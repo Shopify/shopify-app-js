@@ -1,7 +1,7 @@
 {
   "name": "shopify-app-express",
   "version": "0.0.1",
-  "main": "src/index.js",
+  "main": "dist/index.js",
   "description": "Shopify Express Middleware - to simplify the building of Shopify Apps with Express",
   "repository": {
     "type": "git",

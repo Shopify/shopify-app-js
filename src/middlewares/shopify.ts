@@ -10,7 +10,7 @@ const DEFAULT_SQLITE_PATH = `${process.cwd()}/database.sqlite`;
 
 const CONFIG_PATH = `${process.cwd()}/shopify.config.js`;
 
-export async function shopifyMiddleware(app: any, config: ShopifyConfig) {
+export async function shopifyMiddleware(app: any, config?: ShopifyConfig) {
   if (fs.existsSync(CONFIG_PATH)) {
     await import(CONFIG_PATH);
   }
