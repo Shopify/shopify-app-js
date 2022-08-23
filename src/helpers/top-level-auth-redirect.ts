@@ -1,13 +1,12 @@
-import { CONFIG } from "../config";
-
 type TopLevelAuthRedirectParams = {
   apiKey: string,
   hostName: string,
   shop: string,
+  rootPath: string,
 }
 
-export function topLevelAuthRedirect({ apiKey, hostName, shop }: TopLevelAuthRedirectParams): string {
-  const authPath = `${CONFIG.rootPath}/auth`;
+export function topLevelAuthRedirect({ apiKey, hostName, shop, rootPath }: TopLevelAuthRedirectParams): string {
+  const authPath = `${rootPath}/auth`;
 
   return `<!DOCTYPE html>
 <html>

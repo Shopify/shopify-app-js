@@ -43,6 +43,7 @@ export interface ShopifyConfig {
   isEmbeddedApp: boolean,
   sessionStorage: SessionStorage | undefined,
   webhooks: WebhookConfig,
+  defaultSqlitePath: string,
   billing: {
     required: boolean,
     chargeName: string | undefined,
@@ -50,7 +51,6 @@ export interface ShopifyConfig {
     currencyCode: string | undefined,
     interval: BillingInterval | undefined,
   },
-  accessDeniedRedirect: ((req: any, res: any, next: any, url: string) => void) | undefined,
   userAgent: string | undefined,
 }
 
@@ -66,6 +66,7 @@ export let CONFIG: ShopifyConfig = {
   isEmbeddedApp: true,
   sessionStorage: undefined,
   webhooks: GDPR_WEBHOOKS,
+  defaultSqlitePath: `${process.cwd()}/database.sqlite`,
   billing: {
     required: false,
     chargeName: undefined,
@@ -73,7 +74,6 @@ export let CONFIG: ShopifyConfig = {
     currencyCode: undefined,
     interval: undefined,
   },
-  accessDeniedRedirect: undefined,
   userAgent: undefined,
 };
 
@@ -83,10 +83,6 @@ export let CONFIG: ShopifyConfig = {
 export function setConfig(config: ShopifyConfig): ShopifyConfig {
   config.webhooks = Object.assign({}, CONFIG.webhooks, config.webhooks);
   config.billing = Object.assign({}, CONFIG.billing, config.billing);
-
-  if (config.rootPath) {
-    config.rootPath = config.rootPath.replace(/\/$/, "");
-  }
 
   CONFIG = Object.assign({}, CONFIG, config);
 

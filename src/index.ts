@@ -5,5 +5,5 @@ export * from "@shopify/shopify-api";
 export * from "@shopify/shopify-api/dist/rest-resources/2022-07";
 
 export { setConfig } from "./config";
-export { shopifyMiddleware } from "./middlewares/shopify";
+export { shopifyApp } from "./middlewares/shopify";
 export { BillingInterval } from "./helpers/ensure-billing";
