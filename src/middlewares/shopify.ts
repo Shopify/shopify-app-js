@@ -1,8 +1,8 @@
+import '@shopify/shopify-api/dist/adapters/node';
 import { ApiVersion, Shopify } from "@shopify/shopify-api";
 import { gdprTopics } from "@shopify/shopify-api/dist/webhooks/registry";
 import cookieParser from "cookie-parser";
 import compression from "compression";
-import fs from "fs";
 import express from "express";
 
 import { CONFIG } from "../config";
@@ -10,7 +10,6 @@ import { verifyRequest } from "./verify-request.js";
 import { ensureBilling } from "../helpers/ensure-billing";
 import { topLevelAuthRedirect } from "../helpers/top-level-auth-redirect";
 
-const CONFIG_PATH = `${process.cwd()}/shopify.config.js`;
 
 export const ACTIVE_SHOPIFY_SHOPS: {[key: string]: string} = {};
 
@@ -203,17 +202,8 @@ function rootPath(app: any) {
 }
 
 function initApp(app: any) {
-  let promise;
-  if (fs.existsSync(CONFIG_PATH)) {
-    promise = import(CONFIG_PATH);
-  } else {
-    promise = Promise.resolve();
-  }
-
-  promise.then(() => {
-    setupLibrary(app);
-    setupRoutes(app);
-  });
+  setupLibrary(app);
+  setupRoutes(app);
 }
 
 export function shopifyApp() {

@@ -1,4 +1,6 @@
-import { RequestReturn, SessionInterface, Shopify } from "@shopify/shopify-api";
+import { Shopify } from "@shopify/shopify-api";
+import { RequestReturn } from "@shopify/shopify-api/dist/clients/http_client/types"; // FIX NEEDED: deep import
+import { SessionInterface } from "@shopify/shopify-api/dist/auth/session/types"; // FIX NEEDED: deep import
 import { GraphqlClient } from "@shopify/shopify-api/dist/clients/graphql";
 import { CONFIG } from "../config";
 
