@@ -1,16 +1,29 @@
-import {ConfigParams as ApiConfigParams, Shopify} from '@shopify/shopify-api';
+import {
+  ConfigParams as ApiConfigParams,
+  SessionStorage,
+  ShopifyRestResources,
+  Shopify,
+  ApiVersion,
+} from '@shopify/shopify-api';
 
-export interface ShopifyApp {
-  api: Shopify;
+export interface ShopifyApp<
+  T extends ShopifyRestResources = ShopifyRestResources,
+  S extends SessionStorage = SessionStorage,
+> {
+  api: Shopify<T, S>;
 }
 
-export type ApiConfigParamsWithoutDefaults = Omit<
-  ApiConfigParams,
-  'isEmbeddedApp'
-> & {
+export type ApiConfigParamsWithoutDefaults<
+  T extends ShopifyRestResources = any,
+  S extends SessionStorage = SessionStorage,
+> = Omit<ApiConfigParams<T, S>, 'isEmbeddedApp' | 'apiVersion'> & {
   isEmbeddedApp?: boolean;
+  apiVersion?: ApiVersion;
 };
 
-export interface AppConfigParams {
-  api: ApiConfigParamsWithoutDefaults;
+export interface AppConfigParams<
+  T extends ShopifyRestResources = any,
+  S extends SessionStorage = SessionStorage,
+> {
+  api: ApiConfigParamsWithoutDefaults<T, S>;
 }
