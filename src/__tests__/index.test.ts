@@ -8,6 +8,6 @@ describe('shopifyApp', () => {
 
     expect(shopify).toBeDefined();
     expect(shopify.api).toBeDefined();
-    expect(shopify.api.config.apiKey).toBe(testConfig.apiKey);
+    expect(shopify.api.config.apiKey).toBe(testConfig.api.apiKey);
   });
 });
