@@ -5,7 +5,7 @@
     "declaration": true,
     "declarationMap": true,
     "pretty": true,
-    "moduleResolution": "node",
+    "moduleResolution": "node16",
     "target": "es5",
     "downlevelIteration": true,
     "esModuleInterop": true,
@@ -36,6 +36,11 @@
     "baseUrl": ".",
     "rootDir": "src"
   },
-  "include": ["./src/**/*.ts", "./src/**/*.tsx"],
-  "exclude": ["**/*.test.ts", "**/*.test.tsx", "**/test/*", "**/__tests__/*"],
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.tsx"
+  ],
+  "exclude": [
+    "**/*.test.ts", "**/*.test.tsx", "**/test/*", "**/__tests__/*",
+  ],
 }

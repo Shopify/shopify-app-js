@@ -1,5 +1,5 @@
 {
-  "name": "shopify-app-express",
+  "name": "@shopify/shopify-app-express",
   "version": "0.0.1",
   "description": "Shopify Express Middleware - to simplify the building of Shopify Apps with Express",
   "repository": {
@@ -25,8 +25,11 @@
     "preversion": "yarn run test",
     "postversion": "git push origin main --follow-tags && echo \"Log in to shipit to deploy version $npm_package_version\""
   },
+  "peerDependencies": {
+    "@shopify/shopify-api": "*"
+  },
   "dependencies": {
-    "@shopify/shopify-api": "^6.0.0-rc3",
+    "@shopify/shopify-api": "6.0.0-rc3",
     "compression": "^1.7.4",
     "cookie-parser": "^1.4.6",
     "express": "^4.18.1",
@@ -47,8 +50,7 @@
     "rimraf": "^3.0.2",
     "ts-jest": "^28.0.8",
     "ts-node": "^10.9.1",
-    "typescript": "^4.7.4",
-    "vitest": "^0.22.1"
+    "typescript": "^4.7.4"
   },
   "files": [
     "dist/*",
