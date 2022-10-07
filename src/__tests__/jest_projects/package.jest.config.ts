@@ -6,6 +6,8 @@ const config: Config = {
   ...baseConfig,
   displayName: 'package',
   rootDir: '../../',
+  setupFilesAfterEnv: ['<rootDir>/__tests__/setup-jest.ts'],
+  automock: false,
 };
 
 export default config;

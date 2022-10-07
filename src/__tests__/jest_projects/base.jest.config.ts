@@ -11,6 +11,8 @@ const config: Config = {
   moduleFileExtensions: ['ts', 'js', 'json'],
   watchPathIgnorePatterns: ['./node_modules'],
   testRegex: '.*\\.test\\.tsx?$',
+  testTimeout: 5000,
+  setupFilesAfterEnv: ['<rootDir>/__tests__/setup-jest.ts'],
 };
 
 export default config;
