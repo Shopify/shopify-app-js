@@ -1,29 +1,53 @@
+import express, {Express} from 'express';
 import {
   ConfigParams as ApiConfigParams,
   SessionStorage,
   ShopifyRestResources,
   Shopify,
-  ApiVersion,
+  Session,
 } from '@shopify/shopify-api';
 
-export interface ShopifyApp<
-  T extends ShopifyRestResources = ShopifyRestResources,
-  S extends SessionStorage = SessionStorage,
-> {
-  api: Shopify<T, S>;
-}
+export * from './auth/types';
 
-export type ApiConfigParamsWithoutDefaults<
-  T extends ShopifyRestResources = any,
-  S extends SessionStorage = SessionStorage,
-> = Omit<ApiConfigParams<T, S>, 'isEmbeddedApp' | 'apiVersion'> & {
-  isEmbeddedApp?: boolean;
-  apiVersion?: ApiVersion;
-};
+interface AfterAuthCallbackParams {
+  req: express.Request;
+  res: express.Response;
+  session: Session;
+  hasPayment: boolean;
+  api: Shopify;
+}
+type AfterAuthCallback = (
+  params: AfterAuthCallbackParams,
+) => void | Promise<void>;
+
+export interface AuthConfigInterface {
+  path: string;
+  callbackPath: string;
+  afterAuth?: AfterAuthCallback;
+  checkBillingPlans?: string[];
+}
 
 export interface AppConfigParams<
   T extends ShopifyRestResources = any,
   S extends SessionStorage = SessionStorage,
 > {
-  api: ApiConfigParamsWithoutDefaults<T, S>;
+  api?: Partial<ApiConfigParams<T, S>>;
+  useOnlineTokens?: boolean;
+  exitIframePath?: string;
+  auth?: Partial<AuthConfigInterface>;
+}
+
+export interface AppConfigInterface extends Omit<AppConfigParams, 'api'> {
+  useOnlineTokens: boolean;
+  exitIframePath: string;
+  auth: AuthConfigInterface;
+}
+
+export interface ShopifyApp<
+  T extends ShopifyRestResources = ShopifyRestResources,
+  S extends SessionStorage = SessionStorage,
+> {
+  config: AppConfigInterface;
+  api: Shopify<T, S>;
+  auth: Express;
 }

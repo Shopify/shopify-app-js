@@ -20,6 +20,10 @@ export const SHOPIFY_HOST = 'totally-real-host';
 let currentCall: number;
 beforeEach(() => {
   testConfig = {
+    auth: {
+      path: '/auth',
+      callbackPath: '/auth/callback',
+    },
     api: {
       apiKey: 'testApiKey',
       apiSecretKey: 'testApiSecretKey',
