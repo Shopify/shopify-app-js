@@ -2,6 +2,9 @@ import '@shopify/shopify-api/adapters/node';
 import {
   shopifyApi,
   ConfigParams as ApiConfigParams,
+  SessionStorage,
+  ShopifyRestResources,
+  LATEST_API_VERSION,
 } from '@shopify/shopify-api';
 
 import {
@@ -12,14 +15,18 @@ import {
 
 export * from './types';
 
-export function shopifyApp(config: AppConfigParams): ShopifyApp {
-  const shopify = shopifyApi(apiConfigWithDefaults(config.api));
+export function shopifyApp<
+  T extends ShopifyRestResources,
+  S extends SessionStorage = SessionStorage,
+>(config: AppConfigParams<T, S>): ShopifyApp<T, S> {
+  const api = shopifyApi<T, S>(apiConfigWithDefaults<T, S>(config.api));
 
-  return {api: shopify};
+  return {api};
 }
 
-function apiConfigWithDefaults(
-  apiConfig: ApiConfigParamsWithoutDefaults,
-): ApiConfigParams {
-  return {isEmbeddedApp: true, ...apiConfig};
+function apiConfigWithDefaults<
+  T extends ShopifyRestResources,
+  S extends SessionStorage = SessionStorage,
+>(apiConfig: ApiConfigParamsWithoutDefaults<T, S>): ApiConfigParams<T, S> {
+  return {isEmbeddedApp: true, apiVersion: LATEST_API_VERSION, ...apiConfig};
 }
