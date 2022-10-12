@@ -6,7 +6,7 @@ const projects = [
 ];
 
 const config: Config = {
-  testTimeout: 30000,
+  testTimeout: 5000,
   projects,
 };
 
