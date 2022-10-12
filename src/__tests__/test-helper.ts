@@ -117,7 +117,7 @@ expect.extend({
     expect(mockCall[1]).toMatchObject({method, headers, body});
 
     return {
-      message: () => `expected to have seen the right HTTP requests`,
+      message: () => `The expected HTTP requests have been seen`,
       pass: true,
     };
   },
