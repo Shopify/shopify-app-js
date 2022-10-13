@@ -44,7 +44,7 @@ const shopify = shopifyApp({
 const app = express();
 
 // Handles authenticating your app when you visit /api/auth
-app.use('/api', shopify.auth);
+app.use('/api', shopify.auth());
 
 app.get('/', (req, res) => {
   res.send('Hello world!');

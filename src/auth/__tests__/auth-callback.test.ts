@@ -20,7 +20,7 @@ const TOKEN_RESPONSE = {
   scope: 'read_products',
 };
 
-describe('completeAuth', () => {
+describe('authCallback', () => {
   const app = express();
   app.get('/auth', async (req, res) => {
     await createAuthBegin({
@@ -73,45 +73,6 @@ describe('completeAuth', () => {
       expect(session).toBeDefined();
       expect(session!.shop).toEqual(TEST_SHOP);
       expect(session?.accessToken).toEqual('totally-real-access-token');
-    });
-
-    it('calls afterAuth callback', async () => {
-      let callbackCalled = false;
-      shopify.config.auth.afterAuth = async ({req, res, api, session}) => {
-        callbackCalled = true;
-
-        expect(session).toBeDefined();
-        expect(session!.shop).toEqual(TEST_SHOP);
-        expect(req).toBeDefined();
-        expect(res).toBeDefined();
-        expect(api).toStrictEqual(shopify.api);
-      };
-
-      const response = await request(app)
-        .get(`/auth/callback?${callbackInfo.params.toString()}`)
-        .set('Cookie', callbackInfo.cookies)
-        .expect(302);
-
-      const url = new URL(response.header.location);
-      expect(url.host).toBe(SHOPIFY_HOST);
-      expect(url.pathname).toBe(`/apps/${shopify.api.config.apiKey}`);
-      expect(callbackCalled).toBe(true);
-    });
-
-    it('does not redirect if afterAuth redirects', async () => {
-      let callbackCalled = false;
-      shopify.config.auth.afterAuth = async ({res}) => {
-        callbackCalled = true;
-        res.redirect('https://example.com');
-      };
-
-      const response = await request(app)
-        .get(`/auth/callback?${callbackInfo.params.toString()}`)
-        .set('Cookie', callbackInfo.cookies)
-        .expect(302);
-
-      expect(response.header.location).toEqual('https://example.com');
-      expect(callbackCalled).toBe(true);
     });
 
     it.todo('registers all webhook types');
@@ -189,5 +150,88 @@ describe('completeAuth', () => {
         .expect(400)
         .expect('Invalid OAuth callback.');
     });
+  });
+});
+
+describe('authCallback with afterAuth', () => {
+  const afterAuth = jest.fn();
+
+  const app = express();
+  app.get('/auth', async (req, res) => {
+    await createAuthBegin({
+      api: shopify.api,
+      config: shopify.config,
+    })(req, res);
+  });
+  app.get('/auth/callback', async (req, res) => {
+    await createAuthCallback({
+      api: shopify.api,
+      config: shopify.config,
+      afterAuth,
+    })(req, res);
+  });
+
+  let callbackInfo: CallbackInfo;
+  beforeEach(async () => {
+    // Always start off with a valid begin request
+    const beginResponse = await request(app)
+      .get(`/auth?shop=${TEST_SHOP}`)
+      .expect(302);
+    callbackInfo = convertBeginResponseToCallbackInfo(
+      beginResponse,
+      shopify.api.config.apiSecretKey,
+      TEST_SHOP,
+    );
+
+    mockShopifyResponse(TOKEN_RESPONSE);
+  });
+
+  afterEach(() => {
+    asssertShopifyAuthRequestMade(TEST_SHOP, callbackInfo);
+    afterAuth.mockReset();
+  });
+
+  it('triggers callback', async () => {
+    const response = await request(app)
+      .get(`/auth/callback?${callbackInfo.params.toString()}`)
+      .set('Cookie', callbackInfo.cookies)
+      .expect(302);
+
+    const url = new URL(response.header.location);
+    expect(url.host).toBe(SHOPIFY_HOST);
+    expect(url.pathname).toBe(`/apps/${shopify.api.config.apiKey}`);
+
+    const session = await shopify.api.session.getOffline({shop: TEST_SHOP});
+    expect(afterAuth).toHaveBeenCalledTimes(1);
+    expect(afterAuth).toHaveBeenCalledWith(
+      expect.objectContaining({
+        req: expect.anything(),
+        res: expect.anything(),
+        session,
+      }),
+    );
+  });
+
+  it('does not redirect if callback redirects', async () => {
+    afterAuth.mockImplementation(({res}: {res: express.Response}) => {
+      res.redirect('https://example.com');
+    });
+
+    const response = await request(app)
+      .get(`/auth/callback?${callbackInfo.params.toString()}`)
+      .set('Cookie', callbackInfo.cookies)
+      .expect(302);
+
+    expect(response.header.location).toEqual('https://example.com');
+
+    const session = await shopify.api.session.getOffline({shop: TEST_SHOP});
+    expect(afterAuth).toHaveBeenCalledTimes(1);
+    expect(afterAuth).toHaveBeenCalledWith(
+      expect.objectContaining({
+        req: expect.anything(),
+        res: expect.anything(),
+        session,
+      }),
+    );
   });
 });

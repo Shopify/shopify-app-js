@@ -11,10 +11,14 @@ import {
 import {AppConfigInterface} from '../types';
 import {redirectToHost} from '../redirect-to-host';
 
-import {CreateAuthCallbackParams} from './types';
+import {AfterAuthCallback, CreateAuthCallbackParams} from './types';
 import {createAuthBegin} from './auth-begin';
 
-export function createAuthCallback({api, config}: CreateAuthCallbackParams) {
+export function createAuthCallback({
+  api,
+  config,
+  afterAuth,
+}: CreateAuthCallbackParams) {
   return async function authCallback(req: Request, res: Response) {
     try {
       const callbackResponse = await api.auth.callback({
@@ -23,7 +27,7 @@ export function createAuthCallback({api, config}: CreateAuthCallbackParams) {
         rawResponse: res,
       });
 
-      await afterAuthActions(req, res, api, config, callbackResponse);
+      await afterAuthActions(req, res, api, callbackResponse, afterAuth);
     } catch (error) {
       await handleCallbackError(req, res, api, config, error);
     }
@@ -34,17 +38,16 @@ async function afterAuthActions(
   req: Request,
   res: Response,
   api: Shopify,
-  config: AppConfigInterface,
   callbackResponse: CallbackResponse,
+  afterAuth?: AfterAuthCallback,
 ) {
   await registerWebhooks(req, res, callbackResponse.session);
 
-  if (config.auth.afterAuth) {
-    await config.auth.afterAuth({
+  if (afterAuth) {
+    await afterAuth({
       req,
       res,
       session: callbackResponse.session,
-      api,
     });
   }
 

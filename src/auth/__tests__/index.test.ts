@@ -16,7 +16,7 @@ describe('shopify.auth', () => {
 
   beforeEach(() => {
     app = express();
-    app.use('/test', shopify.auth);
+    app.use('/test', shopify.auth());
   });
 
   [
