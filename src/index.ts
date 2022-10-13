@@ -20,7 +20,7 @@ export * from './types';
 export function shopifyApp<
   R extends ShopifyRestResources,
   S extends SessionStorage = SessionStorage,
->(config: AppConfigParams<R, S>): ShopifyApp<R, S> {
+>(config: AppConfigParams<R, S> = {}): ShopifyApp<R, S> {
   const {api: apiConfig, ...appConfig} = config;
 
   const api = shopifyApi<R, S>(apiConfigWithDefaults<R, S>(apiConfig ?? {}));
