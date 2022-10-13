@@ -25,7 +25,6 @@ const shopify = shopifyApp({
   auth: {
     path: '/auth',
     callbackPath: '/auth/callback',
-    checkBillingPlans: ['My plan'],
     afterAuth: async ({req, res, session, hasPayment, api}) => {
       // App-specific behaviour goes here
     },
@@ -52,6 +51,7 @@ Whether the OAuth process should produce online access tokens. Learn more about 
 `string` | Defaults to `"/exitiframe"`
 
 The path your app's frontend uses to trigger an App Bridge redirect to leave the Shopify Admin before starting OAuth.
+Since that page is in the app frontend, we don't include it in this package, but you can find [an example in our template](https://github.com/Shopify/shopify-frontend-template-react/blob/main/pages/ExitIframe.jsx).
 
 ### auth
 
@@ -62,19 +62,25 @@ See below for the specific details.
 
 `string` | Defaults to `"/auth"`
 
-The path used by the app to start the OAuth process.
+The URL path used by the app to start the OAuth process.
+This is relative to the root of the `shopify.auth` app, so when you mount the shopify app, it'll prepend the path.
+
+In the example below, the final auth path is `/shopify/my/auth/path`.
+
+```ts
+const shopify = shopifyApp({
+  auth: {path: '/my/auth/path'},
+});
+
+app.use('/shopify', shopify.auth);
+```
 
 #### callbackPath
 
 `string` | Defaults to `"/auth/callback"`
 
-The path used by the app to complete the OAuth process.
-
-#### checkBillingPlans
-
-`string[]`
-
-Check if any of these plans are active for the shop after OAuth completes.
+The URL path used by the app to complete the OAuth process.
+It works in the same way as `path` above.
 
 #### afterAuth
 
@@ -85,15 +91,20 @@ Callback called after OAuth completes to enable custom app behaviour. Receives a
 - `req`: `express.Request`
 - `res`: `express.Response`
 - `session`: `Session`
-- `hasPayment`: `boolean`
 - `api`: the `shopify.api` object used for the OAuth requests.
 
-For example, the following callback will request payment after OAuth if the merchant hasn't paid for the app yet.
+For example, the following callback will check for and request payment after OAuth if the merchant hasn't paid for the app yet.
 
 ```ts
 const shopify = shopifyApp({
   auth: {
-    afterAuth: async ({req, res, session, hasPayment, api}) => {
+    afterAuth: async ({req, res, session, api}) => {
+      const hasPayment = await api.billing.check({
+        session,
+        plans: ['My plan'],
+        isTest: true,
+      });
+
       if (!hasPayment) {
         res.redirect(
           await api.billing.request({
@@ -122,7 +133,7 @@ The configuration used to set up this object.
 
 ### api
 
-The object created by the `@shopify/shopify-api` package. See [the package documentation](https://github.com/Shopify/shopify-api-node/tree/shopify_api_next#getting-started) for more details.
+The object created by the `@shopify/shopify-api` package. See [the API package documentation](https://github.com/Shopify/shopify-api-node/tree/shopify_api_next#getting-started) for more details.
 
 ### auth
 
