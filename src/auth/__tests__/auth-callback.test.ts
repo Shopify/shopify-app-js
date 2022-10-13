@@ -78,8 +78,6 @@ describe('authCallback', () => {
       expect(session!.shop).toEqual(TEST_SHOP);
       expect(session?.accessToken).toEqual('totally-real-access-token');
     });
-
-    it.todo('registers all webhook types');
   });
 
   describe('fails', () => {

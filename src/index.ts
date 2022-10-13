@@ -7,14 +7,12 @@ import {
   LATEST_API_VERSION,
 } from '@shopify/shopify-api';
 
-import {
-  AppConfigParams,
-  ShopifyApp,
-  AppConfigInterface,
-  AuthConfigInterface,
-} from './types';
+import {AppConfigParams, ShopifyApp, AppConfigInterface} from './types';
+import {AuthConfigInterface} from './auth/types';
+import {WebhooksConfigInterface} from './webhooks/types';
 import {createAuthApp} from './auth/index';
 import {createAuthenticatedRequest} from './middlewares/authenticated_request';
+import {createWebhookApp} from './webhooks/index';
 
 export * from './types';
 
@@ -34,11 +32,9 @@ export function shopifyApp<
   return {
     config: validatedConfig,
     api,
-    auth: createAuthApp({
-      api,
-      config: validatedConfig,
-    }),
     authenticatedRequest,
+    auth: createAuthApp({api, config: validatedConfig}),
+    webhooks: createWebhookApp({api, config: validatedConfig}),
   };
 }
 
@@ -47,7 +43,7 @@ function apiConfigWithDefaults<
   S extends SessionStorage = SessionStorage,
 >(apiConfig: Partial<ApiConfigParams<R, S>>): ApiConfigParams<R, S> {
   /* eslint-disable no-process-env */
-  const config: Partial<ApiConfigParams<R, S>> = {
+  return {
     apiKey: process.env.SHOPIFY_API_KEY!,
     apiSecretKey: process.env.SHOPIFY_API_SECRET!,
     scopes: process.env.SCOPES?.split(',')!,
@@ -61,8 +57,6 @@ function apiConfigWithDefaults<
     ...apiConfig,
   };
   /* eslint-enable no-process-env */
-
-  return config as ApiConfigParams<R, S>;
 }
 
 function validateAppConfig(
@@ -74,10 +68,17 @@ function validateAppConfig(
     ...config.auth,
   };
 
+  const webhooks: WebhooksConfigInterface = {
+    path: '/webhooks',
+    handlers: [],
+    ...config.webhooks,
+  };
+
   return {
     useOnlineTokens: false,
     exitIframePath: '/exitiframe',
     ...config,
     auth,
+    webhooks,
   };
 }

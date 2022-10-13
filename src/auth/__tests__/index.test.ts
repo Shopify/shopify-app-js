@@ -7,9 +7,8 @@ import {
   convertBeginResponseToCallbackInfo,
   mockShopifyResponse,
   shopify,
+  TEST_SHOP,
 } from '../../__tests__/test-helper';
-
-const SHOP = 'my-shop.myshopify.io';
 
 describe('shopify.auth', () => {
   let app: Express;
@@ -20,8 +19,8 @@ describe('shopify.auth', () => {
   });
 
   [
-    {scheme: 'https', host: SHOP, useOnlineTokens: true},
-    {scheme: 'https', host: SHOP, useOnlineTokens: false},
+    {scheme: 'https', host: TEST_SHOP, useOnlineTokens: true},
+    {scheme: 'https', host: TEST_SHOP, useOnlineTokens: false},
     {scheme: 'http', host: 'localhost', useOnlineTokens: true},
     {scheme: 'http', host: 'localhost', useOnlineTokens: false},
   ].forEach((config) => {
@@ -32,12 +31,12 @@ describe('shopify.auth', () => {
 
       // Begin OAuth
       const beginResponse = await request(app)
-        .get(`/test/auth?shop=${SHOP}`)
+        .get(`/test/auth?shop=${TEST_SHOP}`)
         .expect(302);
 
       const beginRedirectUrl = new URL(beginResponse.header.location);
       expect(beginRedirectUrl.protocol).toBe('https:');
-      expect(beginRedirectUrl.hostname).toBe(SHOP);
+      expect(beginRedirectUrl.hostname).toBe(TEST_SHOP);
       expect(beginRedirectUrl.pathname).toBe('/admin/oauth/authorize');
 
       const redirecUri = new URL(
@@ -51,7 +50,7 @@ describe('shopify.auth', () => {
       const callbackInfo = convertBeginResponseToCallbackInfo(
         beginResponse,
         shopify.api.config.apiSecretKey,
-        SHOP,
+        TEST_SHOP,
       );
 
       mockShopifyResponse(
@@ -69,7 +68,7 @@ describe('shopify.auth', () => {
       const url = new URL(callbackResponse.header.location);
       expect(url.pathname).toBe(`/apps/${shopify.api.config.apiKey}`);
 
-      assertShopifyAuthRequestMade(SHOP, callbackInfo);
+      assertShopifyAuthRequestMade(TEST_SHOP, callbackInfo);
     });
   });
 });

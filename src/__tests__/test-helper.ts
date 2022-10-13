@@ -25,6 +25,9 @@ beforeEach(() => {
       path: '/auth',
       callbackPath: '/auth/callback',
     },
+    webhooks: {
+      path: '/webhooks',
+    },
     api: {
       apiKey: 'testApiKey',
       apiSecretKey: 'testApiSecretKey',
@@ -39,15 +42,6 @@ beforeEach(() => {
 
   currentCall = 0;
 });
-
-declare global {
-  // eslint-disable-next-line @typescript-eslint/no-namespace
-  namespace jest {
-    interface Matchers<R> {
-      toMatchMadeHttpRequest(): R;
-    }
-  }
-}
 
 type MockBody =
   | string
@@ -92,6 +86,15 @@ export function mockShopifyResponses(
   fetchMock.mockResponses(...parsedResponses);
 }
 
+declare global {
+  // eslint-disable-next-line @typescript-eslint/no-namespace
+  namespace jest {
+    interface Matchers<R> {
+      toMatchMadeHttpRequest(): R;
+    }
+  }
+}
+
 expect.extend({
   toMatchMadeHttpRequest({
     method,
@@ -108,18 +111,30 @@ expect.extend({
       };
     }
 
-    const bodyObject = body && typeof body !== 'string';
     const expectedUrl = typeof url === 'string' ? new URL(url) : url;
 
     const mockCall = fetchMock.mock.calls[index];
     const requestUrl = new URL(mockCall[0] as string);
 
-    if (bodyObject && mockCall[1]) {
-      mockCall[1].body = JSON.parse(mockCall[1].body as string);
+    const mockBody = mockCall[1]!.body;
+
+    if (body) {
+      if (
+        typeof body === 'string' ||
+        body.constructor.name === 'StringContaining'
+      ) {
+        expect(mockBody).toEqual(body);
+      } else {
+        const requestBody =
+          typeof mockBody === 'string' ? JSON.parse(mockBody) : mockBody;
+        expect(requestBody).toMatchObject(body);
+      }
+    } else {
+      expect(mockBody).toBeFalsy();
     }
 
     expect(requestUrl).toEqual(expectedUrl);
-    expect(mockCall[1]).toMatchObject({method, headers, body});
+    expect(mockCall[1]).toMatchObject({method, headers});
 
     return {
       message: () => `The expected HTTP requests have been seen`,
@@ -189,4 +204,20 @@ export function assertShopifyAuthRequestMade(
       code: callbackInfo.params.get('code'),
     },
   }).toMatchMadeHttpRequest();
+}
+
+export function validWebhookHeaders(
+  body: string,
+  secretKey: string,
+): {[key: string]: string} {
+  const hmac = crypto
+    .createHmac('sha256', secretKey)
+    .update(body, 'utf8')
+    .digest('base64');
+
+  return {
+    'X-Shopify-Topic': 'TEST_TOPIC',
+    'X-Shopify-Shop-Domain': TEST_SHOP,
+    'X-Shopify-Hmac-Sha256': hmac,
+  };
 }

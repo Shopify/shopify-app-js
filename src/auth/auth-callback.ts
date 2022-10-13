@@ -2,6 +2,7 @@ import {Request, Response} from 'express';
 import {
   CallbackResponse,
   CookieNotFound,
+  gdprTopics,
   InvalidOAuthError,
   LogSeverity,
   Session,
@@ -9,6 +10,7 @@ import {
 } from '@shopify/shopify-api';
 
 import {AppConfigInterface} from '../types';
+import {NonHttpWebhookHandler} from '../webhooks/types';
 import {redirectToHost} from '../redirect-to-host';
 
 import {AfterAuthCallback, AuthCallbackParams} from './types';
@@ -28,7 +30,7 @@ export async function authCallback({
       rawResponse: res,
     });
 
-    await afterAuthActions(req, res, api, callbackResponse, afterAuth);
+    await afterAuthActions(req, res, api, config, callbackResponse, afterAuth);
   } catch (error) {
     await handleCallbackError(req, res, api, config, error);
   }
@@ -38,10 +40,11 @@ async function afterAuthActions(
   req: Request,
   res: Response,
   api: Shopify,
+  config: AppConfigInterface,
   callbackResponse: CallbackResponse,
   afterAuth?: AfterAuthCallback,
 ) {
-  await registerWebhooks(req, res, callbackResponse.session);
+  await registerWebhooks(api, config, callbackResponse.session);
 
   if (afterAuth) {
     await afterAuth({
@@ -58,35 +61,40 @@ async function afterAuthActions(
 }
 
 async function registerWebhooks(
-  _req: Request,
-  _res: Response,
-  _session: Session,
+  api: Shopify,
+  config: AppConfigInterface,
+  session: Session,
 ) {
-  // eslint-disable-next-line no-warning-comments
-  // TODO Add webhook support to configs
-  // const responses = await api.webhooks.registerAllHttp({
-  //   path: config.webhookPath,
-  //   shop: _session.shop,
-  //   accessToken: _session.accessToken!,
-  // });
-  //
-  // Object.entries(responses).map(([topic, response]) => {
-  //   if (!response.success && !gdprTopics.includes(topic)) {
-  //     if (response.result.errors) {
-  //       console.log(
-  //         `Failed to register ${topic} webhook: ${response.result.errors[0].message}`,
-  //       );
-  //     } else {
-  //       console.log(
-  //         `Failed to register ${topic} webhook: ${JSON.stringify(
-  //           response.result.data,
-  //           undefined,
-  //           2,
-  //         )}`,
-  //       );
-  //     }
-  //   }
-  // });
+  for (const entry of config.webhooks.handlers) {
+    const response = await api.webhooks.register({
+      shop: session.shop,
+      accessToken: session.accessToken!,
+      path: (entry as NonHttpWebhookHandler).address ?? config.webhooks.path,
+      topic: entry.topic,
+      deliveryMethod: entry.deliveryMethod,
+    });
+    console.log(response[entry.topic].result);
+
+    if (!response[entry.topic].success && !gdprTopics.includes(entry.topic)) {
+      const result: any = response[entry.topic].result;
+
+      if (result.errors) {
+        await api.config.logFunction(
+          LogSeverity.Error,
+          `Failed to register ${entry.topic} webhook: ${result.errors[0].message}`,
+        );
+      } else {
+        await api.config.logFunction(
+          LogSeverity.Error,
+          `Failed to register ${entry.topic} webhook: ${JSON.stringify(
+            result.data,
+            undefined,
+            2,
+          )}`,
+        );
+      }
+    }
+  }
 }
 
 async function handleCallbackError(
@@ -96,7 +104,7 @@ async function handleCallbackError(
   config: AppConfigInterface,
   error: Error,
 ) {
-  api.config.logFunction(
+  await api.config.logFunction(
     LogSeverity.Warning,
     `Failed to complete OAuth with error: ${error}`,
   );
