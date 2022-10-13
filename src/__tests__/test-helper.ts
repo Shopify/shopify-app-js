@@ -16,6 +16,7 @@ export let testConfig: AppConfigParams & {
 export let shopify: ShopifyApp;
 
 export const SHOPIFY_HOST = 'totally-real-host';
+export const TEST_SHOP = 'test-shop.myshopify.io';
 
 let currentCall: number;
 beforeEach(() => {

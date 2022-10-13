@@ -13,7 +13,6 @@ interface AfterAuthCallbackParams {
   req: express.Request;
   res: express.Response;
   session: Session;
-  hasPayment: boolean;
   api: Shopify;
 }
 type AfterAuthCallback = (
@@ -28,10 +27,10 @@ export interface AuthConfigInterface {
 }
 
 export interface AppConfigParams<
-  T extends ShopifyRestResources = any,
+  R extends ShopifyRestResources = any,
   S extends SessionStorage = SessionStorage,
 > {
-  api?: Partial<ApiConfigParams<T, S>>;
+  api?: Partial<ApiConfigParams<R, S>>;
   useOnlineTokens?: boolean;
   exitIframePath?: string;
   auth?: Partial<AuthConfigInterface>;
@@ -44,10 +43,10 @@ export interface AppConfigInterface extends Omit<AppConfigParams, 'api'> {
 }
 
 export interface ShopifyApp<
-  T extends ShopifyRestResources = ShopifyRestResources,
+  R extends ShopifyRestResources = ShopifyRestResources,
   S extends SessionStorage = SessionStorage,
 > {
   config: AppConfigInterface;
-  api: Shopify<T, S>;
+  api: Shopify<R, S>;
   auth: Express;
 }

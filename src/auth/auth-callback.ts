@@ -4,27 +4,26 @@ import {
   CookieNotFound,
   InvalidOAuthError,
   LogSeverity,
+  Session,
   Shopify,
 } from '@shopify/shopify-api';
 
 import {AppConfigInterface} from '../types';
+import {redirectToHost} from '../redirect-to-host';
 
 import {CreateAuthCallbackParams} from './types';
 import {createAuthBegin} from './auth-begin';
 
-// eslint-disable-next-line no-process-env
-const IS_TEST = process.env.NODE_ENV !== 'production';
-
 export function createAuthCallback({api, config}: CreateAuthCallbackParams) {
   return async function authCallback(req: Request, res: Response) {
     try {
-      const callback = await api.auth.callback({
+      const callbackResponse = await api.auth.callback({
         isOnline: config.useOnlineTokens,
         rawRequest: req,
         rawResponse: res,
       });
 
-      await afterAuthActions(req, res, api, config, callback);
+      await afterAuthActions(req, res, api, config, callbackResponse);
     } catch (error) {
       await handleCallbackError(req, res, api, config, error);
     }
@@ -36,39 +35,36 @@ async function afterAuthActions(
   res: Response,
   api: Shopify,
   config: AppConfigInterface,
-  callback: CallbackResponse,
+  callbackResponse: CallbackResponse,
 ) {
-  await registerWebhooks(req, res, callback);
-
-  const hasPayment = await checkForPayment(api, config, callback);
+  await registerWebhooks(req, res, callbackResponse.session);
 
   if (config.auth.afterAuth) {
     await config.auth.afterAuth({
       req,
       res,
-      session: callback.session,
-      hasPayment,
+      session: callbackResponse.session,
       api,
     });
   }
 
-  // If the callback triggers a response, we leave it alone
+  // We redirect to the host-based app URL ONLY if the afterAuth callback didn't send a response already
   if (!res.headersSent) {
-    await redirectToHost(req, res, api, callback);
+    await redirectToHost(req, res, api, callbackResponse.session);
   }
 }
 
 async function registerWebhooks(
   _req: Request,
   _res: Response,
-  _callback: CallbackResponse,
+  _session: Session,
 ) {
   // eslint-disable-next-line no-warning-comments
   // TODO Add webhook support to configs
   // const responses = await api.webhooks.registerAllHttp({
   //   path: config.webhookPath,
-  //   shop: _callback.session.shop,
-  //   accessToken: _callback.session.accessToken!,
+  //   shop: _session.shop,
+  //   accessToken: _session.accessToken!,
   // });
   //
   // Object.entries(responses).map(([topic, response]) => {
@@ -90,39 +86,6 @@ async function registerWebhooks(
   // });
 }
 
-async function checkForPayment(
-  api: Shopify,
-  config: AppConfigInterface,
-  callback: CallbackResponse,
-): Promise<boolean> {
-  if (!api.config.billing || !config.auth.checkBillingPlans) {
-    return true;
-  }
-
-  return api.billing.check({
-    session: callback.session,
-    isTest: IS_TEST,
-    plans: config.auth.checkBillingPlans,
-  });
-}
-
-async function redirectToHost(
-  req: Request,
-  res: Response,
-  api: Shopify,
-  callback: CallbackResponse,
-) {
-  const host = api.utils.sanitizeHost(req.query.host as string)!;
-  const redirectUrl = api.config.isEmbeddedApp
-    ? await api.auth.getEmbeddedAppUrl({
-        rawRequest: req,
-        rawResponse: res,
-      })
-    : `/?shop=${callback.session.shop}&host=${encodeURIComponent(host)}`;
-
-  res.redirect(redirectUrl);
-}
-
 async function handleCallbackError(
   req: Request,
   res: Response,
@@ -130,14 +93,10 @@ async function handleCallbackError(
   config: AppConfigInterface,
   error: Error,
 ) {
-  console.warn(error);
-
-  if (api.config.logFunction) {
-    api.config.logFunction(
-      LogSeverity.Warning,
-      `Failed to complete OAuth with error: ${error}`,
-    );
-  }
+  api.config.logFunction(
+    LogSeverity.Warning,
+    `Failed to complete OAuth with error: ${error}`,
+  );
 
   switch (true) {
     case error instanceof InvalidOAuthError:

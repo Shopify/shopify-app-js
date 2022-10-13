@@ -1,13 +1,11 @@
 import request from 'supertest';
 import express from 'express';
-import {BillingInterval} from '@shopify/shopify-api';
 
 import {
   CallbackInfo,
   shopify,
   SHOPIFY_HOST,
   mockShopifyResponse,
-  mockShopifyResponses,
   asssertShopifyAuthRequestMade,
   convertBeginResponseToCallbackInfo,
   getExpectedOAuthBeginParams,
@@ -16,34 +14,10 @@ import {createAuthCallback} from '../auth-callback';
 import {createAuthBegin} from '../auth-begin';
 
 const TEST_SHOP = 'my-shop.myshopify.io';
-const TEST_PLAN = 'test plan';
 
 const TOKEN_RESPONSE = {
   access_token: 'totally-real-access-token',
   scope: 'read_products',
-};
-const EMPTY_SUBSCRIPTIONS_RESPONSE = {
-  data: {
-    currentAppInstallation: {
-      oneTimePurchases: {
-        edges: [],
-        pageInfo: {hasNextPage: false, endCursor: null},
-      },
-      activeSubscriptions: [],
-      userErrors: [],
-    },
-  },
-};
-const EXISTING_SUBSCRIPTIONS_RESPONSE = {
-  data: {
-    currentAppInstallation: {
-      oneTimePurchases: {
-        edges: [],
-        pageInfo: {hasNextPage: false, endCursor: null},
-      },
-      activeSubscriptions: [{name: TEST_PLAN, test: true}],
-    },
-  },
 };
 
 describe('completeAuth', () => {
@@ -103,18 +77,11 @@ describe('completeAuth', () => {
 
     it('calls afterAuth callback', async () => {
       let callbackCalled = false;
-      shopify.config.auth.afterAuth = async ({
-        req,
-        res,
-        api,
-        session,
-        hasPayment,
-      }) => {
+      shopify.config.auth.afterAuth = async ({req, res, api, session}) => {
         callbackCalled = true;
 
         expect(session).toBeDefined();
         expect(session!.shop).toEqual(TEST_SHOP);
-        expect(hasPayment).toBe(true);
         expect(req).toBeDefined();
         expect(res).toBeDefined();
         expect(api).toStrictEqual(shopify.api);
@@ -144,64 +111,6 @@ describe('completeAuth', () => {
         .expect(302);
 
       expect(response.header.location).toEqual('https://example.com');
-      expect(callbackCalled).toBe(true);
-    });
-
-    it('calls afterAuth with false hasPayment if no payment exists', async () => {
-      shopify.api.config.billing = {
-        [TEST_PLAN]: {
-          amount: 10,
-          currencyCode: 'USD',
-          interval: BillingInterval.Every30Days,
-        },
-      };
-      shopify.config.auth.checkBillingPlans = [TEST_PLAN];
-
-      let callbackCalled = false;
-      shopify.config.auth.afterAuth = async ({hasPayment}) => {
-        callbackCalled = true;
-        expect(hasPayment).toBe(false);
-      };
-
-      mockShopifyResponses([TOKEN_RESPONSE], [EMPTY_SUBSCRIPTIONS_RESPONSE]);
-
-      const response = await request(app)
-        .get(`/auth/callback?${callbackInfo.params.toString()}`)
-        .set('Cookie', callbackInfo.cookies)
-        .expect(302);
-
-      const url = new URL(response.header.location);
-      expect(url.host).toBe(SHOPIFY_HOST);
-      expect(url.pathname).toBe(`/apps/${shopify.api.config.apiKey}`);
-      expect(callbackCalled).toBe(true);
-    });
-
-    it('redirects to root if payment is present', async () => {
-      shopify.api.config.billing = {
-        [TEST_PLAN]: {
-          amount: 10,
-          currencyCode: 'USD',
-          interval: BillingInterval.Every30Days,
-        },
-      };
-      shopify.config.auth.checkBillingPlans = [TEST_PLAN];
-
-      let callbackCalled = false;
-      shopify.config.auth.afterAuth = async ({hasPayment}) => {
-        callbackCalled = true;
-        expect(hasPayment).toBe(true);
-      };
-
-      mockShopifyResponses([TOKEN_RESPONSE], [EXISTING_SUBSCRIPTIONS_RESPONSE]);
-
-      const response = await request(app)
-        .get(`/auth/callback?${callbackInfo.params.toString()}`)
-        .set('Cookie', callbackInfo.cookies)
-        .expect(302);
-
-      const url = new URL(response.header.location);
-      expect(url.host).toBe(SHOPIFY_HOST);
-      expect(url.pathname).toBe(`/apps/${shopify.api.config.apiKey}`);
       expect(callbackCalled).toBe(true);
     });
 

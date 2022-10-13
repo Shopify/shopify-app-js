@@ -18,12 +18,12 @@ import {createAuthApp} from './auth/index';
 export * from './types';
 
 export function shopifyApp<
-  T extends ShopifyRestResources,
+  R extends ShopifyRestResources,
   S extends SessionStorage = SessionStorage,
->(config: AppConfigParams<T, S>): ShopifyApp<T, S> {
+>(config: AppConfigParams<R, S>): ShopifyApp<R, S> {
   const {api: apiConfig, ...appConfig} = config;
 
-  const api = shopifyApi<T, S>(apiConfigWithDefaults<T, S>(apiConfig ?? {}));
+  const api = shopifyApi<R, S>(apiConfigWithDefaults<R, S>(apiConfig ?? {}));
   const validatedConfig = validateAppConfig(appConfig);
 
   return {
@@ -34,11 +34,11 @@ export function shopifyApp<
 }
 
 function apiConfigWithDefaults<
-  T extends ShopifyRestResources,
+  R extends ShopifyRestResources,
   S extends SessionStorage = SessionStorage,
->(apiConfig: Partial<ApiConfigParams<T, S>>): ApiConfigParams<T, S> {
+>(apiConfig: Partial<ApiConfigParams<R, S>>): ApiConfigParams<R, S> {
   /* eslint-disable no-process-env */
-  const config: Partial<ApiConfigParams<T, S>> = {
+  const config: Partial<ApiConfigParams<R, S>> = {
     apiKey: process.env.SHOPIFY_API_KEY!,
     apiSecretKey: process.env.SHOPIFY_API_SECRET!,
     scopes: process.env.SCOPES?.split(',')!,
@@ -53,7 +53,7 @@ function apiConfigWithDefaults<
   };
   /* eslint-enable no-process-env */
 
-  return config as ApiConfigParams<T, S>;
+  return config as ApiConfigParams<R, S>;
 }
 
 function validateAppConfig(
