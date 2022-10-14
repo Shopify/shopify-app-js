@@ -40,10 +40,11 @@ const shopify = shopifyApp({
     hostName: `localhost:${PORT}`,
   },
 });
+
 const app = express();
 
 // Handles authenticating your app when you visit /api/auth
-app.use('/api', shopify.app);
+app.use('/api', shopify.auth);
 
 app.get('/', (req, res) => {
   res.send('Hello world!');
@@ -59,3 +60,5 @@ node ./index.js
 ```
 
 And access `http://localhost:8080` in your browser to view your app.
+
+You can find all allowed configuration options for `shopifyApp` in [the reference docs](./docs/reference/shopifyApp.md).
