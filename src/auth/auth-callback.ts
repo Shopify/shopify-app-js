@@ -73,7 +73,6 @@ async function registerWebhooks(
       topic: entry.topic,
       deliveryMethod: entry.deliveryMethod,
     });
-    console.log(response[entry.topic].result);
 
     if (!response[entry.topic].success && !gdprTopics.includes(entry.topic)) {
       const result: any = response[entry.topic].result;

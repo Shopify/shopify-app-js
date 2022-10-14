@@ -24,8 +24,6 @@ export async function process({
       `Failed to process webhook: ${error}`,
     );
 
-    if (!res.headersSent) {
-      res.status(500).send(error.message);
-    }
+    // The library will respond even if the handler throws an error
   }
 }

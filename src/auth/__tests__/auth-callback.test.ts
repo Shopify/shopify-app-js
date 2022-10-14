@@ -1,35 +1,19 @@
 import request from 'supertest';
 import express from 'express';
-
 import {
-  CallbackInfo,
-  shopify,
-  SHOPIFY_HOST,
-  mockShopifyResponse,
-  assertShopifyAuthRequestMade,
-  convertBeginResponseToCallbackInfo,
-  getExpectedOAuthBeginParams,
-} from '../../__tests__/test-helper';
+  CookieNotFound,
+  DeliveryMethod,
+  InvalidOAuthError,
+  Session,
+} from '@shopify/shopify-api';
+
+import {BASE64_HOST, shopify, SHOPIFY_HOST} from '../../__tests__/test-helper';
 import {authCallback} from '../auth-callback';
-import {authBegin} from '../auth-begin';
 
 const TEST_SHOP = 'my-shop.myshopify.io';
 
-const TOKEN_RESPONSE = {
-  access_token: 'totally-real-access-token',
-  scope: 'read_products',
-};
-
 describe('authCallback', () => {
   const app = express();
-  app.get('/auth', async (req, res) => {
-    await authBegin({
-      req,
-      res,
-      api: shopify.api,
-      config: shopify.config,
-    });
-  });
   app.get('/auth/callback', async (req, res) => {
     await authCallback({
       req,
@@ -39,44 +23,110 @@ describe('authCallback', () => {
     });
   });
 
-  let callbackInfo: CallbackInfo;
+  let callbackMock: jest.SpyInstance;
+  let session: Session;
   beforeEach(async () => {
-    // Always start off with a valid begin request
-    const beginResponse = await request(app)
-      .get(`/auth?shop=${TEST_SHOP}`)
-      .expect(302);
-    callbackInfo = convertBeginResponseToCallbackInfo(
-      beginResponse,
-      shopify.api.config.apiSecretKey,
-      TEST_SHOP,
-    );
+    session = new Session({
+      id: 'test-session',
+      isOnline: shopify.config.useOnlineTokens,
+      shop: TEST_SHOP,
+      state: '1234',
+      accessToken: 'test-access-token',
+    });
+
+    callbackMock = jest.spyOn(shopify.api.auth, 'callback');
   });
 
   describe('when successful', () => {
-    beforeEach(async () => {
-      // Set up the mock response from Shopify since we know we'll complete OAuth
-      mockShopifyResponse(TOKEN_RESPONSE);
+    beforeEach(() => {
+      callbackMock.mockResolvedValueOnce({session, headers: undefined});
     });
 
-    afterEach(() => {
-      // Assert that the OAuth request actually went through
-      assertShopifyAuthRequestMade(TEST_SHOP, callbackInfo);
-    });
-
-    it('creates a session', async () => {
+    it('redirects to app', async () => {
       const response = await request(app)
-        .get(`/auth/callback?${callbackInfo.params.toString()}`)
-        .set('Cookie', callbackInfo.cookies)
+        .get(`/auth/callback?host=${BASE64_HOST}`)
         .expect(302);
 
       const url = new URL(response.header.location);
       expect(url.host).toBe(SHOPIFY_HOST);
       expect(url.pathname).toBe(`/apps/${shopify.api.config.apiKey}`);
+    });
 
-      const session = await shopify.api.session.getOffline({shop: TEST_SHOP});
-      expect(session).toBeDefined();
-      expect(session!.shop).toEqual(TEST_SHOP);
-      expect(session?.accessToken).toEqual('totally-real-access-token');
+    describe('with webhooks', () => {
+      let registerMock: jest.SpyInstance;
+      beforeEach(() => {
+        shopify.config.webhooks.handlers = [
+          {
+            deliveryMethod: DeliveryMethod.Http,
+            topic: 'TEST_TOPIC',
+            handler: async () => {},
+          },
+        ];
+
+        registerMock = jest.spyOn(shopify.api.webhooks, 'register');
+      });
+
+      it('registers webhooks', async () => {
+        registerMock.mockResolvedValueOnce({
+          TEST_TOPIC: {
+            success: true,
+            result: {},
+          },
+        });
+
+        await request(app)
+          .get(`/auth/callback?host=${BASE64_HOST}`)
+          .expect(302);
+
+        expect(registerMock).toHaveBeenCalledWith(
+          expect.objectContaining({
+            accessToken: 'test-access-token',
+            deliveryMethod: DeliveryMethod.Http,
+            path: shopify.config.webhooks.path,
+            shop: TEST_SHOP,
+            topic: 'TEST_TOPIC',
+          }),
+        );
+      });
+
+      it('logs when registration fails', async () => {
+        const consoleErrorMock = jest
+          .spyOn(global.console, 'error')
+          .mockImplementation();
+
+        const errorMessage = 'Test result errors';
+        registerMock.mockResolvedValueOnce({
+          TEST_TOPIC: {
+            success: false,
+            result: {errors: [{message: errorMessage}]},
+          },
+        });
+
+        await request(app)
+          .get(`/auth/callback?host=${BASE64_HOST}`)
+          .expect(302);
+
+        expect(consoleErrorMock).toHaveBeenCalledWith(
+          expect.stringContaining(errorMessage),
+        );
+
+        // Reset the callback mock
+        callbackMock.mockResolvedValueOnce({session, headers: undefined});
+        registerMock.mockResolvedValueOnce({
+          TEST_TOPIC: {
+            success: false,
+            result: {data: {message: errorMessage}},
+          },
+        });
+
+        await request(app)
+          .get(`/auth/callback?host=${BASE64_HOST}`)
+          .expect(302);
+
+        expect(consoleErrorMock).toHaveBeenCalledWith(
+          expect.stringContaining(errorMessage),
+        );
+      });
     });
   });
 
@@ -90,67 +140,61 @@ describe('authCallback', () => {
       consoleWarnMock.mockRestore();
     });
 
-    it('if there is no cookie, but restarts OAuth', async () => {
+    it('restarts OAuth if CookieNotFound', async () => {
+      const errorMessage = 'Test no cookie found';
+      callbackMock.mockRejectedValueOnce(new CookieNotFound(errorMessage));
+
+      const beginMock = jest.spyOn(shopify.api.auth, 'begin');
+      beginMock.mockImplementationOnce(async ({rawResponse}) => {
+        rawResponse.redirect('https://oauth-url');
+      });
+
       const response = await request(app)
-        .get(`/auth/callback?${callbackInfo.params.toString()}`)
+        .get(`/auth/callback?shop=${TEST_SHOP}&host=${BASE64_HOST}`)
         .expect(302);
 
       // We begin a new OAuth flow, so the outcome is a successful OAuth begin flow...
-      const url = new URL(response.header.location);
-      const params = Object.fromEntries(url.searchParams.entries());
-
-      expect(url.host).toBe('my-shop.myshopify.io');
-      expect(params).toMatchObject(getExpectedOAuthBeginParams(shopify.api));
-
-      const cookieNames = response.header['set-cookie'].map(
-        (cookie: string) => cookie.split('=')[0],
+      expect(beginMock).toHaveBeenCalledWith(
+        expect.objectContaining({
+          callbackPath: '/auth/callback',
+          isOnline: shopify.config.useOnlineTokens,
+          shop: TEST_SHOP,
+        }),
       );
-      expect(cookieNames).toEqual([
-        'shopify_app_state',
-        'shopify_app_state.sig',
-      ]);
+      expect(response.header.location).toBe('https://oauth-url');
 
       // ... with a console.warn
-      expect(consoleWarnMock).toHaveBeenCalledTimes(1);
+      expect(consoleWarnMock).toHaveBeenCalledWith(
+        expect.stringContaining(errorMessage),
+      );
     });
 
-    it('if there is no signature cookie, but restarts OAuth', async () => {
-      const cookiesWithoutSignature = callbackInfo.cookies.filter(
-        (cookie: string) => !cookie.startsWith('shopify_app_state.sig'),
-      );
-
-      const response = await request(app)
-        .get(`/auth/callback?${callbackInfo.params.toString()}`)
-        .set('Cookie', cookiesWithoutSignature)
-        .expect(302);
-
-      // We begin a new OAuth flow, so the outcome is a successful OAuth begin flow...
-      const url = new URL(response.header.location);
-      const params = Object.fromEntries(url.searchParams.entries());
-
-      expect(url.host).toBe('my-shop.myshopify.io');
-      expect(params).toMatchObject(getExpectedOAuthBeginParams(shopify.api));
-
-      const cookieNames = response.header['set-cookie'].map(
-        (cookie: string) => cookie.split('=')[0],
-      );
-      expect(cookieNames).toEqual([
-        'shopify_app_state',
-        'shopify_app_state.sig',
-      ]);
-
-      // ... with a console.warn
-      expect(consoleWarnMock).toHaveBeenCalledTimes(1);
-    });
-
-    it('if the HMAC is invalid', async () => {
-      callbackInfo.params.set('hmac', 'invalid');
+    it('fails if the request is invalid', async () => {
+      const errorMessage = 'Test invalid auth';
+      callbackMock.mockRejectedValueOnce(new InvalidOAuthError(errorMessage));
 
       await request(app)
-        .get(`/auth/callback?${callbackInfo.params.toString()}`)
-        .set('Cookie', callbackInfo.cookies)
+        .get(`/auth/callback?shop=${TEST_SHOP}&host=${BASE64_HOST}`)
         .expect(400)
-        .expect('Invalid OAuth callback.');
+        .expect(errorMessage);
+
+      expect(consoleWarnMock).toHaveBeenCalledWith(
+        expect.stringContaining(errorMessage),
+      );
+    });
+
+    it('borks on unknown errors', async () => {
+      const errorMessage = 'Unknown error';
+      callbackMock.mockRejectedValueOnce(new Error(errorMessage));
+
+      await request(app)
+        .get(`/auth/callback?shop=${TEST_SHOP}&host=${BASE64_HOST}`)
+        .expect(500)
+        .expect(errorMessage);
+
+      expect(consoleWarnMock).toHaveBeenCalledWith(
+        expect.stringContaining(errorMessage),
+      );
     });
   });
 });
@@ -159,63 +203,43 @@ describe('authCallback with afterAuth', () => {
   const afterAuth = jest.fn();
 
   const app = express();
-  app.get('/auth', async (req, res) => {
-    await authBegin({
-      req,
-      res,
-      api: shopify.api,
-      config: shopify.config,
-    });
-  });
   app.get('/auth/callback', async (req, res) => {
     await authCallback({
-      api: shopify.api,
       req,
       res,
+      api: shopify.api,
       config: shopify.config,
       afterAuth,
     });
   });
 
-  let callbackInfo: CallbackInfo;
+  let session: Session;
   beforeEach(async () => {
-    // Always start off with a valid begin request
-    const beginResponse = await request(app)
-      .get(`/auth?shop=${TEST_SHOP}`)
-      .expect(302);
-    callbackInfo = convertBeginResponseToCallbackInfo(
-      beginResponse,
-      shopify.api.config.apiSecretKey,
-      TEST_SHOP,
-    );
+    session = new Session({
+      id: 'test-session',
+      isOnline: shopify.config.useOnlineTokens,
+      shop: TEST_SHOP,
+      state: '1234',
+    });
 
-    mockShopifyResponse(TOKEN_RESPONSE);
+    jest
+      .spyOn(shopify.api.auth, 'callback')
+      .mockResolvedValueOnce({session, headers: undefined});
   });
 
   afterEach(() => {
-    assertShopifyAuthRequestMade(TEST_SHOP, callbackInfo);
     afterAuth.mockReset();
   });
 
   it('triggers callback', async () => {
     const response = await request(app)
-      .get(`/auth/callback?${callbackInfo.params.toString()}`)
-      .set('Cookie', callbackInfo.cookies)
+      .get(`/auth/callback?shop=${TEST_SHOP}&host=${BASE64_HOST}`)
       .expect(302);
 
     const url = new URL(response.header.location);
     expect(url.host).toBe(SHOPIFY_HOST);
     expect(url.pathname).toBe(`/apps/${shopify.api.config.apiKey}`);
-
-    const session = await shopify.api.session.getOffline({shop: TEST_SHOP});
-    expect(afterAuth).toHaveBeenCalledTimes(1);
-    expect(afterAuth).toHaveBeenCalledWith(
-      expect.objectContaining({
-        req: expect.anything(),
-        res: expect.anything(),
-        session,
-      }),
-    );
+    expect(afterAuth).toHaveBeenCalledWith(expect.objectContaining({session}));
   });
 
   it('does not redirect if callback redirects', async () => {
@@ -224,20 +248,10 @@ describe('authCallback with afterAuth', () => {
     });
 
     const response = await request(app)
-      .get(`/auth/callback?${callbackInfo.params.toString()}`)
-      .set('Cookie', callbackInfo.cookies)
+      .get(`/auth/callback?shop=${TEST_SHOP}&host=${BASE64_HOST}`)
       .expect(302);
 
     expect(response.header.location).toEqual('https://example.com');
-
-    const session = await shopify.api.session.getOffline({shop: TEST_SHOP});
-    expect(afterAuth).toHaveBeenCalledTimes(1);
-    expect(afterAuth).toHaveBeenCalledWith(
-      expect.objectContaining({
-        req: expect.anything(),
-        res: expect.anything(),
-        session,
-      }),
-    );
+    expect(afterAuth).toHaveBeenCalledWith(expect.objectContaining({session}));
   });
 });

@@ -3,7 +3,7 @@ import request from 'supertest';
 
 import {redirectToAuth} from '../redirect-to-auth';
 
-import {getExpectedOAuthBeginParams, shopify, TEST_SHOP} from './test-helper';
+import {shopify, TEST_SHOP} from './test-helper';
 
 describe('redirectToAuth', () => {
   const app = express();
@@ -11,21 +11,31 @@ describe('redirectToAuth', () => {
     await redirectToAuth({req, res, api: shopify.api, config: shopify.config});
   });
 
+  let beginMock: jest.SpyInstance;
+  beforeEach(() => {
+    beginMock = jest.spyOn(shopify.api.auth, 'begin');
+    beginMock.mockImplementationOnce(async ({rawResponse}) => {
+      rawResponse.redirect('https://oauth-url');
+    });
+  });
+
+  afterEach(() => {
+    beginMock.mockReset();
+  });
+
   it('triggers a server-side redirect with no params', async () => {
     const response = await request(app)
       .get(`/redirect-to-host?shop=${TEST_SHOP}`)
       .expect(302);
 
-    const url = new URL(response.header.location);
-    const params = Object.fromEntries(url.searchParams.entries());
-
-    expect(url.host).toBe(TEST_SHOP);
-    expect(params).toMatchObject(getExpectedOAuthBeginParams(shopify.api));
-
-    const cookieNames = response.header['set-cookie'].map(
-      (cookie: string) => cookie.split('=')[0],
+    expect(beginMock).toHaveBeenCalledWith(
+      expect.objectContaining({
+        callbackPath: '/auth/callback',
+        isOnline: shopify.config.useOnlineTokens,
+        shop: TEST_SHOP,
+      }),
     );
-    expect(cookieNames).toEqual(['shopify_app_state', 'shopify_app_state.sig']);
+    expect(response.header.location).toBe('https://oauth-url');
   });
 
   it('triggers a server-side redirect when embedded is not 1', async () => {
@@ -33,11 +43,14 @@ describe('redirectToAuth', () => {
       .get(`/redirect-to-host?shop=${TEST_SHOP}&embedded=0`)
       .expect(302);
 
-    const url = new URL(response.header.location);
-    const params = Object.fromEntries(url.searchParams.entries());
-
-    expect(url.host).toBe(TEST_SHOP);
-    expect(params).toMatchObject(getExpectedOAuthBeginParams(shopify.api));
+    expect(beginMock).toHaveBeenCalledWith(
+      expect.objectContaining({
+        callbackPath: '/auth/callback',
+        isOnline: shopify.config.useOnlineTokens,
+        shop: TEST_SHOP,
+      }),
+    );
+    expect(response.header.location).toBe('https://oauth-url');
   });
 
   it('triggers a client-side redirect when embedded is 1', async () => {

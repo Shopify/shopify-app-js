@@ -1,8 +1,7 @@
 import crypto from 'crypto';
 
-import request from 'supertest';
 import fetchMock, {MockParams} from 'jest-fetch-mock';
-import {LATEST_API_VERSION, Shopify} from '@shopify/shopify-api';
+import {LATEST_API_VERSION} from '@shopify/shopify-api';
 import {MemorySessionStorage} from '@shopify/shopify-api/session-storage/memory';
 
 import {shopifyApp} from '../index';
@@ -10,12 +9,18 @@ import {AppConfigParams, ShopifyApp} from '../types';
 
 // eslint-disable-next-line import/no-mutable-exports
 export let testConfig: AppConfigParams & {
-  api: {apiKey: string; apiSecretKey: string};
+  api: {
+    apiKey: string;
+    apiSecretKey: string;
+    scopes: string[];
+    apiVersion: string;
+  };
 };
 // eslint-disable-next-line import/no-mutable-exports
 export let shopify: ShopifyApp;
 
 export const SHOPIFY_HOST = 'totally-real-host';
+export const BASE64_HOST = Buffer.from(SHOPIFY_HOST).toString('base64');
 export const TEST_SHOP = 'test-shop.myshopify.io';
 
 let currentCall: number;
@@ -54,15 +59,6 @@ interface AssertHttpRequestParams {
   url: string | URL;
   body?: MockBody;
   headers?: (string | [string, string])[];
-}
-
-interface CookiesType {
-  [key: string]: string;
-}
-
-export interface CallbackInfo {
-  params: URLSearchParams;
-  cookies: string[];
 }
 
 export function mockShopifyResponse(body: MockBody, init?: MockParams) {
@@ -142,69 +138,6 @@ expect.extend({
     };
   },
 });
-
-export function getExpectedOAuthBeginParams(api: Shopify) {
-  return {
-    client_id: api.config.apiKey,
-    scope: api.config.scopes.toString(),
-    redirect_uri: `${api.config.hostScheme}://${api.config.hostName}/auth/callback`,
-    state: expect.stringMatching(/.{15}/),
-  };
-}
-
-export function convertBeginResponseToCallbackInfo(
-  beginResponse: request.Response,
-  secret: string,
-  shop: string,
-): CallbackInfo {
-  const cookies: CookiesType = beginResponse.headers['set-cookie'].reduce(
-    (acc: CookiesType, cookie: string) => {
-      const [name, ...rest] = cookie.split(';')[0].split('=');
-      const value = rest.join('=');
-
-      acc[name] = value;
-      return acc;
-    },
-    {},
-  );
-
-  const params = new URLSearchParams({
-    code: 'testCode',
-    host: Buffer.from(SHOPIFY_HOST).toString('base64'),
-    shop,
-    state: cookies.shopify_app_state,
-    timestamp: '123',
-  });
-  const hmac = crypto
-    .createHmac('sha256', secret)
-    .update(params.toString(), 'utf8')
-    .digest('hex');
-  params.append('hmac', hmac);
-
-  const cookiesArray = Object.entries(cookies).map(
-    ([name, value]: [string, string]) => `${name}=${value}`,
-  );
-
-  return {
-    params,
-    cookies: cookiesArray,
-  };
-}
-
-export function assertShopifyAuthRequestMade(
-  shop: string,
-  callbackInfo: CallbackInfo,
-) {
-  expect({
-    method: 'POST',
-    url: `https://${shop}/admin/oauth/access_token`,
-    body: {
-      client_id: shopify.api.config.apiKey,
-      client_secret: shopify.api.config.apiSecretKey,
-      code: callbackInfo.params.get('code'),
-    },
-  }).toMatchMadeHttpRequest();
-}
 
 export function validWebhookHeaders(
   topic: string,
