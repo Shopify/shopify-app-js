@@ -1,8 +1,8 @@
 import express, {Express, Request, Response} from 'express';
 
 import {AuthMiddlewareParams, CreateAuthAppParams} from './types';
-import {createAuthBegin} from './auth-begin';
-import {createAuthCallback} from './auth-callback';
+import {authBegin} from './auth-begin';
+import {authCallback} from './auth-callback';
 
 export function createAuthApp({
   api,
@@ -23,16 +23,19 @@ export function createAuthApp({
     });
 
     authApp.get(config.auth.path, async (req: Request, res: Response) => {
-      return createAuthBegin({api, config})(req, res);
+      return authBegin({req, res, api, config});
     });
 
     authApp.get(
       config.auth.callbackPath,
       async (req: Request, res: Response) => {
-        return createAuthCallback({api, config, afterAuth: params.afterAuth})(
+        return authCallback({
           req,
           res,
-        );
+          api,
+          config,
+          afterAuth: params.afterAuth,
+        });
       },
     );
 

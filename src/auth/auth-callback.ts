@@ -11,27 +11,27 @@ import {
 import {AppConfigInterface} from '../types';
 import {redirectToHost} from '../redirect-to-host';
 
-import {AfterAuthCallback, CreateAuthCallbackParams} from './types';
-import {createAuthBegin} from './auth-begin';
+import {AfterAuthCallback, AuthCallbackParams} from './types';
+import {authBegin} from './auth-begin';
 
-export function createAuthCallback({
+export async function authCallback({
+  req,
+  res,
   api,
   config,
   afterAuth,
-}: CreateAuthCallbackParams) {
-  return async function authCallback(req: Request, res: Response) {
-    try {
-      const callbackResponse = await api.auth.callback({
-        isOnline: config.useOnlineTokens,
-        rawRequest: req,
-        rawResponse: res,
-      });
+}: AuthCallbackParams) {
+  try {
+    const callbackResponse = await api.auth.callback({
+      isOnline: config.useOnlineTokens,
+      rawRequest: req,
+      rawResponse: res,
+    });
 
-      await afterAuthActions(req, res, api, callbackResponse, afterAuth);
-    } catch (error) {
-      await handleCallbackError(req, res, api, config, error);
-    }
-  };
+    await afterAuthActions(req, res, api, callbackResponse, afterAuth);
+  } catch (error) {
+    await handleCallbackError(req, res, api, config, error);
+  }
 }
 
 async function afterAuthActions(
@@ -53,7 +53,7 @@ async function afterAuthActions(
 
   // We redirect to the host-based app URL ONLY if the afterAuth callback didn't send a response already
   if (!res.headersSent) {
-    await redirectToHost(req, res, api, callbackResponse.session);
+    await redirectToHost({req, res, api, session: callbackResponse.session});
   }
 }
 
@@ -107,7 +107,7 @@ async function handleCallbackError(
       res.send(error.message);
       break;
     case error instanceof CookieNotFound:
-      await createAuthBegin({api, config})(req, res);
+      await authBegin({req, res, api, config});
       break;
     default:
       res.status(500);

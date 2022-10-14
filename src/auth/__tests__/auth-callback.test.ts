@@ -6,12 +6,12 @@ import {
   shopify,
   SHOPIFY_HOST,
   mockShopifyResponse,
-  asssertShopifyAuthRequestMade,
+  assertShopifyAuthRequestMade,
   convertBeginResponseToCallbackInfo,
   getExpectedOAuthBeginParams,
 } from '../../__tests__/test-helper';
-import {createAuthCallback} from '../auth-callback';
-import {createAuthBegin} from '../auth-begin';
+import {authCallback} from '../auth-callback';
+import {authBegin} from '../auth-begin';
 
 const TEST_SHOP = 'my-shop.myshopify.io';
 
@@ -23,16 +23,20 @@ const TOKEN_RESPONSE = {
 describe('authCallback', () => {
   const app = express();
   app.get('/auth', async (req, res) => {
-    await createAuthBegin({
+    await authBegin({
+      req,
+      res,
       api: shopify.api,
       config: shopify.config,
-    })(req, res);
+    });
   });
   app.get('/auth/callback', async (req, res) => {
-    await createAuthCallback({
+    await authCallback({
+      req,
+      res,
       api: shopify.api,
       config: shopify.config,
-    })(req, res);
+    });
   });
 
   let callbackInfo: CallbackInfo;
@@ -56,7 +60,7 @@ describe('authCallback', () => {
 
     afterEach(() => {
       // Assert that the OAuth request actually went through
-      asssertShopifyAuthRequestMade(TEST_SHOP, callbackInfo);
+      assertShopifyAuthRequestMade(TEST_SHOP, callbackInfo);
     });
 
     it('creates a session', async () => {
@@ -158,17 +162,21 @@ describe('authCallback with afterAuth', () => {
 
   const app = express();
   app.get('/auth', async (req, res) => {
-    await createAuthBegin({
+    await authBegin({
+      req,
+      res,
       api: shopify.api,
       config: shopify.config,
-    })(req, res);
+    });
   });
   app.get('/auth/callback', async (req, res) => {
-    await createAuthCallback({
+    await authCallback({
       api: shopify.api,
+      req,
+      res,
       config: shopify.config,
       afterAuth,
-    })(req, res);
+    });
   });
 
   let callbackInfo: CallbackInfo;
@@ -187,7 +195,7 @@ describe('authCallback with afterAuth', () => {
   });
 
   afterEach(() => {
-    asssertShopifyAuthRequestMade(TEST_SHOP, callbackInfo);
+    assertShopifyAuthRequestMade(TEST_SHOP, callbackInfo);
     afterAuth.mockReset();
   });
 

@@ -22,12 +22,16 @@ export interface AuthMiddlewareParams {
   afterAuth?: AfterAuthCallback;
 }
 
-export interface CreateAuthBeginParams {
+export interface AuthBeginParams {
+  req: express.Request;
+  res: express.Response;
   api: Shopify;
   config: AppConfigInterface;
 }
 
-export interface CreateAuthCallbackParams {
+export interface AuthCallbackParams {
+  req: express.Request;
+  res: express.Response;
   api: Shopify;
   config: AppConfigInterface;
   afterAuth?: AfterAuthCallback;

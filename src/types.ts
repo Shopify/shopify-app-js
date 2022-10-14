@@ -1,6 +1,7 @@
-import {Express} from 'express';
+import {Express, Request, Response} from 'express';
 import {
   ConfigParams as ApiConfigParams,
+  Session,
   SessionStorage,
   ShopifyRestResources,
   Shopify,
@@ -39,4 +40,18 @@ export interface ShopifyApp<
   config: AppConfigInterface;
   api: Shopify<R, S>;
   auth: (authParams?: AuthMiddlewareParams) => Express;
+}
+
+export interface RedirectToAuthParams {
+  req: Request;
+  res: Response;
+  api: Shopify;
+  config: AppConfigInterface;
+}
+
+export interface RedirectToHostParams {
+  req: Request;
+  res: Response;
+  api: Shopify;
+  session: Session;
 }

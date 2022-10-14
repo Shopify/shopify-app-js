@@ -1,12 +1,11 @@
-import {Session, Shopify} from '@shopify/shopify-api';
-import {Request, Response} from 'express';
+import {RedirectToHostParams} from './types';
 
-export async function redirectToHost(
-  req: Request,
-  res: Response,
-  api: Shopify,
-  session: Session,
-) {
+export async function redirectToHost({
+  req,
+  res,
+  api,
+  session,
+}: RedirectToHostParams) {
   const host = api.utils.sanitizeHost(req.query.host as string)!;
   const redirectUrl = api.config.isEmbeddedApp
     ? await api.auth.getEmbeddedAppUrl({

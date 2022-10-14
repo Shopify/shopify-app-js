@@ -1,11 +1,7 @@
-import {Request, Response} from 'express';
-
 import {redirectToAuth} from '../redirect-to-auth';
 
-import {CreateAuthBeginParams} from './types';
+import {AuthBeginParams} from './types';
 
-export function createAuthBegin({api, config}: CreateAuthBeginParams) {
-  return async function authBegin(req: Request, res: Response): Promise<void> {
-    await redirectToAuth(req, res, api, config);
-  };
+export async function authBegin({req, res, api, config}: AuthBeginParams) {
+  await redirectToAuth({req, res, api, config});
 }
