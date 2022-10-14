@@ -3,7 +3,7 @@ import express, {Express} from 'express';
 import {AccessTokenResponse, OnlineAccessResponse} from '@shopify/shopify-api';
 
 import {
-  asssertShopifyAuthRequestMade,
+  assertShopifyAuthRequestMade,
   convertBeginResponseToCallbackInfo,
   mockShopifyResponse,
   shopify,
@@ -16,7 +16,7 @@ describe('shopify.auth', () => {
 
   beforeEach(() => {
     app = express();
-    app.use('/test', shopify.auth);
+    app.use('/test', shopify.auth());
   });
 
   [
@@ -69,7 +69,7 @@ describe('shopify.auth', () => {
       const url = new URL(callbackResponse.header.location);
       expect(url.pathname).toBe(`/apps/${shopify.api.config.apiKey}`);
 
-      asssertShopifyAuthRequestMade(SHOP, callbackInfo);
+      assertShopifyAuthRequestMade(SHOP, callbackInfo);
     });
   });
 });

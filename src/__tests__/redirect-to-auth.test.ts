@@ -8,7 +8,7 @@ import {getExpectedOAuthBeginParams, shopify, TEST_SHOP} from './test-helper';
 describe('redirectToAuth', () => {
   const app = express();
   app.get('/redirect-to-host', async (req, res) => {
-    await redirectToAuth(req, res, shopify.api, shopify.config);
+    await redirectToAuth({req, res, api: shopify.api, config: shopify.config});
   });
 
   it('triggers a server-side redirect with no params', async () => {

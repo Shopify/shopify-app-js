@@ -1,26 +1,44 @@
 import express, {Express, Request, Response} from 'express';
 
-import {CreateAuthAppParams} from './types';
-import {createAuthBegin} from './auth-begin';
-import {createAuthCallback} from './auth-callback';
+import {AuthMiddlewareParams, CreateAuthAppParams} from './types';
+import {authBegin} from './auth-begin';
+import {authCallback} from './auth-callback';
 
-export function createAuthApp({api, config}: CreateAuthAppParams): Express {
-  const authApp = express();
+export function createAuthApp({
+  api,
+  config,
+}: CreateAuthAppParams): (authParams: AuthMiddlewareParams) => Express {
+  return function authApp(authParams = {}) {
+    const params = {
+      ...authParams,
+    };
 
-  authApp.on('mount', () => {
-    const mountPath = authApp.mountpath as string;
+    const authApp = express();
 
-    config.auth.path = `${mountPath}${config.auth.path}`;
-    config.auth.callbackPath = `${mountPath}${config.auth.callbackPath}`;
-  });
+    authApp.on('mount', () => {
+      const mountPath = authApp.mountpath as string;
 
-  authApp.get(config.auth.path, async (req: Request, res: Response) => {
-    return createAuthBegin({api, config})(req, res);
-  });
+      config.auth.path = `${mountPath}${config.auth.path}`;
+      config.auth.callbackPath = `${mountPath}${config.auth.callbackPath}`;
+    });
 
-  authApp.get(config.auth.callbackPath, async (req: Request, res: Response) => {
-    return createAuthCallback({api, config})(req, res);
-  });
+    authApp.get(config.auth.path, async (req: Request, res: Response) => {
+      return authBegin({req, res, api, config});
+    });
 
-  return authApp;
+    authApp.get(
+      config.auth.callbackPath,
+      async (req: Request, res: Response) => {
+        return authCallback({
+          req,
+          res,
+          api,
+          config,
+          afterAuth: params.afterAuth,
+        });
+      },
+    );
+
+    return authApp;
+  };
 }

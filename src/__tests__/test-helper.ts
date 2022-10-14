@@ -176,7 +176,7 @@ export function convertBeginResponseToCallbackInfo(
   };
 }
 
-export function asssertShopifyAuthRequestMade(
+export function assertShopifyAuthRequestMade(
   shop: string,
   callbackInfo: CallbackInfo,
 ) {

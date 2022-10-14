@@ -5,15 +5,17 @@ import {
   shopify,
   getExpectedOAuthBeginParams,
 } from '../../__tests__/test-helper';
-import {createAuthBegin} from '../auth-begin';
+import {authBegin} from '../auth-begin';
 
 describe('beginAuth', () => {
   const app = express();
   app.get('/auth', async (req, res) => {
-    await createAuthBegin({
+    await authBegin({
+      req,
+      res,
       api: shopify.api,
       config: shopify.config,
-    })(req, res);
+    });
   });
 
   it('properly redirects when running on localhost', async () => {

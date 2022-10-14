@@ -2,8 +2,6 @@
 
 This function creates an object that contains everything an Express app needs to interact with Shopify.
 
-It will redirect to the app within Shopify when OAuth completes, unless the `afterAuth` callback triggers a different redirect.
-
 ## Example
 
 ```ts
@@ -25,9 +23,6 @@ const shopify = shopifyApp({
   auth: {
     path: '/auth',
     callbackPath: '/auth/callback',
-    afterAuth: async ({req, res, session, hasPayment, api}) => {
-      // App-specific behaviour goes here
-    },
   },
 });
 ```
@@ -82,45 +77,6 @@ app.use('/shopify', shopify.auth);
 The URL path used by the app to complete the OAuth process.
 It works in the same way as `path` above.
 
-#### afterAuth
-
-`Function`
-
-Callback called after OAuth completes to enable custom app behaviour. Receives an object with the following parameters:
-
-- `req`: `express.Request`
-- `res`: `express.Response`
-- `session`: `Session`
-- `api`: the `shopify.api` object used for the OAuth requests.
-
-For example, the following callback will check for and request payment after OAuth if the merchant hasn't paid for the app yet.
-
-```ts
-const shopify = shopifyApp({
-  auth: {
-    afterAuth: async ({req, res, session, api}) => {
-      const hasPayment = await api.billing.check({
-        session,
-        plans: ['My plan'],
-        isTest: true,
-      });
-
-      if (!hasPayment) {
-        res.redirect(
-          await api.billing.request({
-            session,
-            plan: 'My plan',
-            isTest: true,
-          }),
-        );
-      }
-    },
-  },
-});
-```
-
-> **Note**: the above example doesn't have to trigger a redirect back to the app if payment exists - the package will do that by default.
-
 ## Return
 
 Returns an object that contains everything an app needs to interact with Shopify:
@@ -135,9 +91,9 @@ The configuration used to set up this object.
 
 The object created by the `@shopify/shopify-api` package. See [the API package documentation](https://github.com/Shopify/shopify-api-node/tree/shopify_api_next#getting-started) for more details.
 
-### auth
+### [auth](./auth.md)
 
-`Express`
+`(AuthMiddlewareParams) => Express`
 
-An Express.js app that contains the necessary endpoints to perform OAuth in the Shopify platform.
+A function that returns an Express.js app that contains the necessary endpoints to perform OAuth in the Shopify platform.
 You can mount this as a sub-app anywhere in your app.

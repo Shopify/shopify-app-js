@@ -1,14 +1,14 @@
 import {Shopify} from '@shopify/shopify-api';
 import {Request, Response} from 'express';
 
-import {AppConfigInterface} from './types';
+import {AppConfigInterface, RedirectToAuthParams} from './types';
 
-export async function redirectToAuth(
-  req: Request,
-  res: Response,
-  api: Shopify,
-  config: AppConfigInterface,
-) {
+export async function redirectToAuth({
+  req,
+  res,
+  api,
+  config,
+}: RedirectToAuthParams) {
   const shop = api.utils.sanitizeShop(req.query.shop as string);
   if (shop) {
     if (req.query.embedded === '1') {
