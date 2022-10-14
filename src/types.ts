@@ -1,4 +1,4 @@
-import express, {Express, Request, Response, NextFunction} from 'express';
+import {Express, Request, Response, NextFunction} from 'express';
 import {
   ConfigParams as ApiConfigParams,
   Session,

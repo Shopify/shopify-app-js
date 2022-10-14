@@ -32,7 +32,7 @@ export function createAuthenticatedRequest({
 
       if (session && shop && session.shop !== shop) {
         // The current request is for a different shop. Redirect gracefully.
-        return redirectToAuth(req, res, api, config);
+        return redirectToAuth({req, res, api, config});
       }
 
       if (session?.isActive(api.config.scopes)) {
