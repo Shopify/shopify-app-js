@@ -45,6 +45,7 @@ export interface ShopifyApp<
   auth: AuthMiddleware;
   authenticatedRequest: () => RequestHandler;
   webhooks: WebhooksMiddleware;
+  ensureInstalled: () => RequestHandler;
 }
 
 export interface RedirectToAuthParams extends ApiAndConfigParams {

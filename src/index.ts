@@ -13,6 +13,8 @@ import {WebhooksConfigInterface} from './webhooks/types';
 import {createAuthApp} from './auth/index';
 import {createAuthenticatedRequest} from './middlewares/authenticated_request';
 import {createWebhookApp} from './webhooks/index';
+import {createEnsureInstalled} from './middlewares/ensure_installed';
+import {AppInstallations} from './app-installations';
 
 export * from './types';
 
@@ -28,6 +30,7 @@ export function shopifyApp<
     api,
     config: validatedConfig,
   });
+  const appInstallations = new AppInstallations(api);
 
   return {
     config: validatedConfig,
@@ -35,6 +38,11 @@ export function shopifyApp<
     authenticatedRequest,
     auth: createAuthApp({api, config: validatedConfig}),
     webhooks: createWebhookApp({api, config: validatedConfig}),
+    ensureInstalled: createEnsureInstalled({
+      api,
+      config: validatedConfig,
+      appInstallations,
+    }),
   };
 }
 
