@@ -14,6 +14,7 @@ import {
   AuthConfigInterface,
 } from './types';
 import {createAuthApp} from './auth/index';
+import {createAuthenticatedRequest} from './middlewares/authenticated_request';
 
 export * from './types';
 
@@ -25,11 +26,19 @@ export function shopifyApp<
 
   const api = shopifyApi<R, S>(apiConfigWithDefaults<R, S>(apiConfig ?? {}));
   const validatedConfig = validateAppConfig(appConfig);
+  const authenticatedRequest = createAuthenticatedRequest({
+    api,
+    config: validatedConfig,
+  });
 
   return {
     config: validatedConfig,
     api,
-    auth: createAuthApp({api, config: validatedConfig}),
+    auth: createAuthApp({
+      api,
+      config: validatedConfig,
+    }),
+    authenticatedRequest,
   };
 }
 
