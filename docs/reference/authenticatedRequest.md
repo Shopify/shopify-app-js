@@ -10,4 +10,9 @@ If the request received from the front-end does not originate from an App Bridge
 const app = express();
 
 app.use('/api', shopify.authenticatedRequest());
+
+app.get('/api/product/count', async (res, req) => {
+  // because of shopify.authenticateRequest(), session is available
+  // in res.locals.shopify.session
+});
 ```

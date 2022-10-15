@@ -1,4 +1,4 @@
-import {Express, Request, Response, NextFunction} from 'express';
+import {Express, Request, Response, RequestHandler} from 'express';
 import {
   ConfigParams as ApiConfigParams,
   Session,
@@ -33,6 +33,11 @@ export interface AppConfigInterface extends Omit<AppConfigParams, 'api'> {
   auth: AuthConfigInterface;
 }
 
+export interface ApiAndConfigParams {
+  api: Shopify;
+  config: AppConfigInterface;
+}
+
 export interface ShopifyApp<
   R extends ShopifyRestResources = ShopifyRestResources,
   S extends SessionStorage = SessionStorage,
@@ -40,18 +45,12 @@ export interface ShopifyApp<
   config: AppConfigInterface;
   api: Shopify<R, S>;
   auth: (authParams?: AuthMiddlewareParams) => Express;
-  authenticatedRequest: () => (
-    req: Request,
-    res: Response,
-    next: NextFunction,
-  ) => Promise<void>;
+  authenticatedRequest: () => RequestHandler;
 }
 
-export interface RedirectToAuthParams {
+export interface RedirectToAuthParams extends ApiAndConfigParams {
   req: Request;
   res: Response;
-  api: Shopify;
-  config: AppConfigInterface;
 }
 
 export interface RedirectToHostParams {
@@ -59,4 +58,10 @@ export interface RedirectToHostParams {
   res: Response;
   api: Shopify;
   session: Session;
+}
+
+export interface ReturnTopLevelRedirectionParams {
+  res: Response;
+  bearerPresent: boolean;
+  redirectUrl: string;
 }

@@ -1,13 +1,9 @@
-import {HttpResponseError, Shopify} from '@shopify/shopify-api';
+import {HttpResponseError, Shopify, Session} from '@shopify/shopify-api';
 import {Request, Response, NextFunction} from 'express';
 
 import {redirectToAuth} from '../redirect-to-auth';
-import {AppConfigInterface} from '../types';
-
-interface CreateAuthenticatedRequestParams {
-  api: Shopify;
-  config: AppConfigInterface;
-}
+import {returnTopLevelRedirection} from '../return-top-level-redirection';
+import {ApiAndConfigParams} from '../types';
 
 const TEST_GRAPHQL_QUERY = `
 {
@@ -16,10 +12,7 @@ const TEST_GRAPHQL_QUERY = `
   }
 }`;
 
-export function createAuthenticatedRequest({
-  api,
-  config,
-}: CreateAuthenticatedRequestParams) {
+export function createAuthenticatedRequest({api, config}: ApiAndConfigParams) {
   return function authenticatedRequest() {
     return async (req: Request, res: Response, next: NextFunction) => {
       const session = await api.session.getCurrent({
@@ -36,70 +29,68 @@ export function createAuthenticatedRequest({
       }
 
       if (session?.isActive(api.config.scopes)) {
-        try {
-          // Make a request to ensure the access token is still valid. Otherwise, re-authenticate the user.
-          const client = new api.clients.Graphql({
-            domain: session.shop,
-            accessToken: session.accessToken,
-          });
-          await client.query({data: TEST_GRAPHQL_QUERY});
-
+        if (await isValidAccessToken(api, session)) {
           res.locals.shopify = {
             ...res.locals.shopify,
             session,
           };
-
           return next();
-        } catch (error) {
-          if (
-            error instanceof HttpResponseError &&
-            error.response.code === 401
-          ) {
-            // Re-authenticate if we get a 401 response
-          } else {
-            throw error;
-          }
         }
       }
 
       const bearerPresent = req.headers.authorization?.match(/Bearer (.*)/);
       if (bearerPresent) {
         if (!shop) {
-          if (session) {
-            shop = session.shop;
-          } else if (api.config.isEmbeddedApp) {
-            if (bearerPresent) {
-              const payload = await api.session.decodeSessionToken(
-                bearerPresent[1],
-              );
-              shop = payload.dest.replace('https://', '');
-            }
-          }
+          shop = await setShopFromSessionOrToken(
+            api,
+            session,
+            bearerPresent[1],
+          );
         }
       }
 
-      return returnTopLevelRedirection(
+      return returnTopLevelRedirection({
         res,
-        Boolean(bearerPresent),
-        `${config.auth.path}?shop=${shop}`,
-      );
+        bearerPresent: Boolean(bearerPresent),
+        redirectUrl: `${config.auth.path}?shop=${shop}`,
+      });
     };
   };
 }
 
-function returnTopLevelRedirection(
-  res: Response,
-  bearerPresent: boolean,
-  redirectUrl: string,
-) {
-  // If the request has a bearer token, the app is currently embedded, and must break out of the iframe to
-  // re-authenticate
-  if (bearerPresent) {
-    res.status(403);
-    res.header('X-Shopify-API-Request-Failure-Reauthorize', '1');
-    res.header('X-Shopify-API-Request-Failure-Reauthorize-Url', redirectUrl);
-    res.end();
-  } else {
-    res.redirect(redirectUrl);
+async function isValidAccessToken(
+  api: Shopify,
+  session: Session,
+): Promise<boolean> {
+  try {
+    const client = new api.clients.Graphql({
+      domain: session.shop,
+      accessToken: session.accessToken,
+    });
+    await client.query({data: TEST_GRAPHQL_QUERY});
+    return true;
+  } catch (error) {
+    if (error instanceof HttpResponseError && error.response.code === 401) {
+      // Re-authenticate if we get a 401 response
+      return false;
+    } else {
+      throw error;
+    }
   }
+}
+
+async function setShopFromSessionOrToken(
+  api: Shopify,
+  session: Session | undefined,
+  token: string,
+): Promise<string | undefined> {
+  let shop: string | undefined;
+
+  if (session) {
+    shop = session.shop;
+  } else if (api.config.isEmbeddedApp) {
+    const payload = await api.session.decodeSessionToken(token);
+    shop = payload.dest.replace('https://', '');
+  }
+  return shop;
 }
