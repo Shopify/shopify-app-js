@@ -144,14 +144,18 @@ export function validWebhookHeaders(
   body: string,
   secretKey: string,
 ): {[key: string]: string} {
-  const hmac = crypto
-    .createHmac('sha256', secretKey)
-    .update(body, 'utf8')
-    .digest('base64');
+  const hmac = createTestHmac(secretKey, body);
 
   return {
     'X-Shopify-Topic': topic,
     'X-Shopify-Shop-Domain': TEST_SHOP,
     'X-Shopify-Hmac-Sha256': hmac,
   };
+}
+
+export function createTestHmac(secretKey: string, body: string): string {
+  return crypto
+    .createHmac('sha256', secretKey)
+    .update(body, 'utf8')
+    .digest('base64');
 }

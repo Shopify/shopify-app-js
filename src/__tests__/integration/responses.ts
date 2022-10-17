@@ -2,13 +2,13 @@ import {AccessTokenResponse, OnlineAccessResponse} from '@shopify/shopify-api';
 
 export const OFFLINE_ACCESS_TOKEN_RESPONSE: AccessTokenResponse = {
   access_token: 'totally-real-access-token',
-  scope: 'read_products',
+  scope: 'testScope',
 };
 
 export const ONLINE_ACCESS_TOKEN_RESPONSE: OnlineAccessResponse = {
   ...OFFLINE_ACCESS_TOKEN_RESPONSE,
   expires_in: 123456,
-  associated_user_scope: 'read_products',
+  associated_user_scope: 'testScope',
   associated_user: {
     id: 1234,
     first_name: 'first',

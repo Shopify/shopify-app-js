@@ -1,12 +1,15 @@
 import request from 'supertest';
 import express, {Express} from 'express';
+import jwt from 'jsonwebtoken';
 import {ConfigParams, DeliveryMethod} from '@shopify/shopify-api';
 
 import {shopifyApp} from '../..';
 import {ShopifyApp, WebhookConfigHandler} from '../../types';
 import {
   BASE64_HOST,
+  createTestHmac,
   MockBody,
+  mockShopifyResponse,
   mockShopifyResponses,
   testConfig,
   TEST_SHOP,
@@ -63,6 +66,8 @@ describe('Integration tests', () => {
       ];
 
       const afterAuth = jest.fn();
+      const installedMock = jest.fn((_req, res) => res.send('ok'));
+      const authedMock = jest.fn((_req, res) => res.send('ok'));
 
       // Create a new instance of the app with the given config
       const url = new URL(config.host);
@@ -88,6 +93,8 @@ describe('Integration tests', () => {
       });
       app.use('/test', shopify.auth({afterAuth}));
       app.use('/test', shopify.webhooks({handlers}));
+      app.get('/installed', shopify.ensureInstalled(), installedMock);
+      app.get('/authed', shopify.authenticatedRequest(), authedMock);
 
       const callbackInfo = await beginOAuth(app, shopify, config);
 
@@ -96,6 +103,10 @@ describe('Integration tests', () => {
       assertOAuthRequests(shopify, config, callbackInfo);
 
       await webhookProcessRequest(app, shopify, httpMock);
+
+      await makeInstalledRequest(app, config, installedMock);
+
+      await makeAuthenticatedRequest(app, shopify, config, authedMock);
     });
   });
 });
@@ -281,4 +292,64 @@ async function webhookProcessRequest(
   ]);
 
   consoleLogMock.mockRestore();
+}
+
+async function makeInstalledRequest(
+  app: Express,
+  config: TestCase,
+  mock: jest.Mock,
+) {
+  const response = await request(app).get(
+    `/installed?shop=${TEST_SHOP}&host=${BASE64_HOST}&embedded=1`,
+  );
+
+  if (config.embedded) {
+    expect(response.status).toBe(200);
+    expect(mock).toHaveBeenCalledTimes(1);
+  } else {
+    expect(response.status).toBe(500);
+    expect(mock).not.toHaveBeenCalled();
+  }
+}
+
+async function makeAuthenticatedRequest(
+  app: Express,
+  shopify: ShopifyApp,
+  config: TestCase,
+  mock: jest.Mock,
+) {
+  const validJWT = jwt.sign(
+    {
+      sub: 1234,
+      aud: shopify.api.config.apiKey,
+      dest: `https://${TEST_SHOP}`,
+    },
+    shopify.api.config.apiSecretKey,
+    {
+      algorithm: 'HS256',
+    },
+  );
+
+  const headers: {[key: string]: string} = {};
+  if (config.embedded) {
+    headers.Authorization = `Bearer ${validJWT}`;
+  } else {
+    const session = (
+      await shopify.api.config.sessionStorage.findSessionsByShop!(TEST_SHOP)
+    )[0];
+    headers.Cookie = [
+      `shopify_app_session=${session.id}`,
+      `shopify_app_session.sig=${createTestHmac(
+        shopify.api.config.apiSecretKey,
+        session.id,
+      )}`,
+    ].join(';');
+  }
+
+  mockShopifyResponse({data: {shop: {name: TEST_SHOP}}});
+
+  const response = await request(app).get('/authed').set(headers);
+
+  expect(response.status).toBe(200);
+  expect(mock).toHaveBeenCalledTimes(1);
 }
