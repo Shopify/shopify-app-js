@@ -1,4 +1,4 @@
-import {Express, Request, Response, RequestHandler} from 'express';
+import {Request, Response, RequestHandler} from 'express';
 import {
   ConfigParams as ApiConfigParams,
   Session,
@@ -7,15 +7,11 @@ import {
   Shopify,
 } from '@shopify/shopify-api';
 
-import {AuthMiddlewareParams} from './auth/types';
+import {AuthConfigInterface, AuthMiddleware} from './auth/types';
+import {WebhooksConfigInterface, WebhooksMiddleware} from './webhooks/types';
 
 export * from './auth/types';
-
-export interface AuthConfigInterface {
-  path: string;
-  callbackPath: string;
-  checkBillingPlans?: string[];
-}
+export * from './webhooks/types';
 
 export interface AppConfigParams<
   R extends ShopifyRestResources = any,
@@ -25,12 +21,14 @@ export interface AppConfigParams<
   useOnlineTokens?: boolean;
   exitIframePath?: string;
   auth?: Partial<AuthConfigInterface>;
+  webhooks?: Partial<WebhooksConfigInterface>;
 }
 
 export interface AppConfigInterface extends Omit<AppConfigParams, 'api'> {
   useOnlineTokens: boolean;
   exitIframePath: string;
   auth: AuthConfigInterface;
+  webhooks: WebhooksConfigInterface;
 }
 
 export interface ApiAndConfigParams {
@@ -44,8 +42,9 @@ export interface ShopifyApp<
 > {
   config: AppConfigInterface;
   api: Shopify<R, S>;
-  auth: (authParams?: AuthMiddlewareParams) => Express;
+  auth: AuthMiddleware;
   authenticatedRequest: () => RequestHandler;
+  webhooks: WebhooksMiddleware;
 }
 
 export interface RedirectToAuthParams extends ApiAndConfigParams {

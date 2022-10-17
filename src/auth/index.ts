@@ -1,13 +1,15 @@
-import express, {Express, Request, Response} from 'express';
+import express, {Request, Response} from 'express';
 
-import {AuthMiddlewareParams, CreateAuthAppParams} from './types';
+import {ApiAndConfigParams} from '../types';
+
+import {AuthMiddleware} from './types';
 import {authBegin} from './auth-begin';
 import {authCallback} from './auth-callback';
 
 export function createAuthApp({
   api,
   config,
-}: CreateAuthAppParams): (authParams: AuthMiddlewareParams) => Express {
+}: ApiAndConfigParams): AuthMiddleware {
   return function authApp(authParams = {}) {
     const params = {
       ...authParams,
