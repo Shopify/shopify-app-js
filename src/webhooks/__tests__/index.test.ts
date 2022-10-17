@@ -14,7 +14,7 @@ import {ShopifyApp} from '../../types';
 import {shopifyApp} from '../..';
 import {WebhookConfigHandler} from '../types';
 
-describe('shopify.auth', () => {
+describe('shopify.webhooks', () => {
   let app: Express;
   let shopify: ShopifyApp;
   let httpMock: jest.Mock;

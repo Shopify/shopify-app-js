@@ -1,13 +1,15 @@
 import express, {Request, Response} from 'express';
 
-import {CreateWebhookAppParams, WebhooksMiddleware} from './types';
+import {ApiAndConfigParams} from '../types';
+
+import {WebhooksMiddleware} from './types';
 import {process} from './process';
 import {addWebhookHandlers} from './add-webhook-handlers';
 
 export function createWebhookApp({
   api,
   config,
-}: CreateWebhookAppParams): WebhooksMiddleware {
+}: ApiAndConfigParams): WebhooksMiddleware {
   return function webhookApp(webhooksParams = {}) {
     config.webhooks.handlers = webhooksParams.handlers || [];
 

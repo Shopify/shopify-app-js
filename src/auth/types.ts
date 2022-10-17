@@ -3,11 +3,6 @@ import {Shopify, Session} from '@shopify/shopify-api';
 
 import {AppConfigInterface} from '../types';
 
-export interface CreateAuthAppParams {
-  api: Shopify;
-  config: AppConfigInterface;
-}
-
 export interface AfterAuthCallbackParams {
   req: express.Request;
   res: express.Response;

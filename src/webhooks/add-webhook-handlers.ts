@@ -1,11 +1,8 @@
 import {DeliveryMethod} from '@shopify/shopify-api';
 
-import {AddWebhookHandlersParams} from './types';
+import {ApiAndConfigParams} from '../types';
 
-export function addWebhookHandlers({
-  api,
-  config,
-}: AddWebhookHandlersParams): void {
+export function addWebhookHandlers({api, config}: ApiAndConfigParams): void {
   config.webhooks.handlers.forEach((entry) => {
     if (entry.deliveryMethod === DeliveryMethod.Http) {
       api.webhooks.addHttpHandler({
