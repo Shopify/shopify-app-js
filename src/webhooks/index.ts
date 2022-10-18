@@ -3,9 +3,9 @@ import {DeliveryMethod, WebhookHandlerFunction} from '@shopify/shopify-api';
 
 import {
   CreateWebhookAppParams,
+  HttpWebhookHandler,
   WebhooksMiddleware,
   WebhookConfigHandler,
-  HttpWebhookHandler,
 } from './types';
 import {process} from './process';
 import {addWebhookHandlers} from './add-webhook-handlers';

@@ -207,6 +207,7 @@ export function assertShopifyAuthRequestMade(
 }
 
 export function validWebhookHeaders(
+  topic: string,
   body: string,
   secretKey: string,
 ): {[key: string]: string} {
@@ -216,7 +217,7 @@ export function validWebhookHeaders(
     .digest('base64');
 
   return {
-    'X-Shopify-Topic': 'TEST_TOPIC',
+    'X-Shopify-Topic': topic,
     'X-Shopify-Shop-Domain': TEST_SHOP,
     'X-Shopify-Hmac-Sha256': hmac,
   };

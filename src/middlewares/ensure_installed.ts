@@ -17,7 +17,6 @@ export function createEnsureInstalled({
     return async (req: Request, res: Response, next: NextFunction) => {
       if (!api.config.isEmbeddedApp) {
         res.status(500);
-        res.setHeader('Content-Type', 'text/plain');
         return res.send(
           'ensureInstalled() should only be used in embedded apps; use authenticatedRequest() instead',
         );

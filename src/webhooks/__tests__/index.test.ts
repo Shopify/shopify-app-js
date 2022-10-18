@@ -13,6 +13,7 @@ import {
 import {ShopifyApp} from '../../types';
 import {shopifyApp} from '../..';
 import {WebhookConfigHandler} from '../types';
+import {AppInstallations} from '../../app-installations';
 
 describe('shopify.webhooks', () => {
   let app: Express;
@@ -73,7 +74,13 @@ describe('shopify.webhooks', () => {
 
     await request(app)
       .post('/test/webhooks')
-      .set(validWebhookHeaders(body, shopify.api.config.apiSecretKey))
+      .set(
+        validWebhookHeaders(
+          'TEST_TOPIC',
+          body,
+          shopify.api.config.apiSecretKey,
+        ),
+      )
       .send(body)
       .expect(200);
 
@@ -83,7 +90,32 @@ describe('shopify.webhooks', () => {
     );
   });
 
-  it.todo('deletes sessions on APP_UNINSTALLED by default');
+  it('deletes sessions on APP_UNINSTALLED by default', async () => {
+    await performOauth(app, shopify.api.config.apiSecretKey);
+
+    const appInstallations = new AppInstallations(shopify.api);
+
+    expect(await appInstallations.includes(TEST_SHOP)).toBe(true);
+
+    const body = JSON.stringify({});
+
+    await request(app)
+      .post('/test/webhooks')
+      .set(
+        validWebhookHeaders(
+          'APP_UNINSTALLED',
+          body,
+          shopify.api.config.apiSecretKey,
+        ),
+      )
+      .send(body)
+      .expect(200);
+
+    expect(await appInstallations.includes(TEST_SHOP)).toBe(false);
+    expect(consoleLogMock).toHaveBeenCalledWith(
+      'Webhook processed, returned status code 200',
+    );
+  });
 });
 
 describe('with all webhook types', () => {
@@ -145,6 +177,9 @@ describe('with all webhook types', () => {
       [EVENT_BRIDGE_WEBHOOK_CREATE_RESPONSE],
       [EMPTY_WEBHOOK_RESPONSE],
       [PUBSUB_WEBHOOK_CREATE_RESPONSE],
+      // the next two are for APP_UNINSTALLED
+      [EMPTY_WEBHOOK_RESPONSE],
+      [HTTP_WEBHOOK_CREATE_RESPONSE],
     );
 
     await request(app)
@@ -193,10 +228,16 @@ async function performOauth(
       [ACCESS_TOKEN_RESPONSE],
       [EXISTING_WEBHOOK_RESPONSE],
       [HTTP_WEBHOOK_UPDATE_RESPONSE],
+      // the next two are for APP_UNINSTALLED
+      [EXISTING_WEBHOOK_RESPONSE],
+      [HTTP_WEBHOOK_UPDATE_RESPONSE],
     );
   } else {
     mockShopifyResponses(
       [ACCESS_TOKEN_RESPONSE],
+      [EMPTY_WEBHOOK_RESPONSE],
+      [HTTP_WEBHOOK_CREATE_RESPONSE],
+      // the next two are for APP_UNINSTALLED
       [EMPTY_WEBHOOK_RESPONSE],
       [HTTP_WEBHOOK_CREATE_RESPONSE],
     );
