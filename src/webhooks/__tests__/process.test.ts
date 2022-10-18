@@ -98,7 +98,13 @@ describe('process', () => {
 
     await request(app)
       .post('/webhooks')
-      .set(validWebhookHeaders(body, shopify.api.config.apiSecretKey))
+      .set(
+        validWebhookHeaders(
+          'TEST_TOPIC',
+          body,
+          shopify.api.config.apiSecretKey,
+        ),
+      )
       .send(body)
       .expect(500);
 

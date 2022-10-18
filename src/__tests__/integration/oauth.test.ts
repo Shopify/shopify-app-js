@@ -1,10 +1,11 @@
 import request from 'supertest';
 import express, {Express} from 'express';
 import jwt from 'jsonwebtoken';
-import {ConfigParams, DeliveryMethod} from '@shopify/shopify-api';
+import {ConfigParams} from '@shopify/shopify-api';
 
 import {shopifyApp} from '../..';
 import {ShopifyApp, WebhookConfigHandler} from '../../types';
+import {AppInstallations} from '../../app-installations';
 import {
   BASE64_HOST,
   createTestHmac,
@@ -16,18 +17,16 @@ import {
   validWebhookHeaders,
 } from '../test-helper';
 
-import {convertBeginResponseToCallbackInfo} from './utils';
-import {CallbackInfo} from './types';
+import {
+  convertBeginResponseToCallbackInfo,
+  EVENT_BRIDGE_HANDLER,
+  HTTP_HANDLER,
+  PUBSUB_HANDLER,
+} from './utils';
+import {CallbackInfo, OAuthTestCase} from './types';
 import * as mockResponses from './responses';
 
-interface TestCase {
-  embedded: boolean;
-  online: boolean;
-  host: string;
-  existingWebhooks: boolean;
-}
-
-const TEST_CASES: TestCase[] = [];
+const TEST_CASES: OAuthTestCase[] = [];
 
 // Test all permutations of the configs
 // Embedded app
@@ -43,26 +42,13 @@ const TEST_CASES: TestCase[] = [];
   });
 });
 
-describe('Integration tests', () => {
+describe('OAuth integration tests', () => {
   TEST_CASES.forEach((config) => {
     it(`test ${JSON.stringify(config)}`, async () => {
-      const httpMock = jest.fn();
       const handlers: WebhookConfigHandler[] = [
-        {
-          deliveryMethod: DeliveryMethod.Http,
-          topic: 'TEST_TOPIC',
-          handler: httpMock,
-        },
-        {
-          deliveryMethod: DeliveryMethod.EventBridge,
-          topic: 'EB_TOPIC',
-          address: 'eventbridge-address',
-        },
-        {
-          deliveryMethod: DeliveryMethod.PubSub,
-          topic: 'PUBSUB_TOPIC',
-          address: 'pubsub:address',
-        },
+        HTTP_HANDLER,
+        EVENT_BRIDGE_HANDLER,
+        PUBSUB_HANDLER,
       ];
 
       const afterAuth = jest.fn();
@@ -102,17 +88,29 @@ describe('Integration tests', () => {
 
       assertOAuthRequests(shopify, config, callbackInfo);
 
-      await webhookProcessRequest(app, shopify, httpMock);
+      const body = JSON.stringify({'test-body-received': true});
+      await webhookProcessRequest('TEST_TOPIC', body, app, shopify);
+      expect(HTTP_HANDLER.handler).toHaveBeenCalledWith(
+        'TEST_TOPIC',
+        TEST_SHOP,
+        body,
+      );
 
       await makeInstalledRequest(app, config, installedMock);
 
       await makeAuthenticatedRequest(app, shopify, config, authedMock);
+
+      await appUninstalledWebhookRequest(app, shopify);
     });
   });
 });
 
 // Fires the request to start the OAuth process and asserts it goes as expected
-async function beginOAuth(app: Express, shopify: ShopifyApp, config: TestCase) {
+async function beginOAuth(
+  app: Express,
+  shopify: ShopifyApp,
+  config: OAuthTestCase,
+) {
   const beginResponse = await request(app)
     .get(`/test/auth?shop=${TEST_SHOP}`)
     .expect(302);
@@ -149,7 +147,7 @@ async function beginOAuth(app: Express, shopify: ShopifyApp, config: TestCase) {
 async function completeOAuth(
   app: Express,
   shopify: ShopifyApp,
-  config: TestCase,
+  config: OAuthTestCase,
   callbackInfo: CallbackInfo,
   afterAuth: jest.Mock,
 ) {
@@ -192,7 +190,7 @@ async function completeOAuth(
 }
 
 // Mock all necessary responses from Shopify for the OAuth process
-function mockOAuthResponses(config: TestCase) {
+function mockOAuthResponses(config: OAuthTestCase) {
   const responses: [MockBody][] = [
     [
       config.online
@@ -221,13 +219,19 @@ function mockOAuthResponses(config: TestCase) {
     );
   }
 
+  // the next two are for APP_UNINSTALLED
+  responses.push(
+    [mockResponses.EMPTY_WEBHOOK_RESPONSE],
+    [mockResponses.HTTP_WEBHOOK_CREATE_RESPONSE],
+  );
+
   mockShopifyResponses(...responses);
 }
 
 // Asserts that the OAuth process made the expected requests
 function assertOAuthRequests(
   shopify: ShopifyApp,
-  config: TestCase,
+  config: OAuthTestCase,
   callbackInfo: CallbackInfo,
 ) {
   expect({
@@ -272,21 +276,19 @@ function assertOAuthRequests(
 
 // Fires a request to process an HTTP webhook
 async function webhookProcessRequest(
+  topic: string,
+  body: string,
   app: Express,
   shopify: ShopifyApp,
-  mockHandler: jest.SpyInstance,
 ) {
   const consoleLogMock = jest.spyOn(global.console, 'log').mockImplementation();
 
-  const body = JSON.stringify({'test-body-received': true});
-
   await request(app)
     .post('/test/webhooks')
-    .set(validWebhookHeaders(body, shopify.api.config.apiSecretKey))
+    .set(validWebhookHeaders(topic, body, shopify.api.config.apiSecretKey))
     .send(body)
     .expect(200);
 
-  expect(mockHandler).toHaveBeenCalledWith('TEST_TOPIC', TEST_SHOP, body);
   expect(consoleLogMock.mock.calls).toEqual([
     ['Webhook processed, returned status code 200'],
   ]);
@@ -294,9 +296,21 @@ async function webhookProcessRequest(
   consoleLogMock.mockRestore();
 }
 
+async function appUninstalledWebhookRequest(app: Express, shopify: ShopifyApp) {
+  const body = JSON.stringify({'test-body-received': true});
+  const appInstallations = new AppInstallations(shopify.api);
+
+  expect(await appInstallations.includes(TEST_SHOP)).toBe(true);
+
+  await webhookProcessRequest('APP_UNINSTALLED', body, app, shopify);
+
+  expect(await appInstallations.includes(TEST_SHOP)).toBe(false);
+}
+
+// Fires a valid request to check that the installed middleware allows requests through
 async function makeInstalledRequest(
   app: Express,
-  config: TestCase,
+  config: OAuthTestCase,
   mock: jest.Mock,
 ) {
   const response = await request(app).get(
@@ -312,10 +326,11 @@ async function makeInstalledRequest(
   }
 }
 
+// Fires a valid request to check that the authenticated middleware allows requests through
 async function makeAuthenticatedRequest(
   app: Express,
   shopify: ShopifyApp,
-  config: TestCase,
+  config: OAuthTestCase,
   mock: jest.Mock,
 ) {
   const validJWT = jwt.sign(
