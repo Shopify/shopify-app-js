@@ -5,12 +5,14 @@ import {redirectToAuth} from '../redirect-to-auth';
 import {returnTopLevelRedirection} from '../return-top-level-redirection';
 import {ApiAndConfigParams} from '../types';
 
+import {AuthenticatedRequestMiddleware} from './types';
+
 interface CreateAuthenticatedRequestParams extends ApiAndConfigParams {}
 
 export function createAuthenticatedRequest({
   api,
   config,
-}: CreateAuthenticatedRequestParams) {
+}: CreateAuthenticatedRequestParams): AuthenticatedRequestMiddleware {
   return function authenticatedRequest() {
     return async (req: Request, res: Response, next: NextFunction) => {
       const session = await api.session.getCurrent({

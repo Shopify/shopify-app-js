@@ -4,6 +4,8 @@ import {redirectToAuth} from '../redirect-to-auth';
 import {ApiAndConfigParams} from '../types';
 import {AppInstallations} from '../app-installations';
 
+import {EnsureInstalledMiddleware} from './types';
+
 interface CreateEnsureInstalledParams extends ApiAndConfigParams {
   appInstallations: AppInstallations;
 }
@@ -12,7 +14,7 @@ export function createEnsureInstalled({
   api,
   config,
   appInstallations,
-}: CreateEnsureInstalledParams) {
+}: CreateEnsureInstalledParams): EnsureInstalledMiddleware {
   return function ensureInstalled() {
     return async (req: Request, res: Response, next: NextFunction) => {
       if (!api.config.isEmbeddedApp) {
