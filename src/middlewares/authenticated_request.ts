@@ -5,14 +5,14 @@ import {redirectToAuth} from '../redirect-to-auth';
 import {returnTopLevelRedirection} from '../return-top-level-redirection';
 import {ApiAndConfigParams} from '../types';
 
-const TEST_GRAPHQL_QUERY = `
-{
-  shop {
-    name
-  }
-}`;
+import {AuthenticatedRequestMiddleware} from './types';
 
-export function createAuthenticatedRequest({api, config}: ApiAndConfigParams) {
+interface CreateAuthenticatedRequestParams extends ApiAndConfigParams {}
+
+export function createAuthenticatedRequest({
+  api,
+  config,
+}: CreateAuthenticatedRequestParams): AuthenticatedRequestMiddleware {
   return function authenticatedRequest() {
     return async (req: Request, res: Response, next: NextFunction) => {
       const session = await api.session.getCurrent({
@@ -57,6 +57,13 @@ export function createAuthenticatedRequest({api, config}: ApiAndConfigParams) {
     };
   };
 }
+
+const TEST_GRAPHQL_QUERY = `
+{
+  shop {
+    name
+  }
+}`;
 
 async function isValidAccessToken(
   api: Shopify,

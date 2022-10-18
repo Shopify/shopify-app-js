@@ -1,4 +1,4 @@
-import {Request, Response, RequestHandler} from 'express';
+import {Request, Response} from 'express';
 import {
   ConfigParams as ApiConfigParams,
   Session,
@@ -9,8 +9,13 @@ import {
 
 import {AuthConfigInterface, AuthMiddleware} from './auth/types';
 import {WebhooksConfigInterface, WebhooksMiddleware} from './webhooks/types';
+import {
+  AuthenticatedRequestMiddleware,
+  EnsureInstalledMiddleware,
+} from './middlewares/types';
 
 export * from './auth/types';
+export * from './middlewares/types';
 export * from './webhooks/types';
 
 export interface AppConfigParams<
@@ -43,8 +48,9 @@ export interface ShopifyApp<
   config: AppConfigInterface;
   api: Shopify<R, S>;
   auth: AuthMiddleware;
-  authenticatedRequest: () => RequestHandler;
+  authenticatedRequest: AuthenticatedRequestMiddleware;
   webhooks: WebhooksMiddleware;
+  ensureInstalled: EnsureInstalledMiddleware;
 }
 
 export interface RedirectToAuthParams extends ApiAndConfigParams {

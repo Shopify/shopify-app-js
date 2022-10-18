@@ -44,7 +44,13 @@ describe('process', () => {
 
     await request(app)
       .post('/webhooks')
-      .set(validWebhookHeaders(body, shopify.api.config.apiSecretKey))
+      .set(
+        validWebhookHeaders(
+          'TEST_TOPIC',
+          body,
+          shopify.api.config.apiSecretKey,
+        ),
+      )
       .send(body)
       .expect(200);
 
@@ -57,19 +63,28 @@ describe('process', () => {
   it('fails gracefully if there is no handler', async () => {
     const body = JSON.stringify({'test-body-received': true});
 
-    const headers = {
-      ...validWebhookHeaders(body, shopify.api.config.apiSecretKey),
-      'X-Shopify-Topic': 'UNKNOWN_TOPIC',
-    };
-
-    await request(app).post('/webhooks').set(headers).send(body).expect(404);
+    await request(app)
+      .post('/webhooks')
+      .set(
+        validWebhookHeaders(
+          'UNKNOWN_TOPIC',
+          body,
+          shopify.api.config.apiSecretKey,
+        ),
+      )
+      .send(body)
+      .expect(404);
   });
 
   it('returns 401 on faulty webhook requests', async () => {
     const body = JSON.stringify({'test-body-received': true});
 
     const headers = {
-      ...validWebhookHeaders(body, shopify.api.config.apiSecretKey),
+      ...validWebhookHeaders(
+        'TEST_TOPIC',
+        body,
+        shopify.api.config.apiSecretKey,
+      ),
       'X-Shopify-Hmac-Sha256': 'invalid-hmac',
     };
 

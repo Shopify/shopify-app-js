@@ -11,7 +11,10 @@ import {AppConfigParams, ShopifyApp, AppConfigInterface} from './types';
 import {AuthConfigInterface} from './auth/types';
 import {WebhooksConfigInterface} from './webhooks/types';
 import {createAuthApp} from './auth/index';
-import {createAuthenticatedRequest} from './middlewares/authenticated_request';
+import {
+  createAuthenticatedRequest,
+  createEnsureInstalled,
+} from './middlewares/index';
 import {createWebhookApp} from './webhooks/index';
 
 export * from './types';
@@ -24,17 +27,23 @@ export function shopifyApp<
 
   const api = shopifyApi<R, S>(apiConfigWithDefaults<R, S>(apiConfig ?? {}));
   const validatedConfig = validateAppConfig(appConfig);
-  const authenticatedRequest = createAuthenticatedRequest({
-    api,
-    config: validatedConfig,
-  });
 
   return {
     config: validatedConfig,
     api,
-    authenticatedRequest,
     auth: createAuthApp({api, config: validatedConfig}),
-    webhooks: createWebhookApp({api, config: validatedConfig}),
+    authenticatedRequest: createAuthenticatedRequest({
+      api,
+      config: validatedConfig,
+    }),
+    ensureInstalled: createEnsureInstalled({
+      api,
+      config: validatedConfig,
+    }),
+    webhooks: createWebhookApp({
+      api,
+      config: validatedConfig,
+    }),
   };
 }
 
