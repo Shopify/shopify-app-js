@@ -43,7 +43,7 @@ beforeEach(() => {
   currentCall = 0;
 });
 
-type MockBody =
+export type MockBody =
   | string
   | {
       [key: string]: any;

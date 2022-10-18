@@ -6,15 +6,14 @@ import {AppInstallations} from '../app-installations';
 
 import {EnsureInstalledMiddleware} from './types';
 
-interface CreateEnsureInstalledParams extends ApiAndConfigParams {
-  appInstallations: AppInstallations;
-}
+interface CreateEnsureInstalledParams extends ApiAndConfigParams {}
 
 export function createEnsureInstalled({
   api,
   config,
-  appInstallations,
 }: CreateEnsureInstalledParams): EnsureInstalledMiddleware {
+  const appInstallations = new AppInstallations(api);
+
   return function ensureInstalled() {
     return async (req: Request, res: Response, next: NextFunction) => {
       if (!api.config.isEmbeddedApp) {

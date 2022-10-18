@@ -1,6 +1,9 @@
 import express, {Request, Response} from 'express';
 import {DeliveryMethod, WebhookHandlerFunction} from '@shopify/shopify-api';
 
+import {AppInstallations} from '../app-installations';
+import {createDeleteAppInstallationHandler} from '../middlewares';
+
 import {
   CreateWebhookAppParams,
   HttpWebhookHandler,
@@ -32,8 +35,16 @@ function createWrappingHandler({
 export function createWebhookApp({
   api,
   config,
-  specialWebhookHandlers,
 }: CreateWebhookAppParams): WebhooksMiddleware {
+  const appInstallations = new AppInstallations(api);
+  const specialWebhookHandlers: HttpWebhookHandler[] = [
+    {
+      topic: 'APP_UNINSTALLED',
+      deliveryMethod: DeliveryMethod.Http,
+      handler: createDeleteAppInstallationHandler(appInstallations),
+    },
+  ];
+
   return function webhookApp(webhooksParams = {}) {
     config.webhooks.handlers = webhooksParams.handlers || [];
 
@@ -72,14 +83,14 @@ function loadOrWrapHandlers(
       (handler) => handler.topic === specialHandler.topic,
     );
 
-    if (handler && handler.deliveryMethod === DeliveryMethod.Http) {
-      // there's an existing handler for this topic, so we'll wrap it
+    if (!handler) {
+      handlers.push(specialHandler);
+    } else if (handler && handler.deliveryMethod === DeliveryMethod.Http) {
+      // there's an existing HTTP handler for this topic, so we'll wrap it
       handler.handler = createWrappingHandler({
         handler: (handler as HttpWebhookHandler).handler,
         specialHandler: (specialHandler as HttpWebhookHandler).handler,
       });
-    } else {
-      handlers.push(specialHandler);
     }
   });
 }

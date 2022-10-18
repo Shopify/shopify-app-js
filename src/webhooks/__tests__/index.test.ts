@@ -5,6 +5,7 @@ import {DeliveryMethod} from '@shopify/shopify-api';
 import {
   assertShopifyAuthRequestMade,
   convertBeginResponseToCallbackInfo,
+  MockBody,
   mockShopifyResponses,
   TEST_SHOP,
   validWebhookHeaders,
@@ -208,10 +209,317 @@ describe('with all webhook types', () => {
   });
 });
 
+describe('Wrapping HTTP APP_UNINSTALLED handler', () => {
+  let app: Express;
+  let shopify: ShopifyApp;
+  let httpMock: jest.Mock;
+
+  let consoleLogMock: jest.SpyInstance;
+  beforeEach(() => {
+    consoleLogMock = jest.spyOn(global.console, 'log').mockImplementation();
+
+    httpMock = jest.fn();
+
+    const handlers: WebhookConfigHandler[] = [
+      {
+        deliveryMethod: DeliveryMethod.Http,
+        topic: 'APP_UNINSTALLED',
+        handler: httpMock,
+      },
+    ];
+
+    shopify = shopifyApp(testConfig);
+
+    app = express();
+    app.use(shopify.auth());
+    app.use('/test', shopify.webhooks({handlers}));
+  });
+
+  afterEach(() => {
+    consoleLogMock.mockRestore();
+  });
+
+  it('registration is successful', async () => {
+    const beginResponse = await request(app)
+      .get(`/auth?shop=${TEST_SHOP}`)
+      .expect(302);
+
+    const callbackInfo = convertBeginResponseToCallbackInfo(
+      beginResponse,
+      shopify.api.config.apiSecretKey,
+      TEST_SHOP,
+    );
+
+    mockShopifyResponses(
+      [ACCESS_TOKEN_RESPONSE],
+      [EMPTY_WEBHOOK_RESPONSE],
+      [HTTP_WEBHOOK_CREATE_RESPONSE],
+    );
+
+    await request(app)
+      .get(`/auth/callback?${callbackInfo.params.toString()}`)
+      .set('Cookie', callbackInfo.cookies)
+      .expect(302);
+
+    assertShopifyAuthRequestMade(TEST_SHOP, callbackInfo);
+
+    assertGraphqlQueryBody(
+      'webhookSubscriptions(first: 1, topics: APP_UNINSTALLED)',
+    );
+    assertGraphqlQueryBody(
+      'webhookSubscriptionCreate(topic: APP_UNINSTALLED, webhookSubscription: {callbackUrl: "https://my-test-app.myshopify.io/test/webhooks"})',
+    );
+  });
+
+  it('triggers both handlers', async () => {
+    await performOauth(app, shopify.api.config.apiSecretKey, false, [
+      [ACCESS_TOKEN_RESPONSE],
+      [EMPTY_WEBHOOK_RESPONSE],
+      [HTTP_WEBHOOK_CREATE_RESPONSE],
+    ]);
+
+    console.log(
+      (shopify.api.config.sessionStorage as unknown as {[key: string]: any})
+        .sessions,
+    );
+
+    const appInstallations = new AppInstallations(shopify.api);
+
+    expect(await appInstallations.includes(TEST_SHOP)).toBe(true);
+
+    const body = JSON.stringify({});
+
+    await request(app)
+      .post('/test/webhooks')
+      .set(
+        validWebhookHeaders(
+          'APP_UNINSTALLED',
+          body,
+          shopify.api.config.apiSecretKey,
+        ),
+      )
+      .send(body)
+      .expect(200);
+
+    expect(httpMock).toHaveBeenCalledWith('APP_UNINSTALLED', TEST_SHOP, body);
+    expect(await appInstallations.includes(TEST_SHOP)).toBe(false);
+    expect(consoleLogMock).toHaveBeenCalledWith(
+      'Webhook processed, returned status code 200',
+    );
+  });
+});
+
+describe('Not wrapping EventBridge APP_UNINSTALLED handler', () => {
+  let app: Express;
+  let shopify: ShopifyApp;
+  let httpMock: jest.Mock;
+
+  let consoleLogMock: jest.SpyInstance;
+  beforeEach(() => {
+    consoleLogMock = jest.spyOn(global.console, 'log').mockImplementation();
+
+    httpMock = jest.fn();
+
+    const handlers: WebhookConfigHandler[] = [
+      {
+        deliveryMethod: DeliveryMethod.EventBridge,
+        topic: 'APP_UNINSTALLED',
+        address: 'eventbridge-address',
+      },
+    ];
+
+    shopify = shopifyApp(testConfig);
+
+    app = express();
+    app.use(shopify.auth());
+    app.use('/test', shopify.webhooks({handlers}));
+  });
+
+  afterEach(() => {
+    consoleLogMock.mockRestore();
+  });
+
+  it('registration is successful', async () => {
+    const beginResponse = await request(app)
+      .get(`/auth?shop=${TEST_SHOP}`)
+      .expect(302);
+
+    const callbackInfo = convertBeginResponseToCallbackInfo(
+      beginResponse,
+      shopify.api.config.apiSecretKey,
+      TEST_SHOP,
+    );
+
+    mockShopifyResponses(
+      [ACCESS_TOKEN_RESPONSE],
+      [EMPTY_WEBHOOK_RESPONSE],
+      [EVENT_BRIDGE_WEBHOOK_CREATE_RESPONSE],
+    );
+
+    await request(app)
+      .get(`/auth/callback?${callbackInfo.params.toString()}`)
+      .set('Cookie', callbackInfo.cookies)
+      .expect(302);
+
+    assertShopifyAuthRequestMade(TEST_SHOP, callbackInfo);
+
+    assertGraphqlQueryBody(
+      'webhookSubscriptions(first: 1, topics: APP_UNINSTALLED)',
+    );
+    assertGraphqlQueryBody(
+      'eventBridgeWebhookSubscriptionCreate(topic: APP_UNINSTALLED, webhookSubscription: {arn: "eventbridge-address"})',
+    );
+  });
+
+  it('does not trigger any handlers', async () => {
+    await performOauth(app, shopify.api.config.apiSecretKey, false, [
+      [ACCESS_TOKEN_RESPONSE],
+      [EMPTY_WEBHOOK_RESPONSE],
+      [EVENT_BRIDGE_WEBHOOK_CREATE_RESPONSE],
+    ]);
+
+    const appInstallations = new AppInstallations(shopify.api);
+
+    console.log(
+      (shopify.api.config.sessionStorage as unknown as {[key: string]: any})
+        .sessions,
+    );
+    expect(await appInstallations.includes(TEST_SHOP)).toBe(true);
+
+    const body = JSON.stringify({});
+
+    await request(app)
+      .post('/test/webhooks')
+      .set(
+        validWebhookHeaders(
+          'APP_UNINSTALLED',
+          body,
+          shopify.api.config.apiSecretKey,
+        ),
+      )
+      .send(body)
+      .expect(404);
+
+    expect(httpMock).not.toHaveBeenCalledWith(
+      'APP_UNINSTALLED',
+      TEST_SHOP,
+      body,
+    );
+    expect(await appInstallations.includes(TEST_SHOP)).toBe(true);
+    expect(consoleLogMock).toHaveBeenCalledWith(
+      expect.stringContaining('No webhook is registered'),
+    );
+  });
+});
+
+describe('Not wrapping PubSub APP_UNINSTALLED handler', () => {
+  let app: Express;
+  let shopify: ShopifyApp;
+  let httpMock: jest.Mock;
+
+  let consoleLogMock: jest.SpyInstance;
+  beforeEach(() => {
+    consoleLogMock = jest.spyOn(global.console, 'log').mockImplementation();
+
+    httpMock = jest.fn();
+
+    const handlers: WebhookConfigHandler[] = [
+      {
+        deliveryMethod: DeliveryMethod.PubSub,
+        topic: 'APP_UNINSTALLED',
+        address: 'pubsub:address',
+      },
+    ];
+
+    shopify = shopifyApp(testConfig);
+
+    app = express();
+    app.use(shopify.auth());
+    app.use('/test', shopify.webhooks({handlers}));
+  });
+
+  afterEach(() => {
+    consoleLogMock.mockRestore();
+  });
+
+  it('registration is successful', async () => {
+    const beginResponse = await request(app)
+      .get(`/auth?shop=${TEST_SHOP}`)
+      .expect(302);
+
+    const callbackInfo = convertBeginResponseToCallbackInfo(
+      beginResponse,
+      shopify.api.config.apiSecretKey,
+      TEST_SHOP,
+    );
+
+    mockShopifyResponses(
+      [ACCESS_TOKEN_RESPONSE],
+      [EMPTY_WEBHOOK_RESPONSE],
+      [PUBSUB_WEBHOOK_CREATE_RESPONSE],
+    );
+
+    await request(app)
+      .get(`/auth/callback?${callbackInfo.params.toString()}`)
+      .set('Cookie', callbackInfo.cookies)
+      .expect(302);
+
+    assertShopifyAuthRequestMade(TEST_SHOP, callbackInfo);
+
+    assertGraphqlQueryBody(
+      'webhookSubscriptions(first: 1, topics: APP_UNINSTALLED)',
+    );
+    assertGraphqlQueryBody(
+      `pubSubWebhookSubscriptionCreate(topic: APP_UNINSTALLED, webhookSubscription: {pubSubProject: "pubsub",\n                                  pubSubTopic: "address"})`,
+    );
+  });
+
+  it('does not trigger any handlers', async () => {
+    await performOauth(app, shopify.api.config.apiSecretKey, false, [
+      [ACCESS_TOKEN_RESPONSE],
+      [EMPTY_WEBHOOK_RESPONSE],
+      [PUBSUB_WEBHOOK_CREATE_RESPONSE],
+    ]);
+
+    const appInstallations = new AppInstallations(shopify.api);
+
+    console.log(
+      (shopify.api.config.sessionStorage as unknown as {[key: string]: any})
+        .sessions,
+    );
+    expect(await appInstallations.includes(TEST_SHOP)).toBe(true);
+
+    const body = JSON.stringify({});
+
+    await request(app)
+      .post('/test/webhooks')
+      .set(
+        validWebhookHeaders(
+          'APP_UNINSTALLED',
+          body,
+          shopify.api.config.apiSecretKey,
+        ),
+      )
+      .send(body)
+      .expect(404);
+
+    expect(httpMock).not.toHaveBeenCalledWith(
+      'APP_UNINSTALLED',
+      TEST_SHOP,
+      body,
+    );
+    expect(await appInstallations.includes(TEST_SHOP)).toBe(true);
+    expect(consoleLogMock).toHaveBeenCalledWith(
+      expect.stringContaining('No webhook is registered'),
+    );
+  });
+});
+
 async function performOauth(
   app: Express,
   secret: string,
   existingWebhook = false,
+  mockResponses?: [MockBody][],
 ): Promise<void> {
   const beginResponse = await request(app)
     .get(`/auth?shop=${TEST_SHOP}`)
@@ -222,26 +530,30 @@ async function performOauth(
     secret,
     TEST_SHOP,
   );
+  let responses: [MockBody][];
 
-  if (existingWebhook) {
-    mockShopifyResponses(
+  if (mockResponses) {
+    responses = mockResponses;
+  } else if (existingWebhook) {
+    responses = [
       [ACCESS_TOKEN_RESPONSE],
       [EXISTING_WEBHOOK_RESPONSE],
       [HTTP_WEBHOOK_UPDATE_RESPONSE],
       // the next two are for APP_UNINSTALLED
       [EXISTING_WEBHOOK_RESPONSE],
       [HTTP_WEBHOOK_UPDATE_RESPONSE],
-    );
+    ];
   } else {
-    mockShopifyResponses(
+    responses = [
       [ACCESS_TOKEN_RESPONSE],
       [EMPTY_WEBHOOK_RESPONSE],
       [HTTP_WEBHOOK_CREATE_RESPONSE],
       // the next two are for APP_UNINSTALLED
       [EMPTY_WEBHOOK_RESPONSE],
       [HTTP_WEBHOOK_CREATE_RESPONSE],
-    );
+    ];
   }
+  mockShopifyResponses(...responses);
 
   await request(app)
     .get(`/auth/callback?${callbackInfo.params.toString()}`)

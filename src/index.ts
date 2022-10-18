@@ -5,20 +5,17 @@ import {
   SessionStorage,
   ShopifyRestResources,
   LATEST_API_VERSION,
-  DeliveryMethod,
 } from '@shopify/shopify-api';
 
 import {AppConfigParams, ShopifyApp, AppConfigInterface} from './types';
 import {AuthConfigInterface} from './auth/types';
-import {HttpWebhookHandler, WebhooksConfigInterface} from './webhooks/types';
+import {WebhooksConfigInterface} from './webhooks/types';
 import {createAuthApp} from './auth/index';
 import {
   createAuthenticatedRequest,
-  createDeleteAppInstallationHandler,
   createEnsureInstalled,
 } from './middlewares/index';
 import {createWebhookApp} from './webhooks/index';
-import {AppInstallations} from './app-installations';
 
 export * from './types';
 
@@ -30,14 +27,6 @@ export function shopifyApp<
 
   const api = shopifyApi<R, S>(apiConfigWithDefaults<R, S>(apiConfig ?? {}));
   const validatedConfig = validateAppConfig(appConfig);
-  const appInstallations = new AppInstallations(api);
-  const specialWebhookHandlers: HttpWebhookHandler[] = [
-    {
-      topic: 'APP_UNINSTALLED',
-      deliveryMethod: DeliveryMethod.Http,
-      handler: createDeleteAppInstallationHandler(appInstallations),
-    },
-  ];
 
   return {
     config: validatedConfig,
@@ -50,12 +39,10 @@ export function shopifyApp<
     ensureInstalled: createEnsureInstalled({
       api,
       config: validatedConfig,
-      appInstallations,
     }),
     webhooks: createWebhookApp({
       api,
       config: validatedConfig,
-      specialWebhookHandlers,
     }),
   };
 }
