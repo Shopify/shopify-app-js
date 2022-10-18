@@ -52,3 +52,15 @@ export function createEnsureInstalled({
     };
   };
 }
+
+export function createDeleteAppInstallationHandler(
+  appInstallations: AppInstallations,
+) {
+  return async function deleteAppInstallationHandler(
+    _topic: string,
+    shop: string,
+    _body: any,
+  ) {
+    await appInstallations.delete(shop);
+  };
+}

@@ -5,6 +5,8 @@ import {
   WebhookHandlerFunction,
 } from '@shopify/shopify-api';
 
+import {ApiAndConfigParams} from '../types';
+
 interface WebhookHandler {
   topic: string;
 }
@@ -38,4 +40,8 @@ export type WebhookConfigHandler = HttpWebhookHandler | NonHttpWebhookHandler;
 export interface WebhooksConfigInterface {
   path: string;
   handlers: WebhookConfigHandler[];
+}
+
+export interface CreateWebhookAppParams extends ApiAndConfigParams {
+  specialWebhookHandlers?: WebhookConfigHandler[];
 }

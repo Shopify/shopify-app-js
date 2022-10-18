@@ -5,15 +5,19 @@ import {
   SessionStorage,
   ShopifyRestResources,
   LATEST_API_VERSION,
+  DeliveryMethod,
 } from '@shopify/shopify-api';
 
 import {AppConfigParams, ShopifyApp, AppConfigInterface} from './types';
 import {AuthConfigInterface} from './auth/types';
-import {WebhooksConfigInterface} from './webhooks/types';
+import {HttpWebhookHandler, WebhooksConfigInterface} from './webhooks/types';
 import {createAuthApp} from './auth/index';
 import {createAuthenticatedRequest} from './middlewares/authenticated_request';
 import {createWebhookApp} from './webhooks/index';
-import {createEnsureInstalled} from './middlewares/ensure_installed';
+import {
+  createDeleteAppInstallationHandler,
+  createEnsureInstalled,
+} from './middlewares/ensure_installed';
 import {AppInstallations} from './app-installations';
 
 export * from './types';
@@ -31,13 +35,24 @@ export function shopifyApp<
     config: validatedConfig,
   });
   const appInstallations = new AppInstallations(api);
+  const specialWebhookHandlers: HttpWebhookHandler[] = [
+    {
+      topic: 'APP_UNINSTALLED',
+      deliveryMethod: DeliveryMethod.Http,
+      handler: createDeleteAppInstallationHandler(appInstallations),
+    },
+  ];
 
   return {
     config: validatedConfig,
     api,
     authenticatedRequest,
     auth: createAuthApp({api, config: validatedConfig}),
-    webhooks: createWebhookApp({api, config: validatedConfig}),
+    webhooks: createWebhookApp({
+      api,
+      config: validatedConfig,
+      specialWebhookHandlers,
+    }),
     ensureInstalled: createEnsureInstalled({
       api,
       config: validatedConfig,
