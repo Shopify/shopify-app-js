@@ -55,7 +55,7 @@ describe('process', () => {
       .expect(200);
 
     expect(mockHandler).toHaveBeenCalledWith('TEST_TOPIC', TEST_SHOP, body);
-    expect(consoleLogMock).toHaveBeenCalledWith(
+    expect(consoleLogMock).toHaveBeenLastCalledWith(
       'Webhook processed, returned status code 200',
     );
   });
@@ -89,5 +89,28 @@ describe('process', () => {
     };
 
     await request(app).post('/webhooks').set(headers).send(body).expect(401);
+  });
+
+  it('returns a 500 if the handler fails', async () => {
+    mockHandler.mockRejectedValueOnce(new Error('test-error'));
+
+    const body = JSON.stringify({'test-body-received': true});
+
+    await request(app)
+      .post('/webhooks')
+      .set(
+        validWebhookHeaders(
+          'TEST_TOPIC',
+          body,
+          shopify.api.config.apiSecretKey,
+        ),
+      )
+      .send(body)
+      .expect(500);
+
+    expect(mockHandler).toHaveBeenCalledWith('TEST_TOPIC', TEST_SHOP, body);
+    expect(consoleLogMock).toHaveBeenLastCalledWith(
+      'Failed to process webhook: Error: test-error',
+    );
   });
 });

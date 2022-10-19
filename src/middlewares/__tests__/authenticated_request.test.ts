@@ -27,7 +27,7 @@ describe('authenticatedRequest', () => {
         aud: shopify.api.config.apiKey,
         dest: 'https://shop=my-shop.myshopify.io',
       },
-      shopify.api.config.apiKey,
+      shopify.api.config.apiSecretKey,
       {
         algorithm: 'HS256',
       },

@@ -1,10 +1,7 @@
 import request from 'supertest';
 import express from 'express';
 
-import {
-  shopify,
-  getExpectedOAuthBeginParams,
-} from '../../__tests__/test-helper';
+import {shopify, TEST_SHOP} from '../../__tests__/test-helper';
 import {authBegin} from '../auth-begin';
 
 describe('beginAuth', () => {
@@ -18,23 +15,23 @@ describe('beginAuth', () => {
     });
   });
 
-  it('properly redirects when running on localhost', async () => {
-    shopify.api.config.hostScheme = 'http';
-    shopify.api.config.hostName = 'localhost:1234';
+  it('triggers library auth start', async () => {
+    const beginMock = jest.spyOn(shopify.api.auth, 'begin');
+    beginMock.mockImplementationOnce(async ({rawResponse}) => {
+      rawResponse.redirect('https://oauth-url');
+    });
 
     const response = await request(app)
-      .get('/auth?shop=my-shop.myshopify.io')
+      .get(`/auth?shop=${TEST_SHOP}`)
       .expect(302);
 
-    const url = new URL(response.header.location);
-    const params = Object.fromEntries(url.searchParams.entries());
-
-    expect(url.host).toBe('my-shop.myshopify.io');
-    expect(params).toMatchObject(getExpectedOAuthBeginParams(shopify.api));
-
-    const cookieNames = response.header['set-cookie'].map(
-      (cookie: string) => cookie.split('=')[0],
+    expect(beginMock).toHaveBeenCalledWith(
+      expect.objectContaining({
+        callbackPath: '/auth/callback',
+        isOnline: shopify.config.useOnlineTokens,
+        shop: TEST_SHOP,
+      }),
     );
-    expect(cookieNames).toEqual(['shopify_app_state', 'shopify_app_state.sig']);
+    expect(response.header.location).toBe('https://oauth-url');
   });
 });

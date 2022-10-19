@@ -4,7 +4,7 @@ import request from 'supertest';
 
 import {redirectToHost} from '../redirect-to-host';
 
-import {shopify, SHOPIFY_HOST, TEST_SHOP} from './test-helper';
+import {BASE64_HOST, shopify, SHOPIFY_HOST, TEST_SHOP} from './test-helper';
 
 describe('redirectToHost', () => {
   const session = new Session({
@@ -21,7 +21,7 @@ describe('redirectToHost', () => {
   });
 
   it('redirects to Shopify when embedded', async () => {
-    const host = Buffer.from(SHOPIFY_HOST).toString('base64');
+    const host = BASE64_HOST;
     const response = await request(app)
       .get(`/redirect-to-host?host=${host}&embedded=1`)
       .expect(302);
@@ -34,7 +34,7 @@ describe('redirectToHost', () => {
   it('redirects to app when not embedded', async () => {
     shopify.api.config.isEmbeddedApp = false;
 
-    const host = Buffer.from(SHOPIFY_HOST).toString('base64');
+    const host = BASE64_HOST;
     const response = await request(app)
       .get(`/redirect-to-host?host=${host}&embedded=1`)
       .expect(302);
