@@ -5,6 +5,7 @@ import {ApiAndConfigParams} from '../types';
 import {AppInstallations} from '../app-installations';
 
 import {EnsureInstalledMiddleware} from './types';
+import {addCSPHeader} from './ensure_csp';
 
 interface CreateEnsureInstalledParams extends ApiAndConfigParams {}
 
@@ -48,6 +49,7 @@ export function createEnsureInstalled({
 
         return res.redirect(embeddedUrl + req.path);
       }
+      addCSPHeader(api, req, res);
       return next();
     };
   };
