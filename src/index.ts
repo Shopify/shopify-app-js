@@ -7,6 +7,7 @@ import {
   LATEST_API_VERSION,
 } from '@shopify/shopify-api';
 
+import {SHOPIFY_EXPRESS_LIBRARY_VERSION} from './version';
 import {AppConfigParams, ShopifyApp, AppConfigInterface} from './types';
 import {AuthConfigInterface} from './auth/types';
 import {WebhooksConfigInterface} from './webhooks/types';
@@ -51,6 +52,12 @@ function apiConfigWithDefaults<
   R extends ShopifyRestResources,
   S extends SessionStorage = SessionStorage,
 >(apiConfig: Partial<ApiConfigParams<R, S>>): ApiConfigParams<R, S> {
+  let userAgent = `Shopify Express Library v${SHOPIFY_EXPRESS_LIBRARY_VERSION}`;
+
+  if (apiConfig.userAgentPrefix) {
+    userAgent = `${apiConfig.userAgentPrefix} | ${userAgent}`;
+  }
+
   /* eslint-disable no-process-env */
   return {
     apiKey: process.env.SHOPIFY_API_KEY!,
@@ -64,6 +71,7 @@ function apiConfigWithDefaults<
       customShopDomains: [process.env.SHOP_CUSTOM_DOMAIN],
     }),
     ...apiConfig,
+    userAgentPrefix: userAgent,
   };
   /* eslint-enable no-process-env */
 }
