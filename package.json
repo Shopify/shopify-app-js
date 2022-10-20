@@ -29,6 +29,20 @@
   "peerDependencies": {
     "@shopify/shopify-api": "*"
   },
+  "publishConfig": {
+    "access": "public"
+  },
+  "keywords": [
+    "shopify",
+    "node",
+    "express",
+    "app",
+    "graphql",
+    "rest",
+    "webhook",
+    "Admin API",
+    "Storefront API"
+  ],
   "dependencies": {
     "@shopify/shopify-api": "6.0.0-rc6",
     "cookie-parser": "^1.4.6",
