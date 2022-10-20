@@ -1,15 +1,11 @@
-import express, {Request, Response} from 'express';
+import express, {Express, Request, Response} from 'express';
 import {DeliveryMethod, WebhookHandlerFunction} from '@shopify/shopify-api';
+import {ApiAndConfigParams} from 'src/types';
 
 import {AppInstallations} from '../app-installations';
 import {createDeleteAppInstallationHandler} from '../middlewares';
 
-import {
-  CreateWebhookAppParams,
-  HttpWebhookHandler,
-  WebhooksMiddleware,
-  WebhookConfigHandler,
-} from './types';
+import {HttpWebhookHandler, WebhookConfigHandler} from './types';
 import {process} from './process';
 import {addWebhookHandlers} from './add-webhook-handlers';
 
@@ -32,10 +28,17 @@ function createWrappingHandler({
   };
 }
 
-export function createWebhookApp({
+export interface AttachWebhooksParams extends ApiAndConfigParams {
+  subApp: Express;
+  handlers: WebhookConfigHandler[];
+}
+
+export function attachWebhooks({
   api,
   config,
-}: CreateWebhookAppParams): WebhooksMiddleware {
+  subApp,
+  handlers = [],
+}: AttachWebhooksParams): void {
   const appInstallations = new AppInstallations(api);
   const specialWebhookHandlers: HttpWebhookHandler[] = [
     {
@@ -45,33 +48,21 @@ export function createWebhookApp({
     },
   ];
 
-  return function webhookApp(webhooksParams = {}) {
-    config.webhooks.handlers = webhooksParams.handlers || [];
+  config.webhooks.handlers = handlers;
 
-    if (specialWebhookHandlers) {
-      loadOrWrapHandlers(config.webhooks.handlers, specialWebhookHandlers);
-    }
+  if (specialWebhookHandlers) {
+    loadOrWrapHandlers(config.webhooks.handlers, specialWebhookHandlers);
+  }
 
-    const webhookApp = express();
+  addWebhookHandlers({api, config});
 
-    webhookApp.on('mount', () => {
-      const mountPath = webhookApp.mountpath as string;
-
-      config.webhooks.path = `${mountPath}${config.webhooks.path}`;
-
-      addWebhookHandlers({api, config});
-    });
-
-    webhookApp.post(
-      config.webhooks.path,
-      express.text({type: '*/*'}),
-      async (req: Request, res: Response) => {
-        process({req, res, api});
-      },
-    );
-
-    return webhookApp;
-  };
+  subApp.post(
+    config.webhooks.path,
+    express.text({type: '*/*'}),
+    async (req: Request, res: Response) => {
+      process({req, res, api});
+    },
+  );
 }
 
 function loadOrWrapHandlers(

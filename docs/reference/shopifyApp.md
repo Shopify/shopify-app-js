@@ -24,6 +24,9 @@ const shopify = shopifyApp({
     path: '/auth',
     callbackPath: '/auth/callback',
   },
+  webhooks: {
+    path: '/webhooks',
+  },
 });
 ```
 
@@ -58,7 +61,7 @@ See below for the specific details.
 `string` | Defaults to `"/auth"`
 
 The URL path used by the app to start the OAuth process.
-This is relative to the root of the `shopify.auth` app, so when you mount the shopify app, it'll prepend the path.
+This is relative to the root of the `shopify.app` app, so when you mount the shopify app, it'll prepend the mount path.
 
 In the example below, the final auth path is `/shopify/my/auth/path`.
 
@@ -77,6 +80,17 @@ app.use('/shopify', shopify.auth);
 The URL path used by the app to complete the OAuth process.
 It works in the same way as `path` above.
 
+### webhooks
+
+Configurations for Webhooks using this package.
+
+#### path
+
+`string` | Defaults to `"/webhooks"`
+
+The URL path used by the app to receive HTTP webhooks from Shopify.
+This is relative to the root of the `shopify.app` app, so when you mount the shopify app, it'll prepend the mount path.
+
 ## Return
 
 Returns an object that contains everything an app needs to interact with Shopify:
@@ -91,11 +105,11 @@ The configuration used to set up this object.
 
 The object created by the `@shopify/shopify-api` package. See [the API package documentation](https://github.com/Shopify/shopify-api-node/tree/shopify_api_next#getting-started) for more details.
 
-### [auth](./auth.md)
+### [app](./app.md)
 
-`(AuthMiddlewareParams) => Express`
+`(AppMiddlewareParams) => Express`
 
-A function that returns an Express.js app that contains the necessary endpoints to perform OAuth in the Shopify platform.
+A function that returns an Express.js app that contains the necessary endpoints to perform OAuth and webhook processing in the Shopify platform.
 You can mount this as a sub-app anywhere in your app.
 
 ### [authenticatedRequest](./authenticatedRequest.md)

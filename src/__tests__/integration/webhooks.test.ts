@@ -56,8 +56,7 @@ describe('webhook integration', () => {
             next();
           });
 
-          app.use('/test', shopify.auth());
-          app.use('/test', shopify.webhooks({handlers: [config.handler]}));
+          app.use('/test', shopify.app({webhookHandlers: [config.handler]}));
         });
 
         afterEach(() => {
