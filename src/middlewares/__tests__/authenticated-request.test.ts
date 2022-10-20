@@ -16,7 +16,7 @@ describe('authenticatedRequest', () => {
 
   beforeEach(() => {
     app = express();
-    app.use('/api', shopify.auth());
+    app.use('/api', shopify.app({}));
     app.use('/test/*', shopify.authenticatedRequest());
     app.get('/test/shop', async (req, res) => {
       res.json({data: {shop: {name: req.query.shop}}});

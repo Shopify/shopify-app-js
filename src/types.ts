@@ -7,13 +7,14 @@ import {
   Shopify,
 } from '@shopify/shopify-api';
 
-import {AuthConfigInterface, AuthMiddleware} from './auth/types';
-import {WebhooksConfigInterface, WebhooksMiddleware} from './webhooks/types';
+import {AuthConfigInterface} from './auth/types';
+import {WebhooksConfigInterface} from './webhooks/types';
 import {
   AuthenticatedRequestMiddleware,
   CspHeadersMiddleware,
   EnsureInstalledMiddleware,
 } from './middlewares/types';
+import {AppMiddleware} from './sub-app/types';
 
 export * from './auth/types';
 export * from './middlewares/types';
@@ -35,6 +36,7 @@ export interface AppConfigInterface extends Omit<AppConfigParams, 'api'> {
   exitIframePath: string;
   auth: AuthConfigInterface;
   webhooks: WebhooksConfigInterface;
+  mountPath?: string;
 }
 
 export interface ApiAndConfigParams {
@@ -48,10 +50,9 @@ export interface ShopifyApp<
 > {
   config: AppConfigInterface;
   api: Shopify<R, S>;
-  auth: AuthMiddleware;
+  app: AppMiddleware;
   authenticatedRequest: AuthenticatedRequestMiddleware;
   cspHeaders: CspHeadersMiddleware;
-  webhooks: WebhooksMiddleware;
   ensureInstalled: EnsureInstalledMiddleware;
 }
 

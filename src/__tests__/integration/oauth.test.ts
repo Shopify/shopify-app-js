@@ -77,8 +77,7 @@ describe('OAuth integration tests', () => {
         res.setTimeout(100);
         next();
       });
-      app.use('/test', shopify.auth({afterAuth}));
-      app.use('/test', shopify.webhooks({handlers}));
+      app.use('/test', shopify.app({afterAuth, handlers}));
       app.get('/installed', shopify.ensureInstalled(), installedMock);
       app.get('/authed', shopify.authenticatedRequest(), authedMock);
 
