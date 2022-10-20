@@ -11,4 +11,4 @@ and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [1.0.0-rc1]
 
-- Release candidate 1 of Shopify Express package, buildt on release candidates of v6 Shopify API for JavaScript.
+- Release candidate 1 of Shopify Express package, built on release candidates of v6 Shopify API for JavaScript.
