@@ -1,8 +1,8 @@
-import {createAuthenticatedRequest} from './authenticated_request';
+import {createAuthenticatedRequest} from './authenticated-request';
 import {
   createDeleteAppInstallationHandler,
   createEnsureInstalled,
-} from './ensure_installed';
+} from './ensure-installed';
 
 export {
   createAuthenticatedRequest,
