@@ -14,6 +14,7 @@ import {WebhooksConfigInterface} from './webhooks/types';
 import {createAuthApp} from './auth/index';
 import {
   createAuthenticatedRequest,
+  createCspHeaders,
   createEnsureInstalled,
 } from './middlewares/index';
 import {createWebhookApp} from './webhooks/index';
@@ -37,6 +38,7 @@ export function shopifyApp<
       api,
       config: validatedConfig,
     }),
+    cspHeaders: createCspHeaders({api}),
     ensureInstalled: createEnsureInstalled({
       api,
       config: validatedConfig,

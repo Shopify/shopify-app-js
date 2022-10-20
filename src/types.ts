@@ -11,6 +11,7 @@ import {AuthConfigInterface, AuthMiddleware} from './auth/types';
 import {WebhooksConfigInterface, WebhooksMiddleware} from './webhooks/types';
 import {
   AuthenticatedRequestMiddleware,
+  CspHeadersMiddleware,
   EnsureInstalledMiddleware,
 } from './middlewares/types';
 
@@ -49,6 +50,7 @@ export interface ShopifyApp<
   api: Shopify<R, S>;
   auth: AuthMiddleware;
   authenticatedRequest: AuthenticatedRequestMiddleware;
+  cspHeaders: CspHeadersMiddleware;
   webhooks: WebhooksMiddleware;
   ensureInstalled: EnsureInstalledMiddleware;
 }

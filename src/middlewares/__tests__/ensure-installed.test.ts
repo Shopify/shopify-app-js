@@ -47,6 +47,9 @@ describe('ensureInstalled', () => {
         },
       },
     });
+    expect(response.headers['content-security-policy']).toEqual(
+      `frame-ancestors https://${TEST_SHOP} https://admin.shopify.com;`,
+    );
   });
 
   it('returns 500 if no shop provided', async () => {
