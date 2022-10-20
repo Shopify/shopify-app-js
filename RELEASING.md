@@ -50,28 +50,16 @@ For significant API changes that could result in significant refactoring on the 
 
 1. Update the version in `package.json` to match that in `src/version.ts`
 
-1. Stage the `CHANGELOG.md`, `src/version.ts`, and `package.json` files
+1. Stage the `CHANGELOG.md` and `src/version.ts` files
 
    ```shell
-   git add CHANGELOG.md src/version.ts package.json
-   ```
-
-1. Commit the files to the repo
-
-   ```shell
-   git commit -m "Packaging for release vX.Y.Z-rcN"
-   ```
-
-1. Tag the commit with an _annotated_ tag (required for the `--follow-tags` of the `push` command). Note that it's very important that the tag includes `-rc` as part of the tag name - this is how `shipit` will recognize that it's a release candidate, not a general release.
-
-   ```shell
-   git tag -a vX.Y.Z-rcN -m "Release candidate N of version X.Y.Z"
+   git add CHANGELOG.md src/version.ts
    ```
 
 1. Push the files to the remote repository, along with the annotated tag.
 
    ```shell
-   git push origin main --follow-tags
+   yarn version --new-version X.Y.Z-rcN
    ```
 
 1. Login to `shipit`, search for the _next_ environment for `shopify-app-express`, and press _Deploy_ on the appropriate commit (the commit description will be the version number).
