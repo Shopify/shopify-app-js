@@ -29,7 +29,7 @@ describe('cspHeaders', () => {
 
   beforeEach(async () => {
     app = express();
-    app.use('/api', shopify.auth());
+    app.use('/api', shopify.app());
     app.use('/*', shopify.cspHeaders());
     app.get('/', async (_req, res) => {
       res.send(htmlPage);
