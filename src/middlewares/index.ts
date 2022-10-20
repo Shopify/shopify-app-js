@@ -3,11 +3,11 @@ import {
   createDeleteAppInstallationHandler,
   createEnsureInstalled,
 } from './ensure-installed';
-import {createEnsureCSP} from './ensure_csp';
+import {createCspHeaders} from './csp-headers';
 
 export {
   createAuthenticatedRequest,
   createDeleteAppInstallationHandler,
-  createEnsureCSP,
+  createCspHeaders,
   createEnsureInstalled,
 };

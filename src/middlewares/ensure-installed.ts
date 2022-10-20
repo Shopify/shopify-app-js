@@ -5,7 +5,7 @@ import {ApiAndConfigParams} from '../types';
 import {AppInstallations} from '../app-installations';
 
 import {EnsureInstalledMiddleware} from './types';
-import {addCSPHeader} from './ensure_csp';
+import {addCSPHeader} from './csp-headers';
 
 interface CreateEnsureInstalledParams extends ApiAndConfigParams {}
 
