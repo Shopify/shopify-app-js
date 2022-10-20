@@ -4,7 +4,7 @@ import {AfterAuthCallback, WebhookConfigHandler} from '../types';
 
 export interface AppMiddlewareParams {
   afterAuth?: AfterAuthCallback;
-  handlers?: WebhookConfigHandler[];
+  webhookHandlers?: WebhookConfigHandler[];
 }
 
 export type AppMiddleware = (params?: AppMiddlewareParams) => Express;

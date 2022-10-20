@@ -1,17 +1,21 @@
-import {Request, Response} from 'express';
+import {Express, Request, Response} from 'express';
 import {Shopify, Session} from '@shopify/shopify-api';
 
-import {AppConfigInterface} from '../types';
+import {ApiAndConfigParams, AppConfigInterface} from '../types';
 
 export interface AfterAuthCallbackParams {
   req: Request;
   res: Response;
   session: Session;
 }
-
 export type AfterAuthCallback = (
   params: AfterAuthCallbackParams,
 ) => void | Promise<void>;
+
+export interface AttachAuthParams extends ApiAndConfigParams {
+  subApp: Express;
+  afterAuth?: AfterAuthCallback;
+}
 
 export interface AuthBeginParams {
   req: Request;

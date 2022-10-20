@@ -36,7 +36,6 @@ export interface AppConfigInterface extends Omit<AppConfigParams, 'api'> {
   exitIframePath: string;
   auth: AuthConfigInterface;
   webhooks: WebhooksConfigInterface;
-  mountPath?: string;
 }
 
 export interface ApiAndConfigParams {

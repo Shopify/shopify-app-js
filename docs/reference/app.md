@@ -4,27 +4,9 @@ This function creates an Express middleware that contains the endpoints necessar
 
 When setting up the OAuth component, it will redirect to the app within Shopify when OAuth completes, unless the `afterAuth` callback triggers a different redirect.
 
-## Example - setting up OAuth with afterAuth callback
-
-```ts
-const app = express();
-
-const shopify = shopifyApp({// configuration...});
-
-const shopifyAppMiddleware = shopify.app({
-  afterAuth: async ({req, res, session}) => {
-    // ...
-  },
-});
-
-app.use('/shopify', shopifyAppMiddleware);
-```
-
 ## Parameters
 
-### afterAuth
-
-`Function`
+### `afterAuth()` - `Function`
 
 Callback called after OAuth completes to enable custom app behaviour. Receives an object with the following parameters:
 
@@ -32,9 +14,21 @@ Callback called after OAuth completes to enable custom app behaviour. Receives a
 - `res`: `express.Response`
 - `session`: `Session`
 
+> **Note**: the above example doesn't have to trigger a redirect back to the app if payment exists - the package will do that by default.
+
+### `webhookHandlers[]` - `Array`
+
+Array of Webhook handlers ... TODO ... document the various types of Webhook handlers and their associated params.
+
+## Examples
+
+### Example - setting up OAuth with afterAuth callback
+
 For example, the following callback will check for and request payment after OAuth if the merchant hasn't paid for the app yet.
 
 ```ts
+const shopify = shopifyApp({//...config})
+
 const afterAuth = async ({req, res, session}) => {
   const hasPayment = await shopify.api.billing.check({
     session,
@@ -56,9 +50,9 @@ const afterAuth = async ({req, res, session}) => {
 app.use('/shopify', shopify.app({afterAuth}));
 ```
 
-> **Note**: the above example doesn't have to trigger a redirect back to the app if payment exists - the package will do that by default.
+### Example - setting up webhooks handlers
 
-## Example - setting up webhooks handlers
+The following example shows how to setup handlers for the mandatory GDPR webhooks.
 
 ```ts
 const app = express();
@@ -90,17 +84,5 @@ const GDPRWebhookHandlers = [
   },
 ];
 
-const shopifyAppMiddleware = shopify.app({
-  handlers: GDPRWebhookHandlers,
-});
-
-app.use('/shopify', shopifyAppMiddleware);
+app.use('/shopify', shopify.app({handlers: GDPRWebhookHandlers}));
 ```
-
-## Parameters
-
-### handlers
-
-`Array`
-
-Array of Webhook handlers ... TODO ... document the various types of Webhook handlers and their associated params.

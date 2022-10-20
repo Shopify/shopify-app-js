@@ -1,14 +1,8 @@
-import {Express, Request, Response} from 'express';
+import {Request, Response} from 'express';
 
-import {ApiAndConfigParams, AfterAuthCallback} from '../types';
-
+import {AttachAuthParams} from './types';
 import {authBegin} from './auth-begin';
 import {authCallback} from './auth-callback';
-
-export interface AttachAuthParams extends ApiAndConfigParams {
-  subApp: Express;
-  afterAuth?: AfterAuthCallback;
-}
 
 export function attachAuth({
   api,

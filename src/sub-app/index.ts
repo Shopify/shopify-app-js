@@ -11,11 +11,11 @@ export function createSubApp({api, config}: ApiAndConfigParams): AppMiddleware {
     const subApp = express();
 
     subApp.on('mount', () => {
-      config.mountPath = subApp.mountpath as string;
+      const mountPath = subApp.mountpath as string;
 
-      config.auth.path = `${config.mountPath}${config.auth.path}`;
-      config.auth.callbackPath = `${config.mountPath}${config.auth.callbackPath}`;
-      config.webhooks.path = `${config.mountPath}${config.webhooks.path}`;
+      config.auth.path = `${mountPath}${config.auth.path}`;
+      config.auth.callbackPath = `${mountPath}${config.auth.callbackPath}`;
+      config.webhooks.path = `${mountPath}${config.webhooks.path}`;
     });
 
     attachAuth({
@@ -29,7 +29,7 @@ export function createSubApp({api, config}: ApiAndConfigParams): AppMiddleware {
       api,
       config,
       subApp,
-      handlers: params.handlers || [],
+      handlers: params.webhookHandlers || [],
     });
 
     return subApp;
