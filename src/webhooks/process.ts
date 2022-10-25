@@ -20,7 +20,7 @@ export async function process({
     );
   } catch (error) {
     await api.config.logFunction(
-      LogSeverity.Info,
+      LogSeverity.Error,
       `Failed to process webhook: ${error}`,
     );
 

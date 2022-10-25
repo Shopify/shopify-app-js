@@ -4,6 +4,7 @@ import {
   CookieNotFound,
   DeliveryMethod,
   InvalidOAuthError,
+  LogSeverity,
   Session,
 } from '@shopify/shopify-api';
 
@@ -15,12 +16,17 @@ const TEST_SHOP = 'my-shop.myshopify.io';
 describe('authCallback', () => {
   const app = express();
   app.get('/auth/callback', async (req, res) => {
-    await authCallback({
-      req,
-      res,
-      api: shopify.api,
-      config: shopify.config,
-    });
+    try {
+      await authCallback({
+        req,
+        res,
+        api: shopify.api,
+        config: shopify.config,
+      });
+    } catch (error) {
+      console.log(`Test request failed: ${error}`);
+      res.send(500);
+    }
   });
 
   let callbackMock: jest.SpyInstance;
@@ -43,6 +49,8 @@ describe('authCallback', () => {
     });
 
     it('redirects to app', async () => {
+      jest.spyOn(shopify.api.webhooks, 'register').mockResolvedValueOnce({});
+
       const response = await request(app)
         .get(`/auth/callback?host=${BASE64_HOST}`)
         .expect(302);
@@ -55,23 +63,25 @@ describe('authCallback', () => {
     describe('with webhooks', () => {
       let registerMock: jest.SpyInstance;
       beforeEach(() => {
-        shopify.config.webhooks.handlers = [
-          {
+        shopify.api.webhooks.addHandlers({
+          TEST_TOPIC: {
             deliveryMethod: DeliveryMethod.Http,
-            topic: 'TEST_TOPIC',
-            handler: async () => {},
+            callbackUrl: '/webhooks',
+            callback: async () => {},
           },
-        ];
+        });
 
         registerMock = jest.spyOn(shopify.api.webhooks, 'register');
       });
 
       it('registers webhooks', async () => {
         registerMock.mockResolvedValueOnce({
-          TEST_TOPIC: {
-            success: true,
-            result: {},
-          },
+          TEST_TOPIC: [
+            {
+              success: true,
+              result: {},
+            },
+          ],
         });
 
         await request(app)
@@ -80,50 +90,53 @@ describe('authCallback', () => {
 
         expect(registerMock).toHaveBeenCalledWith(
           expect.objectContaining({
-            accessToken: 'test-access-token',
-            deliveryMethod: DeliveryMethod.Http,
-            path: shopify.config.webhooks.path,
             shop: TEST_SHOP,
-            topic: 'TEST_TOPIC',
+            accessToken: 'test-access-token',
           }),
         );
       });
 
       it('logs when registration fails', async () => {
-        const consoleErrorMock = jest
-          .spyOn(global.console, 'error')
-          .mockImplementation();
-
         const errorMessage = 'Test result errors';
         registerMock.mockResolvedValueOnce({
-          TEST_TOPIC: {
-            success: false,
-            result: {errors: [{message: errorMessage}]},
-          },
+          TEST_TOPIC: [
+            {
+              success: false,
+              result: {errors: [{message: errorMessage}]},
+            },
+          ],
         });
 
         await request(app)
           .get(`/auth/callback?host=${BASE64_HOST}`)
           .expect(302);
 
-        expect(consoleErrorMock).toHaveBeenCalledWith(
+        expect(
+          shopify.api.config.logFunction as jest.Mock,
+        ).toHaveBeenCalledWith(
+          LogSeverity.Error,
           expect.stringContaining(errorMessage),
         );
 
         // Reset the callback mock
         callbackMock.mockResolvedValueOnce({session, headers: undefined});
         registerMock.mockResolvedValueOnce({
-          TEST_TOPIC: {
-            success: false,
-            result: {data: {message: errorMessage}},
-          },
+          TEST_TOPIC: [
+            {
+              success: false,
+              result: {data: {message: errorMessage}},
+            },
+          ],
         });
 
         await request(app)
           .get(`/auth/callback?host=${BASE64_HOST}`)
           .expect(302);
 
-        expect(consoleErrorMock).toHaveBeenCalledWith(
+        expect(
+          shopify.api.config.logFunction as jest.Mock,
+        ).toHaveBeenCalledWith(
+          LogSeverity.Error,
           expect.stringContaining(errorMessage),
         );
       });
@@ -131,15 +144,6 @@ describe('authCallback', () => {
   });
 
   describe('fails', () => {
-    let consoleWarnMock: jest.SpyInstance;
-    beforeEach(() => {
-      consoleWarnMock = jest.spyOn(global.console, 'warn').mockImplementation();
-    });
-
-    afterEach(() => {
-      consoleWarnMock.mockRestore();
-    });
-
     it('restarts OAuth if CookieNotFound', async () => {
       const errorMessage = 'Test no cookie found';
       callbackMock.mockRejectedValueOnce(new CookieNotFound(errorMessage));
@@ -163,8 +167,8 @@ describe('authCallback', () => {
       );
       expect(response.header.location).toBe('https://oauth-url');
 
-      // ... with a console.warn
-      expect(consoleWarnMock).toHaveBeenCalledWith(
+      expect(shopify.api.config.logFunction as jest.Mock).toHaveBeenCalledWith(
+        LogSeverity.Warning,
         expect.stringContaining(errorMessage),
       );
     });
@@ -178,7 +182,8 @@ describe('authCallback', () => {
         .expect(400)
         .expect(errorMessage);
 
-      expect(consoleWarnMock).toHaveBeenCalledWith(
+      expect(shopify.api.config.logFunction as jest.Mock).toHaveBeenCalledWith(
+        LogSeverity.Warning,
         expect.stringContaining(errorMessage),
       );
     });
@@ -192,7 +197,8 @@ describe('authCallback', () => {
         .expect(500)
         .expect(errorMessage);
 
-      expect(consoleWarnMock).toHaveBeenCalledWith(
+      expect(shopify.api.config.logFunction as jest.Mock).toHaveBeenCalledWith(
+        LogSeverity.Warning,
         expect.stringContaining(errorMessage),
       );
     });
@@ -204,13 +210,18 @@ describe('authCallback with afterAuth', () => {
 
   const app = express();
   app.get('/auth/callback', async (req, res) => {
-    await authCallback({
-      req,
-      res,
-      api: shopify.api,
-      config: shopify.config,
-      afterAuth,
-    });
+    try {
+      await authCallback({
+        req,
+        res,
+        api: shopify.api,
+        config: shopify.config,
+        afterAuth,
+      });
+    } catch (error) {
+      console.log(`Test request failed: ${error}`);
+      res.send(500);
+    }
   });
 
   let session: Session;
@@ -220,11 +231,13 @@ describe('authCallback with afterAuth', () => {
       isOnline: shopify.config.useOnlineTokens,
       shop: TEST_SHOP,
       state: '1234',
+      accessToken: 'test-access-token',
     });
 
     jest
       .spyOn(shopify.api.auth, 'callback')
       .mockResolvedValueOnce({session, headers: undefined});
+    jest.spyOn(shopify.api.webhooks, 'register').mockResolvedValueOnce({});
   });
 
   afterEach(() => {

@@ -1,10 +1,11 @@
 import {Express} from 'express';
 
-import {AfterAuthCallback, WebhookConfigHandler} from '../types';
+import {AfterAuthCallback} from '../types';
+import {WebhookHandlersParam} from '../webhooks/types';
 
 export interface AppMiddlewareParams {
   afterAuth?: AfterAuthCallback;
-  webhookHandlers?: WebhookConfigHandler[];
+  webhookHandlers?: WebhookHandlersParam;
 }
 
 export type AppMiddleware = (params?: AppMiddlewareParams) => Express;

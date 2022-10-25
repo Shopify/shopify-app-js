@@ -1,9 +1,13 @@
 import crypto from 'crypto';
 
 import request from 'supertest';
-import {DeliveryMethod} from '@shopify/shopify-api';
+import {
+  DeliveryMethod,
+  EventBridgeWebhookHandler,
+  HttpWebhookHandler,
+  PubSubWebhookHandler,
+} from '@shopify/shopify-api';
 
-import {WebhookConfigHandler, HttpWebhookHandler} from '../../webhooks/types';
 import {BASE64_HOST} from '../test-helper';
 
 import {CallbackInfo, CookiesType} from './types';
@@ -11,18 +15,17 @@ import {CallbackInfo, CookiesType} from './types';
 export const httpHandlerMock = jest.fn();
 export const HTTP_HANDLER: HttpWebhookHandler = {
   deliveryMethod: DeliveryMethod.Http,
-  topic: 'TEST_TOPIC',
-  handler: httpHandlerMock,
+  callbackUrl: '/webhooks',
+  callback: httpHandlerMock,
 };
-export const EVENT_BRIDGE_HANDLER: WebhookConfigHandler = {
+export const EVENT_BRIDGE_HANDLER: EventBridgeWebhookHandler = {
   deliveryMethod: DeliveryMethod.EventBridge,
-  topic: 'EB_TOPIC',
-  address: 'eventbridge-address',
+  arn: 'arn:test',
 };
-export const PUBSUB_HANDLER: WebhookConfigHandler = {
+export const PUBSUB_HANDLER: PubSubWebhookHandler = {
   deliveryMethod: DeliveryMethod.PubSub,
-  topic: 'PUBSUB_TOPIC',
-  address: 'pubsub:address',
+  pubSubProject: 'pubSubProject',
+  pubSubTopic: 'pubSubTopic',
 };
 
 export function convertBeginResponseToCallbackInfo(

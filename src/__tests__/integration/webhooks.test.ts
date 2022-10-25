@@ -1,15 +1,17 @@
 import request from 'supertest';
 import express, {Express} from 'express';
+import {LogSeverity} from '@shopify/shopify-api';
 
 import {AppInstallations} from '../../app-installations';
 import {
+  MockBody,
   mockShopifyResponses,
   shopify,
   TEST_SHOP,
   validWebhookHeaders,
 } from '../test-helper';
 
-import {AppUninstalledtestCase} from './types';
+import {AppUninstalledTestCase} from './types';
 import * as mockResponses from './responses';
 import {
   convertBeginResponseToCallbackInfo,
@@ -19,25 +21,26 @@ import {
   PUBSUB_HANDLER,
 } from './utils';
 
-const APP_UNINSTALLED_TEST_CASES: AppUninstalledtestCase[] = [
+const APP_UNINSTALLED_TEST_CASES: AppUninstalledTestCase[] = [
   {
-    handler: {...HTTP_HANDLER, topic: 'APP_UNINSTALLED'},
+    handler: {...HTTP_HANDLER, callbackUrl: '/test/webhooks'},
     expectWrap: true,
     mockResponse: mockResponses.HTTP_WEBHOOK_CREATE_RESPONSE,
-    expectedQuery: 'webhookSubscriptionCreate(topic: APP_UNINSTALLED',
+    expectedQuery: 'webhookSubscriptionCreate(\n      topic: APP_UNINSTALLED',
   },
   {
-    handler: {...EVENT_BRIDGE_HANDLER, topic: 'APP_UNINSTALLED'},
+    handler: {...EVENT_BRIDGE_HANDLER},
     expectWrap: false,
     mockResponse: mockResponses.EVENT_BRIDGE_WEBHOOK_CREATE_RESPONSE,
     expectedQuery:
-      'eventBridgeWebhookSubscriptionCreate(topic: APP_UNINSTALLED',
+      'eventBridgeWebhookSubscriptionCreate(\n      topic: APP_UNINSTALLED',
   },
   {
-    handler: {...PUBSUB_HANDLER, topic: 'APP_UNINSTALLED'},
+    handler: {...PUBSUB_HANDLER},
     expectWrap: false,
     mockResponse: mockResponses.PUBSUB_WEBHOOK_CREATE_RESPONSE,
-    expectedQuery: 'pubSubWebhookSubscriptionCreate(topic: APP_UNINSTALLED',
+    expectedQuery:
+      'pubSubWebhookSubscriptionCreate(\n      topic: APP_UNINSTALLED',
   },
 ];
 
@@ -46,6 +49,7 @@ describe('webhook integration', () => {
     APP_UNINSTALLED_TEST_CASES.forEach((config) => {
       describe(`test ${JSON.stringify(config)}`, () => {
         let app: Express;
+
         beforeEach(() => {
           app = express();
 
@@ -56,7 +60,10 @@ describe('webhook integration', () => {
             next();
           });
 
-          app.use('/test', shopify.app({webhookHandlers: [config.handler]}));
+          app.use(
+            '/test',
+            shopify.app({webhookHandlers: {APP_UNINSTALLED: config.handler}}),
+          );
         });
 
         afterEach(() => {
@@ -64,20 +71,39 @@ describe('webhook integration', () => {
         });
 
         it('registers and triggers as expected', async () => {
-          mockShopifyResponses(
+          const responses: [MockBody][] = [
             [mockResponses.OFFLINE_ACCESS_TOKEN_RESPONSE],
-            // For the handler we're testing
             [mockResponses.EMPTY_WEBHOOK_RESPONSE],
-            [config.mockResponse],
-          );
+          ];
+
+          if (config.expectWrap) {
+            expect(
+              shopify.api.config.logFunction as jest.Mock,
+            ).toHaveBeenCalledWith(
+              LogSeverity.Info,
+              "Detected multiple handlers for 'APP_UNINSTALLED', webhooks.process will call them sequentially",
+            );
+          } else {
+            expect(
+              shopify.api.config.logFunction as jest.Mock,
+            ).not.toHaveBeenCalled();
+
+            responses.push([config.mockResponse]);
+          }
+
+          responses.push([mockResponses.HTTP_WEBHOOK_CREATE_RESPONSE]);
+
+          mockShopifyResponses(...responses);
 
           await performOAuth(app);
 
-          // For the handler we're testing
-          const webhookQueries = [
-            'webhookSubscriptions(first: 1, topics: APP_UNINSTALLED)',
-            config.expectedQuery,
-          ];
+          const webhookQueries = ['webhookSubscriptions('];
+          if (!config.expectWrap) {
+            webhookQueries.push(config.expectedQuery);
+          }
+          webhookQueries.push(
+            'webhookSubscriptionCreate(\n      topic: APP_UNINSTALLED',
+          );
 
           webhookQueries.forEach((query) =>
             expect({
@@ -90,11 +116,16 @@ describe('webhook integration', () => {
           const appInstallations = new AppInstallations(shopify.api);
           expect(await appInstallations.includes(TEST_SHOP)).toBe(true);
 
-          const consoleLogMock = jest
-            .spyOn(global.console, 'log')
-            .mockImplementation();
+          await triggerWebhook(app);
 
-          await triggerWebhook(app, config.expectWrap ? 200 : 404);
+          expect(
+            shopify.api.config.logFunction as jest.Mock,
+          ).toHaveBeenCalledWith(
+            LogSeverity.Info,
+            'Webhook processed, returned status code 200',
+          );
+
+          expect(await appInstallations.includes(TEST_SHOP)).toBe(false);
 
           if (config.expectWrap) {
             expect(httpHandlerMock).toHaveBeenCalledWith(
@@ -102,19 +133,7 @@ describe('webhook integration', () => {
               TEST_SHOP,
               '{}',
             );
-            expect(await appInstallations.includes(TEST_SHOP)).toBe(false);
-            expect(consoleLogMock).toHaveBeenCalledWith(
-              'Webhook processed, returned status code 200',
-            );
-          } else {
-            expect(httpHandlerMock).not.toHaveBeenCalled();
-            expect(await appInstallations.includes(TEST_SHOP)).toBe(true);
-            expect(consoleLogMock).toHaveBeenCalledWith(
-              'Failed to process webhook: Error: No webhook is registered for topic APP_UNINSTALLED',
-            );
           }
-
-          consoleLogMock.mockRestore();
         });
       });
     });
@@ -148,7 +167,7 @@ async function performOAuth(app: Express) {
   }).toMatchMadeHttpRequest();
 }
 
-async function triggerWebhook(app: Express, expectedCode: number) {
+async function triggerWebhook(app: Express) {
   const body = JSON.stringify({});
 
   await request(app)
@@ -161,5 +180,5 @@ async function triggerWebhook(app: Express, expectedCode: number) {
       ),
     )
     .send(body)
-    .expect(expectedCode);
+    .expect(200);
 }

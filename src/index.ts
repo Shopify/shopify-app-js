@@ -84,7 +84,6 @@ function validateAppConfig(
 
   const webhooks: WebhooksConfigInterface = {
     path: '/webhooks',
-    handlers: [],
     ...config.webhooks,
   };
 

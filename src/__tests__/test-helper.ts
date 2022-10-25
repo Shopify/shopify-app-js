@@ -40,6 +40,7 @@ beforeEach(() => {
       apiVersion: LATEST_API_VERSION,
       hostName: 'my-test-app.myshopify.io',
       sessionStorage: new MemorySessionStorage(),
+      logFunction: jest.fn(),
     },
   };
 
