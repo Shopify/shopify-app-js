@@ -11,7 +11,7 @@ import {
   validWebhookHeaders,
 } from '../test-helper';
 
-import {AppUninstalledtestCase} from './types';
+import {AppUninstalledTestCase} from './types';
 import * as mockResponses from './responses';
 import {
   convertBeginResponseToCallbackInfo,
@@ -21,7 +21,7 @@ import {
   PUBSUB_HANDLER,
 } from './utils';
 
-const APP_UNINSTALLED_TEST_CASES: AppUninstalledtestCase[] = [
+const APP_UNINSTALLED_TEST_CASES: AppUninstalledTestCase[] = [
   {
     handler: {...HTTP_HANDLER, callbackUrl: '/test/webhooks'},
     expectWrap: true,

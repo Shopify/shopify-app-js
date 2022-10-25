@@ -16,7 +16,7 @@ export interface OAuthTestCase {
   existingWebhooks: boolean;
 }
 
-export interface AppUninstalledtestCase {
+export interface AppUninstalledTestCase {
   handler: WebhookHandler;
   expectWrap: boolean;
   mockResponse: {[key: string]: any};
