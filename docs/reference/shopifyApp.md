@@ -2,34 +2,6 @@
 
 This function creates an object that contains everything an Express app needs to interact with Shopify.
 
-## Example
-
-```ts
-const shopify = shopifyApp({
-  api: {
-    apiKey: 'ApiKeyFromPartnersDashboard',
-    apiSecretKey: 'ApiSecretKeyFromPartnersDashboard',
-    scopes: ['your_scopes'],
-    hostScheme: 'http',
-    hostName: `localhost:${PORT}`,
-    billing: {
-      'My plan': {
-        amount: 10,
-        currencyCode: 'USD',
-        interval: BillingInterval.Every30Days,
-      },
-    },
-  },
-  auth: {
-    path: '/auth',
-    callbackPath: '/auth/callback',
-  },
-  webhooks: {
-    path: '/webhooks',
-  },
-});
-```
-
 ## Parameters
 
 ### api
@@ -70,7 +42,7 @@ const shopify = shopifyApp({
   auth: {path: '/my/auth/path'},
 });
 
-app.use('/shopify', shopify.auth);
+app.use('/shopify', shopify.app());
 ```
 
 #### callbackPath
@@ -114,4 +86,36 @@ You can mount this as a sub-app anywhere in your app.
 
 ### [authenticatedRequest](./authenticatedRequest.md)
 
-A function that returns an Express middleware that verifies that the request received is authenticated with a valid session.
+A function that returns an Express middleware that verifies that the request received is authenticated with a valid session for embedded apps.
+
+### [ensureInstalled](./ensureInstalled.md)
+
+A function that returns an Express middleware that verifies that the request received is for a shop that has installed the app when rendering HTML.
+
+## Example
+
+```ts
+const shopify = shopifyApp({
+  api: {
+    apiKey: 'ApiKeyFromPartnersDashboard',
+    apiSecretKey: 'ApiSecretKeyFromPartnersDashboard',
+    scopes: ['your_scopes'],
+    hostScheme: 'http',
+    hostName: `localhost:${PORT}`,
+    billing: {
+      'My plan': {
+        amount: 10,
+        currencyCode: 'USD',
+        interval: BillingInterval.Every30Days,
+      },
+    },
+  },
+  auth: {
+    path: '/auth',
+    callbackPath: '/auth/callback',
+  },
+  webhooks: {
+    path: '/webhooks',
+  },
+});
+```

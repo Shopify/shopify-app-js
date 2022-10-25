@@ -6,7 +6,9 @@ When setting up the OAuth component, it will redirect to the app within Shopify 
 
 ## Parameters
 
-### `afterAuth()` - `Function`
+### `afterAuth`
+
+`Function`
 
 Callback called after OAuth completes to enable custom app behaviour. Receives an object with the following parameters:
 
@@ -14,11 +16,15 @@ Callback called after OAuth completes to enable custom app behaviour. Receives a
 - `res`: `express.Response`
 - `session`: `Session`
 
-> **Note**: the above example doesn't have to trigger a redirect back to the app if payment exists - the package will do that by default.
+> **Note**: by default, the app will return to your `/` route, but you can redirect to a different address in `afterAuth`.
 
-### `webhookHandlers[]` - `Array`
+### `webhookHandlers`
 
-Array of Webhook handlers ... TODO ... document the various types of Webhook handlers and their associated params.
+`{[topic: string]: WebhookHandler | WebhookHandler[]}`
+
+Defines the webhooks your app will listen to, and how to handle them. See [the `@shopify/shopify-api` documentation](https://github.com/Shopify/shopify-api-node/blob/main/docs/usage/webhooks.md) for the allowed values.
+
+> **Note**: for HTTP webhook handlers, the `callbackUrl` value isn't used because this package handles setting it. You can ignore it.
 
 ## Examples
 
@@ -27,7 +33,9 @@ Array of Webhook handlers ... TODO ... document the various types of Webhook han
 For example, the following callback will check for and request payment after OAuth if the merchant hasn't paid for the app yet.
 
 ```ts
-const shopify = shopifyApp({//...config})
+const shopify = shopifyApp({
+  /* ... */
+});
 
 const afterAuth = async ({req, res, session}) => {
   const hasPayment = await shopify.api.billing.check({
@@ -50,39 +58,40 @@ const afterAuth = async ({req, res, session}) => {
 app.use('/shopify', shopify.app({afterAuth}));
 ```
 
-### Example - setting up webhooks handlers
+### Example - setting up webhook handlers
 
 The following example shows how to setup handlers for the mandatory GDPR webhooks.
 
 ```ts
-const app = express();
+const {DeliveryMethod} = require('@shopify/shopify-api');
 
+const shopify = shopifyApp({
+  /* ... */
+});
 
-const shopify = shopifyApp({// configuration...});
-
-const GDPRWebhookHandlers = [
-  {
-    topic: "CUSTOMERS_DATA_REQUEST",
-    handler: async (topic, shop, body) => {
+const webhookHandlers = {
+  CUSTOMERS_DATA_REQUEST: {
+    deliveryMethod: DeliveryMethod.Http,
+    callback: async (topic, shop, body) => {
       const payload = JSON.parse(body);
       // prepare customers data to send to customer
     },
   },
-  {
-    topic: "CUSTOMERS_REDACT",
-    handler: async (topic, shop, body) => {
+  CUSTOMERS_REDACT: {
+    deliveryMethod: DeliveryMethod.Http,
+    callback: async (topic, shop, body) => {
       const payload = JSON.parse(body);
       // remove customers data
     },
   },
-  {
-    topic: "SHOP_REDACT",
-    handler: async (topic, shop, body) => {
+  SHOP_REDACT: {
+    deliveryMethod: DeliveryMethod.Http,
+    callback: async (topic, shop, body) => {
       const payload = JSON.parse(body);
       // remove shop data
     },
   },
-];
+};
 
-app.use('/shopify', shopify.app({handlers: GDPRWebhookHandlers}));
+app.use('/shopify', shopify.app({webhookHandlers}));
 ```
