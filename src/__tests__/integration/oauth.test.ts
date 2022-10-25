@@ -1,10 +1,11 @@
 import request from 'supertest';
 import express, {Express} from 'express';
 import jwt from 'jsonwebtoken';
-import {ConfigParams} from '@shopify/shopify-api';
+import {ConfigParams, LogSeverity} from '@shopify/shopify-api';
 
 import {shopifyApp} from '../..';
-import {ShopifyApp, WebhookConfigHandler} from '../../types';
+import {ShopifyApp} from '../../types';
+import {WebhookHandlersParam} from '../../webhooks/types';
 import {AppInstallations} from '../../app-installations';
 import {
   BASE64_HOST,
@@ -45,11 +46,13 @@ const TEST_CASES: OAuthTestCase[] = [];
 describe('OAuth integration tests', () => {
   TEST_CASES.forEach((config) => {
     it(`test ${JSON.stringify(config)}`, async () => {
-      const webhookHandlers: WebhookConfigHandler[] = [
-        HTTP_HANDLER,
-        EVENT_BRIDGE_HANDLER,
-        PUBSUB_HANDLER,
-      ];
+      const webhookHandlers: WebhookHandlersParam = {
+        TEST_TOPIC: [
+          {...HTTP_HANDLER},
+          {...EVENT_BRIDGE_HANDLER},
+          {...PUBSUB_HANDLER},
+        ],
+      };
 
       const afterAuth = jest.fn();
       const installedMock = jest.fn((_req, res) => res.send('ok'));
@@ -89,7 +92,7 @@ describe('OAuth integration tests', () => {
 
       const body = JSON.stringify({'test-body-received': true});
       await webhookProcessRequest('TEST_TOPIC', body, app, shopify);
-      expect(HTTP_HANDLER.handler).toHaveBeenCalledWith(
+      expect(HTTP_HANDLER.callback).toHaveBeenCalledWith(
         'TEST_TOPIC',
         TEST_SHOP,
         body,
@@ -200,29 +203,28 @@ function mockOAuthResponses(config: OAuthTestCase) {
 
   if (config.existingWebhooks) {
     responses.push(
-      [mockResponses.EXISTING_HTTP_WEBHOOK_RESPONSE],
+      // Make sure we're returning the right host so we trigger updates
+      [
+        JSON.stringify(mockResponses.EXISTING_WEBHOOK_RESPONSE).replace(
+          'https://test_host_name',
+          config.host,
+        ),
+      ],
       [mockResponses.HTTP_WEBHOOK_UPDATE_RESPONSE],
-      [mockResponses.EXISTING_EVENT_BRIDGE_WEBHOOK_RESPONSE],
       [mockResponses.EVENT_BRIDGE_WEBHOOK_UPDATE_RESPONSE],
-      [mockResponses.EXISTING_PUBSUB_WEBHOOK_RESPONSE],
       [mockResponses.PUBSUB_WEBHOOK_UPDATE_RESPONSE],
     );
   } else {
     responses.push(
       [mockResponses.EMPTY_WEBHOOK_RESPONSE],
       [mockResponses.HTTP_WEBHOOK_CREATE_RESPONSE],
-      [mockResponses.EMPTY_WEBHOOK_RESPONSE],
       [mockResponses.EVENT_BRIDGE_WEBHOOK_CREATE_RESPONSE],
-      [mockResponses.EMPTY_WEBHOOK_RESPONSE],
       [mockResponses.PUBSUB_WEBHOOK_CREATE_RESPONSE],
     );
   }
 
-  // the next two are for APP_UNINSTALLED
-  responses.push(
-    [mockResponses.EMPTY_WEBHOOK_RESPONSE],
-    [mockResponses.HTTP_WEBHOOK_CREATE_RESPONSE],
-  );
+  // For the custom APP_UNINSTALLED handler
+  responses.push([mockResponses.HTTP_WEBHOOK_CREATE_RESPONSE]);
 
   mockShopifyResponses(...responses);
 }
@@ -246,21 +248,17 @@ function assertOAuthRequests(
   const webhookQueries: string[] = [];
   if (config.existingWebhooks) {
     webhookQueries.push(
-      'webhookSubscriptions(first: 1, topics: TEST_TOPIC)',
-      `webhookSubscriptionUpdate(id: "fakeId", webhookSubscription: {callbackUrl: "${config.host}/test/webhooks"})`,
-      'webhookSubscriptions(first: 1, topics: EB_TOPIC)',
-      'eventBridgeWebhookSubscriptionUpdate(id: "fakeId", webhookSubscription: {arn: "eventbridge-address"})',
-      'webhookSubscriptions(first: 1, topics: PUBSUB_TOPIC)',
-      `pubSubWebhookSubscriptionUpdate(id: "fakeId", webhookSubscription: {pubSubProject: "pubsub",\n                                  pubSubTopic: "address"})`,
+      'webhookSubscriptions(',
+      `webhookSubscriptionUpdate(\n      id: "fakeId",\n      webhookSubscription: {callbackUrl: "${config.host}/test/webhooks"}`,
+      'eventBridgeWebhookSubscriptionUpdate(\n      id: "fakeId",\n      webhookSubscription: {arn: "arn:test"}',
+      `pubSubWebhookSubscriptionUpdate(\n      id: "fakeId",\n      webhookSubscription: {pubSubProject: "pubSubProject", pubSubTopic: "pubSubTopic"}`,
     );
   } else {
     webhookQueries.push(
-      'webhookSubscriptions(first: 1, topics: TEST_TOPIC)',
-      `webhookSubscriptionCreate(topic: TEST_TOPIC, webhookSubscription: {callbackUrl: "${config.host}/test/webhooks"})`,
-      'webhookSubscriptions(first: 1, topics: EB_TOPIC)',
-      'eventBridgeWebhookSubscriptionCreate(topic: EB_TOPIC, webhookSubscription: {arn: "eventbridge-address"})',
-      'webhookSubscriptions(first: 1, topics: PUBSUB_TOPIC)',
-      `pubSubWebhookSubscriptionCreate(topic: PUBSUB_TOPIC, webhookSubscription: {pubSubProject: "pubsub",\n                                  pubSubTopic: "address"})`,
+      'webhookSubscriptions(',
+      `webhookSubscriptionCreate(\n      topic: TEST_TOPIC,\n      webhookSubscription: {callbackUrl: "${config.host}/test/webhooks"}`,
+      'eventBridgeWebhookSubscriptionCreate(\n      topic: TEST_TOPIC,\n      webhookSubscription: {arn: "arn:test"}',
+      `pubSubWebhookSubscriptionCreate(\n      topic: TEST_TOPIC,\n      webhookSubscription: {pubSubProject: "pubSubProject", pubSubTopic: "pubSubTopic"}`,
     );
   }
 
@@ -280,19 +278,16 @@ async function webhookProcessRequest(
   app: Express,
   shopify: ShopifyApp,
 ) {
-  const consoleLogMock = jest.spyOn(global.console, 'log').mockImplementation();
-
   await request(app)
     .post('/test/webhooks')
     .set(validWebhookHeaders(topic, body, shopify.api.config.apiSecretKey))
     .send(body)
     .expect(200);
 
-  expect(consoleLogMock.mock.calls).toEqual([
-    ['Webhook processed, returned status code 200'],
-  ]);
-
-  consoleLogMock.mockRestore();
+  expect(shopify.api.config.logFunction as jest.Mock).toHaveBeenCalledWith(
+    LogSeverity.Info,
+    'Webhook processed, returned status code 200',
+  );
 }
 
 async function appUninstalledWebhookRequest(app: Express, shopify: ShopifyApp) {

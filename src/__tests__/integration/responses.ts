@@ -22,73 +22,79 @@ export const ONLINE_ACCESS_TOKEN_RESPONSE: OnlineAccessResponse = {
 };
 
 export const EMPTY_WEBHOOK_RESPONSE = {
-  data: {webhookSubscriptions: {edges: []}},
+  data: {
+    webhookSubscriptions: {
+      edges: [],
+      pageInfo: {
+        endCursor: null,
+        hasNextPage: false,
+      },
+    },
+  },
 };
 
-export const EXISTING_HTTP_WEBHOOK_RESPONSE = {
+export const EXISTING_WEBHOOK_RESPONSE = {
   data: {
     webhookSubscriptions: {
       edges: [
         {
           node: {
             id: 'fakeId',
+            topic: 'TEST_TOPIC',
+            includeFields: ['id'],
             endpoint: {
               __typename: 'WebhookHttpEndpoint',
-              callbackUrl: 'https://test_host_name/old-webhooks',
+              callbackUrl: 'https://test_host_name/test/webhooks',
             },
           },
         },
-      ],
-    },
-  },
-};
-
-export const EXISTING_EVENT_BRIDGE_WEBHOOK_RESPONSE = {
-  data: {
-    webhookSubscriptions: {
-      edges: [
         {
           node: {
             id: 'fakeId',
+            topic: 'TEST_TOPIC',
+            includeFields: ['id'],
             endpoint: {
               __typename: 'WebhookEventBridgeEndpoint',
-              arn: 'old-eventbridge-address',
+              arn: 'arn:test',
             },
           },
         },
-      ],
-    },
-  },
-};
-
-export const EXISTING_PUBSUB_WEBHOOK_RESPONSE = {
-  data: {
-    webhookSubscriptions: {
-      edges: [
         {
           node: {
             id: 'fakeId',
+            topic: 'TEST_TOPIC',
+            includeFields: ['id'],
             endpoint: {
               __typename: 'WebhookPubSubEndpoint',
-              pubSubProject: 'old-pubsub',
-              pubSubTopic: 'address',
+              pubSubProject: 'pubSubProject',
+              pubSubTopic: 'pubSubTopic',
             },
           },
         },
       ],
+      pageInfo: {
+        endCursor: null,
+        hasNextPage: false,
+      },
     },
   },
 };
 
 export const HTTP_WEBHOOK_CREATE_RESPONSE = {
   data: {
-    webhookSubscriptionCreate: {webhookSubscription: {id: 'fakeId'}},
+    webhookSubscriptionCreate: {
+      webhookSubscription: {id: 'fakeId'},
+      userErrors: [],
+    },
   },
 };
 
 export const HTTP_WEBHOOK_UPDATE_RESPONSE = {
   data: {
-    webhookSubscriptionUpdate: {webhookSubscription: {id: 'fakeId'}},
+    webhookSubscriptionUpdate: {
+      webhookSubscription: {id: 'fakeId'},
+      userErrors: [],
+    },
   },
 };
 
@@ -96,6 +102,7 @@ export const EVENT_BRIDGE_WEBHOOK_CREATE_RESPONSE = {
   data: {
     eventBridgeWebhookSubscriptionCreate: {
       webhookSubscription: {id: 'fakeId'},
+      userErrors: [],
     },
   },
 };
@@ -104,6 +111,7 @@ export const EVENT_BRIDGE_WEBHOOK_UPDATE_RESPONSE = {
   data: {
     eventBridgeWebhookSubscriptionUpdate: {
       webhookSubscription: {id: 'fakeId'},
+      userErrors: [],
     },
   },
 };
@@ -112,6 +120,7 @@ export const PUBSUB_WEBHOOK_CREATE_RESPONSE = {
   data: {
     pubSubWebhookSubscriptionCreate: {
       webhookSubscription: {id: 'fakeId'},
+      userErrors: [],
     },
   },
 };
@@ -120,6 +129,7 @@ export const PUBSUB_WEBHOOK_UPDATE_RESPONSE = {
   data: {
     pubSubWebhookSubscriptionUpdate: {
       webhookSubscription: {id: 'fakeId'},
+      userErrors: [],
     },
   },
 };

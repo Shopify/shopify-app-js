@@ -1,6 +1,6 @@
 import request from 'supertest';
 import express from 'express';
-import {DeliveryMethod} from '@shopify/shopify-api';
+import {DeliveryMethod, LogSeverity} from '@shopify/shopify-api';
 
 import {
   shopify,
@@ -8,7 +8,6 @@ import {
   validWebhookHeaders,
 } from '../../__tests__/test-helper';
 import {process} from '../process';
-import {addWebhookHandlers} from '../add-webhook-handlers';
 
 describe('process', () => {
   const app = express();
@@ -18,25 +17,16 @@ describe('process', () => {
 
   const mockHandler = jest.fn();
 
-  let consoleLogMock: jest.SpyInstance;
   beforeEach(() => {
-    consoleLogMock = jest.spyOn(global.console, 'log').mockImplementation();
-
-    shopify.config.webhooks.handlers = [
-      {
+    shopify.api.webhooks.addHandlers({
+      TEST_TOPIC: {
         deliveryMethod: DeliveryMethod.Http,
-        topic: 'TEST_TOPIC',
-        handler: mockHandler,
+        callbackUrl: '/webhooks',
+        callback: mockHandler,
       },
-    ];
-
-    addWebhookHandlers({api: shopify.api, config: shopify.config});
+    });
 
     mockHandler.mockReset();
-  });
-
-  afterEach(() => {
-    consoleLogMock.mockRestore();
   });
 
   it('triggers the handler', async () => {
@@ -55,7 +45,9 @@ describe('process', () => {
       .expect(200);
 
     expect(mockHandler).toHaveBeenCalledWith('TEST_TOPIC', TEST_SHOP, body);
-    expect(consoleLogMock).toHaveBeenLastCalledWith(
+
+    expect(shopify.api.config.logFunction as jest.Mock).toHaveBeenCalledWith(
+      LogSeverity.Info,
       'Webhook processed, returned status code 200',
     );
   });
@@ -74,6 +66,13 @@ describe('process', () => {
       )
       .send(body)
       .expect(404);
+
+    expect(shopify.api.config.logFunction as jest.Mock).toHaveBeenCalledWith(
+      LogSeverity.Error,
+      expect.stringContaining(
+        'No HTTP webhooks registered for topic UNKNOWN_TOPIC',
+      ),
+    );
   });
 
   it('returns 401 on faulty webhook requests', async () => {
@@ -89,6 +88,13 @@ describe('process', () => {
     };
 
     await request(app).post('/webhooks').set(headers).send(body).expect(401);
+
+    expect(shopify.api.config.logFunction as jest.Mock).toHaveBeenCalledWith(
+      LogSeverity.Error,
+      expect.stringContaining(
+        'Could not validate request for topic TEST_TOPIC',
+      ),
+    );
   });
 
   it('returns a 500 if the handler fails', async () => {
@@ -109,8 +115,9 @@ describe('process', () => {
       .expect(500);
 
     expect(mockHandler).toHaveBeenCalledWith('TEST_TOPIC', TEST_SHOP, body);
-    expect(consoleLogMock).toHaveBeenLastCalledWith(
-      'Failed to process webhook: Error: test-error',
+    expect(shopify.api.config.logFunction as jest.Mock).toHaveBeenCalledWith(
+      LogSeverity.Error,
+      expect.stringContaining('test-error'),
     );
   });
 });

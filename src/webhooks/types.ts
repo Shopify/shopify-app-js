@@ -1,26 +1,31 @@
 import {Express, Request, Response} from 'express';
 import {
-  DeliveryMethod,
+  EventBridgeWebhookHandler,
+  HttpWebhookHandler,
+  PubSubWebhookHandler,
   Shopify,
-  WebhookHandlerFunction,
 } from '@shopify/shopify-api';
 
-interface WebhookHandler {
-  topic: string;
+import {ApiAndConfigParams} from '../types';
+
+type WebhookHandlerWithoutCallbackUrl =
+  | Omit<HttpWebhookHandler, 'callbackUrl'>
+  | EventBridgeWebhookHandler
+  | PubSubWebhookHandler;
+
+export interface WebhookHandlersParam {
+  [topic: string]:
+    | WebhookHandlerWithoutCallbackUrl
+    | WebhookHandlerWithoutCallbackUrl[];
 }
 
-export interface HttpWebhookHandler extends WebhookHandler {
-  deliveryMethod: DeliveryMethod.Http;
-  handler: WebhookHandlerFunction;
+export interface AttachWebhooksParams extends ApiAndConfigParams {
+  subApp: Express;
 }
 
-export interface WebhooksMiddlewareParams {
-  handlers?: (HttpWebhookHandler | NonHttpWebhookHandler)[];
+export interface WebhooksMountParams extends ApiAndConfigParams {
+  handlers?: WebhookHandlersParam;
 }
-
-export type WebhooksMiddleware = (
-  webhookParams?: WebhooksMiddlewareParams,
-) => Express;
 
 export interface WebhookProcessParams {
   req: Request;
@@ -28,14 +33,6 @@ export interface WebhookProcessParams {
   api: Shopify;
 }
 
-export interface NonHttpWebhookHandler extends WebhookHandler {
-  deliveryMethod: Exclude<DeliveryMethod, DeliveryMethod.Http>;
-  address: string;
-}
-
-export type WebhookConfigHandler = HttpWebhookHandler | NonHttpWebhookHandler;
-
 export interface WebhooksConfigInterface {
   path: string;
-  handlers: WebhookConfigHandler[];
 }

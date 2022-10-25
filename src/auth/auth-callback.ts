@@ -10,7 +10,6 @@ import {
 } from '@shopify/shopify-api';
 
 import {AppConfigInterface} from '../types';
-import {NonHttpWebhookHandler} from '../webhooks/types';
 import {redirectToHost} from '../redirect-to-host';
 
 import {AfterAuthCallback, AuthCallbackParams} from './types';
@@ -30,7 +29,7 @@ export async function authCallback({
       rawResponse: res,
     });
 
-    await afterAuthActions(req, res, api, config, callbackResponse, afterAuth);
+    await afterAuthActions(req, res, api, callbackResponse, afterAuth);
   } catch (error) {
     await handleCallbackError(req, res, api, config, error);
   }
@@ -40,11 +39,10 @@ async function afterAuthActions(
   req: Request,
   res: Response,
   api: Shopify,
-  config: AppConfigInterface,
   callbackResponse: CallbackResponse,
   afterAuth?: AfterAuthCallback,
 ) {
-  await registerWebhooks(api, config, callbackResponse.session);
+  await registerWebhooks(api, callbackResponse.session);
 
   if (afterAuth) {
     await afterAuth({
@@ -60,37 +58,36 @@ async function afterAuthActions(
   }
 }
 
-async function registerWebhooks(
-  api: Shopify,
-  config: AppConfigInterface,
-  session: Session,
-) {
-  for (const entry of config.webhooks.handlers) {
-    const response = await api.webhooks.register({
-      shop: session.shop,
-      accessToken: session.accessToken!,
-      path: (entry as NonHttpWebhookHandler).address ?? config.webhooks.path,
-      topic: entry.topic,
-      deliveryMethod: entry.deliveryMethod,
-    });
+async function registerWebhooks(api: Shopify, session: Session) {
+  const responsesByTopic = await api.webhooks.register({
+    shop: session.shop,
+    accessToken: session.accessToken!,
+  });
 
-    if (!response[entry.topic].success && !gdprTopics.includes(entry.topic)) {
-      const result: any = response[entry.topic].result;
+  for (const topic in responsesByTopic) {
+    if (!Object.prototype.hasOwnProperty.call(responsesByTopic, topic)) {
+      continue;
+    }
 
-      if (result.errors) {
-        await api.config.logFunction(
-          LogSeverity.Error,
-          `Failed to register ${entry.topic} webhook: ${result.errors[0].message}`,
-        );
-      } else {
-        await api.config.logFunction(
-          LogSeverity.Error,
-          `Failed to register ${entry.topic} webhook: ${JSON.stringify(
-            result.data,
-            undefined,
-            2,
-          )}`,
-        );
+    for (const response of responsesByTopic[topic]) {
+      if (!response.success && !gdprTopics.includes(topic)) {
+        const result: any = response.result;
+
+        if (result.errors) {
+          await api.config.logFunction(
+            LogSeverity.Error,
+            `Failed to register ${topic} webhook: ${result.errors[0].message}`,
+          );
+        } else {
+          await api.config.logFunction(
+            LogSeverity.Error,
+            `Failed to register ${topic} webhook: ${JSON.stringify(
+              result.data,
+              undefined,
+              2,
+            )}`,
+          );
+        }
       }
     }
   }
