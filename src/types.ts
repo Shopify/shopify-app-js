@@ -2,7 +2,6 @@ import {Request, Response} from 'express';
 import {
   ConfigParams as ApiConfigParams,
   Session,
-  SessionStorage,
   ShopifyRestResources,
   Shopify,
 } from '@shopify/shopify-api';
@@ -20,11 +19,8 @@ export * from './auth/types';
 export * from './middlewares/types';
 export * from './webhooks/types';
 
-export interface AppConfigParams<
-  R extends ShopifyRestResources = any,
-  S extends SessionStorage = SessionStorage,
-> {
-  api?: Partial<ApiConfigParams<R, S>>;
+export interface AppConfigParams<R extends ShopifyRestResources = any> {
+  api?: Partial<ApiConfigParams<R>>;
   useOnlineTokens?: boolean;
   exitIframePath?: string;
   auth?: Partial<AuthConfigInterface>;
@@ -45,10 +41,9 @@ export interface ApiAndConfigParams {
 
 export interface ShopifyApp<
   R extends ShopifyRestResources = ShopifyRestResources,
-  S extends SessionStorage = SessionStorage,
 > {
   config: AppConfigInterface;
-  api: Shopify<R, S>;
+  api: Shopify<R>;
   app: AppMiddleware;
   authenticatedRequest: AuthenticatedRequestMiddleware;
   cspHeaders: CspHeadersMiddleware;

@@ -34,11 +34,11 @@
     "typeRoots": ["./node_modules/@types"],
     "outDir": "./dist",
     "baseUrl": ".",
-    "rootDir": "src"
+    "rootDir": "."
   },
   "include": [
     "src/**/*.ts",
-    "src/**/*.tsx"
+    "session-storage/**/*.ts",
   ],
   "exclude": [
     "**/*.test.ts", "**/*.test.tsx", "**/test/*", "**/__tests__/*",

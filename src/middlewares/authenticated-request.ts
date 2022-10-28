@@ -4,6 +4,7 @@ import {Request, Response, NextFunction} from 'express';
 import {redirectToAuth} from '../redirect-to-auth';
 import {returnTopLevelRedirection} from '../return-top-level-redirection';
 import {ApiAndConfigParams} from '../types';
+import {storage} from '../storage';
 
 import {AuthenticatedRequestMiddleware} from './types';
 
@@ -15,11 +16,18 @@ export function createAuthenticatedRequest({
 }: CreateAuthenticatedRequestParams): AuthenticatedRequestMiddleware {
   return function authenticatedRequest() {
     return async (req: Request, res: Response, next: NextFunction) => {
-      const session = await api.session.getCurrent({
+      const sessionId = await api.session.getCurrentId({
         isOnline: config.useOnlineTokens,
         rawRequest: req,
         rawResponse: res,
       });
+
+      if (!sessionId) {
+        // No session id in the request. Redirect to auth.
+        return redirectToAuth({req, res, api, config});
+      }
+
+      const session = await storage.loadSession(sessionId);
 
       let shop = req.query.shop;
 
@@ -70,10 +78,7 @@ async function isValidAccessToken(
   session: Session,
 ): Promise<boolean> {
   try {
-    const client = new api.clients.Graphql({
-      domain: session.shop,
-      accessToken: session.accessToken,
-    });
+    const client = new api.clients.Graphql(session);
     await client.query({data: TEST_GRAPHQL_QUERY});
     return true;
   } catch (error) {

@@ -1,26 +1,10 @@
-import {Shopify, Session} from '@shopify/shopify-api';
+import {Session} from '@shopify/shopify-api';
+
+import {storage} from './storage';
 
 export class AppInstallations {
-  private sessionStorage;
-
-  constructor(api: Shopify) {
-    if (!api.config.sessionStorage.findSessionsByShop) {
-      throw new Error(
-        'To use this Express package, you must provide a session storage manager that implements findSessionsByShop',
-      );
-    }
-    if (!api.config.sessionStorage.deleteSessions) {
-      throw new Error(
-        'To use this Express package, you must provide a session storage manager that implements deleteSessions',
-      );
-    }
-    this.sessionStorage = api.config.sessionStorage;
-  }
-
   async includes(shopDomain: string): Promise<boolean> {
-    const shopSessions = await this.sessionStorage.findSessionsByShop!(
-      shopDomain,
-    );
+    const shopSessions = await storage.findSessionsByShop!(shopDomain);
     if (shopSessions.length > 0) {
       for (const session of shopSessions) {
         if (session.accessToken) return true;
@@ -30,11 +14,9 @@ export class AppInstallations {
   }
 
   async delete(shopDomain: string): Promise<void> {
-    const shopSessions = await this.sessionStorage.findSessionsByShop!(
-      shopDomain,
-    );
+    const shopSessions = await storage.findSessionsByShop!(shopDomain);
     if (shopSessions.length > 0) {
-      await this.sessionStorage.deleteSessions!(
+      await storage.deleteSessions!(
         shopSessions.map((session: Session) => session.id),
       );
     }

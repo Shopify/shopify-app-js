@@ -2,7 +2,6 @@ import '@shopify/shopify-api/adapters/node';
 import {
   shopifyApi,
   ConfigParams as ApiConfigParams,
-  SessionStorage,
   ShopifyRestResources,
   LATEST_API_VERSION,
 } from '@shopify/shopify-api';
@@ -20,13 +19,12 @@ import {createSubApp} from './sub-app/index';
 
 export * from './types';
 
-export function shopifyApp<
-  R extends ShopifyRestResources,
-  S extends SessionStorage = SessionStorage,
->(config: AppConfigParams<R, S> = {}): ShopifyApp<R, S> {
+export function shopifyApp<R extends ShopifyRestResources>(
+  config: AppConfigParams<R> = {},
+): ShopifyApp<R> {
   const {api: apiConfig, ...appConfig} = config;
 
-  const api = shopifyApi<R, S>(apiConfigWithDefaults<R, S>(apiConfig ?? {}));
+  const api = shopifyApi<R>(apiConfigWithDefaults<R>(apiConfig ?? {}));
   const validatedConfig = validateAppConfig(appConfig);
 
   return {
@@ -45,10 +43,9 @@ export function shopifyApp<
   };
 }
 
-function apiConfigWithDefaults<
-  R extends ShopifyRestResources,
-  S extends SessionStorage = SessionStorage,
->(apiConfig: Partial<ApiConfigParams<R, S>>): ApiConfigParams<R, S> {
+function apiConfigWithDefaults<R extends ShopifyRestResources>(
+  apiConfig: Partial<ApiConfigParams<R>>,
+): ApiConfigParams<R> {
   let userAgent = `Shopify Express Library v${SHOPIFY_EXPRESS_LIBRARY_VERSION}`;
 
   if (apiConfig.userAgentPrefix) {

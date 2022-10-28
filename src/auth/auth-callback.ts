@@ -11,6 +11,7 @@ import {
 
 import {AppConfigInterface} from '../types';
 import {redirectToHost} from '../redirect-to-host';
+import {storage} from '../storage';
 
 import {AfterAuthCallback, AuthCallbackParams} from './types';
 import {authBegin} from './auth-begin';
@@ -28,6 +29,8 @@ export async function authCallback({
       rawRequest: req,
       rawResponse: res,
     });
+
+    storage.storeSession(callbackResponse.session);
 
     await afterAuthActions(req, res, api, callbackResponse, afterAuth);
   } catch (error) {
@@ -59,10 +62,7 @@ async function afterAuthActions(
 }
 
 async function registerWebhooks(api: Shopify, session: Session) {
-  const responsesByTopic = await api.webhooks.register({
-    shop: session.shop,
-    accessToken: session.accessToken!,
-  });
+  const responsesByTopic = await api.webhooks.register(session);
 
   for (const topic in responsesByTopic) {
     if (!Object.prototype.hasOwnProperty.call(responsesByTopic, topic)) {
