@@ -14,12 +14,12 @@ export async function process({
       rawResponse: res,
     });
 
-    await api.config.logFunction(
+    await api.config.logger.log(
       LogSeverity.Info,
       'Webhook processed, returned status code 200',
     );
   } catch (error) {
-    await api.config.logFunction(
+    await api.config.logger.log(
       LogSeverity.Error,
       `Failed to process webhook: ${error}`,
     );

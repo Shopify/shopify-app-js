@@ -16,6 +16,7 @@ import {
   createEnsureInstalled,
 } from './middlewares/index';
 import {createSubApp} from './sub-app/index';
+import {MemorySessionStorage} from './session-storage/memory';
 
 export * from './types';
 
@@ -73,6 +74,8 @@ function apiConfigWithDefaults<R extends ShopifyRestResources>(
 function validateAppConfig(
   config: Omit<AppConfigParams, 'api'>,
 ): AppConfigInterface {
+  const {sessionStorage, ...configWithoutSessionStorage} = config;
+
   const auth: AuthConfigInterface = {
     path: '/auth',
     callbackPath: '/auth/callback',
@@ -87,7 +90,8 @@ function validateAppConfig(
   return {
     useOnlineTokens: false,
     exitIframePath: '/exitiframe',
-    ...config,
+    sessionStorage: sessionStorage ?? new MemorySessionStorage(),
+    ...configWithoutSessionStorage,
     auth,
     webhooks,
   };

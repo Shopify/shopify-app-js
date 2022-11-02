@@ -33,7 +33,7 @@ describe('ensureInstalled', () => {
 
   it('proceeds to process request if embedded app is installed', async () => {
     mockShopifyResponse({data: {shop: {name: TEST_SHOP}}});
-    await shopify.api.config.sessionStorage.storeSession(session);
+    await shopify.config.sessionStorage!.storeSession(session);
 
     const encodedHost = Buffer.from(SHOPIFY_HOST, 'utf-8').toString('base64');
     const response = await request(app)

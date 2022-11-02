@@ -90,8 +90,10 @@ describe('authCallback', () => {
 
         expect(registerMock).toHaveBeenCalledWith(
           expect.objectContaining({
-            shop: TEST_SHOP,
-            accessToken: 'test-access-token',
+            session: expect.objectContaining({
+              shop: TEST_SHOP,
+              accessToken: 'test-access-token',
+            }),
           }),
         );
       });
@@ -111,9 +113,7 @@ describe('authCallback', () => {
           .get(`/auth/callback?host=${BASE64_HOST}`)
           .expect(302);
 
-        expect(
-          shopify.api.config.logFunction as jest.Mock,
-        ).toHaveBeenCalledWith(
+        expect(shopify.api.config.logger.log as jest.Mock).toHaveBeenCalledWith(
           LogSeverity.Error,
           expect.stringContaining(errorMessage),
         );
@@ -133,9 +133,7 @@ describe('authCallback', () => {
           .get(`/auth/callback?host=${BASE64_HOST}`)
           .expect(302);
 
-        expect(
-          shopify.api.config.logFunction as jest.Mock,
-        ).toHaveBeenCalledWith(
+        expect(shopify.api.config.logger.log as jest.Mock).toHaveBeenCalledWith(
           LogSeverity.Error,
           expect.stringContaining(errorMessage),
         );
@@ -167,7 +165,7 @@ describe('authCallback', () => {
       );
       expect(response.header.location).toBe('https://oauth-url');
 
-      expect(shopify.api.config.logFunction as jest.Mock).toHaveBeenCalledWith(
+      expect(shopify.api.config.logger.log as jest.Mock).toHaveBeenCalledWith(
         LogSeverity.Warning,
         expect.stringContaining(errorMessage),
       );
@@ -182,7 +180,7 @@ describe('authCallback', () => {
         .expect(400)
         .expect(errorMessage);
 
-      expect(shopify.api.config.logFunction as jest.Mock).toHaveBeenCalledWith(
+      expect(shopify.api.config.logger.log as jest.Mock).toHaveBeenCalledWith(
         LogSeverity.Warning,
         expect.stringContaining(errorMessage),
       );
@@ -197,7 +195,7 @@ describe('authCallback', () => {
         .expect(500)
         .expect(errorMessage);
 
-      expect(shopify.api.config.logFunction as jest.Mock).toHaveBeenCalledWith(
+      expect(shopify.api.config.logger.log as jest.Mock).toHaveBeenCalledWith(
         LogSeverity.Warning,
         expect.stringContaining(errorMessage),
       );

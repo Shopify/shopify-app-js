@@ -155,7 +155,7 @@ async function completeOAuth(
 ) {
   // Make sure there was no session when we started
   expect(
-    await shopify.api.config.sessionStorage.findSessionsByShop!(TEST_SHOP),
+    await shopify.config.sessionStorage!.findSessionsByShop!(TEST_SHOP),
   ).toEqual([]);
 
   mockOAuthResponses(config);
@@ -185,7 +185,7 @@ async function completeOAuth(
       req: expect.anything(),
       res: expect.anything(),
       session: (
-        await shopify.api.config.sessionStorage.findSessionsByShop!(TEST_SHOP)
+        await shopify.config.sessionStorage!.findSessionsByShop!(TEST_SHOP)
       )[0],
     }),
   );
@@ -284,7 +284,7 @@ async function webhookProcessRequest(
     .send(body)
     .expect(200);
 
-  expect(shopify.api.config.logFunction as jest.Mock).toHaveBeenCalledWith(
+  expect(shopify.api.config.logger.log as jest.Mock).toHaveBeenCalledWith(
     LogSeverity.Info,
     'Webhook processed, returned status code 200',
   );
@@ -292,7 +292,7 @@ async function webhookProcessRequest(
 
 async function appUninstalledWebhookRequest(app: Express, shopify: ShopifyApp) {
   const body = JSON.stringify({'test-body-received': true});
-  const appInstallations = new AppInstallations(shopify.api);
+  const appInstallations = new AppInstallations(shopify.config);
 
   expect(await appInstallations.includes(TEST_SHOP)).toBe(true);
 
@@ -344,7 +344,7 @@ async function makeAuthenticatedRequest(
     headers.Authorization = `Bearer ${validJWT}`;
   } else {
     const session = (
-      await shopify.api.config.sessionStorage.findSessionsByShop!(TEST_SHOP)
+      await shopify.config.sessionStorage!.findSessionsByShop!(TEST_SHOP)
     )[0];
     headers.Cookie = [
       `shopify_app_session=${session.id}`,

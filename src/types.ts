@@ -14,6 +14,7 @@ import {
   EnsureInstalledMiddleware,
 } from './middlewares/types';
 import {AppMiddleware} from './sub-app/types';
+import {SessionStorage} from './session-storage/session-storage';
 
 export * from './auth/types';
 export * from './middlewares/types';
@@ -25,6 +26,7 @@ export interface AppConfigParams<R extends ShopifyRestResources = any> {
   exitIframePath?: string;
   auth?: Partial<AuthConfigInterface>;
   webhooks?: Partial<WebhooksConfigInterface>;
+  sessionStorage?: SessionStorage;
 }
 
 export interface AppConfigInterface extends Omit<AppConfigParams, 'api'> {

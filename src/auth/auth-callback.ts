@@ -11,7 +11,6 @@ import {
 
 import {AppConfigInterface} from '../types';
 import {redirectToHost} from '../redirect-to-host';
-import {storage} from '../storage';
 
 import {AfterAuthCallback, AuthCallbackParams} from './types';
 import {authBegin} from './auth-begin';
@@ -30,7 +29,7 @@ export async function authCallback({
       rawResponse: res,
     });
 
-    storage.storeSession(callbackResponse.session);
+    config.sessionStorage!.storeSession(callbackResponse.session);
 
     await afterAuthActions(req, res, api, callbackResponse, afterAuth);
   } catch (error) {
@@ -62,7 +61,7 @@ async function afterAuthActions(
 }
 
 async function registerWebhooks(api: Shopify, session: Session) {
-  const responsesByTopic = await api.webhooks.register(session);
+  const responsesByTopic = await api.webhooks.register({session});
 
   for (const topic in responsesByTopic) {
     if (!Object.prototype.hasOwnProperty.call(responsesByTopic, topic)) {
@@ -74,12 +73,12 @@ async function registerWebhooks(api: Shopify, session: Session) {
         const result: any = response.result;
 
         if (result.errors) {
-          await api.config.logFunction(
+          await api.config.logger.log(
             LogSeverity.Error,
             `Failed to register ${topic} webhook: ${result.errors[0].message}`,
           );
         } else {
-          await api.config.logFunction(
+          await api.config.logger.log(
             LogSeverity.Error,
             `Failed to register ${topic} webhook: ${JSON.stringify(
               result.data,
@@ -100,7 +99,7 @@ async function handleCallbackError(
   config: AppConfigInterface,
   error: Error,
 ) {
-  await api.config.logFunction(
+  await api.config.logger.log(
     LogSeverity.Warning,
     `Failed to complete OAuth with error: ${error}`,
   );

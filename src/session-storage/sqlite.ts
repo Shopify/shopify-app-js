@@ -1,6 +1,7 @@
 import sqlite3 from 'sqlite3';
-
 import {Session} from '@shopify/shopify-api';
+
+import {SessionStorage} from './session-storage';
 
 export interface SQLiteSessionStorageOptions {
   sessionTableName: string;
@@ -9,7 +10,7 @@ const defaultSQLiteSessionStorageOptions: SQLiteSessionStorageOptions = {
   sessionTableName: 'shopify_sessions',
 };
 
-export class SQLiteSessionStorage {
+export class SQLiteSessionStorage extends SessionStorage {
   private options: SQLiteSessionStorageOptions;
   private db: sqlite3.Database;
   private ready: Promise<void>;
@@ -18,6 +19,8 @@ export class SQLiteSessionStorage {
     private filename: string,
     opts: Partial<SQLiteSessionStorageOptions> = {},
   ) {
+    super();
+
     this.options = {...defaultSQLiteSessionStorageOptions, ...opts};
     this.db = new sqlite3.Database(this.filename);
     this.ready = this.init();
@@ -26,7 +29,7 @@ export class SQLiteSessionStorage {
   public async storeSession(session: Session): Promise<boolean> {
     await this.ready;
 
-    const entries = session.serialize();
+    const entries = session.toPropertyArray();
 
     const query = `
       INSERT OR REPLACE INTO ${this.options.sessionTableName}
@@ -51,7 +54,7 @@ export class SQLiteSessionStorage {
     if (!Array.isArray(rows) || rows?.length !== 1) return undefined;
     const rawResult = rows[0] as any;
 
-    return Session.deserialize(Object.entries(rawResult));
+    return Session.fromPropertyArray(Object.entries(rawResult));
   }
 
   public async deleteSession(id: string): Promise<boolean> {
@@ -84,7 +87,7 @@ export class SQLiteSessionStorage {
     if (!Array.isArray(rows) || rows?.length === 0) return [];
 
     const results: Session[] = rows.map((row) => {
-      return Session.deserialize(Object.entries(row as any));
+      return Session.fromPropertyArray(Object.entries(row as any));
     });
     return results;
   }
