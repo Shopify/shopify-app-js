@@ -1,6 +1,5 @@
 import {Request, Response} from 'express';
 import {
-  CallbackResponse,
   CookieNotFound,
   gdprTopics,
   InvalidOAuthError,
@@ -31,7 +30,7 @@ export async function authCallback({
 
     config.sessionStorage!.storeSession(callbackResponse.session);
 
-    await afterAuthActions(req, res, api, callbackResponse, afterAuth);
+    await afterAuthActions(req, res, api, callbackResponse.session, afterAuth);
   } catch (error) {
     await handleCallbackError(req, res, api, config, error);
   }
@@ -41,22 +40,22 @@ async function afterAuthActions(
   req: Request,
   res: Response,
   api: Shopify,
-  callbackResponse: CallbackResponse,
+  session: Session,
   afterAuth?: AfterAuthCallback,
 ) {
-  await registerWebhooks(api, callbackResponse.session);
+  await registerWebhooks(api, session);
 
   if (afterAuth) {
     await afterAuth({
       req,
       res,
-      session: callbackResponse.session,
+      session,
     });
   }
 
   // We redirect to the host-based app URL ONLY if the afterAuth callback didn't send a response already
   if (!res.headersSent) {
-    await redirectToHost({req, res, api, session: callbackResponse.session});
+    await redirectToHost({req, res, api, session});
   }
 }
 
