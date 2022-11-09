@@ -13,7 +13,7 @@ const defaultPostgreSQLSessionStorageOptions: PostgreSQLSessionStorageOptions =
     port: 3211,
   };
 
-export class PostgreSQLSessionStorage extends SessionStorage {
+export class PostgreSQLSessionStorage implements SessionStorage {
   static withCredentials(
     host: string,
     dbName: string,
@@ -39,8 +39,6 @@ export class PostgreSQLSessionStorage extends SessionStorage {
     private dbUrl: URL,
     opts: Partial<PostgreSQLSessionStorageOptions> = {},
   ) {
-    super();
-
     if (typeof this.dbUrl === 'string') {
       this.dbUrl = new URL(this.dbUrl);
     }

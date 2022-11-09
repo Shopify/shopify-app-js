@@ -17,16 +17,18 @@ import {
 } from './middlewares/index';
 import {createSubApp} from './sub-app/index';
 import {MemorySessionStorage} from './session-storage/memory';
+import {SessionStorage} from './session-storage/session-storage';
 
 export * from './types';
 
-export function shopifyApp<R extends ShopifyRestResources>(
-  config: AppConfigParams<R> = {sessionStorage: new MemorySessionStorage()},
-): ShopifyApp<R> {
+export function shopifyApp<
+  R extends ShopifyRestResources = any,
+  S extends SessionStorage = SessionStorage,
+>(config: AppConfigParams<R, S>): ShopifyApp<R, S> {
   const {api: apiConfig, ...appConfig} = config;
 
   const api = shopifyApi<R>(apiConfigWithDefaults<R>(apiConfig ?? {}));
-  const validatedConfig = validateAppConfig(appConfig);
+  const validatedConfig = validateAppConfig<R, S>(appConfig);
 
   return {
     config: validatedConfig,
@@ -71,9 +73,12 @@ function apiConfigWithDefaults<R extends ShopifyRestResources>(
   /* eslint-enable no-process-env */
 }
 
-function validateAppConfig(
-  config: Omit<AppConfigParams, 'api'>,
-): AppConfigInterface {
+function validateAppConfig<
+  R extends ShopifyRestResources,
+  S extends SessionStorage,
+>(config: Omit<AppConfigParams<R, S>, 'api'>): AppConfigInterface<S> {
+  const {sessionStorage, ...configWithoutSessionStorage} = config;
+
   const auth: AuthConfigInterface = {
     path: '/auth',
     callbackPath: '/auth/callback',
@@ -88,7 +93,8 @@ function validateAppConfig(
   return {
     useOnlineTokens: false,
     exitIframePath: '/exitiframe',
-    ...config,
+    sessionStorage: sessionStorage ?? new MemorySessionStorage(),
+    ...configWithoutSessionStorage,
     auth,
     webhooks,
   };

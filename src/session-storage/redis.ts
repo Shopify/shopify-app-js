@@ -12,7 +12,7 @@ const defaultRedisSessionStorageOptions: RedisSessionStorageOptions = {
   sessionKeyPrefix: 'shopify_sessions',
 };
 
-export class RedisSessionStorage extends SessionStorage {
+export class RedisSessionStorage implements SessionStorage {
   static withCredentials(
     host: string,
     db: number,
@@ -38,8 +38,6 @@ export class RedisSessionStorage extends SessionStorage {
     private dbUrl: URL,
     opts: Partial<RedisSessionStorageOptions> = {},
   ) {
-    super();
-
     if (typeof this.dbUrl === 'string') {
       this.dbUrl = new URL(this.dbUrl);
     }

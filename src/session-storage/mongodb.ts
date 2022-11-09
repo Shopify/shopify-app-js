@@ -10,7 +10,7 @@ const defaultMongoDBSessionStorageOptions: MongoDBSessionStorageOptions = {
   sessionCollectionName: 'shopify_sessions',
 };
 
-export class MongoDBSessionStorage extends SessionStorage {
+export class MongoDBSessionStorage implements SessionStorage {
   static withCredentials(
     host: string,
     dbName: string,
@@ -39,8 +39,6 @@ export class MongoDBSessionStorage extends SessionStorage {
     private dbName: string,
     opts: Partial<MongoDBSessionStorageOptions> = {},
   ) {
-    super();
-
     if (typeof this.dbUrl === 'string') {
       this.dbUrl = new URL(this.dbUrl);
     }

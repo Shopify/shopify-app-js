@@ -20,20 +20,27 @@ export * from './auth/types';
 export * from './middlewares/types';
 export * from './webhooks/types';
 
-export interface AppConfigParams<R extends ShopifyRestResources = any> {
+export interface AppConfigParams<
+  R extends ShopifyRestResources = any,
+  S extends SessionStorage = any,
+> {
   api?: Partial<ApiConfigParams<R>>;
   useOnlineTokens?: boolean;
   exitIframePath?: string;
   auth?: Partial<AuthConfigInterface>;
   webhooks?: Partial<WebhooksConfigInterface>;
-  sessionStorage: SessionStorage;
+  sessionStorage?: S;
 }
 
-export interface AppConfigInterface extends Omit<AppConfigParams, 'api'> {
+export interface AppConfigInterface<
+  R extends ShopifyRestResources = any,
+  S extends SessionStorage = any,
+> extends Omit<AppConfigParams<R, S>, 'api'> {
   useOnlineTokens: boolean;
   exitIframePath: string;
   auth: AuthConfigInterface;
   webhooks: WebhooksConfigInterface;
+  sessionStorage: S;
 }
 
 export interface ApiAndConfigParams {
@@ -42,9 +49,10 @@ export interface ApiAndConfigParams {
 }
 
 export interface ShopifyApp<
-  R extends ShopifyRestResources = ShopifyRestResources,
+  R extends ShopifyRestResources,
+  S extends SessionStorage,
 > {
-  config: AppConfigInterface;
+  config: AppConfigInterface<S>;
   api: Shopify<R>;
   app: AppMiddleware;
   authenticatedRequest: AuthenticatedRequestMiddleware;

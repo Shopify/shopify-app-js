@@ -10,7 +10,7 @@ const defaultMySQLSessionStorageOptions: MySQLSessionStorageOptions = {
   sessionTableName: 'shopify_sessions',
 };
 
-export class MySQLSessionStorage extends SessionStorage {
+export class MySQLSessionStorage implements SessionStorage {
   static withCredentials(
     host: string,
     dbName: string,
@@ -36,8 +36,6 @@ export class MySQLSessionStorage extends SessionStorage {
     private dbUrl: URL,
     opts: Partial<MySQLSessionStorageOptions> = {},
   ) {
-    super();
-
     if (typeof this.dbUrl === 'string') {
       this.dbUrl = new URL(this.dbUrl);
     }

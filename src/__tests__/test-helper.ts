@@ -6,6 +6,7 @@ import {LATEST_API_VERSION} from '@shopify/shopify-api';
 import {MemorySessionStorage} from '../session-storage/memory';
 import {shopifyApp} from '../index';
 import {AppConfigParams, ShopifyApp} from '../types';
+import {SessionStorage} from '../session-storage/session-storage';
 
 // eslint-disable-next-line import/no-mutable-exports
 export let testConfig: AppConfigParams & {
@@ -17,7 +18,7 @@ export let testConfig: AppConfigParams & {
   };
 };
 // eslint-disable-next-line import/no-mutable-exports
-export let shopify: ShopifyApp;
+export let shopify: ShopifyApp<any, SessionStorage>;
 
 export const SHOPIFY_HOST = 'totally-real-host';
 export const BASE64_HOST = Buffer.from(SHOPIFY_HOST).toString('base64');
@@ -46,7 +47,7 @@ beforeEach(() => {
     },
   };
 
-  shopify = shopifyApp(testConfig);
+  shopify = shopifyApp<any, MemorySessionStorage>(testConfig);
 
   currentCall = 0;
 });

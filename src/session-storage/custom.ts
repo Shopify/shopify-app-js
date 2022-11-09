@@ -4,7 +4,7 @@ import * as ShopifyErrors from '../error';
 
 import {SessionStorage} from './session-storage';
 
-export class CustomSessionStorage extends SessionStorage {
+export class CustomSessionStorage implements SessionStorage {
   constructor(
     readonly storeCallback: (session: Session) => Promise<boolean>,
     readonly loadCallback: (
@@ -14,8 +14,6 @@ export class CustomSessionStorage extends SessionStorage {
     readonly deleteSessionsCallback?: (ids: string[]) => Promise<boolean>,
     readonly findSessionsByShopCallback?: (shop: string) => Promise<Session[]>,
   ) {
-    super();
-
     this.storeCallback = storeCallback;
     this.loadCallback = loadCallback;
     this.deleteCallback = deleteCallback;

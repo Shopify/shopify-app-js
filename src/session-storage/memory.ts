@@ -2,7 +2,7 @@ import {Session} from '@shopify/shopify-api';
 
 import {SessionStorage} from './session-storage';
 
-export class MemorySessionStorage extends SessionStorage {
+export class MemorySessionStorage implements SessionStorage {
   private sessions: {[id: string]: Session} = {};
 
   public async storeSession(session: Session): Promise<boolean> {
