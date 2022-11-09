@@ -17,7 +17,6 @@ import {
   TEST_SHOP,
   validWebhookHeaders,
 } from '../test-helper';
-import {SessionStorage} from '../../../session-storage/session-storage';
 
 import {
   convertBeginResponseToCallbackInfo,
@@ -111,7 +110,7 @@ describe('OAuth integration tests', () => {
 // Fires the request to start the OAuth process and asserts it goes as expected
 async function beginOAuth(
   app: Express,
-  shopify: ShopifyApp<any, SessionStorage>,
+  shopify: ShopifyApp,
   config: OAuthTestCase,
 ) {
   const beginResponse = await request(app)
@@ -149,7 +148,7 @@ async function beginOAuth(
 // Fires the request to complete OAuth based on the begin call, and asserts it returns as expected
 async function completeOAuth(
   app: Express,
-  shopify: ShopifyApp<any, SessionStorage>,
+  shopify: ShopifyApp,
   config: OAuthTestCase,
   callbackInfo: CallbackInfo,
   afterAuth: jest.Mock,
@@ -232,7 +231,7 @@ function mockOAuthResponses(config: OAuthTestCase) {
 
 // Asserts that the OAuth process made the expected requests
 function assertOAuthRequests(
-  shopify: ShopifyApp<any, SessionStorage>,
+  shopify: ShopifyApp,
   config: OAuthTestCase,
   callbackInfo: CallbackInfo,
 ) {
@@ -277,7 +276,7 @@ async function webhookProcessRequest(
   topic: string,
   body: string,
   app: Express,
-  shopify: ShopifyApp<any, SessionStorage>,
+  shopify: ShopifyApp,
 ) {
   await request(app)
     .post('/test/webhooks')
@@ -291,10 +290,7 @@ async function webhookProcessRequest(
   );
 }
 
-async function appUninstalledWebhookRequest(
-  app: Express,
-  shopify: ShopifyApp<any, SessionStorage>,
-) {
+async function appUninstalledWebhookRequest(app: Express, shopify: ShopifyApp) {
   const body = JSON.stringify({'test-body-received': true});
   const appInstallations = new AppInstallations(shopify.config);
 
@@ -327,7 +323,7 @@ async function makeInstalledRequest(
 // Fires a valid request to check that the authenticated middleware allows requests through
 async function makeAuthenticatedRequest(
   app: Express,
-  shopify: ShopifyApp<any, SessionStorage>,
+  shopify: ShopifyApp,
   config: OAuthTestCase,
   mock: jest.Mock,
 ) {

@@ -4,7 +4,6 @@ import fetchMock, {MockParams} from 'jest-fetch-mock';
 import {LATEST_API_VERSION} from '@shopify/shopify-api';
 
 import {MemorySessionStorage} from '../../session-storage/memory';
-import {SessionStorage} from '../../session-storage/session-storage';
 import {shopifyApp} from '../index';
 import {AppConfigParams, ShopifyApp} from '../types';
 
@@ -18,7 +17,7 @@ export let testConfig: AppConfigParams & {
   };
 };
 // eslint-disable-next-line import/no-mutable-exports
-export let shopify: ShopifyApp<any, SessionStorage>;
+export let shopify: ShopifyApp;
 
 export const SHOPIFY_HOST = 'totally-real-host';
 export const BASE64_HOST = Buffer.from(SHOPIFY_HOST).toString('base64');
@@ -47,7 +46,7 @@ beforeEach(() => {
     },
   };
 
-  shopify = shopifyApp<any, MemorySessionStorage>(testConfig);
+  shopify = shopifyApp(testConfig);
 
   currentCall = 0;
 });

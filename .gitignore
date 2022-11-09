@@ -6,4 +6,7 @@ coverage/
 yarn-error.log
 tsdocs/
 tsconfig.tsbuildinfo
-*.sqlite
+*.d.ts
+*.d.ts.map
+*.js
+*.js.map

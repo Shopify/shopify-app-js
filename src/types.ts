@@ -23,7 +23,7 @@ export * from './webhooks/types';
 
 export interface AppConfigParams<
   R extends ShopifyRestResources = any,
-  S extends SessionStorage = any,
+  S extends SessionStorage = SessionStorage,
 > {
   api?: Partial<ApiConfigParams<R>>;
   useOnlineTokens?: boolean;
@@ -35,7 +35,7 @@ export interface AppConfigParams<
 
 export interface AppConfigInterface<
   R extends ShopifyRestResources = any,
-  S extends SessionStorage = any,
+  S extends SessionStorage = SessionStorage,
 > extends Omit<AppConfigParams<R, S>, 'api'> {
   useOnlineTokens: boolean;
   exitIframePath: string;
@@ -50,8 +50,8 @@ export interface ApiAndConfigParams {
 }
 
 export interface ShopifyApp<
-  R extends ShopifyRestResources,
-  S extends SessionStorage,
+  R extends ShopifyRestResources = any,
+  S extends SessionStorage = SessionStorage,
 > {
   config: AppConfigInterface<S>;
   api: Shopify<R>;
