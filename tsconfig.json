@@ -32,7 +32,6 @@
       "esnext.asynciterable"
     ],
     "typeRoots": ["./node_modules/@types"],
-    "outDir": "./dist",
     "baseUrl": ".",
     "rootDir": "."
   },

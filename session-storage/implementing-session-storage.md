@@ -25,7 +25,7 @@ id,this-is-a-session-id,shop,my-test-shop.myshopify.com,state,150801840581085,is
 ```ts
 import fs from 'fs';
 import {Session} from '@shopify/shopify-api';
-import {SessionStorage} from '@shopify/shopify-app-express/dist/src/session-storage/session-storage';
+import {SessionStorage} from '@shopify/shopify-app-express/session-storage/session-storage';
 
 export class CsvSessionStorage extends SessionStorage {
   constructor(private filename: string) {

@@ -1,6 +1,6 @@
 import {Session} from '@shopify/shopify-api';
 
-import {shopify} from '../../__tests__/test-helper';
+import {shopify} from '../../src/__tests__/test-helper';
 import {SessionStorage} from '../session-storage';
 
 import {sessionArraysEqual} from './session-test-utils';

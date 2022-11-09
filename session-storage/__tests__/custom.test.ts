@@ -1,7 +1,7 @@
 import {Session} from '@shopify/shopify-api';
 
 import {CustomSessionStorage} from '../custom';
-import {SessionStorageError} from '../../error';
+import {SessionStorageError} from '../../src/error';
 
 describe('custom session storage', () => {
   test('can perform core actions', async () => {

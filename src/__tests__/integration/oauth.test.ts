@@ -17,7 +17,7 @@ import {
   TEST_SHOP,
   validWebhookHeaders,
 } from '../test-helper';
-import {SessionStorage} from '../../session-storage/session-storage';
+import {SessionStorage} from '../../../session-storage/session-storage';
 
 import {
   convertBeginResponseToCallbackInfo,

@@ -6,6 +6,8 @@ import {
   Shopify,
 } from '@shopify/shopify-api';
 
+import {SessionStorage} from '../session-storage/session-storage';
+
 import {AuthConfigInterface} from './auth/types';
 import {WebhooksConfigInterface} from './webhooks/types';
 import {
@@ -14,7 +16,6 @@ import {
   EnsureInstalledMiddleware,
 } from './middlewares/types';
 import {AppMiddleware} from './sub-app/types';
-import {SessionStorage} from './session-storage/session-storage';
 
 export * from './auth/types';
 export * from './middlewares/types';

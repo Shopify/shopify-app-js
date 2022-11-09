@@ -6,6 +6,9 @@ import {
   LATEST_API_VERSION,
 } from '@shopify/shopify-api';
 
+import {MemorySessionStorage} from '../session-storage/memory';
+import {SessionStorage} from '../session-storage/session-storage';
+
 import {SHOPIFY_EXPRESS_LIBRARY_VERSION} from './version';
 import {AppConfigParams, ShopifyApp, AppConfigInterface} from './types';
 import {AuthConfigInterface} from './auth/types';
@@ -16,8 +19,6 @@ import {
   createEnsureInstalled,
 } from './middlewares/index';
 import {createSubApp} from './sub-app/index';
-import {MemorySessionStorage} from './session-storage/memory';
-import {SessionStorage} from './session-storage/session-storage';
 
 export * from './types';
 

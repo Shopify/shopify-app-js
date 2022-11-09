@@ -3,10 +3,10 @@ import crypto from 'crypto';
 import fetchMock, {MockParams} from 'jest-fetch-mock';
 import {LATEST_API_VERSION} from '@shopify/shopify-api';
 
-import {MemorySessionStorage} from '../session-storage/memory';
+import {MemorySessionStorage} from '../../session-storage/memory';
+import {SessionStorage} from '../../session-storage/session-storage';
 import {shopifyApp} from '../index';
 import {AppConfigParams, ShopifyApp} from '../types';
-import {SessionStorage} from '../session-storage/session-storage';
 
 // eslint-disable-next-line import/no-mutable-exports
 export let testConfig: AppConfigParams & {

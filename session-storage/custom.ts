@@ -1,6 +1,6 @@
 import {Session} from '@shopify/shopify-api';
 
-import * as ShopifyErrors from '../error';
+import * as ShopifyErrors from '../src/error';
 
 import {SessionStorage} from './session-storage';
 
