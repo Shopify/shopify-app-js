@@ -7,6 +7,7 @@ const config: Config = {
   displayName: 'package',
   rootDir: '../../',
   setupFilesAfterEnv: ['<rootDir>/__tests__/setup-jest.ts'],
+  testPathIgnorePatterns: ['session-storage/*'],
   automock: false,
 };
 

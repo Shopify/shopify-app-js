@@ -1,6 +1,5 @@
 import {Request, Response} from 'express';
 import {
-  CallbackResponse,
   CookieNotFound,
   gdprTopics,
   InvalidOAuthError,
@@ -29,7 +28,9 @@ export async function authCallback({
       rawResponse: res,
     });
 
-    await afterAuthActions(req, res, api, callbackResponse, afterAuth);
+    config.sessionStorage.storeSession(callbackResponse.session);
+
+    await afterAuthActions(req, res, api, callbackResponse.session, afterAuth);
   } catch (error) {
     await handleCallbackError(req, res, api, config, error);
   }
@@ -39,30 +40,27 @@ async function afterAuthActions(
   req: Request,
   res: Response,
   api: Shopify,
-  callbackResponse: CallbackResponse,
+  session: Session,
   afterAuth?: AfterAuthCallback,
 ) {
-  await registerWebhooks(api, callbackResponse.session);
+  await registerWebhooks(api, session);
 
   if (afterAuth) {
     await afterAuth({
       req,
       res,
-      session: callbackResponse.session,
+      session,
     });
   }
 
   // We redirect to the host-based app URL ONLY if the afterAuth callback didn't send a response already
   if (!res.headersSent) {
-    await redirectToHost({req, res, api, session: callbackResponse.session});
+    await redirectToHost({req, res, api, session});
   }
 }
 
 async function registerWebhooks(api: Shopify, session: Session) {
-  const responsesByTopic = await api.webhooks.register({
-    shop: session.shop,
-    accessToken: session.accessToken!,
-  });
+  const responsesByTopic = await api.webhooks.register({session});
 
   for (const topic in responsesByTopic) {
     if (!Object.prototype.hasOwnProperty.call(responsesByTopic, topic)) {
@@ -74,12 +72,12 @@ async function registerWebhooks(api: Shopify, session: Session) {
         const result: any = response.result;
 
         if (result.errors) {
-          await api.config.logFunction(
+          await api.config.logger.log(
             LogSeverity.Error,
             `Failed to register ${topic} webhook: ${result.errors[0].message}`,
           );
         } else {
-          await api.config.logFunction(
+          await api.config.logger.log(
             LogSeverity.Error,
             `Failed to register ${topic} webhook: ${JSON.stringify(
               result.data,
@@ -100,7 +98,7 @@ async function handleCallbackError(
   config: AppConfigInterface,
   error: Error,
 ) {
-  await api.config.logFunction(
+  await api.config.logger.log(
     LogSeverity.Warning,
     `Failed to complete OAuth with error: ${error}`,
   );

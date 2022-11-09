@@ -1,20 +1,22 @@
-import {Shopify, Session} from '@shopify/shopify-api';
+import {Session} from '@shopify/shopify-api';
+
+import {AppConfigInterface} from './types';
 
 export class AppInstallations {
   private sessionStorage;
 
-  constructor(api: Shopify) {
-    if (!api.config.sessionStorage.findSessionsByShop) {
+  constructor(config: AppConfigInterface) {
+    if (!config.sessionStorage.findSessionsByShop) {
       throw new Error(
         'To use this Express package, you must provide a session storage manager that implements findSessionsByShop',
       );
     }
-    if (!api.config.sessionStorage.deleteSessions) {
+    if (!config.sessionStorage.deleteSessions) {
       throw new Error(
         'To use this Express package, you must provide a session storage manager that implements deleteSessions',
       );
     }
-    this.sessionStorage = api.config.sessionStorage;
+    this.sessionStorage = config.sessionStorage;
   }
 
   async includes(shopDomain: string): Promise<boolean> {

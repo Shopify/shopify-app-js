@@ -46,7 +46,7 @@ describe('process', () => {
 
     expect(mockHandler).toHaveBeenCalledWith('TEST_TOPIC', TEST_SHOP, body);
 
-    expect(shopify.api.config.logFunction as jest.Mock).toHaveBeenCalledWith(
+    expect(shopify.api.config.logger.log as jest.Mock).toHaveBeenCalledWith(
       LogSeverity.Info,
       'Webhook processed, returned status code 200',
     );
@@ -67,7 +67,7 @@ describe('process', () => {
       .send(body)
       .expect(404);
 
-    expect(shopify.api.config.logFunction as jest.Mock).toHaveBeenCalledWith(
+    expect(shopify.api.config.logger.log as jest.Mock).toHaveBeenCalledWith(
       LogSeverity.Error,
       expect.stringContaining(
         'No HTTP webhooks registered for topic UNKNOWN_TOPIC',
@@ -89,7 +89,7 @@ describe('process', () => {
 
     await request(app).post('/webhooks').set(headers).send(body).expect(401);
 
-    expect(shopify.api.config.logFunction as jest.Mock).toHaveBeenCalledWith(
+    expect(shopify.api.config.logger.log as jest.Mock).toHaveBeenCalledWith(
       LogSeverity.Error,
       expect.stringContaining(
         'Could not validate request for topic TEST_TOPIC',
@@ -115,7 +115,7 @@ describe('process', () => {
       .expect(500);
 
     expect(mockHandler).toHaveBeenCalledWith('TEST_TOPIC', TEST_SHOP, body);
-    expect(shopify.api.config.logFunction as jest.Mock).toHaveBeenCalledWith(
+    expect(shopify.api.config.logger.log as jest.Mock).toHaveBeenCalledWith(
       LogSeverity.Error,
       expect.stringContaining('test-error'),
     );

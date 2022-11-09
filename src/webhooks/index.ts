@@ -46,7 +46,7 @@ export function webhooksMount({
   api.webhooks.addHandlers(handlers as AddHandlersParams);
 
   // Add our custom app uninstalled webhook
-  const appInstallations = new AppInstallations(api);
+  const appInstallations = new AppInstallations(config);
 
   api.webhooks.addHandlers({
     APP_UNINSTALLED: {

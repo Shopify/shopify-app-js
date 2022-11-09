@@ -13,6 +13,7 @@ describe('authenticatedRequest', () => {
   let app: Express;
   let validJWT: any;
   let session: Session;
+  const sessionId = '123-this-is-a-session-id';
 
   beforeEach(() => {
     app = express();
@@ -33,7 +34,7 @@ describe('authenticatedRequest', () => {
       },
     );
     session = new Session({
-      id: '123-this-is-a-session-id',
+      id: sessionId,
       shop: 'my-shop.myshopify.io',
       state: '123-this-is-a-state',
       isOnline: shopify.config.useOnlineTokens,
@@ -41,12 +42,13 @@ describe('authenticatedRequest', () => {
       expires: undefined,
       accessToken: 'totally-real-access-token',
     });
+    shopify.config.sessionStorage.storeSession(session);
   });
 
   it('active and valid session does not redirect', async () => {
     jest
-      .spyOn(shopify.api.session, 'getCurrent')
-      .mockResolvedValueOnce(session);
+      .spyOn(shopify.api.session, 'getCurrentId')
+      .mockResolvedValueOnce(sessionId);
 
     mockShopifyResponse({data: {shop: {name: 'my-shop.myshopify.io'}}});
 
@@ -66,8 +68,8 @@ describe('authenticatedRequest', () => {
   it('inactive session with auth header returns 403 with correct headers', async () => {
     session.expires = new Date('2020-12-31T00:00:00');
     jest
-      .spyOn(shopify.api.session, 'getCurrent')
-      .mockResolvedValueOnce(session);
+      .spyOn(shopify.api.session, 'getCurrentId')
+      .mockResolvedValueOnce(sessionId);
 
     const response = await request(app)
       .get('/test/shop?shop=my-shop.myshopify.io')
@@ -85,8 +87,8 @@ describe('authenticatedRequest', () => {
   it('inactive session without auth header redirects to auth', async () => {
     session.expires = new Date('2020-12-31T00:00:00');
     jest
-      .spyOn(shopify.api.session, 'getCurrent')
-      .mockResolvedValueOnce(session);
+      .spyOn(shopify.api.session, 'getCurrentId')
+      .mockResolvedValueOnce(sessionId);
 
     const response = await request(app)
       .get('/test/shop?shop=my-shop.myshopify.io')
@@ -99,7 +101,7 @@ describe('authenticatedRequest', () => {
 
   it('no session, with auth header returns 403 with correct headers', async () => {
     jest
-      .spyOn(shopify.api.session, 'getCurrent')
+      .spyOn(shopify.api.session, 'getCurrentId')
       .mockResolvedValueOnce(undefined);
 
     const response = await request(app)
@@ -117,7 +119,7 @@ describe('authenticatedRequest', () => {
 
   it('no session, without auth header redirects to auth', async () => {
     jest
-      .spyOn(shopify.api.session, 'getCurrent')
+      .spyOn(shopify.api.session, 'getCurrentId')
       .mockResolvedValueOnce(undefined);
 
     const response = await request(app)
@@ -131,8 +133,8 @@ describe('authenticatedRequest', () => {
 
   it('redirect to exit iFrame if different shop, embedded param set to 1', async () => {
     jest
-      .spyOn(shopify.api.session, 'getCurrent')
-      .mockResolvedValueOnce(session);
+      .spyOn(shopify.api.session, 'getCurrentId')
+      .mockResolvedValueOnce(sessionId);
 
     const encodedHost = Buffer.from(SHOPIFY_HOST, 'utf-8').toString('base64');
     const response = await request(app)
@@ -157,18 +159,9 @@ describe('authenticatedRequest', () => {
   });
 
   it('redirects to auth if different shop, no embedded param', async () => {
-    const session = new Session({
-      id: '123-this-is-a-session-id',
-      shop: 'my-shop.myshopify.io',
-      state: '123-this-is-a-state',
-      isOnline: shopify.config.useOnlineTokens,
-      scope: shopify.api.config.scopes.toString(),
-      expires: undefined,
-      accessToken: 'totally-real-access-token',
-    });
     jest
-      .spyOn(shopify.api.session, 'getCurrent')
-      .mockResolvedValueOnce(session);
+      .spyOn(shopify.api.session, 'getCurrentId')
+      .mockResolvedValueOnce(sessionId);
 
     const response = await request(app)
       .get('/test/shop?shop=other-shop.myshopify.io')
@@ -195,8 +188,8 @@ describe('authenticatedRequest', () => {
   it('session found, shops match, scopes differ, with auth header', async () => {
     session.scope = 'read_products,read_draft_orders';
     jest
-      .spyOn(shopify.api.session, 'getCurrent')
-      .mockResolvedValueOnce(session);
+      .spyOn(shopify.api.session, 'getCurrentId')
+      .mockResolvedValueOnce(sessionId);
 
     const response = await request(app)
       .get('/test/shop?shop=my-shop.myshopify.io')
@@ -214,8 +207,8 @@ describe('authenticatedRequest', () => {
   it('inactive session without auth header redirects to auth', async () => {
     session.scope = 'read_products,read_draft_orders';
     jest
-      .spyOn(shopify.api.session, 'getCurrent')
-      .mockResolvedValueOnce(session);
+      .spyOn(shopify.api.session, 'getCurrentId')
+      .mockResolvedValueOnce(sessionId);
 
     const response = await request(app)
       .get('/test/shop?shop=my-shop.myshopify.io')

@@ -78,14 +78,16 @@ describe('webhook integration', () => {
 
           if (config.expectWrap) {
             expect(
-              shopify.api.config.logFunction as jest.Mock,
+              shopify.api.config.logger.log as jest.Mock,
             ).toHaveBeenCalledWith(
               LogSeverity.Info,
-              "Detected multiple handlers for 'APP_UNINSTALLED', webhooks.process will call them sequentially",
+              expect.stringContaining(
+                "Detected multiple handlers for 'APP_UNINSTALLED', webhooks.process will call them sequentially",
+              ),
             );
           } else {
             expect(
-              shopify.api.config.logFunction as jest.Mock,
+              shopify.api.config.logger.log as jest.Mock,
             ).not.toHaveBeenCalled();
 
             responses.push([config.mockResponse]);
@@ -113,13 +115,13 @@ describe('webhook integration', () => {
             }).toMatchMadeHttpRequest(),
           );
 
-          const appInstallations = new AppInstallations(shopify.api);
+          const appInstallations = new AppInstallations(shopify.config);
           expect(await appInstallations.includes(TEST_SHOP)).toBe(true);
 
           await triggerWebhook(app);
 
           expect(
-            shopify.api.config.logFunction as jest.Mock,
+            shopify.api.config.logger.log as jest.Mock,
           ).toHaveBeenCalledWith(
             LogSeverity.Info,
             'Webhook processed, returned status code 200',

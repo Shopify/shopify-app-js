@@ -2,10 +2,12 @@ import '@shopify/shopify-api/adapters/node';
 import {
   shopifyApi,
   ConfigParams as ApiConfigParams,
-  SessionStorage,
   ShopifyRestResources,
   LATEST_API_VERSION,
 } from '@shopify/shopify-api';
+
+import {MemorySessionStorage} from '../session-storage/memory';
+import {SessionStorage} from '../session-storage/session-storage';
 
 import {SHOPIFY_EXPRESS_LIBRARY_VERSION} from './version';
 import {AppConfigParams, ShopifyApp, AppConfigInterface} from './types';
@@ -21,13 +23,13 @@ import {createSubApp} from './sub-app/index';
 export * from './types';
 
 export function shopifyApp<
-  R extends ShopifyRestResources,
+  R extends ShopifyRestResources = any,
   S extends SessionStorage = SessionStorage,
 >(config: AppConfigParams<R, S> = {}): ShopifyApp<R, S> {
   const {api: apiConfig, ...appConfig} = config;
 
-  const api = shopifyApi<R, S>(apiConfigWithDefaults<R, S>(apiConfig ?? {}));
-  const validatedConfig = validateAppConfig(appConfig);
+  const api = shopifyApi<R>(apiConfigWithDefaults<R>(apiConfig ?? {}));
+  const validatedConfig = validateAppConfig<R, S>(appConfig);
 
   return {
     config: validatedConfig,
@@ -45,10 +47,9 @@ export function shopifyApp<
   };
 }
 
-function apiConfigWithDefaults<
-  R extends ShopifyRestResources,
-  S extends SessionStorage = SessionStorage,
->(apiConfig: Partial<ApiConfigParams<R, S>>): ApiConfigParams<R, S> {
+function apiConfigWithDefaults<R extends ShopifyRestResources>(
+  apiConfig: Partial<ApiConfigParams<R>>,
+): ApiConfigParams<R> {
   let userAgent = `Shopify Express Library v${SHOPIFY_EXPRESS_LIBRARY_VERSION}`;
 
   if (apiConfig.userAgentPrefix) {
@@ -73,9 +74,12 @@ function apiConfigWithDefaults<
   /* eslint-enable no-process-env */
 }
 
-function validateAppConfig(
-  config: Omit<AppConfigParams, 'api'>,
-): AppConfigInterface {
+function validateAppConfig<
+  R extends ShopifyRestResources,
+  S extends SessionStorage,
+>(config: Omit<AppConfigParams<R, S>, 'api'>): AppConfigInterface<S> {
+  const {sessionStorage, ...configWithoutSessionStorage} = config;
+
   const auth: AuthConfigInterface = {
     path: '/auth',
     callbackPath: '/auth/callback',
@@ -90,7 +94,8 @@ function validateAppConfig(
   return {
     useOnlineTokens: false,
     exitIframePath: '/exitiframe',
-    ...config,
+    sessionStorage: sessionStorage ?? new MemorySessionStorage(),
+    ...configWithoutSessionStorage,
     auth,
     webhooks,
   };

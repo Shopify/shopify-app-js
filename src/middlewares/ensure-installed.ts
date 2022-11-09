@@ -13,7 +13,7 @@ export function createEnsureInstalled({
   api,
   config,
 }: CreateEnsureInstalledParams): EnsureInstalledMiddleware {
-  const appInstallations = new AppInstallations(api);
+  const appInstallations = new AppInstallations(config);
 
   return function ensureInstalled() {
     return async (req: Request, res: Response, next: NextFunction) => {

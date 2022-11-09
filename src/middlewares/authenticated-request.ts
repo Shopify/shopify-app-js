@@ -15,11 +15,15 @@ export function createAuthenticatedRequest({
 }: CreateAuthenticatedRequestParams): AuthenticatedRequestMiddleware {
   return function authenticatedRequest() {
     return async (req: Request, res: Response, next: NextFunction) => {
-      const session = await api.session.getCurrent({
+      const sessionId = await api.session.getCurrentId({
         isOnline: config.useOnlineTokens,
         rawRequest: req,
         rawResponse: res,
       });
+
+      const session = await config.sessionStorage.loadSession(
+        sessionId as string,
+      );
 
       let shop = req.query.shop;
 
@@ -70,10 +74,7 @@ async function isValidAccessToken(
   session: Session,
 ): Promise<boolean> {
   try {
-    const client = new api.clients.Graphql({
-      domain: session.shop,
-      accessToken: session.accessToken,
-    });
+    const client = new api.clients.Graphql({session});
     await client.query({data: TEST_GRAPHQL_QUERY});
     return true;
   } catch (error) {

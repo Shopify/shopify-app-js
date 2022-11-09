@@ -2,8 +2,8 @@ import crypto from 'crypto';
 
 import fetchMock, {MockParams} from 'jest-fetch-mock';
 import {LATEST_API_VERSION} from '@shopify/shopify-api';
-import {MemorySessionStorage} from '@shopify/shopify-api/session-storage/memory';
 
+import {MemorySessionStorage} from '../../session-storage/memory';
 import {shopifyApp} from '../index';
 import {AppConfigParams, ShopifyApp} from '../types';
 
@@ -33,14 +33,16 @@ beforeEach(() => {
     webhooks: {
       path: '/webhooks',
     },
+    sessionStorage: new MemorySessionStorage(),
     api: {
       apiKey: 'testApiKey',
       apiSecretKey: 'testApiSecretKey',
       scopes: ['testScope'],
       apiVersion: LATEST_API_VERSION,
       hostName: 'my-test-app.myshopify.io',
-      sessionStorage: new MemorySessionStorage(),
-      logFunction: jest.fn(),
+      logger: {
+        log: jest.fn(),
+      },
     },
   };
 
