@@ -3,7 +3,7 @@ name: CI
 jobs:
   CI:
     name: CI (${{ matrix.version }})
-    runs-on: shopify-ubuntu-latest
+    runs-on: ubuntu-latest
     strategy:
       matrix:
         version: [14, 16, 18]
