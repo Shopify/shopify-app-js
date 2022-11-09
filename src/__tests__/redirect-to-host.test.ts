@@ -17,7 +17,13 @@ describe('redirectToHost', () => {
 
   const app = express();
   app.get('/redirect-to-host', async (req, res) => {
-    await redirectToHost({req, res, api: shopify.api, session});
+    await redirectToHost({
+      req,
+      res,
+      api: shopify.api,
+      config: shopify.config,
+      session,
+    });
   });
 
   it('redirects to Shopify when embedded', async () => {

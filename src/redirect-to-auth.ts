@@ -12,23 +12,25 @@ export async function redirectToAuth({
   const shop = api.utils.sanitizeShop(req.query.shop as string);
   if (shop) {
     if (req.query.embedded === '1') {
-      clientSideRedirect(api, config, shop, req, res);
+      await clientSideRedirect(api, config, shop, req, res);
     } else {
-      serverSideRedirect(api, config, shop, req, res);
+      await serverSideRedirect(api, config, shop, req, res);
     }
   } else {
+    await config.logger.error('No shop provided to redirect to auth');
+
     res.status(500);
     res.send('No shop provided');
   }
 }
 
-function clientSideRedirect(
+async function clientSideRedirect(
   api: Shopify,
   config: AppConfigInterface,
   shop: string,
   req: Request,
   res: Response,
-): void {
+): Promise<void> {
   const host = api.utils.sanitizeHost(req.query.host as string);
   if (!host) {
     res.status(500);
@@ -45,6 +47,11 @@ function clientSideRedirect(
     redirectUri: `${appHost}${config.auth.path}?${redirectUriParams}`,
   }).toString();
 
+  await config.logger.debug(
+    `Redirecting to auth while embedded, going to ${config.exitIframePath}`,
+    {shop},
+  );
+
   res.redirect(`${config.exitIframePath}?${queryParams}`);
 }
 
@@ -55,6 +62,11 @@ async function serverSideRedirect(
   req: Request,
   res: Response,
 ): Promise<void> {
+  await config.logger.debug(
+    `Redirecting to auth at ${config.auth.path}, with callback ${config.auth.callbackPath}`,
+    {shop, isOnline: config.useOnlineTokens},
+  );
+
   await api.auth.begin({
     callbackPath: config.auth.callbackPath,
     shop,

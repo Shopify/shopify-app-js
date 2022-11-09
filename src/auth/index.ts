@@ -11,10 +11,14 @@ export function attachAuth({
   afterAuth,
 }: AttachAuthParams): void {
   subApp.get(config.auth.path, async (req: Request, res: Response) => {
+    await config.logger.debug('Initiating auth begin request');
+
     return authBegin({req, res, api, config});
   });
 
   subApp.get(config.auth.callbackPath, async (req: Request, res: Response) => {
+    await config.logger.debug('Initiating auth callback request');
+
     return authCallback({
       req,
       res,

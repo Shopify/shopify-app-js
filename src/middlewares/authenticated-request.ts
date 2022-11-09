@@ -15,6 +15,8 @@ export function createAuthenticatedRequest({
 }: CreateAuthenticatedRequestParams): AuthenticatedRequestMiddleware {
   return function authenticatedRequest() {
     return async (req: Request, res: Response, next: NextFunction) => {
+      config.logger.info('Running authenticatedRequest');
+
       const sessionId = await api.session.getCurrentId({
         isOnline: config.useOnlineTokens,
         rawRequest: req,
@@ -32,8 +34,20 @@ export function createAuthenticatedRequest({
         return redirectToAuth({req, res, api, config});
       }
 
+      config.logger.debug('Request session found and loaded', {
+        shop: session?.shop,
+      });
+
       if (session?.isActive(api.config.scopes)) {
+        config.logger.debug('Request session exists and is active', {
+          shop: session.shop,
+        });
+
         if (await isValidAccessToken(api, session)) {
+          config.logger.info('Request session has a valid access token', {
+            shop: session.shop,
+          });
+
           res.locals.shopify = {
             ...res.locals.shopify,
             session,
@@ -53,10 +67,17 @@ export function createAuthenticatedRequest({
         }
       }
 
+      const redirectUrl = `${config.auth.path}?shop=${shop}`;
+      config.logger.debug(
+        `Session was not valid. Redirecting to ${redirectUrl}`,
+        {shop},
+      );
+
       return returnTopLevelRedirection({
         res,
+        config,
         bearerPresent: Boolean(bearerPresent),
-        redirectUrl: `${config.auth.path}?shop=${shop}`,
+        redirectUrl,
       });
     };
   };

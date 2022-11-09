@@ -4,6 +4,7 @@ export async function redirectToHost({
   req,
   res,
   api,
+  config,
   session,
 }: RedirectToHostParams) {
   const host = api.utils.sanitizeHost(req.query.host as string)!;
@@ -13,6 +14,10 @@ export async function redirectToHost({
         rawResponse: res,
       })
     : `/?shop=${session.shop}&host=${encodeURIComponent(host)}`;
+
+  await config.logger.debug(`Redirecting to host at ${redirectUrl}`, {
+    shop: session.shop,
+  });
 
   res.redirect(redirectUrl);
 }

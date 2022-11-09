@@ -4,6 +4,7 @@ import {
   ConfigParams as ApiConfigParams,
   ShopifyRestResources,
   LATEST_API_VERSION,
+  Shopify,
 } from '@shopify/shopify-api';
 
 import {MemorySessionStorage} from '../session-storage/memory';
@@ -29,7 +30,7 @@ export function shopifyApp<
   const {api: apiConfig, ...appConfig} = config;
 
   const api = shopifyApi<R>(apiConfigWithDefaults<R>(apiConfig ?? {}));
-  const validatedConfig = validateAppConfig<R, S>(appConfig);
+  const validatedConfig = validateAppConfig<R, S>(appConfig, api);
 
   return {
     config: validatedConfig,
@@ -77,7 +78,10 @@ function apiConfigWithDefaults<R extends ShopifyRestResources>(
 function validateAppConfig<
   R extends ShopifyRestResources,
   S extends SessionStorage,
->(config: Omit<AppConfigParams<R, S>, 'api'>): AppConfigInterface<S> {
+>(
+  config: Omit<AppConfigParams<R, S>, 'api'>,
+  api: Shopify,
+): AppConfigInterface<S> {
   const {sessionStorage, ...configWithoutSessionStorage} = config;
 
   const auth: AuthConfigInterface = {
@@ -92,11 +96,30 @@ function validateAppConfig<
   };
 
   return {
+    // We override the API package's logger to add the right package context by default (and make the call simpler)
+    logger: overrideLoggerPackage(api.logger),
     useOnlineTokens: false,
     exitIframePath: '/exitiframe',
     sessionStorage: sessionStorage ?? new MemorySessionStorage(),
     ...configWithoutSessionStorage,
     auth,
     webhooks,
+  };
+}
+
+function overrideLoggerPackage(logger: Shopify['logger']): Shopify['logger'] {
+  const baseContext = {package: 'shopify-app'};
+
+  return {
+    log: async (severity, message, context = {}) =>
+      logger.log(severity, message, {...baseContext, ...context}),
+    debug: async (message, context = {}) =>
+      logger.debug(message, {...baseContext, ...context}),
+    info: async (message, context = {}) =>
+      logger.info(message, {...baseContext, ...context}),
+    warning: async (message, context = {}) =>
+      logger.warning(message, {...baseContext, ...context}),
+    error: async (message, context = {}) =>
+      logger.error(message, {...baseContext, ...context}),
   };
 }

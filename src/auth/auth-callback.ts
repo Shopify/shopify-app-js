@@ -3,7 +3,6 @@ import {
   CookieNotFound,
   gdprTopics,
   InvalidOAuthError,
-  LogSeverity,
   Session,
   Shopify,
 } from '@shopify/shopify-api';
@@ -28,10 +27,27 @@ export async function authCallback({
       rawResponse: res,
     });
 
+    await config.logger.debug('Callback is valid, storing session', {
+      shop: callbackResponse.session.shop,
+    });
+
     config.sessionStorage.storeSession(callbackResponse.session);
 
-    await afterAuthActions(req, res, api, callbackResponse.session, afterAuth);
+    await config.logger.debug('Completed OAuth callback', {
+      shop: callbackResponse.session.shop,
+    });
+
+    await afterAuthActions(
+      req,
+      res,
+      config,
+      api,
+      callbackResponse.session,
+      afterAuth,
+    );
   } catch (error) {
+    await config.logger.error(`Failed to complete OAuth with error: ${error}`);
+
     await handleCallbackError(req, res, api, config, error);
   }
 }
@@ -39,13 +55,18 @@ export async function authCallback({
 async function afterAuthActions(
   req: Request,
   res: Response,
+  config: AppConfigInterface,
   api: Shopify,
   session: Session,
   afterAuth?: AfterAuthCallback,
 ) {
-  await registerWebhooks(api, session);
+  await registerWebhooks(config, api, session);
 
   if (afterAuth) {
+    await config.logger.debug('Calling afterAuth callback', {
+      shop: session.shop,
+    });
+
     await afterAuth({
       req,
       res,
@@ -55,11 +76,17 @@ async function afterAuthActions(
 
   // We redirect to the host-based app URL ONLY if the afterAuth callback didn't send a response already
   if (!res.headersSent) {
-    await redirectToHost({req, res, api, session});
+    await redirectToHost({req, res, api, config, session});
   }
 }
 
-async function registerWebhooks(api: Shopify, session: Session) {
+async function registerWebhooks(
+  config: AppConfigInterface,
+  api: Shopify,
+  session: Session,
+) {
+  await config.logger.debug('Registering webhooks', {shop: session.shop});
+
   const responsesByTopic = await api.webhooks.register({session});
 
   for (const topic in responsesByTopic) {
@@ -72,18 +99,16 @@ async function registerWebhooks(api: Shopify, session: Session) {
         const result: any = response.result;
 
         if (result.errors) {
-          await api.config.logger.log(
-            LogSeverity.Error,
+          await config.logger.error(
             `Failed to register ${topic} webhook: ${result.errors[0].message}`,
+            {shop: session.shop},
           );
         } else {
-          await api.config.logger.log(
-            LogSeverity.Error,
+          await config.logger.error(
             `Failed to register ${topic} webhook: ${JSON.stringify(
               result.data,
-              undefined,
-              2,
             )}`,
+            {shop: session.shop},
           );
         }
       }
@@ -98,11 +123,6 @@ async function handleCallbackError(
   config: AppConfigInterface,
   error: Error,
 ) {
-  await api.config.logger.log(
-    LogSeverity.Warning,
-    `Failed to complete OAuth with error: ${error}`,
-  );
-
   switch (true) {
     case error instanceof InvalidOAuthError:
       res.status(400);

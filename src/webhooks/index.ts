@@ -20,7 +20,7 @@ export function attachWebhooks({
     config.webhooks.path,
     express.text({type: '*/*'}),
     async (req: Request, res: Response) => {
-      process({req, res, api});
+      process({req, res, api, config});
     },
   );
 }
@@ -52,7 +52,7 @@ export function webhooksMount({
     APP_UNINSTALLED: {
       deliveryMethod: DeliveryMethod.Http,
       callbackUrl: config.webhooks.path,
-      callback: createDeleteAppInstallationHandler(appInstallations),
+      callback: createDeleteAppInstallationHandler(appInstallations, config),
     },
   });
 }

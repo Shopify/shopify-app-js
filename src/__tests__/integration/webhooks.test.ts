@@ -124,7 +124,9 @@ describe('webhook integration', () => {
             shopify.api.config.logger.log as jest.Mock,
           ).toHaveBeenCalledWith(
             LogSeverity.Info,
-            'Webhook processed, returned status code 200',
+            expect.stringContaining(
+              'Webhook processed, returned status code 200',
+            ),
           );
 
           expect(await appInstallations.includes(TEST_SHOP)).toBe(false);

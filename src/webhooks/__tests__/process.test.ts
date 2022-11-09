@@ -12,7 +12,7 @@ import {process} from '../process';
 describe('process', () => {
   const app = express();
   app.post('/webhooks', express.text({type: '*/*'}), async (req, res) => {
-    await process({req, res, api: shopify.api});
+    await process({req, res, api: shopify.api, config: shopify.config});
   });
 
   const mockHandler = jest.fn();
@@ -48,7 +48,7 @@ describe('process', () => {
 
     expect(shopify.api.config.logger.log as jest.Mock).toHaveBeenCalledWith(
       LogSeverity.Info,
-      'Webhook processed, returned status code 200',
+      expect.stringContaining('Webhook processed, returned status code 200'),
     );
   });
 

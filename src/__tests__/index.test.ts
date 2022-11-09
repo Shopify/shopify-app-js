@@ -1,4 +1,4 @@
-import {ShopifyError} from '@shopify/shopify-api';
+import {LogSeverity, ShopifyError} from '@shopify/shopify-api';
 
 import {shopifyApp} from '../index';
 
@@ -48,5 +48,23 @@ describe('shopifyApp', () => {
     expect(shopify.api.config.hostScheme).toEqual('https');
     expect(shopify.api.config.customShopDomains).toEqual(['*.envCustomDomain']);
     /* eslint-enable no-process-env */
+  });
+
+  it('properly sets the package in log calls', async () => {
+    const shopify = shopifyApp(testConfig);
+
+    await shopify.config.logger.info('test');
+
+    expect(shopify.api.config.logger.log).toHaveBeenCalledWith(
+      LogSeverity.Info,
+      '[shopify-app/INFO] test',
+    );
+
+    await shopify.config.logger.info('test', {extra: 'context'});
+
+    expect(shopify.api.config.logger.log).toHaveBeenCalledWith(
+      LogSeverity.Info,
+      '[shopify-app/INFO] test | {extra: context}',
+    );
   });
 });
