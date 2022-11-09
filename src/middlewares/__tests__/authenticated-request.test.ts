@@ -42,7 +42,7 @@ describe('authenticatedRequest', () => {
       expires: undefined,
       accessToken: 'totally-real-access-token',
     });
-    shopify.config.sessionStorage!.storeSession(session);
+    shopify.config.sessionStorage.storeSession(session);
   });
 
   it('active and valid session does not redirect', async () => {

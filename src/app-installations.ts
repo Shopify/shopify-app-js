@@ -6,17 +6,17 @@ export class AppInstallations {
   private sessionStorage;
 
   constructor(config: AppConfigInterface) {
-    if (!config.sessionStorage!.findSessionsByShop) {
+    if (!config.sessionStorage.findSessionsByShop) {
       throw new Error(
         'To use this Express package, you must provide a session storage manager that implements findSessionsByShop',
       );
     }
-    if (!config.sessionStorage!.deleteSessions) {
+    if (!config.sessionStorage.deleteSessions) {
       throw new Error(
         'To use this Express package, you must provide a session storage manager that implements deleteSessions',
       );
     }
-    this.sessionStorage = config.sessionStorage!;
+    this.sessionStorage = config.sessionStorage;
   }
 
   async includes(shopDomain: string): Promise<boolean> {

@@ -155,7 +155,7 @@ async function completeOAuth(
 ) {
   // Make sure there was no session when we started
   expect(
-    await shopify.config.sessionStorage!.findSessionsByShop!(TEST_SHOP),
+    await shopify.config.sessionStorage.findSessionsByShop!(TEST_SHOP),
   ).toEqual([]);
 
   mockOAuthResponses(config);
@@ -185,7 +185,7 @@ async function completeOAuth(
       req: expect.anything(),
       res: expect.anything(),
       session: (
-        await shopify.config.sessionStorage!.findSessionsByShop!(TEST_SHOP)
+        await shopify.config.sessionStorage.findSessionsByShop!(TEST_SHOP)
       )[0],
     }),
   );
@@ -344,7 +344,7 @@ async function makeAuthenticatedRequest(
     headers.Authorization = `Bearer ${validJWT}`;
   } else {
     const session = (
-      await shopify.config.sessionStorage!.findSessionsByShop!(TEST_SHOP)
+      await shopify.config.sessionStorage.findSessionsByShop!(TEST_SHOP)
     )[0];
     headers.Cookie = [
       `shopify_app_session=${session.id}`,

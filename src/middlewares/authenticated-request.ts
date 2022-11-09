@@ -21,7 +21,7 @@ export function createAuthenticatedRequest({
         rawResponse: res,
       });
 
-      const session = await config.sessionStorage!.loadSession(
+      const session = await config.sessionStorage.loadSession(
         sessionId as string,
       );
 

@@ -21,7 +21,7 @@ import {MemorySessionStorage} from './session-storage/memory';
 export * from './types';
 
 export function shopifyApp<R extends ShopifyRestResources>(
-  config: AppConfigParams<R> = {},
+  config: AppConfigParams<R> = {sessionStorage: new MemorySessionStorage()},
 ): ShopifyApp<R> {
   const {api: apiConfig, ...appConfig} = config;
 
@@ -74,8 +74,6 @@ function apiConfigWithDefaults<R extends ShopifyRestResources>(
 function validateAppConfig(
   config: Omit<AppConfigParams, 'api'>,
 ): AppConfigInterface {
-  const {sessionStorage, ...configWithoutSessionStorage} = config;
-
   const auth: AuthConfigInterface = {
     path: '/auth',
     callbackPath: '/auth/callback',
@@ -90,8 +88,7 @@ function validateAppConfig(
   return {
     useOnlineTokens: false,
     exitIframePath: '/exitiframe',
-    sessionStorage: sessionStorage ?? new MemorySessionStorage(),
-    ...configWithoutSessionStorage,
+    ...config,
     auth,
     webhooks,
   };

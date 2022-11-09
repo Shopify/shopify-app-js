@@ -28,7 +28,7 @@ export async function authCallback({
       rawResponse: res,
     });
 
-    config.sessionStorage!.storeSession(callbackResponse.session);
+    config.sessionStorage.storeSession(callbackResponse.session);
 
     await afterAuthActions(req, res, api, callbackResponse.session, afterAuth);
   } catch (error) {

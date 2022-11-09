@@ -4,18 +4,19 @@ This folder contains implementations of the `SessionStorage` interface that work
 
 Below is a summary of the options:
 
-| Storage option                  |      Node.js      |
-| ------------------------------- | :---------------: |
-| [SQLite](#sqlite)               |  Yes (_default_)  |
-| [MySQL](#mysql)                 |        Yes        |
-| [PostgreSQL](#postgresql)       |        Yes        |
-| [MongoDB](#mongodb)             |        Yes        |
-| [Redis](#redis)                 |        Yes        |
-| [In-Memory](#in-memory)         | Yes (development) |
+| Storage option                  |              Node.js              |
+| ------------------------------- | :-------------------------------: |
+| [SQLite](#sqlite)               |                Yes                |
+| [MySQL](#mysql)                 |                Yes                |
+| [PostgreSQL](#postgresql)       |                Yes                |
+| [MongoDB](#mongodb)             |                Yes                |
+| [Redis](#redis)                 |                Yes                |
+| [In-Memory](#in-memory)         | Yes (_default_, development only) |
 
 > **Note**: Because this package supports multiple storage options, it does not include the session storage dependencies to avoid installing unnecessary packages.
 >
 > Depending on which storage option you choose, you'll need to add the dependency to your project manually, using
+>
 > ```shell
 > npm install <package-name>
 > # or
@@ -160,5 +161,6 @@ const shopify = shopifyApp({
 
 > **Note**: :warning: This session storage model is for local development only, to make it easier for developers to get started.
 > It will delete all sessions if the app process gets restarted or redeployed, and is not meant for production use.
+> For persistent storage, use one of the other options (see relevant section above for instructions).
 
 [sqlite]: https://www.sqlite.org/

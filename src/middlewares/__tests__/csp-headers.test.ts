@@ -50,7 +50,7 @@ describe('cspHeaders', () => {
     it(`sets correct CSP header for ${JSON.stringify(config)}`, async () => {
       shopify.api.config.isEmbeddedApp = config.isEmbeddedApp;
 
-      await shopify.config.sessionStorage!.storeSession(session);
+      await shopify.config.sessionStorage.storeSession(session);
 
       const encodedHost = Buffer.from(SHOPIFY_HOST, 'utf-8').toString('base64');
       let shopParam = '';

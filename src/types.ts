@@ -26,7 +26,7 @@ export interface AppConfigParams<R extends ShopifyRestResources = any> {
   exitIframePath?: string;
   auth?: Partial<AuthConfigInterface>;
   webhooks?: Partial<WebhooksConfigInterface>;
-  sessionStorage?: SessionStorage;
+  sessionStorage: SessionStorage;
 }
 
 export interface AppConfigInterface extends Omit<AppConfigParams, 'api'> {
