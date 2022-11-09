@@ -37,6 +37,7 @@ export interface AppConfigInterface<
   R extends ShopifyRestResources = any,
   S extends SessionStorage = SessionStorage,
 > extends Omit<AppConfigParams<R, S>, 'api'> {
+  logger: Shopify['logger'];
   useOnlineTokens: boolean;
   exitIframePath: string;
   auth: AuthConfigInterface;
@@ -70,11 +71,13 @@ export interface RedirectToHostParams {
   req: Request;
   res: Response;
   api: Shopify;
+  config: AppConfigInterface;
   session: Session;
 }
 
 export interface ReturnTopLevelRedirectionParams {
   res: Response;
+  config: AppConfigInterface;
   bearerPresent: boolean;
   redirectUrl: string;
 }

@@ -88,14 +88,12 @@ describe('authCallback', () => {
           .get(`/auth/callback?host=${BASE64_HOST}`)
           .expect(302);
 
-        expect(registerMock).toHaveBeenCalledWith(
-          expect.objectContaining({
-            session: expect.objectContaining({
-              shop: TEST_SHOP,
-              accessToken: 'test-access-token',
-            }),
+        expect(registerMock).toHaveBeenCalledWith({
+          session: expect.objectContaining({
+            shop: TEST_SHOP,
+            accessToken: 'test-access-token',
           }),
-        );
+        });
       });
 
       it('logs when registration fails', async () => {
@@ -166,7 +164,7 @@ describe('authCallback', () => {
       expect(response.header.location).toBe('https://oauth-url');
 
       expect(shopify.api.config.logger.log as jest.Mock).toHaveBeenCalledWith(
-        LogSeverity.Warning,
+        LogSeverity.Error,
         expect.stringContaining(errorMessage),
       );
     });
@@ -181,7 +179,7 @@ describe('authCallback', () => {
         .expect(errorMessage);
 
       expect(shopify.api.config.logger.log as jest.Mock).toHaveBeenCalledWith(
-        LogSeverity.Warning,
+        LogSeverity.Error,
         expect.stringContaining(errorMessage),
       );
     });
@@ -196,7 +194,7 @@ describe('authCallback', () => {
         .expect(errorMessage);
 
       expect(shopify.api.config.logger.log as jest.Mock).toHaveBeenCalledWith(
-        LogSeverity.Warning,
+        LogSeverity.Error,
         expect.stringContaining(errorMessage),
       );
     });
