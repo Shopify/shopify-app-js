@@ -19,7 +19,7 @@ import {
   createCspHeaders,
   createEnsureInstalled,
 } from './middlewares/index';
-import {createSubApp} from './sub-app/index';
+import {createShopifyApp} from './shopify-app/index';
 
 export * from './types';
 
@@ -35,7 +35,7 @@ export function shopifyApp<
   return {
     config: validatedConfig,
     api,
-    app: createSubApp({api, config: validatedConfig}),
+    app: createShopifyApp({api, config: validatedConfig}),
     authenticatedRequest: createAuthenticatedRequest({
       api,
       config: validatedConfig,

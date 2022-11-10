@@ -15,7 +15,7 @@ import {
   CspHeadersMiddleware,
   EnsureInstalledMiddleware,
 } from './middlewares/types';
-import {AppMiddleware} from './sub-app/types';
+import {AppMiddleware} from './shopify-app/types';
 
 export * from './auth/types';
 export * from './middlewares/types';

@@ -6,7 +6,10 @@ import {ApiAndConfigParams} from '../types';
 
 import {AppMiddleware} from './types';
 
-export function createSubApp({api, config}: ApiAndConfigParams): AppMiddleware {
+export function createShopifyApp({
+  api,
+  config,
+}: ApiAndConfigParams): AppMiddleware {
   return function subApp(params = {}) {
     const subApp = express();
 
