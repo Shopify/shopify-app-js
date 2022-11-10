@@ -82,7 +82,7 @@ The object created by the `@shopify/shopify-api` package. See [the API package d
 `(AppMiddlewareParams) => Express`
 
 A function that returns an Express.js app that contains the necessary endpoints to perform OAuth and webhook processing in the Shopify platform.
-You can mount this as a sub-app anywhere in your app.
+You can mount this as a [sub-app](https://expressjs.com/en/api.html#app.mountpath) anywhere in your app.
 
 ### [authenticatedRequest](./authenticatedRequest.md)
 
