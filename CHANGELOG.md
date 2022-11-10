@@ -9,10 +9,7 @@ and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 - Initial public release
 
-## [1.0.0-rc2]
+## [1.0.0-rc3]
 
-- Release candidate 1 of Shopify Express package, built on release candidate `6.0.0-rc6` of Shopify API for JavaScript.
-
-## [1.0.0-rc1]
-
-- (publishing failed due to config)
+- Latest release candidate of Shopify Express package, built on release candidate `6.0.0-rc9` of Shopify API for JavaScript.
+- Includes the `SessionStorage` capabilities moved from the API package to this one.

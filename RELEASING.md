@@ -48,8 +48,6 @@ For significant API changes that could result in significant refactoring on the 
 
 1. Increment the version in `src/version.ts`, ensuring that it ends with `-rcN`, where `N` starts at `1` and increments with each Release Candidate.
 
-1. Update the version in `package.json` to match that in `src/version.ts`
-
 1. Stage the `CHANGELOG.md` and `src/version.ts` files
 
    ```shell
