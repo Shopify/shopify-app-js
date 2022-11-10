@@ -15,7 +15,7 @@ import {AppConfigParams, ShopifyApp, AppConfigInterface} from './types';
 import {AuthConfigInterface} from './auth/types';
 import {WebhooksConfigInterface} from './webhooks/types';
 import {
-  createAuthenticatedRequest,
+  createValidateSession,
   createCspHeaders,
   createEnsureInstalled,
 } from './middlewares/index';
@@ -36,7 +36,7 @@ export function shopifyApp<
     config: validatedConfig,
     api,
     app: createShopifyApp({api, config: validatedConfig}),
-    authenticatedRequest: createAuthenticatedRequest({
+    validateSession: createValidateSession({
       api,
       config: validatedConfig,
     }),

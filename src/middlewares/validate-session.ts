@@ -5,17 +5,17 @@ import {redirectToAuth} from '../redirect-to-auth';
 import {returnTopLevelRedirection} from '../return-top-level-redirection';
 import {ApiAndConfigParams} from '../types';
 
-import {AuthenticatedRequestMiddleware} from './types';
+import {validateSessionMiddleware} from './types';
 
-interface CreateAuthenticatedRequestParams extends ApiAndConfigParams {}
+interface createValidateSessionParams extends ApiAndConfigParams {}
 
-export function createAuthenticatedRequest({
+export function createValidateSession({
   api,
   config,
-}: CreateAuthenticatedRequestParams): AuthenticatedRequestMiddleware {
-  return function authenticatedRequest() {
+}: createValidateSessionParams): validateSessionMiddleware {
+  return function validateSession() {
     return async (req: Request, res: Response, next: NextFunction) => {
-      config.logger.info('Running authenticatedRequest');
+      config.logger.info('Running validateSession');
 
       const sessionId = await api.session.getCurrentId({
         isOnline: config.useOnlineTokens,
@@ -30,7 +30,11 @@ export function createAuthenticatedRequest({
       let shop = req.query.shop;
 
       if (session && shop && session.shop !== shop) {
-        // The current request is for a different shop. Redirect gracefully.
+        config.logger.debug(
+          'Found a session for a different shop in the request',
+          {currentShop: session.shop, requestShop: shop},
+        );
+
         return redirectToAuth({req, res, api, config});
       }
 
@@ -68,7 +72,7 @@ export function createAuthenticatedRequest({
       }
 
       const redirectUrl = `${config.auth.path}?shop=${shop}`;
-      config.logger.debug(
+      config.logger.info(
         `Session was not valid. Redirecting to ${redirectUrl}`,
         {shop},
       );

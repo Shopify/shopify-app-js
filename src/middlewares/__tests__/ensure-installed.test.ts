@@ -3,6 +3,7 @@ import express, {Express} from 'express';
 import {Session} from '@shopify/shopify-api';
 
 import {
+  createTestHmac,
   mockShopifyResponse,
   shopify,
   SHOPIFY_HOST,
@@ -112,12 +113,27 @@ describe('ensureInstalled', () => {
     );
   });
 
-  it('returns 500 if non-embedded app', async () => {
+  it('calls validateSession for non-embedded apps with a log', async () => {
     shopify.api.config.isEmbeddedApp = false;
+    const validCookies = [
+      `shopify_app_session=${session.id}`,
+      `shopify_app_session.sig=${createTestHmac(
+        shopify.api.config.apiSecretKey,
+        session.id,
+      )}`,
+    ];
 
-    const encodedHost = Buffer.from(SHOPIFY_HOST, 'utf-8').toString('base64');
+    mockShopifyResponse({});
+    await shopify.config.sessionStorage.storeSession(session);
+
     await request(app)
-      .get(`/test/shop?shop=${TEST_SHOP}&host=${encodedHost}`)
-      .expect(500);
+      .get(`/test/shop`)
+      .set('Cookie', validCookies)
+      .expect(200);
+
+    expect({
+      method: 'POST',
+      url: 'https://test-shop.myshopify.io/admin/api/2022-10/graphql.json',
+    }).toMatchMadeHttpRequest();
   });
 });

@@ -84,7 +84,7 @@ The object created by the `@shopify/shopify-api` package. See [the API package d
 A function that returns an Express.js app that contains the necessary endpoints to perform OAuth and webhook processing in the Shopify platform.
 You can mount this as a [sub-app](https://expressjs.com/en/api.html#app.mountpath) anywhere in your app.
 
-### [authenticatedRequest](./authenticatedRequest.md)
+### [validateSession](./validateSession.md)
 
 A function that returns an Express middleware that verifies that the request received is authenticated with a valid session for embedded apps.
 

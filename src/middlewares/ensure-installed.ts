@@ -6,6 +6,7 @@ import {AppInstallations} from '../app-installations';
 
 import {EnsureInstalledMiddleware} from './types';
 import {addCSPHeader} from './csp-headers';
+import {createValidateSession} from './validate-session';
 
 interface CreateEnsureInstalledParams extends ApiAndConfigParams {}
 
@@ -20,10 +21,11 @@ export function createEnsureInstalled({
       config.logger.info('Running ensureInstalled');
 
       if (!api.config.isEmbeddedApp) {
-        res.status(500);
-        return res.send(
-          'ensureInstalled() should only be used in embedded apps; use authenticatedRequest() instead',
+        config.logger.warning(
+          'ensureInstalled() should only be used in embedded apps; calling validateSession() instead',
         );
+
+        return createValidateSession({api, config})()(req, res, next);
       }
 
       if (typeof req.query.shop !== 'string') {

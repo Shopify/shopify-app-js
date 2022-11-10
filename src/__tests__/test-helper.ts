@@ -124,9 +124,20 @@ expect.extend({
       ) {
         expect(mockBody).toEqual(body);
       } else {
-        const requestBody =
-          typeof mockBody === 'string' ? JSON.parse(mockBody) : mockBody;
-        expect(requestBody).toMatchObject(body);
+        let requestBody = mockBody;
+        if (typeof mockBody === 'string') {
+          try {
+            requestBody = JSON.parse(mockBody);
+          } catch (error) {
+            // Not JSON, that's fine
+          }
+        }
+
+        if (typeof requestBody === 'string') {
+          expect(requestBody).toEqual(body);
+        } else {
+          expect(requestBody).toMatchObject(body);
+        }
       }
     } else {
       expect(mockBody).toBeFalsy();

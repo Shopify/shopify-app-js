@@ -1,4 +1,4 @@
-import {createAuthenticatedRequest} from './authenticated-request';
+import {createValidateSession} from './validate-session';
 import {
   createDeleteAppInstallationHandler,
   createEnsureInstalled,
@@ -6,7 +6,7 @@ import {
 import {createCspHeaders} from './csp-headers';
 
 export {
-  createAuthenticatedRequest,
+  createValidateSession,
   createDeleteAppInstallationHandler,
   createCspHeaders,
   createEnsureInstalled,
