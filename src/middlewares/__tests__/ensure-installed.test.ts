@@ -10,14 +10,14 @@ import {
   TEST_SHOP,
 } from '../../__tests__/test-helper';
 
-describe('ensureInstalled', () => {
+describe('ensureInstalledOnShop', () => {
   let app: Express;
   let session: Session;
 
   beforeEach(async () => {
     app = express();
     app.use('/api', shopify.app());
-    app.use('/test/*', shopify.ensureInstalled());
+    app.use('/test/*', shopify.ensureInstalledOnShop());
     app.get('/test/shop', async (req, res) => {
       res.json({data: {shop: {name: req.query.shop}}});
     });
@@ -84,7 +84,7 @@ describe('ensureInstalled', () => {
 
   it('does NOT redirect to auth if shop NOT installed AND url is exit iFrame path', async () => {
     const encodedHost = Buffer.from(SHOPIFY_HOST, 'utf-8').toString('base64');
-    app.use('/exitiframe', shopify.ensureInstalled());
+    app.use('/exitiframe', shopify.ensureInstalledOnShop());
     app.get('/exitiframe', async (_req, res) => {
       res.send('exit iFrame');
     });
@@ -96,7 +96,7 @@ describe('ensureInstalled', () => {
 
   it('redirects to embedded URL if shop NOT installed AND url is exit iFrame path AND embedded param missing', async () => {
     const encodedHost = Buffer.from(SHOPIFY_HOST, 'utf-8').toString('base64');
-    app.use('/exitiframe', shopify.ensureInstalled());
+    app.use('/exitiframe', shopify.ensureInstalledOnShop());
     app.get('/exitiframe', async (_req, res) => {
       res.send('exit iFrame');
     });
@@ -113,7 +113,7 @@ describe('ensureInstalled', () => {
     );
   });
 
-  it('calls validateSession for non-embedded apps with a log', async () => {
+  it('calls validateAuthenticatedSession for non-embedded apps with a log', async () => {
     shopify.api.config.isEmbeddedApp = false;
     const validCookies = [
       `shopify_app_session=${session.id}`,
@@ -139,7 +139,7 @@ describe('ensureInstalled', () => {
     expect(shopify.api.config.logger.log).toHaveBeenCalledWith(
       LogSeverity.Warning,
       expect.stringContaining(
-        'ensureInstalled() should only be used in embedded apps; calling validateSession() instead',
+        'ensureInstalledOnShop() should only be used in embedded apps; calling validateAuthenticatedSession() instead',
       ),
     );
   });

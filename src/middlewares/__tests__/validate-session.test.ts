@@ -10,7 +10,7 @@ import {
   SHOPIFY_HOST,
 } from '../../__tests__/test-helper';
 
-describe('validateSession', () => {
+describe('validateAuthenticatedSession', () => {
   let app: Express;
   let session: Session;
   const shop = 'my-shop.myshopify.io';
@@ -24,7 +24,7 @@ describe('validateSession', () => {
 
       app = express();
       app.use('/api', shopify.app());
-      app.use('/test/*', shopify.validateSession());
+      app.use('/test/*', shopify.validateAuthenticatedSession());
       app.get('/test/shop', async (req, res) => {
         res.json({data: {shop: {name: req.query.shop}}});
       });
@@ -187,7 +187,7 @@ describe('validateSession', () => {
 
       app = express();
       app.use('/api', shopify.app());
-      app.use('/test/*', shopify.validateSession());
+      app.use('/test/*', shopify.validateAuthenticatedSession());
       app.get('/test/shop', async (req, res) => {
         res.json({data: {shop: {name: req.query.shop}}});
       });

@@ -1,4 +1,4 @@
-# `shopify.validateSession`
+# `shopify.validateAuthenticatedSession`
 
 This function creates an Express middleware that ensures any request to that endpoint will have a valid session (i.e., not expired, access token available, scopes match).
 
@@ -15,11 +15,15 @@ Please visit [our documentation](https://shopify.dev/apps/auth/oauth/session-tok
 ```ts
 const app = express();
 
-app.get('/api/product/count', shopify.validateSession(), async (res, req) => {
-  // because of shopify.validateSession(), session is available
-  // in res.locals.shopify.session
-  const session = res.locals.shopify.session;
+app.get(
+  '/api/product/count',
+  shopify.validateAuthenticatedSession(),
+  async (res, req) => {
+    // because of shopify.validateAuthenticatedSession(), session is available
+    // in res.locals.shopify.session
+    const session = res.locals.shopify.session;
 
-  // Interact with the API
-});
+    // Interact with the API
+  },
+);
 ```

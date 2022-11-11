@@ -53,7 +53,7 @@ const app = express();
 
 app.use('/api', shopify.app());
 
-app.get('/', shopify.ensureInstalled(), (req, res) => {
+app.get('/', shopify.ensureInstalledOnShop(), (req, res) => {
   res.send('Hello world!');
 });
 

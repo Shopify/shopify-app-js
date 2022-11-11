@@ -81,8 +81,8 @@ describe('OAuth integration tests', () => {
         next();
       });
       app.use('/test', shopify.app({afterAuth, webhookHandlers}));
-      app.get('/installed', shopify.ensureInstalled(), installedMock);
-      app.get('/authed', shopify.validateSession(), authedMock);
+      app.get('/installed', shopify.ensureInstalledOnShop(), installedMock);
+      app.get('/authed', shopify.validateAuthenticatedSession(), authedMock);
 
       const callbackInfo = await beginOAuth(app, shopify, config);
 

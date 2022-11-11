@@ -5,17 +5,17 @@ import {redirectToAuth} from '../redirect-to-auth';
 import {returnTopLevelRedirection} from '../return-top-level-redirection';
 import {ApiAndConfigParams} from '../types';
 
-import {validateSessionMiddleware} from './types';
+import {ValidateAuthenticatedSessionMiddleware} from './types';
 
-interface createValidateSessionParams extends ApiAndConfigParams {}
+interface createValidateAuthenticatedSessionParams extends ApiAndConfigParams {}
 
-export function createValidateSession({
+export function createValidateAuthenticatedSession({
   api,
   config,
-}: createValidateSessionParams): validateSessionMiddleware {
-  return function validateSession() {
+}: createValidateAuthenticatedSessionParams): ValidateAuthenticatedSessionMiddleware {
+  return function validateAuthenticatedSession() {
     return async (req: Request, res: Response, next: NextFunction) => {
-      config.logger.info('Running validateSession');
+      config.logger.info('Running validateAuthenticatedSession');
 
       const sessionId = await api.session.getCurrentId({
         isOnline: config.useOnlineTokens,
