@@ -1,6 +1,6 @@
 import request from 'supertest';
 import express, {Express} from 'express';
-import {Session} from '@shopify/shopify-api';
+import {LogSeverity, Session} from '@shopify/shopify-api';
 
 import {
   createTestHmac,
@@ -135,5 +135,12 @@ describe('ensureInstalled', () => {
       method: 'POST',
       url: 'https://test-shop.myshopify.io/admin/api/2022-10/graphql.json',
     }).toMatchMadeHttpRequest();
+
+    expect(shopify.api.config.logger.log).toHaveBeenCalledWith(
+      LogSeverity.Warning,
+      expect.stringContaining(
+        'ensureInstalled() should only be used in embedded apps; calling validateSession() instead',
+      ),
+    );
   });
 });

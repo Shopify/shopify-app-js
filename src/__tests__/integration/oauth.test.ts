@@ -98,9 +98,9 @@ describe('OAuth integration tests', () => {
         body,
       );
 
-      await makeInstalledRequest(app, config, installedMock);
+      await installedRequest(app, config, installedMock);
 
-      await makevalidateSession(app, shopify, config, authedMock);
+      await validSession(app, shopify, config, authedMock);
 
       await appUninstalledWebhookRequest(app, shopify);
     });
@@ -302,7 +302,7 @@ async function appUninstalledWebhookRequest(app: Express, shopify: ShopifyApp) {
 }
 
 // Fires a valid request to check that the installed middleware allows requests through
-async function makeInstalledRequest(
+async function installedRequest(
   app: Express,
   config: OAuthTestCase,
   mock: jest.Mock,
@@ -321,7 +321,7 @@ async function makeInstalledRequest(
 }
 
 // Fires a valid request to check that the authenticated middleware allows requests through
-async function makevalidateSession(
+async function validSession(
   app: Express,
   shopify: ShopifyApp,
   config: OAuthTestCase,
