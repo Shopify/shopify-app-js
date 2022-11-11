@@ -1,22 +1,23 @@
 import request from 'supertest';
 import express, {Express} from 'express';
-import {Session} from '@shopify/shopify-api';
+import {LogSeverity, Session} from '@shopify/shopify-api';
 
 import {
+  createTestHmac,
   mockShopifyResponse,
   shopify,
   SHOPIFY_HOST,
   TEST_SHOP,
 } from '../../__tests__/test-helper';
 
-describe('ensureInstalled', () => {
+describe('ensureInstalledOnShop', () => {
   let app: Express;
   let session: Session;
 
   beforeEach(async () => {
     app = express();
     app.use('/api', shopify.app());
-    app.use('/test/*', shopify.ensureInstalled());
+    app.use('/test/*', shopify.ensureInstalledOnShop());
     app.get('/test/shop', async (req, res) => {
       res.json({data: {shop: {name: req.query.shop}}});
     });
@@ -83,7 +84,7 @@ describe('ensureInstalled', () => {
 
   it('does NOT redirect to auth if shop NOT installed AND url is exit iFrame path', async () => {
     const encodedHost = Buffer.from(SHOPIFY_HOST, 'utf-8').toString('base64');
-    app.use('/exitiframe', shopify.ensureInstalled());
+    app.use('/exitiframe', shopify.ensureInstalledOnShop());
     app.get('/exitiframe', async (_req, res) => {
       res.send('exit iFrame');
     });
@@ -95,7 +96,7 @@ describe('ensureInstalled', () => {
 
   it('redirects to embedded URL if shop NOT installed AND url is exit iFrame path AND embedded param missing', async () => {
     const encodedHost = Buffer.from(SHOPIFY_HOST, 'utf-8').toString('base64');
-    app.use('/exitiframe', shopify.ensureInstalled());
+    app.use('/exitiframe', shopify.ensureInstalledOnShop());
     app.get('/exitiframe', async (_req, res) => {
       res.send('exit iFrame');
     });
@@ -112,12 +113,34 @@ describe('ensureInstalled', () => {
     );
   });
 
-  it('returns 500 if non-embedded app', async () => {
+  it('calls validateAuthenticatedSession for non-embedded apps with a log', async () => {
     shopify.api.config.isEmbeddedApp = false;
+    const validCookies = [
+      `shopify_app_session=${session.id}`,
+      `shopify_app_session.sig=${createTestHmac(
+        shopify.api.config.apiSecretKey,
+        session.id,
+      )}`,
+    ];
 
-    const encodedHost = Buffer.from(SHOPIFY_HOST, 'utf-8').toString('base64');
+    mockShopifyResponse({});
+    await shopify.config.sessionStorage.storeSession(session);
+
     await request(app)
-      .get(`/test/shop?shop=${TEST_SHOP}&host=${encodedHost}`)
-      .expect(500);
+      .get(`/test/shop`)
+      .set('Cookie', validCookies)
+      .expect(200);
+
+    expect({
+      method: 'POST',
+      url: 'https://test-shop.myshopify.io/admin/api/2022-10/graphql.json',
+    }).toMatchMadeHttpRequest();
+
+    expect(shopify.api.config.logger.log).toHaveBeenCalledWith(
+      LogSeverity.Warning,
+      expect.stringContaining(
+        'ensureInstalledOnShop() should only be used in embedded apps; calling validateAuthenticatedSession() instead',
+      ),
+    );
   });
 });

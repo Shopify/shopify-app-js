@@ -81,8 +81,8 @@ describe('OAuth integration tests', () => {
         next();
       });
       app.use('/test', shopify.app({afterAuth, webhookHandlers}));
-      app.get('/installed', shopify.ensureInstalled(), installedMock);
-      app.get('/authed', shopify.authenticatedRequest(), authedMock);
+      app.get('/installed', shopify.ensureInstalledOnShop(), installedMock);
+      app.get('/authed', shopify.validateAuthenticatedSession(), authedMock);
 
       const callbackInfo = await beginOAuth(app, shopify, config);
 
@@ -98,9 +98,9 @@ describe('OAuth integration tests', () => {
         body,
       );
 
-      await makeInstalledRequest(app, config, installedMock);
+      await installedRequest(app, config, installedMock);
 
-      await makeAuthenticatedRequest(app, shopify, config, authedMock);
+      await validSession(app, shopify, config, authedMock);
 
       await appUninstalledWebhookRequest(app, shopify);
     });
@@ -302,7 +302,7 @@ async function appUninstalledWebhookRequest(app: Express, shopify: ShopifyApp) {
 }
 
 // Fires a valid request to check that the installed middleware allows requests through
-async function makeInstalledRequest(
+async function installedRequest(
   app: Express,
   config: OAuthTestCase,
   mock: jest.Mock,
@@ -315,13 +315,13 @@ async function makeInstalledRequest(
     expect(response.status).toBe(200);
     expect(mock).toHaveBeenCalledTimes(1);
   } else {
-    expect(response.status).toBe(500);
+    expect(response.status).toBe(config.embedded ? 500 : 302);
     expect(mock).not.toHaveBeenCalled();
   }
 }
 
 // Fires a valid request to check that the authenticated middleware allows requests through
-async function makeAuthenticatedRequest(
+async function validSession(
   app: Express,
   shopify: ShopifyApp,
   config: OAuthTestCase,

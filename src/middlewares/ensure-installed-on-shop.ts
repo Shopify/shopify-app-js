@@ -6,6 +6,7 @@ import {AppInstallations} from '../app-installations';
 
 import {EnsureInstalledMiddleware} from './types';
 import {addCSPHeader} from './csp-headers';
+import {createValidateAuthenticatedSession} from './validate-authenticated-session';
 
 interface CreateEnsureInstalledParams extends ApiAndConfigParams {}
 
@@ -15,20 +16,25 @@ export function createEnsureInstalled({
 }: CreateEnsureInstalledParams): EnsureInstalledMiddleware {
   const appInstallations = new AppInstallations(config);
 
-  return function ensureInstalled() {
+  return function ensureInstalledOnShop() {
     return async (req: Request, res: Response, next: NextFunction) => {
-      config.logger.info('Running ensureInstalled');
+      config.logger.info('Running ensureInstalledOnShop');
 
       if (!api.config.isEmbeddedApp) {
-        res.status(500);
-        return res.send(
-          'ensureInstalled() should only be used in embedded apps; use authenticatedRequest() instead',
+        config.logger.warning(
+          'ensureInstalledOnShop() should only be used in embedded apps; calling validateAuthenticatedSession() instead',
+        );
+
+        return createValidateAuthenticatedSession({api, config})()(
+          req,
+          res,
+          next,
         );
       }
 
       if (typeof req.query.shop !== 'string') {
         config.logger.error(
-          'ensureInstalled did not receive a shop query argument',
+          'ensureInstalledOnShop did not receive a shop query argument',
           {shop: req.query.shop},
         );
 

@@ -11,7 +11,7 @@ import {SessionStorage} from '../session-storage/session-storage';
 import {AuthConfigInterface} from './auth/types';
 import {WebhooksConfigInterface} from './webhooks/types';
 import {
-  AuthenticatedRequestMiddleware,
+  ValidateAuthenticatedSessionMiddleware,
   CspHeadersMiddleware,
   EnsureInstalledMiddleware,
 } from './middlewares/types';
@@ -57,9 +57,9 @@ export interface ShopifyApp<
   config: AppConfigInterface<S>;
   api: Shopify<R>;
   app: AppMiddleware;
-  authenticatedRequest: AuthenticatedRequestMiddleware;
+  validateAuthenticatedSession: ValidateAuthenticatedSessionMiddleware;
   cspHeaders: CspHeadersMiddleware;
-  ensureInstalled: EnsureInstalledMiddleware;
+  ensureInstalledOnShop: EnsureInstalledMiddleware;
 }
 
 export interface RedirectToAuthParams extends ApiAndConfigParams {
