@@ -10,3 +10,4 @@ tsconfig.tsbuildinfo
 *.d.ts.map
 *.js
 *.js.map
+tmp/

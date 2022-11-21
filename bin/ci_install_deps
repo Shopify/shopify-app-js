@@ -1,0 +1,46 @@
+#!/usr/bin/env bash
+
+cd packages/shopify-app-session-storage
+echo "Installing dependencies for shopify-app-session-storage"
+yarn install
+yarn build
+npm pack
+
+cd ../shopify-app-session-storage-test-utils
+echo "Installing dependencies for shopify-app-session-storage-test-utils"
+mv package.json package.json.bak
+sed '/"@shopify\/shopify-app-session-storage":/d' package.json.bak > package.json
+yarn add ../shopify-app-session-storage/shopify-shopify-app-session-storage-*.tgz
+yarn install && yarn build && npm pack
+
+cd ../shopify-app-session-storage-memory
+echo "Installing dependencies for shopify-app-session-storage-memory"
+mv package.json package.json.bak
+sed '/"@shopify\/shopify-app-session-storage":/d' package.json.bak | sed '/"@shopify\/shopify-app-session-storage-test-utils":/d' > package.json
+yarn add ../shopify-app-session-storage/shopify-shopify-app-session-storage-*.tgz
+yarn add -D ../shopify-app-session-storage-test-utils/shopify-shopify-app-session-storage-test-utils-*.tgz
+yarn install && yarn build && npm pack
+
+cd ../shopify-app-express
+mv package.json package.json.bak
+sed '/"@shopify\/shopify-app-session-storage/d' package.json.bak > package.json
+yarn add ../shopify-app-session-storage/shopify-shopify-app-session-storage-*.tgz
+yarn add ../shopify-app-session-storage-memory/shopify-shopify-app-session-storage-memory-*.tgz
+yarn install
+
+cd ../
+for package in shopify-app-session-storage-mongodb \
+               shopify-app-session-storage-mysql \
+               shopify-app-session-storage-postgresql \
+               shopify-app-session-storage-redis \
+               shopify-app-session-storage-sqlite
+do
+  cd ${package}
+  echo "Installing dependencies for ${package}"
+  mv package.json package.json.bak
+  sed '/"@shopify\/shopify-app-session-storage/d' package.json.bak > package.json
+  yarn add ../shopify-app-session-storage/shopify-shopify-app-session-storage-*.tgz
+  yarn add -D ../shopify-app-session-storage-test-utils/shopify-shopify-app-session-storage-test-utils-*.tgz
+  yarn install
+  cd ..
+done

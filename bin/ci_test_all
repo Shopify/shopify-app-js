@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+for package in packages/*/
+do
+  echo "Testing ${package}"
+  (cd ${package} && yarn test:all)
+done

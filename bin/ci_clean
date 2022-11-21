@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+for package in packages/*/
+do
+  echo "Cleaning ${package}"
+  (cd ${package} && yarn clean)
+done
