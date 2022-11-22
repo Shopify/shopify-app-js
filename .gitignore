@@ -6,9 +6,9 @@ coverage/
 yarn-error.log
 tsdocs/
 tsconfig.tsbuildinfo
-*.d.ts
-*.d.ts.map
-*.js
-*.js.map
+packages/**/*.d.ts
+packages/**/*.d.ts.map
+packages/**/*.js
+packages/**/*.js.map
+packages/**/*.tgz
 tmp/
-*.tgz
