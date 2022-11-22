@@ -1,6 +1,6 @@
 # Implementing session storage
 
-A custom implementaton of `SessionStorage` will need to implement the following methods, as documented by the abstract [`SessionStorage`](./session-storage.ts) class:
+A custom implementaton of `SessionStorage` will need to implement the following methods, as documented by the abstract [`SessionStorage`](./src/session-storage.ts) class:
 
 |        Method        | Parameter type |           Return value         | Description                                                                                                   |
 | :------------------: | :------------: | :----------------------------: | ------------------------------------------------------------------------------------------------------------- |
@@ -25,7 +25,7 @@ id,this-is-a-session-id,shop,my-test-shop.myshopify.com,state,150801840581085,is
 ```ts
 import fs from 'fs';
 import {Session} from '@shopify/shopify-api';
-import {SessionStorage} from '@shopify/shopify-app-express/session-storage/session-storage';
+import {SessionStorage} from '@shopify/shopify-app-session-storage';
 
 export class CsvSessionStorage extends SessionStorage {
   constructor(private filename: string) {
