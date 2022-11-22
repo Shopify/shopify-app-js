@@ -15,4 +15,6 @@ jobs:
       - name: Install
         run: bin/ci_install_deps
       - name: Run tests
-        run: bin/ci_test_all
+        run: bin/ci_test
+      # - name: Run linting
+      #   run: bin/ci_lint
