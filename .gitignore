@@ -11,3 +11,4 @@ tsconfig.tsbuildinfo
 *.js
 *.js.map
 tmp/
+*.tgz
