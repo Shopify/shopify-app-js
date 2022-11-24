@@ -1,6 +1,6 @@
 {
   "name": "@shopify/shopify-app-session-storage-memory",
-  "version": "0.0.0",
+  "version": "1.0.0-rc.0",
   "description": "Shopify App Session Storage for Memory",
   "repository": {
     "type": "git",
@@ -31,13 +31,13 @@
   ],
   "dependencies": {
     "@shopify/shopify-api": "^6.0.0-rc9",
-    "@shopify/shopify-app-session-storage": "^0.0.0",
+    "@shopify/shopify-app-session-storage": "^1.0.0-rc.0",
     "tslib": "^2.4.0"
   },
   "devDependencies": {
     "@shopify/eslint-plugin": "^42.0.1",
     "@shopify/prettier-config": "^1.1.2",
-    "@shopify/shopify-app-session-storage-test-utils": "^0.0.0",
+    "@shopify/shopify-app-session-storage-test-utils": "^0.0.1-rc.0",
     "@types/jest": "^29.1.1",
     "eslint": "^8.24.0",
     "eslint-plugin-prettier": "^4.2.1",

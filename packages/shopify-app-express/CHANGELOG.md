@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.0.0-rc.6
+
+### Patch Changes
+
+- 62c2c31: Test use of changesets for release candidates
+- Updated dependencies [62c2c31]
+  - @shopify/shopify-app-session-storage@1.0.0-rc.0
+  - @shopify/shopify-app-session-storage-memory@1.0.0-rc.0
+
 All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)

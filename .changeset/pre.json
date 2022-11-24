@@ -12,5 +12,8 @@
     "@shopify/shopify-app-session-storage-sqlite": "0.0.0",
     "@shopify/shopify-app-session-storage-test-utils": "0.0.0"
   },
-  "changesets": []
+  "changesets": [
+    "orange-cooks-compare",
+    "stale-maps-wave"
+  ]
 }
