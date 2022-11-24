@@ -15,4 +15,6 @@ jobs:
       - name: Install
         run: yarn install
       - name: Run tests
-        run: yarn test:all
+        run: yarn test
+      - name: Run linting
+        run: yarn lint

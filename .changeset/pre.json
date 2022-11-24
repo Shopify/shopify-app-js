@@ -1,0 +1,16 @@
+{
+  "mode": "pre",
+  "tag": "rc",
+  "initialVersions": {
+    "@shopify/shopify-app-express": "1.0.0-rc.5",
+    "@shopify/shopify-app-session-storage": "0.0.0",
+    "@shopify/shopify-app-session-storage-memory": "0.0.0",
+    "@shopify/shopify-app-session-storage-mongodb": "0.0.0",
+    "@shopify/shopify-app-session-storage-mysql": "0.0.0",
+    "@shopify/shopify-app-session-storage-postgresql": "0.0.0",
+    "@shopify/shopify-app-session-storage-redis": "0.0.0",
+    "@shopify/shopify-app-session-storage-sqlite": "0.0.0",
+    "@shopify/shopify-app-session-storage-test-utils": "0.0.0"
+  },
+  "changesets": []
+}
