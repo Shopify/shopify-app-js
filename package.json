@@ -4,12 +4,12 @@
   "description": "Shopify Express Middleware - to simplify the building of Shopify Apps with Express",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Shopify/shopify-app-express.git"
+    "url": "git+https://github.com/Shopify/shopify-app-js.git"
   },
   "bugs": {
-    "url": "https://github.com/Shopify/shopify-app-express/issues"
+    "url": "https://github.com/Shopify/shopify-app-js/issues"
   },
-  "homepage": "https://github.com/Shopify/shopify-app-express",
+  "homepage": "https://github.com/Shopify/shopify-app-js",
   "author": "Shopify Inc.",
   "license": "MIT",
   "main": "./src/index.js",

@@ -1,4 +1,4 @@
-# `@shopify/shopify-app-express`
+# `@shopify/shopify-app-js`
 
 <!-- ![Build Status]() -->
 
