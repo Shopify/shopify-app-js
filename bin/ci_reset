@@ -1,6 +1,0 @@
-#!/usr/bin/env bash
-
-for package in packages/*/
-do
-  echo "Resetting ${package}" && (cd ${package} && rm -rf node_modules && rm yarn.lock && [ -f package.json.bak ] && mv package.json.bak package.json)
-done

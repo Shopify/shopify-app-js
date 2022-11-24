@@ -17,6 +17,7 @@
   "scripts": {
     "clean": "yarn tsc --build --clean"
   },
+  "private": true,
   "publishConfig": {
     "access": "restricted"
   },
