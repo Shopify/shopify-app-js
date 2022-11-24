@@ -2,13 +2,13 @@
 
 A custom implementaton of `SessionStorage` will need to implement the following methods, as documented by the abstract [`SessionStorage`](./src/session-storage.ts) class:
 
-|        Method        | Parameter type |           Return value         | Description                                                                                                   |
-| :------------------: | :------------: | :----------------------------: | ------------------------------------------------------------------------------------------------------------- |
-|    `storeSession`    |    `Session`   |       `Promise<boolean>`       | Creates or updates the given session in storage; returns `true` if successfully stored, `false` otherwise     |
+|        Method        | Parameter type |          Return value           | Description                                                                                                   |
+| :------------------: | :------------: | :-----------------------------: | ------------------------------------------------------------------------------------------------------------- |
+|    `storeSession`    |   `Session`    |       `Promise<boolean>`        | Creates or updates the given session in storage; returns `true` if successfully stored, `false` otherwise     |
 |    `loadSession`     |    `string`    | `Promise<Session \| undefined>` | Returns a `Session` matching the given session id from storage, or returns `undefined` if not found           |
-|   `deleteSession`    |    `string`    |       `Promise<boolean>`       | Deletes a session matching the given session id from storage; returns `true` if successful, `false` otherwise |
-|   `deleteSessions`   |    `string[]`  |       `Promise<boolean>`       | Deletes each of the given session ids (array) from storage; returns `true` if successful, `false` otherwise   |
-| `findSessionsByShop` |    `string`    |      `Promise<Session[]>`      | Returns an array of `Session`s for the given shop domain; returns an empty array of none found                |
+|   `deleteSession`    |    `string`    |       `Promise<boolean>`        | Deletes a session matching the given session id from storage; returns `true` if successful, `false` otherwise |
+|   `deleteSessions`   |   `string[]`   |       `Promise<boolean>`        | Deletes each of the given session ids (array) from storage; returns `true` if successful, `false` otherwise   |
+| `findSessionsByShop` |    `string`    |      `Promise<Session[]>`       | Returns an array of `Session`s for the given shop domain; returns an empty array of none found                |
 
 ## Example
 

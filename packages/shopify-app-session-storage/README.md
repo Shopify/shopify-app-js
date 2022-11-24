@@ -4,14 +4,14 @@ This folder contains implementations of the `SessionStorage` interface that work
 
 Below is a summary of the options:
 
-| Storage option                  |              Node.js              |
-| ------------------------------- | :-------------------------------: |
-| [SQLite](#sqlite)               |                Yes                |
-| [MySQL](#mysql)                 |                Yes                |
-| [PostgreSQL](#postgresql)       |                Yes                |
-| [MongoDB](#mongodb)             |                Yes                |
-| [Redis](#redis)                 |                Yes                |
-| [In-Memory](#in-memory)         | Yes (_default_, development only) |
+| Storage option            |              Node.js              |
+| ------------------------- | :-------------------------------: |
+| [SQLite](#sqlite)         |                Yes                |
+| [MySQL](#mysql)           |                Yes                |
+| [PostgreSQL](#postgresql) |                Yes                |
+| [MongoDB](#mongodb)       |                Yes                |
+| [Redis](#redis)           |                Yes                |
+| [In-Memory](#in-memory)   | Yes (_default_, development only) |
 
 > **Note**: Because this package supports multiple storage options, it does not include the session storage dependencies to avoid installing unnecessary packages.
 >

@@ -1,9 +1,9 @@
 node_modules
 .DS_STORE
 yarn-error.log
-dist
+dist/
+build/
 coverage/
-yarn-error.log
 tsdocs/
 tsconfig.tsbuildinfo
 packages/**/*.d.ts
@@ -12,3 +12,4 @@ packages/**/*.js
 packages/**/*.js.map
 packages/**/*.tgz
 tmp/
+.loom

@@ -12,22 +12,9 @@
   "homepage": "https://github.com/Shopify/shopify-app-js/tree/main/packages/session-storage-redis",
   "author": "Shopify Inc.",
   "license": "MIT",
-  "main": "./dist/redis.js",
-  "types": "./dist/redis.d.ts",
-  "prettier": "@shopify/prettier-config",
-  "scripts": {
-    "pretest": "yarn install",
-    "test:all": "jest",
-    "test": "jest --selectProjects session_storage",
-    "test:dev": "jest --selectProjects session_storage lint",
-    "lint": "jest --selectProjects lint",
-    "clean": "yarn tsc --build --clean",
-    "prebuild": "yarn tsc --build --clean",
-    "build": "tsc",
-    "prepublishOnly": "yarn run build",
-    "preversion": "yarn run test",
-    "postversion": "git push origin main --follow-tags && echo \"Log in to shipit to deploy version $npm_package_version\""
-  },
+  "main": "./build/cjs/redis.js",
+  "types": "./build/ts/redis.d.ts",
+  "scripts": {},
   "publishConfig": {
     "access": "public"
   },
@@ -46,14 +33,14 @@
   ],
   "dependencies": {
     "@shopify/shopify-api": "^6.0.0-rc9",
-    "@shopify/shopify-app-session-storage": "*",
+    "@shopify/shopify-app-session-storage": "^1.0.0-rc1",
     "redis": "^4.5.0",
     "tslib": "^2.4.0"
   },
   "devDependencies": {
     "@shopify/eslint-plugin": "^42.0.1",
     "@shopify/prettier-config": "^1.1.2",
-    "@shopify/shopify-app-session-storage-test-utils": "*",
+    "@shopify/shopify-app-session-storage-test-utils": "^1.0.0-rc2",
     "@types/jest": "^29.1.1",
     "eslint": "^8.24.0",
     "eslint-plugin-prettier": "^4.2.1",
@@ -66,7 +53,7 @@
     "typescript": "4.8.4"
   },
   "files": [
-    "dist/*",
+    "build/*",
     "!bundle/*",
     "!tsconfig.tsbuildinfo",
     "!node_modules"
