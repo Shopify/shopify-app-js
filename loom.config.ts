@@ -27,7 +27,7 @@ function jestWorkspaceConfigPlugin() {
           // Increase the test timeout to 20 seconds
           configure.jestConfig?.hook((config) => ({
             ...config,
-            testTimeout: 20000,
+            testTimeout: 30000,
           }));
         });
       });
