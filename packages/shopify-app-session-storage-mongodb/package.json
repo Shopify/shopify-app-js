@@ -1,6 +1,6 @@
 {
   "name": "@shopify/shopify-app-session-storage-mongodb",
-  "version": "1.0.0-rc1",
+  "version": "0.0.0",
   "description": "Shopify App Session Storage for MongoDB",
   "repository": {
     "type": "git",
@@ -14,19 +14,7 @@
   "license": "MIT",
   "main": "./build/cjs/mongodb.js",
   "types": "./build/ts/mongodb.d.ts",
-  "prettier": "@shopify/prettier-config",
-  "scripts": {
-    "test:all": "jest",
-    "test": "jest --selectProjects session_storage",
-    "test:dev": "jest --selectProjects session_storage lint",
-    "lint": "jest --selectProjects lint",
-    "clean": "yarn tsc --build --clean",
-    "prebuild": "yarn tsc --build --clean",
-    "build": "tsc",
-    "prepublishOnly": "yarn run build",
-    "preversion": "yarn run test",
-    "postversion": "git push origin main --follow-tags && echo \"Log in to shipit to deploy version $npm_package_version\""
-  },
+  "scripts": {},
   "publishConfig": {
     "access": "public"
   },
@@ -44,14 +32,14 @@
   ],
   "dependencies": {
     "@shopify/shopify-api": "^6.0.0-rc9",
-    "@shopify/shopify-app-session-storage": "^1.0.0-rc1",
+    "@shopify/shopify-app-session-storage": "^0.0.0",
     "mongodb": "^4.11.0",
     "tslib": "^2.4.0"
   },
   "devDependencies": {
     "@shopify/eslint-plugin": "^42.0.1",
     "@shopify/prettier-config": "^1.1.2",
-    "@shopify/shopify-app-session-storage-test-utils": "^1.0.0-rc2",
+    "@shopify/shopify-app-session-storage-test-utils": "^0.0.0",
     "@types/jest": "^29.1.1",
     "eslint": "^8.24.0",
     "eslint-plugin-prettier": "^4.2.1",

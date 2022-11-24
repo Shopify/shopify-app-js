@@ -1,6 +1,6 @@
 {
   "name": "@shopify/shopify-app-session-storage",
-  "version": "1.0.0-rc1",
+  "version": "0.0.0",
   "description": "Shopify App Session Storage - abstract class",
   "repository": {
     "type": "git",
@@ -14,9 +14,7 @@
   "license": "MIT",
   "main": "./build/cjs/session-storage.js",
   "types": "./build/ts/session-storage.d.ts",
-  "scripts": {
-    "clean": "tsc --build --clean"
-  },
+  "scripts": {},
   "publishConfig": {
     "access": "public",
     "@shopify:registry": "https://registry.npmjs.org"

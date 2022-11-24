@@ -1,6 +1,6 @@
 {
   "name": "@shopify/shopify-app-session-storage-postgresql",
-  "version": "1.0.0-rc1",
+  "version": "0.0.0",
   "description": "Shopify App Session Storage for PostgreSQL",
   "repository": {
     "type": "git",
@@ -33,14 +33,14 @@
   ],
   "dependencies": {
     "@shopify/shopify-api": "^6.0.0-rc9",
-    "@shopify/shopify-app-session-storage": "^1.0.0-rc1",
+    "@shopify/shopify-app-session-storage": "^0.0.0",
     "pg": "^8.8.0",
     "tslib": "^2.4.0"
   },
   "devDependencies": {
     "@shopify/eslint-plugin": "^42.0.1",
     "@shopify/prettier-config": "^1.1.2",
-    "@shopify/shopify-app-session-storage-test-utils": "^1.0.0-rc2",
+    "@shopify/shopify-app-session-storage-test-utils": "^0.0.0",
     "@types/jest": "^29.1.1",
     "@types/pg": "^8.6.5",
     "eslint": "^8.24.0",
