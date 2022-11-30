@@ -27,10 +27,10 @@ Requirements:
 You can set up your development environment by running the following:
 
 ```
-git clone git@github.com:Shopify/shopify-app-express.git # get the code
-cd shopify-app-express                                   # change into the source directory
-yarn install                                             # install dependencies
-yarn build                                               # build package
+git clone git@github.com:Shopify/shopify-app-js.git # get the code
+cd shopify-app-js                                   # change into the source directory
+yarn install                                        # install dependencies
+yarn build                                          # build package
 ```
 
 Helpful commands
