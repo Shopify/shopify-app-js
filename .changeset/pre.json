@@ -2,15 +2,15 @@
   "mode": "pre",
   "tag": "rc",
   "initialVersions": {
-    "@shopify/shopify-app-express": "1.0.0-rc.5",
-    "@shopify/shopify-app-session-storage": "0.0.0",
-    "@shopify/shopify-app-session-storage-memory": "0.0.0",
-    "@shopify/shopify-app-session-storage-mongodb": "0.0.0",
-    "@shopify/shopify-app-session-storage-mysql": "0.0.0",
-    "@shopify/shopify-app-session-storage-postgresql": "0.0.0",
-    "@shopify/shopify-app-session-storage-redis": "0.0.0",
-    "@shopify/shopify-app-session-storage-sqlite": "0.0.0",
-    "@shopify/shopify-app-session-storage-test-utils": "0.0.0"
+    "@shopify/shopify-app-express": "1.0.0-rc.6",
+    "@shopify/shopify-app-session-storage": "1.0.0-rc.0",
+    "@shopify/shopify-app-session-storage-memory": "1.0.0-rc.0",
+    "@shopify/shopify-app-session-storage-mongodb": "1.0.0-rc.0",
+    "@shopify/shopify-app-session-storage-mysql": "1.0.0-rc.0",
+    "@shopify/shopify-app-session-storage-postgresql": "1.0.0-rc.0",
+    "@shopify/shopify-app-session-storage-redis": "1.0.0-rc.0",
+    "@shopify/shopify-app-session-storage-sqlite": "1.0.0-rc.0",
+    "@shopify/shopify-app-session-storage-test-utils": "0.0.1-rc.0"
   },
   "changesets": [
     "orange-cooks-compare",
