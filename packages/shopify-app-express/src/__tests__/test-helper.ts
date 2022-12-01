@@ -4,8 +4,8 @@ import fetchMock, {MockParams} from 'jest-fetch-mock';
 import {LATEST_API_VERSION} from '@shopify/shopify-api';
 import {MemorySessionStorage} from '@shopify/shopify-app-session-storage-memory';
 
-import {shopifyApp} from '../index';
-import {AppConfigParams, ShopifyApp} from '../types';
+import {shopifyApp, ShopifyApp} from '../index';
+import {AppConfigParams} from '../config-types';
 
 // eslint-disable-next-line import/no-mutable-exports
 export let testConfig: AppConfigParams & {

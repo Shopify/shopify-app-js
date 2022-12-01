@@ -1,48 +1,44 @@
 import express, {Request, Response} from 'express';
-import {
-  AddHandlersParams,
-  DeliveryMethod,
-  HttpWebhookHandler,
-} from '@shopify/shopify-api';
+import {AddHandlersParams, DeliveryMethod, Shopify} from '@shopify/shopify-api';
 
+import {AppConfigInterface} from '../config-types';
+import {ApiAndConfigParams} from '../types';
 import {AppInstallations} from '../app-installations';
 import {createDeleteAppInstallationHandler} from '../middlewares';
 
-import {AttachWebhooksParams, WebhooksMountParams} from './types';
+import {
+  ProcessWebhooksMiddleware,
+  ProcessWebhooksMiddlewareParams,
+  WebhookHandlersParam,
+} from './types';
 import {process} from './process';
 
-export function attachWebhooks({
+export function processWebhooks({
   api,
   config,
-  subApp,
-}: AttachWebhooksParams): void {
-  subApp.post(
-    config.webhooks.path,
-    express.text({type: '*/*'}),
-    async (req: Request, res: Response) => {
-      process({req, res, api, config});
-    },
-  );
+}: ApiAndConfigParams): ProcessWebhooksMiddleware {
+  return function ({webhookHandlers}: ProcessWebhooksMiddlewareParams) {
+    mountWebhooks(api, config, webhookHandlers);
+
+    return [
+      express.text({type: '*/*'}),
+      async (req: Request, res: Response) => {
+        await process({
+          req,
+          res,
+          api,
+          config,
+        });
+      },
+    ];
+  };
 }
 
-export function webhooksMount({
-  api,
-  config,
-  handlers = {},
-}: WebhooksMountParams) {
-  // Make sure all HTTP handlers' callbackUrl points to the webhook route
-  Object.entries(handlers).forEach(([_, topicHandlers]) => {
-    const handlersArray = Array.isArray(topicHandlers)
-      ? topicHandlers
-      : [topicHandlers];
-
-    handlersArray.forEach((handler) => {
-      if (handler.deliveryMethod === DeliveryMethod.Http) {
-        (handler as HttpWebhookHandler).callbackUrl = config.webhooks.path;
-      }
-    });
-  });
-
+function mountWebhooks(
+  api: Shopify,
+  config: AppConfigInterface,
+  handlers: WebhookHandlersParam,
+) {
   api.webhooks.addHandlers(handlers as AddHandlersParams);
 
   // Add our custom app uninstalled webhook
