@@ -71,6 +71,14 @@ describe('PostgreSQLSessionStorage', () => {
     await exec(`podman rm -f ${containerId}`);
   });
 
-  batteryOfTests(async () => storage);
-  batteryOfTests(async () => storage2);
+  const tests = [
+    {dbName: 'shopitest', sessionStorage: async () => storage},
+    {dbName: 'shopitest2', sessionStorage: async () => storage2},
+  ];
+
+  for (const {dbName, sessionStorage} of tests) {
+    describe(`with ${dbName}`, () => {
+      batteryOfTests(sessionStorage);
+    });
+  }
 });
