@@ -1,7 +1,8 @@
 import {Request, Response, NextFunction} from 'express';
 
 import {redirectToAuth} from '../redirect-to-auth';
-import {ApiAndConfigParams, AppConfigInterface} from '../types';
+import {AppConfigInterface} from '../config-types';
+import {ApiAndConfigParams} from '../types';
 import {AppInstallations} from '../app-installations';
 
 import {EnsureInstalledMiddleware} from './types';

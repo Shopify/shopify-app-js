@@ -1,7 +1,8 @@
 import {Shopify} from '@shopify/shopify-api';
 import {Request, Response} from 'express';
 
-import {AppConfigInterface, RedirectToAuthParams} from './types';
+import {AppConfigInterface} from './config-types';
+import {RedirectToAuthParams} from './types';
 
 export async function redirectToAuth({
   req,
