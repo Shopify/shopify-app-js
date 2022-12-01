@@ -17,7 +17,8 @@
 
 For significant changes that could result in significant refactoring on the part of developers, consider releasing a few _Release Candidate_ versions in advance of the final version.
 
-> **Note**
+> **Warning**
+>
 > These changes **must** be made against the `next` branch, so that the appropriate workflows can run (`next-release.yml`).
 
 1. Prior to creating PR, run the `yarn changeset pre enter rc` command and commit the resultant files from `.changeset`, including the `pre.json` file. This informs `changesets` that it is in pre-release mode, and the pre-release tag is `rc`.
@@ -38,6 +39,7 @@ For significant changes that could result in significant refactoring on the part
 When a major set of changes is about to be mass released from the `next` branch
 
 > **Warning**
+>
 > The next steps need to be confirmed
 
 1. Take the `next` branch out of pre-release mode by running

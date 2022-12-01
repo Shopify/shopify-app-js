@@ -12,15 +12,19 @@ import {PostgreSQLSessionStorage} from '../postgresql';
 const exec = promisify(child_process.exec);
 
 const dbURL = new URL('postgres://shopify:passify@localhost/shopitest');
+const dbURL2 = new URL('postgres://shopify:passify@localhost/shopitest2');
 
 describe('PostgreSQLSessionStorage', () => {
   let storage: PostgreSQLSessionStorage;
+  let storage2: PostgreSQLSessionStorage;
+
   let containerId: string;
   beforeAll(async () => {
     const runCommand = await exec(
       'podman run -d -e POSTGRES_DB=shopitest -e POSTGRES_USER=shopify -e POSTGRES_PASSWORD=passify -p 5432:5432 postgres:14',
       {encoding: 'utf8'},
     );
+
     containerId = runCommand.stdout.trim();
 
     await poll(
@@ -30,7 +34,20 @@ describe('PostgreSQLSessionStorage', () => {
           await new Promise<void>((resolve, reject) => {
             client.connect((err) => {
               if (err) reject(err);
-              resolve();
+
+              // Create second database to test multiple databases on the same instance
+              client.query('CREATE DATABASE shopitest2', [], (err, res) => {
+                if (err) reject(err);
+
+                client.query(
+                  'GRANT ALL PRIVILEGES ON DATABASE shopitest2 TO shopify',
+                  [],
+                  (err2, res2) => {
+                    if (err2) reject(err2);
+                    resolve();
+                  },
+                );
+              });
             });
           });
           await client.end();
@@ -42,13 +59,26 @@ describe('PostgreSQLSessionStorage', () => {
       {interval: 500, timeout: 20000},
     );
     storage = new PostgreSQLSessionStorage(dbURL);
+    storage2 = new PostgreSQLSessionStorage(dbURL2);
+
     await storage.ready;
   });
 
   afterAll(async () => {
     await storage.disconnect();
+    await storage2.disconnect();
+
     await exec(`podman rm -f ${containerId}`);
   });
 
-  batteryOfTests(async () => storage);
+  const tests = [
+    {dbName: 'shopitest', sessionStorage: async () => storage},
+    {dbName: 'shopitest2', sessionStorage: async () => storage2},
+  ];
+
+  for (const {dbName, sessionStorage} of tests) {
+    describe(`with ${dbName}`, () => {
+      batteryOfTests(sessionStorage);
+    });
+  }
 });

@@ -128,9 +128,15 @@ export class PostgreSQLSessionStorage implements SessionStorage {
 
   private async hasSessionTable(): Promise<boolean> {
     const query = `
-      SELECT * FROM pg_catalog.pg_tables WHERE tablename = $1
+      SELECT tablename FROM pg_catalog.pg_tables WHERE tablename = $1 AND schemaname = $2
     `;
-    const rows = await this.query(query, [this.options.sessionTableName]);
+
+    // Allow multiple apps to be on the same host with separate DB and querying the right
+    // DB for the session table exisitence
+    const [rows] = await this.query(query, [
+      this.options.sessionTableName,
+      this.client.database,
+    ]);
     return Array.isArray(rows) && rows.length === 1;
   }
 
