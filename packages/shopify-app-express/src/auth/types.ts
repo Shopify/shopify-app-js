@@ -1,25 +1,17 @@
-import {Express, Request, Response} from 'express';
 import {Shopify} from '@shopify/shopify-api';
+import {Request, RequestHandler, Response} from 'express';
 
-import {AfterAuthCallback, AppConfigInterface} from '../config-types';
+import {AppConfigInterface} from '../config-types';
 import {ApiAndConfigParams} from '../types';
 
-export interface AttachAuthParams extends ApiAndConfigParams {
-  subApp: Express;
-  afterAuth?: AfterAuthCallback;
+export interface AuthMiddleware {
+  begin: () => RequestHandler;
+  callback: () => RequestHandler;
 }
 
-export interface AuthBeginParams {
+export interface AuthCallbackParams extends ApiAndConfigParams {
   req: Request;
   res: Response;
   api: Shopify;
   config: AppConfigInterface;
-}
-
-export interface AuthCallbackParams {
-  req: Request;
-  res: Response;
-  api: Shopify;
-  config: AppConfigInterface;
-  afterAuth?: AfterAuthCallback;
 }

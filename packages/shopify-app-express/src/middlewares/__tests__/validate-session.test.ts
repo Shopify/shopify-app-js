@@ -20,6 +20,8 @@ describe('validateAuthenticatedSession', () => {
     let validJWT: any;
 
     beforeEach(() => {
+      shopify.config.auth.path = '/api/auth';
+      shopify.config.auth.callbackPath = '/api/auth/callback';
       shopify.api.config.isEmbeddedApp = true;
 
       app = express();
@@ -186,6 +188,12 @@ describe('validateAuthenticatedSession', () => {
       shopify.api.config.isEmbeddedApp = false;
 
       app = express();
+      app.get('/auth', shopify.auth.begin());
+      app.get(
+        '/auth/callback',
+        shopify.auth.callback(),
+        shopify.redirectToShopifyOrAppRoot(),
+      );
       app.use('/api', shopify.app());
       app.use('/test/*', shopify.validateAuthenticatedSession());
       app.get('/test/shop', async (req, res) => {
@@ -240,9 +248,7 @@ describe('validateAuthenticatedSession', () => {
         .set('Cookie', [validCookies[0]])
         .expect(302);
 
-      expect(response.header.location).toBe(
-        `/api/auth?shop=my-shop.myshopify.io`,
-      );
+      expect(response.header.location).toBe(`/auth?shop=my-shop.myshopify.io`);
     });
   });
 });

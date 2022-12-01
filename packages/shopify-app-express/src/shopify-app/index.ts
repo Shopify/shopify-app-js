@@ -1,6 +1,5 @@
 import express from 'express';
 
-import {attachAuth} from '../auth/index';
 import {attachWebhooks, webhooksMount} from '../webhooks/index';
 import {ApiAndConfigParams} from '../types';
 
@@ -16,8 +15,6 @@ export function createShopifyApp({
     subApp.on('mount', () => {
       const mountPath = subApp.mountpath as string;
 
-      config.auth.path = `${mountPath}${config.auth.path}`;
-      config.auth.callbackPath = `${mountPath}${config.auth.callbackPath}`;
       config.webhooks.path = `${mountPath}${config.webhooks.path}`;
 
       webhooksMount({
@@ -26,8 +23,6 @@ export function createShopifyApp({
         handlers: params.webhookHandlers || {},
       });
     });
-
-    attachAuth({api, config, subApp, afterAuth: params.afterAuth});
 
     attachWebhooks({api, config, subApp});
 

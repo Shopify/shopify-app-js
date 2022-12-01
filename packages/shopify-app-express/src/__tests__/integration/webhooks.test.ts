@@ -60,6 +60,12 @@ describe('webhook integration', () => {
             next();
           });
 
+          app.get('/test/auth', shopify.auth.begin());
+          app.get(
+            '/test/auth/callback',
+            shopify.auth.callback(),
+            shopify.redirectToShopifyOrAppRoot(),
+          );
           app.use(
             '/test',
             shopify.app({webhookHandlers: {APP_UNINSTALLED: config.handler}}),

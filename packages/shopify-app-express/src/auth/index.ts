@@ -1,30 +1,28 @@
-import {Request, Response} from 'express';
+import {NextFunction, Request, RequestHandler, Response} from 'express';
 
-import {AttachAuthParams} from './types';
-import {authBegin} from './auth-begin';
+import {ApiAndConfigParams} from '../types';
+import {redirectToAuth} from '../redirect-to-auth';
+
 import {authCallback} from './auth-callback';
+import {AuthMiddleware} from './types';
 
-export function attachAuth({
-  api,
-  config,
-  subApp,
-  afterAuth,
-}: AttachAuthParams): void {
-  subApp.get(config.auth.path, async (req: Request, res: Response) => {
-    await config.logger.debug('Initiating auth begin request');
+export function auth({api, config}: ApiAndConfigParams): AuthMiddleware {
+  return {
+    begin(): RequestHandler {
+      return async (req: Request, res: Response) =>
+        redirectToAuth({req, res, api, config});
+    },
+    callback(): RequestHandler {
+      return async (req: Request, res: Response, next: NextFunction) => {
+        await authCallback({
+          req,
+          res,
+          api,
+          config,
+        });
 
-    return authBegin({req, res, api, config});
-  });
-
-  subApp.get(config.auth.callbackPath, async (req: Request, res: Response) => {
-    await config.logger.debug('Initiating auth callback request');
-
-    return authCallback({
-      req,
-      res,
-      api,
-      config,
-      afterAuth,
-    });
-  });
+        next();
+      };
+    },
+  };
 }

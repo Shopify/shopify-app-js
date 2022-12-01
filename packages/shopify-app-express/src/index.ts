@@ -20,12 +20,16 @@ import {
   createValidateAuthenticatedSession,
   createCspHeaders,
   createEnsureInstalled,
+  redirectToShopifyOrAppRoot,
 } from './middlewares/index';
 import {createShopifyApp} from './shopify-app/index';
+import {AuthMiddleware} from './auth/types';
+import {auth} from './auth/index';
 import {
   ValidateAuthenticatedSessionMiddleware,
   CspHeadersMiddleware,
   EnsureInstalledMiddleware,
+  RedirectToShopifyOrAppRootMiddleware,
 } from './middlewares/types';
 import {AppMiddleware} from './shopify-app/types';
 
@@ -41,9 +45,11 @@ export interface ShopifyApp<
   config: AppConfigInterface<S>;
   api: Shopify<R>;
   app: AppMiddleware;
+  auth: AuthMiddleware;
   validateAuthenticatedSession: ValidateAuthenticatedSessionMiddleware;
   cspHeaders: CspHeadersMiddleware;
   ensureInstalledOnShop: EnsureInstalledMiddleware;
+  redirectToShopifyOrAppRoot: RedirectToShopifyOrAppRootMiddleware;
 }
 
 export function shopifyApp<
@@ -59,12 +65,17 @@ export function shopifyApp<
     config: validatedConfig,
     api,
     app: createShopifyApp({api, config: validatedConfig}),
+    auth: auth({api, config: validatedConfig}),
     validateAuthenticatedSession: createValidateAuthenticatedSession({
       api,
       config: validatedConfig,
     }),
     cspHeaders: createCspHeaders({api}),
     ensureInstalledOnShop: createEnsureInstalled({
+      api,
+      config: validatedConfig,
+    }),
+    redirectToShopifyOrAppRoot: redirectToShopifyOrAppRoot({
       api,
       config: validatedConfig,
     }),
