@@ -1,6 +1,6 @@
 import {Session} from '@shopify/shopify-api';
 
-import {AppConfigInterface} from './types';
+import {AppConfigInterface} from './config-types';
 
 export class AppInstallations {
   private sessionStorage;

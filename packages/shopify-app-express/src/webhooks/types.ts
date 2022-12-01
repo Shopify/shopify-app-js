@@ -6,7 +6,8 @@ import {
   Shopify,
 } from '@shopify/shopify-api';
 
-import {ApiAndConfigParams, AppConfigInterface} from '../types';
+import {AppConfigInterface} from '../config-types';
+import {ApiAndConfigParams} from '../types';
 
 type WebhookHandlerWithoutCallbackUrl =
   | Omit<HttpWebhookHandler, 'callbackUrl'>
@@ -32,8 +33,4 @@ export interface WebhookProcessParams {
   res: Response;
   api: Shopify;
   config: AppConfigInterface;
-}
-
-export interface WebhooksConfigInterface {
-  path: string;
 }

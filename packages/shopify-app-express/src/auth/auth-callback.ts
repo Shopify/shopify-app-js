@@ -7,10 +7,10 @@ import {
   Shopify,
 } from '@shopify/shopify-api';
 
-import {AppConfigInterface} from '../types';
+import {AppConfigInterface, AfterAuthCallback} from '../config-types';
 import {redirectToHost} from '../redirect-to-host';
 
-import {AfterAuthCallback, AuthCallbackParams} from './types';
+import {AuthCallbackParams} from './types';
 import {authBegin} from './auth-begin';
 
 export async function authCallback({
