@@ -131,7 +131,7 @@ export class PostgreSQLSessionStorage implements SessionStorage {
       SELECT tablename FROM pg_catalog.pg_tables WHERE tablename = $1 AND schemaname = $2
     `;
 
-    // Allow multiple apps to be on the same host with separate DB and querying the right 
+    // Allow multiple apps to be on the same host with separate DB and querying the right
     // DB for the session table exisitence
     const [rows] = await this.query(query, [
       this.options.sessionTableName,

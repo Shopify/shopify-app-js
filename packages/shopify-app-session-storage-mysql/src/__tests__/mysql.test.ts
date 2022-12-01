@@ -15,7 +15,6 @@ const rootURL = new URL('mysql://root:passify@localhost');
 const dbURL = new URL('mysql://shopify:passify@localhost/shopitest');
 const dbURL2 = new URL('mysql://shopify:passify@localhost/shopitest2');
 
-
 describe('MySQLSessionStorage', () => {
   let storage: MySQLSessionStorage;
   let storage2: MySQLSessionStorage;

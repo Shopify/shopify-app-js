@@ -14,7 +14,6 @@ const exec = promisify(child_process.exec);
 const dbURL = new URL('postgres://shopify:passify@localhost/shopitest');
 const dbURL2 = new URL('postgres://shopify:passify@localhost/shopitest2');
 
-
 describe('PostgreSQLSessionStorage', () => {
   let storage: PostgreSQLSessionStorage;
   let storage2: PostgreSQLSessionStorage;
