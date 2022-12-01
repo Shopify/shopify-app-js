@@ -1,64 +1,11 @@
 import {Request, Response} from 'express';
-import {
-  ConfigParams as ApiConfigParams,
-  Session,
-  ShopifyRestResources,
-  Shopify,
-} from '@shopify/shopify-api';
-import {SessionStorage} from '@shopify/shopify-app-session-storage';
+import {Session, Shopify} from '@shopify/shopify-api';
 
-import {AuthConfigInterface} from './auth/types';
-import {WebhooksConfigInterface} from './webhooks/types';
-import {
-  ValidateAuthenticatedSessionMiddleware,
-  CspHeadersMiddleware,
-  EnsureInstalledMiddleware,
-} from './middlewares/types';
-import {AppMiddleware} from './shopify-app/types';
-
-export * from './auth/types';
-export * from './middlewares/types';
-export * from './webhooks/types';
-
-export interface AppConfigParams<
-  R extends ShopifyRestResources = any,
-  S extends SessionStorage = SessionStorage,
-> {
-  api?: Partial<ApiConfigParams<R>>;
-  useOnlineTokens?: boolean;
-  exitIframePath?: string;
-  auth?: Partial<AuthConfigInterface>;
-  webhooks?: Partial<WebhooksConfigInterface>;
-  sessionStorage?: S;
-}
-
-export interface AppConfigInterface<
-  R extends ShopifyRestResources = any,
-  S extends SessionStorage = SessionStorage,
-> extends Omit<AppConfigParams<R, S>, 'api'> {
-  logger: Shopify['logger'];
-  useOnlineTokens: boolean;
-  exitIframePath: string;
-  auth: AuthConfigInterface;
-  webhooks: WebhooksConfigInterface;
-  sessionStorage: S;
-}
+import {AppConfigInterface} from './config-types';
 
 export interface ApiAndConfigParams {
   api: Shopify;
   config: AppConfigInterface;
-}
-
-export interface ShopifyApp<
-  R extends ShopifyRestResources = any,
-  S extends SessionStorage = SessionStorage,
-> {
-  config: AppConfigInterface<S>;
-  api: Shopify<R>;
-  app: AppMiddleware;
-  validateAuthenticatedSession: ValidateAuthenticatedSessionMiddleware;
-  cspHeaders: CspHeadersMiddleware;
-  ensureInstalledOnShop: EnsureInstalledMiddleware;
 }
 
 export interface RedirectToAuthParams extends ApiAndConfigParams {

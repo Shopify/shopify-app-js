@@ -10,17 +10,41 @@ import {SessionStorage} from '@shopify/shopify-app-session-storage';
 import {MemorySessionStorage} from '@shopify/shopify-app-session-storage-memory';
 
 import {SHOPIFY_EXPRESS_LIBRARY_VERSION} from './version';
-import {AppConfigParams, ShopifyApp, AppConfigInterface} from './types';
-import {AuthConfigInterface} from './auth/types';
-import {WebhooksConfigInterface} from './webhooks/types';
+import {
+  AppConfigInterface,
+  AppConfigParams,
+  AuthConfigInterface,
+  WebhooksConfigInterface,
+} from './config-types';
 import {
   createValidateAuthenticatedSession,
   createCspHeaders,
   createEnsureInstalled,
 } from './middlewares/index';
 import {createShopifyApp} from './shopify-app/index';
+import {
+  ValidateAuthenticatedSessionMiddleware,
+  CspHeadersMiddleware,
+  EnsureInstalledMiddleware,
+} from './middlewares/types';
+import {AppMiddleware} from './shopify-app/types';
 
 export * from './types';
+export * from './auth/types';
+export * from './middlewares/types';
+export * from './webhooks/types';
+
+export interface ShopifyApp<
+  R extends ShopifyRestResources = any,
+  S extends SessionStorage = SessionStorage,
+> {
+  config: AppConfigInterface<S>;
+  api: Shopify<R>;
+  app: AppMiddleware;
+  validateAuthenticatedSession: ValidateAuthenticatedSessionMiddleware;
+  cspHeaders: CspHeadersMiddleware;
+  ensureInstalledOnShop: EnsureInstalledMiddleware;
+}
 
 export function shopifyApp<
   R extends ShopifyRestResources = any,
