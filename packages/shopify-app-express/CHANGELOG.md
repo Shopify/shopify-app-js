@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.0-rc.7
+
+### Patch Changes
+
+- 4a5d06e: Replacing sub-app endpoints with middlewares
+
 ## 1.0.0-rc.6
 
 ### Patch Changes
