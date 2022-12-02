@@ -18,8 +18,6 @@ export async function authCallback({
   api,
   config,
 }: AuthCallbackParams) {
-  await config.logger.info('Initiating auth callback request');
-
   try {
     const callbackResponse = await api.auth.callback({
       isOnline: config.useOnlineTokens,

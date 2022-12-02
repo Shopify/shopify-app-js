@@ -12,6 +12,4 @@ export interface AuthMiddleware {
 export interface AuthCallbackParams extends ApiAndConfigParams {
   req: Request;
   res: Response;
-  api: Shopify;
-  config: AppConfigInterface;
 }
