@@ -6,7 +6,7 @@ It mounts the handlers onto the `shopify` object, and they're registered in `sho
 
 This middleware will always respond to Shopify, even if there was an error while handling the webhook.
 
-:exclamation: **Important**: Shopify always fires POST requests for webhooks.
+:exclamation: **Important**: Shopify always sends POST requests for webhooks.
 Make sure you use this middleware on a `.post()` route.
 
 ## Parameters
