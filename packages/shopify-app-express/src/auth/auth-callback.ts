@@ -7,18 +7,16 @@ import {
   Shopify,
 } from '@shopify/shopify-api';
 
-import {AppConfigInterface, AfterAuthCallback} from '../config-types';
-import {redirectToHost} from '../redirect-to-host';
+import {AppConfigInterface} from '../config-types';
+import {redirectToAuth} from '../redirect-to-auth';
 
 import {AuthCallbackParams} from './types';
-import {authBegin} from './auth-begin';
 
 export async function authCallback({
   req,
   res,
   api,
   config,
-  afterAuth,
 }: AuthCallbackParams) {
   try {
     const callbackResponse = await api.auth.callback({
@@ -26,6 +24,10 @@ export async function authCallback({
       rawRequest: req,
       rawResponse: res,
     });
+    res.locals.shopify = {
+      ...res.locals.shopify,
+      session: callbackResponse.session,
+    };
 
     await config.logger.debug('Callback is valid, storing session', {
       shop: callbackResponse.session.shop,
@@ -37,14 +39,7 @@ export async function authCallback({
       shop: callbackResponse.session.shop,
     });
 
-    await afterAuthActions(
-      req,
-      res,
-      config,
-      api,
-      callbackResponse.session,
-      afterAuth,
-    );
+    await afterAuthActions(req, res, config, api, callbackResponse.session);
   } catch (error) {
     await config.logger.error(`Failed to complete OAuth with error: ${error}`);
 
@@ -53,31 +48,13 @@ export async function authCallback({
 }
 
 async function afterAuthActions(
-  req: Request,
-  res: Response,
+  _req: Request,
+  _res: Response,
   config: AppConfigInterface,
   api: Shopify,
   session: Session,
-  afterAuth?: AfterAuthCallback,
 ) {
   await registerWebhooks(config, api, session);
-
-  if (afterAuth) {
-    await config.logger.debug('Calling afterAuth callback', {
-      shop: session.shop,
-    });
-
-    await afterAuth({
-      req,
-      res,
-      session,
-    });
-  }
-
-  // We redirect to the host-based app URL ONLY if the afterAuth callback didn't send a response already
-  if (!res.headersSent) {
-    await redirectToHost({req, res, api, config, session});
-  }
 }
 
 async function registerWebhooks(
@@ -129,7 +106,7 @@ async function handleCallbackError(
       res.send(error.message);
       break;
     case error instanceof CookieNotFound:
-      await authBegin({req, res, api, config});
+      await redirectToAuth({req, res, api, config});
       break;
     default:
       res.status(500);

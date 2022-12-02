@@ -1,5 +1,5 @@
 import {Request, Response} from 'express';
-import {Session, Shopify} from '@shopify/shopify-api';
+import {Shopify} from '@shopify/shopify-api';
 
 import {AppConfigInterface} from './config-types';
 
@@ -11,14 +11,6 @@ export interface ApiAndConfigParams {
 export interface RedirectToAuthParams extends ApiAndConfigParams {
   req: Request;
   res: Response;
-}
-
-export interface RedirectToHostParams {
-  req: Request;
-  res: Response;
-  api: Shopify;
-  config: AppConfigInterface;
-  session: Session;
 }
 
 export interface ReturnTopLevelRedirectionParams {

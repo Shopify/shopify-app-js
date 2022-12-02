@@ -54,7 +54,15 @@ describe('OAuth integration tests', () => {
         ],
       };
 
-      const afterAuth = jest.fn();
+      const afterAuth = jest.fn().mockImplementation(async (req, res, next) => {
+        const firstSession = (
+          await shopify.config.sessionStorage.findSessionsByShop!(TEST_SHOP)
+        )[0];
+
+        expect(res.locals.shopify.session).toEqual(firstSession);
+
+        next();
+      });
       const installedMock = jest.fn((_req, res) => res.send('ok'));
       const authedMock = jest.fn((_req, res) => res.send('ok'));
 
@@ -70,6 +78,10 @@ describe('OAuth integration tests', () => {
       const shopify = shopifyApp({
         ...testConfig,
         api: apiConfig,
+        auth: {
+          path: '/test/auth',
+          callbackPath: '/test/auth/callback',
+        },
         useOnlineTokens: config.online,
       });
 
@@ -80,7 +92,14 @@ describe('OAuth integration tests', () => {
         res.setTimeout(100);
         next();
       });
-      app.use('/test', shopify.app({afterAuth, webhookHandlers}));
+      app.get('/test/auth', shopify.auth.begin());
+      app.get(
+        '/test/auth/callback',
+        shopify.auth.callback(),
+        afterAuth,
+        shopify.redirectToShopifyOrAppRoot(),
+      );
+      app.use('/test', shopify.app({webhookHandlers}));
       app.get('/installed', shopify.ensureInstalledOnShop(), installedMock);
       app.get('/authed', shopify.validateAuthenticatedSession(), authedMock);
 
@@ -180,15 +199,7 @@ async function completeOAuth(
     });
   }
 
-  expect(afterAuth).toHaveBeenCalledWith(
-    expect.objectContaining({
-      req: expect.anything(),
-      res: expect.anything(),
-      session: (
-        await shopify.config.sessionStorage.findSessionsByShop!(TEST_SHOP)
-      )[0],
-    }),
-  );
+  expect(afterAuth).toHaveBeenCalled();
 }
 
 // Mock all necessary responses from Shopify for the OAuth process
