@@ -10,28 +10,23 @@ import {SessionStorage} from '@shopify/shopify-app-session-storage';
 import {MemorySessionStorage} from '@shopify/shopify-app-session-storage-memory';
 
 import {SHOPIFY_EXPRESS_LIBRARY_VERSION} from './version';
-import {
-  AppConfigInterface,
-  AppConfigParams,
-  AuthConfigInterface,
-  WebhooksConfigInterface,
-} from './config-types';
+import {AppConfigInterface, AppConfigParams} from './config-types';
 import {
   createValidateAuthenticatedSession,
   createCspHeaders,
   createEnsureInstalled,
   redirectToShopifyOrAppRoot,
 } from './middlewares/index';
-import {createShopifyApp} from './shopify-app/index';
 import {AuthMiddleware} from './auth/types';
 import {auth} from './auth/index';
+import {ProcessWebhooksMiddleware} from './webhooks/types';
+import {processWebhooks} from './webhooks/index';
 import {
   ValidateAuthenticatedSessionMiddleware,
   CspHeadersMiddleware,
   EnsureInstalledMiddleware,
   RedirectToShopifyOrAppRootMiddleware,
 } from './middlewares/types';
-import {AppMiddleware} from './shopify-app/types';
 
 export * from './types';
 export * from './auth/types';
@@ -44,8 +39,8 @@ export interface ShopifyApp<
 > {
   config: AppConfigInterface<S>;
   api: Shopify<R>;
-  app: AppMiddleware;
   auth: AuthMiddleware;
+  processWebhooks: ProcessWebhooksMiddleware;
   validateAuthenticatedSession: ValidateAuthenticatedSessionMiddleware;
   cspHeaders: CspHeadersMiddleware;
   ensureInstalledOnShop: EnsureInstalledMiddleware;
@@ -55,7 +50,7 @@ export interface ShopifyApp<
 export function shopifyApp<
   R extends ShopifyRestResources = any,
   S extends SessionStorage = SessionStorage,
->(config: AppConfigParams<R, S> = {}): ShopifyApp<R, S> {
+>(config: AppConfigParams<R, S>): ShopifyApp<R, S> {
   const {api: apiConfig, ...appConfig} = config;
 
   const api = shopifyApi<R>(apiConfigWithDefaults<R>(apiConfig ?? {}));
@@ -64,8 +59,8 @@ export function shopifyApp<
   return {
     config: validatedConfig,
     api,
-    app: createShopifyApp({api, config: validatedConfig}),
     auth: auth({api, config: validatedConfig}),
+    processWebhooks: processWebhooks({api, config: validatedConfig}),
     validateAuthenticatedSession: createValidateAuthenticatedSession({
       api,
       config: validatedConfig,
@@ -118,17 +113,6 @@ function validateAppConfig<
 ): AppConfigInterface<S> {
   const {sessionStorage, ...configWithoutSessionStorage} = config;
 
-  const auth: AuthConfigInterface = {
-    path: '/auth',
-    callbackPath: '/auth/callback',
-    ...config.auth,
-  };
-
-  const webhooks: WebhooksConfigInterface = {
-    path: '/webhooks',
-    ...config.webhooks,
-  };
-
   return {
     // We override the API package's logger to add the right package context by default (and make the call simpler)
     logger: overrideLoggerPackage(api.logger),
@@ -136,8 +120,8 @@ function validateAppConfig<
     exitIframePath: '/exitiframe',
     sessionStorage: sessionStorage ?? new MemorySessionStorage(),
     ...configWithoutSessionStorage,
-    auth,
-    webhooks,
+    auth: config.auth,
+    webhooks: config.webhooks,
   };
 }
 

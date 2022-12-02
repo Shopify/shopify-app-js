@@ -38,7 +38,10 @@ describe('shopifyApp', () => {
     process.env.HOST = 'https://envHost';
     process.env.SHOP_CUSTOM_DOMAIN = '*.envCustomDomain';
 
-    const shopify = shopifyApp();
+    const shopify = shopifyApp({
+      auth: testConfig.auth,
+      webhooks: testConfig.webhooks,
+    });
 
     expect(shopify).toBeDefined();
     expect(shopify.api.config.apiKey).toEqual('envKey');

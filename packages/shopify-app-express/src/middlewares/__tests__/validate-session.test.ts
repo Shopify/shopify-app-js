@@ -25,7 +25,6 @@ describe('validateAuthenticatedSession', () => {
       shopify.api.config.isEmbeddedApp = true;
 
       app = express();
-      app.use('/api', shopify.app());
       app.use('/test/*', shopify.validateAuthenticatedSession());
       app.get('/test/shop', async (req, res) => {
         res.json({data: {shop: {name: req.query.shop}}});
@@ -188,13 +187,6 @@ describe('validateAuthenticatedSession', () => {
       shopify.api.config.isEmbeddedApp = false;
 
       app = express();
-      app.get('/auth', shopify.auth.begin());
-      app.get(
-        '/auth/callback',
-        shopify.auth.callback(),
-        shopify.redirectToShopifyOrAppRoot(),
-      );
-      app.use('/api', shopify.app());
       app.use('/test/*', shopify.validateAuthenticatedSession());
       app.get('/test/shop', async (req, res) => {
         res.json({data: {shop: {name: req.query.shop}}});

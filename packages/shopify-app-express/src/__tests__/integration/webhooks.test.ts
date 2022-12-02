@@ -51,6 +51,8 @@ describe('webhook integration', () => {
         let app: Express;
 
         beforeEach(() => {
+          shopify.config.webhooks.path = '/test/webhooks';
+
           app = express();
 
           // Use a short timeout since everything here should be pretty quick. If you see a `socket hang up` error,
@@ -66,9 +68,11 @@ describe('webhook integration', () => {
             shopify.auth.callback(),
             shopify.redirectToShopifyOrAppRoot(),
           );
-          app.use(
-            '/test',
-            shopify.app({webhookHandlers: {APP_UNINSTALLED: config.handler}}),
+          app.post(
+            '/test/webhooks',
+            shopify.processWebhooks({
+              webhookHandlers: {APP_UNINSTALLED: config.handler},
+            }),
           );
         });
 

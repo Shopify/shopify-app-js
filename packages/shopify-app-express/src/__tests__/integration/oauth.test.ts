@@ -48,7 +48,7 @@ describe('OAuth integration tests', () => {
     it(`test ${JSON.stringify(config)}`, async () => {
       const webhookHandlers: WebhookHandlersParam = {
         TEST_TOPIC: [
-          {...HTTP_HANDLER},
+          {...HTTP_HANDLER, callbackUrl: '/test/webhooks'},
           {...EVENT_BRIDGE_HANDLER},
           {...PUBSUB_HANDLER},
         ],
@@ -82,6 +82,9 @@ describe('OAuth integration tests', () => {
           path: '/test/auth',
           callbackPath: '/test/auth/callback',
         },
+        webhooks: {
+          path: '/test/webhooks',
+        },
         useOnlineTokens: config.online,
       });
 
@@ -99,7 +102,7 @@ describe('OAuth integration tests', () => {
         afterAuth,
         shopify.redirectToShopifyOrAppRoot(),
       );
-      app.use('/test', shopify.app({webhookHandlers}));
+      app.post('/test/webhooks', shopify.processWebhooks({webhookHandlers}));
       app.get('/installed', shopify.ensureInstalledOnShop(), installedMock);
       app.get('/authed', shopify.validateAuthenticatedSession(), authedMock);
 
