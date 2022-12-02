@@ -47,11 +47,27 @@ const shopify = shopifyApp({
     hostScheme: 'http',
     hostName: `localhost:${PORT}`,
   },
+  auth: {
+    path: '/api/auth',
+    callbackPath: '/api/auth/callback',
+  },
+  webhooks: {
+    path: '/api/webhooks',
+  },
 });
 
 const app = express();
 
-app.use('/api', shopify.app());
+app.get(shopify.config.auth.path, shopify.auth.begin());
+app.get(
+  shopify.config.auth.callbackPath,
+  shopify.auth.callback(),
+  shopify.redirectToShopifyOrAppRoot(),
+);
+app.post(
+  shopify.config.webhooks.path,
+  shopify.processWebhooks({webhookHandlers}),
+);
 
 app.get('/', shopify.ensureInstalledOnShop(), (req, res) => {
   res.send('Hello world!');
