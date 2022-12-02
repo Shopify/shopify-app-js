@@ -1,6 +1,6 @@
 {
   "name": "@shopify/shopify-app-session-storage-mysql",
-  "version": "1.0.0-rc.0",
+  "version": "1.0.0-rc.1",
   "description": "Shopify App Session Storage for MySQL",
   "repository": {
     "type": "git",

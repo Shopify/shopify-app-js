@@ -1,5 +1,11 @@
 # @shopify/shopify-app-session-storage-postgresql
 
+## 1.0.0-rc.1
+
+### Minor Changes
+
+- 674fe8f: - Fix session table query to be on the current database
+
 ## 1.0.0-rc.0
 
 ### Major Changes

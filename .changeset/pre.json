@@ -13,7 +13,12 @@
     "@shopify/shopify-app-session-storage-test-utils": "0.0.1-rc.0"
   },
   "changesets": [
+    "afraid-ears-exist",
+    "famous-kids-smell",
+    "friendly-actors-work",
+    "light-shirts-doubt",
     "orange-cooks-compare",
+    "polite-walls-design",
     "stale-maps-wave"
   ]
 }
