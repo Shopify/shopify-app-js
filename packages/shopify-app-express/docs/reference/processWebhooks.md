@@ -2,11 +2,11 @@
 
 This function creates an Express middleware that processes webhook requests from Shopify, based on the given handlers.
 
-It mounts the handlers onto the `shopify` object, and they're registered in `shopify.auth.callback` after we have an access token to call the API.
+It mounts the handlers onto the `shopify` object, and they're registered in `shopify.auth.callback` after we receive an access token to call the API.
 
 This middleware will always respond to Shopify, even if there was an error while handling the webhook.
 
-**Important**: Shopify always fires POST requests for webhooks.
+:exclamation: **Important**: Shopify always fires POST requests for webhooks.
 Make sure you use this middleware on a `.post()` route.
 
 ## Parameters
