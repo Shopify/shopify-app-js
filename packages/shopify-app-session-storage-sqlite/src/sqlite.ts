@@ -57,9 +57,7 @@ export class SQLiteSessionStorage implements SessionStorage {
     const rows = await this.query(query, [id]);
     if (!Array.isArray(rows) || rows?.length !== 1) return undefined;
     const rawResult = rows[0] as any;
-    // convert seconds to milliseconds prior to creating Session object
-    if (rawResult.expires) rawResult.expires *= 1000;
-    return Session.fromPropertyArray(Object.entries(rawResult));
+    return this.databaseRowToSession(rawResult);
   }
 
   public async deleteSession(id: string): Promise<boolean> {
@@ -92,9 +90,7 @@ export class SQLiteSessionStorage implements SessionStorage {
     if (!Array.isArray(rows) || rows?.length === 0) return [];
 
     const results: Session[] = rows.map((row: any) => {
-      // convert seconds to milliseconds prior to creating Session object
-      if (row.expires) row.expires *= 1000;
-      return Session.fromPropertyArray(Object.entries(row));
+      return this.databaseRowToSession(row);
     });
     return results;
   }
@@ -139,5 +135,11 @@ export class SQLiteSessionStorage implements SessionStorage {
         resolve(result);
       });
     });
+  }
+
+  private databaseRowToSession(row: any): Session {
+    // convert seconds to milliseconds prior to creating Session object
+    if (row.expires) row.expires *= 1000;
+    return Session.fromPropertyArray(Object.entries(row));
   }
 }
