@@ -7,14 +7,14 @@ import {AppInstallations} from '../app-installations';
 
 import {EnsureInstalledMiddleware} from './types';
 import {addCSPHeader} from './csp-headers';
-import {createValidateAuthenticatedSession} from './validate-authenticated-session';
+import {validateAuthenticatedSession} from './validate-authenticated-session';
 
-interface CreateEnsureInstalledParams extends ApiAndConfigParams {}
+interface EnsureInstalledParams extends ApiAndConfigParams {}
 
-export function createEnsureInstalled({
+export function ensureInstalled({
   api,
   config,
-}: CreateEnsureInstalledParams): EnsureInstalledMiddleware {
+}: EnsureInstalledParams): EnsureInstalledMiddleware {
   const appInstallations = new AppInstallations(config);
 
   return function ensureInstalledOnShop() {
@@ -26,11 +26,7 @@ export function createEnsureInstalled({
           'ensureInstalledOnShop() should only be used in embedded apps; calling validateAuthenticatedSession() instead',
         );
 
-        return createValidateAuthenticatedSession({api, config})()(
-          req,
-          res,
-          next,
-        );
+        return validateAuthenticatedSession({api, config})()(req, res, next);
       }
 
       if (typeof req.query.shop !== 'string') {
@@ -86,7 +82,7 @@ export function createEnsureInstalled({
   };
 }
 
-export function createDeleteAppInstallationHandler(
+export function deleteAppInstallationHandler(
   appInstallations: AppInstallations,
   config: AppConfigInterface,
 ) {

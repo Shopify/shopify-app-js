@@ -12,9 +12,9 @@ import {MemorySessionStorage} from '@shopify/shopify-app-session-storage-memory'
 import {SHOPIFY_EXPRESS_LIBRARY_VERSION} from './version';
 import {AppConfigInterface, AppConfigParams} from './config-types';
 import {
-  createValidateAuthenticatedSession,
-  createCspHeaders,
-  createEnsureInstalled,
+  validateAuthenticatedSession,
+  cspHeaders,
+  ensureInstalled,
   redirectToShopifyOrAppRoot,
 } from './middlewares/index';
 import {AuthMiddleware} from './auth/types';
@@ -61,12 +61,12 @@ export function shopifyApp<
     api,
     auth: auth({api, config: validatedConfig}),
     processWebhooks: processWebhooks({api, config: validatedConfig}),
-    validateAuthenticatedSession: createValidateAuthenticatedSession({
+    validateAuthenticatedSession: validateAuthenticatedSession({
       api,
       config: validatedConfig,
     }),
-    cspHeaders: createCspHeaders({api}),
-    ensureInstalledOnShop: createEnsureInstalled({
+    cspHeaders: cspHeaders({api}),
+    ensureInstalledOnShop: ensureInstalled({
       api,
       config: validatedConfig,
     }),
