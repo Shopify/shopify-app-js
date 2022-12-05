@@ -45,7 +45,14 @@ export class MySQLSessionStorage implements SessionStorage {
   public async storeSession(session: Session): Promise<boolean> {
     await this.ready;
 
-    const entries = session.toPropertyArray();
+    // Note milliseconds to seconds conversion for `expires` property
+    const entries = session
+      .toPropertyArray()
+      .map(([key, value]) =>
+        key === 'expires'
+          ? [key, Math.floor((value as number) / 1000)]
+          : [key, value],
+      );
     const query = `
       REPLACE INTO ${this.options.sessionTableName}
       (${entries.map(([key]) => key).join(', ')})
@@ -67,6 +74,8 @@ export class MySQLSessionStorage implements SessionStorage {
     const [rows] = await this.query(query, [id]);
     if (!Array.isArray(rows) || rows?.length !== 1) return undefined;
     const rawResult = rows[0] as any;
+    // convert seconds to milliseconds prior to creating Session object
+    if (rawResult.expires) rawResult.expires *= 1000;
     return Session.fromPropertyArray(Object.entries(rawResult));
   }
 
@@ -100,8 +109,10 @@ export class MySQLSessionStorage implements SessionStorage {
     const [rows] = await this.query(query, [shop]);
     if (!Array.isArray(rows) || rows?.length === 0) return [];
 
-    const results: Session[] = rows.map((row) => {
-      return Session.fromPropertyArray(Object.entries(row as any));
+    const results: Session[] = rows.map((row: any) => {
+      // convert seconds to milliseconds prior to creating Session object
+      if (row.expires) row.expires *= 1000;
+      return Session.fromPropertyArray(Object.entries(row));
     });
     return results;
   }
