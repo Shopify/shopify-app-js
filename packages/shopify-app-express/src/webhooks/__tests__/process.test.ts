@@ -5,6 +5,7 @@ import {DeliveryMethod, LogSeverity} from '@shopify/shopify-api';
 import {
   shopify,
   TEST_SHOP,
+  TEST_WEBHOOK_ID,
   validWebhookHeaders,
 } from '../../__tests__/test-helper';
 import {process} from '../process';
@@ -44,7 +45,12 @@ describe('process', () => {
       .send(body)
       .expect(200);
 
-    expect(mockHandler).toHaveBeenCalledWith('TEST_TOPIC', TEST_SHOP, body);
+    expect(mockHandler).toHaveBeenCalledWith(
+      'TEST_TOPIC',
+      TEST_SHOP,
+      body,
+      TEST_WEBHOOK_ID,
+    );
 
     expect(shopify.api.config.logger.log as jest.Mock).toHaveBeenCalledWith(
       LogSeverity.Info,
@@ -114,7 +120,12 @@ describe('process', () => {
       .send(body)
       .expect(500);
 
-    expect(mockHandler).toHaveBeenCalledWith('TEST_TOPIC', TEST_SHOP, body);
+    expect(mockHandler).toHaveBeenCalledWith(
+      'TEST_TOPIC',
+      TEST_SHOP,
+      body,
+      TEST_WEBHOOK_ID,
+    );
     expect(shopify.api.config.logger.log as jest.Mock).toHaveBeenCalledWith(
       LogSeverity.Error,
       expect.stringContaining('test-error'),

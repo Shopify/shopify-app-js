@@ -8,6 +8,7 @@ import {
   mockShopifyResponses,
   shopify,
   TEST_SHOP,
+  TEST_WEBHOOK_ID,
   validWebhookHeaders,
 } from '../test-helper';
 
@@ -146,6 +147,7 @@ describe('webhook integration', () => {
               'APP_UNINSTALLED',
               TEST_SHOP,
               '{}',
+              TEST_WEBHOOK_ID,
             );
           }
         });

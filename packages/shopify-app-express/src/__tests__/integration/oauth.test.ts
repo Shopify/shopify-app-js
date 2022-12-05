@@ -4,7 +4,6 @@ import jwt from 'jsonwebtoken';
 import {ConfigParams, LogSeverity} from '@shopify/shopify-api';
 
 import {shopifyApp} from '../..';
-import {ShopifyApp} from '../../types';
 import {WebhookHandlersParam} from '../../webhooks/types';
 import {AppInstallations} from '../../app-installations';
 import {
@@ -15,6 +14,7 @@ import {
   mockShopifyResponses,
   testConfig,
   TEST_SHOP,
+  TEST_WEBHOOK_ID,
   validWebhookHeaders,
 } from '../test-helper';
 
@@ -118,6 +118,7 @@ describe('OAuth integration tests', () => {
         'TEST_TOPIC',
         TEST_SHOP,
         body,
+        TEST_WEBHOOK_ID,
       );
 
       await installedRequest(app, config, installedMock);

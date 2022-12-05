@@ -22,6 +22,7 @@ export let shopify: ShopifyApp;
 export const SHOPIFY_HOST = 'totally-real-host';
 export const BASE64_HOST = Buffer.from(SHOPIFY_HOST).toString('base64');
 export const TEST_SHOP = 'test-shop.myshopify.io';
+export const TEST_WEBHOOK_ID = '1234567890';
 
 let currentCall: number;
 beforeEach(() => {
@@ -164,6 +165,7 @@ export function validWebhookHeaders(
     'X-Shopify-Topic': topic,
     'X-Shopify-Shop-Domain': TEST_SHOP,
     'X-Shopify-Hmac-Sha256': hmac,
+    'X-Shopify-Webhook-Id': TEST_WEBHOOK_ID,
   };
 }
 
