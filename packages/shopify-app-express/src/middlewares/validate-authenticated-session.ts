@@ -7,12 +7,12 @@ import {ApiAndConfigParams} from '../types';
 
 import {ValidateAuthenticatedSessionMiddleware} from './types';
 
-interface createValidateAuthenticatedSessionParams extends ApiAndConfigParams {}
+interface validateAuthenticatedSessionParams extends ApiAndConfigParams {}
 
-export function createValidateAuthenticatedSession({
+export function validateAuthenticatedSession({
   api,
   config,
-}: createValidateAuthenticatedSessionParams): ValidateAuthenticatedSessionMiddleware {
+}: validateAuthenticatedSessionParams): ValidateAuthenticatedSessionMiddleware {
   return function validateAuthenticatedSession() {
     return async (req: Request, res: Response, next: NextFunction) => {
       config.logger.info('Running validateAuthenticatedSession');

@@ -4,7 +4,7 @@ import {AddHandlersParams, DeliveryMethod, Shopify} from '@shopify/shopify-api';
 import {AppConfigInterface} from '../config-types';
 import {ApiAndConfigParams} from '../types';
 import {AppInstallations} from '../app-installations';
-import {createDeleteAppInstallationHandler} from '../middlewares';
+import {deleteAppInstallationHandler} from '../middlewares';
 
 import {
   ProcessWebhooksMiddleware,
@@ -48,7 +48,7 @@ function mountWebhooks(
     APP_UNINSTALLED: {
       deliveryMethod: DeliveryMethod.Http,
       callbackUrl: config.webhooks.path,
-      callback: createDeleteAppInstallationHandler(appInstallations, config),
+      callback: deleteAppInstallationHandler(appInstallations, config),
     },
   });
 }
