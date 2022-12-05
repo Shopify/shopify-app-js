@@ -86,10 +86,11 @@ export function deleteAppInstallationHandler(
   appInstallations: AppInstallations,
   config: AppConfigInterface,
 ) {
-  return async function deleteAppInstallationHandler(
+  return async function (
     _topic: string,
     shop: string,
     _body: any,
+    _webhookId: string,
   ) {
     await config.logger.debug('Deleting shop sessions', {shop});
 

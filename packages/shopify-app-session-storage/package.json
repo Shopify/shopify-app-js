@@ -31,7 +31,7 @@
     "session storage"
   ],
   "dependencies": {
-    "@shopify/shopify-api": "^6.0.0-rc9",
+    "@shopify/shopify-api": "6.0.0-rc10",
     "tslib": "^2.4.0"
   },
   "devDependencies": {
