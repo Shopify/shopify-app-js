@@ -1,6 +1,11 @@
-import {LogSeverity, ShopifyError} from '@shopify/shopify-api';
+import {
+  FeatureDeprecatedError,
+  LogSeverity,
+  ShopifyError,
+} from '@shopify/shopify-api';
 
 import {shopifyApp} from '../index';
+import {SHOPIFY_EXPRESS_LIBRARY_VERSION} from '../version';
 
 import {testConfig} from './test-helper';
 
@@ -69,5 +74,24 @@ describe('shopifyApp', () => {
       LogSeverity.Info,
       '[shopify-app/INFO] test | {extra: context}',
     );
+  });
+
+  it('properly logs deprecation messages', async () => {
+    const shopify = shopifyApp(testConfig);
+
+    await shopify.config.logger.deprecated('9999.0.0', 'test');
+
+    expect(shopify.api.config.logger.log).toHaveBeenCalledWith(
+      LogSeverity.Warning,
+      '[shopify-app/WARNING] [Deprecated | 9999.0.0] test',
+    );
+  });
+
+  it('throws when deprecation version is reached', async () => {
+    const shopify = shopifyApp(testConfig);
+
+    await expect(
+      shopify.config.logger.deprecated(SHOPIFY_EXPRESS_LIBRARY_VERSION, 'test'),
+    ).rejects.toThrow(FeatureDeprecatedError);
   });
 });

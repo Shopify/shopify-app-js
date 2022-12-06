@@ -48,7 +48,14 @@ export class PostgreSQLSessionStorage implements SessionStorage {
   public async storeSession(session: Session): Promise<boolean> {
     await this.ready;
 
-    const entries = session.toPropertyArray();
+    // Note milliseconds to seconds conversion for `expires` property
+    const entries = session
+      .toPropertyArray()
+      .map(([key, value]) =>
+        key === 'expires'
+          ? [key, Math.floor((value as number) / 1000)]
+          : [key, value],
+      );
     const query = `
       INSERT INTO ${this.options.sessionTableName}
       (${entries.map(([key]) => key).join(', ')})
@@ -73,7 +80,7 @@ export class PostgreSQLSessionStorage implements SessionStorage {
     const rows = await this.query(query, [id]);
     if (!Array.isArray(rows) || rows?.length !== 1) return undefined;
     const rawResult = rows[0] as any;
-    return Session.fromPropertyArray(Object.entries(rawResult));
+    return this.databaseRowToSession(rawResult);
   }
 
   public async deleteSession(id: string): Promise<boolean> {
@@ -106,8 +113,8 @@ export class PostgreSQLSessionStorage implements SessionStorage {
     const rows = await this.query(query, [shop]);
     if (!Array.isArray(rows) || rows?.length === 0) return [];
 
-    const results: Session[] = rows.map((row) => {
-      return Session.fromPropertyArray(Object.entries(row as any));
+    const results: Session[] = rows.map((row: any) => {
+      return this.databaseRowToSession(row);
     });
     return results;
   }
@@ -162,5 +169,11 @@ export class PostgreSQLSessionStorage implements SessionStorage {
   private async query(sql: string, params: any[] = []): Promise<any> {
     const result = await this.client.query(sql, params);
     return result.rows;
+  }
+
+  private databaseRowToSession(row: any): Session {
+    // convert seconds to milliseconds prior to creating Session object
+    if (row.expires) row.expires *= 1000;
+    return Session.fromPropertyArray(Object.entries(row));
   }
 }

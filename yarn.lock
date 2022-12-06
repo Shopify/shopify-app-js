@@ -2809,10 +2809,10 @@
   resolved "https://registry.yarnpkg.com/@shopify/prettier-config/-/prettier-config-1.1.2.tgz#612f87c0cd1196e8b43c85425e587d0fa7f1172d"
   integrity sha512-5ugCL9sPGzmOaZjeRGaWUWhHgAbemrS6z+R7v6gwiD+BiqSeoFhIY+imLpfdFCVpuOGalpHeCv6o3gv++EHs0A==
 
-"@shopify/shopify-api@6.0.0-rc10":
-  version "6.0.0-rc10"
-  resolved "https://registry.yarnpkg.com/@shopify/shopify-api/-/shopify-api-6.0.0-rc10.tgz#6b3de51619d8745a9384320889865326db51a641"
-  integrity sha512-YXU6DWwTA8gwteX1TL09OBFSrgSqgoee0v81Ff3RPJiGilnPrkj6k2ZcoYr/qlseFHyQSEE613d2Lm6Us/5v6w==
+"@shopify/shopify-api@6.0.0-rc11":
+  version "6.0.0-rc11"
+  resolved "https://registry.yarnpkg.com/@shopify/shopify-api/-/shopify-api-6.0.0-rc11.tgz#8678c34bce22b14f9377398c78a5691eb648a0f7"
+  integrity sha512-BMVglKxY1I6HFI1/CrWMjwYg0njn1b1ieCqZ/XJI+c0smCFTHK4I5fM9RAqIE8eJGYcM1Z0nfmEN5i7fAqEDJQ==
   dependencies:
     "@shopify/network" "^1.5.1"
     "@types/node-fetch" "^2.5.7"
