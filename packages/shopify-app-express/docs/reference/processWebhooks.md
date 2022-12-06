@@ -15,7 +15,7 @@ Make sure you use this middleware on a `.post()` route.
 
 `{[topic: string]: WebhookHandler | WebhookHandler[]}`
 
-Defines the webhooks your app will listen to, and how to handle them. See [the `@shopify/shopify-api` documentation](https://github.com/Shopify/shopify-api-node/blob/main/docs/usage/webhooks.md) for the allowed values.
+Defines the webhooks your app will listen to, and how to handle them. See [the `@shopify/shopify-api` documentation](https://github.com/Shopify/shopify-api-js/blob/main/docs/usage/webhooks.md) for the allowed values.
 
 > **Note**: for HTTP webhook handlers, the `callbackUrl` value must match the route where you use this middleware.
 
