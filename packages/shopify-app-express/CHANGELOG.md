@@ -1,5 +1,16 @@
 # Changelog
 
+## 1.0.0
+
+### Patch Changes
+
+- 4a5d06e: Replacing sub-app endpoints with middlewares
+- 3a12b14: Add webhookId to app_uninstalled handler, to align with latest api library rc version
+- 62c2c31: Test use of changesets for release candidates
+- Updated dependencies [62c2c31]
+  - @shopify/shopify-app-session-storage@1.0.0
+  - @shopify/shopify-app-session-storage-memory@1.0.0
+
 ## 1.0.0-rc.7
 
 ### Patch Changes
