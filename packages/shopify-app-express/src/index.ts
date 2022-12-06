@@ -1,3 +1,4 @@
+import semver from 'semver';
 import '@shopify/shopify-api/adapters/node';
 import {
   shopifyApi,
@@ -5,6 +6,7 @@ import {
   ShopifyRestResources,
   LATEST_API_VERSION,
   Shopify,
+  FeatureDeprecatedError,
 } from '@shopify/shopify-api';
 import {SessionStorage} from '@shopify/shopify-app-session-storage';
 import {MemorySessionStorage} from '@shopify/shopify-app-session-storage-memory';
@@ -128,16 +130,34 @@ function validateAppConfig<
 function overrideLoggerPackage(logger: Shopify['logger']): Shopify['logger'] {
   const baseContext = {package: 'shopify-app'};
 
+  const warningFunction: Shopify['logger']['warning'] = async (
+    message,
+    context = {},
+  ) => logger.warning(message, {...baseContext, ...context});
+
   return {
+    ...logger,
     log: async (severity, message, context = {}) =>
       logger.log(severity, message, {...baseContext, ...context}),
     debug: async (message, context = {}) =>
       logger.debug(message, {...baseContext, ...context}),
     info: async (message, context = {}) =>
       logger.info(message, {...baseContext, ...context}),
-    warning: async (message, context = {}) =>
-      logger.warning(message, {...baseContext, ...context}),
+    warning: warningFunction,
     error: async (message, context = {}) =>
       logger.error(message, {...baseContext, ...context}),
+    deprecated: deprecated(warningFunction),
+  };
+}
+
+function deprecated(warningFunction: Shopify['logger']['warning']) {
+  return async function (version: string, message: string): Promise<void> {
+    if (semver.gte(SHOPIFY_EXPRESS_LIBRARY_VERSION, version)) {
+      throw new FeatureDeprecatedError(
+        `Feature was deprecated in version ${version}`,
+      );
+    }
+
+    return warningFunction(`[Deprecated | ${version}] ${message}`);
   };
 }
