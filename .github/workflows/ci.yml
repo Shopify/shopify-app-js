@@ -13,7 +13,8 @@ jobs:
         with:
           node-version: ${{ matrix.version }}
       - name: Install
-        run: yarn install
+        # TODO remove the --ignore-engines flag when node 14 support is dropped
+        run: yarn install --ignore-engines
       - name: Run tests
         run: yarn test
       - name: Run linting
