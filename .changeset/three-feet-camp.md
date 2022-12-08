@@ -2,4 +2,4 @@
 '@shopify/shopify-app-session-storage-kv': major
 ---
 
-Adding session storage package for Cloudflare KV
+Initial public release of @shopify/shopify-app-session-storage-kv
