@@ -2985,9 +2985,9 @@
   integrity sha512-5ugCL9sPGzmOaZjeRGaWUWhHgAbemrS6z+R7v6gwiD+BiqSeoFhIY+imLpfdFCVpuOGalpHeCv6o3gv++EHs0A==
 
 "@shopify/shopify-api@^6.0.0":
-  version "6.0.0"
-  resolved "https://registry.yarnpkg.com/@shopify/shopify-api/-/shopify-api-6.0.0.tgz#bd1e9b44c60cc79e25922bc19b6d5199b48a0d82"
-  integrity sha512-b8zj9uQIUACgsP0k/zF2wykv3tVwBGdZz5h4BT/tYq60KMmukGrWy+rS3V0p7B5ddswlbJZvdncBRYiDthotkQ==
+  version "6.0.1"
+  resolved "https://registry.yarnpkg.com/@shopify/shopify-api/-/shopify-api-6.0.1.tgz#cc0b730cc0037db0f5f4fafd4fdb577b1e18295e"
+  integrity sha512-1suH2MUReEBY8N5nOFRvaih0qqMe1Lxs743dcaXjaclD/Ekn6jZtZWEHMdqrtK8QdDU3+Ms31E8XfzV7DDpH4w==
   dependencies:
     "@shopify/network" "^1.5.1"
     "@types/node-fetch" "^2.5.7"

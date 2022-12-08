@@ -17,44 +17,53 @@ export async function authCallback({
   res,
   api,
   config,
-}: AuthCallbackParams) {
+}: AuthCallbackParams): Promise<boolean> {
   try {
     const callbackResponse = await api.auth.callback({
-      isOnline: config.useOnlineTokens,
       rawRequest: req,
       rawResponse: res,
     });
+
+    await config.logger.debug('Callback is valid, storing session', {
+      shop: callbackResponse.session.shop,
+      isOnline: callbackResponse.session.isOnline,
+    });
+
+    await config.sessionStorage.storeSession(callbackResponse.session);
+
+    // If this is an offline OAuth process, register webhooks
+    if (!callbackResponse.session.isOnline) {
+      await registerWebhooks(config, api, callbackResponse.session);
+    }
+
+    // If we're completing an offline OAuth process, immediately kick off the online one
+    if (config.useOnlineTokens && !callbackResponse.session.isOnline) {
+      await config.logger.debug(
+        'Completing offline OAuth, redirecting to online OAuth',
+        {shop: callbackResponse.session.shop},
+      );
+
+      await redirectToAuth({req, res, api, config, isOnline: true});
+      return false;
+    }
+
     res.locals.shopify = {
       ...res.locals.shopify,
       session: callbackResponse.session,
     };
 
-    await config.logger.debug('Callback is valid, storing session', {
-      shop: callbackResponse.session.shop,
-    });
-
-    config.sessionStorage.storeSession(callbackResponse.session);
-
     await config.logger.debug('Completed OAuth callback', {
       shop: callbackResponse.session.shop,
     });
 
-    await afterAuthActions(req, res, config, api, callbackResponse.session);
+    return true;
   } catch (error) {
     await config.logger.error(`Failed to complete OAuth with error: ${error}`);
 
     await handleCallbackError(req, res, api, config, error);
   }
-}
 
-async function afterAuthActions(
-  _req: Request,
-  _res: Response,
-  config: AppConfigInterface,
-  api: Shopify,
-  session: Session,
-) {
-  await registerWebhooks(config, api, session);
+  return false;
 }
 
 async function registerWebhooks(

@@ -44,7 +44,8 @@ This must match the path of the route that uses `shopify.processWebhooks`.
 
 `boolean` | Defaults to `false`
 
-Whether the OAuth process should produce online access tokens. Learn more about [access modes in Shopify APIs](https://shopify.dev/apps/auth/oauth/access-modes).
+Whether the OAuth process should produce online access tokens as well as offline ones (created by default).
+Learn more about [access modes in Shopify APIs](https://shopify.dev/apps/auth/oauth/access-modes).
 
 ### exitIframePath
 
