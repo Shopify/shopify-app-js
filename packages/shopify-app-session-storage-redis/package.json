@@ -32,7 +32,7 @@
     "Redis"
   ],
   "dependencies": {
-    "@shopify/shopify-api": "^6.0.0",
+    "@shopify/shopify-api": "^6.0.1",
     "@shopify/shopify-app-session-storage": "^1.0.0",
     "redis": "^4.5.0",
     "tslib": "^2.4.0"
