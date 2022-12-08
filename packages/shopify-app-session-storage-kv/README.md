@@ -1,4 +1,4 @@
-## CloudFlare KV
+# Session Storage Adapter for CloudFlare KV
 
 CloudFlare's [KV] storage can be used on worker runtimes.
 Before using it, you'll need to set up a namespace for your sessions and pass in a `KVNamespace` object.
@@ -32,4 +32,4 @@ const shopify = shopifyApi({
 });
 ```
 
-If you prefer to use your own implementation of a session storage mechanism that is compatible with the `@shopify/shopify-app-express` package, see the [implementing session storage guide](../shopify-app-session-storage/implementing-session-storage.md).
+If you prefer to use your own implementation of a session storage mechanism that uses the `SessionStorage` interface, see the [implementing session storage guide](../shopify-app-session-storage/implementing-session-storage.md).
