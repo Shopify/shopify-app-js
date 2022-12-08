@@ -1,22 +1,9 @@
-import {Miniflare} from 'miniflare';
+import semver from 'semver';
 
-import {batteryOfTests} from '@shopify/shopify-app-session-storage-test-utils';
+// eslint-disable-next-line no-warning-comments
+// TODO Remove this file and rename kv.test.actual.ts to kv.test.ts when we drop support for Node 14
+if (semver.gte(process.version, '15.0.0')) {
+  require('./kv.test.actual');
+}
 
-import {KVSessionStorage} from '../kv';
-
-describe('KVSessionStorage', () => {
-  let storage: KVSessionStorage | undefined;
-  beforeAll(async () => {
-    const mf = new Miniflare({
-      scriptPath:
-        'packages/shopify-app-session-storage-kv/src/__tests__/kv-namespace-dummy-worker.ts',
-      kvNamespaces: ['KV_TEST_NAMESPACE'],
-    });
-
-    storage = new KVSessionStorage(
-      await mf.getKVNamespace('KV_TEST_NAMESPACE'),
-    );
-  });
-
-  batteryOfTests(async () => storage!);
-});
+test('dummy test', () => expect(1).toEqual(1));
