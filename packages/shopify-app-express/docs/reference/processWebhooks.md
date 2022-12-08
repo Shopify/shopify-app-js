@@ -36,7 +36,7 @@ const webhookHandlers = {
   CUSTOMERS_DATA_REQUEST: {
     deliveryMethod: DeliveryMethod.Http,
     callbackUrl: shopify.config.webhooks.path,
-    callback: async (topic, shop, body) => {
+    callback: async (topic, shop, body, webhookId, apiVersion) => {
       const payload = JSON.parse(body);
       // prepare customers data to send to customer
     },
@@ -52,7 +52,7 @@ const webhookHandlers = {
   SHOP_REDACT: {
     deliveryMethod: DeliveryMethod.Http,
     callbackUrl: shopify.config.webhooks.path,
-    callback: async (topic, shop, body) => {
+    callback: async (topic, shop, body, webhookId, apiVersion) => {
       const payload = JSON.parse(body);
       // remove shop data
     },

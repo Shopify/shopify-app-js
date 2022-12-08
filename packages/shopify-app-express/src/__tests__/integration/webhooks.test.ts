@@ -1,6 +1,6 @@
 import request from 'supertest';
 import express, {Express} from 'express';
-import {LogSeverity} from '@shopify/shopify-api';
+import {LATEST_API_VERSION, LogSeverity} from '@shopify/shopify-api';
 
 import {AppInstallations} from '../../app-installations';
 import {
@@ -148,6 +148,7 @@ describe('webhook integration', () => {
               TEST_SHOP,
               '{}',
               TEST_WEBHOOK_ID,
+              LATEST_API_VERSION,
             );
           }
         });

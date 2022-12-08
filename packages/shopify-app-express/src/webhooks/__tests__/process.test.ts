@@ -1,6 +1,10 @@
 import request from 'supertest';
 import express from 'express';
-import {DeliveryMethod, LogSeverity} from '@shopify/shopify-api';
+import {
+  DeliveryMethod,
+  LATEST_API_VERSION,
+  LogSeverity,
+} from '@shopify/shopify-api';
 
 import {
   shopify,
@@ -50,6 +54,7 @@ describe('process', () => {
       TEST_SHOP,
       body,
       TEST_WEBHOOK_ID,
+      LATEST_API_VERSION,
     );
 
     expect(shopify.api.config.logger.log as jest.Mock).toHaveBeenCalledWith(
@@ -125,6 +130,7 @@ describe('process', () => {
       TEST_SHOP,
       body,
       TEST_WEBHOOK_ID,
+      LATEST_API_VERSION,
     );
     expect(shopify.api.config.logger.log as jest.Mock).toHaveBeenCalledWith(
       LogSeverity.Error,
