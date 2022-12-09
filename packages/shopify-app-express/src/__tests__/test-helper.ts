@@ -176,6 +176,7 @@ export function validWebhookHeaders(
     'X-Shopify-Shop-Domain': TEST_SHOP,
     'X-Shopify-Hmac-Sha256': hmac,
     'X-Shopify-Webhook-Id': TEST_WEBHOOK_ID,
+    'X-Shopify-Api-Version': LATEST_API_VERSION,
   };
 }
 

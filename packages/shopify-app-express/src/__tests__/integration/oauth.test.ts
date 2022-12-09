@@ -1,7 +1,11 @@
 import request from 'supertest';
 import express, {Express} from 'express';
 import jwt from 'jsonwebtoken';
-import {ConfigParams, LogSeverity} from '@shopify/shopify-api';
+import {
+  ConfigParams,
+  LATEST_API_VERSION,
+  LogSeverity,
+} from '@shopify/shopify-api';
 
 import {shopifyApp} from '../..';
 import {WebhookHandlersParam} from '../../webhooks/types';
@@ -119,6 +123,7 @@ describe('OAuth integration tests', () => {
         TEST_SHOP,
         body,
         TEST_WEBHOOK_ID,
+        LATEST_API_VERSION,
       );
 
       await installedRequest(app, config, installedMock);
