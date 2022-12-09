@@ -9,13 +9,14 @@ export async function redirectToAuth({
   res,
   api,
   config,
+  isOnline = false,
 }: RedirectToAuthParams) {
   const shop = api.utils.sanitizeShop(req.query.shop as string);
   if (shop) {
     if (req.query.embedded === '1') {
       await clientSideRedirect(api, config, shop, req, res);
     } else {
-      await serverSideRedirect(api, config, shop, req, res);
+      await serverSideRedirect(api, config, shop, req, res, isOnline);
     }
   } else {
     await config.logger.error('No shop provided to redirect to auth');
@@ -62,16 +63,17 @@ async function serverSideRedirect(
   shop: string,
   req: Request,
   res: Response,
+  isOnline: boolean,
 ): Promise<void> {
   await config.logger.debug(
     `Redirecting to auth at ${config.auth.path}, with callback ${config.auth.callbackPath}`,
-    {shop, isOnline: config.useOnlineTokens},
+    {shop, isOnline},
   );
 
   await api.auth.begin({
     callbackPath: config.auth.callbackPath,
     shop,
-    isOnline: config.useOnlineTokens,
+    isOnline,
     rawRequest: req,
     rawResponse: res,
   });

@@ -11,6 +11,7 @@ export interface ApiAndConfigParams {
 export interface RedirectToAuthParams extends ApiAndConfigParams {
   req: Request;
   res: Response;
+  isOnline?: boolean;
 }
 
 export interface ReturnTopLevelRedirectionParams {

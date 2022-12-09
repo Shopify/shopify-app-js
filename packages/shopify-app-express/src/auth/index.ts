@@ -16,14 +16,16 @@ export function auth({api, config}: ApiAndConfigParams): AuthMiddleware {
       return async (req: Request, res: Response, next: NextFunction) => {
         await config.logger.info('Handling request to complete OAuth process');
 
-        await authCallback({
+        const oauthCompleted = await authCallback({
           req,
           res,
           api,
           config,
         });
 
-        next();
+        if (oauthCompleted) {
+          next();
+        }
       };
     },
   };
