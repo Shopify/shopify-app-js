@@ -39,7 +39,7 @@ export async function authCallback({
     // If we're completing an offline OAuth process, immediately kick off the online one
     if (config.useOnlineTokens && !callbackResponse.session.isOnline) {
       await config.logger.debug(
-        'Completing offline OAuth, redirecting to online OAuth',
+        'Completing offline token OAuth, redirecting to online token OAuth',
         {shop: callbackResponse.session.shop},
       );
 
@@ -54,6 +54,7 @@ export async function authCallback({
 
     await config.logger.debug('Completed OAuth callback', {
       shop: callbackResponse.session.shop,
+      isOnline: callbackResponse.session.isOnline,
     });
 
     return true;
