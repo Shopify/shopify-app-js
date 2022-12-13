@@ -140,7 +140,7 @@ export class PostgreSQLSessionStorage implements SessionStorage {
 
     // Allow multiple apps to be on the same host with separate DB and querying the right
     // DB for the session table exisitence
-    const [rows] = await this.query(query, [
+    const rows = await this.query(query, [
       this.options.sessionTableName,
       this.client.database,
     ]);
