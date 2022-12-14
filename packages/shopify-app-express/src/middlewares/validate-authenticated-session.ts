@@ -1,4 +1,4 @@
-import {HttpResponseError, Shopify, Session} from '@shopify/shopify-api';
+import {Shopify, Session} from '@shopify/shopify-api';
 import {Request, Response, NextFunction} from 'express';
 
 import {redirectToAuth} from '../redirect-to-auth';
@@ -6,13 +6,14 @@ import {returnTopLevelRedirection} from '../return-top-level-redirection';
 import {ApiAndConfigParams} from '../types';
 
 import {ValidateAuthenticatedSessionMiddleware} from './types';
+import {hasValidAccessToken} from './has-valid-access-token';
 
-interface createValidateAuthenticatedSessionParams extends ApiAndConfigParams {}
+interface validateAuthenticatedSessionParams extends ApiAndConfigParams {}
 
-export function createValidateAuthenticatedSession({
+export function validateAuthenticatedSession({
   api,
   config,
-}: createValidateAuthenticatedSessionParams): ValidateAuthenticatedSessionMiddleware {
+}: validateAuthenticatedSessionParams): ValidateAuthenticatedSessionMiddleware {
   return function validateAuthenticatedSession() {
     return async (req: Request, res: Response, next: NextFunction) => {
       config.logger.info('Running validateAuthenticatedSession');
@@ -47,7 +48,7 @@ export function createValidateAuthenticatedSession({
           shop: session.shop,
         });
 
-        if (await isValidAccessToken(api, session)) {
+        if (await hasValidAccessToken(api, session)) {
           config.logger.info('Request session has a valid access token', {
             shop: session.shop,
           });
@@ -85,31 +86,6 @@ export function createValidateAuthenticatedSession({
       });
     };
   };
-}
-
-const TEST_GRAPHQL_QUERY = `
-{
-  shop {
-    name
-  }
-}`;
-
-async function isValidAccessToken(
-  api: Shopify,
-  session: Session,
-): Promise<boolean> {
-  try {
-    const client = new api.clients.Graphql({session});
-    await client.query({data: TEST_GRAPHQL_QUERY});
-    return true;
-  } catch (error) {
-    if (error instanceof HttpResponseError && error.response.code === 401) {
-      // Re-authenticate if we get a 401 response
-      return false;
-    } else {
-      throw error;
-    }
-  }
 }
 
 async function setShopFromSessionOrToken(

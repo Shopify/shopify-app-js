@@ -1,17 +1,31 @@
 # Releasing shopify-app-js packages
 
-1. The `shopify-app-js` repo uses `changesets` to track and update the respective `CHANGELOG.md` files within the packages.
+- The `shopify-app-js` repo uses `changesets` to track and update the respective `CHANGELOG.md` files within the packages.
 
-1. When creating a PR, the author should run the `yarn changeset` command, answer the relevant questions (i.e., what packages does this PR update, is it major/minor/patch, what is the change description), and then commit the new file created in the `.changeset` directory. These files are used by the workflows to construct the `CHANGELOG.md` entries.
+- When creating a PR, the author should run the `yarn changeset` command, answer the relevant questions (i.e., what packages does this PR update, is it major/minor/patch, what is the change description), and then commit the new file created in the `.changeset` directory. These files are used by the workflows to construct the `CHANGELOG.md` entries.
 
-   > **Note**
-   > If the change is very small and doesn't warrant a changelog entry, run `yarn changeset --empty` and commit the resultant file in the `.changeset` directory.
+  > **Note**
+  > If the change is very small and doesn't warrant a changelog entry, run `yarn changeset --empty` and commit the resultant file in the `.changeset` directory.
 
-1. When the PR is merged into the `main` branch, the `main-release.yml` workflow uses the `changesets/action` to either create or update an existing PR that has the title `Version Packages`. This PR tracks all the changes currently being made against the `main` branch since the last release.
+- When the PR is merged into the `main` branch, the `main-release.yml` workflow uses the `changesets/action` to either create or update an existing PR that has the title `Version Packages`. This PR tracks all the changes currently being made against the `main` branch since the last release.
 
-1. To perform a release, check the details of the `Version Packages` PR, and merge it into `main`.
+## :exclamation: To perform a release
 
-1. The same `changesets/action` in the `main-release.yml` workflow will call `yarn release`, which builds and pushes the changes to `npmjs.org`.
+1. Checkout the `changeset-release/main` branch
+
+   ```shell
+   git checkout changeset-release/main
+   ```
+
+1. If the `@shopify/shopify-app-express` package is being updated as part of the release (see the `Releases` section of the main comment in the `Version Packages` PR), update the version string in the `packages/shopify-app-express/src/version.ts` file to match the version in the `packages/shopify-app-express/package.json` file.
+
+1. While the branch is checked out, edit/remove any of the comments in the changed `CHANGELOG.md` files and commit them to the `changeset-release/main` branch.
+
+1. Once the files in the PR reflect the desired release changes, merge the `Version Packages` PR into `main` - this triggers the release.
+
+1. The same `changesets/action` in the `main-release.yml` workflow will call `yarn release`, which builds the packages and pushes the changed packages to `npmjs.org`.
+
+---
 
 ## Release Candidates
 
@@ -21,18 +35,34 @@ For significant changes that could result in significant refactoring on the part
 >
 > These changes **must** be made against the `next` branch, so that the appropriate workflows can run (`next-release.yml`).
 
-1. Prior to creating PR, run the `yarn changeset pre enter rc` command and commit the resultant files from `.changeset`, including the `pre.json` file. This informs `changesets` that it is in pre-release mode, and the pre-release tag is `rc`.
+> **Warning**
+>
+> Before commencing the effort for a batch of release candidates, make sure the `next` branch an identical copy of `main`.
 
-1. When creating a PR, the author should run the `yarn changeset` command, answer the relevant questions (i.e., what packages does this PR update, is it major/minor/patch, what is the change description), and then commit the new file created in the `.changeset` directory. These files are used by the workflows to construct the `CHANGELOG.md` entries for the release candidates.
+- Prior to creating the first PR against the `next` branch, run the `yarn changeset pre enter rc` command and commit the resultant files from `.changeset`, including the `pre.json` file. This informs `changesets` that it is in pre-release mode, and the pre-release tag is `rc`.
 
-   > **Note**
-   > If the change is very small and doesn't warrant a changelog entry, run `yarn changeset --empty` and commit the resultant file in the `.changeset` directory.
+- When creating a PR, the author should run the `yarn changeset` command, answer the relevant questions (i.e., what packages does this PR update, is it major/minor/patch, what is the change description), and then commit the new file created in the `.changeset` directory. These files are used by the workflows to construct the `CHANGELOG.md` entries for the release candidates.
 
-1. When the PR is merged into the `next` branch, the `next-release.yml` workflow uses the `changesets/action` to either create or update an existing PR that has the title `Version Packages for Release Candidates`.
+  > **Note**
+  > If the change is very small and doesn't warrant a changelog entry, run `yarn changeset --empty` and commit the resultant file in the `.changeset` directory.
 
-1. To perform a release of release candidates, check the details of the `Version Packages for Release Candidates` PR, and merge it into `next`.
+- When the PR is merged into the `next` branch, the `next-release.yml` workflow uses the `changesets/action` to either create or update an existing PR that has the title `Version Packages for Release Candidates`.
 
-1. The same `changesets/action` in the `next-release.yml` workflow will call `yarn release`, which builds and pushes the changes to `npmjs.org`.
+### :exclamation: To perform a release of release candidate packages
+
+1. Checkout the `changeset-release/next` branch
+
+   ```shell
+   git checkout changeset-release/next
+   ```
+
+1. If the `@shopify/shopify-app-express` package is being updated as part of the release (see the `Releases` section of the main comment in the `Version Packages for Release Candidates (rc)` PR), update the version string in the `packages/shopify-app-express/src/version.ts` file to match the version in the `packages/shopify-app-express/package.json` file.
+
+1. While the branch is checked out, edit/remove any of the comments in the changed `CHANGELOG.md` files and commit them to the `changeset-release/next` branch.
+
+1. Once the files in the PR reflect the desired release changes, merge the `Version Packages for Release Candidates (rc)` PR into `next` - this triggers the release.
+
+1. The same `changesets/action` in the `next-release.yml` workflow will call `yarn release`, which builds and pushes the release candidates to `npmjs.org`.
 
 ## Merging `next` into `main` (moving from pre-release to main release)
 
@@ -41,6 +71,12 @@ When a major set of changes is about to be mass released from the `next` branch
 > **Warning**
 >
 > The next steps need to be confirmed
+
+1. Checkout the `changeset-release/next` branch
+
+   ```shell
+   git checkout changeset-release/next
+   ```
 
 1. Take the `next` branch out of pre-release mode by running
 
@@ -52,6 +88,4 @@ When a major set of changes is about to be mass released from the `next` branch
 
 1. Merge the `next` branch into `main`. This _should_ update the relevant `CHANGELOG.md` files on `main` with the changes from the release candidates.
 
-1. In the resultant `Version Packages` PR, edit the `CHANGELOG.md` files as needed, as many of the entries may be irrelevant (early release candidate comments no longer applicable) or may be combined.
-
-1. Merge the `Version Packages` PR into `main` - this will trigger the build and push to `npmjs.org` of the new packages.
+1. Follow the release procedure outlined [above](#exclamation-to-perform-a-release)

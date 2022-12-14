@@ -1,10 +1,13 @@
 import request from 'supertest';
 import express, {Express} from 'express';
 import jwt from 'jsonwebtoken';
-import {ConfigParams, LogSeverity} from '@shopify/shopify-api';
+import {
+  ConfigParams,
+  LATEST_API_VERSION,
+  LogSeverity,
+} from '@shopify/shopify-api';
 
 import {shopifyApp} from '../..';
-import {ShopifyApp} from '../../types';
 import {WebhookHandlersParam} from '../../webhooks/types';
 import {AppInstallations} from '../../app-installations';
 import {
@@ -15,6 +18,7 @@ import {
   mockShopifyResponses,
   testConfig,
   TEST_SHOP,
+  TEST_WEBHOOK_ID,
   validWebhookHeaders,
 } from '../test-helper';
 
@@ -48,13 +52,29 @@ describe('OAuth integration tests', () => {
     it(`test ${JSON.stringify(config)}`, async () => {
       const webhookHandlers: WebhookHandlersParam = {
         TEST_TOPIC: [
-          {...HTTP_HANDLER},
+          {...HTTP_HANDLER, callbackUrl: '/test/webhooks'},
           {...EVENT_BRIDGE_HANDLER},
           {...PUBSUB_HANDLER},
         ],
       };
 
-      const afterAuth = jest.fn();
+      const afterAuth = jest.fn().mockImplementation(async (req, res, next) => {
+        const shopSessions = await shopify.config.sessionStorage
+          .findSessionsByShop!(TEST_SHOP);
+        const offlineSession = shopSessions[0];
+        expect(offlineSession.isOnline).toBe(false);
+
+        if (config.online) {
+          const onlineSession = shopSessions[1];
+
+          expect(onlineSession.isOnline).toBe(true);
+          expect(res.locals.shopify.session).toEqual(onlineSession);
+        } else {
+          expect(res.locals.shopify.session).toEqual(offlineSession);
+        }
+
+        next();
+      });
       const installedMock = jest.fn((_req, res) => res.send('ok'));
       const authedMock = jest.fn((_req, res) => res.send('ok'));
 
@@ -70,6 +90,13 @@ describe('OAuth integration tests', () => {
       const shopify = shopifyApp({
         ...testConfig,
         api: apiConfig,
+        auth: {
+          path: '/test/auth',
+          callbackPath: '/test/auth/callback',
+        },
+        webhooks: {
+          path: '/test/webhooks',
+        },
         useOnlineTokens: config.online,
       });
 
@@ -80,7 +107,14 @@ describe('OAuth integration tests', () => {
         res.setTimeout(100);
         next();
       });
-      app.use('/test', shopify.app({afterAuth, webhookHandlers}));
+      app.get('/test/auth', shopify.auth.begin());
+      app.get(
+        '/test/auth/callback',
+        shopify.auth.callback(),
+        afterAuth,
+        shopify.redirectToShopifyOrAppRoot(),
+      );
+      app.post('/test/webhooks', shopify.processWebhooks({webhookHandlers}));
       app.get('/installed', shopify.ensureInstalledOnShop(), installedMock);
       app.get('/authed', shopify.validateAuthenticatedSession(), authedMock);
 
@@ -96,6 +130,8 @@ describe('OAuth integration tests', () => {
         'TEST_TOPIC',
         TEST_SHOP,
         body,
+        TEST_WEBHOOK_ID,
+        LATEST_API_VERSION,
       );
 
       await installedRequest(app, config, installedMock);
@@ -117,25 +153,12 @@ async function beginOAuth(
     .get(`/test/auth?shop=${TEST_SHOP}`)
     .expect(302);
 
-  const beginRedirectUrl = new URL(beginResponse.header.location);
-  expect(beginRedirectUrl.protocol).toBe('https:');
-  expect(beginRedirectUrl.hostname).toBe(TEST_SHOP);
-  expect(beginRedirectUrl.pathname).toBe('/admin/oauth/authorize');
-
-  const redirecUri = new URL(
-    beginRedirectUrl.searchParams.get('redirect_uri')!,
-  );
-  expect(`${redirecUri.protocol}//${redirecUri.host}`).toBe(`${config.host}`);
-  expect(redirecUri.pathname).toBe('/test/auth/callback');
-
-  expect(beginRedirectUrl.searchParams.get('client_id')).toEqual(
-    shopify.api.config.apiKey,
-  );
-  expect(beginRedirectUrl.searchParams.get('scope')).toEqual(
-    shopify.api.config.scopes.toString(),
-  );
-  expect(beginRedirectUrl.searchParams.get('state')).toEqual(
-    expect.stringMatching(/.{15}/),
+  // We always start with offline tokens
+  assertOAuthBeginRedirectUrl(
+    config,
+    shopify,
+    new URL(beginResponse.header.location),
+    false,
   );
 
   return convertBeginResponseToCallbackInfo(
@@ -160,6 +183,32 @@ async function completeOAuth(
 
   mockOAuthResponses(config);
 
+  let finalCallbackInfo: CallbackInfo;
+
+  // When using online tokens, we first get the offline token, then go back to Shopify for the online one
+  if (config.online) {
+    const onlineCallbackResponse = await request(app)
+      .get(`/test/auth/callback?${callbackInfo.params.toString()}`)
+      .set('Cookie', callbackInfo.cookies)
+      .expect(302);
+
+    // We should have requested an online OAuth
+    assertOAuthBeginRedirectUrl(
+      config,
+      shopify,
+      new URL(onlineCallbackResponse.header.location),
+      true,
+    );
+
+    finalCallbackInfo = convertBeginResponseToCallbackInfo(
+      onlineCallbackResponse,
+      shopify.api.config.apiSecretKey,
+      TEST_SHOP,
+    );
+  } else {
+    finalCallbackInfo = callbackInfo;
+  }
+
   const callbackResponse = await request(app)
     .get(`/test/auth/callback?${callbackInfo.params.toString()}`)
     .set('Cookie', callbackInfo.cookies)
@@ -180,25 +229,40 @@ async function completeOAuth(
     });
   }
 
-  expect(afterAuth).toHaveBeenCalledWith(
-    expect.objectContaining({
-      req: expect.anything(),
-      res: expect.anything(),
-      session: (
-        await shopify.config.sessionStorage.findSessionsByShop!(TEST_SHOP)
-      )[0],
-    }),
+  expect(afterAuth).toHaveBeenCalledTimes(1);
+}
+
+function assertOAuthBeginRedirectUrl(
+  config: OAuthTestCase,
+  shopify: ShopifyApp,
+  url: URL,
+  isOnline: boolean,
+) {
+  expect(url.protocol).toBe('https:');
+  expect(url.hostname).toBe(TEST_SHOP);
+  expect(url.pathname).toBe('/admin/oauth/authorize');
+
+  const redirecUri = new URL(url.searchParams.get('redirect_uri')!);
+  expect(`${redirecUri.protocol}//${redirecUri.host}`).toBe(`${config.host}`);
+  expect(redirecUri.pathname).toBe('/test/auth/callback');
+
+  expect(url.searchParams.get('client_id')).toEqual(shopify.api.config.apiKey);
+  expect(url.searchParams.get('scope')).toEqual(
+    shopify.api.config.scopes.toString(),
   );
+  expect(url.searchParams.get('state')).toEqual(expect.stringMatching(/.{15}/));
+
+  if (isOnline) {
+    expect(url.searchParams.get('grant_options[]')).toEqual('per-user');
+  } else {
+    expect(url.searchParams.get('grant_options[]')).toEqual('');
+  }
 }
 
 // Mock all necessary responses from Shopify for the OAuth process
 function mockOAuthResponses(config: OAuthTestCase) {
   const responses: [MockBody][] = [
-    [
-      config.online
-        ? mockResponses.ONLINE_ACCESS_TOKEN_RESPONSE
-        : mockResponses.OFFLINE_ACCESS_TOKEN_RESPONSE,
-    ],
+    [mockResponses.OFFLINE_ACCESS_TOKEN_RESPONSE],
   ];
 
   if (config.existingWebhooks) {
@@ -225,6 +289,10 @@ function mockOAuthResponses(config: OAuthTestCase) {
 
   // For the custom APP_UNINSTALLED handler
   responses.push([mockResponses.HTTP_WEBHOOK_CREATE_RESPONSE]);
+
+  if (config.online) {
+    responses.push([mockResponses.ONLINE_ACCESS_TOKEN_RESPONSE]);
+  }
 
   mockShopifyResponses(...responses);
 }
@@ -262,6 +330,11 @@ function assertOAuthRequests(
     );
   }
 
+  // The final webhook with the custom APP_UNINSTALLED handler
+  webhookQueries.push(
+    `webhookSubscriptionCreate(\n      topic: APP_UNINSTALLED,\n      webhookSubscription: {callbackUrl: "${config.host}/test/webhooks"}`,
+  );
+
   webhookQueries.forEach((query) =>
     expect({
       method: 'POST',
@@ -269,6 +342,18 @@ function assertOAuthRequests(
       body: expect.stringContaining(query),
     }).toMatchMadeHttpRequest(),
   );
+
+  // We register webhooks with the offline token, so the request for the online token comes after them
+  if (config.online) {
+    expect({
+      method: 'POST',
+      url: `https://${TEST_SHOP}/admin/oauth/access_token`,
+      body: {
+        client_id: shopify.api.config.apiKey,
+        client_secret: shopify.api.config.apiSecretKey,
+      },
+    }).toMatchMadeHttpRequest();
+  }
 }
 
 // Fires a request to process an HTTP webhook

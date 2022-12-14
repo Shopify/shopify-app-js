@@ -3,13 +3,11 @@ import {Shopify} from '@shopify/shopify-api';
 
 import {CspHeadersMiddleware} from './types';
 
-interface CreateCspHeadersParams {
+interface CspHeadersParams {
   api: Shopify;
 }
 
-export function createCspHeaders({
-  api,
-}: CreateCspHeadersParams): CspHeadersMiddleware {
+export function cspHeaders({api}: CspHeadersParams): CspHeadersMiddleware {
   return function cspHeaders() {
     return async (req: Request, res: Response, next: NextFunction) => {
       addCSPHeader(api, req, res);

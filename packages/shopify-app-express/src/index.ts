@@ -1,3 +1,4 @@
+import semver from 'semver';
 import '@shopify/shopify-api/adapters/node';
 import {
   shopifyApi,
@@ -5,29 +6,29 @@ import {
   ShopifyRestResources,
   LATEST_API_VERSION,
   Shopify,
+  FeatureDeprecatedError,
 } from '@shopify/shopify-api';
 import {SessionStorage} from '@shopify/shopify-app-session-storage';
 import {MemorySessionStorage} from '@shopify/shopify-app-session-storage-memory';
 
 import {SHOPIFY_EXPRESS_LIBRARY_VERSION} from './version';
+import {AppConfigInterface, AppConfigParams} from './config-types';
 import {
-  AppConfigInterface,
-  AppConfigParams,
-  AuthConfigInterface,
-  WebhooksConfigInterface,
-} from './config-types';
-import {
-  createValidateAuthenticatedSession,
-  createCspHeaders,
-  createEnsureInstalled,
+  validateAuthenticatedSession,
+  cspHeaders,
+  ensureInstalled,
+  redirectToShopifyOrAppRoot,
 } from './middlewares/index';
-import {createShopifyApp} from './shopify-app/index';
+import {AuthMiddleware} from './auth/types';
+import {auth} from './auth/index';
+import {ProcessWebhooksMiddleware} from './webhooks/types';
+import {processWebhooks} from './webhooks/index';
 import {
   ValidateAuthenticatedSessionMiddleware,
   CspHeadersMiddleware,
   EnsureInstalledMiddleware,
+  RedirectToShopifyOrAppRootMiddleware,
 } from './middlewares/types';
-import {AppMiddleware} from './shopify-app/types';
 
 export * from './types';
 export * from './auth/types';
@@ -40,16 +41,18 @@ export interface ShopifyApp<
 > {
   config: AppConfigInterface<S>;
   api: Shopify<R>;
-  app: AppMiddleware;
+  auth: AuthMiddleware;
+  processWebhooks: ProcessWebhooksMiddleware;
   validateAuthenticatedSession: ValidateAuthenticatedSessionMiddleware;
   cspHeaders: CspHeadersMiddleware;
   ensureInstalledOnShop: EnsureInstalledMiddleware;
+  redirectToShopifyOrAppRoot: RedirectToShopifyOrAppRootMiddleware;
 }
 
 export function shopifyApp<
   R extends ShopifyRestResources = any,
   S extends SessionStorage = SessionStorage,
->(config: AppConfigParams<R, S> = {}): ShopifyApp<R, S> {
+>(config: AppConfigParams<R, S>): ShopifyApp<R, S> {
   const {api: apiConfig, ...appConfig} = config;
 
   const api = shopifyApi<R>(apiConfigWithDefaults<R>(apiConfig ?? {}));
@@ -58,13 +61,18 @@ export function shopifyApp<
   return {
     config: validatedConfig,
     api,
-    app: createShopifyApp({api, config: validatedConfig}),
-    validateAuthenticatedSession: createValidateAuthenticatedSession({
+    auth: auth({api, config: validatedConfig}),
+    processWebhooks: processWebhooks({api, config: validatedConfig}),
+    validateAuthenticatedSession: validateAuthenticatedSession({
       api,
       config: validatedConfig,
     }),
-    cspHeaders: createCspHeaders({api}),
-    ensureInstalledOnShop: createEnsureInstalled({
+    cspHeaders: cspHeaders({api}),
+    ensureInstalledOnShop: ensureInstalled({
+      api,
+      config: validatedConfig,
+    }),
+    redirectToShopifyOrAppRoot: redirectToShopifyOrAppRoot({
       api,
       config: validatedConfig,
     }),
@@ -107,17 +115,6 @@ function validateAppConfig<
 ): AppConfigInterface<S> {
   const {sessionStorage, ...configWithoutSessionStorage} = config;
 
-  const auth: AuthConfigInterface = {
-    path: '/auth',
-    callbackPath: '/auth/callback',
-    ...config.auth,
-  };
-
-  const webhooks: WebhooksConfigInterface = {
-    path: '/webhooks',
-    ...config.webhooks,
-  };
-
   return {
     // We override the API package's logger to add the right package context by default (and make the call simpler)
     logger: overrideLoggerPackage(api.logger),
@@ -125,24 +122,42 @@ function validateAppConfig<
     exitIframePath: '/exitiframe',
     sessionStorage: sessionStorage ?? new MemorySessionStorage(),
     ...configWithoutSessionStorage,
-    auth,
-    webhooks,
+    auth: config.auth,
+    webhooks: config.webhooks,
   };
 }
 
 function overrideLoggerPackage(logger: Shopify['logger']): Shopify['logger'] {
   const baseContext = {package: 'shopify-app'};
 
+  const warningFunction: Shopify['logger']['warning'] = async (
+    message,
+    context = {},
+  ) => logger.warning(message, {...baseContext, ...context});
+
   return {
+    ...logger,
     log: async (severity, message, context = {}) =>
       logger.log(severity, message, {...baseContext, ...context}),
     debug: async (message, context = {}) =>
       logger.debug(message, {...baseContext, ...context}),
     info: async (message, context = {}) =>
       logger.info(message, {...baseContext, ...context}),
-    warning: async (message, context = {}) =>
-      logger.warning(message, {...baseContext, ...context}),
+    warning: warningFunction,
     error: async (message, context = {}) =>
       logger.error(message, {...baseContext, ...context}),
+    deprecated: deprecated(warningFunction),
+  };
+}
+
+function deprecated(warningFunction: Shopify['logger']['warning']) {
+  return async function (version: string, message: string): Promise<void> {
+    if (semver.gte(SHOPIFY_EXPRESS_LIBRARY_VERSION, version)) {
+      throw new FeatureDeprecatedError(
+        `Feature was deprecated in version ${version}`,
+      );
+    }
+
+    return warningFunction(`[Deprecated | ${version}] ${message}`);
   };
 }

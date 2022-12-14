@@ -1,11 +1,13 @@
 import crypto from 'crypto';
 
+import semver from 'semver';
 import fetchMock, {MockParams} from 'jest-fetch-mock';
 import {LATEST_API_VERSION} from '@shopify/shopify-api';
 import {MemorySessionStorage} from '@shopify/shopify-app-session-storage-memory';
 
-import {shopifyApp} from '../index';
-import {AppConfigParams, ShopifyApp} from '../types';
+import {shopifyApp, ShopifyApp} from '../index';
+import {AppConfigParams} from '../config-types';
+import {SHOPIFY_EXPRESS_LIBRARY_VERSION} from '../version';
 
 // eslint-disable-next-line import/no-mutable-exports
 export let testConfig: AppConfigParams & {
@@ -22,6 +24,7 @@ export let shopify: ShopifyApp;
 export const SHOPIFY_HOST = 'totally-real-host';
 export const BASE64_HOST = Buffer.from(SHOPIFY_HOST).toString('base64');
 export const TEST_SHOP = 'test-shop.myshopify.io';
+export const TEST_WEBHOOK_ID = '1234567890';
 
 let currentCall: number;
 beforeEach(() => {
@@ -90,6 +93,7 @@ declare global {
   namespace jest {
     interface Matchers<R> {
       toMatchMadeHttpRequest(): R;
+      toBeWithinDeprecationSchedule(): R;
     }
   }
 }
@@ -151,6 +155,13 @@ expect.extend({
       pass: true,
     };
   },
+  toBeWithinDeprecationSchedule(version: string) {
+    return {
+      message: () =>
+        `Found deprecation limited to version ${version}, please update or remove it.`,
+      pass: semver.lt(SHOPIFY_EXPRESS_LIBRARY_VERSION, version),
+    };
+  },
 });
 
 export function validWebhookHeaders(
@@ -164,6 +175,8 @@ export function validWebhookHeaders(
     'X-Shopify-Topic': topic,
     'X-Shopify-Shop-Domain': TEST_SHOP,
     'X-Shopify-Hmac-Sha256': hmac,
+    'X-Shopify-Webhook-Id': TEST_WEBHOOK_ID,
+    'X-Shopify-Api-Version': LATEST_API_VERSION,
   };
 }
 
@@ -173,3 +186,11 @@ export function createTestHmac(secretKey: string, body: string): string {
     .update(body, 'utf8')
     .digest('base64');
 }
+
+test('passes test deprecation checks', () => {
+  expect('9999.0.0').toBeWithinDeprecationSchedule();
+  expect(() => expect('0.0.0').toBeWithinDeprecationSchedule()).toThrow();
+  expect(() =>
+    expect(SHOPIFY_EXPRESS_LIBRARY_VERSION).toBeWithinDeprecationSchedule(),
+  ).toThrow();
+});

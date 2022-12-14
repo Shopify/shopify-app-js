@@ -6,13 +6,20 @@ import {redirectToAuth} from '../redirect-to-auth';
 import {shopify, TEST_SHOP} from './test-helper';
 
 describe('redirectToAuth', () => {
-  const app = express();
-  app.get('/redirect-to-host', async (req, res) => {
-    await redirectToAuth({req, res, api: shopify.api, config: shopify.config});
-  });
+  let app: express.Express;
 
   let beginMock: jest.SpyInstance;
   beforeEach(() => {
+    app = express();
+    app.get('/redirect-to-auth', async (req, res) => {
+      await redirectToAuth({
+        req,
+        res,
+        api: shopify.api,
+        config: shopify.config,
+      });
+    });
+
     beginMock = jest.spyOn(shopify.api.auth, 'begin');
     beginMock.mockImplementationOnce(async ({rawResponse}) => {
       rawResponse.redirect('https://oauth-url');
@@ -25,7 +32,7 @@ describe('redirectToAuth', () => {
 
   it('triggers a server-side redirect with no params', async () => {
     const response = await request(app)
-      .get(`/redirect-to-host?shop=${TEST_SHOP}`)
+      .get(`/redirect-to-auth?shop=${TEST_SHOP}`)
       .expect(302);
 
     expect(beginMock).toHaveBeenCalledWith(
@@ -40,7 +47,7 @@ describe('redirectToAuth', () => {
 
   it('triggers a server-side redirect when embedded is not 1', async () => {
     const response = await request(app)
-      .get(`/redirect-to-host?shop=${TEST_SHOP}&embedded=0`)
+      .get(`/redirect-to-auth?shop=${TEST_SHOP}&embedded=0`)
       .expect(302);
 
     expect(beginMock).toHaveBeenCalledWith(
@@ -60,7 +67,7 @@ describe('redirectToAuth', () => {
       embedded: '1',
     });
     const response = await request(app)
-      .get(`/redirect-to-host?${expectedParams.toString()}`)
+      .get(`/redirect-to-auth?${expectedParams.toString()}`)
       .expect(302);
 
     const url = new URL(response.header.location, 'http://not-a-real-host');
@@ -73,7 +80,7 @@ describe('redirectToAuth', () => {
 
   it('fails with invalid shop', async () => {
     const response = await request(app)
-      .get(`/redirect-to-host?shop=invalid-shop`)
+      .get(`/redirect-to-auth?shop=invalid-shop`)
       .expect(500);
 
     expect(response.error).toBeDefined();
@@ -85,7 +92,7 @@ describe('redirectToAuth', () => {
       embedded: '1',
     });
     const response = await request(app)
-      .get(`/redirect-to-host?${expectedParams.toString()}`)
+      .get(`/redirect-to-auth?${expectedParams.toString()}`)
       .expect(500);
 
     expect(response.error).toBeDefined();

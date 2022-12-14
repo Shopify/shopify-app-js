@@ -2,11 +2,15 @@ import {Session} from '@shopify/shopify-api';
 import express from 'express';
 import request from 'supertest';
 
-import {redirectToHost} from '../redirect-to-host';
+import {redirectToShopifyOrAppRoot} from '../redirect-to-shopify-or-app-root';
+import {
+  BASE64_HOST,
+  shopify,
+  SHOPIFY_HOST,
+  TEST_SHOP,
+} from '../../__tests__/test-helper';
 
-import {BASE64_HOST, shopify, SHOPIFY_HOST, TEST_SHOP} from './test-helper';
-
-describe('redirectToHost', () => {
+describe('redirectToShopifyOrAppRoot', () => {
   const session = new Session({
     id: 'session-id',
     accessToken: 'access-token',
@@ -15,15 +19,18 @@ describe('redirectToHost', () => {
     state: '1234',
   });
 
-  const app = express();
-  app.get('/redirect-to-host', async (req, res) => {
-    await redirectToHost({
-      req,
-      res,
-      api: shopify.api,
-      config: shopify.config,
-      session,
-    });
+  let app: express.Express;
+  beforeEach(() => {
+    app = express();
+    app.get(
+      '/redirect-to-host',
+      // Make sure the session is available
+      (req, res, next) => {
+        res.locals.shopify = {session};
+        next();
+      },
+      redirectToShopifyOrAppRoot({api: shopify.api, config: shopify.config})(),
+    );
   });
 
   it('redirects to Shopify when embedded', async () => {

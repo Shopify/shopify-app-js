@@ -1,24 +1,13 @@
 # Changelog
 
-## 1.0.0-rc.6
+## 1.0.1
 
 ### Patch Changes
 
-- 62c2c31: Test use of changesets for release candidates
-- Updated dependencies [62c2c31]
-  - @shopify/shopify-app-session-storage@1.0.0-rc.0
-  - @shopify/shopify-app-session-storage-memory@1.0.0-rc.0
+- d72952e: Allow both online and offline tokens with a single package instance
 
-All notable changes to this project will be documented in this file.
+## 1.0.0
 
-The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
-and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
+### Major Changes
 
-## Unreleased
-
-- Initial public release
-
-## [1.0.0-rc5]
-
-- Latest release candidate of Shopify Express package, built on release candidate `6.0.0-rc9` of Shopify API for JavaScript.
-- Includes the `SessionStorage` capabilities moved from the API package to this one.
+- Initial public release of @shopify/shopify-app-express

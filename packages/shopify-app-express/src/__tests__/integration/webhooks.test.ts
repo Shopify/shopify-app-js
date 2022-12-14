@@ -1,6 +1,6 @@
 import request from 'supertest';
 import express, {Express} from 'express';
-import {LogSeverity} from '@shopify/shopify-api';
+import {LATEST_API_VERSION, LogSeverity} from '@shopify/shopify-api';
 
 import {AppInstallations} from '../../app-installations';
 import {
@@ -8,6 +8,7 @@ import {
   mockShopifyResponses,
   shopify,
   TEST_SHOP,
+  TEST_WEBHOOK_ID,
   validWebhookHeaders,
 } from '../test-helper';
 
@@ -51,6 +52,8 @@ describe('webhook integration', () => {
         let app: Express;
 
         beforeEach(() => {
+          shopify.config.webhooks.path = '/test/webhooks';
+
           app = express();
 
           // Use a short timeout since everything here should be pretty quick. If you see a `socket hang up` error,
@@ -60,9 +63,17 @@ describe('webhook integration', () => {
             next();
           });
 
-          app.use(
-            '/test',
-            shopify.app({webhookHandlers: {APP_UNINSTALLED: config.handler}}),
+          app.get('/test/auth', shopify.auth.begin());
+          app.get(
+            '/test/auth/callback',
+            shopify.auth.callback(),
+            shopify.redirectToShopifyOrAppRoot(),
+          );
+          app.post(
+            '/test/webhooks',
+            shopify.processWebhooks({
+              webhookHandlers: {APP_UNINSTALLED: config.handler},
+            }),
           );
         });
 
@@ -136,6 +147,8 @@ describe('webhook integration', () => {
               'APP_UNINSTALLED',
               TEST_SHOP,
               '{}',
+              TEST_WEBHOOK_ID,
+              LATEST_API_VERSION,
             );
           }
         });

@@ -21,6 +21,7 @@ export function batteryOfTests(storageFactory: () => Promise<SessionStorage>) {
       },
       async () => {
         const expiryDate = new Date();
+        expiryDate.setMilliseconds(0);
         expiryDate.setMinutes(expiryDate.getMinutes() + 60);
         const session = new Session({
           id: sessionId,
