@@ -1,5 +1,5 @@
 import {createClient, RedisClientOptions} from 'redis';
-import {Session} from '@shopify/shopify-api';
+import {Session, InvalidSession} from '@shopify/shopify-api';
 import {SessionStorage} from '@shopify/shopify-app-session-storage';
 
 type RedisClient = ReturnType<typeof createClient>;
@@ -86,8 +86,22 @@ export class RedisSessionStorage implements SessionStorage {
       const rawResult = await this.client.get(key);
       if (!rawResult) continue;
 
-      const session = Session.fromPropertyArray(JSON.parse(rawResult));
-      if (session.shop === shop) results.push(session);
+      try {
+        const session = Session.fromPropertyArray(JSON.parse(rawResult));
+        if (session.shop === shop) results.push(session);
+      } catch (err: unknown) {
+        // do nothing if the rawResult is not a parse-able session as we may have other type of data in the db
+        // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Errors/JSON_bad_parse
+        // InvalidSession is raised by Session.fromPropertyArray if its parameter is not an array
+        if (
+          (err instanceof SyntaxError && err.stack?.includes('JSON.parse')) ||
+          err instanceof InvalidSession
+        ) {
+          continue;
+        }
+        // unknown error, re-throw
+        throw err;
+      }
     }
 
     return results;
