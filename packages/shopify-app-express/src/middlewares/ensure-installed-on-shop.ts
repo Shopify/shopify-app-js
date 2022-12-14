@@ -100,7 +100,7 @@ function getRequestShop(
       {shop: req.query.shop},
     );
 
-    res.status(500);
+    res.status(422);
     res.send('No shop provided');
     return undefined;
   }
@@ -113,7 +113,7 @@ function getRequestShop(
       {shop: req.query.shop},
     );
 
-    res.status(500);
+    res.status(422);
     res.send('Invalid shop provided');
     return undefined;
   }

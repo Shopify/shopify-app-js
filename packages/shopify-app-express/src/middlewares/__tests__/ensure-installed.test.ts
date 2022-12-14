@@ -53,12 +53,12 @@ describe('ensureInstalledOnShop', () => {
     );
   });
 
-  it('returns 500 if no shop provided', async () => {
-    await request(app).get(`/test/shop`).expect(500);
+  it('returns 422 if no shop provided', async () => {
+    await request(app).get(`/test/shop`).expect(422);
   });
 
-  it('returns 500 if invalid shop provided', async () => {
-    await request(app).get(`/test/shop?shop=invalid-shop`).expect(500);
+  it('returns 422 if invalid shop provided', async () => {
+    await request(app).get(`/test/shop?shop=invalid-shop`).expect(422);
   });
 
   it('redirects to auth via exit iFrame if shop NOT installed', async () => {
