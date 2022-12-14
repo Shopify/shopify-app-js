@@ -1,33 +1,9 @@
 {
-  "name": "@shopify/shopify-app-express",
-  "version": "1.0.0-rc5",
-  "description": "Shopify Express Middleware - to simplify the building of Shopify Apps with Express",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/Shopify/shopify-app-js.git"
-  },
-  "bugs": {
-    "url": "https://github.com/Shopify/shopify-app-js/issues"
-  },
-  "homepage": "https://github.com/Shopify/shopify-app-js",
-  "author": "Shopify Inc.",
-  "license": "MIT",
-  "main": "./src/index.js",
-  "types": "./src/index.d.ts",
-  "exports": {
-    ".": {
-      "require": "./src/index.js",
-      "types": "./src/index.d.ts",
-      "default": "./src/index.js"
-    },
-    "./session-storage/*": {
-      "import": "./session-storage/*.js",
-      "require": "./session-storage/*.js",
-      "types": "./session-storage/*.d.ts"
-    }
-  },
-  "prettier": "@shopify/prettier-config",
-    "scripts": {
+  "name": "shopify-app-js--root",
+  "version": "1.0.0",
+  "license": "UNLICENSED",
+  "private": true,
+  "scripts": {
     "build": "loom build",
     "test": "loom test",
     "lint": "loom lint",
