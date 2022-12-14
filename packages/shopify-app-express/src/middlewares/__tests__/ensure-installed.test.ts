@@ -21,10 +21,10 @@ describe('ensureInstalledOnShop', () => {
       res.json({data: {shop: {name: req.query.shop}}});
     });
     session = new Session({
-      id: '123-this-is-a-session-id',
+      id: `offline_${TEST_SHOP}`,
       shop: TEST_SHOP,
       state: '123-this-is-a-state',
-      isOnline: shopify.config.useOnlineTokens,
+      isOnline: false,
       scope: shopify.api.config.scopes.toString(),
       expires: undefined,
       accessToken: 'totally-real-access-token',
@@ -33,6 +33,7 @@ describe('ensureInstalledOnShop', () => {
 
   it('proceeds to process request if embedded app is installed', async () => {
     mockShopifyResponse({data: {shop: {name: TEST_SHOP}}});
+
     await shopify.config.sessionStorage.storeSession(session);
 
     const encodedHost = Buffer.from(SHOPIFY_HOST, 'utf-8').toString('base64');
@@ -52,12 +53,12 @@ describe('ensureInstalledOnShop', () => {
     );
   });
 
-  it('returns 500 if no shop provided', async () => {
-    await request(app).get(`/test/shop`).expect(500);
+  it('returns 422 if no shop provided', async () => {
+    await request(app).get(`/test/shop`).expect(422);
   });
 
-  it('returns 500 if invalid shop provided', async () => {
-    await request(app).get(`/test/shop?shop=invalid-shop`).expect(500);
+  it('returns 422 if invalid shop provided', async () => {
+    await request(app).get(`/test/shop?shop=invalid-shop`).expect(422);
   });
 
   it('redirects to auth via exit iFrame if shop NOT installed', async () => {
@@ -81,6 +82,39 @@ describe('ensureInstalledOnShop', () => {
     );
   });
 
+  it('redirects to auth if not installed and not embedded', async () => {
+    mockShopifyResponse({data: {shop: {name: TEST_SHOP}}});
+
+    await shopify.config.sessionStorage.storeSession(session);
+
+    const missingShop = 'some-other-shop.myshopify.io';
+    const encodedHost = Buffer.from(SHOPIFY_HOST, 'utf-8').toString('base64');
+    const response = await request(app)
+      .get(`/test/shop?shop=${missingShop}&host=${encodedHost}`)
+      .expect(302);
+
+    const location = new URL(response.header.location);
+
+    expect(location.host).toBe(missingShop);
+    expect(location.pathname).toBe('/admin/oauth/authorize');
+  });
+
+  it('redirects to auth if installed and not embedded, but token is invalid', async () => {
+    mockShopifyResponse({errors: 'Invalid token'}, {status: 401});
+
+    await shopify.config.sessionStorage.storeSession(session);
+
+    const encodedHost = Buffer.from(SHOPIFY_HOST, 'utf-8').toString('base64');
+    const response = await request(app)
+      .get(`/test/shop?shop=${TEST_SHOP}&host=${encodedHost}`)
+      .expect(302);
+
+    const location = new URL(response.header.location);
+
+    expect(location.host).toBe(TEST_SHOP);
+    expect(location.pathname).toBe('/admin/oauth/authorize');
+  });
+
   it('does NOT redirect to auth if shop NOT installed AND url is exit iFrame path', async () => {
     const encodedHost = Buffer.from(SHOPIFY_HOST, 'utf-8').toString('base64');
     app.use('/exitiframe', shopify.ensureInstalledOnShop());
@@ -93,7 +127,11 @@ describe('ensureInstalledOnShop', () => {
       .expect(200);
   });
 
-  it('redirects to embedded URL if shop NOT installed AND url is exit iFrame path AND embedded param missing', async () => {
+  it('redirects to embedded URL if shop is installed AND url is exit iFrame path AND embedded param missing', async () => {
+    mockShopifyResponse({data: {shop: {name: TEST_SHOP}}});
+
+    await shopify.config.sessionStorage.storeSession(session);
+
     const encodedHost = Buffer.from(SHOPIFY_HOST, 'utf-8').toString('base64');
     app.use('/exitiframe', shopify.ensureInstalledOnShop());
     app.get('/exitiframe', async (_req, res) => {
