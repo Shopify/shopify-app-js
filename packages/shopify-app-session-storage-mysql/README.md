@@ -14,12 +14,12 @@ const shopify = shopifyApp({
 // OR
 
 const shopify = shopifyApp({
-  sessionStorage: MySQLSessionStorage.withCredentials({
+  sessionStorage: MySQLSessionStorage.withCredentials(
     "host.com",
     "thedatabase",
     "username",
     "password",
-  }),
+  ),
   ...
 });
 ```
