@@ -10,3 +10,5 @@ jobs:
       - uses: gaurav-nelson/github-action-markdown-link-check@v1
         with:
           config-file: '.github/workflows/markdown_link_checker_config.json'
+      - name: Ensure markdown links are only to main GitHub branches
+        run: 'grep --include="*.md" --exclude-dir=node_modules -Er "\/(tree|blob)" | (! grep -vE "\/(tree|blob)\/(main|master)")'
