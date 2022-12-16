@@ -158,37 +158,21 @@ export class RedisSessionStorage implements SessionStorage {
 
   private async migrate() {
     const migrationsRecord = await this.client.get(this.fullKey('migrations'));
+    let migrations: {[key: string]: boolean} = {};
     if (migrationsRecord) {
-      // need to check if we need to migrate
-      // as of 2.0.0, this code is illustrative only!
-      const migrations = JSON.parse(migrationsRecord);
-      if (!migrations.migrateToVersion2_0_0) {
-        await migrateToVersion2_0_0(
-          this.client,
-          this.options.sessionKeyPrefix,
-          this.fullKey.bind(this),
-        );
-        migrations.migrateToVersion2_0_0 = true;
-        await this.client.set(
-          this.fullKey('migrations'),
-          JSON.stringify(migrations),
-        );
-      }
-    } else {
-      // first time migration =>
+      migrations = JSON.parse(migrationsRecord);
+    }
+    if (!migrations.migrateToVersion2_0_0) {
       await migrateToVersion2_0_0(
         this.client,
         this.options.sessionKeyPrefix,
         this.fullKey.bind(this),
       );
-
-      const migrations = {
-        migrateToVersion2_0_0: true,
-      };
-      await this.client.set(
-        this.fullKey('migrations'),
-        JSON.stringify(migrations),
-      );
+      migrations.migrateToVersion2_0_0 = true;
     }
+    await this.client.set(
+      this.fullKey('migrations'),
+      JSON.stringify(migrations),
+    );
   }
 }
