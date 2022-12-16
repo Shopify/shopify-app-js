@@ -2,6 +2,8 @@ import {createClient, RedisClientOptions} from 'redis';
 import {Session} from '@shopify/shopify-api';
 import {SessionStorage} from '@shopify/shopify-app-session-storage';
 
+import {migrateToVersion1_0_1} from './migrations';
+
 type RedisClient = ReturnType<typeof createClient>;
 export interface RedisSessionStorageOptions extends RedisClientOptions {
   sessionKeyPrefix: string;
@@ -51,6 +53,7 @@ export class RedisSessionStorage implements SessionStorage {
       this.fullKey(session.id),
       JSON.stringify(session.toPropertyArray()),
     );
+    await this.addKeyToShopList(session);
     return true;
   }
 
@@ -67,27 +70,34 @@ export class RedisSessionStorage implements SessionStorage {
 
   public async deleteSession(id: string): Promise<boolean> {
     await this.ready;
-    await this.client.del(this.fullKey(id));
+    const session = await this.loadSession(id);
+    if (session) {
+      await this.removeKeyFromShopList(session.shop, id);
+      await this.client.del(this.fullKey(id));
+    }
     return true;
   }
 
   public async deleteSessions(ids: string[]): Promise<boolean> {
     await this.ready;
-    await this.client.del(ids.map((id) => this.fullKey(id)));
+    await Promise.all(ids.map((id) => this.deleteSession(id)));
     return true;
   }
 
   public async findSessionsByShop(shop: string): Promise<Session[]> {
     await this.ready;
 
-    const keys = await this.client.keys('*');
+    const idKeysArrayString = await this.client.get(this.fullKey(shop));
+    if (!idKeysArrayString) return [];
+
+    const idKeysArray = JSON.parse(idKeysArrayString);
     const results: Session[] = [];
-    for (const key of keys) {
-      const rawResult = await this.client.get(key);
+    for (const idKey of idKeysArray) {
+      const rawResult = await this.client.get(idKey);
       if (!rawResult) continue;
 
       const session = Session.fromPropertyArray(JSON.parse(rawResult));
-      if (session.shop === shop) results.push(session);
+      results.push(session);
     }
 
     return results;
@@ -101,6 +111,39 @@ export class RedisSessionStorage implements SessionStorage {
     return `${this.options.sessionKeyPrefix}_${name}`;
   }
 
+  private async addKeyToShopList(session: Session) {
+    const shopKey = this.fullKey(session.shop);
+    const idKey = this.fullKey(session.id);
+    const idKeysArrayString = await this.client.get(shopKey);
+
+    if (idKeysArrayString) {
+      const idKeysArray = JSON.parse(idKeysArrayString);
+
+      if (!idKeysArray.includes(idKey)) {
+        idKeysArray.push(idKey);
+        await this.client.set(shopKey, JSON.stringify(idKeysArray));
+      }
+    } else {
+      await this.client.set(shopKey, JSON.stringify([idKey]));
+    }
+  }
+
+  private async removeKeyFromShopList(shop: string, id: string) {
+    const shopKey = this.fullKey(shop);
+    const idKey = this.fullKey(id);
+    const idKeysArrayString = await this.client.get(shopKey);
+
+    if (idKeysArrayString) {
+      const idKeysArray = JSON.parse(idKeysArrayString);
+      const index = idKeysArray.indexOf(idKey);
+
+      if (index > -1) {
+        idKeysArray.splice(index, 1);
+        await this.client.set(shopKey, JSON.stringify(idKeysArray));
+      }
+    }
+  }
+
   private async init() {
     this.client = createClient({
       ...this.options,
@@ -110,5 +153,26 @@ export class RedisSessionStorage implements SessionStorage {
       this.client.on('error', this.options.onError);
     }
     await this.client.connect();
+    await this.migrate();
+  }
+
+  private async migrate() {
+    const migrationsRecord = await this.client.get(this.fullKey('migrations'));
+    let migrations: {[key: string]: boolean} = {};
+    if (migrationsRecord) {
+      migrations = JSON.parse(migrationsRecord);
+    }
+    if (!migrations.migrateToVersion1_0_1) {
+      await migrateToVersion1_0_1(
+        this.client,
+        this.options.sessionKeyPrefix,
+        this.fullKey.bind(this),
+      );
+      migrations.migrateToVersion1_0_1 = true;
+    }
+    await this.client.set(
+      this.fullKey('migrations'),
+      JSON.stringify(migrations),
+    );
   }
 }
