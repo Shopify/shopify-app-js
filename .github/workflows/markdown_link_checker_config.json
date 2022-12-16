@@ -1,4 +1,9 @@
 {
+  "ignorePatterns": [
+    {
+      "pattern": ".*mysql\\.com.*"
+    }
+  ],
   "retryOn429": true,
   "fallbackRetryDelay": "1s"
 }
