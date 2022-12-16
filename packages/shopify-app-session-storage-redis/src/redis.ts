@@ -2,6 +2,8 @@ import {createClient, RedisClientOptions} from 'redis';
 import {Session} from '@shopify/shopify-api';
 import {SessionStorage} from '@shopify/shopify-app-session-storage';
 
+import {migrateToVersion1_0_1} from './migrations';
+
 type RedisClient = ReturnType<typeof createClient>;
 export interface RedisSessionStorageOptions extends RedisClientOptions {
   sessionKeyPrefix: string;
@@ -151,5 +153,26 @@ export class RedisSessionStorage implements SessionStorage {
       this.client.on('error', this.options.onError);
     }
     await this.client.connect();
+    await this.migrate();
+  }
+
+  private async migrate() {
+    const migrationsRecord = await this.client.get(this.fullKey('migrations'));
+    let migrations: {[key: string]: boolean} = {};
+    if (migrationsRecord) {
+      migrations = JSON.parse(migrationsRecord);
+    }
+    if (!migrations.migrateToVersion1_0_1) {
+      await migrateToVersion1_0_1(
+        this.client,
+        this.options.sessionKeyPrefix,
+        this.fullKey.bind(this),
+      );
+      migrations.migrateToVersion1_0_1 = true;
+    }
+    await this.client.set(
+      this.fullKey('migrations'),
+      JSON.stringify(migrations),
+    );
   }
 }
