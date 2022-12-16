@@ -28,7 +28,7 @@ mkdir /my/project/path
 # Set up a new yarn project
 yarn init .
 # You can use your preferred Node package manager
-yarn add @shopify/shopify-app-express @shopify/shopify-api
+yarn add @shopify/shopify-app-express
 ```
 
 Then, you can import the package in your app by creating an `index.js` file containing:
