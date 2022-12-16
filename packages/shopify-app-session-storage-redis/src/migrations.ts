@@ -5,7 +5,7 @@ type RedisClient = ReturnType<typeof createClient>;
 
 // need to add shop keys with list of associated session keys to support
 // the new findSessionsByShop in v2.x.x
-export async function migrateToVersion2_0_0(
+export async function migrateToVersion1_0_1(
   client: RedisClient,
   sessionKeyPrefix: string,
   fullKey: (name: string) => string,
@@ -27,10 +27,4 @@ export async function migrateToVersion2_0_0(
   for (const shop in shopsAndSessions) {
     await client.set(fullKey(shop), JSON.stringify(shopsAndSessions[shop]));
   }
-
-  const schemaAdmin = {
-    dbLastUsedByVersion: '2.0.0',
-    migratedVersions: ['2.0.0'],
-  };
-  await client.set(fullKey('schema_admin'), JSON.stringify(schemaAdmin));
 }

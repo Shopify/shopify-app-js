@@ -61,7 +61,7 @@ describe('RedisSessionStorage', () => {
     batteryOfTests(async () => storage!);
   });
 
-  describe('migrateToVersion2_0_0 tests', () => {
+  describe('migrateToVersion1_0_1 tests', () => {
     let storage: RedisSessionStorage | undefined;
     beforeAll(async () => {
       // flush the DB
