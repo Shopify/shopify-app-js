@@ -1,26 +1,29 @@
 # Session Storage Adapter for MongoDB
 
-This package implements the `SessionStorage` interface that works with an instance of MongoDB.
+This package implements the `SessionStorage` interface that works with an instance of [MongoDB](https://www.mongodb.com/home).
 
 ```js
 import {shopifyApp} from '@shopify/shopify-app-express';
 import {MongoDBSessionStorage} from '@shopify/shopify-app-session-storage-mongodb';
 
 const shopify = shopifyApp({
-  sessionStorage: new MongoDBSessionStorage("mongodb://username:password@host/", "database"),
-  ...
+  sessionStorage: new MongoDBSessionStorage(
+    'mongodb://username:password@host/',
+    'database',
+  ),
+  // ...
 });
 
 // OR
 
 const shopify = shopifyApp({
   sessionStorage: MongoDBSessionStorage.withCredentials(
-    "host.com",
-    "thedatabase",
-    "username",
-    "password",
+    'host.com',
+    'thedatabase',
+    'username',
+    'password',
   ),
-  ...
+  // ...
 });
 ```
 

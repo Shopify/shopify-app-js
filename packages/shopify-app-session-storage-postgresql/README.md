@@ -1,26 +1,28 @@
 # Session Storage Adapter for PostgreSQL
 
-This package implements the `SessionStorage` interface that works with an instance of PostgreSQL.
+This package implements the `SessionStorage` interface that works with an instance of [PostgreSQL](https://www.postgresql.org).
 
 ```js
 import {shopifyApp} from '@shopify/shopify-app-express';
 import {PostgreSQLSessionStorage} from '@shopify/shopify-app-session-storage-postgresql';
 
 const shopify = shopifyApp({
-  sessionStorage: new PostgreSQLSessionStorage("postgres://username:password@host/database"),
-  ...
+  sessionStorage: new PostgreSQLSessionStorage(
+    'postgres://username:password@host/database',
+  ),
+  // ...
 });
 
 // OR
 
 const shopify = shopifyApp({
   sessionStorage: PostgreSQLSessionStorage.withCredentials(
-    "host.com",
-    "thedatabase",
-    "username",
-    "password",
+    'host.com',
+    'thedatabase',
+    'username',
+    'password',
   ),
-  ...
+  // ...
 });
 ```
 

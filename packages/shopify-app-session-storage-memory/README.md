@@ -8,7 +8,7 @@ import {MemorySessionStorage} from '@shopify/shopify-app-session-storage-memory'
 
 const shopify = shopifyApp({
   sessionStorage: new MemorySessionStorage(),
-  ...
+  // ...
 });
 ```
 
