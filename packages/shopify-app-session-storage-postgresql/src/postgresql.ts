@@ -57,11 +57,11 @@ export class PostgreSQLSessionStorage implements SessionStorage {
           : [key, value],
       );
     const query = `
-      INSERT INTO ${this.options.sessionTableName}
-      (${entries.map(([key]) => key).join(', ')})
+      INSERT INTO "${this.options.sessionTableName}"
+      (${entries.map(([key]) => `"${key}"`).join(', ')})
       VALUES (${entries.map((_, i) => `$${i + 1}`).join(', ')})
-      ON CONFLICT (id) DO UPDATE SET ${entries
-        .map(([key]) => `${key} = Excluded.${key}`)
+      ON CONFLICT ("id") DO UPDATE SET ${entries
+        .map(([key]) => `"${key}" = Excluded."${key}"`)
         .join(', ')};
     `;
     await this.query(
@@ -74,8 +74,8 @@ export class PostgreSQLSessionStorage implements SessionStorage {
   public async loadSession(id: string): Promise<Session | undefined> {
     await this.ready;
     const query = `
-      SELECT * FROM ${this.options.sessionTableName}
-      WHERE id = $1;
+      SELECT * FROM "${this.options.sessionTableName}"
+      WHERE "id" = $1;
     `;
     const rows = await this.query(query, [id]);
     if (!Array.isArray(rows) || rows?.length !== 1) return undefined;
@@ -86,8 +86,8 @@ export class PostgreSQLSessionStorage implements SessionStorage {
   public async deleteSession(id: string): Promise<boolean> {
     await this.ready;
     const query = `
-      DELETE FROM ${this.options.sessionTableName}
-      WHERE id = $1;
+      DELETE FROM "${this.options.sessionTableName}"
+      WHERE "id" = $1;
     `;
     await this.query(query, [id]);
     return true;
@@ -96,8 +96,8 @@ export class PostgreSQLSessionStorage implements SessionStorage {
   public async deleteSessions(ids: string[]): Promise<boolean> {
     await this.ready;
     const query = `
-      DELETE FROM ${this.options.sessionTableName}
-      WHERE id IN (${ids.map((_, i) => `$${i + 1}`).join(', ')});
+      DELETE FROM "${this.options.sessionTableName}"
+      WHERE "id" IN (${ids.map((_, i) => `$${i + 1}`).join(', ')});
     `;
     await this.query(query, ids);
     return true;
@@ -107,8 +107,8 @@ export class PostgreSQLSessionStorage implements SessionStorage {
     await this.ready;
 
     const query = `
-      SELECT * FROM ${this.options.sessionTableName}
-      WHERE shop = $1;
+      SELECT * FROM "${this.options.sessionTableName}"
+      WHERE "shop" = $1;
     `;
     const rows = await this.query(query, [shop]);
     if (!Array.isArray(rows) || rows?.length === 0) return [];
@@ -151,15 +151,15 @@ export class PostgreSQLSessionStorage implements SessionStorage {
     const hasSessionTable = await this.hasSessionTable();
     if (!hasSessionTable) {
       const query = `
-        CREATE TABLE ${this.options.sessionTableName} (
-          id varchar(255) NOT NULL PRIMARY KEY,
-          shop varchar(255) NOT NULL,
-          state varchar(255) NOT NULL,
-          isOnline boolean NOT NULL,
-          scope varchar(255),
-          expires integer,
-          onlineAccessInfo varchar(255),
-          accessToken varchar(255)
+        CREATE TABLE "${this.options.sessionTableName}" (
+          "id" varchar(255) NOT NULL PRIMARY KEY,
+          "shop" varchar(255) NOT NULL,
+          "state" varchar(255) NOT NULL,
+          "isOnline" boolean NOT NULL,
+          "scope" varchar(255),
+          "expires" integer,
+          "onlineAccessInfo" varchar(255),
+          "accessToken" varchar(255)
         )
       `;
       await this.query(query);
