@@ -1,12 +1,5 @@
 # Changelog
 
-## 1.0.2
-
-### Patch Changes
-
-- 88ac026: Gracefully handle session errors in validateAuthenticatedSession
-- bcb07a6: Check if session is valid before embedding into the Shopify Admin
-
 ## 1.0.1
 
 ### Patch Changes
