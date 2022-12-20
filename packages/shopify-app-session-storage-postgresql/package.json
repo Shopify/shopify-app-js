@@ -1,6 +1,6 @@
 {
   "name": "@shopify/shopify-app-session-storage-postgresql",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Shopify App Session Storage for PostgreSQL",
   "repository": {
     "type": "git",
