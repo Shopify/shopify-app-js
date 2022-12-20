@@ -3,7 +3,7 @@ import request from 'supertest';
 
 import {redirectToAuth} from '../redirect-to-auth';
 
-import {BASE64_HOST, shopify, TEST_SHOP} from './test-helper';
+import {shopify, TEST_SHOP} from './test-helper';
 
 describe('redirectToAuth', () => {
   let app: express.Express;
@@ -63,20 +63,17 @@ describe('redirectToAuth', () => {
   it('triggers a client-side redirect when embedded is 1', async () => {
     const expectedParams = new URLSearchParams({
       shop: TEST_SHOP,
-      host: BASE64_HOST,
+      host: 'abc',
       embedded: '1',
     });
     const response = await request(app)
       .get(`/redirect-to-auth?${expectedParams.toString()}`)
       .expect(302);
 
-    const url = new URL(
-      response.header.location,
-      'http://not-a-real-host.myshopify.io',
-    );
+    const url = new URL(response.header.location, 'http://not-a-real-host');
     const params = Object.fromEntries(url.searchParams.entries());
 
-    expect(url.host).toBe('not-a-real-host.myshopify.io');
+    expect(url.host).toBe('not-a-real-host');
     expect(url.pathname).toBe('/exitiframe');
     expect(params).toMatchObject(expectedParams);
   });
