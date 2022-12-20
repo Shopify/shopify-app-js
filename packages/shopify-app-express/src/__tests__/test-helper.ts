@@ -21,7 +21,7 @@ export let testConfig: AppConfigParams & {
 // eslint-disable-next-line import/no-mutable-exports
 export let shopify: ShopifyApp;
 
-export const SHOPIFY_HOST = 'totally-real-host';
+export const SHOPIFY_HOST = 'totally-real-host.myshopify.io';
 export const BASE64_HOST = Buffer.from(SHOPIFY_HOST).toString('base64');
 export const TEST_SHOP = 'test-shop.myshopify.io';
 export const TEST_WEBHOOK_ID = '1234567890';
