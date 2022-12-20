@@ -25,6 +25,12 @@ describe('validateAuthenticatedSession', () => {
       shopify.api.config.isEmbeddedApp = true;
 
       app = express();
+      // Use a short timeout since everything here should be pretty quick. If you see a `socket hang up` error,
+      // it's probably because the timeout is too short.
+      app.use('*', (_req, res, next) => {
+        res.setTimeout(100);
+        next();
+      });
       app.use('/test/*', shopify.validateAuthenticatedSession());
       app.get('/test/shop', async (req, res) => {
         res.json({data: {shop: {name: req.query.shop}}});
@@ -177,6 +183,38 @@ describe('validateAuthenticatedSession', () => {
       expect(
         response.headers['x-shopify-api-request-failure-reauthorize-url'],
       ).toBe(`/api/auth?shop=my-shop.myshopify.io`);
+    });
+
+    it('returns a 401 if the session token is invalid', async () => {
+      const invalidJWT = jwt.sign(
+        {
+          dummy: 'data',
+          aud: shopify.api.config.apiKey,
+          dest: `https://${shop}`,
+        },
+        'different-secret-key',
+        {algorithm: 'HS256'},
+      );
+
+      const response = await request(app)
+        .get('/test/shop?shop=my-shop.myshopify.io')
+        .set({Authorization: `Bearer ${invalidJWT}`})
+        .expect(401);
+
+      expect(response.error.text).toMatch('Failed to parse session token');
+    });
+
+    it('returns a 500 if the storage throws an error', async () => {
+      jest
+        .spyOn(shopify.config.sessionStorage, 'loadSession')
+        .mockRejectedValueOnce(new Error('Storage error'));
+
+      const response = await request(app)
+        .get('/test/shop?shop=my-shop.myshopify.io')
+        .set({Authorization: `Bearer ${validJWT}`})
+        .expect(500);
+
+      expect(response.error.text).toBe('Storage error');
     });
   });
 

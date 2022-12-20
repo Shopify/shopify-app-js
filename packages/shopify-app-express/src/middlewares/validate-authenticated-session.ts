@@ -1,4 +1,4 @@
-import {Shopify, Session} from '@shopify/shopify-api';
+import {Session, InvalidJwtError} from '@shopify/shopify-api';
 import {Request, Response, NextFunction} from 'express';
 
 import {redirectToAuth} from '../redirect-to-auth';
@@ -18,17 +18,38 @@ export function validateAuthenticatedSession({
     return async (req: Request, res: Response, next: NextFunction) => {
       config.logger.info('Running validateAuthenticatedSession');
 
-      const sessionId = await api.session.getCurrentId({
-        isOnline: config.useOnlineTokens,
-        rawRequest: req,
-        rawResponse: res,
-      });
+      let sessionId: string | undefined;
+      try {
+        sessionId = await api.session.getCurrentId({
+          isOnline: config.useOnlineTokens,
+          rawRequest: req,
+          rawResponse: res,
+        });
+      } catch (error) {
+        await config.logger.error(
+          `Error when loading session from storage: ${error}`,
+        );
 
-      const session = await config.sessionStorage.loadSession(
-        sessionId as string,
-      );
+        await handleSessionError(req, res, error);
+        return undefined;
+      }
 
-      let shop = req.query.shop;
+      let session: Session | undefined;
+      if (sessionId) {
+        try {
+          session = await config.sessionStorage.loadSession(sessionId);
+        } catch (error) {
+          await config.logger.error(
+            `Error when loading session from storage: ${error}`,
+          );
+
+          res.status(500);
+          res.send(error.message);
+          return undefined;
+        }
+      }
+
+      const shop = req.query.shop || session?.shop;
 
       if (session && shop && session.shop !== shop) {
         config.logger.debug(
@@ -61,17 +82,6 @@ export function validateAuthenticatedSession({
         }
       }
 
-      const bearerPresent = req.headers.authorization?.match(/Bearer (.*)/);
-      if (bearerPresent) {
-        if (!shop) {
-          shop = await setShopFromSessionOrToken(
-            api,
-            session,
-            bearerPresent[1],
-          );
-        }
-      }
-
       const redirectUrl = `${config.auth.path}?shop=${shop}`;
       config.logger.info(
         `Session was not valid. Redirecting to ${redirectUrl}`,
@@ -81,25 +91,22 @@ export function validateAuthenticatedSession({
       return returnTopLevelRedirection({
         res,
         config,
-        bearerPresent: Boolean(bearerPresent),
+        bearerPresent: Boolean(req.headers.authorization?.match(/Bearer (.*)/)),
         redirectUrl,
       });
     };
   };
 }
 
-async function setShopFromSessionOrToken(
-  api: Shopify,
-  session: Session | undefined,
-  token: string,
-): Promise<string | undefined> {
-  let shop: string | undefined;
-
-  if (session) {
-    shop = session.shop;
-  } else if (api.config.isEmbeddedApp) {
-    const payload = await api.session.decodeSessionToken(token);
-    shop = payload.dest.replace('https://', '');
+async function handleSessionError(_req: Request, res: Response, error: Error) {
+  switch (true) {
+    case error instanceof InvalidJwtError:
+      res.status(401);
+      res.send(error.message);
+      break;
+    default:
+      res.status(500);
+      res.send(error.message);
+      break;
   }
-  return shop;
 }
