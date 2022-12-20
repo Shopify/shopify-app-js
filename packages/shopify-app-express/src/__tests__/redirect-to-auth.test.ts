@@ -70,7 +70,10 @@ describe('redirectToAuth', () => {
       .get(`/redirect-to-auth?${expectedParams.toString()}`)
       .expect(302);
 
-    const url = new URL(response.header.location, 'http://not-a-real-host.myshopify.io');
+    const url = new URL(
+      response.header.location,
+      'http://not-a-real-host.myshopify.io',
+    );
     const params = Object.fromEntries(url.searchParams.entries());
 
     expect(url.host).toBe('not-a-real-host.myshopify.io');
