@@ -18,6 +18,7 @@
    ```
 
 1. If the `@shopify/shopify-app-express` package is being updated as part of the release (see the `Releases` section of the main comment in the `Version Packages` PR)
+
    1. Update the version string in the `packages/shopify-app-express/src/version.ts` file to match the version in the `packages/shopify-app-express/package.json` file.
 
 1. While the branch is checked out, edit/remove any of the comments in the changed `CHANGELOG.md` files and commit them to the `changeset-release/main` branch.
@@ -58,6 +59,7 @@ For significant changes that could result in significant refactoring on the part
    ```
 
 1. If the `@shopify/shopify-app-express` package is being updated as part of the release (see the `Releases` section of the main comment in the `Version Packages for Release Candidates (rc)` PR)
+
    1. Update the version string in the `packages/shopify-app-express/src/version.ts` file to match the version in the `packages/shopify-app-express/package.json` file.
 
 1. While the branch is checked out, edit/remove any of the comments in the changed `CHANGELOG.md` files and commit them to the `changeset-release/next` branch.
