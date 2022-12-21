@@ -74,7 +74,7 @@ describe('RedisSessionStorage', () => {
       await storage?.disconnect();
     });
 
-    it('initially satisfies pre-2.0.0 conditions', async () => {
+    it('initially satisfies pre-1.0.1 conditions', async () => {
       const shop1SessionIds = await client.get(
         'shopify_sessions_shop1.myshopify.com',
       );
@@ -86,7 +86,7 @@ describe('RedisSessionStorage', () => {
       expect(shop2SessionIds).toBeNull();
     });
 
-    it('migrates previous data to 2.0.0', async () => {
+    it('migrates previous data to 1.0.1', async () => {
       storage = new RedisSessionStorage(dbURL);
       await storage.ready;
 
@@ -107,7 +107,7 @@ describe('RedisSessionStorage', () => {
       expect(shop2SessionIdsArray).toContain('shopify_sessions_vwxyz-67890');
     });
 
-    it('manipulates 2.0.0 data structures correctly', async () => {
+    it('manipulates 1.0.1 data structures correctly', async () => {
       storage = new RedisSessionStorage(dbURL);
       await storage.ready;
 

@@ -144,7 +144,14 @@ export class PostgreSQLSessionStorage implements SessionStorage {
       this.options.sessionTableName,
       this.client.database,
     ]);
-    return Array.isArray(rows) && rows.length === 1;
+
+    if (!Array.isArray(rows)) return false;
+    if (rows.length === 0 && (await this.hasLowercaseSessionTable())) {
+      // need to migrate the tablename and some columns to be case sensitive
+      await this.migrateSessionTableV1_0_1();
+      return true;
+    }
+    return rows.length === 1;
   }
 
   private async createTable() {
@@ -175,5 +182,33 @@ export class PostgreSQLSessionStorage implements SessionStorage {
     // convert seconds to milliseconds prior to creating Session object
     if (row.expires) row.expires *= 1000;
     return Session.fromPropertyArray(Object.entries(row));
+  }
+
+  private async hasLowercaseSessionTable(): Promise<boolean> {
+    const query = `
+      SELECT tablename FROM pg_catalog.pg_tables WHERE tablename = $1 AND schemaname = $2
+    `;
+
+    // Allow multiple apps to be on the same host with separate DB and querying the right
+    // DB for the session table exisitence
+    const rows = await this.query(query, [
+      this.options.sessionTableName.toLowerCase(),
+      this.client.database,
+    ]);
+    return Array.isArray(rows) && rows.length === 1;
+  }
+
+  private async migrateSessionTableV1_0_1(): Promise<void> {
+    const queries = [
+      `ALTER TABLE ${this.options.sessionTableName.toLowerCase()} RENAME TO "${
+        this.options.sessionTableName
+      }"`,
+      `ALTER TABLE "${this.options.sessionTableName}" RENAME COLUMN isonline TO "isOnline"`,
+      `ALTER TABLE "${this.options.sessionTableName}" RENAME COLUMN onlineaccessinfo TO "onlineAccessInfo"`,
+      `ALTER TABLE "${this.options.sessionTableName}" RENAME COLUMN accesstoken TO "accessToken"`,
+    ];
+    for (const query of queries) {
+      await this.query(query);
+    }
   }
 }
