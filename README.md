@@ -1,11 +1,10 @@
-# `@shopify/shopify-app-js`
 
-This repo is a collection of packages that make it easy for apps to integrate with Shopify.
-They all build on top of the [@shopify/shopify-api](https://github.com/Shopify/shopify-api-js) package to cover specific use cases.
+<div align = center>
 
-This mono-repo supports the following packages:
+# Shopify App JS
 
-## App middleware
+*A mono-repo containing a collection of packages*  
+*designed to easily integrate apps with Shopify.*
 
 #### [`@shopify/shopify-app-remix`](./packages/shopify-app-remix)
 
@@ -14,6 +13,40 @@ This mono-repo supports the following packages:
 #### [`@shopify/shopify-app-express`](./packages/shopify-app-express)
 
 - Creates a middleware layer that allows [Express.js](https://expressjs.com) apps to communicate with and authenticate requests from Shopify.
+<br>
+
+```
+@shopify/shopify-app-js
+```
+
+</div>
+
+<br>
+<br>
+
+## Design
+
+This package has been designed to cover specialized use  
+cases while building on top of **[@shopify/shopify-api][GitHub API]**.
+
+<br>
+<br>
+
+## App Middleware
+
+<br>
+
+-   ### **[Express.js]**
+
+    Creates a middleware layer that allows express apps to  
+    communicate with and authenticate requests from Shopify.
+
+    ```
+    @shopify/shopify-app-express
+    ```
+    
+    [<kbd> GitHub </kbd>][GitHub Express]  
+    [<kbd> NPM </kbd>][NPM Express]
 
 <br>
 <br>
@@ -171,6 +204,7 @@ This mono-repo supports the following packages:
 
 [CloudFlare KV Storage]: https://www.cloudflare.com/products/workers-kv
 [PostgreSQL]: https://www.postgresql.org
+[Express.js]: https://expressjs.com
 [MongoDB]: https://www.mongodb.com/home
 [SQLite]: https://www.sqlite.org
 [MySQL]: https://www.mysql.com
@@ -180,16 +214,19 @@ This mono-repo supports the following packages:
 [GitHub CloudFlare]: packages/shopify-app-session-storage-kv
 [GitHub PostgreSQL]: packages/shopify-app-session-storage-postgresql
 [GitHub MongoDB]: packages/shopify-app-session-storage-mongodb
+[GitHub Express]: packages/shopify-app-express
 [GitHub SQLite]: packages/shopify-app-session-storage-sqlite
 [GitHub Memory]: packages/shopify-app-session-storage-memory
 [GitHub Redis]: packages/shopify-app-session-storage-redis
 [GitHub MySQL]: packages/shopify-app-session-storage-mysql
 [GitHub OAuth]: packages/shopify-app-session-storage
+[GitHub API]: https://github.com/Shopify/shopify-api-js
 
 
 [NPM PostgreSQL]: https://www.npmjs.com/package/@shopify/shopify-app-session-storage-postgresql
 [NPM CloudFlare]: https://www.npmjs.com/package/@shopify/shopify-app-session-storage-kv
 [NPM MongoDB]: https://www.npmjs.com/package/@shopify/shopify-app-session-storage-mongodb
+[NPM Express]: https://www.npmjs.com/package/@shopify/shopify-app-express
 [NPM Memory]: https://www.npmjs.com/package/@shopify/shopify-app-session-storage-memory
 [NPM SQLite]: https://www.npmjs.com/package/@shopify/shopify-app-session-storage-sqlite
 [NPM Redis]: https://www.npmjs.com/package/@shopify/shopify-app-session-storage-redis
