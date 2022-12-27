@@ -11,38 +11,138 @@ This mono-repo supports the following packages:
 
 Creates a middleware layer that allows [Express.js](https://expressjs.com) apps to communicate with and authenticate requests from Shopify.
 
-## Session storage options
+<br>
+<br>
 
-#### [`@shopify/shopify-app-session-storage`](https://github.com/Shopify/shopify-app-js/tree/main/packages/shopify-app-session-storage)
+## Session Storage Options
 
-Provides an interface that enables apps to store the sessions created during the OAuth process in `@shopify/shopify-api`.
+*Implementations for different vendors / technologies.*
 
-You can assign any implementation of this interface to the `@shopify/shopify-app-express` package, but you can also call them directly from your app if you're not building with Express.js.
+<br>
 
-#### [`@shopify/shopify-app-session-storage-memory`](https://github.com/Shopify/shopify-app-js/tree/main/packages/shopify-app-session-storage)
+-   ### **OAuth**
 
-Provides a simplified memory-based implementation of `SessionStorage` for development.
+    Provides an interface that enables apps to store the sessions  
+    created during the OAuth process in  `@shopify/shopify-api`
 
-#### [`@shopify/shopify-app-session-storage-sqlite`](https://github.com/Shopify/shopify-app-js/tree/main/packages/shopify-app-session-storage)
+    You can assign any implementation of this interface to the  
+    `@shopify/shopify-app-express`  package, but you can also call  
+    them directly from your app if you're not building with Express.js.
 
-Provides an implementation of `SessionStorage` that uses [SQLite](https://www.sqlite.org).
+    ```
+    @shopify/shopify-app-session-storage
+    ```
+    
+    [<kbd> GitHub </kbd>][GitHub OAuth]  
+    [<kbd> NPM </kbd>][NPM OAuth]
 
-#### [`@shopify/shopify-app-session-storage-mongodb`](https://github.com/Shopify/shopify-app-js/tree/main/packages/shopify-app-session-storage)
+    <br>
 
-Provides an implementation of `SessionStorage` that uses [MongoDB](https://www.mongodb.com/home).
+-   ### **Memory**
 
-#### [`@shopify/shopify-app-session-storage-mysql`](https://github.com/Shopify/shopify-app-js/tree/main/packages/shopify-app-session-storage)
+    Simplified memory-based implementation.
 
-Provides an implementation of `SessionStorage` that uses [MySQL](https://www.mysql.com).
+    ```
+    @shopify/shopify-app-session-storage-memory
+    ```
+    
+    [<kbd> GitHub </kbd>][GitHub Memory]  
+    [<kbd> NPM </kbd>][NPM Memory]
 
-#### [`@shopify/shopify-app-session-storage-postgresql`](https://github.com/Shopify/shopify-app-js/tree/main/packages/shopify-app-session-storage)
+    <br>
 
-Provides an implementation of `SessionStorage` that uses [PostgreSQL](https://www.postgresql.org).
+-   ### **[SQLite]**
 
-#### [`@shopify/shopify-app-session-storage-redis`](https://github.com/Shopify/shopify-app-js/tree/main/packages/shopify-app-session-storage)
+    ```
+    @shopify/shopify-app-session-storage-sqlite
+    ```
+    
+    [<kbd> GitHub </kbd>][GitHub SQLite]  
+    [<kbd> NPM </kbd>][NPM SQLite]
 
-Provides an implementation of `SessionStorage` that uses [Redis](https://redis.io).
+    <br>
 
-#### [`@shopify/shopify-app-session-storage-kv`](https://github.com/Shopify/shopify-app-js/tree/main/packages/shopify-app-session-storage)
+-   ### **[MongoDB]**
 
-Provides an implementation of `SessionStorage` that uses [CloudFlare KV storage](https://www.cloudflare.com/products/workers-kv).
+    ```
+    @shopify/shopify-app-session-storage-mongodb
+    ```
+    
+    [<kbd> GitHub </kbd>][GitHub MongoDB]  
+    [<kbd> NPM </kbd>][NPM MongoDB]
+
+    <br>
+
+-   ### **[MySQL]**
+
+    ```
+    @shopify/shopify-app-session-storage-mysql
+    ```
+    
+    [<kbd> GitHub </kbd>][GitHub MySQL]  
+    [<kbd> NPM </kbd>][NPM MySQL]
+
+    <br>
+    
+-   ### **[PostgreSQL]**
+
+    ```
+    @shopify/shopify-app-session-storage-postgresql
+    ```
+    
+    [<kbd> GitHub </kbd>][GitHub PostgreSQL]  
+    [<kbd> NPM </kbd>][NPM PostgreSQL]
+
+    <br>
+
+-   ### **[Redis]**
+
+    ```
+    @shopify/shopify-app-session-storage-redis
+    ```
+    
+    [<kbd> GitHub </kbd>][GitHub Redis]  
+    [<kbd> NPM </kbd>][NPM Redis]
+
+    <br>
+
+-   ### **[CloudFlare KV Storage]**
+
+    ```
+    @shopify/shopify-app-session-storage-kv
+    ```
+    
+    [<kbd> GitHub </kbd>][GitHub CloudFlare]  
+    [<kbd> NPM </kbd>][NPM CloudFlare]
+
+<br>
+
+
+<!----------------------------------------------------------------------------->
+
+[CloudFlare KV Storage]: https://www.cloudflare.com/products/workers-kv
+[PostgreSQL]: https://www.postgresql.org
+[MongoDB]: https://www.mongodb.com/home
+[SQLite]: https://www.sqlite.org
+[MySQL]: https://www.mysql.com
+[Redis]: https://redis.io
+
+
+[GitHub CloudFlare]: packages/shopify-app-session-storage-kv
+[GitHub PostgreSQL]: packages/shopify-app-session-storage-postgresql
+[GitHub MongoDB]: packages/shopify-app-session-storage-mongodb
+[GitHub SQLite]: packages/shopify-app-session-storage-sqlite
+[GitHub Memory]: packages/shopify-app-session-storage-memory
+[GitHub Redis]: packages/shopify-app-session-storage-redis
+[GitHub MySQL]: packages/shopify-app-session-storage-mysql
+[GitHub OAuth]: packages/shopify-app-session-storage
+
+
+[NPM PostgreSQL]: https://www.npmjs.com/package/@shopify/shopify-app-session-storage-postgresql
+[NPM CloudFlare]: https://www.npmjs.com/package/@shopify/shopify-app-session-storage-kv
+[NPM MongoDB]: https://www.npmjs.com/package/@shopify/shopify-app-session-storage-mongodb
+[NPM Memory]: https://www.npmjs.com/package/@shopify/shopify-app-session-storage-memory
+[NPM SQLite]: https://www.npmjs.com/package/@shopify/shopify-app-session-storage-sqlite
+[NPM Redis]: https://www.npmjs.com/package/@shopify/shopify-app-session-storage-redis
+[NPM MySQL]: https://www.npmjs.com/package/@shopify/shopify-app-session-storage-mysql
+[NPM OAuth]: https://www.npmjs.com/package/@shopify/shopify-app-session-storage
