@@ -150,6 +150,7 @@ async function embedAppIntoShopify(
   res: Response,
   shop: string,
 ): Promise<void> {
+  try {
   const embeddedUrl = await api.auth.getEmbeddedAppUrl({
     rawRequest: req,
     rawResponse: res,
@@ -161,4 +162,8 @@ async function embedAppIntoShopify(
   );
 
   res.redirect(embeddedUrl + req.path);
+  } catch(err) {
+    res.status(400);
+    res.send("Invalid request");
+  }
 }
