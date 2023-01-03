@@ -61,6 +61,18 @@ describe('ensureInstalledOnShop', () => {
     await request(app).get(`/test/shop?shop=invalid-shop`).expect(422);
   });
 
+  it('returns 400 if no host provided', async () => {
+    mockShopifyResponse({data: {shop: {name: TEST_SHOP}}});
+
+    await shopify.config.sessionStorage.storeSession(session);
+
+    const response = await request(app)
+      .get(`/test/shop?shop=${TEST_SHOP}`)
+      .expect(400);
+
+    expect(response.body).toEqual("Invalid request"));
+  });
+
   it('redirects to auth via exit iFrame if shop NOT installed', async () => {
     const encodedHost = Buffer.from(SHOPIFY_HOST, 'utf-8').toString('base64');
     const response = await request(app)
