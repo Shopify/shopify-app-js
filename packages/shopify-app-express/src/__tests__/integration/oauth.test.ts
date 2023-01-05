@@ -338,7 +338,7 @@ function assertOAuthRequests(
   webhookQueries.forEach((query) =>
     expect({
       method: 'POST',
-      url: `https://${TEST_SHOP}/admin/api/2022-10/graphql.json`,
+      url: `https://${TEST_SHOP}/admin/api/${LATEST_API_VERSION}/graphql.json`,
       body: expect.stringContaining(query),
     }).toMatchMadeHttpRequest(),
   );
