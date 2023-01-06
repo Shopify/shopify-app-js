@@ -1,5 +1,17 @@
 # Changelog
 
+## 1.1.0
+
+### Minor Changes
+
+- 222b755: Updating @shopify/shopify-api to v6.1.0
+
+### Patch Changes
+
+- Updated dependencies [222b755]
+  - @shopify/shopify-app-session-storage@1.0.2
+  - @shopify/shopify-app-session-storage-memory@1.0.2
+
 ## 1.0.2
 
 ### Patch Changes

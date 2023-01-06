@@ -1,5 +1,13 @@
 # @shopify/shopify-app-session-storage-kv
 
+## 1.0.2
+
+### Patch Changes
+
+- 222b755: Updating @shopify/shopify-api to v6.1.0
+- Updated dependencies [222b755]
+  - @shopify/shopify-app-session-storage@1.0.2
+
 ## 1.0.1
 
 ### Patch Changes

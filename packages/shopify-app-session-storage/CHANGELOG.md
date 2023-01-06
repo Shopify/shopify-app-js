@@ -1,5 +1,11 @@
 # @shopify/shopify-app-session-storage
 
+## 1.0.2
+
+### Patch Changes
+
+- 222b755: Updating @shopify/shopify-api to v6.1.0
+
 ## 1.0.1
 
 ### Patch Changes
