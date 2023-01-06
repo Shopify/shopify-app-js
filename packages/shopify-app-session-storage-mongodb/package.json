@@ -33,7 +33,7 @@
   "dependencies": {
     "@shopify/shopify-api": "^6.1.0",
     "@shopify/shopify-app-session-storage": "^1.0.2",
-    "mongodb": "^4.11.0",
+    "mongodb": "^4.13.0",
     "tslib": "^2.4.0"
   },
   "devDependencies": {
