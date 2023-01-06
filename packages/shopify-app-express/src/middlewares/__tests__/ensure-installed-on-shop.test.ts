@@ -1,6 +1,6 @@
 import request from 'supertest';
 import express, {Express} from 'express';
-import {LogSeverity, Session} from '@shopify/shopify-api';
+import {LATEST_API_VERSION, LogSeverity, Session} from '@shopify/shopify-api';
 
 import {
   createTestHmac,
@@ -170,7 +170,7 @@ describe('ensureInstalledOnShop', () => {
 
     expect({
       method: 'POST',
-      url: 'https://test-shop.myshopify.io/admin/api/2022-10/graphql.json',
+      url: `https://test-shop.myshopify.io/admin/api/${LATEST_API_VERSION}/graphql.json`,
     }).toMatchMadeHttpRequest();
 
     expect(shopify.api.config.logger.log).toHaveBeenCalledWith(
