@@ -1,4 +1,5 @@
-import pg from 'pg';
+import {Pool} from 'pg';
+import {parse} from 'pg-connection-string';
 import {Session} from '@shopify/shopify-api';
 import {SessionStorage} from '@shopify/shopify-app-session-storage';
 
@@ -32,7 +33,8 @@ export class PostgreSQLSessionStorage implements SessionStorage {
 
   public readonly ready: Promise<void>;
   private options: PostgreSQLSessionStorageOptions;
-  private client: pg.Client;
+  private pool: Pool;
+  private database: string;
 
   constructor(
     private dbUrl: URL,
@@ -43,6 +45,9 @@ export class PostgreSQLSessionStorage implements SessionStorage {
     }
     this.options = {...defaultPostgreSQLSessionStorageOptions, ...opts};
     this.ready = this.init();
+
+    const config = parse(dbUrl.toString());
+    this.database = config.database || 'postgres';
   }
 
   public async storeSession(session: Session): Promise<boolean> {
@@ -120,17 +125,12 @@ export class PostgreSQLSessionStorage implements SessionStorage {
   }
 
   public disconnect(): Promise<void> {
-    return this.client.end();
+    return this.pool.end();
   }
 
   private async init() {
-    this.client = new pg.Client({connectionString: this.dbUrl.toString()});
-    await this.connectClient();
+    this.pool = new Pool({connectionString: this.dbUrl.toString()});
     await this.createTable();
-  }
-
-  private async connectClient(): Promise<void> {
-    await this.client.connect();
   }
 
   private async hasSessionTable(): Promise<boolean> {
@@ -142,7 +142,7 @@ export class PostgreSQLSessionStorage implements SessionStorage {
     // DB for the session table exisitence
     const rows = await this.query(query, [
       this.options.sessionTableName,
-      this.client.database,
+      this.database,
     ]);
     return Array.isArray(rows) && rows.length === 1;
   }
@@ -167,7 +167,7 @@ export class PostgreSQLSessionStorage implements SessionStorage {
   }
 
   private async query(sql: string, params: any[] = []): Promise<any> {
-    const result = await this.client.query(sql, params);
+    const result = await this.pool.query(sql, params);
     return result.rows;
   }
 
