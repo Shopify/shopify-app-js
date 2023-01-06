@@ -42,7 +42,7 @@
     "@shopify/prettier-config": "^1.1.2",
     "@shopify/shopify-app-session-storage-test-utils": "^0.0.3",
     "@types/jest": "^29.1.1",
-    "@types/pg": "^8.6.5",
+    "@types/pg": "^8.6.6",
     "eslint": "^8.24.0",
     "eslint-plugin-prettier": "^4.2.1",
     "jest": "^28.1.3",
