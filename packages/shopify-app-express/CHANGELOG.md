@@ -1,5 +1,9 @@
 # Changelog
 
+### Patch Changes
+
+- a8c8b48: Fix SQL commands for already existing table
+
 ## 1.1.0
 
 ### Minor Changes
