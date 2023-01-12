@@ -151,7 +151,7 @@ export class PostgreSQLSessionStorage implements SessionStorage {
     const hasSessionTable = await this.hasSessionTable();
     if (!hasSessionTable) {
       const query = `
-        CREATE TABLE ${this.options.sessionTableName} (
+        CREATE TABLE IF NOT EXISTS ${this.options.sessionTableName} (
           id varchar(255) NOT NULL PRIMARY KEY,
           shop varchar(255) NOT NULL,
           state varchar(255) NOT NULL,
