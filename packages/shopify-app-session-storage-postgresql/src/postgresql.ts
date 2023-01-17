@@ -133,24 +133,8 @@ export class PostgreSQLSessionStorage implements SessionStorage {
     await this.client.connect();
   }
 
-  private async hasSessionTable(): Promise<boolean> {
-    const query = `
-      SELECT tablename FROM pg_catalog.pg_tables WHERE tablename = $1 AND schemaname = $2
-    `;
-
-    // Allow multiple apps to be on the same host with separate DB and querying the right
-    // DB for the session table exisitence
-    const rows = await this.query(query, [
-      this.options.sessionTableName,
-      this.client.database,
-    ]);
-    return Array.isArray(rows) && rows.length === 1;
-  }
-
   private async createTable() {
-    const hasSessionTable = await this.hasSessionTable();
-    if (!hasSessionTable) {
-      const query = `
+    const query = `
         CREATE TABLE IF NOT EXISTS ${this.options.sessionTableName} (
           id varchar(255) NOT NULL PRIMARY KEY,
           shop varchar(255) NOT NULL,
@@ -162,8 +146,7 @@ export class PostgreSQLSessionStorage implements SessionStorage {
           accessToken varchar(255)
         )
       `;
-      await this.query(query);
-    }
+    await this.query(query);
   }
 
   private async query(sql: string, params: any[] = []): Promise<any> {
