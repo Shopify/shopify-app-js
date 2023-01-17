@@ -1,5 +1,11 @@
 # @shopify/shopify-app-session-storage-postgresql
 
+### Patch Changes
+
+- a8c8b48: Fix SQL commands for already existing table, addressing breaking changes in PostgreSQL 15
+- b3202595: Remove unused method due to fix proposed in commit a8c8b48
+- 7049bdf2: Update PostgreSQL version in tests to v15
+
 ## 1.0.2
 
 ### Patch Changes
