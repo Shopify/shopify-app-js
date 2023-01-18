@@ -2,6 +2,8 @@ import sqlite3 from 'sqlite3';
 import {Session} from '@shopify/shopify-api';
 import {SessionStorage} from '@shopify/shopify-app-session-storage';
 
+import {migrateToVersion1_0_1} from './migrations';
+
 export interface SQLiteSessionStorageOptions {
   sessionTableName: string;
 }
@@ -21,6 +23,7 @@ export class SQLiteSessionStorage implements SessionStorage {
     this.options = {...defaultSQLiteSessionStorageOptions, ...opts};
     this.db = new sqlite3.Database(this.filename);
     this.ready = this.init();
+    this.ready = this.migrate();
   }
 
   public async storeSession(session: Session): Promise<boolean> {
@@ -116,13 +119,20 @@ export class SQLiteSessionStorage implements SessionStorage {
           state varchar(255) NOT NULL,
           isOnline integer NOT NULL,
           expires integer,
-          scope varchar(255),
+          scope varchar(1024), -- sqlite allows more than this limit without failing
           accessToken varchar(255),
           onlineAccessInfo varchar(255)
-        )
+        );
       `;
       await this.query(query);
     }
+
+    const migration = `
+      CREATE TABLE IF NOT EXISTS ${this.getMigrationTableName()} (
+        version varchar(255) NOT NULL PRIMARY KEY
+      );
+    `;
+    await this.query(migration);
   }
 
   private query(sql: string, params: any[] = []): Promise<any[]> {
@@ -141,5 +151,30 @@ export class SQLiteSessionStorage implements SessionStorage {
     // convert seconds to milliseconds prior to creating Session object
     if (row.expires) row.expires *= 1000;
     return Session.fromPropertyArray(Object.entries(row));
+  }
+
+  private async migrate() {
+    await this.ready;
+    const v101 = "'migrateToVersion1_0_1'";
+
+    const query = `
+      SELECT * FROM ${this.getMigrationTableName()}
+      WHERE version = ?;
+    `;
+    const rows = await this.query(query, [v101]);
+
+    if (rows.length !== 1) {
+      await migrateToVersion1_0_1(this.options.sessionTableName, this.db);
+
+      const insert = `
+          INSERT INTO ${this.getMigrationTableName()} (version)
+          VALUES(?);
+        `;
+      await this.query(insert, [v101]);
+    }
+  }
+
+  private getMigrationTableName(): string {
+    return `${this.options.sessionTableName}_migrations`;
   }
 }

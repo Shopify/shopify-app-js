@@ -153,6 +153,10 @@ export class MySQLSessionStorage implements SessionStorage {
       `;
       await this.query(query);
     }
+
+    // Update for existing tables
+    await this.query(`ALTER TABLE ${this.options.sessionTableName} 
+      MODIFY COLUMN scope varchar(1024)`);
   }
 
   private query(sql: string, params: any[] = []): Promise<any> {

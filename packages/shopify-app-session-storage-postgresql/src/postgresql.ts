@@ -151,19 +151,24 @@ export class PostgreSQLSessionStorage implements SessionStorage {
     const hasSessionTable = await this.hasSessionTable();
     if (!hasSessionTable) {
       const query = `
-        CREATE TABLE ${this.options.sessionTableName} (
-          id varchar(255) NOT NULL PRIMARY KEY,
-          shop varchar(255) NOT NULL,
-          state varchar(255) NOT NULL,
-          isOnline boolean NOT NULL,
-          scope varchar(255),
-          expires integer,
-          onlineAccessInfo varchar(255),
-          accessToken varchar(255)
-        )
-      `;
+      CREATE TABLE ${this.options.sessionTableName} (
+        id varchar(255) NOT NULL PRIMARY KEY,
+        shop varchar(255) NOT NULL,
+        state varchar(255) NOT NULL,
+        isOnline boolean NOT NULL,
+        scope varchar(255),
+        expires integer,
+        onlineAccessInfo varchar(255),
+        accessToken varchar(255)
+      )
+    `;
+
       await this.query(query);
     }
+
+    // Update for existing tables
+    await this.query(`ALTER TABLE ${this.options.sessionTableName} 
+      ALTER COLUMN scope TYPE varchar(1024)`);
   }
 
   private async query(sql: string, params: any[] = []): Promise<any> {

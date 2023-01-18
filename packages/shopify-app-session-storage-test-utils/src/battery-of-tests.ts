@@ -230,4 +230,21 @@ export function batteryOfTests(storageFactory: () => Promise<SessionStorage>) {
       }
     }
   });
+
+  it('can store sessions with scope longer than 255 chars', async () => {
+    const storage = await storageFactory();
+    const sessionId = 'test_session';
+    const session = new Session({
+      id: sessionId,
+      shop: 'shop',
+      state: 'state',
+      isOnline: true,
+      scope:
+        'unauthenticated_read_product_listings,unauthenticated_write_checkouts,unauthenticated_write_customers,unauthenticated_read_customer_tags,unauthenticated_read_content,unauthenticated_read_product_tags,read_orders,read_products,read_script_tags,write_script_tags,read_legal_policies',
+    });
+
+    await expect(storage.storeSession(session)).resolves.toBeTruthy();
+    const storedSession = await storage.loadSession(sessionId);
+    expect(session.equals(storedSession)).toBeTruthy();
+  });
 }
