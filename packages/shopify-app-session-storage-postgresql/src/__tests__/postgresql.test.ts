@@ -81,4 +81,14 @@ describe('PostgreSQLSessionStorage', () => {
       batteryOfTests(sessionStorage);
     });
   }
+  it(`Ensure session table is only created once without failure`, async () => {
+    const storageClone1 = new PostgreSQLSessionStorage(dbURL);
+    await storageClone1.ready;
+
+    const storageClone2 = new PostgreSQLSessionStorage(dbURL);
+    await storageClone2.ready;
+
+    storageClone1.disconnect();
+    storageClone2.disconnect();
+  });
 });
