@@ -2,7 +2,7 @@ import {createPackage, createProjectPlugin} from '@shopify/loom';
 import {buildLibrary} from '@shopify/loom-plugin-build-library';
 
 export default createPackage((pkg) => {
-  pkg.entry({root: './src/session-storage.ts'});
+  pkg.entry({root: './src/index.ts'});
   pkg.use(
     buildLibrary({
       // Required. A browserslist string for specifying your target output.
@@ -28,15 +28,18 @@ export default createPackage((pkg) => {
 });
 
 function jestConfigPlugin() {
-  return createProjectPlugin('MongoDBJestAdjustments', ({tasks: {test}}) => {
-    test.hook(({hooks}) => {
-      hooks.configure.hook((configure) => {
-        // If no tests, pass the suite
-        configure.jestConfig?.hook((config) => ({
-          ...config,
-          passWithNoTests: true,
-        }));
+  return createProjectPlugin(
+    'sessionStorageJestAdjustments',
+    ({tasks: {test}}) => {
+      test.hook(({hooks}) => {
+        hooks.configure.hook((configure) => {
+          // If no tests, pass the suite
+          configure.jestConfig?.hook((config) => ({
+            ...config,
+            passWithNoTests: true,
+          }));
+        });
       });
-    });
-  });
+    },
+  );
 }

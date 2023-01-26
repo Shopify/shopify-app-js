@@ -12,8 +12,8 @@
   "homepage": "https://github.com/Shopify/shopify-app-js/tree/main/packages/session-storage",
   "author": "Shopify Inc.",
   "license": "MIT",
-  "main": "./build/cjs/session-storage.js",
-  "types": "./build/ts/session-storage.d.ts",
+  "main": "./build/cjs/index.js",
+  "types": "./build/ts/index.d.ts",
   "scripts": {},
   "publishConfig": {
     "access": "public",
