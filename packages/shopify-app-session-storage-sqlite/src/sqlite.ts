@@ -1,29 +1,45 @@
 import sqlite3 from 'sqlite3';
 import {Session} from '@shopify/shopify-api';
-import {SessionStorage} from '@shopify/shopify-app-session-storage';
+import {
+  SessionStorage,
+  SessionStorageMigratorOptions,
+  SessionStorageMigrator,
+  RdbmsSessionStorageMigrator,
+} from '@shopify/shopify-app-session-storage';
 
-import {migrateToVersion1_0_1} from './migrations';
+import {SqliteEngine} from './sqlite-engine';
+import {migrationMap} from './migrations';
 
 export interface SQLiteSessionStorageOptions {
   sessionTableName: string;
+  migratorOptions: SessionStorageMigratorOptions | null;
 }
+
 const defaultSQLiteSessionStorageOptions: SQLiteSessionStorageOptions = {
   sessionTableName: 'shopify_sessions',
+  migratorOptions: {
+    migrationTableName: 'shopify_sessions_migrations',
+    migrations: migrationMap,
+  },
 };
 
 export class SQLiteSessionStorage implements SessionStorage {
   private options: SQLiteSessionStorageOptions;
-  private db: sqlite3.Database;
+  private db: SqliteEngine;
   private ready: Promise<void>;
+  private migrator: SessionStorageMigrator | null;
 
   constructor(
     private filename: string,
     opts: Partial<SQLiteSessionStorageOptions> = {},
   ) {
     this.options = {...defaultSQLiteSessionStorageOptions, ...opts};
-    this.db = new sqlite3.Database(this.filename);
+    this.db = new SqliteEngine(
+      new sqlite3.Database(this.filename),
+      this.options.sessionTableName,
+    );
     this.ready = this.init();
-    this.ready = this.migrate();
+    this.ready = this.initMigrator(this.options.migratorOptions);
   }
 
   public async storeSession(session: Session): Promise<boolean> {
@@ -44,7 +60,7 @@ export class SQLiteSessionStorage implements SessionStorage {
       VALUES (${entries.map(() => '?').join(', ')});
     `;
 
-    await this.query(
+    await this.db.query(
       query,
       entries.map(([_key, value]) => value),
     );
@@ -57,7 +73,7 @@ export class SQLiteSessionStorage implements SessionStorage {
       SELECT * FROM ${this.options.sessionTableName}
       WHERE id = ?;
     `;
-    const rows = await this.query(query, [id]);
+    const rows = await this.db.query(query, [id]);
     if (!Array.isArray(rows) || rows?.length !== 1) return undefined;
     const rawResult = rows[0] as any;
     return this.databaseRowToSession(rawResult);
@@ -69,7 +85,7 @@ export class SQLiteSessionStorage implements SessionStorage {
       DELETE FROM ${this.options.sessionTableName}
       WHERE id = ?;
     `;
-    await this.query(query, [id]);
+    await this.db.query(query, [id]);
     return true;
   }
 
@@ -79,7 +95,7 @@ export class SQLiteSessionStorage implements SessionStorage {
       DELETE FROM ${this.options.sessionTableName}
       WHERE id IN (${ids.map(() => '?').join(',')});
     `;
-    await this.query(query, ids);
+    await this.db.query(query, ids);
     return true;
   }
 
@@ -89,7 +105,7 @@ export class SQLiteSessionStorage implements SessionStorage {
       SELECT * FROM ${this.options.sessionTableName}
       WHERE shop = ?;
     `;
-    const rows = await this.query(query, [shop]);
+    const rows = await this.db.query(query, [shop]);
     if (!Array.isArray(rows) || rows?.length === 0) return [];
 
     const results: Session[] = rows.map((row: any) => {
@@ -105,7 +121,7 @@ export class SQLiteSessionStorage implements SessionStorage {
       type = 'table' AND
       name = ?;
     `;
-    const rows = await this.query(query, [this.options.sessionTableName]);
+    const rows = await this.db.query(query, [this.options.sessionTableName]);
     return rows.length === 1;
   }
 
@@ -124,27 +140,8 @@ export class SQLiteSessionStorage implements SessionStorage {
           onlineAccessInfo varchar(255)
         );
       `;
-      await this.query(query);
+      await this.db.query(query);
     }
-
-    const migration = `
-      CREATE TABLE IF NOT EXISTS ${this.getMigrationTableName()} (
-        version varchar(255) NOT NULL PRIMARY KEY
-      );
-    `;
-    await this.query(migration);
-  }
-
-  private query(sql: string, params: any[] = []): Promise<any[]> {
-    return new Promise((resolve, reject) => {
-      this.db.all(sql, params, (err, result) => {
-        if (err) {
-          reject(err);
-          return;
-        }
-        resolve(result);
-      });
-    });
   }
 
   private databaseRowToSession(row: any): Session {
@@ -153,28 +150,19 @@ export class SQLiteSessionStorage implements SessionStorage {
     return Session.fromPropertyArray(Object.entries(row));
   }
 
-  private async migrate() {
+  private async initMigrator(
+    migratorOptions?: SessionStorageMigratorOptions | null,
+  ): Promise<void> {
     await this.ready;
-    const v101 = "'migrateToVersion1_0_1'";
 
-    const query = `
-      SELECT * FROM ${this.getMigrationTableName()}
-      WHERE version = ?;
-    `;
-    const rows = await this.query(query, [v101]);
+    if (migratorOptions === null) {
+      return Promise.resolve();
+    } else {
+      this.migrator = new RdbmsSessionStorageMigrator(this.db, migratorOptions);
+      this.migrator.validateMigrationMap(migrationMap);
 
-    if (rows.length !== 1) {
-      await migrateToVersion1_0_1(this.options.sessionTableName, this.db);
-
-      const insert = `
-          INSERT INTO ${this.getMigrationTableName()} (version)
-          VALUES(?);
-        `;
-      await this.query(insert, [v101]);
+      await this.migrator.initMigrationPersitance();
+      return this.migrator.applyMigrations();
     }
-  }
-
-  private getMigrationTableName(): string {
-    return `${this.options.sessionTableName}_migrations`;
   }
 }
