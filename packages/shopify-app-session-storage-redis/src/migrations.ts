@@ -1,21 +1,20 @@
-import {createClient} from 'redis';
 import {Session} from '@shopify/shopify-api';
 
-type RedisClient = ReturnType<typeof createClient>;
+import {RedisEngine} from './redis-engine';
+
+export const migrationMap = new Map([
+  ['migrateToVersion1_0_1', migrateToVersion1_0_1],
+]);
 
 // need to add shop keys with list of associated session keys to support
 // the new findSessionsByShop in v2.x.x
-export async function migrateToVersion1_0_1(
-  client: RedisClient,
-  sessionKeyPrefix: string,
-  fullKey: (name: string) => string,
-) {
+export async function migrateToVersion1_0_1(engine: RedisEngine) {
   const shopsAndSessions: {[key: string]: string[]} = {};
-  const keys = await client.keys('*');
+  const keys = await engine.keys('*');
   for (const key of keys) {
-    if (key.startsWith(sessionKeyPrefix)) {
+    if (key.startsWith(engine.sessionTableName)) {
       const session = Session.fromPropertyArray(
-        JSON.parse((await client.get(key)) as string),
+        JSON.parse((await engine.getWithoutFullKey(key)) as string),
       );
       if (!shopsAndSessions[session.shop]) {
         shopsAndSessions[session.shop] = [];
@@ -25,6 +24,6 @@ export async function migrateToVersion1_0_1(
   }
   // eslint-disable-next-line guard-for-in
   for (const shop in shopsAndSessions) {
-    await client.set(fullKey(shop), JSON.stringify(shopsAndSessions[shop]));
+    await engine.setKey(shop, JSON.stringify(shopsAndSessions[shop]));
   }
 }
