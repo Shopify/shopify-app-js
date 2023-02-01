@@ -21,6 +21,7 @@ export abstract class AbstractSessionStorageMigrator<
   ) {
     this.options = {...defaultSessionStorageMigratorOptions, ...opts};
     this.dbEngine = db;
+
     this.ready = this.initMigrationPersitance();
   }
 

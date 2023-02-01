@@ -1,6 +1,5 @@
 import {AbstractSessionStorageMigrator} from './abstract-session-storage-migrator';
 import {
-  MigrationFunction,
   DBEngine,
   SessionStorageMigratorOptions,
   defaultSessionStorageMigratorOptions,
@@ -12,16 +11,36 @@ export class RdbmsSessionStorageMigrator extends AbstractSessionStorageMigrator<
   }
 
   async initMigrationPersitance(): Promise<void> {
-    await this.ready;
+    let ifNotExist = '';
+    let discardCreateTable = false;
+
+    if (this.dbEngine.useHasTable) {
+      discardCreateTable = await this.dbEngine.hasTable(
+        this.options.migrationTableName,
+      );
+    } else {
+      ifNotExist = 'IF NOT EXISTS';
+    }
 
     const migration = `
-      CREATE TABLE IF NOT EXISTS ${this.options.migrationTableName} (
+      CREATE TABLE ${ifNotExist} ${this.options.migrationTableName} (
         version varchar(255) NOT NULL PRIMARY KEY
-      );
-    `;
+    );`;
 
-    await this.dbEngine.query(migration, []);
-    return Promise.resolve();
+    let result: Promise<void> = Promise.reject();
+    if (!discardCreateTable) {
+      await this.dbEngine
+        .query(migration, [])
+        .catch((reason: any) => {
+          console.log(`Error while initialising migration table: ${reason}`);
+          result = Promise.reject();
+        })
+        .then((_: any) => {
+          result = Promise.resolve();
+        });
+    }
+
+    return result;
   }
 
   async hasVersionBeenApplied(versionName: string): Promise<boolean> {
@@ -29,7 +48,7 @@ export class RdbmsSessionStorageMigrator extends AbstractSessionStorageMigrator<
 
     const query = `
       SELECT * FROM ${this.options.migrationTableName}
-      WHERE version = ?;
+      WHERE version = ${this.dbEngine.getArgumentPlaceholder(1)};
     `;
     const rows = await this.dbEngine.query(query, [versionName]);
 
@@ -41,7 +60,7 @@ export class RdbmsSessionStorageMigrator extends AbstractSessionStorageMigrator<
 
     const insert = `
           INSERT INTO ${this.options.migrationTableName} (version)
-          VALUES(?);
+          VALUES(${this.dbEngine.getArgumentPlaceholder(1)});
         `;
     await this.dbEngine.query(insert, [versionName]);
     return Promise.resolve();
