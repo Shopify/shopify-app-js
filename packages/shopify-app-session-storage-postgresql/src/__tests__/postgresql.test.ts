@@ -31,25 +31,12 @@ describe('PostgreSQLSessionStorage', () => {
       async () => {
         try {
           const client = new pg.Client({connectionString: dbURL.toString()});
-          await new Promise<void>((resolve, reject) => {
-            client.connect((err) => {
-              if (err) reject(err);
-
-              // Create second database to test multiple databases on the same instance
-              client.query('CREATE DATABASE shopitest2', [], (err, res) => {
-                if (err) reject(err);
-
-                client.query(
-                  'GRANT ALL PRIVILEGES ON DATABASE shopitest2 TO shopify',
-                  [],
-                  (err2, res2) => {
-                    if (err2) reject(err2);
-                    resolve();
-                  },
-                );
-              });
-            });
-          });
+          await client.connect();
+          await client.query('CREATE DATABASE shopitest2', []);
+          await client.query(
+            'GRANT ALL PRIVILEGES ON DATABASE shopitest2 TO shopify',
+            [],
+          );
           await client.end();
         } catch {
           return false;
@@ -62,6 +49,7 @@ describe('PostgreSQLSessionStorage', () => {
     storage2 = new PostgreSQLSessionStorage(dbURL2);
 
     await storage.ready;
+    await storage2.ready;
   });
 
   afterAll(async () => {
