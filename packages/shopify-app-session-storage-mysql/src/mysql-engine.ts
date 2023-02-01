@@ -45,7 +45,7 @@ export class MySqlEngine implements DBEngine {
     return Array.isArray(rows) && rows.length === 1;
   }
 
-  getArgumentPlaceholder(position: number): string {
+  getArgumentPlaceholder(_: number): string {
     return `${this.sqlArgumentPlaceholder}`;
   }
 }

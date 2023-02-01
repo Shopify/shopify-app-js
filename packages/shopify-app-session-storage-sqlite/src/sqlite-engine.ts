@@ -40,7 +40,7 @@ export class SqliteEngine implements DBEngine {
     return rows.length === 1;
   }
 
-  getArgumentPlaceholder(position: number): string {
+  getArgumentPlaceholder(_: number): string {
     return `${this.sqlArgumentPlaceholder}`;
   }
 }

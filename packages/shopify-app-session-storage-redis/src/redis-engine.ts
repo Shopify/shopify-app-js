@@ -69,7 +69,7 @@ export class RedisEngine implements DBEngine {
     return Promise.resolve(false);
   }
 
-  getArgumentPlaceholder(position: number): string {
+  getArgumentPlaceholder(_: number): string {
     return `${this.sqlArgumentPlaceholder}`;
   }
 }
