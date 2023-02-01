@@ -1,5 +1,7 @@
 import {Session} from '@shopify/shopify-api';
 
+import {SessionStorageMigratorOptions} from './session-storage-migration';
+
 /**
  * Defines the strategy to be used to store sessions for the Shopify App.
  */
@@ -40,4 +42,10 @@ interface SessionStorage {
   findSessionsByShop(shop: string): Promise<Session[]>;
 }
 
-export {SessionStorage};
+interface RdbmsSessionStorageOptions {
+  sessionTableName: string;
+  sqlArgumentPlaceholder: string;
+  migratorOptions: SessionStorageMigratorOptions | null;
+}
+
+export {SessionStorage, RdbmsSessionStorageOptions};
