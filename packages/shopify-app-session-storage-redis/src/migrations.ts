@@ -8,7 +8,9 @@ export const migrationMap = new Map([
 
 // need to add shop keys with list of associated session keys to support
 // the new findSessionsByShop in v2.x.x
-export async function migrateToVersion1_0_1(engine: RedisEngine) {
+export async function migrateToVersion1_0_1(
+  engine: RedisEngine,
+): Promise<void> {
   const shopsAndSessions: {[key: string]: string[]} = {};
   const keys = await engine.keys('*');
   for (const key of keys) {
@@ -26,4 +28,6 @@ export async function migrateToVersion1_0_1(engine: RedisEngine) {
   for (const shop in shopsAndSessions) {
     await engine.setKey(shop, JSON.stringify(shopsAndSessions[shop]));
   }
+
+  return Promise.resolve();
 }

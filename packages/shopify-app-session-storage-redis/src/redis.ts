@@ -177,7 +177,6 @@ export class RedisSessionStorage implements SessionStorage {
       );
       this.migrator?.validateMigrationMap(migrationMap);
 
-      await this.migrator?.initMigrationPersitance();
       return this.migrator?.applyMigrations();
     }
   }
