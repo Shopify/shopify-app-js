@@ -75,7 +75,7 @@ export class PostgreSQLSessionStorage implements SessionStorage {
     await this.ready;
     const query = `
       SELECT * FROM "${this.options.sessionTableName}"
-      WHERE "id" = $1;
+      WHERE id = $1;
     `;
     const rows = await this.query(query, [id]);
     if (!Array.isArray(rows) || rows?.length !== 1) return undefined;
@@ -135,15 +135,10 @@ export class PostgreSQLSessionStorage implements SessionStorage {
 
   private async hasSessionTable(): Promise<boolean> {
     const query = `
-      SELECT tablename FROM pg_catalog.pg_tables WHERE tablename = $1 AND schemaname = $2
+      SELECT tablename FROM pg_catalog.pg_tables WHERE tablename = $1
     `;
 
-    // Allow multiple apps to be on the same host with separate DB and querying the right
-    // DB for the session table exisitence
-    const rows = await this.query(query, [
-      this.options.sessionTableName,
-      this.client.database,
-    ]);
+    const rows = await this.query(query, [this.options.sessionTableName]);
 
     if (!Array.isArray(rows)) return false;
     if (rows.length === 0 && (await this.hasLowercaseSessionTable())) {
@@ -158,7 +153,7 @@ export class PostgreSQLSessionStorage implements SessionStorage {
     const hasSessionTable = await this.hasSessionTable();
     if (!hasSessionTable) {
       const query = `
-        CREATE TABLE "${this.options.sessionTableName}" (
+        CREATE TABLE IF NOT EXISTS "${this.options.sessionTableName}" (
           "id" varchar(255) NOT NULL PRIMARY KEY,
           "shop" varchar(255) NOT NULL,
           "state" varchar(255) NOT NULL,
@@ -186,14 +181,13 @@ export class PostgreSQLSessionStorage implements SessionStorage {
 
   private async hasLowercaseSessionTable(): Promise<boolean> {
     const query = `
-      SELECT tablename FROM pg_catalog.pg_tables WHERE tablename = $1 AND schemaname = $2
+      SELECT tablename FROM pg_catalog.pg_tables WHERE tablename = $1
     `;
 
     // Allow multiple apps to be on the same host with separate DB and querying the right
     // DB for the session table exisitence
     const rows = await this.query(query, [
       this.options.sessionTableName.toLowerCase(),
-      this.client.database,
     ]);
     return Array.isArray(rows) && rows.length === 1;
   }
