@@ -5,17 +5,18 @@ import {
   SessionStorageMigratorOptions,
   SessionStorageMigrator,
   RdbmsSessionStorageMigrator,
+  RdbmsSessionStorageOptions,
 } from '@shopify/shopify-app-session-storage';
 
 import {migrationMap} from './migrations';
 import {MySqlEngine} from './mysql-engine';
 
-export interface MySQLSessionStorageOptions {
-  sessionTableName: string;
-  migratorOptions: SessionStorageMigratorOptions | null;
-}
+export interface MySQLSessionStorageOptions
+  extends RdbmsSessionStorageOptions {}
+
 const defaultMySQLSessionStorageOptions: MySQLSessionStorageOptions = {
   sessionTableName: 'shopify_sessions',
+  sqlArgumentPlaceholder: '?',
   migratorOptions: {
     migrationTableName: 'shopify_sessions_migrations',
     migrations: migrationMap,
@@ -71,7 +72,9 @@ export class MySQLSessionStorage implements SessionStorage {
     const query = `
       REPLACE INTO ${this.options.sessionTableName}
       (${entries.map(([key]) => key).join(', ')})
-      VALUES (${entries.map(() => `?`).join(', ')})
+      VALUES (${entries
+        .map(() => `${this.options.sqlArgumentPlaceholder}`)
+        .join(', ')})
     `;
     await this.connection.query(
       query,
@@ -84,7 +87,7 @@ export class MySQLSessionStorage implements SessionStorage {
     await this.ready;
     const query = `
       SELECT * FROM \`${this.options.sessionTableName}\`
-      WHERE id = ?;
+      WHERE id = ${this.options.sqlArgumentPlaceholder};
     `;
     const [rows] = await this.connection.query(query, [id]);
     if (!Array.isArray(rows) || rows?.length !== 1) return undefined;
@@ -96,7 +99,7 @@ export class MySQLSessionStorage implements SessionStorage {
     await this.ready;
     const query = `
       DELETE FROM ${this.options.sessionTableName}
-      WHERE id = ?;
+      WHERE id = ${this.options.sqlArgumentPlaceholder};
     `;
     await this.connection.query(query, [id]);
     return true;
@@ -106,7 +109,9 @@ export class MySQLSessionStorage implements SessionStorage {
     await this.ready;
     const query = `
       DELETE FROM ${this.options.sessionTableName}
-      WHERE id IN (${ids.map(() => '?').join(',')});
+      WHERE id IN (${ids
+        .map(() => `${this.options.sqlArgumentPlaceholder}`)
+        .join(',')});
     `;
     await this.connection.query(query, ids);
     return true;
@@ -117,7 +122,7 @@ export class MySQLSessionStorage implements SessionStorage {
 
     const query = `
       SELECT * FROM ${this.options.sessionTableName}
-      WHERE shop = ?;
+      WHERE shop = ${this.options.sqlArgumentPlaceholder};
     `;
     const [rows] = await this.connection.query(query, [shop]);
     if (!Array.isArray(rows) || rows?.length === 0) return [];
@@ -136,26 +141,15 @@ export class MySQLSessionStorage implements SessionStorage {
     this.connection = new MySqlEngine(
       await mysql.createConnection(this.dbUrl.toString()),
       this.options.sessionTableName,
+      this.options.sqlArgumentPlaceholder,
     );
     await this.createTable();
   }
 
-  private async hasSessionTable(): Promise<boolean> {
-    const query = `
-      SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = ? AND TABLE_SCHEMA = ?;
-    `;
-
-    // Allow multiple apps to be on the same host with separate DB and querying the right
-    // DB for the session table exisitence
-    const [rows] = await this.connection.query(query, [
-      this.options.sessionTableName,
-      this.connection.getDatabase(),
-    ]);
-    return Array.isArray(rows) && rows.length === 1;
-  }
-
   private async createTable() {
-    const hasSessionTable = await this.hasSessionTable();
+    const hasSessionTable = await this.connection.hasTable(
+      this.options.sessionTableName,
+    );
     if (!hasSessionTable) {
       const query = `
         CREATE TABLE ${this.options.sessionTableName} (
@@ -193,7 +187,6 @@ export class MySQLSessionStorage implements SessionStorage {
       );
       this.migrator?.validateMigrationMap(migrationMap);
 
-      await this.migrator?.initMigrationPersitance();
       return this.migrator?.applyMigrations();
     }
   }

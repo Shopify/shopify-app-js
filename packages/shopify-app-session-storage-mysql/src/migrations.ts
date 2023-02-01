@@ -5,7 +5,11 @@ export const migrationMap = new Map([
 ]);
 
 // need change the sizr of the scope column from 255 to 1024 char
-export async function migrateToVersion1_0_1(engine: MySqlEngine) {
+export async function migrateToVersion1_0_1(
+  engine: MySqlEngine,
+): Promise<void> {
   await engine.query(`ALTER TABLE ${engine.sessionTableName} 
       MODIFY COLUMN scope varchar(1024)`);
+
+  return Promise.resolve();
 }
