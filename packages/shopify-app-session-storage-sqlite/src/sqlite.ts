@@ -5,18 +5,18 @@ import {
   SessionStorageMigratorOptions,
   SessionStorageMigrator,
   RdbmsSessionStorageMigrator,
+  RdbmsSessionStorageOptions,
 } from '@shopify/shopify-app-session-storage';
 
 import {SqliteEngine} from './sqlite-engine';
 import {migrationMap} from './migrations';
 
-export interface SQLiteSessionStorageOptions {
-  sessionTableName: string;
-  migratorOptions: SessionStorageMigratorOptions | null;
-}
+export interface SQLiteSessionStorageOptions
+  extends RdbmsSessionStorageOptions {}
 
 const defaultSQLiteSessionStorageOptions: SQLiteSessionStorageOptions = {
   sessionTableName: 'shopify_sessions',
+  sqlArgumentPlaceholder: '?',
   migratorOptions: {
     migrationTableName: 'shopify_sessions_migrations',
     migrations: migrationMap,
@@ -37,6 +37,7 @@ export class SQLiteSessionStorage implements SessionStorage {
     this.db = new SqliteEngine(
       new sqlite3.Database(this.filename),
       this.options.sessionTableName,
+      this.options.sqlArgumentPlaceholder,
     );
     this.ready = this.init();
     this.ready = this.initMigrator(this.options.migratorOptions);
@@ -57,7 +58,9 @@ export class SQLiteSessionStorage implements SessionStorage {
     const query = `
       INSERT OR REPLACE INTO ${this.options.sessionTableName}
       (${entries.map(([key]) => key).join(', ')})
-      VALUES (${entries.map(() => '?').join(', ')});
+      VALUES (${entries
+        .map(() => `${this.options.sqlArgumentPlaceholder}`)
+        .join(', ')});
     `;
 
     await this.db.query(
@@ -71,7 +74,7 @@ export class SQLiteSessionStorage implements SessionStorage {
     await this.ready;
     const query = `
       SELECT * FROM ${this.options.sessionTableName}
-      WHERE id = ?;
+      WHERE id = ${this.options.sqlArgumentPlaceholder};
     `;
     const rows = await this.db.query(query, [id]);
     if (!Array.isArray(rows) || rows?.length !== 1) return undefined;
@@ -83,7 +86,7 @@ export class SQLiteSessionStorage implements SessionStorage {
     await this.ready;
     const query = `
       DELETE FROM ${this.options.sessionTableName}
-      WHERE id = ?;
+      WHERE id = ${this.options.sqlArgumentPlaceholder};
     `;
     await this.db.query(query, [id]);
     return true;
@@ -93,7 +96,9 @@ export class SQLiteSessionStorage implements SessionStorage {
     await this.ready;
     const query = `
       DELETE FROM ${this.options.sessionTableName}
-      WHERE id IN (${ids.map(() => '?').join(',')});
+      WHERE id IN (${ids
+        .map(() => `${this.options.sqlArgumentPlaceholder}`)
+        .join(',')});
     `;
     await this.db.query(query, ids);
     return true;
@@ -103,7 +108,7 @@ export class SQLiteSessionStorage implements SessionStorage {
     await this.ready;
     const query = `
       SELECT * FROM ${this.options.sessionTableName}
-      WHERE shop = ?;
+      WHERE shop = ${this.options.sqlArgumentPlaceholder};
     `;
     const rows = await this.db.query(query, [shop]);
     if (!Array.isArray(rows) || rows?.length === 0) return [];
@@ -114,19 +119,10 @@ export class SQLiteSessionStorage implements SessionStorage {
     return results;
   }
 
-  private async hasSessionTable(): Promise<boolean> {
-    const query = `
-    SELECT name FROM sqlite_schema
-    WHERE
-      type = 'table' AND
-      name = ?;
-    `;
-    const rows = await this.db.query(query, [this.options.sessionTableName]);
-    return rows.length === 1;
-  }
-
   private async init() {
-    const hasSessionTable = await this.hasSessionTable();
+    const hasSessionTable = await this.db.hasTable(
+      this.options.sessionTableName,
+    );
     if (!hasSessionTable) {
       const query = `
         CREATE TABLE ${this.options.sessionTableName} (
@@ -161,7 +157,6 @@ export class SQLiteSessionStorage implements SessionStorage {
       this.migrator = new RdbmsSessionStorageMigrator(this.db, migratorOptions);
       this.migrator.validateMigrationMap(migrationMap);
 
-      await this.migrator.initMigrationPersitance();
       return this.migrator.applyMigrations();
     }
   }

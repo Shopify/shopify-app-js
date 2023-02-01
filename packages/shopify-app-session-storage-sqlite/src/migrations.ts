@@ -3,7 +3,7 @@ import {SqliteEngine} from './sqlite-engine';
 export const migrationMap = new Map([['internal_v101', migrateToV1_0_1]]);
 
 // need to migrate exisiting scope from varchar 255 to varchar 1024
-async function migrateToV1_0_1(engine: SqliteEngine) {
+async function migrateToV1_0_1(engine: SqliteEngine): Promise<void> {
   const tempTableName = `${engine.sessionTableName}_for_migration_toV101`;
 
   //  1. rename exisiting table
@@ -38,4 +38,6 @@ async function migrateToV1_0_1(engine: SqliteEngine) {
   // 4. Delete old renamed table
   const drop = `DROP TABLE ${tempTableName};`;
   await engine.query(drop);
+
+  return Promise.resolve();
 }
