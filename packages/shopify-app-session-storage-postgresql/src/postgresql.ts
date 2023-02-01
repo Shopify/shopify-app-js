@@ -157,26 +157,34 @@ export class PostgreSQLSessionStorage implements SessionStorage {
     await this.client.connect();
   }
 
-  private async createTable() {
-    const hasSessionTable = await this.client.hasTable(
-      this.options.sessionTableName,
-    );
-    if (!hasSessionTable) {
-      const query = `
-      CREATE TABLE ${this.options.sessionTableName} (
-        id varchar(255) NOT NULL PRIMARY KEY,
-        shop varchar(255) NOT NULL,
-        state varchar(255) NOT NULL,
-        isOnline boolean NOT NULL,
-        scope varchar(255),
-        expires integer,
-        onlineAccessInfo varchar(255),
-        accessToken varchar(255)
-      )
+  private async hasSessionTable(): Promise<boolean> {
+    const query = `
+      SELECT tablename FROM pg_catalog.pg_tables WHERE tablename = $1 AND schemaname = $2
     `;
 
-      await this.client.query(query);
-    }
+    // Allow multiple apps to be on the same host with separate DB and querying the right
+    // DB for the session table exisitence
+    const rows = await this.query(query, [
+      this.options.sessionTableName,
+      this.client.database,
+    ]);
+    return Array.isArray(rows) && rows.length === 1;
+  }
+
+  private async createTable() {
+    const query = `
+        CREATE TABLE IF NOT EXISTS ${this.options.sessionTableName} (
+          id varchar(255) NOT NULL PRIMARY KEY,
+          shop varchar(255) NOT NULL,
+          state varchar(255) NOT NULL,
+          isOnline boolean NOT NULL,
+          scope varchar(255),
+          expires integer,
+          onlineAccessInfo varchar(255),
+          accessToken varchar(255)
+        )
+      `;
+    await this.client(query);
   }
 
   private databaseRowToSession(row: any): Session {

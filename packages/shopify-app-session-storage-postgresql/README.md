@@ -1,6 +1,7 @@
 # Session Storage Adapter for PostgreSQL
 
 This package implements the `SessionStorage` interface that works with an instance of [PostgreSQL](https://www.postgresql.org).
+Tested using PostgreSQL v15
 
 ```js
 import {shopifyApp} from '@shopify/shopify-app-express';
