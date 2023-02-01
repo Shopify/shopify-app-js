@@ -1,15 +1,29 @@
 import pg from 'pg';
 import {Session} from '@shopify/shopify-api';
-import {SessionStorage} from '@shopify/shopify-app-session-storage';
+import {
+  RdbmsSessionStorageMigrator,
+  RdbmsSessionStorageOptions,
+  SessionStorage,
+  SessionStorageMigrator,
+  SessionStorageMigratorOptions,
+} from '@shopify/shopify-app-session-storage';
 
-export interface PostgreSQLSessionStorageOptions {
-  sessionTableName: string;
+import {migrationMap} from './migrations';
+import {PostgresEngine} from './postgres-engine';
+
+export interface PostgreSQLSessionStorageOptions
+  extends RdbmsSessionStorageOptions {
   port: number;
 }
 const defaultPostgreSQLSessionStorageOptions: PostgreSQLSessionStorageOptions =
   {
     sessionTableName: 'shopify_sessions',
+    sqlArgumentPlaceholder: '$',
     port: 3211,
+    migratorOptions: {
+      migrationTableName: 'shopify_sessions_migrations',
+      migrations: migrationMap,
+    },
   };
 
 export class PostgreSQLSessionStorage implements SessionStorage {
@@ -32,7 +46,8 @@ export class PostgreSQLSessionStorage implements SessionStorage {
 
   public readonly ready: Promise<void>;
   private options: PostgreSQLSessionStorageOptions;
-  private client: pg.Client;
+  private client: PostgresEngine;
+  private migrator: SessionStorageMigrator | null;
 
   constructor(
     private dbUrl: URL,
@@ -43,6 +58,7 @@ export class PostgreSQLSessionStorage implements SessionStorage {
     }
     this.options = {...defaultPostgreSQLSessionStorageOptions, ...opts};
     this.ready = this.init();
+    this.ready = this.initMigrator(this.options.migratorOptions);
   }
 
   public async storeSession(session: Session): Promise<boolean> {
@@ -59,12 +75,14 @@ export class PostgreSQLSessionStorage implements SessionStorage {
     const query = `
       INSERT INTO ${this.options.sessionTableName}
       (${entries.map(([key]) => key).join(', ')})
-      VALUES (${entries.map((_, i) => `$${i + 1}`).join(', ')})
+      VALUES (${entries
+        .map((_, i) => `${this.client.getArgumentPlaceholder(i + 1)}`)
+        .join(', ')})
       ON CONFLICT (id) DO UPDATE SET ${entries
         .map(([key]) => `${key} = Excluded.${key}`)
         .join(', ')};
     `;
-    await this.query(
+    await this.client.query(
       query,
       entries.map(([_key, value]) => value),
     );
@@ -75,9 +93,9 @@ export class PostgreSQLSessionStorage implements SessionStorage {
     await this.ready;
     const query = `
       SELECT * FROM ${this.options.sessionTableName}
-      WHERE id = $1;
+      WHERE id = ${this.client.getArgumentPlaceholder(1)};
     `;
-    const rows = await this.query(query, [id]);
+    const rows = await this.client.query(query, [id]);
     if (!Array.isArray(rows) || rows?.length !== 1) return undefined;
     const rawResult = rows[0] as any;
     return this.databaseRowToSession(rawResult);
@@ -87,9 +105,9 @@ export class PostgreSQLSessionStorage implements SessionStorage {
     await this.ready;
     const query = `
       DELETE FROM ${this.options.sessionTableName}
-      WHERE id = $1;
+      WHERE id = ${this.client.getArgumentPlaceholder(1)};
     `;
-    await this.query(query, [id]);
+    await this.client.query(query, [id]);
     return true;
   }
 
@@ -97,9 +115,11 @@ export class PostgreSQLSessionStorage implements SessionStorage {
     await this.ready;
     const query = `
       DELETE FROM ${this.options.sessionTableName}
-      WHERE id IN (${ids.map((_, i) => `$${i + 1}`).join(', ')});
+      WHERE id IN (${ids
+        .map((_, i) => `${this.client.getArgumentPlaceholder(i + 1)}`)
+        .join(', ')});
     `;
-    await this.query(query, ids);
+    await this.client.query(query, ids);
     return true;
   }
 
@@ -108,9 +128,9 @@ export class PostgreSQLSessionStorage implements SessionStorage {
 
     const query = `
       SELECT * FROM ${this.options.sessionTableName}
-      WHERE shop = $1;
+      WHERE shop = ${this.client.getArgumentPlaceholder(1)};
     `;
-    const rows = await this.query(query, [shop]);
+    const rows = await this.client.query(query, [shop]);
     if (!Array.isArray(rows) || rows?.length === 0) return [];
 
     const results: Session[] = rows.map((row: any) => {
@@ -120,11 +140,15 @@ export class PostgreSQLSessionStorage implements SessionStorage {
   }
 
   public disconnect(): Promise<void> {
-    return this.client.end();
+    return this.client.disconnect();
   }
 
   private async init() {
-    this.client = new pg.Client({connectionString: this.dbUrl.toString()});
+    this.client = new PostgresEngine(
+      new pg.Client({connectionString: this.dbUrl.toString()}),
+      this.options.sessionTableName,
+      this.options.sqlArgumentPlaceholder,
+    );
     await this.connectClient();
     await this.createTable();
   }
@@ -133,22 +157,10 @@ export class PostgreSQLSessionStorage implements SessionStorage {
     await this.client.connect();
   }
 
-  private async hasSessionTable(): Promise<boolean> {
-    const query = `
-      SELECT tablename FROM pg_catalog.pg_tables WHERE tablename = $1 AND schemaname = $2
-    `;
-
-    // Allow multiple apps to be on the same host with separate DB and querying the right
-    // DB for the session table exisitence
-    const rows = await this.query(query, [
-      this.options.sessionTableName,
-      this.client.database,
-    ]);
-    return Array.isArray(rows) && rows.length === 1;
-  }
-
   private async createTable() {
-    const hasSessionTable = await this.hasSessionTable();
+    const hasSessionTable = await this.client.hasTable(
+      this.options.sessionTableName,
+    );
     if (!hasSessionTable) {
       const query = `
       CREATE TABLE ${this.options.sessionTableName} (
@@ -163,22 +175,31 @@ export class PostgreSQLSessionStorage implements SessionStorage {
       )
     `;
 
-      await this.query(query);
+      await this.client.query(query);
     }
-
-    // Update for existing tables
-    await this.query(`ALTER TABLE ${this.options.sessionTableName} 
-      ALTER COLUMN scope TYPE varchar(1024)`);
-  }
-
-  private async query(sql: string, params: any[] = []): Promise<any> {
-    const result = await this.client.query(sql, params);
-    return result.rows;
   }
 
   private databaseRowToSession(row: any): Session {
     // convert seconds to milliseconds prior to creating Session object
     if (row.expires) row.expires *= 1000;
     return Session.fromPropertyArray(Object.entries(row));
+  }
+
+  private async initMigrator(
+    migratorOptions?: SessionStorageMigratorOptions | null,
+  ): Promise<void> {
+    await this.ready;
+
+    if (migratorOptions === null) {
+      return Promise.resolve();
+    } else {
+      this.migrator = new RdbmsSessionStorageMigrator(
+        this.client,
+        migratorOptions,
+      );
+      this.migrator?.validateMigrationMap(migrationMap);
+
+      return this.migrator?.applyMigrations();
+    }
   }
 }
