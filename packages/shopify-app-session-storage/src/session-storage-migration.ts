@@ -107,10 +107,16 @@ interface SessionStorageMigratorOptions {
   migrations: Map<string, MigrationFunction>;
 }
 
+const defaultSessionStorageMigratorOptions: SessionStorageMigratorOptions = {
+  migrationTableName: 'shopify_sessions_migrations',
+  migrations: new Map(),
+};
+
 export {
   SessionStorageMigrator,
   MigrationFunction,
   DBEngine,
   InvalidMigrationConfigurationError,
   SessionStorageMigratorOptions,
+  defaultSessionStorageMigratorOptions,
 };
