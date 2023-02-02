@@ -43,7 +43,7 @@
     "@shopify/prettier-config": "^1.1.2",
     "@types/compression": "^1.7.2",
     "@types/cookie-parser": "^1.4.3",
-    "@types/express": "^4.17.13",
+    "@types/express": "^4.17.16",
     "@types/jest": "^29.1.1",
     "@types/jsonwebtoken": "^8.5.9",
     "@types/pg": "^8.6.5",
