@@ -32,7 +32,7 @@ export class RedisSessionStorageMigrator extends AbstractSessionStorageMigrator<
     const migrations = await this.getMigrationRecords();
     migrations.set(versionName, true);
 
-    const superClass = this as AbstractSessionStorageMigrator;
+    const superClass = this as AbstractSessionStorageMigrator<RedisEngine>;
 
     superClass.dbEngine.setKey(
       superClass.options.migrationTableName,
@@ -43,7 +43,7 @@ export class RedisSessionStorageMigrator extends AbstractSessionStorageMigrator<
   }
 
   private async getMigrationRecords(): Promise<Map<string, boolean>> {
-    const superClass = this as AbstractSessionStorageMigrator;
+    const superClass = this as AbstractSessionStorageMigrator<RedisEngine>;
 
     const migrationsRecord = await superClass.dbEngine.query(
       superClass.options.migrationTableName,
