@@ -24,23 +24,26 @@ export class RdbmsSessionStorageMigrator extends AbstractSessionStorageMigrator<
 
     const migration = `
       CREATE TABLE ${ifNotExist} ${this.options.migrationTableName} (
-        version varchar(255) NOT NULL PRIMARY KEY
+        ${this.options.versionColumnName} varchar(255) NOT NULL PRIMARY KEY
     );`;
 
-    let result: Promise<void> = Promise.reject();
-    if (!discardCreateTable) {
-      await this.dbEngine
-        .query(migration, [])
-        .catch((reason: any) => {
-          console.log(`Error while initialising migration table: ${reason}`);
-          result = Promise.reject();
-        })
-        .then((_: any) => {
-          result = Promise.resolve();
-        });
+    if (discardCreateTable) {
+      return Promise.resolve();
+    } else {
+      return new Promise((resolve, reject) => {
+        this.dbEngine
+          .query(migration, [])
+          .then((_: any) => {
+            resolve();
+          })
+          .catch((reason: any) => {
+            console.error(
+              `Error while initialising migration table: ${reason}`,
+            );
+            reject();
+          });
+      });
     }
-
-    return result;
   }
 
   async hasVersionBeenApplied(versionName: string): Promise<boolean> {
@@ -48,21 +51,47 @@ export class RdbmsSessionStorageMigrator extends AbstractSessionStorageMigrator<
 
     const query = `
       SELECT * FROM ${this.options.migrationTableName}
-      WHERE version = ${this.dbEngine.getArgumentPlaceholder(1)};
+      WHERE ${this.options.versionColumnName} = 
+        ${this.dbEngine.getArgumentPlaceholder(1)};
     `;
-    const rows = await this.dbEngine.query(query, [versionName]);
 
-    return Promise.resolve(rows.length === 1);
+    return new Promise((resolve, reject) => {
+      this.dbEngine
+        .query(query, [versionName])
+        .then((rows: any) => {
+          resolve(rows.length === 1);
+        })
+        .catch((reason: any) => {
+          console.error(
+            `Error while checking if this migration:[${versionName}] has been applied.\n${reason}`,
+          );
+          reject();
+        });
+    });
   }
 
   async saveAppliedVersion(versionName: string): Promise<void> {
     await this.ready;
 
     const insert = `
-          INSERT INTO ${this.options.migrationTableName} (version)
+          INSERT INTO ${this.options.migrationTableName} (${
+      this.options.versionColumnName
+    })
           VALUES(${this.dbEngine.getArgumentPlaceholder(1)});
         `;
-    await this.dbEngine.query(insert, [versionName]);
-    return Promise.resolve();
+
+    return new Promise((resolve, reject) => {
+      this.dbEngine
+        .query(insert, [versionName])
+        .then((_: any) => {
+          resolve();
+        })
+        .catch((reason: any) => {
+          console.error(
+            `Error while saving this migration version:[${versionName}].\n${reason}`,
+          );
+          reject();
+        });
+    });
   }
 }
