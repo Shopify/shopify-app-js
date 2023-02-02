@@ -22,6 +22,7 @@ const defaultPostgreSQLSessionStorageOptions: PostgreSQLSessionStorageOptions =
     port: 3211,
     migratorOptions: {
       migrationTableName: 'shopify_sessions_migrations',
+      versionColumnName: 'version',
       migrations: migrationMap,
     },
   };
@@ -157,20 +158,6 @@ export class PostgreSQLSessionStorage implements SessionStorage {
     await this.client.connect();
   }
 
-  private async hasSessionTable(): Promise<boolean> {
-    const query = `
-      SELECT tablename FROM pg_catalog.pg_tables WHERE tablename = $1 AND schemaname = $2
-    `;
-
-    // Allow multiple apps to be on the same host with separate DB and querying the right
-    // DB for the session table exisitence
-    const rows = await this.query(query, [
-      this.options.sessionTableName,
-      this.client.database,
-    ]);
-    return Array.isArray(rows) && rows.length === 1;
-  }
-
   private async createTable() {
     const query = `
         CREATE TABLE IF NOT EXISTS ${this.options.sessionTableName} (
@@ -184,7 +171,7 @@ export class PostgreSQLSessionStorage implements SessionStorage {
           accessToken varchar(255)
         )
       `;
-    await this.client(query);
+    await this.client.query(query);
   }
 
   private databaseRowToSession(row: any): Session {
