@@ -12,7 +12,7 @@ export class PostgresEngine implements DBEngine {
     sqlArgumentPlaceholder: string,
   ) {
     this.sessionTableName = sessionTableName;
-    this.useHasTable = true;
+    this.useHasTable = false;
     this.sqlArgumentPlaceholder = sqlArgumentPlaceholder;
   }
 

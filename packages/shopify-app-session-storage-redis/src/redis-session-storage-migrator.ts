@@ -21,8 +21,6 @@ export class RedisSessionStorageMigrator extends AbstractSessionStorageMigrator<
   }
 
   async hasVersionBeenApplied(versionName: string): Promise<boolean> {
-    await this.ready;
-
     const migrations = await this.getMigrationRecords();
     const found =
       migrations.has(versionName) && (migrations.get(versionName) || false);
@@ -31,13 +29,13 @@ export class RedisSessionStorageMigrator extends AbstractSessionStorageMigrator<
   }
 
   async saveAppliedVersion(versionName: string): Promise<void> {
-    await this.ready;
-
     const migrations = await this.getMigrationRecords();
     migrations.set(versionName, true);
 
-    this.dbEngine.setKey(
-      this.options.migrationTableName,
+    const superClass = this as AbstractSessionStorageMigrator;
+
+    superClass.dbEngine.setKey(
+      superClass.options.migrationTableName,
       JSON.stringify(Object.fromEntries(migrations)),
     );
 
@@ -45,8 +43,10 @@ export class RedisSessionStorageMigrator extends AbstractSessionStorageMigrator<
   }
 
   private async getMigrationRecords(): Promise<Map<string, boolean>> {
-    const migrationsRecord = await this.dbEngine.query(
-      this.options.migrationTableName,
+    const superClass = this as AbstractSessionStorageMigrator;
+
+    const migrationsRecord = await superClass.dbEngine.query(
+      superClass.options.migrationTableName,
     );
     let migrations: Map<string, boolean> = new Map();
     if (migrationsRecord) {
