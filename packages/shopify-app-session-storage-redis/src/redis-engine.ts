@@ -52,17 +52,16 @@ export class RedisEngine implements DBEngine {
   }
 
   disconnect(): Promise<void> {
-    let result: Promise<void> = Promise.reject();
-    this.client
-      .quit()
-      .then((_) => {
-        result = Promise.resolve();
-      })
-      .catch((_) => {
-        result = Promise.reject();
-      });
-
-    return result;
+    return new Promise((resolve, reject) => {
+      this.client
+        .quit()
+        .then((_) => {
+          resolve();
+        })
+        .catch((reason) => {
+          reject(reason);
+        });
+    });
   }
 
   hasTable(_: string): Promise<boolean> {

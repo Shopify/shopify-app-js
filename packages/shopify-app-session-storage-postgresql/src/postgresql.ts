@@ -46,6 +46,7 @@ export class PostgreSQLSessionStorage implements SessionStorage {
   }
 
   public readonly ready: Promise<void>;
+  private internalInit: Promise<void>;
   private options: PostgreSQLSessionStorageOptions;
   private client: PostgresEngine;
   private migrator: SessionStorageMigrator | null;
@@ -58,7 +59,7 @@ export class PostgreSQLSessionStorage implements SessionStorage {
       this.dbUrl = new URL(this.dbUrl);
     }
     this.options = {...defaultPostgreSQLSessionStorageOptions, ...opts};
-    this.ready = this.init();
+    this.internalInit = this.init();
     this.ready = this.initMigrator(this.options.migratorOptions);
   }
 
@@ -183,7 +184,7 @@ export class PostgreSQLSessionStorage implements SessionStorage {
   private async initMigrator(
     migratorOptions?: SessionStorageMigratorOptions | null,
   ): Promise<void> {
-    await this.ready;
+    await this.internalInit;
 
     if (migratorOptions === null) {
       return Promise.resolve();

@@ -43,6 +43,7 @@ export class MySQLSessionStorage implements SessionStorage {
   }
 
   public readonly ready: Promise<void>;
+  private internalInit: Promise<void>;
   private options: MySQLSessionStorageOptions;
   private connection: MySqlEngine;
   private migrator: SessionStorageMigrator | null;
@@ -55,7 +56,7 @@ export class MySQLSessionStorage implements SessionStorage {
       this.dbUrl = new URL(this.dbUrl);
     }
     this.options = {...defaultMySQLSessionStorageOptions, ...opts};
-    this.ready = this.init();
+    this.internalInit = this.init();
     this.ready = this.initMigrator(this.options.migratorOptions);
   }
 
@@ -177,7 +178,7 @@ export class MySQLSessionStorage implements SessionStorage {
   private async initMigrator(
     migratorOptions?: SessionStorageMigratorOptions | null,
   ): Promise<void> {
-    await this.ready;
+    await this.internalInit;
 
     if (migratorOptions === null) {
       return Promise.resolve();

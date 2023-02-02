@@ -28,6 +28,7 @@ export class SQLiteSessionStorage implements SessionStorage {
   private options: SQLiteSessionStorageOptions;
   private db: SqliteEngine;
   private ready: Promise<void>;
+  private internalInit: Promise<void>;
   private migrator: SessionStorageMigrator | null;
 
   constructor(
@@ -40,7 +41,7 @@ export class SQLiteSessionStorage implements SessionStorage {
       this.options.sessionTableName,
       this.options.sqlArgumentPlaceholder,
     );
-    this.ready = this.init();
+    this.internalInit = this.init();
     this.ready = this.initMigrator(this.options.migratorOptions);
   }
 
@@ -150,7 +151,7 @@ export class SQLiteSessionStorage implements SessionStorage {
   private async initMigrator(
     migratorOptions?: SessionStorageMigratorOptions | null,
   ): Promise<void> {
-    await this.ready;
+    await this.internalInit;
 
     if (migratorOptions === null) {
       return Promise.resolve();

@@ -42,6 +42,7 @@ export class RedisSessionStorage implements SessionStorage {
   }
 
   public readonly ready: Promise<void>;
+  private internalInit: Promise<void>;
   private options: RedisSessionStorageOptions;
   private client: RedisEngine;
   private migrator: SessionStorageMigrator | null;
@@ -54,7 +55,7 @@ export class RedisSessionStorage implements SessionStorage {
       this.dbUrl = new URL(this.dbUrl);
     }
     this.options = {...defaultRedisSessionStorageOptions, ...opts};
-    this.ready = this.init();
+    this.internalInit = this.init();
     this.ready = this.initMigrator(this.options.migratorOptions);
   }
 
@@ -166,7 +167,7 @@ export class RedisSessionStorage implements SessionStorage {
   private async initMigrator(
     migratorOptions?: SessionStorageMigratorOptions | null,
   ): Promise<void> {
-    await this.ready;
+    await this.internalInit;
 
     if (migratorOptions === null) {
       return Promise.resolve();
