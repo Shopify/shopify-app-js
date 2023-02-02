@@ -104,11 +104,13 @@ class InvalidMigrationConfigurationError extends Error {
  */
 interface SessionStorageMigratorOptions {
   migrationTableName: string;
+  versionColumnName: string;
   migrations: Map<string, MigrationFunction>;
 }
 
 const defaultSessionStorageMigratorOptions: SessionStorageMigratorOptions = {
   migrationTableName: 'shopify_sessions_migrations',
+  versionColumnName: 'version',
   migrations: new Map(),
 };
 

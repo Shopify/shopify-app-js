@@ -19,6 +19,7 @@ const defaultMySQLSessionStorageOptions: MySQLSessionStorageOptions = {
   sqlArgumentPlaceholder: '?',
   migratorOptions: {
     migrationTableName: 'shopify_sessions_migrations',
+    versionColumnName: 'version',
     migrations: migrationMap,
   },
 };
