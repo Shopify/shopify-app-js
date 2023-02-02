@@ -19,6 +19,7 @@ const defaultRedisSessionStorageOptions: RedisSessionStorageOptions = {
   sessionKeyPrefix: 'shopify_sessions',
   migratorOptions: {
     migrationTableName: 'migrations',
+    versionColumnName: '',
     migrations: migrationMap,
   },
 };
