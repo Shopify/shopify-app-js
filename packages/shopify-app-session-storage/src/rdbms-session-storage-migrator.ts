@@ -37,10 +37,7 @@ export class RdbmsSessionStorageMigrator extends AbstractSessionStorageMigrator<
             resolve();
           })
           .catch((reason: any) => {
-            console.error(
-              `Error while initialising migration table: ${reason}`,
-            );
-            reject();
+            reject(reason);
           });
       });
     }
@@ -62,10 +59,7 @@ export class RdbmsSessionStorageMigrator extends AbstractSessionStorageMigrator<
           resolve(rows.length === 1);
         })
         .catch((reason: any) => {
-          console.error(
-            `Error while checking if this migration:[${versionName}] has been applied.\n${reason}`,
-          );
-          reject();
+          reject(reason);
         });
     });
   }
@@ -87,10 +81,7 @@ export class RdbmsSessionStorageMigrator extends AbstractSessionStorageMigrator<
           resolve();
         })
         .catch((reason: any) => {
-          console.error(
-            `Error while saving this migration version:[${versionName}].\n${reason}`,
-          );
-          reject();
+          reject(reason);
         });
     });
   }
