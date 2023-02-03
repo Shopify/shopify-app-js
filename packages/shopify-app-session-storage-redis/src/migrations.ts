@@ -9,14 +9,14 @@ export const migrationMap = new Map([
 // need to add shop keys with list of associated session keys to support
 // the new findSessionsByShop in v2.x.x
 export async function migrateToVersion1_0_1(
-  engine: RedisConnection,
+  connection: RedisConnection,
 ): Promise<void> {
   const shopsAndSessions: {[key: string]: string[]} = {};
-  const keys = await engine.keys('*');
+  const keys = await connection.keys('*');
   for (const key of keys) {
-    if (key.startsWith(engine.sessionPersistenceIdentifier)) {
+    if (key.startsWith(connection.sessionPersistenceIdentifier)) {
       const session = Session.fromPropertyArray(
-        JSON.parse((await engine.getWithoutFullKey(key)) as string),
+        JSON.parse((await connection.getWithoutFullKey(key)) as string),
       );
       if (!shopsAndSessions[session.shop]) {
         shopsAndSessions[session.shop] = [];
@@ -26,7 +26,7 @@ export async function migrateToVersion1_0_1(
   }
   // eslint-disable-next-line guard-for-in
   for (const shop in shopsAndSessions) {
-    await engine.setKey(shop, JSON.stringify(shopsAndSessions[shop]));
+    await connection.setKey(shop, JSON.stringify(shopsAndSessions[shop]));
   }
 
   return Promise.resolve();

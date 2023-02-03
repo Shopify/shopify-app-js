@@ -7,19 +7,20 @@ import {
   InvalidMigrationConfigurationError,
 } from './session-storage-migration';
 
-export abstract class AbstractMigrationEngine<EngineType extends DBConnection>
-  implements SessionStorageMigrator
+export abstract class AbstractMigrationEngine<
+  ConnectionType extends DBConnection,
+> implements SessionStorageMigrator
 {
   protected options: SessionStorageMigratorOptions;
-  protected dbEngine: EngineType;
+  protected connection: ConnectionType;
   protected ready: Promise<void>;
 
   constructor(
-    db: EngineType,
+    db: ConnectionType,
     opts: Partial<SessionStorageMigratorOptions> = {},
   ) {
     this.options = {...defaultSessionStorageMigratorOptions, ...opts};
-    this.dbEngine = db;
+    this.connection = db;
 
     this.ready = this.initMigrationPersitance();
   }
@@ -33,7 +34,7 @@ export abstract class AbstractMigrationEngine<EngineType extends DBConnection>
 
       const versionApplied = await this.hasVersionBeenApplied(version);
       if (!versionApplied) {
-        await migrateFunction(this.dbEngine);
+        await migrateFunction(this.connection);
         await this.saveAppliedVersion(version);
       }
     }

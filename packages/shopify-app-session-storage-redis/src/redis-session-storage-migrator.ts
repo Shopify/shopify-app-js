@@ -7,12 +7,12 @@ import {RedisConnection} from './redis-connection';
 
 export class RedisSessionStorageMigrator extends AbstractMigrationEngine<RedisConnection> {
   constructor(
-    db: RedisConnection,
+    dbConnection: RedisConnection,
     opts: Partial<SessionStorageMigratorOptions> = {},
   ) {
     // The name has already been decided whith the last migration
     opts.migrationTableName = 'migrations';
-    super(db, opts);
+    super(dbConnection, opts);
   }
 
   async initMigrationPersitance(): Promise<void> {
@@ -32,7 +32,7 @@ export class RedisSessionStorageMigrator extends AbstractMigrationEngine<RedisCo
     const migrations = await this.getMigrationRecords();
     migrations.set(versionName, true);
 
-    this.dbEngine.setKey(
+    this.connection.setKey(
       this.options.migrationTableName,
       JSON.stringify(Object.fromEntries(migrations)),
     );
@@ -41,7 +41,7 @@ export class RedisSessionStorageMigrator extends AbstractMigrationEngine<RedisCo
   }
 
   private async getMigrationRecords(): Promise<Map<string, boolean>> {
-    const migrationsRecord = await this.dbEngine.query(
+    const migrationsRecord = await this.connection.query(
       this.options.migrationTableName,
     );
     let migrations: Map<string, boolean> = new Map();

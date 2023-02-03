@@ -7,18 +7,18 @@ import {
 
 export class RdbmsSessionStorageMigrator extends AbstractMigrationEngine<DBConnection> {
   constructor(
-    db: DBConnection,
+    dbConnection: DBConnection,
     opts: Partial<SessionStorageMigratorOptions> = {},
   ) {
-    super(db, {...defaultSessionStorageMigratorOptions, ...opts});
+    super(dbConnection, {...defaultSessionStorageMigratorOptions, ...opts});
   }
 
   async initMigrationPersitance(): Promise<void> {
     let ifNotExist = '';
     let discardCreateTable = false;
 
-    if (this.dbEngine.useHasTable) {
-      discardCreateTable = await this.dbEngine.hasTable(
+    if (this.connection.useHasTable) {
+      discardCreateTable = await this.connection.hasTable(
         this.options.migrationTableName,
       );
     } else {
@@ -34,7 +34,7 @@ export class RdbmsSessionStorageMigrator extends AbstractMigrationEngine<DBConne
       return Promise.resolve();
     } else {
       return new Promise((resolve, reject) => {
-        this.dbEngine
+        this.connection
           .query(migration, [])
           .then((_: any) => {
             resolve();
@@ -52,11 +52,11 @@ export class RdbmsSessionStorageMigrator extends AbstractMigrationEngine<DBConne
     const query = `
       SELECT * FROM ${this.options.migrationTableName}
       WHERE ${this.options.versionColumnName} = 
-        ${this.dbEngine.getArgumentPlaceholder(1)};
+        ${this.connection.getArgumentPlaceholder(1)};
     `;
 
     return new Promise((resolve, reject) => {
-      this.dbEngine
+      this.connection
         .query(query, [versionName])
         .then((rows: any) => {
           resolve(rows.length === 1);
@@ -74,11 +74,11 @@ export class RdbmsSessionStorageMigrator extends AbstractMigrationEngine<DBConne
           INSERT INTO ${this.options.migrationTableName} (${
       this.options.versionColumnName
     })
-          VALUES(${this.dbEngine.getArgumentPlaceholder(1)});
+          VALUES(${this.connection.getArgumentPlaceholder(1)});
         `;
 
     return new Promise((resolve, reject) => {
-      this.dbEngine
+      this.connection
         .query(insert, [versionName])
         .then((_: any) => {
           resolve();
