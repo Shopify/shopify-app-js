@@ -4,7 +4,7 @@ import {DBConnection} from '@shopify/shopify-app-session-storage';
 type RedisClient = ReturnType<typeof createClient>;
 
 export class RedisConnection implements DBConnection {
-  sessionPersistenceIdentifier: string;
+  sessionDBIdentifier: string;
 
   constructor(
     private client: RedisClient,
@@ -12,7 +12,7 @@ export class RedisConnection implements DBConnection {
     onError?: (...args: any[]) => void,
   ) {
     this.client = client;
-    this.sessionPersistenceIdentifier = prefixKey;
+    this.sessionDBIdentifier = prefixKey;
 
     if (onError) {
       this.client.on('error', onError);
@@ -36,7 +36,7 @@ export class RedisConnection implements DBConnection {
   }
 
   fullKey(name: string): string {
-    return `${this.sessionPersistenceIdentifier}_${name}`;
+    return `${this.sessionDBIdentifier}_${name}`;
   }
 
   delete(name: string): Promise<any> {

@@ -2,17 +2,17 @@ import sqlite3 from 'sqlite3';
 import {RdbmsConnection} from '@shopify/shopify-app-session-storage';
 
 export class SqliteConnection implements RdbmsConnection {
-  sessionPersistenceIdentifier: string;
+  sessionDBIdentifier: string;
   useHasTable: boolean;
   sqlArgumentPlaceholder: string;
 
   constructor(
     private db: sqlite3.Database,
-    sessionTableName: string,
+    sessionDBIdentifier: string,
     sqlArgumentPlaceholder: string,
   ) {
     this.db = db;
-    this.sessionPersistenceIdentifier = sessionTableName;
+    this.sessionDBIdentifier = sessionDBIdentifier;
     this.useHasTable = true;
     this.sqlArgumentPlaceholder = sqlArgumentPlaceholder;
   }

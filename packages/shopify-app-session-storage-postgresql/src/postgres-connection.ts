@@ -2,16 +2,16 @@ import pg from 'pg';
 import {RdbmsConnection} from '@shopify/shopify-app-session-storage';
 
 export class PostgresConnection implements RdbmsConnection {
-  sessionPersistenceIdentifier: string;
+  sessionDBIdentifier: string;
   useHasTable: boolean;
   sqlArgumentPlaceholder: string;
 
   constructor(
     private client: pg.Client,
-    sessionTableName: string,
+    sessionDBIdentifier: string,
     sqlArgumentPlaceholder: string,
   ) {
-    this.sessionPersistenceIdentifier = sessionTableName;
+    this.sessionDBIdentifier = sessionDBIdentifier;
     this.useHasTable = false;
     this.sqlArgumentPlaceholder = sqlArgumentPlaceholder;
   }

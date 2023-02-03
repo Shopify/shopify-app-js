@@ -5,20 +5,18 @@ import {
   defaultSessionStorageMigratorOptions,
   InvalidMigrationConfigurationError,
 } from './session-storage-migration';
-import { DBConnection } from "./db-connection";
+import {DBConnection} from './db-connection';
 
 export abstract class AbstractMigrationEngine<
   ConnectionType extends DBConnection,
+  MigratorOptionType extends SessionStorageMigratorOptions,
 > implements SessionStorageMigrator
 {
   protected options: SessionStorageMigratorOptions;
   protected connection: ConnectionType;
   protected ready: Promise<void>;
 
-  constructor(
-    db: ConnectionType,
-    opts: Partial<SessionStorageMigratorOptions> = {},
-  ) {
+  constructor(db: ConnectionType, opts: Partial<MigratorOptionType> = {}) {
     this.options = {...defaultSessionStorageMigratorOptions, ...opts};
     this.connection = db;
 

@@ -1,16 +1,22 @@
 import {AbstractMigrationEngine} from './abstract-migration-engine';
 import {
-  SessionStorageMigratorOptions,
-  defaultSessionStorageMigratorOptions,
+  RdbmsSessionStorageMigratorOptions,
+  defaultRdbmsSessionStorageMigratorOptions,
 } from './session-storage-migration';
 import {RdbmsConnection} from './db-connection';
 
-export class RdbmsSessionStorageMigrator extends AbstractMigrationEngine<RdbmsConnection> {
+export class RdbmsSessionStorageMigrator extends AbstractMigrationEngine<
+  RdbmsConnection,
+  RdbmsSessionStorageMigratorOptions
+> {
   constructor(
     dbConnection: RdbmsConnection,
-    opts: Partial<SessionStorageMigratorOptions> = {},
+    opts: Partial<RdbmsSessionStorageMigratorOptions> = {},
   ) {
-    super(dbConnection, {...defaultSessionStorageMigratorOptions, ...opts});
+    super(dbConnection, {
+      ...defaultRdbmsSessionStorageMigratorOptions,
+      ...opts,
+    });
   }
 
   async initMigrationPersitance(): Promise<void> {
@@ -19,15 +25,15 @@ export class RdbmsSessionStorageMigrator extends AbstractMigrationEngine<RdbmsCo
 
     if (this.connection.useHasTable) {
       discardCreateTable = await this.connection.hasTable(
-        this.options.migrationTableName,
+        this.options.migrationDBIdentifier,
       );
     } else {
       ifNotExist = 'IF NOT EXISTS';
     }
 
     const migration = `
-      CREATE TABLE ${ifNotExist} ${this.options.migrationTableName} (
-        ${this.options.versionColumnName} varchar(255) NOT NULL PRIMARY KEY
+      CREATE TABLE ${ifNotExist} ${this.options.migrationDBIdentifier} (
+        ${this.getOptions().versionColumnName} varchar(255) NOT NULL PRIMARY KEY
     );`;
 
     if (discardCreateTable) {
@@ -50,8 +56,8 @@ export class RdbmsSessionStorageMigrator extends AbstractMigrationEngine<RdbmsCo
     await this.ready;
 
     const query = `
-      SELECT * FROM ${this.options.migrationTableName}
-      WHERE ${this.options.versionColumnName} = 
+      SELECT * FROM ${this.options.migrationDBIdentifier}
+      WHERE ${this.getOptions().versionColumnName} = 
         ${this.connection.getArgumentPlaceholder(1)};
     `;
 
@@ -71,8 +77,8 @@ export class RdbmsSessionStorageMigrator extends AbstractMigrationEngine<RdbmsCo
     await this.ready;
 
     const insert = `
-          INSERT INTO ${this.options.migrationTableName} (${
-      this.options.versionColumnName
+          INSERT INTO ${this.options.migrationDBIdentifier} (${
+      this.getOptions().versionColumnName
     })
           VALUES(${this.connection.getArgumentPlaceholder(1)});
         `;
@@ -87,5 +93,9 @@ export class RdbmsSessionStorageMigrator extends AbstractMigrationEngine<RdbmsCo
           reject(reason);
         });
     });
+  }
+
+  private getOptions(): RdbmsSessionStorageMigratorOptions {
+    return this.options as RdbmsSessionStorageMigratorOptions;
   }
 }

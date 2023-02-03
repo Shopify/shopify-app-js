@@ -3,7 +3,7 @@
  */
 interface DBConnection {
   /** the table used to store sessions */
-  sessionPersistenceIdentifier: string;
+  sessionDBIdentifier: string;
 
   /**
    * Initiate the actual connection to the underlying database

@@ -13,13 +13,12 @@ import {RedisSessionStorageMigrator} from './redis-session-storage-migrator';
 export interface RedisSessionStorageOptions extends RedisClientOptions {
   sessionKeyPrefix: string;
   onError?: (...args: any[]) => void;
-  migratorOptions: SessionStorageMigratorOptions | null;
+  migratorOptions?: SessionStorageMigratorOptions;
 }
 const defaultRedisSessionStorageOptions: RedisSessionStorageOptions = {
   sessionKeyPrefix: 'shopify_sessions',
   migratorOptions: {
-    migrationTableName: 'migrations',
-    versionColumnName: '',
+    migrationDBIdentifier: 'migrations',
     migrations: migrationMap,
   },
 };
@@ -166,7 +165,7 @@ export class RedisSessionStorage implements SessionStorage {
   }
 
   private async initMigrator(
-    migratorOptions?: SessionStorageMigratorOptions | null,
+    migratorOptions?: SessionStorageMigratorOptions,
   ): Promise<void> {
     await this.internalInit;
 

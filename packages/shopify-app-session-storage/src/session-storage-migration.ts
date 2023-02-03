@@ -66,21 +66,33 @@ class InvalidMigrationConfigurationError extends Error {
  * Use to initialise session storage migrators
  */
 interface SessionStorageMigratorOptions {
-  migrationTableName: string;
-  versionColumnName: string;
+  migrationDBIdentifier: string;
   migrations: Map<string, MigrationFunction>;
 }
 
 const defaultSessionStorageMigratorOptions: SessionStorageMigratorOptions = {
-  migrationTableName: 'shopify_sessions_migrations',
-  versionColumnName: 'version',
+  migrationDBIdentifier: 'shopify_sessions_migrations',
   migrations: new Map(),
 };
+
+interface RdbmsSessionStorageMigratorOptions
+  extends SessionStorageMigratorOptions {
+  versionColumnName: string;
+}
+
+const defaultRdbmsSessionStorageMigratorOptions: RdbmsSessionStorageMigratorOptions =
+  {
+    migrationDBIdentifier: 'shopify_sessions_migrations',
+    versionColumnName: 'version',
+    migrations: new Map(),
+  };
 
 export {
   SessionStorageMigrator,
   MigrationFunction,
   InvalidMigrationConfigurationError,
   SessionStorageMigratorOptions,
+  RdbmsSessionStorageMigratorOptions,
   defaultSessionStorageMigratorOptions,
+  defaultRdbmsSessionStorageMigratorOptions,
 };

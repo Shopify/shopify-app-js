@@ -2,10 +2,10 @@ import sqlite3 from 'sqlite3';
 import {Session} from '@shopify/shopify-api';
 import {
   SessionStorage,
-  SessionStorageMigratorOptions,
   SessionStorageMigrator,
   RdbmsSessionStorageMigrator,
   RdbmsSessionStorageOptions,
+  RdbmsSessionStorageMigratorOptions,
 } from '@shopify/shopify-app-session-storage';
 
 import {SqliteConnection} from './sqlite-connection';
@@ -15,10 +15,10 @@ export interface SQLiteSessionStorageOptions
   extends RdbmsSessionStorageOptions {}
 
 const defaultSQLiteSessionStorageOptions: SQLiteSessionStorageOptions = {
-  sessionTableName: 'shopify_sessions',
+  sessionDBIdentifier: 'shopify_sessions',
   sqlArgumentPlaceholder: '?',
   migratorOptions: {
-    migrationTableName: 'shopify_sessions_migrations',
+    migrationDBIdentifier: 'shopify_sessions_migrations',
     versionColumnName: 'version',
     migrations: migrationMap,
   },
@@ -38,7 +38,7 @@ export class SQLiteSessionStorage implements SessionStorage {
     this.options = {...defaultSQLiteSessionStorageOptions, ...opts};
     this.db = new SqliteConnection(
       new sqlite3.Database(this.filename),
-      this.options.sessionTableName,
+      this.options.sessionDBIdentifier,
       this.options.sqlArgumentPlaceholder,
     );
     this.internalInit = this.init();
@@ -58,7 +58,7 @@ export class SQLiteSessionStorage implements SessionStorage {
       );
 
     const query = `
-      INSERT OR REPLACE INTO ${this.options.sessionTableName}
+      INSERT OR REPLACE INTO ${this.options.sessionDBIdentifier}
       (${entries.map(([key]) => key).join(', ')})
       VALUES (${entries
         .map(() => `${this.options.sqlArgumentPlaceholder}`)
@@ -75,7 +75,7 @@ export class SQLiteSessionStorage implements SessionStorage {
   public async loadSession(id: string): Promise<Session | undefined> {
     await this.ready;
     const query = `
-      SELECT * FROM ${this.options.sessionTableName}
+      SELECT * FROM ${this.options.sessionDBIdentifier}
       WHERE id = ${this.options.sqlArgumentPlaceholder};
     `;
     const rows = await this.db.query(query, [id]);
@@ -87,7 +87,7 @@ export class SQLiteSessionStorage implements SessionStorage {
   public async deleteSession(id: string): Promise<boolean> {
     await this.ready;
     const query = `
-      DELETE FROM ${this.options.sessionTableName}
+      DELETE FROM ${this.options.sessionDBIdentifier}
       WHERE id = ${this.options.sqlArgumentPlaceholder};
     `;
     await this.db.query(query, [id]);
@@ -97,7 +97,7 @@ export class SQLiteSessionStorage implements SessionStorage {
   public async deleteSessions(ids: string[]): Promise<boolean> {
     await this.ready;
     const query = `
-      DELETE FROM ${this.options.sessionTableName}
+      DELETE FROM ${this.options.sessionDBIdentifier}
       WHERE id IN (${ids
         .map(() => `${this.options.sqlArgumentPlaceholder}`)
         .join(',')});
@@ -109,7 +109,7 @@ export class SQLiteSessionStorage implements SessionStorage {
   public async findSessionsByShop(shop: string): Promise<Session[]> {
     await this.ready;
     const query = `
-      SELECT * FROM ${this.options.sessionTableName}
+      SELECT * FROM ${this.options.sessionDBIdentifier}
       WHERE shop = ${this.options.sqlArgumentPlaceholder};
     `;
     const rows = await this.db.query(query, [shop]);
@@ -123,11 +123,11 @@ export class SQLiteSessionStorage implements SessionStorage {
 
   private async init() {
     const hasSessionTable = await this.db.hasTable(
-      this.options.sessionTableName,
+      this.options.sessionDBIdentifier,
     );
     if (!hasSessionTable) {
       const query = `
-        CREATE TABLE ${this.options.sessionTableName} (
+        CREATE TABLE ${this.options.sessionDBIdentifier} (
           id varchar(255) NOT NULL PRIMARY KEY,
           shop varchar(255) NOT NULL,
           state varchar(255) NOT NULL,
@@ -149,7 +149,7 @@ export class SQLiteSessionStorage implements SessionStorage {
   }
 
   private async initMigrator(
-    migratorOptions?: SessionStorageMigratorOptions | null,
+    migratorOptions?: RdbmsSessionStorageMigratorOptions,
   ): Promise<void> {
     await this.internalInit;
 

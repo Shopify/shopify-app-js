@@ -2,17 +2,17 @@ import mysql from 'mysql2/promise';
 import {RdbmsConnection} from '@shopify/shopify-app-session-storage';
 
 export class MySqlConnection implements RdbmsConnection {
-  sessionPersistenceIdentifier: string;
+  sessionDBIdentifier: string;
   useHasTable: boolean;
   sqlArgumentPlaceholder: string;
 
   constructor(
     private connection: mysql.Connection,
-    sessionTableName: string,
+    sessionDBIdentifier: string,
     sqlArgumentPlaceholder: string,
   ) {
     this.connection = connection;
-    this.sessionPersistenceIdentifier = sessionTableName;
+    this.sessionDBIdentifier = sessionDBIdentifier;
     this.useHasTable = true;
     this.sqlArgumentPlaceholder = sqlArgumentPlaceholder;
   }
