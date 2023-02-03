@@ -8,7 +8,7 @@ export const migrationMap = new Map([
 export async function migrateToVersion1_0_1(
   engine: MySqlEngine,
 ): Promise<void> {
-  await engine.query(`ALTER TABLE ${engine.sessionTableName} 
+  await engine.query(`ALTER TABLE ${engine.sessionPersistenceIdentifier} 
       MODIFY COLUMN scope varchar(1024)`);
 
   return Promise.resolve();

@@ -2,7 +2,7 @@ import sqlite3 from 'sqlite3';
 import {DBEngine} from '@shopify/shopify-app-session-storage';
 
 export class SqliteEngine implements DBEngine {
-  sessionTableName: string;
+  sessionPersistenceIdentifier: string;
   useHasTable: boolean;
   sqlArgumentPlaceholder: string;
 
@@ -12,7 +12,7 @@ export class SqliteEngine implements DBEngine {
     sqlArgumentPlaceholder: string,
   ) {
     this.db = db;
-    this.sessionTableName = sessionTableName;
+    this.sessionPersistenceIdentifier = sessionTableName;
     this.useHasTable = true;
     this.sqlArgumentPlaceholder = sqlArgumentPlaceholder;
   }

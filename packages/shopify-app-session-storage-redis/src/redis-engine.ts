@@ -4,7 +4,7 @@ import {DBEngine} from '@shopify/shopify-app-session-storage';
 type RedisClient = ReturnType<typeof createClient>;
 
 export class RedisEngine implements DBEngine {
-  sessionTableName: string;
+  sessionPersistenceIdentifier: string;
   useHasTable: boolean;
   sqlArgumentPlaceholder: string;
 
@@ -14,7 +14,7 @@ export class RedisEngine implements DBEngine {
     onError?: (...args: any[]) => void,
   ) {
     this.client = client;
-    this.sessionTableName = prefixKey;
+    this.sessionPersistenceIdentifier = prefixKey;
     this.useHasTable = false;
     this.sqlArgumentPlaceholder = '';
 
@@ -40,7 +40,7 @@ export class RedisEngine implements DBEngine {
   }
 
   fullKey(name: string): string {
-    return `${this.sessionTableName}_${name}`;
+    return `${this.sessionPersistenceIdentifier}_${name}`;
   }
 
   delete(name: string): Promise<any> {

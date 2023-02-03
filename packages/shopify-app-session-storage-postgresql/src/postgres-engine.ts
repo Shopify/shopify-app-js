@@ -2,7 +2,7 @@ import pg from 'pg';
 import {DBEngine} from '@shopify/shopify-app-session-storage';
 
 export class PostgresEngine implements DBEngine {
-  sessionTableName: string;
+  sessionPersistenceIdentifier: string;
   useHasTable: boolean;
   sqlArgumentPlaceholder: string;
 
@@ -11,7 +11,7 @@ export class PostgresEngine implements DBEngine {
     sessionTableName: string,
     sqlArgumentPlaceholder: string,
   ) {
-    this.sessionTableName = sessionTableName;
+    this.sessionPersistenceIdentifier = sessionTableName;
     this.useHasTable = false;
     this.sqlArgumentPlaceholder = sqlArgumentPlaceholder;
   }

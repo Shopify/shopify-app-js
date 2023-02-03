@@ -2,7 +2,7 @@ import mysql from 'mysql2/promise';
 import {DBEngine} from '@shopify/shopify-app-session-storage';
 
 export class MySqlEngine implements DBEngine {
-  sessionTableName: string;
+  sessionPersistenceIdentifier: string;
   useHasTable: boolean;
   sqlArgumentPlaceholder: string;
 
@@ -12,7 +12,7 @@ export class MySqlEngine implements DBEngine {
     sqlArgumentPlaceholder: string,
   ) {
     this.connection = connection;
-    this.sessionTableName = sessionTableName;
+    this.sessionPersistenceIdentifier = sessionTableName;
     this.useHasTable = true;
     this.sqlArgumentPlaceholder = sqlArgumentPlaceholder;
   }

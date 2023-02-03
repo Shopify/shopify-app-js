@@ -14,7 +14,7 @@ export async function migrateToVersion1_0_1(
   const shopsAndSessions: {[key: string]: string[]} = {};
   const keys = await engine.keys('*');
   for (const key of keys) {
-    if (key.startsWith(engine.sessionTableName)) {
+    if (key.startsWith(engine.sessionPersistenceIdentifier)) {
       const session = Session.fromPropertyArray(
         JSON.parse((await engine.getWithoutFullKey(key)) as string),
       );
