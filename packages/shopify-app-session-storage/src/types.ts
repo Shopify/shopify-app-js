@@ -1,4 +1,107 @@
-import {DBConnection} from './db-connection';
+import {Session} from '@shopify/shopify-api';
+
+/**
+ * Defines the strategy to be used to store sessions for the Shopify App.
+ */
+export interface SessionStorage {
+  /**
+   * Creates or updates the given session in storage.
+   *
+   * @param session Session to store
+   */
+  storeSession(session: Session): Promise<boolean>;
+
+  /**
+   * Loads a session from storage.
+   *
+   * @param id Id of the session to load
+   */
+  loadSession(id: string): Promise<Session | undefined>;
+
+  /**
+   * Deletes a session from storage.
+   *
+   * @param id Id of the session to delete
+   */
+  deleteSession(id: string): Promise<boolean>;
+
+  /**
+   * Deletes an array of sessions from storage.
+   *
+   * @param ids Array of session id's to delete
+   */
+  deleteSessions(ids: string[]): Promise<boolean>;
+
+  /**
+   * Return an array of sessions for a given shop (or [] if none found).
+   *
+   * @param shop shop of the session(s) to return
+   */
+  findSessionsByShop(shop: string): Promise<Session[]>;
+}
+
+/**
+ * define the option required to instantiate an RDBMS session storage implementation
+ */
+export interface RdbmsSessionStorageOptions {
+  sessionDBIdentifier: string;
+  sqlArgumentPlaceholder: string;
+  migratorOptions?: RdbmsSessionStorageMigratorOptions;
+}
+
+/**
+ * Define a common way for migrator to execute query on the underlying persistence layer
+ */
+export interface DBConnection {
+  /** the table used to store sessions */
+  sessionDBIdentifier: string;
+
+  /**
+   * Initiate the actual connection to the underlying database
+   */
+  connect(): Promise<void>;
+
+  /**
+   * Disconnect from the underlying database
+   */
+  disconnect(): Promise<void>;
+
+  /**
+   * Make a query to the underlying DB
+   * @param query - the query to execute
+   * @param params - the parameters required by the query
+   */
+  query(query: string, params: any[]): Promise<any[]>;
+}
+
+/**
+ * This is for the use cases of the RDBMS database where
+ */
+export interface RdbmsConnection extends DBConnection {
+  /**
+   * use #hasTable method if 'true', or use "IF NOT EXISTS" if 'false' in CREATE TABLE statements
+   * to determine if a given needs to be created or not
+   */
+  useHasTable: boolean;
+
+  /**
+   * Depending on which DB engine the place holder for parameter in sql query can be either '?' or '$' and a number
+   * (or anything else for that matter)
+   */
+  sqlArgumentPlaceholder: string;
+
+  /**
+   * Determine if a table exist
+   * @param tablename - the table to search
+   */
+  hasTable(tablename: string): Promise<boolean>;
+
+  /**
+   * Based on the the #sqlArgumentPlaceholder value and the underlying engine, return the place holder for a given position in a list of sql argument
+   * @param position the position of the given sql argument
+   */
+  getArgumentPlaceholder(position: number): string;
+}
 
 /**
  * Each migration 'migration_name' will be define the following way.

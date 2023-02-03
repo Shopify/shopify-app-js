@@ -2,8 +2,8 @@ import {AbstractMigrationEngine} from './abstract-migration-engine';
 import {
   RdbmsSessionStorageMigratorOptions,
   defaultRdbmsSessionStorageMigratorOptions,
-} from './session-storage-migration';
-import {RdbmsConnection} from './db-connection';
+  RdbmsConnection,
+} from './types';
 
 export class RdbmsSessionStorageMigrator extends AbstractMigrationEngine<
   RdbmsConnection,
