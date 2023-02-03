@@ -43,4 +43,14 @@ export class SqliteConnection implements DBConnection {
   getArgumentPlaceholder(_: number): string {
     return `${this.sqlArgumentPlaceholder}`;
   }
+
+  connect(): Promise<void> {
+    // Nothing to do here
+    return Promise.resolve();
+  }
+
+  disconnect(): Promise<void> {
+    // Nothing to do here
+    return Promise.resolve();
+  }
 }

@@ -18,6 +18,16 @@ interface DBConnection {
   sqlArgumentPlaceholder: string;
 
   /**
+   * Initiate the actual connection to the underlying database
+   */
+  connect(): Promise<void>;
+
+  /**
+   * Disconnect from the underlying database
+   */
+  disconnect(): Promise<void>;
+
+  /**
    * Make a query to the underlying DB
    * @param query - the query to execute
    * @param params - the parameters required by the query

@@ -21,6 +21,11 @@ export class MySqlConnection implements DBConnection {
     return this.connection.query(query, params);
   }
 
+  connect(): Promise<void> {
+    // Nothing to do here
+    return Promise.resolve();
+  }
+
   public async disconnect(): Promise<void> {
     await this.connection.end();
   }
