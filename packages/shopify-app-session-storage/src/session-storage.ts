@@ -5,7 +5,7 @@ import {RdbmsSessionStorageMigratorOptions} from './session-storage-migration';
 /**
  * Defines the strategy to be used to store sessions for the Shopify App.
  */
-interface SessionStorage {
+export interface SessionStorage {
   /**
    * Creates or updates the given session in storage.
    *
@@ -45,10 +45,8 @@ interface SessionStorage {
 /**
  * define the option required to instantiate an RDBMS session storage implementation
  */
-interface RdbmsSessionStorageOptions {
+export interface RdbmsSessionStorageOptions {
   sessionDBIdentifier: string;
   sqlArgumentPlaceholder: string;
   migratorOptions?: RdbmsSessionStorageMigratorOptions;
 }
-
-export {SessionStorage, RdbmsSessionStorageOptions};

@@ -1,7 +1,7 @@
 /**
  * Define a common way for migrator to execute query on the underlying persistence layer
  */
-interface DBConnection {
+export interface DBConnection {
   /** the table used to store sessions */
   sessionDBIdentifier: string;
 
@@ -26,7 +26,7 @@ interface DBConnection {
 /**
  * This is for the use cases of the RDBMS database where
  */
-interface RdbmsConnection extends DBConnection {
+export interface RdbmsConnection extends DBConnection {
   /**
    * use #hasTable method if 'true', or use "IF NOT EXISTS" if 'false' in CREATE TABLE statements
    * to determine if a given needs to be created or not
@@ -51,5 +51,3 @@ interface RdbmsConnection extends DBConnection {
    */
   getArgumentPlaceholder(position: number): string;
 }
-
-export {DBConnection, RdbmsConnection};

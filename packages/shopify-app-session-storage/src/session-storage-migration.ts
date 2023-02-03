@@ -4,12 +4,12 @@ import {DBConnection} from './db-connection';
  * Each migration 'migration_name' will be define the following way.
  * Via a function that receive the engine in parameter.
  */
-type MigrationFunction = (engine: DBConnection) => Promise<void>;
+export type MigrationFunction = (engine: DBConnection) => Promise<void>;
 
 /**
  * Defines how database migration will be handled.
  */
-interface SessionStorageMigrator {
+export interface SessionStorageMigrator {
   /**
    * Should ensure that the persistence 'table' is created if it does not exist yet.
    */
@@ -56,7 +56,7 @@ interface SessionStorageMigrator {
 /**
  * When the configuration for migration is not consistent
  */
-class InvalidMigrationConfigurationError extends Error {
+export class InvalidMigrationConfigurationError extends Error {
   constructor(message: string) {
     super(message);
   }
@@ -65,34 +65,25 @@ class InvalidMigrationConfigurationError extends Error {
 /**
  * Use to initialise session storage migrators
  */
-interface SessionStorageMigratorOptions {
+export interface SessionStorageMigratorOptions {
   migrationDBIdentifier: string;
   migrations: Map<string, MigrationFunction>;
 }
 
-const defaultSessionStorageMigratorOptions: SessionStorageMigratorOptions = {
-  migrationDBIdentifier: 'shopify_sessions_migrations',
-  migrations: new Map(),
-};
+export const defaultSessionStorageMigratorOptions: SessionStorageMigratorOptions =
+  {
+    migrationDBIdentifier: 'shopify_sessions_migrations',
+    migrations: new Map(),
+  };
 
-interface RdbmsSessionStorageMigratorOptions
+export interface RdbmsSessionStorageMigratorOptions
   extends SessionStorageMigratorOptions {
   migrationNameColumnName: string;
 }
 
-const defaultRdbmsSessionStorageMigratorOptions: RdbmsSessionStorageMigratorOptions =
+export const defaultRdbmsSessionStorageMigratorOptions: RdbmsSessionStorageMigratorOptions =
   {
     migrationDBIdentifier: 'shopify_sessions_migrations',
     migrationNameColumnName: 'migration_name',
     migrations: new Map(),
   };
-
-export {
-  SessionStorageMigrator,
-  MigrationFunction,
-  InvalidMigrationConfigurationError,
-  SessionStorageMigratorOptions,
-  RdbmsSessionStorageMigratorOptions,
-  defaultSessionStorageMigratorOptions,
-  defaultRdbmsSessionStorageMigratorOptions,
-};
