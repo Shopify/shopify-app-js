@@ -38,19 +38,8 @@ export class RdbmsSessionStorageMigrator extends AbstractMigrationEngine<
         } varchar(255) NOT NULL PRIMARY KEY
     );`;
 
-    if (discardCreateTable) {
-      return Promise.resolve();
-    } else {
-      return new Promise((resolve, reject) => {
-        this.connection
-          .query(migration, [])
-          .then((_: any) => {
-            resolve();
-          })
-          .catch((reason: any) => {
-            reject(reason);
-          });
-      });
+    if (!discardCreateTable) {
+      await this.connection.query(migration, []);
     }
   }
 
@@ -63,16 +52,8 @@ export class RdbmsSessionStorageMigrator extends AbstractMigrationEngine<
         ${this.connection.getArgumentPlaceholder(1)};
     `;
 
-    return new Promise((resolve, reject) => {
-      this.connection
-        .query(query, [migrationName])
-        .then((rows: any) => {
-          resolve(rows.length === 1);
-        })
-        .catch((reason: any) => {
-          reject(reason);
-        });
-    });
+    const rows = await this.connection.query(query, [migrationName]);
+    return rows.length === 1;
   }
 
   async saveAppliedMigration(migrationName: string): Promise<void> {
@@ -85,16 +66,7 @@ export class RdbmsSessionStorageMigrator extends AbstractMigrationEngine<
           VALUES(${this.connection.getArgumentPlaceholder(1)});
         `;
 
-    return new Promise((resolve, reject) => {
-      this.connection
-        .query(insert, [migrationName])
-        .then((_: any) => {
-          resolve();
-        })
-        .catch((reason: any) => {
-          reject(reason);
-        });
-    });
+    await this.connection.query(insert, [migrationName]);
   }
 
   private getOptions(): RdbmsSessionStorageMigratorOptions {

@@ -38,6 +38,4 @@ async function migrateToV1_0_1(connection: SqliteConnection): Promise<void> {
   // 4. Delete old renamed table
   const drop = `DROP TABLE ${tempTableName};`;
   await connection.query(drop);
-
-  return Promise.resolve();
 }

@@ -28,6 +28,4 @@ export async function migrateToVersion1_0_1(
   for (const shop in shopsAndSessions) {
     await connection.setKey(shop, JSON.stringify(shopsAndSessions[shop]));
   }
-
-  return Promise.resolve();
 }

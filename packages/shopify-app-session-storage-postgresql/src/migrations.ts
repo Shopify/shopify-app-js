@@ -10,6 +10,4 @@ export async function migrateToVersion1_0_1(
 ): Promise<void> {
   await connection.query(`ALTER TABLE ${connection.sessionDBIdentifier} 
     ALTER COLUMN scope TYPE varchar(1024)`);
-
-  return Promise.resolve();
 }
