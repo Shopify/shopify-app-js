@@ -45,7 +45,6 @@ export interface SessionStorage {
  */
 export interface RdbmsSessionStorageOptions {
   sessionDBIdentifier: string;
-  sqlArgumentPlaceholder: string;
   migratorOptions?: RdbmsSessionStorageMigratorOptions;
 }
 
@@ -85,12 +84,6 @@ export interface RdbmsConnection extends DBConnection {
   useHasTable: boolean;
 
   /**
-   * Depending on which DB engine the place holder for parameter in sql query can be either '?' or '$' and a number
-   * (or anything else for that matter)
-   */
-  sqlArgumentPlaceholder: string;
-
-  /**
    * Determine if a table exist
    * @param tablename - the table to search
    */
@@ -100,7 +93,7 @@ export interface RdbmsConnection extends DBConnection {
    * Based on the the #sqlArgumentPlaceholder value and the underlying engine, return the place holder for a given position in a list of sql argument
    * @param position the position of the given sql argument
    */
-  getArgumentPlaceholder(position: number): string;
+  getArgumentPlaceholder(position?: number): string;
 }
 
 /**

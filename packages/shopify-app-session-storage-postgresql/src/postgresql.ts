@@ -18,7 +18,6 @@ export interface PostgreSQLSessionStorageOptions
 const defaultPostgreSQLSessionStorageOptions: PostgreSQLSessionStorageOptions =
   {
     sessionDBIdentifier: 'shopify_sessions',
-    sqlArgumentPlaceholder: '$',
     port: 3211,
     migratorOptions: {
       migrationDBIdentifier: 'shopify_sessions_migrations',
@@ -149,7 +148,6 @@ export class PostgreSQLSessionStorage implements SessionStorage {
     this.client = new PostgresConnection(
       new pg.Client({connectionString: this.dbUrl.toString()}),
       this.options.sessionDBIdentifier,
-      this.options.sqlArgumentPlaceholder,
     );
     await this.connectClient();
     await this.createTable();

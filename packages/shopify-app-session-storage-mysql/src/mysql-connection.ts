@@ -4,17 +4,14 @@ import {RdbmsConnection} from '@shopify/shopify-app-session-storage';
 export class MySqlConnection implements RdbmsConnection {
   sessionDBIdentifier: string;
   useHasTable: boolean;
-  sqlArgumentPlaceholder: string;
 
   constructor(
     private connection: mysql.Connection,
     sessionDBIdentifier: string,
-    sqlArgumentPlaceholder: string,
   ) {
     this.connection = connection;
     this.sessionDBIdentifier = sessionDBIdentifier;
     this.useHasTable = true;
-    this.sqlArgumentPlaceholder = sqlArgumentPlaceholder;
   }
 
   async query(query: string, params: any[] = []): Promise<any[]> {
@@ -37,8 +34,8 @@ export class MySqlConnection implements RdbmsConnection {
   async hasTable(tablename: string): Promise<boolean> {
     const query = `
       SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES 
-        WHERE TABLE_NAME = ${this.sqlArgumentPlaceholder} 
-          AND TABLE_SCHEMA = ${this.sqlArgumentPlaceholder};
+        WHERE TABLE_NAME = ${this.getArgumentPlaceholder()} 
+          AND TABLE_SCHEMA = ${this.getArgumentPlaceholder()};
     `;
 
     // Allow multiple apps to be on the same host with separate DB and querying the right
@@ -50,7 +47,7 @@ export class MySqlConnection implements RdbmsConnection {
     return Array.isArray(rows) && rows.length === 1;
   }
 
-  getArgumentPlaceholder(_: number): string {
-    return `${this.sqlArgumentPlaceholder}`;
+  getArgumentPlaceholder(_?: number): string {
+    return `?`;
   }
 }

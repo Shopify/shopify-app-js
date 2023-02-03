@@ -16,7 +16,6 @@ export interface MySQLSessionStorageOptions
 
 const defaultMySQLSessionStorageOptions: MySQLSessionStorageOptions = {
   sessionDBIdentifier: 'shopify_sessions',
-  sqlArgumentPlaceholder: '?',
   migratorOptions: {
     migrationDBIdentifier: 'shopify_sessions_migrations',
     migrationNameColumnName: 'migration_name',
@@ -75,7 +74,7 @@ export class MySQLSessionStorage implements SessionStorage {
       REPLACE INTO ${this.options.sessionDBIdentifier}
       (${entries.map(([key]) => key).join(', ')})
       VALUES (${entries
-        .map(() => `${this.options.sqlArgumentPlaceholder}`)
+        .map(() => `${this.connection.getArgumentPlaceholder()}`)
         .join(', ')})
     `;
     await this.connection.query(
@@ -89,7 +88,7 @@ export class MySQLSessionStorage implements SessionStorage {
     await this.ready;
     const query = `
       SELECT * FROM \`${this.options.sessionDBIdentifier}\`
-      WHERE id = ${this.options.sqlArgumentPlaceholder};
+      WHERE id = ${this.connection.getArgumentPlaceholder()};
     `;
     const [rows] = await this.connection.query(query, [id]);
     if (!Array.isArray(rows) || rows?.length !== 1) return undefined;
@@ -101,7 +100,7 @@ export class MySQLSessionStorage implements SessionStorage {
     await this.ready;
     const query = `
       DELETE FROM ${this.options.sessionDBIdentifier}
-      WHERE id = ${this.options.sqlArgumentPlaceholder};
+      WHERE id = ${this.connection.getArgumentPlaceholder()};
     `;
     await this.connection.query(query, [id]);
     return true;
@@ -112,7 +111,7 @@ export class MySQLSessionStorage implements SessionStorage {
     const query = `
       DELETE FROM ${this.options.sessionDBIdentifier}
       WHERE id IN (${ids
-        .map(() => `${this.options.sqlArgumentPlaceholder}`)
+        .map(() => `${this.connection.getArgumentPlaceholder()}`)
         .join(',')});
     `;
     await this.connection.query(query, ids);
@@ -124,7 +123,7 @@ export class MySQLSessionStorage implements SessionStorage {
 
     const query = `
       SELECT * FROM ${this.options.sessionDBIdentifier}
-      WHERE shop = ${this.options.sqlArgumentPlaceholder};
+      WHERE shop = ${this.connection.getArgumentPlaceholder()};
     `;
     const [rows] = await this.connection.query(query, [shop]);
     if (!Array.isArray(rows) || rows?.length === 0) return [];
@@ -143,7 +142,6 @@ export class MySQLSessionStorage implements SessionStorage {
     this.connection = new MySqlConnection(
       await mysql.createConnection(this.dbUrl.toString()),
       this.options.sessionDBIdentifier,
-      this.options.sqlArgumentPlaceholder,
     );
     await this.createTable();
   }

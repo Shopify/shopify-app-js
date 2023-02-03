@@ -16,7 +16,6 @@ export interface SQLiteSessionStorageOptions
 
 const defaultSQLiteSessionStorageOptions: SQLiteSessionStorageOptions = {
   sessionDBIdentifier: 'shopify_sessions',
-  sqlArgumentPlaceholder: '?',
   migratorOptions: {
     migrationDBIdentifier: 'shopify_sessions_migrations',
     migrationNameColumnName: 'migration_name',
@@ -39,7 +38,6 @@ export class SQLiteSessionStorage implements SessionStorage {
     this.db = new SqliteConnection(
       new sqlite3.Database(this.filename),
       this.options.sessionDBIdentifier,
-      this.options.sqlArgumentPlaceholder,
     );
     this.internalInit = this.init();
     this.ready = this.initMigrator(this.options.migratorOptions);
@@ -61,7 +59,7 @@ export class SQLiteSessionStorage implements SessionStorage {
       INSERT OR REPLACE INTO ${this.options.sessionDBIdentifier}
       (${entries.map(([key]) => key).join(', ')})
       VALUES (${entries
-        .map(() => `${this.options.sqlArgumentPlaceholder}`)
+        .map(() => `${this.db.getArgumentPlaceholder()}`)
         .join(', ')});
     `;
 
@@ -76,7 +74,7 @@ export class SQLiteSessionStorage implements SessionStorage {
     await this.ready;
     const query = `
       SELECT * FROM ${this.options.sessionDBIdentifier}
-      WHERE id = ${this.options.sqlArgumentPlaceholder};
+      WHERE id = ${this.db.getArgumentPlaceholder()};
     `;
     const rows = await this.db.query(query, [id]);
     if (!Array.isArray(rows) || rows?.length !== 1) return undefined;
@@ -88,7 +86,7 @@ export class SQLiteSessionStorage implements SessionStorage {
     await this.ready;
     const query = `
       DELETE FROM ${this.options.sessionDBIdentifier}
-      WHERE id = ${this.options.sqlArgumentPlaceholder};
+      WHERE id = ${this.db.getArgumentPlaceholder()};
     `;
     await this.db.query(query, [id]);
     return true;
@@ -99,7 +97,7 @@ export class SQLiteSessionStorage implements SessionStorage {
     const query = `
       DELETE FROM ${this.options.sessionDBIdentifier}
       WHERE id IN (${ids
-        .map(() => `${this.options.sqlArgumentPlaceholder}`)
+        .map(() => `${this.db.getArgumentPlaceholder()}`)
         .join(',')});
     `;
     await this.db.query(query, ids);
@@ -110,7 +108,7 @@ export class SQLiteSessionStorage implements SessionStorage {
     await this.ready;
     const query = `
       SELECT * FROM ${this.options.sessionDBIdentifier}
-      WHERE shop = ${this.options.sqlArgumentPlaceholder};
+      WHERE shop = ${this.db.getArgumentPlaceholder()};
     `;
     const rows = await this.db.query(query, [shop]);
     if (!Array.isArray(rows) || rows?.length === 0) return [];

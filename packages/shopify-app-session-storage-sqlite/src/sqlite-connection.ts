@@ -4,17 +4,11 @@ import {RdbmsConnection} from '@shopify/shopify-app-session-storage';
 export class SqliteConnection implements RdbmsConnection {
   sessionDBIdentifier: string;
   useHasTable: boolean;
-  sqlArgumentPlaceholder: string;
 
-  constructor(
-    private db: sqlite3.Database,
-    sessionDBIdentifier: string,
-    sqlArgumentPlaceholder: string,
-  ) {
+  constructor(private db: sqlite3.Database, sessionDBIdentifier: string) {
     this.db = db;
     this.sessionDBIdentifier = sessionDBIdentifier;
     this.useHasTable = true;
-    this.sqlArgumentPlaceholder = sqlArgumentPlaceholder;
   }
 
   query(query: string, params: any[] = []): Promise<any[]> {
@@ -34,14 +28,14 @@ export class SqliteConnection implements RdbmsConnection {
     SELECT name FROM sqlite_schema
     WHERE
       type = 'table' AND
-      name = ${this.sqlArgumentPlaceholder};
+      name = ${this.getArgumentPlaceholder()};
     `;
     const rows = await this.query(query, [tablename]);
     return rows.length === 1;
   }
 
-  getArgumentPlaceholder(_: number): string {
-    return `${this.sqlArgumentPlaceholder}`;
+  getArgumentPlaceholder(_?: number): string {
+    return `?`;
   }
 
   connect(): Promise<void> {

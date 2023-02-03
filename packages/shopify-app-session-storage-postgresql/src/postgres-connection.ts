@@ -4,16 +4,10 @@ import {RdbmsConnection} from '@shopify/shopify-app-session-storage';
 export class PostgresConnection implements RdbmsConnection {
   sessionDBIdentifier: string;
   useHasTable: boolean;
-  sqlArgumentPlaceholder: string;
 
-  constructor(
-    private client: pg.Client,
-    sessionDBIdentifier: string,
-    sqlArgumentPlaceholder: string,
-  ) {
+  constructor(private client: pg.Client, sessionDBIdentifier: string) {
     this.sessionDBIdentifier = sessionDBIdentifier;
     this.useHasTable = false;
-    this.sqlArgumentPlaceholder = sqlArgumentPlaceholder;
   }
 
   async query(query: string, params: any[] = []): Promise<any[]> {
@@ -47,6 +41,6 @@ export class PostgresConnection implements RdbmsConnection {
   }
 
   getArgumentPlaceholder(position: number): string {
-    return `${this.sqlArgumentPlaceholder}${position}`;
+    return `$${position}`;
   }
 }
