@@ -1,11 +1,11 @@
 import {
   MigrationFunction,
-  DBConnection,
   SessionStorageMigrator,
   SessionStorageMigratorOptions,
   defaultSessionStorageMigratorOptions,
   InvalidMigrationConfigurationError,
 } from './session-storage-migration';
+import { DBConnection } from "./db-connection";
 
 export abstract class AbstractMigrationEngine<
   ConnectionType extends DBConnection,

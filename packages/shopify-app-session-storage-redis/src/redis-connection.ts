@@ -5,8 +5,6 @@ type RedisClient = ReturnType<typeof createClient>;
 
 export class RedisConnection implements DBConnection {
   sessionPersistenceIdentifier: string;
-  useHasTable: boolean;
-  sqlArgumentPlaceholder: string;
 
   constructor(
     private client: RedisClient,
@@ -15,8 +13,6 @@ export class RedisConnection implements DBConnection {
   ) {
     this.client = client;
     this.sessionPersistenceIdentifier = prefixKey;
-    this.useHasTable = false;
-    this.sqlArgumentPlaceholder = '';
 
     if (onError) {
       this.client.on('error', onError);
@@ -62,13 +58,5 @@ export class RedisConnection implements DBConnection {
           reject(reason);
         });
     });
-  }
-
-  hasTable(_: string): Promise<boolean> {
-    return Promise.resolve(false);
-  }
-
-  getArgumentPlaceholder(_: number): string {
-    return `${this.sqlArgumentPlaceholder}`;
   }
 }

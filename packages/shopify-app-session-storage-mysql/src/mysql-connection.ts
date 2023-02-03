@@ -1,7 +1,7 @@
 import mysql from 'mysql2/promise';
-import {DBConnection} from '@shopify/shopify-app-session-storage';
+import {RdbmsConnection} from '@shopify/shopify-app-session-storage';
 
-export class MySqlConnection implements DBConnection {
+export class MySqlConnection implements RdbmsConnection {
   sessionPersistenceIdentifier: string;
   useHasTable: boolean;
   sqlArgumentPlaceholder: string;

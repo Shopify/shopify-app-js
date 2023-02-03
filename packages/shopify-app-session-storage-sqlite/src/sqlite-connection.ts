@@ -1,7 +1,7 @@
 import sqlite3 from 'sqlite3';
-import {DBConnection} from '@shopify/shopify-app-session-storage';
+import {RdbmsConnection} from '@shopify/shopify-app-session-storage';
 
-export class SqliteConnection implements DBConnection {
+export class SqliteConnection implements RdbmsConnection {
   sessionPersistenceIdentifier: string;
   useHasTable: boolean;
   sqlArgumentPlaceholder: string;
