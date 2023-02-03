@@ -1,7 +1,7 @@
 import pg from 'pg';
-import {DBEngine} from '@shopify/shopify-app-session-storage';
+import {DBConnection} from '@shopify/shopify-app-session-storage';
 
-export class PostgresEngine implements DBEngine {
+export class PostgresConnection implements DBConnection {
   sessionPersistenceIdentifier: string;
   useHasTable: boolean;
   sqlArgumentPlaceholder: string;

@@ -9,7 +9,7 @@ import {
 } from '@shopify/shopify-app-session-storage';
 
 import {migrationMap} from './migrations';
-import {MySqlEngine} from './mysql-engine';
+import {MySqlConnection} from './mysql-connection';
 
 export interface MySQLSessionStorageOptions
   extends RdbmsSessionStorageOptions {}
@@ -45,7 +45,7 @@ export class MySQLSessionStorage implements SessionStorage {
   public readonly ready: Promise<void>;
   private internalInit: Promise<void>;
   private options: MySQLSessionStorageOptions;
-  private connection: MySqlEngine;
+  private connection: MySqlConnection;
   private migrator: SessionStorageMigrator | null;
 
   constructor(
@@ -140,7 +140,7 @@ export class MySQLSessionStorage implements SessionStorage {
   }
 
   private async init() {
-    this.connection = new MySqlEngine(
+    this.connection = new MySqlConnection(
       await mysql.createConnection(this.dbUrl.toString()),
       this.options.sessionTableName,
       this.options.sqlArgumentPlaceholder,

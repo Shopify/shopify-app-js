@@ -1,12 +1,15 @@
-import {AbstractSessionStorageMigrator} from './abstract-session-storage-migrator';
+import {AbstractMigrationEngine} from './abstract-migration-engine';
 import {
-  DBEngine,
+  DBConnection,
   SessionStorageMigratorOptions,
   defaultSessionStorageMigratorOptions,
 } from './session-storage-migration';
 
-export class RdbmsSessionStorageMigrator extends AbstractSessionStorageMigrator<DBEngine> {
-  constructor(db: DBEngine, opts: Partial<SessionStorageMigratorOptions> = {}) {
+export class RdbmsSessionStorageMigrator extends AbstractMigrationEngine<DBConnection> {
+  constructor(
+    db: DBConnection,
+    opts: Partial<SessionStorageMigratorOptions> = {},
+  ) {
     super(db, {...defaultSessionStorageMigratorOptions, ...opts});
   }
 

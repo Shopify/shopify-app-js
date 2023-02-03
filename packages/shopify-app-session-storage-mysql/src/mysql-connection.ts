@@ -1,7 +1,7 @@
 import mysql from 'mysql2/promise';
-import {DBEngine} from '@shopify/shopify-app-session-storage';
+import {DBConnection} from '@shopify/shopify-app-session-storage';
 
-export class MySqlEngine implements DBEngine {
+export class MySqlConnection implements DBConnection {
   sessionPersistenceIdentifier: string;
   useHasTable: boolean;
   sqlArgumentPlaceholder: string;

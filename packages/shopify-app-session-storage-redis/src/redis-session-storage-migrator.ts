@@ -1,13 +1,13 @@
 import {
-  AbstractSessionStorageMigrator,
+  AbstractMigrationEngine,
   SessionStorageMigratorOptions,
 } from '@shopify/shopify-app-session-storage';
 
-import {RedisEngine} from './redis-engine';
+import {RedisConnection} from './redis-connection';
 
-export class RedisSessionStorageMigrator extends AbstractSessionStorageMigrator<RedisEngine> {
+export class RedisSessionStorageMigrator extends AbstractMigrationEngine<RedisConnection> {
   constructor(
-    db: RedisEngine,
+    db: RedisConnection,
     opts: Partial<SessionStorageMigratorOptions> = {},
   ) {
     // The name has already been decided whith the last migration

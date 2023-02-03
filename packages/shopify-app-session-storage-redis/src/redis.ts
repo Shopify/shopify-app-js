@@ -7,7 +7,7 @@ import {
 } from '@shopify/shopify-app-session-storage';
 
 import {migrationMap} from './migrations';
-import {RedisEngine} from './redis-engine';
+import {RedisConnection} from './redis-connection';
 import {RedisSessionStorageMigrator} from './redis-session-storage-migrator';
 
 export interface RedisSessionStorageOptions extends RedisClientOptions {
@@ -45,7 +45,7 @@ export class RedisSessionStorage implements SessionStorage {
   public readonly ready: Promise<void>;
   private internalInit: Promise<void>;
   private options: RedisSessionStorageOptions;
-  private client: RedisEngine;
+  private client: RedisConnection;
   private migrator: SessionStorageMigrator | null;
 
   constructor(
@@ -160,7 +160,7 @@ export class RedisSessionStorage implements SessionStorage {
       url: this.dbUrl.toString(),
     });
 
-    this.client = new RedisEngine(client, this.options.sessionKeyPrefix);
+    this.client = new RedisConnection(client, this.options.sessionKeyPrefix);
 
     await this.client.connect();
   }

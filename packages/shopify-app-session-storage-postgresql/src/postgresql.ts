@@ -9,7 +9,7 @@ import {
 } from '@shopify/shopify-app-session-storage';
 
 import {migrationMap} from './migrations';
-import {PostgresEngine} from './postgres-engine';
+import {PostgresConnection} from './postgres-connection';
 
 export interface PostgreSQLSessionStorageOptions
   extends RdbmsSessionStorageOptions {
@@ -48,7 +48,7 @@ export class PostgreSQLSessionStorage implements SessionStorage {
   public readonly ready: Promise<void>;
   private internalInit: Promise<void>;
   private options: PostgreSQLSessionStorageOptions;
-  private client: PostgresEngine;
+  private client: PostgresConnection;
   private migrator: SessionStorageMigrator | null;
 
   constructor(
@@ -146,7 +146,7 @@ export class PostgreSQLSessionStorage implements SessionStorage {
   }
 
   private async init() {
-    this.client = new PostgresEngine(
+    this.client = new PostgresConnection(
       new pg.Client({connectionString: this.dbUrl.toString()}),
       this.options.sessionTableName,
       this.options.sqlArgumentPlaceholder,

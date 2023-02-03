@@ -1,9 +1,9 @@
 import {createClient} from 'redis';
-import {DBEngine} from '@shopify/shopify-app-session-storage';
+import {DBConnection} from '@shopify/shopify-app-session-storage';
 
 type RedisClient = ReturnType<typeof createClient>;
 
-export class RedisEngine implements DBEngine {
+export class RedisConnection implements DBConnection {
   sessionPersistenceIdentifier: string;
   useHasTable: boolean;
   sqlArgumentPlaceholder: string;

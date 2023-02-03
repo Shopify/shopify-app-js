@@ -1,15 +1,14 @@
 import {
   MigrationFunction,
-  DBEngine,
+  DBConnection,
   SessionStorageMigrator,
   SessionStorageMigratorOptions,
   defaultSessionStorageMigratorOptions,
   InvalidMigrationConfigurationError,
 } from './session-storage-migration';
 
-export abstract class AbstractSessionStorageMigrator<
-  EngineType extends DBEngine,
-> implements SessionStorageMigrator
+export abstract class AbstractMigrationEngine<EngineType extends DBConnection>
+  implements SessionStorageMigrator
 {
   protected options: SessionStorageMigratorOptions;
   protected dbEngine: EngineType;

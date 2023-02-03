@@ -1,7 +1,7 @@
 import sqlite3 from 'sqlite3';
-import {DBEngine} from '@shopify/shopify-app-session-storage';
+import {DBConnection} from '@shopify/shopify-app-session-storage';
 
-export class SqliteEngine implements DBEngine {
+export class SqliteConnection implements DBConnection {
   sessionPersistenceIdentifier: string;
   useHasTable: boolean;
   sqlArgumentPlaceholder: string;
