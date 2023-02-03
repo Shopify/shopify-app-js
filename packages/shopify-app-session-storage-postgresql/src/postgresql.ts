@@ -22,7 +22,7 @@ const defaultPostgreSQLSessionStorageOptions: PostgreSQLSessionStorageOptions =
     port: 3211,
     migratorOptions: {
       migrationDBIdentifier: 'shopify_sessions_migrations',
-      versionColumnName: 'version',
+      migrationNameColumnName: 'migration_name',
       migrations: migrationMap,
     },
   };
@@ -193,9 +193,9 @@ export class PostgreSQLSessionStorage implements SessionStorage {
         this.client,
         migratorOptions,
       );
-      this.migrator?.validateMigrationMap(migrationMap);
+      this.migrator.validateMigrationMap(migrationMap);
 
-      return this.migrator?.applyMigrations();
+      return this.migrator.applyMigrations();
     }
   }
 }

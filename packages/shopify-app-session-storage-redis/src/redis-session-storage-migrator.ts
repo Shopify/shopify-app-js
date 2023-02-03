@@ -18,22 +18,21 @@ export class RedisSessionStorageMigrator extends AbstractMigrationEngine<
     super(dbConnection, opts);
   }
 
-  async initMigrationPersitance(): Promise<void> {
+  async initMigrationPersistence(): Promise<void> {
     // nothing to do here
     return Promise.resolve();
   }
 
-  async hasVersionBeenApplied(versionName: string): Promise<boolean> {
+  async hasMigrationBeenApplied(migrationName: string): Promise<boolean> {
     const migrations = await this.getMigrationRecords();
-    const found =
-      migrations.has(versionName) && (migrations.get(versionName) || false);
+    const found = migrations.get(migrationName) ?? false;
 
     return Promise.resolve(found);
   }
 
-  async saveAppliedVersion(versionName: string): Promise<void> {
+  async saveAppliedMigration(migrationName: string): Promise<void> {
     const migrations = await this.getMigrationRecords();
-    migrations.set(versionName, true);
+    migrations.set(migrationName, true);
 
     this.connection.setKey(
       this.options.migrationDBIdentifier,

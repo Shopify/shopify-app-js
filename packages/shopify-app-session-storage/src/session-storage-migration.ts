@@ -1,7 +1,7 @@
 import {DBConnection} from './db-connection';
 
 /**
- * Each migration 'version' will be define the following way.
+ * Each migration 'migration_name' will be define the following way.
  * Via a function that receive the engine in parameter.
  */
 type MigrationFunction = (engine: DBConnection) => Promise<void>;
@@ -13,32 +13,32 @@ interface SessionStorageMigrator {
   /**
    * Should ensure that the persistence 'table' is created if it does not exist yet.
    */
-  initMigrationPersitance(): Promise<void>;
+  initMigrationPersistence(): Promise<void>;
 
   /**
-   *  returns true if the versionName as already been applied and
+   *  returns true if the migrationName as already been applied and
    * therefore the migrator should not apply it. if false,
    * the migrator will run the associated migration
-   * @param versionName the unique version name to look for in the migration table
+   * @param migrationName the unique version name to look for in the migration table
    */
-  hasVersionBeenApplied(versionName: string): Promise<boolean>;
+  hasMigrationBeenApplied(migrationName: string): Promise<boolean>;
 
   /**
-   * Will persist that this versionName has been applied in the migration table
-   * @param versionName the version to persisited as applied
+   * Will persist that this migrationName has been applied in the migration table
+   * @param migrationName the version to persisited as applied
    */
-  saveAppliedVersion(versionName: string): Promise<void>;
+  saveAppliedMigration(migrationName: string): Promise<void>;
 
   /**
-   * Return a map versionName and function that will perform
+   * Return a map migrationName and function that will perform
    * the actual migration
    */
   getMigrationMap(): Map<string, MigrationFunction>;
 
   /**
    * Will iterate over the map returned by #getMigrationMap,
-   * for each entry call #hasVersionBeenApplied, if it returns false
-   * it will execute execute the function and then call #saveAppliedVersion
+   * for each entry call #hasMigrationBeenApplied, if it returns false
+   * it will execute execute the function and then call #saveAppliedMigration
    */
   applyMigrations(): Promise<void>;
 
@@ -77,13 +77,13 @@ const defaultSessionStorageMigratorOptions: SessionStorageMigratorOptions = {
 
 interface RdbmsSessionStorageMigratorOptions
   extends SessionStorageMigratorOptions {
-  versionColumnName: string;
+  migrationNameColumnName: string;
 }
 
 const defaultRdbmsSessionStorageMigratorOptions: RdbmsSessionStorageMigratorOptions =
   {
     migrationDBIdentifier: 'shopify_sessions_migrations',
-    versionColumnName: 'version',
+    migrationNameColumnName: 'migration_name',
     migrations: new Map(),
   };
 

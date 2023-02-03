@@ -19,7 +19,7 @@ const defaultMySQLSessionStorageOptions: MySQLSessionStorageOptions = {
   sqlArgumentPlaceholder: '?',
   migratorOptions: {
     migrationDBIdentifier: 'shopify_sessions_migrations',
-    versionColumnName: 'version',
+    migrationNameColumnName: 'migration_name',
     migrations: migrationMap,
   },
 };
@@ -187,9 +187,9 @@ export class MySQLSessionStorage implements SessionStorage {
         this.connection,
         migratorOptions,
       );
-      this.migrator?.validateMigrationMap(migrationMap);
+      this.migrator.validateMigrationMap(migrationMap);
 
-      return this.migrator?.applyMigrations();
+      return this.migrator.applyMigrations();
     }
   }
 }

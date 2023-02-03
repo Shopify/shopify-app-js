@@ -19,7 +19,7 @@ const defaultSQLiteSessionStorageOptions: SQLiteSessionStorageOptions = {
   sqlArgumentPlaceholder: '?',
   migratorOptions: {
     migrationDBIdentifier: 'shopify_sessions_migrations',
-    versionColumnName: 'version',
+    migrationNameColumnName: 'migration_name',
     migrations: migrationMap,
   },
 };
@@ -133,7 +133,7 @@ export class SQLiteSessionStorage implements SessionStorage {
           state varchar(255) NOT NULL,
           isOnline integer NOT NULL,
           expires integer,
-          scope varchar(1024), -- sqlite allows more than this limit without failing
+          scope varchar(1024),
           accessToken varchar(255),
           onlineAccessInfo varchar(255)
         );

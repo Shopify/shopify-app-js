@@ -20,20 +20,22 @@ export abstract class AbstractMigrationEngine<
     this.options = {...defaultSessionStorageMigratorOptions, ...opts};
     this.connection = db;
 
-    this.ready = this.initMigrationPersitance();
+    this.ready = this.initMigrationPersistence();
   }
 
   async applyMigrations(): Promise<void> {
     await this.ready;
 
-    for (const entry of this.getMigrationMap().entries()) {
-      const version = entry[0];
-      const migrateFunction = entry[1];
-
-      const versionApplied = await this.hasVersionBeenApplied(version);
-      if (!versionApplied) {
-        await migrateFunction(this.connection);
-        await this.saveAppliedVersion(version);
+    for (const [
+      migrationName,
+      migrationFunction,
+    ] of this.getMigrationMap().entries()) {
+      const migrationApplied = await this.hasMigrationBeenApplied(
+        migrationName,
+      );
+      if (!migrationApplied) {
+        await migrationFunction(this.connection);
+        await this.saveAppliedMigration(migrationName);
       }
     }
     return Promise.resolve();
@@ -54,7 +56,7 @@ export abstract class AbstractMigrationEngine<
       }
   }
 
-  abstract initMigrationPersitance(): Promise<void>;
-  abstract hasVersionBeenApplied(versionName: string): Promise<boolean>;
-  abstract saveAppliedVersion(versionName: string): Promise<void>;
+  abstract initMigrationPersistence(): Promise<void>;
+  abstract hasMigrationBeenApplied(migrationName: string): Promise<boolean>;
+  abstract saveAppliedMigration(migrationName: string): Promise<void>;
 }

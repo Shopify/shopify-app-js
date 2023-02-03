@@ -19,7 +19,7 @@ export class RdbmsSessionStorageMigrator extends AbstractMigrationEngine<
     });
   }
 
-  async initMigrationPersitance(): Promise<void> {
+  async initMigrationPersistence(): Promise<void> {
     let ifNotExist = '';
     let discardCreateTable = false;
 
@@ -33,7 +33,9 @@ export class RdbmsSessionStorageMigrator extends AbstractMigrationEngine<
 
     const migration = `
       CREATE TABLE ${ifNotExist} ${this.options.migrationDBIdentifier} (
-        ${this.getOptions().versionColumnName} varchar(255) NOT NULL PRIMARY KEY
+        ${
+          this.getOptions().migrationNameColumnName
+        } varchar(255) NOT NULL PRIMARY KEY
     );`;
 
     if (discardCreateTable) {
@@ -52,18 +54,18 @@ export class RdbmsSessionStorageMigrator extends AbstractMigrationEngine<
     }
   }
 
-  async hasVersionBeenApplied(versionName: string): Promise<boolean> {
+  async hasMigrationBeenApplied(migrationName: string): Promise<boolean> {
     await this.ready;
 
     const query = `
       SELECT * FROM ${this.options.migrationDBIdentifier}
-      WHERE ${this.getOptions().versionColumnName} = 
+      WHERE ${this.getOptions().migrationNameColumnName} = 
         ${this.connection.getArgumentPlaceholder(1)};
     `;
 
     return new Promise((resolve, reject) => {
       this.connection
-        .query(query, [versionName])
+        .query(query, [migrationName])
         .then((rows: any) => {
           resolve(rows.length === 1);
         })
@@ -73,19 +75,19 @@ export class RdbmsSessionStorageMigrator extends AbstractMigrationEngine<
     });
   }
 
-  async saveAppliedVersion(versionName: string): Promise<void> {
+  async saveAppliedMigration(migrationName: string): Promise<void> {
     await this.ready;
 
     const insert = `
           INSERT INTO ${this.options.migrationDBIdentifier} (${
-      this.getOptions().versionColumnName
+      this.getOptions().migrationNameColumnName
     })
           VALUES(${this.connection.getArgumentPlaceholder(1)});
         `;
 
     return new Promise((resolve, reject) => {
       this.connection
-        .query(insert, [versionName])
+        .query(insert, [migrationName])
         .then((_: any) => {
           resolve();
         })
