@@ -3,7 +3,6 @@ import {RdbmsConnection} from '@shopify/shopify-app-session-storage';
 
 export class MySqlConnection implements RdbmsConnection {
   sessionDBIdentifier: string;
-  useHasTable: boolean;
 
   constructor(
     private connection: mysql.Connection,
@@ -11,7 +10,6 @@ export class MySqlConnection implements RdbmsConnection {
   ) {
     this.connection = connection;
     this.sessionDBIdentifier = sessionDBIdentifier;
-    this.useHasTable = true;
   }
 
   async query(query: string, params: any[] = []): Promise<any[]> {

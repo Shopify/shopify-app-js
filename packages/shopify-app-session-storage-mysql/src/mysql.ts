@@ -2,14 +2,13 @@ import mysql from 'mysql2/promise';
 import {Session} from '@shopify/shopify-api';
 import {
   SessionStorage,
-  SessionStorageMigrator,
-  RdbmsSessionStorageMigrator,
   RdbmsSessionStorageOptions,
   RdbmsSessionStorageMigratorOptions,
 } from '@shopify/shopify-app-session-storage';
 
 import {migrationMap} from './migrations';
 import {MySqlConnection} from './mysql-connection';
+import {MySqlSessionStorageMigrator} from './mysql-migrator';
 
 export interface MySQLSessionStorageOptions
   extends RdbmsSessionStorageOptions {}
@@ -45,7 +44,7 @@ export class MySQLSessionStorage implements SessionStorage {
   private internalInit: Promise<void>;
   private options: MySQLSessionStorageOptions;
   private connection: MySqlConnection;
-  private migrator: SessionStorageMigrator | null;
+  private migrator: MySqlSessionStorageMigrator;
 
   constructor(
     private dbUrl: URL,
@@ -181,7 +180,7 @@ export class MySQLSessionStorage implements SessionStorage {
     if (migratorOptions === null) {
       return Promise.resolve();
     } else {
-      this.migrator = new RdbmsSessionStorageMigrator(
+      this.migrator = new MySqlSessionStorageMigrator(
         this.connection,
         migratorOptions,
       );

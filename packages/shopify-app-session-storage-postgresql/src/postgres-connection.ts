@@ -3,11 +3,9 @@ import {RdbmsConnection} from '@shopify/shopify-app-session-storage';
 
 export class PostgresConnection implements RdbmsConnection {
   sessionDBIdentifier: string;
-  useHasTable: boolean;
 
   constructor(private client: pg.Client, sessionDBIdentifier: string) {
     this.sessionDBIdentifier = sessionDBIdentifier;
-    this.useHasTable = false;
   }
 
   async query(query: string, params: any[] = []): Promise<any[]> {

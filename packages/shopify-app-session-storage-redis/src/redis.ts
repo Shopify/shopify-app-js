@@ -8,7 +8,7 @@ import {
 
 import {migrationMap} from './migrations';
 import {RedisConnection} from './redis-connection';
-import {RedisSessionStorageMigrator} from './redis-session-storage-migrator';
+import {RedisSessionStorageMigrator} from './redis-migrator';
 
 export interface RedisSessionStorageOptions extends RedisClientOptions {
   sessionKeyPrefix: string;
@@ -45,7 +45,7 @@ export class RedisSessionStorage implements SessionStorage {
   private internalInit: Promise<void>;
   private options: RedisSessionStorageOptions;
   private client: RedisConnection;
-  private migrator: SessionStorageMigrator | null;
+  private migrator: SessionStorageMigrator;
 
   constructor(
     private dbUrl: URL,

@@ -2,14 +2,13 @@ import sqlite3 from 'sqlite3';
 import {Session} from '@shopify/shopify-api';
 import {
   SessionStorage,
-  SessionStorageMigrator,
-  RdbmsSessionStorageMigrator,
   RdbmsSessionStorageOptions,
   RdbmsSessionStorageMigratorOptions,
 } from '@shopify/shopify-app-session-storage';
 
 import {SqliteConnection} from './sqlite-connection';
 import {migrationMap} from './migrations';
+import {SqliteSessionStorageMigrator} from './sqlite-migrator';
 
 export interface SQLiteSessionStorageOptions
   extends RdbmsSessionStorageOptions {}
@@ -28,7 +27,7 @@ export class SQLiteSessionStorage implements SessionStorage {
   private db: SqliteConnection;
   private ready: Promise<void>;
   private internalInit: Promise<void>;
-  private migrator: SessionStorageMigrator | null;
+  private migrator: SqliteSessionStorageMigrator;
 
   constructor(
     private filename: string,
@@ -154,7 +153,10 @@ export class SQLiteSessionStorage implements SessionStorage {
     if (migratorOptions === null) {
       return Promise.resolve();
     } else {
-      this.migrator = new RdbmsSessionStorageMigrator(this.db, migratorOptions);
+      this.migrator = new SqliteSessionStorageMigrator(
+        this.db,
+        migratorOptions,
+      );
       this.migrator.validateMigrationMap(migrationMap);
 
       return this.migrator.applyMigrations();

@@ -5,7 +5,7 @@ import {
   RdbmsConnection,
 } from './types';
 
-export class RdbmsSessionStorageMigrator extends AbstractMigrationEngine<
+export abstract class RdbmsSessionStorageMigrator extends AbstractMigrationEngine<
   RdbmsConnection,
   RdbmsSessionStorageMigratorOptions
 > {
@@ -17,30 +17,6 @@ export class RdbmsSessionStorageMigrator extends AbstractMigrationEngine<
       ...defaultRdbmsSessionStorageMigratorOptions,
       ...opts,
     });
-  }
-
-  async initMigrationPersistence(): Promise<void> {
-    let ifNotExist = '';
-    let discardCreateTable = false;
-
-    if (this.connection.useHasTable) {
-      discardCreateTable = await this.connection.hasTable(
-        this.options.migrationDBIdentifier,
-      );
-    } else {
-      ifNotExist = 'IF NOT EXISTS';
-    }
-
-    const migration = `
-      CREATE TABLE ${ifNotExist} ${this.options.migrationDBIdentifier} (
-        ${
-          this.getOptions().migrationNameColumnName
-        } varchar(255) NOT NULL PRIMARY KEY
-    );`;
-
-    if (!discardCreateTable) {
-      await this.connection.query(migration, []);
-    }
   }
 
   async hasMigrationBeenApplied(migrationName: string): Promise<boolean> {
@@ -69,7 +45,9 @@ export class RdbmsSessionStorageMigrator extends AbstractMigrationEngine<
     await this.connection.query(insert, [migrationName]);
   }
 
-  private getOptions(): RdbmsSessionStorageMigratorOptions {
+  public getOptions(): RdbmsSessionStorageMigratorOptions {
     return this.options as RdbmsSessionStorageMigratorOptions;
   }
+
+  abstract initMigrationPersistence(): Promise<void>;
 }

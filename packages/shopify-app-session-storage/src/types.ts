@@ -78,12 +78,6 @@ export interface DBConnection {
  */
 export interface RdbmsConnection extends DBConnection {
   /**
-   * use #hasTable method if 'true', or use "IF NOT EXISTS" if 'false' in CREATE TABLE statements
-   * to determine if a given needs to be created or not
-   */
-  useHasTable: boolean;
-
-  /**
    * Determine if a table exist
    * @param tablename - the table to search
    */

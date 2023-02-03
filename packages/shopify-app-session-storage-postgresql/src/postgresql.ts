@@ -1,15 +1,14 @@
 import pg from 'pg';
 import {Session} from '@shopify/shopify-api';
 import {
-  RdbmsSessionStorageMigrator,
   SessionStorage,
-  SessionStorageMigrator,
   RdbmsSessionStorageOptions,
   RdbmsSessionStorageMigratorOptions,
 } from '@shopify/shopify-app-session-storage';
 
 import {migrationMap} from './migrations';
 import {PostgresConnection} from './postgres-connection';
+import {PostgresSessionStorageMigrator} from './postgres-migrator';
 
 export interface PostgreSQLSessionStorageOptions
   extends RdbmsSessionStorageOptions {
@@ -48,7 +47,7 @@ export class PostgreSQLSessionStorage implements SessionStorage {
   private internalInit: Promise<void>;
   private options: PostgreSQLSessionStorageOptions;
   private client: PostgresConnection;
-  private migrator: SessionStorageMigrator | null;
+  private migrator: PostgresSessionStorageMigrator;
 
   constructor(
     private dbUrl: URL,
@@ -187,7 +186,7 @@ export class PostgreSQLSessionStorage implements SessionStorage {
     if (migratorOptions === null) {
       return Promise.resolve();
     } else {
-      this.migrator = new RdbmsSessionStorageMigrator(
+      this.migrator = new PostgresSessionStorageMigrator(
         this.client,
         migratorOptions,
       );

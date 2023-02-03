@@ -3,12 +3,10 @@ import {RdbmsConnection} from '@shopify/shopify-app-session-storage';
 
 export class SqliteConnection implements RdbmsConnection {
   sessionDBIdentifier: string;
-  useHasTable: boolean;
 
   constructor(private db: sqlite3.Database, sessionDBIdentifier: string) {
     this.db = db;
     this.sessionDBIdentifier = sessionDBIdentifier;
-    this.useHasTable = true;
   }
 
   query(query: string, params: any[] = []): Promise<any[]> {
