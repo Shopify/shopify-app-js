@@ -64,19 +64,19 @@ export interface DBConnection {
    * Disconnect from the underlying database
    */
   disconnect(): Promise<void>;
-
-  /**
-   * Make a query to the underlying DB
-   * @param query - the query to execute
-   * @param params - the parameters required by the query
-   */
-  query(query: string, params: any[]): Promise<any[]>;
 }
 
 /**
  * This is for the use cases of the RDBMS database where
  */
 export interface RdbmsConnection extends DBConnection {
+  /**
+   * Make a query to the underlying DB
+   * @param query - the query to execute
+   * @param params - the parameters required by the query
+   */
+  query(query: string, params: any[]): Promise<any[]>;
+
   /**
    * Determine if a table exist
    * @param tablename - the table to search

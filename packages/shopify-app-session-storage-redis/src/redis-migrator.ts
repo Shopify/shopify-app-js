@@ -34,7 +34,7 @@ export class RedisSessionStorageMigrator extends AbstractMigrationEngine<
     const migrations = await this.getMigrationRecords();
     migrations.set(migrationName, true);
 
-    this.connection.setKey(
+    this.connection.set(
       this.options.migrationDBIdentifier,
       JSON.stringify(Object.fromEntries(migrations)),
     );
@@ -43,7 +43,7 @@ export class RedisSessionStorageMigrator extends AbstractMigrationEngine<
   }
 
   private async getMigrationRecords(): Promise<Map<string, boolean>> {
-    const migrationsRecord = await this.connection.query(
+    const migrationsRecord = await this.connection.get(
       this.options.migrationDBIdentifier,
     );
     let migrations: Map<string, boolean> = new Map();

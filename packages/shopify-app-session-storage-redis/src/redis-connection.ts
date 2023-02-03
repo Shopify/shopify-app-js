@@ -19,35 +19,44 @@ export class RedisConnection implements DBConnection {
     }
   }
 
-  query(key: string, _: any[] = []): Promise<any> {
-    return this.client.get(this.fullKey(key));
-  }
-
-  getWithoutFullKey(key: string, _: any[] = []): Promise<any> {
-    return this.client.get(key);
-  }
-
-  keys(name: string): Promise<any> {
-    return this.client.keys(name);
-  }
-
-  async setKey(name: string, value: any) {
-    await this.client.set(this.fullKey(name), value);
-  }
-
-  fullKey(name: string): string {
-    return `${this.sessionDBIdentifier}_${name}`;
-  }
-
-  delete(name: string): Promise<any> {
-    return this.client.del(this.fullKey(name));
-  }
-
   connect(): Promise<void> {
     return this.client.connect();
   }
 
   async disconnect(): Promise<void> {
     await this.client.quit();
+  }
+
+  keys(name: string): Promise<any> {
+    return this.client.keys(name);
+  }
+
+  async set(baseKey: string, value: any, addKeyPrefix = true) {
+    let finalKey = baseKey;
+    if (addKeyPrefix) {
+      finalKey = this.generateFullKey(baseKey);
+    }
+    await this.client.set(finalKey, value);
+  }
+
+  del(baseKey: string, addKeyPrefix = true): Promise<any> {
+    let finalKey = baseKey;
+    if (addKeyPrefix) {
+      finalKey = this.generateFullKey(baseKey);
+    }
+    return this.client.del(finalKey);
+  }
+
+  get(baseKey: string, addKeyPrefix = true): Promise<any> {
+    let finalKey = baseKey;
+    if (addKeyPrefix) {
+      finalKey = this.generateFullKey(baseKey);
+    }
+
+    return this.client.get(finalKey);
+  }
+
+  generateFullKey(name: string): string {
+    return `${this.sessionDBIdentifier}_${name}`;
   }
 }

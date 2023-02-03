@@ -62,7 +62,7 @@ export class RedisSessionStorage implements SessionStorage {
   public async storeSession(session: Session): Promise<boolean> {
     await this.ready;
 
-    await this.client.setKey(
+    await this.client.set(
       session.id,
       JSON.stringify(session.toPropertyArray()),
     );
@@ -73,7 +73,7 @@ export class RedisSessionStorage implements SessionStorage {
   public async loadSession(id: string): Promise<Session | undefined> {
     await this.ready;
 
-    let rawResult: any = await this.client.query(id);
+    let rawResult: any = await this.client.get(id);
 
     if (!rawResult) return undefined;
     rawResult = JSON.parse(rawResult);
@@ -86,7 +86,7 @@ export class RedisSessionStorage implements SessionStorage {
     const session = await this.loadSession(id);
     if (session) {
       await this.removeKeyFromShopList(session.shop, id);
-      await this.client.delete(id);
+      await this.client.del(id);
     }
     return true;
   }
@@ -100,13 +100,13 @@ export class RedisSessionStorage implements SessionStorage {
   public async findSessionsByShop(shop: string): Promise<Session[]> {
     await this.ready;
 
-    const idKeysArrayString = await this.client.query(shop);
+    const idKeysArrayString = await this.client.get(shop);
     if (!idKeysArrayString) return [];
 
     const idKeysArray = JSON.parse(idKeysArrayString);
     const results: Session[] = [];
     for (const idKey of idKeysArray) {
-      const rawResult = await this.client.getWithoutFullKey(idKey);
+      const rawResult = await this.client.get(idKey, false);
       if (!rawResult) continue;
 
       const session = Session.fromPropertyArray(JSON.parse(rawResult));
@@ -122,25 +122,25 @@ export class RedisSessionStorage implements SessionStorage {
 
   private async addKeyToShopList(session: Session) {
     const shopKey = session.shop;
-    const idKey = this.client.fullKey(session.id);
-    const idKeysArrayString = await this.client.query(shopKey);
+    const idKey = this.client.generateFullKey(session.id);
+    const idKeysArrayString = await this.client.get(shopKey);
 
     if (idKeysArrayString) {
       const idKeysArray = JSON.parse(idKeysArrayString);
 
       if (!idKeysArray.includes(idKey)) {
         idKeysArray.push(idKey);
-        await this.client.setKey(shopKey, JSON.stringify(idKeysArray));
+        await this.client.set(shopKey, JSON.stringify(idKeysArray));
       }
     } else {
-      await this.client.setKey(shopKey, JSON.stringify([idKey]));
+      await this.client.set(shopKey, JSON.stringify([idKey]));
     }
   }
 
   private async removeKeyFromShopList(shop: string, id: string) {
     const shopKey = shop;
-    const idKey = this.client.fullKey(id);
-    const idKeysArrayString = await this.client.query(shopKey);
+    const idKey = this.client.generateFullKey(id);
+    const idKeysArrayString = await this.client.get(shopKey);
 
     if (idKeysArrayString) {
       const idKeysArray = JSON.parse(idKeysArrayString);
@@ -148,7 +148,7 @@ export class RedisSessionStorage implements SessionStorage {
 
       if (index > -1) {
         idKeysArray.splice(index, 1);
-        await this.client.setKey(shopKey, JSON.stringify(idKeysArray));
+        await this.client.set(shopKey, JSON.stringify(idKeysArray));
       }
     }
   }

@@ -16,7 +16,7 @@ export async function migrateToVersion1_0_1(
   for (const key of keys) {
     if (key.startsWith(connection.sessionDBIdentifier)) {
       const session = Session.fromPropertyArray(
-        JSON.parse((await connection.getWithoutFullKey(key)) as string),
+        JSON.parse((await connection.get(key, false)) as string),
       );
       if (!shopsAndSessions[session.shop]) {
         shopsAndSessions[session.shop] = [];
@@ -26,6 +26,6 @@ export async function migrateToVersion1_0_1(
   }
   // eslint-disable-next-line guard-for-in
   for (const shop in shopsAndSessions) {
-    await connection.setKey(shop, JSON.stringify(shopsAndSessions[shop]));
+    await connection.set(shop, JSON.stringify(shopsAndSessions[shop]));
   }
 }
