@@ -1,6 +1,6 @@
 # Implementing session storage
 
-A custom implementaton of `SessionStorage` will need to implement the following methods, as documented by the abstract [`SessionStorage`](./src/session-storage.ts) class:
+A custom implementaton of `SessionStorage` will need to implement the following methods, as documented by the abstract [`SessionStorage`](./src/types.ts) class:
 
 |        Method        | Parameter type |          Return value           | Description                                                                                                   |
 | :------------------: | :------------: | :-----------------------------: | ------------------------------------------------------------------------------------------------------------- |
