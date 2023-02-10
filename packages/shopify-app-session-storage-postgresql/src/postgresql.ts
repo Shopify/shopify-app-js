@@ -16,7 +16,7 @@ export interface PostgreSQLSessionStorageOptions
 }
 const defaultPostgreSQLSessionStorageOptions: PostgreSQLSessionStorageOptions =
   {
-    sessionDBIdentifier: 'shopify_sessions',
+    sessionTableName: 'shopify_sessions',
     port: 3211,
     migratorOptions: {
       migrationDBIdentifier: 'shopify_sessions_migrations',

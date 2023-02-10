@@ -14,7 +14,7 @@ export interface SQLiteSessionStorageOptions
   extends RdbmsSessionStorageOptions {}
 
 const defaultSQLiteSessionStorageOptions: SQLiteSessionStorageOptions = {
-  sessionDBIdentifier: 'shopify_sessions',
+  sessionTableName: 'shopify_sessions',
   migratorOptions: {
     migrationDBIdentifier: 'shopify_sessions_migrations',
     migrationNameColumnName: 'migration_name',

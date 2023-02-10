@@ -4,12 +4,12 @@ import {RedisConnection} from './redis-connection';
 
 export const migrationMap = new Map([
   // Thi migration name cannot be chnaged as it has already been released
-  ['migrateToVersion1_0_1', addShopKeysToSessionKeysMapping],
+  ['migrateToVersion1_0_1', migrateAddShopKeyToTrackSessionsByShop],
 ]);
 
 // need to add shop keys with list of associated session keys to support
 // the new findSessionsByShop in v2.x.x
-export async function addShopKeysToSessionKeysMapping(
+export async function migrateAddShopKeyToTrackSessionsByShop(
   connection: RedisConnection,
 ): Promise<void> {
   const shopsAndSessions: {[key: string]: string[]} = {};

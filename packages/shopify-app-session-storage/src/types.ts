@@ -44,7 +44,7 @@ export interface SessionStorage {
  * define the option required to instantiate an RDBMS session storage implementation
  */
 export interface RdbmsSessionStorageOptions {
-  sessionDBIdentifier: string;
+  sessionTableName: string;
   migratorOptions?: RdbmsSessionStorageMigratorOptions;
 }
 

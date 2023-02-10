@@ -8,11 +8,11 @@ export class RedisConnection implements DBConnection {
 
   constructor(
     private client: RedisClient,
-    prefixKey: string,
+    keyPrefix: string,
     onError?: (...args: any[]) => void,
   ) {
     this.client = client;
-    this.sessionDBIdentifier = prefixKey;
+    this.sessionDBIdentifier = keyPrefix;
 
     if (onError) {
       this.client.on('error', onError);
@@ -36,31 +36,22 @@ export class RedisConnection implements DBConnection {
   }
 
   async set(baseKey: string, value: any, addKeyPrefix = true) {
-    let finalKey = baseKey;
-    if (addKeyPrefix) {
-      finalKey = this.generateFullKey(baseKey);
-    }
-    await this.client.set(finalKey, value);
+    await this.client.set(this.buildKey(baseKey, addKeyPrefix), value);
   }
 
   async del(baseKey: string, addKeyPrefix = true): Promise<any> {
-    let finalKey = baseKey;
-    if (addKeyPrefix) {
-      finalKey = this.generateFullKey(baseKey);
-    }
-    return this.client.del(finalKey);
+    return this.client.del(this.buildKey(baseKey, addKeyPrefix));
   }
 
   async get(baseKey: string, addKeyPrefix = true): Promise<any> {
-    let finalKey = baseKey;
-    if (addKeyPrefix) {
-      finalKey = this.generateFullKey(baseKey);
-    }
-
-    return this.client.get(finalKey);
+    return this.client.get(this.buildKey(baseKey, addKeyPrefix));
   }
 
   generateFullKey(name: string): string {
     return `${this.sessionDBIdentifier}_${name}`;
+  }
+
+  private buildKey(baseKey: string, addKeyPrefix: boolean): string {
+    return addKeyPrefix ? this.generateFullKey(baseKey) : baseKey;
   }
 }
