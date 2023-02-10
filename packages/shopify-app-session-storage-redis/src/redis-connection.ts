@@ -19,7 +19,11 @@ export class RedisConnection implements DBConnection {
     }
   }
 
-  connect(): Promise<void> {
+  query(query: string, params: any[]): Promise<any[]> {
+    throw new Error('Method not implemented. Use get(string, boolean) instead');
+  }
+
+  async connect(): Promise<void> {
     return this.client.connect();
   }
 
@@ -27,7 +31,7 @@ export class RedisConnection implements DBConnection {
     await this.client.quit();
   }
 
-  keys(name: string): Promise<any> {
+  async keys(name: string): Promise<any> {
     return this.client.keys(name);
   }
 
@@ -39,7 +43,7 @@ export class RedisConnection implements DBConnection {
     await this.client.set(finalKey, value);
   }
 
-  del(baseKey: string, addKeyPrefix = true): Promise<any> {
+  async del(baseKey: string, addKeyPrefix = true): Promise<any> {
     let finalKey = baseKey;
     if (addKeyPrefix) {
       finalKey = this.generateFullKey(baseKey);
@@ -47,7 +51,7 @@ export class RedisConnection implements DBConnection {
     return this.client.del(finalKey);
   }
 
-  get(baseKey: string, addKeyPrefix = true): Promise<any> {
+  async get(baseKey: string, addKeyPrefix = true): Promise<any> {
     let finalKey = baseKey;
     if (addKeyPrefix) {
       finalKey = this.generateFullKey(baseKey);

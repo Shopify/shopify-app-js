@@ -16,16 +16,16 @@ export class MySqlConnection implements RdbmsConnection {
     return this.connection.query(query, params);
   }
 
-  connect(): Promise<void> {
+  async connect(): Promise<void> {
     // Nothing to do here
     return Promise.resolve();
   }
 
-  public async disconnect(): Promise<void> {
+  async disconnect(): Promise<void> {
     await this.connection.end();
   }
 
-  public getDatabase(): string | undefined {
+  getDatabase(): string | undefined {
     return this.connection.config.database;
   }
 

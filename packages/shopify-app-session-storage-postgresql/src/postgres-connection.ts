@@ -12,11 +12,11 @@ export class PostgresConnection implements RdbmsConnection {
     return (await this.client.query(query, params)).rows;
   }
 
-  public async disconnect(): Promise<void> {
+  async disconnect(): Promise<void> {
     await this.client.end();
   }
 
-  public async connect(): Promise<void> {
+  async connect(): Promise<void> {
     await this.client.connect();
   }
 

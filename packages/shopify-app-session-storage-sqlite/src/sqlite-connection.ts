@@ -9,7 +9,7 @@ export class SqliteConnection implements RdbmsConnection {
     this.sessionDBIdentifier = sessionDBIdentifier;
   }
 
-  query(query: string, params: any[] = []): Promise<any[]> {
+  async query(query: string, params: any[] = []): Promise<any[]> {
     return new Promise((resolve, reject) => {
       this.db.all(query, params, (err, result) => {
         if (err) {
@@ -36,12 +36,12 @@ export class SqliteConnection implements RdbmsConnection {
     return `?`;
   }
 
-  connect(): Promise<void> {
+  async connect(): Promise<void> {
     // Nothing to do here
     return Promise.resolve();
   }
 
-  disconnect(): Promise<void> {
+  async disconnect(): Promise<void> {
     // Nothing to do here
     return Promise.resolve();
   }
