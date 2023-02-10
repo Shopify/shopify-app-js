@@ -106,7 +106,7 @@ export interface SessionStorageMigrator {
   initMigrationPersistence(): Promise<void>;
 
   /**
-   *  returns true if the migrationName as already been applied and
+   * Returns true if the migrationName as already been applied and
    * therefore the migrator should not apply it. if false,
    * the migrator will run the associated migration
    * @param migrationName the unique version name to look for in the migration table
