@@ -1,10 +1,14 @@
 import {SqliteConnection} from './sqlite-connection';
 
-export const migrationMap = new Map([['internal_v101', migrateToV1_0_1]]);
+export const migrationMap = new Map([
+  ['migrateScopeFieldToVarchar1024', migrateScopeFieldToVarchar1024],
+]);
 
 // need to migrate exisiting scope from varchar 255 to varchar 1024
-async function migrateToV1_0_1(connection: SqliteConnection): Promise<void> {
-  const tempTableName = `${connection.sessionDBIdentifier}_for_migration_toV101`;
+async function migrateScopeFieldToVarchar1024(
+  connection: SqliteConnection,
+): Promise<void> {
+  const tempTableName = `${connection.sessionDBIdentifier}_for_migrateScopeFieldToVarchar1024`;
 
   await connection.executeRawQuery('BEGIN');
 

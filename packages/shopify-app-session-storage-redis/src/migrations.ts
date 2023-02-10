@@ -3,12 +3,13 @@ import {Session} from '@shopify/shopify-api';
 import {RedisConnection} from './redis-connection';
 
 export const migrationMap = new Map([
-  ['migrateToVersion1_0_1', migrateToVersion1_0_1],
+  // Thi migration name cannot be chnaged as it has already been released
+  ['migrateToVersion1_0_1', addShopKeysToSessionKeysMapping],
 ]);
 
 // need to add shop keys with list of associated session keys to support
 // the new findSessionsByShop in v2.x.x
-export async function migrateToVersion1_0_1(
+export async function addShopKeysToSessionKeysMapping(
   connection: RedisConnection,
 ): Promise<void> {
   const shopsAndSessions: {[key: string]: string[]} = {};
