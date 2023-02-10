@@ -20,11 +20,11 @@ export class SqliteSessionStorageMigrator extends RdbmsSessionStorageMigrator {
 
     if (!discardCreateTable) {
       const migration = `
-      CREATE TABLE ${this.options.migrationDBIdentifier} (
-        ${
-          this.getOptions().migrationNameColumnName
-        } varchar(255) NOT NULL PRIMARY KEY
-    );`;
+        CREATE TABLE ${this.options.migrationDBIdentifier} (
+          ${
+            this.getOptions().migrationNameColumnName
+          } varchar(255) NOT NULL PRIMARY KEY
+        );`;
 
       await this.connection.query(migration, []);
     }
