@@ -21,6 +21,18 @@ export class SqliteConnection implements RdbmsConnection {
     });
   }
 
+  async executeRawQuery(query: string): Promise<void> {
+    return new Promise((resolve, reject) => {
+      this.db.exec(query, (statement, error) => {
+        if (error) {
+          reject(error);
+          return;
+        }
+        resolve();
+      });
+    });
+  }
+
   async hasTable(tablename: string): Promise<boolean> {
     const query = `
     SELECT name FROM sqlite_schema

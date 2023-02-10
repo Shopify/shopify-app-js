@@ -6,6 +6,8 @@ export const migrationMap = new Map([['internal_v101', migrateToV1_0_1]]);
 async function migrateToV1_0_1(connection: SqliteConnection): Promise<void> {
   const tempTableName = `${connection.sessionDBIdentifier}_for_migration_toV101`;
 
+  await connection.executeRawQuery('BEGIN');
+
   //  1. rename exisiting table
   const rename = `
     ALTER TABLE ${connection.sessionDBIdentifier} RENAME TO ${tempTableName};
@@ -38,4 +40,6 @@ async function migrateToV1_0_1(connection: SqliteConnection): Promise<void> {
   // 4. Delete old renamed table
   const drop = `DROP TABLE ${tempTableName};`;
   await connection.query(drop);
+
+  await connection.executeRawQuery('COMMIT');
 }
