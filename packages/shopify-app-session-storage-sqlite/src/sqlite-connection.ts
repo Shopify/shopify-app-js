@@ -5,7 +5,6 @@ export class SqliteConnection implements RdbmsConnection {
   sessionDBIdentifier: string;
 
   constructor(private db: sqlite3.Database, sessionDBIdentifier: string) {
-    this.db = db;
     this.sessionDBIdentifier = sessionDBIdentifier;
   }
 
