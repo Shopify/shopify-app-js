@@ -70,7 +70,7 @@ export class MySQLSessionStorage implements SessionStorage {
           : [key, value],
       );
     const query = `
-      REPLACE INTO ${this.options.sessionDBIdentifier}
+      REPLACE INTO ${this.options.sessionTableName}
       (${entries.map(([key]) => key).join(', ')})
       VALUES (${entries
         .map(() => `${this.connection.getArgumentPlaceholder()}`)
@@ -86,7 +86,7 @@ export class MySQLSessionStorage implements SessionStorage {
   public async loadSession(id: string): Promise<Session | undefined> {
     await this.ready;
     const query = `
-      SELECT * FROM \`${this.options.sessionDBIdentifier}\`
+      SELECT * FROM \`${this.options.sessionTableName}\`
       WHERE id = ${this.connection.getArgumentPlaceholder()};
     `;
     const [rows] = await this.connection.query(query, [id]);
@@ -98,7 +98,7 @@ export class MySQLSessionStorage implements SessionStorage {
   public async deleteSession(id: string): Promise<boolean> {
     await this.ready;
     const query = `
-      DELETE FROM ${this.options.sessionDBIdentifier}
+      DELETE FROM ${this.options.sessionTableName}
       WHERE id = ${this.connection.getArgumentPlaceholder()};
     `;
     await this.connection.query(query, [id]);
@@ -108,7 +108,7 @@ export class MySQLSessionStorage implements SessionStorage {
   public async deleteSessions(ids: string[]): Promise<boolean> {
     await this.ready;
     const query = `
-      DELETE FROM ${this.options.sessionDBIdentifier}
+      DELETE FROM ${this.options.sessionTableName}
       WHERE id IN (${ids
         .map(() => `${this.connection.getArgumentPlaceholder()}`)
         .join(',')});
@@ -121,7 +121,7 @@ export class MySQLSessionStorage implements SessionStorage {
     await this.ready;
 
     const query = `
-      SELECT * FROM ${this.options.sessionDBIdentifier}
+      SELECT * FROM ${this.options.sessionTableName}
       WHERE shop = ${this.connection.getArgumentPlaceholder()};
     `;
     const [rows] = await this.connection.query(query, [shop]);
@@ -140,18 +140,18 @@ export class MySQLSessionStorage implements SessionStorage {
   private async init() {
     this.connection = new MySqlConnection(
       await mysql.createConnection(this.dbUrl.toString()),
-      this.options.sessionDBIdentifier,
+      this.options.sessionTableName,
     );
     await this.createTable();
   }
 
   private async createTable() {
     const hasSessionTable = await this.connection.hasTable(
-      this.options.sessionDBIdentifier,
+      this.options.sessionTableName,
     );
     if (!hasSessionTable) {
       const query = `
-        CREATE TABLE ${this.options.sessionDBIdentifier} (
+        CREATE TABLE ${this.options.sessionTableName} (
           id varchar(255) NOT NULL PRIMARY KEY,
           shop varchar(255) NOT NULL,
           state varchar(255) NOT NULL,

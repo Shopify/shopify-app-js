@@ -73,7 +73,7 @@ export class PostgreSQLSessionStorage implements SessionStorage {
           : [key, value],
       );
     const query = `
-      INSERT INTO ${this.options.sessionDBIdentifier}
+      INSERT INTO ${this.options.sessionTableName}
       (${entries.map(([key]) => key).join(', ')})
       VALUES (${entries
         .map((_, i) => `${this.client.getArgumentPlaceholder(i + 1)}`)
@@ -92,7 +92,7 @@ export class PostgreSQLSessionStorage implements SessionStorage {
   public async loadSession(id: string): Promise<Session | undefined> {
     await this.ready;
     const query = `
-      SELECT * FROM ${this.options.sessionDBIdentifier}
+      SELECT * FROM ${this.options.sessionTableName}
       WHERE id = ${this.client.getArgumentPlaceholder(1)};
     `;
     const rows = await this.client.query(query, [id]);
@@ -104,7 +104,7 @@ export class PostgreSQLSessionStorage implements SessionStorage {
   public async deleteSession(id: string): Promise<boolean> {
     await this.ready;
     const query = `
-      DELETE FROM ${this.options.sessionDBIdentifier}
+      DELETE FROM ${this.options.sessionTableName}
       WHERE id = ${this.client.getArgumentPlaceholder(1)};
     `;
     await this.client.query(query, [id]);
@@ -114,7 +114,7 @@ export class PostgreSQLSessionStorage implements SessionStorage {
   public async deleteSessions(ids: string[]): Promise<boolean> {
     await this.ready;
     const query = `
-      DELETE FROM ${this.options.sessionDBIdentifier}
+      DELETE FROM ${this.options.sessionTableName}
       WHERE id IN (${ids
         .map((_, i) => `${this.client.getArgumentPlaceholder(i + 1)}`)
         .join(', ')});
@@ -127,7 +127,7 @@ export class PostgreSQLSessionStorage implements SessionStorage {
     await this.ready;
 
     const query = `
-      SELECT * FROM ${this.options.sessionDBIdentifier}
+      SELECT * FROM ${this.options.sessionTableName}
       WHERE shop = ${this.client.getArgumentPlaceholder(1)};
     `;
     const rows = await this.client.query(query, [shop]);
@@ -146,7 +146,7 @@ export class PostgreSQLSessionStorage implements SessionStorage {
   private async init() {
     this.client = new PostgresConnection(
       new pg.Client({connectionString: this.dbUrl.toString()}),
-      this.options.sessionDBIdentifier,
+      this.options.sessionTableName,
     );
     await this.connectClient();
     await this.createTable();
@@ -158,7 +158,7 @@ export class PostgreSQLSessionStorage implements SessionStorage {
 
   private async createTable() {
     const query = `
-        CREATE TABLE IF NOT EXISTS ${this.options.sessionDBIdentifier} (
+        CREATE TABLE IF NOT EXISTS ${this.options.sessionTableName} (
           id varchar(255) NOT NULL PRIMARY KEY,
           shop varchar(255) NOT NULL,
           state varchar(255) NOT NULL,

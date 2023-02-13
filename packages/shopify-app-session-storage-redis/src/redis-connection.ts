@@ -19,7 +19,7 @@ export class RedisConnection implements DBConnection {
     }
   }
 
-  query(query: string, params: any[]): Promise<any[]> {
+  query(_query: string, _params: any[]): Promise<any[]> {
     throw new Error('Method not implemented. Use get(string, boolean) instead');
   }
 

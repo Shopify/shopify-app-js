@@ -22,9 +22,9 @@ export class SqliteConnection implements RdbmsConnection {
 
   async executeRawQuery(query: string): Promise<void> {
     return new Promise((resolve, reject) => {
-      this.db.exec(query, (statement, error) => {
-        if (error) {
-          reject(error);
+      this.db.exec(query, (err: Error) => {
+        if (err) {
+          reject(err);
           return;
         }
         resolve();

@@ -36,7 +36,7 @@ export class SQLiteSessionStorage implements SessionStorage {
     this.options = {...defaultSQLiteSessionStorageOptions, ...opts};
     this.db = new SqliteConnection(
       new sqlite3.Database(this.filename),
-      this.options.sessionDBIdentifier,
+      this.options.sessionTableName,
     );
     this.internalInit = this.init();
     this.ready = this.initMigrator(this.options.migratorOptions);
@@ -55,7 +55,7 @@ export class SQLiteSessionStorage implements SessionStorage {
       );
 
     const query = `
-      INSERT OR REPLACE INTO ${this.options.sessionDBIdentifier}
+      INSERT OR REPLACE INTO ${this.options.sessionTableName}
       (${entries.map(([key]) => key).join(', ')})
       VALUES (${entries
         .map(() => `${this.db.getArgumentPlaceholder()}`)
@@ -72,7 +72,7 @@ export class SQLiteSessionStorage implements SessionStorage {
   public async loadSession(id: string): Promise<Session | undefined> {
     await this.ready;
     const query = `
-      SELECT * FROM ${this.options.sessionDBIdentifier}
+      SELECT * FROM ${this.options.sessionTableName}
       WHERE id = ${this.db.getArgumentPlaceholder()};
     `;
     const rows = await this.db.query(query, [id]);
@@ -84,7 +84,7 @@ export class SQLiteSessionStorage implements SessionStorage {
   public async deleteSession(id: string): Promise<boolean> {
     await this.ready;
     const query = `
-      DELETE FROM ${this.options.sessionDBIdentifier}
+      DELETE FROM ${this.options.sessionTableName}
       WHERE id = ${this.db.getArgumentPlaceholder()};
     `;
     await this.db.query(query, [id]);
@@ -94,7 +94,7 @@ export class SQLiteSessionStorage implements SessionStorage {
   public async deleteSessions(ids: string[]): Promise<boolean> {
     await this.ready;
     const query = `
-      DELETE FROM ${this.options.sessionDBIdentifier}
+      DELETE FROM ${this.options.sessionTableName}
       WHERE id IN (${ids
         .map(() => `${this.db.getArgumentPlaceholder()}`)
         .join(',')});
@@ -106,7 +106,7 @@ export class SQLiteSessionStorage implements SessionStorage {
   public async findSessionsByShop(shop: string): Promise<Session[]> {
     await this.ready;
     const query = `
-      SELECT * FROM ${this.options.sessionDBIdentifier}
+      SELECT * FROM ${this.options.sessionTableName}
       WHERE shop = ${this.db.getArgumentPlaceholder()};
     `;
     const rows = await this.db.query(query, [shop]);
@@ -120,11 +120,11 @@ export class SQLiteSessionStorage implements SessionStorage {
 
   private async init() {
     const hasSessionTable = await this.db.hasTable(
-      this.options.sessionDBIdentifier,
+      this.options.sessionTableName,
     );
     if (!hasSessionTable) {
       const query = `
-        CREATE TABLE ${this.options.sessionDBIdentifier} (
+        CREATE TABLE ${this.options.sessionTableName} (
           id varchar(255) NOT NULL PRIMARY KEY,
           shop varchar(255) NOT NULL,
           state varchar(255) NOT NULL,
