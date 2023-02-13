@@ -7,12 +7,60 @@ export const migrationList = [
     'migrateScopeFieldToVarchar1024',
     migrateScopeFieldToVarchar1024,
   ),
+  new MigrationOperation('migrateToCaseSensitivity', migrateToCaseSensitivity),
 ];
 
-// need change the sizr of the scope column from 255 to 1024 char
+// need change the size of the scope column from 255 to 1024 char
 export async function migrateScopeFieldToVarchar1024(
   connection: PostgresConnection,
 ): Promise<void> {
-  await connection.query(`ALTER TABLE ${connection.sessionStorageIdentifier} 
-    ALTER COLUMN scope TYPE varchar(1024)`);
+  await connection.query(`ALTER TABLE "${connection.sessionStorageIdentifier}"
+    ALTER COLUMN "scope" TYPE varchar(1024)`);
+}
+
+export async function migrateToCaseSensitivity(
+  connection: PostgresConnection,
+): Promise<void> {
+  let queries: string[] = [];
+  if (
+    connection.sessionStorageIdentifier ===
+    connection.sessionStorageIdentifier.toLowerCase()
+  ) {
+    // tablename is lowercase anyway, only need to rename the relevant columns (if not already renamed)
+    const hasOldColumnsQuery = `
+      SELECT EXISTS (
+        SELECT column_name FROM information_schema.columns
+        WHERE table_schema='public' AND table_name = '${connection.sessionStorageIdentifier}' AND column_name='isonline'
+      )
+    `;
+    const rows = await connection.query(hasOldColumnsQuery);
+    if (rows[0].exists) {
+      queries = [
+        `ALTER TABLE "${connection.sessionStorageIdentifier}" RENAME COLUMN "isonline" TO "isOnline"`,
+        `ALTER TABLE "${connection.sessionStorageIdentifier}" RENAME COLUMN "onlineaccessinfo" TO "onlineAccessInfo"`,
+        `ALTER TABLE "${connection.sessionStorageIdentifier}" RENAME COLUMN "accesstoken" TO "accessToken"`,
+      ];
+    }
+  } else {
+    // may need to migrate the data from the old table (if it exists) to the new one
+    const hasOldSessionTable = await connection.hasTable(
+      connection.sessionStorageIdentifier.toLowerCase(),
+    );
+    if (hasOldSessionTable) {
+      queries = [
+        `
+        INSERT INTO "${connection.sessionStorageIdentifier}" (
+          "id", "shop", "state", "isOnline", "scope", "expires", "onlineAccessInfo", "accessToken"
+        )
+        SELECT id, shop, state, isonline, scope, expires, onlineaccessinfo, accesstoken
+        FROM "${connection.sessionStorageIdentifier.toLowerCase()}"
+        `,
+        `DROP TABLE "${connection.sessionStorageIdentifier.toLowerCase()}"`,
+      ];
+    }
+  }
+
+  for (const query of queries) {
+    await connection.query(query);
+  }
 }

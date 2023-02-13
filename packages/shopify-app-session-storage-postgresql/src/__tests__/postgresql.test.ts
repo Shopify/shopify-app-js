@@ -38,7 +38,8 @@ describe('PostgreSQLSessionStorage', () => {
             [],
           );
           await client.end();
-        } catch {
+        } catch (error) {
+          // console.error(error);  // uncomment to see error for debugging tests
           return false;
         }
         return true;
