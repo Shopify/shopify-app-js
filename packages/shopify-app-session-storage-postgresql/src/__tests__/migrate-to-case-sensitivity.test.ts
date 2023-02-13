@@ -145,7 +145,7 @@ afterAll(async () => {
 
       it(`migrates previous tablenames and column names to be case-sensitive`, async () => {
         storage = new PostgreSQLSessionStorage(dbURL, {
-          sessionDBIdentifier: sessionTableName,
+          sessionTableName,
           port: 5433,
         });
         try {
@@ -289,7 +289,7 @@ afterAll(async () => {
 
       it(`doesn't perform any migration`, async () => {
         storage = new PostgreSQLSessionStorage(dbURL, {
-          sessionDBIdentifier: sessionTableName,
+          sessionTableName,
           port: 5433,
         });
         try {
