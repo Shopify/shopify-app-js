@@ -8,6 +8,6 @@ export const migrationMap = new Map([
 export async function migrateScopeFieldToVarchar1024(
   connection: MySqlConnection,
 ): Promise<void> {
-  await connection.query(`ALTER TABLE ${connection.sessionDBIdentifier} 
+  await connection.query(`ALTER TABLE ${connection.sessionStorageIdentifier} 
       MODIFY COLUMN scope varchar(1024)`);
 }

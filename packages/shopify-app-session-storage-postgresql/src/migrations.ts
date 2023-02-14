@@ -8,6 +8,6 @@ export const migrationMap = new Map([
 export async function migrateScopeFieldToVarchar1024(
   connection: PostgresConnection,
 ): Promise<void> {
-  await connection.query(`ALTER TABLE ${connection.sessionDBIdentifier} 
+  await connection.query(`ALTER TABLE ${connection.sessionStorageIdentifier} 
     ALTER COLUMN scope TYPE varchar(1024)`);
 }

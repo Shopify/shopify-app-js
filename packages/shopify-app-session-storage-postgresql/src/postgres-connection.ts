@@ -2,10 +2,10 @@ import pg from 'pg';
 import {RdbmsConnection} from '@shopify/shopify-app-session-storage';
 
 export class PostgresConnection implements RdbmsConnection {
-  sessionDBIdentifier: string;
+  sessionStorageIdentifier: string;
 
-  constructor(private client: pg.Client, sessionDBIdentifier: string) {
-    this.sessionDBIdentifier = sessionDBIdentifier;
+  constructor(private client: pg.Client, sessionStorageIdentifier: string) {
+    this.sessionStorageIdentifier = sessionStorageIdentifier;
   }
 
   async query(query: string, params: any[] = []): Promise<any[]> {

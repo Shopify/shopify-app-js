@@ -8,19 +8,19 @@ export const migrationMap = new Map([
 async function migrateScopeFieldToVarchar1024(
   connection: SqliteConnection,
 ): Promise<void> {
-  const tempTableName = `${connection.sessionDBIdentifier}_for_migrateScopeFieldToVarchar1024`;
+  const tempTableName = `${connection.sessionStorageIdentifier}_for_migrateScopeFieldToVarchar1024`;
 
   await connection.executeRawQuery('BEGIN');
 
   //  1. rename exisiting table
   const rename = `
-    ALTER TABLE ${connection.sessionDBIdentifier} RENAME TO ${tempTableName};
+    ALTER TABLE ${connection.sessionStorageIdentifier} RENAME TO ${tempTableName};
   `;
   await connection.query(rename);
 
   // 2. Create new table with 1024 chars
   const newTable = `
-        CREATE TABLE ${connection.sessionDBIdentifier} (
+        CREATE TABLE ${connection.sessionStorageIdentifier} (
           id varchar(255) NOT NULL PRIMARY KEY,
           shop varchar(255) NOT NULL,
           state varchar(255) NOT NULL,
@@ -35,7 +35,7 @@ async function migrateScopeFieldToVarchar1024(
 
   // 3. copy all content from old table into new table
   const insert = `
-    INSERT INTO ${connection.sessionDBIdentifier} (id,shop,state,isOnline,expires,scope,accessToken,onlineAccessInfo)
+    INSERT INTO ${connection.sessionStorageIdentifier} (id,shop,state,isOnline,expires,scope,accessToken,onlineAccessInfo)
       SELECT id,shop,state,isOnline,expires,scope,accessToken,onlineAccessInfo
       FROM ${tempTableName};
   `;

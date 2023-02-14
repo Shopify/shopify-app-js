@@ -15,7 +15,7 @@ export async function migrateAddShopKeyToTrackSessionsByShop(
   const shopsAndSessions: {[key: string]: string[]} = {};
   const keys = await connection.keys('*');
   for (const key of keys) {
-    if (key.startsWith(connection.sessionDBIdentifier)) {
+    if (key.startsWith(connection.sessionStorageIdentifier)) {
       const session = Session.fromPropertyArray(
         JSON.parse((await connection.get(key, false)) as string),
       );

@@ -2,14 +2,14 @@ import mysql from 'mysql2/promise';
 import {RdbmsConnection} from '@shopify/shopify-app-session-storage';
 
 export class MySqlConnection implements RdbmsConnection {
-  sessionDBIdentifier: string;
+  sessionStorageIdentifier: string;
 
   constructor(
     private connection: mysql.Connection,
-    sessionDBIdentifier: string,
+    sessionStorageIdentifier: string,
   ) {
     this.connection = connection;
-    this.sessionDBIdentifier = sessionDBIdentifier;
+    this.sessionStorageIdentifier = sessionStorageIdentifier;
   }
 
   async query(query: string, params: any[] = []): Promise<any[]> {

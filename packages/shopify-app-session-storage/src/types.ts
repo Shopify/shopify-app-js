@@ -53,7 +53,7 @@ export interface RdbmsSessionStorageOptions {
  */
 export interface DBConnection {
   /** the table used to store sessions */
-  sessionDBIdentifier: string;
+  sessionStorageIdentifier: string;
 
   /**
    * Initiate the actual connection to the underlying database
