@@ -6,7 +6,7 @@ import {
   RdbmsSessionStorageMigratorOptions,
 } from '@shopify/shopify-app-session-storage';
 
-import {migrationMap} from './migrations';
+import {migrationList} from './migrations';
 import {MySqlConnection} from './mysql-connection';
 import {MySqlSessionStorageMigrator} from './mysql-migrator';
 
@@ -18,7 +18,7 @@ const defaultMySQLSessionStorageOptions: MySQLSessionStorageOptions = {
   migratorOptions: {
     migrationDBIdentifier: 'shopify_sessions_migrations',
     migrationNameColumnName: 'migration_name',
-    migrations: migrationMap,
+    migrations: migrationList,
   },
 };
 
@@ -184,7 +184,7 @@ export class MySQLSessionStorage implements SessionStorage {
         this.connection,
         migratorOptions,
       );
-      this.migrator.validateMigrationMap(migrationMap);
+      this.migrator.validateMigrationList(migrationList);
 
       return this.migrator.applyMigrations();
     }

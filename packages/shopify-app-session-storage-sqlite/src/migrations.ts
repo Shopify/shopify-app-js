@@ -1,8 +1,13 @@
+import {MigrationOperation} from '@shopify/shopify-app-session-storage';
+
 import {SqliteConnection} from './sqlite-connection';
 
-export const migrationMap = new Map([
-  ['migrateScopeFieldToVarchar1024', migrateScopeFieldToVarchar1024],
-]);
+export const migrationList = [
+  new MigrationOperation(
+    'migrateScopeFieldToVarchar1024',
+    migrateScopeFieldToVarchar1024,
+  ),
+];
 
 // need to migrate exisiting scope from varchar 255 to varchar 1024
 async function migrateScopeFieldToVarchar1024(

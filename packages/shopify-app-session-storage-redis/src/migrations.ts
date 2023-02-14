@@ -1,11 +1,15 @@
 import {Session} from '@shopify/shopify-api';
+import {MigrationOperation} from '@shopify/shopify-app-session-storage';
 
 import {RedisConnection} from './redis-connection';
 
-export const migrationMap = new Map([
-  // Thi migration name cannot be chnaged as it has already been released
-  ['migrateToVersion1_0_1', migrateAddShopKeyToTrackSessionsByShop],
-]);
+export const migrationList = [
+  new MigrationOperation(
+    // This migration name cannot be chnaged as it has already been released
+    'migrateToVersion1_0_1',
+    migrateAddShopKeyToTrackSessionsByShop,
+  ),
+];
 
 // need to add shop keys with list of associated session keys to support
 // the new findSessionsByShop in v2.x.x

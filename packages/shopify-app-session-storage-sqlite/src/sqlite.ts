@@ -7,7 +7,7 @@ import {
 } from '@shopify/shopify-app-session-storage';
 
 import {SqliteConnection} from './sqlite-connection';
-import {migrationMap} from './migrations';
+import {migrationList} from './migrations';
 import {SqliteSessionStorageMigrator} from './sqlite-migrator';
 
 export interface SQLiteSessionStorageOptions
@@ -18,7 +18,7 @@ const defaultSQLiteSessionStorageOptions: SQLiteSessionStorageOptions = {
   migratorOptions: {
     migrationDBIdentifier: 'shopify_sessions_migrations',
     migrationNameColumnName: 'migration_name',
-    migrations: migrationMap,
+    migrations: migrationList,
   },
 };
 
@@ -157,7 +157,7 @@ export class SQLiteSessionStorage implements SessionStorage {
         this.db,
         migratorOptions,
       );
-      this.migrator.validateMigrationMap(migrationMap);
+      this.migrator.validateMigrationList(migrationList);
 
       return this.migrator.applyMigrations();
     }

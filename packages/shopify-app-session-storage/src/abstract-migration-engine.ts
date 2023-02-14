@@ -1,5 +1,5 @@
 import {
-  MigrationFunction,
+  MigrationOperation,
   SessionStorageMigrator,
   SessionStorageMigratorOptions,
   defaultSessionStorageMigratorOptions,
@@ -26,10 +26,7 @@ export abstract class AbstractMigrationEngine<
   async applyMigrations(): Promise<void> {
     await this.ready;
 
-    for (const [
-      migrationName,
-      migrationFunction,
-    ] of this.getMigrationMap().entries()) {
+    for (const {migrationName, migrationFunction} of this.getMigrationList()) {
       const migrationApplied = await this.hasMigrationBeenApplied(
         migrationName,
       );
@@ -41,16 +38,24 @@ export abstract class AbstractMigrationEngine<
     return Promise.resolve();
   }
 
-  getMigrationMap(): Map<string, MigrationFunction> {
+  getMigrationList(): MigrationOperation[] {
     return this.options.migrations;
   }
 
-  validateMigrationMap(migrationMap: Map<string, MigrationFunction>) {
+  validateMigrationList(migrationList: MigrationOperation[]) {
     if (this.options !== null)
-      for (const key of migrationMap.keys()) {
-        if (!this.options.migrations.has(key)) {
+      for (const {migrationName} of migrationList) {
+        let entryFound = false;
+
+        for (const optionMigration of this.options.migrations) {
+          if (migrationName === optionMigration.migrationName) {
+            entryFound = true;
+            break;
+          }
+        }
+        if (!entryFound) {
           throw new InvalidMigrationConfigurationError(
-            "'Internal migrations are missing, add the 'migrationMap' from the 'migrations.ts' file",
+            "'Internal migrations are missing, add the 'migrationList' from the 'migrations.ts' file",
           );
         }
       }

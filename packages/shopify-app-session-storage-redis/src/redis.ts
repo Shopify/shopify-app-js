@@ -6,7 +6,7 @@ import {
   SessionStorageMigrator,
 } from '@shopify/shopify-app-session-storage';
 
-import {migrationMap} from './migrations';
+import {migrationList} from './migrations';
 import {RedisConnection} from './redis-connection';
 import {RedisSessionStorageMigrator} from './redis-migrator';
 
@@ -19,7 +19,7 @@ const defaultRedisSessionStorageOptions: RedisSessionStorageOptions = {
   sessionKeyPrefix: 'shopify_sessions',
   migratorOptions: {
     migrationDBIdentifier: 'migrations',
-    migrations: migrationMap,
+    migrations: migrationList,
   },
 };
 
@@ -176,7 +176,7 @@ export class RedisSessionStorage implements SessionStorage {
         this.client,
         migratorOptions,
       );
-      this.migrator.validateMigrationMap(migrationMap);
+      this.migrator.validateMigrationList(migrationList);
 
       return this.migrator.applyMigrations();
     }

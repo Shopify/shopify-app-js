@@ -6,7 +6,7 @@ import {
   RdbmsSessionStorageMigratorOptions,
 } from '@shopify/shopify-app-session-storage';
 
-import {migrationMap} from './migrations';
+import {migrationList} from './migrations';
 import {PostgresConnection} from './postgres-connection';
 import {PostgresSessionStorageMigrator} from './postgres-migrator';
 
@@ -21,7 +21,7 @@ const defaultPostgreSQLSessionStorageOptions: PostgreSQLSessionStorageOptions =
     migratorOptions: {
       migrationDBIdentifier: 'shopify_sessions_migrations',
       migrationNameColumnName: 'migration_name',
-      migrations: migrationMap,
+      migrations: migrationList,
     },
   };
 
@@ -190,7 +190,7 @@ export class PostgreSQLSessionStorage implements SessionStorage {
         this.client,
         migratorOptions,
       );
-      this.migrator.validateMigrationMap(migrationMap);
+      this.migrator.validateMigrationList(migrationList);
 
       return this.migrator.applyMigrations();
     }

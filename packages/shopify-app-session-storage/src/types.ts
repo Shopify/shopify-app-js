@@ -97,6 +97,22 @@ export interface RdbmsConnection extends DBConnection {
 export type MigrationFunction = (engine: DBConnection) => Promise<void>;
 
 /**
+ * Defines what is needed for a migration to be execute
+ */
+export class MigrationOperation {
+  /** Name of the migration that will be used to uniquely identity it among all other migration */
+  migrationName: string;
+
+  /** The actual migration function that will modify the perisitence storage */
+  migrationFunction: MigrationFunction;
+
+  constructor(migrationName: string, migrationFunction: MigrationFunction) {
+    this.migrationName = migrationName;
+    this.migrationFunction = migrationFunction;
+  }
+}
+
+/**
  * Defines how database migration will be handled.
  */
 export interface SessionStorageMigrator {
@@ -120,13 +136,12 @@ export interface SessionStorageMigrator {
   saveAppliedMigration(migrationName: string): Promise<void>;
 
   /**
-   * Return a map migrationName and function that will perform
-   * the actual migration
+   * Return a list MigrationOperation that needs to be executed
    */
-  getMigrationMap(): Map<string, MigrationFunction>;
+  getMigrationList(): MigrationOperation[];
 
   /**
-   * Will iterate over the map returned by #getMigrationMap,
+   * Will iterate over the map returned by #getmigrationList,
    * for each entry call #hasMigrationBeenApplied, if it returns false
    * it will execute execute the function and then call #saveAppliedMigration
    */
@@ -138,9 +153,9 @@ export interface SessionStorageMigrator {
    * our internal migrations with theirs if they wish to.
    * E.g. they could override the key for a given version and having the function calling
    * their migration and then ours.
-   * @param migrationMap - the map that contains the internal migrations to run
+   * @param migrationList - the map that contains the internal migrations to run
    */
-  validateMigrationMap(migrationMap: Map<string, MigrationFunction>): void;
+  validateMigrationList(migrationList: MigrationOperation[]): void;
 }
 
 /**
@@ -157,13 +172,13 @@ export class InvalidMigrationConfigurationError extends Error {
  */
 export interface SessionStorageMigratorOptions {
   migrationDBIdentifier: string;
-  migrations: Map<string, MigrationFunction>;
+  migrations: MigrationOperation[];
 }
 
 export const defaultSessionStorageMigratorOptions: SessionStorageMigratorOptions =
   {
     migrationDBIdentifier: 'shopify_sessions_migrations',
-    migrations: new Map(),
+    migrations: [],
   };
 
 export interface RdbmsSessionStorageMigratorOptions
@@ -175,5 +190,5 @@ export const defaultRdbmsSessionStorageMigratorOptions: RdbmsSessionStorageMigra
   {
     migrationDBIdentifier: 'shopify_sessions_migrations',
     migrationNameColumnName: 'migration_name',
-    migrations: new Map(),
+    migrations: [],
   };
