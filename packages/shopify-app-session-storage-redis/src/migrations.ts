@@ -5,7 +5,7 @@ import {RedisConnection} from './redis-connection';
 
 export const migrationList = [
   new MigrationOperation(
-    // This migration name cannot be chnaged as it has already been released
+    // This migration name cannot be changed as it has already been released
     'migrateToVersion1_0_1',
     migrateAddShopKeyToTrackSessionsByShop,
   ),
