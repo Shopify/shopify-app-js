@@ -1,4 +1,3 @@
-import mysql from 'mysql2/promise';
 import {Session} from '@shopify/shopify-api';
 import {
   SessionStorage,
@@ -46,15 +45,9 @@ export class MySQLSessionStorage implements SessionStorage {
   private connection: MySqlConnection;
   private migrator: MySqlSessionStorageMigrator;
 
-  constructor(
-    private dbUrl: URL,
-    opts: Partial<MySQLSessionStorageOptions> = {},
-  ) {
-    if (typeof this.dbUrl === 'string') {
-      this.dbUrl = new URL(this.dbUrl);
-    }
+  constructor(dbUrl: URL, opts: Partial<MySQLSessionStorageOptions> = {}) {
     this.options = {...defaultMySQLSessionStorageOptions, ...opts};
-    this.internalInit = this.init();
+    this.internalInit = this.init(dbUrl.toString());
     this.ready = this.initMigrator(this.options.migratorOptions);
   }
 
@@ -137,11 +130,8 @@ export class MySQLSessionStorage implements SessionStorage {
     await this.connection.disconnect();
   }
 
-  private async init() {
-    this.connection = new MySqlConnection(
-      await mysql.createConnection(this.dbUrl.toString()),
-      this.options.sessionTableName,
-    );
+  private async init(dbUrl: string) {
+    this.connection = new MySqlConnection(dbUrl, this.options.sessionTableName);
     await this.createTable();
   }
 

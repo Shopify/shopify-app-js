@@ -1,4 +1,3 @@
-import pg from 'pg';
 import {Session} from '@shopify/shopify-api';
 import {
   SessionStorage,
@@ -49,15 +48,9 @@ export class PostgreSQLSessionStorage implements SessionStorage {
   private client: PostgresConnection;
   private migrator: PostgresSessionStorageMigrator;
 
-  constructor(
-    private dbUrl: URL,
-    opts: Partial<PostgreSQLSessionStorageOptions> = {},
-  ) {
-    if (typeof this.dbUrl === 'string') {
-      this.dbUrl = new URL(this.dbUrl);
-    }
+  constructor(dbUrl: URL, opts: Partial<PostgreSQLSessionStorageOptions> = {}) {
     this.options = {...defaultPostgreSQLSessionStorageOptions, ...opts};
-    this.internalInit = this.init();
+    this.internalInit = this.init(dbUrl.toString());
     this.ready = this.initMigrator(this.options.migratorOptions);
   }
 
@@ -143,11 +136,8 @@ export class PostgreSQLSessionStorage implements SessionStorage {
     return this.client.disconnect();
   }
 
-  private async init() {
-    this.client = new PostgresConnection(
-      new pg.Client({connectionString: this.dbUrl.toString()}),
-      this.options.sessionTableName,
-    );
+  private async init(dbUrl: string) {
+    this.client = new PostgresConnection(dbUrl, this.options.sessionTableName);
     await this.connectClient();
     await this.createTable();
   }

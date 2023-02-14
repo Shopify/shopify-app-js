@@ -1,4 +1,3 @@
-import sqlite3 from 'sqlite3';
 import {Session} from '@shopify/shopify-api';
 import {
   SessionStorage,
@@ -30,14 +29,11 @@ export class SQLiteSessionStorage implements SessionStorage {
   private migrator: SqliteSessionStorageMigrator;
 
   constructor(
-    private filename: string,
+    filename: string,
     opts: Partial<SQLiteSessionStorageOptions> = {},
   ) {
     this.options = {...defaultSQLiteSessionStorageOptions, ...opts};
-    this.db = new SqliteConnection(
-      new sqlite3.Database(this.filename),
-      this.options.sessionTableName,
-    );
+    this.db = new SqliteConnection(filename, this.options.sessionTableName);
     this.internalInit = this.init();
     this.ready = this.initMigrator(this.options.migratorOptions);
   }

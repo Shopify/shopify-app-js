@@ -3,25 +3,28 @@ import {RdbmsConnection} from '@shopify/shopify-app-session-storage';
 
 export class MySqlConnection implements RdbmsConnection {
   sessionStorageIdentifier: string;
+  private ready: Promise<void>;
+  private connection: mysql.Connection;
 
-  constructor(
-    private connection: mysql.Connection,
-    sessionStorageIdentifier: string,
-  ) {
-    this.connection = connection;
+  constructor(dbUrl: string, sessionStorageIdentifier: string) {
+    this.ready = this.init(dbUrl);
     this.sessionStorageIdentifier = sessionStorageIdentifier;
   }
 
   async query(query: string, params: any[] = []): Promise<any[]> {
+    await this.ready;
     return this.connection.query(query, params);
   }
 
   async connect(): Promise<void> {
-    // Nothing to do here
+    await this.ready;
+
+    // Nothing else to do here
     return Promise.resolve();
   }
 
   async disconnect(): Promise<void> {
+    await this.ready;
     await this.connection.end();
   }
 
@@ -30,6 +33,8 @@ export class MySqlConnection implements RdbmsConnection {
   }
 
   async hasTable(tablename: string): Promise<boolean> {
+    await this.ready;
+
     const query = `
       SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES 
         WHERE TABLE_NAME = ${this.getArgumentPlaceholder()} 
@@ -47,5 +52,9 @@ export class MySqlConnection implements RdbmsConnection {
 
   getArgumentPlaceholder(_?: number): string {
     return `?`;
+  }
+
+  private async init(dbUrl: string): Promise<void> {
+    this.connection = await mysql.createConnection(dbUrl.toString());
   }
 }

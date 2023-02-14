@@ -1,4 +1,4 @@
-import {createClient, RedisClientOptions} from 'redis';
+import {RedisClientOptions} from 'redis';
 import {Session} from '@shopify/shopify-api';
 import {
   SessionStorage,
@@ -47,15 +47,9 @@ export class RedisSessionStorage implements SessionStorage {
   private client: RedisConnection;
   private migrator: SessionStorageMigrator;
 
-  constructor(
-    private dbUrl: URL,
-    opts: Partial<RedisSessionStorageOptions> = {},
-  ) {
-    if (typeof this.dbUrl === 'string') {
-      this.dbUrl = new URL(this.dbUrl);
-    }
+  constructor(dbUrl: URL, opts: Partial<RedisSessionStorageOptions> = {}) {
     this.options = {...defaultRedisSessionStorageOptions, ...opts};
-    this.internalInit = this.init();
+    this.internalInit = this.init(dbUrl.toString());
     this.ready = this.initMigrator(this.options.migratorOptions);
   }
 
@@ -153,14 +147,12 @@ export class RedisSessionStorage implements SessionStorage {
     }
   }
 
-  private async init() {
-    const client = createClient({
-      ...this.options,
-      url: this.dbUrl.toString(),
-    });
-
-    this.client = new RedisConnection(client, this.options.sessionKeyPrefix);
-
+  private async init(dbUrl: string) {
+    this.client = new RedisConnection(
+      dbUrl,
+      this.options,
+      this.options.sessionKeyPrefix,
+    );
     await this.client.connect();
   }
 

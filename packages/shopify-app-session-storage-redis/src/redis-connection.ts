@@ -1,17 +1,19 @@
-import {createClient} from 'redis';
+import {createClient, RedisClientOptions} from 'redis';
 import {DBConnection} from '@shopify/shopify-app-session-storage';
 
 type RedisClient = ReturnType<typeof createClient>;
 
 export class RedisConnection implements DBConnection {
   sessionStorageIdentifier: string;
+  private client: RedisClient;
 
   constructor(
-    private client: RedisClient,
+    dbUrl: string,
+    options: RedisClientOptions,
     keyPrefix: string,
     onError?: (...args: any[]) => void,
   ) {
-    this.client = client;
+    this.init(dbUrl, options);
     this.sessionStorageIdentifier = keyPrefix;
 
     if (onError) {
@@ -53,5 +55,12 @@ export class RedisConnection implements DBConnection {
 
   private buildKey(baseKey: string, addKeyPrefix: boolean): string {
     return addKeyPrefix ? this.generateFullKey(baseKey) : baseKey;
+  }
+
+  private init(dbUrl: string, options: RedisClientOptions) {
+    this.client = createClient({
+      ...options,
+      url: dbUrl,
+    });
   }
 }
