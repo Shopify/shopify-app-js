@@ -48,19 +48,31 @@ export async function migrateToCaseSensitivity(
     );
     if (hasOldSessionTable) {
       queries = [
-        `
-        INSERT INTO "${connection.sessionStorageIdentifier}" (
+        // 1. copy the data from the old table to the new one
+        `INSERT INTO "${connection.sessionStorageIdentifier}" (
           "id", "shop", "state", "isOnline", "scope", "expires", "onlineAccessInfo", "accessToken"
         )
         SELECT id, shop, state, isonline, scope, expires, onlineaccessinfo, accesstoken
-        FROM "${connection.sessionStorageIdentifier.toLowerCase()}"
-        `,
+        FROM "${connection.sessionStorageIdentifier.toLowerCase()}"`,
+        // 2. drop the old table
         `DROP TABLE "${connection.sessionStorageIdentifier.toLowerCase()}"`,
       ];
     }
   }
 
-  for (const query of queries) {
-    await connection.query(query);
+  if (queries.length !== 0) {
+    // wrap in a transaction
+    queries.unshift(`BEGIN`);
+    queries.push(`COMMIT`);
+
+    try {
+      for (const query of queries) {
+        await connection.query(query);
+      }
+    } catch (error) {
+      // rollback if any of the queries fail
+      await connection.query(`ROLLBACK`);
+      throw error;
+    }
   }
 }
