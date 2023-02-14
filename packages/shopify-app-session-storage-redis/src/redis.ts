@@ -1,16 +1,26 @@
-import {createClient, RedisClientOptions} from 'redis';
+import {RedisClientOptions} from 'redis';
 import {Session} from '@shopify/shopify-api';
-import {SessionStorage} from '@shopify/shopify-app-session-storage';
+import {
+  SessionStorage,
+  SessionStorageMigratorOptions,
+  SessionStorageMigrator,
+} from '@shopify/shopify-app-session-storage';
 
-import {migrateToVersion1_0_1} from './migrations';
+import {migrationList} from './migrations';
+import {RedisConnection} from './redis-connection';
+import {RedisSessionStorageMigrator} from './redis-migrator';
 
-type RedisClient = ReturnType<typeof createClient>;
 export interface RedisSessionStorageOptions extends RedisClientOptions {
   sessionKeyPrefix: string;
   onError?: (...args: any[]) => void;
+  migratorOptions?: SessionStorageMigratorOptions;
 }
 const defaultRedisSessionStorageOptions: RedisSessionStorageOptions = {
   sessionKeyPrefix: 'shopify_sessions',
+  migratorOptions: {
+    migrationDBIdentifier: 'migrations',
+    migrations: migrationList,
+  },
 };
 
 export class RedisSessionStorage implements SessionStorage {
@@ -32,25 +42,22 @@ export class RedisSessionStorage implements SessionStorage {
   }
 
   public readonly ready: Promise<void>;
+  private internalInit: Promise<void>;
   private options: RedisSessionStorageOptions;
-  private client: RedisClient;
+  private client: RedisConnection;
+  private migrator: SessionStorageMigrator;
 
-  constructor(
-    private dbUrl: URL,
-    opts: Partial<RedisSessionStorageOptions> = {},
-  ) {
-    if (typeof this.dbUrl === 'string') {
-      this.dbUrl = new URL(this.dbUrl);
-    }
+  constructor(dbUrl: URL, opts: Partial<RedisSessionStorageOptions> = {}) {
     this.options = {...defaultRedisSessionStorageOptions, ...opts};
-    this.ready = this.init();
+    this.internalInit = this.init(dbUrl.toString());
+    this.ready = this.initMigrator(this.options.migratorOptions);
   }
 
   public async storeSession(session: Session): Promise<boolean> {
     await this.ready;
 
     await this.client.set(
-      this.fullKey(session.id),
+      session.id,
       JSON.stringify(session.toPropertyArray()),
     );
     await this.addKeyToShopList(session);
@@ -60,7 +67,7 @@ export class RedisSessionStorage implements SessionStorage {
   public async loadSession(id: string): Promise<Session | undefined> {
     await this.ready;
 
-    let rawResult: any = await this.client.get(this.fullKey(id));
+    let rawResult: any = await this.client.get(id);
 
     if (!rawResult) return undefined;
     rawResult = JSON.parse(rawResult);
@@ -73,7 +80,7 @@ export class RedisSessionStorage implements SessionStorage {
     const session = await this.loadSession(id);
     if (session) {
       await this.removeKeyFromShopList(session.shop, id);
-      await this.client.del(this.fullKey(id));
+      await this.client.del(id);
     }
     return true;
   }
@@ -87,13 +94,13 @@ export class RedisSessionStorage implements SessionStorage {
   public async findSessionsByShop(shop: string): Promise<Session[]> {
     await this.ready;
 
-    const idKeysArrayString = await this.client.get(this.fullKey(shop));
+    const idKeysArrayString = await this.client.get(shop);
     if (!idKeysArrayString) return [];
 
     const idKeysArray = JSON.parse(idKeysArrayString);
     const results: Session[] = [];
     for (const idKey of idKeysArray) {
-      const rawResult = await this.client.get(idKey);
+      const rawResult = await this.client.get(idKey, false);
       if (!rawResult) continue;
 
       const session = Session.fromPropertyArray(JSON.parse(rawResult));
@@ -104,16 +111,12 @@ export class RedisSessionStorage implements SessionStorage {
   }
 
   public async disconnect(): Promise<void> {
-    await this.client.quit();
-  }
-
-  private fullKey(name: string): string {
-    return `${this.options.sessionKeyPrefix}_${name}`;
+    await this.client.disconnect();
   }
 
   private async addKeyToShopList(session: Session) {
-    const shopKey = this.fullKey(session.shop);
-    const idKey = this.fullKey(session.id);
+    const shopKey = session.shop;
+    const idKey = this.client.generateFullKey(session.id);
     const idKeysArrayString = await this.client.get(shopKey);
 
     if (idKeysArrayString) {
@@ -129,8 +132,8 @@ export class RedisSessionStorage implements SessionStorage {
   }
 
   private async removeKeyFromShopList(shop: string, id: string) {
-    const shopKey = this.fullKey(shop);
-    const idKey = this.fullKey(id);
+    const shopKey = shop;
+    const idKey = this.client.generateFullKey(id);
     const idKeysArrayString = await this.client.get(shopKey);
 
     if (idKeysArrayString) {
@@ -144,35 +147,30 @@ export class RedisSessionStorage implements SessionStorage {
     }
   }
 
-  private async init() {
-    this.client = createClient({
-      ...this.options,
-      url: this.dbUrl.toString(),
-    });
-    if (this.options.onError) {
-      this.client.on('error', this.options.onError);
-    }
+  private async init(dbUrl: string) {
+    this.client = new RedisConnection(
+      dbUrl,
+      this.options,
+      this.options.sessionKeyPrefix,
+    );
     await this.client.connect();
-    await this.migrate();
   }
 
-  private async migrate() {
-    const migrationsRecord = await this.client.get(this.fullKey('migrations'));
-    let migrations: {[key: string]: boolean} = {};
-    if (migrationsRecord) {
-      migrations = JSON.parse(migrationsRecord);
-    }
-    if (!migrations.migrateToVersion1_0_1) {
-      await migrateToVersion1_0_1(
+  private async initMigrator(
+    migratorOptions?: SessionStorageMigratorOptions,
+  ): Promise<void> {
+    await this.internalInit;
+
+    if (migratorOptions === null) {
+      return Promise.resolve();
+    } else {
+      this.migrator = new RedisSessionStorageMigrator(
         this.client,
-        this.options.sessionKeyPrefix,
-        this.fullKey.bind(this),
+        migratorOptions,
       );
-      migrations.migrateToVersion1_0_1 = true;
+      this.migrator.validateMigrationList(migrationList);
+
+      return this.migrator.applyMigrations();
     }
-    await this.client.set(
-      this.fullKey('migrations'),
-      JSON.stringify(migrations),
-    );
   }
 }

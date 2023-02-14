@@ -1,21 +1,27 @@
-import {createClient} from 'redis';
 import {Session} from '@shopify/shopify-api';
+import {MigrationOperation} from '@shopify/shopify-app-session-storage';
 
-type RedisClient = ReturnType<typeof createClient>;
+import {RedisConnection} from './redis-connection';
+
+export const migrationList = [
+  new MigrationOperation(
+    // This migration name cannot be changed as it has already been released
+    'migrateToVersion1_0_1',
+    migrateAddShopKeyToTrackSessionsByShop,
+  ),
+];
 
 // need to add shop keys with list of associated session keys to support
 // the new findSessionsByShop in v2.x.x
-export async function migrateToVersion1_0_1(
-  client: RedisClient,
-  sessionKeyPrefix: string,
-  fullKey: (name: string) => string,
-) {
+export async function migrateAddShopKeyToTrackSessionsByShop(
+  connection: RedisConnection,
+): Promise<void> {
   const shopsAndSessions: {[key: string]: string[]} = {};
-  const keys = await client.keys('*');
+  const keys = await connection.keys('*');
   for (const key of keys) {
-    if (key.startsWith(sessionKeyPrefix)) {
+    if (key.startsWith(connection.sessionStorageIdentifier)) {
       const session = Session.fromPropertyArray(
-        JSON.parse((await client.get(key)) as string),
+        JSON.parse((await connection.get(key, false)) as string),
       );
       if (!shopsAndSessions[session.shop]) {
         shopsAndSessions[session.shop] = [];
@@ -25,6 +31,6 @@ export async function migrateToVersion1_0_1(
   }
   // eslint-disable-next-line guard-for-in
   for (const shop in shopsAndSessions) {
-    await client.set(fullKey(shop), JSON.stringify(shopsAndSessions[shop]));
+    await connection.set(shop, JSON.stringify(shopsAndSessions[shop]));
   }
 }

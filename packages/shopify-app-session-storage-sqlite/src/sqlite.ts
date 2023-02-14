@@ -1,26 +1,41 @@
-import sqlite3 from 'sqlite3';
 import {Session} from '@shopify/shopify-api';
-import {SessionStorage} from '@shopify/shopify-app-session-storage';
+import {
+  SessionStorage,
+  RdbmsSessionStorageOptions,
+  RdbmsSessionStorageMigratorOptions,
+} from '@shopify/shopify-app-session-storage';
 
-export interface SQLiteSessionStorageOptions {
-  sessionTableName: string;
-}
+import {SqliteConnection} from './sqlite-connection';
+import {migrationList} from './migrations';
+import {SqliteSessionStorageMigrator} from './sqlite-migrator';
+
+export interface SQLiteSessionStorageOptions
+  extends RdbmsSessionStorageOptions {}
+
 const defaultSQLiteSessionStorageOptions: SQLiteSessionStorageOptions = {
   sessionTableName: 'shopify_sessions',
+  migratorOptions: {
+    migrationDBIdentifier: 'shopify_sessions_migrations',
+    migrationNameColumnName: 'migration_name',
+    migrations: migrationList,
+  },
 };
 
 export class SQLiteSessionStorage implements SessionStorage {
   private options: SQLiteSessionStorageOptions;
-  private db: sqlite3.Database;
+  private db: SqliteConnection;
   private ready: Promise<void>;
+  private internalInit: Promise<void>;
+  private migrator: SqliteSessionStorageMigrator;
 
   constructor(
-    private filename: string,
+    filename: string,
     opts: Partial<SQLiteSessionStorageOptions> = {},
   ) {
     this.options = {...defaultSQLiteSessionStorageOptions, ...opts};
-    this.db = new sqlite3.Database(this.filename);
-    this.ready = this.init();
+    this.db = new SqliteConnection(filename, this.options.sessionTableName);
+    this.internalInit = this.init();
+    this.ready = this.initMigrator(this.options.migratorOptions);
   }
 
   public async storeSession(session: Session): Promise<boolean> {
@@ -38,10 +53,12 @@ export class SQLiteSessionStorage implements SessionStorage {
     const query = `
       INSERT OR REPLACE INTO ${this.options.sessionTableName}
       (${entries.map(([key]) => key).join(', ')})
-      VALUES (${entries.map(() => '?').join(', ')});
+      VALUES (${entries
+        .map(() => `${this.db.getArgumentPlaceholder()}`)
+        .join(', ')});
     `;
 
-    await this.query(
+    await this.db.query(
       query,
       entries.map(([_key, value]) => value),
     );
@@ -52,9 +69,9 @@ export class SQLiteSessionStorage implements SessionStorage {
     await this.ready;
     const query = `
       SELECT * FROM ${this.options.sessionTableName}
-      WHERE id = ?;
+      WHERE id = ${this.db.getArgumentPlaceholder()};
     `;
-    const rows = await this.query(query, [id]);
+    const rows = await this.db.query(query, [id]);
     if (!Array.isArray(rows) || rows?.length !== 1) return undefined;
     const rawResult = rows[0] as any;
     return this.databaseRowToSession(rawResult);
@@ -64,9 +81,9 @@ export class SQLiteSessionStorage implements SessionStorage {
     await this.ready;
     const query = `
       DELETE FROM ${this.options.sessionTableName}
-      WHERE id = ?;
+      WHERE id = ${this.db.getArgumentPlaceholder()};
     `;
-    await this.query(query, [id]);
+    await this.db.query(query, [id]);
     return true;
   }
 
@@ -74,9 +91,11 @@ export class SQLiteSessionStorage implements SessionStorage {
     await this.ready;
     const query = `
       DELETE FROM ${this.options.sessionTableName}
-      WHERE id IN (${ids.map(() => '?').join(',')});
+      WHERE id IN (${ids
+        .map(() => `${this.db.getArgumentPlaceholder()}`)
+        .join(',')});
     `;
-    await this.query(query, ids);
+    await this.db.query(query, ids);
     return true;
   }
 
@@ -84,9 +103,9 @@ export class SQLiteSessionStorage implements SessionStorage {
     await this.ready;
     const query = `
       SELECT * FROM ${this.options.sessionTableName}
-      WHERE shop = ?;
+      WHERE shop = ${this.db.getArgumentPlaceholder()};
     `;
-    const rows = await this.query(query, [shop]);
+    const rows = await this.db.query(query, [shop]);
     if (!Array.isArray(rows) || rows?.length === 0) return [];
 
     const results: Session[] = rows.map((row: any) => {
@@ -95,19 +114,10 @@ export class SQLiteSessionStorage implements SessionStorage {
     return results;
   }
 
-  private async hasSessionTable(): Promise<boolean> {
-    const query = `
-    SELECT name FROM sqlite_schema
-    WHERE
-      type = 'table' AND
-      name = ?;
-    `;
-    const rows = await this.query(query, [this.options.sessionTableName]);
-    return rows.length === 1;
-  }
-
   private async init() {
-    const hasSessionTable = await this.hasSessionTable();
+    const hasSessionTable = await this.db.hasTable(
+      this.options.sessionTableName,
+    );
     if (!hasSessionTable) {
       const query = `
         CREATE TABLE ${this.options.sessionTableName} (
@@ -116,30 +126,36 @@ export class SQLiteSessionStorage implements SessionStorage {
           state varchar(255) NOT NULL,
           isOnline integer NOT NULL,
           expires integer,
-          scope varchar(255),
+          scope varchar(1024),
           accessToken varchar(255),
           onlineAccessInfo varchar(255)
-        )
+        );
       `;
-      await this.query(query);
+      await this.db.query(query);
     }
-  }
-
-  private query(sql: string, params: any[] = []): Promise<any[]> {
-    return new Promise((resolve, reject) => {
-      this.db.all(sql, params, (err, result) => {
-        if (err) {
-          reject(err);
-          return;
-        }
-        resolve(result);
-      });
-    });
   }
 
   private databaseRowToSession(row: any): Session {
     // convert seconds to milliseconds prior to creating Session object
     if (row.expires) row.expires *= 1000;
     return Session.fromPropertyArray(Object.entries(row));
+  }
+
+  private async initMigrator(
+    migratorOptions?: RdbmsSessionStorageMigratorOptions,
+  ): Promise<void> {
+    await this.internalInit;
+
+    if (migratorOptions === null) {
+      return Promise.resolve();
+    } else {
+      this.migrator = new SqliteSessionStorageMigrator(
+        this.db,
+        migratorOptions,
+      );
+      this.migrator.validateMigrationList(migrationList);
+
+      return this.migrator.applyMigrations();
+    }
   }
 }

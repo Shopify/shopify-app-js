@@ -13,3 +13,4 @@ packages/**/*.js.map
 packages/**/*.tgz
 tmp/
 .loom
+.vscode/

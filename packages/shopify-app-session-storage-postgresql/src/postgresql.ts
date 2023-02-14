@@ -1,15 +1,27 @@
-import pg from 'pg';
 import {Session} from '@shopify/shopify-api';
-import {SessionStorage} from '@shopify/shopify-app-session-storage';
+import {
+  SessionStorage,
+  RdbmsSessionStorageOptions,
+  RdbmsSessionStorageMigratorOptions,
+} from '@shopify/shopify-app-session-storage';
 
-export interface PostgreSQLSessionStorageOptions {
-  sessionTableName: string;
+import {migrationList} from './migrations';
+import {PostgresConnection} from './postgres-connection';
+import {PostgresSessionStorageMigrator} from './postgres-migrator';
+
+export interface PostgreSQLSessionStorageOptions
+  extends RdbmsSessionStorageOptions {
   port: number;
 }
 const defaultPostgreSQLSessionStorageOptions: PostgreSQLSessionStorageOptions =
   {
     sessionTableName: 'shopify_sessions',
     port: 3211,
+    migratorOptions: {
+      migrationDBIdentifier: 'shopify_sessions_migrations',
+      migrationNameColumnName: 'migration_name',
+      migrations: migrationList,
+    },
   };
 
 export class PostgreSQLSessionStorage implements SessionStorage {
@@ -31,18 +43,15 @@ export class PostgreSQLSessionStorage implements SessionStorage {
   }
 
   public readonly ready: Promise<void>;
+  private internalInit: Promise<void>;
   private options: PostgreSQLSessionStorageOptions;
-  private client: pg.Client;
+  private client: PostgresConnection;
+  private migrator: PostgresSessionStorageMigrator;
 
-  constructor(
-    private dbUrl: URL,
-    opts: Partial<PostgreSQLSessionStorageOptions> = {},
-  ) {
-    if (typeof this.dbUrl === 'string') {
-      this.dbUrl = new URL(this.dbUrl);
-    }
+  constructor(dbUrl: URL, opts: Partial<PostgreSQLSessionStorageOptions> = {}) {
     this.options = {...defaultPostgreSQLSessionStorageOptions, ...opts};
-    this.ready = this.init();
+    this.internalInit = this.init(dbUrl.toString());
+    this.ready = this.initMigrator(this.options.migratorOptions);
   }
 
   public async storeSession(session: Session): Promise<boolean> {
@@ -59,12 +68,14 @@ export class PostgreSQLSessionStorage implements SessionStorage {
     const query = `
       INSERT INTO ${this.options.sessionTableName}
       (${entries.map(([key]) => key).join(', ')})
-      VALUES (${entries.map((_, i) => `$${i + 1}`).join(', ')})
+      VALUES (${entries
+        .map((_, i) => `${this.client.getArgumentPlaceholder(i + 1)}`)
+        .join(', ')})
       ON CONFLICT (id) DO UPDATE SET ${entries
         .map(([key]) => `${key} = Excluded.${key}`)
         .join(', ')};
     `;
-    await this.query(
+    await this.client.query(
       query,
       entries.map(([_key, value]) => value),
     );
@@ -75,9 +86,9 @@ export class PostgreSQLSessionStorage implements SessionStorage {
     await this.ready;
     const query = `
       SELECT * FROM ${this.options.sessionTableName}
-      WHERE id = $1;
+      WHERE id = ${this.client.getArgumentPlaceholder(1)};
     `;
-    const rows = await this.query(query, [id]);
+    const rows = await this.client.query(query, [id]);
     if (!Array.isArray(rows) || rows?.length !== 1) return undefined;
     const rawResult = rows[0] as any;
     return this.databaseRowToSession(rawResult);
@@ -87,9 +98,9 @@ export class PostgreSQLSessionStorage implements SessionStorage {
     await this.ready;
     const query = `
       DELETE FROM ${this.options.sessionTableName}
-      WHERE id = $1;
+      WHERE id = ${this.client.getArgumentPlaceholder(1)};
     `;
-    await this.query(query, [id]);
+    await this.client.query(query, [id]);
     return true;
   }
 
@@ -97,9 +108,11 @@ export class PostgreSQLSessionStorage implements SessionStorage {
     await this.ready;
     const query = `
       DELETE FROM ${this.options.sessionTableName}
-      WHERE id IN (${ids.map((_, i) => `$${i + 1}`).join(', ')});
+      WHERE id IN (${ids
+        .map((_, i) => `${this.client.getArgumentPlaceholder(i + 1)}`)
+        .join(', ')});
     `;
-    await this.query(query, ids);
+    await this.client.query(query, ids);
     return true;
   }
 
@@ -108,9 +121,9 @@ export class PostgreSQLSessionStorage implements SessionStorage {
 
     const query = `
       SELECT * FROM ${this.options.sessionTableName}
-      WHERE shop = $1;
+      WHERE shop = ${this.client.getArgumentPlaceholder(1)};
     `;
-    const rows = await this.query(query, [shop]);
+    const rows = await this.client.query(query, [shop]);
     if (!Array.isArray(rows) || rows?.length === 0) return [];
 
     const results: Session[] = rows.map((row: any) => {
@@ -120,11 +133,11 @@ export class PostgreSQLSessionStorage implements SessionStorage {
   }
 
   public disconnect(): Promise<void> {
-    return this.client.end();
+    return this.client.disconnect();
   }
 
-  private async init() {
-    this.client = new pg.Client({connectionString: this.dbUrl.toString()});
+  private async init(dbUrl: string) {
+    this.client = new PostgresConnection(dbUrl, this.options.sessionTableName);
     await this.connectClient();
     await this.createTable();
   }
@@ -146,17 +159,30 @@ export class PostgreSQLSessionStorage implements SessionStorage {
           accessToken varchar(255)
         )
       `;
-    await this.query(query);
-  }
-
-  private async query(sql: string, params: any[] = []): Promise<any> {
-    const result = await this.client.query(sql, params);
-    return result.rows;
+    await this.client.query(query);
   }
 
   private databaseRowToSession(row: any): Session {
     // convert seconds to milliseconds prior to creating Session object
     if (row.expires) row.expires *= 1000;
     return Session.fromPropertyArray(Object.entries(row));
+  }
+
+  private async initMigrator(
+    migratorOptions?: RdbmsSessionStorageMigratorOptions,
+  ): Promise<void> {
+    await this.internalInit;
+
+    if (migratorOptions === null) {
+      return Promise.resolve();
+    } else {
+      this.migrator = new PostgresSessionStorageMigrator(
+        this.client,
+        migratorOptions,
+      );
+      this.migrator.validateMigrationList(migrationList);
+
+      return this.migrator.applyMigrations();
+    }
   }
 }
