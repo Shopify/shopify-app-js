@@ -49,7 +49,7 @@ export function convertBeginResponseToCallbackInfo(
     host: BASE64_HOST,
     shop,
     state: cookies.shopify_app_state,
-    timestamp: '123',
+    timestamp: (Date.now() / 1000).toString(),
   });
   const hmac = crypto
     .createHmac('sha256', secret)
