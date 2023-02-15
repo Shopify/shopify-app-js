@@ -1,5 +1,22 @@
 # @shopify/shopify-app-session-storage-postgresql
 
+## 1.1.0
+
+### Minor Changes
+
+- becc305: Migrations capabilities that can handle persistence changes for all session storage implementations
+
+### Patch Changes
+
+- 8cadd09: Modify postgres to make table and column names case sensitive. Fixes Shopify/shopify-api-js#460
+- 8f5749f: Increase size of 'scope' column to 1024 for session storage implementation for RDBMS
+- eaa6b18: Update to support PostgreSQL v15 breaking changes
+- b6501b0: Bump typescript to 4.9.5
+- 348b5af: Bump @ypes/pg to 8.6.6
+- Updated dependencies [b6501b0]
+- Updated dependencies [becc305]
+  - @shopify/shopify-app-session-storage@1.1.0
+
 ## 1.0.2
 
 ### Patch Changes

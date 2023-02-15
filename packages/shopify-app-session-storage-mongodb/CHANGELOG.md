@@ -1,5 +1,16 @@
 # @shopify/shopify-app-session-storage-mongodb
 
+## 1.0.3
+
+### Patch Changes
+
+- 8a4be18: Bump to Mongodb 5.0.0
+- b699a5b: Bump mongodb to 4.13.0
+- b6501b0: Bump typescript to 4.9.5
+- Updated dependencies [b6501b0]
+- Updated dependencies [becc305]
+  - @shopify/shopify-app-session-storage@1.1.0
+
 ## 1.0.2
 
 ### Patch Changes

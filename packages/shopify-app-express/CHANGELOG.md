@@ -1,5 +1,24 @@
 # Changelog
 
+## 1.2.0
+
+### Minor Changes
+
+- becc305: Migrations capabilities that can handle persistence changes for all session storage implementations
+
+### Patch Changes
+
+- b20b498: Bump supertest to 6.3.3
+- 8a4be18: Bump to Mongodb 5.0.0
+- b699a5b: Bump mongodb to 4.13.0
+- b6501b0: Bump typescript to 4.9.5
+- 348b5af: Bump @ypes/pg to 8.6.6
+- cf34f7d: Bump @types/express to 4.17.16
+- Updated dependencies [b6501b0]
+- Updated dependencies [becc305]
+  - @shopify/shopify-app-session-storage-memory@1.0.3
+  - @shopify/shopify-app-session-storage@1.1.0
+
 ## 1.1.0
 
 ### Minor Changes
