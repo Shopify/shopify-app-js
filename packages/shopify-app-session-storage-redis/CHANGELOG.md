@@ -1,5 +1,18 @@
 # @shopify/shopify-app-session-storage-redis
 
+## 1.1.0
+
+### Minor Changes
+
+- becc305: Migrations capabilities that can handle persistence changes for all session storage implementations
+
+### Patch Changes
+
+- b6501b0: Bump typescript to 4.9.5
+- Updated dependencies [b6501b0]
+- Updated dependencies [becc305]
+  - @shopify/shopify-app-session-storage@1.1.0
+
 ## 1.0.2
 
 ### Patch Changes

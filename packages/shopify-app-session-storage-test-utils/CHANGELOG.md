@@ -1,5 +1,19 @@
 # @shopify/shopify-app-session-storage-test-utils
 
+## 0.1.0
+
+### Minor Changes
+
+- becc305: Migrations capabilities that can handle persistence changes for all session storage implementations
+
+### Patch Changes
+
+- 8f5749f: Increase size of 'scope' column to 1024 for session storage implementation for RDBMS
+- b6501b0: Bump typescript to 4.9.5
+- Updated dependencies [b6501b0]
+- Updated dependencies [becc305]
+  - @shopify/shopify-app-session-storage@1.1.0
+
 ## 0.0.3
 
 ### Patch Changes

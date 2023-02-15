@@ -1,5 +1,14 @@
 # @shopify/shopify-app-session-storage-memory
 
+## 1.0.3
+
+### Patch Changes
+
+- b6501b0: Bump typescript to 4.9.5
+- Updated dependencies [b6501b0]
+- Updated dependencies [becc305]
+  - @shopify/shopify-app-session-storage@1.1.0
+
 ## 1.0.2
 
 ### Patch Changes
