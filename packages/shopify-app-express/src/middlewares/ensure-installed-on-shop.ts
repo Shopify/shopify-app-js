@@ -1,5 +1,5 @@
 import {Request, Response, NextFunction} from 'express';
-import {Session, Shopify} from '@shopify/shopify-api';
+import {Session, Shopify, InvalidRequestError} from '@shopify/shopify-api';
 
 import {redirectToAuth} from '../redirect-to-auth';
 import {AppConfigInterface} from '../config-types';
@@ -19,55 +19,69 @@ export function ensureInstalled({
 }: EnsureInstalledParams): EnsureInstalledMiddleware {
   return function ensureInstalledOnShop() {
     return async (req: Request, res: Response, next: NextFunction) => {
-      config.logger.info('Running ensureInstalledOnShop');
+      try {
+        config.logger.info('Running ensureInstalledOnShop');
 
-      if (!api.config.isEmbeddedApp) {
-        config.logger.warning(
-          'ensureInstalledOnShop() should only be used in embedded apps; calling validateAuthenticatedSession() instead',
-        );
+        if (!api.config.isEmbeddedApp) {
+          config.logger.warning(
+            'ensureInstalledOnShop() should only be used in embedded apps; calling validateAuthenticatedSession() instead',
+          );
 
-        return validateAuthenticatedSession({api, config})()(req, res, next);
-      }
+          return validateAuthenticatedSession({api, config})()(req, res, next);
+        }
 
-      const shop = getRequestShop(api, config, req, res);
-      if (!shop) {
-        return undefined;
-      }
-
-      config.logger.debug('Checking if shop has installed the app', {shop});
-
-      const sessionId = api.session.getOfflineId(shop);
-      const session = await config.sessionStorage.loadSession(sessionId);
-
-      const exitIframeRE = new RegExp(`^${config.exitIframePath}`, 'i');
-      if (!session && !req.originalUrl.match(exitIframeRE)) {
-        config.logger.debug(
-          'App installation was not found for shop, redirecting to auth',
-          {shop},
-        );
-
-        return redirectToAuth({req, res, api, config});
-      }
-
-      if (api.config.isEmbeddedApp && req.query.embedded !== '1') {
-        if (await sessionHasValidAccessToken(api, config, session)) {
-          await embedAppIntoShopify(api, config, req, res, shop);
+        const shop = getRequestShop(api, config, req, res);
+        if (!shop) {
           return undefined;
-        } else {
-          config.logger.info(
-            'Found a session, but it is not valid. Redirecting to auth',
+        }
+
+        config.logger.debug('Checking if shop has installed the app', {shop});
+
+        const sessionId = api.session.getOfflineId(shop);
+        const session = await config.sessionStorage.loadSession(sessionId);
+
+        const exitIframeRE = new RegExp(`^${config.exitIframePath}`, 'i');
+        if (!session && !req.originalUrl.match(exitIframeRE)) {
+          config.logger.debug(
+            'App installation was not found for shop, redirecting to auth',
             {shop},
           );
 
           return redirectToAuth({req, res, api, config});
         }
+
+        if (api.config.isEmbeddedApp && req.query.embedded !== '1') {
+          if (await sessionHasValidAccessToken(api, config, session)) {
+            await embedAppIntoShopify(api, config, req, res, shop);
+            return undefined;
+          } else {
+            config.logger.info(
+              'Found a session, but it is not valid. Redirecting to auth',
+              {shop},
+            );
+
+            return redirectToAuth({req, res, api, config});
+          }
+        }
+
+        addCSPHeader(api, req, res);
+
+        config.logger.info('App is installed and ready to load', {shop});
+
+        return next();
+      } catch (err) {
+        if (err instanceof InvalidRequestError) {
+          return res
+            .status(400)
+            .set('Content-Type', 'text/plain')
+            .send('Invalid request');
+        } else {
+          return res
+            .status(500)
+            .set('Content-Type', 'text/plain')
+            .send('Internal server error');
+        }
       }
-
-      addCSPHeader(api, req, res);
-
-      config.logger.info('App is installed and ready to load', {shop});
-
-      return next();
     };
   };
 }
