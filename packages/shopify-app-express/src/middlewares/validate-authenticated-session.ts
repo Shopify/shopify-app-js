@@ -49,7 +49,7 @@ export function validateAuthenticatedSession({
         }
       }
 
-      const shop = req.query.shop || session?.shop;
+      let shop = req.query.shop || session?.shop;
 
       if (session && shop && session.shop !== shop) {
         config.logger.debug(
@@ -82,6 +82,17 @@ export function validateAuthenticatedSession({
         }
       }
 
+      const bearerPresent = req.headers.authorization?.match(/Bearer (.*)/);
+      if (bearerPresent) {
+        if (!shop) {
+          shop = await setShopFromSessionOrToken(
+            api,
+            session,
+            bearerPresent[1],
+          );
+        }
+      }
+
       const redirectUrl = `${config.auth.path}?shop=${shop}`;
       config.logger.info(
         `Session was not valid. Redirecting to ${redirectUrl}`,
@@ -91,7 +102,7 @@ export function validateAuthenticatedSession({
       return returnTopLevelRedirection({
         res,
         config,
-        bearerPresent: Boolean(req.headers.authorization?.match(/Bearer (.*)/)),
+        bearerPresent: Boolean(bearerPresent),
         redirectUrl,
       });
     };
@@ -109,4 +120,20 @@ async function handleSessionError(_req: Request, res: Response, error: Error) {
       res.send(error.message);
       break;
   }
+}
+
+async function setShopFromSessionOrToken(
+  api: Shopify,
+  session: Session | undefined,
+  token: string,
+): Promise<string | undefined> {
+  let shop: string | undefined;
+
+  if (session) {
+    shop = session.shop;
+  } else if (api.config.isEmbeddedApp) {
+    const payload = await api.session.decodeSessionToken(token);
+    shop = payload.dest.replace('https://', '');
+  }
+  return shop;
 }
