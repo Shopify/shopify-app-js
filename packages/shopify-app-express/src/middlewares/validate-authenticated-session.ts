@@ -1,4 +1,4 @@
-import {Session, InvalidJwtError} from '@shopify/shopify-api';
+import {Session, Shopify, InvalidJwtError} from '@shopify/shopify-api';
 import {Request, Response, NextFunction} from 'express';
 
 import {redirectToAuth} from '../redirect-to-auth';
@@ -49,7 +49,8 @@ export function validateAuthenticatedSession({
         }
       }
 
-      let shop = req.query.shop || session?.shop;
+      let shop =
+        api.utils.sanitizeShop(req.query.shop as string) || session?.shop;
 
       if (session && shop && session.shop !== shop) {
         config.logger.debug(
@@ -60,25 +61,27 @@ export function validateAuthenticatedSession({
         return redirectToAuth({req, res, api, config});
       }
 
-      config.logger.debug('Request session found and loaded', {
-        shop: session?.shop,
-      });
-
-      if (session?.isActive(api.config.scopes)) {
-        config.logger.debug('Request session exists and is active', {
+      if (session) {
+        config.logger.debug('Request session found and loaded', {
           shop: session.shop,
         });
 
-        if (await hasValidAccessToken(api, session)) {
-          config.logger.info('Request session has a valid access token', {
+        if (session.isActive(api.config.scopes)) {
+          config.logger.debug('Request session exists and is active', {
             shop: session.shop,
           });
 
-          res.locals.shopify = {
-            ...res.locals.shopify,
-            session,
-          };
-          return next();
+          if (await hasValidAccessToken(api, session)) {
+            config.logger.info('Request session has a valid access token', {
+              shop: session.shop,
+            });
+
+            res.locals.shopify = {
+              ...res.locals.shopify,
+              session,
+            };
+            return next();
+          }
         }
       }
 
