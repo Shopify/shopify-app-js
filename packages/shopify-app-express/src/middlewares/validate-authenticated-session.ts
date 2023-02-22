@@ -1,4 +1,4 @@
-import {Session, InvalidJwtError} from '@shopify/shopify-api';
+import {Session, Shopify, InvalidJwtError} from '@shopify/shopify-api';
 import {Request, Response, NextFunction} from 'express';
 
 import {redirectToAuth} from '../redirect-to-auth';
@@ -49,7 +49,8 @@ export function validateAuthenticatedSession({
         }
       }
 
-      const shop = req.query.shop || session?.shop;
+      let shop =
+        api.utils.sanitizeShop(req.query.shop as string) || session?.shop;
 
       if (session && shop && session.shop !== shop) {
         config.logger.debug(
@@ -60,25 +61,38 @@ export function validateAuthenticatedSession({
         return redirectToAuth({req, res, api, config});
       }
 
-      config.logger.debug('Request session found and loaded', {
-        shop: session?.shop,
-      });
-
-      if (session?.isActive(api.config.scopes)) {
-        config.logger.debug('Request session exists and is active', {
+      if (session) {
+        config.logger.debug('Request session found and loaded', {
           shop: session.shop,
         });
 
-        if (await hasValidAccessToken(api, session)) {
-          config.logger.info('Request session has a valid access token', {
+        if (session.isActive(api.config.scopes)) {
+          config.logger.debug('Request session exists and is active', {
             shop: session.shop,
           });
 
-          res.locals.shopify = {
-            ...res.locals.shopify,
+          if (await hasValidAccessToken(api, session)) {
+            config.logger.info('Request session has a valid access token', {
+              shop: session.shop,
+            });
+
+            res.locals.shopify = {
+              ...res.locals.shopify,
+              session,
+            };
+            return next();
+          }
+        }
+      }
+
+      const bearerPresent = req.headers.authorization?.match(/Bearer (.*)/);
+      if (bearerPresent) {
+        if (!shop) {
+          shop = await setShopFromSessionOrToken(
+            api,
             session,
-          };
-          return next();
+            bearerPresent[1],
+          );
         }
       }
 
@@ -91,7 +105,7 @@ export function validateAuthenticatedSession({
       return returnTopLevelRedirection({
         res,
         config,
-        bearerPresent: Boolean(req.headers.authorization?.match(/Bearer (.*)/)),
+        bearerPresent: Boolean(bearerPresent),
         redirectUrl,
       });
     };
@@ -109,4 +123,20 @@ async function handleSessionError(_req: Request, res: Response, error: Error) {
       res.send(error.message);
       break;
   }
+}
+
+async function setShopFromSessionOrToken(
+  api: Shopify,
+  session: Session | undefined,
+  token: string,
+): Promise<string | undefined> {
+  let shop: string | undefined;
+
+  if (session) {
+    shop = session.shop;
+  } else if (api.config.isEmbeddedApp) {
+    const payload = await api.session.decodeSessionToken(token);
+    shop = payload.dest.replace('https://', '');
+  }
+  return shop;
 }

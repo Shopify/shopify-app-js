@@ -8,7 +8,7 @@
 This package makes it easy for [Express.js](https://expressjs.com/) apps to integrate with Shopify.
 It builds on the `@shopify/shopify-api` package and creates a middleware layer that allows the app to communicate with and authenticate requests from Shopify.
 
-> **Note**: this package will enable your app's backend to work with Shopify APIs, and by default it will behave as an [embedded app](https://shopify.dev/apps/auth/oauth/session-tokens). You'll need to use [Shopify App Bridge](https://shopify.dev/apps/tools/app-bridge) in your frontend to authenticate requests to the backend.
+> **Note**: this package will enable your app's backend to work with Shopify APIs, and by default it will behave as an [embedded app](https://shopify.dev/docs/apps/auth/oauth/session-tokens). You'll need to use [Shopify App Bridge](https://shopify.dev/docs/apps/tools/app-bridge) in your frontend to authenticate requests to the backend.
 
 ## Requirements
 
