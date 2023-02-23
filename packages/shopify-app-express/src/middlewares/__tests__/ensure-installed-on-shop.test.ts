@@ -53,19 +53,19 @@ describe('ensureInstalledOnShop', () => {
     );
   });
 
-  it('returns 401 if no shop provided', async () => {
-    await request(app).get(`/test/shop`).expect(401);
+  it('returns 400 if no shop provided', async () => {
+    await request(app).get(`/test/shop`).expect(400);
   });
 
   it('returns 422 if invalid shop provided', async () => {
     await request(app).get(`/test/shop?shop=invalid-shop`).expect(422);
   });
 
-  it('returns 401 if no host provided', async () => {
+  it('returns 400 if no host provided', async () => {
     mockShopifyResponse({data: {shop: {name: TEST_SHOP}}});
     await shopify.config.sessionStorage.storeSession(session);
 
-    await request(app).get(`/test/shop?shop=${TEST_SHOP}`).expect(401);
+    await request(app).get(`/test/shop?shop=${TEST_SHOP}`).expect(400);
   });
 
   it('redirects to auth via exit iFrame if shop NOT installed', async () => {

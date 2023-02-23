@@ -100,7 +100,7 @@ function getRequestShop(
       {shop: req.query.shop},
     );
 
-    res.status(401);
+    res.status(400);
     res.send('No shop provided');
     return undefined;
   }
@@ -162,7 +162,7 @@ async function embedAppIntoShopify(
       {shop},
     );
 
-    res.status(401);
+    res.status(400);
     res.send('No host provided');
     return;
   }
