@@ -1,5 +1,11 @@
 # @shopify/shopify-app-session-storage-mysql
 
+## 1.1.1
+
+### Patch Changes
+
+- a37f9db: Bump mysql2 to 3.1.2
+
 ## 1.1.0
 
 ### Minor Changes

@@ -1,5 +1,11 @@
 # @shopify/shopify-app-session-storage-mongodb
 
+## 1.0.4
+
+### Patch Changes
+
+- 8b0fa18: Bump mongodb to 5.0.1
+
 ## 1.0.3
 
 ### Patch Changes
