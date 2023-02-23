@@ -100,7 +100,7 @@ function getRequestShop(
       {shop: req.query.shop},
     );
 
-    res.status(422);
+    res.status(401);
     res.send('No shop provided');
     return undefined;
   }
@@ -150,10 +150,22 @@ async function embedAppIntoShopify(
   res: Response,
   shop: string,
 ): Promise<void> {
-  const embeddedUrl = await api.auth.getEmbeddedAppUrl({
-    rawRequest: req,
-    rawResponse: res,
-  });
+  let embeddedUrl: string;
+  try {
+    embeddedUrl = await api.auth.getEmbeddedAppUrl({
+      rawRequest: req,
+      rawResponse: res,
+    });
+  } catch (error) {
+    config.logger.error(
+      `ensureInstalledOnShop did not receive a host query argument`,
+      {shop},
+    );
+
+    res.status(401);
+    res.send('No host provided');
+    return;
+  }
 
   config.logger.debug(
     `Request is not embedded but app is. Redirecting to ${embeddedUrl} to embed the app`,
