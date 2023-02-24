@@ -9,7 +9,7 @@
   "bugs": {
     "url": "https://github.com/Shopify/shopify-app-js/issues"
   },
-  "homepage": "https://github.com/Shopify/shopify-app-js/tree/main/packages/session-storage-test-utils",
+  "homepage": "https://github.com/Shopify/shopify-app-js/tree/main/packages/shopify-app-session-storage-test-utils",
   "author": "Shopify Inc.",
   "license": "MIT",
   "main": "./dist/index.js",

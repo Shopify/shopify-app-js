@@ -9,7 +9,7 @@
   "bugs": {
     "url": "https://github.com/Shopify/shopify-app-js/issues"
   },
-  "homepage": "https://github.com/Shopify/shopify-app-js/tree/main/packages/session-storage-memory",
+  "homepage": "https://github.com/Shopify/shopify-app-js/tree/main/packages/shopify-app-session-storage-memory",
   "author": "Shopify Inc.",
   "license": "MIT",
   "main": "./build/cjs/memory.js",

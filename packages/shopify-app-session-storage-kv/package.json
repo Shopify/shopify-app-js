@@ -9,7 +9,7 @@
   "bugs": {
     "url": "https://github.com/Shopify/shopify-app-js/issues"
   },
-  "homepage": "https://github.com/Shopify/shopify-app-js/tree/main/packages/session-storage-kv",
+  "homepage": "https://github.com/Shopify/shopify-app-js/tree/main/packages/shopify-app-session-storage-kv",
   "author": "Shopify Inc.",
   "license": "MIT",
   "main": "./build/cjs/kv.js",
