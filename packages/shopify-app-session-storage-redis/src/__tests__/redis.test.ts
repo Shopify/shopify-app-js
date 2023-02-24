@@ -150,6 +150,17 @@ describe('RedisSessionStorage', () => {
       expect(shop2Sessions).toHaveLength(3);
     });
   });
+
+  it(`one-time initialisation like migrations and table creations are run only once`, async () => {
+    const storageClone1 = new RedisSessionStorage(dbURL);
+    await storageClone1.ready;
+
+    const storageClone2 = new RedisSessionStorage(dbURL);
+    await storageClone2.ready;
+
+    storageClone1.disconnect();
+    storageClone2.disconnect();
+  });
 });
 
 async function initWithNonSessionData(client: RedisClient) {
