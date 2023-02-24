@@ -48,25 +48,6 @@ export abstract class AbstractMigrationEngine<
     return this.migrations;
   }
 
-  // validateMigrationList(migrationList: MigrationOperation[]) {
-  //   if (this.options !== null)
-  //     for (const {migrationName} of migrationList) {
-  //       let entryFound = false;
-
-  //       for (const optionMigration of this.getMigrationList()) {
-  //         if (migrationName === optionMigration.migrationName) {
-  //           entryFound = true;
-  //           break;
-  //         }
-  //       }
-  //       if (!entryFound) {
-  //         throw new InvalidMigrationConfigurationError(
-  //           "'Internal migrations are missing, add the 'migrationList' from the 'migrations.ts' file",
-  //         );
-  //       }
-  //     }
-  // }
-
   abstract initMigrationPersistence(): Promise<void>;
   abstract hasMigrationBeenApplied(migrationName: string): Promise<boolean>;
   abstract saveAppliedMigration(migrationName: string): Promise<void>;
