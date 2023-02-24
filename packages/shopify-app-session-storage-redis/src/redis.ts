@@ -19,7 +19,6 @@ const defaultRedisSessionStorageOptions: RedisSessionStorageOptions = {
   sessionKeyPrefix: 'shopify_sessions',
   migratorOptions: {
     migrationDBIdentifier: 'migrations',
-    migrations: migrationList,
   },
 };
 
@@ -50,7 +49,12 @@ export class RedisSessionStorage implements SessionStorage {
   constructor(dbUrl: URL, opts: Partial<RedisSessionStorageOptions> = {}) {
     this.options = {...defaultRedisSessionStorageOptions, ...opts};
     this.internalInit = this.init(dbUrl.toString());
-    this.ready = this.initMigrator(this.options.migratorOptions);
+    this.migrator = new RedisSessionStorageMigrator(
+      this.client,
+      this.options.migratorOptions,
+      migrationList,
+    );
+    this.ready = this.migrator.applyMigrations(this.internalInit);
   }
 
   public async storeSession(session: Session): Promise<boolean> {
@@ -154,23 +158,5 @@ export class RedisSessionStorage implements SessionStorage {
       this.options.sessionKeyPrefix,
     );
     await this.client.connect();
-  }
-
-  private async initMigrator(
-    migratorOptions?: SessionStorageMigratorOptions,
-  ): Promise<void> {
-    await this.internalInit;
-
-    if (migratorOptions === null) {
-      return Promise.resolve();
-    } else {
-      this.migrator = new RedisSessionStorageMigrator(
-        this.client,
-        migratorOptions,
-      );
-      this.migrator.validateMigrationList(migrationList);
-
-      return this.migrator.applyMigrations();
-    }
   }
 }

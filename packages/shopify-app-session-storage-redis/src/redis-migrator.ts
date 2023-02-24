@@ -1,6 +1,7 @@
 import {
   AbstractMigrationEngine,
   SessionStorageMigratorOptions,
+  MigrationOperation,
 } from '@shopify/shopify-app-session-storage';
 
 import {RedisConnection} from './redis-connection';
@@ -12,10 +13,11 @@ export class RedisSessionStorageMigrator extends AbstractMigrationEngine<
   constructor(
     dbConnection: RedisConnection,
     opts: Partial<SessionStorageMigratorOptions> = {},
+    migrations: MigrationOperation[],
   ) {
     // The name has already been decided whith the last migration
     opts.migrationDBIdentifier = 'migrations';
-    super(dbConnection, opts);
+    super(dbConnection, opts, migrations);
   }
 
   async initMigrationPersistence(): Promise<void> {

@@ -2,7 +2,6 @@ import {Session} from '@shopify/shopify-api';
 import {
   SessionStorage,
   RdbmsSessionStorageOptions,
-  RdbmsSessionStorageMigratorOptions,
 } from '@shopify/shopify-app-session-storage';
 
 import {migrationList} from './migrations';
@@ -20,7 +19,6 @@ const defaultPostgreSQLSessionStorageOptions: PostgreSQLSessionStorageOptions =
     migratorOptions: {
       migrationDBIdentifier: 'shopify_sessions_migrations',
       migrationNameColumnName: 'migration_name',
-      migrations: migrationList,
     },
   };
 
@@ -51,7 +49,12 @@ export class PostgreSQLSessionStorage implements SessionStorage {
   constructor(dbUrl: URL, opts: Partial<PostgreSQLSessionStorageOptions> = {}) {
     this.options = {...defaultPostgreSQLSessionStorageOptions, ...opts};
     this.internalInit = this.init(dbUrl.toString());
-    this.ready = this.initMigrator(this.options.migratorOptions);
+    this.migrator = new PostgresSessionStorageMigrator(
+      this.client,
+      this.options.migratorOptions,
+      migrationList,
+    );
+    this.ready = this.migrator.applyMigrations(this.internalInit);
   }
 
   public async storeSession(session: Session): Promise<boolean> {
@@ -166,23 +169,5 @@ export class PostgreSQLSessionStorage implements SessionStorage {
     // convert seconds to milliseconds prior to creating Session object
     if (row.expires) row.expires *= 1000;
     return Session.fromPropertyArray(Object.entries(row));
-  }
-
-  private async initMigrator(
-    migratorOptions?: RdbmsSessionStorageMigratorOptions,
-  ): Promise<void> {
-    await this.internalInit;
-
-    if (migratorOptions === null) {
-      return Promise.resolve();
-    } else {
-      this.migrator = new PostgresSessionStorageMigrator(
-        this.client,
-        migratorOptions,
-      );
-      this.migrator.validateMigrationList(migrationList);
-
-      return this.migrator.applyMigrations();
-    }
   }
 }

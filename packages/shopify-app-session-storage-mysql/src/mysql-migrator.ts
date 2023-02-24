@@ -1,6 +1,7 @@
 import {
   RdbmsSessionStorageMigrator,
   RdbmsSessionStorageMigratorOptions,
+  MigrationOperation,
 } from '@shopify/shopify-app-session-storage';
 
 import {MySqlConnection} from './mysql-connection';
@@ -9,8 +10,9 @@ export class MySqlSessionStorageMigrator extends RdbmsSessionStorageMigrator {
   constructor(
     dbConnection: MySqlConnection,
     opts: Partial<RdbmsSessionStorageMigratorOptions> = {},
+    migrations: MigrationOperation[],
   ) {
-    super(dbConnection, opts);
+    super(dbConnection, opts, migrations);
   }
 
   async initMigrationPersistence(): Promise<void> {
