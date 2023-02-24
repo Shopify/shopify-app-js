@@ -1264,10 +1264,10 @@
     human-id "^1.0.2"
     prettier "^2.7.1"
 
-"@cloudflare/workers-types@^4.20221111.1":
-  version "4.20230115.0"
-  resolved "https://registry.yarnpkg.com/@cloudflare/workers-types/-/workers-types-4.20230115.0.tgz#84e6c7b1a753098dbc7cd718fdcf191c215225af"
-  integrity sha512-GPJEiO8AFN+jUpA+DHJ1qdVmk4s/hq8JYKjOV/+U7avGquQbVnj905+Kg6uAEfrq16muwmRKl+XJGqsvlBlDNg==
+"@cloudflare/workers-types@^4.20230221.0":
+  version "4.20230221.0"
+  resolved "https://registry.yarnpkg.com/@cloudflare/workers-types/-/workers-types-4.20230221.0.tgz#d0cca6d1100f5aaf4550db23011a5dc9687a2ef3"
+  integrity sha512-Ge8csuFQMNv3hd8r85PFWv4KV6bHAtKoBaanTkjbbeJS+mizoiBn4OBva0CFQiGfRJklFSGd4OxuCuiK05kogg==
 
 "@eslint/eslintrc@^1.4.1":
   version "1.4.1"
