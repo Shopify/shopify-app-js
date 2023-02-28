@@ -5,9 +5,17 @@ This package implements the `SessionStorage` interface that works with an instan
 ```js
 import {shopifyApp} from '@shopify/shopify-app-express';
 import {SQLiteSessionStorage} from '@shopify/shopify-app-session-storage-sqlite';
+import sqlite3 from 'sqlite3';
+
+// You can construct using either a filename...
+const storage = new SQLiteSessionStorage('/path/to/your.db');
+
+// or an existing sqlite3.Database
+const database = new sqlite3.Database('/path/to/your.db');
+const storage = new SQLiteSessionStorage(database);
 
 const shopify = shopifyApp({
-  sessionStorage: new SQLiteSessionStorage('/path/to/your.db'),
+  sessionStorage: storage,
   // ...
 });
 ```
