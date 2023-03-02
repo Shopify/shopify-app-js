@@ -1,5 +1,13 @@
 # @shopify/shopify-app-session-storage-mysql
 
+## 1.1.2
+
+### Patch Changes
+
+- 97346b3: Fix #132: mysql migrator was unable to detect already applied migrations
+- Updated dependencies [97346b3]
+  - @shopify/shopify-app-session-storage@1.1.1
+
 ## 1.1.1
 
 ### Patch Changes
