@@ -1,5 +1,17 @@
 # @shopify/shopify-app-session-storage-sqlite
 
+## 1.2.0
+
+### Minor Changes
+
+- 7e55407: Allow sqlite3.Database object as argument for SQLiteSessionStorage constructor
+
+### Patch Changes
+
+- 97346b3: Fix #132: mysql migrator was unable to detect already applied migrations
+- Updated dependencies [97346b3]
+  - @shopify/shopify-app-session-storage@1.1.1
+
 ## 1.1.0
 
 ### Minor Changes

@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.2.2
+
+### Patch Changes
+
+- Updated dependencies [97346b3]
+  - @shopify/shopify-app-session-storage@1.1.1
+  - @shopify/shopify-app-session-storage-memory@1.0.4
+
 ## 1.2.1
 
 ### Patch Changes

@@ -1,5 +1,12 @@
 # @shopify/shopify-app-session-storage-kv
 
+## 1.0.4
+
+### Patch Changes
+
+- Updated dependencies [97346b3]
+  - @shopify/shopify-app-session-storage@1.1.1
+
 ## 1.0.3
 
 ### Patch Changes
