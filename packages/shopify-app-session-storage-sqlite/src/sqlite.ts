@@ -2,7 +2,6 @@ import {Session} from '@shopify/shopify-api';
 import {
   SessionStorage,
   RdbmsSessionStorageOptions,
-  RdbmsSessionStorageMigratorOptions,
 } from '@shopify/shopify-app-session-storage';
 import sqlite3 from 'sqlite3';
 
@@ -18,14 +17,13 @@ const defaultSQLiteSessionStorageOptions: SQLiteSessionStorageOptions = {
   migratorOptions: {
     migrationDBIdentifier: 'shopify_sessions_migrations',
     migrationNameColumnName: 'migration_name',
-    migrations: migrationList,
   },
 };
 
 export class SQLiteSessionStorage implements SessionStorage {
+  public readonly ready: Promise<void>;
   private options: SQLiteSessionStorageOptions;
   private db: SqliteConnection;
-  private ready: Promise<void>;
   private internalInit: Promise<void>;
   private migrator: SqliteSessionStorageMigrator;
 
@@ -36,7 +34,12 @@ export class SQLiteSessionStorage implements SessionStorage {
     this.options = {...defaultSQLiteSessionStorageOptions, ...opts};
     this.db = new SqliteConnection(database, this.options.sessionTableName);
     this.internalInit = this.init();
-    this.ready = this.initMigrator(this.options.migratorOptions);
+    this.migrator = new SqliteSessionStorageMigrator(
+      this.db,
+      this.options.migratorOptions,
+      migrationList,
+    );
+    this.ready = this.migrator.applyMigrations(this.internalInit);
   }
 
   public async storeSession(session: Session): Promise<boolean> {
@@ -140,23 +143,5 @@ export class SQLiteSessionStorage implements SessionStorage {
     // convert seconds to milliseconds prior to creating Session object
     if (row.expires) row.expires *= 1000;
     return Session.fromPropertyArray(Object.entries(row));
-  }
-
-  private async initMigrator(
-    migratorOptions?: RdbmsSessionStorageMigratorOptions,
-  ): Promise<void> {
-    await this.internalInit;
-
-    if (migratorOptions === null) {
-      return Promise.resolve();
-    } else {
-      this.migrator = new SqliteSessionStorageMigrator(
-        this.db,
-        migratorOptions,
-      );
-      this.migrator.validateMigrationList(migrationList);
-
-      return this.migrator.applyMigrations();
-    }
   }
 }

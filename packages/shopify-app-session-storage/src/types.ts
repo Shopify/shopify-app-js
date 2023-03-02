@@ -144,27 +144,10 @@ export interface SessionStorageMigrator {
    * Will iterate over the map returned by #getmigrationList,
    * for each entry call #hasMigrationBeenApplied, if it returns false
    * it will execute execute the function and then call #saveAppliedMigration
+   * @param databaseReady - so that the migrator can wait for the database to fully up and running
+   * before starting its execution.
    */
-  applyMigrations(): Promise<void>;
-
-  /**
-   * We want to ensure that user did not forget to includes our internal migrations with theirs.
-   * We only check the key and not the value to allow users to customize even how to run
-   * our internal migrations with theirs if they wish to.
-   * E.g. they could override the key for a given version and having the function calling
-   * their migration and then ours.
-   * @param migrationList - the map that contains the internal migrations to run
-   */
-  validateMigrationList(migrationList: MigrationOperation[]): void;
-}
-
-/**
- * When the configuration for migration is not consistent
- */
-export class InvalidMigrationConfigurationError extends Error {
-  constructor(message: string) {
-    super(message);
-  }
+  applyMigrations(databaseReady: Promise<void>): Promise<void>;
 }
 
 /**
@@ -172,13 +155,11 @@ export class InvalidMigrationConfigurationError extends Error {
  */
 export interface SessionStorageMigratorOptions {
   migrationDBIdentifier: string;
-  migrations: MigrationOperation[];
 }
 
 export const defaultSessionStorageMigratorOptions: SessionStorageMigratorOptions =
   {
     migrationDBIdentifier: 'shopify_sessions_migrations',
-    migrations: [],
   };
 
 export interface RdbmsSessionStorageMigratorOptions
@@ -190,5 +171,4 @@ export const defaultRdbmsSessionStorageMigratorOptions: RdbmsSessionStorageMigra
   {
     migrationDBIdentifier: 'shopify_sessions_migrations',
     migrationNameColumnName: 'migration_name',
-    migrations: [],
   };
