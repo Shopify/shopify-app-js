@@ -46,6 +46,9 @@ describe('shopifyApp', () => {
     const shopify = shopifyApp({
       auth: testConfig.auth,
       webhooks: testConfig.webhooks,
+      api: {
+        logger: testConfig.api.logger,
+      },
     });
 
     expect(shopify).toBeDefined();

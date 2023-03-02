@@ -111,6 +111,24 @@ describe('validateAuthenticatedSession', () => {
       ).toBe(`/api/auth?shop=my-shop.myshopify.io`);
     });
 
+    it('no session, no shop param, with auth header, returns 403 with correct headers', async () => {
+      jest
+        .spyOn(shopify.api.session, 'getCurrentId')
+        .mockResolvedValueOnce(undefined);
+
+      const response = await request(app)
+        .get('/test/shop')
+        .set({Authorization: `Bearer ${validJWT}`})
+        .expect(403);
+
+      expect(
+        response.headers['x-shopify-api-request-failure-reauthorize'],
+      ).toBe('1');
+      expect(
+        response.headers['x-shopify-api-request-failure-reauthorize-url'],
+      ).toBe(`/api/auth?shop=my-shop.myshopify.io`);
+    });
+
     it('no session, without auth header redirects to auth', async () => {
       const response = await request(app)
         .get('/test/shop?shop=my-shop.myshopify.io')

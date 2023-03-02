@@ -6,9 +6,12 @@ export class SqliteConnection implements RdbmsConnection {
   private ready: Promise<void>;
   private db: sqlite3.Database;
 
-  constructor(filename: string, sessionStorageIdentifier: string) {
+  constructor(
+    database: string | sqlite3.Database,
+    sessionStorageIdentifier: string,
+  ) {
     this.sessionStorageIdentifier = sessionStorageIdentifier;
-    this.ready = this.init(filename);
+    this.ready = this.init(database);
   }
 
   async query(query: string, params: any[] = []): Promise<any[]> {
@@ -70,7 +73,8 @@ export class SqliteConnection implements RdbmsConnection {
     return Promise.resolve();
   }
 
-  private async init(filename: string): Promise<void> {
-    this.db = new sqlite3.Database(filename);
+  private async init(database: string | sqlite3.Database): Promise<void> {
+    this.db =
+      typeof database === 'string' ? new sqlite3.Database(database) : database;
   }
 }

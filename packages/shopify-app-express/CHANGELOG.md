@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.2.1
+
+### Patch Changes
+
+- 719f289: Attempt to set shop from token, if present and if no shop param provided or no session found in database. Fixes #94
+- e0fddde: ensureInstalledOnShop - catch error if host param is missing, return 400. Fixes #81
+
 ## 1.2.0
 
 ### Minor Changes

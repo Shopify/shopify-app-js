@@ -3,6 +3,7 @@ import {
   SessionStorage,
   RdbmsSessionStorageOptions,
 } from '@shopify/shopify-app-session-storage';
+import sqlite3 from 'sqlite3';
 
 import {SqliteConnection} from './sqlite-connection';
 import {migrationList} from './migrations';
@@ -27,11 +28,11 @@ export class SQLiteSessionStorage implements SessionStorage {
   private migrator: SqliteSessionStorageMigrator;
 
   constructor(
-    filename: string,
+    database: string | sqlite3.Database,
     opts: Partial<SQLiteSessionStorageOptions> = {},
   ) {
     this.options = {...defaultSQLiteSessionStorageOptions, ...opts};
-    this.db = new SqliteConnection(filename, this.options.sessionTableName);
+    this.db = new SqliteConnection(database, this.options.sessionTableName);
     this.internalInit = this.init();
     this.migrator = new SqliteSessionStorageMigrator(
       this.db,
