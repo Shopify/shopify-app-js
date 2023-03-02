@@ -21,9 +21,9 @@ const defaultSQLiteSessionStorageOptions: SQLiteSessionStorageOptions = {
 };
 
 export class SQLiteSessionStorage implements SessionStorage {
+  public readonly ready: Promise<void>;
   private options: SQLiteSessionStorageOptions;
   private db: SqliteConnection;
-  private ready: Promise<void>;
   private internalInit: Promise<void>;
   private migrator: SqliteSessionStorageMigrator;
 
