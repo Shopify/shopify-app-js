@@ -27,7 +27,7 @@ import fs from 'fs';
 import {Session} from '@shopify/shopify-api';
 import {SessionStorage} from '@shopify/shopify-app-session-storage';
 
-export class CsvSessionStorage extends SessionStorage {
+export class CsvSessionStorage implements SessionStorage {
   constructor(private filename: string) {
     super();
 
