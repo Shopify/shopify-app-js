@@ -18,7 +18,9 @@ export function processWebhooks({
   config,
 }: ApiAndConfigParams): ProcessWebhooksMiddleware {
   return function ({webhookHandlers}: ProcessWebhooksMiddlewareParams) {
-    mountWebhooks(api, config, webhookHandlers);
+    (async () => {
+      await mountWebhooks(api, config, webhookHandlers);
+    })();
 
     return [
       express.text({type: '*/*'}),
@@ -34,17 +36,17 @@ export function processWebhooks({
   };
 }
 
-function mountWebhooks(
+async function mountWebhooks(
   api: Shopify,
   config: AppConfigInterface,
   handlers: WebhookHandlersParam,
 ) {
-  api.webhooks.addHandlers(handlers as AddHandlersParams);
+  await api.webhooks.addHandlers(handlers as AddHandlersParams);
 
   // Add our custom app uninstalled webhook
   const appInstallations = new AppInstallations(config);
 
-  api.webhooks.addHandlers({
+  await api.webhooks.addHandlers({
     APP_UNINSTALLED: {
       deliveryMethod: DeliveryMethod.Http,
       callbackUrl: config.webhooks.path,

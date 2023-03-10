@@ -22,8 +22,8 @@ describe('process', () => {
 
   const mockHandler = jest.fn();
 
-  beforeEach(() => {
-    shopify.api.webhooks.addHandlers({
+  beforeEach(async () => {
+    await shopify.api.webhooks.addHandlers({
       TEST_TOPIC: {
         deliveryMethod: DeliveryMethod.Http,
         callbackUrl: '/webhooks',
