@@ -42,10 +42,12 @@ export class MySQLSessionStorage implements SessionStorage {
   private options: MySQLSessionStorageOptions;
   private connection: MySqlConnection;
   private migrator: MySqlSessionStorageMigrator;
+  private dbUrl: string;
 
   constructor(dbUrl: URL, opts: Partial<MySQLSessionStorageOptions> = {}) {
     this.options = {...defaultMySQLSessionStorageOptions, ...opts};
-    this.internalInit = this.init(dbUrl.toString());
+    this.dbUrl = dbUrl.toString();
+    this.internalInit = this.init();
     this.migrator = new MySqlSessionStorageMigrator(
       this.connection,
       this.options.migratorOptions,
@@ -56,7 +58,7 @@ export class MySQLSessionStorage implements SessionStorage {
 
   public async storeSession(session: Session): Promise<boolean> {
     await this.ready;
-
+    this.init();
     // Note milliseconds to seconds conversion for `expires` property
     const entries = session
       .toPropertyArray()
@@ -76,11 +78,13 @@ export class MySQLSessionStorage implements SessionStorage {
       query,
       entries.map(([_key, value]) => value),
     );
+    this.disconnect();
     return true;
   }
 
   public async loadSession(id: string): Promise<Session | undefined> {
     await this.ready;
+    this.init();
     const query = `
       SELECT * FROM \`${this.options.sessionTableName}\`
       WHERE id = ${this.connection.getArgumentPlaceholder()};
@@ -88,21 +92,25 @@ export class MySQLSessionStorage implements SessionStorage {
     const [rows] = await this.connection.query(query, [id]);
     if (!Array.isArray(rows) || rows?.length !== 1) return undefined;
     const rawResult = rows[0] as any;
+    this.disconnect();
     return this.databaseRowToSession(rawResult);
   }
 
   public async deleteSession(id: string): Promise<boolean> {
     await this.ready;
+    this.init();
     const query = `
       DELETE FROM ${this.options.sessionTableName}
       WHERE id = ${this.connection.getArgumentPlaceholder()};
     `;
     await this.connection.query(query, [id]);
+    this.disconnect();
     return true;
   }
 
   public async deleteSessions(ids: string[]): Promise<boolean> {
     await this.ready;
+    this.init();
     const query = `
       DELETE FROM ${this.options.sessionTableName}
       WHERE id IN (${ids
@@ -110,11 +118,13 @@ export class MySQLSessionStorage implements SessionStorage {
         .join(',')});
     `;
     await this.connection.query(query, ids);
+    this.disconnect();
     return true;
   }
 
   public async findSessionsByShop(shop: string): Promise<Session[]> {
     await this.ready;
+    this.init();
 
     const query = `
       SELECT * FROM ${this.options.sessionTableName}
@@ -126,6 +136,7 @@ export class MySQLSessionStorage implements SessionStorage {
     const results: Session[] = rows.map((row: any) => {
       return this.databaseRowToSession(row);
     });
+    this.disconnect();
     return results;
   }
 
@@ -133,8 +144,8 @@ export class MySQLSessionStorage implements SessionStorage {
     await this.connection.disconnect();
   }
 
-  private async init(dbUrl: string) {
-    this.connection = new MySqlConnection(dbUrl, this.options.sessionTableName);
+  private async init() {
+    this.connection = new MySqlConnection(this.dbUrl, this.options.sessionTableName);
     await this.createTable();
   }
 
