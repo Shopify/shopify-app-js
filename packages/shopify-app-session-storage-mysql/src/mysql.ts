@@ -1,15 +1,15 @@
-import {Session} from '@shopify/shopify-api';
+import { Session } from '@shopify/shopify-api';
 import {
   SessionStorage,
   RdbmsSessionStorageOptions,
 } from '@shopify/shopify-app-session-storage';
 
-import {migrationList} from './migrations';
-import {MySqlConnection} from './mysql-connection';
-import {MySqlSessionStorageMigrator} from './mysql-migrator';
+import { migrationList } from './migrations';
+import { MySqlConnection } from './mysql-connection';
+import { MySqlSessionStorageMigrator } from './mysql-migrator';
 
 export interface MySQLSessionStorageOptions
-  extends RdbmsSessionStorageOptions {}
+  extends RdbmsSessionStorageOptions { }
 
 const defaultMySQLSessionStorageOptions: MySQLSessionStorageOptions = {
   sessionTableName: 'shopify_sessions',
@@ -45,7 +45,7 @@ export class MySQLSessionStorage implements SessionStorage {
   private dbUrl: string;
 
   constructor(dbUrl: URL, opts: Partial<MySQLSessionStorageOptions> = {}) {
-    this.options = {...defaultMySQLSessionStorageOptions, ...opts};
+    this.options = { ...defaultMySQLSessionStorageOptions, ...opts };
     this.dbUrl = dbUrl.toString();
     this.internalInit = this.init();
     this.migrator = new MySqlSessionStorageMigrator(
