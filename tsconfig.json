@@ -4,6 +4,7 @@
   "references": [
     {"path": "./packages/shopify-app-session-storage"},
     {"path": "./packages/shopify-app-session-storage-test-utils"},
+    {"path": "./packages/shopify-app-session-storage-dynamodb"},
     {"path": "./packages/shopify-app-session-storage-memory"},
     {"path": "./packages/shopify-app-session-storage-mongodb"},
     {"path": "./packages/shopify-app-session-storage-mysql"},
