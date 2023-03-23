@@ -5,6 +5,7 @@ import {
   DynamoDBClientConfig,
   GetItemCommand,
   PutItemCommand,
+  QueryCommand,
   ScanCommand,
 } from '@aws-sdk/client-dynamodb';
 import {marshall, unmarshall} from '@aws-sdk/util-dynamodb';
@@ -13,18 +14,20 @@ import {SessionStorage} from '@shopify/shopify-app-session-storage';
 
 export interface DynamoDBSessionStorageOptions {
   sessionTableName: string;
+  shopIndexName: string;
   config?: DynamoDBClientConfig;
 }
 
 const defaultDynamoDBSessionStorageOptions: DynamoDBSessionStorageOptions = {
   sessionTableName: 'shopify_sessions',
+  shopIndexName: 'shop_index',
 };
 
 export class DynamoDBSessionStorage implements SessionStorage {
   private client: DynamoDBClient;
   private options: DynamoDBSessionStorageOptions;
 
-  constructor(opts: DynamoDBSessionStorageOptions) {
+  constructor(opts?: DynamoDBSessionStorageOptions) {
     this.options = {...defaultDynamoDBSessionStorageOptions, ...opts};
     this.client = new DynamoDBClient({...this.options.config});
   }
@@ -71,9 +74,10 @@ export class DynamoDBSessionStorage implements SessionStorage {
 
   public async findSessionsByShop(shop: string): Promise<Session[]> {
     const result = await this.client.send(
-      new ScanCommand({
+      new QueryCommand({
         TableName: this.options.sessionTableName,
-        FilterExpression: 'shop = :shop',
+        IndexName: this.options.shopIndexName,
+        KeyConditionExpression: 'shop = :shop',
         ExpressionAttributeValues: marshall({
           ':shop': shop,
         }),

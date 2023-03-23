@@ -12,6 +12,7 @@ import {DynamoDBSessionStorage} from '../dynamodb';
 describe('DynamoDBSessionStorage', () => {
   const client = new DynamoDBClient({});
   const sessionTableName = 'sessionTable';
+  const shopIndexName = 'shopIndex';
   let storage: DynamoDBSessionStorage;
 
   beforeAll(async () => {
@@ -23,17 +24,31 @@ describe('DynamoDBSessionStorage', () => {
       await client.send(
         new CreateTableCommand({
           TableName: sessionTableName,
-          AttributeDefinitions: [{AttributeName: 'id', AttributeType: 'S'}],
+          AttributeDefinitions: [
+            {AttributeName: 'id', AttributeType: 'S'},
+            {AttributeName: 'shop', AttributeType: 'S'},
+          ],
           KeySchema: [{AttributeName: 'id', KeyType: 'HASH'}],
+          GlobalSecondaryIndexes: [
+            {
+              IndexName: shopIndexName,
+              KeySchema: [{AttributeName: 'shop', KeyType: 'HASH'}],
+              Projection: {ProjectionType: 'KEYS_ONLY'},
+              ProvisionedThroughput: {
+                ReadCapacityUnits: 1,
+                WriteCapacityUnits: 1,
+              },
+            },
+          ],
           ProvisionedThroughput: {ReadCapacityUnits: 1, WriteCapacityUnits: 1},
         }),
       );
       await waitUntilTableExists(
-        {client, maxWaitTime: 60},
+        {client, maxWaitTime: 120},
         {TableName: sessionTableName},
       );
     }
-    storage = new DynamoDBSessionStorage({sessionTableName});
+    storage = new DynamoDBSessionStorage({sessionTableName, shopIndexName});
   });
 
   afterAll(async () => {
