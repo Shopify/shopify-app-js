@@ -9,8 +9,8 @@ import {DynamoDBSessionStorage} from '@shopify/shopify-app-session-storage-dynam
 // You can use the default options
 const storage = new DynamoDBSessionStorage();
 
-// or, if you want to use a different session table name
-const storage = new DynamoDBSessionStorage({ sessionTableName: 'my-table' });
+// or, if you want to use a different session table name and shop index name
+const storage = new DynamoDBSessionStorage({ sessionTableName: 'my-session-table', shopIndexName: 'my-shop-index' });
 
 // or, if you want to use a different region or credentials
 const storage = new DynamoDBSessionStorage({ config: { region: 'us-west-2', credentials: { ... } } });
