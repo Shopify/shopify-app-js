@@ -1,4 +1,2 @@
-import {batteryOfTests} from './battery-of-tests';
-import {poll, wait} from './utils';
-
-export {batteryOfTests, poll, wait};
+export * from './battery-of-tests';
+export * from './utils';

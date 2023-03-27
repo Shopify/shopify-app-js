@@ -3,6 +3,7 @@ import {
   RdbmsSessionStorageMigratorOptions,
   defaultRdbmsSessionStorageMigratorOptions,
   RdbmsConnection,
+  MigrationOperation,
 } from './types';
 
 export abstract class RdbmsSessionStorageMigrator extends AbstractMigrationEngine<
@@ -12,11 +13,16 @@ export abstract class RdbmsSessionStorageMigrator extends AbstractMigrationEngin
   constructor(
     dbConnection: RdbmsConnection,
     opts: Partial<RdbmsSessionStorageMigratorOptions> = {},
+    migrations: MigrationOperation[],
   ) {
-    super(dbConnection, {
-      ...defaultRdbmsSessionStorageMigratorOptions,
-      ...opts,
-    });
+    super(
+      dbConnection,
+      {
+        ...defaultRdbmsSessionStorageMigratorOptions,
+        ...opts,
+      },
+      migrations,
+    );
   }
 
   async hasMigrationBeenApplied(migrationName: string): Promise<boolean> {

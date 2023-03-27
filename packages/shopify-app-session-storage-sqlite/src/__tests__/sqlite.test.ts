@@ -18,6 +18,14 @@ describe('SQLiteSessionStorage', () => {
     await fs.rm(sqliteDbFile, {force: true});
   });
 
+  it(`one-time initialisation like migrations and table creations are run only once`, async () => {
+    const storageClone1 = new SQLiteSessionStorage(sqliteDbFile);
+    await storageClone1.ready;
+
+    const storageClone2 = new SQLiteSessionStorage(sqliteDbFile);
+    await storageClone2.ready;
+  });
+
   describe('with string constructor', () => {
     beforeEach(async () => {
       storage = new SQLiteSessionStorage(sqliteDbFile);

@@ -70,7 +70,8 @@ describe('PostgreSQLSessionStorage', () => {
       batteryOfTests(sessionStorage);
     });
   }
-  it(`Ensure session table is only created once without failure`, async () => {
+
+  it(`one-time initialisation like migrations and table creations are run only once`, async () => {
     const storageClone1 = new PostgreSQLSessionStorage(dbURL);
     await storageClone1.ready;
 

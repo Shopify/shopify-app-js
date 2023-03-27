@@ -45,8 +45,12 @@ describe('MySQLSessionStorage', () => {
       },
       {interval: 500, timeout: 20000},
     );
+
     storage = new MySQLSessionStorage(dbURL);
     storage2 = new MySQLSessionStorage(dbURL2);
+
+    await storage.ready;
+    await storage2.ready;
   });
 
   afterAll(async () => {
@@ -66,4 +70,15 @@ describe('MySQLSessionStorage', () => {
       batteryOfTests(sessionStorage);
     });
   }
+
+  it(`one-time initialisation like migrations and table creations are run only once`, async () => {
+    const storageClone1 = new MySQLSessionStorage(dbURL);
+    await storageClone1.ready;
+
+    const storageClone2 = new MySQLSessionStorage(dbURL);
+    await storageClone2.ready;
+
+    storageClone1.disconnect();
+    storageClone2.disconnect();
+  });
 });
