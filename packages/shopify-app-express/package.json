@@ -52,7 +52,7 @@
     "jest-fetch-mock": "^3.0.3",
     "jest-runner-eslint": "^1.1.0",
     "jsonwebtoken": "^9.0.0",
-    "prettier": "^2.8.4",
+    "prettier": "^2.8.7",
     "supertest": "^6.3.3",
     "ts-jest": "^28.0.8",
     "typescript": "^4.9.5"
