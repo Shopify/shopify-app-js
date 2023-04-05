@@ -9,7 +9,7 @@ import {MySqlConnection} from './mysql-connection';
 import {MySqlSessionStorageMigrator} from './mysql-migrator';
 
 export interface MySQLSessionStorageOptions extends RdbmsSessionStorageOptions {
-  connectionPoolLimit?: number;
+  connectionPoolLimit: number;
 }
 
 const defaultMySQLSessionStorageOptions: MySQLSessionStorageOptions = {

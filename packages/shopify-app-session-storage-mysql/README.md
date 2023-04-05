@@ -9,7 +9,7 @@ import {MySQLSessionStorage} from '@shopify/shopify-app-session-storage-mysql';
 const shopify = shopifyApp({
   sessionStorage: new MySQLSessionStorage(
     'mysql://username:password@host/database',
-    { connectionPoolLimit: 10 } // optional
+    {connectionPoolLimit: 10}, // optional
   ),
   // ...
 });
@@ -22,7 +22,7 @@ const shopify = shopifyApp({
     'thedatabase',
     'username',
     'password',
-    { connectionPoolLimit: 10 } // optional
+    {connectionPoolLimit: 10}, // optional
   ),
   // ...
 });
