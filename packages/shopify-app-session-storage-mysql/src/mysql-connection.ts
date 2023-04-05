@@ -70,7 +70,7 @@ export class MySqlConnection implements RdbmsConnection {
   }
 
   getDatabase(): string | undefined {
-    return this.dbUrl.pathname.replace(/^\//, '');
+    return this.dbUrl.pathname.slice(1);
   }
 
   async hasTable(tablename: string): Promise<boolean> {
