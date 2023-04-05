@@ -1,6 +1,6 @@
 # Session Storage Adapter for MySQL DB
 
-This package implements the `SessionStorage` interface that works with an instance of [MySQL](https://www.mysql.com).
+This package implements the `SessionStorage` interface that works with an instance of [MySQL](https://www.mysql.com), using the `mysql.Pool` as the underlying connection resource.
 
 ```js
 import {shopifyApp} from '@shopify/shopify-app-express';
@@ -9,6 +9,7 @@ import {MySQLSessionStorage} from '@shopify/shopify-app-session-storage-mysql';
 const shopify = shopifyApp({
   sessionStorage: new MySQLSessionStorage(
     'mysql://username:password@host/database',
+    { connectionPoolLimit: 10 } // optional
   ),
   // ...
 });
@@ -21,6 +22,7 @@ const shopify = shopifyApp({
     'thedatabase',
     'username',
     'password',
+    { connectionPoolLimit: 10 } // optional
   ),
   // ...
 });
