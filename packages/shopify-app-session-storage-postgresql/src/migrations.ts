@@ -65,14 +65,6 @@ export async function migrateToCaseSensitivity(
     queries.unshift(`BEGIN`);
     queries.push(`COMMIT`);
 
-    try {
-      for (const query of queries) {
-        await connection.query(query);
-      }
-    } catch (error) {
-      // rollback if any of the queries fail
-      await connection.query(`ROLLBACK`);
-      throw error;
-    }
+    await connection.transaction(queries);
   }
 }
