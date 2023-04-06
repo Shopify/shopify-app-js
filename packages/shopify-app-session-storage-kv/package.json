@@ -51,7 +51,7 @@
     "miniflare": "^2.13.0",
     "prettier": "^2.8.7",
     "ts-jest": "^28.0.8",
-    "typescript": "^4.9.5"
+    "typescript": "^5.0.3"
   },
   "files": [
     "build/*",
