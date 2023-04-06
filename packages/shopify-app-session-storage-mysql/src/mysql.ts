@@ -8,10 +8,12 @@ import {migrationList} from './migrations';
 import {MySqlConnection} from './mysql-connection';
 import {MySqlSessionStorageMigrator} from './mysql-migrator';
 
-export interface MySQLSessionStorageOptions
-  extends RdbmsSessionStorageOptions {}
+export interface MySQLSessionStorageOptions extends RdbmsSessionStorageOptions {
+  connectionPoolLimit: number;
+}
 
 const defaultMySQLSessionStorageOptions: MySQLSessionStorageOptions = {
+  connectionPoolLimit: 10,
   sessionTableName: 'shopify_sessions',
   migratorOptions: {
     migrationDBIdentifier: 'shopify_sessions_migrations',
@@ -45,7 +47,7 @@ export class MySQLSessionStorage implements SessionStorage {
 
   constructor(dbUrl: URL, opts: Partial<MySQLSessionStorageOptions> = {}) {
     this.options = {...defaultMySQLSessionStorageOptions, ...opts};
-    this.internalInit = this.init(dbUrl.toString());
+    this.internalInit = this.init(dbUrl);
     this.migrator = new MySqlSessionStorageMigrator(
       this.connection,
       this.options.migratorOptions,
@@ -133,8 +135,12 @@ export class MySQLSessionStorage implements SessionStorage {
     await this.connection.disconnect();
   }
 
-  private async init(dbUrl: string) {
-    this.connection = new MySqlConnection(dbUrl, this.options.sessionTableName);
+  private async init(dbUrl: URL) {
+    this.connection = new MySqlConnection(
+      dbUrl,
+      this.options.sessionTableName,
+      this.options.connectionPoolLimit,
+    );
     await this.createTable();
   }
 
