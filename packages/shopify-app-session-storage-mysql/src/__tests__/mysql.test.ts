@@ -12,9 +12,22 @@ import {MySQLSessionStorage} from '../mysql';
 
 const exec = promisify(child_process.exec);
 
-const rootURL = new URL('mysql://root:passify@localhost');
-const dbURL = new URL('mysql://shopify:passify@localhost/shopitest');
-const dbURL2 = new URL('mysql://shopify:passify@localhost/shopitest2');
+const dbConfig = {
+  host: 'localhost',
+  user: 'root',
+  password: 'passify#$',
+  database: 'shop&test',
+};
+const dbURL = new URL(
+  `mysql://${encodeURIComponent('shop&fy')}:${encodeURIComponent(
+    'passify#$',
+  )}@localhost/${encodeURIComponent('shop&test')}`,
+);
+const dbURL2 = new URL(
+  `mysql://${encodeURIComponent('shop&fy')}:${encodeURIComponent(
+    'passify#$',
+  )}@localhost/${encodeURIComponent('shop&test2')}`,
+);
 
 describe('MySQLSessionStorage', () => {
   let storage: MySQLSessionStorage;
@@ -23,7 +36,7 @@ describe('MySQLSessionStorage', () => {
   let containerId: string;
   beforeAll(async () => {
     const runCommand = await exec(
-      'podman run -d -e MYSQL_DATABASE=shopitest -e MYSQL_USER=shopify -e MYSQL_PASSWORD=passify -e MYSQL_ROOT_PASSWORD=passify -p 3306:3306 mysql:8-oracle',
+      "podman run -d -e MYSQL_DATABASE='shop&test' -e MYSQL_USER='shop&fy' -e MYSQL_PASSWORD='passify#$' -e MYSQL_ROOT_PASSWORD='passify#$' -p 3306:3306 mysql:8-oracle",
       {encoding: 'utf8'},
     );
     containerId = runCommand.stdout.trim();
@@ -31,15 +44,16 @@ describe('MySQLSessionStorage', () => {
     await poll(
       async () => {
         try {
-          const connection = await mysql2.createConnection(rootURL.toString());
+          const connection = await mysql2.createConnection(dbConfig);
 
-          await connection.execute(`CREATE DATABASE shopitest2;`);
+          await connection.execute(`CREATE DATABASE \`shop&test2\`;`);
           await connection.execute(
-            `GRANT ALL ON shopitest2.* TO 'shopify'@'%';`,
+            `GRANT ALL ON \`shop&test2\`.* TO \`shop&fy\`@\`%\`;`,
           );
 
           await connection.end();
-        } catch {
+        } catch (_error) {
+          // console.error(_error);
           return false;
         }
         return true;

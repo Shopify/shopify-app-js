@@ -70,7 +70,7 @@ export class MySqlConnection implements RdbmsConnection {
   }
 
   getDatabase(): string | undefined {
-    return this.dbUrl.pathname.slice(1);
+    return decodeURIComponent(this.dbUrl.pathname.slice(1));
   }
 
   async hasTable(tablename: string): Promise<boolean> {
@@ -99,9 +99,9 @@ export class MySqlConnection implements RdbmsConnection {
     this.pool = await mysql.createPool({
       connectionLimit: this.connectionPoolLimit,
       host: this.dbUrl.hostname,
-      user: this.dbUrl.username,
-      password: this.dbUrl.password,
-      database: this.dbUrl.pathname.replace(/^\//, ''),
+      user: decodeURIComponent(this.dbUrl.username),
+      password: decodeURIComponent(this.dbUrl.password),
+      database: this.getDatabase(),
     });
   }
 }
