@@ -7,18 +7,9 @@ export class RedisConnection implements DBConnection {
   sessionStorageIdentifier: string;
   private client: RedisClient;
 
-  constructor(
-    dbUrl: string,
-    options: RedisClientOptions,
-    keyPrefix: string,
-    onError?: (...args: any[]) => void,
-  ) {
+  constructor(dbUrl: string, options: RedisClientOptions, keyPrefix: string) {
     this.init(dbUrl, options);
     this.sessionStorageIdentifier = keyPrefix;
-
-    if (onError) {
-      this.client.on('error', onError);
-    }
   }
 
   query(_query: string, _params: any[]): Promise<any[]> {
@@ -62,5 +53,12 @@ export class RedisConnection implements DBConnection {
       ...options,
       url: dbUrl,
     });
+
+    this.client.on('error', this.eventHandler);
+    this.client.on('connect', this.eventHandler);
+    this.client.on('reconnecting', this.eventHandler);
+    this.client.on('ready', this.eventHandler);
   }
+
+  private eventHandler = (..._args: any[]) => {};
 }

@@ -35,6 +35,10 @@ describe('RedisSessionStorage', () => {
     await wait(10000);
 
     client = createClient({url: dbURL.toString()});
+    client.on('error', (err) => {});
+    client.on('connect', () => {});
+    client.on('reconnecting', () => {});
+    client.on('ready', () => {});
     await client.connect();
   });
 
@@ -160,6 +164,32 @@ describe('RedisSessionStorage', () => {
 
     storageClone1.disconnect();
     storageClone2.disconnect();
+  });
+
+  it(`reconnects after a timeout`, async () => {
+    const storage = new RedisSessionStorage(dbURL);
+    await storage.ready;
+
+    const sessionId = 'timeout_connection_test';
+    const session = new Session({
+      id: sessionId,
+      shop: 'shop1.myshopify.com',
+      state: 'state',
+      isOnline: false,
+      scope: ['test_scope'].toString(),
+      accessToken: 'abcde-12345-123',
+    });
+
+    await storage.storeSession(session);
+
+    // Wait for the redis client to disconnect
+    await wait(2500);
+
+    const storedSession = await storage.loadSession(sessionId);
+    expect(storedSession).toBeDefined();
+    expect(storedSession?.id).toBe(sessionId);
+
+    await storage.disconnect();
   });
 });
 
