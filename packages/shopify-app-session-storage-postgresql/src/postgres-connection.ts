@@ -60,7 +60,7 @@ export class PostgresConnection implements RdbmsConnection {
   }
 
   public getDatabase(): string | undefined {
-    return this.dbUrl.pathname.slice(1);
+    return decodeURIComponent(this.dbUrl.pathname.slice(1));
   }
 
   async hasTable(tablename: string): Promise<boolean> {
@@ -83,6 +83,12 @@ export class PostgresConnection implements RdbmsConnection {
   }
 
   private async init(): Promise<void> {
-    this.pool = new pg.Pool({connectionString: this.dbUrl.toString()});
+    this.pool = new pg.Pool({
+      host: this.dbUrl.hostname,
+      user: decodeURIComponent(this.dbUrl.username),
+      password: decodeURIComponent(this.dbUrl.password),
+      database: this.getDatabase(),
+      port: Number(this.dbUrl.port),
+    });
   }
 }

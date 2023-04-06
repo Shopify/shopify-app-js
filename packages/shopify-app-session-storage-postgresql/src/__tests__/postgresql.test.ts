@@ -12,8 +12,16 @@ import {PostgreSQLSessionStorage} from '../postgresql';
 
 const exec = promisify(child_process.exec);
 
-const dbURL = new URL('postgres://shopify:passify@localhost/shopitest');
-const dbURL2 = new URL('postgres://shopify:passify@localhost/shopitest2');
+const dbURL = new URL(
+  `postgres://${encodeURIComponent('shop&fy')}:${encodeURIComponent(
+    'passify#$',
+  )}@localhost/${encodeURIComponent('shop&test')}`,
+);
+const dbURL2 = new URL(
+  `postgres://${encodeURIComponent('shop&fy')}:${encodeURIComponent(
+    'passify#$',
+  )}@localhost/${encodeURIComponent('shop&test2')}`,
+);
 
 describe('PostgreSQLSessionStorage', () => {
   let storage: PostgreSQLSessionStorage;
@@ -22,7 +30,7 @@ describe('PostgreSQLSessionStorage', () => {
   let containerId: string;
   beforeAll(async () => {
     const runCommand = await exec(
-      'podman run -d -e POSTGRES_DB=shopitest -e POSTGRES_USER=shopify -e POSTGRES_PASSWORD=passify -p 5432:5432 postgres:15',
+      "podman run -d -e POSTGRES_DB='shop&test' -e POSTGRES_USER='shop&fy' -e POSTGRES_PASSWORD='passify#$' -p 5432:5432 postgres:15",
       {encoding: 'utf8'},
     );
 
@@ -31,11 +39,16 @@ describe('PostgreSQLSessionStorage', () => {
     await poll(
       async () => {
         try {
-          const client = new pg.Client({connectionString: dbURL.toString()});
+          const client = new pg.Client({
+            host: dbURL.hostname,
+            user: decodeURIComponent(dbURL.username),
+            password: decodeURIComponent(dbURL.password),
+            database: decodeURIComponent(dbURL.pathname.slice(1)),
+          });
           await client.connect();
-          await client.query('CREATE DATABASE shopitest2', []);
+          await client.query(`CREATE DATABASE "shop&test2"`, []);
           await client.query(
-            'GRANT ALL PRIVILEGES ON DATABASE shopitest2 TO shopify',
+            `GRANT ALL PRIVILEGES ON DATABASE "shop&test2" TO "shop&fy"`,
             [],
           );
           await client.end();
@@ -62,8 +75,8 @@ describe('PostgreSQLSessionStorage', () => {
   });
 
   const tests = [
-    {dbName: 'shopitest', sessionStorage: async () => storage},
-    {dbName: 'shopitest2', sessionStorage: async () => storage2},
+    {dbName: 'shop&test', sessionStorage: async () => storage},
+    {dbName: 'shop&test2', sessionStorage: async () => storage2},
   ];
 
   for (const {dbName, sessionStorage} of tests) {
