@@ -60,7 +60,7 @@ export class PostgresConnection implements RdbmsConnection {
   }
 
   public getDatabase(): string | undefined {
-    return this.dbUrl.pathname.replace(/^\//, '');
+    return this.dbUrl.pathname.slice(1);
   }
 
   async hasTable(tablename: string): Promise<boolean> {
