@@ -15,7 +15,11 @@ import {v1_0_0SessionData} from './migration-test-data';
 
 const exec = promisify(child_process.exec);
 
-const dbURL = new URL('redis://shopify:passify@localhost/1');
+const dbURL = new URL(
+  `redis://${encodeURIComponent('shop&fy')}:${encodeURIComponent(
+    'passify#$',
+  )}@localhost/1`,
+);
 
 type RedisClient = ReturnType<typeof createClient>;
 

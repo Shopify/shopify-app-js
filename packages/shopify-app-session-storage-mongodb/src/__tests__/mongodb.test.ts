@@ -11,7 +11,11 @@ import {MongoDBSessionStorage} from '../mongodb';
 
 const exec = promisify(child_process.exec);
 
-const dbURL = new URL('mongodb://shopify:passify@localhost');
+const dbURL = new URL(
+  `mongodb://${encodeURIComponent('shop&fy')}:${encodeURIComponent(
+    'passify$#',
+  )}@localhost`,
+);
 const dbName = 'shopitest';
 
 describe('MongoDBSessionStorage', () => {
@@ -19,7 +23,7 @@ describe('MongoDBSessionStorage', () => {
   let containerId: string;
   beforeAll(async () => {
     const runCommand = await exec(
-      'podman run -d -e MONGO_INITDB_DATABASE=shopitest -e MONGO_INITDB_ROOT_USERNAME=shopify -e MONGO_INITDB_ROOT_PASSWORD=passify -p 27017:27017 mongo:5',
+      "podman run -d -e MONGO_INITDB_DATABASE=shopitest -e MONGO_INITDB_ROOT_USERNAME='shop&fy' -e MONGO_INITDB_ROOT_PASSWORD='passify$#' -p 27017:27017 mongo:5",
       {encoding: 'utf8'},
     );
     containerId = runCommand.stdout.trim();
