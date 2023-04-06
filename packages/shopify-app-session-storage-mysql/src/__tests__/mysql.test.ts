@@ -6,6 +6,7 @@ import {
   poll,
 } from '@shopify/shopify-app-session-storage-test-utils';
 import mysql2 from 'mysql2/promise';
+import {Session} from '@shopify/shopify-api';
 
 import {MySQLSessionStorage} from '../mysql';
 
@@ -80,5 +81,28 @@ describe('MySQLSessionStorage', () => {
 
     storageClone1.disconnect();
     storageClone2.disconnect();
+  });
+
+  it(`can disconnect and reconnect to make queries with the pooling clients`, async () => {
+    const storage = new MySQLSessionStorage(dbURL);
+    await storage.ready;
+    const sessionId = '123';
+    const session = new Session({
+      id: sessionId,
+      shop: 'test-shop.myshopify.com',
+      state: 'test-state',
+      isOnline: false,
+      scope: 'fake_scope',
+    });
+
+    expect(await storage.storeSession(session)).toBeTruthy();
+    await storage.disconnect();
+
+    const loadedSession = await storage.loadSession(sessionId);
+    expect(loadedSession).toEqual(session);
+    await storage.disconnect();
+
+    expect(await storage.deleteSession(sessionId)).toBeTruthy();
+    await storage.disconnect();
   });
 });
