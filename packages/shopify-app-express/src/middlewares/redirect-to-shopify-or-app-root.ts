@@ -11,7 +11,7 @@ export function redirectToShopifyOrAppRoot({
   return function () {
     return async function (req: Request, res: Response) {
       if (res.headersSent) {
-        await config.logger.info(
+        config.logger.info(
           'Response headers have already been sent, skipping redirection to host',
           {shop: res.locals.shopify?.session?.shop},
         );
@@ -29,7 +29,7 @@ export function redirectToShopifyOrAppRoot({
             host,
           )}`;
 
-      await config.logger.debug(`Redirecting to host at ${redirectUrl}`, {
+      config.logger.debug(`Redirecting to host at ${redirectUrl}`, {
         shop: res.locals.shopify.session.shop,
       });
 

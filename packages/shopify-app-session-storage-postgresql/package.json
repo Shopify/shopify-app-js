@@ -32,7 +32,7 @@
     "session storage"
   ],
   "dependencies": {
-    "@shopify/shopify-api": "^6.2.0",
+    "@shopify/shopify-api": "^7.0.0",
     "@shopify/shopify-app-session-storage": "^1.1.1",
     "pg": "^8.9.0",
     "pg-connection-string": "^2.5.0",
