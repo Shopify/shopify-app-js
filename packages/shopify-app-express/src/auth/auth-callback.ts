@@ -24,7 +24,7 @@ export async function authCallback({
       rawResponse: res,
     });
 
-    await config.logger.debug('Callback is valid, storing session', {
+    config.logger.debug('Callback is valid, storing session', {
       shop: callbackResponse.session.shop,
       isOnline: callbackResponse.session.isOnline,
     });
@@ -38,7 +38,7 @@ export async function authCallback({
 
     // If we're completing an offline OAuth process, immediately kick off the online one
     if (config.useOnlineTokens && !callbackResponse.session.isOnline) {
-      await config.logger.debug(
+      config.logger.debug(
         'Completing offline token OAuth, redirecting to online token OAuth',
         {shop: callbackResponse.session.shop},
       );
@@ -52,14 +52,14 @@ export async function authCallback({
       session: callbackResponse.session,
     };
 
-    await config.logger.debug('Completed OAuth callback', {
+    config.logger.debug('Completed OAuth callback', {
       shop: callbackResponse.session.shop,
       isOnline: callbackResponse.session.isOnline,
     });
 
     return true;
   } catch (error) {
-    await config.logger.error(`Failed to complete OAuth with error: ${error}`);
+    config.logger.error(`Failed to complete OAuth with error: ${error}`);
 
     await handleCallbackError(req, res, api, config, error);
   }
@@ -72,7 +72,7 @@ async function registerWebhooks(
   api: Shopify,
   session: Session,
 ) {
-  await config.logger.debug('Registering webhooks', {shop: session.shop});
+  config.logger.debug('Registering webhooks', {shop: session.shop});
 
   const responsesByTopic = await api.webhooks.register({session});
 
@@ -86,12 +86,12 @@ async function registerWebhooks(
         const result: any = response.result;
 
         if (result.errors) {
-          await config.logger.error(
+          config.logger.error(
             `Failed to register ${topic} webhook: ${result.errors[0].message}`,
             {shop: session.shop},
           );
         } else {
-          await config.logger.error(
+          config.logger.error(
             `Failed to register ${topic} webhook: ${JSON.stringify(
               result.data,
             )}`,

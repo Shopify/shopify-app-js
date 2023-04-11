@@ -26,11 +26,11 @@ export function validateAuthenticatedSession({
           rawResponse: res,
         });
       } catch (error) {
-        await config.logger.error(
+        config.logger.error(
           `Error when loading session from storage: ${error}`,
         );
 
-        await handleSessionError(req, res, error);
+        handleSessionError(req, res, error);
         return undefined;
       }
 
@@ -39,7 +39,7 @@ export function validateAuthenticatedSession({
         try {
           session = await config.sessionStorage.loadSession(sessionId);
         } catch (error) {
-          await config.logger.error(
+          config.logger.error(
             `Error when loading session from storage: ${error}`,
           );
 
@@ -112,7 +112,7 @@ export function validateAuthenticatedSession({
   };
 }
 
-async function handleSessionError(_req: Request, res: Response, error: Error) {
+function handleSessionError(_req: Request, res: Response, error: Error) {
   switch (true) {
     case error instanceof InvalidJwtError:
       res.status(401);
