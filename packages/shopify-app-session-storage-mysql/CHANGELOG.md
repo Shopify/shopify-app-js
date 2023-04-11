@@ -1,5 +1,16 @@
 # @shopify/shopify-app-session-storage-mysql
 
+## 1.1.3
+
+### Patch Changes
+
+- 335c8df: MySQL session storage to use a connection pool instead of a single client connection. Fixes #150, #185
+- 502b4c7: Bumps mysql2 from 3.1.2 to 3.2.0.
+- e4f3415: Bump @shopify/shopify-api from 6.2.0 to 7.0.0. See [changelog](https://github.com/Shopify/shopify-api-js/blob/main/CHANGELOG.md) for details.
+- 3969855: Use decodeURIComponent on password, user, database name fields prior to calling underlying MySQL connection. Fixes #163. Also applied to postgresql adapter.
+- Updated dependencies [e4f3415]
+  - @shopify/shopify-app-session-storage@1.1.2
+
 ## 1.1.2
 
 ### Patch Changes
