@@ -32,7 +32,7 @@
     "CloudFlare"
   ],
   "dependencies": {
-    "@shopify/shopify-api": "^6.2.0",
+    "@shopify/shopify-api": "^7.0.0",
     "@shopify/shopify-app-session-storage": "^1.1.1",
     "semver": "^7.4.0",
     "tslib": "^2.4.0"
