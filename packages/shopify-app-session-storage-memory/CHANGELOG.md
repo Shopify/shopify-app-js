@@ -1,5 +1,13 @@
 # @shopify/shopify-app-session-storage-memory
 
+## 1.0.5
+
+### Patch Changes
+
+- e4f3415: Bump @shopify/shopify-api from 6.2.0 to 7.0.0. See [changelog](https://github.com/Shopify/shopify-api-js/blob/main/CHANGELOG.md) for details.
+- Updated dependencies [e4f3415]
+  - @shopify/shopify-app-session-storage@1.1.2
+
 ## 1.0.4
 
 ### Patch Changes

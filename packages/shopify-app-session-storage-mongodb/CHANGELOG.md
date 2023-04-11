@@ -1,5 +1,15 @@
 # @shopify/shopify-app-session-storage-mongodb
 
+## 1.0.6
+
+### Patch Changes
+
+- e4f3415: Bump @shopify/shopify-api from 6.2.0 to 7.0.0. See [changelog](https://github.com/Shopify/shopify-api-js/blob/main/CHANGELOG.md) for details.
+- 7bdb422: Bumps mongodb from 5.1.0 to 5.2.0. See mongodb [changelog](https://github.com/mongodb/node-mongodb-native/blob/main/HISTORY.md) for details.
+- e571c35: Bump mongodb from 5.0.1 to 5.1.0. See mongodb [changelog](https://github.com/mongodb/node-mongodb-native/blob/main/HISTORY.md) for details.
+- Updated dependencies [e4f3415]
+  - @shopify/shopify-app-session-storage@1.1.2
+
 ## 1.0.5
 
 ### Patch Changes

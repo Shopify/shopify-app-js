@@ -1,5 +1,15 @@
 # @shopify/shopify-app-session-storage-redis
 
+## 1.1.2
+
+### Patch Changes
+
+- c9804ae: Bump redis from 4.6.4 to 4.6.5. See redis [release note](https://github.com/redis/node-redis/releases/tag/redis@4.6.5) for more details.
+- e4f3415: Bump @shopify/shopify-api from 6.2.0 to 7.0.0. See [changelog](https://github.com/Shopify/shopify-api-js/blob/main/CHANGELOG.md) for details.
+- 27467d8: Add event handlers to redis client to prevent crashing on disconnect event. Fixes #129, #160 (Thanks to @davidhollenbeckx for linking to issue and solution.)
+- Updated dependencies [e4f3415]
+  - @shopify/shopify-app-session-storage@1.1.2
+
 ## 1.1.1
 
 ### Patch Changes
