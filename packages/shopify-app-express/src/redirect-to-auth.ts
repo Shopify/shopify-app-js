@@ -1,8 +1,9 @@
 import {Shopify} from '@shopify/shopify-api';
 import {Request, Response} from 'express';
 
-import {AppConfigInterface} from './config-types';
 import {RedirectToAuthParams} from './types';
+import {redirectOutOfApp} from './redirect-out-of-app';
+import {AppConfigInterface} from './config-types';
 
 export async function redirectToAuth({
   req,
@@ -12,26 +13,26 @@ export async function redirectToAuth({
   isOnline = false,
 }: RedirectToAuthParams) {
   const shop = api.utils.sanitizeShop(req.query.shop as string);
-  if (shop) {
-    if (req.query.embedded === '1') {
-      clientSideRedirect(api, config, shop, req, res);
-    } else {
-      await serverSideRedirect(api, config, shop, req, res, isOnline);
-    }
-  } else {
+  if (!shop) {
     config.logger.error('No shop provided to redirect to auth');
-
     res.status(500);
     res.send('No shop provided');
+    return;
+  }
+
+  if (req.query.embedded === '1') {
+    clientSideRedirect(api, config, req, res, shop);
+  } else {
+    await serverSideRedirect(api, config, req, res, shop, isOnline);
   }
 }
 
 function clientSideRedirect(
   api: Shopify,
   config: AppConfigInterface,
-  shop: string,
   req: Request,
   res: Response,
+  shop: string,
 ): void {
   const host = api.utils.sanitizeHost(req.query.host as string);
   if (!host) {
@@ -41,28 +42,17 @@ function clientSideRedirect(
   }
 
   const redirectUriParams = new URLSearchParams({shop, host}).toString();
+  const redirectUri = `${api.config.hostScheme}://${api.config.hostName}${config.auth.path}?${redirectUriParams}`;
 
-  const appHost = `${api.config.hostScheme}://${api.config.hostName}`;
-  const queryParams = new URLSearchParams({
-    ...req.query,
-    shop,
-    redirectUri: `${appHost}${config.auth.path}?${redirectUriParams}`,
-  }).toString();
-
-  config.logger.debug(
-    `Redirecting to auth while embedded, going to ${config.exitIframePath}`,
-    {shop},
-  );
-
-  res.redirect(`${config.exitIframePath}?${queryParams}`);
+  redirectOutOfApp({config})({req, res, redirectUri, shop});
 }
 
 async function serverSideRedirect(
   api: Shopify,
   config: AppConfigInterface,
-  shop: string,
   req: Request,
   res: Response,
+  shop: string,
   isOnline: boolean,
 ): Promise<void> {
   config.logger.debug(
