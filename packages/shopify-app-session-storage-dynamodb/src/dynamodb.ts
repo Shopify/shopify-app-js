@@ -106,7 +106,7 @@ export class DynamoDBSessionStorage implements SessionStorage {
     // DynamoDB doesn't support Date objects, so we need to convert it to a number
     const rawSession = {
       ...session.toObject(),
-      expires: session.expires?.getTime(),
+      expires: session.expires?.toISOString(),
     };
 
     return marshall(rawSession, {
@@ -122,9 +122,7 @@ export class DynamoDBSessionStorage implements SessionStorage {
     // Convert the number back to a Date object
     return new Session({
       ...rawSession,
-      expires: rawSession.expires
-        ? new Date(Number(rawSession.expires))
-        : undefined,
+      expires: rawSession.expires ? new Date(rawSession.expires) : undefined,
     });
   }
 }
