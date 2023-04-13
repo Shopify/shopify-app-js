@@ -6,7 +6,6 @@ import {
   GetItemCommand,
   PutItemCommand,
   QueryCommand,
-  ScanCommand,
 } from '@aws-sdk/client-dynamodb';
 import {marshall, unmarshall} from '@aws-sdk/util-dynamodb';
 import {Session, SessionParams} from '@shopify/shopify-api';
@@ -49,18 +48,18 @@ export class DynamoDBSessionStorage implements SessionStorage {
     const result = await this.client.send(
       new GetItemCommand({
         TableName: this.options.sessionTableName,
-        Key: this.seriliazeId(id),
+        Key: this.serializeId(id),
       }),
     );
 
-    return result.Item ? this.deserilaizeSession(result.Item) : undefined;
+    return result.Item ? this.deserializeSession(result.Item) : undefined;
   }
 
   public async deleteSession(id: string): Promise<boolean> {
     await this.client.send(
       new DeleteItemCommand({
         TableName: this.options.sessionTableName,
-        Key: this.seriliazeId(id),
+        Key: this.serializeId(id),
       }),
     );
 
@@ -95,7 +94,7 @@ export class DynamoDBSessionStorage implements SessionStorage {
     );
   }
 
-  private seriliazeId(id: string): {[key: string]: AttributeValue} {
+  private serializeId(id: string): {[key: string]: AttributeValue} {
     return marshall({id});
   }
 
@@ -115,7 +114,7 @@ export class DynamoDBSessionStorage implements SessionStorage {
     });
   }
 
-  private deserilaizeSession(session: {
+  private deserializeSession(session: {
     [key: string]: AttributeValue;
   }): Session {
     const rawSession = unmarshall(session) as SessionParams;
