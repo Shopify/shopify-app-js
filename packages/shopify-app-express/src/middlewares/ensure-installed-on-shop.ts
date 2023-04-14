@@ -1,5 +1,5 @@
 import {Request, Response, NextFunction} from 'express';
-import {Session, Shopify} from '@shopify/shopify-api';
+import {InvalidHmacError, Session, Shopify} from '@shopify/shopify-api';
 
 import {redirectToAuth} from '../redirect-to-auth';
 import {AppConfigInterface} from '../config-types';
@@ -35,6 +35,10 @@ export function ensureInstalled({
       }
 
       config.logger.debug('Checking if shop has installed the app', {shop});
+
+      if (!(await isValidRequest(api, config, req, res, shop))) {
+        return undefined;
+      }
 
       const sessionId = api.session.getOfflineId(shop);
       const session = await config.sessionStorage.loadSession(sessionId);
@@ -173,4 +177,48 @@ async function embedAppIntoShopify(
   );
 
   res.redirect(embeddedUrl + req.path);
+}
+
+async function isValidRequest(
+  api: Shopify,
+  config: AppConfigInterface,
+  req: Request,
+  res: Response,
+  shop: string,
+): Promise<boolean> {
+  const hmac = req.query.hmac as string | undefined;
+  if (!hmac) {
+    config.logger.error('Request does not have HMAC signature', {shop});
+
+    res.status(400);
+    res.send('Bad request');
+    return false;
+  }
+
+  let hmacMatches: boolean;
+  try {
+    hmacMatches = await api.utils.validateHmac(
+      req.query as {[key: string]: string},
+    );
+  } catch (error) {
+    if (error instanceof InvalidHmacError) {
+      hmacMatches = false;
+    } else {
+      config.logger.error(`Unexpected error while validating HMAC: ${error}`);
+
+      res.status(500);
+      res.send('Internal Server Error');
+      return false;
+    }
+  }
+
+  if (hmacMatches) {
+    return true;
+  } else {
+    config.logger.error('Request HMAC is invalid', {shop});
+
+    res.status(401);
+    res.send('Unauthorized');
+    return false;
+  }
 }

@@ -3,12 +3,7 @@ import express from 'express';
 import request from 'supertest';
 
 import {redirectToShopifyOrAppRoot} from '../redirect-to-shopify-or-app-root';
-import {
-  BASE64_HOST,
-  shopify,
-  SHOPIFY_HOST,
-  TEST_SHOP,
-} from '../../__tests__/test-helper';
+import {BASE64_HOST, shopify, TEST_SHOP} from '../../__tests__/test-helper';
 
 describe('redirectToShopifyOrAppRoot', () => {
   const session = new Session({
@@ -40,7 +35,7 @@ describe('redirectToShopifyOrAppRoot', () => {
       .expect(302);
 
     const url = new URL(response.header.location);
-    expect(url.host).toBe(SHOPIFY_HOST);
+    expect(url.host).toBe(TEST_SHOP);
     expect(url.pathname).toBe(`/apps/${shopify.api.config.apiKey}`);
   });
 

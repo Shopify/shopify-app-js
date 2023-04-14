@@ -7,7 +7,7 @@ import {
   LogSeverity,
 } from '@shopify/shopify-api';
 
-import {shopifyApp} from '../..';
+import {ShopifyApp, shopifyApp} from '../..';
 import {WebhookHandlersParam} from '../../webhooks/types';
 import {AppInstallations} from '../../app-installations';
 import {
@@ -20,6 +20,7 @@ import {
   TEST_SHOP,
   TEST_WEBHOOK_ID,
   validWebhookHeaders,
+  queryArgs,
 } from '../test-helper';
 
 import {
@@ -392,9 +393,8 @@ async function installedRequest(
   config: OAuthTestCase,
   mock: jest.Mock,
 ) {
-  const response = await request(app).get(
-    `/installed?shop=${TEST_SHOP}&host=${BASE64_HOST}&embedded=1`,
-  );
+  const args = queryArgs({shop: TEST_SHOP, host: BASE64_HOST, embedded: '1'});
+  const response = await request(app).get(`/installed?${args}`);
 
   if (config.embedded) {
     expect(response.status).toBe(200);

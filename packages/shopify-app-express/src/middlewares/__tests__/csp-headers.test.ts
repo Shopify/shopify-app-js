@@ -2,7 +2,7 @@ import request from 'supertest';
 import express from 'express';
 import {Session} from '@shopify/shopify-api';
 
-import {shopify, SHOPIFY_HOST, TEST_SHOP} from '../../__tests__/test-helper';
+import {shopify, TEST_SHOP} from '../../__tests__/test-helper';
 // import {ShopifyApp, shopifyApp} from '../../index';
 
 const TESTS: {
@@ -51,7 +51,7 @@ describe('cspHeaders', () => {
 
       await shopify.config.sessionStorage.storeSession(session);
 
-      const encodedHost = Buffer.from(SHOPIFY_HOST, 'utf-8').toString('base64');
+      const encodedHost = Buffer.from(TEST_SHOP, 'utf-8').toString('base64');
       let shopParam = '';
       if (config.shop) {
         shopParam = `shop=${config.shop}`;

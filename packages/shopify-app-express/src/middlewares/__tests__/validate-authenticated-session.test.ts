@@ -4,10 +4,10 @@ import {LATEST_API_VERSION, Session} from '@shopify/shopify-api';
 import jwt from 'jsonwebtoken';
 
 import {
+  TEST_SHOP,
   createTestHmac,
   mockShopifyResponse,
   shopify,
-  SHOPIFY_HOST,
 } from '../../__tests__/test-helper';
 
 describe('validateAuthenticatedSession', () => {
@@ -140,7 +140,7 @@ describe('validateAuthenticatedSession', () => {
     });
 
     it('redirect to exit iFrame if different shop, embedded param set to 1', async () => {
-      const encodedHost = Buffer.from(SHOPIFY_HOST, 'utf-8').toString('base64');
+      const encodedHost = Buffer.from(TEST_SHOP, 'utf-8').toString('base64');
       const response = await request(app)
         .get(
           `/test/shop?shop=other-shop.myshopify.io&host=${encodedHost}&embedded=1`,

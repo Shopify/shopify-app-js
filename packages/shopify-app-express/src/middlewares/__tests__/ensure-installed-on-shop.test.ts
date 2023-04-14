@@ -1,12 +1,13 @@
 import request from 'supertest';
-import express, {Express} from 'express';
+import express, {Express, query} from 'express';
 import {LATEST_API_VERSION, LogSeverity, Session} from '@shopify/shopify-api';
 
 import {
+  BASE64_HOST,
   createTestHmac,
   mockShopifyResponse,
+  queryArgs,
   shopify,
-  SHOPIFY_HOST,
   TEST_SHOP,
 } from '../../__tests__/test-helper';
 
@@ -36,10 +37,8 @@ describe('ensureInstalledOnShop', () => {
 
     await shopify.config.sessionStorage.storeSession(session);
 
-    const encodedHost = Buffer.from(SHOPIFY_HOST, 'utf-8').toString('base64');
-    const response = await request(app)
-      .get(`/test/shop?shop=${TEST_SHOP}&host=${encodedHost}&embedded=1`)
-      .expect(200);
+    const args = queryArgs({shop: TEST_SHOP, host: BASE64_HOST, embedded: '1'});
+    const response = await request(app).get(`/test/shop?${args}`).expect(200);
 
     expect(response.body).toEqual({
       data: {
@@ -69,10 +68,9 @@ describe('ensureInstalledOnShop', () => {
   });
 
   it('redirects to auth via exit iFrame if shop NOT installed', async () => {
-    const encodedHost = Buffer.from(SHOPIFY_HOST, 'utf-8').toString('base64');
-    const response = await request(app)
-      .get(`/test/shop?shop=${TEST_SHOP}&host=${encodedHost}&embedded=1`)
-      .expect(302);
+    const encodedHost = BASE64_HOST;
+    const args = queryArgs({shop: TEST_SHOP, host: encodedHost, embedded: '1'});
+    const response = await request(app).get(`/test/shop?${args}`).expect(302);
 
     const expectedRedirectUriStart = new URL(
       shopify.config.auth.path,
@@ -95,10 +93,11 @@ describe('ensureInstalledOnShop', () => {
     await shopify.config.sessionStorage.storeSession(session);
 
     const missingShop = 'some-other-shop.myshopify.io';
-    const encodedHost = Buffer.from(SHOPIFY_HOST, 'utf-8').toString('base64');
-    const response = await request(app)
-      .get(`/test/shop?shop=${missingShop}&host=${encodedHost}`)
-      .expect(302);
+    const args = queryArgs({
+      shop: missingShop,
+      host: Buffer.from(missingShop, 'utf-8').toString('base64'),
+    });
+    const response = await request(app).get(`/test/shop?${args}`).expect(302);
 
     const location = new URL(response.header.location);
 
@@ -111,10 +110,8 @@ describe('ensureInstalledOnShop', () => {
 
     await shopify.config.sessionStorage.storeSession(session);
 
-    const encodedHost = Buffer.from(SHOPIFY_HOST, 'utf-8').toString('base64');
-    const response = await request(app)
-      .get(`/test/shop?shop=${TEST_SHOP}&host=${encodedHost}`)
-      .expect(302);
+    const args = queryArgs({shop: TEST_SHOP, host: BASE64_HOST});
+    const response = await request(app).get(`/test/shop?${args}`).expect(302);
 
     const location = new URL(response.header.location);
 
@@ -123,15 +120,13 @@ describe('ensureInstalledOnShop', () => {
   });
 
   it('does NOT redirect to auth if shop NOT installed AND url is exit iFrame path', async () => {
-    const encodedHost = Buffer.from(SHOPIFY_HOST, 'utf-8').toString('base64');
     app.use('/exitiframe', shopify.ensureInstalledOnShop());
     app.get('/exitiframe', async (_req, res) => {
       res.send('exit iFrame');
     });
 
-    await request(app)
-      .get(`/exitiframe?shop=${TEST_SHOP}&host=${encodedHost}&embedded=1`)
-      .expect(200);
+    const args = queryArgs({shop: TEST_SHOP, host: BASE64_HOST, embedded: '1'});
+    await request(app).get(`/exitiframe?${args}`).expect(200);
   });
 
   it('redirects to embedded URL if shop is installed AND url is exit iFrame path AND embedded param missing', async () => {
@@ -139,19 +134,17 @@ describe('ensureInstalledOnShop', () => {
 
     await shopify.config.sessionStorage.storeSession(session);
 
-    const encodedHost = Buffer.from(SHOPIFY_HOST, 'utf-8').toString('base64');
     app.use('/exitiframe', shopify.ensureInstalledOnShop());
     app.get('/exitiframe', async (_req, res) => {
       res.send('exit iFrame');
     });
 
-    const response = await request(app)
-      .get(`/exitiframe?shop=${TEST_SHOP}&host=${encodedHost}`)
-      .expect(302);
+    const args = queryArgs({shop: TEST_SHOP, host: BASE64_HOST});
+    const response = await request(app).get(`/exitiframe?${args}`).expect(302);
 
     const location = new URL(response.header.location, 'https://example.com');
 
-    expect(location.hostname).toBe(SHOPIFY_HOST);
+    expect(location.hostname).toBe(TEST_SHOP);
     expect(location.pathname).toEqual(
       expect.stringContaining(`apps/${shopify.api.config.apiKey}`),
     );
@@ -186,5 +179,43 @@ describe('ensureInstalledOnShop', () => {
         'ensureInstalledOnShop() should only be used in embedded apps; calling validateAuthenticatedSession() instead',
       ),
     );
+  });
+
+  it('fails if the HMAC is missing', async () => {
+    mockShopifyResponse({data: {shop: {name: TEST_SHOP}}});
+
+    await shopify.config.sessionStorage.storeSession(session);
+
+    await request(app)
+      .get(
+        `/test/shop?shop=${TEST_SHOP}&host=${Buffer.from(
+          TEST_SHOP,
+          'utf-8',
+        ).toString('base64')}&embedded=1`,
+      )
+      .expect(400);
+  });
+
+  it('fails if the HMAC is invalid', async () => {
+    mockShopifyResponse({data: {shop: {name: TEST_SHOP}}});
+
+    await shopify.config.sessionStorage.storeSession(session);
+
+    const args = queryArgs({shop: TEST_SHOP, host: BASE64_HOST, embedded: '1'});
+    await request(app).get(`/test/shop?otherArg=1&${args}`).expect(401);
+  });
+
+  it('fails if timestamp is in the past', async () => {
+    mockShopifyResponse({data: {shop: {name: TEST_SHOP}}});
+
+    await shopify.config.sessionStorage.storeSession(session);
+
+    const args = queryArgs({
+      shop: TEST_SHOP,
+      host: BASE64_HOST,
+      embedded: '1',
+      timestamp: '12345',
+    });
+    await request(app).get(`/test/shop?${args}`).expect(401);
   });
 });

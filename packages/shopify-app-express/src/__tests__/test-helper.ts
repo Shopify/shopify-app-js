@@ -1,4 +1,4 @@
-import crypto from 'crypto';
+import crypto, {BinaryToTextEncoding} from 'crypto';
 
 import semver from 'semver';
 import fetchMock, {MockParams} from 'jest-fetch-mock';
@@ -21,9 +21,8 @@ export let testConfig: AppConfigParams & {
 // eslint-disable-next-line import/no-mutable-exports
 export let shopify: ShopifyApp;
 
-export const SHOPIFY_HOST = 'totally-real-host.myshopify.io';
-export const BASE64_HOST = Buffer.from(SHOPIFY_HOST).toString('base64');
 export const TEST_SHOP = 'test-shop.myshopify.io';
+export const BASE64_HOST = Buffer.from(TEST_SHOP).toString('base64');
 export const TEST_WEBHOOK_ID = '1234567890';
 
 let currentCall: number;
@@ -180,11 +179,34 @@ export function validWebhookHeaders(
   };
 }
 
-export function createTestHmac(secretKey: string, body: string): string {
+export function createTestHmac(
+  secretKey: string,
+  body: string,
+  digest = 'base64',
+): string {
   return crypto
     .createHmac('sha256', secretKey)
     .update(body, 'utf8')
-    .digest('base64');
+    .digest(digest as BinaryToTextEncoding);
+}
+
+export function queryArgs(query: {[key: string]: string}): string {
+  if (!('timestamp' in query)) {
+    query.timestamp = Math.floor(Date.now() / 1000).toString();
+  }
+
+  const args = new URLSearchParams();
+
+  Object.keys(query)
+    .sort((val1, val2) => val1.localeCompare(val2))
+    .forEach((key) => args.append(key, query[key]));
+
+  args.append(
+    'hmac',
+    createTestHmac(shopify.api.config.apiSecretKey, args.toString(), 'hex'),
+  );
+
+  return args.toString();
 }
 
 test('passes test deprecation checks', () => {

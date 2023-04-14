@@ -8,9 +8,7 @@ import {
   Session,
 } from '@shopify/shopify-api';
 
-import {BASE64_HOST, shopify, SHOPIFY_HOST} from '../../__tests__/test-helper';
-
-const TEST_SHOP = 'my-shop.myshopify.io';
+import {BASE64_HOST, shopify, TEST_SHOP} from '../../__tests__/test-helper';
 
 describe('auth', () => {
   let app: express.Express;
@@ -74,7 +72,7 @@ describe('auth', () => {
           .expect(302);
 
         const url = new URL(response.header.location);
-        expect(url.host).toBe(SHOPIFY_HOST);
+        expect(url.host).toBe(TEST_SHOP);
         expect(url.pathname).toBe(`/apps/${shopify.api.config.apiKey}`);
       });
 
@@ -255,9 +253,9 @@ describe('auth with action after callback', () => {
   });
 
   it('triggers callback', async () => {
-    afterAuth.mockImplementation(async (req, res) => {
+    afterAuth.mockImplementation(async (req, res, next) => {
       expect(res.locals.shopify.session).toEqual(session);
-      await shopify.redirectToShopifyOrAppRoot()(req, res);
+      await shopify.redirectToShopifyOrAppRoot()(req, res, next);
     });
 
     const response = await request(app)
@@ -265,7 +263,7 @@ describe('auth with action after callback', () => {
       .expect(302);
 
     const url = new URL(response.header.location);
-    expect(url.host).toBe(SHOPIFY_HOST);
+    expect(url.host).toBe(TEST_SHOP);
     expect(url.pathname).toBe(`/apps/${shopify.api.config.apiKey}`);
     expect(afterAuth).toHaveBeenCalled();
   });
