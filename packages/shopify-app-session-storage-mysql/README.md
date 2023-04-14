@@ -17,6 +17,16 @@ const shopify = shopifyApp({
 // OR
 
 const shopify = shopifyApp({
+  sessionStorage: new MySQLSessionStorage(
+    new URL('mysql://username:password@host/database'),
+    {connectionPoolLimit: 10}, // optional
+  ),
+  // ...
+});
+
+// OR
+
+const shopify = shopifyApp({
   sessionStorage: MySQLSessionStorage.withCredentials(
     'host.com',
     'thedatabase',
