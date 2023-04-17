@@ -17,6 +17,15 @@ const shopify = shopifyApp({
 // OR
 
 const shopify = shopifyApp({
+  sessionStorage: new PostgreSQLSessionStorage(
+    new URL('postgres://username:password@host/database'),
+  ),
+  // ...
+});
+
+// OR
+
+const shopify = shopifyApp({
   sessionStorage: PostgreSQLSessionStorage.withCredentials(
     'host.com',
     'thedatabase',
