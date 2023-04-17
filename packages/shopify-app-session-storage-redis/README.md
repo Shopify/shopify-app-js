@@ -16,6 +16,15 @@ const shopify = shopifyApp({
 // OR
 
 const shopify = shopifyApp({
+  sessionStorage: new RedisSessionStorage(
+    new URL('redis://username:password@host/database'),
+  ),
+  // ...
+});
+
+// OR
+
+const shopify = shopifyApp({
   sessionStorage: RedisSessionStorage.withCredentials(
     'host.com',
     'thedatabase',
