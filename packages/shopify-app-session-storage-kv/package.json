@@ -32,13 +32,12 @@
     "CloudFlare"
   ],
   "dependencies": {
-    "@shopify/shopify-api": "^7.0.0",
-    "@shopify/shopify-app-session-storage": "^1.1.2",
     "semver": "^7.5.0",
     "tslib": "^2.4.0"
   },
   "peerDependencies": {
-    "@shopify/shopify-api": "^6.1.0"
+    "@shopify/shopify-api": "^7.0.0",
+    "@shopify/shopify-app-session-storage": "^1.1.2"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^4.20230419.0",
