@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.1.0
+
+### Minor Changes
+
+- bdfd30b: Add redirectOutOfApp function to shopifyApp object, which allows apps to redirect out of the app (e.g. for OAuth or billing) regardless of how the request was set up
+
 ## 2.0.0
 
 ### Major Changes
