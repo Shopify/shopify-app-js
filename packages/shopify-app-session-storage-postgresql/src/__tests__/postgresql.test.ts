@@ -118,4 +118,19 @@ describe('PostgreSQLSessionStorage', () => {
     expect(await storage.deleteSession(sessionId)).toBeTruthy();
     await storage.disconnect();
   });
+
+  it(`can successfully connect with a url string instead of a URL object`, async () => {
+    const storage = new PostgreSQLSessionStorage(dbURL.toString());
+    await storage.ready;
+    const session = new Session({
+      id: '456',
+      shop: 'test-shop.myshopify.com',
+      state: 'test-state',
+      isOnline: false,
+      scope: 'fake_scope',
+    });
+
+    expect(await storage.storeSession(session)).toBeTruthy();
+    await storage.disconnect();
+  });
 });

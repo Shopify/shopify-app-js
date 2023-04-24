@@ -46,9 +46,14 @@ export class RedisSessionStorage implements SessionStorage {
   private client: RedisConnection;
   private migrator: SessionStorageMigrator;
 
-  constructor(dbUrl: URL, opts: Partial<RedisSessionStorageOptions> = {}) {
+  constructor(
+    dbUrl: URL | string,
+    opts: Partial<RedisSessionStorageOptions> = {},
+  ) {
     this.options = {...defaultRedisSessionStorageOptions, ...opts};
-    this.internalInit = this.init(dbUrl.toString());
+    this.internalInit = this.init(
+      typeof dbUrl === 'string' ? dbUrl : dbUrl.toString(),
+    );
     this.migrator = new RedisSessionStorageMigrator(
       this.client,
       this.options.migratorOptions,
