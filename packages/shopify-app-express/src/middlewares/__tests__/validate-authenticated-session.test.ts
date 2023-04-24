@@ -145,13 +145,8 @@ describe('validateAuthenticatedSession', () => {
         .get(
           `/test/shop?shop=other-shop.myshopify.io&host=${encodedHost}&embedded=1`,
         )
-        .set('Authorization', `Bearer ${validJWT}`)
         .expect(302);
 
-      const expectedRedirectUriStart = new URL(
-        shopify.config.auth.path,
-        `${shopify.api.config.hostScheme}://${shopify.api.config.hostName}`,
-      );
       const location = new URL(response.header.location, 'https://example.com');
       const locationParams = location.searchParams;
 
@@ -159,7 +154,7 @@ describe('validateAuthenticatedSession', () => {
       expect(locationParams.get('shop')).toBe('other-shop.myshopify.io');
       expect(locationParams.get('host')).toBe(encodedHost);
       expect(locationParams.get('redirectUri')).toEqual(
-        expect.stringMatching(expectedRedirectUriStart.href),
+        expect.stringMatching(shopify.config.auth.path),
       );
     });
 
@@ -219,7 +214,9 @@ describe('validateAuthenticatedSession', () => {
         .set({Authorization: `Bearer ${invalidJWT}`})
         .expect(401);
 
-      expect(response.error.text).toMatch('Failed to parse session token');
+      expect((response.error as any).text).toMatch(
+        'Failed to parse session token',
+      );
     });
 
     it('returns a 500 if the storage throws an error', async () => {
@@ -232,7 +229,7 @@ describe('validateAuthenticatedSession', () => {
         .set({Authorization: `Bearer ${validJWT}`})
         .expect(500);
 
-      expect(response.error.text).toBe('Storage error');
+      expect((response.error as any).text).toBe('Storage error');
     });
   });
 

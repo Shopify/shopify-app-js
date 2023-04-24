@@ -14,9 +14,17 @@ export interface RedirectToAuthParams extends ApiAndConfigParams {
   isOnline?: boolean;
 }
 
-export interface ReturnTopLevelRedirectionParams {
-  res: Response;
+export interface RedirectOutOfAppParams {
   config: AppConfigInterface;
-  bearerPresent: boolean;
-  redirectUrl: string;
 }
+
+export interface RedirectOutOfAppInnerParams {
+  req: Request;
+  res: Response;
+  redirectUri: string;
+  shop: string;
+}
+
+export type RedirectOutOfAppFunction = (
+  params: RedirectOutOfAppInnerParams,
+) => void;

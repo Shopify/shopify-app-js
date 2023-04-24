@@ -2,8 +2,8 @@ import {Session, Shopify, InvalidJwtError} from '@shopify/shopify-api';
 import {Request, Response, NextFunction} from 'express';
 
 import {redirectToAuth} from '../redirect-to-auth';
-import {returnTopLevelRedirection} from '../return-top-level-redirection';
 import {ApiAndConfigParams} from '../types';
+import {redirectOutOfApp} from '../redirect-out-of-app';
 
 import {ValidateAuthenticatedSessionMiddleware} from './types';
 import {hasValidAccessToken} from './has-valid-access-token';
@@ -96,18 +96,13 @@ export function validateAuthenticatedSession({
         }
       }
 
-      const redirectUrl = `${config.auth.path}?shop=${shop}`;
+      const redirectUri = `${config.auth.path}?shop=${shop}`;
       config.logger.info(
-        `Session was not valid. Redirecting to ${redirectUrl}`,
+        `Session was not valid. Redirecting to ${redirectUri}`,
         {shop},
       );
 
-      return returnTopLevelRedirection({
-        res,
-        config,
-        bearerPresent: Boolean(bearerPresent),
-        redirectUrl,
-      });
+      return redirectOutOfApp({config})({req, res, redirectUri, shop: shop!});
     };
   };
 }

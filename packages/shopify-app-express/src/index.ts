@@ -29,6 +29,8 @@ import {
   EnsureInstalledMiddleware,
   RedirectToShopifyOrAppRootMiddleware,
 } from './middlewares/types';
+import {redirectOutOfApp} from './redirect-out-of-app';
+import {RedirectOutOfAppFunction} from './types';
 
 export * from './types';
 export * from './auth/types';
@@ -47,6 +49,7 @@ export interface ShopifyApp<
   cspHeaders: CspHeadersMiddleware;
   ensureInstalledOnShop: EnsureInstalledMiddleware;
   redirectToShopifyOrAppRoot: RedirectToShopifyOrAppRootMiddleware;
+  redirectOutOfApp: RedirectOutOfAppFunction;
 }
 
 export function shopifyApp<
@@ -76,6 +79,7 @@ export function shopifyApp<
       api,
       config: validatedConfig,
     }),
+    redirectOutOfApp: redirectOutOfApp({config: validatedConfig}),
   };
 }
 
