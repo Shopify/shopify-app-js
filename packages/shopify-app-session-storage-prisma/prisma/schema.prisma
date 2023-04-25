@@ -8,12 +8,12 @@ datasource db {
 }
 
 model Session {
-  id               String    @id
-  shop             String
-  state            String
-  isOnline         Boolean   @default(false)
-  scope            String?
-  expires          DateTime?
-  accessToken      String
-  onlineAccessInfo String?
+  id          String    @id
+  shop        String
+  state       String
+  isOnline    Boolean   @default(false)
+  scope       String?
+  expires     DateTime?
+  accessToken String
+  userId      Int?
 }

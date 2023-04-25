@@ -6,14 +6,14 @@ Session storage for prisma requires a `schema.prisma` with a Session table with 
 
 ```prisma
 model Session {
-  id               String    @id
-  shop             String
-  state            String
-  isOnline         Boolean   @default(false)
-  scope            String?
-  expires          DateTime?
-  accessToken      String
-  onlineAccessInfo String?
+  id          String    @id
+  shop        String
+  state       String
+  isOnline    Boolean   @default(false)
+  scope       String?
+  expires     DateTime?
+  accessToken String
+  userId      Int?
 }
 ```
 

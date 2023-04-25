@@ -7,11 +7,12 @@ describe('PrismaSessionStorage', () => {
   const prisma = new PrismaClient();
 
   beforeAll(async () => {
+    // TODO: Run exec on prisma setup, look at postgresql.test.ts for example
     await prisma.session.deleteMany();
   });
 
   afterAll(async () => {
-    await prisma.session.deleteMany({});
+    await prisma.session.deleteMany();
   });
 
   batteryOfTests(async () => new PrismaSessionStorage(prisma));
