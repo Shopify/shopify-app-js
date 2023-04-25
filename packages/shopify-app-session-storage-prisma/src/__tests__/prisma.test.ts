@@ -1,14 +1,20 @@
+import * as child_process from 'child_process';
+import {promisify} from 'util';
+
 import {batteryOfTests} from '@shopify/shopify-app-session-storage-test-utils';
 import {PrismaClient} from '@prisma/client';
 
 import {PrismaSessionStorage} from '../prisma';
 
+const exec = promisify(child_process.exec);
+
 describe('PrismaSessionStorage', () => {
-  const prisma = new PrismaClient();
+  let prisma: PrismaClient;
 
   beforeAll(async () => {
-    // TODO: Run exec on prisma setup, look at postgresql.test.ts for example
-    await prisma.session.deleteMany();
+    await exec('npx prisma migrate dev', {encoding: 'utf8'});
+
+    prisma = new PrismaClient();
   });
 
   afterAll(async () => {
