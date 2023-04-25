@@ -1,5 +1,5 @@
 // import type {PrismaClient} from '@prisma/client';
-import {Session, SessionParams} from '@shopify/shopify-api';
+import {Session} from '@shopify/shopify-api';
 import {SessionStorage} from '@shopify/shopify-app-session-storage';
 import type {PrismaClient, Session as Row} from '@prisma/client';
 
@@ -64,26 +64,29 @@ export class PrismaSessionStorage implements SessionStorage {
 
   private sessionToRow(session: Session): Row {
     const sessionParams = session.toObject();
-
     return {
-      ...sessionParams,
+      id: session.id,
+      shop: session.shop,
+      state: session.state,
+      isOnline: session.isOnline,
       scope: session.scope || null,
-      expires: session.expires ? session.expires : null,
+      expires: session.expires || null,
       accessToken: session.accessToken || '',
-      onlineAccessInfo: sessionParams.onlineAccessInfo
-        ? JSON.stringify(sessionParams.onlineAccessInfo)
-        : null,
+      userId: sessionParams.onlineAccessInfo?.associated_user.id || null,
     };
   }
 
   private rowToSession(row: Row): Session {
-    const sessionParams: SessionParams = {
+    const sessionParams: {[key: string]: boolean | string | number} = {
       id: row.id,
       shop: row.shop,
       state: row.state,
       isOnline: row.isOnline,
-      expires: row.expires ? row.expires : undefined,
     };
+
+    if (row.expires) {
+      sessionParams.expires = row.expires.getTime();
+    }
 
     if (row.scope) {
       sessionParams.scope = row.scope;
@@ -93,10 +96,10 @@ export class PrismaSessionStorage implements SessionStorage {
       sessionParams.accessToken = row.accessToken;
     }
 
-    if (row.onlineAccessInfo) {
-      sessionParams.onlineAccessInfo = JSON.parse(row.onlineAccessInfo);
+    if (row.userId) {
+      sessionParams.onlineAccessInfo = String(row.userId);
     }
 
-    return new Session(sessionParams);
+    return Session.fromPropertyArray(Object.entries(sessionParams));
   }
 }
