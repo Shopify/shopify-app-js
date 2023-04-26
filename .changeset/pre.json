@@ -9,7 +9,7 @@
     "@shopify/shopify-app-session-storage-mongodb": "1.0.6",
     "@shopify/shopify-app-session-storage-mysql": "1.1.4",
     "@shopify/shopify-app-session-storage-postgresql": "1.1.2",
-    "@shopify/shopify-app-session-storage-prisma": "1.2.1",
+    "@shopify/shopify-app-session-storage-prisma": "0.0.0",
     "@shopify/shopify-app-session-storage-redis": "1.1.2",
     "@shopify/shopify-app-session-storage-sqlite": "1.2.1",
     "@shopify/shopify-app-session-storage-test-utils": "0.1.2"
