@@ -21,7 +21,7 @@ You can then instantiate and use `PrismaSessionStorage` like so:
 
 ```js
 import {shopifyApp} from '@shopify/shopify-app-express';
-import {SQLiteSessionStorage} from '@shopify/shopify-app-session-storage-prisma';
+import {PrismaSessionStorage} from '@shopify/shopify-app-session-storage-prisma';
 import {PrismaClient} from '@prisma/client';
 
 // You can construct using either a filename...
