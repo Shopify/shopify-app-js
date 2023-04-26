@@ -7017,10 +7017,10 @@ mustache@^4.2.0:
   resolved "https://registry.yarnpkg.com/mustache/-/mustache-4.2.0.tgz#e5892324d60a12ec9c2a73359edca52972bf6f64"
   integrity sha512-71ippSywq5Yb7/tVYyGbkBggbU8H3u5Rz56fH60jGFgr8uHwxs+aSKeqmluIVzM0m0kB7xQjKS6qPfd0b2ZoqQ==
 
-mysql2@^3.2.1:
-  version "3.2.1"
-  resolved "https://registry.yarnpkg.com/mysql2/-/mysql2-3.2.1.tgz#801497a8e6cb1d4b73a7e83bcd62344d4c6ce55e"
-  integrity sha512-o/5GH3/NwgOk6fO+AaVoZfyCAliFWUzTXaPUa80ZPzJFHy9kQyR/D2OSJW9gyB1TFATyY3ZsKY3/srZXMZCKUg==
+mysql2@^3.2.4:
+  version "3.2.4"
+  resolved "https://registry.yarnpkg.com/mysql2/-/mysql2-3.2.4.tgz#71493c13532500f6c4adf36078e8330782771785"
+  integrity sha512-VRjBMAB/WXd35cytsbKPy5eQMdHTQu661CcFAK+pcScVCfGpzQQR9EOM9H4z9tvEW0maVOjTAX0dqXneLX4kaQ==
   dependencies:
     denque "^2.1.0"
     generate-function "^2.3.1"
