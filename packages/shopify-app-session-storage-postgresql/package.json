@@ -34,7 +34,7 @@
   "dependencies": {
     "@shopify/shopify-api": "^7.0.0",
     "@shopify/shopify-app-session-storage": "^1.1.2",
-    "pg": "^8.9.0",
+    "pg": "^8.10.0",
     "pg-connection-string": "^2.5.0",
     "tslib": "^2.4.0"
   },
