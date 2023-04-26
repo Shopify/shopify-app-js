@@ -101,6 +101,12 @@ A function that returns an Express middleware that verifies that the request rec
 
 A function that returns an Express middleware that redirects the user to the app, embedding it into Shopify depending on `api.isEmbeddedApp`.
 
+### [redirectOutOfApp](./redirectOutOfApp.md)
+
+`(RedirectOutOfAppParams) => void`
+
+A function that redirects to any URL at the browser's top level, regardless of where the request originated from.
+
 ## Example
 
 ```ts

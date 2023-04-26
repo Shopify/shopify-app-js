@@ -46,9 +46,14 @@ export class PostgreSQLSessionStorage implements SessionStorage {
   private client: PostgresConnection;
   private migrator: PostgresSessionStorageMigrator;
 
-  constructor(dbUrl: URL, opts: Partial<PostgreSQLSessionStorageOptions> = {}) {
+  constructor(
+    dbUrl: URL | string,
+    opts: Partial<PostgreSQLSessionStorageOptions> = {},
+  ) {
     this.options = {...defaultPostgreSQLSessionStorageOptions, ...opts};
-    this.internalInit = this.init(dbUrl.toString());
+    this.internalInit = this.init(
+      typeof dbUrl === 'string' ? dbUrl : dbUrl.toString(),
+    );
     this.migrator = new PostgresSessionStorageMigrator(
       this.client,
       this.options.migratorOptions,

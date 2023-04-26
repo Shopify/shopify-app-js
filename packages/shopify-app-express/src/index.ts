@@ -29,6 +29,8 @@ import {
   EnsureInstalledMiddleware,
   RedirectToShopifyOrAppRootMiddleware,
 } from './middlewares/types';
+import {redirectOutOfApp} from './redirect-out-of-app';
+import {RedirectOutOfAppFunction} from './types';
 
 export * from './types';
 export * from './auth/types';
@@ -47,6 +49,7 @@ export interface ShopifyApp<
   cspHeaders: CspHeadersMiddleware;
   ensureInstalledOnShop: EnsureInstalledMiddleware;
   redirectToShopifyOrAppRoot: RedirectToShopifyOrAppRootMiddleware;
+  redirectOutOfApp: RedirectOutOfAppFunction;
 }
 
 export function shopifyApp<
@@ -76,6 +79,7 @@ export function shopifyApp<
       api,
       config: validatedConfig,
     }),
+    redirectOutOfApp: redirectOutOfApp({config: validatedConfig}),
   };
 }
 
@@ -130,28 +134,28 @@ function validateAppConfig<
 function overrideLoggerPackage(logger: Shopify['logger']): Shopify['logger'] {
   const baseContext = {package: 'shopify-app'};
 
-  const warningFunction: Shopify['logger']['warning'] = async (
+  const warningFunction: Shopify['logger']['warning'] = (
     message,
     context = {},
   ) => logger.warning(message, {...baseContext, ...context});
 
   return {
     ...logger,
-    log: async (severity, message, context = {}) =>
+    log: (severity, message, context = {}) =>
       logger.log(severity, message, {...baseContext, ...context}),
-    debug: async (message, context = {}) =>
+    debug: (message, context = {}) =>
       logger.debug(message, {...baseContext, ...context}),
-    info: async (message, context = {}) =>
+    info: (message, context = {}) =>
       logger.info(message, {...baseContext, ...context}),
     warning: warningFunction,
-    error: async (message, context = {}) =>
+    error: (message, context = {}) =>
       logger.error(message, {...baseContext, ...context}),
     deprecated: deprecated(warningFunction),
   };
 }
 
 function deprecated(warningFunction: Shopify['logger']['warning']) {
-  return async function (version: string, message: string): Promise<void> {
+  return function (version: string, message: string): Promise<void> {
     if (semver.gte(SHOPIFY_EXPRESS_LIBRARY_VERSION, version)) {
       throw new FeatureDeprecatedError(
         `Feature was deprecated in version ${version}`,

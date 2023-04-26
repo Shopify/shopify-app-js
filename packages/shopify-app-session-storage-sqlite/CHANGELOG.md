@@ -1,5 +1,14 @@
 # @shopify/shopify-app-session-storage-sqlite
 
+## 1.2.1
+
+### Patch Changes
+
+- e4f3415: Bump @shopify/shopify-api from 6.2.0 to 7.0.0. See [changelog](https://github.com/Shopify/shopify-api-js/blob/main/CHANGELOG.md) for details.
+- 9ebfdf1: Bump sqlite3 from 5.1.4 to 5.1.6. See sqlite3 [release notes](https://github.com/TryGhost/node-sqlite3/releases) for details.
+- Updated dependencies [e4f3415]
+  - @shopify/shopify-app-session-storage@1.1.2
+
 ## 1.2.0
 
 ### Minor Changes

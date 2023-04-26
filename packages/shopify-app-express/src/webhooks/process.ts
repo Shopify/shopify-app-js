@@ -13,9 +13,9 @@ export async function process({
       rawResponse: res,
     });
 
-    await config.logger.info('Webhook processed, returned status code 200');
+    config.logger.info('Webhook processed, returned status code 200');
   } catch (error) {
-    await config.logger.error(`Failed to process webhook: ${error}`);
+    config.logger.error(`Failed to process webhook: ${error}`);
 
     // The library will respond even if the handler throws an error
   }

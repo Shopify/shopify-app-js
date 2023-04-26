@@ -45,9 +45,14 @@ export class MySQLSessionStorage implements SessionStorage {
   private connection: MySqlConnection;
   private migrator: MySqlSessionStorageMigrator;
 
-  constructor(dbUrl: URL, opts: Partial<MySQLSessionStorageOptions> = {}) {
+  constructor(
+    dbUrl: URL | string,
+    opts: Partial<MySQLSessionStorageOptions> = {},
+  ) {
     this.options = {...defaultMySQLSessionStorageOptions, ...opts};
-    this.internalInit = this.init(dbUrl);
+    this.internalInit = this.init(
+      typeof dbUrl === 'string' ? new URL(dbUrl) : dbUrl,
+    );
     this.migrator = new MySqlSessionStorageMigrator(
       this.connection,
       this.options.migratorOptions,

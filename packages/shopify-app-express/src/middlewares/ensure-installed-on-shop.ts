@@ -82,7 +82,7 @@ export function deleteAppInstallationHandler(
     _body: any,
     _webhookId: string,
   ) {
-    await config.logger.debug('Deleting shop sessions', {shop});
+    config.logger.debug('Deleting shop sessions', {shop});
 
     await appInstallations.delete(shop);
   };

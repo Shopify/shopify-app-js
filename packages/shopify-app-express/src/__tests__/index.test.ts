@@ -64,14 +64,14 @@ describe('shopifyApp', () => {
   it('properly sets the package in log calls', async () => {
     const shopify = shopifyApp(testConfig);
 
-    await shopify.config.logger.info('test');
+    shopify.config.logger.info('test');
 
     expect(shopify.api.config.logger.log).toHaveBeenCalledWith(
       LogSeverity.Info,
       '[shopify-app/INFO] test',
     );
 
-    await shopify.config.logger.info('test', {extra: 'context'});
+    shopify.config.logger.info('test', {extra: 'context'});
 
     expect(shopify.api.config.logger.log).toHaveBeenCalledWith(
       LogSeverity.Info,
@@ -82,7 +82,7 @@ describe('shopifyApp', () => {
   it('properly logs deprecation messages', async () => {
     const shopify = shopifyApp(testConfig);
 
-    await shopify.config.logger.deprecated('9999.0.0', 'test');
+    shopify.config.logger.deprecated('9999.0.0', 'test');
 
     expect(shopify.api.config.logger.log).toHaveBeenCalledWith(
       LogSeverity.Warning,
@@ -93,8 +93,8 @@ describe('shopifyApp', () => {
   it('throws when deprecation version is reached', async () => {
     const shopify = shopifyApp(testConfig);
 
-    await expect(
+    expect(() =>
       shopify.config.logger.deprecated(SHOPIFY_EXPRESS_LIBRARY_VERSION, 'test'),
-    ).rejects.toThrow(FeatureDeprecatedError);
+    ).toThrow(FeatureDeprecatedError);
   });
 });

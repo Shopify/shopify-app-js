@@ -1,5 +1,11 @@
 # @shopify/shopify-app-session-storage
 
+## 1.1.2
+
+### Patch Changes
+
+- e4f3415: Bump @shopify/shopify-api from 6.2.0 to 7.0.0. See [changelog](https://github.com/Shopify/shopify-api-js/blob/main/CHANGELOG.md) for details.
+
 ## 1.1.1
 
 ### Patch Changes
