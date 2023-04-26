@@ -15,8 +15,6 @@
     "@shopify/shopify-app-session-storage-test-utils": "0.1.2"
   },
   "changesets": [
-    "empty-snakes-deny",
-    "four-ravens-rest",
-    "nervous-stingrays-begin"
+    "four-ravens-rest"
   ]
 }
