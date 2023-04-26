@@ -34,7 +34,7 @@
   "dependencies": {
     "@shopify/shopify-api": "^7.0.0",
     "@shopify/shopify-app-session-storage": "^1.1.2",
-    "semver": "^7.4.0",
+    "semver": "^7.5.0",
     "tslib": "^2.4.0"
   },
   "devDependencies": {
