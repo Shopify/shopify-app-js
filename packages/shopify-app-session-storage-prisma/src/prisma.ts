@@ -3,10 +3,10 @@ import {Session} from '@shopify/shopify-api';
 import {SessionStorage} from '@shopify/shopify-app-session-storage';
 import type {PrismaClient, Session as Row} from '@prisma/client';
 
-export class PrismaSessionStorage implements SessionStorage {
-  constructor(
-    private prisma: PrismaClient | (PrismaClient & {[key: string]: unknown}),
-  ) {
+export class PrismaSessionStorage<T extends PrismaClient>
+  implements SessionStorage
+{
+  constructor(private prisma: T) {
     if (this.prisma.session === undefined) {
       throw new Error('PrismaClient does not have a Session table');
     }
