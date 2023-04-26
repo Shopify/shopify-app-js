@@ -31,13 +31,13 @@
     "Prisma"
   ],
   "dependencies": {
-    "@prisma/client": "^4.13.0",
-    "prisma": "^4.13.0",
     "tslib": "^2.4.0"
   },
   "peerDependencies": {
+    "@prisma/client": "^4.13.0",
     "@shopify/shopify-api": "^7.0.0",
-    "@shopify/shopify-app-session-storage": "^1.1.2"
+    "@shopify/shopify-app-session-storage": "^1.1.2",
+    "prisma": "^4.13.0"
   },
   "devDependencies": {
     "@shopify/eslint-plugin": "^42.1.0",
