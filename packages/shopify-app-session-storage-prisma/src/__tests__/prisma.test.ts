@@ -21,5 +21,5 @@ describe('PrismaSessionStorage', () => {
     await prisma.session.deleteMany();
   });
 
-  batteryOfTests(async () => new PrismaSessionStorage(prisma));
+  batteryOfTests(async () => new PrismaSessionStorage<PrismaClient>(prisma));
 });
