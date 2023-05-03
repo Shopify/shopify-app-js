@@ -13,7 +13,7 @@ model Session {
   scope       String?
   expires     DateTime?
   accessToken String
-  userId      Int?
+  userId      BigInt?
 }
 ```
 
@@ -24,7 +24,6 @@ import {shopifyApp} from '@shopify/shopify-app-express';
 import {PrismaSessionStorage} from '@shopify/shopify-app-session-storage-prisma';
 import {PrismaClient} from '@prisma/client';
 
-// You can construct using either a filename...
 const prisma = new PrismaClient();
 const storage = new PrismaSessionStorage(prisma);
 
