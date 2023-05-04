@@ -37,7 +37,7 @@ The shop for this request.
 
 ## Example
 
-The following example shows how to setup handlers for the mandatory GDPR webhooks.
+The following example shows how to redirect out of the app for requests that render HTML or return JSON data.
 
 ```ts
 const shopify = shopifyApp({});
