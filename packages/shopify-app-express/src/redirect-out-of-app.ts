@@ -29,7 +29,7 @@ function appBridgeHeaderRedirect(
   res.status(403);
   res.append('Access-Control-Expose-Headers', [
     'X-Shopify-Api-Request-Failure-Reauthorize',
-    'X-Shopify-Api-Request-Failure-Reauthorize-Url'
+    'X-Shopify-Api-Request-Failure-Reauthorize-Url',
   ]);
   res.header('X-Shopify-API-Request-Failure-Reauthorize', '1');
   res.header('X-Shopify-API-Request-Failure-Reauthorize-Url', redirectUri);
