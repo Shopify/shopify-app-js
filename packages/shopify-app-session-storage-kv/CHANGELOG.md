@@ -7,7 +7,6 @@
 - e1d4f4f: Add @shopify/shopify-api as a peerDependencies entry for each session-storage package, to avoid API library conflicts (e.g., scopesArray.map error). Should help avoid issues like #93
 - f40fede: Bumps [semver](https://github.com/npm/node-semver) from 7.4.0 to 7.5.0. See semver [changelog](https://github.com/npm/node-semver/blob/main/CHANGELOG.md) for more details.
 - 1d007e8: Bumps [@shopify/shopify-api](https://github.com/Shopify/shopify-api-js) from 7.0.0 to 7.1.0. See `@shopify/shopify-api`'s [changelog](https://github.com/Shopify/shopify-api-js/blob/main/CHANGELOG.md) for more details.
-- Updated dependencies [e1d4f4f]
 - Updated dependencies [1d007e8]
   - @shopify/shopify-app-session-storage@1.1.3
 
