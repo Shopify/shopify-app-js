@@ -1,6 +1,6 @@
 # @shopify/shopify-app-session-storage-prisma
 
-## 1.0.0-rc.1
+## 1.0.0-rc.2
 
 ### Major Changes
 
