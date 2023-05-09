@@ -1,5 +1,11 @@
 # @shopify/shopify-app-session-storage-prisma
 
+## 1.0.0-rc.2
+
+### Major Changes
+
+- 511e83d: Use BigInt for userID rather than Int
+
 ## 1.0.0-rc.0
 
 ### Major Changes
