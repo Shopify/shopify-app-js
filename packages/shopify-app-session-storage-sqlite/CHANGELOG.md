@@ -1,5 +1,13 @@
 # @shopify/shopify-app-session-storage-sqlite
 
+## 1.2.2-rc.0
+
+### Patch Changes
+
+- e1d4f4f: Add @shopify/shopify-api as a peerDependencies entry for each session-storage package, to avoid API library conflicts (e.g., scopesArray.map error). Should help avoid issues like #93
+- Updated dependencies [e1d4f4f]
+  - @shopify/shopify-app-session-storage@1.1.3-rc.0
+
 ## 1.2.1
 
 ### Patch Changes

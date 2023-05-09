@@ -1,5 +1,14 @@
 # Changelog
 
+## 2.1.1-rc.0
+
+### Patch Changes
+
+- f40fede: Bumps [semver](https://github.com/npm/node-semver) from 7.4.0 to 7.5.0. See semver [changelog](https://github.com/npm/node-semver/blob/main/CHANGELOG.md) for more details.
+- Updated dependencies [e1d4f4f]
+  - @shopify/shopify-app-session-storage@1.1.3-rc.0
+  - @shopify/shopify-app-session-storage-memory@1.0.6-rc.0
+
 ## 2.1.0
 
 ### Minor Changes

@@ -1,5 +1,14 @@
 # @shopify/shopify-app-session-storage-kv
 
+## 1.0.6-rc.0
+
+### Patch Changes
+
+- e1d4f4f: Add @shopify/shopify-api as a peerDependencies entry for each session-storage package, to avoid API library conflicts (e.g., scopesArray.map error). Should help avoid issues like #93
+- f40fede: Bumps [semver](https://github.com/npm/node-semver) from 7.4.0 to 7.5.0. See semver [changelog](https://github.com/npm/node-semver/blob/main/CHANGELOG.md) for more details.
+- Updated dependencies [e1d4f4f]
+  - @shopify/shopify-app-session-storage@1.1.3-rc.0
+
 ## 1.0.5
 
 ### Patch Changes

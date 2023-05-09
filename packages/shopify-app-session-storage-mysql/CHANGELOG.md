@@ -1,5 +1,14 @@
 # @shopify/shopify-app-session-storage-mysql
 
+## 1.1.5-rc.0
+
+### Patch Changes
+
+- e1d4f4f: Add @shopify/shopify-api as a peerDependencies entry for each session-storage package, to avoid API library conflicts (e.g., scopesArray.map error). Should help avoid issues like #93
+- 2dd9ba5: Bumps [mysql2](Bumps mysql2 from 3.2.1 to 3.2.4.) from 3.2.1 to 3.2.4. See mysql2 [changelog](https://github.com/sidorares/node-mysql2/blob/master/Changelog.md) for more details.
+- Updated dependencies [e1d4f4f]
+  - @shopify/shopify-app-session-storage@1.1.3-rc.0
+
 ## 1.1.4
 
 ### Patch Changes
