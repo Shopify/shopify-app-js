@@ -15,16 +15,6 @@
     "@shopify/shopify-app-session-storage-test-utils": "0.1.2"
   },
   "changesets": [
-    "beige-llamas-kiss",
-    "clever-maps-invite",
-    "four-ravens-rest",
-    "fuzzy-taxis-smoke",
-    "hip-cooks-pump",
-    "polite-chicken-exercise",
-    "proud-clocks-explode",
-    "slimy-balloons-rescue",
-    "smooth-files-think",
-    "thin-papayas-peel",
-    "young-flowers-behave"
+    "four-ravens-rest"
   ]
 }
