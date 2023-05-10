@@ -14,7 +14,7 @@
     "@changesets/cli": "^2.26.1",
     "@shopify/eslint-plugin": "^42.1.0",
     "@shopify/loom": "^1.0.2",
-    "@shopify/loom-cli": "^1.0.2",
+    "@shopify/loom-cli": "^1.1.0",
     "@shopify/loom-plugin-build-library": "^1.0.3",
     "@shopify/loom-plugin-eslint": "^2.0.1",
     "@shopify/loom-plugin-jest": "^1.0.2",

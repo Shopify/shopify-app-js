@@ -2178,10 +2178,10 @@
     pkg-dir "^5.0.0"
     pluralize "^8.0.0"
 
-"@shopify/loom-cli@^1.0.2":
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/@shopify/loom-cli/-/loom-cli-1.0.2.tgz#69919b87e5ad5b7625addf52c6e5534a7981d9ee"
-  integrity sha512-Tph5Clg9WLpk+4Clzk9YjE9MBc08NI5fHly+mECBH7YuQy3z0u0tqwBrFFy2ZscayP6li8pJTjp2nqup6U8AXg==
+"@shopify/loom-cli@^1.1.0":
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/@shopify/loom-cli/-/loom-cli-1.1.0.tgz#e92f423a26f00c33b7c247a65667a8ff9bd1e8f8"
+  integrity sha512-TsilrMqCRX1gztwfUmuxqDUf/z4Ofa5tk8JD3x4E3cRNp+J4zmQamIqsZqib7cdqIecxIEPnuJ+nDSssSeQFeg==
   dependencies:
     "@shopify/loom" "^1.0.2"
     "@types/signal-exit" "^3.0.0"
