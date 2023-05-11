@@ -4,6 +4,7 @@
 
 ### Major Changes
 
+- a2e5076: Bump @shopify/shopify-api and @shopify/shopify-app/session-storage dependencies
 - 511e83d: Use BigInt for userID rather than Int
 
 ## 1.0.0-rc.0
