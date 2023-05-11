@@ -1,5 +1,6 @@
 import {Request, Response} from 'express';
 import {
+  BotActivityDetected,
   CookieNotFound,
   gdprTopics,
   InvalidOAuthError,
@@ -117,6 +118,10 @@ async function handleCallbackError(
       break;
     case error instanceof CookieNotFound:
       await redirectToAuth({req, res, api, config});
+      break;
+    case error instanceof BotActivityDetected:
+      res.status(410);
+      res.send(error.message);
       break;
     default:
       res.status(500);
