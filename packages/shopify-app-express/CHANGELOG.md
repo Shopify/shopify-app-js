@@ -1,5 +1,18 @@
 # Changelog
 
+## 2.1.1
+
+### Patch Changes
+
+- f8978a5: Add `X-Shopify-Api-Request-Failure-Reauthorize` and `X-Shopify-Api-Request-Failure-Reauthorize-Url` to `Access-Control-Expose-Headers` when redirecting using headers via App Bridge.
+- 553fd67: Respond with 410 to OAuth requests that are initiated by a bot, using bot detection mechanism introduced in 7.1.0 of API library.
+- f40fede: Bumps [semver](https://github.com/npm/node-semver) from 7.4.0 to 7.5.0. See semver [changelog](https://github.com/npm/node-semver/blob/main/CHANGELOG.md) for more details.
+- 1d007e8: Bumps [@shopify/shopify-api](https://github.com/Shopify/shopify-api-js) from 7.0.0 to 7.1.0. See `@shopify/shopify-api`'s [changelog](https://github.com/Shopify/shopify-api-js/blob/main/CHANGELOG.md) for more details.
+- Updated dependencies [e1d4f4f]
+- Updated dependencies [1d007e8]
+  - @shopify/shopify-app-session-storage@1.1.3
+  - @shopify/shopify-app-session-storage-memory@1.0.6
+
 ## 2.1.0
 
 ### Minor Changes
