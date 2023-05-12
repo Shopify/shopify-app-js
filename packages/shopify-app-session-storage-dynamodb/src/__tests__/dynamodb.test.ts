@@ -22,6 +22,14 @@ describe('DynamoDBSessionStorage', () => {
 
   let containerId: string;
   beforeAll(async () => {
+    const dynamoDBClientConfig = {
+      endpoint: 'http://localhost:8000',
+      region: 'us-west-2',
+      credentials: {
+        accessKeyId: 'shopify',
+        secretAccessKey: 'passify',
+      },
+    };
     const runCommand = await exec(
       'podman run -d -e AWS_ACCESS_KEY_ID=shopify -e AWS_SECRET_ACCESS_KEY=passify -p 8000:8000 amazon/dynamodb-local',
       {encoding: 'utf8'},
@@ -31,14 +39,7 @@ describe('DynamoDBSessionStorage', () => {
     await poll(
       async () => {
         try {
-          const client = new DynamoDBClient({
-            endpoint: 'http://localhost:8000',
-            region: 'us-west-2',
-            credentials: {
-              accessKeyId: 'shopify',
-              secretAccessKey: 'passify',
-            },
-          });
+          const client = new DynamoDBClient(dynamoDBClientConfig);
           await client.send(
             new CreateTableCommand({
               TableName: sessionTableName,
@@ -80,14 +81,7 @@ describe('DynamoDBSessionStorage', () => {
     storage = new DynamoDBSessionStorage({
       sessionTableName,
       shopIndexName,
-      config: {
-        endpoint: 'http://localhost:8000',
-        region: 'us-west-2',
-        credentials: {
-          accessKeyId: 'shopify',
-          secretAccessKey: 'passify',
-        },
-      },
+      config: dynamoDBClientConfig,
     });
   });
 
