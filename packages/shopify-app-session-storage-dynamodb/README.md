@@ -2,6 +2,8 @@
 
 This package implements the `SessionStorage` interface that works with an AWS DynamoDB database.
 
+Contributed by [Chris](https://github.com/zirkelc) - thank you :clap:
+
 ```js
 import {shopifyApp} from '@shopify/shopify-app-express';
 import {DynamoDBSessionStorage} from '@shopify/shopify-app-session-storage-dynamodb';
