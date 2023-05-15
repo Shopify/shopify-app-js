@@ -64,6 +64,7 @@ export class PrismaSessionStorage<T extends PrismaClient>
 
   private sessionToRow(session: Session): Row {
     const sessionParams = session.toObject();
+
     return {
       id: session.id,
       shop: session.shop,
@@ -72,7 +73,9 @@ export class PrismaSessionStorage<T extends PrismaClient>
       scope: session.scope || null,
       expires: session.expires || null,
       accessToken: session.accessToken || '',
-      userId: sessionParams.onlineAccessInfo?.associated_user.id || null,
+      userId:
+        (sessionParams.onlineAccessInfo?.associated_user
+          .id as unknown as bigint) || null,
     };
   }
 
