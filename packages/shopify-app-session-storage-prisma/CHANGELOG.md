@@ -1,5 +1,11 @@
 # @shopify/shopify-app-session-storage-prisma
 
+## 1.0.0-rc.3
+
+### Major Changes
+
+- 5fd515f: Add export of types to package. Fix number to bigint type mismatch.
+
 ## 1.0.0-rc.2
 
 ### Major Changes
