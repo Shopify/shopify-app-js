@@ -8,6 +8,7 @@
     {"path": "./packages/shopify-app-session-storage-mongodb"},
     {"path": "./packages/shopify-app-session-storage-mysql"},
     {"path": "./packages/shopify-app-session-storage-postgresql"},
+    {"path": "./packages/shopify-app-session-storage-prisma"},
     {"path": "./packages/shopify-app-session-storage-redis"},
     {"path": "./packages/shopify-app-session-storage-sqlite"},
     {"path": "./packages/shopify-app-session-storage-kv"},
