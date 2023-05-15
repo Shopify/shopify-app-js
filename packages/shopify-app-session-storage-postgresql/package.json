@@ -33,7 +33,7 @@
   ],
   "dependencies": {
     "pg": "^8.10.0",
-    "pg-connection-string": "^2.5.0",
+    "pg-connection-string": "^2.6.0",
     "tslib": "^2.4.0"
   },
   "peerDependencies": {
