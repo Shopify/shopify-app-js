@@ -1,5 +1,11 @@
 # @shopify/shopify-app-session-storage-mysql
 
+## 1.1.6
+
+### Patch Changes
+
+- f5bb9f1: Bumps [mysql2](https://github.com/sidorares/node-mysql2) from 3.3.0 to 3.3.1. See mysql2's [changelog](https://github.com/sidorares/node-mysql2/blob/master/Changelog.md) for more details.
+
 ## 1.1.5
 
 ### Patch Changes

@@ -4,4 +4,4 @@
 
 ### Major Changes
 
-- : Initial public release of @shopify/shopify-app-session-storage-dynamodb
+- 3d92b70: Implementation of @shopify/shopify-app-session-storage-dynamodb for AWS DynamoDB
