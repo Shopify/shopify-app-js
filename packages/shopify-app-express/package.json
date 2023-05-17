@@ -1,6 +1,6 @@
 {
   "name": "@shopify/shopify-app-express",
-  "version": "2.1.1",
+  "version": "2.1.2",
   "description": "Shopify Express Middleware - to simplify the building of Shopify Apps with Express",
   "repository": {
     "type": "git",
