@@ -1,5 +1,11 @@
 # @shopify/shopify-app-session-storage-kv
 
+## 1.0.7
+
+### Patch Changes
+
+- 2f10cdd: Bumps [semver](https://github.com/npm/node-semver) from 7.5.0 to 7.5.1. See `semver`'s [release notes](https://github.com/npm/node-semver/releases) for more details.
+
 ## 1.0.6
 
 ### Patch Changes

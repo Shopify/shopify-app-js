@@ -1,6 +1,6 @@
 {
   "name": "@shopify/shopify-app-session-storage-kv",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "Shopify App Session Storage for KV",
   "repository": {
     "type": "git",
