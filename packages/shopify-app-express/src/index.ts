@@ -93,12 +93,15 @@ function apiConfigWithDefaults<R extends ShopifyRestResources>(
   }
 
   /* eslint-disable no-process-env */
+  const appUrl = process.env.SHOPIFY_APP_URL || process.env.HOST;
+
   return {
-    apiKey: process.env.SHOPIFY_API_KEY!,
-    apiSecretKey: process.env.SHOPIFY_API_SECRET!,
-    scopes: process.env.SCOPES?.split(',')!,
-    hostScheme: (process.env.HOST?.split('://')[0] as 'http' | 'https')!,
-    hostName: process.env.HOST?.replace(/https?:\/\//, '')!,
+    apiKey: (process.env.SHOPIFY_APP_API_KEY || process.env.SHOPIFY_API_KEY)!,
+    apiSecretKey: (process.env.SHOPIFY_APP_API_SECRET ||
+      process.env.SHOPIFY_API_SECRET)!,
+    scopes: (process.env.SHOPIFY_APP_SCOPES || process.env.SCOPES)?.split(',')!,
+    hostScheme: (appUrl?.split('://')[0] as 'http' | 'https')!,
+    hostName: appUrl?.replace(/https?:\/\//, '')!,
     isEmbeddedApp: true,
     apiVersion: LATEST_API_VERSION,
     ...(process.env.SHOP_CUSTOM_DOMAIN && {

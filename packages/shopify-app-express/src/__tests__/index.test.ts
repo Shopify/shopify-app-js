@@ -37,6 +37,32 @@ describe('shopifyApp', () => {
 
   it('properly defaults missing configs based on env vars', () => {
     /* eslint-disable no-process-env */
+    process.env.SHOPIFY_APP_API_KEY = 'envKey';
+    process.env.SHOPIFY_APP_API_SECRET = 'envSecret';
+    process.env.SHOPIFY_APP_SCOPES = 'envScope1,envScope2';
+    process.env.SHOPIFY_APP_URL = 'https://envHost';
+    process.env.SHOP_CUSTOM_DOMAIN = '*.envCustomDomain';
+
+    const shopify = shopifyApp({
+      auth: testConfig.auth,
+      webhooks: testConfig.webhooks,
+      api: {
+        logger: testConfig.api.logger,
+      },
+    });
+
+    expect(shopify).toBeDefined();
+    expect(shopify.api.config.apiKey).toEqual('envKey');
+    expect(shopify.api.config.apiSecretKey).toEqual('envSecret');
+    expect(shopify.api.config.scopes.toString()).toEqual('envScope1,envScope2');
+    expect(shopify.api.config.hostName).toEqual('envHost');
+    expect(shopify.api.config.hostScheme).toEqual('https');
+    expect(shopify.api.config.customShopDomains).toEqual(['*.envCustomDomain']);
+    /* eslint-enable no-process-env */
+  });
+
+  it('properly falls back to the deprecated CLI env vars', () => {
+    /* eslint-disable no-process-env */
     process.env.SHOPIFY_API_KEY = 'envKey';
     process.env.SHOPIFY_API_SECRET = 'envSecret';
     process.env.SCOPES = 'envScope1,envScope2';
