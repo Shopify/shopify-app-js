@@ -33,7 +33,7 @@
   ],
   "dependencies": {
     "semver": "^7.5.1",
-    "tslib": "^2.4.0"
+    "tslib": "^2.5.2"
   },
   "peerDependencies": {
     "@shopify/shopify-api": "^7.1.0",
