@@ -1,5 +1,15 @@
 # Changelog
 
+## 2.1.3
+
+### Patch Changes
+
+- bf91be6: [Internal] Improved tracking of GraphQL calls made by the package
+- b3453ff: Bumping @shopify/shopify-api dependency to latest version
+- Updated dependencies [b3453ff]
+  - @shopify/shopify-app-session-storage-memory@1.0.7
+  - @shopify/shopify-app-session-storage@1.1.4
+
 ## 2.1.2
 
 ### Patch Changes
