@@ -11,7 +11,11 @@ module.exports = {
   },
   overrides: [
     {
-      files: ['packages/*/loom.config.ts', 'tests/setup/setup-jest.ts'],
+      files: [
+        'packages/*/loom.config.ts',
+        '**/setup-jest.ts',
+        'packages/shopify-app-express/src/__tests__/test-helper.ts',
+      ],
       rules: {
         'import/no-extraneous-dependencies': 0,
       },
