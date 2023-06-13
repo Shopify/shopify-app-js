@@ -102,9 +102,7 @@ describe('process', () => {
 
     expect(shopify.api.config.logger.log as jest.Mock).toHaveBeenCalledWith(
       LogSeverity.Error,
-      expect.stringContaining(
-        'Could not validate request for topic TEST_TOPIC',
-      ),
+      expect.stringContaining('Could not validate request HMAC'),
     );
   });
 
