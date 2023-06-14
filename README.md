@@ -19,6 +19,10 @@ This mono-repo supports the following packages:
 
 - You can assign any implementation of this interface to the `@shopify/shopify-app-express` package. You can also call them directly from your app even if you're not building with [Express.js](https://expressjs.com).
 
+#### [`@shopify/shopify-app-session-storage-prisma`](./packages/shopify-app-session-storage-prisma)
+
+- Provides an implementation of `SessionStorage` that uses [Prisma](https://www.prisma.io/).
+
 #### [`@shopify/shopify-app-session-storage-memory`](./packages/shopify-app-session-storage-memory)
 
 - Provides a simplified memory-based implementation of `SessionStorage` for development.
