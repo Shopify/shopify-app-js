@@ -4,4 +4,4 @@
 
 ### Major Changes
 
-- Initial public release of @shopify/shopify-app-session-storage-prisma
+- Initial release of @shopify/shopify-app-session-storage-prisma
