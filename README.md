@@ -13,11 +13,9 @@ This mono-repo supports the following packages:
 
 ## Session storage options
 
-#### [`@shopify/shopify-app-session-storage`](./packages/shopify-app-session-storage)
+#### [`@shopify/shopify-app-session-storage-prisma`](./packages/shopify-app-session-storage-prisma)
 
-- Provides an interface that enables apps to store the sessions created during the OAuth process in `@shopify/shopify-api`.
-
-- You can assign any implementation of this interface to the `@shopify/shopify-app-express` package. You can also call them directly from your app even if you're not building with [Express.js](https://expressjs.com).
+- Provides an implementation of `SessionStorage` that uses [Prisma](https://www.prisma.io/).
 
 #### [`@shopify/shopify-app-session-storage-memory`](./packages/shopify-app-session-storage-memory)
 
@@ -46,6 +44,14 @@ This mono-repo supports the following packages:
 #### [`@shopify/shopify-app-session-storage-kv`](./packages/shopify-app-session-storage-kv)
 
 - Provides an implementation of `SessionStorage` that uses [CloudFlare KV storage](https://www.cloudflare.com/products/workers-kv).
+
+### Building a Session Storage Adaptor
+
+#### [`@shopify/shopify-app-session-storage`](./packages/shopify-app-session-storage)
+
+- Provides an interface that enables apps to store the sessions created during the OAuth process in `@shopify/shopify-api`.
+
+- You can assign any implementation of this interface to the `@shopify/shopify-app-express` package. You can also call them directly from your app even if you're not building with [Express.js](https://expressjs.com).
 
 ### Community contributed implementations of `SessionStorage`
 
