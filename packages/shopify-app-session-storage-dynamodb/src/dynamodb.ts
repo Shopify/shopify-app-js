@@ -105,7 +105,7 @@ export class DynamoDBSessionStorage implements SessionStorage {
   private serializeSession(session: Session): {[key: string]: AttributeValue} {
     // DynamoDB doesn't support Date objects, so we need to convert it to an ISO string
     const rawSession = {
-      ...session.toObject(),
+      ...typeof session === "object" ? session : session.toObject(),
       expires: session.expires?.toISOString(),
     };
 
