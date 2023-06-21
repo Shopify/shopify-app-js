@@ -11,9 +11,9 @@ import {
 import {SessionStorage} from '@shopify/shopify-app-session-storage';
 import {SQLiteSessionStorage} from '@shopify/shopify-app-session-storage-sqlite';
 
-import {AppConfig, AppConfigArg} from './config-types';
+import type {AppConfig, AppConfigArg} from './config-types';
+import type {BasicParams, MandatoryTopics, ShopifyApp} from './types';
 import {SHOPIFY_REMIX_LIBRARY_VERSION} from './version';
-import {BasicParams, MandatoryTopics, ShopifyApp} from './types';
 import {registerWebhooksFactory} from './auth/webhooks';
 import {AuthStrategy} from './auth/admin/authenticate';
 import {authenticateWebhookFactory} from './auth/webhooks/authenticate';
@@ -24,7 +24,7 @@ import {
   installGlobalResponseHeaders,
 } from './auth/helpers/add-response-headers';
 
-export {ShopifyApp} from './types';
+export type {ShopifyApp} from './types';
 
 export {
   LATEST_API_VERSION,

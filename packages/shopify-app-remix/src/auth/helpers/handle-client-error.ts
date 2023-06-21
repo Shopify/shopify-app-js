@@ -1,6 +1,6 @@
 import {HttpResponseError} from '@shopify/shopify-api';
 
-import {BasicParams} from '../../types';
+import type {BasicParams} from '../../types';
 
 import {redirectToAuthPage} from './redirect-to-auth-page';
 

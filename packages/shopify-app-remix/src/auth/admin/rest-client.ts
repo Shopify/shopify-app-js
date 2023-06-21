@@ -9,7 +9,7 @@ import {
   ShopifyRestResources,
 } from '@shopify/shopify-api';
 
-import {BasicParams} from '../../types';
+import type {BasicParams} from '../../types';
 import {handleClientError} from '../helpers';
 
 interface RestClientOptions {
