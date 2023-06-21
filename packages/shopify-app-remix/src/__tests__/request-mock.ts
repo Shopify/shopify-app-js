@@ -10,15 +10,15 @@ interface ResponseParams {
   init: MockParams;
 }
 
-let REQUEST_MOCKS: MockExternalRequestArg[] = [];
+let requestMocks: MockExternalRequestArg[] = [];
 
-let SKIP_MOCK_CHECKS = false;
+let skipMockChecksFlag = false;
 
 export async function mockExternalRequest({
   request,
   response,
 }: MockExternalRequestArg) {
-  REQUEST_MOCKS.push({request, response});
+  requestMocks.push({request, response});
 
   const {body, init} = await mockParams(response);
   fetchMock.mockResponse(body, init);
@@ -29,7 +29,7 @@ export async function mockExternalRequests(...mocks: MockExternalRequestArg[]) {
   for (const mock of mocks) {
     const {request, response} = mock;
 
-    REQUEST_MOCKS.push({request, response});
+    requestMocks.push({request, response});
 
     const {body, init} = await mockParams(response);
     parsedResponses.push([body, init]);
@@ -51,13 +51,13 @@ async function mockParams(response: Response): Promise<ResponseParams> {
 }
 
 export async function validateMocks() {
-  if (REQUEST_MOCKS.length === 0 && fetchMock.mock.calls.length === 0) {
+  if (requestMocks.length === 0 && fetchMock.mock.calls.length === 0) {
     return;
   }
 
-  let matchedRequests: number = 0;
+  let matchedRequests = 0;
 
-  for (const [index, requestMock] of REQUEST_MOCKS.entries()) {
+  for (const [index, requestMock] of requestMocks.entries()) {
     const {request} = requestMock;
 
     if (fetchMock.mock.calls.length === 0) {
@@ -106,12 +106,12 @@ export async function validateMocks() {
     }
   }
 
-  if (REQUEST_MOCKS.length > matchedRequests) {
+  if (requestMocks.length > matchedRequests) {
     throw new Error(
       `Expected ${
-        REQUEST_MOCKS.length
+        requestMocks.length
       } request(s) to be made but they were not:\n\n${JSON.stringify(
-        REQUEST_MOCKS,
+        requestMocks,
         null,
         2,
       )}`,
@@ -132,17 +132,17 @@ export async function validateMocks() {
 }
 
 export function skipMockChecks(value: boolean) {
-  SKIP_MOCK_CHECKS = value;
+  skipMockChecksFlag = value;
 }
 
 beforeEach(() => {
-  SKIP_MOCK_CHECKS = false;
-  REQUEST_MOCKS = [];
+  skipMockChecksFlag = false;
+  requestMocks = [];
   fetchMock.resetMocks();
 });
 
 afterEach(async () => {
-  if (!SKIP_MOCK_CHECKS) {
+  if (!skipMockChecksFlag) {
     await validateMocks();
   }
 });

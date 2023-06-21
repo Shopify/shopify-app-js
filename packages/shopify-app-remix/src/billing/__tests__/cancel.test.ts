@@ -90,7 +90,7 @@ describe('Cancel billing', () => {
     // WHEN
     const response = await getThrownResponse(
       async () =>
-        await billing.cancel({
+        billing.cancel({
           subscriptionId: '123',
           isTest: true,
           prorate: true,
@@ -125,7 +125,7 @@ describe('Cancel billing', () => {
     // WHEN
     const response = await getThrownResponse(
       async () =>
-        await billing.cancel({
+        billing.cancel({
           subscriptionId: '123',
           isTest: true,
           prorate: true,
@@ -161,7 +161,7 @@ describe('Cancel billing', () => {
     // WHEN
     const response = await getThrownResponse(
       async () =>
-        await billing.cancel({
+        billing.cancel({
           subscriptionId: '123',
           isTest: true,
           prorate: true,

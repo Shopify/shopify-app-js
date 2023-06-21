@@ -5,9 +5,10 @@ import {
 } from '@shopify/shopify-api';
 
 import {BasicParams} from '../types';
-import {RequireBillingOptions} from './types';
 import {AppConfigArg} from '../config-types';
 import {redirectToAuthPage} from '../auth/helpers';
+
+import {RequireBillingOptions} from './types';
 
 export function requireBillingFactory<Config extends AppConfigArg>(
   params: BasicParams,

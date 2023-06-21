@@ -97,9 +97,11 @@ function deriveApi<Resources extends ShopifyRestResources>(
     );
   }
 
+  /* eslint-disable no-process-env */
   if (appUrl.hostname === 'localhost' && !appUrl.port && process.env.PORT) {
     appUrl.port = process.env.PORT;
   }
+  /* eslint-enable no-process-env */
   appConfig.appUrl = appUrl.origin;
 
   let userAgentPrefix = `Shopify Remix Library v${SHOPIFY_REMIX_LIBRARY_VERSION}`;
@@ -134,9 +136,9 @@ function deriveConfig<Storage extends SessionStorage>(
       new SQLiteSessionStorage('database.sqlite')) as unknown as Storage,
     auth: {
       path: authPathPrefix,
-      callbackPath: authPathPrefix + '/callback',
-      patchSessionTokenPath: authPathPrefix + '/session-token',
-      exitIframePath: authPathPrefix + '/exit-iframe',
+      callbackPath: `${authPathPrefix}/callback`,
+      patchSessionTokenPath: `${authPathPrefix}/session-token`,
+      exitIframePath: `${authPathPrefix}/exit-iframe`,
     },
   };
 }

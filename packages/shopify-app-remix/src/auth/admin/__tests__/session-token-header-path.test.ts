@@ -12,7 +12,7 @@ import {
   signRequestCookie,
   testConfig,
 } from '../../../__tests__/test-helper';
-import {REAUTH_URL_HEADER} from '../../../auth/helpers/add-response-headers';
+import {REAUTH_URL_HEADER} from '../../helpers/add-response-headers';
 
 describe('authorize.session token header path', () => {
   describe('errors', () => {

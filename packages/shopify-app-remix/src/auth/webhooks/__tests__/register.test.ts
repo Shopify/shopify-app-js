@@ -6,9 +6,9 @@ import {
   TEST_SHOP,
   testConfig,
 } from '../../../__tests__/test-helper';
+import {mockExternalRequests} from '../../../__tests__/request-mock';
 
 import * as mockResponses from './mock-responses';
-import {mockExternalRequests} from '../../../__tests__/request-mock';
 
 describe('Webhook registration', () => {
   it('registers webhooks', async () => {
