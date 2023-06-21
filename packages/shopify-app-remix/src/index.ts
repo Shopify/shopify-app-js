@@ -1,4 +1,4 @@
-import './shopify-api-adapter';
+import '@shopify/shopify-api/adapters/web-api';
 import {
   ConfigInterface as ApiConfig,
   ConfigParams,
@@ -8,6 +8,7 @@ import {
   ShopifyRestResources,
   shopifyApi,
 } from '@shopify/shopify-api';
+import {setAbstractRuntimeString} from '@shopify/shopify-api/runtime';
 import {SessionStorage} from '@shopify/shopify-app-session-storage';
 import {SQLiteSessionStorage} from '@shopify/shopify-app-session-storage-sqlite';
 
@@ -32,6 +33,10 @@ export {
   DeliveryMethod,
   BillingInterval,
 } from '@shopify/shopify-api';
+
+setAbstractRuntimeString(() => {
+  return `Remix`;
+});
 
 /**
  * Creates an object your app will use to interact with Shopify.

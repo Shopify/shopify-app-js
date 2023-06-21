@@ -19,7 +19,7 @@ describe('node setup import', () => {
     expect(cryptoBefore).toBeUndefined();
 
     // WHEN
-    await require('./node');
+    await require('../node');
 
     // THEN
     const cryptoAfter = (await require('@shopify/shopify-api/runtime')).crypto;
