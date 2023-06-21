@@ -114,30 +114,30 @@ describe('admin.authenticate context', () => {
     expect(await response.json()).toEqual({shop: {name: 'Test shop'}});
   });
 
-  const TEST_CASES = [
+  const testCases = [
     {
       testGroup: 'REST client',
       mockRequest: mockRestRequest,
       action: async (admin: AdminApiContext, _session: Session) =>
-        await admin.rest.get({path: '/customers.json'}),
+        admin.rest.get({path: '/customers.json'}),
     },
     {
       testGroup: 'REST resources',
       mockRequest: mockRestRequest,
       action: async (admin: AdminApiContext, session: Session) =>
-        await admin.rest.resources.Customer.all({session}),
+        admin.rest.resources.Customer.all({session}),
     },
     {
       testGroup: 'GraphQL client',
       mockRequest: mockGraphqlRequest(),
       action: async (admin: AdminApiContext, _session: Session) =>
-        await admin.graphql('{ shop { name } }'),
+        admin.graphql('{ shop { name } }'),
     },
     {
       testGroup: 'GraphQL client with options',
       mockRequest: mockGraphqlRequest('2021-01' as ApiVersion),
       action: async (admin: AdminApiContext, _session: Session) =>
-        await admin.graphql(
+        admin.graphql(
           'mutation myMutation($ID: String!) { shop(ID: $ID) { name } }',
           {
             variables: {ID: '123'},
@@ -149,7 +149,7 @@ describe('admin.authenticate context', () => {
     },
   ];
 
-  describe.each(TEST_CASES)(
+  describe.each(testCases)(
     '$testGroup re-authentication',
     ({testGroup: _testGroup, mockRequest, action}) => {
       it('redirects to auth when request receives a 401 response and not embedded', async () => {
@@ -159,7 +159,7 @@ describe('admin.authenticate context', () => {
 
         // WHEN
         const response = await getThrownResponse(
-          async () => await action(admin, session),
+          async () => action(admin, session),
           requestMock,
         );
 
@@ -178,7 +178,7 @@ describe('admin.authenticate context', () => {
 
         // WHEN
         const response = await getThrownResponse(
-          async () => await action(admin, session),
+          async () => action(admin, session),
           requestMock,
         );
 
@@ -197,7 +197,7 @@ describe('admin.authenticate context', () => {
 
         // WHEN
         const response = await getThrownResponse(
-          async () => await action(admin, session),
+          async () => action(admin, session),
           requestMock,
         );
 
@@ -212,7 +212,7 @@ describe('admin.authenticate context', () => {
 
         // WHEN
         const response = await getThrownResponse(
-          async () => await action(admin, session),
+          async () => action(admin, session),
           requestMock,
         );
 
@@ -227,7 +227,7 @@ describe('admin.authenticate context', () => {
 
         // WHEN
         const response = await getThrownResponse(
-          async () => await action(admin, session),
+          async () => action(admin, session),
           requestMock,
         );
 

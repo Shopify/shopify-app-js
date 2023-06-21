@@ -8,9 +8,9 @@ import {redirect} from '@remix-run/server-runtime';
 import {BasicParams} from '../types';
 import {redirectToAuthPage} from '../auth/helpers';
 import {AppConfigArg} from '../config-types';
+import {getAppBridgeHeaders} from '../auth/helpers/redirect-with-app-bridge-headers';
 
 import {RequestBillingOptions} from './types';
-import {getAppBridgeHeaders} from '../auth/helpers/redirect-with-app-bridge-headers';
 
 export function requestBillingFactory<Config extends AppConfigArg>(
   params: BasicParams,
@@ -75,6 +75,7 @@ function redirectOutOfApp(
   const isXhrRequest = request.headers.get('authorization');
 
   if (isXhrRequest) {
+    // eslint-disable-next-line no-warning-comments
     // TODO Check this with the beta flag disabled (with the bounce page)
     // Remix is not including the X-Shopify-API-Request-Failure-Reauthorize-Url when throwing a Response
     // https://github.com/remix-run/remix/issues/5356

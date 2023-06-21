@@ -4,6 +4,7 @@ describe('node setup import', () => {
   let previousCrypto: any;
 
   beforeAll(() => {
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
     previousCrypto = require('@shopify/shopify-api/runtime').crypto;
     setCrypto(undefined as any);
   });

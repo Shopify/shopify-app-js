@@ -1,11 +1,11 @@
 import {BasicParams} from '../../types';
-
-import {PublicContext} from './types';
 import {
   getSessionTokenHeader,
   rejectBotRequest,
   validateSessionToken,
 } from '../helpers';
+
+import {PublicContext} from './types';
 
 export function authenticatePublicFactory(params: BasicParams) {
   return async function authenticatePublic(

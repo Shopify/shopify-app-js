@@ -1,5 +1,6 @@
 import fs from 'fs';
 import path from 'path';
+
 import {ShopifyError} from '@shopify/shopify-api';
 import {SQLiteSessionStorage} from '@shopify/shopify-app-session-storage-sqlite';
 import * as shopifyApiPackage from '@shopify/shopify-api';
@@ -49,6 +50,7 @@ describe('shopifyApp', () => {
   it("fixes the port if it's not set", () => {
     // GIVEN
     jest.spyOn(shopifyApiPackage, 'shopifyApi');
+    // eslint-disable-next-line no-process-env
     process.env.PORT = '1234';
 
     // WHEN
@@ -83,6 +85,7 @@ describe('shopifyApp', () => {
 
   it('properly re-exports required @shopify/shopify-api imports', () => {
     // This test doesn't actually test anything, but it's here to make sure that we're actually importing the values
+    // eslint-disable-next-line @babel/no-unused-expressions
     [APP_LATEST_API_VERSION, LogSeverity, DeliveryMethod, BillingInterval];
   });
 

@@ -26,6 +26,7 @@ export interface GraphqlFunctionOptions {
   session: Session;
 }
 
+// eslint-disable-next-line no-warning-comments
 // TODO: This is actually just a call through to the Shopify API client, but with a different API. We should eventually
 // move this over to the library layer. While doing that, we should also allow the apiVersion to be passed into the REST
 // client request calls.
