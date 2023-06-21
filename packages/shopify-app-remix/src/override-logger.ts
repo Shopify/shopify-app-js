@@ -3,6 +3,7 @@ import {FeatureDeprecatedError, Shopify} from '@shopify/shopify-api';
 
 import {SHOPIFY_REMIX_LIBRARY_VERSION} from './version';
 
+// eslint-disable-next-line no-warning-comments
 // TODO This has been copied from shopify-app-express, it should be extracted into a shared package
 // https://github.com/orgs/Shopify/projects/6899/views/1?pane=issue&itemId=28358070
 export function overrideLogger(logger: Shopify['logger']): Shopify['logger'] {

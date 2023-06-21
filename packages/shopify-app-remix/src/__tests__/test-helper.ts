@@ -16,7 +16,6 @@ import '../adapters/node';
 import {AppConfigArg} from '../config-types';
 import {REAUTH_URL_HEADER} from '../auth/helpers/add-response-headers';
 
-// eslint-disable-next-line import/no-mutable-exports
 export function testConfig(
   overrides: Partial<AppConfigArg> = {},
 ): AppConfigArg & {sessionStorage: SessionStorage} {
@@ -73,19 +72,21 @@ export function getJwt(overrides: Partial<JwtPayload> = {}): TestJwt {
 }
 
 export async function getThrownResponse(
-  callback: Function,
+  callback: (request: Request) => Promise<any>,
   request: Request,
 ): Promise<Response> {
   try {
     await callback(request);
   } catch (response) {
     if (!(response instanceof Response)) {
-      throw `${request.method} request to ${request.url} threw an error instead of a response: ${response}`;
+      throw new Error(
+        `${request.method} request to ${request.url} threw an error instead of a response: ${response}`,
+      );
     }
     return response;
   }
 
-  throw `${request.method} request to ${request.url} did not throw`;
+  throw new Error(`${request.method} request to ${request.url} did not throw`);
 }
 
 export function createTestHmac(body: string): string {
@@ -97,7 +98,7 @@ export function createTestHmac(body: string): string {
 
 export async function setUpValidSession(
   sessionStorage: SessionStorage,
-  isOnline: boolean = false,
+  isOnline = false,
 ): Promise<Session> {
   const overrides: Partial<Session> = {};
   let id = `offline_${TEST_SHOP}`;

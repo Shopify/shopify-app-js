@@ -8,7 +8,7 @@ export async function redirectToAuthPage(
   params: BasicParams,
   request: Request,
   shop: string,
-  isOnline: boolean = false,
+  isOnline = false,
 ): Promise<never> {
   const url = new URL(request.url);
   const isEmbeddedRequest = url.searchParams.get('embedded') === '1';
