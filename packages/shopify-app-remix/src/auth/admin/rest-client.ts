@@ -30,30 +30,6 @@ export class RemixRestClient<Resources extends ShopifyRestResources> {
     this.session = session;
   }
 
-  protected async makeRequest(params: RequestParams): Promise<Response> {
-    const originalClient = new this.params.api.clients.Rest({
-      session: this.session,
-    });
-    const originalRequest = Reflect.get(originalClient, 'request');
-
-    try {
-      const apiResponse = await originalRequest.call(originalClient, params);
-
-      // We use a separate client for REST requests and REST resources because we want to override the API library
-      // client class to return a Response object instead.
-      return new Response(JSON.stringify(apiResponse.body), {
-        headers: apiResponse.headers,
-      });
-    } catch (error) {
-      throw await handleClientError({
-        params: this.params,
-        request: this.request,
-        shop: this.session.shop,
-        error,
-      });
-    }
-  }
-
   /**
    * Performs a GET request on the given path.
    */
@@ -92,6 +68,30 @@ export class RemixRestClient<Resources extends ShopifyRestResources> {
       method: 'DELETE' as RequestParams['method'],
       ...params,
     });
+  }
+
+  protected async makeRequest(params: RequestParams): Promise<Response> {
+    const originalClient = new this.params.api.clients.Rest({
+      session: this.session,
+    });
+    const originalRequest = Reflect.get(originalClient, 'request');
+
+    try {
+      const apiResponse = await originalRequest.call(originalClient, params);
+
+      // We use a separate client for REST requests and REST resources because we want to override the API library
+      // client class to return a Response object instead.
+      return new Response(JSON.stringify(apiResponse.body), {
+        headers: apiResponse.headers,
+      });
+    } catch (error) {
+      throw await handleClientError({
+        params: this.params,
+        request: this.request,
+        shop: this.session.shop,
+        error,
+      });
+    }
   }
 }
 

@@ -37,7 +37,6 @@ const BILLING_CONFIG: Shopify['config']['billing'] = {
 };
 
 describe('Billing request', () => {
-  // TODO: This is currently blocked because the authenticator doesn't work properly with non-embedded apps
   it('redirects to payment confirmation URL when successful and at the top level for non-embedded apps', async () => {
     // GIVEN
     const shopify = shopifyApp({

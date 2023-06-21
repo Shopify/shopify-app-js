@@ -1,8 +1,9 @@
 import {HttpResponseError, Session} from '@shopify/shopify-api';
 
 import {BasicParams} from '../types';
-import {CancelBillingOptions} from './types';
 import {redirectToAuthPage} from '../auth/helpers';
+
+import {CancelBillingOptions} from './types';
 
 export function cancelBillingFactory(
   params: BasicParams,

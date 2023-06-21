@@ -15,9 +15,9 @@ import {
   getThrownResponse,
   setUpValidSession,
   testConfig,
+  signRequestCookie,
 } from '../../../__tests__/test-helper';
 import {mockExternalRequest} from '../../../__tests__/request-mock';
-import {signRequestCookie} from '../../../__tests__/test-helper';
 
 describe('authorize.admin doc request path', () => {
   describe('errors', () => {
