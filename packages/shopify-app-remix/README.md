@@ -3,7 +3,7 @@
 <!-- ![Build Status]() -->
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE.md)
-[![npm version](https://badge.fury.io/js/%40shopify%2Fshopify-app-express.svg)](https://badge.fury.io/js/%40shopify%2Fshopify-app-express)
+[![npm version](https://badge.fury.io/js/%40shopify%2Fshopify-app-remix.svg)](https://badge.fury.io/js/%40shopify%2Fshopify-app-remix)
 
 This package makes it easy to use [Remix](https://remix.run/) to build Shopify apps.
 It builds on the `@shopify/shopify-api` package and exposes a `shopifyApp` function. You can use `shopifyApp` to configure your app and then authenticate requests from Shopify.
@@ -348,7 +348,7 @@ Let's pass the [Prisma app session storage](https://github.com/Shopify/shopify-a
 
 ```ts
 // app/shopify.server.js
-import {shopifyApp} from '@shopify/shopify-app-express';
+import {shopifyApp} from '@shopify/shopify-app-remix';
 import {PrismaSessionStorage} from '@shopify/shopify-app-session-storage-prisma';
 import {PrismaClient} from '@prisma/client';
 

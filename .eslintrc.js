@@ -21,6 +21,12 @@ module.exports = {
       },
     },
     {
+      files: ['packages/shopify-app-remix/src/__tests__/index.test.ts'],
+      rules: {
+        '@babel/no-unused-expressions': 0,
+      },
+    },
+    {
       files: ['**/.eslintrc.js'],
       rules: {
         'no-undef': 'off',
