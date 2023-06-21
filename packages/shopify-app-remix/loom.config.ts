@@ -1,8 +1,18 @@
-import {createPackage, createProjectPlugin} from '@shopify/loom';
+import fs from 'fs';
+
+import {createPackage} from '@shopify/loom';
 import {buildLibrary} from '@shopify/loom-plugin-build-library';
 
 export default createPackage((pkg) => {
   pkg.entry({root: './src/index.ts'});
+
+  const basePath = `${__dirname}/src/adapters`;
+  fs.readdirSync(basePath, {withFileTypes: true})
+    .filter((dirent) => dirent.isDirectory())
+    .forEach((dirent) => {
+      pkg.entry({root: `./src/adapters/${dirent.name}/index.ts`});
+    });
+
   pkg.use(
     buildLibrary({
       // Required. A browserslist string for specifying your target output.
