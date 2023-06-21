@@ -20,7 +20,7 @@
       "require": "./build/cjs/index.js",
       "types": "./build/ts/index.d.ts"
     },
-    "./adapters/node": "./build/cjs/adapters/node.js"
+    "./adapters/*": "./build/cjs/adapters/*/index.js"
   },
   "publishConfig": {
     "access": "public"
@@ -49,7 +49,7 @@
   },
   "dependencies": {
     "@remix-run/server-runtime": "^1.17.1",
-    "@shopify/shopify-api": "^7.3.1",
+    "@shopify/shopify-api": "^7.4.0",
     "@shopify/shopify-app-session-storage": "^1.1.2",
     "@shopify/shopify-app-session-storage-sqlite": "^1.2.2",
     "isbot": "^3.6.5",
