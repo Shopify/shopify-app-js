@@ -1,3 +1,5 @@
+import '@shopify/shopify-api/adapters/web-api';
+import '../adapters/node';
 import crypto from 'crypto';
 
 import jwt from 'jsonwebtoken';
@@ -9,9 +11,6 @@ import {
 } from '@shopify/shopify-api';
 import {SessionStorage} from '@shopify/shopify-app-session-storage';
 import {MemorySessionStorage} from '@shopify/shopify-app-session-storage-memory';
-
-import '../shopify-api-adapter';
-import '../adapters/node';
 
 import {AppConfigArg} from '../config-types';
 import {REAUTH_URL_HEADER} from '../auth/helpers/add-response-headers';
