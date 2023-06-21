@@ -490,7 +490,7 @@ export class AuthStrategy<
           : redirectTo,
       );
 
-      redirectToScript = `<script>shopify.redirectTo("${redirectUrl}")</script>`;
+      redirectToScript = `<script>window.open("${redirectUrl}", "_top")</script>`;
     }
 
     throw new Response(
