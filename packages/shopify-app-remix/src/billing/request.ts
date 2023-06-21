@@ -5,12 +5,12 @@ import {
 } from '@shopify/shopify-api';
 import {redirect} from '@remix-run/server-runtime';
 
-import {BasicParams} from '../types';
+import type {BasicParams} from '../types';
 import {redirectToAuthPage} from '../auth/helpers';
 import {AppConfigArg} from '../config-types';
 import {getAppBridgeHeaders} from '../auth/helpers/redirect-with-app-bridge-headers';
 
-import {RequestBillingOptions} from './types';
+import type {RequestBillingOptions} from './types';
 
 export function requestBillingFactory<Config extends AppConfigArg>(
   params: BasicParams,

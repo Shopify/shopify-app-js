@@ -8,8 +8,8 @@ import {
 } from '@shopify/shopify-api';
 import {SessionStorage} from '@shopify/shopify-app-session-storage';
 
-import {GraphqlQueryFunction} from './auth/admin/graphql-client';
-import {RemixRestClient} from './auth/admin/rest-client';
+import type {GraphqlQueryFunction} from './auth/admin/graphql-client';
+import type {RemixRestClient} from './auth/admin/rest-client';
 
 export interface AppConfigArg<
   Resources extends ShopifyRestResources = ShopifyRestResources,

@@ -1,6 +1,6 @@
 import {JwtPayload} from '@shopify/shopify-api';
 
-import {BasicParams} from '../../types';
+import type {BasicParams} from '../../types';
 
 export async function validateSessionToken(
   {api, logger}: BasicParams,
