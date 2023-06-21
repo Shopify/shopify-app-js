@@ -11,9 +11,13 @@ import {
   ShopifyRestResources,
 } from '@shopify/shopify-api';
 
-import {BasicParams} from '../../types';
-import {AdminApiContext, AppConfig, AppConfigArg} from '../../config-types';
-import {BillingContext} from '../../billing/types';
+import type {BasicParams} from '../../types';
+import type {
+  AdminApiContext,
+  AppConfig,
+  AppConfigArg,
+} from '../../config-types';
+import type {BillingContext} from '../../billing/types';
 import {
   cancelBillingFactory,
   requestBillingFactory,
@@ -29,8 +33,8 @@ import {
   rejectBotRequest,
 } from '../helpers';
 
+import type {AdminContext} from './types';
 import {graphqlClientFactory} from './graphql-client';
-import {AdminContext} from './types';
 import {RemixRestClient, restResourceClientFactory} from './rest-client';
 
 interface SessionContext {

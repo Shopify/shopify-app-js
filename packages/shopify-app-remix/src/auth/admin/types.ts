@@ -1,7 +1,7 @@
 import {JwtPayload, Session, ShopifyRestResources} from '@shopify/shopify-api';
 
 import type {AdminApiContext, AppConfigArg} from '../../config-types';
-import {BillingContext} from '../../billing/types';
+import type {BillingContext} from '../../billing/types';
 
 interface AdminContextInternal<
   Config extends AppConfigArg,

@@ -1,6 +1,6 @@
-import {BasicParams} from '../../types';
+import type {BasicParams} from '../../types';
 
-import {RegisterWebhooksOptions} from './types';
+import type {RegisterWebhooksOptions} from './types';
 
 export function registerWebhooksFactory({api, logger}: BasicParams) {
   return async function registerWebhooks({session}: RegisterWebhooksOptions) {

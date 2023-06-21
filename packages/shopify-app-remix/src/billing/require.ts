@@ -4,11 +4,11 @@ import {
   Session,
 } from '@shopify/shopify-api';
 
-import {BasicParams} from '../types';
-import {AppConfigArg} from '../config-types';
+import type {BasicParams} from '../types';
+import type {AppConfigArg} from '../config-types';
 import {redirectToAuthPage} from '../auth/helpers';
 
-import {RequireBillingOptions} from './types';
+import type {RequireBillingOptions} from './types';
 
 export function requireBillingFactory<Config extends AppConfigArg>(
   params: BasicParams,

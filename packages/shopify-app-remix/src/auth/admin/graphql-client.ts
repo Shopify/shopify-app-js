@@ -1,8 +1,8 @@
 import {ApiVersion, Session} from '@shopify/shopify-api';
 import {flatHeaders} from '@shopify/shopify-api/runtime';
 
-import {BasicParams} from '../../types';
-import {handleClientError} from '../helpers';
+import type {BasicParams} from '../../types';
+import {handleClientError} from '../helpers/handle-client-error';
 
 interface QueryVariables {
   [key: string]: any;
