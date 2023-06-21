@@ -1,4 +1,4 @@
-import {BasicParams} from '../../types';
+import type {BasicParams} from '../../types';
 
 const DEFAULT_CSP = `frame-ancestors https://*.myshopify.com https://admin.shopify.com;`;
 

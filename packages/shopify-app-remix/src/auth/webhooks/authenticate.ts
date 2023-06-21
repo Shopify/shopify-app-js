@@ -1,8 +1,8 @@
 import {ApiVersion, ShopifyRestResources} from '@shopify/shopify-api';
 
-import {BasicParams, MandatoryTopics} from '../../types';
+import type {BasicParams, MandatoryTopics} from '../../types';
 
-import {WebhookContext} from './types';
+import type {WebhookContext} from './types';
 
 export function authenticateWebhookFactory<
   Resources extends ShopifyRestResources,

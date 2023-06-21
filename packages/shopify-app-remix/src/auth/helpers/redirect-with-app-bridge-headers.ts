@@ -1,4 +1,4 @@
-import {BasicParams} from '../../types';
+import type {BasicParams} from '../../types';
 
 import {REAUTH_URL_HEADER, addResponseHeaders} from './add-response-headers';
 
