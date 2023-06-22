@@ -344,7 +344,7 @@ By default `shopifyApp` uses [@shopify/shopify-app-session-storage-sqlite](https
 
 In this example we'll swap the default session adaptor for [Prisma](https://www.prisma.io/).
 
-Let's pass the [Prisma app session storage](https://github.com/Shopify/shopify-app-js/blob/release-candidate/packages/shopify-app-session-storage-prisma/README.md) adaptor to `shopifyApp`:
+Let's pass the [Prisma app session storage](https://github.com/Shopify/shopify-app-js/blob/main/packages/shopify-app-session-storage-prisma/README.md) adaptor to `shopifyApp`:
 
 ```ts
 // app/shopify.server.js
