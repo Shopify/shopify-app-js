@@ -36,7 +36,7 @@
     "tslib": "^2.4.0"
   },
   "peerDependencies": {
-    "@shopify/shopify-api": "^7.3.1",
+    "@shopify/shopify-api": "^7.4.0",
     "@shopify/shopify-app-session-storage": "^1.1.4"
   },
   "devDependencies": {
