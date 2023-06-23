@@ -16,6 +16,13 @@ To follow these usage guides, you will need to:
 - have an app already set up on your partner account
 - have a JavaScript package manager such as [yarn](https://yarnpkg.com) installed
 
+## Shopify CLI
+
+The easiest way to get started with developing Shopify apps is using the [Shopify CLI](https://shopify.dev/docs/apps/tools/cli).
+It helps you set up your environment for developing and publishing your apps and extensions.
+
+We strongly recommend using the CLI to create and manage your apps and extensions!
+
 ## Getting started
 
 This package works with any Remix app. If you're starting an app from scratch, you can create a brand new Remix app that uses the indie-stack:
