@@ -295,7 +295,7 @@ describe('authorize.admin auth callback path', () => {
         [
           'shopify_app_state=;path=/;expires=Thu, 01 Jan 1970 00:00:00 GMT',
           `shopify_app_session=offline_${TEST_SHOP};sameSite=lax; secure=true; path=/`,
-          'shopify_app_session.sig=lOkBnaRYxL39cF4QYycrnwFwS5F9aeUHm/jTNY3qbTE=;sameSite=lax; secure=true; path=/',
+          'shopify_app_session.sig=0qSrbSUpq8Cr+fev917WGyO1IU3Py1fTwZukcHd4hVE=;sameSite=lax; secure=true; path=/',
         ].join(', '),
       );
     });

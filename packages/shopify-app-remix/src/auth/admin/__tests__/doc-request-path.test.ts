@@ -16,6 +16,7 @@ import {
   setUpValidSession,
   testConfig,
   signRequestCookie,
+  expectLoginRedirect,
 } from '../../../__tests__/test-helper';
 import {mockExternalRequest} from '../../../__tests__/request-mock';
 
@@ -40,7 +41,7 @@ describe('authorize.admin doc request path', () => {
       );
 
       // THEN
-      expect(response.status).toBe(400);
+      expectLoginRedirect(response);
     });
 
     it('redirects to auth when not embedded and there is no offline session', async () => {
