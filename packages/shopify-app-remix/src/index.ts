@@ -24,6 +24,7 @@ import {
   addResponseHeadersFactory,
   installGlobalResponseHeaders,
 } from './auth/helpers/add-response-headers';
+import {loginFactory} from './auth/login/login';
 
 export type {ShopifyApp} from './types';
 
@@ -79,6 +80,7 @@ export function shopifyApp<
     sessionStorage: config.sessionStorage,
     addResponseHeaders: addResponseHeadersFactory(params),
     registerWebhooks: registerWebhooksFactory(params),
+    login: loginFactory(params),
     authenticate: {
       admin: oauth.authenticateAdmin.bind(oauth),
       public: authenticatePublicFactory(params),
@@ -144,6 +146,7 @@ function deriveConfig<Storage extends SessionStorage>(
       callbackPath: `${authPathPrefix}/callback`,
       patchSessionTokenPath: `${authPathPrefix}/session-token`,
       exitIframePath: `${authPathPrefix}/exit-iframe`,
+      loginPath: `${authPathPrefix}/login`,
     },
   };
 }
