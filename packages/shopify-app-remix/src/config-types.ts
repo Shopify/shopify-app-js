@@ -208,6 +208,7 @@ interface AuthConfig {
   callbackPath: string;
   exitIframePath: string;
   patchSessionTokenPath: string;
+  loginPath: string;
 }
 
 export interface WebhookConfig {

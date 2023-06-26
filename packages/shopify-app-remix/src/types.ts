@@ -37,6 +37,12 @@ type RegisterWebhooks = (
   options: RegisterWebhooksOptions,
 ) => Promise<RegisterReturn>;
 
+export interface LoginError {
+  errors: {shop: string};
+}
+
+type Login = (request: Request) => Promise<LoginError | never>;
+
 type AddResponseHeaders = (request: Request, headers: Headers) => void;
 
 type AuthenticateAdmin<
@@ -167,6 +173,64 @@ export interface ShopifyApp<Config extends AppConfigArg> {
    * ```
    */
   registerWebhooks: RegisterWebhooks;
+
+  /**
+   * Log a merchant in, and redirect them to the app root. Will redirect the merchant to authentication if a shop is
+   * present in the URL search parameters or form data.
+   *
+   * @example
+   * Providing a login form as a route that can handle GET and POST requests.
+   * export async function loader({ request }: LoaderArgs) {
+   *   const shop = new URL(request.url).searchParams.get("shop");
+   *   if (shop) {
+   *     // We can fully skip the login page if we already have a shop
+   *     const errors = shopify.login(request);
+   *
+   *     return json(errors);
+   *   }
+   *
+   *   return null;
+   * }
+   *
+   * export async function action({ request }: ActionArgs) {
+   *   const errors = shopify.login(request);
+   *
+   *   return json(errors);
+   * }
+   *
+   * export default function Auth() {
+   *   const actionData = useActionData<typeof action>();
+   *   const [shop, setShop] = useState("");
+   *
+   *   return (
+   *     <Page>
+   *       <Card>
+   *         <Form method="post">
+   *           <FormLayout>
+   *             <Text variant="headingMd" as="h2">
+   *               Login
+   *             </Text>
+   *             <TextField
+   *               type="text"
+   *               name="shop"
+   *               label="Shop domain"
+   *               helpText="e.g: my-shop-domain.myshopify.com"
+   *               value={shop}
+   *               onChange={setShop}
+   *               autoComplete="on"
+   *               error={actionData?.errors.shop}
+   *             />
+   *             <Button submit primary>
+   *               Submit
+   *             </Button>
+   *           </FormLayout>
+   *         </Form>
+   *       </Card>
+   *     </Page>
+   *   );
+   * }
+   */
+  login: Login;
 
   /**
    * Ways to authenticate requests from different surfaces across Shopify.
