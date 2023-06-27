@@ -1,6 +1,6 @@
 import {redirect} from '@remix-run/server-runtime';
 
-import {BasicParams, LoginError} from '../../types';
+import {BasicParams, LoginError, LoginErrorType} from '../../types';
 
 export function loginFactory(params: BasicParams) {
   const {api, config, logger} = params;
@@ -15,7 +15,12 @@ export function loginFactory(params: BasicParams) {
 
     if (!shop) {
       logger.debug('Missing shop parameter', {shop});
-      return {errors: {shop: 'Missing shop parameter'}};
+      return {shop: LoginErrorType.MissingShop};
+    }
+
+    if (shop.startsWith('http')) {
+      logger.debug('Shop parameter contained protocol', {shop});
+      return {shop: LoginErrorType.InvalidProtocol};
     }
 
     const shopWithDot =
@@ -24,7 +29,7 @@ export function loginFactory(params: BasicParams) {
 
     if (!sanitizedShop) {
       logger.debug('Invalid shop parameter', {shop: shopWithDot});
-      return {errors: {shop: 'Invalid shop parameter'}};
+      return {shop: LoginErrorType.InvalidShop};
     }
 
     const redirectUrl = `${config.auth.path}?shop=${sanitizedShop}`;
