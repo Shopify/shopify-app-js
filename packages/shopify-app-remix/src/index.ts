@@ -26,7 +26,8 @@ import {
 } from './auth/helpers/add-response-headers';
 import {loginFactory} from './auth/login/login';
 
-export type {ShopifyApp} from './types';
+export type {ShopifyApp, LoginError} from './types';
+export {LoginErrorType} from './types';
 
 export {
   LATEST_API_VERSION,
