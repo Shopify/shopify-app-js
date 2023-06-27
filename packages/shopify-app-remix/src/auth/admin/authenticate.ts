@@ -147,11 +147,12 @@ export class AuthStrategy<
 
     logger.debug('OAuth request contained valid shop', {shop});
 
-    // If we're loading from an iframe or a fetch request, we need to break out of the iframe
+    // If we're loading from an iframe, we need to break out of it
     if (
       config.isEmbeddedApp &&
-      ['iframe', 'empty'].includes(request.headers.get('Sec-Fetch-Dest')!)
+      request.headers.get('Sec-Fetch-Dest') === 'iframe'
     ) {
+      logger.debug('Auth request in iframe detected, exiting iframe', {shop});
       throw redirectWithExitIframe({api, config, logger}, request, shop);
     } else {
       throw await beginAuth({api, config, logger}, request, false, shop);
