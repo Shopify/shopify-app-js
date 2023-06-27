@@ -18,13 +18,11 @@ export function loginFactory(params: BasicParams) {
       return {shop: LoginErrorType.MissingShop};
     }
 
-    if (shop.startsWith('http')) {
-      logger.debug('Shop parameter contained protocol', {shop});
-      return {shop: LoginErrorType.InvalidProtocol};
-    }
-
+    const shopWithoutProtocol = shop.replace(/^https?:\/\//, '');
     const shopWithDot =
-      shop?.indexOf('.') === -1 ? `${shop}.myshopify.com` : shop;
+      shop?.indexOf('.') === -1
+        ? `${shopWithoutProtocol}.myshopify.com`
+        : shopWithoutProtocol;
     const sanitizedShop = api.utils.sanitizeShop(shopWithDot);
 
     if (!sanitizedShop) {
