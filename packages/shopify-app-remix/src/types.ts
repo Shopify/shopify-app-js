@@ -40,7 +40,6 @@ type RegisterWebhooks = (
 export enum LoginErrorType {
   MissingShop = 'MISSING_SHOP',
   InvalidShop = 'INVALID_SHOP',
-  InvalidProtocol = 'INVALID_PROTOCOL',
 }
 
 export interface LoginError {
