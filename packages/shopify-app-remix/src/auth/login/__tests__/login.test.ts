@@ -1,4 +1,4 @@
-import {shopifyApp} from '../../../index';
+import {LoginErrorType, shopifyApp} from '../../../index';
 import {
   APP_URL,
   TEST_SHOP,
@@ -19,7 +19,7 @@ describe('login helper', () => {
     const errors = await shopify.login(requestMock as any as Request);
 
     // THEN
-    expect(errors).toEqual({errors: {shop: 'Missing shop parameter'}});
+    expect(errors).toEqual({shop: LoginErrorType.MissingShop});
   });
 
   it.each([
@@ -41,7 +41,7 @@ describe('login helper', () => {
       const errors = await shopify.login(requestMock as any as Request);
 
       // THEN
-      expect(errors).toEqual({errors: {shop: 'Invalid shop parameter'}});
+      expect(errors).toEqual({shop: LoginErrorType.InvalidShop});
     },
   );
 
