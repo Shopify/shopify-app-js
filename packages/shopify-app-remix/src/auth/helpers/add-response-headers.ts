@@ -1,4 +1,5 @@
 import type {BasicParams} from '../../types';
+import {APP_BRIDGE_NEXT_URL} from '../const';
 
 const DEFAULT_CSP = `frame-ancestors https://*.myshopify.com https://admin.shopify.com;`;
 
@@ -28,11 +29,14 @@ export function addResponseHeaders(
   isEmbeddedApp: boolean,
   shop: string | null | undefined,
 ) {
-  if (isEmbeddedApp && shop) {
-    // Set or update the CSP with the shop subdomain instead of a wildcard:
-    let csp = headers.get('Content-Security-Policy') || DEFAULT_CSP;
-    if (shop) csp = csp.replace('*.myshopify.com', shop);
-    headers.set('Content-Security-Policy', csp);
+  if (isEmbeddedApp) {
+    if (shop) {
+      // Set or update the CSP with the shop subdomain instead of a wildcard:
+      let csp = headers.get('Content-Security-Policy') || DEFAULT_CSP;
+      if (shop) csp = csp.replace('*.myshopify.com', shop);
+      headers.set('Content-Security-Policy', csp);
+    }
+    headers.set('Link', `<${APP_BRIDGE_NEXT_URL}>; rel="preload"`);
   }
 }
 
