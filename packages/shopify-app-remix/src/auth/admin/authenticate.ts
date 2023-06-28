@@ -36,6 +36,7 @@ import {
 import type {AdminContext} from './types';
 import {graphqlClientFactory} from './graphql-client';
 import {RemixRestClient, restResourceClientFactory} from './rest-client';
+import {APP_BRIDGE_NEXT_URL} from '../const';
 
 interface SessionContext {
   session: Session;
@@ -501,7 +502,7 @@ export class AuthStrategy<
 
     throw new Response(
       `
-        <script data-api-key="${config.apiKey}" src="https://cdn.shopify.com/shopifycloud/app-bridge-next/app-bridge.js"></script>
+        <script data-api-key="${config.apiKey}" src="${APP_BRIDGE_NEXT_URL}"></script>
         ${redirectToScript}
       `,
       {headers: {'content-type': 'text/html;charset=utf-8'}},

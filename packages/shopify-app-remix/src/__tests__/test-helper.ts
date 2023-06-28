@@ -14,6 +14,7 @@ import {MemorySessionStorage} from '@shopify/shopify-app-session-storage-memory'
 
 import {AppConfigArg} from '../config-types';
 import {REAUTH_URL_HEADER} from '../auth/helpers/add-response-headers';
+import {APP_BRIDGE_NEXT_URL} from '../auth/const';
 
 export function testConfig(
   overrides: Partial<AppConfigArg> = {},
@@ -205,6 +206,9 @@ export function expectSecurityHeaders(
     );
     expect(headers.get('Access-Control-Expose-Headers')).toEqual(
       REAUTH_URL_HEADER,
+    );
+    expect(headers.get('Link')).toEqual(
+      `<${APP_BRIDGE_NEXT_URL}>; rel="preload"`,
     );
   } else {
     expect(headers.get('Content-Security-Policy')).toEqual(
