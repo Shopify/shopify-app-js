@@ -80,8 +80,8 @@ function redirectOutOfApp(
     // Remix is not including the X-Shopify-API-Request-Failure-Reauthorize-Url when throwing a Response
     // https://github.com/remix-run/remix/issues/5356
     throw new Response(undefined, {
-      status: 302,
-      statusText: 'Redirect',
+      status: 401,
+      statusText: 'Unauthorized',
       headers: getAppBridgeHeaders(params, url, shop),
     });
   } else if (isEmbeddedRequest) {
