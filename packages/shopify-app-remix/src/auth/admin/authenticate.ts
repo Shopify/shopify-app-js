@@ -32,11 +32,11 @@ import {
   validateSessionToken,
   rejectBotRequest,
 } from '../helpers';
+import {APP_BRIDGE_NEXT_URL} from '../const';
 
 import type {AdminContext} from './types';
 import {graphqlClientFactory} from './graphql-client';
 import {RemixRestClient, restResourceClientFactory} from './rest-client';
-import {APP_BRIDGE_NEXT_URL} from '../const';
 
 interface SessionContext {
   session: Session;
