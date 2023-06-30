@@ -13,8 +13,7 @@ import {SessionStorage} from '@shopify/shopify-app-session-storage';
 import {MemorySessionStorage} from '@shopify/shopify-app-session-storage-memory';
 
 import {AppConfigArg} from '../config-types';
-import {REAUTH_URL_HEADER} from '../auth/helpers/add-response-headers';
-import {APP_BRIDGE_NEXT_URL} from '../auth/const';
+import {APP_BRIDGE_NEXT_URL, REAUTH_URL_HEADER} from '../auth/const';
 
 export function testConfig(
   overrides: Partial<AppConfigArg> = {},
