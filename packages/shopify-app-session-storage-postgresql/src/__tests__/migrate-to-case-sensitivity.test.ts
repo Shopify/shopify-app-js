@@ -10,7 +10,7 @@ import {PostgreSQLSessionStorage} from '../postgresql';
 const exec = promisify(child_process.exec);
 
 const dbName = 'migratetocasesensitivitytest';
-const dbURL = new URL(`postgres://shopify:passify@localhost:5433/${dbName}`);
+const dbURL = new URL(`postgres://shopify:passify@localhost:5435/${dbName}`);
 
 const sessionId = 'test-session-id';
 const expiryDate = new Date();
@@ -34,7 +34,7 @@ let pool: pg.Pool;
 
 beforeAll(async () => {
   const runCommand = await exec(
-    `podman run -d -e POSTGRES_DB=${dbName} -e POSTGRES_USER=shopify -e POSTGRES_PASSWORD=passify -p 5433:5432 postgres:15`,
+    `podman run -d -e POSTGRES_DB=${dbName} -e POSTGRES_USER=shopify -e POSTGRES_PASSWORD=passify -p 5435:5432 postgres:15`,
     {encoding: 'utf8'},
   );
 
@@ -52,11 +52,11 @@ afterAll(async () => {
   await exec(`podman rm -f ${containerId}`);
 });
 
-['ShopifySessionsUpperCase', 'shopifysessionslowercase'].forEach(
-  async (sessionTableName) => {
-    describe(`Migrate to case insensitivity - tablename = ${sessionTableName}`, () => {
-      beforeAll(async () => {
-        const query = `
+describe.each(['ShopifySessionsUpperCase', 'shopifysessionslowercase'])(
+  'Migrate to case insensitivity - tablename = %s',
+  (sessionTableName) => {
+    beforeAll(async () => {
+      const query = `
           DROP TABLE IF EXISTS ${sessionTableName.toLowerCase()};
           DROP TABLE IF EXISTS ${sessionTableName};
           CREATE TABLE ${sessionTableName.toLowerCase()} (
@@ -71,52 +71,52 @@ afterAll(async () => {
           )
         `;
 
-        await poll(
-          async () => {
-            try {
-              const client = await pool.connect();
-              await client.query(query, []);
-              client.release();
-            } catch (error) {
-              // uncomment for debugging tests
-              // console.error(error);
-              return false;
-            }
-            return true;
-          },
-          {interval: 500, timeout: 20000},
-        );
-      });
+      await poll(
+        async () => {
+          try {
+            const client = await pool.connect();
+            await client.query(query, []);
+            client.release();
+          } catch (error) {
+            // uncomment for debugging tests
+            // console.error(error);
+            return false;
+          }
+          return true;
+        },
+        {interval: 500, timeout: 20000},
+      );
+    });
 
-      it(`initially satisfies case-insensitive conditions`, async () => {
-        const client = await pool.connect();
+    it(`initially satisfies case-insensitive conditions`, async () => {
+      const client = await pool.connect();
+      try {
+        const result = await client.query(
+          `SELECT EXISTS(SELECT tablename FROM pg_catalog.pg_tables WHERE tablename = '${sessionTableName.toLowerCase()}')`,
+        );
+        expect(result.rows[0].exists).toBeTruthy();
+      } catch (error) {
+        console.error(error);
+      }
+      if (sessionTableName.toLowerCase() !== sessionTableName) {
+        // check that the uppercase table does not exist
         try {
           const result = await client.query(
-            `SELECT EXISTS(SELECT tablename FROM pg_catalog.pg_tables WHERE tablename = '${sessionTableName.toLowerCase()}')`,
+            `SELECT EXISTS(SELECT tablename FROM pg_catalog.pg_tables WHERE tablename = '${sessionTableName}')`,
           );
-          expect(result.rows[0].exists).toBeTruthy();
+          expect(result.rows[0].exists).toBeFalsy();
         } catch (error) {
           console.error(error);
         }
-        if (sessionTableName.toLowerCase() !== sessionTableName) {
-          // check that the uppercase table does not exist
-          try {
-            const result = await client.query(
-              `SELECT EXISTS(SELECT tablename FROM pg_catalog.pg_tables WHERE tablename = '${sessionTableName}')`,
-            );
-            expect(result.rows[0].exists).toBeFalsy();
-          } catch (error) {
-            console.error(error);
-          }
-        }
-        const entries = session
-          .toPropertyArray()
-          .map(([key, value]) =>
-            key === 'expires'
-              ? [key, Math.floor((value as number) / 1000)]
-              : [key, value],
-          );
-        const query = `
+      }
+      const entries = session
+        .toPropertyArray()
+        .map(([key, value]) =>
+          key === 'expires'
+            ? [key, Math.floor((value as number) / 1000)]
+            : [key, value],
+        );
+      const query = `
           INSERT INTO ${sessionTableName}
           (${entries.map(([key]) => `${key}`).join(', ')})
           VALUES (${entries.map((_, i) => `$${i + 1}`).join(', ')})
@@ -124,94 +124,89 @@ afterAll(async () => {
             .map(([key]) => `${key} = Excluded.${key}`)
             .join(', ')};
         `;
-        try {
-          await client.query(
-            query,
-            entries.map(([_key, value]) => value),
-          );
-        } catch (error) {
-          console.error(error);
-        }
-        try {
-          const result = await client.query(
-            `SELECT id FROM ${sessionTableName}`,
-          );
-          expect(result.rows.length).toBe(1);
-        } catch (error) {
-          console.error(error);
-        }
-        client.release();
-      });
-
-      it(`migrates previous tablenames and column names to be case-sensitive`, async () => {
-        storage = new PostgreSQLSessionStorage(dbURL, {
-          sessionTableName,
-          port: 5433,
-        });
-        try {
-          await storage.ready;
-        } catch (error) {
-          console.error('DEBUG: error from storage.ready', error);
-        }
-
-        const client = await pool.connect();
-        if (sessionTableName.toLowerCase() !== sessionTableName) {
-          try {
-            const result = await client.query(
-              `SELECT EXISTS(SELECT tablename FROM pg_catalog.pg_tables WHERE tablename = '${sessionTableName.toLowerCase()}')`,
-            );
-            expect(result.rows[0].exists).toBeFalsy();
-          } catch (error) {
-            console.error(error);
-          }
-        }
-        try {
-          const result = await client.query(
-            `SELECT EXISTS(SELECT tablename FROM pg_catalog.pg_tables WHERE tablename = '${sessionTableName}')`,
-          );
-          expect(result.rows[0].exists).toBeTruthy();
-        } catch (error) {
-          console.error(error);
-        }
-        try {
-          const result = await client.query(
-            `SELECT "id" FROM "${sessionTableName}"`,
-          );
-          expect(result.rows.length).toBe(1);
-        } catch (error) {
-          console.error(error);
-        }
-        client.release();
-
-        let sessionFromDB: Session | undefined;
-        try {
-          sessionFromDB = await storage.loadSession(sessionId);
-        } catch (error) {
-          console.error('DEBUG: error from storage.loadSession', error);
-        }
-        await storage.disconnect();
-
-        expect(sessionFromDB).not.toBeUndefined();
-        expect(sessionFromDB!.id).toBe(sessionId);
-        expect(sessionFromDB!.shop).toBe(session.shop);
-        expect(sessionFromDB!.state).toBe(session.state);
-        expect(sessionFromDB!.isOnline).toBe(session.isOnline);
-        expect(sessionFromDB!.expires).toStrictEqual(session.expires);
-        expect(sessionFromDB!.scope).toBe(session.scope);
-        expect(sessionFromDB!.accessToken).toBe(session.accessToken);
-        expect(sessionFromDB!.onlineAccessInfo).toEqual(
-          session.onlineAccessInfo,
+      try {
+        await client.query(
+          query,
+          entries.map(([_key, value]) => value),
         );
+      } catch (error) {
+        console.error(error);
+      }
+      try {
+        const result = await client.query(`SELECT id FROM ${sessionTableName}`);
+        expect(result.rows.length).toBe(1);
+      } catch (error) {
+        console.error(error);
+      }
+      client.release();
+    });
+
+    it(`migrates previous tablenames and column names to be case-sensitive`, async () => {
+      storage = new PostgreSQLSessionStorage(dbURL, {
+        sessionTableName,
+        port: 5435,
       });
+      try {
+        await storage.ready;
+      } catch (error) {
+        console.error('DEBUG: error from storage.ready', error);
+      }
+
+      const client = await pool.connect();
+      if (sessionTableName.toLowerCase() !== sessionTableName) {
+        try {
+          const result = await client.query(
+            `SELECT EXISTS(SELECT tablename FROM pg_catalog.pg_tables WHERE tablename = '${sessionTableName.toLowerCase()}')`,
+          );
+          expect(result.rows[0].exists).toBeFalsy();
+        } catch (error) {
+          console.error(error);
+        }
+      }
+      try {
+        const result = await client.query(
+          `SELECT EXISTS(SELECT tablename FROM pg_catalog.pg_tables WHERE tablename = '${sessionTableName}')`,
+        );
+        expect(result.rows[0].exists).toBeTruthy();
+      } catch (error) {
+        console.error(error);
+      }
+      try {
+        const result = await client.query(
+          `SELECT "id" FROM "${sessionTableName}"`,
+        );
+        expect(result.rows.length).toBe(1);
+      } catch (error) {
+        console.error(error);
+      }
+      client.release();
+
+      let sessionFromDB: Session | undefined;
+      try {
+        sessionFromDB = await storage.loadSession(sessionId);
+      } catch (error) {
+        console.error('DEBUG: error from storage.loadSession', error);
+      }
+      await storage.disconnect();
+
+      expect(sessionFromDB).not.toBeUndefined();
+      expect(sessionFromDB!.id).toBe(sessionId);
+      expect(sessionFromDB!.shop).toBe(session.shop);
+      expect(sessionFromDB!.state).toBe(session.state);
+      expect(sessionFromDB!.isOnline).toBe(session.isOnline);
+      expect(sessionFromDB!.expires).toStrictEqual(session.expires);
+      expect(sessionFromDB!.scope).toBe(session.scope);
+      expect(sessionFromDB!.accessToken).toBe(session.accessToken);
+      expect(sessionFromDB!.onlineAccessInfo).toEqual(session.onlineAccessInfo);
     });
   },
 );
 
-['ShopifySessionsUpperCase', 'shopifysessionslowercase'].forEach(
-  async (sessionTableName) => {
-    describe(`Table is already case-sensitive - tablename = ${sessionTableName}`, () => {
-      beforeAll(async () => {
-        const query = `
+describe.each(['ShopifySessionsUpperCase', 'shopifysessionslowercase'])(
+  'Table is already case-sensitive - tablename = %s',
+  (sessionTableName) => {
+    beforeAll(async () => {
+      const query = `
           DROP TABLE IF EXISTS "${sessionTableName.toLowerCase()}";
           DROP TABLE IF EXISTS "${sessionTableName}";
           CREATE TABLE "${sessionTableName}" (
@@ -226,41 +221,41 @@ afterAll(async () => {
           )
         `;
 
-        await poll(
-          async () => {
-            try {
-              const client = await pool.connect();
-              await client.query(query, []);
-              client.release();
-            } catch (error) {
-              // uncomment for debugging tests
-              // console.error(error);
-              return false;
-            }
-            return true;
-          },
-          {interval: 500, timeout: 20000},
-        );
-      });
+      await poll(
+        async () => {
+          try {
+            const client = await pool.connect();
+            await client.query(query, []);
+            client.release();
+          } catch (error) {
+            // uncomment for debugging tests
+            // console.error(error);
+            return false;
+          }
+          return true;
+        },
+        {interval: 500, timeout: 20000},
+      );
+    });
 
-      it(`initially satisfies case-sensitive conditions`, async () => {
-        const client = await pool.connect();
-        try {
-          const result = await client.query(
-            `SELECT EXISTS(SELECT tablename FROM pg_catalog.pg_tables WHERE tablename = '${sessionTableName}')`,
-          );
-          expect(result.rows[0].exists).toBeTruthy();
-        } catch (error) {
-          console.error(error);
-        }
-        const entries = session
-          .toPropertyArray()
-          .map(([key, value]) =>
-            key === 'expires'
-              ? [key, Math.floor((value as number) / 1000)]
-              : [key, value],
-          );
-        const query = `
+    it(`initially satisfies case-sensitive conditions`, async () => {
+      const client = await pool.connect();
+      try {
+        const result = await client.query(
+          `SELECT EXISTS(SELECT tablename FROM pg_catalog.pg_tables WHERE tablename = '${sessionTableName}')`,
+        );
+        expect(result.rows[0].exists).toBeTruthy();
+      } catch (error) {
+        console.error(error);
+      }
+      const entries = session
+        .toPropertyArray()
+        .map(([key, value]) =>
+          key === 'expires'
+            ? [key, Math.floor((value as number) / 1000)]
+            : [key, value],
+        );
+      const query = `
           INSERT INTO "${sessionTableName}"
           (${entries.map(([key]) => `"${key}"`).join(', ')})
           VALUES (${entries.map((_, i) => `$${i + 1}`).join(', ')})
@@ -268,85 +263,82 @@ afterAll(async () => {
             .map(([key]) => `"${key}" = Excluded."${key}"`)
             .join(', ')};
         `;
-        try {
-          await client.query(
-            query,
-            entries.map(([_key, value]) => value),
-          );
-        } catch (error) {
-          console.error(error);
-        }
-        try {
-          const result = await client.query(
-            `SELECT "id" FROM "${sessionTableName}"`,
-          );
-          expect(result.rows.length).toBe(1);
-        } catch (error) {
-          console.error(error);
-        }
-        client.release();
-      });
-
-      it(`doesn't perform any migration`, async () => {
-        storage = new PostgreSQLSessionStorage(dbURL, {
-          sessionTableName,
-          port: 5433,
-        });
-        try {
-          await storage.ready;
-        } catch (error) {
-          console.error('DEBUG: error from storage.ready', error);
-        }
-
-        const client = await pool.connect();
-        if (sessionTableName.toLowerCase() !== sessionTableName) {
-          try {
-            const result = await client.query(
-              `SELECT EXISTS(SELECT tablename FROM pg_catalog.pg_tables WHERE tablename = '${sessionTableName.toLowerCase()}')`,
-            );
-            expect(result.rows[0].exists).toBeFalsy();
-          } catch (error) {
-            console.error(error);
-          }
-        }
-        try {
-          const result = await client.query(
-            `SELECT EXISTS(SELECT tablename FROM pg_catalog.pg_tables WHERE tablename = '${sessionTableName}')`,
-          );
-          expect(result.rows[0].exists).toBeTruthy();
-        } catch (error) {
-          console.error(error);
-        }
-        try {
-          const result = await client.query(
-            `SELECT "id" FROM "${sessionTableName}"`,
-          );
-          expect(result.rows.length).toBe(1);
-        } catch (error) {
-          console.error(error);
-        }
-        client.release();
-
-        let sessionFromDB: Session | undefined;
-        try {
-          sessionFromDB = await storage.loadSession(sessionId);
-        } catch (error) {
-          console.error('DEBUG: error from storage.loadSession', error);
-        }
-        await storage.disconnect();
-
-        expect(sessionFromDB).not.toBeUndefined();
-        expect(sessionFromDB!.id).toBe(sessionId);
-        expect(sessionFromDB!.shop).toBe(session.shop);
-        expect(sessionFromDB!.state).toBe(session.state);
-        expect(sessionFromDB!.isOnline).toBe(session.isOnline);
-        expect(sessionFromDB!.expires).toStrictEqual(session.expires);
-        expect(sessionFromDB!.scope).toBe(session.scope);
-        expect(sessionFromDB!.accessToken).toBe(session.accessToken);
-        expect(sessionFromDB!.onlineAccessInfo).toEqual(
-          session.onlineAccessInfo,
+      try {
+        await client.query(
+          query,
+          entries.map(([_key, value]) => value),
         );
+      } catch (error) {
+        console.error(error);
+      }
+      try {
+        const result = await client.query(
+          `SELECT "id" FROM "${sessionTableName}"`,
+        );
+        expect(result.rows.length).toBe(1);
+      } catch (error) {
+        console.error(error);
+      }
+      client.release();
+    });
+
+    it(`doesn't perform any migration`, async () => {
+      storage = new PostgreSQLSessionStorage(dbURL, {
+        sessionTableName,
+        port: 5435,
       });
+      try {
+        await storage.ready;
+      } catch (error) {
+        console.error('DEBUG: error from storage.ready', error);
+      }
+
+      const client = await pool.connect();
+      if (sessionTableName.toLowerCase() !== sessionTableName) {
+        try {
+          const result = await client.query(
+            `SELECT EXISTS(SELECT tablename FROM pg_catalog.pg_tables WHERE tablename = '${sessionTableName.toLowerCase()}')`,
+          );
+          expect(result.rows[0].exists).toBeFalsy();
+        } catch (error) {
+          console.error(error);
+        }
+      }
+      try {
+        const result = await client.query(
+          `SELECT EXISTS(SELECT tablename FROM pg_catalog.pg_tables WHERE tablename = '${sessionTableName}')`,
+        );
+        expect(result.rows[0].exists).toBeTruthy();
+      } catch (error) {
+        console.error(error);
+      }
+      try {
+        const result = await client.query(
+          `SELECT "id" FROM "${sessionTableName}"`,
+        );
+        expect(result.rows.length).toBe(1);
+      } catch (error) {
+        console.error(error);
+      }
+      client.release();
+
+      let sessionFromDB: Session | undefined;
+      try {
+        sessionFromDB = await storage.loadSession(sessionId);
+      } catch (error) {
+        console.error('DEBUG: error from storage.loadSession', error);
+      }
+      await storage.disconnect();
+
+      expect(sessionFromDB).not.toBeUndefined();
+      expect(sessionFromDB!.id).toBe(sessionId);
+      expect(sessionFromDB!.shop).toBe(session.shop);
+      expect(sessionFromDB!.state).toBe(session.state);
+      expect(sessionFromDB!.isOnline).toBe(session.isOnline);
+      expect(sessionFromDB!.expires).toStrictEqual(session.expires);
+      expect(sessionFromDB!.scope).toBe(session.scope);
+      expect(sessionFromDB!.accessToken).toBe(session.accessToken);
+      expect(sessionFromDB!.onlineAccessInfo).toEqual(session.onlineAccessInfo);
     });
   },
 );
