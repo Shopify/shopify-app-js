@@ -20,8 +20,8 @@ import {
 } from '../../../__tests__/test-helper';
 import {mockExternalRequest} from '../../../__tests__/request-mock';
 import {shopifyApp} from '../../..';
-import {REAUTH_URL_HEADER} from '../../helpers/add-response-headers';
 import {AdminApiContext} from '../../../config-types';
+import {REAUTH_URL_HEADER} from '../../const';
 
 const REQUEST_URL = `https://${TEST_SHOP}/admin/api/${LATEST_API_VERSION}/customers.json`;
 
