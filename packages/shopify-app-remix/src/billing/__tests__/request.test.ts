@@ -127,7 +127,7 @@ describe('Billing request', () => {
     );
 
     // THEN
-    expect(response.status).toEqual(302);
+    expect(response.status).toEqual(401);
     expect(response.headers.get(REAUTH_URL_HEADER)).toEqual(
       responses.CONFIRMATION_URL,
     );
