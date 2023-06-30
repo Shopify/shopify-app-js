@@ -4,7 +4,7 @@ import {
   getThrownResponse,
   testConfig,
 } from '../../../__tests__/test-helper';
-import {REAUTH_URL_HEADER} from '../../helpers/add-response-headers';
+import {REAUTH_URL_HEADER} from '../../const';
 
 describe('authorize.admin', () => {
   test('responds to preflight OPTIONS requests', async () => {

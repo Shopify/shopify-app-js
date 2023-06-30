@@ -1,4 +1,5 @@
 import {shopifyApp} from '../../..';
+import {APP_BRIDGE_NEXT_URL} from '../../const';
 import {
   APP_URL,
   TEST_SHOP,
@@ -27,7 +28,7 @@ describe('authorize.admin path session token path', () => {
       'text/html;charset=utf-8',
     );
     expect((await response.text()).trim()).toBe(
-      `<script data-api-key="${config.apiKey}" src="https://cdn.shopify.com/shopifycloud/app-bridge-next/app-bridge.js"></script>`,
+      `<script data-api-key="${config.apiKey}" src="${APP_BRIDGE_NEXT_URL}"></script>`,
     );
   });
 
@@ -51,7 +52,7 @@ describe('authorize.admin path session token path', () => {
       'text/html;charset=utf-8',
     );
     expect((await response.text()).trim()).toContain(
-      `<script data-api-key="${config.apiKey}" src="https://cdn.shopify.com/shopifycloud/app-bridge-next/app-bridge.js"></script>`,
+      `<script data-api-key="${config.apiKey}" src="${APP_BRIDGE_NEXT_URL}"></script>`,
     );
   });
 });
