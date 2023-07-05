@@ -1,3 +1,3 @@
-export {i18nextServer as server} from './server';
-export {serverMiddlewares} from './server-middlewares';
-export {clientMiddlewares} from './client-middlewares';
+export {i18nextServer} from './server';
+export {initI18nextServer} from './init-server';
+export {initI18nextClient} from './init-client';
