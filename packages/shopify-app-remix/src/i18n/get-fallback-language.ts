@@ -2,7 +2,6 @@ import {FallbackLng} from 'i18next';
 
 export function getFallbackLng(
   optionLng: FallbackLng | undefined | false,
-  _lng: string,
 ): string {
   if (typeof optionLng === 'string') {
     return optionLng;
