@@ -24,9 +24,8 @@ export async function initI18nextServer({
   await loadLocalePolyfills();
 
   const lng = await i18nextServer({options, backend}).getLocale(request);
-  const fallbackLng = getFallbackLng(options.fallbackLng, lng);
 
-  await loadPluralRulesPolyfills(fallbackLng, lng);
+  await loadPluralRulesPolyfills(getFallbackLng(options.fallbackLng), lng);
 
   // Make sure we're setting the lng on the options object if it's not already there
   if (!options.lng) {

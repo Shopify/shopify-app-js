@@ -27,11 +27,14 @@ export async function initI18nextClient(
       }
 
       loadPluralRulesPolyfills(
-        getFallbackLng(i18nextOptions.fallbackLng, resultString),
+        getFallbackLng(i18nextOptions.fallbackLng),
         resultString,
       )
         .then(() => callback(result))
-        .catch(() => console.log('Failed to load i18n polyfills'));
+        .catch(() => {
+          console.log('Failed to load i18n polyfills');
+          callback(undefined);
+        });
 
       return result;
     }
