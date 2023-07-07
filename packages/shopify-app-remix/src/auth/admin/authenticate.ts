@@ -32,6 +32,7 @@ import {
   validateSessionToken,
   rejectBotRequest,
 } from '../helpers';
+import {APP_BRIDGE_NEXT_URL} from '../const';
 
 import type {AdminContext} from './types';
 import {graphqlClientFactory} from './graphql-client';
@@ -147,11 +148,12 @@ export class AuthStrategy<
 
     logger.debug('OAuth request contained valid shop', {shop});
 
-    // If we're loading from an iframe or a fetch request, we need to break out of the iframe
+    // If we're loading from an iframe, we need to break out of it
     if (
       config.isEmbeddedApp &&
-      ['iframe', 'empty'].includes(request.headers.get('Sec-Fetch-Dest')!)
+      request.headers.get('Sec-Fetch-Dest') === 'iframe'
     ) {
+      logger.debug('Auth request in iframe detected, exiting iframe', {shop});
       throw redirectWithExitIframe({api, config, logger}, request, shop);
     } else {
       throw await beginAuth({api, config, logger}, request, false, shop);
@@ -213,24 +215,25 @@ export class AuthStrategy<
   }
 
   private async validateUrlParams(request: Request) {
-    const {api} = this;
+    const {api, config, logger} = this;
     const url = new URL(request.url);
 
-    if (this.config.isEmbeddedApp && url.pathname !== this.config.auth.path) {
-      const host = api.utils.sanitizeHost(url.searchParams.get('host')!);
-      if (!host) {
-        throw new Response(undefined, {
-          status: 400,
-          statusText: 'Bad Request',
-        });
-      }
-    }
-
-    // There's an assumption here that the shop search param will always be present. If it isn't, we'll throw an error
-    // but an alternative would be to show a page for the user to fill in the shop, like shopify_app does.
     const shop = api.utils.sanitizeShop(url.searchParams.get('shop')!);
     if (!shop) {
-      throw new Response(undefined, {status: 400, statusText: 'Bad Request'});
+      logger.debug('Missing or invalid shop, redirecting to login path', {
+        shop,
+      });
+      throw redirect(config.auth.loginPath);
+    }
+
+    if (this.config.isEmbeddedApp) {
+      const host = api.utils.sanitizeHost(url.searchParams.get('host')!);
+      if (!host) {
+        logger.debug('Invalid host, redirecting to login path', {
+          host: url.searchParams.get('host'),
+        });
+        throw redirect(config.auth.loginPath);
+      }
     }
   }
 
@@ -499,7 +502,7 @@ export class AuthStrategy<
 
     throw new Response(
       `
-        <script data-api-key="${config.apiKey}" src="https://cdn.shopify.com/shopifycloud/app-bridge-next/app-bridge.js"></script>
+        <script data-api-key="${config.apiKey}" src="${APP_BRIDGE_NEXT_URL}"></script>
         ${redirectToScript}
       `,
       {headers: {'content-type': 'text/html;charset=utf-8'}},

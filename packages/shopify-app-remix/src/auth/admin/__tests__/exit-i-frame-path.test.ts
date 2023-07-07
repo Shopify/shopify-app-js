@@ -6,6 +6,7 @@ import {
   getThrownResponse,
   testConfig,
 } from '../../../__tests__/test-helper';
+import {APP_BRIDGE_NEXT_URL} from '../../const';
 
 describe('authorize.admin exit iframe path', () => {
   test('Uses App Bridge to exit iFrame when the url matches auth.exitIframePath', async () => {
@@ -29,7 +30,7 @@ describe('authorize.admin exit iframe path', () => {
       'text/html;charset=utf-8',
     );
     expect(responseText).toContain(
-      `<script data-api-key="${config.apiKey}" src="https://cdn.shopify.com/shopifycloud/app-bridge-next/app-bridge.js"></script>`,
+      `<script data-api-key="${config.apiKey}" src="${APP_BRIDGE_NEXT_URL}"></script>`,
     );
     expect(responseText).toContain(
       `<script>window.open("${decodeURIComponent(exitTo)}", "_top")</script>`,
@@ -58,7 +59,7 @@ describe('authorize.admin exit iframe path', () => {
       'text/html;charset=utf-8',
     );
     expect(responseText).toContain(
-      `<script data-api-key="${config.apiKey}" src="https://cdn.shopify.com/shopifycloud/app-bridge-next/app-bridge.js"></script>`,
+      `<script data-api-key="${config.apiKey}" src="${APP_BRIDGE_NEXT_URL}"></script>`,
     );
     expect(responseText).toContain(
       `<script>window.open("${decodeURIComponent(exitTo)}", "_top")</script>`,

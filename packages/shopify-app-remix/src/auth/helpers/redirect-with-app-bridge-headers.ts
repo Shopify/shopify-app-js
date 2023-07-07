@@ -1,6 +1,7 @@
 import type {BasicParams} from '../../types';
+import {REAUTH_URL_HEADER} from '../const';
 
-import {REAUTH_URL_HEADER, addResponseHeaders} from './add-response-headers';
+import {addResponseHeaders} from './add-response-headers';
 
 export function redirectWithAppBridgeHeaders(
   params: BasicParams,

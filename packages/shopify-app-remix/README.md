@@ -120,7 +120,7 @@ export default function App() {
         <Links />
         {/* App Bridge must be loaded from the CDN at the head */}
         <script
-          src="https://cdn.shopify.com/shopifycloud/app-bridge-next/app-bridge.js"
+          src="https://cdn.shopify.com/shopifycloud/app-bridge-next.js"
           data-api-key={apiKey}
         />
       </head>
@@ -330,7 +330,7 @@ export const action = async ({request}: ActionArgs) => {
 Your Remix app may need to authenticate requests coming from a public context. An example of this would be a checkout extension. Here is how:
 
 ```ts
-// e.g: routes/api/public/notes.tsx
+// e.g: routes/api.public.notes.tsx
 import {shopify} from '../shopify.server';
 import {LoaderArgs, json} from '@remix-run/node';
 import {getNotes} from '~/models/notes';
@@ -369,3 +369,8 @@ const shopify = shopifyApp({
 ```
 
 Note that this requires a `schema.prisma` file as defined in the README for [Prisma app session storage](https://github.com/Shopify/shopify-app-js/tree/main/packages/shopify-app-session-storage-prisma)
+
+## Internationalization (i18n)
+
+This package also includes some tools to help make it easier for apps to translate their interfaces.
+To use it, please visit our [internationalization documentation](./docs/i18n.md).

@@ -5,6 +5,7 @@ import {buildLibrary} from '@shopify/loom-plugin-build-library';
 
 export default createPackage((pkg) => {
   pkg.entry({root: './src/index.ts'});
+  pkg.entry({root: './src/i18n/index.ts'});
 
   const basePath = `${__dirname}/src/adapters`;
   fs.readdirSync(basePath, {withFileTypes: true})
@@ -19,7 +20,7 @@ export default createPackage((pkg) => {
       // Use browser targets (e.g. `'defaults'`) if your package targets the browser,
       // node targets (e.g. `'node 12.22'`) if your package targets node
       // or both (e.g.`'defaults, node 12.22'`) if your package targets both
-      targets: 'node 14',
+      targets: 'node 16',
       // Optional. Defaults to false. Defines if commonjs outputs should be generated.
       commonjs: true,
       // Optional. Defaults to false. Defines if esmodules outputs should be generated.

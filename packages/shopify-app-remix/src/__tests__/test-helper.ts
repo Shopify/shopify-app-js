@@ -13,7 +13,7 @@ import {SessionStorage} from '@shopify/shopify-app-session-storage';
 import {MemorySessionStorage} from '@shopify/shopify-app-session-storage-memory';
 
 import {AppConfigArg} from '../config-types';
-import {REAUTH_URL_HEADER} from '../auth/helpers/add-response-headers';
+import {APP_BRIDGE_NEXT_URL, REAUTH_URL_HEADER} from '../auth/const';
 
 export function testConfig(
   overrides: Partial<AppConfigArg> = {},
@@ -39,7 +39,7 @@ export const API_KEY = 'testApiKey';
 export const APP_URL = 'https://my-test-app.myshopify.io';
 export const SHOPIFY_HOST = 'totally-real-host.myshopify.io';
 export const BASE64_HOST = Buffer.from(SHOPIFY_HOST).toString('base64');
-export const TEST_SHOP = 'test-shop.myshopify.io';
+export const TEST_SHOP = 'test-shop.myshopify.com';
 export const GRAPHQL_URL = `https://${TEST_SHOP}/admin/api/${LATEST_API_VERSION}/graphql.json`;
 const USER_ID = 12345;
 
@@ -206,6 +206,9 @@ export function expectSecurityHeaders(
     expect(headers.get('Access-Control-Expose-Headers')).toEqual(
       REAUTH_URL_HEADER,
     );
+    expect(headers.get('Link')).toEqual(
+      `<${APP_BRIDGE_NEXT_URL}>; rel="preload"`,
+    );
   } else {
     expect(headers.get('Content-Security-Policy')).toEqual(
       `frame-ancestors 'none';`,
@@ -235,4 +238,11 @@ export function expectExitIframeRedirect(
   if (host) {
     expect(searchParams.get('host')).toBe(host);
   }
+}
+
+export function expectLoginRedirect(response: Response) {
+  expect(response.status).toBe(302);
+
+  const {pathname} = new URL(response.headers.get('location')!, APP_URL);
+  expect(pathname).toBe('/auth/login');
 }

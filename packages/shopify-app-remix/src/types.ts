@@ -27,6 +27,14 @@ export type JSONValue =
   | JSONObject
   | JSONArray;
 
+// eslint-disable-next-line no-warning-comments
+// TODO: Use this enum to replace the isCustomStoreApp config option in shopify-api-js
+export enum AppDistribution {
+  AppStore = 'app_store',
+  SingleMerchant = 'single_merchant',
+  ShopifyAdmin = 'shopify_admin',
+}
+
 interface JSONObject {
   [x: string]: JSONValue;
 }
@@ -36,6 +44,17 @@ interface JSONArray extends Array<JSONValue> {}
 type RegisterWebhooks = (
   options: RegisterWebhooksOptions,
 ) => Promise<RegisterReturn>;
+
+export enum LoginErrorType {
+  MissingShop = 'MISSING_SHOP',
+  InvalidShop = 'INVALID_SHOP',
+}
+
+export interface LoginError {
+  shop?: LoginErrorType;
+}
+
+type Login = (request: Request) => Promise<LoginError | never>;
 
 type AddResponseHeaders = (request: Request, headers: Headers) => void;
 
@@ -103,6 +122,44 @@ export interface ShopifyApp<Config extends AppConfigArg> {
   sessionStorage: SessionStorageType<Config>;
 
   /**
+   * Whether this app is allowed to display a login form to the merchant that calls shopify.login().
+   *
+   * If distribution is AppDistribution.ShopifyAdmin this is false.
+   *
+   * @example
+   * Render a page containing a login form, only when allowed.
+   * ```ts
+   * // app/routes/*.ts
+   * import { shopify } from "~/shopify.server";
+   * import { Form, useLoaderData } from "@remix-run/react";
+   *
+   * export async function loader({ request }) {
+   *   return json({ showForm: shopify.canUseLoginForm });
+   * }
+   *
+   * export default function Page() {
+   *   const { showForm } = useLoaderData();
+   *
+   *   if (showForm) {
+   *     return (
+   *       <Form method="post" action="/auth/login">
+   *         <label>
+   *           <span>Shop domain</span>
+   *           <input type="text" name="shop" />
+   *           <span>e.g: my-shop-domain.myshopify.com</span>
+   *         </label>
+   *         <button type="submit">Log in</button>
+   *       </Form>
+   *     );
+   *   }
+   *
+   *   return null;
+   * }
+   * ```
+   */
+  canUseLoginForm: boolean;
+
+  /**
    * Adds the required Content Security Policy headers for Shopify apps to the given Headers object.
    *
    * {@link https://shopify.dev/docs/apps/store/security/iframe-protection}
@@ -167,6 +224,58 @@ export interface ShopifyApp<Config extends AppConfigArg> {
    * ```
    */
   registerWebhooks: RegisterWebhooks;
+
+  /**
+   * Log a merchant in, and redirect them to the app root. Will redirect the merchant to authentication if a shop is
+   * present in the URL search parameters or form data.
+   *
+   * @example
+   * Providing a login form as a route that can handle GET and POST requests.
+   * export async function loader({ request }: LoaderArgs) {
+   *   const errors = shopify.login(request);
+   *
+   *   return json(errors);
+   * }
+   *
+   * export async function action({ request }: ActionArgs) {
+   *   const errors = shopify.login(request);
+   *
+   *   return json(errors);
+   * }
+   *
+   * export default function Auth() {
+   *   const actionData = useActionData<typeof action>();
+   *   const [shop, setShop] = useState("");
+   *
+   *   return (
+   *     <Page>
+   *       <Card>
+   *         <Form method="post">
+   *           <FormLayout>
+   *             <Text variant="headingMd" as="h2">
+   *               Login
+   *             </Text>
+   *             <TextField
+   *               type="text"
+   *               name="shop"
+   *               label="Shop domain"
+   *               helpText="e.g: my-shop-domain.myshopify.com"
+   *               value={shop}
+   *               onChange={setShop}
+   *               autoComplete="on"
+   *               error={actionData?.errors.shop}
+   *             />
+   *             <Button submit primary>
+   *               Submit
+   *             </Button>
+   *           </FormLayout>
+   *         </Form>
+   *       </Card>
+   *     </Page>
+   *   );
+   * }
+   */
+  login: Login;
 
   /**
    * Ways to authenticate requests from different surfaces across Shopify.

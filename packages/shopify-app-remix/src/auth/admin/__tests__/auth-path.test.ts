@@ -59,22 +59,6 @@ describe('authorize.admin auth path', () => {
     expectSecurityHeaders(response);
   });
 
-  test('redirects to exit-iframe when loading the auth path while in a fetch request', async () => {
-    // GIVEN
-    const config = testConfig();
-    const shopify = shopifyApp(config);
-
-    // WHEN
-    const url = `${APP_URL}/auth?shop=${TEST_SHOP}`;
-    const response = await getThrownResponse(
-      shopify.authenticate.admin,
-      new Request(url, {headers: {'Sec-Fetch-Dest': 'empty'}}),
-    );
-
-    // THEN
-    expectExitIframeRedirect(response, {host: null});
-  });
-
   test('redirects to exit-iframe when loading the auth path while in an iframe request', async () => {
     // GIVEN
     const config = testConfig();

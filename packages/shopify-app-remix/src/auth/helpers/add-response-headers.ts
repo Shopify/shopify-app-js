@@ -1,16 +1,11 @@
 import type {BasicParams} from '../../types';
-
-const DEFAULT_CSP = `frame-ancestors https://*.myshopify.com https://admin.shopify.com;`;
+import {
+  APP_BRIDGE_HEADERS,
+  APP_BRIDGE_NEXT_URL,
+  DEFAULT_CSP_VALUE,
+} from '../const';
 
 const ORIGINAL_HEADERS = Symbol.for('originalHeaders');
-
-export const REAUTH_URL_HEADER =
-  'X-Shopify-API-Request-Failure-Reauthorize-Url';
-export const APP_BRIDGE_HEADERS = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'Authorization',
-  'Access-Control-Expose-Headers': REAUTH_URL_HEADER,
-};
 
 export function addResponseHeadersFactory(params: BasicParams) {
   const {api, config} = params;
@@ -30,7 +25,7 @@ export function addResponseHeaders(
 ) {
   if (isEmbeddedApp && shop) {
     // Set or update the CSP with the shop subdomain instead of a wildcard:
-    let csp = headers.get('Content-Security-Policy') || DEFAULT_CSP;
+    let csp = headers.get('Content-Security-Policy') || DEFAULT_CSP_VALUE;
     if (shop) csp = csp.replace('*.myshopify.com', shop);
     headers.set('Content-Security-Policy', csp);
   }
@@ -61,7 +56,6 @@ export function installGlobalResponseHeaders(isEmbeddedApp: boolean) {
           if (!headers.get(key)) {
             const value =
               APP_BRIDGE_HEADERS[key as keyof typeof APP_BRIDGE_HEADERS];
-            // console.log({key, value, APP_BRIDGE_HEADERS})
             headers.set(key, value);
           }
         }
@@ -71,8 +65,12 @@ export function installGlobalResponseHeaders(isEmbeddedApp: boolean) {
       if (!headers.get('Content-Security-Policy')) {
         headers.set(
           'Content-Security-Policy',
-          isEmbeddedApp ? DEFAULT_CSP : `frame-ancestors 'none';`,
+          isEmbeddedApp ? DEFAULT_CSP_VALUE : `frame-ancestors 'none';`,
         );
+      }
+
+      if (!headers.get('Link')) {
+        headers.set('Link', `<${APP_BRIDGE_NEXT_URL}>; rel="preload"`);
       }
 
       return headers;

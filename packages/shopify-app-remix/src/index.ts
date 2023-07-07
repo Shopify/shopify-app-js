@@ -12,8 +12,13 @@ import {setAbstractRuntimeString} from '@shopify/shopify-api/runtime';
 import {SessionStorage} from '@shopify/shopify-app-session-storage';
 import {SQLiteSessionStorage} from '@shopify/shopify-app-session-storage-sqlite';
 
-import type {AppConfig, AppConfigArg} from './config-types';
-import type {BasicParams, MandatoryTopics, ShopifyApp} from './types';
+import {type AppConfig, type AppConfigArg} from './config-types';
+import {
+  AppDistribution,
+  type BasicParams,
+  type MandatoryTopics,
+  type ShopifyApp,
+} from './types';
 import {SHOPIFY_REMIX_LIBRARY_VERSION} from './version';
 import {registerWebhooksFactory} from './auth/webhooks';
 import {AuthStrategy} from './auth/admin/authenticate';
@@ -24,8 +29,10 @@ import {
   addResponseHeadersFactory,
   installGlobalResponseHeaders,
 } from './auth/helpers/add-response-headers';
+import {loginFactory} from './auth/login/login';
 
-export type {ShopifyApp} from './types';
+export type {ShopifyApp, LoginError} from './types';
+export {LoginErrorType, AppDistribution} from './types';
 
 export {
   LATEST_API_VERSION,
@@ -77,8 +84,10 @@ export function shopifyApp<
 
   return {
     sessionStorage: config.sessionStorage,
+    canUseLoginForm: config.canUseLoginForm,
     addResponseHeaders: addResponseHeadersFactory(params),
     registerWebhooks: registerWebhooksFactory(params),
+    login: loginFactory(params),
     authenticate: {
       admin: oauth.authenticateAdmin.bind(oauth),
       public: authenticatePublicFactory(params),
@@ -121,6 +130,7 @@ function deriveApi<Resources extends ShopifyRestResources>(
     userAgentPrefix,
     isEmbeddedApp: appConfig.isEmbeddedApp ?? true,
     apiVersion: appConfig.apiVersion ?? LATEST_API_VERSION,
+    isCustomStoreApp: appConfig.distribution === AppDistribution.ShopifyAdmin,
   };
 
   return shopifyApi<Resources>(cleanApiConfig);
@@ -131,10 +141,12 @@ function deriveConfig<Storage extends SessionStorage>(
   apiConfig: ApiConfig,
 ): AppConfig<Storage> {
   const authPathPrefix = appConfig.authPathPrefix || '/auth';
+  const distribution = appConfig.distribution ?? AppDistribution.AppStore;
 
   return {
     ...appConfig,
     ...apiConfig,
+    canUseLoginForm: distribution !== AppDistribution.ShopifyAdmin,
     useOnlineTokens: appConfig.useOnlineTokens ?? false,
     hooks: appConfig.hooks ?? {},
     sessionStorage: (appConfig.sessionStorage ??
@@ -144,6 +156,7 @@ function deriveConfig<Storage extends SessionStorage>(
       callbackPath: `${authPathPrefix}/callback`,
       patchSessionTokenPath: `${authPathPrefix}/session-token`,
       exitIframePath: `${authPathPrefix}/exit-iframe`,
+      loginPath: `${authPathPrefix}/login`,
     },
   };
 }
