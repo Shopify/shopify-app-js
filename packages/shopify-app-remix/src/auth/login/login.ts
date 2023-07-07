@@ -40,8 +40,7 @@ export function loginFactory(params: BasicParams) {
       return {shop: LoginErrorType.InvalidShop};
     }
 
-    const [shopWithoutDot] = sanitizedShop.split('.');
-    const redirectUrl = `https://admin.shopify.com/store/${shopWithoutDot}/apps/${config.apiKey}`;
+    const redirectUrl = `${config.appUrl}${config.auth.path}?shop=${sanitizedShop}`;
 
     logger.info(`Redirecting login request to ${redirectUrl}`, {
       shop: sanitizedShop,
