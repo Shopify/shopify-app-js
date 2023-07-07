@@ -19,18 +19,20 @@ export function loginFactory(params: BasicParams) {
     }
 
     const shopWithoutProtocol = shop.replace(/^https?:\/\//, '');
-    const shopWithDot =
+    const shopWithDomain =
       shop?.indexOf('.') === -1
         ? `${shopWithoutProtocol}.myshopify.com`
         : shopWithoutProtocol;
-    const sanitizedShop = api.utils.sanitizeShop(shopWithDot);
+    const sanitizedShop = api.utils.sanitizeShop(shopWithDomain);
 
     if (!sanitizedShop) {
-      logger.debug('Invalid shop parameter', {shop: shopWithDot});
+      logger.debug('Invalid shop parameter', {shop});
       return {shop: LoginErrorType.InvalidShop};
     }
 
-    const redirectUrl = `${config.auth.path}?shop=${sanitizedShop}`;
+    const [shopWithoutDot] = sanitizedShop.split('.');
+    const redirectUrl = `https://admin.shopify.com/store/${shopWithoutDot}/apps/${config.apiKey}`;
+
     logger.info(`Redirecting login request to ${redirectUrl}`, {
       shop: sanitizedShop,
     });
