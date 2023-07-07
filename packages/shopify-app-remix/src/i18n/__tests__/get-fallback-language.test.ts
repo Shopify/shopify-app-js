@@ -12,4 +12,8 @@ describe('getFallbackLanguage', () => {
   it('can find the fallback language from an object', () => {
     expect(getFallbackLng({en: ['en', 'en-US']})).toEqual('en');
   });
+
+  it('falls back to en if all else fails', () => {
+    expect(getFallbackLng(undefined)).toEqual('en');
+  });
 });
