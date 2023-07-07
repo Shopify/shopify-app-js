@@ -1,5 +1,5 @@
 export const APP_BRIDGE_NEXT_URL =
-  'https://cdn.shopify.com/shopifycloud/staging/app-bridge-next.js';
+  'https://cdn.shopify.com/shopifycloud/app-bridge-next.js';
 
 export const REAUTH_URL_HEADER =
   'X-Shopify-API-Request-Failure-Reauthorize-Url';
