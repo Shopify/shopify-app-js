@@ -50,10 +50,13 @@ describe('login helper', () => {
     {urlShop: TEST_SHOP, formShop: null},
     {urlShop: null, formShop: 'test-shop'},
     {urlShop: 'test-shop', formShop: null},
+    {urlShop: null, formShop: 'test-shop.myshopify.com'},
+    {urlShop: 'test-shop.myshopify.com', formShop: null},
   ])(
     'returns a redirect to /auth if the shop is valid: %s',
     async ({urlShop, formShop}) => {
       // GIVEN
+      const config = testConfig();
       const shopify = shopifyApp(testConfig());
       const requestMock = {
         url: urlShop
@@ -69,9 +72,10 @@ describe('login helper', () => {
       );
 
       // THEN
+      const shopWithoutDomain = TEST_SHOP.replace('.myshopify.com', '');
       expect(response.status).toEqual(302);
       expect(response.headers.get('location')).toEqual(
-        `/auth?shop=${TEST_SHOP}`,
+        `https://admin.shopify.com/store/${shopWithoutDomain}/apps/${config.apiKey}`,
       );
     },
   );
