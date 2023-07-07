@@ -7,12 +7,45 @@ import {
 } from '../../../__tests__/test-helper';
 
 describe('login helper', () => {
+  it('returns an empty errors object if GET and no shop param', async () => {
+    // GIVEN
+    const shopify = shopifyApp(testConfig());
+    const requestMock = {
+      url: `${APP_URL}/auth/login`,
+      method: 'GET',
+    };
+
+    // WHEN
+    const errors = await shopify.login(requestMock as any as Request);
+
+    // THEN
+    expect(errors).toStrictEqual({});
+  });
+
+  it('does not access formData if method is GET', async () => {
+    // GIVEN
+    const formDataMock = jest.fn();
+    const shopify = shopifyApp(testConfig());
+    const requestMock = {
+      url: `${APP_URL}/auth/login?shop=${TEST_SHOP}`,
+      method: 'GET',
+      formData: formDataMock,
+    };
+
+    // WHEN
+    getThrownResponse(shopify.login, requestMock as any as Request);
+
+    // THEN
+    expect(formDataMock).not.toHaveBeenCalled();
+  });
+
   it('returns an error if the shop parameter is missing', async () => {
     // GIVEN
     const shopify = shopifyApp(testConfig());
     const requestMock = {
       url: `${APP_URL}/auth/login`,
       formData: async () => ({get: () => null}),
+      method: 'POST',
     };
 
     // WHEN
@@ -23,11 +56,11 @@ describe('login helper', () => {
   });
 
   it.each([
-    {urlShop: 'invalid.shop', formShop: null},
-    {urlShop: null, formShop: 'invalid.shop'},
+    {urlShop: 'invalid.shop', formShop: null, method: 'GET'},
+    {urlShop: null, formShop: 'invalid.shop', method: 'POST'},
   ])(
     'returns an error if the shop parameter is invalid: %s',
-    async ({urlShop, formShop}) => {
+    async ({urlShop, formShop, method}) => {
       // GIVEN
       const shopify = shopifyApp(testConfig());
       const requestMock = {
@@ -35,6 +68,7 @@ describe('login helper', () => {
           ? `${APP_URL}/auth/login?shop=${urlShop}`
           : `${APP_URL}/auth/login`,
         formData: async () => ({get: () => formShop}),
+        method,
       };
 
       // WHEN
@@ -46,15 +80,15 @@ describe('login helper', () => {
   );
 
   it.each([
-    {urlShop: null, formShop: TEST_SHOP},
-    {urlShop: TEST_SHOP, formShop: null},
-    {urlShop: null, formShop: 'test-shop'},
-    {urlShop: 'test-shop', formShop: null},
-    {urlShop: null, formShop: 'test-shop.myshopify.com'},
-    {urlShop: 'test-shop.myshopify.com', formShop: null},
+    {urlShop: null, formShop: TEST_SHOP, method: 'POST'},
+    {urlShop: TEST_SHOP, formShop: null, method: 'GET'},
+    {urlShop: null, formShop: 'test-shop', method: 'POST'},
+    {urlShop: 'test-shop', formShop: null, method: 'GET'},
+    {urlShop: null, formShop: 'test-shop.myshopify.com', method: 'POST'},
+    {urlShop: 'test-shop.myshopify.com', formShop: null, method: 'GET'},
   ])(
     'returns a redirect to /auth if the shop is valid: %s',
-    async ({urlShop, formShop}) => {
+    async ({urlShop, formShop, method}) => {
       // GIVEN
       const config = testConfig();
       const shopify = shopifyApp(testConfig());
@@ -63,6 +97,7 @@ describe('login helper', () => {
           ? `${APP_URL}/auth/login?shop=${urlShop}`
           : `${APP_URL}/auth/login`,
         formData: async () => ({get: () => formShop}),
+        method,
       };
 
       // WHEN
