@@ -7,11 +7,14 @@ export function loginFactory(params: BasicParams) {
 
   return async function login(request: Request): Promise<LoginError | never> {
     const url = new URL(request.url);
-    const formData = await request.formData();
+    const shopParam = url.searchParams.get('shop');
 
-    const shop: string | null = formData.get('shop')
-      ? (formData.get('shop') as string)
-      : url.searchParams.get('shop');
+    if (request.method === 'GET' && !shopParam) {
+      return {};
+    }
+
+    const shop: string | null =
+      shopParam || ((await request.formData()).get('shop') as string);
 
     if (!shop) {
       logger.debug('Missing shop parameter', {shop});
