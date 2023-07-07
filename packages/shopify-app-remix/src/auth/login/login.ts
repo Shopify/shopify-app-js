@@ -6,12 +6,22 @@ export function loginFactory(params: BasicParams) {
   const {api, config, logger} = params;
 
   return async function login(request: Request): Promise<LoginError | never> {
-    const url = new URL(request.url);
-    const formData = await request.formData();
+    if (!config.canUseLoginForm) {
+      logger.debug(
+        'Login endpoint not available for Shopify Admin custom apps',
+      );
+      throw new Response(undefined, {status: 404});
+    }
 
-    const shop: string | null = formData.get('shop')
-      ? (formData.get('shop') as string)
-      : url.searchParams.get('shop');
+    const url = new URL(request.url);
+    const shopParam = url.searchParams.get('shop');
+
+    if (request.method === 'GET' && !shopParam) {
+      return {};
+    }
+
+    const shop: string | null =
+      shopParam || ((await request.formData()).get('shop') as string);
 
     if (!shop) {
       logger.debug('Missing shop parameter', {shop});
@@ -19,18 +29,20 @@ export function loginFactory(params: BasicParams) {
     }
 
     const shopWithoutProtocol = shop.replace(/^https?:\/\//, '');
-    const shopWithDot =
+    const shopWithDomain =
       shop?.indexOf('.') === -1
         ? `${shopWithoutProtocol}.myshopify.com`
         : shopWithoutProtocol;
-    const sanitizedShop = api.utils.sanitizeShop(shopWithDot);
+    const sanitizedShop = api.utils.sanitizeShop(shopWithDomain);
 
     if (!sanitizedShop) {
-      logger.debug('Invalid shop parameter', {shop: shopWithDot});
+      logger.debug('Invalid shop parameter', {shop});
       return {shop: LoginErrorType.InvalidShop};
     }
 
-    const redirectUrl = `${config.auth.path}?shop=${sanitizedShop}`;
+    const [shopWithoutDot] = sanitizedShop.split('.');
+    const redirectUrl = `https://admin.shopify.com/store/${shopWithoutDot}/apps/${config.apiKey}`;
+
     logger.info(`Redirecting login request to ${redirectUrl}`, {
       shop: sanitizedShop,
     });

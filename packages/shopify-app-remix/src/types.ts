@@ -27,6 +27,14 @@ export type JSONValue =
   | JSONObject
   | JSONArray;
 
+// eslint-disable-next-line no-warning-comments
+// TODO: Use this enum to replace the isCustomStoreApp config option in shopify-api-js
+export enum AppDistribution {
+  AppStore = 'app_store',
+  SingleMerchant = 'single_merchant',
+  ShopifyAdmin = 'shopify_admin',
+}
+
 interface JSONObject {
   [x: string]: JSONValue;
 }
@@ -114,6 +122,44 @@ export interface ShopifyApp<Config extends AppConfigArg> {
   sessionStorage: SessionStorageType<Config>;
 
   /**
+   * Whether this app is allowed to display a login form to the merchant that calls shopify.login().
+   *
+   * If distribution is AppDistribution.ShopifyAdmin this is false.
+   *
+   * @example
+   * Render a page containing a login form, only when allowed.
+   * ```ts
+   * // app/routes/*.ts
+   * import { shopify } from "~/shopify.server";
+   * import { Form, useLoaderData } from "@remix-run/react";
+   *
+   * export async function loader({ request }) {
+   *   return json({ showForm: shopify.canUseLoginForm });
+   * }
+   *
+   * export default function Page() {
+   *   const { showForm } = useLoaderData();
+   *
+   *   if (showForm) {
+   *     return (
+   *       <Form method="post" action="/auth/login">
+   *         <label>
+   *           <span>Shop domain</span>
+   *           <input type="text" name="shop" />
+   *           <span>e.g: my-shop-domain.myshopify.com</span>
+   *         </label>
+   *         <button type="submit">Log in</button>
+   *       </Form>
+   *     );
+   *   }
+   *
+   *   return null;
+   * }
+   * ```
+   */
+  canUseLoginForm: boolean;
+
+  /**
    * Adds the required Content Security Policy headers for Shopify apps to the given Headers object.
    *
    * {@link https://shopify.dev/docs/apps/store/security/iframe-protection}
@@ -186,15 +232,9 @@ export interface ShopifyApp<Config extends AppConfigArg> {
    * @example
    * Providing a login form as a route that can handle GET and POST requests.
    * export async function loader({ request }: LoaderArgs) {
-   *   const shop = new URL(request.url).searchParams.get("shop");
-   *   if (shop) {
-   *     // We can fully skip the login page if we already have a shop
-   *     const errors = shopify.login(request);
+   *   const errors = shopify.login(request);
    *
-   *     return json(errors);
-   *   }
-   *
-   *   return null;
+   *   return json(errors);
    * }
    *
    * export async function action({ request }: ActionArgs) {
