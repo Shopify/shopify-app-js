@@ -107,10 +107,9 @@ describe('login helper', () => {
       );
 
       // THEN
-      const shopWithoutDomain = TEST_SHOP.replace('.myshopify.com', '');
       expect(response.status).toEqual(302);
       expect(response.headers.get('location')).toEqual(
-        `https://admin.shopify.com/store/${shopWithoutDomain}/apps/${config.apiKey}`,
+        `${APP_URL}/auth?shop=${TEST_SHOP}`,
       );
     },
   );
