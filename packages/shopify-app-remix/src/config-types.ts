@@ -10,13 +10,18 @@ import {SessionStorage} from '@shopify/shopify-app-session-storage';
 
 import type {GraphqlQueryFunction} from './auth/admin/graphql-client';
 import type {RemixRestClient} from './auth/admin/rest-client';
+import {AppDistribution} from './types';
 
 export interface AppConfigArg<
   Resources extends ShopifyRestResources = ShopifyRestResources,
   Storage extends SessionStorage = SessionStorage,
 > extends Omit<
     ApiConfigArg<Resources>,
-    'hostName' | 'hostScheme' | 'isEmbeddedApp' | 'apiVersion'
+    | 'hostName'
+    | 'hostScheme'
+    | 'isEmbeddedApp'
+    | 'apiVersion'
+    | 'isCustomStoreApp'
   > {
   /**
    * The URL your app is running on.
@@ -145,6 +150,13 @@ export interface AppConfigArg<
   isEmbeddedApp?: boolean;
 
   /**
+   * How your app is distributed. Defaults to app store.
+   *
+   * {@link https://shopify.dev/docs/apps/distribution}
+   */
+  distribution?: AppDistribution;
+
+  /**
    * What version of Shopify's Admin API's would you like to use.
    *
    * {@link https://shopify.dev/docs/api/}
@@ -196,6 +208,7 @@ export interface AppConfigArg<
 
 export interface AppConfig<Storage extends SessionStorage = SessionStorage>
   extends ApiConfig {
+  canUseLoginForm: boolean;
   appUrl: string;
   auth: AuthConfig;
   sessionStorage: Storage;

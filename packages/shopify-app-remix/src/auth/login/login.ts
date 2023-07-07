@@ -6,6 +6,13 @@ export function loginFactory(params: BasicParams) {
   const {api, config, logger} = params;
 
   return async function login(request: Request): Promise<LoginError | never> {
+    if (!config.canUseLoginForm) {
+      logger.debug(
+        'Login endpoint not available for Shopify Admin custom apps',
+      );
+      throw new Response(undefined, {status: 404});
+    }
+
     const url = new URL(request.url);
     const shopParam = url.searchParams.get('shop');
 
