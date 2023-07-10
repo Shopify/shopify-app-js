@@ -29,14 +29,6 @@ function jestWorkspaceConfigPlugin() {
             ...config,
             testTimeout: 30000,
           }));
-          // Uncomment this to get coverage reports on all files
-          // configure.jestFlags?.hook((flags) => ({
-          //   ...flags,
-          //   coverage: true,
-          //   watch: false,
-          //   watchAll: true,
-          //   onlyChanged: false,
-          // }));
         });
       });
     },
