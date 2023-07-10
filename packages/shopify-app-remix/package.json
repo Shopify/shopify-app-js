@@ -51,7 +51,6 @@
     "@remix-run/server-runtime": "^1.17.1",
     "@shopify/shopify-api": "^7.4.0",
     "@shopify/shopify-app-session-storage": "^1.1.2",
-    "@shopify/shopify-app-session-storage-sqlite": "^1.2.2",
     "isbot": "^3.6.5",
     "semver": "^7.5.0",
     "tslib": "^2.5.0"

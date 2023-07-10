@@ -50,28 +50,32 @@ export function installGlobalResponseHeaders(isEmbeddedApp: boolean) {
       // Note: this is not an empty Headers, it will contain any headers passed to new Response():
       const headers = headersDescriptor.get!.call(this);
 
-      // Inject CORS headers required by both Embedded Apps and UI Extensions:
-      if (isEmbeddedApp) {
-        for (const key in APP_BRIDGE_HEADERS) {
-          if (!headers.get(key)) {
-            const value =
-              APP_BRIDGE_HEADERS[key as keyof typeof APP_BRIDGE_HEADERS];
+      try {
+        // Inject CORS headers required by both Embedded Apps and UI Extensions:
+        if (isEmbeddedApp) {
+          for (const key in APP_BRIDGE_HEADERS) {
+            if (!headers.get(key)) {
+              const value =
+                APP_BRIDGE_HEADERS[key as keyof typeof APP_BRIDGE_HEADERS];
 
-            headers.set(key, value);
+              headers.set(key, value);
+            }
           }
         }
-      }
 
-      // Apply a default CSP unless a more specific one (no wildcard) is present:
-      if (!headers.get('Content-Security-Policy')) {
-        headers.set(
-          'Content-Security-Policy',
-          isEmbeddedApp ? DEFAULT_CSP_VALUE : `frame-ancestors 'none';`,
-        );
-      }
+        // Apply a default CSP unless a more specific one (no wildcard) is present:
+        if (!headers.get('Content-Security-Policy')) {
+          headers.set(
+            'Content-Security-Policy',
+            isEmbeddedApp ? DEFAULT_CSP_VALUE : `frame-ancestors 'none';`,
+          );
+        }
 
-      if (!headers.get('Link')) {
-        headers.set('Link', `<${APP_BRIDGE_NEXT_URL}>; rel="preload"`);
+        if (!headers.get('Link')) {
+          headers.set('Link', `<${APP_BRIDGE_NEXT_URL}>; rel="preload"`);
+        }
+      } catch (err) {
+        // Do nothing, this is not a standard Response object.
       }
 
       return headers;
