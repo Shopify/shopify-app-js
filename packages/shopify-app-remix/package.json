@@ -12,19 +12,19 @@
   "homepage": "https://github.com/Shopify/shopify-app-js/tree/main/packages/shopify-app-remix",
   "author": "Shopify Inc.",
   "license": "MIT",
-  "main": "./build/cjs/index.js",
-  "types": "./build/ts/index.d.ts",
+  "main": "./index.js",
+  "types": "./index.d.ts",
   "exports": {
     ".": {
-      "import": "./build/cjs/index.js",
-      "require": "./build/cjs/index.js",
-      "types": "./build/ts/index.d.ts"
+      "import": "./index.js",
+      "require": "./index.js",
+      "types": "./index.d.ts"
     },
-    "./adapters/*": "./build/cjs/adapters/*/index.js",
+    "./adapters/*": "./adapters/*/index.js",
     "./i18n": {
-      "import": "./build/cjs/i18n/index.js",
-      "require": "./build/cjs/i18n/index.js",
-      "types": "./build/ts/i18n/index.d.ts"
+      "import": "./i18n/index.js",
+      "require": "./i18n/index.js",
+      "types": "./i18n/index.d.ts"
     }
   },
   "publishConfig": {
@@ -68,7 +68,10 @@
     "tslib": "^2.5.0"
   },
   "files": [
-    "build/*",
+    "**/*.d.ts",
+    "**/*.d.ts.map",
+    "**/*.js",
+    "**/*.js.map",
     "!build/**/__tests__",
     "!bundle/*",
     "!tsconfig.tsbuildinfo",
