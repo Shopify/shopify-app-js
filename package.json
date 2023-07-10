@@ -8,7 +8,7 @@
     "test": "loom test",
     "lint": "loom lint",
     "release": "loom build && changeset publish",
-    "clean": "rimraf ./packages/*/build .loom && cd ./packages/shopify-app-remix && yarn tsc --build --clean"
+    "clean": "rimraf ./packages/*/build .loom"
   },
   "devDependencies": {
     "@changesets/cli": "^2.26.1",

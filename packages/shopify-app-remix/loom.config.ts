@@ -5,7 +5,6 @@ import {buildLibrary} from '@shopify/loom-plugin-build-library';
 
 export default createPackage((pkg) => {
   pkg.entry({root: './src/index.ts'});
-  pkg.entry({root: './src/i18n/index.ts'});
 
   const basePath = `${__dirname}/src/adapters`;
   fs.readdirSync(basePath, {withFileTypes: true})
