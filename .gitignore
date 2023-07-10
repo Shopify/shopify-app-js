@@ -6,6 +6,7 @@ build/
 coverage/
 tsdocs/
 tsconfig.tsbuildinfo
+database.sqlite
 packages/**/*.d.ts
 packages/**/*.d.ts.map
 packages/**/*.js

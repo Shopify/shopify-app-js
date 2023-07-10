@@ -1,0 +1,65 @@
+{
+  "name": "@shopify/shopify-app-remix",
+  "version": "1.0.0",
+  "description": "Shopify Remix - to simplify the building of Shopify Apps with Remix",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Shopify/shopify-app-js.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Shopify/shopify-app-js/issues"
+  },
+  "homepage": "https://github.com/Shopify/shopify-app-js/tree/main/packages/shopify-app-remix",
+  "author": "Shopify Inc.",
+  "license": "MIT",
+  "main": "./build/cjs/index.js",
+  "types": "./build/ts/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./build/cjs/index.js",
+      "require": "./build/cjs/index.js",
+      "types": "./build/ts/index.d.ts"
+    },
+    "./adapters/*": "./build/cjs/adapters/*/index.js"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "keywords": [
+    "shopify",
+    "javascript",
+    "typescript",
+    "remix",
+    "app",
+    "graphql",
+    "rest",
+    "webhook",
+    "Admin API",
+    "Storefront API"
+  ],
+  "devDependencies": {
+    "@shopify/shopify-app-session-storage-memory": "^1.0.6",
+    "@types/jest": "^29.5.1",
+    "@types/jsonwebtoken": "^9.0.2",
+    "@types/semver": "^7.3.13",
+    "jest": "^29.5.0",
+    "jest-fetch-mock": "^3.0.3",
+    "jsonwebtoken": "^9.0.0",
+    "ts-jest": "^29.1.0"
+  },
+  "dependencies": {
+    "@remix-run/server-runtime": "^1.17.1",
+    "@shopify/shopify-api": "^7.4.0",
+    "@shopify/shopify-app-session-storage": "^1.1.2",
+    "isbot": "^3.6.5",
+    "semver": "^7.5.0",
+    "tslib": "^2.5.0"
+  },
+  "files": [
+    "build/*",
+    "!build/**/__tests__",
+    "!bundle/*",
+    "!tsconfig.tsbuildinfo",
+    "!node_modules"
+  ]
+}
