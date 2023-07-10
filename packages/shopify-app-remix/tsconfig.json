@@ -2,10 +2,9 @@
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
     "baseUrl": ".",
-    "rootDir": "src",
-    "outDir": ".",
-    "jsx": "react",
+    "outDir": "./build/ts",
+    "rootDir": "src"
   },
-  "include": ["src/**/*.ts", "src/**/*.tsx"],
+  "include": ["src/**/*.ts"],
   "exclude": ["**/*.test.ts", "**/*.test.tsx", "**/test/*", "**/__tests__/*"]
 }
