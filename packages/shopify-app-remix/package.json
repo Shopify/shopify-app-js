@@ -12,20 +12,15 @@
   "homepage": "https://github.com/Shopify/shopify-app-js/tree/main/packages/shopify-app-remix",
   "author": "Shopify Inc.",
   "license": "MIT",
-  "main": "./index.js",
-  "types": "./index.d.ts",
+  "main": "./build/cjs/index.js",
+  "types": "./build/ts/index.d.ts",
   "exports": {
     ".": {
-      "import": "./index.js",
-      "require": "./index.js",
-      "types": "./index.d.ts"
+      "import": "./build/cjs/index.js",
+      "require": "./build/cjs/index.js",
+      "types": "./build/ts/index.d.ts"
     },
-    "./adapters/*": "./adapters/*/index.js",
-    "./i18n": {
-      "import": "./i18n/index.js",
-      "require": "./i18n/index.js",
-      "types": "./i18n/index.d.ts"
-    }
+    "./adapters/*": "./build/cjs/adapters/*/index.js"
   },
   "publishConfig": {
     "access": "public"
@@ -53,25 +48,16 @@
     "ts-jest": "^29.1.0"
   },
   "dependencies": {
-    "@formatjs/intl-locale": "^3.3.2",
-    "@formatjs/intl-pluralrules": "^5.2.4",
     "@remix-run/server-runtime": "^1.17.1",
-    "@shopify/i18next-shopify": "^0.2.3",
     "@shopify/shopify-api": "^7.4.0",
     "@shopify/shopify-app-session-storage": "^1.1.2",
     "@shopify/shopify-app-session-storage-sqlite": "^1.2.2",
-    "i18next": "^23.2.6",
-    "i18next-browser-languagedetector": "^7.1.0",
     "isbot": "^3.6.5",
-    "remix-i18next": "^5.2.0",
     "semver": "^7.5.0",
     "tslib": "^2.5.0"
   },
   "files": [
-    "**/*.d.ts",
-    "**/*.d.ts.map",
-    "**/*.js",
-    "**/*.js.map",
+    "build/*",
     "!build/**/__tests__",
     "!bundle/*",
     "!tsconfig.tsbuildinfo",
