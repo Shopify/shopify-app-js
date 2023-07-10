@@ -1,8 +1,4 @@
-import fs from 'fs';
-import path from 'path';
-
 import {ShopifyError} from '@shopify/shopify-api';
-import {SQLiteSessionStorage} from '@shopify/shopify-app-session-storage-sqlite';
 import * as shopifyApiPackage from '@shopify/shopify-api';
 
 import {
@@ -79,7 +75,7 @@ describe('shopifyApp', () => {
       .calls[1][0];
 
     expect(userAgentPrefix).toMatch(
-      /^test \| Shopify Remix Library v[0-9]+\.[0-9]+\.[0-9]+$/,
+      /^test \| Shopify Remix Library v[0-9]+\.[0-9]+\.[0-9]+(-rc.[0-9]+)?$/,
     );
   });
 
