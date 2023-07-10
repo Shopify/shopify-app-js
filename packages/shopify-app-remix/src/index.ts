@@ -10,7 +10,6 @@ import {
 } from '@shopify/shopify-api';
 import {setAbstractRuntimeString} from '@shopify/shopify-api/runtime';
 import {SessionStorage} from '@shopify/shopify-app-session-storage';
-import {SQLiteSessionStorage} from '@shopify/shopify-app-session-storage-sqlite';
 
 import {type AppConfig, type AppConfigArg} from './config-types';
 import {
@@ -140,6 +139,12 @@ function deriveConfig<Storage extends SessionStorage>(
   appConfig: AppConfigArg,
   apiConfig: ApiConfig,
 ): AppConfig<Storage> {
+  if (!appConfig.sessionStorage) {
+    throw new ShopifyError(
+      'Please provide a valid session storage. See https://github.com/Shopify/shopify-app-js/blob/main/README.md#session-storage-options for options.',
+    );
+  }
+
   const authPathPrefix = appConfig.authPathPrefix || '/auth';
   const distribution = appConfig.distribution ?? AppDistribution.AppStore;
 
@@ -149,8 +154,7 @@ function deriveConfig<Storage extends SessionStorage>(
     canUseLoginForm: distribution !== AppDistribution.ShopifyAdmin,
     useOnlineTokens: appConfig.useOnlineTokens ?? false,
     hooks: appConfig.hooks ?? {},
-    sessionStorage: (appConfig.sessionStorage ??
-      new SQLiteSessionStorage('database.sqlite')) as unknown as Storage,
+    sessionStorage: appConfig.sessionStorage as Storage,
     auth: {
       path: authPathPrefix,
       callbackPath: `${authPathPrefix}/callback`,

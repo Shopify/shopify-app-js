@@ -1,5 +1,4 @@
 import {shopifyApp} from '../../..';
-import {APP_BRIDGE_NEXT_URL} from '../../const';
 import {
   APP_URL,
   TEST_SHOP,

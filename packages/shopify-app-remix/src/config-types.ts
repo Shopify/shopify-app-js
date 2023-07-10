@@ -33,9 +33,7 @@ export interface AppConfigArg<
   /**
    * An adaptor for storing sessions in your database of choice.
    *
-   * Shopify provides multiple session storage adaptors ans you can create your own. {@link https://github.com/Shopify/shopify-app-js/blob/main/README.md#session-storage-options}
-   *
-   * @defaultValue `new SQLiteSessionStorage("database.sqlite")`
+   * Shopify provides multiple session storage adaptors and you can create your own. {@link https://github.com/Shopify/shopify-app-js/blob/main/README.md#session-storage-options}
    *
    * @example
    * Using Prisma
@@ -51,7 +49,7 @@ export interface AppConfigArg<
    * });
    * ```
    */
-  sessionStorage?: Storage;
+  sessionStorage: Storage;
 
   /**
    * Does your app use online or just offline tokens.
