@@ -13,7 +13,10 @@
     "@shopify/shopify-app-session-storage-prisma": "1.0.1",
     "@shopify/shopify-app-session-storage-redis": "1.1.5",
     "@shopify/shopify-app-session-storage-sqlite": "1.2.4",
-    "@shopify/shopify-app-session-storage-test-utils": "0.1.5"
+    "@shopify/shopify-app-session-storage-test-utils": "0.1.5",
+    "@shopify/shopify-app-remix": "1.0.0"
   },
-  "changesets": []
+  "changesets": [
+    "seven-fireants-guess"
+  ]
 }
