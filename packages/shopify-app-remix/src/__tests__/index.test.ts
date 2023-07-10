@@ -88,21 +88,12 @@ describe('shopifyApp', () => {
     [APP_LATEST_API_VERSION, LogSeverity, DeliveryMethod, BillingInterval];
   });
 
-  it('defaults sessionStorage', () => {
+  it('fails if no session storage is given', () => {
     // GIVEN
     const config: AppConfigArg = testConfig({sessionStorage: undefined});
-    delete config.sessionStorage;
-    delete config.isEmbeddedApp;
-    delete config.apiVersion;
-
-    if (fs.existsSync(path.join(__dirname, '../../database.sqlite'))) {
-      fs.unlinkSync(path.join(__dirname, '../../database.sqlite'));
-    }
-
-    // WHEN
-    const shopify = shopifyApp(config);
+    delete (config as any).sessionStorage;
 
     // THEN
-    expect(shopify.sessionStorage).toBeInstanceOf(SQLiteSessionStorage);
+    expect(() => shopifyApp(config)).toThrowError(ShopifyError);
   });
 });
