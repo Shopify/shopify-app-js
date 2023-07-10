@@ -56,7 +56,7 @@ export function installGlobalResponseHeaders(isEmbeddedApp: boolean) {
           if (!headers.get(key)) {
             const value =
               APP_BRIDGE_HEADERS[key as keyof typeof APP_BRIDGE_HEADERS];
-            // console.log({key, value, APP_BRIDGE_HEADERS})
+
             headers.set(key, value);
           }
         }
