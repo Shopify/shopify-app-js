@@ -199,7 +199,9 @@ export interface AppConfigArg<
    * import { shopify } from "../../shopify.server";
    *
    * export async function loader({ request }: LoaderArgs) {
-   *   return shopify.authenticate.admin(request);
+   *   await shopify.authenticate.admin(request);
+   *
+   *   return null
    * }
    * ```
    */
