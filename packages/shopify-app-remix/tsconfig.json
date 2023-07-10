@@ -3,9 +3,8 @@
   "compilerOptions": {
     "baseUrl": ".",
     "outDir": "./build/ts",
-    "rootDir": "src",
-    "jsx": "react"
+    "rootDir": "src"
   },
-  "include": ["src/**/*.ts", "src/**/*.tsx"],
+  "include": ["src/**/*.ts"],
   "exclude": ["**/*.test.ts", "**/*.test.tsx", "**/test/*", "**/__tests__/*"]
 }
