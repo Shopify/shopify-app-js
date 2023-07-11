@@ -1,5 +1,17 @@
 # Changelog
 
+## 2.2.0
+
+### Minor Changes
+
+- 32296d7: Update @shopify/shopify-api dependency to 7.5.0
+
+### Patch Changes
+
+- Updated dependencies [32296d7]
+  - @shopify/shopify-app-session-storage-memory@1.0.9
+  - @shopify/shopify-app-session-storage@1.1.6
+
 ## 2.1.4
 
 ### Patch Changes
