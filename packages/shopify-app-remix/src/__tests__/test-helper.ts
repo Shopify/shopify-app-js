@@ -13,7 +13,7 @@ import {SessionStorage} from '@shopify/shopify-app-session-storage';
 import {MemorySessionStorage} from '@shopify/shopify-app-session-storage-memory';
 
 import {AppConfigArg} from '../config-types';
-import {APP_BRIDGE_NEXT_URL, REAUTH_URL_HEADER} from '../auth/const';
+import {APP_BRIDGE_URL, REAUTH_URL_HEADER} from '../auth/const';
 
 export function testConfig(
   overrides: Partial<AppConfigArg> = {},
@@ -206,9 +206,7 @@ export function expectSecurityHeaders(
     expect(headers.get('Access-Control-Expose-Headers')).toEqual(
       REAUTH_URL_HEADER,
     );
-    expect(headers.get('Link')).toEqual(
-      `<${APP_BRIDGE_NEXT_URL}>; rel="preload"`,
-    );
+    expect(headers.get('Link')).toEqual(`<${APP_BRIDGE_URL}>; rel="preload"`);
   } else {
     expect(headers.get('Content-Security-Policy')).toEqual(
       `frame-ancestors 'none';`,
