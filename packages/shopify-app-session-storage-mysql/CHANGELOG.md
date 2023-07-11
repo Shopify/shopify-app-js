@@ -1,5 +1,13 @@
 # @shopify/shopify-app-session-storage-mysql
 
+## 1.1.9
+
+### Patch Changes
+
+- 32296d7: Update @shopify/shopify-api dependency to 7.5.0
+- Updated dependencies [32296d7]
+  - @shopify/shopify-app-session-storage@1.1.6
+
 ## 1.1.8
 
 ### Patch Changes

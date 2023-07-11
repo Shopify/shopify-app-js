@@ -1,5 +1,13 @@
 # @shopify/shopify-app-session-storage-sqlite
 
+## 1.2.5
+
+### Patch Changes
+
+- 32296d7: Update @shopify/shopify-api dependency to 7.5.0
+- Updated dependencies [32296d7]
+  - @shopify/shopify-app-session-storage@1.1.6
+
 ## 1.2.4
 
 ### Patch Changes
