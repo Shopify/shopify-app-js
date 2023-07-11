@@ -17,6 +17,8 @@
     "@shopify/shopify-app-remix": "1.0.0"
   },
   "changesets": [
-    "seven-fireants-guess"
+    "clean-glasses-decide",
+    "seven-fireants-guess",
+    "silver-zebras-rescue"
   ]
 }
