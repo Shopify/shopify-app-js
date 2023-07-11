@@ -122,7 +122,7 @@ export default function App() {
         <Links />
         {/* App Bridge must be loaded from the CDN at the head */}
         <script
-          src="https://cdn.shopify.com/shopifycloud/app-bridge-next.js"
+          src="https://cdn.shopify.com/shopifycloud/app-bridge.js"
           data-api-key={apiKey}
         />
       </head>
