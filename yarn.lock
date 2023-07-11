@@ -3038,10 +3038,10 @@
   resolved "https://registry.yarnpkg.com/@shopify/prettier-config/-/prettier-config-1.1.2.tgz#612f87c0cd1196e8b43c85425e587d0fa7f1172d"
   integrity sha512-5ugCL9sPGzmOaZjeRGaWUWhHgAbemrS6z+R7v6gwiD+BiqSeoFhIY+imLpfdFCVpuOGalpHeCv6o3gv++EHs0A==
 
-"@shopify/shopify-api@^7.4.0":
-  version "7.4.0"
-  resolved "https://registry.yarnpkg.com/@shopify/shopify-api/-/shopify-api-7.4.0.tgz#def55d83c259eef8c3502ba1f9590634c26bc31c"
-  integrity sha512-ktUeqOerTAZFoZsuEZjyMZ2hF4QnXxVjKsphL1lANHPhLDk75q1yMFyoThv/M6YcVg0kc6DTzZ2MRBKkMMzjyA==
+"@shopify/shopify-api@^7.5.0":
+  version "7.5.0"
+  resolved "https://registry.yarnpkg.com/@shopify/shopify-api/-/shopify-api-7.5.0.tgz#8166ec35a8239fe30511570aa3f433160d654686"
+  integrity sha512-0VAYsV2VKL4tWsfGYXKav3nnLRLhaHInrDnyTj1MJfGJHeBLlRhvYMJ0g+f9fxX5k6yo/hvrpW6vVS52hD4sxw==
   dependencies:
     "@shopify/network" "^3.2.1"
     compare-versions "^5.0.3"
