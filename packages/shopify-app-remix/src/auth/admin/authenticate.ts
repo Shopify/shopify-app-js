@@ -32,7 +32,7 @@ import {
   validateSessionToken,
   rejectBotRequest,
 } from '../helpers';
-import {APP_BRIDGE_NEXT_URL} from '../const';
+import {APP_BRIDGE_URL} from '../const';
 
 import type {AdminContext} from './types';
 import {graphqlClientFactory} from './graphql-client';
@@ -502,7 +502,7 @@ export class AuthStrategy<
 
     throw new Response(
       `
-        <script data-api-key="${config.apiKey}" src="${APP_BRIDGE_NEXT_URL}"></script>
+        <script data-api-key="${config.apiKey}" src="${APP_BRIDGE_URL}"></script>
         ${redirectToScript}
       `,
       {headers: {'content-type': 'text/html;charset=utf-8'}},
