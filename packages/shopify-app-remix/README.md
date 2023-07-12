@@ -363,4 +363,16 @@ const shopify = shopifyApp({
 });
 ```
 
-Note that this requires a `schema.prisma` file as defined in the README for [Prisma app session storage](https://github.com/Shopify/shopify-app-js/tree/main/packages/shopify-app-session-storage-prisma)
+Note that this requires a `schema.prisma` file as defined in the README for [Prisma app session storage](https://github.com/Shopify/shopify-app-js/tree/main/packages/shopify-app-session-storage-prisma).
+Remember to [set up your migrations](https://www.prisma.io/docs/concepts/components/prisma-migrate/get-started) after creating the schema file!
+
+## Gotchas / Troubleshooting
+
+### Navigating to other pages breaks
+
+In Remix apps, you can navigate to a different page either by adding an `<a>` tag, or using the `<Link>` component from `@remix-run/react`.
+
+When embedded, Shopify apps require certain parameters to be in the URL.
+Those parameters are automatically set when using `<Link>`, but not for regular `<a>` tags.
+
+You should avoid using `<a>` tags in your HTML code to redirect to other pages within your app.
