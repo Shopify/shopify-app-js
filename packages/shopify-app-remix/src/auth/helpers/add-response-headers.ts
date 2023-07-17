@@ -68,7 +68,10 @@ export function installGlobalResponseHeaders(isEmbeddedApp: boolean) {
         }
 
         if (!headers.get('Link')) {
-          headers.set('Link', `<${APP_BRIDGE_URL}>; rel="preload"`);
+          headers.set(
+            'Link',
+            `<${APP_BRIDGE_URL}>; rel="preload"; as="script"`,
+          );
         }
       } catch (err) {
         // Do nothing, this is not a standard Response object.

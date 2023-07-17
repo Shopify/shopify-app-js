@@ -206,7 +206,9 @@ export function expectSecurityHeaders(
     expect(headers.get('Access-Control-Expose-Headers')).toEqual(
       REAUTH_URL_HEADER,
     );
-    expect(headers.get('Link')).toEqual(`<${APP_BRIDGE_URL}>; rel="preload"`);
+    expect(headers.get('Link')).toEqual(
+      `<${APP_BRIDGE_URL}>; rel="preload"; as="script"`,
+    );
   } else {
     expect(headers.get('Content-Security-Policy')).toEqual(
       `frame-ancestors 'none';`,
