@@ -45,13 +45,8 @@ describe('shopifyApp', () => {
 
   it('does not have login function when distribution is ShopifyAdmin', () => {
     // GIVEN
-    const config = testConfig({
-      userAgentPrefix: 'test',
-    });
-
-    // WHEN
     const shopify = shopifyApp({
-      ...config,
+      ...testConfig(),
       distribution: AppDistribution.ShopifyAdmin,
     });
 
