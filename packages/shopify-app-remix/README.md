@@ -38,13 +38,14 @@ Create `app/shopify.server.js`. We will use this file to configure our Shopify a
 import '@shopify/shopify-app-remix/adapters/node';
 import {LATEST_API_VERSION, shopifyApp} from '@shopify/shopify-app-remix';
 
-export const shopify = shopifyApp({
+const shopify = shopifyApp({
   apiKey: process.env.SHOPIFY_API_KEY!,
   apiSecretKey: process.env.SHOPIFY_API_SECRET!,
   appUrl: process.env.SHOPIFY_APP_URL!,
   scopes: ['read_products'],
   apiVersion: LATEST_API_VERSION,
 });
+export default shopify;
 ```
 
 A description of these config options:
@@ -72,7 +73,7 @@ SHOPIFY_APP_URL="[The tunnel URL you are using to run your app]"
 // app/shopify.server.js
 import {shopifyApp} from '@shopify/shopify-app-remix';
 
-export const shopify = shopifyApp({
+const shopify = shopifyApp({
   // ...
   authPathPrefix: '/auth',
 });
@@ -243,7 +244,7 @@ export async function action({request}: ActionArgs) {
 // app/routes/**/*.tsx
 import {restResources} from '@shopify/shopify-api/rest/admin/2023-04';
 
-export const shopify = shopifyApp({
+const shopify = shopifyApp({
   restResources,
   // ...etc
 });
@@ -274,7 +275,7 @@ To setup webhooks first we need to configure `shopifyApp` with 2 pieces:
 // shopify.server.js
 import {shopifyApp, DeliveryMethod} from '@shopify/shopify-app-remix';
 
-export const shopify = shopifyApp({
+const shopify = shopifyApp({
   apiKey: '1707326264fde5037c658n120626ce3f',
   // ...etc
   webhooks: {
@@ -342,7 +343,9 @@ This can be useful if your app exposes checkout or theme extensions and those ex
 
 ## Session Storage
 
-By default `shopifyApp` uses [@shopify/shopify-app-session-storage-sqlite](https://github.com/Shopify/shopify-app-js/tree/main/packages/shopify-app-session-storage-sqlite) to store sessions. You can change this by passing a different Session Adaptor to `shopifyApp`. To make this easy Shopify offer's [7 production ready session adaptors](https://github.com/Shopify/shopify-app-js/tree/release-candidate/packages)
+When calling `shopifyApp`, you must pass in a `sesionStorage` to store sessions.
+You can change this by passing a different Session Adaptor to `shopifyApp`.
+To make this easy Shopify offers [some production ready session adaptors](https://github.com/Shopify/shopify-app-js/tree/main/packages).
 
 In this example we'll swap the default session adaptor for [Prisma](https://www.prisma.io/).
 
