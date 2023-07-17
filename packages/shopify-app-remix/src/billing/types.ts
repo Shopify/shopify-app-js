@@ -56,7 +56,7 @@ export interface BillingContext<Config extends AppConfigArg> {
    * export const MONTHLY_PLAN = 'Monthly subscription';
    * export const ANNUAL_PLAN = 'Annual subscription';
    *
-   * export const shopify = shopifyApp({
+   * const shopify = shopifyApp({
    *   // ...etc
    *   billing: {
    *     [MONTHLY_PLAN]: {
@@ -71,13 +71,15 @@ export interface BillingContext<Config extends AppConfigArg> {
    *     },
    *   }
    * });
+   * export default shopify;
+   * export const authenticate = shopify.authenticate;
    *
    * // app/routes/**\/.ts
    * import { LoaderArgs } from "@remix-run/node";
-   * import { shopify, MONTHLY_PLAN } from "../shopify.server";
+   * import { authenticate, MONTHLY_PLAN } from "../shopify.server";
    *
    * export const loader = async ({ request }: LoaderArgs) => {
-   *   const { billing } = await shopify.authenticate.admin(request);
+   *   const { billing } = await authenticate.admin(request);
    *   await billing.require({
    *     plans: [MONTHLY_PLAN],
    *     isTest: true,
@@ -97,7 +99,7 @@ export interface BillingContext<Config extends AppConfigArg> {
    * export const MONTHLY_PLAN = 'Monthly subscription';
    * export const ANNUAL_PLAN = 'Annual subscription';
    *
-   * export const shopify = shopifyApp({
+   * const shopify = shopifyApp({
    *   // ...etc
    *   billing: {
    *     [MONTHLY_PLAN]: {
@@ -112,13 +114,15 @@ export interface BillingContext<Config extends AppConfigArg> {
    *     },
    *   }
    * });
+   * export default shopify;
+   * export const authenticate = shopify.authenticate;
    *
    * // app/routes/**\/.ts
    * import { LoaderArgs, redirect } from "@remix-run/node";
-   * import { shopify, MONTHLY_PLAN, ANNUAL_PLAN } from "../shopify.server";
+   * import { authenticate, MONTHLY_PLAN, ANNUAL_PLAN } from "../shopify.server";
    *
    * export const loader = async ({ request }: LoaderArgs) => {
-   *   const { billing } = await shopify.authenticate.admin(request);
+   *   const { billing } = await authenticate.admin(request);
    *   const billingCheck = await billing.require({
    *     plans: [MONTHLY_PLAN, ANNUAL_PLAN],
    *     isTest: true,
@@ -150,7 +154,7 @@ export interface BillingContext<Config extends AppConfigArg> {
    * export const MONTHLY_PLAN = 'Monthly subscription';
    * export const ANNUAL_PLAN = 'Annual subscription';
    *
-   * export const shopify = shopifyApp({
+   * const shopify = shopifyApp({
    *   // ...etc
    *   billing: {
    *     [MONTHLY_PLAN]: {
@@ -165,13 +169,15 @@ export interface BillingContext<Config extends AppConfigArg> {
    *     },
    *   }
    * });
+   * export default shopify;
+   * export const authenticate = shopify.authenticate;
    *
    * // app/routes/**\/.ts
    * import { LoaderArgs } from "@remix-run/node";
-   * import { shopify, MONTHLY_PLAN } from "../shopify.server";
+   * import { authenticate, MONTHLY_PLAN } from "../shopify.server";
    *
    * export const loader = async ({ request }: LoaderArgs) => {
-   *   const { billing } = await shopify.authenticate.admin(request);
+   *   const { billing } = await authenticate.admin(request);
    *   await billing.require({
    *     plans: [MONTHLY_PLAN],
    *     onFailure: async () => billing.request({
@@ -201,7 +207,7 @@ export interface BillingContext<Config extends AppConfigArg> {
    * export const MONTHLY_PLAN = 'Monthly subscription';
    * export const ANNUAL_PLAN = 'Annual subscription';
    *
-   * export const shopify = shopifyApp({
+   * const shopify = shopifyApp({
    *   // ...etc
    *   billing: {
    *     [MONTHLY_PLAN]: {
@@ -216,13 +222,15 @@ export interface BillingContext<Config extends AppConfigArg> {
    *     },
    *   }
    * });
+   * export default shopify;
+   * export const authenticate = shopify.authenticate;
    *
    * // app/routes/cancel-subscription.ts
    * import { LoaderArgs } from "@remix-run/node";
-   * import { shopify, MONTHLY_PLAN } from "../shopify.server";
+   * import { authenticate, MONTHLY_PLAN } from "../shopify.server";
    *
    * export const loader = async ({ request }: LoaderArgs) => {
-   *   const { billing } = await shopify.authenticate.admin(request);
+   *   const { billing } = await authenticate.admin(request);
    *   const billingCheck = await billing.require({
    *     plans: [MONTHLY_PLAN],
    *     onFailure: async () => billing.request({ plan: MONTHLY_PLAN }),

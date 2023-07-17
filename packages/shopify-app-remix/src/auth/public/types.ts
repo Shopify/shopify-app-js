@@ -13,11 +13,11 @@ export interface PublicContext {
    * Getting your app's store specific widget data using the session token
    * // app/routes/public/widgets.ts
    * import { LoaderArgs, json } from "@remix-run/node";
-   * import { shopify } from "../shopify.server";
+   * import { authenticate } from "../shopify.server";
    * import { getWidgets } from "~/db/widgets.server";
    *
    * export const loader = async ({ request }: LoaderArgs) => {
-   *   const { sessionToken } = await shopify.authenticate.public(
+   *   const { sessionToken } = await authenticate.public(
    *     request
    *   );
    *   return json(await getWidgets({shop: sessionToken.dest}));

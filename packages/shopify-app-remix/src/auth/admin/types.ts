@@ -10,7 +10,7 @@ interface AdminContextInternal<
   /**
    * The session for the user who made the request.
    *
-   * This comes from the session storage which `shopifyApp` uses to store sessions in your database of choice.  If you did not provide a session storage adaptor `shopifyApp` uses `SQLiteSessionStorage`
+   * This comes from the session storage which `shopifyApp` uses to store sessions in your database of choice.
    *
    * Use this to get shop or user specific data.
    *
@@ -19,11 +19,11 @@ interface AdminContextInternal<
    * ```ts
    * // app/routes/**\/.ts
    * import { LoaderArgs, json } from "@remix-run/node";
-   * import { shopify } from "../shopify.server";
+   * import { authenticate } from "../shopify.server";
    * import { getWidgets } from "~/db/widgets.server";
    *
    * export const loader = async ({ request }: LoaderArgs) => {
-   *   const { session } = await shopify.authenticate.admin(
+   *   const { session } = await authenticate.admin(
    *     request
    *   );
    *   return json(await getWidgets({shop: session.shop));
@@ -36,18 +36,20 @@ interface AdminContextInternal<
    * // shopify.server.ts
    * import { shopifyApp } from "@shopify/shopify-app-remix";
    *
-   * export const shopify = shopifyApp({
+   * const shopify = shopifyApp({
    *   // ...etc
    *   useOnlineTokens: true,
    * });
+   * export default shopify;
+   * export const authenticate = shopify.authenticate;
    *
    * // app/routes/**\/.ts
    * import { LoaderArgs, json } from "@remix-run/node";
-   * import { shopify } from "../shopify.server";
+   * import { authenticate } from "../shopify.server";
    * import { getWidgets } from "~/db/widgets.server";
    *
    * export const loader = async ({ request }: LoaderArgs) => {
-   *   const { session } = await shopify.authenticate.admin(
+   *   const { session } = await authenticate.admin(
    *     request
    *   );
    *   return json(await getWidgets({user: session.onlineAccessInfo!.id}));
@@ -82,18 +84,20 @@ export interface EmbeddedAdminContext<
    * // shopify.server.ts
    * import { shopifyApp } from "@shopify/shopify-app-remix";
    *
-   * export const shopify = shopifyApp({
+   * const shopify = shopifyApp({
    *   // ...etc
    *   useOnlineTokens: true,
    * });
+   * export default shopify;
+   * export const authenticate = shopify.authenticate;
    *
    * // app/routes/**\/.ts
    * import { LoaderArgs, json } from "@remix-run/node";
-   * import { shopify } from "../shopify.server";
+   * import { authenticate } from "../shopify.server";
    * import { getWidgets } from "~/db/widgets.server";
    *
    * export const loader = async ({ request }: LoaderArgs) => {
-   *   const { sessionToken } = await shopify.authenticate.public(
+   *   const { sessionToken } = await authenticate.public(
    *     request
    *   );
    *   return json(await getWidgets({user: sessionToken.sub}));

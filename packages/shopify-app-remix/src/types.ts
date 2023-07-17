@@ -88,20 +88,7 @@ export interface ShopifyApp<Config extends AppConfigArg> {
   /**
    * The SessionStorage instance your app is using.
    *
-   * If you passed in a custom SessionStorage instance, this will be that instance. If not, this will be an instance of `SQLiteSessionStorage`.
-   *
-   * @example
-   * Defaulting to `SQLiteSessionStorage`
-   * ```ts
-   * // app/shopify.server.ts
-   * import { shopifyApp } from "@shopify/shopify-app-remix";
-   *
-   * const shopify = shopifyApp({
-   *   // ...etc
-   * })
-   *
-   * // shopify.sessionStorage is an instance of SQLiteSessionStorage
-   * ```
+   * An instance of the SessionStorage class you passed in as a config option.
    *
    * @example
    * Using Prisma
@@ -130,11 +117,11 @@ export interface ShopifyApp<Config extends AppConfigArg> {
    * Render a page containing a login form, only when allowed.
    * ```ts
    * // app/routes/*.ts
-   * import { shopify } from "~/shopify.server";
+   * import { login } from "~/shopify.server";
    * import { Form, useLoaderData } from "@remix-run/react";
    *
    * export async function loader({ request }) {
-   *   return json({ showForm: shopify.canUseLoginForm });
+   *   return json({ showForm: login });
    * }
    *
    * export default function Page() {
@@ -170,12 +157,14 @@ export interface ShopifyApp<Config extends AppConfigArg> {
    * // ~/shopify.server.ts
    * import { shopifyApp } from "@shopify/shopify-app-remix";
    *
-   * export const shopify = shopifyApp({
+   * const shopify = shopifyApp({
    *   // ...etc
    * });
+   * export default shopify;
+   * export const addResponseheaders = shopify.addResponseheaders;
    *
    * // entry.server.tsx
-   * import { shopify } from "~/shopify.server";
+   * import { addResponseHeaders } from "~/shopify.server";
    *
    * export default function handleRequest(
    *   request: Request,
@@ -188,7 +177,7 @@ export interface ShopifyApp<Config extends AppConfigArg> {
    *   );
    *
    *   responseHeaders.set("Content-Type", "text/html");
-   *   shopify.addResponseHeaders(request, responseHeaders);
+   *   addResponseHeaders(request, responseHeaders);
    *
    *   return new Response("<!DOCTYPE html>" + markup, {
    *     status: responseStatusCode,
@@ -207,7 +196,7 @@ export interface ShopifyApp<Config extends AppConfigArg> {
    * ```ts
    * import { DeliveryMethod, shopifyApp } from "@shopify/shopify-app-remix";
    *
-   * export const shopify = shopifyApp({
+   * const shopify = shopifyApp({
    *   hooks: {
    *     afterAuth: async ({ session }) => {
    *       shopify.registerWebhooks({ session });
@@ -299,17 +288,19 @@ export interface ShopifyApp<Config extends AppConfigArg> {
      * import { LATEST_API_VERSION, shopifyApp } from "@shopify/shopify-app-remix";
      * import { restResources } from "@shopify/shopify-api/rest/admin/2023-04";
      *
-     * export const shopify = shopifyApp({
+     * const shopify = shopifyApp({
      *   restResources,
      *   // ...etc
      * });
+     * export default shopify;
+     * export const authenticate = shopify.authenticate;
      *
      * // app/routes/**\/*.jsx
      * import { LoaderArgs, json } from "@remix-run/node";
-     * import { shopify } from "../../shopify.server";
+     * import { authenticate } from "../../shopify.server";
      *
      * export async function loader({ request }: LoaderArgs) {
-     *   const {admin, session, sessionToken, billing} = shopify.authenticate.admin(request);
+     *   const {admin, session, sessionToken, billing} = authenticate.admin(request);
      *
      *   return json(await admin.rest.resources.Product.count({ session }));
      * }
@@ -331,11 +322,11 @@ export interface ShopifyApp<Config extends AppConfigArg> {
      * ```ts
      * // app/routes/api/checkout.jsx
      * import { LoaderArgs, json } from "@remix-run/node";
-     * import { shopify } from "../../shopify.server";
+     * import { authenticate } from "../../shopify.server";
      * import { getWidgets } from "~/db/widgets";
      *
      * export async function loader({ request }: LoaderArgs) {
-     *   const {sessionToken} = shopify.authenticate.public(request);
+     *   const {sessionToken} = authenticate.public(request);
      *
      *   return json(await getWidgets(sessionToken));
      * }
@@ -359,7 +350,7 @@ export interface ShopifyApp<Config extends AppConfigArg> {
      *   shopifyApp,
      * } from "@shopify/shopify-app-remix";
      *
-     * export const shopify = shopifyApp({
+     * const shopify = shopifyApp({
      *   webhooks: {
      *    APP_UNINSTALLED: {
      *       deliveryMethod: DeliveryMethod.Http,
@@ -373,14 +364,16 @@ export interface ShopifyApp<Config extends AppConfigArg> {
      *   },
      *   // ...etc
      * });
+     * export default shopify;
+     * export const authenticate = shopify.authenticate;
      *
      * // app/routes/webhooks.ts
      * import { ActionArgs } from "@remix-run/node";
-     * import { shopify } from "../shopify.server";
+     * import { authenticate } from "../shopify.server";
      * import db from "../db.server";
      *
      * export const action = async ({ request }: ActionArgs) => {
-     *   const { topic, shop, admin, payload } = await shopify.authenticate.webhook(request);
+     *   const { topic, shop, admin, payload } = await authenticate.webhook(request);
      *
      *   switch (topic) {
      *     case "APP_UNINSTALLED":
