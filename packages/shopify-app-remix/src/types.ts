@@ -308,8 +308,8 @@ interface ShopifyAppLogin {
    * Log a merchant in, and redirect them to the app root. Will redirect the merchant to authentication if a shop is
    * present in the URL search parameters or form data.
    *
-   * This function will only be present when the `distribution` config option is set to `AppDistribution.AppStore`.
-   * Other app types are not allowed to display a login form.
+   * This function won't be present when the `distribution` config option is set to `AppDistribution.ShopifyAdmin`,
+   * because Admin apps aren't allowed to show a login page.
    *
    * @example
    * Providing a login form as a route that can handle GET and POST requests.
