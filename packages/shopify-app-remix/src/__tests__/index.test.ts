@@ -7,6 +7,7 @@ import {
   LogSeverity,
   DeliveryMethod,
   BillingInterval,
+  AppDistribution,
 } from '../index';
 import {AppConfigArg} from '../config-types';
 
@@ -28,15 +29,29 @@ describe('shopifyApp', () => {
 
   it('can create shopify object', () => {
     // GIVEN
-    const config = testConfig({
-      userAgentPrefix: 'test',
-    });
-
-    // WHEN
-    const shopify = shopifyApp(config);
+    const shopify = shopifyApp(testConfig());
 
     // THEN
     expect(shopify).toBeDefined();
+  });
+
+  it('has login function when distribution is not ShopifyAdmin', () => {
+    // GIVEN
+    const shopify = shopifyApp(testConfig());
+
+    // THEN
+    expect(shopify.login).toBeDefined();
+  });
+
+  it('does not have login function when distribution is ShopifyAdmin', () => {
+    // GIVEN
+    const shopify = shopifyApp({
+      ...testConfig(),
+      distribution: AppDistribution.ShopifyAdmin,
+    });
+
+    // THEN
+    expect(shopify).not.toHaveProperty('login');
   });
 
   it('fails with an invalid config', () => {

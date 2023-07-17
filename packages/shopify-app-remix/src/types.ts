@@ -80,11 +80,7 @@ type SessionStorageType<Config extends AppConfigArg> =
     ? Config['sessionStorage']
     : SessionStorage;
 
-/**
- * An object your app can use to interact with Shopify.
- *
- */
-export interface ShopifyApp<Config extends AppConfigArg> {
+interface ShopifyAppBase<Config extends AppConfigArg> {
   /**
    * The SessionStorage instance your app is using.
    *
@@ -107,44 +103,6 @@ export interface ShopifyApp<Config extends AppConfigArg> {
    * ```
    */
   sessionStorage: SessionStorageType<Config>;
-
-  /**
-   * Whether this app is allowed to display a login form to the merchant that calls shopify.login().
-   *
-   * If distribution is AppDistribution.ShopifyAdmin this is false.
-   *
-   * @example
-   * Render a page containing a login form, only when allowed.
-   * ```ts
-   * // app/routes/*.ts
-   * import { login } from "~/shopify.server";
-   * import { Form, useLoaderData } from "@remix-run/react";
-   *
-   * export async function loader({ request }) {
-   *   return json({ showForm: login });
-   * }
-   *
-   * export default function Page() {
-   *   const { showForm } = useLoaderData();
-   *
-   *   if (showForm) {
-   *     return (
-   *       <Form method="post" action="/auth/login">
-   *         <label>
-   *           <span>Shop domain</span>
-   *           <input type="text" name="shop" />
-   *           <span>e.g: my-shop-domain.myshopify.com</span>
-   *         </label>
-   *         <button type="submit">Log in</button>
-   *       </Form>
-   *     );
-   *   }
-   *
-   *   return null;
-   * }
-   * ```
-   */
-  canUseLoginForm: boolean;
 
   /**
    * Adds the required Content Security Policy headers for Shopify apps to the given Headers object.
@@ -213,58 +171,6 @@ export interface ShopifyApp<Config extends AppConfigArg> {
    * ```
    */
   registerWebhooks: RegisterWebhooks;
-
-  /**
-   * Log a merchant in, and redirect them to the app root. Will redirect the merchant to authentication if a shop is
-   * present in the URL search parameters or form data.
-   *
-   * @example
-   * Providing a login form as a route that can handle GET and POST requests.
-   * export async function loader({ request }: LoaderArgs) {
-   *   const errors = shopify.login(request);
-   *
-   *   return json(errors);
-   * }
-   *
-   * export async function action({ request }: ActionArgs) {
-   *   const errors = shopify.login(request);
-   *
-   *   return json(errors);
-   * }
-   *
-   * export default function Auth() {
-   *   const actionData = useActionData<typeof action>();
-   *   const [shop, setShop] = useState("");
-   *
-   *   return (
-   *     <Page>
-   *       <Card>
-   *         <Form method="post">
-   *           <FormLayout>
-   *             <Text variant="headingMd" as="h2">
-   *               Login
-   *             </Text>
-   *             <TextField
-   *               type="text"
-   *               name="shop"
-   *               label="Shop domain"
-   *               helpText="e.g: my-shop-domain.myshopify.com"
-   *               value={shop}
-   *               onChange={setShop}
-   *               autoComplete="on"
-   *               error={actionData?.errors.shop}
-   *             />
-   *             <Button submit primary>
-   *               Submit
-   *             </Button>
-   *           </FormLayout>
-   *         </Form>
-   *       </Card>
-   *     </Page>
-   *   );
-   * }
-   */
-  login: Login;
 
   /**
    * Ways to authenticate requests from different surfaces across Shopify.
@@ -396,6 +302,83 @@ export interface ShopifyApp<Config extends AppConfigArg> {
     >;
   };
 }
+
+interface ShopifyAppLogin {
+  /**
+   * Log a merchant in, and redirect them to the app root. Will redirect the merchant to authentication if a shop is
+   * present in the URL search parameters or form data.
+   *
+   * This function will only be present when the `distribution` config option is set to `AppDistribution.AppStore`.
+   * Other app types are not allowed to display a login form.
+   *
+   * @example
+   * Providing a login form as a route that can handle GET and POST requests.
+   * export async function loader({ request }: LoaderArgs) {
+   *   const errors = shopify.login(request);
+   *
+   *   return json(errors);
+   * }
+   *
+   * export async function action({ request }: ActionArgs) {
+   *   const errors = shopify.login(request);
+   *
+   *   return json(errors);
+   * }
+   *
+   * export default function Auth() {
+   *   const actionData = useActionData<typeof action>();
+   *   const [shop, setShop] = useState("");
+   *
+   *   return (
+   *     <Page>
+   *       <Card>
+   *         <Form method="post">
+   *           <FormLayout>
+   *             <Text variant="headingMd" as="h2">
+   *               Login
+   *             </Text>
+   *             <TextField
+   *               type="text"
+   *               name="shop"
+   *               label="Shop domain"
+   *               helpText="e.g: my-shop-domain.myshopify.com"
+   *               value={shop}
+   *               onChange={setShop}
+   *               autoComplete="on"
+   *               error={actionData?.errors.shop}
+   *             />
+   *             <Button submit primary>
+   *               Submit
+   *             </Button>
+   *           </FormLayout>
+   *         </Form>
+   *       </Card>
+   *     </Page>
+   *   );
+   * }
+   */
+  login: Login;
+}
+
+type AdminApp<Config extends AppConfigArg> = ShopifyAppBase<Config>;
+type SingleMerchantApp<Config extends AppConfigArg> = ShopifyAppBase<Config> &
+  ShopifyAppLogin;
+type AppStoreApp<Config extends AppConfigArg> = ShopifyAppBase<Config> &
+  ShopifyAppLogin;
+
+/**
+ * An object your app can use to interact with Shopify.
+ *
+ * By default, the app's distribution will be AppStore.
+ */
+export type ShopifyApp<Config extends AppConfigArg> =
+  Config['distribution'] extends AppDistribution.ShopifyAdmin
+    ? AdminApp<Config>
+    : Config['distribution'] extends AppDistribution.SingleMerchant
+    ? SingleMerchantApp<Config>
+    : Config['distribution'] extends AppDistribution.AppStore
+    ? AppStoreApp<Config>
+    : AppStoreApp<Config>;
 
 export type MandatoryTopics =
   | 'CUSTOMERS_DATA_REQUEST'

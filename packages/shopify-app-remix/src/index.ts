@@ -84,10 +84,8 @@ export function shopifyApp<
 
   return {
     sessionStorage: config.sessionStorage,
-    canUseLoginForm: config.canUseLoginForm,
     addResponseHeaders: addResponseHeadersFactory(params),
     registerWebhooks: registerWebhooksFactory(params),
-    login: loginFactory(params),
     authenticate: {
       admin: oauth.authenticateAdmin.bind(oauth),
       public: authenticatePublicFactory(params),
@@ -96,7 +94,16 @@ export function shopifyApp<
         keyof Config['webhooks'] | MandatoryTopics
       >(params),
     },
-  };
+    ...(isAdminApp(appConfig.distribution)
+      ? {}
+      : {login: loginFactory(params)}),
+  } as ShopifyApp<Config>;
+}
+
+function isAdminApp<Config extends AppConfigArg>(
+  distribution: Config['distribution'],
+): distribution is AppDistribution.ShopifyAdmin {
+  return distribution === AppDistribution.ShopifyAdmin;
 }
 
 function deriveApi<Resources extends ShopifyRestResources>(
