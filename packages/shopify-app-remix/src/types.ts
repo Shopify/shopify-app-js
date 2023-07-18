@@ -80,7 +80,7 @@ type SessionStorageType<Config extends AppConfigArg> =
     ? Config['sessionStorage']
     : SessionStorage;
 
-interface ShopifyAppBase<Config extends AppConfigArg> {
+export interface ShopifyAppBase<Config extends AppConfigArg> {
   /**
    * The SessionStorage instance your app is using.
    *
@@ -360,10 +360,10 @@ interface ShopifyAppLogin {
   login: Login;
 }
 
-type AdminApp<Config extends AppConfigArg> = ShopifyAppBase<Config>;
-type SingleMerchantApp<Config extends AppConfigArg> = ShopifyAppBase<Config> &
-  ShopifyAppLogin;
-type AppStoreApp<Config extends AppConfigArg> = ShopifyAppBase<Config> &
+export type AdminApp<Config extends AppConfigArg> = ShopifyAppBase<Config>;
+export type SingleMerchantApp<Config extends AppConfigArg> =
+  ShopifyAppBase<Config> & ShopifyAppLogin;
+export type AppStoreApp<Config extends AppConfigArg> = ShopifyAppBase<Config> &
   ShopifyAppLogin;
 
 /**

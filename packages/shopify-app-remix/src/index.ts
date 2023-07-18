@@ -17,6 +17,10 @@ import {
   type BasicParams,
   type MandatoryTopics,
   type ShopifyApp,
+  type ShopifyAppBase,
+  type AdminApp,
+  type SingleMerchantApp,
+  type AppStoreApp,
 } from './types';
 import {SHOPIFY_REMIX_LIBRARY_VERSION} from './version';
 import {registerWebhooksFactory} from './auth/webhooks';
@@ -82,7 +86,10 @@ export function shopifyApp<
   const params: BasicParams = {api, config, logger};
   const oauth = new AuthStrategy<Config, Resources>(params);
 
-  return {
+  const shopify:
+    | AdminApp<Config>
+    | AppStoreApp<Config>
+    | SingleMerchantApp<Config> = {
     sessionStorage: config.sessionStorage,
     addResponseHeaders: addResponseHeadersFactory(params),
     registerWebhooks: registerWebhooksFactory(params),
@@ -94,16 +101,30 @@ export function shopifyApp<
         keyof Config['webhooks'] | MandatoryTopics
       >(params),
     },
-    ...(isAdminApp(appConfig.distribution)
-      ? {}
-      : {login: loginFactory(params)}),
-  } as ShopifyApp<Config>;
+  };
+
+  if (
+    isAppStoreApp(shopify, appConfig) ||
+    isSingleMerchantApp(shopify, appConfig)
+  ) {
+    shopify.login = loginFactory(params);
+  }
+
+  return shopify as ShopifyApp<Config>;
 }
 
-function isAdminApp<Config extends AppConfigArg>(
-  distribution: Config['distribution'],
-): distribution is AppDistribution.ShopifyAdmin {
-  return distribution === AppDistribution.ShopifyAdmin;
+function isAppStoreApp<Config extends AppConfigArg>(
+  shopify: ShopifyAppBase<Config>,
+  config: Config,
+): shopify is AppStoreApp<Config> {
+  return config.distribution === AppDistribution.ShopifyAdmin;
+}
+
+function isSingleMerchantApp<Config extends AppConfigArg>(
+  shopify: ShopifyAppBase<Config>,
+  config: Config,
+): shopify is SingleMerchantApp<Config> {
+  return config.distribution === AppDistribution.ShopifyAdmin;
 }
 
 function deriveApi<Resources extends ShopifyRestResources>(
