@@ -1,5 +1,5 @@
-export function errorBoundary(error: unknown): string | never {
-  if (error instanceof Response) {
+export function errorBoundary(error: any): string | never {
+  if (error.constructor.name === 'ErrorResponse') {
     return 'Handling response';
   }
 

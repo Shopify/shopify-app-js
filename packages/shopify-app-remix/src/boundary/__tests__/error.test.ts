@@ -2,12 +2,12 @@ import {shopifyApp} from '../../index';
 import {testConfig} from '../../__tests__/test-helper';
 
 describe('Error boundary', () => {
-  it('returns a string when handling a response', () => {
+  it('returns a string when handling an ErrorResponse', () => {
     // GIVEN
     const shopify = shopifyApp(testConfig());
 
     // WHEN
-    const result = shopify.boundary.error(new Response());
+    const result = shopify.boundary.error(new ErrorResponse());
 
     // THEN
     expect(result).toEqual('Handling response');
@@ -24,3 +24,5 @@ describe('Error boundary', () => {
     expect(result).toThrowError();
   });
 });
+
+class ErrorResponse extends Error {}
