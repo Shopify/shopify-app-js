@@ -33,6 +33,8 @@ import {
   installGlobalResponseHeaders,
 } from './auth/helpers/add-response-headers';
 import {loginFactory} from './auth/login/login';
+import {headersBoundary} from './boundary/headers';
+import {errorBoundary} from './boundary/error';
 
 export type {ShopifyApp, LoginError} from './types';
 export {LoginErrorType, AppDistribution} from './types';
@@ -101,6 +103,10 @@ export function shopifyApp<
         keyof Config['webhooks'] | MandatoryTopics
       >(params),
     },
+    boundary: {
+      error: errorBoundary,
+      headers: headersBoundary,
+    },
   };
 
   if (
@@ -114,17 +120,17 @@ export function shopifyApp<
 }
 
 function isAppStoreApp<Config extends AppConfigArg>(
-  shopify: ShopifyAppBase<Config>,
+  _shopify: ShopifyAppBase<Config>,
   config: Config,
-): shopify is AppStoreApp<Config> {
-  return config.distribution === AppDistribution.ShopifyAdmin;
+): _shopify is AppStoreApp<Config> {
+  return config.distribution === AppDistribution.AppStore;
 }
 
 function isSingleMerchantApp<Config extends AppConfigArg>(
-  shopify: ShopifyAppBase<Config>,
+  _shopify: ShopifyAppBase<Config>,
   config: Config,
-): shopify is SingleMerchantApp<Config> {
-  return config.distribution === AppDistribution.ShopifyAdmin;
+): _shopify is SingleMerchantApp<Config> {
+  return config.distribution === AppDistribution.SingleMerchant;
 }
 
 function deriveApi<Resources extends ShopifyRestResources>(
@@ -175,12 +181,12 @@ function deriveConfig<Storage extends SessionStorage>(
   }
 
   const authPathPrefix = appConfig.authPathPrefix || '/auth';
-  const distribution = appConfig.distribution ?? AppDistribution.AppStore;
+  appConfig.distribution = appConfig.distribution ?? AppDistribution.AppStore;
 
   return {
     ...appConfig,
     ...apiConfig,
-    canUseLoginForm: distribution !== AppDistribution.ShopifyAdmin,
+    canUseLoginForm: appConfig.distribution !== AppDistribution.ShopifyAdmin,
     useOnlineTokens: appConfig.useOnlineTokens ?? false,
     hooks: appConfig.hooks ?? {},
     sessionStorage: appConfig.sessionStorage as Storage,

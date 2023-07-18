@@ -1,0 +1,65 @@
+import {shopifyApp} from '../../index';
+import {testConfig} from '../../__tests__/test-helper';
+
+describe('Headers boundary', () => {
+  it('ignores non-error headers if errors are present', () => {
+    // GIVEN
+    const shopify = shopifyApp(testConfig());
+    const headers = {
+      parentHeaders: new Headers([['parent', 'header']]),
+      loaderHeaders: new Headers([['loader', 'header']]),
+      actionHeaders: new Headers([['action', 'header']]),
+      errorHeaders: new Headers([['error', 'header']]),
+    };
+
+    // WHEN
+    const result = shopify.boundary.headers(headers);
+
+    // THEN
+    expect(result.get('parent')).toBeNull();
+    expect(result.get('loader')).toBeNull();
+    expect(result.get('action')).toBeNull();
+    expect(result.get('error')).toEqual('header');
+  });
+
+  it('merges all headers if no errors are present', () => {
+    // GIVEN
+    const shopify = shopifyApp(testConfig());
+    const headers = {
+      parentHeaders: new Headers([
+        ['parent', 'header'],
+        ['common', 'parent'],
+      ]),
+      loaderHeaders: new Headers([
+        ['loader', 'header'],
+        ['common', 'loader'],
+      ]),
+      actionHeaders: new Headers([
+        ['action', 'header'],
+        ['common', 'action'],
+      ]),
+      errorHeaders: new Headers(),
+    };
+
+    // WHEN
+    const result = shopify.boundary.headers(headers);
+
+    // THEN
+    expect(result.get('parent')).toEqual('header');
+    expect(result.get('loader')).toEqual('header');
+    expect(result.get('action')).toEqual('header');
+    expect(result.get('common')).toEqual('parent, loader, action');
+  });
+
+  it('returns an empty headers object if no headers are present', () => {
+    // GIVEN
+    const shopify = shopifyApp(testConfig());
+    const headers = {};
+
+    // WHEN
+    const result = shopify.boundary.headers(headers as any);
+
+    // THEN
+    expect(result).toEqual(new Headers());
+  });
+});
