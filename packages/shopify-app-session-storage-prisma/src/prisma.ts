@@ -6,13 +6,22 @@ import type {PrismaClient, Session as Row} from '@prisma/client';
 export class PrismaSessionStorage<T extends PrismaClient>
   implements SessionStorage
 {
+  private ready: Promise<any>;
+
   constructor(private prisma: T) {
     if (this.prisma.session === undefined) {
       throw new Error('PrismaClient does not have a Session table');
     }
+    this.ready = this.prisma.session.count().catch(() => {
+      throw new PrismaNotMigratedError(
+        'Prisma Session table does not exist, have you migrated your database?',
+      );
+    });
   }
 
   public async storeSession(session: Session): Promise<boolean> {
+    await this.ready;
+
     const data = this.sessionToRow(session);
 
     await this.prisma.session.upsert({
@@ -25,6 +34,8 @@ export class PrismaSessionStorage<T extends PrismaClient>
   }
 
   public async loadSession(id: string): Promise<Session | undefined> {
+    await this.ready;
+
     const row = await this.prisma.session.findUnique({
       where: {id},
     });
@@ -37,6 +48,8 @@ export class PrismaSessionStorage<T extends PrismaClient>
   }
 
   public async deleteSession(id: string): Promise<boolean> {
+    await this.ready;
+
     try {
       await this.prisma.session.delete({where: {id}});
     } catch {
@@ -47,12 +60,16 @@ export class PrismaSessionStorage<T extends PrismaClient>
   }
 
   public async deleteSessions(ids: string[]): Promise<boolean> {
+    await this.ready;
+
     await this.prisma.session.deleteMany({where: {id: {in: ids}}});
 
     return true;
   }
 
   public async findSessionsByShop(shop: string): Promise<Session[]> {
+    await this.ready;
+
     const sessions = await this.prisma.session.findMany({
       where: {shop},
       take: 25,
@@ -106,3 +123,5 @@ export class PrismaSessionStorage<T extends PrismaClient>
     return Session.fromPropertyArray(Object.entries(sessionParams));
   }
 }
+
+export class PrismaNotMigratedError extends Error {}
