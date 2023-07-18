@@ -12,6 +12,7 @@ import type {
   RegisterWebhooksOptions,
   WebhookContext,
 } from './auth/webhooks/types';
+import {ErrorBoundary, HeadersBoundary} from './boundary/types';
 
 export interface BasicParams {
   api: Shopify;
@@ -34,6 +35,11 @@ export enum AppDistribution {
   SingleMerchant = 'single_merchant',
   ShopifyAdmin = 'shopify_admin',
 }
+
+export type MandatoryTopics =
+  | 'CUSTOMERS_DATA_REQUEST'
+  | 'CUSTOMERS_REDACT'
+  | 'SHOP_REDACT';
 
 interface JSONObject {
   [x: string]: JSONValue;
@@ -301,6 +307,11 @@ export interface ShopifyAppBase<Config extends AppConfigArg> {
       keyof Config['webhooks'] | MandatoryTopics
     >;
   };
+
+  boundary: {
+    error: ErrorBoundary;
+    headers: HeadersBoundary;
+  };
 }
 
 interface ShopifyAppLogin {
@@ -379,8 +390,3 @@ export type ShopifyApp<Config extends AppConfigArg> =
     : Config['distribution'] extends AppDistribution.AppStore
     ? AppStoreApp<Config>
     : AppStoreApp<Config>;
-
-export type MandatoryTopics =
-  | 'CUSTOMERS_DATA_REQUEST'
-  | 'CUSTOMERS_REDACT'
-  | 'SHOP_REDACT';
