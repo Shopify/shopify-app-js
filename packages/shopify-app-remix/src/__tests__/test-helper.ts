@@ -203,41 +203,6 @@ export function expectDocumentRequestHeaders(
   }
 }
 
-export function expectSecurityHeaders(
-  response: Response,
-  isEmbeddedApp = true,
-) {
-  if (
-    (response.status < 200 || response.status >= 300) &&
-    response.status !== 401
-  ) {
-    return;
-  }
-
-  const headers = response.headers;
-  if (isEmbeddedApp) {
-    expect(headers.get('Content-Security-Policy')).toEqual(
-      `frame-ancestors https://${encodeURIComponent(
-        TEST_SHOP,
-      )} https://admin.shopify.com;`,
-    );
-    expect(headers.get('Access-Control-Allow-Origin')).toEqual('*');
-    expect(headers.get('Access-Control-Allow-Headers')).toEqual(
-      'Authorization',
-    );
-    expect(headers.get('Access-Control-Expose-Headers')).toEqual(
-      REAUTH_URL_HEADER,
-    );
-    expect(headers.get('Link')).toEqual(
-      `<${APP_BRIDGE_URL}>; rel="preload"; as="script"`,
-    );
-  } else {
-    expect(headers.get('Content-Security-Policy')).toEqual(
-      `frame-ancestors 'none';`,
-    );
-  }
-}
-
 export function expectExitIframeRedirect(
   response: Response,
   {
