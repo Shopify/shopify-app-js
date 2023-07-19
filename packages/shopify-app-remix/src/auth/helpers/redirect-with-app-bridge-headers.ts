@@ -1,7 +1,7 @@
 import type {BasicParams} from '../../types';
 import {REAUTH_URL_HEADER} from '../const';
 
-import {addResponseHeaders} from './add-response-headers';
+import {addDocumentResponseHeaders} from './add-response-headers';
 
 export function redirectWithAppBridgeHeaders(
   params: BasicParams,
@@ -25,7 +25,7 @@ export function getAppBridgeHeaders(
   const {config} = params;
   const headers = new Headers({[REAUTH_URL_HEADER]: url});
 
-  addResponseHeaders(headers, config.isEmbeddedApp, shop);
+  addDocumentResponseHeaders(headers, config.isEmbeddedApp, shop);
 
   return headers;
 }

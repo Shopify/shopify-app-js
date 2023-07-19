@@ -62,7 +62,7 @@ export interface LoginError {
 
 type Login = (request: Request) => Promise<LoginError | never>;
 
-type AddResponseHeaders = (request: Request, headers: Headers) => void;
+type AddDocumentResponseHeaders = (request: Request, headers: Headers) => void;
 
 type AuthenticateAdmin<
   Config extends AppConfigArg,
@@ -125,10 +125,10 @@ export interface ShopifyAppBase<Config extends AppConfigArg> {
    *   // ...etc
    * });
    * export default shopify;
-   * export const addResponseheaders = shopify.addResponseheaders;
+   * export const addDocumentResponseheaders = shopify.addDocumentResponseheaders;
    *
    * // entry.server.tsx
-   * import { addResponseHeaders } from "~/shopify.server";
+   * import { addDocumentResponseHeaders } from "~/shopify.server";
    *
    * export default function handleRequest(
    *   request: Request,
@@ -141,7 +141,7 @@ export interface ShopifyAppBase<Config extends AppConfigArg> {
    *   );
    *
    *   responseHeaders.set("Content-Type", "text/html");
-   *   addResponseHeaders(request, responseHeaders);
+   *   addDocumentResponseHeaders(request, responseHeaders);
    *
    *   return new Response("<!DOCTYPE html>" + markup, {
    *     status: responseStatusCode,
@@ -150,7 +150,7 @@ export interface ShopifyAppBase<Config extends AppConfigArg> {
    * }
    * ```
    */
-  addResponseHeaders: AddResponseHeaders;
+  addDocumentResponseHeaders: AddDocumentResponseHeaders;
 
   /**
    * Register webhook topics for a store using the given session. Most likely you want to use this in combination with the afterAuth hook.

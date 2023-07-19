@@ -6,7 +6,7 @@ import {
   testConfig,
 } from '../../../__tests__/test-helper';
 
-describe('addResponseHeaders', () => {
+describe('addDocumentResponseHeaders', () => {
   it.each([true, false])(
     'adds CORS and frame-ancestors CSP headers when embedded = %s',
     (isEmbeddedApp) => {
@@ -17,7 +17,7 @@ describe('addResponseHeaders', () => {
       const response = new Response();
 
       // WHEN
-      shopify.addResponseHeaders(request, response.headers);
+      shopify.addDocumentResponseHeaders(request, response.headers);
 
       // THEN
       expectSecurityHeaders(response, isEmbeddedApp);

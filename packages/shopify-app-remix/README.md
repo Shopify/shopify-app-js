@@ -129,7 +129,7 @@ export default function App() {
 > **Note**: This version of App Bridge must be loaded from the CDN, in the document head.
 
 Now that your app is ready to respond to requests, it will also need to add the required `Content-Security-Policy` header directives, as per [our documentation](https://shopify.dev/docs/apps/store/security/iframe-protection).
-To do that, this package provides the `shopify.addResponseHeaders` method.
+To do that, this package provides the `shopify.addDocumentResponseHeaders` method.
 
 You should return these headers from any endpoint that renders HTML in your app.
 Most likely you'll want to add this to every HTML response by updating the entry.server.tsx file:
@@ -149,7 +149,7 @@ export default function handleRequest(
   );
 
   responseHeaders.set('Content-Type', 'text/html');
-  shopify.addResponseHeaders(request, responseHeaders);
+  shopify.addDocumentResponseHeaders(request, responseHeaders);
 
   return new Response('<!DOCTYPE html>' + markup, {
     status: responseStatusCode,
