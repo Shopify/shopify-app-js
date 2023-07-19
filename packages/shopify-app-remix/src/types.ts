@@ -12,6 +12,7 @@ import type {
   RegisterWebhooksOptions,
   WebhookContext,
 } from './auth/webhooks/types';
+import {ErrorBoundary, HeadersBoundary} from './boundary/types';
 
 export interface BasicParams {
   api: Shopify;
@@ -34,6 +35,11 @@ export enum AppDistribution {
   SingleMerchant = 'single_merchant',
   ShopifyAdmin = 'shopify_admin',
 }
+
+export type MandatoryTopics =
+  | 'CUSTOMERS_DATA_REQUEST'
+  | 'CUSTOMERS_REDACT'
+  | 'SHOP_REDACT';
 
 interface JSONObject {
   [x: string]: JSONValue;
@@ -80,7 +86,7 @@ type SessionStorageType<Config extends AppConfigArg> =
     ? Config['sessionStorage']
     : SessionStorage;
 
-interface ShopifyAppBase<Config extends AppConfigArg> {
+export interface ShopifyAppBase<Config extends AppConfigArg> {
   /**
    * The SessionStorage instance your app is using.
    *
@@ -301,6 +307,11 @@ interface ShopifyAppBase<Config extends AppConfigArg> {
       keyof Config['webhooks'] | MandatoryTopics
     >;
   };
+
+  boundary: {
+    error: ErrorBoundary;
+    headers: HeadersBoundary;
+  };
 }
 
 interface ShopifyAppLogin {
@@ -360,10 +371,10 @@ interface ShopifyAppLogin {
   login: Login;
 }
 
-type AdminApp<Config extends AppConfigArg> = ShopifyAppBase<Config>;
-type SingleMerchantApp<Config extends AppConfigArg> = ShopifyAppBase<Config> &
-  ShopifyAppLogin;
-type AppStoreApp<Config extends AppConfigArg> = ShopifyAppBase<Config> &
+export type AdminApp<Config extends AppConfigArg> = ShopifyAppBase<Config>;
+export type SingleMerchantApp<Config extends AppConfigArg> =
+  ShopifyAppBase<Config> & ShopifyAppLogin;
+export type AppStoreApp<Config extends AppConfigArg> = ShopifyAppBase<Config> &
   ShopifyAppLogin;
 
 /**
@@ -379,8 +390,3 @@ export type ShopifyApp<Config extends AppConfigArg> =
     : Config['distribution'] extends AppDistribution.AppStore
     ? AppStoreApp<Config>
     : AppStoreApp<Config>;
-
-export type MandatoryTopics =
-  | 'CUSTOMERS_DATA_REQUEST'
-  | 'CUSTOMERS_REDACT'
-  | 'SHOP_REDACT';

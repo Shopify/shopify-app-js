@@ -185,7 +185,8 @@ To load your app within the Shopify Admin, you need to:
 
 ## Authenticating admin requests
 
-`shopifyApp` provides methods for authenticating admin requests. To authenticate admin requests you can call `shopify.authenticate.admin(request)` in a loader or an action:
+`shopifyApp` provides methods for authenticating admin requests.
+To authenticate admin requests you can call `shopify.authenticate.admin(request)` in a loader or an action:
 
 ```ts
 // app/routes/**/*.tsx
@@ -196,7 +197,32 @@ export const loader = async ({request}: LoaderArgs) => {
 };
 ```
 
-If there is a session for this user, this loader will return null. If there is no session for the user, the loader will throw the appropriate redirect Response.
+If there is a session for this user, this loader will return null.
+If there is no session for the user, the loader will throw the appropriate redirect Response.
+
+> **Note**: If you are authenticating more than one route, we recommend using [Remix layout routes](https://remix.run/docs/en/1.18.1/file-conventions/routes-files#layout-routes) to automatically authenticate them.
+
+### Headers
+
+It's important to note that the authentication functions in this package rely on throwing `Response` objects, which must be handled in your Remix routes using them.
+
+To do that, you can set up a [Remix `ErrorBoundary`](https://remix.run/docs/en/main/guides/errors).
+We provide some abstractions for the error and headers boundaries to make it easier for apps to set those up.
+
+```ts
+// app/routes/**/*.tsx
+import {boundary} from '@shopify/shopify-app-remix';
+
+export function ErrorBoundary() {
+  return boundary.error(useRouteError());
+}
+
+export const headers = (headersArgs) => {
+  return boundary.headers(headersArgs);
+};
+```
+
+> **Note**: You can also add this to a layout if you want to authenticate more than one route.
 
 ### Using the Shopify admin GraphQL API
 
