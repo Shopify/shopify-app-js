@@ -28,10 +28,7 @@ import {AuthStrategy} from './auth/admin/authenticate';
 import {authenticateWebhookFactory} from './auth/webhooks/authenticate';
 import {authenticatePublicFactory} from './auth/public/authenticate';
 import {overrideLogger} from './override-logger';
-import {
-  addResponseHeadersFactory,
-  installGlobalResponseHeaders,
-} from './auth/helpers/add-response-headers';
+import {addDocumentResponseHeadersFactory} from './auth/helpers/add-response-headers';
 import {loginFactory} from './auth/login/login';
 import {headersBoundary} from './boundary/headers';
 import {errorBoundary} from './boundary/error';
@@ -79,8 +76,6 @@ export function shopifyApp<
   const config = deriveConfig<Storage>(appConfig, api.config);
   const logger = overrideLogger(api.logger);
 
-  installGlobalResponseHeaders(config.isEmbeddedApp);
-
   if (appConfig.webhooks) {
     api.webhooks.addHandlers(appConfig.webhooks);
   }
@@ -93,7 +88,7 @@ export function shopifyApp<
     | AppStoreApp<Config>
     | SingleMerchantApp<Config> = {
     sessionStorage: config.sessionStorage,
-    addResponseHeaders: addResponseHeadersFactory(params),
+    addDocumentResponseHeaders: addDocumentResponseHeadersFactory(params),
     registerWebhooks: registerWebhooksFactory(params),
     authenticate: {
       admin: oauth.authenticateAdmin.bind(oauth),

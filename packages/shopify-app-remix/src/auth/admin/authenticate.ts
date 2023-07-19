@@ -23,7 +23,7 @@ import {
   requestBillingFactory,
   requireBillingFactory,
 } from '../../billing';
-import {addResponseHeaders} from '../helpers/add-response-headers';
+import {addDocumentResponseHeaders} from '../helpers/add-response-headers';
 import {
   beginAuth,
   getSessionTokenHeader,
@@ -528,7 +528,7 @@ export class AuthStrategy<
     const shop = new URL(request.url).searchParams.get('shop')!;
 
     // We want the headers to be present on all responses:
-    addResponseHeaders(response.headers, config.isEmbeddedApp, shop);
+    addDocumentResponseHeaders(response.headers, config.isEmbeddedApp, shop);
   }
 
   private overriddenRestClient(request: Request, session: Session) {
