@@ -181,6 +181,28 @@ interface ExpectExitIframeRedirectOptions {
   destination?: string;
 }
 
+export function expectDocumentRequestHeaders(
+  response: Response,
+  isEmbeddedApp = true,
+) {
+  const headers = response.headers;
+
+  if (isEmbeddedApp) {
+    expect(headers.get('Content-Security-Policy')).toEqual(
+      `frame-ancestors https://${encodeURIComponent(
+        TEST_SHOP,
+      )} https://admin.shopify.com;`,
+    );
+    expect(headers.get('Link')).toEqual(
+      `<${APP_BRIDGE_URL}>; rel="preload"; as="script";`,
+    );
+  } else {
+    expect(headers.get('Content-Security-Policy')).toEqual(
+      `frame-ancestors 'none';`,
+    );
+  }
+}
+
 export function expectSecurityHeaders(
   response: Response,
   isEmbeddedApp = true,

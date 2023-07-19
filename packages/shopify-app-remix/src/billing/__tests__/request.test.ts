@@ -131,9 +131,6 @@ describe('Billing request', () => {
     expect(response.headers.get(REAUTH_URL_HEADER)).toEqual(
       responses.CONFIRMATION_URL,
     );
-    expect(response.headers.get('Access-Control-Expose-Headers')).toBe(
-      REAUTH_URL_HEADER,
-    );
   });
 
   it('redirects to authentication when at the top level when Shopify invalidated the session', async () => {

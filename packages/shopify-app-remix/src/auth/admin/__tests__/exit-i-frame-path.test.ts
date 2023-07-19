@@ -2,7 +2,7 @@ import {shopifyApp} from '../../..';
 import {
   APP_URL,
   TEST_SHOP,
-  expectSecurityHeaders,
+  expectDocumentRequestHeaders,
   getThrownResponse,
   testConfig,
 } from '../../../__tests__/test-helper';
@@ -25,7 +25,6 @@ describe('authorize.admin exit iframe path', () => {
     // THEN
     const responseText = await response.text();
     expect(response.status).toBe(200);
-    expectSecurityHeaders(response);
     expect(response.headers.get('content-type')).toBe(
       'text/html;charset=utf-8',
     );
@@ -35,6 +34,7 @@ describe('authorize.admin exit iframe path', () => {
     expect(responseText).toContain(
       `<script>window.open("${decodeURIComponent(exitTo)}", "_top")</script>`,
     );
+    expectDocumentRequestHeaders(response);
   });
 
   test('Uses App Bridge to exit iFrame when the url matches auth.exitIframePath and authPathPrefix is passed', async () => {
@@ -54,7 +54,6 @@ describe('authorize.admin exit iframe path', () => {
     // THEN
     const responseText = await response.text();
     expect(response.status).toBe(200);
-    expectSecurityHeaders(response);
     expect(response.headers.get('content-type')).toBe(
       'text/html;charset=utf-8',
     );
@@ -64,6 +63,7 @@ describe('authorize.admin exit iframe path', () => {
     expect(responseText).toContain(
       `<script>window.open("${decodeURIComponent(exitTo)}", "_top")</script>`,
     );
+    expectDocumentRequestHeaders(response);
   });
 
   test('Allows relative paths as exitIframe param', async () => {
@@ -80,6 +80,6 @@ describe('authorize.admin exit iframe path', () => {
 
     // THEN
     expect(response.status).toBe(200);
-    expectSecurityHeaders(response);
+    expectDocumentRequestHeaders(response);
   });
 });

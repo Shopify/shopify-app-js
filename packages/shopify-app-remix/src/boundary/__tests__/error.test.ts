@@ -1,4 +1,4 @@
-import {shopifyApp} from '../../index';
+import {boundary, shopifyApp} from '../../index';
 import {testConfig} from '../../__tests__/test-helper';
 
 describe('Error boundary', () => {
@@ -7,7 +7,7 @@ describe('Error boundary', () => {
     const shopify = shopifyApp(testConfig());
 
     // WHEN
-    const result = shopify.boundary.error(new ErrorResponse());
+    const result = boundary.error(new ErrorResponse());
 
     // THEN
     expect(result).toEqual('Handling response');
@@ -18,7 +18,7 @@ describe('Error boundary', () => {
     const shopify = shopifyApp(testConfig());
 
     // WHEN
-    const result = () => shopify.boundary.error(new Error());
+    const result = () => boundary.error(new Error());
 
     // THEN
     expect(result).toThrowError();

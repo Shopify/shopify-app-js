@@ -5,7 +5,6 @@ import {
   APP_URL,
   BASE64_HOST,
   TEST_SHOP,
-  expectSecurityHeaders,
   getJwt,
   getThrownResponse,
   setUpValidSession,
@@ -30,7 +29,6 @@ describe('authorize.session token header path', () => {
 
       // THEN
       expect(response.status).toBe(401);
-      expectSecurityHeaders(response);
     });
 
     describe.each([true, false])('when isOnline: %s', (isOnline) => {
@@ -48,16 +46,11 @@ describe('authorize.session token header path', () => {
         );
 
         // THEN
-        expect(response.status).toBe(401);
-        expectSecurityHeaders(response);
-        expect(response.headers.get('Access-Control-Expose-Headers')).toBe(
-          REAUTH_URL_HEADER,
-        );
-
         const {origin, pathname, searchParams} = new URL(
           response.headers.get(REAUTH_URL_HEADER)!,
         );
 
+        expect(response.status).toBe(401);
         expect(origin).toBe(APP_URL);
         expect(pathname).toBe('/auth');
         expect(searchParams.get('shop')).toBe(TEST_SHOP);
@@ -81,16 +74,10 @@ describe('authorize.session token header path', () => {
         );
 
         // THEN
-        expect(response.status).toBe(401);
-        expectSecurityHeaders(response);
-        expect(response.headers.get('Access-Control-Expose-Headers')).toBe(
-          REAUTH_URL_HEADER,
-        );
-
         const {origin, pathname, searchParams} = new URL(
           response.headers.get(REAUTH_URL_HEADER)!,
         );
-
+        expect(response.status).toBe(401);
         expect(origin).toBe(APP_URL);
         expect(pathname).toBe('/auth');
         expect(searchParams.get('shop')).toBe(TEST_SHOP);

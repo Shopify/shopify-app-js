@@ -1,4 +1,4 @@
-import {shopifyApp} from '../../index';
+import {boundary, shopifyApp} from '../../index';
 import {testConfig} from '../../__tests__/test-helper';
 
 describe('Headers boundary', () => {
@@ -13,7 +13,7 @@ describe('Headers boundary', () => {
     };
 
     // WHEN
-    const result = shopify.boundary.headers(headers);
+    const result = boundary.headers(headers);
 
     // THEN
     expect(result.get('parent')).toBeNull();
@@ -42,7 +42,7 @@ describe('Headers boundary', () => {
     };
 
     // WHEN
-    const result = shopify.boundary.headers(headers);
+    const result = boundary.headers(headers);
 
     // THEN
     expect(result.get('parent')).toEqual('header');
@@ -57,7 +57,7 @@ describe('Headers boundary', () => {
     const headers = {};
 
     // WHEN
-    const result = shopify.boundary.headers(headers as any);
+    const result = boundary.headers(headers as any);
 
     // THEN
     expect(result).toEqual(new Headers());
