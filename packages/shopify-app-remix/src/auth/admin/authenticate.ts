@@ -24,6 +24,8 @@ import {
   requireBillingFactory,
 } from '../../billing';
 import {
+  appBridgeUrl,
+  addDocumentResponseHeaders,
   beginAuth,
   getSessionTokenHeader,
   redirectWithExitIframe,
@@ -33,8 +35,6 @@ import {
   respondToOptionsRequest,
   ensureCORSHeadersFactory,
 } from '../helpers';
-import {appBridgeUrl} from '../helpers/app-bridge-url';
-import {addDocumentResponseHeaders} from '../helpers/add-response-headers';
 
 import type {
   AdminContext,

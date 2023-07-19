@@ -28,7 +28,7 @@ import {AuthStrategy} from './auth/admin/authenticate';
 import {authenticateWebhookFactory} from './auth/webhooks/authenticate';
 import {authenticatePublicFactory} from './auth/public/authenticate';
 import {overrideLogger} from './override-logger';
-import {addDocumentResponseHeadersFactory} from './auth/helpers/add-response-headers';
+import {addDocumentResponseHeadersFactory} from './auth/helpers';
 import {loginFactory} from './auth/login/login';
 import {headersBoundary} from './boundary/headers';
 import {errorBoundary} from './boundary/error';
