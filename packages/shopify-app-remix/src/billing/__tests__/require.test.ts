@@ -216,13 +216,9 @@ describe('Billing require', () => {
     );
 
     // THEN
-    expect(response.status).toEqual(401);
-    expect(response.headers.get('Access-Control-Expose-Headers')).toBe(
-      REAUTH_URL_HEADER,
-    );
-
     const reauthUrl = new URL(response.headers.get(REAUTH_URL_HEADER)!);
 
+    expect(response.status).toEqual(401);
     expect(reauthUrl.origin).toEqual(APP_URL);
     expect(reauthUrl.pathname).toEqual('/auth');
   });

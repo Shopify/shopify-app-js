@@ -2,13 +2,14 @@ import {shopifyApp} from '../../..';
 import {
   APP_URL,
   TEST_SHOP,
+  expectDocumentRequestHeaders,
   expectSecurityHeaders,
   testConfig,
 } from '../../../__tests__/test-helper';
 
 describe('addDocumentResponseHeaders', () => {
   it.each([true, false])(
-    'adds CORS and frame-ancestors CSP headers when embedded = %s',
+    'adds frame-ancestors CSP headers when embedded = %s',
     (isEmbeddedApp) => {
       // GIVEN
       const config = {...testConfig(), isEmbeddedApp};
@@ -20,7 +21,7 @@ describe('addDocumentResponseHeaders', () => {
       shopify.addDocumentResponseHeaders(request, response.headers);
 
       // THEN
-      expectSecurityHeaders(response, isEmbeddedApp);
+      expectDocumentRequestHeaders(response, isEmbeddedApp);
     },
   );
 });

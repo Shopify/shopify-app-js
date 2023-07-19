@@ -3,7 +3,7 @@ import {APP_BRIDGE_URL} from '../../const';
 import {
   APP_URL,
   TEST_SHOP,
-  expectSecurityHeaders,
+  expectDocumentRequestHeaders,
   getThrownResponse,
   testConfig,
 } from '../../../__tests__/test-helper';
@@ -23,7 +23,7 @@ describe('authorize.admin path session token path', () => {
 
     // THEN
     expect(response.status).toBe(200);
-    expectSecurityHeaders(response);
+    expectDocumentRequestHeaders(response, config.isEmbeddedApp);
     expect(response.headers.get('content-type')).toBe(
       'text/html;charset=utf-8',
     );
@@ -47,7 +47,7 @@ describe('authorize.admin path session token path', () => {
 
     // THEN
     expect(response.status).toBe(200);
-    expectSecurityHeaders(response);
+    expectDocumentRequestHeaders(response, config.isEmbeddedApp);
     expect(response.headers.get('content-type')).toBe(
       'text/html;charset=utf-8',
     );

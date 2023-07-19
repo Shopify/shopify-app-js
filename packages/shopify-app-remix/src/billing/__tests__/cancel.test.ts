@@ -170,15 +170,11 @@ describe('Cancel billing', () => {
     );
 
     // THEN
-    expect(response.status).toEqual(401);
-    expect(response.headers.get('Access-Control-Expose-Headers')).toBe(
-      REAUTH_URL_HEADER,
-    );
-
     const {origin, pathname} = new URL(
       response.headers.get(REAUTH_URL_HEADER)!,
     );
 
+    expect(response.status).toEqual(401);
     expect(origin).toEqual(APP_URL);
     expect(pathname).toEqual('/auth');
   });
