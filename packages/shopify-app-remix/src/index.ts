@@ -98,10 +98,6 @@ export function shopifyApp<
         keyof Config['webhooks'] | MandatoryTopics
       >(params),
     },
-    boundary: {
-      error: errorBoundary,
-      headers: headersBoundary,
-    },
   };
 
   if (
@@ -113,6 +109,12 @@ export function shopifyApp<
 
   return shopify as ShopifyApp<Config>;
 }
+
+// TODO: Document this
+export const boundary = {
+  error: errorBoundary,
+  headers: headersBoundary,
+};
 
 function isAppStoreApp<Config extends AppConfigArg>(
   _shopify: ShopifyAppBase<Config>,

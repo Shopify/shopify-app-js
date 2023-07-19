@@ -1,8 +1,6 @@
 import type {BasicParams} from '../../types';
 import {REAUTH_URL_HEADER} from '../const';
 
-import {addDocumentResponseHeaders} from './add-response-headers';
-
 export function redirectWithAppBridgeHeaders(
   params: BasicParams,
   shop: string,
@@ -13,19 +11,10 @@ export function redirectWithAppBridgeHeaders(
   throw new Response(undefined, {
     status: 401,
     statusText: 'Unauthorized',
-    headers: getAppBridgeHeaders(params, redirectUri, shop),
+    headers: getAppBridgeHeaders(redirectUri),
   });
 }
 
-export function getAppBridgeHeaders(
-  params: BasicParams,
-  url: string,
-  shop: string,
-) {
-  const {config} = params;
-  const headers = new Headers({[REAUTH_URL_HEADER]: url});
-
-  addDocumentResponseHeaders(headers, config.isEmbeddedApp, shop);
-
-  return headers;
+export function getAppBridgeHeaders(url: string) {
+  return new Headers({[REAUTH_URL_HEADER]: url});
 }
