@@ -1,5 +1,11 @@
 # @shopify/shopify-app-remix
 
+## 1.0.0-rc.2
+
+### Patch Changes
+
+- 7263d36: Releasing new candidate
+
 ## 1.0.0-rc.1
 
 ### Patch Changes
