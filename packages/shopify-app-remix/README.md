@@ -211,6 +211,8 @@ We provide some abstractions for the error and headers boundaries to make it eas
 
 ```ts
 // app/routes/**/*.tsx
+import {boundary} from '@shopify/shopify-app-remix';
+
 export function ErrorBoundary() {
   return boundary.error(useRouteError());
 }
