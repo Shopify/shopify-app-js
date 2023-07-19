@@ -30,9 +30,10 @@ import {
   redirectToAuthPage,
   validateSessionToken,
   rejectBotRequest,
+  respondToOptionsRequest,
+  ensureCORSHeaders,
 } from '../helpers';
 import {appBridgeUrl} from '../helpers/app-bridge-url';
-import {REAUTH_URL_HEADER} from '../const';
 
 import type {AdminContext} from './types';
 import {graphqlClientFactory} from './graphql-client';
@@ -65,14 +66,14 @@ export class AuthStrategy<
     const {api, logger, config} = this;
 
     rejectBotRequest({api, logger, config}, request);
-    this.respondToOptionsRequest(request);
+    respondToOptionsRequest({api, logger, config}, request);
 
     let sessionContext: SessionContext;
     try {
       sessionContext = await this.authenticateAndGetSessionContext(request);
     } catch (errorOrResponse) {
       if (errorOrResponse instanceof Response) {
-        this.ensureCORSHeaders(request, errorOrResponse);
+        ensureCORSHeaders({api, logger, config}, request, errorOrResponse);
       }
 
       throw errorOrResponse;
@@ -509,31 +510,6 @@ export class AuthStrategy<
       `,
       {headers: {'content-type': 'text/html;charset=utf-8'}},
     );
-  }
-
-  private respondToOptionsRequest(request: Request) {
-    if (request.method === 'OPTIONS') {
-      throw new Response(null, {
-        status: 204,
-        headers: {
-          'Access-Control-Max-Age': '7200',
-        },
-      });
-    }
-  }
-
-  private ensureCORSHeaders(request: Request, response: Response): void {
-    const {logger, config} = this;
-
-    if (request.headers.get('Origin') !== config.appUrl) {
-      logger.debug(
-        'Request comes from a different origin, adding CORS headers',
-      );
-
-      response.headers.set('Access-Control-Allow-Origin', '*');
-      response.headers.set('Access-Control-Allow-Headers', 'Authorization');
-      response.headers.set('Access-Control-Expose-Headers', REAUTH_URL_HEADER);
-    }
   }
 
   private overriddenRestClient(request: Request, session: Session) {

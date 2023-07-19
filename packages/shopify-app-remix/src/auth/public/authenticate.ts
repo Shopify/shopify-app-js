@@ -2,6 +2,7 @@ import type {BasicParams} from '../../types';
 import {
   getSessionTokenHeader,
   rejectBotRequest,
+  respondToOptionsRequest,
   validateSessionToken,
 } from '../helpers';
 
@@ -14,6 +15,7 @@ export function authenticatePublicFactory(params: BasicParams) {
     const {logger} = params;
 
     rejectBotRequest(params, request);
+    respondToOptionsRequest(params, request);
 
     const sessionTokenHeader = getSessionTokenHeader(request);
 
