@@ -11,6 +11,8 @@ export function respondToOptionsRequest(params: BasicParams, request: Request) {
       },
     });
 
-    throw ensureCORSHeadersFactory(params, request)(response);
+    const ensureCORSHeaders = ensureCORSHeadersFactory(params, request);
+
+    throw ensureCORSHeaders(response);
   }
 }

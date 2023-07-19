@@ -2,7 +2,7 @@ import {BasicParams} from '../../types';
 import {REAUTH_URL_HEADER} from '../const';
 
 export interface EnsureCORSFunction {
-  (response: Response | Promise<Response>): Promise<void>;
+  (response: Response): Response;
 }
 
 export function ensureCORSHeadersFactory(
@@ -11,19 +11,18 @@ export function ensureCORSHeadersFactory(
 ): EnsureCORSFunction {
   const {logger, config} = params;
 
-  return async function ensureCORSHeaders(
-    response: Response | Promise<Response>,
-  ): Promise<void> {
-    const awaited = await response;
-
-    if (request.headers.get('Origin') !== config.appUrl) {
+  return function ensureCORSHeaders(response) {
+    const origin = request.headers.get('Origin');
+    if (origin && origin !== config.appUrl) {
       logger.debug(
         'Request comes from a different origin, adding CORS headers',
       );
 
-      awaited.headers.set('Access-Control-Allow-Origin', '*');
-      awaited.headers.set('Access-Control-Allow-Headers', 'Authorization');
-      awaited.headers.set('Access-Control-Expose-Headers', REAUTH_URL_HEADER);
+      response.headers.set('Access-Control-Allow-Origin', '*');
+      response.headers.set('Access-Control-Allow-Headers', 'Authorization');
+      response.headers.set('Access-Control-Expose-Headers', REAUTH_URL_HEADER);
     }
+
+    return response;
   };
 }
