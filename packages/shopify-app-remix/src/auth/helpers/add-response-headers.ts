@@ -1,5 +1,7 @@
 import type {BasicParams} from '../../types';
-import {APP_BRIDGE_HEADERS, APP_BRIDGE_URL, DEFAULT_CSP_VALUE} from '../const';
+import {APP_BRIDGE_HEADERS, DEFAULT_CSP_VALUE} from '../const';
+
+import {appBridgeUrl} from './app-bridge-url';
 
 const ORIGINAL_HEADERS = Symbol.for('originalHeaders');
 
@@ -70,7 +72,7 @@ export function installGlobalResponseHeaders(isEmbeddedApp: boolean) {
         if (!headers.get('Link')) {
           headers.set(
             'Link',
-            `<${APP_BRIDGE_URL}>; rel="preload"; as="script"`,
+            `<${appBridgeUrl()}>; rel="preload"; as="script"`,
           );
         }
       } catch (err) {
