@@ -212,7 +212,7 @@ export const loader = async ({request}: LoaderArgs) => {
 
   return cors(json({"my": "data"}));
 };
-```
+````
 
 ### Headers
 
@@ -415,7 +415,4 @@ Remember to [set up your migrations](https://www.prisma.io/docs/concepts/compone
 
 In Remix apps, you can navigate to a different page either by adding an `<a>` tag, or using the `<Link>` component from `@remix-run/react`.
 
-In Shopify Remix apps you should avoid using `<a>`.
-Use `<Link> `from `@remix-run/react` instead.
-This ensures that your user remains authenticated.
-````
+In Shopify Remix apps you should avoid using `<a>`. Use `<Link>` from `@remix-run/react` instead. This ensures that your user remains authenticated.
