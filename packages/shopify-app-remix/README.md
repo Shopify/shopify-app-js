@@ -85,7 +85,7 @@ Now let's create the [splat route](https://remix.run/docs/en/main/guides/routing
 // app/routes/auth/$.tsx
 import {LoaderArgs} from '@remix-run/node';
 
-import {shopify} from '../../shopify.server';
+import shopify from '../../shopify.server';
 
 export async function loader({request}: LoaderArgs) {
   await shopify.authenticate.admin(request);
@@ -136,7 +136,7 @@ Most likely you'll want to add this to every HTML response by updating the entry
 
 ```ts
 // entry.server.tsx
-import {shopify} from '~/shopify.server';
+import shopify from './shopify.server';
 
 export default function handleRequest(
   request: Request,
@@ -206,7 +206,7 @@ E.g:
 
 ```ts
 // routes/**/*.tsx
-import {shopify} from '../shopify.server';
+import shopify from '../shopify.server';
 import {ActionArgs, json} from '@remix-run/node';
 
 export async function action({request}: ActionArgs) {
@@ -300,7 +300,7 @@ To do this, your app must authenticate the request.
 // routes/webhooks.tsx
 import {ActionArgs} from '@remix-run/node';
 
-import {shopify} from '../shopify.server';
+import shopify from '../shopify.server';
 import db from '../db.server';
 
 export const action = async ({request}: ActionArgs) => {
@@ -326,8 +326,8 @@ export const action = async ({request}: ActionArgs) => {
 Your Remix app may need to authenticate requests coming from a public context. An example of this would be a checkout extension. Here is how:
 
 ```ts
-// e.g: routes/api/public/notes.tsx
-import {shopify} from '../shopify.server';
+// e.g: routes/api.public.notes.tsx
+import shopify from '../shopify.server';
 import {LoaderArgs, json} from '@remix-run/node';
 import {getNotes} from '~/models/notes';
 
