@@ -3,7 +3,6 @@ import {
   APP_URL,
   TEST_SHOP,
   expectDocumentRequestHeaders,
-  expectSecurityHeaders,
   testConfig,
 } from '../../../__tests__/test-helper';
 
