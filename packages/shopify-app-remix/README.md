@@ -160,7 +160,6 @@ export default function handleRequest(
 
 If you don't want to add this to every HTML request, you can call it in individual loaders, but you should only do this if you have a good reason not to include the headers in every HTML request.
 
-
 ## Setting up for your runtime
 
 By default, this package will work with the runtimes supported by [Remix adapters](https://remix.run/docs/en/1.17.1/other-api/adapter#official-adapters) because it relies on the same [Web Fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API).
@@ -202,7 +201,6 @@ If there is a session for this user, this loader will return null.
 If there is no session for the user, the loader will throw the appropriate redirect Response.
 
 > **Note**: If you are authenticating more than one route, we recommend using [Remix layout routes](https://remix.run/docs/en/1.18.1/file-conventions/routes-files#layout-routes) to automatically authenticate them.
-
 
 ## Authenticating cross-origin admin requests
 
@@ -420,3 +418,4 @@ In Remix apps, you can navigate to a different page either by adding an `<a>` ta
 In Shopify Remix apps you should avoid using `<a>`.
 Use `<Link> `from `@remix-run/react` instead.
 This ensures that your user remains authenticated.
+````
