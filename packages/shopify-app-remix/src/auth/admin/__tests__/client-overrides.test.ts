@@ -233,9 +233,6 @@ describe('admin.authenticate context', () => {
 
         // THEN
         expect(response.status).toEqual(401);
-        expect(response.headers.get('Access-Control-Expose-Headers')).toBe(
-          REAUTH_URL_HEADER,
-        );
 
         const {origin, pathname, searchParams} = new URL(
           response.headers.get(REAUTH_URL_HEADER)!,

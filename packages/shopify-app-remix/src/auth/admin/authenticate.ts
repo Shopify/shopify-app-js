@@ -34,6 +34,7 @@ import {
   ensureCORSHeadersFactory,
 } from '../helpers';
 import {appBridgeUrl} from '../helpers/app-bridge-url';
+import {addDocumentResponseHeaders} from '../helpers/add-response-headers';
 
 import type {
   AdminContext,
@@ -122,12 +123,12 @@ export class AuthStrategy<
 
     if (isPatchSessionToken) {
       logger.debug('Rendering bounce page');
-      throw this.renderAppBridge();
+      throw this.renderAppBridge(request);
     } else if (isExitIframe) {
       const destination = url.searchParams.get('exitIframe')!;
 
       logger.debug('Rendering exit iframe page', {destination});
-      throw this.renderAppBridge(destination);
+      throw this.renderAppBridge(request, destination);
     } else if (isAuthCallbackRequest) {
       throw await this.handleAuthCallbackRequest(request);
     } else if (isAuthRequest) {
@@ -496,7 +497,7 @@ export class AuthStrategy<
     throw redirect(`${config.auth.patchSessionTokenPath}?${params.toString()}`);
   }
 
-  private renderAppBridge(redirectTo?: string): never {
+  private renderAppBridge(request: Request, redirectTo?: string): never {
     const {config} = this;
 
     let redirectToScript = '';
@@ -510,6 +511,15 @@ export class AuthStrategy<
       redirectToScript = `<script>window.open("${redirectUrl}", "_top")</script>`;
     }
 
+    const responseHeaders = new Headers({
+      'content-type': 'text/html;charset=utf-8',
+    });
+    addDocumentResponseHeaders(
+      responseHeaders,
+      config.isEmbeddedApp,
+      new URL(request.url).searchParams.get('shop'),
+    );
+
     throw new Response(
       `
         <script data-api-key="${
@@ -517,7 +527,7 @@ export class AuthStrategy<
         }" src="${appBridgeUrl()}"></script>
         ${redirectToScript}
       `,
-      {headers: {'content-type': 'text/html;charset=utf-8'}},
+      {headers: responseHeaders},
     );
   }
 
