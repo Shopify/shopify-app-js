@@ -31,11 +31,15 @@ import {
   validateSessionToken,
   rejectBotRequest,
   respondToOptionsRequest,
-  ensureCORSHeaders,
+  ensureCORSHeadersFactory,
 } from '../helpers';
 import {appBridgeUrl} from '../helpers/app-bridge-url';
 
-import type {AdminContext} from './types';
+import type {
+  AdminContext,
+  EmbeddedAdminContext,
+  NonEmbeddedAdminContext,
+} from './types';
 import {graphqlClientFactory} from './graphql-client';
 import {RemixRestClient, restResourceClientFactory} from './rest-client';
 
@@ -68,21 +72,26 @@ export class AuthStrategy<
     rejectBotRequest({api, logger, config}, request);
     respondToOptionsRequest({api, logger, config}, request);
 
+    const cors = ensureCORSHeadersFactory({api, logger, config}, request);
+
     let sessionContext: SessionContext;
     try {
       sessionContext = await this.authenticateAndGetSessionContext(request);
     } catch (errorOrResponse) {
       if (errorOrResponse instanceof Response) {
-        ensureCORSHeaders({api, logger, config}, request, errorOrResponse);
+        cors(errorOrResponse);
       }
 
       throw errorOrResponse;
     }
 
-    const context = {
+    const context:
+      | EmbeddedAdminContext<Config, Resources>
+      | NonEmbeddedAdminContext<Config, Resources> = {
       admin: this.createAdminApiContext(request, sessionContext.session),
       billing: this.createBillingContext(request, sessionContext.session),
       session: sessionContext.session,
+      cors,
     };
 
     if (config.isEmbeddedApp) {

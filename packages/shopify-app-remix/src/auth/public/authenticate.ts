@@ -1,5 +1,6 @@
 import type {BasicParams} from '../../types';
 import {
+  ensureCORSHeadersFactory,
   getSessionTokenHeader,
   rejectBotRequest,
   respondToOptionsRequest,
@@ -31,6 +32,7 @@ export function authenticatePublicFactory(params: BasicParams) {
 
     return {
       sessionToken: await validateSessionToken(params, sessionTokenHeader),
+      cors: ensureCORSHeadersFactory(params, request),
     };
   };
 }

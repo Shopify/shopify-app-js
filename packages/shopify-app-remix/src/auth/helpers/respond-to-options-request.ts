@@ -1,6 +1,6 @@
 import {BasicParams} from '../../types';
 
-import {ensureCORSHeaders} from './ensure-cors-headers';
+import {ensureCORSHeadersFactory} from './ensure-cors-headers';
 
 export function respondToOptionsRequest(params: BasicParams, request: Request) {
   if (request.method === 'OPTIONS') {
@@ -11,6 +11,6 @@ export function respondToOptionsRequest(params: BasicParams, request: Request) {
       },
     });
 
-    throw ensureCORSHeaders(params, request, response);
+    throw ensureCORSHeadersFactory(params, request)(response);
   }
 }
