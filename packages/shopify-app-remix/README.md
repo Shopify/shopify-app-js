@@ -206,13 +206,13 @@ If there is no session for the user, the loader will throw the appropriate redir
 
 If your Remix server is authenticating an admin extension, a request from the extension to Remix will be cross-origin. Here `shopify.authenticate.admin` provides a cors function to add the required cross-origin headers:
 
-````ts
+```ts
 export const loader = async ({request}: LoaderArgs) => {
   const {cors} = await shopify.authenticate.admin(request);
 
-  return cors(json({"my": "data"}));
+  return cors(json({my: 'data'}));
 };
-````
+```
 
 ### Headers
 
