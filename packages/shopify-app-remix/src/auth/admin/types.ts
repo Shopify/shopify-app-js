@@ -2,6 +2,7 @@ import {JwtPayload, Session, ShopifyRestResources} from '@shopify/shopify-api';
 
 import type {AdminApiContext, AppConfigArg} from '../../config-types';
 import type {BillingContext} from '../../billing/types';
+import {EnsureCORSFunction} from '../helpers/ensure-cors-headers';
 
 interface AdminContextInternal<
   Config extends AppConfigArg,
@@ -23,9 +24,7 @@ interface AdminContextInternal<
    * import { getWidgets } from "~/db/widgets.server";
    *
    * export const loader = async ({ request }: LoaderArgs) => {
-   *   const { session } = await authenticate.admin(
-   *     request
-   *   );
+   *   const { session } = await authenticate.admin(request);
    *   return json(await getWidgets({shop: session.shop));
    * };
    * ```
@@ -49,24 +48,43 @@ interface AdminContextInternal<
    * import { getWidgets } from "~/db/widgets.server";
    *
    * export const loader = async ({ request }: LoaderArgs) => {
-   *   const { session } = await authenticate.admin(
-   *     request
-   *   );
+   *   const { session } = await authenticate.admin(request);
    *   return json(await getWidgets({user: session.onlineAccessInfo!.id}));
    * };
    * ```
    */
   session: Session;
+
   /**
    * Methods for interacting with the Shopify GraphQL / REST Admin APIs for the store that made the request
    */
   admin: AdminApiContext<Resources>;
+
   /**
    * Billing methods for this store, based on the plans defined in the `billing` config option.
    *
    * {@link https://shopify.dev/docs/apps/billing}
    */
   billing: BillingContext<Config>;
+
+  /**
+   * A function that ensures the CORS headers are set correctly for the response
+   *
+   * @example
+   * Setting CORS headers for a admin request
+   * ```ts
+   * // app/routes/admin/widgets.ts
+   * import { LoaderArgs, json } from "@remix-run/node";
+   * import { authenticate } from "../shopify.server";
+   * import { getWidgets } from "~/db/widgets.server";
+   *
+   * export const loader = async ({ request }: LoaderArgs) => {
+   *   const { session, cors } = await authenticate.admin(request);
+   *   return cors(json(await getWidgets({user: session.onlineAccessInfo!.id})));
+   * };
+   * ```
+   */
+  cors: EnsureCORSFunction;
 }
 
 export interface EmbeddedAdminContext<
