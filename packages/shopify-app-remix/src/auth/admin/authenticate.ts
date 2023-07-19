@@ -23,7 +23,6 @@ import {
   requestBillingFactory,
   requireBillingFactory,
 } from '../../billing';
-import {addDocumentResponseHeaders} from '../helpers/add-response-headers';
 import {
   beginAuth,
   getSessionTokenHeader,
@@ -33,6 +32,7 @@ import {
   rejectBotRequest,
 } from '../helpers';
 import {appBridgeUrl} from '../helpers/app-bridge-url';
+import {REAUTH_URL_HEADER} from '../const';
 
 import type {AdminContext} from './types';
 import {graphqlClientFactory} from './graphql-client';
@@ -72,7 +72,7 @@ export class AuthStrategy<
       sessionContext = await this.authenticateAndGetSessionContext(request);
     } catch (errorOrResponse) {
       if (errorOrResponse instanceof Response) {
-        this.ensureResponseHeaders(request, errorOrResponse);
+        this.ensureCORSHeaders(request, errorOrResponse);
       }
 
       throw errorOrResponse;
@@ -522,13 +522,18 @@ export class AuthStrategy<
     }
   }
 
-  private ensureResponseHeaders(request: Request, response: Response): void {
-    const {config} = this;
+  private ensureCORSHeaders(request: Request, response: Response): void {
+    const {logger, config} = this;
 
-    const shop = new URL(request.url).searchParams.get('shop')!;
+    if (request.headers.get('Origin') !== config.appUrl) {
+      logger.debug(
+        'Request comes from a different origin, adding CORS headers',
+      );
 
-    // We want the headers to be present on all responses:
-    addDocumentResponseHeaders(response.headers, config.isEmbeddedApp, shop);
+      response.headers.set('Access-Control-Allow-Origin', '*');
+      response.headers.set('Access-Control-Allow-Headers', 'Authorization');
+      response.headers.set('Access-Control-Expose-Headers', REAUTH_URL_HEADER);
+    }
   }
 
   private overriddenRestClient(request: Request, session: Session) {

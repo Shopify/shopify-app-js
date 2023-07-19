@@ -12,7 +12,6 @@ import type {
   RegisterWebhooksOptions,
   WebhookContext,
 } from './auth/webhooks/types';
-import {ErrorBoundary, HeadersBoundary} from './boundary/types';
 
 export interface BasicParams {
   api: Shopify;
@@ -306,11 +305,6 @@ export interface ShopifyAppBase<Config extends AppConfigArg> {
       RestResourcesType<Config>,
       keyof Config['webhooks'] | MandatoryTopics
     >;
-  };
-
-  boundary: {
-    error: ErrorBoundary;
-    headers: HeadersBoundary;
   };
 }
 

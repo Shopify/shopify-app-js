@@ -82,7 +82,7 @@ function redirectOutOfApp(
     throw new Response(undefined, {
       status: 401,
       statusText: 'Unauthorized',
-      headers: getAppBridgeHeaders(params, url, shop),
+      headers: getAppBridgeHeaders(url),
     });
   } else if (isEmbeddedRequest) {
     const params = new URLSearchParams({
