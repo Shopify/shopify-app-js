@@ -160,6 +160,7 @@ export default function handleRequest(
 
 If you don't want to add this to every HTML request, you can call it in individual loaders, but you should only do this if you have a good reason not to include the headers in every HTML request.
 
+
 ## Setting up for your runtime
 
 By default, this package will work with the runtimes supported by [Remix adapters](https://remix.run/docs/en/1.17.1/other-api/adapter#official-adapters) because it relies on the same [Web Fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API).
@@ -201,6 +202,19 @@ If there is a session for this user, this loader will return null.
 If there is no session for the user, the loader will throw the appropriate redirect Response.
 
 > **Note**: If you are authenticating more than one route, we recommend using [Remix layout routes](https://remix.run/docs/en/1.18.1/file-conventions/routes-files#layout-routes) to automatically authenticate them.
+
+
+## Authenticating cross-origin admin requests
+
+If your Remix server is authenticating an admin extension, a request from the extension to Remix will be cross-origin. Here `shopify.authenticate.admin` provides a cors function to add the required cross-origin headers:
+
+````ts
+export const loader = async ({request}: LoaderArgs) => {
+  const {cors} = await shopify.authenticate.admin(request);
+
+  return cors(json({"my": "data"}));
+};
+```
 
 ### Headers
 
@@ -358,14 +372,16 @@ import {LoaderArgs, json} from '@remix-run/node';
 import {getNotes} from '~/models/notes';
 
 export const loader = async ({request}: LoaderArgs) => {
-  const {sessionToken} = await shopify.authenticate.public(request);
+  const {sessionToken, cors} = await shopify.authenticate.public(request);
 
   // E.g: Get notes using the shops admin domain
-  return json(await getNotes(sessionToken.iss));
+  return cors(json(await getNotes(sessionToken.iss)));
 };
 ```
 
 This can be useful if your app exposes checkout or theme extensions and those extensions need to access data from your app.
+
+**Note:** These requests will be cross-origin. So you must use the cross-origin helper returned from `shopify.authenticate.public`.
 
 ## Session Storage
 
