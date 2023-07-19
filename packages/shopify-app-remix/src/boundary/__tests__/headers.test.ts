@@ -2,7 +2,7 @@ import {shopifyApp} from '../../index';
 import {testConfig} from '../../__tests__/test-helper';
 
 describe('Headers boundary', () => {
-  it('ignores non-error headers if errors are present', () => {
+  it('returns only error headers if error headers are present', () => {
     // GIVEN
     const shopify = shopifyApp(testConfig());
     const headers = {
@@ -22,7 +22,7 @@ describe('Headers boundary', () => {
     expect(result.get('error')).toEqual('header');
   });
 
-  it('merges all headers if no errors are present', () => {
+  it('merges parent, loader & action headers if no error headers are present', () => {
     // GIVEN
     const shopify = shopifyApp(testConfig());
     const headers = {
