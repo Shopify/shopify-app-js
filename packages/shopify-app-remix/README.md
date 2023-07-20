@@ -24,6 +24,7 @@ The easiest way to get started with developing Shopify apps is using the [Shopif
 It helps you set up your environment for developing and publishing your apps and extensions.
 
 We strongly recommend using the CLI to create and manage your Remix apps and extensions!
+See the [getting started documentation](https://shopify.dev/docs/apps/getting-started/create) to create your app using the Shopify CLI.
 
 ### Using a plain Remix app
 
