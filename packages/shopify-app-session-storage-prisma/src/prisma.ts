@@ -13,8 +13,8 @@ export class PrismaSessionStorage<T extends PrismaClient>
       throw new Error('PrismaClient does not have a Session table');
     }
     this.ready = this.prisma.session.count().catch(() => {
-      throw new PrismaNotMigratedError(
-        'Prisma Session table does not exist, have you migrated your database?',
+      throw new MissingSessionTableError(
+        'Prisma Session table does not exist. This could happen for a few reasons, see https://github.com/Shopify/shopify-app-js/tree/main/packages/shopify-app-session-storage-prisma#troubleshooting for more information',
       );
     });
   }
@@ -124,4 +124,4 @@ export class PrismaSessionStorage<T extends PrismaClient>
   }
 }
 
-export class PrismaNotMigratedError extends Error {}
+export class MissingSessionTableError extends Error {}

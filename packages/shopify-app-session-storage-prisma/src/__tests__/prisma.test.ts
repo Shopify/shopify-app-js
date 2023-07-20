@@ -4,7 +4,7 @@ import {execSync} from 'child_process';
 import {batteryOfTests} from '@shopify/shopify-app-session-storage-test-utils';
 import {PrismaClient} from '@prisma/client';
 
-import {PrismaNotMigratedError, PrismaSessionStorage} from '../prisma';
+import {MissingSessionTableError, PrismaSessionStorage} from '../prisma';
 
 describe('PrismaSessionStorage', () => {
   let prisma: PrismaClient;
@@ -40,7 +40,7 @@ describe('PrismaSessionStoragewhen with no database set up', () => {
       // This should never be reached
       expect(true).toBe(false);
     } catch (error) {
-      expect(error).toBeInstanceOf(PrismaNotMigratedError);
+      expect(error).toBeInstanceOf(MissingSessionTableError);
     }
   });
 });
