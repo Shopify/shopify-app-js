@@ -1,5 +1,11 @@
 # @shopify/shopify-app-session-storage-prisma
 
+## 1.0.3
+
+### Patch Changes
+
+- 90a62de: Throw a specific error when the database doesn't exist to help indicate that a migration might be needed
+
 ## 1.0.2
 
 ### Patch Changes
