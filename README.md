@@ -7,6 +7,10 @@ This mono-repo supports the following packages:
 
 ## App middleware
 
+#### [`@shopify/shopify-app-remix`](./packages/shopify-app-remix)
+
+- Provides functions to allow [Remix](https://remix.run) apps to communicate and authenticate requests from Shopify.
+
 #### [`@shopify/shopify-app-express`](./packages/shopify-app-express)
 
 - Creates a middleware layer that allows [Express.js](https://expressjs.com) apps to communicate with and authenticate requests from Shopify.
@@ -51,7 +55,7 @@ This mono-repo supports the following packages:
 
 - Provides an interface that enables apps to store the sessions created during the OAuth process in `@shopify/shopify-api`.
 
-- You can assign any implementation of this interface to the `@shopify/shopify-app-express` package. You can also call them directly from your app even if you're not building with [Express.js](https://expressjs.com).
+- You can assign any implementation of this interface to the [Middleware layer](#app-middleware) packages. You can also call them directly from your app even if you're not building with [Express.js](https://expressjs.com).
 
 ### Community contributed implementations of `SessionStorage`
 
