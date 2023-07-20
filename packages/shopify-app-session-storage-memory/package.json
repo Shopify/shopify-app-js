@@ -30,7 +30,7 @@
     "session storage"
   ],
   "dependencies": {
-    "tslib": "^2.4.0"
+    "tslib": "^2.6.0"
   },
   "peerDependencies": {
     "@shopify/shopify-api": "^7.5.0",

@@ -33,7 +33,7 @@
   ],
   "dependencies": {
     "sqlite3": "^5.1.6",
-    "tslib": "^2.4.0"
+    "tslib": "^2.6.0"
   },
   "peerDependencies": {
     "@shopify/shopify-api": "^7.5.0",
