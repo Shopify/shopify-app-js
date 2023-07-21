@@ -18,6 +18,16 @@ To follow these usage guides, you will need to:
 
 ## Getting started
 
+### Shopify CLI
+
+The easiest way to get started with developing Shopify apps is using the [Shopify CLI](https://shopify.dev/docs/apps/tools/cli).
+It helps you set up your environment for developing and publishing your apps and extensions.
+
+We strongly recommend using the CLI to create and manage your Remix apps and extensions!
+See the [getting started documentation](https://shopify.dev/docs/apps/getting-started/create) to create your app using the Shopify CLI.
+
+### Using a plain Remix app
+
 This package works with any Remix app. If you're starting an app from scratch, you can create a brand new Remix app that uses the indie-stack:
 
 ```bash
