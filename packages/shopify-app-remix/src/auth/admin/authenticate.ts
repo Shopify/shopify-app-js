@@ -330,7 +330,7 @@ export class AuthStrategy<
 
     await client.query({
       data: `#graphql
-        query {
+        query shopifyAppShopName {
           shop {
             name
           }
