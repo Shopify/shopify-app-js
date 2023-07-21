@@ -46,6 +46,8 @@
     "Storefront API"
   ],
   "devDependencies": {
+    "@remix-run/react": "^1.19.0",
+    "@shopify/polaris": "^11.8.0",
     "@shopify/shopify-app-session-storage-memory": "^1.0.10",
     "@types/jest": "^29.5.1",
     "@types/jsonwebtoken": "^9.0.2",
@@ -66,8 +68,14 @@
     "tslib": "^2.5.0"
   },
   "peerDependencies": {
+    "@shopify/polaris": "*",
     "@remix-run/react": "*",
     "react": "*"
+  },
+  "peerDependenciesMeta": {
+    "@shopify/polaris": {
+      "optional": true
+    }
   },
   "files": [
     "build/*",
