@@ -11,6 +11,9 @@ import {
 import {setAbstractRuntimeString} from '@shopify/shopify-api/runtime';
 import {SessionStorage} from '@shopify/shopify-app-session-storage';
 
+// eslint-disable-next-line no-restricted-imports
+import {boundary as reactBoundary} from '../react/boundary';
+
 import {type AppConfig, type AppConfigArg} from './config-types';
 import {
   AppDistribution,
@@ -30,8 +33,6 @@ import {authenticatePublicFactory} from './auth/public/authenticate';
 import {overrideLogger} from './override-logger';
 import {addDocumentResponseHeadersFactory} from './auth/helpers';
 import {loginFactory} from './auth/login/login';
-import {headersBoundary} from './boundary/headers';
-import {errorBoundary} from './boundary/error';
 
 export type {ShopifyApp, LoginError} from './types';
 export {LoginErrorType, AppDistribution} from './types';
@@ -113,39 +114,14 @@ export function shopifyApp<
 
 /**
  * A collection of functions that handle the necessary code for error boundaries in routes using authenticate.admin.
+ *
+ * @deprecated Please use this instead:
+ * ```ts
+ * import {boundary} from "@shopify/shopify-app-remix/react";
+ * ```
  */
 export const boundary = {
-  /**
-   * A function that handles errors or thrown responses.
-   *
-   * @example
-   * Catching errors in a route
-   * ```ts
-   * // app/routes/admin/widgets.ts
-   * import { boundary } from "@shopify/shopify-app-remix";
-   *
-   * export function ErrorBoundary() {
-   *   return boundary.error(useRouteError());
-   * }
-   * ```
-   */
-  error: errorBoundary,
-
-  /**
-   * A function that sets the appropriate document repsonse headers.
-   *
-   * @example
-   * Catching errors in a route
-   * ```ts
-   * // app/routes/admin/widgets.ts
-   * import { boundary } from "@shopify/shopify-app-remix";
-   *
-   * export const headers = (headersArgs) => {
-   *   return boundary.headers(headersArgs);
-   * };
-   * ```
-   */
-  headers: headersBoundary,
+  ...reactBoundary,
 };
 
 function isAppStoreApp<Config extends AppConfigArg>(
