@@ -12,15 +12,18 @@
   "homepage": "https://github.com/Shopify/shopify-app-js/tree/main/packages/shopify-app-remix",
   "author": "Shopify Inc.",
   "license": "MIT",
-  "main": "./build/cjs/index.js",
-  "types": "./build/ts/index.d.ts",
+  "types": "./build/ts/server/index.d.ts",
+  "main": "./build/cjs/server/index.js",
   "exports": {
     ".": {
-      "import": "./build/cjs/index.js",
-      "require": "./build/cjs/index.js",
-      "types": "./build/ts/index.d.ts"
+      "types": "./build/ts/server/index.d.ts",
+      "default": "./build/cjs/server/index.js"
     },
-    "./adapters/*": "./build/cjs/adapters/*/index.js"
+    "./adapters/*": "./build/cjs/adapters/*/index.js",
+    "./react": {
+      "types": "./build/ts/react/index.d.ts",
+      "default": "./build/cjs/react/index.js"
+    }
   },
   "publishConfig": {
     "access": "public"

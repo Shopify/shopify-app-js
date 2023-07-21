@@ -97,13 +97,15 @@ describe('shopifyApp', () => {
 
   it('properly re-exports required @shopify/shopify-api imports', () => {
     // This test doesn't actually test anything, but it's here to make sure that we're actually importing the values
-    [
+    const imports = [
       APP_LATEST_API_VERSION,
       LogSeverity,
       DeliveryMethod,
       BillingInterval,
       ApiVersion,
     ];
+
+    expect(imports).not.toContain(undefined);
   });
 
   it('fails if no session storage is given', () => {
