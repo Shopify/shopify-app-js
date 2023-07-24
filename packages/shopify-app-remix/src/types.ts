@@ -11,6 +11,7 @@ import type {PublicContext} from './auth/public/types';
 import type {
   RegisterWebhooksOptions,
   WebhookContext,
+  WebhookContextWithSession,
 } from './auth/webhooks/types';
 
 export interface BasicParams {
@@ -73,7 +74,11 @@ type AuthenticatePublic = (request: Request) => Promise<PublicContext>;
 type AuthenticateWebhook<
   Resources extends ShopifyRestResources = ShopifyRestResources,
   Topics = string | number | symbol,
-> = (request: Request) => Promise<WebhookContext<Topics, Resources>>;
+> = (
+  request: Request,
+) => Promise<
+  WebhookContext<Topics> | WebhookContextWithSession<Topics, Resources>
+>;
 
 type RestResourcesType<Config extends AppConfigArg> =
   Config['restResources'] extends ShopifyRestResources

@@ -21,7 +21,41 @@ interface WebhookHeaders {
 }
 
 describe('Webhook validation', () => {
-  it('returns context when successful', async () => {
+  it('returns context when there is no session', async () => {
+    // GIVEN
+    const sessionStorage = new MemorySessionStorage();
+    const shopify = shopifyApp(testConfig({sessionStorage, restResources}));
+    const body = {some: 'data'};
+
+    // WHEN
+    const {
+      admin,
+      apiVersion,
+      session: actualSession,
+      shop,
+      topic,
+      webhookId,
+      payload,
+    } = await shopify.authenticate.webhook(
+      new Request(`${APP_URL}/webhooks`, {
+        method: 'POST',
+        body: JSON.stringify(body),
+        headers: webhookHeaders(JSON.stringify(body)),
+      }),
+    );
+
+    // THEN
+    expect(apiVersion).toBe('2023-01');
+    expect(shop).toBe(TEST_SHOP);
+    expect(topic).toBe('APP_UNINSTALLED');
+    expect(webhookId).toBe('1234567890');
+    expect(payload).toEqual(body);
+
+    expect(admin).toBeUndefined();
+    expect(actualSession).toBeUndefined();
+  });
+
+  it('returns context with session when there is a session', async () => {
     // GIVEN
     const sessionStorage = new MemorySessionStorage();
     const shopify = shopifyApp(testConfig({sessionStorage, restResources}));
@@ -110,25 +144,6 @@ describe('Webhook validation', () => {
 
     // THEN
     expect(response.status).toBe(400);
-  });
-
-  it('throws a 200 when there is no session for that shop', async () => {
-    // GIVEN
-    const sessionStorage = new MemorySessionStorage();
-    const shopify = shopifyApp(testConfig({sessionStorage}));
-
-    // WHEN
-    const response = await getThrownResponse(
-      shopify.authenticate.webhook,
-      new Request(`${APP_URL}/webhooks`, {
-        method: 'POST',
-        body: JSON.stringify({}),
-        headers: webhookHeaders(JSON.stringify({})),
-      }),
-    );
-
-    // THEN
-    expect(response.status).toBe(200);
   });
 
   it('throws a 405 Method Not Allowed on non-POST requests', async () => {

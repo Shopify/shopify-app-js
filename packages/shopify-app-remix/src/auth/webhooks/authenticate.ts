@@ -2,7 +2,7 @@ import {ApiVersion, ShopifyRestResources} from '@shopify/shopify-api';
 
 import type {BasicParams, MandatoryTopics} from '../../types';
 
-import type {WebhookContext} from './types';
+import type {WebhookContext, WebhookContextWithSession} from './types';
 
 export function authenticateWebhookFactory<
   Resources extends ShopifyRestResources,
@@ -10,7 +10,9 @@ export function authenticateWebhookFactory<
 >({api, config, logger}: BasicParams) {
   return async function authenticate(
     request: Request,
-  ): Promise<WebhookContext<Topics, Resources>> {
+  ): Promise<
+    WebhookContext<Topics> | WebhookContextWithSession<Topics, Resources>
+  > {
     if (request.method !== 'POST') {
       logger.debug(
         'Received a non-POST request for a webhook. Only POST requests are allowed.',
@@ -36,18 +38,25 @@ export function authenticateWebhookFactory<
 
     const sessionId = api.session.getOfflineId(check.domain);
     const session = await config.sessionStorage.loadSession(sessionId);
+    const webhookContext: WebhookContext<Topics> = {
+      apiVersion: check.apiVersion,
+      shop: check.domain,
+      topic: check.topic as Topics,
+      webhookId: check.webhookId,
+      payload: JSON.parse(rawBody),
+      session: undefined,
+      admin: undefined,
+    };
+
     if (!session) {
-      logger.debug(
-        'Webhook found no session found for shop. Shopify may deliver a webhook multiple times so this might not indicate an issue',
-        check,
-      );
-      throw new Response(undefined, {status: 200});
+      return webhookContext;
     }
 
     const restClient = new api.clients.Rest({
       session,
       apiVersion: check.apiVersion as ApiVersion,
     });
+
     const graphqlClient = new api.clients.Graphql({
       session,
       apiVersion: check.apiVersion as ApiVersion,
@@ -58,11 +67,7 @@ export function authenticateWebhookFactory<
     });
 
     return {
-      apiVersion: check.apiVersion,
-      shop: check.domain,
-      topic: check.topic as Topics,
-      webhookId: check.webhookId,
-      payload: JSON.parse(rawBody),
+      ...webhookContext,
       session,
       admin: {
         rest: restClient as typeof restClient & Resources,
