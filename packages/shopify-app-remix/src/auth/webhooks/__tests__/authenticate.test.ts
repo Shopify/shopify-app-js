@@ -112,7 +112,7 @@ describe('Webhook validation', () => {
     expect(response.status).toBe(400);
   });
 
-  it('throws a 404 on missing sessions', async () => {
+  it('throws a 200 when there is no session for that shop', async () => {
     // GIVEN
     const sessionStorage = new MemorySessionStorage();
     const shopify = shopifyApp(testConfig({sessionStorage}));
@@ -128,7 +128,7 @@ describe('Webhook validation', () => {
     );
 
     // THEN
-    expect(response.status).toBe(404);
+    expect(response.status).toBe(200);
   });
 
   it('throws a 405 Method Not Allowed on non-POST requests', async () => {

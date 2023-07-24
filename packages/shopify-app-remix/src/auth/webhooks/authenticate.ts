@@ -37,8 +37,11 @@ export function authenticateWebhookFactory<
     const sessionId = api.session.getOfflineId(check.domain);
     const session = await config.sessionStorage.loadSession(sessionId);
     if (!session) {
-      logger.debug('No session found for shop', check);
-      throw new Response(undefined, {status: 404, statusText: 'Not found'});
+      logger.debug(
+        'Webhook found no session found for shop. Shopify may deliver a webhook multiple times so this might not indicate an issue',
+        check,
+      );
+      throw new Response(undefined, {status: 200});
     }
 
     const restClient = new api.clients.Rest({
