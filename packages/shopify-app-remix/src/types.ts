@@ -11,6 +11,7 @@ import type {PublicContext} from './auth/public/types';
 import type {
   RegisterWebhooksOptions,
   WebhookContext,
+  WebhookContextWithSession,
 } from './auth/webhooks/types';
 
 export interface BasicParams {
@@ -73,7 +74,11 @@ type AuthenticatePublic = (request: Request) => Promise<PublicContext>;
 type AuthenticateWebhook<
   Resources extends ShopifyRestResources = ShopifyRestResources,
   Topics = string | number | symbol,
-> = (request: Request) => Promise<WebhookContext<Topics, Resources>>;
+> = (
+  request: Request,
+) => Promise<
+  WebhookContext<Topics> | WebhookContextWithSession<Topics, Resources>
+>;
 
 type RestResourcesType<Config extends AppConfigArg> =
   Config['restResources'] extends ShopifyRestResources
@@ -284,11 +289,13 @@ export interface ShopifyAppBase<Config extends AppConfigArg> {
      * import db from "../db.server";
      *
      * export const action = async ({ request }: ActionArgs) => {
-     *   const { topic, shop, admin, payload } = await authenticate.webhook(request);
+     *   const { topic, shop, session } = await authenticate.webhook(request);
      *
      *   switch (topic) {
      *     case "APP_UNINSTALLED":
-     *       await db.session.deleteMany({ where: { shop } });
+     *       if (session) {
+     *         await db.session.deleteMany({ where: { shop } });
+     *       }
      *       break;
      *     case "CUSTOMERS_DATA_REQUEST":
      *     case "CUSTOMERS_REDACT":
