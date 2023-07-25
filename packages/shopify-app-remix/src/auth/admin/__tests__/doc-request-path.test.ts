@@ -10,7 +10,6 @@ import {
   TEST_SHOP,
   expectBeginAuthRedirect,
   expectExitIframeRedirect,
-  expectDocumentRequestHeaders,
   getJwt,
   getThrownResponse,
   setUpValidSession,
@@ -392,4 +391,38 @@ describe('authorize.admin doc request path', () => {
       });
     },
   );
+
+  it('loads a session from the cookie from a request with no search params when not embedded', async () => {
+    // GIVEN
+    const shopify = shopifyApp({...testConfig(), isEmbeddedApp: false});
+    const testSession = await setUpValidSession(shopify.sessionStorage);
+
+    // WHEN
+    const request = new Request(APP_URL);
+    signRequestCookie({
+      request,
+      cookieName: SESSION_COOKIE_NAME,
+      cookieValue: testSession.id,
+    });
+
+    const {session} = await shopify.authenticate.admin(request);
+
+    // THEN
+    expect(session).toBe(testSession);
+  });
+
+  it('returns a 400 response when no shop is available', async () => {
+    // GIVEN
+    const shopify = shopifyApp({...testConfig(), isEmbeddedApp: false});
+    await setUpValidSession(shopify.sessionStorage);
+
+    // WHEN
+    const response = await getThrownResponse(
+      shopify.authenticate.admin,
+      new Request(APP_URL),
+    );
+
+    // THEN
+    expect(response.status).toBe(400);
+  });
 });

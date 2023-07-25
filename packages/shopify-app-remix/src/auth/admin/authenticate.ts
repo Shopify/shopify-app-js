@@ -260,10 +260,7 @@ export class AuthStrategy<
 
     const offlineId = shop
       ? api.session.getOfflineId(shop)
-      : await api.session.getCurrentId({
-          isOnline: config.useOnlineTokens,
-          rawRequest: request,
-        });
+      : await api.session.getCurrentId({isOnline: false, rawRequest: request});
 
     if (!offlineId) {
       logger.info("Could not find a shop, can't authenticate request");
@@ -276,21 +273,13 @@ export class AuthStrategy<
     const offlineSession = await config.sessionStorage.loadSession(offlineId);
 
     if (!offlineSession) {
-      if (!shop) {
-        logger.info("Could not find a shop, can't authenticate request");
-        throw new Response(undefined, {
-          status: 400,
-          statusText: 'Bad Request',
-        });
-      }
-
       logger.info("Shop hasn't installed app yet, redirecting to OAuth", {
         shop,
       });
       if (isEmbedded) {
-        redirectWithExitIframe({api, config, logger}, request, shop);
+        redirectWithExitIframe({api, config, logger}, request, shop!);
       } else {
-        throw await beginAuth({api, config, logger}, request, false, shop);
+        throw await beginAuth({api, config, logger}, request, false, shop!);
       }
     }
 
