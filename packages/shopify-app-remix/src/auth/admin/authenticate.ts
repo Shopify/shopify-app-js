@@ -227,17 +227,17 @@ export class AuthStrategy<
 
   private async validateUrlParams(request: Request) {
     const {api, config, logger} = this;
-    const url = new URL(request.url);
 
-    const shop = api.utils.sanitizeShop(url.searchParams.get('shop')!);
-    if (!shop) {
-      logger.debug('Missing or invalid shop, redirecting to login path', {
-        shop,
-      });
-      throw redirect(config.auth.loginPath);
-    }
+    if (config.isEmbeddedApp) {
+      const url = new URL(request.url);
+      const shop = api.utils.sanitizeShop(url.searchParams.get('shop')!);
+      if (!shop) {
+        logger.debug('Missing or invalid shop, redirecting to login path', {
+          shop,
+        });
+        throw redirect(config.auth.loginPath);
+      }
 
-    if (this.config.isEmbeddedApp) {
       const host = api.utils.sanitizeHost(url.searchParams.get('host')!);
       if (!host) {
         logger.debug('Invalid host, redirecting to login path', {
@@ -252,17 +252,38 @@ export class AuthStrategy<
     const {api, config, logger} = this;
     const url = new URL(request.url);
 
-    const shop = url.searchParams.get('shop')!;
+    let shop = url.searchParams.get('shop');
     const isEmbedded = url.searchParams.get('embedded') === '1';
 
     // Ensure app is installed
     logger.debug('Ensuring app is installed on shop', {shop});
 
-    const offlineSession = await config.sessionStorage.loadSession(
-      api.session.getOfflineId(shop),
-    );
+    const offlineId = shop
+      ? api.session.getOfflineId(shop)
+      : await api.session.getCurrentId({
+          isOnline: config.useOnlineTokens,
+          rawRequest: request,
+        });
+
+    if (!offlineId) {
+      logger.info("Could not find a shop, can't authenticate request");
+      throw new Response(undefined, {
+        status: 400,
+        statusText: 'Bad Request',
+      });
+    }
+
+    const offlineSession = await config.sessionStorage.loadSession(offlineId);
 
     if (!offlineSession) {
+      if (!shop) {
+        logger.info("Could not find a shop, can't authenticate request");
+        throw new Response(undefined, {
+          status: 400,
+          statusText: 'Bad Request',
+        });
+      }
+
       logger.info("Shop hasn't installed app yet, redirecting to OAuth", {
         shop,
       });
@@ -272,6 +293,8 @@ export class AuthStrategy<
         throw await beginAuth({api, config, logger}, request, false, shop);
       }
     }
+
+    shop = shop || offlineSession.shop;
 
     if (config.isEmbeddedApp && !isEmbedded) {
       try {
