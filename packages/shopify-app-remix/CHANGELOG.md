@@ -1,5 +1,11 @@
 # @shopify/shopify-app-remix
 
+## 1.0.3
+
+### Patch Changes
+
+- e9cefea: Fixing issue when authenticating requests without a `shop` search param to non-embedded apps.
+
 ## 1.0.2
 
 ### Patch Changes
