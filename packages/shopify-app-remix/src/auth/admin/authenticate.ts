@@ -139,7 +139,7 @@ export class AuthStrategy<
         sessionTokenHeader,
       );
 
-      return this.validateAuthenticatedSession(request, sessionToken);
+      return this.getTokenViaTokenExchange(sessionTokenHeader, sessionToken)
     } else {
       await this.validateUrlParams(request);
       await this.ensureInstalledOnShop(request);
@@ -411,7 +411,7 @@ export class AuthStrategy<
         searchParamSessionToken,
       );
 
-      return this.validateAuthenticatedSession(request, sessionToken);
+      return this.getTokenViaTokenExchange(searchParamSessionToken, sessionToken);
     } else {
       // eslint-disable-next-line no-warning-comments
       // TODO move this check into loadSession once we add support for it in the library
@@ -447,6 +447,22 @@ export class AuthStrategy<
     const session = await this.loadSession(request, shop, sessionId);
 
     logger.debug('Found session, request is valid', {shop});
+
+    return {session, token: payload};
+  }
+
+  private async getTokenViaTokenExchange(
+    sessionToken: string,
+    payload: JwtPayload,
+  ): Promise<SessionContext> {
+    const {config, logger, api} = this;
+
+    const dest = new URL(payload.dest);
+    const shop = dest.hostname;
+
+    logger.debug('Requesting token exchange');
+
+    const session = await api.exchange({sessionToken, shop, isOnline: config.useOnlineTokens});
 
     return {session, token: payload};
   }
