@@ -252,7 +252,7 @@ export class AuthStrategy<
     const {api, config, logger} = this;
     const url = new URL(request.url);
 
-    let shop = url.searchParams.get('shop');
+    let shop = url.searchParams.get('shop')!;
     const isEmbedded = url.searchParams.get('embedded') === '1';
 
     // Ensure app is installed
@@ -431,26 +431,6 @@ export class AuthStrategy<
     }
   }
 
-  private async validateAuthenticatedSession(
-    request: Request,
-    payload: JwtPayload,
-  ): Promise<SessionContext> {
-    const {config, logger, api} = this;
-
-    const dest = new URL(payload.dest);
-    const shop = dest.hostname;
-
-    const sessionId = config.useOnlineTokens
-      ? api.session.getJwtSessionId(shop, payload.sub)
-      : api.session.getOfflineId(shop);
-
-    const session = await this.loadSession(request, shop, sessionId);
-
-    logger.debug('Found session, request is valid', {shop});
-
-    return {session, token: payload};
-  }
-
   private async getTokenViaTokenExchange(
     sessionToken: string,
     payload: JwtPayload,
@@ -462,7 +442,7 @@ export class AuthStrategy<
 
     logger.debug('Requesting token exchange');
 
-    const session = await api.exchange({sessionToken, shop, isOnline: config.useOnlineTokens});
+    const {session} = await api.auth.exchange({sessionToken, shop, isOnline: config.useOnlineTokens});
 
     return {session, token: payload};
   }
