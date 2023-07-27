@@ -41,6 +41,7 @@ export {
   LogSeverity,
   DeliveryMethod,
   BillingInterval,
+  ApiVersion,
 } from '@shopify/shopify-api';
 
 setAbstractRuntimeString(() => {
