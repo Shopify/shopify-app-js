@@ -8,6 +8,7 @@ import {
   DeliveryMethod,
   BillingInterval,
   AppDistribution,
+  ApiVersion,
 } from '../index';
 import {AppConfigArg} from '../config-types';
 
@@ -96,7 +97,13 @@ describe('shopifyApp', () => {
 
   it('properly re-exports required @shopify/shopify-api imports', () => {
     // This test doesn't actually test anything, but it's here to make sure that we're actually importing the values
-    [APP_LATEST_API_VERSION, LogSeverity, DeliveryMethod, BillingInterval];
+    [
+      APP_LATEST_API_VERSION,
+      LogSeverity,
+      DeliveryMethod,
+      BillingInterval,
+      ApiVersion,
+    ];
   });
 
   it('fails if no session storage is given', () => {
