@@ -137,7 +137,7 @@ export class AuthStrategy<
         sessionTokenHeader,
       );
 
-      return this.getTokenViaTokenExchange(sessionTokenHeader, sessionToken)
+      return this.getTokenViaTokenExchange(request, sessionTokenHeader, sessionToken)
     } else {
       await this.validateUrlParams(request);
       await this.ensureAppIsEmbeddedIfRequired(request);
@@ -305,7 +305,7 @@ export class AuthStrategy<
         searchParamSessionToken,
       );
 
-      return this.getTokenViaTokenExchange(searchParamSessionToken, sessionToken);
+      return this.getTokenViaTokenExchange(request, searchParamSessionToken, sessionToken);
     } else {
       // eslint-disable-next-line no-warning-comments
       // TODO move this check into loadSession once we add support for it in the library
@@ -326,10 +326,24 @@ export class AuthStrategy<
   }
 
   private async getTokenViaTokenExchange(
+    request: Request,
     sessionToken: string,
     payload: JwtPayload,
   ): Promise<SessionContext> {
     const {config, logger, api} = this;
+
+    const sessionId = await api.session.getCurrentId({
+      isOnline: config.useOnlineTokens,
+      rawRequest: request,
+    });
+
+    if (sessionId) {
+      const persistedSession = await config.sessionStorage.loadSession(sessionId);
+      if (persistedSession) {
+        logger.debug('Reusing existing token')
+        return {session: persistedSession, token: payload}
+      }
+    }
 
     const dest = new URL(payload.dest);
     const shop = dest.hostname;
@@ -337,6 +351,8 @@ export class AuthStrategy<
     logger.debug('Requesting token exchange');
 
     const {session} = await api.auth.exchange({sessionToken, shop, isOnline: config.useOnlineTokens});
+
+    await config.sessionStorage.storeSession(session);
 
     return {session, token: payload};
   }
