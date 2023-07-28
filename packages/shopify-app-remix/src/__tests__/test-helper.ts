@@ -191,7 +191,7 @@ export function expectDocumentRequestHeaders(
     expect(headers.get('Content-Security-Policy')).toEqual(
       `frame-ancestors https://${encodeURIComponent(
         TEST_SHOP,
-      )} https://admin.shopify.com;`,
+      )} https://admin.shopify.com https://*.spin.dev;`,
     );
     expect(headers.get('Link')).toEqual(
       `<${APP_BRIDGE_URL}>; rel="preload"; as="script";`,
