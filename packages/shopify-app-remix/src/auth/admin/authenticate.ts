@@ -1,8 +1,6 @@
 import {redirect} from '@remix-run/server-runtime';
 import {
   CookieNotFound,
-  GraphqlQueryError,
-  HttpResponseError,
   InvalidHmacError,
   InvalidOAuthError,
   JwtPayload,
@@ -142,7 +140,6 @@ export class AuthStrategy<
       return this.getTokenViaTokenExchange(sessionTokenHeader, sessionToken)
     } else {
       await this.validateUrlParams(request);
-      await this.ensureInstalledOnShop(request);
       await this.ensureAppIsEmbeddedIfRequired(request);
       await this.ensureSessionTokenSearchParamIfRequired(request);
 
@@ -246,109 +243,6 @@ export class AuthStrategy<
         throw redirect(config.auth.loginPath);
       }
     }
-  }
-
-  private async ensureInstalledOnShop(request: Request) {
-    const {api, config, logger} = this;
-    const url = new URL(request.url);
-
-    let shop = url.searchParams.get('shop')!;
-    const isEmbedded = url.searchParams.get('embedded') === '1';
-
-    // Ensure app is installed
-    logger.debug('Ensuring app is installed on shop', {shop});
-
-    const offlineId = shop
-      ? api.session.getOfflineId(shop)
-      : await api.session.getCurrentId({isOnline: false, rawRequest: request});
-
-    if (!offlineId) {
-      logger.info("Could not find a shop, can't authenticate request");
-      throw new Response(undefined, {
-        status: 400,
-        statusText: 'Bad Request',
-      });
-    }
-
-    const offlineSession = await config.sessionStorage.loadSession(offlineId);
-
-    if (!offlineSession) {
-      logger.info("Shop hasn't installed app yet, redirecting to OAuth", {
-        shop,
-      });
-      if (isEmbedded) {
-        redirectWithExitIframe({api, config, logger}, request, shop!);
-      } else {
-        throw await beginAuth({api, config, logger}, request, false, shop!);
-      }
-    }
-
-    shop = shop || offlineSession.shop;
-
-    if (config.isEmbeddedApp && !isEmbedded) {
-      try {
-        logger.debug('Ensuring offline session is valid before embedding', {
-          shop,
-        });
-        await this.testSession(offlineSession);
-
-        logger.debug('Offline session is still valid, embedding app', {shop});
-      } catch (error) {
-        if (error instanceof HttpResponseError) {
-          if (error.response.code === 401) {
-            logger.info(
-              'Shop session is no longer valid, redirecting to OAuth',
-              {shop},
-            );
-            throw await beginAuth({api, config, logger}, request, false, shop);
-          } else {
-            const message = JSON.stringify(error.response.body, null, 2);
-            logger.error(
-              `Unexpected error during session validation: ${message}`,
-              {shop},
-            );
-
-            throw new Response(undefined, {
-              status: error.response.code,
-              statusText: error.response.statusText,
-            });
-          }
-        } else if (error instanceof GraphqlQueryError) {
-          const context: {[key: string]: string} = {shop};
-          if (error.response) {
-            context.response = JSON.stringify(error.response);
-          }
-
-          logger.error(
-            `Unexpected error during session validation: ${error.message}`,
-            context,
-          );
-
-          throw new Response(undefined, {
-            status: 500,
-            statusText: 'Internal Server Error',
-          });
-        }
-      }
-    }
-  }
-
-  private async testSession(session: Session): Promise<void> {
-    const {api} = this;
-
-    const client = new api.clients.Graphql({
-      session,
-    });
-
-    await client.query({
-      data: `#graphql
-        query shopifyAppShopName {
-          shop {
-            name
-          }
-        }
-      `,
-    });
   }
 
   private ensureValidShopParam(request: Request): string {

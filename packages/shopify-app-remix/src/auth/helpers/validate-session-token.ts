@@ -16,7 +16,7 @@ export async function validateSessionToken(
 
     return payload;
   } catch (error) {
-    logger.debug(`Failed to validate session token: ${error.message}`);
+    logger.error(`Failed to validate session token: ${error.message}`);
     throw new Response(undefined, {
       status: 401,
       statusText: 'Unauthorized',
