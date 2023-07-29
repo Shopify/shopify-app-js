@@ -18,7 +18,7 @@ const app = express();
 app.get(
   '/api/product/count',
   shopify.validateAuthenticatedSession(),
-  async (res, req) => {
+  async (req, res) => {
     // because of shopify.validateAuthenticatedSession(), session is available
     // in res.locals.shopify.session
     const session = res.locals.shopify.session;
