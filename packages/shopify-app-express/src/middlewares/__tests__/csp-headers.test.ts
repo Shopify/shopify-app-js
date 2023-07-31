@@ -15,7 +15,7 @@ const TESTS: {
   [TEST_SHOP, 12345, undefined].forEach((shop) => {
     let expectedCSP = `frame-ancestors 'none';`;
     if (isEmbeddedApp && typeof shop === 'string') {
-      expectedCSP = `frame-ancestors https://${shop} https://admin.shopify.com;`;
+      expectedCSP = `frame-ancestors https://${shop} https://admin.shopify.com https://*.spin.dev;`;
     }
     TESTS.push({shop, isEmbeddedApp, expectedCSP});
   });
