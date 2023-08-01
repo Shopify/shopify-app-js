@@ -10,14 +10,18 @@ export async function redirectToAuthPage(
   shop: string,
   isOnline = false,
 ): Promise<never> {
+  const {config} = params;
+
   const url = new URL(request.url);
   const isEmbeddedRequest = url.searchParams.get('embedded') === '1';
   const isXhrRequest = request.headers.get('authorization');
 
   if (isXhrRequest) {
-    redirectWithAppBridgeHeaders(params, shop);
+    const redirectUri = new URL(config.auth.path, config.appUrl);
+    redirectUri.searchParams.set('shop', shop);
+    redirectWithAppBridgeHeaders(redirectUri.toString());
   } else if (isEmbeddedRequest) {
-    redirectWithExitIframe(params, request, shop);
+    redirectWithExitIframe(params, request, config.auth.path, shop);
   } else {
     throw await beginAuth(params, request, isOnline, shop);
   }

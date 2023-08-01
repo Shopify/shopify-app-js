@@ -9,3 +9,5 @@ export * from './get-session-token-header';
 export * from './reject-bot-request';
 export * from './respond-to-options-request';
 export * from './handle-client-error';
+export * from './redirect';
+export * from './render-app-bridge';

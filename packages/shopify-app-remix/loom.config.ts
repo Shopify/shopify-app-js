@@ -1,7 +1,7 @@
 import fs from 'fs';
 
 import {createPackage} from '@shopify/loom';
-import {buildLibrary} from '@shopify/loom-plugin-build-library';
+import {babel, buildLibrary} from '@shopify/loom-plugin-build-library';
 
 export default createPackage((pkg) => {
   pkg.entry({root: './src/server/index.ts'});
@@ -33,6 +33,25 @@ export default createPackage((pkg) => {
       rootEntrypoints: false,
       // Optional. Defaults to 'node'. Defines if the jest environment should be 'node' or 'jsdom'.
       jestTestEnvironment: 'node',
+    }),
+    babel({
+      config(babelConfig) {
+        const presets = babelConfig.presets!;
+        const babelPresetIndex = presets.findIndex((preset) =>
+          String(preset[0]).includes('@shopify/babel-preset'),
+        );
+        const existingConfig = presets[babelPresetIndex][1];
+        presets[babelPresetIndex][1] = {
+          ...existingConfig,
+          reactOptions: {
+            ...existingConfig.reactOptions,
+            // This is required to support React 17
+            runtime: 'automatic',
+          },
+        };
+
+        return babelConfig;
+      },
     }),
   );
 });
