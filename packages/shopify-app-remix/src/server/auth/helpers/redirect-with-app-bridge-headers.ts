@@ -1,13 +1,6 @@
-import type {BasicParams} from '../../types';
 import {REAUTH_URL_HEADER} from '../const';
 
-export function redirectWithAppBridgeHeaders(
-  params: BasicParams,
-  shop: string,
-): never {
-  const {config} = params;
-  const redirectUri = `${config.appUrl}${config.auth.path}?shop=${shop}`;
-
+export function redirectWithAppBridgeHeaders(redirectUri: string): never {
   throw new Response(undefined, {
     status: 401,
     statusText: 'Unauthorized',
