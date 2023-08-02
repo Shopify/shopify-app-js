@@ -7,10 +7,7 @@ coverage/
 tsdocs/
 tsconfig.tsbuildinfo
 database.sqlite
-packages/**/*.d.ts
-packages/**/*.d.ts.map
-packages/**/*.js
-packages/**/*.js.map
+packages/**/build
 packages/**/*.tgz
 tmp/
 .loom
