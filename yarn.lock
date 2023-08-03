@@ -3067,6 +3067,19 @@
     tslib "^2.0.3"
     uuid "^9.0.0"
 
+"@shopify/shopify-api@^7.5.1":
+  version "7.5.1"
+  resolved "https://registry.yarnpkg.com/@shopify/shopify-api/-/shopify-api-7.5.1.tgz#d3c69c0b68082885bcb3ffe4a5d9cbdfb3687e46"
+  integrity sha512-zydzwkDPIyXiDcfFCW/R14m36mQkpAP4GthenrEHdx0B/yyfmfCnB6sB4KjWwtd+Y+gojx+PE/lTPCPdPCd2Kg==
+  dependencies:
+    "@shopify/network" "^3.2.1"
+    compare-versions "^5.0.3"
+    isbot "^3.6.10"
+    jose "^4.9.1"
+    node-fetch "^2.6.1"
+    tslib "^2.0.3"
+    uuid "^9.0.0"
+
 "@shopify/typescript-configs@^5.1.0":
   version "5.1.0"
   resolved "https://registry.yarnpkg.com/@shopify/typescript-configs/-/typescript-configs-5.1.0.tgz#f6e8fdd3291bf0a406578b2c6eb21f8c542d3c0a"

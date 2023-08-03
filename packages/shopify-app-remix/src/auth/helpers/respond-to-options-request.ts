@@ -2,9 +2,17 @@ import {BasicParams} from '../../types';
 
 import {ensureCORSHeadersFactory} from './ensure-cors-headers';
 
-export function respondToOptionsRequest(params: BasicParams, request: Request) {
+export function respondToOptionsRequest(
+  params: BasicParams,
+  request: Request,
+  corsHeaders?: string[],
+) {
   if (request.method === 'OPTIONS') {
-    const ensureCORSHeaders = ensureCORSHeadersFactory(params, request);
+    const ensureCORSHeaders = ensureCORSHeadersFactory(
+      params,
+      request,
+      corsHeaders,
+    );
 
     throw ensureCORSHeaders(
       new Response(null, {

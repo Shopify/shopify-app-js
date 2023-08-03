@@ -2,14 +2,21 @@ import {JwtPayload} from '@shopify/shopify-api';
 
 import type {BasicParams} from '../../types';
 
+interface ValidateSessionTokenOptions {
+  checkAudience?: boolean;
+}
+
 export async function validateSessionToken(
   {api, logger}: BasicParams,
   token: string,
+  {checkAudience = true}: ValidateSessionTokenOptions = {},
 ): Promise<JwtPayload> {
   logger.debug('Validating session token');
 
   try {
-    const payload = await api.session.decodeSessionToken(token);
+    const payload = await api.session.decodeSessionToken(token, {
+      checkAudience,
+    });
     logger.debug('Session token is valid', {
       payload: JSON.stringify(payload),
     });
