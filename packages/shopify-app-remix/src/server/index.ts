@@ -11,9 +11,6 @@ import {
 import {setAbstractRuntimeString} from '@shopify/shopify-api/runtime';
 import {SessionStorage} from '@shopify/shopify-app-session-storage';
 
-// eslint-disable-next-line no-restricted-imports
-import {boundary as reactBoundary} from '../react/boundary';
-
 import {type AppConfig, type AppConfigArg} from './config-types';
 import {
   AppDistribution,
@@ -36,6 +33,7 @@ import {loginFactory} from './auth/login/login';
 
 export type {ShopifyApp, LoginError} from './types';
 export {LoginErrorType, AppDistribution} from './types';
+export {boundary} from './boundary';
 
 export {
   LATEST_API_VERSION,
@@ -111,18 +109,6 @@ export function shopifyApp<
 
   return shopify as ShopifyApp<Config>;
 }
-
-/**
- * A collection of functions that handle the necessary code for error boundaries in routes using authenticate.admin.
- *
- * @deprecated Please use this instead:
- * ```ts
- * import {boundary} from "@shopify/shopify-app-remix/react";
- * ```
- */
-export const boundary = {
-  ...reactBoundary,
-};
 
 function isAppStoreApp<Config extends AppConfigArg>(
   _shopify: ShopifyAppBase<Config>,
