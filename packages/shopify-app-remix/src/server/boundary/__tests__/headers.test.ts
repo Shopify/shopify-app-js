@@ -1,5 +1,5 @@
 import {boundary} from '../index';
-import {shopifyApp} from '../../../server/index';
+import {shopifyApp} from '../../index';
 import {testConfig} from '../../../__tests__/test-helper';
 
 describe('Headers boundary', () => {

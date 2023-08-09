@@ -1,5 +1,4 @@
-import {boundary} from '../../index';
-import {shopifyApp} from '../../../server';
+import {boundary, shopifyApp} from '../../index';
 import {testConfig} from '../../../__tests__/test-helper';
 
 describe('Error boundary', () => {
