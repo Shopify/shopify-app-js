@@ -2,6 +2,10 @@ import {JwtPayload} from '@shopify/shopify-api';
 
 import {EnsureCORSFunction} from '../helpers/ensure-cors-headers';
 
+export interface AuthenticatePublicOptions {
+  corsHeaders?: string[];
+}
+
 /**
  * Authenticated Context for a public request
  */
@@ -42,9 +46,11 @@ export interface PublicContext {
    *
    * export const loader = async ({ request }: LoaderArgs) => {
    *   const { sessionToken, cors } = await authenticate.public(
-   *     request
+   *     request,
+   *     { corsHeaders: ["X-My-Custom-Header"] }
    *   );
-   *   return cors(json(await getWidgets({shop: sessionToken.dest})));
+   *   const widgets = await getWidgets({shop: sessionToken.dest});
+   *   return cors(json(widgets));
    * };
    * ```
    */

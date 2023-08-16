@@ -9,8 +9,7 @@ import {
 describe('JWT validation', () => {
   it('returns token when successful', async () => {
     // GIVEN
-    const config = testConfig();
-    const shopify = shopifyApp(config);
+    const shopify = shopifyApp(testConfig());
     const {token, payload} = getJwt();
 
     // WHEN
@@ -26,10 +25,76 @@ describe('JWT validation', () => {
     expect(sessionToken).toMatchObject(payload);
   });
 
+  it('sets extra CORS allowed headers when requested from a different origin', async () => {
+    // GIVEN
+    const shopify = shopifyApp(testConfig());
+    const {token} = getJwt();
+
+    // WHEN
+    const {cors} = await shopify.authenticate.public(
+      new Request('https://some-other.origin', {
+        headers: {
+          Origin: 'https://some-other.origin',
+          Authorization: `Bearer ${token}`,
+        },
+      }),
+      {corsHeaders: ['Content-Type', 'X-Extra-Header']},
+    );
+    const response = cors(new Response());
+
+    // THEN
+    expect(response.headers.get('Access-Control-Allow-Headers')).toBe(
+      'Authorization, Content-Type, X-Extra-Header',
+    );
+  });
+
+  it('responds to preflight requests', async () => {
+    // GIVEN
+    const shopify = shopifyApp(testConfig());
+    const {token, payload} = getJwt();
+
+    // WHEN
+    const response = await getThrownResponse(
+      shopify.authenticate.public,
+      new Request(APP_URL, {
+        method: 'OPTIONS',
+        headers: {Authorization: `Bearer ${token}`},
+      }),
+    );
+
+    // THEN
+    expect(response.status).toBe(204);
+  });
+
+  it('responds to preflight requests from a different origin with extra CORS allowed headers', async () => {
+    // GIVEN
+    const shopify = shopifyApp(testConfig());
+    const {token} = getJwt();
+    const request = new Request('https://some-other.origin', {
+      method: 'OPTIONS',
+      headers: {
+        Origin: 'https://some-other.origin',
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    // WHEN
+    const response = await getThrownResponse(
+      async (request) =>
+        shopify.authenticate.public(request, {corsHeaders: ['X-Extra-Header']}),
+      request,
+    );
+
+    // THEN
+    expect(response.status).toBe(204);
+    expect(response.headers.get('Access-Control-Allow-Headers')).toBe(
+      'Authorization, Content-Type, X-Extra-Header',
+    );
+  });
+
   it('throws a 401 on missing Authorization bearer token', async () => {
     // GIVEN
-    const config = testConfig();
-    const shopify = shopifyApp(config);
+    const shopify = shopifyApp(testConfig());
 
     // WHEN
     const response = await getThrownResponse(
@@ -43,8 +108,7 @@ describe('JWT validation', () => {
 
   it('throws a 401 on invalid Authorization bearer token', async () => {
     // GIVEN
-    const config = testConfig();
-    const shopify = shopifyApp(config);
+    const shopify = shopifyApp(testConfig());
 
     // WHEN
     const response = await getThrownResponse(
@@ -60,8 +124,7 @@ describe('JWT validation', () => {
 
   it('rejects bot requests', async () => {
     // GIVEN
-    const config = testConfig();
-    const shopify = shopifyApp(config);
+    const shopify = shopifyApp(testConfig());
 
     // WHEN
     const response = await getThrownResponse(

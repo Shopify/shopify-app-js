@@ -7,16 +7,19 @@ import {
   validateSessionToken,
 } from '../helpers';
 
-import type {PublicContext} from './types';
+import type {AuthenticatePublicOptions, PublicContext} from './types';
 
 export function authenticatePublicFactory(params: BasicParams) {
   return async function authenticatePublic(
     request: Request,
+    options: AuthenticatePublicOptions = {},
   ): Promise<PublicContext> {
     const {logger} = params;
 
+    const corsHeaders = options.corsHeaders ?? [];
+
     rejectBotRequest(params, request);
-    respondToOptionsRequest(params, request);
+    respondToOptionsRequest(params, request, corsHeaders);
 
     const sessionTokenHeader = getSessionTokenHeader(request);
 
@@ -31,8 +34,10 @@ export function authenticatePublicFactory(params: BasicParams) {
     }
 
     return {
-      sessionToken: await validateSessionToken(params, sessionTokenHeader),
-      cors: ensureCORSHeadersFactory(params, request),
+      sessionToken: await validateSessionToken(params, sessionTokenHeader, {
+        checkAudience: false,
+      }),
+      cors: ensureCORSHeadersFactory(params, request, corsHeaders),
     };
   };
 }
