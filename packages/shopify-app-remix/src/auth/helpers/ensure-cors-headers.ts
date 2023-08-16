@@ -8,7 +8,7 @@ export interface EnsureCORSFunction {
 export function ensureCORSHeadersFactory(
   params: BasicParams,
   request: Request,
-  extraHeaders: string[] = [],
+  corsHeaders: string[] = [],
 ): EnsureCORSFunction {
   const {logger, config} = params;
 
@@ -19,10 +19,16 @@ export function ensureCORSHeadersFactory(
         'Request comes from a different origin, adding CORS headers',
       );
 
+      const corsHeadersSet = new Set([
+        'Authorization',
+        'Content-Type',
+        ...corsHeaders,
+      ]);
+
       response.headers.set('Access-Control-Allow-Origin', '*');
       response.headers.set(
         'Access-Control-Allow-Headers',
-        ['Authorization', ...extraHeaders].join(', '),
+        [...corsHeadersSet].join(', '),
       );
       response.headers.set('Access-Control-Expose-Headers', REAUTH_URL_HEADER);
     }

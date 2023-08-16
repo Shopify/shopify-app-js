@@ -24,14 +24,14 @@ describe('authorize.admin', () => {
     expect(response.status).toBe(204);
     expect(response.headers.get('Access-Control-Allow-Origin')).toBe('*');
     expect(response.headers.get('Access-Control-Allow-Headers')).toBe(
-      'Authorization',
+      'Authorization, Content-Type',
     );
     expect(response.headers.get('Access-Control-Expose-Headers')).toBe(
       REAUTH_URL_HEADER,
     );
   });
 
-  test('Does not adds CORS headers if OPTIONS request and origin is  the app', async () => {
+  test('Does not add CORS headers if OPTIONS request and origin is the app', async () => {
     // GIVEN
     const shopify = shopifyApp(testConfig());
 
@@ -45,7 +45,7 @@ describe('authorize.admin', () => {
     expect(response.status).toBe(204);
     expect(response.headers.get('Access-Control-Allow-Origin')).not.toBe('*');
     expect(response.headers.get('Access-Control-Allow-Headers')).not.toBe(
-      'Authorization',
+      'Authorization, Content-Type',
     );
     expect(response.headers.get('Access-Control-Expose-Headers')).not.toBe(
       REAUTH_URL_HEADER,

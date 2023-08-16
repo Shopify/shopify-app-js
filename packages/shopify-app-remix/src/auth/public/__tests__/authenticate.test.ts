@@ -38,13 +38,13 @@ describe('JWT validation', () => {
           Authorization: `Bearer ${token}`,
         },
       }),
-      {corsHeaders: ['X-Extra-Header']},
+      {corsHeaders: ['Content-Type', 'X-Extra-Header']},
     );
     const response = cors(new Response());
 
     // THEN
-    expect(response.headers.get('Access-Control-Allow-Headers')).toContain(
-      'X-Extra-Header',
+    expect(response.headers.get('Access-Control-Allow-Headers')).toBe(
+      'Authorization, Content-Type, X-Extra-Header',
     );
   });
 
@@ -87,8 +87,8 @@ describe('JWT validation', () => {
 
     // THEN
     expect(response.status).toBe(204);
-    expect(response.headers.get('Access-Control-Allow-Headers')).toContain(
-      'X-Extra-Header',
+    expect(response.headers.get('Access-Control-Allow-Headers')).toBe(
+      'Authorization, Content-Type, X-Extra-Header',
     );
   });
 
