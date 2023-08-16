@@ -5,7 +5,6 @@ import type {BasicParams} from '../../types';
 export function redirectWithExitIframe(
   params: BasicParams,
   request: Request,
-  redirectPath: string,
   shop: string,
 ): never {
   const {api, config} = params;
@@ -15,7 +14,7 @@ export function redirectWithExitIframe(
   const host = api.utils.sanitizeHost(queryParams.get('host')!);
 
   queryParams.set('shop', shop);
-  queryParams.set('exitIframe', `${redirectPath}?shop=${shop}`);
+  queryParams.set('exitIframe', `${config.auth.path}?shop=${shop}`);
 
   if (host) {
     queryParams.set('host', host);

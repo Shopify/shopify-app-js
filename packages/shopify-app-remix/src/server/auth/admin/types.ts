@@ -86,26 +86,6 @@ interface AdminContextInternal<
    * ```
    */
   cors: EnsureCORSFunction;
-
-  /**
-   * A function that redirects the user to a new page, ensuring that the appropriate parameters are set for embedded
-   * apps
-   *
-   * @example
-   * Redirecting the user to the app's home page
-   * ```ts
-   * // app/routes/admin/widgets.ts
-   * import { LoaderArgs, json } from "@remix-run/node";
-   * import { authenticate } from "../shopify.server";
-   * import { getWidgets } from "~/db/widgets.server";
-   *
-   * export const loader = async ({ request }: LoaderArgs) => {
-   *   const { session, redirect } = await authenticate.admin(request);
-   *   return redirect("/");
-   * };
-   * ```
-   */
-  redirect: RedirectFunction;
 }
 
 export interface EmbeddedAdminContext<
@@ -144,6 +124,26 @@ export interface EmbeddedAdminContext<
    * ```
    */
   sessionToken: JwtPayload;
+
+  /**
+   * A function that redirects the user to a new page, ensuring that the appropriate parameters are set for embedded
+   * apps
+   *
+   * @example
+   * Redirecting the user to the app's home page
+   * ```ts
+   * // app/routes/admin/widgets.ts
+   * import { LoaderArgs, json } from "@remix-run/node";
+   * import { authenticate } from "../shopify.server";
+   * import { getWidgets } from "~/db/widgets.server";
+   *
+   * export const loader = async ({ request }: LoaderArgs) => {
+   *   const { session, redirect } = await authenticate.admin(request);
+   *   return redirect("/");
+   * };
+   * ```
+   */
+  redirect: RedirectFunction;
 }
 export interface NonEmbeddedAdminContext<
   Config extends AppConfigArg,
