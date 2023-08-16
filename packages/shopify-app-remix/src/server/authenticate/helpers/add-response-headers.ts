@@ -1,6 +1,13 @@
 import type {BasicParams} from '../../types';
 
-export function addDocumentResponseHeadersFactory(params: BasicParams) {
+export type AddDocumentResponseHeadersFunction = (
+  request: Request,
+  headers: Headers,
+) => void;
+
+export function addDocumentResponseHeadersFactory(
+  params: BasicParams,
+): AddDocumentResponseHeadersFunction {
   const {api, config} = params;
 
   return function (request: Request, headers: Headers) {
