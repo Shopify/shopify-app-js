@@ -1,5 +1,13 @@
 # @shopify/shopify-app-session-storage-redis
 
+## 1.1.7
+
+### Patch Changes
+
+- 13b9048: Updating @shopify/shopify-api dependency to the latest version
+- Updated dependencies [13b9048]
+  - @shopify/shopify-app-session-storage@1.1.7
+
 ## 1.1.6
 
 ### Patch Changes

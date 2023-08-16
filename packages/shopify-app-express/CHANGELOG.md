@@ -1,5 +1,15 @@
 # Changelog
 
+## 2.2.1
+
+### Patch Changes
+
+- 0c46a39: Fixing CSP header for internal Shopify use
+- 13b9048: Updating @shopify/shopify-api dependency to the latest version
+- Updated dependencies [13b9048]
+  - @shopify/shopify-app-session-storage-memory@1.0.10
+  - @shopify/shopify-app-session-storage@1.1.7
+
 ## 2.2.0
 
 ### Minor Changes
