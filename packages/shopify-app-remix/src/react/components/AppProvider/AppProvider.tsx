@@ -1,12 +1,15 @@
 import React from 'react';
-import {AppProvider as PolarisAppProvider} from '@shopify/polaris';
-import translations from '@shopify/polaris/locales/en.json';
+import {
+  AppProvider as PolarisAppProvider,
+  AppProviderProps as PolarisAppProviderProps,
+} from '@shopify/polaris';
+import englishI18n from '@shopify/polaris/locales/en.json';
 
-import {APP_BRIDGE_URL} from '../const';
+import {APP_BRIDGE_URL} from '../../const';
+import {RemixPolarisLink} from '../RemixPolarisLink';
 
-import {RemixPolarisLink} from './RemixPolarisLink';
-
-export interface AppProviderProps {
+export interface AppProviderProps
+  extends Omit<PolarisAppProviderProps, 'linkComponent' | 'i18n'> {
   children: React.ReactNode;
   /**
    * The API key for your Shopify app.
@@ -16,6 +19,12 @@ export interface AppProviderProps {
    * Whether the app is embedded or not. Defaults to `true`.
    */
   isEmbeddedApp?: boolean;
+  /**
+   * The i18n configuration for your Polaris provider.
+   *
+   * {@link https://polaris.shopify.com/components/utilities/app-provider}
+   */
+  i18n?: PolarisAppProviderProps['i18n'];
   /**
    * Used internally by Shopify. You should not need to set this.
    * @internal
@@ -52,16 +61,24 @@ export interface AppProviderProps {
  * }
  * ```
  */
-export function AppProvider({
-  children,
-  apiKey,
-  isEmbeddedApp = true,
-  __APP_BRIDGE_URL = APP_BRIDGE_URL,
-}: AppProviderProps) {
+export function AppProvider(props: AppProviderProps) {
+  const {
+    children,
+    apiKey,
+    i18n,
+    isEmbeddedApp = true,
+    __APP_BRIDGE_URL = APP_BRIDGE_URL,
+    ...polarisProps
+  } = props;
+
   return (
     <>
       {isEmbeddedApp && <script src={__APP_BRIDGE_URL} data-api-key={apiKey} />}
-      <PolarisAppProvider i18n={translations} linkComponent={RemixPolarisLink}>
+      <PolarisAppProvider
+        {...polarisProps}
+        linkComponent={RemixPolarisLink}
+        i18n={i18n || englishI18n}
+      >
         {children}
       </PolarisAppProvider>
     </>
