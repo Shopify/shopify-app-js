@@ -3,6 +3,9 @@ import {Session, Shopify, ShopifyRestResources} from '@shopify/shopify-api';
 import type {JSONValue} from '../../types';
 
 export interface RegisterWebhooksOptions {
+  /**
+   * The Shopify session used to register webhooks via the Admin API.
+   */
   session: Session;
 }
 
