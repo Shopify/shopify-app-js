@@ -7,7 +7,7 @@ module.exports = {
           {
             group: ['../server/*'],
             message:
-              'Importing from src/server in src/react is not allowed as they must be kept separate',
+              'Importing from src/react in src/server is not allowed as they must be kept separate, because it breaks Remix bundling.',
           },
         ],
       },

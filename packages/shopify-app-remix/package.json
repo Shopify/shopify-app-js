@@ -19,7 +19,8 @@
       "types": "./build/ts/server/index.d.ts",
       "default": "./build/cjs/server/index.js"
     },
-    "./adapters/*": "./build/cjs/adapters/*/index.js",
+    "./adapters/*": "./build/cjs/server/adapters/*/index.js",
+    "./server/adapters/*": "./build/cjs/server/adapters/*/index.js",
     "./react": {
       "types": "./build/ts/react/index.d.ts",
       "default": "./build/cjs/react/index.js"
