@@ -45,7 +45,7 @@ Create `app/shopify.server.js`. We will use this file to configure our Shopify a
 
 ```ts
 // app/shopify.server.js
-import '@shopify/shopify-app-remix/adapters/node';
+import '@shopify/shopify-app-remix/server/adapters/node';
 import {LATEST_API_VERSION, shopifyApp} from '@shopify/shopify-app-remix';
 
 const shopify = shopifyApp({
@@ -179,7 +179,7 @@ Since Node.js doesn't fully implement that API, apps will need to import an extr
 In the [Getting Started](#getting-started) section above, you'll notice that the example runs
 
 ```ts
-import '@shopify/shopify-app-remix/adapters/node';
+import '@shopify/shopify-app-remix/server/adapters/node';
 ```
 
 before calling `shopifyApp`.
