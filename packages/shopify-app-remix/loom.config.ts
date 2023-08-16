@@ -7,11 +7,11 @@ export default createPackage((pkg) => {
   pkg.entry({root: './src/server/index.ts'});
   pkg.entry({root: './src/react/index.ts'});
 
-  const basePath = `${__dirname}/src/adapters`;
+  const basePath = `${__dirname}/src/server/adapters`;
   fs.readdirSync(basePath, {withFileTypes: true})
     .filter((dirent) => dirent.isDirectory())
     .forEach((dirent) => {
-      pkg.entry({root: `./src/adapters/${dirent.name}/index.ts`});
+      pkg.entry({root: `./src/server/adapters/${dirent.name}/index.ts`});
     });
 
   pkg.use(

@@ -1,5 +1,5 @@
 import {boundary, shopifyApp} from '../../index';
-import {testConfig} from '../../../__tests__/test-helper';
+import {testConfig} from '../../__tests__/test-helper';
 
 describe('Error boundary', () => {
   it('returns a string when handling an ErrorResponse', () => {
