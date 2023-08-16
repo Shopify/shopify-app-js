@@ -93,13 +93,13 @@ export class AuthStrategy<
       billing: this.createBillingContext(request, sessionContext.session),
       session: sessionContext.session,
       cors,
-      redirect: redirectFactory({api, config, logger}, request),
     };
 
     if (config.isEmbeddedApp) {
       return {
         ...context,
         sessionToken: sessionContext!.token!,
+        redirect: redirectFactory({api, config, logger}, request),
       } as AdminContext<Config, Resources>;
     } else {
       return context as AdminContext<Config, Resources>;
@@ -167,12 +167,7 @@ export class AuthStrategy<
       request.headers.get('Sec-Fetch-Dest') === 'iframe'
     ) {
       logger.debug('Auth request in iframe detected, exiting iframe', {shop});
-      throw redirectWithExitIframe(
-        {api, config, logger},
-        request,
-        config.auth.path,
-        shop,
-      );
+      throw redirectWithExitIframe({api, config, logger}, request, shop);
     } else {
       throw await beginAuth({api, config, logger}, request, false, shop);
     }
@@ -284,12 +279,7 @@ export class AuthStrategy<
         shop,
       });
       if (isEmbedded) {
-        redirectWithExitIframe(
-          {api, config, logger},
-          request,
-          config.auth.path,
-          shop!,
-        );
+        redirectWithExitIframe({api, config, logger}, request, shop!);
       } else {
         throw await beginAuth({api, config, logger}, request, false, shop!);
       }

@@ -23,55 +23,72 @@ export function redirectFactory(
   const {config} = params;
 
   return function redirect(url, init: RedirectInit) {
-    if (config.isEmbeddedApp) {
-      const {searchParams} = new URL(request.url);
-      const parsedUrl = new URL(url, config.appUrl);
-      const target = (typeof init !== 'number' && init?.target) || '_self';
+    const {searchParams} = new URL(request.url);
+    const parsedUrl = new URL(url, config.appUrl);
 
-      const isGet = request.method === 'GET';
-      const isSameOrigin = parsedUrl.origin === config.appUrl;
-      const sessionTokenHeader = Boolean(getSessionTokenHeader(request));
-      const sessionTokenSearchParam = searchParams.has('id_token');
-      const embeddedSearchParam = searchParams.get('embedded') === '1';
-
-      const isBounceRequest =
-        sessionTokenHeader &&
-        !sessionTokenSearchParam &&
-        embeddedSearchParam &&
-        isGet;
-
-      const isDataRequest =
-        sessionTokenHeader &&
-        !sessionTokenSearchParam &&
-        (!embeddedSearchParam || !isGet);
-
-      if (isSameOrigin || url.startsWith('/')) {
-        searchParams.forEach((value, key) => {
-          if (!parsedUrl.searchParams.has(key)) {
-            parsedUrl.searchParams.set(key, value);
-          }
-        });
-      }
-
-      if (target === '_self') {
-        if (isBounceRequest) {
-          throw renderAppBridge(params, request, {
-            url: parsedUrl.toString(),
-            target,
-          });
-        } else {
-          return remixRedirect(parsedUrl.toString(), init);
+    const isSameOrigin = parsedUrl.origin === config.appUrl;
+    if (isSameOrigin || url.startsWith('/')) {
+      searchParams.forEach((value, key) => {
+        if (!parsedUrl.searchParams.has(key)) {
+          parsedUrl.searchParams.set(key, value);
         }
-      } else if (isDataRequest) {
-        throw redirectWithAppBridgeHeaders(parsedUrl.toString());
-      } else if (embeddedSearchParam) {
+      });
+    }
+
+    const target = (typeof init !== 'number' && init?.target) || '_self';
+    if (target === '_self') {
+      if (isBounceRequest(request)) {
         throw renderAppBridge(params, request, {
           url: parsedUrl.toString(),
           target,
         });
+      } else {
+        return remixRedirect(parsedUrl.toString(), init);
       }
+    } else if (isDataRequest(request)) {
+      throw redirectWithAppBridgeHeaders(parsedUrl.toString());
+    } else if (isEmbeddedRequest(request)) {
+      throw renderAppBridge(params, request, {
+        url: parsedUrl.toString(),
+        target,
+      });
     }
 
     return remixRedirect(url, init);
   };
+}
+
+function isBounceRequest(request: Request) {
+  const {searchParams} = new URL(request.url);
+
+  const isGet = request.method === 'GET';
+  const sessionTokenHeader = Boolean(getSessionTokenHeader(request));
+  const sessionTokenSearchParam = searchParams.has('id_token');
+
+  return (
+    sessionTokenHeader &&
+    !sessionTokenSearchParam &&
+    isEmbeddedRequest(request) &&
+    isGet
+  );
+}
+
+function isDataRequest(request: Request) {
+  const {searchParams} = new URL(request.url);
+
+  const isGet = request.method === 'GET';
+  const sessionTokenHeader = Boolean(getSessionTokenHeader(request));
+  const sessionTokenSearchParam = searchParams.has('id_token');
+
+  return (
+    sessionTokenHeader &&
+    !sessionTokenSearchParam &&
+    (!isEmbeddedRequest(request) || !isGet)
+  );
+}
+
+function isEmbeddedRequest(request: Request) {
+  const {searchParams} = new URL(request.url);
+
+  return searchParams.get('embedded') === '1';
 }

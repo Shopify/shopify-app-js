@@ -21,7 +21,7 @@ export async function redirectToAuthPage(
     redirectUri.searchParams.set('shop', shop);
     redirectWithAppBridgeHeaders(redirectUri.toString());
   } else if (isEmbeddedRequest) {
-    redirectWithExitIframe(params, request, config.auth.path, shop);
+    redirectWithExitIframe(params, request, shop);
   } else {
     throw await beginAuth(params, request, isOnline, shop);
   }
