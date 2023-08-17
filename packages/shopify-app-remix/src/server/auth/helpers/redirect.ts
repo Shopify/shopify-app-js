@@ -59,31 +59,23 @@ export function redirectFactory(
 }
 
 function isBounceRequest(request: Request) {
-  const {searchParams} = new URL(request.url);
-
-  const isGet = request.method === 'GET';
-  const sessionTokenHeader = Boolean(getSessionTokenHeader(request));
-  const sessionTokenSearchParam = searchParams.has('id_token');
-
   return (
-    sessionTokenHeader &&
-    !sessionTokenSearchParam &&
-    isEmbeddedRequest(request) &&
-    isGet
+    Boolean(getSessionTokenHeader(request)) &&
+    request.headers.has('X-Shopify-Bounce')
   );
 }
 
 function isDataRequest(request: Request) {
   const {searchParams} = new URL(request.url);
 
-  const isGet = request.method === 'GET';
   const sessionTokenHeader = Boolean(getSessionTokenHeader(request));
   const sessionTokenSearchParam = searchParams.has('id_token');
 
   return (
     sessionTokenHeader &&
     !sessionTokenSearchParam &&
-    (!isEmbeddedRequest(request) || !isGet)
+    !isBounceRequest(request) &&
+    !isEmbeddedRequest(request)
   );
 }
 

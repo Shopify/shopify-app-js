@@ -253,7 +253,7 @@ describe('Redirect helper', () => {
 
     return {
       request: new Request(`${APP_URL}?${searchParams}`, {
-        headers: {Authorization: `Bearer ${token}`},
+        headers: {Authorization: `Bearer ${token}`, 'X-Shopify-Bounce': '1'},
       }),
       searchParams,
     };
