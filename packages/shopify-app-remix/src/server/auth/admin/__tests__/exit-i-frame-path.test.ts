@@ -32,7 +32,7 @@ describe('authorize.admin exit iframe path', () => {
       `<script data-api-key="${config.apiKey}" src="${APP_BRIDGE_URL}"></script>`,
     );
     expect(responseText).toContain(
-      `<script>window.open("${decodeURIComponent(exitTo)}", "_top")</script>`,
+      `<script>window.open("${decodeURIComponent(exitTo)}/", "_top")</script>`,
     );
     expectDocumentRequestHeaders(response);
   });
@@ -61,7 +61,7 @@ describe('authorize.admin exit iframe path', () => {
       `<script data-api-key="${config.apiKey}" src="${APP_BRIDGE_URL}"></script>`,
     );
     expect(responseText).toContain(
-      `<script>window.open("${decodeURIComponent(exitTo)}", "_top")</script>`,
+      `<script>window.open("${decodeURIComponent(exitTo)}/", "_top")</script>`,
     );
     expectDocumentRequestHeaders(response);
   });

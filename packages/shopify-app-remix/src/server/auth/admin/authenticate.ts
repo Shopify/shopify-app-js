@@ -24,8 +24,6 @@ import {
   requireBillingFactory,
 } from '../../billing';
 import {
-  appBridgeUrl,
-  addDocumentResponseHeaders,
   beginAuth,
   getSessionTokenHeader,
   redirectWithExitIframe,
@@ -34,6 +32,8 @@ import {
   rejectBotRequest,
   respondToOptionsRequest,
   ensureCORSHeadersFactory,
+  renderAppBridge,
+  redirectFactory,
 } from '../helpers';
 
 import type {
@@ -99,6 +99,7 @@ export class AuthStrategy<
       return {
         ...context,
         sessionToken: sessionContext!.token!,
+        redirect: redirectFactory({api, config, logger}, request),
       } as AdminContext<Config, Resources>;
     } else {
       return context as AdminContext<Config, Resources>;
@@ -109,6 +110,7 @@ export class AuthStrategy<
     request: Request,
   ): Promise<SessionContext> {
     const {api, logger, config} = this;
+    const params: BasicParams = {api, logger, config};
 
     const url = new URL(request.url);
 
@@ -123,12 +125,12 @@ export class AuthStrategy<
 
     if (isPatchSessionToken) {
       logger.debug('Rendering bounce page');
-      throw this.renderAppBridge(request);
+      throw renderAppBridge(params, request);
     } else if (isExitIframe) {
       const destination = url.searchParams.get('exitIframe')!;
 
       logger.debug('Rendering exit iframe page', {destination});
-      throw this.renderAppBridge(request, destination);
+      throw renderAppBridge(params, request, {url: destination});
     } else if (isAuthCallbackRequest) {
       throw await this.handleAuthCallbackRequest(request);
     } else if (isAuthRequest) {
@@ -507,40 +509,6 @@ export class AuthStrategy<
     // TODO Make sure this works on chrome without a tunnel (weird HTTPS redirect issue)
     // https://github.com/orgs/Shopify/projects/6899/views/1?pane=issue&itemId=28376650
     throw redirect(`${config.auth.patchSessionTokenPath}?${params.toString()}`);
-  }
-
-  private renderAppBridge(request: Request, redirectTo?: string): never {
-    const {config} = this;
-
-    let redirectToScript = '';
-    if (redirectTo) {
-      const redirectUrl = decodeURIComponent(
-        redirectTo.startsWith('/')
-          ? `${config.appUrl}${redirectTo}`
-          : redirectTo,
-      );
-
-      redirectToScript = `<script>window.open("${redirectUrl}", "_top")</script>`;
-    }
-
-    const responseHeaders = new Headers({
-      'content-type': 'text/html;charset=utf-8',
-    });
-    addDocumentResponseHeaders(
-      responseHeaders,
-      config.isEmbeddedApp,
-      new URL(request.url).searchParams.get('shop'),
-    );
-
-    throw new Response(
-      `
-        <script data-api-key="${
-          config.apiKey
-        }" src="${appBridgeUrl()}"></script>
-        ${redirectToScript}
-      `,
-      {headers: responseHeaders},
-    );
   }
 
   private overriddenRestClient(request: Request, session: Session) {
