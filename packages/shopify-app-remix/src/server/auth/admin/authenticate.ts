@@ -11,6 +11,7 @@ import {
   ShopifyRestResources,
 } from '@shopify/shopify-api';
 
+import {adminClientFactory} from '../../clients/admin';
 import type {BasicParams} from '../../types';
 import type {
   AdminApiContext,
@@ -34,6 +35,7 @@ import {
   ensureCORSHeadersFactory,
   renderAppBridge,
   redirectFactory,
+  handleClientErrorFactory,
 } from '../helpers';
 
 import type {
@@ -41,8 +43,6 @@ import type {
   EmbeddedAdminContext,
   NonEmbeddedAdminContext,
 } from './types';
-import {graphqlClientFactory} from './graphql-client';
-import {RemixRestClient, restResourceClientFactory} from './rest-client';
 
 interface SessionContext {
   session: Session;
@@ -511,39 +511,6 @@ export class AuthStrategy<
     throw redirect(`${config.auth.patchSessionTokenPath}?${params.toString()}`);
   }
 
-  private overriddenRestClient(request: Request, session: Session) {
-    const {api, config, logger} = this;
-
-    const client = new RemixRestClient<Resources>({
-      params: {api, config, logger},
-      request,
-      session,
-    });
-
-    if (api.rest) {
-      client.resources = {} as Resources;
-
-      const RestResourceClient = restResourceClientFactory({
-        params: {api, config, logger},
-        request,
-        session,
-      });
-      Object.entries(api.rest).forEach(([name, resource]) => {
-        class RemixResource extends resource {
-          public static Client = RestResourceClient;
-        }
-
-        Reflect.defineProperty(RemixResource, 'name', {
-          value: name,
-        });
-
-        Reflect.set(client.resources, name, RemixResource);
-      });
-    }
-
-    return client;
-  }
-
   private createBillingContext(
     request: Request,
     session: Session,
@@ -561,15 +528,16 @@ export class AuthStrategy<
     request: Request,
     session: Session,
   ): AdminApiContext<Resources> {
-    const {api, config, logger} = this;
-
-    return {
-      rest: this.overriddenRestClient(request, session),
-      graphql: graphqlClientFactory({
-        params: {api, config, logger},
+    return adminClientFactory<Resources>({
+      session,
+      params: {
+        api: this.api,
+        config: this.config,
+        logger: this.logger,
+      },
+      handleClientError: handleClientErrorFactory({
         request,
-        session,
       }),
-    };
+    });
   }
 }

@@ -29,6 +29,7 @@ import {authenticatePublicFactory} from './auth/public/authenticate';
 import {overrideLogger} from './override-logger';
 import {addDocumentResponseHeadersFactory} from './auth/helpers';
 import {loginFactory} from './auth/login/login';
+import {adminClientFactory} from './clients/admin';
 
 /**
  * Creates an object your app will use to interact with Shopify.
@@ -81,6 +82,9 @@ export function shopifyApp<
         keyof Config['webhooks'] | MandatoryTopics
       >(params),
     },
+    unauthenticated: {
+      admin: unauthenticatedAdminContextFactory(params),
+    },
   };
 
   if (
@@ -91,6 +95,17 @@ export function shopifyApp<
   }
 
   return shopify as ShopifyApp<Config>;
+}
+
+function unauthenticatedAdminContextFactory<
+  Resources extends ShopifyRestResources,
+>(params: BasicParams) {
+  return async (shop: string) => {
+    const offlineSessionId = params.api.session.getOfflineId(shop);
+    const session = await sessionStorage.loadSession(offlineSessionId);
+
+    return adminClientFactory<Resources>({params, session});
+  };
 }
 
 function isAppStoreApp<Config extends AppConfigArg>(

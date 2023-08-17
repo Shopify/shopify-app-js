@@ -5,7 +5,7 @@ import {
 } from '@shopify/shopify-api';
 import {SessionStorage} from '@shopify/shopify-app-session-storage';
 
-import type {AppConfig, AppConfigArg} from './config-types';
+import type {AdminApiContext, AppConfig, AppConfigArg} from './config-types';
 import type {AdminContext} from './auth/admin/types';
 import type {
   AuthenticatePublicOptions,
@@ -318,6 +318,12 @@ export interface ShopifyAppBase<Config extends AppConfigArg> {
       RestResourcesType<Config>,
       keyof Config['webhooks'] | MandatoryTopics
     >;
+  };
+
+  unauthenticated: {
+    admin: (
+      shop: string,
+    ) => Promise<AdminApiContext<RestResourcesType<Config>>>;
   };
 }
 
