@@ -9,24 +9,58 @@ import {
   ShopifyRestResources,
 } from '@shopify/shopify-api';
 
-import type {BasicParams} from '../../types';
-import {handleClientError} from '../helpers';
+import {AdminClientOptions} from './types';
 
-interface RestClientOptions {
-  params: BasicParams;
-  request: Request;
-  session: Session;
+export type RestClientWithResources<Resources extends ShopifyRestResources> =
+  RemixRestClient & {resources: Resources};
+
+export function restClientFactory<
+  Resources extends ShopifyRestResources = ShopifyRestResources,
+>({
+  params,
+  handleClientError,
+  session,
+}: AdminClientOptions): RestClientWithResources<Resources> {
+  const {api} = params;
+  const client = new RemixRestClient({
+    params,
+    handleClientError,
+    session,
+  }) as RestClientWithResources<Resources>;
+
+  if (api.rest) {
+    client.resources = {} as Resources;
+
+    const RestResourceClient = restResourceClientFactory({
+      params,
+      handleClientError,
+      session,
+    });
+
+    Object.entries(api.rest).forEach(([name, resource]) => {
+      class RemixResource extends resource {
+        public static Client = RestResourceClient;
+      }
+
+      Reflect.defineProperty(RemixResource, 'name', {
+        value: name,
+      });
+
+      Reflect.set(client.resources, name, RemixResource);
+    });
+  }
+
+  return client;
 }
 
-export class RemixRestClient<Resources extends ShopifyRestResources> {
+class RemixRestClient {
   public session: Session;
-  public resources: Resources;
-  private params: BasicParams;
-  private request: Request;
+  private params: AdminClientOptions['params'];
+  private handleClientError: AdminClientOptions['handleClientError'];
 
-  constructor({params, request, session}: RestClientOptions) {
+  constructor({params, session, handleClientError}: AdminClientOptions) {
     this.params = params;
-    this.request = request;
+    this.handleClientError = handleClientError;
     this.session = session;
   }
 
@@ -85,40 +119,38 @@ export class RemixRestClient<Resources extends ShopifyRestResources> {
         headers: apiResponse.headers,
       });
     } catch (error) {
-      throw await handleClientError({
-        params: this.params,
-        request: this.request,
-        shop: this.session.shop,
-        error,
-      });
+      if (this.handleClientError) {
+        throw await this.handleClientError({
+          error,
+          session: this.session,
+          params: this.params,
+        });
+      } else throw new Error(error);
     }
   }
 }
 
-export function restResourceClientFactory({
+function restResourceClientFactory({
   params,
-  request,
+  handleClientError,
   session,
-}: RestClientOptions): Shopify['clients']['Rest'] {
-  const {api, config, logger} = params;
+}: AdminClientOptions): Shopify['clients']['Rest'] {
+  const {api} = params;
 
   const ApiClient = api.clients.Rest;
   return class RestResourceClient extends ApiClient {
-    protected async request(params: RequestParams) {
+    protected async request(requestParams: RequestParams) {
       const originalClient = new api.clients.Rest({session});
       const originalRequest = Reflect.get(originalClient, 'request');
 
       try {
         // We just call through to the API library client, and handle the error response here, so that data parsing
         // behaves the same way.
-        return await originalRequest.call(originalClient, params);
+        return await originalRequest.call(originalClient, requestParams);
       } catch (error) {
-        throw await handleClientError({
-          params: {api, config, logger},
-          request,
-          shop: session.shop,
-          error,
-        });
+        if (handleClientError) {
+          throw await handleClientError({error, params, session});
+        } else throw new Error(error);
       }
     }
   };

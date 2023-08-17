@@ -1,23 +1,28 @@
 import {HttpResponseError} from '@shopify/shopify-api';
 
-import type {BasicParams} from '../../types';
+import type {HandleAdminClientError} from '../../clients/admin/types';
 
 import {redirectToAuthPage} from './redirect-to-auth-page';
 
 interface HandleClientErrorOptions {
-  params: BasicParams;
   request: Request;
-  error: Error | HttpResponseError;
-  shop: string;
 }
 
-export async function handleClientError({
-  params,
+export function handleClientErrorFactory({
   request,
-  error,
-  shop,
-}: HandleClientErrorOptions): Promise<never> {
-  if (error instanceof HttpResponseError) {
+}: HandleClientErrorOptions): HandleAdminClientError {
+  return async function handleClientError({
+    error,
+    params,
+    session,
+  }): Promise<never> {
+    if (error instanceof HttpResponseError !== true) {
+      params.logger.debug(
+        `Got a response error from the API: ${error.message}`,
+      );
+      throw error;
+    }
+
     params.logger.debug(
       `Got an HTTP response error from the API: ${error.message}`,
       {
@@ -28,18 +33,15 @@ export async function handleClientError({
     );
 
     if (error.response.code === 401) {
-      throw await redirectToAuthPage(params, request, shop);
-    } else {
-      // forward a minimal copy of the upstream HTTP response instead of an Error:
-      throw new Response(JSON.stringify(error.response.body), {
-        status: error.response.code,
-        headers: {
-          'Content-Type': error.response.headers!['Content-Type'] as string,
-        },
-      });
+      throw await redirectToAuthPage(params, request, session.shop);
     }
-  } else {
-    params.logger.debug(`Got a response error from the API: ${error.message}`);
-    throw error;
-  }
+
+    // forward a minimal copy of the upstream HTTP response instead of an Error:
+    throw new Response(JSON.stringify(error.response.body), {
+      status: error.response.code,
+      headers: {
+        'Content-Type': error.response.headers!['Content-Type'] as string,
+      },
+    });
+  };
 }

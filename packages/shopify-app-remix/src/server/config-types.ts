@@ -8,9 +8,9 @@ import {
 } from '@shopify/shopify-api';
 import {SessionStorage} from '@shopify/shopify-app-session-storage';
 
-import type {GraphqlQueryFunction} from './auth/admin/graphql-client';
-import type {RemixRestClient} from './auth/admin/rest-client';
 import {AppDistribution} from './types';
+import {RestClientWithResources} from './clients/admin/rest';
+import {GraphqlQueryFunction} from './clients/admin/graphql';
 
 export interface AppConfigArg<
   Resources extends ShopifyRestResources = ShopifyRestResources,
@@ -334,7 +334,7 @@ export interface AdminApiContext<
    * };
    * ```
    */
-  rest: RemixRestClient<Resources>;
+  rest: RestClientWithResources<Resources>;
 
   /**
    * Methods for interacting with the Shopify Admin GraphQL API

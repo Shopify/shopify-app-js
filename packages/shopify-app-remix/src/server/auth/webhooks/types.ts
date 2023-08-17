@@ -1,6 +1,7 @@
-import {Session, Shopify, ShopifyRestResources} from '@shopify/shopify-api';
+import {Session, ShopifyRestResources} from '@shopify/shopify-api';
 
 import type {JSONValue} from '../../types';
+import {AdminApiContext} from '../../config-types';
 
 export interface RegisterWebhooksOptions {
   session: Session;
@@ -25,8 +26,5 @@ export interface WebhookContextWithSession<
   Resources extends ShopifyRestResources = any,
 > extends Context<Topics> {
   session: Session;
-  admin: {
-    rest: InstanceType<Shopify['clients']['Rest']> & Resources;
-    graphql: InstanceType<Shopify['clients']['Graphql']>;
-  };
+  admin: AdminApiContext<Resources>;
 }
