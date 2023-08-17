@@ -68,6 +68,7 @@ function isBounceRequest(request: Request) {
 function isDataRequest(request: Request) {
   const {searchParams} = new URL(request.url);
 
+  const isGet = request.method === 'GET';
   const sessionTokenHeader = Boolean(getSessionTokenHeader(request));
   const sessionTokenSearchParam = searchParams.has('id_token');
 
@@ -75,7 +76,7 @@ function isDataRequest(request: Request) {
     sessionTokenHeader &&
     !sessionTokenSearchParam &&
     !isBounceRequest(request) &&
-    !isEmbeddedRequest(request)
+    (!isEmbeddedRequest(request) || !isGet)
   );
 }
 
