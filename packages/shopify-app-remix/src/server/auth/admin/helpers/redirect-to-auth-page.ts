@@ -1,4 +1,4 @@
-import type {BasicParams} from '../../types';
+import type {BasicParams} from '../../../types';
 
 import {beginAuth} from './begin-auth';
 import {redirectWithExitIframe} from './redirect-with-exitiframe';

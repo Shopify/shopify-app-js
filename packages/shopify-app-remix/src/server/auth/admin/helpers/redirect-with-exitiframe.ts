@@ -1,6 +1,6 @@
 import {redirect} from '@remix-run/server-runtime';
 
-import type {BasicParams} from '../../types';
+import type {BasicParams} from '../../../types';
 
 export function redirectWithExitIframe(
   params: BasicParams,
