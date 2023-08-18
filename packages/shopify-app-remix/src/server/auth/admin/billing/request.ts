@@ -5,10 +5,9 @@ import {
 } from '@shopify/shopify-api';
 import {redirect} from '@remix-run/server-runtime';
 
-import type {BasicParams} from '../types';
-import {redirectToAuthPage} from '../auth/helpers';
-import {AppConfigArg} from '../config-types';
-import {getAppBridgeHeaders} from '../auth/helpers/redirect-with-app-bridge-headers';
+import {AppConfigArg} from '../../../config-types';
+import {BasicParams} from '../../../types';
+import {getAppBridgeHeaders, redirectToAuthPage} from '../helpers';
 
 import type {RequestBillingOptions} from './types';
 

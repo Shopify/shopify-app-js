@@ -3,11 +3,10 @@ import {
   redirect as remixRedirect,
 } from '@remix-run/server-runtime';
 
-import {BasicParams} from '../../types';
+import {BasicParams} from '../../../types';
+import {getSessionTokenHeader} from '../../helpers/get-session-token-header';
 
-import {renderAppBridge} from './render-app-bridge';
-import {getSessionTokenHeader} from './get-session-token-header';
-import {redirectWithAppBridgeHeaders} from './redirect-with-app-bridge-headers';
+import {redirectWithAppBridgeHeaders, renderAppBridge} from '.';
 
 export type RedirectTarget = '_self' | '_parent' | '_top';
 export type RedirectInit = number | (ResponseInit & {target?: RedirectTarget});

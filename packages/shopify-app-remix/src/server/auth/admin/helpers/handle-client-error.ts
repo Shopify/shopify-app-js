@@ -1,6 +1,6 @@
 import {HttpResponseError} from '@shopify/shopify-api';
 
-import type {HandleAdminClientError} from '../../clients/admin/types';
+import type {HandleAdminClientError} from '../../../clients/admin/types';
 
 import {redirectToAuthPage} from './redirect-to-auth-page';
 

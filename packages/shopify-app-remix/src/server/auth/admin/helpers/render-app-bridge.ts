@@ -1,8 +1,8 @@
-import {BasicParams} from '../../types';
+import {BasicParams} from '../../../types';
+import {appBridgeUrl} from '../../helpers/app-bridge-url';
+import {addDocumentResponseHeaders} from '../../helpers/add-response-headers';
 
-import type {RedirectTarget} from './redirect';
-import {appBridgeUrl} from './app-bridge-url';
-import {addDocumentResponseHeaders} from './add-response-headers';
+import type {RedirectTarget} from '.';
 
 export interface RedirectToOptions {
   url: string | URL;

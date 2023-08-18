@@ -1,4 +1,4 @@
-import {REAUTH_URL_HEADER} from '../const';
+import {REAUTH_URL_HEADER} from '../../const';
 
 export function redirectWithAppBridgeHeaders(redirectUri: string): never {
   throw new Response(undefined, {
