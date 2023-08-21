@@ -102,9 +102,19 @@ function unauthenticatedAdminContextFactory<
 >(params: BasicParams) {
   return async (shop: string) => {
     const offlineSessionId = params.api.session.getOfflineId(shop);
-    const session = await sessionStorage.loadSession(offlineSessionId);
+    const session = await params.config.sessionStorage.loadSession(
+      offlineSessionId,
+    );
 
-    return adminClientFactory<Resources>({params, session});
+    if (!session) {
+      throw new ShopifyError(
+        `Could not find a session for shop ${shop} when creating unauthenticated admin context`,
+      );
+    }
+
+    return {
+      admin: adminClientFactory<Resources>({params, session}),
+    };
   };
 }
 
