@@ -5,7 +5,7 @@ import {
   BillingRequestParams,
 } from '@shopify/shopify-api';
 
-import type {AppConfigArg} from '../config-types';
+import type {AppConfigArg} from '../../../config-types';
 
 export interface RequireBillingOptions<Config extends AppConfigArg>
   extends Omit<BillingCheckParams, 'session' | 'plans' | 'returnObject'> {

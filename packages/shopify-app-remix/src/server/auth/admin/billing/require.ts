@@ -4,9 +4,9 @@ import {
   Session,
 } from '@shopify/shopify-api';
 
-import type {BasicParams} from '../types';
-import type {AppConfigArg} from '../config-types';
-import {redirectToAuthPage} from '../auth/helpers';
+import type {BasicParams} from '../../../types';
+import type {AppConfigArg} from '../../../config-types';
+import {redirectToAuthPage} from '../helpers';
 
 import type {RequireBillingOptions} from './types';
 

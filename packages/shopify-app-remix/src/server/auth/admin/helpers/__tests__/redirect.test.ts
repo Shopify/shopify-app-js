@@ -1,6 +1,6 @@
 import {SESSION_COOKIE_NAME} from '@shopify/shopify-api';
 
-import {shopifyApp} from '../../..';
+import {shopifyApp} from '../../../..';
 import {
   API_KEY,
   APP_URL,
@@ -11,8 +11,8 @@ import {
   setUpValidSession,
   signRequestCookie,
   testConfig,
-} from '../../../__tests__/test-helper';
-import {APP_BRIDGE_URL, REAUTH_URL_HEADER} from '../../const';
+} from '../../../../__tests__/test-helper';
+import {APP_BRIDGE_URL, REAUTH_URL_HEADER} from '../../../const';
 
 describe('Redirect helper', () => {
   describe("passes request search params to redirect, but doesn't override them", () => {

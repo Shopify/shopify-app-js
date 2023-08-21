@@ -1,4 +1,4 @@
-import type {BasicParams} from '../../types';
+import type {BasicParams} from '../../../types';
 
 export async function beginAuth(
   params: BasicParams,
