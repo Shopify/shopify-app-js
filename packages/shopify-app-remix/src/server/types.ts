@@ -86,6 +86,10 @@ type AuthenticateWebhook<
   WebhookContext<Topics> | WebhookContextWithSession<Topics, Resources>
 >;
 
+interface UnauthenticatedAdmin<Resources extends ShopifyRestResources> {
+  admin: AdminApiContext<Resources>;
+}
+
 type RestResourcesType<Config extends AppConfigArg> =
   Config['restResources'] extends ShopifyRestResources
     ? Config['restResources']
@@ -200,9 +204,6 @@ export interface ShopifyAppBase<Config extends AppConfigArg> {
      *
      * If there is no session for the Request, this will redirect the merchant to correct auth flows.
      *
-     * @param request `Request` The incoming request to authenticate
-     * @returns `Promise<AdminContext<Config, Resources>>` An authenticated admin context
-     *
      * @example
      * Registering webhooks and seeding data when a merchant installs your app.
      * ```ts
@@ -235,9 +236,6 @@ export interface ShopifyAppBase<Config extends AppConfigArg> {
      *
      * An example of when to use this is a request from a checkout extension.
      *
-     * @param request `Request` The incoming request to authenticate
-     * @returns `Promise<PublicContext>` An authenticated public context
-     *
      * @example
      * Authenticating a request from a checkout extension
      *
@@ -258,9 +256,6 @@ export interface ShopifyAppBase<Config extends AppConfigArg> {
 
     /**
      * Authenticate a Shopify webhook request, get back an authenticated admin context and details on the webhook request
-     *
-     * @param request `Request` The incoming request to authenticate
-     * @returns `Promise<PublicContext>` An authenticated public context
      *
      * @example
      * Authenticating a webhook request
@@ -320,10 +315,47 @@ export interface ShopifyAppBase<Config extends AppConfigArg> {
     >;
   };
 
+  /**
+   * Methods for getting Contexts from requests that do not originate from Shopify
+   *
+   */
   unauthenticated: {
+    /**
+     * Get an admin context by passing a shop
+     *
+     * **Warning** This should only be used for Requests that do not originate from Shopify.
+     * You must do your own authentication before using this method.
+     * This method throws an error if there is no session for the shop.
+     *
+     * @example
+     * Responding to a request from an external service not controlled by Shopify.
+     * ```ts
+     * // app/shopify.server.ts
+     * import { LATEST_API_VERSION, shopifyApp } from "@shopify/shopify-app-remix";
+     * import { restResources } from "@shopify/shopify-api/rest/admin/2023-04";
+     *
+     * const shopify = shopifyApp({
+     *   restResources,
+     *   // ...etc
+     * });
+     * export default shopify;
+     *
+     * // app/routes/**\/*.jsx
+     * import { LoaderArgs, json } from "@remix-run/node";
+     * import { authenticateExternal } from "~/helpers/authenticate"
+     * import shopify from "../../shopify.server";
+     *
+     * export async function loader({ request }: LoaderArgs) {
+     *   const shop = await authenticateExternal(request)
+     *   const {admin} = await shopify.unauthenticated.admin(shop);
+     *
+     *   return json(await admin.rest.resources.Product.count({ session }));
+     * }
+     * ```
+     */
     admin: (
       shop: string,
-    ) => Promise<AdminApiContext<RestResourcesType<Config>>>;
+    ) => Promise<UnauthenticatedAdmin<RestResourcesType<Config>>>;
   };
 }
 
