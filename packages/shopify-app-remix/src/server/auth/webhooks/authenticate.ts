@@ -1,6 +1,5 @@
-import {ShopifyRestResources} from '@shopify/shopify-api';
+import {ApiVersion, ShopifyRestResources} from '@shopify/shopify-api';
 
-import {adminClientFactory} from '../../clients/admin';
 import type {BasicParams, MandatoryTopics} from '../../types';
 
 import type {WebhookContext, WebhookContextWithSession} from './types';
@@ -53,13 +52,27 @@ export function authenticateWebhookFactory<
       return webhookContext;
     }
 
+    const restClient = new api.clients.Rest({
+      session,
+      apiVersion: check.apiVersion as ApiVersion,
+    });
+
+    const graphqlClient = new api.clients.Graphql({
+      session,
+      apiVersion: check.apiVersion as ApiVersion,
+    });
+
+    Object.entries(api.rest).forEach(([name, resource]) => {
+      Reflect.set(restClient, name, resource);
+    });
+
     return {
       ...webhookContext,
       session,
-      admin: adminClientFactory<Resources>({
-        params: {api, config, logger},
-        session,
-      }),
+      admin: {
+        rest: restClient as typeof restClient & Resources,
+        graphql: graphqlClient,
+      },
     };
   };
 }
