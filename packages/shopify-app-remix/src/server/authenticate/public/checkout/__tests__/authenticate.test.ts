@@ -1,10 +1,10 @@
-import {shopifyApp} from '../../..';
+import {shopifyApp} from '../../../..';
 import {
   APP_URL,
   getJwt,
   getThrownResponse,
   testConfig,
-} from '../../../__tests__/test-helper';
+} from '../../../../__tests__/test-helper';
 
 describe('JWT validation', () => {
   it('returns token when successful', async () => {
