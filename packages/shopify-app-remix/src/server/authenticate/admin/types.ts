@@ -1,8 +1,9 @@
 import {JwtPayload, Session, ShopifyRestResources} from '@shopify/shopify-api';
 
-import type {AdminApiContext, AppConfigArg} from '../../config-types';
-import type {BillingContext} from './billing/types';
 import {EnsureCORSFunction} from '../helpers/ensure-cors-headers';
+import type {AdminApiContext, AppConfigArg} from '../../config-types';
+
+import type {BillingContext} from './billing/types';
 import {RedirectFunction} from './helpers/redirect';
 
 interface AdminContextInternal<
