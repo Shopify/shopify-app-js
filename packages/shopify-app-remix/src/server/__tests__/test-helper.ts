@@ -13,7 +13,7 @@ import {SessionStorage} from '@shopify/shopify-app-session-storage';
 import {MemorySessionStorage} from '@shopify/shopify-app-session-storage-memory';
 
 import {AppConfigArg} from '../config-types';
-import {APP_BRIDGE_URL} from '../auth/const';
+import {APP_BRIDGE_URL} from '../authenticate/const';
 
 export function testConfig(
   overrides: Partial<AppConfigArg> = {},

@@ -22,13 +22,14 @@ import {
   type AppStoreApp,
 } from './types';
 import {SHOPIFY_REMIX_LIBRARY_VERSION} from './version';
-import {registerWebhooksFactory} from './auth/webhooks';
-import {AuthStrategy} from './auth/admin/authenticate';
-import {authenticateWebhookFactory} from './auth/webhooks/authenticate';
-import {authenticatePublicFactory} from './auth/public/authenticate';
+import {registerWebhooksFactory} from './authenticate/webhooks';
+import {AuthStrategy} from './authenticate/admin/authenticate';
+import {authenticateWebhookFactory} from './authenticate/webhooks/authenticate';
+import {authenticatePublicFactory} from './authenticate/public/authenticate';
 import {overrideLogger} from './override-logger';
-import {addDocumentResponseHeadersFactory} from './auth/helpers';
-import {loginFactory} from './auth/login/login';
+import {addDocumentResponseHeadersFactory} from './authenticate/helpers';
+import {loginFactory} from './authenticate/login/login';
+import {unauthenticatedAdminContextFactory} from './unauthenticated/admin';
 
 /**
  * Creates an object your app will use to interact with Shopify.
@@ -80,6 +81,9 @@ export function shopifyApp<
         Resources,
         keyof Config['webhooks'] | MandatoryTopics
       >(params),
+    },
+    unauthenticated: {
+      admin: unauthenticatedAdminContextFactory(params),
     },
   };
 
