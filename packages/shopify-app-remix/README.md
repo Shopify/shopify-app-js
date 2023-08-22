@@ -45,7 +45,7 @@ Create `app/shopify.server.js`. We will use this file to configure our Shopify a
 
 ```ts
 // app/shopify.server.js
-import '@shopify/shopify-app-remix/adapters/node';
+import '@shopify/shopify-app-remix/server/adapters/node';
 import {LATEST_API_VERSION, shopifyApp} from '@shopify/shopify-app-remix';
 
 const shopify = shopifyApp({
@@ -95,7 +95,7 @@ Now let's create the [splat route](https://remix.run/docs/en/main/guides/routing
 // app/routes/auth/$.tsx
 import {LoaderArgs} from '@remix-run/node';
 
-import shopify from '../../shopify.server';
+import shopify from '~/shopify.server';
 
 export async function loader({request}: LoaderArgs) {
   await shopify.authenticate.admin(request);
@@ -104,13 +104,20 @@ export async function loader({request}: LoaderArgs) {
 }
 ```
 
-Finally if your app is embedded (this is the default) we need to setup [App Bridge](https://shopify.dev/docs/apps/tools/app-bridge) in `root.tsx.`. To do this pass the `process.env.SHOPIFY_API_KEY` to the frontend via the loader and load App Bridge from the CDN in the document head.
+Next, set up the `AppProvider` component in your app's routes. To do this pass the `process.env.SHOPIFY_API_KEY` to the frontend via the loader.
 
 Here is an example:
 
 ```ts
 // root.tsx
-export async function loader() {
+import {LoaderArgs} from '@remix-run/node';
+import {AppProvider} from '@shopify/shopify-app-remix/react';
+
+import shopify from '~/shopify.server';
+
+export async function loader({request}: LoaderArgs) {
+  await shopify.authenticate.admin(request);
+
   return json({
     apiKey: process.env.SHOPIFY_API_KEY,
   });
@@ -124,19 +131,18 @@ export default function App() {
       <head>
         <Meta />
         <Links />
-        {/* App Bridge must be loaded from the CDN at the head */}
-        <script
-          src="https://cdn.shopify.com/shopifycloud/app-bridge.js"
-          data-api-key={apiKey}
-        />
       </head>
-      <body>//</body>
+      <body>
+        <AppProvider apiKey={apiKey} isEmbeddedApp>
+          <Outlet />
+        </AppProvider>
+      </body>
     </html>
   );
 }
 ```
 
-> **Note**: This version of App Bridge must be loaded from the CDN, in the document head.
+This component will set up [Polaris](https://polaris.shopify.com/components/utilities/app-provider) and [App Bridge](https://shopify.dev/tools/app-bridge). If your app is not embedded, set the `isEmbeddedApp` prop to `false`.
 
 Now that your app is ready to respond to requests, it will also need to add the required `Content-Security-Policy` header directives, as per [our documentation](https://shopify.dev/docs/apps/store/security/iframe-protection).
 To do that, this package provides the `shopify.addDocumentResponseHeaders` method.
@@ -154,21 +160,11 @@ export default function handleRequest(
   responseHeaders: Headers,
   remixContext: EntryContext,
 ) {
-  const markup = renderToString(
-    <RemixServer context={remixContext} url={request.url} />,
-  );
-
-  responseHeaders.set('Content-Type', 'text/html');
   shopify.addDocumentResponseHeaders(request, responseHeaders);
 
-  return new Response('<!DOCTYPE html>' + markup, {
-    status: responseStatusCode,
-    headers: responseHeaders,
-  });
+  /// ..etc
 }
 ```
-
-If you don't want to add this to every HTML request, you can call it in individual loaders, but you should only do this if you have a good reason not to include the headers in every HTML request.
 
 ## Setting up for your runtime
 
@@ -179,7 +175,7 @@ Since Node.js doesn't fully implement that API, apps will need to import an extr
 In the [Getting Started](#getting-started) section above, you'll notice that the example runs
 
 ```ts
-import '@shopify/shopify-app-remix/adapters/node';
+import '@shopify/shopify-app-remix/server/adapters/node';
 ```
 
 before calling `shopifyApp`.
