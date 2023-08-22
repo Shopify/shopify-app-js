@@ -21,7 +21,9 @@ export function loginFactory(params: BasicParams) {
       return {shop: LoginErrorType.MissingShop};
     }
 
-    const shopWithoutProtocol = shop.replace(/^https?:\/\//, '');
+    const shopWithoutProtocol = shop
+      .replace(/^https?:\/\//, '')
+      .replace(/\/$/, '');
     const shopWithDomain =
       shop?.indexOf('.') === -1
         ? `${shopWithoutProtocol}.myshopify.com`
