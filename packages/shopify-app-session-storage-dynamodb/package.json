@@ -1,6 +1,6 @@
 {
   "name": "@shopify/shopify-app-session-storage-dynamodb",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "Shopify App Session Storage for DynamoDB",
   "repository": {
     "type": "git",
@@ -38,14 +38,14 @@
   },
   "peerDependencies": {
     "@shopify/shopify-api": "^7.5.2",
-    "@shopify/shopify-app-session-storage": "^1.1.7"
+    "@shopify/shopify-app-session-storage": "^1.1.8"
   },
   "devDependencies": {
     "@shopify/eslint-plugin": "^42.1.0",
     "@shopify/prettier-config": "^1.1.2",
     "@shopify/shopify-api": "^7.5.2",
-    "@shopify/shopify-app-session-storage": "^1.1.7",
-    "@shopify/shopify-app-session-storage-test-utils": "^0.1.7",
+    "@shopify/shopify-app-session-storage": "^1.1.8",
+    "@shopify/shopify-app-session-storage-test-utils": "^0.1.8",
     "eslint": "^8.40.0",
     "eslint-plugin-prettier": "^4.2.1",
     "prettier": "^2.8.8",

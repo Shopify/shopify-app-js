@@ -1,5 +1,14 @@
 # Changelog
 
+## 2.2.2
+
+### Patch Changes
+
+- 346b623: Updating dependency on @shopify/shopify-api
+- Updated dependencies [346b623]
+  - @shopify/shopify-app-session-storage-memory@1.0.11
+  - @shopify/shopify-app-session-storage@1.1.8
+
 ## 2.2.1
 
 ### Patch Changes
