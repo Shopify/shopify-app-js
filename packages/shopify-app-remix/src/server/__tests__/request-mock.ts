@@ -92,6 +92,9 @@ export async function validateMocks() {
     if (request?.headers) {
       expected.headers = {};
       actual.headers = {};
+
+      // eslint-disable-next-line no-warning-comments
+      // TODO: we're currently not checking the headers properly. We should fix this.
       Object.entries(request.headers).forEach(([key, value]) => {
         expected.headers[key] = value;
         actual.headers[key] = (init?.headers as any)[key];
