@@ -50,7 +50,7 @@ export function graphqlClientFactory({
         throw await handleClientError({error, params, session});
       }
 
-      throw new Error(error);
+      throw error;
     }
   };
 }
