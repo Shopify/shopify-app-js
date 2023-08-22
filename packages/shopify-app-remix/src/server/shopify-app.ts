@@ -22,14 +22,14 @@ import {
   type AppStoreApp,
 } from './types';
 import {SHOPIFY_REMIX_LIBRARY_VERSION} from './version';
-import {registerWebhooksFactory} from './auth/webhooks';
-import {AuthStrategy} from './auth/admin/authenticate';
-import {authenticateWebhookFactory} from './auth/webhooks/authenticate';
-import {authenticatePublicFactory} from './auth/public/authenticate';
+import {registerWebhooksFactory} from './authenticate/webhooks';
+import {AuthStrategy} from './authenticate/admin/authenticate';
+import {authenticateWebhookFactory} from './authenticate/webhooks/authenticate';
+import {authenticatePublicFactory} from './authenticate/public/authenticate';
 import {overrideLogger} from './override-logger';
-import {addDocumentResponseHeadersFactory} from './auth/helpers';
-import {loginFactory} from './auth/login/login';
-import {adminClientFactory} from './clients/admin';
+import {addDocumentResponseHeadersFactory} from './authenticate/helpers';
+import {loginFactory} from './authenticate/login/login';
+import {unauthenticatedAdminContextFactory} from './unauthenticated/admin';
 
 /**
  * Creates an object your app will use to interact with Shopify.
@@ -95,27 +95,6 @@ export function shopifyApp<
   }
 
   return shopify as ShopifyApp<Config>;
-}
-
-function unauthenticatedAdminContextFactory<
-  Resources extends ShopifyRestResources,
->(params: BasicParams) {
-  return async (shop: string) => {
-    const offlineSessionId = params.api.session.getOfflineId(shop);
-    const session = await params.config.sessionStorage.loadSession(
-      offlineSessionId,
-    );
-
-    if (!session) {
-      throw new ShopifyError(
-        `Could not find a session for shop ${shop} when creating unauthenticated admin context`,
-      );
-    }
-
-    return {
-      admin: adminClientFactory<Resources>({params, session}),
-    };
-  };
 }
 
 function isAppStoreApp<Config extends AppConfigArg>(

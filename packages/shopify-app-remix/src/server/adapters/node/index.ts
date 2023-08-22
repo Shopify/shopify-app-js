@@ -5,7 +5,7 @@ import {
   setCrypto,
 } from '@shopify/shopify-api/runtime';
 
-import {setAppBridgeUrlOverride} from '../../auth/helpers';
+import {setAppBridgeUrlOverride} from '../../authenticate/helpers';
 
 setCrypto(crypto as any);
 

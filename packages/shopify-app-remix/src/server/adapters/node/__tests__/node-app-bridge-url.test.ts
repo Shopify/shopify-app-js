@@ -1,5 +1,5 @@
-import {appBridgeUrl} from '../../../auth/helpers/app-bridge-url';
-import {APP_BRIDGE_URL} from '../../../auth/const';
+import {APP_BRIDGE_URL} from '../../../authenticate/const';
+import {appBridgeUrl} from '../../../authenticate/helpers';
 
 describe('node setup import', () => {
   /* eslint-disable no-process-env */
