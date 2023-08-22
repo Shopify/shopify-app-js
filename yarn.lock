@@ -3054,23 +3054,10 @@
   resolved "https://registry.yarnpkg.com/@shopify/prettier-config/-/prettier-config-1.1.2.tgz#612f87c0cd1196e8b43c85425e587d0fa7f1172d"
   integrity sha512-5ugCL9sPGzmOaZjeRGaWUWhHgAbemrS6z+R7v6gwiD+BiqSeoFhIY+imLpfdFCVpuOGalpHeCv6o3gv++EHs0A==
 
-"@shopify/shopify-api@^7.5.1":
-  version "7.5.1"
-  resolved "https://registry.yarnpkg.com/@shopify/shopify-api/-/shopify-api-7.5.1.tgz#d3c69c0b68082885bcb3ffe4a5d9cbdfb3687e46"
-  integrity sha512-zydzwkDPIyXiDcfFCW/R14m36mQkpAP4GthenrEHdx0B/yyfmfCnB6sB4KjWwtd+Y+gojx+PE/lTPCPdPCd2Kg==
-  dependencies:
-    "@shopify/network" "^3.2.1"
-    compare-versions "^5.0.3"
-    isbot "^3.6.10"
-    jose "^4.9.1"
-    node-fetch "^2.6.1"
-    tslib "^2.0.3"
-    uuid "^9.0.0"
-
-"@shopify/shopify-api@^7.5.1":
-  version "7.5.1"
-  resolved "https://registry.yarnpkg.com/@shopify/shopify-api/-/shopify-api-7.5.1.tgz#d3c69c0b68082885bcb3ffe4a5d9cbdfb3687e46"
-  integrity sha512-zydzwkDPIyXiDcfFCW/R14m36mQkpAP4GthenrEHdx0B/yyfmfCnB6sB4KjWwtd+Y+gojx+PE/lTPCPdPCd2Kg==
+"@shopify/shopify-api@^7.5.2":
+  version "7.5.2"
+  resolved "https://registry.yarnpkg.com/@shopify/shopify-api/-/shopify-api-7.5.2.tgz#3e6fff8242ed652fdeeb9fcc012ea10665b290f4"
+  integrity sha512-1aeO3r0duz8LSj4qPlBvShIX+k4MGIyBmdGSUKFyUbfWOm5krW0Ux6dXuIF3aeSWpKKfIQoaq8b9Az1t2GlgkA==
   dependencies:
     "@shopify/network" "^3.2.1"
     compare-versions "^5.0.3"
