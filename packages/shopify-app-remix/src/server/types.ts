@@ -5,7 +5,7 @@ import {
 } from '@shopify/shopify-api';
 import {SessionStorage} from '@shopify/shopify-app-session-storage';
 
-import type {AdminApiContext, AppConfig, AppConfigArg} from './config-types';
+import type {AppConfig, AppConfigArg} from './config-types';
 import type {AdminContext} from './authenticate/admin/types';
 import type {
   AuthenticatePublicOptions,
@@ -16,6 +16,7 @@ import type {
   WebhookContext,
   WebhookContextWithSession,
 } from './authenticate/webhooks/types';
+import type {UnauthenticatedAdminContext} from './unauthenticated/admin/types';
 
 export interface BasicParams {
   api: Shopify;
@@ -86,9 +87,9 @@ type AuthenticateWebhook<
   WebhookContext<Topics> | WebhookContextWithSession<Topics, Resources>
 >;
 
-interface UnauthenticatedAdmin<Resources extends ShopifyRestResources> {
-  admin: AdminApiContext<Resources>;
-}
+type UnauthenticatedAdmin<Resources extends ShopifyRestResources> = (
+  shop: string,
+) => Promise<UnauthenticatedAdminContext<Resources>>;
 
 type RestResourcesType<Config extends AppConfigArg> =
   Config['restResources'] extends ShopifyRestResources
@@ -353,9 +354,7 @@ export interface ShopifyAppBase<Config extends AppConfigArg> {
      * }
      * ```
      */
-    admin: (
-      shop: string,
-    ) => Promise<UnauthenticatedAdmin<RestResourcesType<Config>>>;
+    admin: UnauthenticatedAdmin<RestResourcesType<Config>>;
   };
 }
 

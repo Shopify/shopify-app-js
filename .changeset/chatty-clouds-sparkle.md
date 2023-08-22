@@ -26,7 +26,7 @@ import shopify from '../../shopify.server';
 
 export async function loader({request}) {
   const shop = await authenticateExternalRequest(request);
-  const {admin} = await shopify.unauthenticated.admin(shop);
+  const {admin, session} = await shopify.unauthenticated.admin(shop);
 
   return json(await admin.rest.resources.Product.count({session}));
 }
