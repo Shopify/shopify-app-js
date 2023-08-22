@@ -113,4 +113,26 @@ describe('login helper', () => {
       );
     },
   );
+
+  it('sanitizes the shop parameter', async () => {
+    // GIVEN
+    const shopify = shopifyApp(testConfig());
+    const requestMock = {
+      url: `${APP_URL}/auth/login`,
+      formData: async () => ({get: () => `https://${TEST_SHOP}/`}),
+      method: 'POST',
+    };
+
+    // WHEN
+    const response = await getThrownResponse(
+      shopify.login,
+      requestMock as any as Request,
+    );
+
+    // THEN
+    expect(response.status).toEqual(302);
+    expect(response.headers.get('location')).toEqual(
+      `${APP_URL}/auth?shop=${TEST_SHOP}`,
+    );
+  });
 });
