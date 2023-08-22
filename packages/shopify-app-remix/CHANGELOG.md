@@ -4,6 +4,11 @@
 
 ### Minor Changes
 
+- 370fc5e: - Internally rearranged source files to create a better separation between backend and frontend code, so we can add frontend-specific exports.
+
+  - A new export path `@shopify/shopify-app-remix/react` will now contain those frontend exports.
+  - The existing server code will be moved to `@shopify/shopify-app-remix/server`, but the root import will still work until the next major release in the future.
+
 - 7bc32b1: Added a way to get an admin context without authenticating.
 
   **Warning** This should only be used for Requests that do not originate from Shopify.
@@ -34,9 +39,6 @@
   }
   ```
 
-- 370fc5e: - Internally rearranged source files to create a better separation between backend and frontend code, so we can add frontend-specific exports.
-  - A new export path `@shopify/shopify-app-remix/react` will now contain those frontend exports.
-  - The existing server code will be moved to `@shopify/shopify-app-remix/server`, but the root import will still work until the next major release in the future.
 - 191241b: Adding a new `redirect` helper to the `EmbeddedAdminContext` type, which will be able to redirect to the given URL regardless of where an embedded app request is being served.
 
   You can also use it to redirect to an external page out of the Shopify Admin by using the `target` option.
@@ -49,9 +51,6 @@
   };
   ```
 
-### Patch Changes
-
-- 346b623: Updating dependency on @shopify/shopify-api
 - f5f1f83: Adding `AppProvider` component to abstract Shopify-specific app setup on the frontend side.
   This makes it easier for apps to set up the components it needs to work with Shopify.
 
@@ -113,6 +112,9 @@
   }
   ```
 
+### Patch Changes
+
+- 346b623: Updating dependency on @shopify/shopify-api
 - 14e8019: Enable `authenticate.public` to handle post-purchase extension requests by supporting extra CORS headers and fixing session token verification.
 - Updated dependencies [346b623]
   - @shopify/shopify-app-session-storage@1.1.8
