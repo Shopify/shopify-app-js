@@ -14,6 +14,9 @@
   **Warning** This should only be used for Requests that do not originate from Shopify.
   You must do your own authentication before using this method.
 
+  <details>
+    <summary>See an example</summary>
+
   ```ts
   // app/shopify.server.ts
   import {shopifyApp} from '@shopify/shopify-app-remix';
@@ -39,9 +42,14 @@
   }
   ```
 
+  </details>
+
 - 191241b: Adding a new `redirect` helper to the `EmbeddedAdminContext` type, which will be able to redirect to the given URL regardless of where an embedded app request is being served.
 
   You can also use it to redirect to an external page out of the Shopify Admin by using the `target` option.
+
+  <details>
+    <summary>See an example</summary>
 
   ```ts
   export const loader = async ({request}) => {
@@ -51,8 +59,13 @@
   };
   ```
 
+  </details>
+
 - f5f1f83: Adding `AppProvider` component to abstract Shopify-specific app setup on the frontend side.
   This makes it easier for apps to set up the components it needs to work with Shopify.
+
+  <details>
+    <summary>See an example</summary>
 
   To make use of this in the Remix app template, you can update your `app/routes/app.jsx` file's `App` component from
 
@@ -111,6 +124,8 @@
     );
   }
   ```
+
+  </details>
 
 ### Patch Changes
 
