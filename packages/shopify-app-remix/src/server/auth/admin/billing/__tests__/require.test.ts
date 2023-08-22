@@ -5,7 +5,7 @@ import {
   Shopify,
 } from '@shopify/shopify-api';
 
-import {shopifyApp} from '../..';
+import {shopifyApp} from '../../../..';
 import {
   APP_URL,
   BASE64_HOST,
@@ -18,9 +18,9 @@ import {
   setUpValidSession,
   signRequestCookie,
   testConfig,
-} from '../../__tests__/test-helper';
-import {mockExternalRequest} from '../../__tests__/request-mock';
-import {REAUTH_URL_HEADER} from '../../auth/const';
+} from '../../../../__tests__/test-helper';
+import {mockExternalRequest} from '../../../../__tests__/request-mock';
+import {REAUTH_URL_HEADER} from '../../../const';
 
 import * as responses from './mock-responses';
 
