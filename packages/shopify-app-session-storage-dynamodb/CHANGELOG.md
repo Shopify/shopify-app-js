@@ -1,5 +1,13 @@
 # @shopify/shopify-app-session-storage-dynamodb
 
+## 1.0.6
+
+### Patch Changes
+
+- 346b623: Updating dependency on @shopify/shopify-api
+- Updated dependencies [346b623]
+  - @shopify/shopify-app-session-storage@1.1.8
+
 ## 1.0.5
 
 ### Patch Changes
