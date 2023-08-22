@@ -1,19 +1,19 @@
-import type {BasicParams} from '../../types';
+import type {BasicParams} from '../../../types';
 import {
   ensureCORSHeadersFactory,
   getSessionTokenHeader,
   rejectBotRequest,
   respondToOptionsRequest,
   validateSessionToken,
-} from '../helpers';
+} from '../../helpers';
 
-import type {AuthenticatePublicOptions, PublicContext} from './types';
+import type {AuthenticateCheckoutOptions, CheckoutContext} from './types';
 
-export function authenticatePublicFactory(params: BasicParams) {
-  return async function authenticatePublic(
+export function authenticateCheckoutFactory(params: BasicParams) {
+  return async function authenticateCheckout(
     request: Request,
-    options: AuthenticatePublicOptions = {},
-  ): Promise<PublicContext> {
+    options: AuthenticateCheckoutOptions = {},
+  ): Promise<CheckoutContext> {
     const {logger} = params;
 
     const corsHeaders = options.corsHeaders ?? [];
@@ -23,7 +23,7 @@ export function authenticatePublicFactory(params: BasicParams) {
 
     const sessionTokenHeader = getSessionTokenHeader(request);
 
-    logger.info('Authenticating public request');
+    logger.info('Authenticating checkout request');
 
     if (!sessionTokenHeader) {
       logger.debug('Request did not contain a session token');
