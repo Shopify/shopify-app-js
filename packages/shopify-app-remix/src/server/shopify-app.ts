@@ -25,7 +25,7 @@ import {SHOPIFY_REMIX_LIBRARY_VERSION} from './version';
 import {registerWebhooksFactory} from './authenticate/webhooks';
 import {AuthStrategy} from './authenticate/admin/authenticate';
 import {authenticateWebhookFactory} from './authenticate/webhooks/authenticate';
-import {authenticatePublicFactory} from './authenticate/public/authenticate';
+import {authenticateCheckoutFactory} from './authenticate/public/checkout/authenticate';
 import {overrideLogger} from './override-logger';
 import {addDocumentResponseHeadersFactory} from './authenticate/helpers';
 import {loginFactory} from './authenticate/login/login';
@@ -76,7 +76,7 @@ export function shopifyApp<
     registerWebhooks: registerWebhooksFactory(params),
     authenticate: {
       admin: oauth.authenticateAdmin.bind(oauth),
-      public: authenticatePublicFactory(params),
+      public: authenticateCheckoutFactory(params),
       webhook: authenticateWebhookFactory<
         Resources,
         keyof Config['webhooks'] | MandatoryTopics

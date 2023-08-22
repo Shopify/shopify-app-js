@@ -1,15 +1,15 @@
 import {JwtPayload} from '@shopify/shopify-api';
 
-import {EnsureCORSFunction} from '../helpers/ensure-cors-headers';
+import {EnsureCORSFunction} from '../../helpers/ensure-cors-headers';
 
-export interface AuthenticatePublicOptions {
+export interface AuthenticateCheckoutOptions {
   corsHeaders?: string[];
 }
 
 /**
- * Authenticated Context for a public request
+ * Authenticated Context for a checkout request
  */
-export interface PublicContext {
+export interface CheckoutContext {
   /**
    * The decoded and validated session token for the request
    *

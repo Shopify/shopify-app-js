@@ -8,9 +8,9 @@ import {SessionStorage} from '@shopify/shopify-app-session-storage';
 import type {AppConfig, AppConfigArg} from './config-types';
 import type {AdminContext} from './authenticate/admin/types';
 import type {
-  AuthenticatePublicOptions,
-  PublicContext,
-} from './authenticate/public/types';
+  AuthenticateCheckoutOptions,
+  CheckoutContext,
+} from './authenticate/public/checkout/types';
 import type {
   RegisterWebhooksOptions,
   WebhookContext,
@@ -75,8 +75,8 @@ type AuthenticateAdmin<
 
 type AuthenticatePublic = (
   request: Request,
-  options?: AuthenticatePublicOptions,
-) => Promise<PublicContext>;
+  options?: AuthenticateCheckoutOptions,
+) => Promise<CheckoutContext>;
 
 type AuthenticateWebhook<
   Resources extends ShopifyRestResources = ShopifyRestResources,
