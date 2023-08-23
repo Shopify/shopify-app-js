@@ -8,15 +8,12 @@ import {SessionStorage} from '@shopify/shopify-app-session-storage';
 import type {AppConfig, AppConfigArg} from './config-types';
 import type {AdminContext} from './authenticate/admin/types';
 import type {
-  AuthenticateCheckoutOptions,
-  CheckoutContext,
-} from './authenticate/public/checkout/types';
-import type {
   RegisterWebhooksOptions,
   WebhookContext,
   WebhookContextWithSession,
 } from './authenticate/webhooks/types';
 import type {UnauthenticatedAdminContext} from './unauthenticated/admin/types';
+import type {AuthenticatePublic} from './authenticate/public/types';
 
 export interface BasicParams {
   api: Shopify;
@@ -72,11 +69,6 @@ type AuthenticateAdmin<
   Config extends AppConfigArg,
   Resources extends ShopifyRestResources = ShopifyRestResources,
 > = (request: Request) => Promise<AdminContext<Config, Resources>>;
-
-type AuthenticatePublic = (
-  request: Request,
-  options?: AuthenticateCheckoutOptions,
-) => Promise<CheckoutContext>;
 
 type AuthenticateWebhook<
   Resources extends ShopifyRestResources = ShopifyRestResources,
@@ -253,7 +245,7 @@ export interface ShopifyAppBase<Config extends AppConfigArg> {
      * }
      * ```
      */
-    public: AuthenticatePublic;
+    public: AuthenticatePublic<RestResourcesType<Config>>;
 
     /**
      * Authenticate a Shopify webhook request, get back an authenticated admin context and details on the webhook request
