@@ -2,6 +2,11 @@ import {JwtPayload} from '@shopify/shopify-api';
 
 import {EnsureCORSFunction} from '../../helpers/ensure-cors-headers';
 
+export type AuthenticateCheckout = (
+  request: Request,
+  options: AuthenticateCheckoutOptions,
+) => Promise<CheckoutContext>;
+
 export interface AuthenticateCheckoutOptions {
   corsHeaders?: string[];
 }
