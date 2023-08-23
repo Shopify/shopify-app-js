@@ -7,12 +7,14 @@ import {
   validateSessionToken,
 } from '../../helpers';
 
-import type {AuthenticateCheckoutOptions, CheckoutContext} from './types';
+import type {AuthenticateCheckout, CheckoutContext} from './types';
 
-export function authenticateCheckoutFactory(params: BasicParams) {
+export function authenticateCheckoutFactory(
+  params: BasicParams,
+): AuthenticateCheckout {
   return async function authenticateCheckout(
-    request: Request,
-    options: AuthenticateCheckoutOptions = {},
+    request,
+    options = {},
   ): Promise<CheckoutContext> {
     const {logger} = params;
 
