@@ -4,7 +4,7 @@ import {BasicParams} from '../../types';
 
 import {authenticateCheckoutFactory} from './checkout/authenticate';
 import {AuthenticateCheckoutOptions} from './checkout/types';
-import {authenticateStorefrontAppProxyFactory} from './storefontAppProxy/authenticate';
+import {authenticateAppProxyFactory} from './appProxy/authenticate';
 import {AuthenticatePublic} from './types';
 
 export function authenticatePublicFactory<
@@ -26,8 +26,7 @@ export function authenticatePublicFactory<
   };
 
   authenticatePublic.checkout = authenticateCheckout;
-  authenticatePublic.storefrontAppProxy =
-    authenticateStorefrontAppProxyFactory<Resources>(params);
+  authenticatePublic.appProxy = authenticateAppProxyFactory<Resources>(params);
 
   return authenticatePublic;
 }

@@ -1,15 +1,12 @@
 import {Session, ShopifyRestResources} from '@shopify/shopify-api';
 
 import {AdminApiContext} from '../../../config-types';
-import {EnsureCORSFunction} from '../../helpers';
 
-export type AuthenticateStorefrontAppProxy<
-  Resources extends ShopifyRestResources,
-> = (request: Request) => Promise<StorefrontAppProxyContext<Resources>>;
+export type AuthenticateAppProxy<Resources extends ShopifyRestResources> = (
+  request: Request,
+) => Promise<AppProxyContext<Resources>>;
 
-export interface StorefrontAppProxyContext<
-  Resources extends ShopifyRestResources,
-> {
+export interface AppProxyContext<Resources extends ShopifyRestResources> {
   /**
    * Methods for interacting with the Shopify GraphQL / REST Admin APIs for the store that made the request
    */
@@ -61,27 +58,4 @@ export interface StorefrontAppProxyContext<
    * ```
    */
   session: Session;
-
-  /**
-   * A function that ensures the CORS headers are set correctly for the response
-   *
-   * @example
-   * Setting CORS headers for a public request
-   * ```ts
-   * // app/routes/public/widgets.ts
-   * import { LoaderArgs, json } from "@remix-run/node";
-   * import { authenticate } from "../shopify.server";
-   * import { getWidgets } from "~/db/widgets.server";
-   *
-   * export const loader = async ({ request }: LoaderArgs) => {
-   *   const { sessionToken, cors } = await authenticate.public(
-   *     request,
-   *     { corsHeaders: ["X-My-Custom-Header"] }
-   *   );
-   *   const widgets = await getWidgets({shop: sessionToken.dest});
-   *   return cors(json(widgets));
-   * };
-   * ```
-   */
-  cors: EnsureCORSFunction;
 }
