@@ -6,7 +6,7 @@ import {
   expectDocumentRequestHeaders,
   getThrownResponse,
   testConfig,
-} from '../../../__tests__/test-helper';
+} from '../../../__test-helpers';
 
 describe('authorize.admin path session token path', () => {
   test('Uses AppBridge to get a session token if the URL is for auth.patchSessionTokenPath', async () => {

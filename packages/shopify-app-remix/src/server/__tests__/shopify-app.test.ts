@@ -11,8 +11,7 @@ import {
   ApiVersion,
 } from '../index';
 import {AppConfigArg} from '../config-types';
-
-import {testConfig} from './test-helper';
+import {testConfig} from '../__test-helpers';
 
 describe('shopifyApp', () => {
   /* eslint-disable no-process-env */

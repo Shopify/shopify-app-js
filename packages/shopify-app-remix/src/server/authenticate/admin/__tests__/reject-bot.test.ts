@@ -1,9 +1,5 @@
 import {shopifyApp} from '../../..';
-import {
-  APP_URL,
-  getThrownResponse,
-  testConfig,
-} from '../../../__tests__/test-helper';
+import {APP_URL, getThrownResponse, testConfig} from '../../../__test-helpers';
 
 describe('authorize.admin', () => {
   test('rejects bot requests', async () => {

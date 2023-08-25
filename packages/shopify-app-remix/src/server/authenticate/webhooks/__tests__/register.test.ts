@@ -5,8 +5,8 @@ import {
   GRAPHQL_URL,
   TEST_SHOP,
   testConfig,
-} from '../../../__tests__/test-helper';
-import {mockExternalRequests} from '../../../__tests__/request-mock';
+  mockExternalRequests,
+} from '../../../__test-helpers';
 
 import * as mockResponses from './mock-responses';
 

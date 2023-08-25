@@ -17,8 +17,8 @@ import {
   setUpValidSession,
   signRequestCookie,
   testConfig,
-} from '../../../__tests__/test-helper';
-import {mockExternalRequest} from '../../../__tests__/request-mock';
+  mockExternalRequest,
+} from '../../../__test-helpers';
 import {shopifyApp} from '../../..';
 import {AdminApiContext} from '../../../config-types';
 import {REAUTH_URL_HEADER} from '../../const';
