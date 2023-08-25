@@ -2,6 +2,7 @@ import '@shopify/shopify-api/adapters/web-api';
 import '../adapters/node';
 
 export * from './const';
+export * from './expect-admin-api-client';
 export * from './expect-begin-auth-redirect';
 export * from './expect-document-request-headers';
 export * from './expect-exit-iframe';
