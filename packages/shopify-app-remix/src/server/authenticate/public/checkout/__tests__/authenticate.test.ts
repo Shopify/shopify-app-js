@@ -4,7 +4,7 @@ import {
   getJwt,
   getThrownResponse,
   testConfig,
-} from '../../../../__tests__/test-helper';
+} from '../../../../__test-helpers';
 
 describe('JWT validation', () => {
   it('returns token when successful', async () => {

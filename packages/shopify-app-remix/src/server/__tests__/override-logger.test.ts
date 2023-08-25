@@ -1,3 +1,6 @@
+import '@shopify/shopify-api/adapters/web-api';
+import '../adapters/node';
+
 import {
   ConfigParams,
   LATEST_API_VERSION,
@@ -7,8 +10,6 @@ import {
 
 import {overrideLogger} from '../override-logger';
 import {SHOPIFY_REMIX_LIBRARY_VERSION} from '../version';
-
-import './test-helper';
 
 const LOG_FN = jest.fn();
 const VALID_API_CONFIG: ConfigParams = {
@@ -26,7 +27,7 @@ describe('override logger', () => {
     jest.resetAllMocks();
   });
 
-  it('overrides the pacakge name in log messages', () => {
+  it('overrides the package name in log messages', () => {
     // GIVEN
     const logger = overrideLogger(shopifyApi(VALID_API_CONFIG).logger);
 

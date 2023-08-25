@@ -1,12 +1,12 @@
 import {LATEST_API_VERSION} from '@shopify/shopify-api';
 
 import {shopifyApp} from '../../../index';
-import {mockExternalRequest} from '../../../__tests__/request-mock';
 import {
   TEST_SHOP,
   setUpValidSession,
   testConfig,
-} from '../../../__tests__/test-helper';
+  mockExternalRequest,
+} from '../../../__test-helpers';
 
 const REQUEST_URL = `https://${TEST_SHOP}/admin/api/${LATEST_API_VERSION}/customers.json`;
 
