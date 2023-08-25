@@ -16,17 +16,24 @@ export function authenticateAppProxyFactory<
     logger.info('Authenticating app proxy request');
 
     const {searchParams} = new URL(request.url);
+    const query = Object.fromEntries(searchParams.entries());
+    let isValid = false;
 
     try {
-      const isValid = await api.utils.validateHmac(
-        Object.fromEntries(searchParams.entries()),
-      );
+      isValid = await api.utils.validateHmac(query, {
+        signator: 'appProxy',
+      });
+    } catch (error) {
+      logger.info(error.message);
+      throw new Response(undefined, {status: 400, statusText: 'Bad Request'});
+    }
 
-      if (!isValid) {
-        throw badRequestResponse();
-      }
-    } catch {
-      throw badRequestResponse();
+    if (!isValid) {
+      logger.info('App proxy request has invalid signature');
+      throw new Response(undefined, {
+        status: 400,
+        statusText: 'Bad Request',
+      });
     }
 
     const shop = searchParams.get('shop')!;
@@ -34,7 +41,8 @@ export function authenticateAppProxyFactory<
     const session = await config.sessionStorage.loadSession(sessionId);
 
     if (!session) {
-      throw badRequestResponse();
+      logger.info('App proxy request could not load session for shop', {shop});
+      throw new Response(undefined, {status: 400, statusText: 'Bad Request'});
     }
 
     return {
@@ -43,6 +51,3 @@ export function authenticateAppProxyFactory<
     };
   };
 }
-
-const badRequestResponse = () =>
-  new Response(undefined, {status: 400, statusText: 'Bad Request'});
