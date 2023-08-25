@@ -11,7 +11,7 @@ import {
   setUpValidSession,
   signRequestCookie,
   testConfig,
-} from '../../../../__tests__/test-helper';
+} from '../../../../__test-helpers';
 import {APP_BRIDGE_URL, REAUTH_URL_HEADER} from '../../../const';
 
 describe('Redirect helper', () => {

@@ -16,8 +16,8 @@ import {
   testConfig,
   signRequestCookie,
   expectLoginRedirect,
-} from '../../../__tests__/test-helper';
-import {mockExternalRequest} from '../../../__tests__/request-mock';
+  mockExternalRequest,
+} from '../../../__test-helpers';
 
 describe('authorize.admin doc request path', () => {
   describe('errors', () => {

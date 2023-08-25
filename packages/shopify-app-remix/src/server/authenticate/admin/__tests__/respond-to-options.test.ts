@@ -1,9 +1,5 @@
 import {shopifyApp} from '../../..';
-import {
-  APP_URL,
-  getThrownResponse,
-  testConfig,
-} from '../../../__tests__/test-helper';
+import {APP_URL, getThrownResponse, testConfig} from '../../../__test-helpers';
 import {REAUTH_URL_HEADER} from '../../const';
 
 describe('authorize.admin', () => {

@@ -19,11 +19,9 @@ import {
   setUpValidSession,
   signRequestCookie,
   testConfig,
-} from '../../../../__tests__/test-helper';
-import {
   mockExternalRequest,
   mockExternalRequests,
-} from '../../../../__tests__/request-mock';
+} from '../../../../__test-helpers';
 import {REAUTH_URL_HEADER} from '../../../const';
 
 import * as responses from './mock-responses';
