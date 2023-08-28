@@ -16,7 +16,7 @@ export interface PublicContext {
    * The payload of the Session Token is described here: {@link https://shopify.dev/docs/apps/auth/oauth/session-tokens#payload}
    *
    * @example
-   * Getting your app's store specific widget data using the session token
+   * <caption>Getting your app's store specific widget data using the session token</caption>
    * ```ts
    * // app/routes/public/widgets.ts
    * import { LoaderArgs, json } from "@remix-run/node";
@@ -37,7 +37,7 @@ export interface PublicContext {
    * A function that ensures the CORS headers are set correctly for the response
    *
    * @example
-   * Setting CORS headers for a public request
+   * <caption>Setting CORS headers for a public request</caption>
    * ```ts
    * // app/routes/public/widgets.ts
    * import { LoaderArgs, json } from "@remix-run/node";

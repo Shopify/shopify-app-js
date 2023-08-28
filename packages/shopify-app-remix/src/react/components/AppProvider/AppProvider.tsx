@@ -1,4 +1,3 @@
-import React from 'react';
 import {
   AppProvider as PolarisAppProvider,
   AppProviderProps as PolarisAppProviderProps,
@@ -10,13 +9,17 @@ import {RemixPolarisLink} from '../RemixPolarisLink';
 
 export interface AppProviderProps
   extends Omit<PolarisAppProviderProps, 'linkComponent' | 'i18n'> {
-  children: React.ReactNode;
   /**
-   * The API key for your Shopify app.
+   * The API key for your Shopify app. This is the `Client ID` from the Partner Dashboard.
+   *
+   * When using the Shopify CLI, this is the `SHOPIFY_API_KEY` environment variable. If you're using the environment
+   * variable, you need to pass it from the loader to the component.
    */
   apiKey: string;
   /**
-   * Whether the app is embedded or not. Defaults to `true`.
+   * Whether the app will be loaded inside the Shopify Admin. Defaults to `true`.
+   *
+   * {@link https://shopify.dev/docs/apps/admin/embedded-app-home}
    */
   isEmbeddedApp?: boolean;
   /**
@@ -35,11 +38,15 @@ export interface AppProviderProps
 /**
  * Sets up the Polaris AppProvider and injects the App Bridge script.
  *
+ * This component extends the [`AppProvider`](https://polaris.shopify.com/components/utilities/app-provider) component
+ * from Polaris, and accepts all of its props except for `linkComponent`, which is overridden to use the Remix `Link`
+ * component.
+ *
  * {@link https://polaris.shopify.com/components/utilities/app-provider}
  * {@link https://shopify.dev/tools/app-bridge}
  *
  * @example
- * Wrap your app in the `AppProvider` component and pass in your API key.
+ * <caption>Wrap your app in the `AppProvider` component and pass in your API key.</caption>
  * ```ts
  * import {authenticate} from '~/shopify.server';
  * import {AppProvider} from '@shopify/shopify-app-remix/react';
@@ -54,7 +61,33 @@ export interface AppProviderProps
  *   const { apiKey } = useLoaderData();
  *
  *   return (
- *     <AppProvider apiKey={apiKey}>
+ *     <AppProvider isEmbeddedApp apiKey={apiKey}>
+ *       <Outlet />
+ *     </AppProvider>
+ *   );
+ * }
+ * ```
+ *
+ * @example
+ * <caption>Load a different locale for Polaris.</caption>
+ * ```ts
+ * import {authenticate} from '~/shopify.server';
+ * import {AppProvider} from '@shopify/shopify-app-remix/react';
+ *
+ * export async function loader({ request }) {
+ *   await authenticate.admin(request);
+ *
+ *   return json({
+ *     apiKey: process.env.SHOPIFY_API_KEY,
+ *     polarisTranslations: require("@shopify/polaris/locales/fr.json"),
+ *   });
+ * }
+ *
+ * export default function App() {
+ *   const { apiKey, polarisTranslations } = useLoaderData();
+ *
+ *   return (
+ *     <AppProvider apiKey={apiKey} i18n={polarisTranslations}>
  *       <Outlet />
  *     </AppProvider>
  *   );
