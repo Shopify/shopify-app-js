@@ -36,7 +36,7 @@ export interface AppConfigArg<
    * Shopify provides multiple session storage adaptors and you can create your own. {@link https://github.com/Shopify/shopify-app-js/blob/main/README.md#session-storage-options}
    *
    * @example
-   * Using Prisma
+   * <caption>Using Prisma</caption>
    * ```ts
    * import { shopifyApp } from "@shopify/shopify-app-remix";
    * import { PrismaSessionStorage } from "@shopify/shopify-app-session-storage-prisma";
@@ -71,7 +71,7 @@ export interface AppConfigArg<
    * This can be in used in conjunction with the afterAuth hook to register webhook topics when a user installs your app.  Or you can use this function in other processes such as background jobs.
    *
    * @example
-   * Registering for a webhook when a merchant uninstalls your app.
+   * <caption>Registering for a webhook when a merchant uninstalls your app.</caption>
    * ```ts
    * // app/shopify.server.ts
    * import { DeliveryMethod, shopifyApp } from "@shopify/shopify-app-remix";
@@ -124,7 +124,7 @@ export interface AppConfigArg<
    * These functions are called in the context of the request that triggered them.  This means you can access the session.
    *
    * @example
-   * Seeding your database custom data when a merchant installs your app.
+   * <caption>Seeding your database custom data when a merchant installs your app.</caption>
    * ```ts
    * import { DeliveryMethod, shopifyApp } from "@shopify/shopify-app-remix";
    * import { seedStoreData } from "~/db/seeds"
@@ -165,7 +165,7 @@ export interface AppConfigArg<
    * @defaultValue `LATEST_API_VERSION` from `@shopify/shopify-app-remix`
    *
    * @example
-   * Using the latest API Version (Recommended)
+   * <caption>Using the latest API Version (Recommended)</caption>
    * ```ts
    * import { LATEST_API_VERSION, shopifyApp } from "@shopify/shopify-app-remix";
    *
@@ -185,7 +185,7 @@ export interface AppConfigArg<
    * @default `"/auth"`
    *
    * @example
-   * Using the latest API Version (Recommended)
+   * <caption>Using the latest API Version (Recommended)</caption>
    * ```ts
    * // app/shopify.server.ts
    * import { LATEST_API_VERSION, shopifyApp } from "@shopify/shopify-app-remix";
@@ -242,7 +242,7 @@ interface HooksConfig {
    * @param context.admin - An object with access to the Shopify Admin API's.
    *
    * @example
-   * Registering webhooks and seeding data when a merchant installs your app.
+   * <caption>Registering webhooks and seeding data when a merchant installs your app.</caption>
    * ```ts
    * import { DeliveryMethod, shopifyApp } from "@shopify/shopify-app-remix";
    * import { seedStoreData } from "~/db/seeds"
@@ -285,7 +285,8 @@ export interface AdminApiContext<
    * {@link https://shopify.dev/docs/api/admin-rest}
    *
    * @example
-   * Getting the number of orders in a store using rest resources
+   * <caption>Getting the number of orders in a store using rest resources</caption>
+   *
    * ```ts
    * // app/shopify.server.ts
    * import { shopifyApp } from "@shopify/shopify-app-remix";
@@ -297,7 +298,9 @@ export interface AdminApiContext<
    * });
    * export default shopify;
    * export const authenticate = shopify.authenticate;
+   * ```
    *
+   * ```ts
    * // app/routes/**\/.ts
    * import { LoaderArgs, json } from "@remix-run/node";
    * import { authenticate } from "../shopify.server";
@@ -309,7 +312,8 @@ export interface AdminApiContext<
    * ```
    *
    * @example
-   * Making a GET request to the REST API
+   * <caption>Making a GET request to the REST API</caption>
+   *
    * ```ts
    * // app/shopify.server.ts
    * import { shopifyApp } from "@shopify/shopify-app-remix";
@@ -321,7 +325,9 @@ export interface AdminApiContext<
    * });
    * export default shopify;
    * export const authenticate = shopify.authenticate;
+   * ```
    *
+   * ```ts
    * // app/routes/**\/.ts
    * import { LoaderArgs, json } from "@remix-run/node";
    * import { authenticate } from "../shopify.server";
@@ -343,7 +349,7 @@ export interface AdminApiContext<
    * {@link https://github.com/Shopify/shopify-api-js/blob/main/docs/reference/clients/Graphql.md}
    *
    * @example
-   * Creating a new product
+   * <caption>Creating a new product</caption>
    * ```ts
    * import { ActionArgs } from "@remix-run/node";
    * import { authenticate } from "../shopify.server";

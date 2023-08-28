@@ -9,7 +9,7 @@ export const boundary = {
    * A function that handles errors or thrown responses.
    *
    * @example
-   * Catching errors in a route
+   * <caption>Catching errors in a route</caption>
    * ```ts
    * // app/routes/admin/widgets.ts
    * import { boundary } from "@shopify/shopify-app-remix";
@@ -25,7 +25,7 @@ export const boundary = {
    * A function that sets the appropriate document repsonse headers.
    *
    * @example
-   * Catching errors in a route
+   * <caption>Catching errors in a route</caption>
    * ```ts
    * // app/routes/admin/widgets.ts
    * import { boundary } from "@shopify/shopify-app-remix";

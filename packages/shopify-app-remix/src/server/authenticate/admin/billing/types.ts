@@ -48,7 +48,7 @@ export interface BillingContext<Config extends AppConfigArg> {
    * @returns A promise that resolves to an object containing the active purchases for the shop.
    *
    * @example
-   * Requesting billing right away
+   * <caption>Requesting billing right away</caption>
    * ```ts
    * // shopify.server.ts
    * import { shopifyApp, BillingInterval } from "@shopify/shopify-app-remix";
@@ -73,7 +73,8 @@ export interface BillingContext<Config extends AppConfigArg> {
    * });
    * export default shopify;
    * export const authenticate = shopify.authenticate;
-   *
+   * ```
+   * ```ts
    * // app/routes/**\/.ts
    * import { LoaderArgs } from "@remix-run/node";
    * import { authenticate, MONTHLY_PLAN } from "../shopify.server";
@@ -91,7 +92,7 @@ export interface BillingContext<Config extends AppConfigArg> {
    * ```
    *
    * @example
-   * Redirecting to a page where the merchant can select a plan
+   * <caption>Redirecting to a page where the merchant can select a plan</caption>
    * ```ts
    * // shopify.server.ts
    * import { shopifyApp, BillingInterval } from "@shopify/shopify-app-remix";
@@ -116,7 +117,8 @@ export interface BillingContext<Config extends AppConfigArg> {
    * });
    * export default shopify;
    * export const authenticate = shopify.authenticate;
-   *
+   * ```
+   * ```ts
    * // app/routes/**\/.ts
    * import { LoaderArgs, redirect } from "@remix-run/node";
    * import { authenticate, MONTHLY_PLAN, ANNUAL_PLAN } from "../shopify.server";
@@ -146,7 +148,7 @@ export interface BillingContext<Config extends AppConfigArg> {
    * @returns Redirects to the confirmation URL for the payment.
    *
    * @example
-   * Requesting billing when there is no payment with a custom return URL
+   * <caption>Requesting billing when there is no payment with a custom return URL</caption>
    * ```ts
    * // shopify.server.ts
    * import { shopifyApp, BillingInterval } from "@shopify/shopify-app-remix";
@@ -171,7 +173,8 @@ export interface BillingContext<Config extends AppConfigArg> {
    * });
    * export default shopify;
    * export const authenticate = shopify.authenticate;
-   *
+   * ```
+   * ```ts
    * // app/routes/**\/.ts
    * import { LoaderArgs } from "@remix-run/node";
    * import { authenticate, MONTHLY_PLAN } from "../shopify.server";
@@ -199,7 +202,7 @@ export interface BillingContext<Config extends AppConfigArg> {
    * @returns The cancelled subscription.
    *
    * @example
-   * Cancelling a subscription
+   * <caption>Cancelling a subscription</caption>
    * ```ts
    * // shopify.server.ts
    * import { shopifyApp, BillingInterval } from "@shopify/shopify-app-remix";
@@ -224,7 +227,8 @@ export interface BillingContext<Config extends AppConfigArg> {
    * });
    * export default shopify;
    * export const authenticate = shopify.authenticate;
-   *
+   * ```
+   * ```ts
    * // app/routes/cancel-subscription.ts
    * import { LoaderArgs } from "@remix-run/node";
    * import { authenticate, MONTHLY_PLAN } from "../shopify.server";

@@ -4,33 +4,18 @@ const data: ReferenceEntityTemplateSchema = {
   name: 'AppProvider',
   descriptionType: 'AppProviderGeneratedType',
   description: '',
-  category: 'entrypoints',
+  category: 'frontend',
   type: 'component',
   isVisualComponent: false,
-  defaultExample: {
-    codeblock: {
-      tabs: [
-        {
-          code: './AppProvider.doc.example.tsx',
-          language: 'ts',
-        },
-      ],
-      title: 'AppProvider',
-    },
-  },
   definitions: [
     {
       title: 'props',
       description: 'React component that sets up App Bridge and Polaris.',
-      type: 'AppProviderProps',
+      type: 'AppProviderGeneratedType',
+      jsDocExamples: true,
     },
   ],
   related: [
-    {
-      name: 'Reference',
-      subtitle: 'Integrate your app with Shopify.',
-      url: '/docs/api/shopify-app-remix/reference',
-    },
     {
       name: 'App bridge',
       subtitle: 'Learn more about App Bridge.',

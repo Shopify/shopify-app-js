@@ -98,7 +98,7 @@ interface Authenticate<Config extends AppConfigArg> {
    * If there is no session for the Request, this will redirect the merchant to correct auth flows.
    *
    * @example
-   * Registering webhooks and seeding data when a merchant installs your app.
+   * <caption>Registering webhooks and seeding data when a merchant installs your app.</caption>
    * ```ts
    * // app/shopify.server.ts
    * import { LATEST_API_VERSION, shopifyApp } from "@shopify/shopify-app-remix";
@@ -110,7 +110,8 @@ interface Authenticate<Config extends AppConfigArg> {
    * });
    * export default shopify;
    * export const authenticate = shopify.authenticate;
-   *
+   * ```
+   * ```ts
    * // app/routes/**\/*.jsx
    * import { LoaderArgs, json } from "@remix-run/node";
    * import { authenticate } from "../../shopify.server";
@@ -125,12 +126,10 @@ interface Authenticate<Config extends AppConfigArg> {
   admin: AuthenticateAdmin<Config, RestResourcesType<Config>>;
 
   /**
-   * Authenticate a public request and get back a session token
-   *
-   * An example of when to use this is a request from a checkout extension.
+   * Authenticate a public request and get back a session token.
    *
    * @example
-   * Authenticating a request from a checkout extension
+   * <caption>Authenticating a request from a checkout extension</caption>
    *
    * ```ts
    * // app/routes/api/checkout.jsx
@@ -151,7 +150,7 @@ interface Authenticate<Config extends AppConfigArg> {
    * Authenticate a Shopify webhook request, get back an authenticated admin context and details on the webhook request
    *
    * @example
-   * Authenticating a webhook request
+   * <caption>Authenticating a webhook request</caption>
    *
    * ```ts
    * // app/routes/api/checkout.jsx
@@ -176,7 +175,8 @@ interface Authenticate<Config extends AppConfigArg> {
    * });
    * export default shopify;
    * export const authenticate = shopify.authenticate;
-   *
+   * ```
+   * ```ts
    * // app/routes/webhooks.ts
    * import { ActionArgs } from "@remix-run/node";
    * import { authenticate } from "../shopify.server";
@@ -221,7 +221,7 @@ interface Unauthenticated<Config extends AppConfigArg> {
    * This method throws an error if there is no session for the shop.
    *
    * @example
-   * Responding to a request from an external service not controlled by Shopify.
+   * <caption>Responding to a request from an external service not controlled by Shopify.</caption>
    * ```ts
    * // app/shopify.server.ts
    * import { LATEST_API_VERSION, shopifyApp } from "@shopify/shopify-app-remix";
@@ -232,7 +232,8 @@ interface Unauthenticated<Config extends AppConfigArg> {
    *   // ...etc
    * });
    * export default shopify;
-   *
+   * ```
+   * ```ts
    * // app/routes/**\/*.jsx
    * import { LoaderArgs, json } from "@remix-run/node";
    * import { authenticateExternal } from "~/helpers/authenticate"
@@ -256,7 +257,7 @@ export interface ShopifyAppBase<Config extends AppConfigArg> {
    * An instance of the SessionStorage class you passed in as a config option.
    *
    * @example
-   * Using Prisma
+   * <caption>Using Prisma</caption>
    * ```ts
    * // app/shopify.server.ts
    * import { shopifyApp } from "@shopify/shopify-app-remix";
@@ -279,8 +280,9 @@ export interface ShopifyAppBase<Config extends AppConfigArg> {
    * {@link https://shopify.dev/docs/apps/store/security/iframe-protection}
    *
    * @example
-   * Globally adding CSP headers to entry.server.tsx.
-   * ```ts
+   * <caption>Globally adding CSP headers to entry.server.tsx.</caption>
+   *
+   * ```
    * // ~/shopify.server.ts
    * import { shopifyApp } from "@shopify/shopify-app-remix";
    *
@@ -289,7 +291,9 @@ export interface ShopifyAppBase<Config extends AppConfigArg> {
    * });
    * export default shopify;
    * export const addDocumentResponseheaders = shopify.addDocumentResponseheaders;
+   * ```
    *
+   * ```ts
    * // entry.server.tsx
    * import { addDocumentResponseHeaders } from "~/shopify.server";
    *
@@ -319,7 +323,7 @@ export interface ShopifyAppBase<Config extends AppConfigArg> {
    * Register webhook topics for a store using the given session. Most likely you want to use this in combination with the afterAuth hook.
    *
    * @example
-   * Registering webhooks when a merchant installs your app.
+   * <caption>Registering webhooks when a merchant installs your app.</caption>
    * ```ts
    * import { DeliveryMethod, shopifyApp } from "@shopify/shopify-app-remix";
    *
@@ -361,7 +365,8 @@ interface ShopifyAppLogin {
    * because Admin apps aren't allowed to show a login page.
    *
    * @example
-   * Providing a login form as a route that can handle GET and POST requests.
+   * <caption>Providing a login form as a route that can handle GET and POST requests.</caption>
+   * ```
    * export async function loader({ request }: LoaderArgs) {
    *   const errors = shopify.login(request);
    *
@@ -405,6 +410,7 @@ interface ShopifyAppLogin {
    *     </Page>
    *   );
    * }
+   * ```
    */
   login: Login;
 }

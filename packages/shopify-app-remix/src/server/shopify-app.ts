@@ -38,7 +38,7 @@ import {authenticatePublicFactory} from './authenticate/public';
  * @returns `ShopifyApp` An object constructed using your appConfig.  It has methods for interacting with Shopify.
  *
  * @example
- * The minimum viable configuration
+ * <caption>The minimum viable configuration</caption>
  * ```ts
  * import { shopifyApp } from "@shopify/shopify-app-remix";
  *
