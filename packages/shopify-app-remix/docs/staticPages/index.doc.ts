@@ -49,7 +49,7 @@ const data: LandingTemplateSchema = {
       sectionCard: [
         {
           name: 'shopifyApp',
-          url: '/docs/api/shopify-app-remix/v1/backend/shopifyapp',
+          url: '/docs/api/shopify-app-remix/backend/shopifyapp',
           type: 'clicode',
         },
       ],
@@ -124,7 +124,7 @@ const data: LandingTemplateSchema = {
         },
         {
           name: 'AppProvider',
-          url: '/docs/api/shopify-app-remix/v1/frontend/appprovider',
+          url: '/docs/api/shopify-app-remix/frontend/appprovider',
           type: 'clicode',
         },
       ],
@@ -146,7 +146,7 @@ const data: LandingTemplateSchema = {
       sectionContent:
         "It's important to note that the authentication functions in this package rely on throwing Response objects, which must be handled in your Remix routes using them." +
         '\n\nTo do that, you can set up a [Remix `ErrorBoundary`](https://remix.run/docs/en/main/guides/errors). We provide some abstractions for the error and headers boundaries to make it easier for apps to set those up.' +
-        '\n\n> Tip: You can also add this to a layout if you want to authenticate more than one route.',
+        '\n\n> Tip: You can also add this to a [Remix layout](https://remix.run/docs/en/main/file-conventions/route-files-v2) if you want to authenticate more than one route.',
       codeblock: {
         title: '/app/root.tsx',
         tabs: [
