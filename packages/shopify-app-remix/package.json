@@ -49,7 +49,7 @@
   },
   "dependencies": {
     "@remix-run/server-runtime": "^1.17.1",
-    "@shopify/shopify-api": "file:../../../shopify-api-js",
+    "@shopify/shopify-api": "/Users/rezaansyed/src/github.com/Shopify/shopify-api-js/shopify-shopify-api-7.5.0.tgz",
     "@shopify/shopify-app-session-storage": "^1.1.2",
     "isbot": "^3.6.5",
     "semver": "^7.5.0",
