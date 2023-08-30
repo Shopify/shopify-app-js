@@ -1,5 +1,191 @@
 [
   {
+    "id": "guide-admin",
+    "title": "Interacting with Shopify Admin",
+    "description": "Once you [set up your backend](/docs/api/shopify-app-remix#backend), you can use the [`authenticate.admin` function](/docs/api/shopify-app-remix/backend/authenticate-admin) to integrate your app with Shopify Admin.\n\nThis function works for both embedded and non-embedded apps, and ensures the app is installed on the current store.\n\nIt returns a context with functions to enable loaders and actions to respond to any requests made by or in Shopify Admin.\n\nThis page goes over the basics of authenticating those requests, and some of the things you can do with it, like querying the Admin API.",
+    "sections": [
+      {
+        "type": "Generic",
+        "anchorLink": "auth",
+        "title": "Authenticating requests",
+        "sectionContent": "To authenticate admin requests you can call `authenticate.admin(request)` in a loader or an action.\n\nIf there is a session for this user, this loader will return null. If there is no session for the user, the loader will throw the appropriate redirect Response.\n\n> Tip: If you are authenticating more than one route, we recommend using [Remix layout routes](https://remix.run/docs/en/1.18.1/file-conventions/routes-files#layout-routes) to automatically authenticate them.",
+        "codeblock": {
+          "title": "/app/routes/**/*.tsx",
+          "tabs": [
+            {
+              "title": "/app/routes/**/*.tsx",
+              "code": "import {LoaderFunction, ActionFunction} from '@remix-run/node';\n\nimport {authenticate} from '~/shopify.server';\n\nexport const loader: LoaderFunction = async ({request}) =&gt; {\n  await authenticate.admin(request);\n\n  // App logic\n\n  return null;\n};\n\nexport const action: ActionFunction = async ({request}) =&gt; {\n  await authenticate.admin(request);\n\n  // App logic\n\n  return null;\n};\n",
+              "language": "tsx"
+            }
+          ]
+        }
+      },
+      {
+        "type": "Generic",
+        "anchorLink": "headers",
+        "title": "Headers",
+        "sectionContent": "It's important to note that the authentication functions in this package rely on throwing Response objects, which must be handled in your Remix routes using them.\n\nTo do that, you can set up a [Remix `ErrorBoundary`](https://remix.run/docs/en/main/guides/errors). We provide some abstractions for the error and headers boundaries to make it easier for apps to set those up.\n\n> Tip: You can also add this to a layout if you want to authenticate more than one route.",
+        "codeblock": {
+          "title": "/app/routes/**/*.tsx",
+          "tabs": [
+            {
+              "title": "/app/routes/**/*.tsx",
+              "code": "import {useRouteError} from '@remix-run/react';\nimport {boundary} from '@shopify/shopify-app-remix';\n\nexport function ErrorBoundary() {\n  return boundary.error(useRouteError());\n}\n\nexport const headers = (headersArgs) =&gt; {\n  return boundary.headers(headersArgs);\n};\n",
+              "language": "tsx"
+            }
+          ]
+        }
+      },
+      {
+        "type": "Generic",
+        "anchorLink": "cors-auth",
+        "title": "Authenticating cross-origin admin requests",
+        "sectionContent": "If your Remix server is authenticating an admin extension, a request from the extension to Remix will be cross-origin.\n\nHere `authenticate.admin` provides a `cors` function to add the required cross-origin headers.",
+        "codeblock": {
+          "title": "/app/routes/**/*.tsx",
+          "tabs": [
+            {
+              "title": "/app/routes/**/*.tsx",
+              "code": "import {json, LoaderFunction} from '@remix-run/node';\n\nimport {authenticate} from '~/shopify.server';\n\nexport const loader: LoaderFunction = async ({request}) =&gt; {\n  const {cors} = await authenticate.admin(request);\n\n  // App logic\n\n  return cors(json({my: 'data'}));\n};\n",
+              "language": "tsx"
+            }
+          ]
+        }
+      },
+      {
+        "type": "Generic",
+        "anchorLink": "graphql-api",
+        "title": "Using the GraphQL API",
+        "sectionContent": "Once a request is authenticated, `authenticate.admin` will return an `admin` object that contains a GraphQL client that can interact with the [Shopify Admin GraphQL API](/docs/api/admin-graphql).",
+        "codeblock": {
+          "title": "/app/routes/**/*.tsx",
+          "tabs": [
+            {
+              "title": "/app/routes/**/*.tsx",
+              "code": "import {ActionFunction, json} from '@remix-run/node';\n\nimport {authenticate} from '../shopify.server';\n\nexport const action: ActionFunction = async ({request}) =&gt; {\n  const {admin} = await authenticate.admin(request);\n\n  const response = await admin.graphql(\n    `#graphql\n    mutation populateProduct($input: ProductInput!) {\n      productCreate(input: $input) {\n        product {\n          id\n        }\n      }\n    }`,\n    {\n      variables: {\n        input: {\n          title: 'New product',\n          variants: [{price: 100}],\n        },\n      },\n    },\n  );\n  const parsedResponse = await response.json();\n\n  return json({data: parsedResponse.data});\n};\n",
+              "language": "tsx"
+            }
+          ]
+        }
+      },
+      {
+        "type": "Generic",
+        "anchorLink": "rest-api",
+        "title": "Using the REST API",
+        "sectionContent": "Once a request is authenticated, `authenticate.admin` will return an `admin` object that contains a REST client that can interact with the [Shopify Admin REST API](/docs/api/admin-rest).\n\nYou can also import a set of resource classes from the `@shopify/shopify-api` package (included in `@shopify/shopify-app-remix`).\n\nThese classes map to the individual REST endpoints, and will be returned under `admin.rest.resources`.",
+        "codeblock": {
+          "title": "Interacting with the REST API",
+          "tabs": [
+            {
+              "title": "/app/shopify.server.ts",
+              "code": "import {shopifyApp} from '@shopify/shopify-app-remix/server';\nimport {restResources} from '@shopify/shopify-api/rest/admin/2023-07';\n\nconst shopify = shopifyApp({\n  restResources,\n  // ...etc\n});\n\nexport const authenticate = shopify.authenticate;\n",
+              "language": "tsx"
+            },
+            {
+              "title": "/app/routes/**/*.tsx",
+              "code": "import {LoaderFunction, json} from '@remix-run/node';\nimport {useRouteError} from '@remix-run/react';\n\nimport {authenticate} from '~/shopify.server';\n\nexport const loader: LoaderFunction = async ({request}) =&gt; {\n  const {admin, session} = await authenticate.admin(request);\n\n  // Use REST resources\n  const data = await admin.rest.resources.Product.count({session});\n\n  // Or use the REST client\n  const response = await admin.rest.get({path: 'products/count'});\n  const data = response.body;\n\n  return json({productCount: data.count});\n};\n",
+              "language": "tsx"
+            }
+          ]
+        }
+      },
+      {
+        "type": "Resource",
+        "title": "Resources",
+        "anchorLink": "resources",
+        "resources": [
+          {
+            "name": "authenticate.admin",
+            "url": "/docs/api/shopify-app-remix/backend/authenticate-admin"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "guide-billing",
+    "title": "Billing for your app",
+    "description": "You can bill merchants for your app via Shopify using the Admin API, either as a one-time purchase or as a recurring subscription.\n\nShopify will handle the transactions, based on purchases set up by the app and agreed upon by the merchant.\n\nFor more information on how this process works, see [the billing documentation](/docs/apps/billing).",
+    "sections": [
+      {
+        "type": "Generic",
+        "anchorLink": "app-purchases",
+        "title": "Setting up app purchases",
+        "sectionContent": "Your app can offer one or more billing options to merchants. These can be one-time purchases or recurring subscriptions.\n\nTo configure app purchases, use the `billing` configuration when calling `shopifyApp`. This configuration is a hash, where the keys are the purchase name that will appear in the purchase, and the values are the settings.\n\nEach configuration must contain an `amount`, `currencyCode` and `interval`, but they also accept the same parameters as the GraphQL mutations below.",
+        "sectionCard": [
+          {
+            "name": "appSubscriptionCreate",
+            "url": "/docs/api/admin-graphql/current/mutations/appSubscriptionCreate",
+            "type": "shopify"
+          },
+          {
+            "name": "appPurchaseOneTimeCreate",
+            "url": "/docs/api/admin-graphql/current/mutations/appPurchaseOneTimeCreate",
+            "type": "shopify"
+          }
+        ],
+        "codeblock": {
+          "title": "/app/routes/**/*.tsx",
+          "tabs": [
+            {
+              "title": "/app/routes/**/*.tsx",
+              "code": "import {shopifyApp, BillingInterval} from '@shopify/shopify-app-remix/server';\n\nexport const MONTHLY_PLAN = 'Monthly subscription';\nexport const ANNUAL_PLAN = 'Annual subscription';\n\nconst shopify = shopifyApp({\n  // ...etc\n  billing: {\n    [MONTHLY_PLAN]: {\n      amount: 5,\n      currencyCode: 'USD',\n      interval: BillingInterval.Every30Days,\n    },\n    [ANNUAL_PLAN]: {\n      amount: 50,\n      currencyCode: 'USD',\n      interval: BillingInterval.Annual,\n    },\n  },\n});\nexport default shopify;\nexport const authenticate = shopify.authenticate;\n",
+              "language": "tsx"
+            }
+          ]
+        }
+      },
+      {
+        "type": "Generic",
+        "anchorLink": "require",
+        "title": "Gating requests",
+        "sectionContent": "You can ensure that merchants have paid for the app before allowing them to access certain routes.\n\nTo do this, you can use the `admin.billing.require` function. This function will verify that there is an active payment, or require it if there isn't.\n\nYou can pass in multiple plans to `require`. It will pass if there is a purchase for **any** of them, and return information on the active purchase.\n\n> Tip: Make sure to call this function in both loaders and actions so you don't end up with ungated requests.\n> If you want to gate multiple routes, use this example in a [Remix layout](https://remix.run/docs/en/main/file-conventions/route-files-v2).",
+        "codeblock": {
+          "title": "/app/routes/**/*.tsx",
+          "tabs": [
+            {
+              "title": "/app/routes/**/*.tsx",
+              "code": "import {LoaderFunction} from '@remix-run/node';\n\nimport {authenticate, MONTHLY_PLAN} from '../shopify.server';\n\nexport const loader: LoaderFunction = async ({request}) =&gt; {\n  const {billing} = await authenticate.admin(request);\n  const billingData = await billing.require({\n    plans: [MONTHLY_PLAN],\n    isTest: true,\n    onFailure: async () =&gt; billing.request({plan: MONTHLY_PLAN}),\n  });\n\n  // App logic\n};\n",
+              "language": "tsx"
+            }
+          ]
+        }
+      },
+      {
+        "type": "Generic",
+        "anchorLink": "request",
+        "title": "Requesting payment",
+        "sectionContent": "If `admin.billing.require` doesn't find a purchase, it will trigger the `onFailure` callback.\n\nWhen that happens, you can decide where to take the merchant, which may typically mean:\n- Request payment right away for one of the purchase configs\n- Redirect the merchant to page where they can select a plan\n\n> Tip: You'll still need to call `authenticate.admin` in the plan selection page so you have access to the Admin API.",
+        "codeblock": {
+          "title": "/app/routes/**/*.tsx",
+          "tabs": [
+            {
+              "title": "Request billing right away",
+              "code": "import {LoaderFunction} from '@remix-run/node';\n\nimport {authenticate, MONTHLY_PLAN} from '../shopify.server';\n\nexport const loader: LoaderFunction = async ({request}) =&gt; {\n  const {billing} = await authenticate.admin(request);\n  await billing.require({\n    plans: [MONTHLY_PLAN],\n    isTest: true,\n    onFailure: async () =&gt; billing.request({plan: MONTHLY_PLAN}),\n  });\n\n  // App logic\n};\n",
+              "language": "tsx"
+            },
+            {
+              "title": "Redirect merchant",
+              "code": "import {LoaderFunction} from '@remix-run/node';\n\nimport {authenticate, MONTHLY_PLAN, ANNUAL_PLAN} from '../shopify.server';\n\nexport const loader: LoaderFunction = async ({request}) =&gt; {\n  const {billing, redirect} = await authenticate.admin(request);\n  await billing.require({\n    plans: [MONTHLY_PLAN, ANNUAL_PLAN],\n    isTest: true,\n    onFailure: () =&gt; redirect('/select-plan'),\n  });\n\n  // App logic\n};\n",
+              "language": "tsx"
+            }
+          ]
+        }
+      },
+      {
+        "type": "Resource",
+        "title": "Resources",
+        "anchorLink": "resources",
+        "resources": [
+          {
+            "name": "admin.billing",
+            "url": "../backend/admin-features/billing"
+          }
+        ]
+      }
+    ]
+  },
+  {
     "id": "shopify-app-remix",
     "title": "Shopify App package for Remix",
     "description": "The @shopify/shopify-app-remix package enables Remix apps to authenticate with Shopify and make API calls. It uses [App Bridge](/docs/api/app-bridge-library) to enable apps to embed themselves in the Shopify Admin.",
@@ -43,7 +229,7 @@
         "sectionCard": [
           {
             "name": "shopifyApp",
-            "url": "/docs/api/shopify-app-remix/v1/backend/shopifyapp",
+            "url": "/docs/api/shopify-app-remix/backend/shopifyapp",
             "type": "clicode"
           }
         ],
@@ -110,7 +296,7 @@
           },
           {
             "name": "AppProvider",
-            "url": "/docs/api/shopify-app-remix/v1/frontend/appprovider",
+            "url": "/docs/api/shopify-app-remix/frontend/appprovider",
             "type": "clicode"
           }
         ],
@@ -129,7 +315,7 @@
         "type": "Generic",
         "anchorLink": "boundaries",
         "title": "Set up error boundaries",
-        "sectionContent": "It's important to note that the authentication functions in this package rely on throwing Response objects, which must be handled in your Remix routes using them.\n\nTo do that, you can set up a [Remix `ErrorBoundary`](https://remix.run/docs/en/main/guides/errors). We provide some abstractions for the error and headers boundaries to make it easier for apps to set those up.\n\n> Tip: You can also add this to a layout if you want to authenticate more than one route.",
+        "sectionContent": "It's important to note that the authentication functions in this package rely on throwing Response objects, which must be handled in your Remix routes using them.\n\nTo do that, you can set up a [Remix `ErrorBoundary`](https://remix.run/docs/en/main/guides/errors). We provide some abstractions for the error and headers boundaries to make it easier for apps to set those up.\n\n> Tip: You can also add this to a [Remix layout](https://remix.run/docs/en/main/file-conventions/route-files-v2) if you want to authenticate more than one route.",
         "codeblock": {
           "title": "/app/root.tsx",
           "tabs": [
@@ -140,6 +326,56 @@
             }
           ]
         }
+      }
+    ]
+  },
+  {
+    "id": "guide-webhooks",
+    "title": "Subscribing to webhooks",
+    "description": "Your app must respond to [mandatory webhook topics](/docs/apps/webhooks/configuration/mandatory-webhooks). In addition, your app can register [optional webhook topics](/docs/api/admin-rest/current/resources/webhook#event-topics).",
+    "sections": [
+      {
+        "type": "Generic",
+        "anchorLink": "config",
+        "title": "Configuring webhooks",
+        "sectionContent": "To set up webhooks first we need to configure `shopifyApp` with 2 pieces:\n1. The webhooks you want to subscribe to. In this example we subscribe to the `APP_UNINSTALLED` topic.\n1. The code to register the `APP_UNINSTALLED` topic after a merchant installs you app. Here `shopifyApp` provides an `afterAuth` hook.\n\n> Note: You can't register mandatory topics using this package, you must [configure those in the Partner Dashboard](/docs/apps/webhooks/configuration/mandatory-webhooks) instead.",
+        "codeblock": {
+          "title": "/app/shopify.server.ts",
+          "tabs": [
+            {
+              "title": "/app/shopify.server.ts",
+              "code": "import {shopifyApp, DeliveryMethod} from '@shopify/shopify-app-remix/server';\n\nconst shopify = shopifyApp({\n  apiKey: 'abcde1234567890',\n  // ...etc\n  webhooks: {\n    APP_UNINSTALLED: {\n      deliveryMethod: DeliveryMethod.Http,\n      callbackUrl: '/webhooks',\n    },\n  },\n  hooks: {\n    afterAuth: async ({session}) =&gt; {\n      shopify.registerWebhooks({session});\n    },\n  },\n});\n\nexport const authenticate = shopify.authenticate;\n",
+              "language": "tsx"
+            }
+          ]
+        }
+      },
+      {
+        "type": "Generic",
+        "anchorLink": "endpoints",
+        "title": "Set up your endpoints",
+        "sectionContent": "Legitimate webhook requests are always `POST`s signed by Shopify, so you must authenticate them before taking any action.\n\nFor each `callbackUrl` in your configuration, you must set up an `action` that uses the `authenticate.webhook` function to authenticate the request.\n\nPlease keep in mind that webhook endpoints should respond as quickly as possible. If you need to run a long-running job, consider using background tasks.\n\n> Caution: Webhook endpoints **must** respond with an `HTTP 200` code, or Shopify will retry.",
+        "codeblock": {
+          "title": "/app/routes/webhooks.tsx",
+          "tabs": [
+            {
+              "title": "/app/routes/webhooks.tsx",
+              "code": "import {ActionFunction} from '@remix-run/node';\n\nimport db from '../db.server';\n\nimport {authenticate} from '~/shopify.server';\n\nexport const action: ActionFunction = async ({request}) =&gt; {\n  const {topic, shop, session} = await authenticate.webhook(request);\n\n  switch (topic) {\n    case 'APP_UNINSTALLED':\n      if (session) {\n        await db.session.deleteMany({where: {shop}});\n      }\n      break;\n    case 'CUSTOMERS_DATA_REQUEST':\n    case 'CUSTOMERS_REDACT':\n    case 'SHOP_REDACT':\n    default:\n      throw new Response('Unhandled webhook topic', {status: 404});\n  }\n\n  throw new Response();\n};\n",
+              "language": "tsx"
+            }
+          ]
+        }
+      },
+      {
+        "type": "Resource",
+        "title": "Resources",
+        "anchorLink": "resources",
+        "resources": [
+          {
+            "name": "authenticate.webhook",
+            "url": "/docs/api/shopify-app-remix/backend/authenticate-webhook"
+          }
+        ]
       }
     ]
   }
