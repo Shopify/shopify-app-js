@@ -1,8 +1,5 @@
 import {redirect} from '@remix-run/server-runtime';
 import {
-  CookieNotFound,
-  InvalidHmacError,
-  InvalidOAuthError,
   JwtPayload,
   Session,
   Shopify,
@@ -24,21 +21,14 @@ import {
 import {
   appBridgeUrl,
   addDocumentResponseHeaders,
-  beginAuth,
   getSessionTokenHeader,
-  redirectWithExitIframe,
-  redirectToAuthPage,
   validateSessionToken,
   rejectBotRequest,
   respondToOptionsRequest,
   ensureCORSHeadersFactory,
 } from '../helpers';
 
-import type {
-  AdminContext,
-  EmbeddedAdminContext,
-  NonEmbeddedAdminContext,
-} from './types';
+import type {EmbeddedAdminContext} from './types';
 import {graphqlClientFactory} from './graphql-client';
 import {RemixRestClient, restResourceClientFactory} from './rest-client';
 
@@ -49,7 +39,7 @@ interface SessionContext {
 
 const SESSION_TOKEN_PARAM = 'id_token';
 
-export class AuthStrategy<
+export class EmbeddedAuthStrategy<
   Config extends AppConfigArg,
   Resources extends ShopifyRestResources = ShopifyRestResources,
 > {
@@ -69,7 +59,7 @@ export class AuthStrategy<
     const {api, logger, config} = this;
 
     if (!api.config.isEmbeddedApp) {
-      throw Error('You cannot use token exchange for a non embedded app')
+      throw Error('You cannot use token exchange for a non embedded app');
     }
 
     rejectBotRequest({api, logger, config}, request);
@@ -103,33 +93,46 @@ export class AuthStrategy<
     const {api, logger, config} = this;
 
     const url = new URL(request.url);
+    const shop = url.searchParams.get('shop')!;
 
     const isPatchSessionToken =
       url.pathname === config.auth.patchSessionTokenPath;
-    const sessionTokenHeader = getSessionTokenHeader(request);
-
-    logger.info('Authenticating admin request');
 
     if (isPatchSessionToken) {
       logger.debug('Rendering bounce page');
       throw this.renderAppBridge(request);
-    } else if (sessionTokenHeader) {
+    }
+
+    const sessionTokenHeader = getSessionTokenHeader(request);
+    const sessionTokenParam = url.searchParams.get(SESSION_TOKEN_PARAM)!;
+    const sessionTokenString = sessionTokenHeader || sessionTokenParam;
+
+    if (sessionTokenParam) {
+      await this.validateUrlParams(request);
+      await this.ensureAppIsEmbeddedIfRequired(request);
+    }
+
+    if (sessionTokenString) {
+      logger.info('Authenticating admin request');
+
+      logger.debug('Session token is present, validating session', {shop});
+
       const sessionToken = await validateSessionToken(
         {api, logger, config},
-        sessionTokenHeader,
+        sessionTokenString,
       );
 
       return this.getTokenViaTokenExchange(
         request,
-        sessionTokenHeader,
+        sessionTokenString,
         sessionToken,
       );
     } else {
-      await this.validateUrlParams(request);
-      await this.ensureAppIsEmbeddedIfRequired(request);
-      await this.ensureSessionTokenSearchParamIfRequired(request);
-
-      return this.ensureSessionExists(request);
+      logger.debug(
+        'Missing session token in search params, going to bounce page',
+        {shop},
+      );
+      throw this.redirectToBouncePage(url);
     }
   }
 
@@ -166,46 +169,6 @@ export class AuthStrategy<
     }
   }
 
-  private async ensureSessionTokenSearchParamIfRequired(request: Request) {
-    const {logger} = this;
-    const url = new URL(request.url);
-
-    const shop = url.searchParams.get('shop')!;
-    const searchParamSessionToken = url.searchParams.get(SESSION_TOKEN_PARAM);
-
-    if (!searchParamSessionToken) {
-      logger.debug(
-        'Missing session token in search params, going to bounce page',
-        {shop},
-      );
-      this.redirectToBouncePage(url);
-    }
-  }
-
-  private async ensureSessionExists(request: Request): Promise<SessionContext> {
-    const {api, config, logger} = this;
-    const url = new URL(request.url);
-
-    const shop = url.searchParams.get('shop')!;
-    const searchParamSessionToken = url.searchParams.get(SESSION_TOKEN_PARAM)!;
-
-    logger.debug(
-      'Session token is present in query params, validating session',
-      {shop},
-    );
-
-    const sessionToken = await validateSessionToken(
-      {api, config, logger},
-      searchParamSessionToken,
-    );
-
-    return this.getTokenViaTokenExchange(
-      request,
-      searchParamSessionToken,
-      sessionToken,
-    );
-  }
-
   private async getTokenViaTokenExchange(
     request: Request,
     sessionToken: string,
@@ -219,10 +182,13 @@ export class AuthStrategy<
     });
 
     if (sessionId) {
-      const persistedSession = await config.sessionStorage.loadSession(sessionId);
+      logger.debug(`SESSION ID: ${sessionId}`)
+      const persistedSession = await config.sessionStorage.loadSession(
+        sessionId,
+      );
       if (persistedSession) {
-        logger.debug('Reusing existing token')
-        return {session: persistedSession, token: payload}
+        logger.debug(`Reusing existing token: ${persistedSession.accessToken}`);
+        return {session: persistedSession, token: payload};
       }
     }
 
@@ -237,7 +203,7 @@ export class AuthStrategy<
       isOnline: config.useOnlineTokens,
     });
 
-    logger.info(`RECEIVED TOKEN: ${session}`);
+    logger.debug(`RECEIVED TOKEN: ${session.accessToken}`);
 
     await config.sessionStorage.storeSession(session);
 

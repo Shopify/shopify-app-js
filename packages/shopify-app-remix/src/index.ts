@@ -24,7 +24,7 @@ import {
 } from './types';
 import {SHOPIFY_REMIX_LIBRARY_VERSION} from './version';
 import {registerWebhooksFactory} from './auth/webhooks';
-import {AuthStrategy} from './auth/admin/authenticate';
+import { EmbeddedAuthStrategy } from './auth/admin/token-exchange';
 import {authenticateWebhookFactory} from './auth/webhooks/authenticate';
 import {authenticatePublicFactory} from './auth/public/authenticate';
 import {overrideLogger} from './override-logger';
@@ -81,7 +81,8 @@ export function shopifyApp<
   }
 
   const params: BasicParams = {api, config, logger};
-  const oauth = new AuthStrategy<Config, Resources>(params);
+  // const oauth = new AuthStrategy<Config, Resources>(params);
+  const tokenExchange = new EmbeddedAuthStrategy<Config, Resources>(params);
 
   const shopify:
     | AdminApp<Config>
@@ -91,7 +92,7 @@ export function shopifyApp<
     addDocumentResponseHeaders: addDocumentResponseHeadersFactory(params),
     registerWebhooks: registerWebhooksFactory(params),
     authenticate: {
-      admin: oauth.authenticateAdmin.bind(oauth),
+      admin: tokenExchange.authenticateAdmin.bind(tokenExchange),
       public: authenticatePublicFactory(params),
       webhook: authenticateWebhookFactory<
         Resources,
