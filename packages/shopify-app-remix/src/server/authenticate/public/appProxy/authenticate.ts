@@ -1,18 +1,13 @@
-import {ShopifyRestResources} from '@shopify/shopify-api';
-
-import {adminClientFactory} from '../../../clients/admin';
 import {BasicParams} from '../../../types';
 
-import {AuthenticateAppProxy, AppProxyContext} from './types';
+import {AuthenticateAppProxy} from './types';
 
-export function authenticateAppProxyFactory<
-  Resources extends ShopifyRestResources,
->(params: BasicParams): AuthenticateAppProxy<Resources> {
+export function authenticateAppProxyFactory(
+  params: BasicParams,
+): AuthenticateAppProxy {
   const {logger, api, config} = params;
 
-  return async function authenticateAppProxy(
-    request,
-  ): Promise<AppProxyContext<Resources>> {
+  return async function authenticateAppProxy(request): Promise<undefined> {
     logger.info('Authenticating app proxy request');
 
     const {searchParams} = new URL(request.url);
@@ -45,9 +40,6 @@ export function authenticateAppProxyFactory<
       throw new Response(undefined, {status: 400, statusText: 'Bad Request'});
     }
 
-    return {
-      admin: adminClientFactory({params, session}),
-      session,
-    };
+    return undefined;
   };
 }
