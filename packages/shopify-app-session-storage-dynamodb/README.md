@@ -23,4 +23,29 @@ const shopify = shopifyApp({
 });
 ```
 
+## Table Schema
+
+```js
+{
+  TableName: sessionTableName,
+  AttributeDefinitions: [
+    {AttributeName: 'id', AttributeType: 'S'},
+    {AttributeName: 'shop', AttributeType: 'S'},
+  ],
+  KeySchema: [{AttributeName: 'id', KeyType: 'HASH'}],
+  GlobalSecondaryIndexes: [
+    {
+      IndexName: shopIndexName,
+      KeySchema: [{AttributeName: 'shop', KeyType: 'HASH'}],
+      Projection: {ProjectionType: 'KEYS_ONLY'},
+      ProvisionedThroughput: {
+        ReadCapacityUnits: 1,
+        WriteCapacityUnits: 1,
+      },
+    },
+  ],
+  ProvisionedThroughput: {ReadCapacityUnits: 1, WriteCapacityUnits: 1},
+}
+```
+
 If you prefer to use your own implementation of a session storage mechanism that uses the `SessionStorage` interface, see the [implementing session storage guide](../shopify-app-session-storage/implementing-session-storage.md).
