@@ -20,17 +20,17 @@ const data: ReferenceEntityTemplateSchema = {
     {
       name: 'Admin context',
       subtitle: 'Authenticate requests from Shopify Admin.',
-      url: '/docs/api/shopify-app-remix/backend/authenticate-admin',
+      url: '/docs/api/shopify-app-remix/backend/authenticate/admin',
     },
     {
       name: 'Webhook context',
       subtitle: 'Authenticate Shopify webhook requests.',
-      url: '/docs/api/shopify-app-remix/backend/authenticate-webhook',
+      url: '/docs/api/shopify-app-remix/backend/authenticate/webhook',
     },
     {
       name: 'Public context',
       subtitle: 'Authenticate checkout extension requests.',
-      url: '/docs/api/shopify-app-remix/backend/authenticate-public',
+      url: '/docs/api/shopify-app-remix/backend/authenticate/public',
     },
   ],
 };

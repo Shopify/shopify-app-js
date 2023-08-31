@@ -1,9 +1,10 @@
 import {ReferenceEntityTemplateSchema} from '@shopify/generate-docs';
 
 const data: ReferenceEntityTemplateSchema = {
-  name: 'Authenticate webhook',
+  name: 'Webhook',
   description: 'Contains functions for verifying Shopify webhooks.',
   category: 'backend',
+  subCategory: 'Authenticate',
   type: 'object',
   isVisualComponent: false,
   definitions: [

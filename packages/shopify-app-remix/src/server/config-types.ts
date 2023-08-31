@@ -73,7 +73,7 @@ export interface AppConfigArg<
    * @example
    * <caption>Registering for a webhook when a merchant uninstalls your app.</caption>
    * ```ts
-   * // app/shopify.server.ts
+   * // /app/shopify.server.ts
    * import { DeliveryMethod, shopifyApp } from "@shopify/shopify-app-remix";
    *
    * const shopify = shopifyApp({
@@ -93,7 +93,7 @@ export interface AppConfigArg<
    * export default shopify;
    * export const authenticate = shopify.authenticate;
    *
-   * // app/routes/webhooks.jsx
+   * // /app/routes/webhooks.jsx
    * import { ActionArgs } from "@remix-run/node";
    *
    * import { authenticate } from "../shopify.server";
@@ -187,7 +187,7 @@ export interface AppConfigArg<
    * @example
    * <caption>Using the latest API Version (Recommended)</caption>
    * ```ts
-   * // app/shopify.server.ts
+   * // /app/shopify.server.ts
    * import { LATEST_API_VERSION, shopifyApp } from "@shopify/shopify-app-remix";
    *
    * const shopify = shopifyApp({
@@ -197,7 +197,7 @@ export interface AppConfigArg<
    * export default shopify;
    * export const authenticate = shopify.authenticate;
    *
-   * // app/routes/auth/$.jsx
+   * // /app/routes/auth/$.jsx
    * import { LoaderArgs } from "@remix-run/node";
    * import { authenticate } from "../../shopify.server";
    *
@@ -288,7 +288,7 @@ export interface AdminApiContext<
    * <caption>Getting the number of orders in a store using rest resources</caption>
    *
    * ```ts
-   * // app/shopify.server.ts
+   * // /app/shopify.server.ts
    * import { shopifyApp } from "@shopify/shopify-app-remix";
    * import { restResources } from "@shopify/shopify-api/rest/admin/2023-07";
    *
@@ -301,7 +301,7 @@ export interface AdminApiContext<
    * ```
    *
    * ```ts
-   * // app/routes/**\/.ts
+   * // /app/routes/**\/*.ts
    * import { LoaderArgs, json } from "@remix-run/node";
    * import { authenticate } from "../shopify.server";
    *
@@ -315,7 +315,7 @@ export interface AdminApiContext<
    * <caption>Making a GET request to the REST API</caption>
    *
    * ```ts
-   * // app/shopify.server.ts
+   * // /app/shopify.server.ts
    * import { shopifyApp } from "@shopify/shopify-app-remix";
    * import { restResources } from "@shopify/shopify-api/rest/admin/2023-04";
    *
@@ -328,7 +328,7 @@ export interface AdminApiContext<
    * ```
    *
    * ```ts
-   * // app/routes/**\/.ts
+   * // /app/routes/**\/*.ts
    * import { LoaderArgs, json } from "@remix-run/node";
    * import { authenticate } from "../shopify.server";
    *

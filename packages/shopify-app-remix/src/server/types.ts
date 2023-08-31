@@ -100,7 +100,7 @@ interface Authenticate<Config extends AppConfigArg> {
    * @example
    * <caption>Registering webhooks and seeding data when a merchant installs your app.</caption>
    * ```ts
-   * // app/shopify.server.ts
+   * // /app/shopify.server.ts
    * import { LATEST_API_VERSION, shopifyApp } from "@shopify/shopify-app-remix";
    * import { restResources } from "@shopify/shopify-api/rest/admin/2023-04";
    *
@@ -112,7 +112,7 @@ interface Authenticate<Config extends AppConfigArg> {
    * export const authenticate = shopify.authenticate;
    * ```
    * ```ts
-   * // app/routes/**\/*.jsx
+   * // /app/routes/**\/*.jsx
    * import { LoaderArgs, json } from "@remix-run/node";
    * import { authenticate } from "../../shopify.server";
    *
@@ -132,7 +132,7 @@ interface Authenticate<Config extends AppConfigArg> {
    * <caption>Authenticating a request from a checkout extension</caption>
    *
    * ```ts
-   * // app/routes/api/checkout.jsx
+   * // /app/routes/api/checkout.jsx
    * import { LoaderArgs, json } from "@remix-run/node";
    * import { authenticate } from "../../shopify.server";
    * import { getWidgets } from "~/db/widgets";
@@ -153,7 +153,7 @@ interface Authenticate<Config extends AppConfigArg> {
    * <caption>Authenticating a webhook request</caption>
    *
    * ```ts
-   * // app/routes/api/checkout.jsx
+   * // /app/shopify.server.ts
    * import {
    *   DeliveryMethod,
    *   shopifyApp,
@@ -177,7 +177,7 @@ interface Authenticate<Config extends AppConfigArg> {
    * export const authenticate = shopify.authenticate;
    * ```
    * ```ts
-   * // app/routes/webhooks.ts
+   * // /app/routes/webhooks.ts
    * import { ActionArgs } from "@remix-run/node";
    * import { authenticate } from "../shopify.server";
    * import db from "../db.server";
@@ -223,7 +223,7 @@ interface Unauthenticated<Config extends AppConfigArg> {
    * @example
    * <caption>Responding to a request from an external service not controlled by Shopify.</caption>
    * ```ts
-   * // app/shopify.server.ts
+   * // /app/shopify.server.ts
    * import { LATEST_API_VERSION, shopifyApp } from "@shopify/shopify-app-remix";
    * import { restResources } from "@shopify/shopify-api/rest/admin/2023-04";
    *
@@ -234,7 +234,7 @@ interface Unauthenticated<Config extends AppConfigArg> {
    * export default shopify;
    * ```
    * ```ts
-   * // app/routes/**\/*.jsx
+   * // /app/routes/**\/*.jsx
    * import { LoaderArgs, json } from "@remix-run/node";
    * import { authenticateExternal } from "~/helpers/authenticate"
    * import shopify from "../../shopify.server";
@@ -252,14 +252,12 @@ interface Unauthenticated<Config extends AppConfigArg> {
 
 export interface ShopifyAppBase<Config extends AppConfigArg> {
   /**
-   * The SessionStorage instance your app is using.
-   *
-   * An instance of the SessionStorage class you passed in as a config option.
+   * The `SessionStorage` instance you passed in as a config option.
    *
    * @example
    * <caption>Using Prisma</caption>
    * ```ts
-   * // app/shopify.server.ts
+   * // /app/shopify.server.ts
    * import { shopifyApp } from "@shopify/shopify-app-remix";
    * import { PrismaSessionStorage } from "@shopify/shopify-app-session-storage-prisma";
    * import prisma from "~/db.server";

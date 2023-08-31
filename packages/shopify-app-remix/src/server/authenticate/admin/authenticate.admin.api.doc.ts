@@ -3,7 +3,7 @@ import {ReferenceEntityTemplateSchema} from '@shopify/generate-docs';
 const data: ReferenceEntityTemplateSchema = {
   name: 'Admin API',
   description:
-    'Contains objects used to interact with the Admin API.\n\nThis object is returned as part of different contexts, such as `admin`. See the [Related](#related) section for more information.',
+    'Contains objects used to interact with the Admin API.\n\nThis object is returned as part of different contexts, such as [`admin`](/docs/api/shopify-app-remix/backend/authenticate/admin), [`unauthenticated.admin`](/docs/api/shopify-app-remix/backend/unauthenticated-admin), and [`webhook`](/docs/api/shopify-app-remix/backend/authenticate/webhook).',
   category: 'backend',
   subCategory: 'admin features',
   type: 'object',
@@ -21,12 +21,12 @@ const data: ReferenceEntityTemplateSchema = {
     {
       name: 'Authenticated context',
       subtitle: 'Authenticate requests from Shopify Admin.',
-      url: '/docs/api/shopify-app-remix/backend/authenticate-admin',
+      url: '/docs/api/shopify-app-remix/backend/authenticate/admin',
     },
     {
       name: 'Unauthenticated context',
       subtitle: 'Interact with the Admin API on non-Shopify requests.',
-      url: '/docs/api/shopify-app-remix/backend/unauthenticated-admin',
+      url: '/docs/api/shopify-app-remix/backend/unauthenticated/unauthenticated-admin',
     },
   ],
 };

@@ -11,7 +11,7 @@ export const boundary = {
    * @example
    * <caption>Catching errors in a route</caption>
    * ```ts
-   * // app/routes/admin/widgets.ts
+   * // /app/routes/admin/widgets.ts
    * import { boundary } from "@shopify/shopify-app-remix";
    *
    * export function ErrorBoundary() {
@@ -27,7 +27,7 @@ export const boundary = {
    * @example
    * <caption>Catching errors in a route</caption>
    * ```ts
-   * // app/routes/admin/widgets.ts
+   * // /app/routes/admin/widgets.ts
    * import { boundary } from "@shopify/shopify-app-remix";
    *
    * export const headers = (headersArgs) => {
