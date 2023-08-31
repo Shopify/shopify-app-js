@@ -30,7 +30,7 @@ interface AdminContextInternal<
    * export const authenticate = shopify.authenticate;
    * ```
    * ```ts
-   * // app/routes/**\/.ts
+   * // /app/routes/**\/*.ts
    * import { LoaderArgs, json } from "@remix-run/node";
    * import { authenticate } from "../shopify.server";
    * import { getWidgets } from "~/db/widgets.server";
@@ -55,7 +55,7 @@ interface AdminContextInternal<
    * export const authenticate = shopify.authenticate;
    * ```
    * ```ts
-   * // app/routes/**\/.ts
+   * // /app/routes/**\/*.ts
    * import { LoaderArgs, json } from "@remix-run/node";
    * import { authenticate } from "../shopify.server";
    * import { getWidgets } from "~/db/widgets.server";
@@ -86,7 +86,7 @@ interface AdminContextInternal<
    * @example
    * <caption>Setting CORS headers for a admin request</caption>
    * ```ts
-   * // app/routes/admin/widgets.ts
+   * // /app/routes/admin/widgets.ts
    * import { LoaderArgs, json } from "@remix-run/node";
    * import { authenticate } from "../shopify.server";
    * import { getWidgets } from "~/db/widgets.server";
@@ -125,7 +125,7 @@ export interface EmbeddedAdminContext<
    * export const authenticate = shopify.authenticate;
    * ```
    * ```ts
-   * // app/routes/**\/.ts
+   * // /app/routes/**\/*.ts
    * import { LoaderArgs, json } from "@remix-run/node";
    * import { authenticate } from "../shopify.server";
    * import { getWidgets } from "~/db/widgets.server";
@@ -149,7 +149,7 @@ export interface EmbeddedAdminContext<
    * @example
    * <caption>Redirecting the user to the app's home page</caption>
    * ```ts
-   * // app/routes/admin/widgets.ts
+   * // /app/routes/admin/widgets.ts
    * import { LoaderArgs, json } from "@remix-run/node";
    * import { authenticate } from "../shopify.server";
    *
@@ -162,7 +162,7 @@ export interface EmbeddedAdminContext<
    * @example
    * <caption>Redirecting outside of Shopify Admin</caption>
    * ```ts
-   * // app/routes/admin/widgets.ts
+   * // /app/routes/admin/widgets.ts
    * import { LoaderArgs, json } from "@remix-run/node";
    * import { authenticate } from "../shopify.server";
    *

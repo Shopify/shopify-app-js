@@ -15,7 +15,7 @@ export interface UnauthenticatedAdminContext<
    * @example
    * <caption>Getting your app's shop specific widget data using a session</caption>
    * ```ts
-   * // app/routes/**\/.ts
+   * // /app/routes/**\/*.ts
    * import { LoaderArgs, json } from "@remix-run/node";
    * import { unauthenticated } from "../shopify.server";
    * import { getWidgets } from "~/db/widgets.server";

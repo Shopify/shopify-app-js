@@ -21,7 +21,7 @@ const data: ReferenceEntityTemplateSchema = {
     {
       name: 'Admin context',
       subtitle: 'Authenticate requests from Shopify Admin.',
-      url: '/docs/api/shopify-app-remix/backend/authenticate-admin',
+      url: '/docs/api/shopify-app-remix/backend/authenticate/admin',
     },
   ],
 };

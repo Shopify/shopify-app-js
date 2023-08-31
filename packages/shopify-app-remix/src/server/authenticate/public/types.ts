@@ -18,7 +18,7 @@ export interface PublicContext {
    * @example
    * <caption>Getting your app's store specific widget data using the session token</caption>
    * ```ts
-   * // app/routes/public/widgets.ts
+   * // /app/routes/public/widgets.ts
    * import { LoaderArgs, json } from "@remix-run/node";
    * import { authenticate } from "../shopify.server";
    * import { getWidgets } from "~/db/widgets.server";
@@ -39,7 +39,7 @@ export interface PublicContext {
    * @example
    * <caption>Setting CORS headers for a public request</caption>
    * ```ts
-   * // app/routes/public/widgets.ts
+   * // /app/routes/public/widgets.ts
    * import { LoaderArgs, json } from "@remix-run/node";
    * import { authenticate } from "../shopify.server";
    * import { getWidgets } from "~/db/widgets.server";
