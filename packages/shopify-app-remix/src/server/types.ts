@@ -245,7 +245,7 @@ export interface ShopifyAppBase<Config extends AppConfigArg> {
      * }
      * ```
      */
-    public: AuthenticatePublic<RestResourcesType<Config>>;
+    public: AuthenticatePublic;
 
     /**
      * Authenticate a Shopify webhook request, get back an authenticated admin context and details on the webhook request

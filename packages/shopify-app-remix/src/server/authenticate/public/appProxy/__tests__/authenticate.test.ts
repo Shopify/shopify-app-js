@@ -6,10 +6,7 @@ import {
   APP_URL,
   TEST_SHOP,
   getThrownResponse,
-  setUpValidSession,
   testConfig,
-  mockExternalRequest,
-  expectAdminApiClient,
 } from '../../../../__test-helpers';
 
 const REQUEST_URL = `https://${TEST_SHOP}/admin/api/${LATEST_API_VERSION}/customers.json`;
@@ -112,39 +109,6 @@ describe('authenticating app proxy requests', () => {
     // THEN
     expect(response.status).toBe(400);
     expect(response.statusText).toBe('Bad Request');
-  });
-
-  it('Returns the session', async () => {
-    // GIVEN
-    const shopify = shopifyApp(testConfig());
-    await setUpValidSession(shopify.sessionStorage);
-
-    // WHEN
-    const url = new URL(APP_URL);
-    url.searchParams.set('shop', TEST_SHOP);
-    url.searchParams.set('timestamp', secondsInPast(10));
-    url.searchParams.set('signature', await createAppProxyHmac(url));
-
-    const context = await shopify.authenticate.public.appProxy(
-      new Request(url.toString()),
-    );
-
-    // THEN
-    expect(context.session.shop).toBe(TEST_SHOP);
-  });
-
-  describe('Returns the admin client', () => {
-    expectAdminApiClient(async () => {
-      const shopify = shopifyApp(testConfig());
-      const expectedSession = await setUpValidSession(
-        shopify.sessionStorage,
-        false,
-      );
-      const {admin, session: actualSession} =
-        await shopify.unauthenticated.admin(TEST_SHOP);
-
-      return {admin, expectedSession, actualSession};
-    });
   });
 });
 
