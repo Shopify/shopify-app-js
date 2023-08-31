@@ -1,5 +1,8 @@
 import '@shopify/shopify-app-remix/server/adapters/node';
-import {LATEST_API_VERSION, shopifyApp} from '@shopify/shopify-app-remix';
+import {
+  LATEST_API_VERSION,
+  shopifyApp,
+} from '@shopify/shopify-app-remix/server';
 
 const shopify = shopifyApp({
   apiKey: process.env.SHOPIFY_API_KEY!,

@@ -21,7 +21,7 @@ interface AdminContextInternal<
    * <caption>Getting your app's shop specific widget data using an offline session</caption>
    * ```ts
    * // shopify.server.ts
-   * import { shopifyApp } from "@shopify/shopify-app-remix";
+   * import { shopifyApp } from "@shopify/shopify-app-remix/server";
    *
    * const shopify = shopifyApp({
    *   // ...etc
@@ -45,7 +45,7 @@ interface AdminContextInternal<
    * <caption>Getting your app's user specific widget data using an online session</caption>
    * ```ts
    * // shopify.server.ts
-   * import { shopifyApp } from "@shopify/shopify-app-remix";
+   * import { shopifyApp } from "@shopify/shopify-app-remix/server";
    *
    * const shopify = shopifyApp({
    *   // ...etc
@@ -115,7 +115,7 @@ export interface EmbeddedAdminContext<
    * <caption>Getting your app's user specific widget data using the session token</caption>
    * ```ts
    * // shopify.server.ts
-   * import { shopifyApp } from "@shopify/shopify-app-remix";
+   * import { shopifyApp } from "@shopify/shopify-app-remix/server";
    *
    * const shopify = shopifyApp({
    *   // ...etc

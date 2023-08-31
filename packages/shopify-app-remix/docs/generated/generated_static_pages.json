@@ -188,13 +188,13 @@
   {
     "id": "shopify-app-remix",
     "title": "Shopify App package for Remix",
-    "description": "The @shopify/shopify-app-remix package enables Remix apps to authenticate with Shopify and make API calls. It uses [App Bridge](/docs/api/app-bridge-library) to enable apps to embed themselves in the Shopify Admin.",
+    "description": "The @shopify/shopify-app-remix package enables Remix apps to authenticate with Shopify and make API calls. It uses [App Bridge](/docs/api/app-bridge-library) to enable apps to embed themselves in the Shopify Admin.\n\nIn this page we'll go over the main components you need to integrate an app with Shopify.\n\n> Tip: The quickest way to create a new app is using the Shopify CLI. Check out the [getting started guide](/docs/apps/getting-started/create), or the [app template](https://github.com/Shopify/shopify-app-template-remix) for a complete example.",
     "sections": [
       {
         "type": "Generic",
         "anchorLink": "install",
         "title": "Install",
-        "sectionContent": "The quickest way to create a new app is using the Shopify CLI. You can follow the getting started guide to create a new app that uses this package.\n\nYou can follow the instructions on this page to set up an existing app to use this package. Start by installing it using your preferred package manager.",
+        "sectionContent": "If you're not using the CLI, you can use the examples in this page to set up an existing app to use this package. Start by installing it using your preferred package manager.",
         "sectionCard": [
           {
             "name": "Build an app",
@@ -224,8 +224,8 @@
       {
         "type": "Generic",
         "anchorLink": "shopify-app",
-        "title": "Create the Shopify object",
-        "sectionContent": "The first thing you need to do is to call the `shopifyApp` function, so you can get context objects for your app.\n\n> Caution: When running on a node environment, you'll also need to import the node adapter, as per the example.",
+        "title": "Backend setup",
+        "sectionContent": "All of the backend features provided by this package are available through the `shopifyApp` function.\n\nThis function creates an object that can authenticate requests from Shopify, create contexts for non-Shopify requests, and much more.\n\n> Caution: When running on a node environment, you'll also need to import the node adapter, as per the example.",
         "sectionCard": [
           {
             "name": "shopifyApp",
@@ -239,23 +239,7 @@
             {
               "title": "/app/shopify.server.ts",
               "language": "ts",
-              "code": "import '@shopify/shopify-app-remix/server/adapters/node';\nimport {LATEST_API_VERSION, shopifyApp} from '@shopify/shopify-app-remix';\n\nconst shopify = shopifyApp({\n  apiKey: process.env.SHOPIFY_API_KEY!,\n  apiSecretKey: process.env.SHOPIFY_API_SECRET!,\n  appUrl: process.env.SHOPIFY_APP_URL!,\n  scopes: ['read_products'],\n  apiVersion: LATEST_API_VERSION,\n});\nexport default shopify;\n"
-            }
-          ]
-        }
-      },
-      {
-        "type": "Generic",
-        "anchorLink": "auth-route",
-        "title": "Create an auth route",
-        "sectionContent": "Next, you'll need a [splat route](https://remix.run/docs/en/main/guides/routing#splats) to enable your app to complete the [OAuth process](https://shopify.dev/docs/apps/auth/oauth) and retrieve an access token to the Shopify API.\n\nWhen a route calls `authenticate.admin`, the package will start OAuth to install the app or refresh tokens, and handle the callback from Shopify after it completes.\n\nWhen the `authenticate` methods return, that means the request is valid and you can run your app's logic.\n\nThe default route is `/app/routes/auth/$.tsx`, but you can configure this route using the `authPathPrefix` option.",
-        "codeblock": {
-          "title": "/app/routes/auth/$.ts",
-          "tabs": [
-            {
-              "title": "/app/routes/auth/$.ts",
-              "language": "ts",
-              "code": "import {LoaderArgs} from '@remix-run/node';\n\nimport shopify from '~/shopify.server';\n\nexport async function loader({request}: LoaderArgs) {\n  await shopify.authenticate.admin(request);\n\n  // App logic goes here\n\n  return null;\n}\n"
+              "code": "import '@shopify/shopify-app-remix/server/adapters/node';\nimport {\n  LATEST_API_VERSION,\n  shopifyApp,\n} from '@shopify/shopify-app-remix/server';\n\nconst shopify = shopifyApp({\n  apiKey: process.env.SHOPIFY_API_KEY!,\n  apiSecretKey: process.env.SHOPIFY_API_SECRET!,\n  appUrl: process.env.SHOPIFY_APP_URL!,\n  scopes: ['read_products'],\n  apiVersion: LATEST_API_VERSION,\n});\nexport default shopify;\n"
             }
           ]
         }
@@ -263,8 +247,8 @@
       {
         "type": "Generic",
         "anchorLink": "headers",
-        "title": "Set up response headers",
-        "sectionContent": "Now that your app is ready to respond to requests, it will also need to add the required Content-Security-Policy header directives, as per [our documentation](/docs/apps/store/security/iframe-protection). To do that, this package provides the shopify.addDocumentResponseHeaders method.\n\nYou should return these headers from any endpoint that renders HTML in your app. Most likely you'll want to add this to every HTML response by updating the `entry.server.tsx` file:",
+        "title": "Response headers",
+        "sectionContent": "When loading inside the Shopify Admin, your app will need to add the required `Content-Security-Policy` header directives, as per [our documentation](/docs/apps/store/security/iframe-protection). To do that, this package provides the `shopify.addDocumentResponseHeaders` method.\n\nYou should return these headers from any endpoint that renders HTML in your app. Most likely you'll want to add this to every HTML response by updating the `entry.server.tsx` file:",
         "codeblock": {
           "title": "/app/entry.server.tsx",
           "tabs": [
@@ -278,9 +262,41 @@
       },
       {
         "type": "Generic",
+        "anchorLink": "boundaries",
+        "title": "Error boundaries",
+        "sectionContent": "The authentication functions in this package rely on throwing `Response` objects, which must be handled in your Remix routes using them.\n\nTo do that, you can set up a [Remix `ErrorBoundary`](https://remix.run/docs/en/main/guides/errors). We provide some abstractions for the error and headers boundaries to make it easier for apps to set those up.\n\n> Tip: You can also add this to a [Remix layout](https://remix.run/docs/en/main/file-conventions/route-files-v2) if you want to authenticate more than one route.",
+        "codeblock": {
+          "title": "/app/routes/**/*.tsx",
+          "tabs": [
+            {
+              "title": "/app/routes/**/*.tsx",
+              "language": "tsx",
+              "code": "import {boundary} from '@shopify/shopify-app-remix/server';\n\nexport function ErrorBoundary() {\n  return boundary.error(useRouteError());\n}\n\nexport const headers = (headersArgs) =&gt; {\n  return boundary.headers(headersArgs);\n};\n"
+            }
+          ]
+        }
+      },
+      {
+        "type": "Generic",
+        "anchorLink": "auth-route",
+        "title": "OAuth route",
+        "sectionContent": "To install an app or refresh tokens, you'll need to set up an [OAuth](docs/apps/auth/oauth) route. To do that, set up a [splat route](https://remix.run/docs/en/main/guides/routing#splats) that calls `authenticate.admin`.\n\nWhen that function is called, the package will start the OAuth process, and handle the callback from Shopify after it completes.\n\nThe default route is `/app/routes/auth/$.tsx`, but you can configure this route using the `authPathPrefix` option.",
+        "codeblock": {
+          "title": "/app/routes/auth/$.tsx",
+          "tabs": [
+            {
+              "title": "/app/routes/auth/$.tsx",
+              "language": "ts",
+              "code": "import {LoaderArgs} from '@remix-run/node';\n\nimport shopify from '~/shopify.server';\n\nexport async function loader({request}: LoaderArgs) {\n  await shopify.authenticate.admin(request);\n\n  // App logic goes here\n\n  return null;\n}\n"
+            }
+          ]
+        }
+      },
+      {
+        "type": "Generic",
         "anchorLink": "app-provider",
-        "title": "Set up AppProvider",
-        "sectionContent": "Next, set up the `AppProvider` component in your app's routes. This component will set up App Bridge and Polaris so you can integrate your app into the Shopify Admin.\n\nTo do this pass the `process.env.SHOPIFY_API_KEY` to the frontend via the loader.",
+        "title": "AppProvider",
+        "sectionContent": "In order to use all of the features from App Bridge, you'll need to use the `AppProvider` component in your app's routes.\n\nThis component will set up App Bridge and Polaris so you can integrate your app into the Shopify Admin, and it helps us ensure your app stays up to date with Shopify requirements.\n\nTo do this pass the `process.env.SHOPIFY_API_KEY` to the frontend via the loader.",
         "sectionCard": [
           {
             "name": "App bridge",
@@ -307,22 +323,6 @@
               "title": "/app/root.tsx",
               "language": "tsx",
               "code": "import {LoaderArgs} from '@remix-run/node';\nimport {AppProvider} from '@shopify/shopify-app-remix/react';\n\nimport shopify from '~/shopify.server';\n\nexport async function loader({request}: LoaderArgs) {\n  await shopify.authenticate.admin(request);\n\n  return json({\n    apiKey: process.env.SHOPIFY_API_KEY,\n  });\n}\n\nexport default function App() {\n  const {apiKey} = useLoaderData&lt;typeof loader&gt;();\n\n  return (\n    &lt;html&gt;\n      &lt;head&gt;\n        &lt;Meta /&gt;\n        &lt;Links /&gt;\n      &lt;/head&gt;\n      &lt;body&gt;\n        &lt;AppProvider apiKey={apiKey} isEmbeddedApp&gt;\n          &lt;Outlet /&gt;\n        &lt;/AppProvider&gt;\n      &lt;/body&gt;\n    &lt;/html&gt;\n  );\n}\n"
-            }
-          ]
-        }
-      },
-      {
-        "type": "Generic",
-        "anchorLink": "boundaries",
-        "title": "Set up error boundaries",
-        "sectionContent": "It's important to note that the authentication functions in this package rely on throwing Response objects, which must be handled in your Remix routes using them.\n\nTo do that, you can set up a [Remix `ErrorBoundary`](https://remix.run/docs/en/main/guides/errors). We provide some abstractions for the error and headers boundaries to make it easier for apps to set those up.\n\n> Tip: You can also add this to a [Remix layout](https://remix.run/docs/en/main/file-conventions/route-files-v2) if you want to authenticate more than one route.",
-        "codeblock": {
-          "title": "/app/root.tsx",
-          "tabs": [
-            {
-              "title": "/app/root.tsx",
-              "language": "tsx",
-              "code": "import {boundary} from '@shopify/shopify-app-remix/server';\n\nexport function ErrorBoundary() {\n  return boundary.error(useRouteError());\n}\n\nexport const headers = (headersArgs) =&gt; {\n  return boundary.headers(headersArgs);\n};\n"
             }
           ]
         }

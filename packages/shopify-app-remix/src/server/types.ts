@@ -109,7 +109,7 @@ interface Authenticate<Config extends AppConfigArg> {
    * <caption>Registering webhooks and seeding data when a merchant installs your app.</caption>
    * ```ts
    * // /app/shopify.server.ts
-   * import { LATEST_API_VERSION, shopifyApp } from "@shopify/shopify-app-remix";
+   * import { LATEST_API_VERSION, shopifyApp } from "@shopify/shopify-app-remix/server";
    * import { restResources } from "@shopify/shopify-api/rest/admin/2023-04";
    *
    * const shopify = shopifyApp({
@@ -162,10 +162,7 @@ interface Authenticate<Config extends AppConfigArg> {
    *
    * ```ts
    * // /app/shopify.server.ts
-   * import {
-   *   DeliveryMethod,
-   *   shopifyApp,
-   * } from "@shopify/shopify-app-remix";
+   * import { DeliveryMethod, shopifyApp } from "@shopify/shopify-app-remix/server";
    *
    * const shopify = shopifyApp({
    *   webhooks: {
@@ -232,7 +229,7 @@ interface Unauthenticated<Config extends AppConfigArg> {
    * <caption>Responding to a request from an external service not controlled by Shopify.</caption>
    * ```ts
    * // /app/shopify.server.ts
-   * import { LATEST_API_VERSION, shopifyApp } from "@shopify/shopify-app-remix";
+   * import { LATEST_API_VERSION, shopifyApp } from "@shopify/shopify-app-remix/server";
    * import { restResources } from "@shopify/shopify-api/rest/admin/2023-04";
    *
    * const shopify = shopifyApp({
@@ -266,7 +263,7 @@ export interface ShopifyAppBase<Config extends AppConfigArg> {
    * <caption>Using Prisma</caption>
    * ```ts
    * // /app/shopify.server.ts
-   * import { shopifyApp } from "@shopify/shopify-app-remix";
+   * import { shopifyApp } from "@shopify/shopify-app-remix/server";
    * import { PrismaSessionStorage } from "@shopify/shopify-app-session-storage-prisma";
    * import prisma from "~/db.server";
    *
@@ -290,7 +287,7 @@ export interface ShopifyAppBase<Config extends AppConfigArg> {
    *
    * ```
    * // ~/shopify.server.ts
-   * import { shopifyApp } from "@shopify/shopify-app-remix";
+   * import { shopifyApp } from "@shopify/shopify-app-remix/server";
    *
    * const shopify = shopifyApp({
    *   // ...etc
@@ -331,7 +328,7 @@ export interface ShopifyAppBase<Config extends AppConfigArg> {
    * @example
    * <caption>Registering webhooks when a merchant installs your app.</caption>
    * ```ts
-   * import { DeliveryMethod, shopifyApp } from "@shopify/shopify-app-remix";
+   * import { DeliveryMethod, shopifyApp } from "@shopify/shopify-app-remix/server";
    *
    * const shopify = shopifyApp({
    *   hooks: {

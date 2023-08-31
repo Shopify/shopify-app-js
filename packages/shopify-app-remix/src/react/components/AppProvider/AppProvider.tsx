@@ -30,7 +30,7 @@ export interface AppProviderProps
   i18n?: PolarisAppProviderProps['i18n'];
   /**
    * Used internally by Shopify. You should not need to set this.
-   * @internal
+   * @private
    */
   __APP_BRIDGE_URL?: string;
 }

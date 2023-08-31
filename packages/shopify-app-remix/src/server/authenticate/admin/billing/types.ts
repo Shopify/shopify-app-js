@@ -67,7 +67,7 @@ export interface BillingContext<Config extends AppConfigArg> {
    * ```
    * ```ts
    * // shopify.server.ts
-   * import { shopifyApp, BillingInterval } from "@shopify/shopify-app-remix";
+   * import { shopifyApp, BillingInterval } from "@shopify/shopify-app-remix/server";
    *
    * export const MONTHLY_PLAN = 'Monthly subscription';
    * export const ANNUAL_PLAN = 'Annual subscription';
@@ -114,7 +114,7 @@ export interface BillingContext<Config extends AppConfigArg> {
    * ```
    * ```ts
    * // shopify.server.ts
-   * import { shopifyApp, BillingInterval } from "@shopify/shopify-app-remix";
+   * import { shopifyApp, BillingInterval } from "@shopify/shopify-app-remix/server";
    *
    * export const MONTHLY_PLAN = 'Monthly subscription';
    * export const ANNUAL_PLAN = 'Annual subscription';
@@ -170,7 +170,7 @@ export interface BillingContext<Config extends AppConfigArg> {
    * ```
    * ```ts
    * // shopify.server.ts
-   * import { shopifyApp, BillingInterval } from "@shopify/shopify-app-remix";
+   * import { shopifyApp, BillingInterval } from "@shopify/shopify-app-remix/server";
    *
    * export const MONTHLY_PLAN = 'Monthly subscription';
    * export const ANNUAL_PLAN = 'Annual subscription';
@@ -227,7 +227,7 @@ export interface BillingContext<Config extends AppConfigArg> {
    * ```
    * ```ts
    * // shopify.server.ts
-   * import { shopifyApp, BillingInterval } from "@shopify/shopify-app-remix";
+   * import { shopifyApp, BillingInterval } from "@shopify/shopify-app-remix/server";
    *
    * export const MONTHLY_PLAN = 'Monthly subscription';
    * export const ANNUAL_PLAN = 'Annual subscription';
