@@ -16,4 +16,4 @@ const shopify = shopifyApp({
 > It will delete all sessions if the app process gets restarted or redeployed, and is not meant for production use.
 > For persistent storage, use one of the other options (see relevant section above for instructions).
 
-If you prefer to use your own implementation of a session storage mechanism that is compatible with the `@shopify/shopify-app-express` package, see the [implementing session storage guide](../shopify-app-session-storage/implementing-session-storage.md).
+If you prefer to use your own implementation of a session storage mechanism that is compatible with the `@shopify/shopify-app-express` package, see the [implementing session storage guide](https://github.com/Shopify/shopify-app-js/blob/main/packages/shopify-app-session-storage/implementing-session-storage.md).
