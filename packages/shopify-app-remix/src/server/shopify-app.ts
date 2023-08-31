@@ -40,7 +40,7 @@ import {authenticatePublicFactory} from './authenticate/public';
  * @example
  * <caption>The minimum viable configuration</caption>
  * ```ts
- * import { shopifyApp } from "@shopify/shopify-app-remix";
+ * import { shopifyApp } from "@shopify/shopify-app-remix/server";
  *
  * const shopify = shopifyApp({
  *   apiKey: process.env.SHOPIFY_API_KEY!,

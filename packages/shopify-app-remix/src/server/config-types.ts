@@ -38,7 +38,7 @@ export interface AppConfigArg<
    * @example
    * <caption>Using Prisma</caption>
    * ```ts
-   * import { shopifyApp } from "@shopify/shopify-app-remix";
+   * import { shopifyApp } from "@shopify/shopify-app-remix/server";
    * import { PrismaSessionStorage } from "@shopify/shopify-app-session-storage-prisma";
    *
    * import prisma from "~/db.server";
@@ -74,7 +74,7 @@ export interface AppConfigArg<
    * <caption>Registering for a webhook when a merchant uninstalls your app.</caption>
    * ```ts
    * // /app/shopify.server.ts
-   * import { DeliveryMethod, shopifyApp } from "@shopify/shopify-app-remix";
+   * import { DeliveryMethod, shopifyApp } from "@shopify/shopify-app-remix/server";
    *
    * const shopify = shopifyApp({
    *   webhooks: {
@@ -126,7 +126,7 @@ export interface AppConfigArg<
    * @example
    * <caption>Seeding your database custom data when a merchant installs your app.</caption>
    * ```ts
-   * import { DeliveryMethod, shopifyApp } from "@shopify/shopify-app-remix";
+   * import { DeliveryMethod, shopifyApp } from "@shopify/shopify-app-remix/server";
    * import { seedStoreData } from "~/db/seeds"
    *
    * const shopify = shopifyApp({
@@ -167,7 +167,7 @@ export interface AppConfigArg<
    * @example
    * <caption>Using the latest API Version (Recommended)</caption>
    * ```ts
-   * import { LATEST_API_VERSION, shopifyApp } from "@shopify/shopify-app-remix";
+   * import { LATEST_API_VERSION, shopifyApp } from "@shopify/shopify-app-remix/server";
    *
    * const shopify = shopifyApp({
    *   // ...etc
@@ -188,7 +188,7 @@ export interface AppConfigArg<
    * <caption>Using the latest API Version (Recommended)</caption>
    * ```ts
    * // /app/shopify.server.ts
-   * import { LATEST_API_VERSION, shopifyApp } from "@shopify/shopify-app-remix";
+   * import { LATEST_API_VERSION, shopifyApp } from "@shopify/shopify-app-remix/server";
    *
    * const shopify = shopifyApp({
    *   // ...etc
@@ -244,7 +244,7 @@ interface HooksConfig {
    * @example
    * <caption>Registering webhooks and seeding data when a merchant installs your app.</caption>
    * ```ts
-   * import { DeliveryMethod, shopifyApp } from "@shopify/shopify-app-remix";
+   * import { DeliveryMethod, shopifyApp } from "@shopify/shopify-app-remix/server";
    * import { seedStoreData } from "~/db/seeds"
    *
    * const shopify = shopifyApp({
@@ -289,7 +289,7 @@ export interface AdminApiContext<
    *
    * ```ts
    * // /app/shopify.server.ts
-   * import { shopifyApp } from "@shopify/shopify-app-remix";
+   * import { shopifyApp } from "@shopify/shopify-app-remix/server";
    * import { restResources } from "@shopify/shopify-api/rest/admin/2023-07";
    *
    * const shopify = shopifyApp({
@@ -316,7 +316,7 @@ export interface AdminApiContext<
    *
    * ```ts
    * // /app/shopify.server.ts
-   * import { shopifyApp } from "@shopify/shopify-app-remix";
+   * import { shopifyApp } from "@shopify/shopify-app-remix/server";
    * import { restResources } from "@shopify/shopify-api/rest/admin/2023-04";
    *
    * const shopify = shopifyApp({
