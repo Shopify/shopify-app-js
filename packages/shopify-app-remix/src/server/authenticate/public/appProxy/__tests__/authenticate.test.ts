@@ -1,6 +1,6 @@
 import {HashFormat, createSHA256HMAC} from '@shopify/shopify-api/runtime';
 
-import {LATEST_API_VERSION, shopifyApp} from '../../../..';
+import {shopifyApp} from '../../../..';
 import {
   API_SECRET_KEY,
   APP_URL,
@@ -9,8 +9,6 @@ import {
   setUpValidSession,
   testConfig,
 } from '../../../../__test-helpers';
-
-const REQUEST_URL = `https://${TEST_SHOP}/admin/api/${LATEST_API_VERSION}/customers.json`;
 
 describe('authenticating app proxy requests', () => {
   it('Throws a 400 response if there is no signature param', async () => {
@@ -32,7 +30,7 @@ describe('authenticating app proxy requests', () => {
     expect(response.statusText).toBe('Bad Request');
   });
 
-  it.only('Throws a 400 response if the signature param is incorrect', async () => {
+  it('Throws a 400 response if the signature param is incorrect', async () => {
     // GIVEN
     const shopify = shopifyApp(testConfig());
 
@@ -80,26 +78,6 @@ describe('authenticating app proxy requests', () => {
     const url = new URL(APP_URL);
     url.searchParams.set('shop', TEST_SHOP);
     url.searchParams.set('timestamp', secondsInFuture(100));
-    url.searchParams.set('signature', await createAppProxyHmac(url));
-
-    const response = await getThrownResponse(
-      shopify.authenticate.public.appProxy,
-      new Request(url.toString()),
-    );
-
-    // THEN
-    expect(response.status).toBe(400);
-    expect(response.statusText).toBe('Bad Request');
-  });
-
-  it('Throws a 400 response if there is no session for that shop', async () => {
-    // GIVEN
-    const shopify = shopifyApp(testConfig());
-
-    // WHEN
-    const url = new URL(APP_URL);
-    url.searchParams.set('shop', TEST_SHOP);
-    url.searchParams.set('timestamp', secondsInPast(10));
     url.searchParams.set('signature', await createAppProxyHmac(url));
 
     const response = await getThrownResponse(

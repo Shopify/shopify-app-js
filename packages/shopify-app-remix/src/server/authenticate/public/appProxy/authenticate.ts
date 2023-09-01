@@ -2,11 +2,10 @@ import {BasicParams} from '../../../types';
 
 import {AuthenticateAppProxy} from './types';
 
-export function authenticateAppProxyFactory(
-  params: BasicParams,
-): AuthenticateAppProxy {
-  const {logger, api, config} = params;
-
+export function authenticateAppProxyFactory({
+  logger,
+  api,
+}: BasicParams): AuthenticateAppProxy {
   return async function authenticateAppProxy(request): Promise<undefined> {
     logger.info('Authenticating app proxy request');
 
@@ -29,15 +28,6 @@ export function authenticateAppProxyFactory(
         status: 400,
         statusText: 'Bad Request',
       });
-    }
-
-    const shop = searchParams.get('shop')!;
-    const sessionId = api.session.getOfflineId(shop);
-    const session = await config.sessionStorage.loadSession(sessionId);
-
-    if (!session) {
-      logger.info('App proxy request could not load session for shop', {shop});
-      throw new Response(undefined, {status: 400, statusText: 'Bad Request'});
     }
 
     return undefined;
