@@ -1,8 +1,10 @@
 import {Session} from '@shopify/shopify-api';
-import {TEST_SHOP} from '.';
+
 import {LATEST_API_VERSION} from '..';
 import {AdminApiContext} from '../config-types';
+
 import {mockExternalRequest} from './request-mock';
+import {TEST_SHOP} from './const';
 
 const REQUEST_URL = `https://${TEST_SHOP}/admin/api/${LATEST_API_VERSION}/customers.json`;
 
