@@ -6,6 +6,7 @@ import {
   APP_URL,
   TEST_SHOP,
   getThrownResponse,
+  setUpValidSession,
   testConfig,
 } from '../../../../__test-helpers';
 
@@ -31,15 +32,15 @@ describe('authenticating app proxy requests', () => {
     expect(response.statusText).toBe('Bad Request');
   });
 
-  it('Throws a 400 response if the signature param is incorrect', async () => {
+  it.only('Throws a 400 response if the signature param is incorrect', async () => {
     // GIVEN
     const shopify = shopifyApp(testConfig());
 
     // WHEN
     const url = new URL(APP_URL);
     url.searchParams.set('shop', TEST_SHOP);
-    url.searchParams.set('timestamp', secondsInPast(10));
-    url.searchParams.set('signature', await createAppProxyHmac(url));
+    url.searchParams.set('timestamp', secondsInPast(1));
+    url.searchParams.set('signature', 'not-the-right-signature');
 
     const response = await getThrownResponse(
       shopify.authenticate.public.appProxy,
@@ -109,6 +110,26 @@ describe('authenticating app proxy requests', () => {
     // THEN
     expect(response.status).toBe(400);
     expect(response.statusText).toBe('Bad Request');
+  });
+
+  it('Returns undefined if timestamp and signature is valid and there is a session', async () => {
+    // GIVEN
+    const config = testConfig();
+    const shopify = shopifyApp(config);
+    setUpValidSession(config.sessionStorage);
+
+    // WHEN
+    const url = new URL(APP_URL);
+    url.searchParams.set('shop', TEST_SHOP);
+    url.searchParams.set('timestamp', secondsInPast(1));
+    url.searchParams.set('signature', await createAppProxyHmac(url));
+
+    const context = await shopify.authenticate.public.appProxy(
+      new Request(url.toString()),
+    );
+
+    // THEN
+    expect(context).toBe(undefined);
   });
 });
 
