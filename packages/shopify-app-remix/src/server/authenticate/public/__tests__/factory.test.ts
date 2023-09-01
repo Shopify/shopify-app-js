@@ -1,19 +1,43 @@
-import {shopifyApp} from '../../../..';
+import {shopifyApp} from '../../..';
 import {
   APP_URL,
   getJwt,
   getThrownResponse,
   testConfig,
-} from '../../../../__test-helpers';
+} from '../../../__test-helpers';
 
 describe('JWT validation', () => {
+  it.only('logs that the method is deprecated', async () => {
+    // GIVEN
+    const config = testConfig();
+    const shopify = shopifyApp(config);
+    const {token} = getJwt();
+
+    // WHEN
+    await shopify.authenticate.public(
+      new Request(APP_URL, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }),
+    );
+
+    // THEN
+    expect(config.logger?.log).toHaveBeenCalledWith(
+      expect.any(Number),
+      expect.stringContaining(
+        'authenticate.public() will be deprecated in v2. Use authenticate.public.checkout() instead.',
+      ),
+    );
+  });
+
   it('returns token when successful', async () => {
     // GIVEN
     const shopify = shopifyApp(testConfig());
     const {token, payload} = getJwt();
 
     // WHEN
-    const {sessionToken} = await shopify.authenticate.public.checkout(
+    const {sessionToken} = await shopify.authenticate.public(
       new Request(APP_URL, {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -31,7 +55,7 @@ describe('JWT validation', () => {
     const {token} = getJwt();
 
     // WHEN
-    const {cors} = await shopify.authenticate.public.checkout(
+    const {cors} = await shopify.authenticate.public(
       new Request('https://some-other.origin', {
         headers: {
           Origin: 'https://some-other.origin',
@@ -55,7 +79,7 @@ describe('JWT validation', () => {
 
     // WHEN
     const response = await getThrownResponse(
-      async (request) => shopify.authenticate.public.checkout(request),
+      shopify.authenticate.public,
       new Request(APP_URL, {
         method: 'OPTIONS',
         headers: {Authorization: `Bearer ${token}`},
@@ -81,9 +105,7 @@ describe('JWT validation', () => {
     // WHEN
     const response = await getThrownResponse(
       async (request) =>
-        shopify.authenticate.public.checkout(request, {
-          corsHeaders: ['X-Extra-Header'],
-        }),
+        shopify.authenticate.public(request, {corsHeaders: ['X-Extra-Header']}),
       request,
     );
 
@@ -100,7 +122,7 @@ describe('JWT validation', () => {
 
     // WHEN
     const response = await getThrownResponse(
-      async (request) => shopify.authenticate.public.checkout(request),
+      shopify.authenticate.public,
       new Request(APP_URL),
     );
 
@@ -114,7 +136,7 @@ describe('JWT validation', () => {
 
     // WHEN
     const response = await getThrownResponse(
-      async (request) => shopify.authenticate.public.checkout(request),
+      shopify.authenticate.public,
       new Request(APP_URL, {
         headers: {Authorization: `Bearer this_is_not_a_valid_token`},
       }),
@@ -130,7 +152,7 @@ describe('JWT validation', () => {
 
     // WHEN
     const response = await getThrownResponse(
-      async (request) => shopify.authenticate.public.checkout(request),
+      shopify.authenticate.public,
       new Request(APP_URL, {
         headers: {'User-Agent': 'Googlebot'},
       }),
