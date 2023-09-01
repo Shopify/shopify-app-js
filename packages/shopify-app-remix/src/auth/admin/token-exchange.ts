@@ -117,16 +117,20 @@ export class EmbeddedAuthStrategy<
 
       logger.debug('Session token is present, validating session', {shop});
 
-      const sessionToken = await validateSessionToken(
-        {api, logger, config},
-        sessionTokenString,
-      );
+      try {
+        const sessionToken = await validateSessionToken(
+          {api, logger, config},
+          sessionTokenString,
+        );
 
-      return this.getTokenViaTokenExchange(
-        request,
-        sessionTokenString,
-        sessionToken,
-      );
+        return this.getTokenViaTokenExchange(
+          request,
+          sessionTokenString,
+          sessionToken,
+        );
+      } catch (error) {
+        throw this.renderAppBridge(request, '/');
+      }
     } else {
       logger.debug(
         'Missing session token in search params, going to bounce page',
@@ -182,7 +186,7 @@ export class EmbeddedAuthStrategy<
     });
 
     if (sessionId) {
-      logger.debug(`SESSION ID: ${sessionId}`)
+      logger.debug(`SESSION ID: ${sessionId}`);
       const persistedSession = await config.sessionStorage.loadSession(
         sessionId,
       );

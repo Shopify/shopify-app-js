@@ -309,7 +309,11 @@ export class AuthStrategy<
         searchParamSessionToken,
       );
 
-      return this.getTokenViaTokenExchange(request, searchParamSessionToken, sessionToken);
+      return this.getTokenViaTokenExchange(
+        request,
+        searchParamSessionToken,
+        sessionToken,
+      );
     } else {
       // eslint-disable-next-line no-warning-comments
       // TODO move this check into loadSession once we add support for it in the library
