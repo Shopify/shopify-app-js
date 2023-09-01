@@ -7,7 +7,7 @@ import {
 } from '../../../__test-helpers';
 
 describe('JWT validation', () => {
-  it.only('logs that the method is deprecated', async () => {
+  it('logs that the method is deprecated', async () => {
     // GIVEN
     const config = testConfig();
     const shopify = shopifyApp(config);
@@ -56,7 +56,7 @@ describe('JWT validation', () => {
 
     // WHEN
     const {cors} = await shopify.authenticate.public(
-      new Request('https://some-other.origin', {
+      new Request(APP_URL, {
         headers: {
           Origin: 'https://some-other.origin',
           Authorization: `Bearer ${token}`,
@@ -94,7 +94,7 @@ describe('JWT validation', () => {
     // GIVEN
     const shopify = shopifyApp(testConfig());
     const {token} = getJwt();
-    const request = new Request('https://some-other.origin', {
+    const request = new Request(APP_URL, {
       method: 'OPTIONS',
       headers: {
         Origin: 'https://some-other.origin',

@@ -24,7 +24,7 @@ export type AuthenticatePublic = AuthenticateCheckout & {
    * Authenticate a request from a checkout extension
    *
    * @example
-   * Authenticating a checkout extension request
+   * <caption>Authenticating a checkout extension request</caption>
    * ```ts
    * // app/routes/public/widgets.ts
    * import { LoaderArgs, json } from "@remix-run/node";
@@ -44,7 +44,7 @@ export type AuthenticatePublic = AuthenticateCheckout & {
    * Authenticate a request from an app proxy
    *
    * @example
-   * Authenticating an app proxy request
+   * <caption>Authenticating an app proxy request</caption>
    * ```ts
    * // app/routes/public/widgets.ts
    * import { LoaderArgs, json } from "@remix-run/node";

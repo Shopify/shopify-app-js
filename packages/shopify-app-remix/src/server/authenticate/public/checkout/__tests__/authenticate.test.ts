@@ -32,7 +32,7 @@ describe('JWT validation', () => {
 
     // WHEN
     const {cors} = await shopify.authenticate.public.checkout(
-      new Request('https://some-other.origin', {
+      new Request(APP_URL, {
         headers: {
           Origin: 'https://some-other.origin',
           Authorization: `Bearer ${token}`,
@@ -70,7 +70,7 @@ describe('JWT validation', () => {
     // GIVEN
     const shopify = shopifyApp(testConfig());
     const {token} = getJwt();
-    const request = new Request('https://some-other.origin', {
+    const request = new Request(APP_URL, {
       method: 'OPTIONS',
       headers: {
         Origin: 'https://some-other.origin',
