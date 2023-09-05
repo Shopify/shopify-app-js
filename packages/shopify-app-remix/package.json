@@ -51,7 +51,7 @@
   ],
   "devDependencies": {
     "@remix-run/react": "^1.19.0",
-    "@shopify/generate-docs": "/Users/paulo/src/github.com/Shopify/generate-docs/packages/generate-docs/shopify-generate-docs-0.10.13.tgz",
+    "@shopify/generate-docs": "^0.11.0",
     "@shopify/polaris": "^11.8.0",
     "@shopify/react-testing": "^5.1.3",
     "@shopify/shopify-app-session-storage-memory": "^1.0.11",
