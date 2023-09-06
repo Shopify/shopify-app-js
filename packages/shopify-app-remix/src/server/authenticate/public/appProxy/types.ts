@@ -9,6 +9,7 @@ export type AuthenticateAppProxy = (
 export type LiquidResponseFunction = (
   body: string,
   init?: number | ResponseInit,
+  options?: {layout: boolean},
 ) => Response;
 
 interface AppProxyContext {
