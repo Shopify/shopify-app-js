@@ -37,6 +37,21 @@ const shopify = shopifyApp({
 
 If you prefer to use your own implementation of a session storage mechanism that is compatible with the `@shopify/shopify-app-express` package, see the [implementing session storage guide](https://github.com/Shopify/shopify-app-js/blob/main/packages/shopify-app-session-storage/implementing-session-storage.md).
 
+## Options
+
+You can also pass in some optional flags to tweak the behavior of the adapter.
+
+### Custom table name
+
+You can pass in the `tableName` option if you want to use a different table name in your schema.
+For example:
+
+```ts
+const storage = new PrismaSessionStorage(prisma, {
+  tableName: 'MyCustomSession',
+});
+```
+
 ## Troubleshooting
 
 If there is an issue with your schema that prevents it from finding the `Session` table, this package will throw a `MissingSessionTableError`.
