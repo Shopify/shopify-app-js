@@ -4,9 +4,10 @@ import {adminClientFactory} from '../../../clients/admin';
 import {BasicParams} from '../../../types';
 
 import {
-  AppProxyContext,
+  AppProxyContextWithoutSession,
   AppProxyContextWithSession,
   AuthenticateAppProxy,
+  LiquidResponseFunction,
 } from './types';
 
 export function authenticateAppProxyFactory<
@@ -16,7 +17,9 @@ export function authenticateAppProxyFactory<
 
   return async function authenticate(
     request,
-  ): Promise<AppProxyContext | AppProxyContextWithSession<Resources>> {
+  ): Promise<
+    AppProxyContextWithoutSession | AppProxyContextWithSession<Resources>
+  > {
     logger.info('Authenticating app proxy request');
 
     const {searchParams} = new URL(request.url);
@@ -45,7 +48,8 @@ export function authenticateAppProxyFactory<
     const session = await config.sessionStorage.loadSession(sessionId);
 
     if (!session) {
-      const context: AppProxyContext = {
+      const context: AppProxyContextWithoutSession = {
+        liquid,
         session: undefined,
         admin: undefined,
       };
@@ -54,6 +58,7 @@ export function authenticateAppProxyFactory<
     }
 
     const context: AppProxyContextWithSession<Resources> = {
+      liquid,
       session,
       admin: adminClientFactory({params, session}),
     };
@@ -61,3 +66,18 @@ export function authenticateAppProxyFactory<
     return context;
   };
 }
+
+const liquid: LiquidResponseFunction = function liquid(
+  body: string,
+  init?: number | ResponseInit,
+) {
+  const responseInit = typeof init === 'number' ? {status: init} : init || {};
+  const headers = new Headers(responseInit.headers);
+
+  headers.set('Content-Type', 'application/liquid');
+
+  return new Response(body, {
+    ...responseInit,
+    headers,
+  });
+};
