@@ -1,4 +1,5 @@
 import {Session, ShopifyRestResources} from '@shopify/shopify-api';
+
 import {AdminApiContext} from '../../../config-types';
 
 export type AuthenticateAppProxy = (

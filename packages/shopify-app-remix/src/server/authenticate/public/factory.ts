@@ -1,10 +1,11 @@
+import {ShopifyRestResources} from '@shopify/shopify-api';
+
 import {BasicParams} from '../../types';
 
 import {authenticateCheckoutFactory} from './checkout/authenticate';
 import {AuthenticateCheckoutOptions} from './checkout/types';
 import {authenticateAppProxyFactory} from './appProxy/authenticate';
 import {AuthenticatePublic} from './types';
-import {ShopifyRestResources} from '@shopify/shopify-api';
 
 export function authenticatePublicFactory<
   Resources extends ShopifyRestResources,

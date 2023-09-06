@@ -1,3 +1,5 @@
+import {ShopifyRestResources} from '@shopify/shopify-api';
+
 import {adminClientFactory} from '../../../clients/admin';
 import {BasicParams} from '../../../types';
 
@@ -6,7 +8,6 @@ import {
   AppProxyContextWithSession,
   AuthenticateAppProxy,
 } from './types';
-import {ShopifyRestResources} from '@shopify/shopify-api';
 
 export function authenticateAppProxyFactory<
   Resources extends ShopifyRestResources,
