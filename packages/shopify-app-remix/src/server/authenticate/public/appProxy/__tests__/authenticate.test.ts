@@ -5,6 +5,7 @@ import {
   API_SECRET_KEY,
   APP_URL,
   TEST_SHOP,
+  expectAdminApiClient,
   getThrownResponse,
   setUpValidSession,
   testConfig,
@@ -90,24 +91,42 @@ describe('authenticating app proxy requests', () => {
     expect(response.statusText).toBe('Bad Request');
   });
 
-  it('Returns undefined if timestamp and signature is valid and there is a session', async () => {
-    // GIVEN
-    const config = testConfig();
-    const shopify = shopifyApp(config);
-    setUpValidSession(config.sessionStorage);
+  describe('when the request is valid and there is no session', () => {
+    it('Returns AppProxy Context', async () => {
+      // GIVEN
+      const config = testConfig();
+      const shopify = shopifyApp(config);
 
-    // WHEN
-    const url = new URL(APP_URL);
-    url.searchParams.set('shop', TEST_SHOP);
-    url.searchParams.set('timestamp', secondsInPast(1));
-    url.searchParams.set('signature', await createAppProxyHmac(url));
+      // WHEN
+      const url = new URL(APP_URL);
+      url.searchParams.set('shop', TEST_SHOP);
+      url.searchParams.set('timestamp', secondsInPast(1));
+      url.searchParams.set('signature', await createAppProxyHmac(url));
 
-    const context = await shopify.authenticate.public.appProxy(
-      new Request(url.toString()),
-    );
+      const context = await shopify.authenticate.public.appProxy(
+        new Request(url.toString()),
+      );
 
-    // THEN
-    expect(context).toBe(undefined);
+      // THEN
+      expect(context).toStrictEqual({
+        session: undefined,
+        admin: undefined,
+      });
+    });
+  });
+
+  describe('when the request is valid and there is a session', () => {
+    expectAdminApiClient(async () => {
+      const shopify = shopifyApp(testConfig());
+      const expectedSession = await setUpValidSession(
+        shopify.sessionStorage,
+        false,
+      );
+      const {admin, session: actualSession} =
+        await shopify.unauthenticated.admin(TEST_SHOP);
+
+      return {admin, expectedSession, actualSession};
+    });
   });
 });
 
