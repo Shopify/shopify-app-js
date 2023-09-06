@@ -67,16 +67,15 @@ export function authenticateAppProxyFactory<
   };
 }
 
-const liquid: LiquidResponseFunction = function liquid(
-  body: string,
-  init?: number | ResponseInit,
-) {
+const liquid: LiquidResponseFunction = function liquid(body, init, options) {
   const responseInit = typeof init === 'number' ? {status: init} : init || {};
-  const headers = new Headers(responseInit.headers);
+  const responseBody =
+    options?.layout === false ? `{% layout none %} ${body}` : body;
 
+  const headers = new Headers(responseInit.headers);
   headers.set('Content-Type', 'application/liquid');
 
-  return new Response(body, {
+  return new Response(responseBody, {
     ...responseInit,
     headers,
   });
