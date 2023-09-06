@@ -1,3 +1,5 @@
+import {ShopifyRestResources} from '@shopify/shopify-api';
+
 import {BasicParams} from '../../types';
 
 import {authenticateCheckoutFactory} from './checkout/authenticate';
@@ -5,9 +7,9 @@ import {AuthenticateCheckoutOptions} from './checkout/types';
 import {authenticateAppProxyFactory} from './appProxy/authenticate';
 import {AuthenticatePublic} from './types';
 
-export function authenticatePublicFactory(
-  params: BasicParams,
-): AuthenticatePublic {
+export function authenticatePublicFactory<
+  Resources extends ShopifyRestResources,
+>(params: BasicParams): AuthenticatePublic {
   const {logger} = params;
 
   const authenticateCheckout = authenticateCheckoutFactory(params);
@@ -24,7 +26,7 @@ export function authenticatePublicFactory(
   };
 
   authenticatePublic.checkout = authenticateCheckout;
-  authenticatePublic.appProxy = authenticateAppProxyFactory(params);
+  authenticatePublic.appProxy = authenticateAppProxyFactory<Resources>(params);
 
   return authenticatePublic;
 }

@@ -1,12 +1,22 @@
+import {ShopifyRestResources} from '@shopify/shopify-api';
+
+import {adminClientFactory} from '../../../clients/admin';
 import {BasicParams} from '../../../types';
 
-import {AuthenticateAppProxy} from './types';
+import {
+  AppProxyContext,
+  AppProxyContextWithSession,
+  AuthenticateAppProxy,
+} from './types';
 
-export function authenticateAppProxyFactory({
-  logger,
-  api,
-}: BasicParams): AuthenticateAppProxy {
-  return async function authenticateAppProxy(request): Promise<undefined> {
+export function authenticateAppProxyFactory<
+  Resources extends ShopifyRestResources,
+>(params: BasicParams): AuthenticateAppProxy {
+  const {api, config, logger} = params;
+
+  return async function authenticate(
+    request,
+  ): Promise<AppProxyContext | AppProxyContextWithSession<Resources>> {
     logger.info('Authenticating app proxy request');
 
     const {searchParams} = new URL(request.url);
@@ -30,6 +40,24 @@ export function authenticateAppProxyFactory({
       });
     }
 
-    return undefined;
+    const shop = searchParams.get('shop')!;
+    const sessionId = api.session.getOfflineId(shop);
+    const session = await config.sessionStorage.loadSession(sessionId);
+
+    if (!session) {
+      const context: AppProxyContext = {
+        session: undefined,
+        admin: undefined,
+      };
+
+      return context;
+    }
+
+    const context: AppProxyContextWithSession<Resources> = {
+      session,
+      admin: adminClientFactory({params, session}),
+    };
+
+    return context;
   };
 }
