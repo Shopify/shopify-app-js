@@ -6,15 +6,41 @@ export type AuthenticateAppProxy = (
   request: Request,
 ) => Promise<AppProxyContext | AppProxyContextWithSession>;
 
-export interface AppProxyContext {
+export type LiquidResponseFunction = (
+  body: string,
+  init?: number | ResponseInit,
+) => Response;
+
+interface AppProxyContext {
   /**
-   * No session is available for the shop who made this request.
+   * A utility for creating a Liquid Response.
+   *
+   * @example
+   * <caption>Returning a Liquid Response from an app proxy route</caption>
+   * ```ts
+   * // app/routes/**\/.ts
+   * import {authenticate} from "~/shopify.server"
+   *
+   * export async function loader({ request }) {
+   *   const {liquid} = authenticate.public.appProxy(request);
+   *
+   *   return liquid("Hello {{shop.name}}")
+   * }
+   *
+   * ```
+   */
+  liquid: LiquidResponseFunction;
+}
+
+export interface AppProxyContextWithoutSession extends AppProxyContext {
+  /**
+   * No session is available for the shop that made this request.
    *
    * This comes from the session storage which `shopifyApp` uses to store sessions in your database of choice.
    */
   session: undefined;
   /**
-   * No session is available for the shop who made this request.
+   * No session is available for the shop that made this request.
    * Therefore no methods for interacting with the Shopify GraphQL / REST Admin APIs are available.
    */
   admin: undefined;
@@ -22,9 +48,9 @@ export interface AppProxyContext {
 
 export interface AppProxyContextWithSession<
   Resources extends ShopifyRestResources = ShopifyRestResources,
-> {
+> extends AppProxyContext {
   /**
-   * The session for the shop who made the request.
+   * The session for the shop that made the request.
    *
    * This comes from the session storage which `shopifyApp` uses to store sessions in your database of choice.
    *
