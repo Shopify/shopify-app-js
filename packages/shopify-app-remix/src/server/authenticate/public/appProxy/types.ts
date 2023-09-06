@@ -31,7 +31,7 @@ export interface AppProxyContextWithSession<
    * Use this to get shop or user specific data.
    *
    * @example
-   * Getting your app's shop specific widget data using an offline session
+   * <caption>Getting your app's shop specific widget data using an offline session</caption>
    * ```ts
    * // app/routes/**\/.ts
    * import { json } from "@remix-run/node";
