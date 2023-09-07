@@ -8,7 +8,8 @@
     "test": "loom test",
     "lint": "loom lint",
     "release": "loom build && changeset publish",
-    "clean": "rimraf ./packages/*/build .loom"
+    "clean": "rimraf ./packages/*/build .loom",
+    "token-exchange-build": "./local-build"
   },
   "devDependencies": {
     "@changesets/cli": "^2.26.1",

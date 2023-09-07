@@ -5,7 +5,7 @@
     {"path": "./packages/shopify-app-session-storage"},
     {"path": "./packages/shopify-app-session-storage-test-utils"},
     {"path": "./packages/shopify-app-session-storage-prisma"},
-    {"path": "./packages/shopify-app-session-storage-sqlite"},
+    {"path": "./packages/shopify-app-session-storage-memory"},
     {"path": "./packages/shopify-app-remix"}
   ]
 }
