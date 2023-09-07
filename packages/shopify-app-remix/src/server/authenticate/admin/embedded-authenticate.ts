@@ -15,10 +15,10 @@ import type {
 } from '../../config-types';
 import {
   getSessionTokenHeader,
-  validateSessionToken,
   rejectBotRequest,
   respondToOptionsRequest,
   ensureCORSHeadersFactory,
+  validateSessionTokenWithCallback,
 } from '../helpers';
 
 import type {BillingContext} from './billing/types';
@@ -129,10 +129,17 @@ export class EmbeddedAuthStrategy<
     }
 
     if (sessionTokenString) {
-      const sessionToken = await validateSessionToken(
-        {api, logger, config},
-        sessionTokenString,
-      );
+      let sessionToken;
+
+      try {
+        sessionToken = await validateSessionTokenWithCallback(
+          {api, logger, config},
+          sessionTokenString,
+        );
+      } catch {
+        console.log('CAUGHT');
+        throw this.redirectToBouncePage(url);
+      }
 
       return this.getAccessToken(request, sessionTokenString, sessionToken);
     } else {
@@ -239,6 +246,7 @@ export class EmbeddedAuthStrategy<
 
     const params = new URLSearchParams(url.search);
     params.set('shopify-reload', url.href);
+    params.delete('id_token');
 
     // eslint-disable-next-line no-warning-comments
     // TODO Make sure this works on chrome without a tunnel (weird HTTPS redirect issue)

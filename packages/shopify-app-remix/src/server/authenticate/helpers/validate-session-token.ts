@@ -30,3 +30,23 @@ export async function validateSessionToken(
     });
   }
 }
+
+export async function validateSessionTokenWithCallback(
+  {api, logger}: BasicParams,
+  token: string,
+  {checkAudience = true}: ValidateSessionTokenOptions = {},
+) {
+  logger.debug('Validating session token');
+
+  console.log('BEFORE');
+  const payload = await api.session.decodeSessionToken(token, {
+    checkAudience,
+  });
+  console.log('AFTER');
+
+  logger.debug('Session token is valid', {
+    payload: JSON.stringify(payload),
+  });
+
+  return payload;
+}
