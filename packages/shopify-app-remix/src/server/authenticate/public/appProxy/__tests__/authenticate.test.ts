@@ -91,8 +91,105 @@ describe('authenticating app proxy requests', () => {
     expect(response.statusText).toBe('Bad Request');
   });
 
-  describe('when the request is valid and there is no session', () => {
-    it('Returns AppProxy Context', async () => {
+  describe('Valid requests return a liquid helper', () => {
+    it('Returns a Response with Content-Type: application/liquid and status 200 by default', async () => {
+      // GIVEN
+      const config = testConfig();
+      const shopify = shopifyApp(config);
+
+      // WHEN
+      const url = new URL(APP_URL);
+      url.searchParams.set('shop', TEST_SHOP);
+      url.searchParams.set('timestamp', secondsInPast(1));
+      url.searchParams.set('signature', await createAppProxyHmac(url));
+
+      const {liquid} = await shopify.authenticate.public.appProxy(
+        new Request(url.toString()),
+      );
+      const response = liquid('Liquid template {{shop.name}}');
+
+      // THEN
+      expect(response.status).toBe(200);
+      expect(await response.text()).toBe('Liquid template {{shop.name}}');
+      expect(response.headers.get('Content-Type')).toBe('application/liquid');
+    });
+
+    it('Returns a Response with status equal to init if init is number', async () => {
+      // GIVEN
+      const config = testConfig();
+      const shopify = shopifyApp(config);
+
+      // WHEN
+      const url = new URL(APP_URL);
+      url.searchParams.set('shop', TEST_SHOP);
+      url.searchParams.set('timestamp', secondsInPast(1));
+      url.searchParams.set('signature', await createAppProxyHmac(url));
+
+      const {liquid} = await shopify.authenticate.public.appProxy(
+        new Request(url.toString()),
+      );
+      const response = liquid('Liquid template {{shop.name}}', 400);
+
+      // THEN
+      expect(response.status).toBe(400);
+    });
+
+    it('Returns a Response with properties from init in init is an object', async () => {
+      // GIVEN
+      const config = testConfig();
+      const shopify = shopifyApp(config);
+
+      // WHEN
+      const url = new URL(APP_URL);
+      url.searchParams.set('shop', TEST_SHOP);
+      url.searchParams.set('timestamp', secondsInPast(1));
+      url.searchParams.set('signature', await createAppProxyHmac(url));
+
+      const {liquid} = await shopify.authenticate.public.appProxy(
+        new Request(url.toString()),
+      );
+      const response = liquid('Liquid template {{shop.name}}', {
+        headers: {
+          my: 'header',
+        },
+        status: 300,
+        statusText: 'Oops',
+      });
+
+      // THEN
+      expect(response.headers.get('my')).toBe('header');
+      expect(response.headers.get('Content-Type')).toBe('application/liquid');
+      expect(response.status).toBe(300);
+      expect(response.statusText).toBe('Oops');
+    });
+
+    it('Returns a Response body with layout {% layout none %} if layout is false', async () => {
+      // GIVEN
+      const config = testConfig();
+      const shopify = shopifyApp(config);
+
+      // WHEN
+      const url = new URL(APP_URL);
+      url.searchParams.set('shop', TEST_SHOP);
+      url.searchParams.set('timestamp', secondsInPast(1));
+      url.searchParams.set('signature', await createAppProxyHmac(url));
+
+      const {liquid} = await shopify.authenticate.public.appProxy(
+        new Request(url.toString()),
+      );
+      const response = liquid('Liquid template {{shop.name}}', undefined, {
+        layout: false,
+      });
+
+      // THEN
+      expect(await response.text()).toBe(
+        '{% layout none %} Liquid template {{shop.name}}',
+      );
+    });
+  });
+
+  describe('Valid requests with no session', () => {
+    it('Returns AppProxy Context ', async () => {
       // GIVEN
       const config = testConfig();
       const shopify = shopifyApp(config);
@@ -111,11 +208,12 @@ describe('authenticating app proxy requests', () => {
       expect(context).toStrictEqual({
         session: undefined,
         admin: undefined,
+        liquid: expect.any(Function),
       });
     });
   });
 
-  describe('when the request is valid and there is a session', () => {
+  describe('Valid requests with a session return an admin API client', () => {
     expectAdminApiClient(async () => {
       const shopify = shopifyApp(testConfig());
       const expectedSession = await setUpValidSession(
