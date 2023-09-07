@@ -67,6 +67,7 @@ export class AuthStrategy<
     request: Request,
   ): Promise<AdminContext<Config, Resources>> {
     const {api, logger, config} = this;
+    logger.info('shopify-app-remix is local');
 
     rejectBotRequest({api, logger, config}, request);
     respondToOptionsRequest({api, logger, config}, request);
