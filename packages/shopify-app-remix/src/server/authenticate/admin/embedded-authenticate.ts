@@ -1,5 +1,7 @@
 import {redirect} from '@remix-run/server-runtime';
 import {
+  HttpResponseError,
+  InvalidJwtError,
   JwtPayload,
   Session,
   Shopify,
@@ -136,12 +138,24 @@ export class EmbeddedAuthStrategy<
           {api, logger, config},
           sessionTokenString,
         );
-      } catch {
-        console.log('CAUGHT');
-        throw this.redirectToBouncePage(url);
-      }
 
-      return this.getAccessToken(request, sessionTokenString, sessionToken);
+        return await this.getAccessToken(
+          request,
+          sessionTokenString,
+          sessionToken,
+        );
+      } catch (error) {
+        if (
+          error instanceof InvalidJwtError ||
+          (error instanceof HttpResponseError &&
+            error.response.code === 400 &&
+            error.response.body?.error === 'invalid_subject_token')
+        ) {
+          console.log(`CAUGHT ${JSON.stringify(error)}`);
+          throw this.redirectToBouncePage(url);
+        }
+        throw error;
+      }
     } else {
       logger.debug(
         'Missing session token in search params, going to bounce page',
