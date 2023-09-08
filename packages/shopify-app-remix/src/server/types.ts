@@ -218,10 +218,10 @@ interface Unauthenticated<Config extends AppConfigArg> {
    * This method throws an error if there is no session for the shop.
    *
    * @example
-   * <caption>Responding to a request from an external service not controlled by Shopify.</caption>
+   * Responding to a request from an external service not controlled by Shopify.
    * ```ts
-   * // /app/shopify.server.ts
-   * import { LATEST_API_VERSION, shopifyApp } from "@shopify/shopify-app-remix/server";
+   * // app/shopify.server.ts
+   * import { LATEST_API_VERSION, shopifyApp } from "@shopify/shopify-app-remix";
    * import { restResources } from "@shopify/shopify-api/rest/admin/2023-04";
    *
    * const shopify = shopifyApp({
@@ -229,9 +229,8 @@ interface Unauthenticated<Config extends AppConfigArg> {
    *   // ...etc
    * });
    * export default shopify;
-   * ```
-   * ```ts
-   * // /app/routes/**\/*.jsx
+   *
+   * // app/routes/**\/*.jsx
    * import { LoaderArgs, json } from "@remix-run/node";
    * import { authenticateExternal } from "~/helpers/authenticate"
    * import shopify from "../../shopify.server";

@@ -30,6 +30,7 @@ import {addDocumentResponseHeadersFactory} from './authenticate/helpers';
 import {loginFactory} from './authenticate/login/login';
 import {unauthenticatedAdminContextFactory} from './unauthenticated/admin';
 import {authenticatePublicFactory} from './authenticate/public';
+import {unauthenticatedStorefrontContextFactory} from './unauthenticated/storefront';
 
 /**
  * Creates an object your app will use to interact with Shopify.
@@ -67,6 +68,13 @@ export function shopifyApp<
   const params: BasicParams = {api, config, logger};
   const oauth = new AuthStrategy<Config, Resources>(params);
 
+  if (appConfig.privateAppStorefrontAccessToken) {
+    logger.deprecated(
+      '2.0.0',
+      'privateAppStorefrontAccessToken is deprecated.  Use privateStorefrontAccessToken instead.',
+    );
+  }
+
   const shopify:
     | AdminApp<Config>
     | AppStoreApp<Config>
@@ -84,6 +92,7 @@ export function shopifyApp<
     },
     unauthenticated: {
       admin: unauthenticatedAdminContextFactory(params),
+      storefront: unauthenticatedStorefrontContextFactory(params),
     },
   };
 
@@ -161,9 +170,16 @@ function deriveConfig<Storage extends SessionStorage>(
   const authPathPrefix = appConfig.authPathPrefix || '/auth';
   appConfig.distribution = appConfig.distribution ?? AppDistribution.AppStore;
 
+  const privateAppStorefrontAccessToken =
+    appConfig.privateStorefrontAccessToken ||
+    appConfig.privateAppStorefrontAccessToken;
+
+  delete appConfig.privateStorefrontAccessToken;
+
   return {
     ...appConfig,
     ...apiConfig,
+    privateAppStorefrontAccessToken,
     canUseLoginForm: appConfig.distribution !== AppDistribution.ShopifyAdmin,
     useOnlineTokens: appConfig.useOnlineTokens ?? false,
     hooks: appConfig.hooks ?? {},

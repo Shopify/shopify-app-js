@@ -10,7 +10,7 @@ import {SessionStorage} from '@shopify/shopify-app-session-storage';
 
 import {AppDistribution} from './types';
 import {RestClientWithResources} from './clients/admin/rest';
-import {GraphqlQueryFunction} from './clients/admin/graphql';
+import {GraphQLClient} from './clients/types';
 
 export interface AppConfigArg<
   Resources extends ShopifyRestResources = ShopifyRestResources,
@@ -212,6 +212,12 @@ export interface AppConfigArg<
    * ```
    */
   authPathPrefix?: string;
+
+  /**
+   * TODO: Document
+   *
+   */
+  privateStorefrontAccessToken?: string;
 }
 
 export interface AppConfig<Storage extends SessionStorage = SessionStorage>
@@ -367,5 +373,5 @@ export interface AdminApiContext<
    * }
    * ```
    */
-  graphql: GraphqlQueryFunction;
+  graphql: GraphQLClient;
 }

@@ -1,22 +1,12 @@
-import {ApiVersion} from '@shopify/shopify-api';
 import {flatHeaders} from '@shopify/shopify-api/runtime';
+
+import {GraphQLClient, GraphQLQueryOptions} from '../types';
 
 import {AdminClientOptions} from './types';
 
-interface QueryVariables {
-  [key: string]: any;
-}
-
-interface QueryOptions {
-  variables?: QueryVariables;
-  apiVersion?: ApiVersion;
-  headers?: {[key: string]: any};
-  tries?: number;
-}
-
 export type GraphqlQueryFunction = (
   query: string,
-  options?: QueryOptions,
+  options?: GraphQLQueryOptions,
 ) => Promise<Response>;
 
 // eslint-disable-next-line no-warning-comments
@@ -27,8 +17,8 @@ export function graphqlClientFactory({
   params,
   handleClientError,
   session,
-}: AdminClientOptions) {
-  return async function query(query: string, options?: QueryOptions) {
+}: AdminClientOptions): GraphQLClient {
+  return async function query(query, options) {
     const client = new params.api.clients.Graphql({
       session,
       apiVersion: options?.apiVersion,

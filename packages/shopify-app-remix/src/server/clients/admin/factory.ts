@@ -11,6 +11,7 @@ interface RestClientOptions {
   session: Session;
   handleClientError?: (error: any) => Promise<void>;
 }
+
 export function adminClientFactory<
   Resources extends ShopifyRestResources = ShopifyRestResources,
 >({
