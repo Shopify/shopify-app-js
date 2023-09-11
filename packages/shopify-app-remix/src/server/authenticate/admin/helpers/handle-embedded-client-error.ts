@@ -1,6 +1,7 @@
 import {HttpResponseError} from '@shopify/shopify-api';
 
 import type {HandleAdminClientError} from '../../../clients/admin/types';
+import { redirect } from '@remix-run/server-runtime';
 
 // import {redirectToAuthPage} from './redirect-to-auth-page';
 
@@ -9,7 +10,7 @@ interface HandleClientErrorOptions {
 }
 
 export function handleEmbeddedClientErrorFactory(
-  _options: HandleClientErrorOptions,
+  {request}: HandleClientErrorOptions,
 ): HandleAdminClientError {
   return async function handleClientError({
     error,
@@ -39,14 +40,18 @@ export function handleEmbeddedClientErrorFactory(
       // delete access token
       params.config.sessionStorage.deleteSession(session.id);
 
-      // return retry header (max retry maybe?)
-      throw new Response(undefined, {
-        status: error.response.code,
-        headers: {
-          'Content-Type': 'application/json',
-          'X-Shopify-Invalid-Session': '1',
-        },
-      });
+      const isXhrRequest = request.headers.get('authorization');
+      if (isXhrRequest) {
+        throw new Response(undefined, {
+          status: error.response.code,
+          headers: {
+            'Content-Type': 'application/json',
+            'X-Shopify-Invalid-Session': '1',
+          },
+        });
+      } else {
+        throw redirect(request.url);
+      }
     }
 
     // 403 insufficient scopes
