@@ -134,4 +134,21 @@ describe('MySQLSessionStorage', () => {
     expect(await storage.storeSession(session)).toBeTruthy();
     await storage.disconnect();
   });
+
+  it(`can successfully connect with a url string and ssl param`, async () => {
+    const _dbURL = new URL(dbURL);
+    _dbURL.searchParams.append('ssl', 'false');
+    const storage = new MySQLSessionStorage(_dbURL.toString());
+    await storage.ready;
+    const session = new Session({
+      id: '456',
+      shop: 'test-shop.myshopify.com',
+      state: 'test-state',
+      isOnline: false,
+      scope: 'fake_scope',
+    });
+
+    expect(await storage.storeSession(session)).toBeTruthy();
+    await storage.disconnect();
+  });
 });

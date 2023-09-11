@@ -103,6 +103,7 @@ export class MySqlConnection implements RdbmsConnection {
       password: decodeURIComponent(this.dbUrl.password),
       database: this.getDatabase(),
       port: Number(this.dbUrl.port),
+      ssl: (this.dbUrl.searchParams.get('ssl') !== 'false').toString(),
     });
   }
 }
