@@ -1,5 +1,17 @@
 # @shopify/shopify-app-session-storage-prisma
 
+## 1.1.0
+
+### Minor Changes
+
+- 695f829: Allow using custom tables for the Prisma session storage.
+
+### Patch Changes
+
+- 5b862fe: Upgraded shopify-api dependency to 7.6.0
+- Updated dependencies [5b862fe]
+  - @shopify/shopify-app-session-storage@1.1.9
+
 ## 1.0.5
 
 ### Patch Changes

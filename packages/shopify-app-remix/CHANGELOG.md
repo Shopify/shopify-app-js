@@ -1,5 +1,18 @@
 # @shopify/shopify-app-remix
 
+## 1.2.0
+
+### Minor Changes
+
+- 43e7058: Added authenticate.public.appProxy(). Copied authenticate.public() to authenticate.public.checkout() and marked authenticate.public() as deprecated. authenticate.public() will continue to work until v2
+
+### Patch Changes
+
+- 0acfd52: Remove trailing slashes from shop domains when handling login form requests.
+- 19696a0: Fixed an issue when running the app behind a reverse proxy that rewrites the `Host` header, where the bounce flow redirect (to ensure the id_token search param is present) relied on the incoming request URL and pointed to the internal host rather than the external one.
+- Updated dependencies [5b862fe]
+  - @shopify/shopify-app-session-storage@1.1.9
+
 ## 1.1.0
 
 ### Minor Changes
