@@ -15,7 +15,7 @@ export type LiquidResponseFunction = (
   initAndOptions?: number | (ResponseInit & Options),
 ) => Response;
 
-interface AppProxyContext {
+interface Context {
   /**
    * A utility for creating a Liquid Response.
    *
@@ -36,7 +36,7 @@ interface AppProxyContext {
   liquid: LiquidResponseFunction;
 }
 
-export interface AppProxyContextWithoutSession extends AppProxyContext {
+export interface AppProxyContext extends Context {
   /**
    * No session is available for the shop that made this request.
    *
@@ -52,7 +52,7 @@ export interface AppProxyContextWithoutSession extends AppProxyContext {
 
 export interface AppProxyContextWithSession<
   Resources extends ShopifyRestResources = ShopifyRestResources,
-> extends AppProxyContext {
+> extends Context {
   /**
    * The session for the shop that made the request.
    *

@@ -4,7 +4,7 @@ import {adminClientFactory} from '../../../clients/admin';
 import {BasicParams} from '../../../types';
 
 import {
-  AppProxyContextWithoutSession,
+  AppProxyContext,
   AppProxyContextWithSession,
   AuthenticateAppProxy,
   LiquidResponseFunction,
@@ -17,9 +17,7 @@ export function authenticateAppProxyFactory<
 
   return async function authenticate(
     request,
-  ): Promise<
-    AppProxyContextWithoutSession | AppProxyContextWithSession<Resources>
-  > {
+  ): Promise<AppProxyContext | AppProxyContextWithSession<Resources>> {
     logger.info('Authenticating app proxy request');
 
     const {searchParams} = new URL(request.url);
@@ -48,7 +46,7 @@ export function authenticateAppProxyFactory<
     const session = await config.sessionStorage.loadSession(sessionId);
 
     if (!session) {
-      const context: AppProxyContextWithoutSession = {
+      const context: AppProxyContext = {
         liquid,
         session: undefined,
         admin: undefined,
