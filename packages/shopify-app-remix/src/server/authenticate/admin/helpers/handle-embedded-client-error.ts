@@ -1,7 +1,7 @@
 import {HttpResponseError} from '@shopify/shopify-api';
+import {redirect} from '@remix-run/server-runtime';
 
 import type {HandleAdminClientError} from '../../../clients/admin/types';
-import { redirect } from '@remix-run/server-runtime';
 
 // import {redirectToAuthPage} from './redirect-to-auth-page';
 
@@ -9,9 +9,9 @@ interface HandleClientErrorOptions {
   request: Request;
 }
 
-export function handleEmbeddedClientErrorFactory(
-  {request}: HandleClientErrorOptions,
-): HandleAdminClientError {
+export function handleEmbeddedClientErrorFactory({
+  request,
+}: HandleClientErrorOptions): HandleAdminClientError {
   return async function handleClientError({
     error,
     params,

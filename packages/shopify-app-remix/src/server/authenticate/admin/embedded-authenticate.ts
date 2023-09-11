@@ -37,6 +37,8 @@ import type {
 import {
   handleEmbeddedClientErrorFactory,
   redirectFactory,
+  redirectWithAppBridgeHeaders,
+  redirectWithExitIframe,
   renderAppBridge,
 } from './helpers';
 
@@ -113,10 +115,16 @@ export class EmbeddedAuthStrategy<
 
     const isPatchSessionToken =
       url.pathname === config.auth.patchSessionTokenPath;
+    const isExitIframe = url.pathname === config.auth.exitIframePath;
 
     if (isPatchSessionToken) {
       logger.debug('Rendering bounce page');
       throw renderAppBridge(params, request);
+    } else if (isExitIframe) {
+      const destination = url.searchParams.get('exitIframe')!;
+
+      logger.debug('Rendering exit iframe page', {destination});
+      throw renderAppBridge(params, request, {url: destination});
     }
 
     const sessionTokenHeader = getSessionTokenHeader(request);
@@ -211,19 +219,42 @@ export class EmbeddedAuthStrategy<
       rawRequest: request,
     });
 
+    const dest = new URL(payload.dest);
+    const shop = dest.hostname;
+
     if (sessionId) {
       logger.debug(`SESSION ID: ${sessionId}`);
       const persistedSession = await config.sessionStorage.loadSession(
         sessionId,
       );
+
       if (persistedSession) {
         logger.debug(`Reusing existing token: ${persistedSession.accessToken}`);
-        return {session: persistedSession};
+
+        if (persistedSession.isScopeChanged(config.scopes)) {
+          // TODO: make it unified admin
+          const redirectUrl = `https://${shop}/admin/oauth/install?client_id=${config.apiKey}`
+
+          config.sessionStorage.deleteSession(persistedSession.id);
+
+          const isXhrRequest = request.headers.get('authorization');
+          if (isXhrRequest) {
+            throw redirectWithAppBridgeHeaders(redirectUrl);
+          } else {
+            throw redirectWithExitIframe(
+              {config, logger, api},
+              request,
+              shop,
+              redirectUrl,
+            );
+          }
+        }
+
+        if (!persistedSession.isExpired()) {
+          return {session: persistedSession};
+        }
       }
     }
-
-    const dest = new URL(payload.dest);
-    const shop = dest.hostname;
 
     logger.debug('Requesting token exchange');
 
