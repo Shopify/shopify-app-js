@@ -35,7 +35,7 @@ import type {
   NonEmbeddedAdminContext,
 } from './types';
 import {
-  handleClientErrorFactory,
+  handleEmbeddedClientErrorFactory,
   redirectFactory,
   renderAppBridge,
 } from './helpers';
@@ -292,7 +292,7 @@ export class EmbeddedAuthStrategy<
         config: this.config,
         logger: this.logger,
       },
-      handleClientError: handleClientErrorFactory({
+      handleClientError: handleEmbeddedClientErrorFactory({
         request,
       }),
     });
