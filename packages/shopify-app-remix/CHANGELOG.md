@@ -1,5 +1,11 @@
 # @shopify/shopify-app-remix
 
+## 1.2.1
+
+### Patch Changes
+
+- bffcee9: Fix type error. Previously `authenticate.appProxy()` was typed as if it could return an object without session and admin properties. This was incorrect. Those properties will always exist, they may just be undefined.
+
 ## 1.2.0
 
 ### Minor Changes
