@@ -6,10 +6,10 @@ import {shopifyApp} from '../../..';
 import {
   APP_URL,
   TEST_SHOP,
-  createTestHmac,
+  getHmac,
   getThrownResponse,
   testConfig,
-} from '../../../__tests__/test-helper';
+} from '../../../__test-helpers';
 
 interface WebhookHeaders {
   [key: string]: string;
@@ -173,7 +173,7 @@ function webhookHeaders(
     'X-Shopify-Topic': 'app/uninstalled',
     'X-Shopify-API-Version': '2023-01',
     'X-Shopify-Webhook-Id': '1234567890',
-    'X-Shopify-Hmac-Sha256': createTestHmac(body),
+    'X-Shopify-Hmac-Sha256': getHmac(body),
     ...overrides,
   };
 }

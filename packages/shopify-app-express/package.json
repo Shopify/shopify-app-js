@@ -30,7 +30,7 @@
     "Storefront API"
   ],
   "dependencies": {
-    "@shopify/shopify-api": "^7.5.2",
+    "@shopify/shopify-api": "^7.6.0",
     "@shopify/shopify-app-session-storage": "^1.1.8",
     "@shopify/shopify-app-session-storage-memory": "^1.0.11",
     "cookie-parser": "^1.4.6",

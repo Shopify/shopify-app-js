@@ -34,7 +34,7 @@
     "tslib": "^2.4.0"
   },
   "peerDependencies": {
-    "@shopify/shopify-api": "^7.5.2"
+    "@shopify/shopify-api": "^7.6.0"
   },
   "devDependencies": {
     "@shopify/eslint-plugin": "^42.1.0",

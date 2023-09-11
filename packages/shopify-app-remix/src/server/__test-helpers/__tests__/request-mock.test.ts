@@ -3,7 +3,7 @@ import {
   mockExternalRequests,
   skipMockChecks,
   validateMocks,
-} from './request-mock';
+} from '../request-mock';
 
 describe('Request mocks', () => {
   beforeEach(() => {

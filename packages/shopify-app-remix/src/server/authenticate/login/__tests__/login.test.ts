@@ -4,7 +4,7 @@ import {
   TEST_SHOP,
   getThrownResponse,
   testConfig,
-} from '../../../__tests__/test-helper';
+} from '../../../__test-helpers';
 
 describe('login helper', () => {
   it('returns an empty errors object if GET and no shop param', async () => {

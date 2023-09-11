@@ -1,6 +1,5 @@
 import {HashFormat, createSHA256HMAC} from '@shopify/shopify-api/runtime';
 
-import {mockExternalRequest} from '../../../__tests__/request-mock';
 import {shopifyApp} from '../../..';
 import {
   BASE64_HOST,
@@ -8,7 +7,8 @@ import {
   getThrownResponse,
   signRequestCookie,
   testConfig,
-} from '../../../__tests__/test-helper';
+  mockExternalRequest,
+} from '../../../__test-helpers';
 
 describe('authorize.admin auth callback path', () => {
   describe('errors', () => {
