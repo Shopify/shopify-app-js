@@ -6,10 +6,13 @@ export type AuthenticateAppProxy = (
   request: Request,
 ) => Promise<AppProxyContext | AppProxyContextWithSession>;
 
+interface Options {
+  layout?: boolean;
+}
+
 export type LiquidResponseFunction = (
   body: string,
-  init?: number | ResponseInit,
-  options?: {layout: boolean},
+  initAndOptions?: number | (ResponseInit & Options),
 ) => Response;
 
 interface AppProxyContext {

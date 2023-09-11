@@ -177,11 +177,37 @@ describe('authenticating app proxy requests', () => {
       const {liquid} = await shopify.authenticate.public.appProxy(
         new Request(url.toString()),
       );
-      const response = liquid('Liquid template {{shop.name}}', undefined, {
+      const response = liquid('Liquid template {{shop.name}}', {
         layout: false,
       });
 
       // THEN
+      expect(await response.text()).toBe(
+        '{% layout none %} Liquid template {{shop.name}}',
+      );
+    });
+
+    it('Returns a Response body combining layout and initOptions', async () => {
+      // GIVEN
+      const config = testConfig();
+      const shopify = shopifyApp(config);
+
+      // WHEN
+      const url = new URL(APP_URL);
+      url.searchParams.set('shop', TEST_SHOP);
+      url.searchParams.set('timestamp', secondsInPast(1));
+      url.searchParams.set('signature', await createAppProxyHmac(url));
+
+      const {liquid} = await shopify.authenticate.public.appProxy(
+        new Request(url.toString()),
+      );
+      const response = liquid('Liquid template {{shop.name}}', {
+        status: 400,
+        layout: false,
+      });
+
+      // THEN
+      expect(response.status).toBe(400);
       expect(await response.text()).toBe(
         '{% layout none %} Liquid template {{shop.name}}',
       );

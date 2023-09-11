@@ -67,12 +67,18 @@ export function authenticateAppProxyFactory<
   };
 }
 
-// ignoring because I want to type the function using LiquidResponseFunction
-// eslint-disable-next-line func-style
-const liquid: LiquidResponseFunction = function liquid(body, init, options) {
-  const responseInit = typeof init === 'number' ? {status: init} : init || {};
-  const responseBody =
-    options?.layout === false ? `{% layout none %} ${body}` : body;
+const liquid: LiquidResponseFunction = (body, initAndOptions) => {
+  if (typeof initAndOptions !== 'object') {
+    return new Response(body, {
+      status: initAndOptions || 200,
+      headers: {
+        'Content-Type': 'application/liquid',
+      },
+    });
+  }
+
+  const {layout, ...responseInit} = initAndOptions || {};
+  const responseBody = layout === false ? `{% layout none %} ${body}` : body;
 
   const headers = new Headers(responseInit.headers);
   headers.set('Content-Type', 'application/liquid');
