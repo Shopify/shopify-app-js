@@ -4,7 +4,44 @@
 
 ### Minor Changes
 
-- 43e7058: Added authenticate.public.appProxy(). Copied authenticate.public() to authenticate.public.checkout() and marked authenticate.public() as deprecated. authenticate.public() will continue to work until v2
+- 43e7058: Added `authenticate.public.appProxy()` for authenticating [App Proxy](https://shopify.dev/docs/apps/online-store/app-proxies) requests.
+
+  <details>
+    <summary>Returning a liquid response</summary>
+
+  ```ts
+  // app/routes/**\/.ts
+  import {authenticate} from '~/shopify.server';
+
+  export async function loader({request}) {
+    const {liquid, admin} = authenticate.public.appProxy(request);
+
+    return liquid('Hello {{shop.name}}');
+  }
+  ```
+
+  </details>
+
+  <details>
+    <summary>Using the Admin GraphQL API</summary>
+
+  ```ts
+  // app/routes/**\/.ts
+  import {authenticate} from '~/shopify.server';
+
+  export async function loader({request}) {
+    const {liquid, admin} = authenticate.public.appProxy(request);
+
+    const response = await admin.graphql('QUERY');
+    const json = await response.json();
+
+    return json(json);
+  }
+  ```
+
+  </details>
+
+- 43e7058: Copied `authenticate.public()` to `authenticate.public.checkout()` and marked `authenticate.public()` as deprecated. `authenticate.public()` will continue to work until v2
 
 ### Patch Changes
 
