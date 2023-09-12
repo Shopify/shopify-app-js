@@ -4,7 +4,7 @@ import type {JSONValue} from '../../types';
 
 export interface RegisterWebhooksOptions {
   /**
-   * The Shopify session used to register webhooks via the Admin API.
+   * The Shopify session used to register webhooks using the Admin API.
    */
   session: Session;
 }
@@ -112,13 +112,13 @@ export interface WebhookContextWithSession<
   /**
    * A session with an offline token for the shop.
    *
-   * Only returned if there is a session for the shop.
+   * Returned only if there is a session for the shop.
    */
   session: Session;
   /**
    * An admin context for the webhook.
    *
-   * Only returned if there is a session for the shop.
+   * Returned only if there is a session for the shop.
    */
   admin: {
     /** A REST client. */

@@ -14,7 +14,7 @@ export interface RequireBillingOptions<Config extends AppConfigArg>
    */
   plans: (keyof Config['billing'])[];
   /**
-   * How to handle the request if the shop does not have an active payment for any of the given plans.
+   * How to handle the request if the shop doesn't have an active payment for any plan.
    */
   onFailure: (error: any) => Promise<Response>;
 }
@@ -43,7 +43,7 @@ export interface CancelBillingOptions {
 
 export interface BillingContext<Config extends AppConfigArg> {
   /**
-   * Checks if the shop has an active payment for any the given plans defined in the `billing` config option.
+   * Checks if the shop has an active payment for any plan defined in the `billing` config option.
    *
    * @returns A promise that resolves to an object containing the active purchases for the shop.
    *
@@ -143,7 +143,7 @@ export interface BillingContext<Config extends AppConfigArg> {
   ) => Promise<BillingCheckResponseObject>;
 
   /**
-   * Requests payment for the given plan.
+   * Requests payment for the plan.
    *
    * @returns Redirects to the confirmation URL for the payment.
    *
@@ -197,7 +197,7 @@ export interface BillingContext<Config extends AppConfigArg> {
   request: (options: RequestBillingOptions<Config>) => Promise<never>;
 
   /**
-   * Cancels an ongoing subscription, given its id.
+   * Cancels an ongoing subscription, given its ID.
    *
    * @returns The cancelled subscription.
    *

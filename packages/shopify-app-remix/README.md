@@ -24,11 +24,11 @@ The easiest way to get started with developing Shopify apps is using the [Shopif
 It helps you set up your environment for developing and publishing your apps and extensions.
 
 We strongly recommend using the CLI to create and manage your Remix apps and extensions!
-See the [getting started documentation](https://shopify.dev/docs/apps/getting-started/create) to create your app using the Shopify CLI.
+Refer to the [getting started documentation](https://shopify.dev/docs/apps/getting-started/create) to create your app using the Shopify CLI.
 
 ### Using a plain Remix app
 
-This package works with any Remix app. If you're starting an app from scratch, you can create a brand new Remix app that uses the indie-stack:
+This package works with any Remix app. If you're starting an app from scratch, then you can create a brand new Remix app that uses the indie-stack:
 
 ```bash
 npx create-remix@latest --template remix-run/indie-stack
@@ -142,7 +142,7 @@ export default function App() {
 }
 ```
 
-This component will set up [Polaris](https://polaris.shopify.com/components/utilities/app-provider) and [App Bridge](https://shopify.dev/tools/app-bridge). If your app is not embedded, set the `isEmbeddedApp` prop to `false`.
+This component will set up [Polaris](https://polaris.shopify.com/components/utilities/app-provider) and [App Bridge](https://shopify.dev/tools/app-bridge). If your app isn't embedded, set the `isEmbeddedApp` prop to `false`.
 
 Now that your app is ready to respond to requests, it will also need to add the required `Content-Security-Policy` header directives, as per [our documentation](https://shopify.dev/docs/apps/store/security/iframe-protection).
 To do that, this package provides the `shopify.addDocumentResponseHeaders` method.
@@ -179,7 +179,7 @@ import '@shopify/shopify-app-remix/server/adapters/node';
 ```
 
 before calling `shopifyApp`.
-If you're running on a runtime other than Node, you can simply omit that line.
+If you're running on a runtime other than Node, then you can simply omit that line.
 
 ## Loading your app in admin
 
@@ -210,7 +210,7 @@ If there is no session for the user, the loader will throw the appropriate redir
 
 ## Authenticating cross-origin admin requests
 
-If your Remix server is authenticating an admin extension, a request from the extension to Remix will be cross-origin. Here `shopify.authenticate.admin` provides a cors function to add the required cross-origin headers:
+If your Remix server is authenticating an admin extension, a request from the extension to Remix is cross-origin. Here `shopify.authenticate.admin` provides a cors function to add the required cross-origin headers:
 
 ```ts
 export const loader = async ({request}: LoaderArgs) => {
@@ -387,7 +387,7 @@ export const loader = async ({request}: LoaderArgs) => {
 
 This can be useful if your app exposes checkout or theme extensions and those extensions need to access data from your app.
 
-**Note:** These requests will be cross-origin. So you must use the cross-origin helper returned from `shopify.authenticate.public`.
+**Note:** These requests are cross-origin, so you must use the cross-origin helper returned from `shopify.authenticate.public`.
 
 ## Session Storage
 

@@ -15,10 +15,10 @@ interface AdminContextInternal<
    *
    * This comes from the session storage which `shopifyApp` uses to store sessions in your database of choice.
    *
-   * Use this to get shop or user specific data.
+   * Use this to get shop or user-specific data.
    *
    * @example
-   * <caption>Getting your app's shop specific widget data using an offline session</caption>
+   * <caption>Getting your app's shop-specific widget data using an offline session</caption>
    * ```ts
    * // shopify.server.ts
    * import { shopifyApp } from "@shopify/shopify-app-remix/server";
@@ -42,7 +42,7 @@ interface AdminContextInternal<
    * ```
    *
    * @example
-   * <caption>Getting your app's user specific widget data using an online session</caption>
+   * <caption>Getting your app's user-specific widget data using an online session</caption>
    * ```ts
    * // shopify.server.ts
    * import { shopifyApp } from "@shopify/shopify-app-remix/server";
@@ -107,12 +107,12 @@ export interface EmbeddedAdminContext<
   /**
    * The decoded and validated session token for the request.
    *
-   * Only returned if `isEmbeddedApp` is `true`.
+   * Returned only if `isEmbeddedApp` is `true`.
    *
    * {@link https://shopify.dev/docs/apps/auth/oauth/session-tokens#payload}
    *
    * @example
-   * <caption>Getting your app's user specific widget data using the session token</caption>
+   * <caption>Getting your app's user-specific widget data using the session token</caption>
    * ```ts
    * // shopify.server.ts
    * import { shopifyApp } from "@shopify/shopify-app-remix/server";
@@ -144,10 +144,10 @@ export interface EmbeddedAdminContext<
    * A function that redirects the user to a new page, ensuring that the appropriate parameters are set for embedded
    * apps.
    *
-   * Only returned if `isEmbeddedApp` is `true`.
+   * Returned only if `isEmbeddedApp` is `true`.
    *
    * @example
-   * <caption>Redirecting the user to the app's home page</caption>
+   * <caption>Redirecting the user to the app's homepage</caption>
    * ```ts
    * // /app/routes/admin/widgets.ts
    * import { LoaderArgs, json } from "@remix-run/node";

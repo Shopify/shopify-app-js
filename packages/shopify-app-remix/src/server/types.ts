@@ -99,7 +99,7 @@ type SessionStorageType<Config extends AppConfigArg> =
 
 interface Authenticate<Config extends AppConfigArg> {
   /**
-   * Authenticate an admin Request and get back an authenticated admin context.  Use the authenticated admin context to interact with Shopify
+   * Authenticate an admin Request and get back an authenticated admin context.  Use the authenticated admin context to interact with Shopify.
    *
    * Examples of when to use this are requests from your app's UI, or requests from admin extensions.
    *
@@ -427,7 +427,7 @@ export type AppStoreApp<Config extends AppConfigArg> = ShopifyAppBase<Config> &
 /**
  * An object your app can use to interact with Shopify.
  *
- * By default, the app's distribution will be AppStore.
+ * By default, the app's distribution is `AppStore`.
  */
 export type ShopifyApp<Config extends AppConfigArg> =
   Config['distribution'] extends AppDistribution.ShopifyAdmin

@@ -11,12 +11,12 @@ export interface AuthenticatePublicOptions {
  */
 export interface PublicContext {
   /**
-   * The decoded and validated session token for the request
+   * The decoded and validated session token for the request.
    *
    * The payload of the Session Token is described here: {@link https://shopify.dev/docs/apps/auth/oauth/session-tokens#payload}
    *
    * @example
-   * <caption>Getting your app's store specific widget data using the session token</caption>
+   * <caption>Getting your app's store-specific widget data using the session token</caption>
    * ```ts
    * // /app/routes/public/widgets.ts
    * import { LoaderArgs, json } from "@remix-run/node";

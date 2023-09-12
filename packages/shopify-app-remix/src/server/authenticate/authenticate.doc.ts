@@ -3,7 +3,7 @@ import {ReferenceEntityTemplateSchema} from '@shopify/generate-docs';
 const data: ReferenceEntityTemplateSchema = {
   name: 'Authenticate overview',
   description:
-    'Contains functions to authenticate requests from different Shopify surfaces. It can be used to validate requests coming from Shopify Admin, webhooks or extensions.\n\nGo to the [Related](#related) section to see all supported actions in `admin`, `webhook` and `public`.',
+    'Contains functions to authenticate requests from different Shopify surfaces. It can be used to validate requests coming from Shopify Admin, webhooks or extensions.\n\nRefer to the [Related](#related) section to see all supported actions in `admin`, `webhook` and `public`.',
   category: 'backend',
   type: 'object',
   isVisualComponent: false,

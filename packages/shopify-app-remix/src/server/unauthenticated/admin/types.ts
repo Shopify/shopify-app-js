@@ -10,10 +10,10 @@ export interface UnauthenticatedAdminContext<
    *
    * This comes from the session storage which `shopifyApp` uses to store sessions in your database of choice.
    *
-   * This will always be an offline session. You can use to get shop specific data.
+   * This will always be an offline session. You can use to get shop-specific data.
    *
    * @example
-   * <caption>Getting your app's shop specific widget data using a session</caption>
+   * <caption>Getting your app's shop-specific widget data using a session</caption>
    * ```ts
    * // /app/routes/**\/*.ts
    * import { LoaderArgs, json } from "@remix-run/node";

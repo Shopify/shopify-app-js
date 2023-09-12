@@ -154,7 +154,7 @@ function deriveConfig<Storage extends SessionStorage>(
 ): AppConfig<Storage> {
   if (!appConfig.sessionStorage) {
     throw new ShopifyError(
-      'Please provide a valid session storage. See https://github.com/Shopify/shopify-app-js/blob/main/README.md#session-storage-options for options.',
+      'Please provide a valid session storage. Refer to https://github.com/Shopify/shopify-app-js/blob/main/README.md#session-storage-options for options.',
     );
   }
 
