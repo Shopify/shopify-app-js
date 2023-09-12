@@ -13,23 +13,23 @@ export interface AppProviderProps
    * The API key for your Shopify app. This is the `Client ID` from the Partner Dashboard.
    *
    * When using the Shopify CLI, this is the `SHOPIFY_API_KEY` environment variable. If you're using the environment
-   * variable, you need to pass it from the loader to the component.
+   * variable, then you need to pass it from the loader to the component.
    */
   apiKey: string;
   /**
-   * Whether the app will be loaded inside the Shopify Admin. Defaults to `true`.
+   * Whether the app is loaded inside the Shopify Admin. Default is `true`.
    *
    * {@link https://shopify.dev/docs/apps/admin/embedded-app-home}
    */
   isEmbeddedApp?: boolean;
   /**
-   * The i18n configuration for your Polaris provider.
+   * The internationalization (i18n) configuration for your Polaris provider.
    *
    * {@link https://polaris.shopify.com/components/utilities/app-provider}
    */
   i18n?: PolarisAppProviderProps['i18n'];
   /**
-   * Used internally by Shopify. You should not need to set this.
+   * Used internally by Shopify. You don't need to set this.
    * @private
    */
   __APP_BRIDGE_URL?: string;

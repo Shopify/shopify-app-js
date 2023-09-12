@@ -26,14 +26,16 @@ export interface AppConfigArg<
   /**
    * The URL your app is running on.
    *
-   * The `@shopify/cli` provides this URL as `process.env.SHOPIFY_APP_URL`.  For development this is probably a tunnel URL that points to your local machine.  If production this is your production URL.
+   * The `@shopify/cli` provides this URL as `process.env.SHOPIFY_APP_URL`.  For development this is probably a tunnel URL that points to your local machine.  If this is a production app, this is your production URL.
    */
   appUrl: string;
 
   /**
    * An adaptor for storing sessions in your database of choice.
    *
-   * Shopify provides multiple session storage adaptors and you can create your own. {@link https://github.com/Shopify/shopify-app-js/blob/main/README.md#session-storage-options}
+   * Shopify provides multiple session storage adaptors and you can create your own.
+   *
+   * {@link https://github.com/Shopify/shopify-app-js/blob/main/README.md#session-storage-options}
    *
    * @example
    * <caption>Using Prisma</caption>
@@ -53,9 +55,9 @@ export interface AppConfigArg<
   sessionStorage: Storage;
 
   /**
-   * Does your app use online or just offline tokens.
+   * Whether your app use online or offline tokens.
    *
-   * If your app uses online tokens both online and offline tokens will be saved to your database.  This ensures your app can perform background jobs
+   * If your app uses online tokens, then both online and offline tokens will be saved to your database.  This ensures your app can perform background jobs.
    *
    * {@link https://shopify.dev/docs/apps/auth/oauth/access-modes}
    *
@@ -151,7 +153,7 @@ export interface AppConfigArg<
   isEmbeddedApp?: boolean;
 
   /**
-   * How your app is distributed. Defaults to app store.
+   * How your app is distributed. Default is `AppDistribution.AppStore`.
    *
    * {@link https://shopify.dev/docs/apps/distribution}
    */
@@ -280,12 +282,12 @@ export interface AdminApiContext<
   /**
    * Methods for interacting with the Shopify Admin REST API
    *
-   * There are methods for interacting with individual REST resources. You can also make plain `GET`, `POST`, `PUT` and `DELETE` requests should the REST resources not meet your needs.
+   * There are methods for interacting with individual REST resources. You can also make `GET`, `POST`, `PUT` and `DELETE` requests should the REST resources not meet your needs.
    *
    * {@link https://shopify.dev/docs/api/admin-rest}
    *
    * @example
-   * <caption>Getting the number of orders in a store using rest resources</caption>
+   * <caption>Getting the number of orders in a store using REST resources</caption>
    *
    * ```ts
    * // /app/shopify.server.ts
@@ -312,7 +314,7 @@ export interface AdminApiContext<
    * ```
    *
    * @example
-   * <caption>Making a GET request to the REST API</caption>
+   * <caption>Performing a GET request to the REST API</caption>
    *
    * ```ts
    * // /app/shopify.server.ts
