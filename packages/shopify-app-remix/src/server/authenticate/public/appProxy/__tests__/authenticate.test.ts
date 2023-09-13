@@ -98,13 +98,8 @@ describe('authenticating app proxy requests', () => {
       const shopify = shopifyApp(config);
 
       // WHEN
-      const url = new URL(APP_URL);
-      url.searchParams.set('shop', TEST_SHOP);
-      url.searchParams.set('timestamp', secondsInPast(1));
-      url.searchParams.set('signature', await createAppProxyHmac(url));
-
       const {liquid} = await shopify.authenticate.public.appProxy(
-        new Request(url.toString()),
+        await getValidRequest(),
       );
       const response = liquid('Liquid template {{shop.name}}');
 
@@ -120,13 +115,8 @@ describe('authenticating app proxy requests', () => {
       const shopify = shopifyApp(config);
 
       // WHEN
-      const url = new URL(APP_URL);
-      url.searchParams.set('shop', TEST_SHOP);
-      url.searchParams.set('timestamp', secondsInPast(1));
-      url.searchParams.set('signature', await createAppProxyHmac(url));
-
       const {liquid} = await shopify.authenticate.public.appProxy(
-        new Request(url.toString()),
+        await getValidRequest(),
       );
       const response = liquid('Liquid template {{shop.name}}', 400);
 
@@ -140,13 +130,8 @@ describe('authenticating app proxy requests', () => {
       const shopify = shopifyApp(config);
 
       // WHEN
-      const url = new URL(APP_URL);
-      url.searchParams.set('shop', TEST_SHOP);
-      url.searchParams.set('timestamp', secondsInPast(1));
-      url.searchParams.set('signature', await createAppProxyHmac(url));
-
       const {liquid} = await shopify.authenticate.public.appProxy(
-        new Request(url.toString()),
+        await getValidRequest(),
       );
       const response = liquid('Liquid template {{shop.name}}', {
         headers: {
@@ -169,13 +154,8 @@ describe('authenticating app proxy requests', () => {
       const shopify = shopifyApp(config);
 
       // WHEN
-      const url = new URL(APP_URL);
-      url.searchParams.set('shop', TEST_SHOP);
-      url.searchParams.set('timestamp', secondsInPast(1));
-      url.searchParams.set('signature', await createAppProxyHmac(url));
-
       const {liquid} = await shopify.authenticate.public.appProxy(
-        new Request(url.toString()),
+        await getValidRequest(),
       );
       const response = liquid('Liquid template {{shop.name}}', {
         layout: false,
@@ -193,13 +173,8 @@ describe('authenticating app proxy requests', () => {
       const shopify = shopifyApp(config);
 
       // WHEN
-      const url = new URL(APP_URL);
-      url.searchParams.set('shop', TEST_SHOP);
-      url.searchParams.set('timestamp', secondsInPast(1));
-      url.searchParams.set('signature', await createAppProxyHmac(url));
-
       const {liquid} = await shopify.authenticate.public.appProxy(
-        new Request(url.toString()),
+        await getValidRequest(),
       );
       const response = liquid('Liquid template {{shop.name}}', {
         status: 400,
@@ -221,13 +196,8 @@ describe('authenticating app proxy requests', () => {
       const shopify = shopifyApp(config);
 
       // WHEN
-      const url = new URL(APP_URL);
-      url.searchParams.set('shop', TEST_SHOP);
-      url.searchParams.set('timestamp', secondsInPast(1));
-      url.searchParams.set('signature', await createAppProxyHmac(url));
-
       const context = await shopify.authenticate.public.appProxy(
-        new Request(url.toString()),
+        await getValidRequest(),
       );
 
       // THEN
@@ -247,13 +217,27 @@ describe('authenticating app proxy requests', () => {
         shopify.sessionStorage,
         false,
       );
+
       const {admin, session: actualSession} =
-        await shopify.unauthenticated.admin(TEST_SHOP);
+        await shopify.authenticate.public.appProxy(await getValidRequest());
+
+      if (!admin) {
+        throw new Error('No admin client');
+      }
 
       return {admin, expectedSession, actualSession};
     });
   });
 });
+
+async function getValidRequest(): Promise<Request> {
+  const url = new URL(APP_URL);
+  url.searchParams.set('shop', TEST_SHOP);
+  url.searchParams.set('timestamp', secondsInPast(1));
+  url.searchParams.set('signature', await createAppProxyHmac(url));
+
+  return new Request(url.toString());
+}
 
 async function createAppProxyHmac(url: URL): Promise<string> {
   const params = Object.fromEntries(url.searchParams.entries());
