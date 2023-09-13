@@ -1,5 +1,3 @@
-import {LATEST_API_VERSION} from '@shopify/shopify-api';
-
 import {shopifyApp} from '../../../index';
 import {
   TEST_SHOP,
@@ -7,8 +5,6 @@ import {
   testConfig,
   expectAdminApiClient,
 } from '../../../__test-helpers';
-
-const REQUEST_URL = `https://${TEST_SHOP}/admin/api/${LATEST_API_VERSION}/customers.json`;
 
 describe('unauthenticated admin context', () => {
   expectAdminApiClient(async () => {
