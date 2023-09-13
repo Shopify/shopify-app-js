@@ -1,13 +1,16 @@
 import {flatHeaders} from '@shopify/shopify-api/runtime';
 import {Session} from '@shopify/shopify-api';
-import {BasicParams} from 'src/server/types';
 
+import {BasicParams} from '../../types';
 import {GraphQLClient} from '../types';
 
-export function storefrontGraphQLClientFactory(
-  params: BasicParams,
-  session: Session,
-): GraphQLClient {
+export function storefrontClientFactory({
+  params,
+  session,
+}: {
+  params: BasicParams;
+  session: Session;
+}): GraphQLClient {
   const {api} = params;
 
   return async (query, options = {}) => {

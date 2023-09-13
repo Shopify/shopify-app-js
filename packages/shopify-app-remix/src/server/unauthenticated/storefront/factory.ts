@@ -1,7 +1,7 @@
 import {BasicParams} from 'src/server/types';
 import {ShopifyError} from '@shopify/shopify-api';
 
-import {storefrontGraphQLClientFactory} from '../../clients/storefront';
+import {storefrontClientFactory} from '../../clients/storefront';
 import {getOfflineSession} from '../helpers';
 
 import {StorefrontContext, GetStorefrontContext} from './types';
@@ -19,7 +19,7 @@ export function unauthenticatedStorefrontContextFactory(
     }
 
     return {
-      graphql: storefrontGraphQLClientFactory(params, session),
+      graphql: storefrontClientFactory({params, session}),
     };
   };
 }

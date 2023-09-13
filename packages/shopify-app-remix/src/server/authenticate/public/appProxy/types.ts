@@ -1,6 +1,7 @@
 import {Session, ShopifyRestResources} from '@shopify/shopify-api';
 
 import {AdminApiContext} from '../../../config-types';
+import {GraphQLClient} from '../../../clients/types';
 
 export type AuthenticateAppProxy = (
   request: Request,
@@ -50,6 +51,12 @@ export interface AppProxyContext extends Context {
    * Therefore no methods for interacting with the GraphQL / REST Admin APIs are available.
    */
   admin: undefined;
+
+  /**
+   * No session is available for the shop that made this request.
+   * Therefore no method for interacting with the Storefront API is available.
+   */
+  storefront: undefined;
 }
 
 export interface AppProxyContextWithSession<
@@ -111,4 +118,10 @@ export interface AppProxyContextWithSession<
    * ```
    */
   admin: AdminApiContext<Resources>;
+
+  /**
+   * TODO
+   *
+   */
+  storefront: GraphQLClient;
 }
