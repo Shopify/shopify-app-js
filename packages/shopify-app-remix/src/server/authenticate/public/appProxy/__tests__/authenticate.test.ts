@@ -6,6 +6,7 @@ import {
   APP_URL,
   TEST_SHOP,
   expectAdminApiClient,
+  expectStorefrontApiClient,
   getThrownResponse,
   mockExternalRequest,
   setUpValidSession,
@@ -231,39 +232,21 @@ describe('authenticating app proxy requests', () => {
   });
 
   describe('Valid requests with a session return a Storefront API client', () => {
-    it('Can perform GraphQL Requests', async () => {
-      // GIVEN
+    expectStorefrontApiClient(async () => {
       const shopify = shopifyApp(testConfig());
-      const session = await setUpValidSession(shopify.sessionStorage, false);
-      const apiResponse = {blogs: {nodes: [{id: 1}]}};
-
-      await mockExternalRequest({
-        request: new Request(
-          `https://${TEST_SHOP}/api/${LATEST_API_VERSION}/graphql.json`,
-          {
-            method: 'POST',
-            headers: {'Shopify-Storefront-Private-Token': session.accessToken!},
-          },
-        ),
-        response: new Response(JSON.stringify(apiResponse)),
-      });
-
-      // WHEN
-      const {storefront} = await shopify.authenticate.public.appProxy(
-        await getValidRequest(),
+      const expectedSession = await setUpValidSession(
+        shopify.sessionStorage,
+        false,
       );
+
+      const {storefront, session: actualSession} =
+        await shopify.authenticate.public.appProxy(await getValidRequest());
 
       if (!storefront) {
         throw new Error('No storefront client');
       }
 
-      const response = await storefront.graphql(
-        'blogs(first: 1) { nodes { id }}',
-      );
-
-      // THEN
-      expect(response.status).toEqual(200);
-      expect(await response.json()).toEqual(apiResponse);
+      return {storefront, expectedSession, actualSession};
     });
   });
 });
