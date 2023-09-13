@@ -1,12 +1,13 @@
 import {HashFormat, createSHA256HMAC} from '@shopify/shopify-api/runtime';
 
-import {shopifyApp} from '../../../..';
+import {LATEST_API_VERSION, shopifyApp} from '../../../..';
 import {
   API_SECRET_KEY,
   APP_URL,
   TEST_SHOP,
   expectAdminApiClient,
   getThrownResponse,
+  mockExternalRequest,
   setUpValidSession,
   testConfig,
 } from '../../../../__test-helpers';
@@ -226,6 +227,43 @@ describe('authenticating app proxy requests', () => {
       }
 
       return {admin, expectedSession, actualSession};
+    });
+  });
+
+  describe('Valid requests with a session return a Storefront API client', () => {
+    it('Can perform GraphQL Requests', async () => {
+      // GIVEN
+      const shopify = shopifyApp(testConfig());
+      const session = await setUpValidSession(shopify.sessionStorage, false);
+      const apiResponse = {blogs: {nodes: [{id: 1}]}};
+
+      await mockExternalRequest({
+        request: new Request(
+          `https://${TEST_SHOP}/api/${LATEST_API_VERSION}/graphql.json`,
+          {
+            method: 'POST',
+            headers: {'Shopify-Storefront-Private-Token': session.accessToken!},
+          },
+        ),
+        response: new Response(JSON.stringify(apiResponse)),
+      });
+
+      // WHEN
+      const {storefront} = await shopify.authenticate.public.appProxy(
+        await getValidRequest(),
+      );
+
+      if (!storefront) {
+        throw new Error('No storefront client');
+      }
+
+      const response = await storefront.graphql(
+        'blogs(first: 1) { nodes { id }}',
+      );
+
+      // THEN
+      expect(response.status).toEqual(200);
+      expect(await response.json()).toEqual(apiResponse);
     });
   });
 });
