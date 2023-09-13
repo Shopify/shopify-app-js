@@ -234,6 +234,7 @@ describe('authenticating app proxy requests', () => {
       expect(context).toStrictEqual({
         session: undefined,
         admin: undefined,
+        storefront: undefined,
         liquid: expect.any(Function),
       });
     });

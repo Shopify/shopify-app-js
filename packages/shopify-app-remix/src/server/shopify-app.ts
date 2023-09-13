@@ -68,13 +68,6 @@ export function shopifyApp<
   const params: BasicParams = {api, config, logger};
   const oauth = new AuthStrategy<Config, Resources>(params);
 
-  if (appConfig.privateAppStorefrontAccessToken) {
-    logger.deprecated(
-      '2.0.0',
-      'privateAppStorefrontAccessToken is deprecated.  Use privateStorefrontAccessToken instead.',
-    );
-  }
-
   const shopify:
     | AdminApp<Config>
     | AppStoreApp<Config>
@@ -170,16 +163,9 @@ function deriveConfig<Storage extends SessionStorage>(
   const authPathPrefix = appConfig.authPathPrefix || '/auth';
   appConfig.distribution = appConfig.distribution ?? AppDistribution.AppStore;
 
-  const privateAppStorefrontAccessToken =
-    appConfig.privateStorefrontAccessToken ||
-    appConfig.privateAppStorefrontAccessToken;
-
-  delete appConfig.privateStorefrontAccessToken;
-
   return {
     ...appConfig,
     ...apiConfig,
-    privateAppStorefrontAccessToken,
     canUseLoginForm: appConfig.distribution !== AppDistribution.ShopifyAdmin,
     useOnlineTokens: appConfig.useOnlineTokens ?? false,
     hooks: appConfig.hooks ?? {},

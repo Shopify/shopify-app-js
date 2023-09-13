@@ -211,12 +211,6 @@ export interface AppConfigArg<
    * ```
    */
   authPathPrefix?: string;
-
-  /**
-   * TODO: Document
-   *
-   */
-  privateStorefrontAccessToken?: string;
 }
 
 export interface AppConfig<Storage extends SessionStorage = SessionStorage>

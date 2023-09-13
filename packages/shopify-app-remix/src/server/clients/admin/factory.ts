@@ -1,10 +1,10 @@
 import {Session, ShopifyRestResources} from '@shopify/shopify-api';
 
-import {AdminApiContext} from '../../config-types';
 import {BasicParams} from '../../types';
 
 import {graphqlClientFactory} from './graphql';
 import {restClientFactory} from './rest';
+import type {AdminApiContext} from './types';
 
 interface RestClientOptions {
   params: BasicParams;
