@@ -1,10 +1,19 @@
-import {GraphQLClient} from '../../clients/types';
+import {Session} from '@shopify/shopify-api';
 
-export interface StorefrontContext {
+import type {StorefrontContext} from '../../clients';
+
+export interface UnauthenticatedStorefrontContext {
   /**
    * TODO: Add TSDoc
    */
-  graphql: GraphQLClient;
+  session: Session;
+
+  /**
+   * TODO: Add TSDoc
+   */
+  storefront: StorefrontContext;
 }
 
-export type GetStorefrontContext = (shop: string) => Promise<StorefrontContext>;
+export type GetUnauthenticatedStorefrontContext = (
+  shop: string,
+) => Promise<UnauthenticatedStorefrontContext>;

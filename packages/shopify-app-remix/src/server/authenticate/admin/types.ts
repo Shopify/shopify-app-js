@@ -1,7 +1,8 @@
 import {JwtPayload, Session, ShopifyRestResources} from '@shopify/shopify-api';
 
 import {EnsureCORSFunction} from '../helpers/ensure-cors-headers';
-import type {AdminApiContext, AppConfigArg} from '../../config-types';
+import type {AppConfigArg} from '../../config-types';
+import type {AdminApiContext} from '../../clients';
 
 import type {BillingContext} from './billing/types';
 import {RedirectFunction} from './helpers/redirect';
@@ -191,3 +192,8 @@ export type AdminContext<
 > = Config['isEmbeddedApp'] extends false
   ? NonEmbeddedAdminContext<Config, Resources>
   : EmbeddedAdminContext<Config, Resources>;
+
+export type AuthenticateAdmin<
+  Config extends AppConfigArg,
+  Resources extends ShopifyRestResources = ShopifyRestResources,
+> = (request: Request) => Promise<AdminContext<Config, Resources>>;

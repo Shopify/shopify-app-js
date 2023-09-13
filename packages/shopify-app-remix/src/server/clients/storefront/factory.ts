@@ -2,7 +2,8 @@ import {flatHeaders} from '@shopify/shopify-api/runtime';
 import {Session} from '@shopify/shopify-api';
 
 import {BasicParams} from '../../types';
-import {GraphQLClient} from '../types';
+
+import type {StorefrontContext} from '.';
 
 export function storefrontClientFactory({
   params,
@@ -10,23 +11,25 @@ export function storefrontClientFactory({
 }: {
   params: BasicParams;
   session: Session;
-}): GraphQLClient {
+}): StorefrontContext {
   const {api} = params;
 
-  return async (query, options = {}) => {
-    const client = new api.clients.Storefront({
-      session,
-      apiVersion: options.apiVersion,
-    });
+  return {
+    graphql: async (query, options = {}) => {
+      const client = new api.clients.Storefront({
+        session,
+        apiVersion: options.apiVersion,
+      });
 
-    const apiResponse = await client.query({
-      data: {query, variables: options?.variables},
-      tries: options.tries,
-      extraHeaders: options.headers,
-    });
+      const apiResponse = await client.query({
+        data: {query, variables: options?.variables},
+        tries: options.tries,
+        extraHeaders: options.headers,
+      });
 
-    return new Response(JSON.stringify(apiResponse.body), {
-      headers: flatHeaders(apiResponse.headers),
-    });
+      return new Response(JSON.stringify(apiResponse.body), {
+        headers: flatHeaders(apiResponse.headers),
+      });
+    },
   };
 }

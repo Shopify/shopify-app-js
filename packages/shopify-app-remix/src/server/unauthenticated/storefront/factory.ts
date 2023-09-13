@@ -4,12 +4,15 @@ import {ShopifyError} from '@shopify/shopify-api';
 import {storefrontClientFactory} from '../../clients/storefront';
 import {getOfflineSession} from '../helpers';
 
-import {StorefrontContext, GetStorefrontContext} from './types';
+import {
+  UnauthenticatedStorefrontContext,
+  GetUnauthenticatedStorefrontContext,
+} from './types';
 
 export function unauthenticatedStorefrontContextFactory(
   params: BasicParams,
-): GetStorefrontContext {
-  return async (shop: string): Promise<StorefrontContext> => {
+): GetUnauthenticatedStorefrontContext {
+  return async (shop: string): Promise<UnauthenticatedStorefrontContext> => {
     const session = await getOfflineSession(shop, params);
 
     if (!session) {
@@ -19,7 +22,8 @@ export function unauthenticatedStorefrontContextFactory(
     }
 
     return {
-      graphql: storefrontClientFactory({params, session}),
+      session,
+      storefront: storefrontClientFactory({params, session}),
     };
   };
 }

@@ -9,8 +9,7 @@ import {
 import {SessionStorage} from '@shopify/shopify-app-session-storage';
 
 import {AppDistribution} from './types';
-import {RestClientWithResources} from './clients/admin/rest';
-import {GraphQLClient} from './clients/types';
+import type {AdminApiContext} from './clients';
 
 export interface AppConfigArg<
   Resources extends ShopifyRestResources = ShopifyRestResources,

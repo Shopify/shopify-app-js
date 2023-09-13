@@ -9,7 +9,7 @@ import {
   ShopifyRestResources,
 } from '@shopify/shopify-api';
 
-import {AdminClientOptions} from './types';
+import type {AdminClientOptions} from './types';
 
 export type RestClientWithResources<Resources extends ShopifyRestResources> =
   RemixRestClient & {resources: Resources};

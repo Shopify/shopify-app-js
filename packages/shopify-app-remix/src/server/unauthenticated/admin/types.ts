@@ -1,6 +1,6 @@
 import {Session, ShopifyRestResources} from '@shopify/shopify-api';
 
-import type {AdminApiContext} from '../../config-types';
+import {AdminApiContext} from '../../clients';
 
 export interface UnauthenticatedAdminContext<
   Resources extends ShopifyRestResources,
@@ -35,3 +35,7 @@ export interface UnauthenticatedAdminContext<
    */
   admin: AdminApiContext<Resources>;
 }
+
+export type GetUnauthenticatedAdminContext<
+  Resources extends ShopifyRestResources,
+> = (shop: string) => Promise<UnauthenticatedAdminContext<Resources>>;

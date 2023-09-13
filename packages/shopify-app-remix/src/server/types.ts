@@ -6,13 +6,10 @@ import {
 import {SessionStorage} from '@shopify/shopify-app-session-storage';
 
 import type {AppConfig, AppConfigArg} from './config-types';
-import type {AdminContext} from './authenticate/admin/types';
 import type {
+  AuthenticateWebhook,
   RegisterWebhooksOptions,
-  WebhookContext,
-  WebhookContextWithSession,
 } from './authenticate/webhooks/types';
-import type {UnauthenticatedAdminContext} from './unauthenticated/admin/types';
 import type {AuthenticatePublic} from './authenticate/public/types';
 
 export interface BasicParams {

@@ -1,7 +1,6 @@
 import {Session, ShopifyRestResources} from '@shopify/shopify-api';
 
-import {AdminApiContext} from '../../../config-types';
-import {GraphQLClient} from '../../../clients/types';
+import {AdminApiContext, StorefrontContext} from '../../../clients';
 
 export type AuthenticateAppProxy = (
   request: Request,
@@ -123,5 +122,5 @@ export interface AppProxyContextWithSession<
    * TODO
    *
    */
-  storefront: GraphQLClient;
+  storefront: StorefrontContext;
 }
