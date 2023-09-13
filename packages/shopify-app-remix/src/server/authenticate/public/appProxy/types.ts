@@ -119,8 +119,7 @@ export interface AppProxyContextWithSession<
   admin: AdminApiContext<Resources>;
 
   /**
-   * TODO
-   *
+   * Method for interacting with the Shopify Storefront Graphql API for the store that made the request
    */
   storefront: StorefrontContext;
 }

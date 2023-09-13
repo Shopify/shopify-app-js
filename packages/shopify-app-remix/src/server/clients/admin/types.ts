@@ -23,15 +23,17 @@ export interface AdminApiContext<
   /**
    * Methods for interacting with the Shopify Admin REST API
    *
-   * There are methods for interacting with individual REST resources. You can also make plain `GET`, `POST`, `PUT` and `DELETE` requests should the REST resources not meet your needs.
+   * There are methods for interacting with individual REST resources. You can also make `GET`, `POST`, `PUT` and `DELETE` requests should the REST resources not meet your needs.
    *
    * {@link https://shopify.dev/docs/api/admin-rest}
    *
    * @example
-   * Getting the number of orders in a store using rest resources
+   * <caption>Using REST resources.</caption>
+   * <description>Getting the number of orders in a store using REST resources.</description>
+   *
    * ```ts
-   * // app/shopify.server.ts
-   * import { shopifyApp } from "@shopify/shopify-app-remix";
+   * // /app/shopify.server.ts
+   * import { shopifyApp } from "@shopify/shopify-app-remix/server";
    * import { restResources } from "@shopify/shopify-api/rest/admin/2023-07";
    *
    * const shopify = shopifyApp({
@@ -40,8 +42,10 @@ export interface AdminApiContext<
    * });
    * export default shopify;
    * export const authenticate = shopify.authenticate;
+   * ```
    *
-   * // app/routes/**\/.ts
+   * ```ts
+   * // /app/routes/**\/*.ts
    * import { LoaderArgs, json } from "@remix-run/node";
    * import { authenticate } from "../shopify.server";
    *
@@ -52,10 +56,12 @@ export interface AdminApiContext<
    * ```
    *
    * @example
-   * Making a GET request to the REST API
+   * <caption>Performing a GET request to the REST API.</caption>
+   * <description>Use `admin.rest.<method>` to make custom requests to the API.</description>
+   *
    * ```ts
-   * // app/shopify.server.ts
-   * import { shopifyApp } from "@shopify/shopify-app-remix";
+   * // /app/shopify.server.ts
+   * import { shopifyApp } from "@shopify/shopify-app-remix/server";
    * import { restResources } from "@shopify/shopify-api/rest/admin/2023-04";
    *
    * const shopify = shopifyApp({
@@ -64,8 +70,10 @@ export interface AdminApiContext<
    * });
    * export default shopify;
    * export const authenticate = shopify.authenticate;
+   * ```
    *
-   * // app/routes/**\/.ts
+   * ```ts
+   * // /app/routes/**\/*.ts
    * import { LoaderArgs, json } from "@remix-run/node";
    * import { authenticate } from "../shopify.server";
    *
@@ -86,7 +94,8 @@ export interface AdminApiContext<
    * {@link https://github.com/Shopify/shopify-api-js/blob/main/docs/reference/clients/Graphql.md}
    *
    * @example
-   * Creating a new product
+   * <caption>Querying the GraphQL API.</caption>
+   * <description>Use `admin.graphql` to make query / mutation requests.</description>
    * ```ts
    * import { ActionArgs } from "@remix-run/node";
    * import { authenticate } from "../shopify.server";
