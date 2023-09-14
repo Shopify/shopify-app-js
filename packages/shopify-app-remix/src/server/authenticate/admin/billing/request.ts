@@ -20,6 +20,7 @@ export function requestBillingFactory<Config extends AppConfigArg>(
     plan,
     isTest,
     returnUrl,
+    ...overrides
   }: RequestBillingOptions<Config>): Promise<never> {
     const {api, logger} = params;
 
@@ -38,6 +39,7 @@ export function requestBillingFactory<Config extends AppConfigArg>(
         isTest,
         returnUrl,
         returnObject: true,
+        ...overrides,
       });
     } catch (error) {
       if (error instanceof HttpResponseError && error.response.code === 401) {
