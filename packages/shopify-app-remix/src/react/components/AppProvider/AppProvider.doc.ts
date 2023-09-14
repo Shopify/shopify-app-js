@@ -4,7 +4,7 @@ const data: ReferenceEntityTemplateSchema = {
   name: 'AppProvider',
   descriptionType: 'AppProviderGeneratedType',
   description: '',
-  category: 'frontend',
+  category: 'Entrypoints',
   type: 'component',
   isVisualComponent: false,
   definitions: [

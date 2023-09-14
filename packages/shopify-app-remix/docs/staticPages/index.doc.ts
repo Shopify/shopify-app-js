@@ -51,7 +51,7 @@ const data: LandingTemplateSchema = {
       sectionCard: [
         {
           name: 'shopifyApp',
-          url: '/docs/api/shopify-app-remix/backend/shopifyapp',
+          url: '/docs/api/shopify-app-remix/entrypoints/shopifyapp',
           type: 'clicode',
         },
       ],
@@ -145,7 +145,7 @@ const data: LandingTemplateSchema = {
         },
         {
           name: 'AppProvider',
-          url: '/docs/api/shopify-app-remix/frontend/appprovider',
+          url: '/docs/api/shopify-app-remix/entrypoints/appprovider',
           type: 'clicode',
         },
       ],

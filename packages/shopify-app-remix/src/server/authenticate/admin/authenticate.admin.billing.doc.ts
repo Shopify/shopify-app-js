@@ -4,8 +4,7 @@ const data: ReferenceEntityTemplateSchema = {
   name: 'Billing',
   description:
     'Contains function used to bill merchants for your app.\n\nThis object is returned on authenticated Admin requests. Refer to the [Related](#related) section for more information.',
-  category: 'backend',
-  subCategory: 'admin features',
+  category: 'APIs',
   type: 'object',
   isVisualComponent: false,
   definitions: [
@@ -21,7 +20,7 @@ const data: ReferenceEntityTemplateSchema = {
     {
       name: 'Admin context',
       subtitle: 'Authenticate requests from Shopify Admin.',
-      url: '/docs/api/shopify-app-remix/backend/authenticate/admin',
+      url: '/docs/api/shopify-app-remix/authenticate/admin',
     },
   ],
 };

@@ -6,20 +6,7 @@ import type {AuthenticateAppProxy} from './appProxy/types';
 // But it became tightly coupled to authentictaing Checkout requests.
 // In V2 you will have only public.checkout() and public.appProxy(), no public()
 
-/**
- * Methods for authenticating Requests from Shopify's public surfaces
- *
- * To maintain backwards compatability this is a function and an object.
- *
- * Do not use `authenticate.public()`. Use `authenticate.public.checkout()` instead.
- * `authenticate.public()` will be removed in v2.
- *
- * Methods are:
- *
- * - `authenticate.public.checkout()` for authenticating requests from checkout extensions
- * - `authenticate.public.appProxy()` for authenticating requests from app proxies
- */
-export type AuthenticatePublic = AuthenticateCheckout & {
+interface AuthenticatePublicObject {
   /**
    * Authenticate a request from a checkout extension
    *
@@ -64,4 +51,20 @@ export type AuthenticatePublic = AuthenticateCheckout & {
    * ```
    */
   appProxy: AuthenticateAppProxy;
-};
+}
+
+/**
+ * Methods for authenticating Requests from Shopify's public surfaces
+ *
+ * To maintain backwards compatability this is a function and an object.
+ *
+ * Do not use `authenticate.public()`. Use `authenticate.public.checkout()` instead.
+ * `authenticate.public()` will be removed in v2.
+ *
+ * Methods are:
+ *
+ * - `authenticate.public.checkout()` for authenticating requests from checkout extensions
+ * - `authenticate.public.appProxy()` for authenticating requests from app proxies
+ */
+export type AuthenticatePublic = AuthenticateCheckout &
+  AuthenticatePublicObject;
