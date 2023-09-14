@@ -1,2 +1,5 @@
 .changeset/pre.json
 coverage
+
+packages/shopify-app-remix/docs/*
+packages/shopify-app-remix/**/*.example.tsx?

@@ -15,12 +15,22 @@ interface AdminContextInternal<
    *
    * This comes from the session storage which `shopifyApp` uses to store sessions in your database of choice.
    *
-   * Use this to get shop or user specific data.
+   * Use this to get shop or user-specific data.
    *
    * @example
-   * Getting your app's shop specific widget data using an offline session
+   * <caption>Getting your app's shop-specific widget data using an offline session</caption>
    * ```ts
-   * // app/routes/**\/.ts
+   * // shopify.server.ts
+   * import { shopifyApp } from "@shopify/shopify-app-remix/server";
+   *
+   * const shopify = shopifyApp({
+   *   // ...etc
+   * });
+   * export default shopify;
+   * export const authenticate = shopify.authenticate;
+   * ```
+   * ```ts
+   * // /app/routes/**\/*.ts
    * import { LoaderArgs, json } from "@remix-run/node";
    * import { authenticate } from "../shopify.server";
    * import { getWidgets } from "~/db/widgets.server";
@@ -32,10 +42,10 @@ interface AdminContextInternal<
    * ```
    *
    * @example
-   * Getting your app's user specific widget data using an online session
+   * <caption>Getting your app's user-specific widget data using an online session</caption>
    * ```ts
    * // shopify.server.ts
-   * import { shopifyApp } from "@shopify/shopify-app-remix";
+   * import { shopifyApp } from "@shopify/shopify-app-remix/server";
    *
    * const shopify = shopifyApp({
    *   // ...etc
@@ -43,8 +53,9 @@ interface AdminContextInternal<
    * });
    * export default shopify;
    * export const authenticate = shopify.authenticate;
-   *
-   * // app/routes/**\/.ts
+   * ```
+   * ```ts
+   * // /app/routes/**\/*.ts
    * import { LoaderArgs, json } from "@remix-run/node";
    * import { authenticate } from "../shopify.server";
    * import { getWidgets } from "~/db/widgets.server";
@@ -73,9 +84,9 @@ interface AdminContextInternal<
    * A function that ensures the CORS headers are set correctly for the response
    *
    * @example
-   * Setting CORS headers for a admin request
+   * <caption>Setting CORS headers for a admin request</caption>
    * ```ts
-   * // app/routes/admin/widgets.ts
+   * // /app/routes/admin/widgets.ts
    * import { LoaderArgs, json } from "@remix-run/node";
    * import { authenticate } from "../shopify.server";
    * import { getWidgets } from "~/db/widgets.server";
@@ -94,15 +105,17 @@ export interface EmbeddedAdminContext<
   Resources extends ShopifyRestResources = ShopifyRestResources,
 > extends AdminContextInternal<Config, Resources> {
   /**
-   * The decoded and validated session token for the request
+   * The decoded and validated session token for the request.
+   *
+   * Returned only if `isEmbeddedApp` is `true`.
    *
    * {@link https://shopify.dev/docs/apps/auth/oauth/session-tokens#payload}
    *
    * @example
-   * Getting your app's user specific widget data using the session token
+   * <caption>Getting your app's user-specific widget data using the session token</caption>
    * ```ts
    * // shopify.server.ts
-   * import { shopifyApp } from "@shopify/shopify-app-remix";
+   * import { shopifyApp } from "@shopify/shopify-app-remix/server";
    *
    * const shopify = shopifyApp({
    *   // ...etc
@@ -110,8 +123,9 @@ export interface EmbeddedAdminContext<
    * });
    * export default shopify;
    * export const authenticate = shopify.authenticate;
-   *
-   * // app/routes/**\/.ts
+   * ```
+   * ```ts
+   * // /app/routes/**\/*.ts
    * import { LoaderArgs, json } from "@remix-run/node";
    * import { authenticate } from "../shopify.server";
    * import { getWidgets } from "~/db/widgets.server";
@@ -128,19 +142,33 @@ export interface EmbeddedAdminContext<
 
   /**
    * A function that redirects the user to a new page, ensuring that the appropriate parameters are set for embedded
-   * apps
+   * apps.
+   *
+   * Returned only if `isEmbeddedApp` is `true`.
    *
    * @example
-   * Redirecting the user to the app's home page
+   * <caption>Redirecting the user to the app's homepage</caption>
    * ```ts
-   * // app/routes/admin/widgets.ts
+   * // /app/routes/admin/widgets.ts
    * import { LoaderArgs, json } from "@remix-run/node";
    * import { authenticate } from "../shopify.server";
-   * import { getWidgets } from "~/db/widgets.server";
    *
    * export const loader = async ({ request }: LoaderArgs) => {
    *   const { session, redirect } = await authenticate.admin(request);
    *   return redirect("/");
+   * };
+   * ```
+   *
+   * @example
+   * <caption>Redirecting outside of Shopify Admin</caption>
+   * ```ts
+   * // /app/routes/admin/widgets.ts
+   * import { LoaderArgs, json } from "@remix-run/node";
+   * import { authenticate } from "../shopify.server";
+   *
+   * export const loader = async ({ request }: LoaderArgs) => {
+   *   const { session, redirect } = await authenticate.admin(request);
+   *   return redirect("/", { target: '_parent' });
    * };
    * ```
    */

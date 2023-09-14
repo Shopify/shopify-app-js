@@ -38,9 +38,9 @@ import {authenticatePublicFactory} from './authenticate/public';
  * @returns `ShopifyApp` An object constructed using your appConfig.  It has methods for interacting with Shopify.
  *
  * @example
- * The minimum viable configuration
+ * <caption>The minimum viable configuration</caption>
  * ```ts
- * import { shopifyApp } from "@shopify/shopify-app-remix";
+ * import { shopifyApp } from "@shopify/shopify-app-remix/server";
  *
  * const shopify = shopifyApp({
  *   apiKey: process.env.SHOPIFY_API_KEY!,
@@ -154,7 +154,7 @@ function deriveConfig<Storage extends SessionStorage>(
 ): AppConfig<Storage> {
   if (!appConfig.sessionStorage) {
     throw new ShopifyError(
-      'Please provide a valid session storage. See https://github.com/Shopify/shopify-app-js/blob/main/README.md#session-storage-options for options.',
+      'Please provide a valid session storage. Refer to https://github.com/Shopify/shopify-app-js/blob/main/README.md#session-storage-options for options.',
     );
   }
 
