@@ -4,8 +4,7 @@ const data: ReferenceEntityTemplateSchema = {
   name: 'Unauthenticated admin',
   description:
     "Allows interacting with the Admin API on requests that didn't come from Shopify.\n\nRefer to the [Related](#related) section to see all supported actions in `admin`.\n\n> Caution: This should only be used for Requests that do not originate from Shopify.\n> You must do your own authentication before using this method.\n>This function doesn't perform **any** validation and should not rely on unvalidated user input.",
-  category: 'backend',
-  subCategory: 'Unauthenticated',
+  category: 'Unauthenticated',
   type: 'object',
   isVisualComponent: false,
   definitions: [
@@ -25,7 +24,7 @@ const data: ReferenceEntityTemplateSchema = {
     {
       name: 'API context',
       subtitle: 'Interact with the Admin API.',
-      url: '/docs/api/shopify-app-remix/backend/admin-features/admin-api',
+      url: '/docs/api/shopify-app-remix/apis/admin-api',
     },
   ],
 };

@@ -113,7 +113,7 @@ const data: LandingTemplateSchema = {
       resources: [
         {
           name: 'authenticate.admin',
-          url: '/docs/api/shopify-app-remix/backend/authenticate-admin',
+          url: '/docs/api/shopify-app-remix/authenticate/admin',
         },
       ],
     },

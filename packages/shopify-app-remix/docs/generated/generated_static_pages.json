@@ -96,7 +96,7 @@
         "resources": [
           {
             "name": "authenticate.admin",
-            "url": "/docs/api/shopify-app-remix/backend/authenticate-admin"
+            "url": "/docs/api/shopify-app-remix/authenticate/admin"
           }
         ]
       }
@@ -146,7 +146,7 @@
         "sectionCard": [
           {
             "name": "shopifyApp",
-            "url": "/docs/api/shopify-app-remix/backend/shopifyapp",
+            "url": "/docs/api/shopify-app-remix/entrypoints/shopifyapp",
             "type": "clicode"
           }
         ],
@@ -229,7 +229,7 @@
           },
           {
             "name": "AppProvider",
-            "url": "/docs/api/shopify-app-remix/frontend/appprovider",
+            "url": "/docs/api/shopify-app-remix/entrypoints/appprovider",
             "type": "clicode"
           }
         ],
@@ -290,7 +290,7 @@
         "resources": [
           {
             "name": "authenticate.webhook",
-            "url": "/docs/api/shopify-app-remix/backend/authenticate-webhook"
+            "url": "/docs/api/shopify-app-remix/authenticate/webhook"
           }
         ]
       }

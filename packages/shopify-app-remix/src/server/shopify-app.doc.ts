@@ -3,8 +3,10 @@ import {ReferenceEntityTemplateSchema} from '@shopify/generate-docs';
 const data: ReferenceEntityTemplateSchema = {
   name: 'shopifyApp',
   description:
-    "Returns a set of functions that can be used by the app's backend to be able to respond to all Shopify requests.\n\nThe shape of the returned object changes depending on the value of `distribution`. If it is `AppDistribution.ShopifyAdmin`, only `ShopifyAppBase` objects are returned, otherwise `ShopifyAppLogin` objects are included.\n\nRefer to the [Related](#related) section to see all supported contexts in `authenticate` and `unauthenticated`.",
-  category: 'backend',
+    "Returns a set of functions that can be used by the app's backend to be able to respond to all Shopify requests." +
+    '\n\nThe shape of the returned object changes depending on the value of `distribution`. If it is `AppDistribution.ShopifyAdmin`, only `ShopifyAppBase` objects are returned, otherwise `ShopifyAppLogin` objects are included.' +
+    '\n\nRefer to the [Related](#related) section to see all supported contexts in `authenticate` and `unauthenticated`.',
+  category: 'Entrypoints',
   type: 'function',
   isVisualComponent: false,
   definitions: [
@@ -33,12 +35,12 @@ const data: ReferenceEntityTemplateSchema = {
     {
       name: 'Authenticated contexts',
       subtitle: 'Authenticate requests coming from Shopify.',
-      url: '/docs/api/shopify-app-remix/backend/authenticate-overview',
+      url: '/docs/api/shopify-app-remix/authenticate',
     },
     {
       name: 'Unauthenticated contexts',
       subtitle: 'Interact with the API on non-Shopify requests.',
-      url: '/docs/api/shopify-app-remix/backend/unauthenticated-overview',
+      url: '/docs/api/shopify-app-remix/unauthenticated',
     },
   ],
 };

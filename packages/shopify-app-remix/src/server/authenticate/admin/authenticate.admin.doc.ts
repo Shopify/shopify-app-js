@@ -4,8 +4,7 @@ const data: ReferenceEntityTemplateSchema = {
   name: 'Admin',
   description:
     'Contains functions for authenticating and interacting with the Admin API.\n\nThis function can handle requests for apps embedded in the Admin, Admin extensions, or non-embedded apps.\n\nRefer to the [Related](#related) section to see all supported actions in `admin` and `billing`.',
-  category: 'backend',
-  subCategory: 'Authenticate',
+  category: 'Authenticate',
   type: 'object',
   isVisualComponent: false,
   definitions: [
@@ -38,12 +37,12 @@ const data: ReferenceEntityTemplateSchema = {
     {
       name: 'API context',
       subtitle: 'Interact with the Admin API.',
-      url: '/docs/api/shopify-app-remix/backend/admin-features/admin-api',
+      url: '/docs/api/shopify-app-remix/apis/admin-api',
     },
     {
       name: 'Billing context',
       subtitle: 'Bill merchants for your app using the Admin API.',
-      url: '/docs/api/shopify-app-remix/backend/admin-features/billing',
+      url: '/docs/api/shopify-app-remix/apis/billing',
     },
   ],
 };
