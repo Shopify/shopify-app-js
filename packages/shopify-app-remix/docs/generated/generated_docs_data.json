@@ -3110,39 +3110,46 @@
             "description": ""
           },
           "AuthenticatePublic": {
-            "filePath": "/server/types.ts",
+            "filePath": "/server/authenticate/public/types.ts",
+            "syntaxKind": "TypeAliasDeclaration",
             "name": "AuthenticatePublic",
+            "value": "AuthenticateCheckout & {\n  /**\n   * Authenticate a request from a checkout extension\n   *\n   * @example\n   * <caption>Authenticating a checkout extension request</caption>\n   * ```ts\n   * // /app/routes/public/widgets.ts\n   * import { LoaderArgs, json } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   *\n   * export const loader = async ({ request }: LoaderArgs) => {\n   *   const { sessionToken, cors } = await authenticate.public.checkout(\n   *     request,\n   *   );\n   *   return cors(json({my: \"data\", shop: sessionToken.dest}));\n   * };\n   * ```\n   */\n  checkout: AuthenticateCheckout;\n\n  /**\n   * Authenticate a request from an app proxy\n   *\n   * @example\n   * <caption>Authenticating an app proxy request</caption>\n   * ```ts\n   * // /app/routes/public/widgets.ts\n   * import { LoaderArgs, json } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   *\n   * export const loader = async ({ request }: LoaderArgs) => {\n   *   await authenticate.public.appProxy(\n   *     request,\n   *   );\n   *\n   *   const {searchParams} = new URL(request.url);\n   *   const shop = searchParams.get(\"shop\");\n   *   const customerId = searchParams.get(\"logged_in_customer_id\")\n   *\n   *   return json({my: \"data\", shop, customerId});\n   * };\n   * ```\n   */\n  appProxy: AuthenticateAppProxy;\n}",
+            "description": "Methods for authenticating Requests from Shopify's public surfaces\n\nTo maintain backwards compatability this is a function and an object.\n\nDo not use `authenticate.public()`. Use `authenticate.public.checkout()` instead.`authenticate.public()` will be removed in v2.\n\nMethods are:\n\n- `authenticate.public.checkout()` for authenticating requests from checkout extensions- `authenticate.public.appProxy()` for authenticating requests from app proxies"
+          },
+          "AuthenticateCheckout": {
+            "filePath": "/server/authenticate/public/checkout/types.ts",
+            "name": "AuthenticateCheckout",
             "description": "",
             "params": [
               {
                 "name": "request",
                 "description": "",
                 "value": "Request",
-                "filePath": "/server/types.ts"
+                "filePath": "/server/authenticate/public/checkout/types.ts"
               },
               {
                 "name": "options",
                 "description": "",
-                "value": "AuthenticatePublicOptions",
+                "value": "AuthenticateCheckoutOptions",
                 "isOptional": true,
-                "filePath": "/server/types.ts"
+                "filePath": "/server/authenticate/public/checkout/types.ts"
               }
             ],
             "returns": {
-              "filePath": "/server/types.ts",
+              "filePath": "/server/authenticate/public/checkout/types.ts",
               "description": "",
-              "name": "Promise<PublicContext>",
-              "value": "Promise<PublicContext>"
+              "name": "Promise<CheckoutContext>",
+              "value": "Promise<CheckoutContext>"
             },
-            "value": "type AuthenticatePublic = (\n  request: Request,\n  options?: AuthenticatePublicOptions,\n) => Promise<PublicContext>;"
+            "value": "export type AuthenticateCheckout = (\n  request: Request,\n  options?: AuthenticateCheckoutOptions,\n) => Promise<CheckoutContext>;"
           },
-          "AuthenticatePublicOptions": {
-            "filePath": "/server/authenticate/public/types.ts",
-            "name": "AuthenticatePublicOptions",
+          "AuthenticateCheckoutOptions": {
+            "filePath": "/server/authenticate/public/checkout/types.ts",
+            "name": "AuthenticateCheckoutOptions",
             "description": "",
             "members": [
               {
-                "filePath": "/server/authenticate/public/types.ts",
+                "filePath": "/server/authenticate/public/checkout/types.ts",
                 "syntaxKind": "PropertySignature",
                 "name": "corsHeaders",
                 "value": "string[]",
@@ -3150,33 +3157,33 @@
                 "isOptional": true
               }
             ],
-            "value": "export interface AuthenticatePublicOptions {\n  corsHeaders?: string[];\n}"
+            "value": "export interface AuthenticateCheckoutOptions {\n  corsHeaders?: string[];\n}"
           },
-          "PublicContext": {
-            "filePath": "/server/authenticate/public/types.ts",
-            "name": "PublicContext",
-            "description": "Authenticated Context for a public request",
+          "CheckoutContext": {
+            "filePath": "/server/authenticate/public/checkout/types.ts",
+            "name": "CheckoutContext",
+            "description": "Authenticated Context for a checkout request",
             "members": [
               {
-                "filePath": "/server/authenticate/public/types.ts",
+                "filePath": "/server/authenticate/public/checkout/types.ts",
                 "syntaxKind": "PropertySignature",
                 "name": "sessionToken",
                 "value": "JwtPayload",
-                "description": "The decoded and validated session token for the request.\n\nThe payload of the Session Token is described here: \n\n\n",
+                "description": "The decoded and validated session token for the request\n\nThe payload of the Session Token is described here: \n\n\n",
                 "examples": [
                   {
-                    "description": "Getting your app's store-specific widget data using the session token",
+                    "description": "Get store specific widget data using the session token",
                     "tabs": [
                       {
                         "code": "import { LoaderArgs, json } from \"@remix-run/node\";\nimport { authenticate } from \"../shopify.server\";\nimport { getWidgets } from \"~/db/widgets.server\";\n\nexport const loader = async ({ request }: LoaderArgs) => {\n  const { sessionToken } = await authenticate.public(\n    request\n  );\n  return json(await getWidgets({shop: sessionToken.dest}));\n};",
-                        "title": "/app/routes/public/widgets.ts"
+                        "title": "app/routes/public/widgets.ts"
                       }
                     ]
                   }
                 ]
               },
               {
-                "filePath": "/server/authenticate/public/types.ts",
+                "filePath": "/server/authenticate/public/checkout/types.ts",
                 "syntaxKind": "PropertySignature",
                 "name": "cors",
                 "value": "EnsureCORSFunction",
@@ -3187,14 +3194,168 @@
                     "tabs": [
                       {
                         "code": "import { LoaderArgs, json } from \"@remix-run/node\";\nimport { authenticate } from \"../shopify.server\";\nimport { getWidgets } from \"~/db/widgets.server\";\n\nexport const loader = async ({ request }: LoaderArgs) => {\n  const { sessionToken, cors } = await authenticate.public(\n    request,\n    { corsHeaders: [\"X-My-Custom-Header\"] }\n  );\n  const widgets = await getWidgets({shop: sessionToken.dest});\n  return cors(json(widgets));\n};",
-                        "title": "/app/routes/public/widgets.ts"
+                        "title": "app/routes/public/widgets.ts"
                       }
                     ]
                   }
                 ]
               }
             ],
-            "value": "export interface PublicContext {\n  /**\n   * The decoded and validated session token for the request.\n   *\n   * The payload of the Session Token is described here: {@link https://shopify.dev/docs/apps/auth/oauth/session-tokens#payload}\n   *\n   * @example\n   * <caption>Getting your app's store-specific widget data using the session token</caption>\n   * ```ts\n   * // /app/routes/public/widgets.ts\n   * import { LoaderArgs, json } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   * import { getWidgets } from \"~/db/widgets.server\";\n   *\n   * export const loader = async ({ request }: LoaderArgs) => {\n   *   const { sessionToken } = await authenticate.public(\n   *     request\n   *   );\n   *   return json(await getWidgets({shop: sessionToken.dest}));\n   * };\n   * ```\n   */\n  sessionToken: JwtPayload;\n\n  /**\n   * A function that ensures the CORS headers are set correctly for the response\n   *\n   * @example\n   * <caption>Setting CORS headers for a public request</caption>\n   * ```ts\n   * // /app/routes/public/widgets.ts\n   * import { LoaderArgs, json } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   * import { getWidgets } from \"~/db/widgets.server\";\n   *\n   * export const loader = async ({ request }: LoaderArgs) => {\n   *   const { sessionToken, cors } = await authenticate.public(\n   *     request,\n   *     { corsHeaders: [\"X-My-Custom-Header\"] }\n   *   );\n   *   const widgets = await getWidgets({shop: sessionToken.dest});\n   *   return cors(json(widgets));\n   * };\n   * ```\n   */\n  cors: EnsureCORSFunction;\n}"
+            "value": "export interface CheckoutContext {\n  /**\n   * The decoded and validated session token for the request\n   *\n   * The payload of the Session Token is described here: {@link https://shopify.dev/docs/apps/auth/oauth/session-tokens#payload}\n   *\n   * @example\n   * <caption>Get store specific widget data using the session token</caption>\n   * ```ts\n   * // app/routes/public/widgets.ts\n   * import { LoaderArgs, json } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   * import { getWidgets } from \"~/db/widgets.server\";\n   *\n   * export const loader = async ({ request }: LoaderArgs) => {\n   *   const { sessionToken } = await authenticate.public(\n   *     request\n   *   );\n   *   return json(await getWidgets({shop: sessionToken.dest}));\n   * };\n   * ```\n   */\n  sessionToken: JwtPayload;\n\n  /**\n   * A function that ensures the CORS headers are set correctly for the response\n   *\n   * @example\n   * <caption>Setting CORS headers for a public request</caption>\n   * ```ts\n   * // app/routes/public/widgets.ts\n   * import { LoaderArgs, json } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   * import { getWidgets } from \"~/db/widgets.server\";\n   *\n   * export const loader = async ({ request }: LoaderArgs) => {\n   *   const { sessionToken, cors } = await authenticate.public(\n   *     request,\n   *     { corsHeaders: [\"X-My-Custom-Header\"] }\n   *   );\n   *   const widgets = await getWidgets({shop: sessionToken.dest});\n   *   return cors(json(widgets));\n   * };\n   * ```\n   */\n  cors: EnsureCORSFunction;\n}"
+          },
+          "AuthenticateAppProxy": {
+            "filePath": "/server/authenticate/public/appProxy/types.ts",
+            "name": "AuthenticateAppProxy",
+            "description": "",
+            "params": [
+              {
+                "name": "request",
+                "description": "",
+                "value": "Request",
+                "filePath": "/server/authenticate/public/appProxy/types.ts"
+              }
+            ],
+            "returns": {
+              "filePath": "/server/authenticate/public/appProxy/types.ts",
+              "description": "",
+              "name": "Promise<AppProxyContext | AppProxyContextWithSession>",
+              "value": "Promise<AppProxyContext | AppProxyContextWithSession>"
+            },
+            "value": "export type AuthenticateAppProxy = (\n  request: Request,\n) => Promise<AppProxyContext | AppProxyContextWithSession>;"
+          },
+          "AppProxyContext": {
+            "filePath": "/server/authenticate/public/appProxy/types.ts",
+            "name": "AppProxyContext",
+            "description": "",
+            "members": [
+              {
+                "filePath": "/server/authenticate/public/appProxy/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "session",
+                "value": "undefined",
+                "description": "No session is available for the shop that made this request.\n\nThis comes from the session storage which `shopifyApp` uses to store sessions in your database of choice."
+              },
+              {
+                "filePath": "/server/authenticate/public/appProxy/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "admin",
+                "value": "undefined",
+                "description": "No session is available for the shop that made this request.Therefore no methods for interacting with the Shopify GraphQL / REST Admin APIs are available."
+              },
+              {
+                "filePath": "/server/authenticate/public/appProxy/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "liquid",
+                "value": "LiquidResponseFunction",
+                "description": "A utility for creating a Liquid Response.",
+                "examples": [
+                  {
+                    "description": "Returning a Liquid Response from an app proxy route",
+                    "tabs": [
+                      {
+                        "code": "import {authenticate} from \"~/shopify.server\"\n\nexport async function loader({ request }) {\n  const {liquid} = authenticate.public.appProxy(request);\n\n  return liquid(\"Hello {{shop.name}}\")\n}",
+                        "title": "app/routes/**\\/.ts"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "value": "export interface AppProxyContext extends Context {\n  /**\n   * No session is available for the shop that made this request.\n   *\n   * This comes from the session storage which `shopifyApp` uses to store sessions in your database of choice.\n   */\n  session: undefined;\n  /**\n   * No session is available for the shop that made this request.\n   * Therefore no methods for interacting with the Shopify GraphQL / REST Admin APIs are available.\n   */\n  admin: undefined;\n}"
+          },
+          "LiquidResponseFunction": {
+            "filePath": "/server/authenticate/public/appProxy/types.ts",
+            "name": "LiquidResponseFunction",
+            "description": "",
+            "params": [
+              {
+                "name": "body",
+                "description": "",
+                "value": "string",
+                "filePath": "/server/authenticate/public/appProxy/types.ts"
+              },
+              {
+                "name": "initAndOptions",
+                "description": "",
+                "value": "number | (ResponseInit & Options)",
+                "isOptional": true,
+                "filePath": "/server/authenticate/public/appProxy/types.ts"
+              }
+            ],
+            "returns": {
+              "filePath": "/server/authenticate/public/appProxy/types.ts",
+              "description": "",
+              "name": "Response",
+              "value": "Response"
+            },
+            "value": "export type LiquidResponseFunction = (\n  body: string,\n  initAndOptions?: number | (ResponseInit & Options),\n) => Response;"
+          },
+          "Options": {
+            "filePath": "/server/authenticate/public/appProxy/types.ts",
+            "name": "Options",
+            "description": "",
+            "members": [
+              {
+                "filePath": "/server/authenticate/public/appProxy/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "layout",
+                "value": "boolean",
+                "description": "",
+                "isOptional": true
+              }
+            ],
+            "value": "interface Options {\n  layout?: boolean;\n}"
+          },
+          "AppProxyContextWithSession": {
+            "filePath": "/server/authenticate/public/appProxy/types.ts",
+            "name": "AppProxyContextWithSession",
+            "description": "",
+            "members": [
+              {
+                "filePath": "/server/authenticate/public/appProxy/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "session",
+                "value": "Session",
+                "description": "The session for the shop that made the request.\n\nThis comes from the session storage which `shopifyApp` uses to store sessions in your database of choice.\n\nUse this to get shop or user specific data.",
+                "examples": [
+                  {
+                    "description": "Getting your app's shop specific widget data using an offline session",
+                    "tabs": [
+                      {
+                        "code": "import { json } from \"@remix-run/node\";\nimport { authenticate } from \"../shopify.server\";\nimport { getWidgets } from \"~/db/widgets.server\";\n\nexport const loader = async ({ request }) => {\n  const { session } = await authenticate.public.appProxy(request);\n  return json(await getWidgets({shop: session.shop));\n};",
+                        "title": "app/routes/**\\/.ts"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "filePath": "/server/authenticate/public/appProxy/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "admin",
+                "value": "AdminApiContext<Resources>",
+                "description": "Methods for interacting with the Shopify GraphQL / REST Admin APIs for the store that made the request"
+              },
+              {
+                "filePath": "/server/authenticate/public/appProxy/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "liquid",
+                "value": "LiquidResponseFunction",
+                "description": "A utility for creating a Liquid Response.",
+                "examples": [
+                  {
+                    "description": "Returning a Liquid Response from an app proxy route",
+                    "tabs": [
+                      {
+                        "code": "import {authenticate} from \"~/shopify.server\"\n\nexport async function loader({ request }) {\n  const {liquid} = authenticate.public.appProxy(request);\n\n  return liquid(\"Hello {{shop.name}}\")\n}",
+                        "title": "app/routes/**\\/.ts"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "value": "export interface AppProxyContextWithSession<\n  Resources extends ShopifyRestResources = ShopifyRestResources,\n> extends Context {\n  /**\n   * The session for the shop that made the request.\n   *\n   * This comes from the session storage which `shopifyApp` uses to store sessions in your database of choice.\n   *\n   * Use this to get shop or user specific data.\n   *\n   * @example\n   * <caption>Getting your app's shop specific widget data using an offline session</caption>\n   * ```ts\n   * // app/routes/**\\/.ts\n   * import { json } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   * import { getWidgets } from \"~/db/widgets.server\";\n   *\n   * export const loader = async ({ request }) => {\n   *   const { session } = await authenticate.public.appProxy(request);\n   *   return json(await getWidgets({shop: session.shop));\n   * };\n   * ```\n   */\n  session: Session;\n  /**\n   * Methods for interacting with the Shopify GraphQL / REST Admin APIs for the store that made the request\n   */\n  admin: AdminApiContext<Resources>;\n}"
           },
           "AuthenticateWebhook": {
             "filePath": "/server/types.ts",
@@ -3580,14 +3741,14 @@
               {
                 "filePath": "/server/types.ts",
                 "syntaxKind": "MethodSignature",
-                "name": "__@iterator@354",
+                "name": "__@iterator@378",
                 "value": "() => IterableIterator<JSONValue>",
                 "description": "Iterator"
               },
               {
                 "filePath": "/server/types.ts",
                 "syntaxKind": "MethodSignature",
-                "name": "__@unscopables@356",
+                "name": "__@unscopables@380",
                 "value": "() => { copyWithin: boolean; entries: boolean; fill: boolean; find: boolean; findIndex: boolean; keys: boolean; values: boolean; }",
                 "description": "Returns an object whose properties have the value 'true'\r\nwhen they will be absent when used in a 'with' statement."
               },
@@ -3801,205 +3962,6 @@
                   {
                     "title": "/app/routes/webhooks.ts",
                     "code": "import { ActionArgs } from \"@remix-run/node\";\nimport { authenticate } from \"../shopify.server\";\nimport db from \"../db.server\";\n\nexport const action = async ({ request }: ActionArgs) =&gt; {\n  const { topic, shop, session } = await authenticate.webhook(request);\n\n  switch (topic) {\n    case \"APP_UNINSTALLED\":\n      if (session) {\n        await db.session.deleteMany({ where: { shop } });\n      }\n      break;\n    case \"CUSTOMERS_DATA_REQUEST\":\n    case \"CUSTOMERS_REDACT\":\n    case \"SHOP_REDACT\":\n    default:\n      throw new Response(\"Unhandled webhook topic\", { status: 404 });\n  }\n\n  throw new Response();\n};",
-                    "language": "typescript"
-                  }
-                ]
-              }
-            }
-          ]
-        }
-      ]
-    }
-  },
-  {
-    "name": "Public",
-    "description": "Contains functions for authenticating checkout extension requests.\n\n> Caution: Since these are public requests, make sure you're not exposing any sensitive merchant data in your responses.",
-    "category": "backend",
-    "subCategory": "Authenticate",
-    "type": "object",
-    "isVisualComponent": false,
-    "definitions": [
-      {
-        "title": "authenticate.public",
-        "description": "Authenticates requests coming from Checkout extensions.",
-        "type": "AuthenticatePublic",
-        "typeDefinitions": {
-          "AuthenticatePublic": {
-            "filePath": "/server/types.ts",
-            "name": "AuthenticatePublic",
-            "description": "",
-            "params": [
-              {
-                "name": "request",
-                "description": "",
-                "value": "Request",
-                "filePath": "/server/types.ts"
-              },
-              {
-                "name": "options",
-                "description": "",
-                "value": "AuthenticatePublicOptions",
-                "isOptional": true,
-                "filePath": "/server/types.ts"
-              }
-            ],
-            "returns": {
-              "filePath": "/server/types.ts",
-              "description": "",
-              "name": "Promise<PublicContext>",
-              "value": "Promise<PublicContext>"
-            },
-            "value": "type AuthenticatePublic = (\n  request: Request,\n  options?: AuthenticatePublicOptions,\n) => Promise<PublicContext>;"
-          },
-          "AuthenticatePublicOptions": {
-            "filePath": "/server/authenticate/public/types.ts",
-            "name": "AuthenticatePublicOptions",
-            "description": "",
-            "members": [
-              {
-                "filePath": "/server/authenticate/public/types.ts",
-                "syntaxKind": "PropertySignature",
-                "name": "corsHeaders",
-                "value": "string[]",
-                "description": "",
-                "isOptional": true
-              }
-            ],
-            "value": "export interface AuthenticatePublicOptions {\n  corsHeaders?: string[];\n}"
-          },
-          "PublicContext": {
-            "filePath": "/server/authenticate/public/types.ts",
-            "name": "PublicContext",
-            "description": "Authenticated Context for a public request",
-            "members": [
-              {
-                "filePath": "/server/authenticate/public/types.ts",
-                "syntaxKind": "PropertySignature",
-                "name": "sessionToken",
-                "value": "JwtPayload",
-                "description": "The decoded and validated session token for the request.\n\nThe payload of the Session Token is described here: \n\n\n",
-                "examples": [
-                  {
-                    "description": "Getting your app's store-specific widget data using the session token",
-                    "tabs": [
-                      {
-                        "code": "import { LoaderArgs, json } from \"@remix-run/node\";\nimport { authenticate } from \"../shopify.server\";\nimport { getWidgets } from \"~/db/widgets.server\";\n\nexport const loader = async ({ request }: LoaderArgs) => {\n  const { sessionToken } = await authenticate.public(\n    request\n  );\n  return json(await getWidgets({shop: sessionToken.dest}));\n};",
-                        "title": "/app/routes/public/widgets.ts"
-                      }
-                    ]
-                  }
-                ]
-              },
-              {
-                "filePath": "/server/authenticate/public/types.ts",
-                "syntaxKind": "PropertySignature",
-                "name": "cors",
-                "value": "EnsureCORSFunction",
-                "description": "A function that ensures the CORS headers are set correctly for the response",
-                "examples": [
-                  {
-                    "description": "Setting CORS headers for a public request",
-                    "tabs": [
-                      {
-                        "code": "import { LoaderArgs, json } from \"@remix-run/node\";\nimport { authenticate } from \"../shopify.server\";\nimport { getWidgets } from \"~/db/widgets.server\";\n\nexport const loader = async ({ request }: LoaderArgs) => {\n  const { sessionToken, cors } = await authenticate.public(\n    request,\n    { corsHeaders: [\"X-My-Custom-Header\"] }\n  );\n  const widgets = await getWidgets({shop: sessionToken.dest});\n  return cors(json(widgets));\n};",
-                        "title": "/app/routes/public/widgets.ts"
-                      }
-                    ]
-                  }
-                ]
-              }
-            ],
-            "value": "export interface PublicContext {\n  /**\n   * The decoded and validated session token for the request.\n   *\n   * The payload of the Session Token is described here: {@link https://shopify.dev/docs/apps/auth/oauth/session-tokens#payload}\n   *\n   * @example\n   * <caption>Getting your app's store-specific widget data using the session token</caption>\n   * ```ts\n   * // /app/routes/public/widgets.ts\n   * import { LoaderArgs, json } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   * import { getWidgets } from \"~/db/widgets.server\";\n   *\n   * export const loader = async ({ request }: LoaderArgs) => {\n   *   const { sessionToken } = await authenticate.public(\n   *     request\n   *   );\n   *   return json(await getWidgets({shop: sessionToken.dest}));\n   * };\n   * ```\n   */\n  sessionToken: JwtPayload;\n\n  /**\n   * A function that ensures the CORS headers are set correctly for the response\n   *\n   * @example\n   * <caption>Setting CORS headers for a public request</caption>\n   * ```ts\n   * // /app/routes/public/widgets.ts\n   * import { LoaderArgs, json } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   * import { getWidgets } from \"~/db/widgets.server\";\n   *\n   * export const loader = async ({ request }: LoaderArgs) => {\n   *   const { sessionToken, cors } = await authenticate.public(\n   *     request,\n   *     { corsHeaders: [\"X-My-Custom-Header\"] }\n   *   );\n   *   const widgets = await getWidgets({shop: sessionToken.dest});\n   *   return cors(json(widgets));\n   * };\n   * ```\n   */\n  cors: EnsureCORSFunction;\n}"
-          }
-        },
-        "jsDocExamples": false
-      },
-      {
-        "title": "PublicContext",
-        "description": "Object returned by `authenticate.public`.",
-        "type": "PublicContext",
-        "typeDefinitions": {
-          "PublicContext": {
-            "filePath": "/server/authenticate/public/types.ts",
-            "name": "PublicContext",
-            "description": "Authenticated Context for a public request",
-            "members": [
-              {
-                "filePath": "/server/authenticate/public/types.ts",
-                "syntaxKind": "PropertySignature",
-                "name": "sessionToken",
-                "value": "JwtPayload",
-                "description": "The decoded and validated session token for the request.\n\nThe payload of the Session Token is described here: \n\n\n",
-                "examples": [
-                  {
-                    "description": "Getting your app's store-specific widget data using the session token",
-                    "tabs": [
-                      {
-                        "code": "import { LoaderArgs, json } from \"@remix-run/node\";\nimport { authenticate } from \"../shopify.server\";\nimport { getWidgets } from \"~/db/widgets.server\";\n\nexport const loader = async ({ request }: LoaderArgs) => {\n  const { sessionToken } = await authenticate.public(\n    request\n  );\n  return json(await getWidgets({shop: sessionToken.dest}));\n};",
-                        "title": "/app/routes/public/widgets.ts"
-                      }
-                    ]
-                  }
-                ]
-              },
-              {
-                "filePath": "/server/authenticate/public/types.ts",
-                "syntaxKind": "PropertySignature",
-                "name": "cors",
-                "value": "EnsureCORSFunction",
-                "description": "A function that ensures the CORS headers are set correctly for the response",
-                "examples": [
-                  {
-                    "description": "Setting CORS headers for a public request",
-                    "tabs": [
-                      {
-                        "code": "import { LoaderArgs, json } from \"@remix-run/node\";\nimport { authenticate } from \"../shopify.server\";\nimport { getWidgets } from \"~/db/widgets.server\";\n\nexport const loader = async ({ request }: LoaderArgs) => {\n  const { sessionToken, cors } = await authenticate.public(\n    request,\n    { corsHeaders: [\"X-My-Custom-Header\"] }\n  );\n  const widgets = await getWidgets({shop: sessionToken.dest});\n  return cors(json(widgets));\n};",
-                        "title": "/app/routes/public/widgets.ts"
-                      }
-                    ]
-                  }
-                ]
-              }
-            ],
-            "value": "export interface PublicContext {\n  /**\n   * The decoded and validated session token for the request.\n   *\n   * The payload of the Session Token is described here: {@link https://shopify.dev/docs/apps/auth/oauth/session-tokens#payload}\n   *\n   * @example\n   * <caption>Getting your app's store-specific widget data using the session token</caption>\n   * ```ts\n   * // /app/routes/public/widgets.ts\n   * import { LoaderArgs, json } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   * import { getWidgets } from \"~/db/widgets.server\";\n   *\n   * export const loader = async ({ request }: LoaderArgs) => {\n   *   const { sessionToken } = await authenticate.public(\n   *     request\n   *   );\n   *   return json(await getWidgets({shop: sessionToken.dest}));\n   * };\n   * ```\n   */\n  sessionToken: JwtPayload;\n\n  /**\n   * A function that ensures the CORS headers are set correctly for the response\n   *\n   * @example\n   * <caption>Setting CORS headers for a public request</caption>\n   * ```ts\n   * // /app/routes/public/widgets.ts\n   * import { LoaderArgs, json } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   * import { getWidgets } from \"~/db/widgets.server\";\n   *\n   * export const loader = async ({ request }: LoaderArgs) => {\n   *   const { sessionToken, cors } = await authenticate.public(\n   *     request,\n   *     { corsHeaders: [\"X-My-Custom-Header\"] }\n   *   );\n   *   const widgets = await getWidgets({shop: sessionToken.dest});\n   *   return cors(json(widgets));\n   * };\n   * ```\n   */\n  cors: EnsureCORSFunction;\n}"
-          }
-        },
-        "jsDocExamples": true
-      }
-    ],
-    "related": [],
-    "examples": {
-      "description": "Usage examples",
-      "exampleGroups": [
-        {
-          "title": "sessionToken",
-          "examples": [
-            {
-              "description": "",
-              "codeblock": {
-                "title": "Getting your app's store-specific widget data using the session token",
-                "tabs": [
-                  {
-                    "title": "/app/routes/public/widgets.ts",
-                    "code": "import { LoaderArgs, json } from \"@remix-run/node\";\nimport { authenticate } from \"../shopify.server\";\nimport { getWidgets } from \"~/db/widgets.server\";\n\nexport const loader = async ({ request }: LoaderArgs) =&gt; {\n  const { sessionToken } = await authenticate.public(\n    request\n  );\n  return json(await getWidgets({shop: sessionToken.dest}));\n};",
-                    "language": "typescript"
-                  }
-                ]
-              }
-            }
-          ]
-        },
-        {
-          "title": "cors",
-          "examples": [
-            {
-              "description": "",
-              "codeblock": {
-                "title": "Setting CORS headers for a public request",
-                "tabs": [
-                  {
-                    "title": "/app/routes/public/widgets.ts",
-                    "code": "import { LoaderArgs, json } from \"@remix-run/node\";\nimport { authenticate } from \"../shopify.server\";\nimport { getWidgets } from \"~/db/widgets.server\";\n\nexport const loader = async ({ request }: LoaderArgs) =&gt; {\n  const { sessionToken, cors } = await authenticate.public(\n    request,\n    { corsHeaders: [\"X-My-Custom-Header\"] }\n  );\n  const widgets = await getWidgets({shop: sessionToken.dest});\n  return cors(json(widgets));\n};",
                     "language": "typescript"
                   }
                 ]
@@ -4407,14 +4369,14 @@
               {
                 "filePath": "/server/types.ts",
                 "syntaxKind": "MethodSignature",
-                "name": "__@iterator@354",
+                "name": "__@iterator@378",
                 "value": "() => IterableIterator<JSONValue>",
                 "description": "Iterator"
               },
               {
                 "filePath": "/server/types.ts",
                 "syntaxKind": "MethodSignature",
-                "name": "__@unscopables@356",
+                "name": "__@unscopables@380",
                 "value": "() => { copyWithin: boolean; entries: boolean; fill: boolean; find: boolean; findIndex: boolean; keys: boolean; values: boolean; }",
                 "description": "Returns an object whose properties have the value 'true'\r\nwhen they will be absent when used in a 'with' statement."
               },
@@ -4912,14 +4874,14 @@
               {
                 "filePath": "/server/types.ts",
                 "syntaxKind": "MethodSignature",
-                "name": "__@iterator@354",
+                "name": "__@iterator@378",
                 "value": "() => IterableIterator<JSONValue>",
                 "description": "Iterator"
               },
               {
                 "filePath": "/server/types.ts",
                 "syntaxKind": "MethodSignature",
-                "name": "__@unscopables@356",
+                "name": "__@unscopables@380",
                 "value": "() => { copyWithin: boolean; entries: boolean; fill: boolean; find: boolean; findIndex: boolean; keys: boolean; values: boolean; }",
                 "description": "Returns an object whose properties have the value 'true'\r\nwhen they will be absent when used in a 'with' statement."
               },
@@ -5064,7 +5026,7 @@
               "name": "ShopifyApp<Config extends AppConfigArg<Resources, Storage>>",
               "value": "ShopifyApp<Config extends AppConfigArg<Resources, Storage>>"
             },
-            "value": "export function shopifyApp<\n  Config extends AppConfigArg<Resources, Storage>,\n  Resources extends ShopifyRestResources,\n  Storage extends SessionStorage,\n>(appConfig: Config): ShopifyApp<Config> {\n  const api = deriveApi<Resources>(appConfig);\n  const config = deriveConfig<Storage>(appConfig, api.config);\n  const logger = overrideLogger(api.logger);\n\n  if (appConfig.webhooks) {\n    api.webhooks.addHandlers(appConfig.webhooks);\n  }\n\n  const params: BasicParams = {api, config, logger};\n  const oauth = new AuthStrategy<Config, Resources>(params);\n\n  const shopify:\n    | AdminApp<Config>\n    | AppStoreApp<Config>\n    | SingleMerchantApp<Config> = {\n    sessionStorage: config.sessionStorage,\n    addDocumentResponseHeaders: addDocumentResponseHeadersFactory(params),\n    registerWebhooks: registerWebhooksFactory(params),\n    authenticate: {\n      admin: oauth.authenticateAdmin.bind(oauth),\n      public: authenticatePublicFactory(params),\n      webhook: authenticateWebhookFactory<\n        Resources,\n        keyof Config['webhooks'] | MandatoryTopics\n      >(params),\n    },\n    unauthenticated: {\n      admin: unauthenticatedAdminContextFactory(params),\n    },\n  };\n\n  if (\n    isAppStoreApp(shopify, appConfig) ||\n    isSingleMerchantApp(shopify, appConfig)\n  ) {\n    shopify.login = loginFactory(params);\n  }\n\n  return shopify as ShopifyApp<Config>;\n}",
+            "value": "export function shopifyApp<\n  Config extends AppConfigArg<Resources, Storage>,\n  Resources extends ShopifyRestResources,\n  Storage extends SessionStorage,\n>(appConfig: Config): ShopifyApp<Config> {\n  const api = deriveApi<Resources>(appConfig);\n  const config = deriveConfig<Storage>(appConfig, api.config);\n  const logger = overrideLogger(api.logger);\n\n  if (appConfig.webhooks) {\n    api.webhooks.addHandlers(appConfig.webhooks);\n  }\n\n  const params: BasicParams = {api, config, logger};\n  const oauth = new AuthStrategy<Config, Resources>(params);\n\n  const shopify:\n    | AdminApp<Config>\n    | AppStoreApp<Config>\n    | SingleMerchantApp<Config> = {\n    sessionStorage: config.sessionStorage,\n    addDocumentResponseHeaders: addDocumentResponseHeadersFactory(params),\n    registerWebhooks: registerWebhooksFactory(params),\n    authenticate: {\n      admin: oauth.authenticateAdmin.bind(oauth),\n      public: authenticatePublicFactory<Resources>(params),\n      webhook: authenticateWebhookFactory<\n        Resources,\n        keyof Config['webhooks'] | MandatoryTopics\n      >(params),\n    },\n    unauthenticated: {\n      admin: unauthenticatedAdminContextFactory(params),\n    },\n  };\n\n  if (\n    isAppStoreApp(shopify, appConfig) ||\n    isSingleMerchantApp(shopify, appConfig)\n  ) {\n    shopify.login = loginFactory(params);\n  }\n\n  return shopify as ShopifyApp<Config>;\n}",
             "examples": [
               {
                 "description": "The minimum viable configuration",
@@ -6206,39 +6168,46 @@
             "description": ""
           },
           "AuthenticatePublic": {
-            "filePath": "/server/types.ts",
+            "filePath": "/server/authenticate/public/types.ts",
+            "syntaxKind": "TypeAliasDeclaration",
             "name": "AuthenticatePublic",
+            "value": "AuthenticateCheckout & {\n  /**\n   * Authenticate a request from a checkout extension\n   *\n   * @example\n   * <caption>Authenticating a checkout extension request</caption>\n   * ```ts\n   * // /app/routes/public/widgets.ts\n   * import { LoaderArgs, json } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   *\n   * export const loader = async ({ request }: LoaderArgs) => {\n   *   const { sessionToken, cors } = await authenticate.public.checkout(\n   *     request,\n   *   );\n   *   return cors(json({my: \"data\", shop: sessionToken.dest}));\n   * };\n   * ```\n   */\n  checkout: AuthenticateCheckout;\n\n  /**\n   * Authenticate a request from an app proxy\n   *\n   * @example\n   * <caption>Authenticating an app proxy request</caption>\n   * ```ts\n   * // /app/routes/public/widgets.ts\n   * import { LoaderArgs, json } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   *\n   * export const loader = async ({ request }: LoaderArgs) => {\n   *   await authenticate.public.appProxy(\n   *     request,\n   *   );\n   *\n   *   const {searchParams} = new URL(request.url);\n   *   const shop = searchParams.get(\"shop\");\n   *   const customerId = searchParams.get(\"logged_in_customer_id\")\n   *\n   *   return json({my: \"data\", shop, customerId});\n   * };\n   * ```\n   */\n  appProxy: AuthenticateAppProxy;\n}",
+            "description": "Methods for authenticating Requests from Shopify's public surfaces\n\nTo maintain backwards compatability this is a function and an object.\n\nDo not use `authenticate.public()`. Use `authenticate.public.checkout()` instead.`authenticate.public()` will be removed in v2.\n\nMethods are:\n\n- `authenticate.public.checkout()` for authenticating requests from checkout extensions- `authenticate.public.appProxy()` for authenticating requests from app proxies"
+          },
+          "AuthenticateCheckout": {
+            "filePath": "/server/authenticate/public/checkout/types.ts",
+            "name": "AuthenticateCheckout",
             "description": "",
             "params": [
               {
                 "name": "request",
                 "description": "",
                 "value": "Request",
-                "filePath": "/server/types.ts"
+                "filePath": "/server/authenticate/public/checkout/types.ts"
               },
               {
                 "name": "options",
                 "description": "",
-                "value": "AuthenticatePublicOptions",
+                "value": "AuthenticateCheckoutOptions",
                 "isOptional": true,
-                "filePath": "/server/types.ts"
+                "filePath": "/server/authenticate/public/checkout/types.ts"
               }
             ],
             "returns": {
-              "filePath": "/server/types.ts",
+              "filePath": "/server/authenticate/public/checkout/types.ts",
               "description": "",
-              "name": "Promise<PublicContext>",
-              "value": "Promise<PublicContext>"
+              "name": "Promise<CheckoutContext>",
+              "value": "Promise<CheckoutContext>"
             },
-            "value": "type AuthenticatePublic = (\n  request: Request,\n  options?: AuthenticatePublicOptions,\n) => Promise<PublicContext>;"
+            "value": "export type AuthenticateCheckout = (\n  request: Request,\n  options?: AuthenticateCheckoutOptions,\n) => Promise<CheckoutContext>;"
           },
-          "AuthenticatePublicOptions": {
-            "filePath": "/server/authenticate/public/types.ts",
-            "name": "AuthenticatePublicOptions",
+          "AuthenticateCheckoutOptions": {
+            "filePath": "/server/authenticate/public/checkout/types.ts",
+            "name": "AuthenticateCheckoutOptions",
             "description": "",
             "members": [
               {
-                "filePath": "/server/authenticate/public/types.ts",
+                "filePath": "/server/authenticate/public/checkout/types.ts",
                 "syntaxKind": "PropertySignature",
                 "name": "corsHeaders",
                 "value": "string[]",
@@ -6246,33 +6215,33 @@
                 "isOptional": true
               }
             ],
-            "value": "export interface AuthenticatePublicOptions {\n  corsHeaders?: string[];\n}"
+            "value": "export interface AuthenticateCheckoutOptions {\n  corsHeaders?: string[];\n}"
           },
-          "PublicContext": {
-            "filePath": "/server/authenticate/public/types.ts",
-            "name": "PublicContext",
-            "description": "Authenticated Context for a public request",
+          "CheckoutContext": {
+            "filePath": "/server/authenticate/public/checkout/types.ts",
+            "name": "CheckoutContext",
+            "description": "Authenticated Context for a checkout request",
             "members": [
               {
-                "filePath": "/server/authenticate/public/types.ts",
+                "filePath": "/server/authenticate/public/checkout/types.ts",
                 "syntaxKind": "PropertySignature",
                 "name": "sessionToken",
                 "value": "JwtPayload",
-                "description": "The decoded and validated session token for the request.\n\nThe payload of the Session Token is described here: \n\n\n",
+                "description": "The decoded and validated session token for the request\n\nThe payload of the Session Token is described here: \n\n\n",
                 "examples": [
                   {
-                    "description": "Getting your app's store-specific widget data using the session token",
+                    "description": "Get store specific widget data using the session token",
                     "tabs": [
                       {
                         "code": "import { LoaderArgs, json } from \"@remix-run/node\";\nimport { authenticate } from \"../shopify.server\";\nimport { getWidgets } from \"~/db/widgets.server\";\n\nexport const loader = async ({ request }: LoaderArgs) => {\n  const { sessionToken } = await authenticate.public(\n    request\n  );\n  return json(await getWidgets({shop: sessionToken.dest}));\n};",
-                        "title": "/app/routes/public/widgets.ts"
+                        "title": "app/routes/public/widgets.ts"
                       }
                     ]
                   }
                 ]
               },
               {
-                "filePath": "/server/authenticate/public/types.ts",
+                "filePath": "/server/authenticate/public/checkout/types.ts",
                 "syntaxKind": "PropertySignature",
                 "name": "cors",
                 "value": "EnsureCORSFunction",
@@ -6283,14 +6252,168 @@
                     "tabs": [
                       {
                         "code": "import { LoaderArgs, json } from \"@remix-run/node\";\nimport { authenticate } from \"../shopify.server\";\nimport { getWidgets } from \"~/db/widgets.server\";\n\nexport const loader = async ({ request }: LoaderArgs) => {\n  const { sessionToken, cors } = await authenticate.public(\n    request,\n    { corsHeaders: [\"X-My-Custom-Header\"] }\n  );\n  const widgets = await getWidgets({shop: sessionToken.dest});\n  return cors(json(widgets));\n};",
-                        "title": "/app/routes/public/widgets.ts"
+                        "title": "app/routes/public/widgets.ts"
                       }
                     ]
                   }
                 ]
               }
             ],
-            "value": "export interface PublicContext {\n  /**\n   * The decoded and validated session token for the request.\n   *\n   * The payload of the Session Token is described here: {@link https://shopify.dev/docs/apps/auth/oauth/session-tokens#payload}\n   *\n   * @example\n   * <caption>Getting your app's store-specific widget data using the session token</caption>\n   * ```ts\n   * // /app/routes/public/widgets.ts\n   * import { LoaderArgs, json } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   * import { getWidgets } from \"~/db/widgets.server\";\n   *\n   * export const loader = async ({ request }: LoaderArgs) => {\n   *   const { sessionToken } = await authenticate.public(\n   *     request\n   *   );\n   *   return json(await getWidgets({shop: sessionToken.dest}));\n   * };\n   * ```\n   */\n  sessionToken: JwtPayload;\n\n  /**\n   * A function that ensures the CORS headers are set correctly for the response\n   *\n   * @example\n   * <caption>Setting CORS headers for a public request</caption>\n   * ```ts\n   * // /app/routes/public/widgets.ts\n   * import { LoaderArgs, json } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   * import { getWidgets } from \"~/db/widgets.server\";\n   *\n   * export const loader = async ({ request }: LoaderArgs) => {\n   *   const { sessionToken, cors } = await authenticate.public(\n   *     request,\n   *     { corsHeaders: [\"X-My-Custom-Header\"] }\n   *   );\n   *   const widgets = await getWidgets({shop: sessionToken.dest});\n   *   return cors(json(widgets));\n   * };\n   * ```\n   */\n  cors: EnsureCORSFunction;\n}"
+            "value": "export interface CheckoutContext {\n  /**\n   * The decoded and validated session token for the request\n   *\n   * The payload of the Session Token is described here: {@link https://shopify.dev/docs/apps/auth/oauth/session-tokens#payload}\n   *\n   * @example\n   * <caption>Get store specific widget data using the session token</caption>\n   * ```ts\n   * // app/routes/public/widgets.ts\n   * import { LoaderArgs, json } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   * import { getWidgets } from \"~/db/widgets.server\";\n   *\n   * export const loader = async ({ request }: LoaderArgs) => {\n   *   const { sessionToken } = await authenticate.public(\n   *     request\n   *   );\n   *   return json(await getWidgets({shop: sessionToken.dest}));\n   * };\n   * ```\n   */\n  sessionToken: JwtPayload;\n\n  /**\n   * A function that ensures the CORS headers are set correctly for the response\n   *\n   * @example\n   * <caption>Setting CORS headers for a public request</caption>\n   * ```ts\n   * // app/routes/public/widgets.ts\n   * import { LoaderArgs, json } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   * import { getWidgets } from \"~/db/widgets.server\";\n   *\n   * export const loader = async ({ request }: LoaderArgs) => {\n   *   const { sessionToken, cors } = await authenticate.public(\n   *     request,\n   *     { corsHeaders: [\"X-My-Custom-Header\"] }\n   *   );\n   *   const widgets = await getWidgets({shop: sessionToken.dest});\n   *   return cors(json(widgets));\n   * };\n   * ```\n   */\n  cors: EnsureCORSFunction;\n}"
+          },
+          "AuthenticateAppProxy": {
+            "filePath": "/server/authenticate/public/appProxy/types.ts",
+            "name": "AuthenticateAppProxy",
+            "description": "",
+            "params": [
+              {
+                "name": "request",
+                "description": "",
+                "value": "Request",
+                "filePath": "/server/authenticate/public/appProxy/types.ts"
+              }
+            ],
+            "returns": {
+              "filePath": "/server/authenticate/public/appProxy/types.ts",
+              "description": "",
+              "name": "Promise<AppProxyContext | AppProxyContextWithSession>",
+              "value": "Promise<AppProxyContext | AppProxyContextWithSession>"
+            },
+            "value": "export type AuthenticateAppProxy = (\n  request: Request,\n) => Promise<AppProxyContext | AppProxyContextWithSession>;"
+          },
+          "AppProxyContext": {
+            "filePath": "/server/authenticate/public/appProxy/types.ts",
+            "name": "AppProxyContext",
+            "description": "",
+            "members": [
+              {
+                "filePath": "/server/authenticate/public/appProxy/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "session",
+                "value": "undefined",
+                "description": "No session is available for the shop that made this request.\n\nThis comes from the session storage which `shopifyApp` uses to store sessions in your database of choice."
+              },
+              {
+                "filePath": "/server/authenticate/public/appProxy/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "admin",
+                "value": "undefined",
+                "description": "No session is available for the shop that made this request.Therefore no methods for interacting with the Shopify GraphQL / REST Admin APIs are available."
+              },
+              {
+                "filePath": "/server/authenticate/public/appProxy/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "liquid",
+                "value": "LiquidResponseFunction",
+                "description": "A utility for creating a Liquid Response.",
+                "examples": [
+                  {
+                    "description": "Returning a Liquid Response from an app proxy route",
+                    "tabs": [
+                      {
+                        "code": "import {authenticate} from \"~/shopify.server\"\n\nexport async function loader({ request }) {\n  const {liquid} = authenticate.public.appProxy(request);\n\n  return liquid(\"Hello {{shop.name}}\")\n}",
+                        "title": "app/routes/**\\/.ts"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "value": "export interface AppProxyContext extends Context {\n  /**\n   * No session is available for the shop that made this request.\n   *\n   * This comes from the session storage which `shopifyApp` uses to store sessions in your database of choice.\n   */\n  session: undefined;\n  /**\n   * No session is available for the shop that made this request.\n   * Therefore no methods for interacting with the Shopify GraphQL / REST Admin APIs are available.\n   */\n  admin: undefined;\n}"
+          },
+          "LiquidResponseFunction": {
+            "filePath": "/server/authenticate/public/appProxy/types.ts",
+            "name": "LiquidResponseFunction",
+            "description": "",
+            "params": [
+              {
+                "name": "body",
+                "description": "",
+                "value": "string",
+                "filePath": "/server/authenticate/public/appProxy/types.ts"
+              },
+              {
+                "name": "initAndOptions",
+                "description": "",
+                "value": "number | (ResponseInit & Options)",
+                "isOptional": true,
+                "filePath": "/server/authenticate/public/appProxy/types.ts"
+              }
+            ],
+            "returns": {
+              "filePath": "/server/authenticate/public/appProxy/types.ts",
+              "description": "",
+              "name": "Response",
+              "value": "Response"
+            },
+            "value": "export type LiquidResponseFunction = (\n  body: string,\n  initAndOptions?: number | (ResponseInit & Options),\n) => Response;"
+          },
+          "Options": {
+            "filePath": "/server/authenticate/public/appProxy/types.ts",
+            "name": "Options",
+            "description": "",
+            "members": [
+              {
+                "filePath": "/server/authenticate/public/appProxy/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "layout",
+                "value": "boolean",
+                "description": "",
+                "isOptional": true
+              }
+            ],
+            "value": "interface Options {\n  layout?: boolean;\n}"
+          },
+          "AppProxyContextWithSession": {
+            "filePath": "/server/authenticate/public/appProxy/types.ts",
+            "name": "AppProxyContextWithSession",
+            "description": "",
+            "members": [
+              {
+                "filePath": "/server/authenticate/public/appProxy/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "session",
+                "value": "Session",
+                "description": "The session for the shop that made the request.\n\nThis comes from the session storage which `shopifyApp` uses to store sessions in your database of choice.\n\nUse this to get shop or user specific data.",
+                "examples": [
+                  {
+                    "description": "Getting your app's shop specific widget data using an offline session",
+                    "tabs": [
+                      {
+                        "code": "import { json } from \"@remix-run/node\";\nimport { authenticate } from \"../shopify.server\";\nimport { getWidgets } from \"~/db/widgets.server\";\n\nexport const loader = async ({ request }) => {\n  const { session } = await authenticate.public.appProxy(request);\n  return json(await getWidgets({shop: session.shop));\n};",
+                        "title": "app/routes/**\\/.ts"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "filePath": "/server/authenticate/public/appProxy/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "admin",
+                "value": "AdminApiContext<Resources>",
+                "description": "Methods for interacting with the Shopify GraphQL / REST Admin APIs for the store that made the request"
+              },
+              {
+                "filePath": "/server/authenticate/public/appProxy/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "liquid",
+                "value": "LiquidResponseFunction",
+                "description": "A utility for creating a Liquid Response.",
+                "examples": [
+                  {
+                    "description": "Returning a Liquid Response from an app proxy route",
+                    "tabs": [
+                      {
+                        "code": "import {authenticate} from \"~/shopify.server\"\n\nexport async function loader({ request }) {\n  const {liquid} = authenticate.public.appProxy(request);\n\n  return liquid(\"Hello {{shop.name}}\")\n}",
+                        "title": "app/routes/**\\/.ts"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "value": "export interface AppProxyContextWithSession<\n  Resources extends ShopifyRestResources = ShopifyRestResources,\n> extends Context {\n  /**\n   * The session for the shop that made the request.\n   *\n   * This comes from the session storage which `shopifyApp` uses to store sessions in your database of choice.\n   *\n   * Use this to get shop or user specific data.\n   *\n   * @example\n   * <caption>Getting your app's shop specific widget data using an offline session</caption>\n   * ```ts\n   * // app/routes/**\\/.ts\n   * import { json } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   * import { getWidgets } from \"~/db/widgets.server\";\n   *\n   * export const loader = async ({ request }) => {\n   *   const { session } = await authenticate.public.appProxy(request);\n   *   return json(await getWidgets({shop: session.shop));\n   * };\n   * ```\n   */\n  session: Session;\n  /**\n   * Methods for interacting with the Shopify GraphQL / REST Admin APIs for the store that made the request\n   */\n  admin: AdminApiContext<Resources>;\n}"
           },
           "AuthenticateWebhook": {
             "filePath": "/server/types.ts",
@@ -6676,14 +6799,14 @@
               {
                 "filePath": "/server/types.ts",
                 "syntaxKind": "MethodSignature",
-                "name": "__@iterator@354",
+                "name": "__@iterator@378",
                 "value": "() => IterableIterator<JSONValue>",
                 "description": "Iterator"
               },
               {
                 "filePath": "/server/types.ts",
                 "syntaxKind": "MethodSignature",
-                "name": "__@unscopables@356",
+                "name": "__@unscopables@380",
                 "value": "() => { copyWithin: boolean; entries: boolean; fill: boolean; find: boolean; findIndex: boolean; keys: boolean; values: boolean; }",
                 "description": "Returns an object whose properties have the value 'true'\r\nwhen they will be absent when used in a 'with' statement."
               },
@@ -7901,39 +8024,46 @@
             "description": ""
           },
           "AuthenticatePublic": {
-            "filePath": "/server/types.ts",
+            "filePath": "/server/authenticate/public/types.ts",
+            "syntaxKind": "TypeAliasDeclaration",
             "name": "AuthenticatePublic",
+            "value": "AuthenticateCheckout & {\n  /**\n   * Authenticate a request from a checkout extension\n   *\n   * @example\n   * <caption>Authenticating a checkout extension request</caption>\n   * ```ts\n   * // /app/routes/public/widgets.ts\n   * import { LoaderArgs, json } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   *\n   * export const loader = async ({ request }: LoaderArgs) => {\n   *   const { sessionToken, cors } = await authenticate.public.checkout(\n   *     request,\n   *   );\n   *   return cors(json({my: \"data\", shop: sessionToken.dest}));\n   * };\n   * ```\n   */\n  checkout: AuthenticateCheckout;\n\n  /**\n   * Authenticate a request from an app proxy\n   *\n   * @example\n   * <caption>Authenticating an app proxy request</caption>\n   * ```ts\n   * // /app/routes/public/widgets.ts\n   * import { LoaderArgs, json } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   *\n   * export const loader = async ({ request }: LoaderArgs) => {\n   *   await authenticate.public.appProxy(\n   *     request,\n   *   );\n   *\n   *   const {searchParams} = new URL(request.url);\n   *   const shop = searchParams.get(\"shop\");\n   *   const customerId = searchParams.get(\"logged_in_customer_id\")\n   *\n   *   return json({my: \"data\", shop, customerId});\n   * };\n   * ```\n   */\n  appProxy: AuthenticateAppProxy;\n}",
+            "description": "Methods for authenticating Requests from Shopify's public surfaces\n\nTo maintain backwards compatability this is a function and an object.\n\nDo not use `authenticate.public()`. Use `authenticate.public.checkout()` instead.`authenticate.public()` will be removed in v2.\n\nMethods are:\n\n- `authenticate.public.checkout()` for authenticating requests from checkout extensions- `authenticate.public.appProxy()` for authenticating requests from app proxies"
+          },
+          "AuthenticateCheckout": {
+            "filePath": "/server/authenticate/public/checkout/types.ts",
+            "name": "AuthenticateCheckout",
             "description": "",
             "params": [
               {
                 "name": "request",
                 "description": "",
                 "value": "Request",
-                "filePath": "/server/types.ts"
+                "filePath": "/server/authenticate/public/checkout/types.ts"
               },
               {
                 "name": "options",
                 "description": "",
-                "value": "AuthenticatePublicOptions",
+                "value": "AuthenticateCheckoutOptions",
                 "isOptional": true,
-                "filePath": "/server/types.ts"
+                "filePath": "/server/authenticate/public/checkout/types.ts"
               }
             ],
             "returns": {
-              "filePath": "/server/types.ts",
+              "filePath": "/server/authenticate/public/checkout/types.ts",
               "description": "",
-              "name": "Promise<PublicContext>",
-              "value": "Promise<PublicContext>"
+              "name": "Promise<CheckoutContext>",
+              "value": "Promise<CheckoutContext>"
             },
-            "value": "type AuthenticatePublic = (\n  request: Request,\n  options?: AuthenticatePublicOptions,\n) => Promise<PublicContext>;"
+            "value": "export type AuthenticateCheckout = (\n  request: Request,\n  options?: AuthenticateCheckoutOptions,\n) => Promise<CheckoutContext>;"
           },
-          "AuthenticatePublicOptions": {
-            "filePath": "/server/authenticate/public/types.ts",
-            "name": "AuthenticatePublicOptions",
+          "AuthenticateCheckoutOptions": {
+            "filePath": "/server/authenticate/public/checkout/types.ts",
+            "name": "AuthenticateCheckoutOptions",
             "description": "",
             "members": [
               {
-                "filePath": "/server/authenticate/public/types.ts",
+                "filePath": "/server/authenticate/public/checkout/types.ts",
                 "syntaxKind": "PropertySignature",
                 "name": "corsHeaders",
                 "value": "string[]",
@@ -7941,33 +8071,33 @@
                 "isOptional": true
               }
             ],
-            "value": "export interface AuthenticatePublicOptions {\n  corsHeaders?: string[];\n}"
+            "value": "export interface AuthenticateCheckoutOptions {\n  corsHeaders?: string[];\n}"
           },
-          "PublicContext": {
-            "filePath": "/server/authenticate/public/types.ts",
-            "name": "PublicContext",
-            "description": "Authenticated Context for a public request",
+          "CheckoutContext": {
+            "filePath": "/server/authenticate/public/checkout/types.ts",
+            "name": "CheckoutContext",
+            "description": "Authenticated Context for a checkout request",
             "members": [
               {
-                "filePath": "/server/authenticate/public/types.ts",
+                "filePath": "/server/authenticate/public/checkout/types.ts",
                 "syntaxKind": "PropertySignature",
                 "name": "sessionToken",
                 "value": "JwtPayload",
-                "description": "The decoded and validated session token for the request.\n\nThe payload of the Session Token is described here: \n\n\n",
+                "description": "The decoded and validated session token for the request\n\nThe payload of the Session Token is described here: \n\n\n",
                 "examples": [
                   {
-                    "description": "Getting your app's store-specific widget data using the session token",
+                    "description": "Get store specific widget data using the session token",
                     "tabs": [
                       {
                         "code": "import { LoaderArgs, json } from \"@remix-run/node\";\nimport { authenticate } from \"../shopify.server\";\nimport { getWidgets } from \"~/db/widgets.server\";\n\nexport const loader = async ({ request }: LoaderArgs) => {\n  const { sessionToken } = await authenticate.public(\n    request\n  );\n  return json(await getWidgets({shop: sessionToken.dest}));\n};",
-                        "title": "/app/routes/public/widgets.ts"
+                        "title": "app/routes/public/widgets.ts"
                       }
                     ]
                   }
                 ]
               },
               {
-                "filePath": "/server/authenticate/public/types.ts",
+                "filePath": "/server/authenticate/public/checkout/types.ts",
                 "syntaxKind": "PropertySignature",
                 "name": "cors",
                 "value": "EnsureCORSFunction",
@@ -7978,14 +8108,168 @@
                     "tabs": [
                       {
                         "code": "import { LoaderArgs, json } from \"@remix-run/node\";\nimport { authenticate } from \"../shopify.server\";\nimport { getWidgets } from \"~/db/widgets.server\";\n\nexport const loader = async ({ request }: LoaderArgs) => {\n  const { sessionToken, cors } = await authenticate.public(\n    request,\n    { corsHeaders: [\"X-My-Custom-Header\"] }\n  );\n  const widgets = await getWidgets({shop: sessionToken.dest});\n  return cors(json(widgets));\n};",
-                        "title": "/app/routes/public/widgets.ts"
+                        "title": "app/routes/public/widgets.ts"
                       }
                     ]
                   }
                 ]
               }
             ],
-            "value": "export interface PublicContext {\n  /**\n   * The decoded and validated session token for the request.\n   *\n   * The payload of the Session Token is described here: {@link https://shopify.dev/docs/apps/auth/oauth/session-tokens#payload}\n   *\n   * @example\n   * <caption>Getting your app's store-specific widget data using the session token</caption>\n   * ```ts\n   * // /app/routes/public/widgets.ts\n   * import { LoaderArgs, json } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   * import { getWidgets } from \"~/db/widgets.server\";\n   *\n   * export const loader = async ({ request }: LoaderArgs) => {\n   *   const { sessionToken } = await authenticate.public(\n   *     request\n   *   );\n   *   return json(await getWidgets({shop: sessionToken.dest}));\n   * };\n   * ```\n   */\n  sessionToken: JwtPayload;\n\n  /**\n   * A function that ensures the CORS headers are set correctly for the response\n   *\n   * @example\n   * <caption>Setting CORS headers for a public request</caption>\n   * ```ts\n   * // /app/routes/public/widgets.ts\n   * import { LoaderArgs, json } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   * import { getWidgets } from \"~/db/widgets.server\";\n   *\n   * export const loader = async ({ request }: LoaderArgs) => {\n   *   const { sessionToken, cors } = await authenticate.public(\n   *     request,\n   *     { corsHeaders: [\"X-My-Custom-Header\"] }\n   *   );\n   *   const widgets = await getWidgets({shop: sessionToken.dest});\n   *   return cors(json(widgets));\n   * };\n   * ```\n   */\n  cors: EnsureCORSFunction;\n}"
+            "value": "export interface CheckoutContext {\n  /**\n   * The decoded and validated session token for the request\n   *\n   * The payload of the Session Token is described here: {@link https://shopify.dev/docs/apps/auth/oauth/session-tokens#payload}\n   *\n   * @example\n   * <caption>Get store specific widget data using the session token</caption>\n   * ```ts\n   * // app/routes/public/widgets.ts\n   * import { LoaderArgs, json } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   * import { getWidgets } from \"~/db/widgets.server\";\n   *\n   * export const loader = async ({ request }: LoaderArgs) => {\n   *   const { sessionToken } = await authenticate.public(\n   *     request\n   *   );\n   *   return json(await getWidgets({shop: sessionToken.dest}));\n   * };\n   * ```\n   */\n  sessionToken: JwtPayload;\n\n  /**\n   * A function that ensures the CORS headers are set correctly for the response\n   *\n   * @example\n   * <caption>Setting CORS headers for a public request</caption>\n   * ```ts\n   * // app/routes/public/widgets.ts\n   * import { LoaderArgs, json } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   * import { getWidgets } from \"~/db/widgets.server\";\n   *\n   * export const loader = async ({ request }: LoaderArgs) => {\n   *   const { sessionToken, cors } = await authenticate.public(\n   *     request,\n   *     { corsHeaders: [\"X-My-Custom-Header\"] }\n   *   );\n   *   const widgets = await getWidgets({shop: sessionToken.dest});\n   *   return cors(json(widgets));\n   * };\n   * ```\n   */\n  cors: EnsureCORSFunction;\n}"
+          },
+          "AuthenticateAppProxy": {
+            "filePath": "/server/authenticate/public/appProxy/types.ts",
+            "name": "AuthenticateAppProxy",
+            "description": "",
+            "params": [
+              {
+                "name": "request",
+                "description": "",
+                "value": "Request",
+                "filePath": "/server/authenticate/public/appProxy/types.ts"
+              }
+            ],
+            "returns": {
+              "filePath": "/server/authenticate/public/appProxy/types.ts",
+              "description": "",
+              "name": "Promise<AppProxyContext | AppProxyContextWithSession>",
+              "value": "Promise<AppProxyContext | AppProxyContextWithSession>"
+            },
+            "value": "export type AuthenticateAppProxy = (\n  request: Request,\n) => Promise<AppProxyContext | AppProxyContextWithSession>;"
+          },
+          "AppProxyContext": {
+            "filePath": "/server/authenticate/public/appProxy/types.ts",
+            "name": "AppProxyContext",
+            "description": "",
+            "members": [
+              {
+                "filePath": "/server/authenticate/public/appProxy/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "session",
+                "value": "undefined",
+                "description": "No session is available for the shop that made this request.\n\nThis comes from the session storage which `shopifyApp` uses to store sessions in your database of choice."
+              },
+              {
+                "filePath": "/server/authenticate/public/appProxy/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "admin",
+                "value": "undefined",
+                "description": "No session is available for the shop that made this request.Therefore no methods for interacting with the Shopify GraphQL / REST Admin APIs are available."
+              },
+              {
+                "filePath": "/server/authenticate/public/appProxy/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "liquid",
+                "value": "LiquidResponseFunction",
+                "description": "A utility for creating a Liquid Response.",
+                "examples": [
+                  {
+                    "description": "Returning a Liquid Response from an app proxy route",
+                    "tabs": [
+                      {
+                        "code": "import {authenticate} from \"~/shopify.server\"\n\nexport async function loader({ request }) {\n  const {liquid} = authenticate.public.appProxy(request);\n\n  return liquid(\"Hello {{shop.name}}\")\n}",
+                        "title": "app/routes/**\\/.ts"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "value": "export interface AppProxyContext extends Context {\n  /**\n   * No session is available for the shop that made this request.\n   *\n   * This comes from the session storage which `shopifyApp` uses to store sessions in your database of choice.\n   */\n  session: undefined;\n  /**\n   * No session is available for the shop that made this request.\n   * Therefore no methods for interacting with the Shopify GraphQL / REST Admin APIs are available.\n   */\n  admin: undefined;\n}"
+          },
+          "LiquidResponseFunction": {
+            "filePath": "/server/authenticate/public/appProxy/types.ts",
+            "name": "LiquidResponseFunction",
+            "description": "",
+            "params": [
+              {
+                "name": "body",
+                "description": "",
+                "value": "string",
+                "filePath": "/server/authenticate/public/appProxy/types.ts"
+              },
+              {
+                "name": "initAndOptions",
+                "description": "",
+                "value": "number | (ResponseInit & Options)",
+                "isOptional": true,
+                "filePath": "/server/authenticate/public/appProxy/types.ts"
+              }
+            ],
+            "returns": {
+              "filePath": "/server/authenticate/public/appProxy/types.ts",
+              "description": "",
+              "name": "Response",
+              "value": "Response"
+            },
+            "value": "export type LiquidResponseFunction = (\n  body: string,\n  initAndOptions?: number | (ResponseInit & Options),\n) => Response;"
+          },
+          "Options": {
+            "filePath": "/server/authenticate/public/appProxy/types.ts",
+            "name": "Options",
+            "description": "",
+            "members": [
+              {
+                "filePath": "/server/authenticate/public/appProxy/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "layout",
+                "value": "boolean",
+                "description": "",
+                "isOptional": true
+              }
+            ],
+            "value": "interface Options {\n  layout?: boolean;\n}"
+          },
+          "AppProxyContextWithSession": {
+            "filePath": "/server/authenticate/public/appProxy/types.ts",
+            "name": "AppProxyContextWithSession",
+            "description": "",
+            "members": [
+              {
+                "filePath": "/server/authenticate/public/appProxy/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "session",
+                "value": "Session",
+                "description": "The session for the shop that made the request.\n\nThis comes from the session storage which `shopifyApp` uses to store sessions in your database of choice.\n\nUse this to get shop or user specific data.",
+                "examples": [
+                  {
+                    "description": "Getting your app's shop specific widget data using an offline session",
+                    "tabs": [
+                      {
+                        "code": "import { json } from \"@remix-run/node\";\nimport { authenticate } from \"../shopify.server\";\nimport { getWidgets } from \"~/db/widgets.server\";\n\nexport const loader = async ({ request }) => {\n  const { session } = await authenticate.public.appProxy(request);\n  return json(await getWidgets({shop: session.shop));\n};",
+                        "title": "app/routes/**\\/.ts"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "filePath": "/server/authenticate/public/appProxy/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "admin",
+                "value": "AdminApiContext<Resources>",
+                "description": "Methods for interacting with the Shopify GraphQL / REST Admin APIs for the store that made the request"
+              },
+              {
+                "filePath": "/server/authenticate/public/appProxy/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "liquid",
+                "value": "LiquidResponseFunction",
+                "description": "A utility for creating a Liquid Response.",
+                "examples": [
+                  {
+                    "description": "Returning a Liquid Response from an app proxy route",
+                    "tabs": [
+                      {
+                        "code": "import {authenticate} from \"~/shopify.server\"\n\nexport async function loader({ request }) {\n  const {liquid} = authenticate.public.appProxy(request);\n\n  return liquid(\"Hello {{shop.name}}\")\n}",
+                        "title": "app/routes/**\\/.ts"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "value": "export interface AppProxyContextWithSession<\n  Resources extends ShopifyRestResources = ShopifyRestResources,\n> extends Context {\n  /**\n   * The session for the shop that made the request.\n   *\n   * This comes from the session storage which `shopifyApp` uses to store sessions in your database of choice.\n   *\n   * Use this to get shop or user specific data.\n   *\n   * @example\n   * <caption>Getting your app's shop specific widget data using an offline session</caption>\n   * ```ts\n   * // app/routes/**\\/.ts\n   * import { json } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   * import { getWidgets } from \"~/db/widgets.server\";\n   *\n   * export const loader = async ({ request }) => {\n   *   const { session } = await authenticate.public.appProxy(request);\n   *   return json(await getWidgets({shop: session.shop));\n   * };\n   * ```\n   */\n  session: Session;\n  /**\n   * Methods for interacting with the Shopify GraphQL / REST Admin APIs for the store that made the request\n   */\n  admin: AdminApiContext<Resources>;\n}"
           },
           "AuthenticateWebhook": {
             "filePath": "/server/types.ts",
@@ -8371,14 +8655,14 @@
               {
                 "filePath": "/server/types.ts",
                 "syntaxKind": "MethodSignature",
-                "name": "__@iterator@354",
+                "name": "__@iterator@378",
                 "value": "() => IterableIterator<JSONValue>",
                 "description": "Iterator"
               },
               {
                 "filePath": "/server/types.ts",
                 "syntaxKind": "MethodSignature",
-                "name": "__@unscopables@356",
+                "name": "__@unscopables@380",
                 "value": "() => { copyWithin: boolean; entries: boolean; fill: boolean; find: boolean; findIndex: boolean; keys: boolean; values: boolean; }",
                 "description": "Returns an object whose properties have the value 'true'\r\nwhen they will be absent when used in a 'with' statement."
               },
