@@ -10,10 +10,10 @@ const data: LandingTemplateSchema = {
   sections: [
     {
       type: 'Generic',
-      anchorLink: 'install',
-      title: 'Install',
+      anchorLink: 'installation',
+      title: 'Installation',
       sectionContent:
-        "If you're not using the CLI, you can use the examples in this page to set up an existing app to use this package. Start by installing it using your preferred package manager.",
+        "If you're not using the CLI, then you can use the examples in this page to set up an existing app to use this package. Start by installing it using your preferred package manager.",
       sectionCard: [
         {
           name: 'Build an app',

@@ -4,7 +4,7 @@ const data: ReferenceEntityTemplateSchema = {
   name: 'shopifyApp',
   description:
     "Returns a set of functions that can be used by the app's backend to be able to respond to all Shopify requests." +
-    '\n\nThe shape of the returned object changes depending on the value of `distribution`. If it is `AppDistribution.ShopifyAdmin`, only `ShopifyAppBase` objects are returned, otherwise `ShopifyAppLogin` objects are included.' +
+    '\n\nThe shape of the returned object changes depending on the value of `distribution`. If it is `AppDistribution.ShopifyAdmin`, then only `ShopifyAppBase` objects are returned, otherwise `ShopifyAppLogin` objects are included.' +
     '\n\nRefer to the [Related](#related) section to see all supported contexts in `authenticate` and `unauthenticated`.',
   category: 'Entrypoints',
   type: 'function',

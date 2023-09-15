@@ -30,7 +30,7 @@ export interface UnauthenticatedAdminContext<
   session: Session;
 
   /**
-   * Methods for interacting with the Shopify GraphQL / REST Admin APIs for the given store.
+   * Methods for interacting with the GraphQL / REST Admin APIs for the given store.
    */
   admin: AdminApiContext<Resources>;
 }

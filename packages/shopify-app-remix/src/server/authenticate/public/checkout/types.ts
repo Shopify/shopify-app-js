@@ -18,7 +18,7 @@ export interface CheckoutContext {
   /**
    * The decoded and validated session token for the request
    *
-   * The payload of the Session Token is described here: {@link https://shopify.dev/docs/apps/auth/oauth/session-tokens#payload}
+   * Refer to the OAuth docs for the [session token payload](https://shopify.dev/docs/apps/auth/oauth/session-tokens#payload).
    *
    * @example
    * <caption>Get store specific widget data using the session token</caption>
@@ -39,7 +39,7 @@ export interface CheckoutContext {
   sessionToken: JwtPayload;
 
   /**
-   * A function that ensures the CORS headers are set correctly for the response
+   * A function that ensures the CORS headers are set correctly for the response.
    *
    * @example
    * <caption>Setting CORS headers for a public request</caption>
