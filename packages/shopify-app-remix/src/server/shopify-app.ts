@@ -34,7 +34,7 @@ import {authenticatePublicFactory} from './authenticate/public';
 /**
  * Creates an object your app will use to interact with Shopify.
  *
- * @param appConfig Configuration options for your shopify app.  For example, the scopes your app needs.
+ * @param appConfig Configuration options for your Shopify app, such as the scopes your app needs.
  * @returns `ShopifyApp` An object constructed using your appConfig.  It has methods for interacting with Shopify.
  *
  * @example

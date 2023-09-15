@@ -280,7 +280,7 @@ export interface AdminApiContext<
   Resources extends ShopifyRestResources = ShopifyRestResources,
 > {
   /**
-   * Methods for interacting with the Shopify Admin REST API
+   * Methods for interacting with the REST Admin API.
    *
    * There are methods for interacting with individual REST resources. You can also make `GET`, `POST`, `PUT` and `DELETE` requests should the REST resources not meet your needs.
    *
@@ -345,7 +345,7 @@ export interface AdminApiContext<
   rest: RestClientWithResources<Resources>;
 
   /**
-   * Methods for interacting with the Shopify Admin GraphQL API
+   * Methods for interacting with the GraphQL Admin API.
    *
    * {@link https://shopify.dev/docs/api/admin-graphql}
    * {@link https://github.com/Shopify/shopify-api-js/blob/main/docs/reference/clients/Graphql.md}

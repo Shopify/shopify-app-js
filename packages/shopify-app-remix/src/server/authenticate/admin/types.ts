@@ -69,7 +69,7 @@ interface AdminContextInternal<
   session: Session;
 
   /**
-   * Methods for interacting with the Shopify GraphQL / REST Admin APIs for the store that made the request
+   * Methods for interacting with the GraphQL / REST Admin APIs for the store that made the request.
    */
   admin: AdminApiContext<Resources>;
 
@@ -81,7 +81,7 @@ interface AdminContextInternal<
   billing: BillingContext<Config>;
 
   /**
-   * A function that ensures the CORS headers are set correctly for the response
+   * A function that ensures the CORS headers are set correctly for the response.
    *
    * @example
    * <caption>Setting CORS headers for a admin request</caption>

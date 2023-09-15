@@ -36,7 +36,7 @@ export interface AppProviderProps
 }
 
 /**
- * Sets up the Polaris AppProvider and injects the App Bridge script.
+ * Sets up the Polaris `AppProvider` and injects the App Bridge script.
  *
  * This component extends the [`AppProvider`](https://polaris.shopify.com/components/utilities/app-provider) component
  * from Polaris, and accepts all of its props except for `linkComponent`, which is overridden to use the Remix `Link`

@@ -14,9 +14,9 @@ const data: LandingTemplateSchema = {
       anchorLink: 'auth',
       title: 'Authenticating requests',
       sectionContent:
-        'To authenticate admin requests you can call `authenticate.admin(request)` in a loader or an action.' +
-        '\n\nIf there is a session for this user, this loader will return null. If there is no session for the user, the loader will throw the appropriate redirect Response.' +
-        '\n\n> Tip: If you are authenticating more than one route, we recommend using [Remix layout routes](https://remix.run/docs/en/1.18.1/file-conventions/routes-files#layout-routes) to automatically authenticate them.',
+        "To authenticate admin requests you can call `authenticate.admin(request)` in a loader or an action." +
+        "\n\nIf there's a session for this user, then this loader will return null. If there's no session for the user, then the loader will throw the appropriate redirect Response." +
+        "\n\n> Tip: If you are authenticating more than one route, then we recommend using [Remix layout routes](https://remix.run/docs/en/1.18.1/file-conventions/routes-files#layout-routes) to automatically authenticate them.",
       codeblock: {
         title: '/app/routes/**/*.tsx',
         tabs: [
@@ -52,7 +52,7 @@ const data: LandingTemplateSchema = {
       anchorLink: 'cors-auth',
       title: 'Authenticating cross-origin admin requests',
       sectionContent:
-        'If your Remix server is authenticating an admin extension, a request from the extension to Remix will be cross-origin.' +
+        'If your Remix server is authenticating an admin extension, then a request from the extension to Remix will be cross-origin.' +
         '\n\nHere `authenticate.admin` provides a `cors` function to add the required cross-origin headers.',
       codeblock: {
         title: '/app/routes/**/*.tsx',
@@ -70,7 +70,7 @@ const data: LandingTemplateSchema = {
       anchorLink: 'graphql-api',
       title: 'Using the GraphQL API',
       sectionContent:
-        'Once a request is authenticated, `authenticate.admin` will return an `admin` object that contains a GraphQL client that can interact with the [Shopify Admin GraphQL API](/docs/api/admin-graphql).',
+        'Once a request is authenticated, `authenticate.admin` will return an `admin` object that contains a GraphQL client that can interact with the [GraphQL Admin API](/docs/api/admin-graphql).',
       codeblock: {
         title: '/app/routes/**/*.tsx',
         tabs: [
@@ -87,8 +87,8 @@ const data: LandingTemplateSchema = {
       anchorLink: 'rest-api',
       title: 'Using the REST API',
       sectionContent:
-        'Once a request is authenticated, `authenticate.admin` will return an `admin` object that contains a REST client that can interact with the [Shopify Admin REST API](/docs/api/admin-rest).' +
-        '\n\nYou can also import a set of resource classes from the `@shopify/shopify-api` package (included in `@shopify/shopify-app-remix`).' +
+        'Once a request is authenticated, `authenticate.admin` will return an `admin` object that contains a REST client that can interact with the [REST Admin API](/docs/api/admin-rest).' +
+        '\n\nYou can also import a set of resource classes from the `@shopify/shopify-api` package, which is included in `@shopify/shopify-app-remix`.' +
         '\n\nThese classes map to the individual REST endpoints, and will be returned under `admin.rest.resources`.',
       codeblock: {
         title: 'Interacting with the REST API',

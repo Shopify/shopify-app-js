@@ -11,7 +11,7 @@ const data: ReferenceEntityTemplateSchema = {
     {
       title: 'authenticate.admin',
       description:
-        'Authenticates requests coming from Shopify Admin.\n\nThe shape of the returned object changes depending on the `isEmbeddedApp` config.',
+        'Authenticates requests coming from the Shopify admin.\n\nThe shape of the returned object changes depending on the `isEmbeddedApp` config.',
       type: 'AuthenticateAdmin',
     },
     {

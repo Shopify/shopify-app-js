@@ -33,7 +33,7 @@ const data: LandingTemplateSchema = {
       sectionContent:
         'Legitimate webhook requests are always `POST`s signed by Shopify, so you must authenticate them before taking any action.' +
         '\n\nFor each `callbackUrl` in your configuration, you must set up an `action` that uses the `authenticate.webhook` function to authenticate the request.' +
-        '\n\nPlease keep in mind that webhook endpoints should respond as quickly as possible. If you need to run a long-running job, consider using background tasks.' +
+        '\n\nPlease keep in mind that webhook endpoints should respond as quickly as possible. If you need to run a long-running job, then consider using background tasks.' +
         '\n\n> Caution: Webhook endpoints **must** respond with an `HTTP 200` code, or Shopify will retry.',
       codeblock: {
         title: '/app/routes/webhooks.tsx',
