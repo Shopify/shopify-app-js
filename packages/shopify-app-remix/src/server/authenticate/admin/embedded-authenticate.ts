@@ -116,6 +116,7 @@ export class EmbeddedAuthStrategy<
     const isPatchSessionToken =
       url.pathname === config.auth.patchSessionTokenPath;
     const isExitIframe = url.pathname === config.auth.exitIframePath;
+    const isAuthRequest = url.pathname === config.auth.path;
 
     if (isPatchSessionToken) {
       logger.debug('Rendering bounce page');
@@ -125,6 +126,10 @@ export class EmbeddedAuthStrategy<
 
       logger.debug('Rendering exit iframe page', {destination});
       throw renderAppBridge(params, request, {url: destination});
+    } else if (isAuthRequest) {
+      const shop = this.ensureValidShopParam(request);
+      const installUrl = `https://${shop}/admin/oauth/install?client_id=${config.apiKey}`;
+      throw redirect(installUrl);
     }
 
     const sessionTokenHeader = getSessionTokenHeader(request);
@@ -170,6 +175,20 @@ export class EmbeddedAuthStrategy<
       );
       throw this.redirectToBouncePage(url);
     }
+  }
+
+  private ensureValidShopParam(request: Request): string {
+    const url = new URL(request.url);
+    const {api} = this;
+    const shop = api.utils.sanitizeShop(url.searchParams.get('shop')!);
+
+    if (!shop) {
+      throw new Response('Shop param is invalid', {
+        status: 400,
+      });
+    }
+
+    return shop;
   }
 
   private async validateUrlParams(request: Request) {
@@ -232,22 +251,9 @@ export class EmbeddedAuthStrategy<
         logger.debug(`Reusing existing token: ${persistedSession.accessToken}`);
 
         if (persistedSession.isScopeChanged(config.scopes)) {
-          // TODO: make it unified admin
-          const redirectUrl = `https://${shop}/admin/oauth/install?client_id=${config.apiKey}`
-
           config.sessionStorage.deleteSession(persistedSession.id);
 
-          const isXhrRequest = request.headers.get('authorization');
-          if (isXhrRequest) {
-            throw redirectWithAppBridgeHeaders(redirectUrl);
-          } else {
-            throw redirectWithExitIframe(
-              {config, logger, api},
-              request,
-              shop,
-              redirectUrl,
-            );
-          }
+          this.redirectToInstall(request, shop);
         }
 
         if (!persistedSession.isExpired()) {
@@ -269,6 +275,25 @@ export class EmbeddedAuthStrategy<
     await config.sessionStorage.storeSession(session);
 
     return {session, token: payload};
+  }
+
+  private redirectToInstall(request: Request, shop: string) {
+    const {config, logger, api} = this;
+
+    // TODO: make it unified admin
+    const redirectUrl = `https://${shop}/admin/oauth/install?client_id=${config.apiKey}`
+
+    const isXhrRequest = request.headers.get('authorization');
+    if (isXhrRequest) {
+      throw redirectWithAppBridgeHeaders(redirectUrl);
+    } else {
+      throw redirectWithExitIframe(
+        {config, logger, api},
+        request,
+        shop,
+        redirectUrl,
+      );
+    }
   }
 
   private async redirectToShopifyOrAppRoot(

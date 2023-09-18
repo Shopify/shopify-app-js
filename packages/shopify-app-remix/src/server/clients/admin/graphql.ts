@@ -36,6 +36,14 @@ export function graphqlClientFactory({
         headers: flatHeaders(apiResponse.headers),
       });
     } catch (error) {
+      if (error.response.code === 401) {
+        console.log(
+          '========> 401 errored request',
+          JSON.stringify(session),
+          query,
+        );
+      }
+
       if (handleClientError) {
         throw await handleClientError({error, params, session});
       }

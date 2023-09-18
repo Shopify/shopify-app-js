@@ -28,7 +28,9 @@ import {loginFactory} from './authenticate/login/login';
 import {unauthenticatedAdminContextFactory} from './unauthenticated/admin';
 import {authenticatePublicFactory} from './authenticate/public';
 import {unauthenticatedStorefrontContextFactory} from './unauthenticated/storefront';
+// import { AuthStrategy } from './authenticate/admin/authenticate';
 import {EmbeddedAuthStrategy} from './authenticate/admin/embedded-authenticate';
+// import {EmbeddedAuthStrategy} from './authenticate/admin/embedded-authenticate';
 
 /**
  * Creates an object your app will use to interact with Shopify.
