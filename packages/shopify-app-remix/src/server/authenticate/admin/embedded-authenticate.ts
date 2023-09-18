@@ -8,13 +8,8 @@ import {
   ShopifyRestResources,
 } from '@shopify/shopify-api';
 
-import {adminClientFactory} from '../../clients/admin';
 import type {BasicParams} from '../../types';
-import type {
-  AdminApiContext,
-  AppConfig,
-  AppConfigArg,
-} from '../../config-types';
+import type {AppConfig, AppConfigArg} from '../../config-types';
 import {
   getSessionTokenHeader,
   rejectBotRequest,
@@ -23,12 +18,6 @@ import {
   validateSessionTokenWithCallback,
 } from '../helpers';
 
-import type {BillingContext} from './billing/types';
-import {
-  cancelBillingFactory,
-  requestBillingFactory,
-  requireBillingFactory,
-} from './billing';
 import type {
   AdminContext,
   EmbeddedAdminContext,
@@ -41,6 +30,14 @@ import {
   redirectWithExitIframe,
   renderAppBridge,
 } from './helpers';
+import {
+  createAdminApiContext,
+  createBillingContext,
+  ensureAppIsEmbeddedIfRequired,
+  ensureValidShopParam,
+  redirectToBouncePage,
+  validateUrlParams,
+} from './helpers/auth-helpers';
 
 interface SessionContext {
   session: Session;
@@ -88,8 +85,21 @@ export class EmbeddedAuthStrategy<
     const context:
       | EmbeddedAdminContext<Config, Resources>
       | NonEmbeddedAdminContext<Config, Resources> = {
-      admin: this.createAdminApiContext(request, sessionContext.session),
-      billing: this.createBillingContext(request, sessionContext.session),
+      admin: createAdminApiContext<Resources>(
+        request,
+        sessionContext.session,
+        handleEmbeddedClientErrorFactory,
+        {
+          api,
+          logger,
+          config,
+        },
+      ),
+      billing: createBillingContext(request, sessionContext.session, {
+        api,
+        logger,
+        config,
+      }),
       session: sessionContext.session,
       cors,
     };
@@ -127,7 +137,7 @@ export class EmbeddedAuthStrategy<
       logger.debug('Rendering exit iframe page', {destination});
       throw renderAppBridge(params, request, {url: destination});
     } else if (isAuthRequest) {
-      const shop = this.ensureValidShopParam(request);
+      const shop = ensureValidShopParam(request, {api, logger, config});
       const installUrl = `https://${shop}/admin/oauth/install?client_id=${config.apiKey}`;
       throw redirect(installUrl);
     }
@@ -139,8 +149,8 @@ export class EmbeddedAuthStrategy<
     logger.info('Authenticating admin request');
 
     if (sessionTokenParam) {
-      await this.validateUrlParams(request);
-      await this.ensureAppIsEmbeddedIfRequired(request);
+      await validateUrlParams(request, {api, logger, config});
+      await ensureAppIsEmbeddedIfRequired(request, {api, logger, config});
     }
 
     if (sessionTokenString) {
@@ -165,7 +175,7 @@ export class EmbeddedAuthStrategy<
             error.response.body?.error === 'invalid_subject_token')
         ) {
           console.log(`CAUGHT ${JSON.stringify(error)}`);
-          throw this.redirectToBouncePage(url);
+          throw redirectToBouncePage(url, {api, logger, config});
         }
         throw error;
       }
@@ -173,56 +183,7 @@ export class EmbeddedAuthStrategy<
       logger.debug(
         'Missing session token in search params, going to bounce page',
       );
-      throw this.redirectToBouncePage(url);
-    }
-  }
-
-  private ensureValidShopParam(request: Request): string {
-    const url = new URL(request.url);
-    const {api} = this;
-    const shop = api.utils.sanitizeShop(url.searchParams.get('shop')!);
-
-    if (!shop) {
-      throw new Response('Shop param is invalid', {
-        status: 400,
-      });
-    }
-
-    return shop;
-  }
-
-  private async validateUrlParams(request: Request) {
-    const {api, config, logger} = this;
-
-    if (config.isEmbeddedApp) {
-      const url = new URL(request.url);
-      const shop = api.utils.sanitizeShop(url.searchParams.get('shop')!);
-      if (!shop) {
-        logger.debug('Missing or invalid shop, redirecting to login path', {
-          shop,
-        });
-        throw redirect(config.auth.loginPath);
-      }
-
-      const host = api.utils.sanitizeHost(url.searchParams.get('host')!);
-      if (!host) {
-        logger.debug('Invalid host, redirecting to login path', {
-          host: url.searchParams.get('host'),
-        });
-        throw redirect(config.auth.loginPath);
-      }
-    }
-  }
-
-  private async ensureAppIsEmbeddedIfRequired(request: Request) {
-    const {logger} = this;
-    const url = new URL(request.url);
-
-    const shop = url.searchParams.get('shop')!;
-
-    if (url.searchParams.get('embedded') !== '1') {
-      logger.debug('App is not embedded, redirecting to Shopify', {shop});
-      await this.redirectToShopifyOrAppRoot(request);
+      throw redirectToBouncePage(url, {api, logger, config});
     }
   }
 
@@ -277,11 +238,12 @@ export class EmbeddedAuthStrategy<
     return {session, token: payload};
   }
 
+  // this does not initiate oauth auth code flow, it just triggers managed install
   private redirectToInstall(request: Request, shop: string) {
     const {config, logger, api} = this;
 
     // TODO: make it unified admin
-    const redirectUrl = `https://${shop}/admin/oauth/install?client_id=${config.apiKey}`
+    const redirectUrl = `https://${shop}/admin/oauth/install?client_id=${config.apiKey}`;
 
     const isXhrRequest = request.headers.get('authorization');
     if (isXhrRequest) {
@@ -294,63 +256,5 @@ export class EmbeddedAuthStrategy<
         redirectUrl,
       );
     }
-  }
-
-  private async redirectToShopifyOrAppRoot(
-    request: Request,
-    responseHeaders?: Headers,
-  ): Promise<never> {
-    const {api} = this;
-    const redirectUrl = await api.auth.getEmbeddedAppUrl({rawRequest: request});
-
-    throw redirect(redirectUrl, {headers: responseHeaders});
-  }
-
-  private redirectToBouncePage(url: URL): never {
-    const {api, config} = this;
-
-    // eslint-disable-next-line no-warning-comments
-    // TODO this is to work around a remix bug
-    // https://github.com/orgs/Shopify/projects/6899/views/1?pane=issue&itemId=28376650
-    url.protocol = `${api.config.hostScheme}:`;
-
-    const params = new URLSearchParams(url.search);
-    params.set('shopify-reload', url.href);
-    params.delete('id_token');
-
-    // eslint-disable-next-line no-warning-comments
-    // TODO Make sure this works on chrome without a tunnel (weird HTTPS redirect issue)
-    // https://github.com/orgs/Shopify/projects/6899/views/1?pane=issue&itemId=28376650
-    throw redirect(`${config.auth.patchSessionTokenPath}?${params.toString()}`);
-  }
-
-  private createBillingContext(
-    request: Request,
-    session: Session,
-  ): BillingContext<Config> {
-    const {api, logger, config} = this;
-
-    return {
-      require: requireBillingFactory({api, logger, config}, request, session),
-      request: requestBillingFactory({api, logger, config}, request, session),
-      cancel: cancelBillingFactory({api, logger, config}, request, session),
-    };
-  }
-
-  private createAdminApiContext(
-    request: Request,
-    session: Session,
-  ): AdminApiContext<Resources> {
-    return adminClientFactory<Resources>({
-      session,
-      params: {
-        api: this.api,
-        config: this.config,
-        logger: this.logger,
-      },
-      handleClientError: handleEmbeddedClientErrorFactory({
-        request,
-      }),
-    });
   }
 }

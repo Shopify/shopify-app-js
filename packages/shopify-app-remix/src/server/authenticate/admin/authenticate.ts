@@ -1,4 +1,3 @@
-import {redirect} from '@remix-run/server-runtime';
 import {
   CookieNotFound,
   GraphqlQueryError,
@@ -11,7 +10,6 @@ import {
   ShopifyRestResources,
 } from '@shopify/shopify-api';
 
-import {AdminApiContext, adminClientFactory} from '../../clients/admin';
 import type {BasicParams} from '../../types';
 import type {AppConfig, AppConfigArg} from '../../config-types';
 import {
@@ -22,12 +20,6 @@ import {
   ensureCORSHeadersFactory,
 } from '../helpers';
 
-import type {BillingContext} from './billing/types';
-import {
-  cancelBillingFactory,
-  requestBillingFactory,
-  requireBillingFactory,
-} from './billing';
 import type {
   AdminContext,
   EmbeddedAdminContext,
@@ -41,6 +33,15 @@ import {
   redirectWithExitIframe,
   renderAppBridge,
 } from './helpers';
+import {
+  createAdminApiContext,
+  createBillingContext,
+  ensureAppIsEmbeddedIfRequired,
+  ensureValidShopParam,
+  redirectToBouncePage,
+  redirectToShopifyOrAppRoot,
+  validateUrlParams,
+} from './helpers/auth-helpers';
 
 interface SessionContext {
   session: Session;
@@ -88,8 +89,21 @@ export class AuthStrategy<
     const context:
       | EmbeddedAdminContext<Config, Resources>
       | NonEmbeddedAdminContext<Config, Resources> = {
-      admin: this.createAdminApiContext(request, sessionContext.session),
-      billing: this.createBillingContext(request, sessionContext.session),
+      admin: createAdminApiContext<Resources>(
+        request,
+        sessionContext.session,
+        handleClientErrorFactory,
+        {
+          api,
+          logger,
+          config,
+        },
+      ),
+      billing: createBillingContext(request, sessionContext.session, {
+        api,
+        logger,
+        config,
+      }),
       session: sessionContext.session,
       cors,
     };
@@ -142,9 +156,9 @@ export class AuthStrategy<
 
       return this.validateAuthenticatedSession(request, sessionToken);
     } else {
-      await this.validateUrlParams(request);
+      await validateUrlParams(request, {api, logger, config});
       await this.ensureInstalledOnShop(request);
-      await this.ensureAppIsEmbeddedIfRequired(request);
+      await ensureAppIsEmbeddedIfRequired(request, {api, logger, config});
       await this.ensureSessionTokenSearchParamIfRequired(request);
 
       return this.ensureSessionExists(request);
@@ -156,7 +170,7 @@ export class AuthStrategy<
 
     logger.info('Handling OAuth begin request');
 
-    const shop = this.ensureValidShopParam(request);
+    const shop = ensureValidShopParam(request, {api, logger, config});
 
     logger.debug('OAuth request contained valid shop', {shop});
 
@@ -177,7 +191,7 @@ export class AuthStrategy<
 
     logger.info('Handling OAuth callback request');
 
-    const shop = this.ensureValidShopParam(request);
+    const shop = ensureValidShopParam(request, {api, logger, config});
 
     try {
       const {session, headers: responseHeaders} = await api.auth.callback({
@@ -195,11 +209,24 @@ export class AuthStrategy<
         logger.info('Running afterAuth hook');
         await config.hooks.afterAuth({
           session,
-          admin: this.createAdminApiContext(request, session),
+          admin: createAdminApiContext<Resources>(
+            request,
+            session,
+            handleClientErrorFactory,
+            {
+              api,
+              logger,
+              config,
+            },
+          ),
         });
       }
 
-      throw await this.redirectToShopifyOrAppRoot(request, responseHeaders);
+      throw await redirectToShopifyOrAppRoot(
+        request,
+        {api, config, logger},
+        responseHeaders,
+      );
     } catch (error) {
       if (error instanceof Response) {
         throw error;
@@ -222,29 +249,6 @@ export class AuthStrategy<
           status: 500,
           statusText: 'Internal Server Error',
         });
-      }
-    }
-  }
-
-  private async validateUrlParams(request: Request) {
-    const {api, config, logger} = this;
-
-    if (config.isEmbeddedApp) {
-      const url = new URL(request.url);
-      const shop = api.utils.sanitizeShop(url.searchParams.get('shop')!);
-      if (!shop) {
-        logger.debug('Missing or invalid shop, redirecting to login path', {
-          shop,
-        });
-        throw redirect(config.auth.loginPath);
-      }
-
-      const host = api.utils.sanitizeHost(url.searchParams.get('host')!);
-      if (!host) {
-        logger.debug('Invalid host, redirecting to login path', {
-          host: url.searchParams.get('host'),
-        });
-        throw redirect(config.auth.loginPath);
       }
     }
   }
@@ -352,34 +356,8 @@ export class AuthStrategy<
     });
   }
 
-  private ensureValidShopParam(request: Request): string {
-    const url = new URL(request.url);
-    const {api} = this;
-    const shop = api.utils.sanitizeShop(url.searchParams.get('shop')!);
-
-    if (!shop) {
-      throw new Response('Shop param is invalid', {
-        status: 400,
-      });
-    }
-
-    return shop;
-  }
-
-  private async ensureAppIsEmbeddedIfRequired(request: Request) {
-    const {api, logger} = this;
-    const url = new URL(request.url);
-
-    const shop = url.searchParams.get('shop')!;
-
-    if (api.config.isEmbeddedApp && url.searchParams.get('embedded') !== '1') {
-      logger.debug('App is not embedded, redirecting to Shopify', {shop});
-      await this.redirectToShopifyOrAppRoot(request);
-    }
-  }
-
   private async ensureSessionTokenSearchParamIfRequired(request: Request) {
-    const {api, logger} = this;
+    const {api, config, logger} = this;
     const url = new URL(request.url);
 
     const shop = url.searchParams.get('shop')!;
@@ -390,7 +368,7 @@ export class AuthStrategy<
         'Missing session token in search params, going to bounce page',
         {shop},
       );
-      this.redirectToBouncePage(url);
+      redirectToBouncePage(url, {api, logger, config});
     }
   }
 
@@ -474,68 +452,5 @@ export class AuthStrategy<
     }
 
     return session!;
-  }
-
-  private async redirectToShopifyOrAppRoot(
-    request: Request,
-    responseHeaders?: Headers,
-  ): Promise<never> {
-    const {api} = this;
-    const url = new URL(request.url);
-
-    const host = api.utils.sanitizeHost(url.searchParams.get('host')!)!;
-    const shop = api.utils.sanitizeShop(url.searchParams.get('shop')!)!;
-
-    const redirectUrl = api.config.isEmbeddedApp
-      ? await api.auth.getEmbeddedAppUrl({rawRequest: request})
-      : `/?shop=${shop}&host=${encodeURIComponent(host)}`;
-
-    throw redirect(redirectUrl, {headers: responseHeaders});
-  }
-
-  private redirectToBouncePage(url: URL): never {
-    const {config} = this;
-
-    // Make sure we always point to the configured app URL so it also works behind reverse proxies (that alter the Host
-    // header).
-    url.searchParams.set(
-      'shopify-reload',
-      `${config.appUrl}${url.pathname}${url.search}`,
-    );
-
-    // eslint-disable-next-line no-warning-comments
-    // TODO Make sure this works on chrome without a tunnel (weird HTTPS redirect issue)
-    // https://github.com/orgs/Shopify/projects/6899/views/1?pane=issue&itemId=28376650
-    throw redirect(`${config.auth.patchSessionTokenPath}${url.search}`);
-  }
-
-  private createBillingContext(
-    request: Request,
-    session: Session,
-  ): BillingContext<Config> {
-    const {api, logger, config} = this;
-
-    return {
-      require: requireBillingFactory({api, logger, config}, request, session),
-      request: requestBillingFactory({api, logger, config}, request, session),
-      cancel: cancelBillingFactory({api, logger, config}, request, session),
-    };
-  }
-
-  private createAdminApiContext(
-    request: Request,
-    session: Session,
-  ): AdminApiContext<Resources> {
-    return adminClientFactory<Resources>({
-      session,
-      params: {
-        api: this.api,
-        config: this.config,
-        logger: this.logger,
-      },
-      handleClientError: handleClientErrorFactory({
-        request,
-      }),
-    });
   }
 }
