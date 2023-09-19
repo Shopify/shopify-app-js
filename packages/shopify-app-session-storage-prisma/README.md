@@ -35,7 +35,22 @@ const shopify = shopifyApp({
 
 > **Note**: If you use [SQLite](https://sqlite.com) with Prisma note that sqlite is a local, file-based SQL database. It persists all tables to a single file on your local disk. As such, it’s simple to set up and is a great choice for getting started with Shopify App development. However, it won’t work when your app getting scaled across multiple instances because they would each create their own database.
 
-If you prefer to use your own implementation of a session storage mechanism that is compatible with the `@shopify/shopify-app-express` package, see the [implementing session storage guide](../shopify-app-session-storage/implementing-session-storage.md).
+If you prefer to use your own implementation of a session storage mechanism that is compatible with the `@shopify/shopify-app-express` package, see the [implementing session storage guide](https://github.com/Shopify/shopify-app-js/blob/main/packages/shopify-app-session-storage/implementing-session-storage.md).
+
+## Options
+
+You can also pass in some optional flags to tweak the behavior of the adapter.
+
+### Custom table name
+
+You can pass in the `tableName` option if you want to use a different table name in your schema.
+For example:
+
+```ts
+const storage = new PrismaSessionStorage(prisma, {
+  tableName: 'MyCustomSession',
+});
+```
 
 ## Troubleshooting
 

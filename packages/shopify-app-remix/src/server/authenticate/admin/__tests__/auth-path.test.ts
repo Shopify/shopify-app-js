@@ -6,7 +6,7 @@ import {
   expectExitIframeRedirect,
   getThrownResponse,
   testConfig,
-} from '../../../__tests__/test-helper';
+} from '../../../__test-helpers';
 
 describe('authorize.admin auth path', () => {
   test('throws an 400 Response if the shop param is missing', async () => {

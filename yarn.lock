@@ -2999,6 +2999,15 @@
     pkg-dir "^5.0.0"
     pluralize "^8.0.0"
 
+"@shopify/generate-docs@^0.11.0":
+  version "0.11.0"
+  resolved "https://registry.yarnpkg.com/@shopify/generate-docs/-/generate-docs-0.11.0.tgz#7a496a5e3328928ac58edb2c3f3ae0cc131e01ba"
+  integrity sha512-SufWSQXRqh6cCVd+H8c9cpXWKaBcRpcduIdVk3RkKV/PiD11WkUrHsdVFC1CZHWm1L7QYLaXBqwszFo1UvtYag==
+  dependencies:
+    "@types/react" "^18.0.21"
+    globby "^11.1.0"
+    typescript "^4.8.3"
+
 "@shopify/loom-cli@^1.1.0":
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/@shopify/loom-cli/-/loom-cli-1.1.0.tgz#e92f423a26f00c33b7c247a65667a8ff9bd1e8f8"
@@ -3136,10 +3145,10 @@
     jest-matcher-utils "^26.6.2"
     react-reconciler "^0.28.0"
 
-"@shopify/shopify-api@^7.5.2":
-  version "7.5.2"
-  resolved "https://registry.yarnpkg.com/@shopify/shopify-api/-/shopify-api-7.5.2.tgz#3e6fff8242ed652fdeeb9fcc012ea10665b290f4"
-  integrity sha512-1aeO3r0duz8LSj4qPlBvShIX+k4MGIyBmdGSUKFyUbfWOm5krW0Ux6dXuIF3aeSWpKKfIQoaq8b9Az1t2GlgkA==
+"@shopify/shopify-api@7.6.0", "@shopify/shopify-api@^7.6.0":
+  version "7.6.0"
+  resolved "https://registry.yarnpkg.com/@shopify/shopify-api/-/shopify-api-7.6.0.tgz#d181ca9fbd2ff3b3a7595e9e121fde707dbbb36a"
+  integrity sha512-XUyBkSrUHvqCknPdY3ylaGDyC3hA2aKmXTsbo7vpGzncMqC1hZ2pwRJbBMnffdbEWj14Um9zkEMS7MKf1k6PBw==
   dependencies:
     "@shopify/network" "^3.2.1"
     compare-versions "^5.0.3"
@@ -3474,6 +3483,15 @@
   version "18.2.15"
   resolved "https://registry.yarnpkg.com/@types/react/-/react-18.2.15.tgz#14792b35df676c20ec3cf595b262f8c615a73066"
   integrity sha512-oEjE7TQt1fFTFSbf8kkNuc798ahTUzn3Le67/PWjE8MAfYAD/qB7O8hSTcromLFqHCt9bcdOg5GXMokzTjJ5SA==
+  dependencies:
+    "@types/prop-types" "*"
+    "@types/scheduler" "*"
+    csstype "^3.0.2"
+
+"@types/react@^18.0.21":
+  version "18.2.21"
+  resolved "https://registry.yarnpkg.com/@types/react/-/react-18.2.21.tgz#774c37fd01b522d0b91aed04811b58e4e0514ed9"
+  integrity sha512-neFKG/sBAwGxHgXiIxnbm3/AAVQ/cMRS93hvBpg8xYRbeQSPVABp9U2bRnPf0iI4+Ucdv3plSxKK+3CW2ENJxA==
   dependencies:
     "@types/prop-types" "*"
     "@types/scheduler" "*"
@@ -9918,7 +9936,7 @@ typedarray-to-buffer@^3.1.5:
   dependencies:
     is-typedarray "^1.0.0"
 
-typescript@4.9.5, typescript@^4.3.5, typescript@^4.9.5:
+typescript@4.9.5, typescript@^4.3.5, typescript@^4.8.3, typescript@^4.9.5:
   version "4.9.5"
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-4.9.5.tgz#095979f9bcc0d09da324d58d03ce8f8374cbe65a"
   integrity sha512-1FXk9E2Hm+QzZQ7z+McJiHL4NW1F2EzMu9Nq9i3zAaGqibafqYwCVU6WyWAuyQRRzOlxou8xZSyXLEN8oKj24g==

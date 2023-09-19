@@ -16,8 +16,8 @@ import {
   testConfig,
   signRequestCookie,
   expectLoginRedirect,
-} from '../../../__tests__/test-helper';
-import {mockExternalRequest} from '../../../__tests__/request-mock';
+  mockExternalRequest,
+} from '../../../__test-helpers';
 
 describe('authorize.admin doc request path', () => {
   describe('errors', () => {
@@ -198,6 +198,31 @@ describe('authorize.admin doc request path', () => {
       expect(pathname).toBe('/auth/session-token');
       expect(searchParams.get('shop')).toBe(TEST_SHOP);
       expect(searchParams.get('host')).toBe(BASE64_HOST);
+      expect(searchParams.get('shopify-reload')).toBe(
+        `${APP_URL}/?embedded=1&shop=${TEST_SHOP}&host=${BASE64_HOST}`,
+      );
+    });
+
+    it('always bounces to the app URL, regardless of request URL', async () => {
+      // GIVEN
+      const shopify = shopifyApp(testConfig());
+      await setUpValidSession(shopify.sessionStorage);
+
+      // WHEN
+      const response = await getThrownResponse(
+        shopify.authenticate.admin,
+        new Request(
+          `https://some-other-host.not.real?embedded=1&shop=${TEST_SHOP}&host=${BASE64_HOST}`,
+        ),
+      );
+
+      // THEN
+      const {searchParams} = new URL(
+        response.headers.get('location')!,
+        APP_URL,
+      );
+
+      expect(response.status).toBe(302);
       expect(searchParams.get('shopify-reload')).toBe(
         `${APP_URL}/?embedded=1&shop=${TEST_SHOP}&host=${BASE64_HOST}`,
       );

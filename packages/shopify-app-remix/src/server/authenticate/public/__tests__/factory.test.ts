@@ -4,9 +4,33 @@ import {
   getJwt,
   getThrownResponse,
   testConfig,
-} from '../../../__tests__/test-helper';
+} from '../../../__test-helpers';
 
 describe('JWT validation', () => {
+  it('logs that the method is deprecated', async () => {
+    // GIVEN
+    const config = testConfig();
+    const shopify = shopifyApp(config);
+    const {token} = getJwt();
+
+    // WHEN
+    await shopify.authenticate.public(
+      new Request(APP_URL, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }),
+    );
+
+    // THEN
+    expect(config.logger?.log).toHaveBeenCalledWith(
+      expect.any(Number),
+      expect.stringContaining(
+        'authenticate.public() will be deprecated in v2. Use authenticate.public.checkout() instead.',
+      ),
+    );
+  });
+
   it('returns token when successful', async () => {
     // GIVEN
     const shopify = shopifyApp(testConfig());
@@ -32,7 +56,7 @@ describe('JWT validation', () => {
 
     // WHEN
     const {cors} = await shopify.authenticate.public(
-      new Request('https://some-other.origin', {
+      new Request(APP_URL, {
         headers: {
           Origin: 'https://some-other.origin',
           Authorization: `Bearer ${token}`,
@@ -70,7 +94,7 @@ describe('JWT validation', () => {
     // GIVEN
     const shopify = shopifyApp(testConfig());
     const {token} = getJwt();
-    const request = new Request('https://some-other.origin', {
+    const request = new Request(APP_URL, {
       method: 'OPTIONS',
       headers: {
         Origin: 'https://some-other.origin',

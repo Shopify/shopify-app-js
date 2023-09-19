@@ -1,5 +1,11 @@
 # @shopify/shopify-app-session-storage
 
+## 1.1.9
+
+### Patch Changes
+
+- 5b862fe: Upgraded shopify-api dependency to 7.6.0
+
 ## 1.1.8
 
 ### Patch Changes

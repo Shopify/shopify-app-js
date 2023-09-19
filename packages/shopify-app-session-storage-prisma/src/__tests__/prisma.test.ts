@@ -20,9 +20,17 @@ describe('PrismaSessionStorage', () => {
 
   afterAll(async () => {
     await prisma.session.deleteMany();
+    await prisma.mySession.deleteMany();
   });
 
+  // Using the default table name
   batteryOfTests(async () => new PrismaSessionStorage<PrismaClient>(prisma));
+
+  // Using a custom table name
+  batteryOfTests(
+    async () =>
+      new PrismaSessionStorage<PrismaClient>(prisma, {tableName: 'mySession'}),
+  );
 });
 
 describe('PrismaSessionStoragewhen with no database set up', () => {

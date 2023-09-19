@@ -1,5 +1,13 @@
 # @shopify/shopify-app-session-storage-memory
 
+## 1.0.12
+
+### Patch Changes
+
+- 5b862fe: Upgraded shopify-api dependency to 7.6.0
+- Updated dependencies [5b862fe]
+  - @shopify/shopify-app-session-storage@1.1.9
+
 ## 1.0.11
 
 ### Patch Changes

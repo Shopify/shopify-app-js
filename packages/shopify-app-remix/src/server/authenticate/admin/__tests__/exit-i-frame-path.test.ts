@@ -5,7 +5,7 @@ import {
   expectDocumentRequestHeaders,
   getThrownResponse,
   testConfig,
-} from '../../../__tests__/test-helper';
+} from '../../../__test-helpers';
 import {APP_BRIDGE_URL} from '../../const';
 
 describe('authorize.admin exit iframe path', () => {

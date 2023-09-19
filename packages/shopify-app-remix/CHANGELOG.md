@@ -1,5 +1,61 @@
 # @shopify/shopify-app-remix
 
+## 1.2.1
+
+### Patch Changes
+
+- bffcee9: Fix type error. Previously `authenticate.appProxy()` was typed as if it could return an object without session and admin properties. This was incorrect. Those properties will always exist, they may just be undefined.
+
+## 1.2.0
+
+### Minor Changes
+
+- 43e7058: Added `authenticate.public.appProxy()` for authenticating [App Proxy](https://shopify.dev/docs/apps/online-store/app-proxies) requests.
+
+  <details>
+    <summary>Returning a liquid response</summary>
+
+  ```ts
+  // app/routes/**\/.ts
+  import {authenticate} from '~/shopify.server';
+
+  export async function loader({request}) {
+    const {liquid, admin} = authenticate.public.appProxy(request);
+
+    return liquid('Hello {{shop.name}}');
+  }
+  ```
+
+  </details>
+
+  <details>
+    <summary>Using the Admin GraphQL API</summary>
+
+  ```ts
+  // app/routes/**\/.ts
+  import {authenticate} from '~/shopify.server';
+
+  export async function loader({request}) {
+    const {liquid, admin} = authenticate.public.appProxy(request);
+
+    const response = await admin.graphql('QUERY');
+    const json = await response.json();
+
+    return json(json);
+  }
+  ```
+
+  </details>
+
+- 43e7058: Copied `authenticate.public()` to `authenticate.public.checkout()` and marked `authenticate.public()` as deprecated. `authenticate.public()` will continue to work until v2
+
+### Patch Changes
+
+- 0acfd52: Remove trailing slashes from shop domains when handling login form requests.
+- 19696a0: Fixed an issue when running the app behind a reverse proxy that rewrites the `Host` header, where the bounce flow redirect (to ensure the id_token search param is present) relied on the incoming request URL and pointed to the internal host rather than the external one.
+- Updated dependencies [5b862fe]
+  - @shopify/shopify-app-session-storage@1.1.9
+
 ## 1.1.0
 
 ### Minor Changes

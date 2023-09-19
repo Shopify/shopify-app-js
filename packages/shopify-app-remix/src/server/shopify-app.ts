@@ -25,22 +25,22 @@ import {SHOPIFY_REMIX_LIBRARY_VERSION} from './version';
 import {registerWebhooksFactory} from './authenticate/webhooks';
 import {AuthStrategy} from './authenticate/admin/authenticate';
 import {authenticateWebhookFactory} from './authenticate/webhooks/authenticate';
-import {authenticatePublicFactory} from './authenticate/public/authenticate';
 import {overrideLogger} from './override-logger';
 import {addDocumentResponseHeadersFactory} from './authenticate/helpers';
 import {loginFactory} from './authenticate/login/login';
 import {unauthenticatedAdminContextFactory} from './unauthenticated/admin';
+import {authenticatePublicFactory} from './authenticate/public';
 
 /**
  * Creates an object your app will use to interact with Shopify.
  *
- * @param appConfig Configuration options for your shopify app.  For example, the scopes your app needs.
+ * @param appConfig Configuration options for your Shopify app, such as the scopes your app needs.
  * @returns `ShopifyApp` An object constructed using your appConfig.  It has methods for interacting with Shopify.
  *
  * @example
- * The minimum viable configuration
+ * <caption>The minimum viable configuration</caption>
  * ```ts
- * import { shopifyApp } from "@shopify/shopify-app-remix";
+ * import { shopifyApp } from "@shopify/shopify-app-remix/server";
  *
  * const shopify = shopifyApp({
  *   apiKey: process.env.SHOPIFY_API_KEY!,
@@ -76,7 +76,7 @@ export function shopifyApp<
     registerWebhooks: registerWebhooksFactory(params),
     authenticate: {
       admin: oauth.authenticateAdmin.bind(oauth),
-      public: authenticatePublicFactory(params),
+      public: authenticatePublicFactory<Resources>(params),
       webhook: authenticateWebhookFactory<
         Resources,
         keyof Config['webhooks'] | MandatoryTopics
@@ -154,7 +154,7 @@ function deriveConfig<Storage extends SessionStorage>(
 ): AppConfig<Storage> {
   if (!appConfig.sessionStorage) {
     throw new ShopifyError(
-      'Please provide a valid session storage. See https://github.com/Shopify/shopify-app-js/blob/main/README.md#session-storage-options for options.',
+      'Please provide a valid session storage. Refer to https://github.com/Shopify/shopify-app-js/blob/main/README.md#session-storage-options for options.',
     );
   }
 
