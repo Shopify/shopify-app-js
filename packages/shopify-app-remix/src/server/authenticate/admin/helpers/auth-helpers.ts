@@ -97,15 +97,17 @@ export function redirectToBouncePage(
 
   // Make sure we always point to the configured app URL so it also works behind reverse proxies (that alter the Host
   // header).
-  url.searchParams.set(
+  const params = new URLSearchParams(url.search);
+  params.delete('id_token');
+  params.set(
     'shopify-reload',
-    `${config.appUrl}${url.pathname}${url.search}`,
+    `${config.appUrl}${url.pathname}?${params.toString()}`,
   );
 
   // eslint-disable-next-line no-warning-comments
   // TODO Make sure this works on chrome without a tunnel (weird HTTPS redirect issue)
   // https://github.com/orgs/Shopify/projects/6899/views/1?pane=issue&itemId=28376650
-  throw redirect(`${config.auth.patchSessionTokenPath}${url.search}`);
+  throw redirect(`${config.auth.patchSessionTokenPath}?${params.toString()}`);
 }
 
 export function createBillingContext(
