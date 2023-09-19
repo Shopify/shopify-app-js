@@ -1,5 +1,5 @@
 import {redirect} from '@remix-run/server-runtime';
-import {Session, ShopifyRestResources} from '@shopify/shopify-api';
+import {Session, ShopifyRestResources, JwtPayload} from '@shopify/shopify-api';
 
 import {AppConfigArg} from '../../../config-types';
 import {
@@ -14,6 +14,56 @@ import {
   requestBillingFactory,
   requireBillingFactory,
 } from '../billing';
+import type {
+  AdminContext,
+  EmbeddedAdminContext,
+  NonEmbeddedAdminContext,
+} from '../types';
+import {EnsureCORSFunction} from '../../helpers';
+
+import {redirectFactory} from './redirect';
+
+interface SessionContext {
+  session: Session;
+  token?: JwtPayload;
+}
+
+export function createApiContext<
+  Config extends AppConfigArg,
+  Resources extends ShopifyRestResources,
+>(
+  params: BasicParams,
+  request: Request,
+  sessionContext: SessionContext,
+  cors: EnsureCORSFunction,
+  handleAdminClientErrorFactory: HandleClientErrorFactory,
+) {
+  const context:
+    | EmbeddedAdminContext<Config, Resources>
+    | NonEmbeddedAdminContext<Config, Resources> = {
+    admin: createAdminApiContext<Resources>(
+      request,
+      sessionContext.session,
+      handleAdminClientErrorFactory,
+      params,
+    ),
+    billing: createBillingContext(request, sessionContext.session, params),
+    session: sessionContext.session,
+    cors,
+  };
+
+  const {config} = params;
+
+  if (config.isEmbeddedApp) {
+    return {
+      ...context,
+      sessionToken: sessionContext!.token!,
+      redirect: redirectFactory(params, request),
+    } as AdminContext<Config, Resources>;
+  } else {
+    return context as AdminContext<Config, Resources>;
+  }
+}
 
 type HandleClientErrorFactory = ({
   request,

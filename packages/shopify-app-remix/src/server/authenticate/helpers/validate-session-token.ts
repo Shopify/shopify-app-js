@@ -7,21 +7,15 @@ interface ValidateSessionTokenOptions {
 }
 
 export async function validateSessionToken(
-  {api, logger}: BasicParams,
+  params: BasicParams,
   token: string,
   {checkAudience = true}: ValidateSessionTokenOptions = {},
 ): Promise<JwtPayload> {
+  const {logger} = params;
   logger.debug('Validating session token');
 
   try {
-    const payload = await api.session.decodeSessionToken(token, {
-      checkAudience,
-    });
-    logger.debug('Session token is valid', {
-      payload: JSON.stringify(payload),
-    });
-
-    return payload;
+    return await validateSessionTokenUncaught(params, token, {checkAudience});
   } catch (error) {
     logger.debug(`Failed to validate session token: ${error.message}`);
     throw new Response(undefined, {
@@ -31,11 +25,11 @@ export async function validateSessionToken(
   }
 }
 
-export async function validateSessionTokenWithCallback(
+export async function validateSessionTokenUncaught(
   {api, logger}: BasicParams,
   token: string,
   {checkAudience = true}: ValidateSessionTokenOptions = {},
-) {
+): Promise<JwtPayload> {
   logger.debug('Validating session token');
 
   console.log('BEFORE');

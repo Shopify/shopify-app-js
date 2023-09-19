@@ -54,9 +54,6 @@ export function handleEmbeddedClientErrorFactory({
       }
     }
 
-    // 403 insufficient scopes
-    // throw await redirectToAuthPage(params, request, session.shop);
-
     // forward a minimal copy of the upstream HTTP response instead of an Error:
     throw new Response(JSON.stringify(error.response.body), {
       status: error.response.code,

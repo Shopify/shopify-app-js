@@ -15,24 +15,18 @@ import {
   rejectBotRequest,
   respondToOptionsRequest,
   ensureCORSHeadersFactory,
-  validateSessionTokenWithCallback,
+  validateSessionTokenUncaught,
 } from '../helpers';
 
-import type {
-  AdminContext,
-  EmbeddedAdminContext,
-  NonEmbeddedAdminContext,
-} from './types';
+import type {AdminContext} from './types';
 import {
   handleEmbeddedClientErrorFactory,
-  redirectFactory,
   redirectWithAppBridgeHeaders,
   redirectWithExitIframe,
   renderAppBridge,
 } from './helpers';
 import {
-  createAdminApiContext,
-  createBillingContext,
+  createApiContext,
   ensureAppIsEmbeddedIfRequired,
   ensureValidShopParam,
   redirectToBouncePage,
@@ -82,37 +76,13 @@ export class EmbeddedAuthStrategy<
       throw errorOrResponse;
     }
 
-    const context:
-      | EmbeddedAdminContext<Config, Resources>
-      | NonEmbeddedAdminContext<Config, Resources> = {
-      admin: createAdminApiContext<Resources>(
-        request,
-        sessionContext.session,
-        handleEmbeddedClientErrorFactory,
-        {
-          api,
-          logger,
-          config,
-        },
-      ),
-      billing: createBillingContext(request, sessionContext.session, {
-        api,
-        logger,
-        config,
-      }),
-      session: sessionContext.session,
+    return createApiContext<Config, Resources>(
+      {api, logger, config},
+      request,
+      sessionContext,
       cors,
-    };
-
-    if (config.isEmbeddedApp) {
-      return {
-        ...context,
-        sessionToken: sessionContext!.token!,
-        redirect: redirectFactory({api, config, logger}, request),
-      } as AdminContext<Config, Resources>;
-    } else {
-      return context as AdminContext<Config, Resources>;
-    }
+      handleEmbeddedClientErrorFactory,
+    );
   }
 
   private async authenticateAndGetSessionContext(
@@ -154,10 +124,8 @@ export class EmbeddedAuthStrategy<
     }
 
     if (sessionTokenString) {
-      let sessionToken;
-
       try {
-        sessionToken = await validateSessionTokenWithCallback(
+        const sessionToken = await validateSessionTokenUncaught(
           {api, logger, config},
           sessionTokenString,
         );

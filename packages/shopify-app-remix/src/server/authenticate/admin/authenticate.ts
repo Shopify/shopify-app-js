@@ -22,20 +22,17 @@ import {
 
 import type {
   AdminContext,
-  EmbeddedAdminContext,
-  NonEmbeddedAdminContext,
 } from './types';
 import {
   beginAuth,
   handleClientErrorFactory,
-  redirectFactory,
   redirectToAuthPage,
   redirectWithExitIframe,
   renderAppBridge,
 } from './helpers';
 import {
   createAdminApiContext,
-  createBillingContext,
+  createApiContext,
   ensureAppIsEmbeddedIfRequired,
   ensureValidShopParam,
   redirectToBouncePage,
@@ -86,37 +83,13 @@ export class AuthStrategy<
       throw errorOrResponse;
     }
 
-    const context:
-      | EmbeddedAdminContext<Config, Resources>
-      | NonEmbeddedAdminContext<Config, Resources> = {
-      admin: createAdminApiContext<Resources>(
-        request,
-        sessionContext.session,
-        handleClientErrorFactory,
-        {
-          api,
-          logger,
-          config,
-        },
-      ),
-      billing: createBillingContext(request, sessionContext.session, {
-        api,
-        logger,
-        config,
-      }),
-      session: sessionContext.session,
+    return createApiContext<Config, Resources>(
+      {api, logger, config},
+      request,
+      sessionContext,
       cors,
-    };
-
-    if (config.isEmbeddedApp) {
-      return {
-        ...context,
-        sessionToken: sessionContext!.token!,
-        redirect: redirectFactory({api, config, logger}, request),
-      } as AdminContext<Config, Resources>;
-    } else {
-      return context as AdminContext<Config, Resources>;
-    }
+      handleClientErrorFactory,
+    );
   }
 
   private async authenticateAndGetSessionContext(
