@@ -11,17 +11,18 @@ export interface UnauthenticatedStorefrontContext {
    * This will always be an offline session. You can use this to get shop specific data.
    *
    * @example
-   * <caption>Getting shop specific data using a session</caption>
+   * <caption>Using the offline session.</caption>
+   * <description>Get your app's shop-specific data using the returned offline `session` object.</description>
    * ```ts
    * // app/routes/**\/.ts
    * import { LoaderArgs, json } from "@remix-run/node";
    * import { unauthenticated } from "../shopify.server";
-   * import { getWidgets } from "~/db/widgets.server";
+   * import { getMyAppData } from "~/db/model.server";
    *
    * export const loader = async ({ request }: LoaderArgs) => {
    *   const shop = getShopFromExternalRequest(request);
    *   const { session } = await unauthenticated.storefront(shop);
-   *   return json(await getWidgets({shop: session.shop));
+   *   return json(await getMyAppData({shop: session.shop));
    * };
    * ```
    */
