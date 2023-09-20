@@ -143,7 +143,7 @@ export class EmbeddedAuthStrategy<
             error.response.body?.error === 'invalid_subject_token')
         ) {
           console.log(`CAUGHT ${JSON.stringify(error)}`);
-          throw redirectToBouncePage(url, {api, logger, config});
+          throw this.handleInvalidSession(request);
         }
         throw error;
       }
@@ -151,7 +151,7 @@ export class EmbeddedAuthStrategy<
       logger.debug(
         'Missing session token in search params, going to bounce page',
       );
-      throw redirectToBouncePage(url, {api, logger, config});
+      throw this.handleInvalidSession(request);
     }
   }
 
@@ -204,6 +204,23 @@ export class EmbeddedAuthStrategy<
     await config.sessionStorage.storeSession(session);
 
     return {session, token: payload};
+  }
+
+  private handleInvalidSession(request: Request) {
+    const {api, logger, config} = this;
+
+    const isXhrRequest = request.headers.get('authorization');
+    if (!isXhrRequest) {
+      return redirectToBouncePage(new URL(request.url), {api, logger, config});
+    }
+
+    return new Response(undefined, {
+      status: 401,
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Shopify-Invalid-Session': '1',
+      },
+    });
   }
 
   // this does not initiate oauth auth code flow, it just triggers managed install
