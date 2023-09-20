@@ -156,7 +156,6 @@
             "type": "clicode"
           }
         ],
-        "image": "architecture.png",
         "codeblock": {
           "title": "/app/shopify.server.ts",
           "tabs": [

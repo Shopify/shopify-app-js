@@ -500,22 +500,6 @@
                 "name": "plan",
                 "value": "keyof Config[\"billing\"]",
                 "description": "The plan to request. Must be one of the values defined in the `billing` config option."
-              },
-              {
-                "filePath": "/server/authenticate/admin/billing/types.ts",
-                "syntaxKind": "PropertySignature",
-                "name": "isTest",
-                "value": "boolean",
-                "description": "",
-                "isOptional": true
-              },
-              {
-                "filePath": "/server/authenticate/admin/billing/types.ts",
-                "syntaxKind": "PropertySignature",
-                "name": "returnUrl",
-                "value": "string",
-                "description": "",
-                "isOptional": true
               }
             ],
             "value": "export interface RequestBillingOptions<Config extends AppConfigArg>\n  extends Omit<BillingRequestParams, 'session' | 'plan' | 'returnObject'> {\n  /**\n   * The plan to request. Must be one of the values defined in the `billing` config option.\n   */\n  plan: keyof Config['billing'];\n}"
@@ -1053,22 +1037,6 @@
                 "name": "plan",
                 "value": "keyof Config[\"billing\"]",
                 "description": "The plan to request. Must be one of the values defined in the `billing` config option."
-              },
-              {
-                "filePath": "/server/authenticate/admin/billing/types.ts",
-                "syntaxKind": "PropertySignature",
-                "name": "isTest",
-                "value": "boolean",
-                "description": "",
-                "isOptional": true
-              },
-              {
-                "filePath": "/server/authenticate/admin/billing/types.ts",
-                "syntaxKind": "PropertySignature",
-                "name": "returnUrl",
-                "value": "string",
-                "description": "",
-                "isOptional": true
               }
             ],
             "value": "export interface RequestBillingOptions<Config extends AppConfigArg>\n  extends Omit<BillingRequestParams, 'session' | 'plan' | 'returnObject'> {\n  /**\n   * The plan to request. Must be one of the values defined in the `billing` config option.\n   */\n  plan: keyof Config['billing'];\n}"
@@ -2784,14 +2752,14 @@
               {
                 "filePath": "/server/types.ts",
                 "syntaxKind": "MethodSignature",
-                "name": "__@iterator@386",
+                "name": "__@iterator@423",
                 "value": "() => IterableIterator<JSONValue>",
                 "description": "Iterator"
               },
               {
                 "filePath": "/server/types.ts",
                 "syntaxKind": "MethodSignature",
-                "name": "__@unscopables@388",
+                "name": "__@unscopables@425",
                 "value": "() => { copyWithin: boolean; entries: boolean; fill: boolean; find: boolean; findIndex: boolean; keys: boolean; values: boolean; }",
                 "description": "Returns an object whose properties have the value 'true'\r\nwhen they will be absent when used in a 'with' statement."
               },
@@ -4024,22 +3992,6 @@
                 "name": "plan",
                 "value": "keyof Config[\"billing\"]",
                 "description": "The plan to request. Must be one of the values defined in the `billing` config option."
-              },
-              {
-                "filePath": "/server/authenticate/admin/billing/types.ts",
-                "syntaxKind": "PropertySignature",
-                "name": "isTest",
-                "value": "boolean",
-                "description": "",
-                "isOptional": true
-              },
-              {
-                "filePath": "/server/authenticate/admin/billing/types.ts",
-                "syntaxKind": "PropertySignature",
-                "name": "returnUrl",
-                "value": "string",
-                "description": "",
-                "isOptional": true
               }
             ],
             "value": "export interface RequestBillingOptions<Config extends AppConfigArg>\n  extends Omit<BillingRequestParams, 'session' | 'plan' | 'returnObject'> {\n  /**\n   * The plan to request. Must be one of the values defined in the `billing` config option.\n   */\n  plan: keyof Config['billing'];\n}"
@@ -4941,14 +4893,14 @@
               {
                 "filePath": "/server/types.ts",
                 "syntaxKind": "MethodSignature",
-                "name": "__@iterator@386",
+                "name": "__@iterator@423",
                 "value": "() => IterableIterator<JSONValue>",
                 "description": "Iterator"
               },
               {
                 "filePath": "/server/types.ts",
                 "syntaxKind": "MethodSignature",
-                "name": "__@unscopables@388",
+                "name": "__@unscopables@425",
                 "value": "() => { copyWithin: boolean; entries: boolean; fill: boolean; find: boolean; findIndex: boolean; keys: boolean; values: boolean; }",
                 "description": "Returns an object whose properties have the value 'true'\r\nwhen they will be absent when used in a 'with' statement."
               },
