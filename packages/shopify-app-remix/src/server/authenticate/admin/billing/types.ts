@@ -48,7 +48,8 @@ export interface BillingContext<Config extends AppConfigArg> {
    * @returns A promise that resolves to an object containing the active purchases for the shop.
    *
    * @example
-   * <caption>Requesting billing right away</caption>
+   * <caption>Requesting billing right away.</caption>
+   * <description>Call `billing.request` in the `onFailure` callback to immediately request payment.</description>
    * ```ts
    * // /app/routes/**\/*.ts
    * import { LoaderArgs } from "@remix-run/node";
@@ -92,7 +93,8 @@ export interface BillingContext<Config extends AppConfigArg> {
    * ```
    *
    * @example
-   * <caption>Redirecting to a page where the merchant can select a plan</caption>
+   * <caption>Using a plan selection page.</caption>
+   * <description>Redirect to a different page in the `onFailure` callback, where the merchant can select a billing plan.</description>
    * ```ts
    * // /app/routes/**\/*.ts
    * import { LoaderArgs, redirect } from "@remix-run/node";
@@ -148,7 +150,8 @@ export interface BillingContext<Config extends AppConfigArg> {
    * @returns Redirects to the confirmation URL for the payment.
    *
    * @example
-   * <caption>Requesting billing when there is no payment with a custom return URL</caption>
+   * <caption>Using a custom return URL.</caption>
+   * <description>Change where the merchant is returned to after approving the purchase using the `returnUrl` option.</description>
    * ```ts
    * // /app/routes/**\/*.ts
    * import { LoaderArgs } from "@remix-run/node";
@@ -202,7 +205,8 @@ export interface BillingContext<Config extends AppConfigArg> {
    * @returns The cancelled subscription.
    *
    * @example
-   * <caption>Cancelling a subscription</caption>
+   * <caption>Cancelling a subscription.</caption>
+   * <description>Use the `billing.cancel` function to cancel an active subscription with the id returned from `billing.require`.</description>
    * ```ts
    * // /app/routes/cancel-subscription.ts
    * import { LoaderArgs } from "@remix-run/node";

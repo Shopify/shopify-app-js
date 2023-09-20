@@ -14,9 +14,9 @@ const data: ReferenceEntityTemplateSchema = {
       description:
         'Provides utilities that apps can use to make requests to the Admin API.',
       type: 'AdminApiContext',
-      jsDocExamples: true,
     },
   ],
+  jsDocTypeExamples: ['AdminApiContext'],
   related: [
     {
       name: 'Authenticated context',

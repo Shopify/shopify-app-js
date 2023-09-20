@@ -3,7 +3,7 @@ import {ReferenceEntityTemplateSchema} from '@shopify/generate-docs';
 const data: ReferenceEntityTemplateSchema = {
   name: 'Billing',
   description:
-    'Contains function used to bill merchants for your app.\n\nThis object is returned on authenticated Admin requests. Refer to the [Related](#related) section for more information.',
+    'Contains function used to bill merchants for your app.\n\nThis object is returned on authenticated Admin requests.',
   category: 'APIs',
   type: 'object',
   isVisualComponent: false,
@@ -13,9 +13,9 @@ const data: ReferenceEntityTemplateSchema = {
       description:
         'Provides utilities that apps can use to request billing for the app using the Admin API.',
       type: 'BillingContext',
-      jsDocExamples: true,
     },
   ],
+  jsDocTypeExamples: ['BillingContext'],
   related: [
     {
       name: 'Admin context',

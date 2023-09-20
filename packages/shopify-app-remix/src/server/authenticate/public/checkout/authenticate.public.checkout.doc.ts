@@ -15,13 +15,8 @@ const data: ReferenceEntityTemplateSchema = {
         'Authenticates requests coming from Shopify checkout extensions.',
       type: 'AuthenticateCheckout',
     },
-    {
-      title: 'CheckoutContext',
-      description: 'Object returned by `authenticate.public.checkout`.',
-      type: 'CheckoutContext',
-      jsDocExamples: true,
-    },
   ],
+  jsDocTypeExamples: ['CheckoutContext'],
   related: [],
 };
 

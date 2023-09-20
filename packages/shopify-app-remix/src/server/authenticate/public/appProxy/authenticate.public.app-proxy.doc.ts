@@ -18,15 +18,9 @@ const data: ReferenceEntityTemplateSchema = {
       title: 'AppProxyContext',
       description: 'Object returned by `authenticate.public.appProxy`.',
       type: 'AppProxyContextWithSession',
-      jsDocExamples: true,
-    },
-    {
-      title: 'AdminApiContext',
-      description: 'Object returned by `authenticate.public.appProxy`.',
-      type: 'AdminApiContext',
-      jsDocExamples: true,
     },
   ],
+  jsDocTypeExamples: ['AppProxyContextWithSession', 'AdminApiContext'],
   related: [
     {
       name: 'API context',
