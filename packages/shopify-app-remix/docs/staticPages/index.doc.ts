@@ -12,7 +12,28 @@ const data: LandingTemplateSchema = {
       anchorLink: 'quick-start',
       title: 'Quick start',
       sectionContent:
-        "The quickest way to create a new app is using the Shopify CLI. Check out the [getting started guide](/docs/apps/getting-started), or the [app template](https://github.com/Shopify/shopify-app-template-remix) for a complete example.",
+        "The quickest way to create a new app is using the Shopify CLI. You can use your preferred package manager for that." +
+        "\n\nCheck out the [getting started guide](/docs/apps/getting-started), or the [app template](https://github.com/Shopify/shopify-app-template-remix) for a complete example.",
+      codeblock: {
+        title: 'Create an app',
+        tabs: [
+          {
+            title: 'npm',
+            language: 'sh',
+            code: './examples/index/create.npm.example.sh',
+          },
+          {
+            title: 'yarn',
+            language: 'sh',
+            code: './examples/index/create.yarn.example.sh',
+          },
+          {
+            title: 'pnpm',
+            language: 'sh',
+            code: './examples/index/create.pnpm.example.sh',
+          },
+        ],
+      },
       sectionCard: [
         {
           name: 'Build an app',
@@ -33,14 +54,17 @@ const data: LandingTemplateSchema = {
         tabs: [
           {
             title: 'npm',
+            language: 'sh',
             code: './examples/index/install.npm.example.sh',
           },
           {
             title: 'yarn',
+            language: 'sh',
             code: './examples/index/install.yarn.example.sh',
           },
           {
             title: 'pnpm',
+            language: 'sh',
             code: './examples/index/install.pnpm.example.sh',
           },
         ],

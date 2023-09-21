@@ -20,7 +20,7 @@ const data: ReferenceEntityTemplateSchema = {
       type: 'AppProxyContextWithSession',
     },
   ],
-  jsDocTypeExamples: ['AppProxyContextWithSession', 'AdminApiContext'],
+  jsDocTypeExamples: ['AppProxyContextWithSession'],
   related: [
     {
       name: 'API context',

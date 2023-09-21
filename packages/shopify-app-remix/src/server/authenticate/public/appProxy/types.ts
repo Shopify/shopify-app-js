@@ -81,6 +81,34 @@ export interface AppProxyContextWithSession<
 
   /**
    * Methods for interacting with the GraphQL / REST Admin APIs for the store that made the request.
+   *
+   * @example
+   * <caption>Interacting with the Admin API.</caption>
+   * <description>Use the `admin` object to interact with the REST or GraphQL APIs.</description>
+   * ```ts
+   * // app/routes/**\/.ts
+   * import { json } from "@remix-run/node";
+   * import { authenticate } from "../shopify.server";
+   *
+   * export async function action({ request }: ActionArgs) {
+   *   const { admin } = await authenticate.public.appProxy(request);
+   *
+   *   const response = await admin.graphql(
+   *     `#graphql
+   *     mutation populateProduct($input: ProductInput!) {
+   *       productCreate(input: $input) {
+   *         product {
+   *           id
+   *         }
+   *       }
+   *     }`,
+   *     { variables: { input: { title: "Product Name" } } }
+   *   );
+   *
+   *   const productData = await response.json();
+   *   return json({ data: productData.data });
+   * }
+   * ```
    */
   admin: AdminApiContext<Resources>;
 }

@@ -1669,7 +1669,19 @@
                 "syntaxKind": "PropertySignature",
                 "name": "admin",
                 "value": "AdminApiContext<Resources>",
-                "description": "Methods for interacting with the GraphQL / REST Admin APIs for the store that made the request."
+                "description": "Methods for interacting with the GraphQL / REST Admin APIs for the store that made the request.",
+                "examples": [
+                  {
+                    "title": "Interacting with the Admin API",
+                    "description": "Use the `admin` object to interact with the REST or GraphQL APIs.",
+                    "tabs": [
+                      {
+                        "code": "import { json } from \"@remix-run/node\";\nimport { authenticate } from \"../shopify.server\";\n\nexport async function action({ request }: ActionArgs) {\n  const { admin } = await authenticate.public.appProxy(request);\n\n  const response = await admin.graphql(\n    `#graphql\n    mutation populateProduct($input: ProductInput!) {\n      productCreate(input: $input) {\n        product {\n          id\n        }\n      }\n    }`,\n    { variables: { input: { title: \"Product Name\" } } }\n  );\n\n  const productData = await response.json();\n  return json({ data: productData.data });\n}",
+                        "title": "app/routes/**\\/.ts"
+                      }
+                    ]
+                  }
+                ]
               },
               {
                 "filePath": "/server/authenticate/public/appProxy/types.ts",
@@ -1691,7 +1703,7 @@
                 ]
               }
             ],
-            "value": "export interface AppProxyContextWithSession<\n  Resources extends ShopifyRestResources = ShopifyRestResources,\n> extends Context {\n  /**\n   * The session for the shop that made the request.\n   *\n   * This comes from the session storage which `shopifyApp` uses to store sessions in your database of choice.\n   *\n   * Use this to get shop or user-specific data.\n   *\n   * @example\n   * <caption>Using the session object.</caption>\n   * <description>Get your app's data using an offline session for the shop that made the request.</description>\n   * ```ts\n   * // app/routes/**\\/.ts\n   * import { json } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   * import { getMyAppModelData } from \"~/db/model.server\";\n   *\n   * export const loader = async ({ request }) => {\n   *   const { session } = await authenticate.public.appProxy(request);\n   *   return json(await getMyAppModelData({shop: session.shop));\n   * };\n   * ```\n   */\n  session: Session;\n\n  /**\n   * Methods for interacting with the GraphQL / REST Admin APIs for the store that made the request.\n   */\n  admin: AdminApiContext<Resources>;\n}"
+            "value": "export interface AppProxyContextWithSession<\n  Resources extends ShopifyRestResources = ShopifyRestResources,\n> extends Context {\n  /**\n   * The session for the shop that made the request.\n   *\n   * This comes from the session storage which `shopifyApp` uses to store sessions in your database of choice.\n   *\n   * Use this to get shop or user-specific data.\n   *\n   * @example\n   * <caption>Using the session object.</caption>\n   * <description>Get your app's data using an offline session for the shop that made the request.</description>\n   * ```ts\n   * // app/routes/**\\/.ts\n   * import { json } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   * import { getMyAppModelData } from \"~/db/model.server\";\n   *\n   * export const loader = async ({ request }) => {\n   *   const { session } = await authenticate.public.appProxy(request);\n   *   return json(await getMyAppModelData({shop: session.shop));\n   * };\n   * ```\n   */\n  session: Session;\n\n  /**\n   * Methods for interacting with the GraphQL / REST Admin APIs for the store that made the request.\n   *\n   * @example\n   * <caption>Interacting with the Admin API.</caption>\n   * <description>Use the `admin` object to interact with the REST or GraphQL APIs.</description>\n   * ```ts\n   * // app/routes/**\\/.ts\n   * import { json } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   *\n   * export async function action({ request }: ActionArgs) {\n   *   const { admin } = await authenticate.public.appProxy(request);\n   *\n   *   const response = await admin.graphql(\n   *     `#graphql\n   *     mutation populateProduct($input: ProductInput!) {\n   *       productCreate(input: $input) {\n   *         product {\n   *           id\n   *         }\n   *       }\n   *     }`,\n   *     { variables: { input: { title: \"Product Name\" } } }\n   *   );\n   *\n   *   const productData = await response.json();\n   *   return json({ data: productData.data });\n   * }\n   * ```\n   */\n  admin: AdminApiContext<Resources>;\n}"
           },
           "AdminApiContext": {
             "filePath": "/server/config-types.ts",
@@ -1876,7 +1888,19 @@
                 "syntaxKind": "PropertySignature",
                 "name": "admin",
                 "value": "AdminApiContext<Resources>",
-                "description": "Methods for interacting with the GraphQL / REST Admin APIs for the store that made the request."
+                "description": "Methods for interacting with the GraphQL / REST Admin APIs for the store that made the request.",
+                "examples": [
+                  {
+                    "title": "Interacting with the Admin API",
+                    "description": "Use the `admin` object to interact with the REST or GraphQL APIs.",
+                    "tabs": [
+                      {
+                        "code": "import { json } from \"@remix-run/node\";\nimport { authenticate } from \"../shopify.server\";\n\nexport async function action({ request }: ActionArgs) {\n  const { admin } = await authenticate.public.appProxy(request);\n\n  const response = await admin.graphql(\n    `#graphql\n    mutation populateProduct($input: ProductInput!) {\n      productCreate(input: $input) {\n        product {\n          id\n        }\n      }\n    }`,\n    { variables: { input: { title: \"Product Name\" } } }\n  );\n\n  const productData = await response.json();\n  return json({ data: productData.data });\n}",
+                        "title": "app/routes/**\\/.ts"
+                      }
+                    ]
+                  }
+                ]
               },
               {
                 "filePath": "/server/authenticate/public/appProxy/types.ts",
@@ -1898,7 +1922,7 @@
                 ]
               }
             ],
-            "value": "export interface AppProxyContextWithSession<\n  Resources extends ShopifyRestResources = ShopifyRestResources,\n> extends Context {\n  /**\n   * The session for the shop that made the request.\n   *\n   * This comes from the session storage which `shopifyApp` uses to store sessions in your database of choice.\n   *\n   * Use this to get shop or user-specific data.\n   *\n   * @example\n   * <caption>Using the session object.</caption>\n   * <description>Get your app's data using an offline session for the shop that made the request.</description>\n   * ```ts\n   * // app/routes/**\\/.ts\n   * import { json } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   * import { getMyAppModelData } from \"~/db/model.server\";\n   *\n   * export const loader = async ({ request }) => {\n   *   const { session } = await authenticate.public.appProxy(request);\n   *   return json(await getMyAppModelData({shop: session.shop));\n   * };\n   * ```\n   */\n  session: Session;\n\n  /**\n   * Methods for interacting with the GraphQL / REST Admin APIs for the store that made the request.\n   */\n  admin: AdminApiContext<Resources>;\n}"
+            "value": "export interface AppProxyContextWithSession<\n  Resources extends ShopifyRestResources = ShopifyRestResources,\n> extends Context {\n  /**\n   * The session for the shop that made the request.\n   *\n   * This comes from the session storage which `shopifyApp` uses to store sessions in your database of choice.\n   *\n   * Use this to get shop or user-specific data.\n   *\n   * @example\n   * <caption>Using the session object.</caption>\n   * <description>Get your app's data using an offline session for the shop that made the request.</description>\n   * ```ts\n   * // app/routes/**\\/.ts\n   * import { json } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   * import { getMyAppModelData } from \"~/db/model.server\";\n   *\n   * export const loader = async ({ request }) => {\n   *   const { session } = await authenticate.public.appProxy(request);\n   *   return json(await getMyAppModelData({shop: session.shop));\n   * };\n   * ```\n   */\n  session: Session;\n\n  /**\n   * Methods for interacting with the GraphQL / REST Admin APIs for the store that made the request.\n   *\n   * @example\n   * <caption>Interacting with the Admin API.</caption>\n   * <description>Use the `admin` object to interact with the REST or GraphQL APIs.</description>\n   * ```ts\n   * // app/routes/**\\/.ts\n   * import { json } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   *\n   * export async function action({ request }: ActionArgs) {\n   *   const { admin } = await authenticate.public.appProxy(request);\n   *\n   *   const response = await admin.graphql(\n   *     `#graphql\n   *     mutation populateProduct($input: ProductInput!) {\n   *       productCreate(input: $input) {\n   *         product {\n   *           id\n   *         }\n   *       }\n   *     }`,\n   *     { variables: { input: { title: \"Product Name\" } } }\n   *   );\n   *\n   *   const productData = await response.json();\n   *   return json({ data: productData.data });\n   * }\n   * ```\n   */\n  admin: AdminApiContext<Resources>;\n}"
           },
           "AdminApiContext": {
             "filePath": "/server/config-types.ts",
@@ -2094,8 +2118,7 @@
       }
     ],
     "jsDocTypeExamples": [
-      "AppProxyContextWithSession",
-      "AdminApiContext"
+      "AppProxyContextWithSession"
     ],
     "related": [
       {
@@ -2126,6 +2149,24 @@
           ]
         },
         {
+          "title": "admin",
+          "examples": [
+            {
+              "description": "Use the `admin` object to interact with the REST or GraphQL APIs.",
+              "codeblock": {
+                "title": "Interacting with the Admin API",
+                "tabs": [
+                  {
+                    "title": "app/routes/**\\/.ts",
+                    "code": "import { json } from \"@remix-run/node\";\nimport { authenticate } from \"../shopify.server\";\n\nexport async function action({ request }: ActionArgs) {\n  const { admin } = await authenticate.public.appProxy(request);\n\n  const response = await admin.graphql(\n    `#graphql\n    mutation populateProduct($input: ProductInput!) {\n      productCreate(input: $input) {\n        product {\n          id\n        }\n      }\n    }`,\n    { variables: { input: { title: \"Product Name\" } } }\n  );\n\n  const productData = await response.json();\n  return json({ data: productData.data });\n}",
+                    "language": "typescript"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
           "title": "liquid",
           "examples": [
             {
@@ -2136,60 +2177,6 @@
                   {
                     "title": "app/routes/**\\/.ts",
                     "code": "import {authenticate} from \"~/shopify.server\"\n\nexport async function loader({ request }) {\n  const {liquid} = authenticate.public.appProxy(request);\n\n  return liquid(\"Hello {{shop.name}}\")\n}",
-                    "language": "typescript"
-                  }
-                ]
-              }
-            }
-          ]
-        },
-        {
-          "title": "rest",
-          "examples": [
-            {
-              "description": "Getting the number of orders in a store using REST resources.",
-              "codeblock": {
-                "title": "Using REST resources",
-                "tabs": [
-                  {
-                    "title": "/app/shopify.server.ts",
-                    "code": "import { shopifyApp } from \"@shopify/shopify-app-remix/server\";\nimport { restResources } from \"@shopify/shopify-api/rest/admin/2023-07\";\n\nconst shopify = shopifyApp({\n  restResources,\n  // ...etc\n});\nexport default shopify;\nexport const authenticate = shopify.authenticate;",
-                    "language": "typescript"
-                  },
-                  {
-                    "title": "/app/routes/**\\/*.ts",
-                    "code": "import { LoaderArgs, json } from \"@remix-run/node\";\nimport { authenticate } from \"../shopify.server\";\n\nexport const loader = async ({ request }: LoaderArgs) =&gt; {\n  const { admin, session } = await authenticate.admin(request);\n  return json(admin.rest.resources.Order.count({ session }));\n};",
-                    "language": "typescript"
-                  }
-                ]
-              }
-            },
-            {
-              "description": "Use `admin.rest.<method>` to make custom requests to the API.",
-              "codeblock": {
-                "title": "Performing a GET request to the REST API",
-                "tabs": [
-                  {
-                    "title": "/app/routes/**\\/*.ts",
-                    "code": "import { LoaderArgs, json } from \"@remix-run/node\";\nimport { authenticate } from \"../shopify.server\";\n\nexport const loader = async ({ request }: LoaderArgs) =&gt; {\n  const { admin, session } = await authenticate.admin(request);\n  const response = await admin.rest.get({ path: \"/customers/count.json\" });\n  const customers = await response.json();\n  return json({ customers });\n};",
-                    "language": "typescript"
-                  }
-                ]
-              }
-            }
-          ]
-        },
-        {
-          "title": "graphql",
-          "examples": [
-            {
-              "description": "Use `admin.graphql` to make query / mutation requests.",
-              "codeblock": {
-                "title": "Querying the GraphQL API",
-                "tabs": [
-                  {
-                    "title": "Example",
-                    "code": "import { ActionArgs } from \"@remix-run/node\";\nimport { authenticate } from \"../shopify.server\";\n\nexport async function action({ request }: ActionArgs) {\n  const { admin } = await authenticate.admin(request);\n\n  const response = await admin.graphql(\n    `#graphql\n    mutation populateProduct($input: ProductInput!) {\n      productCreate(input: $input) {\n        product {\n          id\n        }\n      }\n    }`,\n    { variables: { input: { title: \"Product Name\" } } }\n  );\n\n  const productData = await response.json();\n  return json({ data: productData.data });\n}",
                     "language": "typescript"
                   }
                 ]
@@ -2752,14 +2739,14 @@
               {
                 "filePath": "/server/types.ts",
                 "syntaxKind": "MethodSignature",
-                "name": "__@iterator@423",
+                "name": "__@iterator@424",
                 "value": "() => IterableIterator<JSONValue>",
                 "description": "Iterator"
               },
               {
                 "filePath": "/server/types.ts",
                 "syntaxKind": "MethodSignature",
-                "name": "__@unscopables@425",
+                "name": "__@unscopables@426",
                 "value": "() => { copyWithin: boolean; entries: boolean; fill: boolean; find: boolean; findIndex: boolean; keys: boolean; values: boolean; }",
                 "description": "Returns an object whose properties have the value 'true'\r\nwhen they will be absent when used in a 'with' statement."
               },
@@ -4480,7 +4467,19 @@
                 "syntaxKind": "PropertySignature",
                 "name": "admin",
                 "value": "AdminApiContext<Resources>",
-                "description": "Methods for interacting with the GraphQL / REST Admin APIs for the store that made the request."
+                "description": "Methods for interacting with the GraphQL / REST Admin APIs for the store that made the request.",
+                "examples": [
+                  {
+                    "title": "Interacting with the Admin API",
+                    "description": "Use the `admin` object to interact with the REST or GraphQL APIs.",
+                    "tabs": [
+                      {
+                        "code": "import { json } from \"@remix-run/node\";\nimport { authenticate } from \"../shopify.server\";\n\nexport async function action({ request }: ActionArgs) {\n  const { admin } = await authenticate.public.appProxy(request);\n\n  const response = await admin.graphql(\n    `#graphql\n    mutation populateProduct($input: ProductInput!) {\n      productCreate(input: $input) {\n        product {\n          id\n        }\n      }\n    }`,\n    { variables: { input: { title: \"Product Name\" } } }\n  );\n\n  const productData = await response.json();\n  return json({ data: productData.data });\n}",
+                        "title": "app/routes/**\\/.ts"
+                      }
+                    ]
+                  }
+                ]
               },
               {
                 "filePath": "/server/authenticate/public/appProxy/types.ts",
@@ -4502,7 +4501,7 @@
                 ]
               }
             ],
-            "value": "export interface AppProxyContextWithSession<\n  Resources extends ShopifyRestResources = ShopifyRestResources,\n> extends Context {\n  /**\n   * The session for the shop that made the request.\n   *\n   * This comes from the session storage which `shopifyApp` uses to store sessions in your database of choice.\n   *\n   * Use this to get shop or user-specific data.\n   *\n   * @example\n   * <caption>Using the session object.</caption>\n   * <description>Get your app's data using an offline session for the shop that made the request.</description>\n   * ```ts\n   * // app/routes/**\\/.ts\n   * import { json } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   * import { getMyAppModelData } from \"~/db/model.server\";\n   *\n   * export const loader = async ({ request }) => {\n   *   const { session } = await authenticate.public.appProxy(request);\n   *   return json(await getMyAppModelData({shop: session.shop));\n   * };\n   * ```\n   */\n  session: Session;\n\n  /**\n   * Methods for interacting with the GraphQL / REST Admin APIs for the store that made the request.\n   */\n  admin: AdminApiContext<Resources>;\n}"
+            "value": "export interface AppProxyContextWithSession<\n  Resources extends ShopifyRestResources = ShopifyRestResources,\n> extends Context {\n  /**\n   * The session for the shop that made the request.\n   *\n   * This comes from the session storage which `shopifyApp` uses to store sessions in your database of choice.\n   *\n   * Use this to get shop or user-specific data.\n   *\n   * @example\n   * <caption>Using the session object.</caption>\n   * <description>Get your app's data using an offline session for the shop that made the request.</description>\n   * ```ts\n   * // app/routes/**\\/.ts\n   * import { json } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   * import { getMyAppModelData } from \"~/db/model.server\";\n   *\n   * export const loader = async ({ request }) => {\n   *   const { session } = await authenticate.public.appProxy(request);\n   *   return json(await getMyAppModelData({shop: session.shop));\n   * };\n   * ```\n   */\n  session: Session;\n\n  /**\n   * Methods for interacting with the GraphQL / REST Admin APIs for the store that made the request.\n   *\n   * @example\n   * <caption>Interacting with the Admin API.</caption>\n   * <description>Use the `admin` object to interact with the REST or GraphQL APIs.</description>\n   * ```ts\n   * // app/routes/**\\/.ts\n   * import { json } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   *\n   * export async function action({ request }: ActionArgs) {\n   *   const { admin } = await authenticate.public.appProxy(request);\n   *\n   *   const response = await admin.graphql(\n   *     `#graphql\n   *     mutation populateProduct($input: ProductInput!) {\n   *       productCreate(input: $input) {\n   *         product {\n   *           id\n   *         }\n   *       }\n   *     }`,\n   *     { variables: { input: { title: \"Product Name\" } } }\n   *   );\n   *\n   *   const productData = await response.json();\n   *   return json({ data: productData.data });\n   * }\n   * ```\n   */\n  admin: AdminApiContext<Resources>;\n}"
           },
           "AuthenticateWebhook": {
             "filePath": "/server/types.ts",
@@ -4893,14 +4892,14 @@
               {
                 "filePath": "/server/types.ts",
                 "syntaxKind": "MethodSignature",
-                "name": "__@iterator@423",
+                "name": "__@iterator@424",
                 "value": "() => IterableIterator<JSONValue>",
                 "description": "Iterator"
               },
               {
                 "filePath": "/server/types.ts",
                 "syntaxKind": "MethodSignature",
-                "name": "__@unscopables@425",
+                "name": "__@unscopables@426",
                 "value": "() => { copyWithin: boolean; entries: boolean; fill: boolean; find: boolean; findIndex: boolean; keys: boolean; values: boolean; }",
                 "description": "Returns an object whose properties have the value 'true'\r\nwhen they will be absent when used in a 'with' statement."
               },

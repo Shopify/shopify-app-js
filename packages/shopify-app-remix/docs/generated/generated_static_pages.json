@@ -111,7 +111,27 @@
         "type": "Generic",
         "anchorLink": "quick-start",
         "title": "Quick start",
-        "sectionContent": "The quickest way to create a new app is using the Shopify CLI. Check out the [getting started guide](/docs/apps/getting-started), or the [app template](https://github.com/Shopify/shopify-app-template-remix) for a complete example.",
+        "sectionContent": "The quickest way to create a new app is using the Shopify CLI. You can use your preferred package manager for that.\n\nCheck out the [getting started guide](/docs/apps/getting-started), or the [app template](https://github.com/Shopify/shopify-app-template-remix) for a complete example.",
+        "codeblock": {
+          "title": "Create an app",
+          "tabs": [
+            {
+              "title": "npm",
+              "language": "sh",
+              "code": "npm init @shopify/app@latest\n"
+            },
+            {
+              "title": "yarn",
+              "language": "sh",
+              "code": "yarn create @shopify/app\n"
+            },
+            {
+              "title": "pnpm",
+              "language": "sh",
+              "code": "pnpm create @shopify/app\n"
+            }
+          ]
+        },
         "sectionCard": [
           {
             "name": "Build an app",
@@ -131,14 +151,17 @@
           "tabs": [
             {
               "title": "npm",
+              "language": "sh",
               "code": "npm i --save @shopify/shopify-app-remix\n"
             },
             {
               "title": "yarn",
+              "language": "sh",
               "code": "yarn add @shopify/shopify-app-remix\n"
             },
             {
               "title": "pnpm",
+              "language": "sh",
               "code": "pnpm add @shopify/shopify-app-remix\n"
             }
           ]
