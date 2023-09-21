@@ -63,6 +63,14 @@ export class PostgresConnection implements RdbmsConnection {
     return decodeURIComponent(this.dbUrl.pathname.slice(1));
   }
 
+  public getSSL(): boolean | pg.ClientConfig['ssl'] | undefined {
+    const ssl = this.dbUrl.searchParams.get('ssl');
+    if (!ssl) {
+      return undefined;
+    }
+    return JSON.parse(ssl);
+  }
+
   async hasTable(tablename: string): Promise<boolean> {
     await this.ready;
     const query = `
@@ -89,7 +97,7 @@ export class PostgresConnection implements RdbmsConnection {
       password: decodeURIComponent(this.dbUrl.password),
       database: this.getDatabase(),
       port: Number(this.dbUrl.port),
-      ssl: this.dbUrl.searchParams.get('ssl') !== 'false',
+      ssl: this.getSSL(),
     });
   }
 }
