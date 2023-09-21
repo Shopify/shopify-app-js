@@ -10,7 +10,7 @@ import {
   setUpValidSession,
   signRequestCookie,
   testConfig,
-} from '../../../__tests__/test-helper';
+} from '../../../__test-helpers';
 import {REAUTH_URL_HEADER} from '../../const';
 
 describe('authorize.session token header path', () => {

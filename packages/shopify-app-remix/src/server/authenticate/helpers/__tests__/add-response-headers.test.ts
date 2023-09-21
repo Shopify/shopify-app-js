@@ -4,7 +4,7 @@ import {
   TEST_SHOP,
   expectDocumentRequestHeaders,
   testConfig,
-} from '../../../__tests__/test-helper';
+} from '../../../__test-helpers';
 
 describe('addDocumentResponseHeaders', () => {
   it.each([true, false])(

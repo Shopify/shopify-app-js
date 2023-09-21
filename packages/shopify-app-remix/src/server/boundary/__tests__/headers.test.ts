@@ -1,6 +1,6 @@
 import {boundary} from '../index';
 import {shopifyApp} from '../../index';
-import {testConfig} from '../../__tests__/test-helper';
+import {testConfig} from '../../__test-helpers';
 
 describe('Headers boundary', () => {
   it('returns only error headers if error headers are present', () => {

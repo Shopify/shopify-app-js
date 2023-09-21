@@ -14,7 +14,7 @@ export interface RequireBillingOptions<Config extends AppConfigArg>
    */
   plans: (keyof Config['billing'])[];
   /**
-   * How to handle the request if the shop does not have an active payment for any of the given plans.
+   * How to handle the request if the shop doesn't have an active payment for any plan.
    */
   onFailure: (error: any) => Promise<Response>;
 }
@@ -43,38 +43,14 @@ export interface CancelBillingOptions {
 
 export interface BillingContext<Config extends AppConfigArg> {
   /**
-   * Checks if the shop has an active payment for any the given plans defined in the `billing` config option.
+   * Checks if the shop has an active payment for any plan defined in the `billing` config option.
    *
    * @returns A promise that resolves to an object containing the active purchases for the shop.
    *
    * @example
-   * Requesting billing right away
+   * <caption>Requesting billing right away</caption>
    * ```ts
-   * // shopify.server.ts
-   * import { shopifyApp, BillingInterval } from "@shopify/shopify-app-remix";
-   *
-   * export const MONTHLY_PLAN = 'Monthly subscription';
-   * export const ANNUAL_PLAN = 'Annual subscription';
-   *
-   * const shopify = shopifyApp({
-   *   // ...etc
-   *   billing: {
-   *     [MONTHLY_PLAN]: {
-   *       amount: 5,
-   *       currencyCode: 'USD',
-   *       interval: BillingInterval.Every30Days,
-   *     },
-   *     [ANNUAL_PLAN]: {
-   *       amount: 50,
-   *       currencyCode: 'USD',
-   *       interval: BillingInterval.Annual,
-   *     },
-   *   }
-   * });
-   * export default shopify;
-   * export const authenticate = shopify.authenticate;
-   *
-   * // app/routes/**\/.ts
+   * // /app/routes/**\/*.ts
    * import { LoaderArgs } from "@remix-run/node";
    * import { authenticate, MONTHLY_PLAN } from "../shopify.server";
    *
@@ -89,12 +65,9 @@ export interface BillingContext<Config extends AppConfigArg> {
    *   // App logic
    * };
    * ```
-   *
-   * @example
-   * Redirecting to a page where the merchant can select a plan
    * ```ts
    * // shopify.server.ts
-   * import { shopifyApp, BillingInterval } from "@shopify/shopify-app-remix";
+   * import { shopifyApp, BillingInterval } from "@shopify/shopify-app-remix/server";
    *
    * export const MONTHLY_PLAN = 'Monthly subscription';
    * export const ANNUAL_PLAN = 'Annual subscription';
@@ -116,8 +89,12 @@ export interface BillingContext<Config extends AppConfigArg> {
    * });
    * export default shopify;
    * export const authenticate = shopify.authenticate;
+   * ```
    *
-   * // app/routes/**\/.ts
+   * @example
+   * <caption>Redirecting to a page where the merchant can select a plan</caption>
+   * ```ts
+   * // /app/routes/**\/*.ts
    * import { LoaderArgs, redirect } from "@remix-run/node";
    * import { authenticate, MONTHLY_PLAN, ANNUAL_PLAN } from "../shopify.server";
    *
@@ -135,21 +112,9 @@ export interface BillingContext<Config extends AppConfigArg> {
    *   // App logic
    * };
    * ```
-   */
-  require: (
-    options: RequireBillingOptions<Config>,
-  ) => Promise<BillingCheckResponseObject>;
-
-  /**
-   * Requests payment for the given plan.
-   *
-   * @returns Redirects to the confirmation URL for the payment.
-   *
-   * @example
-   * Requesting billing when there is no payment with a custom return URL
    * ```ts
    * // shopify.server.ts
-   * import { shopifyApp, BillingInterval } from "@shopify/shopify-app-remix";
+   * import { shopifyApp, BillingInterval } from "@shopify/shopify-app-remix/server";
    *
    * export const MONTHLY_PLAN = 'Monthly subscription';
    * export const ANNUAL_PLAN = 'Annual subscription';
@@ -171,8 +136,21 @@ export interface BillingContext<Config extends AppConfigArg> {
    * });
    * export default shopify;
    * export const authenticate = shopify.authenticate;
+   * ```
+   */
+  require: (
+    options: RequireBillingOptions<Config>,
+  ) => Promise<BillingCheckResponseObject>;
+
+  /**
+   * Requests payment for the plan.
    *
-   * // app/routes/**\/.ts
+   * @returns Redirects to the confirmation URL for the payment.
+   *
+   * @example
+   * <caption>Requesting billing when there is no payment with a custom return URL</caption>
+   * ```ts
+   * // /app/routes/**\/*.ts
    * import { LoaderArgs } from "@remix-run/node";
    * import { authenticate, MONTHLY_PLAN } from "../shopify.server";
    *
@@ -190,19 +168,9 @@ export interface BillingContext<Config extends AppConfigArg> {
    *   // App logic
    * };
    * ```
-   */
-  request: (options: RequestBillingOptions<Config>) => Promise<never>;
-
-  /**
-   * Cancels an ongoing subscription, given its id.
-   *
-   * @returns The cancelled subscription.
-   *
-   * @example
-   * Cancelling a subscription
    * ```ts
    * // shopify.server.ts
-   * import { shopifyApp, BillingInterval } from "@shopify/shopify-app-remix";
+   * import { shopifyApp, BillingInterval } from "@shopify/shopify-app-remix/server";
    *
    * export const MONTHLY_PLAN = 'Monthly subscription';
    * export const ANNUAL_PLAN = 'Annual subscription';
@@ -224,8 +192,19 @@ export interface BillingContext<Config extends AppConfigArg> {
    * });
    * export default shopify;
    * export const authenticate = shopify.authenticate;
+   * ```
+   */
+  request: (options: RequestBillingOptions<Config>) => Promise<never>;
+
+  /**
+   * Cancels an ongoing subscription, given its ID.
    *
-   * // app/routes/cancel-subscription.ts
+   * @returns The cancelled subscription.
+   *
+   * @example
+   * <caption>Cancelling a subscription</caption>
+   * ```ts
+   * // /app/routes/cancel-subscription.ts
    * import { LoaderArgs } from "@remix-run/node";
    * import { authenticate, MONTHLY_PLAN } from "../shopify.server";
    *
@@ -245,6 +224,31 @@ export interface BillingContext<Config extends AppConfigArg> {
    *
    *   // App logic
    * };
+   * ```
+   * ```ts
+   * // shopify.server.ts
+   * import { shopifyApp, BillingInterval } from "@shopify/shopify-app-remix/server";
+   *
+   * export const MONTHLY_PLAN = 'Monthly subscription';
+   * export const ANNUAL_PLAN = 'Annual subscription';
+   *
+   * const shopify = shopifyApp({
+   *   // ...etc
+   *   billing: {
+   *     [MONTHLY_PLAN]: {
+   *       amount: 5,
+   *       currencyCode: 'USD',
+   *       interval: BillingInterval.Every30Days,
+   *     },
+   *     [ANNUAL_PLAN]: {
+   *       amount: 50,
+   *       currencyCode: 'USD',
+   *       interval: BillingInterval.Annual,
+   *     },
+   *   }
+   * });
+   * export default shopify;
+   * export const authenticate = shopify.authenticate;
    * ```
    */
   cancel: (options: CancelBillingOptions) => Promise<AppSubscription>;
