@@ -4,16 +4,36 @@ const data: LandingTemplateSchema = {
   id: 'shopify-app-remix',
   title: 'Shopify App package for Remix',
   description:
-    'The @shopify/shopify-app-remix package enables Remix apps to authenticate with Shopify and make API calls. It uses [App Bridge](/docs/api/app-bridge-library) to enable apps to embed themselves in the Shopify Admin.' +
-    "\n\nIn this page we'll go over the main components you need to integrate an app with Shopify." +
-    '\n\n> Tip: The quickest way to create a new app is using the Shopify CLI. Check out the [getting started guide](/docs/apps/getting-started/create), or the [app template](https://github.com/Shopify/shopify-app-template-remix) for a complete example.',
+    'The [@shopify/shopify-app-remix](https://www.npmjs.com/package/@shopify/shopify-app-remix) package enables Remix apps to authenticate with Shopify and make API calls. It uses [App Bridge](/docs/api/app-bridge-library) to enable apps to embed themselves in the Shopify Admin.' +
+    "\n\nIn this page we'll go over the main components you need to integrate an app with Shopify.",
   sections: [
     {
       type: 'Generic',
-      anchorLink: 'installation',
-      title: 'Installation',
+      anchorLink: 'quick-start',
+      title: 'Quick start',
       sectionContent:
-        "If you're not using the CLI, then you can use the examples in this page to set up an existing app to use this package. Start by installing it using your preferred package manager.",
+        "The quickest way to create a new app is using the Shopify CLI. You can use your preferred package manager for that." +
+        "\n\nCheck out the [getting started guide](/docs/apps/getting-started), or the [app template](https://github.com/Shopify/shopify-app-template-remix) for a complete example.",
+      codeblock: {
+        title: 'Create an app',
+        tabs: [
+          {
+            title: 'npm',
+            language: 'sh',
+            code: './examples/index/create.npm.example.sh',
+          },
+          {
+            title: 'yarn',
+            language: 'sh',
+            code: './examples/index/create.yarn.example.sh',
+          },
+          {
+            title: 'pnpm',
+            language: 'sh',
+            code: './examples/index/create.pnpm.example.sh',
+          },
+        ],
+      },
       sectionCard: [
         {
           name: 'Build an app',
@@ -22,19 +42,29 @@ const data: LandingTemplateSchema = {
           type: 'tutorial',
         },
       ],
+    },
+    {
+      type: 'Generic',
+      anchorLink: 'installation',
+      title: 'Installation',
+      sectionContent:
+        "If you're not using the CLI, then you can use the examples in this page to set up an existing app to use this package. Start by installing it using your preferred package manager.",
       codeblock: {
         title: 'Install package',
         tabs: [
           {
             title: 'npm',
+            language: 'sh',
             code: './examples/index/install.npm.example.sh',
           },
           {
             title: 'yarn',
+            language: 'sh',
             code: './examples/index/install.yarn.example.sh',
           },
           {
             title: 'pnpm',
+            language: 'sh',
             code: './examples/index/install.pnpm.example.sh',
           },
         ],
@@ -45,9 +75,9 @@ const data: LandingTemplateSchema = {
       anchorLink: 'shopify-app',
       title: 'Backend setup',
       sectionContent:
-        'All of the backend features provided by this package are available through the `shopifyApp` function.' +
-        '\n\nThis function creates an object that can authenticate requests from Shopify, create contexts for non-Shopify requests, and much more.' +
-        "\n\n> Caution: When running on a node environment, you'll also need to import the node adapter, as per the example.",
+        "Using the `shopifyApp` function, you can create an object that enables your app's backend to authenticate requests coming from Shopify, and interacting with Shopify APIs." +
+        "\n\nThese functions make it easy for your app stays up to date, benefitting from the current best practices and security updates." +
+        "\n\n> Caution: When running on a node environment, you'll also need to import the node adapter, as per the example. This will ensure your app is using the appropriate implementation of the Web [fetch](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API) and [crypto](https://developer.mozilla.org/en-US/docs/Web/API/Web_Crypto_API) APIs.",
       sectionCard: [
         {
           name: 'shopifyApp',
@@ -89,9 +119,9 @@ const data: LandingTemplateSchema = {
       anchorLink: 'boundaries',
       title: 'Error boundaries',
       sectionContent:
-        'The authentication functions in this package rely on throwing `Response` objects, which must be handled in your Remix routes using them.' +
-        '\n\nTo do that, you can set up a [Remix `ErrorBoundary`](https://remix.run/docs/en/main/guides/errors). We provide some abstractions for the error and headers boundaries to make it easier for apps to set those up.' +
-        '\n\n> Tip: You can also add this to a [Remix layout](https://remix.run/docs/en/main/file-conventions/route-files-v2) if you want to authenticate more than one route.',
+        "The OAuth process can't happen inside the admin iframe, and this package is capable of detecting that scenario and properly redirecting using the [Remix `ErrorBoundary`](https://remix.run/docs/en/main/guides/errors) export to set the correct headers for App Bridge." +
+        "\n\nUse the abstractions provided by this package in your authenticated routes, to automatically set up the error and headers boundaries to redirect outside the iframe when needed." +
+        "\n\n> Tip: You can also add this to a [Remix layout](https://remix.run/docs/en/main/file-conventions/route-files-v2) if you want to authenticate more than one route, but make sure to call the Shopify boundary methods whenever you need to add your own exports.",
       codeblock: {
         title: '/app/routes/**/*.tsx',
         tabs: [

@@ -3,7 +3,7 @@ import {ReferenceEntityTemplateSchema} from '@shopify/generate-docs';
 const data: ReferenceEntityTemplateSchema = {
   name: 'Admin',
   description:
-    'Contains functions for authenticating and interacting with the Admin API.\n\nThis function can handle requests for apps embedded in the Admin, Admin extensions, or non-embedded apps.\n\nRefer to the [Related](#related) section to see all supported actions in `admin` and `billing`.',
+    'Contains functions for authenticating and interacting with the Admin API.\n\nThis function can handle requests for apps embedded in the Admin, Admin extensions, or non-embedded apps.',
   category: 'Authenticate',
   type: 'object',
   isVisualComponent: false,
@@ -14,24 +14,11 @@ const data: ReferenceEntityTemplateSchema = {
         'Authenticates requests coming from the Shopify admin.\n\nThe shape of the returned object changes depending on the `isEmbeddedApp` config.',
       type: 'AuthenticateAdmin',
     },
-    {
-      title: 'AdminContext',
-      description: 'Object returned by `authenticate.admin`.',
-      type: 'EmbeddedAdminContext',
-      jsDocExamples: true,
-    },
-    {
-      title: 'AdminApiContext',
-      description: 'Components of the `admin` response object.',
-      type: 'AdminApiContext',
-      jsDocExamples: true,
-    },
-    {
-      title: 'BillingContext',
-      description: 'Components of the `billing` response object.',
-      type: 'BillingContext',
-      jsDocExamples: true,
-    },
+  ],
+  jsDocTypeExamples: [
+    'EmbeddedAdminContext',
+    'AdminApiContext',
+    'BillingContext',
   ],
   related: [
     {

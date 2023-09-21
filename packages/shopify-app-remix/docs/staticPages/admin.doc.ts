@@ -33,9 +33,9 @@ const data: LandingTemplateSchema = {
       anchorLink: 'headers',
       title: 'Headers',
       sectionContent:
-        "It's important to note that the authentication functions in this package rely on throwing Response objects, which must be handled in your Remix routes using them." +
-        '\n\nTo do that, you can set up a [Remix `ErrorBoundary`](https://remix.run/docs/en/main/guides/errors). We provide some abstractions for the error and headers boundaries to make it easier for apps to set those up.' +
-        '\n\n> Tip: You can also add this to a layout if you want to authenticate more than one route.',
+        "The OAuth process can't happen inside the admin iframe, and this package is capable of detecting that scenario and properly redirecting using the [Remix `ErrorBoundary`](https://remix.run/docs/en/main/guides/errors) export to set the correct headers for App Bridge." +
+        "\n\nUse the abstractions provided by this package in your authenticated routes, to automatically set up the error and headers boundaries to redirect outside the iframe when needed." +
+        "\n\n> Tip: You can also add this to a [Remix layout](https://remix.run/docs/en/main/file-conventions/route-files-v2) if you want to authenticate more than one route, but make sure to call the Shopify boundary methods whenever you need to add your own exports.",
       codeblock: {
         title: '/app/routes/**/*.tsx',
         tabs: [

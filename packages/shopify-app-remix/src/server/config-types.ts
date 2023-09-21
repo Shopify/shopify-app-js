@@ -38,7 +38,8 @@ export interface AppConfigArg<
    * {@link https://github.com/Shopify/shopify-app-js/blob/main/README.md#session-storage-options}
    *
    * @example
-   * <caption>Using Prisma</caption>
+   * <caption>Storing sessions with Prisma.</caption>
+   * <description>Add the `@shopify/shopify-app-session-storage-prisma` package to use the Prisma session storage.</description>
    * ```ts
    * import { shopifyApp } from "@shopify/shopify-app-remix/server";
    * import { PrismaSessionStorage } from "@shopify/shopify-app-session-storage-prisma";
@@ -287,7 +288,8 @@ export interface AdminApiContext<
    * {@link https://shopify.dev/docs/api/admin-rest}
    *
    * @example
-   * <caption>Getting the number of orders in a store using REST resources</caption>
+   * <caption>Using REST resources.</caption>
+   * <description>Getting the number of orders in a store using REST resources.</description>
    *
    * ```ts
    * // /app/shopify.server.ts
@@ -314,20 +316,8 @@ export interface AdminApiContext<
    * ```
    *
    * @example
-   * <caption>Performing a GET request to the REST API</caption>
-   *
-   * ```ts
-   * // /app/shopify.server.ts
-   * import { shopifyApp } from "@shopify/shopify-app-remix/server";
-   * import { restResources } from "@shopify/shopify-api/rest/admin/2023-04";
-   *
-   * const shopify = shopifyApp({
-   *   restResources,
-   *   // ...etc
-   * });
-   * export default shopify;
-   * export const authenticate = shopify.authenticate;
-   * ```
+   * <caption>Performing a GET request to the REST API.</caption>
+   * <description>Use `admin.rest.<method>` to make custom requests to the API.</description>
    *
    * ```ts
    * // /app/routes/**\/*.ts
@@ -351,7 +341,8 @@ export interface AdminApiContext<
    * {@link https://github.com/Shopify/shopify-api-js/blob/main/docs/reference/clients/Graphql.md}
    *
    * @example
-   * <caption>Creating a new product</caption>
+   * <caption>Querying the GraphQL API.</caption>
+   * <description>Use `admin.graphql` to make query / mutation requests.</description>
    * ```ts
    * import { ActionArgs } from "@remix-run/node";
    * import { authenticate } from "../shopify.server";

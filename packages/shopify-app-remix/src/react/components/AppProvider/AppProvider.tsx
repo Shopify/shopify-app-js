@@ -46,7 +46,8 @@ export interface AppProviderProps
  * {@link https://shopify.dev/tools/app-bridge}
  *
  * @example
- * <caption>Wrap your app in the `AppProvider` component and pass in your API key.</caption>
+ * <caption>Set up AppProvider.</caption>
+ * <description>Wrap your app in the `AppProvider` component and pass in your API key.</description>
  * ```ts
  * import {authenticate} from '~/shopify.server';
  * import {AppProvider} from '@shopify/shopify-app-remix/react';
@@ -69,7 +70,8 @@ export interface AppProviderProps
  * ```
  *
  * @example
- * <caption>Load a different locale for Polaris.</caption>
+ * <caption>Localize Polaris components.</caption>
+ * <description>Pass in a different locale for Polaris to translate its components.</description>
  * ```ts
  * import {authenticate} from '~/shopify.server';
  * import {AppProvider} from '@shopify/shopify-app-remix/react';

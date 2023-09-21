@@ -12,13 +12,8 @@ const data: ReferenceEntityTemplateSchema = {
       description: 'Verifies requests coming from Shopify webhooks.',
       type: 'AuthenticateWebhook',
     },
-    {
-      title: 'WebhookContext',
-      description: 'Object returned by `authenticate.webhook`.',
-      type: 'WebhookContextWithSession',
-      jsDocExamples: true,
-    },
   ],
+  jsDocTypeExamples: ['WebhookContextWithSession'],
   related: [],
 };
 
