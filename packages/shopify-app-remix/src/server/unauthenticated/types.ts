@@ -58,7 +58,7 @@ export interface Unauthenticated<Resources extends ShopifyRestResources> {
    * export async function loader({ request }: LoaderArgs) {
    *   const shop = await authenticateExternal(request)
    *   const {storefront} = await shopify.unauthenticated.storefront(shop);
-   *   const response = await storefront.graphql(`{blogs(first: 10) { edges { node { id } } } }`)
+   *   const response = await storefront.graphql(`{blogs(first: 10) { edges { node { id } } } }`);
    *
    *   return json(await response.json());
    * }

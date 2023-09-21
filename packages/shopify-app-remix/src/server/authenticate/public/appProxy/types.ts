@@ -119,7 +119,24 @@ export interface AppProxyContextWithSession<
   admin: AdminApiContext<Resources>;
 
   /**
-   * Method for interacting with the Shopify Storefront Graphql API for the store that made the request
+   * Method for interacting with the Shopify Storefront Graphql API for the store that made the request.
+   *
+   * @example
+   * <caption>Interacting with the Storefront API.</caption>
+   * <description>Use the `storefront` object to interact with the GraphQL API.</description>
+   * ```ts
+   * // app/routes/**\/.ts
+   * import { json } from "@remix-run/node";
+   * import { authenticate } from "../shopify.server";
+   *
+   * export async function action({ request }: ActionArgs) {
+   *   const { admin } = await authenticate.public.appProxy(request);
+   *
+   *   const response = await storefront.graphql(`{blogs(first: 10) { edges { node { id } } } }`);
+   *
+   *   return json(await response.json());
+   * }
+   * ```
    */
   storefront: StorefrontContext;
 }
