@@ -75,10 +75,7 @@ export class MySqlConnection implements RdbmsConnection {
 
   public getSSL(): string | mysql.SslOptions | undefined {
     const ssl = this.dbUrl.searchParams.get('ssl');
-    if (!ssl) {
-      return undefined;
-    }
-    return JSON.parse(ssl);
+    return ssl ? JSON.parse(ssl) : undefined;
   }
 
   async hasTable(tablename: string): Promise<boolean> {

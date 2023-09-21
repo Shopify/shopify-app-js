@@ -65,10 +65,7 @@ export class PostgresConnection implements RdbmsConnection {
 
   public getSSL(): boolean | pg.ClientConfig['ssl'] | undefined {
     const ssl = this.dbUrl.searchParams.get('ssl');
-    if (!ssl) {
-      return undefined;
-    }
-    return JSON.parse(ssl);
+    return ssl ? JSON.parse(ssl) : undefined;
   }
 
   async hasTable(tablename: string): Promise<boolean> {
