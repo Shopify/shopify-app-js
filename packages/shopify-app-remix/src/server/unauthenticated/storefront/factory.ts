@@ -17,7 +17,7 @@ export function unauthenticatedStorefrontContextFactory(
 
     if (!session) {
       throw new ShopifyError(
-        `Could not find a session for shop ${shop} when creating unauthenticated admin context`,
+        `Could not find a session for shop ${shop} when creating unauthenticated storefront context`,
       );
     }
 
