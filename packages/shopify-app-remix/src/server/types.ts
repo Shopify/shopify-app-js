@@ -6,14 +6,13 @@ import {
 import {SessionStorage} from '@shopify/shopify-app-session-storage';
 
 import type {AppConfig, AppConfigArg} from './config-types';
-import type {AdminContext} from './authenticate/admin/types';
 import type {
+  AuthenticateWebhook,
   RegisterWebhooksOptions,
-  WebhookContext,
-  WebhookContextWithSession,
 } from './authenticate/webhooks/types';
-import type {UnauthenticatedAdminContext} from './unauthenticated/admin/types';
 import type {AuthenticatePublic} from './authenticate/public/types';
+import type {AdminContext} from './authenticate/admin/types';
+import type {Unauthenticated} from './unauthenticated/types';
 
 export interface BasicParams {
   api: Shopify;
@@ -69,15 +68,6 @@ type AuthenticateAdmin<
   Config extends AppConfigArg,
   Resources extends ShopifyRestResources = ShopifyRestResources,
 > = (request: Request) => Promise<AdminContext<Config, Resources>>;
-
-type AuthenticateWebhook<
-  Resources extends ShopifyRestResources = ShopifyRestResources,
-  Topics = string | number | symbol,
-> = (
-  request: Request,
-) => Promise<
-  WebhookContext<Topics> | WebhookContextWithSession<Topics, Resources>
->;
 
 type RestResourcesType<Config extends AppConfigArg> =
   Config['restResources'] extends ShopifyRestResources
@@ -203,48 +193,6 @@ interface Authenticate<Config extends AppConfigArg> {
     RestResourcesType<Config>,
     keyof Config['webhooks'] | MandatoryTopics
   >;
-}
-
-type UnauthenticatedAdmin<Resources extends ShopifyRestResources> = (
-  shop: string,
-) => Promise<UnauthenticatedAdminContext<Resources>>;
-
-interface Unauthenticated<Config extends AppConfigArg> {
-  /**
-   * Get an admin context by passing a shop
-   *
-   * **Warning** This should only be used for Requests that do not originate from Shopify.
-   * You must do your own authentication before using this method.
-   * This method throws an error if there is no session for the shop.
-   *
-   * @example
-   * <caption>Responding to a request from an external service not controlled by Shopify.</caption>
-   * ```ts
-   * // /app/shopify.server.ts
-   * import { LATEST_API_VERSION, shopifyApp } from "@shopify/shopify-app-remix/server";
-   * import { restResources } from "@shopify/shopify-api/rest/admin/2023-04";
-   *
-   * const shopify = shopifyApp({
-   *   restResources,
-   *   // ...etc
-   * });
-   * export default shopify;
-   * ```
-   * ```ts
-   * // /app/routes/**\/*.jsx
-   * import { LoaderArgs, json } from "@remix-run/node";
-   * import { authenticateExternal } from "~/helpers/authenticate"
-   * import shopify from "../../shopify.server";
-   *
-   * export async function loader({ request }: LoaderArgs) {
-   *   const shop = await authenticateExternal(request)
-   *   const {admin} = await shopify.unauthenticated.admin(shop);
-   *
-   *   return json(await admin.rest.resources.Product.count({ session }));
-   * }
-   * ```
-   */
-  admin: UnauthenticatedAdmin<RestResourcesType<Config>>;
 }
 
 export interface ShopifyAppBase<Config extends AppConfigArg> {
@@ -405,7 +353,7 @@ export interface ShopifyAppBase<Config extends AppConfigArg> {
    * }
    * ```
    */
-  unauthenticated: Unauthenticated<Config>;
+  unauthenticated: Unauthenticated<RestResourcesType<Config>>;
 }
 
 interface ShopifyAppLogin {

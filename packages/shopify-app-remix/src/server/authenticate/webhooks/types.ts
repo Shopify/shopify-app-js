@@ -132,3 +132,12 @@ export interface WebhookContextWithSession<
     graphql: InstanceType<Shopify['clients']['Graphql']>;
   };
 }
+
+export type AuthenticateWebhook<
+  Resources extends ShopifyRestResources = ShopifyRestResources,
+  Topics = string | number | symbol,
+> = (
+  request: Request,
+) => Promise<
+  WebhookContext<Topics> | WebhookContextWithSession<Topics, Resources>
+>;

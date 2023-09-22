@@ -1,6 +1,6 @@
 import {ShopifyRestResources} from '@shopify/shopify-api';
 
-import {adminClientFactory} from '../../../clients/admin';
+import {adminClientFactory, storefrontClientFactory} from '../../../clients';
 import {BasicParams} from '../../../types';
 
 import {
@@ -50,6 +50,7 @@ export function authenticateAppProxyFactory<
         liquid,
         session: undefined,
         admin: undefined,
+        storefront: undefined,
       };
 
       return context;
@@ -59,6 +60,7 @@ export function authenticateAppProxyFactory<
       liquid,
       session,
       admin: adminClientFactory({params, session}),
+      storefront: storefrontClientFactory({params, session}),
     };
 
     return context;

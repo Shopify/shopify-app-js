@@ -1,6 +1,6 @@
 import {Session, ShopifyRestResources} from '@shopify/shopify-api';
 
-import {AdminApiContext} from '../../../config-types';
+import {AdminApiContext, StorefrontContext} from '../../../clients';
 
 export type AuthenticateAppProxy = (
   request: Request,
@@ -50,6 +50,12 @@ export interface AppProxyContext extends Context {
    * Therefore no methods for interacting with the GraphQL / REST Admin APIs are available.
    */
   admin: undefined;
+
+  /**
+   * No session is available for the shop that made this request.
+   * Therefore no method for interacting with the Storefront API is available.
+   */
+  storefront: undefined;
 }
 
 export interface AppProxyContextWithSession<
@@ -111,4 +117,26 @@ export interface AppProxyContextWithSession<
    * ```
    */
   admin: AdminApiContext<Resources>;
+
+  /**
+   * Method for interacting with the Shopify Storefront Graphql API for the store that made the request.
+   *
+   * @example
+   * <caption>Interacting with the Storefront API.</caption>
+   * <description>Use the `storefront` object to interact with the GraphQL API.</description>
+   * ```ts
+   * // app/routes/**\/.ts
+   * import { json } from "@remix-run/node";
+   * import { authenticate } from "../shopify.server";
+   *
+   * export async function action({ request }: ActionArgs) {
+   *   const { admin } = await authenticate.public.appProxy(request);
+   *
+   *   const response = await storefront.graphql(`{blogs(first: 10) { edges { node { id } } } }`);
+   *
+   *   return json(await response.json());
+   * }
+   * ```
+   */
+  storefront: StorefrontContext;
 }

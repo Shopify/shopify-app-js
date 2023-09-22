@@ -11,13 +11,9 @@ import {
   ShopifyRestResources,
 } from '@shopify/shopify-api';
 
-import {adminClientFactory} from '../../clients/admin';
+import {AdminApiContext, adminClientFactory} from '../../clients/admin';
 import type {BasicParams} from '../../types';
-import type {
-  AdminApiContext,
-  AppConfig,
-  AppConfigArg,
-} from '../../config-types';
+import type {AppConfig, AppConfigArg} from '../../config-types';
 import {
   getSessionTokenHeader,
   validateSessionToken,

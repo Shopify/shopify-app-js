@@ -3,28 +3,29 @@ import {
   TEST_SHOP,
   setUpValidSession,
   testConfig,
-  expectAdminApiClient,
+  expectStorefrontApiClient,
 } from '../../../__test-helpers';
 
-describe('unauthenticated admin context', () => {
+describe('unauthenticated storefront context', () => {
   it('throws an error if there is no offline session for the shop', async () => {
     // GIVEN
     const shopify = shopifyApp(testConfig());
 
     // EXPECT
-    await expect(shopify.unauthenticated.admin(TEST_SHOP)).rejects.toThrow();
+    await expect(
+      shopify.unauthenticated.storefront(TEST_SHOP),
+    ).rejects.toThrow();
   });
 
-  expectAdminApiClient(async () => {
+  expectStorefrontApiClient(async () => {
     const shopify = shopifyApp(testConfig());
     const expectedSession = await setUpValidSession(
       shopify.sessionStorage,
       false,
     );
-    const {admin, session: actualSession} = await shopify.unauthenticated.admin(
-      TEST_SHOP,
-    );
+    const {storefront, session: actualSession} =
+      await shopify.unauthenticated.storefront(TEST_SHOP);
 
-    return {admin, expectedSession, actualSession};
+    return {storefront, expectedSession, actualSession};
   });
 });

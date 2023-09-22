@@ -14,18 +14,18 @@ const data: ReferenceEntityTemplateSchema = {
       description: 'Authenticates requests coming from Shopify app proxies.',
       type: 'AuthenticateAppProxy',
     },
-    {
-      title: 'AppProxyContext',
-      description: 'Object returned by `authenticate.public.appProxy`.',
-      type: 'AppProxyContextWithSession',
-    },
   ],
   jsDocTypeExamples: ['AppProxyContextWithSession'],
   related: [
     {
-      name: 'API context',
+      name: 'Admin API context',
       subtitle: 'Interact with the Admin API.',
       url: '/docs/api/shopify-app-remix/apis/admin-api',
+    },
+    {
+      name: 'Storefront API context',
+      subtitle: 'Interact with the Storefront API.',
+      url: '/docs/api/shopify-app-remix/apis/storefront-api',
     },
   ],
 };
