@@ -50,6 +50,32 @@
 ### Patch Changes
 
 - 64fe70b: Allow all billing config overrides at request time.
+
+  <details>
+    <summary>Override billing configs when calling <code>request</code></summary>
+
+  ```ts
+  import {json} from '@remix-run/node';
+  import {authenticate} from '~/shopify.server';
+
+  export async function loader({request}) {
+    const {billing} = await authenticate.admin(request);
+
+    await billing.require({
+      plans: ['plan1', 'plan2'],
+      onFailure: async () =>
+        await billing.request({
+          plan: 'plan1',
+          trialDays: 5, // Override the trialDays config value
+        }),
+    });
+
+    return json(await response.json());
+  }
+  ```
+
+  </details>
+
 - 616388d: Updating dependency on @shopify/shopify-api to 7.7.0
 - Updated dependencies [616388d]
   - @shopify/shopify-app-session-storage@1.1.10
