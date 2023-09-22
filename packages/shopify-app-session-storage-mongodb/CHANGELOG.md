@@ -1,5 +1,13 @@
 # @shopify/shopify-app-session-storage-mongodb
 
+## 1.0.15
+
+### Patch Changes
+
+- 616388d: Updating dependency on @shopify/shopify-api to 7.7.0
+- Updated dependencies [616388d]
+  - @shopify/shopify-app-session-storage@1.1.10
+
 ## 1.0.14
 
 ### Patch Changes

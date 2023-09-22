@@ -1,5 +1,59 @@
 # @shopify/shopify-app-remix
 
+## 1.3.0
+
+### Minor Changes
+
+- 6ac6832: Added the storefront GraphQL client.
+
+  The storefront API client can be accessed in two ways
+
+  <details>
+    <summary>App Proxy</summary>
+
+  ```ts
+  import {json} from '@remix-run/node';
+  import {authenticate} from '~/shopify.server';
+
+  export async function loader({request}) {
+    const {storefront} = await authenticate.public.appProxy(request);
+    const response = await storefront.graphql('{blogs(first: 10) {nodes{id}}}');
+
+    return json(await response.json());
+  }
+  ```
+
+  </details>
+
+  <details>
+    <summary>Unauthenticated Storefront</summary>
+
+  ```ts
+  import {json} from '@remix-run/node';
+  import {unauthenticated} from '~/shopify.server';
+  import {customAuthenticateRequest} from '~/helpers';
+
+  export async function loader({request}) {
+    await customAuthenticateRequest(request);
+
+    const {storefront} = await unauthenticated.storefront(
+      'my-shop.myshopify.com',
+    );
+    const response = await storefront.graphql('{blogs(first: 10) {nodes{id}}}');
+
+    return json(await response.json());
+  }
+  ```
+
+  </details>
+
+### Patch Changes
+
+- 64fe70b: Allow all billing config overrides at request time.
+- 616388d: Updating dependency on @shopify/shopify-api to 7.7.0
+- Updated dependencies [616388d]
+  - @shopify/shopify-app-session-storage@1.1.10
+
 ## 1.2.1
 
 ### Patch Changes
