@@ -14,7 +14,8 @@ interface Context<Topics = string | number | symbol> {
    * The API version used for the webhook.
    *
    * @example
-   * <caption>Get API version used for webhook request.</caption>
+   * <caption>Webhook API version.</caption>
+   * <description>Get the API version used for webhook request.</description>
    * ```
    * import { ActionFunction } from "@remix-run/node";
    * import { authenticate } from "../shopify.server";
@@ -30,7 +31,8 @@ interface Context<Topics = string | number | symbol> {
    * The shop where the webhook was triggered.
    *
    * @example
-   * <caption>Get the shop that triggered a webhook.</caption>
+   * <caption>Webhook shop.</caption>
+   * <description>Get the shop that triggered a webhook.</description>
    * ```
    * import { ActionFunction } from "@remix-run/node";
    * import { authenticate } from "../shopify.server";
@@ -46,7 +48,8 @@ interface Context<Topics = string | number | symbol> {
    * The topic of the webhook.
    *
    * @example
-   * <caption>Get the webhook topic.</caption>
+   * <caption>Webhook topic.</caption>
+   * <description>Get the event topic for the webhook.</description>
    * ```
    * import { ActionFunction } from "@remix-run/node";
    * import { authenticate } from "../shopify.server";
@@ -69,7 +72,8 @@ interface Context<Topics = string | number | symbol> {
    * A unique ID for the webhook. Useful to keep track of which events your app has already processed.
    *
    * @example
-   * <caption>Get the webhook ID.</caption>
+   * <caption>Webhook ID.</caption>
+   * <description>Get the webhook ID.</description>
    * ```
    * import { ActionFunction } from "@remix-run/node";
    * import { authenticate } from "../shopify.server";
@@ -85,7 +89,8 @@ interface Context<Topics = string | number | symbol> {
    * The payload from the webhook request.
    *
    * @example
-   * <caption>Get the request's POST payload.</caption>
+   * <caption>Webhook payload.</caption>
+   * <description>Get the request's POST payload.</description>
    * ```
    * import { ActionFunction } from "@remix-run/node";
    * import { authenticate } from "../shopify.server";
@@ -127,3 +132,12 @@ export interface WebhookContextWithSession<
     graphql: InstanceType<Shopify['clients']['Graphql']>;
   };
 }
+
+export type AuthenticateWebhook<
+  Resources extends ShopifyRestResources = ShopifyRestResources,
+  Topics = string | number | symbol,
+> = (
+  request: Request,
+) => Promise<
+  WebhookContext<Topics> | WebhookContextWithSession<Topics, Resources>
+>;

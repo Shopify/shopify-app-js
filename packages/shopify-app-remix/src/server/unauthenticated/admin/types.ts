@@ -1,6 +1,6 @@
 import {Session, ShopifyRestResources} from '@shopify/shopify-api';
 
-import type {AdminApiContext} from '../../config-types';
+import {AdminApiContext} from '../../clients';
 
 export interface UnauthenticatedAdminContext<
   Resources extends ShopifyRestResources,
@@ -13,17 +13,18 @@ export interface UnauthenticatedAdminContext<
    * This will always be an offline session. You can use to get shop-specific data.
    *
    * @example
-   * <caption>Getting your app's shop-specific widget data using a session</caption>
+   * <caption>Using the offline session.</caption>
+   * <description>Get your app's shop-specific data using the returned offline `session` object.</description>
    * ```ts
    * // /app/routes/**\/*.ts
    * import { LoaderArgs, json } from "@remix-run/node";
    * import { unauthenticated } from "../shopify.server";
-   * import { getWidgets } from "~/db/widgets.server";
+   * import { getMyAppData } from "~/db/model.server";
    *
    * export const loader = async ({ request }: LoaderArgs) => {
    *   const shop = getShopFromExternalRequest(request);
    *   const { session } = await unauthenticated.admin(shop);
-   *   return json(await getWidgets({shop: session.shop));
+   *   return json(await getMyAppData({shop: session.shop));
    * };
    * ```
    */
@@ -34,3 +35,7 @@ export interface UnauthenticatedAdminContext<
    */
   admin: AdminApiContext<Resources>;
 }
+
+export type GetUnauthenticatedAdminContext<
+  Resources extends ShopifyRestResources,
+> = (shop: string) => Promise<UnauthenticatedAdminContext<Resources>>;

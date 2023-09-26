@@ -1,5 +1,3 @@
-import {LATEST_API_VERSION} from '@shopify/shopify-api';
-
 import {shopifyApp} from '../../../index';
 import {
   TEST_SHOP,
@@ -8,9 +6,15 @@ import {
   expectAdminApiClient,
 } from '../../../__test-helpers';
 
-const REQUEST_URL = `https://${TEST_SHOP}/admin/api/${LATEST_API_VERSION}/customers.json`;
-
 describe('unauthenticated admin context', () => {
+  it('throws an error if there is no offline session for the shop', async () => {
+    // GIVEN
+    const shopify = shopifyApp(testConfig());
+
+    // EXPECT
+    await expect(shopify.unauthenticated.admin(TEST_SHOP)).rejects.toThrow();
+  });
+
   expectAdminApiClient(async () => {
     const shopify = shopifyApp(testConfig());
     const expectedSession = await setUpValidSession(

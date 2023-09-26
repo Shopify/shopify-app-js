@@ -2,6 +2,7 @@ import {ShopifyError, ShopifyRestResources} from '@shopify/shopify-api';
 
 import {BasicParams} from '../../types';
 import {adminClientFactory} from '../../clients/admin';
+import {getOfflineSession} from '../helpers';
 
 import {UnauthenticatedAdminContext} from './types';
 
@@ -11,10 +12,7 @@ export function unauthenticatedAdminContextFactory<
   return async (
     shop: string,
   ): Promise<UnauthenticatedAdminContext<Resources>> => {
-    const offlineSessionId = params.api.session.getOfflineId(shop);
-    const session = await params.config.sessionStorage.loadSession(
-      offlineSessionId,
-    );
+    const session = await getOfflineSession(shop, params);
 
     if (!session) {
       throw new ShopifyError(
