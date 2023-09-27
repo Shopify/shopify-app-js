@@ -11,8 +11,7 @@ describe('addDocumentResponseHeaders', () => {
     'adds frame-ancestors CSP headers when embedded = %s',
     (isEmbeddedApp) => {
       // GIVEN
-      const config = {...testConfig(), isEmbeddedApp};
-      const shopify = shopifyApp(config);
+      const shopify = shopifyApp(testConfig({isEmbeddedApp}));
       const request = new Request(`${APP_URL}?shop=${TEST_SHOP}`);
       const response = new Response();
 

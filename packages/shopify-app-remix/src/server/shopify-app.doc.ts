@@ -14,6 +14,13 @@ const data: ReferenceEntityTemplateSchema = {
       description: 'Function to create a new Shopify API object.',
       type: 'ShopifyAppGeneratedType',
     },
+    {
+      title: 'Future flags',
+      description:
+        'Set future flags using the `future` configuration field to opt in to upcoming breaking changes.' +
+        '\n\nWith this feature, you can prepare for major releases ahead of time, as well as try out new features before they are released.',
+      type: 'FutureFlags',
+    },
   ],
   jsDocTypeExamples: [
     'ShopifyAppGeneratedType',

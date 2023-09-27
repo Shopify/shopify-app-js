@@ -1770,7 +1770,7 @@
   },
   {
     "name": "Webhook",
-    "description": "Contains functions for verifying Shopify webhooks.",
+    "description": "Contains functions for verifying Shopify webhooks.\n\n> Note: The format of the `admin` object returned by this function changes with the `v3_webhookAdminContext` future flag.",
     "category": "Authenticate",
     "type": "object",
     "isVisualComponent": false,
@@ -1795,14 +1795,21 @@
             "returns": {
               "filePath": "/server/authenticate/webhooks/types.ts",
               "description": "",
-              "name": "Promise<\n  WebhookContext<Topics> | WebhookContextWithSession<Topics, Resources>\n>",
-              "value": "Promise<\n  WebhookContext<Topics> | WebhookContextWithSession<Topics, Resources>\n>"
+              "name": "Promise<WebhookContext<Future, Resources, Topics>>",
+              "value": "Promise<WebhookContext<Future, Resources, Topics>>"
             },
-            "value": "export type AuthenticateWebhook<\n  Resources extends ShopifyRestResources = ShopifyRestResources,\n  Topics = string | number | symbol,\n> = (\n  request: Request,\n) => Promise<\n  WebhookContext<Topics> | WebhookContextWithSession<Topics, Resources>\n>;"
+            "value": "export type AuthenticateWebhook<\n  Future extends FutureFlagOptions,\n  Resources extends ShopifyRestResources,\n  Topics = string | number | symbol,\n> = (request: Request) => Promise<WebhookContext<Future, Resources, Topics>>;"
           },
           "WebhookContext": {
             "filePath": "/server/authenticate/webhooks/types.ts",
+            "syntaxKind": "TypeAliasDeclaration",
             "name": "WebhookContext",
+            "value": "WebhookContextWithoutSession<Topics> | WebhookContextWithSession<Future, Resources, Topics>",
+            "description": ""
+          },
+          "WebhookContextWithoutSession": {
+            "filePath": "/server/authenticate/webhooks/types.ts",
+            "name": "WebhookContextWithoutSession",
             "description": "",
             "members": [
               {
@@ -1915,7 +1922,7 @@
                 ]
               }
             ],
-            "value": "export interface WebhookContext<Topics = string | number | symbol>\n  extends Context<Topics> {\n  session: undefined;\n  admin: undefined;\n}"
+            "value": "export interface WebhookContextWithoutSession<Topics = string | number | symbol>\n  extends Context<Topics> {\n  session: undefined;\n  admin: undefined;\n}"
           },
           "JSONValue": {
             "filePath": "/server/types.ts",
@@ -2169,14 +2176,14 @@
               {
                 "filePath": "/server/types.ts",
                 "syntaxKind": "MethodSignature",
-                "name": "__@iterator@527",
+                "name": "__@iterator@540",
                 "value": "() => IterableIterator<JSONValue>",
                 "description": "Iterator"
               },
               {
                 "filePath": "/server/types.ts",
                 "syntaxKind": "MethodSignature",
-                "name": "__@unscopables@529",
+                "name": "__@unscopables@542",
                 "value": "() => { copyWithin: boolean; entries: boolean; fill: boolean; find: boolean; findIndex: boolean; keys: boolean; values: boolean; }",
                 "description": "Returns an object whose properties have the value 'true'\r\nwhen they will be absent when used in a 'with' statement."
               },
@@ -2206,8 +2213,30 @@
                 "filePath": "/server/authenticate/webhooks/types.ts",
                 "syntaxKind": "PropertySignature",
                 "name": "admin",
-                "value": "{ rest: RestClient & Resources; graphql: GraphqlClient; }",
-                "description": "An admin context for the webhook.\n\nReturned only if there is a session for the shop."
+                "value": "WebhookAdminContext<Future, Resources>",
+                "description": "An admin context for the webhook.\n\nReturned only if there is a session for the shop.",
+                "examples": [
+                  {
+                    "title": "[V3] Webhook admin context",
+                    "description": "With the `v3_webhookAdminContext` future flag enabled, use the `admin` object in the context to interact with the Admin API.",
+                    "tabs": [
+                      {
+                        "code": "import { ActionFunctionArgs } from \"@remix-run/node\";\nimport { authenticate } from \"../shopify.server\";\n\nexport async function action({ request }: ActionFunctionArgs) {\n  const { admin } = await authenticate.webhook(request);\n\n  const response = await admin?.graphql(\n    `#graphql\n    mutation populateProduct($input: ProductInput!) {\n      productCreate(input: $input) {\n        product {\n          id\n        }\n      }\n    }`,\n    { variables: { input: { title: \"Product Name\" } } }\n  );\n\n  const productData = await response.json();\n  return json({ data: productData.data });\n}",
+                        "title": "Example"
+                      }
+                    ]
+                  },
+                  {
+                    "title": "Webhook admin context",
+                    "description": "Use the `admin` object in the context to interact with the Admin API. This format will be removed in V3 of the package.",
+                    "tabs": [
+                      {
+                        "code": "import { json, ActionFunctionArgs } from \"@remix-run/node\";\nimport { authenticate } from \"../shopify.server\";\n\nexport async function action({ request }: ActionFunctionArgs) {\n  const { admin } = await authenticate.webhook(request);\n\n  const response = await admin?.graphql.query<any>({\n    data: {\n      query: `#graphql\n        mutation populateProduct($input: ProductInput!) {\n          productCreate(input: $input) {\n            product {\n              id\n            }\n          }\n        }`,\n      variables: { input: { title: \"Product Name\" } },\n    },\n  });\n\n  const productData = response?.body.data;\n  return json({ data: productData.data });\n}",
+                        "title": "Example"
+                      }
+                    ]
+                  }
+                ]
               },
               {
                 "filePath": "/server/authenticate/webhooks/types.ts",
@@ -2305,7 +2334,554 @@
                 ]
               }
             ],
-            "value": "export interface WebhookContextWithSession<\n  Topics = string | number | symbol,\n  Resources extends ShopifyRestResources = any,\n> extends Context<Topics> {\n  /**\n   * A session with an offline token for the shop.\n   *\n   * Returned only if there is a session for the shop.\n   */\n  session: Session;\n  /**\n   * An admin context for the webhook.\n   *\n   * Returned only if there is a session for the shop.\n   */\n  admin: {\n    /** A REST client. */\n    rest: InstanceType<Shopify['clients']['Rest']> & Resources;\n    /** A GraphQL client. */\n    graphql: InstanceType<Shopify['clients']['Graphql']>;\n  };\n}"
+            "value": "export interface WebhookContextWithSession<\n  Future extends FutureFlagOptions,\n  Resources extends ShopifyRestResources,\n  Topics = string | number | symbol,\n> extends Context<Topics> {\n  /**\n   * A session with an offline token for the shop.\n   *\n   * Returned only if there is a session for the shop.\n   */\n  session: Session;\n\n  /**\n   * An admin context for the webhook.\n   *\n   * Returned only if there is a session for the shop.\n   *\n   * @example\n   * <caption>[V3] Webhook admin context.</caption>\n   * <description>With the `v3_webhookAdminContext` future flag enabled, use the `admin` object in the context to interact with the Admin API.</description>\n   * ```ts\n   * import { ActionFunctionArgs } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   *\n   * export async function action({ request }: ActionFunctionArgs) {\n   *   const { admin } = await authenticate.webhook(request);\n   *\n   *   const response = await admin?.graphql(\n   *     `#graphql\n   *     mutation populateProduct($input: ProductInput!) {\n   *       productCreate(input: $input) {\n   *         product {\n   *           id\n   *         }\n   *       }\n   *     }`,\n   *     { variables: { input: { title: \"Product Name\" } } }\n   *   );\n   *\n   *   const productData = await response.json();\n   *   return json({ data: productData.data });\n   * }\n   * ```\n   *\n   * @example\n   * <caption>Webhook admin context.</caption>\n   * <description>Use the `admin` object in the context to interact with the Admin API. This format will be removed in V3 of the package.</description>\n   * ```ts\n   * import { json, ActionFunctionArgs } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   *\n   * export async function action({ request }: ActionFunctionArgs) {\n   *   const { admin } = await authenticate.webhook(request);\n   *\n   *   const response = await admin?.graphql.query<any>({\n   *     data: {\n   *       query: `#graphql\n   *         mutation populateProduct($input: ProductInput!) {\n   *           productCreate(input: $input) {\n   *             product {\n   *               id\n   *             }\n   *           }\n   *         }`,\n   *       variables: { input: { title: \"Product Name\" } },\n   *     },\n   *   });\n   *\n   *   const productData = response?.body.data;\n   *   return json({ data: productData.data });\n   * }\n   * ```\n   */\n  admin: WebhookAdminContext<Future, Resources>;\n}"
+          },
+          "WebhookAdminContext": {
+            "filePath": "/server/authenticate/webhooks/types.ts",
+            "syntaxKind": "TypeAliasDeclaration",
+            "name": "WebhookAdminContext",
+            "value": "FeatureEnabled<Future, 'v3_webhookAdminContext'> extends true\n  ? AdminApiContext<Resources>\n  : LegacyWebhookAdminApiContext<Resources>",
+            "description": ""
+          },
+          "FeatureEnabled": {
+            "filePath": "/server/future/flags.ts",
+            "syntaxKind": "TypeAliasDeclaration",
+            "name": "FeatureEnabled",
+            "value": "Future extends FutureFlags\n  ? Future[Flag] extends true\n    ? true\n    : false\n  : false",
+            "description": ""
+          },
+          "FutureFlags": {
+            "filePath": "/server/future/flags.ts",
+            "name": "FutureFlags",
+            "description": "",
+            "members": [
+              {
+                "filePath": "/server/future/flags.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "v3_webhookAdminContext",
+                "value": "boolean",
+                "description": "When enabled, returns the same `admin` context (`AdminApiContext`) from `authenticate.webhook` that is returned from `authenticate.admin`.",
+                "isOptional": true,
+                "defaultValue": "false"
+              }
+            ],
+            "value": "export interface FutureFlags {\n  /**\n   * When enabled, returns the same `admin` context (`AdminApiContext`) from `authenticate.webhook` that is returned from `authenticate.admin`.\n   *\n   * @default false\n   */\n  v3_webhookAdminContext?: boolean;\n}"
+          },
+          "AdminContext": {
+            "filePath": "/server/authenticate/admin/types.ts",
+            "syntaxKind": "TypeAliasDeclaration",
+            "name": "AdminContext",
+            "value": "Config['isEmbeddedApp'] extends false\n  ? NonEmbeddedAdminContext<Config, Resources>\n  : EmbeddedAdminContext<Config, Resources>",
+            "description": ""
+          },
+          "NonEmbeddedAdminContext": {
+            "filePath": "/server/authenticate/admin/types.ts",
+            "name": "NonEmbeddedAdminContext",
+            "description": "",
+            "members": [
+              {
+                "filePath": "/server/authenticate/admin/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "session",
+                "value": "Session",
+                "description": "The session for the user who made the request.\n\nThis comes from the session storage which `shopifyApp` uses to store sessions in your database of choice.\n\nUse this to get shop or user-specific data.",
+                "examples": [
+                  {
+                    "title": "Using offline sessions",
+                    "description": "Get your app's shop-specific data using an offline session.",
+                    "tabs": [
+                      {
+                        "code": "import { shopifyApp } from \"@shopify/shopify-app-remix/server\";\n\nconst shopify = shopifyApp({\n  // ...etc\n});\nexport default shopify;\nexport const authenticate = shopify.authenticate;",
+                        "title": "shopify.server.ts"
+                      },
+                      {
+                        "code": "import { LoaderFunctionArgs, json } from \"@remix-run/node\";\nimport { authenticate } from \"../shopify.server\";\nimport { getMyAppData } from \"~/db/model.server\";\n\nexport const loader = async ({ request }: LoaderFunctionArgs) => {\n  const { session } = await authenticate.admin(request);\n  return json(await getMyAppData({shop: session.shop));\n};",
+                        "title": "/app/routes/**\\/*.ts"
+                      }
+                    ]
+                  },
+                  {
+                    "title": "Using online sessions",
+                    "description": "Get your app's user-specific data using an online session.",
+                    "tabs": [
+                      {
+                        "code": "import { shopifyApp } from \"@shopify/shopify-app-remix/server\";\n\nconst shopify = shopifyApp({\n  // ...etc\n  useOnlineTokens: true,\n});\nexport default shopify;\nexport const authenticate = shopify.authenticate;",
+                        "title": "shopify.server.ts"
+                      },
+                      {
+                        "code": "import { LoaderFunctionArgs, json } from \"@remix-run/node\";\nimport { authenticate } from \"../shopify.server\";\nimport { getMyAppData } from \"~/db/model.server\";\n\nexport const loader = async ({ request }: LoaderFunctionArgs) => {\n  const { session } = await authenticate.admin(request);\n  return json(await getMyAppData({user: session.onlineAccessInfo!.id}));\n};",
+                        "title": "/app/routes/**\\/*.ts"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "filePath": "/server/authenticate/admin/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "admin",
+                "value": "AdminApiContext<Resources>",
+                "description": "Methods for interacting with the GraphQL / REST Admin APIs for the store that made the request."
+              },
+              {
+                "filePath": "/server/authenticate/admin/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "billing",
+                "value": "BillingContext<Config>",
+                "description": "Billing methods for this store, based on the plans defined in the `billing` config option.\n\n\n\n\n"
+              },
+              {
+                "filePath": "/server/authenticate/admin/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "cors",
+                "value": "EnsureCORSFunction",
+                "description": "A function that ensures the CORS headers are set correctly for the response.",
+                "examples": [
+                  {
+                    "title": "Setting CORS headers for a admin request",
+                    "description": "Use the `cors` helper to ensure your app can respond to requests from admin extensions.",
+                    "tabs": [
+                      {
+                        "code": "import { LoaderFunctionArgs, json } from \"@remix-run/node\";\nimport { authenticate } from \"../shopify.server\";\nimport { getMyAppData } from \"~/db/model.server\";\n\nexport const loader = async ({ request }: LoaderFunctionArgs) => {\n  const { session, cors } = await authenticate.admin(request);\n  return cors(json(await getMyAppData({user: session.onlineAccessInfo!.id})));\n};",
+                        "title": "/app/routes/admin/my-route.ts"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "value": "export interface NonEmbeddedAdminContext<\n  Config extends AppConfigArg,\n  Resources extends ShopifyRestResources = ShopifyRestResources,\n> extends AdminContextInternal<Config, Resources> {}"
+          },
+          "AdminApiContext": {
+            "filePath": "/server/clients/admin/types.ts",
+            "name": "AdminApiContext",
+            "description": "",
+            "members": [
+              {
+                "filePath": "/server/clients/admin/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "rest",
+                "value": "RestClientWithResources<Resources>",
+                "description": "Methods for interacting with the Shopify Admin REST API\n\nThere are methods for interacting with individual REST resources. You can also make `GET`, `POST`, `PUT` and `DELETE` requests should the REST resources not meet your needs.\n\n\n\n\n",
+                "examples": [
+                  {
+                    "title": "Using REST resources",
+                    "description": "Getting the number of orders in a store using REST resources.",
+                    "tabs": [
+                      {
+                        "code": "import { shopifyApp } from \"@shopify/shopify-app-remix/server\";\nimport { restResources } from \"@shopify/shopify-api/rest/admin/2023-07\";\n\nconst shopify = shopifyApp({\n  restResources,\n  // ...etc\n});\nexport default shopify;\nexport const authenticate = shopify.authenticate;",
+                        "title": "/app/shopify.server.ts"
+                      },
+                      {
+                        "code": "import { LoaderFunctionArgs, json } from \"@remix-run/node\";\nimport { authenticate } from \"../shopify.server\";\n\nexport const loader = async ({ request }: LoaderFunctionArgs) => {\n  const { admin, session } = await authenticate.admin(request);\n  return json(admin.rest.resources.Order.count({ session }));\n};",
+                        "title": "/app/routes/**\\/*.ts"
+                      }
+                    ]
+                  },
+                  {
+                    "title": "Performing a GET request to the REST API",
+                    "description": "Use `admin.rest.<method>` to make custom requests to the API.",
+                    "tabs": [
+                      {
+                        "code": "import { shopifyApp } from \"@shopify/shopify-app-remix/server\";\nimport { restResources } from \"@shopify/shopify-api/rest/admin/2023-04\";\n\nconst shopify = shopifyApp({\n  restResources,\n  // ...etc\n});\nexport default shopify;\nexport const authenticate = shopify.authenticate;",
+                        "title": "/app/shopify.server.ts"
+                      },
+                      {
+                        "code": "import { LoaderFunctionArgs, json } from \"@remix-run/node\";\nimport { authenticate } from \"../shopify.server\";\n\nexport const loader = async ({ request }: LoaderFunctionArgs) => {\n  const { admin, session } = await authenticate.admin(request);\n  const response = await admin.rest.get({ path: \"/customers/count.json\" });\n  const customers = await response.json();\n  return json({ customers });\n};",
+                        "title": "/app/routes/**\\/*.ts"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "filePath": "/server/clients/admin/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "graphql",
+                "value": "GraphQLClient",
+                "description": "Methods for interacting with the Shopify Admin GraphQL API\n\n\n\n\n\n\n\n\n\n",
+                "examples": [
+                  {
+                    "title": "Querying the GraphQL API",
+                    "description": "Use `admin.graphql` to make query / mutation requests.",
+                    "tabs": [
+                      {
+                        "code": "import { ActionFunctionArgs } from \"@remix-run/node\";\nimport { authenticate } from \"../shopify.server\";\n\nexport async function action({ request }: ActionFunctionArgs) {\n  const { admin } = await authenticate.admin(request);\n\n  const response = await admin.graphql(\n    `#graphql\n    mutation populateProduct($input: ProductInput!) {\n      productCreate(input: $input) {\n        product {\n          id\n        }\n      }\n    }`,\n    { variables: { input: { title: \"Product Name\" } } }\n  );\n\n  const productData = await response.json();\n  return json({ data: productData.data });\n}",
+                        "title": "Example"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "value": "export interface AdminApiContext<\n  Resources extends ShopifyRestResources = ShopifyRestResources,\n> {\n  /**\n   * Methods for interacting with the Shopify Admin REST API\n   *\n   * There are methods for interacting with individual REST resources. You can also make `GET`, `POST`, `PUT` and `DELETE` requests should the REST resources not meet your needs.\n   *\n   * {@link https://shopify.dev/docs/api/admin-rest}\n   *\n   * @example\n   * <caption>Using REST resources.</caption>\n   * <description>Getting the number of orders in a store using REST resources.</description>\n   *\n   * ```ts\n   * // /app/shopify.server.ts\n   * import { shopifyApp } from \"@shopify/shopify-app-remix/server\";\n   * import { restResources } from \"@shopify/shopify-api/rest/admin/2023-07\";\n   *\n   * const shopify = shopifyApp({\n   *   restResources,\n   *   // ...etc\n   * });\n   * export default shopify;\n   * export const authenticate = shopify.authenticate;\n   * ```\n   *\n   * ```ts\n   * // /app/routes/**\\/*.ts\n   * import { LoaderFunctionArgs, json } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   *\n   * export const loader = async ({ request }: LoaderFunctionArgs) => {\n   *   const { admin, session } = await authenticate.admin(request);\n   *   return json(admin.rest.resources.Order.count({ session }));\n   * };\n   * ```\n   *\n   * @example\n   * <caption>Performing a GET request to the REST API.</caption>\n   * <description>Use `admin.rest.<method>` to make custom requests to the API.</description>\n   *\n   * ```ts\n   * // /app/shopify.server.ts\n   * import { shopifyApp } from \"@shopify/shopify-app-remix/server\";\n   * import { restResources } from \"@shopify/shopify-api/rest/admin/2023-04\";\n   *\n   * const shopify = shopifyApp({\n   *   restResources,\n   *   // ...etc\n   * });\n   * export default shopify;\n   * export const authenticate = shopify.authenticate;\n   * ```\n   *\n   * ```ts\n   * // /app/routes/**\\/*.ts\n   * import { LoaderFunctionArgs, json } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   *\n   * export const loader = async ({ request }: LoaderFunctionArgs) => {\n   *   const { admin, session } = await authenticate.admin(request);\n   *   const response = await admin.rest.get({ path: \"/customers/count.json\" });\n   *   const customers = await response.json();\n   *   return json({ customers });\n   * };\n   * ```\n   */\n  rest: RestClientWithResources<Resources>;\n\n  /**\n   * Methods for interacting with the Shopify Admin GraphQL API\n   *\n   * {@link https://shopify.dev/docs/api/admin-graphql}\n   * {@link https://github.com/Shopify/shopify-api-js/blob/main/packages/shopify-api/docs/reference/clients/Graphql.md}\n   *\n   * @example\n   * <caption>Querying the GraphQL API.</caption>\n   * <description>Use `admin.graphql` to make query / mutation requests.</description>\n   * ```ts\n   * import { ActionFunctionArgs } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   *\n   * export async function action({ request }: ActionFunctionArgs) {\n   *   const { admin } = await authenticate.admin(request);\n   *\n   *   const response = await admin.graphql(\n   *     `#graphql\n   *     mutation populateProduct($input: ProductInput!) {\n   *       productCreate(input: $input) {\n   *         product {\n   *           id\n   *         }\n   *       }\n   *     }`,\n   *     { variables: { input: { title: \"Product Name\" } } }\n   *   );\n   *\n   *   const productData = await response.json();\n   *   return json({ data: productData.data });\n   * }\n   * ```\n   */\n  graphql: GraphQLClient;\n}"
+          },
+          "RestClientWithResources": {
+            "filePath": "/server/clients/admin/rest.ts",
+            "syntaxKind": "TypeAliasDeclaration",
+            "name": "RestClientWithResources",
+            "value": "RemixRestClient & {resources: Resources}",
+            "description": ""
+          },
+          "BillingContext": {
+            "filePath": "/server/authenticate/admin/billing/types.ts",
+            "name": "BillingContext",
+            "description": "",
+            "members": [
+              {
+                "filePath": "/server/authenticate/admin/billing/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "require",
+                "value": "(options: RequireBillingOptions<Config>) => Promise<BillingCheckResponseObject>",
+                "description": "Checks if the shop has an active payment for any plan defined in the `billing` config option.",
+                "examples": [
+                  {
+                    "title": "Requesting billing right away",
+                    "description": "Call `billing.request` in the `onFailure` callback to immediately request payment.",
+                    "tabs": [
+                      {
+                        "code": "import { LoaderFunctionArgs } from \"@remix-run/node\";\nimport { authenticate, MONTHLY_PLAN } from \"../shopify.server\";\n\nexport const loader = async ({ request }: LoaderFunctionArgs) => {\n  const { billing } = await authenticate.admin(request);\n  await billing.require({\n    plans: [MONTHLY_PLAN],\n    isTest: true,\n    onFailure: async () => billing.request({ plan: MONTHLY_PLAN }),\n  });\n\n  // App logic\n};",
+                        "title": "/app/routes/**\\/*.ts"
+                      },
+                      {
+                        "code": "import { shopifyApp, BillingInterval } from \"@shopify/shopify-app-remix/server\";\n\nexport const MONTHLY_PLAN = 'Monthly subscription';\nexport const ANNUAL_PLAN = 'Annual subscription';\n\nconst shopify = shopifyApp({\n  // ...etc\n  billing: {\n    [MONTHLY_PLAN]: {\n      amount: 5,\n      currencyCode: 'USD',\n      interval: BillingInterval.Every30Days,\n    },\n    [ANNUAL_PLAN]: {\n      amount: 50,\n      currencyCode: 'USD',\n      interval: BillingInterval.Annual,\n    },\n  }\n});\nexport default shopify;\nexport const authenticate = shopify.authenticate;",
+                        "title": "shopify.server.ts"
+                      }
+                    ]
+                  },
+                  {
+                    "title": "Using a plan selection page",
+                    "description": "Redirect to a different page in the `onFailure` callback, where the merchant can select a billing plan.",
+                    "tabs": [
+                      {
+                        "code": "import { LoaderFunctionArgs, redirect } from \"@remix-run/node\";\nimport { authenticate, MONTHLY_PLAN, ANNUAL_PLAN } from \"../shopify.server\";\n\nexport const loader = async ({ request }: LoaderFunctionArgs) => {\n  const { billing } = await authenticate.admin(request);\n  const billingCheck = await billing.require({\n    plans: [MONTHLY_PLAN, ANNUAL_PLAN],\n    isTest: true,\n    onFailure: () => redirect('/select-plan'),\n  });\n\n  const subscription = billingCheck.appSubscriptions[0];\n  console.log(`Shop is on ${subscription.name} (id ${subscription.id})`);\n\n  // App logic\n};",
+                        "title": "/app/routes/**\\/*.ts"
+                      },
+                      {
+                        "code": "import { shopifyApp, BillingInterval } from \"@shopify/shopify-app-remix/server\";\n\nexport const MONTHLY_PLAN = 'Monthly subscription';\nexport const ANNUAL_PLAN = 'Annual subscription';\n\nconst shopify = shopifyApp({\n  // ...etc\n  billing: {\n    [MONTHLY_PLAN]: {\n      amount: 5,\n      currencyCode: 'USD',\n      interval: BillingInterval.Every30Days,\n    },\n    [ANNUAL_PLAN]: {\n      amount: 50,\n      currencyCode: 'USD',\n      interval: BillingInterval.Annual,\n    },\n  }\n});\nexport default shopify;\nexport const authenticate = shopify.authenticate;",
+                        "title": "shopify.server.ts"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "filePath": "/server/authenticate/admin/billing/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "request",
+                "value": "(options: RequestBillingOptions<Config>) => Promise<never>",
+                "description": "Requests payment for the plan.",
+                "examples": [
+                  {
+                    "title": "Using a custom return URL",
+                    "description": "Change where the merchant is returned to after approving the purchase using the `returnUrl` option.",
+                    "tabs": [
+                      {
+                        "code": "import { LoaderFunctionArgs } from \"@remix-run/node\";\nimport { authenticate, MONTHLY_PLAN } from \"../shopify.server\";\n\nexport const loader = async ({ request }: LoaderFunctionArgs) => {\n  const { billing } = await authenticate.admin(request);\n  await billing.require({\n    plans: [MONTHLY_PLAN],\n    onFailure: async () => billing.request({\n      plan: MONTHLY_PLAN,\n      isTest: true,\n      returnUrl: '/billing-complete',\n    }),\n  });\n\n  // App logic\n};",
+                        "title": "/app/routes/**\\/*.ts"
+                      },
+                      {
+                        "code": "import { shopifyApp, BillingInterval } from \"@shopify/shopify-app-remix/server\";\n\nexport const MONTHLY_PLAN = 'Monthly subscription';\nexport const ANNUAL_PLAN = 'Annual subscription';\n\nconst shopify = shopifyApp({\n  // ...etc\n  billing: {\n    [MONTHLY_PLAN]: {\n      amount: 5,\n      currencyCode: 'USD',\n      interval: BillingInterval.Every30Days,\n    },\n    [ANNUAL_PLAN]: {\n      amount: 50,\n      currencyCode: 'USD',\n      interval: BillingInterval.Annual,\n    },\n  }\n});\nexport default shopify;\nexport const authenticate = shopify.authenticate;",
+                        "title": "shopify.server.ts"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "filePath": "/server/authenticate/admin/billing/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "cancel",
+                "value": "(options: CancelBillingOptions) => Promise<AppSubscription>",
+                "description": "Cancels an ongoing subscription, given its ID.",
+                "examples": [
+                  {
+                    "title": "Cancelling a subscription",
+                    "description": "Use the `billing.cancel` function to cancel an active subscription with the id returned from `billing.require`.",
+                    "tabs": [
+                      {
+                        "code": "import { LoaderFunctionArgs } from \"@remix-run/node\";\nimport { authenticate, MONTHLY_PLAN } from \"../shopify.server\";\n\nexport const loader = async ({ request }: LoaderFunctionArgs) => {\n  const { billing } = await authenticate.admin(request);\n  const billingCheck = await billing.require({\n    plans: [MONTHLY_PLAN],\n    onFailure: async () => billing.request({ plan: MONTHLY_PLAN }),\n  });\n\n  const subscription = billingCheck.appSubscriptions[0];\n  const cancelledSubscription = await billing.cancel({\n    subscriptionId: subscription.id,\n    isTest: true,\n    prorate: true,\n   });\n\n  // App logic\n};",
+                        "title": "/app/routes/cancel-subscription.ts"
+                      },
+                      {
+                        "code": "import { shopifyApp, BillingInterval } from \"@shopify/shopify-app-remix/server\";\n\nexport const MONTHLY_PLAN = 'Monthly subscription';\nexport const ANNUAL_PLAN = 'Annual subscription';\n\nconst shopify = shopifyApp({\n  // ...etc\n  billing: {\n    [MONTHLY_PLAN]: {\n      amount: 5,\n      currencyCode: 'USD',\n      interval: BillingInterval.Every30Days,\n    },\n    [ANNUAL_PLAN]: {\n      amount: 50,\n      currencyCode: 'USD',\n      interval: BillingInterval.Annual,\n    },\n  }\n});\nexport default shopify;\nexport const authenticate = shopify.authenticate;",
+                        "title": "shopify.server.ts"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "value": "export interface BillingContext<Config extends AppConfigArg> {\n  /**\n   * Checks if the shop has an active payment for any plan defined in the `billing` config option.\n   *\n   * @returns A promise that resolves to an object containing the active purchases for the shop.\n   *\n   * @example\n   * <caption>Requesting billing right away.</caption>\n   * <description>Call `billing.request` in the `onFailure` callback to immediately request payment.</description>\n   * ```ts\n   * // /app/routes/**\\/*.ts\n   * import { LoaderFunctionArgs } from \"@remix-run/node\";\n   * import { authenticate, MONTHLY_PLAN } from \"../shopify.server\";\n   *\n   * export const loader = async ({ request }: LoaderFunctionArgs) => {\n   *   const { billing } = await authenticate.admin(request);\n   *   await billing.require({\n   *     plans: [MONTHLY_PLAN],\n   *     isTest: true,\n   *     onFailure: async () => billing.request({ plan: MONTHLY_PLAN }),\n   *   });\n   *\n   *   // App logic\n   * };\n   * ```\n   * ```ts\n   * // shopify.server.ts\n   * import { shopifyApp, BillingInterval } from \"@shopify/shopify-app-remix/server\";\n   *\n   * export const MONTHLY_PLAN = 'Monthly subscription';\n   * export const ANNUAL_PLAN = 'Annual subscription';\n   *\n   * const shopify = shopifyApp({\n   *   // ...etc\n   *   billing: {\n   *     [MONTHLY_PLAN]: {\n   *       amount: 5,\n   *       currencyCode: 'USD',\n   *       interval: BillingInterval.Every30Days,\n   *     },\n   *     [ANNUAL_PLAN]: {\n   *       amount: 50,\n   *       currencyCode: 'USD',\n   *       interval: BillingInterval.Annual,\n   *     },\n   *   }\n   * });\n   * export default shopify;\n   * export const authenticate = shopify.authenticate;\n   * ```\n   *\n   * @example\n   * <caption>Using a plan selection page.</caption>\n   * <description>Redirect to a different page in the `onFailure` callback, where the merchant can select a billing plan.</description>\n   * ```ts\n   * // /app/routes/**\\/*.ts\n   * import { LoaderFunctionArgs, redirect } from \"@remix-run/node\";\n   * import { authenticate, MONTHLY_PLAN, ANNUAL_PLAN } from \"../shopify.server\";\n   *\n   * export const loader = async ({ request }: LoaderFunctionArgs) => {\n   *   const { billing } = await authenticate.admin(request);\n   *   const billingCheck = await billing.require({\n   *     plans: [MONTHLY_PLAN, ANNUAL_PLAN],\n   *     isTest: true,\n   *     onFailure: () => redirect('/select-plan'),\n   *   });\n   *\n   *   const subscription = billingCheck.appSubscriptions[0];\n   *   console.log(`Shop is on ${subscription.name} (id ${subscription.id})`);\n   *\n   *   // App logic\n   * };\n   * ```\n   * ```ts\n   * // shopify.server.ts\n   * import { shopifyApp, BillingInterval } from \"@shopify/shopify-app-remix/server\";\n   *\n   * export const MONTHLY_PLAN = 'Monthly subscription';\n   * export const ANNUAL_PLAN = 'Annual subscription';\n   *\n   * const shopify = shopifyApp({\n   *   // ...etc\n   *   billing: {\n   *     [MONTHLY_PLAN]: {\n   *       amount: 5,\n   *       currencyCode: 'USD',\n   *       interval: BillingInterval.Every30Days,\n   *     },\n   *     [ANNUAL_PLAN]: {\n   *       amount: 50,\n   *       currencyCode: 'USD',\n   *       interval: BillingInterval.Annual,\n   *     },\n   *   }\n   * });\n   * export default shopify;\n   * export const authenticate = shopify.authenticate;\n   * ```\n   */\n  require: (\n    options: RequireBillingOptions<Config>,\n  ) => Promise<BillingCheckResponseObject>;\n\n  /**\n   * Requests payment for the plan.\n   *\n   * @returns Redirects to the confirmation URL for the payment.\n   *\n   * @example\n   * <caption>Using a custom return URL.</caption>\n   * <description>Change where the merchant is returned to after approving the purchase using the `returnUrl` option.</description>\n   * ```ts\n   * // /app/routes/**\\/*.ts\n   * import { LoaderFunctionArgs } from \"@remix-run/node\";\n   * import { authenticate, MONTHLY_PLAN } from \"../shopify.server\";\n   *\n   * export const loader = async ({ request }: LoaderFunctionArgs) => {\n   *   const { billing } = await authenticate.admin(request);\n   *   await billing.require({\n   *     plans: [MONTHLY_PLAN],\n   *     onFailure: async () => billing.request({\n   *       plan: MONTHLY_PLAN,\n   *       isTest: true,\n   *       returnUrl: '/billing-complete',\n   *     }),\n   *   });\n   *\n   *   // App logic\n   * };\n   * ```\n   * ```ts\n   * // shopify.server.ts\n   * import { shopifyApp, BillingInterval } from \"@shopify/shopify-app-remix/server\";\n   *\n   * export const MONTHLY_PLAN = 'Monthly subscription';\n   * export const ANNUAL_PLAN = 'Annual subscription';\n   *\n   * const shopify = shopifyApp({\n   *   // ...etc\n   *   billing: {\n   *     [MONTHLY_PLAN]: {\n   *       amount: 5,\n   *       currencyCode: 'USD',\n   *       interval: BillingInterval.Every30Days,\n   *     },\n   *     [ANNUAL_PLAN]: {\n   *       amount: 50,\n   *       currencyCode: 'USD',\n   *       interval: BillingInterval.Annual,\n   *     },\n   *   }\n   * });\n   * export default shopify;\n   * export const authenticate = shopify.authenticate;\n   * ```\n   */\n  request: (options: RequestBillingOptions<Config>) => Promise<never>;\n\n  /**\n   * Cancels an ongoing subscription, given its ID.\n   *\n   * @returns The cancelled subscription.\n   *\n   * @example\n   * <caption>Cancelling a subscription.</caption>\n   * <description>Use the `billing.cancel` function to cancel an active subscription with the id returned from `billing.require`.</description>\n   * ```ts\n   * // /app/routes/cancel-subscription.ts\n   * import { LoaderFunctionArgs } from \"@remix-run/node\";\n   * import { authenticate, MONTHLY_PLAN } from \"../shopify.server\";\n   *\n   * export const loader = async ({ request }: LoaderFunctionArgs) => {\n   *   const { billing } = await authenticate.admin(request);\n   *   const billingCheck = await billing.require({\n   *     plans: [MONTHLY_PLAN],\n   *     onFailure: async () => billing.request({ plan: MONTHLY_PLAN }),\n   *   });\n   *\n   *   const subscription = billingCheck.appSubscriptions[0];\n   *   const cancelledSubscription = await billing.cancel({\n   *     subscriptionId: subscription.id,\n   *     isTest: true,\n   *     prorate: true,\n   *    });\n   *\n   *   // App logic\n   * };\n   * ```\n   * ```ts\n   * // shopify.server.ts\n   * import { shopifyApp, BillingInterval } from \"@shopify/shopify-app-remix/server\";\n   *\n   * export const MONTHLY_PLAN = 'Monthly subscription';\n   * export const ANNUAL_PLAN = 'Annual subscription';\n   *\n   * const shopify = shopifyApp({\n   *   // ...etc\n   *   billing: {\n   *     [MONTHLY_PLAN]: {\n   *       amount: 5,\n   *       currencyCode: 'USD',\n   *       interval: BillingInterval.Every30Days,\n   *     },\n   *     [ANNUAL_PLAN]: {\n   *       amount: 50,\n   *       currencyCode: 'USD',\n   *       interval: BillingInterval.Annual,\n   *     },\n   *   }\n   * });\n   * export default shopify;\n   * export const authenticate = shopify.authenticate;\n   * ```\n   */\n  cancel: (options: CancelBillingOptions) => Promise<AppSubscription>;\n}"
+          },
+          "RequireBillingOptions": {
+            "filePath": "/server/authenticate/admin/billing/types.ts",
+            "name": "RequireBillingOptions",
+            "description": "",
+            "members": [
+              {
+                "filePath": "/server/authenticate/admin/billing/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "plans",
+                "value": "(keyof Config[\"billing\"])[]",
+                "description": "The plans to check for. Must be one of the values defined in the `billing` config option."
+              },
+              {
+                "filePath": "/server/authenticate/admin/billing/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "onFailure",
+                "value": "(error: any) => Promise<Response>",
+                "description": "How to handle the request if the shop doesn't have an active payment for any plan."
+              },
+              {
+                "filePath": "/server/authenticate/admin/billing/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "isTest",
+                "value": "boolean",
+                "description": "",
+                "isOptional": true
+              }
+            ],
+            "value": "export interface RequireBillingOptions<Config extends AppConfigArg>\n  extends Omit<BillingCheckParams, 'session' | 'plans' | 'returnObject'> {\n  /**\n   * The plans to check for. Must be one of the values defined in the `billing` config option.\n   */\n  plans: (keyof Config['billing'])[];\n  /**\n   * How to handle the request if the shop doesn't have an active payment for any plan.\n   */\n  onFailure: (error: any) => Promise<Response>;\n}"
+          },
+          "RequestBillingOptions": {
+            "filePath": "/server/authenticate/admin/billing/types.ts",
+            "name": "RequestBillingOptions",
+            "description": "",
+            "members": [
+              {
+                "filePath": "/server/authenticate/admin/billing/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "plan",
+                "value": "keyof Config[\"billing\"]",
+                "description": "The plan to request. Must be one of the values defined in the `billing` config option."
+              }
+            ],
+            "value": "export interface RequestBillingOptions<Config extends AppConfigArg>\n  extends Omit<BillingRequestParams, 'session' | 'plan' | 'returnObject'> {\n  /**\n   * The plan to request. Must be one of the values defined in the `billing` config option.\n   */\n  plan: keyof Config['billing'];\n}"
+          },
+          "CancelBillingOptions": {
+            "filePath": "/server/authenticate/admin/billing/types.ts",
+            "name": "CancelBillingOptions",
+            "description": "",
+            "members": [
+              {
+                "filePath": "/server/authenticate/admin/billing/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "subscriptionId",
+                "value": "string",
+                "description": "The ID of the subscription to cancel."
+              },
+              {
+                "filePath": "/server/authenticate/admin/billing/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "prorate",
+                "value": "boolean",
+                "description": "Whether to prorate the cancellation.\n\n\n\n\n",
+                "isOptional": true
+              },
+              {
+                "filePath": "/server/authenticate/admin/billing/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "isTest",
+                "value": "boolean",
+                "description": "",
+                "isOptional": true
+              }
+            ],
+            "value": "export interface CancelBillingOptions {\n  /**\n   * The ID of the subscription to cancel.\n   */\n  subscriptionId: string;\n  /**\n   * Whether to prorate the cancellation.\n   *\n   * {@link https://shopify.dev/docs/apps/billing/subscriptions/cancel-recurring-charges}\n   */\n  prorate?: boolean;\n  isTest?: boolean;\n}"
+          },
+          "EmbeddedAdminContext": {
+            "filePath": "/server/authenticate/admin/types.ts",
+            "name": "EmbeddedAdminContext",
+            "description": "",
+            "members": [
+              {
+                "filePath": "/server/authenticate/admin/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "sessionToken",
+                "value": "JwtPayload",
+                "description": "The decoded and validated session token for the request.\n\nReturned only if `isEmbeddedApp` is `true`.\n\n\n\n\n",
+                "examples": [
+                  {
+                    "title": "Using the decoded session token",
+                    "description": "Get user-specific data using the `sessionToken` object.",
+                    "tabs": [
+                      {
+                        "code": "import { shopifyApp } from \"@shopify/shopify-app-remix/server\";\n\nconst shopify = shopifyApp({\n  // ...etc\n  useOnlineTokens: true,\n});\nexport default shopify;\nexport const authenticate = shopify.authenticate;",
+                        "title": "shopify.server.ts"
+                      },
+                      {
+                        "code": "import { LoaderFunctionArgs, json } from \"@remix-run/node\";\nimport { authenticate } from \"../shopify.server\";\nimport { getMyAppData } from \"~/db/model.server\";\n\nexport const loader = async ({ request }: LoaderFunctionArgs) => {\n  const { sessionToken } = await authenticate.public.checkout(\n    request\n  );\n  return json(await getMyAppData({user: sessionToken.sub}));\n};",
+                        "title": "/app/routes/**\\/*.ts"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "filePath": "/server/authenticate/admin/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "redirect",
+                "value": "RedirectFunction",
+                "description": "A function that redirects the user to a new page, ensuring that the appropriate parameters are set for embedded apps.\n\nReturned only if `isEmbeddedApp` is `true`.",
+                "examples": [
+                  {
+                    "title": "Redirecting to an app route",
+                    "description": "Use the `redirect` helper to safely redirect between pages.",
+                    "tabs": [
+                      {
+                        "code": "import { LoaderFunctionArgs, json } from \"@remix-run/node\";\nimport { authenticate } from \"../shopify.server\";\n\nexport const loader = async ({ request }: LoaderFunctionArgs) => {\n  const { session, redirect } = await authenticate.admin(request);\n  return redirect(\"/\");\n};",
+                        "title": "/app/routes/admin/my-route.ts"
+                      }
+                    ]
+                  },
+                  {
+                    "title": "Redirecting outside of Shopify admin",
+                    "description": "Pass in a `target` option of `_top` or `_parent` to go to an external URL.",
+                    "tabs": [
+                      {
+                        "code": "import { LoaderFunctionArgs, json } from \"@remix-run/node\";\nimport { authenticate } from \"../shopify.server\";\n\nexport const loader = async ({ request }: LoaderFunctionArgs) => {\n  const { session, redirect } = await authenticate.admin(request);\n  return redirect(\"/\", { target: '_parent' });\n};",
+                        "title": "/app/routes/admin/my-route.ts"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "filePath": "/server/authenticate/admin/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "session",
+                "value": "Session",
+                "description": "The session for the user who made the request.\n\nThis comes from the session storage which `shopifyApp` uses to store sessions in your database of choice.\n\nUse this to get shop or user-specific data.",
+                "examples": [
+                  {
+                    "title": "Using offline sessions",
+                    "description": "Get your app's shop-specific data using an offline session.",
+                    "tabs": [
+                      {
+                        "code": "import { shopifyApp } from \"@shopify/shopify-app-remix/server\";\n\nconst shopify = shopifyApp({\n  // ...etc\n});\nexport default shopify;\nexport const authenticate = shopify.authenticate;",
+                        "title": "shopify.server.ts"
+                      },
+                      {
+                        "code": "import { LoaderFunctionArgs, json } from \"@remix-run/node\";\nimport { authenticate } from \"../shopify.server\";\nimport { getMyAppData } from \"~/db/model.server\";\n\nexport const loader = async ({ request }: LoaderFunctionArgs) => {\n  const { session } = await authenticate.admin(request);\n  return json(await getMyAppData({shop: session.shop));\n};",
+                        "title": "/app/routes/**\\/*.ts"
+                      }
+                    ]
+                  },
+                  {
+                    "title": "Using online sessions",
+                    "description": "Get your app's user-specific data using an online session.",
+                    "tabs": [
+                      {
+                        "code": "import { shopifyApp } from \"@shopify/shopify-app-remix/server\";\n\nconst shopify = shopifyApp({\n  // ...etc\n  useOnlineTokens: true,\n});\nexport default shopify;\nexport const authenticate = shopify.authenticate;",
+                        "title": "shopify.server.ts"
+                      },
+                      {
+                        "code": "import { LoaderFunctionArgs, json } from \"@remix-run/node\";\nimport { authenticate } from \"../shopify.server\";\nimport { getMyAppData } from \"~/db/model.server\";\n\nexport const loader = async ({ request }: LoaderFunctionArgs) => {\n  const { session } = await authenticate.admin(request);\n  return json(await getMyAppData({user: session.onlineAccessInfo!.id}));\n};",
+                        "title": "/app/routes/**\\/*.ts"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "filePath": "/server/authenticate/admin/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "admin",
+                "value": "AdminApiContext<Resources>",
+                "description": "Methods for interacting with the GraphQL / REST Admin APIs for the store that made the request."
+              },
+              {
+                "filePath": "/server/authenticate/admin/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "billing",
+                "value": "BillingContext<Config>",
+                "description": "Billing methods for this store, based on the plans defined in the `billing` config option.\n\n\n\n\n"
+              },
+              {
+                "filePath": "/server/authenticate/admin/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "cors",
+                "value": "EnsureCORSFunction",
+                "description": "A function that ensures the CORS headers are set correctly for the response.",
+                "examples": [
+                  {
+                    "title": "Setting CORS headers for a admin request",
+                    "description": "Use the `cors` helper to ensure your app can respond to requests from admin extensions.",
+                    "tabs": [
+                      {
+                        "code": "import { LoaderFunctionArgs, json } from \"@remix-run/node\";\nimport { authenticate } from \"../shopify.server\";\nimport { getMyAppData } from \"~/db/model.server\";\n\nexport const loader = async ({ request }: LoaderFunctionArgs) => {\n  const { session, cors } = await authenticate.admin(request);\n  return cors(json(await getMyAppData({user: session.onlineAccessInfo!.id})));\n};",
+                        "title": "/app/routes/admin/my-route.ts"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "value": "export interface EmbeddedAdminContext<\n  Config extends AppConfigArg,\n  Resources extends ShopifyRestResources = ShopifyRestResources,\n> extends AdminContextInternal<Config, Resources> {\n  /**\n   * The decoded and validated session token for the request.\n   *\n   * Returned only if `isEmbeddedApp` is `true`.\n   *\n   * {@link https://shopify.dev/docs/apps/auth/oauth/session-tokens#payload}\n   *\n   * @example\n   * <caption>Using the decoded session token.</caption>\n   * <description>Get user-specific data using the `sessionToken` object.</description>\n   * ```ts\n   * // shopify.server.ts\n   * import { shopifyApp } from \"@shopify/shopify-app-remix/server\";\n   *\n   * const shopify = shopifyApp({\n   *   // ...etc\n   *   useOnlineTokens: true,\n   * });\n   * export default shopify;\n   * export const authenticate = shopify.authenticate;\n   * ```\n   * ```ts\n   * // /app/routes/**\\/*.ts\n   * import { LoaderFunctionArgs, json } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   * import { getMyAppData } from \"~/db/model.server\";\n   *\n   * export const loader = async ({ request }: LoaderFunctionArgs) => {\n   *   const { sessionToken } = await authenticate.public.checkout(\n   *     request\n   *   );\n   *   return json(await getMyAppData({user: sessionToken.sub}));\n   * };\n   * ```\n   */\n  sessionToken: JwtPayload;\n\n  /**\n   * A function that redirects the user to a new page, ensuring that the appropriate parameters are set for embedded\n   * apps.\n   *\n   * Returned only if `isEmbeddedApp` is `true`.\n   *\n   * @example\n   * <caption>Redirecting to an app route.</caption>\n   * <description>Use the `redirect` helper to safely redirect between pages.</description>\n   * ```ts\n   * // /app/routes/admin/my-route.ts\n   * import { LoaderFunctionArgs, json } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   *\n   * export const loader = async ({ request }: LoaderFunctionArgs) => {\n   *   const { session, redirect } = await authenticate.admin(request);\n   *   return redirect(\"/\");\n   * };\n   * ```\n   *\n   * @example\n   * <caption>Redirecting outside of Shopify admin.</caption>\n   * <description>Pass in a `target` option of `_top` or `_parent` to go to an external URL.</description>\n   * ```ts\n   * // /app/routes/admin/my-route.ts\n   * import { LoaderFunctionArgs, json } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   *\n   * export const loader = async ({ request }: LoaderFunctionArgs) => {\n   *   const { session, redirect } = await authenticate.admin(request);\n   *   return redirect(\"/\", { target: '_parent' });\n   * };\n   * ```\n   */\n  redirect: RedirectFunction;\n}"
+          },
+          "RedirectFunction": {
+            "filePath": "/server/authenticate/admin/helpers/redirect.ts",
+            "name": "RedirectFunction",
+            "description": "",
+            "params": [
+              {
+                "name": "url",
+                "description": "",
+                "value": "string",
+                "filePath": "/server/authenticate/admin/helpers/redirect.ts"
+              },
+              {
+                "name": "init",
+                "description": "",
+                "value": "RedirectInit",
+                "isOptional": true,
+                "filePath": "/server/authenticate/admin/helpers/redirect.ts"
+              }
+            ],
+            "returns": {
+              "filePath": "/server/authenticate/admin/helpers/redirect.ts",
+              "description": "",
+              "name": "TypedResponse<never>",
+              "value": "TypedResponse<never>"
+            },
+            "value": "export type RedirectFunction = (\n  url: string,\n  init?: RedirectInit,\n) => TypedResponse<never>;"
+          },
+          "RedirectInit": {
+            "filePath": "/server/authenticate/admin/helpers/redirect.ts",
+            "syntaxKind": "TypeAliasDeclaration",
+            "name": "RedirectInit",
+            "value": "number | (ResponseInit & {target?: RedirectTarget})",
+            "description": ""
+          },
+          "RedirectTarget": {
+            "filePath": "/server/authenticate/admin/helpers/redirect.ts",
+            "syntaxKind": "TypeAliasDeclaration",
+            "name": "RedirectTarget",
+            "value": "'_self' | '_parent' | '_top'",
+            "description": ""
+          },
+          "LegacyWebhookAdminApiContext": {
+            "filePath": "/server/authenticate/webhooks/types.ts",
+            "name": "LegacyWebhookAdminApiContext",
+            "description": "",
+            "members": [
+              {
+                "filePath": "/server/authenticate/webhooks/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "rest",
+                "value": "RestClient & Resources",
+                "description": "A REST client."
+              },
+              {
+                "filePath": "/server/authenticate/webhooks/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "graphql",
+                "value": "InstanceType<Shopify['clients']['Graphql']>",
+                "description": "A GraphQL client."
+              }
+            ],
+            "value": "export interface LegacyWebhookAdminApiContext<\n  Resources extends ShopifyRestResources,\n> {\n  /** A REST client. */\n  rest: InstanceType<Shopify['clients']['Rest']> & Resources;\n  /** A GraphQL client. */\n  graphql: InstanceType<Shopify['clients']['Graphql']>;\n}"
           }
         }
       }
@@ -2313,10 +2889,47 @@
     "jsDocTypeExamples": [
       "WebhookContextWithSession"
     ],
-    "related": [],
+    "related": [
+      {
+        "name": "Admin API context",
+        "subtitle": "Interact with the Admin API.",
+        "url": "/docs/api/shopify-app-remix/apis/admin-api"
+      }
+    ],
     "examples": {
       "description": "",
       "exampleGroups": [
+        {
+          "title": "admin",
+          "examples": [
+            {
+              "description": "With the `v3_webhookAdminContext` future flag enabled, use the `admin` object in the context to interact with the Admin API.",
+              "codeblock": {
+                "title": "[V3] Webhook admin context",
+                "tabs": [
+                  {
+                    "title": "Example",
+                    "code": "import { ActionFunctionArgs } from \"@remix-run/node\";\nimport { authenticate } from \"../shopify.server\";\n\nexport async function action({ request }: ActionFunctionArgs) {\n  const { admin } = await authenticate.webhook(request);\n\n  const response = await admin?.graphql(\n    `#graphql\n    mutation populateProduct($input: ProductInput!) {\n      productCreate(input: $input) {\n        product {\n          id\n        }\n      }\n    }`,\n    { variables: { input: { title: \"Product Name\" } } }\n  );\n\n  const productData = await response.json();\n  return json({ data: productData.data });\n}",
+                    "language": "typescript"
+                  }
+                ]
+              }
+            },
+            {
+              "description": "Use the `admin` object in the context to interact with the Admin API. This format will be removed in V3 of the package.",
+              "codeblock": {
+                "title": "Webhook admin context",
+                "tabs": [
+                  {
+                    "title": "Example",
+                    "code": "import { json, ActionFunctionArgs } from \"@remix-run/node\";\nimport { authenticate } from \"../shopify.server\";\n\nexport async function action({ request }: ActionFunctionArgs) {\n  const { admin } = await authenticate.webhook(request);\n\n  const response = await admin?.graphql.query&lt;any&gt;({\n    data: {\n      query: `#graphql\n        mutation populateProduct($input: ProductInput!) {\n          productCreate(input: $input) {\n            product {\n              id\n            }\n          }\n        }`,\n      variables: { input: { title: \"Product Name\" } },\n    },\n  });\n\n  const productData = response?.body.data;\n  return json({ data: productData.data });\n}",
+                    "language": "typescript"
+                  }
+                ]
+              }
+            }
+          ]
+        },
         {
           "title": "apiVersion",
           "examples": [
@@ -2687,7 +3300,7 @@
               "name": "ShopifyApp<Config extends AppConfigArg<Resources, Storage>>",
               "value": "ShopifyApp<Config extends AppConfigArg<Resources, Storage>>"
             },
-            "value": "export function shopifyApp<\n  Config extends AppConfigArg<Resources, Storage>,\n  Resources extends ShopifyRestResources,\n  Storage extends SessionStorage,\n>(appConfig: Config): ShopifyApp<Config> {\n  const api = deriveApi<Resources>(appConfig);\n  const config = deriveConfig<Storage>(appConfig, api.config);\n  const logger = overrideLogger(api.logger);\n\n  if (appConfig.webhooks) {\n    api.webhooks.addHandlers(appConfig.webhooks);\n  }\n\n  const params: BasicParams = {api, config, logger};\n  const oauth = new AuthStrategy<Config, Resources>(params);\n\n  const shopify:\n    | AdminApp<Config>\n    | AppStoreApp<Config>\n    | SingleMerchantApp<Config> = {\n    sessionStorage: config.sessionStorage,\n    addDocumentResponseHeaders: addDocumentResponseHeadersFactory(params),\n    registerWebhooks: registerWebhooksFactory(params),\n    authenticate: {\n      admin: oauth.authenticateAdmin.bind(oauth),\n      public: authenticatePublicFactory<Resources>(params),\n      webhook: authenticateWebhookFactory<\n        Resources,\n        keyof Config['webhooks'] | MandatoryTopics\n      >(params),\n    },\n    unauthenticated: {\n      admin: unauthenticatedAdminContextFactory(params),\n      storefront: unauthenticatedStorefrontContextFactory(params),\n    },\n  };\n\n  if (\n    isAppStoreApp(shopify, appConfig) ||\n    isSingleMerchantApp(shopify, appConfig)\n  ) {\n    shopify.login = loginFactory(params);\n  }\n\n  return shopify as ShopifyApp<Config>;\n}",
+            "value": "export function shopifyApp<\n  Config extends AppConfigArg<Resources, Storage>,\n  Resources extends ShopifyRestResources,\n  Storage extends SessionStorage,\n>(appConfig: Config): ShopifyApp<Config> {\n  const api = deriveApi<Resources>(appConfig);\n  const config = deriveConfig<Storage>(appConfig, api.config);\n  const logger = overrideLogger(api.logger);\n\n  if (appConfig.webhooks) {\n    api.webhooks.addHandlers(appConfig.webhooks);\n  }\n\n  const params: BasicParams = {api, config, logger};\n  const oauth = new AuthStrategy<Config, Resources>(params);\n\n  const shopify:\n    | AdminApp<Config>\n    | AppStoreApp<Config>\n    | SingleMerchantApp<Config> = {\n    sessionStorage: config.sessionStorage,\n    addDocumentResponseHeaders: addDocumentResponseHeadersFactory(params),\n    registerWebhooks: registerWebhooksFactory(params),\n    authenticate: {\n      admin: oauth.authenticateAdmin.bind(oauth),\n      public: authenticatePublicFactory<Resources>(params),\n      webhook: authenticateWebhookFactory<\n        Config['future'],\n        Resources,\n        keyof Config['webhooks'] | MandatoryTopics\n      >(params),\n    },\n    unauthenticated: {\n      admin: unauthenticatedAdminContextFactory(params),\n      storefront: unauthenticatedStorefrontContextFactory(params),\n    },\n  };\n\n  if (\n    isAppStoreApp(shopify, appConfig) ||\n    isSingleMerchantApp(shopify, appConfig)\n  ) {\n    shopify.login = loginFactory(params);\n  }\n\n  return shopify as ShopifyApp<Config>;\n}",
             "examples": [
               {
                 "title": "The minimum viable configuration",
@@ -2843,6 +3456,14 @@
               {
                 "filePath": "/server/config-types.ts",
                 "syntaxKind": "PropertySignature",
+                "name": "future",
+                "value": "FutureFlags",
+                "description": "Features that will be introduced in future releases of this package.\n\nYou can opt in to these features by setting the corresponding flags. By doing so, you can prepare for future releases in advance and provide feedback on the new features.",
+                "isOptional": true
+              },
+              {
+                "filePath": "/server/config-types.ts",
+                "syntaxKind": "PropertySignature",
                 "name": "apiKey",
                 "value": "string",
                 "description": "",
@@ -2920,7 +3541,7 @@
                 "isOptional": true
               }
             ],
-            "value": "export interface AppConfigArg<\n  Resources extends ShopifyRestResources = ShopifyRestResources,\n  Storage extends SessionStorage = SessionStorage,\n> extends Omit<\n    ApiConfigArg<Resources>,\n    | 'hostName'\n    | 'hostScheme'\n    | 'isEmbeddedApp'\n    | 'apiVersion'\n    | 'isCustomStoreApp'\n  > {\n  /**\n   * The URL your app is running on.\n   *\n   * The `@shopify/cli` provides this URL as `process.env.SHOPIFY_APP_URL`.  For development this is probably a tunnel URL that points to your local machine.  If this is a production app, this is your production URL.\n   */\n  appUrl: string;\n\n  /**\n   * An adaptor for storing sessions in your database of choice.\n   *\n   * Shopify provides multiple session storage adaptors and you can create your own.\n   *\n   * {@link https://github.com/Shopify/shopify-app-js/blob/main/README.md#session-storage-options}\n   *\n   * @example\n   * <caption>Storing sessions with Prisma.</caption>\n   * <description>Add the `@shopify/shopify-app-session-storage-prisma` package to use the Prisma session storage.</description>\n   * ```ts\n   * import { shopifyApp } from \"@shopify/shopify-app-remix/server\";\n   * import { PrismaSessionStorage } from \"@shopify/shopify-app-session-storage-prisma\";\n   *\n   * import prisma from \"~/db.server\";\n   *\n   * const shopify = shopifyApp({\n   *   // ... etc\n   *   sessionStorage: new PrismaSessionStorage(prisma),\n   * });\n   * export default shopify;\n   * ```\n   */\n  sessionStorage: Storage;\n\n  /**\n   * Whether your app use online or offline tokens.\n   *\n   * If your app uses online tokens, then both online and offline tokens will be saved to your database.  This ensures your app can perform background jobs.\n   *\n   * {@link https://shopify.dev/docs/apps/auth/oauth/access-modes}\n   *\n   * @defaultValue `false`\n   */\n  useOnlineTokens?: boolean;\n\n  /**\n   * The config for the webhook topics your app would like to subscribe to.\n   *\n   * {@link https://shopify.dev/docs/apps/webhooks}\n   *\n   * This can be in used in conjunction with the afterAuth hook to register webhook topics when a user installs your app.  Or you can use this function in other processes such as background jobs.\n   *\n   * @example\n   * <caption>Registering for a webhook when a merchant uninstalls your app.</caption>\n   * ```ts\n   * // /app/shopify.server.ts\n   * import { DeliveryMethod, shopifyApp } from \"@shopify/shopify-app-remix/server\";\n   *\n   * const shopify = shopifyApp({\n   *   webhooks: {\n   *     APP_UNINSTALLED: {\n   *       deliveryMethod: DeliveryMethod.Http,\n   *        callbackUrl: \"/webhooks\",\n   *     },\n   *   },\n   *   hooks: {\n   *     afterAuth: async ({ session }) => {\n   *       shopify.registerWebhooks({ session });\n   *     }\n   *   },\n   *   // ...etc\n   * });\n   * export default shopify;\n   * export const authenticate = shopify.authenticate;\n   *\n   * // /app/routes/webhooks.jsx\n   * import { ActionFunctionArgs } from \"@remix-run/node\";\n   *\n   * import { authenticate } from \"../shopify.server\";\n   * import db from \"../db.server\";\n   *\n   * export const action = async ({ request }: ActionFunctionArgs) => {\n   *   const { topic, shop } = await authenticate.webhook(request);\n   *\n   *   switch (topic) {\n   *     case \"APP_UNINSTALLED\":\n   *       await db.session.deleteMany({ where: { shop } });\n   *       break;\n   *     case \"CUSTOMERS_DATA_REQUEST\":\n   *     case \"CUSTOMERS_REDACT\":\n   *     case \"SHOP_REDACT\":\n   *     default:\n   *       throw new Response(\"Unhandled webhook topic\", { status: 404 });\n   *   }\n   *   throw new Response();\n   * };\n   * ```\n   */\n  webhooks?: WebhookConfig;\n\n  /**\n   * Functions to call at key places during your apps lifecycle.\n   *\n   * These functions are called in the context of the request that triggered them.  This means you can access the session.\n   *\n   * @example\n   * <caption>Seeding your database custom data when a merchant installs your app.</caption>\n   * ```ts\n   * import { DeliveryMethod, shopifyApp } from \"@shopify/shopify-app-remix/server\";\n   * import { seedStoreData } from \"~/db/seeds\"\n   *\n   * const shopify = shopifyApp({\n   *   hooks: {\n   *     afterAuth: async ({ session }) => {\n   *       seedStoreData({session})\n   *     }\n   *   },\n   *   // ...etc\n   * });\n   * ```\n   */\n  hooks?: HooksConfig;\n\n  /**\n   * Does your app render embedded inside the Shopify Admin or on its own.\n   *\n   * Unless you have very specific needs, this should be true.\n   *\n   * @defaultValue `true`\n   */\n  isEmbeddedApp?: boolean;\n\n  /**\n   * How your app is distributed. Default is `AppDistribution.AppStore`.\n   *\n   * {@link https://shopify.dev/docs/apps/distribution}\n   */\n  distribution?: AppDistribution;\n\n  /**\n   * What version of Shopify's Admin API's would you like to use.\n   *\n   * {@link https://shopify.dev/docs/api/}\n   *\n   * @defaultValue `LATEST_API_VERSION` from `@shopify/shopify-app-remix`\n   *\n   * @example\n   * <caption>Using the latest API Version (Recommended)</caption>\n   * ```ts\n   * import { LATEST_API_VERSION, shopifyApp } from \"@shopify/shopify-app-remix/server\";\n   *\n   * const shopify = shopifyApp({\n   *   // ...etc\n   *   apiVersion: LATEST_API_VERSION,\n   * });\n   * ```\n   */\n  apiVersion?: ApiVersion;\n\n  /**\n   * A path that Shopify can reserve for auth related endpoints.\n   *\n   * This must match a $ route in your Remix app.  That route must export a loader function that calls `shopify.authenticate.admin(request)`.\n   *\n   * @default `\"/auth\"`\n   *\n   * @example\n   * <caption>Using the latest API Version (Recommended)</caption>\n   * ```ts\n   * // /app/shopify.server.ts\n   * import { LATEST_API_VERSION, shopifyApp } from \"@shopify/shopify-app-remix/server\";\n   *\n   * const shopify = shopifyApp({\n   *   // ...etc\n   *   apiVersion: LATEST_API_VERSION,\n   * });\n   * export default shopify;\n   * export const authenticate = shopify.authenticate;\n   *\n   * // /app/routes/auth/$.jsx\n   * import { LoaderFunctionArgs } from \"@remix-run/node\";\n   * import { authenticate } from \"../../shopify.server\";\n   *\n   * export async function loader({ request }: LoaderFunctionArgs) {\n   *   await authenticate.admin(request);\n   *\n   *   return null\n   * }\n   * ```\n   */\n  authPathPrefix?: string;\n}"
+            "value": "export interface AppConfigArg<\n  Resources extends ShopifyRestResources = ShopifyRestResources,\n  Storage extends SessionStorage = SessionStorage,\n> extends Omit<\n    ApiConfigArg<Resources>,\n    | 'hostName'\n    | 'hostScheme'\n    | 'isEmbeddedApp'\n    | 'apiVersion'\n    | 'isCustomStoreApp'\n  > {\n  /**\n   * The URL your app is running on.\n   *\n   * The `@shopify/cli` provides this URL as `process.env.SHOPIFY_APP_URL`.  For development this is probably a tunnel URL that points to your local machine.  If this is a production app, this is your production URL.\n   */\n  appUrl: string;\n\n  /**\n   * An adaptor for storing sessions in your database of choice.\n   *\n   * Shopify provides multiple session storage adaptors and you can create your own.\n   *\n   * {@link https://github.com/Shopify/shopify-app-js/blob/main/README.md#session-storage-options}\n   *\n   * @example\n   * <caption>Storing sessions with Prisma.</caption>\n   * <description>Add the `@shopify/shopify-app-session-storage-prisma` package to use the Prisma session storage.</description>\n   * ```ts\n   * import { shopifyApp } from \"@shopify/shopify-app-remix/server\";\n   * import { PrismaSessionStorage } from \"@shopify/shopify-app-session-storage-prisma\";\n   *\n   * import prisma from \"~/db.server\";\n   *\n   * const shopify = shopifyApp({\n   *   // ... etc\n   *   sessionStorage: new PrismaSessionStorage(prisma),\n   * });\n   * export default shopify;\n   * ```\n   */\n  sessionStorage: Storage;\n\n  /**\n   * Whether your app use online or offline tokens.\n   *\n   * If your app uses online tokens, then both online and offline tokens will be saved to your database.  This ensures your app can perform background jobs.\n   *\n   * {@link https://shopify.dev/docs/apps/auth/oauth/access-modes}\n   *\n   * @defaultValue `false`\n   */\n  useOnlineTokens?: boolean;\n\n  /**\n   * The config for the webhook topics your app would like to subscribe to.\n   *\n   * {@link https://shopify.dev/docs/apps/webhooks}\n   *\n   * This can be in used in conjunction with the afterAuth hook to register webhook topics when a user installs your app.  Or you can use this function in other processes such as background jobs.\n   *\n   * @example\n   * <caption>Registering for a webhook when a merchant uninstalls your app.</caption>\n   * ```ts\n   * // /app/shopify.server.ts\n   * import { DeliveryMethod, shopifyApp } from \"@shopify/shopify-app-remix/server\";\n   *\n   * const shopify = shopifyApp({\n   *   webhooks: {\n   *     APP_UNINSTALLED: {\n   *       deliveryMethod: DeliveryMethod.Http,\n   *        callbackUrl: \"/webhooks\",\n   *     },\n   *   },\n   *   hooks: {\n   *     afterAuth: async ({ session }) => {\n   *       shopify.registerWebhooks({ session });\n   *     }\n   *   },\n   *   // ...etc\n   * });\n   * export default shopify;\n   * export const authenticate = shopify.authenticate;\n   *\n   * // /app/routes/webhooks.jsx\n   * import { ActionFunctionArgs } from \"@remix-run/node\";\n   *\n   * import { authenticate } from \"../shopify.server\";\n   * import db from \"../db.server\";\n   *\n   * export const action = async ({ request }: ActionFunctionArgs) => {\n   *   const { topic, shop } = await authenticate.webhook(request);\n   *\n   *   switch (topic) {\n   *     case \"APP_UNINSTALLED\":\n   *       await db.session.deleteMany({ where: { shop } });\n   *       break;\n   *     case \"CUSTOMERS_DATA_REQUEST\":\n   *     case \"CUSTOMERS_REDACT\":\n   *     case \"SHOP_REDACT\":\n   *     default:\n   *       throw new Response(\"Unhandled webhook topic\", { status: 404 });\n   *   }\n   *   throw new Response();\n   * };\n   * ```\n   */\n  webhooks?: WebhookConfig;\n\n  /**\n   * Functions to call at key places during your apps lifecycle.\n   *\n   * These functions are called in the context of the request that triggered them.  This means you can access the session.\n   *\n   * @example\n   * <caption>Seeding your database custom data when a merchant installs your app.</caption>\n   * ```ts\n   * import { DeliveryMethod, shopifyApp } from \"@shopify/shopify-app-remix/server\";\n   * import { seedStoreData } from \"~/db/seeds\"\n   *\n   * const shopify = shopifyApp({\n   *   hooks: {\n   *     afterAuth: async ({ session }) => {\n   *       seedStoreData({session})\n   *     }\n   *   },\n   *   // ...etc\n   * });\n   * ```\n   */\n  hooks?: HooksConfig;\n\n  /**\n   * Does your app render embedded inside the Shopify Admin or on its own.\n   *\n   * Unless you have very specific needs, this should be true.\n   *\n   * @defaultValue `true`\n   */\n  isEmbeddedApp?: boolean;\n\n  /**\n   * How your app is distributed. Default is `AppDistribution.AppStore`.\n   *\n   * {@link https://shopify.dev/docs/apps/distribution}\n   */\n  distribution?: AppDistribution;\n\n  /**\n   * What version of Shopify's Admin API's would you like to use.\n   *\n   * {@link https://shopify.dev/docs/api/}\n   *\n   * @defaultValue `LATEST_API_VERSION` from `@shopify/shopify-app-remix`\n   *\n   * @example\n   * <caption>Using the latest API Version (Recommended)</caption>\n   * ```ts\n   * import { LATEST_API_VERSION, shopifyApp } from \"@shopify/shopify-app-remix/server\";\n   *\n   * const shopify = shopifyApp({\n   *   // ...etc\n   *   apiVersion: LATEST_API_VERSION,\n   * });\n   * ```\n   */\n  apiVersion?: ApiVersion;\n\n  /**\n   * A path that Shopify can reserve for auth related endpoints.\n   *\n   * This must match a $ route in your Remix app.  That route must export a loader function that calls `shopify.authenticate.admin(request)`.\n   *\n   * @default `\"/auth\"`\n   *\n   * @example\n   * <caption>Using the latest API Version (Recommended)</caption>\n   * ```ts\n   * // /app/shopify.server.ts\n   * import { LATEST_API_VERSION, shopifyApp } from \"@shopify/shopify-app-remix/server\";\n   *\n   * const shopify = shopifyApp({\n   *   // ...etc\n   *   apiVersion: LATEST_API_VERSION,\n   * });\n   * export default shopify;\n   * export const authenticate = shopify.authenticate;\n   *\n   * // /app/routes/auth/$.jsx\n   * import { LoaderFunctionArgs } from \"@remix-run/node\";\n   * import { authenticate } from \"../../shopify.server\";\n   *\n   * export async function loader({ request }: LoaderFunctionArgs) {\n   *   await authenticate.admin(request);\n   *\n   *   return null\n   * }\n   * ```\n   */\n  authPathPrefix?: string;\n\n  /**\n   * Features that will be introduced in future releases of this package.\n   *\n   * You can opt in to these features by setting the corresponding flags. By doing so, you can prepare for future\n   * releases in advance and provide feedback on the new features.\n   */\n  future?: FutureFlags;\n}"
           },
           "WebhookConfig": {
             "filePath": "/server/config-types.ts",
@@ -3078,6 +3699,23 @@
                 "value": "shopify_admin"
               }
             ]
+          },
+          "FutureFlags": {
+            "filePath": "/server/future/flags.ts",
+            "name": "FutureFlags",
+            "description": "",
+            "members": [
+              {
+                "filePath": "/server/future/flags.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "v3_webhookAdminContext",
+                "value": "boolean",
+                "description": "When enabled, returns the same `admin` context (`AdminApiContext`) from `authenticate.webhook` that is returned from `authenticate.admin`.",
+                "isOptional": true,
+                "defaultValue": "false"
+              }
+            ],
+            "value": "export interface FutureFlags {\n  /**\n   * When enabled, returns the same `admin` context (`AdminApiContext`) from `authenticate.webhook` that is returned from `authenticate.admin`.\n   *\n   * @default false\n   */\n  v3_webhookAdminContext?: boolean;\n}"
           },
           "ShopifyApp": {
             "filePath": "/server/types.ts",
@@ -3321,7 +3959,7 @@
                 "filePath": "/server/types.ts",
                 "syntaxKind": "PropertySignature",
                 "name": "webhook",
-                "value": "AuthenticateWebhook<\n    RestResourcesType<Config>,\n    keyof Config['webhooks'] | MandatoryTopics\n  >",
+                "value": "AuthenticateWebhook<\n    Config['future'],\n    RestResourcesType<Config>,\n    keyof Config['webhooks'] | MandatoryTopics\n  >",
                 "description": "Authenticate a Shopify webhook request, get back an authenticated admin context and details on the webhook request",
                 "examples": [
                   {
@@ -3341,7 +3979,7 @@
                 ]
               }
             ],
-            "value": "interface Authenticate<Config extends AppConfigArg> {\n  /**\n   * Authenticate an admin Request and get back an authenticated admin context.  Use the authenticated admin context to interact with Shopify.\n   *\n   * Examples of when to use this are requests from your app's UI, or requests from admin extensions.\n   *\n   * If there is no session for the Request, this will redirect the merchant to correct auth flows.\n   *\n   * @example\n   * <caption>Authenticating a request for an embedded app.</caption>\n   * ```ts\n   * // /app/shopify.server.ts\n   * import { LATEST_API_VERSION, shopifyApp } from \"@shopify/shopify-app-remix/server\";\n   * import { restResources } from \"@shopify/shopify-api/rest/admin/2023-04\";\n   *\n   * const shopify = shopifyApp({\n   *   restResources,\n   *   // ...etc\n   * });\n   * export default shopify;\n   * export const authenticate = shopify.authenticate;\n   * ```\n   * ```ts\n   * // /app/routes/**\\/*.jsx\n   * import { LoaderFunctionArgs, json } from \"@remix-run/node\";\n   * import { authenticate } from \"../../shopify.server\";\n   *\n   * export async function loader({ request }: LoaderFunctionArgs) {\n   *   const {admin, session, sessionToken, billing} = authenticate.admin(request);\n   *\n   *   return json(await admin.rest.resources.Product.count({ session }));\n   * }\n   * ```\n   */\n  admin: AuthenticateAdmin<Config, RestResourcesType<Config>>;\n\n  /**\n   * Authenticate a public request and get back a session token.\n   *\n   * @example\n   * <caption>Authenticating a request from a checkout extension</caption>\n   *\n   * ```ts\n   * // /app/routes/api/checkout.jsx\n   * import { LoaderFunctionArgs, json } from \"@remix-run/node\";\n   * import { authenticate } from \"../../shopify.server\";\n   * import { getWidgets } from \"~/db/widgets\";\n   *\n   * export async function loader({ request }: LoaderFunctionArgs) {\n   *   const {sessionToken} = authenticate.public.checkout(request);\n   *\n   *   return json(await getWidgets(sessionToken));\n   * }\n   * ```\n   */\n  public: AuthenticatePublic;\n\n  /**\n   * Authenticate a Shopify webhook request, get back an authenticated admin context and details on the webhook request\n   *\n   * @example\n   * <caption>Authenticating a webhook request</caption>\n   *\n   * ```ts\n   * // /app/shopify.server.ts\n   * import { DeliveryMethod, shopifyApp } from \"@shopify/shopify-app-remix/server\";\n   *\n   * const shopify = shopifyApp({\n   *   webhooks: {\n   *    APP_UNINSTALLED: {\n   *       deliveryMethod: DeliveryMethod.Http,\n   *       callbackUrl: \"/webhooks\",\n   *     },\n   *   },\n   *   hooks: {\n   *     afterAuth: async ({ session }) => {\n   *       shopify.registerWebhooks({ session });\n   *     },\n   *   },\n   *   // ...etc\n   * });\n   * export default shopify;\n   * export const authenticate = shopify.authenticate;\n   * ```\n   * ```ts\n   * // /app/routes/webhooks.ts\n   * import { ActionFunctionArgs } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   * import db from \"../db.server\";\n   *\n   * export const action = async ({ request }: ActionFunctionArgs) => {\n   *   const { topic, shop, session } = await authenticate.webhook(request);\n   *\n   *   switch (topic) {\n   *     case \"APP_UNINSTALLED\":\n   *       if (session) {\n   *         await db.session.deleteMany({ where: { shop } });\n   *       }\n   *       break;\n   *     case \"CUSTOMERS_DATA_REQUEST\":\n   *     case \"CUSTOMERS_REDACT\":\n   *     case \"SHOP_REDACT\":\n   *     default:\n   *       throw new Response(\"Unhandled webhook topic\", { status: 404 });\n   *   }\n   *\n   *   throw new Response();\n   * };\n   * ```\n   */\n  webhook: AuthenticateWebhook<\n    RestResourcesType<Config>,\n    keyof Config['webhooks'] | MandatoryTopics\n  >;\n}"
+            "value": "interface Authenticate<Config extends AppConfigArg> {\n  /**\n   * Authenticate an admin Request and get back an authenticated admin context.  Use the authenticated admin context to interact with Shopify.\n   *\n   * Examples of when to use this are requests from your app's UI, or requests from admin extensions.\n   *\n   * If there is no session for the Request, this will redirect the merchant to correct auth flows.\n   *\n   * @example\n   * <caption>Authenticating a request for an embedded app.</caption>\n   * ```ts\n   * // /app/shopify.server.ts\n   * import { LATEST_API_VERSION, shopifyApp } from \"@shopify/shopify-app-remix/server\";\n   * import { restResources } from \"@shopify/shopify-api/rest/admin/2023-04\";\n   *\n   * const shopify = shopifyApp({\n   *   restResources,\n   *   // ...etc\n   * });\n   * export default shopify;\n   * export const authenticate = shopify.authenticate;\n   * ```\n   * ```ts\n   * // /app/routes/**\\/*.jsx\n   * import { LoaderFunctionArgs, json } from \"@remix-run/node\";\n   * import { authenticate } from \"../../shopify.server\";\n   *\n   * export async function loader({ request }: LoaderFunctionArgs) {\n   *   const {admin, session, sessionToken, billing} = authenticate.admin(request);\n   *\n   *   return json(await admin.rest.resources.Product.count({ session }));\n   * }\n   * ```\n   */\n  admin: AuthenticateAdmin<Config, RestResourcesType<Config>>;\n\n  /**\n   * Authenticate a public request and get back a session token.\n   *\n   * @example\n   * <caption>Authenticating a request from a checkout extension</caption>\n   *\n   * ```ts\n   * // /app/routes/api/checkout.jsx\n   * import { LoaderFunctionArgs, json } from \"@remix-run/node\";\n   * import { authenticate } from \"../../shopify.server\";\n   * import { getWidgets } from \"~/db/widgets\";\n   *\n   * export async function loader({ request }: LoaderFunctionArgs) {\n   *   const {sessionToken} = authenticate.public.checkout(request);\n   *\n   *   return json(await getWidgets(sessionToken));\n   * }\n   * ```\n   */\n  public: AuthenticatePublic;\n\n  /**\n   * Authenticate a Shopify webhook request, get back an authenticated admin context and details on the webhook request\n   *\n   * @example\n   * <caption>Authenticating a webhook request</caption>\n   *\n   * ```ts\n   * // /app/shopify.server.ts\n   * import { DeliveryMethod, shopifyApp } from \"@shopify/shopify-app-remix/server\";\n   *\n   * const shopify = shopifyApp({\n   *   webhooks: {\n   *    APP_UNINSTALLED: {\n   *       deliveryMethod: DeliveryMethod.Http,\n   *       callbackUrl: \"/webhooks\",\n   *     },\n   *   },\n   *   hooks: {\n   *     afterAuth: async ({ session }) => {\n   *       shopify.registerWebhooks({ session });\n   *     },\n   *   },\n   *   // ...etc\n   * });\n   * export default shopify;\n   * export const authenticate = shopify.authenticate;\n   * ```\n   * ```ts\n   * // /app/routes/webhooks.ts\n   * import { ActionFunctionArgs } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   * import db from \"../db.server\";\n   *\n   * export const action = async ({ request }: ActionFunctionArgs) => {\n   *   const { topic, shop, session } = await authenticate.webhook(request);\n   *\n   *   switch (topic) {\n   *     case \"APP_UNINSTALLED\":\n   *       if (session) {\n   *         await db.session.deleteMany({ where: { shop } });\n   *       }\n   *       break;\n   *     case \"CUSTOMERS_DATA_REQUEST\":\n   *     case \"CUSTOMERS_REDACT\":\n   *     case \"SHOP_REDACT\":\n   *     default:\n   *       throw new Response(\"Unhandled webhook topic\", { status: 404 });\n   *   }\n   *\n   *   throw new Response();\n   * };\n   * ```\n   */\n  webhook: AuthenticateWebhook<\n    Config['future'],\n    RestResourcesType<Config>,\n    keyof Config['webhooks'] | MandatoryTopics\n  >;\n}"
           },
           "AuthenticateAdmin": {
             "filePath": "/server/types.ts",
@@ -4172,14 +4810,21 @@
             "returns": {
               "filePath": "/server/authenticate/webhooks/types.ts",
               "description": "",
-              "name": "Promise<\n  WebhookContext<Topics> | WebhookContextWithSession<Topics, Resources>\n>",
-              "value": "Promise<\n  WebhookContext<Topics> | WebhookContextWithSession<Topics, Resources>\n>"
+              "name": "Promise<WebhookContext<Future, Resources, Topics>>",
+              "value": "Promise<WebhookContext<Future, Resources, Topics>>"
             },
-            "value": "export type AuthenticateWebhook<\n  Resources extends ShopifyRestResources = ShopifyRestResources,\n  Topics = string | number | symbol,\n> = (\n  request: Request,\n) => Promise<\n  WebhookContext<Topics> | WebhookContextWithSession<Topics, Resources>\n>;"
+            "value": "export type AuthenticateWebhook<\n  Future extends FutureFlagOptions,\n  Resources extends ShopifyRestResources,\n  Topics = string | number | symbol,\n> = (request: Request) => Promise<WebhookContext<Future, Resources, Topics>>;"
           },
           "WebhookContext": {
             "filePath": "/server/authenticate/webhooks/types.ts",
+            "syntaxKind": "TypeAliasDeclaration",
             "name": "WebhookContext",
+            "value": "WebhookContextWithoutSession<Topics> | WebhookContextWithSession<Future, Resources, Topics>",
+            "description": ""
+          },
+          "WebhookContextWithoutSession": {
+            "filePath": "/server/authenticate/webhooks/types.ts",
+            "name": "WebhookContextWithoutSession",
             "description": "",
             "members": [
               {
@@ -4292,7 +4937,7 @@
                 ]
               }
             ],
-            "value": "export interface WebhookContext<Topics = string | number | symbol>\n  extends Context<Topics> {\n  session: undefined;\n  admin: undefined;\n}"
+            "value": "export interface WebhookContextWithoutSession<Topics = string | number | symbol>\n  extends Context<Topics> {\n  session: undefined;\n  admin: undefined;\n}"
           },
           "JSONValue": {
             "filePath": "/server/types.ts",
@@ -4546,14 +5191,14 @@
               {
                 "filePath": "/server/types.ts",
                 "syntaxKind": "MethodSignature",
-                "name": "__@iterator@527",
+                "name": "__@iterator@540",
                 "value": "() => IterableIterator<JSONValue>",
                 "description": "Iterator"
               },
               {
                 "filePath": "/server/types.ts",
                 "syntaxKind": "MethodSignature",
-                "name": "__@unscopables@529",
+                "name": "__@unscopables@542",
                 "value": "() => { copyWithin: boolean; entries: boolean; fill: boolean; find: boolean; findIndex: boolean; keys: boolean; values: boolean; }",
                 "description": "Returns an object whose properties have the value 'true'\r\nwhen they will be absent when used in a 'with' statement."
               },
@@ -4583,8 +5228,30 @@
                 "filePath": "/server/authenticate/webhooks/types.ts",
                 "syntaxKind": "PropertySignature",
                 "name": "admin",
-                "value": "{ rest: RestClient & Resources; graphql: GraphqlClient; }",
-                "description": "An admin context for the webhook.\n\nReturned only if there is a session for the shop."
+                "value": "WebhookAdminContext<Future, Resources>",
+                "description": "An admin context for the webhook.\n\nReturned only if there is a session for the shop.",
+                "examples": [
+                  {
+                    "title": "[V3] Webhook admin context",
+                    "description": "With the `v3_webhookAdminContext` future flag enabled, use the `admin` object in the context to interact with the Admin API.",
+                    "tabs": [
+                      {
+                        "code": "import { ActionFunctionArgs } from \"@remix-run/node\";\nimport { authenticate } from \"../shopify.server\";\n\nexport async function action({ request }: ActionFunctionArgs) {\n  const { admin } = await authenticate.webhook(request);\n\n  const response = await admin?.graphql(\n    `#graphql\n    mutation populateProduct($input: ProductInput!) {\n      productCreate(input: $input) {\n        product {\n          id\n        }\n      }\n    }`,\n    { variables: { input: { title: \"Product Name\" } } }\n  );\n\n  const productData = await response.json();\n  return json({ data: productData.data });\n}",
+                        "title": "Example"
+                      }
+                    ]
+                  },
+                  {
+                    "title": "Webhook admin context",
+                    "description": "Use the `admin` object in the context to interact with the Admin API. This format will be removed in V3 of the package.",
+                    "tabs": [
+                      {
+                        "code": "import { json, ActionFunctionArgs } from \"@remix-run/node\";\nimport { authenticate } from \"../shopify.server\";\n\nexport async function action({ request }: ActionFunctionArgs) {\n  const { admin } = await authenticate.webhook(request);\n\n  const response = await admin?.graphql.query<any>({\n    data: {\n      query: `#graphql\n        mutation populateProduct($input: ProductInput!) {\n          productCreate(input: $input) {\n            product {\n              id\n            }\n          }\n        }`,\n      variables: { input: { title: \"Product Name\" } },\n    },\n  });\n\n  const productData = response?.body.data;\n  return json({ data: productData.data });\n}",
+                        "title": "Example"
+                      }
+                    ]
+                  }
+                ]
               },
               {
                 "filePath": "/server/authenticate/webhooks/types.ts",
@@ -4682,7 +5349,43 @@
                 ]
               }
             ],
-            "value": "export interface WebhookContextWithSession<\n  Topics = string | number | symbol,\n  Resources extends ShopifyRestResources = any,\n> extends Context<Topics> {\n  /**\n   * A session with an offline token for the shop.\n   *\n   * Returned only if there is a session for the shop.\n   */\n  session: Session;\n  /**\n   * An admin context for the webhook.\n   *\n   * Returned only if there is a session for the shop.\n   */\n  admin: {\n    /** A REST client. */\n    rest: InstanceType<Shopify['clients']['Rest']> & Resources;\n    /** A GraphQL client. */\n    graphql: InstanceType<Shopify['clients']['Graphql']>;\n  };\n}"
+            "value": "export interface WebhookContextWithSession<\n  Future extends FutureFlagOptions,\n  Resources extends ShopifyRestResources,\n  Topics = string | number | symbol,\n> extends Context<Topics> {\n  /**\n   * A session with an offline token for the shop.\n   *\n   * Returned only if there is a session for the shop.\n   */\n  session: Session;\n\n  /**\n   * An admin context for the webhook.\n   *\n   * Returned only if there is a session for the shop.\n   *\n   * @example\n   * <caption>[V3] Webhook admin context.</caption>\n   * <description>With the `v3_webhookAdminContext` future flag enabled, use the `admin` object in the context to interact with the Admin API.</description>\n   * ```ts\n   * import { ActionFunctionArgs } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   *\n   * export async function action({ request }: ActionFunctionArgs) {\n   *   const { admin } = await authenticate.webhook(request);\n   *\n   *   const response = await admin?.graphql(\n   *     `#graphql\n   *     mutation populateProduct($input: ProductInput!) {\n   *       productCreate(input: $input) {\n   *         product {\n   *           id\n   *         }\n   *       }\n   *     }`,\n   *     { variables: { input: { title: \"Product Name\" } } }\n   *   );\n   *\n   *   const productData = await response.json();\n   *   return json({ data: productData.data });\n   * }\n   * ```\n   *\n   * @example\n   * <caption>Webhook admin context.</caption>\n   * <description>Use the `admin` object in the context to interact with the Admin API. This format will be removed in V3 of the package.</description>\n   * ```ts\n   * import { json, ActionFunctionArgs } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   *\n   * export async function action({ request }: ActionFunctionArgs) {\n   *   const { admin } = await authenticate.webhook(request);\n   *\n   *   const response = await admin?.graphql.query<any>({\n   *     data: {\n   *       query: `#graphql\n   *         mutation populateProduct($input: ProductInput!) {\n   *           productCreate(input: $input) {\n   *             product {\n   *               id\n   *             }\n   *           }\n   *         }`,\n   *       variables: { input: { title: \"Product Name\" } },\n   *     },\n   *   });\n   *\n   *   const productData = response?.body.data;\n   *   return json({ data: productData.data });\n   * }\n   * ```\n   */\n  admin: WebhookAdminContext<Future, Resources>;\n}"
+          },
+          "WebhookAdminContext": {
+            "filePath": "/server/authenticate/webhooks/types.ts",
+            "syntaxKind": "TypeAliasDeclaration",
+            "name": "WebhookAdminContext",
+            "value": "FeatureEnabled<Future, 'v3_webhookAdminContext'> extends true\n  ? AdminApiContext<Resources>\n  : LegacyWebhookAdminApiContext<Resources>",
+            "description": ""
+          },
+          "FeatureEnabled": {
+            "filePath": "/server/future/flags.ts",
+            "syntaxKind": "TypeAliasDeclaration",
+            "name": "FeatureEnabled",
+            "value": "Future extends FutureFlags\n  ? Future[Flag] extends true\n    ? true\n    : false\n  : false",
+            "description": ""
+          },
+          "LegacyWebhookAdminApiContext": {
+            "filePath": "/server/authenticate/webhooks/types.ts",
+            "name": "LegacyWebhookAdminApiContext",
+            "description": "",
+            "members": [
+              {
+                "filePath": "/server/authenticate/webhooks/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "rest",
+                "value": "RestClient & Resources",
+                "description": "A REST client."
+              },
+              {
+                "filePath": "/server/authenticate/webhooks/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "graphql",
+                "value": "InstanceType<Shopify['clients']['Graphql']>",
+                "description": "A GraphQL client."
+              }
+            ],
+            "value": "export interface LegacyWebhookAdminApiContext<\n  Resources extends ShopifyRestResources,\n> {\n  /** A REST client. */\n  rest: InstanceType<Shopify['clients']['Rest']> & Resources;\n  /** A GraphQL client. */\n  graphql: InstanceType<Shopify['clients']['Graphql']>;\n}"
           },
           "MandatoryTopics": {
             "filePath": "/server/types.ts",
@@ -5062,6 +5765,30 @@
             "name": "AppStoreApp",
             "value": "ShopifyAppBase<Config> & ShopifyAppLogin",
             "description": ""
+          }
+        }
+      },
+      {
+        "title": "Future flags",
+        "description": "Set future flags using the `future` configuration field to opt in to upcoming breaking changes.\n\nWith this feature, you can prepare for major releases ahead of time, as well as try out new features before they are released.",
+        "type": "FutureFlags",
+        "typeDefinitions": {
+          "FutureFlags": {
+            "filePath": "/server/future/flags.ts",
+            "name": "FutureFlags",
+            "description": "",
+            "members": [
+              {
+                "filePath": "/server/future/flags.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "v3_webhookAdminContext",
+                "value": "boolean",
+                "description": "When enabled, returns the same `admin` context (`AdminApiContext`) from `authenticate.webhook` that is returned from `authenticate.admin`.",
+                "isOptional": true,
+                "defaultValue": "false"
+              }
+            ],
+            "value": "export interface FutureFlags {\n  /**\n   * When enabled, returns the same `admin` context (`AdminApiContext`) from `authenticate.webhook` that is returned from `authenticate.admin`.\n   *\n   * @default false\n   */\n  v3_webhookAdminContext?: boolean;\n}"
           }
         }
       }

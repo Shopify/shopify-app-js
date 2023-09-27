@@ -21,8 +21,8 @@ import {
   expectAdminApiClient,
 } from '../../../__test-helpers';
 import {shopifyApp} from '../../..';
-import {AdminApiContext} from '../../../config-types';
 import {REAUTH_URL_HEADER} from '../../const';
+import {AdminApiContext} from '../../../clients';
 
 describe('admin.authenticate context', () => {
   expectAdminApiClient(async () => {
@@ -196,7 +196,7 @@ describe('admin.authenticate context', () => {
 });
 
 async function setUpEmbeddedFlow() {
-  const shopify = shopifyApp({...testConfig(), restResources});
+  const shopify = shopifyApp(testConfig({restResources}));
   const expectedSession = await setUpValidSession(shopify.sessionStorage);
 
   const {token} = getJwt();
@@ -212,7 +212,7 @@ async function setUpEmbeddedFlow() {
 }
 
 async function setUpFetchFlow() {
-  const shopify = shopifyApp({...testConfig(), restResources});
+  const shopify = shopifyApp(testConfig({restResources}));
   await setUpValidSession(shopify.sessionStorage);
 
   const {token} = getJwt();
@@ -227,11 +227,7 @@ async function setUpFetchFlow() {
 }
 
 async function setUpNonEmbeddedFlow() {
-  const shopify = shopifyApp({
-    ...testConfig(),
-    restResources,
-    isEmbeddedApp: false,
-  });
+  const shopify = shopifyApp(testConfig({restResources, isEmbeddedApp: false}));
   const session = await setUpValidSession(shopify.sessionStorage);
 
   const request = new Request(`${APP_URL}?shop=${TEST_SHOP}`);
