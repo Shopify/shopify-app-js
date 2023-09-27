@@ -15,11 +15,7 @@ const data: ReferenceEntityTemplateSchema = {
       type: 'AuthenticateAdmin',
     },
   ],
-  jsDocTypeExamples: [
-    'EmbeddedAdminContext',
-    'AdminApiContext',
-    'BillingContext',
-  ],
+  jsDocTypeExamples: ['EmbeddedAdminContext'],
   related: [
     {
       name: 'API context',

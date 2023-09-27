@@ -137,6 +137,23 @@ export interface WebhookContextWithSession<
    * A session with an offline token for the shop.
    *
    * Returned only if there is a session for the shop.
+   *
+   * @example
+   * <caption>Using the session object.</caption>
+   * <description>Use the `session` object to create an unauthenticated Admin API context.</description>
+   * ```
+   * import { ActionFunction } from "@remix-run/node";
+   * import { authenticate } from "../shopify.server";
+   *
+   * export const action: ActionFunction = async ({ request }) => {
+   *   const { session } = await authenticate.webhook(request);
+   *   const { admin } = await shopify.unauthenticated.admin(session.shop);
+   *
+   *   // Do something with the Admin API.
+   *
+   *   return new Response();
+   * };
+   * ```
    */
   session: Session;
 
@@ -144,6 +161,34 @@ export interface WebhookContextWithSession<
    * An admin context for the webhook.
    *
    * Returned only if there is a session for the shop.
+   *
+   * @example
+   * <caption>Interacting with the Admin API.</caption>
+   * <description>Use the `admin` object to interact with the REST or GraphQL APIs using an offline access token for the shop that triggered the webhook.</description>
+   * ```ts
+   * // app/routes/webhooks.ts
+   * import { ActionFunction } from "@remix-run/node";
+   * import { authenticate } from "../shopify.server";
+   *
+   * export const action: ActionFunction = async ({ request }) => {
+   *   const { admin } = await authenticate.webhook(request);
+   *
+   *   const response = await admin.graphql(
+   *     `#graphql
+   *     mutation populateProduct($input: ProductInput!) {
+   *       productCreate(input: $input) {
+   *         product {
+   *           id
+   *         }
+   *       }
+   *     }`,
+   *     { variables: { input: { title: "Product Name" } } }
+   *   );
+   *
+   *   const productData = await response.json();
+   *   return json({ data: productData.data });
+   * }
+   * ```
    */
   admin: WebhookAdminContext<Future, Resources>;
 }

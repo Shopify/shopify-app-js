@@ -73,6 +73,34 @@ interface AdminContextInternal<
 
   /**
    * Methods for interacting with the GraphQL / REST Admin APIs for the store that made the request.
+   *
+   * @example
+   * <caption>Interacting with the Admin API.</caption>
+   * <description>Use the `admin` object to interact with the REST or GraphQL APIs.</description>
+   * ```ts
+   * // app/routes/**\/.ts
+   * import { json } from "@remix-run/node";
+   * import { authenticate } from "../shopify.server";
+   *
+   * export async function action({ request }: ActionArgs) {
+   *   const { admin } = await authenticate.admin(request);
+   *
+   *   const response = await admin.graphql(
+   *     `#graphql
+   *     mutation populateProduct($input: ProductInput!) {
+   *       productCreate(input: $input) {
+   *         product {
+   *           id
+   *         }
+   *       }
+   *     }`,
+   *     { variables: { input: { title: "Product Name" } } }
+   *   );
+   *
+   *   const productData = await response.json();
+   *   return json({ data: productData.data });
+   * }
+   * ```
    */
   admin: AdminApiContext<Resources>;
 
@@ -80,6 +108,26 @@ interface AdminContextInternal<
    * Billing methods for this store, based on the plans defined in the `billing` config option.
    *
    * {@link https://shopify.dev/docs/apps/billing}
+   *
+   * @example
+   * <caption>Querying the billing API.</caption>
+   * <description>You can use the `billing` object to check / request payment for your app.</description>
+   * ```ts
+   * // /app/routes/**\/*.ts
+   * import { LoaderArgs } from "@remix-run/node";
+   * import { authenticate, MONTHLY_PLAN } from "../shopify.server";
+   *
+   * export const loader = async ({ request }: LoaderArgs) => {
+   *   const { billing } = await authenticate.admin(request);
+   *   await billing.require({
+   *     plans: [MONTHLY_PLAN],
+   *     isTest: true,
+   *     onFailure: async () => billing.request({ plan: MONTHLY_PLAN }),
+   *   });
+   *
+   *   // App logic
+   * };
+   * ```
    */
   billing: BillingContext<Config>;
 
