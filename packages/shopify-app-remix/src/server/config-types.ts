@@ -8,6 +8,7 @@ import {
 } from '@shopify/shopify-api';
 import {SessionStorage} from '@shopify/shopify-app-session-storage';
 
+import type {FutureFlags} from './future/flags';
 import type {AppDistribution} from './types';
 import type {AdminApiContext} from './clients';
 
@@ -211,6 +212,14 @@ export interface AppConfigArg<
    * ```
    */
   authPathPrefix?: string;
+
+  /**
+   * Features that will be introduced in future releases of this package.
+   *
+   * You can opt in to these features by setting the corresponding flags. By doing so, you can prepare for future
+   * releases in advance and provide feedback on the new features.
+   */
+  future?: FutureFlags;
 }
 
 export interface AppConfig<Storage extends SessionStorage = SessionStorage>
@@ -221,6 +230,7 @@ export interface AppConfig<Storage extends SessionStorage = SessionStorage>
   sessionStorage: Storage;
   useOnlineTokens: boolean;
   hooks: HooksConfig;
+  future: FutureFlags;
 }
 
 interface AuthConfig {

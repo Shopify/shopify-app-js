@@ -1,8 +1,8 @@
 import {
+  BillingConfigSubscriptionPlan,
   BillingInterval,
   HttpResponseError,
   SESSION_COOKIE_NAME,
-  Shopify,
 } from '@shopify/shopify-api';
 
 import {shopifyApp} from '../../../..';
@@ -24,18 +24,18 @@ import {REAUTH_URL_HEADER} from '../../../const';
 
 import * as responses from './mock-responses';
 
-const BILLING_CONFIG: Shopify['config']['billing'] = {
+const BILLING_CONFIG = {
   [responses.PLAN_1]: {
     amount: 5,
     currencyCode: 'USD',
     interval: BillingInterval.Every30Days,
-  },
+  } as BillingConfigSubscriptionPlan,
 };
 
 describe('Cancel billing', () => {
   it('returns an AppSubscription when the cancellation is successful', async () => {
     // GIVEN
-    const shopify = shopifyApp({...testConfig(), billing: BILLING_CONFIG});
+    const shopify = shopifyApp(testConfig({billing: BILLING_CONFIG}));
     await setUpValidSession(shopify.sessionStorage);
 
     const {billing} = await shopify.authenticate.admin(
@@ -62,12 +62,8 @@ describe('Cancel billing', () => {
 
   it('redirects to authentication when at the top level when Shopify invalidated the session', async () => {
     // GIVEN
-    const config = testConfig();
-    const shopify = shopifyApp({
-      ...config,
-      isEmbeddedApp: false,
-      billing: BILLING_CONFIG,
-    });
+    const config = testConfig({isEmbeddedApp: false, billing: BILLING_CONFIG});
+    const shopify = shopifyApp(config);
     const session = await setUpValidSession(shopify.sessionStorage);
 
     const request = new Request(`${APP_URL}/billing?shop=${TEST_SHOP}`);
@@ -104,7 +100,7 @@ describe('Cancel billing', () => {
 
   it('redirects to exit-iframe with authentication using app bridge when embedded and Shopify invalidated the session', async () => {
     // GIVEN
-    const shopify = shopifyApp({...testConfig(), billing: BILLING_CONFIG});
+    const shopify = shopifyApp(testConfig({billing: BILLING_CONFIG}));
     await setUpValidSession(shopify.sessionStorage);
 
     const {token} = getJwt();
@@ -139,7 +135,7 @@ describe('Cancel billing', () => {
 
   it('returns redirection headers during fetch requests when Shopify invalidated the session', async () => {
     // GIVEN
-    const shopify = shopifyApp({...testConfig(), billing: BILLING_CONFIG});
+    const shopify = shopifyApp(testConfig({billing: BILLING_CONFIG}));
     await setUpValidSession(shopify.sessionStorage);
 
     const request = new Request(`${APP_URL}/billing`, {
@@ -181,11 +177,9 @@ describe('Cancel billing', () => {
 
   it('throws errors other than authentication errors', async () => {
     // GIVEN
-    const shopify = shopifyApp({
-      ...testConfig(),
-      isEmbeddedApp: false,
-      billing: BILLING_CONFIG,
-    });
+    const shopify = shopifyApp(
+      testConfig({isEmbeddedApp: false, billing: BILLING_CONFIG}),
+    );
     const session = await setUpValidSession(shopify.sessionStorage);
 
     await mockExternalRequest({

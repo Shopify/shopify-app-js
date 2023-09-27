@@ -79,6 +79,7 @@ export function shopifyApp<
       admin: oauth.authenticateAdmin.bind(oauth),
       public: authenticatePublicFactory<Resources>(params),
       webhook: authenticateWebhookFactory<
+        Config['future'],
         Resources,
         keyof Config['webhooks'] | MandatoryTopics
       >(params),
@@ -170,6 +171,7 @@ function deriveConfig<Storage extends SessionStorage>(
     useOnlineTokens: appConfig.useOnlineTokens ?? false,
     hooks: appConfig.hooks ?? {},
     sessionStorage: appConfig.sessionStorage as Storage,
+    future: appConfig.future ?? {},
     auth: {
       path: authPathPrefix,
       callbackPath: `${authPathPrefix}/callback`,

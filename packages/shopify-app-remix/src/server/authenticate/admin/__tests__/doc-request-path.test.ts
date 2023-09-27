@@ -387,7 +387,7 @@ describe('authorize.admin doc request path', () => {
 
       it('returns the context if the session is valid and the app is not embedded', async () => {
         // GIVEN
-        const shopify = shopifyApp({...testConfig(), isEmbeddedApp: false});
+        const shopify = shopifyApp(testConfig({isEmbeddedApp: false}));
 
         let testSession: Session;
         testSession = await setUpValidSession(shopify.sessionStorage);
@@ -419,7 +419,7 @@ describe('authorize.admin doc request path', () => {
 
   it('loads a session from the cookie from a request with no search params when not embedded', async () => {
     // GIVEN
-    const shopify = shopifyApp({...testConfig(), isEmbeddedApp: false});
+    const shopify = shopifyApp(testConfig({isEmbeddedApp: false}));
     const testSession = await setUpValidSession(shopify.sessionStorage);
 
     // WHEN
@@ -438,7 +438,7 @@ describe('authorize.admin doc request path', () => {
 
   it('returns a 400 response when no shop is available', async () => {
     // GIVEN
-    const shopify = shopifyApp({...testConfig(), isEmbeddedApp: false});
+    const shopify = shopifyApp(testConfig({isEmbeddedApp: false}));
     await setUpValidSession(shopify.sessionStorage);
 
     // WHEN

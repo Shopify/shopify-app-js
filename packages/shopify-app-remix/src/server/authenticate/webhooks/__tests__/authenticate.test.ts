@@ -6,8 +6,10 @@ import {shopifyApp} from '../../..';
 import {
   APP_URL,
   TEST_SHOP,
+  expectAdminApiClient,
   getHmac,
   getThrownResponse,
+  setUpValidSession,
   testConfig,
 } from '../../../__test-helpers';
 
@@ -55,31 +57,64 @@ describe('Webhook validation', () => {
     expect(actualSession).toBeUndefined();
   });
 
-  it('returns context with session when there is a session', async () => {
-    // GIVEN
-    const sessionStorage = new MemorySessionStorage();
-    const shopify = shopifyApp(testConfig({sessionStorage, restResources}));
-    const body = {some: 'data'};
+  describe('returns context with session when there is a session', () => {
+    expectAdminApiClient(async () => {
+      // GIVEN
+      const sessionStorage = new MemorySessionStorage();
+      const shopify = shopifyApp(testConfig({sessionStorage, restResources}));
+      const body = {some: 'data'};
 
-    const session = new Session({
-      id: `offline_${TEST_SHOP}`,
-      shop: TEST_SHOP,
-      isOnline: false,
-      state: 'test',
-      accessToken: 'totally_real_token',
+      const expectedSession = new Session({
+        id: `offline_${TEST_SHOP}`,
+        shop: TEST_SHOP,
+        isOnline: false,
+        state: 'test',
+        accessToken: 'totally_real_token',
+      });
+      await sessionStorage.storeSession(expectedSession);
+
+      // WHEN
+      const {
+        admin,
+        apiVersion,
+        session: actualSession,
+        shop,
+        topic,
+        webhookId,
+        payload,
+      } = await shopify.authenticate.webhook(
+        new Request(`${APP_URL}/webhooks`, {
+          method: 'POST',
+          body: JSON.stringify(body),
+          headers: webhookHeaders(JSON.stringify(body)),
+        }),
+      );
+
+      // THEN
+      expect(apiVersion).toBe('2023-01');
+      expect(shop).toBe(TEST_SHOP);
+      expect(topic).toBe('APP_UNINSTALLED');
+      expect(webhookId).toBe('1234567890');
+      expect(actualSession).toBe(expectedSession);
+      expect(payload).toEqual(body);
+
+      if (!admin) throw new Error('Expected admin to be defined');
+      if (!actualSession) throw new Error('Expected session to be defined');
+
+      return {admin, expectedSession, actualSession};
     });
-    await sessionStorage.storeSession(session);
+  });
+
+  it('returns a legacy context when the future flag is disabled', async () => {
+    // GIVEN
+    const shopify = shopifyApp(
+      testConfig({restResources, future: {v3_webhookContext: false}}),
+    );
+    const session = await setUpValidSession(shopify.sessionStorage);
 
     // WHEN
-    const {
-      admin,
-      apiVersion,
-      session: actualSession,
-      shop,
-      topic,
-      webhookId,
-      payload,
-    } = await shopify.authenticate.webhook(
+    const body = {some: 'data'};
+    const {admin} = await shopify.authenticate.webhook(
       new Request(`${APP_URL}/webhooks`, {
         method: 'POST',
         body: JSON.stringify(body),
@@ -88,18 +123,11 @@ describe('Webhook validation', () => {
     );
 
     // THEN
-    expect(apiVersion).toBe('2023-01');
-    expect(shop).toBe(TEST_SHOP);
-    expect(topic).toBe('APP_UNINSTALLED');
-    expect(webhookId).toBe('1234567890');
-    expect(actualSession).toBe(session);
-    expect(payload).toEqual(body);
+    expect(admin?.rest.apiVersion).toBe('2023-01');
+    expect(admin?.rest.session).toBe(session);
 
-    expect(admin.rest.apiVersion).toBe('2023-01');
-    expect(admin.rest.session).toBe(session);
-
-    expect(admin.graphql.apiVersion).toBe('2023-01');
-    expect(admin.graphql.session).toBe(session);
+    expect(admin?.graphql.apiVersion).toBe('2023-01');
+    expect(admin?.graphql.session).toBe(session);
   });
 
   it('throws a 400 on invalid HMAC', async () => {

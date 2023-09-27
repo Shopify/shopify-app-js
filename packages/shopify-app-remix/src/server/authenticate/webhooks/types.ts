@@ -1,6 +1,8 @@
 import {Session, Shopify, ShopifyRestResources} from '@shopify/shopify-api';
 
 import type {JSONValue} from '../../types';
+import type {AdminApiContext} from '../../clients';
+import type {FeatureEnabled, FutureFlagOptions} from '../../future/flags';
 
 export interface RegisterWebhooksOptions {
   /**
@@ -104,15 +106,32 @@ interface Context<Topics = string | number | symbol> {
   payload: JSONValue;
 }
 
-export interface WebhookContext<Topics = string | number | symbol>
+export interface WebhookContextWithoutSession<Topics = string | number | symbol>
   extends Context<Topics> {
   session: undefined;
   admin: undefined;
 }
 
+export interface LegacyWebhookAdminApiContext<
+  Resources extends ShopifyRestResources,
+> {
+  /** A REST client. */
+  rest: InstanceType<Shopify['clients']['Rest']> & Resources;
+  /** A GraphQL client. */
+  graphql: InstanceType<Shopify['clients']['Graphql']>;
+}
+
+export type WebhookAdminContext<
+  Future extends FutureFlagOptions,
+  Resources extends ShopifyRestResources,
+> = FeatureEnabled<Future, 'v3_webhookContext'> extends true
+  ? AdminApiContext<Resources>
+  : LegacyWebhookAdminApiContext<Resources>;
+
 export interface WebhookContextWithSession<
+  Future extends FutureFlagOptions,
+  Resources extends ShopifyRestResources,
   Topics = string | number | symbol,
-  Resources extends ShopifyRestResources = any,
 > extends Context<Topics> {
   /**
    * A session with an offline token for the shop.
@@ -120,24 +139,25 @@ export interface WebhookContextWithSession<
    * Returned only if there is a session for the shop.
    */
   session: Session;
+
   /**
    * An admin context for the webhook.
    *
    * Returned only if there is a session for the shop.
    */
-  admin: {
-    /** A REST client. */
-    rest: InstanceType<Shopify['clients']['Rest']> & Resources;
-    /** A GraphQL client. */
-    graphql: InstanceType<Shopify['clients']['Graphql']>;
-  };
+  admin: WebhookAdminContext<Future, Resources>;
 }
 
-export type AuthenticateWebhook<
-  Resources extends ShopifyRestResources = ShopifyRestResources,
+export type WebhookContext<
+  Future extends FutureFlagOptions,
+  Resources extends ShopifyRestResources,
   Topics = string | number | symbol,
-> = (
-  request: Request,
-) => Promise<
-  WebhookContext<Topics> | WebhookContextWithSession<Topics, Resources>
->;
+> =
+  | WebhookContextWithoutSession<Topics>
+  | WebhookContextWithSession<Future, Resources, Topics>;
+
+export type AuthenticateWebhook<
+  Future extends FutureFlagOptions,
+  Resources extends ShopifyRestResources,
+  Topics = string | number | symbol,
+> = (request: Request) => Promise<WebhookContext<Future, Resources, Topics>>;
