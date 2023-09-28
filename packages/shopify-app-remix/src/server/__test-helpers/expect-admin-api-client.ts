@@ -1,7 +1,7 @@
 import {Session} from '@shopify/shopify-api';
 
 import {LATEST_API_VERSION} from '..';
-import {AdminApiContext} from '../config-types';
+import type {AdminApiContext} from '../clients';
 
 import {mockExternalRequest} from './request-mock';
 import {TEST_SHOP} from './const';

@@ -30,6 +30,7 @@ import {addDocumentResponseHeadersFactory} from './authenticate/helpers';
 import {loginFactory} from './authenticate/login/login';
 import {unauthenticatedAdminContextFactory} from './unauthenticated/admin';
 import {authenticatePublicFactory} from './authenticate/public';
+import {unauthenticatedStorefrontContextFactory} from './unauthenticated/storefront';
 
 /**
  * Creates an object your app will use to interact with Shopify.
@@ -84,6 +85,7 @@ export function shopifyApp<
     },
     unauthenticated: {
       admin: unauthenticatedAdminContextFactory(params),
+      storefront: unauthenticatedStorefrontContextFactory(params),
     },
   };
 

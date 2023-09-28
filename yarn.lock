@@ -2999,10 +2999,10 @@
     pkg-dir "^5.0.0"
     pluralize "^8.0.0"
 
-"@shopify/generate-docs@^0.11.0":
-  version "0.11.0"
-  resolved "https://registry.yarnpkg.com/@shopify/generate-docs/-/generate-docs-0.11.0.tgz#7a496a5e3328928ac58edb2c3f3ae0cc131e01ba"
-  integrity sha512-SufWSQXRqh6cCVd+H8c9cpXWKaBcRpcduIdVk3RkKV/PiD11WkUrHsdVFC1CZHWm1L7QYLaXBqwszFo1UvtYag==
+"@shopify/generate-docs@^0.11.1":
+  version "0.11.1"
+  resolved "https://registry.yarnpkg.com/@shopify/generate-docs/-/generate-docs-0.11.1.tgz#4b4d159cb5578dc98fa4218bbc9edade1872d0f1"
+  integrity sha512-pZxCkUtO6MXJaetEdd4Tyk6t7tjJTUNd3VGCXyOeZqKAWrXEob+8gkost0x23EmuES4GGqQKSB9nnKdFvbdk1w==
   dependencies:
     "@types/react" "^18.0.21"
     globby "^11.1.0"
@@ -3145,10 +3145,10 @@
     jest-matcher-utils "^26.6.2"
     react-reconciler "^0.28.0"
 
-"@shopify/shopify-api@7.6.0", "@shopify/shopify-api@^7.6.0":
-  version "7.6.0"
-  resolved "https://registry.yarnpkg.com/@shopify/shopify-api/-/shopify-api-7.6.0.tgz#d181ca9fbd2ff3b3a7595e9e121fde707dbbb36a"
-  integrity sha512-XUyBkSrUHvqCknPdY3ylaGDyC3hA2aKmXTsbo7vpGzncMqC1hZ2pwRJbBMnffdbEWj14Um9zkEMS7MKf1k6PBw==
+"@shopify/shopify-api@^7.7.0":
+  version "7.7.0"
+  resolved "https://registry.yarnpkg.com/@shopify/shopify-api/-/shopify-api-7.7.0.tgz#0344b5ba90b4ac913c26193ffd6eaedc91d24889"
+  integrity sha512-VrOty3470GpGcf2nZDCUQGCHU5lz9X91RwAoHqlutKueBsS5d8d7P6wv667zCxh+DHoV+8BBcNwQr/esW5TsAg==
   dependencies:
     "@shopify/network" "^3.2.1"
     compare-versions "^5.0.3"

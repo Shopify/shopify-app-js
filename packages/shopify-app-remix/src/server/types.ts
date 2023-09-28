@@ -6,14 +6,13 @@ import {
 import {SessionStorage} from '@shopify/shopify-app-session-storage';
 
 import type {AppConfig, AppConfigArg} from './config-types';
-import type {AdminContext} from './authenticate/admin/types';
 import type {
+  AuthenticateWebhook,
   RegisterWebhooksOptions,
-  WebhookContext,
-  WebhookContextWithSession,
 } from './authenticate/webhooks/types';
-import type {UnauthenticatedAdminContext} from './unauthenticated/admin/types';
 import type {AuthenticatePublic} from './authenticate/public/types';
+import type {AdminContext} from './authenticate/admin/types';
+import type {Unauthenticated} from './unauthenticated/types';
 
 export interface BasicParams {
   api: Shopify;
@@ -70,15 +69,6 @@ type AuthenticateAdmin<
   Resources extends ShopifyRestResources = ShopifyRestResources,
 > = (request: Request) => Promise<AdminContext<Config, Resources>>;
 
-type AuthenticateWebhook<
-  Resources extends ShopifyRestResources = ShopifyRestResources,
-  Topics = string | number | symbol,
-> = (
-  request: Request,
-) => Promise<
-  WebhookContext<Topics> | WebhookContextWithSession<Topics, Resources>
->;
-
 type RestResourcesType<Config extends AppConfigArg> =
   Config['restResources'] extends ShopifyRestResources
     ? Config['restResources']
@@ -98,7 +88,7 @@ interface Authenticate<Config extends AppConfigArg> {
    * If there is no session for the Request, this will redirect the merchant to correct auth flows.
    *
    * @example
-   * <caption>Registering webhooks and seeding data when a merchant installs your app.</caption>
+   * <caption>Authenticating a request for an embedded app.</caption>
    * ```ts
    * // /app/shopify.server.ts
    * import { LATEST_API_VERSION, shopifyApp } from "@shopify/shopify-app-remix/server";
@@ -138,7 +128,7 @@ interface Authenticate<Config extends AppConfigArg> {
    * import { getWidgets } from "~/db/widgets";
    *
    * export async function loader({ request }: LoaderArgs) {
-   *   const {sessionToken} = authenticate.public(request);
+   *   const {sessionToken} = authenticate.public.checkout(request);
    *
    *   return json(await getWidgets(sessionToken));
    * }
@@ -205,54 +195,13 @@ interface Authenticate<Config extends AppConfigArg> {
   >;
 }
 
-type UnauthenticatedAdmin<Resources extends ShopifyRestResources> = (
-  shop: string,
-) => Promise<UnauthenticatedAdminContext<Resources>>;
-
-interface Unauthenticated<Config extends AppConfigArg> {
-  /**
-   * Get an admin context by passing a shop
-   *
-   * **Warning** This should only be used for Requests that do not originate from Shopify.
-   * You must do your own authentication before using this method.
-   * This method throws an error if there is no session for the shop.
-   *
-   * @example
-   * <caption>Responding to a request from an external service not controlled by Shopify.</caption>
-   * ```ts
-   * // /app/shopify.server.ts
-   * import { LATEST_API_VERSION, shopifyApp } from "@shopify/shopify-app-remix/server";
-   * import { restResources } from "@shopify/shopify-api/rest/admin/2023-04";
-   *
-   * const shopify = shopifyApp({
-   *   restResources,
-   *   // ...etc
-   * });
-   * export default shopify;
-   * ```
-   * ```ts
-   * // /app/routes/**\/*.jsx
-   * import { LoaderArgs, json } from "@remix-run/node";
-   * import { authenticateExternal } from "~/helpers/authenticate"
-   * import shopify from "../../shopify.server";
-   *
-   * export async function loader({ request }: LoaderArgs) {
-   *   const shop = await authenticateExternal(request)
-   *   const {admin} = await shopify.unauthenticated.admin(shop);
-   *
-   *   return json(await admin.rest.resources.Product.count({ session }));
-   * }
-   * ```
-   */
-  admin: UnauthenticatedAdmin<RestResourcesType<Config>>;
-}
-
 export interface ShopifyAppBase<Config extends AppConfigArg> {
   /**
    * The `SessionStorage` instance you passed in as a config option.
    *
    * @example
-   * <caption>Using Prisma</caption>
+   * <caption>Storing sessions with Prisma.</caption>
+   * <description>Import the `@shopify/shopify-app-session-storage-prisma` package to store sessions in your Prisma database.</description>
    * ```ts
    * // /app/shopify.server.ts
    * import { shopifyApp } from "@shopify/shopify-app-remix/server";
@@ -275,7 +224,8 @@ export interface ShopifyAppBase<Config extends AppConfigArg> {
    * {@link https://shopify.dev/docs/apps/store/security/iframe-protection}
    *
    * @example
-   * <caption>Globally adding CSP headers to entry.server.tsx.</caption>
+   * <caption>Return headers on all requests.</caption>
+   * <description>Add headers to all HTML requests by calling `shopify.addDocumentResponseHeaders` in `entry.server.tsx`.</description>
    *
    * ```
    * // ~/shopify.server.ts
@@ -318,7 +268,8 @@ export interface ShopifyAppBase<Config extends AppConfigArg> {
    * Register webhook topics for a store using the given session. Most likely you want to use this in combination with the afterAuth hook.
    *
    * @example
-   * <caption>Registering webhooks when a merchant installs your app.</caption>
+   * <caption>Registering webhooks.</caption>
+   * <description>Trigger the registration after a merchant installs your app using the `afterAuth` hook.</description>
    * ```ts
    * import { DeliveryMethod, shopifyApp } from "@shopify/shopify-app-remix/server";
    *
@@ -342,13 +293,67 @@ export interface ShopifyAppBase<Config extends AppConfigArg> {
 
   /**
    * Ways to authenticate requests from different surfaces across Shopify.
+   *
+   * @example
+   * <caption>Authenticate Shopify requests.</caption>
+   * <description>Use the functions in `authenticate` to validate requests coming from Shopify.</description>
+   * ```ts
+   * // /app/shopify.server.ts
+   * import { LATEST_API_VERSION, shopifyApp } from "@shopify/shopify-app-remix/server";
+   * import { restResources } from "@shopify/shopify-api/rest/admin/2023-04";
+   *
+   * const shopify = shopifyApp({
+   *   restResources,
+   *   // ...etc
+   * });
+   * export default shopify;
+   * ```
+   * ```ts
+   * // /app/routes/**\/*.jsx
+   * import { LoaderArgs, json } from "@remix-run/node";
+   * import shopify from "../../shopify.server";
+   *
+   * export async function loader({ request }: LoaderArgs) {
+   *   const {admin, session, sessionToken, billing} = shopify.authenticate.admin(request);
+   *
+   *   return json(await admin.rest.resources.Product.count({ session }));
+   * }
+   * ```
    */
   authenticate: Authenticate<Config>;
 
   /**
    * Ways to get Contexts from requests that do not originate from Shopify.
+   *
+   * @example
+   * <caption>Using unauthenticated contexts.</caption>
+   * <description>Create contexts for requests that don't come from Shopify.</description>
+   * ```ts
+   * // /app/shopify.server.ts
+   * import { LATEST_API_VERSION, shopifyApp } from "@shopify/shopify-app-remix/server";
+   * import { restResources } from "@shopify/shopify-api/rest/admin/2023-04";
+   *
+   * const shopify = shopifyApp({
+   *   restResources,
+   *   // ...etc
+   * });
+   * export default shopify;
+   * ```
+   * ```ts
+   * // /app/routes/**\/*.jsx
+   * import { LoaderArgs, json } from "@remix-run/node";
+   * import { authenticateExternal } from "~/helpers/authenticate"
+   * import shopify from "../../shopify.server";
+   *
+   * export async function loader({ request }: LoaderArgs) {
+   *   const shop = await authenticateExternal(request)
+   *   const {admin} = await shopify.unauthenticated.admin(shop);
+   *
+   *   return json(await admin.rest.resources.Product.count({ session }));
+   * }
+   * ```
    */
-  unauthenticated: Unauthenticated<Config>;
+  unauthenticated: Unauthenticated<RestResourcesType<Config>>;
 }
 
 interface ShopifyAppLogin {
@@ -360,8 +365,21 @@ interface ShopifyAppLogin {
    * because Admin apps aren't allowed to show a login page.
    *
    * @example
-   * <caption>Providing a login form as a route that can handle GET and POST requests.</caption>
+   * <caption>Creating a login page.</caption>
+   * <description>Use `shopify.login` to create a login form, in a route that can handle GET and POST requests.</description>
+   * ```ts
+   * // /app/shopify.server.ts
+   * import { LATEST_API_VERSION, shopifyApp } from "@shopify/shopify-app-remix/server";
+   *
+   * const shopify = shopifyApp({
+   *   // ...etc
+   * });
+   * export default shopify;
    * ```
+   * ```ts
+   * // /app/routes/auth/login.tsx
+   * import shopify from "../../shopify.server";
+   *
    * export async function loader({ request }: LoaderArgs) {
    *   const errors = shopify.login(request);
    *

@@ -21,18 +21,19 @@ export interface CheckoutContext {
    * Refer to the OAuth docs for the [session token payload](https://shopify.dev/docs/apps/auth/oauth/session-tokens#payload).
    *
    * @example
-   * <caption>Get store specific widget data using the session token</caption>
+   * <caption>Using the decoded session token.</caption>
+   * <description>Get store-specific data using the `sessionToken` object.</description>
    * ```ts
-   * // app/routes/public/widgets.ts
+   * // app/routes/public/my-route.ts
    * import { LoaderArgs, json } from "@remix-run/node";
    * import { authenticate } from "../shopify.server";
-   * import { getWidgets } from "~/db/widgets.server";
+   * import { getMyAppData } from "~/db/model.server";
    *
    * export const loader = async ({ request }: LoaderArgs) => {
-   *   const { sessionToken } = await authenticate.public(
+   *   const { sessionToken } = await authenticate.public.checkout(
    *     request
    *   );
-   *   return json(await getWidgets({shop: sessionToken.dest}));
+   *   return json(await getMyAppData({shop: sessionToken.dest}));
    * };
    * ```
    */
@@ -42,20 +43,21 @@ export interface CheckoutContext {
    * A function that ensures the CORS headers are set correctly for the response.
    *
    * @example
-   * <caption>Setting CORS headers for a public request</caption>
+   * <caption>Setting CORS headers for a public request.</caption>
+   * <description>Use the `cors` helper to ensure your app can respond to checkout extension requests.</description>
    * ```ts
-   * // app/routes/public/widgets.ts
+   * // app/routes/public/my-route.ts
    * import { LoaderArgs, json } from "@remix-run/node";
    * import { authenticate } from "../shopify.server";
-   * import { getWidgets } from "~/db/widgets.server";
+   * import { getMyAppData } from "~/db/model.server";
    *
    * export const loader = async ({ request }: LoaderArgs) => {
-   *   const { sessionToken, cors } = await authenticate.public(
+   *   const { sessionToken, cors } = await authenticate.public.checkout(
    *     request,
    *     { corsHeaders: ["X-My-Custom-Header"] }
    *   );
-   *   const widgets = await getWidgets({shop: sessionToken.dest});
-   *   return cors(json(widgets));
+   *   const data = await getMyAppData({shop: sessionToken.dest});
+   *   return cors(json(data));
    * };
    * ```
    */

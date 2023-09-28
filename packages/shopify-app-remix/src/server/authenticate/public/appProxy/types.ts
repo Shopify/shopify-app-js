@@ -1,6 +1,6 @@
 import {Session, ShopifyRestResources} from '@shopify/shopify-api';
 
-import {AdminApiContext} from '../../../config-types';
+import {AdminApiContext, StorefrontContext} from '../../../clients';
 
 export type AuthenticateAppProxy = (
   request: Request,
@@ -20,7 +20,8 @@ interface Context {
    * A utility for creating a Liquid Response.
    *
    * @example
-   * <caption>Returning a Liquid Response from an app proxy route</caption>
+   * <caption>Rendering liquid content.</caption>
+   * <description>Use the `liquid` helper to render a `Response` with Liquid content.</description>
    * ```ts
    * // app/routes/**\/.ts
    * import {authenticate} from "~/shopify.server"
@@ -49,6 +50,12 @@ export interface AppProxyContext extends Context {
    * Therefore no methods for interacting with the GraphQL / REST Admin APIs are available.
    */
   admin: undefined;
+
+  /**
+   * No session is available for the shop that made this request.
+   * Therefore no method for interacting with the Storefront API is available.
+   */
+  storefront: undefined;
 }
 
 export interface AppProxyContextWithSession<
@@ -62,16 +69,17 @@ export interface AppProxyContextWithSession<
    * Use this to get shop or user-specific data.
    *
    * @example
-   * <caption>Getting your app's shop specific widget data using an offline session</caption>
+   * <caption>Using the session object.</caption>
+   * <description>Get your app's data using an offline session for the shop that made the request.</description>
    * ```ts
    * // app/routes/**\/.ts
    * import { json } from "@remix-run/node";
    * import { authenticate } from "../shopify.server";
-   * import { getWidgets } from "~/db/widgets.server";
+   * import { getMyAppModelData } from "~/db/model.server";
    *
    * export const loader = async ({ request }) => {
    *   const { session } = await authenticate.public.appProxy(request);
-   *   return json(await getWidgets({shop: session.shop));
+   *   return json(await getMyAppModelData({shop: session.shop));
    * };
    * ```
    */
@@ -79,6 +87,56 @@ export interface AppProxyContextWithSession<
 
   /**
    * Methods for interacting with the GraphQL / REST Admin APIs for the store that made the request.
+   *
+   * @example
+   * <caption>Interacting with the Admin API.</caption>
+   * <description>Use the `admin` object to interact with the REST or GraphQL APIs.</description>
+   * ```ts
+   * // app/routes/**\/.ts
+   * import { json } from "@remix-run/node";
+   * import { authenticate } from "../shopify.server";
+   *
+   * export async function action({ request }: ActionArgs) {
+   *   const { admin } = await authenticate.public.appProxy(request);
+   *
+   *   const response = await admin.graphql(
+   *     `#graphql
+   *     mutation populateProduct($input: ProductInput!) {
+   *       productCreate(input: $input) {
+   *         product {
+   *           id
+   *         }
+   *       }
+   *     }`,
+   *     { variables: { input: { title: "Product Name" } } }
+   *   );
+   *
+   *   const productData = await response.json();
+   *   return json({ data: productData.data });
+   * }
+   * ```
    */
   admin: AdminApiContext<Resources>;
+
+  /**
+   * Method for interacting with the Shopify Storefront Graphql API for the store that made the request.
+   *
+   * @example
+   * <caption>Interacting with the Storefront API.</caption>
+   * <description>Use the `storefront` object to interact with the GraphQL API.</description>
+   * ```ts
+   * // app/routes/**\/.ts
+   * import { json } from "@remix-run/node";
+   * import { authenticate } from "../shopify.server";
+   *
+   * export async function action({ request }: ActionArgs) {
+   *   const { admin } = await authenticate.public.appProxy(request);
+   *
+   *   const response = await storefront.graphql(`{blogs(first: 10) { edges { node { id } } } }`);
+   *
+   *   return json(await response.json());
+   * }
+   * ```
+   */
+  storefront: StorefrontContext;
 }

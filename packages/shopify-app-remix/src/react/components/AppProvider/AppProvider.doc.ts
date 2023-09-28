@@ -9,12 +9,12 @@ const data: ReferenceEntityTemplateSchema = {
   isVisualComponent: false,
   definitions: [
     {
-      title: 'props',
-      description: 'React component that sets up App Bridge and Polaris.',
-      type: 'AppProviderGeneratedType',
-      jsDocExamples: true,
+      title: 'AppProviderProps',
+      description: 'Props for the `AppProvider` component.',
+      type: 'AppProviderProps',
     },
   ],
+  jsDocTypeExamples: ['AppProviderGeneratedType'],
   related: [
     {
       name: 'App bridge',
