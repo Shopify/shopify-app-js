@@ -1,13 +1,12 @@
-import {ApiVersion, ShopifyRestResources} from '@shopify/shopify-api';
+import {ApiVersion, Session, ShopifyRestResources} from '@shopify/shopify-api';
 
 import type {BasicParams, MandatoryTopics} from '../../types';
-import {AdminApiContext, adminClientFactory} from '../../clients';
+import {adminClientFactory} from '../../clients';
 import {handleClientErrorFactory} from '../admin/helpers';
 import {FutureFlagOptions} from '../../future/flags';
 
 import type {
   AuthenticateWebhook,
-  LegacyWebhookAdminApiContext,
   WebhookAdminContext,
   WebhookContext,
   WebhookContextWithoutSession,
@@ -62,39 +61,55 @@ export function authenticateWebhookFactory<
       return webhookContext;
     }
 
-    let admin:
-      | AdminApiContext<Resources>
-      | LegacyWebhookAdminApiContext<Resources>;
-    if (config.future.v3_webhookContext) {
-      admin = adminClientFactory<Resources>({
-        params,
-        session,
-        handleClientError: handleClientErrorFactory({request}),
-      });
-    } else {
-      const restClient = new api.clients.Rest({
-        session,
-        apiVersion: check.apiVersion as ApiVersion,
-      });
-      const graphqlClient = new api.clients.Graphql({
-        session,
-        apiVersion: check.apiVersion as ApiVersion,
-      });
-
-      Object.entries(api.rest).forEach(([name, resource]) => {
-        Reflect.set(restClient, name, resource);
-      });
-
-      admin = {
-        rest: restClient as typeof restClient & Resources,
-        graphql: graphqlClient,
-      };
-    }
-
     return {
       ...webhookContext,
       session,
-      admin: admin as WebhookAdminContext<Future, Resources>,
+      admin: adminContext<Resources>({
+        params,
+        request,
+        session,
+        apiVersion: check.apiVersion as ApiVersion,
+      }) as WebhookAdminContext<Future, Resources>,
     };
   };
+}
+
+function adminContext<Resources extends ShopifyRestResources>({
+  params,
+  request,
+  session,
+  apiVersion,
+}: {
+  params: BasicParams;
+  request: Request;
+  session: Session;
+  apiVersion: ApiVersion;
+}) {
+  const {api, config} = params;
+
+  if (config.future.v3_webhookContext) {
+    return adminClientFactory<Resources>({
+      params,
+      session,
+      handleClientError: handleClientErrorFactory({request}),
+    });
+  } else {
+    const restClient = new api.clients.Rest({
+      session,
+      apiVersion: apiVersion as ApiVersion,
+    });
+    const graphqlClient = new api.clients.Graphql({
+      session,
+      apiVersion: apiVersion as ApiVersion,
+    });
+
+    Object.entries(api.rest).forEach(([name, resource]) => {
+      Reflect.set(restClient, name, resource);
+    });
+
+    return {
+      rest: restClient as typeof restClient & Resources,
+      graphql: graphqlClient,
+    };
+  }
 }

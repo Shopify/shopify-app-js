@@ -14,7 +14,13 @@ const data: ReferenceEntityTemplateSchema = {
     },
   ],
   jsDocTypeExamples: ['WebhookContextWithSession'],
-  related: [],
+  related: [
+    {
+      name: 'Admin API context',
+      subtitle: 'Interact with the Admin API.',
+      url: '/docs/api/shopify-app-remix/apis/admin-api',
+    },
+  ],
 };
 
 export default data;
