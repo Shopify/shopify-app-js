@@ -91,7 +91,7 @@ export interface AdminApiContext<
    * Methods for interacting with the Shopify Admin GraphQL API
    *
    * {@link https://shopify.dev/docs/api/admin-graphql}
-   * {@link https://github.com/Shopify/shopify-api-js/blob/main/docs/reference/clients/Graphql.md}
+   * {@link https://github.com/Shopify/shopify-api-js/blob/main/packages/shopify-api/docs/reference/clients/Graphql.md}
    *
    * @example
    * <caption>Querying the GraphQL API.</caption>

@@ -11,16 +11,6 @@ labels: 'Type: Bug 🐛'
 Write a short description of the issue here. Please provide any details or logs that
 can help us debug it.
 
-To increase logging, change these settings when calling shopifyApp:
-  api: {
-    logger: {
-      level: LogSeverity.Debug,
-      httpRequests: true, // if the error seems to be related to requests
-    }
-  }
-
-Learn more: https://github.com/Shopify/shopify-api-js/blob/main/docs/reference/shopifyApi.md#logger
-
 -->
 
 - `@shopify/shopify-app-*` package and version:
