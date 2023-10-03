@@ -8,6 +8,8 @@
 This package makes it easy to use [Remix](https://remix.run/) to build Shopify apps.
 It builds on the `@shopify/shopify-api` package and exposes a `shopifyApp` function. You can use `shopifyApp` to configure your app and then authenticate requests from Shopify.
 
+Visit the [`shopify.dev` documentation](https://shopify.dev/docs/api/shopify-app-remix) for more details on the Remix app package.
+
 ## Requirements
 
 To follow these usage guides, you will need to:
@@ -419,10 +421,4 @@ Remember to [set up your migrations](https://www.prisma.io/docs/concepts/compone
 
 ## Gotchas / Troubleshooting
 
-### Navigating to other pages breaks
-
-In Remix apps, you can navigate to a different page either by adding an `<a>` tag, or using the `<Link>` component from `@remix-run/react`.
-
-In Shopify Remix apps you should avoid using `<a>`.
-Use `<Link> `from `@remix-run/react` instead.
-This ensures that your user remains authenticated.
+If you're experiencing unexpected behaviors when using this package, check our [app template's documentation](https://github.com/Shopify/shopify-app-template-remix#gotchas--troubleshooting) for some common examples.

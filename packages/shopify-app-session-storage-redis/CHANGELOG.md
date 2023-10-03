@@ -62,7 +62,7 @@
 
 - e1d4f4f: Add @shopify/shopify-api as a peerDependencies entry for each session-storage package, to avoid API library conflicts (e.g., scopesArray.map error). Should help avoid issues like #93
 - de5fa79: Bumps [redis](https://github.com/redis/node-redis) from 4.6.5 to 4.6.6. See redis' [release](https://github.com/redis/node-redis/releases/tag/redis@4.6.6) for more details.
-- 1d007e8: Bumps [@shopify/shopify-api](https://github.com/Shopify/shopify-api-js) from 7.0.0 to 7.1.0. See `@shopify/shopify-api`'s [changelog](https://github.com/Shopify/shopify-api-js/blob/main/CHANGELOG.md) for more details.
+- 1d007e8: Bumps [@shopify/shopify-api](https://github.com/Shopify/shopify-api-js) from 7.0.0 to 7.1.0. See `@shopify/shopify-api`'s [changelog](https://github.com/Shopify/shopify-api-js/blob/main/packages/shopify-api/CHANGELOG.md) for more details.
 - Updated dependencies [e1d4f4f]
 - Updated dependencies [1d007e8]
   - @shopify/shopify-app-session-storage@1.1.3
@@ -72,7 +72,7 @@
 ### Patch Changes
 
 - c9804ae: Bump redis from 4.6.4 to 4.6.5. See redis [release note](https://github.com/redis/node-redis/releases/tag/redis@4.6.5) for more details.
-- e4f3415: Bump @shopify/shopify-api from 6.2.0 to 7.0.0. See [changelog](https://github.com/Shopify/shopify-api-js/blob/main/CHANGELOG.md) for details.
+- e4f3415: Bump @shopify/shopify-api from 6.2.0 to 7.0.0. See [changelog](https://github.com/Shopify/shopify-api-js/blob/main/packages/shopify-api/CHANGELOG.md) for details.
 - 27467d8: Add event handlers to redis client to prevent crashing on disconnect event. Fixes #129, #160 (Thanks to @davidhollenbeckx for linking to issue and solution.)
 - Updated dependencies [e4f3415]
   - @shopify/shopify-app-session-storage@1.1.2
