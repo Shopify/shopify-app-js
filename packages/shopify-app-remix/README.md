@@ -421,10 +421,4 @@ Remember to [set up your migrations](https://www.prisma.io/docs/concepts/compone
 
 ## Gotchas / Troubleshooting
 
-### Navigating to other pages breaks
-
-In Remix apps, you can navigate to a different page either by adding an `<a>` tag, or using the `<Link>` component from `@remix-run/react`.
-
-In Shopify Remix apps you should avoid using `<a>`.
-Use `<Link> `from `@remix-run/react` instead.
-This ensures that your user remains authenticated.
+If you're experiencing unexpected behaviors when using this package, check our [app template's documentation](https://github.com/Shopify/shopify-app-template-remix#gotchas--troubleshooting) for some common examples.
