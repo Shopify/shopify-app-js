@@ -46,10 +46,10 @@ export interface AdminApiContext<
    *
    * ```ts
    * // /app/routes/**\/*.ts
-   * import { LoaderArgs, json } from "@remix-run/node";
+   * import { LoaderFunctionArgs, json } from "@remix-run/node";
    * import { authenticate } from "../shopify.server";
    *
-   * export const loader = async ({ request }: LoaderArgs) => {
+   * export const loader = async ({ request }: LoaderFunctionArgs) => {
    *   const { admin, session } = await authenticate.admin(request);
    *   return json(admin.rest.resources.Order.count({ session }));
    * };
@@ -74,10 +74,10 @@ export interface AdminApiContext<
    *
    * ```ts
    * // /app/routes/**\/*.ts
-   * import { LoaderArgs, json } from "@remix-run/node";
+   * import { LoaderFunctionArgs, json } from "@remix-run/node";
    * import { authenticate } from "../shopify.server";
    *
-   * export const loader = async ({ request }: LoaderArgs) => {
+   * export const loader = async ({ request }: LoaderFunctionArgs) => {
    *   const { admin, session } = await authenticate.admin(request);
    *   const response = await admin.rest.get({ path: "/customers/count.json" });
    *   const customers = await response.json();
@@ -97,10 +97,10 @@ export interface AdminApiContext<
    * <caption>Querying the GraphQL API.</caption>
    * <description>Use `admin.graphql` to make query / mutation requests.</description>
    * ```ts
-   * import { ActionArgs } from "@remix-run/node";
+   * import { ActionFunctionArgs } from "@remix-run/node";
    * import { authenticate } from "../shopify.server";
    *
-   * export async function action({ request }: ActionArgs) {
+   * export async function action({ request }: ActionFunctionArgs) {
    *   const { admin } = await authenticate.admin(request);
    *
    *   const response = await admin.graphql(

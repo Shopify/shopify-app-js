@@ -81,11 +81,11 @@ It should export a loader that uses `shopifyApp` to authenticate:
 
 ```ts
 // app/routes/auth/$.tsx
-import {LoaderArgs} from '@remix-run/node';
+import {LoaderFunctionArgs} from '@remix-run/node';
 
 import shopify from '~/shopify.server';
 
-export async function loader({request}: LoaderArgs) {
+export async function loader({request}: LoaderFunctionArgs) {
   await shopify.authenticate.admin(request);
 
   return null;
@@ -98,12 +98,12 @@ Here is an example:
 
 ```ts
 // root.tsx
-import {LoaderArgs} from '@remix-run/node';
+import {LoaderFunctionArgs} from '@remix-run/node';
 import {AppProvider} from '@shopify/shopify-app-remix/react';
 
 import shopify from '~/shopify.server';
 
-export async function loader({request}: LoaderArgs) {
+export async function loader({request}: LoaderFunctionArgs) {
   await shopify.authenticate.admin(request);
 
   return json({

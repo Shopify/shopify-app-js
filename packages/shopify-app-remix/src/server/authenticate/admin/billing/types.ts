@@ -52,10 +52,10 @@ export interface BillingContext<Config extends AppConfigArg> {
    * <description>Call `billing.request` in the `onFailure` callback to immediately request payment.</description>
    * ```ts
    * // /app/routes/**\/*.ts
-   * import { LoaderArgs } from "@remix-run/node";
+   * import { LoaderFunctionArgs } from "@remix-run/node";
    * import { authenticate, MONTHLY_PLAN } from "../shopify.server";
    *
-   * export const loader = async ({ request }: LoaderArgs) => {
+   * export const loader = async ({ request }: LoaderFunctionArgs) => {
    *   const { billing } = await authenticate.admin(request);
    *   await billing.require({
    *     plans: [MONTHLY_PLAN],
@@ -97,10 +97,10 @@ export interface BillingContext<Config extends AppConfigArg> {
    * <description>Redirect to a different page in the `onFailure` callback, where the merchant can select a billing plan.</description>
    * ```ts
    * // /app/routes/**\/*.ts
-   * import { LoaderArgs, redirect } from "@remix-run/node";
+   * import { LoaderFunctionArgs, redirect } from "@remix-run/node";
    * import { authenticate, MONTHLY_PLAN, ANNUAL_PLAN } from "../shopify.server";
    *
-   * export const loader = async ({ request }: LoaderArgs) => {
+   * export const loader = async ({ request }: LoaderFunctionArgs) => {
    *   const { billing } = await authenticate.admin(request);
    *   const billingCheck = await billing.require({
    *     plans: [MONTHLY_PLAN, ANNUAL_PLAN],
@@ -154,10 +154,10 @@ export interface BillingContext<Config extends AppConfigArg> {
    * <description>Change where the merchant is returned to after approving the purchase using the `returnUrl` option.</description>
    * ```ts
    * // /app/routes/**\/*.ts
-   * import { LoaderArgs } from "@remix-run/node";
+   * import { LoaderFunctionArgs } from "@remix-run/node";
    * import { authenticate, MONTHLY_PLAN } from "../shopify.server";
    *
-   * export const loader = async ({ request }: LoaderArgs) => {
+   * export const loader = async ({ request }: LoaderFunctionArgs) => {
    *   const { billing } = await authenticate.admin(request);
    *   await billing.require({
    *     plans: [MONTHLY_PLAN],
@@ -209,10 +209,10 @@ export interface BillingContext<Config extends AppConfigArg> {
    * <description>Use the `billing.cancel` function to cancel an active subscription with the id returned from `billing.require`.</description>
    * ```ts
    * // /app/routes/cancel-subscription.ts
-   * import { LoaderArgs } from "@remix-run/node";
+   * import { LoaderFunctionArgs } from "@remix-run/node";
    * import { authenticate, MONTHLY_PLAN } from "../shopify.server";
    *
-   * export const loader = async ({ request }: LoaderArgs) => {
+   * export const loader = async ({ request }: LoaderFunctionArgs) => {
    *   const { billing } = await authenticate.admin(request);
    *   const billingCheck = await billing.require({
    *     plans: [MONTHLY_PLAN],
