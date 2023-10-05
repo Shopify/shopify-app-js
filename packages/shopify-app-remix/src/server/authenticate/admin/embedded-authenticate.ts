@@ -1,4 +1,4 @@
-import {redirect} from '@remix-run/server-runtime';
+// import {redirect} from '@remix-run/server-runtime';
 import {
   HttpResponseError,
   InvalidJwtError,
@@ -21,14 +21,14 @@ import {
 import type {AdminContext} from './types';
 import {
   handleEmbeddedClientErrorFactory,
-  redirectWithAppBridgeHeaders,
-  redirectWithExitIframe,
+  // redirectWithAppBridgeHeaders,
+  // redirectWithExitIframe,
   renderAppBridge,
 } from './helpers';
 import {
   createApiContext,
   ensureAppIsEmbeddedIfRequired,
-  ensureValidShopParam,
+  // ensureValidShopParam,
   redirectToBouncePage,
   validateUrlParams,
 } from './helpers/auth-helpers';
@@ -96,7 +96,7 @@ export class EmbeddedAuthStrategy<
     const isPatchSessionToken =
       url.pathname === config.auth.patchSessionTokenPath;
     const isExitIframe = url.pathname === config.auth.exitIframePath;
-    const isAuthRequest = url.pathname === config.auth.path;
+    // const isAuthRequest = url.pathname === config.auth.path;
 
     if (isPatchSessionToken) {
       logger.debug('Rendering bounce page');
@@ -106,11 +106,12 @@ export class EmbeddedAuthStrategy<
 
       logger.debug('Rendering exit iframe page', {destination});
       throw renderAppBridge(params, request, {url: destination});
-    } else if (isAuthRequest) {
-      const shop = ensureValidShopParam(request, {api, logger, config});
-      const installUrl = `https://${shop}/admin/oauth/install?client_id=${config.apiKey}`;
-      throw redirect(installUrl);
     }
+    // else if (isAuthRequest) {
+    //   const shop = ensureValidShopParam(request, {api, logger, config});
+    //   const installUrl = `https://${shop}/admin/oauth/install?client_id=${config.apiKey}`;
+    //   throw redirect(installUrl);
+    // }
 
     const sessionTokenHeader = getSessionTokenHeader(request);
     const sessionTokenParam = url.searchParams.get(SESSION_TOKEN_PARAM)!;
@@ -182,7 +183,7 @@ export class EmbeddedAuthStrategy<
         if (persistedSession.isScopeChanged(config.scopes)) {
           config.sessionStorage.deleteSession(persistedSession.id);
 
-          this.redirectToInstall(request, shop);
+          // this.redirectToInstall(request, shop);
         }
 
         if (!persistedSession.isExpired()) {
@@ -224,22 +225,22 @@ export class EmbeddedAuthStrategy<
   }
 
   // this does not initiate oauth auth code flow, it just triggers managed install
-  private redirectToInstall(request: Request, shop: string) {
-    const {config, logger, api} = this;
+  // private redirectToInstall(request: Request, shop: string) {
+  //   const {config, logger, api} = this;
 
-    // TODO: make it unified admin
-    const redirectUrl = `https://${shop}/admin/oauth/install?client_id=${config.apiKey}`;
+  //   // TODO: make it unified admin
+  //   const redirectUrl = `https://${shop}/admin/oauth/install?client_id=${config.apiKey}`;
 
-    const isXhrRequest = request.headers.get('authorization');
-    if (isXhrRequest) {
-      throw redirectWithAppBridgeHeaders(redirectUrl);
-    } else {
-      throw redirectWithExitIframe(
-        {config, logger, api},
-        request,
-        shop,
-        redirectUrl,
-      );
-    }
-  }
+  //   const isXhrRequest = request.headers.get('authorization');
+  //   if (isXhrRequest) {
+  //     throw redirectWithAppBridgeHeaders(redirectUrl);
+  //   } else {
+  //     throw redirectWithExitIframe(
+  //       {config, logger, api},
+  //       request,
+  //       shop,
+  //       redirectUrl,
+  //     );
+  //   }
+  // }
 }
