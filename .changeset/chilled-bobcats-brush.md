@@ -11,7 +11,6 @@
 '@shopify/shopify-app-session-storage-prisma': major
 '@shopify/shopify-app-session-storage-redis': major
 '@shopify/shopify-app-session-storage-sqlite': major
-'@shopify/shopify-app-session-storage-test-utils': patch
 ---
 
 ### Removed support for Node 14
