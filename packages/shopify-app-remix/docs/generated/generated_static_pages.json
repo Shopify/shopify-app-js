@@ -233,7 +233,7 @@
             {
               "title": "/app/routes/auth/$.tsx",
               "language": "ts",
-              "code": "import {LoaderArgs} from '@remix-run/node';\n\nimport shopify from '~/shopify.server';\n\nexport async function loader({request}: LoaderArgs) {\n  await shopify.authenticate.admin(request);\n\n  // App logic goes here\n\n  return null;\n}\n"
+              "code": "import {LoaderFunctionArgs} from '@remix-run/node';\n\nimport shopify from '~/shopify.server';\n\nexport async function loader({request}: LoaderFunctionArgs) {\n  await shopify.authenticate.admin(request);\n\n  // App logic goes here\n\n  return null;\n}\n"
             }
           ]
         }
@@ -268,7 +268,7 @@
             {
               "title": "/app/root.tsx",
               "language": "tsx",
-              "code": "import {LoaderArgs} from '@remix-run/node';\nimport {AppProvider} from '@shopify/shopify-app-remix/react';\n\nimport shopify from '~/shopify.server';\n\nexport async function loader({request}: LoaderArgs) {\n  await shopify.authenticate.admin(request);\n\n  return json({\n    apiKey: process.env.SHOPIFY_API_KEY,\n  });\n}\n\nexport default function App() {\n  const {apiKey} = useLoaderData&lt;typeof loader&gt;();\n\n  return (\n    &lt;html&gt;\n      &lt;head&gt;\n        &lt;Meta /&gt;\n        &lt;Links /&gt;\n      &lt;/head&gt;\n      &lt;body&gt;\n        &lt;AppProvider apiKey={apiKey} isEmbeddedApp&gt;\n          &lt;Outlet /&gt;\n        &lt;/AppProvider&gt;\n      &lt;/body&gt;\n    &lt;/html&gt;\n  );\n}\n"
+              "code": "import {LoaderFunctionArgs} from '@remix-run/node';\nimport {AppProvider} from '@shopify/shopify-app-remix/react';\n\nimport shopify from '~/shopify.server';\n\nexport async function loader({request}: LoaderFunctionArgs) {\n  await shopify.authenticate.admin(request);\n\n  return json({\n    apiKey: process.env.SHOPIFY_API_KEY,\n  });\n}\n\nexport default function App() {\n  const {apiKey} = useLoaderData&lt;typeof loader&gt;();\n\n  return (\n    &lt;html&gt;\n      &lt;head&gt;\n        &lt;Meta /&gt;\n        &lt;Links /&gt;\n      &lt;/head&gt;\n      &lt;body&gt;\n        &lt;AppProvider apiKey={apiKey} isEmbeddedApp&gt;\n          &lt;Outlet /&gt;\n        &lt;/AppProvider&gt;\n      &lt;/body&gt;\n    &lt;/html&gt;\n  );\n}\n"
             }
           ]
         }
