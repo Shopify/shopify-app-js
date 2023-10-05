@@ -24,10 +24,7 @@ export function addDocumentResponseHeaders(
   shop: string | null | undefined,
 ) {
   if (shop) {
-    headers.set(
-      'Link',
-      '<https://cdn.shopify.com/shopifycloud/app-bridge.js>; rel="preload"; as="script";',
-    );
+    headers.set('Link', '</dev/app-bridge.js>; rel="preload"; as="script";');
   }
 
   if (isEmbeddedApp) {

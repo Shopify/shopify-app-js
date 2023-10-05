@@ -21,7 +21,7 @@ describe('<AppProvider />', () => {
 
     // THEN
     expect(component).toContainReactComponent('script', {
-      src: 'https://cdn.shopify.com/shopifycloud/app-bridge.js',
+      src: '/dev/app-bridge.js',
     });
     expect(component).toContainReactHtml('Hello world');
   });
