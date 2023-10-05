@@ -96,7 +96,7 @@ export interface AppProxyContextWithSession<
    * import { json } from "@remix-run/node";
    * import { authenticate } from "../shopify.server";
    *
-   * export async function action({ request }: ActionArgs) {
+   * export async function action({ request }: ActionFunctionArgs) {
    *   const { admin } = await authenticate.public.appProxy(request);
    *
    *   const response = await admin.graphql(
@@ -129,7 +129,7 @@ export interface AppProxyContextWithSession<
    * import { json } from "@remix-run/node";
    * import { authenticate } from "../shopify.server";
    *
-   * export async function action({ request }: ActionArgs) {
+   * export async function action({ request }: ActionFunctionArgs) {
    *   const { admin } = await authenticate.public.appProxy(request);
    *
    *   const response = await storefront.graphql(`{blogs(first: 10) { edges { node { id } } } }`);

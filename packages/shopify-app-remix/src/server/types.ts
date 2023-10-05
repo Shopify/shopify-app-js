@@ -103,10 +103,10 @@ interface Authenticate<Config extends AppConfigArg> {
    * ```
    * ```ts
    * // /app/routes/**\/*.jsx
-   * import { LoaderArgs, json } from "@remix-run/node";
+   * import { LoaderFunctionArgs, json } from "@remix-run/node";
    * import { authenticate } from "../../shopify.server";
    *
-   * export async function loader({ request }: LoaderArgs) {
+   * export async function loader({ request }: LoaderFunctionArgs) {
    *   const {admin, session, sessionToken, billing} = authenticate.admin(request);
    *
    *   return json(await admin.rest.resources.Product.count({ session }));
@@ -123,11 +123,11 @@ interface Authenticate<Config extends AppConfigArg> {
    *
    * ```ts
    * // /app/routes/api/checkout.jsx
-   * import { LoaderArgs, json } from "@remix-run/node";
+   * import { LoaderFunctionArgs, json } from "@remix-run/node";
    * import { authenticate } from "../../shopify.server";
    * import { getWidgets } from "~/db/widgets";
    *
-   * export async function loader({ request }: LoaderArgs) {
+   * export async function loader({ request }: LoaderFunctionArgs) {
    *   const {sessionToken} = authenticate.public.checkout(request);
    *
    *   return json(await getWidgets(sessionToken));
@@ -165,11 +165,11 @@ interface Authenticate<Config extends AppConfigArg> {
    * ```
    * ```ts
    * // /app/routes/webhooks.ts
-   * import { ActionArgs } from "@remix-run/node";
+   * import { ActionFunctionArgs } from "@remix-run/node";
    * import { authenticate } from "../shopify.server";
    * import db from "../db.server";
    *
-   * export const action = async ({ request }: ActionArgs) => {
+   * export const action = async ({ request }: ActionFunctionArgs) => {
    *   const { topic, shop, session } = await authenticate.webhook(request);
    *
    *   switch (topic) {
@@ -310,10 +310,10 @@ export interface ShopifyAppBase<Config extends AppConfigArg> {
    * ```
    * ```ts
    * // /app/routes/**\/*.jsx
-   * import { LoaderArgs, json } from "@remix-run/node";
+   * import { LoaderFunctionArgs, json } from "@remix-run/node";
    * import shopify from "../../shopify.server";
    *
-   * export async function loader({ request }: LoaderArgs) {
+   * export async function loader({ request }: LoaderFunctionArgs) {
    *   const {admin, session, sessionToken, billing} = shopify.authenticate.admin(request);
    *
    *   return json(await admin.rest.resources.Product.count({ session }));
@@ -341,11 +341,11 @@ export interface ShopifyAppBase<Config extends AppConfigArg> {
    * ```
    * ```ts
    * // /app/routes/**\/*.jsx
-   * import { LoaderArgs, json } from "@remix-run/node";
+   * import { LoaderFunctionArgs, json } from "@remix-run/node";
    * import { authenticateExternal } from "~/helpers/authenticate"
    * import shopify from "../../shopify.server";
    *
-   * export async function loader({ request }: LoaderArgs) {
+   * export async function loader({ request }: LoaderFunctionArgs) {
    *   const shop = await authenticateExternal(request)
    *   const {admin} = await shopify.unauthenticated.admin(shop);
    *
@@ -380,13 +380,13 @@ interface ShopifyAppLogin {
    * // /app/routes/auth/login.tsx
    * import shopify from "../../shopify.server";
    *
-   * export async function loader({ request }: LoaderArgs) {
+   * export async function loader({ request }: LoaderFunctionArgs) {
    *   const errors = shopify.login(request);
    *
    *   return json(errors);
    * }
    *
-   * export async function action({ request }: ActionArgs) {
+   * export async function action({ request }: ActionFunctionArgs) {
    *   const errors = shopify.login(request);
    *
    *   return json(errors);

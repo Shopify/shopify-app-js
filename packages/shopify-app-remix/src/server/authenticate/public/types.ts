@@ -14,10 +14,10 @@ interface AuthenticatePublicObject {
    * <caption>Authenticating a checkout extension request</caption>
    * ```ts
    * // /app/routes/public/widgets.ts
-   * import { LoaderArgs, json } from "@remix-run/node";
+   * import { LoaderFunctionArgs, json } from "@remix-run/node";
    * import { authenticate } from "../shopify.server";
    *
-   * export const loader = async ({ request }: LoaderArgs) => {
+   * export const loader = async ({ request }: LoaderFunctionArgs) => {
    *   const { sessionToken, cors } = await authenticate.public.checkout(
    *     request,
    *   );
@@ -34,10 +34,10 @@ interface AuthenticatePublicObject {
    * <caption>Authenticating an app proxy request</caption>
    * ```ts
    * // /app/routes/public/widgets.ts
-   * import { LoaderArgs, json } from "@remix-run/node";
+   * import { LoaderFunctionArgs, json } from "@remix-run/node";
    * import { authenticate } from "../shopify.server";
    *
-   * export const loader = async ({ request }: LoaderArgs) => {
+   * export const loader = async ({ request }: LoaderFunctionArgs) => {
    *   await authenticate.public.appProxy(
    *     request,
    *   );
