@@ -1,4 +1,4 @@
-import {HttpResponseError} from '@shopify/shopify-api';
+import {GraphqlQueryError, HttpResponseError} from '@shopify/shopify-api';
 import {redirect} from '@remix-run/server-runtime';
 
 import type {HandleAdminClientError} from '../../../clients/admin/types';
@@ -18,6 +18,17 @@ export function handleEmbeddedClientErrorFactory({
     session,
   }): Promise<never> {
     if (error instanceof HttpResponseError !== true) {
+      const gqlerror = error.response.errors[0] as any;
+      console.log('EXTENSIONS ERROR', gqlerror.extensions.code);
+      if (error instanceof GraphqlQueryError && gqlerror.extensions.code) {
+        throw new Response(undefined, {
+          status: 403,
+          headers: {
+            'Content-Type': 'application/json',
+            'X-Shopify-Insufficient-Access': '1',
+          },
+        });
+      }
       params.logger.debug(
         `Got a response error from the API: ${error.message}`,
       );
@@ -50,8 +61,20 @@ export function handleEmbeddedClientErrorFactory({
           },
         });
       } else {
+        // On document load, delete the access token and reload the app to retrigger
+        // token exchange
         throw redirect(request.url);
       }
+    }
+
+    if (error.response.code === 403) {
+      throw new Response(undefined, {
+        status: error.response.code,
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Shopify-Insufficient-Access': '1',
+        },
+      });
     }
 
     // forward a minimal copy of the upstream HTTP response instead of an Error:

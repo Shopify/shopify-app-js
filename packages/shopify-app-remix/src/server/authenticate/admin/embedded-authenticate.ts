@@ -180,12 +180,6 @@ export class EmbeddedAuthStrategy<
       if (persistedSession) {
         logger.debug(`Reusing existing token: ${persistedSession.accessToken}`);
 
-        if (persistedSession.isScopeChanged(config.scopes)) {
-          config.sessionStorage.deleteSession(persistedSession.id);
-
-          // this.redirectToInstall(request, shop);
-        }
-
         if (!persistedSession.isExpired()) {
           return {session: persistedSession};
         }
@@ -223,24 +217,4 @@ export class EmbeddedAuthStrategy<
       },
     });
   }
-
-  // this does not initiate oauth auth code flow, it just triggers managed install
-  // private redirectToInstall(request: Request, shop: string) {
-  //   const {config, logger, api} = this;
-
-  //   // TODO: make it unified admin
-  //   const redirectUrl = `https://${shop}/admin/oauth/install?client_id=${config.apiKey}`;
-
-  //   const isXhrRequest = request.headers.get('authorization');
-  //   if (isXhrRequest) {
-  //     throw redirectWithAppBridgeHeaders(redirectUrl);
-  //   } else {
-  //     throw redirectWithExitIframe(
-  //       {config, logger, api},
-  //       request,
-  //       shop,
-  //       redirectUrl,
-  //     );
-  //   }
-  // }
 }
