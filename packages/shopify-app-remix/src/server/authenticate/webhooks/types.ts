@@ -1,6 +1,8 @@
 import {Session, Shopify, ShopifyRestResources} from '@shopify/shopify-api';
 
 import type {JSONValue} from '../../types';
+import type {AdminApiContext} from '../../clients';
+import type {FeatureEnabled, FutureFlagOptions} from '../../future/flags';
 
 export interface RegisterWebhooksOptions {
   /**
@@ -104,15 +106,32 @@ interface Context<Topics = string | number | symbol> {
   payload: JSONValue;
 }
 
-export interface WebhookContext<Topics = string | number | symbol>
+export interface WebhookContextWithoutSession<Topics = string | number | symbol>
   extends Context<Topics> {
   session: undefined;
   admin: undefined;
 }
 
+export interface LegacyWebhookAdminApiContext<
+  Resources extends ShopifyRestResources,
+> {
+  /** A REST client. */
+  rest: InstanceType<Shopify['clients']['Rest']> & Resources;
+  /** A GraphQL client. */
+  graphql: InstanceType<Shopify['clients']['Graphql']>;
+}
+
+export type WebhookAdminContext<
+  Future extends FutureFlagOptions,
+  Resources extends ShopifyRestResources,
+> = FeatureEnabled<Future, 'v3_webhookAdminContext'> extends true
+  ? AdminApiContext<Resources>
+  : LegacyWebhookAdminApiContext<Resources>;
+
 export interface WebhookContextWithSession<
+  Future extends FutureFlagOptions,
+  Resources extends ShopifyRestResources,
   Topics = string | number | symbol,
-  Resources extends ShopifyRestResources = any,
 > extends Context<Topics> {
   /**
    * A session with an offline token for the shop.
@@ -120,24 +139,81 @@ export interface WebhookContextWithSession<
    * Returned only if there is a session for the shop.
    */
   session: Session;
+
   /**
    * An admin context for the webhook.
    *
    * Returned only if there is a session for the shop.
+   *
+   * @example
+   * <caption>[V3] Webhook admin context.</caption>
+   * <description>With the `v3_webhookAdminContext` future flag enabled, use the `admin` object in the context to interact with the Admin API.</description>
+   * ```ts
+   * import { ActionFunctionArgs } from "@remix-run/node";
+   * import { authenticate } from "../shopify.server";
+   *
+   * export async function action({ request }: ActionFunctionArgs) {
+   *   const { admin } = await authenticate.webhook(request);
+   *
+   *   const response = await admin?.graphql(
+   *     `#graphql
+   *     mutation populateProduct($input: ProductInput!) {
+   *       productCreate(input: $input) {
+   *         product {
+   *           id
+   *         }
+   *       }
+   *     }`,
+   *     { variables: { input: { title: "Product Name" } } }
+   *   );
+   *
+   *   const productData = await response.json();
+   *   return json({ data: productData.data });
+   * }
+   * ```
+   *
+   * @example
+   * <caption>Webhook admin context.</caption>
+   * <description>Use the `admin` object in the context to interact with the Admin API. This format will be removed in V3 of the package.</description>
+   * ```ts
+   * import { json, ActionFunctionArgs } from "@remix-run/node";
+   * import { authenticate } from "../shopify.server";
+   *
+   * export async function action({ request }: ActionFunctionArgs) {
+   *   const { admin } = await authenticate.webhook(request);
+   *
+   *   const response = await admin?.graphql.query<any>({
+   *     data: {
+   *       query: `#graphql
+   *         mutation populateProduct($input: ProductInput!) {
+   *           productCreate(input: $input) {
+   *             product {
+   *               id
+   *             }
+   *           }
+   *         }`,
+   *       variables: { input: { title: "Product Name" } },
+   *     },
+   *   });
+   *
+   *   const productData = response?.body.data;
+   *   return json({ data: productData.data });
+   * }
+   * ```
    */
-  admin: {
-    /** A REST client. */
-    rest: InstanceType<Shopify['clients']['Rest']> & Resources;
-    /** A GraphQL client. */
-    graphql: InstanceType<Shopify['clients']['Graphql']>;
-  };
+  admin: WebhookAdminContext<Future, Resources>;
 }
 
-export type AuthenticateWebhook<
-  Resources extends ShopifyRestResources = ShopifyRestResources,
+export type WebhookContext<
+  Future extends FutureFlagOptions,
+  Resources extends ShopifyRestResources,
   Topics = string | number | symbol,
-> = (
-  request: Request,
-) => Promise<
-  WebhookContext<Topics> | WebhookContextWithSession<Topics, Resources>
->;
+> =
+  | WebhookContextWithoutSession<Topics>
+  | WebhookContextWithSession<Future, Resources, Topics>;
+
+export type AuthenticateWebhook<
+  Future extends FutureFlagOptions,
+  Resources extends ShopifyRestResources,
+  Topics = string | number | symbol,
+> = (request: Request) => Promise<WebhookContext<Future, Resources, Topics>>;

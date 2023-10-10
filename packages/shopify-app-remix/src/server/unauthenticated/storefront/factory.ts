@@ -1,6 +1,6 @@
-import {BasicParams} from 'src/server/types';
 import {ShopifyError} from '@shopify/shopify-api';
 
+import {BasicParams} from '../../types';
 import {storefrontClientFactory} from '../../clients/storefront';
 import {getOfflineSession} from '../helpers';
 
