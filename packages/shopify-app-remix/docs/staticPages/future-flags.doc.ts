@@ -5,7 +5,7 @@ const data: LandingTemplateSchema = {
   title: 'Future flags',
   description:
     'Similarly to how [Remix approaches breaking changes](https://remix.run/docs/en/main/start/future-flags), the `@shopify/shopify-app-remix` package also uses future flags.' +
-    "\n\nBigger features are breaking changes are initially added behind a future flag. This means that they're disabled by default, and must be manually enabled by setting the appropriate flag in the `future` option of the `shopifyApp` function." +
+    "\n\nBigger features and breaking changes are initially added behind a future flag. This means that they're disabled by default, and must be manually enabled by setting the appropriate flag in the `future` option of the `shopifyApp` function." +
     '\n\nThis allows apps to gradually adopt new features, and prepare for breaking changes and major releases ahead of time.',
   sections: [
     {
@@ -66,7 +66,8 @@ const data: LandingTemplateSchema = {
           name: 'v3_webhookAdminContext',
           value: '',
           description:
-            'Returns the same `admin` context (`AdminApiContext`) from `authenticate.webhook` that is returned from `authenticate.admin`.',
+            'Returns the same `admin` context (`AdminApiContext`) from `authenticate.webhook` that is returned from `authenticate.admin`.' +
+            '\n\nSee [authenticate.webhook](/docs/api/shopify-app-remix/authenticate/webhook#example-admin) for more details.',
           isOptional: true,
         },
       ],
