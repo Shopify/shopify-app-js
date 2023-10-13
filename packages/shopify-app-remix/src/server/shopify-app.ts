@@ -1,9 +1,7 @@
 import '@shopify/shopify-api/adapters/web-api';
 import {
   ConfigInterface as ApiConfig,
-  ConfigParams,
   LATEST_API_VERSION,
-  Shopify,
   ShopifyError,
   ShopifyRestResources,
   shopifyApi,
@@ -57,7 +55,7 @@ export function shopifyApp<
   Resources extends ShopifyRestResources,
   Storage extends SessionStorage,
 >(appConfig: Config): ShopifyApp<Config> {
-  const api = deriveApi<Resources>(appConfig);
+  const api = deriveApi(appConfig);
   const config = deriveConfig<Storage>(appConfig, api.config);
   const logger = overrideLogger(api.logger);
 
@@ -114,9 +112,7 @@ function isSingleMerchantApp<Config extends AppConfigArg>(
   return config.distribution === AppDistribution.SingleMerchant;
 }
 
-function deriveApi<Resources extends ShopifyRestResources>(
-  appConfig: AppConfigArg,
-): Shopify<Resources> {
+function deriveApi(appConfig: AppConfigArg) {
   let appUrl: URL;
   try {
     appUrl = new URL(appConfig.appUrl);
@@ -138,7 +134,7 @@ function deriveApi<Resources extends ShopifyRestResources>(
     userAgentPrefix = `${appConfig.userAgentPrefix} | ${userAgentPrefix}`;
   }
 
-  const cleanApiConfig: ConfigParams = {
+  return shopifyApi({
     ...appConfig,
     hostName: appUrl.host,
     hostScheme: appUrl.protocol.replace(':', '') as 'http' | 'https',
@@ -146,9 +142,7 @@ function deriveApi<Resources extends ShopifyRestResources>(
     isEmbeddedApp: appConfig.isEmbeddedApp ?? true,
     apiVersion: appConfig.apiVersion ?? LATEST_API_VERSION,
     isCustomStoreApp: appConfig.distribution === AppDistribution.ShopifyAdmin,
-  };
-
-  return shopifyApi<Resources>(cleanApiConfig);
+  });
 }
 
 function deriveConfig<Storage extends SessionStorage>(
