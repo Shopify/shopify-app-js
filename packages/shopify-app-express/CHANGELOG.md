@@ -4,14 +4,49 @@
 
 ### Major Changes
 
-- f837060: ### Removed support for Node 14
+- f837060: **Removed support for Node 14**
 
-  Node 14 has reached it's [EOL](https://endoflife.date/nodejs), and dependencies to this package no longer work on Node 14.
+  Node 14 has reached its [EOL](https://endoflife.date/nodejs), and dependencies to this package no longer work on Node 14.
   Because of that, we can no longer support that version.
 
   If your app is running on Node 14, you'll need to update to a more recent version before upgrading this package.
 
   This upgrade does not require any code changes.
+
+#### Changes to the `ShopifyApp` type
+
+Previously, the `ShopifyApp` type accepted 2 generic types: the REST resources and the session storage class.
+In v3, that type accepts 1 generic: the params given to the `shopifyApp()` function, which contains both of the previous types, and more.
+
+Apps shouldn't need to use that type directly since `shopifyApp()` is able to extract the types from the parameters it's given.
+If you need to explicitly set those generics, you'll need to use the `AppConfigParams` type.
+
+<details>
+<summary>See an example</summary>
+
+Before:
+
+```ts
+import {ShopifyApp} from '@shopify/shopify-app-express';
+import {restResources} from '@shopify/shopify-api/rest/admin/2023-10';
+import {MemorySessionStorage} from '@shopify/shopify-app-session-storage-memory';
+
+const myVariable: ShopifyApp<typeof restResources, MemorySessionStorage>;
+```
+
+After:
+
+```ts
+import {ShopifyApp, AppConfigParams} from '@shopify/shopify-app-express';
+import {restResources} from '@shopify/shopify-api/rest/admin/2023-10';
+import {MemorySessionStorage} from '@shopify/shopify-app-session-storage-memory';
+
+const myVariable: ShopifyApp<
+  AppConfigParams<typeof restResources, MemorySessionStorage>
+>;
+```
+
+</details>
 
 ### Patch Changes
 

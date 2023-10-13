@@ -34,6 +34,7 @@ export * from './types';
 export * from './auth/types';
 export * from './middlewares/types';
 export * from './webhooks/types';
+export type {AppConfigParams} from './config-types';
 
 type DefaultedConfigs<Params extends Partial<ApiConfigParams> | undefined> =
   ApiConfigParams & Params;

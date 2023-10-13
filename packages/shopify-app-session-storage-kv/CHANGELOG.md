@@ -4,9 +4,9 @@
 
 ### Major Changes
 
-- f837060: ### Removed support for Node 14
+- f837060: **Removed support for Node 14**
 
-  Node 14 has reached it's [EOL](https://endoflife.date/nodejs), and dependencies to this package no longer work on Node 14.
+  Node 14 has reached its [EOL](https://endoflife.date/nodejs), and dependencies to this package no longer work on Node 14.
   Because of that, we can no longer support that version.
 
   If your app is running on Node 14, you'll need to update to a more recent version before upgrading this package.
