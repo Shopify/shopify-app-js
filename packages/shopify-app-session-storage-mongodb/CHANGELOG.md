@@ -1,5 +1,25 @@
 # @shopify/shopify-app-session-storage-mongodb
 
+## 2.0.0
+
+### Major Changes
+
+- f837060: ### Removed support for Node 14
+
+  Node 14 has reached it's [EOL](https://endoflife.date/nodejs), and dependencies to this package no longer work on Node 14.
+  Because of that, we can no longer support that version.
+
+  If your app is running on Node 14, you'll need to update to a more recent version before upgrading this package.
+
+  This upgrade does not require any code changes.
+
+### Patch Changes
+
+- a69d6fc: Updating dependency on @shopify/shopify-api to v.8.0.1
+- Updated dependencies [f837060]
+- Updated dependencies [a69d6fc]
+  - @shopify/shopify-app-session-storage@2.0.0
+
 ## 1.0.15
 
 ### Patch Changes

@@ -1,5 +1,15 @@
 # @shopify/shopify-app-session-storage-test-utils
 
+## 1.0.0
+
+### Patch Changes
+
+- f50a78f: Dropping node 14 support
+- a69d6fc: Updating dependency on @shopify/shopify-api to v.8.0.1
+- Updated dependencies [f837060]
+- Updated dependencies [a69d6fc]
+  - @shopify/shopify-app-session-storage@2.0.0
+
 ## 0.1.10
 
 ### Patch Changes
