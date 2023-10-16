@@ -26,7 +26,7 @@ describe('JWT validation', () => {
     expect(config.logger?.log).toHaveBeenCalledWith(
       expect.any(Number),
       expect.stringContaining(
-        'authenticate.public() will be deprecated in v2. Use authenticate.public.checkout() instead.',
+        'authenticate.public() will be deprecated in v3. Use authenticate.public.checkout() instead.',
       ),
     );
   });

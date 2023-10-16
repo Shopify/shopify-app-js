@@ -18,8 +18,8 @@ export function authenticatePublicFactory<
     options: AuthenticateCheckoutOptions,
   ) => {
     logger.deprecated(
-      '2.0.0',
-      'authenticate.public() will be deprecated in v2. Use authenticate.public.checkout() instead.',
+      '3.0.0',
+      'authenticate.public() will be deprecated in v3. Use authenticate.public.checkout() instead.',
     );
 
     return authenticateCheckout(request, options);
