@@ -2587,30 +2587,27 @@
   resolved "https://registry.yarnpkg.com/@redis/time-series/-/time-series-1.0.5.tgz#a6d70ef7a0e71e083ea09b967df0a0ed742bc6ad"
   integrity sha512-IFjIgTusQym2B5IZJG3XKr5llka7ey84fw/NOYqESP5WUfQs9zz1ww/9+qoz4ka/S6KcGBodzlCeZ5UImKbscg==
 
-"@remix-run/react@^1.19.0":
-  version "1.19.0"
-  resolved "https://registry.yarnpkg.com/@remix-run/react/-/react-1.19.0.tgz#3fd54076e0aa315c67034b4071838762054f6c05"
-  integrity sha512-wZBNfA+wtX4GQ2xQyWefSpq45b9b+DydXq+mucog1jaR2OPFmSDjNzwp09Nc8G1TcpsvDH4CNgz4nsA94WvFmQ==
+"@remix-run/react@^2.0.0":
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/@remix-run/react/-/react-2.1.0.tgz#b74f5e31dcbfc20a8d916864e38047cd687371c5"
+  integrity sha512-DeYgfsvNxHqNn29sGA3XsZCciMKo2EFTQ9hHkuVPTsJXC4ipHr6Dja1j6UzZYPe/ZuKppiuTjueWCQlE2jOe1w==
   dependencies:
-    "@remix-run/router" "1.7.2"
-    react-router-dom "6.14.2"
+    "@remix-run/router" "1.10.0"
+    "@remix-run/server-runtime" "2.1.0"
+    react-router-dom "6.17.0"
 
-"@remix-run/router@1.6.3":
-  version "1.6.3"
-  resolved "https://registry.yarnpkg.com/@remix-run/router/-/router-1.6.3.tgz#8205baf6e17ef93be35bf62c37d2d594e9be0dad"
-  integrity sha512-EXJysQ7J3veRECd0kZFQwYYd5sJMcq2O/m60zu1W2l3oVQ9xtub8jTOtYRE0+M2iomyG/W3Ps7+vp2kna0C27Q==
+"@remix-run/router@1.10.0":
+  version "1.10.0"
+  resolved "https://registry.yarnpkg.com/@remix-run/router/-/router-1.10.0.tgz#e2170dc2049b06e65bbe883adad0e8ddf8291278"
+  integrity sha512-Lm+fYpMfZoEucJ7cMxgt4dYt8jLfbpwRCzAjm9UgSLOkmlqo9gupxt6YX3DY0Fk155NT9l17d/ydi+964uS9Lw==
 
-"@remix-run/router@1.7.2":
-  version "1.7.2"
-  resolved "https://registry.yarnpkg.com/@remix-run/router/-/router-1.7.2.tgz#cba1cf0a04bc04cb66027c51fa600e9cbc388bc8"
-  integrity sha512-7Lcn7IqGMV+vizMPoEl5F0XDshcdDYtMI6uJLQdQz5CfZAwy3vvGKYSUk789qndt5dEC4HfSjviSYlSoHGL2+A==
-
-"@remix-run/server-runtime@^1.17.1":
-  version "1.17.1"
-  resolved "https://registry.yarnpkg.com/@remix-run/server-runtime/-/server-runtime-1.17.1.tgz#620ac5eb514737f2937051f8d91c8d5a021f0beb"
-  integrity sha512-PuLDaf7WmrOaQzM70yCcM6Jm+g+UHzeBFvocxdqohJnO/8+/n5pFIKHwhooqcSq2TR0WtVpSVhCakdywiOH2mA==
+"@remix-run/server-runtime@2.1.0", "@remix-run/server-runtime@^2.0.0":
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/@remix-run/server-runtime/-/server-runtime-2.1.0.tgz#e3141b55140ffd17df7cb7306cbfeeedb6f694b8"
+  integrity sha512-Uz69yF4Gu6F3VYQub3JgDo9godN8eDMeZclkadBTAWN7bYLonu0ChR/GlFxS35OLeF7BDgudxOSZob0nE1WHNg==
   dependencies:
-    "@remix-run/router" "1.6.3"
+    "@remix-run/router" "1.10.0"
+    "@types/cookie" "^0.4.1"
     "@web3-storage/multipart-parser" "^1.0.0"
     cookie "^0.4.1"
     set-cookie-parser "^2.4.8"
@@ -2710,14 +2707,14 @@
     pkg-dir "^5.0.0"
     pluralize "^8.0.0"
 
-"@shopify/generate-docs@^0.11.0":
-  version "0.11.0"
-  resolved "https://registry.yarnpkg.com/@shopify/generate-docs/-/generate-docs-0.11.0.tgz#7a496a5e3328928ac58edb2c3f3ae0cc131e01ba"
-  integrity sha512-SufWSQXRqh6cCVd+H8c9cpXWKaBcRpcduIdVk3RkKV/PiD11WkUrHsdVFC1CZHWm1L7QYLaXBqwszFo1UvtYag==
+"@shopify/generate-docs@^0.11.1":
+  version "0.11.2"
+  resolved "https://registry.yarnpkg.com/@shopify/generate-docs/-/generate-docs-0.11.2.tgz#e87be96181b17bebb00eaa431062b78b57b51715"
+  integrity sha512-vLYZ6mQm61TyRPgMsnD2JyzNx9kl5t+wt7hPOyYGz1WJ/mIXunRapDrfOpx9JDXQQd4A6U/pGmIuz5X0P940Tg==
   dependencies:
     "@types/react" "^18.0.21"
     globby "^11.1.0"
-    typescript "^4.8.3"
+    typescript "^4.8.3 || ^5.0.0"
 
 "@shopify/loom-cli@^1.1.0":
   version "1.1.0"
@@ -2856,10 +2853,10 @@
     jest-matcher-utils "^26.6.2"
     react-reconciler "^0.28.0"
 
-"@shopify/shopify-api@7.6.0", "@shopify/shopify-api@^7.6.0":
-  version "7.6.0"
-  resolved "https://registry.yarnpkg.com/@shopify/shopify-api/-/shopify-api-7.6.0.tgz#d181ca9fbd2ff3b3a7595e9e121fde707dbbb36a"
-  integrity sha512-XUyBkSrUHvqCknPdY3ylaGDyC3hA2aKmXTsbo7vpGzncMqC1hZ2pwRJbBMnffdbEWj14Um9zkEMS7MKf1k6PBw==
+"@shopify/shopify-api@^8.0.1":
+  version "8.0.1"
+  resolved "https://registry.yarnpkg.com/@shopify/shopify-api/-/shopify-api-8.0.1.tgz#c04aa45f493b0256b46ef6088227fbe0e7bd3f93"
+  integrity sha512-Bqt6eX2IMcZLtKcefaajb9h9sqBtCMG+EH0l6v0xalckqPElQXAjg3fdSyeAZihWvqKUSVDGDDyf5gwYzfEsHQ==
   dependencies:
     "@shopify/network" "^3.2.1"
     compare-versions "^5.0.3"
@@ -3354,6 +3351,11 @@
   integrity sha512-Var+aj5I6ZgIqsQ05N2V8q5OBrFfZXtIGWWDSrEYLIbMw758obagSwdGcLCjwh1Ga7M7+wj0SDIAaAC/WT7aaA==
   dependencies:
     "@types/express" "*"
+
+"@types/cookie@^0.4.1":
+  version "0.4.1"
+  resolved "https://registry.yarnpkg.com/@types/cookie/-/cookie-0.4.1.tgz#bfd02c1f2224567676c1545199f87c3a861d878d"
+  integrity sha512-XW/Aa8APYr6jSVVA1y/DEIZX0/GMKLEVekNG727R8cs56ahETkRAy/3DR7+fJyh7oUgGwNQaRfXCun0+KbWY7Q==
 
 "@types/estree@*":
   version "1.0.1"
@@ -8996,20 +8998,20 @@ react-reconciler@^0.28.0:
     loose-envify "^1.1.0"
     scheduler "^0.22.0"
 
-react-router-dom@6.14.2:
-  version "6.14.2"
-  resolved "https://registry.yarnpkg.com/react-router-dom/-/react-router-dom-6.14.2.tgz#88f520118b91aa60233bd08dbd3fdcaea3a68488"
-  integrity sha512-5pWX0jdKR48XFZBuJqHosX3AAHjRAzygouMTyimnBPOLdY3WjzUSKhus2FVMihUFWzeLebDgr4r8UeQFAct7Bg==
+react-router-dom@6.17.0:
+  version "6.17.0"
+  resolved "https://registry.yarnpkg.com/react-router-dom/-/react-router-dom-6.17.0.tgz#ea73f89186546c1cf72b10fcb7356d874321b2ad"
+  integrity sha512-qWHkkbXQX+6li0COUUPKAUkxjNNqPJuiBd27dVwQGDNsuFBdMbrS6UZ0CLYc4CsbdLYTckn4oB4tGDuPZpPhaQ==
   dependencies:
-    "@remix-run/router" "1.7.2"
-    react-router "6.14.2"
+    "@remix-run/router" "1.10.0"
+    react-router "6.17.0"
 
-react-router@6.14.2:
-  version "6.14.2"
-  resolved "https://registry.yarnpkg.com/react-router/-/react-router-6.14.2.tgz#1f60994d8c369de7b8ba7a78d8f7ec23df76b300"
-  integrity sha512-09Zss2dE2z+T1D03IheqAFtK4UzQyX8nFPWx6jkwdYzGLXd5ie06A6ezS2fO6zJfEb/SpG6UocN2O1hfD+2urQ==
+react-router@6.17.0:
+  version "6.17.0"
+  resolved "https://registry.yarnpkg.com/react-router/-/react-router-6.17.0.tgz#7b680c4cefbc425b57537eb9c73bedecbdc67c1e"
+  integrity sha512-YJR3OTJzi3zhqeJYADHANCGPUu9J+6fT5GLv82UWRGSxu6oJYCKVmxUcaBQuGm9udpWmPsvpme/CdHumqgsoaA==
   dependencies:
-    "@remix-run/router" "1.7.2"
+    "@remix-run/router" "1.10.0"
 
 react-transition-group@^4.4.2:
   version "4.4.5"
@@ -10067,10 +10069,15 @@ typedarray-to-buffer@^3.1.5:
   dependencies:
     is-typedarray "^1.0.0"
 
-typescript@4.9.5, typescript@^4.3.5, typescript@^4.8.3, typescript@^4.9.5:
+typescript@4.9.5, typescript@^4.3.5, typescript@^4.9.5:
   version "4.9.5"
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-4.9.5.tgz#095979f9bcc0d09da324d58d03ce8f8374cbe65a"
   integrity sha512-1FXk9E2Hm+QzZQ7z+McJiHL4NW1F2EzMu9Nq9i3zAaGqibafqYwCVU6WyWAuyQRRzOlxou8xZSyXLEN8oKj24g==
+
+"typescript@^4.8.3 || ^5.0.0":
+  version "5.2.2"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-5.2.2.tgz#5ebb5e5a5b75f085f22bc3f8460fba308310fa78"
+  integrity sha512-mI4WrpHsbCIcwT9cF4FZvr80QUeKvsUsUvKDoR+X/7XHQH98xYD8YHZg7ANtz2GtZt/CBq2QJ0thkGJMHfqc1w==
 
 unbox-primitive@^1.0.2:
   version "1.0.2"

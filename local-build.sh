@@ -1,9 +1,9 @@
 cd ~/src/github.com/Shopify/shopify-app-js
 
 # clean shopify-api-js's build
-cd ../shopify-api-js
+cd ../shopify-api-js/packages/shopify-api
 yarn token-exchange-clean
-cd ../shopify-app-js
+cd ../../../shopify-app-js
 
 # unlink local version of shopify-api-js (or true, it's ok if it wasn't linked before)
 yarn unlink "@shopify/shopify-api" || true
@@ -31,9 +31,9 @@ cd ../../../
 yarn clean
 
 # re-build shopify-api-js
-cd ../shopify-api-js
+cd ../shopify-api-js/packages/shopify-api
 yarn token-exchange-build
-cd ../shopify-app-js
+cd ../../../shopify-app-js
 
 # re-link shopify-api-js
 yarn link "@shopify/shopify-api"
