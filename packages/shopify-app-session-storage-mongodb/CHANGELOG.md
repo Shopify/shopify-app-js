@@ -1,5 +1,13 @@
 # @shopify/shopify-app-session-storage-mongodb
 
+## 2.0.1
+
+### Patch Changes
+
+- 6d12840: Updating dependencies on @shopify/shopify-api
+- Updated dependencies [6d12840]
+  - @shopify/shopify-app-session-storage@2.0.1
+
 ## 2.0.0
 
 ### Major Changes
