@@ -1,5 +1,11 @@
 # @shopify/shopify-app-session-storage
 
+## 2.0.1
+
+### Patch Changes
+
+- 6d12840: Updating dependencies on @shopify/shopify-api
+
 ## 2.0.0
 
 ### Major Changes
