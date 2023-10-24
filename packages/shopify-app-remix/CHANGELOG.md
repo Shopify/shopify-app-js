@@ -4,7 +4,7 @@
 
 ### Patch Changes
 
-- ee7114a: Fixed the errorBoundary to work with new cases in Remix v2.
+- ee7114a: Fixed the errorBoundary to work with new cases in Remix v2. Thank you @btomaj!
 
 ## 2.0.1
 
