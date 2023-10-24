@@ -2176,14 +2176,14 @@
               {
                 "filePath": "/server/types.ts",
                 "syntaxKind": "MethodSignature",
-                "name": "__@iterator@540",
+                "name": "__@iterator@576",
                 "value": "() => IterableIterator<JSONValue>",
                 "description": "Iterator"
               },
               {
                 "filePath": "/server/types.ts",
                 "syntaxKind": "MethodSignature",
-                "name": "__@unscopables@542",
+                "name": "__@unscopables@578",
                 "value": "() => { copyWithin: boolean; entries: boolean; fill: boolean; find: boolean; findIndex: boolean; keys: boolean; values: boolean; }",
                 "description": "Returns an object whose properties have the value 'true'\r\nwhen they will be absent when used in a 'with' statement."
               },
@@ -3300,7 +3300,7 @@
               "name": "ShopifyApp<Config extends AppConfigArg<Resources, Storage>>",
               "value": "ShopifyApp<Config extends AppConfigArg<Resources, Storage>>"
             },
-            "value": "export function shopifyApp<\n  Config extends AppConfigArg<Resources, Storage>,\n  Resources extends ShopifyRestResources,\n  Storage extends SessionStorage,\n>(appConfig: Config): ShopifyApp<Config> {\n  const api = deriveApi<Resources>(appConfig);\n  const config = deriveConfig<Storage>(appConfig, api.config);\n  const logger = overrideLogger(api.logger);\n\n  if (appConfig.webhooks) {\n    api.webhooks.addHandlers(appConfig.webhooks);\n  }\n\n  const params: BasicParams = {api, config, logger};\n  const oauth = new AuthStrategy<Config, Resources>(params);\n\n  const shopify:\n    | AdminApp<Config>\n    | AppStoreApp<Config>\n    | SingleMerchantApp<Config> = {\n    sessionStorage: config.sessionStorage,\n    addDocumentResponseHeaders: addDocumentResponseHeadersFactory(params),\n    registerWebhooks: registerWebhooksFactory(params),\n    authenticate: {\n      admin: oauth.authenticateAdmin.bind(oauth),\n      public: authenticatePublicFactory<Resources>(params),\n      webhook: authenticateWebhookFactory<\n        Config['future'],\n        Resources,\n        keyof Config['webhooks'] | MandatoryTopics\n      >(params),\n    },\n    unauthenticated: {\n      admin: unauthenticatedAdminContextFactory(params),\n      storefront: unauthenticatedStorefrontContextFactory(params),\n    },\n  };\n\n  if (\n    isAppStoreApp(shopify, appConfig) ||\n    isSingleMerchantApp(shopify, appConfig)\n  ) {\n    shopify.login = loginFactory(params);\n  }\n\n  return shopify as ShopifyApp<Config>;\n}",
+            "value": "export function shopifyApp<\n  Config extends AppConfigArg<Resources, Storage>,\n  Resources extends ShopifyRestResources,\n  Storage extends SessionStorage,\n>(appConfig: Config): ShopifyApp<Config> {\n  const api = deriveApi(appConfig);\n  const config = deriveConfig<Storage>(appConfig, api.config);\n  const logger = overrideLogger(api.logger);\n\n  if (appConfig.webhooks) {\n    api.webhooks.addHandlers(appConfig.webhooks);\n  }\n\n  const params: BasicParams = {api, config, logger};\n  const oauth = new AuthStrategy<Config, Resources>(params);\n\n  const shopify:\n    | AdminApp<Config>\n    | AppStoreApp<Config>\n    | SingleMerchantApp<Config> = {\n    sessionStorage: config.sessionStorage,\n    addDocumentResponseHeaders: addDocumentResponseHeadersFactory(params),\n    registerWebhooks: registerWebhooksFactory(params),\n    authenticate: {\n      admin: oauth.authenticateAdmin.bind(oauth),\n      public: authenticatePublicFactory<Resources>(params),\n      webhook: authenticateWebhookFactory<\n        Config['future'],\n        Resources,\n        keyof Config['webhooks'] | MandatoryTopics\n      >(params),\n    },\n    unauthenticated: {\n      admin: unauthenticatedAdminContextFactory(params),\n      storefront: unauthenticatedStorefrontContextFactory(params),\n    },\n  };\n\n  if (\n    isAppStoreApp(shopify, appConfig) ||\n    isSingleMerchantApp(shopify, appConfig)\n  ) {\n    shopify.login = loginFactory(params);\n  }\n\n  return shopify as ShopifyApp<Config>;\n}",
             "examples": [
               {
                 "title": "The minimum viable configuration",
@@ -3480,7 +3480,7 @@
                 "filePath": "/server/config-types.ts",
                 "syntaxKind": "PropertySignature",
                 "name": "scopes",
-                "value": "string[] | AuthScopes",
+                "value": "AuthScopes | string[]",
                 "description": "",
                 "isOptional": true
               },
@@ -3528,7 +3528,7 @@
                 "filePath": "/server/config-types.ts",
                 "syntaxKind": "PropertySignature",
                 "name": "restResources",
-                "value": "T",
+                "value": "Resources",
                 "description": "",
                 "isOptional": true
               },
@@ -3537,6 +3537,14 @@
                 "syntaxKind": "PropertySignature",
                 "name": "logger",
                 "value": "{ log?: LogFunction; level?: LogSeverity; httpRequests?: boolean; timestamps?: boolean; }",
+                "description": "",
+                "isOptional": true
+              },
+              {
+                "filePath": "/server/config-types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "future",
+                "value": "FutureFlagOptions",
                 "description": "",
                 "isOptional": true
               }
@@ -3716,6 +3724,13 @@
               }
             ],
             "value": "export interface FutureFlags {\n  /**\n   * When enabled, returns the same `admin` context (`AdminApiContext`) from `authenticate.webhook` that is returned from `authenticate.admin`.\n   *\n   * @default false\n   */\n  v3_webhookAdminContext?: boolean;\n}"
+          },
+          "FutureFlagOptions": {
+            "filePath": "/server/future/flags.ts",
+            "syntaxKind": "TypeAliasDeclaration",
+            "name": "FutureFlagOptions",
+            "value": "FutureFlags | undefined",
+            "description": ""
           },
           "ShopifyApp": {
             "filePath": "/server/types.ts",
@@ -5191,14 +5206,14 @@
               {
                 "filePath": "/server/types.ts",
                 "syntaxKind": "MethodSignature",
-                "name": "__@iterator@540",
+                "name": "__@iterator@576",
                 "value": "() => IterableIterator<JSONValue>",
                 "description": "Iterator"
               },
               {
                 "filePath": "/server/types.ts",
                 "syntaxKind": "MethodSignature",
-                "name": "__@unscopables@542",
+                "name": "__@unscopables@578",
                 "value": "() => { copyWithin: boolean; entries: boolean; fill: boolean; find: boolean; findIndex: boolean; keys: boolean; values: boolean; }",
                 "description": "Returns an object whose properties have the value 'true'\r\nwhen they will be absent when used in a 'with' statement."
               },
