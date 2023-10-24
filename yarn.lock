@@ -3143,10 +3143,10 @@
     jest-matcher-utils "^26.6.2"
     react-reconciler "^0.28.0"
 
-"@shopify/shopify-api@^8.0.1":
-  version "8.0.1"
-  resolved "https://registry.yarnpkg.com/@shopify/shopify-api/-/shopify-api-8.0.1.tgz#c04aa45f493b0256b46ef6088227fbe0e7bd3f93"
-  integrity sha512-Bqt6eX2IMcZLtKcefaajb9h9sqBtCMG+EH0l6v0xalckqPElQXAjg3fdSyeAZihWvqKUSVDGDDyf5gwYzfEsHQ==
+"@shopify/shopify-api@^8.0.2":
+  version "8.0.2"
+  resolved "https://registry.yarnpkg.com/@shopify/shopify-api/-/shopify-api-8.0.2.tgz#765bf03cf0c953ca9c2cde0aae91fba45c6d5def"
+  integrity sha512-hvVLoEsYglE4GRqFhr9D6oMr2bV6tEdsD9PxuNZ6bYDptoD+kQFKsaP83jE1qtHhB3ve0DeevaVVYjS/2TU7MA==
   dependencies:
     "@shopify/network" "^3.2.1"
     compare-versions "^5.0.3"
