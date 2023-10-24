@@ -1,5 +1,11 @@
 # @shopify/shopify-app-remix
 
+## 2.0.2
+
+### Patch Changes
+
+- ee7114a: Fixed the errorBoundary to work with new cases in Remix v2.
+
 ## 2.0.1
 
 ### Patch Changes
