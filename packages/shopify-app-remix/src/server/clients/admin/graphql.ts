@@ -1,13 +1,9 @@
+import {AdminOperations} from '@shopify/shopify-api';
 import {flatHeaders} from '@shopify/shopify-api/runtime';
 
-import {GraphQLClient, GraphQLQueryOptions} from '../types';
+import {GraphQLClient} from '../types';
 
 import {AdminClientOptions} from './types';
-
-export type GraphqlQueryFunction = (
-  query: string,
-  options?: GraphQLQueryOptions,
-) => Promise<Response>;
 
 // eslint-disable-next-line no-warning-comments
 // TODO: This is actually just a call through to the Shopify API client, but with a different API. We should eventually
@@ -17,7 +13,7 @@ export function graphqlClientFactory({
   params,
   handleClientError,
   session,
-}: AdminClientOptions): GraphQLClient {
+}: AdminClientOptions): GraphQLClient<any, AdminOperations> {
   return async function query(query, options) {
     const client = new params.api.clients.Graphql({
       session,

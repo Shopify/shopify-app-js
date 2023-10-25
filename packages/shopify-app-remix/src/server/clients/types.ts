@@ -1,17 +1,29 @@
-import {ApiVersion} from '@shopify/shopify-api';
+import {
+  AllOperations,
+  ApiVersion,
+  OperationRequest,
+  ReturnBody,
+} from '@shopify/shopify-api';
 
-interface QueryVariables {
-  [key: string]: any;
-}
-
-export interface GraphQLQueryOptions {
-  variables?: QueryVariables;
+export interface GraphQLQueryOptions<T, Operations extends AllOperations> {
+  variables?: T extends keyof Operations
+    ? OperationRequest<Operations, T>['variables']
+    : {[key: string]: any};
   apiVersion?: ApiVersion;
-  headers?: {[key: string]: any};
+  headers?: {
+    [key: string]: any;
+  };
   tries?: number;
 }
 
-export type GraphQLClient = (
-  query: string,
-  options?: GraphQLQueryOptions,
-) => Promise<Response>;
+type GraphqlReturnWithJson<T, Operations extends AllOperations> = Omit<
+  Response,
+  'json'
+> & {
+  json: () => Promise<ReturnBody<T, Operations>>;
+};
+
+export type GraphQLClient<T, Operations extends AllOperations> = (
+  query: T,
+  options?: GraphQLQueryOptions<T, Operations>,
+) => Promise<GraphqlReturnWithJson<T, Operations>>;

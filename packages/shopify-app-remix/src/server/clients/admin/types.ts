@@ -1,7 +1,11 @@
-import {Session, ShopifyRestResources} from '@shopify/shopify-api';
+import {
+  AdminOperations,
+  Session,
+  ShopifyRestResources,
+} from '@shopify/shopify-api';
 
 import {BasicParams} from '../../types';
-import {GraphQLClient} from '../types';
+import type {GraphQLClient} from '../types';
 
 import type {RestClientWithResources} from './rest';
 
@@ -120,5 +124,7 @@ export interface AdminApiContext<
    * }
    * ```
    */
-  graphql: GraphQLClient;
+  graphql: <T extends keyof AdminOperations | string>(
+    ...params: Parameters<GraphQLClient<T, AdminOperations>>
+  ) => ReturnType<GraphQLClient<T, AdminOperations>>;
 }
