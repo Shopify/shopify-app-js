@@ -5,6 +5,13 @@ export interface FutureFlags {
    * @default false
    */
   v3_webhookAdminContext?: boolean;
+
+  /**
+   * When enabled authenticate.public() will not work.  Use authenticate.public.checkout() instead.
+   *
+   * @default false
+   */
+  v3_authenticatePublic?: boolean;
 }
 
 export type FutureFlagOptions = FutureFlags | undefined;
