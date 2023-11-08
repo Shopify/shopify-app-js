@@ -134,7 +134,7 @@ interface Authenticate<Config extends AppConfigArg> {
    * }
    * ```
    */
-  public: AuthenticatePublic;
+  public: AuthenticatePublic<Config['future']>;
 
   /**
    * Authenticate a Shopify webhook request, get back an authenticated admin context and details on the webhook request

@@ -1,6 +1,6 @@
 {
   "name": "@shopify/shopify-app-session-storage-mysql",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Shopify App Session Storage for MySQL",
   "repository": {
     "type": "git",
@@ -36,13 +36,13 @@
     "tslib": "^2.4.0"
   },
   "peerDependencies": {
-    "@shopify/shopify-api": "^8.0.1",
-    "@shopify/shopify-app-session-storage": "^2.0.0"
+    "@shopify/shopify-api": "^8.0.2",
+    "@shopify/shopify-app-session-storage": "^2.0.1"
   },
   "devDependencies": {
     "@shopify/eslint-plugin": "^42.1.0",
     "@shopify/prettier-config": "^1.1.2",
-    "@shopify/shopify-app-session-storage-test-utils": "^1.0.0",
+    "@shopify/shopify-app-session-storage-test-utils": "^1.0.1",
     "@types/jest": "^29.5.1",
     "eslint": "^8.40.0",
     "eslint-plugin-prettier": "^4.2.1",

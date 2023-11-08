@@ -75,7 +75,7 @@ export function shopifyApp<
     registerWebhooks: registerWebhooksFactory(params),
     authenticate: {
       admin: oauth.authenticateAdmin.bind(oauth),
-      public: authenticatePublicFactory<Resources>(params),
+      public: authenticatePublicFactory<Config['future'], Resources>(params),
       webhook: authenticateWebhookFactory<
         Config['future'],
         Resources,

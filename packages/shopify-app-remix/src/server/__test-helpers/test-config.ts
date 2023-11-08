@@ -17,6 +17,10 @@ type TestConfig<Overrides extends Partial<AppConfigArg>> =
     Overrides & {
       // Create an object with all future flags defaulted to active to ensure our tests are updated when we introduce new flags
       future: {
+        v3_authenticatePublic: DefaultedFutureFlag<
+          Overrides,
+          'v3_authenticatePublic'
+        >;
         v3_webhookAdminContext: DefaultedFutureFlag<
           Overrides,
           'v3_webhookAdminContext'
@@ -42,6 +46,7 @@ export function testConfig<Overrides extends Partial<AppConfigArg>>(
     ...overrides,
     future: {
       v3_webhookAdminContext: true,
+      v3_authenticatePublic: true,
       ...(overrides.future as Overrides['future']),
     },
   };

@@ -1,19 +1,36 @@
 import {ShopifyRestResources} from '@shopify/shopify-api';
 
 import {BasicParams} from '../../types';
+import {FutureFlagOptions} from '../../future/flags';
 
 import {authenticateCheckoutFactory} from './checkout/authenticate';
 import {AuthenticateCheckoutOptions} from './checkout/types';
 import {authenticateAppProxyFactory} from './appProxy/authenticate';
-import {AuthenticatePublic} from './types';
+import {
+  AuthenticatePublic,
+  AuthenticatePublicLegacy,
+  AuthenticatePublicObject,
+} from './types';
 
 export function authenticatePublicFactory<
+  Future extends FutureFlagOptions,
   Resources extends ShopifyRestResources,
->(params: BasicParams): AuthenticatePublic {
-  const {logger} = params;
+>(params: BasicParams): AuthenticatePublic<Future> {
+  const {logger, config} = params;
 
   const authenticateCheckout = authenticateCheckoutFactory(params);
-  const authenticatePublic = (
+  const authenticateAppProxy = authenticateAppProxyFactory<Resources>(params);
+
+  if (config.future.v3_authenticatePublic) {
+    const context: AuthenticatePublicObject = {
+      checkout: authenticateCheckout,
+      appProxy: authenticateAppProxy,
+    };
+
+    return context as AuthenticatePublic<Future>;
+  }
+
+  const authenticatePublic: AuthenticatePublicLegacy = (
     request: Request,
     options: AuthenticateCheckoutOptions,
   ) => {
@@ -26,7 +43,7 @@ export function authenticatePublicFactory<
   };
 
   authenticatePublic.checkout = authenticateCheckout;
-  authenticatePublic.appProxy = authenticateAppProxyFactory<Resources>(params);
+  authenticatePublic.appProxy = authenticateAppProxy;
 
   return authenticatePublic;
 }
