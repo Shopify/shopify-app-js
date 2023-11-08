@@ -6,6 +6,7 @@ import {
   RequestedTokenType,
   Session,
   Shopify,
+  ShopifyError,
   ShopifyRestResources,
 } from '@shopify/shopify-api';
 
@@ -90,71 +91,36 @@ export class EmbeddedAuthStrategy<
   private async authenticateAndGetSessionContext(
     request: Request,
   ): Promise<SessionContext> {
-    const {api, logger, config} = this;
-    const params: BasicParams = {api, logger, config};
+    const {api, logger} = this;
 
-    const url = new URL(request.url);
-
-    const isPatchSessionToken =
-      url.pathname === config.auth.patchSessionTokenPath;
-    const isExitIframe = url.pathname === config.auth.exitIframePath;
-    // const isAuthRequest = url.pathname === config.auth.path;
-
-    if (isPatchSessionToken) {
-      logger.debug('Rendering bounce page');
-      throw renderAppBridge(params, request);
-    } else if (isExitIframe) {
-      const destination = url.searchParams.get('exitIframe')!;
-
-      logger.debug('Rendering exit iframe page', {destination});
-      throw renderAppBridge(params, request, {url: destination});
-    }
-    // else if (isAuthRequest) {
-    //   const shop = ensureValidShopParam(request, {api, logger, config});
-    //   const installUrl = `https://${shop}/admin/oauth/install?client_id=${config.apiKey}`;
-    //   throw redirect(installUrl);
-    // }
-
-    const sessionTokenHeader = getSessionTokenHeader(request);
-    const sessionTokenParam = url.searchParams.get(SESSION_TOKEN_PARAM)!;
-    const sessionTokenString = sessionTokenHeader || sessionTokenParam;
+    const sessionTokenHeader = api.session.sessionTokenFromHeader(request);
+    const sessionTokenParam = api.session.sessionTokenFromParam(request);
+    const sessionToken = sessionTokenHeader || sessionTokenParam;
 
     logger.info('Authenticating admin request');
 
-    if (sessionTokenParam) {
-      await validateUrlParams(request, {api, logger, config});
-      await ensureAppIsEmbeddedIfRequired(request, {api, logger, config});
-    }
+    if (sessionToken) {
+      const sessionTokenPayload = await api.session.decodeSessionToken(
+        sessionToken,
+        {
+          checkAudience: true,
+        },
+      );
 
-    if (sessionTokenString) {
-      try {
-        const sessionToken = await validateSessionTokenUncaught(
-          {api, logger, config},
-          sessionTokenString,
-        );
-
-        return await this.getAccessToken(
-          request,
-          sessionTokenString,
-          sessionToken,
-        );
-      } catch (error) {
-        if (
-          error instanceof InvalidJwtError ||
-          (error instanceof HttpResponseError &&
-            error.response.code === 400 &&
-            error.response.body?.error === 'invalid_subject_token')
-        ) {
-          console.log(`CAUGHT ${JSON.stringify(error)}`);
-          throw this.handleInvalidSession(request);
-        }
-        throw error;
+      if (this.config.useOnlineTokens) {
+        this.getAccessToken(request, sessionToken, sessionTokenPayload, false);
       }
+      return this.getAccessToken(
+        request,
+        sessionToken,
+        sessionTokenPayload,
+        this.config.useOnlineTokens,
+      );
     } else {
       logger.debug(
         'Missing session token in search params, going to bounce page',
       );
-      throw this.handleInvalidSession(request);
+      throw new ShopifyError('Session token was not found');
     }
   }
 
@@ -162,11 +128,12 @@ export class EmbeddedAuthStrategy<
     request: Request,
     sessionToken: string,
     payload: JwtPayload,
+    isOnline: boolean,
   ) {
     const {config, logger, api} = this;
 
     const sessionId = await api.session.getCurrentId({
-      isOnline: config.useOnlineTokens,
+      isOnline,
       rawRequest: request,
     });
 
@@ -174,53 +141,45 @@ export class EmbeddedAuthStrategy<
     const shop = dest.hostname;
 
     if (sessionId) {
-      logger.debug(`SESSION ID: ${sessionId}`);
       const persistedSession = await config.sessionStorage.loadSession(
         sessionId,
       );
 
-      if (persistedSession) {
-        logger.debug(`Reusing existing token: ${persistedSession.accessToken}`);
-
-        //   if (!persistedSession.isExpired()) {
+      if (persistedSession && !persistedSession.isExpired()) {
         return {session: persistedSession};
-        //   }
       }
     }
 
     logger.debug(
-      `Requesting token exchange online tokens? ${config.useOnlineTokens}`,
+      `Performing token exchange for shop: ${shop} & sessionId: ${sessionId}`,
     );
-
     const {session} = await api.auth.tokenExchange({
       sessionToken,
       shop,
-      requestedTokenType: config.useOnlineTokens
+      requestedTokenType: isOnline
         ? RequestedTokenType.OnlineAccessToken
         : RequestedTokenType.OfflineAccessToken,
     });
 
-    logger.debug(`RECEIVED TOKEN: ${session.accessToken}`);
-
     await config.sessionStorage.storeSession(session);
 
+    // if (config.hooks.afterAuth) {
+    //   logger.info('Running afterAuth hook');
+    //   await config.hooks.afterAuth({
+    //     session,
+    //     admin: createApiContext<Resources>(
+    //       request,
+    //       session,
+    //       handleClientErrorFactory,
+    //       {
+    //         api,
+    //         logger,
+    //         config,
+    //       },
+    //     ),
+    //   });
+    // }
+
     return {session, token: payload};
-  }
-
-  private handleInvalidSession(request: Request) {
-    const {api, logger, config} = this;
-
-    const isXhrRequest = request.headers.get('authorization');
-    if (!isXhrRequest) {
-      return redirectToBouncePage(new URL(request.url), {api, logger, config});
-    }
-
-    return new Response(undefined, {
-      status: 401,
-      headers: {
-        'Content-Type': 'application/json',
-        'X-Shopify-Invalid-Session': '1',
-      },
-    });
   }
 }
