@@ -1,14 +1,26 @@
-import pg from 'pg';
+import pg, {type PoolConfig} from 'pg';
 import {RdbmsConnection} from '@shopify/shopify-app-session-storage';
 
 export class PostgresConnection implements RdbmsConnection {
   sessionStorageIdentifier: string;
   private ready: Promise<void>;
   private pool: pg.Pool;
-  private dbUrl: URL;
+  private config: PoolConfig;
 
-  constructor(dbUrl: string, sessionStorageIdentifier: string) {
-    this.dbUrl = new URL(dbUrl);
+  constructor(config: string | PoolConfig, sessionStorageIdentifier: string) {
+    if (typeof config === 'string') {
+      const dbUrl = new URL(config);
+
+      this.config = {
+        host: dbUrl.hostname,
+        user: decodeURIComponent(dbUrl.username),
+        password: decodeURIComponent(dbUrl.password),
+        database: decodeURIComponent(dbUrl.pathname.slice(1)),
+        port: Number(dbUrl.port),
+      };
+    } else {
+      this.config = config;
+    }
     this.ready = this.init();
     this.sessionStorageIdentifier = sessionStorageIdentifier;
   }
@@ -60,7 +72,7 @@ export class PostgresConnection implements RdbmsConnection {
   }
 
   public getDatabase(): string | undefined {
-    return decodeURIComponent(this.dbUrl.pathname.slice(1));
+    return this.config.database;
   }
 
   async hasTable(tablename: string): Promise<boolean> {
@@ -83,12 +95,6 @@ export class PostgresConnection implements RdbmsConnection {
   }
 
   private async init(): Promise<void> {
-    this.pool = new pg.Pool({
-      host: this.dbUrl.hostname,
-      user: decodeURIComponent(this.dbUrl.username),
-      password: decodeURIComponent(this.dbUrl.password),
-      database: this.getDatabase(),
-      port: Number(this.dbUrl.port),
-    });
+    this.pool = new pg.Pool(this.config);
   }
 }

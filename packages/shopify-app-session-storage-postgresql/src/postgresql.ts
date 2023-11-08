@@ -7,6 +7,7 @@ import {
 import {migrationList} from './migrations';
 import {PostgresConnection} from './postgres-connection';
 import {PostgresSessionStorageMigrator} from './postgres-migrator';
+import type {PoolConfig} from 'pg';
 
 export interface PostgreSQLSessionStorageOptions
   extends RdbmsSessionStorageOptions {
@@ -47,12 +48,12 @@ export class PostgreSQLSessionStorage implements SessionStorage {
   private migrator: PostgresSessionStorageMigrator;
 
   constructor(
-    dbUrl: URL | string,
+    config: string | URL | PoolConfig,
     opts: Partial<PostgreSQLSessionStorageOptions> = {},
   ) {
     this.options = {...defaultPostgreSQLSessionStorageOptions, ...opts};
     this.internalInit = this.init(
-      typeof dbUrl === 'string' ? dbUrl : dbUrl.toString(),
+      config instanceof URL ? config.toString() : config,
     );
     this.migrator = new PostgresSessionStorageMigrator(
       this.client,
@@ -144,8 +145,8 @@ export class PostgreSQLSessionStorage implements SessionStorage {
     return this.client.disconnect();
   }
 
-  private async init(dbUrl: string) {
-    this.client = new PostgresConnection(dbUrl, this.options.sessionTableName);
+  private async init(config: string | PoolConfig) {
+    this.client = new PostgresConnection(config, this.options.sessionTableName);
     await this.connectClient();
     await this.createTable();
   }
