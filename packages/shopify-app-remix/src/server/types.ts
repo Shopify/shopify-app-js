@@ -13,9 +13,13 @@ import type {
 import type {AuthenticatePublic} from './authenticate/public/types';
 import type {AdminContext} from './authenticate/admin/types';
 import type {Unauthenticated} from './unauthenticated/types';
+import {FutureFlagOptions} from './future/flags';
+import type {MockApiConfig} from './shopify-app';
 
-export interface BasicParams {
-  api: Shopify;
+export interface BasicParams<
+  Future extends FutureFlagOptions = FutureFlagOptions,
+> {
+  api: Shopify<MockApiConfig<Future>>;
   config: AppConfig;
   logger: Shopify['logger'];
 }

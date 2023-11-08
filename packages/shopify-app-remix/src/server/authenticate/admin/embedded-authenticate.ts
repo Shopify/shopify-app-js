@@ -3,6 +3,7 @@ import {
   HttpResponseError,
   InvalidJwtError,
   JwtPayload,
+  RequestedTokenType,
   Session,
   Shopify,
   ShopifyRestResources,
@@ -17,6 +18,7 @@ import {
   ensureCORSHeadersFactory,
   validateSessionTokenUncaught,
 } from '../helpers';
+import {type MockApiConfig} from '../../shopify-app';
 
 import type {AdminContext} from './types';
 import {
@@ -44,11 +46,11 @@ export class EmbeddedAuthStrategy<
   Config extends AppConfigArg,
   Resources extends ShopifyRestResources = ShopifyRestResources,
 > {
-  protected api: Shopify;
+  protected api: Shopify<MockApiConfig<Config['future']>>;
   protected config: AppConfig;
   protected logger: Shopify['logger'];
 
-  public constructor({api, config, logger}: BasicParams) {
+  public constructor({api, config, logger}: BasicParams<Config['future']>) {
     this.api = api;
     this.config = config;
     this.logger = logger;
@@ -180,18 +182,22 @@ export class EmbeddedAuthStrategy<
       if (persistedSession) {
         logger.debug(`Reusing existing token: ${persistedSession.accessToken}`);
 
-        if (!persistedSession.isExpired()) {
-          return {session: persistedSession};
-        }
+        //   if (!persistedSession.isExpired()) {
+        return {session: persistedSession};
+        //   }
       }
     }
 
-    logger.debug('Requesting token exchange');
+    logger.debug(
+      `Requesting token exchange online tokens? ${config.useOnlineTokens}`,
+    );
 
     const {session} = await api.auth.tokenExchange({
       sessionToken,
       shop,
-      isOnline: config.useOnlineTokens,
+      requestedTokenType: config.useOnlineTokens
+        ? RequestedTokenType.OnlineAccessToken
+        : RequestedTokenType.OfflineAccessToken,
     });
 
     logger.debug(`RECEIVED TOKEN: ${session.accessToken}`);

@@ -9,6 +9,7 @@ import {
   Shopify,
   ShopifyRestResources,
 } from '@shopify/shopify-api';
+import {MockApiConfig} from 'src/server/shopify-app';
 
 import type {BasicParams} from '../../types';
 import type {AppConfig, AppConfigArg} from '../../config-types';
@@ -20,9 +21,7 @@ import {
   ensureCORSHeadersFactory,
 } from '../helpers';
 
-import type {
-  AdminContext,
-} from './types';
+import type {AdminContext} from './types';
 import {
   beginAuth,
   handleClientErrorFactory,
@@ -51,11 +50,11 @@ export class AuthStrategy<
   Config extends AppConfigArg,
   Resources extends ShopifyRestResources = ShopifyRestResources,
 > {
-  protected api: Shopify;
+  protected api: Shopify<MockApiConfig<Config['future']>>;
   protected config: AppConfig;
   protected logger: Shopify['logger'];
 
-  public constructor({api, config, logger}: BasicParams) {
+  public constructor({api, config, logger}: BasicParams<Config['future']>) {
     this.api = api;
     this.config = config;
     this.logger = logger;

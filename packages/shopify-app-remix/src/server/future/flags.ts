@@ -12,6 +12,8 @@ export interface FutureFlags {
    * @default false
    */
   v3_authenticatePublic?: boolean;
+
+  unstable_tokenExchange: boolean;
 }
 
 export type FutureFlagOptions = FutureFlags | undefined;

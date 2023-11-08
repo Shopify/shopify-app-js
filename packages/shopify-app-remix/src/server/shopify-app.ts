@@ -1,6 +1,7 @@
 import '@shopify/shopify-api/adapters/web-api';
 import {
   ConfigInterface as ApiConfig,
+  ConfigParams,
   LATEST_API_VERSION,
   ShopifyError,
   ShopifyRestResources,
@@ -30,6 +31,7 @@ import {authenticatePublicFactory} from './authenticate/public';
 import {unauthenticatedStorefrontContextFactory} from './unauthenticated/storefront';
 import {AuthStrategy} from './authenticate/admin/authenticate';
 import {EmbeddedAuthStrategy} from './authenticate/admin/embedded-authenticate';
+import {FutureFlagOptions, FutureFlags} from './future/flags';
 
 /**
  * Creates an object your app will use to interact with Shopify.
@@ -64,7 +66,11 @@ export function shopifyApp<
     api.webhooks.addHandlers(appConfig.webhooks);
   }
 
-  const params: BasicParams = {api, config, logger};
+  const params: BasicParams<Config['future']> = {
+    api: api as any,
+    config,
+    logger,
+  };
   const oauth = new AuthStrategy<Config, Resources>(params);
   const tokenExchange = new EmbeddedAuthStrategy<Config, Resources>(params);
 
@@ -146,8 +152,19 @@ function deriveApi(appConfig: AppConfigArg) {
     isEmbeddedApp: appConfig.isEmbeddedApp ?? true,
     apiVersion: appConfig.apiVersion ?? LATEST_API_VERSION,
     isCustomStoreApp: appConfig.distribution === AppDistribution.ShopifyAdmin,
+    future: {
+      unstable_tokenExchange: appConfig.future?.unstable_tokenExchange,
+    },
   });
 }
+
+export type MockApiConfig<Future extends FutureFlagOptions> = ConfigParams & {
+  future?: {
+    unstable_tokenExchange?: Future extends FutureFlags
+      ? Future['unstable_tokenExchange']
+      : boolean;
+  };
+};
 
 function deriveConfig<Storage extends SessionStorage>(
   appConfig: AppConfigArg,
@@ -169,7 +186,7 @@ function deriveConfig<Storage extends SessionStorage>(
     useOnlineTokens: appConfig.useOnlineTokens ?? false,
     hooks: appConfig.hooks ?? {},
     sessionStorage: appConfig.sessionStorage as Storage,
-    future: appConfig.future ?? {},
+    future: appConfig.future ?? {unstable_tokenExchange: true},
     auth: {
       path: authPathPrefix,
       callbackPath: `${authPathPrefix}/callback`,
