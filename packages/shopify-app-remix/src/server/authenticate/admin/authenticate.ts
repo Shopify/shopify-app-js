@@ -1,10 +1,7 @@
 import {redirect} from '@remix-run/server-runtime';
 import {
-  CookieNotFound,
   GraphqlQueryError,
   HttpResponseError,
-  InvalidHmacError,
-  InvalidOAuthError,
   JwtPayload,
   Session,
   Shopify,
@@ -39,11 +36,12 @@ import {
   redirectFactory,
   redirectToAuthPage,
   redirectWithExitIframe,
-  renderAppBridge,
 } from './helpers';
+import {AuthCodeFlowStrategy} from './strategies/auth-code-flow';
 
 interface SessionContext {
   session: Session;
+  shop: string;
   token?: JwtPayload;
 }
 
@@ -109,37 +107,35 @@ export class AuthStrategy<
   ): Promise<SessionContext> {
     const {api, logger, config} = this;
     const params: BasicParams = {api, logger, config};
-
-    const url = new URL(request.url);
-
-    const isPatchSessionToken =
-      url.pathname === config.auth.patchSessionTokenPath;
-    const isExitIframe = url.pathname === config.auth.exitIframePath;
-    const isAuthRequest = url.pathname === config.auth.path;
-    const isAuthCallbackRequest = url.pathname === config.auth.callbackPath;
-    const sessionTokenHeader = getSessionTokenHeader(request);
-
     logger.info('Authenticating admin request');
 
-    if (isPatchSessionToken) {
-      logger.debug('Rendering bounce page');
-      throw renderAppBridge(params, request);
-    } else if (isExitIframe) {
-      const destination = url.searchParams.get('exitIframe')!;
+    const strategy = new AuthCodeFlowStrategy();
 
-      logger.debug('Rendering exit iframe page', {destination});
-      throw renderAppBridge(params, request, {url: destination});
-    } else if (isAuthCallbackRequest) {
-      throw await this.handleAuthCallbackRequest(request);
-    } else if (isAuthRequest) {
-      throw await this.handleAuthBeginRequest(request);
-    } else if (sessionTokenHeader) {
+    await strategy.handleRoutes(request, params);
+
+    const sessionTokenHeader = getSessionTokenHeader(request);
+
+    if (sessionTokenHeader) {
       const sessionToken = await validateSessionToken(
         {api, logger, config},
         sessionTokenHeader,
       );
 
-      return this.validateAuthenticatedSession(request, sessionToken);
+      const sessionContext = await this.getAuthenticatedSession(sessionToken);
+
+      if (
+        !sessionContext?.session ||
+        !sessionContext?.session.isActive(config.scopes)
+      ) {
+        const shop = this.getShopFromSessionToken(sessionToken);
+        const debugMessage = sessionContext?.session
+          ? 'Found a session, but it has expired, redirecting to OAuth'
+          : 'No session found, redirecting to OAuth';
+        logger.debug(debugMessage, {shop});
+        await redirectToAuthPage({api, config, logger}, request, shop);
+      }
+
+      return sessionContext!;
     } else {
       await this.validateUrlParams(request);
       await this.ensureInstalledOnShop(request);
@@ -147,81 +143,6 @@ export class AuthStrategy<
       await this.ensureSessionTokenSearchParamIfRequired(request);
 
       return this.ensureSessionExists(request);
-    }
-  }
-
-  private async handleAuthBeginRequest(request: Request): Promise<never> {
-    const {api, config, logger} = this;
-
-    logger.info('Handling OAuth begin request');
-
-    const shop = this.ensureValidShopParam(request);
-
-    logger.debug('OAuth request contained valid shop', {shop});
-
-    // If we're loading from an iframe, we need to break out of it
-    if (
-      config.isEmbeddedApp &&
-      request.headers.get('Sec-Fetch-Dest') === 'iframe'
-    ) {
-      logger.debug('Auth request in iframe detected, exiting iframe', {shop});
-      throw redirectWithExitIframe({api, config, logger}, request, shop);
-    } else {
-      throw await beginAuth({api, config, logger}, request, false, shop);
-    }
-  }
-
-  private async handleAuthCallbackRequest(request: Request): Promise<never> {
-    const {api, config, logger} = this;
-
-    logger.info('Handling OAuth callback request');
-
-    const shop = this.ensureValidShopParam(request);
-
-    try {
-      const {session, headers: responseHeaders} = await api.auth.callback({
-        rawRequest: request,
-      });
-
-      await config.sessionStorage.storeSession(session);
-
-      if (config.useOnlineTokens && !session.isOnline) {
-        logger.info('Requesting online access token for offline session');
-        await beginAuth({api, config, logger}, request, true, shop);
-      }
-
-      if (config.hooks.afterAuth) {
-        logger.info('Running afterAuth hook');
-        await config.hooks.afterAuth({
-          session,
-          admin: this.createAdminApiContext(request, session),
-        });
-      }
-
-      throw await this.redirectToShopifyOrAppRoot(request, responseHeaders);
-    } catch (error) {
-      if (error instanceof Response) {
-        throw error;
-      }
-
-      logger.error('Error during OAuth callback', {error: error.message});
-
-      if (error instanceof CookieNotFound) {
-        throw await this.handleAuthBeginRequest(request);
-      } else if (
-        error instanceof InvalidHmacError ||
-        error instanceof InvalidOAuthError
-      ) {
-        throw new Response(undefined, {
-          status: 400,
-          statusText: 'Invalid OAuth Request',
-        });
-      } else {
-        throw new Response(undefined, {
-          status: 500,
-          statusText: 'Internal Server Error',
-        });
-      }
     }
   }
 
@@ -248,15 +169,11 @@ export class AuthStrategy<
     }
   }
 
-  private async ensureInstalledOnShop(request: Request) {
+  private async getOfflineToken(request: Request) {
     const {api, config, logger} = this;
     const url = new URL(request.url);
 
-    let shop = url.searchParams.get('shop');
-    const isEmbedded = url.searchParams.get('embedded') === '1';
-
-    // Ensure app is installed
-    logger.debug('Ensuring app is installed on shop', {shop});
+    const shop = url.searchParams.get('shop');
 
     const offlineId = shop
       ? api.session.getOfflineId(shop)
@@ -270,7 +187,20 @@ export class AuthStrategy<
       });
     }
 
-    const offlineSession = await config.sessionStorage.loadSession(offlineId);
+    return config.sessionStorage.loadSession(offlineId);
+  }
+
+  private async ensureInstalledOnShop(request: Request) {
+    const {api, config, logger} = this;
+    const url = new URL(request.url);
+
+    let shop = url.searchParams.get('shop');
+
+    // Ensure app is installed
+    logger.debug('Ensuring app is installed on shop', {shop});
+
+    const offlineSession = await this.getOfflineToken(request);
+    const isEmbedded = url.searchParams.get('embedded') === '1';
 
     if (!offlineSession) {
       logger.info("Shop hasn't installed app yet, redirecting to OAuth", {
@@ -294,42 +224,55 @@ export class AuthStrategy<
 
         logger.debug('Offline session is still valid, embedding app', {shop});
       } catch (error) {
-        if (error instanceof HttpResponseError) {
-          if (error.response.code === 401) {
-            logger.info(
-              'Shop session is no longer valid, redirecting to OAuth',
-              {shop},
-            );
-            throw await beginAuth({api, config, logger}, request, false, shop);
-          } else {
-            const message = JSON.stringify(error.response.body, null, 2);
-            logger.error(
-              `Unexpected error during session validation: ${message}`,
-              {shop},
-            );
-
-            throw new Response(undefined, {
-              status: error.response.code,
-              statusText: error.response.statusText,
-            });
-          }
-        } else if (error instanceof GraphqlQueryError) {
-          const context: {[key: string]: string} = {shop};
-          if (error.response) {
-            context.response = JSON.stringify(error.response);
-          }
-
-          logger.error(
-            `Unexpected error during session validation: ${error.message}`,
-            context,
-          );
-
-          throw new Response(undefined, {
-            status: 500,
-            statusText: 'Internal Server Error',
-          });
-        }
+        await this.handleInvalidOfflineSession(
+          error,
+          {api, logger, config},
+          request,
+          shop,
+        );
       }
+    }
+  }
+
+  private async handleInvalidOfflineSession(
+    error: Error,
+    params: BasicParams,
+    request: Request,
+    shop: string,
+  ) {
+    const {api, logger, config} = params;
+    if (error instanceof HttpResponseError) {
+      if (error.response.code === 401) {
+        logger.info('Shop session is no longer valid, redirecting to OAuth', {
+          shop,
+        });
+        throw await beginAuth({api, config, logger}, request, false, shop);
+      } else {
+        const message = JSON.stringify(error.response.body, null, 2);
+        logger.error(`Unexpected error during session validation: ${message}`, {
+          shop,
+        });
+
+        throw new Response(undefined, {
+          status: error.response.code,
+          statusText: error.response.statusText,
+        });
+      }
+    } else if (error instanceof GraphqlQueryError) {
+      const context: {[key: string]: string} = {shop};
+      if (error.response) {
+        context.response = JSON.stringify(error.response);
+      }
+
+      logger.error(
+        `Unexpected error during session validation: ${error.message}`,
+        context,
+      );
+
+      throw new Response(undefined, {
+        status: 500,
+        statusText: 'Internal Server Error',
+      });
     }
   }
 
@@ -349,20 +292,6 @@ export class AuthStrategy<
         }
       `,
     });
-  }
-
-  private ensureValidShopParam(request: Request): string {
-    const url = new URL(request.url);
-    const {api} = this;
-    const shop = api.utils.sanitizeShop(url.searchParams.get('shop')!);
-
-    if (!shop) {
-      throw new Response('Shop param is invalid', {
-        status: 400,
-      });
-    }
-
-    return shop;
   }
 
   private async ensureAppIsEmbeddedIfRequired(request: Request) {
@@ -411,7 +340,21 @@ export class AuthStrategy<
         searchParamSessionToken,
       );
 
-      return this.validateAuthenticatedSession(request, sessionToken);
+      const sessionContext = await this.getAuthenticatedSession(sessionToken);
+
+      if (
+        !sessionContext?.session ||
+        !sessionContext?.session.isActive(config.scopes)
+      ) {
+        const shop = this.getShopFromSessionToken(sessionToken);
+        const debugMessage = sessionContext?.session
+          ? 'Found a session, but it has expired, redirecting to OAuth'
+          : 'No session found, redirecting to OAuth';
+        logger.debug(debugMessage, {shop});
+        await redirectToAuthPage({api, config, logger}, request, shop);
+      }
+
+      return sessionContext!;
     } else {
       // eslint-disable-next-line no-warning-comments
       // TODO move this check into loadSession once we add support for it in the library
@@ -427,54 +370,52 @@ export class AuthStrategy<
         throw await beginAuth({api, config, logger}, request, false, shop);
       }
 
-      return {session: await this.loadSession(request, shop, sessionId)};
+      const session = await this.loadSession(sessionId);
+
+      if (!session || !session?.isActive(config.scopes)) {
+        const debugMessage = session
+          ? 'Found a session, but it has expired, redirecting to OAuth'
+          : 'No session found, redirecting to OAuth';
+        logger.debug(debugMessage, {shop});
+        throw await beginAuth({api, config, logger}, request, false, shop);
+      }
+
+      return {session, shop};
     }
   }
 
-  private async validateAuthenticatedSession(
-    request: Request,
+  private getShopFromSessionToken(payload: JwtPayload): string {
+    const dest = new URL(payload.dest);
+    return dest.hostname;
+  }
+
+  private async getAuthenticatedSession(
     payload: JwtPayload,
-  ): Promise<SessionContext> {
+  ): Promise<SessionContext | null> {
     const {config, logger, api} = this;
 
-    const dest = new URL(payload.dest);
-    const shop = dest.hostname;
+    const shop = this.getShopFromSessionToken(payload);
 
     const sessionId = config.useOnlineTokens
       ? api.session.getJwtSessionId(shop, payload.sub)
       : api.session.getOfflineId(shop);
 
-    const session = await this.loadSession(request, shop, sessionId);
+    const session = await this.loadSession(sessionId);
 
     logger.debug('Found session, request is valid', {shop});
 
-    return {session, token: payload};
+    return session ? {session, shop, token: payload} : null;
   }
 
-  private async loadSession(
-    request: Request,
-    shop: string,
-    sessionId: string,
-  ): Promise<Session> {
-    const {api, config, logger} = this;
+  private async loadSession(sessionId: string): Promise<Session | undefined> {
+    const {config, logger} = this;
 
     logger.debug('Loading session from storage', {sessionId});
 
-    const session = await config.sessionStorage.loadSession(sessionId);
-    if (!session) {
-      logger.debug('No session found, redirecting to OAuth', {shop});
-      await redirectToAuthPage({api, config, logger}, request, shop);
-    } else if (!session.isActive(config.scopes)) {
-      logger.debug(
-        'Found a session, but it has expired, redirecting to OAuth',
-        {shop},
-      );
-      await redirectToAuthPage({api, config, logger}, request, shop);
-    }
-
-    return session!;
+    return config.sessionStorage.loadSession(sessionId);
   }
 
+  // duplicated
   private async redirectToShopifyOrAppRoot(
     request: Request,
     responseHeaders?: Headers,
@@ -521,6 +462,7 @@ export class AuthStrategy<
     };
   }
 
+  // duplicate
   private createAdminApiContext(
     request: Request,
     session: Session,
