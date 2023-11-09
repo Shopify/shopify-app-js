@@ -112,7 +112,7 @@ export class AuthStrategy<
     logger.info('Authenticating admin request');
 
     this.handleBouncePageRoute(request, params);
-    this.handleExistIframeRequest(request, params);
+    this.handleExitIframeRoute(request, params);
     this.handleOAuthRoutes(request, config);
 
     const sessionTokenHeader = getSessionTokenHeader(request);
@@ -144,10 +144,7 @@ export class AuthStrategy<
     }
   }
 
-  private async handleExistIframeRequest(
-    request: Request,
-    params: BasicParams,
-  ) {
+  private async handleExitIframeRoute(request: Request, params: BasicParams) {
     const {config, logger} = params;
     const url = new URL(request.url);
 
@@ -160,25 +157,30 @@ export class AuthStrategy<
   }
 
   private async handleOAuthRoutes(request: Request, config: AppConfig) {
+    const {api} = this;
     const url = new URL(request.url);
     const isAuthRequest = url.pathname === config.auth.path;
     const isAuthCallbackRequest = url.pathname === config.auth.callbackPath;
 
-    if (isAuthRequest) {
-      throw await this.handleAuthBeginRequest(request);
-    }
+    if (!isAuthRequest && !isAuthCallbackRequest) return;
+
+    const shop = api.utils.sanitizeShop(url.searchParams.get('shop')!);
+    if (!shop) throw new Response('Shop param is invalid', {status: 400});
+
+    if (isAuthRequest) throw await this.handleAuthBeginRequest(request, shop);
 
     if (isAuthCallbackRequest) {
-      throw await this.handleAuthCallbackRequest(request);
+      throw await this.handleAuthCallbackRequest(request, shop);
     }
   }
 
-  private async handleAuthBeginRequest(request: Request): Promise<never> {
+  private async handleAuthBeginRequest(
+    request: Request,
+    shop: string,
+  ): Promise<never> {
     const {api, config, logger} = this;
 
     logger.info('Handling OAuth begin request');
-
-    const shop = this.ensureValidShopParam(request);
 
     logger.debug('OAuth request contained valid shop', {shop});
 
@@ -194,12 +196,14 @@ export class AuthStrategy<
     }
   }
 
-  private async handleAuthCallbackRequest(request: Request): Promise<never> {
+  private async handleAuthCallbackRequest(
+    request: Request,
+    shop: string,
+  ): Promise<never> {
     const {api, config, logger} = this;
+    const params = {api, config, logger};
 
     logger.info('Handling OAuth callback request');
-
-    const shop = this.ensureValidShopParam(request);
 
     try {
       const {session, headers: responseHeaders} = await api.auth.callback({
@@ -210,42 +214,61 @@ export class AuthStrategy<
 
       if (config.useOnlineTokens && !session.isOnline) {
         logger.info('Requesting online access token for offline session');
-        await beginAuth({api, config, logger}, request, true, shop);
+        await beginAuth(params, request, true, shop);
       }
 
-      if (config.hooks.afterAuth) {
-        logger.info('Running afterAuth hook');
-        await config.hooks.afterAuth({
-          session,
-          admin: this.createAdminApiContext(request, session),
-        });
-      }
+      await this.triggerAfterAuthHook(params, session, request);
 
       throw await this.redirectToShopifyOrAppRoot(request, responseHeaders);
     } catch (error) {
-      if (error instanceof Response) {
-        throw error;
-      }
+      if (error instanceof Response) throw error;
 
-      logger.error('Error during OAuth callback', {error: error.message});
-
-      if (error instanceof CookieNotFound) {
-        throw await this.handleAuthBeginRequest(request);
-      } else if (
-        error instanceof InvalidHmacError ||
-        error instanceof InvalidOAuthError
-      ) {
-        throw new Response(undefined, {
-          status: 400,
-          statusText: 'Invalid OAuth Request',
-        });
-      } else {
-        throw new Response(undefined, {
-          status: 500,
-          statusText: 'Internal Server Error',
-        });
-      }
+      throw await this.parseOauthCallbackError(params, error, request, shop);
     }
+  }
+
+  private async triggerAfterAuthHook(
+    params: BasicParams,
+    session: Session,
+    request: Request,
+  ) {
+    const {config, logger} = params;
+    if (config.hooks.afterAuth) {
+      logger.info('Running afterAuth hook');
+      await config.hooks.afterAuth({
+        session,
+        admin: this.createAdminApiContext(request, session),
+      });
+    }
+  }
+
+  private async parseOauthCallbackError(
+    params: BasicParams,
+    error: Error,
+    request: Request,
+    shop: string,
+  ) {
+    const {logger} = params;
+    logger.error('Error during OAuth callback', {error: error.message});
+
+    if (error instanceof CookieNotFound) {
+      return this.handleAuthBeginRequest(request, shop);
+    }
+
+    if (
+      error instanceof InvalidHmacError ||
+      error instanceof InvalidOAuthError
+    ) {
+      return new Response(undefined, {
+        status: 400,
+        statusText: 'Invalid OAuth Request',
+      });
+    }
+
+    return new Response(undefined, {
+      status: 500,
+      statusText: 'Internal Server Error',
+    });
   }
 
   private async validateUrlParams(request: Request) {
@@ -394,20 +417,6 @@ export class AuthStrategy<
         }
       `,
     });
-  }
-
-  private ensureValidShopParam(request: Request): string {
-    const url = new URL(request.url);
-    const {api} = this;
-    const shop = api.utils.sanitizeShop(url.searchParams.get('shop')!);
-
-    if (!shop) {
-      throw new Response('Shop param is invalid', {
-        status: 400,
-      });
-    }
-
-    return shop;
   }
 
   private async ensureAppIsEmbeddedIfRequired(request: Request) {
