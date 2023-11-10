@@ -111,9 +111,9 @@ export class AuthStrategy<
     const params: BasicParams = {api, logger, config};
     logger.info('Authenticating admin request');
 
-    this.handleBouncePageRoute(request, params);
-    this.handleExitIframeRoute(request, params);
-    this.handleOAuthRoutes(request, config);
+    await this.handleBouncePageRoute(request, params);
+    await this.handleExitIframeRoute(request, params);
+    await this.handleOAuthRoutes(request, config);
 
     const sessionTokenHeader = getSessionTokenHeader(request);
 
@@ -223,7 +223,7 @@ export class AuthStrategy<
     } catch (error) {
       if (error instanceof Response) throw error;
 
-      throw await this.parseOauthCallbackError(params, error, request, shop);
+      throw await this.oauthCallbackError(params, error, request, shop);
     }
   }
 
@@ -242,7 +242,7 @@ export class AuthStrategy<
     }
   }
 
-  private async parseOauthCallbackError(
+  private async oauthCallbackError(
     params: BasicParams,
     error: Error,
     request: Request,
