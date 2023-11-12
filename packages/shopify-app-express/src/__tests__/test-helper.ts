@@ -2,7 +2,7 @@ import crypto from 'crypto';
 
 import semver from 'semver';
 import fetchMock, {MockParams} from 'jest-fetch-mock';
-import {LATEST_API_VERSION} from '@shopify/shopify-api';
+import {LATEST_API_VERSION, ShopifyRestResources} from '@shopify/shopify-api';
 import {MemorySessionStorage} from '@shopify/shopify-app-session-storage-memory';
 
 import {shopifyApp, ShopifyApp} from '../index';
@@ -10,7 +10,10 @@ import {AppConfigParams} from '../config-types';
 import {SHOPIFY_EXPRESS_LIBRARY_VERSION} from '../version';
 
 // eslint-disable-next-line import/no-mutable-exports
-export let testConfig: AppConfigParams & {
+export let testConfig: AppConfigParams<
+  ShopifyRestResources,
+  MemorySessionStorage
+> & {
   api: {
     apiKey: string;
     apiSecretKey: string;

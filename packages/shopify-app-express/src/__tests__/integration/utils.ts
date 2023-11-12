@@ -4,7 +4,7 @@ import request from 'supertest';
 import {
   DeliveryMethod,
   EventBridgeWebhookHandler,
-  HttpWebhookHandler,
+  HttpWebhookHandlerWithCallback,
   PubSubWebhookHandler,
 } from '@shopify/shopify-api';
 
@@ -13,7 +13,7 @@ import {BASE64_HOST} from '../test-helper';
 import {CallbackInfo, CookiesType} from './types';
 
 export const httpHandlerMock = jest.fn();
-export const HTTP_HANDLER: HttpWebhookHandler = {
+export const HTTP_HANDLER: HttpWebhookHandlerWithCallback = {
   deliveryMethod: DeliveryMethod.Http,
   callbackUrl: '/webhooks',
   callback: httpHandlerMock,

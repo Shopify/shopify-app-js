@@ -26,11 +26,11 @@ export interface Unauthenticated<Resources extends ShopifyRestResources> {
    * ```
    * ```ts
    * // /app/routes/**\/*.jsx
-   * import { LoaderArgs, json } from "@remix-run/node";
+   * import { LoaderFunctionArgs, json } from "@remix-run/node";
    * import { authenticateExternal } from "~/helpers/authenticate"
    * import shopify from "../../shopify.server";
    *
-   * export async function loader({ request }: LoaderArgs) {
+   * export async function loader({ request }: LoaderFunctionArgs) {
    *   const shop = await authenticateExternal(request)
    *   const {admin} = await shopify.unauthenticated.admin(shop);
    *
@@ -51,11 +51,11 @@ export interface Unauthenticated<Resources extends ShopifyRestResources> {
    * <caption>Responding to a request not controlled by Shopify</caption>
    * ```ts
    * // /app/routes/**\/*.jsx
-   * import { LoaderArgs, json } from "@remix-run/node";
+   * import { LoaderFunctionArgs, json } from "@remix-run/node";
    * import { authenticateExternal } from "~/helpers/authenticate"
    * import shopify from "../../shopify.server";
    *
-   * export async function loader({ request }: LoaderArgs) {
+   * export async function loader({ request }: LoaderFunctionArgs) {
    *   const shop = await authenticateExternal(request)
    *   const {storefront} = await shopify.unauthenticated.storefront(shop);
    *   const response = await storefront.graphql(`{blogs(first: 10) { edges { node { id } } } }`);

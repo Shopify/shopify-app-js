@@ -1,5 +1,6 @@
 import {Session} from '@shopify/shopify-api';
-import {BasicParams} from 'src/server/types';
+
+import {BasicParams} from '../../types';
 
 export async function getOfflineSession(
   shop: string,

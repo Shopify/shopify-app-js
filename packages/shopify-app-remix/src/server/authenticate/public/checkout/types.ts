@@ -25,11 +25,11 @@ export interface CheckoutContext {
    * <description>Get store-specific data using the `sessionToken` object.</description>
    * ```ts
    * // app/routes/public/my-route.ts
-   * import { LoaderArgs, json } from "@remix-run/node";
+   * import { LoaderFunctionArgs, json } from "@remix-run/node";
    * import { authenticate } from "../shopify.server";
    * import { getMyAppData } from "~/db/model.server";
    *
-   * export const loader = async ({ request }: LoaderArgs) => {
+   * export const loader = async ({ request }: LoaderFunctionArgs) => {
    *   const { sessionToken } = await authenticate.public.checkout(
    *     request
    *   );
@@ -47,11 +47,11 @@ export interface CheckoutContext {
    * <description>Use the `cors` helper to ensure your app can respond to checkout extension requests.</description>
    * ```ts
    * // app/routes/public/my-route.ts
-   * import { LoaderArgs, json } from "@remix-run/node";
+   * import { LoaderFunctionArgs, json } from "@remix-run/node";
    * import { authenticate } from "../shopify.server";
    * import { getMyAppData } from "~/db/model.server";
    *
-   * export const loader = async ({ request }: LoaderArgs) => {
+   * export const loader = async ({ request }: LoaderFunctionArgs) => {
    *   const { sessionToken, cors } = await authenticate.public.checkout(
    *     request,
    *     { corsHeaders: ["X-My-Custom-Header"] }

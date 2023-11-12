@@ -45,10 +45,12 @@ describe('shopifyApp', () => {
 
   it('does not have login function when distribution is ShopifyAdmin', () => {
     // GIVEN
-    const shopify = shopifyApp({
-      ...testConfig(),
-      distribution: AppDistribution.ShopifyAdmin,
-    });
+    const shopify = shopifyApp(
+      testConfig({
+        distribution: AppDistribution.ShopifyAdmin,
+        adminApiAccessToken: 'dummy_token',
+      }),
+    );
 
     // THEN
     expect(shopify).not.toHaveProperty('login');

@@ -1,5 +1,136 @@
 # @shopify/shopify-app-remix
 
+## 2.1.0
+
+### Minor Changes
+
+- f34eefd: Added v3_authenticatePublic feature flag to remove `authenticate.public(request)`.
+
+  Apps can opt in to the new future at any time, so this is not a breaking change until version 3.
+
+    <details>
+      <summary>See an example</summary>
+
+  Without the `v3_authenticatePublic` future flag the deprecated `authenticate.public(request)` is supported:
+
+  ```ts
+  await authenticate.public.checkout(request);
+  await authenticate.public.appProxy(request);
+
+  // Deprecated.  Use authenticate.public.checkout(request) instead
+  await authenticate.public(request);
+  ```
+
+  With the `v3_authenticatePublic` future flag enabled the deprecated `authenticate.public(request)` is not supported:
+
+  ```ts
+  await authenticate.public.checkout(request);
+  await authenticate.public.appProxy(request);
+  ```
+
+    </details>
+
+## 2.0.2
+
+### Patch Changes
+
+- ee7114a: Fixed the errorBoundary to work with new cases in Remix v2. Thank you @btomaj!
+
+## 2.0.1
+
+### Patch Changes
+
+- 6d12840: Updating dependencies on @shopify/shopify-api
+- Updated dependencies [6d12840]
+  - @shopify/shopify-app-session-storage@2.0.1
+
+## 2.0.0
+
+### Major Changes
+
+- f837060: **Removed support for Node 14**
+
+  Node 14 has reached its [EOL](https://endoflife.date/nodejs), and dependencies to this package no longer work on Node 14.
+  Because of that, we can no longer support that version.
+
+  If your app is running on Node 14, you'll need to update to a more recent version before upgrading this package.
+
+  This upgrade does not require any code changes.
+
+### Minor Changes
+
+- a1b3393: Added support for `future` flags in the `shopifyApp` function, with a `v3_webhookContext` flag to have `authenticate.webhook` return a standard `admin` context, instead of a different type.
+
+  Apps can opt in to the new future at any time, so this is not a breaking change (yet).
+
+  <details>
+    <summary>See an example</summary>
+
+  Without the `v3_webhookContext` flag, `graphql` provides a `query` function that takes the query string as the `data` param.
+  When using variables, `data` needs to be an object containing `query` and `variables`.
+
+  ```ts
+  import {json, ActionFunctionArgs} from '@remix-run/node';
+  import {authenticate} from '../shopify.server';
+
+  export async function action({request}: ActionFunctionArgs) {
+    const {admin} = await authenticate.webhook(request);
+
+    const response = await admin?.graphql.query<any>({
+      data: {
+        query: `#graphql
+        mutation populateProduct($input: ProductInput!) {
+          productCreate(input: $input) {
+            product {
+              id
+            }
+          }
+        }`,
+        variables: {input: {title: 'Product Name'}},
+      },
+    });
+
+    const productData = response?.body.data;
+    return json({data: productData.data});
+  }
+  ```
+
+  With the `v3_webhookContext` flag enabled, `graphql` _is_ a function that takes in the query string and an optional settings object, including `variables`.
+
+  ```ts
+  import {ActionFunctionArgs} from '@remix-run/node';
+  import {authenticate} from '../shopify.server';
+
+  export async function action({request}: ActionFunctionArgs) {
+    const {admin} = await authenticate.webhook(request);
+
+    const response = await admin?.graphql(
+      `#graphql
+      mutation populateProduct($input: ProductInput!) {
+        productCreate(input: $input) {
+          product {
+            id
+          }
+        }
+      }`,
+      {variables: {input: {title: 'Product Name'}}},
+    );
+
+    const productData = await response.json();
+    return json({data: productData.data});
+  }
+  ```
+
+  </details>
+
+### Patch Changes
+
+- afb0a7d: Updating Remix dependencies to v2.
+- a69d6fc: Updating dependency on @shopify/shopify-api to v.8.0.1
+- Updated dependencies [f837060]
+- Updated dependencies [a69d6fc]
+  - @shopify/shopify-app-session-storage@2.0.0
+
 ## 1.3.0
 
 ### Minor Changes
@@ -127,7 +258,7 @@
 
   </details>
 
-- 43e7058: Copied `authenticate.public()` to `authenticate.public.checkout()` and marked `authenticate.public()` as deprecated. `authenticate.public()` will continue to work until v2
+- 43e7058: Copied `authenticate.public()` to `authenticate.public.checkout()` and marked `authenticate.public()` as deprecated. `authenticate.public()` will continue to work until v3
 
 ### Patch Changes
 
