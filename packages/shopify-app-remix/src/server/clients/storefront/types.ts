@@ -13,10 +13,10 @@ export interface StorefrontContext {
    * <description>Use `storefront.graphql` to make query / mutation requests.</description>
    * ```ts
    * import { ActionFunctionArgs } from "@remix-run/node";
-   * import { authenticate } from "../shopify.server";
+   * import { unauthenticated } from "../shopify.server";
    *
    * export async function action({ request }: ActionFunctionArgs) {
-   *   const { storefront } = await authenticate.storefront(request);
+   *   const { storefront } = await unauthenticated.storefront(request);
    *
    *   const response = await storefront.graphql(`{blogs(first: 10) { edges { node { id } } } }`);
    *
