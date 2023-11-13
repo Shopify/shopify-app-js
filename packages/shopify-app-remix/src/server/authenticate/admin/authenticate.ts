@@ -1,10 +1,7 @@
 import {redirect} from '@remix-run/server-runtime';
 import {
-  CookieNotFound,
   GraphqlQueryError,
   HttpResponseError,
-  InvalidHmacError,
-  InvalidOAuthError,
   JwtPayload,
   Session,
   Shopify,
@@ -39,8 +36,8 @@ import {
   redirectFactory,
   redirectToAuthPage,
   redirectWithExitIframe,
-  renderAppBridge,
 } from './helpers';
+import {AuthCodeFlowStrategy} from './strategies/auth-code-flow';
 
 interface SessionContext {
   session: Session;
@@ -112,9 +109,9 @@ export class AuthStrategy<
     const params: BasicParams = {api, logger, config};
     logger.info('Authenticating admin request');
 
-    await this.handleBouncePageRoute(request, params);
-    await this.handleExitIframeRoute(request, params);
-    await this.handleOAuthRoutes(request, config);
+    const strategy = new AuthCodeFlowStrategy();
+
+    await strategy.handleRoutes(request, params);
 
     const sessionTokenHeader = getSessionTokenHeader(request);
 
@@ -147,143 +144,6 @@ export class AuthStrategy<
 
       return this.ensureSessionExists(request);
     }
-  }
-
-  private async handleBouncePageRoute(request: Request, params: BasicParams) {
-    const {config, logger} = params;
-    const url = new URL(request.url);
-
-    if (url.pathname === config.auth.patchSessionTokenPath) {
-      logger.debug('Rendering bounce page');
-      throw renderAppBridge(params, request);
-    }
-  }
-
-  private async handleExitIframeRoute(request: Request, params: BasicParams) {
-    const {config, logger} = params;
-    const url = new URL(request.url);
-
-    if (url.pathname === config.auth.exitIframePath) {
-      const destination = url.searchParams.get('exitIframe')!;
-
-      logger.debug('Rendering exit iframe page', {destination});
-      throw renderAppBridge(params, request, {url: destination});
-    }
-  }
-
-  private async handleOAuthRoutes(request: Request, config: AppConfig) {
-    const {api} = this;
-    const url = new URL(request.url);
-    const isAuthRequest = url.pathname === config.auth.path;
-    const isAuthCallbackRequest = url.pathname === config.auth.callbackPath;
-
-    if (!isAuthRequest && !isAuthCallbackRequest) return;
-
-    const shop = api.utils.sanitizeShop(url.searchParams.get('shop')!);
-    if (!shop) throw new Response('Shop param is invalid', {status: 400});
-
-    if (isAuthRequest) throw await this.handleAuthBeginRequest(request, shop);
-
-    if (isAuthCallbackRequest) {
-      throw await this.handleAuthCallbackRequest(request, shop);
-    }
-  }
-
-  private async handleAuthBeginRequest(
-    request: Request,
-    shop: string,
-  ): Promise<never> {
-    const {api, config, logger} = this;
-
-    logger.info('Handling OAuth begin request');
-
-    logger.debug('OAuth request contained valid shop', {shop});
-
-    // If we're loading from an iframe, we need to break out of it
-    if (
-      config.isEmbeddedApp &&
-      request.headers.get('Sec-Fetch-Dest') === 'iframe'
-    ) {
-      logger.debug('Auth request in iframe detected, exiting iframe', {shop});
-      throw redirectWithExitIframe({api, config, logger}, request, shop);
-    } else {
-      throw await beginAuth({api, config, logger}, request, false, shop);
-    }
-  }
-
-  private async handleAuthCallbackRequest(
-    request: Request,
-    shop: string,
-  ): Promise<never> {
-    const {api, config, logger} = this;
-    const params = {api, config, logger};
-
-    logger.info('Handling OAuth callback request');
-
-    try {
-      const {session, headers: responseHeaders} = await api.auth.callback({
-        rawRequest: request,
-      });
-
-      await config.sessionStorage.storeSession(session);
-
-      if (config.useOnlineTokens && !session.isOnline) {
-        logger.info('Requesting online access token for offline session');
-        await beginAuth(params, request, true, shop);
-      }
-
-      await this.triggerAfterAuthHook(params, session, request);
-
-      throw await this.redirectToShopifyOrAppRoot(request, responseHeaders);
-    } catch (error) {
-      if (error instanceof Response) throw error;
-
-      throw await this.oauthCallbackError(params, error, request, shop);
-    }
-  }
-
-  private async triggerAfterAuthHook(
-    params: BasicParams,
-    session: Session,
-    request: Request,
-  ) {
-    const {config, logger} = params;
-    if (config.hooks.afterAuth) {
-      logger.info('Running afterAuth hook');
-      await config.hooks.afterAuth({
-        session,
-        admin: this.createAdminApiContext(request, session),
-      });
-    }
-  }
-
-  private async oauthCallbackError(
-    params: BasicParams,
-    error: Error,
-    request: Request,
-    shop: string,
-  ) {
-    const {logger} = params;
-    logger.error('Error during OAuth callback', {error: error.message});
-
-    if (error instanceof CookieNotFound) {
-      return this.handleAuthBeginRequest(request, shop);
-    }
-
-    if (
-      error instanceof InvalidHmacError ||
-      error instanceof InvalidOAuthError
-    ) {
-      return new Response(undefined, {
-        status: 400,
-        statusText: 'Invalid OAuth Request',
-      });
-    }
-
-    return new Response(undefined, {
-      status: 500,
-      statusText: 'Internal Server Error',
-    });
   }
 
   private async validateUrlParams(request: Request) {
@@ -555,6 +415,7 @@ export class AuthStrategy<
     return config.sessionStorage.loadSession(sessionId);
   }
 
+  // duplicated
   private async redirectToShopifyOrAppRoot(
     request: Request,
     responseHeaders?: Headers,
@@ -601,6 +462,7 @@ export class AuthStrategy<
     };
   }
 
+  // duplicate
   private createAdminApiContext(
     request: Request,
     session: Session,
