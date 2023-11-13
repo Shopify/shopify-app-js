@@ -355,7 +355,7 @@ export class AuthStrategy<
         logger.debug('Session id not found in cookies, redirecting to OAuth', {
           shop,
         });
-        throw await beginAuth({api, config, logger}, request, false, shop);
+        throw await redirectToAuthPage({api, config, logger}, request, shop);
       }
 
       const session = await this.loadSession(sessionId);
@@ -365,7 +365,7 @@ export class AuthStrategy<
           ? 'Found a session, but it has expired, redirecting to OAuth'
           : 'No session found, redirecting to OAuth';
         logger.debug(debugMessage, {shop});
-        throw await beginAuth({api, config, logger}, request, false, shop);
+        throw await redirectToAuthPage({api, config, logger}, request, shop);
       }
 
       return {session, shop};
