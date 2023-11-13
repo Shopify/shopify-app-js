@@ -125,17 +125,20 @@ export class AuthStrategy<
       );
 
       const sessionContext = await this.getAuthenticatedSession(sessionToken);
-      const {session, shop} = sessionContext;
 
-      if (!session || !session.isActive(config.scopes)) {
-        const debugMessage = session
+      if (
+        !sessionContext?.session ||
+        !sessionContext?.session.isActive(config.scopes)
+      ) {
+        const shop = this.getShopFromSessionToken(sessionToken);
+        const debugMessage = sessionContext?.session
           ? 'Found a session, but it has expired, redirecting to OAuth'
           : 'No session found, redirecting to OAuth';
         logger.debug(debugMessage, {shop});
         await redirectToAuthPage({api, config, logger}, request, shop);
       }
 
-      return sessionContext;
+      return sessionContext!;
     } else {
       await this.validateUrlParams(request);
       await this.ensureInstalledOnShop(request);
@@ -477,7 +480,21 @@ export class AuthStrategy<
         searchParamSessionToken,
       );
 
-      return this.getAuthenticatedSession(request, sessionToken);
+      const sessionContext = await this.getAuthenticatedSession(sessionToken);
+
+      if (
+        !sessionContext?.session ||
+        !sessionContext?.session.isActive(config.scopes)
+      ) {
+        const shop = this.getShopFromSessionToken(sessionToken);
+        const debugMessage = sessionContext?.session
+          ? 'Found a session, but it has expired, redirecting to OAuth'
+          : 'No session found, redirecting to OAuth';
+        logger.debug(debugMessage, {shop});
+        await redirectToAuthPage({api, config, logger}, request, shop);
+      }
+
+      return sessionContext!;
     } else {
       // eslint-disable-next-line no-warning-comments
       // TODO move this check into loadSession once we add support for it in the library
@@ -493,17 +510,31 @@ export class AuthStrategy<
         throw await beginAuth({api, config, logger}, request, false, shop);
       }
 
-      return {session: await this.loadSession(request, shop, sessionId), shop};
+      const session = await this.loadSession(sessionId);
+
+      if (!session || !session?.isActive(config.scopes)) {
+        const debugMessage = session
+          ? 'Found a session, but it has expired, redirecting to OAuth'
+          : 'No session found, redirecting to OAuth';
+        logger.debug(debugMessage, {shop});
+        throw await beginAuth({api, config, logger}, request, false, shop);
+      }
+
+      return {session, shop};
     }
+  }
+
+  private getShopFromSessionToken(payload: JwtPayload): string {
+    const dest = new URL(payload.dest);
+    return dest.hostname;
   }
 
   private async getAuthenticatedSession(
     payload: JwtPayload,
-  ): Promise<SessionContext> {
+  ): Promise<SessionContext | null> {
     const {config, logger, api} = this;
 
-    const dest = new URL(payload.dest);
-    const shop = dest.hostname;
+    const shop = this.getShopFromSessionToken(payload);
 
     const sessionId = config.useOnlineTokens
       ? api.session.getJwtSessionId(shop, payload.sub)
@@ -513,13 +544,11 @@ export class AuthStrategy<
 
     logger.debug('Found session, request is valid', {shop});
 
-    return {session, shop, token: payload};
+    return session ? {session, shop, token: payload} : null;
   }
 
-  private async loadSession(
-    sessionId: string,
-  ): Promise<Session> {
-    const {api, config, logger} = this;
+  private async loadSession(sessionId: string): Promise<Session | undefined> {
+    const {config, logger} = this;
 
     logger.debug('Loading session from storage', {sessionId});
 
