@@ -28,6 +28,7 @@ import type {
   AdminContext,
   EmbeddedAdminContext,
   NonEmbeddedAdminContext,
+  SessionContext,
 } from './types';
 import {
   beginAuth,
@@ -38,12 +39,6 @@ import {
   redirectWithExitIframe,
 } from './helpers';
 import {AuthCodeFlowStrategy} from './strategies/auth-code-flow';
-
-interface SessionContext {
-  session: Session;
-  shop: string;
-  token?: JwtPayload;
-}
 
 const SESSION_TOKEN_PARAM = 'id_token';
 
@@ -121,25 +116,14 @@ export class AuthStrategy<
 
     if (sessionTokenHeader) {
       const sessionToken = await validateSessionToken(
-        {api, logger, config},
+        params,
         sessionTokenHeader,
       );
 
+      const shop = this.getShopFromSessionToken(sessionToken);
       const sessionContext = await this.getAuthenticatedSession(sessionToken);
 
-      if (
-        !sessionContext?.session ||
-        !sessionContext?.session.isActive(config.scopes)
-      ) {
-        const shop = this.getShopFromSessionToken(sessionToken);
-        const debugMessage = sessionContext?.session
-          ? 'Found a session, but it has expired, redirecting to OAuth'
-          : 'No session found, redirecting to OAuth';
-        logger.debug(debugMessage, {shop});
-        await redirectToAuthPage({api, config, logger}, request, shop);
-      }
-
-      return sessionContext!;
+      return strategy.manageAccessToken(sessionContext, shop, request, params);
     } else {
       await this.validateUrlParams(request);
       await this.ensureInstalledOnShop(request);

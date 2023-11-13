@@ -2,17 +2,20 @@ import {
   CookieNotFound,
   InvalidHmacError,
   InvalidOAuthError,
+  JwtPayload,
   ShopifyRestResources,
 } from '@shopify/shopify-api';
 
 import type {BasicParams} from '../../../types';
 import {
   beginAuth,
+  redirectToAuthPage,
   redirectToShopifyOrAppRoot,
   redirectWithExitIframe,
   renderAppBridge,
   triggerAfterAuthHook,
 } from '../helpers';
+import {SessionContext} from '../types';
 
 export class AuthCodeFlowStrategy<
   Resources extends ShopifyRestResources = ShopifyRestResources,
@@ -21,6 +24,27 @@ export class AuthCodeFlowStrategy<
     await this.handleBouncePageRoute(request, params);
     await this.handleExitIframeRoute(request, params);
     await this.handleOAuthRoutes(request, params);
+  }
+
+  async manageAccessToken(
+    sessionContext: SessionContext | null,
+    shop: string,
+    request: Request,
+    params: BasicParams,
+  ): Promise<SessionContext> {
+    const {config, logger} = params;
+    if (
+      !sessionContext?.session ||
+      !sessionContext?.session.isActive(config.scopes)
+    ) {
+      const debugMessage = sessionContext?.session
+        ? 'Found a session, but it has expired, redirecting to OAuth'
+        : 'No session found, redirecting to OAuth';
+      logger.debug(debugMessage, {shop});
+      await redirectToAuthPage(params, request, shop);
+    }
+
+    return sessionContext!;
   }
 
   private async handleBouncePageRoute(request: Request, params: BasicParams) {
