@@ -8,7 +8,6 @@ import {
   ShopifyRestResources,
 } from '@shopify/shopify-api';
 
-import {AdminApiContext, adminClientFactory} from '../../clients/admin';
 import type {BasicParams} from '../../types';
 import type {AppConfig, AppConfigArg} from '../../config-types';
 import {
@@ -32,9 +31,10 @@ import type {
 } from './types';
 import {
   beginAuth,
-  handleClientErrorFactory,
+  createAdminApiContext,
   redirectFactory,
   redirectToAuthPage,
+  redirectToShopifyOrAppRoot,
   redirectWithExitIframe,
 } from './helpers';
 import {AuthCodeFlowStrategy} from './strategies/auth-code-flow';
@@ -85,7 +85,11 @@ export class AuthStrategy<
     const context:
       | EmbeddedAdminContext<Config, Resources>
       | NonEmbeddedAdminContext<Config, Resources> = {
-      admin: this.createAdminApiContext(request, sessionContext.session),
+      admin: createAdminApiContext<Resources>(request, sessionContext.session, {
+        api,
+        logger,
+        config,
+      }),
       billing: this.createBillingContext(request, sessionContext.session),
       session: sessionContext.session,
       cors,
@@ -295,14 +299,14 @@ export class AuthStrategy<
   }
 
   private async ensureAppIsEmbeddedIfRequired(request: Request) {
-    const {api, logger} = this;
+    const {api, logger, config} = this;
     const url = new URL(request.url);
 
     const shop = url.searchParams.get('shop')!;
 
     if (api.config.isEmbeddedApp && url.searchParams.get('embedded') !== '1') {
       logger.debug('App is not embedded, redirecting to Shopify', {shop});
-      await this.redirectToShopifyOrAppRoot(request);
+      await redirectToShopifyOrAppRoot(request, {api, logger, config});
     }
   }
 
@@ -415,24 +419,6 @@ export class AuthStrategy<
     return config.sessionStorage.loadSession(sessionId);
   }
 
-  // duplicated
-  private async redirectToShopifyOrAppRoot(
-    request: Request,
-    responseHeaders?: Headers,
-  ): Promise<never> {
-    const {api} = this;
-    const url = new URL(request.url);
-
-    const host = api.utils.sanitizeHost(url.searchParams.get('host')!)!;
-    const shop = api.utils.sanitizeShop(url.searchParams.get('shop')!)!;
-
-    const redirectUrl = api.config.isEmbeddedApp
-      ? await api.auth.getEmbeddedAppUrl({rawRequest: request})
-      : `/?shop=${shop}&host=${encodeURIComponent(host)}`;
-
-    throw redirect(redirectUrl, {headers: responseHeaders});
-  }
-
   private redirectToBouncePage(url: URL): never {
     const {config} = this;
 
@@ -460,23 +446,5 @@ export class AuthStrategy<
       request: requestBillingFactory({api, logger, config}, request, session),
       cancel: cancelBillingFactory({api, logger, config}, request, session),
     };
-  }
-
-  // duplicate
-  private createAdminApiContext(
-    request: Request,
-    session: Session,
-  ): AdminApiContext<Resources> {
-    return adminClientFactory<Resources>({
-      session,
-      params: {
-        api: this.api,
-        config: this.config,
-        logger: this.logger,
-      },
-      handleClientError: handleClientErrorFactory({
-        request,
-      }),
-    });
   }
 }

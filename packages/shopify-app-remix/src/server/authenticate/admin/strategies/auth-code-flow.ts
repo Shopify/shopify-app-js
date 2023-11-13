@@ -2,18 +2,16 @@ import {
   CookieNotFound,
   InvalidHmacError,
   InvalidOAuthError,
-  Session,
   ShopifyRestResources,
 } from '@shopify/shopify-api';
-import {redirect} from '@remix-run/server-runtime';
 
 import type {BasicParams} from '../../../types';
-import {AdminApiContext, adminClientFactory} from '../../../clients/admin';
 import {
   beginAuth,
-  handleClientErrorFactory,
+  redirectToShopifyOrAppRoot,
   redirectWithExitIframe,
   renderAppBridge,
+  triggerAfterAuthHook,
 } from '../helpers';
 
 export class AuthCodeFlowStrategy<
@@ -23,53 +21,6 @@ export class AuthCodeFlowStrategy<
     await this.handleBouncePageRoute(request, params);
     await this.handleExitIframeRoute(request, params);
     await this.handleOAuthRoutes(request, params);
-  }
-
-  async triggerAfterAuthHook(
-    params: BasicParams,
-    session: Session,
-    request: Request,
-  ) {
-    const {config, logger} = params;
-    if (config.hooks.afterAuth) {
-      logger.info('Running afterAuth hook');
-      await config.hooks.afterAuth({
-        session,
-        admin: this.createAdminApiContext(request, session, params),
-      });
-    }
-  }
-
-  async redirectToShopifyOrAppRoot(
-    request: Request,
-    params: BasicParams,
-    responseHeaders?: Headers,
-  ): Promise<never> {
-    const {api} = params;
-    const url = new URL(request.url);
-
-    const host = api.utils.sanitizeHost(url.searchParams.get('host')!)!;
-    const shop = api.utils.sanitizeShop(url.searchParams.get('shop')!)!;
-
-    const redirectUrl = api.config.isEmbeddedApp
-      ? await api.auth.getEmbeddedAppUrl({rawRequest: request})
-      : `/?shop=${shop}&host=${encodeURIComponent(host)}`;
-
-    throw redirect(redirectUrl, {headers: responseHeaders});
-  }
-
-  createAdminApiContext(
-    request: Request,
-    session: Session,
-    params: BasicParams,
-  ): AdminApiContext<Resources> {
-    return adminClientFactory<Resources>({
-      session,
-      params,
-      handleClientError: handleClientErrorFactory({
-        request,
-      }),
-    });
   }
 
   private async handleBouncePageRoute(request: Request, params: BasicParams) {
@@ -157,13 +108,9 @@ export class AuthCodeFlowStrategy<
         await beginAuth(params, request, true, shop);
       }
 
-      await this.triggerAfterAuthHook(params, session, request);
+      await triggerAfterAuthHook<Resources>(params, session, request);
 
-      throw await this.redirectToShopifyOrAppRoot(
-        request,
-        params,
-        responseHeaders,
-      );
+      throw await redirectToShopifyOrAppRoot(request, params, responseHeaders);
     } catch (error) {
       if (error instanceof Response) throw error;
 
