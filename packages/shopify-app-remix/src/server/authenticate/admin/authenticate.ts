@@ -364,7 +364,7 @@ export class AuthStrategy<
 
         logger.debug('Offline session is still valid, embedding app', {shop});
       } catch (error) {
-        this.handleInvalidOfflineSession(
+        await this.handleInvalidOfflineSession(
           error,
           {api, logger, config},
           request,
