@@ -5,6 +5,7 @@ import {
   JwtPayload,
   Session,
   Shopify,
+  ShopifyError,
   ShopifyRestResources,
 } from '@shopify/shopify-api';
 
@@ -121,7 +122,9 @@ export class AuthStrategy<
       );
 
       const shop = this.getShopFromSessionToken(sessionToken);
-      const sessionContext = await this.getAuthenticatedSession(sessionToken);
+      const sessionContext = await this.getAuthenticatedSession({
+        payload: sessionToken,
+      });
 
       return strategy.manageAccessToken(sessionContext, shop, request, params);
     } else {
@@ -317,7 +320,7 @@ export class AuthStrategy<
     let shop = url.searchParams.get('shop')!;
     const searchParamSessionToken = url.searchParams.get(SESSION_TOKEN_PARAM)!;
 
-    let sessionContextFinal: SessionContext;
+    let sessionContext: SessionContext | null;
     if (api.config.isEmbeddedApp) {
       logger.debug(
         'Session token is present in query params, validating session',
@@ -330,50 +333,37 @@ export class AuthStrategy<
       );
       shop = this.getShopFromSessionToken(sessionToken);
 
-      const sessionContext = await this.getAuthenticatedSession(sessionToken);
-
-      if (!sessionContext) {
-        throw await redirectToAuthPage({api, config, logger}, request, shop);
-      }
-
-      sessionContextFinal = sessionContext;
+      sessionContext = await this.getAuthenticatedSession({
+        payload: sessionToken,
+      });
       // return sessionContext!;
     } else {
       // eslint-disable-next-line no-warning-comments
       // TODO move this check into loadSession once we add support for it in the library
       // https://github.com/orgs/Shopify/projects/6899/views/1?pane=issue&itemId=28378114
-      const sessionId = await api.session.getCurrentId({
-        isOnline: config.useOnlineTokens,
-        rawRequest: request,
-      });
-      if (!sessionId) {
-        logger.debug('Session id not found in cookies, redirecting to OAuth', {
-          shop,
-        });
-        throw await redirectToAuthPage({api, config, logger}, request, shop);
-      }
+      // const sessionId = await api.session.getCurrentId({
+      //   isOnline: config.useOnlineTokens,
+      //   rawRequest: request,
+      // });
+      // if (!sessionId) {
+      //   logger.debug('Session id not found in cookies, redirecting to OAuth', {
+      //     shop,
+      //   });
+      //   throw await redirectToAuthPage({api, config, logger}, request, shop);
+      // }
 
-      const session = await this.loadSession(sessionId);
-
-      if (!session) {
-        throw await redirectToAuthPage({api, config, logger}, request, shop);
-      }
-
-      sessionContextFinal = {session, shop};
+      sessionContext = await this.getAuthenticatedSession({request});
     }
 
-    if (
-      !sessionContextFinal ||
-      !sessionContextFinal.session.isActive(config.scopes)
-    ) {
-      const debugMessage = sessionContextFinal
+    if (!sessionContext || !sessionContext.session.isActive(config.scopes)) {
+      const debugMessage = sessionContext
         ? 'Found a session, but it has expired, redirecting to OAuth'
         : 'No session found, redirecting to OAuth';
       logger.debug(debugMessage, {shop});
       await redirectToAuthPage({api, config, logger}, request, shop);
     }
 
-    return sessionContextFinal!;
+    return sessionContext!;
   }
 
   private getShopFromSessionToken(payload: JwtPayload): string {
@@ -381,16 +371,37 @@ export class AuthStrategy<
     return dest.hostname;
   }
 
-  private async getAuthenticatedSession(
-    payload: JwtPayload,
-  ): Promise<SessionContext | null> {
+  private async getAuthenticatedSession({
+    payload,
+    request,
+  }: {
+    payload?: JwtPayload;
+    request?: Request;
+  }): Promise<SessionContext | null> {
     const {config, logger, api} = this;
 
-    const shop = this.getShopFromSessionToken(payload);
+    let shop: string;
+    let sessionId: string | undefined;
 
-    const sessionId = config.useOnlineTokens
-      ? api.session.getJwtSessionId(shop, payload.sub)
-      : api.session.getOfflineId(shop);
+    if (config.isEmbeddedApp && payload) {
+      shop = this.getShopFromSessionToken(payload);
+      sessionId = config.useOnlineTokens
+        ? api.session.getJwtSessionId(shop, payload.sub)
+        : api.session.getOfflineId(shop);
+    } else if (request) {
+      const url = new URL(request.url);
+      shop = url.searchParams.get('shop')!;
+      sessionId = await api.session.getCurrentId({
+        isOnline: config.useOnlineTokens,
+        rawRequest: request,
+      });
+    } else {
+      throw new ShopifyError();
+    }
+
+    if (!sessionId) {
+      return null;
+    }
 
     const session = await this.loadSession(sessionId);
 
