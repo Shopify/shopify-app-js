@@ -1,9 +1,9 @@
 import {redirect} from '@remix-run/server-runtime';
 import {
+  InvalidRequestError,
   JwtPayload,
   Session,
   Shopify,
-  ShopifyError,
   ShopifyRestResources,
 } from '@shopify/shopify-api';
 
@@ -44,18 +44,24 @@ interface ShopWithSessionContext {
   shop: string;
 }
 
+interface AuthStrategyParams extends BasicParams {
+  strategy: AuthCodeFlowStrategy;
+}
+
 export class AuthStrategy<
   Config extends AppConfigArg,
   Resources extends ShopifyRestResources = ShopifyRestResources,
 > {
+  protected strategy: AuthCodeFlowStrategy;
   protected api: Shopify;
   protected config: AppConfig;
   protected logger: Shopify['logger'];
 
-  public constructor({api, config, logger}: BasicParams) {
+  public constructor({strategy, api, config, logger}: AuthStrategyParams) {
     this.api = api;
     this.config = config;
     this.logger = logger;
+    this.strategy = strategy;
   }
 
   public async authenticateAdmin(
@@ -106,26 +112,23 @@ export class AuthStrategy<
   private async authenticateAndGetSessionContext(
     request: Request,
   ): Promise<SessionContext> {
-    const {api, logger, config} = this;
-    const params: BasicParams = {api, logger, config};
+    const {logger} = this;
     logger.info('Authenticating admin request');
 
-    const strategy = new AuthCodeFlowStrategy(params);
-
-    await strategy.handleRoutes(request);
+    await this.strategy.handleRoutes(request);
 
     const sessionTokenHeader = getSessionTokenHeader(request);
 
     if (!sessionTokenHeader) {
       await this.validateUrlParams(request);
-      await strategy.ensureInstalledOnShop(request);
+      await this.strategy.ensureInstalledOnShop(request);
       await this.ensureAppIsEmbeddedIfRequired(request);
       await this.ensureSessionTokenSearchParamIfRequired(request);
     }
 
     const {sessionContext, shop} = await this.getAuthenticatedSession(request);
 
-    return strategy.manageAccessToken(sessionContext, shop, request);
+    return this.strategy.manageAccessToken(sessionContext, shop, request);
   }
 
   private async validateUrlParams(request: Request) {
@@ -217,7 +220,7 @@ export class AuthStrategy<
         rawRequest: request,
       });
     } else {
-      throw new ShopifyError();
+      throw new InvalidRequestError();
     }
 
     if (!sessionId) {
