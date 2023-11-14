@@ -27,7 +27,7 @@ export class AuthCodeFlowStrategy<
   }
 
   async manageAccessToken(
-    sessionContext: SessionContext | null,
+    sessionContext: SessionContext | undefined,
     shop: string,
     request: Request,
     params: BasicParams,

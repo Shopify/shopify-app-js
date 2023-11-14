@@ -44,6 +44,11 @@ import {AuthCodeFlowStrategy} from './strategies/auth-code-flow';
 
 const SESSION_TOKEN_PARAM = 'id_token';
 
+interface ShopWithSessionContext {
+  sessionContext?: SessionContext;
+  shop: string;
+}
+
 export class AuthStrategy<
   Config extends AppConfigArg,
   Resources extends ShopifyRestResources = ShopifyRestResources,
@@ -117,15 +122,9 @@ export class AuthStrategy<
     const sessionTokenHeader = getSessionTokenHeader(request);
 
     if (sessionTokenHeader) {
-      const sessionToken = await validateSessionToken(
-        params,
-        sessionTokenHeader,
+      const {sessionContext, shop} = await this.getAuthenticatedSession(
+        request,
       );
-
-      const shop = this.getShopFromSessionToken(sessionToken);
-      const sessionContext = await this.getAuthenticatedSession({
-        payload: sessionToken,
-      });
 
       return strategy.manageAccessToken(sessionContext, shop, request, params);
     } else {
@@ -316,30 +315,9 @@ export class AuthStrategy<
 
   private async ensureSessionExists(request: Request): Promise<SessionContext> {
     const {api, config, logger} = this;
-    const url = new URL(request.url);
 
-    let shop = url.searchParams.get('shop')!;
-    const searchParamSessionToken = getSessionTokenFromUrlParam(request)!;
-
-    let sessionContext: SessionContext | null;
-    if (api.config.isEmbeddedApp) {
-      logger.debug(
-        'Session token is present in query params, validating session',
-        {shop},
-      );
-
-      const sessionToken = await validateSessionToken(
-        {api, config, logger},
-        searchParamSessionToken,
-      );
-      shop = this.getShopFromSessionToken(sessionToken);
-
-      sessionContext = await this.getAuthenticatedSession({
-        payload: sessionToken,
-      });
-    } else {
-      sessionContext = await this.getAuthenticatedSession({request});
-    }
+    const shopWithSessionContext = await this.getAuthenticatedSession(request);
+    const {shop, sessionContext} = shopWithSessionContext;
 
     if (!sessionContext || !sessionContext.session.isActive(config.scopes)) {
       const debugMessage = sessionContext
@@ -357,24 +335,28 @@ export class AuthStrategy<
     return dest.hostname;
   }
 
-  private async getAuthenticatedSession({
-    payload,
-    request,
-  }: {
-    payload?: JwtPayload;
-    request?: Request;
-  }): Promise<SessionContext | null> {
+  private async getAuthenticatedSession(
+    request: Request,
+  ): Promise<ShopWithSessionContext> {
     const {config, logger, api} = this;
 
     let shop: string;
     let sessionId: string | undefined;
+    let payload: JwtPayload | undefined;
 
-    if (config.isEmbeddedApp && payload) {
+    const sessionToken =
+      getSessionTokenHeader(request) || getSessionTokenFromUrlParam(request);
+
+    if (config.isEmbeddedApp && sessionToken) {
+      payload = await validateSessionToken({config, logger, api}, sessionToken);
       shop = this.getShopFromSessionToken(payload);
+
+      logger.debug('Session token is present, validating session', {shop});
       sessionId = config.useOnlineTokens
         ? api.session.getJwtSessionId(shop, payload.sub)
         : api.session.getOfflineId(shop);
-    } else if (!config.isEmbeddedApp && request) {
+      // eslint-disable-next-line no-negated-condition
+    } else if (!config.isEmbeddedApp) {
       const url = new URL(request.url);
       shop = url.searchParams.get('shop')!;
 
@@ -390,14 +372,14 @@ export class AuthStrategy<
     }
 
     if (!sessionId) {
-      return null;
+      return {shop};
     }
 
     const session = await this.loadSession(sessionId);
 
     logger.debug('Found session, request is valid', {shop});
 
-    return session ? {session, shop, token: payload} : null;
+    return {sessionContext: session && {session, token: payload}, shop};
   }
 
   private async loadSession(sessionId: string): Promise<Session | undefined> {
