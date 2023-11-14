@@ -314,9 +314,10 @@ export class AuthStrategy<
     const {api, config, logger} = this;
     const url = new URL(request.url);
 
-    const shop = url.searchParams.get('shop')!;
+    let shop = url.searchParams.get('shop')!;
     const searchParamSessionToken = url.searchParams.get(SESSION_TOKEN_PARAM)!;
 
+    let sessionContextFinal: SessionContext;
     if (api.config.isEmbeddedApp) {
       logger.debug(
         'Session token is present in query params, validating session',
@@ -327,22 +328,16 @@ export class AuthStrategy<
         {api, config, logger},
         searchParamSessionToken,
       );
+      shop = this.getShopFromSessionToken(sessionToken);
 
       const sessionContext = await this.getAuthenticatedSession(sessionToken);
 
-      if (
-        !sessionContext?.session ||
-        !sessionContext?.session.isActive(config.scopes)
-      ) {
-        const shop = this.getShopFromSessionToken(sessionToken);
-        const debugMessage = sessionContext?.session
-          ? 'Found a session, but it has expired, redirecting to OAuth'
-          : 'No session found, redirecting to OAuth';
-        logger.debug(debugMessage, {shop});
-        await redirectToAuthPage({api, config, logger}, request, shop);
+      if (!sessionContext) {
+        throw await redirectToAuthPage({api, config, logger}, request, shop);
       }
 
-      return sessionContext!;
+      sessionContextFinal = sessionContext;
+      // return sessionContext!;
     } else {
       // eslint-disable-next-line no-warning-comments
       // TODO move this check into loadSession once we add support for it in the library
@@ -360,16 +355,25 @@ export class AuthStrategy<
 
       const session = await this.loadSession(sessionId);
 
-      if (!session || !session?.isActive(config.scopes)) {
-        const debugMessage = session
-          ? 'Found a session, but it has expired, redirecting to OAuth'
-          : 'No session found, redirecting to OAuth';
-        logger.debug(debugMessage, {shop});
+      if (!session) {
         throw await redirectToAuthPage({api, config, logger}, request, shop);
       }
 
-      return {session, shop};
+      sessionContextFinal = {session, shop};
     }
+
+    if (
+      !sessionContextFinal ||
+      !sessionContextFinal.session.isActive(config.scopes)
+    ) {
+      const debugMessage = sessionContextFinal
+        ? 'Found a session, but it has expired, redirecting to OAuth'
+        : 'No session found, redirecting to OAuth';
+      logger.debug(debugMessage, {shop});
+      await redirectToAuthPage({api, config, logger}, request, shop);
+    }
+
+    return sessionContextFinal!;
   }
 
   private getShopFromSessionToken(payload: JwtPayload): string {
