@@ -36,7 +36,6 @@ import {
   beginAuth,
   createAdminApiContext,
   redirectFactory,
-  redirectToAuthPage,
   redirectToShopifyOrAppRoot,
   redirectWithExitIframe,
 } from './helpers';
@@ -121,20 +120,16 @@ export class AuthStrategy<
 
     const sessionTokenHeader = getSessionTokenHeader(request);
 
-    if (sessionTokenHeader) {
-      const {sessionContext, shop} = await this.getAuthenticatedSession(
-        request,
-      );
-
-      return strategy.manageAccessToken(sessionContext, shop, request, params);
-    } else {
+    if (!sessionTokenHeader) {
       await this.validateUrlParams(request);
       await this.ensureInstalledOnShop(request);
       await this.ensureAppIsEmbeddedIfRequired(request);
       await this.ensureSessionTokenSearchParamIfRequired(request);
-
-      return this.ensureSessionExists(request);
     }
+
+    const {sessionContext, shop} = await this.getAuthenticatedSession(request);
+
+    return strategy.manageAccessToken(sessionContext, shop, request, params);
   }
 
   private async validateUrlParams(request: Request) {
@@ -311,23 +306,6 @@ export class AuthStrategy<
       );
       this.redirectToBouncePage(url);
     }
-  }
-
-  private async ensureSessionExists(request: Request): Promise<SessionContext> {
-    const {api, config, logger} = this;
-
-    const shopWithSessionContext = await this.getAuthenticatedSession(request);
-    const {shop, sessionContext} = shopWithSessionContext;
-
-    if (!sessionContext || !sessionContext.session.isActive(config.scopes)) {
-      const debugMessage = sessionContext
-        ? 'Found a session, but it has expired, redirecting to OAuth'
-        : 'No session found, redirecting to OAuth';
-      logger.debug(debugMessage, {shop});
-      await redirectToAuthPage({api, config, logger}, request, shop);
-    }
-
-    return sessionContext!;
   }
 
   private getShopFromSessionToken(payload: JwtPayload): string {
