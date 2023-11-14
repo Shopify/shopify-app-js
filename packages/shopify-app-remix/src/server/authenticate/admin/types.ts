@@ -200,6 +200,5 @@ export type AuthenticateAdmin<
 
 export interface SessionContext {
   session: Session;
-  // shop: string;
   token?: JwtPayload;
 }

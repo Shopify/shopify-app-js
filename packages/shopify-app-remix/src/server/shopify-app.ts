@@ -29,6 +29,7 @@ import {loginFactory} from './authenticate/login/login';
 import {unauthenticatedAdminContextFactory} from './unauthenticated/admin';
 import {authenticatePublicFactory} from './authenticate/public';
 import {unauthenticatedStorefrontContextFactory} from './unauthenticated/storefront';
+import {AuthCodeFlowStrategy} from './authenticate/admin/strategies/auth-code-flow';
 
 /**
  * Creates an object your app will use to interact with Shopify.
@@ -64,7 +65,11 @@ export function shopifyApp<
   }
 
   const params: BasicParams = {api, config, logger};
-  const oauth = new AuthStrategy<Config, Resources>(params);
+  const oauth = new AuthCodeFlowStrategy(params);
+  const authStrategy = new AuthStrategy<Config, Resources>({
+    ...params,
+    strategy: oauth,
+  });
 
   const shopify:
     | AdminApp<Config>
@@ -74,7 +79,7 @@ export function shopifyApp<
     addDocumentResponseHeaders: addDocumentResponseHeadersFactory(params),
     registerWebhooks: registerWebhooksFactory(params),
     authenticate: {
-      admin: oauth.authenticateAdmin.bind(oauth),
+      admin: authStrategy.authenticateAdmin.bind(authStrategy),
       public: authenticatePublicFactory<Config['future'], Resources>(params),
       webhook: authenticateWebhookFactory<
         Config['future'],

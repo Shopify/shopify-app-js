@@ -1,9 +1,9 @@
 import {redirect} from '@remix-run/server-runtime';
 import {
+  InvalidRequestError,
   JwtPayload,
   Session,
   Shopify,
-  ShopifyError,
   ShopifyRestResources,
 } from '@shopify/shopify-api';
 
@@ -34,8 +34,9 @@ import {
   createAdminApiContext,
   redirectFactory,
   redirectToShopifyOrAppRoot,
+  renderAppBridge,
 } from './helpers';
-import {AuthCodeFlowStrategy} from './strategies/auth-code-flow';
+import {AuthorizationStrategy} from './strategies/types';
 
 const SESSION_TOKEN_PARAM = 'id_token';
 
@@ -44,18 +45,24 @@ interface ShopWithSessionContext {
   shop: string;
 }
 
+interface AuthStrategyParams extends BasicParams {
+  strategy: AuthorizationStrategy;
+}
+
 export class AuthStrategy<
   Config extends AppConfigArg,
   Resources extends ShopifyRestResources = ShopifyRestResources,
 > {
+  protected strategy: AuthorizationStrategy;
   protected api: Shopify;
   protected config: AppConfig;
   protected logger: Shopify['logger'];
 
-  public constructor({api, config, logger}: BasicParams) {
+  public constructor({strategy, api, config, logger}: AuthStrategyParams) {
     this.api = api;
     this.config = config;
     this.logger = logger;
+    this.strategy = strategy;
   }
 
   public async authenticateAdmin(
@@ -67,6 +74,8 @@ export class AuthStrategy<
     respondToOptionsRequest({api, logger, config}, request);
 
     const cors = ensureCORSHeadersFactory({api, logger, config}, request);
+
+    await this.handleRoutes(request);
 
     let sessionContext: SessionContext;
     try {
@@ -103,29 +112,52 @@ export class AuthStrategy<
     }
   }
 
+  private async handleRoutes(request: Request) {
+    await this.handleBouncePageRoute(request);
+    await this.handleExitIframeRoute(request);
+    await this.strategy.handleRoutes(request);
+  }
+
   private async authenticateAndGetSessionContext(
     request: Request,
   ): Promise<SessionContext> {
-    const {api, logger, config} = this;
-    const params: BasicParams = {api, logger, config};
+    const {logger} = this;
     logger.info('Authenticating admin request');
-
-    const strategy = new AuthCodeFlowStrategy(params);
-
-    await strategy.handleRoutes(request);
 
     const sessionTokenHeader = getSessionTokenHeader(request);
 
     if (!sessionTokenHeader) {
       await this.validateUrlParams(request);
-      await strategy.ensureInstalledOnShop(request);
+      await this.strategy.ensureInstalledOnShop(request);
       await this.ensureAppIsEmbeddedIfRequired(request);
       await this.ensureSessionTokenSearchParamIfRequired(request);
     }
 
     const {sessionContext, shop} = await this.getAuthenticatedSession(request);
 
-    return strategy.manageAccessToken(sessionContext, shop, request);
+    return this.strategy.manageAccessToken(sessionContext, shop, request);
+  }
+
+  private async handleBouncePageRoute(request: Request) {
+    const {config, logger, api} = this;
+    const url = new URL(request.url);
+
+    if (url.pathname === config.auth.patchSessionTokenPath) {
+      logger.debug('Rendering bounce page');
+      throw renderAppBridge({config, logger, api}, request);
+    }
+  }
+
+  private async handleExitIframeRoute(request: Request) {
+    const {config, logger, api} = this;
+    const url = new URL(request.url);
+
+    if (url.pathname === config.auth.exitIframePath) {
+      const destination = url.searchParams.get('exitIframe')!;
+
+      logger.debug('Rendering exit iframe page', {destination});
+      throw renderAppBridge({config, logger, api}, request, {url: destination});
+    }
   }
 
   private async validateUrlParams(request: Request) {
@@ -217,10 +249,13 @@ export class AuthStrategy<
         rawRequest: request,
       });
     } else {
-      throw new ShopifyError();
+      throw new InvalidRequestError();
     }
 
     if (!sessionId) {
+      logger.debug('Session id not found in cookies, redirecting to OAuth', {
+        shop,
+      });
       return {shop};
     }
 
