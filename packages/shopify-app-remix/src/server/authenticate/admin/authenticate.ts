@@ -35,7 +35,7 @@ import {
   redirectFactory,
   redirectToShopifyOrAppRoot,
 } from './helpers';
-import {AuthCodeFlowStrategy} from './strategies/auth-code-flow';
+import {AuthorizationStrategy} from './strategies/types';
 
 const SESSION_TOKEN_PARAM = 'id_token';
 
@@ -45,14 +45,14 @@ interface ShopWithSessionContext {
 }
 
 interface AuthStrategyParams extends BasicParams {
-  strategy: AuthCodeFlowStrategy;
+  strategy: AuthorizationStrategy;
 }
 
 export class AuthStrategy<
   Config extends AppConfigArg,
   Resources extends ShopifyRestResources = ShopifyRestResources,
 > {
-  protected strategy: AuthCodeFlowStrategy;
+  protected strategy: AuthorizationStrategy;
   protected api: Shopify;
   protected config: AppConfig;
   protected logger: Shopify['logger'];

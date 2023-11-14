@@ -21,9 +21,12 @@ import {
 import {SessionContext} from '../types';
 import {AppConfig} from '../../../config-types';
 
+import {AuthorizationStrategy} from './types';
+
 export class AuthCodeFlowStrategy<
   Resources extends ShopifyRestResources = ShopifyRestResources,
-> {
+> implements AuthorizationStrategy
+{
   protected api: Shopify;
   protected config: AppConfig;
   protected logger: Shopify['logger'];
