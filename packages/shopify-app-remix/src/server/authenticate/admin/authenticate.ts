@@ -17,6 +17,7 @@ import {
   rejectBotRequest,
   respondToOptionsRequest,
   ensureCORSHeadersFactory,
+  getSessionTokenFromUrlParam,
 } from '../helpers';
 
 import type {BillingContext} from './billing/types';
@@ -318,7 +319,7 @@ export class AuthStrategy<
     const url = new URL(request.url);
 
     let shop = url.searchParams.get('shop')!;
-    const searchParamSessionToken = url.searchParams.get(SESSION_TOKEN_PARAM)!;
+    const searchParamSessionToken = getSessionTokenFromUrlParam(request)!;
 
     let sessionContext: SessionContext | null;
     if (api.config.isEmbeddedApp) {
@@ -336,22 +337,7 @@ export class AuthStrategy<
       sessionContext = await this.getAuthenticatedSession({
         payload: sessionToken,
       });
-      // return sessionContext!;
     } else {
-      // eslint-disable-next-line no-warning-comments
-      // TODO move this check into loadSession once we add support for it in the library
-      // https://github.com/orgs/Shopify/projects/6899/views/1?pane=issue&itemId=28378114
-      // const sessionId = await api.session.getCurrentId({
-      //   isOnline: config.useOnlineTokens,
-      //   rawRequest: request,
-      // });
-      // if (!sessionId) {
-      //   logger.debug('Session id not found in cookies, redirecting to OAuth', {
-      //     shop,
-      //   });
-      //   throw await redirectToAuthPage({api, config, logger}, request, shop);
-      // }
-
       sessionContext = await this.getAuthenticatedSession({request});
     }
 
