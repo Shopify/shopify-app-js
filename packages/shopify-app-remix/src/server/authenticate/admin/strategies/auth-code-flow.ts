@@ -1,8 +1,10 @@
 import {
   CookieNotFound,
+  GraphqlQueryError,
+  HttpResponseError,
   InvalidHmacError,
   InvalidOAuthError,
-  JwtPayload,
+  Session,
   ShopifyRestResources,
 } from '@shopify/shopify-api';
 
@@ -45,6 +47,88 @@ export class AuthCodeFlowStrategy<
     }
 
     return sessionContext!;
+  }
+
+  async ensureInstalledOnShop(request: Request, params: BasicParams) {
+    const {api, config, logger} = params;
+    const url = new URL(request.url);
+
+    let shop = url.searchParams.get('shop');
+
+    // Ensure app is installed
+    logger.debug('Ensuring app is installed on shop', {shop});
+
+    if (!(await this.hasValidOfflineId(request, params))) {
+      logger.info("Could not find a shop, can't authenticate request");
+      throw new Response(undefined, {
+        status: 400,
+        statusText: 'Bad Request',
+      });
+    }
+
+    const offlineSession = await this.getOfflineSession(request, params);
+    const isEmbedded = url.searchParams.get('embedded') === '1';
+
+    if (!offlineSession) {
+      logger.info("Shop hasn't installed app yet, redirecting to OAuth", {
+        shop,
+      });
+      if (isEmbedded) {
+        redirectWithExitIframe({api, config, logger}, request, shop!);
+      } else {
+        throw await beginAuth({api, config, logger}, request, false, shop!);
+      }
+    }
+
+    shop = shop || offlineSession.shop;
+
+    if (config.isEmbeddedApp && !isEmbedded) {
+      try {
+        logger.debug('Ensuring offline session is valid before embedding', {
+          shop,
+        });
+        await this.testSession(offlineSession, params);
+
+        logger.debug('Offline session is still valid, embedding app', {shop});
+      } catch (error) {
+        await this.handleInvalidOfflineSession(
+          error,
+          {api, logger, config},
+          request,
+          shop,
+        );
+      }
+    }
+  }
+
+  private async getOfflineSession(request: Request, params: BasicParams) {
+    const {api, config} = params;
+    const url = new URL(request.url);
+
+    const shop = url.searchParams.get('shop');
+
+    const offlineId = shop
+      ? api.session.getOfflineId(shop)
+      : await api.session.getCurrentId({isOnline: false, rawRequest: request});
+
+    if (!offlineId) {
+      return null;
+    }
+
+    return config.sessionStorage.loadSession(offlineId);
+  }
+
+  private async hasValidOfflineId(request: Request, params: BasicParams) {
+    const {api} = params;
+    const url = new URL(request.url);
+
+    const shop = url.searchParams.get('shop');
+
+    const offlineId = shop
+      ? api.session.getOfflineId(shop)
+      : await api.session.getCurrentId({isOnline: false, rawRequest: request});
+
+    return Boolean(offlineId);
   }
 
   private async handleBouncePageRoute(request: Request, params: BasicParams) {
@@ -142,6 +226,27 @@ export class AuthCodeFlowStrategy<
     }
   }
 
+  private async testSession(
+    session: Session,
+    params: BasicParams,
+  ): Promise<void> {
+    const {api} = params;
+
+    const client = new api.clients.Graphql({
+      session,
+    });
+
+    await client.query({
+      data: `#graphql
+        query shopifyAppShopName {
+          shop {
+            name
+          }
+        }
+      `,
+    });
+  }
+
   private async oauthCallbackError(
     params: BasicParams,
     error: Error,
@@ -169,5 +274,47 @@ export class AuthCodeFlowStrategy<
       status: 500,
       statusText: 'Internal Server Error',
     });
+  }
+
+  private async handleInvalidOfflineSession(
+    error: Error,
+    params: BasicParams,
+    request: Request,
+    shop: string,
+  ) {
+    const {api, logger, config} = params;
+    if (error instanceof HttpResponseError) {
+      if (error.response.code === 401) {
+        logger.info('Shop session is no longer valid, redirecting to OAuth', {
+          shop,
+        });
+        throw await beginAuth({api, config, logger}, request, false, shop);
+      } else {
+        const message = JSON.stringify(error.response.body, null, 2);
+        logger.error(`Unexpected error during session validation: ${message}`, {
+          shop,
+        });
+
+        throw new Response(undefined, {
+          status: error.response.code,
+          statusText: error.response.statusText,
+        });
+      }
+    } else if (error instanceof GraphqlQueryError) {
+      const context: {[key: string]: string} = {shop};
+      if (error.response) {
+        context.response = JSON.stringify(error.response);
+      }
+
+      logger.error(
+        `Unexpected error during session validation: ${error.message}`,
+        context,
+      );
+
+      throw new Response(undefined, {
+        status: 500,
+        statusText: 'Internal Server Error',
+      });
+    }
   }
 }
