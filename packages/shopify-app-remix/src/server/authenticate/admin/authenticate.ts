@@ -388,9 +388,13 @@ export class AuthStrategy<
       sessionId = config.useOnlineTokens
         ? api.session.getJwtSessionId(shop, payload.sub)
         : api.session.getOfflineId(shop);
-    } else if (request) {
+    } else if (!config.isEmbeddedApp && request) {
       const url = new URL(request.url);
       shop = url.searchParams.get('shop')!;
+
+      // eslint-disable-next-line no-warning-comments
+      // TODO move this check into loadSession once we add support for it in the library
+      // https://github.com/orgs/Shopify/projects/6899/views/1?pane=issue&itemId=28378114
       sessionId = await api.session.getCurrentId({
         isOnline: config.useOnlineTokens,
         rawRequest: request,
