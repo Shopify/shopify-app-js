@@ -110,22 +110,22 @@ export class AuthStrategy<
     const params: BasicParams = {api, logger, config};
     logger.info('Authenticating admin request');
 
-    const strategy = new AuthCodeFlowStrategy();
+    const strategy = new AuthCodeFlowStrategy(params);
 
-    await strategy.handleRoutes(request, params);
+    await strategy.handleRoutes(request);
 
     const sessionTokenHeader = getSessionTokenHeader(request);
 
     if (!sessionTokenHeader) {
       await this.validateUrlParams(request);
-      await strategy.ensureInstalledOnShop(request, params);
+      await strategy.ensureInstalledOnShop(request);
       await this.ensureAppIsEmbeddedIfRequired(request);
       await this.ensureSessionTokenSearchParamIfRequired(request);
     }
 
     const {sessionContext, shop} = await this.getAuthenticatedSession(request);
 
-    return strategy.manageAccessToken(sessionContext, shop, request, params);
+    return strategy.manageAccessToken(sessionContext, shop, request);
   }
 
   private async validateUrlParams(request: Request) {
