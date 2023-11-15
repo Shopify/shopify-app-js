@@ -225,10 +225,10 @@ export class AuthStrategy<
     let sessionId: string | undefined;
     let payload: JwtPayload | undefined;
 
-    const sessionToken =
-      getSessionTokenHeader(request) || getSessionTokenFromUrlParam(request);
+    const sessionToken = (getSessionTokenHeader(request) ||
+      getSessionTokenFromUrlParam(request))!;
 
-    if (config.isEmbeddedApp && sessionToken) {
+    if (config.isEmbeddedApp) {
       payload = await validateSessionToken({config, logger, api}, sessionToken);
       shop = this.getShopFromSessionToken(payload);
 
@@ -236,8 +236,7 @@ export class AuthStrategy<
       sessionId = config.useOnlineTokens
         ? api.session.getJwtSessionId(shop, payload.sub)
         : api.session.getOfflineId(shop);
-      // eslint-disable-next-line no-negated-condition
-    } else if (!config.isEmbeddedApp) {
+    } else {
       const url = new URL(request.url);
       shop = url.searchParams.get('shop')!;
 
@@ -248,8 +247,6 @@ export class AuthStrategy<
         isOnline: config.useOnlineTokens,
         rawRequest: request,
       });
-    } else {
-      throw new InvalidRequestError();
     }
 
     if (!sessionId) {

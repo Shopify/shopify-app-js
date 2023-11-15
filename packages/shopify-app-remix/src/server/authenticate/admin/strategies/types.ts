@@ -11,5 +11,5 @@ export interface AuthorizationStrategy {
     shop: string;
     request: Request;
   }) => Promise<SessionContext>;
-  ensureInstalledOnShop: (request: Request) => void;
+  ensureInstalledOnShop: (request: Request) => Promise<void>;
 }
