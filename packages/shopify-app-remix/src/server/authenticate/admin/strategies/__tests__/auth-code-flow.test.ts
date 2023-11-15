@@ -11,6 +11,8 @@ import {
 import {AppDistribution, shopifyApp} from '../../../../index';
 
 import {
+  API_KEY,
+  API_SECRET_KEY,
   APP_URL,
   BASE64_HOST,
   TEST_SHOP,
@@ -18,18 +20,21 @@ import {
   expectBeginAuthRedirect,
   expectExitIframeRedirect,
   getThrownResponse,
+  mockExternalRequest,
   setUpValidSession,
+  signRequestCookie,
   testConfig,
 } from '../../../../__test-helpers';
 import {AuthCodeFlowStrategy} from '../auth-code-flow';
 import {SessionStorage} from '@shopify/shopify-app-session-storage';
 import {AppConfig, AppConfigArg, AuthConfig} from '../../../../config-types';
 import {BasicParams} from '../../../../types';
+import {HashFormat, createSHA256HMAC} from '@shopify/shopify-api/runtime';
 
 const LOG_FN = jest.fn();
 const VALID_API_CONFIG: ConfigParams = {
-  apiKey: 'test-key',
-  apiSecretKey: 'test-secret',
+  apiKey: API_KEY,
+  apiSecretKey: API_SECRET_KEY,
   scopes: ['test-scope'],
   apiVersion: LATEST_API_VERSION,
   hostName: 'my-app.com',
@@ -139,6 +144,41 @@ describe('AuthCodeFlowStrategy', () => {
       });
     });
 
+    describe('when request path matches auth callback path', () => {
+      it('fetches access token and stores it', async () => {
+        // GIVEN
+        const {params, config} = getBasicParamsAndConfig({
+          appConfig: {appUrl: `https://${VALID_API_CONFIG.hostName}`},
+          authPaths: {
+            callbackPath: '/auth/callback',
+          },
+        });
+
+        const strategy = new AuthCodeFlowStrategy(params);
+
+        // WHEN
+        await mockCodeExchangeRequest('offline');
+        const response = await getThrownResponse(
+          strategy.handleRoutes.bind(strategy),
+          await getValidCallbackRequest(config),
+        );
+
+        // THEN
+        const [session] = await config.sessionStorage!.findSessionsByShop(
+          TEST_SHOP,
+        );
+
+        expect(session).toMatchObject({
+          accessToken: '123abc',
+          id: `offline_${TEST_SHOP}`,
+          isOnline: false,
+          scope: 'read_products',
+          shop: TEST_SHOP,
+          state: 'nonce',
+        });
+      });
+    });
+
     describe('when request path does not match any auth paths', () => {
       it('does not redirect or throw', async () => {
         // GIVEN
@@ -202,4 +242,68 @@ function derivedShopifyAppConfig<Storage extends SessionStorage>(
       ...authPaths,
     },
   };
+}
+
+function getCallbackUrl(appConfig: ReturnType<typeof testConfig>) {
+  return `${appConfig.appUrl}/auth/callback`;
+}
+
+async function getValidCallbackRequest(config: ReturnType<typeof testConfig>) {
+  const cookieName = 'shopify_app_state';
+  const state = 'nonce';
+  const code = 'code_from_shopify';
+  const now = Math.trunc(Date.now() / 1000) - 2;
+  const queryParams = `code=${code}&host=${BASE64_HOST}&shop=${TEST_SHOP}&state=${state}&timestamp=${now}`;
+  const hmac = await createSHA256HMAC(
+    config.apiSecretKey,
+    queryParams,
+    HashFormat.Hex,
+  );
+
+  const request = new Request(
+    `${getCallbackUrl(config)}?${queryParams}&hmac=${hmac}`,
+  );
+
+  signRequestCookie({
+    request,
+    cookieName,
+    cookieValue: state,
+  });
+
+  return request;
+}
+
+async function mockCodeExchangeRequest(
+  tokenType: 'online' | 'offline' = 'offline',
+) {
+  const responseBody = {
+    access_token: '123abc',
+    scope: 'read_products',
+  };
+
+  await mockExternalRequest({
+    request: new Request(`https://${TEST_SHOP}/admin/oauth/access_token`, {
+      method: 'POST',
+    }),
+    response:
+      tokenType === 'offline'
+        ? new Response(JSON.stringify(responseBody))
+        : new Response(
+            JSON.stringify({
+              ...responseBody,
+              expires_in: Math.trunc(Date.now() / 1000) + 3600,
+              associated_user_scope: 'read_products',
+              associated_user: {
+                id: 902541635,
+                first_name: 'John',
+                last_name: 'Smith',
+                email: 'john@example.com',
+                email_verified: true,
+                account_owner: true,
+                locale: 'en',
+                collaborator: false,
+              },
+            }),
+          ),
+  });
 }
