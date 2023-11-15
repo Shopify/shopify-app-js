@@ -54,11 +54,15 @@ export class AuthCodeFlowStrategy<
     }
   }
 
-  async manageAccessToken(
-    sessionContext: SessionContext | undefined,
-    shop: string,
-    request: Request,
-  ): Promise<SessionContext> {
+  async manageAccessToken({
+    sessionContext,
+    shop,
+    request,
+  }: {
+    sessionContext?: SessionContext;
+    shop: string;
+    request: Request;
+  }): Promise<SessionContext> {
     const {config, logger, api} = this;
     if (
       !sessionContext?.session ||
