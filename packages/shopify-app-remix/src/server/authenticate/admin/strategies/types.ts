@@ -1,7 +1,7 @@
 import {SessionContext} from '../types';
 
 export interface AuthorizationStrategy {
-  handleRoutes: (request: Request) => void;
+  handleRoutes: (request: Request) => Promise<void>;
   manageAccessToken: ({
     sessionContext,
     shop,
