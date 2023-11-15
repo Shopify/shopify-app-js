@@ -34,6 +34,7 @@ import {
   createAdminApiContext,
   redirectFactory,
   redirectToShopifyOrAppRoot,
+  renderAppBridge,
 } from './helpers';
 import {AuthorizationStrategy} from './strategies/types';
 
@@ -74,6 +75,8 @@ export class AuthStrategy<
 
     const cors = ensureCORSHeadersFactory({api, logger, config}, request);
 
+    await this.handleRoutes(request);
+
     let sessionContext: SessionContext;
     try {
       sessionContext = await this.authenticateAndGetSessionContext(request);
@@ -109,13 +112,17 @@ export class AuthStrategy<
     }
   }
 
+  private async handleRoutes(request: Request) {
+    await this.handleBouncePageRoute(request);
+    await this.handleExitIframeRoute(request);
+    await this.strategy.handleRoutes(request);
+  }
+
   private async authenticateAndGetSessionContext(
     request: Request,
   ): Promise<SessionContext> {
     const {logger} = this;
     logger.info('Authenticating admin request');
-
-    await this.strategy.handleRoutes(request);
 
     const sessionTokenHeader = getSessionTokenHeader(request);
 
@@ -129,6 +136,28 @@ export class AuthStrategy<
     const {sessionContext, shop} = await this.getAuthenticatedSession(request);
 
     return this.strategy.manageAccessToken(sessionContext, shop, request);
+  }
+
+  private async handleBouncePageRoute(request: Request) {
+    const {config, logger, api} = this;
+    const url = new URL(request.url);
+
+    if (url.pathname === config.auth.patchSessionTokenPath) {
+      logger.debug('Rendering bounce page');
+      throw renderAppBridge({config, logger, api}, request);
+    }
+  }
+
+  private async handleExitIframeRoute(request: Request) {
+    const {config, logger, api} = this;
+    const url = new URL(request.url);
+
+    if (url.pathname === config.auth.exitIframePath) {
+      const destination = url.searchParams.get('exitIframe')!;
+
+      logger.debug('Rendering exit iframe page', {destination});
+      throw renderAppBridge({config, logger, api}, request, {url: destination});
+    }
   }
 
   private async validateUrlParams(request: Request) {

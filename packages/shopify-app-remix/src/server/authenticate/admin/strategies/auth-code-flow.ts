@@ -15,7 +15,6 @@ import {
   redirectToAuthPage,
   redirectToShopifyOrAppRoot,
   redirectWithExitIframe,
-  renderAppBridge,
   triggerAfterAuthHook,
 } from '../helpers';
 import {SessionContext} from '../types';
@@ -38,9 +37,21 @@ export class AuthCodeFlowStrategy<
   }
 
   async handleRoutes(request: Request) {
-    await this.handleBouncePageRoute(request);
-    await this.handleExitIframeRoute(request);
-    await this.handleOAuthRoutes(request);
+    const {api, config} = this;
+    const url = new URL(request.url);
+    const isAuthRequest = url.pathname === config.auth.path;
+    const isAuthCallbackRequest = url.pathname === config.auth.callbackPath;
+
+    if (!isAuthRequest && !isAuthCallbackRequest) return;
+
+    const shop = api.utils.sanitizeShop(url.searchParams.get('shop')!);
+    if (!shop) throw new Response('Shop param is invalid', {status: 400});
+
+    if (isAuthRequest) throw await this.handleAuthBeginRequest(request, shop);
+
+    if (isAuthCallbackRequest) {
+      throw await this.handleAuthCallbackRequest(request, shop);
+    }
   }
 
   async manageAccessToken(
@@ -107,46 +118,6 @@ export class AuthCodeFlowStrategy<
       } catch (error) {
         await this.handleInvalidOfflineSession(error, request, shop);
       }
-    }
-  }
-
-  private async handleBouncePageRoute(request: Request) {
-    const {config, logger, api} = this;
-    const url = new URL(request.url);
-
-    if (url.pathname === config.auth.patchSessionTokenPath) {
-      logger.debug('Rendering bounce page');
-      throw renderAppBridge({config, logger, api}, request);
-    }
-  }
-
-  private async handleExitIframeRoute(request: Request) {
-    const {config, logger, api} = this;
-    const url = new URL(request.url);
-
-    if (url.pathname === config.auth.exitIframePath) {
-      const destination = url.searchParams.get('exitIframe')!;
-
-      logger.debug('Rendering exit iframe page', {destination});
-      throw renderAppBridge({config, logger, api}, request, {url: destination});
-    }
-  }
-
-  private async handleOAuthRoutes(request: Request) {
-    const {api, config} = this;
-    const url = new URL(request.url);
-    const isAuthRequest = url.pathname === config.auth.path;
-    const isAuthCallbackRequest = url.pathname === config.auth.callbackPath;
-
-    if (!isAuthRequest && !isAuthCallbackRequest) return;
-
-    const shop = api.utils.sanitizeShop(url.searchParams.get('shop')!);
-    if (!shop) throw new Response('Shop param is invalid', {status: 400});
-
-    if (isAuthRequest) throw await this.handleAuthBeginRequest(request, shop);
-
-    if (isAuthCallbackRequest) {
-      throw await this.handleAuthCallbackRequest(request, shop);
     }
   }
 
