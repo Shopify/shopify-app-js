@@ -135,7 +135,7 @@ export class AuthStrategy<
 
     const {sessionContext, shop} = await this.getAuthenticatedSession(request);
 
-    return this.strategy.manageAccessToken(sessionContext, shop, request);
+    return this.strategy.manageAccessToken({sessionContext, shop, request});
   }
 
   private async handleBouncePageRoute(request: Request) {
