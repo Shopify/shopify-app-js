@@ -1,6 +1,5 @@
 import {redirect} from '@remix-run/server-runtime';
 import {
-  InvalidRequestError,
   JwtPayload,
   Session,
   Shopify,
