@@ -234,7 +234,7 @@ export interface AppConfig<Storage extends SessionStorage = SessionStorage>
   future: FutureFlags;
 }
 
-interface AuthConfig {
+export interface AuthConfig {
   path: string;
   callbackPath: string;
   exitIframePath: string;
