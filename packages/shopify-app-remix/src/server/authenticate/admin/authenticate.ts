@@ -253,6 +253,9 @@ export class AuthStrategy<
     }
 
     if (!sessionId) {
+      logger.debug('Session id not found in cookies, redirecting to OAuth', {
+        shop,
+      });
       return {shop};
     }
 
