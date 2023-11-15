@@ -14,7 +14,9 @@ import {
   APP_URL,
   BASE64_HOST,
   TEST_SHOP,
+  TestConfig,
   expectBeginAuthRedirect,
+  expectExitIframeRedirect,
   getThrownResponse,
   setUpValidSession,
   testConfig,
@@ -22,6 +24,7 @@ import {
 import {AuthCodeFlowStrategy} from '../auth-code-flow';
 import {SessionStorage} from '@shopify/shopify-app-session-storage';
 import {AppConfig, AppConfigArg, AuthConfig} from '../../../../config-types';
+import {BasicParams} from '../../../../types';
 
 const LOG_FN = jest.fn();
 const VALID_API_CONFIG: ConfigParams = {
@@ -36,32 +39,143 @@ const VALID_API_CONFIG: ConfigParams = {
 
 describe('AuthCodeFlowStrategy', () => {
   describe('handleRoutes', () => {
-    it('handles routes', async () => {
-      // GIVEN
-      const configArgs = testConfig({
-        ...VALID_API_CONFIG,
-        appUrl: `https://${VALID_API_CONFIG.hostName}`,
+    describe('when request path matches auth path', () => {
+      it('initiates auth code flow when embedded without iframe header', async () => {
+        // GIVEN
+        const {params, config} = getBasicParamsAndConfig({
+          appConfig: {appUrl: `https://${VALID_API_CONFIG.hostName}`},
+          authPaths: {
+            path: '/initiate-auth',
+          },
+        });
+        const request = new Request(
+          `${APP_URL}/initiate-auth?shop=${TEST_SHOP}`,
+        );
+        const strategy = new AuthCodeFlowStrategy(params);
+
+        // WHEN
+        const response = await getThrownResponse(
+          strategy.handleRoutes.bind(strategy),
+          request,
+        );
+
+        // THEN
+        expectBeginAuthRedirect(config, response);
       });
-      const api = shopifyApi(VALID_API_CONFIG);
-      const config = derivedShopifyAppConfig(configArgs, api.config, {
-        path: '/initiate-auth',
+
+      it('initiates auth code flow when not embedded', async () => {
+        // GIVEN
+        const {params, config} = getBasicParamsAndConfig({
+          appConfig: {
+            appUrl: `https://${VALID_API_CONFIG.hostName}`,
+            isEmbeddedApp: false,
+          },
+          authPaths: {
+            path: '/initiate-auth',
+          },
+        });
+        const request = new Request(
+          `${APP_URL}/initiate-auth?shop=${TEST_SHOP}`,
+        );
+        const strategy = new AuthCodeFlowStrategy(params);
+
+        // WHEN
+        const response = await getThrownResponse(
+          strategy.handleRoutes.bind(strategy),
+          request,
+        );
+
+        // THEN
+        expectBeginAuthRedirect(config, response);
       });
-      const params = {api, config, logger: api.logger};
 
-      const request = new Request(`${APP_URL}/initiate-auth?shop=${TEST_SHOP}`);
-      const strategy = new AuthCodeFlowStrategy(params);
+      it('initiates auth code flow when embedded with iframe header', async () => {
+        // GIVEN
+        const {params, config} = getBasicParamsAndConfig({
+          appConfig: {appUrl: `https://${VALID_API_CONFIG.hostName}`},
+          authPaths: {
+            path: '/initiate-auth',
+          },
+        });
+        const request = new Request(
+          `${APP_URL}/initiate-auth?shop=${TEST_SHOP}`,
+          {headers: {'Sec-Fetch-Dest': 'iframe'}},
+        );
+        const strategy = new AuthCodeFlowStrategy(params);
 
-      // WHEN
-      const response = await getThrownResponse(
-        strategy.handleRoutes.bind(strategy),
-        request,
-      );
+        // WHEN
+        const response = await getThrownResponse(
+          strategy.handleRoutes.bind(strategy),
+          request,
+        );
 
-      // THEN
-      expectBeginAuthRedirect(configArgs, response);
+        // THEN
+        expectExitIframeRedirect(response, {
+          host: null,
+          destination: `/initiate-auth?shop=${TEST_SHOP}`,
+        });
+      });
+
+      it('returns 400 when shop is invalid', async () => {
+        // GIVEN
+        const {params, config} = getBasicParamsAndConfig({
+          appConfig: {appUrl: `https://${VALID_API_CONFIG.hostName}`},
+          authPaths: {
+            path: '/initiate-auth',
+          },
+        });
+        const request = new Request(`${APP_URL}/initiate-auth?shop=google.com`);
+        const strategy = new AuthCodeFlowStrategy(params);
+
+        // WHEN
+        const response = await getThrownResponse(
+          strategy.handleRoutes.bind(strategy),
+          request,
+        );
+
+        // THEN
+        expect(response.status).toBe(400);
+        expect(await response.text()).toBe('Shop param is invalid');
+      });
+    });
+
+    describe('when request path does not match any auth paths', () => {
+      it('does not redirect or throw', async () => {
+        // GIVEN
+        const {params, config} = getBasicParamsAndConfig({
+          appConfig: {appUrl: `https://${VALID_API_CONFIG.hostName}`},
+          authPaths: {
+            path: '/initiate-auth',
+          },
+        });
+        const request = new Request(`${APP_URL}/my-path?shop=${TEST_SHOP}`);
+        const strategy = new AuthCodeFlowStrategy(params);
+
+        // WHEN
+        const result = strategy.handleRoutes(request);
+
+        // THEN
+        await expect(result).resolves.toBeUndefined();
+      });
     });
   });
 });
+
+function getBasicParamsAndConfig({
+  appConfig = {},
+  authPaths = {},
+}: {
+  appConfig: Partial<AppConfigArg>;
+  authPaths: Partial<AuthConfig>;
+}): {params: BasicParams; config: TestConfig<Partial<AppConfigArg>>} {
+  const configArgs = testConfig({
+    ...VALID_API_CONFIG,
+    ...appConfig,
+  });
+  const api = shopifyApi(VALID_API_CONFIG);
+  const config = derivedShopifyAppConfig(configArgs, api.config, authPaths);
+  return {params: {api, config, logger: api.logger}, config: configArgs};
+}
 
 function derivedShopifyAppConfig<Storage extends SessionStorage>(
   appConfig: AppConfigArg,
