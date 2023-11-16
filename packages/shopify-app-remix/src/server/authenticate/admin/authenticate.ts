@@ -74,10 +74,10 @@ export class AuthStrategy<
 
     const cors = ensureCORSHeadersFactory({api, logger, config}, request);
 
-    await this.handleRoutes(request);
-
     let sessionContext: SessionContext;
     try {
+      await this.handleRoutes(request);
+
       sessionContext = await this.authenticateAndGetSessionContext(request);
     } catch (errorOrResponse) {
       if (errorOrResponse instanceof Response) {

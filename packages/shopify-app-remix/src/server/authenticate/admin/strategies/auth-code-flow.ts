@@ -195,11 +195,7 @@ export class AuthCodeFlowStrategy<
       ? api.session.getOfflineId(shop)
       : await api.session.getCurrentId({isOnline: false, rawRequest: request});
 
-    if (!offlineId) {
-      return null;
-    }
-
-    return config.sessionStorage.loadSession(offlineId);
+    return config.sessionStorage.loadSession(offlineId!);
   }
 
   private async hasValidOfflineId(request: Request) {
