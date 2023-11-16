@@ -11,7 +11,7 @@ type DefaultedFutureFlag<
   Flag extends keyof FutureFlags,
 > = Overrides['future'] extends FutureFlags ? Overrides['future'][Flag] : true;
 
-export type TestConfig<Overrides extends Partial<AppConfigArg>> =
+type TestConfig<Overrides extends Partial<AppConfigArg>> =
   // We omit billing so we use the actual values when set, rather than the generic type
   Omit<AppConfigArg, 'billing'> &
     Overrides & {
