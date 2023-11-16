@@ -185,7 +185,7 @@ export class AuthCodeFlowStrategy<
     }
   }
 
-  private async getOfflineSession(request: Request) {
+  private async getOfflineSession(request: Request): Promise<Session> {
     const {api, config} = this;
     const url = new URL(request.url);
 
