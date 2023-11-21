@@ -1,3 +1,5 @@
+// When adding new flags, you should also add them to the `TEST_FUTURE_FLAGS` object in `test-config.ts` to ensure that
+// it doesn't cause regressions.
 export interface FutureFlags {
   /**
    * When enabled, returns the same `admin` context (`AdminApiContext`) from `authenticate.webhook` that is returned from `authenticate.admin`.
