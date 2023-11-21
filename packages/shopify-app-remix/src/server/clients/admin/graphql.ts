@@ -18,7 +18,7 @@ export function graphqlClientFactory({
   handleClientError,
   session,
 }: AdminClientOptions): GraphQLClient {
-  return async function query(query, options) {
+  return async function query(operation, options) {
     const client = new params.api.clients.Graphql({
       session,
       apiVersion: options?.apiVersion,
@@ -27,7 +27,7 @@ export function graphqlClientFactory({
     try {
       // We convert the incoming response to a Response object to bring this client closer to the Remix client.
       const apiResponse = await client.query({
-        data: {query, variables: options?.variables},
+        data: {query: operation, variables: options?.variables},
         tries: options?.tries,
         extraHeaders: options?.headers,
       });
