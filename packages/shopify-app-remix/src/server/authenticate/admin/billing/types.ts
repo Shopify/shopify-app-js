@@ -25,6 +25,14 @@ export interface RequestBillingOptions<Config extends AppConfigArg>
    * The plan to request. Must be one of the values defined in the `billing` config option.
    */
   plan: keyof Config['billing'];
+  /**
+   * Whether to use the test mode. This prevents the credit card from being charged. Test shops and demo shops cannot be charged.
+   */
+  isTest?: boolean;
+  /**
+   * The URL to return to after the merchant approves the payment.
+   */
+  returnUrl?: string;
 }
 
 export interface CancelBillingOptions {
@@ -38,6 +46,9 @@ export interface CancelBillingOptions {
    * {@link https://shopify.dev/docs/apps/billing/subscriptions/cancel-recurring-charges}
    */
   prorate?: boolean;
+  /*
+   * Whether to use the test mode. This prevents the credit card from being charged. Test shops and demo shops cannot be charged.
+   */
   isTest?: boolean;
 }
 
