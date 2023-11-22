@@ -36,7 +36,7 @@ export class AuthCodeFlowStrategy<
     this.logger = logger;
   }
 
-  async handleRoutes(request: Request) {
+  async respondToOAuthRequests(request: Request) {
     const {api, config} = this;
     const url = new URL(request.url);
     const isAuthRequest = url.pathname === config.auth.path;
@@ -54,7 +54,7 @@ export class AuthCodeFlowStrategy<
     }
   }
 
-  async manageAccessToken({
+  async acquireAccessToken({
     sessionContext,
     shop,
     request,

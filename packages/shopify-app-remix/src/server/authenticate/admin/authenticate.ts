@@ -11,7 +11,7 @@ import type {AppConfig, AppConfigArg} from '../../config-types';
 import {
   getSessionTokenHeader,
   validateSessionToken,
-  rejectBotRequest,
+  rejectBotRequest as respondToBotRequest,
   respondToOptionsRequest,
   ensureCORSHeadersFactory,
   getSessionTokenFromUrlParam,
@@ -69,75 +69,47 @@ export class AuthStrategy<
   ): Promise<AdminContext<Config, Resources>> {
     const {api, logger, config} = this;
 
-    rejectBotRequest({api, logger, config}, request);
-    respondToOptionsRequest({api, logger, config}, request);
-
-    const cors = ensureCORSHeadersFactory({api, logger, config}, request);
-
     let sessionContext: SessionContext;
     try {
-      await this.handleRoutes(request);
+      respondToBotRequest({api, logger, config}, request);
+      respondToOptionsRequest({api, logger, config}, request);
+      await this.respondToBouncePageRequest(request);
+      await this.respondToExitIframeRequest(request);
+      await this.strategy.respondToOAuthRequests(request);
 
-      sessionContext = await this.authenticateAndGetSessionContext(request);
+      logger.info('Authenticating admin request');
+
+      const sessionTokenHeader = getSessionTokenHeader(request);
+
+      if (!sessionTokenHeader) {
+        await this.validateUrlParams(request);
+        await this.strategy.ensureInstalledOnShop(request);
+        await this.ensureAppIsEmbeddedIfRequired(request);
+        await this.ensureSessionTokenSearchParamIfRequired(request);
+      }
+
+      const authenticatedSession = await this.loadActiveSession(request);
+
+      sessionContext = await this.strategy.acquireAccessToken({
+        sessionContext: authenticatedSession.sessionContext,
+        shop: authenticatedSession.shop,
+        request,
+      });
     } catch (errorOrResponse) {
       if (errorOrResponse instanceof Response) {
-        cors(errorOrResponse);
+        ensureCORSHeadersFactory(
+          {api, logger, config},
+          request,
+        )(errorOrResponse);
       }
 
       throw errorOrResponse;
     }
 
-    const context:
-      | EmbeddedAdminContext<Config, Resources>
-      | NonEmbeddedAdminContext<Config, Resources> = {
-      admin: createAdminApiContext<Resources>(request, sessionContext.session, {
-        api,
-        logger,
-        config,
-      }),
-      billing: this.createBillingContext(request, sessionContext.session),
-      session: sessionContext.session,
-      cors,
-    };
-
-    if (config.isEmbeddedApp) {
-      return {
-        ...context,
-        sessionToken: sessionContext!.token!,
-        redirect: redirectFactory({api, config, logger}, request),
-      } as AdminContext<Config, Resources>;
-    } else {
-      return context as AdminContext<Config, Resources>;
-    }
+    return this.createContext(request, sessionContext);
   }
 
-  private async handleRoutes(request: Request) {
-    await this.handleBouncePageRoute(request);
-    await this.handleExitIframeRoute(request);
-    await this.strategy.handleRoutes(request);
-  }
-
-  private async authenticateAndGetSessionContext(
-    request: Request,
-  ): Promise<SessionContext> {
-    const {logger} = this;
-    logger.info('Authenticating admin request');
-
-    const sessionTokenHeader = getSessionTokenHeader(request);
-
-    if (!sessionTokenHeader) {
-      await this.validateUrlParams(request);
-      await this.strategy.ensureInstalledOnShop(request);
-      await this.ensureAppIsEmbeddedIfRequired(request);
-      await this.ensureSessionTokenSearchParamIfRequired(request);
-    }
-
-    const {sessionContext, shop} = await this.getAuthenticatedSession(request);
-
-    return this.strategy.manageAccessToken({sessionContext, shop, request});
-  }
-
-  private async handleBouncePageRoute(request: Request) {
+  private async respondToBouncePageRequest(request: Request) {
     const {config, logger, api} = this;
     const url = new URL(request.url);
 
@@ -147,7 +119,7 @@ export class AuthStrategy<
     }
   }
 
-  private async handleExitIframeRoute(request: Request) {
+  private async respondToExitIframeRequest(request: Request) {
     const {config, logger, api} = this;
     const url = new URL(request.url);
 
@@ -200,8 +172,9 @@ export class AuthStrategy<
 
     const shop = url.searchParams.get('shop')!;
     const searchParamSessionToken = url.searchParams.get(SESSION_TOKEN_PARAM);
+    const isEmbedded = url.searchParams.get('embedded') === '1';
 
-    if (api.config.isEmbeddedApp && !searchParamSessionToken) {
+    if (api.config.isEmbeddedApp && isEmbedded && !searchParamSessionToken) {
       logger.debug(
         'Missing session token in search params, going to bounce page',
         {shop},
@@ -215,7 +188,7 @@ export class AuthStrategy<
     return dest.hostname;
   }
 
-  private async getAuthenticatedSession(
+  private async loadActiveSession(
     request: Request,
   ): Promise<ShopWithSessionContext> {
     const {config, logger, api} = this;
@@ -255,19 +228,13 @@ export class AuthStrategy<
       return {shop};
     }
 
-    const session = await this.loadSession(sessionId);
+    logger.debug('Loading session from storage', {sessionId});
+
+    const session = await config.sessionStorage.loadSession(sessionId);
 
     logger.debug('Found session, request is valid', {shop});
 
     return {sessionContext: session && {session, token: payload}, shop};
-  }
-
-  private async loadSession(sessionId: string): Promise<Session | undefined> {
-    const {config, logger} = this;
-
-    logger.debug('Loading session from storage', {sessionId});
-
-    return config.sessionStorage.loadSession(sessionId);
   }
 
   private redirectToBouncePage(url: URL): never {
@@ -284,6 +251,36 @@ export class AuthStrategy<
     // TODO Make sure this works on chrome without a tunnel (weird HTTPS redirect issue)
     // https://github.com/orgs/Shopify/projects/6899/views/1?pane=issue&itemId=28376650
     throw redirect(`${config.auth.patchSessionTokenPath}${url.search}`);
+  }
+
+  private createContext(
+    request: Request,
+    sessionContext: SessionContext,
+  ): AdminContext<Config, Resources> {
+    const {api, logger, config} = this;
+
+    const context:
+      | EmbeddedAdminContext<Config, Resources>
+      | NonEmbeddedAdminContext<Config, Resources> = {
+      admin: createAdminApiContext<Resources>(request, sessionContext.session, {
+        api,
+        logger,
+        config,
+      }),
+      billing: this.createBillingContext(request, sessionContext.session),
+      session: sessionContext.session,
+      cors: ensureCORSHeadersFactory({api, logger, config}, request),
+    };
+
+    if (config.isEmbeddedApp) {
+      return {
+        ...context,
+        sessionToken: sessionContext!.token!,
+        redirect: redirectFactory({api, config, logger}, request),
+      } as AdminContext<Config, Resources>;
+    } else {
+      return context as AdminContext<Config, Resources>;
+    }
   }
 
   private createBillingContext(
