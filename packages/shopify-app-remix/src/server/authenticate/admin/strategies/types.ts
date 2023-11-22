@@ -1,15 +1,17 @@
+import {JwtPayload} from '@shopify/shopify-api';
+
 import {SessionContext} from '../types';
 
+export interface SessionTokenContext {
+  shop: string;
+  sessionId: string;
+  payload?: JwtPayload;
+}
+
 export interface AuthorizationStrategy {
-  handleRoutes: (request: Request) => Promise<void>;
-  manageAccessToken: ({
-    sessionContext,
-    shop,
-    request,
-  }: {
-    sessionContext?: SessionContext;
-    shop: string;
-    request: Request;
-  }) => Promise<SessionContext>;
-  ensureInstalledOnShop: (request: Request) => Promise<void>;
+  respondToOAuthRequests: (request: Request) => Promise<void | never>;
+  authenticate: (
+    request: Request,
+    sessionToken: string,
+  ) => Promise<SessionContext | never>;
 }
