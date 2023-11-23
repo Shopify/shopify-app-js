@@ -7,7 +7,6 @@ import {
   Session,
   Shopify,
   ShopifyRestResources,
-  JwtPayload,
 } from '@shopify/shopify-api';
 import {redirect} from '@remix-run/server-runtime';
 
@@ -25,7 +24,7 @@ import {SessionContext} from '../types';
 import {AppConfig} from '../../../config-types';
 import {getSessionTokenHeader, validateSessionToken} from '../../helpers';
 
-import {AuthorizationStrategy} from './types';
+import {AuthorizationStrategy, SessionTokenContext} from './types';
 
 export class AuthCodeFlowStrategy<
   Resources extends ShopifyRestResources = ShopifyRestResources,
@@ -81,22 +80,18 @@ export class AuthCodeFlowStrategy<
       sessionToken,
     );
 
-    if (!sessionId) {
-      logger.debug('Session id not found in cookies, redirecting to OAuth', {
-        shop,
-      });
-      throw await beginAuth({api, config, logger}, request, false, shop);
-    }
-
     logger.debug('Loading session from storage', {sessionId});
 
     const session = await config.sessionStorage.loadSession(sessionId);
 
-    if (!session || !session.isActive(config.scopes)) {
-      const debugMessage = session
-        ? 'Found a session, but it has expired, redirecting to OAuth'
-        : 'No session found, redirecting to OAuth';
-      logger.debug(debugMessage, {shop});
+    if (!session) {
+      logger.debug('No session found, redirecting to OAuth', {shop});
+      await redirectToAuthPage({config, logger, api}, request, shop);
+    } else if (!session.isActive(config.scopes)) {
+      logger.debug(
+        'Found a session, but it has expired, redirecting to OAuth',
+        {shop},
+      );
       await redirectToAuthPage({config, logger, api}, request, shop);
     }
 
@@ -175,33 +170,44 @@ export class AuthCodeFlowStrategy<
     }
   }
 
-  private async getSessionTokenContext(request: Request, sessionToken: string) {
+  private async getSessionTokenContext(
+    request: Request,
+    sessionToken: string,
+  ): Promise<SessionTokenContext> {
     const {api, config, logger} = this;
 
-    let shop: string;
-    let payload: JwtPayload | undefined;
-    let sessionId: string | undefined;
-
     if (config.isEmbeddedApp) {
-      payload = await validateSessionToken({config, logger, api}, sessionToken);
+      const payload = await validateSessionToken(
+        {config, logger, api},
+        sessionToken,
+      );
       const dest = new URL(payload.dest);
-      shop = dest.hostname;
+      const shop = dest.hostname;
 
       logger.debug('Session token is present, validating session', {shop});
-      sessionId = config.useOnlineTokens
+      const sessionId = config.useOnlineTokens
         ? api.session.getJwtSessionId(shop, payload.sub)
         : api.session.getOfflineId(shop);
-    } else {
-      const url = new URL(request.url);
-      shop = url.searchParams.get('shop')!;
 
-      sessionId = await api.session.getCurrentId({
-        isOnline: config.useOnlineTokens,
-        rawRequest: request,
-      });
+      return {shop, payload, sessionId};
     }
 
-    return {shop, payload, sessionId};
+    const url = new URL(request.url);
+    const shop = url.searchParams.get('shop')!;
+
+    const sessionId = await api.session.getCurrentId({
+      isOnline: config.useOnlineTokens,
+      rawRequest: request,
+    });
+
+    if (!sessionId) {
+      logger.debug('Session id not found in cookies, redirecting to OAuth', {
+        shop,
+      });
+      throw await beginAuth({api, config, logger}, request, false, shop);
+    }
+
+    return {shop, sessionId, payload: undefined};
   }
 
   private async handleAuthBeginRequest(

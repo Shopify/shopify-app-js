@@ -52,8 +52,8 @@ export class AuthStrategy<
   public async authenticateAdmin(
     request: Request,
   ): Promise<AdminContext<Config, Resources>> {
-    const {config, logger} = this;
-    const params = {api: this.api, logger, config};
+    const {config, logger, api} = this;
+    const params = {api, logger, config};
 
     try {
       respondToBotRequest(params, request);

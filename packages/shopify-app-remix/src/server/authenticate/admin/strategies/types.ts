@@ -4,8 +4,8 @@ import {SessionContext} from '../types';
 
 export interface SessionTokenContext {
   shop: string;
+  sessionId: string;
   payload?: JwtPayload;
-  sessionId?: string;
 }
 
 export interface AuthorizationStrategy {
