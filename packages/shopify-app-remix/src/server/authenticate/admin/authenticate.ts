@@ -1,7 +1,7 @@
-import {Session, Shopify, ShopifyRestResources} from '@shopify/shopify-api';
+import {ShopifyRestResources} from '@shopify/shopify-api';
 
 import type {BasicParams} from '../../types';
-import type {AppConfig, AppConfigArg} from '../../config-types';
+import type {AppConfigArg} from '../../config-types';
 import {
   getSessionTokenHeader,
   ensureCORSHeadersFactory,
@@ -10,7 +10,6 @@ import {
   respondToOptionsRequest,
 } from '../helpers';
 
-import type {BillingContext} from './billing/types';
 import {
   cancelBillingFactory,
   requestBillingFactory,
@@ -18,6 +17,7 @@ import {
 } from './billing';
 import type {
   AdminContext,
+  AuthenticateAdmin,
   EmbeddedAdminContext,
   NonEmbeddedAdminContext,
   SessionContext,
@@ -33,34 +33,76 @@ interface AuthStrategyParams extends BasicParams {
   strategy: AuthorizationStrategy;
 }
 
-export class AuthStrategy<
-  Config extends AppConfigArg,
+export function authStrategyFactory<
+  ConfigArg extends AppConfigArg,
   Resources extends ShopifyRestResources = ShopifyRestResources,
-> {
-  protected strategy: AuthorizationStrategy;
-  protected api: Shopify;
-  protected config: AppConfig;
-  protected logger: Shopify['logger'];
+>({
+  strategy,
+  ...params
+}: AuthStrategyParams): AuthenticateAdmin<ConfigArg, Resources> {
+  const {api, logger, config} = params;
 
-  public constructor({strategy, api, config, logger}: AuthStrategyParams) {
-    this.api = api;
-    this.config = config;
-    this.logger = logger;
-    this.strategy = strategy;
+  async function respondToBouncePageRequest(request: Request) {
+    const url = new URL(request.url);
+
+    if (url.pathname === config.auth.patchSessionTokenPath) {
+      logger.debug('Rendering bounce page');
+      throw renderAppBridge({config, logger, api}, request);
+    }
   }
 
-  public async authenticateAdmin(
-    request: Request,
-  ): Promise<AdminContext<Config, Resources>> {
-    const {config, logger, api} = this;
-    const params = {api, logger, config};
+  async function respondToExitIframeRequest(request: Request) {
+    const url = new URL(request.url);
 
+    if (url.pathname === config.auth.exitIframePath) {
+      const destination = url.searchParams.get('exitIframe')!;
+
+      logger.debug('Rendering exit iframe page', {destination});
+      throw renderAppBridge({config, logger, api}, request, {url: destination});
+    }
+  }
+
+  function createContext(
+    request: Request,
+    sessionContext: SessionContext,
+  ): AdminContext<ConfigArg, Resources> {
+    const {session} = sessionContext;
+
+    const context:
+      | EmbeddedAdminContext<ConfigArg, Resources>
+      | NonEmbeddedAdminContext<ConfigArg, Resources> = {
+      admin: createAdminApiContext<Resources>(request, sessionContext.session, {
+        api,
+        logger,
+        config,
+      }),
+      billing: {
+        require: requireBillingFactory({api, logger, config}, request, session),
+        request: requestBillingFactory({api, logger, config}, request, session),
+        cancel: cancelBillingFactory({api, logger, config}, request, session),
+      },
+      session: sessionContext.session,
+      cors: ensureCORSHeadersFactory({api, logger, config}, request),
+    };
+
+    if (config.isEmbeddedApp) {
+      return {
+        ...context,
+        sessionToken: sessionContext!.token!,
+        redirect: redirectFactory({api, config, logger}, request),
+      } as AdminContext<ConfigArg, Resources>;
+    } else {
+      return context as AdminContext<ConfigArg, Resources>;
+    }
+  }
+
+  return async function authenticateAdmin(request: Request) {
     try {
       respondToBotRequest(params, request);
       respondToOptionsRequest(params, request);
-      await this.respondToBouncePageRequest(params, request);
-      await this.respondToExitIframeRequest(params, request);
-      await this.strategy.respondToOAuthRequests(request);
+      await respondToBouncePageRequest(request);
+      await respondToExitIframeRequest(request);
+      await strategy.respondToOAuthRequests(request);
 
       logger.info('Authenticating admin request');
 
@@ -75,17 +117,14 @@ export class AuthStrategy<
         },
       });
 
-      const sessionContext = await this.strategy.authenticate(
-        request,
-        sessionToken,
-      );
+      const sessionContext = await strategy.authenticate(request, sessionToken);
 
       logger.debug('Request is valid, loaded session from session token', {
         shop: sessionContext.session.shop,
         isOnline: sessionContext.session.isOnline,
       });
 
-      return this.createContext(request, sessionContext);
+      return createContext(request, sessionContext);
     } catch (errorOrResponse) {
       if (errorOrResponse instanceof Response) {
         ensureCORSHeadersFactory(params, request)(errorOrResponse);
@@ -93,76 +132,5 @@ export class AuthStrategy<
 
       throw errorOrResponse;
     }
-  }
-
-  private async respondToBouncePageRequest(
-    params: BasicParams,
-    request: Request,
-  ) {
-    const {config, logger, api} = params;
-    const url = new URL(request.url);
-
-    if (url.pathname === config.auth.patchSessionTokenPath) {
-      logger.debug('Rendering bounce page');
-      throw renderAppBridge({config, logger, api}, request);
-    }
-  }
-
-  private async respondToExitIframeRequest(
-    params: BasicParams,
-    request: Request,
-  ) {
-    const {config, logger, api} = params;
-    const url = new URL(request.url);
-
-    if (url.pathname === config.auth.exitIframePath) {
-      const destination = url.searchParams.get('exitIframe')!;
-
-      logger.debug('Rendering exit iframe page', {destination});
-      throw renderAppBridge({config, logger, api}, request, {url: destination});
-    }
-  }
-
-  private createContext(
-    request: Request,
-    sessionContext: SessionContext,
-  ): AdminContext<Config, Resources> {
-    const {api, logger, config} = this;
-
-    const context:
-      | EmbeddedAdminContext<Config, Resources>
-      | NonEmbeddedAdminContext<Config, Resources> = {
-      admin: createAdminApiContext<Resources>(request, sessionContext.session, {
-        api,
-        logger,
-        config,
-      }),
-      billing: this.createBillingContext(request, sessionContext.session),
-      session: sessionContext.session,
-      cors: ensureCORSHeadersFactory({api, logger, config}, request),
-    };
-
-    if (config.isEmbeddedApp) {
-      return {
-        ...context,
-        sessionToken: sessionContext!.token!,
-        redirect: redirectFactory({api, config, logger}, request),
-      } as AdminContext<Config, Resources>;
-    } else {
-      return context as AdminContext<Config, Resources>;
-    }
-  }
-
-  private createBillingContext(
-    request: Request,
-    session: Session,
-  ): BillingContext<Config> {
-    const {api, logger, config} = this;
-
-    return {
-      require: requireBillingFactory({api, logger, config}, request, session),
-      request: requestBillingFactory({api, logger, config}, request, session),
-      cancel: cancelBillingFactory({api, logger, config}, request, session),
-    };
-  }
+  };
 }
