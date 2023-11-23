@@ -2,7 +2,7 @@ import type {BasicParams} from '../../../types';
 import {
   ensureCORSHeadersFactory,
   getSessionTokenHeader,
-  rejectBotRequest,
+  respondToBotRequest,
   respondToOptionsRequest,
   validateSessionToken,
 } from '../../helpers';
@@ -20,7 +20,7 @@ export function authenticateCheckoutFactory(
 
     const corsHeaders = options.corsHeaders ?? [];
 
-    rejectBotRequest(params, request);
+    respondToBotRequest(params, request);
     respondToOptionsRequest(params, request, corsHeaders);
 
     const sessionTokenHeader = getSessionTokenHeader(request);
