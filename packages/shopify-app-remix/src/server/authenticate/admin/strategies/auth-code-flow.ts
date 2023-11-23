@@ -216,9 +216,7 @@ export class AuthCodeFlowStrategy<
   ): Promise<never> {
     const {api, config, logger} = this;
 
-    logger.info('Handling OAuth begin request');
-
-    logger.debug('OAuth request contained valid shop', {shop});
+    logger.info('Handling OAuth begin request', {shop});
 
     // If we're loading from an iframe, we need to break out of it
     if (
