@@ -60,7 +60,7 @@ export interface BillingContext<Config extends AppConfigArg> {
    *
    * @example
    * <caption>Requesting billing right away.</caption>
-   * <description>Call `billing.request` in the `onFailure` callback to immediately request payment.</description>
+   * <description>Call `billing.request` in the `onFailure` callback to immediately redirect to the Shopify page to request payment.</description>
    * ```ts
    * // /app/routes/**\/*.ts
    * import { LoaderFunctionArgs } from "@remix-run/node";
@@ -105,7 +105,7 @@ export interface BillingContext<Config extends AppConfigArg> {
    *
    * @example
    * <caption>Using a plan selection page.</caption>
-   * <description>Redirect to a different page in the `onFailure` callback, where the merchant can select a billing plan.</description>
+   * <description> When the app has multiple plans, create a page in your App that allows the merchant to select a plan. If a merchant does not have the required plan you can redirect them to page in your app to select one.</description>
    * ```ts
    * // /app/routes/**\/*.ts
    * import { LoaderFunctionArgs, redirect } from "@remix-run/node";
