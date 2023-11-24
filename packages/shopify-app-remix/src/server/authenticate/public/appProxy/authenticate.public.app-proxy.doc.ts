@@ -3,7 +3,7 @@ import {ReferenceEntityTemplateSchema} from '@shopify/generate-docs';
 const data: ReferenceEntityTemplateSchema = {
   name: 'App proxy',
   description:
-    'The `authenticate.public.appProxy` function validates app proxy requests made by Shopify, and returns a context to enable querying Shopify APIs.',
+    '[App proxies](/docs/apps/online-store/app-proxies) take requests to Shopify links, and redirect them to external links. The `authenticate.public.appProxy` function validates requests made to app proxies, and returns a context to enable querying Shopify APIs.',
   category: 'Authenticate',
   subCategory: 'Public',
   type: 'object',
@@ -11,7 +11,8 @@ const data: ReferenceEntityTemplateSchema = {
   definitions: [
     {
       title: 'authenticate.public.appProxy',
-      description: 'Authenticates requests coming from Shopify app proxies.',
+      description:
+        'Authenticates requests coming to the app from Shopify app proxies.',
       type: 'AuthenticateAppProxy',
     },
   ],
