@@ -1318,7 +1318,7 @@
                     "description": "Use the `liquid` helper to render a `Response` with Liquid content.",
                     "tabs": [
                       {
-                        "code": "import {authenticate} from \"~/shopify.server\"\n\nexport async function loader({ request }) {\n  const {liquid} = authenticate.public.appProxy(request);\n\n  return liquid(\"Hello {{shop.name}}\")\n}",
+                        "code": "import {authenticate} from \"~/shopify.server\"\n\nexport async function loader({ request }) {\n  const {liquid} = await authenticate.public.appProxy(request);\n\n  return liquid(\"Hello {{shop.name}}\")\n}",
                         "title": "app/routes/**\\/.ts"
                       }
                     ]
@@ -1445,7 +1445,7 @@
                     "description": "Use the `liquid` helper to render a `Response` with Liquid content.",
                     "tabs": [
                       {
-                        "code": "import {authenticate} from \"~/shopify.server\"\n\nexport async function loader({ request }) {\n  const {liquid} = authenticate.public.appProxy(request);\n\n  return liquid(\"Hello {{shop.name}}\")\n}",
+                        "code": "import {authenticate} from \"~/shopify.server\"\n\nexport async function loader({ request }) {\n  const {liquid} = await authenticate.public.appProxy(request);\n\n  return liquid(\"Hello {{shop.name}}\")\n}",
                         "title": "app/routes/**\\/.ts"
                       }
                     ]
@@ -1638,7 +1638,7 @@
                 "tabs": [
                   {
                     "title": "app/routes/**\\/.ts",
-                    "code": "import {authenticate} from \"~/shopify.server\"\n\nexport async function loader({ request }) {\n  const {liquid} = authenticate.public.appProxy(request);\n\n  return liquid(\"Hello {{shop.name}}\")\n}",
+                    "code": "import {authenticate} from \"~/shopify.server\"\n\nexport async function loader({ request }) {\n  const {liquid} = await authenticate.public.appProxy(request);\n\n  return liquid(\"Hello {{shop.name}}\")\n}",
                     "language": "typescript"
                   }
                 ]
@@ -2208,14 +2208,14 @@
               {
                 "filePath": "/server/types.ts",
                 "syntaxKind": "MethodSignature",
-                "name": "__@iterator@577",
+                "name": "__@iterator@579",
                 "value": "() => IterableIterator<JSONValue>",
                 "description": "Iterator"
               },
               {
                 "filePath": "/server/types.ts",
                 "syntaxKind": "MethodSignature",
-                "name": "__@unscopables@579",
+                "name": "__@unscopables@581",
                 "value": "() => { copyWithin: boolean; entries: boolean; fill: boolean; find: boolean; findIndex: boolean; keys: boolean; values: boolean; }",
                 "description": "Returns an object whose properties have the value 'true'\r\nwhen they will be absent when used in a 'with' statement."
               },
@@ -4735,7 +4735,7 @@
                     "description": "Use the `liquid` helper to render a `Response` with Liquid content.",
                     "tabs": [
                       {
-                        "code": "import {authenticate} from \"~/shopify.server\"\n\nexport async function loader({ request }) {\n  const {liquid} = authenticate.public.appProxy(request);\n\n  return liquid(\"Hello {{shop.name}}\")\n}",
+                        "code": "import {authenticate} from \"~/shopify.server\"\n\nexport async function loader({ request }) {\n  const {liquid} = await authenticate.public.appProxy(request);\n\n  return liquid(\"Hello {{shop.name}}\")\n}",
                         "title": "app/routes/**\\/.ts"
                       }
                     ]
@@ -4862,7 +4862,7 @@
                     "description": "Use the `liquid` helper to render a `Response` with Liquid content.",
                     "tabs": [
                       {
-                        "code": "import {authenticate} from \"~/shopify.server\"\n\nexport async function loader({ request }) {\n  const {liquid} = authenticate.public.appProxy(request);\n\n  return liquid(\"Hello {{shop.name}}\")\n}",
+                        "code": "import {authenticate} from \"~/shopify.server\"\n\nexport async function loader({ request }) {\n  const {liquid} = await authenticate.public.appProxy(request);\n\n  return liquid(\"Hello {{shop.name}}\")\n}",
                         "title": "app/routes/**\\/.ts"
                       }
                     ]
@@ -5302,14 +5302,14 @@
               {
                 "filePath": "/server/types.ts",
                 "syntaxKind": "MethodSignature",
-                "name": "__@iterator@577",
+                "name": "__@iterator@579",
                 "value": "() => IterableIterator<JSONValue>",
                 "description": "Iterator"
               },
               {
                 "filePath": "/server/types.ts",
                 "syntaxKind": "MethodSignature",
-                "name": "__@unscopables@579",
+                "name": "__@unscopables@581",
                 "value": "() => { copyWithin: boolean; entries: boolean; fill: boolean; find: boolean; findIndex: boolean; keys: boolean; values: boolean; }",
                 "description": "Returns an object whose properties have the value 'true'\r\nwhen they will be absent when used in a 'with' statement."
               },
