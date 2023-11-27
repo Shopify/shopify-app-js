@@ -1,6 +1,6 @@
 import {SESSION_COOKIE_NAME, Session} from '@shopify/shopify-api';
 
-import {shopifyApp} from '../../../../..';
+import {shopifyApp} from '../../../../../..';
 import {
   APP_URL,
   BASE64_HOST,
@@ -12,9 +12,9 @@ import {
   setUpValidSession,
   testConfig,
   signRequestCookie,
-} from '../../../../../__test-helpers';
+} from '../../../../../../__test-helpers';
 
-describe('manageAccessToken', () => {
+describe('authenticate', () => {
   describe('errors', () => {
     it('redirects to exit-iframe if app is embedded and the session is no longer valid for the id_token when embedded', async () => {
       // GIVEN

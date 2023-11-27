@@ -1,10 +1,8 @@
-import {JwtPayload} from '@shopify/shopify-api';
-
-import {SessionContext} from '../types';
+import {JwtPayload, Session} from '@shopify/shopify-api';
 
 export interface SessionTokenContext {
   shop: string;
-  sessionId: string;
+  sessionId?: string;
   payload?: JwtPayload;
 }
 
@@ -12,6 +10,7 @@ export interface AuthorizationStrategy {
   respondToOAuthRequests: (request: Request) => Promise<void | never>;
   authenticate: (
     request: Request,
-    sessionToken: string,
-  ) => Promise<SessionContext | never>;
+    session: Session | undefined,
+    shop: string,
+  ) => Promise<Session | never>;
 }

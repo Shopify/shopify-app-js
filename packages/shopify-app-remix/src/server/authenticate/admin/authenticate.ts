@@ -1,4 +1,4 @@
-import {ShopifyRestResources} from '@shopify/shopify-api';
+import {JwtPayload, Session, ShopifyRestResources} from '@shopify/shopify-api';
 
 import type {BasicParams} from '../../types';
 import type {AppConfigArg} from '../../config-types';
@@ -8,6 +8,7 @@ import {
   getSessionTokenFromUrlParam,
   respondToBotRequest,
   respondToOptionsRequest,
+  validateSessionToken,
 } from '../helpers';
 
 import {
@@ -20,14 +21,16 @@ import type {
   AuthenticateAdmin,
   EmbeddedAdminContext,
   NonEmbeddedAdminContext,
-  SessionContext,
 } from './types';
 import {
   createAdminApiContext,
+  ensureAppIsEmbeddedIfRequired,
+  ensureSessionTokenSearchParamIfRequired,
   redirectFactory,
   renderAppBridge,
+  validateShopAndHostParams,
 } from './helpers';
-import {AuthorizationStrategy} from './strategies/types';
+import {AuthorizationStrategy, SessionTokenContext} from './strategies/types';
 
 interface AuthStrategyParams extends BasicParams {
   strategy: AuthorizationStrategy;
@@ -64,32 +67,31 @@ export function authStrategyFactory<
 
   function createContext(
     request: Request,
-    sessionContext: SessionContext,
+    session: Session,
+    sessionToken?: JwtPayload,
   ): AdminContext<ConfigArg, Resources> {
-    const {session} = sessionContext;
-
     const context:
       | EmbeddedAdminContext<ConfigArg, Resources>
       | NonEmbeddedAdminContext<ConfigArg, Resources> = {
-      admin: createAdminApiContext<Resources>(request, sessionContext.session, {
+      admin: createAdminApiContext<Resources>(request, session, {
         api,
         logger,
         config,
       }),
       billing: {
-        require: requireBillingFactory({api, logger, config}, request, session),
-        request: requestBillingFactory({api, logger, config}, request, session),
-        cancel: cancelBillingFactory({api, logger, config}, request, session),
+        require: requireBillingFactory(params, request, session),
+        request: requestBillingFactory(params, request, session),
+        cancel: cancelBillingFactory(params, request, session),
       },
-      session: sessionContext.session,
-      cors: ensureCORSHeadersFactory({api, logger, config}, request),
+      session,
+      cors: ensureCORSHeadersFactory(params, request),
     };
 
     if (config.isEmbeddedApp) {
       return {
         ...context,
-        sessionToken: sessionContext!.token!,
-        redirect: redirectFactory({api, config, logger}, request),
+        sessionToken,
+        redirect: redirectFactory(params, request),
       } as AdminContext<ConfigArg, Resources>;
     } else {
       return context as AdminContext<ConfigArg, Resources>;
@@ -104,27 +106,38 @@ export function authStrategyFactory<
       await respondToExitIframeRequest(request);
       await strategy.respondToOAuthRequests(request);
 
+      // If this is a valid request, but it doesn't have a session token header, this is a document request. We need to
+      // ensure we're embedded if needed and we have the information needed to load the session.
+      if (!getSessionTokenHeader(request)) {
+        validateShopAndHostParams(params, request);
+        await ensureAppIsEmbeddedIfRequired(params, request);
+        await ensureSessionTokenSearchParamIfRequired(params, request);
+      }
+
       logger.info('Authenticating admin request');
 
-      const headerSessionToken = getSessionTokenHeader(request);
-      const searchParamSessionToken = getSessionTokenFromUrlParam(request);
-      const sessionToken = (headerSessionToken || searchParamSessionToken)!;
+      const {payload, shop, sessionId} = await getSessionTokenContext(
+        params,
+        request,
+      );
 
-      logger.debug('Attempting to authenticate session token', {
-        sessionToken: {
-          header: headerSessionToken,
-          search: searchParamSessionToken,
-        },
-      });
+      logger.debug('Loading session from storage', {sessionId});
+      const existingSession = sessionId
+        ? await config.sessionStorage.loadSession(sessionId)
+        : undefined;
 
-      const sessionContext = await strategy.authenticate(request, sessionToken);
+      const session = await strategy.authenticate(
+        request,
+        existingSession,
+        shop,
+      );
 
       logger.debug('Request is valid, loaded session from session token', {
-        shop: sessionContext.session.shop,
-        isOnline: sessionContext.session.isOnline,
+        shop: session.shop,
+        isOnline: session.isOnline,
       });
 
-      return createContext(request, sessionContext);
+      return createContext(request, session, payload);
     } catch (errorOrResponse) {
       if (errorOrResponse instanceof Response) {
         ensureCORSHeadersFactory(params, request)(errorOrResponse);
@@ -133,4 +146,48 @@ export function authStrategyFactory<
       throw errorOrResponse;
     }
   };
+}
+
+async function getSessionTokenContext(
+  params: BasicParams,
+  request: Request,
+): Promise<SessionTokenContext> {
+  const {api, config, logger} = params;
+
+  const headerSessionToken = getSessionTokenHeader(request);
+  const searchParamSessionToken = getSessionTokenFromUrlParam(request);
+  const sessionToken = (headerSessionToken || searchParamSessionToken)!;
+
+  logger.debug('Attempting to authenticate session token', {
+    sessionToken: {
+      header: headerSessionToken,
+      search: searchParamSessionToken,
+    },
+  });
+
+  if (config.isEmbeddedApp) {
+    const payload = await validateSessionToken(
+      {config, logger, api},
+      sessionToken,
+    );
+    const dest = new URL(payload.dest);
+    const shop = dest.hostname;
+
+    logger.debug('Session token is valid', {shop, payload});
+    const sessionId = config.useOnlineTokens
+      ? api.session.getJwtSessionId(shop, payload.sub)
+      : api.session.getOfflineId(shop);
+
+    return {shop, payload, sessionId};
+  }
+
+  const url = new URL(request.url);
+  const shop = url.searchParams.get('shop')!;
+
+  const sessionId = await api.session.getCurrentId({
+    isOnline: config.useOnlineTokens,
+    rawRequest: request,
+  });
+
+  return {shop, sessionId, payload: undefined};
 }

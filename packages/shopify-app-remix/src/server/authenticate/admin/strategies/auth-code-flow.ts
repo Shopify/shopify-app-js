@@ -8,23 +8,20 @@ import {
   Shopify,
   ShopifyRestResources,
 } from '@shopify/shopify-api';
-import {redirect} from '@remix-run/server-runtime';
 
 import type {BasicParams} from '../../../types';
 import {
   beginAuth,
-  ensureAppIsEmbeddedIfRequired,
-  ensureSessionTokenSearchParamIfRequired,
   redirectToAuthPage,
   redirectToShopifyOrAppRoot,
   redirectWithExitIframe,
   triggerAfterAuthHook,
+  validateShopAndHostParams,
 } from '../helpers';
-import {SessionContext} from '../types';
 import {AppConfig} from '../../../config-types';
-import {getSessionTokenHeader, validateSessionToken} from '../../helpers';
+import {getSessionTokenHeader} from '../../helpers';
 
-import {AuthorizationStrategy, SessionTokenContext} from './types';
+import {AuthorizationStrategy} from './types';
 
 export class AuthCodeFlowStrategy<
   Resources extends ShopifyRestResources = ShopifyRestResources,
@@ -41,7 +38,7 @@ export class AuthCodeFlowStrategy<
   }
 
   public async respondToOAuthRequests(request: Request): Promise<void | never> {
-    const {api, logger, config} = this;
+    const {api, config} = this;
 
     const url = new URL(request.url);
     const isAuthRequest = url.pathname === config.auth.path;
@@ -58,31 +55,20 @@ export class AuthCodeFlowStrategy<
       }
     }
 
-    // If this is a valid request, but it doesn't have a session token header, this is a document request. We need to
-    // ensure we're embedded if needed and we have the information needed to load the session.
     if (!getSessionTokenHeader(request)) {
-      const params = {api, logger, config};
-
+      // This is a document request that doesn't contain a session token. We check if the app is installed.
+      // If the app isn't installed, we initiate the OAuth auth code flow.
+      // Requests with a header can only happen after the app is installed.
       await this.ensureInstalledOnShop(request);
-      await ensureAppIsEmbeddedIfRequired(params, request);
-      await ensureSessionTokenSearchParamIfRequired(params, request);
     }
   }
 
   public async authenticate(
     request: Request,
-    sessionToken: string,
-  ): Promise<SessionContext | never> {
+    session: Session | undefined,
+    shop: string,
+  ): Promise<Session | never> {
     const {api, config, logger} = this;
-
-    const {shop, payload, sessionId} = await this.getSessionTokenContext(
-      request,
-      sessionToken,
-    );
-
-    logger.debug('Loading session from storage', {sessionId});
-
-    const session = await config.sessionStorage.loadSession(sessionId);
 
     if (!session) {
       logger.debug('No session found, redirecting to OAuth', {shop});
@@ -95,13 +81,15 @@ export class AuthCodeFlowStrategy<
       await redirectToAuthPage({config, logger, api}, request, shop);
     }
 
-    return {session: session!, token: payload};
+    logger.debug('Found a valid session', {shop});
+
+    return session!;
   }
 
   private async ensureInstalledOnShop(request: Request) {
     const {api, config, logger} = this;
 
-    this.validateUrlParams(request);
+    validateShopAndHostParams({api, config, logger}, request);
 
     const url = new URL(request.url);
     let shop = url.searchParams.get('shop');
@@ -145,69 +133,6 @@ export class AuthCodeFlowStrategy<
         await this.handleInvalidOfflineSession(error, request, shop);
       }
     }
-  }
-
-  private validateUrlParams(request: Request) {
-    const {api, config, logger} = this;
-
-    if (config.isEmbeddedApp) {
-      const url = new URL(request.url);
-      const shop = api.utils.sanitizeShop(url.searchParams.get('shop')!);
-      if (!shop) {
-        logger.debug('Missing or invalid shop, redirecting to login path', {
-          shop,
-        });
-        throw redirect(config.auth.loginPath);
-      }
-
-      const host = api.utils.sanitizeHost(url.searchParams.get('host')!);
-      if (!host) {
-        logger.debug('Invalid host, redirecting to login path', {
-          host: url.searchParams.get('host'),
-        });
-        throw redirect(config.auth.loginPath);
-      }
-    }
-  }
-
-  private async getSessionTokenContext(
-    request: Request,
-    sessionToken: string,
-  ): Promise<SessionTokenContext> {
-    const {api, config, logger} = this;
-
-    if (config.isEmbeddedApp) {
-      const payload = await validateSessionToken(
-        {config, logger, api},
-        sessionToken,
-      );
-      const dest = new URL(payload.dest);
-      const shop = dest.hostname;
-
-      logger.debug('Session token is present, validating session', {shop});
-      const sessionId = config.useOnlineTokens
-        ? api.session.getJwtSessionId(shop, payload.sub)
-        : api.session.getOfflineId(shop);
-
-      return {shop, payload, sessionId};
-    }
-
-    const url = new URL(request.url);
-    const shop = url.searchParams.get('shop')!;
-
-    const sessionId = await api.session.getCurrentId({
-      isOnline: config.useOnlineTokens,
-      rawRequest: request,
-    });
-
-    if (!sessionId) {
-      logger.debug('Session id not found in cookies, redirecting to OAuth', {
-        shop,
-      });
-      throw await beginAuth({api, config, logger}, request, false, shop);
-    }
-
-    return {shop, sessionId, payload: undefined};
   }
 
   private async handleAuthBeginRequest(
@@ -271,29 +196,24 @@ export class AuthCodeFlowStrategy<
   private async getOfflineSession(
     request: Request,
   ): Promise<Session | undefined> {
-    const {api, config} = this;
-    const url = new URL(request.url);
-
-    const shop = url.searchParams.get('shop');
-
-    const offlineId = shop
-      ? api.session.getOfflineId(shop)
-      : await api.session.getCurrentId({isOnline: false, rawRequest: request});
-
-    return config.sessionStorage.loadSession(offlineId!);
+    const offlineId = await this.getOfflineSessionId(request);
+    return this.config.sessionStorage.loadSession(offlineId!);
   }
 
   private async hasValidOfflineId(request: Request) {
+    return Boolean(await this.getOfflineSessionId(request));
+  }
+
+  private async getOfflineSessionId(
+    request: Request,
+  ): Promise<string | undefined> {
     const {api} = this;
     const url = new URL(request.url);
-
     const shop = url.searchParams.get('shop');
 
-    const offlineId = shop
+    return shop
       ? api.session.getOfflineId(shop)
-      : await api.session.getCurrentId({isOnline: false, rawRequest: request});
-
-    return Boolean(offlineId);
+      : api.session.getCurrentId({isOnline: false, rawRequest: request});
   }
 
   private async testSession(session: Session): Promise<void> {
