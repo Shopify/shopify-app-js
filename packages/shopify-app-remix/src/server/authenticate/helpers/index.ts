@@ -5,3 +5,4 @@ export * from './validate-session-token';
 export * from './get-session-token-header';
 export * from './reject-bot-request';
 export * from './respond-to-options-request';
+export * from './respond-to-invalid-session-token';
