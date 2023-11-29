@@ -32,7 +32,7 @@ const data: LandingTemplateSchema = {
       anchorLink: 'endpoints',
       title: 'Set up your endpoints',
       sectionContent:
-        'Create a route in your app to handle incoming webhook requests.' +
+        'Create a route in your app to handle incoming webhook requests for each `callbackUrl` you set in your configuration.' +
         'Legitimate webhook requests are always `POST` requests signed by Shopify, so you must authenticate them before taking any action. To do this you must set up an `action` that uses the `authenticate.webhook` function to authenticate the request.' +
         '\n\nPlease keep in mind that webhook endpoints should respond as quickly as possible. If you need to run a long-running job, then consider using background tasks.' +
         '\n\n> Caution: Webhook endpoints **must** respond with an `HTTP 200` code, or Shopify will retry.',
