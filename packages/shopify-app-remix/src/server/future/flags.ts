@@ -14,6 +14,13 @@ export interface FutureFlags {
    * @default false
    */
   v3_authenticatePublic?: boolean;
+
+  /**
+   * TODO
+   *
+   * @default false
+   */
+  unstable_newEmbeddedAuthStrategy?: boolean;
 }
 
 export type FutureFlagOptions = FutureFlags | undefined;
