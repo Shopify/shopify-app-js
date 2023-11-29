@@ -30,6 +30,7 @@ import {unauthenticatedAdminContextFactory} from './unauthenticated/admin';
 import {authenticatePublicFactory} from './authenticate/public';
 import {unauthenticatedStorefrontContextFactory} from './unauthenticated/storefront';
 import {AuthCodeFlowStrategy} from './authenticate/admin/strategies/auth-code-flow';
+import {TokenExchangeStrategy} from './authenticate/admin/strategies/token-exchange';
 
 /**
  * Creates an object your app will use to interact with Shopify.
@@ -67,9 +68,13 @@ export function shopifyApp<
 
   const params: BasicParams = {api, config, logger};
   const oauth = new AuthCodeFlowStrategy(params);
+  const tokenExchange = new TokenExchangeStrategy(params);
   const authStrategy = authStrategyFactory<Config, Resources>({
     ...params,
-    strategy: oauth,
+    strategy:
+      config.future.unstable_tokenExchange && config.isEmbeddedApp
+        ? tokenExchange
+        : oauth,
   });
 
   const shopify:

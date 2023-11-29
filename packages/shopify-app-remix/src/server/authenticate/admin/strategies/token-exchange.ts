@@ -41,7 +41,7 @@ export class TokenExchangeStrategy<
 
     if (!sessionToken) throw new InvalidJwtError();
 
-    if (!session /* || session.isExpired() */) {
+    if (!session || session.isExpired()) {
       logger.info('Requesting offline access token');
       const {session: offlineSession} = await this.exchangeToken({
         request,
