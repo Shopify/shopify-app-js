@@ -21,7 +21,7 @@ import {
 import {AppConfig} from '../../../config-types';
 import {getSessionTokenHeader} from '../../helpers';
 
-import {AuthorizationStrategy} from './types';
+import {AuthorizationStrategy, SessionContext} from './types';
 
 export class AuthCodeFlowStrategy<
   Resources extends ShopifyRestResources = ShopifyRestResources,
@@ -65,10 +65,11 @@ export class AuthCodeFlowStrategy<
 
   public async authenticate(
     request: Request,
-    session: Session | undefined,
-    shop: string,
+    sessionContext: SessionContext,
   ): Promise<Session | never> {
     const {api, config, logger} = this;
+
+    const {shop, session} = sessionContext;
 
     if (!session) {
       logger.debug('No session found, redirecting to OAuth', {shop});
