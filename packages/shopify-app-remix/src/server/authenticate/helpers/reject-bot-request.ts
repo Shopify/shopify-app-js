@@ -2,7 +2,7 @@ import isbot from 'isbot';
 
 import type {BasicParams} from '../../types';
 
-export function rejectBotRequest(
+export function respondToBotRequest(
   {logger}: BasicParams,
   request: Request,
 ): void | never {
