@@ -197,8 +197,3 @@ export type AuthenticateAdmin<
   Config extends AppConfigArg,
   Resources extends ShopifyRestResources = ShopifyRestResources,
 > = (request: Request) => Promise<AdminContext<Config, Resources>>;
-
-export interface SessionContext {
-  session: Session;
-  token?: JwtPayload;
-}
