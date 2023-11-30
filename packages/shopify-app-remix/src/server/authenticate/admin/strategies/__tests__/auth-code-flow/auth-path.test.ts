@@ -1,17 +1,17 @@
-import {shopifyApp} from '../../../../../..';
+import {shopifyApp} from '../../../../..';
 import {
   APP_URL,
   TEST_SHOP,
   expectBeginAuthRedirect,
   expectExitIframeRedirect,
   getThrownResponse,
-  testConfig,
-} from '../../../../../../__test-helpers';
+  testConfigAuthCodeFlow,
+} from '../../../../../__test-helpers';
 
 describe('authorize.admin auth path', () => {
   test('throws an 400 Response if the shop param is missing', async () => {
     // GIVEN
-    const config = testConfig();
+    const config = testConfigAuthCodeFlow();
     const shopify = shopifyApp(config);
 
     // WHEN
@@ -27,7 +27,7 @@ describe('authorize.admin auth path', () => {
 
   test('throws an 400 Response if the shop param is invalid', async () => {
     // GIVEN
-    const config = testConfig();
+    const config = testConfigAuthCodeFlow();
     const shopify = shopifyApp(config);
 
     // WHEN
@@ -43,7 +43,7 @@ describe('authorize.admin auth path', () => {
 
   test('throws an 302 Response to begin auth', async () => {
     // GIVEN
-    const config = testConfig();
+    const config = testConfigAuthCodeFlow();
     const shopify = shopifyApp(config);
 
     // WHEN
@@ -59,7 +59,7 @@ describe('authorize.admin auth path', () => {
 
   test('redirects to exit-iframe when loading the auth path while in an iframe request', async () => {
     // GIVEN
-    const config = testConfig();
+    const config = testConfigAuthCodeFlow();
     const shopify = shopifyApp(config);
 
     // WHEN
