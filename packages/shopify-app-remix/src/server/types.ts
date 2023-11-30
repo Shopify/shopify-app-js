@@ -269,8 +269,8 @@ export interface ShopifyAppBase<Config extends AppConfigArg> {
    * Register webhook topics for a store using the given session. Most likely you want to use this in combination with the afterAuth hook.
    *
    * @example
-   * <caption>Registering webhooks.</caption>
-   * <description>Trigger the registration after a merchant installs your app using the `afterAuth` hook.</description>
+   * <caption>Registering webhooks after install</caption>
+   * <description>Trigger the registration to create the webhook subscriptions after a merchant installs your app using the `afterAuth` hook. Learn more about [subscribing to webhooks.](/docs/api/shopify-app-remix/v1/guide-webhooks)</description>
    * ```ts
    * import { DeliveryMethod, shopifyApp } from "@shopify/shopify-app-remix/server";
    *
