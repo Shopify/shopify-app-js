@@ -67,11 +67,18 @@ export class TokenExchangeStrategy<
         newSession = onlineSession;
       }
 
-      await triggerAfterAuthHook<Resources>(
-        {api, config, logger},
-        newSession,
-        request,
-      );
+      try {
+        await triggerAfterAuthHook<Resources>(
+          {api, config, logger},
+          newSession,
+          request,
+        );
+      } catch (error) {
+        throw new Response(undefined, {
+          status: 500,
+          statusText: 'Internal Server Error',
+        });
+      }
 
       return newSession;
     }
