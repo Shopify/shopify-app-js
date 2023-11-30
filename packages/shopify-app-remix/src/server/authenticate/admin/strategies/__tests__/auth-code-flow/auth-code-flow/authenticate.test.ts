@@ -10,7 +10,7 @@ import {
   getJwt,
   getThrownResponse,
   setUpValidSession,
-  testConfig,
+  testConfigAuthCodeFlow,
   signRequestCookie,
 } from '../../../../../../__test-helpers';
 
@@ -18,7 +18,9 @@ describe('authenticate', () => {
   describe('errors', () => {
     it('redirects to exit-iframe if app is embedded and the session is no longer valid for the id_token when embedded', async () => {
       // GIVEN
-      const shopify = shopifyApp(testConfig({scopes: ['otherTestScope']}));
+      const shopify = shopifyApp(
+        testConfigAuthCodeFlow({scopes: ['otherTestScope']}),
+      );
       await setUpValidSession(shopify.sessionStorage);
 
       // WHEN
@@ -37,8 +39,10 @@ describe('authenticate', () => {
     // manageAccessToken or ensureInstalledOnShop
     it('redirects to auth if there is no session cookie for non-embedded apps when at the top level', async () => {
       // GIVEN
-      const config = testConfig();
-      const shopify = shopifyApp(testConfig({isEmbeddedApp: false}));
+      const config = testConfigAuthCodeFlow();
+      const shopify = shopifyApp(
+        testConfigAuthCodeFlow({isEmbeddedApp: false}),
+      );
       await setUpValidSession(shopify.sessionStorage);
 
       // WHEN
@@ -57,7 +61,7 @@ describe('authenticate', () => {
 
     it('redirects to auth if the session is no longer valid for non-embedded apps when at the top level', async () => {
       // GIVEN
-      const config = testConfig({
+      const config = testConfigAuthCodeFlow({
         isEmbeddedApp: false,
         scopes: ['otherTestScope'],
       });
@@ -89,7 +93,9 @@ describe('authenticate', () => {
     (isOnline) => {
       it('returns the context if the session is valid and the app is embedded', async () => {
         // GIVEN
-        const shopify = shopifyApp(testConfig({useOnlineTokens: isOnline}));
+        const shopify = shopifyApp(
+          testConfigAuthCodeFlow({useOnlineTokens: isOnline}),
+        );
 
         let testSession: Session;
         testSession = await setUpValidSession(shopify.sessionStorage);
@@ -115,7 +121,9 @@ describe('authenticate', () => {
 
       it('returns the context if the session is valid and the app is not embedded', async () => {
         // GIVEN
-        const shopify = shopifyApp(testConfig({isEmbeddedApp: false}));
+        const shopify = shopifyApp(
+          testConfigAuthCodeFlow({isEmbeddedApp: false}),
+        );
 
         let testSession: Session;
         testSession = await setUpValidSession(shopify.sessionStorage);
@@ -148,7 +156,7 @@ describe('authenticate', () => {
   // manageAccessToken & ensureInstalledOnShop
   it('loads a session from the cookie from a request with no search params when not embedded', async () => {
     // GIVEN
-    const shopify = shopifyApp(testConfig({isEmbeddedApp: false}));
+    const shopify = shopifyApp(testConfigAuthCodeFlow({isEmbeddedApp: false}));
     const testSession = await setUpValidSession(shopify.sessionStorage);
 
     // WHEN
