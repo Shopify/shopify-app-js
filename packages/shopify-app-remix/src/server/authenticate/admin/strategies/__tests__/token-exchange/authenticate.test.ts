@@ -1,4 +1,4 @@
-import {SESSION_COOKIE_NAME, Session} from '@shopify/shopify-api';
+import {Session} from '@shopify/shopify-api';
 
 import {shopifyApp} from '../../../../..';
 import {
