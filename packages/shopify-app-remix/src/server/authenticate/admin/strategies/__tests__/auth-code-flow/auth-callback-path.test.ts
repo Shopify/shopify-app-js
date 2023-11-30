@@ -1,6 +1,6 @@
 import {HashFormat, createSHA256HMAC} from '@shopify/shopify-api/runtime';
 
-import {shopifyApp} from '../../../../../..';
+import {shopifyApp} from '../../../../..';
 import {
   BASE64_HOST,
   TEST_SHOP,
@@ -8,13 +8,14 @@ import {
   signRequestCookie,
   testConfig,
   mockExternalRequest,
-} from '../../../../../../__test-helpers';
+  testConfigAuthCodeFlow,
+} from '../../../../../__test-helpers';
 
 describe('authorize.admin auth callback path', () => {
   describe('errors', () => {
     test('throws an error if the shop param is missing', async () => {
       // GIVEN
-      const config = testConfig();
+      const config = testConfigAuthCodeFlow();
       const shopify = shopifyApp(config);
 
       // WHEN
@@ -30,7 +31,7 @@ describe('authorize.admin auth callback path', () => {
 
     test('throws an error if the shop param is not valid', async () => {
       // GIVEN
-      const config = testConfig();
+      const config = testConfigAuthCodeFlow();
       const shopify = shopifyApp(config);
 
       // WHEN
@@ -46,7 +47,7 @@ describe('authorize.admin auth callback path', () => {
 
     test('throws an 302 Response to begin auth if CookieNotFound error', async () => {
       // GIVEN
-      const config = testConfig();
+      const config = testConfigAuthCodeFlow();
       const shopify = shopifyApp(config);
 
       // WHEN
@@ -71,7 +72,7 @@ describe('authorize.admin auth callback path', () => {
 
     test('throws a 400 if there is no HMAC param', async () => {
       // GIVEN
-      const config = testConfig();
+      const config = testConfigAuthCodeFlow();
       const shopify = shopifyApp(config);
 
       // WHEN
@@ -98,7 +99,7 @@ describe('authorize.admin auth callback path', () => {
 
     test('throws a 400 if the HMAC param is invalid', async () => {
       // GIVEN
-      const config = testConfig();
+      const config = testConfigAuthCodeFlow();
       const shopify = shopifyApp(config);
 
       // WHEN
@@ -126,7 +127,7 @@ describe('authorize.admin auth callback path', () => {
 
     test('throws a 500 if any other errors are thrown', async () => {
       // GIVEN
-      const config = testConfig();
+      const config = testConfigAuthCodeFlow();
       const shopify = shopifyApp({
         ...config,
         hooks: {
@@ -151,7 +152,7 @@ describe('authorize.admin auth callback path', () => {
   describe('Success states', () => {
     test('Exchanges the code for a token and saves it to SessionStorage', async () => {
       // GIVEN
-      const config = testConfig();
+      const config = testConfigAuthCodeFlow();
       const shopify = shopifyApp(config);
 
       // WHEN
@@ -178,7 +179,7 @@ describe('authorize.admin auth callback path', () => {
 
     test('throws an 302 Response to begin auth if token was offline and useOnlineTokens is true', async () => {
       // GIVEN
-      const config = testConfig({useOnlineTokens: true});
+      const config = testConfigAuthCodeFlow({useOnlineTokens: true});
       const shopify = shopifyApp(config);
 
       // WHEN
@@ -203,7 +204,7 @@ describe('authorize.admin auth callback path', () => {
 
     test('Does not throw a 302 Response to begin auth if token was online', async () => {
       // GIVEN
-      const config = testConfig({useOnlineTokens: true});
+      const config = testConfigAuthCodeFlow({useOnlineTokens: true});
       const shopify = shopifyApp(config);
 
       // WHEN
@@ -221,7 +222,7 @@ describe('authorize.admin auth callback path', () => {
     test('Runs the afterAuth hooks passing', async () => {
       // GIVEN
       const afterAuthMock = jest.fn();
-      const config = testConfig({
+      const config = testConfigAuthCodeFlow({
         hooks: {
           afterAuth: afterAuthMock,
         },
@@ -241,7 +242,7 @@ describe('authorize.admin auth callback path', () => {
 
     test('throws a 302 response to the emebdded app URL if isEmbeddedApp is true', async () => {
       // GIVEN
-      const config = testConfig();
+      const config = testConfigAuthCodeFlow();
       const shopify = shopifyApp(config);
 
       // WHEN
@@ -260,7 +261,7 @@ describe('authorize.admin auth callback path', () => {
 
     test('throws a 302 to / if embedded is not true', async () => {
       // GIVEN
-      const config = testConfig({
+      const config = testConfigAuthCodeFlow({
         isEmbeddedApp: false,
       });
       const shopify = shopifyApp(config);
