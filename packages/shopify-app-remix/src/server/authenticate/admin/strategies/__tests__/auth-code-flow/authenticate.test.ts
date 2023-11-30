@@ -1,6 +1,6 @@
 import {SESSION_COOKIE_NAME, Session} from '@shopify/shopify-api';
 
-import {shopifyApp} from '../../../../../..';
+import {shopifyApp} from '../../../../..';
 import {
   APP_URL,
   BASE64_HOST,
@@ -12,7 +12,7 @@ import {
   setUpValidSession,
   testConfigAuthCodeFlow,
   signRequestCookie,
-} from '../../../../../../__test-helpers';
+} from '../../../../../__test-helpers';
 
 describe('authenticate', () => {
   describe('errors', () => {

@@ -1,4 +1,4 @@
-import {shopifyApp} from '../../../../../..';
+import {shopifyApp} from '../../../../..';
 import {
   APP_URL,
   TEST_SHOP,
@@ -6,7 +6,7 @@ import {
   expectExitIframeRedirect,
   getThrownResponse,
   testConfigAuthCodeFlow,
-} from '../../../../../../__test-helpers';
+} from '../../../../../__test-helpers';
 
 describe('authorize.admin auth path', () => {
   test('throws an 400 Response if the shop param is missing', async () => {

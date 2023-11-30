@@ -1,6 +1,6 @@
 import {LogSeverity, SESSION_COOKIE_NAME} from '@shopify/shopify-api';
 
-import {shopifyApp} from '../../../../../..';
+import {shopifyApp} from '../../../../..';
 import {
   API_KEY,
   APP_URL,
@@ -16,7 +16,7 @@ import {
   testConfigAuthCodeFlow,
   signRequestCookie,
   mockExternalRequest,
-} from '../../../../../../__test-helpers';
+} from '../../../../../__test-helpers';
 
 describe('authorize.admin doc request path', () => {
   describe('errors', () => {

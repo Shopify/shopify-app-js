@@ -1,6 +1,6 @@
 import {HashFormat, createSHA256HMAC} from '@shopify/shopify-api/runtime';
 
-import {shopifyApp} from '../../../../../..';
+import {shopifyApp} from '../../../../..';
 import {
   BASE64_HOST,
   TEST_SHOP,
@@ -9,7 +9,7 @@ import {
   testConfig,
   mockExternalRequest,
   testConfigAuthCodeFlow,
-} from '../../../../../../__test-helpers';
+} from '../../../../../__test-helpers';
 
 describe('authorize.admin auth callback path', () => {
   describe('errors', () => {
