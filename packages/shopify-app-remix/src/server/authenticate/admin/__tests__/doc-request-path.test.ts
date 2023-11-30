@@ -128,4 +128,24 @@ describe('authorize.admin doc request path', () => {
     // THEN
     expect(response.status).toBe(400);
   });
+
+  it("redirects to the embedded app URL if the app isn't embedded yet", async () => {
+    // GIVEN
+    const config = testConfig();
+    const shopify = shopifyApp(config);
+    await setUpValidSession(shopify.sessionStorage);
+
+    // WHEN
+    const response = await getThrownResponse(
+      shopify.authenticate.admin,
+      new Request(`${APP_URL}?shop=${TEST_SHOP}&host=${BASE64_HOST}`),
+    );
+
+    // THEN
+    const {hostname, pathname} = new URL(response.headers.get('location')!);
+
+    expect(response.status).toBe(302);
+    expect(hostname).toBe(SHOPIFY_HOST);
+    expect(pathname).toBe(`/apps/${API_KEY}`);
+  });
 });

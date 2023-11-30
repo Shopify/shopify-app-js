@@ -127,31 +127,6 @@ describe('authorize.admin doc request path', () => {
       );
     });
 
-    it("redirects to the embedded app URL if there is a valid session but the app isn't embedded yet", async () => {
-      // GIVEN
-      const config = testConfigAuthCodeFlow();
-      const shopify = shopifyApp(testConfigAuthCodeFlow());
-      await setUpValidSession(shopify.sessionStorage);
-
-      await mockExternalRequest({
-        request: new Request(GRAPHQL_URL, {method: 'POST'}),
-        response: new Response(undefined, {status: 200}),
-      });
-
-      // WHEN
-      const response = await getThrownResponse(
-        shopify.authenticate.admin,
-        new Request(`${APP_URL}?shop=${TEST_SHOP}&host=${BASE64_HOST}`),
-      );
-
-      // THEN
-      const {hostname, pathname} = new URL(response.headers.get('location')!);
-
-      expect(response.status).toBe(302);
-      expect(hostname).toBe(SHOPIFY_HOST);
-      expect(pathname).toBe(`/apps/${API_KEY}`);
-    });
-
     it('redirects to exit-iframe if app is embedded and there is no session for the id_token when embedded', async () => {
       // GIVEN
       const shopify = shopifyApp(testConfigAuthCodeFlow());
