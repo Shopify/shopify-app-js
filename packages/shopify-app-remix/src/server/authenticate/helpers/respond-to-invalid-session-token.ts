@@ -13,6 +13,7 @@ export function respondToInvalidSessionToken(
     return redirectToBouncePage({api, logger, config}, new URL(request.url));
   }
 
+  // eslint-disable-next-line no-warning-comments
   // TODO add header so app bridge retries with new session token
   throw new Response(undefined, {
     status: 401,
