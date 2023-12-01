@@ -23,6 +23,7 @@ export interface AppConfigArg<
     | 'isEmbeddedApp'
     | 'apiVersion'
     | 'isCustomStoreApp'
+    | 'future'
   > {
   /**
    * The URL your app is running on.
@@ -224,7 +225,7 @@ export interface AppConfigArg<
 }
 
 export interface AppConfig<Storage extends SessionStorage = SessionStorage>
-  extends ApiConfig {
+  extends Omit<ApiConfig, 'future'> {
   canUseLoginForm: boolean;
   appUrl: string;
   auth: AuthConfig;
