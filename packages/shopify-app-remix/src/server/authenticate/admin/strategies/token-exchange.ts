@@ -7,8 +7,7 @@ import {
   ShopifyRestResources,
 } from '@shopify/shopify-api';
 import {AppConfig, AppConfigArg} from 'src/server/config-types';
-import {BasicParams} from 'src/server/types';
-import {MockApiConfig} from 'src/server/shopify-app';
+import {BasicParams, MockApiConfig} from 'src/server/types';
 
 import {triggerAfterAuthHook} from '../helpers';
 import {respondToInvalidSessionToken} from '../../helpers';
