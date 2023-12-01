@@ -71,7 +71,7 @@ export function shopifyApp<
   const authStrategy = authStrategyFactory<Config, Resources>({
     ...params,
     strategy:
-      config.future.unstable_tokenExchange && config.isEmbeddedApp
+      config.future.unstable_newEmbeddedAuthStrategy && config.isEmbeddedApp
         ? tokenExchange
         : oauth,
   });
@@ -152,7 +152,10 @@ function deriveApi(appConfig: AppConfigArg) {
     isEmbeddedApp: appConfig.isEmbeddedApp ?? true,
     apiVersion: appConfig.apiVersion ?? LATEST_API_VERSION,
     isCustomStoreApp: appConfig.distribution === AppDistribution.ShopifyAdmin,
-    future: {},
+    future: {
+      unstable_tokenExchange:
+        appConfig.future?.unstable_newEmbeddedAuthStrategy,
+    },
   });
 }
 
