@@ -114,7 +114,11 @@ export class TokenExchangeStrategy<
       ) {
         throw respondToInvalidSessionToken({api, config, logger}, request);
       }
-      throw error;
+
+      throw new Response(undefined, {
+        status: 500,
+        statusText: 'Internal Server Error',
+      });
     }
   }
 }
