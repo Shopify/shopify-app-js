@@ -147,6 +147,7 @@ function deriveApi(appConfig: AppConfigArg) {
     isEmbeddedApp: appConfig.isEmbeddedApp ?? true,
     apiVersion: appConfig.apiVersion ?? LATEST_API_VERSION,
     isCustomStoreApp: appConfig.distribution === AppDistribution.ShopifyAdmin,
+    future: {},
   });
 }
 
