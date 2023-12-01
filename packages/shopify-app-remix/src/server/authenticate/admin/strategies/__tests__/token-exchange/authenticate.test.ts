@@ -115,6 +115,84 @@ describe('authenticate', () => {
     },
   );
 
+  test('redirects to bounce page when receiving an invalid subject token response from token exchange API', async () => {
+    // GIVEN
+    const config = testConfig();
+    const shopify = shopifyApp(config);
+
+    const {token} = getJwt();
+    await mockInvalidTokenExchangeRequest('invalid_subject_token');
+
+    // WHEN
+    const response = await getThrownResponse(
+      shopify.authenticate.admin,
+      new Request(
+        `${APP_URL}?embedded=1&shop=${TEST_SHOP}&host=${BASE64_HOST}&id_token=${token}`,
+      ),
+    );
+
+    // THEN
+    const {pathname, searchParams} = new URL(
+      response.headers.get('location')!,
+      APP_URL,
+    );
+
+    expect(response.status).toBe(302);
+    expect(pathname).toBe('/auth/session-token');
+    expect(searchParams.get('shop')).toBe(TEST_SHOP);
+    expect(searchParams.get('host')).toBe(BASE64_HOST);
+    expect(searchParams.get('shopify-reload')).toBe(
+      `${APP_URL}/?embedded=1&shop=${TEST_SHOP}&host=${BASE64_HOST}`,
+    );
+    expect(fetchMock.mock.calls).toHaveLength(1);
+  });
+
+  test('throws 401 unauthorized when receiving an invalid subject token response from token exchange API', async () => {
+    // GIVEN
+    const config = testConfig();
+    const shopify = shopifyApp(config);
+
+    const {token} = getJwt();
+    await mockInvalidTokenExchangeRequest('invalid_subject_token');
+
+    // WHEN
+    const response = await getThrownResponse(
+      shopify.authenticate.admin,
+      new Request(APP_URL, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }),
+    );
+
+    // THEN
+    expect(response.status).toBe(401);
+    expect(fetchMock.mock.calls).toHaveLength(1);
+  });
+
+  test('throws 500 for any other error from token exchange API', async () => {
+    // GIVEN
+    const config = testConfig();
+    const shopify = shopifyApp(config);
+
+    const {token} = getJwt();
+    await mockInvalidTokenExchangeRequest('im_broke', 401);
+
+    // WHEN
+    const response = await getThrownResponse(
+      shopify.authenticate.admin,
+      new Request(APP_URL, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }),
+    );
+
+    // THEN
+    expect(response.status).toBe(500);
+    expect(fetchMock.mock.calls).toHaveLength(1);
+  });
+
   test('throws a 500 if afterAuth hook throws an error', async () => {
     // GIVEN
     const config = testConfig();
@@ -212,5 +290,21 @@ async function mockTokenExchangeRequest(
               },
             }),
           ),
+  });
+}
+
+async function mockInvalidTokenExchangeRequest(error: string, status = 400) {
+  await mockExternalRequest({
+    request: new Request(`https://${TEST_SHOP}/admin/oauth/access_token`, {
+      method: 'POST',
+    }),
+    response: new Response(
+      JSON.stringify({
+        error,
+      }),
+      {
+        status,
+      },
+    ),
   });
 }
