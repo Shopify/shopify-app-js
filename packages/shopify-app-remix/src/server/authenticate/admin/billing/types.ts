@@ -175,7 +175,7 @@ export interface BillingContext<Config extends AppConfigArg> {
    *     onFailure: async () => billing.request({
    *       plan: MONTHLY_PLAN,
    *       isTest: true,
-   *       returnUrl: '/billing-complete',
+   *       returnUrl: 'https://admin.shopify.com/store/my-store/apps/my-app/billing-page',
    *     }),
    *   });
    *
