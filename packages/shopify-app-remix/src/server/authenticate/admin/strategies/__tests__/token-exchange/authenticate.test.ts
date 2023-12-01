@@ -46,6 +46,7 @@ describe('authenticate', () => {
       shop: TEST_SHOP,
       state: '',
     });
+    expect(fetchMock.mock.calls).toHaveLength(1);
   });
 
   it('performs token exchange when existing session is no longer valid', async () => {
@@ -81,6 +82,7 @@ describe('authenticate', () => {
       state: '',
       onlineAccessInfo: expect.any(Object),
     });
+    expect(fetchMock.mock.calls).toHaveLength(2);
   });
 
   describe.each([true, false])(
@@ -111,6 +113,7 @@ describe('authenticate', () => {
         expect(session).toBe(testSession);
         expect(admin.rest.session).toBe(testSession);
         expect(session.isOnline).toEqual(isOnline);
+        expect(fetchMock.mock.calls).toHaveLength(0);
       });
     },
   );
