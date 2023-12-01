@@ -1,4 +1,8 @@
-import {ApiVersion, ShopifyRestResources} from '@shopify/shopify-api';
+import {
+  ApiVersion,
+  ShopifyRestResources,
+  WebhookValidationErrorReason,
+} from '@shopify/shopify-api';
 
 import type {BasicParams, MandatoryTopics} from '../../types';
 import {AdminApiContext, adminClientFactory} from '../../clients';
@@ -42,8 +46,16 @@ export function authenticateWebhookFactory<
     });
 
     if (!check.valid) {
-      logger.debug('Webhook validation failed', check);
-      throw new Response(undefined, {status: 400, statusText: 'Bad Request'});
+      if (check.reason === WebhookValidationErrorReason.InvalidHmac) {
+        logger.debug('Webhook HMAC validation failed', check);
+        throw new Response(undefined, {
+          status: 401,
+          statusText: 'Unauthorized',
+        });
+      } else {
+        logger.debug('Webhook validation failed', check);
+        throw new Response(undefined, {status: 400, statusText: 'Bad Request'});
+      }
     }
 
     const sessionId = api.session.getOfflineId(check.domain);

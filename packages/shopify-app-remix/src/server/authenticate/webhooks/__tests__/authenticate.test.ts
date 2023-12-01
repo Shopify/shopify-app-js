@@ -130,7 +130,7 @@ describe('Webhook validation', () => {
     expect(admin?.graphql.session).toBe(session);
   });
 
-  it('throws a 400 on invalid HMAC', async () => {
+  it('throws a 401 on invalid HMAC', async () => {
     // GIVEN
     const shopify = shopifyApp(testConfig());
 
@@ -147,7 +147,7 @@ describe('Webhook validation', () => {
     );
 
     // THEN
-    expect(response.status).toBe(400);
+    expect(response.status).toBe(401);
   });
 
   it.each([
