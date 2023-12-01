@@ -55,7 +55,7 @@ export function testConfigAuthCodeFlow<
 ) {
   return testConfig({
     ...overrides,
-    future: {...future, unstable_tokenExchange: false},
+    future: {...future, unstable_newEmbeddedAuthStrategy: false},
   });
 }
 

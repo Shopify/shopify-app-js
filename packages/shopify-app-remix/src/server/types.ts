@@ -1,4 +1,5 @@
 import {
+  ConfigParams,
   RegisterReturn,
   Shopify,
   ShopifyRestResources,
@@ -13,12 +14,23 @@ import type {
 import type {AuthenticatePublic} from './authenticate/public/types';
 import type {AdminContext} from './authenticate/admin/types';
 import type {Unauthenticated} from './unauthenticated/types';
+import {FutureFlagOptions, FutureFlags} from './future/flags';
 
-export interface BasicParams {
-  api: Shopify;
+export interface BasicParams<
+  Future extends FutureFlagOptions = FutureFlagOptions,
+> {
+  api: Shopify<MockApiConfig<Future>>;
   config: AppConfig;
   logger: Shopify['logger'];
 }
+
+export type MockApiConfig<Future extends FutureFlagOptions> = ConfigParams & {
+  future?: {
+    unstable_tokenExchange?: Future extends FutureFlags
+      ? Future['unstable_newEmbeddedAuthStrategy']
+      : boolean;
+  };
+};
 
 export type JSONValue =
   | string
