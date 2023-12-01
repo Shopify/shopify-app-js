@@ -157,10 +157,10 @@ async function getSessionTokenContext(
   const sessionToken = (headerSessionToken || searchParamSessionToken)!;
 
   logger.debug('Attempting to authenticate session token', {
-    sessionToken: {
+    sessionToken: JSON.stringify({
       header: headerSessionToken,
       search: searchParamSessionToken,
-    },
+    }),
   });
 
   if (config.isEmbeddedApp) {
