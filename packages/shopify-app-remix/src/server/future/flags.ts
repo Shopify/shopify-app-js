@@ -16,7 +16,7 @@ export interface FutureFlags {
   v3_authenticatePublic?: boolean;
 
   /**
-   * TODO
+   * Enable token exchange token acquisition strategy with shopify managed install.
    *
    * @default false
    */
