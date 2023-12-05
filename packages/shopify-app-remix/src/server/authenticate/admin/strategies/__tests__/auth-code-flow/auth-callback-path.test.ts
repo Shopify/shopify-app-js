@@ -8,286 +8,325 @@ import {
   signRequestCookie,
   testConfig,
   mockExternalRequest,
-  testConfigAuthCodeFlow,
+  APP_URL,
 } from '../../../../../__test-helpers';
 
 describe('authorize.admin auth callback path', () => {
-  describe('errors', () => {
-    test('throws an error if the shop param is missing', async () => {
-      // GIVEN
-      const config = testConfigAuthCodeFlow();
-      const shopify = shopifyApp(config);
+  describe.each([true, false])('when isEmbeddedApp: %s', (isEmbeddedApp) => {
+    describe('errors', () => {
+      test('throws an error if the shop param is missing', async () => {
+        // GIVEN
+        const config = testConfig({
+          future: {unstable_newEmbeddedAuthStrategy: !isEmbeddedApp},
+          isEmbeddedApp,
+        });
+        const shopify = shopifyApp(config);
 
-      // WHEN
-      const response = await getThrownResponse(
-        shopify.authenticate.admin,
-        new Request(getCallbackUrl(config)),
-      );
+        // WHEN
+        const response = await getThrownResponse(
+          shopify.authenticate.admin,
+          new Request(getCallbackUrl(config)),
+        );
 
-      // THEN
-      expect(response.status).toBe(400);
-      expect(await response.text()).toBe('Shop param is invalid');
-    });
-
-    test('throws an error if the shop param is not valid', async () => {
-      // GIVEN
-      const config = testConfigAuthCodeFlow();
-      const shopify = shopifyApp(config);
-
-      // WHEN
-      const response = await getThrownResponse(
-        shopify.authenticate.admin,
-        new Request(`${getCallbackUrl(config)}?shop=invalid`),
-      );
-
-      // THEN
-      expect(response.status).toBe(400);
-      expect(await response.text()).toBe('Shop param is invalid');
-    });
-
-    test('throws an 302 Response to begin auth if CookieNotFound error', async () => {
-      // GIVEN
-      const config = testConfigAuthCodeFlow();
-      const shopify = shopifyApp(config);
-
-      // WHEN
-      const callbackUrl = getCallbackUrl(config);
-      const response = await getThrownResponse(
-        shopify.authenticate.admin,
-        new Request(`${callbackUrl}?shop=${TEST_SHOP}`),
-      );
-
-      // THEN
-      const {searchParams, hostname} = new URL(
-        response.headers.get('location')!,
-      );
-
-      expect(response.status).toBe(302);
-      expect(hostname).toBe(TEST_SHOP);
-      expect(searchParams.get('client_id')).toBe(config.apiKey);
-      expect(searchParams.get('scope')).toBe(config.scopes!.toString());
-      expect(searchParams.get('redirect_uri')).toBe(callbackUrl);
-      expect(searchParams.get('state')).toStrictEqual(expect.any(String));
-    });
-
-    test('throws a 400 if there is no HMAC param', async () => {
-      // GIVEN
-      const config = testConfigAuthCodeFlow();
-      const shopify = shopifyApp(config);
-
-      // WHEN
-      const state = 'nonce';
-      const request = new Request(
-        `${getCallbackUrl(config)}?shop=${TEST_SHOP}&state=${state}`,
-      );
-
-      signRequestCookie({
-        request,
-        cookieName: 'shopify_app_state',
-        cookieValue: state,
+        // THEN
+        expect(response.status).toBe(400);
+        expect(await response.text()).toBe('Shop param is invalid');
       });
 
-      const response = await getThrownResponse(
-        shopify.authenticate.admin,
-        request,
-      );
+      test('throws an error if the shop param is not valid', async () => {
+        // GIVEN
+        const config = testConfig({
+          future: {unstable_newEmbeddedAuthStrategy: !isEmbeddedApp},
+          isEmbeddedApp,
+        });
+        const shopify = shopifyApp(config);
 
-      // THEN
-      expect(response.status).toBe(400);
-      expect(response.statusText).toBe('Invalid OAuth Request');
-    });
+        // WHEN
+        const response = await getThrownResponse(
+          shopify.authenticate.admin,
+          new Request(`${getCallbackUrl(config)}?shop=invalid`),
+        );
 
-    test('throws a 400 if the HMAC param is invalid', async () => {
-      // GIVEN
-      const config = testConfigAuthCodeFlow();
-      const shopify = shopifyApp(config);
-
-      // WHEN
-      const state = 'nonce';
-      const request = new Request(
-        `${getCallbackUrl(
-          config,
-        )}?shop=${TEST_SHOP}&state=${state}&hmac=invalid`,
-      );
-
-      signRequestCookie({
-        request,
-        cookieName: 'shopify_app_state',
-        cookieValue: state,
+        // THEN
+        expect(response.status).toBe(400);
+        expect(await response.text()).toBe('Shop param is invalid');
       });
 
-      const response = await getThrownResponse(
-        shopify.authenticate.admin,
-        request,
-      );
+      test('throws an 302 Response to begin auth if CookieNotFound error', async () => {
+        // GIVEN
+        const config = testConfig({
+          future: {unstable_newEmbeddedAuthStrategy: !isEmbeddedApp},
+          isEmbeddedApp,
+        });
+        const shopify = shopifyApp(config);
 
-      // THEN
-      expect(response.status).toBe(400);
-    });
+        // WHEN
+        const callbackUrl = getCallbackUrl(config);
+        const response = await getThrownResponse(
+          shopify.authenticate.admin,
+          new Request(`${callbackUrl}?shop=${TEST_SHOP}`),
+        );
 
-    test('throws a 500 if any other errors are thrown', async () => {
-      // GIVEN
-      const config = testConfigAuthCodeFlow();
-      const shopify = shopifyApp({
-        ...config,
-        hooks: {
-          afterAuth: () => {
-            throw new Error('test');
+        // THEN
+        const {searchParams, hostname} = new URL(
+          response.headers.get('location')!,
+        );
+
+        expect(response.status).toBe(302);
+        expect(hostname).toBe(TEST_SHOP);
+        expect(searchParams.get('client_id')).toBe(config.apiKey);
+        expect(searchParams.get('scope')).toBe(config.scopes!.toString());
+        expect(searchParams.get('redirect_uri')).toBe(callbackUrl);
+        expect(searchParams.get('state')).toStrictEqual(expect.any(String));
+      });
+
+      test('throws a 400 if there is no HMAC param', async () => {
+        // GIVEN
+        const config = testConfig({
+          future: {unstable_newEmbeddedAuthStrategy: !isEmbeddedApp},
+          isEmbeddedApp,
+        });
+        const shopify = shopifyApp(config);
+
+        // WHEN
+        const state = 'nonce';
+        const request = new Request(
+          `${getCallbackUrl(config)}?shop=${TEST_SHOP}&state=${state}`,
+        );
+
+        signRequestCookie({
+          request,
+          cookieName: 'shopify_app_state',
+          cookieValue: state,
+        });
+
+        const response = await getThrownResponse(
+          shopify.authenticate.admin,
+          request,
+        );
+
+        // THEN
+        expect(response.status).toBe(400);
+        expect(response.statusText).toBe('Invalid OAuth Request');
+      });
+
+      test('throws a 400 if the HMAC param is invalid', async () => {
+        // GIVEN
+        const config = testConfig({
+          future: {unstable_newEmbeddedAuthStrategy: !isEmbeddedApp},
+          isEmbeddedApp,
+        });
+        const shopify = shopifyApp(config);
+
+        // WHEN
+        const state = 'nonce';
+        const request = new Request(
+          `${getCallbackUrl(
+            config,
+          )}?shop=${TEST_SHOP}&state=${state}&hmac=invalid`,
+        );
+
+        signRequestCookie({
+          request,
+          cookieName: 'shopify_app_state',
+          cookieValue: state,
+        });
+
+        const response = await getThrownResponse(
+          shopify.authenticate.admin,
+          request,
+        );
+
+        // THEN
+        expect(response.status).toBe(400);
+      });
+
+      test('throws a 500 if any other errors are thrown', async () => {
+        // GIVEN
+        const config = testConfig({
+          future: {unstable_newEmbeddedAuthStrategy: !isEmbeddedApp},
+          isEmbeddedApp,
+        });
+        const shopify = shopifyApp({
+          ...config,
+          hooks: {
+            afterAuth: () => {
+              throw new Error('test');
+            },
           },
-        },
-      });
+        });
 
-      // WHEN
-      await mockCodeExchangeRequest('offline');
-      const response = await getThrownResponse(
-        shopify.authenticate.admin,
-        await getValidCallbackRequest(config),
-      );
+        // WHEN
+        await mockCodeExchangeRequest('offline');
+        const response = await getThrownResponse(
+          shopify.authenticate.admin,
+          await getValidCallbackRequest(config),
+        );
 
-      // THEN
-      expect(response.status).toBe(500);
-    });
-  });
-
-  describe('Success states', () => {
-    test('Exchanges the code for a token and saves it to SessionStorage', async () => {
-      // GIVEN
-      const config = testConfigAuthCodeFlow();
-      const shopify = shopifyApp(config);
-
-      // WHEN
-      await mockCodeExchangeRequest('offline');
-      const response = await getThrownResponse(
-        shopify.authenticate.admin,
-        await getValidCallbackRequest(config),
-      );
-
-      // THEN
-      const [session] = await config.sessionStorage!.findSessionsByShop(
-        TEST_SHOP,
-      );
-
-      expect(session).toMatchObject({
-        accessToken: '123abc',
-        id: `offline_${TEST_SHOP}`,
-        isOnline: false,
-        scope: 'read_products',
-        shop: TEST_SHOP,
-        state: 'nonce',
+        // THEN
+        expect(response.status).toBe(500);
       });
     });
 
-    test('throws an 302 Response to begin auth if token was offline and useOnlineTokens is true', async () => {
-      // GIVEN
-      const config = testConfigAuthCodeFlow({useOnlineTokens: true});
-      const shopify = shopifyApp(config);
+    describe('Success states', () => {
+      test('Exchanges the code for a token and saves it to SessionStorage', async () => {
+        // GIVEN
+        const config = testConfig({
+          future: {unstable_newEmbeddedAuthStrategy: !isEmbeddedApp},
+          isEmbeddedApp,
+        });
+        const shopify = shopifyApp(config);
 
-      // WHEN
-      await mockCodeExchangeRequest('offline');
-      const response = await getThrownResponse(
-        shopify.authenticate.admin,
-        await getValidCallbackRequest(config),
-      );
+        // WHEN
+        await mockCodeExchangeRequest('offline');
+        const response = await getThrownResponse(
+          shopify.authenticate.admin,
+          await getValidCallbackRequest(config),
+        );
 
-      // THEN
-      const {searchParams, hostname} = new URL(
-        response.headers.get('location')!,
-      );
+        // THEN
+        const [session] = await config.sessionStorage!.findSessionsByShop(
+          TEST_SHOP,
+        );
 
-      expect(response.status).toBe(302);
-      expect(hostname).toBe(TEST_SHOP);
-      expect(searchParams.get('client_id')).toBe(config.apiKey);
-      expect(searchParams.get('scope')).toBe(config.scopes!.toString());
-      expect(searchParams.get('redirect_uri')).toBe(getCallbackUrl(config));
-      expect(searchParams.get('state')).toStrictEqual(expect.any(String));
-    });
-
-    test('Does not throw a 302 Response to begin auth if token was online', async () => {
-      // GIVEN
-      const config = testConfigAuthCodeFlow({useOnlineTokens: true});
-      const shopify = shopifyApp(config);
-
-      // WHEN
-      await mockCodeExchangeRequest('online');
-      const response = await getThrownResponse(
-        shopify.authenticate.admin,
-        await getValidCallbackRequest(config),
-      );
-
-      // THEN
-      const {hostname} = new URL(response.headers.get('location')!);
-      expect(hostname).not.toBe(TEST_SHOP);
-    });
-
-    test('Runs the afterAuth hooks passing', async () => {
-      // GIVEN
-      const afterAuthMock = jest.fn();
-      const config = testConfigAuthCodeFlow({
-        hooks: {
-          afterAuth: afterAuthMock,
-        },
+        expect(session).toMatchObject({
+          accessToken: '123abc',
+          id: `offline_${TEST_SHOP}`,
+          isOnline: false,
+          scope: 'read_products',
+          shop: TEST_SHOP,
+          state: 'nonce',
+        });
       });
-      const shopify = shopifyApp(config);
 
-      // WHEN
-      await mockCodeExchangeRequest();
-      const response = await getThrownResponse(
-        shopify.authenticate.admin,
-        await getValidCallbackRequest(config),
-      );
+      test('throws an 302 Response to begin auth if token was offline and useOnlineTokens is true', async () => {
+        // GIVEN
+        const config = testConfig({
+          useOnlineTokens: true,
+          future: {unstable_newEmbeddedAuthStrategy: !isEmbeddedApp},
+          isEmbeddedApp,
+        });
+        const shopify = shopifyApp(config);
 
-      // THEN
-      expect(afterAuthMock).toHaveBeenCalledTimes(1);
-    });
+        // WHEN
+        await mockCodeExchangeRequest('offline');
+        const response = await getThrownResponse(
+          shopify.authenticate.admin,
+          await getValidCallbackRequest(config),
+        );
 
-    test('throws a 302 response to the emebdded app URL if isEmbeddedApp is true', async () => {
-      // GIVEN
-      const config = testConfigAuthCodeFlow();
-      const shopify = shopifyApp(config);
+        // THEN
+        const {searchParams, hostname} = new URL(
+          response.headers.get('location')!,
+        );
 
-      // WHEN
-      await mockCodeExchangeRequest('offline');
-      const response = await getThrownResponse(
-        shopify.authenticate.admin,
-        await getValidCallbackRequest(config),
-      );
-
-      // THEN
-      expect(response.status).toBe(302);
-      expect(response.headers.get('location')).toBe(
-        'https://totally-real-host.myshopify.io/apps/testApiKey',
-      );
-    });
-
-    test('throws a 302 to / if embedded is not true', async () => {
-      // GIVEN
-      const config = testConfigAuthCodeFlow({
-        isEmbeddedApp: false,
+        expect(response.status).toBe(302);
+        expect(hostname).toBe(TEST_SHOP);
+        expect(searchParams.get('client_id')).toBe(config.apiKey);
+        expect(searchParams.get('scope')).toBe(config.scopes!.toString());
+        expect(searchParams.get('redirect_uri')).toBe(getCallbackUrl(config));
+        expect(searchParams.get('state')).toStrictEqual(expect.any(String));
       });
-      const shopify = shopifyApp(config);
 
-      // WHEN
-      await mockCodeExchangeRequest('offline');
-      const request = await getValidCallbackRequest(config);
-      const response = await getThrownResponse(
-        shopify.authenticate.admin,
-        request,
-      );
+      test('Does not throw a 302 Response to begin auth if token was online', async () => {
+        // GIVEN
+        const config = testConfig({
+          useOnlineTokens: true,
+          future: {unstable_newEmbeddedAuthStrategy: !isEmbeddedApp},
+          isEmbeddedApp,
+        });
+        const shopify = shopifyApp(config);
 
-      // THEN
-      const url = new URL(request.url);
-      const host = url.searchParams.get('host');
-      expect(response.status).toBe(302);
-      expect(response.headers.get('location')).toBe(
-        `/?shop=${TEST_SHOP}&host=${host}`,
-      );
-      expect(response.headers.get('set-cookie')).toBe(
-        [
-          'shopify_app_state=;path=/;expires=Thu, 01 Jan 1970 00:00:00 GMT',
-          `shopify_app_session=offline_${TEST_SHOP};sameSite=lax; secure=true; path=/`,
-          'shopify_app_session.sig=0qSrbSUpq8Cr+fev917WGyO1IU3Py1fTwZukcHd4hVE=;sameSite=lax; secure=true; path=/',
-        ].join(', '),
-      );
+        // WHEN
+        await mockCodeExchangeRequest('online');
+        const response = await getThrownResponse(
+          shopify.authenticate.admin,
+          await getValidCallbackRequest(config),
+        );
+
+        // THEN
+        const base = `http://${APP_URL}`;
+        const {hostname} = new URL(response.headers.get('location')!, base);
+        expect(hostname).not.toBe(TEST_SHOP);
+      });
+
+      test('Runs the afterAuth hooks passing', async () => {
+        // GIVEN
+        const afterAuthMock = jest.fn();
+        const config = testConfig({
+          hooks: {
+            afterAuth: afterAuthMock,
+          },
+          future: {unstable_newEmbeddedAuthStrategy: !isEmbeddedApp},
+          isEmbeddedApp,
+        });
+        const shopify = shopifyApp(config);
+
+        // WHEN
+        await mockCodeExchangeRequest();
+        const response = await getThrownResponse(
+          shopify.authenticate.admin,
+          await getValidCallbackRequest(config),
+        );
+
+        // THEN
+        expect(afterAuthMock).toHaveBeenCalledTimes(1);
+      });
+
+      if (isEmbeddedApp) {
+        test('throws a 302 response to the embedded app URL', async () => {
+          // GIVEN
+          const config = testConfig({
+            future: {unstable_newEmbeddedAuthStrategy: false},
+            isEmbeddedApp: true,
+          });
+          const shopify = shopifyApp(config);
+
+          // WHEN
+          await mockCodeExchangeRequest('offline');
+          const response = await getThrownResponse(
+            shopify.authenticate.admin,
+            await getValidCallbackRequest(config),
+          );
+
+          // THEN
+          expect(response.status).toBe(302);
+          expect(response.headers.get('location')).toBe(
+            'https://totally-real-host.myshopify.io/apps/testApiKey',
+          );
+        });
+      } else {
+        test('throws a 302 to /', async () => {
+          // GIVEN
+          const config = testConfig({
+            isEmbeddedApp: false,
+          });
+          const shopify = shopifyApp(config);
+
+          // WHEN
+          await mockCodeExchangeRequest('offline');
+          const request = await getValidCallbackRequest(config);
+          const response = await getThrownResponse(
+            shopify.authenticate.admin,
+            request,
+          );
+
+          // THEN
+          const url = new URL(request.url);
+          const host = url.searchParams.get('host');
+          expect(response.status).toBe(302);
+          expect(response.headers.get('location')).toBe(
+            `/?shop=${TEST_SHOP}&host=${host}`,
+          );
+          expect(response.headers.get('set-cookie')).toBe(
+            [
+              'shopify_app_state=;path=/;expires=Thu, 01 Jan 1970 00:00:00 GMT',
+              `shopify_app_session=offline_${TEST_SHOP};sameSite=lax; secure=true; path=/`,
+              'shopify_app_session.sig=0qSrbSUpq8Cr+fev917WGyO1IU3Py1fTwZukcHd4hVE=;sameSite=lax; secure=true; path=/',
+            ].join(', '),
+          );
+        });
+      }
     });
   });
 });

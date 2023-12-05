@@ -8,8 +8,7 @@ import {
   getJwt,
   getThrownResponse,
   setUpValidSession,
-  signRequestCookie,
-  testConfigAuthCodeFlow,
+  testConfig,
 } from '../../../../../__test-helpers';
 import {REAUTH_URL_HEADER} from '../../../../const';
 
@@ -19,7 +18,10 @@ describe('authorize.session token header path', () => {
       it(`returns app bridge redirection headers if there is no session`, async () => {
         // GIVEN
         const shopify = shopifyApp(
-          testConfigAuthCodeFlow({useOnlineTokens: isOnline}),
+          testConfig({
+            useOnlineTokens: isOnline,
+            future: {unstable_newEmbeddedAuthStrategy: false},
+          }),
         );
 
         // WHEN
@@ -45,13 +47,14 @@ describe('authorize.session token header path', () => {
       it(`returns app bridge redirection headers if the session is no longer valid`, async () => {
         // GIVEN
         const shopify = shopifyApp(
-          testConfigAuthCodeFlow({
+          testConfig({
             useOnlineTokens: isOnline,
             scopes: ['otherTestScope'],
+            future: {unstable_newEmbeddedAuthStrategy: false},
           }),
         );
         // The session scopes don't match the configured scopes, so it needs to be reset
-        await setUpValidSession(shopify.sessionStorage, isOnline);
+        await setUpValidSession(shopify.sessionStorage, {isOnline});
 
         // WHEN
         const {token} = getJwt();
