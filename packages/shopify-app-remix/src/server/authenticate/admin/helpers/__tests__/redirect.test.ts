@@ -293,7 +293,7 @@ describe('Redirect helper', () => {
   describe('when not embedded', () => {
     it('is not returned as part of the context', async () => {
       // GIVEN
-      const shopify = shopifyApp({...testConfig(), isEmbeddedApp: false});
+      const shopify = shopifyApp(testConfig({isEmbeddedApp: false}));
       const testSession = await setUpValidSession(shopify.sessionStorage);
 
       const request = new Request(APP_URL);

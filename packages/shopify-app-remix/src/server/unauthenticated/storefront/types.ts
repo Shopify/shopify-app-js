@@ -15,11 +15,11 @@ export interface UnauthenticatedStorefrontContext {
    * <description>Get your app's shop-specific data using the returned offline `session` object.</description>
    * ```ts
    * // app/routes/**\/.ts
-   * import { LoaderArgs, json } from "@remix-run/node";
+   * import { LoaderFunctionArgs, json } from "@remix-run/node";
    * import { unauthenticated } from "../shopify.server";
    * import { getMyAppData } from "~/db/model.server";
    *
-   * export const loader = async ({ request }: LoaderArgs) => {
+   * export const loader = async ({ request }: LoaderFunctionArgs) => {
    *   const shop = getShopFromExternalRequest(request);
    *   const { session } = await unauthenticated.storefront(shop);
    *   return json(await getMyAppData({shop: session.shop));

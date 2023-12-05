@@ -1,3 +1,5 @@
+import {FeatureEnabled, FutureFlagOptions} from '../../future/flags';
+
 import type {AuthenticateCheckout} from './checkout/types';
 import type {AuthenticateAppProxy} from './appProxy/types';
 
@@ -6,7 +8,7 @@ import type {AuthenticateAppProxy} from './appProxy/types';
 // But it became tightly coupled to authentictaing Checkout requests.
 // In V2 you will have only public.checkout() and public.appProxy(), no public()
 
-interface AuthenticatePublicObject {
+export interface AuthenticatePublicObject {
   /**
    * Authenticate a request from a checkout extension
    *
@@ -14,10 +16,10 @@ interface AuthenticatePublicObject {
    * <caption>Authenticating a checkout extension request</caption>
    * ```ts
    * // /app/routes/public/widgets.ts
-   * import { LoaderArgs, json } from "@remix-run/node";
+   * import { LoaderFunctionArgs, json } from "@remix-run/node";
    * import { authenticate } from "../shopify.server";
    *
-   * export const loader = async ({ request }: LoaderArgs) => {
+   * export const loader = async ({ request }: LoaderFunctionArgs) => {
    *   const { sessionToken, cors } = await authenticate.public.checkout(
    *     request,
    *   );
@@ -34,10 +36,10 @@ interface AuthenticatePublicObject {
    * <caption>Authenticating an app proxy request</caption>
    * ```ts
    * // /app/routes/public/widgets.ts
-   * import { LoaderArgs, json } from "@remix-run/node";
+   * import { LoaderFunctionArgs, json } from "@remix-run/node";
    * import { authenticate } from "../shopify.server";
    *
-   * export const loader = async ({ request }: LoaderArgs) => {
+   * export const loader = async ({ request }: LoaderFunctionArgs) => {
    *   await authenticate.public.appProxy(
    *     request,
    *   );
@@ -53,6 +55,11 @@ interface AuthenticatePublicObject {
   appProxy: AuthenticateAppProxy;
 }
 
+export type AuthenticatePublic<Future extends FutureFlagOptions> =
+  FeatureEnabled<Future, 'v3_authenticatePublic'> extends true
+    ? AuthenticatePublicObject
+    : AuthenticatePublicLegacy;
+
 /**
  * Methods for authenticating Requests from Shopify's public surfaces
  *
@@ -66,5 +73,5 @@ interface AuthenticatePublicObject {
  * - `authenticate.public.checkout()` for authenticating requests from checkout extensions
  * - `authenticate.public.appProxy()` for authenticating requests from app proxies
  */
-export type AuthenticatePublic = AuthenticateCheckout &
+export type AuthenticatePublicLegacy = AuthenticateCheckout &
   AuthenticatePublicObject;

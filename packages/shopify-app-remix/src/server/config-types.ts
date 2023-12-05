@@ -8,12 +8,14 @@ import {
 } from '@shopify/shopify-api';
 import {SessionStorage} from '@shopify/shopify-app-session-storage';
 
+import type {FutureFlagOptions, FutureFlags} from './future/flags';
 import type {AppDistribution} from './types';
 import type {AdminApiContext} from './clients';
 
 export interface AppConfigArg<
   Resources extends ShopifyRestResources = ShopifyRestResources,
   Storage extends SessionStorage = SessionStorage,
+  Future extends FutureFlagOptions = FutureFlagOptions,
 > extends Omit<
     ApiConfigArg<Resources>,
     | 'hostName'
@@ -21,6 +23,7 @@ export interface AppConfigArg<
     | 'isEmbeddedApp'
     | 'apiVersion'
     | 'isCustomStoreApp'
+    | 'future'
   > {
   /**
    * The URL your app is running on.
@@ -96,12 +99,12 @@ export interface AppConfigArg<
    * export const authenticate = shopify.authenticate;
    *
    * // /app/routes/webhooks.jsx
-   * import { ActionArgs } from "@remix-run/node";
+   * import { ActionFunctionArgs } from "@remix-run/node";
    *
    * import { authenticate } from "../shopify.server";
    * import db from "../db.server";
    *
-   * export const action = async ({ request }: ActionArgs) => {
+   * export const action = async ({ request }: ActionFunctionArgs) => {
    *   const { topic, shop } = await authenticate.webhook(request);
    *
    *   switch (topic) {
@@ -200,10 +203,10 @@ export interface AppConfigArg<
    * export const authenticate = shopify.authenticate;
    *
    * // /app/routes/auth/$.jsx
-   * import { LoaderArgs } from "@remix-run/node";
+   * import { LoaderFunctionArgs } from "@remix-run/node";
    * import { authenticate } from "../../shopify.server";
    *
-   * export async function loader({ request }: LoaderArgs) {
+   * export async function loader({ request }: LoaderFunctionArgs) {
    *   await authenticate.admin(request);
    *
    *   return null
@@ -211,19 +214,28 @@ export interface AppConfigArg<
    * ```
    */
   authPathPrefix?: string;
+
+  /**
+   * Features that will be introduced in future releases of this package.
+   *
+   * You can opt in to these features by setting the corresponding flags. By doing so, you can prepare for future
+   * releases in advance and provide feedback on the new features.
+   */
+  future?: Future;
 }
 
 export interface AppConfig<Storage extends SessionStorage = SessionStorage>
-  extends ApiConfig {
+  extends Omit<ApiConfig, 'future'> {
   canUseLoginForm: boolean;
   appUrl: string;
   auth: AuthConfig;
   sessionStorage: Storage;
   useOnlineTokens: boolean;
   hooks: HooksConfig;
+  future: FutureFlags;
 }
 
-interface AuthConfig {
+export interface AuthConfig {
   path: string;
   callbackPath: string;
   exitIframePath: string;

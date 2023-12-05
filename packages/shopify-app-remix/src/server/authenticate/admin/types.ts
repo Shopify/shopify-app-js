@@ -33,11 +33,11 @@ interface AdminContextInternal<
    * ```
    * ```ts
    * // /app/routes/**\/*.ts
-   * import { LoaderArgs, json } from "@remix-run/node";
+   * import { LoaderFunctionArgs, json } from "@remix-run/node";
    * import { authenticate } from "../shopify.server";
    * import { getMyAppData } from "~/db/model.server";
    *
-   * export const loader = async ({ request }: LoaderArgs) => {
+   * export const loader = async ({ request }: LoaderFunctionArgs) => {
    *   const { session } = await authenticate.admin(request);
    *   return json(await getMyAppData({shop: session.shop));
    * };
@@ -59,11 +59,11 @@ interface AdminContextInternal<
    * ```
    * ```ts
    * // /app/routes/**\/*.ts
-   * import { LoaderArgs, json } from "@remix-run/node";
+   * import { LoaderFunctionArgs, json } from "@remix-run/node";
    * import { authenticate } from "../shopify.server";
    * import { getMyAppData } from "~/db/model.server";
    *
-   * export const loader = async ({ request }: LoaderArgs) => {
+   * export const loader = async ({ request }: LoaderFunctionArgs) => {
    *   const { session } = await authenticate.admin(request);
    *   return json(await getMyAppData({user: session.onlineAccessInfo!.id}));
    * };
@@ -91,11 +91,11 @@ interface AdminContextInternal<
    * <description>Use the `cors` helper to ensure your app can respond to requests from admin extensions.</description>
    * ```ts
    * // /app/routes/admin/my-route.ts
-   * import { LoaderArgs, json } from "@remix-run/node";
+   * import { LoaderFunctionArgs, json } from "@remix-run/node";
    * import { authenticate } from "../shopify.server";
    * import { getMyAppData } from "~/db/model.server";
    *
-   * export const loader = async ({ request }: LoaderArgs) => {
+   * export const loader = async ({ request }: LoaderFunctionArgs) => {
    *   const { session, cors } = await authenticate.admin(request);
    *   return cors(json(await getMyAppData({user: session.onlineAccessInfo!.id})));
    * };
@@ -131,11 +131,11 @@ export interface EmbeddedAdminContext<
    * ```
    * ```ts
    * // /app/routes/**\/*.ts
-   * import { LoaderArgs, json } from "@remix-run/node";
+   * import { LoaderFunctionArgs, json } from "@remix-run/node";
    * import { authenticate } from "../shopify.server";
    * import { getMyAppData } from "~/db/model.server";
    *
-   * export const loader = async ({ request }: LoaderArgs) => {
+   * export const loader = async ({ request }: LoaderFunctionArgs) => {
    *   const { sessionToken } = await authenticate.public.checkout(
    *     request
    *   );
@@ -156,10 +156,10 @@ export interface EmbeddedAdminContext<
    * <description>Use the `redirect` helper to safely redirect between pages.</description>
    * ```ts
    * // /app/routes/admin/my-route.ts
-   * import { LoaderArgs, json } from "@remix-run/node";
+   * import { LoaderFunctionArgs, json } from "@remix-run/node";
    * import { authenticate } from "../shopify.server";
    *
-   * export const loader = async ({ request }: LoaderArgs) => {
+   * export const loader = async ({ request }: LoaderFunctionArgs) => {
    *   const { session, redirect } = await authenticate.admin(request);
    *   return redirect("/");
    * };
@@ -170,10 +170,10 @@ export interface EmbeddedAdminContext<
    * <description>Pass in a `target` option of `_top` or `_parent` to go to an external URL.</description>
    * ```ts
    * // /app/routes/admin/my-route.ts
-   * import { LoaderArgs, json } from "@remix-run/node";
+   * import { LoaderFunctionArgs, json } from "@remix-run/node";
    * import { authenticate } from "../shopify.server";
    *
-   * export const loader = async ({ request }: LoaderArgs) => {
+   * export const loader = async ({ request }: LoaderFunctionArgs) => {
    *   const { session, redirect } = await authenticate.admin(request);
    *   return redirect("/", { target: '_parent' });
    * };
@@ -197,3 +197,8 @@ export type AuthenticateAdmin<
   Config extends AppConfigArg,
   Resources extends ShopifyRestResources = ShopifyRestResources,
 > = (request: Request) => Promise<AdminContext<Config, Resources>>;
+
+export interface SessionContext {
+  session: Session;
+  token?: JwtPayload;
+}

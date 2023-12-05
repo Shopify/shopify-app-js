@@ -113,11 +113,9 @@ describe('authorize.session token header path', () => {
 
       it('returns context when session exists for non-embedded apps', async () => {
         // GIVEN
-        const shopify = shopifyApp({
-          ...testConfig(),
-          isEmbeddedApp: false,
-          useOnlineTokens: isOnline,
-        });
+        const shopify = shopifyApp(
+          testConfig({isEmbeddedApp: false, useOnlineTokens: isOnline}),
+        );
 
         let testSession: Session;
         testSession = await setUpValidSession(shopify.sessionStorage);

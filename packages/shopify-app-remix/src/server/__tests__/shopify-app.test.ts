@@ -10,7 +10,6 @@ import {
   AppDistribution,
   ApiVersion,
 } from '../index';
-import {AppConfigArg} from '../config-types';
 import {testConfig} from '../__test-helpers';
 
 describe('shopifyApp', () => {
@@ -45,10 +44,12 @@ describe('shopifyApp', () => {
 
   it('does not have login function when distribution is ShopifyAdmin', () => {
     // GIVEN
-    const shopify = shopifyApp({
-      ...testConfig(),
-      distribution: AppDistribution.ShopifyAdmin,
-    });
+    const shopify = shopifyApp(
+      testConfig({
+        distribution: AppDistribution.ShopifyAdmin,
+        adminApiAccessToken: 'dummy_token',
+      }),
+    );
 
     // THEN
     expect(shopify).not.toHaveProperty('login');
@@ -109,10 +110,10 @@ describe('shopifyApp', () => {
 
   it('fails if no session storage is given', () => {
     // GIVEN
-    const config: AppConfigArg = testConfig({sessionStorage: undefined});
+    const config = testConfig({sessionStorage: undefined});
     delete (config as any).sessionStorage;
 
     // THEN
-    expect(() => shopifyApp(config)).toThrowError(ShopifyError);
+    expect(() => shopifyApp(config as any)).toThrowError(ShopifyError);
   });
 });

@@ -1,13 +1,9 @@
 import request from 'supertest';
 import express, {Express} from 'express';
 import jwt from 'jsonwebtoken';
-import {
-  ConfigParams,
-  LATEST_API_VERSION,
-  LogSeverity,
-} from '@shopify/shopify-api';
+import {LATEST_API_VERSION, LogSeverity} from '@shopify/shopify-api';
 
-import {shopifyApp} from '../..';
+import {ShopifyApp, shopifyApp} from '../..';
 import {WebhookHandlersParam} from '../../webhooks/types';
 import {AppInstallations} from '../../app-installations';
 import {
@@ -80,7 +76,7 @@ describe('OAuth integration tests', () => {
 
       // Create a new instance of the app with the given config
       const url = new URL(config.host);
-      const apiConfig: ConfigParams = {
+      const apiConfig = {
         ...testConfig.api,
         isEmbeddedApp: config.embedded,
         hostScheme: url.protocol.slice(0, -1) as 'http' | 'https',

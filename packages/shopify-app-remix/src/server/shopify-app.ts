@@ -1,9 +1,7 @@
 import '@shopify/shopify-api/adapters/web-api';
 import {
   ConfigInterface as ApiConfig,
-  ConfigParams,
   LATEST_API_VERSION,
-  Shopify,
   ShopifyError,
   ShopifyRestResources,
   shopifyApi,
@@ -23,7 +21,7 @@ import {
 } from './types';
 import {SHOPIFY_REMIX_LIBRARY_VERSION} from './version';
 import {registerWebhooksFactory} from './authenticate/webhooks';
-import {AuthStrategy} from './authenticate/admin/authenticate';
+import {authStrategyFactory} from './authenticate/admin/authenticate';
 import {authenticateWebhookFactory} from './authenticate/webhooks/authenticate';
 import {overrideLogger} from './override-logger';
 import {addDocumentResponseHeadersFactory} from './authenticate/helpers';
@@ -31,6 +29,7 @@ import {loginFactory} from './authenticate/login/login';
 import {unauthenticatedAdminContextFactory} from './unauthenticated/admin';
 import {authenticatePublicFactory} from './authenticate/public';
 import {unauthenticatedStorefrontContextFactory} from './unauthenticated/storefront';
+import {AuthCodeFlowStrategy} from './authenticate/admin/strategies/auth-code-flow';
 
 /**
  * Creates an object your app will use to interact with Shopify.
@@ -57,7 +56,7 @@ export function shopifyApp<
   Resources extends ShopifyRestResources,
   Storage extends SessionStorage,
 >(appConfig: Config): ShopifyApp<Config> {
-  const api = deriveApi<Resources>(appConfig);
+  const api = deriveApi(appConfig);
   const config = deriveConfig<Storage>(appConfig, api.config);
   const logger = overrideLogger(api.logger);
 
@@ -66,7 +65,11 @@ export function shopifyApp<
   }
 
   const params: BasicParams = {api, config, logger};
-  const oauth = new AuthStrategy<Config, Resources>(params);
+  const oauth = new AuthCodeFlowStrategy(params);
+  const authStrategy = authStrategyFactory<Config, Resources>({
+    ...params,
+    strategy: oauth,
+  });
 
   const shopify:
     | AdminApp<Config>
@@ -76,9 +79,10 @@ export function shopifyApp<
     addDocumentResponseHeaders: addDocumentResponseHeadersFactory(params),
     registerWebhooks: registerWebhooksFactory(params),
     authenticate: {
-      admin: oauth.authenticateAdmin.bind(oauth),
-      public: authenticatePublicFactory<Resources>(params),
+      admin: authStrategy,
+      public: authenticatePublicFactory<Config['future'], Resources>(params),
       webhook: authenticateWebhookFactory<
+        Config['future'],
         Resources,
         keyof Config['webhooks'] | MandatoryTopics
       >(params),
@@ -113,9 +117,7 @@ function isSingleMerchantApp<Config extends AppConfigArg>(
   return config.distribution === AppDistribution.SingleMerchant;
 }
 
-function deriveApi<Resources extends ShopifyRestResources>(
-  appConfig: AppConfigArg,
-): Shopify<Resources> {
+function deriveApi(appConfig: AppConfigArg) {
   let appUrl: URL;
   try {
     appUrl = new URL(appConfig.appUrl);
@@ -137,7 +139,7 @@ function deriveApi<Resources extends ShopifyRestResources>(
     userAgentPrefix = `${appConfig.userAgentPrefix} | ${userAgentPrefix}`;
   }
 
-  const cleanApiConfig: ConfigParams = {
+  return shopifyApi({
     ...appConfig,
     hostName: appUrl.host,
     hostScheme: appUrl.protocol.replace(':', '') as 'http' | 'https',
@@ -145,9 +147,8 @@ function deriveApi<Resources extends ShopifyRestResources>(
     isEmbeddedApp: appConfig.isEmbeddedApp ?? true,
     apiVersion: appConfig.apiVersion ?? LATEST_API_VERSION,
     isCustomStoreApp: appConfig.distribution === AppDistribution.ShopifyAdmin,
-  };
-
-  return shopifyApi<Resources>(cleanApiConfig);
+    future: {},
+  });
 }
 
 function deriveConfig<Storage extends SessionStorage>(
@@ -170,6 +171,7 @@ function deriveConfig<Storage extends SessionStorage>(
     useOnlineTokens: appConfig.useOnlineTokens ?? false,
     hooks: appConfig.hooks ?? {},
     sessionStorage: appConfig.sessionStorage as Storage,
+    future: appConfig.future ?? {},
     auth: {
       path: authPathPrefix,
       callbackPath: `${authPathPrefix}/callback`,

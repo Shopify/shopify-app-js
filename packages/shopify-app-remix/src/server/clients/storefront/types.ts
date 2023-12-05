@@ -12,16 +12,16 @@ export interface StorefrontContext {
    * <caption>Querying the GraphQL API.</caption>
    * <description>Use `storefront.graphql` to make query / mutation requests.</description>
    * ```ts
-   * import { ActionArgs } from "@remix-run/node";
+   * // app/routes/**\/.ts
+   * import { json } from "@remix-run/node";
    * import { authenticate } from "../shopify.server";
    *
-   * export async function action({ request }: ActionArgs) {
-   *   const { storefront } = await authenticate.storefront(request);
+   * export async function action({ request }: ActionFunctionArgs) {
+   *   const { storefront } = await authenticate.public.appProxy(request);
    *
    *   const response = await storefront.graphql(`{blogs(first: 10) { edges { node { id } } } }`);
    *
-   *   const productData = await response.json();
-   *   return json({ data: productData.data });
+   *   return json(await response.json());
    * }
    * ```
    */
