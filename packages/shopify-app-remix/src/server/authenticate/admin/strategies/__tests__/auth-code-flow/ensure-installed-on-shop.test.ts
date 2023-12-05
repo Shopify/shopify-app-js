@@ -13,16 +13,18 @@ import {
   getJwt,
   getThrownResponse,
   setUpValidSession,
-  testConfigAuthCodeFlow,
   signRequestCookie,
   mockExternalRequest,
+  testConfig,
 } from '../../../../../__test-helpers';
 
 describe('authorize.admin doc request path', () => {
   describe('errors', () => {
     it('redirects to auth when not embedded and there is no offline session', async () => {
       // GIVEN
-      const config = testConfigAuthCodeFlow();
+      const config = testConfig({
+        future: {unstable_newEmbeddedAuthStrategy: false},
+      });
       const shopify = shopifyApp(config);
 
       // WHEN
@@ -37,7 +39,11 @@ describe('authorize.admin doc request path', () => {
 
     it('redirects to exit-iframe when embedded and there is no offline session', async () => {
       // GIVEN
-      const shopify = shopifyApp(testConfigAuthCodeFlow());
+      const shopify = shopifyApp(
+        testConfig({
+          future: {unstable_newEmbeddedAuthStrategy: false},
+        }),
+      );
 
       // WHEN
       const response = await getThrownResponse(
@@ -53,7 +59,9 @@ describe('authorize.admin doc request path', () => {
 
     it('redirects to auth when not embedded on an embedded app, and the API token is invalid', async () => {
       // GIVEN
-      const config = testConfigAuthCodeFlow();
+      const config = testConfig({
+        future: {unstable_newEmbeddedAuthStrategy: false},
+      });
       const shopify = shopifyApp(config);
       await setUpValidSession(shopify.sessionStorage);
 
@@ -74,7 +82,9 @@ describe('authorize.admin doc request path', () => {
 
     it('returns non-401 codes when not embedded on an embedded app and the request fails', async () => {
       // GIVEN
-      const config = testConfigAuthCodeFlow();
+      const config = testConfig({
+        future: {unstable_newEmbeddedAuthStrategy: false},
+      });
       const shopify = shopifyApp(config);
       await setUpValidSession(shopify.sessionStorage);
 
@@ -102,7 +112,9 @@ describe('authorize.admin doc request path', () => {
 
     it('returns a 500 when not embedded on an embedded app and the request fails', async () => {
       // GIVEN
-      const config = testConfigAuthCodeFlow();
+      const config = testConfig({
+        future: {unstable_newEmbeddedAuthStrategy: false},
+      });
       const shopify = shopifyApp(config);
       await setUpValidSession(shopify.sessionStorage);
 
@@ -129,7 +141,11 @@ describe('authorize.admin doc request path', () => {
 
     it('redirects to exit-iframe if app is embedded and there is no session for the id_token when embedded', async () => {
       // GIVEN
-      const shopify = shopifyApp(testConfigAuthCodeFlow());
+      const shopify = shopifyApp(
+        testConfig({
+          future: {unstable_newEmbeddedAuthStrategy: false},
+        }),
+      );
       await setUpValidSession(shopify.sessionStorage);
       const otherShopDomain = 'other-shop.myshopify.io';
 
@@ -149,9 +165,14 @@ describe('authorize.admin doc request path', () => {
     // manageAccessToken or ensureInstalledOnShop
     it('redirects to auth if there is no session cookie for non-embedded apps when at the top level', async () => {
       // GIVEN
-      const config = testConfigAuthCodeFlow();
+      const config = testConfig({
+        future: {unstable_newEmbeddedAuthStrategy: false},
+      });
       const shopify = shopifyApp(
-        testConfigAuthCodeFlow({isEmbeddedApp: false}),
+        testConfig({
+          isEmbeddedApp: false,
+          future: {unstable_newEmbeddedAuthStrategy: false},
+        }),
       );
       await setUpValidSession(shopify.sessionStorage);
 
@@ -171,7 +192,10 @@ describe('authorize.admin doc request path', () => {
 
     it('redirects to auth if there is no session for non-embedded apps when at the top level', async () => {
       // GIVEN
-      const config = testConfigAuthCodeFlow({isEmbeddedApp: false});
+      const config = testConfig({
+        isEmbeddedApp: false,
+        future: {unstable_newEmbeddedAuthStrategy: false},
+      });
       const shopify = shopifyApp(config);
       await setUpValidSession(shopify.sessionStorage);
 
@@ -198,7 +222,12 @@ describe('authorize.admin doc request path', () => {
   // manageAccessToken & ensureInstalledOnShop
   it('loads a session from the cookie from a request with no search params when not embedded', async () => {
     // GIVEN
-    const shopify = shopifyApp(testConfigAuthCodeFlow({isEmbeddedApp: false}));
+    const shopify = shopifyApp(
+      testConfig({
+        isEmbeddedApp: false,
+        future: {unstable_newEmbeddedAuthStrategy: false},
+      }),
+    );
     const testSession = await setUpValidSession(shopify.sessionStorage);
 
     // WHEN
