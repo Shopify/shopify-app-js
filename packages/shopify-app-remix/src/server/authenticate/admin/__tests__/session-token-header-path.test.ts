@@ -39,10 +39,9 @@ describe('authorize.session token header path', () => {
         // GIVEN
         const shopify = shopifyApp(testConfig({useOnlineTokens: isOnline}));
 
-        const testSession = await setUpValidSession(
-          shopify.sessionStorage,
+        const testSession = await setUpValidSession(shopify.sessionStorage, {
           isOnline,
-        );
+        });
 
         // WHEN
         const {token, payload} = getJwt();
@@ -67,7 +66,9 @@ describe('authorize.session token header path', () => {
         let testSession: Session;
         testSession = await setUpValidSession(shopify.sessionStorage);
         if (isOnline) {
-          testSession = await setUpValidSession(shopify.sessionStorage, true);
+          testSession = await setUpValidSession(shopify.sessionStorage, {
+            isOnline: true,
+          });
         }
 
         // WHEN

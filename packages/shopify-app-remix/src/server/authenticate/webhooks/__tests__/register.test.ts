@@ -113,6 +113,8 @@ describe('Webhook registration', () => {
     });
   });
 
+  // eslint-disable-next-line no-warning-comments
+  // TODO: Remove tests once we have a better solution to parallel afterAuth calls
   it('logs throttling errors', async () => {
     // GIVEN
     const shopify = shopifyApp(

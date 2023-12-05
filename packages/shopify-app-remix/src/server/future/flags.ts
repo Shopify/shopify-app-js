@@ -16,7 +16,7 @@ export interface FutureFlags {
   v3_authenticatePublic?: boolean;
 
   /**
-   * Enable token exchange token acquisition strategy with shopify managed install.
+   * When enabled, embedded apps will fetch access tokens via token exchange. This assumes app are using declarative scopes with Shopify managing installs.
    *
    * @default false
    */

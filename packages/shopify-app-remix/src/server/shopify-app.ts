@@ -66,14 +66,12 @@ export function shopifyApp<
   }
 
   const params: BasicParams = {api, config, logger};
-  const oauth = new AuthCodeFlowStrategy(params);
-  const tokenExchange = new TokenExchangeStrategy(params);
   const authStrategy = authStrategyFactory<Config, Resources>({
     ...params,
     strategy:
       config.future.unstable_newEmbeddedAuthStrategy && config.isEmbeddedApp
-        ? tokenExchange
-        : oauth,
+        ? new TokenExchangeStrategy(params)
+        : new AuthCodeFlowStrategy(params),
   });
 
   const shopify:

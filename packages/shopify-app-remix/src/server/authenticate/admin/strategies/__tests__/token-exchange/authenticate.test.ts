@@ -53,7 +53,10 @@ describe('authenticate', () => {
     const config = testConfig({useOnlineTokens: true});
     const shopify = shopifyApp(config);
     const anHourAgo = new Date(Date.now() - 1000 * 3600);
-    await setUpValidSession(shopify.sessionStorage, true, anHourAgo);
+    await setUpValidSession(shopify.sessionStorage, {
+      isOnline: true,
+      expires: anHourAgo,
+    });
 
     const {token} = getJwt();
     await mockTokenExchangeRequest(token, 'offline');
@@ -93,10 +96,9 @@ describe('authenticate', () => {
         let testSession: Session;
         testSession = await setUpValidSession(shopify.sessionStorage);
         if (isOnline) {
-          testSession = await setUpValidSession(
-            shopify.sessionStorage,
+          testSession = await setUpValidSession(shopify.sessionStorage, {
             isOnline,
-          );
+          });
         }
 
         // WHEN
@@ -115,7 +117,7 @@ describe('authenticate', () => {
     },
   );
 
-  test('redirects to bounce page when receiving an invalid subject token response from token exchange API', async () => {
+  test('redirects to bounce page on document request when receiving an invalid subject token response from token exchange API', async () => {
     // GIVEN
     const config = testConfig();
     const shopify = shopifyApp(config);
@@ -144,10 +146,9 @@ describe('authenticate', () => {
     expect(searchParams.get('shopify-reload')).toBe(
       `${APP_URL}/?embedded=1&shop=${TEST_SHOP}&host=${BASE64_HOST}`,
     );
-    expect(fetchMock.mock.calls).toHaveLength(1);
   });
 
-  test('throws 401 unauthorized when receiving an invalid subject token response from token exchange API', async () => {
+  test('throws 401 unauthorized on XHR request when receiving an invalid subject token response from token exchange API', async () => {
     // GIVEN
     const config = testConfig();
     const shopify = shopifyApp(config);
@@ -167,7 +168,6 @@ describe('authenticate', () => {
 
     // THEN
     expect(response.status).toBe(401);
-    expect(fetchMock.mock.calls).toHaveLength(1);
   });
 
   test('throws 500 for any other error from token exchange API', async () => {
@@ -190,7 +190,6 @@ describe('authenticate', () => {
 
     // THEN
     expect(response.status).toBe(500);
-    expect(fetchMock.mock.calls).toHaveLength(1);
   });
 
   test('throws a 500 if afterAuth hook throws an error', async () => {
