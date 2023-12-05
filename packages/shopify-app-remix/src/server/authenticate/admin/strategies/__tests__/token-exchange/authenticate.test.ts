@@ -120,7 +120,7 @@ describe('authenticate', () => {
     },
   );
 
-  test('redirects to bounce page when receiving an invalid subject token response from token exchange API', async () => {
+  test('redirects to bounce page on document request when receiving an invalid subject token response from token exchange API', async () => {
     // GIVEN
     const config = testConfig();
     const shopify = shopifyApp(config);
@@ -152,7 +152,7 @@ describe('authenticate', () => {
     expect(fetchMock.mock.calls).toHaveLength(1);
   });
 
-  test('throws 401 unauthorized when receiving an invalid subject token response from token exchange API', async () => {
+  test('throws 401 unauthorized on XHR request when receiving an invalid subject token response from token exchange API', async () => {
     // GIVEN
     const config = testConfig();
     const shopify = shopifyApp(config);

@@ -7,7 +7,7 @@ export const redirectToBouncePage = (params: BasicParams, url: URL): never => {
 
   // Make sure we always point to the configured app URL so it also works behind reverse proxies (that alter the Host
   // header).
-  const searchParams = new URLSearchParams(url.search);
+  const searchParams = url.searchParams;
   searchParams.delete('id_token');
   searchParams.set(
     'shopify-reload',
