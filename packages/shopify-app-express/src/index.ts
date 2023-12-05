@@ -3,12 +3,10 @@ import '@shopify/shopify-api/adapters/node';
 import {
   shopifyApi,
   ConfigParams as ApiConfigParams,
-  ShopifyRestResources,
   LATEST_API_VERSION,
   Shopify,
   FeatureDeprecatedError,
 } from '@shopify/shopify-api';
-import {SessionStorage} from '@shopify/shopify-app-session-storage';
 import {MemorySessionStorage} from '@shopify/shopify-app-session-storage-memory';
 
 import {SHOPIFY_EXPRESS_LIBRARY_VERSION} from './version';
@@ -36,13 +34,22 @@ export * from './types';
 export * from './auth/types';
 export * from './middlewares/types';
 export * from './webhooks/types';
+export type {AppConfigParams} from './config-types';
 
-export interface ShopifyApp<
-  R extends ShopifyRestResources = any,
-  S extends SessionStorage = SessionStorage,
-> {
-  config: AppConfigInterface<S>;
-  api: Shopify<R>;
+type DefaultedConfigs<Params extends Partial<ApiConfigParams> | undefined> =
+  ApiConfigParams & Params;
+
+type ConfigInterfaceFromParams<Params extends AppConfigParams> =
+  AppConfigInterface<
+    NonNullable<DefaultedConfigs<Params['api']>['restResources']>,
+    Params['sessionStorage'] extends undefined
+      ? MemorySessionStorage
+      : NonNullable<Params['sessionStorage']>
+  >;
+
+export interface ShopifyApp<Params extends AppConfigParams = AppConfigParams> {
+  config: ConfigInterfaceFromParams<Params>;
+  api: Shopify<DefaultedConfigs<Params['api']>>;
   auth: AuthMiddleware;
   processWebhooks: ProcessWebhooksMiddleware;
   validateAuthenticatedSession: ValidateAuthenticatedSessionMiddleware;
@@ -52,18 +59,17 @@ export interface ShopifyApp<
   redirectOutOfApp: RedirectOutOfAppFunction;
 }
 
-export function shopifyApp<
-  R extends ShopifyRestResources = any,
-  S extends SessionStorage = SessionStorage,
->(config: AppConfigParams<R, S>): ShopifyApp<R, S> {
+export function shopifyApp<Params extends AppConfigParams>(
+  config: Params,
+): ShopifyApp<Params> {
   const {api: apiConfig, ...appConfig} = config;
 
-  const api = shopifyApi<R>(apiConfigWithDefaults<R>(apiConfig ?? {}));
-  const validatedConfig = validateAppConfig<R, S>(appConfig, api);
+  const api = shopifyApi(apiConfigWithDefaults(apiConfig ?? {}));
+  const validatedConfig = validateAppConfig(appConfig, api);
 
   return {
     config: validatedConfig,
-    api,
+    api: api as Shopify<DefaultedConfigs<Params['api']>>,
     auth: auth({api, config: validatedConfig}),
     processWebhooks: processWebhooks({api, config: validatedConfig}),
     validateAuthenticatedSession: validateAuthenticatedSession({
@@ -83,9 +89,9 @@ export function shopifyApp<
   };
 }
 
-function apiConfigWithDefaults<R extends ShopifyRestResources>(
-  apiConfig: Partial<ApiConfigParams<R>>,
-): ApiConfigParams<R> {
+function apiConfigWithDefaults<Params extends Partial<ApiConfigParams>>(
+  apiConfig: Params,
+): DefaultedConfigs<Params> {
   let userAgent = `Shopify Express Library v${SHOPIFY_EXPRESS_LIBRARY_VERSION}`;
 
   if (apiConfig.userAgentPrefix) {
@@ -110,13 +116,10 @@ function apiConfigWithDefaults<R extends ShopifyRestResources>(
   /* eslint-enable no-process-env */
 }
 
-function validateAppConfig<
-  R extends ShopifyRestResources,
-  S extends SessionStorage,
->(
-  config: Omit<AppConfigParams<R, S>, 'api'>,
+function validateAppConfig<Params extends Omit<AppConfigParams, 'api'>>(
+  config: Params,
   api: Shopify,
-): AppConfigInterface<S> {
+): ConfigInterfaceFromParams<Params> {
   const {sessionStorage, ...configWithoutSessionStorage} = config;
 
   return {
@@ -124,7 +127,8 @@ function validateAppConfig<
     logger: overrideLoggerPackage(api.logger),
     useOnlineTokens: false,
     exitIframePath: '/exitiframe',
-    sessionStorage: sessionStorage ?? new MemorySessionStorage(),
+    sessionStorage: (sessionStorage ??
+      new MemorySessionStorage()) as ConfigInterfaceFromParams<Params>['sessionStorage'],
     ...configWithoutSessionStorage,
     auth: config.auth,
     webhooks: config.webhooks,

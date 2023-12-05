@@ -1,6 +1,6 @@
 {
   "name": "@shopify/shopify-app-session-storage-test-utils",
-  "version": "0.1.6",
+  "version": "1.0.1",
   "description": "Utilities for testing Shopify App Session Storage",
   "repository": {
     "type": "git",
@@ -38,8 +38,8 @@
     "tslib": "^2.4.0"
   },
   "peerDependencies": {
-    "@shopify/shopify-api": "^7.5.1",
-    "@shopify/shopify-app-session-storage": "^1.1.6"
+    "@shopify/shopify-api": "^8.1.1",
+    "@shopify/shopify-app-session-storage": "^2.0.1"
   },
   "devDependencies": {
     "@shopify/eslint-plugin": "^42.1.0",

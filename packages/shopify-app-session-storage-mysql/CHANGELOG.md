@@ -1,5 +1,65 @@
 # @shopify/shopify-app-session-storage-mysql
 
+## 2.0.1
+
+### Patch Changes
+
+- 6d12840: Updating dependencies on @shopify/shopify-api
+- Updated dependencies [6d12840]
+  - @shopify/shopify-app-session-storage@2.0.1
+
+## 2.0.0
+
+### Major Changes
+
+- f837060: **Removed support for Node 14**
+
+  Node 14 has reached its [EOL](https://endoflife.date/nodejs), and dependencies to this package no longer work on Node 14.
+  Because of that, we can no longer support that version.
+
+  If your app is running on Node 14, you'll need to update to a more recent version before upgrading this package.
+
+  This upgrade does not require any code changes.
+
+### Patch Changes
+
+- a69d6fc: Updating dependency on @shopify/shopify-api to v.8.0.1
+- Updated dependencies [f837060]
+- Updated dependencies [a69d6fc]
+  - @shopify/shopify-app-session-storage@2.0.0
+
+## 1.1.13
+
+### Patch Changes
+
+- 616388d: Updating dependency on @shopify/shopify-api to 7.7.0
+- Updated dependencies [616388d]
+  - @shopify/shopify-app-session-storage@1.1.10
+
+## 1.1.12
+
+### Patch Changes
+
+- 5b862fe: Upgraded shopify-api dependency to 7.6.0
+- Updated dependencies [5b862fe]
+  - @shopify/shopify-app-session-storage@1.1.9
+
+## 1.1.11
+
+### Patch Changes
+
+- 346b623: Updating dependency on @shopify/shopify-api
+- Updated dependencies [346b623]
+  - @shopify/shopify-app-session-storage@1.1.8
+
+## 1.1.10
+
+### Patch Changes
+
+- 13b9048: Updating @shopify/shopify-api dependency to the latest version
+- Updated dependencies [13b9048]
+  - @shopify/shopify-app-session-storage@1.1.7
+
 ## 1.1.9
 
 ### Patch Changes
@@ -36,7 +96,7 @@
 
 - e1d4f4f: Add @shopify/shopify-api as a peerDependencies entry for each session-storage package, to avoid API library conflicts (e.g., scopesArray.map error). Should help avoid issues like #93
 - 2dd9ba5: Bumps [mysql2](Bumps mysql2 from 3.2.1 to 3.2.4.) from 3.2.1 to 3.2.4. See mysql2 [changelog](https://github.com/sidorares/node-mysql2/blob/master/Changelog.md) for more details.
-- 1d007e8: Bumps [@shopify/shopify-api](https://github.com/Shopify/shopify-api-js) from 7.0.0 to 7.1.0. See `@shopify/shopify-api`'s [changelog](https://github.com/Shopify/shopify-api-js/blob/main/CHANGELOG.md) for more details.
+- 1d007e8: Bumps [@shopify/shopify-api](https://github.com/Shopify/shopify-api-js) from 7.0.0 to 7.1.0. See `@shopify/shopify-api`'s [changelog](https://github.com/Shopify/shopify-api-js/blob/main/packages/shopify-api/CHANGELOG.md) for more details.
 - 9aaf402: Bumps [mysql2](https://github.com/sidorares/node-mysql2) from 3.2.4 to 3.3.0. See mysql2's [changelog](https://github.com/sidorares/node-mysql2/blob/master/Changelog.md) for more details.
 - Updated dependencies [e1d4f4f]
 - Updated dependencies [1d007e8]
@@ -55,7 +115,7 @@
 
 - 335c8df: MySQL session storage to use a connection pool instead of a single client connection. Fixes #150, #185
 - 502b4c7: Bumps mysql2 from 3.1.2 to 3.2.0.
-- e4f3415: Bump @shopify/shopify-api from 6.2.0 to 7.0.0. See [changelog](https://github.com/Shopify/shopify-api-js/blob/main/CHANGELOG.md) for details.
+- e4f3415: Bump @shopify/shopify-api from 6.2.0 to 7.0.0. See [changelog](https://github.com/Shopify/shopify-api-js/blob/main/packages/shopify-api/CHANGELOG.md) for details.
 - 3969855: Use decodeURIComponent on password, user, database name fields prior to calling underlying MySQL connection. Fixes #163. Also applied to postgresql adapter.
 - Updated dependencies [e4f3415]
   - @shopify/shopify-app-session-storage@1.1.2
