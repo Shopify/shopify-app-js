@@ -6,13 +6,6 @@
 *A mono-repo containing a collection of packages*  
 *designed to easily integrate apps with Shopify.*
 
-#### [`@shopify/shopify-app-remix`](./packages/shopify-app-remix)
-
-- Provides functions to allow [Remix](https://remix.run) apps to communicate and authenticate requests from Shopify.
-
-#### [`@shopify/shopify-app-express`](./packages/shopify-app-express)
-
-- Creates a middleware layer that allows [Express.js](https://expressjs.com) apps to communicate with and authenticate requests from Shopify.
 <br>
 
 ```
@@ -27,7 +20,7 @@
 ## Design
 
 This package has been designed to cover specialized use  
-cases while building on top of **[@shopify/shopify-api][GitHub API]**.
+cases while building on top of **[@shopify/shopify-api][GitHub API]**
 
 <br>
 <br>
@@ -36,10 +29,24 @@ cases while building on top of **[@shopify/shopify-api][GitHub API]**.
 
 <br>
 
+-   ### **[Remix]**
+
+    Middlware for Remix apps that allows to communicate  
+    with and authenticate requests coming from Shopify.
+    
+    ```
+    @shopify/shopify-app-remix
+    ```
+    
+    [<kbd> GitHub </kbd>][GitHub Remix]  
+    [<kbd> NPM </kbd>][NPM Remix]
+
+    <br>
+
 -   ### **[Express.js]**
 
-    Creates a middleware layer that allows express apps to  
-    communicate with and authenticate requests from Shopify.
+    Middlware for Express apps that allows to communicate  
+    with and authenticate requests coming from Shopify.
 
     ```
     @shopify/shopify-app-express
@@ -51,74 +58,11 @@ cases while building on top of **[@shopify/shopify-api][GitHub API]**.
 <br>
 <br>
 
-#### [`@shopify/shopify-app-session-storage-prisma`](./packages/shopify-app-session-storage-prisma)
-
-- Provides an implementation of `SessionStorage` that uses [Prisma](https://www.prisma.io/).
-
-#### [`@shopify/shopify-app-session-storage-memory`](./packages/shopify-app-session-storage-memory)
-
-- Provides a simplified memory-based implementation of `SessionStorage` for development.
-
-#### [`@shopify/shopify-app-session-storage-sqlite`](./packages/shopify-app-session-storage-sqlite)
-
-- Provides an implementation of `SessionStorage` that uses [SQLite](https://www.sqlite.org).
-
-#### [`@shopify/shopify-app-session-storage-mongodb`](./packages/shopify-app-session-storage-mongodb)
-
-- Provides an implementation of `SessionStorage` that uses [MongoDB](https://www.mongodb.com/home).
-
-#### [`@shopify/shopify-app-session-storage-mysql`](./packages/shopify-app-session-storage-mysql)
-
-- Provides an implementation of `SessionStorage` that uses [MySQL](https://www.mysql.com).
-
-#### [`@shopify/shopify-app-session-storage-postgresql`](./packages/shopify-app-session-storage-postgresql)
-
-- Provides an implementation of `SessionStorage` that uses [PostgreSQL](https://www.postgresql.org).
-
-#### [`@shopify/shopify-app-session-storage-redis`](./packages/shopify-app-session-storage-redis)
-
-- Provides an implementation of `SessionStorage` that uses [Redis](https://redis.io).
-
-#### [`@shopify/shopify-app-session-storage-kv`](./packages/shopify-app-session-storage-kv)
-
-- Provides an implementation of `SessionStorage` that uses [CloudFlare KV storage](https://www.cloudflare.com/products/workers-kv).
-
-### Building a Session Storage Adaptor
-
-#### [`@shopify/shopify-app-session-storage`](./packages/shopify-app-session-storage)
-
-- Provides an interface that enables apps to store the sessions created during the OAuth process in `@shopify/shopify-api`.
-
-- You can assign any implementation of this interface to the [Middleware layer](#app-middleware) packages. You can also call them directly from your app even if you're not building with [Express.js](https://expressjs.com).
-
-### Community contributed implementations of `SessionStorage`
-
-#### [`@shopify/shopify-app-session-storage-dynamodb`](./packages/shopify-app-session-storage-dynamodb)
-
-- Provides an implementation of `SessionStorage` that uses [AWS DynamoDB](https://aws.amazon.com/dynamodb/). Contributed by [Chris](https://github.com/zirkelc) - thank you :clap:
 ## Session Storage Options
 
 *Implementations for different vendors / technologies.*
 
 <br>
-
--   ### **OAuth**
-
-    Provides an interface that enables apps to store the sessions  
-    created during the OAuth process in  `@shopify/shopify-api`
-
-    You can assign any implementation of this interface to the  
-    `@shopify/shopify-app-express`  package, but you can also call  
-    them directly from your app if you're not building with Express.js.
-
-    ```
-    @shopify/shopify-app-session-storage
-    ```
-    
-    [<kbd> GitHub </kbd>][GitHub OAuth]  
-    [<kbd> NPM </kbd>][NPM OAuth]
-
-    <br>
 
 -   ### **Memory**
 
@@ -131,6 +75,17 @@ cases while building on top of **[@shopify/shopify-api][GitHub API]**.
     [<kbd> GitHub </kbd>][GitHub Memory]  
     [<kbd> NPM </kbd>][NPM Memory]
 
+    <br>
+    
+-   ### **[Prisma]**
+
+    ```
+    @shopify/shopify-app-session-storage-prisma
+    ```
+
+    [<kbd> GitHub </kbd>][GitHub Prisma]  
+    [<kbd> NPM </kbd>][NPM Prisma]
+    
     <br>
 
 -   ### **[SQLite]**
@@ -198,37 +153,86 @@ cases while building on top of **[@shopify/shopify-api][GitHub API]**.
     [<kbd> NPM </kbd>][NPM CloudFlare]
 
 <br>
+<br>
+
+## Session Storage Adaptor
+
+Provides an interface that enables apps to store the sessions  
+created during the OAuth process in  `@shopify/shopify-api`
+
+You can assign any implementation of this interface to the  
+`@shopify/shopify-app-express`  package, but you can also call  
+them directly from your app if you're not building with **[Express.js]**
+
+```
+@shopify/shopify-app-session-storage
+```
+
+[<kbd> GitHub </kbd>][GitHub OAuth]  
+[<kbd> NPM </kbd>][NPM OAuth]
+
+<br>
+<br>
+
+## Community Packages
+
+*Contributed `SessionStorage` implementations.*
+
+<br>
+
+-   ### **[AWS DynamoDB]**
+
+    Contributed by **[Chris]** - thank you :clap:
+
+    ```
+    @shopify/shopify-app-session-storage-dynamodb
+    ```
+    
+    [<kbd> GitHub </kbd>][GitHub DynamoDB]  
+    [<kbd> NPM </kbd>][NPM DynamoDB] 
+
+<br>
 
 
 <!----------------------------------------------------------------------------->
 
 [CloudFlare KV Storage]: https://www.cloudflare.com/products/workers-kv
+[AWS DynamoDB]: https://aws.amazon.com/dynamodb/
 [PostgreSQL]: https://www.postgresql.org
 [Express.js]: https://expressjs.com
 [MongoDB]: https://www.mongodb.com/home
+[Prisma]: https://www.prisma.io/
 [SQLite]: https://www.sqlite.org
+[Chris]: https://github.com/zirkelc
 [MySQL]: https://www.mysql.com
+[Remix]: https://remix.run
 [Redis]: https://redis.io
 
 
 [GitHub CloudFlare]: packages/shopify-app-session-storage-kv
 [GitHub PostgreSQL]: packages/shopify-app-session-storage-postgresql
+[GitHub DynamoDB]: packages/shopify-app-session-storage-dynamodb
 [GitHub MongoDB]: packages/shopify-app-session-storage-mongodb
 [GitHub Express]: packages/shopify-app-express
 [GitHub SQLite]: packages/shopify-app-session-storage-sqlite
 [GitHub Memory]: packages/shopify-app-session-storage-memory
+[GitHub Prisma]: packages/shopify-app-session-storage-prisma
 [GitHub Redis]: packages/shopify-app-session-storage-redis
 [GitHub MySQL]: packages/shopify-app-session-storage-mysql
 [GitHub OAuth]: packages/shopify-app-session-storage
+[GitHub Remix]: packages/shopify-app-remix
 [GitHub API]: https://github.com/Shopify/shopify-api-js
 
 
 [NPM PostgreSQL]: https://www.npmjs.com/package/@shopify/shopify-app-session-storage-postgresql
 [NPM CloudFlare]: https://www.npmjs.com/package/@shopify/shopify-app-session-storage-kv
+[NPM DynamoDB]: https://www.npmjs.com/package/@shopify/shopify-app-session-storage-dynamodb
 [NPM MongoDB]: https://www.npmjs.com/package/@shopify/shopify-app-session-storage-mongodb
 [NPM Express]: https://www.npmjs.com/package/@shopify/shopify-app-express
 [NPM Memory]: https://www.npmjs.com/package/@shopify/shopify-app-session-storage-memory
 [NPM SQLite]: https://www.npmjs.com/package/@shopify/shopify-app-session-storage-sqlite
+[NPM Prisma]: https://www.npmjs.com/package/@shopify/shopify-app-session-storage-prisma
 [NPM Redis]: https://www.npmjs.com/package/@shopify/shopify-app-session-storage-redis
 [NPM MySQL]: https://www.npmjs.com/package/@shopify/shopify-app-session-storage-mysql
 [NPM OAuth]: https://www.npmjs.com/package/@shopify/shopify-app-session-storage
+[NPM Remix]: https://www.npmjs.com/package/@shopify/shopify-app-remix
