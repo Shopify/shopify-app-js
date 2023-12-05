@@ -11,6 +11,7 @@ import {SessionStorage} from '@shopify/shopify-app-session-storage';
 import type {FutureFlagOptions, FutureFlags} from './future/flags';
 import type {AppDistribution} from './types';
 import type {AdminApiContext} from './clients';
+import {IdempotentJobScheduler} from './authenticate/async-jobs/idempotent-job-scheduler';
 
 export interface AppConfigArg<
   Resources extends ShopifyRestResources = ShopifyRestResources,
@@ -233,6 +234,7 @@ export interface AppConfig<Storage extends SessionStorage = SessionStorage>
   useOnlineTokens: boolean;
   hooks: HooksConfig;
   future: FutureFlags;
+  jobScheduler: IdempotentJobScheduler;
 }
 
 export interface AuthConfig {

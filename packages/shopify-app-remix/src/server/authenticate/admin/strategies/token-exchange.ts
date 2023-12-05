@@ -4,20 +4,17 @@ import {
   RequestedTokenType,
   Session,
   Shopify,
-  ShopifyRestResources,
 } from '@shopify/shopify-api';
 import {AppConfig, AppConfigArg} from 'src/server/config-types';
 import {BasicParams, ApiConfigWithFutureFlags} from 'src/server/types';
 
-import {triggerAfterAuthHook} from '../helpers';
 import {respondToInvalidSessionToken} from '../../helpers';
+import {AfterAuthJob} from '../../async-jobs/after-auth-job';
 
 import {AuthorizationStrategy, SessionContext} from './types';
 
-export class TokenExchangeStrategy<
-  Config extends AppConfigArg,
-  Resources extends ShopifyRestResources = ShopifyRestResources,
-> implements AuthorizationStrategy
+export class TokenExchangeStrategy<Config extends AppConfigArg>
+  implements AuthorizationStrategy
 {
   protected api: Shopify<ApiConfigWithFutureFlags<Config['future']>>;
   protected config: AppConfig;
@@ -67,18 +64,16 @@ export class TokenExchangeStrategy<
         newSession = onlineSession;
       }
 
-      try {
-        await triggerAfterAuthHook<Resources>(
-          {api, config, logger},
-          newSession,
+      config.jobScheduler.scheduleJob(
+        new AfterAuthJob({
+          params: {config, api, logger},
+          session: newSession,
           request,
-        );
-      } catch (error) {
-        throw new Response(undefined, {
-          status: 500,
-          statusText: 'Internal Server Error',
-        });
-      }
+        }),
+        {
+          jobIdentifier: sessionToken,
+        },
+      );
 
       return newSession;
     }
