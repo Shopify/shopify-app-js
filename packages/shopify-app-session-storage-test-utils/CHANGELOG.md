@@ -1,5 +1,46 @@
 # @shopify/shopify-app-session-storage-test-utils
 
+## 1.0.1
+
+### Patch Changes
+
+- Updated dependencies [6d12840]
+  - @shopify/shopify-app-session-storage@2.0.1
+
+## 1.0.0
+
+### Patch Changes
+
+- f50a78f: Dropping node 14 support
+- a69d6fc: Updating dependency on @shopify/shopify-api to v.8.0.1
+- Updated dependencies [f837060]
+- Updated dependencies [a69d6fc]
+  - @shopify/shopify-app-session-storage@2.0.0
+
+## 0.1.10
+
+### Patch Changes
+
+- 616388d: Updating dependency on @shopify/shopify-api to 7.7.0
+- Updated dependencies [616388d]
+  - @shopify/shopify-app-session-storage@1.1.10
+
+## 0.1.9
+
+### Patch Changes
+
+- 5b862fe: Upgraded shopify-api dependency to 7.6.0
+- Updated dependencies [5b862fe]
+  - @shopify/shopify-app-session-storage@1.1.9
+
+## 0.1.8
+
+### Patch Changes
+
+- 346b623: Updating dependency on @shopify/shopify-api
+- Updated dependencies [346b623]
+  - @shopify/shopify-app-session-storage@1.1.8
+
 ## 0.1.7
 
 ### Patch Changes
@@ -37,7 +78,7 @@
 ### Patch Changes
 
 - e1d4f4f: Add @shopify/shopify-api as a peerDependencies entry for each session-storage package, to avoid API library conflicts (e.g., scopesArray.map error). Should help avoid issues like #93
-- 1d007e8: Bumps [@shopify/shopify-api](https://github.com/Shopify/shopify-api-js) from 7.0.0 to 7.1.0. See `@shopify/shopify-api`'s [changelog](https://github.com/Shopify/shopify-api-js/blob/main/CHANGELOG.md) for more details.
+- 1d007e8: Bumps [@shopify/shopify-api](https://github.com/Shopify/shopify-api-js) from 7.0.0 to 7.1.0. See `@shopify/shopify-api`'s [changelog](https://github.com/Shopify/shopify-api-js/blob/main/packages/shopify-api/CHANGELOG.md) for more details.
 - Updated dependencies [e1d4f4f]
 - Updated dependencies [1d007e8]
   - @shopify/shopify-app-session-storage@1.1.3
@@ -46,7 +87,7 @@
 
 ### Patch Changes
 
-- e4f3415: Bump @shopify/shopify-api from 6.2.0 to 7.0.0. See [changelog](https://github.com/Shopify/shopify-api-js/blob/main/CHANGELOG.md) for details.
+- e4f3415: Bump @shopify/shopify-api from 6.2.0 to 7.0.0. See [changelog](https://github.com/Shopify/shopify-api-js/blob/main/packages/shopify-api/CHANGELOG.md) for details.
 - Updated dependencies [e4f3415]
   - @shopify/shopify-app-session-storage@1.1.2
 

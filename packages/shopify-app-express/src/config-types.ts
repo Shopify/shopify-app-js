@@ -6,25 +6,25 @@ import {
 import {SessionStorage} from '@shopify/shopify-app-session-storage';
 
 export interface AppConfigParams<
-  R extends ShopifyRestResources = any,
-  S extends SessionStorage = SessionStorage,
+  Resources extends ShopifyRestResources = ShopifyRestResources,
+  Storage extends SessionStorage = SessionStorage,
 > {
   auth: AuthConfigInterface;
   webhooks: WebhooksConfigInterface;
-  api?: Partial<ApiConfigParams<R>>;
+  api?: Partial<ApiConfigParams<Resources>>;
   useOnlineTokens?: boolean;
   exitIframePath?: string;
-  sessionStorage?: S;
+  sessionStorage?: Storage;
 }
 
 export interface AppConfigInterface<
-  R extends ShopifyRestResources = any,
-  S extends SessionStorage = SessionStorage,
-> extends Omit<AppConfigParams<R, S>, 'api'> {
+  Resources extends ShopifyRestResources = ShopifyRestResources,
+  Storage extends SessionStorage = SessionStorage,
+> extends Omit<AppConfigParams<Resources, Storage>, 'api'> {
   logger: Shopify['logger'];
   useOnlineTokens: boolean;
   exitIframePath: string;
-  sessionStorage: S;
+  sessionStorage: Storage;
 }
 
 export interface AuthConfigInterface {

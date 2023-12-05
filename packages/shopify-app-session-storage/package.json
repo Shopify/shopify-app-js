@@ -1,6 +1,6 @@
 {
   "name": "@shopify/shopify-app-session-storage",
-  "version": "1.1.7",
+  "version": "2.0.1",
   "description": "Shopify App Session Storage - abstract class",
   "repository": {
     "type": "git",
@@ -34,7 +34,7 @@
     "tslib": "^2.4.0"
   },
   "peerDependencies": {
-    "@shopify/shopify-api": "^7.5.1"
+    "@shopify/shopify-api": "^8.1.1"
   },
   "devDependencies": {
     "@shopify/eslint-plugin": "^42.1.0",

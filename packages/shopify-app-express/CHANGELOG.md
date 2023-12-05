@@ -1,5 +1,97 @@
 # Changelog
 
+## 3.0.1
+
+### Patch Changes
+
+- 6d12840: Updating dependencies on @shopify/shopify-api
+- Updated dependencies [6d12840]
+  - @shopify/shopify-app-session-storage-memory@2.0.1
+  - @shopify/shopify-app-session-storage@2.0.1
+
+## 3.0.0
+
+### Major Changes
+
+- f837060: **Removed support for Node 14**
+
+  Node 14 has reached its [EOL](https://endoflife.date/nodejs), and dependencies to this package no longer work on Node 14.
+  Because of that, we can no longer support that version.
+
+  If your app is running on Node 14, you'll need to update to a more recent version before upgrading this package.
+
+  This upgrade does not require any code changes.
+
+#### Changes to the `ShopifyApp` type
+
+Previously, the `ShopifyApp` type accepted 2 generic types: the REST resources and the session storage class.
+In v3, that type accepts 1 generic: the params given to the `shopifyApp()` function, which contains both of the previous types, and more.
+
+Apps shouldn't need to use that type directly since `shopifyApp()` is able to extract the types from the parameters it's given.
+If you need to explicitly set those generics, you'll need to use the `AppConfigParams` type.
+
+<details>
+<summary>See an example</summary>
+
+Before:
+
+```ts
+import {ShopifyApp} from '@shopify/shopify-app-express';
+import {restResources} from '@shopify/shopify-api/rest/admin/2023-10';
+import {MemorySessionStorage} from '@shopify/shopify-app-session-storage-memory';
+
+const myVariable: ShopifyApp<typeof restResources, MemorySessionStorage>;
+```
+
+After:
+
+```ts
+import {ShopifyApp, AppConfigParams} from '@shopify/shopify-app-express';
+import {restResources} from '@shopify/shopify-api/rest/admin/2023-10';
+import {MemorySessionStorage} from '@shopify/shopify-app-session-storage-memory';
+
+const myVariable: ShopifyApp<
+  AppConfigParams<typeof restResources, MemorySessionStorage>
+>;
+```
+
+</details>
+
+### Patch Changes
+
+- a69d6fc: Updating dependency on @shopify/shopify-api to v.8.0.1
+- Updated dependencies [f837060]
+- Updated dependencies [a69d6fc]
+  - @shopify/shopify-app-session-storage@2.0.0
+  - @shopify/shopify-app-session-storage-memory@2.0.0
+
+## 2.2.4
+
+### Patch Changes
+
+- 616388d: Updating dependency on @shopify/shopify-api to 7.7.0
+- Updated dependencies [616388d]
+  - @shopify/shopify-app-session-storage-memory@1.0.13
+  - @shopify/shopify-app-session-storage@1.1.10
+
+## 2.2.3
+
+### Patch Changes
+
+- 5b862fe: Upgraded shopify-api dependency to 7.6.0
+- Updated dependencies [5b862fe]
+  - @shopify/shopify-app-session-storage-memory@1.0.12
+  - @shopify/shopify-app-session-storage@1.1.9
+
+## 2.2.2
+
+### Patch Changes
+
+- 346b623: Updating dependency on @shopify/shopify-api
+- Updated dependencies [346b623]
+  - @shopify/shopify-app-session-storage-memory@1.0.11
+  - @shopify/shopify-app-session-storage@1.1.8
+
 ## 2.2.1
 
 ### Patch Changes
@@ -54,7 +146,7 @@
 - f8978a5: Add `X-Shopify-Api-Request-Failure-Reauthorize` and `X-Shopify-Api-Request-Failure-Reauthorize-Url` to `Access-Control-Expose-Headers` when redirecting using headers via App Bridge.
 - 553fd67: Respond with 410 to OAuth requests that are initiated by a bot, using bot detection mechanism introduced in 7.1.0 of API library.
 - f40fede: Bumps [semver](https://github.com/npm/node-semver) from 7.4.0 to 7.5.0. See semver [changelog](https://github.com/npm/node-semver/blob/main/CHANGELOG.md) for more details.
-- 1d007e8: Bumps [@shopify/shopify-api](https://github.com/Shopify/shopify-api-js) from 7.0.0 to 7.1.0. See `@shopify/shopify-api`'s [changelog](https://github.com/Shopify/shopify-api-js/blob/main/CHANGELOG.md) for more details.
+- 1d007e8: Bumps [@shopify/shopify-api](https://github.com/Shopify/shopify-api-js) from 7.0.0 to 7.1.0. See `@shopify/shopify-api`'s [changelog](https://github.com/Shopify/shopify-api-js/blob/main/packages/shopify-api/CHANGELOG.md) for more details.
 - Updated dependencies [e1d4f4f]
 - Updated dependencies [1d007e8]
   - @shopify/shopify-app-session-storage@1.1.3
@@ -70,9 +162,9 @@
 
 ### Major Changes
 
-- 814a9c1: Bump @shopify/shopify-api from 6.2.0 to 7.0.0. See [changelog](https://github.com/Shopify/shopify-api-js/blob/main/CHANGELOG.md) for details.
+- 814a9c1: Bump @shopify/shopify-api from 6.2.0 to 7.0.0. See [changelog](https://github.com/Shopify/shopify-api-js/blob/main/packages/shopify-api/CHANGELOG.md) for details.
 
-  ⚠️ [Breaking] Refer to the [6 to 7 migration guide](https://github.com/Shopify/shopify-api-js/blob/main/docs/migrating-to-v7.md) for more details on how the `.api` property returned by `shopifyApp` may be impacted by this release of the API library.
+  ⚠️ [Breaking] Refer to the [6 to 7 migration guide](https://github.com/Shopify/shopify-api-js/blob/main/packages/shopify-api/docs/migrating-to-v7.md) for more details on how the `.api` property returned by `shopifyApp` may be impacted by this release of the API library.
 
   ⚠️ [Breaking] If your app is using the logging methods of the `.config.logger` property returned by `shopifyApp`, it is no longer `async`.
 

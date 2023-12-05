@@ -17,3 +17,14 @@ model Session {
   accessToken String
   userId      BigInt?
 }
+
+model MySession {
+  id          String    @id
+  shop        String
+  state       String
+  isOnline    Boolean   @default(false)
+  scope       String?
+  expires     DateTime?
+  accessToken String
+  userId      BigInt?
+}
