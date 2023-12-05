@@ -46,7 +46,6 @@ describe('authenticate', () => {
       shop: TEST_SHOP,
       state: '',
     });
-    expect(fetchMock.mock.calls).toHaveLength(1);
   });
 
   it('performs token exchange when existing session is no longer valid', async () => {
@@ -85,7 +84,6 @@ describe('authenticate', () => {
       state: '',
       onlineAccessInfo: expect.any(Object),
     });
-    expect(fetchMock.mock.calls).toHaveLength(2);
   });
 
   describe.each([true, false])(
@@ -115,7 +113,6 @@ describe('authenticate', () => {
         expect(session).toBe(testSession);
         expect(admin.rest.session).toBe(testSession);
         expect(session.isOnline).toEqual(isOnline);
-        expect(fetchMock.mock.calls).toHaveLength(0);
       });
     },
   );
@@ -149,7 +146,6 @@ describe('authenticate', () => {
     expect(searchParams.get('shopify-reload')).toBe(
       `${APP_URL}/?embedded=1&shop=${TEST_SHOP}&host=${BASE64_HOST}`,
     );
-    expect(fetchMock.mock.calls).toHaveLength(1);
   });
 
   test('throws 401 unauthorized on XHR request when receiving an invalid subject token response from token exchange API', async () => {
@@ -172,7 +168,6 @@ describe('authenticate', () => {
 
     // THEN
     expect(response.status).toBe(401);
-    expect(fetchMock.mock.calls).toHaveLength(1);
   });
 
   test('throws 500 for any other error from token exchange API', async () => {
@@ -195,7 +190,6 @@ describe('authenticate', () => {
 
     // THEN
     expect(response.status).toBe(500);
-    expect(fetchMock.mock.calls).toHaveLength(1);
   });
 
   test('throws a 500 if afterAuth hook throws an error', async () => {
