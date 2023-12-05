@@ -215,10 +215,9 @@ describe('authenticating app proxy requests', () => {
   describe('Valid requests with a session return an admin API client', () => {
     expectAdminApiClient(async () => {
       const shopify = shopifyApp(testConfig());
-      const expectedSession = await setUpValidSession(
-        shopify.sessionStorage,
-        false,
-      );
+      const expectedSession = await setUpValidSession(shopify.sessionStorage, {
+        isOnline: false,
+      });
 
       const {admin, session: actualSession} =
         await shopify.authenticate.public.appProxy(await getValidRequest());
@@ -234,10 +233,9 @@ describe('authenticating app proxy requests', () => {
   describe('Valid requests with a session return a Storefront API client', () => {
     expectStorefrontApiClient(async () => {
       const shopify = shopifyApp(testConfig());
-      const expectedSession = await setUpValidSession(
-        shopify.sessionStorage,
-        false,
-      );
+      const expectedSession = await setUpValidSession(shopify.sessionStorage, {
+        isOnline: false,
+      });
 
       const {storefront, session: actualSession} =
         await shopify.authenticate.public.appProxy(await getValidRequest());

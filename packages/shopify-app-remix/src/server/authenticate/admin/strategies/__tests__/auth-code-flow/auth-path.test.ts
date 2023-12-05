@@ -5,13 +5,15 @@ import {
   expectBeginAuthRedirect,
   expectExitIframeRedirect,
   getThrownResponse,
-  testConfigAuthCodeFlow,
+  testConfig,
 } from '../../../../../__test-helpers';
 
 describe('authorize.admin auth path', () => {
   test('throws an 400 Response if the shop param is missing', async () => {
     // GIVEN
-    const config = testConfigAuthCodeFlow();
+    const config = testConfig({
+      future: {unstable_newEmbeddedAuthStrategy: false},
+    });
     const shopify = shopifyApp(config);
 
     // WHEN
@@ -27,7 +29,9 @@ describe('authorize.admin auth path', () => {
 
   test('throws an 400 Response if the shop param is invalid', async () => {
     // GIVEN
-    const config = testConfigAuthCodeFlow();
+    const config = testConfig({
+      future: {unstable_newEmbeddedAuthStrategy: false},
+    });
     const shopify = shopifyApp(config);
 
     // WHEN
@@ -43,7 +47,9 @@ describe('authorize.admin auth path', () => {
 
   test('throws an 302 Response to begin auth', async () => {
     // GIVEN
-    const config = testConfigAuthCodeFlow();
+    const config = testConfig({
+      future: {unstable_newEmbeddedAuthStrategy: false},
+    });
     const shopify = shopifyApp(config);
 
     // WHEN
@@ -59,7 +65,9 @@ describe('authorize.admin auth path', () => {
 
   test('redirects to exit-iframe when loading the auth path while in an iframe request', async () => {
     // GIVEN
-    const config = testConfigAuthCodeFlow();
+    const config = testConfig({
+      future: {unstable_newEmbeddedAuthStrategy: false},
+    });
     const shopify = shopifyApp(config);
 
     // WHEN

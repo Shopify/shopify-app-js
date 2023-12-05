@@ -7,7 +7,7 @@ import {
   ShopifyRestResources,
 } from '@shopify/shopify-api';
 import {AppConfig, AppConfigArg} from 'src/server/config-types';
-import {BasicParams, MockApiConfig} from 'src/server/types';
+import {BasicParams, ApiConfigWithFutureFlags} from 'src/server/types';
 
 import {triggerAfterAuthHook} from '../helpers';
 import {respondToInvalidSessionToken} from '../../helpers';
@@ -19,7 +19,7 @@ export class TokenExchangeStrategy<
   Resources extends ShopifyRestResources = ShopifyRestResources,
 > implements AuthorizationStrategy
 {
-  protected api: Shopify<MockApiConfig<Config['future']>>;
+  protected api: Shopify<ApiConfigWithFutureFlags<Config['future']>>;
   protected config: AppConfig;
   protected logger: Shopify['logger'];
 
@@ -41,6 +41,7 @@ export class TokenExchangeStrategy<
     if (!sessionToken) throw new InvalidJwtError();
 
     if (!session || session.isExpired()) {
+      logger.info('No valid session found');
       logger.info('Requesting offline access token');
       const {session: offlineSession} = await this.exchangeToken({
         request,

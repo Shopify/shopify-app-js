@@ -45,20 +45,6 @@ beforeEach(() => {
   (TEST_CONFIG as any).sessionStorage = new MemorySessionStorage();
 });
 
-export function testConfigAuthCodeFlow<
-  Overrides extends TestOverridesArg<Future>,
-  Future extends FutureFlagOptions,
->(
-  {future, ...overrides}: Overrides & {future?: Future} = {} as Overrides & {
-    future?: Future;
-  },
-) {
-  return testConfig({
-    ...overrides,
-    future: {...future, unstable_newEmbeddedAuthStrategy: false},
-  });
-}
-
 export function testConfig<
   Overrides extends TestOverridesArg<Future>,
   Future extends FutureFlagOptions,
