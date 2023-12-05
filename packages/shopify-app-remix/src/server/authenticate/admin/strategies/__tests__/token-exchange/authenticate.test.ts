@@ -54,7 +54,10 @@ describe('authenticate', () => {
     const config = testConfig({useOnlineTokens: true});
     const shopify = shopifyApp(config);
     const anHourAgo = new Date(Date.now() - 1000 * 3600);
-    await setUpValidSession(shopify.sessionStorage, true, anHourAgo);
+    await setUpValidSession(shopify.sessionStorage, {
+      isOnline: true,
+      expires: anHourAgo,
+    });
 
     const {token} = getJwt();
     await mockTokenExchangeRequest(token, 'offline');
@@ -95,10 +98,9 @@ describe('authenticate', () => {
         let testSession: Session;
         testSession = await setUpValidSession(shopify.sessionStorage);
         if (isOnline) {
-          testSession = await setUpValidSession(
-            shopify.sessionStorage,
+          testSession = await setUpValidSession(shopify.sessionStorage, {
             isOnline,
-          );
+          });
         }
 
         // WHEN

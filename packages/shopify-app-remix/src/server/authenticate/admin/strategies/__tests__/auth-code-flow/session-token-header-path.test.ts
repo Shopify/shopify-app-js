@@ -51,7 +51,7 @@ describe('authorize.session token header path', () => {
           }),
         );
         // The session scopes don't match the configured scopes, so it needs to be reset
-        await setUpValidSession(shopify.sessionStorage, isOnline);
+        await setUpValidSession(shopify.sessionStorage, {isOnline});
 
         // WHEN
         const {token} = getJwt();

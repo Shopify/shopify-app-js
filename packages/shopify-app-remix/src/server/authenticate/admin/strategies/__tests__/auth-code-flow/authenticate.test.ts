@@ -100,10 +100,9 @@ describe('authenticate', () => {
         let testSession: Session;
         testSession = await setUpValidSession(shopify.sessionStorage);
         if (isOnline) {
-          testSession = await setUpValidSession(
-            shopify.sessionStorage,
+          testSession = await setUpValidSession(shopify.sessionStorage, {
             isOnline,
-          );
+          });
         }
 
         // WHEN
@@ -128,10 +127,9 @@ describe('authenticate', () => {
         let testSession: Session;
         testSession = await setUpValidSession(shopify.sessionStorage);
         if (isOnline) {
-          testSession = await setUpValidSession(
-            shopify.sessionStorage,
+          testSession = await setUpValidSession(shopify.sessionStorage, {
             isOnline,
-          );
+          });
         }
 
         // WHEN
