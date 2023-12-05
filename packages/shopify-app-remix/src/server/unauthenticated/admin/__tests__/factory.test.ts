@@ -17,10 +17,9 @@ describe('unauthenticated admin context', () => {
 
   expectAdminApiClient(async () => {
     const shopify = shopifyApp(testConfig());
-    const expectedSession = await setUpValidSession(
-      shopify.sessionStorage,
-      false,
-    );
+    const expectedSession = await setUpValidSession(shopify.sessionStorage, {
+      isOnline: false,
+    });
     const {admin, session: actualSession} = await shopify.unauthenticated.admin(
       TEST_SHOP,
     );
