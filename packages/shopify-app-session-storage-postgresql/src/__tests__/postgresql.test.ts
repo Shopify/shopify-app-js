@@ -136,7 +136,7 @@ describe('PostgreSQLSessionStorage', () => {
 
   it(`can successfully connect with a url string and ssl param`, async () => {
     const _dbURL = new URL(dbURL);
-    _dbURL.searchParams.append('ssl', 'false');
+    _dbURL.searchParams.append('ssl', '{"rejectUnauthorized":false}');
     const storage = new PostgreSQLSessionStorage(_dbURL.toString());
     await storage.ready;
     const session = new Session({
