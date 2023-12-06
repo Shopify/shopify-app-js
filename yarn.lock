@@ -2780,6 +2780,13 @@
     estree-walker "^1.0.1"
     picomatch "^2.2.2"
 
+"@shopify/admin-api-client@^0.1.0":
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/@shopify/admin-api-client/-/admin-api-client-0.1.0.tgz#9442357fd1b038b03a43ab93a5446f1076e79690"
+  integrity sha512-rUq60K5Zu4gmpjdpx3s1DRCRofZXhSNVB74i2rmqQSvPhLkHm8XC5GCfH+kUVO9DEmrVMFI5t3e9IBbz5oAYBw==
+  dependencies:
+    "@shopify/graphql-client" "^0.8.0"
+
 "@shopify/babel-preset@^24.1.4":
   version "24.1.5"
   resolved "https://registry.yarnpkg.com/@shopify/babel-preset/-/babel-preset-24.1.5.tgz#76cfef62bb8a4d9769559f3f2505148a55d13488"
@@ -2840,6 +2847,11 @@
     "@types/react" "^18.0.21"
     globby "^11.1.0"
     typescript "^4.8.3"
+
+"@shopify/graphql-client@^0.8.0":
+  version "0.8.0"
+  resolved "https://registry.yarnpkg.com/@shopify/graphql-client/-/graphql-client-0.8.0.tgz#cfddbc913f56e7f3a1ad28d768013f6a4b598c20"
+  integrity sha512-YtEwYVUzV5n1fyQoc3Rsd5Y1F8OWP27dVe8/gQ3xNy7MLlRIOd3uT9/2LagUNM2cGw3tSrc8d35XG/cKFnCVyg==
 
 "@shopify/loom-cli@^1.1.0":
   version "1.1.0"
@@ -2990,6 +3002,13 @@
     node-fetch "^2.6.1"
     tslib "^2.0.3"
     uuid "^9.0.0"
+
+"@shopify/storefront-api-client@^0.1.1":
+  version "0.1.1"
+  resolved "https://registry.yarnpkg.com/@shopify/storefront-api-client/-/storefront-api-client-0.1.1.tgz#57aea64603e6980c1b384dde0d3b0e9ee616dd6c"
+  integrity sha512-OwwWPfQIjNrwcfSC21zqSeOtk29EXYF0+TOCHYIzmb5PMLsp9y8wZRlQf7oNAVNpUBLr7ibcvjYy7LwC4Yzf0w==
+  dependencies:
+    "@shopify/graphql-client" "^0.8.0"
 
 "@shopify/typescript-configs@^5.1.0":
   version "5.1.0"

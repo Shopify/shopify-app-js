@@ -223,15 +223,13 @@ export class AuthCodeFlowStrategy<
       session,
     });
 
-    await client.query({
-      data: `#graphql
-        query shopifyAppShopName {
-          shop {
-            name
-          }
+    await client.query(`#graphql
+      query shopifyAppShopName {
+        shop {
+          name
         }
-      `,
-    });
+      }
+    `);
   }
 
   private async oauthCallbackError(

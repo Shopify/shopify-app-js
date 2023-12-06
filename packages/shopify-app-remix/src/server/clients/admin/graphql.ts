@@ -1,13 +1,9 @@
 import {flatHeaders} from '@shopify/shopify-api/runtime';
+import {AdminOperations} from '@shopify/admin-api-client';
 
-import {GraphQLClient, GraphQLQueryOptions} from '../types';
+import {GraphQLClient} from '../types';
 
 import {AdminClientOptions} from './types';
-
-export type GraphqlQueryFunction = (
-  query: string,
-  options?: GraphQLQueryOptions,
-) => Promise<Response>;
 
 // eslint-disable-next-line no-warning-comments
 // TODO: This is actually just a call through to the Shopify API client, but with a different API. We should eventually
@@ -17,7 +13,7 @@ export function graphqlClientFactory({
   params,
   handleClientError,
   session,
-}: AdminClientOptions): GraphQLClient {
+}: AdminClientOptions): GraphQLClient<AdminOperations> {
   return async function query(operation, options) {
     const client = new params.api.clients.Graphql({
       session,
@@ -26,8 +22,8 @@ export function graphqlClientFactory({
 
     try {
       // We convert the incoming response to a Response object to bring this client closer to the Remix client.
-      const apiResponse = await client.query({
-        data: {query: operation, variables: options?.variables},
+      const apiResponse = await client.query(operation, {
+        variables: options?.variables,
         tries: options?.tries,
         extraHeaders: options?.headers,
       });

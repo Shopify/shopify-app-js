@@ -21,10 +21,10 @@ export function storefrontClientFactory({
         apiVersion: options.apiVersion,
       });
 
-      const apiResponse = await client.query({
-        data: {query, variables: options?.variables},
-        tries: options.tries,
-        extraHeaders: options.headers,
+      const apiResponse = await client.query(query, {
+        variables: options?.variables,
+        tries: options?.tries,
+        extraHeaders: options?.headers,
       });
 
       return new Response(JSON.stringify(apiResponse.body), {

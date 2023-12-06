@@ -105,26 +105,7 @@ describe('admin.authenticate context', () => {
       it('redirects to auth when request receives a 401 response and not embedded', async () => {
         // GIVEN
         const {admin, session} = await setUpNonEmbeddedFlow();
-        const requestMock = await mockRequest();
-
-        // WHEN
-        const response = await getThrownResponse(
-          async () => action(admin, session),
-          requestMock,
-        );
-
-        // THEN
-        expect(response.status).toEqual(302);
-
-        const {hostname, pathname} = new URL(response.headers.get('Location')!);
-        expect(hostname).toEqual(TEST_SHOP);
-        expect(pathname).toEqual('/admin/oauth/authorize');
-      });
-
-      it('redirects to auth when request receives a 401 response and not embedded', async () => {
-        // GIVEN
-        const {admin, session} = await setUpNonEmbeddedFlow();
-        const requestMock = await mockRequest();
+        const requestMock = await mockRequest(401);
 
         // WHEN
         const response = await getThrownResponse(
@@ -158,7 +139,7 @@ describe('admin.authenticate context', () => {
       it('redirects to exit iframe when request receives a 401 response and embedded', async () => {
         // GIVEN
         const {admin, session} = await setUpEmbeddedFlow();
-        const requestMock = await mockRequest();
+        const requestMock = await mockRequest(401);
 
         // WHEN
         const response = await getThrownResponse(
@@ -173,7 +154,7 @@ describe('admin.authenticate context', () => {
       it('returns app bridge redirection headers when request receives a 401 response on fetch requests', async () => {
         // GIVEN
         const {admin, session} = await setUpFetchFlow();
-        const requestMock = await mockRequest();
+        const requestMock = await mockRequest(401);
 
         // WHEN
         const response = await getThrownResponse(
@@ -243,7 +224,7 @@ async function setUpNonEmbeddedFlow() {
   };
 }
 
-async function mockRestRequest(status = 401) {
+async function mockRestRequest(status) {
   const requestMock = new Request(
     `https://${TEST_SHOP}/admin/api/${LATEST_API_VERSION}/customers.json`,
   );
@@ -257,7 +238,7 @@ async function mockRestRequest(status = 401) {
 }
 
 function mockGraphqlRequest(apiVersion = LATEST_API_VERSION) {
-  return async function (status = 401) {
+  return async function (status) {
     const requestMock = new Request(
       `https://${TEST_SHOP}/admin/api/${apiVersion}/graphql.json`,
       {method: 'POST'},
