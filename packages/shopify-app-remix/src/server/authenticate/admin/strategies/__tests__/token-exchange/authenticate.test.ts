@@ -192,6 +192,33 @@ describe('authenticate', () => {
     expect(response.status).toBe(500);
   });
 
+  test('throws a 500 if afterAuth hook throws an error', async () => {
+    // GIVEN
+    const config = testConfig();
+    const shopify = shopifyApp({
+      ...config,
+      hooks: {
+        afterAuth: () => {
+          throw new Error('test');
+        },
+      },
+    });
+
+    const {token} = getJwt();
+    await mockTokenExchangeRequest(token, 'offline');
+
+    // WHEN
+    const response = await getThrownResponse(
+      shopify.authenticate.admin,
+      new Request(
+        `${APP_URL}?embedded=1&shop=${TEST_SHOP}&host=${BASE64_HOST}&id_token=${token}`,
+      ),
+    );
+
+    // THEN
+    expect(response.status).toBe(500);
+  });
+
   test('Runs the afterAuth hooks passing', async () => {
     // GIVEN
     const afterAuthMock = jest.fn();

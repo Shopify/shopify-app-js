@@ -9,7 +9,7 @@ import {AppConfig, AppConfigArg} from 'src/server/config-types';
 import {BasicParams, ApiConfigWithFutureFlags} from 'src/server/types';
 
 import {respondToInvalidSessionToken} from '../../helpers';
-import {AfterAuthJob} from '../../async-jobs/after-auth-job';
+import {triggerAfterAuthHook} from '../helpers';
 
 import {AuthorizationStrategy, SessionContext} from './types';
 
@@ -64,16 +64,26 @@ export class TokenExchangeStrategy<Config extends AppConfigArg>
         newSession = onlineSession;
       }
 
-      config.jobScheduler.scheduleJob(
-        new AfterAuthJob({
-          params: {config, api, logger},
-          session: newSession,
-          request,
-        }),
-        {
-          jobIdentifier: sessionToken,
-        },
-      );
+      try {
+        await config.idempotentPromiseHandler.handlePromise(
+          () => {
+            logger.info('Running the afterAuth hook asynchronously');
+            return triggerAfterAuthHook(
+              {api, config, logger},
+              newSession,
+              request,
+            );
+          },
+          {
+            promiseIdentifier: sessionToken,
+          },
+        );
+      } catch (error) {
+        throw new Response(undefined, {
+          status: 500,
+          statusText: 'Internal Server Error',
+        });
+      }
 
       return newSession;
     }
