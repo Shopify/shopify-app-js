@@ -68,16 +68,18 @@ export function authStrategyFactory<
   function createContext(
     request: Request,
     session: Session,
+    authStrategy: AuthorizationStrategy,
     sessionToken?: JwtPayload,
   ): AdminContext<ConfigArg, Resources> {
     const context:
       | EmbeddedAdminContext<ConfigArg, Resources>
       | NonEmbeddedAdminContext<ConfigArg, Resources> = {
-      admin: createAdminApiContext<Resources>(request, session, {
-        api,
-        logger,
-        config,
-      }),
+      admin: createAdminApiContext<Resources>(
+        request,
+        session,
+        params,
+        authStrategy,
+      ),
       billing: {
         require: requireBillingFactory(params, request, session),
         request: requestBillingFactory(params, request, session),
@@ -135,7 +137,7 @@ export function authStrategyFactory<
         isOnline: session.isOnline,
       });
 
-      return createContext(request, session, payload);
+      return createContext(request, session, strategy, payload);
     } catch (errorOrResponse) {
       if (errorOrResponse instanceof Response) {
         ensureCORSHeadersFactory(params, request)(errorOrResponse);
