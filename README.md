@@ -25,13 +25,13 @@ cases while building on top of **[@shopify/shopify-api][GitHub API]**
 <br>
 <br>
 
-## App Middleware
+## App middleware
 
 <br>
 
 -   ### **[Remix]**
 
-    Middlware for Remix apps that allows to communicate  
+    Middleware for Remix apps that allows apps to communicate  
     with and authenticate requests coming from Shopify.
     
     ```
@@ -45,7 +45,7 @@ cases while building on top of **[@shopify/shopify-api][GitHub API]**
 
 -   ### **[Express.js]**
 
-    Middlware for Express apps that allows to communicate  
+    Middleware for Express apps that allows apps to communicate  
     with and authenticate requests coming from Shopify.
 
     ```
@@ -58,7 +58,7 @@ cases while building on top of **[@shopify/shopify-api][GitHub API]**
 <br>
 <br>
 
-## Session Storage Options
+## Session storage options
 
 *Implementations for different vendors / technologies.*
 
