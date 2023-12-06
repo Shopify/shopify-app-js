@@ -38,8 +38,8 @@ cases while building on top of **[@shopify/shopify-api][GitHub API]**
     @shopify/shopify-app-remix
     ```
     
-    [<kbd> GitHub </kbd>][GitHub Remix]  
-    [<kbd> NPM </kbd>][NPM Remix]
+    [![Badge GitHub]][GitHub Remix]  
+    [![Badge NPM Remix]][NPM Remix]
 
     <br>
 
@@ -52,8 +52,8 @@ cases while building on top of **[@shopify/shopify-api][GitHub API]**
     @shopify/shopify-app-express
     ```
     
-    [<kbd> GitHub </kbd>][GitHub Express]  
-    [<kbd> NPM </kbd>][NPM Express]
+    [![Badge GitHub]][GitHub Express]  
+    [![Badge NPM Express]][NPM Express]
 
 <br>
 <br>
@@ -72,8 +72,8 @@ cases while building on top of **[@shopify/shopify-api][GitHub API]**
     @shopify/shopify-app-session-storage-memory
     ```
     
-    [<kbd> GitHub </kbd>][GitHub Memory]  
-    [<kbd> NPM </kbd>][NPM Memory]
+    [![Badge GitHub]][GitHub Memory]  
+    [![Badge NPM Memory]][NPM Memory]
 
     <br>
     
@@ -83,8 +83,8 @@ cases while building on top of **[@shopify/shopify-api][GitHub API]**
     @shopify/shopify-app-session-storage-prisma
     ```
 
-    [<kbd> GitHub </kbd>][GitHub Prisma]  
-    [<kbd> NPM </kbd>][NPM Prisma]
+    [![Badge GitHub]][GitHub Prisma]  
+    [![Badge NPM Prisma]][NPM Prisma]
     
     <br>
 
@@ -94,8 +94,8 @@ cases while building on top of **[@shopify/shopify-api][GitHub API]**
     @shopify/shopify-app-session-storage-sqlite
     ```
     
-    [<kbd> GitHub </kbd>][GitHub SQLite]  
-    [<kbd> NPM </kbd>][NPM SQLite]
+    [![Badge GitHub]][GitHub SQLite]  
+    [![Badge NPM SQLite]][NPM SQLite]
 
     <br>
 
@@ -105,8 +105,8 @@ cases while building on top of **[@shopify/shopify-api][GitHub API]**
     @shopify/shopify-app-session-storage-mongodb
     ```
     
-    [<kbd> GitHub </kbd>][GitHub MongoDB]  
-    [<kbd> NPM </kbd>][NPM MongoDB]
+    [![Badge GitHub]][GitHub MongoDB]  
+    [![Badge NPM MongoDB]][NPM MongoDB]
 
     <br>
 
@@ -116,8 +116,8 @@ cases while building on top of **[@shopify/shopify-api][GitHub API]**
     @shopify/shopify-app-session-storage-mysql
     ```
     
-    [<kbd> GitHub </kbd>][GitHub MySQL]  
-    [<kbd> NPM </kbd>][NPM MySQL]
+    [![Badge GitHub]][GitHub MySQL]  
+    [![Badge NPM MySQL]][NPM MySQL]
 
     <br>
     
@@ -127,8 +127,8 @@ cases while building on top of **[@shopify/shopify-api][GitHub API]**
     @shopify/shopify-app-session-storage-postgresql
     ```
     
-    [<kbd> GitHub </kbd>][GitHub PostgreSQL]  
-    [<kbd> NPM </kbd>][NPM PostgreSQL]
+    [![Badge GitHub]][GitHub PostgreSQL]  
+    [![Badge NPM PostgreSQL]][NPM PostgreSQL]
 
     <br>
 
@@ -138,8 +138,8 @@ cases while building on top of **[@shopify/shopify-api][GitHub API]**
     @shopify/shopify-app-session-storage-redis
     ```
     
-    [<kbd> GitHub </kbd>][GitHub Redis]  
-    [<kbd> NPM </kbd>][NPM Redis]
+    [![Badge GitHub]][GitHub Redis]  
+    [![Badge NPM Redis]][NPM Redis]
 
     <br>
 
@@ -149,8 +149,8 @@ cases while building on top of **[@shopify/shopify-api][GitHub API]**
     @shopify/shopify-app-session-storage-kv
     ```
     
-    [<kbd> GitHub </kbd>][GitHub CloudFlare]  
-    [<kbd> NPM </kbd>][NPM CloudFlare]
+    [![Badge GitHub]][GitHub CloudFlare]  
+    [![Badge NPM CloudFlare]][NPM CloudFlare]
 
 <br>
 <br>
@@ -168,8 +168,8 @@ them directly from your app if you're not building with **[Express.js]**
 @shopify/shopify-app-session-storage
 ```
 
-[<kbd> GitHub </kbd>][GitHub OAuth]  
-[<kbd> NPM </kbd>][NPM OAuth]
+[![Badge GitHub]][GitHub OAuth]  
+[![Badge NPM OAuth]][NPM OAuth]
 
 <br>
 <br>
@@ -188,8 +188,8 @@ them directly from your app if you're not building with **[Express.js]**
     @shopify/shopify-app-session-storage-dynamodb
     ```
     
-    [<kbd> GitHub </kbd>][GitHub DynamoDB]  
-    [<kbd> NPM </kbd>][NPM DynamoDB] 
+    [![Badge GitHub]][GitHub DynamoDB]  
+    [![Badge NPM DynamoDB]][NPM DynamoDB] 
 
 <br>
 
@@ -236,3 +236,21 @@ them directly from your app if you're not building with **[Express.js]**
 [NPM MySQL]: https://www.npmjs.com/package/@shopify/shopify-app-session-storage-mysql
 [NPM OAuth]: https://www.npmjs.com/package/@shopify/shopify-app-session-storage
 [NPM Remix]: https://www.npmjs.com/package/@shopify/shopify-app-remix
+
+
+[Badge GitHub]: https://img.shields.io/badge/GitHub-222222?style=for-the-badge&logoColor=white&logo=GitHub
+
+
+[Badge NPM PostgreSQL]: https://img.shields.io/npm/v/%40shopify%2Fshopify-app-session-storage-postgresql?style=for-the-badge&logo=NPM&labelColor=CB3837&color=a82d2d
+[Badge NPM CloudFlare]: https://img.shields.io/npm/v/%40shopify%2Fshopify-app-session-storage-kv?style=for-the-badge&logo=NPM&labelColor=CB3837&color=a82d2d
+[Badge NPM DynamoDB]: https://img.shields.io/npm/v/%40shopify%2Fshopify-app-session-storage-dynamodb?style=for-the-badge&logo=NPM&labelColor=CB3837&color=a82d2d
+[Badge NPM MongoDB]: https://img.shields.io/npm/v/%40shopify%2Fshopify-app-session-storage-mongodb?style=for-the-badge&logo=NPM&labelColor=CB3837&color=a82d2d
+[Badge NPM Express]: https://img.shields.io/npm/v/%40shopify%2Fshopify-app-express?style=for-the-badge&logo=NPM&labelColor=CB3837&color=a82d2d
+[Badge NPM Memory]: https://img.shields.io/npm/v/%40shopify%2Fshopify-app-session-storage-memory?style=for-the-badge&logo=NPM&labelColor=CB3837&color=a82d2d
+[Badge NPM SQLite]: https://img.shields.io/npm/v/%40shopify%2Fshopify-app-session-storage-sqlite?style=for-the-badge&logo=NPM&labelColor=CB3837&color=a82d2d
+[Badge NPM Prisma]: https://img.shields.io/npm/v/%40shopify%2Fshopify-app-session-storage-prisma?style=for-the-badge&logo=NPM&labelColor=CB3837&color=a82d2d
+[Badge NPM Redis]: https://img.shields.io/npm/v/%40shopify%2Fshopify-app-session-storage-redis?style=for-the-badge&logo=NPM&labelColor=CB3837&color=a82d2d
+[Badge NPM MySQL]: https://img.shields.io/npm/v/%40shopify%2Fshopify-app-session-storage-mysql?style=for-the-badge&logo=NPM&labelColor=CB3837&color=a82d2d
+[Badge NPM OAuth]: https://img.shields.io/npm/v/%40shopify%2Fshopify-app-session-storage?style=for-the-badge&logo=NPM&labelColor=CB3837&color=a82d2d
+[Badge NPM Remix]: https://img.shields.io/npm/v/%40shopify%2Fshopify-app-remix?style=for-the-badge&logo=NPM&labelColor=CB3837&color=a82d2d
+
