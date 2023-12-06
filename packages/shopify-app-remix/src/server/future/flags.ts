@@ -14,6 +14,13 @@ export interface FutureFlags {
    * @default false
    */
   v3_authenticatePublic?: boolean;
+
+  /**
+   * When enabled allows you to specify billing plans as line items in the Shopify App configuration.
+   *
+   * @default false
+   */
+  unstable_lineItemBilling?: boolean;
 }
 
 export type FutureFlagOptions = FutureFlags | undefined;

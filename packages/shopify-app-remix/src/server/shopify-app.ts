@@ -30,6 +30,7 @@ import {unauthenticatedAdminContextFactory} from './unauthenticated/admin';
 import {authenticatePublicFactory} from './authenticate/public';
 import {unauthenticatedStorefrontContextFactory} from './unauthenticated/storefront';
 import {AuthCodeFlowStrategy} from './authenticate/admin/strategies/auth-code-flow';
+import {APIFutureFlags} from './future/api-flags';
 
 /**
  * Creates an object your app will use to interact with Shopify.
@@ -139,6 +140,19 @@ function deriveApi(appConfig: AppConfigArg) {
     userAgentPrefix = `${appConfig.userAgentPrefix} | ${userAgentPrefix}`;
   }
 
+  const future: {[key: string]: boolean} = {};
+
+  for (const key in appConfig.future) {
+    if (Object.prototype.hasOwnProperty.call(appConfig.future, key)) {
+      const apiConfigFutureValue =
+        appConfig.future[key as keyof typeof appConfig.future];
+      if (key in APIFutureFlags && apiConfigFutureValue !== undefined) {
+        const flagKey = key as keyof typeof APIFutureFlags;
+        future[APIFutureFlags[flagKey]] = apiConfigFutureValue;
+      }
+    }
+  }
+
   return shopifyApi({
     ...appConfig,
     hostName: appUrl.host,
@@ -147,7 +161,7 @@ function deriveApi(appConfig: AppConfigArg) {
     isEmbeddedApp: appConfig.isEmbeddedApp ?? true,
     apiVersion: appConfig.apiVersion ?? LATEST_API_VERSION,
     isCustomStoreApp: appConfig.distribution === AppDistribution.ShopifyAdmin,
-    future: {},
+    future,
   });
 }
 

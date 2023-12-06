@@ -116,4 +116,21 @@ describe('shopifyApp', () => {
     // THEN
     expect(() => shopifyApp(config as any)).toThrowError(ShopifyError);
   });
+
+  it('passes through shopify-api-js future flags', () => {
+    // GIVEN
+    jest.spyOn(shopifyApiPackage, 'shopifyApi');
+    const config = testConfig({
+      future: {
+        unstable_lineItemBilling: true,
+      },
+    });
+
+    // WHEN
+    shopifyApp(config);
+
+    // THEN
+    const {future} = (shopifyApiPackage.shopifyApi as any).mock.calls[1][0];
+    expect(future).toMatchObject({unstable_lineItemBilling: true});
+  });
 });
