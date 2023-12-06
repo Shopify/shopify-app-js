@@ -65,18 +65,11 @@ export class TokenExchangeStrategy<Config extends AppConfigArg>
       }
 
       try {
-        await config.idempotentPromiseHandler.handlePromise(
-          () => {
-            logger.info('Running the afterAuth hook asynchronously');
-            return triggerAfterAuthHook(
-              {api, config, logger},
-              newSession,
-              request,
-            );
-          },
-          {
-            promiseIdentifier: sessionToken,
-          },
+        await this.handleAfterAuthHook(
+          {api, config, logger},
+          newSession,
+          request,
+          sessionToken,
         );
       } catch (error) {
         throw new Response(undefined, {
@@ -125,5 +118,22 @@ export class TokenExchangeStrategy<Config extends AppConfigArg>
         statusText: 'Internal Server Error',
       });
     }
+  }
+
+  private async handleAfterAuthHook(
+    params: BasicParams,
+    session: Session,
+    request: Request,
+    sessionToken: string,
+  ) {
+    const {config} = params;
+    await config.idempotentPromiseHandler.handlePromise(
+      () => {
+        return triggerAfterAuthHook(params, session, request);
+      },
+      {
+        promiseIdentifier: sessionToken,
+      },
+    );
   }
 }
