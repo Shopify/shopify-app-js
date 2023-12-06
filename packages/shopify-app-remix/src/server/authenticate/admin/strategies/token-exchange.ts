@@ -84,6 +84,8 @@ export class TokenExchangeStrategy<Config extends AppConfigArg>
     return session!;
   }
 
+  public async handleInvalidAccessTokenError(): Promise<void> {}
+
   private async exchangeToken({
     request,
     shop,

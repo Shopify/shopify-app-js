@@ -1,15 +1,11 @@
 import {HttpResponseError} from '@shopify/shopify-api';
 
 import type {HandleAdminClientError} from '../../../clients/admin/types';
-
-import {redirectToAuthPage} from './redirect-to-auth-page';
-
-interface HandleClientErrorOptions {
-  request: Request;
-}
+import {HandleClientErrorOptions} from '../strategies/types';
 
 export function handleClientErrorFactory({
   request,
+  authStrategy,
 }: HandleClientErrorOptions): HandleAdminClientError {
   return async function handleClientError({
     error,
@@ -32,8 +28,12 @@ export function handleClientErrorFactory({
       },
     );
 
-    if (error.response.code === 401) {
-      throw await redirectToAuthPage(params, request, session.shop);
+    if (error.response.code === 401 && authStrategy) {
+      await authStrategy.handleInvalidAccessTokenError({
+        request,
+        session,
+        error,
+      });
     }
 
     // forward a minimal copy of the upstream HTTP response instead of an Error:

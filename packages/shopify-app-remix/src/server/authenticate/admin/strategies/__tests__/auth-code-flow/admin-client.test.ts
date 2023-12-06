@@ -1,6 +1,5 @@
 import {
   ApiVersion,
-  HttpMaxRetriesError,
   LATEST_API_VERSION,
   SESSION_COOKIE_NAME,
   Session,
