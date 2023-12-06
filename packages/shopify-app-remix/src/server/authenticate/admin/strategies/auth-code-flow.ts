@@ -21,7 +21,11 @@ import {
 import {AppConfig} from '../../../config-types';
 import {getSessionTokenHeader} from '../../helpers';
 
-import {AuthorizationStrategy, SessionContext} from './types';
+import {
+  AuthorizationStrategy,
+  HandleInvalidAccessTokenOptions,
+  SessionContext,
+} from './types';
 
 export class AuthCodeFlowStrategy<
   Resources extends ShopifyRestResources = ShopifyRestResources,
@@ -85,6 +89,18 @@ export class AuthCodeFlowStrategy<
     logger.debug('Found a valid session', {shop});
 
     return session!;
+  }
+
+  public async handleInvalidAccessTokenError({
+    request,
+    session,
+  }: HandleInvalidAccessTokenOptions): Promise<never> {
+    const {api, config, logger} = this;
+    throw await redirectToAuthPage(
+      {api, config, logger},
+      request,
+      session.shop,
+    );
   }
 
   private async ensureInstalledOnShop(request: Request) {
