@@ -1,5 +1,13 @@
 # @shopify/shopify-app-session-storage-memory
 
+## 2.0.2
+
+### Patch Changes
+
+- 3685bd4: Bump shopify-api to ^8.1.1
+- Updated dependencies [3685bd4]
+  - @shopify/shopify-app-session-storage@2.0.2
+
 ## 2.0.1
 
 ### Patch Changes
