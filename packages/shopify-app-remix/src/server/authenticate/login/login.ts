@@ -35,7 +35,12 @@ export function loginFactory(params: BasicParams) {
       return {shop: LoginErrorType.InvalidShop};
     }
 
-    const redirectUrl = `${config.appUrl}${config.auth.path}?shop=${sanitizedShop}`;
+    const authPath = `${config.appUrl}${config.auth.path}?shop=${sanitizedShop}`;
+    const installPath = `https://${sanitizedShop}/admin/oauth/install?client_id=${config.apiKey}`;
+
+    const shouldInstall =
+      config.isEmbeddedApp && config.future.unstable_newEmbeddedAuthStrategy;
+    const redirectUrl = shouldInstall ? installPath : authPath;
 
     logger.info(`Redirecting login request to ${redirectUrl}`, {
       shop: sanitizedShop,
