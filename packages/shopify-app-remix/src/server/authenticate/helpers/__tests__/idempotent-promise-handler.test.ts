@@ -1,3 +1,5 @@
+import {ShopifyError} from '@shopify/shopify-api';
+
 import {IdempotentPromiseHandler} from '../idempotent-promise-handler';
 
 const mockFunction = jest.fn();
@@ -47,5 +49,56 @@ describe('IdempotentPromiseHandler', () => {
 
     // THEN
     expect(mockFunction).toHaveBeenCalledTimes(2);
+  });
+
+  it('clears stale identifier from hash', async () => {
+    // GIVEN
+    const currentDate = Date.now();
+    jest.useFakeTimers().setSystemTime(currentDate);
+    const promiseHandler = new IdempotentPromiseHandler() as any;
+
+    // WHEN
+    promiseHandler.handlePromise({
+      promiseFunction,
+      identifier: 'old-promise',
+    });
+
+    jest.useFakeTimers().setSystemTime(currentDate + 70000);
+
+    await promiseHandler.handlePromise({
+      promiseFunction,
+      identifier: 'new-promise',
+    });
+
+    expect(promiseHandler.identifiers.size).toBe(1);
+  });
+
+  it('clears stale identifier from hash even when promise fails', async () => {
+    // GIVEN
+    const promiseFunctionErr = () => {
+      throw new ShopifyError();
+    };
+    const currentDate = Date.now();
+    jest.useFakeTimers().setSystemTime(currentDate);
+    const promiseHandler = new IdempotentPromiseHandler() as any;
+
+    // WHEN
+    expect(
+      promiseHandler.handlePromise({
+        promiseFunction: promiseFunctionErr,
+        identifier: 'old-promise',
+      }),
+    ).rejects.toThrow();
+
+    jest.useFakeTimers().setSystemTime(currentDate + 70000);
+
+    expect(
+      promiseHandler.handlePromise({
+        promiseFunction: promiseFunctionErr,
+        identifier: 'new-promise',
+      }),
+    ).rejects.toThrow();
+
+    expect(promiseHandler.identifiers.size).toBe(1);
   });
 });
