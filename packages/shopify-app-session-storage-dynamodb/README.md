@@ -54,23 +54,21 @@ This policy must be attached to a user -- `dynamodb:Query` does not work with in
 
 ```json
 {
-    "Version": "2012-10-17",
-    "Statement": [
-        {
-            "Sid": "Statement1",
-            "Effect": "Allow",
-            "Action": [
-                "dynamodb:GetItem",
-                "dynamodb:DeleteItem",
-                "dynamodb:PutItem",
-                "dynamodb:Query",
-                "dynamodb:DescribeTable"
-            ],
-            "Resource": [
-                "arn:aws:dynamodb:<region>:<account-id>:table/<table-name>"
-            ]
-        }
-    ]
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "Statement1",
+      "Effect": "Allow",
+      "Action": [
+        "dynamodb:GetItem",
+        "dynamodb:DeleteItem",
+        "dynamodb:PutItem",
+        "dynamodb:Query",
+        "dynamodb:DescribeTable"
+      ],
+      "Resource": ["arn:aws:dynamodb:<region>:<account-id>:table/<table-name>"]
+    }
+  ]
 }
 ```
 
