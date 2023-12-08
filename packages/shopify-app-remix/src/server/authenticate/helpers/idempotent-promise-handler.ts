@@ -3,31 +3,43 @@ export interface IdempotentHandlePromiseParams {
   identifier: string;
 }
 
+const IDENTIFIER_TTL_MS = 60000;
+
 export class IdempotentPromiseHandler {
-  protected identifiers: Set<string>;
+  protected identifiers: Map<string, number>;
 
   constructor() {
-    this.identifiers = new Set<string>();
+    this.identifiers = new Map<string, number>();
   }
 
   async handlePromise({
     promiseFunction,
     identifier,
   }: IdempotentHandlePromiseParams): Promise<any> {
-    if (this.isPromiseRunnable(identifier)) {
-      await promiseFunction();
+    try {
+      if (this.isPromiseRunnable(identifier)) {
+        await promiseFunction();
+      }
+    } finally {
+      this.clearStaleIdentifiers();
     }
 
     return Promise.resolve();
   }
 
-  private isPromiseRunnable(identifier?: string) {
-    if (!identifier) return true;
-
+  private isPromiseRunnable(identifier: string) {
     if (!this.identifiers.has(identifier)) {
-      this.identifiers.add(identifier);
+      this.identifiers.set(identifier, Date.now());
       return true;
     }
     return false;
+  }
+
+  private async clearStaleIdentifiers() {
+    this.identifiers.forEach((date, identifier, map) => {
+      if (Date.now() - date > IDENTIFIER_TTL_MS) {
+        map.delete(identifier);
+      }
+    });
   }
 }
