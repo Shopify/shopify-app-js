@@ -5,14 +5,15 @@ import {TEST_SHOP, USER_ID} from './const';
 
 export async function setUpValidSession(
   sessionStorage: SessionStorage,
-  isOnline = false,
+  sessionParams?: Partial<Session>,
 ): Promise<Session> {
   const overrides: Partial<Session> = {};
   let id = `offline_${TEST_SHOP}`;
-  if (isOnline) {
+  if (sessionParams?.isOnline) {
     id = `${TEST_SHOP}_${USER_ID}`;
     // Expires one day from now
-    overrides.expires = new Date(Date.now() + 1000 * 3600 * 24);
+    overrides.expires =
+      sessionParams.expires || new Date(Date.now() + 1000 * 3600 * 24);
     overrides.onlineAccessInfo = {
       associated_user_scope: 'testScope',
       expires_in: 3600 * 24,
@@ -32,7 +33,7 @@ export async function setUpValidSession(
   const session = new Session({
     id,
     shop: TEST_SHOP,
-    isOnline,
+    isOnline: Boolean(sessionParams?.isOnline),
     state: 'test',
     accessToken: 'totally_real_token',
     scope: 'testScope',

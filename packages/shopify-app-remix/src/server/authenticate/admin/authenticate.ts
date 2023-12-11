@@ -116,21 +116,19 @@ export function authStrategyFactory<
 
       logger.info('Authenticating admin request');
 
-      const {payload, shop, sessionId} = await getSessionTokenContext(
-        params,
-        request,
-      );
+      const {payload, shop, sessionId, sessionToken} =
+        await getSessionTokenContext(params, request);
 
       logger.debug('Loading session from storage', {sessionId});
       const existingSession = sessionId
         ? await config.sessionStorage.loadSession(sessionId)
         : undefined;
 
-      const session = await strategy.authenticate(
-        request,
-        existingSession,
+      const session = await strategy.authenticate(request, {
+        session: existingSession,
+        sessionToken,
         shop,
-      );
+      });
 
       logger.debug('Request is valid, loaded session from session token', {
         shop: session.shop,
@@ -159,10 +157,10 @@ async function getSessionTokenContext(
   const sessionToken = (headerSessionToken || searchParamSessionToken)!;
 
   logger.debug('Attempting to authenticate session token', {
-    sessionToken: {
+    sessionToken: JSON.stringify({
       header: headerSessionToken,
       search: searchParamSessionToken,
-    },
+    }),
   });
 
   if (config.isEmbeddedApp) {
@@ -178,7 +176,7 @@ async function getSessionTokenContext(
       ? api.session.getJwtSessionId(shop, payload.sub)
       : api.session.getOfflineId(shop);
 
-    return {shop, payload, sessionId};
+    return {shop, payload, sessionId, sessionToken};
   }
 
   const url = new URL(request.url);
@@ -189,5 +187,5 @@ async function getSessionTokenContext(
     rawRequest: request,
   });
 
-  return {shop, sessionId, payload: undefined};
+  return {shop, sessionId, payload: undefined, sessionToken};
 }
