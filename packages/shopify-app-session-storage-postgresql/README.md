@@ -18,7 +18,7 @@ const shopify = shopifyApp({
 
 const shopify = shopifyApp({
   sessionStorage: new PostgreSQLSessionStorage(
-    'postgres://username:password@host/database?ssl={"rejectUnauthorized":false}',
+    'postgres://username:password@host/database?ssl={"rejectUnauthorized":true}',
   ),
   // ...
 });

@@ -18,7 +18,7 @@ const shopify = shopifyApp({
 
 const shopify = shopifyApp({
   sessionStorage: new MySQLSessionStorage(
-    'mysql://username:password@host/database?ssl={"rejectUnauthorized":false}',
+    'mysql://username:password@host/database?ssl={"rejectUnauthorized":true}',
     {connectionPoolLimit: 10}, // optional
   ),
   // ...
