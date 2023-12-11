@@ -11,7 +11,11 @@ import {BasicParams, ApiConfigWithFutureFlags} from 'src/server/types';
 import {respondToInvalidSessionToken} from '../../helpers';
 import {triggerAfterAuthHook} from '../helpers';
 
-import {AuthorizationStrategy, SessionContext} from './types';
+import {
+  AuthorizationStrategy,
+  HandleInvalidAccessTokenOptions,
+  SessionContext,
+} from './types';
 
 export class TokenExchangeStrategy<Config extends AppConfigArg>
   implements AuthorizationStrategy
@@ -84,7 +88,19 @@ export class TokenExchangeStrategy<Config extends AppConfigArg>
     return session!;
   }
 
-  public async handleInvalidAccessTokenError(): Promise<void> {}
+  public async handleInvalidAccessTokenError({
+    request,
+    session,
+  }: HandleInvalidAccessTokenOptions): Promise<void> {
+    const {config, api, logger} = this;
+
+    config.sessionStorage.deleteSession(session.id);
+
+    respondToInvalidSessionToken({
+      params: {config, api, logger},
+      request,
+    });
+  }
 
   private async exchangeToken({
     request,
@@ -112,7 +128,11 @@ export class TokenExchangeStrategy<Config extends AppConfigArg>
           error.response.code === 400 &&
           error.response.body?.error === 'invalid_subject_token')
       ) {
-        throw respondToInvalidSessionToken({api, config, logger}, request);
+        throw respondToInvalidSessionToken({
+          params: {api, config, logger},
+          request,
+          retryRequest: true,
+        });
       }
 
       throw new Response(undefined, {

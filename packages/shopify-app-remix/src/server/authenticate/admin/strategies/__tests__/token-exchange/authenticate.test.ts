@@ -168,6 +168,9 @@ describe('authenticate', () => {
 
     // THEN
     expect(response.status).toBe(401);
+    expect(
+      response.headers.get('X-Shopify-Retry-Invalid-Session-Request'),
+    ).toEqual('1');
   });
 
   test('throws 500 for any other error from token exchange API', async () => {
