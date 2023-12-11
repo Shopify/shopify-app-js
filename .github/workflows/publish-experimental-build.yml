@@ -1,0 +1,36 @@
+name: Publish experimental release
+on:
+  workflow_dispatch:
+
+jobs:
+  experimental-release:
+    name: Publishing experimental release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@master
+        with:
+          ref: experimental
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18.x
+          cache: 'yarn'
+
+      - name: Install dependencies
+        run: yarn --frozen-lockfile
+
+      - name: Build
+        run: yarn build
+
+      - name: Publish to NPM
+        id: changesets
+        uses: changesets/action@v1
+        with:
+          version: yarn changeset version --snapshot experimental
+          publish: yarn changeset publish --tag experimental
+          setupGitUser: false
+          createGithubReleases: false
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
