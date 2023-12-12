@@ -66,7 +66,14 @@
               "language": "tsx"
             }
           ]
-        }
+        },
+        "sectionCard": [
+          {
+            "url": "/docs/api/shopify-app-remix/guide-graphql-types",
+            "name": "Typing GraphQL operations",
+            "type": "tutorial"
+          }
+        ]
       },
       {
         "type": "Generic",
@@ -156,6 +163,130 @@
             "value": "",
             "description": "Returns the same `admin` context (`AdminApiContext`) from `authenticate.webhook` that is returned from `authenticate.admin`.\n\nSee [authenticate.webhook](/docs/api/shopify-app-remix/authenticate/webhook#example-admin) for more details.",
             "isOptional": true
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "guide-graphql-types",
+    "title": "Typing GraphQL operations",
+    "description": "The GraphQL clients provided in this package can use [Codegen](https://the-guild.dev/graphql/codegen) to automatically parse and create types for your queries and mutations.\n\nBy installing a few packages in your app, you can use the `graphql-codegen` script, which will look for strings with the `#graphql` tag and add syntax highlighting and types to them.",
+    "sections": [
+      {
+        "type": "Markdown",
+        "anchorLink": "example",
+        "title": "See it in action",
+        "sectionContent": "\nIn this example, we use the `graphql-codegen` script to parse a query in the `/app/routes/new.tsx` file.\n\nNote how VSCode shows the types for both the return type of `response.json()`, and the `variables` option in the `graphql` function.\n\n<video style=\"width: 100%; height: auto;\" muted controls aria-label=\"A demonstration of a Remix app using GraphQL types\">\n  <source src=\"/assets/client-libraries/graphql-types-demo.webm\" type=\"video/webm\">\n  Your browser doesn't support this video.\n</video>\n      "
+      },
+      {
+        "type": "Generic",
+        "anchorLink": "install",
+        "title": "Installing packages",
+        "sectionContent": "To use the `graphql-codegen` script, you will need to install a few packages in your app.\n\nThey will include the scripts to run, and the types that will be overridden by the results of parsing your operations.",
+        "codeblock": {
+          "title": "Installing packages",
+          "tabs": [
+            {
+              "title": "npm",
+              "language": "sh",
+              "code": "npm add --save-dev @shopify/api-codegen-preset\nnpm add @shopify/admin-api-client @shopify/storefront-api-client\n"
+            },
+            {
+              "title": "yarn",
+              "language": "sh",
+              "code": "yarn add --dev @shopify/api-codegen-preset\nyarn add @shopify/admin-api-client @shopify/storefront-api-client\n"
+            },
+            {
+              "title": "pnpm",
+              "language": "sh",
+              "code": "pnpm add --save-dev @shopify/api-codegen-preset\npnpm add @shopify/admin-api-client @shopify/storefront-api-client\n"
+            }
+          ]
+        }
+      },
+      {
+        "type": "Generic",
+        "anchorLink": "configure",
+        "title": "Setting up .graphqlrc.ts",
+        "sectionContent": "Before you can parse operations, you'll need to create a `.grahpqlrc.ts` file in your project, and configure it to use the `@shopify/api-codegen-preset`.",
+        "codeblock": {
+          "title": "Codegen configuration example",
+          "tabs": [
+            {
+              "title": "/.graphqlrc.ts",
+              "language": "ts",
+              "code": "import {shopifyApiProject, ApiType} from '@shopify/api-codegen-preset';\n\nexport default {\n  // For syntax highlighting / auto-complete when writing operations\n  schema: 'https://shopify.dev/admin-graphql-direct-proxy/2023-10',\n  documents: ['./app/**/*.{js,ts,jsx,tsx}'],\n  projects: {\n    // To produce variable / return types for Admin API operations\n    default: shopifyApiProject({\n      apiType: ApiType.Admin,\n      apiVersion: '2023-10',\n      documents: ['./app/**/*.{js,ts,jsx,tsx}'],\n      outputDir: './app/types',\n    }),\n  },\n};\n"
+            }
+          ]
+        },
+        "sectionCard": [
+          {
+            "url": "https://github.com/Shopify/shopify-api-js/tree/main/packages/api-codegen-preset#configuration",
+            "name": "Configuration options",
+            "subtitle": "Learn more about the available configurations.",
+            "type": "github"
+          }
+        ]
+      },
+      {
+        "type": "Generic",
+        "anchorLink": "set-up-script",
+        "title": "Setting up the script",
+        "sectionContent": "To generate types, you'll need to add an entry for `graphql-codegen` in the `\"scripts\"` section of your `package.json` file.",
+        "codeblock": {
+          "title": "Setting up the script",
+          "tabs": [
+            {
+              "title": "/package.json",
+              "language": "json",
+              "code": "{\n  \"scripts\": {\n    \"graphql-codegen\": \"graphql-codegen\"\n  }\n}\n"
+            }
+          ]
+        }
+      },
+      {
+        "type": "Generic",
+        "anchorLink": "run",
+        "title": "Generating types",
+        "sectionContent": "You can run the script in watch mode to update your types every time you save a file.",
+        "codeblock": {
+          "title": "Running graphql-codegen",
+          "tabs": [
+            {
+              "title": "npm",
+              "language": "sh",
+              "code": "npm run graphql-codegen -- --watch\n"
+            },
+            {
+              "title": "yarn",
+              "language": "sh",
+              "code": "yarn graphql-codegen --watch\n"
+            },
+            {
+              "title": "pnpm",
+              "language": "sh",
+              "code": "pnpm run graphql-codegen --watch\n"
+            }
+          ]
+        }
+      },
+      {
+        "type": "Resource",
+        "title": "Resources",
+        "anchorLink": "resources",
+        "resources": [
+          {
+            "name": "Admin API",
+            "url": "/docs/api/shopify-app-remix/apis/admin-api",
+            "type": "shopify",
+            "subtitle": "Make requests to the Admin API"
+          },
+          {
+            "name": "Storefront API",
+            "url": "/docs/api/shopify-app-remix/apis/storefront-api",
+            "type": "shopify",
+            "subtitle": "Make requests to the Storefront API"
           }
         ]
       }

@@ -296,7 +296,7 @@
                 "filePath": "/server/clients/admin/types.ts",
                 "syntaxKind": "PropertySignature",
                 "name": "graphql",
-                "value": "GraphQLClient",
+                "value": "GraphQLClient<AdminOperations>",
                 "description": "Methods for interacting with the Shopify Admin GraphQL API\n\n\n\n\n\n\n\n\n\n",
                 "examples": [
                   {
@@ -312,7 +312,7 @@
                 ]
               }
             ],
-            "value": "export interface AdminApiContext<\n  Resources extends ShopifyRestResources = ShopifyRestResources,\n> {\n  /**\n   * Methods for interacting with the Shopify Admin REST API\n   *\n   * There are methods for interacting with individual REST resources. You can also make `GET`, `POST`, `PUT` and `DELETE` requests should the REST resources not meet your needs.\n   *\n   * {@link https://shopify.dev/docs/api/admin-rest}\n   *\n   * @example\n   * <caption>Using REST resources.</caption>\n   * <description>Getting the number of orders in a store using REST resources. Visit the [Admin REST API references](/docs/api/admin-rest) for examples on using each resource. </description>\n   *\n   * ```ts\n   * // /app/routes/**\\/*.ts\n   * import { LoaderFunctionArgs, json } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   *\n   * export const loader = async ({ request }: LoaderFunctionArgs) => {\n   *   const { admin, session } = await authenticate.admin(request);\n   *   return json(admin.rest.resources.Order.count({ session }));\n   * };\n   * ```\n   *\n   *\n   * ```ts\n   * // /app/shopify.server.ts\n   * import { shopifyApp } from \"@shopify/shopify-app-remix/server\";\n   * import { restResources } from \"@shopify/shopify-api/rest/admin/2023-07\";\n   *\n   * const shopify = shopifyApp({\n   *   restResources,\n   *   // ...etc\n   * });\n   * export default shopify;\n   * export const authenticate = shopify.authenticate;\n   * ```\n   *\n   *\n   * @example\n   * <caption>Performing a GET request to the REST API.</caption>\n   * <description>Use `admin.rest.get` to make custom requests to make a request to to the `customer/count` endpoint</description>\n   *\n   * ```ts\n   * // /app/routes/**\\/*.ts\n   * import { LoaderFunctionArgs, json } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   *\n   * export const loader = async ({ request }: LoaderFunctionArgs) => {\n   *   const { admin, session } = await authenticate.admin(request);\n   *   const response = await admin.rest.get({ path: \"/customers/count.json\" });\n   *   const customers = await response.json();\n   *   return json({ customers });\n   * };\n   * ```\n   *\n   * ```ts\n   * // /app/shopify.server.ts\n   * import { shopifyApp } from \"@shopify/shopify-app-remix/server\";\n   * import { restResources } from \"@shopify/shopify-api/rest/admin/2023-04\";\n   *\n   * const shopify = shopifyApp({\n   *   restResources,\n   *   // ...etc\n   * });\n   * export default shopify;\n   * export const authenticate = shopify.authenticate;\n   * ```\n   * @example\n   * <caption>Performing a POST request to the REST API.</caption>\n   * <description>Use `admin.rest.post` to make custom requests to make a request to to the `customers.json` endpoint to send a welcome email</description>\n   * ```ts\n   * // /app/routes/**\\/*.ts\n   * import { LoaderFunctionArgs, json } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   *\n   * export const loader = async ({ request }: LoaderFunctionArgs) => {\n   *   const { admin, session } = await authenticate.admin(request);\n   *   const response = admin.rest.post({\n   *     path: \"customers/7392136888625/send_invite.json\",\n   *     body: {\n   *       customer_invite: {\n   *         to: \"new_test_email@shopify.com\",\n   *         from: \"j.limited@example.com\",\n   *         bcc: [\"j.limited@example.com\"],\n   *         subject: \"Welcome to my new shop\",\n   *         custom_message: \"My awesome new store\",\n   *       },\n   *     },\n   * });\n   *   const customerInvite = await response.json();\n   *   return json({ customerInvite });\n   * };\n   * ```\n   *\n   * ```ts\n   * // /app/shopify.server.ts\n   * import { shopifyApp } from \"@shopify/shopify-app-remix/server\";\n   * import { restResources } from \"@shopify/shopify-api/rest/admin/2023-04\";\n   *\n   * const shopify = shopifyApp({\n   *   restResources,\n   *   // ...etc\n   * });\n   * export default shopify;\n   * export const authenticate = shopify.authenticate;\n   * ```\n   */\n  rest: RestClientWithResources<Resources>;\n\n  /**\n   * Methods for interacting with the Shopify Admin GraphQL API\n   *\n   * {@link https://shopify.dev/docs/api/admin-graphql}\n   * {@link https://github.com/Shopify/shopify-api-js/blob/main/packages/shopify-api/docs/reference/clients/Graphql.md}\n   *\n   * @example\n   * <caption>Querying the GraphQL API.</caption>\n   * <description>Use `admin.graphql` to make query / mutation requests.</description>\n   * ```ts\n   * import { ActionFunctionArgs } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   *\n   * export async function action({ request }: ActionFunctionArgs) {\n   *   const { admin } = await authenticate.admin(request);\n   *\n   *   const response = await admin.graphql(\n   *     `#graphql\n   *     mutation populateProduct($input: ProductInput!) {\n   *       productCreate(input: $input) {\n   *         product {\n   *           id\n   *         }\n   *       }\n   *     }`,\n   *     { variables: { input: { title: \"Product Name\" } } }\n   *   );\n   *\n   *   const productData = await response.json();\n   *   return json({ data: productData.data });\n   * }\n   * ```\n   */\n  graphql: GraphQLClient;\n}"
+            "value": "export interface AdminApiContext<\n  Resources extends ShopifyRestResources = ShopifyRestResources,\n> {\n  /**\n   * Methods for interacting with the Shopify Admin REST API\n   *\n   * There are methods for interacting with individual REST resources. You can also make `GET`, `POST`, `PUT` and `DELETE` requests should the REST resources not meet your needs.\n   *\n   * {@link https://shopify.dev/docs/api/admin-rest}\n   *\n   * @example\n   * <caption>Using REST resources.</caption>\n   * <description>Getting the number of orders in a store using REST resources. Visit the [Admin REST API references](/docs/api/admin-rest) for examples on using each resource. </description>\n   *\n   * ```ts\n   * // /app/routes/**\\/*.ts\n   * import { LoaderFunctionArgs, json } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   *\n   * export const loader = async ({ request }: LoaderFunctionArgs) => {\n   *   const { admin, session } = await authenticate.admin(request);\n   *   return json(admin.rest.resources.Order.count({ session }));\n   * };\n   * ```\n   *\n   *\n   * ```ts\n   * // /app/shopify.server.ts\n   * import { shopifyApp } from \"@shopify/shopify-app-remix/server\";\n   * import { restResources } from \"@shopify/shopify-api/rest/admin/2023-07\";\n   *\n   * const shopify = shopifyApp({\n   *   restResources,\n   *   // ...etc\n   * });\n   * export default shopify;\n   * export const authenticate = shopify.authenticate;\n   * ```\n   *\n   *\n   * @example\n   * <caption>Performing a GET request to the REST API.</caption>\n   * <description>Use `admin.rest.get` to make custom requests to make a request to to the `customer/count` endpoint</description>\n   *\n   * ```ts\n   * // /app/routes/**\\/*.ts\n   * import { LoaderFunctionArgs, json } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   *\n   * export const loader = async ({ request }: LoaderFunctionArgs) => {\n   *   const { admin, session } = await authenticate.admin(request);\n   *   const response = await admin.rest.get({ path: \"/customers/count.json\" });\n   *   const customers = await response.json();\n   *   return json({ customers });\n   * };\n   * ```\n   *\n   * ```ts\n   * // /app/shopify.server.ts\n   * import { shopifyApp } from \"@shopify/shopify-app-remix/server\";\n   * import { restResources } from \"@shopify/shopify-api/rest/admin/2023-04\";\n   *\n   * const shopify = shopifyApp({\n   *   restResources,\n   *   // ...etc\n   * });\n   * export default shopify;\n   * export const authenticate = shopify.authenticate;\n   * ```\n   * @example\n   * <caption>Performing a POST request to the REST API.</caption>\n   * <description>Use `admin.rest.post` to make custom requests to make a request to to the `customers.json` endpoint to send a welcome email</description>\n   * ```ts\n   * // /app/routes/**\\/*.ts\n   * import { LoaderFunctionArgs, json } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   *\n   * export const loader = async ({ request }: LoaderFunctionArgs) => {\n   *   const { admin, session } = await authenticate.admin(request);\n   *   const response = admin.rest.post({\n   *     path: \"customers/7392136888625/send_invite.json\",\n   *     body: {\n   *       customer_invite: {\n   *         to: \"new_test_email@shopify.com\",\n   *         from: \"j.limited@example.com\",\n   *         bcc: [\"j.limited@example.com\"],\n   *         subject: \"Welcome to my new shop\",\n   *         custom_message: \"My awesome new store\",\n   *       },\n   *     },\n   * });\n   *   const customerInvite = await response.json();\n   *   return json({ customerInvite });\n   * };\n   * ```\n   *\n   * ```ts\n   * // /app/shopify.server.ts\n   * import { shopifyApp } from \"@shopify/shopify-app-remix/server\";\n   * import { restResources } from \"@shopify/shopify-api/rest/admin/2023-04\";\n   *\n   * const shopify = shopifyApp({\n   *   restResources,\n   *   // ...etc\n   * });\n   * export default shopify;\n   * export const authenticate = shopify.authenticate;\n   * ```\n   */\n  rest: RestClientWithResources<Resources>;\n\n  /**\n   * Methods for interacting with the Shopify Admin GraphQL API\n   *\n   * {@link https://shopify.dev/docs/api/admin-graphql}\n   * {@link https://github.com/Shopify/shopify-api-js/blob/main/packages/shopify-api/docs/reference/clients/Graphql.md}\n   *\n   * @example\n   * <caption>Querying the GraphQL API.</caption>\n   * <description>Use `admin.graphql` to make query / mutation requests.</description>\n   * ```ts\n   * import { ActionFunctionArgs } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   *\n   * export async function action({ request }: ActionFunctionArgs) {\n   *   const { admin } = await authenticate.admin(request);\n   *\n   *   const response = await admin.graphql(\n   *     `#graphql\n   *     mutation populateProduct($input: ProductInput!) {\n   *       productCreate(input: $input) {\n   *         product {\n   *           id\n   *         }\n   *       }\n   *     }`,\n   *     { variables: { input: { title: \"Product Name\" } } }\n   *   );\n   *\n   *   const productData = await response.json();\n   *   return json({ data: productData.data });\n   * }\n   * ```\n   */\n  graphql: GraphQLClient<AdminOperations>;\n}"
           },
           "RestClientWithResources": {
             "filePath": "/server/clients/admin/rest.ts",
@@ -441,6 +441,100 @@
               }
             ],
             "value": "export interface RequireBillingOptions<Config extends AppConfigArg>\n  extends Omit<BillingCheckParams, 'session' | 'plans' | 'returnObject'> {\n  /**\n   * The plans to check for. Must be one of the values defined in the `billing` config option.\n   */\n  plans: (keyof Config['billing'])[];\n  /**\n   * How to handle the request if the shop doesn't have an active payment for any plan.\n   */\n  onFailure: (error: any) => Promise<Response>;\n}"
+          },
+          "BillingCheckResponseObject": {
+            "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/billing/types.ts",
+            "name": "BillingCheckResponseObject",
+            "description": "",
+            "members": [
+              {
+                "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/billing/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "hasActivePayment",
+                "value": "boolean",
+                "description": ""
+              },
+              {
+                "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/billing/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "oneTimePurchases",
+                "value": "OneTimePurchase[]",
+                "description": ""
+              },
+              {
+                "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/billing/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "appSubscriptions",
+                "value": "AppSubscription[]",
+                "description": ""
+              }
+            ],
+            "value": "export interface BillingCheckResponseObject {\n  hasActivePayment: boolean;\n  oneTimePurchases: OneTimePurchase[];\n  appSubscriptions: AppSubscription[];\n}"
+          },
+          "OneTimePurchase": {
+            "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/billing/types.ts",
+            "name": "OneTimePurchase",
+            "description": "",
+            "members": [
+              {
+                "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/billing/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "id",
+                "value": "string",
+                "description": ""
+              },
+              {
+                "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/billing/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "name",
+                "value": "string",
+                "description": ""
+              },
+              {
+                "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/billing/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "test",
+                "value": "boolean",
+                "description": ""
+              },
+              {
+                "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/billing/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "status",
+                "value": "string",
+                "description": ""
+              }
+            ],
+            "value": "export interface OneTimePurchase {\n  id: string;\n  name: string;\n  test: boolean;\n  status: string;\n}"
+          },
+          "AppSubscription": {
+            "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/billing/types.ts",
+            "name": "AppSubscription",
+            "description": "",
+            "members": [
+              {
+                "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/billing/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "id",
+                "value": "string",
+                "description": ""
+              },
+              {
+                "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/billing/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "name",
+                "value": "string",
+                "description": ""
+              },
+              {
+                "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/billing/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "test",
+                "value": "boolean",
+                "description": ""
+              }
+            ],
+            "value": "export interface AppSubscription {\n  id: string;\n  name: string;\n  test: boolean;\n}"
           },
           "RequestBillingOptions": {
             "filePath": "/server/authenticate/admin/billing/types.ts",
@@ -633,6 +727,77 @@
               }
             ],
             "value": "export interface EmbeddedAdminContext<\n  Config extends AppConfigArg,\n  Resources extends ShopifyRestResources = ShopifyRestResources,\n> extends AdminContextInternal<Config, Resources> {\n  /**\n   * The decoded and validated session token for the request.\n   *\n   * Returned only if `isEmbeddedApp` is `true`.\n   *\n   * {@link https://shopify.dev/docs/apps/auth/oauth/session-tokens#payload}\n   *\n   * @example\n   * <caption>Using the decoded session token.</caption>\n   * <description>Get user-specific data using the `sessionToken` object.</description>\n   * ```ts\n   * // shopify.server.ts\n   * import { shopifyApp } from \"@shopify/shopify-app-remix/server\";\n   *\n   * const shopify = shopifyApp({\n   *   // ...etc\n   *   useOnlineTokens: true,\n   * });\n   * export default shopify;\n   * export const authenticate = shopify.authenticate;\n   * ```\n   * ```ts\n   * // /app/routes/**\\/*.ts\n   * import { LoaderFunctionArgs, json } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   * import { getMyAppData } from \"~/db/model.server\";\n   *\n   * export const loader = async ({ request }: LoaderFunctionArgs) => {\n   *   const { sessionToken } = await authenticate.public.checkout(\n   *     request\n   *   );\n   *   return json(await getMyAppData({user: sessionToken.sub}));\n   * };\n   * ```\n   */\n  sessionToken: JwtPayload;\n\n  /**\n   * A function that redirects the user to a new page, ensuring that the appropriate parameters are set for embedded\n   * apps.\n   *\n   * Returned only if `isEmbeddedApp` is `true`.\n   *\n   * @example\n   * <caption>Redirecting to an app route.</caption>\n   * <description>Use the `redirect` helper to safely redirect between pages.</description>\n   * ```ts\n   * // /app/routes/admin/my-route.ts\n   * import { LoaderFunctionArgs, json } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   *\n   * export const loader = async ({ request }: LoaderFunctionArgs) => {\n   *   const { session, redirect } = await authenticate.admin(request);\n   *   return redirect(\"/\");\n   * };\n   * ```\n   *\n   * @example\n   * <caption>Redirecting outside of Shopify admin.</caption>\n   * <description>Pass in a `target` option of `_top` or `_parent` to go to an external URL.</description>\n   * ```ts\n   * // /app/routes/admin/my-route.ts\n   * import { LoaderFunctionArgs, json } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   *\n   * export const loader = async ({ request }: LoaderFunctionArgs) => {\n   *   const { session, redirect } = await authenticate.admin(request);\n   *   return redirect(\"/\", { target: '_parent' });\n   * };\n   * ```\n   */\n  redirect: RedirectFunction;\n}"
+          },
+          "JwtPayload": {
+            "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/session/types.ts",
+            "name": "JwtPayload",
+            "description": "",
+            "members": [
+              {
+                "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/session/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "iss",
+                "value": "string",
+                "description": ""
+              },
+              {
+                "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/session/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "dest",
+                "value": "string",
+                "description": ""
+              },
+              {
+                "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/session/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "aud",
+                "value": "string",
+                "description": ""
+              },
+              {
+                "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/session/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "sub",
+                "value": "string",
+                "description": ""
+              },
+              {
+                "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/session/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "exp",
+                "value": "number",
+                "description": ""
+              },
+              {
+                "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/session/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "nbf",
+                "value": "number",
+                "description": ""
+              },
+              {
+                "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/session/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "iat",
+                "value": "number",
+                "description": ""
+              },
+              {
+                "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/session/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "jti",
+                "value": "string",
+                "description": ""
+              },
+              {
+                "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/session/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "sid",
+                "value": "string",
+                "description": ""
+              }
+            ],
+            "value": "export interface JwtPayload {\n  iss: string;\n  dest: string;\n  aud: string;\n  sub: string;\n  exp: number;\n  nbf: number;\n  iat: number;\n  jti: string;\n  sid: string;\n}"
           },
           "RedirectFunction": {
             "filePath": "/server/authenticate/admin/helpers/redirect.ts",
@@ -1111,6 +1276,100 @@
             ],
             "value": "export interface RequireBillingOptions<Config extends AppConfigArg>\n  extends Omit<BillingCheckParams, 'session' | 'plans' | 'returnObject'> {\n  /**\n   * The plans to check for. Must be one of the values defined in the `billing` config option.\n   */\n  plans: (keyof Config['billing'])[];\n  /**\n   * How to handle the request if the shop doesn't have an active payment for any plan.\n   */\n  onFailure: (error: any) => Promise<Response>;\n}"
           },
+          "BillingCheckResponseObject": {
+            "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/billing/types.ts",
+            "name": "BillingCheckResponseObject",
+            "description": "",
+            "members": [
+              {
+                "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/billing/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "hasActivePayment",
+                "value": "boolean",
+                "description": ""
+              },
+              {
+                "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/billing/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "oneTimePurchases",
+                "value": "OneTimePurchase[]",
+                "description": ""
+              },
+              {
+                "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/billing/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "appSubscriptions",
+                "value": "AppSubscription[]",
+                "description": ""
+              }
+            ],
+            "value": "export interface BillingCheckResponseObject {\n  hasActivePayment: boolean;\n  oneTimePurchases: OneTimePurchase[];\n  appSubscriptions: AppSubscription[];\n}"
+          },
+          "OneTimePurchase": {
+            "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/billing/types.ts",
+            "name": "OneTimePurchase",
+            "description": "",
+            "members": [
+              {
+                "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/billing/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "id",
+                "value": "string",
+                "description": ""
+              },
+              {
+                "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/billing/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "name",
+                "value": "string",
+                "description": ""
+              },
+              {
+                "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/billing/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "test",
+                "value": "boolean",
+                "description": ""
+              },
+              {
+                "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/billing/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "status",
+                "value": "string",
+                "description": ""
+              }
+            ],
+            "value": "export interface OneTimePurchase {\n  id: string;\n  name: string;\n  test: boolean;\n  status: string;\n}"
+          },
+          "AppSubscription": {
+            "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/billing/types.ts",
+            "name": "AppSubscription",
+            "description": "",
+            "members": [
+              {
+                "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/billing/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "id",
+                "value": "string",
+                "description": ""
+              },
+              {
+                "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/billing/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "name",
+                "value": "string",
+                "description": ""
+              },
+              {
+                "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/billing/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "test",
+                "value": "boolean",
+                "description": ""
+              }
+            ],
+            "value": "export interface AppSubscription {\n  id: string;\n  name: string;\n  test: boolean;\n}"
+          },
           "RequestBillingOptions": {
             "filePath": "/server/authenticate/admin/billing/types.ts",
             "name": "RequestBillingOptions",
@@ -1547,7 +1806,7 @@
                 "filePath": "/server/clients/admin/types.ts",
                 "syntaxKind": "PropertySignature",
                 "name": "graphql",
-                "value": "GraphQLClient",
+                "value": "GraphQLClient<AdminOperations>",
                 "description": "Methods for interacting with the Shopify Admin GraphQL API\n\n\n\n\n\n\n\n\n\n",
                 "examples": [
                   {
@@ -1563,7 +1822,7 @@
                 ]
               }
             ],
-            "value": "export interface AdminApiContext<\n  Resources extends ShopifyRestResources = ShopifyRestResources,\n> {\n  /**\n   * Methods for interacting with the Shopify Admin REST API\n   *\n   * There are methods for interacting with individual REST resources. You can also make `GET`, `POST`, `PUT` and `DELETE` requests should the REST resources not meet your needs.\n   *\n   * {@link https://shopify.dev/docs/api/admin-rest}\n   *\n   * @example\n   * <caption>Using REST resources.</caption>\n   * <description>Getting the number of orders in a store using REST resources. Visit the [Admin REST API references](/docs/api/admin-rest) for examples on using each resource. </description>\n   *\n   * ```ts\n   * // /app/routes/**\\/*.ts\n   * import { LoaderFunctionArgs, json } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   *\n   * export const loader = async ({ request }: LoaderFunctionArgs) => {\n   *   const { admin, session } = await authenticate.admin(request);\n   *   return json(admin.rest.resources.Order.count({ session }));\n   * };\n   * ```\n   *\n   *\n   * ```ts\n   * // /app/shopify.server.ts\n   * import { shopifyApp } from \"@shopify/shopify-app-remix/server\";\n   * import { restResources } from \"@shopify/shopify-api/rest/admin/2023-07\";\n   *\n   * const shopify = shopifyApp({\n   *   restResources,\n   *   // ...etc\n   * });\n   * export default shopify;\n   * export const authenticate = shopify.authenticate;\n   * ```\n   *\n   *\n   * @example\n   * <caption>Performing a GET request to the REST API.</caption>\n   * <description>Use `admin.rest.get` to make custom requests to make a request to to the `customer/count` endpoint</description>\n   *\n   * ```ts\n   * // /app/routes/**\\/*.ts\n   * import { LoaderFunctionArgs, json } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   *\n   * export const loader = async ({ request }: LoaderFunctionArgs) => {\n   *   const { admin, session } = await authenticate.admin(request);\n   *   const response = await admin.rest.get({ path: \"/customers/count.json\" });\n   *   const customers = await response.json();\n   *   return json({ customers });\n   * };\n   * ```\n   *\n   * ```ts\n   * // /app/shopify.server.ts\n   * import { shopifyApp } from \"@shopify/shopify-app-remix/server\";\n   * import { restResources } from \"@shopify/shopify-api/rest/admin/2023-04\";\n   *\n   * const shopify = shopifyApp({\n   *   restResources,\n   *   // ...etc\n   * });\n   * export default shopify;\n   * export const authenticate = shopify.authenticate;\n   * ```\n   * @example\n   * <caption>Performing a POST request to the REST API.</caption>\n   * <description>Use `admin.rest.post` to make custom requests to make a request to to the `customers.json` endpoint to send a welcome email</description>\n   * ```ts\n   * // /app/routes/**\\/*.ts\n   * import { LoaderFunctionArgs, json } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   *\n   * export const loader = async ({ request }: LoaderFunctionArgs) => {\n   *   const { admin, session } = await authenticate.admin(request);\n   *   const response = admin.rest.post({\n   *     path: \"customers/7392136888625/send_invite.json\",\n   *     body: {\n   *       customer_invite: {\n   *         to: \"new_test_email@shopify.com\",\n   *         from: \"j.limited@example.com\",\n   *         bcc: [\"j.limited@example.com\"],\n   *         subject: \"Welcome to my new shop\",\n   *         custom_message: \"My awesome new store\",\n   *       },\n   *     },\n   * });\n   *   const customerInvite = await response.json();\n   *   return json({ customerInvite });\n   * };\n   * ```\n   *\n   * ```ts\n   * // /app/shopify.server.ts\n   * import { shopifyApp } from \"@shopify/shopify-app-remix/server\";\n   * import { restResources } from \"@shopify/shopify-api/rest/admin/2023-04\";\n   *\n   * const shopify = shopifyApp({\n   *   restResources,\n   *   // ...etc\n   * });\n   * export default shopify;\n   * export const authenticate = shopify.authenticate;\n   * ```\n   */\n  rest: RestClientWithResources<Resources>;\n\n  /**\n   * Methods for interacting with the Shopify Admin GraphQL API\n   *\n   * {@link https://shopify.dev/docs/api/admin-graphql}\n   * {@link https://github.com/Shopify/shopify-api-js/blob/main/packages/shopify-api/docs/reference/clients/Graphql.md}\n   *\n   * @example\n   * <caption>Querying the GraphQL API.</caption>\n   * <description>Use `admin.graphql` to make query / mutation requests.</description>\n   * ```ts\n   * import { ActionFunctionArgs } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   *\n   * export async function action({ request }: ActionFunctionArgs) {\n   *   const { admin } = await authenticate.admin(request);\n   *\n   *   const response = await admin.graphql(\n   *     `#graphql\n   *     mutation populateProduct($input: ProductInput!) {\n   *       productCreate(input: $input) {\n   *         product {\n   *           id\n   *         }\n   *       }\n   *     }`,\n   *     { variables: { input: { title: \"Product Name\" } } }\n   *   );\n   *\n   *   const productData = await response.json();\n   *   return json({ data: productData.data });\n   * }\n   * ```\n   */\n  graphql: GraphQLClient;\n}"
+            "value": "export interface AdminApiContext<\n  Resources extends ShopifyRestResources = ShopifyRestResources,\n> {\n  /**\n   * Methods for interacting with the Shopify Admin REST API\n   *\n   * There are methods for interacting with individual REST resources. You can also make `GET`, `POST`, `PUT` and `DELETE` requests should the REST resources not meet your needs.\n   *\n   * {@link https://shopify.dev/docs/api/admin-rest}\n   *\n   * @example\n   * <caption>Using REST resources.</caption>\n   * <description>Getting the number of orders in a store using REST resources. Visit the [Admin REST API references](/docs/api/admin-rest) for examples on using each resource. </description>\n   *\n   * ```ts\n   * // /app/routes/**\\/*.ts\n   * import { LoaderFunctionArgs, json } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   *\n   * export const loader = async ({ request }: LoaderFunctionArgs) => {\n   *   const { admin, session } = await authenticate.admin(request);\n   *   return json(admin.rest.resources.Order.count({ session }));\n   * };\n   * ```\n   *\n   *\n   * ```ts\n   * // /app/shopify.server.ts\n   * import { shopifyApp } from \"@shopify/shopify-app-remix/server\";\n   * import { restResources } from \"@shopify/shopify-api/rest/admin/2023-07\";\n   *\n   * const shopify = shopifyApp({\n   *   restResources,\n   *   // ...etc\n   * });\n   * export default shopify;\n   * export const authenticate = shopify.authenticate;\n   * ```\n   *\n   *\n   * @example\n   * <caption>Performing a GET request to the REST API.</caption>\n   * <description>Use `admin.rest.get` to make custom requests to make a request to to the `customer/count` endpoint</description>\n   *\n   * ```ts\n   * // /app/routes/**\\/*.ts\n   * import { LoaderFunctionArgs, json } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   *\n   * export const loader = async ({ request }: LoaderFunctionArgs) => {\n   *   const { admin, session } = await authenticate.admin(request);\n   *   const response = await admin.rest.get({ path: \"/customers/count.json\" });\n   *   const customers = await response.json();\n   *   return json({ customers });\n   * };\n   * ```\n   *\n   * ```ts\n   * // /app/shopify.server.ts\n   * import { shopifyApp } from \"@shopify/shopify-app-remix/server\";\n   * import { restResources } from \"@shopify/shopify-api/rest/admin/2023-04\";\n   *\n   * const shopify = shopifyApp({\n   *   restResources,\n   *   // ...etc\n   * });\n   * export default shopify;\n   * export const authenticate = shopify.authenticate;\n   * ```\n   * @example\n   * <caption>Performing a POST request to the REST API.</caption>\n   * <description>Use `admin.rest.post` to make custom requests to make a request to to the `customers.json` endpoint to send a welcome email</description>\n   * ```ts\n   * // /app/routes/**\\/*.ts\n   * import { LoaderFunctionArgs, json } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   *\n   * export const loader = async ({ request }: LoaderFunctionArgs) => {\n   *   const { admin, session } = await authenticate.admin(request);\n   *   const response = admin.rest.post({\n   *     path: \"customers/7392136888625/send_invite.json\",\n   *     body: {\n   *       customer_invite: {\n   *         to: \"new_test_email@shopify.com\",\n   *         from: \"j.limited@example.com\",\n   *         bcc: [\"j.limited@example.com\"],\n   *         subject: \"Welcome to my new shop\",\n   *         custom_message: \"My awesome new store\",\n   *       },\n   *     },\n   * });\n   *   const customerInvite = await response.json();\n   *   return json({ customerInvite });\n   * };\n   * ```\n   *\n   * ```ts\n   * // /app/shopify.server.ts\n   * import { shopifyApp } from \"@shopify/shopify-app-remix/server\";\n   * import { restResources } from \"@shopify/shopify-api/rest/admin/2023-04\";\n   *\n   * const shopify = shopifyApp({\n   *   restResources,\n   *   // ...etc\n   * });\n   * export default shopify;\n   * export const authenticate = shopify.authenticate;\n   * ```\n   */\n  rest: RestClientWithResources<Resources>;\n\n  /**\n   * Methods for interacting with the Shopify Admin GraphQL API\n   *\n   * {@link https://shopify.dev/docs/api/admin-graphql}\n   * {@link https://github.com/Shopify/shopify-api-js/blob/main/packages/shopify-api/docs/reference/clients/Graphql.md}\n   *\n   * @example\n   * <caption>Querying the GraphQL API.</caption>\n   * <description>Use `admin.graphql` to make query / mutation requests.</description>\n   * ```ts\n   * import { ActionFunctionArgs } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   *\n   * export async function action({ request }: ActionFunctionArgs) {\n   *   const { admin } = await authenticate.admin(request);\n   *\n   *   const response = await admin.graphql(\n   *     `#graphql\n   *     mutation populateProduct($input: ProductInput!) {\n   *       productCreate(input: $input) {\n   *         product {\n   *           id\n   *         }\n   *       }\n   *     }`,\n   *     { variables: { input: { title: \"Product Name\" } } }\n   *   );\n   *\n   *   const productData = await response.json();\n   *   return json({ data: productData.data });\n   * }\n   * ```\n   */\n  graphql: GraphQLClient<AdminOperations>;\n}"
           },
           "RestClientWithResources": {
             "filePath": "/server/clients/admin/rest.ts",
@@ -1581,7 +1840,7 @@
                 "filePath": "/server/clients/storefront/types.ts",
                 "syntaxKind": "PropertySignature",
                 "name": "graphql",
-                "value": "GraphQLClient",
+                "value": "GraphQLClient<StorefrontOperations>",
                 "description": "Method for interacting with the Shopify Storefront GraphQL API\n\nIf you're getting incorrect type hints in the Shopify template, follow [these instructions](https://github.com/Shopify/shopify-app-template-remix/tree/main#incorrect-graphql-hints).\n\n\n\n\n",
                 "examples": [
                   {
@@ -1597,7 +1856,7 @@
                 ]
               }
             ],
-            "value": "export interface StorefrontContext {\n  /**\n   * Method for interacting with the Shopify Storefront GraphQL API\n   *\n   * If you're getting incorrect type hints in the Shopify template, follow [these instructions](https://github.com/Shopify/shopify-app-template-remix/tree/main#incorrect-graphql-hints).\n   *\n   * {@link https://shopify.dev/docs/api/storefront}\n   *\n   * @example\n   * <caption>Querying the GraphQL API.</caption>\n   * <description>Use `storefront.graphql` to make query / mutation requests.</description>\n   * ```ts\n   * // app/routes/**\\/.ts\n   * import { json } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   *\n   * export async function action({ request }: ActionFunctionArgs) {\n   *   const { storefront } = await authenticate.public.appProxy(request);\n   *\n   *   const response = await storefront.graphql(`{blogs(first: 10) { edges { node { id } } } }`);\n   *\n   *   return json(await response.json());\n   * }\n   * ```\n   */\n  graphql: GraphQLClient;\n}"
+            "value": "export interface StorefrontContext {\n  /**\n   * Method for interacting with the Shopify Storefront GraphQL API\n   *\n   * If you're getting incorrect type hints in the Shopify template, follow [these instructions](https://github.com/Shopify/shopify-app-template-remix/tree/main#incorrect-graphql-hints).\n   *\n   * {@link https://shopify.dev/docs/api/storefront}\n   *\n   * @example\n   * <caption>Querying the GraphQL API.</caption>\n   * <description>Use `storefront.graphql` to make query / mutation requests.</description>\n   * ```ts\n   * // app/routes/**\\/.ts\n   * import { json } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   *\n   * export async function action({ request }: ActionFunctionArgs) {\n   *   const { storefront } = await authenticate.public.appProxy(request);\n   *\n   *   const response = await storefront.graphql(`{blogs(first: 10) { edges { node { id } } } }`);\n   *\n   *   return json(await response.json());\n   * }\n   * ```\n   */\n  graphql: GraphQLClient<StorefrontOperations>;\n}"
           }
         }
       }
@@ -1796,6 +2055,77 @@
               }
             ],
             "value": "export interface CheckoutContext {\n  /**\n   * The decoded and validated session token for the request\n   *\n   * Refer to the OAuth docs for the [session token payload](https://shopify.dev/docs/apps/auth/oauth/session-tokens#payload).\n   *\n   * @example\n   * <caption>Using the decoded session token.</caption>\n   * <description>Get store-specific data using the `sessionToken` object.</description>\n   * ```ts\n   * // app/routes/public/my-route.ts\n   * import { LoaderFunctionArgs, json } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   * import { getMyAppData } from \"~/db/model.server\";\n   *\n   * export const loader = async ({ request }: LoaderFunctionArgs) => {\n   *   const { sessionToken } = await authenticate.public.checkout(\n   *     request\n   *   );\n   *   return json(await getMyAppData({shop: sessionToken.dest}));\n   * };\n   * ```\n   */\n  sessionToken: JwtPayload;\n\n  /**\n   * A function that ensures the CORS headers are set correctly for the response.\n   *\n   * @example\n   * <caption>Setting CORS headers for a public request.</caption>\n   * <description>Use the `cors` helper to ensure your app can respond to checkout extension requests.</description>\n   * ```ts\n   * // app/routes/public/my-route.ts\n   * import { LoaderFunctionArgs, json } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   * import { getMyAppData } from \"~/db/model.server\";\n   *\n   * export const loader = async ({ request }: LoaderFunctionArgs) => {\n   *   const { sessionToken, cors } = await authenticate.public.checkout(\n   *     request,\n   *     { corsHeaders: [\"X-My-Custom-Header\"] }\n   *   );\n   *   const data = await getMyAppData({shop: sessionToken.dest});\n   *   return cors(json(data));\n   * };\n   * ```\n   */\n  cors: EnsureCORSFunction;\n}"
+          },
+          "JwtPayload": {
+            "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/session/types.ts",
+            "name": "JwtPayload",
+            "description": "",
+            "members": [
+              {
+                "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/session/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "iss",
+                "value": "string",
+                "description": ""
+              },
+              {
+                "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/session/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "dest",
+                "value": "string",
+                "description": ""
+              },
+              {
+                "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/session/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "aud",
+                "value": "string",
+                "description": ""
+              },
+              {
+                "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/session/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "sub",
+                "value": "string",
+                "description": ""
+              },
+              {
+                "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/session/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "exp",
+                "value": "number",
+                "description": ""
+              },
+              {
+                "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/session/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "nbf",
+                "value": "number",
+                "description": ""
+              },
+              {
+                "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/session/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "iat",
+                "value": "number",
+                "description": ""
+              },
+              {
+                "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/session/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "jti",
+                "value": "string",
+                "description": ""
+              },
+              {
+                "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/session/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "sid",
+                "value": "string",
+                "description": ""
+              }
+            ],
+            "value": "export interface JwtPayload {\n  iss: string;\n  dest: string;\n  aud: string;\n  sub: string;\n  exp: number;\n  nbf: number;\n  iat: number;\n  jti: string;\n  sid: string;\n}"
           }
         }
       }
@@ -2254,14 +2584,14 @@
               {
                 "filePath": "/server/types.ts",
                 "syntaxKind": "MethodSignature",
-                "name": "__@iterator@644",
+                "name": "__@iterator@1391",
                 "value": "() => IterableIterator<JSONValue>",
                 "description": "Iterator"
               },
               {
                 "filePath": "/server/types.ts",
                 "syntaxKind": "MethodSignature",
-                "name": "__@unscopables@646",
+                "name": "__@unscopables@1393",
                 "value": "() => { copyWithin: boolean; entries: boolean; fill: boolean; find: boolean; findIndex: boolean; keys: boolean; values: boolean; }",
                 "description": "Returns an object whose properties have the value 'true'\r\nwhen they will be absent when used in a 'with' statement."
               },
@@ -2421,39 +2751,6 @@
             "value": "FeatureEnabled<Future, 'v3_webhookAdminContext'> extends true\n  ? AdminApiContext<Resources>\n  : LegacyWebhookAdminApiContext<Resources>",
             "description": ""
           },
-          "FeatureEnabled": {
-            "filePath": "/server/future/flags.ts",
-            "syntaxKind": "TypeAliasDeclaration",
-            "name": "FeatureEnabled",
-            "value": "Future extends FutureFlags\n  ? Future[Flag] extends true\n    ? true\n    : false\n  : false",
-            "description": ""
-          },
-          "FutureFlags": {
-            "filePath": "/server/future/flags.ts",
-            "name": "FutureFlags",
-            "description": "",
-            "members": [
-              {
-                "filePath": "/server/future/flags.ts",
-                "syntaxKind": "PropertySignature",
-                "name": "v3_webhookAdminContext",
-                "value": "boolean",
-                "description": "When enabled, returns the same `admin` context (`AdminApiContext`) from `authenticate.webhook` that is returned from `authenticate.admin`.",
-                "isOptional": true,
-                "defaultValue": "false"
-              },
-              {
-                "filePath": "/server/future/flags.ts",
-                "syntaxKind": "PropertySignature",
-                "name": "v3_authenticatePublic",
-                "value": "boolean",
-                "description": "When enabled authenticate.public() will not work.  Use authenticate.public.checkout() instead.",
-                "isOptional": true,
-                "defaultValue": "false"
-              }
-            ],
-            "value": "export interface FutureFlags {\n  /**\n   * When enabled, returns the same `admin` context (`AdminApiContext`) from `authenticate.webhook` that is returned from `authenticate.admin`.\n   *\n   * @default false\n   */\n  v3_webhookAdminContext?: boolean;\n\n  /**\n   * When enabled authenticate.public() will not work.  Use authenticate.public.checkout() instead.\n   *\n   * @default false\n   */\n  v3_authenticatePublic?: boolean;\n}"
-          },
           "AdminContext": {
             "filePath": "/server/authenticate/admin/types.ts",
             "syntaxKind": "TypeAliasDeclaration",
@@ -2599,7 +2896,7 @@
                 "filePath": "/server/clients/admin/types.ts",
                 "syntaxKind": "PropertySignature",
                 "name": "graphql",
-                "value": "GraphQLClient",
+                "value": "GraphQLClient<AdminOperations>",
                 "description": "Methods for interacting with the Shopify Admin GraphQL API\n\n\n\n\n\n\n\n\n\n",
                 "examples": [
                   {
@@ -2615,7 +2912,7 @@
                 ]
               }
             ],
-            "value": "export interface AdminApiContext<\n  Resources extends ShopifyRestResources = ShopifyRestResources,\n> {\n  /**\n   * Methods for interacting with the Shopify Admin REST API\n   *\n   * There are methods for interacting with individual REST resources. You can also make `GET`, `POST`, `PUT` and `DELETE` requests should the REST resources not meet your needs.\n   *\n   * {@link https://shopify.dev/docs/api/admin-rest}\n   *\n   * @example\n   * <caption>Using REST resources.</caption>\n   * <description>Getting the number of orders in a store using REST resources. Visit the [Admin REST API references](/docs/api/admin-rest) for examples on using each resource. </description>\n   *\n   * ```ts\n   * // /app/routes/**\\/*.ts\n   * import { LoaderFunctionArgs, json } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   *\n   * export const loader = async ({ request }: LoaderFunctionArgs) => {\n   *   const { admin, session } = await authenticate.admin(request);\n   *   return json(admin.rest.resources.Order.count({ session }));\n   * };\n   * ```\n   *\n   *\n   * ```ts\n   * // /app/shopify.server.ts\n   * import { shopifyApp } from \"@shopify/shopify-app-remix/server\";\n   * import { restResources } from \"@shopify/shopify-api/rest/admin/2023-07\";\n   *\n   * const shopify = shopifyApp({\n   *   restResources,\n   *   // ...etc\n   * });\n   * export default shopify;\n   * export const authenticate = shopify.authenticate;\n   * ```\n   *\n   *\n   * @example\n   * <caption>Performing a GET request to the REST API.</caption>\n   * <description>Use `admin.rest.get` to make custom requests to make a request to to the `customer/count` endpoint</description>\n   *\n   * ```ts\n   * // /app/routes/**\\/*.ts\n   * import { LoaderFunctionArgs, json } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   *\n   * export const loader = async ({ request }: LoaderFunctionArgs) => {\n   *   const { admin, session } = await authenticate.admin(request);\n   *   const response = await admin.rest.get({ path: \"/customers/count.json\" });\n   *   const customers = await response.json();\n   *   return json({ customers });\n   * };\n   * ```\n   *\n   * ```ts\n   * // /app/shopify.server.ts\n   * import { shopifyApp } from \"@shopify/shopify-app-remix/server\";\n   * import { restResources } from \"@shopify/shopify-api/rest/admin/2023-04\";\n   *\n   * const shopify = shopifyApp({\n   *   restResources,\n   *   // ...etc\n   * });\n   * export default shopify;\n   * export const authenticate = shopify.authenticate;\n   * ```\n   * @example\n   * <caption>Performing a POST request to the REST API.</caption>\n   * <description>Use `admin.rest.post` to make custom requests to make a request to to the `customers.json` endpoint to send a welcome email</description>\n   * ```ts\n   * // /app/routes/**\\/*.ts\n   * import { LoaderFunctionArgs, json } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   *\n   * export const loader = async ({ request }: LoaderFunctionArgs) => {\n   *   const { admin, session } = await authenticate.admin(request);\n   *   const response = admin.rest.post({\n   *     path: \"customers/7392136888625/send_invite.json\",\n   *     body: {\n   *       customer_invite: {\n   *         to: \"new_test_email@shopify.com\",\n   *         from: \"j.limited@example.com\",\n   *         bcc: [\"j.limited@example.com\"],\n   *         subject: \"Welcome to my new shop\",\n   *         custom_message: \"My awesome new store\",\n   *       },\n   *     },\n   * });\n   *   const customerInvite = await response.json();\n   *   return json({ customerInvite });\n   * };\n   * ```\n   *\n   * ```ts\n   * // /app/shopify.server.ts\n   * import { shopifyApp } from \"@shopify/shopify-app-remix/server\";\n   * import { restResources } from \"@shopify/shopify-api/rest/admin/2023-04\";\n   *\n   * const shopify = shopifyApp({\n   *   restResources,\n   *   // ...etc\n   * });\n   * export default shopify;\n   * export const authenticate = shopify.authenticate;\n   * ```\n   */\n  rest: RestClientWithResources<Resources>;\n\n  /**\n   * Methods for interacting with the Shopify Admin GraphQL API\n   *\n   * {@link https://shopify.dev/docs/api/admin-graphql}\n   * {@link https://github.com/Shopify/shopify-api-js/blob/main/packages/shopify-api/docs/reference/clients/Graphql.md}\n   *\n   * @example\n   * <caption>Querying the GraphQL API.</caption>\n   * <description>Use `admin.graphql` to make query / mutation requests.</description>\n   * ```ts\n   * import { ActionFunctionArgs } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   *\n   * export async function action({ request }: ActionFunctionArgs) {\n   *   const { admin } = await authenticate.admin(request);\n   *\n   *   const response = await admin.graphql(\n   *     `#graphql\n   *     mutation populateProduct($input: ProductInput!) {\n   *       productCreate(input: $input) {\n   *         product {\n   *           id\n   *         }\n   *       }\n   *     }`,\n   *     { variables: { input: { title: \"Product Name\" } } }\n   *   );\n   *\n   *   const productData = await response.json();\n   *   return json({ data: productData.data });\n   * }\n   * ```\n   */\n  graphql: GraphQLClient;\n}"
+            "value": "export interface AdminApiContext<\n  Resources extends ShopifyRestResources = ShopifyRestResources,\n> {\n  /**\n   * Methods for interacting with the Shopify Admin REST API\n   *\n   * There are methods for interacting with individual REST resources. You can also make `GET`, `POST`, `PUT` and `DELETE` requests should the REST resources not meet your needs.\n   *\n   * {@link https://shopify.dev/docs/api/admin-rest}\n   *\n   * @example\n   * <caption>Using REST resources.</caption>\n   * <description>Getting the number of orders in a store using REST resources. Visit the [Admin REST API references](/docs/api/admin-rest) for examples on using each resource. </description>\n   *\n   * ```ts\n   * // /app/routes/**\\/*.ts\n   * import { LoaderFunctionArgs, json } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   *\n   * export const loader = async ({ request }: LoaderFunctionArgs) => {\n   *   const { admin, session } = await authenticate.admin(request);\n   *   return json(admin.rest.resources.Order.count({ session }));\n   * };\n   * ```\n   *\n   *\n   * ```ts\n   * // /app/shopify.server.ts\n   * import { shopifyApp } from \"@shopify/shopify-app-remix/server\";\n   * import { restResources } from \"@shopify/shopify-api/rest/admin/2023-07\";\n   *\n   * const shopify = shopifyApp({\n   *   restResources,\n   *   // ...etc\n   * });\n   * export default shopify;\n   * export const authenticate = shopify.authenticate;\n   * ```\n   *\n   *\n   * @example\n   * <caption>Performing a GET request to the REST API.</caption>\n   * <description>Use `admin.rest.get` to make custom requests to make a request to to the `customer/count` endpoint</description>\n   *\n   * ```ts\n   * // /app/routes/**\\/*.ts\n   * import { LoaderFunctionArgs, json } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   *\n   * export const loader = async ({ request }: LoaderFunctionArgs) => {\n   *   const { admin, session } = await authenticate.admin(request);\n   *   const response = await admin.rest.get({ path: \"/customers/count.json\" });\n   *   const customers = await response.json();\n   *   return json({ customers });\n   * };\n   * ```\n   *\n   * ```ts\n   * // /app/shopify.server.ts\n   * import { shopifyApp } from \"@shopify/shopify-app-remix/server\";\n   * import { restResources } from \"@shopify/shopify-api/rest/admin/2023-04\";\n   *\n   * const shopify = shopifyApp({\n   *   restResources,\n   *   // ...etc\n   * });\n   * export default shopify;\n   * export const authenticate = shopify.authenticate;\n   * ```\n   * @example\n   * <caption>Performing a POST request to the REST API.</caption>\n   * <description>Use `admin.rest.post` to make custom requests to make a request to to the `customers.json` endpoint to send a welcome email</description>\n   * ```ts\n   * // /app/routes/**\\/*.ts\n   * import { LoaderFunctionArgs, json } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   *\n   * export const loader = async ({ request }: LoaderFunctionArgs) => {\n   *   const { admin, session } = await authenticate.admin(request);\n   *   const response = admin.rest.post({\n   *     path: \"customers/7392136888625/send_invite.json\",\n   *     body: {\n   *       customer_invite: {\n   *         to: \"new_test_email@shopify.com\",\n   *         from: \"j.limited@example.com\",\n   *         bcc: [\"j.limited@example.com\"],\n   *         subject: \"Welcome to my new shop\",\n   *         custom_message: \"My awesome new store\",\n   *       },\n   *     },\n   * });\n   *   const customerInvite = await response.json();\n   *   return json({ customerInvite });\n   * };\n   * ```\n   *\n   * ```ts\n   * // /app/shopify.server.ts\n   * import { shopifyApp } from \"@shopify/shopify-app-remix/server\";\n   * import { restResources } from \"@shopify/shopify-api/rest/admin/2023-04\";\n   *\n   * const shopify = shopifyApp({\n   *   restResources,\n   *   // ...etc\n   * });\n   * export default shopify;\n   * export const authenticate = shopify.authenticate;\n   * ```\n   */\n  rest: RestClientWithResources<Resources>;\n\n  /**\n   * Methods for interacting with the Shopify Admin GraphQL API\n   *\n   * {@link https://shopify.dev/docs/api/admin-graphql}\n   * {@link https://github.com/Shopify/shopify-api-js/blob/main/packages/shopify-api/docs/reference/clients/Graphql.md}\n   *\n   * @example\n   * <caption>Querying the GraphQL API.</caption>\n   * <description>Use `admin.graphql` to make query / mutation requests.</description>\n   * ```ts\n   * import { ActionFunctionArgs } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   *\n   * export async function action({ request }: ActionFunctionArgs) {\n   *   const { admin } = await authenticate.admin(request);\n   *\n   *   const response = await admin.graphql(\n   *     `#graphql\n   *     mutation populateProduct($input: ProductInput!) {\n   *       productCreate(input: $input) {\n   *         product {\n   *           id\n   *         }\n   *       }\n   *     }`,\n   *     { variables: { input: { title: \"Product Name\" } } }\n   *   );\n   *\n   *   const productData = await response.json();\n   *   return json({ data: productData.data });\n   * }\n   * ```\n   */\n  graphql: GraphQLClient<AdminOperations>;\n}"
           },
           "RestClientWithResources": {
             "filePath": "/server/clients/admin/rest.ts",
@@ -2744,6 +3041,100 @@
               }
             ],
             "value": "export interface RequireBillingOptions<Config extends AppConfigArg>\n  extends Omit<BillingCheckParams, 'session' | 'plans' | 'returnObject'> {\n  /**\n   * The plans to check for. Must be one of the values defined in the `billing` config option.\n   */\n  plans: (keyof Config['billing'])[];\n  /**\n   * How to handle the request if the shop doesn't have an active payment for any plan.\n   */\n  onFailure: (error: any) => Promise<Response>;\n}"
+          },
+          "BillingCheckResponseObject": {
+            "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/billing/types.ts",
+            "name": "BillingCheckResponseObject",
+            "description": "",
+            "members": [
+              {
+                "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/billing/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "hasActivePayment",
+                "value": "boolean",
+                "description": ""
+              },
+              {
+                "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/billing/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "oneTimePurchases",
+                "value": "OneTimePurchase[]",
+                "description": ""
+              },
+              {
+                "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/billing/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "appSubscriptions",
+                "value": "AppSubscription[]",
+                "description": ""
+              }
+            ],
+            "value": "export interface BillingCheckResponseObject {\n  hasActivePayment: boolean;\n  oneTimePurchases: OneTimePurchase[];\n  appSubscriptions: AppSubscription[];\n}"
+          },
+          "OneTimePurchase": {
+            "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/billing/types.ts",
+            "name": "OneTimePurchase",
+            "description": "",
+            "members": [
+              {
+                "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/billing/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "id",
+                "value": "string",
+                "description": ""
+              },
+              {
+                "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/billing/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "name",
+                "value": "string",
+                "description": ""
+              },
+              {
+                "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/billing/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "test",
+                "value": "boolean",
+                "description": ""
+              },
+              {
+                "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/billing/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "status",
+                "value": "string",
+                "description": ""
+              }
+            ],
+            "value": "export interface OneTimePurchase {\n  id: string;\n  name: string;\n  test: boolean;\n  status: string;\n}"
+          },
+          "AppSubscription": {
+            "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/billing/types.ts",
+            "name": "AppSubscription",
+            "description": "",
+            "members": [
+              {
+                "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/billing/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "id",
+                "value": "string",
+                "description": ""
+              },
+              {
+                "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/billing/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "name",
+                "value": "string",
+                "description": ""
+              },
+              {
+                "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/billing/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "test",
+                "value": "boolean",
+                "description": ""
+              }
+            ],
+            "value": "export interface AppSubscription {\n  id: string;\n  name: string;\n  test: boolean;\n}"
           },
           "RequestBillingOptions": {
             "filePath": "/server/authenticate/admin/billing/types.ts",
@@ -2936,6 +3327,77 @@
               }
             ],
             "value": "export interface EmbeddedAdminContext<\n  Config extends AppConfigArg,\n  Resources extends ShopifyRestResources = ShopifyRestResources,\n> extends AdminContextInternal<Config, Resources> {\n  /**\n   * The decoded and validated session token for the request.\n   *\n   * Returned only if `isEmbeddedApp` is `true`.\n   *\n   * {@link https://shopify.dev/docs/apps/auth/oauth/session-tokens#payload}\n   *\n   * @example\n   * <caption>Using the decoded session token.</caption>\n   * <description>Get user-specific data using the `sessionToken` object.</description>\n   * ```ts\n   * // shopify.server.ts\n   * import { shopifyApp } from \"@shopify/shopify-app-remix/server\";\n   *\n   * const shopify = shopifyApp({\n   *   // ...etc\n   *   useOnlineTokens: true,\n   * });\n   * export default shopify;\n   * export const authenticate = shopify.authenticate;\n   * ```\n   * ```ts\n   * // /app/routes/**\\/*.ts\n   * import { LoaderFunctionArgs, json } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   * import { getMyAppData } from \"~/db/model.server\";\n   *\n   * export const loader = async ({ request }: LoaderFunctionArgs) => {\n   *   const { sessionToken } = await authenticate.public.checkout(\n   *     request\n   *   );\n   *   return json(await getMyAppData({user: sessionToken.sub}));\n   * };\n   * ```\n   */\n  sessionToken: JwtPayload;\n\n  /**\n   * A function that redirects the user to a new page, ensuring that the appropriate parameters are set for embedded\n   * apps.\n   *\n   * Returned only if `isEmbeddedApp` is `true`.\n   *\n   * @example\n   * <caption>Redirecting to an app route.</caption>\n   * <description>Use the `redirect` helper to safely redirect between pages.</description>\n   * ```ts\n   * // /app/routes/admin/my-route.ts\n   * import { LoaderFunctionArgs, json } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   *\n   * export const loader = async ({ request }: LoaderFunctionArgs) => {\n   *   const { session, redirect } = await authenticate.admin(request);\n   *   return redirect(\"/\");\n   * };\n   * ```\n   *\n   * @example\n   * <caption>Redirecting outside of Shopify admin.</caption>\n   * <description>Pass in a `target` option of `_top` or `_parent` to go to an external URL.</description>\n   * ```ts\n   * // /app/routes/admin/my-route.ts\n   * import { LoaderFunctionArgs, json } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   *\n   * export const loader = async ({ request }: LoaderFunctionArgs) => {\n   *   const { session, redirect } = await authenticate.admin(request);\n   *   return redirect(\"/\", { target: '_parent' });\n   * };\n   * ```\n   */\n  redirect: RedirectFunction;\n}"
+          },
+          "JwtPayload": {
+            "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/session/types.ts",
+            "name": "JwtPayload",
+            "description": "",
+            "members": [
+              {
+                "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/session/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "iss",
+                "value": "string",
+                "description": ""
+              },
+              {
+                "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/session/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "dest",
+                "value": "string",
+                "description": ""
+              },
+              {
+                "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/session/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "aud",
+                "value": "string",
+                "description": ""
+              },
+              {
+                "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/session/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "sub",
+                "value": "string",
+                "description": ""
+              },
+              {
+                "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/session/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "exp",
+                "value": "number",
+                "description": ""
+              },
+              {
+                "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/session/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "nbf",
+                "value": "number",
+                "description": ""
+              },
+              {
+                "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/session/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "iat",
+                "value": "number",
+                "description": ""
+              },
+              {
+                "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/session/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "jti",
+                "value": "string",
+                "description": ""
+              },
+              {
+                "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/session/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "sid",
+                "value": "string",
+                "description": ""
+              }
+            ],
+            "value": "export interface JwtPayload {\n  iss: string;\n  dest: string;\n  aud: string;\n  sub: string;\n  exp: number;\n  nbf: number;\n  iat: number;\n  jti: string;\n  sid: string;\n}"
           },
           "RedirectFunction": {
             "filePath": "/server/authenticate/admin/helpers/redirect.ts",
@@ -3212,7 +3674,7 @@
                 "filePath": "/server/clients/admin/types.ts",
                 "syntaxKind": "PropertySignature",
                 "name": "graphql",
-                "value": "GraphQLClient",
+                "value": "GraphQLClient<AdminOperations>",
                 "description": "Methods for interacting with the Shopify Admin GraphQL API\n\n\n\n\n\n\n\n\n\n",
                 "examples": [
                   {
@@ -3228,7 +3690,7 @@
                 ]
               }
             ],
-            "value": "export interface AdminApiContext<\n  Resources extends ShopifyRestResources = ShopifyRestResources,\n> {\n  /**\n   * Methods for interacting with the Shopify Admin REST API\n   *\n   * There are methods for interacting with individual REST resources. You can also make `GET`, `POST`, `PUT` and `DELETE` requests should the REST resources not meet your needs.\n   *\n   * {@link https://shopify.dev/docs/api/admin-rest}\n   *\n   * @example\n   * <caption>Using REST resources.</caption>\n   * <description>Getting the number of orders in a store using REST resources. Visit the [Admin REST API references](/docs/api/admin-rest) for examples on using each resource. </description>\n   *\n   * ```ts\n   * // /app/routes/**\\/*.ts\n   * import { LoaderFunctionArgs, json } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   *\n   * export const loader = async ({ request }: LoaderFunctionArgs) => {\n   *   const { admin, session } = await authenticate.admin(request);\n   *   return json(admin.rest.resources.Order.count({ session }));\n   * };\n   * ```\n   *\n   *\n   * ```ts\n   * // /app/shopify.server.ts\n   * import { shopifyApp } from \"@shopify/shopify-app-remix/server\";\n   * import { restResources } from \"@shopify/shopify-api/rest/admin/2023-07\";\n   *\n   * const shopify = shopifyApp({\n   *   restResources,\n   *   // ...etc\n   * });\n   * export default shopify;\n   * export const authenticate = shopify.authenticate;\n   * ```\n   *\n   *\n   * @example\n   * <caption>Performing a GET request to the REST API.</caption>\n   * <description>Use `admin.rest.get` to make custom requests to make a request to to the `customer/count` endpoint</description>\n   *\n   * ```ts\n   * // /app/routes/**\\/*.ts\n   * import { LoaderFunctionArgs, json } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   *\n   * export const loader = async ({ request }: LoaderFunctionArgs) => {\n   *   const { admin, session } = await authenticate.admin(request);\n   *   const response = await admin.rest.get({ path: \"/customers/count.json\" });\n   *   const customers = await response.json();\n   *   return json({ customers });\n   * };\n   * ```\n   *\n   * ```ts\n   * // /app/shopify.server.ts\n   * import { shopifyApp } from \"@shopify/shopify-app-remix/server\";\n   * import { restResources } from \"@shopify/shopify-api/rest/admin/2023-04\";\n   *\n   * const shopify = shopifyApp({\n   *   restResources,\n   *   // ...etc\n   * });\n   * export default shopify;\n   * export const authenticate = shopify.authenticate;\n   * ```\n   * @example\n   * <caption>Performing a POST request to the REST API.</caption>\n   * <description>Use `admin.rest.post` to make custom requests to make a request to to the `customers.json` endpoint to send a welcome email</description>\n   * ```ts\n   * // /app/routes/**\\/*.ts\n   * import { LoaderFunctionArgs, json } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   *\n   * export const loader = async ({ request }: LoaderFunctionArgs) => {\n   *   const { admin, session } = await authenticate.admin(request);\n   *   const response = admin.rest.post({\n   *     path: \"customers/7392136888625/send_invite.json\",\n   *     body: {\n   *       customer_invite: {\n   *         to: \"new_test_email@shopify.com\",\n   *         from: \"j.limited@example.com\",\n   *         bcc: [\"j.limited@example.com\"],\n   *         subject: \"Welcome to my new shop\",\n   *         custom_message: \"My awesome new store\",\n   *       },\n   *     },\n   * });\n   *   const customerInvite = await response.json();\n   *   return json({ customerInvite });\n   * };\n   * ```\n   *\n   * ```ts\n   * // /app/shopify.server.ts\n   * import { shopifyApp } from \"@shopify/shopify-app-remix/server\";\n   * import { restResources } from \"@shopify/shopify-api/rest/admin/2023-04\";\n   *\n   * const shopify = shopifyApp({\n   *   restResources,\n   *   // ...etc\n   * });\n   * export default shopify;\n   * export const authenticate = shopify.authenticate;\n   * ```\n   */\n  rest: RestClientWithResources<Resources>;\n\n  /**\n   * Methods for interacting with the Shopify Admin GraphQL API\n   *\n   * {@link https://shopify.dev/docs/api/admin-graphql}\n   * {@link https://github.com/Shopify/shopify-api-js/blob/main/packages/shopify-api/docs/reference/clients/Graphql.md}\n   *\n   * @example\n   * <caption>Querying the GraphQL API.</caption>\n   * <description>Use `admin.graphql` to make query / mutation requests.</description>\n   * ```ts\n   * import { ActionFunctionArgs } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   *\n   * export async function action({ request }: ActionFunctionArgs) {\n   *   const { admin } = await authenticate.admin(request);\n   *\n   *   const response = await admin.graphql(\n   *     `#graphql\n   *     mutation populateProduct($input: ProductInput!) {\n   *       productCreate(input: $input) {\n   *         product {\n   *           id\n   *         }\n   *       }\n   *     }`,\n   *     { variables: { input: { title: \"Product Name\" } } }\n   *   );\n   *\n   *   const productData = await response.json();\n   *   return json({ data: productData.data });\n   * }\n   * ```\n   */\n  graphql: GraphQLClient;\n}"
+            "value": "export interface AdminApiContext<\n  Resources extends ShopifyRestResources = ShopifyRestResources,\n> {\n  /**\n   * Methods for interacting with the Shopify Admin REST API\n   *\n   * There are methods for interacting with individual REST resources. You can also make `GET`, `POST`, `PUT` and `DELETE` requests should the REST resources not meet your needs.\n   *\n   * {@link https://shopify.dev/docs/api/admin-rest}\n   *\n   * @example\n   * <caption>Using REST resources.</caption>\n   * <description>Getting the number of orders in a store using REST resources. Visit the [Admin REST API references](/docs/api/admin-rest) for examples on using each resource. </description>\n   *\n   * ```ts\n   * // /app/routes/**\\/*.ts\n   * import { LoaderFunctionArgs, json } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   *\n   * export const loader = async ({ request }: LoaderFunctionArgs) => {\n   *   const { admin, session } = await authenticate.admin(request);\n   *   return json(admin.rest.resources.Order.count({ session }));\n   * };\n   * ```\n   *\n   *\n   * ```ts\n   * // /app/shopify.server.ts\n   * import { shopifyApp } from \"@shopify/shopify-app-remix/server\";\n   * import { restResources } from \"@shopify/shopify-api/rest/admin/2023-07\";\n   *\n   * const shopify = shopifyApp({\n   *   restResources,\n   *   // ...etc\n   * });\n   * export default shopify;\n   * export const authenticate = shopify.authenticate;\n   * ```\n   *\n   *\n   * @example\n   * <caption>Performing a GET request to the REST API.</caption>\n   * <description>Use `admin.rest.get` to make custom requests to make a request to to the `customer/count` endpoint</description>\n   *\n   * ```ts\n   * // /app/routes/**\\/*.ts\n   * import { LoaderFunctionArgs, json } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   *\n   * export const loader = async ({ request }: LoaderFunctionArgs) => {\n   *   const { admin, session } = await authenticate.admin(request);\n   *   const response = await admin.rest.get({ path: \"/customers/count.json\" });\n   *   const customers = await response.json();\n   *   return json({ customers });\n   * };\n   * ```\n   *\n   * ```ts\n   * // /app/shopify.server.ts\n   * import { shopifyApp } from \"@shopify/shopify-app-remix/server\";\n   * import { restResources } from \"@shopify/shopify-api/rest/admin/2023-04\";\n   *\n   * const shopify = shopifyApp({\n   *   restResources,\n   *   // ...etc\n   * });\n   * export default shopify;\n   * export const authenticate = shopify.authenticate;\n   * ```\n   * @example\n   * <caption>Performing a POST request to the REST API.</caption>\n   * <description>Use `admin.rest.post` to make custom requests to make a request to to the `customers.json` endpoint to send a welcome email</description>\n   * ```ts\n   * // /app/routes/**\\/*.ts\n   * import { LoaderFunctionArgs, json } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   *\n   * export const loader = async ({ request }: LoaderFunctionArgs) => {\n   *   const { admin, session } = await authenticate.admin(request);\n   *   const response = admin.rest.post({\n   *     path: \"customers/7392136888625/send_invite.json\",\n   *     body: {\n   *       customer_invite: {\n   *         to: \"new_test_email@shopify.com\",\n   *         from: \"j.limited@example.com\",\n   *         bcc: [\"j.limited@example.com\"],\n   *         subject: \"Welcome to my new shop\",\n   *         custom_message: \"My awesome new store\",\n   *       },\n   *     },\n   * });\n   *   const customerInvite = await response.json();\n   *   return json({ customerInvite });\n   * };\n   * ```\n   *\n   * ```ts\n   * // /app/shopify.server.ts\n   * import { shopifyApp } from \"@shopify/shopify-app-remix/server\";\n   * import { restResources } from \"@shopify/shopify-api/rest/admin/2023-04\";\n   *\n   * const shopify = shopifyApp({\n   *   restResources,\n   *   // ...etc\n   * });\n   * export default shopify;\n   * export const authenticate = shopify.authenticate;\n   * ```\n   */\n  rest: RestClientWithResources<Resources>;\n\n  /**\n   * Methods for interacting with the Shopify Admin GraphQL API\n   *\n   * {@link https://shopify.dev/docs/api/admin-graphql}\n   * {@link https://github.com/Shopify/shopify-api-js/blob/main/packages/shopify-api/docs/reference/clients/Graphql.md}\n   *\n   * @example\n   * <caption>Querying the GraphQL API.</caption>\n   * <description>Use `admin.graphql` to make query / mutation requests.</description>\n   * ```ts\n   * import { ActionFunctionArgs } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   *\n   * export async function action({ request }: ActionFunctionArgs) {\n   *   const { admin } = await authenticate.admin(request);\n   *\n   *   const response = await admin.graphql(\n   *     `#graphql\n   *     mutation populateProduct($input: ProductInput!) {\n   *       productCreate(input: $input) {\n   *         product {\n   *           id\n   *         }\n   *       }\n   *     }`,\n   *     { variables: { input: { title: \"Product Name\" } } }\n   *   );\n   *\n   *   const productData = await response.json();\n   *   return json({ data: productData.data });\n   * }\n   * ```\n   */\n  graphql: GraphQLClient<AdminOperations>;\n}"
           },
           "RestClientWithResources": {
             "filePath": "/server/clients/admin/rest.ts",
@@ -3359,7 +3821,7 @@
                 "filePath": "/server/clients/storefront/types.ts",
                 "syntaxKind": "PropertySignature",
                 "name": "graphql",
-                "value": "GraphQLClient",
+                "value": "GraphQLClient<StorefrontOperations>",
                 "description": "Method for interacting with the Shopify Storefront GraphQL API\n\nIf you're getting incorrect type hints in the Shopify template, follow [these instructions](https://github.com/Shopify/shopify-app-template-remix/tree/main#incorrect-graphql-hints).\n\n\n\n\n",
                 "examples": [
                   {
@@ -3375,7 +3837,7 @@
                 ]
               }
             ],
-            "value": "export interface StorefrontContext {\n  /**\n   * Method for interacting with the Shopify Storefront GraphQL API\n   *\n   * If you're getting incorrect type hints in the Shopify template, follow [these instructions](https://github.com/Shopify/shopify-app-template-remix/tree/main#incorrect-graphql-hints).\n   *\n   * {@link https://shopify.dev/docs/api/storefront}\n   *\n   * @example\n   * <caption>Querying the GraphQL API.</caption>\n   * <description>Use `storefront.graphql` to make query / mutation requests.</description>\n   * ```ts\n   * // app/routes/**\\/.ts\n   * import { json } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   *\n   * export async function action({ request }: ActionFunctionArgs) {\n   *   const { storefront } = await authenticate.public.appProxy(request);\n   *\n   *   const response = await storefront.graphql(`{blogs(first: 10) { edges { node { id } } } }`);\n   *\n   *   return json(await response.json());\n   * }\n   * ```\n   */\n  graphql: GraphQLClient;\n}"
+            "value": "export interface StorefrontContext {\n  /**\n   * Method for interacting with the Shopify Storefront GraphQL API\n   *\n   * If you're getting incorrect type hints in the Shopify template, follow [these instructions](https://github.com/Shopify/shopify-app-template-remix/tree/main#incorrect-graphql-hints).\n   *\n   * {@link https://shopify.dev/docs/api/storefront}\n   *\n   * @example\n   * <caption>Querying the GraphQL API.</caption>\n   * <description>Use `storefront.graphql` to make query / mutation requests.</description>\n   * ```ts\n   * // app/routes/**\\/.ts\n   * import { json } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   *\n   * export async function action({ request }: ActionFunctionArgs) {\n   *   const { storefront } = await authenticate.public.appProxy(request);\n   *\n   *   const response = await storefront.graphql(`{blogs(first: 10) { edges { node { id } } } }`);\n   *\n   *   return json(await response.json());\n   * }\n   * ```\n   */\n  graphql: GraphQLClient<StorefrontOperations>;\n}"
           }
         }
       }
@@ -3629,7 +4091,7 @@
                 "filePath": "/server/config-types.ts",
                 "syntaxKind": "PropertySignature",
                 "name": "scopes",
-                "value": "AuthScopes | string[]",
+                "value": "string[] | AuthScopes",
                 "description": "",
                 "isOptional": true
               },
@@ -3704,6 +4166,279 @@
               }
             ],
             "value": "export interface WebhookConfig {\n  [key: string]: WebhookHandler | WebhookHandler[];\n}"
+          },
+          "WebhookHandler": {
+            "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/webhooks/types.ts",
+            "syntaxKind": "TypeAliasDeclaration",
+            "name": "WebhookHandler",
+            "value": "HttpWebhookHandler | HttpWebhookHandlerWithCallback | EventBridgeWebhookHandler | PubSubWebhookHandler",
+            "description": ""
+          },
+          "HttpWebhookHandler": {
+            "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/webhooks/types.ts",
+            "name": "HttpWebhookHandler",
+            "description": "",
+            "members": [
+              {
+                "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/webhooks/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "deliveryMethod",
+                "value": "DeliveryMethod.Http",
+                "description": ""
+              },
+              {
+                "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/webhooks/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "callbackUrl",
+                "value": "string",
+                "description": ""
+              },
+              {
+                "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/webhooks/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "id",
+                "value": "string",
+                "description": "",
+                "isOptional": true
+              },
+              {
+                "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/webhooks/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "includeFields",
+                "value": "string[]",
+                "description": "",
+                "isOptional": true
+              },
+              {
+                "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/webhooks/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "metafieldNamespaces",
+                "value": "string[]",
+                "description": "",
+                "isOptional": true
+              }
+            ],
+            "value": "export interface HttpWebhookHandler extends BaseWebhookHandler {\n  deliveryMethod: DeliveryMethod.Http;\n  callbackUrl: string;\n}"
+          },
+          "DeliveryMethod": {
+            "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/webhooks/types.ts",
+            "syntaxKind": "EnumDeclaration",
+            "name": "DeliveryMethod",
+            "value": "export enum DeliveryMethod {\n  Http = 'http',\n  EventBridge = 'eventbridge',\n  PubSub = 'pubsub',\n}",
+            "members": [
+              {
+                "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/webhooks/types.ts",
+                "name": "Http",
+                "value": "http"
+              },
+              {
+                "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/webhooks/types.ts",
+                "name": "EventBridge",
+                "value": "eventbridge"
+              },
+              {
+                "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/webhooks/types.ts",
+                "name": "PubSub",
+                "value": "pubsub"
+              }
+            ]
+          },
+          "HttpWebhookHandlerWithCallback": {
+            "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/webhooks/types.ts",
+            "name": "HttpWebhookHandlerWithCallback",
+            "description": "",
+            "members": [
+              {
+                "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/webhooks/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "callback",
+                "value": "WebhookHandlerFunction",
+                "description": ""
+              },
+              {
+                "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/webhooks/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "deliveryMethod",
+                "value": "DeliveryMethod.Http",
+                "description": ""
+              },
+              {
+                "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/webhooks/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "callbackUrl",
+                "value": "string",
+                "description": ""
+              },
+              {
+                "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/webhooks/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "id",
+                "value": "string",
+                "description": "",
+                "isOptional": true
+              },
+              {
+                "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/webhooks/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "includeFields",
+                "value": "string[]",
+                "description": "",
+                "isOptional": true
+              },
+              {
+                "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/webhooks/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "metafieldNamespaces",
+                "value": "string[]",
+                "description": "",
+                "isOptional": true
+              }
+            ],
+            "value": "export interface HttpWebhookHandlerWithCallback extends HttpWebhookHandler {\n  callback: WebhookHandlerFunction;\n}"
+          },
+          "WebhookHandlerFunction": {
+            "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/webhooks/types.ts",
+            "name": "WebhookHandlerFunction",
+            "description": "",
+            "params": [
+              {
+                "name": "topic",
+                "description": "",
+                "value": "string",
+                "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/webhooks/types.ts"
+              },
+              {
+                "name": "shop_domain",
+                "description": "",
+                "value": "string",
+                "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/webhooks/types.ts"
+              },
+              {
+                "name": "body",
+                "description": "",
+                "value": "string",
+                "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/webhooks/types.ts"
+              },
+              {
+                "name": "webhookId",
+                "description": "",
+                "value": "string",
+                "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/webhooks/types.ts"
+              },
+              {
+                "name": "apiVersion",
+                "description": "",
+                "value": "string",
+                "isOptional": true,
+                "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/webhooks/types.ts"
+              }
+            ],
+            "returns": {
+              "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/webhooks/types.ts",
+              "description": "",
+              "name": "Promise<void>",
+              "value": "Promise<void>"
+            },
+            "value": "export type WebhookHandlerFunction = (\n  topic: string,\n  shop_domain: string,\n  body: string,\n  webhookId: string,\n  apiVersion?: string,\n) => Promise<void>;"
+          },
+          "EventBridgeWebhookHandler": {
+            "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/webhooks/types.ts",
+            "name": "EventBridgeWebhookHandler",
+            "description": "",
+            "members": [
+              {
+                "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/webhooks/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "deliveryMethod",
+                "value": "DeliveryMethod.EventBridge",
+                "description": ""
+              },
+              {
+                "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/webhooks/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "arn",
+                "value": "string",
+                "description": ""
+              },
+              {
+                "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/webhooks/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "id",
+                "value": "string",
+                "description": "",
+                "isOptional": true
+              },
+              {
+                "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/webhooks/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "includeFields",
+                "value": "string[]",
+                "description": "",
+                "isOptional": true
+              },
+              {
+                "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/webhooks/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "metafieldNamespaces",
+                "value": "string[]",
+                "description": "",
+                "isOptional": true
+              }
+            ],
+            "value": "export interface EventBridgeWebhookHandler extends BaseWebhookHandler {\n  deliveryMethod: DeliveryMethod.EventBridge;\n  arn: string;\n}"
+          },
+          "PubSubWebhookHandler": {
+            "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/webhooks/types.ts",
+            "name": "PubSubWebhookHandler",
+            "description": "",
+            "members": [
+              {
+                "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/webhooks/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "deliveryMethod",
+                "value": "DeliveryMethod.PubSub",
+                "description": ""
+              },
+              {
+                "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/webhooks/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "pubSubProject",
+                "value": "string",
+                "description": ""
+              },
+              {
+                "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/webhooks/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "pubSubTopic",
+                "value": "string",
+                "description": ""
+              },
+              {
+                "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/webhooks/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "id",
+                "value": "string",
+                "description": "",
+                "isOptional": true
+              },
+              {
+                "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/webhooks/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "includeFields",
+                "value": "string[]",
+                "description": "",
+                "isOptional": true
+              },
+              {
+                "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/webhooks/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "metafieldNamespaces",
+                "value": "string[]",
+                "description": "",
+                "isOptional": true
+              }
+            ],
+            "value": "export interface PubSubWebhookHandler extends BaseWebhookHandler {\n  deliveryMethod: DeliveryMethod.PubSub;\n  pubSubProject: string;\n  pubSubTopic: string;\n}"
           },
           "HooksConfig": {
             "filePath": "/server/config-types.ts",
@@ -3815,7 +4550,7 @@
                 "filePath": "/server/clients/admin/types.ts",
                 "syntaxKind": "PropertySignature",
                 "name": "graphql",
-                "value": "GraphQLClient",
+                "value": "GraphQLClient<AdminOperations>",
                 "description": "Methods for interacting with the Shopify Admin GraphQL API\n\n\n\n\n\n\n\n\n\n",
                 "examples": [
                   {
@@ -3831,7 +4566,7 @@
                 ]
               }
             ],
-            "value": "export interface AdminApiContext<\n  Resources extends ShopifyRestResources = ShopifyRestResources,\n> {\n  /**\n   * Methods for interacting with the Shopify Admin REST API\n   *\n   * There are methods for interacting with individual REST resources. You can also make `GET`, `POST`, `PUT` and `DELETE` requests should the REST resources not meet your needs.\n   *\n   * {@link https://shopify.dev/docs/api/admin-rest}\n   *\n   * @example\n   * <caption>Using REST resources.</caption>\n   * <description>Getting the number of orders in a store using REST resources. Visit the [Admin REST API references](/docs/api/admin-rest) for examples on using each resource. </description>\n   *\n   * ```ts\n   * // /app/routes/**\\/*.ts\n   * import { LoaderFunctionArgs, json } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   *\n   * export const loader = async ({ request }: LoaderFunctionArgs) => {\n   *   const { admin, session } = await authenticate.admin(request);\n   *   return json(admin.rest.resources.Order.count({ session }));\n   * };\n   * ```\n   *\n   *\n   * ```ts\n   * // /app/shopify.server.ts\n   * import { shopifyApp } from \"@shopify/shopify-app-remix/server\";\n   * import { restResources } from \"@shopify/shopify-api/rest/admin/2023-07\";\n   *\n   * const shopify = shopifyApp({\n   *   restResources,\n   *   // ...etc\n   * });\n   * export default shopify;\n   * export const authenticate = shopify.authenticate;\n   * ```\n   *\n   *\n   * @example\n   * <caption>Performing a GET request to the REST API.</caption>\n   * <description>Use `admin.rest.get` to make custom requests to make a request to to the `customer/count` endpoint</description>\n   *\n   * ```ts\n   * // /app/routes/**\\/*.ts\n   * import { LoaderFunctionArgs, json } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   *\n   * export const loader = async ({ request }: LoaderFunctionArgs) => {\n   *   const { admin, session } = await authenticate.admin(request);\n   *   const response = await admin.rest.get({ path: \"/customers/count.json\" });\n   *   const customers = await response.json();\n   *   return json({ customers });\n   * };\n   * ```\n   *\n   * ```ts\n   * // /app/shopify.server.ts\n   * import { shopifyApp } from \"@shopify/shopify-app-remix/server\";\n   * import { restResources } from \"@shopify/shopify-api/rest/admin/2023-04\";\n   *\n   * const shopify = shopifyApp({\n   *   restResources,\n   *   // ...etc\n   * });\n   * export default shopify;\n   * export const authenticate = shopify.authenticate;\n   * ```\n   * @example\n   * <caption>Performing a POST request to the REST API.</caption>\n   * <description>Use `admin.rest.post` to make custom requests to make a request to to the `customers.json` endpoint to send a welcome email</description>\n   * ```ts\n   * // /app/routes/**\\/*.ts\n   * import { LoaderFunctionArgs, json } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   *\n   * export const loader = async ({ request }: LoaderFunctionArgs) => {\n   *   const { admin, session } = await authenticate.admin(request);\n   *   const response = admin.rest.post({\n   *     path: \"customers/7392136888625/send_invite.json\",\n   *     body: {\n   *       customer_invite: {\n   *         to: \"new_test_email@shopify.com\",\n   *         from: \"j.limited@example.com\",\n   *         bcc: [\"j.limited@example.com\"],\n   *         subject: \"Welcome to my new shop\",\n   *         custom_message: \"My awesome new store\",\n   *       },\n   *     },\n   * });\n   *   const customerInvite = await response.json();\n   *   return json({ customerInvite });\n   * };\n   * ```\n   *\n   * ```ts\n   * // /app/shopify.server.ts\n   * import { shopifyApp } from \"@shopify/shopify-app-remix/server\";\n   * import { restResources } from \"@shopify/shopify-api/rest/admin/2023-04\";\n   *\n   * const shopify = shopifyApp({\n   *   restResources,\n   *   // ...etc\n   * });\n   * export default shopify;\n   * export const authenticate = shopify.authenticate;\n   * ```\n   */\n  rest: RestClientWithResources<Resources>;\n\n  /**\n   * Methods for interacting with the Shopify Admin GraphQL API\n   *\n   * {@link https://shopify.dev/docs/api/admin-graphql}\n   * {@link https://github.com/Shopify/shopify-api-js/blob/main/packages/shopify-api/docs/reference/clients/Graphql.md}\n   *\n   * @example\n   * <caption>Querying the GraphQL API.</caption>\n   * <description>Use `admin.graphql` to make query / mutation requests.</description>\n   * ```ts\n   * import { ActionFunctionArgs } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   *\n   * export async function action({ request }: ActionFunctionArgs) {\n   *   const { admin } = await authenticate.admin(request);\n   *\n   *   const response = await admin.graphql(\n   *     `#graphql\n   *     mutation populateProduct($input: ProductInput!) {\n   *       productCreate(input: $input) {\n   *         product {\n   *           id\n   *         }\n   *       }\n   *     }`,\n   *     { variables: { input: { title: \"Product Name\" } } }\n   *   );\n   *\n   *   const productData = await response.json();\n   *   return json({ data: productData.data });\n   * }\n   * ```\n   */\n  graphql: GraphQLClient;\n}"
+            "value": "export interface AdminApiContext<\n  Resources extends ShopifyRestResources = ShopifyRestResources,\n> {\n  /**\n   * Methods for interacting with the Shopify Admin REST API\n   *\n   * There are methods for interacting with individual REST resources. You can also make `GET`, `POST`, `PUT` and `DELETE` requests should the REST resources not meet your needs.\n   *\n   * {@link https://shopify.dev/docs/api/admin-rest}\n   *\n   * @example\n   * <caption>Using REST resources.</caption>\n   * <description>Getting the number of orders in a store using REST resources. Visit the [Admin REST API references](/docs/api/admin-rest) for examples on using each resource. </description>\n   *\n   * ```ts\n   * // /app/routes/**\\/*.ts\n   * import { LoaderFunctionArgs, json } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   *\n   * export const loader = async ({ request }: LoaderFunctionArgs) => {\n   *   const { admin, session } = await authenticate.admin(request);\n   *   return json(admin.rest.resources.Order.count({ session }));\n   * };\n   * ```\n   *\n   *\n   * ```ts\n   * // /app/shopify.server.ts\n   * import { shopifyApp } from \"@shopify/shopify-app-remix/server\";\n   * import { restResources } from \"@shopify/shopify-api/rest/admin/2023-07\";\n   *\n   * const shopify = shopifyApp({\n   *   restResources,\n   *   // ...etc\n   * });\n   * export default shopify;\n   * export const authenticate = shopify.authenticate;\n   * ```\n   *\n   *\n   * @example\n   * <caption>Performing a GET request to the REST API.</caption>\n   * <description>Use `admin.rest.get` to make custom requests to make a request to to the `customer/count` endpoint</description>\n   *\n   * ```ts\n   * // /app/routes/**\\/*.ts\n   * import { LoaderFunctionArgs, json } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   *\n   * export const loader = async ({ request }: LoaderFunctionArgs) => {\n   *   const { admin, session } = await authenticate.admin(request);\n   *   const response = await admin.rest.get({ path: \"/customers/count.json\" });\n   *   const customers = await response.json();\n   *   return json({ customers });\n   * };\n   * ```\n   *\n   * ```ts\n   * // /app/shopify.server.ts\n   * import { shopifyApp } from \"@shopify/shopify-app-remix/server\";\n   * import { restResources } from \"@shopify/shopify-api/rest/admin/2023-04\";\n   *\n   * const shopify = shopifyApp({\n   *   restResources,\n   *   // ...etc\n   * });\n   * export default shopify;\n   * export const authenticate = shopify.authenticate;\n   * ```\n   * @example\n   * <caption>Performing a POST request to the REST API.</caption>\n   * <description>Use `admin.rest.post` to make custom requests to make a request to to the `customers.json` endpoint to send a welcome email</description>\n   * ```ts\n   * // /app/routes/**\\/*.ts\n   * import { LoaderFunctionArgs, json } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   *\n   * export const loader = async ({ request }: LoaderFunctionArgs) => {\n   *   const { admin, session } = await authenticate.admin(request);\n   *   const response = admin.rest.post({\n   *     path: \"customers/7392136888625/send_invite.json\",\n   *     body: {\n   *       customer_invite: {\n   *         to: \"new_test_email@shopify.com\",\n   *         from: \"j.limited@example.com\",\n   *         bcc: [\"j.limited@example.com\"],\n   *         subject: \"Welcome to my new shop\",\n   *         custom_message: \"My awesome new store\",\n   *       },\n   *     },\n   * });\n   *   const customerInvite = await response.json();\n   *   return json({ customerInvite });\n   * };\n   * ```\n   *\n   * ```ts\n   * // /app/shopify.server.ts\n   * import { shopifyApp } from \"@shopify/shopify-app-remix/server\";\n   * import { restResources } from \"@shopify/shopify-api/rest/admin/2023-04\";\n   *\n   * const shopify = shopifyApp({\n   *   restResources,\n   *   // ...etc\n   * });\n   * export default shopify;\n   * export const authenticate = shopify.authenticate;\n   * ```\n   */\n  rest: RestClientWithResources<Resources>;\n\n  /**\n   * Methods for interacting with the Shopify Admin GraphQL API\n   *\n   * {@link https://shopify.dev/docs/api/admin-graphql}\n   * {@link https://github.com/Shopify/shopify-api-js/blob/main/packages/shopify-api/docs/reference/clients/Graphql.md}\n   *\n   * @example\n   * <caption>Querying the GraphQL API.</caption>\n   * <description>Use `admin.graphql` to make query / mutation requests.</description>\n   * ```ts\n   * import { ActionFunctionArgs } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   *\n   * export async function action({ request }: ActionFunctionArgs) {\n   *   const { admin } = await authenticate.admin(request);\n   *\n   *   const response = await admin.graphql(\n   *     `#graphql\n   *     mutation populateProduct($input: ProductInput!) {\n   *       productCreate(input: $input) {\n   *         product {\n   *           id\n   *         }\n   *       }\n   *     }`,\n   *     { variables: { input: { title: \"Product Name\" } } }\n   *   );\n   *\n   *   const productData = await response.json();\n   *   return json({ data: productData.data });\n   * }\n   * ```\n   */\n  graphql: GraphQLClient<AdminOperations>;\n}"
           },
           "RestClientWithResources": {
             "filePath": "/server/clients/admin/rest.ts",
@@ -3839,6 +4574,19 @@
             "name": "RestClientWithResources",
             "value": "RemixRestClient & {resources: Resources}",
             "description": ""
+          },
+          "ShopifyRestResources": {
+            "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/rest/types.ts",
+            "name": "ShopifyRestResources",
+            "description": "",
+            "members": [
+              {
+                "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/rest/types.ts",
+                "name": "[resource: string]",
+                "value": "any"
+              }
+            ],
+            "value": "export interface ShopifyRestResources {\n  [resource: string]: any;\n}"
           },
           "AppDistribution": {
             "filePath": "/server/types.ts",
@@ -3863,31 +4611,489 @@
               }
             ]
           },
-          "FutureFlags": {
-            "filePath": "/server/future/flags.ts",
-            "name": "FutureFlags",
+          "ApiVersion": {
+            "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/types.ts",
+            "syntaxKind": "EnumDeclaration",
+            "name": "ApiVersion",
+            "value": "export enum ApiVersion {\n  October22 = '2022-10',\n  January23 = '2023-01',\n  April23 = '2023-04',\n  July23 = '2023-07',\n  October23 = '2023-10',\n  Unstable = 'unstable',\n}",
+            "members": [
+              {
+                "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/types.ts",
+                "name": "October22",
+                "value": "2022-10"
+              },
+              {
+                "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/types.ts",
+                "name": "January23",
+                "value": "2023-01"
+              },
+              {
+                "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/types.ts",
+                "name": "April23",
+                "value": "2023-04"
+              },
+              {
+                "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/types.ts",
+                "name": "July23",
+                "value": "2023-07"
+              },
+              {
+                "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/types.ts",
+                "name": "October23",
+                "value": "2023-10"
+              },
+              {
+                "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/types.ts",
+                "name": "Unstable",
+                "value": "unstable"
+              }
+            ]
+          },
+          "BillingConfig": {
+            "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/billing/types.ts",
+            "name": "BillingConfig",
             "description": "",
             "members": [
               {
-                "filePath": "/server/future/flags.ts",
-                "syntaxKind": "PropertySignature",
-                "name": "v3_webhookAdminContext",
-                "value": "boolean",
-                "description": "When enabled, returns the same `admin` context (`AdminApiContext`) from `authenticate.webhook` that is returned from `authenticate.admin`.",
-                "isOptional": true,
-                "defaultValue": "false"
-              },
-              {
-                "filePath": "/server/future/flags.ts",
-                "syntaxKind": "PropertySignature",
-                "name": "v3_authenticatePublic",
-                "value": "boolean",
-                "description": "When enabled authenticate.public() will not work.  Use authenticate.public.checkout() instead.",
-                "isOptional": true,
-                "defaultValue": "false"
+                "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/billing/types.ts",
+                "name": "[plan: string]",
+                "value": "BillingConfigItem<Future>"
               }
             ],
-            "value": "export interface FutureFlags {\n  /**\n   * When enabled, returns the same `admin` context (`AdminApiContext`) from `authenticate.webhook` that is returned from `authenticate.admin`.\n   *\n   * @default false\n   */\n  v3_webhookAdminContext?: boolean;\n\n  /**\n   * When enabled authenticate.public() will not work.  Use authenticate.public.checkout() instead.\n   *\n   * @default false\n   */\n  v3_authenticatePublic?: boolean;\n}"
+            "value": "export interface BillingConfig<\n  Future extends FutureFlagOptions = FutureFlagOptions,\n> {\n  [plan: string]: BillingConfigItem<Future>;\n}"
+          },
+          "BillingConfigItem": {
+            "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/billing/types.ts",
+            "syntaxKind": "TypeAliasDeclaration",
+            "name": "BillingConfigItem",
+            "value": "FeatureEnabled<Future, 'unstable_lineItemBilling'> extends true\n  ? BillingConfigOneTimePlan | BillingConfigSubscriptionLineItemPlan\n  : BillingConfigLegacyItem",
+            "description": ""
+          },
+          "BillingConfigOneTimePlan": {
+            "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/billing/types.ts",
+            "name": "BillingConfigOneTimePlan",
+            "description": "",
+            "members": [
+              {
+                "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/billing/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "interval",
+                "value": "BillingInterval.OneTime",
+                "description": ""
+              },
+              {
+                "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/billing/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "amount",
+                "value": "number",
+                "description": ""
+              },
+              {
+                "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/billing/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "currencyCode",
+                "value": "string",
+                "description": ""
+              }
+            ],
+            "value": "export interface BillingConfigOneTimePlan extends BillingConfigPlan {\n  interval: BillingInterval.OneTime;\n}"
+          },
+          "BillingInterval": {
+            "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/types.ts",
+            "syntaxKind": "EnumDeclaration",
+            "name": "BillingInterval",
+            "value": "export enum BillingInterval {\n  OneTime = 'ONE_TIME',\n  Every30Days = 'EVERY_30_DAYS',\n  Annual = 'ANNUAL',\n  Usage = 'USAGE',\n}",
+            "members": [
+              {
+                "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/types.ts",
+                "name": "OneTime",
+                "value": "ONE_TIME"
+              },
+              {
+                "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/types.ts",
+                "name": "Every30Days",
+                "value": "EVERY_30_DAYS"
+              },
+              {
+                "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/types.ts",
+                "name": "Annual",
+                "value": "ANNUAL"
+              },
+              {
+                "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/types.ts",
+                "name": "Usage",
+                "value": "USAGE"
+              }
+            ]
+          },
+          "BillingConfigSubscriptionLineItemPlan": {
+            "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/billing/types.ts",
+            "name": "BillingConfigSubscriptionLineItemPlan",
+            "description": "",
+            "members": [
+              {
+                "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/billing/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "replacementBehavior",
+                "value": "BillingReplacementBehavior",
+                "description": "",
+                "isOptional": true
+              },
+              {
+                "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/billing/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "trialDays",
+                "value": "number",
+                "description": "",
+                "isOptional": true
+              },
+              {
+                "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/billing/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "lineItems",
+                "value": "(BillingConfigRecurringLineItem | BillingConfigUsageLineItem)[]",
+                "description": ""
+              }
+            ],
+            "value": "export interface BillingConfigSubscriptionLineItemPlan {\n  replacementBehavior?: BillingReplacementBehavior;\n  trialDays?: number;\n  lineItems: (BillingConfigRecurringLineItem | BillingConfigUsageLineItem)[];\n}"
+          },
+          "BillingReplacementBehavior": {
+            "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/types.ts",
+            "syntaxKind": "EnumDeclaration",
+            "name": "BillingReplacementBehavior",
+            "value": "export enum BillingReplacementBehavior {\n  ApplyImmediately = 'APPLY_IMMEDIATELY',\n  ApplyOnNextBillingCycle = 'APPLY_ON_NEXT_BILLING_CYCLE',\n  Standard = 'STANDARD',\n}",
+            "members": [
+              {
+                "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/types.ts",
+                "name": "ApplyImmediately",
+                "value": "APPLY_IMMEDIATELY"
+              },
+              {
+                "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/types.ts",
+                "name": "ApplyOnNextBillingCycle",
+                "value": "APPLY_ON_NEXT_BILLING_CYCLE"
+              },
+              {
+                "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/types.ts",
+                "name": "Standard",
+                "value": "STANDARD"
+              }
+            ]
+          },
+          "BillingConfigRecurringLineItem": {
+            "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/billing/types.ts",
+            "name": "BillingConfigRecurringLineItem",
+            "description": "",
+            "members": [
+              {
+                "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/billing/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "interval",
+                "value": "BillingInterval.Every30Days | BillingInterval.Annual",
+                "description": ""
+              },
+              {
+                "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/billing/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "discount",
+                "value": "BillingConfigSubscriptionPlanDiscount",
+                "description": "",
+                "isOptional": true
+              },
+              {
+                "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/billing/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "amount",
+                "value": "number",
+                "description": ""
+              },
+              {
+                "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/billing/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "currencyCode",
+                "value": "string",
+                "description": ""
+              }
+            ],
+            "value": "export interface BillingConfigRecurringLineItem extends BillingConfigLineItem {\n  interval: BillingInterval.Every30Days | BillingInterval.Annual;\n  discount?: BillingConfigSubscriptionPlanDiscount;\n}"
+          },
+          "BillingConfigSubscriptionPlanDiscount": {
+            "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/billing/types.ts",
+            "name": "BillingConfigSubscriptionPlanDiscount",
+            "description": "",
+            "members": [
+              {
+                "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/billing/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "durationLimitInIntervals",
+                "value": "number",
+                "description": "",
+                "isOptional": true
+              },
+              {
+                "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/billing/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "value",
+                "value": "BillingConfigSubscriptionPlanDiscountAmount | BillingConfigSubscriptionPlanDiscountPercentage",
+                "description": ""
+              }
+            ],
+            "value": "export interface BillingConfigSubscriptionPlanDiscount {\n  durationLimitInIntervals?: number;\n  value:\n    | BillingConfigSubscriptionPlanDiscountAmount\n    | BillingConfigSubscriptionPlanDiscountPercentage;\n}"
+          },
+          "BillingConfigSubscriptionPlanDiscountAmount": {
+            "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/billing/types.ts",
+            "name": "BillingConfigSubscriptionPlanDiscountAmount",
+            "description": "",
+            "members": [
+              {
+                "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/billing/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "amount",
+                "value": "number",
+                "description": ""
+              },
+              {
+                "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/billing/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "percentage",
+                "value": "never",
+                "description": "",
+                "isOptional": true
+              }
+            ],
+            "value": "export interface BillingConfigSubscriptionPlanDiscountAmount {\n  amount: number;\n  percentage?: never;\n}"
+          },
+          "BillingConfigSubscriptionPlanDiscountPercentage": {
+            "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/billing/types.ts",
+            "name": "BillingConfigSubscriptionPlanDiscountPercentage",
+            "description": "",
+            "members": [
+              {
+                "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/billing/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "amount",
+                "value": "never",
+                "description": "",
+                "isOptional": true
+              },
+              {
+                "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/billing/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "percentage",
+                "value": "number",
+                "description": ""
+              }
+            ],
+            "value": "export interface BillingConfigSubscriptionPlanDiscountPercentage {\n  amount?: never;\n  percentage: number;\n}"
+          },
+          "BillingConfigUsageLineItem": {
+            "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/billing/types.ts",
+            "name": "BillingConfigUsageLineItem",
+            "description": "",
+            "members": [
+              {
+                "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/billing/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "interval",
+                "value": "BillingInterval.Usage",
+                "description": ""
+              },
+              {
+                "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/billing/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "terms",
+                "value": "string",
+                "description": ""
+              },
+              {
+                "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/billing/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "amount",
+                "value": "number",
+                "description": ""
+              },
+              {
+                "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/billing/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "currencyCode",
+                "value": "string",
+                "description": ""
+              }
+            ],
+            "value": "export interface BillingConfigUsageLineItem extends BillingConfigLineItem {\n  interval: BillingInterval.Usage;\n  terms: string;\n}"
+          },
+          "BillingConfigLegacyItem": {
+            "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/billing/types.ts",
+            "syntaxKind": "TypeAliasDeclaration",
+            "name": "BillingConfigLegacyItem",
+            "value": "BillingConfigOneTimePlan | BillingConfigSubscriptionPlan | BillingConfigUsagePlan",
+            "description": ""
+          },
+          "BillingConfigSubscriptionPlan": {
+            "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/billing/types.ts",
+            "name": "BillingConfigSubscriptionPlan",
+            "description": "",
+            "members": [
+              {
+                "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/billing/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "interval",
+                "value": "Exclude<RecurringBillingIntervals, BillingInterval.Usage>",
+                "description": ""
+              },
+              {
+                "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/billing/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "trialDays",
+                "value": "number",
+                "description": "",
+                "isOptional": true
+              },
+              {
+                "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/billing/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "replacementBehavior",
+                "value": "BillingReplacementBehavior",
+                "description": "",
+                "isOptional": true
+              },
+              {
+                "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/billing/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "discount",
+                "value": "BillingConfigSubscriptionPlanDiscount",
+                "description": "",
+                "isOptional": true
+              },
+              {
+                "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/billing/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "amount",
+                "value": "number",
+                "description": ""
+              },
+              {
+                "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/billing/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "currencyCode",
+                "value": "string",
+                "description": ""
+              }
+            ],
+            "value": "export interface BillingConfigSubscriptionPlan extends BillingConfigPlan {\n  interval: Exclude<RecurringBillingIntervals, BillingInterval.Usage>;\n  trialDays?: number;\n  replacementBehavior?: BillingReplacementBehavior;\n  discount?: BillingConfigSubscriptionPlanDiscount;\n}"
+          },
+          "RecurringBillingIntervals": {
+            "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/types.ts",
+            "syntaxKind": "TypeAliasDeclaration",
+            "name": "RecurringBillingIntervals",
+            "value": "RecurringBillingIntervals",
+            "description": ""
+          },
+          "BillingConfigUsagePlan": {
+            "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/billing/types.ts",
+            "name": "BillingConfigUsagePlan",
+            "description": "",
+            "members": [
+              {
+                "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/billing/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "interval",
+                "value": "BillingInterval.Usage",
+                "description": ""
+              },
+              {
+                "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/billing/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "usageTerms",
+                "value": "string",
+                "description": ""
+              },
+              {
+                "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/billing/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "trialDays",
+                "value": "number",
+                "description": "",
+                "isOptional": true
+              },
+              {
+                "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/billing/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "replacementBehavior",
+                "value": "BillingReplacementBehavior",
+                "description": "",
+                "isOptional": true
+              },
+              {
+                "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/billing/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "amount",
+                "value": "number",
+                "description": ""
+              },
+              {
+                "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/billing/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "currencyCode",
+                "value": "string",
+                "description": ""
+              }
+            ],
+            "value": "export interface BillingConfigUsagePlan extends BillingConfigPlan {\n  interval: BillingInterval.Usage;\n  usageTerms: string;\n  trialDays?: number;\n  replacementBehavior?: BillingReplacementBehavior;\n}"
+          },
+          "LogFunction": {
+            "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/base-types.ts",
+            "name": "LogFunction",
+            "description": "",
+            "params": [
+              {
+                "name": "severity",
+                "description": "",
+                "value": "LogSeverity",
+                "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/base-types.ts"
+              },
+              {
+                "name": "msg",
+                "description": "",
+                "value": "string",
+                "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/base-types.ts"
+              }
+            ],
+            "returns": {
+              "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/base-types.ts",
+              "description": "",
+              "name": "void",
+              "value": "void"
+            },
+            "value": "export type LogFunction = (severity: LogSeverity, msg: string) => void;"
+          },
+          "LogSeverity": {
+            "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/types.ts",
+            "syntaxKind": "EnumDeclaration",
+            "name": "LogSeverity",
+            "value": "export enum LogSeverity {\n  Error,\n  Warning,\n  Info,\n  Debug,\n}",
+            "members": [
+              {
+                "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/types.ts",
+                "name": "Error",
+                "value": 0
+              },
+              {
+                "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/types.ts",
+                "name": "Warning",
+                "value": 1
+              },
+              {
+                "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/types.ts",
+                "name": "Info",
+                "value": 2
+              },
+              {
+                "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/types.ts",
+                "name": "Debug",
+                "value": 3
+              }
+            ]
           },
           "ShopifyApp": {
             "filePath": "/server/types.ts",
@@ -4045,6 +5251,19 @@
             },
             "value": "type AddDocumentResponseHeaders = (request: Request, headers: Headers) => void;"
           },
+          "Headers": {
+            "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/runtime/http/types.ts",
+            "name": "Headers",
+            "description": "",
+            "members": [
+              {
+                "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/runtime/http/types.ts",
+                "name": "[key: string]",
+                "value": "string | string[]"
+              }
+            ],
+            "value": "export interface Headers {\n  [key: string]: string | string[];\n}"
+          },
           "RegisterWebhooks": {
             "filePath": "/server/types.ts",
             "name": "RegisterWebhooks",
@@ -4079,6 +5298,78 @@
               }
             ],
             "value": "export interface RegisterWebhooksOptions {\n  /**\n   * The Shopify session used to register webhooks using the Admin API.\n   */\n  session: Session;\n}"
+          },
+          "RegisterReturn": {
+            "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/webhooks/types.ts",
+            "name": "RegisterReturn",
+            "description": "",
+            "members": [
+              {
+                "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/webhooks/types.ts",
+                "name": "[topic: string]",
+                "value": "RegisterResult[]"
+              }
+            ],
+            "value": "export interface RegisterReturn {\n  [topic: string]: RegisterResult[];\n}"
+          },
+          "RegisterResult": {
+            "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/webhooks/types.ts",
+            "name": "RegisterResult",
+            "description": "",
+            "members": [
+              {
+                "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/webhooks/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "success",
+                "value": "boolean",
+                "description": ""
+              },
+              {
+                "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/webhooks/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "deliveryMethod",
+                "value": "DeliveryMethod",
+                "description": ""
+              },
+              {
+                "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/webhooks/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "result",
+                "value": "unknown",
+                "description": ""
+              },
+              {
+                "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/webhooks/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "operation",
+                "value": "WebhookOperation",
+                "description": ""
+              }
+            ],
+            "value": "export interface RegisterResult {\n  success: boolean;\n  deliveryMethod: DeliveryMethod;\n  result: unknown;\n  operation: WebhookOperation;\n}"
+          },
+          "WebhookOperation": {
+            "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/webhooks/types.ts",
+            "syntaxKind": "EnumDeclaration",
+            "name": "WebhookOperation",
+            "value": "export enum WebhookOperation {\n  Create = 'create',\n  Update = 'update',\n  Delete = 'delete',\n}",
+            "members": [
+              {
+                "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/webhooks/types.ts",
+                "name": "Create",
+                "value": "create"
+              },
+              {
+                "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/webhooks/types.ts",
+                "name": "Update",
+                "value": "update"
+              },
+              {
+                "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/webhooks/types.ts",
+                "name": "Delete",
+                "value": "delete"
+              }
+            ]
           },
           "Authenticate": {
             "filePath": "/server/types.ts",
@@ -4379,6 +5670,100 @@
             ],
             "value": "export interface RequireBillingOptions<Config extends AppConfigArg>\n  extends Omit<BillingCheckParams, 'session' | 'plans' | 'returnObject'> {\n  /**\n   * The plans to check for. Must be one of the values defined in the `billing` config option.\n   */\n  plans: (keyof Config['billing'])[];\n  /**\n   * How to handle the request if the shop doesn't have an active payment for any plan.\n   */\n  onFailure: (error: any) => Promise<Response>;\n}"
           },
+          "BillingCheckResponseObject": {
+            "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/billing/types.ts",
+            "name": "BillingCheckResponseObject",
+            "description": "",
+            "members": [
+              {
+                "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/billing/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "hasActivePayment",
+                "value": "boolean",
+                "description": ""
+              },
+              {
+                "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/billing/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "oneTimePurchases",
+                "value": "OneTimePurchase[]",
+                "description": ""
+              },
+              {
+                "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/billing/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "appSubscriptions",
+                "value": "AppSubscription[]",
+                "description": ""
+              }
+            ],
+            "value": "export interface BillingCheckResponseObject {\n  hasActivePayment: boolean;\n  oneTimePurchases: OneTimePurchase[];\n  appSubscriptions: AppSubscription[];\n}"
+          },
+          "OneTimePurchase": {
+            "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/billing/types.ts",
+            "name": "OneTimePurchase",
+            "description": "",
+            "members": [
+              {
+                "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/billing/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "id",
+                "value": "string",
+                "description": ""
+              },
+              {
+                "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/billing/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "name",
+                "value": "string",
+                "description": ""
+              },
+              {
+                "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/billing/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "test",
+                "value": "boolean",
+                "description": ""
+              },
+              {
+                "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/billing/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "status",
+                "value": "string",
+                "description": ""
+              }
+            ],
+            "value": "export interface OneTimePurchase {\n  id: string;\n  name: string;\n  test: boolean;\n  status: string;\n}"
+          },
+          "AppSubscription": {
+            "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/billing/types.ts",
+            "name": "AppSubscription",
+            "description": "",
+            "members": [
+              {
+                "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/billing/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "id",
+                "value": "string",
+                "description": ""
+              },
+              {
+                "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/billing/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "name",
+                "value": "string",
+                "description": ""
+              },
+              {
+                "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/billing/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "test",
+                "value": "boolean",
+                "description": ""
+              }
+            ],
+            "value": "export interface AppSubscription {\n  id: string;\n  name: string;\n  test: boolean;\n}"
+          },
           "RequestBillingOptions": {
             "filePath": "/server/authenticate/admin/billing/types.ts",
             "name": "RequestBillingOptions",
@@ -4571,6 +5956,77 @@
             ],
             "value": "export interface EmbeddedAdminContext<\n  Config extends AppConfigArg,\n  Resources extends ShopifyRestResources = ShopifyRestResources,\n> extends AdminContextInternal<Config, Resources> {\n  /**\n   * The decoded and validated session token for the request.\n   *\n   * Returned only if `isEmbeddedApp` is `true`.\n   *\n   * {@link https://shopify.dev/docs/apps/auth/oauth/session-tokens#payload}\n   *\n   * @example\n   * <caption>Using the decoded session token.</caption>\n   * <description>Get user-specific data using the `sessionToken` object.</description>\n   * ```ts\n   * // shopify.server.ts\n   * import { shopifyApp } from \"@shopify/shopify-app-remix/server\";\n   *\n   * const shopify = shopifyApp({\n   *   // ...etc\n   *   useOnlineTokens: true,\n   * });\n   * export default shopify;\n   * export const authenticate = shopify.authenticate;\n   * ```\n   * ```ts\n   * // /app/routes/**\\/*.ts\n   * import { LoaderFunctionArgs, json } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   * import { getMyAppData } from \"~/db/model.server\";\n   *\n   * export const loader = async ({ request }: LoaderFunctionArgs) => {\n   *   const { sessionToken } = await authenticate.public.checkout(\n   *     request\n   *   );\n   *   return json(await getMyAppData({user: sessionToken.sub}));\n   * };\n   * ```\n   */\n  sessionToken: JwtPayload;\n\n  /**\n   * A function that redirects the user to a new page, ensuring that the appropriate parameters are set for embedded\n   * apps.\n   *\n   * Returned only if `isEmbeddedApp` is `true`.\n   *\n   * @example\n   * <caption>Redirecting to an app route.</caption>\n   * <description>Use the `redirect` helper to safely redirect between pages.</description>\n   * ```ts\n   * // /app/routes/admin/my-route.ts\n   * import { LoaderFunctionArgs, json } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   *\n   * export const loader = async ({ request }: LoaderFunctionArgs) => {\n   *   const { session, redirect } = await authenticate.admin(request);\n   *   return redirect(\"/\");\n   * };\n   * ```\n   *\n   * @example\n   * <caption>Redirecting outside of Shopify admin.</caption>\n   * <description>Pass in a `target` option of `_top` or `_parent` to go to an external URL.</description>\n   * ```ts\n   * // /app/routes/admin/my-route.ts\n   * import { LoaderFunctionArgs, json } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   *\n   * export const loader = async ({ request }: LoaderFunctionArgs) => {\n   *   const { session, redirect } = await authenticate.admin(request);\n   *   return redirect(\"/\", { target: '_parent' });\n   * };\n   * ```\n   */\n  redirect: RedirectFunction;\n}"
           },
+          "JwtPayload": {
+            "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/session/types.ts",
+            "name": "JwtPayload",
+            "description": "",
+            "members": [
+              {
+                "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/session/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "iss",
+                "value": "string",
+                "description": ""
+              },
+              {
+                "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/session/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "dest",
+                "value": "string",
+                "description": ""
+              },
+              {
+                "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/session/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "aud",
+                "value": "string",
+                "description": ""
+              },
+              {
+                "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/session/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "sub",
+                "value": "string",
+                "description": ""
+              },
+              {
+                "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/session/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "exp",
+                "value": "number",
+                "description": ""
+              },
+              {
+                "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/session/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "nbf",
+                "value": "number",
+                "description": ""
+              },
+              {
+                "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/session/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "iat",
+                "value": "number",
+                "description": ""
+              },
+              {
+                "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/session/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "jti",
+                "value": "string",
+                "description": ""
+              },
+              {
+                "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/lib/session/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "sid",
+                "value": "string",
+                "description": ""
+              }
+            ],
+            "value": "export interface JwtPayload {\n  iss: string;\n  dest: string;\n  aud: string;\n  sub: string;\n  exp: number;\n  nbf: number;\n  iat: number;\n  jti: string;\n  sid: string;\n}"
+          },
           "RedirectFunction": {
             "filePath": "/server/authenticate/admin/helpers/redirect.ts",
             "name": "RedirectFunction",
@@ -4624,13 +6080,6 @@
             "syntaxKind": "TypeAliasDeclaration",
             "name": "AuthenticatePublic",
             "value": "FeatureEnabled<Future, 'v3_authenticatePublic'> extends true\n    ? AuthenticatePublicObject\n    : AuthenticatePublicLegacy",
-            "description": ""
-          },
-          "FeatureEnabled": {
-            "filePath": "/server/future/flags.ts",
-            "syntaxKind": "TypeAliasDeclaration",
-            "name": "FeatureEnabled",
-            "value": "Future extends FutureFlags\n  ? Future[Flag] extends true\n    ? true\n    : false\n  : false",
             "description": ""
           },
           "AuthenticatePublicObject": {
@@ -4972,7 +6421,7 @@
                 "filePath": "/server/clients/storefront/types.ts",
                 "syntaxKind": "PropertySignature",
                 "name": "graphql",
-                "value": "GraphQLClient",
+                "value": "GraphQLClient<StorefrontOperations>",
                 "description": "Method for interacting with the Shopify Storefront GraphQL API\n\nIf you're getting incorrect type hints in the Shopify template, follow [these instructions](https://github.com/Shopify/shopify-app-template-remix/tree/main#incorrect-graphql-hints).\n\n\n\n\n",
                 "examples": [
                   {
@@ -4988,7 +6437,7 @@
                 ]
               }
             ],
-            "value": "export interface StorefrontContext {\n  /**\n   * Method for interacting with the Shopify Storefront GraphQL API\n   *\n   * If you're getting incorrect type hints in the Shopify template, follow [these instructions](https://github.com/Shopify/shopify-app-template-remix/tree/main#incorrect-graphql-hints).\n   *\n   * {@link https://shopify.dev/docs/api/storefront}\n   *\n   * @example\n   * <caption>Querying the GraphQL API.</caption>\n   * <description>Use `storefront.graphql` to make query / mutation requests.</description>\n   * ```ts\n   * // app/routes/**\\/.ts\n   * import { json } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   *\n   * export async function action({ request }: ActionFunctionArgs) {\n   *   const { storefront } = await authenticate.public.appProxy(request);\n   *\n   *   const response = await storefront.graphql(`{blogs(first: 10) { edges { node { id } } } }`);\n   *\n   *   return json(await response.json());\n   * }\n   * ```\n   */\n  graphql: GraphQLClient;\n}"
+            "value": "export interface StorefrontContext {\n  /**\n   * Method for interacting with the Shopify Storefront GraphQL API\n   *\n   * If you're getting incorrect type hints in the Shopify template, follow [these instructions](https://github.com/Shopify/shopify-app-template-remix/tree/main#incorrect-graphql-hints).\n   *\n   * {@link https://shopify.dev/docs/api/storefront}\n   *\n   * @example\n   * <caption>Querying the GraphQL API.</caption>\n   * <description>Use `storefront.graphql` to make query / mutation requests.</description>\n   * ```ts\n   * // app/routes/**\\/.ts\n   * import { json } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   *\n   * export async function action({ request }: ActionFunctionArgs) {\n   *   const { storefront } = await authenticate.public.appProxy(request);\n   *\n   *   const response = await storefront.graphql(`{blogs(first: 10) { edges { node { id } } } }`);\n   *\n   *   return json(await response.json());\n   * }\n   * ```\n   */\n  graphql: GraphQLClient<StorefrontOperations>;\n}"
           },
           "AuthenticatePublicLegacy": {
             "filePath": "/server/authenticate/public/types.ts",
@@ -5393,14 +6842,14 @@
               {
                 "filePath": "/server/types.ts",
                 "syntaxKind": "MethodSignature",
-                "name": "__@iterator@644",
+                "name": "__@iterator@1391",
                 "value": "() => IterableIterator<JSONValue>",
                 "description": "Iterator"
               },
               {
                 "filePath": "/server/types.ts",
                 "syntaxKind": "MethodSignature",
-                "name": "__@unscopables@646",
+                "name": "__@unscopables@1393",
                 "value": "() => { copyWithin: boolean; entries: boolean; fill: boolean; find: boolean; findIndex: boolean; keys: boolean; values: boolean; }",
                 "description": "Returns an object whose properties have the value 'true'\r\nwhen they will be absent when used in a 'with' statement."
               },
@@ -5969,30 +7418,28 @@
         "type": "FutureFlags",
         "typeDefinitions": {
           "FutureFlags": {
-            "filePath": "/server/future/flags.ts",
+            "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/future/flags.ts",
             "name": "FutureFlags",
             "description": "",
             "members": [
               {
-                "filePath": "/server/future/flags.ts",
+                "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/future/flags.ts",
                 "syntaxKind": "PropertySignature",
-                "name": "v3_webhookAdminContext",
+                "name": "unstable_tokenExchange",
                 "value": "boolean",
-                "description": "When enabled, returns the same `admin` context (`AdminApiContext`) from `authenticate.webhook` that is returned from `authenticate.admin`.",
-                "isOptional": true,
-                "defaultValue": "false"
+                "description": "",
+                "isOptional": true
               },
               {
-                "filePath": "/server/future/flags.ts",
+                "filePath": "Users/paulo/src/github.com/Shopify/shopify-api-js/packages/shopify-api/future/flags.ts",
                 "syntaxKind": "PropertySignature",
-                "name": "v3_authenticatePublic",
+                "name": "unstable_lineItemBilling",
                 "value": "boolean",
-                "description": "When enabled authenticate.public() will not work.  Use authenticate.public.checkout() instead.",
-                "isOptional": true,
-                "defaultValue": "false"
+                "description": "",
+                "isOptional": true
               }
             ],
-            "value": "export interface FutureFlags {\n  /**\n   * When enabled, returns the same `admin` context (`AdminApiContext`) from `authenticate.webhook` that is returned from `authenticate.admin`.\n   *\n   * @default false\n   */\n  v3_webhookAdminContext?: boolean;\n\n  /**\n   * When enabled authenticate.public() will not work.  Use authenticate.public.checkout() instead.\n   *\n   * @default false\n   */\n  v3_authenticatePublic?: boolean;\n}"
+            "value": "export interface FutureFlags {\n  unstable_tokenExchange?: boolean;\n  unstable_lineItemBilling?: boolean;\n}"
           }
         }
       }
@@ -6287,7 +7734,7 @@
                 "filePath": "/server/clients/admin/types.ts",
                 "syntaxKind": "PropertySignature",
                 "name": "graphql",
-                "value": "GraphQLClient",
+                "value": "GraphQLClient<AdminOperations>",
                 "description": "Methods for interacting with the Shopify Admin GraphQL API\n\n\n\n\n\n\n\n\n\n",
                 "examples": [
                   {
@@ -6303,7 +7750,7 @@
                 ]
               }
             ],
-            "value": "export interface AdminApiContext<\n  Resources extends ShopifyRestResources = ShopifyRestResources,\n> {\n  /**\n   * Methods for interacting with the Shopify Admin REST API\n   *\n   * There are methods for interacting with individual REST resources. You can also make `GET`, `POST`, `PUT` and `DELETE` requests should the REST resources not meet your needs.\n   *\n   * {@link https://shopify.dev/docs/api/admin-rest}\n   *\n   * @example\n   * <caption>Using REST resources.</caption>\n   * <description>Getting the number of orders in a store using REST resources. Visit the [Admin REST API references](/docs/api/admin-rest) for examples on using each resource. </description>\n   *\n   * ```ts\n   * // /app/routes/**\\/*.ts\n   * import { LoaderFunctionArgs, json } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   *\n   * export const loader = async ({ request }: LoaderFunctionArgs) => {\n   *   const { admin, session } = await authenticate.admin(request);\n   *   return json(admin.rest.resources.Order.count({ session }));\n   * };\n   * ```\n   *\n   *\n   * ```ts\n   * // /app/shopify.server.ts\n   * import { shopifyApp } from \"@shopify/shopify-app-remix/server\";\n   * import { restResources } from \"@shopify/shopify-api/rest/admin/2023-07\";\n   *\n   * const shopify = shopifyApp({\n   *   restResources,\n   *   // ...etc\n   * });\n   * export default shopify;\n   * export const authenticate = shopify.authenticate;\n   * ```\n   *\n   *\n   * @example\n   * <caption>Performing a GET request to the REST API.</caption>\n   * <description>Use `admin.rest.get` to make custom requests to make a request to to the `customer/count` endpoint</description>\n   *\n   * ```ts\n   * // /app/routes/**\\/*.ts\n   * import { LoaderFunctionArgs, json } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   *\n   * export const loader = async ({ request }: LoaderFunctionArgs) => {\n   *   const { admin, session } = await authenticate.admin(request);\n   *   const response = await admin.rest.get({ path: \"/customers/count.json\" });\n   *   const customers = await response.json();\n   *   return json({ customers });\n   * };\n   * ```\n   *\n   * ```ts\n   * // /app/shopify.server.ts\n   * import { shopifyApp } from \"@shopify/shopify-app-remix/server\";\n   * import { restResources } from \"@shopify/shopify-api/rest/admin/2023-04\";\n   *\n   * const shopify = shopifyApp({\n   *   restResources,\n   *   // ...etc\n   * });\n   * export default shopify;\n   * export const authenticate = shopify.authenticate;\n   * ```\n   * @example\n   * <caption>Performing a POST request to the REST API.</caption>\n   * <description>Use `admin.rest.post` to make custom requests to make a request to to the `customers.json` endpoint to send a welcome email</description>\n   * ```ts\n   * // /app/routes/**\\/*.ts\n   * import { LoaderFunctionArgs, json } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   *\n   * export const loader = async ({ request }: LoaderFunctionArgs) => {\n   *   const { admin, session } = await authenticate.admin(request);\n   *   const response = admin.rest.post({\n   *     path: \"customers/7392136888625/send_invite.json\",\n   *     body: {\n   *       customer_invite: {\n   *         to: \"new_test_email@shopify.com\",\n   *         from: \"j.limited@example.com\",\n   *         bcc: [\"j.limited@example.com\"],\n   *         subject: \"Welcome to my new shop\",\n   *         custom_message: \"My awesome new store\",\n   *       },\n   *     },\n   * });\n   *   const customerInvite = await response.json();\n   *   return json({ customerInvite });\n   * };\n   * ```\n   *\n   * ```ts\n   * // /app/shopify.server.ts\n   * import { shopifyApp } from \"@shopify/shopify-app-remix/server\";\n   * import { restResources } from \"@shopify/shopify-api/rest/admin/2023-04\";\n   *\n   * const shopify = shopifyApp({\n   *   restResources,\n   *   // ...etc\n   * });\n   * export default shopify;\n   * export const authenticate = shopify.authenticate;\n   * ```\n   */\n  rest: RestClientWithResources<Resources>;\n\n  /**\n   * Methods for interacting with the Shopify Admin GraphQL API\n   *\n   * {@link https://shopify.dev/docs/api/admin-graphql}\n   * {@link https://github.com/Shopify/shopify-api-js/blob/main/packages/shopify-api/docs/reference/clients/Graphql.md}\n   *\n   * @example\n   * <caption>Querying the GraphQL API.</caption>\n   * <description>Use `admin.graphql` to make query / mutation requests.</description>\n   * ```ts\n   * import { ActionFunctionArgs } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   *\n   * export async function action({ request }: ActionFunctionArgs) {\n   *   const { admin } = await authenticate.admin(request);\n   *\n   *   const response = await admin.graphql(\n   *     `#graphql\n   *     mutation populateProduct($input: ProductInput!) {\n   *       productCreate(input: $input) {\n   *         product {\n   *           id\n   *         }\n   *       }\n   *     }`,\n   *     { variables: { input: { title: \"Product Name\" } } }\n   *   );\n   *\n   *   const productData = await response.json();\n   *   return json({ data: productData.data });\n   * }\n   * ```\n   */\n  graphql: GraphQLClient;\n}"
+            "value": "export interface AdminApiContext<\n  Resources extends ShopifyRestResources = ShopifyRestResources,\n> {\n  /**\n   * Methods for interacting with the Shopify Admin REST API\n   *\n   * There are methods for interacting with individual REST resources. You can also make `GET`, `POST`, `PUT` and `DELETE` requests should the REST resources not meet your needs.\n   *\n   * {@link https://shopify.dev/docs/api/admin-rest}\n   *\n   * @example\n   * <caption>Using REST resources.</caption>\n   * <description>Getting the number of orders in a store using REST resources. Visit the [Admin REST API references](/docs/api/admin-rest) for examples on using each resource. </description>\n   *\n   * ```ts\n   * // /app/routes/**\\/*.ts\n   * import { LoaderFunctionArgs, json } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   *\n   * export const loader = async ({ request }: LoaderFunctionArgs) => {\n   *   const { admin, session } = await authenticate.admin(request);\n   *   return json(admin.rest.resources.Order.count({ session }));\n   * };\n   * ```\n   *\n   *\n   * ```ts\n   * // /app/shopify.server.ts\n   * import { shopifyApp } from \"@shopify/shopify-app-remix/server\";\n   * import { restResources } from \"@shopify/shopify-api/rest/admin/2023-07\";\n   *\n   * const shopify = shopifyApp({\n   *   restResources,\n   *   // ...etc\n   * });\n   * export default shopify;\n   * export const authenticate = shopify.authenticate;\n   * ```\n   *\n   *\n   * @example\n   * <caption>Performing a GET request to the REST API.</caption>\n   * <description>Use `admin.rest.get` to make custom requests to make a request to to the `customer/count` endpoint</description>\n   *\n   * ```ts\n   * // /app/routes/**\\/*.ts\n   * import { LoaderFunctionArgs, json } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   *\n   * export const loader = async ({ request }: LoaderFunctionArgs) => {\n   *   const { admin, session } = await authenticate.admin(request);\n   *   const response = await admin.rest.get({ path: \"/customers/count.json\" });\n   *   const customers = await response.json();\n   *   return json({ customers });\n   * };\n   * ```\n   *\n   * ```ts\n   * // /app/shopify.server.ts\n   * import { shopifyApp } from \"@shopify/shopify-app-remix/server\";\n   * import { restResources } from \"@shopify/shopify-api/rest/admin/2023-04\";\n   *\n   * const shopify = shopifyApp({\n   *   restResources,\n   *   // ...etc\n   * });\n   * export default shopify;\n   * export const authenticate = shopify.authenticate;\n   * ```\n   * @example\n   * <caption>Performing a POST request to the REST API.</caption>\n   * <description>Use `admin.rest.post` to make custom requests to make a request to to the `customers.json` endpoint to send a welcome email</description>\n   * ```ts\n   * // /app/routes/**\\/*.ts\n   * import { LoaderFunctionArgs, json } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   *\n   * export const loader = async ({ request }: LoaderFunctionArgs) => {\n   *   const { admin, session } = await authenticate.admin(request);\n   *   const response = admin.rest.post({\n   *     path: \"customers/7392136888625/send_invite.json\",\n   *     body: {\n   *       customer_invite: {\n   *         to: \"new_test_email@shopify.com\",\n   *         from: \"j.limited@example.com\",\n   *         bcc: [\"j.limited@example.com\"],\n   *         subject: \"Welcome to my new shop\",\n   *         custom_message: \"My awesome new store\",\n   *       },\n   *     },\n   * });\n   *   const customerInvite = await response.json();\n   *   return json({ customerInvite });\n   * };\n   * ```\n   *\n   * ```ts\n   * // /app/shopify.server.ts\n   * import { shopifyApp } from \"@shopify/shopify-app-remix/server\";\n   * import { restResources } from \"@shopify/shopify-api/rest/admin/2023-04\";\n   *\n   * const shopify = shopifyApp({\n   *   restResources,\n   *   // ...etc\n   * });\n   * export default shopify;\n   * export const authenticate = shopify.authenticate;\n   * ```\n   */\n  rest: RestClientWithResources<Resources>;\n\n  /**\n   * Methods for interacting with the Shopify Admin GraphQL API\n   *\n   * {@link https://shopify.dev/docs/api/admin-graphql}\n   * {@link https://github.com/Shopify/shopify-api-js/blob/main/packages/shopify-api/docs/reference/clients/Graphql.md}\n   *\n   * @example\n   * <caption>Querying the GraphQL API.</caption>\n   * <description>Use `admin.graphql` to make query / mutation requests.</description>\n   * ```ts\n   * import { ActionFunctionArgs } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   *\n   * export async function action({ request }: ActionFunctionArgs) {\n   *   const { admin } = await authenticate.admin(request);\n   *\n   *   const response = await admin.graphql(\n   *     `#graphql\n   *     mutation populateProduct($input: ProductInput!) {\n   *       productCreate(input: $input) {\n   *         product {\n   *           id\n   *         }\n   *       }\n   *     }`,\n   *     { variables: { input: { title: \"Product Name\" } } }\n   *   );\n   *\n   *   const productData = await response.json();\n   *   return json({ data: productData.data });\n   * }\n   * ```\n   */\n  graphql: GraphQLClient<AdminOperations>;\n}"
           },
           "RestClientWithResources": {
             "filePath": "/server/clients/admin/rest.ts",
@@ -6502,7 +7949,7 @@
                 "filePath": "/server/clients/storefront/types.ts",
                 "syntaxKind": "PropertySignature",
                 "name": "graphql",
-                "value": "GraphQLClient",
+                "value": "GraphQLClient<StorefrontOperations>",
                 "description": "Method for interacting with the Shopify Storefront GraphQL API\n\nIf you're getting incorrect type hints in the Shopify template, follow [these instructions](https://github.com/Shopify/shopify-app-template-remix/tree/main#incorrect-graphql-hints).\n\n\n\n\n",
                 "examples": [
                   {
@@ -6518,7 +7965,7 @@
                 ]
               }
             ],
-            "value": "export interface StorefrontContext {\n  /**\n   * Method for interacting with the Shopify Storefront GraphQL API\n   *\n   * If you're getting incorrect type hints in the Shopify template, follow [these instructions](https://github.com/Shopify/shopify-app-template-remix/tree/main#incorrect-graphql-hints).\n   *\n   * {@link https://shopify.dev/docs/api/storefront}\n   *\n   * @example\n   * <caption>Querying the GraphQL API.</caption>\n   * <description>Use `storefront.graphql` to make query / mutation requests.</description>\n   * ```ts\n   * // app/routes/**\\/.ts\n   * import { json } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   *\n   * export async function action({ request }: ActionFunctionArgs) {\n   *   const { storefront } = await authenticate.public.appProxy(request);\n   *\n   *   const response = await storefront.graphql(`{blogs(first: 10) { edges { node { id } } } }`);\n   *\n   *   return json(await response.json());\n   * }\n   * ```\n   */\n  graphql: GraphQLClient;\n}"
+            "value": "export interface StorefrontContext {\n  /**\n   * Method for interacting with the Shopify Storefront GraphQL API\n   *\n   * If you're getting incorrect type hints in the Shopify template, follow [these instructions](https://github.com/Shopify/shopify-app-template-remix/tree/main#incorrect-graphql-hints).\n   *\n   * {@link https://shopify.dev/docs/api/storefront}\n   *\n   * @example\n   * <caption>Querying the GraphQL API.</caption>\n   * <description>Use `storefront.graphql` to make query / mutation requests.</description>\n   * ```ts\n   * // app/routes/**\\/.ts\n   * import { json } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   *\n   * export async function action({ request }: ActionFunctionArgs) {\n   *   const { storefront } = await authenticate.public.appProxy(request);\n   *\n   *   const response = await storefront.graphql(`{blogs(first: 10) { edges { node { id } } } }`);\n   *\n   *   return json(await response.json());\n   * }\n   * ```\n   */\n  graphql: GraphQLClient<StorefrontOperations>;\n}"
           }
         }
       }
