@@ -40,6 +40,7 @@ import {AuthCodeFlowStrategy} from './authenticate/admin/strategies/auth-code-fl
  * @example
  * <caption>The minimum viable configuration</caption>
  * ```ts
+ * // /shopify.server.ts
  * import { shopifyApp } from "@shopify/shopify-app-remix/server";
  *
  * const shopify = shopifyApp({

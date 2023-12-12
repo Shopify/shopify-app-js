@@ -1,5 +1,19 @@
 # @shopify/shopify-app-remix
 
+## 2.2.0
+
+### Minor Changes
+
+- d92f828: Refactor AuthStrategy to extract OAuth authorization code flow behaviour into a separate class.
+
+### Patch Changes
+
+- 8c36e82: Fixing a bug in the GraphQL client that could cause specific builds to fail, because we used `query` for both the function and argument names.
+- 9d0fc6f: Now `authenticate.webhook(request);` will return 401 Unauthorized when webhook HMAC validation fails.
+- 3685bd4: Bump shopify-api to ^8.1.1
+- Updated dependencies [3685bd4]
+  - @shopify/shopify-app-session-storage@2.0.2
+
 ## 2.1.0
 
 ### Minor Changes

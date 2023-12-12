@@ -17,7 +17,7 @@ const data: LandingTemplateSchema = {
         '\n1. Review the required scopes for the webhook topics, and update your [app scopes](/docs/apps/tools/cli/configuration#access_scopes)  as necessary.' +
         "\n\n> Note: You can't register mandatory topics using this package, you must [configure those in the Partner Dashboard](/docs/apps/webhooks/configuration/mandatory-webhooks) instead.",
       codeblock: {
-        title: '/app/shopify.server.ts',
+        title: 'Configure webhooks subscriptions',
         tabs: [
           {
             title: '/app/shopify.server.ts',
@@ -37,7 +37,7 @@ const data: LandingTemplateSchema = {
         '\n\nPlease keep in mind that webhook endpoints should respond as quickly as possible. If you need to run a long-running job, then consider using background tasks.' +
         '\n\n> Caution: Webhook endpoints **must** respond with an `HTTP 200` code, or Shopify will retry.',
       codeblock: {
-        title: '/app/routes/webhooks.tsx',
+        title: 'Receive webhook requests',
         tabs: [
           {
             title: '/app/routes/webhooks.tsx',
