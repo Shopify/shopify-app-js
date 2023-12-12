@@ -72,7 +72,7 @@
     "@shopify/shopify-app-session-storage": "^2.0.2",
     "isbot": "^3.6.5",
     "semver": "^7.5.4",
-    "tslib": "^2.5.0"
+    "tslib": "^2.6.2"
   },
   "peerDependencies": {
     "@remix-run/react": "*",

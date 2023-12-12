@@ -33,7 +33,7 @@
   ],
   "dependencies": {
     "redis": "^4.6.6",
-    "tslib": "^2.4.0"
+    "tslib": "^2.6.2"
   },
   "peerDependencies": {
     "@shopify/shopify-api": "^8.1.1",
