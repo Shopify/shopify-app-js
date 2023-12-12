@@ -2,6 +2,7 @@ import {LoginErrorType, shopifyApp} from '../../../index';
 import {
   APP_URL,
   TEST_SHOP,
+  TEST_SHOP_NAME,
   getThrownResponse,
   testConfig,
 } from '../../../__test-helpers';
@@ -117,7 +118,7 @@ describe('login helper', () => {
 
         // THEN
         const expectedPath = testCaseConfig.redirectToInstall
-          ? `https://${TEST_SHOP}/admin/oauth/install?client_id=${config.apiKey}`
+          ? `https://admin.shopify.com/store/${TEST_SHOP_NAME}/oauth/install?client_id=${config.apiKey}`
           : `${APP_URL}/auth?shop=${TEST_SHOP}`;
 
         expect(response.status).toEqual(302);
@@ -145,7 +146,7 @@ describe('login helper', () => {
       );
 
       const expectedPath = testCaseConfig.redirectToInstall
-        ? `https://${TEST_SHOP}/admin/oauth/install?client_id=${config.apiKey}`
+        ? `https://admin.shopify.com/store/${TEST_SHOP_NAME}/oauth/install?client_id=${config.apiKey}`
         : `${APP_URL}/auth?shop=${TEST_SHOP}`;
 
       // THEN
