@@ -196,6 +196,7 @@ export class AuthCodeFlowStrategy<
         {api, config, logger},
         session,
         request,
+        this,
       );
 
       throw await redirectToShopifyOrAppRoot(

@@ -151,7 +151,7 @@ export class TokenExchangeStrategy<Config extends AppConfigArg>
     const {config} = params;
     await config.idempotentPromiseHandler.handlePromise({
       promiseFunction: () => {
-        return triggerAfterAuthHook(params, session, request);
+        return triggerAfterAuthHook(params, session, request, this);
       },
       identifier: sessionToken,
     });
