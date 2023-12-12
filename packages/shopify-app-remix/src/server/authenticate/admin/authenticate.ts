@@ -30,7 +30,14 @@ import {
   renderAppBridge,
   validateShopAndHostParams,
 } from './helpers';
-import {AuthorizationStrategy, SessionTokenContext} from './strategies/types';
+import {AuthorizationStrategy} from './strategies/types';
+
+export interface SessionTokenContext {
+  shop: string;
+  sessionId?: string;
+  sessionToken?: string;
+  payload?: JwtPayload;
+}
 
 interface AuthStrategyParams extends BasicParams {
   strategy: AuthorizationStrategy;
