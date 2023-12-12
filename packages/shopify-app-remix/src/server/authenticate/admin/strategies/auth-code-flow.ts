@@ -12,6 +12,7 @@ import {
 import type {BasicParams} from '../../../types';
 import {
   beginAuth,
+  handleClientErrorFactory,
   redirectToAuthPage,
   redirectToShopifyOrAppRoot,
   redirectWithExitIframe,
@@ -20,12 +21,9 @@ import {
 } from '../helpers';
 import {AppConfig} from '../../../config-types';
 import {getSessionTokenHeader} from '../../helpers';
+import {HandleAdminClientError} from '../../../clients';
 
-import {
-  AuthorizationStrategy,
-  HandleInvalidAccessTokenOptions,
-  SessionContext,
-} from './types';
+import {AuthorizationStrategy, SessionContext, OnErrorOptions} from './types';
 
 export class AuthCodeFlowStrategy<
   Resources extends ShopifyRestResources = ShopifyRestResources,
@@ -91,16 +89,20 @@ export class AuthCodeFlowStrategy<
     return session!;
   }
 
-  public async handleInvalidAccessTokenError({
-    request,
-    session,
-  }: HandleInvalidAccessTokenOptions): Promise<never> {
+  public handleClientError(request: Request): HandleAdminClientError {
     const {api, config, logger} = this;
-    throw await redirectToAuthPage(
-      {api, config, logger},
+    return handleClientErrorFactory({
       request,
-      session.shop,
-    );
+      onError: async ({session, error}: OnErrorOptions) => {
+        if (error.response.code === 401) {
+          throw await redirectToAuthPage(
+            {api, config, logger},
+            request,
+            session.shop,
+          );
+        }
+      },
+    });
   }
 
   private async ensureInstalledOnShop(request: Request) {
