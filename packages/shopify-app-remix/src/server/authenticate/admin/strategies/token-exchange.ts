@@ -9,13 +9,10 @@ import {AppConfig, AppConfigArg} from 'src/server/config-types';
 import {BasicParams, ApiConfigWithFutureFlags} from 'src/server/types';
 
 import {respondToInvalidSessionToken} from '../../helpers';
-import {triggerAfterAuthHook} from '../helpers';
+import {handleClientErrorFactory, triggerAfterAuthHook} from '../helpers';
+import {HandleAdminClientError} from '../../../clients';
 
-import {
-  AuthorizationStrategy,
-  HandleInvalidAccessTokenOptions,
-  SessionContext,
-} from './types';
+import {AuthorizationStrategy, SessionContext, OnErrorOptions} from './types';
 
 export class TokenExchangeStrategy<Config extends AppConfigArg>
   implements AuthorizationStrategy
@@ -88,17 +85,20 @@ export class TokenExchangeStrategy<Config extends AppConfigArg>
     return session!;
   }
 
-  public async handleInvalidAccessTokenError({
-    request,
-    session,
-  }: HandleInvalidAccessTokenOptions): Promise<void> {
-    const {config, api, logger} = this;
-
-    config.sessionStorage.deleteSession(session.id);
-
-    respondToInvalidSessionToken({
-      params: {config, api, logger},
+  public handleClientError(request: Request): HandleAdminClientError {
+    const {api, config, logger} = this;
+    return handleClientErrorFactory({
       request,
+      onError: async ({session, error}: OnErrorOptions) => {
+        if (error.response.code === 401) {
+          config.sessionStorage.deleteSession(session.id);
+
+          respondToInvalidSessionToken({
+            params: {config, api, logger},
+            request,
+          });
+        }
+      },
     });
   }
 

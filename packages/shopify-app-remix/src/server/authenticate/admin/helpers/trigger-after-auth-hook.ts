@@ -19,10 +19,9 @@ export async function triggerAfterAuthHook<
     await config.hooks.afterAuth({
       session,
       admin: createAdminApiContext<Resources>(
-        request,
         session,
         params,
-        authStrategy,
+        authStrategy.handleClientError(request),
       ),
     });
   }

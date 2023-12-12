@@ -1,4 +1,6 @@
-import {Session} from '@shopify/shopify-api';
+import {HttpResponseError, Session} from '@shopify/shopify-api';
+
+import {HandleAdminClientError} from '../../../clients';
 
 export interface SessionContext {
   shop: string;
@@ -6,24 +8,22 @@ export interface SessionContext {
   sessionToken?: string;
 }
 
-export interface HandleClientErrorOptions {
-  request: Request;
-  authStrategy?: AuthorizationStrategy;
-}
-
-export interface HandleInvalidAccessTokenOptions {
+export interface OnErrorOptions {
   request: Request;
   session: Session;
-  error: any;
+  error: HttpResponseError;
 }
+
+export interface HandleClientErrorOptions {
+  request: Request;
+  onError?: ({session, error}: OnErrorOptions) => Promise<void | never>;
+}
+
 export interface AuthorizationStrategy {
   respondToOAuthRequests: (request: Request) => Promise<void | never>;
   authenticate: (
     request: Request,
     sessionContext: SessionContext,
   ) => Promise<Session | never>;
-  handleInvalidAccessTokenError: ({
-    request,
-    session,
-  }: HandleInvalidAccessTokenOptions) => Promise<void | never>;
+  handleClientError: (request: Request) => HandleAdminClientError;
 }
