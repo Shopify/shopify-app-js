@@ -16,7 +16,7 @@ const data: LandingTemplateSchema = {
         'To opt in to a feature, simply enable the appropriate flag in the `future` option of the `shopifyApp` function.' +
         '\n\nOnce a flag is set, the returned `shopify` object will start using the new APIs, including using any new types. That allows apps to rely on TypeScript to use a feature regardless of a flag being enabled or not.',
       codeblock: {
-        title: '/app/shopify.server.ts',
+        title: 'Enable future flags',
         tabs: [
           {
             title: '/app/shopify.server.ts',
@@ -36,7 +36,7 @@ const data: LandingTemplateSchema = {
         '\n\nWhen the feature is ready for release, the future flag will be removed and it will be available by default.' +
         '\n\nIn this example, `shopify` has a new function called `newFeature`. If the future flag is disabled, TypeScript will be unaware of the new function, and the app will fail to compile if it tries to use it.',
       codeblock: {
-        title: '/app/routes/*.tsx',
+        title: 'Use unstable APIs',
         tabs: [
           {
             title: '/app/routes/*.tsx',

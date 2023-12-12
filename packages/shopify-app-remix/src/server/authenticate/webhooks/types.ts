@@ -18,7 +18,8 @@ interface Context<Topics = string | number | symbol> {
    * @example
    * <caption>Webhook API version.</caption>
    * <description>Get the API version used for webhook request.</description>
-   * ```
+   * ```ts
+   * // /app/routes/webhooks.tsx
    * import { ActionFunction } from "@remix-run/node";
    * import { authenticate } from "../shopify.server";
    *
@@ -35,7 +36,8 @@ interface Context<Topics = string | number | symbol> {
    * @example
    * <caption>Webhook shop.</caption>
    * <description>Get the shop that triggered a webhook.</description>
-   * ```
+   * ```ts
+   * // /app/routes/webhooks.tsx
    * import { ActionFunction } from "@remix-run/node";
    * import { authenticate } from "../shopify.server";
    *
@@ -52,7 +54,8 @@ interface Context<Topics = string | number | symbol> {
    * @example
    * <caption>Webhook topic.</caption>
    * <description>Get the event topic for the webhook.</description>
-   * ```
+   * ```ts
+   * // /app/routes/webhooks.tsx
    * import { ActionFunction } from "@remix-run/node";
    * import { authenticate } from "../shopify.server";
    *
@@ -76,7 +79,8 @@ interface Context<Topics = string | number | symbol> {
    * @example
    * <caption>Webhook ID.</caption>
    * <description>Get the webhook ID.</description>
-   * ```
+   * ```ts
+   * // /app/routes/webhooks.tsx
    * import { ActionFunction } from "@remix-run/node";
    * import { authenticate } from "../shopify.server";
    *
@@ -93,7 +97,8 @@ interface Context<Topics = string | number | symbol> {
    * @example
    * <caption>Webhook payload.</caption>
    * <description>Get the request's POST payload.</description>
-   * ```
+   * ```ts
+   * // /app/routes/webhooks.tsx
    * import { ActionFunction } from "@remix-run/node";
    * import { authenticate } from "../shopify.server";
    *
@@ -149,6 +154,7 @@ export interface WebhookContextWithSession<
    * <caption>[V3] Webhook admin context.</caption>
    * <description>With the `v3_webhookAdminContext` future flag enabled, use the `admin` object in the context to interact with the Admin API.</description>
    * ```ts
+   * // /app/routes/webhooks.tsx
    * import { ActionFunctionArgs } from "@remix-run/node";
    * import { authenticate } from "../shopify.server";
    *
@@ -176,6 +182,7 @@ export interface WebhookContextWithSession<
    * <caption>Webhook admin context.</caption>
    * <description>Use the `admin` object in the context to interact with the Admin API. This format will be removed in V3 of the package.</description>
    * ```ts
+   * // /app/routes/webhooks.tsx
    * import { json, ActionFunctionArgs } from "@remix-run/node";
    * import { authenticate } from "../shopify.server";
    *
