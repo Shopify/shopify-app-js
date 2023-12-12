@@ -1,11 +1,4 @@
-import {JwtPayload, Session} from '@shopify/shopify-api';
-
-export interface SessionTokenContext {
-  shop: string;
-  sessionId?: string;
-  sessionToken?: string;
-  payload?: JwtPayload;
-}
+import {Session} from '@shopify/shopify-api';
 
 export interface SessionContext {
   shop: string;
