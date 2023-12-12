@@ -82,10 +82,9 @@ export function authStrategyFactory<
       | EmbeddedAdminContext<ConfigArg, Resources>
       | NonEmbeddedAdminContext<ConfigArg, Resources> = {
       admin: createAdminApiContext<Resources>(
-        request,
         session,
         params,
-        authStrategy,
+        authStrategy.handleClientError(request),
       ),
       billing: {
         require: requireBillingFactory(params, request, session),
