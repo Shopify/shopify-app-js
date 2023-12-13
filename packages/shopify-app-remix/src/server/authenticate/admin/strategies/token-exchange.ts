@@ -9,9 +9,10 @@ import {AppConfig, AppConfigArg} from 'src/server/config-types';
 import {BasicParams, ApiConfigWithFutureFlags} from 'src/server/types';
 
 import {respondToInvalidSessionToken} from '../../helpers';
-import {triggerAfterAuthHook} from '../helpers';
+import {handleClientErrorFactory, triggerAfterAuthHook} from '../helpers';
+import {HandleAdminClientError} from '../../../clients';
 
-import {AuthorizationStrategy, SessionContext} from './types';
+import {AuthorizationStrategy, SessionContext, OnErrorOptions} from './types';
 
 export class TokenExchangeStrategy<Config extends AppConfigArg>
   implements AuthorizationStrategy
@@ -84,6 +85,23 @@ export class TokenExchangeStrategy<Config extends AppConfigArg>
     return session!;
   }
 
+  public handleClientError(request: Request): HandleAdminClientError {
+    const {api, config, logger} = this;
+    return handleClientErrorFactory({
+      request,
+      onError: async ({session, error}: OnErrorOptions) => {
+        if (error.response.code === 401) {
+          config.sessionStorage.deleteSession(session.id);
+
+          respondToInvalidSessionToken({
+            params: {config, api, logger},
+            request,
+          });
+        }
+      },
+    });
+  }
+
   private async exchangeToken({
     request,
     shop,
@@ -110,7 +128,11 @@ export class TokenExchangeStrategy<Config extends AppConfigArg>
           error.response.code === 400 &&
           error.response.body?.error === 'invalid_subject_token')
       ) {
-        throw respondToInvalidSessionToken({api, config, logger}, request);
+        throw respondToInvalidSessionToken({
+          params: {api, config, logger},
+          request,
+          retryRequest: true,
+        });
       }
 
       throw new Response(undefined, {
@@ -129,7 +151,7 @@ export class TokenExchangeStrategy<Config extends AppConfigArg>
     const {config} = params;
     await config.idempotentPromiseHandler.handlePromise({
       promiseFunction: () => {
-        return triggerAfterAuthHook(params, session, request);
+        return triggerAfterAuthHook(params, session, request, this);
       },
       identifier: sessionToken,
     });

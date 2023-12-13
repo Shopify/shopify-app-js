@@ -30,7 +30,14 @@ import {
   renderAppBridge,
   validateShopAndHostParams,
 } from './helpers';
-import {AuthorizationStrategy, SessionTokenContext} from './strategies/types';
+import {AuthorizationStrategy} from './strategies/types';
+
+export interface SessionTokenContext {
+  shop: string;
+  sessionId?: string;
+  sessionToken?: string;
+  payload?: JwtPayload;
+}
 
 interface AuthStrategyParams extends BasicParams {
   strategy: AuthorizationStrategy;
@@ -68,16 +75,17 @@ export function authStrategyFactory<
   function createContext(
     request: Request,
     session: Session,
+    authStrategy: AuthorizationStrategy,
     sessionToken?: JwtPayload,
   ): AdminContext<ConfigArg, Resources> {
     const context:
       | EmbeddedAdminContext<ConfigArg, Resources>
       | NonEmbeddedAdminContext<ConfigArg, Resources> = {
-      admin: createAdminApiContext<Resources>(request, session, {
-        api,
-        logger,
-        config,
-      }),
+      admin: createAdminApiContext<Resources>(
+        session,
+        params,
+        authStrategy.handleClientError(request),
+      ),
       billing: {
         require: requireBillingFactory(params, request, session),
         request: requestBillingFactory(params, request, session),
@@ -135,7 +143,7 @@ export function authStrategyFactory<
         isOnline: session.isOnline,
       });
 
-      return createContext(request, session, payload);
+      return createContext(request, session, strategy, payload);
     } catch (errorOrResponse) {
       if (errorOrResponse instanceof Response) {
         ensureCORSHeadersFactory(params, request)(errorOrResponse);

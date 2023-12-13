@@ -1,16 +1,22 @@
-import {JwtPayload, Session} from '@shopify/shopify-api';
+import {HttpResponseError, Session} from '@shopify/shopify-api';
 
-export interface SessionTokenContext {
-  shop: string;
-  sessionId?: string;
-  sessionToken?: string;
-  payload?: JwtPayload;
-}
+import {HandleAdminClientError} from '../../../clients';
 
 export interface SessionContext {
   shop: string;
   session?: Session;
   sessionToken?: string;
+}
+
+export interface OnErrorOptions {
+  request: Request;
+  session: Session;
+  error: HttpResponseError;
+}
+
+export interface HandleClientErrorOptions {
+  request: Request;
+  onError?: ({session, error}: OnErrorOptions) => Promise<void | never>;
 }
 
 export interface AuthorizationStrategy {
@@ -19,4 +25,5 @@ export interface AuthorizationStrategy {
     request: Request,
     sessionContext: SessionContext,
   ) => Promise<Session | never>;
+  handleClientError: (request: Request) => HandleAdminClientError;
 }
