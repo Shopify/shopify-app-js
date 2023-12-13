@@ -1,1 +1,1 @@
-yarn graphql-codegen --watch
+yarn graphql-codegen

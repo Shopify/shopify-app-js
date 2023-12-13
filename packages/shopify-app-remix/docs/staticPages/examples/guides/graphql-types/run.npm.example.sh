@@ -1,1 +1,1 @@
-npm run graphql-codegen -- --watch
+npm run graphql-codegen

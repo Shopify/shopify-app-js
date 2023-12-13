@@ -171,7 +171,7 @@
   {
     "id": "guide-graphql-types",
     "title": "Typing GraphQL operations",
-    "description": "The GraphQL clients provided in this package can use [Codegen](https://the-guild.dev/graphql/codegen) to automatically parse and create types for your queries and mutations.\n\nBy installing a few packages in your app, you can use the `graphql-codegen` script, which will look for strings with the `#graphql` tag and add syntax highlighting and types to them.",
+    "description": "The GraphQL clients provided in this package can use [Codegen](https://the-guild.dev/graphql/codegen) to automatically parse and create types for your queries and mutations.\n\nBy installing a few packages in your app, you can use the `graphql-codegen` script, which will look for strings with the `#graphql` tag and extract types from them.\n\nIf your IDE supports it, you will also get syntax highlighting and auto-complete features when writing your queries.",
     "sections": [
       {
         "type": "Markdown",
@@ -209,7 +209,7 @@
         "type": "Generic",
         "anchorLink": "configure",
         "title": "Setting up .graphqlrc.ts",
-        "sectionContent": "Before you can parse operations, you'll need to create a `.grahpqlrc.ts` file in your project, and configure it to use the `@shopify/api-codegen-preset`.",
+        "sectionContent": "Before you can parse operations, you'll need to create a `.graphqlrc.ts` file in your project, and configure it to use the `@shopify/api-codegen-preset`.\n\n> Caution: Parsing will not work on `.graphql` documents, because the preset can only apply types from JavaScript and TypeScript const strings.",
         "codeblock": {
           "title": "Codegen configuration example",
           "tabs": [
@@ -249,24 +249,24 @@
         "type": "Generic",
         "anchorLink": "run",
         "title": "Generating types",
-        "sectionContent": "You can run the script in watch mode to update your types every time you save a file.",
+        "sectionContent": "When you run `graphql-codegen`, it will look in all your configured documents for strings marked with a `#graphql` tag.\n\nIDEs that support the `.graphqlrc.ts` file will provide syntax highlighting for your operations, as well as typing.\n\n> Tip: You can pass in a `--watch` flag to the script, which will update your types every time you save a file.",
         "codeblock": {
           "title": "Running graphql-codegen",
           "tabs": [
             {
               "title": "npm",
               "language": "sh",
-              "code": "npm run graphql-codegen -- --watch\n"
+              "code": "npm run graphql-codegen\n"
             },
             {
               "title": "yarn",
               "language": "sh",
-              "code": "yarn graphql-codegen --watch\n"
+              "code": "yarn graphql-codegen\n"
             },
             {
               "title": "pnpm",
               "language": "sh",
-              "code": "pnpm run graphql-codegen --watch\n"
+              "code": "pnpm run graphql-codegen\n"
             }
           ]
         }
