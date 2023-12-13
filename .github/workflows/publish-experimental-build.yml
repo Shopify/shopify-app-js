@@ -24,14 +24,13 @@ jobs:
       - name: Build
         run: yarn build
 
-      - name: Publish to NPM
-        id: changesets
-        uses: changesets/action@v1
-        with:
-          version: yarn changeset version --snapshot experimental
-          publish: yarn changeset publish --tag experimental
-          setupGitUser: false
-          createGithubReleases: false
+      - name: Version
+        run: yarn changeset version --snapshot experimental
+
+      - name: Setup .npmrc with NPM token
+        run:  echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN\n" > ~/.npmrc
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-          GITHUB_TOKEN: ${{ secrets.SHOPIFY_GH_ACCESS_TOKEN }}
+
+      - name: Publish to NPM
+        run: yarn changeset publish --tag experimental
