@@ -31,8 +31,8 @@
     "session storage"
   ],
   "dependencies": {
-    "mongodb": "^5.5.0",
-    "tslib": "^2.4.0"
+    "mongodb": "^5.8.0",
+    "tslib": "^2.6.2"
   },
   "peerDependencies": {
     "@shopify/shopify-api": "^8.1.1",

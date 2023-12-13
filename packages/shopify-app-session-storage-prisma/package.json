@@ -31,7 +31,7 @@
     "Prisma"
   ],
   "dependencies": {
-    "tslib": "^2.4.0"
+    "tslib": "^2.6.2"
   },
   "peerDependencies": {
     "@prisma/client": "^4.13.0",
