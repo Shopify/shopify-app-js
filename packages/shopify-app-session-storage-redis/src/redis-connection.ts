@@ -17,7 +17,7 @@ export class RedisConnection implements DBConnection {
   }
 
   async connect(): Promise<void> {
-    return this.client.connect();
+    await this.client.connect();
   }
 
   async disconnect(): Promise<void> {
