@@ -46,7 +46,7 @@
     "@shopify/shopify-app-session-storage-test-utils": "^1.0.2",
     "eslint": "^8.55.0",
     "eslint-plugin-prettier": "^4.2.1",
-    "miniflare": "^2.14.0",
+    "miniflare": "^3.20231030.4",
     "prettier": "^2.8.8",
     "typescript": "^4.9.5"
   },
