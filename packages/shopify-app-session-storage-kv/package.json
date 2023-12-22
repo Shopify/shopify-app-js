@@ -32,8 +32,8 @@
     "CloudFlare"
   ],
   "dependencies": {
-    "semver": "^7.5.1",
-    "tslib": "^2.4.0"
+    "semver": "^7.5.4",
+    "tslib": "^2.6.2"
   },
   "peerDependencies": {
     "@shopify/shopify-api": "^8.1.1",
@@ -44,7 +44,7 @@
     "@shopify/eslint-plugin": "^42.1.0",
     "@shopify/prettier-config": "^1.1.2",
     "@shopify/shopify-app-session-storage-test-utils": "^1.0.2",
-    "eslint": "^8.40.0",
+    "eslint": "^8.55.0",
     "eslint-plugin-prettier": "^4.2.1",
     "miniflare": "^2.14.0",
     "prettier": "^2.8.8",

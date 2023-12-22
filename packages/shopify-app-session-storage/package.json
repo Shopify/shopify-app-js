@@ -31,7 +31,7 @@
     "session storage"
   ],
   "dependencies": {
-    "tslib": "^2.4.0"
+    "tslib": "^2.6.2"
   },
   "peerDependencies": {
     "@shopify/shopify-api": "^8.1.1"
@@ -40,7 +40,7 @@
     "@shopify/eslint-plugin": "^42.1.0",
     "@shopify/prettier-config": "^1.1.2",
     "@types/jest": "^29.5.1",
-    "eslint": "^8.40.0",
+    "eslint": "^8.55.0",
     "eslint-plugin-prettier": "^4.2.1",
     "prettier": "^2.8.8",
     "typescript": "^4.9.5"

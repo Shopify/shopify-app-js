@@ -33,8 +33,8 @@
   ],
   "dependencies": {
     "pg": "^8.11.0",
-    "pg-connection-string": "^2.5.0",
-    "tslib": "^2.4.0"
+    "pg-connection-string": "^2.6.2",
+    "tslib": "^2.6.2"
   },
   "peerDependencies": {
     "@shopify/shopify-api": "^8.1.1",
@@ -46,7 +46,7 @@
     "@shopify/shopify-app-session-storage-test-utils": "^1.0.2",
     "@types/jest": "^29.5.1",
     "@types/pg": "^8.6.6",
-    "eslint": "^8.40.0",
+    "eslint": "^8.55.0",
     "eslint-plugin-prettier": "^4.2.1",
     "prettier": "^2.8.8",
     "typescript": "4.9.5"

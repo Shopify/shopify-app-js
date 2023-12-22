@@ -23,4 +23,53 @@ const shopify = shopifyApp({
 });
 ```
 
+## Table Schema
+
+```js
+{
+  TableName: sessionTableName,
+  AttributeDefinitions: [
+    {AttributeName: 'id', AttributeType: 'S'},
+    {AttributeName: 'shop', AttributeType: 'S'},
+  ],
+  KeySchema: [{AttributeName: 'id', KeyType: 'HASH'}],
+  GlobalSecondaryIndexes: [
+    {
+      IndexName: shopIndexName,
+      KeySchema: [{AttributeName: 'shop', KeyType: 'HASH'}],
+      Projection: {ProjectionType: 'KEYS_ONLY'},
+      ProvisionedThroughput: {
+        ReadCapacityUnits: 1,
+        WriteCapacityUnits: 1,
+      },
+    },
+  ],
+  ProvisionedThroughput: {ReadCapacityUnits: 1, WriteCapacityUnits: 1},
+}
+```
+
+### AWS Policy for DynamoDB
+
+This policy must be attached to a user -- `dynamodb:Query` does not work with inline policies.
+
+```json
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "Statement1",
+      "Effect": "Allow",
+      "Action": [
+        "dynamodb:GetItem",
+        "dynamodb:DeleteItem",
+        "dynamodb:PutItem",
+        "dynamodb:Query",
+        "dynamodb:DescribeTable"
+      ],
+      "Resource": ["arn:aws:dynamodb:<region>:<account-id>:table/<table-name>"]
+    }
+  ]
+}
+```
+
 If you prefer to use your own implementation of a session storage mechanism that uses the `SessionStorage` interface, see the [implementing session storage guide](https://github.com/Shopify/shopify-app-js/blob/main/packages/shopify-app-session-storage/implementing-session-storage.md).

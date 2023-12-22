@@ -1917,7 +1917,7 @@
                     "tabs": [
                       {
                         "code": "import { ActionFunction } from \"@remix-run/node\";\nimport { authenticate } from \"../shopify.server\";\n\nexport const action: ActionFunction = async ({ request }) => {\n  const { apiVersion } = await authenticate.webhook(request);\n  return new Response();\n};",
-                        "title": "Example"
+                        "title": "/app/routes/webhooks.tsx"
                       }
                     ]
                   }
@@ -1936,7 +1936,7 @@
                     "tabs": [
                       {
                         "code": "import { ActionFunction } from \"@remix-run/node\";\nimport { authenticate } from \"../shopify.server\";\n\nexport const action: ActionFunction = async ({ request }) => {\n  const { shop } = await authenticate.webhook(request);\n  return new Response();\n};",
-                        "title": "Example"
+                        "title": "/app/routes/webhooks.tsx"
                       }
                     ]
                   }
@@ -1955,7 +1955,7 @@
                     "tabs": [
                       {
                         "code": "import { ActionFunction } from \"@remix-run/node\";\nimport { authenticate } from \"../shopify.server\";\n\nexport const action: ActionFunction = async ({ request }) => {\n  const { topic } = await authenticate.webhook(request);\n\n  switch (topic) {\n    case \"APP_UNINSTALLED\":\n      // Do something when the app is uninstalled.\n      break;\n  }\n\n  return new Response();\n};",
-                        "title": "Example"
+                        "title": "/app/routes/webhooks.tsx"
                       }
                     ]
                   }
@@ -1974,7 +1974,7 @@
                     "tabs": [
                       {
                         "code": "import { ActionFunction } from \"@remix-run/node\";\nimport { authenticate } from \"../shopify.server\";\n\nexport const action: ActionFunction = async ({ request }) => {\n  const { webhookId } = await authenticate.webhook(request);\n  return new Response();\n};",
-                        "title": "Example"
+                        "title": "/app/routes/webhooks.tsx"
                       }
                     ]
                   }
@@ -1993,7 +1993,7 @@
                     "tabs": [
                       {
                         "code": "import { ActionFunction } from \"@remix-run/node\";\nimport { authenticate } from \"../shopify.server\";\n\nexport const action: ActionFunction = async ({ request }) => {\n  const { payload } = await authenticate.webhook(request);\n  return new Response();\n};",
-                        "title": "Example"
+                        "title": "/app/routes/webhooks.tsx"
                       }
                     ]
                   }
@@ -2254,14 +2254,14 @@
               {
                 "filePath": "/server/types.ts",
                 "syntaxKind": "MethodSignature",
-                "name": "__@iterator@629",
+                "name": "__@iterator@644",
                 "value": "() => IterableIterator<JSONValue>",
                 "description": "Iterator"
               },
               {
                 "filePath": "/server/types.ts",
                 "syntaxKind": "MethodSignature",
-                "name": "__@unscopables@631",
+                "name": "__@unscopables@646",
                 "value": "() => { copyWithin: boolean; entries: boolean; fill: boolean; find: boolean; findIndex: boolean; keys: boolean; values: boolean; }",
                 "description": "Returns an object whose properties have the value 'true'\r\nwhen they will be absent when used in a 'with' statement."
               },
@@ -2300,7 +2300,7 @@
                     "tabs": [
                       {
                         "code": "import { ActionFunctionArgs } from \"@remix-run/node\";\nimport { authenticate } from \"../shopify.server\";\n\nexport async function action({ request }: ActionFunctionArgs) {\n  const { admin } = await authenticate.webhook(request);\n\n  const response = await admin?.graphql(\n    `#graphql\n    mutation populateProduct($input: ProductInput!) {\n      productCreate(input: $input) {\n        product {\n          id\n        }\n      }\n    }`,\n    { variables: { input: { title: \"Product Name\" } } }\n  );\n\n  const productData = await response.json();\n  return json({ data: productData.data });\n}",
-                        "title": "Example"
+                        "title": "/app/routes/webhooks.tsx"
                       }
                     ]
                   },
@@ -2310,7 +2310,7 @@
                     "tabs": [
                       {
                         "code": "import { json, ActionFunctionArgs } from \"@remix-run/node\";\nimport { authenticate } from \"../shopify.server\";\n\nexport async function action({ request }: ActionFunctionArgs) {\n  const { admin } = await authenticate.webhook(request);\n\n  const response = await admin?.graphql.query<any>({\n    data: {\n      query: `#graphql\n        mutation populateProduct($input: ProductInput!) {\n          productCreate(input: $input) {\n            product {\n              id\n            }\n          }\n        }`,\n      variables: { input: { title: \"Product Name\" } },\n    },\n  });\n\n  const productData = response?.body.data;\n  return json({ data: productData.data });\n}",
-                        "title": "Example"
+                        "title": "/app/routes/webhooks.tsx"
                       }
                     ]
                   }
@@ -2329,7 +2329,7 @@
                     "tabs": [
                       {
                         "code": "import { ActionFunction } from \"@remix-run/node\";\nimport { authenticate } from \"../shopify.server\";\n\nexport const action: ActionFunction = async ({ request }) => {\n  const { apiVersion } = await authenticate.webhook(request);\n  return new Response();\n};",
-                        "title": "Example"
+                        "title": "/app/routes/webhooks.tsx"
                       }
                     ]
                   }
@@ -2348,7 +2348,7 @@
                     "tabs": [
                       {
                         "code": "import { ActionFunction } from \"@remix-run/node\";\nimport { authenticate } from \"../shopify.server\";\n\nexport const action: ActionFunction = async ({ request }) => {\n  const { shop } = await authenticate.webhook(request);\n  return new Response();\n};",
-                        "title": "Example"
+                        "title": "/app/routes/webhooks.tsx"
                       }
                     ]
                   }
@@ -2367,7 +2367,7 @@
                     "tabs": [
                       {
                         "code": "import { ActionFunction } from \"@remix-run/node\";\nimport { authenticate } from \"../shopify.server\";\n\nexport const action: ActionFunction = async ({ request }) => {\n  const { topic } = await authenticate.webhook(request);\n\n  switch (topic) {\n    case \"APP_UNINSTALLED\":\n      // Do something when the app is uninstalled.\n      break;\n  }\n\n  return new Response();\n};",
-                        "title": "Example"
+                        "title": "/app/routes/webhooks.tsx"
                       }
                     ]
                   }
@@ -2386,7 +2386,7 @@
                     "tabs": [
                       {
                         "code": "import { ActionFunction } from \"@remix-run/node\";\nimport { authenticate } from \"../shopify.server\";\n\nexport const action: ActionFunction = async ({ request }) => {\n  const { webhookId } = await authenticate.webhook(request);\n  return new Response();\n};",
-                        "title": "Example"
+                        "title": "/app/routes/webhooks.tsx"
                       }
                     ]
                   }
@@ -2405,14 +2405,14 @@
                     "tabs": [
                       {
                         "code": "import { ActionFunction } from \"@remix-run/node\";\nimport { authenticate } from \"../shopify.server\";\n\nexport const action: ActionFunction = async ({ request }) => {\n  const { payload } = await authenticate.webhook(request);\n  return new Response();\n};",
-                        "title": "Example"
+                        "title": "/app/routes/webhooks.tsx"
                       }
                     ]
                   }
                 ]
               }
             ],
-            "value": "export interface WebhookContextWithSession<\n  Future extends FutureFlagOptions,\n  Resources extends ShopifyRestResources,\n  Topics = string | number | symbol,\n> extends Context<Topics> {\n  /**\n   * A session with an offline token for the shop.\n   *\n   * Returned only if there is a session for the shop.\n   */\n  session: Session;\n\n  /**\n   * An admin context for the webhook.\n   *\n   * Returned only if there is a session for the shop.\n   *\n   * @example\n   * <caption>[V3] Webhook admin context.</caption>\n   * <description>With the `v3_webhookAdminContext` future flag enabled, use the `admin` object in the context to interact with the Admin API.</description>\n   * ```ts\n   * import { ActionFunctionArgs } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   *\n   * export async function action({ request }: ActionFunctionArgs) {\n   *   const { admin } = await authenticate.webhook(request);\n   *\n   *   const response = await admin?.graphql(\n   *     `#graphql\n   *     mutation populateProduct($input: ProductInput!) {\n   *       productCreate(input: $input) {\n   *         product {\n   *           id\n   *         }\n   *       }\n   *     }`,\n   *     { variables: { input: { title: \"Product Name\" } } }\n   *   );\n   *\n   *   const productData = await response.json();\n   *   return json({ data: productData.data });\n   * }\n   * ```\n   *\n   * @example\n   * <caption>Webhook admin context.</caption>\n   * <description>Use the `admin` object in the context to interact with the Admin API. This format will be removed in V3 of the package.</description>\n   * ```ts\n   * import { json, ActionFunctionArgs } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   *\n   * export async function action({ request }: ActionFunctionArgs) {\n   *   const { admin } = await authenticate.webhook(request);\n   *\n   *   const response = await admin?.graphql.query<any>({\n   *     data: {\n   *       query: `#graphql\n   *         mutation populateProduct($input: ProductInput!) {\n   *           productCreate(input: $input) {\n   *             product {\n   *               id\n   *             }\n   *           }\n   *         }`,\n   *       variables: { input: { title: \"Product Name\" } },\n   *     },\n   *   });\n   *\n   *   const productData = response?.body.data;\n   *   return json({ data: productData.data });\n   * }\n   * ```\n   */\n  admin: WebhookAdminContext<Future, Resources>;\n}"
+            "value": "export interface WebhookContextWithSession<\n  Future extends FutureFlagOptions,\n  Resources extends ShopifyRestResources,\n  Topics = string | number | symbol,\n> extends Context<Topics> {\n  /**\n   * A session with an offline token for the shop.\n   *\n   * Returned only if there is a session for the shop.\n   */\n  session: Session;\n\n  /**\n   * An admin context for the webhook.\n   *\n   * Returned only if there is a session for the shop.\n   *\n   * @example\n   * <caption>[V3] Webhook admin context.</caption>\n   * <description>With the `v3_webhookAdminContext` future flag enabled, use the `admin` object in the context to interact with the Admin API.</description>\n   * ```ts\n   * // /app/routes/webhooks.tsx\n   * import { ActionFunctionArgs } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   *\n   * export async function action({ request }: ActionFunctionArgs) {\n   *   const { admin } = await authenticate.webhook(request);\n   *\n   *   const response = await admin?.graphql(\n   *     `#graphql\n   *     mutation populateProduct($input: ProductInput!) {\n   *       productCreate(input: $input) {\n   *         product {\n   *           id\n   *         }\n   *       }\n   *     }`,\n   *     { variables: { input: { title: \"Product Name\" } } }\n   *   );\n   *\n   *   const productData = await response.json();\n   *   return json({ data: productData.data });\n   * }\n   * ```\n   *\n   * @example\n   * <caption>Webhook admin context.</caption>\n   * <description>Use the `admin` object in the context to interact with the Admin API. This format will be removed in V3 of the package.</description>\n   * ```ts\n   * // /app/routes/webhooks.tsx\n   * import { json, ActionFunctionArgs } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   *\n   * export async function action({ request }: ActionFunctionArgs) {\n   *   const { admin } = await authenticate.webhook(request);\n   *\n   *   const response = await admin?.graphql.query<any>({\n   *     data: {\n   *       query: `#graphql\n   *         mutation populateProduct($input: ProductInput!) {\n   *           productCreate(input: $input) {\n   *             product {\n   *               id\n   *             }\n   *           }\n   *         }`,\n   *       variables: { input: { title: \"Product Name\" } },\n   *     },\n   *   });\n   *\n   *   const productData = response?.body.data;\n   *   return json({ data: productData.data });\n   * }\n   * ```\n   */\n  admin: WebhookAdminContext<Future, Resources>;\n}"
           },
           "WebhookAdminContext": {
             "filePath": "/server/authenticate/webhooks/types.ts",
@@ -3025,7 +3025,7 @@
                 "title": "[V3] Webhook admin context",
                 "tabs": [
                   {
-                    "title": "Example",
+                    "title": "/app/routes/webhooks.tsx",
                     "code": "import { ActionFunctionArgs } from \"@remix-run/node\";\nimport { authenticate } from \"../shopify.server\";\n\nexport async function action({ request }: ActionFunctionArgs) {\n  const { admin } = await authenticate.webhook(request);\n\n  const response = await admin?.graphql(\n    `#graphql\n    mutation populateProduct($input: ProductInput!) {\n      productCreate(input: $input) {\n        product {\n          id\n        }\n      }\n    }`,\n    { variables: { input: { title: \"Product Name\" } } }\n  );\n\n  const productData = await response.json();\n  return json({ data: productData.data });\n}",
                     "language": "typescript"
                   }
@@ -3038,7 +3038,7 @@
                 "title": "Webhook admin context",
                 "tabs": [
                   {
-                    "title": "Example",
+                    "title": "/app/routes/webhooks.tsx",
                     "code": "import { json, ActionFunctionArgs } from \"@remix-run/node\";\nimport { authenticate } from \"../shopify.server\";\n\nexport async function action({ request }: ActionFunctionArgs) {\n  const { admin } = await authenticate.webhook(request);\n\n  const response = await admin?.graphql.query&lt;any&gt;({\n    data: {\n      query: `#graphql\n        mutation populateProduct($input: ProductInput!) {\n          productCreate(input: $input) {\n            product {\n              id\n            }\n          }\n        }`,\n      variables: { input: { title: \"Product Name\" } },\n    },\n  });\n\n  const productData = response?.body.data;\n  return json({ data: productData.data });\n}",
                     "language": "typescript"
                   }
@@ -3056,7 +3056,7 @@
                 "title": "Webhook API version",
                 "tabs": [
                   {
-                    "title": "Example",
+                    "title": "/app/routes/webhooks.tsx",
                     "code": "import { ActionFunction } from \"@remix-run/node\";\nimport { authenticate } from \"../shopify.server\";\n\nexport const action: ActionFunction = async ({ request }) =&gt; {\n  const { apiVersion } = await authenticate.webhook(request);\n  return new Response();\n};",
                     "language": "typescript"
                   }
@@ -3074,7 +3074,7 @@
                 "title": "Webhook shop",
                 "tabs": [
                   {
-                    "title": "Example",
+                    "title": "/app/routes/webhooks.tsx",
                     "code": "import { ActionFunction } from \"@remix-run/node\";\nimport { authenticate } from \"../shopify.server\";\n\nexport const action: ActionFunction = async ({ request }) =&gt; {\n  const { shop } = await authenticate.webhook(request);\n  return new Response();\n};",
                     "language": "typescript"
                   }
@@ -3092,7 +3092,7 @@
                 "title": "Webhook topic",
                 "tabs": [
                   {
-                    "title": "Example",
+                    "title": "/app/routes/webhooks.tsx",
                     "code": "import { ActionFunction } from \"@remix-run/node\";\nimport { authenticate } from \"../shopify.server\";\n\nexport const action: ActionFunction = async ({ request }) =&gt; {\n  const { topic } = await authenticate.webhook(request);\n\n  switch (topic) {\n    case \"APP_UNINSTALLED\":\n      // Do something when the app is uninstalled.\n      break;\n  }\n\n  return new Response();\n};",
                     "language": "typescript"
                   }
@@ -3110,7 +3110,7 @@
                 "title": "Webhook ID",
                 "tabs": [
                   {
-                    "title": "Example",
+                    "title": "/app/routes/webhooks.tsx",
                     "code": "import { ActionFunction } from \"@remix-run/node\";\nimport { authenticate } from \"../shopify.server\";\n\nexport const action: ActionFunction = async ({ request }) =&gt; {\n  const { webhookId } = await authenticate.webhook(request);\n  return new Response();\n};",
                     "language": "typescript"
                   }
@@ -3128,7 +3128,7 @@
                 "title": "Webhook payload",
                 "tabs": [
                   {
-                    "title": "Example",
+                    "title": "/app/routes/webhooks.tsx",
                     "code": "import { ActionFunction } from \"@remix-run/node\";\nimport { authenticate } from \"../shopify.server\";\n\nexport const action: ActionFunction = async ({ request }) =&gt; {\n  const { payload } = await authenticate.webhook(request);\n  return new Response();\n};",
                     "language": "typescript"
                   }
@@ -3457,7 +3457,7 @@
                 "tabs": [
                   {
                     "code": "import { shopifyApp } from \"@shopify/shopify-app-remix/server\";\n\nconst shopify = shopifyApp({\n  apiKey: process.env.SHOPIFY_API_KEY!,\n  apiSecretKey: process.env.SHOPIFY_API_SECRET!,\n  scopes: process.env.SCOPES?.split(\",\")!,\n  appUrl: process.env.SHOPIFY_APP_URL!,\n});\nexport default shopify;",
-                    "title": "Example"
+                    "title": "/shopify.server.ts"
                   }
                 ]
               }
@@ -3669,7 +3669,7 @@
                 "filePath": "/server/config-types.ts",
                 "syntaxKind": "PropertySignature",
                 "name": "billing",
-                "value": "BillingConfig",
+                "value": "BillingConfig<Future>",
                 "description": "",
                 "isOptional": true
               },
@@ -3688,17 +3688,9 @@
                 "value": "{ log?: LogFunction; level?: LogSeverity; httpRequests?: boolean; timestamps?: boolean; }",
                 "description": "",
                 "isOptional": true
-              },
-              {
-                "filePath": "/server/config-types.ts",
-                "syntaxKind": "PropertySignature",
-                "name": "future",
-                "value": "FutureFlagOptions",
-                "description": "",
-                "isOptional": true
               }
             ],
-            "value": "export interface AppConfigArg<\n  Resources extends ShopifyRestResources = ShopifyRestResources,\n  Storage extends SessionStorage = SessionStorage,\n  Future extends FutureFlagOptions = FutureFlagOptions,\n> extends Omit<\n    ApiConfigArg<Resources>,\n    | 'hostName'\n    | 'hostScheme'\n    | 'isEmbeddedApp'\n    | 'apiVersion'\n    | 'isCustomStoreApp'\n  > {\n  /**\n   * The URL your app is running on.\n   *\n   * The `@shopify/cli` provides this URL as `process.env.SHOPIFY_APP_URL`.  For development this is probably a tunnel URL that points to your local machine.  If this is a production app, this is your production URL.\n   */\n  appUrl: string;\n\n  /**\n   * An adaptor for storing sessions in your database of choice.\n   *\n   * Shopify provides multiple session storage adaptors and you can create your own.\n   *\n   * {@link https://github.com/Shopify/shopify-app-js/blob/main/README.md#session-storage-options}\n   *\n   * @example\n   * <caption>Storing sessions with Prisma.</caption>\n   * <description>Add the `@shopify/shopify-app-session-storage-prisma` package to use the Prisma session storage.</description>\n   * ```ts\n   * import { shopifyApp } from \"@shopify/shopify-app-remix/server\";\n   * import { PrismaSessionStorage } from \"@shopify/shopify-app-session-storage-prisma\";\n   *\n   * import prisma from \"~/db.server\";\n   *\n   * const shopify = shopifyApp({\n   *   // ... etc\n   *   sessionStorage: new PrismaSessionStorage(prisma),\n   * });\n   * export default shopify;\n   * ```\n   */\n  sessionStorage: Storage;\n\n  /**\n   * Whether your app use online or offline tokens.\n   *\n   * If your app uses online tokens, then both online and offline tokens will be saved to your database.  This ensures your app can perform background jobs.\n   *\n   * {@link https://shopify.dev/docs/apps/auth/oauth/access-modes}\n   *\n   * @defaultValue `false`\n   */\n  useOnlineTokens?: boolean;\n\n  /**\n   * The config for the webhook topics your app would like to subscribe to.\n   *\n   * {@link https://shopify.dev/docs/apps/webhooks}\n   *\n   * This can be in used in conjunction with the afterAuth hook to register webhook topics when a user installs your app.  Or you can use this function in other processes such as background jobs.\n   *\n   * @example\n   * <caption>Registering for a webhook when a merchant uninstalls your app.</caption>\n   * ```ts\n   * // /app/shopify.server.ts\n   * import { DeliveryMethod, shopifyApp } from \"@shopify/shopify-app-remix/server\";\n   *\n   * const shopify = shopifyApp({\n   *   webhooks: {\n   *     APP_UNINSTALLED: {\n   *       deliveryMethod: DeliveryMethod.Http,\n   *        callbackUrl: \"/webhooks\",\n   *     },\n   *   },\n   *   hooks: {\n   *     afterAuth: async ({ session }) => {\n   *       shopify.registerWebhooks({ session });\n   *     }\n   *   },\n   *   // ...etc\n   * });\n   * export default shopify;\n   * export const authenticate = shopify.authenticate;\n   *\n   * // /app/routes/webhooks.jsx\n   * import { ActionFunctionArgs } from \"@remix-run/node\";\n   *\n   * import { authenticate } from \"../shopify.server\";\n   * import db from \"../db.server\";\n   *\n   * export const action = async ({ request }: ActionFunctionArgs) => {\n   *   const { topic, shop } = await authenticate.webhook(request);\n   *\n   *   switch (topic) {\n   *     case \"APP_UNINSTALLED\":\n   *       await db.session.deleteMany({ where: { shop } });\n   *       break;\n   *     case \"CUSTOMERS_DATA_REQUEST\":\n   *     case \"CUSTOMERS_REDACT\":\n   *     case \"SHOP_REDACT\":\n   *     default:\n   *       throw new Response(\"Unhandled webhook topic\", { status: 404 });\n   *   }\n   *   throw new Response();\n   * };\n   * ```\n   */\n  webhooks?: WebhookConfig;\n\n  /**\n   * Functions to call at key places during your apps lifecycle.\n   *\n   * These functions are called in the context of the request that triggered them.  This means you can access the session.\n   *\n   * @example\n   * <caption>Seeding your database custom data when a merchant installs your app.</caption>\n   * ```ts\n   * import { DeliveryMethod, shopifyApp } from \"@shopify/shopify-app-remix/server\";\n   * import { seedStoreData } from \"~/db/seeds\"\n   *\n   * const shopify = shopifyApp({\n   *   hooks: {\n   *     afterAuth: async ({ session }) => {\n   *       seedStoreData({session})\n   *     }\n   *   },\n   *   // ...etc\n   * });\n   * ```\n   */\n  hooks?: HooksConfig;\n\n  /**\n   * Does your app render embedded inside the Shopify Admin or on its own.\n   *\n   * Unless you have very specific needs, this should be true.\n   *\n   * @defaultValue `true`\n   */\n  isEmbeddedApp?: boolean;\n\n  /**\n   * How your app is distributed. Default is `AppDistribution.AppStore`.\n   *\n   * {@link https://shopify.dev/docs/apps/distribution}\n   */\n  distribution?: AppDistribution;\n\n  /**\n   * What version of Shopify's Admin API's would you like to use.\n   *\n   * {@link https://shopify.dev/docs/api/}\n   *\n   * @defaultValue `LATEST_API_VERSION` from `@shopify/shopify-app-remix`\n   *\n   * @example\n   * <caption>Using the latest API Version (Recommended)</caption>\n   * ```ts\n   * import { LATEST_API_VERSION, shopifyApp } from \"@shopify/shopify-app-remix/server\";\n   *\n   * const shopify = shopifyApp({\n   *   // ...etc\n   *   apiVersion: LATEST_API_VERSION,\n   * });\n   * ```\n   */\n  apiVersion?: ApiVersion;\n\n  /**\n   * A path that Shopify can reserve for auth related endpoints.\n   *\n   * This must match a $ route in your Remix app.  That route must export a loader function that calls `shopify.authenticate.admin(request)`.\n   *\n   * @default `\"/auth\"`\n   *\n   * @example\n   * <caption>Using the latest API Version (Recommended)</caption>\n   * ```ts\n   * // /app/shopify.server.ts\n   * import { LATEST_API_VERSION, shopifyApp } from \"@shopify/shopify-app-remix/server\";\n   *\n   * const shopify = shopifyApp({\n   *   // ...etc\n   *   apiVersion: LATEST_API_VERSION,\n   * });\n   * export default shopify;\n   * export const authenticate = shopify.authenticate;\n   *\n   * // /app/routes/auth/$.jsx\n   * import { LoaderFunctionArgs } from \"@remix-run/node\";\n   * import { authenticate } from \"../../shopify.server\";\n   *\n   * export async function loader({ request }: LoaderFunctionArgs) {\n   *   await authenticate.admin(request);\n   *\n   *   return null\n   * }\n   * ```\n   */\n  authPathPrefix?: string;\n\n  /**\n   * Features that will be introduced in future releases of this package.\n   *\n   * You can opt in to these features by setting the corresponding flags. By doing so, you can prepare for future\n   * releases in advance and provide feedback on the new features.\n   */\n  future?: Future;\n}"
+            "value": "export interface AppConfigArg<\n  Resources extends ShopifyRestResources = ShopifyRestResources,\n  Storage extends SessionStorage = SessionStorage,\n  Future extends FutureFlagOptions = FutureFlagOptions,\n> extends Omit<\n    ApiConfigArg<Resources>,\n    | 'hostName'\n    | 'hostScheme'\n    | 'isEmbeddedApp'\n    | 'apiVersion'\n    | 'isCustomStoreApp'\n    | 'future'\n  > {\n  /**\n   * The URL your app is running on.\n   *\n   * The `@shopify/cli` provides this URL as `process.env.SHOPIFY_APP_URL`.  For development this is probably a tunnel URL that points to your local machine.  If this is a production app, this is your production URL.\n   */\n  appUrl: string;\n\n  /**\n   * An adaptor for storing sessions in your database of choice.\n   *\n   * Shopify provides multiple session storage adaptors and you can create your own.\n   *\n   * {@link https://github.com/Shopify/shopify-app-js/blob/main/README.md#session-storage-options}\n   *\n   * @example\n   * <caption>Storing sessions with Prisma.</caption>\n   * <description>Add the `@shopify/shopify-app-session-storage-prisma` package to use the Prisma session storage.</description>\n   * ```ts\n   * import { shopifyApp } from \"@shopify/shopify-app-remix/server\";\n   * import { PrismaSessionStorage } from \"@shopify/shopify-app-session-storage-prisma\";\n   *\n   * import prisma from \"~/db.server\";\n   *\n   * const shopify = shopifyApp({\n   *   // ... etc\n   *   sessionStorage: new PrismaSessionStorage(prisma),\n   * });\n   * export default shopify;\n   * ```\n   */\n  sessionStorage: Storage;\n\n  /**\n   * Whether your app use online or offline tokens.\n   *\n   * If your app uses online tokens, then both online and offline tokens will be saved to your database.  This ensures your app can perform background jobs.\n   *\n   * {@link https://shopify.dev/docs/apps/auth/oauth/access-modes}\n   *\n   * @defaultValue `false`\n   */\n  useOnlineTokens?: boolean;\n\n  /**\n   * The config for the webhook topics your app would like to subscribe to.\n   *\n   * {@link https://shopify.dev/docs/apps/webhooks}\n   *\n   * This can be in used in conjunction with the afterAuth hook to register webhook topics when a user installs your app.  Or you can use this function in other processes such as background jobs.\n   *\n   * @example\n   * <caption>Registering for a webhook when a merchant uninstalls your app.</caption>\n   * ```ts\n   * // /app/shopify.server.ts\n   * import { DeliveryMethod, shopifyApp } from \"@shopify/shopify-app-remix/server\";\n   *\n   * const shopify = shopifyApp({\n   *   webhooks: {\n   *     APP_UNINSTALLED: {\n   *       deliveryMethod: DeliveryMethod.Http,\n   *        callbackUrl: \"/webhooks\",\n   *     },\n   *   },\n   *   hooks: {\n   *     afterAuth: async ({ session }) => {\n   *       shopify.registerWebhooks({ session });\n   *     }\n   *   },\n   *   // ...etc\n   * });\n   * export default shopify;\n   * export const authenticate = shopify.authenticate;\n   *\n   * // /app/routes/webhooks.jsx\n   * import { ActionFunctionArgs } from \"@remix-run/node\";\n   *\n   * import { authenticate } from \"../shopify.server\";\n   * import db from \"../db.server\";\n   *\n   * export const action = async ({ request }: ActionFunctionArgs) => {\n   *   const { topic, shop } = await authenticate.webhook(request);\n   *\n   *   switch (topic) {\n   *     case \"APP_UNINSTALLED\":\n   *       await db.session.deleteMany({ where: { shop } });\n   *       break;\n   *     case \"CUSTOMERS_DATA_REQUEST\":\n   *     case \"CUSTOMERS_REDACT\":\n   *     case \"SHOP_REDACT\":\n   *     default:\n   *       throw new Response(\"Unhandled webhook topic\", { status: 404 });\n   *   }\n   *   throw new Response();\n   * };\n   * ```\n   */\n  webhooks?: WebhookConfig;\n\n  /**\n   * Functions to call at key places during your apps lifecycle.\n   *\n   * These functions are called in the context of the request that triggered them.  This means you can access the session.\n   *\n   * @example\n   * <caption>Seeding your database custom data when a merchant installs your app.</caption>\n   * ```ts\n   * import { DeliveryMethod, shopifyApp } from \"@shopify/shopify-app-remix/server\";\n   * import { seedStoreData } from \"~/db/seeds\"\n   *\n   * const shopify = shopifyApp({\n   *   hooks: {\n   *     afterAuth: async ({ session }) => {\n   *       seedStoreData({session})\n   *     }\n   *   },\n   *   // ...etc\n   * });\n   * ```\n   */\n  hooks?: HooksConfig;\n\n  /**\n   * Does your app render embedded inside the Shopify Admin or on its own.\n   *\n   * Unless you have very specific needs, this should be true.\n   *\n   * @defaultValue `true`\n   */\n  isEmbeddedApp?: boolean;\n\n  /**\n   * How your app is distributed. Default is `AppDistribution.AppStore`.\n   *\n   * {@link https://shopify.dev/docs/apps/distribution}\n   */\n  distribution?: AppDistribution;\n\n  /**\n   * What version of Shopify's Admin API's would you like to use.\n   *\n   * {@link https://shopify.dev/docs/api/}\n   *\n   * @defaultValue `LATEST_API_VERSION` from `@shopify/shopify-app-remix`\n   *\n   * @example\n   * <caption>Using the latest API Version (Recommended)</caption>\n   * ```ts\n   * import { LATEST_API_VERSION, shopifyApp } from \"@shopify/shopify-app-remix/server\";\n   *\n   * const shopify = shopifyApp({\n   *   // ...etc\n   *   apiVersion: LATEST_API_VERSION,\n   * });\n   * ```\n   */\n  apiVersion?: ApiVersion;\n\n  /**\n   * A path that Shopify can reserve for auth related endpoints.\n   *\n   * This must match a $ route in your Remix app.  That route must export a loader function that calls `shopify.authenticate.admin(request)`.\n   *\n   * @default `\"/auth\"`\n   *\n   * @example\n   * <caption>Using the latest API Version (Recommended)</caption>\n   * ```ts\n   * // /app/shopify.server.ts\n   * import { LATEST_API_VERSION, shopifyApp } from \"@shopify/shopify-app-remix/server\";\n   *\n   * const shopify = shopifyApp({\n   *   // ...etc\n   *   apiVersion: LATEST_API_VERSION,\n   * });\n   * export default shopify;\n   * export const authenticate = shopify.authenticate;\n   *\n   * // /app/routes/auth/$.jsx\n   * import { LoaderFunctionArgs } from \"@remix-run/node\";\n   * import { authenticate } from \"../../shopify.server\";\n   *\n   * export async function loader({ request }: LoaderFunctionArgs) {\n   *   await authenticate.admin(request);\n   *\n   *   return null\n   * }\n   * ```\n   */\n  authPathPrefix?: string;\n\n  /**\n   * Features that will be introduced in future releases of this package.\n   *\n   * You can opt in to these features by setting the corresponding flags. By doing so, you can prepare for future\n   * releases in advance and provide feedback on the new features.\n   */\n  future?: Future;\n}"
           },
           "WebhookConfig": {
             "filePath": "/server/config-types.ts",
@@ -3871,13 +3863,6 @@
               }
             ]
           },
-          "FutureFlagOptions": {
-            "filePath": "/server/future/flags.ts",
-            "syntaxKind": "TypeAliasDeclaration",
-            "name": "FutureFlagOptions",
-            "value": "FutureFlags | undefined",
-            "description": ""
-          },
           "FutureFlags": {
             "filePath": "/server/future/flags.ts",
             "name": "FutureFlags",
@@ -3973,7 +3958,7 @@
                     "tabs": [
                       {
                         "code": "import { DeliveryMethod, shopifyApp } from \"@shopify/shopify-app-remix/server\";\n\nconst shopify = shopifyApp({\n  hooks: {\n    afterAuth: async ({ session }) => {\n      shopify.registerWebhooks({ session });\n    }\n  },\n  webhooks: {\n    APP_UNINSTALLED: {\n      deliveryMethod: DeliveryMethod.Http,\n       callbackUrl: \"/webhooks\",\n    },\n  },\n  // ...etc\n});",
-                        "title": "Example"
+                        "title": "/app/shopify.server.ts"
                       }
                     ]
                   }
@@ -5071,7 +5056,7 @@
                     "tabs": [
                       {
                         "code": "import { ActionFunction } from \"@remix-run/node\";\nimport { authenticate } from \"../shopify.server\";\n\nexport const action: ActionFunction = async ({ request }) => {\n  const { apiVersion } = await authenticate.webhook(request);\n  return new Response();\n};",
-                        "title": "Example"
+                        "title": "/app/routes/webhooks.tsx"
                       }
                     ]
                   }
@@ -5090,7 +5075,7 @@
                     "tabs": [
                       {
                         "code": "import { ActionFunction } from \"@remix-run/node\";\nimport { authenticate } from \"../shopify.server\";\n\nexport const action: ActionFunction = async ({ request }) => {\n  const { shop } = await authenticate.webhook(request);\n  return new Response();\n};",
-                        "title": "Example"
+                        "title": "/app/routes/webhooks.tsx"
                       }
                     ]
                   }
@@ -5109,7 +5094,7 @@
                     "tabs": [
                       {
                         "code": "import { ActionFunction } from \"@remix-run/node\";\nimport { authenticate } from \"../shopify.server\";\n\nexport const action: ActionFunction = async ({ request }) => {\n  const { topic } = await authenticate.webhook(request);\n\n  switch (topic) {\n    case \"APP_UNINSTALLED\":\n      // Do something when the app is uninstalled.\n      break;\n  }\n\n  return new Response();\n};",
-                        "title": "Example"
+                        "title": "/app/routes/webhooks.tsx"
                       }
                     ]
                   }
@@ -5128,7 +5113,7 @@
                     "tabs": [
                       {
                         "code": "import { ActionFunction } from \"@remix-run/node\";\nimport { authenticate } from \"../shopify.server\";\n\nexport const action: ActionFunction = async ({ request }) => {\n  const { webhookId } = await authenticate.webhook(request);\n  return new Response();\n};",
-                        "title": "Example"
+                        "title": "/app/routes/webhooks.tsx"
                       }
                     ]
                   }
@@ -5147,7 +5132,7 @@
                     "tabs": [
                       {
                         "code": "import { ActionFunction } from \"@remix-run/node\";\nimport { authenticate } from \"../shopify.server\";\n\nexport const action: ActionFunction = async ({ request }) => {\n  const { payload } = await authenticate.webhook(request);\n  return new Response();\n};",
-                        "title": "Example"
+                        "title": "/app/routes/webhooks.tsx"
                       }
                     ]
                   }
@@ -5408,14 +5393,14 @@
               {
                 "filePath": "/server/types.ts",
                 "syntaxKind": "MethodSignature",
-                "name": "__@iterator@629",
+                "name": "__@iterator@644",
                 "value": "() => IterableIterator<JSONValue>",
                 "description": "Iterator"
               },
               {
                 "filePath": "/server/types.ts",
                 "syntaxKind": "MethodSignature",
-                "name": "__@unscopables@631",
+                "name": "__@unscopables@646",
                 "value": "() => { copyWithin: boolean; entries: boolean; fill: boolean; find: boolean; findIndex: boolean; keys: boolean; values: boolean; }",
                 "description": "Returns an object whose properties have the value 'true'\r\nwhen they will be absent when used in a 'with' statement."
               },
@@ -5454,7 +5439,7 @@
                     "tabs": [
                       {
                         "code": "import { ActionFunctionArgs } from \"@remix-run/node\";\nimport { authenticate } from \"../shopify.server\";\n\nexport async function action({ request }: ActionFunctionArgs) {\n  const { admin } = await authenticate.webhook(request);\n\n  const response = await admin?.graphql(\n    `#graphql\n    mutation populateProduct($input: ProductInput!) {\n      productCreate(input: $input) {\n        product {\n          id\n        }\n      }\n    }`,\n    { variables: { input: { title: \"Product Name\" } } }\n  );\n\n  const productData = await response.json();\n  return json({ data: productData.data });\n}",
-                        "title": "Example"
+                        "title": "/app/routes/webhooks.tsx"
                       }
                     ]
                   },
@@ -5464,7 +5449,7 @@
                     "tabs": [
                       {
                         "code": "import { json, ActionFunctionArgs } from \"@remix-run/node\";\nimport { authenticate } from \"../shopify.server\";\n\nexport async function action({ request }: ActionFunctionArgs) {\n  const { admin } = await authenticate.webhook(request);\n\n  const response = await admin?.graphql.query<any>({\n    data: {\n      query: `#graphql\n        mutation populateProduct($input: ProductInput!) {\n          productCreate(input: $input) {\n            product {\n              id\n            }\n          }\n        }`,\n      variables: { input: { title: \"Product Name\" } },\n    },\n  });\n\n  const productData = response?.body.data;\n  return json({ data: productData.data });\n}",
-                        "title": "Example"
+                        "title": "/app/routes/webhooks.tsx"
                       }
                     ]
                   }
@@ -5483,7 +5468,7 @@
                     "tabs": [
                       {
                         "code": "import { ActionFunction } from \"@remix-run/node\";\nimport { authenticate } from \"../shopify.server\";\n\nexport const action: ActionFunction = async ({ request }) => {\n  const { apiVersion } = await authenticate.webhook(request);\n  return new Response();\n};",
-                        "title": "Example"
+                        "title": "/app/routes/webhooks.tsx"
                       }
                     ]
                   }
@@ -5502,7 +5487,7 @@
                     "tabs": [
                       {
                         "code": "import { ActionFunction } from \"@remix-run/node\";\nimport { authenticate } from \"../shopify.server\";\n\nexport const action: ActionFunction = async ({ request }) => {\n  const { shop } = await authenticate.webhook(request);\n  return new Response();\n};",
-                        "title": "Example"
+                        "title": "/app/routes/webhooks.tsx"
                       }
                     ]
                   }
@@ -5521,7 +5506,7 @@
                     "tabs": [
                       {
                         "code": "import { ActionFunction } from \"@remix-run/node\";\nimport { authenticate } from \"../shopify.server\";\n\nexport const action: ActionFunction = async ({ request }) => {\n  const { topic } = await authenticate.webhook(request);\n\n  switch (topic) {\n    case \"APP_UNINSTALLED\":\n      // Do something when the app is uninstalled.\n      break;\n  }\n\n  return new Response();\n};",
-                        "title": "Example"
+                        "title": "/app/routes/webhooks.tsx"
                       }
                     ]
                   }
@@ -5540,7 +5525,7 @@
                     "tabs": [
                       {
                         "code": "import { ActionFunction } from \"@remix-run/node\";\nimport { authenticate } from \"../shopify.server\";\n\nexport const action: ActionFunction = async ({ request }) => {\n  const { webhookId } = await authenticate.webhook(request);\n  return new Response();\n};",
-                        "title": "Example"
+                        "title": "/app/routes/webhooks.tsx"
                       }
                     ]
                   }
@@ -5559,14 +5544,14 @@
                     "tabs": [
                       {
                         "code": "import { ActionFunction } from \"@remix-run/node\";\nimport { authenticate } from \"../shopify.server\";\n\nexport const action: ActionFunction = async ({ request }) => {\n  const { payload } = await authenticate.webhook(request);\n  return new Response();\n};",
-                        "title": "Example"
+                        "title": "/app/routes/webhooks.tsx"
                       }
                     ]
                   }
                 ]
               }
             ],
-            "value": "export interface WebhookContextWithSession<\n  Future extends FutureFlagOptions,\n  Resources extends ShopifyRestResources,\n  Topics = string | number | symbol,\n> extends Context<Topics> {\n  /**\n   * A session with an offline token for the shop.\n   *\n   * Returned only if there is a session for the shop.\n   */\n  session: Session;\n\n  /**\n   * An admin context for the webhook.\n   *\n   * Returned only if there is a session for the shop.\n   *\n   * @example\n   * <caption>[V3] Webhook admin context.</caption>\n   * <description>With the `v3_webhookAdminContext` future flag enabled, use the `admin` object in the context to interact with the Admin API.</description>\n   * ```ts\n   * import { ActionFunctionArgs } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   *\n   * export async function action({ request }: ActionFunctionArgs) {\n   *   const { admin } = await authenticate.webhook(request);\n   *\n   *   const response = await admin?.graphql(\n   *     `#graphql\n   *     mutation populateProduct($input: ProductInput!) {\n   *       productCreate(input: $input) {\n   *         product {\n   *           id\n   *         }\n   *       }\n   *     }`,\n   *     { variables: { input: { title: \"Product Name\" } } }\n   *   );\n   *\n   *   const productData = await response.json();\n   *   return json({ data: productData.data });\n   * }\n   * ```\n   *\n   * @example\n   * <caption>Webhook admin context.</caption>\n   * <description>Use the `admin` object in the context to interact with the Admin API. This format will be removed in V3 of the package.</description>\n   * ```ts\n   * import { json, ActionFunctionArgs } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   *\n   * export async function action({ request }: ActionFunctionArgs) {\n   *   const { admin } = await authenticate.webhook(request);\n   *\n   *   const response = await admin?.graphql.query<any>({\n   *     data: {\n   *       query: `#graphql\n   *         mutation populateProduct($input: ProductInput!) {\n   *           productCreate(input: $input) {\n   *             product {\n   *               id\n   *             }\n   *           }\n   *         }`,\n   *       variables: { input: { title: \"Product Name\" } },\n   *     },\n   *   });\n   *\n   *   const productData = response?.body.data;\n   *   return json({ data: productData.data });\n   * }\n   * ```\n   */\n  admin: WebhookAdminContext<Future, Resources>;\n}"
+            "value": "export interface WebhookContextWithSession<\n  Future extends FutureFlagOptions,\n  Resources extends ShopifyRestResources,\n  Topics = string | number | symbol,\n> extends Context<Topics> {\n  /**\n   * A session with an offline token for the shop.\n   *\n   * Returned only if there is a session for the shop.\n   */\n  session: Session;\n\n  /**\n   * An admin context for the webhook.\n   *\n   * Returned only if there is a session for the shop.\n   *\n   * @example\n   * <caption>[V3] Webhook admin context.</caption>\n   * <description>With the `v3_webhookAdminContext` future flag enabled, use the `admin` object in the context to interact with the Admin API.</description>\n   * ```ts\n   * // /app/routes/webhooks.tsx\n   * import { ActionFunctionArgs } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   *\n   * export async function action({ request }: ActionFunctionArgs) {\n   *   const { admin } = await authenticate.webhook(request);\n   *\n   *   const response = await admin?.graphql(\n   *     `#graphql\n   *     mutation populateProduct($input: ProductInput!) {\n   *       productCreate(input: $input) {\n   *         product {\n   *           id\n   *         }\n   *       }\n   *     }`,\n   *     { variables: { input: { title: \"Product Name\" } } }\n   *   );\n   *\n   *   const productData = await response.json();\n   *   return json({ data: productData.data });\n   * }\n   * ```\n   *\n   * @example\n   * <caption>Webhook admin context.</caption>\n   * <description>Use the `admin` object in the context to interact with the Admin API. This format will be removed in V3 of the package.</description>\n   * ```ts\n   * // /app/routes/webhooks.tsx\n   * import { json, ActionFunctionArgs } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   *\n   * export async function action({ request }: ActionFunctionArgs) {\n   *   const { admin } = await authenticate.webhook(request);\n   *\n   *   const response = await admin?.graphql.query<any>({\n   *     data: {\n   *       query: `#graphql\n   *         mutation populateProduct($input: ProductInput!) {\n   *           productCreate(input: $input) {\n   *             product {\n   *               id\n   *             }\n   *           }\n   *         }`,\n   *       variables: { input: { title: \"Product Name\" } },\n   *     },\n   *   });\n   *\n   *   const productData = response?.body.data;\n   *   return json({ data: productData.data });\n   * }\n   * ```\n   */\n  admin: WebhookAdminContext<Future, Resources>;\n}"
           },
           "WebhookAdminContext": {
             "filePath": "/server/authenticate/webhooks/types.ts",
@@ -5829,7 +5814,7 @@
                     "tabs": [
                       {
                         "code": "import { DeliveryMethod, shopifyApp } from \"@shopify/shopify-app-remix/server\";\n\nconst shopify = shopifyApp({\n  hooks: {\n    afterAuth: async ({ session }) => {\n      shopify.registerWebhooks({ session });\n    }\n  },\n  webhooks: {\n    APP_UNINSTALLED: {\n      deliveryMethod: DeliveryMethod.Http,\n       callbackUrl: \"/webhooks\",\n    },\n  },\n  // ...etc\n});",
-                        "title": "Example"
+                        "title": "/app/shopify.server.ts"
                       }
                     ]
                   }
@@ -5882,7 +5867,7 @@
                 ]
               }
             ],
-            "value": "export interface ShopifyAppBase<Config extends AppConfigArg> {\n  /**\n   * The `SessionStorage` instance you passed in as a config option.\n   *\n   * @example\n   * <caption>Storing sessions with Prisma.</caption>\n   * <description>Import the `@shopify/shopify-app-session-storage-prisma` package to store sessions in your Prisma database.</description>\n   * ```ts\n   * // /app/shopify.server.ts\n   * import { shopifyApp } from \"@shopify/shopify-app-remix/server\";\n   * import { PrismaSessionStorage } from \"@shopify/shopify-app-session-storage-prisma\";\n   * import prisma from \"~/db.server\";\n   *\n   * const shopify = shopifyApp({\n   *   sesssionStorage: new PrismaSessionStorage(prisma),\n   *   // ...etc\n   * })\n   *\n   * // shopify.sessionStorage is an instance of PrismaSessionStorage\n   * ```\n   */\n  sessionStorage: SessionStorageType<Config>;\n\n  /**\n   * Adds the required Content Security Policy headers for Shopify apps to the given Headers object.\n   *\n   * {@link https://shopify.dev/docs/apps/store/security/iframe-protection}\n   *\n   * @example\n   * <caption>Return headers on all requests.</caption>\n   * <description>Add headers to all HTML requests by calling `shopify.addDocumentResponseHeaders` in `entry.server.tsx`.</description>\n   *\n   * ```\n   * // ~/shopify.server.ts\n   * import { shopifyApp } from \"@shopify/shopify-app-remix/server\";\n   *\n   * const shopify = shopifyApp({\n   *   // ...etc\n   * });\n   * export default shopify;\n   * export const addDocumentResponseheaders = shopify.addDocumentResponseheaders;\n   * ```\n   *\n   * ```ts\n   * // entry.server.tsx\n   * import { addDocumentResponseHeaders } from \"~/shopify.server\";\n   *\n   * export default function handleRequest(\n   *   request: Request,\n   *   responseStatusCode: number,\n   *   responseHeaders: Headers,\n   *   remixContext: EntryContext\n   * ) {\n   *   const markup = renderToString(\n   *     <RemixServer context={remixContext} url={request.url} />\n   *   );\n   *\n   *   responseHeaders.set(\"Content-Type\", \"text/html\");\n   *   addDocumentResponseHeaders(request, responseHeaders);\n   *\n   *   return new Response(\"<!DOCTYPE html>\" + markup, {\n   *     status: responseStatusCode,\n   *     headers: responseHeaders,\n   *   });\n   * }\n   * ```\n   */\n  addDocumentResponseHeaders: AddDocumentResponseHeaders;\n\n  /**\n   * Register webhook topics for a store using the given session. Most likely you want to use this in combination with the afterAuth hook.\n   *\n   * @example\n   * <caption>Registering webhooks after install</caption>\n   * <description>Trigger the registration to create the webhook subscriptions after a merchant installs your app using the `afterAuth` hook. Learn more about [subscribing to webhooks.](/docs/api/shopify-app-remix/v1/guide-webhooks)</description>\n   * ```ts\n   * import { DeliveryMethod, shopifyApp } from \"@shopify/shopify-app-remix/server\";\n   *\n   * const shopify = shopifyApp({\n   *   hooks: {\n   *     afterAuth: async ({ session }) => {\n   *       shopify.registerWebhooks({ session });\n   *     }\n   *   },\n   *   webhooks: {\n   *     APP_UNINSTALLED: {\n   *       deliveryMethod: DeliveryMethod.Http,\n   *        callbackUrl: \"/webhooks\",\n   *     },\n   *   },\n   *   // ...etc\n   * });\n   * ```\n   */\n  registerWebhooks: RegisterWebhooks;\n\n  /**\n   * Ways to authenticate requests from different surfaces across Shopify.\n   *\n   * @example\n   * <caption>Authenticate Shopify requests.</caption>\n   * <description>Use the functions in `authenticate` to validate requests coming from Shopify.</description>\n   * ```ts\n   * // /app/shopify.server.ts\n   * import { LATEST_API_VERSION, shopifyApp } from \"@shopify/shopify-app-remix/server\";\n   * import { restResources } from \"@shopify/shopify-api/rest/admin/2023-04\";\n   *\n   * const shopify = shopifyApp({\n   *   restResources,\n   *   // ...etc\n   * });\n   * export default shopify;\n   * ```\n   * ```ts\n   * // /app/routes/**\\/*.jsx\n   * import { LoaderFunctionArgs, json } from \"@remix-run/node\";\n   * import shopify from \"../../shopify.server\";\n   *\n   * export async function loader({ request }: LoaderFunctionArgs) {\n   *   const {admin, session, sessionToken, billing} = shopify.authenticate.admin(request);\n   *\n   *   return json(await admin.rest.resources.Product.count({ session }));\n   * }\n   * ```\n   */\n  authenticate: Authenticate<Config>;\n\n  /**\n   * Ways to get Contexts from requests that do not originate from Shopify.\n   *\n   * @example\n   * <caption>Using unauthenticated contexts.</caption>\n   * <description>Create contexts for requests that don't come from Shopify.</description>\n   * ```ts\n   * // /app/shopify.server.ts\n   * import { LATEST_API_VERSION, shopifyApp } from \"@shopify/shopify-app-remix/server\";\n   * import { restResources } from \"@shopify/shopify-api/rest/admin/2023-04\";\n   *\n   * const shopify = shopifyApp({\n   *   restResources,\n   *   // ...etc\n   * });\n   * export default shopify;\n   * ```\n   * ```ts\n   * // /app/routes/**\\/*.jsx\n   * import { LoaderFunctionArgs, json } from \"@remix-run/node\";\n   * import { authenticateExternal } from \"~/helpers/authenticate\"\n   * import shopify from \"../../shopify.server\";\n   *\n   * export async function loader({ request }: LoaderFunctionArgs) {\n   *   const shop = await authenticateExternal(request)\n   *   const {admin} = await shopify.unauthenticated.admin(shop);\n   *\n   *   return json(await admin.rest.resources.Product.count({ session }));\n   * }\n   * ```\n   */\n  unauthenticated: Unauthenticated<RestResourcesType<Config>>;\n}"
+            "value": "export interface ShopifyAppBase<Config extends AppConfigArg> {\n  /**\n   * The `SessionStorage` instance you passed in as a config option.\n   *\n   * @example\n   * <caption>Storing sessions with Prisma.</caption>\n   * <description>Import the `@shopify/shopify-app-session-storage-prisma` package to store sessions in your Prisma database.</description>\n   * ```ts\n   * // /app/shopify.server.ts\n   * import { shopifyApp } from \"@shopify/shopify-app-remix/server\";\n   * import { PrismaSessionStorage } from \"@shopify/shopify-app-session-storage-prisma\";\n   * import prisma from \"~/db.server\";\n   *\n   * const shopify = shopifyApp({\n   *   sesssionStorage: new PrismaSessionStorage(prisma),\n   *   // ...etc\n   * })\n   *\n   * // shopify.sessionStorage is an instance of PrismaSessionStorage\n   * ```\n   */\n  sessionStorage: SessionStorageType<Config>;\n\n  /**\n   * Adds the required Content Security Policy headers for Shopify apps to the given Headers object.\n   *\n   * {@link https://shopify.dev/docs/apps/store/security/iframe-protection}\n   *\n   * @example\n   * <caption>Return headers on all requests.</caption>\n   * <description>Add headers to all HTML requests by calling `shopify.addDocumentResponseHeaders` in `entry.server.tsx`.</description>\n   *\n   * ```\n   * // ~/shopify.server.ts\n   * import { shopifyApp } from \"@shopify/shopify-app-remix/server\";\n   *\n   * const shopify = shopifyApp({\n   *   // ...etc\n   * });\n   * export default shopify;\n   * export const addDocumentResponseheaders = shopify.addDocumentResponseheaders;\n   * ```\n   *\n   * ```ts\n   * // entry.server.tsx\n   * import { addDocumentResponseHeaders } from \"~/shopify.server\";\n   *\n   * export default function handleRequest(\n   *   request: Request,\n   *   responseStatusCode: number,\n   *   responseHeaders: Headers,\n   *   remixContext: EntryContext\n   * ) {\n   *   const markup = renderToString(\n   *     <RemixServer context={remixContext} url={request.url} />\n   *   );\n   *\n   *   responseHeaders.set(\"Content-Type\", \"text/html\");\n   *   addDocumentResponseHeaders(request, responseHeaders);\n   *\n   *   return new Response(\"<!DOCTYPE html>\" + markup, {\n   *     status: responseStatusCode,\n   *     headers: responseHeaders,\n   *   });\n   * }\n   * ```\n   */\n  addDocumentResponseHeaders: AddDocumentResponseHeaders;\n\n  /**\n   * Register webhook topics for a store using the given session. Most likely you want to use this in combination with the afterAuth hook.\n   *\n   * @example\n   * <caption>Registering webhooks after install</caption>\n   * <description>Trigger the registration to create the webhook subscriptions after a merchant installs your app using the `afterAuth` hook. Learn more about [subscribing to webhooks.](/docs/api/shopify-app-remix/v1/guide-webhooks)</description>\n   * ```ts\n   * // /app/shopify.server.ts\n   * import { DeliveryMethod, shopifyApp } from \"@shopify/shopify-app-remix/server\";\n   *\n   * const shopify = shopifyApp({\n   *   hooks: {\n   *     afterAuth: async ({ session }) => {\n   *       shopify.registerWebhooks({ session });\n   *     }\n   *   },\n   *   webhooks: {\n   *     APP_UNINSTALLED: {\n   *       deliveryMethod: DeliveryMethod.Http,\n   *        callbackUrl: \"/webhooks\",\n   *     },\n   *   },\n   *   // ...etc\n   * });\n   * ```\n   */\n  registerWebhooks: RegisterWebhooks;\n\n  /**\n   * Ways to authenticate requests from different surfaces across Shopify.\n   *\n   * @example\n   * <caption>Authenticate Shopify requests.</caption>\n   * <description>Use the functions in `authenticate` to validate requests coming from Shopify.</description>\n   * ```ts\n   * // /app/shopify.server.ts\n   * import { LATEST_API_VERSION, shopifyApp } from \"@shopify/shopify-app-remix/server\";\n   * import { restResources } from \"@shopify/shopify-api/rest/admin/2023-04\";\n   *\n   * const shopify = shopifyApp({\n   *   restResources,\n   *   // ...etc\n   * });\n   * export default shopify;\n   * ```\n   * ```ts\n   * // /app/routes/**\\/*.jsx\n   * import { LoaderFunctionArgs, json } from \"@remix-run/node\";\n   * import shopify from \"../../shopify.server\";\n   *\n   * export async function loader({ request }: LoaderFunctionArgs) {\n   *   const {admin, session, sessionToken, billing} = shopify.authenticate.admin(request);\n   *\n   *   return json(await admin.rest.resources.Product.count({ session }));\n   * }\n   * ```\n   */\n  authenticate: Authenticate<Config>;\n\n  /**\n   * Ways to get Contexts from requests that do not originate from Shopify.\n   *\n   * @example\n   * <caption>Using unauthenticated contexts.</caption>\n   * <description>Create contexts for requests that don't come from Shopify.</description>\n   * ```ts\n   * // /app/shopify.server.ts\n   * import { LATEST_API_VERSION, shopifyApp } from \"@shopify/shopify-app-remix/server\";\n   * import { restResources } from \"@shopify/shopify-api/rest/admin/2023-04\";\n   *\n   * const shopify = shopifyApp({\n   *   restResources,\n   *   // ...etc\n   * });\n   * export default shopify;\n   * ```\n   * ```ts\n   * // /app/routes/**\\/*.jsx\n   * import { LoaderFunctionArgs, json } from \"@remix-run/node\";\n   * import { authenticateExternal } from \"~/helpers/authenticate\"\n   * import shopify from \"../../shopify.server\";\n   *\n   * export async function loader({ request }: LoaderFunctionArgs) {\n   *   const shop = await authenticateExternal(request)\n   *   const {admin} = await shopify.unauthenticated.admin(shop);\n   *\n   *   return json(await admin.rest.resources.Product.count({ session }));\n   * }\n   * ```\n   */\n  unauthenticated: Unauthenticated<RestResourcesType<Config>>;\n}"
           },
           "ShopifyAppLogin": {
             "filePath": "/server/types.ts",
@@ -6035,7 +6020,7 @@
         "title": "The minimum viable configuration",
         "tabs": [
           {
-            "title": "Example",
+            "title": "/shopify.server.ts",
             "code": "import { shopifyApp } from \"@shopify/shopify-app-remix/server\";\n\nconst shopify = shopifyApp({\n  apiKey: process.env.SHOPIFY_API_KEY!,\n  apiSecretKey: process.env.SHOPIFY_API_SECRET!,\n  scopes: process.env.SCOPES?.split(\",\")!,\n  appUrl: process.env.SHOPIFY_APP_URL!,\n});\nexport default shopify;",
             "language": "typescript"
           }
@@ -6095,7 +6080,7 @@
                 "title": "Registering webhooks after install",
                 "tabs": [
                   {
-                    "title": "Example",
+                    "title": "/app/shopify.server.ts",
                     "code": "import { DeliveryMethod, shopifyApp } from \"@shopify/shopify-app-remix/server\";\n\nconst shopify = shopifyApp({\n  hooks: {\n    afterAuth: async ({ session }) =&gt; {\n      shopify.registerWebhooks({ session });\n    }\n  },\n  webhooks: {\n    APP_UNINSTALLED: {\n      deliveryMethod: DeliveryMethod.Http,\n       callbackUrl: \"/webhooks\",\n    },\n  },\n  // ...etc\n});",
                     "language": "typescript"
                   }

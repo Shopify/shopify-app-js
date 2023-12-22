@@ -32,9 +32,9 @@
     "AWS"
   ],
   "dependencies": {
-    "@aws-sdk/client-dynamodb": "^3.332.0",
+    "@aws-sdk/client-dynamodb": "^3.470.0",
     "@aws-sdk/util-dynamodb": "^3.332.0",
-    "tslib": "^2.4.0"
+    "tslib": "^2.6.2"
   },
   "peerDependencies": {
     "@shopify/shopify-api": "^8.1.1",
@@ -46,7 +46,7 @@
     "@shopify/shopify-api": "^8.1.1",
     "@shopify/shopify-app-session-storage": "^2.0.2",
     "@shopify/shopify-app-session-storage-test-utils": "^1.0.2",
-    "eslint": "^8.40.0",
+    "eslint": "^8.55.0",
     "eslint-plugin-prettier": "^4.2.1",
     "prettier": "^2.8.8",
     "typescript": "^4.9.5"
