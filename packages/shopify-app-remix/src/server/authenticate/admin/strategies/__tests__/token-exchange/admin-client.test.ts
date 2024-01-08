@@ -109,7 +109,7 @@ describe('admin.authenticate context', () => {
         // THEN
         expect(response.status).toEqual(401);
         expect(
-          response.headers.get('X-Shopify-Retry-Invalid-Session-Request'),
+          response.headers.get('Shopify-Retry-Invalid-Session-Request'),
         ).toBeNull();
 
         expect(

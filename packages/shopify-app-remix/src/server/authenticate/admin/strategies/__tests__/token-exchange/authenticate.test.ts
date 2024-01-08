@@ -169,7 +169,7 @@ describe('authenticate', () => {
     // THEN
     expect(response.status).toBe(401);
     expect(
-      response.headers.get('X-Shopify-Retry-Invalid-Session-Request'),
+      response.headers.get('Shopify-Retry-Invalid-Session-Request'),
     ).toEqual('1');
   });
 

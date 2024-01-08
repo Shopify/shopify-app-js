@@ -5,7 +5,7 @@ export const REAUTH_URL_HEADER =
   'X-Shopify-API-Request-Failure-Reauthorize-Url';
 
 export const RETRY_INVALID_SESSION_HEADER = {
-  'X-Shopify-Retry-Invalid-Session-Request': '1',
+  'Shopify-Retry-Invalid-Session-Request': '1',
 };
 
 export const CORS_HEADERS = {
