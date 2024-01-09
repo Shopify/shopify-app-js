@@ -126,7 +126,7 @@ export class TokenExchangeStrategy<Config extends AppConfigArg>
         error instanceof InvalidJwtError ||
         (error instanceof HttpResponseError &&
           error.response.code === 400 &&
-          error.response.body?.error === 'invalid_subject_token')
+          error.response.body?.error === 'invalid_subject_token_type')
       ) {
         throw respondToInvalidSessionToken({
           params: {api, config, logger},

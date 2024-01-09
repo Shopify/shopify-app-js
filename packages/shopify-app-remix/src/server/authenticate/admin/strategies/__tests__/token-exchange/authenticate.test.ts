@@ -123,7 +123,7 @@ describe('authenticate', () => {
     const shopify = shopifyApp(config);
 
     const {token} = getJwt();
-    await mockInvalidTokenExchangeRequest('invalid_subject_token');
+    await mockInvalidTokenExchangeRequest('invalid_subject_token_type');
 
     // WHEN
     const response = await getThrownResponse(
@@ -154,7 +154,7 @@ describe('authenticate', () => {
     const shopify = shopifyApp(config);
 
     const {token} = getJwt();
-    await mockInvalidTokenExchangeRequest('invalid_subject_token');
+    await mockInvalidTokenExchangeRequest('invalid_subject_token_type');
 
     // WHEN
     const response = await getThrownResponse(
