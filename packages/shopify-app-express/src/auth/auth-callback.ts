@@ -2,7 +2,7 @@ import {Request, Response} from 'express';
 import {
   BotActivityDetected,
   CookieNotFound,
-  gdprTopics,
+  privacyTopics,
   InvalidOAuthError,
   Session,
   Shopify,
@@ -83,7 +83,7 @@ async function registerWebhooks(
     }
 
     for (const response of responsesByTopic[topic]) {
-      if (!response.success && !gdprTopics.includes(topic)) {
+      if (!response.success && !privacyTopics.includes(topic)) {
         const result: any = response.result;
 
         if (result.errors) {

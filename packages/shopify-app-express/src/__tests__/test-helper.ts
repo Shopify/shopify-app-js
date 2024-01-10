@@ -73,7 +73,7 @@ interface AssertHttpRequestParams {
 export function mockShopifyResponse(body: MockBody, init?: MockParams) {
   fetchMock.mockResponse(
     typeof body === 'string' ? body : JSON.stringify(body),
-    init,
+    mockResponseInit(init),
   );
 }
 
@@ -84,11 +84,20 @@ export function mockShopifyResponses(
     ([body, init]) => {
       const bodyString = typeof body === 'string' ? body : JSON.stringify(body);
 
-      return init ? [bodyString, init] : [bodyString, {}];
+      return [bodyString, mockResponseInit(init)];
     },
   );
 
   fetchMock.mockResponses(...parsedResponses);
+}
+
+function mockResponseInit(init?: MockParams): MockParams {
+  const initObj = init ?? {};
+
+  return {
+    ...initObj,
+    headers: {'Content-Type': 'application/json', ...initObj.headers},
+  };
 }
 
 declare global {

@@ -223,7 +223,7 @@ export class AuthCodeFlowStrategy<
       session,
     });
 
-    await client.query(`#graphql
+    await client.request(`#graphql
       query shopifyAppShopName {
         shop {
           name

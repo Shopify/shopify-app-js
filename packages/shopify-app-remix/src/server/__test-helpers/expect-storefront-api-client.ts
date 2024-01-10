@@ -16,7 +16,7 @@ export function expectStorefrontApiClient(
   it('Storefront client can perform GraphQL Requests', async () => {
     // GIVEN
     const {storefront, actualSession} = await factory();
-    const apiResponse = {blogs: {nodes: [{id: 1}]}};
+    const apiResponse = {data: {blogs: {nodes: [{id: 1}]}}};
     await mockExternalRequest({
       request: new Request(
         `https://${TEST_SHOP}/api/${LATEST_API_VERSION}/graphql.json`,

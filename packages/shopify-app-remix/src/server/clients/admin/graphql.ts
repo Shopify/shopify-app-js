@@ -1,4 +1,3 @@
-import {flatHeaders} from '@shopify/shopify-api/runtime';
 import {AdminOperations} from '@shopify/admin-api-client';
 
 import {GraphQLClient} from '../types';
@@ -22,15 +21,13 @@ export function graphqlClientFactory({
 
     try {
       // We convert the incoming response to a Response object to bring this client closer to the Remix client.
-      const apiResponse = await client.query(operation, {
+      const apiResponse = await client.request(operation, {
         variables: options?.variables,
-        tries: options?.tries,
-        extraHeaders: options?.headers,
+        retries: options?.tries ? options.tries - 1 : 0,
+        headers: options?.headers,
       });
 
-      return new Response(JSON.stringify(apiResponse.body), {
-        headers: flatHeaders(apiResponse.headers),
-      });
+      return new Response(JSON.stringify(apiResponse));
     } catch (error) {
       if (handleClientError) {
         throw await handleClientError({error, params, session});
