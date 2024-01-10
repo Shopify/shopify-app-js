@@ -33,7 +33,7 @@
   ],
   "dependencies": {
     "@aws-sdk/client-dynamodb": "^3.470.0",
-    "@aws-sdk/util-dynamodb": "^3.332.0",
+    "@aws-sdk/util-dynamodb": "^3.485.0",
     "tslib": "^2.6.2"
   },
   "peerDependencies": {
