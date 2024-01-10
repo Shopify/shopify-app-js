@@ -1,5 +1,18 @@
 # @shopify/shopify-app-remix
 
+## 2.3.0
+
+### Minor Changes
+
+- a9c7836: Adding support for the new clients from `@shopify/admin-api-client` and `@shopify/storefront-api-client` that can leverage `@shopify/api-codegen-preset` to automatically type GraphQL operations using Codegen.
+
+  For more information on how to add types to your queries, see [the `@shopify/api-codegen-preset` documentation](https://github.com/Shopify/shopify-api-js/tree/main/packages/api-codegen-preset).
+
+### Patch Changes
+
+- Updated dependencies [d3e4b5e]
+  - @shopify/shopify-app-session-storage@2.0.3
+
 ## 2.2.0
 
 ### Minor Changes
