@@ -96,7 +96,9 @@ export function expectAdminApiClient(
           headers: {'X-Shopify-Access-Token': actualSession.accessToken!},
         },
       ),
-      response: new Response(JSON.stringify({shop: {name: 'Test shop'}})),
+      response: new Response(
+        JSON.stringify({data: {shop: {name: 'Test shop'}}}),
+      ),
     });
 
     // WHEN
@@ -104,7 +106,7 @@ export function expectAdminApiClient(
 
     // THEN
     expect(response.status).toEqual(200);
-    expect(await response.json()).toEqual({shop: {name: 'Test shop'}});
+    expect(await response.json()).toEqual({data: {shop: {name: 'Test shop'}}});
   });
 
   it('returns a session object as part of the context', async () => {

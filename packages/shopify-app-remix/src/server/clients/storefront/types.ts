@@ -1,3 +1,5 @@
+import {StorefrontOperations} from '@shopify/storefront-api-client';
+
 import {GraphQLClient} from '../types';
 
 export interface StorefrontContext {
@@ -25,5 +27,5 @@ export interface StorefrontContext {
    * }
    * ```
    */
-  graphql: GraphQLClient;
+  graphql: GraphQLClient<StorefrontOperations>;
 }

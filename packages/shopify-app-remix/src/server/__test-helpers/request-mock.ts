@@ -45,7 +45,10 @@ async function mockParams(response: Response): Promise<ResponseParams> {
       status: response.status,
       statusText: response.statusText,
       url: response.url,
-      headers: Object.fromEntries(response.headers.entries()),
+      headers: {
+        ...Object.fromEntries(response.headers.entries()),
+        'content-type': 'application/json',
+      },
     },
   };
 }

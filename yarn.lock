@@ -2780,6 +2780,13 @@
     estree-walker "^1.0.1"
     picomatch "^2.2.2"
 
+"@shopify/admin-api-client@^0.2.1":
+  version "0.2.1"
+  resolved "https://registry.yarnpkg.com/@shopify/admin-api-client/-/admin-api-client-0.2.1.tgz#98f10a9732b6d742189af5ccb7bb4dd781485acd"
+  integrity sha512-Oeh247CRXqSk5ktrEoBRN/BA5AGEliiyKJeTSGaIZpnMYDSXb2FNsmLaZY49/jTklmMouwoqh7FnYE5Vw8ZyQw==
+  dependencies:
+    "@shopify/graphql-client" "^0.9.1"
+
 "@shopify/babel-preset@^24.1.4":
   version "24.1.5"
   resolved "https://registry.yarnpkg.com/@shopify/babel-preset/-/babel-preset-24.1.5.tgz#76cfef62bb8a4d9769559f3f2505148a55d13488"
@@ -2840,6 +2847,11 @@
     "@types/react" "^18.0.21"
     globby "^11.1.0"
     typescript "^4.8.3"
+
+"@shopify/graphql-client@^0.9.1":
+  version "0.9.1"
+  resolved "https://registry.yarnpkg.com/@shopify/graphql-client/-/graphql-client-0.9.1.tgz#0c37a4143c0dd26837e82b8fd13e1b64fabf90dc"
+  integrity sha512-yx6PIHY8u4O0ijUQccmIpjoyM1JSbe5RkrSyXSbjhsS+nla0WAJDIMw4R01mjx3dFnVIcGONhRX/QrUq97uWig==
 
 "@shopify/loom-cli@^1.1.0":
   version "1.1.0"
@@ -2978,18 +2990,27 @@
     jest-matcher-utils "^26.6.2"
     react-reconciler "^0.28.0"
 
-"@shopify/shopify-api@^8.1.1":
-  version "8.1.1"
-  resolved "https://registry.yarnpkg.com/@shopify/shopify-api/-/shopify-api-8.1.1.tgz#d3f400a27d9fe2eaa7647bbd33134b75fe52463a"
-  integrity sha512-0JO3Mhv9Sb8VKPw/LUdacHJj9wbT/txyByr2TF03yjqoV++G3NxNMUAA1tcpoSvOAv20KlQjwpoFnXqBmPFW7Q==
+"@shopify/shopify-api@^9.0.1":
+  version "9.0.1"
+  resolved "https://registry.yarnpkg.com/@shopify/shopify-api/-/shopify-api-9.0.1.tgz#7f236d94d902b3671c6a11f11f3561f98ddc7422"
+  integrity sha512-ToqT5zt/YA+VbFcLAoEVr6grs6v+Y9io5kuULy9Zhm5RClFEhkpRLM4U+vrrV5XjWYC6pcxs00WjpSi0onryrw==
   dependencies:
+    "@shopify/admin-api-client" "^0.2.1"
     "@shopify/network" "^3.2.1"
+    "@shopify/storefront-api-client" "^0.2.1"
     compare-versions "^5.0.3"
     isbot "^3.6.10"
     jose "^4.9.1"
     node-fetch "^2.6.1"
     tslib "^2.0.3"
     uuid "^9.0.0"
+
+"@shopify/storefront-api-client@^0.2.1":
+  version "0.2.1"
+  resolved "https://registry.yarnpkg.com/@shopify/storefront-api-client/-/storefront-api-client-0.2.1.tgz#17f98d34cc218ff3e688bb812421f5c51e3ab451"
+  integrity sha512-e0yk0rwxGd6Dr7ArBHD1MuDd74RRkW03xb2YS90PZEP3mHcMCVAng2lm733tqooA6iNaooAKsy+O0HTKH2JgUA==
+  dependencies:
+    "@shopify/graphql-client" "^0.9.1"
 
 "@shopify/typescript-configs@^5.1.0":
   version "5.1.0"

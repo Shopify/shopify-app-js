@@ -1,4 +1,5 @@
 import {Session, ShopifyRestResources} from '@shopify/shopify-api';
+import {AdminOperations} from '@shopify/admin-api-client';
 
 import {BasicParams} from '../../types';
 import {GraphQLClient} from '../types';
@@ -161,5 +162,5 @@ export interface AdminApiContext<
    * }
    * ```
    */
-  graphql: GraphQLClient;
+  graphql: GraphQLClient<AdminOperations>;
 }
