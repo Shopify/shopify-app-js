@@ -166,21 +166,21 @@ async function setUpNonEmbeddedFlow() {
   };
 }
 
-async function mockRestRequest(status = 401) {
+async function mockRestRequest(status) {
   const requestMock = new Request(
     `https://${TEST_SHOP}/admin/api/${LATEST_API_VERSION}/customers.json`,
   );
 
   await mockExternalRequest({
     request: requestMock,
-    response: new Response(undefined, {status}),
+    response: new Response('{}', {status}),
   });
 
   return requestMock;
 }
 
 function mockGraphqlRequest(apiVersion = LATEST_API_VERSION) {
-  return async function (status = 401) {
+  return async function (status) {
     const requestMock = new Request(
       `https://${TEST_SHOP}/admin/api/${apiVersion}/graphql.json`,
       {method: 'POST'},

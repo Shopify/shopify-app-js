@@ -285,6 +285,7 @@ export interface ShopifyAppBase<Config extends AppConfigArg> {
    * <caption>Registering webhooks after install</caption>
    * <description>Trigger the registration to create the webhook subscriptions after a merchant installs your app using the `afterAuth` hook. Learn more about [subscribing to webhooks.](/docs/api/shopify-app-remix/v1/guide-webhooks)</description>
    * ```ts
+   * // /app/shopify.server.ts
    * import { DeliveryMethod, shopifyApp } from "@shopify/shopify-app-remix/server";
    *
    * const shopify = shopifyApp({

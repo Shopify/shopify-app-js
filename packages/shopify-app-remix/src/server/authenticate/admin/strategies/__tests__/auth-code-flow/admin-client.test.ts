@@ -72,26 +72,7 @@ describe('admin.authenticate context', () => {
       it('redirects to auth when request receives a 401 response and not embedded', async () => {
         // GIVEN
         const {admin, session} = await setUpNonEmbeddedFlow();
-        const requestMock = await mockRequest();
-
-        // WHEN
-        const response = await getThrownResponse(
-          async () => action(admin, session),
-          requestMock,
-        );
-
-        // THEN
-        expect(response.status).toEqual(302);
-
-        const {hostname, pathname} = new URL(response.headers.get('Location')!);
-        expect(hostname).toEqual(TEST_SHOP);
-        expect(pathname).toEqual('/admin/oauth/authorize');
-      });
-
-      it('redirects to auth when request receives a 401 response and not embedded', async () => {
-        // GIVEN
-        const {admin, session} = await setUpNonEmbeddedFlow();
-        const requestMock = await mockRequest();
+        const requestMock = await mockRequest(401);
 
         // WHEN
         const response = await getThrownResponse(
@@ -218,7 +199,7 @@ async function mockRestRequest(status = 401) {
 
   await mockExternalRequest({
     request: requestMock,
-    response: new Response(undefined, {status}),
+    response: new Response('{}', {status}),
   });
 
   return requestMock;

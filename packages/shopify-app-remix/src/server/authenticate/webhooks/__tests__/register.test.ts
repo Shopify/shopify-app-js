@@ -97,9 +97,7 @@ describe('Webhook registration', () => {
           body: 'webhookSubscriptionCreate',
         }),
         response: new Response(
-          JSON.stringify({
-            body: mockResponses.HTTP_WEBHOOK_CREATE_ERROR_RESPONSE,
-          }),
+          JSON.stringify(mockResponses.HTTP_WEBHOOK_CREATE_ERROR_RESPONSE),
         ),
       },
     );

@@ -10,7 +10,7 @@
         "title": "Authenticating requests",
         "sectionContent": "To authenticate admin requests you can call `authenticate.admin(request)` in a loader or an action.\n\nIf there's a session for this user, then this loader will return null. If there's no session for the user, then the loader will throw the appropriate redirect Response.\n\n> Tip: If you are authenticating more than one route, then we recommend using [Remix layout routes](https://remix.run/docs/en/1.18.1/file-conventions/routes-files#layout-routes) to automatically authenticate them.",
         "codeblock": {
-          "title": "/app/routes/**/*.tsx",
+          "title": "Authenticating requests",
           "tabs": [
             {
               "title": "/app/routes/**/*.tsx",
@@ -26,7 +26,7 @@
         "title": "Headers",
         "sectionContent": "The OAuth process can't happen inside the admin iframe, and this package is capable of detecting that scenario and properly redirecting using the [Remix `ErrorBoundary`](https://remix.run/docs/en/main/guides/errors) export to set the correct headers for App Bridge.\n\nUse the abstractions provided by this package in your authenticated routes, to automatically set up the error and headers boundaries to redirect outside the iframe when needed.\n\n> Tip: You can also add this to a [Remix layout](https://remix.run/docs/en/main/file-conventions/route-files-v2) if you want to authenticate more than one route, but make sure to call the Shopify boundary methods whenever you need to add your own exports.",
         "codeblock": {
-          "title": "/app/routes/**/*.tsx",
+          "title": "Configure header boundaries",
           "tabs": [
             {
               "title": "/app/routes/**/*.tsx",
@@ -42,7 +42,7 @@
         "title": "Authenticating cross-origin admin requests",
         "sectionContent": "If your Remix server is authenticating an admin extension, then a request from the extension to Remix will be cross-origin.\n\nHere `authenticate.admin` provides a `cors` function to add the required cross-origin headers.",
         "codeblock": {
-          "title": "/app/routes/**/*.tsx",
+          "title": "Add cross-origin headers",
           "tabs": [
             {
               "title": "/app/routes/**/*.tsx",
@@ -58,7 +58,7 @@
         "title": "Using the GraphQL API",
         "sectionContent": "Once a request is authenticated, `authenticate.admin` will return an `admin` object that contains a GraphQL client that can interact with the [GraphQL Admin API](/docs/api/admin-graphql).",
         "codeblock": {
-          "title": "/app/routes/**/*.tsx",
+          "title": "Make GraphQL requests",
           "tabs": [
             {
               "title": "/app/routes/**/*.tsx",
@@ -66,7 +66,14 @@
               "language": "tsx"
             }
           ]
-        }
+        },
+        "sectionCard": [
+          {
+            "url": "/docs/api/shopify-app-remix/guide-graphql-types",
+            "name": "Typing GraphQL operations",
+            "type": "tutorial"
+          }
+        ]
       },
       {
         "type": "Generic",
@@ -113,7 +120,7 @@
         "title": "Setting future flags",
         "sectionContent": "To opt in to a feature, simply enable the appropriate flag in the `future` option of the `shopifyApp` function.\n\nOnce a flag is set, the returned `shopify` object will start using the new APIs, including using any new types. That allows apps to rely on TypeScript to use a feature regardless of a flag being enabled or not.",
         "codeblock": {
-          "title": "/app/shopify.server.ts",
+          "title": "Enable future flags",
           "tabs": [
             {
               "title": "/app/shopify.server.ts",
@@ -129,7 +136,7 @@
         "title": "Unstable APIs",
         "sectionContent": "When introducing new features to the package for which we want to gather feedback, we will add them behind a future flag, starting with the `unstable_` prefix.\n\nThat allows early adopters to try them out individually, without having to install a release candidate package.\n\nWhen the feature is ready for release, the future flag will be removed and it will be available by default.\n\nIn this example, `shopify` has a new function called `newFeature`. If the future flag is disabled, TypeScript will be unaware of the new function, and the app will fail to compile if it tries to use it.",
         "codeblock": {
-          "title": "/app/routes/*.tsx",
+          "title": "Use unstable APIs",
           "tabs": [
             {
               "title": "/app/routes/*.tsx",
@@ -156,6 +163,130 @@
             "value": "",
             "description": "Returns the same `admin` context (`AdminApiContext`) from `authenticate.webhook` that is returned from `authenticate.admin`.\n\nSee [authenticate.webhook](/docs/api/shopify-app-remix/authenticate/webhook#example-admin) for more details.",
             "isOptional": true
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "guide-graphql-types",
+    "title": "Typing GraphQL operations",
+    "description": "The GraphQL clients provided in this package can use [Codegen](https://the-guild.dev/graphql/codegen) to automatically parse and create types for your queries and mutations.\n\nBy installing a few packages in your app, you can use the `graphql-codegen` script, which will look for strings with the `#graphql` tag and extract types from them.\n\nIf your IDE supports it, you will also get syntax highlighting and auto-complete features when writing your queries.",
+    "sections": [
+      {
+        "type": "Markdown",
+        "anchorLink": "example",
+        "title": "See it in action",
+        "sectionContent": "\nIn this example, we use the `graphql-codegen` script to parse a query in the `/app/routes/new.tsx` file.\n\nNote how VSCode shows the types for both the return type of `response.json()`, and the `variables` option in the `graphql` function.\n\n<video style=\"width: 100%; height: auto;\" muted controls aria-label=\"A demonstration of a Remix app using GraphQL types\">\n  <source src=\"/assets/client-libraries/graphql-types-demo.webm\" type=\"video/webm\">\n  Your browser doesn't support this video.\n</video>\n      "
+      },
+      {
+        "type": "Generic",
+        "anchorLink": "install",
+        "title": "Installing packages",
+        "sectionContent": "To use the `graphql-codegen` script, you will need to install a few packages in your app.\n\nThey will include the scripts to run, and the types that will be overridden by the results of parsing your operations.",
+        "codeblock": {
+          "title": "Installing packages",
+          "tabs": [
+            {
+              "title": "npm",
+              "language": "sh",
+              "code": "npm add --save-dev @shopify/api-codegen-preset\nnpm add @shopify/admin-api-client @shopify/storefront-api-client\n"
+            },
+            {
+              "title": "yarn",
+              "language": "sh",
+              "code": "yarn add --dev @shopify/api-codegen-preset\nyarn add @shopify/admin-api-client @shopify/storefront-api-client\n"
+            },
+            {
+              "title": "pnpm",
+              "language": "sh",
+              "code": "pnpm add --save-dev @shopify/api-codegen-preset\npnpm add @shopify/admin-api-client @shopify/storefront-api-client\n"
+            }
+          ]
+        }
+      },
+      {
+        "type": "Generic",
+        "anchorLink": "configure",
+        "title": "Setting up .graphqlrc.ts",
+        "sectionContent": "Before you can parse operations, you'll need to create a `.graphqlrc.ts` file in your project, and configure it to use the `@shopify/api-codegen-preset`.\n\n> Caution: Parsing will not work on `.graphql` documents, because the preset can only apply types from JavaScript and TypeScript const strings.",
+        "codeblock": {
+          "title": "Codegen configuration example",
+          "tabs": [
+            {
+              "title": "/.graphqlrc.ts",
+              "language": "ts",
+              "code": "import {shopifyApiProject, ApiType} from '@shopify/api-codegen-preset';\n\nexport default {\n  // For syntax highlighting / auto-complete when writing operations\n  schema: 'https://shopify.dev/admin-graphql-direct-proxy/2023-10',\n  documents: ['./app/**/*.{js,ts,jsx,tsx}'],\n  projects: {\n    // To produce variable / return types for Admin API operations\n    default: shopifyApiProject({\n      apiType: ApiType.Admin,\n      apiVersion: '2023-10',\n      documents: ['./app/**/*.{js,ts,jsx,tsx}'],\n      outputDir: './app/types',\n    }),\n  },\n};\n"
+            }
+          ]
+        },
+        "sectionCard": [
+          {
+            "url": "https://github.com/Shopify/shopify-api-js/tree/main/packages/api-codegen-preset#configuration",
+            "name": "Configuration options",
+            "subtitle": "Learn more about the available configurations.",
+            "type": "github"
+          }
+        ]
+      },
+      {
+        "type": "Generic",
+        "anchorLink": "set-up-script",
+        "title": "Setting up the script",
+        "sectionContent": "To generate types, you'll need to add an entry for `graphql-codegen` in the `\"scripts\"` section of your `package.json` file.",
+        "codeblock": {
+          "title": "Setting up the script",
+          "tabs": [
+            {
+              "title": "/package.json",
+              "language": "json",
+              "code": "{\n  \"scripts\": {\n    \"graphql-codegen\": \"graphql-codegen\"\n  }\n}\n"
+            }
+          ]
+        }
+      },
+      {
+        "type": "Generic",
+        "anchorLink": "run",
+        "title": "Generating types",
+        "sectionContent": "When you run `graphql-codegen`, it will look in all your configured documents for strings marked with a `#graphql` tag.\n\nIDEs that support the `.graphqlrc.ts` file will provide syntax highlighting for your operations, as well as typing.\n\n> Tip: You can pass in a `--watch` flag to the script, which will update your types every time you save a file.",
+        "codeblock": {
+          "title": "Running graphql-codegen",
+          "tabs": [
+            {
+              "title": "npm",
+              "language": "sh",
+              "code": "npm run graphql-codegen\n"
+            },
+            {
+              "title": "yarn",
+              "language": "sh",
+              "code": "yarn graphql-codegen\n"
+            },
+            {
+              "title": "pnpm",
+              "language": "sh",
+              "code": "pnpm run graphql-codegen\n"
+            }
+          ]
+        }
+      },
+      {
+        "type": "Resource",
+        "title": "Resources",
+        "anchorLink": "resources",
+        "resources": [
+          {
+            "name": "Admin API",
+            "url": "/docs/api/shopify-app-remix/apis/admin-api",
+            "type": "shopify",
+            "subtitle": "Make requests to the Admin API"
+          },
+          {
+            "name": "Storefront API",
+            "url": "/docs/api/shopify-app-remix/apis/storefront-api",
+            "type": "shopify",
+            "subtitle": "Make requests to the Storefront API"
           }
         ]
       }
@@ -239,7 +370,7 @@
           }
         ],
         "codeblock": {
-          "title": "/app/shopify.server.ts",
+          "title": "Configure ShopifyApp",
           "tabs": [
             {
               "title": "/app/shopify.server.ts",
@@ -255,7 +386,7 @@
         "title": "Response headers",
         "sectionContent": "When loading inside the Shopify Admin, your app will need to add the required `Content-Security-Policy` header directives, as per [our documentation](/docs/apps/store/security/iframe-protection). To do that, this package provides the `shopify.addDocumentResponseHeaders` method.\n\nYou should return these headers from any endpoint that renders HTML in your app. Most likely you'll want to add this to every HTML response by updating the `entry.server.tsx` file:",
         "codeblock": {
-          "title": "/app/entry.server.tsx",
+          "title": "Add required headers",
           "tabs": [
             {
               "title": "/app/entry.server.tsx",
@@ -271,7 +402,7 @@
         "title": "Error boundaries",
         "sectionContent": "The OAuth process can't happen inside the admin iframe, and this package is capable of detecting that scenario and properly redirecting using the [Remix `ErrorBoundary`](https://remix.run/docs/en/main/guides/errors) export to set the correct headers for App Bridge.\n\nUse the abstractions provided by this package in your authenticated routes, to automatically set up the error and headers boundaries to redirect outside the iframe when needed.\n\n> Tip: You can also add this to a [Remix layout](https://remix.run/docs/en/main/file-conventions/route-files-v2) if you want to authenticate more than one route, but make sure to call the Shopify boundary methods whenever you need to add your own exports.",
         "codeblock": {
-          "title": "/app/routes/**/*.tsx",
+          "title": "Configure header boundaries",
           "tabs": [
             {
               "title": "/app/routes/**/*.tsx",
@@ -287,7 +418,7 @@
         "title": "OAuth route",
         "sectionContent": "To install an app or refresh tokens, you'll need to set up an [OAuth](docs/apps/auth/oauth) route. To do that, set up a [splat route](https://remix.run/docs/en/main/guides/routing#splats) that calls `authenticate.admin`.\n\nWhen that function is called, the package will start the OAuth process, and handle the callback from Shopify after it completes.\n\nThe default route is `/app/routes/auth/$.tsx`, but you can configure this route using the `authPathPrefix` option.",
         "codeblock": {
-          "title": "/app/routes/auth/$.tsx",
+          "title": "Add OAuth route",
           "tabs": [
             {
               "title": "/app/routes/auth/$.tsx",
@@ -322,7 +453,7 @@
           }
         ],
         "codeblock": {
-          "title": "/app/root.tsx",
+          "title": "Add AppProvider",
           "tabs": [
             {
               "title": "/app/root.tsx",
@@ -345,7 +476,7 @@
         "title": "Configuring webhooks subscriptions",
         "sectionContent": "Configure `shopifyApp` and setup webhook subscription with the following steps:\n1. The webhooks you want to subscribe to. In this example we subscribe to the `APP_UNINSTALLED` topic.\n1. The code to register the `APP_UNINSTALLED` topic after a merchant installs you app. Here `shopifyApp` provides an `afterAuth` hook.\n1. Review the required scopes for the webhook topics, and update your [app scopes](/docs/apps/tools/cli/configuration#access_scopes)  as necessary.\n\n> Note: You can't register mandatory topics using this package, you must [configure those in the Partner Dashboard](/docs/apps/webhooks/configuration/mandatory-webhooks) instead.",
         "codeblock": {
-          "title": "/app/shopify.server.ts",
+          "title": "Configure webhooks subscriptions",
           "tabs": [
             {
               "title": "/app/shopify.server.ts",
@@ -361,7 +492,7 @@
         "title": "Set up your endpoints",
         "sectionContent": "Create a route in your app to handle incoming webhook requests for each `callbackUrl` you set in your configuration.Legitimate webhook requests are always `POST` requests signed by Shopify, so you must authenticate them before taking any action. To do this you must set up an `action` that uses the `authenticate.webhook` function to authenticate the request.\n\nPlease keep in mind that webhook endpoints should respond as quickly as possible. If you need to run a long-running job, then consider using background tasks.\n\n> Caution: Webhook endpoints **must** respond with an `HTTP 200` code, or Shopify will retry.",
         "codeblock": {
-          "title": "/app/routes/webhooks.tsx",
+          "title": "Receive webhook requests",
           "tabs": [
             {
               "title": "/app/routes/webhooks.tsx",

@@ -42,6 +42,7 @@ import {IdempotentPromiseHandler} from './authenticate/helpers/idempotent-promis
  * @example
  * <caption>The minimum viable configuration</caption>
  * ```ts
+ * // /shopify.server.ts
  * import { shopifyApp } from "@shopify/shopify-app-remix/server";
  *
  * const shopify = shopifyApp({

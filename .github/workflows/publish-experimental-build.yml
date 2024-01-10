@@ -12,11 +12,15 @@ jobs:
         with:
           ref: experimental
 
+      # Setup .npmrc file to publish to npm
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
           node-version: 18.x
           cache: 'yarn'
+          registry-url: 'https://registry.npmjs.org'
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Install dependencies
         run: yarn --frozen-lockfile
@@ -24,13 +28,11 @@ jobs:
       - name: Build
         run: yarn build
 
+      - name: Version
+        run: yarn changeset version --snapshot experimental
+
       - name: Publish to NPM
-        id: changesets
-        uses: changesets/action@v1
-        with:
-          version: yarn changeset version --snapshot experimental
-          publish: yarn changeset publish --tag experimental
-          setupGitUser: false
-          createGithubReleases: false
+        run: yarn changeset publish --tag experimental
         env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
