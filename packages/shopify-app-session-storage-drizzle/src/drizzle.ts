@@ -1,28 +1,23 @@
 import {Session} from '@shopify/shopify-api';
-import type {SessionStorage} from '@shopify/shopify-app-session-storage';
 import {and, eq} from 'drizzle-orm';
+import type {SessionStorage} from '@shopify/shopify-app-session-storage';
 
-export interface DrizzleSessionStorageOptions {
-  // If not `sessions` then pass something else?
-  table?: any;
-}
+import * as schema from './drizzle/schema';
 
 export class DrizzleSessionStorage implements SessionStorage {
-  // Generated Types needed from Drizzle
   constructor(
+    // Generated Types needed from the following (in user app)
+    // export const db = drizzle(client, { schema });
     private db: any,
-    // Required currently
-    private sessions: any,
-    options: Partial<DrizzleSessionStorageOptions> = {},
+    private sessionsTable: typeof schema.sessions,
   ) {
     this.db = db;
-    this.sessions = sessions;
-    console.log(options);
+    this.sessionsTable = sessionsTable;
   }
 
   // Fix Date type
   public async storeSession(session: Session): Promise<boolean> {
-    await this.db.insert(this.sessions).values(session);
+    await this.db.insert(this.sessionsTable).values(session);
 
     // Need to fix "session" to be the expected shape
     // onConflictDoUpdate({ where : sql`${sessions.id} = ${session.id}`, set: session })
@@ -46,7 +41,9 @@ export class DrizzleSessionStorage implements SessionStorage {
 
   public async deleteSession(id: string): Promise<boolean> {
     // Actually check it deleted
-    await this.db.delete(this.sessions).where(eq(this.sessions.id, id));
+    await this.db
+      .delete(this.sessionsTable)
+      .where(eq(this.sessionsTable.id, id));
 
     return true;
   }
@@ -55,8 +52,8 @@ export class DrizzleSessionStorage implements SessionStorage {
     if (ids.length === 0) return true;
 
     await this.db
-      .delete(this.sessions)
-      .where(and(...ids.map((id) => eq(this.sessions.id, id))));
+      .delete(this.sessionsTable)
+      .where(and(...ids.map((id) => eq(this.sessionsTable.id, id))));
 
     return true;
   }
