@@ -2,7 +2,7 @@ import {createPackage, createProjectPlugin} from '@shopify/loom';
 import {buildLibrary} from '@shopify/loom-plugin-build-library';
 
 export default createPackage((pkg) => {
-  pkg.entry({root: './src/prisma.ts'});
+  pkg.entry({root: './src/drizzle.ts'});
   pkg.use(
     buildLibrary({
       // Required. A browserslist string for specifying your target output.

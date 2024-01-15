@@ -26,8 +26,9 @@ import {shopifyApp} from '@shopify/shopify-app-express';
 import {DrizzleSessionStorage} from '@shopify/shopify-app-session-storage-drizzle';
 
 import {db} from './db.server';
+import {sessions} from './schema';
 
-const storage = new DrizzleSessionStorage(db);
+const storage = new DrizzleSessionStorage(db, {table: sessions});
 
 const shopify = shopifyApp({
   sessionStorage: storage,
