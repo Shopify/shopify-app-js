@@ -1,5 +1,32 @@
 # @shopify/shopify-app-remix
 
+## 2.3.0
+
+### Minor Changes
+
+- a9c7836: Adding support for the new clients from `@shopify/admin-api-client` and `@shopify/storefront-api-client` that can leverage `@shopify/api-codegen-preset` to automatically type GraphQL operations using Codegen.
+
+  For more information on how to add types to your queries, see [the `@shopify/api-codegen-preset` documentation](https://github.com/Shopify/shopify-api-js/tree/main/packages/api-codegen-preset).
+
+### Patch Changes
+
+- Updated dependencies [d3e4b5e]
+  - @shopify/shopify-app-session-storage@2.0.3
+
+## 2.2.0
+
+### Minor Changes
+
+- d92f828: Refactor AuthStrategy to extract OAuth authorization code flow behaviour into a separate class.
+
+### Patch Changes
+
+- 8c36e82: Fixing a bug in the GraphQL client that could cause specific builds to fail, because we used `query` for both the function and argument names.
+- 9d0fc6f: Now `authenticate.webhook(request);` will return 401 Unauthorized when webhook HMAC validation fails.
+- 3685bd4: Bump shopify-api to ^8.1.1
+- Updated dependencies [3685bd4]
+  - @shopify/shopify-app-session-storage@2.0.2
+
 ## 2.1.0
 
 ### Minor Changes

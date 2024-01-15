@@ -127,7 +127,9 @@ describe('webhook integration', () => {
             expect({
               method: 'POST',
               url: `https://${TEST_SHOP}/admin/api/${LATEST_API_VERSION}/graphql.json`,
-              body: expect.stringContaining(query),
+              body: expect.objectContaining({
+                query: expect.stringContaining(query),
+              }),
             }).toMatchMadeHttpRequest(),
           );
 

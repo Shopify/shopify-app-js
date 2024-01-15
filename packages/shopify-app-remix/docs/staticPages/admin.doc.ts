@@ -14,11 +14,11 @@ const data: LandingTemplateSchema = {
       anchorLink: 'auth',
       title: 'Authenticating requests',
       sectionContent:
-        "To authenticate admin requests you can call `authenticate.admin(request)` in a loader or an action." +
+        'To authenticate admin requests you can call `authenticate.admin(request)` in a loader or an action.' +
         "\n\nIf there's a session for this user, then this loader will return null. If there's no session for the user, then the loader will throw the appropriate redirect Response." +
-        "\n\n> Tip: If you are authenticating more than one route, then we recommend using [Remix layout routes](https://remix.run/docs/en/1.18.1/file-conventions/routes-files#layout-routes) to automatically authenticate them.",
+        '\n\n> Tip: If you are authenticating more than one route, then we recommend using [Remix layout routes](https://remix.run/docs/en/1.18.1/file-conventions/routes-files#layout-routes) to automatically authenticate them.',
       codeblock: {
-        title: '/app/routes/**/*.tsx',
+        title: 'Authenticating requests',
         tabs: [
           {
             title: '/app/routes/**/*.tsx',
@@ -34,10 +34,10 @@ const data: LandingTemplateSchema = {
       title: 'Headers',
       sectionContent:
         "The OAuth process can't happen inside the admin iframe, and this package is capable of detecting that scenario and properly redirecting using the [Remix `ErrorBoundary`](https://remix.run/docs/en/main/guides/errors) export to set the correct headers for App Bridge." +
-        "\n\nUse the abstractions provided by this package in your authenticated routes, to automatically set up the error and headers boundaries to redirect outside the iframe when needed." +
-        "\n\n> Tip: You can also add this to a [Remix layout](https://remix.run/docs/en/main/file-conventions/route-files-v2) if you want to authenticate more than one route, but make sure to call the Shopify boundary methods whenever you need to add your own exports.",
+        '\n\nUse the abstractions provided by this package in your authenticated routes, to automatically set up the error and headers boundaries to redirect outside the iframe when needed.' +
+        '\n\n> Tip: You can also add this to a [Remix layout](https://remix.run/docs/en/main/file-conventions/route-files-v2) if you want to authenticate more than one route, but make sure to call the Shopify boundary methods whenever you need to add your own exports.',
       codeblock: {
-        title: '/app/routes/**/*.tsx',
+        title: 'Configure header boundaries',
         tabs: [
           {
             title: '/app/routes/**/*.tsx',
@@ -55,7 +55,7 @@ const data: LandingTemplateSchema = {
         'If your Remix server is authenticating an admin extension, then a request from the extension to Remix will be cross-origin.' +
         '\n\nHere `authenticate.admin` provides a `cors` function to add the required cross-origin headers.',
       codeblock: {
-        title: '/app/routes/**/*.tsx',
+        title: 'Add cross-origin headers',
         tabs: [
           {
             title: '/app/routes/**/*.tsx',
@@ -72,7 +72,7 @@ const data: LandingTemplateSchema = {
       sectionContent:
         'Once a request is authenticated, `authenticate.admin` will return an `admin` object that contains a GraphQL client that can interact with the [GraphQL Admin API](/docs/api/admin-graphql).',
       codeblock: {
-        title: '/app/routes/**/*.tsx',
+        title: 'Make GraphQL requests',
         tabs: [
           {
             title: '/app/routes/**/*.tsx',
@@ -81,6 +81,13 @@ const data: LandingTemplateSchema = {
           },
         ],
       },
+      sectionCard: [
+        {
+          url: '/docs/api/shopify-app-remix/guide-graphql-types',
+          name: 'Typing GraphQL operations',
+          type: 'tutorial',
+        },
+      ],
     },
     {
       type: 'Generic',

@@ -1,4 +1,3 @@
-import {flatHeaders} from '@shopify/shopify-api/runtime';
 import {Session} from '@shopify/shopify-api';
 
 import {BasicParams} from '../../types';
@@ -21,15 +20,13 @@ export function storefrontClientFactory({
         apiVersion: options.apiVersion,
       });
 
-      const apiResponse = await client.query({
-        data: {query, variables: options?.variables},
-        tries: options.tries,
-        extraHeaders: options.headers,
+      const apiResponse = await client.request(query, {
+        variables: options?.variables,
+        retries: options?.tries ? options.tries - 1 : 0,
+        headers: options?.headers,
       });
 
-      return new Response(JSON.stringify(apiResponse.body), {
-        headers: flatHeaders(apiResponse.headers),
-      });
+      return new Response(JSON.stringify(apiResponse));
     },
   };
 }

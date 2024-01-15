@@ -167,7 +167,10 @@ describe('ensureInstalledOnShop', () => {
       )}`,
     ];
 
-    mockShopifyResponse({});
+    mockShopifyResponse({
+      data: {},
+      extensions: {},
+    });
     await shopify.config.sessionStorage.storeSession(session);
 
     await request(app)

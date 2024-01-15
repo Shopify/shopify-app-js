@@ -86,7 +86,7 @@ const data: LandingTemplateSchema = {
         },
       ],
       codeblock: {
-        title: '/app/shopify.server.ts',
+        title: 'Configure ShopifyApp',
         tabs: [
           {
             title: '/app/shopify.server.ts',
@@ -104,7 +104,7 @@ const data: LandingTemplateSchema = {
         'When loading inside the Shopify Admin, your app will need to add the required `Content-Security-Policy` header directives, as per [our documentation](/docs/apps/store/security/iframe-protection). To do that, this package provides the `shopify.addDocumentResponseHeaders` method.' +
         "\n\nYou should return these headers from any endpoint that renders HTML in your app. Most likely you'll want to add this to every HTML response by updating the `entry.server.tsx` file:",
       codeblock: {
-        title: '/app/entry.server.tsx',
+        title: 'Add required headers',
         tabs: [
           {
             title: '/app/entry.server.tsx',
@@ -123,7 +123,7 @@ const data: LandingTemplateSchema = {
         "\n\nUse the abstractions provided by this package in your authenticated routes, to automatically set up the error and headers boundaries to redirect outside the iframe when needed." +
         "\n\n> Tip: You can also add this to a [Remix layout](https://remix.run/docs/en/main/file-conventions/route-files-v2) if you want to authenticate more than one route, but make sure to call the Shopify boundary methods whenever you need to add your own exports.",
       codeblock: {
-        title: '/app/routes/**/*.tsx',
+        title: 'Configure header boundaries',
         tabs: [
           {
             title: '/app/routes/**/*.tsx',
@@ -142,7 +142,7 @@ const data: LandingTemplateSchema = {
         '\n\nWhen that function is called, the package will start the OAuth process, and handle the callback from Shopify after it completes.' +
         '\n\nThe default route is `/app/routes/auth/$.tsx`, but you can configure this route using the `authPathPrefix` option.',
       codeblock: {
-        title: '/app/routes/auth/$.tsx',
+        title: 'Add OAuth route',
         tabs: [
           {
             title: '/app/routes/auth/$.tsx',
@@ -180,7 +180,7 @@ const data: LandingTemplateSchema = {
         },
       ],
       codeblock: {
-        title: '/app/root.tsx',
+        title: 'Add AppProvider',
         tabs: [
           {
             title: '/app/root.tsx',

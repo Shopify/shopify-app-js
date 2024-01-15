@@ -9,14 +9,15 @@ const data: LandingTemplateSchema = {
     {
       type: 'Generic',
       anchorLink: 'config',
-      title: 'Configuring webhooks',
+      title: 'Configuring webhooks subscriptions',
       sectionContent:
-        'To set up webhooks first we need to configure `shopifyApp` with 2 pieces:' +
+        'Configure `shopifyApp` and setup webhook subscription with the following steps:' +
         '\n1. The webhooks you want to subscribe to. In this example we subscribe to the `APP_UNINSTALLED` topic.' +
         '\n1. The code to register the `APP_UNINSTALLED` topic after a merchant installs you app. Here `shopifyApp` provides an `afterAuth` hook.' +
+        '\n1. Review the required scopes for the webhook topics, and update your [app scopes](/docs/apps/tools/cli/configuration#access_scopes)  as necessary.' +
         "\n\n> Note: You can't register mandatory topics using this package, you must [configure those in the Partner Dashboard](/docs/apps/webhooks/configuration/mandatory-webhooks) instead.",
       codeblock: {
-        title: '/app/shopify.server.ts',
+        title: 'Configure webhooks subscriptions',
         tabs: [
           {
             title: '/app/shopify.server.ts',
@@ -31,12 +32,12 @@ const data: LandingTemplateSchema = {
       anchorLink: 'endpoints',
       title: 'Set up your endpoints',
       sectionContent:
-        'Legitimate webhook requests are always `POST`s signed by Shopify, so you must authenticate them before taking any action.' +
-        '\n\nFor each `callbackUrl` in your configuration, you must set up an `action` that uses the `authenticate.webhook` function to authenticate the request.' +
+        'Create a route in your app to handle incoming webhook requests for each `callbackUrl` you set in your configuration.' +
+        'Legitimate webhook requests are always `POST` requests signed by Shopify, so you must authenticate them before taking any action. To do this you must set up an `action` that uses the `authenticate.webhook` function to authenticate the request.' +
         '\n\nPlease keep in mind that webhook endpoints should respond as quickly as possible. If you need to run a long-running job, then consider using background tasks.' +
         '\n\n> Caution: Webhook endpoints **must** respond with an `HTTP 200` code, or Shopify will retry.',
       codeblock: {
-        title: '/app/routes/webhooks.tsx',
+        title: 'Receive webhook requests',
         tabs: [
           {
             title: '/app/routes/webhooks.tsx',

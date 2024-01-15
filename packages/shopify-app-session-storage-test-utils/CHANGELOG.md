@@ -1,5 +1,20 @@
 # @shopify/shopify-app-session-storage-test-utils
 
+## 1.0.3
+
+### Patch Changes
+
+- Updated dependencies [d3e4b5e]
+  - @shopify/shopify-app-session-storage@2.0.3
+
+## 1.0.2
+
+### Patch Changes
+
+- 3685bd4: Bump shopify-api to ^8.1.1
+- Updated dependencies [3685bd4]
+  - @shopify/shopify-app-session-storage@2.0.2
+
 ## 1.0.1
 
 ### Patch Changes

@@ -8,13 +8,14 @@ import {
 } from '@shopify/shopify-api';
 import {SessionStorage} from '@shopify/shopify-app-session-storage';
 
-import type {FutureFlags} from './future/flags';
+import type {FutureFlagOptions, FutureFlags} from './future/flags';
 import type {AppDistribution} from './types';
 import type {AdminApiContext} from './clients';
 
 export interface AppConfigArg<
   Resources extends ShopifyRestResources = ShopifyRestResources,
   Storage extends SessionStorage = SessionStorage,
+  Future extends FutureFlagOptions = FutureFlagOptions,
 > extends Omit<
     ApiConfigArg<Resources>,
     | 'hostName'
@@ -22,6 +23,7 @@ export interface AppConfigArg<
     | 'isEmbeddedApp'
     | 'apiVersion'
     | 'isCustomStoreApp'
+    | 'future'
   > {
   /**
    * The URL your app is running on.
@@ -219,11 +221,11 @@ export interface AppConfigArg<
    * You can opt in to these features by setting the corresponding flags. By doing so, you can prepare for future
    * releases in advance and provide feedback on the new features.
    */
-  future?: FutureFlags;
+  future?: Future;
 }
 
 export interface AppConfig<Storage extends SessionStorage = SessionStorage>
-  extends ApiConfig {
+  extends Omit<ApiConfig, 'future'> {
   canUseLoginForm: boolean;
   appUrl: string;
   auth: AuthConfig;
@@ -233,7 +235,7 @@ export interface AppConfig<Storage extends SessionStorage = SessionStorage>
   future: FutureFlags;
 }
 
-interface AuthConfig {
+export interface AuthConfig {
   path: string;
   callbackPath: string;
   exitIframePath: string;

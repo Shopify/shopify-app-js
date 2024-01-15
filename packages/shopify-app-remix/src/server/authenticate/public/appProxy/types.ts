@@ -27,7 +27,7 @@ interface Context {
    * import {authenticate} from "~/shopify.server"
    *
    * export async function loader({ request }) {
-   *   const {liquid} = authenticate.public.appProxy(request);
+   *   const {liquid} = await authenticate.public.appProxy(request);
    *
    *   return liquid("Hello {{shop.name}}")
    * }
@@ -70,7 +70,7 @@ export interface AppProxyContextWithSession<
    *
    * @example
    * <caption>Using the session object.</caption>
-   * <description>Get your app's data using an offline session for the shop that made the request.</description>
+   * <description>Get the session for the shop that initiated the request to the app proxy.</description>
    * ```ts
    * // app/routes/**\/.ts
    * import { json } from "@remix-run/node";
@@ -78,7 +78,10 @@ export interface AppProxyContextWithSession<
    * import { getMyAppModelData } from "~/db/model.server";
    *
    * export const loader = async ({ request }) => {
+   *   // Get the session for the shop that initiated the request to the app proxy.
    *   const { session } = await authenticate.public.appProxy(request);
+   *
+   *   // Use the session data to make to queries to your database or additional requests.
    *   return json(await getMyAppModelData({shop: session.shop));
    * };
    * ```
@@ -130,7 +133,7 @@ export interface AppProxyContextWithSession<
    * import { authenticate } from "../shopify.server";
    *
    * export async function action({ request }: ActionFunctionArgs) {
-   *   const { admin } = await authenticate.public.appProxy(request);
+   *   const { storefront } = await authenticate.public.appProxy(request);
    *
    *   const response = await storefront.graphql(`{blogs(first: 10) { edges { node { id } } } }`);
    *
