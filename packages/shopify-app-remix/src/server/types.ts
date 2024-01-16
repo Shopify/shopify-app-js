@@ -19,19 +19,23 @@ import {FutureFlagOptions, FutureFlags} from './future/flags';
 export interface BasicParams<
   Future extends FutureFlagOptions = FutureFlagOptions,
 > {
-  api: Shopify<ApiConfigWithFutureFlags<Future>>;
+  api: Shopify<
+    ApiConfigWithFutureFlags<Future>,
+    ShopifyRestResources,
+    ApiFutureFlags<Future>
+  >;
   config: AppConfig;
   logger: Shopify['logger'];
 }
 
+export interface ApiFutureFlags<Future extends FutureFlagOptions> {
+  unstable_tokenExchange?: Future extends FutureFlags
+    ? Future['unstable_newEmbeddedAuthStrategy']
+    : boolean;
+}
+
 export type ApiConfigWithFutureFlags<Future extends FutureFlagOptions> =
-  ConfigParams & {
-    future?: {
-      unstable_tokenExchange?: Future extends FutureFlags
-        ? Future['unstable_newEmbeddedAuthStrategy']
-        : boolean;
-    };
-  };
+  ConfigParams<ShopifyRestResources, ApiFutureFlags<Future>>;
 
 export type JSONValue =
   | string

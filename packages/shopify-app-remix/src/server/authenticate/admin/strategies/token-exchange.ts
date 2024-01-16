@@ -4,10 +4,15 @@ import {
   RequestedTokenType,
   Session,
   Shopify,
+  ShopifyRestResources,
 } from '@shopify/shopify-api';
-import {AppConfig, AppConfigArg} from 'src/server/config-types';
-import {BasicParams, ApiConfigWithFutureFlags} from 'src/server/types';
 
+import {AppConfig, AppConfigArg} from '../../../config-types';
+import {
+  BasicParams,
+  ApiConfigWithFutureFlags,
+  ApiFutureFlags,
+} from '../../../types';
 import {respondToInvalidSessionToken} from '../../helpers';
 import {handleClientErrorFactory, triggerAfterAuthHook} from '../helpers';
 import {HandleAdminClientError} from '../../../clients';
@@ -17,7 +22,12 @@ import {AuthorizationStrategy, SessionContext, OnErrorOptions} from './types';
 export class TokenExchangeStrategy<Config extends AppConfigArg>
   implements AuthorizationStrategy
 {
-  protected api: Shopify<ApiConfigWithFutureFlags<Config['future']>>;
+  protected api: Shopify<
+    ApiConfigWithFutureFlags<Config['future']>,
+    ShopifyRestResources,
+    ApiFutureFlags<Config['future']>
+  >;
+
   protected config: AppConfig;
   protected logger: Shopify['logger'];
 
