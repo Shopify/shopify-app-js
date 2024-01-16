@@ -166,7 +166,7 @@ async function mockRestRequest(status = 401) {
 
   await mockExternalRequest({
     request: requestMock,
-    response: new Response(undefined, {status}),
+    response: new Response('{}', {status}),
   });
 
   return requestMock;
