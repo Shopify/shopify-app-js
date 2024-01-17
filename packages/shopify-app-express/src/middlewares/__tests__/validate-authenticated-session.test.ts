@@ -266,7 +266,10 @@ describe('validateAuthenticatedSession', () => {
     });
 
     it('finds a session with the right cookie', async () => {
-      mockShopifyResponse({});
+      mockShopifyResponse({
+        data: {},
+        extensions: {},
+      });
 
       const response = await request(app)
         .get('/test/shop?shop=my-shop.myshopify.io')

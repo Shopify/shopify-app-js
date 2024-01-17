@@ -1,5 +1,12 @@
 # @shopify/shopify-app-session-storage-test-utils
 
+## 1.0.3
+
+### Patch Changes
+
+- Updated dependencies [d3e4b5e]
+  - @shopify/shopify-app-session-storage@2.0.3
+
 ## 1.0.2
 
 ### Patch Changes

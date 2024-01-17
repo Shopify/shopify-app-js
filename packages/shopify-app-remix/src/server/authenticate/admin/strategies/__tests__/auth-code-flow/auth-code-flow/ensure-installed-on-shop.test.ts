@@ -80,10 +80,10 @@ describe('authorize.admin doc request path', () => {
 
       await mockExternalRequest({
         request: new Request(GRAPHQL_URL, {method: 'POST'}),
-        response: new Response(
-          JSON.stringify({errors: [{message: 'Something went wrong!'}]}),
-          {status: 500, statusText: 'Internal Server Error'},
-        ),
+        response: new Response('', {
+          status: 500,
+          statusText: 'Internal Server Error',
+        }),
       });
 
       // WHEN
@@ -96,7 +96,7 @@ describe('authorize.admin doc request path', () => {
       expect(response.status).toBe(500);
       expect(config.logger?.log).toHaveBeenCalledWith(
         LogSeverity.Error,
-        expect.stringContaining('Something went wrong!'),
+        expect.stringContaining('Internal Server Error'),
       );
     });
 
@@ -109,7 +109,7 @@ describe('authorize.admin doc request path', () => {
       await mockExternalRequest({
         request: new Request(GRAPHQL_URL, {method: 'POST'}),
         response: new Response(
-          JSON.stringify({errors: ['Something went wrong!']}),
+          JSON.stringify({errors: [{message: 'Something went wrong!'}]}),
         ),
       });
 
