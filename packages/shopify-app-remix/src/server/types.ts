@@ -66,7 +66,7 @@ interface JSONArray extends Array<JSONValue> {}
 
 type RegisterWebhooks = (
   options: RegisterWebhooksOptions,
-) => Promise<RegisterReturn | void>;
+) => Promise<RegisterReturn>;
 
 export enum LoginErrorType {
   MissingShop = 'MISSING_SHOP',

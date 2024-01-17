@@ -32,14 +32,3 @@ export const HTTP_WEBHOOK_CREATE_ERROR_RESPONSE = {
     },
   },
 };
-
-export const HTTP_WEBHOOK_THROTTLING_ERROR_RESPONSE = {
-  errors: [
-    {
-      message: 'Throttled',
-      extensions: {
-        code: 'THROTTLED',
-      },
-    },
-  ],
-};
