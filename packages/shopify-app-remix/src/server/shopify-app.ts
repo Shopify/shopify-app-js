@@ -30,6 +30,8 @@ import {unauthenticatedAdminContextFactory} from './unauthenticated/admin';
 import {authenticatePublicFactory} from './authenticate/public';
 import {unauthenticatedStorefrontContextFactory} from './unauthenticated/storefront';
 import {AuthCodeFlowStrategy} from './authenticate/admin/strategies/auth-code-flow';
+import {TokenExchangeStrategy} from './authenticate/admin/strategies/token-exchange';
+import {IdempotentPromiseHandler} from './authenticate/helpers/idempotent-promise-handler';
 
 /**
  * Creates an object your app will use to interact with Shopify.
@@ -66,10 +68,12 @@ export function shopifyApp<
   }
 
   const params: BasicParams = {api, config, logger};
-  const oauth = new AuthCodeFlowStrategy(params);
   const authStrategy = authStrategyFactory<Config, Resources>({
     ...params,
-    strategy: oauth,
+    strategy:
+      config.future.unstable_newEmbeddedAuthStrategy && config.isEmbeddedApp
+        ? new TokenExchangeStrategy(params)
+        : new AuthCodeFlowStrategy(params),
   });
 
   const shopify:
@@ -148,7 +152,10 @@ function deriveApi(appConfig: AppConfigArg) {
     isEmbeddedApp: appConfig.isEmbeddedApp ?? true,
     apiVersion: appConfig.apiVersion ?? LATEST_API_VERSION,
     isCustomStoreApp: appConfig.distribution === AppDistribution.ShopifyAdmin,
-    future: {},
+    future: {
+      unstable_tokenExchange:
+        appConfig.future?.unstable_newEmbeddedAuthStrategy,
+    },
   });
 }
 
@@ -168,6 +175,7 @@ function deriveConfig<Storage extends SessionStorage>(
   return {
     ...appConfig,
     ...apiConfig,
+    idempotentPromiseHandler: new IdempotentPromiseHandler(),
     canUseLoginForm: appConfig.distribution !== AppDistribution.ShopifyAdmin,
     useOnlineTokens: appConfig.useOnlineTokens ?? false,
     hooks: appConfig.hooks ?? {},
