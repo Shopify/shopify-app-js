@@ -286,7 +286,7 @@ export class AuthCodeFlowStrategy<
     } else if (error instanceof GraphqlQueryError) {
       const context: {[key: string]: string} = {shop};
       if (error.response) {
-        context.response = JSON.stringify(error.response);
+        context.response = JSON.stringify(error.body);
       }
 
       logger.error(
