@@ -69,7 +69,7 @@
   "dependencies": {
     "@remix-run/server-runtime": "^2.0.0",
     "@shopify/admin-api-client": "^0.2.1",
-    "@shopify/shopify-api": "^9.0.1",
+    "@shopify/shopify-api": "^9.0.2",
     "@shopify/shopify-app-session-storage": "^2.0.3",
     "@shopify/storefront-api-client": "^0.2.1",
     "isbot": "^3.7.1",
