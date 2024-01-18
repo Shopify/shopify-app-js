@@ -3162,14 +3162,14 @@
     pkg-dir "^5.0.0"
     pluralize "^8.0.0"
 
-"@shopify/generate-docs@^0.11.1":
-  version "0.11.1"
-  resolved "https://registry.yarnpkg.com/@shopify/generate-docs/-/generate-docs-0.11.1.tgz#4b4d159cb5578dc98fa4218bbc9edade1872d0f1"
-  integrity sha512-pZxCkUtO6MXJaetEdd4Tyk6t7tjJTUNd3VGCXyOeZqKAWrXEob+8gkost0x23EmuES4GGqQKSB9nnKdFvbdk1w==
+"@shopify/generate-docs@^0.13.1":
+  version "0.13.1"
+  resolved "https://registry.yarnpkg.com/@shopify/generate-docs/-/generate-docs-0.13.1.tgz#c2f41671c488a70e4bf91648ffc5631c56febc3e"
+  integrity sha512-V3vk6oemlqX/1joFYLPjvzephgVTzbuysw9lig7UgSbuMah0kXq+VSvF9IxgQMnfloTT32nWbkBtl+AJTQurtw==
   dependencies:
     "@types/react" "^18.0.21"
     globby "^11.1.0"
-    typescript "^4.8.3"
+    typescript "^4.8.3 || ^5.0.0"
 
 "@shopify/graphql-client@^0.9.1":
   version "0.9.1"
@@ -4049,9 +4049,9 @@
     csstype "^3.0.2"
 
 "@types/react@^18.0.21":
-  version "18.2.21"
-  resolved "https://registry.yarnpkg.com/@types/react/-/react-18.2.21.tgz#774c37fd01b522d0b91aed04811b58e4e0514ed9"
-  integrity sha512-neFKG/sBAwGxHgXiIxnbm3/AAVQ/cMRS93hvBpg8xYRbeQSPVABp9U2bRnPf0iI4+Ucdv3plSxKK+3CW2ENJxA==
+  version "18.2.48"
+  resolved "https://registry.yarnpkg.com/@types/react/-/react-18.2.48.tgz#11df5664642d0bd879c1f58bc1d37205b064e8f1"
+  integrity sha512-qboRCl6Ie70DQQG9hhNREz81jqC1cs9EVNcjQ1AU+jH6NFfSAhVVbrrY/+nSF+Bsk4AOwm9Qa61InvMCyV+H3w==
   dependencies:
     "@types/prop-types" "*"
     "@types/scheduler" "*"
@@ -10927,10 +10927,15 @@ typedarray-to-buffer@^3.1.5:
   dependencies:
     is-typedarray "^1.0.0"
 
-typescript@4.9.5, typescript@^4.3.5, typescript@^4.8.3, typescript@^4.9.5:
+typescript@4.9.5, typescript@^4.3.5, typescript@^4.9.5:
   version "4.9.5"
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-4.9.5.tgz#095979f9bcc0d09da324d58d03ce8f8374cbe65a"
   integrity sha512-1FXk9E2Hm+QzZQ7z+McJiHL4NW1F2EzMu9Nq9i3zAaGqibafqYwCVU6WyWAuyQRRzOlxou8xZSyXLEN8oKj24g==
+
+"typescript@^4.8.3 || ^5.0.0":
+  version "5.3.3"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-5.3.3.tgz#b3ce6ba258e72e6305ba66f5c9b452aaee3ffe37"
+  integrity sha512-pXWcraxM0uxAS+tN0AG/BF2TyqmHO014Z070UsJ+pFvYuRSq8KH8DmWpnbXe0pEPDHXZV3FcAbJkijJ5oNEnWw==
 
 unbox-primitive@^1.0.2:
   version "1.0.2"

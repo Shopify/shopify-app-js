@@ -14,6 +14,13 @@ export interface FutureFlags {
    * @default false
    */
   v3_authenticatePublic?: boolean;
+
+  /**
+   * When enabled, embedded apps will fetch access tokens via token exchange. This assumes app are using declarative scopes with Shopify managing installs.
+   *
+   * @default false
+   */
+  unstable_newEmbeddedAuthStrategy?: boolean;
 }
 
 export type FutureFlagOptions = FutureFlags | undefined;

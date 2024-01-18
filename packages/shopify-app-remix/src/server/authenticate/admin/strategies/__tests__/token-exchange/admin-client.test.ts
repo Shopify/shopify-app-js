@@ -11,6 +11,7 @@ import {
   APP_URL,
   BASE64_HOST,
   TEST_SHOP,
+  expectExitIframeRedirect,
   getJwt,
   getThrownResponse,
   setUpValidSession,
@@ -18,9 +19,13 @@ import {
   testConfig,
   mockExternalRequest,
   expectAdminApiClient,
-} from '../../../__test-helpers';
-import {shopifyApp} from '../../..';
-import {AdminApiContext} from '../../../clients';
+} from '../../../../../__test-helpers';
+import {shopifyApp} from '../../../../..';
+import {
+  REAUTH_URL_HEADER,
+  RETRY_INVALID_SESSION_HEADER,
+} from '../../../../const';
+import {AdminApiContext} from '../../../../../clients';
 
 describe('admin.authenticate context', () => {
   expectAdminApiClient(async () => {
@@ -28,42 +33,10 @@ describe('admin.authenticate context', () => {
       admin,
       expectedSession,
       session: actualSession,
-    } = await setUpEmbeddedFlow();
+    } = await setUpDocumentFlow();
 
     return {admin, expectedSession, actualSession};
   });
-
-  it('re-throws errors other than HttpResponseErrors on GraphQL requests', async () => {
-    // GIVEN
-    const {admin} = await setUpEmbeddedFlow();
-
-    // WHEN
-    await mockGraphqlRequest()(429);
-    await mockGraphqlRequest()(429);
-
-    // THEN
-    await expect(async () =>
-      admin.graphql(
-        'mutation myMutation($ID: String!) { shop(ID: $ID) { name } }',
-        {variables: {ID: '123'}, tries: 2},
-      ),
-    ).rejects.toThrowError(HttpMaxRetriesError);
-  });
-
-  it('re-throws errors other than HttpResponseErrors on REST requests', async () => {
-    // GIVEN
-    const {admin} = await setUpEmbeddedFlow();
-
-    // WHEN
-    await mockRestRequest(429);
-    await mockRestRequest(429);
-
-    // THEN
-    await expect(async () =>
-      admin.rest.get({path: '/customers.json', tries: 2}),
-    ).rejects.toThrowError(HttpMaxRetriesError);
-  });
-
   describe.each([
     {
       testGroup: 'REST client',
@@ -100,10 +73,10 @@ describe('admin.authenticate context', () => {
   ])(
     '$testGroup re-authentication',
     ({testGroup: _testGroup, mockRequest, action}) => {
-      it('throws a response when request receives a non-401 response and not embedded', async () => {
+      it('redirects to exit bounce page when document request receives a 401 response', async () => {
         // GIVEN
-        const {admin, session} = await setUpNonEmbeddedFlow();
-        const requestMock = await mockRequest(403);
+        const {admin, session, shopify} = await setUpDocumentFlow();
+        const requestMock = await mockRequest();
 
         // WHEN
         const response = await getThrownResponse(
@@ -112,14 +85,47 @@ describe('admin.authenticate context', () => {
         );
 
         // THEN
-        expect(response.status).toEqual(403);
+        expect(response.status).toBe(302);
+
+        const {pathname} = new URL(response.headers.get('location')!, APP_URL);
+        expect(pathname).toBe('/auth/session-token');
+
+        expect(
+          await shopify.sessionStorage.loadSession(session.id),
+        ).toBeUndefined();
+      });
+
+      it('returns 401 when receives a 401 response on fetch requests', async () => {
+        // GIVEN
+        const {admin, session, shopify} = await setUpFetchFlow();
+        const requestMock = await mockRequest();
+
+        // WHEN
+        const response = await getThrownResponse(
+          async () => action(admin, session),
+          requestMock,
+        );
+
+        // THEN
+        expect(response.status).toEqual(401);
+        expect(
+          response.headers.get('X-Shopify-Retry-Invalid-Session-Request'),
+        ).toBeNull();
+
+        expect(
+          await shopify.sessionStorage.loadSession(session.id),
+        ).toBeUndefined();
       });
     },
   );
 });
 
-async function setUpEmbeddedFlow() {
-  const shopify = shopifyApp(testConfig({restResources}));
+async function setUpDocumentFlow() {
+  const shopify = shopifyApp(
+    testConfig({
+      restResources,
+    }),
+  );
   const expectedSession = await setUpValidSession(shopify.sessionStorage);
 
   const {token} = getJwt();
@@ -134,15 +140,17 @@ async function setUpEmbeddedFlow() {
   };
 }
 
-async function setUpNonEmbeddedFlow() {
-  const shopify = shopifyApp(testConfig({restResources, isEmbeddedApp: false}));
-  const session = await setUpValidSession(shopify.sessionStorage);
+async function setUpFetchFlow() {
+  const shopify = shopifyApp(
+    testConfig({
+      restResources,
+    }),
+  );
+  await setUpValidSession(shopify.sessionStorage);
 
-  const request = new Request(`${APP_URL}?shop=${TEST_SHOP}`);
-  signRequestCookie({
-    request,
-    cookieName: SESSION_COOKIE_NAME,
-    cookieValue: session.id,
+  const {token} = getJwt();
+  const request = new Request(APP_URL, {
+    headers: {Authorization: `Bearer ${token}`},
   });
 
   return {
@@ -151,7 +159,7 @@ async function setUpNonEmbeddedFlow() {
   };
 }
 
-async function mockRestRequest(status) {
+async function mockRestRequest(status = 401) {
   const requestMock = new Request(
     `https://${TEST_SHOP}/admin/api/${LATEST_API_VERSION}/customers.json`,
   );
@@ -165,7 +173,7 @@ async function mockRestRequest(status) {
 }
 
 function mockGraphqlRequest(apiVersion = LATEST_API_VERSION) {
-  return async function (status) {
+  return async function (status = 401) {
     const requestMock = new Request(
       `https://${TEST_SHOP}/admin/api/${apiVersion}/graphql.json`,
       {method: 'POST'},
