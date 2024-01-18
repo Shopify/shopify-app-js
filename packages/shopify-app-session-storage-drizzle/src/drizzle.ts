@@ -6,22 +6,22 @@ export class DrizzleSessionStorage implements SessionStorage {
   constructor(
     // Generated Types needed from the following (in user app)
     // export const db = drizzle(client, { schema });
+    // sessionsTable could be sqliteTable, pgTable etc.
     private db: any,
-    // sessionsTable could be sqliteTable, pg etc.
     private sessionsTable: any,
   ) {
     this.db = db;
     this.sessionsTable = sessionsTable;
   }
 
-  // Check Date type
   public async storeSession(session: Session): Promise<boolean> {
-    await this.db.insert(this.sessionsTable).values(session);
-    // Error during OAuth callback | {error: SQLITE_ERROR: near ")": syntax error}
-    // .onConflictDoUpdate({
-    //   where: sql`${this.sessionsTable.id} = "${session.id}"`,
-    //   set: session,
-    // });
+    await this.db
+      .insert(this.sessionsTable)
+      .values(session)
+      .onConflictDoUpdate({
+        target: this.sessionsTable.id,
+        set: session,
+      });
 
     return true;
   }
@@ -74,7 +74,7 @@ export class DrizzleSessionStorage implements SessionStorage {
   }
 
   private databaseRowToSession(row: any): Session {
-    if (row.expires) row.expires = row.expires.getTime();
+    if (row.expires) row.expires = new Date(row.expires);
 
     return Session.fromPropertyArray(Object.entries(row));
   }
