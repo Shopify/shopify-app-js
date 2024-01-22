@@ -1,13 +1,17 @@
-# Session Storage Adapter for Drizzle
+# Session Storage Adapters for Drizzle
 
 This package implements the `SessionStorage` interface that works with an instance of [Drizzle](https://orm.drizzle.team).
 
-Session storage for Drizzle requires a `schema.ts` with a Session table with at-least the following columns:
+There are 3 adapters for Drizzle: `DrizzlePgAdapter`, `DrizzleSQLiteAdapter` and `DrizzleMySQLAdapter` which is in development. 
+
+Session storage for Drizzle requires a `schema.ts` with a `session` table. Make sure to create `session` table and apply changes to the database before using this pakacge.
+
+## Example with SQLite
 
 ```ts
 import {sqliteTable, text, integer, blob} from 'drizzle-orm/sqlite-core';
 
-export const sessions = sqliteTable('sessions', {
+export const session = sqliteTable('session', {
   id: text('id').primaryKey(),
   shop: text('shop').notNull(),
   state: text('state').notNull(),
@@ -19,16 +23,16 @@ export const sessions = sqliteTable('sessions', {
 });
 ```
 
-You can then instantiate and use `DrizzleSessionStorage` like so:
+You can then instantiate and use `DrizzleSQLiteAdapter` like so:
 
 ```js
 import {shopifyApp} from '@shopify/shopify-app-express';
-import {DrizzleSessionStorage} from '@shopify/shopify-app-session-storage-drizzle';
+import {DrizzleSQLiteAdapter} from '@shopify/shopify-app-session-storage-drizzle';
 
 import {db} from './db.server';
-import {sessions} from './schema';
+import {session} from './schema';
 
-const storage = new DrizzleSessionStorage(db, sessions);
+const storage = new DrizzleSQLiteAdapter(db, session);
 
 const shopify = shopifyApp({
   sessionStorage: storage,
