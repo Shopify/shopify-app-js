@@ -1,6 +1,6 @@
 import {bigint, boolean, pgTable, text, timestamp} from 'drizzle-orm/pg-core';
 
-export const session = pgTable('session', {
+export const sessionTable = pgTable('session' as string, {
   id: text('id').primaryKey(),
   shop: text('shop').notNull(),
   state: text('state').notNull(),
@@ -11,4 +11,4 @@ export const session = pgTable('session', {
   userId: bigint('userId', {mode: 'bigint'}),
 });
 
-export type PgSessionTable = typeof session;
+export type PgSessionTable = typeof sessionTable;

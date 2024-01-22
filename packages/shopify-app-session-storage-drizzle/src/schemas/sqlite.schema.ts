@@ -1,6 +1,6 @@
 import {text, sqliteTable, integer, blob} from 'drizzle-orm/sqlite-core';
 
-export const session = sqliteTable('session', {
+export const sessionTable = sqliteTable('session' as string, {
   id: text('id').primaryKey(),
   shop: text('shop').notNull(),
   state: text('state').notNull(),
@@ -11,4 +11,4 @@ export const session = sqliteTable('session', {
   userId: blob('userId', {mode: 'bigint'}),
 });
 
-export type SQLiteSessionTable = typeof session;
+export type SQLiteSessionTable = typeof sessionTable;
