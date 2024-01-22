@@ -1,5 +1,5 @@
 ---
-'@shopify/shopify-app-session-storage-prisma': patch
+'@shopify/shopify-app-session-storage-prisma': major
 ---
 
 Updated the dependency on `prisma`
