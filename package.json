@@ -11,7 +11,7 @@
     "clean": "rimraf ./packages/*/build .loom"
   },
   "devDependencies": {
-    "@changesets/cli": "^2.26.1",
+    "@changesets/cli": "^2.27.1",
     "@jest/types": "^29.6.3",
     "@shopify/eslint-plugin": "^42.1.0",
     "@shopify/loom": "^1.0.2",
