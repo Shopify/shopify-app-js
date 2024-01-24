@@ -10,6 +10,7 @@ describe('KVSessionStorage', () => {
       scriptPath:
         'packages/shopify-app-session-storage-kv/src/__tests__/kv-namespace-dummy-worker.ts',
       kvNamespaces: ['KV_TEST_NAMESPACE'],
+      modules: true,
     });
 
     storage = new KVSessionStorage(
