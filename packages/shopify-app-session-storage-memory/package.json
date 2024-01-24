@@ -29,22 +29,13 @@
     "Storefront API",
     "session storage"
   ],
-  "dependencies": {
-    "tslib": "^2.6.2"
-  },
+  "dependencies": {},
   "peerDependencies": {
     "@shopify/shopify-api": "^9.0.2",
     "@shopify/shopify-app-session-storage": "^2.0.3"
   },
   "devDependencies": {
-    "@shopify/eslint-plugin": "^42.1.0",
-    "@shopify/prettier-config": "^1.1.2",
-    "@shopify/shopify-app-session-storage-test-utils": "^1.0.3",
-    "@types/jest": "^29.5.1",
-    "eslint": "^8.55.0",
-    "eslint-plugin-prettier": "^4.2.1",
-    "prettier": "^2.8.8",
-    "typescript": "4.9.5"
+    "@shopify/shopify-app-session-storage-test-utils": "^1.0.3"
   },
   "files": [
     "build/*",
