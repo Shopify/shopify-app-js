@@ -12,6 +12,7 @@ import {
 import type {BasicParams} from '../../../types';
 import {
   beginAuth,
+  handleClientErrorFactory,
   redirectToAuthPage,
   redirectToShopifyOrAppRoot,
   redirectWithExitIframe,
@@ -20,8 +21,9 @@ import {
 } from '../helpers';
 import {AppConfig} from '../../../config-types';
 import {getSessionTokenHeader} from '../../helpers';
+import {HandleAdminClientError} from '../../../clients';
 
-import {AuthorizationStrategy} from './types';
+import {AuthorizationStrategy, SessionContext, OnErrorOptions} from './types';
 
 export class AuthCodeFlowStrategy<
   Resources extends ShopifyRestResources = ShopifyRestResources,
@@ -65,10 +67,11 @@ export class AuthCodeFlowStrategy<
 
   public async authenticate(
     request: Request,
-    session: Session | undefined,
-    shop: string,
+    sessionContext: SessionContext,
   ): Promise<Session | never> {
     const {api, config, logger} = this;
+
+    const {shop, session} = sessionContext;
 
     if (!session) {
       logger.debug('No session found, redirecting to OAuth', {shop});
@@ -84,6 +87,22 @@ export class AuthCodeFlowStrategy<
     logger.debug('Found a valid session', {shop});
 
     return session!;
+  }
+
+  public handleClientError(request: Request): HandleAdminClientError {
+    const {api, config, logger} = this;
+    return handleClientErrorFactory({
+      request,
+      onError: async ({session, error}: OnErrorOptions) => {
+        if (error.response.code === 401) {
+          throw await redirectToAuthPage(
+            {api, config, logger},
+            request,
+            session.shop,
+          );
+        }
+      },
+    });
   }
 
   private async ensureInstalledOnShop(request: Request) {
@@ -179,6 +198,7 @@ export class AuthCodeFlowStrategy<
         {api, config, logger},
         session,
         request,
+        this,
       );
 
       throw await redirectToShopifyOrAppRoot(
@@ -286,7 +306,7 @@ export class AuthCodeFlowStrategy<
     } else if (error instanceof GraphqlQueryError) {
       const context: {[key: string]: string} = {shop};
       if (error.response) {
-        context.response = JSON.stringify(error.response);
+        context.response = JSON.stringify(error.body);
       }
 
       logger.error(
