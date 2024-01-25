@@ -163,6 +163,12 @@
             "value": "",
             "description": "Returns the same `admin` context (`AdminApiContext`) from `authenticate.webhook` that is returned from `authenticate.admin`.\n\nSee [authenticate.webhook](/docs/api/shopify-app-remix/authenticate/webhook#example-admin) for more details.",
             "isOptional": true
+          },
+          {
+            "name": "unstable_newEmbeddedAuthStrategy",
+            "value": "",
+            "description": "Embedded apps will fetch access tokens via token exchange. This assumes app are using declarative scopes with Shopify managing installs.\n\nSee [Token Exchange](ZL:TODO link to shopify.dev) for more details.",
+            "isOptional": true
           }
         ]
       }
