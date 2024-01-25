@@ -713,6 +713,14 @@
               }
             ]
           },
+          "SearchParams": {
+            "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/admin-api-client/dist/ts/rest/types.d.ts",
+            "syntaxKind": "TypeAliasDeclaration",
+            "name": "SearchParams",
+            "value": "Record<string, SearchParamFields>",
+            "description": "",
+            "members": []
+          },
           "HeaderParams": {
             "filePath": "../../node_modules/@shopify/shopify-api/lib/clients/types.d.ts",
             "syntaxKind": "TypeAliasDeclaration",
@@ -728,115 +736,48 @@
             "value": "GetRequestParams & {\n    data: Record<string, any> | string;\n}",
             "description": ""
           },
-          "GraphQLClient": {
-            "filePath": "src/server/clients/types.ts",
-            "name": "GraphQLClient",
-            "description": "",
-            "params": [
-              {
-                "name": "query",
-                "description": "",
-                "value": "Operation extends keyof Operations",
-                "filePath": "src/server/clients/types.ts"
-              },
-              {
-                "name": "options",
-                "description": "",
-                "value": "GraphQLQueryOptions<Operation, Operations>",
-                "isOptional": true,
-                "filePath": "src/server/clients/types.ts"
-              }
-            ],
-            "returns": {
-              "filePath": "src/server/clients/types.ts",
-              "description": "",
-              "name": "interface Promise<T> {\n    /**\n     * Attaches callbacks for the resolution and/or rejection of the Promise.\n     * @param onfulfilled The callback to execute when the Promise is resolved.\n     * @param onrejected The callback to execute when the Promise is rejected.\n     * @returns A Promise for the completion of which ever callback is executed.\n     */\n    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): Promise<TResult1 | TResult2>;\n\n    /**\n     * Attaches a callback for only the rejection of the Promise.\n     * @param onrejected The callback to execute when the Promise is rejected.\n     * @returns A Promise for the completion of the callback.\n     */\n    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): Promise<T | TResult>;\n}, interface Promise<T> {}, Promise: PromiseConstructor, interface Promise<T> {\n    readonly [Symbol.toStringTag]: string;\n}, interface Promise<T> {\n    /**\n     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The\n     * resolved value cannot be modified from the callback.\n     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).\n     * @returns A Promise for the completion of the callback.\n     */\n    finally(onfinally?: (() => void) | undefined | null): Promise<T>;\n}",
-              "value": "interface Promise<T> {\n    /**\n     * Attaches callbacks for the resolution and/or rejection of the Promise.\n     * @param onfulfilled The callback to execute when the Promise is resolved.\n     * @param onrejected The callback to execute when the Promise is rejected.\n     * @returns A Promise for the completion of which ever callback is executed.\n     */\n    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): Promise<TResult1 | TResult2>;\n\n    /**\n     * Attaches a callback for only the rejection of the Promise.\n     * @param onrejected The callback to execute when the Promise is rejected.\n     * @returns A Promise for the completion of the callback.\n     */\n    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): Promise<T | TResult>;\n}, interface Promise<T> {}, Promise: PromiseConstructor, interface Promise<T> {\n    readonly [Symbol.toStringTag]: string;\n}, interface Promise<T> {\n    /**\n     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The\n     * resolved value cannot be modified from the callback.\n     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).\n     * @returns A Promise for the completion of the callback.\n     */\n    finally(onfinally?: (() => void) | undefined | null): Promise<T>;\n}"
-            },
-            "value": "export type GraphQLClient<Operations extends AllOperations> = <\n  Operation extends keyof Operations,\n>(\n  query: Operation,\n  options?: GraphQLQueryOptions<Operation, Operations>,\n) => Promise<\n  ResponseWithType<FetchResponseBody<ReturnData<Operation, Operations>>>\n>;"
+          "AdminOperations": {
+            "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/admin-api-client/dist/ts/graphql/types.d.ts",
+            "syntaxKind": "TypeAliasDeclaration",
+            "name": "AdminOperations",
+            "value": "AdminQueries & AdminMutations",
+            "description": ""
           },
-          "GraphQLQueryOptions": {
-            "filePath": "src/server/clients/types.ts",
-            "name": "GraphQLQueryOptions",
+          "AdminQueries": {
+            "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/admin-api-client/dist/ts/graphql/types.d.ts",
+            "name": "AdminQueries",
             "description": "",
             "members": [
               {
-                "filePath": "src/server/clients/types.ts",
-                "syntaxKind": "PropertySignature",
-                "name": "variables",
-                "value": "ApiClientRequestOptions<Operation, Operations>[\"variables\"]",
-                "description": "",
-                "isOptional": true
+                "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/admin-api-client/dist/ts/graphql/types.d.ts",
+                "name": "[key: string]",
+                "value": "{\n        variables: any;\n        return: any;\n    }"
               },
               {
-                "filePath": "src/server/clients/types.ts",
-                "syntaxKind": "PropertySignature",
-                "name": "apiVersion",
-                "value": "ApiVersion",
-                "description": "",
-                "isOptional": true
-              },
-              {
-                "filePath": "src/server/clients/types.ts",
-                "syntaxKind": "PropertySignature",
-                "name": "headers",
-                "value": "{ [key: string]: any; }",
-                "description": "",
-                "isOptional": true
-              },
-              {
-                "filePath": "src/server/clients/types.ts",
-                "syntaxKind": "PropertySignature",
-                "name": "tries",
-                "value": "number",
-                "description": "",
-                "isOptional": true
+                "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/admin-api-client/dist/ts/graphql/types.d.ts",
+                "name": "[key: number | symbol]",
+                "value": "never"
               }
             ],
-            "value": "export interface GraphQLQueryOptions<\n  Operation extends keyof Operations,\n  Operations extends AllOperations,\n> {\n  variables?: ApiClientRequestOptions<Operation, Operations>['variables'];\n  apiVersion?: ApiVersion;\n  headers?: {[key: string]: any};\n  tries?: number;\n}"
+            "value": "export interface AdminQueries {\n    [key: string]: {\n        variables: any;\n        return: any;\n    };\n    [key: number | symbol]: never;\n}"
           },
-          "ApiVersion": {
-            "filePath": "../../node_modules/@shopify/shopify-api/lib/types.d.ts",
-            "syntaxKind": "EnumDeclaration",
-            "name": "ApiVersion",
-            "value": "export declare enum ApiVersion {\n    October22 = \"2022-10\",\n    January23 = \"2023-01\",\n    April23 = \"2023-04\",\n    July23 = \"2023-07\",\n    October23 = \"2023-10\",\n    January24 = \"2024-01\",\n    Unstable = \"unstable\"\n}",
+          "AdminMutations": {
+            "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/admin-api-client/dist/ts/graphql/types.d.ts",
+            "name": "AdminMutations",
+            "description": "",
             "members": [
               {
-                "filePath": "../../node_modules/@shopify/shopify-api/lib/types.d.ts",
-                "name": "October22",
-                "value": "2022-10"
+                "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/admin-api-client/dist/ts/graphql/types.d.ts",
+                "name": "[key: string]",
+                "value": "{\n        variables: any;\n        return: any;\n    }"
               },
               {
-                "filePath": "../../node_modules/@shopify/shopify-api/lib/types.d.ts",
-                "name": "January23",
-                "value": "2023-01"
-              },
-              {
-                "filePath": "../../node_modules/@shopify/shopify-api/lib/types.d.ts",
-                "name": "April23",
-                "value": "2023-04"
-              },
-              {
-                "filePath": "../../node_modules/@shopify/shopify-api/lib/types.d.ts",
-                "name": "July23",
-                "value": "2023-07"
-              },
-              {
-                "filePath": "../../node_modules/@shopify/shopify-api/lib/types.d.ts",
-                "name": "October23",
-                "value": "2023-10"
-              },
-              {
-                "filePath": "../../node_modules/@shopify/shopify-api/lib/types.d.ts",
-                "name": "January24",
-                "value": "2024-01"
-              },
-              {
-                "filePath": "../../node_modules/@shopify/shopify-api/lib/types.d.ts",
-                "name": "Unstable",
-                "value": "unstable"
+                "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/admin-api-client/dist/ts/graphql/types.d.ts",
+                "name": "[key: number | symbol]",
+                "value": "never"
               }
-            ]
+            ],
+            "value": "export interface AdminMutations {\n    [key: string]: {\n        variables: any;\n        return: any;\n    };\n    [key: number | symbol]: never;\n}"
           },
           "BillingContext": {
             "filePath": "src/server/authenticate/admin/billing/types.ts",
@@ -2715,6 +2656,14 @@
               }
             ]
           },
+          "SearchParams": {
+            "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/admin-api-client/dist/ts/rest/types.d.ts",
+            "syntaxKind": "TypeAliasDeclaration",
+            "name": "SearchParams",
+            "value": "Record<string, SearchParamFields>",
+            "description": "",
+            "members": []
+          },
           "HeaderParams": {
             "filePath": "../../node_modules/@shopify/shopify-api/lib/clients/types.d.ts",
             "syntaxKind": "TypeAliasDeclaration",
@@ -2730,115 +2679,48 @@
             "value": "GetRequestParams & {\n    data: Record<string, any> | string;\n}",
             "description": ""
           },
-          "GraphQLClient": {
-            "filePath": "src/server/clients/types.ts",
-            "name": "GraphQLClient",
-            "description": "",
-            "params": [
-              {
-                "name": "query",
-                "description": "",
-                "value": "Operation extends keyof Operations",
-                "filePath": "src/server/clients/types.ts"
-              },
-              {
-                "name": "options",
-                "description": "",
-                "value": "GraphQLQueryOptions<Operation, Operations>",
-                "isOptional": true,
-                "filePath": "src/server/clients/types.ts"
-              }
-            ],
-            "returns": {
-              "filePath": "src/server/clients/types.ts",
-              "description": "",
-              "name": "interface Promise<T> {\n    /**\n     * Attaches callbacks for the resolution and/or rejection of the Promise.\n     * @param onfulfilled The callback to execute when the Promise is resolved.\n     * @param onrejected The callback to execute when the Promise is rejected.\n     * @returns A Promise for the completion of which ever callback is executed.\n     */\n    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): Promise<TResult1 | TResult2>;\n\n    /**\n     * Attaches a callback for only the rejection of the Promise.\n     * @param onrejected The callback to execute when the Promise is rejected.\n     * @returns A Promise for the completion of the callback.\n     */\n    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): Promise<T | TResult>;\n}, interface Promise<T> {}, Promise: PromiseConstructor, interface Promise<T> {\n    readonly [Symbol.toStringTag]: string;\n}, interface Promise<T> {\n    /**\n     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The\n     * resolved value cannot be modified from the callback.\n     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).\n     * @returns A Promise for the completion of the callback.\n     */\n    finally(onfinally?: (() => void) | undefined | null): Promise<T>;\n}",
-              "value": "interface Promise<T> {\n    /**\n     * Attaches callbacks for the resolution and/or rejection of the Promise.\n     * @param onfulfilled The callback to execute when the Promise is resolved.\n     * @param onrejected The callback to execute when the Promise is rejected.\n     * @returns A Promise for the completion of which ever callback is executed.\n     */\n    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): Promise<TResult1 | TResult2>;\n\n    /**\n     * Attaches a callback for only the rejection of the Promise.\n     * @param onrejected The callback to execute when the Promise is rejected.\n     * @returns A Promise for the completion of the callback.\n     */\n    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): Promise<T | TResult>;\n}, interface Promise<T> {}, Promise: PromiseConstructor, interface Promise<T> {\n    readonly [Symbol.toStringTag]: string;\n}, interface Promise<T> {\n    /**\n     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The\n     * resolved value cannot be modified from the callback.\n     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).\n     * @returns A Promise for the completion of the callback.\n     */\n    finally(onfinally?: (() => void) | undefined | null): Promise<T>;\n}"
-            },
-            "value": "export type GraphQLClient<Operations extends AllOperations> = <\n  Operation extends keyof Operations,\n>(\n  query: Operation,\n  options?: GraphQLQueryOptions<Operation, Operations>,\n) => Promise<\n  ResponseWithType<FetchResponseBody<ReturnData<Operation, Operations>>>\n>;"
+          "AdminOperations": {
+            "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/admin-api-client/dist/ts/graphql/types.d.ts",
+            "syntaxKind": "TypeAliasDeclaration",
+            "name": "AdminOperations",
+            "value": "AdminQueries & AdminMutations",
+            "description": ""
           },
-          "GraphQLQueryOptions": {
-            "filePath": "src/server/clients/types.ts",
-            "name": "GraphQLQueryOptions",
+          "AdminQueries": {
+            "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/admin-api-client/dist/ts/graphql/types.d.ts",
+            "name": "AdminQueries",
             "description": "",
             "members": [
               {
-                "filePath": "src/server/clients/types.ts",
-                "syntaxKind": "PropertySignature",
-                "name": "variables",
-                "value": "ApiClientRequestOptions<Operation, Operations>[\"variables\"]",
-                "description": "",
-                "isOptional": true
+                "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/admin-api-client/dist/ts/graphql/types.d.ts",
+                "name": "[key: string]",
+                "value": "{\n        variables: any;\n        return: any;\n    }"
               },
               {
-                "filePath": "src/server/clients/types.ts",
-                "syntaxKind": "PropertySignature",
-                "name": "apiVersion",
-                "value": "ApiVersion",
-                "description": "",
-                "isOptional": true
-              },
-              {
-                "filePath": "src/server/clients/types.ts",
-                "syntaxKind": "PropertySignature",
-                "name": "headers",
-                "value": "{ [key: string]: any; }",
-                "description": "",
-                "isOptional": true
-              },
-              {
-                "filePath": "src/server/clients/types.ts",
-                "syntaxKind": "PropertySignature",
-                "name": "tries",
-                "value": "number",
-                "description": "",
-                "isOptional": true
+                "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/admin-api-client/dist/ts/graphql/types.d.ts",
+                "name": "[key: number | symbol]",
+                "value": "never"
               }
             ],
-            "value": "export interface GraphQLQueryOptions<\n  Operation extends keyof Operations,\n  Operations extends AllOperations,\n> {\n  variables?: ApiClientRequestOptions<Operation, Operations>['variables'];\n  apiVersion?: ApiVersion;\n  headers?: {[key: string]: any};\n  tries?: number;\n}"
+            "value": "export interface AdminQueries {\n    [key: string]: {\n        variables: any;\n        return: any;\n    };\n    [key: number | symbol]: never;\n}"
           },
-          "ApiVersion": {
-            "filePath": "../../node_modules/@shopify/shopify-api/lib/types.d.ts",
-            "syntaxKind": "EnumDeclaration",
-            "name": "ApiVersion",
-            "value": "export declare enum ApiVersion {\n    October22 = \"2022-10\",\n    January23 = \"2023-01\",\n    April23 = \"2023-04\",\n    July23 = \"2023-07\",\n    October23 = \"2023-10\",\n    January24 = \"2024-01\",\n    Unstable = \"unstable\"\n}",
+          "AdminMutations": {
+            "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/admin-api-client/dist/ts/graphql/types.d.ts",
+            "name": "AdminMutations",
+            "description": "",
             "members": [
               {
-                "filePath": "../../node_modules/@shopify/shopify-api/lib/types.d.ts",
-                "name": "October22",
-                "value": "2022-10"
+                "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/admin-api-client/dist/ts/graphql/types.d.ts",
+                "name": "[key: string]",
+                "value": "{\n        variables: any;\n        return: any;\n    }"
               },
               {
-                "filePath": "../../node_modules/@shopify/shopify-api/lib/types.d.ts",
-                "name": "January23",
-                "value": "2023-01"
-              },
-              {
-                "filePath": "../../node_modules/@shopify/shopify-api/lib/types.d.ts",
-                "name": "April23",
-                "value": "2023-04"
-              },
-              {
-                "filePath": "../../node_modules/@shopify/shopify-api/lib/types.d.ts",
-                "name": "July23",
-                "value": "2023-07"
-              },
-              {
-                "filePath": "../../node_modules/@shopify/shopify-api/lib/types.d.ts",
-                "name": "October23",
-                "value": "2023-10"
-              },
-              {
-                "filePath": "../../node_modules/@shopify/shopify-api/lib/types.d.ts",
-                "name": "January24",
-                "value": "2024-01"
-              },
-              {
-                "filePath": "../../node_modules/@shopify/shopify-api/lib/types.d.ts",
-                "name": "Unstable",
-                "value": "unstable"
+                "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/admin-api-client/dist/ts/graphql/types.d.ts",
+                "name": "[key: number | symbol]",
+                "value": "never"
               }
-            ]
+            ],
+            "value": "export interface AdminMutations {\n    [key: string]: {\n        variables: any;\n        return: any;\n    };\n    [key: number | symbol]: never;\n}"
           },
           "StorefrontContext": {
             "filePath": "src/server/clients/storefront/types.ts",
@@ -2866,6 +2748,49 @@
               }
             ],
             "value": "export interface StorefrontContext {\n  /**\n   * Method for interacting with the Shopify Storefront GraphQL API\n   *\n   * If you're getting incorrect type hints in the Shopify template, follow [these instructions](https://github.com/Shopify/shopify-app-template-remix/tree/main#incorrect-graphql-hints).\n   *\n   * {@link https://shopify.dev/docs/api/storefront}\n   *\n   * @example\n   * <caption>Querying the GraphQL API.</caption>\n   * <description>Use `storefront.graphql` to make query / mutation requests.</description>\n   * ```ts\n   * // app/routes/**\\/.ts\n   * import { json } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   *\n   * export async function action({ request }: ActionFunctionArgs) {\n   *   const { storefront } = await authenticate.public.appProxy(request);\n   *\n   *   const response = await storefront.graphql(`{blogs(first: 10) { edges { node { id } } } }`);\n   *\n   *   return json(await response.json());\n   * }\n   * ```\n   */\n  graphql: GraphQLClient<StorefrontOperations>;\n}"
+          },
+          "StorefrontOperations": {
+            "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/storefront-api-client/dist/storefront-api-client.d.ts",
+            "syntaxKind": "TypeAliasDeclaration",
+            "name": "StorefrontOperations",
+            "value": "StorefrontQueries & StorefrontMutations",
+            "description": ""
+          },
+          "StorefrontQueries": {
+            "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/storefront-api-client/dist/storefront-api-client.d.ts",
+            "name": "StorefrontQueries",
+            "description": "",
+            "members": [
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/storefront-api-client/dist/storefront-api-client.d.ts",
+                "name": "[key: string]",
+                "value": "{\n        variables: any;\n        return: any;\n    }"
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/storefront-api-client/dist/storefront-api-client.d.ts",
+                "name": "[key: number | symbol]",
+                "value": "never"
+              }
+            ],
+            "value": "interface StorefrontQueries {\n    [key: string]: {\n        variables: any;\n        return: any;\n    };\n    [key: number | symbol]: never;\n}"
+          },
+          "StorefrontMutations": {
+            "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/storefront-api-client/dist/storefront-api-client.d.ts",
+            "name": "StorefrontMutations",
+            "description": "",
+            "members": [
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/storefront-api-client/dist/storefront-api-client.d.ts",
+                "name": "[key: string]",
+                "value": "{\n        variables: any;\n        return: any;\n    }"
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/storefront-api-client/dist/storefront-api-client.d.ts",
+                "name": "[key: number | symbol]",
+                "value": "never"
+              }
+            ],
+            "value": "interface StorefrontMutations {\n    [key: string]: {\n        variables: any;\n        return: any;\n    };\n    [key: number | symbol]: never;\n}"
           }
         }
       }
@@ -3600,14 +3525,14 @@
               {
                 "filePath": "src/server/types.ts",
                 "syntaxKind": "MethodSignature",
-                "name": "__@iterator@1657",
+                "name": "__@iterator@482",
                 "value": "() => IterableIterator<JSONValue>",
                 "description": "Iterator"
               },
               {
                 "filePath": "src/server/types.ts",
                 "syntaxKind": "PropertySignature",
-                "name": "__@unscopables@1659",
+                "name": "__@unscopables@484",
                 "value": "{ [x: number]: boolean; length?: boolean; toString?: boolean; toLocaleString?: boolean; pop?: boolean; push?: boolean; concat?: boolean; join?: boolean; reverse?: boolean; shift?: boolean; slice?: boolean; sort?: boolean; splice?: boolean; unshift?: boolean; indexOf?: boolean; lastIndexOf?: boolean; every?: boolean; some?: boolean; forEach?: boolean; map?: boolean; filter?: boolean; reduce?: boolean; reduceRight?: boolean; find?: boolean; findIndex?: boolean; fill?: boolean; copyWithin?: boolean; entries?: boolean; keys?: boolean; values?: boolean; includes?: boolean; flatMap?: boolean; flat?: boolean; [Symbol.iterator]?: boolean; readonly [Symbol.unscopables]?: boolean; at?: boolean; }",
                 "description": "Is an object whose properties have the value 'true' when they will be absent when used in a 'with' statement."
               },
@@ -4297,6 +4222,14 @@
               }
             ]
           },
+          "SearchParams": {
+            "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/admin-api-client/dist/ts/rest/types.d.ts",
+            "syntaxKind": "TypeAliasDeclaration",
+            "name": "SearchParams",
+            "value": "Record<string, SearchParamFields>",
+            "description": "",
+            "members": []
+          },
           "HeaderParams": {
             "filePath": "../../node_modules/@shopify/shopify-api/lib/clients/types.d.ts",
             "syntaxKind": "TypeAliasDeclaration",
@@ -4312,115 +4245,48 @@
             "value": "GetRequestParams & {\n    data: Record<string, any> | string;\n}",
             "description": ""
           },
-          "GraphQLClient": {
-            "filePath": "src/server/clients/types.ts",
-            "name": "GraphQLClient",
-            "description": "",
-            "params": [
-              {
-                "name": "query",
-                "description": "",
-                "value": "Operation extends keyof Operations",
-                "filePath": "src/server/clients/types.ts"
-              },
-              {
-                "name": "options",
-                "description": "",
-                "value": "GraphQLQueryOptions<Operation, Operations>",
-                "isOptional": true,
-                "filePath": "src/server/clients/types.ts"
-              }
-            ],
-            "returns": {
-              "filePath": "src/server/clients/types.ts",
-              "description": "",
-              "name": "interface Promise<T> {\n    /**\n     * Attaches callbacks for the resolution and/or rejection of the Promise.\n     * @param onfulfilled The callback to execute when the Promise is resolved.\n     * @param onrejected The callback to execute when the Promise is rejected.\n     * @returns A Promise for the completion of which ever callback is executed.\n     */\n    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): Promise<TResult1 | TResult2>;\n\n    /**\n     * Attaches a callback for only the rejection of the Promise.\n     * @param onrejected The callback to execute when the Promise is rejected.\n     * @returns A Promise for the completion of the callback.\n     */\n    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): Promise<T | TResult>;\n}, interface Promise<T> {}, Promise: PromiseConstructor, interface Promise<T> {\n    readonly [Symbol.toStringTag]: string;\n}, interface Promise<T> {\n    /**\n     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The\n     * resolved value cannot be modified from the callback.\n     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).\n     * @returns A Promise for the completion of the callback.\n     */\n    finally(onfinally?: (() => void) | undefined | null): Promise<T>;\n}",
-              "value": "interface Promise<T> {\n    /**\n     * Attaches callbacks for the resolution and/or rejection of the Promise.\n     * @param onfulfilled The callback to execute when the Promise is resolved.\n     * @param onrejected The callback to execute when the Promise is rejected.\n     * @returns A Promise for the completion of which ever callback is executed.\n     */\n    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): Promise<TResult1 | TResult2>;\n\n    /**\n     * Attaches a callback for only the rejection of the Promise.\n     * @param onrejected The callback to execute when the Promise is rejected.\n     * @returns A Promise for the completion of the callback.\n     */\n    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): Promise<T | TResult>;\n}, interface Promise<T> {}, Promise: PromiseConstructor, interface Promise<T> {\n    readonly [Symbol.toStringTag]: string;\n}, interface Promise<T> {\n    /**\n     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The\n     * resolved value cannot be modified from the callback.\n     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).\n     * @returns A Promise for the completion of the callback.\n     */\n    finally(onfinally?: (() => void) | undefined | null): Promise<T>;\n}"
-            },
-            "value": "export type GraphQLClient<Operations extends AllOperations> = <\n  Operation extends keyof Operations,\n>(\n  query: Operation,\n  options?: GraphQLQueryOptions<Operation, Operations>,\n) => Promise<\n  ResponseWithType<FetchResponseBody<ReturnData<Operation, Operations>>>\n>;"
+          "AdminOperations": {
+            "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/admin-api-client/dist/ts/graphql/types.d.ts",
+            "syntaxKind": "TypeAliasDeclaration",
+            "name": "AdminOperations",
+            "value": "AdminQueries & AdminMutations",
+            "description": ""
           },
-          "GraphQLQueryOptions": {
-            "filePath": "src/server/clients/types.ts",
-            "name": "GraphQLQueryOptions",
+          "AdminQueries": {
+            "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/admin-api-client/dist/ts/graphql/types.d.ts",
+            "name": "AdminQueries",
             "description": "",
             "members": [
               {
-                "filePath": "src/server/clients/types.ts",
-                "syntaxKind": "PropertySignature",
-                "name": "variables",
-                "value": "ApiClientRequestOptions<Operation, Operations>[\"variables\"]",
-                "description": "",
-                "isOptional": true
+                "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/admin-api-client/dist/ts/graphql/types.d.ts",
+                "name": "[key: string]",
+                "value": "{\n        variables: any;\n        return: any;\n    }"
               },
               {
-                "filePath": "src/server/clients/types.ts",
-                "syntaxKind": "PropertySignature",
-                "name": "apiVersion",
-                "value": "ApiVersion",
-                "description": "",
-                "isOptional": true
-              },
-              {
-                "filePath": "src/server/clients/types.ts",
-                "syntaxKind": "PropertySignature",
-                "name": "headers",
-                "value": "{ [key: string]: any; }",
-                "description": "",
-                "isOptional": true
-              },
-              {
-                "filePath": "src/server/clients/types.ts",
-                "syntaxKind": "PropertySignature",
-                "name": "tries",
-                "value": "number",
-                "description": "",
-                "isOptional": true
+                "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/admin-api-client/dist/ts/graphql/types.d.ts",
+                "name": "[key: number | symbol]",
+                "value": "never"
               }
             ],
-            "value": "export interface GraphQLQueryOptions<\n  Operation extends keyof Operations,\n  Operations extends AllOperations,\n> {\n  variables?: ApiClientRequestOptions<Operation, Operations>['variables'];\n  apiVersion?: ApiVersion;\n  headers?: {[key: string]: any};\n  tries?: number;\n}"
+            "value": "export interface AdminQueries {\n    [key: string]: {\n        variables: any;\n        return: any;\n    };\n    [key: number | symbol]: never;\n}"
           },
-          "ApiVersion": {
-            "filePath": "../../node_modules/@shopify/shopify-api/lib/types.d.ts",
-            "syntaxKind": "EnumDeclaration",
-            "name": "ApiVersion",
-            "value": "export declare enum ApiVersion {\n    October22 = \"2022-10\",\n    January23 = \"2023-01\",\n    April23 = \"2023-04\",\n    July23 = \"2023-07\",\n    October23 = \"2023-10\",\n    January24 = \"2024-01\",\n    Unstable = \"unstable\"\n}",
+          "AdminMutations": {
+            "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/admin-api-client/dist/ts/graphql/types.d.ts",
+            "name": "AdminMutations",
+            "description": "",
             "members": [
               {
-                "filePath": "../../node_modules/@shopify/shopify-api/lib/types.d.ts",
-                "name": "October22",
-                "value": "2022-10"
+                "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/admin-api-client/dist/ts/graphql/types.d.ts",
+                "name": "[key: string]",
+                "value": "{\n        variables: any;\n        return: any;\n    }"
               },
               {
-                "filePath": "../../node_modules/@shopify/shopify-api/lib/types.d.ts",
-                "name": "January23",
-                "value": "2023-01"
-              },
-              {
-                "filePath": "../../node_modules/@shopify/shopify-api/lib/types.d.ts",
-                "name": "April23",
-                "value": "2023-04"
-              },
-              {
-                "filePath": "../../node_modules/@shopify/shopify-api/lib/types.d.ts",
-                "name": "July23",
-                "value": "2023-07"
-              },
-              {
-                "filePath": "../../node_modules/@shopify/shopify-api/lib/types.d.ts",
-                "name": "October23",
-                "value": "2023-10"
-              },
-              {
-                "filePath": "../../node_modules/@shopify/shopify-api/lib/types.d.ts",
-                "name": "January24",
-                "value": "2024-01"
-              },
-              {
-                "filePath": "../../node_modules/@shopify/shopify-api/lib/types.d.ts",
-                "name": "Unstable",
-                "value": "unstable"
+                "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/admin-api-client/dist/ts/graphql/types.d.ts",
+                "name": "[key: number | symbol]",
+                "value": "never"
               }
-            ]
+            ],
+            "value": "export interface AdminMutations {\n    [key: string]: {\n        variables: any;\n        return: any;\n    };\n    [key: number | symbol]: never;\n}"
           },
           "BillingContext": {
             "filePath": "src/server/authenticate/admin/billing/types.ts",
@@ -5034,6 +4900,283 @@
             ],
             "value": "export declare class RestClient {\n    static config: ConfigInterface;\n    static formatPaths: boolean;\n    static LINK_HEADER_REGEXP: RegExp;\n    static DEFAULT_LIMIT: string;\n    static RETRY_WAIT_TIME: number;\n    static readonly DEPRECATION_ALERT_DELAY = 300000;\n    loggedDeprecations: Record<string, number>;\n    readonly client: AdminRestApiClient;\n    readonly session: Session;\n    readonly apiVersion: ApiVersion;\n    constructor({ session, apiVersion }: RestClientParams);\n    /**\n     * Performs a GET request on the given path.\n     */\n    get<T = any>(params: GetRequestParams): Promise<RestRequestReturn<T>>;\n    /**\n     * Performs a POST request on the given path.\n     */\n    post<T = any>(params: PostRequestParams): Promise<RestRequestReturn<T>>;\n    /**\n     * Performs a PUT request on the given path.\n     */\n    put<T = any>(params: PutRequestParams): Promise<RestRequestReturn<T>>;\n    /**\n     * Performs a DELETE request on the given path.\n     */\n    delete<T = any>(params: DeleteRequestParams): Promise<RestRequestReturn<T>>;\n    protected request<T = any>(params: RequestParams): Promise<RestRequestReturn<T>>;\n    private restClass;\n    private buildRequestParams;\n    private logDeprecations;\n}"
           },
+          "AdminRestApiClient": {
+            "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/admin-api-client/dist/ts/rest/types.d.ts",
+            "name": "AdminRestApiClient",
+            "description": "",
+            "members": [
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/admin-api-client/dist/ts/rest/types.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "get",
+                "value": "(path: string, options?: GetRequestOptions) => Promise<Response>",
+                "description": ""
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/admin-api-client/dist/ts/rest/types.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "put",
+                "value": "(path: string, options?: PutRequestOptions) => Promise<Response>",
+                "description": ""
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/admin-api-client/dist/ts/rest/types.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "post",
+                "value": "(path: string, options?: PostRequestOptions) => Promise<Response>",
+                "description": ""
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/admin-api-client/dist/ts/rest/types.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "delete",
+                "value": "(path: string, options?: DeleteRequestOptions) => Promise<Response>",
+                "description": ""
+              }
+            ],
+            "value": "export interface AdminRestApiClient {\n    get: (path: string, options?: GetRequestOptions) => ReturnType<CustomFetchApi>;\n    put: (path: string, options?: PutRequestOptions) => ReturnType<CustomFetchApi>;\n    post: (path: string, options?: PostRequestOptions) => ReturnType<CustomFetchApi>;\n    delete: (path: string, options?: DeleteRequestOptions) => ReturnType<CustomFetchApi>;\n}"
+          },
+          "GetRequestOptions": {
+            "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/admin-api-client/dist/ts/rest/types.d.ts",
+            "name": "GetRequestOptions",
+            "description": "",
+            "members": [
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/admin-api-client/dist/ts/rest/types.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "headers",
+                "value": "HeaderOptions",
+                "description": "",
+                "isOptional": true
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/admin-api-client/dist/ts/rest/types.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "data",
+                "value": "string | Record<string, any>",
+                "description": "",
+                "isOptional": true
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/admin-api-client/dist/ts/rest/types.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "searchParams",
+                "value": "SearchParams",
+                "description": "",
+                "isOptional": true
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/admin-api-client/dist/ts/rest/types.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "retries",
+                "value": "number",
+                "description": "",
+                "isOptional": true
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/admin-api-client/dist/ts/rest/types.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "apiVersion",
+                "value": "string",
+                "description": "",
+                "isOptional": true
+              }
+            ],
+            "value": "export interface GetRequestOptions {\n    headers?: HeaderOptions;\n    data?: Record<string, any> | string;\n    searchParams?: SearchParams;\n    retries?: number;\n    apiVersion?: string;\n}"
+          },
+          "HeaderOptions": {
+            "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/admin-api-client/dist/ts/rest/types.d.ts",
+            "syntaxKind": "TypeAliasDeclaration",
+            "name": "HeaderOptions",
+            "value": "Record<string, string | number | string[]>",
+            "description": "",
+            "members": []
+          },
+          "PutRequestOptions": {
+            "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/admin-api-client/dist/ts/rest/types.d.ts",
+            "name": "PutRequestOptions",
+            "description": "",
+            "members": [
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/admin-api-client/dist/ts/rest/types.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "data",
+                "value": "string | Record<string, any>",
+                "description": ""
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/admin-api-client/dist/ts/rest/types.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "headers",
+                "value": "HeaderOptions",
+                "description": "",
+                "isOptional": true
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/admin-api-client/dist/ts/rest/types.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "searchParams",
+                "value": "SearchParams",
+                "description": "",
+                "isOptional": true
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/admin-api-client/dist/ts/rest/types.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "retries",
+                "value": "number",
+                "description": "",
+                "isOptional": true
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/admin-api-client/dist/ts/rest/types.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "apiVersion",
+                "value": "string",
+                "description": "",
+                "isOptional": true
+              }
+            ],
+            "value": "export interface PutRequestOptions extends PostRequestOptions {\n}"
+          },
+          "PostRequestOptions": {
+            "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/admin-api-client/dist/ts/rest/types.d.ts",
+            "name": "PostRequestOptions",
+            "description": "",
+            "members": [
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/admin-api-client/dist/ts/rest/types.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "data",
+                "value": "string | Record<string, any>",
+                "description": ""
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/admin-api-client/dist/ts/rest/types.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "headers",
+                "value": "HeaderOptions",
+                "description": "",
+                "isOptional": true
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/admin-api-client/dist/ts/rest/types.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "searchParams",
+                "value": "SearchParams",
+                "description": "",
+                "isOptional": true
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/admin-api-client/dist/ts/rest/types.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "retries",
+                "value": "number",
+                "description": "",
+                "isOptional": true
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/admin-api-client/dist/ts/rest/types.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "apiVersion",
+                "value": "string",
+                "description": "",
+                "isOptional": true
+              }
+            ],
+            "value": "export interface PostRequestOptions extends GetRequestOptions {\n    data: Required<GetRequestOptions>[\"data\"];\n}"
+          },
+          "DeleteRequestOptions": {
+            "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/admin-api-client/dist/ts/rest/types.d.ts",
+            "name": "DeleteRequestOptions",
+            "description": "",
+            "members": [
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/admin-api-client/dist/ts/rest/types.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "headers",
+                "value": "HeaderOptions",
+                "description": "",
+                "isOptional": true
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/admin-api-client/dist/ts/rest/types.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "data",
+                "value": "string | Record<string, any>",
+                "description": "",
+                "isOptional": true
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/admin-api-client/dist/ts/rest/types.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "searchParams",
+                "value": "SearchParams",
+                "description": "",
+                "isOptional": true
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/admin-api-client/dist/ts/rest/types.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "retries",
+                "value": "number",
+                "description": "",
+                "isOptional": true
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/admin-api-client/dist/ts/rest/types.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "apiVersion",
+                "value": "string",
+                "description": "",
+                "isOptional": true
+              }
+            ],
+            "value": "export interface DeleteRequestOptions extends GetRequestOptions {\n}"
+          },
+          "ApiVersion": {
+            "filePath": "../../node_modules/@shopify/shopify-api/lib/types.d.ts",
+            "syntaxKind": "EnumDeclaration",
+            "name": "ApiVersion",
+            "value": "export declare enum ApiVersion {\n    October22 = \"2022-10\",\n    January23 = \"2023-01\",\n    April23 = \"2023-04\",\n    July23 = \"2023-07\",\n    October23 = \"2023-10\",\n    January24 = \"2024-01\",\n    Unstable = \"unstable\"\n}",
+            "members": [
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/types.d.ts",
+                "name": "October22",
+                "value": "2022-10"
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/types.d.ts",
+                "name": "January23",
+                "value": "2023-01"
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/types.d.ts",
+                "name": "April23",
+                "value": "2023-04"
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/types.d.ts",
+                "name": "July23",
+                "value": "2023-07"
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/types.d.ts",
+                "name": "October23",
+                "value": "2023-10"
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/types.d.ts",
+                "name": "January24",
+                "value": "2024-01"
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/types.d.ts",
+                "name": "Unstable",
+                "value": "unstable"
+              }
+            ]
+          },
           "RestRequestReturn": {
             "filePath": "../../node_modules/@shopify/shopify-api/lib/clients/admin/types.d.ts",
             "name": "RestRequestReturn",
@@ -5063,14 +5206,6 @@
               }
             ],
             "value": "export interface RestRequestReturn<T = any> {\n    body: T;\n    headers: Headers;\n    pageInfo?: PageInfo;\n}"
-          },
-          "Headers": {
-            "filePath": "../../node_modules/@shopify/shopify-api/runtime/http/types.d.ts",
-            "syntaxKind": "TypeAliasDeclaration",
-            "name": "Headers",
-            "value": "Record<string, string | string[]>",
-            "description": "",
-            "members": []
           },
           "PageInfo": {
             "filePath": "../../node_modules/@shopify/shopify-api/lib/clients/admin/types.d.ts",
@@ -5871,6 +6006,168 @@
             ],
             "value": "export declare class GraphqlClient {\n    static config: ConfigInterface;\n    readonly session: Session;\n    readonly client: AdminApiClient;\n    readonly apiVersion?: ApiVersion;\n    constructor(params: GraphqlClientParams);\n    query<T = undefined>(params: GraphqlParams): Promise<RequestReturn<T>>;\n    request<T = undefined, Operation extends keyof Operations = string, Operations extends AdminOperations = AdminOperations>(operation: Operation, options?: GraphqlQueryOptions<Operation, Operations>): Promise<ClientResponse<T extends undefined ? ReturnData<Operation, Operations> : T>>;\n    private graphqlClass;\n}"
           },
+          "AdminApiClient": {
+            "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/admin-api-client/dist/ts/graphql/types.d.ts",
+            "syntaxKind": "TypeAliasDeclaration",
+            "name": "AdminApiClient",
+            "value": "ApiClient<AdminApiClientConfig, AdminOperations>",
+            "description": "",
+            "members": [
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/admin-api-client/dist/ts/graphql/types.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "config",
+                "value": "Readonly<TClientConfig>",
+                "description": ""
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/admin-api-client/dist/ts/graphql/types.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "getHeaders",
+                "value": "(headers?: Headers) => Headers",
+                "description": ""
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/admin-api-client/dist/ts/graphql/types.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "getApiUrl",
+                "value": "(apiVersion?: string) => string",
+                "description": ""
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/admin-api-client/dist/ts/graphql/types.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "fetch",
+                "value": "ApiClientFetch<Operations>",
+                "description": ""
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/admin-api-client/dist/ts/graphql/types.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "request",
+                "value": "ApiClientRequest<Operations>",
+                "description": ""
+              }
+            ]
+          },
+          "Readonly": {
+            "filePath": "../../node_modules/@shopify/polaris/build/ts/src/components/TextField/TextField.d.ts",
+            "name": "Readonly",
+            "description": "",
+            "members": [
+              {
+                "filePath": "../../node_modules/@shopify/polaris/build/ts/src/components/TextField/TextField.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "readonly",
+                "value": "true",
+                "description": "",
+                "isOptional": true
+              }
+            ],
+            "value": "interface Readonly {\n    readonly?: true;\n}"
+          },
+          "ApiClientFetch": {
+            "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/graphql-client/dist/graphql-client.d.ts",
+            "name": "ApiClientFetch",
+            "description": "",
+            "params": [
+              {
+                "name": "params",
+                "description": "",
+                "value": "ApiClientRequestParams<Operation, Operations>",
+                "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/graphql-client/dist/graphql-client.d.ts"
+              }
+            ],
+            "returns": {
+              "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/graphql-client/dist/graphql-client.d.ts",
+              "description": "",
+              "name": "interface Promise<T> {\n    /**\n     * Attaches callbacks for the resolution and/or rejection of the Promise.\n     * @param onfulfilled The callback to execute when the Promise is resolved.\n     * @param onrejected The callback to execute when the Promise is rejected.\n     * @returns A Promise for the completion of which ever callback is executed.\n     */\n    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): Promise<TResult1 | TResult2>;\n\n    /**\n     * Attaches a callback for only the rejection of the Promise.\n     * @param onrejected The callback to execute when the Promise is rejected.\n     * @returns A Promise for the completion of the callback.\n     */\n    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): Promise<T | TResult>;\n}, interface Promise<T> {}, Promise: PromiseConstructor, interface Promise<T> {\n    readonly [Symbol.toStringTag]: string;\n}, interface Promise<T> {\n    /**\n     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The\n     * resolved value cannot be modified from the callback.\n     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).\n     * @returns A Promise for the completion of the callback.\n     */\n    finally(onfinally?: (() => void) | undefined | null): Promise<T>;\n}",
+              "value": "interface Promise<T> {\n    /**\n     * Attaches callbacks for the resolution and/or rejection of the Promise.\n     * @param onfulfilled The callback to execute when the Promise is resolved.\n     * @param onrejected The callback to execute when the Promise is rejected.\n     * @returns A Promise for the completion of which ever callback is executed.\n     */\n    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): Promise<TResult1 | TResult2>;\n\n    /**\n     * Attaches a callback for only the rejection of the Promise.\n     * @param onrejected The callback to execute when the Promise is rejected.\n     * @returns A Promise for the completion of the callback.\n     */\n    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): Promise<T | TResult>;\n}, interface Promise<T> {}, Promise: PromiseConstructor, interface Promise<T> {\n    readonly [Symbol.toStringTag]: string;\n}, interface Promise<T> {\n    /**\n     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The\n     * resolved value cannot be modified from the callback.\n     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).\n     * @returns A Promise for the completion of the callback.\n     */\n    finally(onfinally?: (() => void) | undefined | null): Promise<T>;\n}"
+            },
+            "value": "type ApiClientFetch<Operations extends AllOperations = AllOperations> = <Operation extends keyof Operations = string>(...params: ApiClientRequestParams<Operation, Operations>) => Promise<ResponseWithType<FetchResponseBody<ReturnData<Operation, Operations>>>>;"
+          },
+          "ApiClientRequestParams": {
+            "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/graphql-client/dist/graphql-client.d.ts",
+            "syntaxKind": "TypeAliasDeclaration",
+            "name": "ApiClientRequestParams",
+            "value": "[\n    operation: Operation,\n    options?: ApiClientRequestOptions<Operation, Operations>\n]",
+            "description": "",
+            "members": [
+              {
+                "name": "[0]",
+                "value": "operation: Operation",
+                "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/graphql-client/dist/graphql-client.d.ts"
+              },
+              {
+                "name": "[1]",
+                "value": "options?: ApiClientRequestOptions<Operation, Operations>",
+                "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/graphql-client/dist/graphql-client.d.ts"
+              }
+            ]
+          },
+          "ApiClientRequestOptions": {
+            "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/graphql-client/dist/graphql-client.d.ts",
+            "syntaxKind": "TypeAliasDeclaration",
+            "name": "ApiClientRequestOptions",
+            "value": "{\n    apiVersion?: string;\n    headers?: Headers;\n    retries?: number;\n} & (Operation extends keyof Operations ? OperationVariables<Operation, Operations> : {\n    variables?: Record<string, any>;\n})",
+            "description": ""
+          },
+          "Headers": {
+            "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/graphql-client/dist/graphql-client.d.ts",
+            "syntaxKind": "TypeAliasDeclaration",
+            "name": "Headers",
+            "value": "Record<string, string | string[]>",
+            "description": "",
+            "members": []
+          },
+          "OperationVariables": {
+            "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/graphql-client/dist/graphql-client.d.ts",
+            "syntaxKind": "TypeAliasDeclaration",
+            "name": "OperationVariables",
+            "value": "Operations[Operation][\"variables\"] extends Record<string, never> ? Record<string, never> : {\n    variables?: {\n        [k in keyof Operations[Operation][\"variables\"]]: UnpackedInputMaybe<Operations[Operation][\"variables\"][k]>;\n    };\n}",
+            "description": ""
+          },
+          "UnpackedInputMaybe": {
+            "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/graphql-client/dist/graphql-client.d.ts",
+            "syntaxKind": "TypeAliasDeclaration",
+            "name": "UnpackedInputMaybe",
+            "value": "InputType extends InputMaybe<infer R> ? InputMaybe<UnpackedInput<R>> : UnpackedInput<InputType>",
+            "description": ""
+          },
+          "InputMaybe": {
+            "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/graphql-client/dist/graphql-client.d.ts",
+            "syntaxKind": "TypeAliasDeclaration",
+            "name": "InputMaybe",
+            "value": "never",
+            "description": ""
+          },
+          "UnpackedInput": {
+            "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/graphql-client/dist/graphql-client.d.ts",
+            "syntaxKind": "TypeAliasDeclaration",
+            "name": "UnpackedInput",
+            "value": "\"input\" extends keyof InputType ? InputType[\"input\"] : InputType",
+            "description": ""
+          },
+          "ApiClientRequest": {
+            "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/graphql-client/dist/graphql-client.d.ts",
+            "name": "ApiClientRequest",
+            "description": "",
+            "params": [
+              {
+                "name": "params",
+                "description": "",
+                "value": "ApiClientRequestParams<Operation, Operations>",
+                "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/graphql-client/dist/graphql-client.d.ts"
+              }
+            ],
+            "returns": {
+              "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/graphql-client/dist/graphql-client.d.ts",
+              "description": "",
+              "name": "interface Promise<T> {\n    /**\n     * Attaches callbacks for the resolution and/or rejection of the Promise.\n     * @param onfulfilled The callback to execute when the Promise is resolved.\n     * @param onrejected The callback to execute when the Promise is rejected.\n     * @returns A Promise for the completion of which ever callback is executed.\n     */\n    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): Promise<TResult1 | TResult2>;\n\n    /**\n     * Attaches a callback for only the rejection of the Promise.\n     * @param onrejected The callback to execute when the Promise is rejected.\n     * @returns A Promise for the completion of the callback.\n     */\n    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): Promise<T | TResult>;\n}, interface Promise<T> {}, Promise: PromiseConstructor, interface Promise<T> {\n    readonly [Symbol.toStringTag]: string;\n}, interface Promise<T> {\n    /**\n     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The\n     * resolved value cannot be modified from the callback.\n     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).\n     * @returns A Promise for the completion of the callback.\n     */\n    finally(onfinally?: (() => void) | undefined | null): Promise<T>;\n}",
+              "value": "interface Promise<T> {\n    /**\n     * Attaches callbacks for the resolution and/or rejection of the Promise.\n     * @param onfulfilled The callback to execute when the Promise is resolved.\n     * @param onrejected The callback to execute when the Promise is rejected.\n     * @returns A Promise for the completion of which ever callback is executed.\n     */\n    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): Promise<TResult1 | TResult2>;\n\n    /**\n     * Attaches a callback for only the rejection of the Promise.\n     * @param onrejected The callback to execute when the Promise is rejected.\n     * @returns A Promise for the completion of the callback.\n     */\n    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): Promise<T | TResult>;\n}, interface Promise<T> {}, Promise: PromiseConstructor, interface Promise<T> {\n    readonly [Symbol.toStringTag]: string;\n}, interface Promise<T> {\n    /**\n     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The\n     * resolved value cannot be modified from the callback.\n     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).\n     * @returns A Promise for the completion of the callback.\n     */\n    finally(onfinally?: (() => void) | undefined | null): Promise<T>;\n}"
+            },
+            "value": "type ApiClientRequest<Operations extends AllOperations = AllOperations> = <TData = undefined, Operation extends keyof Operations = string>(...params: ApiClientRequestParams<Operation, Operations>) => Promise<ClientResponse<TData extends undefined ? ReturnData<Operation, Operations> : TData>>;"
+          },
           "GraphqlParams": {
             "filePath": "../../node_modules/@shopify/shopify-api/lib/clients/types.d.ts",
             "syntaxKind": "TypeAliasDeclaration",
@@ -5933,6 +6230,93 @@
             ],
             "value": "export interface GraphqlQueryOptions<Operation extends keyof Operations, Operations extends AllOperations> {\n    variables?: ApiClientRequestOptions<Operation, Operations>['variables'];\n    headers?: Record<string, string | number>;\n    retries?: number;\n}"
           },
+          "ClientResponse": {
+            "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/graphql-client/dist/graphql-client.d.ts",
+            "name": "ClientResponse",
+            "description": "",
+            "members": [
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/graphql-client/dist/graphql-client.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "errors",
+                "value": "ResponseErrors",
+                "description": "",
+                "isOptional": true
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/graphql-client/dist/graphql-client.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "data",
+                "value": "TData",
+                "description": "",
+                "isOptional": true
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/graphql-client/dist/graphql-client.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "extensions",
+                "value": "GQLExtensions",
+                "description": "",
+                "isOptional": true
+              }
+            ],
+            "value": "interface ClientResponse<TData = any> extends FetchResponseBody<TData> {\n    errors?: ResponseErrors;\n}"
+          },
+          "ResponseErrors": {
+            "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/graphql-client/dist/graphql-client.d.ts",
+            "name": "ResponseErrors",
+            "description": "",
+            "members": [
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/graphql-client/dist/graphql-client.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "networkStatusCode",
+                "value": "number",
+                "description": "",
+                "isOptional": true
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/graphql-client/dist/graphql-client.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "message",
+                "value": "string",
+                "description": "",
+                "isOptional": true
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/graphql-client/dist/graphql-client.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "graphQLErrors",
+                "value": "any[]",
+                "description": "",
+                "isOptional": true
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/graphql-client/dist/graphql-client.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "response",
+                "value": "Response",
+                "description": "",
+                "isOptional": true
+              }
+            ],
+            "value": "interface ResponseErrors {\n    networkStatusCode?: number;\n    message?: string;\n    graphQLErrors?: any[];\n    response?: Response;\n}"
+          },
+          "GQLExtensions": {
+            "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/graphql-client/dist/graphql-client.d.ts",
+            "syntaxKind": "TypeAliasDeclaration",
+            "name": "GQLExtensions",
+            "value": "Record<string, any>",
+            "description": "",
+            "members": []
+          },
+          "ReturnData": {
+            "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/graphql-client/dist/graphql-client.d.ts",
+            "syntaxKind": "TypeAliasDeclaration",
+            "name": "ReturnData",
+            "value": "Operation extends keyof Operations ? Operations[Operation][\"return\"] : any",
+            "description": ""
+          },
           "StorefrontClient": {
             "filePath": "../../node_modules/@shopify/shopify-api/lib/clients/storefront/client.d.ts",
             "name": "StorefrontClient",
@@ -5975,6 +6359,93 @@
               }
             ],
             "value": "export declare class StorefrontClient {\n    static config: ConfigInterface;\n    readonly session: Session;\n    readonly client: StorefrontApiClient;\n    readonly apiVersion?: ApiVersion;\n    constructor(params: GraphqlClientParams);\n    query<T = undefined>(params: GraphqlParams): Promise<RequestReturn<T>>;\n    request<T = undefined, Operation extends keyof Operations = string, Operations extends StorefrontOperations = StorefrontOperations>(operation: Operation, options?: GraphqlQueryOptions<Operation, Operations>): Promise<ClientResponse<T extends undefined ? ReturnData<Operation, Operations> : T>>;\n    private storefrontClass;\n}"
+          },
+          "StorefrontApiClient": {
+            "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/storefront-api-client/dist/storefront-api-client.d.ts",
+            "syntaxKind": "TypeAliasDeclaration",
+            "name": "StorefrontApiClient",
+            "value": "ApiClient<StorefrontApiClientConfig, StorefrontOperations>",
+            "description": "",
+            "members": [
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/storefront-api-client/dist/storefront-api-client.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "config",
+                "value": "Readonly<TClientConfig>",
+                "description": ""
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/storefront-api-client/dist/storefront-api-client.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "getHeaders",
+                "value": "(headers?: Headers) => Headers",
+                "description": ""
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/storefront-api-client/dist/storefront-api-client.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "getApiUrl",
+                "value": "(apiVersion?: string) => string",
+                "description": ""
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/storefront-api-client/dist/storefront-api-client.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "fetch",
+                "value": "ApiClientFetch<Operations>",
+                "description": ""
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/storefront-api-client/dist/storefront-api-client.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "request",
+                "value": "ApiClientRequest<Operations>",
+                "description": ""
+              }
+            ]
+          },
+          "StorefrontOperations": {
+            "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/storefront-api-client/dist/storefront-api-client.d.ts",
+            "syntaxKind": "TypeAliasDeclaration",
+            "name": "StorefrontOperations",
+            "value": "StorefrontQueries & StorefrontMutations",
+            "description": ""
+          },
+          "StorefrontQueries": {
+            "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/storefront-api-client/dist/storefront-api-client.d.ts",
+            "name": "StorefrontQueries",
+            "description": "",
+            "members": [
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/storefront-api-client/dist/storefront-api-client.d.ts",
+                "name": "[key: string]",
+                "value": "{\n        variables: any;\n        return: any;\n    }"
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/storefront-api-client/dist/storefront-api-client.d.ts",
+                "name": "[key: number | symbol]",
+                "value": "never"
+              }
+            ],
+            "value": "interface StorefrontQueries {\n    [key: string]: {\n        variables: any;\n        return: any;\n    };\n    [key: number | symbol]: never;\n}"
+          },
+          "StorefrontMutations": {
+            "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/storefront-api-client/dist/storefront-api-client.d.ts",
+            "name": "StorefrontMutations",
+            "description": "",
+            "members": [
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/storefront-api-client/dist/storefront-api-client.d.ts",
+                "name": "[key: string]",
+                "value": "{\n        variables: any;\n        return: any;\n    }"
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/storefront-api-client/dist/storefront-api-client.d.ts",
+                "name": "[key: number | symbol]",
+                "value": "never"
+              }
+            ],
+            "value": "interface StorefrontMutations {\n    [key: string]: {\n        variables: any;\n        return: any;\n    };\n    [key: number | symbol]: never;\n}"
           },
           "GraphqlProxy": {
             "filePath": "../../node_modules/@shopify/shopify-api/lib/clients/graphql_proxy/types.d.ts",
@@ -8205,6 +8676,14 @@
               }
             ]
           },
+          "SearchParams": {
+            "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/admin-api-client/dist/ts/rest/types.d.ts",
+            "syntaxKind": "TypeAliasDeclaration",
+            "name": "SearchParams",
+            "value": "Record<string, SearchParamFields>",
+            "description": "",
+            "members": []
+          },
           "HeaderParams": {
             "filePath": "../../node_modules/@shopify/shopify-api/lib/clients/types.d.ts",
             "syntaxKind": "TypeAliasDeclaration",
@@ -8220,115 +8699,48 @@
             "value": "GetRequestParams & {\n    data: Record<string, any> | string;\n}",
             "description": ""
           },
-          "GraphQLClient": {
-            "filePath": "src/server/clients/types.ts",
-            "name": "GraphQLClient",
-            "description": "",
-            "params": [
-              {
-                "name": "query",
-                "description": "",
-                "value": "Operation extends keyof Operations",
-                "filePath": "src/server/clients/types.ts"
-              },
-              {
-                "name": "options",
-                "description": "",
-                "value": "GraphQLQueryOptions<Operation, Operations>",
-                "isOptional": true,
-                "filePath": "src/server/clients/types.ts"
-              }
-            ],
-            "returns": {
-              "filePath": "src/server/clients/types.ts",
-              "description": "",
-              "name": "interface Promise<T> {\n    /**\n     * Attaches callbacks for the resolution and/or rejection of the Promise.\n     * @param onfulfilled The callback to execute when the Promise is resolved.\n     * @param onrejected The callback to execute when the Promise is rejected.\n     * @returns A Promise for the completion of which ever callback is executed.\n     */\n    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): Promise<TResult1 | TResult2>;\n\n    /**\n     * Attaches a callback for only the rejection of the Promise.\n     * @param onrejected The callback to execute when the Promise is rejected.\n     * @returns A Promise for the completion of the callback.\n     */\n    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): Promise<T | TResult>;\n}, interface Promise<T> {}, Promise: PromiseConstructor, interface Promise<T> {\n    readonly [Symbol.toStringTag]: string;\n}, interface Promise<T> {\n    /**\n     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The\n     * resolved value cannot be modified from the callback.\n     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).\n     * @returns A Promise for the completion of the callback.\n     */\n    finally(onfinally?: (() => void) | undefined | null): Promise<T>;\n}",
-              "value": "interface Promise<T> {\n    /**\n     * Attaches callbacks for the resolution and/or rejection of the Promise.\n     * @param onfulfilled The callback to execute when the Promise is resolved.\n     * @param onrejected The callback to execute when the Promise is rejected.\n     * @returns A Promise for the completion of which ever callback is executed.\n     */\n    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): Promise<TResult1 | TResult2>;\n\n    /**\n     * Attaches a callback for only the rejection of the Promise.\n     * @param onrejected The callback to execute when the Promise is rejected.\n     * @returns A Promise for the completion of the callback.\n     */\n    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): Promise<T | TResult>;\n}, interface Promise<T> {}, Promise: PromiseConstructor, interface Promise<T> {\n    readonly [Symbol.toStringTag]: string;\n}, interface Promise<T> {\n    /**\n     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The\n     * resolved value cannot be modified from the callback.\n     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).\n     * @returns A Promise for the completion of the callback.\n     */\n    finally(onfinally?: (() => void) | undefined | null): Promise<T>;\n}"
-            },
-            "value": "export type GraphQLClient<Operations extends AllOperations> = <\n  Operation extends keyof Operations,\n>(\n  query: Operation,\n  options?: GraphQLQueryOptions<Operation, Operations>,\n) => Promise<\n  ResponseWithType<FetchResponseBody<ReturnData<Operation, Operations>>>\n>;"
+          "AdminOperations": {
+            "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/admin-api-client/dist/ts/graphql/types.d.ts",
+            "syntaxKind": "TypeAliasDeclaration",
+            "name": "AdminOperations",
+            "value": "AdminQueries & AdminMutations",
+            "description": ""
           },
-          "GraphQLQueryOptions": {
-            "filePath": "src/server/clients/types.ts",
-            "name": "GraphQLQueryOptions",
+          "AdminQueries": {
+            "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/admin-api-client/dist/ts/graphql/types.d.ts",
+            "name": "AdminQueries",
             "description": "",
             "members": [
               {
-                "filePath": "src/server/clients/types.ts",
-                "syntaxKind": "PropertySignature",
-                "name": "variables",
-                "value": "ApiClientRequestOptions<Operation, Operations>[\"variables\"]",
-                "description": "",
-                "isOptional": true
+                "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/admin-api-client/dist/ts/graphql/types.d.ts",
+                "name": "[key: string]",
+                "value": "{\n        variables: any;\n        return: any;\n    }"
               },
               {
-                "filePath": "src/server/clients/types.ts",
-                "syntaxKind": "PropertySignature",
-                "name": "apiVersion",
-                "value": "ApiVersion",
-                "description": "",
-                "isOptional": true
-              },
-              {
-                "filePath": "src/server/clients/types.ts",
-                "syntaxKind": "PropertySignature",
-                "name": "headers",
-                "value": "{ [key: string]: any; }",
-                "description": "",
-                "isOptional": true
-              },
-              {
-                "filePath": "src/server/clients/types.ts",
-                "syntaxKind": "PropertySignature",
-                "name": "tries",
-                "value": "number",
-                "description": "",
-                "isOptional": true
+                "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/admin-api-client/dist/ts/graphql/types.d.ts",
+                "name": "[key: number | symbol]",
+                "value": "never"
               }
             ],
-            "value": "export interface GraphQLQueryOptions<\n  Operation extends keyof Operations,\n  Operations extends AllOperations,\n> {\n  variables?: ApiClientRequestOptions<Operation, Operations>['variables'];\n  apiVersion?: ApiVersion;\n  headers?: {[key: string]: any};\n  tries?: number;\n}"
+            "value": "export interface AdminQueries {\n    [key: string]: {\n        variables: any;\n        return: any;\n    };\n    [key: number | symbol]: never;\n}"
           },
-          "ApiVersion": {
-            "filePath": "../../node_modules/@shopify/shopify-api/lib/types.d.ts",
-            "syntaxKind": "EnumDeclaration",
-            "name": "ApiVersion",
-            "value": "export declare enum ApiVersion {\n    October22 = \"2022-10\",\n    January23 = \"2023-01\",\n    April23 = \"2023-04\",\n    July23 = \"2023-07\",\n    October23 = \"2023-10\",\n    January24 = \"2024-01\",\n    Unstable = \"unstable\"\n}",
+          "AdminMutations": {
+            "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/admin-api-client/dist/ts/graphql/types.d.ts",
+            "name": "AdminMutations",
+            "description": "",
             "members": [
               {
-                "filePath": "../../node_modules/@shopify/shopify-api/lib/types.d.ts",
-                "name": "October22",
-                "value": "2022-10"
+                "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/admin-api-client/dist/ts/graphql/types.d.ts",
+                "name": "[key: string]",
+                "value": "{\n        variables: any;\n        return: any;\n    }"
               },
               {
-                "filePath": "../../node_modules/@shopify/shopify-api/lib/types.d.ts",
-                "name": "January23",
-                "value": "2023-01"
-              },
-              {
-                "filePath": "../../node_modules/@shopify/shopify-api/lib/types.d.ts",
-                "name": "April23",
-                "value": "2023-04"
-              },
-              {
-                "filePath": "../../node_modules/@shopify/shopify-api/lib/types.d.ts",
-                "name": "July23",
-                "value": "2023-07"
-              },
-              {
-                "filePath": "../../node_modules/@shopify/shopify-api/lib/types.d.ts",
-                "name": "October23",
-                "value": "2023-10"
-              },
-              {
-                "filePath": "../../node_modules/@shopify/shopify-api/lib/types.d.ts",
-                "name": "January24",
-                "value": "2024-01"
-              },
-              {
-                "filePath": "../../node_modules/@shopify/shopify-api/lib/types.d.ts",
-                "name": "Unstable",
-                "value": "unstable"
+                "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/admin-api-client/dist/ts/graphql/types.d.ts",
+                "name": "[key: number | symbol]",
+                "value": "never"
               }
-            ]
+            ],
+            "value": "export interface AdminMutations {\n    [key: string]: {\n        variables: any;\n        return: any;\n    };\n    [key: number | symbol]: never;\n}"
           }
         }
       }
@@ -8470,115 +8882,48 @@
             ],
             "value": "export interface StorefrontContext {\n  /**\n   * Method for interacting with the Shopify Storefront GraphQL API\n   *\n   * If you're getting incorrect type hints in the Shopify template, follow [these instructions](https://github.com/Shopify/shopify-app-template-remix/tree/main#incorrect-graphql-hints).\n   *\n   * {@link https://shopify.dev/docs/api/storefront}\n   *\n   * @example\n   * <caption>Querying the GraphQL API.</caption>\n   * <description>Use `storefront.graphql` to make query / mutation requests.</description>\n   * ```ts\n   * // app/routes/**\\/.ts\n   * import { json } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   *\n   * export async function action({ request }: ActionFunctionArgs) {\n   *   const { storefront } = await authenticate.public.appProxy(request);\n   *\n   *   const response = await storefront.graphql(`{blogs(first: 10) { edges { node { id } } } }`);\n   *\n   *   return json(await response.json());\n   * }\n   * ```\n   */\n  graphql: GraphQLClient<StorefrontOperations>;\n}"
           },
-          "GraphQLClient": {
-            "filePath": "src/server/clients/types.ts",
-            "name": "GraphQLClient",
-            "description": "",
-            "params": [
-              {
-                "name": "query",
-                "description": "",
-                "value": "Operation extends keyof Operations",
-                "filePath": "src/server/clients/types.ts"
-              },
-              {
-                "name": "options",
-                "description": "",
-                "value": "GraphQLQueryOptions<Operation, Operations>",
-                "isOptional": true,
-                "filePath": "src/server/clients/types.ts"
-              }
-            ],
-            "returns": {
-              "filePath": "src/server/clients/types.ts",
-              "description": "",
-              "name": "interface Promise<T> {\n    /**\n     * Attaches callbacks for the resolution and/or rejection of the Promise.\n     * @param onfulfilled The callback to execute when the Promise is resolved.\n     * @param onrejected The callback to execute when the Promise is rejected.\n     * @returns A Promise for the completion of which ever callback is executed.\n     */\n    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): Promise<TResult1 | TResult2>;\n\n    /**\n     * Attaches a callback for only the rejection of the Promise.\n     * @param onrejected The callback to execute when the Promise is rejected.\n     * @returns A Promise for the completion of the callback.\n     */\n    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): Promise<T | TResult>;\n}, interface Promise<T> {}, Promise: PromiseConstructor, interface Promise<T> {\n    readonly [Symbol.toStringTag]: string;\n}, interface Promise<T> {\n    /**\n     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The\n     * resolved value cannot be modified from the callback.\n     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).\n     * @returns A Promise for the completion of the callback.\n     */\n    finally(onfinally?: (() => void) | undefined | null): Promise<T>;\n}",
-              "value": "interface Promise<T> {\n    /**\n     * Attaches callbacks for the resolution and/or rejection of the Promise.\n     * @param onfulfilled The callback to execute when the Promise is resolved.\n     * @param onrejected The callback to execute when the Promise is rejected.\n     * @returns A Promise for the completion of which ever callback is executed.\n     */\n    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): Promise<TResult1 | TResult2>;\n\n    /**\n     * Attaches a callback for only the rejection of the Promise.\n     * @param onrejected The callback to execute when the Promise is rejected.\n     * @returns A Promise for the completion of the callback.\n     */\n    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): Promise<T | TResult>;\n}, interface Promise<T> {}, Promise: PromiseConstructor, interface Promise<T> {\n    readonly [Symbol.toStringTag]: string;\n}, interface Promise<T> {\n    /**\n     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The\n     * resolved value cannot be modified from the callback.\n     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).\n     * @returns A Promise for the completion of the callback.\n     */\n    finally(onfinally?: (() => void) | undefined | null): Promise<T>;\n}"
-            },
-            "value": "export type GraphQLClient<Operations extends AllOperations> = <\n  Operation extends keyof Operations,\n>(\n  query: Operation,\n  options?: GraphQLQueryOptions<Operation, Operations>,\n) => Promise<\n  ResponseWithType<FetchResponseBody<ReturnData<Operation, Operations>>>\n>;"
+          "StorefrontOperations": {
+            "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/storefront-api-client/dist/storefront-api-client.d.ts",
+            "syntaxKind": "TypeAliasDeclaration",
+            "name": "StorefrontOperations",
+            "value": "StorefrontQueries & StorefrontMutations",
+            "description": ""
           },
-          "GraphQLQueryOptions": {
-            "filePath": "src/server/clients/types.ts",
-            "name": "GraphQLQueryOptions",
+          "StorefrontQueries": {
+            "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/storefront-api-client/dist/storefront-api-client.d.ts",
+            "name": "StorefrontQueries",
             "description": "",
             "members": [
               {
-                "filePath": "src/server/clients/types.ts",
-                "syntaxKind": "PropertySignature",
-                "name": "variables",
-                "value": "ApiClientRequestOptions<Operation, Operations>[\"variables\"]",
-                "description": "",
-                "isOptional": true
+                "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/storefront-api-client/dist/storefront-api-client.d.ts",
+                "name": "[key: string]",
+                "value": "{\n        variables: any;\n        return: any;\n    }"
               },
               {
-                "filePath": "src/server/clients/types.ts",
-                "syntaxKind": "PropertySignature",
-                "name": "apiVersion",
-                "value": "ApiVersion",
-                "description": "",
-                "isOptional": true
-              },
-              {
-                "filePath": "src/server/clients/types.ts",
-                "syntaxKind": "PropertySignature",
-                "name": "headers",
-                "value": "{ [key: string]: any; }",
-                "description": "",
-                "isOptional": true
-              },
-              {
-                "filePath": "src/server/clients/types.ts",
-                "syntaxKind": "PropertySignature",
-                "name": "tries",
-                "value": "number",
-                "description": "",
-                "isOptional": true
+                "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/storefront-api-client/dist/storefront-api-client.d.ts",
+                "name": "[key: number | symbol]",
+                "value": "never"
               }
             ],
-            "value": "export interface GraphQLQueryOptions<\n  Operation extends keyof Operations,\n  Operations extends AllOperations,\n> {\n  variables?: ApiClientRequestOptions<Operation, Operations>['variables'];\n  apiVersion?: ApiVersion;\n  headers?: {[key: string]: any};\n  tries?: number;\n}"
+            "value": "interface StorefrontQueries {\n    [key: string]: {\n        variables: any;\n        return: any;\n    };\n    [key: number | symbol]: never;\n}"
           },
-          "ApiVersion": {
-            "filePath": "../../node_modules/@shopify/shopify-api/lib/types.d.ts",
-            "syntaxKind": "EnumDeclaration",
-            "name": "ApiVersion",
-            "value": "export declare enum ApiVersion {\n    October22 = \"2022-10\",\n    January23 = \"2023-01\",\n    April23 = \"2023-04\",\n    July23 = \"2023-07\",\n    October23 = \"2023-10\",\n    January24 = \"2024-01\",\n    Unstable = \"unstable\"\n}",
+          "StorefrontMutations": {
+            "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/storefront-api-client/dist/storefront-api-client.d.ts",
+            "name": "StorefrontMutations",
+            "description": "",
             "members": [
               {
-                "filePath": "../../node_modules/@shopify/shopify-api/lib/types.d.ts",
-                "name": "October22",
-                "value": "2022-10"
+                "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/storefront-api-client/dist/storefront-api-client.d.ts",
+                "name": "[key: string]",
+                "value": "{\n        variables: any;\n        return: any;\n    }"
               },
               {
-                "filePath": "../../node_modules/@shopify/shopify-api/lib/types.d.ts",
-                "name": "January23",
-                "value": "2023-01"
-              },
-              {
-                "filePath": "../../node_modules/@shopify/shopify-api/lib/types.d.ts",
-                "name": "April23",
-                "value": "2023-04"
-              },
-              {
-                "filePath": "../../node_modules/@shopify/shopify-api/lib/types.d.ts",
-                "name": "July23",
-                "value": "2023-07"
-              },
-              {
-                "filePath": "../../node_modules/@shopify/shopify-api/lib/types.d.ts",
-                "name": "October23",
-                "value": "2023-10"
-              },
-              {
-                "filePath": "../../node_modules/@shopify/shopify-api/lib/types.d.ts",
-                "name": "January24",
-                "value": "2024-01"
-              },
-              {
-                "filePath": "../../node_modules/@shopify/shopify-api/lib/types.d.ts",
-                "name": "Unstable",
-                "value": "unstable"
+                "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/storefront-api-client/dist/storefront-api-client.d.ts",
+                "name": "[key: number | symbol]",
+                "value": "never"
               }
-            ]
+            ],
+            "value": "interface StorefrontMutations {\n    [key: string]: {\n        variables: any;\n        return: any;\n    };\n    [key: number | symbol]: never;\n}"
           }
         }
       }
@@ -8652,7 +8997,7 @@
               "name": "ShopifyApp<Config extends AppConfigArg<Resources, Storage>>",
               "value": "ShopifyApp<Config extends AppConfigArg<Resources, Storage>>"
             },
-            "value": "export function shopifyApp<\n  Config extends AppConfigArg<Resources, Storage>,\n  Resources extends ShopifyRestResources,\n  Storage extends SessionStorage,\n>(appConfig: Config): ShopifyApp<Config> {\n  const api = deriveApi(appConfig);\n  const config = deriveConfig<Storage>(appConfig, api.config);\n  const logger = overrideLogger(api.logger);\n\n  if (appConfig.webhooks) {\n    api.webhooks.addHandlers(appConfig.webhooks);\n  }\n\n  const params: BasicParams = {api, config, logger};\n  const oauth = new AuthCodeFlowStrategy(params);\n  const authStrategy = authStrategyFactory<Config, Resources>({\n    ...params,\n    strategy: oauth,\n  });\n\n  const shopify:\n    | AdminApp<Config>\n    | AppStoreApp<Config>\n    | SingleMerchantApp<Config> = {\n    sessionStorage: config.sessionStorage,\n    addDocumentResponseHeaders: addDocumentResponseHeadersFactory(params),\n    registerWebhooks: registerWebhooksFactory(params),\n    authenticate: {\n      admin: authStrategy,\n      public: authenticatePublicFactory<Config['future'], Resources>(params),\n      webhook: authenticateWebhookFactory<\n        Config['future'],\n        Resources,\n        keyof Config['webhooks'] | MandatoryTopics\n      >(params),\n    },\n    unauthenticated: {\n      admin: unauthenticatedAdminContextFactory(params),\n      storefront: unauthenticatedStorefrontContextFactory(params),\n    },\n  };\n\n  if (\n    isAppStoreApp(shopify, appConfig) ||\n    isSingleMerchantApp(shopify, appConfig)\n  ) {\n    shopify.login = loginFactory(params);\n  }\n\n  return shopify as ShopifyApp<Config>;\n}",
+            "value": "export function shopifyApp<\n  Config extends AppConfigArg<Resources, Storage>,\n  Resources extends ShopifyRestResources,\n  Storage extends SessionStorage,\n>(appConfig: Config): ShopifyApp<Config> {\n  const api = deriveApi(appConfig);\n  const config = deriveConfig<Storage>(appConfig, api.config);\n  const logger = overrideLogger(api.logger);\n\n  if (appConfig.webhooks) {\n    api.webhooks.addHandlers(appConfig.webhooks);\n  }\n\n  const params: BasicParams = {api, config, logger};\n  const authStrategy = authStrategyFactory<Config, Resources>({\n    ...params,\n    strategy:\n      config.future.unstable_newEmbeddedAuthStrategy && config.isEmbeddedApp\n        ? new TokenExchangeStrategy(params)\n        : new AuthCodeFlowStrategy(params),\n  });\n\n  const shopify:\n    | AdminApp<Config>\n    | AppStoreApp<Config>\n    | SingleMerchantApp<Config> = {\n    sessionStorage: config.sessionStorage,\n    addDocumentResponseHeaders: addDocumentResponseHeadersFactory(params),\n    registerWebhooks: registerWebhooksFactory(params),\n    authenticate: {\n      admin: authStrategy,\n      public: authenticatePublicFactory<Config['future'], Resources>(params),\n      webhook: authenticateWebhookFactory<\n        Config['future'],\n        Resources,\n        keyof Config['webhooks'] | MandatoryTopics\n      >(params),\n    },\n    unauthenticated: {\n      admin: unauthenticatedAdminContextFactory(params),\n      storefront: unauthenticatedStorefrontContextFactory(params),\n    },\n  };\n\n  if (\n    isAppStoreApp(shopify, appConfig) ||\n    isSingleMerchantApp(shopify, appConfig)\n  ) {\n    shopify.login = loginFactory(params);\n  }\n\n  return shopify as ShopifyApp<Config>;\n}",
             "examples": [
               {
                 "title": "The minimum viable configuration",
@@ -9676,6 +10021,14 @@
               }
             ]
           },
+          "SearchParams": {
+            "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/admin-api-client/dist/ts/rest/types.d.ts",
+            "syntaxKind": "TypeAliasDeclaration",
+            "name": "SearchParams",
+            "value": "Record<string, SearchParamFields>",
+            "description": "",
+            "members": []
+          },
           "HeaderParams": {
             "filePath": "../../node_modules/@shopify/shopify-api/lib/clients/types.d.ts",
             "syntaxKind": "TypeAliasDeclaration",
@@ -9691,72 +10044,79 @@
             "value": "GetRequestParams & {\n    data: Record<string, any> | string;\n}",
             "description": ""
           },
-          "GraphQLClient": {
-            "filePath": "src/server/clients/types.ts",
-            "name": "GraphQLClient",
-            "description": "",
-            "params": [
-              {
-                "name": "query",
-                "description": "",
-                "value": "Operation extends keyof Operations",
-                "filePath": "src/server/clients/types.ts"
-              },
-              {
-                "name": "options",
-                "description": "",
-                "value": "GraphQLQueryOptions<Operation, Operations>",
-                "isOptional": true,
-                "filePath": "src/server/clients/types.ts"
-              }
-            ],
-            "returns": {
-              "filePath": "src/server/clients/types.ts",
-              "description": "",
-              "name": "interface Promise<T> {\n    /**\n     * Attaches callbacks for the resolution and/or rejection of the Promise.\n     * @param onfulfilled The callback to execute when the Promise is resolved.\n     * @param onrejected The callback to execute when the Promise is rejected.\n     * @returns A Promise for the completion of which ever callback is executed.\n     */\n    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): Promise<TResult1 | TResult2>;\n\n    /**\n     * Attaches a callback for only the rejection of the Promise.\n     * @param onrejected The callback to execute when the Promise is rejected.\n     * @returns A Promise for the completion of the callback.\n     */\n    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): Promise<T | TResult>;\n}, interface Promise<T> {}, Promise: PromiseConstructor, interface Promise<T> {\n    readonly [Symbol.toStringTag]: string;\n}, interface Promise<T> {\n    /**\n     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The\n     * resolved value cannot be modified from the callback.\n     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).\n     * @returns A Promise for the completion of the callback.\n     */\n    finally(onfinally?: (() => void) | undefined | null): Promise<T>;\n}",
-              "value": "interface Promise<T> {\n    /**\n     * Attaches callbacks for the resolution and/or rejection of the Promise.\n     * @param onfulfilled The callback to execute when the Promise is resolved.\n     * @param onrejected The callback to execute when the Promise is rejected.\n     * @returns A Promise for the completion of which ever callback is executed.\n     */\n    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): Promise<TResult1 | TResult2>;\n\n    /**\n     * Attaches a callback for only the rejection of the Promise.\n     * @param onrejected The callback to execute when the Promise is rejected.\n     * @returns A Promise for the completion of the callback.\n     */\n    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): Promise<T | TResult>;\n}, interface Promise<T> {}, Promise: PromiseConstructor, interface Promise<T> {\n    readonly [Symbol.toStringTag]: string;\n}, interface Promise<T> {\n    /**\n     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The\n     * resolved value cannot be modified from the callback.\n     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).\n     * @returns A Promise for the completion of the callback.\n     */\n    finally(onfinally?: (() => void) | undefined | null): Promise<T>;\n}"
-            },
-            "value": "export type GraphQLClient<Operations extends AllOperations> = <\n  Operation extends keyof Operations,\n>(\n  query: Operation,\n  options?: GraphQLQueryOptions<Operation, Operations>,\n) => Promise<\n  ResponseWithType<FetchResponseBody<ReturnData<Operation, Operations>>>\n>;"
+          "AdminOperations": {
+            "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/admin-api-client/dist/ts/graphql/types.d.ts",
+            "syntaxKind": "TypeAliasDeclaration",
+            "name": "AdminOperations",
+            "value": "AdminQueries & AdminMutations",
+            "description": ""
           },
-          "GraphQLQueryOptions": {
-            "filePath": "src/server/clients/types.ts",
-            "name": "GraphQLQueryOptions",
+          "AdminQueries": {
+            "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/admin-api-client/dist/ts/graphql/types.d.ts",
+            "name": "AdminQueries",
             "description": "",
             "members": [
               {
-                "filePath": "src/server/clients/types.ts",
-                "syntaxKind": "PropertySignature",
-                "name": "variables",
-                "value": "ApiClientRequestOptions<Operation, Operations>[\"variables\"]",
-                "description": "",
-                "isOptional": true
+                "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/admin-api-client/dist/ts/graphql/types.d.ts",
+                "name": "[key: string]",
+                "value": "{\n        variables: any;\n        return: any;\n    }"
               },
               {
-                "filePath": "src/server/clients/types.ts",
-                "syntaxKind": "PropertySignature",
-                "name": "apiVersion",
-                "value": "ApiVersion",
-                "description": "",
-                "isOptional": true
-              },
-              {
-                "filePath": "src/server/clients/types.ts",
-                "syntaxKind": "PropertySignature",
-                "name": "headers",
-                "value": "{ [key: string]: any; }",
-                "description": "",
-                "isOptional": true
-              },
-              {
-                "filePath": "src/server/clients/types.ts",
-                "syntaxKind": "PropertySignature",
-                "name": "tries",
-                "value": "number",
-                "description": "",
-                "isOptional": true
+                "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/admin-api-client/dist/ts/graphql/types.d.ts",
+                "name": "[key: number | symbol]",
+                "value": "never"
               }
             ],
-            "value": "export interface GraphQLQueryOptions<\n  Operation extends keyof Operations,\n  Operations extends AllOperations,\n> {\n  variables?: ApiClientRequestOptions<Operation, Operations>['variables'];\n  apiVersion?: ApiVersion;\n  headers?: {[key: string]: any};\n  tries?: number;\n}"
+            "value": "export interface AdminQueries {\n    [key: string]: {\n        variables: any;\n        return: any;\n    };\n    [key: number | symbol]: never;\n}"
+          },
+          "AdminMutations": {
+            "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/admin-api-client/dist/ts/graphql/types.d.ts",
+            "name": "AdminMutations",
+            "description": "",
+            "members": [
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/admin-api-client/dist/ts/graphql/types.d.ts",
+                "name": "[key: string]",
+                "value": "{\n        variables: any;\n        return: any;\n    }"
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/admin-api-client/dist/ts/graphql/types.d.ts",
+                "name": "[key: number | symbol]",
+                "value": "never"
+              }
+            ],
+            "value": "export interface AdminMutations {\n    [key: string]: {\n        variables: any;\n        return: any;\n    };\n    [key: number | symbol]: never;\n}"
+          },
+          "ShopifyRestResources": {
+            "filePath": "../../node_modules/@shopify/shopify-api/rest/types.d.ts",
+            "syntaxKind": "TypeAliasDeclaration",
+            "name": "ShopifyRestResources",
+            "value": "Record<string, any>",
+            "description": "",
+            "members": []
+          },
+          "AppDistribution": {
+            "filePath": "src/server/types.ts",
+            "syntaxKind": "EnumDeclaration",
+            "name": "AppDistribution",
+            "value": "export enum AppDistribution {\n  AppStore = 'app_store',\n  SingleMerchant = 'single_merchant',\n  ShopifyAdmin = 'shopify_admin',\n}",
+            "members": [
+              {
+                "filePath": "src/server/types.ts",
+                "name": "AppStore",
+                "value": "app_store"
+              },
+              {
+                "filePath": "src/server/types.ts",
+                "name": "SingleMerchant",
+                "value": "single_merchant"
+              },
+              {
+                "filePath": "src/server/types.ts",
+                "name": "ShopifyAdmin",
+                "value": "shopify_admin"
+              }
+            ]
           },
           "ApiVersion": {
             "filePath": "../../node_modules/@shopify/shopify-api/lib/types.d.ts",
@@ -9798,37 +10158,6 @@
                 "filePath": "../../node_modules/@shopify/shopify-api/lib/types.d.ts",
                 "name": "Unstable",
                 "value": "unstable"
-              }
-            ]
-          },
-          "ShopifyRestResources": {
-            "filePath": "../../node_modules/@shopify/shopify-api/rest/types.d.ts",
-            "syntaxKind": "TypeAliasDeclaration",
-            "name": "ShopifyRestResources",
-            "value": "Record<string, any>",
-            "description": "",
-            "members": []
-          },
-          "AppDistribution": {
-            "filePath": "src/server/types.ts",
-            "syntaxKind": "EnumDeclaration",
-            "name": "AppDistribution",
-            "value": "export enum AppDistribution {\n  AppStore = 'app_store',\n  SingleMerchant = 'single_merchant',\n  ShopifyAdmin = 'shopify_admin',\n}",
-            "members": [
-              {
-                "filePath": "src/server/types.ts",
-                "name": "AppStore",
-                "value": "app_store"
-              },
-              {
-                "filePath": "src/server/types.ts",
-                "name": "SingleMerchant",
-                "value": "single_merchant"
-              },
-              {
-                "filePath": "src/server/types.ts",
-                "name": "ShopifyAdmin",
-                "value": "shopify_admin"
               }
             ]
           },
@@ -10050,14 +10379,6 @@
             },
             "value": "type AddDocumentResponseHeaders = (request: Request, headers: Headers) => void;"
           },
-          "Headers": {
-            "filePath": "../../node_modules/@shopify/shopify-api/runtime/http/types.d.ts",
-            "syntaxKind": "TypeAliasDeclaration",
-            "name": "Headers",
-            "value": "Record<string, string | string[]>",
-            "description": "",
-            "members": []
-          },
           "RegisterWebhooks": {
             "filePath": "src/server/types.ts",
             "name": "RegisterWebhooks",
@@ -10073,10 +10394,10 @@
             "returns": {
               "filePath": "src/server/types.ts",
               "description": "",
-              "name": "Promise<RegisterReturn>",
-              "value": "Promise<RegisterReturn>"
+              "name": "Promise<RegisterReturn | void>",
+              "value": "Promise<RegisterReturn | void>"
             },
-            "value": "type RegisterWebhooks = (\n  options: RegisterWebhooksOptions,\n) => Promise<RegisterReturn>;"
+            "value": "type RegisterWebhooks = (\n  options: RegisterWebhooksOptions,\n) => Promise<RegisterReturn | void>;"
           },
           "RegisterWebhooksOptions": {
             "filePath": "src/server/authenticate/webhooks/types.ts",
@@ -11176,6 +11497,49 @@
             ],
             "value": "export interface StorefrontContext {\n  /**\n   * Method for interacting with the Shopify Storefront GraphQL API\n   *\n   * If you're getting incorrect type hints in the Shopify template, follow [these instructions](https://github.com/Shopify/shopify-app-template-remix/tree/main#incorrect-graphql-hints).\n   *\n   * {@link https://shopify.dev/docs/api/storefront}\n   *\n   * @example\n   * <caption>Querying the GraphQL API.</caption>\n   * <description>Use `storefront.graphql` to make query / mutation requests.</description>\n   * ```ts\n   * // app/routes/**\\/.ts\n   * import { json } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   *\n   * export async function action({ request }: ActionFunctionArgs) {\n   *   const { storefront } = await authenticate.public.appProxy(request);\n   *\n   *   const response = await storefront.graphql(`{blogs(first: 10) { edges { node { id } } } }`);\n   *\n   *   return json(await response.json());\n   * }\n   * ```\n   */\n  graphql: GraphQLClient<StorefrontOperations>;\n}"
           },
+          "StorefrontOperations": {
+            "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/storefront-api-client/dist/storefront-api-client.d.ts",
+            "syntaxKind": "TypeAliasDeclaration",
+            "name": "StorefrontOperations",
+            "value": "StorefrontQueries & StorefrontMutations",
+            "description": ""
+          },
+          "StorefrontQueries": {
+            "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/storefront-api-client/dist/storefront-api-client.d.ts",
+            "name": "StorefrontQueries",
+            "description": "",
+            "members": [
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/storefront-api-client/dist/storefront-api-client.d.ts",
+                "name": "[key: string]",
+                "value": "{\n        variables: any;\n        return: any;\n    }"
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/storefront-api-client/dist/storefront-api-client.d.ts",
+                "name": "[key: number | symbol]",
+                "value": "never"
+              }
+            ],
+            "value": "interface StorefrontQueries {\n    [key: string]: {\n        variables: any;\n        return: any;\n    };\n    [key: number | symbol]: never;\n}"
+          },
+          "StorefrontMutations": {
+            "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/storefront-api-client/dist/storefront-api-client.d.ts",
+            "name": "StorefrontMutations",
+            "description": "",
+            "members": [
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/storefront-api-client/dist/storefront-api-client.d.ts",
+                "name": "[key: string]",
+                "value": "{\n        variables: any;\n        return: any;\n    }"
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/storefront-api-client/dist/storefront-api-client.d.ts",
+                "name": "[key: number | symbol]",
+                "value": "never"
+              }
+            ],
+            "value": "interface StorefrontMutations {\n    [key: string]: {\n        variables: any;\n        return: any;\n    };\n    [key: number | symbol]: never;\n}"
+          },
           "AuthenticatePublicLegacy": {
             "filePath": "src/server/authenticate/public/types.ts",
             "syntaxKind": "TypeAliasDeclaration",
@@ -11579,14 +11943,14 @@
               {
                 "filePath": "src/server/types.ts",
                 "syntaxKind": "MethodSignature",
-                "name": "__@iterator@1657",
+                "name": "__@iterator@482",
                 "value": "() => IterableIterator<JSONValue>",
                 "description": "Iterator"
               },
               {
                 "filePath": "src/server/types.ts",
                 "syntaxKind": "PropertySignature",
-                "name": "__@unscopables@1659",
+                "name": "__@unscopables@484",
                 "value": "{ [x: number]: boolean; length?: boolean; toString?: boolean; toLocaleString?: boolean; pop?: boolean; push?: boolean; concat?: boolean; join?: boolean; reverse?: boolean; shift?: boolean; slice?: boolean; sort?: boolean; splice?: boolean; unshift?: boolean; indexOf?: boolean; lastIndexOf?: boolean; every?: boolean; some?: boolean; forEach?: boolean; map?: boolean; filter?: boolean; reduce?: boolean; reduceRight?: boolean; find?: boolean; findIndex?: boolean; fill?: boolean; copyWithin?: boolean; entries?: boolean; keys?: boolean; values?: boolean; includes?: boolean; flatMap?: boolean; flat?: boolean; [Symbol.iterator]?: boolean; readonly [Symbol.unscopables]?: boolean; at?: boolean; }",
                 "description": "Is an object whose properties have the value 'true' when they will be absent when used in a 'with' statement."
               },
@@ -11831,6 +12195,240 @@
               }
             ],
             "value": "export declare class RestClient {\n    static config: ConfigInterface;\n    static formatPaths: boolean;\n    static LINK_HEADER_REGEXP: RegExp;\n    static DEFAULT_LIMIT: string;\n    static RETRY_WAIT_TIME: number;\n    static readonly DEPRECATION_ALERT_DELAY = 300000;\n    loggedDeprecations: Record<string, number>;\n    readonly client: AdminRestApiClient;\n    readonly session: Session;\n    readonly apiVersion: ApiVersion;\n    constructor({ session, apiVersion }: RestClientParams);\n    /**\n     * Performs a GET request on the given path.\n     */\n    get<T = any>(params: GetRequestParams): Promise<RestRequestReturn<T>>;\n    /**\n     * Performs a POST request on the given path.\n     */\n    post<T = any>(params: PostRequestParams): Promise<RestRequestReturn<T>>;\n    /**\n     * Performs a PUT request on the given path.\n     */\n    put<T = any>(params: PutRequestParams): Promise<RestRequestReturn<T>>;\n    /**\n     * Performs a DELETE request on the given path.\n     */\n    delete<T = any>(params: DeleteRequestParams): Promise<RestRequestReturn<T>>;\n    protected request<T = any>(params: RequestParams): Promise<RestRequestReturn<T>>;\n    private restClass;\n    private buildRequestParams;\n    private logDeprecations;\n}"
+          },
+          "AdminRestApiClient": {
+            "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/admin-api-client/dist/ts/rest/types.d.ts",
+            "name": "AdminRestApiClient",
+            "description": "",
+            "members": [
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/admin-api-client/dist/ts/rest/types.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "get",
+                "value": "(path: string, options?: GetRequestOptions) => Promise<Response>",
+                "description": ""
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/admin-api-client/dist/ts/rest/types.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "put",
+                "value": "(path: string, options?: PutRequestOptions) => Promise<Response>",
+                "description": ""
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/admin-api-client/dist/ts/rest/types.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "post",
+                "value": "(path: string, options?: PostRequestOptions) => Promise<Response>",
+                "description": ""
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/admin-api-client/dist/ts/rest/types.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "delete",
+                "value": "(path: string, options?: DeleteRequestOptions) => Promise<Response>",
+                "description": ""
+              }
+            ],
+            "value": "export interface AdminRestApiClient {\n    get: (path: string, options?: GetRequestOptions) => ReturnType<CustomFetchApi>;\n    put: (path: string, options?: PutRequestOptions) => ReturnType<CustomFetchApi>;\n    post: (path: string, options?: PostRequestOptions) => ReturnType<CustomFetchApi>;\n    delete: (path: string, options?: DeleteRequestOptions) => ReturnType<CustomFetchApi>;\n}"
+          },
+          "GetRequestOptions": {
+            "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/admin-api-client/dist/ts/rest/types.d.ts",
+            "name": "GetRequestOptions",
+            "description": "",
+            "members": [
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/admin-api-client/dist/ts/rest/types.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "headers",
+                "value": "HeaderOptions",
+                "description": "",
+                "isOptional": true
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/admin-api-client/dist/ts/rest/types.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "data",
+                "value": "string | Record<string, any>",
+                "description": "",
+                "isOptional": true
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/admin-api-client/dist/ts/rest/types.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "searchParams",
+                "value": "SearchParams",
+                "description": "",
+                "isOptional": true
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/admin-api-client/dist/ts/rest/types.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "retries",
+                "value": "number",
+                "description": "",
+                "isOptional": true
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/admin-api-client/dist/ts/rest/types.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "apiVersion",
+                "value": "string",
+                "description": "",
+                "isOptional": true
+              }
+            ],
+            "value": "export interface GetRequestOptions {\n    headers?: HeaderOptions;\n    data?: Record<string, any> | string;\n    searchParams?: SearchParams;\n    retries?: number;\n    apiVersion?: string;\n}"
+          },
+          "HeaderOptions": {
+            "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/admin-api-client/dist/ts/rest/types.d.ts",
+            "syntaxKind": "TypeAliasDeclaration",
+            "name": "HeaderOptions",
+            "value": "Record<string, string | number | string[]>",
+            "description": "",
+            "members": []
+          },
+          "PutRequestOptions": {
+            "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/admin-api-client/dist/ts/rest/types.d.ts",
+            "name": "PutRequestOptions",
+            "description": "",
+            "members": [
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/admin-api-client/dist/ts/rest/types.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "data",
+                "value": "string | Record<string, any>",
+                "description": ""
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/admin-api-client/dist/ts/rest/types.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "headers",
+                "value": "HeaderOptions",
+                "description": "",
+                "isOptional": true
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/admin-api-client/dist/ts/rest/types.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "searchParams",
+                "value": "SearchParams",
+                "description": "",
+                "isOptional": true
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/admin-api-client/dist/ts/rest/types.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "retries",
+                "value": "number",
+                "description": "",
+                "isOptional": true
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/admin-api-client/dist/ts/rest/types.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "apiVersion",
+                "value": "string",
+                "description": "",
+                "isOptional": true
+              }
+            ],
+            "value": "export interface PutRequestOptions extends PostRequestOptions {\n}"
+          },
+          "PostRequestOptions": {
+            "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/admin-api-client/dist/ts/rest/types.d.ts",
+            "name": "PostRequestOptions",
+            "description": "",
+            "members": [
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/admin-api-client/dist/ts/rest/types.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "data",
+                "value": "string | Record<string, any>",
+                "description": ""
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/admin-api-client/dist/ts/rest/types.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "headers",
+                "value": "HeaderOptions",
+                "description": "",
+                "isOptional": true
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/admin-api-client/dist/ts/rest/types.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "searchParams",
+                "value": "SearchParams",
+                "description": "",
+                "isOptional": true
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/admin-api-client/dist/ts/rest/types.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "retries",
+                "value": "number",
+                "description": "",
+                "isOptional": true
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/admin-api-client/dist/ts/rest/types.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "apiVersion",
+                "value": "string",
+                "description": "",
+                "isOptional": true
+              }
+            ],
+            "value": "export interface PostRequestOptions extends GetRequestOptions {\n    data: Required<GetRequestOptions>[\"data\"];\n}"
+          },
+          "DeleteRequestOptions": {
+            "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/admin-api-client/dist/ts/rest/types.d.ts",
+            "name": "DeleteRequestOptions",
+            "description": "",
+            "members": [
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/admin-api-client/dist/ts/rest/types.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "headers",
+                "value": "HeaderOptions",
+                "description": "",
+                "isOptional": true
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/admin-api-client/dist/ts/rest/types.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "data",
+                "value": "string | Record<string, any>",
+                "description": "",
+                "isOptional": true
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/admin-api-client/dist/ts/rest/types.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "searchParams",
+                "value": "SearchParams",
+                "description": "",
+                "isOptional": true
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/admin-api-client/dist/ts/rest/types.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "retries",
+                "value": "number",
+                "description": "",
+                "isOptional": true
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/admin-api-client/dist/ts/rest/types.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "apiVersion",
+                "value": "string",
+                "description": "",
+                "isOptional": true
+              }
+            ],
+            "value": "export interface DeleteRequestOptions extends GetRequestOptions {\n}"
           },
           "RestRequestReturn": {
             "filePath": "../../node_modules/@shopify/shopify-api/lib/clients/admin/types.d.ts",
@@ -12599,6 +13197,168 @@
             ],
             "value": "export declare class GraphqlClient {\n    static config: ConfigInterface;\n    readonly session: Session;\n    readonly client: AdminApiClient;\n    readonly apiVersion?: ApiVersion;\n    constructor(params: GraphqlClientParams);\n    query<T = undefined>(params: GraphqlParams): Promise<RequestReturn<T>>;\n    request<T = undefined, Operation extends keyof Operations = string, Operations extends AdminOperations = AdminOperations>(operation: Operation, options?: GraphqlQueryOptions<Operation, Operations>): Promise<ClientResponse<T extends undefined ? ReturnData<Operation, Operations> : T>>;\n    private graphqlClass;\n}"
           },
+          "AdminApiClient": {
+            "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/admin-api-client/dist/ts/graphql/types.d.ts",
+            "syntaxKind": "TypeAliasDeclaration",
+            "name": "AdminApiClient",
+            "value": "ApiClient<AdminApiClientConfig, AdminOperations>",
+            "description": "",
+            "members": [
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/admin-api-client/dist/ts/graphql/types.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "config",
+                "value": "Readonly<TClientConfig>",
+                "description": ""
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/admin-api-client/dist/ts/graphql/types.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "getHeaders",
+                "value": "(headers?: Headers) => Headers",
+                "description": ""
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/admin-api-client/dist/ts/graphql/types.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "getApiUrl",
+                "value": "(apiVersion?: string) => string",
+                "description": ""
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/admin-api-client/dist/ts/graphql/types.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "fetch",
+                "value": "ApiClientFetch<Operations>",
+                "description": ""
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/admin-api-client/dist/ts/graphql/types.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "request",
+                "value": "ApiClientRequest<Operations>",
+                "description": ""
+              }
+            ]
+          },
+          "Readonly": {
+            "filePath": "../../node_modules/@shopify/polaris/build/ts/src/components/TextField/TextField.d.ts",
+            "name": "Readonly",
+            "description": "",
+            "members": [
+              {
+                "filePath": "../../node_modules/@shopify/polaris/build/ts/src/components/TextField/TextField.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "readonly",
+                "value": "true",
+                "description": "",
+                "isOptional": true
+              }
+            ],
+            "value": "interface Readonly {\n    readonly?: true;\n}"
+          },
+          "ApiClientFetch": {
+            "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/graphql-client/dist/graphql-client.d.ts",
+            "name": "ApiClientFetch",
+            "description": "",
+            "params": [
+              {
+                "name": "params",
+                "description": "",
+                "value": "ApiClientRequestParams<Operation, Operations>",
+                "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/graphql-client/dist/graphql-client.d.ts"
+              }
+            ],
+            "returns": {
+              "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/graphql-client/dist/graphql-client.d.ts",
+              "description": "",
+              "name": "interface Promise<T> {\n    /**\n     * Attaches callbacks for the resolution and/or rejection of the Promise.\n     * @param onfulfilled The callback to execute when the Promise is resolved.\n     * @param onrejected The callback to execute when the Promise is rejected.\n     * @returns A Promise for the completion of which ever callback is executed.\n     */\n    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): Promise<TResult1 | TResult2>;\n\n    /**\n     * Attaches a callback for only the rejection of the Promise.\n     * @param onrejected The callback to execute when the Promise is rejected.\n     * @returns A Promise for the completion of the callback.\n     */\n    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): Promise<T | TResult>;\n}, interface Promise<T> {}, Promise: PromiseConstructor, interface Promise<T> {\n    readonly [Symbol.toStringTag]: string;\n}, interface Promise<T> {\n    /**\n     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The\n     * resolved value cannot be modified from the callback.\n     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).\n     * @returns A Promise for the completion of the callback.\n     */\n    finally(onfinally?: (() => void) | undefined | null): Promise<T>;\n}",
+              "value": "interface Promise<T> {\n    /**\n     * Attaches callbacks for the resolution and/or rejection of the Promise.\n     * @param onfulfilled The callback to execute when the Promise is resolved.\n     * @param onrejected The callback to execute when the Promise is rejected.\n     * @returns A Promise for the completion of which ever callback is executed.\n     */\n    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): Promise<TResult1 | TResult2>;\n\n    /**\n     * Attaches a callback for only the rejection of the Promise.\n     * @param onrejected The callback to execute when the Promise is rejected.\n     * @returns A Promise for the completion of the callback.\n     */\n    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): Promise<T | TResult>;\n}, interface Promise<T> {}, Promise: PromiseConstructor, interface Promise<T> {\n    readonly [Symbol.toStringTag]: string;\n}, interface Promise<T> {\n    /**\n     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The\n     * resolved value cannot be modified from the callback.\n     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).\n     * @returns A Promise for the completion of the callback.\n     */\n    finally(onfinally?: (() => void) | undefined | null): Promise<T>;\n}"
+            },
+            "value": "type ApiClientFetch<Operations extends AllOperations = AllOperations> = <Operation extends keyof Operations = string>(...params: ApiClientRequestParams<Operation, Operations>) => Promise<ResponseWithType<FetchResponseBody<ReturnData<Operation, Operations>>>>;"
+          },
+          "ApiClientRequestParams": {
+            "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/graphql-client/dist/graphql-client.d.ts",
+            "syntaxKind": "TypeAliasDeclaration",
+            "name": "ApiClientRequestParams",
+            "value": "[\n    operation: Operation,\n    options?: ApiClientRequestOptions<Operation, Operations>\n]",
+            "description": "",
+            "members": [
+              {
+                "name": "[0]",
+                "value": "operation: Operation",
+                "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/graphql-client/dist/graphql-client.d.ts"
+              },
+              {
+                "name": "[1]",
+                "value": "options?: ApiClientRequestOptions<Operation, Operations>",
+                "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/graphql-client/dist/graphql-client.d.ts"
+              }
+            ]
+          },
+          "ApiClientRequestOptions": {
+            "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/graphql-client/dist/graphql-client.d.ts",
+            "syntaxKind": "TypeAliasDeclaration",
+            "name": "ApiClientRequestOptions",
+            "value": "{\n    apiVersion?: string;\n    headers?: Headers;\n    retries?: number;\n} & (Operation extends keyof Operations ? OperationVariables<Operation, Operations> : {\n    variables?: Record<string, any>;\n})",
+            "description": ""
+          },
+          "Headers": {
+            "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/graphql-client/dist/graphql-client.d.ts",
+            "syntaxKind": "TypeAliasDeclaration",
+            "name": "Headers",
+            "value": "Record<string, string | string[]>",
+            "description": "",
+            "members": []
+          },
+          "OperationVariables": {
+            "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/graphql-client/dist/graphql-client.d.ts",
+            "syntaxKind": "TypeAliasDeclaration",
+            "name": "OperationVariables",
+            "value": "Operations[Operation][\"variables\"] extends Record<string, never> ? Record<string, never> : {\n    variables?: {\n        [k in keyof Operations[Operation][\"variables\"]]: UnpackedInputMaybe<Operations[Operation][\"variables\"][k]>;\n    };\n}",
+            "description": ""
+          },
+          "UnpackedInputMaybe": {
+            "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/graphql-client/dist/graphql-client.d.ts",
+            "syntaxKind": "TypeAliasDeclaration",
+            "name": "UnpackedInputMaybe",
+            "value": "InputType extends InputMaybe<infer R> ? InputMaybe<UnpackedInput<R>> : UnpackedInput<InputType>",
+            "description": ""
+          },
+          "InputMaybe": {
+            "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/graphql-client/dist/graphql-client.d.ts",
+            "syntaxKind": "TypeAliasDeclaration",
+            "name": "InputMaybe",
+            "value": "never",
+            "description": ""
+          },
+          "UnpackedInput": {
+            "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/graphql-client/dist/graphql-client.d.ts",
+            "syntaxKind": "TypeAliasDeclaration",
+            "name": "UnpackedInput",
+            "value": "\"input\" extends keyof InputType ? InputType[\"input\"] : InputType",
+            "description": ""
+          },
+          "ApiClientRequest": {
+            "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/graphql-client/dist/graphql-client.d.ts",
+            "name": "ApiClientRequest",
+            "description": "",
+            "params": [
+              {
+                "name": "params",
+                "description": "",
+                "value": "ApiClientRequestParams<Operation, Operations>",
+                "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/graphql-client/dist/graphql-client.d.ts"
+              }
+            ],
+            "returns": {
+              "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/graphql-client/dist/graphql-client.d.ts",
+              "description": "",
+              "name": "interface Promise<T> {\n    /**\n     * Attaches callbacks for the resolution and/or rejection of the Promise.\n     * @param onfulfilled The callback to execute when the Promise is resolved.\n     * @param onrejected The callback to execute when the Promise is rejected.\n     * @returns A Promise for the completion of which ever callback is executed.\n     */\n    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): Promise<TResult1 | TResult2>;\n\n    /**\n     * Attaches a callback for only the rejection of the Promise.\n     * @param onrejected The callback to execute when the Promise is rejected.\n     * @returns A Promise for the completion of the callback.\n     */\n    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): Promise<T | TResult>;\n}, interface Promise<T> {}, Promise: PromiseConstructor, interface Promise<T> {\n    readonly [Symbol.toStringTag]: string;\n}, interface Promise<T> {\n    /**\n     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The\n     * resolved value cannot be modified from the callback.\n     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).\n     * @returns A Promise for the completion of the callback.\n     */\n    finally(onfinally?: (() => void) | undefined | null): Promise<T>;\n}",
+              "value": "interface Promise<T> {\n    /**\n     * Attaches callbacks for the resolution and/or rejection of the Promise.\n     * @param onfulfilled The callback to execute when the Promise is resolved.\n     * @param onrejected The callback to execute when the Promise is rejected.\n     * @returns A Promise for the completion of which ever callback is executed.\n     */\n    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): Promise<TResult1 | TResult2>;\n\n    /**\n     * Attaches a callback for only the rejection of the Promise.\n     * @param onrejected The callback to execute when the Promise is rejected.\n     * @returns A Promise for the completion of the callback.\n     */\n    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): Promise<T | TResult>;\n}, interface Promise<T> {}, Promise: PromiseConstructor, interface Promise<T> {\n    readonly [Symbol.toStringTag]: string;\n}, interface Promise<T> {\n    /**\n     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The\n     * resolved value cannot be modified from the callback.\n     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).\n     * @returns A Promise for the completion of the callback.\n     */\n    finally(onfinally?: (() => void) | undefined | null): Promise<T>;\n}"
+            },
+            "value": "type ApiClientRequest<Operations extends AllOperations = AllOperations> = <TData = undefined, Operation extends keyof Operations = string>(...params: ApiClientRequestParams<Operation, Operations>) => Promise<ClientResponse<TData extends undefined ? ReturnData<Operation, Operations> : TData>>;"
+          },
           "GraphqlParams": {
             "filePath": "../../node_modules/@shopify/shopify-api/lib/clients/types.d.ts",
             "syntaxKind": "TypeAliasDeclaration",
@@ -12661,6 +13421,93 @@
             ],
             "value": "export interface GraphqlQueryOptions<Operation extends keyof Operations, Operations extends AllOperations> {\n    variables?: ApiClientRequestOptions<Operation, Operations>['variables'];\n    headers?: Record<string, string | number>;\n    retries?: number;\n}"
           },
+          "ClientResponse": {
+            "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/graphql-client/dist/graphql-client.d.ts",
+            "name": "ClientResponse",
+            "description": "",
+            "members": [
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/graphql-client/dist/graphql-client.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "errors",
+                "value": "ResponseErrors",
+                "description": "",
+                "isOptional": true
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/graphql-client/dist/graphql-client.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "data",
+                "value": "TData",
+                "description": "",
+                "isOptional": true
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/graphql-client/dist/graphql-client.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "extensions",
+                "value": "GQLExtensions",
+                "description": "",
+                "isOptional": true
+              }
+            ],
+            "value": "interface ClientResponse<TData = any> extends FetchResponseBody<TData> {\n    errors?: ResponseErrors;\n}"
+          },
+          "ResponseErrors": {
+            "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/graphql-client/dist/graphql-client.d.ts",
+            "name": "ResponseErrors",
+            "description": "",
+            "members": [
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/graphql-client/dist/graphql-client.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "networkStatusCode",
+                "value": "number",
+                "description": "",
+                "isOptional": true
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/graphql-client/dist/graphql-client.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "message",
+                "value": "string",
+                "description": "",
+                "isOptional": true
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/graphql-client/dist/graphql-client.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "graphQLErrors",
+                "value": "any[]",
+                "description": "",
+                "isOptional": true
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/graphql-client/dist/graphql-client.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "response",
+                "value": "Response",
+                "description": "",
+                "isOptional": true
+              }
+            ],
+            "value": "interface ResponseErrors {\n    networkStatusCode?: number;\n    message?: string;\n    graphQLErrors?: any[];\n    response?: Response;\n}"
+          },
+          "GQLExtensions": {
+            "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/graphql-client/dist/graphql-client.d.ts",
+            "syntaxKind": "TypeAliasDeclaration",
+            "name": "GQLExtensions",
+            "value": "Record<string, any>",
+            "description": "",
+            "members": []
+          },
+          "ReturnData": {
+            "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/graphql-client/dist/graphql-client.d.ts",
+            "syntaxKind": "TypeAliasDeclaration",
+            "name": "ReturnData",
+            "value": "Operation extends keyof Operations ? Operations[Operation][\"return\"] : any",
+            "description": ""
+          },
           "StorefrontClient": {
             "filePath": "../../node_modules/@shopify/shopify-api/lib/clients/storefront/client.d.ts",
             "name": "StorefrontClient",
@@ -12703,6 +13550,50 @@
               }
             ],
             "value": "export declare class StorefrontClient {\n    static config: ConfigInterface;\n    readonly session: Session;\n    readonly client: StorefrontApiClient;\n    readonly apiVersion?: ApiVersion;\n    constructor(params: GraphqlClientParams);\n    query<T = undefined>(params: GraphqlParams): Promise<RequestReturn<T>>;\n    request<T = undefined, Operation extends keyof Operations = string, Operations extends StorefrontOperations = StorefrontOperations>(operation: Operation, options?: GraphqlQueryOptions<Operation, Operations>): Promise<ClientResponse<T extends undefined ? ReturnData<Operation, Operations> : T>>;\n    private storefrontClass;\n}"
+          },
+          "StorefrontApiClient": {
+            "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/storefront-api-client/dist/storefront-api-client.d.ts",
+            "syntaxKind": "TypeAliasDeclaration",
+            "name": "StorefrontApiClient",
+            "value": "ApiClient<StorefrontApiClientConfig, StorefrontOperations>",
+            "description": "",
+            "members": [
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/storefront-api-client/dist/storefront-api-client.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "config",
+                "value": "Readonly<TClientConfig>",
+                "description": ""
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/storefront-api-client/dist/storefront-api-client.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "getHeaders",
+                "value": "(headers?: Headers) => Headers",
+                "description": ""
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/storefront-api-client/dist/storefront-api-client.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "getApiUrl",
+                "value": "(apiVersion?: string) => string",
+                "description": ""
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/storefront-api-client/dist/storefront-api-client.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "fetch",
+                "value": "ApiClientFetch<Operations>",
+                "description": ""
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/storefront-api-client/dist/storefront-api-client.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "request",
+                "value": "ApiClientRequest<Operations>",
+                "description": ""
+              }
+            ]
           },
           "GraphqlProxy": {
             "filePath": "../../node_modules/@shopify/shopify-api/lib/clients/graphql_proxy/types.d.ts",
@@ -15143,6 +16034,14 @@
               }
             ]
           },
+          "SearchParams": {
+            "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/admin-api-client/dist/ts/rest/types.d.ts",
+            "syntaxKind": "TypeAliasDeclaration",
+            "name": "SearchParams",
+            "value": "Record<string, SearchParamFields>",
+            "description": "",
+            "members": []
+          },
           "HeaderParams": {
             "filePath": "../../node_modules/@shopify/shopify-api/lib/clients/types.d.ts",
             "syntaxKind": "TypeAliasDeclaration",
@@ -15158,115 +16057,48 @@
             "value": "GetRequestParams & {\n    data: Record<string, any> | string;\n}",
             "description": ""
           },
-          "GraphQLClient": {
-            "filePath": "src/server/clients/types.ts",
-            "name": "GraphQLClient",
-            "description": "",
-            "params": [
-              {
-                "name": "query",
-                "description": "",
-                "value": "Operation extends keyof Operations",
-                "filePath": "src/server/clients/types.ts"
-              },
-              {
-                "name": "options",
-                "description": "",
-                "value": "GraphQLQueryOptions<Operation, Operations>",
-                "isOptional": true,
-                "filePath": "src/server/clients/types.ts"
-              }
-            ],
-            "returns": {
-              "filePath": "src/server/clients/types.ts",
-              "description": "",
-              "name": "interface Promise<T> {\n    /**\n     * Attaches callbacks for the resolution and/or rejection of the Promise.\n     * @param onfulfilled The callback to execute when the Promise is resolved.\n     * @param onrejected The callback to execute when the Promise is rejected.\n     * @returns A Promise for the completion of which ever callback is executed.\n     */\n    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): Promise<TResult1 | TResult2>;\n\n    /**\n     * Attaches a callback for only the rejection of the Promise.\n     * @param onrejected The callback to execute when the Promise is rejected.\n     * @returns A Promise for the completion of the callback.\n     */\n    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): Promise<T | TResult>;\n}, interface Promise<T> {}, Promise: PromiseConstructor, interface Promise<T> {\n    readonly [Symbol.toStringTag]: string;\n}, interface Promise<T> {\n    /**\n     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The\n     * resolved value cannot be modified from the callback.\n     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).\n     * @returns A Promise for the completion of the callback.\n     */\n    finally(onfinally?: (() => void) | undefined | null): Promise<T>;\n}",
-              "value": "interface Promise<T> {\n    /**\n     * Attaches callbacks for the resolution and/or rejection of the Promise.\n     * @param onfulfilled The callback to execute when the Promise is resolved.\n     * @param onrejected The callback to execute when the Promise is rejected.\n     * @returns A Promise for the completion of which ever callback is executed.\n     */\n    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): Promise<TResult1 | TResult2>;\n\n    /**\n     * Attaches a callback for only the rejection of the Promise.\n     * @param onrejected The callback to execute when the Promise is rejected.\n     * @returns A Promise for the completion of the callback.\n     */\n    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): Promise<T | TResult>;\n}, interface Promise<T> {}, Promise: PromiseConstructor, interface Promise<T> {\n    readonly [Symbol.toStringTag]: string;\n}, interface Promise<T> {\n    /**\n     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The\n     * resolved value cannot be modified from the callback.\n     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).\n     * @returns A Promise for the completion of the callback.\n     */\n    finally(onfinally?: (() => void) | undefined | null): Promise<T>;\n}"
-            },
-            "value": "export type GraphQLClient<Operations extends AllOperations> = <\n  Operation extends keyof Operations,\n>(\n  query: Operation,\n  options?: GraphQLQueryOptions<Operation, Operations>,\n) => Promise<\n  ResponseWithType<FetchResponseBody<ReturnData<Operation, Operations>>>\n>;"
+          "AdminOperations": {
+            "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/admin-api-client/dist/ts/graphql/types.d.ts",
+            "syntaxKind": "TypeAliasDeclaration",
+            "name": "AdminOperations",
+            "value": "AdminQueries & AdminMutations",
+            "description": ""
           },
-          "GraphQLQueryOptions": {
-            "filePath": "src/server/clients/types.ts",
-            "name": "GraphQLQueryOptions",
+          "AdminQueries": {
+            "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/admin-api-client/dist/ts/graphql/types.d.ts",
+            "name": "AdminQueries",
             "description": "",
             "members": [
               {
-                "filePath": "src/server/clients/types.ts",
-                "syntaxKind": "PropertySignature",
-                "name": "variables",
-                "value": "ApiClientRequestOptions<Operation, Operations>[\"variables\"]",
-                "description": "",
-                "isOptional": true
+                "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/admin-api-client/dist/ts/graphql/types.d.ts",
+                "name": "[key: string]",
+                "value": "{\n        variables: any;\n        return: any;\n    }"
               },
               {
-                "filePath": "src/server/clients/types.ts",
-                "syntaxKind": "PropertySignature",
-                "name": "apiVersion",
-                "value": "ApiVersion",
-                "description": "",
-                "isOptional": true
-              },
-              {
-                "filePath": "src/server/clients/types.ts",
-                "syntaxKind": "PropertySignature",
-                "name": "headers",
-                "value": "{ [key: string]: any; }",
-                "description": "",
-                "isOptional": true
-              },
-              {
-                "filePath": "src/server/clients/types.ts",
-                "syntaxKind": "PropertySignature",
-                "name": "tries",
-                "value": "number",
-                "description": "",
-                "isOptional": true
+                "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/admin-api-client/dist/ts/graphql/types.d.ts",
+                "name": "[key: number | symbol]",
+                "value": "never"
               }
             ],
-            "value": "export interface GraphQLQueryOptions<\n  Operation extends keyof Operations,\n  Operations extends AllOperations,\n> {\n  variables?: ApiClientRequestOptions<Operation, Operations>['variables'];\n  apiVersion?: ApiVersion;\n  headers?: {[key: string]: any};\n  tries?: number;\n}"
+            "value": "export interface AdminQueries {\n    [key: string]: {\n        variables: any;\n        return: any;\n    };\n    [key: number | symbol]: never;\n}"
           },
-          "ApiVersion": {
-            "filePath": "../../node_modules/@shopify/shopify-api/lib/types.d.ts",
-            "syntaxKind": "EnumDeclaration",
-            "name": "ApiVersion",
-            "value": "export declare enum ApiVersion {\n    October22 = \"2022-10\",\n    January23 = \"2023-01\",\n    April23 = \"2023-04\",\n    July23 = \"2023-07\",\n    October23 = \"2023-10\",\n    January24 = \"2024-01\",\n    Unstable = \"unstable\"\n}",
+          "AdminMutations": {
+            "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/admin-api-client/dist/ts/graphql/types.d.ts",
+            "name": "AdminMutations",
+            "description": "",
             "members": [
               {
-                "filePath": "../../node_modules/@shopify/shopify-api/lib/types.d.ts",
-                "name": "October22",
-                "value": "2022-10"
+                "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/admin-api-client/dist/ts/graphql/types.d.ts",
+                "name": "[key: string]",
+                "value": "{\n        variables: any;\n        return: any;\n    }"
               },
               {
-                "filePath": "../../node_modules/@shopify/shopify-api/lib/types.d.ts",
-                "name": "January23",
-                "value": "2023-01"
-              },
-              {
-                "filePath": "../../node_modules/@shopify/shopify-api/lib/types.d.ts",
-                "name": "April23",
-                "value": "2023-04"
-              },
-              {
-                "filePath": "../../node_modules/@shopify/shopify-api/lib/types.d.ts",
-                "name": "July23",
-                "value": "2023-07"
-              },
-              {
-                "filePath": "../../node_modules/@shopify/shopify-api/lib/types.d.ts",
-                "name": "October23",
-                "value": "2023-10"
-              },
-              {
-                "filePath": "../../node_modules/@shopify/shopify-api/lib/types.d.ts",
-                "name": "January24",
-                "value": "2024-01"
-              },
-              {
-                "filePath": "../../node_modules/@shopify/shopify-api/lib/types.d.ts",
-                "name": "Unstable",
-                "value": "unstable"
+                "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/admin-api-client/dist/ts/graphql/types.d.ts",
+                "name": "[key: number | symbol]",
+                "value": "never"
               }
-            ]
+            ],
+            "value": "export interface AdminMutations {\n    [key: string]: {\n        variables: any;\n        return: any;\n    };\n    [key: number | symbol]: never;\n}"
           }
         }
       }
@@ -15715,115 +16547,48 @@
             ],
             "value": "export interface StorefrontContext {\n  /**\n   * Method for interacting with the Shopify Storefront GraphQL API\n   *\n   * If you're getting incorrect type hints in the Shopify template, follow [these instructions](https://github.com/Shopify/shopify-app-template-remix/tree/main#incorrect-graphql-hints).\n   *\n   * {@link https://shopify.dev/docs/api/storefront}\n   *\n   * @example\n   * <caption>Querying the GraphQL API.</caption>\n   * <description>Use `storefront.graphql` to make query / mutation requests.</description>\n   * ```ts\n   * // app/routes/**\\/.ts\n   * import { json } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   *\n   * export async function action({ request }: ActionFunctionArgs) {\n   *   const { storefront } = await authenticate.public.appProxy(request);\n   *\n   *   const response = await storefront.graphql(`{blogs(first: 10) { edges { node { id } } } }`);\n   *\n   *   return json(await response.json());\n   * }\n   * ```\n   */\n  graphql: GraphQLClient<StorefrontOperations>;\n}"
           },
-          "GraphQLClient": {
-            "filePath": "src/server/clients/types.ts",
-            "name": "GraphQLClient",
-            "description": "",
-            "params": [
-              {
-                "name": "query",
-                "description": "",
-                "value": "Operation extends keyof Operations",
-                "filePath": "src/server/clients/types.ts"
-              },
-              {
-                "name": "options",
-                "description": "",
-                "value": "GraphQLQueryOptions<Operation, Operations>",
-                "isOptional": true,
-                "filePath": "src/server/clients/types.ts"
-              }
-            ],
-            "returns": {
-              "filePath": "src/server/clients/types.ts",
-              "description": "",
-              "name": "interface Promise<T> {\n    /**\n     * Attaches callbacks for the resolution and/or rejection of the Promise.\n     * @param onfulfilled The callback to execute when the Promise is resolved.\n     * @param onrejected The callback to execute when the Promise is rejected.\n     * @returns A Promise for the completion of which ever callback is executed.\n     */\n    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): Promise<TResult1 | TResult2>;\n\n    /**\n     * Attaches a callback for only the rejection of the Promise.\n     * @param onrejected The callback to execute when the Promise is rejected.\n     * @returns A Promise for the completion of the callback.\n     */\n    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): Promise<T | TResult>;\n}, interface Promise<T> {}, Promise: PromiseConstructor, interface Promise<T> {\n    readonly [Symbol.toStringTag]: string;\n}, interface Promise<T> {\n    /**\n     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The\n     * resolved value cannot be modified from the callback.\n     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).\n     * @returns A Promise for the completion of the callback.\n     */\n    finally(onfinally?: (() => void) | undefined | null): Promise<T>;\n}",
-              "value": "interface Promise<T> {\n    /**\n     * Attaches callbacks for the resolution and/or rejection of the Promise.\n     * @param onfulfilled The callback to execute when the Promise is resolved.\n     * @param onrejected The callback to execute when the Promise is rejected.\n     * @returns A Promise for the completion of which ever callback is executed.\n     */\n    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): Promise<TResult1 | TResult2>;\n\n    /**\n     * Attaches a callback for only the rejection of the Promise.\n     * @param onrejected The callback to execute when the Promise is rejected.\n     * @returns A Promise for the completion of the callback.\n     */\n    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): Promise<T | TResult>;\n}, interface Promise<T> {}, Promise: PromiseConstructor, interface Promise<T> {\n    readonly [Symbol.toStringTag]: string;\n}, interface Promise<T> {\n    /**\n     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The\n     * resolved value cannot be modified from the callback.\n     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).\n     * @returns A Promise for the completion of the callback.\n     */\n    finally(onfinally?: (() => void) | undefined | null): Promise<T>;\n}"
-            },
-            "value": "export type GraphQLClient<Operations extends AllOperations> = <\n  Operation extends keyof Operations,\n>(\n  query: Operation,\n  options?: GraphQLQueryOptions<Operation, Operations>,\n) => Promise<\n  ResponseWithType<FetchResponseBody<ReturnData<Operation, Operations>>>\n>;"
+          "StorefrontOperations": {
+            "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/storefront-api-client/dist/storefront-api-client.d.ts",
+            "syntaxKind": "TypeAliasDeclaration",
+            "name": "StorefrontOperations",
+            "value": "StorefrontQueries & StorefrontMutations",
+            "description": ""
           },
-          "GraphQLQueryOptions": {
-            "filePath": "src/server/clients/types.ts",
-            "name": "GraphQLQueryOptions",
+          "StorefrontQueries": {
+            "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/storefront-api-client/dist/storefront-api-client.d.ts",
+            "name": "StorefrontQueries",
             "description": "",
             "members": [
               {
-                "filePath": "src/server/clients/types.ts",
-                "syntaxKind": "PropertySignature",
-                "name": "variables",
-                "value": "ApiClientRequestOptions<Operation, Operations>[\"variables\"]",
-                "description": "",
-                "isOptional": true
+                "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/storefront-api-client/dist/storefront-api-client.d.ts",
+                "name": "[key: string]",
+                "value": "{\n        variables: any;\n        return: any;\n    }"
               },
               {
-                "filePath": "src/server/clients/types.ts",
-                "syntaxKind": "PropertySignature",
-                "name": "apiVersion",
-                "value": "ApiVersion",
-                "description": "",
-                "isOptional": true
-              },
-              {
-                "filePath": "src/server/clients/types.ts",
-                "syntaxKind": "PropertySignature",
-                "name": "headers",
-                "value": "{ [key: string]: any; }",
-                "description": "",
-                "isOptional": true
-              },
-              {
-                "filePath": "src/server/clients/types.ts",
-                "syntaxKind": "PropertySignature",
-                "name": "tries",
-                "value": "number",
-                "description": "",
-                "isOptional": true
+                "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/storefront-api-client/dist/storefront-api-client.d.ts",
+                "name": "[key: number | symbol]",
+                "value": "never"
               }
             ],
-            "value": "export interface GraphQLQueryOptions<\n  Operation extends keyof Operations,\n  Operations extends AllOperations,\n> {\n  variables?: ApiClientRequestOptions<Operation, Operations>['variables'];\n  apiVersion?: ApiVersion;\n  headers?: {[key: string]: any};\n  tries?: number;\n}"
+            "value": "interface StorefrontQueries {\n    [key: string]: {\n        variables: any;\n        return: any;\n    };\n    [key: number | symbol]: never;\n}"
           },
-          "ApiVersion": {
-            "filePath": "../../node_modules/@shopify/shopify-api/lib/types.d.ts",
-            "syntaxKind": "EnumDeclaration",
-            "name": "ApiVersion",
-            "value": "export declare enum ApiVersion {\n    October22 = \"2022-10\",\n    January23 = \"2023-01\",\n    April23 = \"2023-04\",\n    July23 = \"2023-07\",\n    October23 = \"2023-10\",\n    January24 = \"2024-01\",\n    Unstable = \"unstable\"\n}",
+          "StorefrontMutations": {
+            "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/storefront-api-client/dist/storefront-api-client.d.ts",
+            "name": "StorefrontMutations",
+            "description": "",
             "members": [
               {
-                "filePath": "../../node_modules/@shopify/shopify-api/lib/types.d.ts",
-                "name": "October22",
-                "value": "2022-10"
+                "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/storefront-api-client/dist/storefront-api-client.d.ts",
+                "name": "[key: string]",
+                "value": "{\n        variables: any;\n        return: any;\n    }"
               },
               {
-                "filePath": "../../node_modules/@shopify/shopify-api/lib/types.d.ts",
-                "name": "January23",
-                "value": "2023-01"
-              },
-              {
-                "filePath": "../../node_modules/@shopify/shopify-api/lib/types.d.ts",
-                "name": "April23",
-                "value": "2023-04"
-              },
-              {
-                "filePath": "../../node_modules/@shopify/shopify-api/lib/types.d.ts",
-                "name": "July23",
-                "value": "2023-07"
-              },
-              {
-                "filePath": "../../node_modules/@shopify/shopify-api/lib/types.d.ts",
-                "name": "October23",
-                "value": "2023-10"
-              },
-              {
-                "filePath": "../../node_modules/@shopify/shopify-api/lib/types.d.ts",
-                "name": "January24",
-                "value": "2024-01"
-              },
-              {
-                "filePath": "../../node_modules/@shopify/shopify-api/lib/types.d.ts",
-                "name": "Unstable",
-                "value": "unstable"
+                "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/storefront-api-client/dist/storefront-api-client.d.ts",
+                "name": "[key: number | symbol]",
+                "value": "never"
               }
-            ]
+            ],
+            "value": "interface StorefrontMutations {\n    [key: string]: {\n        variables: any;\n        return: any;\n    };\n    [key: number | symbol]: never;\n}"
           }
         }
       }
