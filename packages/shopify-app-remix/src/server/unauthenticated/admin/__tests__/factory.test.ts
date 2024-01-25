@@ -20,9 +20,8 @@ describe('unauthenticated admin context', () => {
     const expectedSession = await setUpValidSession(shopify.sessionStorage, {
       isOnline: false,
     });
-    const {admin, session: actualSession} = await shopify.unauthenticated.admin(
-      TEST_SHOP,
-    );
+    const {admin, session: actualSession} =
+      await shopify.unauthenticated.admin(TEST_SHOP);
 
     return {admin, expectedSession, actualSession};
   });

@@ -185,9 +185,8 @@ describe('authorize.admin auth callback path', () => {
         );
 
         // THEN
-        const [session] = await config.sessionStorage!.findSessionsByShop(
-          TEST_SHOP,
-        );
+        const [session] =
+          await config.sessionStorage!.findSessionsByShop(TEST_SHOP);
 
         expect(session).toMatchObject({
           accessToken: '123abc',
