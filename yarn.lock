@@ -2687,13 +2687,6 @@
     estree-walker "^1.0.1"
     picomatch "^2.2.2"
 
-"@shopify/admin-api-client@^0.2.1":
-  version "0.2.1"
-  resolved "https://registry.yarnpkg.com/@shopify/admin-api-client/-/admin-api-client-0.2.1.tgz#98f10a9732b6d742189af5ccb7bb4dd781485acd"
-  integrity sha512-Oeh247CRXqSk5ktrEoBRN/BA5AGEliiyKJeTSGaIZpnMYDSXb2FNsmLaZY49/jTklmMouwoqh7FnYE5Vw8ZyQw==
-  dependencies:
-    "@shopify/graphql-client" "^0.9.1"
-
 "@shopify/admin-api-client@^0.2.2":
   version "0.2.2"
   resolved "https://registry.yarnpkg.com/@shopify/admin-api-client/-/admin-api-client-0.2.2.tgz#c288b4af8834bc7ab6c7c1ad26e7feddfa648ec6"
@@ -2762,12 +2755,7 @@
     globby "^11.1.0"
     typescript "^4.8.3 || ^5.0.0"
 
-"@shopify/graphql-client@^0.9.1":
-  version "0.9.1"
-  resolved "https://registry.yarnpkg.com/@shopify/graphql-client/-/graphql-client-0.9.1.tgz#0c37a4143c0dd26837e82b8fd13e1b64fabf90dc"
-  integrity sha512-yx6PIHY8u4O0ijUQccmIpjoyM1JSbe5RkrSyXSbjhsS+nla0WAJDIMw4R01mjx3dFnVIcGONhRX/QrUq97uWig==
-
-"@shopify/graphql-client@^0.9.2":
+"@shopify/graphql-client@^0.9.1", "@shopify/graphql-client@^0.9.2":
   version "0.9.2"
   resolved "https://registry.yarnpkg.com/@shopify/graphql-client/-/graphql-client-0.9.2.tgz#2c37ba20bbc1713c78b1b241af99405cd92ab428"
   integrity sha512-Xk7bPA3UsLXFHV6F39t5g8dTVxqPagwJoR+MLYUvCuhlWpDeZW3f/OcgShXPPben5NcnOVV38kj5GVlkvrWqiQ==
