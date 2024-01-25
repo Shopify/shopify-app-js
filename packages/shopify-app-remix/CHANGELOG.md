@@ -1,5 +1,23 @@
 # @shopify/shopify-app-remix
 
+## 2.4.0
+
+### Minor Changes
+
+- 2473c85: Add new embedded authorization strategy relying on Shopify managed install and OAuth token exchange
+
+### Patch Changes
+
+- 35b74dd: Fixes a bug that was causing external redirects to fail in remix actions
+- 42013e8: Minor refactor in login.ts to use new URL util method from shopify-api-js
+- b4eeb24: Improved and simplified package.json dependencies
+- b998c30: Bump shopify-api version from 9.0.1 to 9.0.2
+- b998c30: Handle webhook registration throttling error
+- f445164: Use 'body' field from GraphqlQueryError when logging session validation error
+- Updated dependencies [b4eeb24]
+- Updated dependencies [b998c30]
+  - @shopify/shopify-app-session-storage@2.0.4
+
 ## 2.3.0
 
 ### Minor Changes
