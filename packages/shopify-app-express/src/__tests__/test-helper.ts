@@ -57,11 +57,7 @@ beforeEach(() => {
   currentCall = 0;
 });
 
-export type MockBody =
-  | string
-  | {
-      [key: string]: any;
-    };
+export type MockBody = string | Record<string, any>;
 
 interface AssertHttpRequestParams {
   method: string;
@@ -180,7 +176,7 @@ export function validWebhookHeaders(
   topic: string,
   body: string,
   secretKey: string,
-): {[key: string]: string} {
+): Record<string, string> {
   const hmac = createTestHmac(secretKey, body);
 
   return {

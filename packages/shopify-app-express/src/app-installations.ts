@@ -20,9 +20,8 @@ export class AppInstallations {
   }
 
   async includes(shopDomain: string): Promise<boolean> {
-    const shopSessions = await this.sessionStorage.findSessionsByShop!(
-      shopDomain,
-    );
+    const shopSessions =
+      await this.sessionStorage.findSessionsByShop!(shopDomain);
     if (shopSessions.length > 0) {
       for (const session of shopSessions) {
         if (session.accessToken) return true;
@@ -32,9 +31,8 @@ export class AppInstallations {
   }
 
   async delete(shopDomain: string): Promise<void> {
-    const shopSessions = await this.sessionStorage.findSessionsByShop!(
-      shopDomain,
-    );
+    const shopSessions =
+      await this.sessionStorage.findSessionsByShop!(shopDomain);
     if (shopSessions.length > 0) {
       await this.sessionStorage.deleteSessions!(
         shopSessions.map((session: Session) => session.id),

@@ -129,9 +129,10 @@ export interface LegacyWebhookAdminApiContext<
 export type WebhookAdminContext<
   Future extends FutureFlagOptions,
   Resources extends ShopifyRestResources,
-> = FeatureEnabled<Future, 'v3_webhookAdminContext'> extends true
-  ? AdminApiContext<Resources>
-  : LegacyWebhookAdminApiContext<Resources>;
+> =
+  FeatureEnabled<Future, 'v3_webhookAdminContext'> extends true
+    ? AdminApiContext<Resources>
+    : LegacyWebhookAdminApiContext<Resources>;
 
 export interface WebhookContextWithSession<
   Future extends FutureFlagOptions,

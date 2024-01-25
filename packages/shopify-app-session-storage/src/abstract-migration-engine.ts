@@ -33,9 +33,8 @@ export abstract class AbstractMigrationEngine<
     await this.ready;
 
     for (const {migrationName, migrationFunction} of this.getMigrationList()) {
-      const migrationApplied = await this.hasMigrationBeenApplied(
-        migrationName,
-      );
+      const migrationApplied =
+        await this.hasMigrationBeenApplied(migrationName);
       if (!migrationApplied) {
         await migrationFunction(this.connection);
         await this.saveAppliedMigration(migrationName);

@@ -1,8 +1,6 @@
 import {WebhookHandler} from '@shopify/shopify-api';
 
-export interface CookiesType {
-  [key: string]: string;
-}
+export type CookiesType = Record<string, string>;
 
 export interface CallbackInfo {
   params: URLSearchParams;
@@ -19,6 +17,6 @@ export interface OAuthTestCase {
 export interface AppUninstalledTestCase {
   handler: WebhookHandler;
   expectWrap: boolean;
-  mockResponse: {[key: string]: any};
+  mockResponse: Record<string, any>;
   expectedQuery: string;
 }
