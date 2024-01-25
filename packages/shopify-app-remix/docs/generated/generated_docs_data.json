@@ -3525,14 +3525,14 @@
               {
                 "filePath": "src/server/types.ts",
                 "syntaxKind": "MethodSignature",
-                "name": "__@iterator@482",
+                "name": "__@iterator@483",
                 "value": "() => IterableIterator<JSONValue>",
                 "description": "Iterator"
               },
               {
                 "filePath": "src/server/types.ts",
                 "syntaxKind": "PropertySignature",
-                "name": "__@unscopables@484",
+                "name": "__@unscopables@485",
                 "value": "{ [x: number]: boolean; length?: boolean; toString?: boolean; toLocaleString?: boolean; pop?: boolean; push?: boolean; concat?: boolean; join?: boolean; reverse?: boolean; shift?: boolean; slice?: boolean; sort?: boolean; splice?: boolean; unshift?: boolean; indexOf?: boolean; lastIndexOf?: boolean; every?: boolean; some?: boolean; forEach?: boolean; map?: boolean; filter?: boolean; reduce?: boolean; reduceRight?: boolean; find?: boolean; findIndex?: boolean; fill?: boolean; copyWithin?: boolean; entries?: boolean; keys?: boolean; values?: boolean; includes?: boolean; flatMap?: boolean; flat?: boolean; [Symbol.iterator]?: boolean; readonly [Symbol.unscopables]?: boolean; at?: boolean; }",
                 "description": "Is an object whose properties have the value 'true' when they will be absent when used in a 'with' statement."
               },
@@ -11943,14 +11943,14 @@
               {
                 "filePath": "src/server/types.ts",
                 "syntaxKind": "MethodSignature",
-                "name": "__@iterator@482",
+                "name": "__@iterator@483",
                 "value": "() => IterableIterator<JSONValue>",
                 "description": "Iterator"
               },
               {
                 "filePath": "src/server/types.ts",
                 "syntaxKind": "PropertySignature",
-                "name": "__@unscopables@484",
+                "name": "__@unscopables@485",
                 "value": "{ [x: number]: boolean; length?: boolean; toString?: boolean; toLocaleString?: boolean; pop?: boolean; push?: boolean; concat?: boolean; join?: boolean; reverse?: boolean; shift?: boolean; slice?: boolean; sort?: boolean; splice?: boolean; unshift?: boolean; indexOf?: boolean; lastIndexOf?: boolean; every?: boolean; some?: boolean; forEach?: boolean; map?: boolean; filter?: boolean; reduce?: boolean; reduceRight?: boolean; find?: boolean; findIndex?: boolean; fill?: boolean; copyWithin?: boolean; entries?: boolean; keys?: boolean; values?: boolean; includes?: boolean; flatMap?: boolean; flat?: boolean; [Symbol.iterator]?: boolean; readonly [Symbol.unscopables]?: boolean; at?: boolean; }",
                 "description": "Is an object whose properties have the value 'true' when they will be absent when used in a 'with' statement."
               },
@@ -15333,28 +15333,39 @@
         "type": "FutureFlags",
         "typeDefinitions": {
           "FutureFlags": {
-            "filePath": "../../node_modules/@shopify/shopify-api/future/flags.d.ts",
+            "filePath": "src/server/future/flags.ts",
             "name": "FutureFlags",
             "description": "",
             "members": [
               {
-                "filePath": "../../node_modules/@shopify/shopify-api/future/flags.d.ts",
+                "filePath": "src/server/future/flags.ts",
                 "syntaxKind": "PropertySignature",
-                "name": "unstable_tokenExchange",
+                "name": "v3_webhookAdminContext",
                 "value": "boolean",
-                "description": "",
-                "isOptional": true
+                "description": "When enabled, returns the same `admin` context (`AdminApiContext`) from `authenticate.webhook` that is returned from `authenticate.admin`.",
+                "isOptional": true,
+                "defaultValue": "false"
               },
               {
-                "filePath": "../../node_modules/@shopify/shopify-api/future/flags.d.ts",
+                "filePath": "src/server/future/flags.ts",
                 "syntaxKind": "PropertySignature",
-                "name": "unstable_lineItemBilling",
+                "name": "v3_authenticatePublic",
                 "value": "boolean",
-                "description": "",
-                "isOptional": true
+                "description": "When enabled authenticate.public() will not work.  Use authenticate.public.checkout() instead.",
+                "isOptional": true,
+                "defaultValue": "false"
+              },
+              {
+                "filePath": "src/server/future/flags.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "unstable_newEmbeddedAuthStrategy",
+                "value": "boolean",
+                "description": "When enabled, embedded apps will fetch access tokens via token exchange. This assumes app are using declarative scopes with Shopify managing installs.",
+                "isOptional": true,
+                "defaultValue": "false"
               }
             ],
-            "value": "export interface FutureFlags {\n    unstable_tokenExchange?: boolean;\n    unstable_lineItemBilling?: boolean;\n}"
+            "value": "export interface FutureFlags {\n  /**\n   * When enabled, returns the same `admin` context (`AdminApiContext`) from `authenticate.webhook` that is returned from `authenticate.admin`.\n   *\n   * @default false\n   */\n  v3_webhookAdminContext?: boolean;\n\n  /**\n   * When enabled authenticate.public() will not work.  Use authenticate.public.checkout() instead.\n   *\n   * @default false\n   */\n  v3_authenticatePublic?: boolean;\n\n  /**\n   * When enabled, embedded apps will fetch access tokens via token exchange. This assumes app are using declarative scopes with Shopify managing installs.\n   *\n   * @default false\n   */\n  unstable_newEmbeddedAuthStrategy?: boolean;\n}"
           }
         }
       }
