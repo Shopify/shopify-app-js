@@ -5,7 +5,8 @@
     "declaration": true,
     "declarationMap": true,
     "pretty": true,
-    "moduleResolution": "node16",
+    "module": "Node16",
+    "moduleResolution": "Node16",
     "target": "es5",
     "downlevelIteration": true,
     "esModuleInterop": true,
@@ -32,7 +33,6 @@
       "es2020",
       "esnext.asynciterable"
     ],
-    "typeRoots": ["./node_modules/@types"],
     "baseUrl": ".",
     "outDir": "./dist",
     "rootDir": "src"
