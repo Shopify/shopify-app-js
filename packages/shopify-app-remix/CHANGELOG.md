@@ -4,7 +4,9 @@
 
 ### Minor Changes
 
-- 2473c85: Add new embedded authorization strategy relying on Shopify managed install and OAuth token exchange
+- 2473c85: Add new embedded authorization strategy relying on Shopify managed install and OAuth token
+
+  :exclamation: For more information on how to enable this feature, see [Using the New Token Exchange OAuth Flow](./README.md#using-the-new-token-exchange-oauth-flow)
 
 ### Patch Changes
 

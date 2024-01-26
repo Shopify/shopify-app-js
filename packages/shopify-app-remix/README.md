@@ -174,7 +174,7 @@ Here are some guides to help you set up your app:
 You can also authenticate requests from surfaces other than the admin.
 To see all supported methods, see [the `shopify.authenticate` object documentation](https://shopify.dev/docs/api/shopify-app-remix/latest/authenticate).
 
-### Using the new Token Exchange OAuth flow
+### Using the New Token Exchange OAuth flow
 > [!TIP]
 > If you are building an embedded app, we **strongly** recommend using [Shopify managed install](ZL:TODO) with [Token Exchange](#token-exchange) instead of the Authorization Code Grant Flow.
 
