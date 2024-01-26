@@ -182,7 +182,8 @@ with [Token Exchange](#token-exchange) instead of the Authorization Code Grant F
 We've introduced a new installation and OAuth flow for **embedded apps** that eliminates the redirects used for installation and authorization. It
 can replace the existing [Authorization Code install and grant flow](https://shopify.dev/docs/apps/auth/get-access-tokens/authorization-code-grant).
 
-You can take advantage of [Shopify Managed Install](https://shopify.dev/docs/apps/auth/installation#shopify-managed-installation) to handle automatic app installation and scope updates, while using 
+You can take advantage of [Shopify Managed Install](https://shopify.dev/docs/apps/auth/installation#shopify-managed-installation)
+to handle automatic app installations and scope updates, while using
 [Token Exchange](https://shopify.dev/docs/apps/auth/get-access-tokens/token-exchange/overview) to get an access token for the logged-in user.
 
 ##### Enabling Token Exchange in your app

@@ -138,7 +138,8 @@ const data: LandingTemplateSchema = {
       anchorLink: 'auth-route',
       title: 'OAuth route',
       sectionContent:
-        "To install an app or refresh tokens, you'll need to set up an [OAuth](docs/apps/auth/oauth) route. To do that, set up a [splat route](https://remix.run/docs/en/main/guides/routing#splats) that calls `authenticate.admin`." +
+        "> Note: This is only applicable to non-embedded apps or legacy embedded apps that are **not** using [Token Exchange](#token-exchange) for OAuth and installation flow." +
+        "\n\nTo install an app or refresh tokens, you'll need to set up an [OAuth](docs/apps/auth/oauth) route. To do that, set up a [splat route](https://remix.run/docs/en/main/guides/routing#splats) that calls `authenticate.admin`." +
         '\n\nWhen that function is called, the package will start the OAuth process, and handle the callback from Shopify after it completes.' +
         '\n\nThe default route is `/app/routes/auth/$.tsx`, but you can configure this route using the `authPathPrefix` option.',
       codeblock: {
@@ -151,6 +152,35 @@ const data: LandingTemplateSchema = {
           },
         ],
       },
+    },
+    {
+      type: 'Generic',
+      anchorLink: 'token-exchange',
+      title: 'Using Token exchange for OAuth',
+      sectionContent:
+        "> Tip: This is available for embedded apps that are using [Shopify managed installation](https://shopify.dev/docs/apps/auth/installation#shopify-managed-installation)." +
+        "\nIf you're building an embedded app, we **strongly** recommend using Shopify managed install with [token exchange](https://shopify.dev/docs/apps/auth/get-access-tokens/token-exchange/overview)" +
+        "\n\n We have introduced a new installation and OAuth flow for **embedded apps** that eliminates the redirects used for installation and authorization." +
+        " It can replace the legacy [Authorization Code install and grant flow](https://shopify.dev/docs/apps/auth/get-access-tokens/authorization-code-grant) to eliminate app redirects and installation handling" +
+        "\n\nYou can take advantage of [Shopify Managed Install](https://shopify.dev/docs/apps/auth/installation#shopify-managed-installation)" +
+        " to handle automatic app installations and scope updates, while using" +
+        " [Token Exchange](https://shopify.dev/docs/apps/auth/get-access-tokens/token-exchange/overview) to get an access token for the logged-in user." +
+        "\n\n > Note: Newly created Remix apps from the template after February 1st 2024 will have token exchange enabled by default." +
+        "\n\n1. Turn on [Shopify Managed Install](https://shopify.dev/docs/apps/auth/installation#shopify-managed-installation)" +
+        " by configuring your scopes [through the Shopify CLI](https://shopify.dev/docs/apps/tools/cli/configuration)." +
+        "\n2. Turn on the future flag `unstable_newEmbeddedAuthStrategy` in your app's server configuration file." +
+        "\n3. Enjoy no-redirect OAuth flow, and app installation process.",
+      codeblock: {
+        title: 'Enabling token exchange',
+        tabs: [
+          {
+            title: '/app/shopify.server.ts',
+            language: 'ts',
+            code: './examples/index/token-exchange-config.example.ts',
+
+          }
+        ],
+      }
     },
     {
       type: 'Generic',
