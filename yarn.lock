@@ -436,10 +436,10 @@
     "@smithy/types" "^2.7.0"
     tslib "^2.5.0"
 
-"@aws-sdk/util-dynamodb@^3.490.0":
-  version "3.490.0"
-  resolved "https://registry.yarnpkg.com/@aws-sdk/util-dynamodb/-/util-dynamodb-3.490.0.tgz#1e2f2eaa3c80c175d22c0545d41615178f9ab7c8"
-  integrity sha512-xoDtKQ4Dt89hUofe3BjVXOor3PDxF9f4Uv4g+N7DpYaFhkxB5iHMJxsAgQk4GzWDXK6wnf2fOxd/jbDFXtTmgw==
+"@aws-sdk/util-dynamodb@^3.499.0":
+  version "3.499.0"
+  resolved "https://registry.yarnpkg.com/@aws-sdk/util-dynamodb/-/util-dynamodb-3.499.0.tgz#161a8afaa935861c593a6be6a73df89a76e58505"
+  integrity sha512-EDCL7BgQ3DvqfnxcXWMqIs1HFwOvlpilAb6DCHXWTnoO4OVGg9lPFsQKg0JSJ79rqMciAfl8Und4cyIUgbvqbg==
   dependencies:
     tslib "^2.5.0"
 
@@ -4684,7 +4684,7 @@ create-jest-runner@^0.11.2:
     jest-worker "^28.0.2"
     throat "^6.0.1"
 
-cross-fetch@^3.0.4, cross-fetch@^3.0.6:
+cross-fetch@^3.0.4:
   version "3.1.8"
   resolved "https://registry.yarnpkg.com/cross-fetch/-/cross-fetch-3.1.8.tgz#0327eba65fd68a7d119f8fb2bf9334a1a7956f82"
   integrity sha512-cvA+JwZoU0Xq+h6WkMvAUqPEYy92Obet6UdKLfW60qn99ftItKjB5T+BkyWOFWe2pUyfQ+IJHmpOTznqk1M6Kg==
