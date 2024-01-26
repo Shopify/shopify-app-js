@@ -2506,10 +2506,22 @@
   resolved "https://registry.yarnpkg.com/@remix-run/router/-/router-1.14.2.tgz#4d58f59908d9197ba3179310077f25c88e49ed17"
   integrity sha512-ACXpdMM9hmKZww21yEqWwiLws/UPLhNKvimN8RrYSqPSvB3ov7sLvAcfvaxePeLvccTQKGdkDIhLYApZVDFuKg==
 
-"@remix-run/server-runtime@2.5.0", "@remix-run/server-runtime@^2.0.0":
+"@remix-run/server-runtime@2.5.0":
   version "2.5.0"
   resolved "https://registry.yarnpkg.com/@remix-run/server-runtime/-/server-runtime-2.5.0.tgz#9a6ca518db14ef5102d517fb9634996467308960"
   integrity sha512-Lf/cflOOmx+IAZ1Kd3vKTFhXOS5cUbc2E8pjBE+5xF/1aHI+3NhqqS/haimZ+LaPa4GP8D+0lE6t2Q+2bXJXmg==
+  dependencies:
+    "@remix-run/router" "1.14.2"
+    "@types/cookie" "^0.6.0"
+    "@web3-storage/multipart-parser" "^1.0.0"
+    cookie "^0.6.0"
+    set-cookie-parser "^2.4.8"
+    source-map "^0.7.3"
+
+"@remix-run/server-runtime@^2.5.1":
+  version "2.5.1"
+  resolved "https://registry.yarnpkg.com/@remix-run/server-runtime/-/server-runtime-2.5.1.tgz#6db6f264ff260527f0f762a36b838d0a42b0a55d"
+  integrity sha512-bP31jrVbYTJ2eP5sxZfDgT1YyXzDlzsfMxGYVzpaoLCYDJAekq1QpHLLXKGOXhmyb46O9rdhlQKfwD6WpAxr3A==
   dependencies:
     "@remix-run/router" "1.14.2"
     "@types/cookie" "^0.6.0"
