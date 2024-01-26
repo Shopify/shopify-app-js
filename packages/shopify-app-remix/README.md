@@ -176,7 +176,8 @@ To see all supported methods, see [the `shopify.authenticate` object documentati
 
 ### Using the New Token Exchange OAuth flow
 > [!TIP]
-> If you are building an embedded app, we **strongly** recommend using [Shopify managed install](ZL:TODO) with [Token Exchange](#token-exchange) instead of the Authorization Code Grant Flow.
+> If you are building an embedded app, we **strongly** recommend using [Shopify managed install](https://shopify.dev/docs/apps/auth/installation#shopify-managed-installation)
+with [Token Exchange](#token-exchange) instead of the Authorization Code Grant Flow.
 
 We've introduced a new installation and OAuth flow for **embedded apps** that eliminates the redirects used for installation and authorization. It
 can replace the existing [Authorization Code install and grant flow](https://shopify.dev/docs/apps/auth/get-access-tokens/authorization-code-grant).
@@ -184,10 +185,10 @@ can replace the existing [Authorization Code install and grant flow](https://sho
 You can take advantage of [Shopify Managed Install](https://shopify.dev/docs/apps/auth/installation#shopify-managed-installation) to handle automatic app installation and scope updates, while using 
 [Token Exchange](https://shopify.dev/docs/apps/auth/get-access-tokens/token-exchange/overview) to get an access token for the logged-in user.
 
+##### Enabling Token Exchange in your app
 > [!NOTE]
 > Newly created Remix apps from the template after February 1st 2024 will have token exchange enabled by default.
 
-##### Enabling Token Exchange in your app
 1. Turn on [Shopify Managed Install](https://shopify.dev/docs/apps/auth/installation#shopify-managed-installation)
 by configuring your scopes [through the Shopify CLI](https://shopify.dev/docs/apps/tools/cli/configuration).
 2. Turn on the future flag `unstable_newEmbeddedAuthStrategy` in your app's server configuration file.
@@ -205,11 +206,10 @@ const shopify = shopifyApp({
 ```
 3. Enjoy painless no-redirect OAuth flow, and app installation process.
 
-Learn more about:
+###### Learn more about:
   - [How Token Exchange Works](https://shopify.dev/docs/apps/auth/get-access-tokens/token-exchange/overview)
   - [Using Shopify Managed Install for your app's installation](https://shopify.dev/docs/apps/auth/installation#shopify-managed-installation)
   - [Configuring Access Scopes Through the Shopify CLI](https://shopify.dev/docs/apps/tools/cli/configuration)
-
 
 ## Gotchas / Troubleshooting
 
