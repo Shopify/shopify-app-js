@@ -3928,7 +3928,7 @@
             "filePath": "src/server/authenticate/webhooks/types.ts",
             "syntaxKind": "TypeAliasDeclaration",
             "name": "WebhookAdminContext",
-            "value": "FeatureEnabled<Future, 'v3_webhookAdminContext'> extends true\n  ? AdminApiContext<Resources>\n  : LegacyWebhookAdminApiContext<Resources>",
+            "value": "FeatureEnabled<Future, 'v3_webhookAdminContext'> extends true\n    ? AdminApiContext<Resources>\n    : LegacyWebhookAdminApiContext<Resources>",
             "description": ""
           },
           "AdminContext": {
@@ -9242,289 +9242,11 @@
           },
           "WebhookConfig": {
             "filePath": "src/server/config-types.ts",
-            "name": "WebhookConfig",
-            "description": "",
-            "members": [
-              {
-                "filePath": "src/server/config-types.ts",
-                "name": "[key: string]",
-                "value": "WebhookHandler | WebhookHandler[]"
-              }
-            ],
-            "value": "export interface WebhookConfig {\n  [key: string]: WebhookHandler | WebhookHandler[];\n}"
-          },
-          "WebhookHandler": {
-            "filePath": "../../node_modules/@shopify/shopify-api/lib/webhooks/types.d.ts",
             "syntaxKind": "TypeAliasDeclaration",
-            "name": "WebhookHandler",
-            "value": "HttpWebhookHandler | HttpWebhookHandlerWithCallback | EventBridgeWebhookHandler | PubSubWebhookHandler",
-            "description": ""
-          },
-          "HttpWebhookHandler": {
-            "filePath": "../../node_modules/@shopify/shopify-api/lib/webhooks/types.d.ts",
-            "name": "HttpWebhookHandler",
+            "name": "WebhookConfig",
+            "value": "Record<string, WebhookHandler | WebhookHandler[]>",
             "description": "",
-            "members": [
-              {
-                "filePath": "../../node_modules/@shopify/shopify-api/lib/webhooks/types.d.ts",
-                "syntaxKind": "PropertySignature",
-                "name": "deliveryMethod",
-                "value": "DeliveryMethod.Http",
-                "description": ""
-              },
-              {
-                "filePath": "../../node_modules/@shopify/shopify-api/lib/webhooks/types.d.ts",
-                "syntaxKind": "PropertySignature",
-                "name": "callbackUrl",
-                "value": "string",
-                "description": ""
-              },
-              {
-                "filePath": "../../node_modules/@shopify/shopify-api/lib/webhooks/types.d.ts",
-                "syntaxKind": "PropertySignature",
-                "name": "id",
-                "value": "string",
-                "description": "",
-                "isOptional": true
-              },
-              {
-                "filePath": "../../node_modules/@shopify/shopify-api/lib/webhooks/types.d.ts",
-                "syntaxKind": "PropertySignature",
-                "name": "includeFields",
-                "value": "string[]",
-                "description": "",
-                "isOptional": true
-              },
-              {
-                "filePath": "../../node_modules/@shopify/shopify-api/lib/webhooks/types.d.ts",
-                "syntaxKind": "PropertySignature",
-                "name": "metafieldNamespaces",
-                "value": "string[]",
-                "description": "",
-                "isOptional": true
-              }
-            ],
-            "value": "export interface HttpWebhookHandler extends BaseWebhookHandler {\n    deliveryMethod: DeliveryMethod.Http;\n    callbackUrl: string;\n}"
-          },
-          "DeliveryMethod": {
-            "filePath": "../../node_modules/@shopify/shopify-api/lib/webhooks/types.d.ts",
-            "syntaxKind": "EnumDeclaration",
-            "name": "DeliveryMethod",
-            "value": "export declare enum DeliveryMethod {\n    Http = \"http\",\n    EventBridge = \"eventbridge\",\n    PubSub = \"pubsub\"\n}",
-            "members": [
-              {
-                "filePath": "../../node_modules/@shopify/shopify-api/lib/webhooks/types.d.ts",
-                "name": "Http",
-                "value": "http"
-              },
-              {
-                "filePath": "../../node_modules/@shopify/shopify-api/lib/webhooks/types.d.ts",
-                "name": "EventBridge",
-                "value": "eventbridge"
-              },
-              {
-                "filePath": "../../node_modules/@shopify/shopify-api/lib/webhooks/types.d.ts",
-                "name": "PubSub",
-                "value": "pubsub"
-              }
-            ]
-          },
-          "HttpWebhookHandlerWithCallback": {
-            "filePath": "../../node_modules/@shopify/shopify-api/lib/webhooks/types.d.ts",
-            "name": "HttpWebhookHandlerWithCallback",
-            "description": "",
-            "members": [
-              {
-                "filePath": "../../node_modules/@shopify/shopify-api/lib/webhooks/types.d.ts",
-                "syntaxKind": "PropertySignature",
-                "name": "callback",
-                "value": "WebhookHandlerFunction",
-                "description": ""
-              },
-              {
-                "filePath": "../../node_modules/@shopify/shopify-api/lib/webhooks/types.d.ts",
-                "syntaxKind": "PropertySignature",
-                "name": "deliveryMethod",
-                "value": "DeliveryMethod.Http",
-                "description": ""
-              },
-              {
-                "filePath": "../../node_modules/@shopify/shopify-api/lib/webhooks/types.d.ts",
-                "syntaxKind": "PropertySignature",
-                "name": "callbackUrl",
-                "value": "string",
-                "description": ""
-              },
-              {
-                "filePath": "../../node_modules/@shopify/shopify-api/lib/webhooks/types.d.ts",
-                "syntaxKind": "PropertySignature",
-                "name": "id",
-                "value": "string",
-                "description": "",
-                "isOptional": true
-              },
-              {
-                "filePath": "../../node_modules/@shopify/shopify-api/lib/webhooks/types.d.ts",
-                "syntaxKind": "PropertySignature",
-                "name": "includeFields",
-                "value": "string[]",
-                "description": "",
-                "isOptional": true
-              },
-              {
-                "filePath": "../../node_modules/@shopify/shopify-api/lib/webhooks/types.d.ts",
-                "syntaxKind": "PropertySignature",
-                "name": "metafieldNamespaces",
-                "value": "string[]",
-                "description": "",
-                "isOptional": true
-              }
-            ],
-            "value": "export interface HttpWebhookHandlerWithCallback extends HttpWebhookHandler {\n    callback: WebhookHandlerFunction;\n}"
-          },
-          "WebhookHandlerFunction": {
-            "filePath": "../../node_modules/@shopify/shopify-api/lib/webhooks/types.d.ts",
-            "name": "WebhookHandlerFunction",
-            "description": "",
-            "params": [
-              {
-                "name": "topic",
-                "description": "",
-                "value": "string",
-                "filePath": "../../node_modules/@shopify/shopify-api/lib/webhooks/types.d.ts"
-              },
-              {
-                "name": "shop_domain",
-                "description": "",
-                "value": "string",
-                "filePath": "../../node_modules/@shopify/shopify-api/lib/webhooks/types.d.ts"
-              },
-              {
-                "name": "body",
-                "description": "",
-                "value": "string",
-                "filePath": "../../node_modules/@shopify/shopify-api/lib/webhooks/types.d.ts"
-              },
-              {
-                "name": "webhookId",
-                "description": "",
-                "value": "string",
-                "filePath": "../../node_modules/@shopify/shopify-api/lib/webhooks/types.d.ts"
-              },
-              {
-                "name": "apiVersion",
-                "description": "",
-                "value": "string",
-                "isOptional": true,
-                "filePath": "../../node_modules/@shopify/shopify-api/lib/webhooks/types.d.ts"
-              }
-            ],
-            "returns": {
-              "filePath": "../../node_modules/@shopify/shopify-api/lib/webhooks/types.d.ts",
-              "description": "",
-              "name": "Promise<void>",
-              "value": "Promise<void>"
-            },
-            "value": "export type WebhookHandlerFunction = (topic: string, shop_domain: string, body: string, webhookId: string, apiVersion?: string) => Promise<void>;"
-          },
-          "EventBridgeWebhookHandler": {
-            "filePath": "../../node_modules/@shopify/shopify-api/lib/webhooks/types.d.ts",
-            "name": "EventBridgeWebhookHandler",
-            "description": "",
-            "members": [
-              {
-                "filePath": "../../node_modules/@shopify/shopify-api/lib/webhooks/types.d.ts",
-                "syntaxKind": "PropertySignature",
-                "name": "deliveryMethod",
-                "value": "DeliveryMethod.EventBridge",
-                "description": ""
-              },
-              {
-                "filePath": "../../node_modules/@shopify/shopify-api/lib/webhooks/types.d.ts",
-                "syntaxKind": "PropertySignature",
-                "name": "arn",
-                "value": "string",
-                "description": ""
-              },
-              {
-                "filePath": "../../node_modules/@shopify/shopify-api/lib/webhooks/types.d.ts",
-                "syntaxKind": "PropertySignature",
-                "name": "id",
-                "value": "string",
-                "description": "",
-                "isOptional": true
-              },
-              {
-                "filePath": "../../node_modules/@shopify/shopify-api/lib/webhooks/types.d.ts",
-                "syntaxKind": "PropertySignature",
-                "name": "includeFields",
-                "value": "string[]",
-                "description": "",
-                "isOptional": true
-              },
-              {
-                "filePath": "../../node_modules/@shopify/shopify-api/lib/webhooks/types.d.ts",
-                "syntaxKind": "PropertySignature",
-                "name": "metafieldNamespaces",
-                "value": "string[]",
-                "description": "",
-                "isOptional": true
-              }
-            ],
-            "value": "export interface EventBridgeWebhookHandler extends BaseWebhookHandler {\n    deliveryMethod: DeliveryMethod.EventBridge;\n    arn: string;\n}"
-          },
-          "PubSubWebhookHandler": {
-            "filePath": "../../node_modules/@shopify/shopify-api/lib/webhooks/types.d.ts",
-            "name": "PubSubWebhookHandler",
-            "description": "",
-            "members": [
-              {
-                "filePath": "../../node_modules/@shopify/shopify-api/lib/webhooks/types.d.ts",
-                "syntaxKind": "PropertySignature",
-                "name": "deliveryMethod",
-                "value": "DeliveryMethod.PubSub",
-                "description": ""
-              },
-              {
-                "filePath": "../../node_modules/@shopify/shopify-api/lib/webhooks/types.d.ts",
-                "syntaxKind": "PropertySignature",
-                "name": "pubSubProject",
-                "value": "string",
-                "description": ""
-              },
-              {
-                "filePath": "../../node_modules/@shopify/shopify-api/lib/webhooks/types.d.ts",
-                "syntaxKind": "PropertySignature",
-                "name": "pubSubTopic",
-                "value": "string",
-                "description": ""
-              },
-              {
-                "filePath": "../../node_modules/@shopify/shopify-api/lib/webhooks/types.d.ts",
-                "syntaxKind": "PropertySignature",
-                "name": "id",
-                "value": "string",
-                "description": "",
-                "isOptional": true
-              },
-              {
-                "filePath": "../../node_modules/@shopify/shopify-api/lib/webhooks/types.d.ts",
-                "syntaxKind": "PropertySignature",
-                "name": "includeFields",
-                "value": "string[]",
-                "description": "",
-                "isOptional": true
-              },
-              {
-                "filePath": "../../node_modules/@shopify/shopify-api/lib/webhooks/types.d.ts",
-                "syntaxKind": "PropertySignature",
-                "name": "metafieldNamespaces",
-                "value": "string[]",
-                "description": "",
-                "isOptional": true
-              }
-            ],
-            "value": "export interface PubSubWebhookHandler extends BaseWebhookHandler {\n    deliveryMethod: DeliveryMethod.PubSub;\n    pubSubProject: string;\n    pubSubTopic: string;\n}"
+            "members": []
           },
           "HooksConfig": {
             "filePath": "src/server/config-types.ts",
@@ -10227,7 +9949,7 @@
             "filePath": "src/server/types.ts",
             "syntaxKind": "TypeAliasDeclaration",
             "name": "ShopifyApp",
-            "value": "Config['distribution'] extends AppDistribution.ShopifyAdmin\n    ? AdminApp<Config>\n    : Config['distribution'] extends AppDistribution.SingleMerchant\n    ? SingleMerchantApp<Config>\n    : Config['distribution'] extends AppDistribution.AppStore\n    ? AppStoreApp<Config>\n    : AppStoreApp<Config>",
+            "value": "Config['distribution'] extends AppDistribution.ShopifyAdmin\n    ? AdminApp<Config>\n    : Config['distribution'] extends AppDistribution.SingleMerchant\n      ? SingleMerchantApp<Config>\n      : Config['distribution'] extends AppDistribution.AppStore\n        ? AppStoreApp<Config>\n        : AppStoreApp<Config>",
             "description": "An object your app can use to interact with Shopify.\n\nBy default, the app's distribution is `AppStore`."
           },
           "AdminApp": {
@@ -12107,7 +11829,7 @@
             "filePath": "src/server/authenticate/webhooks/types.ts",
             "syntaxKind": "TypeAliasDeclaration",
             "name": "WebhookAdminContext",
-            "value": "FeatureEnabled<Future, 'v3_webhookAdminContext'> extends true\n  ? AdminApiContext<Resources>\n  : LegacyWebhookAdminApiContext<Resources>",
+            "value": "FeatureEnabled<Future, 'v3_webhookAdminContext'> extends true\n    ? AdminApiContext<Resources>\n    : LegacyWebhookAdminApiContext<Resources>",
             "description": ""
           },
           "LegacyWebhookAdminApiContext": {
@@ -14177,6 +13899,279 @@
             "description": "",
             "members": []
           },
+          "WebhookHandler": {
+            "filePath": "../../node_modules/@shopify/shopify-api/lib/webhooks/types.d.ts",
+            "syntaxKind": "TypeAliasDeclaration",
+            "name": "WebhookHandler",
+            "value": "HttpWebhookHandler | HttpWebhookHandlerWithCallback | EventBridgeWebhookHandler | PubSubWebhookHandler",
+            "description": ""
+          },
+          "HttpWebhookHandler": {
+            "filePath": "../../node_modules/@shopify/shopify-api/lib/webhooks/types.d.ts",
+            "name": "HttpWebhookHandler",
+            "description": "",
+            "members": [
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/webhooks/types.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "deliveryMethod",
+                "value": "DeliveryMethod.Http",
+                "description": ""
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/webhooks/types.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "callbackUrl",
+                "value": "string",
+                "description": ""
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/webhooks/types.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "id",
+                "value": "string",
+                "description": "",
+                "isOptional": true
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/webhooks/types.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "includeFields",
+                "value": "string[]",
+                "description": "",
+                "isOptional": true
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/webhooks/types.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "metafieldNamespaces",
+                "value": "string[]",
+                "description": "",
+                "isOptional": true
+              }
+            ],
+            "value": "export interface HttpWebhookHandler extends BaseWebhookHandler {\n    deliveryMethod: DeliveryMethod.Http;\n    callbackUrl: string;\n}"
+          },
+          "DeliveryMethod": {
+            "filePath": "../../node_modules/@shopify/shopify-api/lib/webhooks/types.d.ts",
+            "syntaxKind": "EnumDeclaration",
+            "name": "DeliveryMethod",
+            "value": "export declare enum DeliveryMethod {\n    Http = \"http\",\n    EventBridge = \"eventbridge\",\n    PubSub = \"pubsub\"\n}",
+            "members": [
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/webhooks/types.d.ts",
+                "name": "Http",
+                "value": "http"
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/webhooks/types.d.ts",
+                "name": "EventBridge",
+                "value": "eventbridge"
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/webhooks/types.d.ts",
+                "name": "PubSub",
+                "value": "pubsub"
+              }
+            ]
+          },
+          "HttpWebhookHandlerWithCallback": {
+            "filePath": "../../node_modules/@shopify/shopify-api/lib/webhooks/types.d.ts",
+            "name": "HttpWebhookHandlerWithCallback",
+            "description": "",
+            "members": [
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/webhooks/types.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "callback",
+                "value": "WebhookHandlerFunction",
+                "description": ""
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/webhooks/types.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "deliveryMethod",
+                "value": "DeliveryMethod.Http",
+                "description": ""
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/webhooks/types.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "callbackUrl",
+                "value": "string",
+                "description": ""
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/webhooks/types.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "id",
+                "value": "string",
+                "description": "",
+                "isOptional": true
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/webhooks/types.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "includeFields",
+                "value": "string[]",
+                "description": "",
+                "isOptional": true
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/webhooks/types.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "metafieldNamespaces",
+                "value": "string[]",
+                "description": "",
+                "isOptional": true
+              }
+            ],
+            "value": "export interface HttpWebhookHandlerWithCallback extends HttpWebhookHandler {\n    callback: WebhookHandlerFunction;\n}"
+          },
+          "WebhookHandlerFunction": {
+            "filePath": "../../node_modules/@shopify/shopify-api/lib/webhooks/types.d.ts",
+            "name": "WebhookHandlerFunction",
+            "description": "",
+            "params": [
+              {
+                "name": "topic",
+                "description": "",
+                "value": "string",
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/webhooks/types.d.ts"
+              },
+              {
+                "name": "shop_domain",
+                "description": "",
+                "value": "string",
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/webhooks/types.d.ts"
+              },
+              {
+                "name": "body",
+                "description": "",
+                "value": "string",
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/webhooks/types.d.ts"
+              },
+              {
+                "name": "webhookId",
+                "description": "",
+                "value": "string",
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/webhooks/types.d.ts"
+              },
+              {
+                "name": "apiVersion",
+                "description": "",
+                "value": "string",
+                "isOptional": true,
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/webhooks/types.d.ts"
+              }
+            ],
+            "returns": {
+              "filePath": "../../node_modules/@shopify/shopify-api/lib/webhooks/types.d.ts",
+              "description": "",
+              "name": "Promise<void>",
+              "value": "Promise<void>"
+            },
+            "value": "export type WebhookHandlerFunction = (topic: string, shop_domain: string, body: string, webhookId: string, apiVersion?: string) => Promise<void>;"
+          },
+          "EventBridgeWebhookHandler": {
+            "filePath": "../../node_modules/@shopify/shopify-api/lib/webhooks/types.d.ts",
+            "name": "EventBridgeWebhookHandler",
+            "description": "",
+            "members": [
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/webhooks/types.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "deliveryMethod",
+                "value": "DeliveryMethod.EventBridge",
+                "description": ""
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/webhooks/types.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "arn",
+                "value": "string",
+                "description": ""
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/webhooks/types.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "id",
+                "value": "string",
+                "description": "",
+                "isOptional": true
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/webhooks/types.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "includeFields",
+                "value": "string[]",
+                "description": "",
+                "isOptional": true
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/webhooks/types.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "metafieldNamespaces",
+                "value": "string[]",
+                "description": "",
+                "isOptional": true
+              }
+            ],
+            "value": "export interface EventBridgeWebhookHandler extends BaseWebhookHandler {\n    deliveryMethod: DeliveryMethod.EventBridge;\n    arn: string;\n}"
+          },
+          "PubSubWebhookHandler": {
+            "filePath": "../../node_modules/@shopify/shopify-api/lib/webhooks/types.d.ts",
+            "name": "PubSubWebhookHandler",
+            "description": "",
+            "members": [
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/webhooks/types.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "deliveryMethod",
+                "value": "DeliveryMethod.PubSub",
+                "description": ""
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/webhooks/types.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "pubSubProject",
+                "value": "string",
+                "description": ""
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/webhooks/types.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "pubSubTopic",
+                "value": "string",
+                "description": ""
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/webhooks/types.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "id",
+                "value": "string",
+                "description": "",
+                "isOptional": true
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/webhooks/types.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "includeFields",
+                "value": "string[]",
+                "description": "",
+                "isOptional": true
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/webhooks/types.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "metafieldNamespaces",
+                "value": "string[]",
+                "description": "",
+                "isOptional": true
+              }
+            ],
+            "value": "export interface PubSubWebhookHandler extends BaseWebhookHandler {\n    deliveryMethod: DeliveryMethod.PubSub;\n    pubSubProject: string;\n    pubSubTopic: string;\n}"
+          },
           "RegisterParams": {
             "filePath": "../../node_modules/@shopify/shopify-api/lib/webhooks/types.d.ts",
             "name": "RegisterParams",
@@ -15360,12 +15355,12 @@
                 "syntaxKind": "PropertySignature",
                 "name": "unstable_newEmbeddedAuthStrategy",
                 "value": "boolean",
-                "description": "When enabled, embedded apps will fetch access tokens via token exchange. This assumes app are using declarative scopes with Shopify managing installs.",
+                "description": "When enabled, embedded apps will fetch access tokens via [token exchange](https://shopify.dev/docs/apps/auth/get-access-tokens/token-exchange/overview). This assumes app are using declarative scopes with [Shopify managing installs](https://shopify.dev/docs/apps/auth/installation#shopify-managed-installation).",
                 "isOptional": true,
                 "defaultValue": "false"
               }
             ],
-            "value": "export interface FutureFlags {\n  /**\n   * When enabled, returns the same `admin` context (`AdminApiContext`) from `authenticate.webhook` that is returned from `authenticate.admin`.\n   *\n   * @default false\n   */\n  v3_webhookAdminContext?: boolean;\n\n  /**\n   * When enabled authenticate.public() will not work.  Use authenticate.public.checkout() instead.\n   *\n   * @default false\n   */\n  v3_authenticatePublic?: boolean;\n\n  /**\n   * When enabled, embedded apps will fetch access tokens via token exchange. This assumes app are using declarative scopes with Shopify managing installs.\n   *\n   * @default false\n   */\n  unstable_newEmbeddedAuthStrategy?: boolean;\n}"
+            "value": "export interface FutureFlags {\n  /**\n   * When enabled, returns the same `admin` context (`AdminApiContext`) from `authenticate.webhook` that is returned from `authenticate.admin`.\n   *\n   * @default false\n   */\n  v3_webhookAdminContext?: boolean;\n\n  /**\n   * When enabled authenticate.public() will not work.  Use authenticate.public.checkout() instead.\n   *\n   * @default false\n   */\n  v3_authenticatePublic?: boolean;\n\n  /**\n   * When enabled, embedded apps will fetch access tokens via [token exchange](https://shopify.dev/docs/apps/auth/get-access-tokens/token-exchange/overview).\n   * This assumes app are using declarative scopes with [Shopify managing installs](https://shopify.dev/docs/apps/auth/installation#shopify-managed-installation).\n   *\n   * @default false\n   */\n  unstable_newEmbeddedAuthStrategy?: boolean;\n}"
           }
         }
       }

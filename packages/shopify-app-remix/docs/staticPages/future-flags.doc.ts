@@ -75,7 +75,7 @@ const data: LandingTemplateSchema = {
           value: '',
           description:
             'Embedded apps will fetch access tokens via token exchange. This assumes app are using declarative scopes with Shopify managing installs.' +
-            '\n\nSee [Token Exchange](ZL:TODO link to shopify.dev) for more details.',
+            '\n\nSee [Token Exchange](https://shopify.dev/docs/apps/auth/get-access-tokens/token-exchange/overview) for more details.',
           isOptional: true,
         },
       ],
