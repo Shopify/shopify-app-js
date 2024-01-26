@@ -192,7 +192,7 @@ authenticated API access.
 > [!NOTE]
 > Newly created Remix apps from the template after February 1st 2024 will have this feature enabled by default.
 
-1. Enable [Shopify managed install](https://shopify.dev/docs/apps/auth/installation#shopify-managed-installation)
+1. Enable [Shopify managed installation](https://shopify.dev/docs/apps/auth/installation#shopify-managed-installation)
 by configuring your scopes [through the Shopify CLI](https://shopify.dev/docs/apps/tools/cli/configuration).
 2. Enable the future flag `unstable_newEmbeddedAuthStrategy` in your app's server configuration file.
 
@@ -210,9 +210,9 @@ const shopify = shopifyApp({
 3. Enjoy no-redirect OAuth flow, and app installation process.
 
 ###### Learn more about:
-  - [How Token Exchange Works](https://shopify.dev/docs/apps/auth/get-access-tokens/token-exchange/overview)
-  - [Using Shopify Managed Install for your app's installation](https://shopify.dev/docs/apps/auth/installation#shopify-managed-installation)
-  - [Configuring Access Scopes Through the Shopify CLI](https://shopify.dev/docs/apps/tools/cli/configuration)
+  - [How token exchange works](https://shopify.dev/docs/apps/auth/get-access-tokens/token-exchange/overview)
+  - [Using Shopify managed installation](https://shopify.dev/docs/apps/auth/installation#shopify-managed-installation)
+  - [Configuring access scopes through the Shopify CLI](https://shopify.dev/docs/apps/tools/cli/configuration)
 
 ## Gotchas / Troubleshooting
 
