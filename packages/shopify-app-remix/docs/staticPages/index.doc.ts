@@ -166,7 +166,7 @@ const data: LandingTemplateSchema = {
         "\n\nIt takes advantage of [Shopify managed installation](https://shopify.dev/docs/apps/auth/installation#shopify-managed-installation)" +
         " to handle automatic app installations and scope updates, while using" +
         " [token exchange](https://shopify.dev/docs/apps/auth/get-access-tokens/token-exchange/overview) to get an access token for the logged-in user." +
-        "\n\n > Note: Newly created Remix apps from the template after February 1st 2024 will have this feature enabled by default." +
+        "\n\n > Note: Newly created Remix apps from the template after February 1st 2024 has this feature enabled by default." +
         "\n\n1. Enable [Shopify managed installation](https://shopify.dev/docs/apps/auth/installation#shopify-managed-installation)" +
         " by configuring your scopes [through the Shopify CLI](https://shopify.dev/docs/apps/tools/cli/configuration)." +
         "\n2. Enable the future flag `unstable_newEmbeddedAuthStrategy` in your app's server configuration file." +

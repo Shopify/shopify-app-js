@@ -190,7 +190,7 @@ authenticated API access.
 
 ##### Enabling this new strategy in your app
 > [!NOTE]
-> Newly created Remix apps from the template after February 1st 2024 will have this feature enabled by default.
+> Newly created Remix apps from the template after February 1st 2024 has this feature enabled by default.
 
 1. Enable [Shopify managed installation](https://shopify.dev/docs/apps/auth/installation#shopify-managed-installation)
 by configuring your scopes [through the Shopify CLI](https://shopify.dev/docs/apps/tools/cli/configuration).
