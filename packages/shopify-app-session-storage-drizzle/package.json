@@ -29,8 +29,9 @@
     "Storefront API",
     "session storage",
     "Drizzle"
-  ],
+  ],  
   "dependencies": {
+    "pg": "^8.11.3",
     "tslib": "^2.6.2"
   },
   "peerDependencies": {

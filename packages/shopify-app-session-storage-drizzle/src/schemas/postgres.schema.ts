@@ -11,4 +11,4 @@ export const sessionTable = pgTable('session' as string, {
   userId: bigint('userId', {mode: 'bigint'}),
 });
 
-export type PgSessionTable = typeof sessionTable;
+export type PostgresSessionTable = typeof sessionTable;

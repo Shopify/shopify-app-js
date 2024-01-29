@@ -11,14 +11,9 @@ import {BaseSQLiteDatabase} from 'drizzle-orm/sqlite-core';
 
 import {SQLiteSessionTable} from '../schemas/sqlite.schema';
 
-export class DrizzleSQLiteAdapter<
-  T extends BaseSQLiteDatabase<'sync' | 'async', TRunResult, TSchema>,
-  TRunResult,
-  TSchema extends {[key: string]: unknown} = {[key: string]: unknown},
-> implements SessionStorage
-{
+export class DrizzleSessionStorageSQLite implements SessionStorage {
   constructor(
-    private readonly db: T,
+    private readonly db: BaseSQLiteDatabase<'sync' | 'async', any, any>,
     private readonly sessionTable: SQLiteSessionTable,
   ) {}
 
