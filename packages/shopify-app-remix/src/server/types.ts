@@ -1,4 +1,5 @@
 import {
+  ConfigParams,
   RegisterReturn,
   Shopify,
   ShopifyRestResources,
@@ -13,12 +14,28 @@ import type {
 import type {AuthenticatePublic} from './authenticate/public/types';
 import type {AdminContext} from './authenticate/admin/types';
 import type {Unauthenticated} from './unauthenticated/types';
+import {FutureFlagOptions, FutureFlags} from './future/flags';
 
-export interface BasicParams {
-  api: Shopify;
+export interface BasicParams<
+  Future extends FutureFlagOptions = FutureFlagOptions,
+> {
+  api: Shopify<
+    ApiConfigWithFutureFlags<Future>,
+    ShopifyRestResources,
+    ApiFutureFlags<Future>
+  >;
   config: AppConfig;
   logger: Shopify['logger'];
 }
+
+export interface ApiFutureFlags<Future extends FutureFlagOptions> {
+  unstable_tokenExchange?: Future extends FutureFlags
+    ? Future['unstable_newEmbeddedAuthStrategy']
+    : boolean;
+}
+
+export type ApiConfigWithFutureFlags<Future extends FutureFlagOptions> =
+  ConfigParams<ShopifyRestResources, ApiFutureFlags<Future>>;
 
 export type JSONValue =
   | string
@@ -41,6 +58,8 @@ export type MandatoryTopics =
   | 'CUSTOMERS_REDACT'
   | 'SHOP_REDACT';
 
+// This can't be a type because it would reference itself
+// eslint-disable-next-line @typescript-eslint/consistent-indexed-object-style
 interface JSONObject {
   [x: string]: JSONValue;
 }
@@ -49,7 +68,7 @@ interface JSONArray extends Array<JSONValue> {}
 
 type RegisterWebhooks = (
   options: RegisterWebhooksOptions,
-) => Promise<RegisterReturn>;
+) => Promise<RegisterReturn | void>;
 
 export enum LoginErrorType {
   MissingShop = 'MISSING_SHOP',
@@ -445,7 +464,7 @@ export type ShopifyApp<Config extends AppConfigArg> =
   Config['distribution'] extends AppDistribution.ShopifyAdmin
     ? AdminApp<Config>
     : Config['distribution'] extends AppDistribution.SingleMerchant
-    ? SingleMerchantApp<Config>
-    : Config['distribution'] extends AppDistribution.AppStore
-    ? AppStoreApp<Config>
-    : AppStoreApp<Config>;
+      ? SingleMerchantApp<Config>
+      : Config['distribution'] extends AppDistribution.AppStore
+        ? AppStoreApp<Config>
+        : AppStoreApp<Config>;

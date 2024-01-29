@@ -55,8 +55,8 @@ describe('OAuth integration tests', () => {
       };
 
       const afterAuth = jest.fn().mockImplementation(async (req, res, next) => {
-        const shopSessions = await shopify.config.sessionStorage
-          .findSessionsByShop!(TEST_SHOP);
+        const shopSessions =
+          await shopify.config.sessionStorage.findSessionsByShop!(TEST_SHOP);
         const offlineSession = shopSessions[0];
         expect(offlineSession.isOnline).toBe(false);
 
@@ -420,7 +420,7 @@ async function validSession(
     },
   );
 
-  const headers: {[key: string]: string} = {};
+  const headers: Record<string, string> = {};
   if (config.embedded) {
     headers.Authorization = `Bearer ${validJWT}`;
   } else {

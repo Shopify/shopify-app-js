@@ -13,7 +13,7 @@ export interface GraphQLQueryOptions<
 > {
   variables?: ApiClientRequestOptions<Operation, Operations>['variables'];
   apiVersion?: ApiVersion;
-  headers?: {[key: string]: any};
+  headers?: Record<string, any>;
   tries?: number;
 }
 

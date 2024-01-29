@@ -19,10 +19,9 @@ describe('unauthenticated storefront context', () => {
 
   expectStorefrontApiClient(async () => {
     const shopify = shopifyApp(testConfig());
-    const expectedSession = await setUpValidSession(
-      shopify.sessionStorage,
-      false,
-    );
+    const expectedSession = await setUpValidSession(shopify.sessionStorage, {
+      isOnline: false,
+    });
     const {storefront, session: actualSession} =
       await shopify.unauthenticated.storefront(TEST_SHOP);
 

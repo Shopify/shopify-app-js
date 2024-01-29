@@ -12,7 +12,7 @@ export async function hasValidAccessToken(
 ): Promise<boolean> {
   try {
     const client = new api.clients.Graphql({session});
-    await client.query({data: TEST_GRAPHQL_QUERY});
+    await client.request(TEST_GRAPHQL_QUERY);
     return true;
   } catch (error) {
     if (error instanceof HttpResponseError && error.response.code === 401) {
