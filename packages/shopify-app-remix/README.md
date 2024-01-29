@@ -174,7 +174,7 @@ Here are some guides to help you set up your app:
 You can also authenticate requests from surfaces other than the admin.
 To see all supported methods, see [the `shopify.authenticate` object documentation](https://shopify.dev/docs/api/shopify-app-remix/latest/authenticate).
 
-### New embedded authorization strategy
+### New embedded app authorization strategy
 > [!TIP]
 > If you are building an embedded app, we **strongly** recommend using [Shopify managed installation](https://shopify.dev/docs/apps/auth/installation#shopify-managed-installation)
 with [token exchange](https://shopify.dev/docs/apps/auth/get-access-tokens/token-exchange/overview) instead of the legacy authorization code grant flow.
@@ -207,7 +207,7 @@ const shopify = shopifyApp({
 })
 
 ```
-3. Enjoy no-redirect OAuth flow, and app installation process.
+3. Enjoy a smoother and faster app installation process.
 
 ###### Learn more about:
   - [How token exchange works](https://shopify.dev/docs/apps/auth/get-access-tokens/token-exchange/overview)

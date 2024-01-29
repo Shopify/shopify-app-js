@@ -138,8 +138,8 @@ const data: LandingTemplateSchema = {
       anchorLink: 'auth-route',
       title: 'OAuth route',
       sectionContent:
-        "> Tip: This is only applicable to non-embedded apps or legacy embedded apps that are **not** using the [new embedded authorization strategy](#embedded-auth-strategy) for OAuth and installation flow. If you're building an embedded app, we **strongly** recommend using the" +
-        " [new embedded authorization strategy](#embedded-auth-strategy)" +
+        "> Tip: This is only applicable to non-embedded apps or legacy embedded apps that are **not** using the [new embedded app authorization strategy](#embedded-auth-strategy) for OAuth and installation flow. If you're building an embedded app, we **strongly** recommend using the" +
+        " [new embedded app authorization strategy](#embedded-auth-strategy)" +
         "\n\nTo install an app or refresh tokens, you'll need to set up an [OAuth](docs/apps/auth/oauth) route. To do that, set up a [splat route](https://remix.run/docs/en/main/guides/routing#splats) that calls `authenticate.admin`." +
         '\n\nWhen that function is called, the package will start the OAuth process, and handle the callback from Shopify after it completes.' +
         '\n\nThe default route is `/app/routes/auth/$.tsx`, but you can configure this route using the `authPathPrefix` option.',
@@ -157,7 +157,7 @@ const data: LandingTemplateSchema = {
     {
       type: 'Generic',
       anchorLink: 'embedded-auth-strategy',
-      title: 'New embedded authorization strategy',
+      title: 'New embedded app authorization strategy',
       sectionContent:
         "> Tip: This is available for embedded apps that are using [Shopify managed installation](https://shopify.dev/docs/apps/auth/installation#shopify-managed-installation)." +
         "\n> If you're building an embedded app, we **strongly** recommend using this feature that utilizes Shopify managed install with [token exchange](https://shopify.dev/docs/apps/auth/get-access-tokens/token-exchange/overview)." +
