@@ -32,7 +32,7 @@
     "AWS"
   ],
   "dependencies": {
-    "@aws-sdk/client-dynamodb": "^3.470.0",
+    "@aws-sdk/client-dynamodb": "^3.502.0",
     "@aws-sdk/util-dynamodb": "^3.499.0"
   },
   "peerDependencies": {
