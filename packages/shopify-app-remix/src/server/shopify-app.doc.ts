@@ -20,6 +20,7 @@ const data: ReferenceEntityTemplateSchema = {
         'Set future flags using the `future` configuration field to opt in to upcoming breaking changes.' +
         '\n\nWith this feature, you can prepare for major releases ahead of time, as well as try out new features before they are released.',
       type: 'FutureFlags',
+      filePath: 'src/server/future/flags.ts',
     },
   ],
   jsDocTypeExamples: [
