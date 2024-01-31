@@ -178,7 +178,7 @@ To see all supported methods, see [the `shopify.authenticate` object documentati
 
 > [!TIP]
 > If you are building an embedded app, we **strongly** recommend using [Shopify managed installation](https://shopify.dev/docs/apps/auth/installation#shopify-managed-installation)
-> with [token exchange](https://shopify.dev/docs/apps/auth/get-access-tokens/token-exchange/overview) instead of the legacy authorization code grant flow.
+> with [token exchange](https://shopify.dev/docs/apps/auth/get-access-tokens/token-exchange) instead of the legacy authorization code grant flow.
 
 We've introduced a new installation and authorization strategy for **embedded apps** that
 eliminates the redirects that were previously necessary.
@@ -186,7 +186,7 @@ It replaces the existing [installation and authorization code grant flow](https:
 
 This is achieved by using [Shopify managed installation](https://shopify.dev/docs/apps/auth/installation#shopify-managed-installation)
 to handle automatic app installations and scope updates, while utilizing
-[token exchange](https://shopify.dev/docs/apps/auth/get-access-tokens/token-exchange/overview) to retrieve an access token for
+[token exchange](https://shopify.dev/docs/apps/auth/get-access-tokens/token-exchange) to retrieve an access token for
 authenticated API access.
 
 ##### Enabling this new strategy in your app
@@ -214,7 +214,7 @@ const shopify = shopifyApp({
 
 ###### Learn more about:
 
-- [How token exchange works](https://shopify.dev/docs/apps/auth/get-access-tokens/token-exchange/overview)
+- [How token exchange works](https://shopify.dev/docs/apps/auth/get-access-tokens/token-exchange)
 - [Using Shopify managed installation](https://shopify.dev/docs/apps/auth/installation#shopify-managed-installation)
 - [Configuring access scopes through the Shopify CLI](https://shopify.dev/docs/apps/tools/cli/configuration)
 
