@@ -32,6 +32,7 @@ import {unauthenticatedStorefrontContextFactory} from './unauthenticated/storefr
 import {AuthCodeFlowStrategy} from './authenticate/admin/strategies/auth-code-flow';
 import {TokenExchangeStrategy} from './authenticate/admin/strategies/token-exchange';
 import {IdempotentPromiseHandler} from './authenticate/helpers/idempotent-promise-handler';
+import {authenticateFlowFactory} from './authenticate/flow/authenticate';
 
 /**
  * Creates an object your app will use to interact with Shopify.
@@ -85,6 +86,7 @@ export function shopifyApp<
     registerWebhooks: registerWebhooksFactory(params),
     authenticate: {
       admin: authStrategy,
+      flow: authenticateFlowFactory<Resources>(params),
       public: authenticatePublicFactory<Config['future'], Resources>(params),
       webhook: authenticateWebhookFactory<
         Config['future'],

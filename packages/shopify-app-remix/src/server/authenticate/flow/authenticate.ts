@@ -1,10 +1,18 @@
-import {adminClientFactory} from 'src/server/clients/admin';
-import {BasicParams} from 'src/server/types';
+import {ShopifyRestResources} from '@shopify/shopify-api';
 
-export function authenticateFlowFactory(params: BasicParams) {
+import {adminClientFactory} from '../../clients/admin';
+import {BasicParams} from '../../types';
+
+import type {AuthenticateFlow, FlowContext} from './types';
+
+export function authenticateFlowFactory<
+  Resources extends ShopifyRestResources = ShopifyRestResources,
+>(params: BasicParams): AuthenticateFlow<Resources> {
   const {api, config, logger} = params;
 
-  return async function authenticate(request: Request) {
+  return async function authenticate(
+    request: Request,
+  ): Promise<FlowContext<Resources>> {
     logger.info('Authenticating flow request');
 
     if (request.method !== 'POST') {
@@ -19,12 +27,14 @@ export function authenticateFlowFactory(params: BasicParams) {
     }
 
     const rawBody = await request.text();
-    const {valid} = await api.flow.validate({
+    const result = await api.flow.validate({
       rawBody,
       rawRequest: request,
     });
 
-    if (!valid) {
+    if (!result.valid) {
+      logger.error('Received an invalid flow request', {reason: result.reason});
+
       throw new Response(undefined, {
         status: 400,
         statusText: 'Bad Request',
@@ -32,6 +42,11 @@ export function authenticateFlowFactory(params: BasicParams) {
     }
 
     const payload = JSON.parse(rawBody);
+
+    logger.debug('Flow request is valid, looking for an offline session', {
+      shop: payload.shopify_domain,
+    });
+
     const sessionId = api.session.getOfflineId(payload.shopify_domain);
     const session = await config.sessionStorage.loadSession(sessionId);
 
@@ -45,10 +60,12 @@ export function authenticateFlowFactory(params: BasicParams) {
       });
     }
 
+    logger.debug('Found a session for the flow request', {shop: session.shop});
+
     return {
       session,
       payload,
-      admin: adminClientFactory({params, session}),
+      admin: adminClientFactory<Resources>({params, session}),
     };
   };
 }
