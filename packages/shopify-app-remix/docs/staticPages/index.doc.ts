@@ -160,12 +160,12 @@ const data: LandingTemplateSchema = {
       title: 'New embedded app authorization strategy',
       sectionContent:
         "> Tip: This is available for embedded apps that are using [Shopify managed installation](https://shopify.dev/docs/apps/auth/installation#shopify-managed-installation)." +
-        "\n> If you're building an embedded app, we **strongly** recommend using this feature that utilizes Shopify managed install with [token exchange](https://shopify.dev/docs/apps/auth/get-access-tokens/token-exchange/overview)." +
+        "\n> If you're building an embedded app, we **strongly** recommend using this feature that utilizes Shopify managed install with [token exchange](https://shopify.dev/docs/apps/auth/get-access-tokens/token-exchange)." +
         "\n\n We have introduced a new authorization and installation strategy for **embedded apps** that eliminates the redirects that were previously necessary." +
         " It replaces the legacy [authorization Code install and grant flow](https://shopify.dev/docs/apps/auth/get-access-tokens/authorization-code-grant)." +
         "\n\nIt takes advantage of [Shopify managed installation](https://shopify.dev/docs/apps/auth/installation#shopify-managed-installation)" +
         " to handle automatic app installations and scope updates, while using" +
-        " [token exchange](https://shopify.dev/docs/apps/auth/get-access-tokens/token-exchange/overview) to get an access token for the logged-in user." +
+        " [token exchange](https://shopify.dev/docs/apps/auth/get-access-tokens/token-exchange) to get an access token for the logged-in user." +
         "\n\n > Note: Newly created Remix apps from the template after February 1st 2024 has this feature enabled by default." +
         "\n\n1. Enable [Shopify managed installation](https://shopify.dev/docs/apps/auth/installation#shopify-managed-installation)" +
         " by configuring your scopes [through the Shopify CLI](https://shopify.dev/docs/apps/tools/cli/configuration)." +
