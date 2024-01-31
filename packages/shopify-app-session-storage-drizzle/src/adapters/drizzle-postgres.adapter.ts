@@ -100,11 +100,9 @@ export class DrizzleSessionStoragePostgres implements SessionStorage {
       state: session.state,
       isOnline: session.isOnline,
       scope: session.scope,
-      expires: session.expires
-        ? new Date(session.expires).toDateString()
-        : null,
+      expires: session.expires,
       accessToken: session.accessToken,
-      userId: session.onlineAccessInfo?.associated_user.id as unknown as bigint,
+      userId: session.onlineAccessInfo?.associated_user.id,
     };
   }
 
@@ -114,11 +112,8 @@ export class DrizzleSessionStoragePostgres implements SessionStorage {
       shop: row.shop,
       state: row.state,
       isOnline: row.isOnline,
+      expires: row.expires as any,
     };
-
-    if (row.expires) {
-      sessionParams.expires = new Date(row.expires).getTime();
-    }
 
     if (row.scope) {
       sessionParams.scope = row.scope;
@@ -129,7 +124,7 @@ export class DrizzleSessionStoragePostgres implements SessionStorage {
     }
 
     if (row.userId) {
-      sessionParams.onlineAccessInfo = String(row.userId);
+      sessionParams.onlineAccessInfo = row.userId;
     }
 
     return Session.fromPropertyArray(Object.entries(sessionParams));

@@ -6,9 +6,9 @@ export const sessionTable = pgTable('session' as string, {
   state: text('state').notNull(),
   isOnline: boolean('isOnline').default(false).notNull(),
   scope: text('scope'),
-  expires: timestamp('expires', {precision: 3, mode: 'string'}),
+  expires: timestamp('expires', {mode: 'date'}),
   accessToken: text('accessToken'),
-  userId: bigint('userId', {mode: 'bigint'}),
+  userId: bigint('userId', {mode: 'number'}),
 });
 
 export type PostgresSessionTable = typeof sessionTable;

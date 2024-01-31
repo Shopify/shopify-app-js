@@ -28,19 +28,19 @@ const dbURL = new URL(
   )}@localhost/${encodeURIComponent('shop&test')}`,
 );
 
-export const sessionTable = pgTable('session' as string, {
+export const sessionTable = pgTable('session', {
   id: text('id').primaryKey(),
   shop: text('shop').notNull(),
   state: text('state').notNull(),
   isOnline: boolean('isOnline').default(false).notNull(),
   scope: text('scope'),
-  expires: timestamp('expires', {precision: 3, mode: 'string'}),
+  expires: timestamp('expires', {mode: 'date'}),
   accessToken: text('accessToken'),
-  userId: bigint('userId', {mode: 'bigint'}),
+  userId: bigint('userId', {mode: 'number'}),
 });
 
 describe('DrizzleSessionStoragePostgres', () => {
-  let drizzleDb: PgDatabase<QueryResultHKT>;
+  let drizzleDb: PgDatabase<QueryResultHKT, any>;
   let containerId: string;
   let client: pg.Client;
   let drizzleSessionStorage: DrizzleSessionStoragePostgres;
@@ -85,7 +85,7 @@ describe('DrizzleSessionStoragePostgres', () => {
       "state" TEXT NOT NULL,
       "isOnline" BOOLEAN NOT NULL DEFAULT false,
       "scope" TEXT,
-      "expires" TIMESTAMP(3),
+      "expires" TIMESTAMP,
       "accessToken" TEXT,
       "userId" BIGINT
     )
