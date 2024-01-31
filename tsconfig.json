@@ -15,6 +15,6 @@
     {"path": "./packages/shopify-app-session-storage-sqlite"},
     {"path": "./packages/shopify-app-session-storage-kv"},
     {"path": "./packages/shopify-app-express"},
-    {"path": "./packages/shopify-app-remix"}
-  ]
+    {"path": "./packages/shopify-app-remix"},
+  ],
 }

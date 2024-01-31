@@ -58,6 +58,8 @@ export type MandatoryTopics =
   | 'CUSTOMERS_REDACT'
   | 'SHOP_REDACT';
 
+// This can't be a type because it would reference itself
+// eslint-disable-next-line @typescript-eslint/consistent-indexed-object-style
 interface JSONObject {
   [x: string]: JSONValue;
 }
@@ -66,7 +68,7 @@ interface JSONArray extends Array<JSONValue> {}
 
 type RegisterWebhooks = (
   options: RegisterWebhooksOptions,
-) => Promise<RegisterReturn>;
+) => Promise<RegisterReturn | void>;
 
 export enum LoginErrorType {
   MissingShop = 'MISSING_SHOP',
@@ -462,7 +464,7 @@ export type ShopifyApp<Config extends AppConfigArg> =
   Config['distribution'] extends AppDistribution.ShopifyAdmin
     ? AdminApp<Config>
     : Config['distribution'] extends AppDistribution.SingleMerchant
-    ? SingleMerchantApp<Config>
-    : Config['distribution'] extends AppDistribution.AppStore
-    ? AppStoreApp<Config>
-    : AppStoreApp<Config>;
+      ? SingleMerchantApp<Config>
+      : Config['distribution'] extends AppDistribution.AppStore
+        ? AppStoreApp<Config>
+        : AppStoreApp<Config>;

@@ -174,6 +174,50 @@ Here are some guides to help you set up your app:
 You can also authenticate requests from surfaces other than the admin.
 To see all supported methods, see [the `shopify.authenticate` object documentation](https://shopify.dev/docs/api/shopify-app-remix/latest/authenticate).
 
+### New embedded app authorization strategy
+
+> [!TIP]
+> If you are building an embedded app, we **strongly** recommend using [Shopify managed installation](https://shopify.dev/docs/apps/auth/installation#shopify-managed-installation)
+> with [token exchange](https://shopify.dev/docs/apps/auth/get-access-tokens/token-exchange) instead of the legacy authorization code grant flow.
+
+We've introduced a new installation and authorization strategy for **embedded apps** that
+eliminates the redirects that were previously necessary.
+It replaces the existing [installation and authorization code grant flow](https://shopify.dev/docs/apps/auth/get-access-tokens/authorization-code-grant).
+
+This is achieved by using [Shopify managed installation](https://shopify.dev/docs/apps/auth/installation#shopify-managed-installation)
+to handle automatic app installations and scope updates, while utilizing
+[token exchange](https://shopify.dev/docs/apps/auth/get-access-tokens/token-exchange) to retrieve an access token for
+authenticated API access.
+
+##### Enabling this new strategy in your app
+
+> [!NOTE]
+> Newly created Remix apps from the template after February 1st 2024 has this feature enabled by default.
+
+1. Enable [Shopify managed installation](https://shopify.dev/docs/apps/auth/installation#shopify-managed-installation)
+   by configuring your scopes [through the Shopify CLI](https://shopify.dev/docs/apps/tools/cli/configuration).
+2. Enable the future flag `unstable_newEmbeddedAuthStrategy` in your app's server configuration file.
+
+```ts
+// my-app/app/shopify.server.ts
+const shopify = shopifyApp({
+  ...
+  isEmbeddedApp: true,
+  future: {
+    unstable_newEmbeddedAuthStrategy: true,
+  }
+})
+
+```
+
+3. Enjoy a smoother and faster app installation process.
+
+###### Learn more about:
+
+- [How token exchange works](https://shopify.dev/docs/apps/auth/get-access-tokens/token-exchange)
+- [Using Shopify managed installation](https://shopify.dev/docs/apps/auth/installation#shopify-managed-installation)
+- [Configuring access scopes through the Shopify CLI](https://shopify.dev/docs/apps/tools/cli/configuration)
+
 ## Gotchas / Troubleshooting
 
 If you're experiencing unexpected behaviors when using this package, check our [app template's documentation](https://github.com/Shopify/shopify-app-template-remix#gotchas--troubleshooting) for the solution to common issues.

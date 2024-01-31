@@ -3,9 +3,10 @@ import {Shopify, WebhookHandler} from '@shopify/shopify-api';
 
 import {AppConfigInterface} from '../config-types';
 
-export interface WebhookHandlersParam {
-  [topic: string]: WebhookHandler | WebhookHandler[];
-}
+export type WebhookHandlersParam = Record<
+  string,
+  WebhookHandler | WebhookHandler[]
+>;
 
 export interface WebhookProcessParams {
   req: Request;

@@ -94,15 +94,15 @@ export class DynamoDBSessionStorage implements SessionStorage {
     );
   }
 
-  private serializeId(id: string): {[key: string]: AttributeValue} {
+  private serializeId(id: string): Record<string, AttributeValue> {
     return marshall({id});
   }
 
-  private deserializeId(id: {[key: string]: AttributeValue}): string {
+  private deserializeId(id: Record<string, AttributeValue>): string {
     return unmarshall(id).id;
   }
 
-  private serializeSession(session: Session): {[key: string]: AttributeValue} {
+  private serializeSession(session: Session): Record<string, AttributeValue> {
     // DynamoDB doesn't support Date objects, so we need to convert it to an ISO string
     const rawSession = {
       ...session.toObject(),
@@ -114,9 +114,7 @@ export class DynamoDBSessionStorage implements SessionStorage {
     });
   }
 
-  private deserializeSession(session: {
-    [key: string]: AttributeValue;
-  }): Session {
+  private deserializeSession(session: Record<string, AttributeValue>): Session {
     const rawSession = unmarshall(session) as SessionParams;
 
     // Convert the ISO string back to a Date object

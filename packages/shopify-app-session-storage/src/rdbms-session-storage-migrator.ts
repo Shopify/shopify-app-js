@@ -30,7 +30,7 @@ export abstract class RdbmsSessionStorageMigrator extends AbstractMigrationEngin
 
     const query = `
       SELECT * FROM ${this.options.migrationDBIdentifier}
-      WHERE ${this.getOptions().migrationNameColumnName} = 
+      WHERE ${this.getOptions().migrationNameColumnName} =
         ${this.connection.getArgumentPlaceholder(1)};
     `;
 
@@ -43,8 +43,8 @@ export abstract class RdbmsSessionStorageMigrator extends AbstractMigrationEngin
 
     const insert = `
           INSERT INTO ${this.options.migrationDBIdentifier} (${
-      this.getOptions().migrationNameColumnName
-    })
+            this.getOptions().migrationNameColumnName
+          })
           VALUES(${this.connection.getArgumentPlaceholder(1)});
         `;
 

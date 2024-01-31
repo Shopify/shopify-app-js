@@ -37,8 +37,8 @@ export function loginFactory(params: BasicParams) {
 
     const authPath = `${config.appUrl}${config.auth.path}?shop=${sanitizedShop}`;
 
-    const storeName = sanitizedShop.split('.')[0];
-    const installPath = `https://admin.shopify.com/store/${storeName}/oauth/install?client_id=${config.apiKey}`;
+    const adminPath = api.utils.legacyUrlToShopAdminUrl(sanitizedShop);
+    const installPath = `https://${adminPath}/oauth/install?client_id=${config.apiKey}`;
 
     const shouldInstall =
       config.isEmbeddedApp && config.future.unstable_newEmbeddedAuthStrategy;

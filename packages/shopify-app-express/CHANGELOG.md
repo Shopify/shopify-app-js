@@ -1,5 +1,17 @@
 # Changelog
 
+## 4.0.1
+
+### Patch Changes
+
+- b4eeb24: Improved and simplified package.json dependencies
+- b998c30: Bump shopify-api version from 9.0.1 to 9.0.2
+- d8f8436: Replaced query() internal call in the GraphQL client with request()
+- Updated dependencies [b4eeb24]
+- Updated dependencies [b998c30]
+  - @shopify/shopify-app-session-storage-memory@2.0.4
+  - @shopify/shopify-app-session-storage@2.0.4
+
 ## 4.0.0
 
 ### Major Changes

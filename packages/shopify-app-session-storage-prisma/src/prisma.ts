@@ -110,7 +110,7 @@ export class PrismaSessionStorage<T extends PrismaClient>
   }
 
   private rowToSession(row: Row): Session {
-    const sessionParams: {[key: string]: boolean | string | number} = {
+    const sessionParams: Record<string, boolean | string | number> = {
       id: row.id,
       shop: row.shop,
       state: row.state,

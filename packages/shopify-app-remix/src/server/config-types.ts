@@ -245,9 +245,7 @@ export interface AuthConfig {
   loginPath: string;
 }
 
-export interface WebhookConfig {
-  [key: string]: WebhookHandler | WebhookHandler[];
-}
+export type WebhookConfig = Record<string, WebhookHandler | WebhookHandler[]>;
 
 interface HooksConfig {
   /**

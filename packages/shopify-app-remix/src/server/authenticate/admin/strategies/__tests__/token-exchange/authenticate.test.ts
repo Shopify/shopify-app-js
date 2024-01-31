@@ -33,9 +33,8 @@ describe('authenticate', () => {
     );
 
     // THEN
-    const [persistedSession] = await config.sessionStorage.findSessionsByShop(
-      TEST_SHOP,
-    );
+    const [persistedSession] =
+      await config.sessionStorage.findSessionsByShop(TEST_SHOP);
 
     expect(persistedSession).toEqual(session);
     expect(session).toMatchObject({
@@ -70,9 +69,8 @@ describe('authenticate', () => {
     );
 
     // THEN
-    const [_, onlineSession] = await config.sessionStorage.findSessionsByShop(
-      TEST_SHOP,
-    );
+    const [_, onlineSession] =
+      await config.sessionStorage.findSessionsByShop(TEST_SHOP);
 
     expect(onlineSession).toEqual(session);
     expect(session).toMatchObject({

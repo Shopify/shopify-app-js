@@ -1,5 +1,19 @@
 # @shopify/shopify-app-session-storage-prisma
 
+## 3.0.0
+
+### Major Changes
+
+- ea88df2: Updated the dependency on `prisma` to v5+. This package itself has no breaking changes, but you'll need to update your app's dependency on Prisma as well as this package.
+
+### Patch Changes
+
+- b4eeb24: Improved and simplified package.json dependencies
+- b998c30: Bump shopify-api version from 9.0.1 to 9.0.2
+- Updated dependencies [b4eeb24]
+- Updated dependencies [b998c30]
+  - @shopify/shopify-app-session-storage@2.0.4
+
 ## 2.0.3
 
 ### Patch Changes
