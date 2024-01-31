@@ -29,10 +29,11 @@
     "Storefront API",
     "session storage",
     "Drizzle"
-  ],  
+  ],
   "dependencies": {
     "pg": "^8.11.3",
-    "tslib": "^2.6.2"
+    "tslib": "^2.6.2",
+    "better-sqlite3": "^9.3.0"
   },
   "peerDependencies": {
     "@shopify/shopify-api": "^9.0.1",

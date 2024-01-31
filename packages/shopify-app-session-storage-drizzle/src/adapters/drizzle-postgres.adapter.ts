@@ -112,8 +112,11 @@ export class DrizzleSessionStoragePostgres implements SessionStorage {
       shop: row.shop,
       state: row.state,
       isOnline: row.isOnline,
-      expires: row.expires as any,
     };
+
+    if (row.expires) {
+      sessionParams.expires = row.expires as any;
+    }
 
     if (row.scope) {
       sessionParams.scope = row.scope;

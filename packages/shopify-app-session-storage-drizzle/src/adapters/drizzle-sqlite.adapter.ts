@@ -95,9 +95,7 @@ export class DrizzleSessionStorageSQLite implements SessionStorage {
       state: session.state,
       isOnline: session.isOnline,
       scope: session.scope,
-      expires: session.expires
-        ? new Date(session.expires).toDateString()
-        : null,
+      expires: session.expires ? session.expires.toISOString() : null,
       accessToken: session.accessToken,
       userId: session.onlineAccessInfo?.associated_user.id as unknown as bigint,
     };
@@ -112,7 +110,7 @@ export class DrizzleSessionStorageSQLite implements SessionStorage {
     };
 
     if (row.expires) {
-      sessionParams.expires = new Date(row.expires).getTime();
+      sessionParams.expires = new Date(row.expires) as any;
     }
 
     if (row.scope) {
@@ -124,7 +122,7 @@ export class DrizzleSessionStorageSQLite implements SessionStorage {
     }
 
     if (row.userId) {
-      sessionParams.onlineAccessInfo = String(row.userId);
+      sessionParams.onlineAccessInfo = Number(row.userId);
     }
 
     return Session.fromPropertyArray(Object.entries(sessionParams));
