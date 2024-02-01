@@ -32,7 +32,7 @@
     "Redis"
   ],
   "dependencies": {
-    "redis": "^4.6.11"
+    "redis": "^4.6.12"
   },
   "peerDependencies": {
     "@shopify/shopify-api": "^9.0.2",

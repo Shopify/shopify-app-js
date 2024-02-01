@@ -6,6 +6,8 @@
 
 - 2473c85: Add new embedded authorization strategy relying on Shopify managed install and OAuth token exchange
 
+  :exclamation: For more information on how to enable this feature, see ["New Embedded Authorization Strategy"](./README.md#new-embedded-authorization-strategy)
+
 ### Patch Changes
 
 - 35b74dd: Fixes a bug that was causing external redirects to fail in remix actions
