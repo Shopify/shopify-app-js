@@ -138,7 +138,9 @@ const data: LandingTemplateSchema = {
       anchorLink: 'auth-route',
       title: 'OAuth route',
       sectionContent:
-        "To install an app or refresh tokens, you'll need to set up an [OAuth](docs/apps/auth/oauth) route. To do that, set up a [splat route](https://remix.run/docs/en/main/guides/routing#splats) that calls `authenticate.admin`." +
+        "> Tip: This is only applicable to non-embedded apps or legacy embedded apps that are **not** using the [new embedded app authorization strategy](#embedded-auth-strategy) for OAuth and installation flow. If you're building an embedded app, we **strongly** recommend using the" +
+        " [new embedded app authorization strategy](#embedded-auth-strategy)" +
+        "\n\nTo install an app or refresh tokens, you'll need to set up an [OAuth](docs/apps/auth/oauth) route. To do that, set up a [splat route](https://remix.run/docs/en/main/guides/routing#splats) that calls `authenticate.admin`." +
         '\n\nWhen that function is called, the package will start the OAuth process, and handle the callback from Shopify after it completes.' +
         '\n\nThe default route is `/app/routes/auth/$.tsx`, but you can configure this route using the `authPathPrefix` option.',
       codeblock: {
@@ -151,6 +153,35 @@ const data: LandingTemplateSchema = {
           },
         ],
       },
+    },
+    {
+      type: 'Generic',
+      anchorLink: 'embedded-auth-strategy',
+      title: 'New embedded app authorization strategy',
+      sectionContent:
+        "> Tip: This is available for embedded apps that are using [Shopify managed installation](https://shopify.dev/docs/apps/auth/installation#shopify-managed-installation)." +
+        "\n> If you're building an embedded app, we **strongly** recommend using this feature that utilizes Shopify managed install with [token exchange](https://shopify.dev/docs/apps/auth/get-access-tokens/token-exchange)." +
+        "\n\n We have introduced a new authorization and installation strategy for **embedded apps** that eliminates the redirects that were previously necessary." +
+        " It replaces the legacy [authorization Code install and grant flow](https://shopify.dev/docs/apps/auth/get-access-tokens/authorization-code-grant)." +
+        "\n\nIt takes advantage of [Shopify managed installation](https://shopify.dev/docs/apps/auth/installation#shopify-managed-installation)" +
+        " to handle automatic app installations and scope updates, while using" +
+        " [token exchange](https://shopify.dev/docs/apps/auth/get-access-tokens/token-exchange) to get an access token for the logged-in user." +
+        "\n\n > Note: Newly created Remix apps from the template after February 1st 2024 has this feature enabled by default." +
+        "\n\n1. Enable [Shopify managed installation](https://shopify.dev/docs/apps/auth/installation#shopify-managed-installation)" +
+        " by configuring your scopes [through the Shopify CLI](https://shopify.dev/docs/apps/tools/cli/configuration)." +
+        "\n2. Enable the future flag `unstable_newEmbeddedAuthStrategy` in your app's server configuration file." +
+        "\n3. Enjoy no-redirect OAuth flow, and app installation process.",
+      codeblock: {
+        title: 'Enabling the new embedded auth strategy',
+        tabs: [
+          {
+            title: '/app/shopify.server.ts',
+            language: 'ts',
+            code: './examples/index/embedded-app-auth-strategy-config.example.ts',
+
+          }
+        ],
+      }
     },
     {
       type: 'Generic',
