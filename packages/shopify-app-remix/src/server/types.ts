@@ -229,7 +229,7 @@ export interface ShopifyAppBase<Config extends AppConfigArg> {
    * import prisma from "~/db.server";
    *
    * const shopify = shopifyApp({
-   *   sesssionStorage: new PrismaSessionStorage(prisma),
+   *   sessionStorage: new PrismaSessionStorage(prisma),
    *   // ...etc
    * })
    *
@@ -464,7 +464,7 @@ export type ShopifyApp<Config extends AppConfigArg> =
   Config['distribution'] extends AppDistribution.ShopifyAdmin
     ? AdminApp<Config>
     : Config['distribution'] extends AppDistribution.SingleMerchant
-      ? SingleMerchantApp<Config>
-      : Config['distribution'] extends AppDistribution.AppStore
-        ? AppStoreApp<Config>
-        : AppStoreApp<Config>;
+    ? SingleMerchantApp<Config>
+    : Config['distribution'] extends AppDistribution.AppStore
+    ? AppStoreApp<Config>
+    : AppStoreApp<Config>;
