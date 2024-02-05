@@ -148,7 +148,10 @@ interface Authenticate<Config extends AppConfigArg> {
    * export async function action({ request }: ActionFunctionArgs) {
    *   const {admin, session, payload} = authenticate.flow(request);
    *
-   *   return json(await admin.rest.resources.Product.count({ session }));
+   *   // Perform flow extension logic
+   *
+   *   // Return a 200 response
+   *   return null;
    * }
    * ```
    * ```ts
