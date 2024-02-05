@@ -229,7 +229,7 @@ export interface ShopifyAppBase<Config extends AppConfigArg> {
    * import prisma from "~/db.server";
    *
    * const shopify = shopifyApp({
-   *   sesssionStorage: new PrismaSessionStorage(prisma),
+   *   sessionStorage: new PrismaSessionStorage(prisma),
    *   // ...etc
    * })
    *

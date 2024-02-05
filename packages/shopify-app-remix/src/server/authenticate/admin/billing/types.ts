@@ -104,7 +104,7 @@ export interface BillingContext<Config extends AppConfigArg> {
    * ```
    *
    * @example
-   * <caption>Using a plan selection page.</caption>
+   * <caption>Redirect to a plan selection page.</caption>
    * <description> When the app has multiple plans, create a page in your App that allows the merchant to select a plan. If a merchant does not have the required plan you can redirect them to page in your app to select one.</description>
    * ```ts
    * // /app/routes/**\/*.ts
