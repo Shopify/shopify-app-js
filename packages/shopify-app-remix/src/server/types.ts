@@ -464,7 +464,7 @@ export type ShopifyApp<Config extends AppConfigArg> =
   Config['distribution'] extends AppDistribution.ShopifyAdmin
     ? AdminApp<Config>
     : Config['distribution'] extends AppDistribution.SingleMerchant
-    ? SingleMerchantApp<Config>
-    : Config['distribution'] extends AppDistribution.AppStore
-    ? AppStoreApp<Config>
-    : AppStoreApp<Config>;
+      ? SingleMerchantApp<Config>
+      : Config['distribution'] extends AppDistribution.AppStore
+        ? AppStoreApp<Config>
+        : AppStoreApp<Config>;
