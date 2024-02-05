@@ -17,7 +17,7 @@ const data: ReferenceEntityTemplateSchema = {
       type: 'GetUnauthenticatedAdminContext',
     },
   ],
-  jsDocTypeExamples: ['UnauthenticatedAdminContext', 'AdminApiContext'],
+  jsDocTypeExamples: ['UnauthenticatedAdminContext'],
   related: [
     {
       name: 'API context',
