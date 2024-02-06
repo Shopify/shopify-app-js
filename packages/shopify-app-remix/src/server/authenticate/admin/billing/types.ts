@@ -19,6 +19,14 @@ export interface RequireBillingOptions<Config extends AppConfigArg>
   onFailure: (error: any) => Promise<Response>;
 }
 
+export interface CheckBillingOptions<Config extends AppConfigArg>
+  extends Omit<BillingCheckParams, 'session' | 'plans' | 'returnObject'> {
+  /**
+   * The plans to check for. Must be one of the values defined in the `billing` config option.
+   */
+  plans: (keyof Config['billing'])[];
+}
+
 export interface RequestBillingOptions<Config extends AppConfigArg>
   extends Omit<BillingRequestParams, 'session' | 'plan' | 'returnObject'> {
   /**
@@ -153,6 +161,61 @@ export interface BillingContext<Config extends AppConfigArg> {
    */
   require: (
     options: RequireBillingOptions<Config>,
+  ) => Promise<BillingCheckResponseObject>;
+
+  /**
+   * Checks if the shop has an active payment for any plan defined in the `billing` config option.
+   *
+   * @returns A promise that resolves to an object containing the active purchases for the shop.
+   *
+   * * @example
+   * <caption>Check what billing plans a merchant is subscribed to.</caption>
+   * <description>Use billing.check if you want to determine which plans are in use. Unlike `require`, `check` does not
+   * throw an error if no active billing plans are present. </description>
+   * ```ts
+   * // /app/routes/**\/*.ts
+   * import { LoaderFunctionArgs } from "@remix-run/node";
+   * import { authenticate, MONTHLY_PLAN } from "../shopify.server";
+   *
+   * export const loader = async ({ request }: LoaderFunctionArgs) => {
+   *   const { billing } = await authenticate.admin(request);
+   *   const { resp } = await billing.check({
+   *     plans: [MONTHLY_PLAN],
+   *     isTest: false,
+   *   });
+   *  console.log(resp.hasActivePayment)
+   *  console.log(resp.appSubscriptions)
+   * };
+   * ```
+   * ```ts
+   * // shopify.server.ts
+   * import { shopifyApp, BillingInterval } from "@shopify/shopify-app-remix/server";
+   *
+   * export const MONTHLY_PLAN = 'Monthly subscription';
+   * export const ANNUAL_PLAN = 'Annual subscription';
+   *
+   * const shopify = shopifyApp({
+   *   // ...etc
+   *   billing: {
+   *     [MONTHLY_PLAN]: {
+   *       amount: 5,
+   *       currencyCode: 'USD',
+   *       interval: BillingInterval.Every30Days,
+   *     },
+   *     [ANNUAL_PLAN]: {
+   *       amount: 50,
+   *       currencyCode: 'USD',
+   *       interval: BillingInterval.Annual,
+   *     },
+   *   }
+   * });
+   * export default shopify;
+   * export const authenticate = shopify.authenticate;
+   * ```
+   *
+   */
+  check: (
+    options: CheckBillingOptions<Config>,
   ) => Promise<BillingCheckResponseObject>;
 
   /**
