@@ -3,10 +3,11 @@ import {ReferenceEntityTemplateSchema} from '@shopify/generate-docs';
 const data: ReferenceEntityTemplateSchema = {
   name: 'Unauthenticated admin',
   description:
-    "Allows interacting with the Admin API on requests that didn't come from Shopify." +
-    '\n\n> Caution: This should only be used for Requests that do not originate from Shopify.' +
-    '\n> You must do your own authentication before using this method.' +
-    "\n>This function doesn't perform **any** validation and shouldn't rely on unvalidated user input.",
+    "Allows interacting with the Admin API on requests that didn't come from Shopify, which enables apps to integrate with 3rd party services." +
+    "\n\nBecause the request isn't sent by Shopify, this package isn't able to authenticate the request." +
+    '\nIn that case, it is up to the app to obtain the shop domain from the 3rd party service in a secure way.' +
+    '\n\n> Caution:' +
+    "\n> This function doesn't perform **any** validation and shouldn't rely on raw user input.",
   category: 'Unauthenticated',
   type: 'object',
   isVisualComponent: false,
