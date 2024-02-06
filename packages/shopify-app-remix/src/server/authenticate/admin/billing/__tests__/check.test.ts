@@ -32,7 +32,7 @@ const BILLING_CONFIG: Shopify['config']['billing'] = {
 };
 
 describe('Billing check', () => {
-  it('returns true when there is payment', async () => {
+  it('returns plan information when there is payment', async () => {
     // GIVEN
     const config = testConfig();
     await setUpValidSession(config.sessionStorage);
@@ -83,14 +83,15 @@ describe('Billing check', () => {
       }),
     );
     // WHEN
-    const result = await billing.check({
-      plans: [responses.PLAN_1],
-    });
+    const {hasActivePayment, oneTimePurchases, appSubscriptions} =
+      await billing.check({
+        plans: [responses.PLAN_1],
+      });
 
     // THEN
-    expect(result.hasActivePayment).toBe(false);
-    expect(result.oneTimePurchases).toEqual([]);
-    expect(result.appSubscriptions).toEqual([]);
+    expect(hasActivePayment).toBe(false);
+    expect(oneTimePurchases).toEqual([]);
+    expect(appSubscriptions).toEqual([]);
   });
 
   it('redirects to exit-iframe with authentication using app bridge when embedded and Shopify invalidated the session', async () => {

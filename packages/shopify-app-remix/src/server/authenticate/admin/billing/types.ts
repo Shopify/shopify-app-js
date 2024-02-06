@@ -168,7 +168,7 @@ export interface BillingContext<Config extends AppConfigArg> {
    *
    * @returns A promise that resolves to an object containing the active purchases for the shop.
    *
-   * * @example
+   * @example
    * <caption>Check what billing plans a merchant is subscribed to.</caption>
    * <description>Use billing.check if you want to determine which plans are in use. Unlike `require`, `check` does not
    * throw an error if no active billing plans are present. </description>
@@ -179,12 +179,12 @@ export interface BillingContext<Config extends AppConfigArg> {
    *
    * export const loader = async ({ request }: LoaderFunctionArgs) => {
    *   const { billing } = await authenticate.admin(request);
-   *   const { resp } = await billing.check({
+   *   const { hasActivePayment, appSubscriptions } = await billing.check({
    *     plans: [MONTHLY_PLAN],
    *     isTest: false,
    *   });
-   *  console.log(resp.hasActivePayment)
-   *  console.log(resp.appSubscriptions)
+   *  console.log(hasActivePayment)
+   *  console.log(appSubscriptions)
    * };
    * ```
    * ```ts
