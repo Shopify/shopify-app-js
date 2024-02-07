@@ -2589,12 +2589,12 @@
     estree-walker "^1.0.1"
     picomatch "^2.2.2"
 
-"@shopify/admin-api-client@^0.2.2":
-  version "0.2.2"
-  resolved "https://registry.yarnpkg.com/@shopify/admin-api-client/-/admin-api-client-0.2.2.tgz#c288b4af8834bc7ab6c7c1ad26e7feddfa648ec6"
-  integrity sha512-7x79Ras5gbf7U3oVBjFIPF70WUUit3kLF93IMhtTaC9OJ/b9NIeW1w4/+RSJq3FM/7MGQGUkyrrnuNI3nl3Eig==
+"@shopify/admin-api-client@^0.2.3":
+  version "0.2.3"
+  resolved "https://registry.yarnpkg.com/@shopify/admin-api-client/-/admin-api-client-0.2.3.tgz#4637b5708af0090db9eb3f34e184a43b03800762"
+  integrity sha512-IYAKgaRoqTLlgAanvbgk3ifBWQoBaQIYAIZkMkZS7lk1ESi9tWsxYj+XHfBIhECv2/NlxQkdAzMjlR+etFiTUg==
   dependencies:
-    "@shopify/graphql-client" "^0.9.2"
+    "@shopify/graphql-client" "^0.9.3"
 
 "@shopify/babel-preset@^24.1.4":
   version "24.1.5"
@@ -2657,10 +2657,10 @@
     globby "^11.1.0"
     typescript "^4.8.3 || ^5.0.0"
 
-"@shopify/graphql-client@^0.9.2":
-  version "0.9.2"
-  resolved "https://registry.yarnpkg.com/@shopify/graphql-client/-/graphql-client-0.9.2.tgz#2c37ba20bbc1713c78b1b241af99405cd92ab428"
-  integrity sha512-Xk7bPA3UsLXFHV6F39t5g8dTVxqPagwJoR+MLYUvCuhlWpDeZW3f/OcgShXPPben5NcnOVV38kj5GVlkvrWqiQ==
+"@shopify/graphql-client@^0.9.3":
+  version "0.9.3"
+  resolved "https://registry.yarnpkg.com/@shopify/graphql-client/-/graphql-client-0.9.3.tgz#c5140d02948c827d3cb9fe634c0b2ab192d69aa9"
+  integrity sha512-2FEg6/Ue98ozJK3hFOj8kxMTiimW2eiYLDn7k+9ZqYWQ2eg+HHmdW+r5upw3jgT/2FPNYwqyz8qaZxPoxbP9Bw==
 
 "@shopify/loom-cli@^1.1.0":
   version "1.1.0"
@@ -2801,27 +2801,27 @@
     jest-matcher-utils "^26.6.2"
     react-reconciler "^0.28.0"
 
-"@shopify/shopify-api@^9.0.2":
-  version "9.0.2"
-  resolved "https://registry.yarnpkg.com/@shopify/shopify-api/-/shopify-api-9.0.2.tgz#01a321fc6bcf3450572751e6c1f8c1e4ba8ab78a"
-  integrity sha512-ZOnzDein63JMatQAYshg2RyBXcseBUTP8stbrwG/FwDhWqNafxMC2O8AcoIGoaNc1SoRYbWpxCbwkeO/CrW7Vg==
+"@shopify/shopify-api@^9.1.0":
+  version "9.1.0"
+  resolved "https://registry.yarnpkg.com/@shopify/shopify-api/-/shopify-api-9.1.0.tgz#7b9ca825741187221972b9ca4864e74436d5ebfa"
+  integrity sha512-9/w4bcfmwccHNedJe+tQeTVZ5WGb9eZy05wSp9LXq+V2PlcIp2gxSfudg6FGPwmSU4LgRD1d6AfWxnyRHV5M4g==
   dependencies:
-    "@shopify/admin-api-client" "^0.2.2"
+    "@shopify/admin-api-client" "^0.2.3"
     "@shopify/network" "^3.2.1"
-    "@shopify/storefront-api-client" "^0.2.2"
+    "@shopify/storefront-api-client" "^0.2.3"
     compare-versions "^5.0.3"
-    isbot "^3.6.10"
-    jose "^4.9.1"
+    isbot "^4.4.0"
+    jose "^5.2.0"
     node-fetch "^2.6.1"
     tslib "^2.0.3"
     uuid "^9.0.0"
 
-"@shopify/storefront-api-client@^0.2.1", "@shopify/storefront-api-client@^0.2.2":
-  version "0.2.2"
-  resolved "https://registry.yarnpkg.com/@shopify/storefront-api-client/-/storefront-api-client-0.2.2.tgz#79ddddd70838617e7a1a509f2d58ce148457e293"
-  integrity sha512-sPpbXEGYbCRQ1jvwdEMtrutUTLmwtrZ30nHBLuKLIgtezFmhuvF5/FD/hgPQCxWxEukZt8518gAVgE6p+9D8ig==
+"@shopify/storefront-api-client@^0.2.3":
+  version "0.2.3"
+  resolved "https://registry.yarnpkg.com/@shopify/storefront-api-client/-/storefront-api-client-0.2.3.tgz#828e3eee1a335975778c98a629fcd8d3da099ce3"
+  integrity sha512-n1QITdbQnUFYQwRwYbZtjFQ6onFjdhmOeZw7Zl2K9iwXt7HjBYClMtgk3bbppAAzxDccpQBUimR2f9mt/oOgMg==
   dependencies:
-    "@shopify/graphql-client" "^0.9.2"
+    "@shopify/graphql-client" "^0.9.3"
 
 "@shopify/typescript-configs@^5.1.0":
   version "5.1.0"
@@ -6603,10 +6603,15 @@ isarray@^2.0.5:
   resolved "https://registry.yarnpkg.com/isarray/-/isarray-2.0.5.tgz#8af1e4c1221244cc62459faf38940d4e644a5723"
   integrity sha512-xHjhDr3cNBK0BzdUJSPXZntQUx/mwMS5Rw4A7lPJ90XGAO6ISP/ePDNuo0vhqOZU+UD5JoodwCAAoZQd3FeAKw==
 
-isbot@^3.6.10, isbot@^3.7.1:
+isbot@^3.7.1:
   version "3.7.1"
   resolved "https://registry.yarnpkg.com/isbot/-/isbot-3.7.1.tgz#83655e59bfae8cd410d3c63b398c8ad813bf3fdf"
   integrity sha512-JfqOaY3O1lcWt2nc+D6Mq231CNpwZrBboLa59Go0J8hjGH+gY/Sy0CA/YLUSIScINmAVwTdJZIsOTk4PfBtRuw==
+
+isbot@^4.4.0:
+  version "4.4.0"
+  resolved "https://registry.yarnpkg.com/isbot/-/isbot-4.4.0.tgz#897ce9f2e498de6181027660ca80de8734d1ef81"
+  integrity sha512-8ZvOWUA68kyJO4hHJdWjyreq7TYNWTS9y15IzeqVdKxR9pPr3P/3r9AHcoIv9M0Rllkao5qWz2v1lmcyKIVCzQ==
 
 isexe@^2.0.0:
   version "2.0.0"
@@ -7552,10 +7557,10 @@ jest@^29.1.0:
     import-local "^3.0.2"
     jest-cli "^29.5.0"
 
-jose@^4.9.1:
-  version "4.14.4"
-  resolved "https://registry.yarnpkg.com/jose/-/jose-4.14.4.tgz#59e09204e2670c3164ee24cbfe7115c6f8bff9ca"
-  integrity sha512-j8GhLiKmUAh+dsFXlX1aJCbt5KMibuKb+d7j1JaOJG6s2UjX1PQlW+OKB/sD4a/5ZYF4RcmYmLSndOoU3Lt/3g==
+jose@^5.2.0:
+  version "5.2.1"
+  resolved "https://registry.yarnpkg.com/jose/-/jose-5.2.1.tgz#ec3befe173896e592e2d9ef5f267d061ffb203c5"
+  integrity sha512-qiaQhtQRw6YrOaOj0v59h3R6hUY9NvxBmmnMfKemkqYmBB0tEc97NbLP7ix44VP5p9/0YHG8Vyhzuo5YBNwviA==
 
 "js-tokens@^3.0.0 || ^4.0.0", js-tokens@^4.0.0:
   version "4.0.0"
