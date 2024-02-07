@@ -15,7 +15,7 @@ export function requireBillingFactory<Config extends AppConfigArg>(
   request: Request,
   session: Session,
 ) {
-  const {api, logger} = params;
+  const {api, logger, config} = params;
 
   return async function requireBilling(options: RequireBillingOptions<Config>) {
     const logContext = {
@@ -37,7 +37,9 @@ export function requireBillingFactory<Config extends AppConfigArg>(
     } catch (error) {
       if (error instanceof HttpResponseError && error.response.code === 401) {
         logger.debug('API token was invalid, redirecting to OAuth', logContext);
-        throw await redirectToAuthPage(params, request, session.shop);
+        const shop = session.shop;
+        config.sessionStorage.deleteSession(session.id);
+        throw await redirectToAuthPage(params, request, shop);
       } else {
         throw error;
       }

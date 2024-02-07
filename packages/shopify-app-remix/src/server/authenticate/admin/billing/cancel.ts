@@ -11,7 +11,7 @@ export function cancelBillingFactory(
   session: Session,
 ) {
   return async function cancelBilling(options: CancelBillingOptions) {
-    const {api, logger} = params;
+    const {api, logger, config} = params;
 
     logger.debug('Cancelling billing', {shop: session.shop, ...options});
 
@@ -27,7 +27,9 @@ export function cancelBillingFactory(
         logger.debug('API token was invalid, redirecting to OAuth', {
           shop: session.shop,
         });
-        throw await redirectToAuthPage(params, request, session.shop);
+        const shop = session.shop;
+        config.sessionStorage.deleteSession(session.id);
+        throw await redirectToAuthPage(params, request, shop);
       } else {
         throw error;
       }

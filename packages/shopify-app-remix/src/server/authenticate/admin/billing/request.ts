@@ -22,7 +22,7 @@ export function requestBillingFactory<Config extends AppConfigArg>(
     returnUrl,
     ...overrides
   }: RequestBillingOptions<Config>): Promise<never> {
-    const {api, logger} = params;
+    const {api, logger, config} = params;
 
     logger.info('Requesting billing', {
       shop: session.shop,
@@ -46,7 +46,9 @@ export function requestBillingFactory<Config extends AppConfigArg>(
         logger.debug('API token was invalid, redirecting to OAuth', {
           shop: session.shop,
         });
-        throw await redirectToAuthPage(params, request, session.shop);
+        const shop = session.shop;
+        config.sessionStorage.deleteSession(session.id);
+        throw await redirectToAuthPage(params, request, shop);
       } else {
         throw error;
       }
