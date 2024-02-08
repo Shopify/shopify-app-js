@@ -33,6 +33,7 @@ import {AuthCodeFlowStrategy} from './authenticate/admin/strategies/auth-code-fl
 import {TokenExchangeStrategy} from './authenticate/admin/strategies/token-exchange';
 import {IdempotentPromiseHandler} from './authenticate/helpers/idempotent-promise-handler';
 import {authenticateFlowFactory} from './authenticate/flow/authenticate';
+import {authenticateFulfillmentServiceFactory} from './authenticate/fulfillment-service/authenticate';
 import {FutureFlagOptions, logDisabledFutureFlags} from './future/flags';
 
 /**
@@ -90,6 +91,8 @@ export function shopifyApp<
       admin: authStrategy,
       flow: authenticateFlowFactory<Resources>(params),
       public: authenticatePublicFactory<Future, Resources>(params),
+      fulfillmentService:
+        authenticateFulfillmentServiceFactory<Resources>(params),
       webhook: authenticateWebhookFactory<
         Future,
         Resources,

@@ -19,6 +19,7 @@ import type {
   ApiFutureFlags,
   FutureFlagOptions,
 } from './future/flags';
+import {AuthenticateFulfillmentService} from './authenticate/fulfillment-service/types';
 
 export interface BasicParams<
   Future extends FutureFlagOptions = FutureFlagOptions,
@@ -146,6 +147,41 @@ interface Authenticate<Config extends AppConfigArg> {
    * ```
    */
   flow: AuthenticateFlow<RestResourcesType<Config>>;
+
+  /**
+   * Authenticate a request from a fulfillment service and get back an authenticated context.
+   *
+   * @example
+   * <caption>Shopify session for the fulfillment service request.</caption>
+   * <description>Use the session associated with this request to use the Admin GraphQL API </description>
+   * ```ts
+   * // /app/routes/fulfillment_order_notification.ts
+   * import { ActionFunctionArgs } from "@remix-run/node";
+   * import { authenticate } from "../shopify.server";
+   *
+   * export async function action({ request }: ActionFunctionArgs) {
+   *   const { admin } = await authenticate.fulfillmentService(request);
+   *
+   *   const response = await admin.graphql(
+   *     `#graphql
+   *     mutation acceptFulfillmentRequest {
+   *       fulfillmentOrderAcceptFulfillmentRequest(
+   *            id: "gid://shopify/FulfillmentOrder/5014440902678",
+   *            message: "Reminder that tomorrow is a holiday. We won't be able to ship this until Monday."){
+   *             fulfillmentOrder {
+   *                 status
+   *                requestStatus
+   *            }
+   *         }
+   *     }
+   *    );
+   *
+   *   const productData = await response.json();
+   *   return json({ data: productData.data });
+   * }
+   * ```
+   * */
+  fulfillmentService: AuthenticateFulfillmentService<RestResourcesType<Config>>;
 
   /**
    * Authenticate a public request and get back a session token.
