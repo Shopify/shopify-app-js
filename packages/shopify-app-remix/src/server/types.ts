@@ -15,7 +15,7 @@ import type {AuthenticatePublic} from './authenticate/public/types';
 import type {AuthenticateAdmin} from './authenticate/admin/types';
 import type {Unauthenticated} from './unauthenticated/types';
 import type {AuthenticateFlow} from './authenticate/flow/types';
-import {FutureFlagOptions} from './future/flags';
+import type {FutureFlagOptions} from './future/flags';
 
 export interface BasicParams<
   Future extends FutureFlagOptions = FutureFlagOptions,
