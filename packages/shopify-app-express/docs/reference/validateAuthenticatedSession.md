@@ -7,6 +7,7 @@ If the verification fails in either case, it will redirect the user to complete 
 
 - When embedded, it will verify that the request received from the front-end originates from an App Bridge `authenticatedFetch`.
 - When not embedded, it will verify that the request contains a valid session cookie set up during the OAuth process.
+  - XHR requests will return a `403 Forbidden` response with the `X-Shopify-Api-Request-Failure-Reauthorize-Url` header indicating where to redirect the user for authentication.
 
 Please visit [our documentation](https://shopify.dev/docs/apps/auth/oauth/session-tokens) to learn more about session tokens and how they work.
 
