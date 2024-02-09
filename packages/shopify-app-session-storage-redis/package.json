@@ -35,7 +35,7 @@
     "redis": "^4.6.12"
   },
   "peerDependencies": {
-    "@shopify/shopify-api": "^9.1.0",
+    "@shopify/shopify-api": "^9.2.0",
     "@shopify/shopify-app-session-storage": "^2.0.4"
   },
   "devDependencies": {

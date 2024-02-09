@@ -2801,10 +2801,10 @@
     jest-matcher-utils "^26.6.2"
     react-reconciler "^0.28.0"
 
-"@shopify/shopify-api@^9.1.0":
-  version "9.1.0"
-  resolved "https://registry.yarnpkg.com/@shopify/shopify-api/-/shopify-api-9.1.0.tgz#7b9ca825741187221972b9ca4864e74436d5ebfa"
-  integrity sha512-9/w4bcfmwccHNedJe+tQeTVZ5WGb9eZy05wSp9LXq+V2PlcIp2gxSfudg6FGPwmSU4LgRD1d6AfWxnyRHV5M4g==
+"@shopify/shopify-api@^9.2.0":
+  version "9.2.0"
+  resolved "https://registry.yarnpkg.com/@shopify/shopify-api/-/shopify-api-9.2.0.tgz#8a552fc63a578fdb0b58261fefdc7b87f10065a6"
+  integrity sha512-rHAKzMO2AQLf+UkjG0x6TUNga/LcAPM3gd3ANCx/yFxKSYvyaJDeVdkgidt5GNjl7UacWkICTr9Tc4XFgmFDng==
   dependencies:
     "@shopify/admin-api-client" "^0.2.3"
     "@shopify/network" "^3.2.1"
