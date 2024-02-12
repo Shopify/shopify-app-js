@@ -11,6 +11,7 @@ export function redirectWithExitIframe(
   const url = new URL(request.url);
 
   const queryParams = url.searchParams;
+
   const host = api.utils.sanitizeHost(queryParams.get('host')!);
 
   queryParams.set('shop', shop);
@@ -18,6 +19,10 @@ export function redirectWithExitIframe(
 
   if (host) {
     queryParams.set('host', host);
+    queryParams.set(
+      'exitIframe',
+      `${config.auth.path}?shop=${shop}&host=${host}`,
+    );
   }
 
   throw redirect(`${config.auth.exitIframePath}?${queryParams.toString()}`);
