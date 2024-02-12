@@ -1,5 +1,11 @@
 # @shopify/shopify-app-remix
 
+## 2.5.1
+
+### Patch Changes
+
+- 22b7744: Throw error when attempting to exit-iframe with an invalid URL
+
 ## 2.5.0
 
 ### Minor Changes
