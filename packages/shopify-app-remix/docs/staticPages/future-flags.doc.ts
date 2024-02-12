@@ -70,6 +70,14 @@ const data: LandingTemplateSchema = {
             '\n\nSee [authenticate.webhook](/docs/api/shopify-app-remix/authenticate/webhook#example-admin) for more details.',
           isOptional: true,
         },
+        {
+          name: 'unstable_newEmbeddedAuthStrategy',
+          value: '',
+          description:
+            'Embedded apps will fetch access tokens via token exchange. This assumes the app has declared scopes for Shopify managed installations.' +
+            '\n\nLearn more about this [new embedded app auth strategy](https://shopify.dev/docs/api/shopify-app-remix#embedded-auth-strategy).',
+          isOptional: true,
+        },
       ],
     },
   ],

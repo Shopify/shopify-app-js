@@ -17,3 +17,4 @@ export type {ShopifyApp, LoginError} from './types';
 export {LoginErrorType, AppDistribution} from './types';
 export {boundary} from './boundary';
 export {shopifyApp} from './shopify-app';
+export * from './errors';

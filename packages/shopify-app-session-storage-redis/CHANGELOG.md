@@ -1,5 +1,19 @@
 # @shopify/shopify-app-session-storage-redis
 
+## 3.0.0
+
+### Minor Changes
+
+- 64e0246: Update shopify-api version to 9.2.0
+
+### Patch Changes
+
+- 106d459: Updates redis from 4.6.11 to 4.6.12.
+- f5742c1: Updated dependency on `@shopify/shopify-api`
+- Updated dependencies [f5742c1]
+- Updated dependencies [64e0246]
+  - @shopify/shopify-app-session-storage@2.1.0
+
 ## 2.0.4
 
 ### Patch Changes

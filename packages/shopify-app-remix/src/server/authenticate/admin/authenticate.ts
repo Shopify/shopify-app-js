@@ -15,6 +15,7 @@ import {
   cancelBillingFactory,
   requestBillingFactory,
   requireBillingFactory,
+  checkBillingFactory,
 } from './billing';
 import type {
   AdminContext,
@@ -88,6 +89,7 @@ export function authStrategyFactory<
       ),
       billing: {
         require: requireBillingFactory(params, request, session),
+        check: checkBillingFactory(params, request, session),
         request: requestBillingFactory(params, request, session),
         cancel: cancelBillingFactory(params, request, session),
       },
