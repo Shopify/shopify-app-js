@@ -9,7 +9,7 @@ export default createPackage((pkg) => {
 
   const basePath = `${__dirname}/src/server/adapters`;
   fs.readdirSync(basePath, {withFileTypes: true})
-    .filter((dirent) => dirent.isDirectory())
+    .filter((dirent) => dirent.isDirectory() && dirent.name !== '__tests__')
     .forEach((dirent) => {
       pkg.entry({root: `./src/server/adapters/${dirent.name}/index.ts`});
     });

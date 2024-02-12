@@ -84,9 +84,8 @@ export async function validateMocks() {
     }
 
     if (request?.body) {
-      const bodyString = new TextDecoder('utf-8').decode(
-        request.body as any as Buffer,
-      );
+      const bodyBuffer = await stream2buffer(request.body);
+      const bodyString = new TextDecoder('utf-8').decode(bodyBuffer);
 
       expected.body = expect.stringContaining(bodyString);
       actual.body = init?.body?.toString();
@@ -135,6 +134,22 @@ export async function validateMocks() {
       )}`,
     );
   }
+}
+
+async function stream2buffer(
+  stream: ReadableStream<Uint8Array>,
+): Promise<Buffer> {
+  const buffers = [];
+
+  for await (const data of stream as any) {
+    if (typeof data === 'number') {
+      buffers.push(Uint8Array.from([data]));
+    } else {
+      buffers.push(data);
+    }
+  }
+
+  return Buffer.concat(buffers);
 }
 
 export function skipMockChecks(value: boolean) {
