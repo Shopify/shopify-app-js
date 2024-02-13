@@ -8,9 +8,10 @@ export function redirectOutOfApp({
   config,
 }: ApiAndConfigParams): RedirectOutOfAppFunction {
   return function redirectOutOfApp({req, res, redirectUri, shop}): void {
-    if (!api.config.isEmbeddedApp && isFetchRequest(req)) {
-      appBridgeHeaderRedirect(config, res, redirectUri);
-    } else if (req.headers.authorization?.match(/Bearer (.*)/)) {
+    if (
+      (!api.config.isEmbeddedApp && isFetchRequest(req)) ||
+      req.headers.authorization?.match(/Bearer (.*)/)
+    ) {
       appBridgeHeaderRedirect(config, res, redirectUri);
     } else if (req.query.embedded === '1') {
       exitIframeRedirect(config, req, res, redirectUri, shop);
