@@ -70,7 +70,7 @@
     "@aws-sdk/util-utf8-browser" "^3.0.0"
     tslib "^1.11.1"
 
-"@aws-sdk/client-dynamodb@^3.470.0":
+"@aws-sdk/client-dynamodb@^3.504.0":
   version "3.511.0"
   resolved "https://registry.yarnpkg.com/@aws-sdk/client-dynamodb/-/client-dynamodb-3.511.0.tgz#858144d64b7627ac91976befb4a7b5b2d6a0a0b9"
   integrity sha512-1da7byPNfPS+txu+51irEzgwVU60Zjz8k0AOIyEAZcOV224TTnuSVM+FYQq0E5CniX8gLriQsDSjVhDaYunSFQ==
@@ -1874,7 +1874,7 @@
   resolved "https://registry.yarnpkg.com/@cloudflare/workerd-windows-64/-/workerd-windows-64-1.20240129.0.tgz#99f456b636413e66d860deb2b803d04cc5b47d75"
   integrity sha512-YqGno0XSqqqkDmNoGEX6M8kJlI2lEfWntbTPVtHaZlaXVR9sWfoD7TEno0NKC95cXFz+ioyFLbgbOdnfWwmVAA==
 
-"@cloudflare/workers-types@^4.20230511.0":
+"@cloudflare/workers-types@^4.20240129.0":
   version "4.20240208.0"
   resolved "https://registry.yarnpkg.com/@cloudflare/workers-types/-/workers-types-4.20240208.0.tgz#5c7f7bdf8c960687dc8258814207acac40108a81"
   integrity sha512-MVGTTjZpJu4kJONvai5SdJzWIhOJbuweVZ3goI7FNyG+JdoQH41OoB+nMhLsX626vPLZVWGPIWsiSo/WZHzgQw==
@@ -2987,7 +2987,7 @@
     estree-walker "^1.0.1"
     picomatch "^2.2.2"
 
-"@shopify/admin-api-client@^0.2.2", "@shopify/admin-api-client@^0.2.3":
+"@shopify/admin-api-client@^0.2.3":
   version "0.2.3"
   resolved "https://registry.yarnpkg.com/@shopify/admin-api-client/-/admin-api-client-0.2.3.tgz#4637b5708af0090db9eb3f34e184a43b03800762"
   integrity sha512-IYAKgaRoqTLlgAanvbgk3ifBWQoBaQIYAIZkMkZS7lk1ESi9tWsxYj+XHfBIhECv2/NlxQkdAzMjlR+etFiTUg==
@@ -3189,25 +3189,25 @@
   resolved "https://registry.yarnpkg.com/@shopify/network/-/network-3.2.1.tgz#c51590bb9ccd177bb7a35c2bad482233198d215b"
   integrity sha512-Ih/6Oe80dynlUsRfEqptWBfsySCqI0rjQvPAjS8HuWeK9nZ+TvmYScfxjucKXZ2deXwAClnU6SMdh3/B1lMMog==
 
-"@shopify/polaris-icons@^7.9.0":
-  version "7.13.0"
-  resolved "https://registry.yarnpkg.com/@shopify/polaris-icons/-/polaris-icons-7.13.0.tgz#7c2c3a5ae56b8285a8853470aba9ebbe28d1b70d"
-  integrity sha512-+KW2GbEDtw0WzfQlslk3Qo76lf609NvK14eBPCMCYkDP16zPfT4ydui1wRqpRPSCaW1oFOnX3A8bNpwKzOVM0Q==
+"@shopify/polaris-icons@^8.2.0":
+  version "8.2.0"
+  resolved "https://registry.yarnpkg.com/@shopify/polaris-icons/-/polaris-icons-8.2.0.tgz#b8925ab8dd3d2628c04a46510e66d1e58b1a83a5"
+  integrity sha512-Lb8ij+kGfOUNpYTFZE22Scb+JtykmspZOr6FilxFENzotj/9OcsUbO2/qv3ov8G4XBHUdK1UbrnjFTEes0uzQA==
 
-"@shopify/polaris-tokens@^7.12.1":
-  version "7.12.1"
-  resolved "https://registry.yarnpkg.com/@shopify/polaris-tokens/-/polaris-tokens-7.12.1.tgz#a60c7f49d1685b096f388de60c111d7e61c01e49"
-  integrity sha512-cMLUmLJf/q/IHlGaiW1h1PjWmjNPM1EF7wPONh+30LTAeOv26QCPpmrzDOt2o4hHIQAlX15Pp//qxpCJKvsgiA==
+"@shopify/polaris-tokens@^8.8.0":
+  version "8.8.0"
+  resolved "https://registry.yarnpkg.com/@shopify/polaris-tokens/-/polaris-tokens-8.8.0.tgz#348841e58d25c17759a162501a2ab08e9724705c"
+  integrity sha512-Ml0sR+hu/uZJVDZjF2+2qgogCrXSvQ8TOwkrRNUuzhDG58f99FHnyuQ1kprUFyDt0DSEZJ0Jf4pzrBnkI0UgVg==
   dependencies:
     deepmerge "^4.3.1"
 
-"@shopify/polaris@^11.8.0":
-  version "11.26.0"
-  resolved "https://registry.yarnpkg.com/@shopify/polaris/-/polaris-11.26.0.tgz#f59fddeba24b620724e3c6f6a48518f2926f073d"
-  integrity sha512-LNgHEmCEqd3/sb6kEFVcK25zpyIwiebE1iWsgNJPOVY/aqAFwAtrh7iQgbGrpR/W6yweKmQ4of/A+PdhP6l7Vw==
+"@shopify/polaris@^12.12.1":
+  version "12.15.0"
+  resolved "https://registry.yarnpkg.com/@shopify/polaris/-/polaris-12.15.0.tgz#86e63dacf4fa71261b0c559c5652396b51c1690e"
+  integrity sha512-b7vyM4Hmj8xmFWj2d1SAXr0DrX0PfgLuGfRD7mwvTq0r8lr3XhjbhfVGWGsl94KVlow1LTzGkdDSF/hLUSflgA==
   dependencies:
-    "@shopify/polaris-icons" "^7.9.0"
-    "@shopify/polaris-tokens" "^7.12.1"
+    "@shopify/polaris-icons" "^8.2.0"
+    "@shopify/polaris-tokens" "^8.8.0"
     "@types/react" "^18.2.0"
     "@types/react-dom" "^18.2.0"
     "@types/react-transition-group" "^4.4.2"
@@ -3229,7 +3229,7 @@
     react-is "^18.0.0"
     react-reconciler "^0.28.0"
 
-"@shopify/shopify-api@^9.0.1", "@shopify/shopify-api@^9.0.2":
+"@shopify/shopify-api@^9.0.1", "@shopify/shopify-api@^9.2.0":
   version "9.2.0"
   resolved "https://registry.yarnpkg.com/@shopify/shopify-api/-/shopify-api-9.2.0.tgz#8a552fc63a578fdb0b58261fefdc7b87f10065a6"
   integrity sha512-rHAKzMO2AQLf+UkjG0x6TUNga/LcAPM3gd3ANCx/yFxKSYvyaJDeVdkgidt5GNjl7UacWkICTr9Tc4XFgmFDng==
@@ -3244,7 +3244,7 @@
     tslib "^2.0.3"
     uuid "^9.0.0"
 
-"@shopify/storefront-api-client@^0.2.1", "@shopify/storefront-api-client@^0.2.3":
+"@shopify/storefront-api-client@^0.2.3":
   version "0.2.3"
   resolved "https://registry.yarnpkg.com/@shopify/storefront-api-client/-/storefront-api-client-0.2.3.tgz#828e3eee1a335975778c98a629fcd8d3da099ce3"
   integrity sha512-n1QITdbQnUFYQwRwYbZtjFQ6onFjdhmOeZw7Zl2K9iwXt7HjBYClMtgk3bbppAAzxDccpQBUimR2f9mt/oOgMg==
@@ -3745,7 +3745,7 @@
   dependencies:
     "@types/node" "*"
 
-"@types/cookie-parser@^1.4.3":
+"@types/cookie-parser@^1.4.6":
   version "1.4.6"
   resolved "https://registry.yarnpkg.com/@types/cookie-parser/-/cookie-parser-1.4.6.tgz#002643c514cccf883a65cbe044dbdc38c0b92ade"
   integrity sha512-KoooCrD56qlLskXPLGUiJxOMnv5l/8m7cQD2OxJ73NPMhuSz9PmvwRD6EpjDyKBVrdJDdQ4bQK7JFNHnNmax0w==
@@ -4714,6 +4714,14 @@ better-path-resolve@1.0.0:
   integrity sha512-pbnl5XzGBdrFU/wT4jqmJVPn2B6UHPBOhzMQkY/SPUPB6QtUXtmBHBIwCbXJol93mOpGMnQyP/+BB19q04xj7g==
   dependencies:
     is-windows "^1.0.0"
+
+better-sqlite3@^9.3.0:
+  version "9.4.1"
+  resolved "https://registry.yarnpkg.com/better-sqlite3/-/better-sqlite3-9.4.1.tgz#006bc6a899a69166c5fe89c9cff64509295d12b2"
+  integrity sha512-QpqiQeMI4WkE+dQ68zTMX5OzlPGc7lXIDP1iKUt4Omt9PdaVgzKYxHIJRIzt1E+RUBQoFmkip/IbvzyrxehAIg==
+  dependencies:
+    bindings "^1.5.0"
+    prebuild-install "^7.1.1"
 
 bindings@^1.5.0:
   version "1.5.0"
@@ -10091,7 +10099,7 @@ redent@^3.0.0:
     indent-string "^4.0.0"
     strip-indent "^3.0.0"
 
-redis@^4.6.11:
+redis@^4.6.12:
   version "4.6.13"
   resolved "https://registry.yarnpkg.com/redis/-/redis-4.6.13.tgz#e247267c5f3ba35ab8277b57343d3a56acb2f0a6"
   integrity sha512-MHgkS4B+sPjCXpf+HfdetBwbRz6vCtsceTmw1pHNYJAsYxrfpOP6dz+piJWGos8wqG7qb3vj/Rrc5qOlmInUuA==
@@ -10256,7 +10264,7 @@ rimraf@^3.0.0, rimraf@^3.0.2:
   dependencies:
     glob "^7.1.3"
 
-rimraf@^5.0.0:
+rimraf@^5.0.5:
   version "5.0.5"
   resolved "https://registry.yarnpkg.com/rimraf/-/rimraf-5.0.5.tgz#9be65d2d6e683447d2e9013da2bf451139a61ccf"
   integrity sha512-CqDakW+hMe/Bz202FPEymy68P+G50RfMQK+Qo5YUqc9SPipvbGjCGKd0RSKEelbsfQuw3g5NZDSrlZZAJurH1A==
