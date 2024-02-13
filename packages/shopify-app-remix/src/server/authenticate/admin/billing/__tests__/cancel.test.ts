@@ -100,7 +100,8 @@ describe('Cancel billing', () => {
 
   it('redirects to exit-iframe with authentication using app bridge when embedded and Shopify invalidated the session', async () => {
     // GIVEN
-    const shopify = shopifyApp(testConfig({billing: BILLING_CONFIG}));
+    const config = testConfig();
+    const shopify = shopifyApp({...config, billing: BILLING_CONFIG});
     await setUpValidSession(shopify.sessionStorage);
 
     const {token} = getJwt();
@@ -130,6 +131,9 @@ describe('Cancel billing', () => {
     );
 
     // THEN
+    const shopSession =
+      await config.sessionStorage.findSessionsByShop(TEST_SHOP);
+    expect(shopSession).toStrictEqual([]);
     expectExitIframeRedirect(response);
   });
 
