@@ -7,14 +7,22 @@ import {
   eq,
   inArray,
 } from 'drizzle-orm';
-import {PgDatabase, QueryResultHKT} from 'drizzle-orm/pg-core';
+import {
+  MySqlDatabase,
+  PreparedQueryHKTBase,
+  QueryResultHKT,
+} from 'drizzle-orm/mysql-core';
 
-import {PostgresSessionTable} from '../schemas/postgres.schema';
+import {MySQLSessionTable} from '../schemas/mysql.schema';
 
-export class DrizzleSessionStoragePostgres implements SessionStorage {
+export class DrizzleSessionStorageMySQL implements SessionStorage {
   constructor(
-    private readonly db: PgDatabase<QueryResultHKT, any>,
-    private readonly sessionTable: PostgresSessionTable,
+    private readonly db: MySqlDatabase<
+      QueryResultHKT,
+      PreparedQueryHKTBase,
+      any
+    >,
+    private readonly sessionTable: MySQLSessionTable,
   ) {}
 
   public async storeSession(session: Session): Promise<boolean> {
@@ -23,8 +31,7 @@ export class DrizzleSessionStoragePostgres implements SessionStorage {
     await this.db
       .insert(this.sessionTable)
       .values({...row})
-      .onConflictDoUpdate({
-        target: this.sessionTable.id,
+      .onDuplicateKeyUpdate({
         set: {...row},
       });
 
@@ -88,9 +95,7 @@ export class DrizzleSessionStoragePostgres implements SessionStorage {
     return sessions.map((session) => this.rowToSession(session));
   }
 
-  private sessionToRow(
-    session: Session,
-  ): InferInsertModel<PostgresSessionTable> {
+  private sessionToRow(session: Session): InferInsertModel<MySQLSessionTable> {
     return {
       id: session.id,
       shop: session.shop,
@@ -103,7 +108,7 @@ export class DrizzleSessionStoragePostgres implements SessionStorage {
     };
   }
 
-  private rowToSession(row: InferSelectModel<PostgresSessionTable>): Session {
+  private rowToSession(row: InferSelectModel<MySQLSessionTable>): Session {
     const sessionParams: {[key: string]: boolean | string | number} = {
       id: row.id,
       shop: row.shop,

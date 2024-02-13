@@ -5,7 +5,6 @@ import {
   batteryOfTests,
   poll,
 } from '@shopify/shopify-app-session-storage-test-utils';
-import {sql} from 'drizzle-orm';
 import {drizzle} from 'drizzle-orm/node-postgres';
 import {
   PgDatabase,
@@ -23,12 +22,14 @@ import {DrizzleSessionStoragePostgres} from '../adapters/drizzle-postgres.adapte
 const exec = promisify(child_process.exec);
 
 const dbURL = new URL(
-  `postgres://${encodeURIComponent('shop&fy')}:${encodeURIComponent(
-    'passify#$',
-  )}@localhost/${encodeURIComponent('shop&test')}`,
+  `postgres://${encodeURIComponent('newUser')}:${encodeURIComponent(
+    'newPass#123',
+  )}@localhost:${encodeURIComponent('5433')}/${encodeURIComponent(
+    'newShopDB',
+  )}`,
 );
 
-export const sessionTable = pgTable('session', {
+const sessionTable = pgTable('session', {
   id: text('id').primaryKey(),
   shop: text('shop').notNull(),
   state: text('state').notNull(),
@@ -40,14 +41,13 @@ export const sessionTable = pgTable('session', {
 });
 
 describe('DrizzleSessionStoragePostgres', () => {
-  let drizzleDb: PgDatabase<QueryResultHKT, any>;
   let containerId: string;
   let client: pg.Client;
   let drizzleSessionStorage: DrizzleSessionStoragePostgres;
 
   beforeAll(async () => {
     const runCommand = await exec(
-      "podman run -d -e POSTGRES_DB='shop&test' -e POSTGRES_USER='shop&fy' -e POSTGRES_PASSWORD='passify#$' -p 5432:5432 postgres:15",
+      "podman run -d -e POSTGRES_DB='newShopDB' -e POSTGRES_USER='newUser' -e POSTGRES_PASSWORD='newPass#123' -p 5433:5432 postgres:15",
       {encoding: 'utf8'},
     );
 
@@ -61,11 +61,12 @@ describe('DrizzleSessionStoragePostgres', () => {
             user: decodeURIComponent(dbURL.username),
             password: decodeURIComponent(dbURL.password),
             database: decodeURIComponent(dbURL.pathname.slice(1)),
+            port: Number(dbURL.port),
           });
 
           await client.connect();
         } catch (error) {
-          // console.error(error);  // uncomment to see error for debugging tests
+          // console.error(error);
 
           return false;
         }
@@ -75,10 +76,7 @@ describe('DrizzleSessionStoragePostgres', () => {
       {interval: 500, timeout: 20000},
     );
 
-    drizzleDb = drizzle(client);
-
-    await drizzleDb.execute(sql`
-    CREATE TABLE IF NOT EXISTS "session" (
+    await client.query(`CREATE TABLE IF NOT EXISTS "session" (
       "id" TEXT PRIMARY KEY,
       "shop" TEXT NOT NULL,
       "state" TEXT NOT NULL,
@@ -87,8 +85,9 @@ describe('DrizzleSessionStoragePostgres', () => {
       "expires" TIMESTAMP,
       "accessToken" TEXT,
       "userId" BIGINT
-    )
-    `);
+    )`);
+
+    const drizzleDb = drizzle(client);
 
     drizzleSessionStorage = new DrizzleSessionStoragePostgres(
       drizzleDb,
@@ -97,7 +96,9 @@ describe('DrizzleSessionStoragePostgres', () => {
   });
 
   afterAll(async () => {
-    await client.end();
+    if (client) {
+      await client.end();
+    }
 
     await exec(`podman rm -f ${containerId}`);
   });
