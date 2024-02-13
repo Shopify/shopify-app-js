@@ -1,5 +1,30 @@
 # @shopify/shopify-app-remix
 
+## 2.5.1
+
+### Patch Changes
+
+- 22b7744: Throw error when attempting to exit-iframe with an invalid URL
+
+## 2.5.0
+
+### Minor Changes
+
+- 6d5b4e0: Add check function to the billing API
+- ba3eff7: Added a new method `shopify.authenticate.flow(request)`, which will validate a Flow extension request, and return the payload / API clients to the app.
+- da09f4e: Add SessionNotFoundError for unauthenticated requests
+- 64e0246: Update shopify-api version to 9.2.0
+
+### Patch Changes
+
+- 8811faa: Updated the `@shopify/admin-api-client` dependency
+- f5742c1: Updated dependency on `@shopify/shopify-api`
+- d0a5483: Remove references to unstable_tokenExchange
+- 37dff44: Updated Remix dependencies to v2.5.1
+- Updated dependencies [f5742c1]
+- Updated dependencies [64e0246]
+  - @shopify/shopify-app-session-storage@2.1.0
+
 ## 2.4.0
 
 ### Minor Changes

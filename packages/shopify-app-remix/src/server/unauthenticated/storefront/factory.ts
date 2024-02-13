@@ -1,5 +1,4 @@
-import {ShopifyError} from '@shopify/shopify-api';
-
+import {SessionNotFoundError} from '../../errors';
 import {BasicParams} from '../../types';
 import {storefrontClientFactory} from '../../clients/storefront';
 import {getOfflineSession} from '../helpers';
@@ -16,7 +15,7 @@ export function unauthenticatedStorefrontContextFactory(
     const session = await getOfflineSession(shop, params);
 
     if (!session) {
-      throw new ShopifyError(
+      throw new SessionNotFoundError(
         `Could not find a session for shop ${shop} when creating unauthenticated storefront context`,
       );
     }

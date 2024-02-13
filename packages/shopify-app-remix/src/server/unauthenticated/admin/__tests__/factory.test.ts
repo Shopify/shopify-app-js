@@ -1,4 +1,4 @@
-import {shopifyApp} from '../../../index';
+import {SessionNotFoundError, shopifyApp} from '../../../index';
 import {
   TEST_SHOP,
   setUpValidSession,
@@ -12,7 +12,9 @@ describe('unauthenticated admin context', () => {
     const shopify = shopifyApp(testConfig());
 
     // EXPECT
-    await expect(shopify.unauthenticated.admin(TEST_SHOP)).rejects.toThrow();
+    await expect(shopify.unauthenticated.admin(TEST_SHOP)).rejects.toThrow(
+      SessionNotFoundError,
+    );
   });
 
   expectAdminApiClient(async () => {

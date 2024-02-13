@@ -1,5 +1,6 @@
-import {ShopifyError, ShopifyRestResources} from '@shopify/shopify-api';
+import {ShopifyRestResources} from '@shopify/shopify-api';
 
+import {SessionNotFoundError} from '../../errors';
 import {BasicParams} from '../../types';
 import {adminClientFactory} from '../../clients/admin';
 import {getOfflineSession} from '../helpers';
@@ -15,7 +16,7 @@ export function unauthenticatedAdminContextFactory<
     const session = await getOfflineSession(shop, params);
 
     if (!session) {
-      throw new ShopifyError(
+      throw new SessionNotFoundError(
         `Could not find a session for shop ${shop} when creating unauthenticated admin context`,
       );
     }

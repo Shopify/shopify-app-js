@@ -1,3 +1,5 @@
+import {ShopifyError} from '@shopify/shopify-api';
+
 import {shopifyApp} from '../../..';
 import {
   APP_URL,
@@ -81,5 +83,17 @@ describe('authorize.admin exit iframe path', () => {
     // THEN
     expect(response.status).toBe(200);
     expectDocumentRequestHeaders(response);
+  });
+
+  test('refuses to redirect to invalid URLs', async () => {
+    // GIVEN
+    const shopify = shopifyApp(testConfig());
+    const exitTo = encodeURIComponent('file:///not/allowed/path');
+    const url = `${APP_URL}/auth/exit-iframe?exitIframe=${exitTo}&shop=${TEST_SHOP}`;
+
+    // THEN
+    await expect(shopify.authenticate.admin(new Request(url))).rejects.toThrow(
+      ShopifyError,
+    );
   });
 });

@@ -161,6 +161,18 @@ export interface AdminApiContext<
    *   return json({ data: productData.data });
    * }
    * ```
+   *
+   * ```ts
+   * // /app/shopify.server.ts
+   * import { shopifyApp } from "@shopify/shopify-app-remix/server";
+   *
+   * const shopify = shopifyApp({
+   *   restResources,
+   *   // ...etc
+   * });
+   * export default shopify;
+   * export const unauthenticated = shopify.unauthenticated;
+   * ```
    */
   graphql: GraphQLClient<AdminOperations>;
 }
