@@ -12,7 +12,7 @@ export function checkBillingFactory<Config extends AppConfigArg>(
   session: Session,
 ) {
   return async function checkBilling(options: CheckBillingOptions<Config>) {
-    const {api, logger} = params;
+    const {api, logger, config} = params;
 
     logger.debug('Checking billing plans', {shop: session.shop, ...options});
 
@@ -28,6 +28,7 @@ export function checkBillingFactory<Config extends AppConfigArg>(
         logger.debug('API token was invalid, redirecting to OAuth', {
           shop: session.shop,
         });
+        config.sessionStorage.deleteSession(session.id);
         throw await redirectToAuthPage(params, request, session.shop);
       } else {
         throw error;
