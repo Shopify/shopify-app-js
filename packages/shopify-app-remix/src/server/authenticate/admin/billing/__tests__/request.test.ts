@@ -95,6 +95,7 @@ describe('Billing request', () => {
     // THEN
     expectExitIframeRedirect(response, {
       destination: responses.CONFIRMATION_URL,
+      addHostToExitIframePath: false,
     });
   });
 
