@@ -3019,10 +3019,20 @@
                 "examples": [
                   {
                     "title": "Rendering liquid content",
-                    "description": "Use the `liquid` helper to render a `Response` with Liquid content.",
+                    "description": "Use the `liquid` helper to render a `Response` with Liquid content using the shop's theme.",
                     "tabs": [
                       {
-                        "code": "import {authenticate} from \"~/shopify.server\"\n\nexport async function loader({ request }) {\n  const {liquid} = await authenticate.public.appProxy(request);\n\n  return liquid(\"Hello {{shop.name}}\")\n}",
+                        "code": "import {authenticate} from \"~/shopify.server\"\n\nexport async function loader({ request }) {\n  const {liquid} = await authenticate.public.appProxy(request);\n\n  return liquid(\"Hello {{shop.name}}\");\n}",
+                        "title": "app/routes/**\\/.ts"
+                      }
+                    ]
+                  },
+                  {
+                    "title": "Rendering liquid content without a layout",
+                    "description": "Set the `layout` option to `false` to render the Liquid content without a theme.",
+                    "tabs": [
+                      {
+                        "code": "import {authenticate} from \"~/shopify.server\"\n\nexport async function loader({ request }) {\n  const {liquid} = await authenticate.public.appProxy(request);\n\n  return liquid(\n    \"Hello {{shop.name}}\",\n    { layout: false }\n  );\n}",
                         "title": "app/routes/**\\/.ts"
                       }
                     ]
@@ -3069,11 +3079,11 @@
                 "syntaxKind": "PropertySignature",
                 "name": "layout",
                 "value": "boolean",
-                "description": "",
+                "description": "Whether to use the shop's theme layout around the Liquid content.",
                 "isOptional": true
               }
             ],
-            "value": "interface Options {\n  layout?: boolean;\n}"
+            "value": "interface Options {\n  /**\n   * Whether to use the shop's theme layout around the Liquid content.\n   */\n  layout?: boolean;\n}"
           },
           "AppProxyContextWithSession": {
             "filePath": "src/server/authenticate/public/appProxy/types.ts",
@@ -3146,10 +3156,20 @@
                 "examples": [
                   {
                     "title": "Rendering liquid content",
-                    "description": "Use the `liquid` helper to render a `Response` with Liquid content.",
+                    "description": "Use the `liquid` helper to render a `Response` with Liquid content using the shop's theme.",
                     "tabs": [
                       {
-                        "code": "import {authenticate} from \"~/shopify.server\"\n\nexport async function loader({ request }) {\n  const {liquid} = await authenticate.public.appProxy(request);\n\n  return liquid(\"Hello {{shop.name}}\")\n}",
+                        "code": "import {authenticate} from \"~/shopify.server\"\n\nexport async function loader({ request }) {\n  const {liquid} = await authenticate.public.appProxy(request);\n\n  return liquid(\"Hello {{shop.name}}\");\n}",
+                        "title": "app/routes/**\\/.ts"
+                      }
+                    ]
+                  },
+                  {
+                    "title": "Rendering liquid content without a layout",
+                    "description": "Set the `layout` option to `false` to render the Liquid content without a theme.",
+                    "tabs": [
+                      {
+                        "code": "import {authenticate} from \"~/shopify.server\"\n\nexport async function loader({ request }) {\n  const {liquid} = await authenticate.public.appProxy(request);\n\n  return liquid(\n    \"Hello {{shop.name}}\",\n    { layout: false }\n  );\n}",
                         "title": "app/routes/**\\/.ts"
                       }
                     ]
@@ -3839,13 +3859,26 @@
           "title": "liquid",
           "examples": [
             {
-              "description": "Use the `liquid` helper to render a `Response` with Liquid content.",
+              "description": "Use the `liquid` helper to render a `Response` with Liquid content using the shop's theme.",
               "codeblock": {
                 "title": "Rendering liquid content",
                 "tabs": [
                   {
                     "title": "app/routes/**\\/.ts",
-                    "code": "import {authenticate} from \"~/shopify.server\"\n\nexport async function loader({ request }) {\n  const {liquid} = await authenticate.public.appProxy(request);\n\n  return liquid(\"Hello {{shop.name}}\")\n}",
+                    "code": "import {authenticate} from \"~/shopify.server\"\n\nexport async function loader({ request }) {\n  const {liquid} = await authenticate.public.appProxy(request);\n\n  return liquid(\"Hello {{shop.name}}\");\n}",
+                    "language": "typescript"
+                  }
+                ]
+              }
+            },
+            {
+              "description": "Set the `layout` option to `false` to render the Liquid content without a theme.",
+              "codeblock": {
+                "title": "Rendering liquid content without a layout",
+                "tabs": [
+                  {
+                    "title": "app/routes/**\\/.ts",
+                    "code": "import {authenticate} from \"~/shopify.server\"\n\nexport async function loader({ request }) {\n  const {liquid} = await authenticate.public.appProxy(request);\n\n  return liquid(\n    \"Hello {{shop.name}}\",\n    { layout: false }\n  );\n}",
                     "language": "typescript"
                   }
                 ]
@@ -12511,10 +12544,20 @@
                 "examples": [
                   {
                     "title": "Rendering liquid content",
-                    "description": "Use the `liquid` helper to render a `Response` with Liquid content.",
+                    "description": "Use the `liquid` helper to render a `Response` with Liquid content using the shop's theme.",
                     "tabs": [
                       {
-                        "code": "import {authenticate} from \"~/shopify.server\"\n\nexport async function loader({ request }) {\n  const {liquid} = await authenticate.public.appProxy(request);\n\n  return liquid(\"Hello {{shop.name}}\")\n}",
+                        "code": "import {authenticate} from \"~/shopify.server\"\n\nexport async function loader({ request }) {\n  const {liquid} = await authenticate.public.appProxy(request);\n\n  return liquid(\"Hello {{shop.name}}\");\n}",
+                        "title": "app/routes/**\\/.ts"
+                      }
+                    ]
+                  },
+                  {
+                    "title": "Rendering liquid content without a layout",
+                    "description": "Set the `layout` option to `false` to render the Liquid content without a theme.",
+                    "tabs": [
+                      {
+                        "code": "import {authenticate} from \"~/shopify.server\"\n\nexport async function loader({ request }) {\n  const {liquid} = await authenticate.public.appProxy(request);\n\n  return liquid(\n    \"Hello {{shop.name}}\",\n    { layout: false }\n  );\n}",
                         "title": "app/routes/**\\/.ts"
                       }
                     ]
@@ -12561,11 +12604,11 @@
                 "syntaxKind": "PropertySignature",
                 "name": "layout",
                 "value": "boolean",
-                "description": "",
+                "description": "Whether to use the shop's theme layout around the Liquid content.",
                 "isOptional": true
               }
             ],
-            "value": "interface Options {\n  layout?: boolean;\n}"
+            "value": "interface Options {\n  /**\n   * Whether to use the shop's theme layout around the Liquid content.\n   */\n  layout?: boolean;\n}"
           },
           "AppProxyContextWithSession": {
             "filePath": "src/server/authenticate/public/appProxy/types.ts",
@@ -12638,10 +12681,20 @@
                 "examples": [
                   {
                     "title": "Rendering liquid content",
-                    "description": "Use the `liquid` helper to render a `Response` with Liquid content.",
+                    "description": "Use the `liquid` helper to render a `Response` with Liquid content using the shop's theme.",
                     "tabs": [
                       {
-                        "code": "import {authenticate} from \"~/shopify.server\"\n\nexport async function loader({ request }) {\n  const {liquid} = await authenticate.public.appProxy(request);\n\n  return liquid(\"Hello {{shop.name}}\")\n}",
+                        "code": "import {authenticate} from \"~/shopify.server\"\n\nexport async function loader({ request }) {\n  const {liquid} = await authenticate.public.appProxy(request);\n\n  return liquid(\"Hello {{shop.name}}\");\n}",
+                        "title": "app/routes/**\\/.ts"
+                      }
+                    ]
+                  },
+                  {
+                    "title": "Rendering liquid content without a layout",
+                    "description": "Set the `layout` option to `false` to render the Liquid content without a theme.",
+                    "tabs": [
+                      {
+                        "code": "import {authenticate} from \"~/shopify.server\"\n\nexport async function loader({ request }) {\n  const {liquid} = await authenticate.public.appProxy(request);\n\n  return liquid(\n    \"Hello {{shop.name}}\",\n    { layout: false }\n  );\n}",
                         "title": "app/routes/**\\/.ts"
                       }
                     ]
