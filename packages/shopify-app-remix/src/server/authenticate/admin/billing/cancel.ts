@@ -27,7 +27,7 @@ export function cancelBillingFactory(
         logger.debug('API token was invalid, redirecting to OAuth', {
           shop: session.shop,
         });
-        config.sessionStorage.deleteSession(session.id);
+        await config.sessionStorage.deleteSession(session.id);
         throw await redirectToAuthPage(params, request, session.shop);
       } else {
         throw error;

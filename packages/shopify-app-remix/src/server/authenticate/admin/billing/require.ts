@@ -37,7 +37,7 @@ export function requireBillingFactory<Config extends AppConfigArg>(
     } catch (error) {
       if (error instanceof HttpResponseError && error.response.code === 401) {
         logger.debug('API token was invalid, redirecting to OAuth', logContext);
-        config.sessionStorage.deleteSession(session.id);
+        await config.sessionStorage.deleteSession(session.id);
         throw await redirectToAuthPage(params, request, session.shop);
       } else {
         throw error;

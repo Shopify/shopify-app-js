@@ -193,9 +193,9 @@ describe('Billing request', () => {
     );
 
     // THEN
-    const shopSession =
+    const shopSessions =
       await config.sessionStorage.findSessionsByShop(TEST_SHOP);
-    expect(shopSession).toStrictEqual([]);
+    expect(shopSessions).toStrictEqual([]);
     expectExitIframeRedirect(response);
   });
 
