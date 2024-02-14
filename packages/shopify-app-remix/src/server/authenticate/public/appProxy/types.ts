@@ -7,6 +7,9 @@ export type AuthenticateAppProxy = (
 ) => Promise<AppProxyContext | AppProxyContextWithSession>;
 
 interface Options {
+  /**
+   * Whether to use the shop's theme layout around the Liquid content.
+   */
   layout?: boolean;
 }
 
@@ -21,7 +24,7 @@ interface Context {
    *
    * @example
    * <caption>Rendering liquid content.</caption>
-   * <description>Use the `liquid` helper to render a `Response` with Liquid content.</description>
+   * <description>Use the `liquid` helper to render a `Response` with Liquid content using the shop's theme.</description>
    * ```ts
    * // app/routes/**\/.ts
    * import {authenticate} from "~/shopify.server"
@@ -29,9 +32,25 @@ interface Context {
    * export async function loader({ request }) {
    *   const {liquid} = await authenticate.public.appProxy(request);
    *
-   *   return liquid("Hello {{shop.name}}")
+   *   return liquid("Hello {{shop.name}}");
    * }
+   * ```
    *
+   * @example
+   * <caption>Rendering liquid content without a layout.</caption>
+   * <description>Set the `layout` option to `false` to render the Liquid content without a theme.</description>
+   * ```ts
+   * // app/routes/**\/.ts
+   * import {authenticate} from "~/shopify.server"
+   *
+   * export async function loader({ request }) {
+   *   const {liquid} = await authenticate.public.appProxy(request);
+   *
+   *   return liquid(
+   *     "Hello {{shop.name}}",
+   *     { layout: false }
+   *   );
+   * }
    * ```
    */
   liquid: LiquidResponseFunction;

@@ -85,7 +85,7 @@ export function shopifyApp<Params extends AppConfigParams>(
       api,
       config: validatedConfig,
     }),
-    redirectOutOfApp: redirectOutOfApp({config: validatedConfig}),
+    redirectOutOfApp: redirectOutOfApp({api, config: validatedConfig}),
   };
 }
 
