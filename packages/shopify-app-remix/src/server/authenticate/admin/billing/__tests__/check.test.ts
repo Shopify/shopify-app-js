@@ -125,6 +125,9 @@ describe('Billing check', () => {
     );
 
     // THEN
+    const shopSessions =
+      await config.sessionStorage.findSessionsByShop(TEST_SHOP);
+    expect(shopSessions).toStrictEqual([]);
     expectExitIframeRedirect(response);
   });
 

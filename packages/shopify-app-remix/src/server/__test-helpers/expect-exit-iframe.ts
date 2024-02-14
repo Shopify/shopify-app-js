@@ -4,6 +4,7 @@ interface ExpectExitIframeRedirectOptions {
   shop?: string;
   host?: string | null;
   destination?: string;
+  addHostToExitIframePath?: boolean;
 }
 
 export function expectExitIframeRedirect(
@@ -12,6 +13,7 @@ export function expectExitIframeRedirect(
     shop = TEST_SHOP,
     host = BASE64_HOST,
     destination = `/auth?shop=${shop}`,
+    addHostToExitIframePath = true,
   }: ExpectExitIframeRedirectOptions = {},
 ) {
   expect(response.status).toBe(302);
@@ -23,9 +25,13 @@ export function expectExitIframeRedirect(
   expect(pathname).toBe('/auth/exit-iframe');
 
   expect(searchParams.get('shop')).toBe(shop);
-  expect(searchParams.get('exitIframe')).toBe(destination);
 
+  let expectedDestination = destination;
   if (host) {
     expect(searchParams.get('host')).toBe(host);
+    if (addHostToExitIframePath) {
+      expectedDestination = destination.concat(`&host=${host}`);
+    }
   }
+  expect(searchParams.get('exitIframe')).toBe(expectedDestination);
 }
