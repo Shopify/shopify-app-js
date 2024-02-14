@@ -2953,7 +2953,7 @@
   },
   {
     "name": "App proxy",
-    "description": "[App proxies](/docs/apps/online-store/app-proxies) take requests to Shopify links, and redirect them to external links. The `authenticate.public.appProxy` function validates requests made to app proxies, and returns a context to enable querying Shopify APIs.",
+    "description": "[App proxies](/docs/apps/online-store/app-proxies) take requests to Shopify links, and redirect them to external links.\nThe `authenticate.public.appProxy` function validates requests made to app proxies, and returns a context to enable querying Shopify APIs.\n\n> Note: If the store has not installed the app, store-related properties such as `admin` or `storefront` will be `undefined`",
     "category": "Authenticate",
     "subCategory": "Public",
     "type": "object",
@@ -3019,10 +3019,20 @@
                 "examples": [
                   {
                     "title": "Rendering liquid content",
-                    "description": "Use the `liquid` helper to render a `Response` with Liquid content.",
+                    "description": "Use the `liquid` helper to render a `Response` with Liquid content using the shop's theme.",
                     "tabs": [
                       {
-                        "code": "import {authenticate} from \"~/shopify.server\"\n\nexport async function loader({ request }) {\n  const {liquid} = await authenticate.public.appProxy(request);\n\n  return liquid(\"Hello {{shop.name}}\")\n}",
+                        "code": "import {authenticate} from \"~/shopify.server\"\n\nexport async function loader({ request }) {\n  const {liquid} = await authenticate.public.appProxy(request);\n\n  return liquid(\"Hello {{shop.name}}\");\n}",
+                        "title": "app/routes/**\\/.ts"
+                      }
+                    ]
+                  },
+                  {
+                    "title": "Rendering liquid content without a layout",
+                    "description": "Set the `layout` option to `false` to render the Liquid content without a theme.",
+                    "tabs": [
+                      {
+                        "code": "import {authenticate} from \"~/shopify.server\"\n\nexport async function loader({ request }) {\n  const {liquid} = await authenticate.public.appProxy(request);\n\n  return liquid(\n    \"Hello {{shop.name}}\",\n    { layout: false }\n  );\n}",
                         "title": "app/routes/**\\/.ts"
                       }
                     ]
@@ -3069,11 +3079,11 @@
                 "syntaxKind": "PropertySignature",
                 "name": "layout",
                 "value": "boolean",
-                "description": "",
+                "description": "Whether to use the shop's theme layout around the Liquid content.",
                 "isOptional": true
               }
             ],
-            "value": "interface Options {\n  layout?: boolean;\n}"
+            "value": "interface Options {\n  /**\n   * Whether to use the shop's theme layout around the Liquid content.\n   */\n  layout?: boolean;\n}"
           },
           "AppProxyContextWithSession": {
             "filePath": "src/server/authenticate/public/appProxy/types.ts",
@@ -3146,10 +3156,20 @@
                 "examples": [
                   {
                     "title": "Rendering liquid content",
-                    "description": "Use the `liquid` helper to render a `Response` with Liquid content.",
+                    "description": "Use the `liquid` helper to render a `Response` with Liquid content using the shop's theme.",
                     "tabs": [
                       {
-                        "code": "import {authenticate} from \"~/shopify.server\"\n\nexport async function loader({ request }) {\n  const {liquid} = await authenticate.public.appProxy(request);\n\n  return liquid(\"Hello {{shop.name}}\")\n}",
+                        "code": "import {authenticate} from \"~/shopify.server\"\n\nexport async function loader({ request }) {\n  const {liquid} = await authenticate.public.appProxy(request);\n\n  return liquid(\"Hello {{shop.name}}\");\n}",
+                        "title": "app/routes/**\\/.ts"
+                      }
+                    ]
+                  },
+                  {
+                    "title": "Rendering liquid content without a layout",
+                    "description": "Set the `layout` option to `false` to render the Liquid content without a theme.",
+                    "tabs": [
+                      {
+                        "code": "import {authenticate} from \"~/shopify.server\"\n\nexport async function loader({ request }) {\n  const {liquid} = await authenticate.public.appProxy(request);\n\n  return liquid(\n    \"Hello {{shop.name}}\",\n    { layout: false }\n  );\n}",
                         "title": "app/routes/**\\/.ts"
                       }
                     ]
@@ -3839,13 +3859,26 @@
           "title": "liquid",
           "examples": [
             {
-              "description": "Use the `liquid` helper to render a `Response` with Liquid content.",
+              "description": "Use the `liquid` helper to render a `Response` with Liquid content using the shop's theme.",
               "codeblock": {
                 "title": "Rendering liquid content",
                 "tabs": [
                   {
                     "title": "app/routes/**\\/.ts",
-                    "code": "import {authenticate} from \"~/shopify.server\"\n\nexport async function loader({ request }) {\n  const {liquid} = await authenticate.public.appProxy(request);\n\n  return liquid(\"Hello {{shop.name}}\")\n}",
+                    "code": "import {authenticate} from \"~/shopify.server\"\n\nexport async function loader({ request }) {\n  const {liquid} = await authenticate.public.appProxy(request);\n\n  return liquid(\"Hello {{shop.name}}\");\n}",
+                    "language": "typescript"
+                  }
+                ]
+              }
+            },
+            {
+              "description": "Set the `layout` option to `false` to render the Liquid content without a theme.",
+              "codeblock": {
+                "title": "Rendering liquid content without a layout",
+                "tabs": [
+                  {
+                    "title": "app/routes/**\\/.ts",
+                    "code": "import {authenticate} from \"~/shopify.server\"\n\nexport async function loader({ request }) {\n  const {liquid} = await authenticate.public.appProxy(request);\n\n  return liquid(\n    \"Hello {{shop.name}}\",\n    { layout: false }\n  );\n}",
                     "language": "typescript"
                   }
                 ]
@@ -4493,14 +4526,14 @@
               {
                 "filePath": "src/server/types.ts",
                 "syntaxKind": "MethodSignature",
-                "name": "__@iterator@176",
+                "name": "__@iterator@175",
                 "value": "() => IterableIterator<JSONValue>",
                 "description": "Iterator"
               },
               {
                 "filePath": "src/server/types.ts",
                 "syntaxKind": "PropertySignature",
-                "name": "__@unscopables@178",
+                "name": "__@unscopables@177",
                 "value": "{ [x: number]: boolean; length?: boolean; toString?: boolean; toLocaleString?: boolean; pop?: boolean; push?: boolean; concat?: boolean; join?: boolean; reverse?: boolean; shift?: boolean; slice?: boolean; sort?: boolean; splice?: boolean; unshift?: boolean; indexOf?: boolean; lastIndexOf?: boolean; every?: boolean; some?: boolean; forEach?: boolean; map?: boolean; filter?: boolean; reduce?: boolean; reduceRight?: boolean; find?: boolean; findIndex?: boolean; fill?: boolean; copyWithin?: boolean; entries?: boolean; keys?: boolean; values?: boolean; includes?: boolean; flatMap?: boolean; flat?: boolean; [Symbol.iterator]?: boolean; readonly [Symbol.unscopables]?: boolean; at?: boolean; }",
                 "description": "Is an object whose properties have the value 'true' when they will be absent when used in a 'with' statement."
               },
@@ -6115,7 +6148,7 @@
                 "filePath": "../../node_modules/@shopify/shopify-api/lib/index.d.ts",
                 "syntaxKind": "PropertySignature",
                 "name": "auth",
-                "value": "ShopifyAuth<Future>",
+                "value": "ShopifyAuth",
                 "description": ""
               },
               {
@@ -6168,7 +6201,7 @@
                 "description": ""
               }
             ],
-            "value": "export interface Shopify<Params extends ConfigParams = ConfigParams, Resources extends ShopifyRestResources = ShopifyRestResources, Future extends FutureFlagOptions = FutureFlagOptions> {\n    config: ConfigInterface<Params>;\n    clients: ShopifyClients;\n    auth: ShopifyAuth<Future>;\n    session: ShopifySession;\n    utils: ShopifyUtils;\n    webhooks: ShopifyWebhooks;\n    billing: ShopifyBilling;\n    logger: ShopifyLogger;\n    rest: Resources;\n    flow: ShopifyFlow;\n}"
+            "value": "export interface Shopify<Params extends ConfigParams = ConfigParams, Resources extends ShopifyRestResources = ShopifyRestResources, _Future extends FutureFlagOptions = FutureFlagOptions> {\n    config: ConfigInterface<Params>;\n    clients: ShopifyClients;\n    auth: ShopifyAuth;\n    session: ShopifySession;\n    utils: ShopifyUtils;\n    webhooks: ShopifyWebhooks;\n    billing: ShopifyBilling;\n    logger: ShopifyLogger;\n    rest: Resources;\n    flow: ShopifyFlow;\n}"
           },
           "ConfigInterface": {
             "filePath": "../../node_modules/@shopify/shopify-api/lib/base-types.d.ts",
@@ -6697,7 +6730,7 @@
             "filePath": "../../node_modules/@shopify/shopify-api/lib/billing/types.d.ts",
             "syntaxKind": "TypeAliasDeclaration",
             "name": "BillingConfigItem",
-            "value": "FeatureEnabled<Future, 'unstable_lineItemBilling'> extends true ? BillingConfigOneTimePlan | BillingConfigSubscriptionLineItemPlan : BillingConfigLegacyItem",
+            "value": "FeatureEnabled<Future, 'v10_lineItemBilling'> extends true ? BillingConfigOneTimePlan | BillingConfigSubscriptionLineItemPlan : BillingConfigLegacyItem",
             "description": ""
           },
           "BillingConfigOneTimePlan": {
@@ -7354,10 +7387,60 @@
           },
           "ShopifyAuth": {
             "filePath": "../../node_modules/@shopify/shopify-api/lib/auth/index.d.ts",
-            "syntaxKind": "TypeAliasDeclaration",
             "name": "ShopifyAuth",
-            "value": "{\n    begin: OAuthBegin;\n    callback: OAuthCallback;\n    nonce: Nonce;\n    safeCompare: SafeCompare;\n    getEmbeddedAppUrl: GetEmbeddedAppUrl;\n    buildEmbeddedAppUrl: BuildEmbeddedAppUrl;\n} & (FeatureEnabled<Future, 'unstable_tokenExchange'> extends true ? {\n    tokenExchange: TokenExchange;\n} : Record<string, never>)",
-            "description": ""
+            "description": "",
+            "members": [
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/auth/index.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "begin",
+                "value": "OAuthBegin",
+                "description": ""
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/auth/index.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "callback",
+                "value": "OAuthCallback",
+                "description": ""
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/auth/index.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "nonce",
+                "value": "Nonce",
+                "description": ""
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/auth/index.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "safeCompare",
+                "value": "SafeCompare",
+                "description": ""
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/auth/index.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "getEmbeddedAppUrl",
+                "value": "GetEmbeddedAppUrl",
+                "description": ""
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/auth/index.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "buildEmbeddedAppUrl",
+                "value": "BuildEmbeddedAppUrl",
+                "description": ""
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/auth/index.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "tokenExchange",
+                "value": "TokenExchange",
+                "description": ""
+              }
+            ],
+            "value": "export interface ShopifyAuth {\n    begin: OAuthBegin;\n    callback: OAuthCallback;\n    nonce: Nonce;\n    safeCompare: SafeCompare;\n    getEmbeddedAppUrl: GetEmbeddedAppUrl;\n    buildEmbeddedAppUrl: BuildEmbeddedAppUrl;\n    tokenExchange: TokenExchange;\n}"
           },
           "OAuthBegin": {
             "filePath": "../../node_modules/@shopify/shopify-api/lib/auth/oauth/oauth.d.ts",
@@ -10763,7 +10846,7 @@
             "filePath": "../../node_modules/@shopify/shopify-api/lib/billing/types.d.ts",
             "syntaxKind": "TypeAliasDeclaration",
             "name": "BillingConfigItem",
-            "value": "FeatureEnabled<Future, 'unstable_lineItemBilling'> extends true ? BillingConfigOneTimePlan | BillingConfigSubscriptionLineItemPlan : BillingConfigLegacyItem",
+            "value": "FeatureEnabled<Future, 'v10_lineItemBilling'> extends true ? BillingConfigOneTimePlan | BillingConfigSubscriptionLineItemPlan : BillingConfigLegacyItem",
             "description": ""
           },
           "BillingConfigOneTimePlan": {
@@ -12461,10 +12544,20 @@
                 "examples": [
                   {
                     "title": "Rendering liquid content",
-                    "description": "Use the `liquid` helper to render a `Response` with Liquid content.",
+                    "description": "Use the `liquid` helper to render a `Response` with Liquid content using the shop's theme.",
                     "tabs": [
                       {
-                        "code": "import {authenticate} from \"~/shopify.server\"\n\nexport async function loader({ request }) {\n  const {liquid} = await authenticate.public.appProxy(request);\n\n  return liquid(\"Hello {{shop.name}}\")\n}",
+                        "code": "import {authenticate} from \"~/shopify.server\"\n\nexport async function loader({ request }) {\n  const {liquid} = await authenticate.public.appProxy(request);\n\n  return liquid(\"Hello {{shop.name}}\");\n}",
+                        "title": "app/routes/**\\/.ts"
+                      }
+                    ]
+                  },
+                  {
+                    "title": "Rendering liquid content without a layout",
+                    "description": "Set the `layout` option to `false` to render the Liquid content without a theme.",
+                    "tabs": [
+                      {
+                        "code": "import {authenticate} from \"~/shopify.server\"\n\nexport async function loader({ request }) {\n  const {liquid} = await authenticate.public.appProxy(request);\n\n  return liquid(\n    \"Hello {{shop.name}}\",\n    { layout: false }\n  );\n}",
                         "title": "app/routes/**\\/.ts"
                       }
                     ]
@@ -12511,11 +12604,11 @@
                 "syntaxKind": "PropertySignature",
                 "name": "layout",
                 "value": "boolean",
-                "description": "",
+                "description": "Whether to use the shop's theme layout around the Liquid content.",
                 "isOptional": true
               }
             ],
-            "value": "interface Options {\n  layout?: boolean;\n}"
+            "value": "interface Options {\n  /**\n   * Whether to use the shop's theme layout around the Liquid content.\n   */\n  layout?: boolean;\n}"
           },
           "AppProxyContextWithSession": {
             "filePath": "src/server/authenticate/public/appProxy/types.ts",
@@ -12588,10 +12681,20 @@
                 "examples": [
                   {
                     "title": "Rendering liquid content",
-                    "description": "Use the `liquid` helper to render a `Response` with Liquid content.",
+                    "description": "Use the `liquid` helper to render a `Response` with Liquid content using the shop's theme.",
                     "tabs": [
                       {
-                        "code": "import {authenticate} from \"~/shopify.server\"\n\nexport async function loader({ request }) {\n  const {liquid} = await authenticate.public.appProxy(request);\n\n  return liquid(\"Hello {{shop.name}}\")\n}",
+                        "code": "import {authenticate} from \"~/shopify.server\"\n\nexport async function loader({ request }) {\n  const {liquid} = await authenticate.public.appProxy(request);\n\n  return liquid(\"Hello {{shop.name}}\");\n}",
+                        "title": "app/routes/**\\/.ts"
+                      }
+                    ]
+                  },
+                  {
+                    "title": "Rendering liquid content without a layout",
+                    "description": "Set the `layout` option to `false` to render the Liquid content without a theme.",
+                    "tabs": [
+                      {
+                        "code": "import {authenticate} from \"~/shopify.server\"\n\nexport async function loader({ request }) {\n  const {liquid} = await authenticate.public.appProxy(request);\n\n  return liquid(\n    \"Hello {{shop.name}}\",\n    { layout: false }\n  );\n}",
                         "title": "app/routes/**\\/.ts"
                       }
                     ]
@@ -13031,14 +13134,14 @@
               {
                 "filePath": "src/server/types.ts",
                 "syntaxKind": "MethodSignature",
-                "name": "__@iterator@176",
+                "name": "__@iterator@175",
                 "value": "() => IterableIterator<JSONValue>",
                 "description": "Iterator"
               },
               {
                 "filePath": "src/server/types.ts",
                 "syntaxKind": "PropertySignature",
-                "name": "__@unscopables@178",
+                "name": "__@unscopables@177",
                 "value": "{ [x: number]: boolean; length?: boolean; toString?: boolean; toLocaleString?: boolean; pop?: boolean; push?: boolean; concat?: boolean; join?: boolean; reverse?: boolean; shift?: boolean; slice?: boolean; sort?: boolean; splice?: boolean; unshift?: boolean; indexOf?: boolean; lastIndexOf?: boolean; every?: boolean; some?: boolean; forEach?: boolean; map?: boolean; filter?: boolean; reduce?: boolean; reduceRight?: boolean; find?: boolean; findIndex?: boolean; fill?: boolean; copyWithin?: boolean; entries?: boolean; keys?: boolean; values?: boolean; includes?: boolean; flatMap?: boolean; flat?: boolean; [Symbol.iterator]?: boolean; readonly [Symbol.unscopables]?: boolean; at?: boolean; }",
                 "description": "Is an object whose properties have the value 'true' when they will be absent when used in a 'with' statement."
               },
@@ -13414,7 +13517,7 @@
                 "filePath": "../../node_modules/@shopify/shopify-api/lib/index.d.ts",
                 "syntaxKind": "PropertySignature",
                 "name": "auth",
-                "value": "ShopifyAuth<Future>",
+                "value": "ShopifyAuth",
                 "description": ""
               },
               {
@@ -13467,7 +13570,7 @@
                 "description": ""
               }
             ],
-            "value": "export interface Shopify<Params extends ConfigParams = ConfigParams, Resources extends ShopifyRestResources = ShopifyRestResources, Future extends FutureFlagOptions = FutureFlagOptions> {\n    config: ConfigInterface<Params>;\n    clients: ShopifyClients;\n    auth: ShopifyAuth<Future>;\n    session: ShopifySession;\n    utils: ShopifyUtils;\n    webhooks: ShopifyWebhooks;\n    billing: ShopifyBilling;\n    logger: ShopifyLogger;\n    rest: Resources;\n    flow: ShopifyFlow;\n}"
+            "value": "export interface Shopify<Params extends ConfigParams = ConfigParams, Resources extends ShopifyRestResources = ShopifyRestResources, _Future extends FutureFlagOptions = FutureFlagOptions> {\n    config: ConfigInterface<Params>;\n    clients: ShopifyClients;\n    auth: ShopifyAuth;\n    session: ShopifySession;\n    utils: ShopifyUtils;\n    webhooks: ShopifyWebhooks;\n    billing: ShopifyBilling;\n    logger: ShopifyLogger;\n    rest: Resources;\n    flow: ShopifyFlow;\n}"
           },
           "ConfigInterface": {
             "filePath": "../../node_modules/@shopify/shopify-api/lib/base-types.d.ts",
@@ -14207,10 +14310,60 @@
           },
           "ShopifyAuth": {
             "filePath": "../../node_modules/@shopify/shopify-api/lib/auth/index.d.ts",
-            "syntaxKind": "TypeAliasDeclaration",
             "name": "ShopifyAuth",
-            "value": "{\n    begin: OAuthBegin;\n    callback: OAuthCallback;\n    nonce: Nonce;\n    safeCompare: SafeCompare;\n    getEmbeddedAppUrl: GetEmbeddedAppUrl;\n    buildEmbeddedAppUrl: BuildEmbeddedAppUrl;\n} & (FeatureEnabled<Future, 'unstable_tokenExchange'> extends true ? {\n    tokenExchange: TokenExchange;\n} : Record<string, never>)",
-            "description": ""
+            "description": "",
+            "members": [
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/auth/index.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "begin",
+                "value": "OAuthBegin",
+                "description": ""
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/auth/index.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "callback",
+                "value": "OAuthCallback",
+                "description": ""
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/auth/index.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "nonce",
+                "value": "Nonce",
+                "description": ""
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/auth/index.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "safeCompare",
+                "value": "SafeCompare",
+                "description": ""
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/auth/index.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "getEmbeddedAppUrl",
+                "value": "GetEmbeddedAppUrl",
+                "description": ""
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/auth/index.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "buildEmbeddedAppUrl",
+                "value": "BuildEmbeddedAppUrl",
+                "description": ""
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/auth/index.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "tokenExchange",
+                "value": "TokenExchange",
+                "description": ""
+              }
+            ],
+            "value": "export interface ShopifyAuth {\n    begin: OAuthBegin;\n    callback: OAuthCallback;\n    nonce: Nonce;\n    safeCompare: SafeCompare;\n    getEmbeddedAppUrl: GetEmbeddedAppUrl;\n    buildEmbeddedAppUrl: BuildEmbeddedAppUrl;\n    tokenExchange: TokenExchange;\n}"
           },
           "OAuthBegin": {
             "filePath": "../../node_modules/@shopify/shopify-api/lib/auth/oauth/oauth.d.ts",

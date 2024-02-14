@@ -50,7 +50,7 @@
     "Storefront API"
   ],
   "devDependencies": {
-    "@remix-run/react": "^2.5.1",
+    "@remix-run/react": "^2.6.0",
     "@shopify/generate-docs": "^0.13.1",
     "@shopify/polaris": "^12.12.1",
     "@shopify/react-testing": "^5.1.3",
