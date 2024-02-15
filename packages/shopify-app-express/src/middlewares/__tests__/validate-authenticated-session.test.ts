@@ -298,5 +298,22 @@ describe('validateAuthenticatedSession', () => {
 
       expect(response.header.location).toBe(`/auth?shop=my-shop.myshopify.io`);
     });
+
+    it('returns a 403 with the authentication header in XHR requests', async () => {
+      session.expires = new Date('2020-12-31T00:00:00');
+
+      const response = await request(app)
+        .get('/test/shop?shop=my-shop.myshopify.io')
+        .set('Cookie', validCookies)
+        .set('X-Requested-With', 'XMLHttpRequest')
+        .expect(403);
+
+      expect(
+        response.headers['x-shopify-api-request-failure-reauthorize'],
+      ).toBe('1');
+      expect(
+        response.headers['x-shopify-api-request-failure-reauthorize-url'],
+      ).toBe(`${shopify.config.auth.path}?shop=my-shop.myshopify.io`);
+    });
   });
 });

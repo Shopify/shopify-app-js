@@ -1,5 +1,28 @@
 # @shopify/shopify-app-session-storage-kv
 
+## 3.0.0
+
+### Minor Changes
+
+- 64e0246: Update shopify-api version to 9.2.0
+
+### Patch Changes
+
+- f5742c1: Updated dependency on `@shopify/shopify-api`
+- Updated dependencies [f5742c1]
+- Updated dependencies [64e0246]
+  - @shopify/shopify-app-session-storage@2.1.0
+
+## 2.0.4
+
+### Patch Changes
+
+- b4eeb24: Improved and simplified package.json dependencies
+- b998c30: Bump shopify-api version from 9.0.1 to 9.0.2
+- Updated dependencies [b4eeb24]
+- Updated dependencies [b998c30]
+  - @shopify/shopify-app-session-storage@2.0.4
+
 ## 2.0.3
 
 ### Patch Changes

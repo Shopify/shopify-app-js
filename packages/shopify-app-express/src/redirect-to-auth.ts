@@ -44,7 +44,7 @@ function clientSideRedirect(
   const redirectUriParams = new URLSearchParams({shop, host}).toString();
   const redirectUri = `${api.config.hostScheme}://${api.config.hostName}${config.auth.path}?${redirectUriParams}`;
 
-  redirectOutOfApp({config})({req, res, redirectUri, shop});
+  redirectOutOfApp({config, api})({req, res, redirectUri, shop});
 }
 
 async function serverSideRedirect(

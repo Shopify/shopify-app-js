@@ -2,6 +2,8 @@ import {BasicParams} from '../../../types';
 import {appBridgeUrl} from '../../helpers/app-bridge-url';
 import {addDocumentResponseHeaders} from '../../helpers/add-response-headers';
 
+import {sanitizeRedirectUrl} from './validate-redirect-url';
+
 import type {RedirectTarget} from '.';
 
 export interface RedirectToOptions {
@@ -16,7 +18,8 @@ export function renderAppBridge(
 ): never {
   let redirectToScript = '';
   if (redirectTo) {
-    const destination = new URL(redirectTo.url, config.appUrl);
+    const destination = sanitizeRedirectUrl(config.appUrl, redirectTo.url);
+
     const target = redirectTo.target ?? '_top';
 
     redirectToScript = `<script>window.open(${JSON.stringify(

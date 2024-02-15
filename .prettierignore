@@ -1,4 +1,4 @@
-.changeset/pre.json
+.changeset
 coverage
 
 packages/shopify-app-remix/docs/**/*.json

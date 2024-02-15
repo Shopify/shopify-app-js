@@ -16,7 +16,7 @@ export const migrationList = [
 export async function migrateAddShopKeyToTrackSessionsByShop(
   connection: RedisConnection,
 ): Promise<void> {
-  const shopsAndSessions: {[key: string]: string[]} = {};
+  const shopsAndSessions: Record<string, string[]> = {};
   const keys = await connection.keys('*');
   for (const key of keys) {
     if (key.startsWith(connection.sessionStorageIdentifier)) {

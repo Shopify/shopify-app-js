@@ -1,4 +1,5 @@
 import {
+  ConfigParams,
   RegisterReturn,
   Shopify,
   ShopifyRestResources,
@@ -11,14 +12,27 @@ import type {
   RegisterWebhooksOptions,
 } from './authenticate/webhooks/types';
 import type {AuthenticatePublic} from './authenticate/public/types';
-import type {AdminContext} from './authenticate/admin/types';
+import type {AuthenticateAdmin} from './authenticate/admin/types';
 import type {Unauthenticated} from './unauthenticated/types';
+import type {AuthenticateFlow} from './authenticate/flow/types';
+import type {FutureFlagOptions} from './future/flags';
 
-export interface BasicParams {
-  api: Shopify;
+export interface BasicParams<
+  Future extends FutureFlagOptions = FutureFlagOptions,
+> {
+  api: Shopify<
+    ApiConfigWithFutureFlags<Future>,
+    ShopifyRestResources,
+    ApiFutureFlags<Future>
+  >;
   config: AppConfig;
   logger: Shopify['logger'];
 }
+
+export interface ApiFutureFlags<_Future extends FutureFlagOptions> {}
+
+export type ApiConfigWithFutureFlags<Future extends FutureFlagOptions> =
+  ConfigParams<ShopifyRestResources, ApiFutureFlags<Future>>;
 
 export type JSONValue =
   | string
@@ -41,6 +55,8 @@ export type MandatoryTopics =
   | 'CUSTOMERS_REDACT'
   | 'SHOP_REDACT';
 
+// This can't be a type because it would reference itself
+// eslint-disable-next-line @typescript-eslint/consistent-indexed-object-style
 interface JSONObject {
   [x: string]: JSONValue;
 }
@@ -49,7 +65,7 @@ interface JSONArray extends Array<JSONValue> {}
 
 type RegisterWebhooks = (
   options: RegisterWebhooksOptions,
-) => Promise<RegisterReturn>;
+) => Promise<RegisterReturn | void>;
 
 export enum LoginErrorType {
   MissingShop = 'MISSING_SHOP',
@@ -63,11 +79,6 @@ export interface LoginError {
 type Login = (request: Request) => Promise<LoginError | never>;
 
 type AddDocumentResponseHeaders = (request: Request, headers: Headers) => void;
-
-type AuthenticateAdmin<
-  Config extends AppConfigArg,
-  Resources extends ShopifyRestResources = ShopifyRestResources,
-> = (request: Request) => Promise<AdminContext<Config, Resources>>;
 
 type RestResourcesType<Config extends AppConfigArg> =
   Config['restResources'] extends ShopifyRestResources
@@ -90,6 +101,17 @@ interface Authenticate<Config extends AppConfigArg> {
    * @example
    * <caption>Authenticating a request for an embedded app.</caption>
    * ```ts
+   * // /app/routes/**\/*.jsx
+   * import { LoaderFunctionArgs, json } from "@remix-run/node";
+   * import { authenticate } from "../../shopify.server";
+   *
+   * export async function loader({ request }: LoaderFunctionArgs) {
+   *   const {admin, session, sessionToken, billing} = authenticate.admin(request);
+   *
+   *   return json(await admin.rest.resources.Product.count({ session }));
+   * }
+   * ```
+   * ```ts
    * // /app/shopify.server.ts
    * import { LATEST_API_VERSION, shopifyApp } from "@shopify/shopify-app-remix/server";
    * import { restResources } from "@shopify/shopify-api/rest/admin/2023-04";
@@ -101,19 +123,47 @@ interface Authenticate<Config extends AppConfigArg> {
    * export default shopify;
    * export const authenticate = shopify.authenticate;
    * ```
-   * ```ts
-   * // /app/routes/**\/*.jsx
-   * import { LoaderFunctionArgs, json } from "@remix-run/node";
-   * import { authenticate } from "../../shopify.server";
-   *
-   * export async function loader({ request }: LoaderFunctionArgs) {
-   *   const {admin, session, sessionToken, billing} = authenticate.admin(request);
-   *
-   *   return json(await admin.rest.resources.Product.count({ session }));
-   * }
-   * ```
    */
   admin: AuthenticateAdmin<Config, RestResourcesType<Config>>;
+
+  /**
+   * Authenticate a Flow extension Request and get back an authenticated context, containing an admin context to access
+   * the API, and the payload of the request.
+   *
+   * If there is no session for the Request, this will return an HTTP 400 error.
+   *
+   * Note that this will always be a POST request.
+   *
+   * @example
+   * <caption>Authenticating a Flow extension request.</caption>
+   * ```ts
+   * // /app/routes/**\/*.jsx
+   * import { ActionFunctionArgs, json } from "@remix-run/node";
+   * import { authenticate } from "../../shopify.server";
+   *
+   * export async function action({ request }: ActionFunctionArgs) {
+   *   const {admin, session, payload} = authenticate.flow(request);
+   *
+   *   // Perform flow extension logic
+   *
+   *   // Return a 200 response
+   *   return null;
+   * }
+   * ```
+   * ```ts
+   * // /app/shopify.server.ts
+   * import { LATEST_API_VERSION, shopifyApp } from "@shopify/shopify-app-remix/server";
+   * import { restResources } from "@shopify/shopify-api/rest/admin/2023-04";
+   *
+   * const shopify = shopifyApp({
+   *   restResources,
+   *   // ...etc
+   * });
+   * export default shopify;
+   * export const authenticate = shopify.authenticate;
+   * ```
+   */
+  flow: AuthenticateFlow<RestResourcesType<Config>>;
 
   /**
    * Authenticate a public request and get back a session token.
@@ -210,7 +260,7 @@ export interface ShopifyAppBase<Config extends AppConfigArg> {
    * import prisma from "~/db.server";
    *
    * const shopify = shopifyApp({
-   *   sesssionStorage: new PrismaSessionStorage(prisma),
+   *   sessionStorage: new PrismaSessionStorage(prisma),
    *   // ...etc
    * })
    *
@@ -445,7 +495,7 @@ export type ShopifyApp<Config extends AppConfigArg> =
   Config['distribution'] extends AppDistribution.ShopifyAdmin
     ? AdminApp<Config>
     : Config['distribution'] extends AppDistribution.SingleMerchant
-    ? SingleMerchantApp<Config>
-    : Config['distribution'] extends AppDistribution.AppStore
-    ? AppStoreApp<Config>
-    : AppStoreApp<Config>;
+      ? SingleMerchantApp<Config>
+      : Config['distribution'] extends AppDistribution.AppStore
+        ? AppStoreApp<Config>
+        : AppStoreApp<Config>;

@@ -70,8 +70,8 @@ export async function validateMocks() {
     matchedRequests++;
     const [url, init] = fetchMock.mock.calls[index];
 
-    const expected: {[key: string]: any} = {};
-    const actual: {[key: string]: any} = {};
+    const expected: Record<string, any> = {};
+    const actual: Record<string, any> = {};
 
     if (request?.url) {
       expected.url = new URL(request.url);
