@@ -33,7 +33,7 @@
   "dependencies": {},
   "peerDependencies": {
     "@prisma/client": "^5.9.1",
-    "@shopify/shopify-api": "^9.2.0",
+    "@shopify/shopify-api": "^9.3.0",
     "@shopify/shopify-app-session-storage": "^2.1.0",
     "prisma": "^5.8.1"
   },

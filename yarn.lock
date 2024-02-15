@@ -2596,6 +2596,13 @@
   dependencies:
     "@shopify/graphql-client" "^0.9.3"
 
+"@shopify/admin-api-client@^0.2.4":
+  version "0.2.4"
+  resolved "https://registry.yarnpkg.com/@shopify/admin-api-client/-/admin-api-client-0.2.4.tgz#8917849d4d20bc46294f4620596d80432a24bf8b"
+  integrity sha512-a1EytG/uxtESpzN8h74g3j8lt+12yvcF8TJy49Jo1OQ5kxP2qTf+uxApPe2arBUuwIwfCFGwwnqp6w6FNDjfDA==
+  dependencies:
+    "@shopify/graphql-client" "^0.9.4"
+
 "@shopify/babel-preset@^24.1.4":
   version "24.1.5"
   resolved "https://registry.yarnpkg.com/@shopify/babel-preset/-/babel-preset-24.1.5.tgz#76cfef62bb8a4d9769559f3f2505148a55d13488"
@@ -2661,6 +2668,11 @@
   version "0.9.3"
   resolved "https://registry.yarnpkg.com/@shopify/graphql-client/-/graphql-client-0.9.3.tgz#c5140d02948c827d3cb9fe634c0b2ab192d69aa9"
   integrity sha512-2FEg6/Ue98ozJK3hFOj8kxMTiimW2eiYLDn7k+9ZqYWQ2eg+HHmdW+r5upw3jgT/2FPNYwqyz8qaZxPoxbP9Bw==
+
+"@shopify/graphql-client@^0.9.4":
+  version "0.9.4"
+  resolved "https://registry.yarnpkg.com/@shopify/graphql-client/-/graphql-client-0.9.4.tgz#751cd2134d29fb6e18df248b4e6b82116ecb1077"
+  integrity sha512-6O2FEda9iGpeFftBvicLzgMu3mq0ovfsK3IDz6G89bU5R06YDccdKLF/qyp/bzdl2jsbqvNtgEBL00xx95utPA==
 
 "@shopify/loom-cli@^1.1.0":
   version "1.1.0"
@@ -2801,15 +2813,15 @@
     jest-matcher-utils "^26.6.2"
     react-reconciler "^0.28.0"
 
-"@shopify/shopify-api@^9.2.0":
-  version "9.2.0"
-  resolved "https://registry.yarnpkg.com/@shopify/shopify-api/-/shopify-api-9.2.0.tgz#8a552fc63a578fdb0b58261fefdc7b87f10065a6"
-  integrity sha512-rHAKzMO2AQLf+UkjG0x6TUNga/LcAPM3gd3ANCx/yFxKSYvyaJDeVdkgidt5GNjl7UacWkICTr9Tc4XFgmFDng==
+"@shopify/shopify-api@^9.3.0":
+  version "9.3.0"
+  resolved "https://registry.yarnpkg.com/@shopify/shopify-api/-/shopify-api-9.3.0.tgz#a7859b817f6c4e2f7cca583df6bf663c0d16ea1b"
+  integrity sha512-RTGflr4RBowWW6apcXX8D6+0h8b1OyntjKmEJxbCAISoyfFZwC+sl+CbTIJlPFmdiCeD4sdRXIdpQLqwpGFabA==
   dependencies:
-    "@shopify/admin-api-client" "^0.2.3"
+    "@shopify/admin-api-client" "^0.2.4"
     "@shopify/network" "^3.2.1"
-    "@shopify/storefront-api-client" "^0.2.3"
-    compare-versions "^5.0.3"
+    "@shopify/storefront-api-client" "^0.2.4"
+    compare-versions "^6.1.0"
     isbot "^4.4.0"
     jose "^5.2.0"
     node-fetch "^2.6.1"
@@ -2822,6 +2834,13 @@
   integrity sha512-n1QITdbQnUFYQwRwYbZtjFQ6onFjdhmOeZw7Zl2K9iwXt7HjBYClMtgk3bbppAAzxDccpQBUimR2f9mt/oOgMg==
   dependencies:
     "@shopify/graphql-client" "^0.9.3"
+
+"@shopify/storefront-api-client@^0.2.4":
+  version "0.2.4"
+  resolved "https://registry.yarnpkg.com/@shopify/storefront-api-client/-/storefront-api-client-0.2.4.tgz#952fc54ef1593df3d536cb3ad478fa5e77958288"
+  integrity sha512-BWlmLgghMwHCSMUoGQhGU35RTqAOzaW86djdTcCU4/gNygEj56mSgH5sb7Rq+5Uiq0N9kX9CMoJY4TSQR2AIbA==
+  dependencies:
+    "@shopify/graphql-client" "^0.9.4"
 
 "@shopify/typescript-configs@^5.1.0":
   version "5.1.0"
@@ -4615,10 +4634,10 @@ commondir@^1.0.1:
   resolved "https://registry.yarnpkg.com/commondir/-/commondir-1.0.1.tgz#ddd800da0c66127393cca5950ea968a3aaf1253b"
   integrity sha512-W9pAhw0ja1Edb5GVdIF1mjZw/ASI0AlShXM83UUGe2DVr5TdAPEA1OA8m/g8zWp9x6On7gqufY+FatDbC3MDQg==
 
-compare-versions@^5.0.3:
-  version "5.0.3"
-  resolved "https://registry.yarnpkg.com/compare-versions/-/compare-versions-5.0.3.tgz#a9b34fea217472650ef4a2651d905f42c28ebfd7"
-  integrity sha512-4UZlZP8Z99MGEY+Ovg/uJxJuvoXuN4M6B3hKaiackiHrgzQFEe3diJi1mf1PNHbFujM7FvLrK2bpgIaImbtZ1A==
+compare-versions@^6.1.0:
+  version "6.1.0"
+  resolved "https://registry.yarnpkg.com/compare-versions/-/compare-versions-6.1.0.tgz#3f2131e3ae93577df111dba133e6db876ffe127a"
+  integrity sha512-LNZQXhqUvqUTotpZ00qLSaify3b4VFD588aRr8MKFw4CMUr98ytzCW5wDH5qx/DEY5kCDXcbcRuCqL0szEf2tg==
 
 component-emitter@^1.3.0:
   version "1.3.0"
