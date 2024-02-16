@@ -1,5 +1,6 @@
 import {
   BillingConfigSubscriptionPlan,
+  BillingConfigSubscriptionLineItemPlan,
   BillingError,
   BillingInterval,
   HttpResponseError,
@@ -26,6 +27,23 @@ import {REAUTH_URL_HEADER} from '../../../const';
 
 import * as responses from './mock-responses';
 
+const BILLING_CONFIGS = [
+  {
+    amount: 5,
+    currencyCode: 'USD',
+    interval: BillingInterval.Every30Days,
+  } as BillingConfigSubscriptionPlan,
+  {
+    lineItems: [
+      {
+        amount: 5,
+        currencyCode: 'USD',
+        interval: BillingInterval.Every30Days,
+      },
+    ],
+  } as BillingConfigSubscriptionLineItemPlan,
+];
+
 const BILLING_CONFIG = {
   [responses.PLAN_1]: {
     amount: 5,
@@ -34,11 +52,57 @@ const BILLING_CONFIG = {
   } as BillingConfigSubscriptionPlan,
 };
 
+const BILLING_CONFIG_LINE_ITEMS = {
+  [responses.PLAN_1]: {
+    lineItems: [
+      {
+        amount: 5,
+        currencyCode: 'USD',
+        interval: BillingInterval.Every30Days,
+      },
+    ],
+  } as BillingConfigSubscriptionLineItemPlan,
+};
+
 describe('Billing request', () => {
   it('redirects to payment confirmation URL when successful and at the top level for non-embedded apps', async () => {
     // GIVEN
     const shopify = shopifyApp(
       testConfig({isEmbeddedApp: false, billing: BILLING_CONFIG}),
+    );
+    const session = await setUpValidSession(shopify.sessionStorage);
+
+    await mockExternalRequests({
+      request: new Request(GRAPHQL_URL, {method: 'POST', body: 'test'}),
+      response: new Response(responses.PURCHASE_SUBSCRIPTION_RESPONSE),
+    });
+
+    const request = new Request(`${APP_URL}/billing?shop=${TEST_SHOP}`);
+    signRequestCookie({
+      request,
+      cookieName: SESSION_COOKIE_NAME,
+      cookieValue: session.id,
+    });
+
+    const {billing} = await shopify.authenticate.admin(request);
+
+    // WHEN
+    const response = await getThrownResponse(
+      async () => billing.request({plan: responses.PLAN_1, isTest: true}),
+      request,
+    );
+
+    // THEN
+    expect(response.status).toEqual(302);
+    expect(response.headers.get('Location')).toEqual(
+      responses.CONFIRMATION_URL,
+    );
+  });
+
+  it('redirects to payment confirmation URL when successful and at the top level for non-embedded apps', async () => {
+    // GIVEN
+    const shopify = shopifyApp(
+      testConfig({isEmbeddedApp: false, billing: BILLING_CONFIG_LINE_ITEMS}),
     );
     const session = await setUpValidSession(shopify.sessionStorage);
 
