@@ -32,7 +32,7 @@
   ],
   "dependencies": {},
   "peerDependencies": {
-    "@shopify/shopify-api": "^9.3.0"
+    "@shopify/shopify-api": "^9.3.1"
   },
   "devDependencies": {},
   "files": [

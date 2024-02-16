@@ -14,4 +14,4 @@
 "@shopify/shopify-app-remix": patch
 ---
 
-Updated dependency on `@shopify/shopify-api` to 9.3.0
+Updated dependency on `@shopify/shopify-api` to 9.3.1
