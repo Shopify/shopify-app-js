@@ -62,9 +62,40 @@ function forkRemixProject(projects: Config.InitialProjectOptions[]) {
         [
           {
             ...project,
-            displayName: 'shopify-app-remix-server',
+            setupFilesAfterEnv: [
+              ...(project.setupFilesAfterEnv ?? []),
+              '../../packages/shopify-app-remix/src/server/adapters/node/__tests__/setup-jest.ts',
+            ],
+            displayName: 'shopify-app-remix-server-node',
             testEnvironment: 'node',
-            testPathIgnorePatterns: ['src/react'],
+            testPathIgnorePatterns: [
+              'src/react',
+              'src/server/adapters/__tests__',
+            ],
+          },
+        ],
+        [
+          {
+            ...project,
+            setupFilesAfterEnv: [
+              ...(project.setupFilesAfterEnv ?? []),
+              '../../packages/shopify-app-remix/src/server/adapters/vercel/__tests__/setup-jest.ts',
+            ],
+            displayName: 'shopify-app-remix-server-vercel',
+            testEnvironment: 'node',
+            testPathIgnorePatterns: [
+              'src/react',
+              'src/server/adapters/__tests__',
+            ],
+          },
+        ],
+        [
+          {
+            ...project,
+            testRegex: undefined,
+            displayName: 'shopify-app-remix-server-adapters',
+            testMatch: ['<rootDir>/src/server/adapters/__tests__/**/*'],
+            testEnvironment: 'node',
           },
         ],
       );

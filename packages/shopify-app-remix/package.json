@@ -64,6 +64,7 @@
     "react-dom": "^18.2.0"
   },
   "dependencies": {
+    "@remix-run/node": "^2.6.0",
     "@remix-run/server-runtime": "^2.5.1",
     "@shopify/admin-api-client": "^0.2.3",
     "@shopify/shopify-api": "^9.3.1",
