@@ -1,5 +1,4 @@
 import {
-  ConfigParams,
   RegisterReturn,
   Shopify,
   ShopifyRestResources,
@@ -15,7 +14,11 @@ import type {AuthenticatePublic} from './authenticate/public/types';
 import type {AuthenticateAdmin} from './authenticate/admin/types';
 import type {Unauthenticated} from './unauthenticated/types';
 import type {AuthenticateFlow} from './authenticate/flow/types';
-import type {FutureFlagOptions, FutureFlags} from './future/flags';
+import type {
+  ApiConfigWithFutureFlags,
+  ApiFutureFlags,
+  FutureFlagOptions,
+} from './future/flags';
 
 export interface BasicParams<
   Future extends FutureFlagOptions = FutureFlagOptions,
@@ -28,15 +31,6 @@ export interface BasicParams<
   config: AppConfig;
   logger: Shopify['logger'];
 }
-
-export interface ApiFutureFlags<Future extends FutureFlagOptions> {
-  v10_lineItemBilling?: Future extends FutureFlags
-    ? Future['v3_lineItemBilling']
-    : boolean;
-}
-
-export type ApiConfigWithFutureFlags<Future extends FutureFlagOptions> =
-  ConfigParams<ShopifyRestResources, ApiFutureFlags<Future>>;
 
 export type JSONValue =
   | string

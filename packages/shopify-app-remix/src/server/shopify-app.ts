@@ -33,6 +33,7 @@ import {AuthCodeFlowStrategy} from './authenticate/admin/strategies/auth-code-fl
 import {TokenExchangeStrategy} from './authenticate/admin/strategies/token-exchange';
 import {IdempotentPromiseHandler} from './authenticate/helpers/idempotent-promise-handler';
 import {authenticateFlowFactory} from './authenticate/flow/authenticate';
+import {FutureFlagOptions} from './future/flags';
 
 /**
  * Creates an object your app will use to interact with Shopify.
@@ -56,9 +57,10 @@ import {authenticateFlowFactory} from './authenticate/flow/authenticate';
  * ```
  */
 export function shopifyApp<
-  Config extends AppConfigArg<Resources, Storage>,
+  Config extends AppConfigArg<Resources, Storage, Future>,
   Resources extends ShopifyRestResources,
   Storage extends SessionStorage,
+  Future extends FutureFlagOptions = Config['future'],
 >(appConfig: Config): ShopifyApp<Config> {
   const api = deriveApi(appConfig);
   const config = deriveConfig<Storage>(appConfig, api.config);
@@ -87,9 +89,9 @@ export function shopifyApp<
     authenticate: {
       admin: authStrategy,
       flow: authenticateFlowFactory<Resources>(params),
-      public: authenticatePublicFactory<Config['future'], Resources>(params),
+      public: authenticatePublicFactory<Future, Resources>(params),
       webhook: authenticateWebhookFactory<
-        Config['future'],
+        Future,
         Resources,
         keyof Config['webhooks'] | MandatoryTopics
       >(params),
