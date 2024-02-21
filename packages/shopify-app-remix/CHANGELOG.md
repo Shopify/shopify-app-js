@@ -1,5 +1,62 @@
 # @shopify/shopify-app-remix
 
+## 2.6.0
+
+### Minor Changes
+
+- 1002934: Add new v3_lineItemBilling future flag
+
+  With this future flag you can configure billing plans to have multiple line items, eg. a recurring plan and a usage based plan.
+
+  ```ts
+  //shopify.server.ts
+  import { shopifyApp, BillingInterval } from "@shopify/shopify-app-remix/server";
+
+  export const MONTHLY_PLAN = 'Monthly subscription';
+  export const ANNUAL_PLAN = 'Annual subscription';
+
+  const shopify = shopifyApp({
+    // ...etc
+    billing: {
+      [MONTHLY_PLAN]: {
+        lineItems: [
+         {
+           amount: 5,
+           currencyCode: 'USD',
+           interval: BillingInterval.Every30Days,
+          }
+          {
+              amount: 1,
+              currencyCode: 'USD',
+              interval: BillingInterval.Usage
+              terms: "1 dollar per 1000 emails",
+          }
+        ],
+      },
+    },
+    future: {v3_lineItemBilling: true}
+  });
+  export default shopify;
+  export const authenticate = shopify.authenticate;
+
+  ```
+
+- 956f493: Allow subscribing to webhooks with sub-topics
+- 6df84d2: Introduce Vercel adapter to fix deploys to Vercel.
+
+  Since v.9.0.0 of `@shopify/shopify-api` developers deploying their Remix apps to Vercel have encountered errors.
+
+  Developers looking to deploy their application to Vercel should replace references to import `"@shopify/shopify-app-remix/adapters/node";` with `"@shopify/shopify-app-remix/adapters/vercel";` to properly load the required global variables.
+
+### Patch Changes
+
+- 02a8341: Updated dependency on `@shopify/shopify-api` to 9.3.1
+- 321d6a4: Update @shopify/shopify-api to 9.3.2
+- 7787a1a: Fix billing redirect issue when using the new embedded auth strategy
+- Updated dependencies [02a8341]
+- Updated dependencies [321d6a4]
+  - @shopify/shopify-app-session-storage@2.1.1
+
 ## 2.5.1
 
 ### Patch Changes
