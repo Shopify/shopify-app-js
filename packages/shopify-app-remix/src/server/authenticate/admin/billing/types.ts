@@ -194,6 +194,12 @@ export interface BillingContext<Config extends AppConfigArg> {
    *          currencyCode: 'USD',
    *          interval: BillingInterval.Every30Days,
    *         }
+   *         {
+   *         amount: 1,
+   *         currencyCode: 'USD',
+   *         interval: BillingInterval.Usage.
+   *         terms: '1 dollar per 1000 emails',
+   *         },
    *       ],
    *     },
    *   }
