@@ -1,4 +1,5 @@
 import {
+  BillingConfigSubscriptionLineItemPlan,
   BillingConfigSubscriptionPlan,
   BillingInterval,
   HttpResponseError,
@@ -26,16 +27,58 @@ import * as responses from './mock-responses';
 
 const BILLING_CONFIG = {
   [responses.PLAN_1]: {
-    amount: 5,
-    currencyCode: 'USD',
-    interval: BillingInterval.Every30Days,
-  } as BillingConfigSubscriptionPlan,
+    lineItems: [
+      {
+        amount: 5,
+        currencyCode: 'USD',
+        interval: BillingInterval.Every30Days,
+      },
+    ],
+  } as BillingConfigSubscriptionLineItemPlan,
 };
 
 describe('Cancel billing', () => {
   it('returns an AppSubscription when the cancellation is successful', async () => {
     // GIVEN
     const shopify = shopifyApp(testConfig({billing: BILLING_CONFIG}));
+    await setUpValidSession(shopify.sessionStorage);
+
+    const {billing} = await shopify.authenticate.admin(
+      new Request(`${APP_URL}/billing`, {
+        headers: {Authorization: `Bearer ${getJwt().token}`},
+      }),
+    );
+
+    await mockExternalRequest({
+      request: new Request(GRAPHQL_URL, {method: 'POST', body: 'test'}),
+      response: new Response(responses.CANCEL_RESPONSE),
+    });
+
+    // WHEN
+    const subscription = await billing.cancel({
+      subscriptionId: '123',
+      isTest: true,
+      prorate: true,
+    });
+
+    // THEN
+    expect(subscription).toEqual(responses.APP_SUBSCRIPTION);
+  });
+
+  it('returns an AppSubscription when the cancellation is successful when v3_lineItemBilling is not enabled', async () => {
+    // GIVEN
+    const shopify = shopifyApp(
+      testConfig({
+        billing: {
+          [responses.PLAN_1]: {
+            amount: 5,
+            currencyCode: 'USD',
+            interval: BillingInterval.Every30Days,
+          } as BillingConfigSubscriptionPlan,
+        },
+        future: {v3_lineItemBilling: false},
+      }),
+    );
     await setUpValidSession(shopify.sessionStorage);
 
     const {billing} = await shopify.authenticate.admin(
