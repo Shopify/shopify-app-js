@@ -1,5 +1,23 @@
 # Changelog
 
+## 4.1.1
+
+### Patch Changes
+
+- b1ddc74: Return a 403 with X-Shopify headers on XHR requests for non-embedded apps, instead of a 302. The 302 ran into CORS errors and always failed.
+
+  These requests will return the following headers:
+
+  - `X-Shopify-Api-Request-Failure-Reauthorize`: `1`
+  - `X-Shopify-Api-Request-Failure-Reauthorize-Url`: <URL>
+
+- 02a8341: Updated dependency on `@shopify/shopify-api` to 9.3.1
+- 321d6a4: Update @shopify/shopify-api to 9.3.2
+- Updated dependencies [02a8341]
+- Updated dependencies [321d6a4]
+  - @shopify/shopify-app-session-storage-memory@3.0.1
+  - @shopify/shopify-app-session-storage@2.1.1
+
 ## 4.1.0
 
 ### Minor Changes
@@ -83,9 +101,9 @@ If you need to explicitly set those generics, you'll need to use the `AppConfigP
 Before:
 
 ```ts
-import {ShopifyApp} from '@shopify/shopify-app-express';
-import {restResources} from '@shopify/shopify-api/rest/admin/2023-10';
-import {MemorySessionStorage} from '@shopify/shopify-app-session-storage-memory';
+import { ShopifyApp } from "@shopify/shopify-app-express";
+import { restResources } from "@shopify/shopify-api/rest/admin/2023-10";
+import { MemorySessionStorage } from "@shopify/shopify-app-session-storage-memory";
 
 const myVariable: ShopifyApp<typeof restResources, MemorySessionStorage>;
 ```
@@ -93,9 +111,9 @@ const myVariable: ShopifyApp<typeof restResources, MemorySessionStorage>;
 After:
 
 ```ts
-import {ShopifyApp, AppConfigParams} from '@shopify/shopify-app-express';
-import {restResources} from '@shopify/shopify-api/rest/admin/2023-10';
-import {MemorySessionStorage} from '@shopify/shopify-app-session-storage-memory';
+import { ShopifyApp, AppConfigParams } from "@shopify/shopify-app-express";
+import { restResources } from "@shopify/shopify-api/rest/admin/2023-10";
+import { MemorySessionStorage } from "@shopify/shopify-app-session-storage-memory";
 
 const myVariable: ShopifyApp<
   AppConfigParams<typeof restResources, MemorySessionStorage>

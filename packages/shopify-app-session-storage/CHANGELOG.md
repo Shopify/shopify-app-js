@@ -1,5 +1,12 @@
 # @shopify/shopify-app-session-storage
 
+## 2.1.1
+
+### Patch Changes
+
+- 02a8341: Updated dependency on `@shopify/shopify-api` to 9.3.1
+- 321d6a4: Update @shopify/shopify-api to 9.3.2
+
 ## 2.1.0
 
 ### Minor Changes
