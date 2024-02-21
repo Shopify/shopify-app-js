@@ -1,5 +1,5 @@
-import {APP_BRIDGE_URL} from '../../../authenticate/const';
-import {appBridgeUrl} from '../../../authenticate/helpers';
+import {APP_BRIDGE_URL} from '../../authenticate/const';
+import {appBridgeUrl} from '../../authenticate/helpers';
 
 describe('node setup import', () => {
   /* eslint-disable no-process-env */
@@ -9,7 +9,7 @@ describe('node setup import', () => {
     process.env.APP_BRIDGE_URL = 'http://localhost:9876/app-bridge.js';
 
     // WHEN
-    await require('../index');
+    await require('../node/index');
 
     // THEN
     expect(appBridgeUrl()).toEqual(process.env.APP_BRIDGE_URL);

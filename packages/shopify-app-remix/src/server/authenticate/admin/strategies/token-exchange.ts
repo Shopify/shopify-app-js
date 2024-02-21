@@ -8,14 +8,14 @@ import {
 } from '@shopify/shopify-api';
 
 import {AppConfig, AppConfigArg} from '../../../config-types';
-import {
-  BasicParams,
-  ApiConfigWithFutureFlags,
-  ApiFutureFlags,
-} from '../../../types';
+import {BasicParams} from '../../../types';
 import {respondToInvalidSessionToken} from '../../helpers';
 import {handleClientErrorFactory, triggerAfterAuthHook} from '../helpers';
 import {HandleAdminClientError} from '../../../clients';
+import type {
+  ApiConfigWithFutureFlags,
+  ApiFutureFlags,
+} from '../../../future/flags';
 
 import {AuthorizationStrategy, SessionContext, OnErrorOptions} from './types';
 
