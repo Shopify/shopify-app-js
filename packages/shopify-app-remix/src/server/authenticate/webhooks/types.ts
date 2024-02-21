@@ -109,6 +109,25 @@ interface Context<Topics = string | number | symbol> {
    * ```
    */
   payload: JSONValue;
+  /**
+   * The sub-topic of the webhook. This is only available for certain webhooks.
+   *
+   * @example
+   * <caption>Webhook sub-topic.</caption>
+   * <description>Get the webhook sub-topic.</description>
+   * ```ts
+   * // /app/routes/webhooks.tsx
+   * import { ActionFunction } from "@remix-run/node";
+   * import { authenticate } from "../shopify.server";
+   *
+   * export const action: ActionFunction = async ({ request }) => {
+   *   const { subTopic } = await authenticate.webhook(request);
+   *   return new Response();
+   * };
+   * ```
+   *
+   */
+  subTopic?: string;
 }
 
 export interface WebhookContextWithoutSession<Topics = string | number | symbol>

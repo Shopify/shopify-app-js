@@ -4200,6 +4200,26 @@
                     ]
                   }
                 ]
+              },
+              {
+                "filePath": "src/server/authenticate/webhooks/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "subTopic",
+                "value": "string",
+                "description": "The sub-topic of the webhook. This is only available for certain webhooks.",
+                "isOptional": true,
+                "examples": [
+                  {
+                    "title": "Webhook sub-topic",
+                    "description": "Get the webhook sub-topic.",
+                    "tabs": [
+                      {
+                        "code": "import { ActionFunction } from \"@remix-run/node\";\nimport { authenticate } from \"../shopify.server\";\n\nexport const action: ActionFunction = async ({ request }) => {\n  const { subTopic } = await authenticate.webhook(request);\n  return new Response();\n};",
+                        "title": "/app/routes/webhooks.tsx"
+                      }
+                    ]
+                  }
+                ]
               }
             ],
             "value": "export interface WebhookContextWithoutSession<Topics = string | number | symbol>\n  extends Context<Topics> {\n  session: undefined;\n  admin: undefined;\n}"
@@ -4607,6 +4627,26 @@
                     "tabs": [
                       {
                         "code": "import { ActionFunction } from \"@remix-run/node\";\nimport { authenticate } from \"../shopify.server\";\n\nexport const action: ActionFunction = async ({ request }) => {\n  const { payload } = await authenticate.webhook(request);\n  return new Response();\n};",
+                        "title": "/app/routes/webhooks.tsx"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "filePath": "src/server/authenticate/webhooks/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "subTopic",
+                "value": "string",
+                "description": "The sub-topic of the webhook. This is only available for certain webhooks.",
+                "isOptional": true,
+                "examples": [
+                  {
+                    "title": "Webhook sub-topic",
+                    "description": "Get the webhook sub-topic.",
+                    "tabs": [
+                      {
+                        "code": "import { ActionFunction } from \"@remix-run/node\";\nimport { authenticate } from \"../shopify.server\";\n\nexport const action: ActionFunction = async ({ request }) => {\n  const { subTopic } = await authenticate.webhook(request);\n  return new Response();\n};",
                         "title": "/app/routes/webhooks.tsx"
                       }
                     ]
@@ -9543,6 +9583,24 @@
               }
             }
           ]
+        },
+        {
+          "title": "subTopic",
+          "examples": [
+            {
+              "description": "Get the webhook sub-topic.",
+              "codeblock": {
+                "title": "Webhook sub-topic",
+                "tabs": [
+                  {
+                    "title": "/app/routes/webhooks.tsx",
+                    "code": "import { ActionFunction } from \"@remix-run/node\";\nimport { authenticate } from \"../shopify.server\";\n\nexport const action: ActionFunction = async ({ request }) =&gt; {\n  const { subTopic } = await authenticate.webhook(request);\n  return new Response();\n};",
+                    "language": "typescript"
+                  }
+                ]
+              }
+            }
+          ]
         }
       ]
     }
@@ -13322,6 +13380,26 @@
                     ]
                   }
                 ]
+              },
+              {
+                "filePath": "src/server/authenticate/webhooks/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "subTopic",
+                "value": "string",
+                "description": "The sub-topic of the webhook. This is only available for certain webhooks.",
+                "isOptional": true,
+                "examples": [
+                  {
+                    "title": "Webhook sub-topic",
+                    "description": "Get the webhook sub-topic.",
+                    "tabs": [
+                      {
+                        "code": "import { ActionFunction } from \"@remix-run/node\";\nimport { authenticate } from \"../shopify.server\";\n\nexport const action: ActionFunction = async ({ request }) => {\n  const { subTopic } = await authenticate.webhook(request);\n  return new Response();\n};",
+                        "title": "/app/routes/webhooks.tsx"
+                      }
+                    ]
+                  }
+                ]
               }
             ],
             "value": "export interface WebhookContextWithoutSession<Topics = string | number | symbol>\n  extends Context<Topics> {\n  session: undefined;\n  admin: undefined;\n}"
@@ -13729,6 +13807,26 @@
                     "tabs": [
                       {
                         "code": "import { ActionFunction } from \"@remix-run/node\";\nimport { authenticate } from \"../shopify.server\";\n\nexport const action: ActionFunction = async ({ request }) => {\n  const { payload } = await authenticate.webhook(request);\n  return new Response();\n};",
+                        "title": "/app/routes/webhooks.tsx"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "filePath": "src/server/authenticate/webhooks/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "subTopic",
+                "value": "string",
+                "description": "The sub-topic of the webhook. This is only available for certain webhooks.",
+                "isOptional": true,
+                "examples": [
+                  {
+                    "title": "Webhook sub-topic",
+                    "description": "Get the webhook sub-topic.",
+                    "tabs": [
+                      {
+                        "code": "import { ActionFunction } from \"@remix-run/node\";\nimport { authenticate } from \"../shopify.server\";\n\nexport const action: ActionFunction = async ({ request }) => {\n  const { subTopic } = await authenticate.webhook(request);\n  return new Response();\n};",
                         "title": "/app/routes/webhooks.tsx"
                       }
                     ]
