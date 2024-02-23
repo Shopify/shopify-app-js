@@ -19,17 +19,27 @@ import {
   triggerAfterAuthHook,
   validateShopAndHostParams,
 } from '../helpers';
-import {AppConfig} from '../../../config-types';
+import {AppConfig, AppConfigArg} from '../../../config-types';
 import {getSessionTokenHeader} from '../../helpers';
 import {HandleAdminClientError} from '../../../clients';
+import type {
+  ApiConfigWithFutureFlags,
+  ApiFutureFlags,
+} from '../../../future/flags';
 
 import {AuthorizationStrategy, SessionContext, OnErrorOptions} from './types';
 
 export class AuthCodeFlowStrategy<
+  Config extends AppConfigArg,
   Resources extends ShopifyRestResources = ShopifyRestResources,
 > implements AuthorizationStrategy
 {
-  protected api: Shopify;
+  protected api: Shopify<
+    ApiConfigWithFutureFlags<Config['future']>,
+    ShopifyRestResources,
+    ApiFutureFlags<Config['future']>
+  >;
+
   protected config: AppConfig;
   protected logger: Shopify['logger'];
 

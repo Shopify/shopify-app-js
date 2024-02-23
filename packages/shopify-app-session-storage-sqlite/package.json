@@ -1,6 +1,6 @@
 {
   "name": "@shopify/shopify-app-session-storage-sqlite",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "description": "Shopify App Session Storage for SQLite",
   "repository": {
     "type": "git",
@@ -35,11 +35,11 @@
     "sqlite3": "^5.1.7"
   },
   "peerDependencies": {
-    "@shopify/shopify-api": "^9.2.0",
-    "@shopify/shopify-app-session-storage": "^2.1.0"
+    "@shopify/shopify-api": "^9.3.2",
+    "@shopify/shopify-app-session-storage": "^2.1.1"
   },
   "devDependencies": {
-    "@shopify/shopify-app-session-storage-test-utils": "^2.0.0",
+    "@shopify/shopify-app-session-storage-test-utils": "^2.0.1",
     "@types/sqlite3": "^3.1.8"
   },
   "files": [

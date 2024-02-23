@@ -61,6 +61,6 @@ describe('Headers boundary', () => {
     const result = boundary.headers(headers as any);
 
     // THEN
-    expect(result).toEqual(new Headers());
+    expect(result.entries()).toEqual(new Headers().entries());
   });
 });

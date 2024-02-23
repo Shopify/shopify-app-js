@@ -71,6 +71,14 @@ const data: LandingTemplateSchema = {
           isOptional: true,
         },
         {
+          name: 'v3_lineItemBilling',
+          value: '',
+          description:
+            'Allows you to pass billing plans with up to two line items when creating a new app subscription.' +
+            '\n\n This allows you to create app subscriptions with both recurring and usage based components.',
+          isOptional: true,
+        },
+        {
           name: 'unstable_newEmbeddedAuthStrategy',
           value: '',
           description:
