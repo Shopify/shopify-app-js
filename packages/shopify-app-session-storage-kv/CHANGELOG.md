@@ -1,5 +1,11 @@
 # @shopify/shopify-app-session-storage-kv
 
+## 3.0.2
+
+### Patch Changes
+
+- 6deb1bd: Updated dependency on `semver`
+
 ## 3.0.1
 
 ### Patch Changes

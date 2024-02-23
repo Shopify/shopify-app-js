@@ -1,5 +1,12 @@
 # @shopify/shopify-app-remix
 
+## 2.6.1
+
+### Patch Changes
+
+- c95cfdf: Update AppConfig type to Readonly. The config should not be modified after it is created.
+- 6deb1bd: Updated dependency on `semver`
+
 ## 2.6.0
 
 ### Minor Changes

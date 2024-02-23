@@ -1,5 +1,11 @@
 # Changelog
 
+## 4.1.2
+
+### Patch Changes
+
+- 6deb1bd: Updated dependency on `semver`
+
 ## 4.1.1
 
 ### Patch Changes
