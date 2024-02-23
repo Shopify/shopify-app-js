@@ -61,7 +61,7 @@ export function shopifyApp<
   Resources extends ShopifyRestResources,
   Storage extends SessionStorage,
   Future extends FutureFlagOptions = Config['future'],
->(appConfig: Config): ShopifyApp<Config> {
+>(appConfig: Readonly<Config>): ShopifyApp<Config> {
   const api = deriveApi(appConfig);
   const config = deriveConfig<Storage>(appConfig, api.config);
   const logger = overrideLogger(api.logger);
