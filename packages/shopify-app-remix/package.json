@@ -57,7 +57,7 @@
     "@shopify/shopify-app-session-storage-memory": "^3.0.1",
     "@types/jsonwebtoken": "^9.0.5",
     "@types/react": "^18.2.18",
-    "@types/semver": "^7.5.6",
+    "@types/semver": "^7.5.7",
     "jest-fetch-mock": "^3.0.3",
     "jsonwebtoken": "^9.0.2",
     "react": "^18.2.0",
@@ -71,7 +71,7 @@
     "@shopify/shopify-app-session-storage": "^2.1.1",
     "@shopify/storefront-api-client": "^0.2.3",
     "isbot": "^3.7.1",
-    "semver": "^7.5.4"
+    "semver": "^7.6.0"
   },
   "peerDependencies": {
     "@remix-run/react": "*",
