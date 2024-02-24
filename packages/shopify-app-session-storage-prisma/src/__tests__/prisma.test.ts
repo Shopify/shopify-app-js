@@ -33,7 +33,7 @@ describe('PrismaSessionStorage', () => {
   );
 });
 
-describe('PrismaSessionStoragewhen with no database set up', () => {
+describe('PrismaSessionStorage when with no database set up', () => {
   beforeAll(async () => {
     clearTestDatabase();
   });
@@ -49,6 +49,11 @@ describe('PrismaSessionStoragewhen with no database set up', () => {
       expect(true).toBe(false);
     } catch (error) {
       expect(error).toBeInstanceOf(MissingSessionTableError);
+
+      const {cause} = error;
+      expect(cause.message).toContain(
+        'The table `main.Session` does not exist in the current database.',
+      );
     }
   });
 });

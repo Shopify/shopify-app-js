@@ -21,7 +21,7 @@ export function processWebhooks({
     mountWebhooks(api, config, webhookHandlers);
 
     return [
-      express.text({type: '*/*'}),
+      express.text({type: '*/*', limit: '500kb'}),
       async (req: Request, res: Response) => {
         await process({
           req,

@@ -1,5 +1,17 @@
 # @shopify/shopify-app-session-storage-prisma
 
+## 4.0.1
+
+### Patch Changes
+
+- 02a8341: Updated dependency on `@shopify/shopify-api` to 9.3.1
+- 321d6a4: Update @shopify/shopify-api to 9.3.2
+- 56c2198: Bumps @prisma/client from 5.8.1 to 5.9.1.
+- 2d5181b: Add error cause when throwing MissingSessionTableError
+- Updated dependencies [02a8341]
+- Updated dependencies [321d6a4]
+  - @shopify/shopify-app-session-storage@2.1.1
+
 ## 4.0.0
 
 ### Minor Changes

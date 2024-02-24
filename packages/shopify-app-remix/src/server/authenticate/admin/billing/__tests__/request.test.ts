@@ -1,5 +1,5 @@
 import {
-  BillingConfigSubscriptionPlan,
+  BillingConfigSubscriptionLineItemPlan,
   BillingError,
   BillingInterval,
   HttpResponseError,
@@ -28,13 +28,51 @@ import * as responses from './mock-responses';
 
 const BILLING_CONFIG = {
   [responses.PLAN_1]: {
-    amount: 5,
-    currencyCode: 'USD',
-    interval: BillingInterval.Every30Days,
-  } as BillingConfigSubscriptionPlan,
+    lineItems: [
+      {
+        amount: 5,
+        currencyCode: 'USD',
+        interval: BillingInterval.Every30Days,
+      },
+    ],
+  } as BillingConfigSubscriptionLineItemPlan,
 };
 
 describe('Billing request', () => {
+  it('redirects to payment confirmation URL when successful and at the top level for non-embedded apps', async () => {
+    // GIVEN
+    const shopify = shopifyApp(
+      testConfig({isEmbeddedApp: false, billing: BILLING_CONFIG}),
+    );
+    const session = await setUpValidSession(shopify.sessionStorage);
+
+    await mockExternalRequests({
+      request: new Request(GRAPHQL_URL, {method: 'POST', body: 'test'}),
+      response: new Response(responses.PURCHASE_SUBSCRIPTION_RESPONSE),
+    });
+
+    const request = new Request(`${APP_URL}/billing?shop=${TEST_SHOP}`);
+    signRequestCookie({
+      request,
+      cookieName: SESSION_COOKIE_NAME,
+      cookieValue: session.id,
+    });
+
+    const {billing} = await shopify.authenticate.admin(request);
+
+    // WHEN
+    const response = await getThrownResponse(
+      async () => billing.request({plan: responses.PLAN_1, isTest: true}),
+      request,
+    );
+
+    // THEN
+    expect(response.status).toEqual(302);
+    expect(response.headers.get('Location')).toEqual(
+      responses.CONFIRMATION_URL,
+    );
+  });
+
   it('redirects to payment confirmation URL when successful and at the top level for non-embedded apps', async () => {
     // GIVEN
     const shopify = shopifyApp(
@@ -95,6 +133,7 @@ describe('Billing request', () => {
     // THEN
     expectExitIframeRedirect(response, {
       destination: responses.CONFIRMATION_URL,
+      addHostToExitIframePath: false,
     });
   });
 
@@ -166,7 +205,8 @@ describe('Billing request', () => {
 
   it('redirects to exit-iframe with authentication using app bridge when embedded and Shopify invalidated the session', async () => {
     // GIVEN
-    const shopify = shopifyApp(testConfig({billing: BILLING_CONFIG}));
+    const config = testConfig();
+    const shopify = shopifyApp({...config, billing: BILLING_CONFIG});
     await setUpValidSession(shopify.sessionStorage);
 
     await mockExternalRequest({
@@ -191,6 +231,9 @@ describe('Billing request', () => {
     );
 
     // THEN
+    const shopSessions =
+      await config.sessionStorage.findSessionsByShop(TEST_SHOP);
+    expect(shopSessions).toStrictEqual([]);
     expectExitIframeRedirect(response);
   });
 
@@ -282,5 +325,49 @@ describe('Billing request', () => {
     await expect(
       billing.request({plan: responses.PLAN_1, isTest: true}),
     ).rejects.toThrowError(BillingError);
+  });
+
+  it('redirects to payment confirmation URL when successful and at the top level for non-embedded when v3_lineItemBilling is not enabled ', async () => {
+    // GIVEN
+    const shopify = shopifyApp(
+      testConfig({
+        isEmbeddedApp: false,
+        billing: {
+          [responses.PLAN_1]: {
+            amount: 5,
+            currencyCode: 'USD',
+            interval: BillingInterval.Every30Days,
+          },
+        },
+        future: {v3_lineItemBilling: false},
+      }),
+    );
+    const session = await setUpValidSession(shopify.sessionStorage);
+
+    await mockExternalRequests({
+      request: new Request(GRAPHQL_URL, {method: 'POST', body: 'test'}),
+      response: new Response(responses.PURCHASE_SUBSCRIPTION_RESPONSE),
+    });
+
+    const request = new Request(`${APP_URL}/billing?shop=${TEST_SHOP}`);
+    signRequestCookie({
+      request,
+      cookieName: SESSION_COOKIE_NAME,
+      cookieValue: session.id,
+    });
+
+    const {billing} = await shopify.authenticate.admin(request);
+
+    // WHEN
+    const response = await getThrownResponse(
+      async () => billing.request({plan: responses.PLAN_1, isTest: true}),
+      request,
+    );
+
+    // THEN
+    expect(response.status).toEqual(302);
+    expect(response.headers.get('Location')).toEqual(
+      responses.CONFIRMATION_URL,
+    );
   });
 });
