@@ -2,7 +2,7 @@
 
 This package implements the `SessionStorage` interface that works with an instance of [Drizzle](https://orm.drizzle.team).
 
-There are 3 adapters for Drizzle: `DrizzleSessionStoragePostgres`, `DrizzleSessionStorageSQLite` and `DrizzleSessionStorageMySQL`. 
+There are 3 adapters for Drizzle: `DrizzleSessionStoragePostgres`, `DrizzleSessionStorageSQLite` and `DrizzleSessionStorageMySQL`.
 
 Session storage for Drizzle requires a `schema.ts` with a `session` table with at-least the columns as in the example. Make sure to create `session` table and apply changes to the database before using this pakacge.
 

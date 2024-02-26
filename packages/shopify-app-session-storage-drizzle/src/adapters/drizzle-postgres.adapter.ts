@@ -104,7 +104,7 @@ export class DrizzleSessionStoragePostgres implements SessionStorage {
   }
 
   private rowToSession(row: InferSelectModel<PostgresSessionTable>): Session {
-    const sessionParams: {[key: string]: boolean | string | number} = {
+    const sessionParams: Record<string, boolean | string | number> = {
       id: row.id,
       shop: row.shop,
       state: row.state,
