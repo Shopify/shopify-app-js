@@ -2737,13 +2737,14 @@
   resolved "https://registry.yarnpkg.com/@shopify/prettier-config/-/prettier-config-1.1.2.tgz#612f87c0cd1196e8b43c85425e587d0fa7f1172d"
   integrity sha512-5ugCL9sPGzmOaZjeRGaWUWhHgAbemrS6z+R7v6gwiD+BiqSeoFhIY+imLpfdFCVpuOGalpHeCv6o3gv++EHs0A==
 
-"@shopify/react-testing@^5.1.3":
-  version "5.1.3"
-  resolved "https://registry.yarnpkg.com/@shopify/react-testing/-/react-testing-5.1.3.tgz#6586e87dececc81af9d252e55813cfbf4c2ea836"
-  integrity sha512-zDnG1neDTfNycOInXpulm3UfeInZCit3LTC+Ba65HtTVqn6vw52p17Gn8kgO/7/jypO6NfiA4SGWI2MCVp7keA==
+"@shopify/react-testing@^5.1.4":
+  version "5.1.4"
+  resolved "https://registry.yarnpkg.com/@shopify/react-testing/-/react-testing-5.1.4.tgz#ef71f91c8e08ff60040773802b0bc7d1c1816a1a"
+  integrity sha512-2ey9OH/LnISfJtdfT3Y5WLEj9VsXnyKrekKacsXiiDhKx4s2zT5Gep4oIsnyyACDhAykxwiFV9rV0TKmA+LrIg==
   dependencies:
     "@shopify/useful-types" "^5.1.2"
     jest-matcher-utils "^26.6.2"
+    react-is "^18.0.0"
     react-reconciler "^0.28.0"
 
 "@shopify/shopify-api@^9.3.2":
