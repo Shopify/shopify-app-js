@@ -46,7 +46,7 @@
     "better-sqlite3": "^9.3.0",
     "drizzle-kit": "^0.20.12",
     "drizzle-orm": "^0.29.3",
-    "eslint": "^8.55.0",
+    "eslint": "^8.57.0",
     "eslint-plugin-prettier": "^4.2.1",
     "mysql2": "^3.9.1",
     "pg": "^8.11.3",
