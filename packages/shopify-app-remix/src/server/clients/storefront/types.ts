@@ -26,6 +26,53 @@ export interface StorefrontContext {
    *   return json(await response.json());
    * }
    * ```
+   *
+   * @example
+   * <caption>Handling GraphQL errors.</caption>
+   * <description>Catch `GraphqlQueryError` errors to see error messages from the API.</description>
+   * ```ts
+   * // /app/routes/**\/*.ts
+   * import { ActionFunction } from "@remix-run/node";
+   * import { authenticate } from "../shopify.server";
+   *
+   * export const action: ActionFunction = async ({ request }) => {
+   *   const { storefront } = await authenticate.public.appProxy(request);
+   *
+   *   try {
+   *     const response = await storefront.graphql(
+   *       `#graphql
+   *       query incorrectQuery {
+   *         products(first: 10) {
+   *           nodes {
+   *             not_a_field
+   *           }
+   *         }
+   *       }`,
+   *     );
+   *
+   *     return json({ data: await response.json() });
+   *   } catch (error) {
+   *     if (error instanceof GraphqlQueryError) {
+   *       // { errors: { graphQLErrors: [
+   *       //   { message: "Field 'not_a_field' doesn't exist on type 'Product'" }
+   *       // ] } }
+   *       return json({ errors: error.body?.errors }, { status: 500 });
+   *     }
+   *     return json({ message: "An error occurred" }, { status: 500 });
+   *   }
+   * }
+   * ```
+   *
+   * ```ts
+   * // /app/shopify.server.ts
+   * import { shopifyApp } from "@shopify/shopify-app-remix/server";
+   *
+   * const shopify = shopifyApp({
+   *   // ...
+   * });
+   * export default shopify;
+   * export const authenticate = shopify.authenticate;
+   * ```
    */
   graphql: GraphQLClient<StorefrontOperations>;
 }

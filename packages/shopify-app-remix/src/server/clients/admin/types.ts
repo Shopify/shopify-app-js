@@ -34,15 +34,20 @@ export interface AdminApiContext<
    *
    * ```ts
    * // /app/routes/**\/*.ts
-   * import { LoaderFunctionArgs, json } from "@remix-run/node";
+   * import { LoaderFunction, json } from "@remix-run/node";
    * import { authenticate } from "../shopify.server";
    *
-   * export const loader = async ({ request }: LoaderFunctionArgs) => {
-   *   const { admin, session } = await authenticate.admin(request);
-   *   return json(admin.rest.resources.Order.count({ session }));
+   * export const loader: LoaderFunction = async ({ request }) => {
+   *   const {
+   *     admin,
+   *     session,
+   *   } = await authenticate.admin(request);
+   *
+   *   return json(
+   *     admin.rest.resources.Order.count({ session }),
+   *   );
    * };
    * ```
-   *
    *
    * ```ts
    * // /app/shopify.server.ts
@@ -57,20 +62,26 @@ export interface AdminApiContext<
    * export const authenticate = shopify.authenticate;
    * ```
    *
-   *
    * @example
    * <caption>Performing a GET request to the REST API.</caption>
    * <description>Use `admin.rest.get` to make custom requests to make a request to to the `customer/count` endpoint</description>
    *
    * ```ts
    * // /app/routes/**\/*.ts
-   * import { LoaderFunctionArgs, json } from "@remix-run/node";
+   * import { LoaderFunction, json } from "@remix-run/node";
    * import { authenticate } from "../shopify.server";
    *
-   * export const loader = async ({ request }: LoaderFunctionArgs) => {
-   *   const { admin, session } = await authenticate.admin(request);
-   *   const response = await admin.rest.get({ path: "/customers/count.json" });
+   * export const loader: LoaderFunction = async ({ request }) => {
+   *   const {
+   *     admin,
+   *     session,
+   *   } = await authenticate.admin(request);
+   *
+   *   const response = await admin.rest.get({
+   *     path: "/customers/count.json",
+   *   });
    *   const customers = await response.json();
+   *
    *   return json({ customers });
    * };
    * ```
@@ -87,16 +98,21 @@ export interface AdminApiContext<
    * export default shopify;
    * export const authenticate = shopify.authenticate;
    * ```
+   *
    * @example
    * <caption>Performing a POST request to the REST API.</caption>
    * <description>Use `admin.rest.post` to make custom requests to make a request to to the `customers.json` endpoint to send a welcome email</description>
    * ```ts
    * // /app/routes/**\/*.ts
-   * import { LoaderFunctionArgs, json } from "@remix-run/node";
+   * import { LoaderFunction, json } from "@remix-run/node";
    * import { authenticate } from "../shopify.server";
    *
-   * export const loader = async ({ request }: LoaderFunctionArgs) => {
-   *   const { admin, session } = await authenticate.admin(request);
+   * export const loader: LoaderFunction = async ({ request }) => {
+   *   const {
+   *     admin,
+   *     session,
+   *   } = await authenticate.admin(request);
+   *
    *   const response = admin.rest.post({
    *     path: "customers/7392136888625/send_invite.json",
    *     body: {
@@ -108,7 +124,8 @@ export interface AdminApiContext<
    *         custom_message: "My awesome new store",
    *       },
    *     },
-   * });
+   *   });
+   *
    *   const customerInvite = await response.json();
    *   return json({ customerInvite });
    * };
@@ -139,10 +156,11 @@ export interface AdminApiContext<
    * <caption>Querying the GraphQL API.</caption>
    * <description>Use `admin.graphql` to make query / mutation requests.</description>
    * ```ts
-   * import { ActionFunctionArgs } from "@remix-run/node";
+   * // /app/routes/**\/*.ts
+   * import { ActionFunction } from "@remix-run/node";
    * import { authenticate } from "../shopify.server";
    *
-   * export async function action({ request }: ActionFunctionArgs) {
+   * export const action: ActionFunction = async ({ request }) => {
    *   const { admin } = await authenticate.admin(request);
    *
    *   const response = await admin.graphql(
@@ -154,11 +172,17 @@ export interface AdminApiContext<
    *         }
    *       }
    *     }`,
-   *     { variables: { input: { title: "Product Name" } } }
+   *     {
+   *       variables: {
+   *         input: { title: "Product Name" },
+   *       },
+   *     },
    *   );
    *
    *   const productData = await response.json();
-   *   return json({ data: productData.data });
+   *   return json({
+   *     productId: productData.data?.productCreate?.product?.id,
+   *   });
    * }
    * ```
    *
@@ -167,11 +191,57 @@ export interface AdminApiContext<
    * import { shopifyApp } from "@shopify/shopify-app-remix/server";
    *
    * const shopify = shopifyApp({
-   *   restResources,
-   *   // ...etc
+   *   // ...
    * });
    * export default shopify;
-   * export const unauthenticated = shopify.unauthenticated;
+   * export const authenticate = shopify.authenticate;
+   * ```
+   *
+   * @example
+   * <caption>Handling GraphQL errors.</caption>
+   * <description>Catch `GraphqlQueryError` errors to see error messages from the API.</description>
+   * ```ts
+   * // /app/routes/**\/*.ts
+   * import { ActionFunction } from "@remix-run/node";
+   * import { authenticate } from "../shopify.server";
+   *
+   * export const action: ActionFunction = async ({ request }) => {
+   *   const { admin } = await authenticate.admin(request);
+   *
+   *   try {
+   *     const response = await admin.graphql(
+   *       `#graphql
+   *       query incorrectQuery {
+   *         products(first: 10) {
+   *           nodes {
+   *             not_a_field
+   *           }
+   *         }
+   *       }`,
+   *     );
+   *
+   *     return json({ data: await response.json() });
+   *   } catch (error) {
+   *     if (error instanceof GraphqlQueryError) {
+   *       // { errors: { graphQLErrors: [
+   *       //   { message: "Field 'not_a_field' doesn't exist on type 'Product'" }
+   *       // ] } }
+   *       return json({ errors: error.body?.errors }, { status: 500 });
+   *     }
+   *     return json({ message: "An error occurred" }, { status: 500 });
+   *   }
+   * }
+   * ```
+   *
+   * ```ts
+   * // /app/shopify.server.ts
+   * import { shopifyApp } from "@shopify/shopify-app-remix/server";
+   *
+   * const shopify = shopifyApp({
+   *   // ...
+   * });
+   * export default shopify;
+   * export const authenticate = shopify.authenticate;
    * ```
    */
   graphql: GraphQLClient<AdminOperations>;
