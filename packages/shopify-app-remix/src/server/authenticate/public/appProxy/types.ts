@@ -24,7 +24,7 @@ interface Context {
    *
    * @example
    * <caption>Rendering liquid content.</caption>
-   * <description>Use the `liquid` helper to render a `Response` with Liquid content using the shop's theme.</description>
+   * <description>Use the `liquid` helper to render a `Response` with Liquid content using the shop's theme. See the [Liquid reference](https://shopify.dev/docs/api/liquid) for all the features it enables.</description>
    * ```ts
    * // app/routes/**\/.ts
    * import {authenticate} from "~/shopify.server"
