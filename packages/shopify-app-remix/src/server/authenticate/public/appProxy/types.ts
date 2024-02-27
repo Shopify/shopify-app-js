@@ -98,10 +98,13 @@ export interface AppProxyContextWithSession<
    *
    * export const loader = async ({ request }) => {
    *   // Get the session for the shop that initiated the request to the app proxy.
-   *   const { session } = await authenticate.public.appProxy(request);
+   *   const { session } =
+   *     await authenticate.public.appProxy(request);
    *
    *   // Use the session data to make to queries to your database or additional requests.
-   *   return json(await getMyAppModelData({shop: session.shop));
+   *   return json(
+   *     await getMyAppModelData({shop: session.shop})
+   *   );
    * };
    * ```
    */
@@ -130,7 +133,11 @@ export interface AppProxyContextWithSession<
    *         }
    *       }
    *     }`,
-   *     { variables: { input: { title: "Product Name" } } }
+   *     {
+   *       variables: {
+   *         input: { title: "Product Name" }
+   *       }
+   *     }
    *   );
    *
    *   const productData = await response.json();
@@ -154,7 +161,18 @@ export interface AppProxyContextWithSession<
    * export async function action({ request }: ActionFunctionArgs) {
    *   const { storefront } = await authenticate.public.appProxy(request);
    *
-   *   const response = await storefront.graphql(`{blogs(first: 10) { edges { node { id } } } }`);
+   *   const response = await storefront.graphql(
+   *     `#graphql
+   *     query blogIds {
+   *       blogs(first: 10) {
+   *         edges {
+   *           node {
+   *             id
+   *           }
+   *         }
+   *       }
+   *     }`
+   *   );
    *
    *   return json(await response.json());
    * }
