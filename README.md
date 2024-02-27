@@ -21,6 +21,10 @@ This mono-repo supports the following packages:
 
 - Provides an implementation of `SessionStorage` that uses [Prisma](https://www.prisma.io/).
 
+#### [`@shopify/shopify-app-session-storage-drizzle`](./packages/shopify-app-session-storage-drizzle)
+
+- Provides an implementation of `SessionStorage` that uses [Drizzle](https://orm.drizzle.team/).
+
 #### [`@shopify/shopify-app-session-storage-memory`](./packages/shopify-app-session-storage-memory)
 
 - Provides a simplified memory-based implementation of `SessionStorage` for development.
