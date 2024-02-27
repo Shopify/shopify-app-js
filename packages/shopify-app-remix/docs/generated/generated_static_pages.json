@@ -524,7 +524,7 @@
           "tabs": [
             {
               "title": "/app/routes/webhooks.tsx",
-              "code": "import {ActionFunction} from '@remix-run/node';\n\nimport db from '../db.server';\n\nimport {authenticate} from '~/shopify.server';\n\nexport const action: ActionFunction = async ({request}) =&gt; {\n  const {topic, shop, session} = await authenticate.webhook(request);\n\n  switch (topic) {\n    case 'APP_UNINSTALLED':\n      if (session) {\n        await db.session.deleteMany({where: {shop}});\n      }\n      break;\n    case 'CUSTOMERS_DATA_REQUEST':\n    case 'CUSTOMERS_REDACT':\n    case 'SHOP_REDACT':\n    default:\n      throw new Response('Unhandled webhook topic', {status: 404});\n  }\n\n  throw new Response();\n};\n",
+              "code": "import {ActionFunctionArgs} from '@remix-run/node';\n\nimport db from '../db.server';\n\nimport {authenticate} from '~/shopify.server';\n\nexport const action = async ({request}: ActionFunctionArgs) =&gt; {\n  const {topic, shop, session} = await authenticate.webhook(request);\n\n  switch (topic) {\n    case 'APP_UNINSTALLED':\n      if (session) {\n        await db.session.deleteMany({where: {shop}});\n      }\n      break;\n    case 'CUSTOMERS_DATA_REQUEST':\n    case 'CUSTOMERS_REDACT':\n    case 'SHOP_REDACT':\n    default:\n      throw new Response('Unhandled webhook topic', {status: 404});\n  }\n\n  throw new Response();\n};\n",
               "language": "tsx"
             }
           ]

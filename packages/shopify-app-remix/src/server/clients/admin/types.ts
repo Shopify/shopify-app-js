@@ -34,10 +34,10 @@ export interface AdminApiContext<
    *
    * ```ts
    * // /app/routes/**\/*.ts
-   * import { LoaderFunction, json } from "@remix-run/node";
+   * import { LoaderFunctionArgs, json } from "@remix-run/node";
    * import { authenticate } from "../shopify.server";
    *
-   * export const loader: LoaderFunction = async ({ request }) => {
+   * export const loader = async ({ request }: LoaderFunctionArgs) => {
    *   const {
    *     admin,
    *     session,
@@ -68,10 +68,10 @@ export interface AdminApiContext<
    *
    * ```ts
    * // /app/routes/**\/*.ts
-   * import { LoaderFunction, json } from "@remix-run/node";
+   * import { LoaderFunctionArgs, json } from "@remix-run/node";
    * import { authenticate } from "../shopify.server";
    *
-   * export const loader: LoaderFunction = async ({ request }) => {
+   * export const loader = async ({ request }: LoaderFunctionArgs) => {
    *   const {
    *     admin,
    *     session,
@@ -104,10 +104,10 @@ export interface AdminApiContext<
    * <description>Use `admin.rest.post` to make custom requests to make a request to to the `customers.json` endpoint to send a welcome email</description>
    * ```ts
    * // /app/routes/**\/*.ts
-   * import { LoaderFunction, json } from "@remix-run/node";
+   * import { LoaderFunctionArgs, json } from "@remix-run/node";
    * import { authenticate } from "../shopify.server";
    *
-   * export const loader: LoaderFunction = async ({ request }) => {
+   * export const loader = async ({ request }: LoaderFunctionArgs) => {
    *   const {
    *     admin,
    *     session,
@@ -157,10 +157,10 @@ export interface AdminApiContext<
    * <description>Use `admin.graphql` to make query / mutation requests.</description>
    * ```ts
    * // /app/routes/**\/*.ts
-   * import { ActionFunction } from "@remix-run/node";
+   * import { ActionFunctionArgs } from "@remix-run/node";
    * import { authenticate } from "../shopify.server";
    *
-   * export const action: ActionFunction = async ({ request }) => {
+   * export const action = async ({ request }: ActionFunctionArgs) => {
    *   const { admin } = await authenticate.admin(request);
    *
    *   const response = await admin.graphql(
@@ -202,10 +202,10 @@ export interface AdminApiContext<
    * <description>Catch `GraphqlQueryError` errors to see error messages from the API.</description>
    * ```ts
    * // /app/routes/**\/*.ts
-   * import { ActionFunction } from "@remix-run/node";
+   * import { ActionFunctionArgs } from "@remix-run/node";
    * import { authenticate } from "../shopify.server";
    *
-   * export const action: ActionFunction = async ({ request }) => {
+   * export const action = async ({ request }: ActionFunctionArgs) => {
    *   const { admin } = await authenticate.admin(request);
    *
    *   try {

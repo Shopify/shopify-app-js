@@ -32,10 +32,10 @@ export interface StorefrontContext {
    * <description>Catch `GraphqlQueryError` errors to see error messages from the API.</description>
    * ```ts
    * // /app/routes/**\/*.ts
-   * import { ActionFunction } from "@remix-run/node";
+   * import { ActionFunctionArgs } from "@remix-run/node";
    * import { authenticate } from "../shopify.server";
    *
-   * export const action: ActionFunction = async ({ request }) => {
+   * export const action = async ({ request }: ActionFunctionArgs) => {
    *   const { storefront } = await authenticate.public.appProxy(request);
    *
    *   try {
