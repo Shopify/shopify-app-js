@@ -30,6 +30,12 @@ const data: ReferenceEntityTemplateSchema = {
       subtitle: 'Interact with the Storefront API.',
       url: '/docs/api/shopify-app-remix/apis/storefront-api',
     },
+    {
+      name: 'Liquid reference',
+      subtitle: "Use the shop's theme to render a template.",
+      url: '/docs/api/liquid',
+      type: 'liquid',
+    },
   ],
 };
 

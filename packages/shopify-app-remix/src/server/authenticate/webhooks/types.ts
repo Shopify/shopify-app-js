@@ -20,10 +20,10 @@ interface Context<Topics = string | number | symbol> {
    * <description>Get the API version used for webhook request.</description>
    * ```ts
    * // /app/routes/webhooks.tsx
-   * import { ActionFunction } from "@remix-run/node";
+   * import { ActionFunctionArgs } from "@remix-run/node";
    * import { authenticate } from "../shopify.server";
    *
-   * export const action: ActionFunction = async ({ request }) => {
+   * export const action = async ({ request }: ActionFunctionArgs) => {
    *   const { apiVersion } = await authenticate.webhook(request);
    *   return new Response();
    * };
@@ -38,10 +38,10 @@ interface Context<Topics = string | number | symbol> {
    * <description>Get the shop that triggered a webhook.</description>
    * ```ts
    * // /app/routes/webhooks.tsx
-   * import { ActionFunction } from "@remix-run/node";
+   * import { ActionFunctionArgs } from "@remix-run/node";
    * import { authenticate } from "../shopify.server";
    *
-   * export const action: ActionFunction = async ({ request }) => {
+   * export const action = async ({ request }: ActionFunctionArgs) => {
    *   const { shop } = await authenticate.webhook(request);
    *   return new Response();
    * };
@@ -56,10 +56,10 @@ interface Context<Topics = string | number | symbol> {
    * <description>Get the event topic for the webhook.</description>
    * ```ts
    * // /app/routes/webhooks.tsx
-   * import { ActionFunction } from "@remix-run/node";
+   * import { ActionFunctionArgs } from "@remix-run/node";
    * import { authenticate } from "../shopify.server";
    *
-   * export const action: ActionFunction = async ({ request }) => {
+   * export const action = async ({ request }: ActionFunctionArgs) => {
    *   const { topic } = await authenticate.webhook(request);
    *
    *   switch (topic) {
@@ -81,10 +81,10 @@ interface Context<Topics = string | number | symbol> {
    * <description>Get the webhook ID.</description>
    * ```ts
    * // /app/routes/webhooks.tsx
-   * import { ActionFunction } from "@remix-run/node";
+   * import { ActionFunctionArgs } from "@remix-run/node";
    * import { authenticate } from "../shopify.server";
    *
-   * export const action: ActionFunction = async ({ request }) => {
+   * export const action = async ({ request }: ActionFunctionArgs) => {
    *   const { webhookId } = await authenticate.webhook(request);
    *   return new Response();
    * };
@@ -99,10 +99,10 @@ interface Context<Topics = string | number | symbol> {
    * <description>Get the request's POST payload.</description>
    * ```ts
    * // /app/routes/webhooks.tsx
-   * import { ActionFunction } from "@remix-run/node";
+   * import { ActionFunctionArgs } from "@remix-run/node";
    * import { authenticate } from "../shopify.server";
    *
-   * export const action: ActionFunction = async ({ request }) => {
+   * export const action = async ({ request }: ActionFunctionArgs) => {
    *   const { payload } = await authenticate.webhook(request);
    *   return new Response();
    * };
@@ -117,10 +117,10 @@ interface Context<Topics = string | number | symbol> {
    * <description>Get the webhook sub-topic.</description>
    * ```ts
    * // /app/routes/webhooks.tsx
-   * import { ActionFunction } from "@remix-run/node";
+   * import { ActionFunctionArgs } from "@remix-run/node";
    * import { authenticate } from "../shopify.server";
    *
-   * export const action: ActionFunction = async ({ request }) => {
+   * export const action = async ({ request }: ActionFunctionArgs) => {
    *   const { subTopic } = await authenticate.webhook(request);
    *   return new Response();
    * };

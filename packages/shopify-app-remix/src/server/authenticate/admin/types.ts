@@ -22,16 +22,6 @@ interface AdminContextInternal<
    * <caption>Using offline sessions.</caption>
    * <description>Get your app's shop-specific data using an offline session.</description>
    * ```ts
-   * // shopify.server.ts
-   * import { shopifyApp } from "@shopify/shopify-app-remix/server";
-   *
-   * const shopify = shopifyApp({
-   *   // ...etc
-   * });
-   * export default shopify;
-   * export const authenticate = shopify.authenticate;
-   * ```
-   * ```ts
    * // /app/routes/**\/*.ts
    * import { LoaderFunctionArgs, json } from "@remix-run/node";
    * import { authenticate } from "../shopify.server";
@@ -42,21 +32,20 @@ interface AdminContextInternal<
    *   return json(await getMyAppData({shop: session.shop));
    * };
    * ```
-   *
-   * @example
-   * <caption>Using online sessions.</caption>
-   * <description>Get your app's user-specific data using an online session.</description>
    * ```ts
    * // shopify.server.ts
    * import { shopifyApp } from "@shopify/shopify-app-remix/server";
    *
    * const shopify = shopifyApp({
    *   // ...etc
-   *   useOnlineTokens: true,
    * });
    * export default shopify;
    * export const authenticate = shopify.authenticate;
    * ```
+   *
+   * @example
+   * <caption>Using online sessions.</caption>
+   * <description>Get your app's user-specific data using an online session.</description>
    * ```ts
    * // /app/routes/**\/*.ts
    * import { LoaderFunctionArgs, json } from "@remix-run/node";
@@ -67,6 +56,17 @@ interface AdminContextInternal<
    *   const { session } = await authenticate.admin(request);
    *   return json(await getMyAppData({user: session.onlineAccessInfo!.id}));
    * };
+   * ```
+   * ```ts
+   * // shopify.server.ts
+   * import { shopifyApp } from "@shopify/shopify-app-remix/server";
+   *
+   * const shopify = shopifyApp({
+   *   // ...etc
+   *   useOnlineTokens: true,
+   * });
+   * export default shopify;
+   * export const authenticate = shopify.authenticate;
    * ```
    */
   session: Session;
@@ -119,6 +119,19 @@ export interface EmbeddedAdminContext<
    * <caption>Using the decoded session token.</caption>
    * <description>Get user-specific data using the `sessionToken` object.</description>
    * ```ts
+   * // /app/routes/**\/*.ts
+   * import { LoaderFunctionArgs, json } from "@remix-run/node";
+   * import { authenticate } from "../shopify.server";
+   * import { getMyAppData } from "~/db/model.server";
+   *
+   * export const loader = async ({ request }: LoaderFunctionArgs) => {
+   *   const { sessionToken } = await authenticate.admin(
+   *     request
+   *   );
+   *   return json(await getMyAppData({user: sessionToken.sub}));
+   * };
+   * ```
+   * ```ts
    * // shopify.server.ts
    * import { shopifyApp } from "@shopify/shopify-app-remix/server";
    *
@@ -128,19 +141,6 @@ export interface EmbeddedAdminContext<
    * });
    * export default shopify;
    * export const authenticate = shopify.authenticate;
-   * ```
-   * ```ts
-   * // /app/routes/**\/*.ts
-   * import { LoaderFunctionArgs, json } from "@remix-run/node";
-   * import { authenticate } from "../shopify.server";
-   * import { getMyAppData } from "~/db/model.server";
-   *
-   * export const loader = async ({ request }: LoaderFunctionArgs) => {
-   *   const { sessionToken } = await authenticate.public.checkout(
-   *     request
-   *   );
-   *   return json(await getMyAppData({user: sessionToken.sub}));
-   * };
    * ```
    */
   sessionToken: JwtPayload;
