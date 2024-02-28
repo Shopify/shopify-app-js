@@ -16,6 +16,24 @@ const data: ReferenceEntityTemplateSchema = {
       type: 'AuthenticateCheckout',
     },
   ],
+  defaultExample: {
+    description: 'Authenticate and return offers for the shop',
+    codeblock: {
+      title: 'Authenticate and return offers for the shop',
+      tabs: [
+        {
+          title: '/app/routes/**.ts',
+          language: 'typescript',
+          code: './authenticate.public.checkout.doc.example.ts',
+        },
+        {
+          title: '/app/offers.server.ts',
+          language: 'typescript',
+          code: './authenticate.public.checkout.doc.example.offers.ts',
+        },
+      ],
+    },
+  },
   jsDocTypeExamples: ['CheckoutContext'],
   related: [],
 };
