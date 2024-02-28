@@ -223,9 +223,10 @@ export interface AdminApiContext<
    *     return json({ data: await response.json() });
    *   } catch (error) {
    *     if (error instanceof GraphqlQueryError) {
-   *       // { errors: { graphQLErrors: [
+   *       // error.body.errors:
+   *       // { graphQLErrors: [
    *       //   { message: "Field 'not_a_field' doesn't exist on type 'Product'" }
-   *       // ] } }
+   *       // ] }
    *       return json({ errors: error.body?.errors }, { status: 500 });
    *     }
    *     return json({ message: "An error occurred" }, { status: 500 });
