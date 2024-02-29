@@ -1,6 +1,5 @@
 import {Session, Shopify, ShopifyRestResources} from '@shopify/shopify-api';
 
-import type {JSONValue} from '../../types';
 import type {AdminApiContext} from '../../clients';
 import type {FeatureEnabled, FutureFlagOptions} from '../../future/flags';
 
@@ -30,6 +29,7 @@ interface Context<Topics = string | number | symbol> {
    * ```
    */
   apiVersion: string;
+
   /**
    * The shop where the webhook was triggered.
    *
@@ -48,6 +48,7 @@ interface Context<Topics = string | number | symbol> {
    * ```
    */
   shop: string;
+
   /**
    * The topic of the webhook.
    *
@@ -73,6 +74,7 @@ interface Context<Topics = string | number | symbol> {
    * ```
    */
   topic: Topics;
+
   /**
    * A unique ID for the webhook. Useful to keep track of which events your app has already processed.
    *
@@ -91,6 +93,7 @@ interface Context<Topics = string | number | symbol> {
    * ```
    */
   webhookId: string;
+
   /**
    * The payload from the webhook request.
    *
@@ -108,7 +111,8 @@ interface Context<Topics = string | number | symbol> {
    * };
    * ```
    */
-  payload: JSONValue;
+  payload: Record<string, any>;
+
   /**
    * The sub-topic of the webhook. This is only available for certain webhooks.
    *

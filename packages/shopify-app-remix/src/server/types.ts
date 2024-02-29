@@ -32,14 +32,6 @@ export interface BasicParams<
   logger: Shopify['logger'];
 }
 
-export type JSONValue =
-  | string
-  | number
-  | boolean
-  | null
-  | JSONObject
-  | JSONArray;
-
 // eslint-disable-next-line no-warning-comments
 // TODO: Use this enum to replace the isCustomStoreApp config option in shopify-api-js
 export enum AppDistribution {
@@ -52,14 +44,6 @@ export type MandatoryTopics =
   | 'CUSTOMERS_DATA_REQUEST'
   | 'CUSTOMERS_REDACT'
   | 'SHOP_REDACT';
-
-// This can't be a type because it would reference itself
-// eslint-disable-next-line @typescript-eslint/consistent-indexed-object-style
-interface JSONObject {
-  [x: string]: JSONValue;
-}
-
-interface JSONArray extends Array<JSONValue> {}
 
 type RegisterWebhooks = (
   options: RegisterWebhooksOptions,
