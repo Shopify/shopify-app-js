@@ -66,47 +66,35 @@ export function logDisabledFutureFlags(
   config: AppConfig,
   logger: Shopify['logger'],
 ) {
-  if (!config.future) {
-    return;
-  }
-
   const logFlag = (flag: string, message: string) =>
-    `Future flag ${flag} is disabled.\n\n  ${message}\n`;
+    logger.info(`Future flag ${flag} is disabled.\n\n  ${message}\n`);
 
   if (!config.future.v3_authenticatePublic) {
-    logger.info(
-      logFlag(
-        'v3_authenticatePublic',
-        'Enable this flag to allow appProxy and checkout in `shopify.authenticate.public`.',
-      ),
+    logFlag(
+      'v3_authenticatePublic',
+      'Enable this flag to allow appProxy and checkout in `shopify.authenticate.public`.',
     );
   }
 
   if (!config.future.v3_lineItemBilling) {
-    logger.info(
-      logFlag(
-        'v3_lineItemBilling',
-        'Enable this flag to allow billing plans with multiple line items.',
-      ),
+    logFlag(
+      'v3_lineItemBilling',
+      'Enable this flag to allow billing plans with multiple line items.',
     );
   }
 
   if (!config.future.v3_webhookAdminContext) {
-    logger.info(
-      logFlag(
-        'v3_webhookAdminContext',
-        'Enable this flag to use the standard Admin context when calling `shopify.authenticate.webhook`.',
-      ),
+    logFlag(
+      'v3_webhookAdminContext',
+      'Enable this flag to use the standard Admin context when calling `shopify.authenticate.webhook`.',
     );
   }
 
   if (!config.future.unstable_newEmbeddedAuthStrategy) {
-    logger.info(
-      logFlag(
-        'unstable_newEmbeddedAuthStrategy',
-        'Enable this to use OAuth token exchange instead of auth code to generate API access tokens.' +
-          '\n  Your app must be using Shopify managed install: https://shopify.dev/docs/apps/auth/installation',
-      ),
+    logFlag(
+      'unstable_newEmbeddedAuthStrategy',
+      'Enable this to use OAuth token exchange instead of auth code to generate API access tokens.' +
+        '\n  Your app must be using Shopify managed install: https://shopify.dev/docs/apps/auth/installation',
     );
   }
 }

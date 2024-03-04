@@ -161,6 +161,7 @@ function deriveApi(appConfig: AppConfigArg) {
     future: {
       v10_lineItemBilling: appConfig.future?.v3_lineItemBilling,
     },
+    _logDisabledFutureFlags: false,
   });
 }
 
