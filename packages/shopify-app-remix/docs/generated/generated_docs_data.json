@@ -1488,6 +1488,19 @@
         }
       }
     ],
+    "defaultExample": {
+      "description": "Authenticate, run API mutation, and redirect",
+      "codeblock": {
+        "title": "Authenticate, run API mutation, and redirect",
+        "tabs": [
+          {
+            "title": "/app/routes/**.ts",
+            "language": "typescript",
+            "code": "import {type ActionFunctionArgs, json} from '@remix-run/node';\nimport {GraphqlQueryError} from '@shopify/shopify-api';\n\nimport {authenticate} from '../shopify.server';\n\nexport const action = async ({request}: ActionFunctionArgs) =&gt; {\n  const {admin, redirect} = await authenticate.admin(request);\n\n  try {\n    await admin.graphql(\n      `#graphql\n      mutation updateProductTitle($input: ProductInput!) {\n        productUpdate(input: $input) {\n          product {\n            id\n          }\n        }\n      }`,\n      {\n        variables: {\n          input: {id: '123', title: 'New title'},\n        },\n      },\n    );\n\n    return redirect('/app/product-updated');\n  } catch (error) {\n    if (error instanceof GraphqlQueryError) {\n      return json({errors: error.body?.errors}, {status: 500});\n    }\n\n    return new Response('Failed to update product title', {status: 500});\n  }\n};\n"
+          }
+        ]
+      }
+    },
     "jsDocTypeExamples": [
       "EmbeddedAdminContext",
       "AdminApiContext",
@@ -3087,6 +3100,19 @@
         }
       }
     ],
+    "defaultExample": {
+      "description": "Handle a flow action call",
+      "codeblock": {
+        "title": "Set a metafield on a customer after a flow call",
+        "tabs": [
+          {
+            "title": "/app/routes/**.ts",
+            "language": "typescript",
+            "code": "import {type ActionFunctionArgs} from '@remix-run/node';\n\nimport {authenticate} from '../shopify.server';\n\nexport const action = async ({request}: ActionFunctionArgs) =&gt; {\n  const {admin, payload} = await authenticate.flow(request);\n\n  const customerId = payload.properties.customer_id;\n\n  const response = await admin.graphql(\n    `#graphql\n    mutation setMetafield($customerId: ID!, $time: String!) {\n      metafieldsSet(metafields: {\n        ownerId: $customerId\n        namespace: \"my-app\",\n        key: \"last_flow_update\",\n        value: $time,\n        type: \"string\",\n      }) {\n        metafields {\n          key\n          value\n        }\n      }\n    }\n    `,\n    {\n      variables: {\n        customerId,\n        time: new Date().toISOString(),\n      },\n    },\n  );\n  const body = await response.json();\n\n  console.log('Updated value', body.data!.metafieldsSet!.metafields![0].value);\n\n  return new Response();\n};\n"
+          }
+        ]
+      }
+    },
     "jsDocTypeExamples": [
       "FlowContext"
     ],
@@ -4117,6 +4143,19 @@
         }
       }
     ],
+    "defaultExample": {
+      "description": "Authenticate and fetch product information",
+      "codeblock": {
+        "title": "Authenticate and fetch product information",
+        "tabs": [
+          {
+            "title": "/app/routes/**.ts",
+            "language": "typescript",
+            "code": "import type {LoaderFunctionArgs} from '@remix-run/node';\n\nimport {authenticate} from '../shopify.server';\n\nexport const loader = async ({request}: LoaderFunctionArgs) =&gt; {\n  const {storefront, liquid} = await authenticate.public.appProxy(request);\n\n  if (!storefront) {\n    return new Response();\n  }\n\n  const response = await storefront.graphql(\n    `#graphql\n    query productTitle {\n      products(first: 1) {\n        nodes {\n          title\n        }\n      }\n    }`,\n  );\n  const body = await response.json();\n\n  const title = body.data.products.nodes[0].title;\n\n  return liquid(`Found product ${title} from {{shop.name}}`);\n};\n"
+          }
+        ]
+      }
+    },
     "jsDocTypeExamples": [
       "AppProxyContextWithSession"
     ],
@@ -4412,6 +4451,24 @@
         }
       }
     ],
+    "defaultExample": {
+      "description": "Authenticate and return offers for the shop",
+      "codeblock": {
+        "title": "Authenticate and return offers for the shop",
+        "tabs": [
+          {
+            "title": "/app/routes/**.ts",
+            "language": "typescript",
+            "code": "import type {ActionFunctionArgs, LoaderFunctionArgs} from '@remix-run/node';\nimport {json} from '@remix-run/node';\n\nimport {authenticate} from '../shopify.server';\nimport {getOffers} from '../offers.server';\n\n// The loader responds to preflight requests from Shopify\nexport const loader = async ({request}: LoaderFunctionArgs) =&gt; {\n  await authenticate.public.checkout(request);\n};\n\nexport const action = async ({request}: ActionFunctionArgs) =&gt; {\n  const {cors, sessionToken} = await authenticate.public.checkout(request);\n\n  const offers = getOffers(sessionToken.dest);\n  return cors(json({offers}));\n};\n"
+          },
+          {
+            "title": "/app/offers.server.ts",
+            "language": "typescript",
+            "code": "// Most apps would load this from their database\nexport function getOffers(shop: string) {\n  const offers: Record&lt;any, any[]&gt; = {\n    'shop.com': [\n      {\n        id: '1',\n        title: '10% off',\n        price: 10,\n        type: 'percentage',\n      },\n      {\n        id: '2',\n        title: 'Free shipping',\n        price: 0,\n        type: 'shipping',\n      },\n    ],\n  };\n\n  return offers[shop];\n}\n"
+          }
+        ]
+      }
+    },
     "jsDocTypeExamples": [
       "CheckoutContext"
     ],
@@ -9457,6 +9514,19 @@
         }
       }
     ],
+    "defaultExample": {
+      "description": "Update a metafield when a product is updated",
+      "codeblock": {
+        "title": "Update a metafield when a product is updated",
+        "tabs": [
+          {
+            "title": "/app/routes/**.ts",
+            "language": "typescript",
+            "code": "import {type ActionFunctionArgs} from '@remix-run/node';\n\nimport {authenticate} from '../shopify.server';\n\nexport const action = async ({request}: ActionFunctionArgs) =&gt; {\n  const {topic, admin, payload} = await authenticate.webhook(request);\n\n  switch (topic) {\n    case 'PRODUCTS_UPDATE':\n      await admin.graphql(\n        `#graphql\n        mutation setMetafield($productId: ID!, $time: String!) {\n          metafieldsSet(metafields: {\n            ownerId: $productId\n            namespace: \"my-app\",\n            key: \"webhook_received_at\",\n            value: $time,\n            type: \"string\",\n          }) {\n            metafields {\n              key\n              value\n            }\n          }\n        }\n        `,\n        {\n          variables: {\n            productId: payload.admin_graphql_api_id,\n            time: new Date().toISOString(),\n          },\n        },\n      );\n\n      return new Response();\n  }\n\n  throw new Response();\n};\n"
+          }
+        ]
+      }
+    },
     "jsDocTypeExamples": [
       "WebhookContextWithSession"
     ],
