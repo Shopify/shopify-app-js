@@ -18,6 +18,19 @@ const data: ReferenceEntityTemplateSchema = {
       type: 'AuthenticateAppProxy',
     },
   ],
+  defaultExample: {
+    description: 'Authenticate and fetch product information',
+    codeblock: {
+      title: 'Authenticate and fetch product information',
+      tabs: [
+        {
+          title: '/app/routes/**.ts',
+          language: 'typescript',
+          code: './authenticate.public.app-proxy.doc.example.ts',
+        },
+      ],
+    },
+  },
   jsDocTypeExamples: ['AppProxyContextWithSession'],
   related: [
     {
