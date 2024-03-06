@@ -1,6 +1,7 @@
 import {Session} from '@shopify/shopify-api';
 import {SessionStorage} from '@shopify/shopify-app-session-storage';
 import type {PrismaClient, Session as Row} from '@prisma/client';
+import {Prisma} from '@prisma/client';
 
 interface PrismaSessionStorageOptions {
   tableName?: string;
@@ -38,11 +39,24 @@ export class PrismaSessionStorage<T extends PrismaClient>
 
     const data = this.sessionToRow(session);
 
-    await this.getSessionTable().upsert({
-      where: {id: session.id},
-      update: data,
-      create: data,
-    });
+    try {
+      await this.getSessionTable().upsert({
+        where: {id: session.id},
+        update: data,
+        create: data,
+      });
+    } catch (error) {
+      if (
+        error instanceof Prisma.PrismaClientKnownRequestError &&
+        error.code === 'P2002'
+      ) {
+        console.log(
+          'Caught PrismaClientKnownRequestError P2002, Session already exists',
+        );
+        return true;
+      }
+      throw error;
+    }
 
     return true;
   }
