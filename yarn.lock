@@ -3025,10 +3025,10 @@
     pkg-dir "^5.0.0"
     pluralize "^8.0.0"
 
-"@shopify/generate-docs@^0.13.1":
-  version "0.13.1"
-  resolved "https://registry.yarnpkg.com/@shopify/generate-docs/-/generate-docs-0.13.1.tgz#c2f41671c488a70e4bf91648ffc5631c56febc3e"
-  integrity sha512-V3vk6oemlqX/1joFYLPjvzephgVTzbuysw9lig7UgSbuMah0kXq+VSvF9IxgQMnfloTT32nWbkBtl+AJTQurtw==
+"@shopify/generate-docs@^0.13.2":
+  version "0.13.2"
+  resolved "https://registry.yarnpkg.com/@shopify/generate-docs/-/generate-docs-0.13.2.tgz#4a308476271f5a45d6e73e6009876bbf14855953"
+  integrity sha512-3F733/9wXQMSXbOH2t6WEmmtw+4zao4K51DLOZy/ppxtTFnHywCGXTeTa/E6/He4jrX2kPaZP171IrIPd4E85Q==
   dependencies:
     "@types/react" "^18.0.21"
     globby "^11.1.0"
