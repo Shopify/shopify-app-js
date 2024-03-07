@@ -53,6 +53,7 @@ See the sections below for specific details related to the steps outlined above.
    git checkout changeset-release/main
    ```
 
+1. If releasing the `shopify-api` package, update the version string in the `packages/shopify-api/lib/version.ts` file to match the version in the `packages/shopify-api/package.json` file.
 1. If releasing the Express package, update the version string in the `packages/shopify-app-express/src/version.ts` file to match the version in the `packages/shopify-app-express/package.json` file.
 1. If releasing the Remix package, update the version string in the `packages/shopify-app-remix/src/version.ts` file to match the version in the `packages/shopify-app-remix/package.json` file.
 
