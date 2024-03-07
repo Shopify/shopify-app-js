@@ -33,7 +33,7 @@ import {AuthCodeFlowStrategy} from './authenticate/admin/strategies/auth-code-fl
 import {TokenExchangeStrategy} from './authenticate/admin/strategies/token-exchange';
 import {IdempotentPromiseHandler} from './authenticate/helpers/idempotent-promise-handler';
 import {authenticateFlowFactory} from './authenticate/flow/authenticate';
-import {FutureFlagOptions} from './future/flags';
+import {FutureFlagOptions, logDisabledFutureFlags} from './future/flags';
 
 /**
  * Creates an object your app will use to interact with Shopify.
@@ -109,6 +109,8 @@ export function shopifyApp<
     shopify.login = loginFactory(params);
   }
 
+  logDisabledFutureFlags(config, logger);
+
   return shopify as ShopifyApp<Config>;
 }
 
@@ -159,6 +161,7 @@ function deriveApi(appConfig: AppConfigArg) {
     future: {
       v10_lineItemBilling: appConfig.future?.v3_lineItemBilling,
     },
+    _logDisabledFutureFlags: false,
   });
 }
 

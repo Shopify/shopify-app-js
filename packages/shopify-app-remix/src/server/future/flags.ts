@@ -1,6 +1,12 @@
 // When adding new flags, you should also add them to the `TEST_FUTURE_FLAGS` object in `test-config.ts` to ensure that
 
-import type {ConfigParams, ShopifyRestResources} from '@shopify/shopify-api';
+import type {
+  ConfigParams,
+  Shopify,
+  ShopifyRestResources,
+} from '@shopify/shopify-api';
+
+import {AppConfig} from '../config-types';
 
 // it doesn't cause regressions.
 export interface FutureFlags {
@@ -55,3 +61,40 @@ export type FeatureEnabled<
     ? true
     : false
   : false;
+
+export function logDisabledFutureFlags(
+  config: AppConfig,
+  logger: Shopify['logger'],
+) {
+  const logFlag = (flag: string, message: string) =>
+    logger.info(`Future flag ${flag} is disabled.\n\n  ${message}\n`);
+
+  if (!config.future.v3_authenticatePublic) {
+    logFlag(
+      'v3_authenticatePublic',
+      'Enable this flag to allow appProxy and checkout in `shopify.authenticate.public`.',
+    );
+  }
+
+  if (!config.future.v3_lineItemBilling) {
+    logFlag(
+      'v3_lineItemBilling',
+      'Enable this flag to allow billing plans with multiple line items.',
+    );
+  }
+
+  if (!config.future.v3_webhookAdminContext) {
+    logFlag(
+      'v3_webhookAdminContext',
+      'Enable this flag to use the standard Admin context when calling `shopify.authenticate.webhook`.',
+    );
+  }
+
+  if (!config.future.unstable_newEmbeddedAuthStrategy) {
+    logFlag(
+      'unstable_newEmbeddedAuthStrategy',
+      'Enable this to use OAuth token exchange instead of auth code to generate API access tokens.' +
+        '\n  Your app must be using Shopify managed install: https://shopify.dev/docs/apps/auth/installation',
+    );
+  }
+}
