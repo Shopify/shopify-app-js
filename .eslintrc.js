@@ -4,7 +4,7 @@ module.exports = {
     es2021: true,
   },
   extends: ['plugin:@shopify/typescript', 'plugin:@shopify/prettier'],
-  ignorePatterns: ['build/', 'tmp/', 'dist/', 'coverage/'],
+  ignorePatterns: ['build/', 'tmp/', 'dist/', 'coverage/', 'node_modules/'],
   rules: {
     'no-console': 0,
     '@typescript-eslint/naming-convention': 0,
@@ -12,8 +12,9 @@ module.exports = {
   overrides: [
     {
       files: [
-        'packages/*/loom.config.ts',
         '**/setup-jest.ts',
+        '**/rollup.config.js',
+        '**/rollup.config.*.js',
         'packages/shopify-app-express/src/__tests__/test-helper.ts',
       ],
       rules: {
