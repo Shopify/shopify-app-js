@@ -75,7 +75,7 @@ export function authenticateFulfillmentServiceFactory<
 
     return {
       session,
-      kind: payload.kind,
+      payload,
       admin: adminClientFactory<Resources>({params, session}),
     };
   };

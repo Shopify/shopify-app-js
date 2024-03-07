@@ -16,6 +16,19 @@ const data: ReferenceEntityTemplateSchema = {
       type: 'AuthenticateFulfillmentService',
     },
   ],
+  defaultExample: {
+    description: 'Handle a fulfillment service notification call',
+    codeblock: {
+      title: 'Consume a fulfillment service notification request',
+      tabs: [
+        {
+          title: '/app/routes/**.ts',
+          language: 'typescript',
+          code: './authenticate.fulfillment-service.doc.example.ts',
+        },
+      ],
+    },
+  },
   jsDocTypeExamples: ['FulfillmentServiceContext'],
   related: [
     {

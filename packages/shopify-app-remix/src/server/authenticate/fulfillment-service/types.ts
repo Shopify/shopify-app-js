@@ -9,13 +9,30 @@ export interface FulfillmentServiceContext<
    * A session with an offline token for the shop.
    *
    * Returned only if there is a session for the shop.
+   * @example
+   * <caption>Shopify session for the fulfillment service notification request.</caption>
+   * <description>Use the session associated with this request to use REST resources.</description>
+   * ```ts
+   * // /app/routes/fulfillment_service_notification.tsx
+   * import { ActionFunctionArgs } from "@remix-run/node";
+   * import { authenticate } from "../shopify.server";
+   *
+   *   export const action = async ({ request }: ActionFunctionArgs) => {
+   *   const { session, admin } = await authenticate.fulfillmentService(request);
+   *
+   *   const products = await admin?.rest.resources.Product.all({ session });
+   *   // Use products
+   *
+   *   return new Response();
+   * };
+   * ```
    * */
   session: Session;
   /**
-   * A session with an offline token for the shop.
+   *
+   * An admin context for the fulfillment service request.
    *
    * Returned only if there is a session for the shop.
-   *
    * @example
    * <caption>Shopify session for the fulfillment service request.</caption>
    * <description>Use the session associated with this request to use the Admin GraphQL API </description>
@@ -26,23 +43,43 @@ export interface FulfillmentServiceContext<
    *
    * export async function action({ request }: ActionFunctionArgs) {
    *   const { admin } = await authenticate.fulfillmentService(request);
-   *
-   *   const response = await admin.graphql(
-   *     `#graphql
-   *     mutation acceptFulfillmentRequest {
-   *       fulfillmentOrderAcceptFulfillmentRequest(
-   *            id: "gid://shopify/FulfillmentOrder/5014440902678",
-   *            message: "Reminder that tomorrow is a holiday. We won't be able to ship this until Monday."){
-   *             fulfillmentOrder {
-   *                 status
-   *                requestStatus
+   *   const response = await admin?.graphql(
+   *  `#graphql
+   *    query {
+   *      shop {
+   *        assignedFulfillmentOrders(first: 10, assignmentStatus: FULFILLMENT_REQUESTED) {
+   *          edges {
+   *            node {
+   *              id
+   *              destination {
+   *              firstName
+   *              lastName
    *            }
-   *         }
-   *     }
-   *    );
+   *            lineItems(first: 10) {
+   *              edges {
+   *                node {
+   *                id
+   *                productTitle
+   *                sku
+   *                remainingQuantity
+   *              }
+   *            }
+   *          }
+   *          merchantRequests(first: 10, kind: FULFILLMENT_REQUEST) {
+   *            edges {
+   *              node {
+   *                message
+   *              }
+   *            }
+   *          }
+   *        }
+   *      }
+   *    }
+   *  }
+   * }`);
    *
-   *   const productData = await response.json();
-   *   return json({ data: productData.data });
+   *   const fulfillments = await response.json();
+   *   return json({ data: fulfillments.data });
    * }
    * ```
    */
@@ -60,13 +97,18 @@ export interface FulfillmentServiceContext<
    * import { authenticate } from "../shopify.server";
    *
    * export const action: ActionFunction = async ({ request }) => {
-   *   const { kind } = await authenticate.fulfillmentService(request);
-   *   console.log(kind);
-   *   return new Response();
-   * };
+   *   const { payload } = await authenticate.fulfillmentService(request);
+   *   if(payload.kind === 'FULFILLMENT_REQUEST') {
+   *    // handle fulfillment request
+   *   } else if (payload.kind === 'CANCELLATION_REQUEST') {
+   *    // handle cancellation request
+   *   };
+   * return new Response();
    * ```
    */
-  kind: string;
+  payload: Record<string, any> & {
+    kind: string;
+  };
 }
 
 export type AuthenticateFulfillmentService<

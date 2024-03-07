@@ -100,12 +100,12 @@ describe('authenticating fulfillment service notification requests', () => {
     } = await getValidRequest(sessionStorage);
 
     // WHEN
-    const {session, kind} =
+    const {session, payload} =
       await shopify.authenticate.fulfillmentService(request);
 
     // THEN
     expect(session).toEqual(expectedSession);
-    expect(kind).toBe(body.kind);
+    expect(payload.kind).toBe(body.kind);
   });
 
   describe('valid requests include an API client object', () => {
