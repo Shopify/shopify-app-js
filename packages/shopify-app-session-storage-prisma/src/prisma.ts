@@ -52,14 +52,14 @@ export class PrismaSessionStorage<T extends PrismaClient>
         error instanceof Prisma.PrismaClientKnownRequestError &&
         error.code === UNIQUE_KEY_CONSTRAINT_ERROR_CODE
       ) {
+        console.log(
+          'Caught PrismaClientKnownRequestError P2002 - Unique Key Key Constraint, retrying upsert.',
+        );
         await this.getSessionTable().upsert({
           where: {id: session.id},
           update: data,
           create: data,
         });
-        console.log(
-          'Caught PrismaClientKnownRequestError P2002 - Unique Key Key Constraint, retrying upsert.',
-        );
         return true;
       }
       throw error;
