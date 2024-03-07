@@ -7,6 +7,8 @@ interface PrismaSessionStorageOptions {
   tableName?: string;
 }
 
+const UNIQUE_KEY_CONSTRAINT_ERROR_CODE = 'P2002';
+
 export class PrismaSessionStorage<T extends PrismaClient>
   implements SessionStorage
 {
@@ -48,10 +50,15 @@ export class PrismaSessionStorage<T extends PrismaClient>
     } catch (error) {
       if (
         error instanceof Prisma.PrismaClientKnownRequestError &&
-        error.code === 'P2002'
+        error.code === UNIQUE_KEY_CONSTRAINT_ERROR_CODE
       ) {
+        await this.getSessionTable().upsert({
+          where: {id: session.id},
+          update: data,
+          create: data,
+        });
         console.log(
-          'Caught PrismaClientKnownRequestError P2002, Session already exists',
+          'Caught PrismaClientKnownRequestError P2002 - Unique Key Key Constraint, retrying upsert.',
         );
         return true;
       }

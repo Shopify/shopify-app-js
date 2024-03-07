@@ -59,10 +59,11 @@ describe('PrismaSessionStorage when with no database set up', () => {
   });
 });
 
-describe('Prisma throws P2002 on upsert', () => {
+describe('Prisma throws P2002 Unique key constraint error on upsert', () => {
   let prisma: PrismaClient;
   let storage: PrismaSessionStorage<PrismaClient>;
   let session: Session;
+  let prismaUniqueKeyConstraintError: Prisma.PrismaClientKnownRequestError;
 
   beforeAll(async () => {
     // Reset the database prior to the tests
@@ -81,29 +82,42 @@ describe('Prisma throws P2002 on upsert', () => {
       scope: '',
     });
 
-    jest.spyOn(prisma.session, 'upsert').mockImplementation(() => {
-      throw new Prisma.PrismaClientKnownRequestError('error message', {
+    prismaUniqueKeyConstraintError = new Prisma.PrismaClientKnownRequestError(
+      'error message',
+      {
         code: 'P2002',
         clientVersion: '0',
-      });
-    });
+      },
+    );
+  });
+
+  afterEach(() => {
+    jest.clearAllMocks();
   });
 
   afterAll(async () => {
     await prisma.session.deleteMany();
-    jest.clearAllMocks();
   });
 
-  it('handles Prisma P2002 errors', async () => {
+  it('handles Prisma unique key constraint errors', async () => {
+    mockPrismaError(prisma, prismaUniqueKeyConstraintError);
     await expect(storage.storeSession(session)).resolves.not.toThrow();
   });
 
-  it('Returns true after handling Prisma P2002 errors', async () => {
+  it('Returns true after handling Prisma unique key constraint errors', async () => {
+    mockPrismaError(prisma, prismaUniqueKeyConstraintError);
     const result = await storage.storeSession(session);
     expect(result).toBe(true);
   });
 
-  it('Throws other errors not P2002', async () => {
+  it('Tries upsert again after handling Prisma unique key constraint errors', async () => {
+    mockPrismaError(prisma, prismaUniqueKeyConstraintError);
+
+    await storage.storeSession(session);
+    expect(prisma.session.upsert).toHaveBeenCalledTimes(2);
+  });
+
+  it('Throws other errors that is not unique key constraint error', async () => {
     const expectedError = new Prisma.PrismaClientKnownRequestError(
       'error message',
       {
@@ -111,10 +125,7 @@ describe('Prisma throws P2002 on upsert', () => {
         clientVersion: '0',
       },
     );
-    jest.clearAllMocks();
-    jest.spyOn(prisma.session, 'upsert').mockImplementation(() => {
-      throw expectedError;
-    });
+    mockPrismaError(prisma, expectedError);
 
     try {
       await storage.storeSession(session);
@@ -132,4 +143,13 @@ function clearTestDatabase() {
   if (fs.existsSync(testDbPath)) {
     fs.unlinkSync(testDbPath);
   }
+}
+
+function mockPrismaError(
+  prisma: PrismaClient,
+  error: Prisma.PrismaClientKnownRequestError,
+) {
+  jest.spyOn(prisma.session, 'upsert').mockImplementationOnce(() => {
+    throw error;
+  });
 }
