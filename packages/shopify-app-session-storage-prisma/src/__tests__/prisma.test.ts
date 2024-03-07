@@ -84,6 +84,7 @@ describe('Prisma throws P2002 on upsert', () => {
     jest.spyOn(prisma.session, 'upsert').mockImplementation(() => {
       throw new Prisma.PrismaClientKnownRequestError('error message', {
         code: 'P2002',
+        clientVersion: '0',
       });
     });
   });
@@ -100,6 +101,29 @@ describe('Prisma throws P2002 on upsert', () => {
   it('Returns true after handling Prisma P2002 errors', async () => {
     const result = await storage.storeSession(session);
     expect(result).toBe(true);
+  });
+
+  it('Throws other errors not P2002', async () => {
+    const expectedError = new Prisma.PrismaClientKnownRequestError(
+      'error message',
+      {
+        code: 'P2003',
+        clientVersion: '0',
+      },
+    );
+    jest.clearAllMocks();
+    jest.spyOn(prisma.session, 'upsert').mockImplementation(() => {
+      throw expectedError;
+    });
+
+    try {
+      await storage.storeSession(session);
+
+      // This should never be reached
+      expect(true).toBe(false);
+    } catch (actualError) {
+      expect(actualError).toStrictEqual(expectedError);
+    }
   });
 });
 
