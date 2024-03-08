@@ -29,7 +29,7 @@
       "ES2021",
     ],
     "baseUrl": ".",
-    "outDir": "./dist",
+    "outDir": "./dist/ts",
     "rootDir": "src"
   }
 }
