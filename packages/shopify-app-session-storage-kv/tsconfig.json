@@ -1,9 +1,9 @@
 {
-  "extends": "../../tsconfig.base.json",
+  "extends": "../../config/ts/tsconfig.base.json",
   "compilerOptions": {
     "types": ["@cloudflare/workers-types", "node", "jest"],
     "baseUrl": ".",
-    "outDir": "./build/ts",
+    "outDir": "./dist/ts",
     "rootDir": "src"
   },
   "include": ["src/**/*.ts"],

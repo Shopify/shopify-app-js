@@ -44,8 +44,7 @@
     "miniflare": "^3.20240304.2"
   },
   "files": [
-    "build/*",
-    "!bundle/*",
+    "dist/*",
     "!tsconfig.tsbuildinfo",
     "!node_modules"
   ]

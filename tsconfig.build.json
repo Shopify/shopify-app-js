@@ -1,0 +1,7 @@
+{
+  "extends": "./config/ts/tsconfig.base.json",
+  "compilerOptions": {
+    "declaration": true,
+    "emitDeclarationOnly": true
+  }
+}
