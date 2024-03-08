@@ -1,10 +1,13 @@
 import {Session} from '@shopify/shopify-api';
 import {SessionStorage} from '@shopify/shopify-app-session-storage';
 import type {PrismaClient, Session as Row} from '@prisma/client';
+import {Prisma} from '@prisma/client';
 
 interface PrismaSessionStorageOptions {
   tableName?: string;
 }
+
+const UNIQUE_KEY_CONSTRAINT_ERROR_CODE = 'P2002';
 
 export class PrismaSessionStorage<T extends PrismaClient>
   implements SessionStorage
@@ -38,11 +41,29 @@ export class PrismaSessionStorage<T extends PrismaClient>
 
     const data = this.sessionToRow(session);
 
-    await this.getSessionTable().upsert({
-      where: {id: session.id},
-      update: data,
-      create: data,
-    });
+    try {
+      await this.getSessionTable().upsert({
+        where: {id: session.id},
+        update: data,
+        create: data,
+      });
+    } catch (error) {
+      if (
+        error instanceof Prisma.PrismaClientKnownRequestError &&
+        error.code === UNIQUE_KEY_CONSTRAINT_ERROR_CODE
+      ) {
+        console.log(
+          'Caught PrismaClientKnownRequestError P2002 - Unique Key Key Constraint, retrying upsert.',
+        );
+        await this.getSessionTable().upsert({
+          where: {id: session.id},
+          update: data,
+          create: data,
+        });
+        return true;
+      }
+      throw error;
+    }
 
     return true;
   }

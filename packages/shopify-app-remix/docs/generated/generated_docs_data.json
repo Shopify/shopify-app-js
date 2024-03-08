@@ -1147,9 +1147,251 @@
                 "name": "test",
                 "value": "boolean",
                 "description": "Whether this is a test subscription."
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/billing/types.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "lineItems",
+                "value": "ActiveSubscriptionLineItem[]",
+                "description": "",
+                "isOptional": true
               }
             ],
-            "value": "export interface AppSubscription {\n    /**\n     * The ID of the app subscription.\n     */\n    id: string;\n    /**\n     * The name of the purchased plan.\n     */\n    name: string;\n    /**\n     * Whether this is a test subscription.\n     */\n    test: boolean;\n}"
+            "value": "export interface AppSubscription {\n    /**\n     * The ID of the app subscription.\n     */\n    id: string;\n    /**\n     * The name of the purchased plan.\n     */\n    name: string;\n    /**\n     * Whether this is a test subscription.\n     */\n    test: boolean;\n    lineItems?: ActiveSubscriptionLineItem[];\n}"
+          },
+          "ActiveSubscriptionLineItem": {
+            "filePath": "../../node_modules/@shopify/shopify-api/lib/billing/types.d.ts",
+            "name": "ActiveSubscriptionLineItem",
+            "description": "",
+            "members": [
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/billing/types.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "id",
+                "value": "string",
+                "description": ""
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/billing/types.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "plan",
+                "value": "AppPlan",
+                "description": ""
+              }
+            ],
+            "value": "export interface ActiveSubscriptionLineItem {\n    id: string;\n    plan: AppPlan;\n}"
+          },
+          "AppPlan": {
+            "filePath": "../../node_modules/@shopify/shopify-api/lib/billing/types.d.ts",
+            "name": "AppPlan",
+            "description": "",
+            "members": [
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/billing/types.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "pricingDetails",
+                "value": "RecurringAppPlan | UsageAppPlan",
+                "description": ""
+              }
+            ],
+            "value": "export interface AppPlan {\n    pricingDetails: RecurringAppPlan | UsageAppPlan;\n}"
+          },
+          "RecurringAppPlan": {
+            "filePath": "../../node_modules/@shopify/shopify-api/lib/billing/types.d.ts",
+            "name": "RecurringAppPlan",
+            "description": "",
+            "members": [
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/billing/types.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "interval",
+                "value": "BillingInterval.Every30Days | BillingInterval.Annual",
+                "description": ""
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/billing/types.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "price",
+                "value": "Money",
+                "description": ""
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/billing/types.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "discount",
+                "value": "AppPlanDiscount",
+                "description": ""
+              }
+            ],
+            "value": "export interface RecurringAppPlan {\n    interval: BillingInterval.Every30Days | BillingInterval.Annual;\n    price: Money;\n    discount: AppPlanDiscount;\n}"
+          },
+          "BillingInterval": {
+            "filePath": "../../node_modules/@shopify/shopify-api/lib/types.d.ts",
+            "syntaxKind": "EnumDeclaration",
+            "name": "BillingInterval",
+            "value": "export declare enum BillingInterval {\n    OneTime = \"ONE_TIME\",\n    Every30Days = \"EVERY_30_DAYS\",\n    Annual = \"ANNUAL\",\n    Usage = \"USAGE\"\n}",
+            "members": [
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/types.d.ts",
+                "name": "OneTime",
+                "value": "ONE_TIME"
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/types.d.ts",
+                "name": "Every30Days",
+                "value": "EVERY_30_DAYS"
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/types.d.ts",
+                "name": "Annual",
+                "value": "ANNUAL"
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/types.d.ts",
+                "name": "Usage",
+                "value": "USAGE"
+              }
+            ]
+          },
+          "Money": {
+            "filePath": "../../node_modules/@shopify/shopify-api/lib/billing/types.d.ts",
+            "name": "Money",
+            "description": "",
+            "members": [
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/billing/types.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "amount",
+                "value": "number",
+                "description": ""
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/billing/types.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "currencyCode",
+                "value": "string",
+                "description": ""
+              }
+            ],
+            "value": "interface Money {\n    amount: number;\n    currencyCode: string;\n}"
+          },
+          "AppPlanDiscount": {
+            "filePath": "../../node_modules/@shopify/shopify-api/lib/billing/types.d.ts",
+            "name": "AppPlanDiscount",
+            "description": "",
+            "members": [
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/billing/types.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "durationLimitInIntervals",
+                "value": "number",
+                "description": ""
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/billing/types.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "remainingDurationInIntervals",
+                "value": "number",
+                "description": ""
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/billing/types.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "priceAfterDiscount",
+                "value": "Money",
+                "description": ""
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/billing/types.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "value",
+                "value": "AppPlanDiscountAmount",
+                "description": ""
+              }
+            ],
+            "value": "export interface AppPlanDiscount {\n    durationLimitInIntervals: number;\n    remainingDurationInIntervals: number;\n    priceAfterDiscount: Money;\n    value: AppPlanDiscountAmount;\n}"
+          },
+          "AppPlanDiscountAmount": {
+            "filePath": "../../node_modules/@shopify/shopify-api/lib/billing/types.d.ts",
+            "syntaxKind": "TypeAliasDeclaration",
+            "name": "AppPlanDiscountAmount",
+            "value": "BillingConfigSubscriptionPlanDiscountAmount | BillingConfigSubscriptionPlanDiscountPercentage",
+            "description": ""
+          },
+          "BillingConfigSubscriptionPlanDiscountAmount": {
+            "filePath": "../../node_modules/@shopify/shopify-api/lib/billing/types.d.ts",
+            "name": "BillingConfigSubscriptionPlanDiscountAmount",
+            "description": "",
+            "members": [
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/billing/types.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "amount",
+                "value": "number",
+                "description": "The amount to discount.\n\nCannot be set if `percentage` is set."
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/billing/types.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "percentage",
+                "value": "never",
+                "description": "The percentage to discount.\n\nCannot be set if `amount` is set.",
+                "isOptional": true
+              }
+            ],
+            "value": "export interface BillingConfigSubscriptionPlanDiscountAmount {\n    /**\n     * The amount to discount.\n     *\n     * Cannot be set if `percentage` is set.\n     */\n    amount: number;\n    /**\n     * The percentage to discount.\n     *\n     * Cannot be set if `amount` is set.\n     */\n    percentage?: never;\n}"
+          },
+          "BillingConfigSubscriptionPlanDiscountPercentage": {
+            "filePath": "../../node_modules/@shopify/shopify-api/lib/billing/types.d.ts",
+            "name": "BillingConfigSubscriptionPlanDiscountPercentage",
+            "description": "",
+            "members": [
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/billing/types.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "amount",
+                "value": "never",
+                "description": "The amount to discount.\n\nCannot be set if `percentage` is set.",
+                "isOptional": true
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/billing/types.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "percentage",
+                "value": "number",
+                "description": "The percentage to discount.\n\nCannot be set if `amount` is set."
+              }
+            ],
+            "value": "export interface BillingConfigSubscriptionPlanDiscountPercentage {\n    /**\n     * The amount to discount.\n     *\n     * Cannot be set if `percentage` is set.\n     */\n    amount?: never;\n    /**\n     * The percentage to discount.\n     *\n     * Cannot be set if `amount` is set.\n     */\n    percentage: number;\n}"
+          },
+          "UsageAppPlan": {
+            "filePath": "../../node_modules/@shopify/shopify-api/lib/billing/types.d.ts",
+            "name": "UsageAppPlan",
+            "description": "",
+            "members": [
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/billing/types.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "balanceUsed",
+                "value": "Money",
+                "description": ""
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/billing/types.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "cappedAmount",
+                "value": "Money",
+                "description": ""
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/billing/types.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "terms",
+                "value": "string",
+                "description": ""
+              }
+            ],
+            "value": "export interface UsageAppPlan {\n    balanceUsed: Money;\n    cappedAmount: Money;\n    terms: string;\n}"
           },
           "CheckBillingOptions": {
             "filePath": "src/server/authenticate/admin/billing/types.ts",
@@ -2125,9 +2367,251 @@
                 "name": "test",
                 "value": "boolean",
                 "description": "Whether this is a test subscription."
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/billing/types.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "lineItems",
+                "value": "ActiveSubscriptionLineItem[]",
+                "description": "",
+                "isOptional": true
               }
             ],
-            "value": "export interface AppSubscription {\n    /**\n     * The ID of the app subscription.\n     */\n    id: string;\n    /**\n     * The name of the purchased plan.\n     */\n    name: string;\n    /**\n     * Whether this is a test subscription.\n     */\n    test: boolean;\n}"
+            "value": "export interface AppSubscription {\n    /**\n     * The ID of the app subscription.\n     */\n    id: string;\n    /**\n     * The name of the purchased plan.\n     */\n    name: string;\n    /**\n     * Whether this is a test subscription.\n     */\n    test: boolean;\n    lineItems?: ActiveSubscriptionLineItem[];\n}"
+          },
+          "ActiveSubscriptionLineItem": {
+            "filePath": "../../node_modules/@shopify/shopify-api/lib/billing/types.d.ts",
+            "name": "ActiveSubscriptionLineItem",
+            "description": "",
+            "members": [
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/billing/types.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "id",
+                "value": "string",
+                "description": ""
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/billing/types.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "plan",
+                "value": "AppPlan",
+                "description": ""
+              }
+            ],
+            "value": "export interface ActiveSubscriptionLineItem {\n    id: string;\n    plan: AppPlan;\n}"
+          },
+          "AppPlan": {
+            "filePath": "../../node_modules/@shopify/shopify-api/lib/billing/types.d.ts",
+            "name": "AppPlan",
+            "description": "",
+            "members": [
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/billing/types.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "pricingDetails",
+                "value": "RecurringAppPlan | UsageAppPlan",
+                "description": ""
+              }
+            ],
+            "value": "export interface AppPlan {\n    pricingDetails: RecurringAppPlan | UsageAppPlan;\n}"
+          },
+          "RecurringAppPlan": {
+            "filePath": "../../node_modules/@shopify/shopify-api/lib/billing/types.d.ts",
+            "name": "RecurringAppPlan",
+            "description": "",
+            "members": [
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/billing/types.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "interval",
+                "value": "BillingInterval.Every30Days | BillingInterval.Annual",
+                "description": ""
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/billing/types.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "price",
+                "value": "Money",
+                "description": ""
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/billing/types.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "discount",
+                "value": "AppPlanDiscount",
+                "description": ""
+              }
+            ],
+            "value": "export interface RecurringAppPlan {\n    interval: BillingInterval.Every30Days | BillingInterval.Annual;\n    price: Money;\n    discount: AppPlanDiscount;\n}"
+          },
+          "BillingInterval": {
+            "filePath": "../../node_modules/@shopify/shopify-api/lib/types.d.ts",
+            "syntaxKind": "EnumDeclaration",
+            "name": "BillingInterval",
+            "value": "export declare enum BillingInterval {\n    OneTime = \"ONE_TIME\",\n    Every30Days = \"EVERY_30_DAYS\",\n    Annual = \"ANNUAL\",\n    Usage = \"USAGE\"\n}",
+            "members": [
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/types.d.ts",
+                "name": "OneTime",
+                "value": "ONE_TIME"
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/types.d.ts",
+                "name": "Every30Days",
+                "value": "EVERY_30_DAYS"
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/types.d.ts",
+                "name": "Annual",
+                "value": "ANNUAL"
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/types.d.ts",
+                "name": "Usage",
+                "value": "USAGE"
+              }
+            ]
+          },
+          "Money": {
+            "filePath": "../../node_modules/@shopify/shopify-api/lib/billing/types.d.ts",
+            "name": "Money",
+            "description": "",
+            "members": [
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/billing/types.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "amount",
+                "value": "number",
+                "description": ""
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/billing/types.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "currencyCode",
+                "value": "string",
+                "description": ""
+              }
+            ],
+            "value": "interface Money {\n    amount: number;\n    currencyCode: string;\n}"
+          },
+          "AppPlanDiscount": {
+            "filePath": "../../node_modules/@shopify/shopify-api/lib/billing/types.d.ts",
+            "name": "AppPlanDiscount",
+            "description": "",
+            "members": [
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/billing/types.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "durationLimitInIntervals",
+                "value": "number",
+                "description": ""
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/billing/types.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "remainingDurationInIntervals",
+                "value": "number",
+                "description": ""
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/billing/types.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "priceAfterDiscount",
+                "value": "Money",
+                "description": ""
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/billing/types.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "value",
+                "value": "AppPlanDiscountAmount",
+                "description": ""
+              }
+            ],
+            "value": "export interface AppPlanDiscount {\n    durationLimitInIntervals: number;\n    remainingDurationInIntervals: number;\n    priceAfterDiscount: Money;\n    value: AppPlanDiscountAmount;\n}"
+          },
+          "AppPlanDiscountAmount": {
+            "filePath": "../../node_modules/@shopify/shopify-api/lib/billing/types.d.ts",
+            "syntaxKind": "TypeAliasDeclaration",
+            "name": "AppPlanDiscountAmount",
+            "value": "BillingConfigSubscriptionPlanDiscountAmount | BillingConfigSubscriptionPlanDiscountPercentage",
+            "description": ""
+          },
+          "BillingConfigSubscriptionPlanDiscountAmount": {
+            "filePath": "../../node_modules/@shopify/shopify-api/lib/billing/types.d.ts",
+            "name": "BillingConfigSubscriptionPlanDiscountAmount",
+            "description": "",
+            "members": [
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/billing/types.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "amount",
+                "value": "number",
+                "description": "The amount to discount.\n\nCannot be set if `percentage` is set."
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/billing/types.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "percentage",
+                "value": "never",
+                "description": "The percentage to discount.\n\nCannot be set if `amount` is set.",
+                "isOptional": true
+              }
+            ],
+            "value": "export interface BillingConfigSubscriptionPlanDiscountAmount {\n    /**\n     * The amount to discount.\n     *\n     * Cannot be set if `percentage` is set.\n     */\n    amount: number;\n    /**\n     * The percentage to discount.\n     *\n     * Cannot be set if `amount` is set.\n     */\n    percentage?: never;\n}"
+          },
+          "BillingConfigSubscriptionPlanDiscountPercentage": {
+            "filePath": "../../node_modules/@shopify/shopify-api/lib/billing/types.d.ts",
+            "name": "BillingConfigSubscriptionPlanDiscountPercentage",
+            "description": "",
+            "members": [
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/billing/types.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "amount",
+                "value": "never",
+                "description": "The amount to discount.\n\nCannot be set if `percentage` is set.",
+                "isOptional": true
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/billing/types.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "percentage",
+                "value": "number",
+                "description": "The percentage to discount.\n\nCannot be set if `amount` is set."
+              }
+            ],
+            "value": "export interface BillingConfigSubscriptionPlanDiscountPercentage {\n    /**\n     * The amount to discount.\n     *\n     * Cannot be set if `percentage` is set.\n     */\n    amount?: never;\n    /**\n     * The percentage to discount.\n     *\n     * Cannot be set if `amount` is set.\n     */\n    percentage: number;\n}"
+          },
+          "UsageAppPlan": {
+            "filePath": "../../node_modules/@shopify/shopify-api/lib/billing/types.d.ts",
+            "name": "UsageAppPlan",
+            "description": "",
+            "members": [
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/billing/types.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "balanceUsed",
+                "value": "Money",
+                "description": ""
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/billing/types.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "cappedAmount",
+                "value": "Money",
+                "description": ""
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/billing/types.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "terms",
+                "value": "string",
+                "description": ""
+              }
+            ],
+            "value": "export interface UsageAppPlan {\n    balanceUsed: Money;\n    cappedAmount: Money;\n    terms: string;\n}"
           },
           "CheckBillingOptions": {
             "filePath": "src/server/authenticate/admin/billing/types.ts",
@@ -3179,6 +3663,834 @@
                   {
                     "title": "/app/routes/flow.tsx",
                     "code": "import { ActionFunctionArgs } from \"@remix-run/node\";\nimport { authenticate } from \"../shopify.server\";\n\nexport async function action({ request }: ActionFunctionArgs) {\n  const { admin } = await authenticate.flow(request);\n\n  const response = await admin?.graphql(\n    `#graphql\n    mutation populateProduct($input: ProductInput!) {\n      productCreate(input: $input) {\n        product {\n          id\n        }\n      }\n    }`,\n    { variables: { input: { title: \"Product Name\" } } }\n  );\n\n  const productData = await response.json();\n  return json({ data: productData.data });\n}",
+                    "language": "typescript"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "Fulfillment Service",
+    "description": "Contains functions for verifying fulfillment service requests.\n\nSee the [fulfillment service documentation](https://shopify.dev/docs/apps/fulfillment/fulfillment-service-apps) for more information.",
+    "category": "Authenticate",
+    "type": "object",
+    "isVisualComponent": false,
+    "definitions": [
+      {
+        "title": "authenticate.fulfillmentService",
+        "description": "Verifies requests coming from Shopify to fulfillment service apps",
+        "type": "AuthenticateFulfillmentService",
+        "typeDefinitions": {
+          "AuthenticateFulfillmentService": {
+            "filePath": "src/server/authenticate/fulfillment-service/types.ts",
+            "name": "AuthenticateFulfillmentService",
+            "description": "",
+            "params": [
+              {
+                "name": "request",
+                "description": "",
+                "value": "Request",
+                "filePath": "src/server/authenticate/fulfillment-service/types.ts"
+              }
+            ],
+            "returns": {
+              "filePath": "src/server/authenticate/fulfillment-service/types.ts",
+              "description": "",
+              "name": "Promise<FulfillmentServiceContext<Resources>>",
+              "value": "Promise<FulfillmentServiceContext<Resources>>"
+            },
+            "value": "export type AuthenticateFulfillmentService<\n  Resources extends ShopifyRestResources = ShopifyRestResources,\n> = (request: Request) => Promise<FulfillmentServiceContext<Resources>>;"
+          },
+          "FulfillmentServiceContext": {
+            "filePath": "src/server/authenticate/fulfillment-service/types.ts",
+            "name": "FulfillmentServiceContext",
+            "description": "",
+            "members": [
+              {
+                "filePath": "src/server/authenticate/fulfillment-service/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "session",
+                "value": "Session",
+                "description": "A session with an offline token for the shop.\n\nReturned only if there is a session for the shop.",
+                "examples": [
+                  {
+                    "title": "Shopify session for the fulfillment service notification request",
+                    "description": "Use the session associated with this request to use REST resources.",
+                    "tabs": [
+                      {
+                        "code": "import { ActionFunctionArgs } from \"@remix-run/node\";\nimport { authenticate } from \"../shopify.server\";\n\n  export const action = async ({ request }: ActionFunctionArgs) => {\n  const { session, admin } = await authenticate.fulfillmentService(request);\n\n  const products = await admin?.rest.resources.Product.all({ session });\n  // Use products\n\n  return new Response();\n};",
+                        "title": "/app/routes/fulfillment_service_notification.tsx"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "filePath": "src/server/authenticate/fulfillment-service/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "admin",
+                "value": "AdminApiContext<Resources>",
+                "description": "\nAn admin context for the fulfillment service request.\n\nReturned only if there is a session for the shop.",
+                "examples": [
+                  {
+                    "title": "Shopify session for the fulfillment service request",
+                    "description": "Use the session associated with this request to use the Admin GraphQL API",
+                    "tabs": [
+                      {
+                        "code": "import { ActionFunctionArgs } from \"@remix-run/node\";\nimport { authenticate } from \"../shopify.server\";\n\nexport async function action({ request }: ActionFunctionArgs) {\n  const { admin } = await authenticate.fulfillmentService(request);\n  const response = await admin?.graphql(\n `#graphql\n   query {\n     shop {\n       assignedFulfillmentOrders(first: 10, assignmentStatus: FULFILLMENT_REQUESTED) {\n         edges {\n           node {\n             id\n             destination {\n             firstName\n             lastName\n           }\n           lineItems(first: 10) {\n             edges {\n               node {\n               id\n               productTitle\n               sku\n               remainingQuantity\n             }\n           }\n         }\n         merchantRequests(first: 10, kind: FULFILLMENT_REQUEST) {\n           edges {\n             node {\n               message\n             }\n           }\n         }\n       }\n     }\n   }\n }\n}`);\n\n  const fulfillments = await response.json();\n  return json({ data: fulfillments.data });\n}",
+                        "title": "/app/routes/fulfillment_order_notification.ts"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "filePath": "src/server/authenticate/fulfillment-service/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "payload",
+                "value": "Record<string, any> & { kind: string; }",
+                "description": "The payload from the fulfillment service request.",
+                "examples": [
+                  {
+                    "title": "Fulfillment service request payload",
+                    "description": "Get the request's POST payload.",
+                    "tabs": [
+                      {
+                        "code": "/app/routes/fulfillment_order_notification.ts\nimport { ActionFunction } from \"@remix-run/node\";\nimport { authenticate } from \"../shopify.server\";\n\nexport const action: ActionFunction = async ({ request }) => {\n  const { payload } = await authenticate.fulfillmentService(request);\n  if(payload.kind === 'FULFILLMENT_REQUEST') {\n   // handle fulfillment request\n  } else if (payload.kind === 'CANCELLATION_REQUEST') {\n   // handle cancellation request\n  };\nreturn new Response();",
+                        "title": "Example"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "value": "export interface FulfillmentServiceContext<\n  Resources extends ShopifyRestResources = ShopifyRestResources,\n> {\n  /**\n   * A session with an offline token for the shop.\n   *\n   * Returned only if there is a session for the shop.\n   * @example\n   * <caption>Shopify session for the fulfillment service notification request.</caption>\n   * <description>Use the session associated with this request to use REST resources.</description>\n   * ```ts\n   * // /app/routes/fulfillment_service_notification.tsx\n   * import { ActionFunctionArgs } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   *\n   *   export const action = async ({ request }: ActionFunctionArgs) => {\n   *   const { session, admin } = await authenticate.fulfillmentService(request);\n   *\n   *   const products = await admin?.rest.resources.Product.all({ session });\n   *   // Use products\n   *\n   *   return new Response();\n   * };\n   * ```\n   * */\n  session: Session;\n  /**\n   *\n   * An admin context for the fulfillment service request.\n   *\n   * Returned only if there is a session for the shop.\n   * @example\n   * <caption>Shopify session for the fulfillment service request.</caption>\n   * <description>Use the session associated with this request to use the Admin GraphQL API </description>\n   * ```ts\n   * // /app/routes/fulfillment_order_notification.ts\n   * import { ActionFunctionArgs } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   *\n   * export async function action({ request }: ActionFunctionArgs) {\n   *   const { admin } = await authenticate.fulfillmentService(request);\n   *   const response = await admin?.graphql(\n   *  `#graphql\n   *    query {\n   *      shop {\n   *        assignedFulfillmentOrders(first: 10, assignmentStatus: FULFILLMENT_REQUESTED) {\n   *          edges {\n   *            node {\n   *              id\n   *              destination {\n   *              firstName\n   *              lastName\n   *            }\n   *            lineItems(first: 10) {\n   *              edges {\n   *                node {\n   *                id\n   *                productTitle\n   *                sku\n   *                remainingQuantity\n   *              }\n   *            }\n   *          }\n   *          merchantRequests(first: 10, kind: FULFILLMENT_REQUEST) {\n   *            edges {\n   *              node {\n   *                message\n   *              }\n   *            }\n   *          }\n   *        }\n   *      }\n   *    }\n   *  }\n   * }`);\n   *\n   *   const fulfillments = await response.json();\n   *   return json({ data: fulfillments.data });\n   * }\n   * ```\n   */\n  admin: AdminApiContext<Resources>;\n\n  /**\n   * The payload from the fulfillment service request.\n   *\n   * @example\n   * <caption>Fulfillment service request payload.</caption>\n   * <description>Get the request's POST payload.</description>\n   * ```ts\n   * /app/routes/fulfillment_order_notification.ts\n   * import { ActionFunction } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   *\n   * export const action: ActionFunction = async ({ request }) => {\n   *   const { payload } = await authenticate.fulfillmentService(request);\n   *   if(payload.kind === 'FULFILLMENT_REQUEST') {\n   *    // handle fulfillment request\n   *   } else if (payload.kind === 'CANCELLATION_REQUEST') {\n   *    // handle cancellation request\n   *   };\n   * return new Response();\n   * ```\n   */\n  payload: Record<string, any> & {\n    kind: string;\n  };\n}"
+          },
+          "Session": {
+            "filePath": "../../node_modules/@shopify/shopify-api/lib/session/session.d.ts",
+            "name": "Session",
+            "description": "Stores App information from logged in merchants so they can make authenticated requests to the Admin API.",
+            "members": [
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/session/session.d.ts",
+                "syntaxKind": "PropertyDeclaration",
+                "name": "id",
+                "value": "string",
+                "description": "The unique identifier for the session."
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/session/session.d.ts",
+                "syntaxKind": "PropertyDeclaration",
+                "name": "shop",
+                "value": "string",
+                "description": "The Shopify shop domain, such as `example.myshopify.com`."
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/session/session.d.ts",
+                "syntaxKind": "PropertyDeclaration",
+                "name": "state",
+                "value": "string",
+                "description": "The state of the session. Used for the OAuth authentication code flow."
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/session/session.d.ts",
+                "syntaxKind": "PropertyDeclaration",
+                "name": "isOnline",
+                "value": "boolean",
+                "description": "Whether the access token in the session is online or offline."
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/session/session.d.ts",
+                "syntaxKind": "PropertyDeclaration",
+                "name": "scope",
+                "value": "string",
+                "description": "The desired scopes for the access token, at the time the session was created."
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/session/session.d.ts",
+                "syntaxKind": "PropertyDeclaration",
+                "name": "expires",
+                "value": "Date",
+                "description": "The date the access token expires."
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/session/session.d.ts",
+                "syntaxKind": "PropertyDeclaration",
+                "name": "accessToken",
+                "value": "string",
+                "description": "The access token for the session."
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/session/session.d.ts",
+                "syntaxKind": "PropertyDeclaration",
+                "name": "onlineAccessInfo",
+                "value": "OnlineAccessInfo",
+                "description": "Information on the user for the session. Only present for online sessions."
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/session/session.d.ts",
+                "syntaxKind": "MethodDeclaration",
+                "name": "isActive",
+                "value": "(scopes: string | string[] | AuthScopes) => boolean",
+                "description": "Whether the session is active. Active sessions have an access token that is not expired, and has the given scopes."
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/session/session.d.ts",
+                "syntaxKind": "MethodDeclaration",
+                "name": "isScopeChanged",
+                "value": "(scopes: string | string[] | AuthScopes) => boolean",
+                "description": "Whether the access token has the given scopes."
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/session/session.d.ts",
+                "syntaxKind": "MethodDeclaration",
+                "name": "isExpired",
+                "value": "(withinMillisecondsOfExpiry?: number) => boolean",
+                "description": "Whether the access token is expired."
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/session/session.d.ts",
+                "syntaxKind": "MethodDeclaration",
+                "name": "toObject",
+                "value": "() => SessionParams",
+                "description": "Converts an object with data into a Session."
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/session/session.d.ts",
+                "syntaxKind": "MethodDeclaration",
+                "name": "equals",
+                "value": "(other: Session) => boolean",
+                "description": "Checks whether the given session is equal to this session."
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/session/session.d.ts",
+                "syntaxKind": "MethodDeclaration",
+                "name": "toPropertyArray",
+                "value": "() => [string, string | number | boolean][]",
+                "description": "Converts the session into an array of key-value pairs."
+              }
+            ],
+            "value": "export declare class Session {\n    static fromPropertyArray(entries: [string, string | number | boolean][]): Session;\n    /**\n     * The unique identifier for the session.\n     */\n    readonly id: string;\n    /**\n     * The Shopify shop domain, such as `example.myshopify.com`.\n     */\n    shop: string;\n    /**\n     * The state of the session. Used for the OAuth authentication code flow.\n     */\n    state: string;\n    /**\n     * Whether the access token in the session is online or offline.\n     */\n    isOnline: boolean;\n    /**\n     * The desired scopes for the access token, at the time the session was created.\n     */\n    scope?: string;\n    /**\n     * The date the access token expires.\n     */\n    expires?: Date;\n    /**\n     * The access token for the session.\n     */\n    accessToken?: string;\n    /**\n     * Information on the user for the session. Only present for online sessions.\n     */\n    onlineAccessInfo?: OnlineAccessInfo;\n    constructor(params: SessionParams);\n    /**\n     * Whether the session is active. Active sessions have an access token that is not expired, and has the given scopes.\n     */\n    isActive(scopes: AuthScopes | string | string[]): boolean;\n    /**\n     * Whether the access token has the given scopes.\n     */\n    isScopeChanged(scopes: AuthScopes | string | string[]): boolean;\n    /**\n     * Whether the access token is expired.\n     */\n    isExpired(withinMillisecondsOfExpiry?: number): boolean;\n    /**\n     * Converts an object with data into a Session.\n     */\n    toObject(): SessionParams;\n    /**\n     * Checks whether the given session is equal to this session.\n     */\n    equals(other: Session | undefined): boolean;\n    /**\n     * Converts the session into an array of key-value pairs.\n     */\n    toPropertyArray(): [string, string | number | boolean][];\n}"
+          },
+          "OnlineAccessInfo": {
+            "filePath": "../../node_modules/@shopify/shopify-api/lib/auth/oauth/types.d.ts",
+            "name": "OnlineAccessInfo",
+            "description": "",
+            "members": [
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/auth/oauth/types.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "expires_in",
+                "value": "number",
+                "description": "How long the access token is valid for, in seconds."
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/auth/oauth/types.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "associated_user_scope",
+                "value": "string",
+                "description": "The effective set of scopes for the session."
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/auth/oauth/types.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "associated_user",
+                "value": "{ id: number; first_name: string; last_name: string; email: string; email_verified: boolean; account_owner: boolean; locale: string; collaborator: boolean; }",
+                "description": "The user associated with the access token."
+              }
+            ],
+            "value": "export interface OnlineAccessInfo {\n    /**\n     * How long the access token is valid for, in seconds.\n     */\n    expires_in: number;\n    /**\n     * The effective set of scopes for the session.\n     */\n    associated_user_scope: string;\n    /**\n     * The user associated with the access token.\n     */\n    associated_user: {\n        /**\n         * The user's ID.\n         */\n        id: number;\n        /**\n         * The user's first name.\n         */\n        first_name: string;\n        /**\n         * The user's last name.\n         */\n        last_name: string;\n        /**\n         * The user's email address.\n         */\n        email: string;\n        /**\n         * Whether the user has verified their email address.\n         */\n        email_verified: boolean;\n        /**\n         * Whether the user is the account owner.\n         */\n        account_owner: boolean;\n        /**\n         * The user's locale.\n         */\n        locale: string;\n        /**\n         * Whether the user is a collaborator.\n         */\n        collaborator: boolean;\n    };\n}"
+          },
+          "AuthScopes": {
+            "filePath": "../../node_modules/@shopify/shopify-api/lib/auth/scopes/index.d.ts",
+            "name": "AuthScopes",
+            "description": "A class that represents a set of access token scopes.",
+            "members": [
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/auth/scopes/index.d.ts",
+                "syntaxKind": "MethodDeclaration",
+                "name": "has",
+                "value": "(scope: string | string[] | AuthScopes) => boolean",
+                "description": "Checks whether the current set of scopes includes the given one."
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/auth/scopes/index.d.ts",
+                "syntaxKind": "MethodDeclaration",
+                "name": "equals",
+                "value": "(otherScopes: string | string[] | AuthScopes) => boolean",
+                "description": "Checks whether the current set of scopes equals the given one."
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/auth/scopes/index.d.ts",
+                "syntaxKind": "MethodDeclaration",
+                "name": "toString",
+                "value": "() => string",
+                "description": "Returns a comma-separated string with the current set of scopes."
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/auth/scopes/index.d.ts",
+                "syntaxKind": "MethodDeclaration",
+                "name": "toArray",
+                "value": "() => string[]",
+                "description": "Returns an array with the current set of scopes."
+              }
+            ],
+            "value": "declare class AuthScopes {\n    static SCOPE_DELIMITER: string;\n    private compressedScopes;\n    private expandedScopes;\n    constructor(scopes: string | string[] | AuthScopes | undefined);\n    /**\n     * Checks whether the current set of scopes includes the given one.\n     */\n    has(scope: string | string[] | AuthScopes | undefined): boolean;\n    /**\n     * Checks whether the current set of scopes equals the given one.\n     */\n    equals(otherScopes: string | string[] | AuthScopes | undefined): boolean;\n    /**\n     * Returns a comma-separated string with the current set of scopes.\n     */\n    toString(): string;\n    /**\n     * Returns an array with the current set of scopes.\n     */\n    toArray(): string[];\n    private getImpliedScopes;\n}"
+          },
+          "SessionParams": {
+            "filePath": "../../node_modules/@shopify/shopify-api/lib/session/types.d.ts",
+            "name": "SessionParams",
+            "description": "",
+            "members": [
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/session/types.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "id",
+                "value": "string",
+                "description": "The unique identifier for the session."
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/session/types.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "shop",
+                "value": "string",
+                "description": "The Shopify shop domain."
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/session/types.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "state",
+                "value": "string",
+                "description": "The state of the session. Used for the OAuth authentication code flow."
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/session/types.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "isOnline",
+                "value": "boolean",
+                "description": "Whether the access token in the session is online or offline."
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/session/types.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "scope",
+                "value": "string",
+                "description": "The scopes for the access token.",
+                "isOptional": true
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/session/types.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "expires",
+                "value": "Date",
+                "description": "The date the access token expires.",
+                "isOptional": true
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/session/types.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "accessToken",
+                "value": "string",
+                "description": "The access token for the session.",
+                "isOptional": true
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/session/types.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "onlineAccessInfo",
+                "value": "OnlineAccessInfo",
+                "description": "Information on the user for the session. Only present for online sessions.",
+                "isOptional": true
+              }
+            ],
+            "value": "export interface SessionParams {\n    /**\n     * The unique identifier for the session.\n     */\n    readonly id: string;\n    /**\n     * The Shopify shop domain.\n     */\n    shop: string;\n    /**\n     * The state of the session. Used for the OAuth authentication code flow.\n     */\n    state: string;\n    /**\n     * Whether the access token in the session is online or offline.\n     */\n    isOnline: boolean;\n    /**\n     * The scopes for the access token.\n     */\n    scope?: string;\n    /**\n     * The date the access token expires.\n     */\n    expires?: Date;\n    /**\n     * The access token for the session.\n     */\n    accessToken?: string;\n    /**\n     * Information on the user for the session. Only present for online sessions.\n     */\n    onlineAccessInfo?: OnlineAccessInfo;\n}"
+          },
+          "AdminApiContext": {
+            "filePath": "src/server/clients/admin/types.ts",
+            "name": "AdminApiContext",
+            "description": "",
+            "members": [
+              {
+                "filePath": "src/server/clients/admin/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "rest",
+                "value": "RestClientWithResources<Resources>",
+                "description": "Methods for interacting with the Shopify Admin REST API\n\nThere are methods for interacting with individual REST resources. You can also make `GET`, `POST`, `PUT` and `DELETE` requests should the REST resources not meet your needs.\n\n\n\n\n",
+                "examples": [
+                  {
+                    "title": "Using REST resources",
+                    "description": "Getting the number of orders in a store using REST resources. Visit the [Admin REST API references](/docs/api/admin-rest) for examples on using each resource.",
+                    "tabs": [
+                      {
+                        "code": "import { LoaderFunctionArgs, json } from \"@remix-run/node\";\nimport { authenticate } from \"../shopify.server\";\n\nexport const loader = async ({ request }: LoaderFunctionArgs) => {\n  const {\n    admin,\n    session,\n  } = await authenticate.admin(request);\n\n  return json(\n    admin.rest.resources.Order.count({ session }),\n  );\n};",
+                        "title": "/app/routes/**\\/*.ts"
+                      },
+                      {
+                        "code": "import { shopifyApp } from \"@shopify/shopify-app-remix/server\";\nimport { restResources } from \"@shopify/shopify-api/rest/admin/2023-07\";\n\nconst shopify = shopifyApp({\n  restResources,\n  // ...etc\n});\nexport default shopify;\nexport const authenticate = shopify.authenticate;",
+                        "title": "/app/shopify.server.ts"
+                      }
+                    ]
+                  },
+                  {
+                    "title": "Performing a GET request to the REST API",
+                    "description": "Use `admin.rest.get` to make custom requests to make a request to to the `customer/count` endpoint",
+                    "tabs": [
+                      {
+                        "code": "import { LoaderFunctionArgs, json } from \"@remix-run/node\";\nimport { authenticate } from \"../shopify.server\";\n\nexport const loader = async ({ request }: LoaderFunctionArgs) => {\n  const {\n    admin,\n    session,\n  } = await authenticate.admin(request);\n\n  const response = await admin.rest.get({\n    path: \"/customers/count.json\",\n  });\n  const customers = await response.json();\n\n  return json({ customers });\n};",
+                        "title": "/app/routes/**\\/*.ts"
+                      },
+                      {
+                        "code": "import { shopifyApp } from \"@shopify/shopify-app-remix/server\";\nimport { restResources } from \"@shopify/shopify-api/rest/admin/2023-04\";\n\nconst shopify = shopifyApp({\n  restResources,\n  // ...etc\n});\nexport default shopify;\nexport const authenticate = shopify.authenticate;",
+                        "title": "/app/shopify.server.ts"
+                      }
+                    ]
+                  },
+                  {
+                    "title": "Performing a POST request to the REST API",
+                    "description": "Use `admin.rest.post` to make custom requests to make a request to to the `customers.json` endpoint to send a welcome email",
+                    "tabs": [
+                      {
+                        "code": "import { LoaderFunctionArgs, json } from \"@remix-run/node\";\nimport { authenticate } from \"../shopify.server\";\n\nexport const loader = async ({ request }: LoaderFunctionArgs) => {\n  const {\n    admin,\n    session,\n  } = await authenticate.admin(request);\n\n  const response = admin.rest.post({\n    path: \"customers/7392136888625/send_invite.json\",\n    body: {\n      customer_invite: {\n        to: \"new_test_email@shopify.com\",\n        from: \"j.limited@example.com\",\n        bcc: [\"j.limited@example.com\"],\n        subject: \"Welcome to my new shop\",\n        custom_message: \"My awesome new store\",\n      },\n    },\n  });\n\n  const customerInvite = await response.json();\n  return json({ customerInvite });\n};",
+                        "title": "/app/routes/**\\/*.ts"
+                      },
+                      {
+                        "code": "import { shopifyApp } from \"@shopify/shopify-app-remix/server\";\nimport { restResources } from \"@shopify/shopify-api/rest/admin/2023-04\";\n\nconst shopify = shopifyApp({\n  restResources,\n  // ...etc\n});\nexport default shopify;\nexport const authenticate = shopify.authenticate;",
+                        "title": "/app/shopify.server.ts"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "filePath": "src/server/clients/admin/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "graphql",
+                "value": "GraphQLClient<AdminOperations>",
+                "description": "Methods for interacting with the Shopify Admin GraphQL API\n\n\n\n\n\n\n\n\n\n",
+                "examples": [
+                  {
+                    "title": "Querying the GraphQL API",
+                    "description": "Use `admin.graphql` to make query / mutation requests.",
+                    "tabs": [
+                      {
+                        "code": "import { ActionFunctionArgs } from \"@remix-run/node\";\nimport { authenticate } from \"../shopify.server\";\n\nexport const action = async ({ request }: ActionFunctionArgs) => {\n  const { admin } = await authenticate.admin(request);\n\n  const response = await admin.graphql(\n    `#graphql\n    mutation populateProduct($input: ProductInput!) {\n      productCreate(input: $input) {\n        product {\n          id\n        }\n      }\n    }`,\n    {\n      variables: {\n        input: { title: \"Product Name\" },\n      },\n    },\n  );\n\n  const productData = await response.json();\n  return json({\n    productId: productData.data?.productCreate?.product?.id,\n  });\n}",
+                        "title": "/app/routes/**\\/*.ts"
+                      },
+                      {
+                        "code": "import { shopifyApp } from \"@shopify/shopify-app-remix/server\";\n\nconst shopify = shopifyApp({\n  // ...\n});\nexport default shopify;\nexport const authenticate = shopify.authenticate;",
+                        "title": "/app/shopify.server.ts"
+                      }
+                    ]
+                  },
+                  {
+                    "title": "Handling GraphQL errors",
+                    "description": "Catch `GraphqlQueryError` errors to see error messages from the API.",
+                    "tabs": [
+                      {
+                        "code": "import { ActionFunctionArgs } from \"@remix-run/node\";\nimport { authenticate } from \"../shopify.server\";\n\nexport const action = async ({ request }: ActionFunctionArgs) => {\n  const { admin } = await authenticate.admin(request);\n\n  try {\n    const response = await admin.graphql(\n      `#graphql\n      query incorrectQuery {\n        products(first: 10) {\n          nodes {\n            not_a_field\n          }\n        }\n      }`,\n    );\n\n    return json({ data: await response.json() });\n  } catch (error) {\n    if (error instanceof GraphqlQueryError) {\n      // error.body.errors:\n      // { graphQLErrors: [\n      //   { message: \"Field 'not_a_field' doesn't exist on type 'Product'\" }\n      // ] }\n      return json({ errors: error.body?.errors }, { status: 500 });\n    }\n    return json({ message: \"An error occurred\" }, { status: 500 });\n  }\n}",
+                        "title": "/app/routes/**\\/*.ts"
+                      },
+                      {
+                        "code": "import { shopifyApp } from \"@shopify/shopify-app-remix/server\";\n\nconst shopify = shopifyApp({\n  // ...\n});\nexport default shopify;\nexport const authenticate = shopify.authenticate;",
+                        "title": "/app/shopify.server.ts"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "value": "export interface AdminApiContext<\n  Resources extends ShopifyRestResources = ShopifyRestResources,\n> {\n  /**\n   * Methods for interacting with the Shopify Admin REST API\n   *\n   * There are methods for interacting with individual REST resources. You can also make `GET`, `POST`, `PUT` and `DELETE` requests should the REST resources not meet your needs.\n   *\n   * {@link https://shopify.dev/docs/api/admin-rest}\n   *\n   * @example\n   * <caption>Using REST resources.</caption>\n   * <description>Getting the number of orders in a store using REST resources. Visit the [Admin REST API references](/docs/api/admin-rest) for examples on using each resource. </description>\n   *\n   * ```ts\n   * // /app/routes/**\\/*.ts\n   * import { LoaderFunctionArgs, json } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   *\n   * export const loader = async ({ request }: LoaderFunctionArgs) => {\n   *   const {\n   *     admin,\n   *     session,\n   *   } = await authenticate.admin(request);\n   *\n   *   return json(\n   *     admin.rest.resources.Order.count({ session }),\n   *   );\n   * };\n   * ```\n   *\n   * ```ts\n   * // /app/shopify.server.ts\n   * import { shopifyApp } from \"@shopify/shopify-app-remix/server\";\n   * import { restResources } from \"@shopify/shopify-api/rest/admin/2023-07\";\n   *\n   * const shopify = shopifyApp({\n   *   restResources,\n   *   // ...etc\n   * });\n   * export default shopify;\n   * export const authenticate = shopify.authenticate;\n   * ```\n   *\n   * @example\n   * <caption>Performing a GET request to the REST API.</caption>\n   * <description>Use `admin.rest.get` to make custom requests to make a request to to the `customer/count` endpoint</description>\n   *\n   * ```ts\n   * // /app/routes/**\\/*.ts\n   * import { LoaderFunctionArgs, json } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   *\n   * export const loader = async ({ request }: LoaderFunctionArgs) => {\n   *   const {\n   *     admin,\n   *     session,\n   *   } = await authenticate.admin(request);\n   *\n   *   const response = await admin.rest.get({\n   *     path: \"/customers/count.json\",\n   *   });\n   *   const customers = await response.json();\n   *\n   *   return json({ customers });\n   * };\n   * ```\n   *\n   * ```ts\n   * // /app/shopify.server.ts\n   * import { shopifyApp } from \"@shopify/shopify-app-remix/server\";\n   * import { restResources } from \"@shopify/shopify-api/rest/admin/2023-04\";\n   *\n   * const shopify = shopifyApp({\n   *   restResources,\n   *   // ...etc\n   * });\n   * export default shopify;\n   * export const authenticate = shopify.authenticate;\n   * ```\n   *\n   * @example\n   * <caption>Performing a POST request to the REST API.</caption>\n   * <description>Use `admin.rest.post` to make custom requests to make a request to to the `customers.json` endpoint to send a welcome email</description>\n   * ```ts\n   * // /app/routes/**\\/*.ts\n   * import { LoaderFunctionArgs, json } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   *\n   * export const loader = async ({ request }: LoaderFunctionArgs) => {\n   *   const {\n   *     admin,\n   *     session,\n   *   } = await authenticate.admin(request);\n   *\n   *   const response = admin.rest.post({\n   *     path: \"customers/7392136888625/send_invite.json\",\n   *     body: {\n   *       customer_invite: {\n   *         to: \"new_test_email@shopify.com\",\n   *         from: \"j.limited@example.com\",\n   *         bcc: [\"j.limited@example.com\"],\n   *         subject: \"Welcome to my new shop\",\n   *         custom_message: \"My awesome new store\",\n   *       },\n   *     },\n   *   });\n   *\n   *   const customerInvite = await response.json();\n   *   return json({ customerInvite });\n   * };\n   * ```\n   *\n   * ```ts\n   * // /app/shopify.server.ts\n   * import { shopifyApp } from \"@shopify/shopify-app-remix/server\";\n   * import { restResources } from \"@shopify/shopify-api/rest/admin/2023-04\";\n   *\n   * const shopify = shopifyApp({\n   *   restResources,\n   *   // ...etc\n   * });\n   * export default shopify;\n   * export const authenticate = shopify.authenticate;\n   * ```\n   */\n  rest: RestClientWithResources<Resources>;\n\n  /**\n   * Methods for interacting with the Shopify Admin GraphQL API\n   *\n   * {@link https://shopify.dev/docs/api/admin-graphql}\n   * {@link https://github.com/Shopify/shopify-api-js/blob/main/packages/shopify-api/docs/reference/clients/Graphql.md}\n   *\n   * @example\n   * <caption>Querying the GraphQL API.</caption>\n   * <description>Use `admin.graphql` to make query / mutation requests.</description>\n   * ```ts\n   * // /app/routes/**\\/*.ts\n   * import { ActionFunctionArgs } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   *\n   * export const action = async ({ request }: ActionFunctionArgs) => {\n   *   const { admin } = await authenticate.admin(request);\n   *\n   *   const response = await admin.graphql(\n   *     `#graphql\n   *     mutation populateProduct($input: ProductInput!) {\n   *       productCreate(input: $input) {\n   *         product {\n   *           id\n   *         }\n   *       }\n   *     }`,\n   *     {\n   *       variables: {\n   *         input: { title: \"Product Name\" },\n   *       },\n   *     },\n   *   );\n   *\n   *   const productData = await response.json();\n   *   return json({\n   *     productId: productData.data?.productCreate?.product?.id,\n   *   });\n   * }\n   * ```\n   *\n   * ```ts\n   * // /app/shopify.server.ts\n   * import { shopifyApp } from \"@shopify/shopify-app-remix/server\";\n   *\n   * const shopify = shopifyApp({\n   *   // ...\n   * });\n   * export default shopify;\n   * export const authenticate = shopify.authenticate;\n   * ```\n   *\n   * @example\n   * <caption>Handling GraphQL errors.</caption>\n   * <description>Catch `GraphqlQueryError` errors to see error messages from the API.</description>\n   * ```ts\n   * // /app/routes/**\\/*.ts\n   * import { ActionFunctionArgs } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   *\n   * export const action = async ({ request }: ActionFunctionArgs) => {\n   *   const { admin } = await authenticate.admin(request);\n   *\n   *   try {\n   *     const response = await admin.graphql(\n   *       `#graphql\n   *       query incorrectQuery {\n   *         products(first: 10) {\n   *           nodes {\n   *             not_a_field\n   *           }\n   *         }\n   *       }`,\n   *     );\n   *\n   *     return json({ data: await response.json() });\n   *   } catch (error) {\n   *     if (error instanceof GraphqlQueryError) {\n   *       // error.body.errors:\n   *       // { graphQLErrors: [\n   *       //   { message: \"Field 'not_a_field' doesn't exist on type 'Product'\" }\n   *       // ] }\n   *       return json({ errors: error.body?.errors }, { status: 500 });\n   *     }\n   *     return json({ message: \"An error occurred\" }, { status: 500 });\n   *   }\n   * }\n   * ```\n   *\n   * ```ts\n   * // /app/shopify.server.ts\n   * import { shopifyApp } from \"@shopify/shopify-app-remix/server\";\n   *\n   * const shopify = shopifyApp({\n   *   // ...\n   * });\n   * export default shopify;\n   * export const authenticate = shopify.authenticate;\n   * ```\n   */\n  graphql: GraphQLClient<AdminOperations>;\n}"
+          },
+          "RestClientWithResources": {
+            "filePath": "src/server/clients/admin/rest.ts",
+            "syntaxKind": "TypeAliasDeclaration",
+            "name": "RestClientWithResources",
+            "value": "RemixRestClient & {resources: Resources}",
+            "description": ""
+          },
+          "RemixRestClient": {
+            "filePath": "src/server/clients/admin/rest.ts",
+            "name": "RemixRestClient",
+            "description": "",
+            "members": [
+              {
+                "filePath": "src/server/clients/admin/rest.ts",
+                "syntaxKind": "PropertyDeclaration",
+                "name": "session",
+                "value": "Session",
+                "description": ""
+              },
+              {
+                "filePath": "src/server/clients/admin/rest.ts",
+                "syntaxKind": "MethodDeclaration",
+                "name": "get",
+                "value": "(params: GetRequestParams) => Promise<Response>",
+                "description": "Performs a GET request on the given path."
+              },
+              {
+                "filePath": "src/server/clients/admin/rest.ts",
+                "syntaxKind": "MethodDeclaration",
+                "name": "post",
+                "value": "(params: PostRequestParams) => Promise<Response>",
+                "description": "Performs a POST request on the given path."
+              },
+              {
+                "filePath": "src/server/clients/admin/rest.ts",
+                "syntaxKind": "MethodDeclaration",
+                "name": "put",
+                "value": "(params: PostRequestParams) => Promise<Response>",
+                "description": "Performs a PUT request on the given path."
+              },
+              {
+                "filePath": "src/server/clients/admin/rest.ts",
+                "syntaxKind": "MethodDeclaration",
+                "name": "delete",
+                "value": "(params: GetRequestParams) => Promise<Response>",
+                "description": "Performs a DELETE request on the given path."
+              }
+            ],
+            "value": "class RemixRestClient {\n  public session: Session;\n  private params: AdminClientOptions['params'];\n  private handleClientError: AdminClientOptions['handleClientError'];\n\n  constructor({params, session, handleClientError}: AdminClientOptions) {\n    this.params = params;\n    this.handleClientError = handleClientError;\n    this.session = session;\n  }\n\n  /**\n   * Performs a GET request on the given path.\n   */\n  public async get(params: GetRequestParams) {\n    return this.makeRequest({\n      method: 'GET' as RequestParams['method'],\n      ...params,\n    });\n  }\n\n  /**\n   * Performs a POST request on the given path.\n   */\n  public async post(params: PostRequestParams) {\n    return this.makeRequest({\n      method: 'POST' as RequestParams['method'],\n      ...params,\n    });\n  }\n\n  /**\n   * Performs a PUT request on the given path.\n   */\n  public async put(params: PutRequestParams) {\n    return this.makeRequest({\n      method: 'PUT' as RequestParams['method'],\n      ...params,\n    });\n  }\n\n  /**\n   * Performs a DELETE request on the given path.\n   */\n  public async delete(params: DeleteRequestParams) {\n    return this.makeRequest({\n      method: 'DELETE' as RequestParams['method'],\n      ...params,\n    });\n  }\n\n  protected async makeRequest(params: RequestParams): Promise<Response> {\n    const originalClient = new this.params.api.clients.Rest({\n      session: this.session,\n    });\n    const originalRequest = Reflect.get(originalClient, 'request');\n\n    try {\n      const apiResponse = await originalRequest.call(originalClient, params);\n\n      // We use a separate client for REST requests and REST resources because we want to override the API library\n      // client class to return a Response object instead.\n      return new Response(JSON.stringify(apiResponse.body), {\n        headers: apiResponse.headers,\n      });\n    } catch (error) {\n      if (this.handleClientError) {\n        throw await this.handleClientError({\n          error,\n          session: this.session,\n          params: this.params,\n        });\n      } else throw new Error(error);\n    }\n  }\n}"
+          },
+          "GetRequestParams": {
+            "filePath": "../../node_modules/@shopify/shopify-api/lib/clients/types.d.ts",
+            "name": "GetRequestParams",
+            "description": "",
+            "members": [
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/clients/types.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "path",
+                "value": "string",
+                "description": "The path to the resource, relative to the API version root."
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/clients/types.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "type",
+                "value": "DataType",
+                "description": "The type of data expected in the response.",
+                "isOptional": true
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/clients/types.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "data",
+                "value": "string | Record<string, any>",
+                "description": "The request body.",
+                "isOptional": true
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/clients/types.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "query",
+                "value": "SearchParams",
+                "description": "Query parameters to be sent with the request.",
+                "isOptional": true
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/clients/types.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "extraHeaders",
+                "value": "HeaderParams",
+                "description": "Additional headers to be sent with the request.",
+                "isOptional": true
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/clients/types.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "tries",
+                "value": "number",
+                "description": "The maximum number of times the request can be made if it fails with a throttling or server error.",
+                "isOptional": true
+              }
+            ],
+            "value": "export interface GetRequestParams {\n    /**\n     * The path to the resource, relative to the API version root.\n     */\n    path: string;\n    /**\n     * The type of data expected in the response.\n     */\n    type?: DataType;\n    /**\n     * The request body.\n     */\n    data?: Record<string, any> | string;\n    /**\n     * Query parameters to be sent with the request.\n     */\n    query?: SearchParams;\n    /**\n     * Additional headers to be sent with the request.\n     */\n    extraHeaders?: HeaderParams;\n    /**\n     * The maximum number of times the request can be made if it fails with a throttling or server error.\n     */\n    tries?: number;\n}"
+          },
+          "DataType": {
+            "filePath": "../../node_modules/@shopify/shopify-api/lib/clients/types.d.ts",
+            "syntaxKind": "EnumDeclaration",
+            "name": "DataType",
+            "value": "export declare enum DataType {\n    JSON = \"application/json\",\n    GraphQL = \"application/graphql\",\n    URLEncoded = \"application/x-www-form-urlencoded\"\n}",
+            "members": [
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/clients/types.d.ts",
+                "name": "JSON",
+                "value": "application/json"
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/clients/types.d.ts",
+                "name": "GraphQL",
+                "value": "application/graphql"
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/clients/types.d.ts",
+                "name": "URLEncoded",
+                "value": "application/x-www-form-urlencoded"
+              }
+            ]
+          },
+          "SearchParams": {
+            "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/admin-api-client/dist/ts/rest/types.d.ts",
+            "syntaxKind": "TypeAliasDeclaration",
+            "name": "SearchParams",
+            "value": "Record<string, SearchParamFields>",
+            "description": "",
+            "members": []
+          },
+          "HeaderParams": {
+            "filePath": "../../node_modules/@shopify/shopify-api/lib/clients/types.d.ts",
+            "syntaxKind": "TypeAliasDeclaration",
+            "name": "HeaderParams",
+            "value": "Record<string, string | number | string[]>",
+            "description": "Headers to be sent with the request.",
+            "members": []
+          },
+          "PostRequestParams": {
+            "filePath": "../../node_modules/@shopify/shopify-api/lib/clients/types.d.ts",
+            "syntaxKind": "TypeAliasDeclaration",
+            "name": "PostRequestParams",
+            "value": "GetRequestParams & {\n    data: Record<string, any> | string;\n}",
+            "description": ""
+          },
+          "GraphQLClient": {
+            "filePath": "src/server/clients/types.ts",
+            "name": "GraphQLClient",
+            "description": "",
+            "params": [
+              {
+                "name": "query",
+                "description": "",
+                "value": "Operation extends keyof Operations",
+                "filePath": "src/server/clients/types.ts"
+              },
+              {
+                "name": "options",
+                "description": "",
+                "value": "GraphQLQueryOptions<Operation, Operations>",
+                "isOptional": true,
+                "filePath": "src/server/clients/types.ts"
+              }
+            ],
+            "returns": {
+              "filePath": "src/server/clients/types.ts",
+              "description": "",
+              "name": "interface Promise<T> {\n    /**\n     * Attaches callbacks for the resolution and/or rejection of the Promise.\n     * @param onfulfilled The callback to execute when the Promise is resolved.\n     * @param onrejected The callback to execute when the Promise is rejected.\n     * @returns A Promise for the completion of which ever callback is executed.\n     */\n    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): Promise<TResult1 | TResult2>;\n\n    /**\n     * Attaches a callback for only the rejection of the Promise.\n     * @param onrejected The callback to execute when the Promise is rejected.\n     * @returns A Promise for the completion of the callback.\n     */\n    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): Promise<T | TResult>;\n}, interface Promise<T> {}, Promise: PromiseConstructor, interface Promise<T> {\n    readonly [Symbol.toStringTag]: string;\n}, interface Promise<T> {\n    /**\n     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The\n     * resolved value cannot be modified from the callback.\n     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).\n     * @returns A Promise for the completion of the callback.\n     */\n    finally(onfinally?: (() => void) | undefined | null): Promise<T>;\n}",
+              "value": "interface Promise<T> {\n    /**\n     * Attaches callbacks for the resolution and/or rejection of the Promise.\n     * @param onfulfilled The callback to execute when the Promise is resolved.\n     * @param onrejected The callback to execute when the Promise is rejected.\n     * @returns A Promise for the completion of which ever callback is executed.\n     */\n    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): Promise<TResult1 | TResult2>;\n\n    /**\n     * Attaches a callback for only the rejection of the Promise.\n     * @param onrejected The callback to execute when the Promise is rejected.\n     * @returns A Promise for the completion of the callback.\n     */\n    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): Promise<T | TResult>;\n}, interface Promise<T> {}, Promise: PromiseConstructor, interface Promise<T> {\n    readonly [Symbol.toStringTag]: string;\n}, interface Promise<T> {\n    /**\n     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The\n     * resolved value cannot be modified from the callback.\n     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).\n     * @returns A Promise for the completion of the callback.\n     */\n    finally(onfinally?: (() => void) | undefined | null): Promise<T>;\n}"
+            },
+            "value": "export type GraphQLClient<Operations extends AllOperations> = <\n  Operation extends keyof Operations,\n>(\n  query: Operation,\n  options?: GraphQLQueryOptions<Operation, Operations>,\n) => Promise<GraphQLResponse<Operation, Operations>>;"
+          },
+          "GraphQLQueryOptions": {
+            "filePath": "src/server/clients/types.ts",
+            "name": "GraphQLQueryOptions",
+            "description": "",
+            "members": [
+              {
+                "filePath": "src/server/clients/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "variables",
+                "value": "ApiClientRequestOptions<Operation, Operations>[\"variables\"]",
+                "description": "The variables to pass to the operation.",
+                "isOptional": true
+              },
+              {
+                "filePath": "src/server/clients/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "apiVersion",
+                "value": "ApiVersion",
+                "description": "The version of the API to use for the request.",
+                "isOptional": true
+              },
+              {
+                "filePath": "src/server/clients/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "headers",
+                "value": "Record<string, any>",
+                "description": "Additional headers to include in the request.",
+                "isOptional": true
+              },
+              {
+                "filePath": "src/server/clients/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "tries",
+                "value": "number",
+                "description": "The total number of times to try the request if it fails.",
+                "isOptional": true
+              }
+            ],
+            "value": "export interface GraphQLQueryOptions<\n  Operation extends keyof Operations,\n  Operations extends AllOperations,\n> {\n  /**\n   * The variables to pass to the operation.\n   */\n  variables?: ApiClientRequestOptions<Operation, Operations>['variables'];\n  /**\n   * The version of the API to use for the request.\n   */\n  apiVersion?: ApiVersion;\n  /**\n   * Additional headers to include in the request.\n   */\n  headers?: Record<string, any>;\n  /**\n   * The total number of times to try the request if it fails.\n   */\n  tries?: number;\n}"
+          },
+          "ApiVersion": {
+            "filePath": "../../node_modules/@shopify/shopify-api/lib/types.d.ts",
+            "syntaxKind": "EnumDeclaration",
+            "name": "ApiVersion",
+            "value": "export declare enum ApiVersion {\n    October22 = \"2022-10\",\n    January23 = \"2023-01\",\n    April23 = \"2023-04\",\n    July23 = \"2023-07\",\n    October23 = \"2023-10\",\n    January24 = \"2024-01\",\n    Unstable = \"unstable\"\n}",
+            "members": [
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/types.d.ts",
+                "name": "October22",
+                "value": "2022-10"
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/types.d.ts",
+                "name": "January23",
+                "value": "2023-01"
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/types.d.ts",
+                "name": "April23",
+                "value": "2023-04"
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/types.d.ts",
+                "name": "July23",
+                "value": "2023-07"
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/types.d.ts",
+                "name": "October23",
+                "value": "2023-10"
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/types.d.ts",
+                "name": "January24",
+                "value": "2024-01"
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/types.d.ts",
+                "name": "Unstable",
+                "value": "unstable"
+              }
+            ]
+          },
+          "AdminOperations": {
+            "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/admin-api-client/dist/ts/graphql/types.d.ts",
+            "syntaxKind": "TypeAliasDeclaration",
+            "name": "AdminOperations",
+            "value": "AdminQueries & AdminMutations",
+            "description": ""
+          },
+          "AdminQueries": {
+            "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/admin-api-client/dist/ts/graphql/types.d.ts",
+            "name": "AdminQueries",
+            "description": "",
+            "members": [
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/admin-api-client/dist/ts/graphql/types.d.ts",
+                "name": "[key: string]",
+                "value": "{\n        variables: any;\n        return: any;\n    }"
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/admin-api-client/dist/ts/graphql/types.d.ts",
+                "name": "[key: number | symbol]",
+                "value": "never"
+              }
+            ],
+            "value": "export interface AdminQueries {\n    [key: string]: {\n        variables: any;\n        return: any;\n    };\n    [key: number | symbol]: never;\n}"
+          },
+          "AdminMutations": {
+            "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/admin-api-client/dist/ts/graphql/types.d.ts",
+            "name": "AdminMutations",
+            "description": "",
+            "members": [
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/admin-api-client/dist/ts/graphql/types.d.ts",
+                "name": "[key: string]",
+                "value": "{\n        variables: any;\n        return: any;\n    }"
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/node_modules/@shopify/admin-api-client/dist/ts/graphql/types.d.ts",
+                "name": "[key: number | symbol]",
+                "value": "never"
+              }
+            ],
+            "value": "export interface AdminMutations {\n    [key: string]: {\n        variables: any;\n        return: any;\n    };\n    [key: number | symbol]: never;\n}"
+          }
+        }
+      }
+    ],
+    "defaultExample": {
+      "description": "Handle a fulfillment service notification call",
+      "codeblock": {
+        "title": "Consume a fulfillment service notification request",
+        "tabs": [
+          {
+            "title": "/app/routes/**.ts",
+            "language": "typescript",
+            "code": "import {type ActionFunctionArgs} from '@remix-run/node';\n\nimport {authenticate} from '../shopify.server';\n\nexport const action = async ({request}: ActionFunctionArgs) =&gt; {\n  const {admin, payload} = await authenticate.flow(request);\n\n  const kind = payload.kind;\n\n  if(kind === 'FULFILLMENT_REQUEST') {\n    const response = await admin?.graphql(\n        `#graphql\n         query {\n           shop {\n             assignedFulfillmentOrders(first: 10, assignmentStatus: FULFILLMENT_REQUESTED) {\n               edges {\n                 node {\n                   id\n                   destination {\n                   firstName\n                   lastName\n                 }\n                 lineItems(first: 10) {\n                   edges {\n                     node {\n                     id\n                     productTitle\n                     sku\n                     remainingQuantity\n                   }\n                 }\n               }\n               merchantRequests(first: 10, kind: FULFILLMENT_REQUEST) {\n                 edges {\n                   node {\n                     message\n                   }\n                 }\n               }\n             }\n           }\n         }\n       }\n      }`);\n\n        const fulfillments = await response.json();\n        console.log(fulfillments);\n  }\n\n\n  return new Response();\n};\n"
+          }
+        ]
+      }
+    },
+    "jsDocTypeExamples": [
+      "FulfillmentServiceContext"
+    ],
+    "related": [
+      {
+        "name": "Admin API context",
+        "subtitle": "Interact with the Admin API.",
+        "url": "/docs/api/shopify-app-remix/apis/admin-api"
+      },
+      {
+        "name": "Manage Fulfillments",
+        "subtitle": "Receive fulfillment requests and cancellations.",
+        "url": "/docs/apps/fulfillment/fulfillment-service-apps/manage-fulfillments",
+        "type": "shopify"
+      }
+    ],
+    "examples": {
+      "description": "",
+      "exampleGroups": [
+        {
+          "title": "session",
+          "examples": [
+            {
+              "description": "Use the session associated with this request to use REST resources.",
+              "codeblock": {
+                "title": "Shopify session for the fulfillment service notification request",
+                "tabs": [
+                  {
+                    "title": "/app/routes/fulfillment_service_notification.tsx",
+                    "code": "import { ActionFunctionArgs } from \"@remix-run/node\";\nimport { authenticate } from \"../shopify.server\";\n\n  export const action = async ({ request }: ActionFunctionArgs) =&gt; {\n  const { session, admin } = await authenticate.fulfillmentService(request);\n\n  const products = await admin?.rest.resources.Product.all({ session });\n  // Use products\n\n  return new Response();\n};",
+                    "language": "typescript"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "title": "admin",
+          "examples": [
+            {
+              "description": "Use the session associated with this request to use the Admin GraphQL API",
+              "codeblock": {
+                "title": "Shopify session for the fulfillment service request",
+                "tabs": [
+                  {
+                    "title": "/app/routes/fulfillment_order_notification.ts",
+                    "code": "import { ActionFunctionArgs } from \"@remix-run/node\";\nimport { authenticate } from \"../shopify.server\";\n\nexport async function action({ request }: ActionFunctionArgs) {\n  const { admin } = await authenticate.fulfillmentService(request);\n  const response = await admin?.graphql(\n `#graphql\n   query {\n     shop {\n       assignedFulfillmentOrders(first: 10, assignmentStatus: FULFILLMENT_REQUESTED) {\n         edges {\n           node {\n             id\n             destination {\n             firstName\n             lastName\n           }\n           lineItems(first: 10) {\n             edges {\n               node {\n               id\n               productTitle\n               sku\n               remainingQuantity\n             }\n           }\n         }\n         merchantRequests(first: 10, kind: FULFILLMENT_REQUEST) {\n           edges {\n             node {\n               message\n             }\n           }\n         }\n       }\n     }\n   }\n }\n}`);\n\n  const fulfillments = await response.json();\n  return json({ data: fulfillments.data });\n}",
+                    "language": "typescript"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "title": "payload",
+          "examples": [
+            {
+              "description": "Get the request's POST payload.",
+              "codeblock": {
+                "title": "Fulfillment service request payload",
+                "tabs": [
+                  {
+                    "title": "Example",
+                    "code": "/app/routes/fulfillment_order_notification.ts\nimport { ActionFunction } from \"@remix-run/node\";\nimport { authenticate } from \"../shopify.server\";\n\nexport const action: ActionFunction = async ({ request }) =&gt; {\n  const { payload } = await authenticate.fulfillmentService(request);\n  if(payload.kind === 'FULFILLMENT_REQUEST') {\n   // handle fulfillment request\n  } else if (payload.kind === 'CANCELLATION_REQUEST') {\n   // handle cancellation request\n  };\nreturn new Response();",
                     "language": "typescript"
                   }
                 ]
@@ -5829,9 +7141,251 @@
                 "name": "test",
                 "value": "boolean",
                 "description": "Whether this is a test subscription."
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/billing/types.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "lineItems",
+                "value": "ActiveSubscriptionLineItem[]",
+                "description": "",
+                "isOptional": true
               }
             ],
-            "value": "export interface AppSubscription {\n    /**\n     * The ID of the app subscription.\n     */\n    id: string;\n    /**\n     * The name of the purchased plan.\n     */\n    name: string;\n    /**\n     * Whether this is a test subscription.\n     */\n    test: boolean;\n}"
+            "value": "export interface AppSubscription {\n    /**\n     * The ID of the app subscription.\n     */\n    id: string;\n    /**\n     * The name of the purchased plan.\n     */\n    name: string;\n    /**\n     * Whether this is a test subscription.\n     */\n    test: boolean;\n    lineItems?: ActiveSubscriptionLineItem[];\n}"
+          },
+          "ActiveSubscriptionLineItem": {
+            "filePath": "../../node_modules/@shopify/shopify-api/lib/billing/types.d.ts",
+            "name": "ActiveSubscriptionLineItem",
+            "description": "",
+            "members": [
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/billing/types.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "id",
+                "value": "string",
+                "description": ""
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/billing/types.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "plan",
+                "value": "AppPlan",
+                "description": ""
+              }
+            ],
+            "value": "export interface ActiveSubscriptionLineItem {\n    id: string;\n    plan: AppPlan;\n}"
+          },
+          "AppPlan": {
+            "filePath": "../../node_modules/@shopify/shopify-api/lib/billing/types.d.ts",
+            "name": "AppPlan",
+            "description": "",
+            "members": [
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/billing/types.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "pricingDetails",
+                "value": "RecurringAppPlan | UsageAppPlan",
+                "description": ""
+              }
+            ],
+            "value": "export interface AppPlan {\n    pricingDetails: RecurringAppPlan | UsageAppPlan;\n}"
+          },
+          "RecurringAppPlan": {
+            "filePath": "../../node_modules/@shopify/shopify-api/lib/billing/types.d.ts",
+            "name": "RecurringAppPlan",
+            "description": "",
+            "members": [
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/billing/types.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "interval",
+                "value": "BillingInterval.Every30Days | BillingInterval.Annual",
+                "description": ""
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/billing/types.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "price",
+                "value": "Money",
+                "description": ""
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/billing/types.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "discount",
+                "value": "AppPlanDiscount",
+                "description": ""
+              }
+            ],
+            "value": "export interface RecurringAppPlan {\n    interval: BillingInterval.Every30Days | BillingInterval.Annual;\n    price: Money;\n    discount: AppPlanDiscount;\n}"
+          },
+          "BillingInterval": {
+            "filePath": "../../node_modules/@shopify/shopify-api/lib/types.d.ts",
+            "syntaxKind": "EnumDeclaration",
+            "name": "BillingInterval",
+            "value": "export declare enum BillingInterval {\n    OneTime = \"ONE_TIME\",\n    Every30Days = \"EVERY_30_DAYS\",\n    Annual = \"ANNUAL\",\n    Usage = \"USAGE\"\n}",
+            "members": [
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/types.d.ts",
+                "name": "OneTime",
+                "value": "ONE_TIME"
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/types.d.ts",
+                "name": "Every30Days",
+                "value": "EVERY_30_DAYS"
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/types.d.ts",
+                "name": "Annual",
+                "value": "ANNUAL"
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/types.d.ts",
+                "name": "Usage",
+                "value": "USAGE"
+              }
+            ]
+          },
+          "Money": {
+            "filePath": "../../node_modules/@shopify/shopify-api/lib/billing/types.d.ts",
+            "name": "Money",
+            "description": "",
+            "members": [
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/billing/types.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "amount",
+                "value": "number",
+                "description": ""
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/billing/types.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "currencyCode",
+                "value": "string",
+                "description": ""
+              }
+            ],
+            "value": "interface Money {\n    amount: number;\n    currencyCode: string;\n}"
+          },
+          "AppPlanDiscount": {
+            "filePath": "../../node_modules/@shopify/shopify-api/lib/billing/types.d.ts",
+            "name": "AppPlanDiscount",
+            "description": "",
+            "members": [
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/billing/types.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "durationLimitInIntervals",
+                "value": "number",
+                "description": ""
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/billing/types.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "remainingDurationInIntervals",
+                "value": "number",
+                "description": ""
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/billing/types.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "priceAfterDiscount",
+                "value": "Money",
+                "description": ""
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/billing/types.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "value",
+                "value": "AppPlanDiscountAmount",
+                "description": ""
+              }
+            ],
+            "value": "export interface AppPlanDiscount {\n    durationLimitInIntervals: number;\n    remainingDurationInIntervals: number;\n    priceAfterDiscount: Money;\n    value: AppPlanDiscountAmount;\n}"
+          },
+          "AppPlanDiscountAmount": {
+            "filePath": "../../node_modules/@shopify/shopify-api/lib/billing/types.d.ts",
+            "syntaxKind": "TypeAliasDeclaration",
+            "name": "AppPlanDiscountAmount",
+            "value": "BillingConfigSubscriptionPlanDiscountAmount | BillingConfigSubscriptionPlanDiscountPercentage",
+            "description": ""
+          },
+          "BillingConfigSubscriptionPlanDiscountAmount": {
+            "filePath": "../../node_modules/@shopify/shopify-api/lib/billing/types.d.ts",
+            "name": "BillingConfigSubscriptionPlanDiscountAmount",
+            "description": "",
+            "members": [
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/billing/types.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "amount",
+                "value": "number",
+                "description": "The amount to discount.\n\nCannot be set if `percentage` is set."
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/billing/types.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "percentage",
+                "value": "never",
+                "description": "The percentage to discount.\n\nCannot be set if `amount` is set.",
+                "isOptional": true
+              }
+            ],
+            "value": "export interface BillingConfigSubscriptionPlanDiscountAmount {\n    /**\n     * The amount to discount.\n     *\n     * Cannot be set if `percentage` is set.\n     */\n    amount: number;\n    /**\n     * The percentage to discount.\n     *\n     * Cannot be set if `amount` is set.\n     */\n    percentage?: never;\n}"
+          },
+          "BillingConfigSubscriptionPlanDiscountPercentage": {
+            "filePath": "../../node_modules/@shopify/shopify-api/lib/billing/types.d.ts",
+            "name": "BillingConfigSubscriptionPlanDiscountPercentage",
+            "description": "",
+            "members": [
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/billing/types.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "amount",
+                "value": "never",
+                "description": "The amount to discount.\n\nCannot be set if `percentage` is set.",
+                "isOptional": true
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/billing/types.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "percentage",
+                "value": "number",
+                "description": "The percentage to discount.\n\nCannot be set if `amount` is set."
+              }
+            ],
+            "value": "export interface BillingConfigSubscriptionPlanDiscountPercentage {\n    /**\n     * The amount to discount.\n     *\n     * Cannot be set if `percentage` is set.\n     */\n    amount?: never;\n    /**\n     * The percentage to discount.\n     *\n     * Cannot be set if `amount` is set.\n     */\n    percentage: number;\n}"
+          },
+          "UsageAppPlan": {
+            "filePath": "../../node_modules/@shopify/shopify-api/lib/billing/types.d.ts",
+            "name": "UsageAppPlan",
+            "description": "",
+            "members": [
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/billing/types.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "balanceUsed",
+                "value": "Money",
+                "description": ""
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/billing/types.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "cappedAmount",
+                "value": "Money",
+                "description": ""
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/billing/types.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "terms",
+                "value": "string",
+                "description": ""
+              }
+            ],
+            "value": "export interface UsageAppPlan {\n    balanceUsed: Money;\n    cappedAmount: Money;\n    terms: string;\n}"
           },
           "CheckBillingOptions": {
             "filePath": "src/server/authenticate/admin/billing/types.ts",
@@ -6676,9 +8230,16 @@
                 "name": "flow",
                 "value": "ShopifyFlow",
                 "description": ""
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/index.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "fulfillmentService",
+                "value": "FulfillmentService",
+                "description": ""
               }
             ],
-            "value": "export interface Shopify<Params extends ConfigParams = ConfigParams, Resources extends ShopifyRestResources = ShopifyRestResources, _Future extends FutureFlagOptions = FutureFlagOptions> {\n    config: ConfigInterface<Params>;\n    clients: ShopifyClients;\n    auth: ShopifyAuth;\n    session: ShopifySession;\n    utils: ShopifyUtils;\n    webhooks: ShopifyWebhooks;\n    billing: ShopifyBilling;\n    logger: ShopifyLogger;\n    rest: Resources;\n    flow: ShopifyFlow;\n}"
+            "value": "export interface Shopify<Params extends ConfigParams = ConfigParams, Resources extends ShopifyRestResources = ShopifyRestResources, _Future extends FutureFlagOptions = FutureFlagOptions> {\n    config: ConfigInterface<Params>;\n    clients: ShopifyClients;\n    auth: ShopifyAuth;\n    session: ShopifySession;\n    utils: ShopifyUtils;\n    webhooks: ShopifyWebhooks;\n    billing: ShopifyBilling;\n    logger: ShopifyLogger;\n    rest: Resources;\n    flow: ShopifyFlow;\n    fulfillmentService: FulfillmentService;\n}"
           },
           "ConfigInterface": {
             "filePath": "../../node_modules/@shopify/shopify-api/lib/base-types.d.ts",
@@ -7239,34 +8800,6 @@
             ],
             "value": "export interface BillingConfigOneTimePlan extends BillingConfigPlan {\n    /**\n     * Interval for this plan.\n     *\n     * Must be set to `OneTime`.\n     */\n    interval: BillingInterval.OneTime;\n}"
           },
-          "BillingInterval": {
-            "filePath": "../../node_modules/@shopify/shopify-api/lib/types.d.ts",
-            "syntaxKind": "EnumDeclaration",
-            "name": "BillingInterval",
-            "value": "export declare enum BillingInterval {\n    OneTime = \"ONE_TIME\",\n    Every30Days = \"EVERY_30_DAYS\",\n    Annual = \"ANNUAL\",\n    Usage = \"USAGE\"\n}",
-            "members": [
-              {
-                "filePath": "../../node_modules/@shopify/shopify-api/lib/types.d.ts",
-                "name": "OneTime",
-                "value": "ONE_TIME"
-              },
-              {
-                "filePath": "../../node_modules/@shopify/shopify-api/lib/types.d.ts",
-                "name": "Every30Days",
-                "value": "EVERY_30_DAYS"
-              },
-              {
-                "filePath": "../../node_modules/@shopify/shopify-api/lib/types.d.ts",
-                "name": "Annual",
-                "value": "ANNUAL"
-              },
-              {
-                "filePath": "../../node_modules/@shopify/shopify-api/lib/types.d.ts",
-                "name": "Usage",
-                "value": "USAGE"
-              }
-            ]
-          },
           "BillingConfigSubscriptionLineItemPlan": {
             "filePath": "../../node_modules/@shopify/shopify-api/lib/billing/types.d.ts",
             "name": "BillingConfigSubscriptionLineItemPlan",
@@ -7380,52 +8913,6 @@
               }
             ],
             "value": "export interface BillingConfigSubscriptionPlanDiscount {\n    /**\n     * The number of intervals to apply the discount for.\n     */\n    durationLimitInIntervals?: number;\n    /**\n     * The discount to apply.\n     */\n    value: BillingConfigSubscriptionPlanDiscountAmount | BillingConfigSubscriptionPlanDiscountPercentage;\n}"
-          },
-          "BillingConfigSubscriptionPlanDiscountAmount": {
-            "filePath": "../../node_modules/@shopify/shopify-api/lib/billing/types.d.ts",
-            "name": "BillingConfigSubscriptionPlanDiscountAmount",
-            "description": "",
-            "members": [
-              {
-                "filePath": "../../node_modules/@shopify/shopify-api/lib/billing/types.d.ts",
-                "syntaxKind": "PropertySignature",
-                "name": "amount",
-                "value": "number",
-                "description": "The amount to discount.\n\nCannot be set if `percentage` is set."
-              },
-              {
-                "filePath": "../../node_modules/@shopify/shopify-api/lib/billing/types.d.ts",
-                "syntaxKind": "PropertySignature",
-                "name": "percentage",
-                "value": "never",
-                "description": "The percentage to discount.\n\nCannot be set if `amount` is set.",
-                "isOptional": true
-              }
-            ],
-            "value": "export interface BillingConfigSubscriptionPlanDiscountAmount {\n    /**\n     * The amount to discount.\n     *\n     * Cannot be set if `percentage` is set.\n     */\n    amount: number;\n    /**\n     * The percentage to discount.\n     *\n     * Cannot be set if `amount` is set.\n     */\n    percentage?: never;\n}"
-          },
-          "BillingConfigSubscriptionPlanDiscountPercentage": {
-            "filePath": "../../node_modules/@shopify/shopify-api/lib/billing/types.d.ts",
-            "name": "BillingConfigSubscriptionPlanDiscountPercentage",
-            "description": "",
-            "members": [
-              {
-                "filePath": "../../node_modules/@shopify/shopify-api/lib/billing/types.d.ts",
-                "syntaxKind": "PropertySignature",
-                "name": "amount",
-                "value": "never",
-                "description": "The amount to discount.\n\nCannot be set if `percentage` is set.",
-                "isOptional": true
-              },
-              {
-                "filePath": "../../node_modules/@shopify/shopify-api/lib/billing/types.d.ts",
-                "syntaxKind": "PropertySignature",
-                "name": "percentage",
-                "value": "number",
-                "description": "The percentage to discount.\n\nCannot be set if `amount` is set."
-              }
-            ],
-            "value": "export interface BillingConfigSubscriptionPlanDiscountPercentage {\n    /**\n     * The amount to discount.\n     *\n     * Cannot be set if `percentage` is set.\n     */\n    amount?: never;\n    /**\n     * The percentage to discount.\n     *\n     * Cannot be set if `amount` is set.\n     */\n    percentage: number;\n}"
           },
           "BillingConfigUsageLineItem": {
             "filePath": "../../node_modules/@shopify/shopify-api/lib/billing/types.d.ts",
@@ -9047,40 +10534,31 @@
                 "syntaxKind": "PropertySignature",
                 "name": "valid",
                 "value": "false",
-                "description": ""
+                "description": "Whether the request is a valid Flow request from Shopify."
               },
               {
                 "filePath": "../../node_modules/@shopify/shopify-api/lib/webhooks/types.d.ts",
                 "syntaxKind": "PropertySignature",
                 "name": "reason",
-                "value": "WebhookValidationErrorReason",
+                "value": "WebhookValidationErrorReasonType",
                 "description": ""
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/webhooks/types.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "valid",
+                "value": "false",
+                "description": "Whether the request is a valid Flow request from Shopify."
               }
             ],
-            "value": "export interface WebhookValidationInvalid {\n    valid: false;\n    reason: WebhookValidationErrorReason;\n}"
+            "value": "export interface WebhookValidationInvalid extends Omit<ValidationInvalid, 'reason'> {\n    valid: false;\n    reason: WebhookValidationErrorReasonType;\n}"
           },
-          "WebhookValidationErrorReason": {
+          "WebhookValidationErrorReasonType": {
             "filePath": "../../node_modules/@shopify/shopify-api/lib/webhooks/types.d.ts",
-            "syntaxKind": "EnumDeclaration",
-            "name": "WebhookValidationErrorReason",
-            "value": "export declare enum WebhookValidationErrorReason {\n    MissingHeaders = \"missing_headers\",\n    MissingBody = \"missing_body\",\n    InvalidHmac = \"invalid_hmac\"\n}",
-            "members": [
-              {
-                "filePath": "../../node_modules/@shopify/shopify-api/lib/webhooks/types.d.ts",
-                "name": "MissingHeaders",
-                "value": "missing_headers"
-              },
-              {
-                "filePath": "../../node_modules/@shopify/shopify-api/lib/webhooks/types.d.ts",
-                "name": "MissingBody",
-                "value": "missing_body"
-              },
-              {
-                "filePath": "../../node_modules/@shopify/shopify-api/lib/webhooks/types.d.ts",
-                "name": "InvalidHmac",
-                "value": "invalid_hmac"
-              }
-            ]
+            "syntaxKind": "TypeAliasDeclaration",
+            "name": "WebhookValidationErrorReasonType",
+            "value": "(typeof WebhookValidationErrorReason)[keyof typeof WebhookValidationErrorReason]",
+            "description": ""
           },
           "WebhookValidationMissingHeaders": {
             "filePath": "../../node_modules/@shopify/shopify-api/lib/webhooks/types.d.ts",
@@ -9091,7 +10569,7 @@
                 "filePath": "../../node_modules/@shopify/shopify-api/lib/webhooks/types.d.ts",
                 "syntaxKind": "PropertySignature",
                 "name": "reason",
-                "value": "WebhookValidationErrorReason.MissingHeaders",
+                "value": "\"missing_headers\"",
                 "description": ""
               },
               {
@@ -9106,10 +10584,10 @@
                 "syntaxKind": "PropertySignature",
                 "name": "valid",
                 "value": "false",
-                "description": ""
+                "description": "Whether the request is a valid Flow request from Shopify."
               }
             ],
-            "value": "export interface WebhookValidationMissingHeaders extends WebhookValidationInvalid {\n    reason: WebhookValidationErrorReason.MissingHeaders;\n    missingHeaders: string[];\n}"
+            "value": "export interface WebhookValidationMissingHeaders extends WebhookValidationInvalid {\n    reason: typeof WebhookValidationErrorReason.MissingHeaders;\n    missingHeaders: string[];\n}"
           },
           "ShopifyBilling": {
             "filePath": "../../node_modules/@shopify/shopify-api/lib/billing/index.d.ts",
@@ -9416,100 +10894,70 @@
                 "filePath": "../../node_modules/@shopify/shopify-api/lib/flow/index.d.ts",
                 "syntaxKind": "PropertySignature",
                 "name": "validate",
-                "value": "({ rawBody, ...adapterArgs }: FlowValidateParams) => Promise<FlowValidationInvalid | FlowValidationValid>",
+                "value": "({ rawBody, ...adapterArgs }: ValidateParams) => Promise<ValidationInvalid | ValidationValid>",
                 "description": ""
               }
             ]
           },
-          "FlowValidateParams": {
-            "filePath": "../../node_modules/@shopify/shopify-api/lib/flow/types.d.ts",
-            "name": "FlowValidateParams",
+          "ValidationInvalid": {
+            "filePath": "../../node_modules/@shopify/shopify-api/lib/utils/types.d.ts",
+            "name": "ValidationInvalid",
             "description": "",
             "members": [
               {
-                "filePath": "../../node_modules/@shopify/shopify-api/lib/flow/types.d.ts",
-                "syntaxKind": "PropertySignature",
-                "name": "rawBody",
-                "value": "string",
-                "description": "The raw body of the request."
-              },
-              {
-                "filePath": "../../node_modules/@shopify/shopify-api/lib/flow/types.d.ts",
-                "syntaxKind": "PropertySignature",
-                "name": "rawRequest",
-                "value": "AdapterRequest",
-                "description": "The raw request, from the app's framework."
-              },
-              {
-                "filePath": "../../node_modules/@shopify/shopify-api/lib/flow/types.d.ts",
-                "syntaxKind": "PropertySignature",
-                "name": "rawResponse",
-                "value": "AdapterResponse",
-                "description": "The raw response, from the app's framework. Only applies to frameworks that expose an API similar to Node's HTTP module.",
-                "isOptional": true
-              }
-            ],
-            "value": "export interface FlowValidateParams extends AdapterArgs {\n    /**\n     * The raw body of the request.\n     */\n    rawBody: string;\n}"
-          },
-          "FlowValidationInvalid": {
-            "filePath": "../../node_modules/@shopify/shopify-api/lib/flow/types.d.ts",
-            "name": "FlowValidationInvalid",
-            "description": "",
-            "members": [
-              {
-                "filePath": "../../node_modules/@shopify/shopify-api/lib/flow/types.d.ts",
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/utils/types.d.ts",
                 "syntaxKind": "PropertySignature",
                 "name": "valid",
                 "value": "false",
                 "description": "Whether the request is a valid Flow request from Shopify."
               },
               {
-                "filePath": "../../node_modules/@shopify/shopify-api/lib/flow/types.d.ts",
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/utils/types.d.ts",
                 "syntaxKind": "PropertySignature",
                 "name": "reason",
-                "value": "FlowValidationErrorReason",
+                "value": "ValidationErrorReasonType",
                 "description": "The reason why the request is not valid."
               }
             ],
-            "value": "export interface FlowValidationInvalid {\n    /**\n     * Whether the request is a valid Flow request from Shopify.\n     */\n    valid: false;\n    /**\n     * The reason why the request is not valid.\n     */\n    reason: FlowValidationErrorReason;\n}"
+            "value": "export interface ValidationInvalid {\n    /**\n     * Whether the request is a valid Flow request from Shopify.\n     */\n    valid: false;\n    /**\n     * The reason why the request is not valid.\n     */\n    reason: ValidationErrorReasonType;\n}"
           },
-          "FlowValidationErrorReason": {
-            "filePath": "../../node_modules/@shopify/shopify-api/lib/flow/types.d.ts",
-            "syntaxKind": "EnumDeclaration",
-            "name": "FlowValidationErrorReason",
-            "value": "export declare enum FlowValidationErrorReason {\n    MissingBody = \"missing_body\",\n    MissingHmac = \"missing_hmac\",\n    InvalidHmac = \"invalid_hmac\"\n}",
-            "members": [
-              {
-                "filePath": "../../node_modules/@shopify/shopify-api/lib/flow/types.d.ts",
-                "name": "MissingBody",
-                "value": "missing_body"
-              },
-              {
-                "filePath": "../../node_modules/@shopify/shopify-api/lib/flow/types.d.ts",
-                "name": "MissingHmac",
-                "value": "missing_hmac"
-              },
-              {
-                "filePath": "../../node_modules/@shopify/shopify-api/lib/flow/types.d.ts",
-                "name": "InvalidHmac",
-                "value": "invalid_hmac"
-              }
-            ]
+          "ValidationErrorReasonType": {
+            "filePath": "../../node_modules/@shopify/shopify-api/lib/utils/types.d.ts",
+            "syntaxKind": "TypeAliasDeclaration",
+            "name": "ValidationErrorReasonType",
+            "value": "(typeof ValidationErrorReason)[keyof typeof ValidationErrorReason]",
+            "description": ""
           },
-          "FlowValidationValid": {
-            "filePath": "../../node_modules/@shopify/shopify-api/lib/flow/types.d.ts",
-            "name": "FlowValidationValid",
+          "ValidationValid": {
+            "filePath": "../../node_modules/@shopify/shopify-api/lib/utils/types.d.ts",
+            "name": "ValidationValid",
             "description": "",
             "members": [
               {
-                "filePath": "../../node_modules/@shopify/shopify-api/lib/flow/types.d.ts",
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/utils/types.d.ts",
                 "syntaxKind": "PropertySignature",
                 "name": "valid",
                 "value": "true",
-                "description": "Whether the request is a valid Flow request from Shopify."
+                "description": "Whether the request is a valid request from Shopify."
               }
             ],
-            "value": "export interface FlowValidationValid {\n    /**\n     * Whether the request is a valid Flow request from Shopify.\n     */\n    valid: true;\n}"
+            "value": "export interface ValidationValid {\n    /**\n     * Whether the request is a valid request from Shopify.\n     */\n    valid: true;\n}"
+          },
+          "FulfillmentService": {
+            "filePath": "../../node_modules/@shopify/shopify-api/lib/fulfillment-service/index.d.ts",
+            "syntaxKind": "TypeAliasDeclaration",
+            "name": "FulfillmentService",
+            "value": "ReturnType<typeof fulfillmentService>",
+            "description": "",
+            "members": [
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/fulfillment-service/index.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "validate",
+                "value": "({ rawBody, ...adapterArgs }: ValidateParams) => Promise<ValidationInvalid | ValidationValid>",
+                "description": ""
+              }
+            ]
           }
         }
       }
@@ -10753,7 +12201,7 @@
               "name": "ShopifyApp<Config extends AppConfigArg<Resources, Storage, Future>>",
               "value": "ShopifyApp<Config extends AppConfigArg<Resources, Storage, Future>>"
             },
-            "value": "export function shopifyApp<\n  Config extends AppConfigArg<Resources, Storage, Future>,\n  Resources extends ShopifyRestResources,\n  Storage extends SessionStorage,\n  Future extends FutureFlagOptions = Config['future'],\n>(appConfig: Readonly<Config>): ShopifyApp<Config> {\n  const api = deriveApi(appConfig);\n  const config = deriveConfig<Storage>(appConfig, api.config);\n  const logger = overrideLogger(api.logger);\n\n  if (appConfig.webhooks) {\n    api.webhooks.addHandlers(appConfig.webhooks);\n  }\n\n  const params: BasicParams = {api, config, logger};\n  const authStrategy = authStrategyFactory<Config, Resources>({\n    ...params,\n    strategy:\n      config.future.unstable_newEmbeddedAuthStrategy && config.isEmbeddedApp\n        ? new TokenExchangeStrategy(params)\n        : new AuthCodeFlowStrategy(params),\n  });\n\n  const shopify:\n    | AdminApp<Config>\n    | AppStoreApp<Config>\n    | SingleMerchantApp<Config> = {\n    sessionStorage: config.sessionStorage,\n    addDocumentResponseHeaders: addDocumentResponseHeadersFactory(params),\n    registerWebhooks: registerWebhooksFactory(params),\n    authenticate: {\n      admin: authStrategy,\n      flow: authenticateFlowFactory<Resources>(params),\n      public: authenticatePublicFactory<Future, Resources>(params),\n      webhook: authenticateWebhookFactory<\n        Future,\n        Resources,\n        keyof Config['webhooks'] | MandatoryTopics\n      >(params),\n    },\n    unauthenticated: {\n      admin: unauthenticatedAdminContextFactory(params),\n      storefront: unauthenticatedStorefrontContextFactory(params),\n    },\n  };\n\n  if (\n    isAppStoreApp(shopify, appConfig) ||\n    isSingleMerchantApp(shopify, appConfig)\n  ) {\n    shopify.login = loginFactory(params);\n  }\n\n  return shopify as ShopifyApp<Config>;\n}",
+            "value": "export function shopifyApp<\n  Config extends AppConfigArg<Resources, Storage, Future>,\n  Resources extends ShopifyRestResources,\n  Storage extends SessionStorage,\n  Future extends FutureFlagOptions = Config['future'],\n>(appConfig: Readonly<Config>): ShopifyApp<Config> {\n  const api = deriveApi(appConfig);\n  const config = deriveConfig<Storage>(appConfig, api.config);\n  const logger = overrideLogger(api.logger);\n\n  if (appConfig.webhooks) {\n    api.webhooks.addHandlers(appConfig.webhooks);\n  }\n\n  const params: BasicParams = {api, config, logger};\n  const authStrategy = authStrategyFactory<Config, Resources>({\n    ...params,\n    strategy:\n      config.future.unstable_newEmbeddedAuthStrategy && config.isEmbeddedApp\n        ? new TokenExchangeStrategy(params)\n        : new AuthCodeFlowStrategy(params),\n  });\n\n  const shopify:\n    | AdminApp<Config>\n    | AppStoreApp<Config>\n    | SingleMerchantApp<Config> = {\n    sessionStorage: config.sessionStorage,\n    addDocumentResponseHeaders: addDocumentResponseHeadersFactory(params),\n    registerWebhooks: registerWebhooksFactory(params),\n    authenticate: {\n      admin: authStrategy,\n      flow: authenticateFlowFactory<Resources>(params),\n      public: authenticatePublicFactory<Future, Resources>(params),\n      fulfillmentService:\n        authenticateFulfillmentServiceFactory<Resources>(params),\n      webhook: authenticateWebhookFactory<\n        Future,\n        Resources,\n        keyof Config['webhooks'] | MandatoryTopics\n      >(params),\n    },\n    unauthenticated: {\n      admin: unauthenticatedAdminContextFactory(params),\n      storefront: unauthenticatedStorefrontContextFactory(params),\n    },\n  };\n\n  if (\n    isAppStoreApp(shopify, appConfig) ||\n    isSingleMerchantApp(shopify, appConfig)\n  ) {\n    shopify.login = loginFactory(params);\n  }\n\n  return shopify as ShopifyApp<Config>;\n}",
             "examples": [
               {
                 "title": "The minimum viable configuration",
@@ -11306,6 +12754,25 @@
               {
                 "filePath": "src/server/types.ts",
                 "syntaxKind": "PropertySignature",
+                "name": "fulfillmentService",
+                "value": "AuthenticateFulfillmentService<RestResourcesType<Config>>",
+                "description": "Authenticate a request from a fulfillment service and get back an authenticated context.",
+                "examples": [
+                  {
+                    "title": "Shopify session for the fulfillment service request",
+                    "description": "Use the session associated with this request to use the Admin GraphQL API",
+                    "tabs": [
+                      {
+                        "code": "import { ActionFunctionArgs } from \"@remix-run/node\";\nimport { authenticate } from \"../shopify.server\";\n\nexport async function action({ request }: ActionFunctionArgs) {\n  const { admin } = await authenticate.fulfillmentService(request);\n\n  const response = await admin.graphql(\n    `#graphql\n    mutation acceptFulfillmentRequest {\n      fulfillmentOrderAcceptFulfillmentRequest(\n           id: \"gid://shopify/FulfillmentOrder/5014440902678\",\n           message: \"Reminder that tomorrow is a holiday. We won't be able to ship this until Monday.\"){\n            fulfillmentOrder {\n                status\n               requestStatus\n           }\n        }\n    }\n   );\n\n  const productData = await response.json();\n  return json({ data: productData.data });\n}",
+                        "title": "/app/routes/fulfillment_order_notification.ts"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "filePath": "src/server/types.ts",
+                "syntaxKind": "PropertySignature",
                 "name": "public",
                 "value": "AuthenticatePublic<Config['future']>",
                 "description": "Authenticate a public request and get back a session token.",
@@ -11346,7 +12813,7 @@
                 ]
               }
             ],
-            "value": "interface Authenticate<Config extends AppConfigArg> {\n  /**\n   * Authenticate an admin Request and get back an authenticated admin context.  Use the authenticated admin context to interact with Shopify.\n   *\n   * Examples of when to use this are requests from your app's UI, or requests from admin extensions.\n   *\n   * If there is no session for the Request, this will redirect the merchant to correct auth flows.\n   *\n   * @example\n   * <caption>Authenticating a request for an embedded app.</caption>\n   * ```ts\n   * // /app/routes/**\\/*.jsx\n   * import { LoaderFunctionArgs, json } from \"@remix-run/node\";\n   * import { authenticate } from \"../../shopify.server\";\n   *\n   * export async function loader({ request }: LoaderFunctionArgs) {\n   *   const {admin, session, sessionToken, billing} = authenticate.admin(request);\n   *\n   *   return json(await admin.rest.resources.Product.count({ session }));\n   * }\n   * ```\n   * ```ts\n   * // /app/shopify.server.ts\n   * import { LATEST_API_VERSION, shopifyApp } from \"@shopify/shopify-app-remix/server\";\n   * import { restResources } from \"@shopify/shopify-api/rest/admin/2023-04\";\n   *\n   * const shopify = shopifyApp({\n   *   restResources,\n   *   // ...etc\n   * });\n   * export default shopify;\n   * export const authenticate = shopify.authenticate;\n   * ```\n   */\n  admin: AuthenticateAdmin<Config, RestResourcesType<Config>>;\n\n  /**\n   * Authenticate a Flow extension Request and get back an authenticated context, containing an admin context to access\n   * the API, and the payload of the request.\n   *\n   * If there is no session for the Request, this will return an HTTP 400 error.\n   *\n   * Note that this will always be a POST request.\n   *\n   * @example\n   * <caption>Authenticating a Flow extension request.</caption>\n   * ```ts\n   * // /app/routes/**\\/*.jsx\n   * import { ActionFunctionArgs, json } from \"@remix-run/node\";\n   * import { authenticate } from \"../../shopify.server\";\n   *\n   * export async function action({ request }: ActionFunctionArgs) {\n   *   const {admin, session, payload} = authenticate.flow(request);\n   *\n   *   // Perform flow extension logic\n   *\n   *   // Return a 200 response\n   *   return null;\n   * }\n   * ```\n   * ```ts\n   * // /app/shopify.server.ts\n   * import { LATEST_API_VERSION, shopifyApp } from \"@shopify/shopify-app-remix/server\";\n   * import { restResources } from \"@shopify/shopify-api/rest/admin/2023-04\";\n   *\n   * const shopify = shopifyApp({\n   *   restResources,\n   *   // ...etc\n   * });\n   * export default shopify;\n   * export const authenticate = shopify.authenticate;\n   * ```\n   */\n  flow: AuthenticateFlow<RestResourcesType<Config>>;\n\n  /**\n   * Authenticate a public request and get back a session token.\n   *\n   * @example\n   * <caption>Authenticating a request from a checkout extension</caption>\n   *\n   * ```ts\n   * // /app/routes/api/checkout.jsx\n   * import { LoaderFunctionArgs, json } from \"@remix-run/node\";\n   * import { authenticate } from \"../../shopify.server\";\n   * import { getWidgets } from \"~/db/widgets\";\n   *\n   * export async function loader({ request }: LoaderFunctionArgs) {\n   *   const {sessionToken} = authenticate.public.checkout(request);\n   *\n   *   return json(await getWidgets(sessionToken));\n   * }\n   * ```\n   */\n  public: AuthenticatePublic<Config['future']>;\n\n  /**\n   * Authenticate a Shopify webhook request, get back an authenticated admin context and details on the webhook request\n   *\n   * @example\n   * <caption>Authenticating a webhook request</caption>\n   *\n   * ```ts\n   * // /app/shopify.server.ts\n   * import { DeliveryMethod, shopifyApp } from \"@shopify/shopify-app-remix/server\";\n   *\n   * const shopify = shopifyApp({\n   *   webhooks: {\n   *    APP_UNINSTALLED: {\n   *       deliveryMethod: DeliveryMethod.Http,\n   *       callbackUrl: \"/webhooks\",\n   *     },\n   *   },\n   *   hooks: {\n   *     afterAuth: async ({ session }) => {\n   *       shopify.registerWebhooks({ session });\n   *     },\n   *   },\n   *   // ...etc\n   * });\n   * export default shopify;\n   * export const authenticate = shopify.authenticate;\n   * ```\n   * ```ts\n   * // /app/routes/webhooks.ts\n   * import { ActionFunctionArgs } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   * import db from \"../db.server\";\n   *\n   * export const action = async ({ request }: ActionFunctionArgs) => {\n   *   const { topic, shop, session } = await authenticate.webhook(request);\n   *\n   *   switch (topic) {\n   *     case \"APP_UNINSTALLED\":\n   *       if (session) {\n   *         await db.session.deleteMany({ where: { shop } });\n   *       }\n   *       break;\n   *     case \"CUSTOMERS_DATA_REQUEST\":\n   *     case \"CUSTOMERS_REDACT\":\n   *     case \"SHOP_REDACT\":\n   *     default:\n   *       throw new Response(\"Unhandled webhook topic\", { status: 404 });\n   *   }\n   *\n   *   throw new Response();\n   * };\n   * ```\n   */\n  webhook: AuthenticateWebhook<\n    Config['future'],\n    RestResourcesType<Config>,\n    keyof Config['webhooks'] | MandatoryTopics\n  >;\n}"
+            "value": "interface Authenticate<Config extends AppConfigArg> {\n  /**\n   * Authenticate an admin Request and get back an authenticated admin context.  Use the authenticated admin context to interact with Shopify.\n   *\n   * Examples of when to use this are requests from your app's UI, or requests from admin extensions.\n   *\n   * If there is no session for the Request, this will redirect the merchant to correct auth flows.\n   *\n   * @example\n   * <caption>Authenticating a request for an embedded app.</caption>\n   * ```ts\n   * // /app/routes/**\\/*.jsx\n   * import { LoaderFunctionArgs, json } from \"@remix-run/node\";\n   * import { authenticate } from \"../../shopify.server\";\n   *\n   * export async function loader({ request }: LoaderFunctionArgs) {\n   *   const {admin, session, sessionToken, billing} = authenticate.admin(request);\n   *\n   *   return json(await admin.rest.resources.Product.count({ session }));\n   * }\n   * ```\n   * ```ts\n   * // /app/shopify.server.ts\n   * import { LATEST_API_VERSION, shopifyApp } from \"@shopify/shopify-app-remix/server\";\n   * import { restResources } from \"@shopify/shopify-api/rest/admin/2023-04\";\n   *\n   * const shopify = shopifyApp({\n   *   restResources,\n   *   // ...etc\n   * });\n   * export default shopify;\n   * export const authenticate = shopify.authenticate;\n   * ```\n   */\n  admin: AuthenticateAdmin<Config, RestResourcesType<Config>>;\n\n  /**\n   * Authenticate a Flow extension Request and get back an authenticated context, containing an admin context to access\n   * the API, and the payload of the request.\n   *\n   * If there is no session for the Request, this will return an HTTP 400 error.\n   *\n   * Note that this will always be a POST request.\n   *\n   * @example\n   * <caption>Authenticating a Flow extension request.</caption>\n   * ```ts\n   * // /app/routes/**\\/*.jsx\n   * import { ActionFunctionArgs, json } from \"@remix-run/node\";\n   * import { authenticate } from \"../../shopify.server\";\n   *\n   * export async function action({ request }: ActionFunctionArgs) {\n   *   const {admin, session, payload} = authenticate.flow(request);\n   *\n   *   // Perform flow extension logic\n   *\n   *   // Return a 200 response\n   *   return null;\n   * }\n   * ```\n   * ```ts\n   * // /app/shopify.server.ts\n   * import { LATEST_API_VERSION, shopifyApp } from \"@shopify/shopify-app-remix/server\";\n   * import { restResources } from \"@shopify/shopify-api/rest/admin/2023-04\";\n   *\n   * const shopify = shopifyApp({\n   *   restResources,\n   *   // ...etc\n   * });\n   * export default shopify;\n   * export const authenticate = shopify.authenticate;\n   * ```\n   */\n  flow: AuthenticateFlow<RestResourcesType<Config>>;\n\n  /**\n   * Authenticate a request from a fulfillment service and get back an authenticated context.\n   *\n   * @example\n   * <caption>Shopify session for the fulfillment service request.</caption>\n   * <description>Use the session associated with this request to use the Admin GraphQL API </description>\n   * ```ts\n   * // /app/routes/fulfillment_order_notification.ts\n   * import { ActionFunctionArgs } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   *\n   * export async function action({ request }: ActionFunctionArgs) {\n   *   const { admin } = await authenticate.fulfillmentService(request);\n   *\n   *   const response = await admin.graphql(\n   *     `#graphql\n   *     mutation acceptFulfillmentRequest {\n   *       fulfillmentOrderAcceptFulfillmentRequest(\n   *            id: \"gid://shopify/FulfillmentOrder/5014440902678\",\n   *            message: \"Reminder that tomorrow is a holiday. We won't be able to ship this until Monday.\"){\n   *             fulfillmentOrder {\n   *                 status\n   *                requestStatus\n   *            }\n   *         }\n   *     }\n   *    );\n   *\n   *   const productData = await response.json();\n   *   return json({ data: productData.data });\n   * }\n   * ```\n   * */\n  fulfillmentService: AuthenticateFulfillmentService<RestResourcesType<Config>>;\n\n  /**\n   * Authenticate a public request and get back a session token.\n   *\n   * @example\n   * <caption>Authenticating a request from a checkout extension</caption>\n   *\n   * ```ts\n   * // /app/routes/api/checkout.jsx\n   * import { LoaderFunctionArgs, json } from \"@remix-run/node\";\n   * import { authenticate } from \"../../shopify.server\";\n   * import { getWidgets } from \"~/db/widgets\";\n   *\n   * export async function loader({ request }: LoaderFunctionArgs) {\n   *   const {sessionToken} = authenticate.public.checkout(request);\n   *\n   *   return json(await getWidgets(sessionToken));\n   * }\n   * ```\n   */\n  public: AuthenticatePublic<Config['future']>;\n\n  /**\n   * Authenticate a Shopify webhook request, get back an authenticated admin context and details on the webhook request\n   *\n   * @example\n   * <caption>Authenticating a webhook request</caption>\n   *\n   * ```ts\n   * // /app/shopify.server.ts\n   * import { DeliveryMethod, shopifyApp } from \"@shopify/shopify-app-remix/server\";\n   *\n   * const shopify = shopifyApp({\n   *   webhooks: {\n   *    APP_UNINSTALLED: {\n   *       deliveryMethod: DeliveryMethod.Http,\n   *       callbackUrl: \"/webhooks\",\n   *     },\n   *   },\n   *   hooks: {\n   *     afterAuth: async ({ session }) => {\n   *       shopify.registerWebhooks({ session });\n   *     },\n   *   },\n   *   // ...etc\n   * });\n   * export default shopify;\n   * export const authenticate = shopify.authenticate;\n   * ```\n   * ```ts\n   * // /app/routes/webhooks.ts\n   * import { ActionFunctionArgs } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   * import db from \"../db.server\";\n   *\n   * export const action = async ({ request }: ActionFunctionArgs) => {\n   *   const { topic, shop, session } = await authenticate.webhook(request);\n   *\n   *   switch (topic) {\n   *     case \"APP_UNINSTALLED\":\n   *       if (session) {\n   *         await db.session.deleteMany({ where: { shop } });\n   *       }\n   *       break;\n   *     case \"CUSTOMERS_DATA_REQUEST\":\n   *     case \"CUSTOMERS_REDACT\":\n   *     case \"SHOP_REDACT\":\n   *     default:\n   *       throw new Response(\"Unhandled webhook topic\", { status: 404 });\n   *   }\n   *\n   *   throw new Response();\n   * };\n   * ```\n   */\n  webhook: AuthenticateWebhook<\n    Config['future'],\n    RestResourcesType<Config>,\n    keyof Config['webhooks'] | MandatoryTopics\n  >;\n}"
           },
           "AuthenticateAdmin": {
             "filePath": "src/server/authenticate/admin/types.ts",
@@ -12101,9 +13568,251 @@
                 "name": "test",
                 "value": "boolean",
                 "description": "Whether this is a test subscription."
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/billing/types.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "lineItems",
+                "value": "ActiveSubscriptionLineItem[]",
+                "description": "",
+                "isOptional": true
               }
             ],
-            "value": "export interface AppSubscription {\n    /**\n     * The ID of the app subscription.\n     */\n    id: string;\n    /**\n     * The name of the purchased plan.\n     */\n    name: string;\n    /**\n     * Whether this is a test subscription.\n     */\n    test: boolean;\n}"
+            "value": "export interface AppSubscription {\n    /**\n     * The ID of the app subscription.\n     */\n    id: string;\n    /**\n     * The name of the purchased plan.\n     */\n    name: string;\n    /**\n     * Whether this is a test subscription.\n     */\n    test: boolean;\n    lineItems?: ActiveSubscriptionLineItem[];\n}"
+          },
+          "ActiveSubscriptionLineItem": {
+            "filePath": "../../node_modules/@shopify/shopify-api/lib/billing/types.d.ts",
+            "name": "ActiveSubscriptionLineItem",
+            "description": "",
+            "members": [
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/billing/types.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "id",
+                "value": "string",
+                "description": ""
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/billing/types.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "plan",
+                "value": "AppPlan",
+                "description": ""
+              }
+            ],
+            "value": "export interface ActiveSubscriptionLineItem {\n    id: string;\n    plan: AppPlan;\n}"
+          },
+          "AppPlan": {
+            "filePath": "../../node_modules/@shopify/shopify-api/lib/billing/types.d.ts",
+            "name": "AppPlan",
+            "description": "",
+            "members": [
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/billing/types.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "pricingDetails",
+                "value": "RecurringAppPlan | UsageAppPlan",
+                "description": ""
+              }
+            ],
+            "value": "export interface AppPlan {\n    pricingDetails: RecurringAppPlan | UsageAppPlan;\n}"
+          },
+          "RecurringAppPlan": {
+            "filePath": "../../node_modules/@shopify/shopify-api/lib/billing/types.d.ts",
+            "name": "RecurringAppPlan",
+            "description": "",
+            "members": [
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/billing/types.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "interval",
+                "value": "BillingInterval.Every30Days | BillingInterval.Annual",
+                "description": ""
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/billing/types.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "price",
+                "value": "Money",
+                "description": ""
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/billing/types.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "discount",
+                "value": "AppPlanDiscount",
+                "description": ""
+              }
+            ],
+            "value": "export interface RecurringAppPlan {\n    interval: BillingInterval.Every30Days | BillingInterval.Annual;\n    price: Money;\n    discount: AppPlanDiscount;\n}"
+          },
+          "BillingInterval": {
+            "filePath": "../../node_modules/@shopify/shopify-api/lib/types.d.ts",
+            "syntaxKind": "EnumDeclaration",
+            "name": "BillingInterval",
+            "value": "export declare enum BillingInterval {\n    OneTime = \"ONE_TIME\",\n    Every30Days = \"EVERY_30_DAYS\",\n    Annual = \"ANNUAL\",\n    Usage = \"USAGE\"\n}",
+            "members": [
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/types.d.ts",
+                "name": "OneTime",
+                "value": "ONE_TIME"
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/types.d.ts",
+                "name": "Every30Days",
+                "value": "EVERY_30_DAYS"
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/types.d.ts",
+                "name": "Annual",
+                "value": "ANNUAL"
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/types.d.ts",
+                "name": "Usage",
+                "value": "USAGE"
+              }
+            ]
+          },
+          "Money": {
+            "filePath": "../../node_modules/@shopify/shopify-api/lib/billing/types.d.ts",
+            "name": "Money",
+            "description": "",
+            "members": [
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/billing/types.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "amount",
+                "value": "number",
+                "description": ""
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/billing/types.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "currencyCode",
+                "value": "string",
+                "description": ""
+              }
+            ],
+            "value": "interface Money {\n    amount: number;\n    currencyCode: string;\n}"
+          },
+          "AppPlanDiscount": {
+            "filePath": "../../node_modules/@shopify/shopify-api/lib/billing/types.d.ts",
+            "name": "AppPlanDiscount",
+            "description": "",
+            "members": [
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/billing/types.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "durationLimitInIntervals",
+                "value": "number",
+                "description": ""
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/billing/types.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "remainingDurationInIntervals",
+                "value": "number",
+                "description": ""
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/billing/types.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "priceAfterDiscount",
+                "value": "Money",
+                "description": ""
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/billing/types.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "value",
+                "value": "AppPlanDiscountAmount",
+                "description": ""
+              }
+            ],
+            "value": "export interface AppPlanDiscount {\n    durationLimitInIntervals: number;\n    remainingDurationInIntervals: number;\n    priceAfterDiscount: Money;\n    value: AppPlanDiscountAmount;\n}"
+          },
+          "AppPlanDiscountAmount": {
+            "filePath": "../../node_modules/@shopify/shopify-api/lib/billing/types.d.ts",
+            "syntaxKind": "TypeAliasDeclaration",
+            "name": "AppPlanDiscountAmount",
+            "value": "BillingConfigSubscriptionPlanDiscountAmount | BillingConfigSubscriptionPlanDiscountPercentage",
+            "description": ""
+          },
+          "BillingConfigSubscriptionPlanDiscountAmount": {
+            "filePath": "../../node_modules/@shopify/shopify-api/lib/billing/types.d.ts",
+            "name": "BillingConfigSubscriptionPlanDiscountAmount",
+            "description": "",
+            "members": [
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/billing/types.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "amount",
+                "value": "number",
+                "description": "The amount to discount.\n\nCannot be set if `percentage` is set."
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/billing/types.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "percentage",
+                "value": "never",
+                "description": "The percentage to discount.\n\nCannot be set if `amount` is set.",
+                "isOptional": true
+              }
+            ],
+            "value": "export interface BillingConfigSubscriptionPlanDiscountAmount {\n    /**\n     * The amount to discount.\n     *\n     * Cannot be set if `percentage` is set.\n     */\n    amount: number;\n    /**\n     * The percentage to discount.\n     *\n     * Cannot be set if `amount` is set.\n     */\n    percentage?: never;\n}"
+          },
+          "BillingConfigSubscriptionPlanDiscountPercentage": {
+            "filePath": "../../node_modules/@shopify/shopify-api/lib/billing/types.d.ts",
+            "name": "BillingConfigSubscriptionPlanDiscountPercentage",
+            "description": "",
+            "members": [
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/billing/types.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "amount",
+                "value": "never",
+                "description": "The amount to discount.\n\nCannot be set if `percentage` is set.",
+                "isOptional": true
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/billing/types.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "percentage",
+                "value": "number",
+                "description": "The percentage to discount.\n\nCannot be set if `amount` is set."
+              }
+            ],
+            "value": "export interface BillingConfigSubscriptionPlanDiscountPercentage {\n    /**\n     * The amount to discount.\n     *\n     * Cannot be set if `percentage` is set.\n     */\n    amount?: never;\n    /**\n     * The percentage to discount.\n     *\n     * Cannot be set if `amount` is set.\n     */\n    percentage: number;\n}"
+          },
+          "UsageAppPlan": {
+            "filePath": "../../node_modules/@shopify/shopify-api/lib/billing/types.d.ts",
+            "name": "UsageAppPlan",
+            "description": "",
+            "members": [
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/billing/types.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "balanceUsed",
+                "value": "Money",
+                "description": ""
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/billing/types.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "cappedAmount",
+                "value": "Money",
+                "description": ""
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/billing/types.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "terms",
+                "value": "string",
+                "description": ""
+              }
+            ],
+            "value": "export interface UsageAppPlan {\n    balanceUsed: Money;\n    cappedAmount: Money;\n    terms: string;\n}"
           },
           "CheckBillingOptions": {
             "filePath": "src/server/authenticate/admin/billing/types.ts",
@@ -12538,6 +14247,91 @@
               }
             ],
             "value": "export interface FlowContext<\n  Resources extends ShopifyRestResources = ShopifyRestResources,\n> {\n  /**\n   * A session with an offline token for the shop.\n   *\n   * Returned only if there is a session for the shop.\n   *\n   * @example\n   * <caption>Shopify session for the Flow request.</caption>\n   * <description>Use the session associated with this request to use REST resources.</description>\n   * ```ts\n   * // /app/routes/flow.tsx\n   * import { ActionFunctionArgs } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   *\n   * export const action = async ({ request }: ActionFunctionArgs) => {\n   *   const { session, admin } = await authenticate.flow(request);\n   *\n   *   const products = await admin?.rest.resources.Product.all({ session });\n   *   // Use products\n   *\n   *   return new Response();\n   * };\n   * ```\n   */\n  session: Session;\n\n  /**\n   * The payload from the Flow request.\n   *\n   * @example\n   * <caption>Flow payload.</caption>\n   * <description>Get the request's POST payload.</description>\n   * ```ts\n   * // /app/routes/flow.tsx\n   * import { ActionFunctionArgs } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   *\n   * export const action = async ({ request }: ActionFunctionArgs) => {\n   *   const { payload } = await authenticate.flow(request);\n   *   return new Response();\n   * };\n   * ```\n   */\n  payload: any;\n\n  /**\n   * An admin context for the Flow request.\n   *\n   * Returned only if there is a session for the shop.\n   *\n   * @example\n   * <caption>Flow admin context.</caption>\n   * <description>Use the `admin` object in the context to interact with the Admin API.</description>\n   * ```ts\n   * // /app/routes/flow.tsx\n   * import { ActionFunctionArgs } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   *\n   * export async function action({ request }: ActionFunctionArgs) {\n   *   const { admin } = await authenticate.flow(request);\n   *\n   *   const response = await admin?.graphql(\n   *     `#graphql\n   *     mutation populateProduct($input: ProductInput!) {\n   *       productCreate(input: $input) {\n   *         product {\n   *           id\n   *         }\n   *       }\n   *     }`,\n   *     { variables: { input: { title: \"Product Name\" } } }\n   *   );\n   *\n   *   const productData = await response.json();\n   *   return json({ data: productData.data });\n   * }\n   * ```\n   */\n  admin: AdminApiContext<Resources>;\n}"
+          },
+          "AuthenticateFulfillmentService": {
+            "filePath": "src/server/authenticate/fulfillment-service/types.ts",
+            "name": "AuthenticateFulfillmentService",
+            "description": "",
+            "params": [
+              {
+                "name": "request",
+                "description": "",
+                "value": "Request",
+                "filePath": "src/server/authenticate/fulfillment-service/types.ts"
+              }
+            ],
+            "returns": {
+              "filePath": "src/server/authenticate/fulfillment-service/types.ts",
+              "description": "",
+              "name": "Promise<FulfillmentServiceContext<Resources>>",
+              "value": "Promise<FulfillmentServiceContext<Resources>>"
+            },
+            "value": "export type AuthenticateFulfillmentService<\n  Resources extends ShopifyRestResources = ShopifyRestResources,\n> = (request: Request) => Promise<FulfillmentServiceContext<Resources>>;"
+          },
+          "FulfillmentServiceContext": {
+            "filePath": "src/server/authenticate/fulfillment-service/types.ts",
+            "name": "FulfillmentServiceContext",
+            "description": "",
+            "members": [
+              {
+                "filePath": "src/server/authenticate/fulfillment-service/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "session",
+                "value": "Session",
+                "description": "A session with an offline token for the shop.\n\nReturned only if there is a session for the shop.",
+                "examples": [
+                  {
+                    "title": "Shopify session for the fulfillment service notification request",
+                    "description": "Use the session associated with this request to use REST resources.",
+                    "tabs": [
+                      {
+                        "code": "import { ActionFunctionArgs } from \"@remix-run/node\";\nimport { authenticate } from \"../shopify.server\";\n\n  export const action = async ({ request }: ActionFunctionArgs) => {\n  const { session, admin } = await authenticate.fulfillmentService(request);\n\n  const products = await admin?.rest.resources.Product.all({ session });\n  // Use products\n\n  return new Response();\n};",
+                        "title": "/app/routes/fulfillment_service_notification.tsx"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "filePath": "src/server/authenticate/fulfillment-service/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "admin",
+                "value": "AdminApiContext<Resources>",
+                "description": "\nAn admin context for the fulfillment service request.\n\nReturned only if there is a session for the shop.",
+                "examples": [
+                  {
+                    "title": "Shopify session for the fulfillment service request",
+                    "description": "Use the session associated with this request to use the Admin GraphQL API",
+                    "tabs": [
+                      {
+                        "code": "import { ActionFunctionArgs } from \"@remix-run/node\";\nimport { authenticate } from \"../shopify.server\";\n\nexport async function action({ request }: ActionFunctionArgs) {\n  const { admin } = await authenticate.fulfillmentService(request);\n  const response = await admin?.graphql(\n `#graphql\n   query {\n     shop {\n       assignedFulfillmentOrders(first: 10, assignmentStatus: FULFILLMENT_REQUESTED) {\n         edges {\n           node {\n             id\n             destination {\n             firstName\n             lastName\n           }\n           lineItems(first: 10) {\n             edges {\n               node {\n               id\n               productTitle\n               sku\n               remainingQuantity\n             }\n           }\n         }\n         merchantRequests(first: 10, kind: FULFILLMENT_REQUEST) {\n           edges {\n             node {\n               message\n             }\n           }\n         }\n       }\n     }\n   }\n }\n}`);\n\n  const fulfillments = await response.json();\n  return json({ data: fulfillments.data });\n}",
+                        "title": "/app/routes/fulfillment_order_notification.ts"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "filePath": "src/server/authenticate/fulfillment-service/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "payload",
+                "value": "Record<string, any> & { kind: string; }",
+                "description": "The payload from the fulfillment service request.",
+                "examples": [
+                  {
+                    "title": "Fulfillment service request payload",
+                    "description": "Get the request's POST payload.",
+                    "tabs": [
+                      {
+                        "code": "/app/routes/fulfillment_order_notification.ts\nimport { ActionFunction } from \"@remix-run/node\";\nimport { authenticate } from \"../shopify.server\";\n\nexport const action: ActionFunction = async ({ request }) => {\n  const { payload } = await authenticate.fulfillmentService(request);\n  if(payload.kind === 'FULFILLMENT_REQUEST') {\n   // handle fulfillment request\n  } else if (payload.kind === 'CANCELLATION_REQUEST') {\n   // handle cancellation request\n  };\nreturn new Response();",
+                        "title": "Example"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "value": "export interface FulfillmentServiceContext<\n  Resources extends ShopifyRestResources = ShopifyRestResources,\n> {\n  /**\n   * A session with an offline token for the shop.\n   *\n   * Returned only if there is a session for the shop.\n   * @example\n   * <caption>Shopify session for the fulfillment service notification request.</caption>\n   * <description>Use the session associated with this request to use REST resources.</description>\n   * ```ts\n   * // /app/routes/fulfillment_service_notification.tsx\n   * import { ActionFunctionArgs } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   *\n   *   export const action = async ({ request }: ActionFunctionArgs) => {\n   *   const { session, admin } = await authenticate.fulfillmentService(request);\n   *\n   *   const products = await admin?.rest.resources.Product.all({ session });\n   *   // Use products\n   *\n   *   return new Response();\n   * };\n   * ```\n   * */\n  session: Session;\n  /**\n   *\n   * An admin context for the fulfillment service request.\n   *\n   * Returned only if there is a session for the shop.\n   * @example\n   * <caption>Shopify session for the fulfillment service request.</caption>\n   * <description>Use the session associated with this request to use the Admin GraphQL API </description>\n   * ```ts\n   * // /app/routes/fulfillment_order_notification.ts\n   * import { ActionFunctionArgs } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   *\n   * export async function action({ request }: ActionFunctionArgs) {\n   *   const { admin } = await authenticate.fulfillmentService(request);\n   *   const response = await admin?.graphql(\n   *  `#graphql\n   *    query {\n   *      shop {\n   *        assignedFulfillmentOrders(first: 10, assignmentStatus: FULFILLMENT_REQUESTED) {\n   *          edges {\n   *            node {\n   *              id\n   *              destination {\n   *              firstName\n   *              lastName\n   *            }\n   *            lineItems(first: 10) {\n   *              edges {\n   *                node {\n   *                id\n   *                productTitle\n   *                sku\n   *                remainingQuantity\n   *              }\n   *            }\n   *          }\n   *          merchantRequests(first: 10, kind: FULFILLMENT_REQUEST) {\n   *            edges {\n   *              node {\n   *                message\n   *              }\n   *            }\n   *          }\n   *        }\n   *      }\n   *    }\n   *  }\n   * }`);\n   *\n   *   const fulfillments = await response.json();\n   *   return json({ data: fulfillments.data });\n   * }\n   * ```\n   */\n  admin: AdminApiContext<Resources>;\n\n  /**\n   * The payload from the fulfillment service request.\n   *\n   * @example\n   * <caption>Fulfillment service request payload.</caption>\n   * <description>Get the request's POST payload.</description>\n   * ```ts\n   * /app/routes/fulfillment_order_notification.ts\n   * import { ActionFunction } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   *\n   * export const action: ActionFunction = async ({ request }) => {\n   *   const { payload } = await authenticate.fulfillmentService(request);\n   *   if(payload.kind === 'FULFILLMENT_REQUEST') {\n   *    // handle fulfillment request\n   *   } else if (payload.kind === 'CANCELLATION_REQUEST') {\n   *    // handle cancellation request\n   *   };\n   * return new Response();\n   * ```\n   */\n  payload: Record<string, any> & {\n    kind: string;\n  };\n}"
           },
           "AuthenticatePublic": {
             "filePath": "src/server/authenticate/public/types.ts",
@@ -13818,9 +15612,16 @@
                 "name": "flow",
                 "value": "ShopifyFlow",
                 "description": ""
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/index.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "fulfillmentService",
+                "value": "FulfillmentService",
+                "description": ""
               }
             ],
-            "value": "export interface Shopify<Params extends ConfigParams = ConfigParams, Resources extends ShopifyRestResources = ShopifyRestResources, _Future extends FutureFlagOptions = FutureFlagOptions> {\n    config: ConfigInterface<Params>;\n    clients: ShopifyClients;\n    auth: ShopifyAuth;\n    session: ShopifySession;\n    utils: ShopifyUtils;\n    webhooks: ShopifyWebhooks;\n    billing: ShopifyBilling;\n    logger: ShopifyLogger;\n    rest: Resources;\n    flow: ShopifyFlow;\n}"
+            "value": "export interface Shopify<Params extends ConfigParams = ConfigParams, Resources extends ShopifyRestResources = ShopifyRestResources, _Future extends FutureFlagOptions = FutureFlagOptions> {\n    config: ConfigInterface<Params>;\n    clients: ShopifyClients;\n    auth: ShopifyAuth;\n    session: ShopifySession;\n    utils: ShopifyUtils;\n    webhooks: ShopifyWebhooks;\n    billing: ShopifyBilling;\n    logger: ShopifyLogger;\n    rest: Resources;\n    flow: ShopifyFlow;\n    fulfillmentService: FulfillmentService;\n}"
           },
           "ConfigInterface": {
             "filePath": "../../node_modules/@shopify/shopify-api/lib/base-types.d.ts",
@@ -14381,34 +16182,6 @@
             ],
             "value": "export interface BillingConfigOneTimePlan extends BillingConfigPlan {\n    /**\n     * Interval for this plan.\n     *\n     * Must be set to `OneTime`.\n     */\n    interval: BillingInterval.OneTime;\n}"
           },
-          "BillingInterval": {
-            "filePath": "../../node_modules/@shopify/shopify-api/lib/types.d.ts",
-            "syntaxKind": "EnumDeclaration",
-            "name": "BillingInterval",
-            "value": "export declare enum BillingInterval {\n    OneTime = \"ONE_TIME\",\n    Every30Days = \"EVERY_30_DAYS\",\n    Annual = \"ANNUAL\",\n    Usage = \"USAGE\"\n}",
-            "members": [
-              {
-                "filePath": "../../node_modules/@shopify/shopify-api/lib/types.d.ts",
-                "name": "OneTime",
-                "value": "ONE_TIME"
-              },
-              {
-                "filePath": "../../node_modules/@shopify/shopify-api/lib/types.d.ts",
-                "name": "Every30Days",
-                "value": "EVERY_30_DAYS"
-              },
-              {
-                "filePath": "../../node_modules/@shopify/shopify-api/lib/types.d.ts",
-                "name": "Annual",
-                "value": "ANNUAL"
-              },
-              {
-                "filePath": "../../node_modules/@shopify/shopify-api/lib/types.d.ts",
-                "name": "Usage",
-                "value": "USAGE"
-              }
-            ]
-          },
           "BillingConfigSubscriptionLineItemPlan": {
             "filePath": "../../node_modules/@shopify/shopify-api/lib/billing/types.d.ts",
             "name": "BillingConfigSubscriptionLineItemPlan",
@@ -14522,52 +16295,6 @@
               }
             ],
             "value": "export interface BillingConfigSubscriptionPlanDiscount {\n    /**\n     * The number of intervals to apply the discount for.\n     */\n    durationLimitInIntervals?: number;\n    /**\n     * The discount to apply.\n     */\n    value: BillingConfigSubscriptionPlanDiscountAmount | BillingConfigSubscriptionPlanDiscountPercentage;\n}"
-          },
-          "BillingConfigSubscriptionPlanDiscountAmount": {
-            "filePath": "../../node_modules/@shopify/shopify-api/lib/billing/types.d.ts",
-            "name": "BillingConfigSubscriptionPlanDiscountAmount",
-            "description": "",
-            "members": [
-              {
-                "filePath": "../../node_modules/@shopify/shopify-api/lib/billing/types.d.ts",
-                "syntaxKind": "PropertySignature",
-                "name": "amount",
-                "value": "number",
-                "description": "The amount to discount.\n\nCannot be set if `percentage` is set."
-              },
-              {
-                "filePath": "../../node_modules/@shopify/shopify-api/lib/billing/types.d.ts",
-                "syntaxKind": "PropertySignature",
-                "name": "percentage",
-                "value": "never",
-                "description": "The percentage to discount.\n\nCannot be set if `amount` is set.",
-                "isOptional": true
-              }
-            ],
-            "value": "export interface BillingConfigSubscriptionPlanDiscountAmount {\n    /**\n     * The amount to discount.\n     *\n     * Cannot be set if `percentage` is set.\n     */\n    amount: number;\n    /**\n     * The percentage to discount.\n     *\n     * Cannot be set if `amount` is set.\n     */\n    percentage?: never;\n}"
-          },
-          "BillingConfigSubscriptionPlanDiscountPercentage": {
-            "filePath": "../../node_modules/@shopify/shopify-api/lib/billing/types.d.ts",
-            "name": "BillingConfigSubscriptionPlanDiscountPercentage",
-            "description": "",
-            "members": [
-              {
-                "filePath": "../../node_modules/@shopify/shopify-api/lib/billing/types.d.ts",
-                "syntaxKind": "PropertySignature",
-                "name": "amount",
-                "value": "never",
-                "description": "The amount to discount.\n\nCannot be set if `percentage` is set.",
-                "isOptional": true
-              },
-              {
-                "filePath": "../../node_modules/@shopify/shopify-api/lib/billing/types.d.ts",
-                "syntaxKind": "PropertySignature",
-                "name": "percentage",
-                "value": "number",
-                "description": "The percentage to discount.\n\nCannot be set if `amount` is set."
-              }
-            ],
-            "value": "export interface BillingConfigSubscriptionPlanDiscountPercentage {\n    /**\n     * The amount to discount.\n     *\n     * Cannot be set if `percentage` is set.\n     */\n    amount?: never;\n    /**\n     * The percentage to discount.\n     *\n     * Cannot be set if `amount` is set.\n     */\n    percentage: number;\n}"
           },
           "BillingConfigUsageLineItem": {
             "filePath": "../../node_modules/@shopify/shopify-api/lib/billing/types.d.ts",
@@ -16122,40 +17849,31 @@
                 "syntaxKind": "PropertySignature",
                 "name": "valid",
                 "value": "false",
-                "description": ""
+                "description": "Whether the request is a valid Flow request from Shopify."
               },
               {
                 "filePath": "../../node_modules/@shopify/shopify-api/lib/webhooks/types.d.ts",
                 "syntaxKind": "PropertySignature",
                 "name": "reason",
-                "value": "WebhookValidationErrorReason",
+                "value": "WebhookValidationErrorReasonType",
                 "description": ""
+              },
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/webhooks/types.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "valid",
+                "value": "false",
+                "description": "Whether the request is a valid Flow request from Shopify."
               }
             ],
-            "value": "export interface WebhookValidationInvalid {\n    valid: false;\n    reason: WebhookValidationErrorReason;\n}"
+            "value": "export interface WebhookValidationInvalid extends Omit<ValidationInvalid, 'reason'> {\n    valid: false;\n    reason: WebhookValidationErrorReasonType;\n}"
           },
-          "WebhookValidationErrorReason": {
+          "WebhookValidationErrorReasonType": {
             "filePath": "../../node_modules/@shopify/shopify-api/lib/webhooks/types.d.ts",
-            "syntaxKind": "EnumDeclaration",
-            "name": "WebhookValidationErrorReason",
-            "value": "export declare enum WebhookValidationErrorReason {\n    MissingHeaders = \"missing_headers\",\n    MissingBody = \"missing_body\",\n    InvalidHmac = \"invalid_hmac\"\n}",
-            "members": [
-              {
-                "filePath": "../../node_modules/@shopify/shopify-api/lib/webhooks/types.d.ts",
-                "name": "MissingHeaders",
-                "value": "missing_headers"
-              },
-              {
-                "filePath": "../../node_modules/@shopify/shopify-api/lib/webhooks/types.d.ts",
-                "name": "MissingBody",
-                "value": "missing_body"
-              },
-              {
-                "filePath": "../../node_modules/@shopify/shopify-api/lib/webhooks/types.d.ts",
-                "name": "InvalidHmac",
-                "value": "invalid_hmac"
-              }
-            ]
+            "syntaxKind": "TypeAliasDeclaration",
+            "name": "WebhookValidationErrorReasonType",
+            "value": "(typeof WebhookValidationErrorReason)[keyof typeof WebhookValidationErrorReason]",
+            "description": ""
           },
           "WebhookValidationMissingHeaders": {
             "filePath": "../../node_modules/@shopify/shopify-api/lib/webhooks/types.d.ts",
@@ -16166,7 +17884,7 @@
                 "filePath": "../../node_modules/@shopify/shopify-api/lib/webhooks/types.d.ts",
                 "syntaxKind": "PropertySignature",
                 "name": "reason",
-                "value": "WebhookValidationErrorReason.MissingHeaders",
+                "value": "\"missing_headers\"",
                 "description": ""
               },
               {
@@ -16181,10 +17899,10 @@
                 "syntaxKind": "PropertySignature",
                 "name": "valid",
                 "value": "false",
-                "description": ""
+                "description": "Whether the request is a valid Flow request from Shopify."
               }
             ],
-            "value": "export interface WebhookValidationMissingHeaders extends WebhookValidationInvalid {\n    reason: WebhookValidationErrorReason.MissingHeaders;\n    missingHeaders: string[];\n}"
+            "value": "export interface WebhookValidationMissingHeaders extends WebhookValidationInvalid {\n    reason: typeof WebhookValidationErrorReason.MissingHeaders;\n    missingHeaders: string[];\n}"
           },
           "ShopifyBilling": {
             "filePath": "../../node_modules/@shopify/shopify-api/lib/billing/index.d.ts",
@@ -16491,100 +18209,70 @@
                 "filePath": "../../node_modules/@shopify/shopify-api/lib/flow/index.d.ts",
                 "syntaxKind": "PropertySignature",
                 "name": "validate",
-                "value": "({ rawBody, ...adapterArgs }: FlowValidateParams) => Promise<FlowValidationInvalid | FlowValidationValid>",
+                "value": "({ rawBody, ...adapterArgs }: ValidateParams) => Promise<ValidationInvalid | ValidationValid>",
                 "description": ""
               }
             ]
           },
-          "FlowValidateParams": {
-            "filePath": "../../node_modules/@shopify/shopify-api/lib/flow/types.d.ts",
-            "name": "FlowValidateParams",
+          "ValidationInvalid": {
+            "filePath": "../../node_modules/@shopify/shopify-api/lib/utils/types.d.ts",
+            "name": "ValidationInvalid",
             "description": "",
             "members": [
               {
-                "filePath": "../../node_modules/@shopify/shopify-api/lib/flow/types.d.ts",
-                "syntaxKind": "PropertySignature",
-                "name": "rawBody",
-                "value": "string",
-                "description": "The raw body of the request."
-              },
-              {
-                "filePath": "../../node_modules/@shopify/shopify-api/lib/flow/types.d.ts",
-                "syntaxKind": "PropertySignature",
-                "name": "rawRequest",
-                "value": "AdapterRequest",
-                "description": "The raw request, from the app's framework."
-              },
-              {
-                "filePath": "../../node_modules/@shopify/shopify-api/lib/flow/types.d.ts",
-                "syntaxKind": "PropertySignature",
-                "name": "rawResponse",
-                "value": "AdapterResponse",
-                "description": "The raw response, from the app's framework. Only applies to frameworks that expose an API similar to Node's HTTP module.",
-                "isOptional": true
-              }
-            ],
-            "value": "export interface FlowValidateParams extends AdapterArgs {\n    /**\n     * The raw body of the request.\n     */\n    rawBody: string;\n}"
-          },
-          "FlowValidationInvalid": {
-            "filePath": "../../node_modules/@shopify/shopify-api/lib/flow/types.d.ts",
-            "name": "FlowValidationInvalid",
-            "description": "",
-            "members": [
-              {
-                "filePath": "../../node_modules/@shopify/shopify-api/lib/flow/types.d.ts",
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/utils/types.d.ts",
                 "syntaxKind": "PropertySignature",
                 "name": "valid",
                 "value": "false",
                 "description": "Whether the request is a valid Flow request from Shopify."
               },
               {
-                "filePath": "../../node_modules/@shopify/shopify-api/lib/flow/types.d.ts",
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/utils/types.d.ts",
                 "syntaxKind": "PropertySignature",
                 "name": "reason",
-                "value": "FlowValidationErrorReason",
+                "value": "ValidationErrorReasonType",
                 "description": "The reason why the request is not valid."
               }
             ],
-            "value": "export interface FlowValidationInvalid {\n    /**\n     * Whether the request is a valid Flow request from Shopify.\n     */\n    valid: false;\n    /**\n     * The reason why the request is not valid.\n     */\n    reason: FlowValidationErrorReason;\n}"
+            "value": "export interface ValidationInvalid {\n    /**\n     * Whether the request is a valid Flow request from Shopify.\n     */\n    valid: false;\n    /**\n     * The reason why the request is not valid.\n     */\n    reason: ValidationErrorReasonType;\n}"
           },
-          "FlowValidationErrorReason": {
-            "filePath": "../../node_modules/@shopify/shopify-api/lib/flow/types.d.ts",
-            "syntaxKind": "EnumDeclaration",
-            "name": "FlowValidationErrorReason",
-            "value": "export declare enum FlowValidationErrorReason {\n    MissingBody = \"missing_body\",\n    MissingHmac = \"missing_hmac\",\n    InvalidHmac = \"invalid_hmac\"\n}",
-            "members": [
-              {
-                "filePath": "../../node_modules/@shopify/shopify-api/lib/flow/types.d.ts",
-                "name": "MissingBody",
-                "value": "missing_body"
-              },
-              {
-                "filePath": "../../node_modules/@shopify/shopify-api/lib/flow/types.d.ts",
-                "name": "MissingHmac",
-                "value": "missing_hmac"
-              },
-              {
-                "filePath": "../../node_modules/@shopify/shopify-api/lib/flow/types.d.ts",
-                "name": "InvalidHmac",
-                "value": "invalid_hmac"
-              }
-            ]
+          "ValidationErrorReasonType": {
+            "filePath": "../../node_modules/@shopify/shopify-api/lib/utils/types.d.ts",
+            "syntaxKind": "TypeAliasDeclaration",
+            "name": "ValidationErrorReasonType",
+            "value": "(typeof ValidationErrorReason)[keyof typeof ValidationErrorReason]",
+            "description": ""
           },
-          "FlowValidationValid": {
-            "filePath": "../../node_modules/@shopify/shopify-api/lib/flow/types.d.ts",
-            "name": "FlowValidationValid",
+          "ValidationValid": {
+            "filePath": "../../node_modules/@shopify/shopify-api/lib/utils/types.d.ts",
+            "name": "ValidationValid",
             "description": "",
             "members": [
               {
-                "filePath": "../../node_modules/@shopify/shopify-api/lib/flow/types.d.ts",
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/utils/types.d.ts",
                 "syntaxKind": "PropertySignature",
                 "name": "valid",
                 "value": "true",
-                "description": "Whether the request is a valid Flow request from Shopify."
+                "description": "Whether the request is a valid request from Shopify."
               }
             ],
-            "value": "export interface FlowValidationValid {\n    /**\n     * Whether the request is a valid Flow request from Shopify.\n     */\n    valid: true;\n}"
+            "value": "export interface ValidationValid {\n    /**\n     * Whether the request is a valid request from Shopify.\n     */\n    valid: true;\n}"
+          },
+          "FulfillmentService": {
+            "filePath": "../../node_modules/@shopify/shopify-api/lib/fulfillment-service/index.d.ts",
+            "syntaxKind": "TypeAliasDeclaration",
+            "name": "FulfillmentService",
+            "value": "ReturnType<typeof fulfillmentService>",
+            "description": "",
+            "members": [
+              {
+                "filePath": "../../node_modules/@shopify/shopify-api/lib/fulfillment-service/index.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "validate",
+                "value": "({ rawBody, ...adapterArgs }: ValidateParams) => Promise<ValidationInvalid | ValidationValid>",
+                "description": ""
+              }
+            ]
           },
           "MandatoryTopics": {
             "filePath": "src/server/types.ts",
@@ -17220,6 +18908,15 @@
                 "value": "{ log?: LogFunction; level?: LogSeverity; httpRequests?: boolean; timestamps?: boolean; }",
                 "description": "Customization options for Shopify logs.",
                 "isOptional": true
+              },
+              {
+                "filePath": "src/server/config-types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "_logDisabledFutureFlags",
+                "value": "boolean",
+                "description": "Whether to log disabled future flags at startup.",
+                "isOptional": true,
+                "isPrivate": true
               }
             ],
             "value": "export interface AppConfigArg<\n  Resources extends ShopifyRestResources = ShopifyRestResources,\n  Storage extends SessionStorage = SessionStorage,\n  Future extends FutureFlagOptions = FutureFlagOptions,\n> extends Omit<\n    ApiConfigArg<Resources, ApiFutureFlags<Future>>,\n    | 'hostName'\n    | 'hostScheme'\n    | 'isEmbeddedApp'\n    | 'apiVersion'\n    | 'isCustomStoreApp'\n    | 'future'\n  > {\n  /**\n   * The URL your app is running on.\n   *\n   * The `@shopify/cli` provides this URL as `process.env.SHOPIFY_APP_URL`.  For development this is probably a tunnel URL that points to your local machine.  If this is a production app, this is your production URL.\n   */\n  appUrl: string;\n\n  /**\n   * An adaptor for storing sessions in your database of choice.\n   *\n   * Shopify provides multiple session storage adaptors and you can create your own.\n   *\n   * {@link https://github.com/Shopify/shopify-app-js/blob/main/README.md#session-storage-options}\n   *\n   * @example\n   * <caption>Storing sessions with Prisma.</caption>\n   * <description>Add the `@shopify/shopify-app-session-storage-prisma` package to use the Prisma session storage.</description>\n   * ```ts\n   * import { shopifyApp } from \"@shopify/shopify-app-remix/server\";\n   * import { PrismaSessionStorage } from \"@shopify/shopify-app-session-storage-prisma\";\n   *\n   * import prisma from \"~/db.server\";\n   *\n   * const shopify = shopifyApp({\n   *   // ... etc\n   *   sessionStorage: new PrismaSessionStorage(prisma),\n   * });\n   * export default shopify;\n   * ```\n   */\n  sessionStorage: Storage;\n\n  /**\n   * Whether your app use online or offline tokens.\n   *\n   * If your app uses online tokens, then both online and offline tokens will be saved to your database.  This ensures your app can perform background jobs.\n   *\n   * {@link https://shopify.dev/docs/apps/auth/oauth/access-modes}\n   *\n   * @defaultValue `false`\n   */\n  useOnlineTokens?: boolean;\n\n  /**\n   * The config for the webhook topics your app would like to subscribe to.\n   *\n   * {@link https://shopify.dev/docs/apps/webhooks}\n   *\n   * This can be in used in conjunction with the afterAuth hook to register webhook topics when a user installs your app.  Or you can use this function in other processes such as background jobs.\n   *\n   * @example\n   * <caption>Registering for a webhook when a merchant uninstalls your app.</caption>\n   * ```ts\n   * // /app/shopify.server.ts\n   * import { DeliveryMethod, shopifyApp } from \"@shopify/shopify-app-remix/server\";\n   *\n   * const shopify = shopifyApp({\n   *   webhooks: {\n   *     APP_UNINSTALLED: {\n   *       deliveryMethod: DeliveryMethod.Http,\n   *        callbackUrl: \"/webhooks\",\n   *     },\n   *   },\n   *   hooks: {\n   *     afterAuth: async ({ session }) => {\n   *       shopify.registerWebhooks({ session });\n   *     }\n   *   },\n   *   // ...etc\n   * });\n   * export default shopify;\n   * export const authenticate = shopify.authenticate;\n   *\n   * // /app/routes/webhooks.jsx\n   * import { ActionFunctionArgs } from \"@remix-run/node\";\n   *\n   * import { authenticate } from \"../shopify.server\";\n   * import db from \"../db.server\";\n   *\n   * export const action = async ({ request }: ActionFunctionArgs) => {\n   *   const { topic, shop } = await authenticate.webhook(request);\n   *\n   *   switch (topic) {\n   *     case \"APP_UNINSTALLED\":\n   *       await db.session.deleteMany({ where: { shop } });\n   *       break;\n   *     case \"CUSTOMERS_DATA_REQUEST\":\n   *     case \"CUSTOMERS_REDACT\":\n   *     case \"SHOP_REDACT\":\n   *     default:\n   *       throw new Response(\"Unhandled webhook topic\", { status: 404 });\n   *   }\n   *   throw new Response();\n   * };\n   * ```\n   */\n  webhooks?: WebhookConfig;\n\n  /**\n   * Functions to call at key places during your apps lifecycle.\n   *\n   * These functions are called in the context of the request that triggered them.  This means you can access the session.\n   *\n   * @example\n   * <caption>Seeding your database custom data when a merchant installs your app.</caption>\n   * ```ts\n   * import { DeliveryMethod, shopifyApp } from \"@shopify/shopify-app-remix/server\";\n   * import { seedStoreData } from \"~/db/seeds\"\n   *\n   * const shopify = shopifyApp({\n   *   hooks: {\n   *     afterAuth: async ({ session }) => {\n   *       seedStoreData({session})\n   *     }\n   *   },\n   *   // ...etc\n   * });\n   * ```\n   */\n  hooks?: HooksConfig;\n\n  /**\n   * Does your app render embedded inside the Shopify Admin or on its own.\n   *\n   * Unless you have very specific needs, this should be true.\n   *\n   * @defaultValue `true`\n   */\n  isEmbeddedApp?: boolean;\n\n  /**\n   * How your app is distributed. Default is `AppDistribution.AppStore`.\n   *\n   * {@link https://shopify.dev/docs/apps/distribution}\n   */\n  distribution?: AppDistribution;\n\n  /**\n   * What version of Shopify's Admin API's would you like to use.\n   *\n   * {@link https://shopify.dev/docs/api/}\n   *\n   * @defaultValue `LATEST_API_VERSION` from `@shopify/shopify-app-remix`\n   *\n   * @example\n   * <caption>Using the latest API Version (Recommended)</caption>\n   * ```ts\n   * import { LATEST_API_VERSION, shopifyApp } from \"@shopify/shopify-app-remix/server\";\n   *\n   * const shopify = shopifyApp({\n   *   // ...etc\n   *   apiVersion: LATEST_API_VERSION,\n   * });\n   * ```\n   */\n  apiVersion?: ApiVersion;\n\n  /**\n   * A path that Shopify can reserve for auth related endpoints.\n   *\n   * This must match a $ route in your Remix app.  That route must export a loader function that calls `shopify.authenticate.admin(request)`.\n   *\n   * @default `\"/auth\"`\n   *\n   * @example\n   * <caption>Using the latest API Version (Recommended)</caption>\n   * ```ts\n   * // /app/shopify.server.ts\n   * import { LATEST_API_VERSION, shopifyApp } from \"@shopify/shopify-app-remix/server\";\n   *\n   * const shopify = shopifyApp({\n   *   // ...etc\n   *   apiVersion: LATEST_API_VERSION,\n   * });\n   * export default shopify;\n   * export const authenticate = shopify.authenticate;\n   *\n   * // /app/routes/auth/$.jsx\n   * import { LoaderFunctionArgs } from \"@remix-run/node\";\n   * import { authenticate } from \"../../shopify.server\";\n   *\n   * export async function loader({ request }: LoaderFunctionArgs) {\n   *   await authenticate.admin(request);\n   *\n   *   return null\n   * }\n   * ```\n   */\n  authPathPrefix?: string;\n\n  /**\n   * Features that will be introduced in future releases of this package.\n   *\n   * You can opt in to these features by setting the corresponding flags. By doing so, you can prepare for future\n   * releases in advance and provide feedback on the new features.\n   */\n  future?: Future;\n}"
