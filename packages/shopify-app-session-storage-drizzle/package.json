@@ -54,8 +54,7 @@
     "typescript": "4.9.5"
   },
   "files": [
-    "build/*",
-    "!bundle/*",
+    "dist/*",
     "!tsconfig.tsbuildinfo",
     "!node_modules"
   ]

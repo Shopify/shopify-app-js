@@ -85,9 +85,8 @@
     }
   },
   "files": [
-    "build/*",
+    "dist/*",
     "!build/**/__tests__",
-    "!bundle/*",
     "!tsconfig.tsbuildinfo",
     "!node_modules"
   ]

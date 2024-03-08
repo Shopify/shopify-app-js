@@ -44,8 +44,7 @@
     "@types/pg": "^8.11.4"
   },
   "files": [
-    "build/*",
-    "!bundle/*",
+    "dist/*",
     "!tsconfig.tsbuildinfo",
     "!node_modules"
   ]

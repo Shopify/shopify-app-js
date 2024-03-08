@@ -42,8 +42,7 @@
     "@shopify/shopify-app-session-storage-test-utils": "^2.0.3"
   },
   "files": [
-    "build/*",
-    "!bundle/*",
+    "dist/*",
     "!tsconfig.tsbuildinfo",
     "!node_modules"
   ]

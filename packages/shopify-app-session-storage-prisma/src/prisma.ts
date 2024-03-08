@@ -31,7 +31,7 @@ export class PrismaSessionStorage<T extends PrismaClient>
       .catch((cause) => {
         throw new MissingSessionTableError(
           `Prisma ${this.tableName} table does not exist. This could happen for a few reasons, see https://github.com/Shopify/shopify-app-js/tree/main/packages/shopify-app-session-storage-prisma#troubleshooting for more information`,
-          {cause},
+          cause,
         );
       });
   }
@@ -163,4 +163,11 @@ export class PrismaSessionStorage<T extends PrismaClient>
   }
 }
 
-export class MissingSessionTableError extends Error {}
+export class MissingSessionTableError extends Error {
+  constructor(
+    message: string,
+    public readonly cause: Error,
+  ) {
+    super(message);
+  }
+}
