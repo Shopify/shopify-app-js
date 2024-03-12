@@ -12,27 +12,53 @@
   "homepage": "https://github.com/Shopify/shopify-app-js/tree/main/packages/shopify-app-remix",
   "author": "Shopify Inc.",
   "license": "MIT",
-  "types": "./build/ts/server/index.d.ts",
-  "main": "./build/cjs/server/index.js",
+  "main": "./dist/cjs/server/index.js",
+  "module": "./dist/esm/server/index.mjs",
+  "types": "./dist/ts/server/index.d.ts",
   "exports": {
     ".": {
-      "types": "./build/ts/server/index.d.ts",
-      "default": "./build/cjs/server/index.js"
+      "types": "./dist/ts/server/index.d.ts",
+      "require": "./dist/cjs/server/index.js",
+      "import": "./dist/esm/server/index.mjs",
+      "default": "./dist/cjs/server/index.js"
     },
-    "./adapters/*": "./build/cjs/server/adapters/*/index.js",
+    "./adapters/*": {
+      "types": "./dist/ts/server/adapters/*/index.d.ts",
+      "require": "./dist/cjs/server/adapters/*/index.js",
+      "import": "./dist/esm/server/adapters/*/index.mjs",
+      "default": "./dist/cjs/server/adapters/*/index.js"
+    },
+    "./server/adapters/*": {
+      "types": "./dist/ts/server/adapters/*/index.d.ts",
+      "require": "./dist/cjs/server/adapters/*/index.js",
+      "import": "./dist/esm/server/adapters/*/index.mjs",
+      "default": "./dist/cjs/server/adapters/*/index.js"
+    },
     "./server": {
-      "types": "./build/ts/server/index.d.ts",
-      "default": "./build/cjs/server/index.js"
+      "types": "./dist/ts/server/index.d.ts",
+      "require": "./dist/cjs/server/index.js",
+      "import": "./dist/esm/server/index.mjs",
+      "default": "./dist/cjs/server/index.js"
     },
-    "./server/adapters/*": "./build/cjs/server/adapters/*/index.js",
     "./react": {
-      "types": "./build/ts/react/index.d.ts",
-      "default": "./build/cjs/react/index.js"
+      "types": "./dist/ts/react/index.d.ts",
+      "require": "./dist/cjs/react/index.js",
+      "import": "./dist/esm/react/index.mjs",
+      "default": "./dist/cjs/react/index.js"
     }
   },
   "scripts": {
     "build-docs": "sh docs/build-docs.sh",
-    "validate-docs": "sh ./docs/build-docs.sh isTest && yarn compare-docs"
+    "validate-docs": "sh ./docs/build-docs.sh isTest && yarn compare-docs",
+    "lint": "eslint . --ext .js,.ts",
+    "build": "yarn run rollup && yarn tsc -p ./tsconfig.build.json",
+    "test": "jest",
+    "test:ci": "yarn test",
+    "rollup": "rollup -c rollup.config.js --bundleConfigAsCjs",
+    "clean": "rimraf .rollup.cache dist",
+    "changeset": "changeset",
+    "version": "changeset version",
+    "release": "yarn build && changeset publish"
   },
   "publishConfig": {
     "access": "public"

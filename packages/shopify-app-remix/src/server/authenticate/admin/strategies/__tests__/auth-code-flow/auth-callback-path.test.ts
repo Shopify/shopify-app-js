@@ -179,7 +179,7 @@ describe('authorize.admin auth callback path', () => {
 
         // WHEN
         await mockCodeExchangeRequest('offline');
-        const response = await getThrownResponse(
+        await getThrownResponse(
           shopify.authenticate.admin,
           await getValidCallbackRequest(config),
         );
@@ -263,7 +263,7 @@ describe('authorize.admin auth callback path', () => {
 
         // WHEN
         await mockCodeExchangeRequest();
-        const response = await getThrownResponse(
+        await getThrownResponse(
           shopify.authenticate.admin,
           await getValidCallbackRequest(config),
         );
