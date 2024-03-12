@@ -192,7 +192,7 @@ async function setUpNonEmbeddedFlow() {
   };
 }
 
-async function mockRestRequest(status) {
+async function mockRestRequest(status: any) {
   const requestMock = new Request(
     `https://${TEST_SHOP}/admin/api/${LATEST_API_VERSION}/customers.json`,
   );

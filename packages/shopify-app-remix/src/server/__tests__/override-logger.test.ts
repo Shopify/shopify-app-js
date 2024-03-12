@@ -12,7 +12,7 @@ import {overrideLogger} from '../override-logger';
 import {SHOPIFY_REMIX_LIBRARY_VERSION} from '../version';
 
 const LOG_FN = jest.fn();
-const VALID_API_CONFIG: ConfigParams = {
+const VALID_API_CONFIG: ConfigParams<any, any> = {
   apiKey: 'test-key',
   apiSecretKey: 'test-secret',
   scopes: ['test-scope'],

@@ -2,11 +2,9 @@ import {LogSeverity, SESSION_COOKIE_NAME} from '@shopify/shopify-api';
 
 import {shopifyApp} from '../../../../..';
 import {
-  API_KEY,
   APP_URL,
   BASE64_HOST,
   GRAPHQL_URL,
-  SHOPIFY_HOST,
   TEST_SHOP,
   expectBeginAuthRedirect,
   expectExitIframeRedirect,

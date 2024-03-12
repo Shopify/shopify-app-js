@@ -247,7 +247,7 @@ describe('authenticate', () => {
 });
 
 async function mockTokenExchangeRequest(
-  sessionToken,
+  sessionToken: any,
   tokenType: 'online' | 'offline' = 'offline',
 ) {
   const responseBody = {

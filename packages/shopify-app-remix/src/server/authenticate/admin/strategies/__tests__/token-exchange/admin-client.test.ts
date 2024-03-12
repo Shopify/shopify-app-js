@@ -1,30 +1,18 @@
-import {
-  ApiVersion,
-  HttpMaxRetriesError,
-  LATEST_API_VERSION,
-  SESSION_COOKIE_NAME,
-  Session,
-} from '@shopify/shopify-api';
+import {ApiVersion, LATEST_API_VERSION, Session} from '@shopify/shopify-api';
 import {restResources} from '@shopify/shopify-api/rest/admin/2023-04';
 
 import {
   APP_URL,
   BASE64_HOST,
   TEST_SHOP,
-  expectExitIframeRedirect,
   getJwt,
   getThrownResponse,
   setUpValidSession,
-  signRequestCookie,
   testConfig,
   mockExternalRequest,
   expectAdminApiClient,
 } from '../../../../../__test-helpers';
 import {shopifyApp} from '../../../../..';
-import {
-  REAUTH_URL_HEADER,
-  RETRY_INVALID_SESSION_HEADER,
-} from '../../../../const';
 import {AdminApiContext} from '../../../../../clients';
 
 describe('admin.authenticate context', () => {
