@@ -1,4 +1,3 @@
-import React from 'react';
 import {mount} from '@shopify/react-testing';
 import {AppProvider as PolarisAppProvider} from '@shopify/polaris';
 

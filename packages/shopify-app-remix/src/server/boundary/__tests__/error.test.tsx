@@ -1,5 +1,3 @@
-import React from 'react';
-
 import {boundary} from '../../index';
 
 describe('Error boundary', () => {
