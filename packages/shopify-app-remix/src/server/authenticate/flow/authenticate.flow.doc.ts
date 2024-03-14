@@ -15,6 +15,19 @@ const data: ReferenceEntityTemplateSchema = {
       type: 'AuthenticateFlow',
     },
   ],
+  defaultExample: {
+    description: 'Handle a flow action call',
+    codeblock: {
+      title: 'Set a metafield on a customer after a flow call',
+      tabs: [
+        {
+          title: '/app/routes/**.ts',
+          language: 'typescript',
+          code: './authenticate.flow.doc.example.ts',
+        },
+      ],
+    },
+  },
   jsDocTypeExamples: ['FlowContext'],
   related: [
     {

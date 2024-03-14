@@ -18,6 +18,19 @@ const data: ReferenceEntityTemplateSchema = {
       type: 'AuthenticateAppProxy',
     },
   ],
+  defaultExample: {
+    description: 'Authenticate and fetch product information',
+    codeblock: {
+      title: 'Authenticate and fetch product information',
+      tabs: [
+        {
+          title: '/app/routes/**.ts',
+          language: 'typescript',
+          code: './authenticate.public.app-proxy.doc.example.ts',
+        },
+      ],
+    },
+  },
   jsDocTypeExamples: ['AppProxyContextWithSession'],
   related: [
     {
@@ -29,6 +42,12 @@ const data: ReferenceEntityTemplateSchema = {
       name: 'Storefront API context',
       subtitle: 'Interact with the Storefront API.',
       url: '/docs/api/shopify-app-remix/apis/storefront-api',
+    },
+    {
+      name: 'Liquid reference',
+      subtitle: "Use the shop's theme to render a template.",
+      url: '/docs/api/liquid',
+      type: 'liquid',
     },
   ],
 };

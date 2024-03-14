@@ -1,10 +1,10 @@
-import {ActionFunction} from '@remix-run/node';
+import {ActionFunctionArgs} from '@remix-run/node';
 
 import db from '../db.server';
 
 import {authenticate} from '~/shopify.server';
 
-export const action: ActionFunction = async ({request}) => {
+export const action = async ({request}: ActionFunctionArgs) => {
   const {topic, shop, session} = await authenticate.webhook(request);
 
   switch (topic) {
