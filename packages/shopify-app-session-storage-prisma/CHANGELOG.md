@@ -1,5 +1,17 @@
 # @shopify/shopify-app-session-storage-prisma
 
+## 4.0.2
+
+### Patch Changes
+
+- 3bc4195: Handle Prisma error P2002 during upsert
+- 3938adc: Update shopify-api-js to v9.5
+- c6c975f: Update @shopify/shopify-api to 9.5.1
+- e192b61: Bumps @prisma/client from 5.9.1 to 5.10.2.
+- Updated dependencies [3938adc]
+- Updated dependencies [c6c975f]
+  - @shopify/shopify-app-session-storage@2.1.2
+
 ## 4.0.1
 
 ### Patch Changes
