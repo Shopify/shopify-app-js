@@ -1,6 +1,6 @@
 {
   "name": "@shopify/shopify-app-session-storage-redis",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "description": "Shopify App Session Storage for Redis",
   "repository": {
     "type": "git",
@@ -35,11 +35,11 @@
     "redis": "^4.6.12"
   },
   "peerDependencies": {
-    "@shopify/shopify-api": "^9.2.0",
-    "@shopify/shopify-app-session-storage": "^2.1.0"
+    "@shopify/shopify-api": "^9.5.0",
+    "@shopify/shopify-app-session-storage": "^2.1.1"
   },
   "devDependencies": {
-    "@shopify/shopify-app-session-storage-test-utils": "^2.0.0"
+    "@shopify/shopify-app-session-storage-test-utils": "^2.0.1"
   },
   "files": [
     "build/*",

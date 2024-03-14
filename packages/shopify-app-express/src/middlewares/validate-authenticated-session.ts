@@ -102,7 +102,12 @@ export function validateAuthenticatedSession({
         {shop},
       );
 
-      return redirectOutOfApp({config})({req, res, redirectUri, shop: shop!});
+      return redirectOutOfApp({api, config})({
+        req,
+        res,
+        redirectUri,
+        shop: shop!,
+      });
     };
   };
 }

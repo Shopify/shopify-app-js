@@ -1,4 +1,5 @@
 import {
+  BillingConfigSubscriptionLineItemPlan,
   BillingInterval,
   HttpResponseError,
   SESSION_COOKIE_NAME,
@@ -23,12 +24,16 @@ import {REAUTH_URL_HEADER} from '../../../const';
 
 import * as responses from './mock-responses';
 
-const BILLING_CONFIG: Shopify['config']['billing'] = {
+const BILLING_CONFIG = {
   [responses.PLAN_1]: {
-    amount: 5,
-    currencyCode: 'USD',
-    interval: BillingInterval.Every30Days,
-  },
+    lineItems: [
+      {
+        amount: 5,
+        currencyCode: 'USD',
+        interval: BillingInterval.Every30Days,
+      },
+    ],
+  } as BillingConfigSubscriptionLineItemPlan,
 };
 
 describe('Billing check', () => {
@@ -37,6 +42,48 @@ describe('Billing check', () => {
     const config = testConfig();
     await setUpValidSession(config.sessionStorage);
     const shopify = shopifyApp({...config, billing: BILLING_CONFIG});
+
+    await mockExternalRequest({
+      request: new Request(GRAPHQL_URL, {method: 'POST', body: 'test'}),
+      response: new Response(responses.EXISTING_SUBSCRIPTION),
+    });
+
+    const {billing} = await shopify.authenticate.admin(
+      new Request(`${APP_URL}/billing`, {
+        headers: {
+          Authorization: `Bearer ${getJwt().token}`,
+        },
+      }),
+    );
+
+    // WHEN
+    const result = await billing.check({
+      plans: [responses.PLAN_1],
+    });
+
+    // THEN
+    expect(result.hasActivePayment).toBe(true);
+    expect(result.oneTimePurchases).toEqual([]);
+    expect(result.appSubscriptions).toEqual([
+      {id: 'gid://123', name: responses.PLAN_1, test: true},
+    ]);
+  });
+
+  it('returns plan information when there is payment and v3_lineItemBilling is not enabled', async () => {
+    // GIVEN
+    const config = testConfig();
+    await setUpValidSession(config.sessionStorage);
+    const shopify = shopifyApp({
+      ...config,
+      billing: {
+        [responses.PLAN_1]: {
+          amount: 5,
+          currencyCode: 'USD',
+          interval: BillingInterval.Every30Days,
+        },
+      },
+      future: {v3_lineItemBilling: false},
+    });
 
     await mockExternalRequest({
       request: new Request(GRAPHQL_URL, {method: 'POST', body: 'test'}),
@@ -125,6 +172,9 @@ describe('Billing check', () => {
     );
 
     // THEN
+    const shopSessions =
+      await config.sessionStorage.findSessionsByShop(TEST_SHOP);
+    expect(shopSessions).toStrictEqual([]);
     expectExitIframeRedirect(response);
   });
 

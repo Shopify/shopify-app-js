@@ -10,10 +10,11 @@
     {"path": "./packages/shopify-app-session-storage-mysql"},
     {"path": "./packages/shopify-app-session-storage-postgresql"},
     {"path": "./packages/shopify-app-session-storage-prisma"},
+    {"path": "./packages/shopify-app-session-storage-drizzle"},
     {"path": "./packages/shopify-app-session-storage-redis"},
     {"path": "./packages/shopify-app-session-storage-sqlite"},
     {"path": "./packages/shopify-app-session-storage-kv"},
     {"path": "./packages/shopify-app-express"},
-    {"path": "./packages/shopify-app-remix"},
-  ],
+    {"path": "./packages/shopify-app-remix"}
+  ]
 }

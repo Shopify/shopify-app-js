@@ -15,6 +15,19 @@ const data: ReferenceEntityTemplateSchema = {
       type: 'AuthenticateAdmin',
     },
   ],
+  defaultExample: {
+    description: 'Authenticate, run API mutation, and redirect',
+    codeblock: {
+      title: 'Authenticate, run API mutation, and redirect',
+      tabs: [
+        {
+          title: '/app/routes/**.ts',
+          language: 'typescript',
+          code: './authenticate.admin.doc.example.ts',
+        },
+      ],
+    },
+  },
   jsDocTypeExamples: [
     'EmbeddedAdminContext',
     'AdminApiContext',

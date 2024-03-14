@@ -1,6 +1,5 @@
 import {Session, Shopify, ShopifyRestResources} from '@shopify/shopify-api';
 
-import type {JSONValue} from '../../types';
 import type {AdminApiContext} from '../../clients';
 import type {FeatureEnabled, FutureFlagOptions} from '../../future/flags';
 
@@ -20,16 +19,17 @@ interface Context<Topics = string | number | symbol> {
    * <description>Get the API version used for webhook request.</description>
    * ```ts
    * // /app/routes/webhooks.tsx
-   * import { ActionFunction } from "@remix-run/node";
+   * import { ActionFunctionArgs } from "@remix-run/node";
    * import { authenticate } from "../shopify.server";
    *
-   * export const action: ActionFunction = async ({ request }) => {
+   * export const action = async ({ request }: ActionFunctionArgs) => {
    *   const { apiVersion } = await authenticate.webhook(request);
    *   return new Response();
    * };
    * ```
    */
   apiVersion: string;
+
   /**
    * The shop where the webhook was triggered.
    *
@@ -38,16 +38,17 @@ interface Context<Topics = string | number | symbol> {
    * <description>Get the shop that triggered a webhook.</description>
    * ```ts
    * // /app/routes/webhooks.tsx
-   * import { ActionFunction } from "@remix-run/node";
+   * import { ActionFunctionArgs } from "@remix-run/node";
    * import { authenticate } from "../shopify.server";
    *
-   * export const action: ActionFunction = async ({ request }) => {
+   * export const action = async ({ request }: ActionFunctionArgs) => {
    *   const { shop } = await authenticate.webhook(request);
    *   return new Response();
    * };
    * ```
    */
   shop: string;
+
   /**
    * The topic of the webhook.
    *
@@ -56,10 +57,10 @@ interface Context<Topics = string | number | symbol> {
    * <description>Get the event topic for the webhook.</description>
    * ```ts
    * // /app/routes/webhooks.tsx
-   * import { ActionFunction } from "@remix-run/node";
+   * import { ActionFunctionArgs } from "@remix-run/node";
    * import { authenticate } from "../shopify.server";
    *
-   * export const action: ActionFunction = async ({ request }) => {
+   * export const action = async ({ request }: ActionFunctionArgs) => {
    *   const { topic } = await authenticate.webhook(request);
    *
    *   switch (topic) {
@@ -73,6 +74,7 @@ interface Context<Topics = string | number | symbol> {
    * ```
    */
   topic: Topics;
+
   /**
    * A unique ID for the webhook. Useful to keep track of which events your app has already processed.
    *
@@ -81,16 +83,17 @@ interface Context<Topics = string | number | symbol> {
    * <description>Get the webhook ID.</description>
    * ```ts
    * // /app/routes/webhooks.tsx
-   * import { ActionFunction } from "@remix-run/node";
+   * import { ActionFunctionArgs } from "@remix-run/node";
    * import { authenticate } from "../shopify.server";
    *
-   * export const action: ActionFunction = async ({ request }) => {
+   * export const action = async ({ request }: ActionFunctionArgs) => {
    *   const { webhookId } = await authenticate.webhook(request);
    *   return new Response();
    * };
    * ```
    */
   webhookId: string;
+
   /**
    * The payload from the webhook request.
    *
@@ -99,16 +102,36 @@ interface Context<Topics = string | number | symbol> {
    * <description>Get the request's POST payload.</description>
    * ```ts
    * // /app/routes/webhooks.tsx
-   * import { ActionFunction } from "@remix-run/node";
+   * import { ActionFunctionArgs } from "@remix-run/node";
    * import { authenticate } from "../shopify.server";
    *
-   * export const action: ActionFunction = async ({ request }) => {
+   * export const action = async ({ request }: ActionFunctionArgs) => {
    *   const { payload } = await authenticate.webhook(request);
    *   return new Response();
    * };
    * ```
    */
-  payload: JSONValue;
+  payload: Record<string, any>;
+
+  /**
+   * The sub-topic of the webhook. This is only available for certain webhooks.
+   *
+   * @example
+   * <caption>Webhook sub-topic.</caption>
+   * <description>Get the webhook sub-topic.</description>
+   * ```ts
+   * // /app/routes/webhooks.tsx
+   * import { ActionFunctionArgs } from "@remix-run/node";
+   * import { authenticate } from "../shopify.server";
+   *
+   * export const action = async ({ request }: ActionFunctionArgs) => {
+   *   const { subTopic } = await authenticate.webhook(request);
+   *   return new Response();
+   * };
+   * ```
+   *
+   */
+  subTopic?: string;
 }
 
 export interface WebhookContextWithoutSession<Topics = string | number | symbol>

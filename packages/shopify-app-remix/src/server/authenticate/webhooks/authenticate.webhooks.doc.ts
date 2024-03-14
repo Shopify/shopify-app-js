@@ -15,6 +15,19 @@ const data: ReferenceEntityTemplateSchema = {
       type: 'AuthenticateWebhook',
     },
   ],
+  defaultExample: {
+    description: 'Update a metafield when a product is updated',
+    codeblock: {
+      title: 'Update a metafield when a product is updated',
+      tabs: [
+        {
+          title: '/app/routes/**.ts',
+          language: 'typescript',
+          code: './authenticate.webhooks.doc.example.ts',
+        },
+      ],
+    },
+  },
   jsDocTypeExamples: ['WebhookContextWithSession'],
   related: [
     {

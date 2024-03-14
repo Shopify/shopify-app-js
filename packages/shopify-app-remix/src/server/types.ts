@@ -1,5 +1,4 @@
 import {
-  ConfigParams,
   RegisterReturn,
   Shopify,
   ShopifyRestResources,
@@ -15,7 +14,12 @@ import type {AuthenticatePublic} from './authenticate/public/types';
 import type {AuthenticateAdmin} from './authenticate/admin/types';
 import type {Unauthenticated} from './unauthenticated/types';
 import type {AuthenticateFlow} from './authenticate/flow/types';
-import type {FutureFlagOptions} from './future/flags';
+import type {
+  ApiConfigWithFutureFlags,
+  ApiFutureFlags,
+  FutureFlagOptions,
+} from './future/flags';
+import {AuthenticateFulfillmentService} from './authenticate/fulfillment-service/types';
 
 export interface BasicParams<
   Future extends FutureFlagOptions = FutureFlagOptions,
@@ -29,19 +33,6 @@ export interface BasicParams<
   logger: Shopify['logger'];
 }
 
-export interface ApiFutureFlags<_Future extends FutureFlagOptions> {}
-
-export type ApiConfigWithFutureFlags<Future extends FutureFlagOptions> =
-  ConfigParams<ShopifyRestResources, ApiFutureFlags<Future>>;
-
-export type JSONValue =
-  | string
-  | number
-  | boolean
-  | null
-  | JSONObject
-  | JSONArray;
-
 // eslint-disable-next-line no-warning-comments
 // TODO: Use this enum to replace the isCustomStoreApp config option in shopify-api-js
 export enum AppDistribution {
@@ -54,14 +45,6 @@ export type MandatoryTopics =
   | 'CUSTOMERS_DATA_REQUEST'
   | 'CUSTOMERS_REDACT'
   | 'SHOP_REDACT';
-
-// This can't be a type because it would reference itself
-// eslint-disable-next-line @typescript-eslint/consistent-indexed-object-style
-interface JSONObject {
-  [x: string]: JSONValue;
-}
-
-interface JSONArray extends Array<JSONValue> {}
 
 type RegisterWebhooks = (
   options: RegisterWebhooksOptions,
@@ -164,6 +147,41 @@ interface Authenticate<Config extends AppConfigArg> {
    * ```
    */
   flow: AuthenticateFlow<RestResourcesType<Config>>;
+
+  /**
+   * Authenticate a request from a fulfillment service and get back an authenticated context.
+   *
+   * @example
+   * <caption>Shopify session for the fulfillment service request.</caption>
+   * <description>Use the session associated with this request to use the Admin GraphQL API </description>
+   * ```ts
+   * // /app/routes/fulfillment_order_notification.ts
+   * import { ActionFunctionArgs } from "@remix-run/node";
+   * import { authenticate } from "../shopify.server";
+   *
+   * export async function action({ request }: ActionFunctionArgs) {
+   *   const { admin } = await authenticate.fulfillmentService(request);
+   *
+   *   const response = await admin.graphql(
+   *     `#graphql
+   *     mutation acceptFulfillmentRequest {
+   *       fulfillmentOrderAcceptFulfillmentRequest(
+   *            id: "gid://shopify/FulfillmentOrder/5014440902678",
+   *            message: "Reminder that tomorrow is a holiday. We won't be able to ship this until Monday."){
+   *             fulfillmentOrder {
+   *                 status
+   *                requestStatus
+   *            }
+   *         }
+   *     }
+   *    );
+   *
+   *   const productData = await response.json();
+   *   return json({ data: productData.data });
+   * }
+   * ```
+   * */
+  fulfillmentService: AuthenticateFulfillmentService<RestResourcesType<Config>>;
 
   /**
    * Authenticate a public request and get back a session token.

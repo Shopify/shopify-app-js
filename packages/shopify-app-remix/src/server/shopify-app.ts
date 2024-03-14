@@ -33,6 +33,8 @@ import {AuthCodeFlowStrategy} from './authenticate/admin/strategies/auth-code-fl
 import {TokenExchangeStrategy} from './authenticate/admin/strategies/token-exchange';
 import {IdempotentPromiseHandler} from './authenticate/helpers/idempotent-promise-handler';
 import {authenticateFlowFactory} from './authenticate/flow/authenticate';
+import {authenticateFulfillmentServiceFactory} from './authenticate/fulfillment-service/authenticate';
+import {FutureFlagOptions, logDisabledFutureFlags} from './future/flags';
 
 /**
  * Creates an object your app will use to interact with Shopify.
@@ -56,10 +58,11 @@ import {authenticateFlowFactory} from './authenticate/flow/authenticate';
  * ```
  */
 export function shopifyApp<
-  Config extends AppConfigArg<Resources, Storage>,
+  Config extends AppConfigArg<Resources, Storage, Future>,
   Resources extends ShopifyRestResources,
   Storage extends SessionStorage,
->(appConfig: Config): ShopifyApp<Config> {
+  Future extends FutureFlagOptions = Config['future'],
+>(appConfig: Readonly<Config>): ShopifyApp<Config> {
   const api = deriveApi(appConfig);
   const config = deriveConfig<Storage>(appConfig, api.config);
   const logger = overrideLogger(api.logger);
@@ -87,9 +90,11 @@ export function shopifyApp<
     authenticate: {
       admin: authStrategy,
       flow: authenticateFlowFactory<Resources>(params),
-      public: authenticatePublicFactory<Config['future'], Resources>(params),
+      public: authenticatePublicFactory<Future, Resources>(params),
+      fulfillmentService:
+        authenticateFulfillmentServiceFactory<Resources>(params),
       webhook: authenticateWebhookFactory<
-        Config['future'],
+        Future,
         Resources,
         keyof Config['webhooks'] | MandatoryTopics
       >(params),
@@ -106,6 +111,8 @@ export function shopifyApp<
   ) {
     shopify.login = loginFactory(params);
   }
+
+  logDisabledFutureFlags(config, logger);
 
   return shopify as ShopifyApp<Config>;
 }
@@ -154,7 +161,10 @@ function deriveApi(appConfig: AppConfigArg) {
     isEmbeddedApp: appConfig.isEmbeddedApp ?? true,
     apiVersion: appConfig.apiVersion ?? LATEST_API_VERSION,
     isCustomStoreApp: appConfig.distribution === AppDistribution.ShopifyAdmin,
-    future: {},
+    future: {
+      v10_lineItemBilling: appConfig.future?.v3_lineItemBilling,
+    },
+    _logDisabledFutureFlags: false,
   });
 }
 

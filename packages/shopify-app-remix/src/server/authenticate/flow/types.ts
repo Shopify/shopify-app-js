@@ -15,10 +15,10 @@ export interface FlowContext<
    * <description>Use the session associated with this request to use REST resources.</description>
    * ```ts
    * // /app/routes/flow.tsx
-   * import { ActionFunction } from "@remix-run/node";
+   * import { ActionFunctionArgs } from "@remix-run/node";
    * import { authenticate } from "../shopify.server";
    *
-   * export const action: ActionFunction = async ({ request }) => {
+   * export const action = async ({ request }: ActionFunctionArgs) => {
    *   const { session, admin } = await authenticate.flow(request);
    *
    *   const products = await admin?.rest.resources.Product.all({ session });
@@ -38,10 +38,10 @@ export interface FlowContext<
    * <description>Get the request's POST payload.</description>
    * ```ts
    * // /app/routes/flow.tsx
-   * import { ActionFunction } from "@remix-run/node";
+   * import { ActionFunctionArgs } from "@remix-run/node";
    * import { authenticate } from "../shopify.server";
    *
-   * export const action: ActionFunction = async ({ request }) => {
+   * export const action = async ({ request }: ActionFunctionArgs) => {
    *   const { payload } = await authenticate.flow(request);
    *   return new Response();
    * };

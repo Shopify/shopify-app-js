@@ -65,6 +65,7 @@ describe('redirectToAuth', () => {
       shop: TEST_SHOP,
       host: BASE64_HOST,
       embedded: '1',
+      redirectUri: `https://${shopify.api.config.hostName}/auth?shop=${TEST_SHOP}&host=${BASE64_HOST}`,
     });
     const response = await request(app)
       .get(`/redirect-to-auth?${expectedParams.toString()}`)
@@ -74,11 +75,10 @@ describe('redirectToAuth', () => {
       response.header.location,
       'http://not-a-real-host.myshopify.io',
     );
-    const params = Object.fromEntries(url.searchParams.entries());
 
     expect(url.host).toBe('not-a-real-host.myshopify.io');
     expect(url.pathname).toBe('/exitiframe');
-    expect(params).toMatchObject(expectedParams);
+    expect(url.searchParams.toString()).toEqual(expectedParams.toString());
   });
 
   it('fails with invalid shop', async () => {

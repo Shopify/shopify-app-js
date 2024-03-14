@@ -7,6 +7,9 @@ export type AuthenticateAppProxy = (
 ) => Promise<AppProxyContext | AppProxyContextWithSession>;
 
 interface Options {
+  /**
+   * Whether to use the shop's theme layout around the Liquid content.
+   */
   layout?: boolean;
 }
 
@@ -21,7 +24,7 @@ interface Context {
    *
    * @example
    * <caption>Rendering liquid content.</caption>
-   * <description>Use the `liquid` helper to render a `Response` with Liquid content.</description>
+   * <description>Use the `liquid` helper to render a `Response` with Liquid content using the shop's theme. See the [Liquid reference](https://shopify.dev/docs/api/liquid) for all the features it enables.</description>
    * ```ts
    * // app/routes/**\/.ts
    * import {authenticate} from "~/shopify.server"
@@ -29,9 +32,25 @@ interface Context {
    * export async function loader({ request }) {
    *   const {liquid} = await authenticate.public.appProxy(request);
    *
-   *   return liquid("Hello {{shop.name}}")
+   *   return liquid("Hello {{shop.name}}");
    * }
+   * ```
    *
+   * @example
+   * <caption>Rendering liquid content without a layout.</caption>
+   * <description>Set the `layout` option to `false` to render the Liquid content without a theme.</description>
+   * ```ts
+   * // app/routes/**\/.ts
+   * import {authenticate} from "~/shopify.server"
+   *
+   * export async function loader({ request }) {
+   *   const {liquid} = await authenticate.public.appProxy(request);
+   *
+   *   return liquid(
+   *     "Hello {{shop.name}}",
+   *     { layout: false }
+   *   );
+   * }
    * ```
    */
   liquid: LiquidResponseFunction;
@@ -79,10 +98,13 @@ export interface AppProxyContextWithSession<
    *
    * export const loader = async ({ request }) => {
    *   // Get the session for the shop that initiated the request to the app proxy.
-   *   const { session } = await authenticate.public.appProxy(request);
+   *   const { session } =
+   *     await authenticate.public.appProxy(request);
    *
    *   // Use the session data to make to queries to your database or additional requests.
-   *   return json(await getMyAppModelData({shop: session.shop));
+   *   return json(
+   *     await getMyAppModelData({shop: session.shop})
+   *   );
    * };
    * ```
    */
@@ -111,7 +133,11 @@ export interface AppProxyContextWithSession<
    *         }
    *       }
    *     }`,
-   *     { variables: { input: { title: "Product Name" } } }
+   *     {
+   *       variables: {
+   *         input: { title: "Product Name" }
+   *       }
+   *     }
    *   );
    *
    *   const productData = await response.json();
@@ -135,7 +161,18 @@ export interface AppProxyContextWithSession<
    * export async function action({ request }: ActionFunctionArgs) {
    *   const { storefront } = await authenticate.public.appProxy(request);
    *
-   *   const response = await storefront.graphql(`{blogs(first: 10) { edges { node { id } } } }`);
+   *   const response = await storefront.graphql(
+   *     `#graphql
+   *     query blogIds {
+   *       blogs(first: 10) {
+   *         edges {
+   *           node {
+   *             id
+   *           }
+   *         }
+   *       }
+   *     }`
+   *   );
    *
    *   return json(await response.json());
    * }

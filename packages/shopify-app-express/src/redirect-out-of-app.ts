@@ -1,13 +1,17 @@
 import {Request, Response} from 'express';
 
 import {AppConfigInterface} from './config-types';
-import {RedirectOutOfAppFunction, RedirectOutOfAppParams} from './types';
+import {RedirectOutOfAppFunction, ApiAndConfigParams} from './types';
 
 export function redirectOutOfApp({
+  api,
   config,
-}: RedirectOutOfAppParams): RedirectOutOfAppFunction {
+}: ApiAndConfigParams): RedirectOutOfAppFunction {
   return function redirectOutOfApp({req, res, redirectUri, shop}): void {
-    if (req.headers.authorization?.match(/Bearer (.*)/)) {
+    if (
+      (!api.config.isEmbeddedApp && isFetchRequest(req)) ||
+      req.headers.authorization?.match(/Bearer (.*)/)
+    ) {
       appBridgeHeaderRedirect(config, res, redirectUri);
     } else if (req.query.embedded === '1') {
       exitIframeRedirect(config, req, res, redirectUri, shop);
@@ -69,4 +73,8 @@ function serverSideRedirect(
   );
 
   res.redirect(redirectUri);
+}
+
+function isFetchRequest(req: Request) {
+  return req.xhr || req.headers['sec-fetch-dest'] === 'empty';
 }

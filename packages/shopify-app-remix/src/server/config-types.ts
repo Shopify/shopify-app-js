@@ -8,7 +8,11 @@ import {
 } from '@shopify/shopify-api';
 import {SessionStorage} from '@shopify/shopify-app-session-storage';
 
-import type {FutureFlagOptions, FutureFlags} from './future/flags';
+import type {
+  ApiFutureFlags,
+  FutureFlagOptions,
+  FutureFlags,
+} from './future/flags';
 import type {AppDistribution} from './types';
 import type {AdminApiContext} from './clients';
 import {IdempotentPromiseHandler} from './authenticate/helpers/idempotent-promise-handler';
@@ -18,7 +22,7 @@ export interface AppConfigArg<
   Storage extends SessionStorage = SessionStorage,
   Future extends FutureFlagOptions = FutureFlagOptions,
 > extends Omit<
-    ApiConfigArg<Resources>,
+    ApiConfigArg<Resources, ApiFutureFlags<Future>>,
     | 'hostName'
     | 'hostScheme'
     | 'isEmbeddedApp'
