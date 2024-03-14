@@ -6,6 +6,10 @@
 
 - 4053132: Initial release of @shopify/shopify-app-session-storage-drizzle
 
+This package implements the `SessionStorage` interface that works with an instance of [Drizzle](https://orm.drizzle.team).
+
+Refer to the [README](./README.md) for more information.
+
 ### Patch Changes
 
 - 3938adc: Update shopify-api-js to v9.5
