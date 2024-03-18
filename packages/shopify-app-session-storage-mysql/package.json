@@ -12,9 +12,20 @@
   "homepage": "https://github.com/Shopify/shopify-app-js/tree/main/packages/shopify-app-session-storage-mysql",
   "author": "Shopify Inc.",
   "license": "MIT",
-  "main": "./build/cjs/mysql.js",
-  "types": "./build/ts/mysql.d.ts",
-  "scripts": {},
+  "main": "./dist/cjs/mysql.js",
+  "module": "./dist/esm/mysql.mjs",
+  "types": "./dist/ts/mysql.d.ts",
+  "scripts": {
+    "lint": "eslint . --ext .js,.ts",
+    "build": "yarn run rollup && yarn tsc -p ./tsconfig.build.json",
+    "test": "jest",
+    "test:ci": "yarn test",
+    "rollup": "rollup -c rollup.config.js --bundleConfigAsCjs",
+    "clean": "rimraf .rollup.cache dist",
+    "changeset": "changeset",
+    "version": "changeset version",
+    "release": "yarn build && changeset publish"
+  },
   "publishConfig": {
     "access": "public"
   },

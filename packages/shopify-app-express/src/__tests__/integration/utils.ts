@@ -33,7 +33,8 @@ export function convertBeginResponseToCallbackInfo(
   secret: string,
   shop: string,
 ): CallbackInfo {
-  const cookies: CookiesType = beginResponse.headers['set-cookie'].reduce(
+  const setCookie: string[] = beginResponse.headers['set-cookie'] as any;
+  const cookies: CookiesType = setCookie.reduce(
     (acc: CookiesType, cookie: string) => {
       const [name, ...rest] = cookie.split(';')[0].split('=');
       const value = rest.join('=');

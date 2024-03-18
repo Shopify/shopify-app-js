@@ -12,9 +12,20 @@
   "homepage": "https://github.com/Shopify/shopify-app-js/tree/main/packages/shopify-app-session-storage-drizzle",
   "author": "Shopify Inc.",
   "license": "MIT",
-  "main": "./build/cjs/drizzle.js",
-  "types": "./build/ts/drizzle.d.ts",
-  "scripts": {},
+  "main": "./dist/cjs/drizzle.js",
+  "module": "./dist/esm/drizzle.mjs",
+  "types": "./dist/ts/drizzle.d.ts",
+  "scripts": {
+    "lint": "eslint . --ext .js,.ts",
+    "build": "yarn run rollup && yarn tsc -p ./tsconfig.build.json",
+    "test": "jest",
+    "test:ci": "yarn test",
+    "rollup": "rollup -c rollup.config.js --bundleConfigAsCjs",
+    "clean": "rimraf .rollup.cache dist",
+    "changeset": "changeset",
+    "version": "changeset version",
+    "release": "yarn build && changeset publish"
+  },
   "publishConfig": {
     "access": "public"
   },
@@ -43,6 +54,7 @@
     "@shopify/eslint-plugin": "^42.1.0",
     "@shopify/prettier-config": "^1.1.2",
     "@shopify/shopify-app-session-storage-test-utils": "^2.0.2",
+    "@types/better-sqlite3": "^7.6.9",
     "better-sqlite3": "^9.4.3",
     "drizzle-kit": "^0.20.12",
     "drizzle-orm": "^0.29.3",

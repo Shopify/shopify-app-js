@@ -25,7 +25,7 @@ describe('redirectToShopifyOrAppRoot', () => {
     app.get(
       '/redirect-to-host',
       // Make sure the session is available
-      (req, res, next) => {
+      (_req, res, next) => {
         res.locals.shopify = {session};
         next();
       },

@@ -54,23 +54,25 @@ describe('OAuth integration tests', () => {
         ],
       };
 
-      const afterAuth = jest.fn().mockImplementation(async (req, res, next) => {
-        const shopSessions =
-          await shopify.config.sessionStorage.findSessionsByShop!(TEST_SHOP);
-        const offlineSession = shopSessions[0];
-        expect(offlineSession.isOnline).toBe(false);
+      const afterAuth = jest
+        .fn()
+        .mockImplementation(async (_req, res, next) => {
+          const shopSessions =
+            await shopify.config.sessionStorage.findSessionsByShop!(TEST_SHOP);
+          const offlineSession = shopSessions[0];
+          expect(offlineSession.isOnline).toBe(false);
 
-        if (config.online) {
-          const onlineSession = shopSessions[1];
+          if (config.online) {
+            const onlineSession = shopSessions[1];
 
-          expect(onlineSession.isOnline).toBe(true);
-          expect(res.locals.shopify.session).toEqual(onlineSession);
-        } else {
-          expect(res.locals.shopify.session).toEqual(offlineSession);
-        }
+            expect(onlineSession.isOnline).toBe(true);
+            expect(res.locals.shopify.session).toEqual(onlineSession);
+          } else {
+            expect(res.locals.shopify.session).toEqual(offlineSession);
+          }
 
-        next();
-      });
+          next();
+        });
       const installedMock = jest.fn((_req, res) => res.send('ok'));
       const authedMock = jest.fn((_req, res) => res.send('ok'));
 
@@ -207,8 +209,8 @@ async function completeOAuth(
   }
 
   const callbackResponse = await request(app)
-    .get(`/test/auth/callback?${callbackInfo.params.toString()}`)
-    .set('Cookie', callbackInfo.cookies)
+    .get(`/test/auth/callback?${finalCallbackInfo.params.toString()}`)
+    .set('Cookie', finalCallbackInfo.cookies)
     .expect(302);
 
   if (config.embedded) {

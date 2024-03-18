@@ -1,6 +1,5 @@
 import * as fs from 'fs/promises';
 
-import {Session} from '@shopify/shopify-api';
 import {batteryOfTests} from '@shopify/shopify-app-session-storage-test-utils';
 import sqlite3 from 'sqlite3';
 

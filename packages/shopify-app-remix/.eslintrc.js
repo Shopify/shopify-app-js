@@ -1,4 +1,7 @@
+const config = require('../../.eslintrc');
+
 module.exports = {
+  ...config,
   ignorePatterns: [
     'docs/',
     '*.example.ts',
