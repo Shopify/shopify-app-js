@@ -6,15 +6,7 @@ import {
   poll,
 } from '@shopify/shopify-app-session-storage-test-utils';
 import {drizzle} from 'drizzle-orm/node-postgres';
-import {
-  PgDatabase,
-  QueryResultHKT,
-  bigint,
-  boolean,
-  pgTable,
-  text,
-  timestamp,
-} from 'drizzle-orm/pg-core';
+import {bigint, boolean, pgTable, text, timestamp} from 'drizzle-orm/pg-core';
 import pg from 'pg';
 
 import {DrizzleSessionStoragePostgres} from '../adapters/drizzle-postgres.adapter';
@@ -24,7 +16,7 @@ const exec = promisify(child_process.exec);
 const dbURL = new URL(
   `postgres://${encodeURIComponent('newUser')}:${encodeURIComponent(
     'newPass#123',
-  )}@localhost:${encodeURIComponent('5433')}/${encodeURIComponent(
+  )}@localhost:${encodeURIComponent('5434')}/${encodeURIComponent(
     'newShopDB',
   )}`,
 );
@@ -47,7 +39,7 @@ describe('DrizzleSessionStoragePostgres', () => {
 
   beforeAll(async () => {
     const runCommand = await exec(
-      "podman run -d -e POSTGRES_DB='newShopDB' -e POSTGRES_USER='newUser' -e POSTGRES_PASSWORD='newPass#123' -p 5433:5432 postgres:15",
+      "podman run -d -e POSTGRES_DB='newShopDB' -e POSTGRES_USER='newUser' -e POSTGRES_PASSWORD='newPass#123' -p 5434:5432 postgres:15",
       {encoding: 'utf8'},
     );
 

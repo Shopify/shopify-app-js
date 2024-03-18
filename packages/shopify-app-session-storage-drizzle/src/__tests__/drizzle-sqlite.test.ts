@@ -2,13 +2,7 @@ import * as fs from 'fs/promises';
 import {resolve} from 'node:path';
 
 import {batteryOfTests} from '@shopify/shopify-app-session-storage-test-utils';
-import {
-  sqliteTable,
-  blob,
-  text,
-  integer,
-  BaseSQLiteDatabase,
-} from 'drizzle-orm/sqlite-core';
+import {sqliteTable, blob, text, integer} from 'drizzle-orm/sqlite-core';
 import {drizzle} from 'drizzle-orm/better-sqlite3';
 import Database from 'better-sqlite3';
 

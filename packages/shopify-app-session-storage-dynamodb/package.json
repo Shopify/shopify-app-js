@@ -12,9 +12,20 @@
   "homepage": "https://github.com/Shopify/shopify-app-js/tree/main/packages/shopify-app-session-storage-dynamodb",
   "author": "Shopify Inc.",
   "license": "MIT",
-  "main": "./build/cjs/dynamodb.js",
-  "types": "./build/ts/dynamodb.d.ts",
-  "scripts": {},
+  "main": "./dist/cjs/dynamodb.js",
+  "module": "./dist/esm/dynamodb.mjs",
+  "types": "./dist/ts/dynamodb.d.ts",
+  "scripts": {
+    "lint": "eslint . --ext .js,.ts",
+    "build": "yarn run rollup && yarn tsc -p ./tsconfig.build.json",
+    "test": "jest",
+    "test:ci": "yarn test",
+    "rollup": "rollup -c rollup.config.js --bundleConfigAsCjs",
+    "clean": "rimraf .rollup.cache dist",
+    "changeset": "changeset",
+    "version": "changeset version",
+    "release": "yarn build && changeset publish"
+  },
   "publishConfig": {
     "access": "public"
   },

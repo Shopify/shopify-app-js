@@ -39,7 +39,7 @@ describe('RedisSessionStorage', () => {
     await wait(10000);
 
     client = createClient({url: dbURL.toString()});
-    client.on('error', (err) => {});
+    client.on('error', () => {});
     client.on('connect', () => {});
     client.on('reconnecting', () => {});
     client.on('ready', () => {});
