@@ -128,6 +128,18 @@ export class PrismaSessionStorage<T extends PrismaClient>
       userId:
         (sessionParams.onlineAccessInfo?.associated_user
           .id as unknown as bigint) || null,
+      firstName:
+        sessionParams.onlineAccessInfo?.associated_user.first_name || null,
+      lastName:
+        sessionParams.onlineAccessInfo?.associated_user.last_name || null,
+      email: sessionParams.onlineAccessInfo?.associated_user.email || null,
+      accountOwner:
+        sessionParams.onlineAccessInfo?.associated_user.account_owner || false,
+      locale: sessionParams.onlineAccessInfo?.associated_user.locale || null,
+      collaborator:
+        sessionParams.onlineAccessInfo?.associated_user.collaborator || null,
+      emailVerified:
+        sessionParams.onlineAccessInfo?.associated_user.email_verified || null,
     };
   }
 
@@ -152,10 +164,38 @@ export class PrismaSessionStorage<T extends PrismaClient>
     }
 
     if (row.userId) {
-      sessionParams.onlineAccessInfo = String(row.userId);
+      sessionParams.userId = String(row.userId);
     }
 
-    return Session.fromPropertyArray(Object.entries(sessionParams));
+    if (row.firstName) {
+      sessionParams.firstName = String(row.firstName);
+    }
+
+    if (row.lastName) {
+      sessionParams.lastName = String(row.lastName);
+    }
+
+    if (row.email) {
+      sessionParams.email = String(row.email);
+    }
+
+    if (row.accountOwner) {
+      sessionParams.accountOwner = String(row.accountOwner);
+    }
+
+    if (row.locale) {
+      sessionParams.locale = String(row.locale);
+    }
+
+    if (row.collaborator) {
+      sessionParams.collaborator = String(row.collaborator);
+    }
+
+    if (row.emailVerified) {
+      sessionParams.emailVerified = String(row.emailVerified);
+    }
+
+    return Session.fromPropertyArray(Object.entries(sessionParams), true);
   }
 
   private getSessionTable(): T['session'] {

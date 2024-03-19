@@ -63,6 +63,56 @@ export function batteryOfTests(storageFactory: () => Promise<SessionStorage>) {
           id: sessionId,
           shop: 'shop',
           state: 'state',
+          isOnline: false,
+          scope: testScopes.toString(),
+          accessToken: '123',
+        });
+        return session;
+      },
+      async () => {
+        const expiryDate = new Date();
+        expiryDate.setMilliseconds(0);
+        expiryDate.setMinutes(expiryDate.getMinutes() + 60);
+        const session = new Session({
+          id: sessionId,
+          shop: 'shop',
+          state: 'state',
+          isOnline: false,
+          expires: expiryDate,
+          accessToken: '123',
+          scope: testScopes.toString(),
+        });
+        return session;
+      },
+      async () => {
+        const session = new Session({
+          id: sessionId,
+          shop: 'shop',
+          state: 'state',
+          isOnline: false,
+          expires: null as any,
+          scope: testScopes.toString(),
+          accessToken: '123',
+        });
+        return session;
+      },
+      async () => {
+        const session = new Session({
+          id: sessionId,
+          shop: 'shop',
+          state: 'state',
+          isOnline: false,
+          expires: undefined,
+          scope: testScopes.toString(),
+          accessToken: '123',
+        });
+        return session;
+      },
+      async () => {
+        const session = new Session({
+          id: sessionId,
+          shop: 'shop',
+          state: 'state',
           isOnline: true,
           onlineAccessInfo: {associated_user: {id: 123}} as any,
           scope: testScopes.toString(),
@@ -79,6 +129,7 @@ export function batteryOfTests(storageFactory: () => Promise<SessionStorage>) {
 
       await expect(storage.storeSession(session)).resolves.toBeTruthy();
       const storedSession = await storage.loadSession(sessionId);
+
       expect(session.equals(storedSession)).toBeTruthy();
 
       expect(storedSession?.isActive(testScopes)).toBeTruthy();
