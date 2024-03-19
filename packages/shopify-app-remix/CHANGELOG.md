@@ -1,5 +1,39 @@
 # @shopify/shopify-app-remix
 
+## 2.7.0
+
+### Minor Changes
+
+- 6e45991: Adds an API to authenticate fulfillment service notifications
+
+  Learn more about [fulfillment service apps](https://shopify.dev/docs/apps/fulfillment/fulfillment-service-apps/manage-fulfillments).
+
+  ```
+  //app/routes/fulfillment_order_notification.jsx
+
+  import { authenticate } from "../shopify.server";
+
+  export const action = async ({ request }) => {
+      const { admin, payload } = await authenticate.fulfillmentService(request);
+
+      if (!admin) {
+        throw new Response();
+      }
+      console.log(payload.kind, 'kind'); //FULFILLMENT_REQUEST
+      throw new Response();
+    };
+  ```
+
+### Patch Changes
+
+- 674f6e3: Show an INFO log for disabled future flags to encourage apps to migrate ahead of time, making major version bumps simpler.
+- 3938adc: Update shopify-api-js to v9.5
+- c6c975f: Update @shopify/shopify-api to 9.5.1
+- 5aecf7d: Make `authenticate.webhook` return type's `payload` field more flexible, so apps aren't required to cast every value.
+- Updated dependencies [3938adc]
+- Updated dependencies [c6c975f]
+  - @shopify/shopify-app-session-storage@2.1.2
+
 ## 2.6.1
 
 ### Patch Changes

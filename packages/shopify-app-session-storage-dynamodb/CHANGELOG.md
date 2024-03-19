@@ -1,5 +1,16 @@
 # @shopify/shopify-app-session-storage-dynamodb
 
+## 3.0.2
+
+### Patch Changes
+
+- 6dc0da8: Bumps @aws-sdk/client-dynamodb from 3.511.0 to 3.533.0.
+- 3938adc: Update shopify-api-js to v9.5
+- c6c975f: Update @shopify/shopify-api to 9.5.1
+- Updated dependencies [3938adc]
+- Updated dependencies [c6c975f]
+  - @shopify/shopify-app-session-storage@2.1.2
+
 ## 3.0.1
 
 ### Patch Changes
