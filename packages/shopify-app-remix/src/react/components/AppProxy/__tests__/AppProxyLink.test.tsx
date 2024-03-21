@@ -9,7 +9,7 @@ describe('<AppProxyLink />', () => {
   it('adds a trailing slash if one is missing', () => {
     // WHEN
     const component = mount(
-      <AppProxyLink to="/my-action">Hello world</AppProxyLink>,
+      <AppProxyLink href="/my-action">Hello world</AppProxyLink>,
     );
 
     // THEN
@@ -22,7 +22,7 @@ describe('<AppProxyLink />', () => {
   it("doesn't alter the href if it has a trailing slash", () => {
     // WHEN
     const component = mount(
-      <AppProxyLink to="/my-action/">Hello world</AppProxyLink>,
+      <AppProxyLink href="/my-action/">Hello world</AppProxyLink>,
     );
 
     // THEN
