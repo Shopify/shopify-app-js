@@ -57,8 +57,10 @@ export function authenticateAppProxyFactory<
 }
 
 const liquid: LiquidResponseFunction = (body, initAndOptions) => {
+  const processedBody = processLiquidBody(body);
+
   if (typeof initAndOptions !== 'object') {
-    return new Response(body, {
+    return new Response(processedBody, {
       status: initAndOptions || 200,
       headers: {
         'Content-Type': 'application/liquid',
@@ -67,7 +69,8 @@ const liquid: LiquidResponseFunction = (body, initAndOptions) => {
   }
 
   const {layout, ...responseInit} = initAndOptions || {};
-  const responseBody = layout === false ? `{% layout none %} ${body}` : body;
+  const responseBody =
+    layout === false ? `{% layout none %} ${processedBody}` : processedBody;
 
   const headers = new Headers(responseInit.headers);
   headers.set('Content-Type', 'application/liquid');
@@ -128,4 +131,17 @@ async function validateAppProxyHmac(
     logger.info(error.message);
     throw new Response(undefined, {status: 400, statusText: 'Bad Request'});
   }
+}
+
+function processLiquidBody(body: string) {
+  return (
+    body
+      // Add trailing slashes to relative form action URLs
+      .replaceAll(
+        /<(form[^>]+)action="(\/[^"?]+)(\?[^"]+)?">/g,
+        '<$1action="$2/$3">',
+      )
+      // Add trailing slashes to relative link href URLs
+      .replaceAll(/<(a[^>]+)href="(\/[^"?]+)(\?[^"]+)?">/g, '<$1href="$2/$3">')
+  );
 }

@@ -9,6 +9,10 @@ import {AppProxyProvider} from '../../AppProxyProvider';
 
 describe('<AppProxyForm />', () => {
   it('throws an error if used outside of an AppProxyProvider', () => {
+    // GIVEN
+    jest.spyOn(console, 'error').mockImplementation(() => {});
+
+    // WHEN
     expect(() =>
       mount(<AppProxyForm action="/my-action">Hello world</AppProxyForm>),
     ).toThrow('AppProxyForm must be used within an AppProxyProvider component');

@@ -8,6 +8,10 @@ import {AppProxyProvider} from '../../AppProxyProvider';
 
 describe('<AppProxyLink />', () => {
   it('throws an error if used outside of an AppProxyProvider', () => {
+    // GIVEN
+    jest.spyOn(console, 'error').mockImplementation(() => {});
+
+    // WHEN
     expect(() =>
       mount(<AppProxyLink href="/my-action">Hello world</AppProxyLink>),
     ).toThrow('AppProxyLink must be used within an AppProxyProvider component');

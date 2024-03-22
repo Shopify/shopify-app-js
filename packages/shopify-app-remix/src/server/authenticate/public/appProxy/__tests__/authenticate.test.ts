@@ -1,6 +1,6 @@
 import {HashFormat, createSHA256HMAC} from '@shopify/shopify-api/runtime';
 
-import {LATEST_API_VERSION, shopifyApp} from '../../../..';
+import {shopifyApp} from '../../../..';
 import {
   API_SECRET_KEY,
   APP_URL,
@@ -8,7 +8,6 @@ import {
   expectAdminApiClient,
   expectStorefrontApiClient,
   getThrownResponse,
-  mockExternalRequest,
   setUpValidSession,
   testConfig,
 } from '../../../../__test-helpers';
@@ -96,8 +95,7 @@ describe('authenticating app proxy requests', () => {
   describe('Valid requests return a liquid helper', () => {
     it('Returns a Response with Content-Type: application/liquid and status 200 by default', async () => {
       // GIVEN
-      const config = testConfig();
-      const shopify = shopifyApp(config);
+      const shopify = shopifyApp(testConfig());
 
       // WHEN
       const {liquid} = await shopify.authenticate.public.appProxy(
@@ -113,8 +111,7 @@ describe('authenticating app proxy requests', () => {
 
     it('Returns a Response with status equal to init if init is number', async () => {
       // GIVEN
-      const config = testConfig();
-      const shopify = shopifyApp(config);
+      const shopify = shopifyApp(testConfig());
 
       // WHEN
       const {liquid} = await shopify.authenticate.public.appProxy(
@@ -128,8 +125,7 @@ describe('authenticating app proxy requests', () => {
 
     it('Returns a Response with properties from init in init is an object', async () => {
       // GIVEN
-      const config = testConfig();
-      const shopify = shopifyApp(config);
+      const shopify = shopifyApp(testConfig());
 
       // WHEN
       const {liquid} = await shopify.authenticate.public.appProxy(
@@ -152,8 +148,7 @@ describe('authenticating app proxy requests', () => {
 
     it('Returns a Response body with layout {% layout none %} if layout is false', async () => {
       // GIVEN
-      const config = testConfig();
-      const shopify = shopifyApp(config);
+      const shopify = shopifyApp(testConfig());
 
       // WHEN
       const {liquid} = await shopify.authenticate.public.appProxy(
@@ -171,8 +166,7 @@ describe('authenticating app proxy requests', () => {
 
     it('Returns a Response body combining layout and initOptions', async () => {
       // GIVEN
-      const config = testConfig();
-      const shopify = shopifyApp(config);
+      const shopify = shopifyApp(testConfig());
 
       // WHEN
       const {liquid} = await shopify.authenticate.public.appProxy(
@@ -188,6 +182,104 @@ describe('authenticating app proxy requests', () => {
       expect(await response.text()).toBe(
         '{% layout none %} Liquid template {{shop.name}}',
       );
+    });
+
+    describe('form action parsing', () => {
+      it('adds trailing slashes to relative URLs', async () => {
+        // GIVEN
+        const shopify = shopifyApp(testConfig());
+
+        // WHEN
+        const {liquid} = await shopify.authenticate.public.appProxy(
+          await getValidRequest(),
+        );
+        const response = liquid('<form action="/foo"></form>');
+
+        // THEN
+        expect(response.status).toBe(200);
+        expect(await response.text()).toBe('<form action="/foo/"></form>');
+      });
+
+      it('preserves search params when adding trailing slashes', async () => {
+        // GIVEN
+        const shopify = shopifyApp(testConfig());
+
+        // WHEN
+        const {liquid} = await shopify.authenticate.public.appProxy(
+          await getValidRequest(),
+        );
+        const response = liquid('<form action="/foo?bar=baz"></form>');
+
+        // THEN
+        expect(response.status).toBe(200);
+        expect(await response.text()).toBe(
+          '<form action="/foo/?bar=baz"></form>',
+        );
+      });
+
+      it('does not alter absolute URLs', async () => {
+        // GIVEN
+        const shopify = shopifyApp(testConfig());
+
+        // WHEN
+        const {liquid} = await shopify.authenticate.public.appProxy(
+          await getValidRequest(),
+        );
+        const response = liquid('<form action="/foo?bar=baz"></form>');
+
+        // THEN
+        expect(response.status).toBe(200);
+        expect(await response.text()).toBe(
+          '<form action="/foo/?bar=baz"></form>',
+        );
+      });
+    });
+
+    describe('link href parsing', () => {
+      it('adds trailing slashes to relative URLs', async () => {
+        // GIVEN
+        const shopify = shopifyApp(testConfig());
+
+        // WHEN
+        const {liquid} = await shopify.authenticate.public.appProxy(
+          await getValidRequest(),
+        );
+        const response = liquid('<a href="/foo"></a>');
+
+        // THEN
+        expect(response.status).toBe(200);
+        expect(await response.text()).toBe('<a href="/foo/"></a>');
+      });
+
+      it('preserves search params when adding trailing slashes', async () => {
+        // GIVEN
+        const shopify = shopifyApp(testConfig());
+
+        // WHEN
+        const {liquid} = await shopify.authenticate.public.appProxy(
+          await getValidRequest(),
+        );
+        const response = liquid('<a href="/foo?bar=baz"></a>');
+
+        // THEN
+        expect(response.status).toBe(200);
+        expect(await response.text()).toBe('<a href="/foo/?bar=baz"></a>');
+      });
+
+      it('does not alter absolute URLs', async () => {
+        // GIVEN
+        const shopify = shopifyApp(testConfig());
+
+        // WHEN
+        const {liquid} = await shopify.authenticate.public.appProxy(
+          await getValidRequest(),
+        );
+        const response = liquid('<a href="/foo?bar=baz"></a>');
+
+        // THEN
+        expect(response.status).toBe(200);
+        expect(await response.text()).toBe('<a href="/foo/?bar=baz"></a>');
+      });
     });
   });
 
