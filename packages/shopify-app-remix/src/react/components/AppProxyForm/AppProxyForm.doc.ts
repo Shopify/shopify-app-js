@@ -1,14 +1,14 @@
 import {ReferenceEntityTemplateSchema} from '@shopify/generate-docs';
 
 const data: ReferenceEntityTemplateSchema = {
-  name: 'AppProxy.Link',
-  descriptionType: 'AppProxyLinkGeneratedType',
+  name: 'AppProxyForm',
+  descriptionType: 'AppProxyFormGeneratedType',
   description: '',
   category: 'App proxy components',
   type: 'component',
   isVisualComponent: false,
   definitions: [],
-  jsDocTypeExamples: ['AppProxyLinkGeneratedType'],
+  jsDocTypeExamples: ['AppProxyFormGeneratedType'],
   related: [
     {
       name: 'authenticate.public.appProxy',
@@ -17,9 +17,9 @@ const data: ReferenceEntityTemplateSchema = {
       type: 'remix',
     },
     {
-      name: 'AppProxy',
+      name: 'AppProxyProvider',
       subtitle: 'Enable JavaScript in pages loaded through app proxies.',
-      url: '/docs/api/shopify-app-remix/app-proxy-components/appproxy',
+      url: '/docs/api/shopify-app-remix/app-proxy-components/appproxyprovider',
       type: 'remix',
     },
   ],

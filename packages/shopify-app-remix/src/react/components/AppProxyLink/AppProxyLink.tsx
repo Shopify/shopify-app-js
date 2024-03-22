@@ -1,4 +1,6 @@
-import {useEffect, useState} from 'react';
+import {useContext} from 'react';
+
+import {AppProxyProviderContext} from '../AppProxyProvider';
 
 export interface AppProxyLinkProps
   extends React.DetailedHTMLProps<
@@ -15,10 +17,10 @@ export interface AppProxyLinkProps
  *
  * @example
  * <caption>Link to a different route.</caption>
- * <description>Use an `AppProxy.Link` within an `AppProxy` to link to a different route.</description>
+ * <description>Use an `AppProxyLink` within an `AppProxyProvider` to link to a different route.</description>
  * ```ts
  * import {authenticate} from '~/shopify.server';
- * import {AppProxy} from '@shopify/shopify-app-remix/react';
+ * import {AppProxyProvider, AppProxyLink} from '@shopify/shopify-app-remix/react';
  *
  * export async function loader({ request }) {
  *   await authenticate.public.appProxy(request);
@@ -30,24 +32,26 @@ export interface AppProxyLinkProps
  *   const { appUrl } = useLoaderData();
  *
  *   return (
- *     <AppProxy appUrl={appUrl}>
- *       <AppProxy.Link href="/other-route">Link to another route</AppProxy.Link>
- *     </AppProxy>
+ *     <AppProxyProvider appUrl={appUrl}>
+ *       <AppProxyLink href="/other-route">Link to another route</AppProxyLink>
+ *     </AppProxyProvider>
  *   );
  * }
  * ```
  */
 export function AppProxyLink(props: AppProxyLinkProps) {
-  const [origin, setOrigin] = useState('');
+  const context = useContext(AppProxyProviderContext);
 
-  useEffect(() => {
-    setOrigin(window.location.origin);
-  }, [setOrigin]);
+  if (!context) {
+    throw new Error(
+      'AppProxyLink must be used within an AppProxyProvider component',
+    );
+  }
 
   const {children, href, ...otherProps} = props;
 
   return (
-    <a href={`${origin}${href.replace(/([^/])$/, '$1/')}`} {...otherProps}>
+    <a href={context.formatUrl(href)} {...otherProps}>
       {children}
     </a>
   );

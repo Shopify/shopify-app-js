@@ -5,21 +5,13 @@ import {mount} from '@shopify/react-testing';
 import '../../../__tests__/test-helper';
 
 import {AppProxyForm} from '../AppProxyForm';
+import {AppProxyProvider} from '../../AppProxyProvider';
 
 describe('<AppProxyForm />', () => {
-  it('passes through with an empty action', () => {
-    // WHEN
-    const component = mount(
-      <RouterProvider
-        router={createMemoryRouter([
-          {path: '/', element: <AppProxyForm>Hello world</AppProxyForm>},
-        ])}
-      />,
-    );
-
-    // THEN
-    expect(component).toContainReactComponent('form', {action: '/'});
-    expect(component).toContainReactHtml('Hello world');
+  it('throws an error if used outside of an AppProxyProvider', () => {
+    expect(() =>
+      mount(<AppProxyForm action="/my-action">Hello world</AppProxyForm>),
+    ).toThrow('AppProxyForm must be used within an AppProxyProvider component');
   });
 
   it('adds a trailing slash if one is missing', () => {
@@ -30,7 +22,9 @@ describe('<AppProxyForm />', () => {
           {
             path: '/',
             element: (
-              <AppProxyForm action="/my-action">Hello world</AppProxyForm>
+              <AppProxyProvider appUrl="http://my-app.example.io">
+                <AppProxyForm action="/my-action">Hello world</AppProxyForm>
+              </AppProxyProvider>
             ),
           },
         ])}
@@ -50,7 +44,9 @@ describe('<AppProxyForm />', () => {
           {
             path: '/',
             element: (
-              <AppProxyForm action="/my-action/">Hello world</AppProxyForm>
+              <AppProxyProvider appUrl="http://my-app.example.io">
+                <AppProxyForm action="/my-action/">Hello world</AppProxyForm>
+              </AppProxyProvider>
             ),
           },
         ])}

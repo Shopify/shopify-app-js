@@ -144,83 +144,8 @@
     }
   },
   {
-    "name": "AppProxy",
-    "description": "Sets up a page to render behind a Shopify app proxy, enabling JavaScript and CSS to be loaded from the app.\n\nAlso provides components that enable using other components such as links and forms within proxies.\n\n> Caution: Because Remix doesn't support URL rewriting, any route using this component should <b>match the pathname of the proxy URL exactly</b>, and <b>end in a trailing slash</b> (e.g., `https://<shop>/apps/proxy/`).",
-    "category": "App proxy components",
-    "type": "component",
-    "isVisualComponent": false,
-    "definitions": [
-      {
-        "title": "AppProxyProps",
-        "description": "Props for the `AppProxy` component.",
-        "type": "AppProxyProps",
-        "typeDefinitions": {
-          "AppProxyProps": {
-            "filePath": "src/react/components/AppProxy/AppProxy.tsx",
-            "name": "AppProxyProps",
-            "description": "",
-            "members": [
-              {
-                "filePath": "src/react/components/AppProxy/AppProxy.tsx",
-                "syntaxKind": "PropertySignature",
-                "name": "appUrl",
-                "value": "string",
-                "description": "The URL where the app is hosted. You can set this from the `SHOPIFY_APP_URL` environment variable."
-              },
-              {
-                "filePath": "src/react/components/AppProxy/AppProxy.tsx",
-                "syntaxKind": "PropertySignature",
-                "name": "children",
-                "value": "React.ReactNode",
-                "description": "The children to render.",
-                "isOptional": true
-              }
-            ],
-            "value": "export interface AppProxyProps {\n  /**\n   * The URL where the app is hosted. You can set this from the `SHOPIFY_APP_URL` environment variable.\n   */\n  appUrl: string;\n\n  /**\n   * The children to render.\n   */\n  children?: React.ReactNode;\n}"
-          }
-        }
-      }
-    ],
-    "jsDocTypeExamples": [
-      "AppProxyGeneratedType"
-    ],
-    "related": [
-      {
-        "name": "authenticate.public.appProxy",
-        "subtitle": "Authenticate app proxy requests.",
-        "url": "/docs/api/shopify-app-remix/authenticate/public/app-proxy",
-        "type": "remix"
-      },
-      {
-        "name": "AppProxy.Form",
-        "subtitle": "Render form elements in proxies.",
-        "url": "/docs/api/shopify-app-remix/app-proxy-components/appproxy-form",
-        "type": "remix"
-      },
-      {
-        "name": "AppProxy.Link",
-        "subtitle": "Render link elements in proxies.",
-        "url": "/docs/api/shopify-app-remix/app-proxy-components/appproxy-link",
-        "type": "remix"
-      }
-    ],
-    "defaultExample": {
-      "description": "Wrap your route component in the `AppProxy` component and pass in your app URL.",
-      "codeblock": {
-        "title": "Wrap a route with an AppProxy component",
-        "tabs": [
-          {
-            "title": "Example",
-            "code": "import {authenticate} from '~/shopify.server';\nimport {AppProxy} from '@shopify/shopify-app-remix/react';\n\nexport async function loader({ request }) {\n  await authenticate.public.appProxy(request);\n\n  return json({ appUrl: process.env.SHOPIFY_APP_URL });\n}\n\nexport default function App() {\n  const { appUrl } = useLoaderData();\n\n  return (\n    &lt;AppProxy appUrl={appUrl}&gt;\n      Page content\n    &lt;/AppProxy&gt;\n  );\n}",
-            "language": "typescript"
-          }
-        ]
-      }
-    }
-  },
-  {
-    "name": "AppProxy.Form",
-    "description": "Sets up a `<form />` HTML element that works when rendered behind an app proxy.\n\nSupports any properties accepted by the `<form />` HTML element.",
+    "name": "AppProxyForm",
+    "description": "Sets up a Remix `<Form>` component that works when rendered behind an app proxy.\n\nSupports any properties accepted by the `<Form>` component.",
     "category": "App proxy components",
     "type": "component",
     "isVisualComponent": false,
@@ -236,20 +161,20 @@
         "type": "remix"
       },
       {
-        "name": "AppProxy",
+        "name": "AppProxyProvider",
         "subtitle": "Enable JavaScript in pages loaded through app proxies.",
-        "url": "/docs/api/shopify-app-remix/app-proxy-components/appproxy",
+        "url": "/docs/api/shopify-app-remix/app-proxy-components/appproxyprovider",
         "type": "remix"
       }
     ],
     "defaultExample": {
-      "description": "Use an `AppProxy.Form` within an `AppProxy` to create a form.",
+      "description": "Use an `AppProxyForm` within an `AppProxy` to create a form.",
       "codeblock": {
         "title": "Render a form element in a proxied route",
         "tabs": [
           {
             "title": "Example",
-            "code": "import {authenticate} from '~/shopify.server';\nimport {AppProxy} from '@shopify/shopify-app-remix/react';\n\nexport async function loader({ request }) {\n  await authenticate.public.appProxy(request);\n\n  return json({ appUrl: process.env.SHOPIFY_APP_URL });\n}\n\nexport default function App() {\n  const { appUrl } = useLoaderData();\n\n  return (\n    &lt;AppProxy appUrl={appUrl}&gt;\n      &lt;AppProxy.Form action=\"/submit\"&gt;\n        &lt;input type=\"text\" name=\"name\" /&gt;\n\n        &lt;input type=\"submit\" name=\"Submit\" /&gt;\n      &lt;/AppProxy.Form&gt;\n    &lt;/AppProxy&gt;\n  );\n}",
+            "code": "import {authenticate} from '~/shopify.server';\nimport {AppProxyProvider, AppProxyForm} from '@shopify/shopify-app-remix/react';\n\nexport async function loader({ request }) {\n  await authenticate.public.appProxy(request);\n\n  return json({ appUrl: process.env.SHOPIFY_APP_URL });\n}\n\nexport default function App() {\n  const { appUrl } = useLoaderData();\n\n  return (\n    &lt;AppProxyProvider appUrl={appUrl}&gt;\n      &lt;AppProxyForm action=\"/submit\"&gt;\n        &lt;input type=\"text\" name=\"name\" /&gt;\n\n        &lt;input type=\"submit\" name=\"Submit\" /&gt;\n      &lt;/AppProxyForm&gt;\n    &lt;/AppProxyProvider&gt;\n  );\n}",
             "language": "typescript"
           }
         ]
@@ -257,7 +182,7 @@
     }
   },
   {
-    "name": "AppProxy.Link",
+    "name": "AppProxyLink",
     "description": "Sets up an `<a />` HTML element that works when rendered behind an app proxy.\n\nSupports any properties accepted by the `<a />` HTML element.",
     "category": "App proxy components",
     "type": "component",
@@ -274,20 +199,95 @@
         "type": "remix"
       },
       {
-        "name": "AppProxy",
+        "name": "AppProxyProvider",
         "subtitle": "Enable JavaScript in pages loaded through app proxies.",
-        "url": "/docs/api/shopify-app-remix/app-proxy-components/appproxy",
+        "url": "/docs/api/shopify-app-remix/app-proxy-components/appproxyprovider",
         "type": "remix"
       }
     ],
     "defaultExample": {
-      "description": "Use an `AppProxy.Link` within an `AppProxy` to link to a different route.",
+      "description": "Use an `AppProxyLink` within an `AppProxyProvider` to link to a different route.",
       "codeblock": {
         "title": "Link to a different route",
         "tabs": [
           {
             "title": "Example",
-            "code": "import {authenticate} from '~/shopify.server';\nimport {AppProxy} from '@shopify/shopify-app-remix/react';\n\nexport async function loader({ request }) {\n  await authenticate.public.appProxy(request);\n\n  return json({ appUrl: process.env.SHOPIFY_APP_URL });\n}\n\nexport default function App() {\n  const { appUrl } = useLoaderData();\n\n  return (\n    &lt;AppProxy appUrl={appUrl}&gt;\n      &lt;AppProxy.Link href=\"/other-route\"&gt;Link to another route&lt;/AppProxy.Link&gt;\n    &lt;/AppProxy&gt;\n  );\n}",
+            "code": "import {authenticate} from '~/shopify.server';\nimport {AppProxyProvider, AppProxyLink} from '@shopify/shopify-app-remix/react';\n\nexport async function loader({ request }) {\n  await authenticate.public.appProxy(request);\n\n  return json({ appUrl: process.env.SHOPIFY_APP_URL });\n}\n\nexport default function App() {\n  const { appUrl } = useLoaderData();\n\n  return (\n    &lt;AppProxyProvider appUrl={appUrl}&gt;\n      &lt;AppProxyLink href=\"/other-route\"&gt;Link to another route&lt;/AppProxyLink&gt;\n    &lt;/AppProxyProvider&gt;\n  );\n}",
+            "language": "typescript"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "name": "AppProxyProvider",
+    "description": "Sets up a page to render behind a Shopify app proxy, enabling JavaScript and CSS to be loaded from the app.\n\nAlso provides components that enable using other components such as links and forms within proxies.\n\n> Caution: Because Remix doesn't support URL rewriting, any route using this component should <b>match the pathname of the proxy URL exactly</b>, and <b>end in a trailing slash</b> (e.g., `https://<shop>/apps/proxy/`).",
+    "category": "Entrypoints",
+    "type": "component",
+    "isVisualComponent": false,
+    "definitions": [
+      {
+        "title": "AppProxyProviderProps",
+        "description": "Props for the `AppProxyProvider` component.",
+        "type": "AppProxyProviderProps",
+        "typeDefinitions": {
+          "AppProxyProviderProps": {
+            "filePath": "src/react/components/AppProxy/AppProxyProvider.tsx",
+            "name": "AppProxyProviderProps",
+            "description": "",
+            "members": [
+              {
+                "filePath": "src/react/components/AppProxy/AppProxyProvider.tsx",
+                "syntaxKind": "PropertySignature",
+                "name": "appUrl",
+                "value": "string",
+                "description": "The URL where the app is hosted. You can set this from the `SHOPIFY_APP_URL` environment variable."
+              },
+              {
+                "filePath": "src/react/components/AppProxy/AppProxyProvider.tsx",
+                "syntaxKind": "PropertySignature",
+                "name": "children",
+                "value": "React.ReactNode",
+                "description": "The children to render.",
+                "isOptional": true
+              }
+            ],
+            "value": "export interface AppProxyProviderProps {\n  /**\n   * The URL where the app is hosted. You can set this from the `SHOPIFY_APP_URL` environment variable.\n   */\n  appUrl: string;\n\n  /**\n   * The children to render.\n   */\n  children?: React.ReactNode;\n}"
+          }
+        }
+      }
+    ],
+    "jsDocTypeExamples": [
+      "AppProxyProviderGeneratedType"
+    ],
+    "related": [
+      {
+        "name": "authenticate.public.appProxy",
+        "subtitle": "Authenticate app proxy requests.",
+        "url": "/docs/api/shopify-app-remix/authenticate/public/app-proxy",
+        "type": "remix"
+      },
+      {
+        "name": "AppProxyForm",
+        "subtitle": "Render form elements in proxies.",
+        "url": "/docs/api/shopify-app-remix/app-proxy-components/appproxy-form",
+        "type": "remix"
+      },
+      {
+        "name": "AppProxyLink",
+        "subtitle": "Render link elements in proxies.",
+        "url": "/docs/api/shopify-app-remix/app-proxy-components/appproxy-link",
+        "type": "remix"
+      }
+    ],
+    "defaultExample": {
+      "description": "Wrap your route component in the `AppProxyProvider` component and pass in your app URL.",
+      "codeblock": {
+        "title": "Wrap a route with an AppProxyProvider component",
+        "tabs": [
+          {
+            "title": "Example",
+            "code": "import {authenticate} from '~/shopify.server';\nimport {AppProxyProvider} from '@shopify/shopify-app-remix/react';\n\nexport async function loader({ request }) {\n  await authenticate.public.appProxy(request);\n\n  return json({ appUrl: process.env.SHOPIFY_APP_URL });\n}\n\nexport default function App() {\n  const { appUrl } = useLoaderData();\n\n  return (\n    &lt;AppProxyProvider appUrl={appUrl}&gt;\n      Page content\n    &lt;/AppProxyProvider&gt;\n  );\n}",
             "language": "typescript"
           }
         ]

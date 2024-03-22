@@ -1,20 +1,20 @@
 import {ReferenceEntityTemplateSchema} from '@shopify/generate-docs';
 
 const data: ReferenceEntityTemplateSchema = {
-  name: 'AppProxy',
-  descriptionType: 'AppProxyGeneratedType',
+  name: 'AppProxyProvider',
+  descriptionType: 'AppProxyProviderGeneratedType',
   description: '',
-  category: 'App proxy components',
+  category: 'Entrypoints',
   type: 'component',
   isVisualComponent: false,
   definitions: [
     {
-      title: 'AppProxyProps',
-      description: 'Props for the `AppProxy` component.',
-      type: 'AppProxyProps',
+      title: 'AppProxyProviderProps',
+      description: 'Props for the `AppProxyProvider` component.',
+      type: 'AppProxyProviderProps',
     },
   ],
-  jsDocTypeExamples: ['AppProxyGeneratedType'],
+  jsDocTypeExamples: ['AppProxyProviderGeneratedType'],
   related: [
     {
       name: 'authenticate.public.appProxy',
@@ -23,13 +23,13 @@ const data: ReferenceEntityTemplateSchema = {
       type: 'remix',
     },
     {
-      name: 'AppProxy.Form',
+      name: 'AppProxyForm',
       subtitle: 'Render form elements in proxies.',
       url: '/docs/api/shopify-app-remix/app-proxy-components/appproxy-form',
       type: 'remix',
     },
     {
-      name: 'AppProxy.Link',
+      name: 'AppProxyLink',
       subtitle: 'Render link elements in proxies.',
       url: '/docs/api/shopify-app-remix/app-proxy-components/appproxy-link',
       type: 'remix',

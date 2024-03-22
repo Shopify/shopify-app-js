@@ -1,2 +1,4 @@
 export * from './AppProvider';
-export * from './AppProxy';
+export * from './AppProxyProvider';
+export * from './AppProxyForm';
+export * from './AppProxyLink';
