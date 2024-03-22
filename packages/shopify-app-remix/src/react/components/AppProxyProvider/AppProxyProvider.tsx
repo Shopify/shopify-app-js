@@ -39,6 +39,7 @@ export const AppProxyProviderContext =
  * <caption>Wrap a route with an AppProxyProvider component.</caption>
  * <description>Wrap your route component in the `AppProxyProvider` component and pass in your app URL.</description>
  * ```ts
+ * // /app/routes/**\/*.ts
  * import {authenticate} from '~/shopify.server';
  * import {AppProxyProvider} from '@shopify/shopify-app-remix/react';
  *

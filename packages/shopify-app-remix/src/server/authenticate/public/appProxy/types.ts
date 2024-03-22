@@ -26,7 +26,7 @@ interface Context {
    * <caption>Rendering liquid content.</caption>
    * <description>Use the `liquid` helper to render a `Response` with Liquid content using the shop's theme. See the [Liquid reference](https://shopify.dev/docs/api/liquid) for all the features it enables.</description>
    * ```ts
-   * // app/routes/**\/.ts
+   * // /app/routes/**\/*.ts
    * import {authenticate} from "~/shopify.server"
    *
    * export async function loader({ request }) {
@@ -40,7 +40,7 @@ interface Context {
    * <caption>Rendering liquid content without a layout.</caption>
    * <description>Set the `layout` option to `false` to render the Liquid content without a theme.</description>
    * ```ts
-   * // app/routes/**\/.ts
+   * // /app/routes/**\/*.ts
    * import {authenticate} from "~/shopify.server"
    *
    * export async function loader({ request }) {
@@ -50,6 +50,41 @@ interface Context {
    *     "Hello {{shop.name}}",
    *     { layout: false }
    *   );
+   * }
+   * ```
+   *
+   * @example
+   * <caption>Rendering a form in a Liquid response.</caption>
+   * <description>Handle form submissions through an app proxy.</description>
+   * ```ts
+   * // app/routes/apps.proxy.my-action.tsx
+   * import { redirect } from "@remix-run/node";
+   * import { authenticate } from "~/shopify.server";
+   *
+   * export async function loader({ request }) {
+   *   const { liquid } = await authenticate.public.appProxy(request);
+   *
+   *   return liquid(`
+   *     <form method="post" action="/apps/proxy/my-action">
+   *       <input type="text" name="field" />
+   *       <button type="submit">Submit</button>
+   *     </form>
+   *   `);
+   * }
+   *
+   * export async function action({ request }) {
+   *   await authenticate.public.appProxy(request);
+   *
+   *   const formData = await request.formData();
+   *   const field = formData.get("field")?.toString();
+   *
+   *   // Perform actions here
+   *   if (field) {
+   *     console.log("Field:", field);
+   *   }
+   *
+   *   // Return to the form page
+   *   return redirect("/apps/proxy/my-action");
    * }
    * ```
    */

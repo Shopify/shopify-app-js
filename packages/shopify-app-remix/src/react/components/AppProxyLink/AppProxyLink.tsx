@@ -19,6 +19,7 @@ export interface AppProxyLinkProps
  * <caption>Link to a different route.</caption>
  * <description>Use an `AppProxyLink` within an `AppProxyProvider` to link to a different route.</description>
  * ```ts
+ * // /app/routes/**\/*.ts
  * import {authenticate} from '~/shopify.server';
  * import {AppProxyProvider, AppProxyLink} from '@shopify/shopify-app-remix/react';
  *

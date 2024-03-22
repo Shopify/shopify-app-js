@@ -49,6 +49,7 @@ export interface AppProviderProps
  * <caption>Set up AppProvider.</caption>
  * <description>Wrap your app in the `AppProvider` component and pass in your API key.</description>
  * ```ts
+ * // /app/routes/**\/*.ts
  * import {authenticate} from '~/shopify.server';
  * import {AppProvider} from '@shopify/shopify-app-remix/react';
  *
@@ -73,6 +74,7 @@ export interface AppProviderProps
  * <caption>Localize Polaris components.</caption>
  * <description>Pass in a different locale for Polaris to translate its components.</description>
  * ```ts
+ * // /app/routes/**\/*.ts
  * import {authenticate} from '~/shopify.server';
  * import {AppProvider} from '@shopify/shopify-app-remix/react';
  *
