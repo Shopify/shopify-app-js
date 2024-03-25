@@ -17,7 +17,7 @@ export interface AppProxyLinkProps
  *
  * @example
  * <caption>Link to a different route.</caption>
- * <description>Use an `AppProxyLink` within an `AppProxyProvider` to link to a different route.</description>
+ * <description>Use an `AppProxyLink` within an `AppProxyProvider` to link to a different proxied route.</description>
  * ```ts
  * // /app/routes/**\/*.ts
  * import {authenticate} from '~/shopify.server';
@@ -34,7 +34,7 @@ export interface AppProxyLinkProps
  *
  *   return (
  *     <AppProxyProvider appUrl={appUrl}>
- *       <AppProxyLink href="/other-route">Link to another route</AppProxyLink>
+ *       <AppProxyLink href="/other-proxy-route">Link to another route</AppProxyLink>
  *     </AppProxyProvider>
  *   );
  * }
