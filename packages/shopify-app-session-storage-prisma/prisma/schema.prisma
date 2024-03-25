@@ -18,6 +18,7 @@ model Session {
   userId      BigInt?
 }
 
+// We use this in unit tests to ensure it works with a different model name
 model MySession {
   id          String    @id
   shop        String
