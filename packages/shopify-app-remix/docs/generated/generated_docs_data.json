@@ -120,7 +120,7 @@
             "title": "Set up AppProvider",
             "tabs": [
               {
-                "title": "Example",
+                "title": "app/routes/**\\/.tsx",
                 "code": "import {authenticate} from '~/shopify.server';\nimport {AppProvider} from '@shopify/shopify-app-remix/react';\n\nexport async function loader({ request }) {\n  await authenticate.admin(request);\n\n  return json({ apiKey: process.env.SHOPIFY_API_KEY });\n}\n\nexport default function App() {\n  const { apiKey } = useLoaderData();\n\n  return (\n    &lt;AppProvider isEmbeddedApp apiKey={apiKey}&gt;\n      &lt;Outlet /&gt;\n    &lt;/AppProvider&gt;\n  );\n}",
                 "language": "typescript"
               }
@@ -133,7 +133,7 @@
             "title": "Localize Polaris components",
             "tabs": [
               {
-                "title": "Example",
+                "title": "app/routes/**\\/.tsx",
                 "code": "import {authenticate} from '~/shopify.server';\nimport {AppProvider} from '@shopify/shopify-app-remix/react';\n\nexport async function loader({ request }) {\n  await authenticate.admin(request);\n\n  return json({\n    apiKey: process.env.SHOPIFY_API_KEY,\n    polarisTranslations: require(\"@shopify/polaris/locales/fr.json\"),\n  });\n}\n\nexport default function App() {\n  const { apiKey, polarisTranslations } = useLoaderData();\n\n  return (\n    &lt;AppProvider apiKey={apiKey} i18n={polarisTranslations}&gt;\n      &lt;Outlet /&gt;\n    &lt;/AppProvider&gt;\n  );\n}",
                 "language": "typescript"
               }
@@ -141,6 +141,157 @@
           }
         }
       ]
+    }
+  },
+  {
+    "name": "AppProxyForm",
+    "description": "Sets up a Remix `<Form>` component that works when rendered behind an app proxy.\n\nSupports any properties accepted by the `<Form>` component.",
+    "category": "App proxy components",
+    "type": "component",
+    "isVisualComponent": false,
+    "definitions": [],
+    "jsDocTypeExamples": [
+      "AppProxyFormGeneratedType"
+    ],
+    "related": [
+      {
+        "name": "authenticate.public.appProxy",
+        "subtitle": "Authenticating app proxy requests.",
+        "url": "/docs/api/shopify-app-remix/authenticate/public/app-proxy",
+        "type": "remix"
+      },
+      {
+        "name": "AppProxyProvider",
+        "subtitle": "Enable JavaScript in pages loaded through app proxies.",
+        "url": "/docs/api/shopify-app-remix/app-proxy-components/appproxyprovider",
+        "type": "remix"
+      }
+    ],
+    "defaultExample": {
+      "description": "Use an `AppProxyForm` within an `AppProxy` to create a form.",
+      "codeblock": {
+        "title": "Render a form element in a proxied route",
+        "tabs": [
+          {
+            "title": "app/routes/**\\/.tsx",
+            "code": "import {\n  AppProxyProvider,\n  AppProxyForm,\n} from \"@shopify/shopify-app-remix/react\";\nimport { authenticate } from \"~/shopify.server\";\n\nexport async function loader({ request }) {\n  await authenticate.public.appProxy(request);\n\n  return json({ appUrl: process.env.SHOPIFY_APP_URL });\n}\n\nexport async function action({ request }) {\n  await authenticate.public.appProxy(request);\n\n  const formData = await request.formData();\n  const field = formData.get(\"field\")?.toString();\n\n  // Perform actions\n  if (field) {\n    console.log(\"Field:\", field);\n  }\n\n  // Return JSON to the client\n  return json({ message: \"Success!\" });\n}\n\nexport default function App() {\n  const { appUrl } = useLoaderData();\n  const data = useActionData();\n\n  return (\n    &lt;AppProxyProvider appUrl={appUrl}&gt;\n      &lt;AppProxyForm action=\"/\"&gt;\n        &lt;input type=\"text\" name=\"field\" defaultValue={data?.field} /&gt;\n\n        &lt;input type=\"submit\" name=\"Submit\" /&gt;\n      &lt;/AppProxyForm&gt;\n    &lt;/AppProxyProvider&gt;\n  );\n}",
+            "language": "typescript"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "name": "AppProxyLink",
+    "description": "Sets up an `<a />` HTML element that works when rendered behind an app proxy.\n\nSupports any properties accepted by the `<a />` HTML element.",
+    "category": "App proxy components",
+    "type": "component",
+    "isVisualComponent": false,
+    "definitions": [],
+    "jsDocTypeExamples": [
+      "AppProxyLinkGeneratedType"
+    ],
+    "related": [
+      {
+        "name": "authenticate.public.appProxy",
+        "subtitle": "Authenticating app proxy requests.",
+        "url": "/docs/api/shopify-app-remix/authenticate/public/app-proxy",
+        "type": "remix"
+      },
+      {
+        "name": "AppProxyProvider",
+        "subtitle": "Enable JavaScript in pages loaded through app proxies.",
+        "url": "/docs/api/shopify-app-remix/app-proxy-components/appproxyprovider",
+        "type": "remix"
+      }
+    ],
+    "defaultExample": {
+      "description": "Use an `AppProxyLink` within an `AppProxyProvider` to link to a different route.",
+      "codeblock": {
+        "title": "Link to a different route",
+        "tabs": [
+          {
+            "title": "app/routes/**\\/.tsx",
+            "code": "import {authenticate} from '~/shopify.server';\nimport {AppProxyProvider, AppProxyLink} from '@shopify/shopify-app-remix/react';\n\nexport async function loader({ request }) {\n  await authenticate.public.appProxy(request);\n\n  return json({ appUrl: process.env.SHOPIFY_APP_URL });\n}\n\nexport default function App() {\n  const { appUrl } = useLoaderData();\n\n  return (\n    &lt;AppProxyProvider appUrl={appUrl}&gt;\n      &lt;AppProxyLink href=\"/other-route\"&gt;Link to another route&lt;/AppProxyLink&gt;\n    &lt;/AppProxyProvider&gt;\n  );\n}",
+            "language": "typescript"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "name": "AppProxyProvider",
+    "description": "Sets up a page to render behind a Shopify app proxy, enabling JavaScript and CSS to be loaded from the app.\n\nAlso provides components that enable using other components such as links and forms within proxies.\n\n> Caution: Because Remix doesn't support URL rewriting, any route using this component should <b>match the pathname of the proxy URL exactly</b>, and <b>end in a trailing slash</b> (e.g., `https://<shop>/apps/proxy/`).",
+    "category": "Entrypoints",
+    "type": "component",
+    "isVisualComponent": false,
+    "definitions": [
+      {
+        "title": "AppProxyProviderProps",
+        "description": "Props for the `AppProxyProvider` component.",
+        "type": "AppProxyProviderProps",
+        "typeDefinitions": {
+          "AppProxyProviderProps": {
+            "filePath": "src/react/components/AppProxyProvider/AppProxyProvider.tsx",
+            "name": "AppProxyProviderProps",
+            "description": "",
+            "members": [
+              {
+                "filePath": "src/react/components/AppProxyProvider/AppProxyProvider.tsx",
+                "syntaxKind": "PropertySignature",
+                "name": "appUrl",
+                "value": "string",
+                "description": "The URL where the app is hosted. You can set this from the `SHOPIFY_APP_URL` environment variable."
+              },
+              {
+                "filePath": "src/react/components/AppProxyProvider/AppProxyProvider.tsx",
+                "syntaxKind": "PropertySignature",
+                "name": "children",
+                "value": "React.ReactNode",
+                "description": "The children to render.",
+                "isOptional": true
+              }
+            ],
+            "value": "export interface AppProxyProviderProps {\n  /**\n   * The URL where the app is hosted. You can set this from the `SHOPIFY_APP_URL` environment variable.\n   */\n  appUrl: string;\n\n  /**\n   * The children to render.\n   */\n  children?: React.ReactNode;\n}"
+          }
+        }
+      }
+    ],
+    "jsDocTypeExamples": [
+      "AppProxyProviderGeneratedType"
+    ],
+    "related": [
+      {
+        "name": "authenticate.public.appProxy",
+        "subtitle": "Authenticate app proxy requests.",
+        "url": "/docs/api/shopify-app-remix/authenticate/public/app-proxy",
+        "type": "remix"
+      },
+      {
+        "name": "AppProxyForm",
+        "subtitle": "Render form elements in proxies.",
+        "url": "/docs/api/shopify-app-remix/app-proxy-components/appproxy-form",
+        "type": "remix"
+      },
+      {
+        "name": "AppProxyLink",
+        "subtitle": "Render link elements in proxies.",
+        "url": "/docs/api/shopify-app-remix/app-proxy-components/appproxy-link",
+        "type": "remix"
+      }
+    ],
+    "defaultExample": {
+      "description": "Wrap your route component in the `AppProxyProvider` component and pass in your app URL.",
+      "codeblock": {
+        "title": "Wrap a route with an AppProxyProvider component",
+        "tabs": [
+          {
+            "title": "app/routes/**\\/.tsx",
+            "code": "import {authenticate} from '~/shopify.server';\nimport {AppProxyProvider} from '@shopify/shopify-app-remix/react';\n\nexport async function loader({ request }) {\n  await authenticate.public.appProxy(request);\n\n  return json({ appUrl: process.env.SHOPIFY_APP_URL });\n}\n\nexport default function App() {\n  const { appUrl } = useLoaderData();\n\n  return (\n    &lt;AppProxyProvider appUrl={appUrl}&gt;\n      Page content\n    &lt;/AppProxyProvider&gt;\n  );\n}",
+            "language": "typescript"
+          }
+        ]
+      }
     }
   },
   {
@@ -4573,7 +4724,7 @@
                     "tabs": [
                       {
                         "code": "import {authenticate} from \"~/shopify.server\"\n\nexport async function loader({ request }) {\n  const {liquid} = await authenticate.public.appProxy(request);\n\n  return liquid(\"Hello {{shop.name}}\");\n}",
-                        "title": "app/routes/**\\/.ts"
+                        "title": "app/routes/**\\/.tsx"
                       }
                     ]
                   },
@@ -4583,7 +4734,17 @@
                     "tabs": [
                       {
                         "code": "import {authenticate} from \"~/shopify.server\"\n\nexport async function loader({ request }) {\n  const {liquid} = await authenticate.public.appProxy(request);\n\n  return liquid(\n    \"Hello {{shop.name}}\",\n    { layout: false }\n  );\n}",
-                        "title": "app/routes/**\\/.ts"
+                        "title": "app/routes/**\\/.tsx"
+                      }
+                    ]
+                  },
+                  {
+                    "title": "Rendering a form in a Liquid response",
+                    "description": "Handle form submissions through an app proxy.",
+                    "tabs": [
+                      {
+                        "code": "import { redirect } from \"@remix-run/node\";\nimport { authenticate } from \"~/shopify.server\";\n\nexport async function loader({ request }) {\n  const { liquid } = await authenticate.public.appProxy(request);\n\n  return liquid(`\n    <form method=\"post\" action=\"/apps/proxy/my-action\">\n      <input type=\"text\" name=\"field\" />\n      <button type=\"submit\">Submit</button>\n    </form>\n  `);\n}\n\nexport async function action({ request }) {\n  await authenticate.public.appProxy(request);\n\n  const formData = await request.formData();\n  const field = formData.get(\"field\")?.toString();\n\n  // Perform actions here\n  if (field) {\n    console.log(\"Field:\", field);\n  }\n\n  // Return to the form page\n  return redirect(\"/apps/proxy/my-action\");\n}",
+                        "title": "app/routes/apps.proxy.my-action.tsx"
                       }
                     ]
                   }
@@ -4710,7 +4871,7 @@
                     "tabs": [
                       {
                         "code": "import {authenticate} from \"~/shopify.server\"\n\nexport async function loader({ request }) {\n  const {liquid} = await authenticate.public.appProxy(request);\n\n  return liquid(\"Hello {{shop.name}}\");\n}",
-                        "title": "app/routes/**\\/.ts"
+                        "title": "app/routes/**\\/.tsx"
                       }
                     ]
                   },
@@ -4720,7 +4881,17 @@
                     "tabs": [
                       {
                         "code": "import {authenticate} from \"~/shopify.server\"\n\nexport async function loader({ request }) {\n  const {liquid} = await authenticate.public.appProxy(request);\n\n  return liquid(\n    \"Hello {{shop.name}}\",\n    { layout: false }\n  );\n}",
-                        "title": "app/routes/**\\/.ts"
+                        "title": "app/routes/**\\/.tsx"
+                      }
+                    ]
+                  },
+                  {
+                    "title": "Rendering a form in a Liquid response",
+                    "description": "Handle form submissions through an app proxy.",
+                    "tabs": [
+                      {
+                        "code": "import { redirect } from \"@remix-run/node\";\nimport { authenticate } from \"~/shopify.server\";\n\nexport async function loader({ request }) {\n  const { liquid } = await authenticate.public.appProxy(request);\n\n  return liquid(`\n    <form method=\"post\" action=\"/apps/proxy/my-action\">\n      <input type=\"text\" name=\"field\" />\n      <button type=\"submit\">Submit</button>\n    </form>\n  `);\n}\n\nexport async function action({ request }) {\n  await authenticate.public.appProxy(request);\n\n  const formData = await request.formData();\n  const field = formData.get(\"field\")?.toString();\n\n  // Perform actions here\n  if (field) {\n    console.log(\"Field:\", field);\n  }\n\n  // Return to the form page\n  return redirect(\"/apps/proxy/my-action\");\n}",
+                        "title": "app/routes/apps.proxy.my-action.tsx"
                       }
                     ]
                   }
@@ -5555,7 +5726,7 @@
                 "title": "Rendering liquid content",
                 "tabs": [
                   {
-                    "title": "app/routes/**\\/.ts",
+                    "title": "app/routes/**\\/.tsx",
                     "code": "import {authenticate} from \"~/shopify.server\"\n\nexport async function loader({ request }) {\n  const {liquid} = await authenticate.public.appProxy(request);\n\n  return liquid(\"Hello {{shop.name}}\");\n}",
                     "language": "typescript"
                   }
@@ -5568,8 +5739,21 @@
                 "title": "Rendering liquid content without a layout",
                 "tabs": [
                   {
-                    "title": "app/routes/**\\/.ts",
+                    "title": "app/routes/**\\/.tsx",
                     "code": "import {authenticate} from \"~/shopify.server\"\n\nexport async function loader({ request }) {\n  const {liquid} = await authenticate.public.appProxy(request);\n\n  return liquid(\n    \"Hello {{shop.name}}\",\n    { layout: false }\n  );\n}",
+                    "language": "typescript"
+                  }
+                ]
+              }
+            },
+            {
+              "description": "Handle form submissions through an app proxy.",
+              "codeblock": {
+                "title": "Rendering a form in a Liquid response",
+                "tabs": [
+                  {
+                    "title": "app/routes/apps.proxy.my-action.tsx",
+                    "code": "import { redirect } from \"@remix-run/node\";\nimport { authenticate } from \"~/shopify.server\";\n\nexport async function loader({ request }) {\n  const { liquid } = await authenticate.public.appProxy(request);\n\n  return liquid(`\n    &lt;form method=\"post\" action=\"/apps/proxy/my-action\"&gt;\n      &lt;input type=\"text\" name=\"field\" /&gt;\n      &lt;button type=\"submit\"&gt;Submit&lt;/button&gt;\n    &lt;/form&gt;\n  `);\n}\n\nexport async function action({ request }) {\n  await authenticate.public.appProxy(request);\n\n  const formData = await request.formData();\n  const field = formData.get(\"field\")?.toString();\n\n  // Perform actions here\n  if (field) {\n    console.log(\"Field:\", field);\n  }\n\n  // Return to the form page\n  return redirect(\"/apps/proxy/my-action\");\n}",
                     "language": "typescript"
                   }
                 ]
@@ -12201,7 +12385,7 @@
               "name": "ShopifyApp<Config extends AppConfigArg<Resources, Storage, Future>>",
               "value": "ShopifyApp<Config extends AppConfigArg<Resources, Storage, Future>>"
             },
-            "value": "export function shopifyApp<\n  Config extends AppConfigArg<Resources, Storage, Future>,\n  Resources extends ShopifyRestResources,\n  Storage extends SessionStorage,\n  Future extends FutureFlagOptions = Config['future'],\n>(appConfig: Readonly<Config>): ShopifyApp<Config> {\n  const api = deriveApi(appConfig);\n  const config = deriveConfig<Storage>(appConfig, api.config);\n  const logger = overrideLogger(api.logger);\n\n  if (appConfig.webhooks) {\n    api.webhooks.addHandlers(appConfig.webhooks);\n  }\n\n  const params: BasicParams = {api, config, logger};\n  const authStrategy = authStrategyFactory<Config, Resources>({\n    ...params,\n    strategy:\n      config.future.unstable_newEmbeddedAuthStrategy && config.isEmbeddedApp\n        ? new TokenExchangeStrategy(params)\n        : new AuthCodeFlowStrategy(params),\n  });\n\n  const shopify:\n    | AdminApp<Config>\n    | AppStoreApp<Config>\n    | SingleMerchantApp<Config> = {\n    sessionStorage: config.sessionStorage,\n    addDocumentResponseHeaders: addDocumentResponseHeadersFactory(params),\n    registerWebhooks: registerWebhooksFactory(params),\n    authenticate: {\n      admin: authStrategy,\n      flow: authenticateFlowFactory<Resources>(params),\n      public: authenticatePublicFactory<Future, Resources>(params),\n      fulfillmentService:\n        authenticateFulfillmentServiceFactory<Resources>(params),\n      webhook: authenticateWebhookFactory<\n        Future,\n        Resources,\n        keyof Config['webhooks'] | MandatoryTopics\n      >(params),\n    },\n    unauthenticated: {\n      admin: unauthenticatedAdminContextFactory(params),\n      storefront: unauthenticatedStorefrontContextFactory(params),\n    },\n  };\n\n  if (\n    isAppStoreApp(shopify, appConfig) ||\n    isSingleMerchantApp(shopify, appConfig)\n  ) {\n    shopify.login = loginFactory(params);\n  }\n\n  return shopify as ShopifyApp<Config>;\n}",
+            "value": "export function shopifyApp<\n  Config extends AppConfigArg<Resources, Storage, Future>,\n  Resources extends ShopifyRestResources,\n  Storage extends SessionStorage,\n  Future extends FutureFlagOptions = Config['future'],\n>(appConfig: Readonly<Config>): ShopifyApp<Config> {\n  const api = deriveApi(appConfig);\n  const config = deriveConfig<Storage>(appConfig, api.config);\n  const logger = overrideLogger(api.logger);\n\n  if (appConfig.webhooks) {\n    api.webhooks.addHandlers(appConfig.webhooks);\n  }\n\n  const params: BasicParams = {api, config, logger};\n  const authStrategy = authStrategyFactory<Config, Resources>({\n    ...params,\n    strategy:\n      config.future.unstable_newEmbeddedAuthStrategy && config.isEmbeddedApp\n        ? new TokenExchangeStrategy(params)\n        : new AuthCodeFlowStrategy(params),\n  });\n\n  const shopify:\n    | AdminApp<Config>\n    | AppStoreApp<Config>\n    | SingleMerchantApp<Config> = {\n    sessionStorage: config.sessionStorage,\n    addDocumentResponseHeaders: addDocumentResponseHeadersFactory(params),\n    registerWebhooks: registerWebhooksFactory(params),\n    authenticate: {\n      admin: authStrategy,\n      flow: authenticateFlowFactory<Resources>(params),\n      public: authenticatePublicFactory<Future, Resources>(params),\n      fulfillmentService:\n        authenticateFulfillmentServiceFactory<Resources>(params),\n      webhook: authenticateWebhookFactory<\n        Future,\n        Resources,\n        keyof Config['webhooks'] | MandatoryTopics\n      >(params),\n    },\n    unauthenticated: {\n      admin: unauthenticatedAdminContextFactory(params),\n      storefront: unauthenticatedStorefrontContextFactory(params),\n    },\n  };\n\n  if (\n    isAppStoreApp(shopify, appConfig) ||\n    isSingleMerchantApp(shopify, appConfig)\n  ) {\n    shopify.login = loginFactory(params);\n  }\n\n  logDisabledFutureFlags(config, logger);\n\n  return shopify as ShopifyApp<Config>;\n}",
             "examples": [
               {
                 "title": "The minimum viable configuration",
@@ -14534,7 +14718,7 @@
                     "tabs": [
                       {
                         "code": "import {authenticate} from \"~/shopify.server\"\n\nexport async function loader({ request }) {\n  const {liquid} = await authenticate.public.appProxy(request);\n\n  return liquid(\"Hello {{shop.name}}\");\n}",
-                        "title": "app/routes/**\\/.ts"
+                        "title": "app/routes/**\\/.tsx"
                       }
                     ]
                   },
@@ -14544,7 +14728,17 @@
                     "tabs": [
                       {
                         "code": "import {authenticate} from \"~/shopify.server\"\n\nexport async function loader({ request }) {\n  const {liquid} = await authenticate.public.appProxy(request);\n\n  return liquid(\n    \"Hello {{shop.name}}\",\n    { layout: false }\n  );\n}",
-                        "title": "app/routes/**\\/.ts"
+                        "title": "app/routes/**\\/.tsx"
+                      }
+                    ]
+                  },
+                  {
+                    "title": "Rendering a form in a Liquid response",
+                    "description": "Handle form submissions through an app proxy.",
+                    "tabs": [
+                      {
+                        "code": "import { redirect } from \"@remix-run/node\";\nimport { authenticate } from \"~/shopify.server\";\n\nexport async function loader({ request }) {\n  const { liquid } = await authenticate.public.appProxy(request);\n\n  return liquid(`\n    <form method=\"post\" action=\"/apps/proxy/my-action\">\n      <input type=\"text\" name=\"field\" />\n      <button type=\"submit\">Submit</button>\n    </form>\n  `);\n}\n\nexport async function action({ request }) {\n  await authenticate.public.appProxy(request);\n\n  const formData = await request.formData();\n  const field = formData.get(\"field\")?.toString();\n\n  // Perform actions here\n  if (field) {\n    console.log(\"Field:\", field);\n  }\n\n  // Return to the form page\n  return redirect(\"/apps/proxy/my-action\");\n}",
+                        "title": "app/routes/apps.proxy.my-action.tsx"
                       }
                     ]
                   }
@@ -14671,7 +14865,7 @@
                     "tabs": [
                       {
                         "code": "import {authenticate} from \"~/shopify.server\"\n\nexport async function loader({ request }) {\n  const {liquid} = await authenticate.public.appProxy(request);\n\n  return liquid(\"Hello {{shop.name}}\");\n}",
-                        "title": "app/routes/**\\/.ts"
+                        "title": "app/routes/**\\/.tsx"
                       }
                     ]
                   },
@@ -14681,7 +14875,17 @@
                     "tabs": [
                       {
                         "code": "import {authenticate} from \"~/shopify.server\"\n\nexport async function loader({ request }) {\n  const {liquid} = await authenticate.public.appProxy(request);\n\n  return liquid(\n    \"Hello {{shop.name}}\",\n    { layout: false }\n  );\n}",
-                        "title": "app/routes/**\\/.ts"
+                        "title": "app/routes/**\\/.tsx"
+                      }
+                    ]
+                  },
+                  {
+                    "title": "Rendering a form in a Liquid response",
+                    "description": "Handle form submissions through an app proxy.",
+                    "tabs": [
+                      {
+                        "code": "import { redirect } from \"@remix-run/node\";\nimport { authenticate } from \"~/shopify.server\";\n\nexport async function loader({ request }) {\n  const { liquid } = await authenticate.public.appProxy(request);\n\n  return liquid(`\n    <form method=\"post\" action=\"/apps/proxy/my-action\">\n      <input type=\"text\" name=\"field\" />\n      <button type=\"submit\">Submit</button>\n    </form>\n  `);\n}\n\nexport async function action({ request }) {\n  await authenticate.public.appProxy(request);\n\n  const formData = await request.formData();\n  const field = formData.get(\"field\")?.toString();\n\n  // Perform actions here\n  if (field) {\n    console.log(\"Field:\", field);\n  }\n\n  // Return to the form page\n  return redirect(\"/apps/proxy/my-action\");\n}",
+                        "title": "app/routes/apps.proxy.my-action.tsx"
                       }
                     ]
                   }
