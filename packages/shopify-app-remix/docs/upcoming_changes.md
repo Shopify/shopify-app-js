@@ -8,20 +8,32 @@ You can use it as a guide for migrating your app, and ensuring you're ready for 
 
 ## Table of contents
 
+- [Use new authentication strategy for embedded apps](#use-new-authentication-strategy-for-embedded-apps)
 - [Root import path deprecation](#root-import-path-deprecation)
-- [Introducing the AppProvider component](#introducing-the-appprovider-component)
-- [Aligning the `admin` context object for webhooks](#aligning-the-admin-context-object-for-webhooks)
+- [Use the AppProvider component](#use-the-appprovider-component)
+- [Align the `admin` context object for webhooks](#align-the-admin-context-object-for-webhooks)
+- [Replace`authenticate.public()` with `authenticate.public.checkout()`](#replaceauthenticatepublic-with-authenticatepubliccheckout)
+- [Use line item billing configs](#use-line-item-billing-configs)
+
+## Use new authentication strategy for embedded apps
+
+Shopify apps can now use [OAuth token exchange](https://shopify.dev/docs/apps/auth/get-access-tokens/token-exchange) to obtain an API access token without having to redirect the user, which makes the process much faster, and less error prone.
+
+This package will automatically use token exchange, but that only works if [Shopify managed installation](https://shopify.dev/docs/apps/auth/installation#shopify-managed-installation) is enabled for the app.
+Before updating this package in your app, please ensure you've enabled managed installation.
+
+For more details on how this works, please see the [new embedded authorization strategy](../README.md#new-embedded-authorization-strategy) section in the README.
 
 ## Root import path deprecation
 
-In the current version, apps can import server-side functions using the following statements:
+Initially, apps could import server-side functions using the following statements:
 
 ```ts
 import '@shopify/shopify-app-remix/adapters/node';
 import {shopifyApp} from '@shopify/shopify-app-remix';
 ```
 
-With the addition of React component to this package, we'll start having full separation between server and react code, as in:
+With the addition of React component to this package, we've separated the exports between server and react code, as in:
 
 ```ts
 import '@shopify/shopify-app-remix/server/adapters/node';
@@ -29,7 +41,7 @@ import {shopifyApp} from '@shopify/shopify-app-remix/server';
 import {AppProvider} from '@shopify/shopify-app-remix/react';
 ```
 
-## Introducing the AppProvider component
+## Use the AppProvider component
 
 In order to make it easier to set up the frontend for apps using this package, we introduced a new `AppProvider` component.
 Previous apps will continue to work without this component, but we strongly recommend all apps use it because it makes it easier to keep up with updates from Shopify.
@@ -92,7 +104,7 @@ export default function App() {
 }
 ```
 
-## Aligning the `admin` context object for webhooks
+## Align the `admin` context object for webhooks
 
 The `admin` context returned by `authenticate.webhook` didn't match the object returned by e.g. `authenticate.admin`, which could lead to confusion.
 
@@ -150,4 +162,89 @@ export async function action({request}: ActionFunctionArgs) {
 
   // ...
 }
+```
+
+## Replace`authenticate.public()` with `authenticate.public.checkout()`
+
+The `authenticate.public` export used to be a function that was meant to authenticate [checkout extension](https://shopify.dev/docs/api/checkout-extensions) requests.
+
+That was confusing, because:
+
+- It isn't the only type of public requests apps might need to handle
+- It didn't make it clear what the purpose of the export was
+
+We refactored the export so that all public authentication methods are grouped together under `authenticate.public`, for instance `authenticate.public.checkout()` and `authenticate.public.appProxy()`.
+
+Before:
+
+```ts
+export async function loader({request}: LoaderFunctionArgs) {
+  await authenticate.public(request);
+
+  return null;
+}
+```
+
+After:
+
+```ts
+export async function loader({request}: LoaderFunctionArgs) {
+  await authenticate.public.checkout(request);
+
+  return null;
+}
+```
+
+## Use line item billing configs
+
+Before v10 of the `@shopify/shopify-api` package, each recurring payment plan in the app's billing configuration only supported a single item, even though the API itself allows for multiple items per subscription.
+
+To better match the API, the `billing` configuration option was changed to allow for multiple line items per plan, so instead of passing in a single configuration, it now accepts an array of items.
+
+Before:
+
+```ts
+const shopify = shopifyApp({
+  billing: {
+    one_time: {
+      interval: BillingInterval.OneTime,
+      amount: 10,
+      currencyCode: 'USD',
+    },
+    monthly_plan: {
+      interval: BillingInterval.Every30Days,
+      amount: 5,
+      currencyCode: 'USD',
+    },
+  },
+});
+```
+
+After:
+
+```ts
+const shopify = shopifyApp({
+  billing: {
+    one_time: {
+      interval: BillingInterval.OneTime,
+      amount: 10,
+      currencyCode: 'USD',
+    },
+    monthly_plan: {
+      lineItems: [
+        {
+          interval: BillingInterval.Every30Days,
+          amount: 5,
+          currencyCode: 'USD',
+        },
+        {
+          interval: BillingInterval.Usage,
+          amount: 1,
+          currencyCode: 'USD',
+          terms: '1 dollar per 1000 emails',
+        },
+      ],
+    },
+  },
+});
 ```
