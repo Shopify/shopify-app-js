@@ -73,6 +73,11 @@ export class MySqlConnection implements RdbmsConnection {
     return decodeURIComponent(this.dbUrl.pathname.slice(1));
   }
 
+  public getSSL(): string | mysql.SslOptions | undefined {
+    const ssl = this.dbUrl.searchParams.get('ssl');
+    return ssl ? JSON.parse(ssl) : undefined;
+  }
+
   async hasTable(tablename: string): Promise<boolean> {
     await this.ready;
 
@@ -103,6 +108,7 @@ export class MySqlConnection implements RdbmsConnection {
       password: decodeURIComponent(this.dbUrl.password),
       database: this.getDatabase(),
       port: Number(this.dbUrl.port),
+      ssl: this.getSSL(),
     });
   }
 }

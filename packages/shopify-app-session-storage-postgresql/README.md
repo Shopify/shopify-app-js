@@ -14,6 +14,15 @@ const shopify = shopifyApp({
   // ...
 });
 
+// OR with ssl options set
+
+const shopify = shopifyApp({
+  sessionStorage: new PostgreSQLSessionStorage(
+    'postgres://username:password@host/database?ssl={"rejectUnauthorized":true}',
+  ),
+  // ...
+});
+
 // OR
 
 const shopify = shopifyApp({
