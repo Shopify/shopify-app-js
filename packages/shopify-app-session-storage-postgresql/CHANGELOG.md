@@ -1,5 +1,13 @@
 # @shopify/shopify-app-session-storage-postgresql
 
+## 3.0.3
+
+### Patch Changes
+
+- 4aa4b59: Bump shopify-api to v9.6.0
+- Updated dependencies [4aa4b59]
+  - @shopify/shopify-app-session-storage@2.1.3
+
 ## 3.0.2
 
 ### Patch Changes

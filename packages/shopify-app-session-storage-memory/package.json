@@ -1,6 +1,6 @@
 {
   "name": "@shopify/shopify-app-session-storage-memory",
-  "version": "3.0.2",
+  "version": "3.0.3",
   "description": "Shopify App Session Storage for Memory",
   "repository": {
     "type": "git",
@@ -32,10 +32,10 @@
   "dependencies": {},
   "peerDependencies": {
     "@shopify/shopify-api": "^9.6.0",
-    "@shopify/shopify-app-session-storage": "^2.1.2"
+    "@shopify/shopify-app-session-storage": "^2.1.3"
   },
   "devDependencies": {
-    "@shopify/shopify-app-session-storage-test-utils": "^2.0.2"
+    "@shopify/shopify-app-session-storage-test-utils": "^2.0.3"
   },
   "files": [
     "build/*",

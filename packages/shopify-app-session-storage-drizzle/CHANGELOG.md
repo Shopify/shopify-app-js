@@ -1,5 +1,13 @@
 # @shopify/shopify-app-session-storage-drizzle
 
+## 1.0.1
+
+### Patch Changes
+
+- 4aa4b59: Bump shopify-api to v9.6.0
+- Updated dependencies [4aa4b59]
+  - @shopify/shopify-app-session-storage@2.1.3
+
 ## 1.0.0
 
 ### Major Changes

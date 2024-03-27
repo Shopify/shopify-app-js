@@ -1,5 +1,11 @@
 # @shopify/shopify-app-session-storage
 
+## 2.1.3
+
+### Patch Changes
+
+- 4aa4b59: Bump shopify-api to v9.6.0
+
 ## 2.1.2
 
 ### Patch Changes
