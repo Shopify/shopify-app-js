@@ -128,6 +128,7 @@ describe('OAuth integration tests', () => {
         body,
         TEST_WEBHOOK_ID,
         LATEST_API_VERSION,
+        undefined,
       );
 
       await installedRequest(app, config, installedMock);
