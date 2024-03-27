@@ -34,7 +34,7 @@
     "@shopify/shopify-app-session-storage": "^2.1.2",
     "@shopify/shopify-app-session-storage-memory": "^3.0.2",
     "cookie-parser": "^1.4.6",
-    "express": "^4.18.1",
+    "express": "^4.19.2",
     "semver": "^7.6.0"
   },
   "devDependencies": {
