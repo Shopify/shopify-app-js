@@ -43,8 +43,7 @@
     "@types/sqlite3": "^3.1.8"
   },
   "files": [
-    "build/*",
-    "!bundle/*",
+    "dist/*",
     "!tsconfig.tsbuildinfo",
     "!node_modules"
   ]
