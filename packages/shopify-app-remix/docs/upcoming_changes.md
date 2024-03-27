@@ -12,10 +12,14 @@ You can use it as a guide for migrating your app, and ensuring you're ready for 
 - [Root import path deprecation](#root-import-path-deprecation)
 - [Use the AppProvider component](#use-the-appprovider-component)
 - [Align the `admin` context object for webhooks](#align-the-admin-context-object-for-webhooks)
-- [Replace`authenticate.public()` with `authenticate.public.checkout()`](#replaceauthenticatepublic-with-authenticatepubliccheckout)
+- [Replace `authenticate.public()` with `authenticate.public.checkout()`](#replace-authenticatepublic-with-authenticatepubliccheckout)
 - [Use line item billing configs](#use-line-item-billing-configs)
 
 ## Use new authentication strategy for embedded apps
+
+> [!NOTE]
+> The `unstable_newEmbeddedAuthStrategy` future flag enabled this behaviour.
+> If you've already enabled the flag, you don't need to follow these instructions.
 
 Shopify apps can now use [OAuth token exchange](https://shopify.dev/docs/apps/auth/get-access-tokens/token-exchange) to obtain an API access token without having to redirect the user, which makes the process much faster, and less error prone.
 
@@ -106,6 +110,10 @@ export default function App() {
 
 ## Align the `admin` context object for webhooks
 
+> [!NOTE]
+> The `v3_webhookAdminContext` future flag enabled this behaviour.
+> If you've already enabled the flag, you don't need to follow these instructions.
+
 The `admin` context returned by `authenticate.webhook` didn't match the object returned by e.g. `authenticate.admin`, which could lead to confusion.
 
 We updated the shape of the object returned by `authenticate.webhook` so that every authentication method returns a consistent format.
@@ -164,7 +172,11 @@ export async function action({request}: ActionFunctionArgs) {
 }
 ```
 
-## Replace`authenticate.public()` with `authenticate.public.checkout()`
+## Replace `authenticate.public()` with `authenticate.public.checkout()`
+
+> [!NOTE]
+> The `v3_authenticatePublic` future flag enabled this behaviour.
+> If you've already enabled the flag, you don't need to follow these instructions.
 
 The `authenticate.public` export used to be a function that was meant to authenticate [checkout extension](https://shopify.dev/docs/api/checkout-extensions) requests.
 
@@ -196,6 +208,10 @@ export async function loader({request}: LoaderFunctionArgs) {
 ```
 
 ## Use line item billing configs
+
+> [!NOTE]
+> The `v3_lineItemBilling` future flag enabled this behaviour.
+> If you've already enabled the flag, you don't need to follow these instructions.
 
 Before v10 of the `@shopify/shopify-api` package, each recurring payment plan in the app's billing configuration only supported a single item, even though the API itself allows for multiple items per subscription.
 
