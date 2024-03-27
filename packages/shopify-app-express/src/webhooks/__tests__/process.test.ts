@@ -55,6 +55,7 @@ describe('process', () => {
       body,
       TEST_WEBHOOK_ID,
       LATEST_API_VERSION,
+      undefined,
     );
 
     expect(shopify.api.config.logger.log as jest.Mock).toHaveBeenCalledWith(
@@ -129,6 +130,7 @@ describe('process', () => {
       body,
       TEST_WEBHOOK_ID,
       LATEST_API_VERSION,
+      undefined,
     );
     expect(shopify.api.config.logger.log as jest.Mock).toHaveBeenCalledWith(
       LogSeverity.Error,
