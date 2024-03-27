@@ -3,3 +3,4 @@ coverage
 
 packages/shopify-app-remix/docs/**/*.json
 packages/shopify-app-remix/**/*.example.tsx?
+packages/shopify-api/rest/admin
