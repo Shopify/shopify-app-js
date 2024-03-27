@@ -11,7 +11,6 @@ import {
   signRequestCookie,
   testConfig,
 } from '../../../__test-helpers';
-import {REAUTH_URL_HEADER} from '../../const';
 
 describe('authorize.session token header path', () => {
   describe('errors', () => {

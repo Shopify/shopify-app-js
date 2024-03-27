@@ -12,32 +12,15 @@
   "homepage": "https://github.com/Shopify/shopify-app-js/tree/main/packages/shopify-app-session-storage-prisma",
   "author": "Shopify Inc.",
   "license": "MIT",
-  "main": "./dist/cjs/index.js",
-  "module": "./dist/esm/index.mjs",
-  "types": "./dist/ts/index.d.ts",
-  "exports": {
-    ".": {
-      "module": {
-        "types": "./dist/ts/index.d.ts",
-        "default": "./dist/esm/index.mjs"
-      },
-      "import": {
-        "types": "./dist/ts/index.d.ts",
-        "default": "./dist/esm/index.mjs"
-      },
-      "require": {
-        "types": "./dist/ts/index.d.ts",
-        "default": "./dist/cjs/index.js"
-      },
-      "default": "./dist/esm/index.mjs"
-    }
-  },
+  "main": "./dist/cjs/prisma.js",
+  "module": "./dist/esm/prisma.mjs",
+  "types": "./dist/ts/prisma.d.ts",
   "scripts": {
     "lint": "eslint . --ext .js,.ts",
-    "build": "yarn run rollup",
+    "build": "yarn run rollup && yarn tsc -p ./tsconfig.build.json",
     "test": "jest",
     "test:ci": "yarn test",
-    "rollup": "rollup -c ../../config/rollup/rollup.config.js --bundleConfigAsCjs",
+    "rollup": "rollup -c rollup.config.js --bundleConfigAsCjs",
     "clean": "rimraf .rollup.cache dist",
     "changeset": "changeset",
     "version": "changeset version",

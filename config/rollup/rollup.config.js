@@ -1,23 +1,13 @@
+import path from 'path';
 import typescript from '@rollup/plugin-typescript';
 import resolve from '@rollup/plugin-node-resolve';
 import commonjs from '@rollup/plugin-commonjs';
 import replace from '@rollup/plugin-replace';
 import excludeDependenciesFromBundle from 'rollup-plugin-exclude-dependencies-from-bundle';
-import copy from 'rollup-plugin-copy';
 
 import * as pkg from '../../package.json';
 
-export const mainSrcInput = 'src/index.ts';
-
-export function getPlugins(format) {
-  const esmConfig = {
-    emitDeclarationOnly: true,
-  };
-  const cjsConfig = {
-    noEmit: true,
-    declaration: false,
-  };
-
+export function getPlugins(outDir) {
   return [
     excludeDependenciesFromBundle({dependencies: true, peerDependencies: true}),
     resolve({
@@ -28,53 +18,47 @@ export function getPlugins(format) {
     }),
     commonjs(),
     typescript({
-      ...(format === 'esm' ? esmConfig : cjsConfig),
-      tsconfig: './tsconfig.json',
-      outDir: `./dist/${format}/ts`,
+      tsconfig: path.resolve('./tsconfig.build.json'),
+      outDir,
+      outputToFilesystem: false,
+      noEmit: true,
+      declaration: false,
+      moduleResolution: 'Bundler',
     }),
-    ...(format === 'esm'
-      ? [
-          copy({
-            targets: [
-              {src: './dist/esm/ts', dest: './dist/ts', overwrite: true},
-            ],
-          }),
-        ]
-      : []),
   ];
 }
 
-export function getConfig() {
+export const esmConfigs = {
+  dir: './dist/esm',
+  format: 'es',
+  sourcemap: true,
+  preserveModules: true,
+  preserveModulesRoot: 'src',
+  entryFileNames: '[name].mjs',
+};
+
+export const cjsConfigs = {
+  dir: './dist/cjs',
+  format: 'cjs',
+  sourcemap: true,
+  preserveModules: true,
+  preserveModulesRoot: 'src',
+  exports: 'named',
+};
+
+export function getConfig(input = 'src/index.ts') {
   return [
     {
-      input: mainSrcInput,
-      plugins: getPlugins('esm'),
+      input,
+      plugins: getPlugins('./dist/esm'),
       external: Object.keys(pkg.dependencies),
-      output: [
-        {
-          dir: './dist/esm',
-          format: 'es',
-          sourcemap: true,
-          preserveModules: true,
-          preserveModulesRoot: 'src',
-          entryFileNames: '[name].mjs',
-        },
-      ],
+      output: [esmConfigs],
     },
     {
-      input: mainSrcInput,
-      plugins: getPlugins('cjs'),
+      input,
+      plugins: getPlugins('./dist/cjs'),
       external: Object.keys(pkg.dependencies),
-      output: [
-        {
-          dir: './dist/cjs',
-          format: 'cjs',
-          sourcemap: true,
-          preserveModules: true,
-          preserveModulesRoot: 'src',
-          exports: 'named',
-        },
-      ],
+      output: [cjsConfigs],
     },
   ];
 }

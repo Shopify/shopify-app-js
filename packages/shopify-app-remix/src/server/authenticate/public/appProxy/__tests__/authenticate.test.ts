@@ -1,6 +1,6 @@
 import {HashFormat, createSHA256HMAC} from '@shopify/shopify-api/runtime';
 
-import {LATEST_API_VERSION, shopifyApp} from '../../../..';
+import {shopifyApp} from '../../../..';
 import {
   API_SECRET_KEY,
   APP_URL,
@@ -8,7 +8,6 @@ import {
   expectAdminApiClient,
   expectStorefrontApiClient,
   getThrownResponse,
-  mockExternalRequest,
   setUpValidSession,
   testConfig,
 } from '../../../../__test-helpers';

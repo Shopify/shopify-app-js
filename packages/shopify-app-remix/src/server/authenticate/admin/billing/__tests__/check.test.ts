@@ -3,7 +3,6 @@ import {
   BillingInterval,
   HttpResponseError,
   SESSION_COOKIE_NAME,
-  Shopify,
 } from '@shopify/shopify-api';
 
 import {shopifyApp} from '../../../..';

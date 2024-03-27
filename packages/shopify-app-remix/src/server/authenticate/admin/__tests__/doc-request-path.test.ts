@@ -1,22 +1,14 @@
-import {LogSeverity, SESSION_COOKIE_NAME, Session} from '@shopify/shopify-api';
-
 import {shopifyApp} from '../../..';
 import {
   API_KEY,
   APP_URL,
   BASE64_HOST,
-  GRAPHQL_URL,
   SHOPIFY_HOST,
   TEST_SHOP,
-  expectBeginAuthRedirect,
-  expectExitIframeRedirect,
-  getJwt,
   getThrownResponse,
   setUpValidSession,
   testConfig,
-  signRequestCookie,
   expectLoginRedirect,
-  mockExternalRequest,
 } from '../../../__test-helpers';
 
 describe('authorize.admin doc request path', () => {

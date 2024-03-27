@@ -22,6 +22,7 @@
     "noImplicitThis": true,
     "resolveJsonModule": true,
     "skipLibCheck": true,
+    "jsx": "react-jsx",
     "lib": [
       "dom",
       "dom.iterable",

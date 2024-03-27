@@ -51,7 +51,7 @@ describe('JWT validation', () => {
   it('responds to preflight requests', async () => {
     // GIVEN
     const shopify = shopifyApp(testConfig());
-    const {token, payload} = getJwt();
+    const {token} = getJwt();
 
     // WHEN
     const response = await getThrownResponse(

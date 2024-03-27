@@ -6,4 +6,7 @@ module.exports = {
     '*.example.*.ts',
     '*.example.*.tsx',
   ],
+  env: {
+    node: true,
+  },
 };

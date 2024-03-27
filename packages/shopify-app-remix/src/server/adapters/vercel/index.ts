@@ -7,7 +7,7 @@ installGlobals();
 
 const fetchFunc = fetch;
 setAbstractFetchFunc(async (...args) => {
-  const response = await fetchFunc.apply(this, args);
+  const response = await fetchFunc(...args);
 
   return response;
 });

@@ -98,7 +98,7 @@ describe('Authenticate.public', () => {
           },
         }),
       );
-      const {token, payload} = getJwt();
+      const {token} = getJwt();
 
       // WHEN
       const response = await getThrownResponse(

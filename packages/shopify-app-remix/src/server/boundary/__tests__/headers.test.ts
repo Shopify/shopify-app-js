@@ -1,11 +1,8 @@
 import {boundary} from '../index';
-import {shopifyApp} from '../../index';
-import {testConfig} from '../../__test-helpers';
 
 describe('Headers boundary', () => {
   it('returns only error headers if error headers are present', () => {
     // GIVEN
-    const shopify = shopifyApp(testConfig());
     const headers = {
       parentHeaders: new Headers([['parent', 'header']]),
       loaderHeaders: new Headers([['loader', 'header']]),
@@ -25,7 +22,6 @@ describe('Headers boundary', () => {
 
   it('merges parent, loader & action headers if no error headers are present', () => {
     // GIVEN
-    const shopify = shopifyApp(testConfig());
     const headers = {
       parentHeaders: new Headers([
         ['parent', 'header'],
@@ -54,7 +50,6 @@ describe('Headers boundary', () => {
 
   it('returns an empty headers object if no headers are present', () => {
     // GIVEN
-    const shopify = shopifyApp(testConfig());
     const headers = {};
 
     // WHEN
