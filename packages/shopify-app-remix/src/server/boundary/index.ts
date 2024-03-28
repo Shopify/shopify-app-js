@@ -22,7 +22,7 @@ export const boundary = {
   error: errorBoundary,
 
   /**
-   * A function that sets the appropriate document repsonse headers.
+   * A function that sets the appropriate document response headers.
    *
    * @example
    * <caption>Catching errors in a route</caption>
