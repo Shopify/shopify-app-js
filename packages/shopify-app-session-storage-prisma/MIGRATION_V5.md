@@ -42,12 +42,16 @@ npx prisma generate
 ```
 
 ## Using the user information
+
 The user information will now be available on the `Session` object:
 
 ```ts
-  const { admin, session } = await authenticate.admin(request);
+const {admin, session} = await authenticate.admin(request);
 
-  console.log("user id", session.onlineAccessInfo.associated_user.id);
-  console.log("user email", session.onlineAccessInfo.associated_user.email);
-  console.log("account owner", session.onlineAccessInfo.associated_user.account_owner);
+console.log('user id', session.onlineAccessInfo.associated_user.id);
+console.log('user email', session.onlineAccessInfo.associated_user.email);
+console.log(
+  'account owner',
+  session.onlineAccessInfo.associated_user.account_owner,
+);
 ```
