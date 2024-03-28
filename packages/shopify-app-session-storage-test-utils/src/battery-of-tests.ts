@@ -63,7 +63,7 @@ export function batteryOfTests(storageFactory: () => Promise<SessionStorage>) {
           id: sessionId,
           shop: 'shop',
           state: 'state',
-          isOnline: false,
+          isOnline: true,
           onlineAccessInfo: {associated_user: {id: 123}} as any,
           scope: testScopes.toString(),
           accessToken: '123',
@@ -79,6 +79,7 @@ export function batteryOfTests(storageFactory: () => Promise<SessionStorage>) {
 
       await expect(storage.storeSession(session)).resolves.toBeTruthy();
       const storedSession = await storage.loadSession(sessionId);
+
       expect(session.equals(storedSession)).toBeTruthy();
 
       expect(storedSession?.isActive(testScopes)).toBeTruthy();
