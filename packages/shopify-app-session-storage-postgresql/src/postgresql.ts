@@ -3,6 +3,7 @@ import {
   SessionStorage,
   RdbmsSessionStorageOptions,
 } from '@shopify/shopify-app-session-storage';
+import {type PoolConfig} from 'pg';
 
 import {migrationList} from './migrations';
 import {PostgresConnection} from './postgres-connection';
@@ -11,6 +12,13 @@ import {PostgresSessionStorageMigrator} from './postgres-migrator';
 export interface PostgreSQLSessionStorageOptions
   extends RdbmsSessionStorageOptions {
   port: number;
+
+  /**
+   * Optional additional configuration for the PostgreSQL pool.
+   *
+   * For example, use this to provide additional SSL connection options.
+   */
+  poolConfig?: PoolConfig;
 }
 const defaultPostgreSQLSessionStorageOptions: PostgreSQLSessionStorageOptions =
   {
@@ -145,7 +153,11 @@ export class PostgreSQLSessionStorage implements SessionStorage {
   }
 
   private async init(dbUrl: string) {
-    this.client = new PostgresConnection(dbUrl, this.options.sessionTableName);
+    this.client = new PostgresConnection(
+      dbUrl,
+      this.options.sessionTableName,
+      this.options.poolConfig,
+    );
     await this.connectClient();
     await this.createTable();
   }
