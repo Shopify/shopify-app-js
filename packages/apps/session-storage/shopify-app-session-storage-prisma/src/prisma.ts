@@ -137,9 +137,9 @@ export class PrismaSessionStorage<T extends PrismaClient>
         sessionParams.onlineAccessInfo?.associated_user.account_owner || false,
       locale: sessionParams.onlineAccessInfo?.associated_user.locale || null,
       collaborator:
-        sessionParams.onlineAccessInfo?.associated_user.collaborator || null,
+        sessionParams.onlineAccessInfo?.associated_user.collaborator || false,
       emailVerified:
-        sessionParams.onlineAccessInfo?.associated_user.email_verified || null,
+        sessionParams.onlineAccessInfo?.associated_user.email_verified || false,
     };
   }
 
@@ -149,6 +149,14 @@ export class PrismaSessionStorage<T extends PrismaClient>
       shop: row.shop,
       state: row.state,
       isOnline: row.isOnline,
+      userId: String(row.userId),
+      firstName: String(row.firstName),
+      lastName: String(row.lastName),
+      email: String(row.email),
+      accountOwner: Boolean(row.accountOwner),
+      locale: String(row.locale),
+      collaborator: Boolean(row.collaborator),
+      emailVerified: Boolean(row.emailVerified),
     };
 
     if (row.expires) {
@@ -161,38 +169,6 @@ export class PrismaSessionStorage<T extends PrismaClient>
 
     if (row.accessToken) {
       sessionParams.accessToken = row.accessToken;
-    }
-
-    if (row.userId) {
-      sessionParams.userId = String(row.userId);
-    }
-
-    if (row.firstName) {
-      sessionParams.firstName = String(row.firstName);
-    }
-
-    if (row.lastName) {
-      sessionParams.lastName = String(row.lastName);
-    }
-
-    if (row.email) {
-      sessionParams.email = String(row.email);
-    }
-
-    if (row.accountOwner) {
-      sessionParams.accountOwner = String(row.accountOwner);
-    }
-
-    if (row.locale) {
-      sessionParams.locale = String(row.locale);
-    }
-
-    if (row.collaborator) {
-      sessionParams.collaborator = String(row.collaborator);
-    }
-
-    if (row.emailVerified) {
-      sessionParams.emailVerified = String(row.emailVerified);
     }
 
     return Session.fromPropertyArray(Object.entries(sessionParams), true);

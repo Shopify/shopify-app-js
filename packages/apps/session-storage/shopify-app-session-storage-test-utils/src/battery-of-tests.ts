@@ -5,7 +5,10 @@ import {sessionArraysEqual} from './session-test-utils';
 
 const testScopes = ['test_scope'];
 
-export function batteryOfTests(storageFactory: () => Promise<SessionStorage>) {
+export function batteryOfTests(
+  storageFactory: () => Promise<SessionStorage>,
+  testUserInfo = false,
+) {
   it('can store and delete all kinds of sessions', async () => {
     const sessionFactories = [
       async () => {
@@ -114,7 +117,18 @@ export function batteryOfTests(storageFactory: () => Promise<SessionStorage>) {
           shop: 'shop',
           state: 'state',
           isOnline: true,
-          onlineAccessInfo: {associated_user: {id: 123}} as any,
+          onlineAccessInfo: {
+            associated_user: {
+              id: 123,
+              first_name: 'first',
+              last_name: 'last',
+              email: 'email',
+              account_owner: true,
+              locale: 'en',
+              collaborator: false,
+              email_verified: true,
+            } as any,
+          } as any,
           scope: testScopes.toString(),
           accessToken: '123',
         });
@@ -141,6 +155,56 @@ export function batteryOfTests(storageFactory: () => Promise<SessionStorage>) {
       await expect(storage.deleteSession(sessionId)).resolves.toBeTruthy();
     }
   });
+
+  if (testUserInfo) {
+    it('can store and delete sessions with user info', async () => {
+      const sessionFactories = [
+        async () => {
+          const session = new Session({
+            id: sessionId,
+            shop: 'shop',
+            state: 'state',
+            isOnline: true,
+            scope: testScopes.toString(),
+            accessToken: '123',
+            onlineAccessInfo: {
+              associated_user: {
+                id: 123,
+                first_name: 'first',
+                last_name: 'last',
+                email: 'email@email.com',
+                account_owner: true,
+                locale: 'en',
+                collaborator: false,
+                email_verified: true,
+              },
+            } as any,
+          });
+          return session;
+        },
+      ];
+
+      const sessionId = 'test_session';
+      const storage = await storageFactory();
+      for (const factory of sessionFactories) {
+        const session = await factory();
+
+        await expect(storage.storeSession(session)).resolves.toBeTruthy();
+        const storedSession = await storage.loadSession(sessionId);
+        console.log(storedSession, 'storedSession');
+        console.log(session, 'session');
+        expect(session.equals(storedSession)).toBeTruthy();
+
+        expect(storedSession?.isActive(testScopes)).toBeTruthy();
+
+        await expect(storage.deleteSession(sessionId)).resolves.toBeTruthy();
+        await expect(storage.loadSession(sessionId)).resolves.toBeUndefined();
+
+        // Deleting a non-existing session should work
+        await expect(storage.deleteSession(sessionId)).resolves.toBeTruthy();
+      }
+    });
+  }
 
   it('can store sessions with unexpected fields', async () => {
     const storage = await storageFactory();
