@@ -41,7 +41,7 @@
   },
   "devDependencies": {
     "@shopify/shopify-app-session-storage-test-utils": "^2.0.2",
-    "@types/pg": "^8.11.0"
+    "@types/pg": "^8.11.4"
   },
   "files": [
     "build/*",
