@@ -14,8 +14,8 @@ CREATE TABLE "new_Session" (
     "email" TEXT,
     "accountOwner" BOOLEAN NOT NULL DEFAULT false,
     "locale" TEXT,
-    "collaborator" BOOLEAN DEFAULT false,
-    "emailVerified" BOOLEAN DEFAULT false
+    "collaborator" BOOLEAN NOT NULL DEFAULT false,
+    "emailVerified" BOOLEAN NOT NULL DEFAULT false
 );
 INSERT INTO "new_Session" ("accessToken", "expires", "id", "isOnline", "scope", "shop", "state", "userId") SELECT "accessToken", "expires", "id", "isOnline", "scope", "shop", "state", "userId" FROM "Session";
 DROP TABLE "Session";
