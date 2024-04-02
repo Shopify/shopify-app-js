@@ -21,8 +21,8 @@ model Session {
   email         String?
   accountOwner  Boolean   @default(false)
   locale        String?
-  collaborator  Boolean?  @default(false)
-  emailVerified Boolean?  @default(false)
+  collaborator  Boolean  @default(false)
+  emailVerified Boolean  @default(false)
 }
 
 // We use this in unit tests to ensure it works with a different model name
