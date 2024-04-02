@@ -63,7 +63,7 @@ export function batteryOfTests(storageFactory: () => Promise<SessionStorage>) {
           id: sessionId,
           shop: 'shop',
           state: 'state',
-          isOnline: false,
+          isOnline: true,
           onlineAccessInfo: {associated_user: {id: 123}} as any,
           scope: testScopes.toString(),
           accessToken: '123',
@@ -98,7 +98,7 @@ export function batteryOfTests(storageFactory: () => Promise<SessionStorage>) {
       id: sessionId,
       shop: 'shop',
       state: 'state',
-      isOnline: true,
+      isOnline: false,
     });
     (session as any).someField = 'lol';
 
@@ -115,6 +115,7 @@ export function batteryOfTests(storageFactory: () => Promise<SessionStorage>) {
       shop: 'shop',
       state: 'state',
       isOnline: true,
+      onlineAccessInfo: {associated_user: {id: 123}} as any,
     });
 
     await expect(storage.storeSession(session)).resolves.toBeTruthy();
@@ -137,25 +138,25 @@ export function batteryOfTests(storageFactory: () => Promise<SessionStorage>) {
         id: `${prefix}_1`,
         shop: 'find-shop1-sessions.myshopify.io',
         state: 'state',
-        isOnline: true,
+        isOnline: false,
       }),
       new Session({
         id: `${prefix}_2`,
         shop: 'do-not-find-shop2-sessions.myshopify.io',
         state: 'state',
-        isOnline: true,
+        isOnline: false,
       }),
       new Session({
         id: `${prefix}_3`,
         shop: 'find-shop1-sessions.myshopify.io',
         state: 'state',
-        isOnline: true,
+        isOnline: false,
       }),
       new Session({
         id: `${prefix}_4`,
         shop: 'do-not-find-shop3-sessions.myshopify.io',
         state: 'state',
-        isOnline: true,
+        isOnline: false,
       }),
     ];
 
@@ -188,25 +189,25 @@ export function batteryOfTests(storageFactory: () => Promise<SessionStorage>) {
         id: `${prefix}_1`,
         shop: 'delete-shop1-sessions.myshopify.io',
         state: 'state',
-        isOnline: true,
+        isOnline: false,
       }),
       new Session({
         id: `${prefix}_2`,
         shop: 'do-not-delete-shop2-sessions.myshopify.io',
         state: 'state',
-        isOnline: true,
+        isOnline: false,
       }),
       new Session({
         id: `${prefix}_3`,
         shop: 'delete-shop1-sessions.myshopify.io',
         state: 'state',
-        isOnline: true,
+        isOnline: false,
       }),
       new Session({
         id: `${prefix}_4`,
         shop: 'do-not-delete-shop3-sessions.myshopify.io',
         state: 'state',
-        isOnline: true,
+        isOnline: false,
       }),
     ];
 
@@ -238,7 +239,7 @@ export function batteryOfTests(storageFactory: () => Promise<SessionStorage>) {
       id: sessionId,
       shop: 'shop',
       state: 'state',
-      isOnline: true,
+      isOnline: false,
       scope:
         'unauthenticated_read_product_listings,unauthenticated_write_checkouts,unauthenticated_write_customers,unauthenticated_read_customer_tags,unauthenticated_read_content,unauthenticated_read_product_tags,read_orders,read_products,read_script_tags,write_script_tags,read_legal_policies',
     });
