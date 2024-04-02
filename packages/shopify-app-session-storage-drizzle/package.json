@@ -36,7 +36,7 @@
   "peerDependencies": {
     "@shopify/shopify-api": "^9.6.0",
     "@shopify/shopify-app-session-storage": "^2.1.2",
-    "drizzle-orm": "^0.29.3"
+    "drizzle-orm": "^0.30.6"
   },
   "devDependencies": {
     "@libsql/client": "^0.4.0-pre.7",
