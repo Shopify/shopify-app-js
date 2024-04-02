@@ -7,7 +7,6 @@
 
 With this change when using online access tokens, the user information is stored as part of the session. Previously only the user ID was stored. This will enable changing of page content or limiting of page visibility by user, as well as unlock logging users actions. This is a breaking change, as the Primsa schema has been updated to include the user information.
 
-Please see the [migration guide](/packages/shopify-app-session-storage-prisma/MIGRATION_V5.md) for more information on how to update your app to use the new session data.
 
 <details>
 The new session will include the following data:
