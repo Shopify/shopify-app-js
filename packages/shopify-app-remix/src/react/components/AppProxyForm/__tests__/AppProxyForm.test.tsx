@@ -1,4 +1,3 @@
-import React from 'react';
 import {RouterProvider, createMemoryRouter} from 'react-router-dom';
 import {mount} from '@shopify/react-testing';
 

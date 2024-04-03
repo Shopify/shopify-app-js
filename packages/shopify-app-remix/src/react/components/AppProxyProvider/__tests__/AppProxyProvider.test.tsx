@@ -1,4 +1,4 @@
-import React, {useContext} from 'react';
+import {useContext} from 'react';
 import {mount} from '@shopify/react-testing';
 
 import '../../../__tests__/test-helper';
