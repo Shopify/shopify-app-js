@@ -75,7 +75,7 @@ describe.each(['ShopifySessionsUpperCase', 'shopifysessionslowercase'])(
         async () => {
           try {
             const client = await pool.connect();
-            await client.query(query, []);
+            await client.query(query);
             client.release();
           } catch (error) {
             // uncomment for debugging tests
@@ -127,7 +127,7 @@ describe.each(['ShopifySessionsUpperCase', 'shopifysessionslowercase'])(
       try {
         await client.query(
           query,
-          entries.map(([_key, value]) => value),
+          entries.map(([_key, value]) => value) as string[],
         );
       } catch (error) {
         console.error(error);
@@ -225,7 +225,7 @@ describe.each(['ShopifySessionsUpperCase', 'shopifysessionslowercase'])(
         async () => {
           try {
             const client = await pool.connect();
-            await client.query(query, []);
+            await client.query(query);
             client.release();
           } catch (error) {
             // uncomment for debugging tests
@@ -266,7 +266,7 @@ describe.each(['ShopifySessionsUpperCase', 'shopifysessionslowercase'])(
       try {
         await client.query(
           query,
-          entries.map(([_key, value]) => value),
+          entries.map(([_key, value]) => value) as string[],
         );
       } catch (error) {
         console.error(error);

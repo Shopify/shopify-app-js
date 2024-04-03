@@ -46,10 +46,9 @@ describe('PostgreSQLSessionStorage', () => {
             database: decodeURIComponent(dbURL.pathname.slice(1)),
           });
           await client.connect();
-          await client.query(`CREATE DATABASE "shop&test2"`, []);
+          await client.query(`CREATE DATABASE "shop&test2"`);
           await client.query(
             `GRANT ALL PRIVILEGES ON DATABASE "shop&test2" TO "shop&fy"`,
-            [],
           );
           await client.end();
         } catch (error) {
