@@ -36,9 +36,12 @@ export function authenticateCheckoutFactory(
     }
 
     return {
-      sessionToken: await validateSessionToken(params, sessionTokenHeader, {
-        checkAudience: false,
-      }),
+      sessionToken: await validateSessionToken(
+        params,
+        request,
+        sessionTokenHeader,
+        {checkAudience: false},
+      ),
       cors: ensureCORSHeadersFactory(params, request, corsHeaders),
     };
   };

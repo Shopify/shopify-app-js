@@ -174,10 +174,7 @@ async function getSessionTokenContext(
   });
 
   if (config.isEmbeddedApp) {
-    const payload = await validateSessionToken(
-      {config, logger, api},
-      sessionToken,
-    );
+    const payload = await validateSessionToken(params, request, sessionToken);
     const dest = new URL(payload.dest);
     const shop = dest.hostname;
 
