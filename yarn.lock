@@ -3159,10 +3159,10 @@
     react-is "^18.0.0"
     react-reconciler "^0.28.0"
 
-"@shopify/shopify-api@^9.6.2":
-  version "9.6.2"
-  resolved "https://registry.yarnpkg.com/@shopify/shopify-api/-/shopify-api-9.6.2.tgz#03b922ba39904e668b304836ec068dcf4514bed8"
-  integrity sha512-hcDrFpB0wPB86JHqO2EPd10PJUlwRzEI4TVoQuNYRB9qICZ4/Tk5CddGc7NOyIouqwS7A17dI1rZwEqqIoke5A==
+"@shopify/shopify-api@^9.7.1":
+  version "9.7.1"
+  resolved "https://registry.yarnpkg.com/@shopify/shopify-api/-/shopify-api-9.7.1.tgz#16afdf8397caef829b3c3bcbe3335289c3e6e13d"
+  integrity sha512-LstIycn/gC0OHbLX3YEqEFdlkp1v+CvJhyUB0dTJz+uK7gziu8G9lZgnv9/punjBH38mw7qBSCGEMzdLve6gAA==
   dependencies:
     "@shopify/admin-api-client" "^0.2.8"
     "@shopify/network" "^3.2.1"
