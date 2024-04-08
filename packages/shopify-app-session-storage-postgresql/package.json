@@ -32,7 +32,7 @@
     "session storage"
   ],
   "dependencies": {
-    "pg": "^8.11.3",
+    "pg": "^8.11.5",
     "pg-connection-string": "^2.6.2"
   },
   "peerDependencies": {
