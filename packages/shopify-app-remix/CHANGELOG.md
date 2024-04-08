@@ -1,5 +1,22 @@
 # @shopify/shopify-app-remix
 
+## 2.8.0
+
+### Minor Changes
+
+- cb656dc: Added `AppProxy` React components to enable JS behind proxies
+
+### Patch Changes
+
+- 9a41180: Fixed an issue where full page reloads broke HMR on pages loaded for more than a minute
+- 4aa4b59: Bump shopify-api to v9.6.0
+- 883fe7b: Bumps @shopify/shopify-api to v9.6.2
+- 753d406: Update @shopify/shopify-api to v9.7.1
+- Updated dependencies [4aa4b59]
+- Updated dependencies [883fe7b]
+- Updated dependencies [753d406]
+  - @shopify/shopify-app-session-storage@2.1.3
+
 ## 2.7.0
 
 ### Minor Changes
