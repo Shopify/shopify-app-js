@@ -5,12 +5,21 @@ export class PostgresConnection implements RdbmsConnection {
   sessionStorageIdentifier: string;
   private ready: Promise<void>;
   private pool: pg.Pool;
+  /**
+   * Additional user-provided configuration for the PostgreSQL pool.
+   */
+  private poolConfig: pg.PoolConfig | undefined;
   private dbUrl: URL;
 
-  constructor(dbUrl: string, sessionStorageIdentifier: string) {
+  constructor(
+    dbUrl: string,
+    sessionStorageIdentifier: string,
+    poolConfig: pg.PoolConfig | undefined,
+  ) {
     this.dbUrl = new URL(dbUrl);
     this.ready = this.init();
     this.sessionStorageIdentifier = sessionStorageIdentifier;
+    this.poolConfig = poolConfig;
   }
 
   async query(query: string, params: any[] = []): Promise<any[]> {
@@ -84,6 +93,7 @@ export class PostgresConnection implements RdbmsConnection {
 
   private async init(): Promise<void> {
     this.pool = new pg.Pool({
+      ...this.poolConfig,
       host: this.dbUrl.hostname,
       user: decodeURIComponent(this.dbUrl.username),
       password: decodeURIComponent(this.dbUrl.password),
