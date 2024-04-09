@@ -17,6 +17,6 @@ jobs:
       - name: Build packages
         run: yarn build
       - name: Run tests
-        run: yarn test
+        run: yarn test:ci
       - name: Run linting
         run: yarn lint
