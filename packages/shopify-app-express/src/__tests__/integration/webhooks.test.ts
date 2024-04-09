@@ -156,6 +156,7 @@ describe('webhook integration', () => {
               '{}',
               TEST_WEBHOOK_ID,
               LATEST_API_VERSION,
+              undefined,
             );
           }
         });

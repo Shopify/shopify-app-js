@@ -1,22 +1,14 @@
-import {LogSeverity, SESSION_COOKIE_NAME, Session} from '@shopify/shopify-api';
-
 import {shopifyApp} from '../../..';
 import {
   API_KEY,
   APP_URL,
   BASE64_HOST,
-  GRAPHQL_URL,
   SHOPIFY_HOST,
   TEST_SHOP,
-  expectBeginAuthRedirect,
-  expectExitIframeRedirect,
-  getJwt,
   getThrownResponse,
   setUpValidSession,
   testConfig,
-  signRequestCookie,
   expectLoginRedirect,
-  mockExternalRequest,
 } from '../../../__test-helpers';
 
 describe('authorize.admin doc request path', () => {
@@ -96,7 +88,7 @@ describe('authorize.admin doc request path', () => {
       );
     });
 
-    it('throws a 401 if app is embedded and the id_token search param is invalid', async () => {
+    it('throws a 302 to reload the page if app is embedded and the id_token search param is invalid for document requests', async () => {
       // GIVEN
       const shopify = shopifyApp(testConfig());
       await setUpValidSession(shopify.sessionStorage);
@@ -110,7 +102,38 @@ describe('authorize.admin doc request path', () => {
       );
 
       // THEN
+      const {pathname, searchParams} = new URL(
+        response.headers.get('location')!,
+        APP_URL,
+      );
+
+      expect(response.status).toBe(302);
+      expect(pathname).toBe('/auth/session-token');
+      expect(searchParams.get('shop')).toBe(TEST_SHOP);
+      expect(searchParams.get('host')).toBe(BASE64_HOST);
+      expect(searchParams.get('shopify-reload')).toBe(
+        `${APP_URL}/?embedded=1&shop=${TEST_SHOP}&host=${BASE64_HOST}`,
+      );
+    });
+
+    it('throws a 401 if app is embedded and the id_token search param is invalid for XHR requests', async () => {
+      // GIVEN
+      const shopify = shopifyApp(testConfig());
+      await setUpValidSession(shopify.sessionStorage);
+
+      // WHEN
+      const response = await getThrownResponse(
+        shopify.authenticate.admin,
+        new Request(`${APP_URL}?shop=${TEST_SHOP}&host=${BASE64_HOST}`, {
+          headers: {Authorization: 'Bearer invalid'},
+        }),
+      );
+
+      // THEN
       expect(response.status).toBe(401);
+      expect(
+        response.headers.get('X-Shopify-Retry-Invalid-Session-Request'),
+      ).toBe('1');
     });
   });
 

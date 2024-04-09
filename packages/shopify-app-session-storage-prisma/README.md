@@ -17,6 +17,10 @@ model Session {
 }
 ```
 
+> [!WARNING]
+> Some DB adapters adapters may set a maximum length for the String type by default, please ensure your fields allow for long enough strings.
+> See <https://www.prisma.io/docs/orm/reference/prisma-schema-reference#string> for more information
+
 You can then instantiate and use `PrismaSessionStorage` like so:
 
 ```js
