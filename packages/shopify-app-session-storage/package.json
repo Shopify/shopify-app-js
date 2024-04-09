@@ -46,7 +46,7 @@
     "@shopify/shopify-api": "^9.7.1"
   },
   "devDependencies": {
-    "@shopify/shopify-api": "^9.5.1"
+    "@shopify/shopify-api": "^9.7.1"
   },
   "files": [
     "dist/*",
