@@ -1,10 +1,10 @@
-export { createStorefrontApiClient } from "./storefront-api-client";
+export {createStorefrontApiClient} from './storefront-api-client';
 export {
   StorefrontQueries,
   StorefrontMutations,
   StorefrontOperations,
   StorefrontApiClient,
-} from "./types";
+} from './types';
 
 export type {
   AllOperations,
@@ -16,4 +16,4 @@ export type {
   LogContent,
   ResponseWithType,
   ReturnData,
-} from "@shopify/graphql-client";
+} from '@shopify/graphql-client';

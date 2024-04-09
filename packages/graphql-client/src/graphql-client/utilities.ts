@@ -1,4 +1,4 @@
-import { CLIENT, MAX_RETRIES, MIN_RETRIES } from "./constants";
+import {CLIENT, MAX_RETRIES, MIN_RETRIES} from './constants';
 
 export function formatErrorMessage(message: string, client = CLIENT) {
   return message.startsWith(`${client}`) ? message : `${client}: ${message}`;
@@ -13,7 +13,7 @@ export function getErrorCause(error: any): Record<string, any> | undefined {
 }
 
 export function combineErrors(dataArray: Record<string, any>[]) {
-  return dataArray.flatMap(({ errors }) => {
+  return dataArray.flatMap(({errors}) => {
     return errors ?? [];
   });
 }
@@ -27,7 +27,7 @@ export function validateRetries({
 }) {
   if (
     retries !== undefined &&
-    (typeof retries !== "number" ||
+    (typeof retries !== 'number' ||
       retries < MIN_RETRIES ||
       retries > MAX_RETRIES)
   ) {
@@ -39,10 +39,10 @@ export function validateRetries({
 
 export function getKeyValueIfValid(key: string, value?: any) {
   return value &&
-    (typeof value !== "object" ||
+    (typeof value !== 'object' ||
       Array.isArray(value) ||
-      (typeof value === "object" && Object.keys(value).length > 0))
-    ? { [key]: value }
+      (typeof value === 'object' && Object.keys(value).length > 0))
+    ? {[key]: value}
     : {};
 }
 
@@ -70,7 +70,7 @@ function combineObjects(baseObject: any, newObject: any) {
   return Object.keys(newObject || {}).reduce(
     (acc: any, key: string | number) => {
       if (
-        (typeof newObject[key] === "object" || Array.isArray(newObject[key])) &&
+        (typeof newObject[key] === 'object' || Array.isArray(newObject[key])) &&
         baseObject[key]
       ) {
         acc[key] = combineObjects(baseObject[key], newObject[key]);
@@ -80,7 +80,7 @@ function combineObjects(baseObject: any, newObject: any) {
       acc[key] = newObject[key];
       return acc;
     },
-    Array.isArray(baseObject) ? [...baseObject] : { ...baseObject },
+    Array.isArray(baseObject) ? [...baseObject] : {...baseObject},
   );
 }
 
@@ -88,5 +88,5 @@ export function buildCombinedDataObject([
   initialDatum,
   ...remainingData
 ]: any[]) {
-  return remainingData.reduce(combineObjects, { ...initialDatum });
+  return remainingData.reduce(combineObjects, {...initialDatum});
 }

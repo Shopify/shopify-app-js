@@ -3,7 +3,7 @@ import {
   ApiClientLogger,
   ApiClientLogContentTypes,
   ApiClientConfig,
-} from "@shopify/graphql-client";
+} from '@shopify/graphql-client';
 
 export type AdminApiClientLogContentTypes = ApiClientLogContentTypes;
 
@@ -14,7 +14,7 @@ export type AdminApiClientConfig = ApiClientConfig & {
 
 export type AdminApiClientOptions = Omit<
   AdminApiClientConfig,
-  "headers" | "apiUrl"
+  'headers' | 'apiUrl'
 > & {
   customFetchApi?: CustomFetchApi;
   logger?: ApiClientLogger<AdminApiClientLogContentTypes>;

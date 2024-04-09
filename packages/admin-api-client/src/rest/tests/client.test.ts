@@ -1,22 +1,22 @@
-import fetchMock from "jest-fetch-mock";
+import fetchMock from 'jest-fetch-mock';
 
 import {
   ACCESS_TOKEN_HEADER,
   CLIENT,
   DEFAULT_CLIENT_VERSION,
-} from "../../constants";
-import * as constants from "../../constants";
-import { createAdminRestApiClient } from "../client";
+} from '../../constants';
+import * as constants from '../../constants';
+import {createAdminRestApiClient} from '../client';
 
 const successResponse = JSON.stringify({
-  message: "Your HTTP request was successful!",
+  message: 'Your HTTP request was successful!',
 });
 
 interface AssertRequestOptions {
   request: Request;
 }
 
-describe("REST Admin API Client", () => {
+describe('REST Admin API Client', () => {
   fetchMock.enableMocks();
 
   beforeEach(() => {
@@ -30,11 +30,11 @@ describe("REST Admin API Client", () => {
     jest.restoreAllMocks();
   });
 
-  describe("createAdminRestApiClient()", () => {
+  describe('createAdminRestApiClient()', () => {
     const config = {
-      storeDomain: "https://test-store.myshopify.io",
-      apiVersion: "2023-10",
-      accessToken: "access-token",
+      storeDomain: 'https://test-store.myshopify.io',
+      apiVersion: '2023-10',
+      accessToken: 'access-token',
     };
 
     function apiUrl(
@@ -43,15 +43,15 @@ describe("REST Admin API Client", () => {
       version = config.apiVersion,
     ): string {
       return `${config.storeDomain}/admin/api/${version}${path}.json${
-        queryString ? `?${queryString}` : ""
+        queryString ? `?${queryString}` : ''
       }`;
     }
 
     const headers = new Headers({
-      "Content-Type": "application/json",
-      Accept: "application/json",
+      'Content-Type': 'application/json',
+      Accept: 'application/json',
       [ACCESS_TOKEN_HEADER]: config.accessToken,
-      "User-Agent": `${CLIENT} v${DEFAULT_CLIENT_VERSION}`,
+      'User-Agent': `${CLIENT} v${DEFAULT_CLIENT_VERSION}`,
     });
 
     afterEach(() => {
@@ -59,73 +59,73 @@ describe("REST Admin API Client", () => {
       jest.restoreAllMocks();
     });
 
-    it("can make GET request", async () => {
+    it('can make GET request', async () => {
       // GIVEN
       const client = createAdminRestApiClient(config);
 
       // WHEN
-      const response = await client.get("/url/path");
+      const response = await client.get('/url/path');
 
       // THEN
       expect(response.ok).toBe(true);
       expect(await response.text()).toBe(successResponse);
       await assertRequest({
-        request: new Request(apiUrl("/url/path"), { method: "GET", headers }),
+        request: new Request(apiUrl('/url/path'), {method: 'GET', headers}),
       });
     });
 
-    it("handles non-json, non-2xx response", async () => {
+    it('handles non-json, non-2xx response', async () => {
       // GIVEN
       const client = createAdminRestApiClient(config);
-      fetchMock.mockResponseOnce("not a json object", {
+      fetchMock.mockResponseOnce('not a json object', {
         status: 404,
-        statusText: "not found",
+        statusText: 'not found',
       });
 
       // WHEN
-      const response = await client.get("/url/path");
+      const response = await client.get('/url/path');
 
       // THEN
       expect(response.ok).toBe(false);
-      expect(await response.text()).toBe("not a json object");
+      expect(await response.text()).toBe('not a json object');
       await assertRequest({
-        request: new Request(apiUrl("/url/path"), { method: "GET", headers }),
+        request: new Request(apiUrl('/url/path'), {method: 'GET', headers}),
       });
     });
 
-    it("can make POST request", async () => {
+    it('can make POST request', async () => {
       // GIVEN
       const client = createAdminRestApiClient(config);
       const postData = {
-        title: "Test product",
+        title: 'Test product',
         amount: 10,
       };
 
       // WHEN
-      const response = await client.post("/url/path", { data: postData });
+      const response = await client.post('/url/path', {data: postData});
 
       // THEN
       expect(response.ok).toBe(true);
       expect(await response.text()).toBe(successResponse);
       await assertRequest({
-        request: new Request(apiUrl("/url/path"), {
-          method: "POST",
+        request: new Request(apiUrl('/url/path'), {
+          method: 'POST',
           headers,
           body: JSON.stringify(postData),
         }),
       });
     });
 
-    it("can make POST request and data is already formatted", async () => {
+    it('can make POST request and data is already formatted', async () => {
       // GIVEN
       const client = createAdminRestApiClient(config);
       const postData = {
-        title: "Test product",
+        title: 'Test product',
         amount: 10,
       };
 
       // WHEN
-      const response = await client.post("/url/path", {
+      const response = await client.post('/url/path', {
         data: JSON.stringify(postData),
       });
 
@@ -133,36 +133,36 @@ describe("REST Admin API Client", () => {
       expect(response.ok).toBe(true);
       expect(await response.text()).toBe(successResponse);
       await assertRequest({
-        request: new Request(apiUrl("/url/path"), {
-          method: "POST",
+        request: new Request(apiUrl('/url/path'), {
+          method: 'POST',
           headers,
           body: JSON.stringify(postData),
         }),
       });
     });
 
-    it("can make POST request with zero-length JSON", async () => {
+    it('can make POST request with zero-length JSON', async () => {
       // GIVEN
       const client = createAdminRestApiClient(config);
 
       // WHEN
-      const response = await client.post("/url/path", {
-        data: "",
+      const response = await client.post('/url/path', {
+        data: '',
       });
 
       // THEN
       expect(response.ok).toBe(true);
       expect(await response.text()).toBe(successResponse);
       await assertRequest({
-        request: new Request(apiUrl("/url/path"), {
-          method: "POST",
+        request: new Request(apiUrl('/url/path'), {
+          method: 'POST',
           headers,
-          body: "",
+          body: '',
         }),
       });
     });
 
-    it("can make POST request with GraphQL type", async () => {
+    it('can make POST request with GraphQL type', async () => {
       // GIVEN
       const client = createAdminRestApiClient(config);
 
@@ -179,79 +179,79 @@ describe("REST Admin API Client", () => {
         }
       `;
       const expectedHeaders = new Headers(headers);
-      expectedHeaders.set("Content-Type", "application/graphql");
+      expectedHeaders.set('Content-Type', 'application/graphql');
 
       // WHEN
-      const response = await client.post("/url/path", {
+      const response = await client.post('/url/path', {
         data: graphqlQuery,
-        headers: { "Content-Type": "application/graphql" },
+        headers: {'Content-Type': 'application/graphql'},
       });
 
       // THEN
       expect(response.ok).toBe(true);
       expect(await response.text()).toBe(successResponse);
       await assertRequest({
-        request: new Request(apiUrl("/url/path"), {
-          method: "POST",
+        request: new Request(apiUrl('/url/path'), {
+          method: 'POST',
           headers: expectedHeaders,
           body: graphqlQuery,
         }),
       });
     });
 
-    it("can make PUT request", async () => {
+    it('can make PUT request', async () => {
       // GIVEN
       const client = createAdminRestApiClient(config);
       const putData = {
-        title: "Test product",
+        title: 'Test product',
         amount: 10,
       };
 
       // WHEN
-      const response = await client.put("/url/path", { data: putData });
+      const response = await client.put('/url/path', {data: putData});
 
       // THEN
       expect(response.ok).toBe(true);
       expect(await response.text()).toBe(successResponse);
       await assertRequest({
-        request: new Request(apiUrl("/url/path"), {
-          method: "PUT",
+        request: new Request(apiUrl('/url/path'), {
+          method: 'PUT',
           headers,
           body: JSON.stringify(putData),
         }),
       });
     });
 
-    it("can make DELETE request", async () => {
+    it('can make DELETE request', async () => {
       // GIVEN
       const client = createAdminRestApiClient(config);
 
       // WHEN
-      const response = await client.delete("/url/path");
+      const response = await client.delete('/url/path');
 
       // THEN
       expect(response.ok).toBe(true);
       expect(await response.text()).toBe(successResponse);
       await assertRequest({
-        request: new Request(apiUrl("/url/path"), {
-          method: "DELETE",
+        request: new Request(apiUrl('/url/path'), {
+          method: 'DELETE',
           headers,
         }),
       });
     });
 
-    it("allows custom headers", async () => {
+    it('allows custom headers', async () => {
       // GIVEN
       const client = createAdminRestApiClient(config);
 
-      const customHeaders = { "X-Not-A-Real-Header": "some_value" };
+      const customHeaders = {'X-Not-A-Real-Header': 'some_value'};
       const expectedHeaders = new Headers({
         ...Object.fromEntries(headers.entries()),
         ...customHeaders,
       });
 
       // WHEN
-      const response = await client.get("/url/path", {
+      const response = await client.get('/url/path', {
         headers: customHeaders,
       });
 
@@ -259,25 +259,25 @@ describe("REST Admin API Client", () => {
       expect(response.ok).toBe(true);
       expect(await response.text()).toBe(successResponse);
       await assertRequest({
-        request: new Request(apiUrl("/url/path"), {
-          method: "GET",
+        request: new Request(apiUrl('/url/path'), {
+          method: 'GET',
           headers: expectedHeaders,
         }),
       });
     });
 
-    it("extends User-Agent (uppercase) if it is provided", async () => {
+    it('extends User-Agent (uppercase) if it is provided', async () => {
       // GIVEN
       const client = createAdminRestApiClient(config);
 
-      const customHeaders = { "User-Agent": "My agent" };
+      const customHeaders = {'User-Agent': 'My agent'};
       const expectedHeaders = new Headers({
         ...Object.fromEntries(headers.entries()),
-        "user-agent": `My agent | ${headers.get("User-Agent")}`,
+        'user-agent': `My agent | ${headers.get('User-Agent')}`,
       });
 
       // WHEN
-      const response = await client.get("/url/path", {
+      const response = await client.get('/url/path', {
         headers: customHeaders,
       });
 
@@ -285,25 +285,25 @@ describe("REST Admin API Client", () => {
       expect(response.ok).toBe(true);
       expect(await response.text()).toBe(successResponse);
       await assertRequest({
-        request: new Request(apiUrl("/url/path"), {
-          method: "GET",
+        request: new Request(apiUrl('/url/path'), {
+          method: 'GET',
           headers: expectedHeaders,
         }),
       });
     });
 
-    it("extends User-Agent (lowercase) if it is provided", async () => {
+    it('extends User-Agent (lowercase) if it is provided', async () => {
       // GIVEN
       const client = createAdminRestApiClient(config);
 
-      const customHeaders = { "user-agent": "My agent" };
+      const customHeaders = {'user-agent': 'My agent'};
       const expectedHeaders = new Headers({
         ...Object.fromEntries(headers.entries()),
-        "user-agent": `My agent | ${headers.get("User-Agent")}`,
+        'user-agent': `My agent | ${headers.get('User-Agent')}`,
       });
 
       // WHEN
-      const response = await client.get("/url/path", {
+      const response = await client.get('/url/path', {
         headers: customHeaders,
       });
 
@@ -311,54 +311,54 @@ describe("REST Admin API Client", () => {
       expect(response.ok).toBe(true);
       expect(await response.text()).toBe(successResponse);
       await assertRequest({
-        request: new Request(apiUrl("/url/path"), {
-          method: "GET",
+        request: new Request(apiUrl('/url/path'), {
+          method: 'GET',
           headers: expectedHeaders,
         }),
       });
     });
 
-    it("extends a User-Agent provided by config", async () => {
+    it('extends a User-Agent provided by config', async () => {
       // GIVEN
       const client = createAdminRestApiClient({
         ...config,
-        userAgentPrefix: "Config Agent",
+        userAgentPrefix: 'Config Agent',
       });
 
       const expectedHeaders = new Headers({
         ...Object.fromEntries(headers.entries()),
-        "user-agent": `Config Agent | ${headers.get("User-Agent")}`,
+        'user-agent': `Config Agent | ${headers.get('User-Agent')}`,
       });
 
       // WHEN
-      const response = await client.get("/url/path");
+      const response = await client.get('/url/path');
 
       // THEN
       expect(response.ok).toBe(true);
       expect(await response.text()).toBe(successResponse);
       await assertRequest({
-        request: new Request(apiUrl("/url/path"), {
-          method: "GET",
+        request: new Request(apiUrl('/url/path'), {
+          method: 'GET',
           headers: expectedHeaders,
         }),
       });
     });
 
-    it("extends a User-Agent provided by config and an extra header", async () => {
+    it('extends a User-Agent provided by config and an extra header', async () => {
       // GIVEN
       const client = createAdminRestApiClient({
         ...config,
-        userAgentPrefix: "Config Agent",
+        userAgentPrefix: 'Config Agent',
       });
 
-      const customHeaders = { "user-agent": "My agent" };
+      const customHeaders = {'user-agent': 'My agent'};
       const expectedHeaders = new Headers({
         ...Object.fromEntries(headers.entries()),
-        "user-agent": `My agent | Config Agent | ${headers.get("User-Agent")}`,
+        'user-agent': `My agent | Config Agent | ${headers.get('User-Agent')}`,
       });
 
       // WHEN
-      const response = await client.get("/url/path", {
+      const response = await client.get('/url/path', {
         headers: customHeaders,
       });
 
@@ -366,33 +366,33 @@ describe("REST Admin API Client", () => {
       expect(response.ok).toBe(true);
       expect(await response.text()).toBe(successResponse);
       await assertRequest({
-        request: new Request(apiUrl("/url/path"), {
-          method: "GET",
+        request: new Request(apiUrl('/url/path'), {
+          method: 'GET',
           headers: expectedHeaders,
         }),
       });
     });
 
-    it("fails with invalid retry count", async () => {
+    it('fails with invalid retry count', async () => {
       // GIVEN
       const client = createAdminRestApiClient(config);
 
       // THEN
-      await expect(client.get("/url/path", { retries: -1 })).rejects.toThrow();
+      await expect(client.get('/url/path', {retries: -1})).rejects.toThrow();
     });
 
-    it("retries failed requests but returns success", async () => {
+    it('retries failed requests but returns success', async () => {
       // GIVEN
       const client = createAdminRestApiClient(config);
 
       const mockResponses = [
-        new Response("Something went wrong!", {
+        new Response('Something went wrong!', {
           status: 503,
-          statusText: "Did not work",
+          statusText: 'Did not work',
         }),
-        new Response("Something went wrong!", {
+        new Response('Something went wrong!', {
           status: 429,
-          statusText: "Did not work",
+          statusText: 'Did not work',
         }),
         new Response(JSON.stringify(successResponse)),
       ];
@@ -403,28 +403,28 @@ describe("REST Admin API Client", () => {
       });
 
       // WHEN
-      const response = await client.get("/url/path", { retries: 2 });
+      const response = await client.get('/url/path', {retries: 2});
 
       // THEN
       expect(response).toBe(mockResponses[2]);
       expect(fetch).toHaveBeenCalledTimes(3);
       await assertRequest({
-        request: new Request(apiUrl("/url/path"), { method: "GET", headers }),
+        request: new Request(apiUrl('/url/path'), {method: 'GET', headers}),
       });
     });
 
-    it("retries failed requests and stops on non-retriable errors", async () => {
+    it('retries failed requests and stops on non-retriable errors', async () => {
       // GIVEN
       const client = createAdminRestApiClient(config);
 
       const mockResponses = [
-        new Response("Something went wrong!", {
+        new Response('Something went wrong!', {
           status: 503,
-          statusText: "Did not work",
+          statusText: 'Did not work',
         }),
-        new Response("Something went wrong!", {
+        new Response('Something went wrong!', {
           status: 403,
-          statusText: "Did not work",
+          statusText: 'Did not work',
         }),
       ];
 
@@ -434,54 +434,54 @@ describe("REST Admin API Client", () => {
       });
 
       // WHEN
-      const response = await client.get("/url/path", { retries: 2 });
+      const response = await client.get('/url/path', {retries: 2});
 
       // THEN
       expect(response).toBe(mockResponses[1]);
       expect(fetch).toHaveBeenCalledTimes(2);
       await assertRequest({
-        request: new Request(apiUrl("/url/path"), { method: "GET", headers }),
+        request: new Request(apiUrl('/url/path'), {method: 'GET', headers}),
       });
     });
 
-    it("stops retrying after reaching the limit, and returns the last response", async () => {
+    it('stops retrying after reaching the limit, and returns the last response', async () => {
       // GIVEN
       const client = createAdminRestApiClient(config);
-      const errorResponse = new Response("Something went wrong!", {
+      const errorResponse = new Response('Something went wrong!', {
         status: 503,
-        statusText: "Did not work",
+        statusText: 'Did not work',
       });
 
       fetchMock.mockResolvedValue(errorResponse);
 
       // WHEN
-      const response = await client.get("/url/path", { retries: 2 });
+      const response = await client.get('/url/path', {retries: 2});
 
       // THEN
       expect(response.status).toBe(503);
       expect(fetch).toHaveBeenCalledTimes(3);
       await assertRequest({
-        request: new Request(apiUrl("/url/path"), { method: "GET", headers }),
+        request: new Request(apiUrl('/url/path'), {method: 'GET', headers}),
       });
     });
 
-    it("throws after reaching the limit if all fetches were aborted", async () => {
+    it('throws after reaching the limit if all fetches were aborted', async () => {
       // GIVEN
       const client = createAdminRestApiClient(config);
 
       fetchMock.mockAbort();
 
       // WHEN
-      await expect(client.get("/url/path", { retries: 2 })).rejects.toThrow();
+      await expect(client.get('/url/path', {retries: 2})).rejects.toThrow();
 
       // THEN
       expect(fetch).toHaveBeenCalledTimes(3);
       await assertRequest({
-        request: new Request(apiUrl("/url/path"), { method: "GET", headers }),
+        request: new Request(apiUrl('/url/path'), {method: 'GET', headers}),
       });
     });
 
-    it("waits for the amount of time defined by the Retry-After header", async () => {
+    it('waits for the amount of time defined by the Retry-After header', async () => {
       // Default to 10 seconds to ensure the test will timeout if this fails
       (constants as any).DEFAULT_RETRY_WAIT_TIME = 10000;
 
@@ -489,47 +489,47 @@ describe("REST Admin API Client", () => {
       const client = createAdminRestApiClient(config);
 
       const realWaitTime = 0.05;
-      const errorResponse = new Response("Something went wrong!", {
+      const errorResponse = new Response('Something went wrong!', {
         status: 503,
-        statusText: "Did not work",
-        headers: { "Retry-After": realWaitTime.toString() },
+        statusText: 'Did not work',
+        headers: {'Retry-After': realWaitTime.toString()},
       });
 
       fetchMock.mockResolvedValue(errorResponse);
 
       // WHEN
-      const response = await client.get("/url/path", { retries: 1 });
+      const response = await client.get('/url/path', {retries: 1});
 
       // THEN
       expect(response.status).toBe(503);
       expect(fetch).toHaveBeenCalledTimes(2);
       await assertRequest({
-        request: new Request(apiUrl("/url/path"), { method: "GET", headers }),
+        request: new Request(apiUrl('/url/path'), {method: 'GET', headers}),
       });
     });
 
-    it("adds missing slashes to paths", async () => {
+    it('adds missing slashes to paths', async () => {
       // GIVEN
       const client = createAdminRestApiClient(config);
 
       // WHEN
-      const response = await client.get("url/path");
+      const response = await client.get('url/path');
 
       // THEN
       expect(response.ok).toBe(true);
       expect(await response.text()).toBe(successResponse);
       await assertRequest({
-        request: new Request(apiUrl("/url/path"), { method: "GET", headers }),
+        request: new Request(apiUrl('/url/path'), {method: 'GET', headers}),
       });
     });
 
-    it("properly formats arrays and hashes in query strings", async () => {
+    it('properly formats arrays and hashes in query strings', async () => {
       // GIVEN
       const client = createAdminRestApiClient(config);
 
       // WHEN
-      const response = await client.get("/url/path", {
-        searchParams: { array: ["a", "b", "c"], hash: { a1: "b", a2: "d" } },
+      const response = await client.get('/url/path', {
+        searchParams: {array: ['a', 'b', 'c'], hash: {a1: 'b', a2: 'd'}},
       });
 
       // THEN
@@ -538,21 +538,21 @@ describe("REST Admin API Client", () => {
       await assertRequest({
         request: new Request(
           apiUrl(
-            "/url/path",
-            encodeURI("array[]=a&array[]=b&array[]=c&hash[a1]=b&hash[a2]=d"),
+            '/url/path',
+            encodeURI('array[]=a&array[]=b&array[]=c&hash[a1]=b&hash[a2]=d'),
           ),
-          { method: "GET", headers },
+          {method: 'GET', headers},
         ),
       });
     });
 
-    it("logs requests and responses when given a logger", async () => {
+    it('logs requests and responses when given a logger', async () => {
       // GIVEN
       const logger = jest.fn();
-      const client = createAdminRestApiClient({ ...config, logger });
+      const client = createAdminRestApiClient({...config, logger});
 
       // WHEN
-      const response = await client.get("/url/path");
+      const response = await client.get('/url/path');
 
       // THEN
       expect(response.ok).toBe(true);
@@ -561,23 +561,23 @@ describe("REST Admin API Client", () => {
 
       const log = logger.mock.calls[0][0];
 
-      expect(log.type).toBe("HTTP-Response");
+      expect(log.type).toBe('HTTP-Response');
       expect(log.content.response).toBe(response);
-      expect(log.content.requestParams[0]).toEqual(apiUrl("/url/path"));
+      expect(log.content.requestParams[0]).toEqual(apiUrl('/url/path'));
       expect(log.content.requestParams[1]).toMatchObject({
-        method: "GET",
+        method: 'GET',
         headers: expect.anything(),
       });
     });
 
-    it("logs retries and responses when given a logger", async () => {
+    it('logs retries and responses when given a logger', async () => {
       // GIVEN
       const logger = jest.fn();
-      const client = createAdminRestApiClient({ ...config, logger });
+      const client = createAdminRestApiClient({...config, logger});
 
-      const retryResponse = new Response("Something went wrong!", {
+      const retryResponse = new Response('Something went wrong!', {
         status: 429,
-        statusText: "Did not work",
+        statusText: 'Did not work',
       });
       const mockResponses = [
         retryResponse,
@@ -590,7 +590,7 @@ describe("REST Admin API Client", () => {
       });
 
       // WHEN
-      const response = await client.get("/url/path", { retries: 1 });
+      const response = await client.get('/url/path', {retries: 1});
 
       // THEN
       expect(response.ok).toBe(true);
@@ -598,30 +598,30 @@ describe("REST Admin API Client", () => {
 
       expect(logger).toHaveBeenNthCalledWith(
         1,
-        expect.objectContaining({ type: "HTTP-Response" }),
+        expect.objectContaining({type: 'HTTP-Response'}),
       );
 
       const log = logger.mock.calls[1][0];
 
-      expect(log.type).toBe("HTTP-Retry");
+      expect(log.type).toBe('HTTP-Retry');
       expect(log.content.lastResponse).toBe(retryResponse);
       expect(log.content.retryAttempt).toBe(1);
       expect(log.content.maxRetries).toBe(1);
-      expect(log.content.requestParams[0]).toEqual(apiUrl("/url/path"));
+      expect(log.content.requestParams[0]).toEqual(apiUrl('/url/path'));
       expect(log.content.requestParams[1]).toMatchObject({
-        method: "GET",
+        method: 'GET',
         headers: expect.anything(),
       });
 
       expect(logger).toHaveBeenNthCalledWith(
         3,
-        expect.objectContaining({ type: "HTTP-Response" }),
+        expect.objectContaining({type: 'HTTP-Response'}),
       );
     });
   });
 });
 
-async function assertRequest({ request }: AssertRequestOptions) {
+async function assertRequest({request}: AssertRequestOptions) {
   const mockParams: [any, any] = fetchMock.mock.calls[0];
   const mockRequest = new Request(...mockParams);
 

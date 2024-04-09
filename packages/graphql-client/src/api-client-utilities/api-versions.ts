@@ -28,7 +28,7 @@ export function getCurrentApiVersion() {
 }
 
 export function getCurrentSupportedApiVersions() {
-  const { year, quarter, version: currentVersion } = getCurrentApiVersion();
+  const {year, quarter, version: currentVersion} = getCurrentApiVersion();
 
   const nextVersion =
     quarter === 4
@@ -41,6 +41,6 @@ export function getCurrentSupportedApiVersions() {
     getPrevousVersion(year, quarter, 1),
     currentVersion,
     nextVersion,
-    "unstable",
+    'unstable',
   ];
 }

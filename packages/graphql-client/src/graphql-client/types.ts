@@ -46,7 +46,7 @@ export interface LogContent {
 }
 
 export interface HTTPResponseLog extends LogContent {
-  type: "HTTP-Response";
+  type: 'HTTP-Response';
   content: {
     requestParams: Parameters<CustomFetchApi>;
     response: Response;
@@ -54,7 +54,7 @@ export interface HTTPResponseLog extends LogContent {
 }
 
 export interface HTTPRetryLog extends LogContent {
-  type: "HTTP-Retry";
+  type: 'HTTP-Retry';
   content: {
     requestParams: Parameters<CustomFetchApi>;
     lastResponse?: Response;
@@ -78,9 +78,9 @@ export interface ClientOptions {
 }
 
 export interface ClientConfig {
-  readonly headers: ClientOptions["headers"];
-  readonly url: ClientOptions["url"];
-  readonly retries: Required<ClientOptions>["retries"];
+  readonly headers: ClientOptions['headers'];
+  readonly url: ClientOptions['url'];
+  readonly retries: Required<ClientOptions>['retries'];
 }
 
 export interface RequestOptions {

@@ -1,4 +1,4 @@
-import { generateHttpFetch } from "./http-fetch";
+import {generateHttpFetch} from './http-fetch';
 import {
   ClientOptions,
   CustomFetchApi,
@@ -8,7 +8,7 @@ import {
   Logger,
   LogContentTypes,
   DataChunk,
-} from "./types";
+} from './types';
 import {
   CLIENT,
   GQL_API_ERROR,
@@ -23,7 +23,7 @@ import {
   SDK_VERSION_HEADER,
   DEFAULT_SDK_VARIANT,
   DEFAULT_CLIENT_VERSION,
-} from "./constants";
+} from './constants';
 import {
   formatErrorMessage,
   getErrorMessage,
@@ -33,7 +33,7 @@ import {
   buildCombinedDataObject,
   getErrorCause,
   combineErrors,
-} from "./utilities";
+} from './utilities';
 
 export function createGraphQLClient({
   headers,
@@ -42,7 +42,7 @@ export function createGraphQLClient({
   retries = 0,
   logger,
 }: ClientOptions): GraphQLClient {
-  validateRetries({ client: CLIENT, retries });
+  validateRetries({client: CLIENT, retries});
 
   const config: ClientConfig = {
     headers,
@@ -79,11 +79,11 @@ export function generateClientLogger(logger?: Logger): Logger {
 async function processJSONResponse<TData = any>(
   response: any,
 ): Promise<ClientResponse<TData>> {
-  const { errors, data, extensions } = await response.json();
+  const {errors, data, extensions} = await response.json();
 
   return {
-    ...getKeyValueIfValid("data", data),
-    ...getKeyValueIfValid("extensions", extensions),
+    ...getKeyValueIfValid('data', data),
+    ...getKeyValueIfValid('extensions', extensions),
     ...(errors || !data
       ? {
           errors: {
@@ -91,7 +91,7 @@ async function processJSONResponse<TData = any>(
             message: formatErrorMessage(
               errors ? GQL_API_ERROR : NO_DATA_OR_ERRORS_ERROR,
             ),
-            ...getKeyValueIfValid("graphQLErrors", errors),
+            ...getKeyValueIfValid('graphQLErrors', errors),
             response,
           },
         }
@@ -101,8 +101,8 @@ async function processJSONResponse<TData = any>(
 
 function generateFetch(
   httpFetch: ReturnType<typeof generateHttpFetch>,
-  { url, headers, retries }: ClientConfig,
-): GraphQLClient["fetch"] {
+  {url, headers, retries}: ClientConfig,
+): GraphQLClient['fetch'] {
   return async (operation, options = {}) => {
     const {
       variables,
@@ -116,13 +116,13 @@ function generateFetch(
       variables,
     });
 
-    validateRetries({ client: CLIENT, retries: overrideRetries });
+    validateRetries({client: CLIENT, retries: overrideRetries});
 
     const flatHeaders = Object.entries({
       ...headers,
       ...overrideHeaders,
     }).reduce((headers: Record<string, string>, [key, value]) => {
-      headers[key] = Array.isArray(value) ? value.join(", ") : value.toString();
+      headers[key] = Array.isArray(value) ? value.join(', ') : value.toString();
       return headers;
     }, {});
 
@@ -134,7 +134,7 @@ function generateFetch(
     const fetchParams: Parameters<CustomFetchApi> = [
       overrideUrl ?? url,
       {
-        method: "POST",
+        method: 'POST',
         headers: flatHeaders,
         body,
       },
@@ -146,20 +146,20 @@ function generateFetch(
 
 function generateRequest(
   fetch: ReturnType<typeof generateFetch>,
-): GraphQLClient["request"] {
+): GraphQLClient['request'] {
   return async (...props) => {
     if (DEFER_OPERATION_REGEX.test(props[0])) {
       throw new Error(
         formatErrorMessage(
-          "This operation will result in a streamable response - use requestStream() instead.",
+          'This operation will result in a streamable response - use requestStream() instead.',
         ),
       );
     }
 
     try {
       const response = await fetch(...props);
-      const { status, statusText } = response;
-      const contentType = response.headers.get("content-type") || "";
+      const {status, statusText} = response;
+      const contentType = response.headers.get('content-type') || '';
 
       if (!response.ok) {
         return {
@@ -225,7 +225,7 @@ function readStreamChunk(
   return {
     async *[Symbol.asyncIterator]() {
       try {
-        let buffer = "";
+        let buffer = '';
 
         for await (const textChunk of streamBodyIterator) {
           buffer += textChunk;
@@ -253,7 +253,7 @@ function readStreamChunk(
             buffer = buffer.slice(lastBoundaryIndex + boundary.length);
 
             if (buffer.trim() === `--`) {
-              buffer = "";
+              buffer = '';
             }
           }
         }
@@ -298,24 +298,24 @@ function getResponseDataFromChunkBodies(chunkBodies: string[]): {
       }
     })
     .map((payload) => {
-      const { data, incremental, hasNext, extensions, errors } = payload;
+      const {data, incremental, hasNext, extensions, errors} = payload;
 
       // initial data chunk
       if (!incremental) {
         return {
           data: data || {},
-          ...getKeyValueIfValid("errors", errors),
-          ...getKeyValueIfValid("extensions", extensions),
+          ...getKeyValueIfValid('errors', errors),
+          ...getKeyValueIfValid('extensions', extensions),
           hasNext,
         };
       }
 
       // subsequent data chunks
-      const incrementalArray: { data: any; errors?: any }[] = incremental.map(
-        ({ data, path, errors }: any) => {
+      const incrementalArray: {data: any; errors?: any}[] = incremental.map(
+        ({data, path, errors}: any) => {
           return {
             data: data && path ? buildDataObjectByPath(path, data) : {},
-            ...getKeyValueIfValid("errors", errors),
+            ...getKeyValueIfValid('errors', errors),
           };
         },
       );
@@ -325,9 +325,9 @@ function getResponseDataFromChunkBodies(chunkBodies: string[]): {
           incrementalArray.length === 1
             ? incrementalArray[0].data
             : buildCombinedDataObject([
-                ...incrementalArray.map(({ data }) => data),
+                ...incrementalArray.map(({data}) => data),
               ]),
-        ...getKeyValueIfValid("errors", combineErrors(incrementalArray)),
+        ...getKeyValueIfValid('errors', combineErrors(incrementalArray)),
         hasNext,
       };
     });
@@ -354,16 +354,16 @@ function createMultipartResponseAsyncInterator(
   response: Response,
   responseContentType: string,
 ) {
-  const boundaryHeader = (responseContentType ?? "").match(
+  const boundaryHeader = (responseContentType ?? '').match(
     BOUNDARY_HEADER_REGEX,
   );
-  const boundary = `--${boundaryHeader ? boundaryHeader[1] : "-"}`;
+  const boundary = `--${boundaryHeader ? boundaryHeader[1] : '-'}`;
 
   if (
     !response.body?.getReader &&
     !(response.body as any)![Symbol.asyncIterator]
   ) {
-    throw new Error("API multipart response did not return an iterable body", {
+    throw new Error('API multipart response did not return an iterable body', {
       cause: response,
     });
   }
@@ -392,7 +392,7 @@ function createMultipartResponseAsyncInterator(
 
           combinedData = buildCombinedDataObject([
             combinedData,
-            ...responseData.map(({ data }) => data),
+            ...responseData.map(({data}) => data),
           ]);
 
           streamHasNext = responseData.slice(-1)[0].hasNext;
@@ -400,8 +400,8 @@ function createMultipartResponseAsyncInterator(
           validateResponseData(responseErrors, combinedData);
 
           yield {
-            ...getKeyValueIfValid("data", combinedData),
-            ...getKeyValueIfValid("extensions", responseExtensions),
+            ...getKeyValueIfValid('data', combinedData),
+            ...getKeyValueIfValid('extensions', responseExtensions),
             hasNext: streamHasNext,
           };
         }
@@ -413,12 +413,12 @@ function createMultipartResponseAsyncInterator(
         const cause = getErrorCause(error);
 
         yield {
-          ...getKeyValueIfValid("data", combinedData),
-          ...getKeyValueIfValid("extensions", responseExtensions),
+          ...getKeyValueIfValid('data', combinedData),
+          ...getKeyValueIfValid('extensions', responseExtensions),
           errors: {
             message: formatErrorMessage(getErrorMessage(error)),
             networkStatusCode: response.status,
-            ...getKeyValueIfValid("graphQLErrors", cause?.graphQLErrors),
+            ...getKeyValueIfValid('graphQLErrors', cause?.graphQLErrors),
             response,
           },
           hasNext: false,
@@ -430,12 +430,12 @@ function createMultipartResponseAsyncInterator(
 
 function generateRequestStream(
   fetch: ReturnType<typeof generateFetch>,
-): GraphQLClient["requestStream"] {
+): GraphQLClient['requestStream'] {
   return async (...props) => {
     if (!DEFER_OPERATION_REGEX.test(props[0])) {
       throw new Error(
         formatErrorMessage(
-          "This operation does not result in a streamable response - use request() instead.",
+          'This operation does not result in a streamable response - use request() instead.',
         ),
       );
     }
@@ -443,13 +443,13 @@ function generateRequestStream(
     try {
       const response = await fetch(...props);
 
-      const { statusText } = response;
+      const {statusText} = response;
 
       if (!response.ok) {
-        throw new Error(statusText, { cause: response });
+        throw new Error(statusText, {cause: response});
       }
 
-      const responseContentType = response.headers.get("content-type") || "";
+      const responseContentType = response.headers.get('content-type') || '';
 
       switch (true) {
         case responseContentType.includes(CONTENT_TYPES.json):
@@ -462,7 +462,7 @@ function generateRequestStream(
         default:
           throw new Error(
             `${UNEXPECTED_CONTENT_TYPE_ERROR} ${responseContentType}`,
-            { cause: response },
+            {cause: response},
           );
       }
     } catch (error) {
@@ -473,8 +473,8 @@ function generateRequestStream(
           yield {
             errors: {
               message: formatErrorMessage(getErrorMessage(error)),
-              ...getKeyValueIfValid("networkStatusCode", response?.status),
-              ...getKeyValueIfValid("response", response),
+              ...getKeyValueIfValid('networkStatusCode', response?.status),
+              ...getKeyValueIfValid('response', response),
             },
             hasNext: false,
           };

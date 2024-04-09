@@ -1,6 +1,6 @@
-import { CLIENT, RETRIABLE_STATUS_CODES, RETRY_WAIT_TIME } from "./constants";
-import { CustomFetchApi, GraphQLClient, Logger } from "./types";
-import { formatErrorMessage, getErrorMessage } from "./utilities";
+import {CLIENT, RETRIABLE_STATUS_CODES, RETRY_WAIT_TIME} from './constants';
+import {CustomFetchApi, GraphQLClient, Logger} from './types';
+import {formatErrorMessage, getErrorMessage} from './utilities';
 
 interface GenerateHttpFetchOptions {
   clientLogger: Logger;
@@ -21,7 +21,7 @@ export function generateHttpFetch({
     requestParams: Parameters<CustomFetchApi>,
     count: number,
     maxRetries: number,
-  ): ReturnType<GraphQLClient["fetch"]> => {
+  ): ReturnType<GraphQLClient['fetch']> => {
     const nextCount = count + 1;
     const maxTries = maxRetries + 1;
     let response: Response | undefined;
@@ -30,7 +30,7 @@ export function generateHttpFetch({
       response = await customFetchApi(...requestParams);
 
       clientLogger({
-        type: "HTTP-Response",
+        type: 'HTTP-Response',
         content: {
           requestParams,
           response,
@@ -48,13 +48,13 @@ export function generateHttpFetch({
       return response;
     } catch (error) {
       if (nextCount <= maxTries) {
-        const retryAfter = response?.headers.get("Retry-After");
+        const retryAfter = response?.headers.get('Retry-After');
         await sleep(
           retryAfter ? parseInt(retryAfter, 10) : defaultRetryWaitTime,
         );
 
         clientLogger({
-          type: "HTTP-Retry",
+          type: 'HTTP-Retry',
           content: {
             requestParams,
             lastResponse: response,
@@ -71,7 +71,7 @@ export function generateHttpFetch({
           `${
             maxRetries > 0
               ? `Attempted maximum number of ${maxRetries} network retries. Last message - `
-              : ""
+              : ''
           }${getErrorMessage(error)}`,
           client,
         ),

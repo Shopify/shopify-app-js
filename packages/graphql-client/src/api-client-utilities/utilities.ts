@@ -1,23 +1,23 @@
-import { RequestParams } from "../graphql-client/types";
+import {RequestParams} from '../graphql-client/types';
 
 import {
   AllOperations,
   ApiClient,
   ApiClientConfig,
   ApiClientRequestOptions,
-} from "./types";
+} from './types';
 
 export function generateGetHeaders(
   config: ApiClientConfig,
-): ApiClient["getHeaders"] {
+): ApiClient['getHeaders'] {
   return (customHeaders) => {
-    return { ...(customHeaders ?? {}), ...config.headers };
+    return {...(customHeaders ?? {}), ...config.headers};
   };
 }
 
 export function generateGetGQLClientParams<
   Operations extends AllOperations = AllOperations,
->({ getHeaders, getApiUrl }: Pick<ApiClient, "getHeaders" | "getApiUrl">) {
+>({getHeaders, getApiUrl}: Pick<ApiClient, 'getHeaders' | 'getApiUrl'>) {
   return <Operation extends keyof Operations>(
     operation: Operation,
     options?: ApiClientRequestOptions<Operation, Operations>,
@@ -25,18 +25,13 @@ export function generateGetGQLClientParams<
     const props: RequestParams = [operation as string];
 
     if (options && Object.keys(options).length > 0) {
-      const {
-        variables,
-        apiVersion: propApiVersion,
-        headers,
-        retries,
-      } = options;
+      const {variables, apiVersion: propApiVersion, headers, retries} = options;
 
       props.push({
-        ...(variables ? { variables } : {}),
-        ...(headers ? { headers: getHeaders(headers) } : {}),
-        ...(propApiVersion ? { url: getApiUrl(propApiVersion) } : {}),
-        ...(retries ? { retries } : {}),
+        ...(variables ? {variables} : {}),
+        ...(headers ? {headers: getHeaders(headers)} : {}),
+        ...(propApiVersion ? {url: getApiUrl(propApiVersion)} : {}),
+        ...(retries ? {retries} : {}),
       });
     }
 

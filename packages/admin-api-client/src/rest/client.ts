@@ -7,12 +7,12 @@ import {
   validateApiVersion,
   validateDomainAndGetStoreUrl,
   validateRetries,
-} from "@shopify/graphql-client";
+} from '@shopify/graphql-client';
 
 import {
   validateRequiredAccessToken,
   validateServerSideUsage,
-} from "../validations";
+} from '../validations';
 import {
   ACCESS_TOKEN_HEADER,
   CLIENT,
@@ -20,7 +20,7 @@ import {
   DEFAULT_CONTENT_TYPE,
   DEFAULT_RETRY_WAIT_TIME,
   RETRIABLE_STATUS_CODES,
-} from "../constants";
+} from '../constants';
 
 import {
   AdminRestApiClient,
@@ -34,7 +34,7 @@ import {
   RequestOptions,
   SearchParamFields,
   SearchParams,
-} from "./types";
+} from './types';
 
 export function createAdminRestApiClient({
   storeDomain,
@@ -44,7 +44,7 @@ export function createAdminRestApiClient({
   logger,
   customFetchApi = fetch,
   retries: clientRetries = 0,
-  scheme = "https",
+  scheme = 'https',
   defaultRetryTime = DEFAULT_RETRY_WAIT_TIME,
   formatPaths = true,
 }: AdminRestApiClientOptions): AdminRestApiClient {
@@ -53,7 +53,7 @@ export function createAdminRestApiClient({
   const storeUrl = validateDomainAndGetStoreUrl({
     client: CLIENT,
     storeDomain,
-  }).replace("https://", `${scheme}://`);
+  }).replace('https://', `${scheme}://`);
 
   const baseApiVersionValidationParams = {
     client: CLIENT,
@@ -69,7 +69,7 @@ export function createAdminRestApiClient({
     logger,
   });
   validateRequiredAccessToken(accessToken);
-  validateRetries({ client: CLIENT, retries: clientRetries });
+  validateRetries({client: CLIENT, retries: clientRetries});
 
   const apiUrlFormatter = generateApiUrlFormatter(
     storeUrl,
@@ -97,29 +97,29 @@ export function createAdminRestApiClient({
       apiVersion,
     }: RequestOptions,
   ): ReturnType<CustomFetchApi> => {
-    validateRetries({ client: CLIENT, retries });
+    validateRetries({client: CLIENT, retries});
 
     const url = apiUrlFormatter(path, searchParams ?? {}, apiVersion);
 
     const requestHeaders = normalizedHeaders(requestHeadersObj ?? {});
     const userAgent = [
-      ...(requestHeaders["user-agent"] ? [requestHeaders["user-agent"]] : []),
+      ...(requestHeaders['user-agent'] ? [requestHeaders['user-agent']] : []),
       ...(userAgentPrefix ? [userAgentPrefix] : []),
       `${CLIENT} v${DEFAULT_CLIENT_VERSION}`,
-    ].join(" | ");
+    ].join(' | ');
 
     const headers = normalizedHeaders({
-      "Content-Type": DEFAULT_CONTENT_TYPE,
+      'Content-Type': DEFAULT_CONTENT_TYPE,
       ...requestHeaders,
       Accept: DEFAULT_CONTENT_TYPE,
       [ACCESS_TOKEN_HEADER]: accessToken,
-      "User-Agent": userAgent,
+      'User-Agent': userAgent,
     });
 
-    const body = data && typeof data !== "string" ? JSON.stringify(data) : data;
+    const body = data && typeof data !== 'string' ? JSON.stringify(data) : data;
 
     return httpFetch(
-      [url, { method, headers, ...(body ? { body } : undefined) }],
+      [url, {method, headers, ...(body ? {body} : undefined)}],
       1,
       retries ?? clientRetries,
     );
@@ -127,13 +127,13 @@ export function createAdminRestApiClient({
 
   return {
     get: (path: string, options?: GetRequestOptions) =>
-      request(path, { method: Method.Get, ...options }),
+      request(path, {method: Method.Get, ...options}),
     put: (path: string, options?: PutRequestOptions) =>
-      request(path, { method: Method.Put, ...options }),
+      request(path, {method: Method.Put, ...options}),
     post: (path: string, options?: PostRequestOptions) =>
-      request(path, { method: Method.Post, ...options }),
+      request(path, {method: Method.Post, ...options}),
     delete: (path: string, options?: DeleteRequestOptions) =>
-      request(path, { method: Method.Delete, ...options }),
+      request(path, {method: Method.Delete, ...options}),
   };
 }
 
@@ -142,7 +142,7 @@ function generateApiUrlFormatter(
   defaultApiVersion: string,
   baseApiVersionValidationParams: Omit<
     Parameters<typeof validateApiVersion>[0],
-    "apiVersion"
+    'apiVersion'
   >,
   formatPaths = true,
 ) {
@@ -164,7 +164,7 @@ function generateApiUrlFormatter(
           convertValue(params, `${key}[]`, arrayValue),
         );
         return;
-      } else if (typeof value === "object") {
+      } else if (typeof value === 'object') {
         Object.entries(value).forEach(([objKey, objValue]) =>
           convertValue(params, `${key}[${objKey}]`, objValue),
         );
@@ -175,12 +175,12 @@ function generateApiUrlFormatter(
     }
 
     const urlApiVersion = (apiVersion ?? defaultApiVersion).trim();
-    let cleanPath = path.replace(/^\//, "");
+    let cleanPath = path.replace(/^\//, '');
     if (formatPaths) {
-      if (!cleanPath.startsWith("admin")) {
+      if (!cleanPath.startsWith('admin')) {
         cleanPath = `admin/api/${urlApiVersion}/${cleanPath}`;
       }
-      if (!cleanPath.endsWith(".json")) {
+      if (!cleanPath.endsWith('.json')) {
         cleanPath = `${cleanPath}.json`;
       }
     }
@@ -191,7 +191,7 @@ function generateApiUrlFormatter(
         convertValue(params, key, value);
       }
     }
-    const queryString = params.toString() ? `?${params.toString()}` : "";
+    const queryString = params.toString() ? `?${params.toString()}` : '';
 
     return `${storeUrl}/${cleanPath}${queryString}`;
   };
@@ -209,7 +209,7 @@ function normalizedHeaders(headersObj: HeaderOptions): Record<string, string> {
   const normalizedHeaders: Record<string, string> = {};
   for (const [key, value] of Object.entries(headersObj)) {
     normalizedHeaders[key.toLowerCase()] = Array.isArray(value)
-      ? value.join(", ")
+      ? value.join(', ')
       : String(value);
   }
   return normalizedHeaders;

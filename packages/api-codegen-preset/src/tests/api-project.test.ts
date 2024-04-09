@@ -1,15 +1,15 @@
-import fs from "fs";
+import fs from 'fs';
 
-import { shopifyApiProject } from "../api-project";
-import { ApiType, ShopifyApiProjectOptions } from "../types";
+import {shopifyApiProject} from '../api-project';
+import {ApiType, ShopifyApiProjectOptions} from '../types';
 
-describe("shopifyApiProject", () => {
+describe('shopifyApiProject', () => {
   beforeEach(() => {
     jest.restoreAllMocks();
   });
 
   describe.each([ApiType.Admin, ApiType.Storefront])(
-    "when API type is %s",
+    'when API type is %s',
     (apiType) => {
       const type = apiType.toLowerCase();
 
@@ -17,10 +17,10 @@ describe("shopifyApiProject", () => {
         // GIVEN
         const config: ShopifyApiProjectOptions = {
           apiType,
-          apiVersion: "2023-10",
-          outputDir: "./testDir",
-          documents: ["./src/**/*.ts"],
-          module: "module",
+          apiVersion: '2023-10',
+          outputDir: './testDir',
+          documents: ['./src/**/*.ts'],
+          module: 'module',
         };
 
         // WHEN
@@ -37,17 +37,17 @@ describe("shopifyApiProject", () => {
         });
       });
 
-      it("loads schema from file when file is present", () => {
+      it('loads schema from file when file is present', () => {
         // GIVEN
         const config: ShopifyApiProjectOptions = {
           apiType,
-          apiVersion: "2023-10",
-          outputDir: "./testDir",
-          documents: ["./src/**/*.ts"],
-          module: "module",
+          apiVersion: '2023-10',
+          outputDir: './testDir',
+          documents: ['./src/**/*.ts'],
+          module: 'module',
         };
 
-        const spy = jest.spyOn(fs, "existsSync");
+        const spy = jest.spyOn(fs, 'existsSync');
         spy.mockReturnValue(true);
 
         // WHEN
@@ -64,7 +64,7 @@ describe("shopifyApiProject", () => {
         });
       });
 
-      it("defaults missing values", () => {
+      it('defaults missing values', () => {
         // GIVEN
         const config: ShopifyApiProjectOptions = {
           apiType,
@@ -76,7 +76,7 @@ describe("shopifyApiProject", () => {
         // THEN
         expect(projectConfig).toEqual({
           schema: `https://shopify.dev/${type}-graphql-direct-proxy`,
-          documents: ["**/*.{ts,tsx}", "!node_modules"],
+          documents: ['**/*.{ts,tsx}', '!node_modules'],
           extensions: {
             // This is tested by the api-types file
             codegen: expect.anything(),

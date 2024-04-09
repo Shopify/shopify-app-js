@@ -1,29 +1,29 @@
-import { TextEncoder, TextDecoder } from "util";
-import { Readable } from "stream";
+import {TextEncoder, TextDecoder} from 'util';
+import {Readable} from 'stream';
 
-import { ReadableStream } from "web-streams-polyfill";
+import {ReadableStream} from 'web-streams-polyfill';
 
-import { createGraphQLClient } from "../../graphql-client";
+import {createGraphQLClient} from '../../graphql-client';
 import {
   LogContentTypes,
   ClientOptions,
   Headers as TypesHeaders,
-} from "../../types";
+} from '../../types';
 import {
   SDK_VARIANT_HEADER,
   SDK_VERSION_HEADER,
   DEFAULT_CLIENT_VERSION,
   DEFAULT_SDK_VARIANT,
-} from "../../constants";
+} from '../../constants';
 
 global.TextEncoder = TextEncoder;
 global.TextDecoder = TextDecoder as any;
 
 export const clientConfig = {
-  url: "http://test-store.myshopify.com/api/2023-10/graphql.json",
+  url: 'http://test-store.myshopify.com/api/2023-10/graphql.json',
   headers: {
-    "Content-Type": "application/json",
-    "X-Shopify-Storefront-Access-Token": "public-token",
+    'Content-Type': 'application/json',
+    'X-Shopify-Storefront-Access-Token': 'public-token',
   },
 };
 
@@ -36,7 +36,7 @@ query {
 `;
 
 export const variables = {
-  country: "US",
+  country: 'US',
 };
 
 export const defaultHeaders = {
@@ -54,9 +54,9 @@ export function getValidClient({
   logger?: (logContent: LogContentTypes) => void;
   headers?: TypesHeaders;
 } = {}) {
-  const updatedConfig: ClientOptions = { ...clientConfig };
+  const updatedConfig: ClientOptions = {...clientConfig};
 
-  if (typeof retries === "number") {
+  if (typeof retries === 'number') {
     updatedConfig.retries = retries;
   }
 
@@ -78,7 +78,7 @@ const streamResponseConfig = {
   status: 200,
   ok: true,
   headers: new Headers({
-    "Content-Type": "multipart/mixed; boundary=graphql",
+    'Content-Type': 'multipart/mixed; boundary=graphql',
   }),
 };
 

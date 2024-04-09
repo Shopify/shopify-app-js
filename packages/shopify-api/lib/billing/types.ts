@@ -124,7 +124,7 @@ export type BillingConfigItem<
     : BillingConfigLegacyItem;
 
 // Type this as an interface to improve TSDoc support for it.
-/* eslint-disable @typescript-eslint/consistent-indexed-object-style */
+
 /**
  * Billing configuration options, indexed by an app-specific plan name.
  */
@@ -136,7 +136,6 @@ export interface BillingConfig<
    */
   [plan: string]: BillingConfigItem<Future>;
 }
-/* eslint-enable @typescript-eslint/consistent-indexed-object-style */
 
 export type RequestConfigOverrides =
   | Partial<BillingConfigOneTimePlan>

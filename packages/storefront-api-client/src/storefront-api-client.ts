@@ -5,14 +5,14 @@ import {
   validateApiVersion,
   generateGetGQLClientParams,
   generateGetHeaders,
-} from "@shopify/graphql-client";
+} from '@shopify/graphql-client';
 
 import {
   StorefrontApiClientOptions,
   StorefrontApiClient,
   StorefrontApiClientConfig,
   StorefrontOperations,
-} from "./types";
+} from './types';
 import {
   DEFAULT_SDK_VARIANT,
   DEFAULT_CLIENT_VERSION,
@@ -23,11 +23,11 @@ import {
   PUBLIC_ACCESS_TOKEN_HEADER,
   PRIVATE_ACCESS_TOKEN_HEADER,
   CLIENT,
-} from "./constants";
+} from './constants';
 import {
   validateRequiredAccessTokens,
   validatePrivateAccessTokenUsage,
-} from "./validations";
+} from './validations';
 
 export function createStorefrontApiClient({
   storeDomain,
@@ -52,7 +52,7 @@ export function createStorefrontApiClient({
     logger,
   };
 
-  validateApiVersion({ ...baseApiVersionValidationParams, apiVersion });
+  validateApiVersion({...baseApiVersionValidationParams, apiVersion});
   validateRequiredAccessTokens(publicAccessToken, privateAccessToken);
   validatePrivateAccessTokenUsage(privateAccessToken);
 
@@ -66,19 +66,19 @@ export function createStorefrontApiClient({
     storeDomain: storeUrl,
     apiVersion,
     ...(publicAccessToken
-      ? { publicAccessToken }
+      ? {publicAccessToken}
       : {
           privateAccessToken: privateAccessToken!,
         }),
     headers: {
-      "Content-Type": DEFAULT_CONTENT_TYPE,
+      'Content-Type': DEFAULT_CONTENT_TYPE,
       Accept: DEFAULT_CONTENT_TYPE,
       [SDK_VARIANT_HEADER]: DEFAULT_SDK_VARIANT,
       [SDK_VERSION_HEADER]: DEFAULT_CLIENT_VERSION,
-      ...(clientName ? { [SDK_VARIANT_SOURCE_HEADER]: clientName } : {}),
+      ...(clientName ? {[SDK_VARIANT_SOURCE_HEADER]: clientName} : {}),
       ...(publicAccessToken
-        ? { [PUBLIC_ACCESS_TOKEN_HEADER]: publicAccessToken }
-        : { [PRIVATE_ACCESS_TOKEN_HEADER]: privateAccessToken! }),
+        ? {[PUBLIC_ACCESS_TOKEN_HEADER]: publicAccessToken}
+        : {[PRIVATE_ACCESS_TOKEN_HEADER]: privateAccessToken!}),
     },
     apiUrl: apiUrlFormatter(),
     clientName,
@@ -123,7 +123,7 @@ function generateApiUrlFormatter(
   defaultApiVersion: string,
   baseApiVersionValidationParams: Omit<
     Parameters<typeof validateApiVersion>[0],
-    "apiVersion"
+    'apiVersion'
   >,
 ) {
   return (apiVersion?: string) => {
@@ -143,7 +143,7 @@ function generateApiUrlFormatter(
 function generateGetApiUrl(
   config: StorefrontApiClientConfig,
   apiUrlFormatter: (version?: string) => string,
-): StorefrontApiClient["getApiUrl"] {
+): StorefrontApiClient['getApiUrl'] {
   return (propApiVersion?: string) => {
     return propApiVersion ? apiUrlFormatter(propApiVersion) : config.apiUrl;
   };

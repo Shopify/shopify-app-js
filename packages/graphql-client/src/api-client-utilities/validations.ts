@@ -1,4 +1,4 @@
-import { ApiClientLogger } from "./types";
+import {ApiClientLogger} from './types';
 
 export function validateDomainAndGetStoreUrl({
   client,
@@ -8,7 +8,7 @@ export function validateDomainAndGetStoreUrl({
   storeDomain: string | undefined;
 }) {
   try {
-    if (!storeDomain || typeof storeDomain !== "string") {
+    if (!storeDomain || typeof storeDomain !== 'string') {
       throw new Error();
     }
 
@@ -19,7 +19,7 @@ export function validateDomainAndGetStoreUrl({
       : `https://${trimmedDomain}`;
 
     const url = new URL(protocolUrl);
-    url.protocol = "https";
+    url.protocol = 'https';
 
     return url.origin;
   } catch (_error) {
@@ -42,10 +42,10 @@ export function validateApiVersion({
 }) {
   const versionError = `${client}: the provided apiVersion ("${apiVersion}")`;
   const supportedVersion = `Currently supported API versions: ${currentSupportedApiVersions.join(
-    ", ",
+    ', ',
   )}`;
 
-  if (!apiVersion || typeof apiVersion !== "string") {
+  if (!apiVersion || typeof apiVersion !== 'string') {
     throw new Error(`${versionError} is invalid. ${supportedVersion}`);
   }
 
@@ -54,7 +54,7 @@ export function validateApiVersion({
   if (!currentSupportedApiVersions.includes(trimmedApiVersion)) {
     if (logger) {
       logger({
-        type: "Unsupported_Api_Version",
+        type: 'Unsupported_Api_Version',
         content: {
           apiVersion,
           supportedApiVersions: currentSupportedApiVersions,

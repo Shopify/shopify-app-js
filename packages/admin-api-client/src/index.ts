@@ -1,13 +1,13 @@
-export { createAdminApiClient } from "./graphql";
+export {createAdminApiClient} from './graphql';
 export {
   AdminApiClient,
   AdminQueries,
   AdminMutations,
   AdminOperations,
-} from "./graphql/types";
+} from './graphql/types';
 
-export { createAdminRestApiClient } from "./rest";
-export { AdminRestApiClient, SearchParams } from "./rest/types";
+export {createAdminRestApiClient} from './rest';
+export {AdminRestApiClient, SearchParams} from './rest/types';
 
 export type {
   AllOperations,
@@ -19,4 +19,4 @@ export type {
   LogContent,
   ResponseWithType,
   ReturnData,
-} from "@shopify/graphql-client";
+} from '@shopify/graphql-client';

@@ -6,14 +6,14 @@ import {
   ClientResponse,
   FetchResponseBody,
   ClientStreamIterator,
-} from "../graphql-client/types";
+} from '../graphql-client/types';
 
 import {
   AllOperations,
   OperationVariables,
   ResponseWithType,
   ReturnData,
-} from "./operation-types";
+} from './operation-types';
 
 export {
   AllOperations,
@@ -21,10 +21,10 @@ export {
   OperationVariables,
   ReturnData,
   ResponseWithType,
-} from "./operation-types";
+} from './operation-types';
 
 export interface UnsupportedApiVersionLog extends LogContent {
-  type: "Unsupported_Api_Version";
+  type: 'Unsupported_Api_Version';
   content: {
     apiVersion: string;
     supportedApiVersions: string[];
@@ -55,7 +55,7 @@ export type ApiClientRequestOptions<
   retries?: number;
 } & (Operation extends keyof Operations
   ? OperationVariables<Operation, Operations>
-  : { variables?: Record<string, any> });
+  : {variables?: Record<string, any>});
 
 export type ApiClientRequestParams<
   Operation extends keyof Operations,

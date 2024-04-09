@@ -1,6 +1,6 @@
-import type { ApiType } from "../types";
+import type {ApiType} from '../types';
 
-import { apiConfigs } from "./api-configs";
+import {apiConfigs} from './api-configs';
 
 export function getSchemaData(
   outputDir: string,
@@ -11,12 +11,12 @@ export function getSchemaData(
 
   return {
     schema: config.schema.replace(
-      "%%API_VERSION%%",
-      apiVersion ? `/${apiVersion}` : "",
+      '%%API_VERSION%%',
+      apiVersion ? `/${apiVersion}` : '',
     ),
     schemaFile: `${outputDir}/${config.schemaFile.replace(
-      "%%API_VERSION%%",
-      apiVersion ? `-${apiVersion}` : "",
+      '%%API_VERSION%%',
+      apiVersion ? `-${apiVersion}` : '',
     )}`,
   };
 }

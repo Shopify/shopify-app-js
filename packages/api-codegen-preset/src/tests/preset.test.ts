@@ -1,16 +1,16 @@
-import path from "path";
+import path from 'path';
 
-import { executeCodegen } from "@graphql-codegen/cli";
-import { pluckConfig } from "@shopify/graphql-codegen";
+import {executeCodegen} from '@graphql-codegen/cli';
+import {pluckConfig} from '@shopify/graphql-codegen';
 
-import { ApiType, preset } from "..";
+import {ApiType, preset} from '..';
 
-const getCodegenOptions = (fixture: string, output = "out.d.ts") => ({
+const getCodegenOptions = (fixture: string, output = 'out.d.ts') => ({
   pluckConfig: pluckConfig as any,
   generates: {
     [output]: {
       preset,
-      schema: path.join(__dirname, "fixtures", "schema.graphql"),
+      schema: path.join(__dirname, 'fixtures', 'schema.graphql'),
       documents: path.join(__dirname, `fixtures/${fixture}`),
       presetConfig: {
         apiType: ApiType.Admin,
@@ -19,18 +19,18 @@ const getCodegenOptions = (fixture: string, output = "out.d.ts") => ({
   },
 });
 
-describe("Preset", () => {
-  it("includes ESLint comments, types with Pick, generated operations and augments interfaces", async () => {
-    const result = await executeCodegen(getCodegenOptions("operations.ts"));
+describe('Preset', () => {
+  it('includes ESLint comments, types with Pick, generated operations and augments interfaces', async () => {
+    const result = await executeCodegen(getCodegenOptions('operations.ts'));
 
     expect(result).toHaveLength(1);
 
     const generatedCode = result.find(
-      (file) => file.filename === "out.d.ts",
+      (file) => file.filename === 'out.d.ts',
     )!.content;
 
     // Disables ESLint
-    expect(generatedCode).toMatch("/* eslint-disable */");
+    expect(generatedCode).toMatch('/* eslint-disable */');
 
     // Imports Admin API
     expect(generatedCode).toMatch(

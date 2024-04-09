@@ -1,11 +1,11 @@
-import fetchMock from "jest-fetch-mock";
+import fetchMock from 'jest-fetch-mock';
 
-import { generateHttpFetch } from "../http-fetch";
-import { CustomFetchApi } from "../types";
+import {generateHttpFetch} from '../http-fetch';
+import {CustomFetchApi} from '../types';
 
-const globalFetchMock = JSON.stringify({ data: {} });
+const globalFetchMock = JSON.stringify({data: {}});
 
-const url = "http://localhost:1234/graphql";
+const url = 'http://localhost:1234/graphql';
 export const operation = `
 query {
   shop {
@@ -16,14 +16,14 @@ query {
 
 export const variables = {};
 
-describe("httpFetch utility", () => {
+describe('httpFetch utility', () => {
   let clientLogger: jest.Mock = jest.fn();
 
   fetchMock.enableMocks();
 
   beforeEach(() => {
     jest
-      .spyOn(global, "setTimeout")
+      .spyOn(global, 'setTimeout')
       .mockImplementation(jest.fn((resolve) => resolve() as any));
     fetchMock.mockResponse(() => Promise.resolve(globalFetchMock));
     clientLogger = jest.fn();
@@ -34,28 +34,28 @@ describe("httpFetch utility", () => {
     jest.restoreAllMocks();
   });
 
-  describe("generateHttpFetch()", () => {
-    describe("initialization", () => {
-      it("can create a new function", () => {
-        const httpFetch = generateHttpFetch({ clientLogger });
+  describe('generateHttpFetch()', () => {
+    describe('initialization', () => {
+      it('can create a new function', () => {
+        const httpFetch = generateHttpFetch({clientLogger});
 
         expect(httpFetch).toBeDefined();
       });
     });
 
-    describe("httpFetch()", () => {
-      it("uses the global fetch when a custom fetch API is not provided at initialization", () => {
-        const httpFetch = generateHttpFetch({ clientLogger });
+    describe('httpFetch()', () => {
+      it('uses the global fetch when a custom fetch API is not provided at initialization', () => {
+        const httpFetch = generateHttpFetch({clientLogger});
 
-        httpFetch([url, { method: "POST", body: operation }], 1, 0);
+        httpFetch([url, {method: 'POST', body: operation}], 1, 0);
 
         expect(fetch).toHaveBeenCalledWith(url, {
-          method: "POST",
+          method: 'POST',
           body: operation,
         });
       });
 
-      it("uses the fetch override if one is given", () => {
+      it('uses the fetch override if one is given', () => {
         const mockFetch = jest.fn();
         mockFetch.mockReturnValue(
           Promise.resolve(new Response(globalFetchMock)),
@@ -66,24 +66,24 @@ describe("httpFetch utility", () => {
           clientLogger,
         });
 
-        httpFetch([url, { method: "POST", body: operation }], 1, 0);
+        httpFetch([url, {method: 'POST', body: operation}], 1, 0);
 
         expect(fetch).not.toHaveBeenCalled();
         expect(mockFetch).toHaveBeenCalledWith(url, {
-          method: "POST",
+          method: 'POST',
           body: operation,
         });
       });
 
-      it("uses all fetch RequestInit fields", async () => {
-        const httpFetch = generateHttpFetch({ clientLogger });
+      it('uses all fetch RequestInit fields', async () => {
+        const httpFetch = generateHttpFetch({clientLogger});
 
         const requestParams: Parameters<CustomFetchApi> = [
           url,
           {
-            method: "POST",
-            body: JSON.stringify({ query: operation }),
-            headers: { "X-My-Header": "1" },
+            method: 'POST',
+            body: JSON.stringify({query: operation}),
+            headers: {'X-My-Header': '1'},
           },
         ];
 
@@ -92,8 +92,8 @@ describe("httpFetch utility", () => {
         expect(fetch).toHaveBeenCalledWith(...requestParams);
       });
 
-      it("uses default client name for errors", async () => {
-        const httpFetch = generateHttpFetch({ clientLogger });
+      it('uses default client name for errors', async () => {
+        const httpFetch = generateHttpFetch({clientLogger});
 
         fetchMock.mockAbort();
 
@@ -103,8 +103,8 @@ describe("httpFetch utility", () => {
         expect(fetch).toHaveBeenCalledTimes(1);
       });
 
-      it("logs responses with client name override", async () => {
-        const httpFetch = generateHttpFetch({ clientLogger, client: "foo" });
+      it('logs responses with client name override', async () => {
+        const httpFetch = generateHttpFetch({clientLogger, client: 'foo'});
 
         fetchMock.mockAbort();
 
@@ -114,14 +114,14 @@ describe("httpFetch utility", () => {
         expect(fetch).toHaveBeenCalledTimes(1);
       });
 
-      describe("retries", () => {
+      describe('retries', () => {
         let httpFetch: ReturnType<typeof generateHttpFetch>;
 
         beforeEach(() => {
-          httpFetch = generateHttpFetch({ clientLogger });
+          httpFetch = generateHttpFetch({clientLogger});
         });
 
-        it("waits for the override retry wait time", async () => {
+        it('waits for the override retry wait time', async () => {
           const httpFetch = generateHttpFetch({
             clientLogger,
             defaultRetryWaitTime: 500,
@@ -137,8 +137,8 @@ describe("httpFetch utility", () => {
           expect(setTimeout).toHaveBeenCalledWith(expect.any(Function), 500);
         });
 
-        describe("Aborted fetch responses", () => {
-          it("calls the global fetch 1 time and throws a plain error when the client retries value is 0", async () => {
+        describe('Aborted fetch responses', () => {
+          it('calls the global fetch 1 time and throws a plain error when the client retries value is 0', async () => {
             fetchMock.mockAbort();
 
             await expect(async () => {
@@ -147,7 +147,7 @@ describe("httpFetch utility", () => {
             expect(fetch).toHaveBeenCalledTimes(1);
           });
 
-          it("calls the global fetch 2 times and throws a retry error when the client was initialized with 1 retries and all fetches were aborted", async () => {
+          it('calls the global fetch 2 times and throws a retry error when the client was initialized with 1 retries and all fetches were aborted', async () => {
             fetchMock.mockAbort();
 
             await expect(async () => {
@@ -160,7 +160,7 @@ describe("httpFetch utility", () => {
             expect(fetch).toHaveBeenCalledTimes(2);
           });
 
-          it("calls the global fetch 3 times and throws a retry error when the function is provided with 2 retries and all fetches were aborted", async () => {
+          it('calls the global fetch 3 times and throws a retry error when the function is provided with 2 retries and all fetches were aborted', async () => {
             fetchMock.mockAbort();
 
             await expect(async () => {
@@ -174,7 +174,7 @@ describe("httpFetch utility", () => {
             expect(fetch).toHaveBeenCalledTimes(3);
           });
 
-          it("returns a valid http response after an aborted fetch and the next response is valid", async () => {
+          it('returns a valid http response after an aborted fetch and the next response is valid', async () => {
             fetchMock.mockAbortOnce();
 
             const response = await httpFetch([operation], 1, 2);
@@ -183,7 +183,7 @@ describe("httpFetch utility", () => {
             expect(fetch).toHaveBeenCalledTimes(2);
           });
 
-          it("delays a retry by 1000ms", async () => {
+          it('delays a retry by 1000ms', async () => {
             fetchMock.mockAbort();
 
             await expect(async () => {
@@ -194,14 +194,14 @@ describe("httpFetch utility", () => {
             expect(setTimeout).toHaveBeenCalledWith(expect.any(Function), 1000);
           });
 
-          it("logs each retry attempt if a logger is provided", async () => {
+          it('logs each retry attempt if a logger is provided', async () => {
             fetchMock.mockAbort();
 
             const requestParams: Parameters<CustomFetchApi> = [
               url,
               {
-                method: "POST",
-                body: JSON.stringify({ query: operation }),
+                method: 'POST',
+                body: JSON.stringify({query: operation}),
               },
             ];
 
@@ -211,7 +211,7 @@ describe("httpFetch utility", () => {
 
             expect(clientLogger).toHaveBeenCalledTimes(2);
             expect(clientLogger).toHaveBeenNthCalledWith(1, {
-              type: "HTTP-Retry",
+              type: 'HTTP-Retry',
               content: {
                 requestParams,
                 lastResponse: undefined,
@@ -221,7 +221,7 @@ describe("httpFetch utility", () => {
             });
 
             expect(clientLogger).toHaveBeenNthCalledWith(2, {
-              type: "HTTP-Retry",
+              type: 'HTTP-Retry',
               content: {
                 requestParams,
                 lastResponse: undefined,
@@ -232,16 +232,16 @@ describe("httpFetch utility", () => {
           });
         });
 
-        describe("429 responses", () => {
+        describe('429 responses', () => {
           const status = 429;
           const mockedFailedResponse = new Response(JSON.stringify({}), {
             status,
             headers: new Headers({
-              "Content-Type": "application/json",
+              'Content-Type': 'application/json',
             }),
           });
 
-          it("calls the global fetch 1 time and returns the failed http response when the client default retries value is 0", async () => {
+          it('calls the global fetch 1 time and returns the failed http response when the client default retries value is 0', async () => {
             fetchMock.mockResolvedValue(mockedFailedResponse);
             const response = await httpFetch([operation], 1, 0);
 
@@ -249,7 +249,7 @@ describe("httpFetch utility", () => {
             expect(fetch).toHaveBeenCalledTimes(1);
           });
 
-          it("calls the global fetch 2 times and returns the failed http response when the client was initialized with 1 retries and all fetches returned 429 responses", async () => {
+          it('calls the global fetch 2 times and returns the failed http response when the client was initialized with 1 retries and all fetches returned 429 responses', async () => {
             fetchMock.mockResolvedValue(mockedFailedResponse);
 
             const response = await httpFetch([operation], 1, 1);
@@ -258,7 +258,7 @@ describe("httpFetch utility", () => {
             expect(fetch).toHaveBeenCalledTimes(2);
           });
 
-          it("calls the global fetch 3 times and returns the failed http response when the function is provided with 2 retries and all fetches returned 429 responses", async () => {
+          it('calls the global fetch 3 times and returns the failed http response when the function is provided with 2 retries and all fetches returned 429 responses', async () => {
             fetchMock.mockResolvedValue(mockedFailedResponse);
             const response = await httpFetch([operation], 1, 2);
 
@@ -266,11 +266,11 @@ describe("httpFetch utility", () => {
             expect(fetch).toHaveBeenCalledTimes(3);
           });
 
-          it("returns a valid response after an a failed 429 fetch response and the next response is valid", async () => {
-            const mockedSuccessData = { data: {} };
+          it('returns a valid response after an a failed 429 fetch response and the next response is valid', async () => {
+            const mockedSuccessData = {data: {}};
             fetchMock.mockResponses(
-              ["", { status }],
-              [JSON.stringify(mockedSuccessData), { status: 200 }],
+              ['', {status}],
+              [JSON.stringify(mockedSuccessData), {status: 200}],
             );
 
             const response = await httpFetch([operation], 1, 2);
@@ -280,11 +280,11 @@ describe("httpFetch utility", () => {
             expect(fetch).toHaveBeenCalledTimes(2);
           });
 
-          it("returns a failed non 429/503 response after an a failed 429 fetch response and the next response has failed", async () => {
-            const mockedSuccessData = { data: {} };
+          it('returns a failed non 429/503 response after an a failed 429 fetch response and the next response has failed', async () => {
+            const mockedSuccessData = {data: {}};
             fetchMock.mockResponses(
-              ["", { status }],
-              [JSON.stringify(mockedSuccessData), { status: 500 }],
+              ['', {status}],
+              [JSON.stringify(mockedSuccessData), {status: 500}],
             );
 
             const response = await httpFetch([operation], 1, 2);
@@ -294,7 +294,7 @@ describe("httpFetch utility", () => {
             expect(fetch).toHaveBeenCalledTimes(2);
           });
 
-          it("delays a retry by 1000ms", async () => {
+          it('delays a retry by 1000ms', async () => {
             fetchMock.mockResolvedValue(mockedFailedResponse);
 
             const response = await httpFetch([operation], 1, 1);
@@ -305,18 +305,18 @@ describe("httpFetch utility", () => {
             expect(setTimeout).toHaveBeenCalledWith(expect.any(Function), 1000);
           });
 
-          it("logs each retry attempt if a logger is provided", async () => {
+          it('logs each retry attempt if a logger is provided', async () => {
             fetchMock.mockResolvedValue(mockedFailedResponse);
 
             const requestParams: Parameters<CustomFetchApi> = [
               url,
-              { method: "POST", body: JSON.stringify({ query: operation }) },
+              {method: 'POST', body: JSON.stringify({query: operation})},
             ];
 
             await httpFetch(requestParams, 1, 2);
 
             const retryLogs = clientLogger.mock.calls.filter(
-              (args) => args[0].type === "HTTP-Retry",
+              (args) => args[0].type === 'HTTP-Retry',
             );
 
             expect(retryLogs.length).toBe(2);
@@ -335,16 +335,16 @@ describe("httpFetch utility", () => {
           });
         });
 
-        describe("503 responses", () => {
+        describe('503 responses', () => {
           const status = 503;
           const mockedFailedResponse = new Response(JSON.stringify({}), {
             status,
             headers: new Headers({
-              "Content-Type": "application/json",
+              'Content-Type': 'application/json',
             }),
           });
 
-          it("calls the global fetch 1 time and returns the failed http response when the client default retries value is 0", async () => {
+          it('calls the global fetch 1 time and returns the failed http response when the client default retries value is 0', async () => {
             fetchMock.mockResolvedValue(mockedFailedResponse);
             const response = await httpFetch([operation], 1, 0);
 
@@ -352,7 +352,7 @@ describe("httpFetch utility", () => {
             expect(fetch).toHaveBeenCalledTimes(1);
           });
 
-          it("calls the global fetch 2 times and returns the failed http response when the client was initialized with 1 retries and all fetch responses were 503 ", async () => {
+          it('calls the global fetch 2 times and returns the failed http response when the client was initialized with 1 retries and all fetch responses were 503 ', async () => {
             fetchMock.mockResolvedValue(mockedFailedResponse);
 
             const response = await httpFetch([operation], 1, 1);
@@ -361,7 +361,7 @@ describe("httpFetch utility", () => {
             expect(fetch).toHaveBeenCalledTimes(2);
           });
 
-          it("calls the global fetch 3 times and returns the failed http response when the function is provided with 2 retries and all fetch responses were 503", async () => {
+          it('calls the global fetch 3 times and returns the failed http response when the function is provided with 2 retries and all fetch responses were 503', async () => {
             fetchMock.mockResolvedValue(mockedFailedResponse);
             const response = await httpFetch([operation], 1, 2);
 
@@ -369,11 +369,11 @@ describe("httpFetch utility", () => {
             expect(fetch).toHaveBeenCalledTimes(3);
           });
 
-          it("returns a valid response after a failed 503 fetch response and the next response is valid", async () => {
-            const mockedSuccessData = { data: {} };
+          it('returns a valid response after a failed 503 fetch response and the next response is valid', async () => {
+            const mockedSuccessData = {data: {}};
             fetchMock.mockResponses(
-              ["", { status }],
-              [JSON.stringify(mockedSuccessData), { status: 200 }],
+              ['', {status}],
+              [JSON.stringify(mockedSuccessData), {status: 200}],
             );
 
             const response = await httpFetch([operation], 1, 2);
@@ -383,11 +383,11 @@ describe("httpFetch utility", () => {
             expect(fetch).toHaveBeenCalledTimes(2);
           });
 
-          it("returns a failed non 429/503 response after a failed 503 fetch response and the next response has failed", async () => {
-            const mockedSuccessData = { data: {} };
+          it('returns a failed non 429/503 response after a failed 503 fetch response and the next response has failed', async () => {
+            const mockedSuccessData = {data: {}};
             fetchMock.mockResponses(
-              ["", { status }],
-              [JSON.stringify(mockedSuccessData), { status: 500 }],
+              ['', {status}],
+              [JSON.stringify(mockedSuccessData), {status: 500}],
             );
 
             const response = await httpFetch([operation], 1, 1);
@@ -397,7 +397,7 @@ describe("httpFetch utility", () => {
             expect(fetch).toHaveBeenCalledTimes(2);
           });
 
-          it("delays a retry by 1000ms", async () => {
+          it('delays a retry by 1000ms', async () => {
             fetchMock.mockResolvedValue(mockedFailedResponse);
 
             const response = await httpFetch([operation], 1, 1);
@@ -408,17 +408,17 @@ describe("httpFetch utility", () => {
             expect(setTimeout).toHaveBeenCalledWith(expect.any(Function), 1000);
           });
 
-          it("logs each retry attempt if a logger is provided", async () => {
+          it('logs each retry attempt if a logger is provided', async () => {
             fetchMock.mockResolvedValue(mockedFailedResponse);
 
             const requestParams: Parameters<CustomFetchApi> = [
               url,
-              { method: "POST", body: JSON.stringify({ query: operation }) },
+              {method: 'POST', body: JSON.stringify({query: operation})},
             ];
             await httpFetch(requestParams, 1, 2);
 
             const retryLogs = clientLogger.mock.calls.filter(
-              (args) => args[0].type === "HTTP-Retry",
+              (args) => args[0].type === 'HTTP-Retry',
             );
 
             expect(retryLogs.length).toBe(2);
@@ -437,13 +437,13 @@ describe("httpFetch utility", () => {
           });
         });
 
-        it("does not retry additional network requests if the initial response is successful", async () => {
+        it('does not retry additional network requests if the initial response is successful', async () => {
           const mockedSuccessResponse = new Response(
-            JSON.stringify({ data: {} }),
+            JSON.stringify({data: {}}),
             {
               status: 200,
               headers: new Headers({
-                "Content-Type": "application/json",
+                'Content-Type': 'application/json',
               }),
             },
           );
@@ -455,13 +455,13 @@ describe("httpFetch utility", () => {
           expect(fetch).toHaveBeenCalledTimes(1);
         });
 
-        it("does not retry additional network requests on a failed response that is not a 429 or 503", async () => {
+        it('does not retry additional network requests on a failed response that is not a 429 or 503', async () => {
           const mockedFailedResponse = new Response(
-            JSON.stringify({ data: {} }),
+            JSON.stringify({data: {}}),
             {
               status: 500,
               headers: new Headers({
-                "Content-Type": "application/json",
+                'Content-Type': 'application/json',
               }),
             },
           );

@@ -1,12 +1,12 @@
-import { CustomFetchApi } from "@shopify/graphql-client";
+import {CustomFetchApi} from '@shopify/graphql-client';
 
-import { AdminApiClientOptions } from "../types";
+import {AdminApiClientOptions} from '../types';
 
 export enum Method {
-  Get = "GET",
-  Post = "POST",
-  Put = "PUT",
-  Delete = "DELETE",
+  Get = 'GET',
+  Post = 'POST',
+  Put = 'PUT',
+  Delete = 'DELETE',
 }
 
 type SearchParamField = string | number;
@@ -27,7 +27,7 @@ export interface GetRequestOptions {
 }
 
 export interface PostRequestOptions extends GetRequestOptions {
-  data: Required<GetRequestOptions>["data"];
+  data: Required<GetRequestOptions>['data'];
 }
 
 export interface PutRequestOptions extends PostRequestOptions {}
@@ -35,7 +35,7 @@ export interface PutRequestOptions extends PostRequestOptions {}
 export interface DeleteRequestOptions extends GetRequestOptions {}
 
 export interface AdminRestApiClientOptions extends AdminApiClientOptions {
-  scheme?: "https" | "http";
+  scheme?: 'https' | 'http';
   defaultRetryTime?: number;
   formatPaths?: boolean;
 }

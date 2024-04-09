@@ -5,21 +5,21 @@ import {
   validateDomainAndGetStoreUrl,
   generateGetGQLClientParams,
   generateGetHeaders,
-} from "@shopify/graphql-client";
+} from '@shopify/graphql-client';
 
 import {
   DEFAULT_CONTENT_TYPE,
   ACCESS_TOKEN_HEADER,
   CLIENT,
   DEFAULT_CLIENT_VERSION,
-} from "../constants";
+} from '../constants';
 import {
   validateRequiredAccessToken,
   validateServerSideUsage,
-} from "../validations";
-import { AdminApiClientConfig, AdminApiClientOptions } from "../types";
+} from '../validations';
+import {AdminApiClientConfig, AdminApiClientOptions} from '../types';
 
-import { AdminApiClient, AdminOperations } from "./types";
+import {AdminApiClient, AdminOperations} from './types';
 
 export function createAdminApiClient({
   storeDomain,
@@ -63,11 +63,11 @@ export function createAdminApiClient({
     apiVersion,
     accessToken,
     headers: {
-      "Content-Type": DEFAULT_CONTENT_TYPE,
+      'Content-Type': DEFAULT_CONTENT_TYPE,
       Accept: DEFAULT_CONTENT_TYPE,
       [ACCESS_TOKEN_HEADER]: accessToken,
-      "User-Agent": `${
-        userAgentPrefix ? `${userAgentPrefix} | ` : ""
+      'User-Agent': `${
+        userAgentPrefix ? `${userAgentPrefix} | ` : ''
       }${CLIENT} v${DEFAULT_CLIENT_VERSION}`,
     },
     apiUrl: apiUrlFormatter(),
@@ -110,7 +110,7 @@ function generateApiUrlFormatter(
   defaultApiVersion: string,
   baseApiVersionValidationParams: Omit<
     Parameters<typeof validateApiVersion>[0],
-    "apiVersion"
+    'apiVersion'
   >,
 ) {
   return (apiVersion?: string) => {
@@ -130,7 +130,7 @@ function generateApiUrlFormatter(
 function generateGetApiUrl(
   config: AdminApiClientConfig,
   apiUrlFormatter: (version?: string) => string,
-): AdminApiClient["getApiUrl"] {
+): AdminApiClient['getApiUrl'] {
   return (propApiVersion?: string) => {
     return propApiVersion ? apiUrlFormatter(propApiVersion) : config.apiUrl;
   };
