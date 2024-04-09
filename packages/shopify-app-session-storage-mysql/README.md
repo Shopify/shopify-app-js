@@ -14,6 +14,16 @@ const shopify = shopifyApp({
   // ...
 });
 
+// OR with ssl options set
+
+const shopify = shopifyApp({
+  sessionStorage: new MySQLSessionStorage(
+    'mysql://username:password@host/database?ssl={"rejectUnauthorized":true}',
+    {connectionPoolLimit: 10}, // optional
+  ),
+  // ...
+});
+
 // OR
 
 const shopify = shopifyApp({
