@@ -9,5 +9,5 @@ const fetchFunc = fetch;
 setAbstractFetchFunc(async (...args) => {
   const response = await fetchFunc(...args);
 
-  return response;
+  return response as any;
 });

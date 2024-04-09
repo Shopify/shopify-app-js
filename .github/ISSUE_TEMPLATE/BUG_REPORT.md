@@ -8,8 +8,8 @@ labels: 'Type: Bug 🐛'
 
 Before opening this issue, I have:
 
-- [ ] Upgraded to the latest version of the package
-  - `@shopify/shopify-app-*` package and version:
+- [ ] Upgraded to the latest version of the relevant packages
+  - `@shopify/*` package and version:
   - Node version:
   - Operating system:
 - [ ] Set `{ logger: { level: LogSeverity.Debug } }` in my configuration, when applicable

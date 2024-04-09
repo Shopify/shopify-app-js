@@ -32,7 +32,6 @@
     "test:ci": "yarn test && yarn test:rest_resources && yarn test:adapters",
     "test": "jest --selectProjects library",
     "pretest:adapters": "yarn build && yarn rollup -c adapters/__e2etests__/rollup.test-web-api-app.config.js",
-    "posttest:adapters": "yarn clean",
     "test:adapters": "jest --selectProjects adapters:mock adapters:node adapters:cf-worker adapters:web-api",
     "test:rest_resources": "jest --selectProjects rest_resources",
     "lint": "jest --selectProjects lint",

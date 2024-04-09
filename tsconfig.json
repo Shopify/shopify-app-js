@@ -2,6 +2,11 @@
   "files": [],
   "include": [],
   "references": [
+    {"path": "./packages/admin-api-client"},
+    {"path": "./packages/api-codegen-preset"},
+    {"path": "./packages/graphql-client"},
+    {"path": "./packages/shopify-api"},
+    {"path": "./packages/storefront-api-client"},
     {"path": "./packages/shopify-app-session-storage"},
     {"path": "./packages/shopify-app-session-storage-test-utils"},
     {"path": "./packages/shopify-app-session-storage-dynamodb"},
