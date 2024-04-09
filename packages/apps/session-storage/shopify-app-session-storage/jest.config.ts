@@ -1,6 +1,6 @@
 import type {Config} from 'jest';
 
-import baseConfig from '../../config/tests/jest.config';
+import baseConfig from '../../../../config/tests/jest.config';
 
 const config: Config = {
   ...baseConfig,

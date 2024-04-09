@@ -1,6 +1,6 @@
 import type {Config} from 'jest';
 
-import baseConfig from '../../config/tests/jest.config';
+import baseConfig from '../../../config/tests/jest.config';
 
 const esModules = ['@web3-storage'].join('|');
 
@@ -24,7 +24,7 @@ const config: Config = {
       testMatch: ['**/*.test.ts', '**/*.test.tsx'],
       setupFilesAfterEnv: [
         ...(baseConfig.setupFilesAfterEnv ?? []),
-        '../../packages/shopify-app-remix/src/server/adapters/node/__tests__/setup-jest.ts',
+        `${__dirname}/src/server/adapters/node/__tests__/setup-jest.ts`,
       ],
       testPathIgnorePatterns: ['src/react', 'src/server/adapters/__tests__'],
     },
@@ -34,7 +34,7 @@ const config: Config = {
       testMatch: ['**/*.test.ts', '**/*.test.tsx'],
       setupFilesAfterEnv: [
         ...(baseConfig.setupFilesAfterEnv ?? []),
-        '../../packages/shopify-app-remix/src/server/adapters/vercel/__tests__/setup-jest.ts',
+        `${__dirname}/src/server/adapters/vercel/__tests__/setup-jest.ts`,
       ],
       testPathIgnorePatterns: ['src/react', 'src/server/adapters/__tests__'],
     },

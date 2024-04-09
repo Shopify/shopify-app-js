@@ -20,7 +20,7 @@
     "build": "yarn run rollup && yarn tsc -p ./tsconfig.build.json",
     "test": "jest",
     "test:ci": "yarn test",
-    "rollup": "rollup -c ../../config/rollup/rollup.config.js --bundleConfigAsCjs",
+    "rollup": "rollup -c rollup.config.js --bundleConfigAsCjs",
     "clean": "rimraf .rollup.cache dist",
     "changeset": "changeset",
     "version": "changeset version",

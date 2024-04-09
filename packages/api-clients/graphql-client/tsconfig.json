@@ -13,5 +13,5 @@
     "allowSyntheticDefaultImports": true,
     "strictPropertyInitialization": true
   },
-  "extends": "../../tsconfig.base.json",
+  "extends": "../../../tsconfig.base.json"
 }

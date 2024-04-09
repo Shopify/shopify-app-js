@@ -16,17 +16,17 @@ module.exports = {
         '**/setup-jest.ts',
         '**/rollup.config.js',
         '**/rollup.config.*.js',
-        'packages/shopify-app-express/src/__tests__/test-helper.ts',
-        'packages/admin-api-client/src/rest/tests/client.test.ts',
-        'packages/shopify-api/adapters/__e2etests__/rollup.test-web-api-app.config.ts',
-        'packages/storefront-api-client/src/tests/setupTests.ts',
+        'packages/api-clients/admin-api-client/src/rest/tests/client.test.ts',
+        'packages/api-clients/storefront-api-client/src/tests/setupTests.ts',
+        'packages/apps/shopify-app-express/src/__tests__/test-helper.ts',
+        'packages/apps/shopify-api/adapters/__e2etests__/rollup.test-web-api-app.config.ts',
       ],
       rules: {
         'import/no-extraneous-dependencies': 0,
       },
     },
     {
-      files: ['packages/shopify-app-remix/src/__tests__/index.test.ts'],
+      files: ['packages/apps/shopify-app-remix/src/__tests__/index.test.ts'],
       rules: {
         '@babel/no-unused-expressions': 0,
       },

@@ -15,5 +15,5 @@
   "exclude": [
     "**/*.test.ts", "**/test/*", "**/__tests__/*",
   ],
-  "extends": "../../tsconfig.base.json",
+  "extends": "../../../tsconfig.base.json",
 }
