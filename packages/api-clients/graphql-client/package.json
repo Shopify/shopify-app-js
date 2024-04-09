@@ -4,7 +4,7 @@
   "description": "Shopify GraphQL Client - A lightweight generic GraphQL JS client to interact with Shopify GraphQL APIs",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Shopify/shopify-api-js.git"
+    "url": "git+https://github.com/Shopify/shopify-app-js.git"
   },
   "author": "Shopify",
   "license": "MIT",
@@ -91,7 +91,7 @@
     "web-streams-polyfill": "^4.0.0"
   },
   "bugs": {
-    "url": "https://github.com/Shopify/shopify-api-js/issues"
+    "url": "https://github.com/Shopify/shopify-app-js/issues"
   },
-  "homepage": "https://github.com/Shopify/shopify-api-js/tree/main/packages/graphql-client#readme"
+  "homepage": "https://github.com/Shopify/shopify-app-js/tree/main/packages/api-clients/graphql-client#readme"
 }

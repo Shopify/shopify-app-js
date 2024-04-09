@@ -9,7 +9,7 @@
   "bugs": {
     "url": "https://github.com/Shopify/shopify-app-express/issues"
   },
-  "homepage": "https://github.com/Shopify/shopify-app-express/tree/main/packages/shopify-app-express",
+  "homepage": "https://github.com/Shopify/shopify-app-express/tree/main/packages/apps/shopify-app-express",
   "author": "Shopify Inc.",
   "license": "MIT",
   "main": "./dist/cjs/index.js",

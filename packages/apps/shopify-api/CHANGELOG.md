@@ -93,7 +93,7 @@
   <details>
 
   ```ts
-  const { session, headers } = shopify.auth.callback({
+  const {session, headers} = shopify.auth.callback({
     rawRequest: req,
     rawResponse: res,
   });
@@ -297,13 +297,13 @@
   Before:
 
   ```ts
-  import { gdprTopics } from "@shopify/shopify-api";
+  import {gdprTopics} from '@shopify/shopify-api';
   ```
 
   After:
 
   ```ts
-  import { privacyTopics } from "@shopify/shopify-api";
+  import {privacyTopics} from '@shopify/shopify-api';
   ```
 
 ### Minor Changes
@@ -356,13 +356,13 @@
           {
             interval: BillingInterval.Usage,
             amount: 30,
-            currencyCode: "USD",
-            terms: "per 1000 emails",
+            currencyCode: 'USD',
+            terms: 'per 1000 emails',
           },
           {
             interval: BillingInterval.Every30Days,
             amount: 30,
-            currencyCode: "USD",
+            currencyCode: 'USD',
             discount: {
               durationLimitInIntervals: 3,
               value: {
@@ -403,7 +403,7 @@
 
   <!-- markdown-link-check-disable -->
 
-  For details on what's changed in this version, please see the [V8 migration guide](/packages/shopify-api/docs/migrating-to-v8.md).
+  For details on what's changed in this version, please see the [V8 migration guide](/packages/apps/shopify-api/docs/migrating-to-v8.md).
 
   <!-- markdown-link-check-enable -->
 
@@ -734,7 +734,7 @@
   Before:
 
   ```js
-  app.post("/graphql", async (req, res) => {
+  app.post('/graphql', async (req, res) => {
     await Shopify.Utils.graphqlProxy(req, res);
   });
   ```
@@ -742,7 +742,7 @@
   After:
 
   ```js
-  app.post("/graphql", async (req, res) => {
+  app.post('/graphql', async (req, res) => {
     const response = await Shopify.Utils.graphqlProxy(req, res);
     res.status(200).send(response.body);
   });
