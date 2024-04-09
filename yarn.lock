@@ -3945,11 +3945,6 @@
     globby "^11.1.0"
     typescript "^4.8.3 || ^5.0.0"
 
-"@shopify/graphql-client@^0.9.4":
-  version "0.9.4"
-  resolved "https://registry.yarnpkg.com/@shopify/graphql-client/-/graphql-client-0.9.4.tgz#751cd2134d29fb6e18df248b4e6b82116ecb1077"
-  integrity sha512-6O2FEda9iGpeFftBvicLzgMu3mq0ovfsK3IDz6G89bU5R06YDccdKLF/qyp/bzdl2jsbqvNtgEBL00xx95utPA==
-
 "@shopify/graphql-codegen@^0.0.1":
   version "0.0.1"
   resolved "https://registry.yarnpkg.com/@shopify/graphql-codegen/-/graphql-codegen-0.0.1.tgz#5d1633d148db7fb091b51af50087b55cca8a6ff1"
@@ -4004,13 +3999,6 @@
     jest-matcher-utils "^26.6.2"
     react-is "^18.0.0"
     react-reconciler "^0.28.0"
-
-"@shopify/storefront-api-client@^0.2.3":
-  version "0.2.4"
-  resolved "https://registry.yarnpkg.com/@shopify/storefront-api-client/-/storefront-api-client-0.2.4.tgz#952fc54ef1593df3d536cb3ad478fa5e77958288"
-  integrity sha512-BWlmLgghMwHCSMUoGQhGU35RTqAOzaW86djdTcCU4/gNygEj56mSgH5sb7Rq+5Uiq0N9kX9CMoJY4TSQR2AIbA==
-  dependencies:
-    "@shopify/graphql-client" "^0.9.4"
 
 "@shopify/typescript-configs@^5.1.0":
   version "5.1.0"

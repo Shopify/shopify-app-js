@@ -1,11 +1,10 @@
 import path from 'path';
+
 import typescript from '@rollup/plugin-typescript';
 import resolve from '@rollup/plugin-node-resolve';
 import commonjs from '@rollup/plugin-commonjs';
 import replace from '@rollup/plugin-replace';
 import excludeDependenciesFromBundle from 'rollup-plugin-exclude-dependencies-from-bundle';
-
-import * as pkg from '../../package.json';
 
 export function getPlugins(outDir) {
   return [
@@ -46,7 +45,7 @@ export const cjsConfigs = {
   exports: 'named',
 };
 
-export function getConfig(input = 'src/index.ts') {
+export function getConfig(pkg, input = 'src/index.ts') {
   return [
     {
       input,
@@ -62,7 +61,3 @@ export function getConfig(input = 'src/index.ts') {
     },
   ];
 }
-
-const config = getConfig();
-
-export default config;
