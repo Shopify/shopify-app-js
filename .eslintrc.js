@@ -18,8 +18,8 @@ module.exports = {
         '**/rollup.config.*.js',
         'packages/api-clients/admin-api-client/src/rest/tests/client.test.ts',
         'packages/api-clients/storefront-api-client/src/tests/setupTests.ts',
-        'packages/apps/shopify-app-express/src/__tests__/test-helper.ts',
         'packages/apps/shopify-api/adapters/__e2etests__/rollup.test-web-api-app.config.ts',
+        'packages/apps/shopify-app-express/src/__tests__/test-helper.ts',
       ],
       rules: {
         'import/no-extraneous-dependencies': 0,

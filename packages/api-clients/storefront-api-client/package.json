@@ -4,7 +4,7 @@
   "description": "Shopify Storefront API Client - A lightweight JS client to interact with Shopify's Storefront API",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Shopify/shopify-api-js.git"
+    "url": "git+https://github.com/Shopify/shopify-app-js.git"
   },
   "author": "Shopify",
   "license": "MIT",
@@ -89,7 +89,7 @@
     "jest-environment-jsdom": "^29.5.0"
   },
   "bugs": {
-    "url": "https://github.com/Shopify/shopify-api-js/issues"
+    "url": "https://github.com/Shopify/shopify-app-js/issues"
   },
-  "homepage": "https://github.com/Shopify/shopify-api-js/tree/main/packages/storefront-api-client#readme"
+  "homepage": "https://github.com/Shopify/shopify-app-js/tree/main/packages/api-clients/storefront-api-client#readme"
 }

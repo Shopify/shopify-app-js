@@ -79,7 +79,7 @@
 
 ### Major Changes
 
-- d3e4b5e: Updated `@shopify/shopify-api` to the latest major version. Please follow [the v9 migration guide](https://github.com/Shopify/shopify-api-js/blob/main/packages/shopify-api/docs/migrating-to-v9.md) to update your app.
+- d3e4b5e: Updated `@shopify/shopify-api` to the latest major version. Please follow [the v9 migration guide](/packages/apps/shopify-api/docs/migrating-to-v9.md) to update your app.
 
 ### Patch Changes
 
@@ -242,7 +242,7 @@ const myVariable: ShopifyApp<
 - f8978a5: Add `X-Shopify-Api-Request-Failure-Reauthorize` and `X-Shopify-Api-Request-Failure-Reauthorize-Url` to `Access-Control-Expose-Headers` when redirecting using headers via App Bridge.
 - 553fd67: Respond with 410 to OAuth requests that are initiated by a bot, using bot detection mechanism introduced in 7.1.0 of API library.
 - f40fede: Bumps [semver](https://github.com/npm/node-semver) from 7.4.0 to 7.5.0. See semver [changelog](https://github.com/npm/node-semver/blob/main/CHANGELOG.md) for more details.
-- 1d007e8: Bumps [@shopify/shopify-api](https://github.com/Shopify/shopify-api-js) from 7.0.0 to 7.1.0. See `@shopify/shopify-api`'s [changelog](https://github.com/Shopify/shopify-api-js/blob/main/packages/shopify-api/CHANGELOG.md) for more details.
+- 1d007e8: Bumps [@shopify/shopify-api](/packages/apps/shopify-api) from 7.0.0 to 7.1.0. See `@shopify/shopify-api`'s [changelog](/packages/apps/shopify-api/CHANGELOG.md) for more details.
 - Updated dependencies [e1d4f4f]
 - Updated dependencies [1d007e8]
   - @shopify/shopify-app-session-storage@1.1.3
@@ -258,9 +258,9 @@ const myVariable: ShopifyApp<
 
 ### Major Changes
 
-- 814a9c1: Bump @shopify/shopify-api from 6.2.0 to 7.0.0. See [changelog](https://github.com/Shopify/shopify-api-js/blob/main/packages/shopify-api/CHANGELOG.md) for details.
+- 814a9c1: Bump @shopify/shopify-api from 6.2.0 to 7.0.0. See [changelog](/packages/apps/shopify-api/CHANGELOG.md) for details.
 
-  ⚠️ [Breaking] Refer to the [6 to 7 migration guide](https://github.com/Shopify/shopify-api-js/blob/main/packages/shopify-api/docs/migrating-to-v7.md) for more details on how the `.api` property returned by `shopifyApp` may be impacted by this release of the API library.
+  ⚠️ [Breaking] Refer to the [6 to 7 migration guide](/packages/apps/shopify-api/docs/migrating-to-v7.md) for more details on how the `.api` property returned by `shopifyApp` may be impacted by this release of the API library.
 
   ⚠️ [Breaking] If your app is using the logging methods of the `.config.logger` property returned by `shopifyApp`, it is no longer `async`.
 

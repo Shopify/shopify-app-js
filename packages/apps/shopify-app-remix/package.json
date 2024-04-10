@@ -9,7 +9,7 @@
   "bugs": {
     "url": "https://github.com/Shopify/shopify-app-js/issues"
   },
-  "homepage": "https://github.com/Shopify/shopify-app-js/tree/main/packages/shopify-app-remix",
+  "homepage": "https://github.com/Shopify/shopify-app-js/tree/main/packages/apps/shopify-app-remix",
   "author": "Shopify Inc.",
   "license": "MIT",
   "main": "./dist/cjs/server/index.js",

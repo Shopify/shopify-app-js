@@ -46,12 +46,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Shopify/shopify-api-js.git"
+    "url": "git+https://github.com/Shopify/shopify-app-js.git"
   },
   "bugs": {
-    "url": "https://github.com/Shopify/shopify-api-js/issues"
+    "url": "https://github.com/Shopify/shopify-app-js/issues"
   },
-  "homepage": "https://github.com/Shopify/shopify-api-js",
+  "homepage": "https://github.com/Shopify/shopify-app-js/tree/main/packages/apps/shopify-api",
   "author": "Shopify Inc.",
   "license": "MIT",
   "keywords": [

@@ -234,7 +234,7 @@
         },
         "sectionCard": [
           {
-            "url": "https://github.com/Shopify/shopify-api-js/tree/main/packages/api-codegen-preset#configuration",
+            "url": "https://github.com/Shopify/shopify-app-js/tree/main/packages/api-clients/api-codegen-preset#configuration",
             "name": "Configuration options",
             "subtitle": "Learn more about the available configurations.",
             "type": "github"

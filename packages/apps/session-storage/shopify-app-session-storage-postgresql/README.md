@@ -36,4 +36,4 @@ const shopify = shopifyApp({
 });
 ```
 
-If you prefer to use your own implementation of a session storage mechanism that is compatible with the `@shopify/shopify-app-express` package, see the [implementing session storage guide](https://github.com/Shopify/shopify-app-js/blob/main/packages/shopify-app-session-storage/implementing-session-storage.md).
+If you prefer to use your own implementation of a session storage mechanism that is compatible with the `@shopify/shopify-app-express` package, see the [implementing session storage guide](/packages/apps/session-storage/shopify-app-session-storage/implementing-session-storage.md).

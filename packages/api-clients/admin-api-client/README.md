@@ -50,62 +50,62 @@ const {data, errors, extensions} = await client.request(operation, {
 
 #### `createAdminApiClient()` parameters
 
-| Property            | Type             | Description                                                                                                                                                                                                                                          |
-| ------------------- | ---------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| storeDomain         | `string`         | The `myshopify.com` domain |
-| apiVersion          | `string`         | The requested Admin API version |
-| accessToken         | `string`         | The Admin API access token |
-| userAgentPrefix?    | `string`         | Any prefix you wish to include in the User-Agent for requests made by the library. |
-| retries?            | `number`         | The number of HTTP request retries if the request was abandoned or the server responded with a `Too Many Requests (429)` or `Service Unavailable (503)` response. Default value is `0`. Maximum value is `3`. |
-| customFetchApi?     | `(url: string, init?: {method?: string, headers?: HeaderInit, body?: string}) => Promise<Response>` | A replacement `fetch` function that will be used in all client network requests. By default, the client uses `window.fetch()`. |
-| logger?             | `(logContent:`[`UnsupportedApiVersionLog`](#unsupportedapiversionlog) ` \| `[`HTTPResponseLog`](#httpresponselog)`\|`[`HTTPRetryLog`](#httpretrylog)`) => void` | A logger function that accepts [log content objects](#log-content-types). This logger will be called in certain conditions with contextual information. |
+| Property         | Type                                                                                                                                                          | Description                                                                                                                                                                                                   |
+| ---------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| storeDomain      | `string`                                                                                                                                                      | The `myshopify.com` domain                                                                                                                                                                                    |
+| apiVersion       | `string`                                                                                                                                                      | The requested Admin API version                                                                                                                                                                               |
+| accessToken      | `string`                                                                                                                                                      | The Admin API access token                                                                                                                                                                                    |
+| userAgentPrefix? | `string`                                                                                                                                                      | Any prefix you wish to include in the User-Agent for requests made by the library.                                                                                                                            |
+| retries?         | `number`                                                                                                                                                      | The number of HTTP request retries if the request was abandoned or the server responded with a `Too Many Requests (429)` or `Service Unavailable (503)` response. Default value is `0`. Maximum value is `3`. |
+| customFetchApi?  | `(url: string, init?: {method?: string, headers?: HeaderInit, body?: string}) => Promise<Response>`                                                           | A replacement `fetch` function that will be used in all client network requests. By default, the client uses `window.fetch()`.                                                                                |
+| logger?          | `(logContent:`[`UnsupportedApiVersionLog`](#unsupportedapiversionlog) `\|`[`HTTPResponseLog`](#httpresponselog)`\|`[`HTTPRetryLog`](#httpretrylog)`) => void` | A logger function that accepts [log content objects](#log-content-types). This logger will be called in certain conditions with contextual information.                                                       |
 
 ### Client properties
 
-| Property      | Type                                                                                                                                                                       | Description                                                                                                                                                                                                                                                                                                                                                                |
-| ------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| config        | [`AdminApiClientConfig`](#adminapiclientconfig-properties)                                                                                                                                                             | Configuration for the client                                                                                                                                                                                                                                                                                                                                               |
-| getHeaders    | `(headers?: Record<string, string \| string[]>) => Record<string, string \| string[]>`                                                                                                       | Returns Admin API specific headers needed to interact with the API. If additional `headers` are provided, the custom headers will be included in the returned headers object.                                                                                                                                                                                               |
-| getApiUrl     | `(apiVersion?: string) => string`                                                                                                                                          | Returns the shop specific API url. If an API version is provided, the returned URL will include the provided version, else the URL will include the API version set at client initialization.                                                                                                                                                                              |
-| fetch         | `(operation: string, options?:`[`AdminAPIClientRequestOptions`](#adminapiclientrequestoptions-properties)`) => Promise<Response>`                                          | Fetches data from Admin API using the provided GQL `operation` string and [`AdminAPIClientRequestOptions`](#adminapiclientrequestoptions-properties) object and returns the network response.                                                                                                                                                                                 |
-| request       | `<TData>(operation: string, options?:`[`AdminAPIClientRequestOptions`](#adminapiclientrequestoptions-properties)`) => Promise<`[`ClientResponse<TData>`](#clientresponsetdata)`>` | Requests data from Admin API using the provided GQL `operation` string and [`AdminAPIClientRequestOptions`](#adminapiclientrequestoptions-properties) object and returns a normalized response object.                                                                                                                                                                        |
+| Property   | Type                                                                                                                                                                              | Description                                                                                                                                                                                            |
+| ---------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| config     | [`AdminApiClientConfig`](#adminapiclientconfig-properties)                                                                                                                        | Configuration for the client                                                                                                                                                                           |
+| getHeaders | `(headers?: Record<string, string \| string[]>) => Record<string, string \| string[]>`                                                                                            | Returns Admin API specific headers needed to interact with the API. If additional `headers` are provided, the custom headers will be included in the returned headers object.                          |
+| getApiUrl  | `(apiVersion?: string) => string`                                                                                                                                                 | Returns the shop specific API url. If an API version is provided, the returned URL will include the provided version, else the URL will include the API version set at client initialization.          |
+| fetch      | `(operation: string, options?:`[`AdminAPIClientRequestOptions`](#adminapiclientrequestoptions-properties)`) => Promise<Response>`                                                 | Fetches data from Admin API using the provided GQL `operation` string and [`AdminAPIClientRequestOptions`](#adminapiclientrequestoptions-properties) object and returns the network response.          |
+| request    | `<TData>(operation: string, options?:`[`AdminAPIClientRequestOptions`](#adminapiclientrequestoptions-properties)`) => Promise<`[`ClientResponse<TData>`](#clientresponsetdata)`>` | Requests data from Admin API using the provided GQL `operation` string and [`AdminAPIClientRequestOptions`](#adminapiclientrequestoptions-properties) object and returns a normalized response object. |
 
 ### `AdminApiClientConfig` properties
 
-| Name           | Type                     | Description                                          |
-| -------------- | ------------------------ | ---------------------------------------------------- |
-| storeDomain     | `string`    | The `myshopify.com` domain      |
-| apiVersion    | `string`                 | The Admin API version to use in the API request |
-| accessToken | `string` | The provided public access token. If `privateAccessToken` was provided, `publicAccessToken` will not be available. |
-| headers | `Record<string, string \| string[]>` | The headers generated by the client during initialization |
-| apiUrl | `string` | The API URL generated from the provided store domain and api version |
-| retries? | `number` | The number of retries the client will attempt when the API responds with a `Too Many Requests (429)` or `Service Unavailable (503)` response |
+| Name        | Type                                 | Description                                                                                                                                  |
+| ----------- | ------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------- |
+| storeDomain | `string`                             | The `myshopify.com` domain                                                                                                                   |
+| apiVersion  | `string`                             | The Admin API version to use in the API request                                                                                              |
+| accessToken | `string`                             | The provided public access token. If `privateAccessToken` was provided, `publicAccessToken` will not be available.                           |
+| headers     | `Record<string, string \| string[]>` | The headers generated by the client during initialization                                                                                    |
+| apiUrl      | `string`                             | The API URL generated from the provided store domain and api version                                                                         |
+| retries?    | `number`                             | The number of retries the client will attempt when the API responds with a `Too Many Requests (429)` or `Service Unavailable (503)` response |
 
 ### `ApiClientRequestOptions` properties
 
-| Name           | Type                     | Description                                          |
-| -------------- | ------------------------ | ---------------------------------------------------- |
-| variables?     | `Record<string, any>`    | Variable values needed in the graphQL operation      |
-| apiVersion?    | `string`                 | The Admin API version to use in the API request      |
-| headers?       | `Record<string, string \| string[]>`| Customized headers to be included in the API request |
-| retries?       | `number`                 | Alternative number of retries for the request. Retries only occur for requests that were abandoned or if the server responds with a `Too Many Request (429)` or `Service Unavailable (503)` response. Minimum value is `0` and maximum value is `3`. |
+| Name        | Type                                 | Description                                                                                                                                                                                                                                          |
+| ----------- | ------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| variables?  | `Record<string, any>`                | Variable values needed in the graphQL operation                                                                                                                                                                                                      |
+| apiVersion? | `string`                             | The Admin API version to use in the API request                                                                                                                                                                                                      |
+| headers?    | `Record<string, string \| string[]>` | Customized headers to be included in the API request                                                                                                                                                                                                 |
+| retries?    | `number`                             | Alternative number of retries for the request. Retries only occur for requests that were abandoned or if the server responds with a `Too Many Request (429)` or `Service Unavailable (503)` response. Minimum value is `0` and maximum value is `3`. |
 
 ### `ClientResponse<TData>`
 
-| Name        | Type                      | Description                                                                                                                                                                                         |
-| ----------- | ------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| data?       | `TData \| any`            | Data returned from the Admin API. If `TData` was provided to the function, the return type is `TData`, else it returns type `any`.                                                                  |
+| Name        | Type                                | Description                                                                                                                                                                                         |
+| ----------- | ----------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| data?       | `TData \| any`                      | Data returned from the Admin API. If `TData` was provided to the function, the return type is `TData`, else it returns type `any`.                                                                  |
 | errors?     | [`ResponseErrors`](#responseerrors) | Error object that contains any API or network errors that occured while fetching the data from the API. It does not include any `UserErrors`.                                                       |
-| extensions? | `Record<string, any>`    | Additional information on the GraphQL response data and context. It can include the `context` object that contains the localization context information used to generate the returned API response. |
+| extensions? | `Record<string, any>`               | Additional information on the GraphQL response data and context. It can include the `context` object that contains the localization context information used to generate the returned API response. |
 
 ### `ResponseErrors`
 
-| Name        | Type                  | Description                                                                                                                                                                                         |
-| ----------- | --------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| networkStatusCode?       | `number`        | HTTP response status code                                                             |
-| message?      | `string`       | The provided error message                                                       |
-| graphQLErrors? | `any[]` | The GraphQL API errors returned by the server |
-| response? | `Response` | The raw response object from the network fetch call |
+| Name               | Type       | Description                                         |
+| ------------------ | ---------- | --------------------------------------------------- |
+| networkStatusCode? | `number`   | HTTP response status code                           |
+| message?           | `string`   | The provided error message                          |
+| graphQLErrors?     | `any[]`    | The GraphQL API errors returned by the server       |
+| response?          | `Response` | The raw response object from the network fetch call |
 
 #### Client `request()` response examples
 
@@ -122,15 +122,15 @@ const {data, errors, extensions} = await client.request(operation, {
       "title": "Aera",
       "handle": "aera-helmet"
     }
-    },
-    "extensions": {
+  },
+  "extensions": {
     "cost": {
       "requestedQueryCost": 1,
       "actualQueryCost": 1,
       "throttleStatus": {
-      "maximumAvailable": 1000.0,
-      "currentlyAvailable": 999,
-      "restoreRate": 50.0
+        "maximumAvailable": 1000.0,
+        "currentlyAvailable": 999,
+        "restoreRate": 50.0
       }
     }
   }
@@ -289,41 +289,43 @@ const {data, errors, extensions} = await client.request(productQuery, {
 This client is compatible with the `@shopify/api-codegen-preset` package.
 You can use that package to create types from your operations with the [Codegen CLI](https://www.graphql-cli.com/codegen/).
 
-There are different ways to [configure codegen](https://github.com/Shopify/shopify-api-js/tree/main/packages/api-codegen-preset#configuration) with it, but the simplest way is to:
+There are different ways to [configure codegen](/packages/api-clients/api-codegen-preset#configuration) with it, but the simplest way is to:
 
 1. Add the preset package as a dev dependency to your project, for example:
-    ```bash
-    npm install --save-dev @shopify/api-codegen-preset
-    ```
+   ```bash
+   npm install --save-dev @shopify/api-codegen-preset
+   ```
 1. Create a `.graphqlrc.ts` file in your root containing:
-    ```ts
-    import { ApiType, shopifyApiProject } from "@shopify/api-codegen-preset";
 
-    export default {
-      schema: "https://shopify.dev/admin-graphql-direct-proxy",
-      documents: ["*.ts", "!node_modules"],
-      projects: {
-        default: shopifyApiProject({
-          apiType: ApiType.Admin,
-          apiVersion: "2023-10",
-          outputDir: "./types",
-        }),
-      },
-    };
-    ```
+   ```ts
+   import {ApiType, shopifyApiProject} from '@shopify/api-codegen-preset';
+
+   export default {
+     schema: 'https://shopify.dev/admin-graphql-direct-proxy',
+     documents: ['*.ts', '!node_modules'],
+     projects: {
+       default: shopifyApiProject({
+         apiType: ApiType.Admin,
+         apiVersion: '2023-10',
+         outputDir: './types',
+       }),
+     },
+   };
+   ```
+
 1. Add `"graphql-codegen": "graphql-codegen"` to your `scripts` section in `package.json`.
 1. Tag your operations with `#graphql`, for example:
-    ```ts
-    const {data, errors, extensions} = await client.request(
-      `#graphql
-      query Shop {
-        shop {
-          name
-        }
-      }`
-    );
-    console.log(data?.shop.name);
-    ```
+   ```ts
+   const {data, errors, extensions} = await client.request(
+     `#graphql
+     query Shop {
+       shop {
+         name
+       }
+     }`,
+   );
+   console.log(data?.shop.name);
+   ```
 1. Run `npm run graphql-codegen` to parse the types from your operations.
 
 > [!NOTE]
@@ -338,35 +340,35 @@ When TS includes that file, it'll automatically cause the client to detect the t
 
 This log content is sent to the logger whenever an unsupported API version is provided to the client.
 
-| Property | Type                     | Description                        |
-| -------- | ------------------------ | ---------------------------------- |
-| type      | `LogType['Unsupported_Api_Version']`                 | The type of log content. Is always set to `Unsupported_Api_Version`            |
+| Property | Type                                                   | Description                                                                                          |
+| -------- | ------------------------------------------------------ | ---------------------------------------------------------------------------------------------------- |
+| type     | `LogType['Unsupported_Api_Version']`                   | The type of log content. Is always set to `Unsupported_Api_Version`                                  |
 | content  | `{apiVersion: string, supportedApiVersions: string[]}` | Contextual info including the provided API version and the list of currently supported API versions. |
 
 #### `HTTPResponseLog`
 
 This log content is sent to the logger whenever a HTTP response is received by the client.
 
-| Property | Type                     | Description                        |
-| -------- | ------------------------ | ---------------------------------- |
-| type      | `LogType['HTTP-Response']`                 | The type of log content. Is always set to `HTTP-Response`            |
+| Property | Type                                                                      | Description                                                 |
+| -------- | ------------------------------------------------------------------------- | ----------------------------------------------------------- |
+| type     | `LogType['HTTP-Response']`                                                | The type of log content. Is always set to `HTTP-Response`   |
 | content  | `{`[`requestParams`](#requestparams)`: [url, init?], response: Response}` | Contextual data regarding the request and received response |
 
 #### `HTTPRetryLog`
 
 This log content is sent to the logger whenever the client attempts to retry HTTP requests.
 
-| Property | Type                     | Description                        |
-| -------- | ------------------------ | ---------------------------------- |
-| type      | `LogType['HTTP-Retry']`                 | The type of log content. Is always set to `HTTP-Retry`            |
-| content  | `{`[`requestParams`](#requestparams)`: [url, init?], lastResponse?: Response, retryAttempt: number, maxRetries: number}` | Contextual data regarding the upcoming retry attempt. <br /><br/>`requestParams`: [parameters](#requestparams) used in the request<br/>`lastResponse`: previous response <br/> `retryAttempt`: the current retry attempt count <br/> `maxRetries`: the maximum number of retries  |
+| Property | Type                                                                                                                     | Description                                                                                                                                                                                                                                                                      |
+| -------- | ------------------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| type     | `LogType['HTTP-Retry']`                                                                                                  | The type of log content. Is always set to `HTTP-Retry`                                                                                                                                                                                                                           |
+| content  | `{`[`requestParams`](#requestparams)`: [url, init?], lastResponse?: Response, retryAttempt: number, maxRetries: number}` | Contextual data regarding the upcoming retry attempt. <br /><br/>`requestParams`: [parameters](#requestparams) used in the request<br/>`lastResponse`: previous response <br/> `retryAttempt`: the current retry attempt count <br/> `maxRetries`: the maximum number of retries |
 
 #### `RequestParams`
 
-| Property | Type                     | Description                        |
-| -------- | ------------------------ | ---------------------------------- |
-| url      | `string`                 | Requested URL            |
-| init?  | `{method?: string, headers?: HeaderInit, body?: string}` | The request information  |
+| Property | Type                                                     | Description             |
+| -------- | -------------------------------------------------------- | ----------------------- |
+| url      | `string`                                                 | Requested URL           |
+| init?    | `{method?: string, headers?: HeaderInit, body?: string}` | The request information |
 
 ## REST Client
 
@@ -387,7 +389,7 @@ const client = createAdminRestApiClient({
 Query for a product:
 
 ```typescript
-const response = await client.get("products/1234567890");
+const response = await client.get('products/1234567890');
 
 if (response.ok) {
   const body = await response.json();
@@ -396,37 +398,37 @@ if (response.ok) {
 
 #### `createAdminRestApiClient()` parameters
 
-| Property            | Type              | Description                                                                                                                                                                                                                                          |
-| ------------------- | ----------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| storeDomain         | `string`          | The `myshopify.com` domain |
-| apiVersion          | `string`          | The requested Admin API version |
-| accessToken         | `string`          | The Admin API access token |
-| userAgentPrefix?    | `string`          | Any prefix you wish to include in the User-Agent for requests made by the library. |
-| retries?            | `number`          | The number of HTTP request retries if the request was abandoned or the server responded with a `Too Many Requests (429)` or `Service Unavailable (503)` response. Default value is `0`. Maximum value is `3`. |
-| customFetchApi?     | `(url: string, init?: {method?: string, headers?: HeaderInit, body?: string}) => Promise<Response>` | A replacement `fetch` function that will be used in all client network requests. By default, the client uses `window.fetch()`. |
-| logger?             | `(logContent:`[`UnsupportedApiVersionLog`](#unsupportedapiversionlog) ` \| `[`HTTPResponseLog`](#httpresponselog)`\|`[`HTTPRetryLog`](#httpretrylog)`) => void` | A logger function that accepts [log content objects](#log-content-types). This logger will be called in certain conditions with contextual information. |
-| scheme?             | `http` \| `https` | The HTTP scheme to use for requests |
-| defaultRetryTime?   | `number`          | How long to wait for a retry when missing the `Retry-After` header |
-| formatPaths?        | `boolean`         | Whether to format paths, e.g. `products/123` => `/products/123.json` |
+| Property          | Type                                                                                                                                                          | Description                                                                                                                                                                                                   |
+| ----------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| storeDomain       | `string`                                                                                                                                                      | The `myshopify.com` domain                                                                                                                                                                                    |
+| apiVersion        | `string`                                                                                                                                                      | The requested Admin API version                                                                                                                                                                               |
+| accessToken       | `string`                                                                                                                                                      | The Admin API access token                                                                                                                                                                                    |
+| userAgentPrefix?  | `string`                                                                                                                                                      | Any prefix you wish to include in the User-Agent for requests made by the library.                                                                                                                            |
+| retries?          | `number`                                                                                                                                                      | The number of HTTP request retries if the request was abandoned or the server responded with a `Too Many Requests (429)` or `Service Unavailable (503)` response. Default value is `0`. Maximum value is `3`. |
+| customFetchApi?   | `(url: string, init?: {method?: string, headers?: HeaderInit, body?: string}) => Promise<Response>`                                                           | A replacement `fetch` function that will be used in all client network requests. By default, the client uses `window.fetch()`.                                                                                |
+| logger?           | `(logContent:`[`UnsupportedApiVersionLog`](#unsupportedapiversionlog) `\|`[`HTTPResponseLog`](#httpresponselog)`\|`[`HTTPRetryLog`](#httpretrylog)`) => void` | A logger function that accepts [log content objects](#log-content-types). This logger will be called in certain conditions with contextual information.                                                       |
+| scheme?           | `http` \| `https`                                                                                                                                             | The HTTP scheme to use for requests                                                                                                                                                                           |
+| defaultRetryTime? | `number`                                                                                                                                                      | How long to wait for a retry when missing the `Retry-After` header                                                                                                                                            |
+| formatPaths?      | `boolean`                                                                                                                                                     | Whether to format paths, e.g. `products/123` => `/products/123.json`                                                                                                                                          |
 
 ### Client properties
 
-| Property      | Type                                                            | Description                                                                                                                                                                    |
-| ------------- | --------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| get    | `(path: string, options?:`[`GetRequestOptions`](#getrequestoptions-properties)`) => Promise<Response>` | Performs a GET request to the API. |
-| post   | `(path: string, options?:`[`PostRequestOptions`](#postrequestoptions-properties)`) => Promise<Response>` | Performs a POST request to the API. |
-| put    | `(path: string, options?:`[`PutRequestOptions`](#putrequestoptions-properties)`) => Promise<Response>` | Performs a PUT request to the API. |
-| delete | `(path: string, options?:`[`DeleteRequestOptions`](#deleterequestoptions-properties)`) => Promise<Response>` | Performs a DELETE request to the API. |
+| Property | Type                                                                                                         | Description                           |
+| -------- | ------------------------------------------------------------------------------------------------------------ | ------------------------------------- |
+| get      | `(path: string, options?:`[`GetRequestOptions`](#getrequestoptions-properties)`) => Promise<Response>`       | Performs a GET request to the API.    |
+| post     | `(path: string, options?:`[`PostRequestOptions`](#postrequestoptions-properties)`) => Promise<Response>`     | Performs a POST request to the API.   |
+| put      | `(path: string, options?:`[`PutRequestOptions`](#putrequestoptions-properties)`) => Promise<Response>`       | Performs a PUT request to the API.    |
+| delete   | `(path: string, options?:`[`DeleteRequestOptions`](#deleterequestoptions-properties)`) => Promise<Response>` | Performs a DELETE request to the API. |
 
 ### `GetRequestOptions` properties
 
-| Name          | Type                                    | Description                                           |
-| ------------- | --------------------------------------- | ----------------------------------------------------- |
-| apiVersion?   | `string`                                | The Admin API version to use in the API request.      |
-| headers?      | `{[key: string]: string}`               | Customized headers to be included in the API request. |
-| searchParams? | `{ [key: string]: string \| number[] }` | Any extra query string arguments to include in the request. |
+| Name          | Type                                    | Description                                                                                                                                                                                                                                          |
+| ------------- | --------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| apiVersion?   | `string`                                | The Admin API version to use in the API request.                                                                                                                                                                                                     |
+| headers?      | `{[key: string]: string}`               | Customized headers to be included in the API request.                                                                                                                                                                                                |
+| searchParams? | `{ [key: string]: string \| number[] }` | Any extra query string arguments to include in the request.                                                                                                                                                                                          |
 | retries?      | `number`                                | Alternative number of retries for the request. Retries only occur for requests that were abandoned or if the server responds with a `Too Many Request (429)` or `Service Unavailable (503)` response. Minimum value is `0` and maximum value is `3.` |
-| data?         | `{ [key: string]: any } \| string`      | Request body data.                                    |
+| data?         | `{ [key: string]: any } \| string`      | Request body data.                                                                                                                                                                                                                                   |
 
 ### `PostRequestOptions` properties
 
@@ -445,7 +447,7 @@ Same options as for [GET requests](#getrequestoptions-properties).
 #### Query for a product
 
 ```typescript
-const response = await client.get("products/1234567890");
+const response = await client.get('products/1234567890');
 
 if (response.ok) {
   const body = await response.json();
@@ -455,15 +457,13 @@ if (response.ok) {
 #### Update a product
 
 ```typescript
-const response = await client.put("products/1234567890",
-  {
-    data: {
-      product: {
-        handle: "my-new-handle",
-      }
-    }
-  }
-);
+const response = await client.put('products/1234567890', {
+  data: {
+    product: {
+      handle: 'my-new-handle',
+    },
+  },
+});
 
 if (response.ok) {
   const body = await response.json();
@@ -473,11 +473,9 @@ if (response.ok) {
 #### Dynamically set the Admin API version per data fetch
 
 ```typescript
-const response = await client.get("products/1234567890",
-  {
-    apiVersion: '2023-01',
-  }
-);
+const response = await client.get('products/1234567890', {
+  apiVersion: '2023-01',
+});
 
 if (response.ok) {
   const body = await response.json();
@@ -487,13 +485,11 @@ if (response.ok) {
 #### Add custom headers to API request
 
 ```typescript
-const response = await client.get("products/1234567890",
-  {
-    headers: {
-      'X-My-Custom-Header': "1",
-    },
-  }
-);
+const response = await client.get('products/1234567890', {
+  headers: {
+    'X-My-Custom-Header': '1',
+  },
+});
 
 if (response.ok) {
   const body = await response.json();
@@ -503,11 +499,9 @@ if (response.ok) {
 #### Dynamically set the number of retries per request
 
 ```typescript
-const response = await client.get("products/1234567890",
-  {
-    retries: 2,
-  }
-);
+const response = await client.get('products/1234567890', {
+  retries: 2,
+});
 
 if (response.ok) {
   const body = await response.json();
