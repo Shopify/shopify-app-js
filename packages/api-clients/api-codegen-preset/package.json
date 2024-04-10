@@ -4,13 +4,13 @@
   "description": "Preset for graphql-codegen to parse and type queries to Shopify APIs",
   "author": "Shopify",
   "license": "MIT",
-  "homepage": "https://github.com/Shopify/shopify-api-js/tree/main/packages/api-codegen-preset#readme",
+  "homepage": "https://github.com/Shopify/shopify-app-js/tree/main/packages/api-clients/api-codegen-preset#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Shopify/shopify-api-js.git"
+    "url": "git+https://github.com/Shopify/shopify-app-js.git"
   },
   "bugs": {
-    "url": "https://github.com/Shopify/shopify-api-js/issues"
+    "url": "https://github.com/Shopify/shopify-app-js/issues"
   },
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",

@@ -121,13 +121,13 @@
 ### Patch Changes
 
 - e1d4f4f: Add @shopify/shopify-api as a peerDependencies entry for each session-storage package, to avoid API library conflicts (e.g., scopesArray.map error). Should help avoid issues like #93
-- 1d007e8: Bumps [@shopify/shopify-api](https://github.com/Shopify/shopify-api-js) from 7.0.0 to 7.1.0. See `@shopify/shopify-api`'s [changelog](https://github.com/Shopify/shopify-api-js/blob/main/packages/shopify-api/CHANGELOG.md) for more details.
+- 1d007e8: Bumps [@shopify/shopify-api](/packages/apps/shopify-api) from 7.0.0 to 7.1.0. See `@shopify/shopify-api`'s [changelog](/packages/apps/shopify-api/CHANGELOG.md) for more details.
 
 ## 1.1.2
 
 ### Patch Changes
 
-- e4f3415: Bump @shopify/shopify-api from 6.2.0 to 7.0.0. See [changelog](https://github.com/Shopify/shopify-api-js/blob/main/packages/shopify-api/CHANGELOG.md) for details.
+- e4f3415: Bump @shopify/shopify-api from 6.2.0 to 7.0.0. See [changelog](/packages/apps/shopify-api/CHANGELOG.md) for details.
 
 ## 1.1.1
 

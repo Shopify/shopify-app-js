@@ -1,5 +1,7 @@
-import {getConfig} from '../../config/rollup/rollup.config';
+import {getConfig} from '../../../../config/rollup/rollup-utils';
 
-const config = getConfig('src/sqlite.ts');
+import * as pkg from './package.json';
+
+const config = getConfig(pkg, 'src/sqlite.ts');
 
 export default config;

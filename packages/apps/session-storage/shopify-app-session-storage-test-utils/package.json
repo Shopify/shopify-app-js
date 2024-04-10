@@ -9,7 +9,7 @@
   "bugs": {
     "url": "https://github.com/Shopify/shopify-app-js/issues"
   },
-  "homepage": "https://github.com/Shopify/shopify-app-js/tree/main/packages/shopify-app-session-storage-test-utils",
+  "homepage": "https://github.com/Shopify/shopify-app-js/tree/main/packages/apps/session-storage/shopify-app-session-storage-test-utils",
   "author": "Shopify Inc.",
   "license": "MIT",
   "main": "./dist/cjs/index.js",
@@ -20,7 +20,7 @@
     "build": "yarn run rollup && yarn tsc -p ./tsconfig.build.json",
     "test": "jest",
     "test:ci": "yarn test",
-    "rollup": "rollup -c ../../config/rollup/rollup.config.js --bundleConfigAsCjs",
+    "rollup": "rollup -c rollup.config.js --bundleConfigAsCjs",
     "clean": "rimraf .rollup.cache dist",
     "changeset": "changeset",
     "version": "changeset version",

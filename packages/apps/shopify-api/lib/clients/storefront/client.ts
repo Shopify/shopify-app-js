@@ -86,7 +86,7 @@ export class StorefrontClient {
     logger(this.storefrontClass().config).deprecated(
       '10.0.0',
       'The query method is deprecated, and was replaced with the request method.\n' +
-        'See the migration guide: https://github.com/Shopify/shopify-api-js/blob/main/packages/shopify-api/docs/migrating-to-v9.md#using-the-new-clients.',
+        'See the migration guide: https://github.com/Shopify/shopify-app-js/blob/main/packages/apps/shopify-api/docs/migrating-to-v9.md#using-the-new-clients.',
     );
 
     if (

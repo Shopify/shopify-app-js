@@ -290,7 +290,7 @@ See [Access modes](https://shopify.dev/docs/apps/auth/oauth/access-modes) for mo
 
 1. The `SessionStorage` interface has been removed and any provided implementions have been removed from the library. The library only provides methods to obtain sessionId's. Responsibility for storing sessions is delegated to the application.
 
-   > **Note** The previous implementations of session storage have been converted into their own standalone packages in the [`Shopify/shopify-app-js` repo](https://github.com/Shopify/shopify-app-js/tree/main/packages) (see the list in the [Implementing session storage guide](./guides/session-storage.md)).
+   > **Note** The previous implementations of session storage have been converted into their own standalone packages in the [`Shopify/shopify-app-js` repo](/packages) (see the list in the [Implementing session storage guide](./guides/session-storage.md)).
 
 1. The `Session` constructor now takes an object which allows all properties of a session, and `Session.cloneSession` was removed since we can use a session as arguments for the clone.
    <div>Before
