@@ -1,68 +1,53 @@
-# `@shopify/shopify-app-js`
+# Shopify API and app tools for JavaScript
 
-This repo is a collection of packages that make it easy for apps to integrate with Shopify.
-They all build on top of the [@shopify/shopify-api](https://github.com/Shopify/shopify-api-js) package to cover specific use cases.
+This repository contains packages you can use to interact with Shopify's APIs.
+You can use these packages to create clients for those APIs directly, or to create apps using TypeScript / JavaScript.
 
-This mono-repo supports the following packages:
+It is organized as a [monorepo](https://monorepo.tools/), which includes multiple packages that can be used together.
 
-## App middleware
+## Packages
 
-#### [`@shopify/shopify-app-remix`](./packages/shopify-app-remix)
+The packages in this repository can be used to extend Shopify in different ways:
 
-- Provides functions to allow [Remix](https://remix.run) apps to communicate and authenticate requests from Shopify.
+- [API clients](#api-clients)
+- [Apps and middlewares](#apps-and-middlewares)
+- [Session storage](#session-storage)
 
-#### [`@shopify/shopify-app-express`](./packages/shopify-app-express)
+### [API clients](/packages/api-clients)
 
-- Creates a middleware layer that allows [Express.js](https://expressjs.com) apps to communicate with and authenticate requests from Shopify.
+These packages make it easy to interact with Shopify's APIs if you have the required [access tokens](https://shopify.dev/docs/apps/auth#types-of-authentication-and-authorization-methods).
 
-## Session storage options
+| Package                                                                                 | Latest version                                                                                                                                          | Description                                                                                                                          |
+| --------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
+| [`@shopify/admin-api-client`](/packages/api-clients/admin-api-client/#readme)           | [![Latest badge](https://img.shields.io/npm/v/@shopify/admin-api-client/latest.svg)](https://www.npmjs.com/package/@shopify/admin-api-client)           | Client for the [GraphQL](https://shopify.dev/docs/api/admin-graphql) and [REST](https://shopify.dev/docs/api/admin-rest) Admin APIs. |
+| [`@shopify/storefront-api-client`](/packages/api-clients/storefront-api-client/#readme) | [![Latest badge](https://img.shields.io/npm/v/@shopify/storefront-api-client/latest.svg)](https://www.npmjs.com/package/@shopify/storefront-api-client) | Client for the GraphQL [Storefront](https://shopify.dev/docs/api/storefront) API.                                                    |
+| [`@shopify/graphql-client`](/packages/api-clients/graphql-client/#readme)               | [![Latest badge](https://img.shields.io/npm/v/@shopify/graphql-client/latest.svg)](https://www.npmjs.com/package/@shopify/graphql-client)               | Generic GraphQL API client.                                                                                                          |
+| [`@shopify/api-codegen-preset`](/packages/api-clients/api-codegen-preset/#readme)       | [![Latest badge](https://img.shields.io/npm/v/@shopify/api-codegen-preset/latest.svg)](https://www.npmjs.com/package/@shopify/api-codegen-preset)       | [Codegen](https://the-guild.dev/graphql/codegen) preset for Shopify APIs. Automatically integrates with the clients above.           |
 
-#### [`@shopify/shopify-app-session-storage-prisma`](./packages/shopify-app-session-storage-prisma)
+### [Apps and middlewares](/packages/apps)
 
-- Provides an implementation of `SessionStorage` that uses [Prisma](https://www.prisma.io/).
+These packages make it easy to create Shopify apps with TS / JS using different tech stacks.
 
-#### [`@shopify/shopify-app-session-storage-drizzle`](./packages/shopify-app-session-storage-drizzle)
+| Package                                                                             | Latest version                                                                                                                                      | Description                                                                            |
+| ----------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------- |
+| [`@shopify/shopify-api`](/packages/api-clients/shopify-api/#readme)                 | [![Latest badge](https://img.shields.io/npm/v/@shopify/shopify-api/latest.svg)](https://www.npmjs.com/package/@shopify/shopify-api)                 | Framework and runtime agnostic library for Shopify OAuth, APIs, webhooks, and more.    |
+| [`@shopify/shopify-app-remix`](/packages/api-clients/shopify-app-remix/#readme)     | [![Latest badge](https://img.shields.io/npm/v/@shopify/shopify-app-remix/latest.svg)](https://www.npmjs.com/package/@shopify/shopify-app-remix)     | Implementation of `@shopify/shopify-api` to make it easy to create apps using Remix.   |
+| [`@shopify/shopify-app-express`](/packages/api-clients/shopify-app-express/#readme) | [![Latest badge](https://img.shields.io/npm/v/@shopify/shopify-app-express/latest.svg)](https://www.npmjs.com/package/@shopify/shopify-app-express) | Implementation of `@shopify/shopify-api` to make it easy to create apps using Express. |
 
-- Provides an implementation of `SessionStorage` that uses [Drizzle](https://orm.drizzle.team/).
+### [Session storage](/packages/apps/session-storage)
 
-#### [`@shopify/shopify-app-session-storage-memory`](./packages/shopify-app-session-storage-memory)
+These packages provide database-specific implementations to manage `@shopify/shopify-api` sessions.
 
-- Provides a simplified memory-based implementation of `SessionStorage` for development.
-
-#### [`@shopify/shopify-app-session-storage-sqlite`](./packages/shopify-app-session-storage-sqlite)
-
-- Provides an implementation of `SessionStorage` that uses [SQLite](https://www.sqlite.org).
-
-#### [`@shopify/shopify-app-session-storage-mongodb`](./packages/shopify-app-session-storage-mongodb)
-
-- Provides an implementation of `SessionStorage` that uses [MongoDB](https://www.mongodb.com/home).
-
-#### [`@shopify/shopify-app-session-storage-mysql`](./packages/shopify-app-session-storage-mysql)
-
-- Provides an implementation of `SessionStorage` that uses [MySQL](https://www.mysql.com).
-
-#### [`@shopify/shopify-app-session-storage-postgresql`](./packages/shopify-app-session-storage-postgresql)
-
-- Provides an implementation of `SessionStorage` that uses [PostgreSQL](https://www.postgresql.org).
-
-#### [`@shopify/shopify-app-session-storage-redis`](./packages/shopify-app-session-storage-redis)
-
-- Provides an implementation of `SessionStorage` that uses [Redis](https://redis.io).
-
-#### [`@shopify/shopify-app-session-storage-kv`](./packages/shopify-app-session-storage-kv)
-
-- Provides an implementation of `SessionStorage` that uses [CloudFlare KV storage](https://www.cloudflare.com/products/workers-kv).
-
-### Building a Session Storage Adaptor
-
-#### [`@shopify/shopify-app-session-storage`](./packages/shopify-app-session-storage)
-
-- Provides an interface that enables apps to store the sessions created during the OAuth process in `@shopify/shopify-api`.
-
-- You can assign any implementation of this interface to the [Middleware layer](#app-middleware) packages. You can also call them directly from your app even if you're not building with [Express.js](https://expressjs.com).
-
-### Community contributed implementations of `SessionStorage`
-
-#### [`@shopify/shopify-app-session-storage-dynamodb`](./packages/shopify-app-session-storage-dynamodb)
-
-- Provides an implementation of `SessionStorage` that uses [AWS DynamoDB](https://aws.amazon.com/dynamodb/). Contributed by [Chris](https://github.com/zirkelc) - thank you :clap:
+| Package                                                                                                                           | Latest version                                                                                                                                                                            | Description                                                                           |
+| --------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------- |
+| [`@shopify/shopify-app-session-storage`](/packages/apps/session-storage/shopify-app-session-storage#readme)                       | [![Latest badge](https://img.shields.io/npm/v/@shopify/shopify-app-session-storage/latest.svg)](https://www.npmjs.com/package/@shopify/shopify-app-session-storage)                       | Provides the interfaces used by the app middleware packages to write custom packages. |
+| [`@shopify/shopify-app-session-storage-drizzle`](/packages/apps/session-storage/shopify-app-session-storage-drizzle#readme)       | [![Latest badge](https://img.shields.io/npm/v/@shopify/shopify-app-session-storage-drizzle/latest.svg)](https://www.npmjs.com/package/@shopify/shopify-app-session-storage-drizzle)       | Drizzle implementation of the session storage interface.                              |
+| [`@shopify/shopify-app-session-storage-dynamodb`](/packages/apps/session-storage/shopify-app-session-storage-dynamodb#readme)     | [![Latest badge](https://img.shields.io/npm/v/@shopify/shopify-app-session-storage-dynamodb/latest.svg)](https://www.npmjs.com/package/@shopify/shopify-app-session-storage-dynamodb)     | DynamoDB implementation of the session storage interface.                             |
+| [`@shopify/shopify-app-session-storage-kv`](/packages/apps/session-storage/shopify-app-session-storage-kv#readme)                 | [![Latest badge](https://img.shields.io/npm/v/@shopify/shopify-app-session-storage-kv/latest.svg)](https://www.npmjs.com/package/@shopify/shopify-app-session-storage-kv)                 | Cloudflare KV implementation of the session storage interface.                        |
+| [`@shopify/shopify-app-session-storage-memory`](/packages/apps/session-storage/shopify-app-session-storage-memory#readme)         | [![Latest badge](https://img.shields.io/npm/v/@shopify/shopify-app-session-storage-memory/latest.svg)](https://www.npmjs.com/package/@shopify/shopify-app-session-storage-memory)         | Memory implementation of the session storage interface.                               |
+| [`@shopify/shopify-app-session-storage-mongodb`](/packages/apps/session-storage/shopify-app-session-storage-mongodb#readme)       | [![Latest badge](https://img.shields.io/npm/v/@shopify/shopify-app-session-storage-mongodb/latest.svg)](https://www.npmjs.com/package/@shopify/shopify-app-session-storage-mongodb)       | MongoDB implementation of the session storage interface.                              |
+| [`@shopify/shopify-app-session-storage-mysql`](/packages/apps/session-storage/shopify-app-session-storage-mysql#readme)           | [![Latest badge](https://img.shields.io/npm/v/@shopify/shopify-app-session-storage-mysql/latest.svg)](https://www.npmjs.com/package/@shopify/shopify-app-session-storage-mysql)           | Mysql implementation of the session storage interface.                                |
+| [`@shopify/shopify-app-session-storage-postgresql`](/packages/apps/session-storage/shopify-app-session-storage-postgresql#readme) | [![Latest badge](https://img.shields.io/npm/v/@shopify/shopify-app-session-storage-postgresql/latest.svg)](https://www.npmjs.com/package/@shopify/shopify-app-session-storage-postgresql) | PostgreSQL implementation of the session storage interface.                           |
+| [`@shopify/shopify-app-session-storage-prisma`](/packages/apps/session-storage/shopify-app-session-storage-prisma#readme)         | [![Latest badge](https://img.shields.io/npm/v/@shopify/shopify-app-session-storage-prisma/latest.svg)](https://www.npmjs.com/package/@shopify/shopify-app-session-storage-prisma)         | Prisma implementation of the session storage interface.                               |
+| [`@shopify/shopify-app-session-storage-redis`](/packages/apps/session-storage/shopify-app-session-storage-redis#readme)           | [![Latest badge](https://img.shields.io/npm/v/@shopify/shopify-app-session-storage-redis/latest.svg)](https://www.npmjs.com/package/@shopify/shopify-app-session-storage-redis)           | Redis implementation of the session storage interface.                                |
+| [`@shopify/shopify-app-session-storage-sqlite`](/packages/apps/session-storage/shopify-app-session-storage-sqlite#readme)         | [![Latest badge](https://img.shields.io/npm/v/@shopify/shopify-app-session-storage-sqlite/latest.svg)](https://www.npmjs.com/package/@shopify/shopify-app-session-storage-sqlite)         | SQLite implementation of the session storage interface.                               |

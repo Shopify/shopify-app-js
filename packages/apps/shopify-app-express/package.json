@@ -1,0 +1,65 @@
+{
+  "name": "@shopify/shopify-app-express",
+  "version": "4.1.4",
+  "description": "Shopify Express Middleware - to simplify the building of Shopify Apps with Express",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Shopify/shopify-app-express.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Shopify/shopify-app-express/issues"
+  },
+  "homepage": "https://github.com/Shopify/shopify-app-express/tree/main/packages/apps/shopify-app-express",
+  "author": "Shopify Inc.",
+  "license": "MIT",
+  "main": "./dist/cjs/index.js",
+  "module": "./dist/esm/index.mjs",
+  "types": "./dist/ts/index.d.ts",
+  "scripts": {
+    "lint": "eslint . --ext .js,.ts",
+    "build": "yarn run rollup && yarn tsc -p ./tsconfig.build.json",
+    "test": "jest",
+    "test:ci": "yarn test",
+    "rollup": "rollup -c rollup.config.js --bundleConfigAsCjs",
+    "clean": "rimraf .rollup.cache dist",
+    "changeset": "changeset",
+    "version": "changeset version",
+    "release": "yarn build && changeset publish"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "keywords": [
+    "shopify",
+    "node",
+    "express",
+    "app",
+    "graphql",
+    "rest",
+    "webhook",
+    "Admin API",
+    "Storefront API"
+  ],
+  "dependencies": {
+    "@shopify/shopify-api": "^9.7.1",
+    "@shopify/shopify-app-session-storage": "^2.1.3",
+    "@shopify/shopify-app-session-storage-memory": "^3.0.3",
+    "cookie-parser": "^1.4.6",
+    "express": "^4.19.2",
+    "semver": "^7.6.0"
+  },
+  "devDependencies": {
+    "@types/compression": "^1.7.5",
+    "@types/cookie-parser": "^1.4.6",
+    "@types/express": "^4.17.21",
+    "@types/jsonwebtoken": "^9.0.5",
+    "@types/supertest": "^6.0.2",
+    "jsonwebtoken": "^9.0.2",
+    "supertest": "^6.3.3"
+  },
+  "files": [
+    "dist/*",
+    "!tsconfig.tsbuildinfo",
+    "!node_modules"
+  ]
+}

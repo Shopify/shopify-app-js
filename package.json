@@ -7,7 +7,8 @@
     "build": "turbo build",
     "lint": "turbo lint --parallel",
     "test": "turbo run test --concurrency 1",
-    "test:ci": "turbo run test:ci --concurrency 1",
+    "test:ci": "turbo run test:ci --filter='!./packages/apps/session-storage/*' --concurrency 1",
+    "test:ci_sessions": "turbo run test:ci --filter=./packages/apps/session-storage/* --concurrency 2",
     "release": "turbo build && changeset publish",
     "dev": "turbo dev --no-cache --continue",
     "clean": "turbo clean",
@@ -15,8 +16,10 @@
     "version-packages": "changeset version"
   },
   "devDependencies": {
+    "@babel/plugin-transform-runtime": "^7.24.3",
     "@babel/preset-env": "^7.24.0",
     "@changesets/cli": "^2.27.1",
+    "@cloudflare/workers-types": "^4.20240402.0",
     "@jest/types": "^29.6.3",
     "@rollup/plugin-babel": "^6.0.3",
     "@rollup/plugin-commonjs": "^24.0.1",
@@ -25,6 +28,7 @@
     "@rollup/plugin-replace": "^5.0.2",
     "@rollup/plugin-terser": "^0.4.0",
     "@rollup/plugin-typescript": "^11.1.6",
+    "@shopify/babel-preset": "^25.0.0",
     "@shopify/eslint-plugin": "^44.0.0",
     "@shopify/prettier-config": "^1.1.2",
     "@shopify/typescript-configs": "^5.1.0",
@@ -44,7 +48,7 @@
     "ts-jest": "^29.1.2",
     "ts-node": "^10.9.2",
     "tslib": "^2.6.2",
-    "turbo": "^1.12.4",
+    "turbo": "^1.13.2",
     "typescript": "5.3.3"
   },
   "dependencies": {},
@@ -54,6 +58,10 @@
     "ts-jest": "^29.1.2"
   },
   "workspaces": [
-    "packages/*"
+    "packages/api-clients/*",
+    "packages/apps/shopify-api",
+    "packages/apps/shopify-app-remix",
+    "packages/apps/shopify-app-express",
+    "packages/apps/session-storage/*"
   ]
 }

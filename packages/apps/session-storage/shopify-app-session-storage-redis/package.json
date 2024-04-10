@@ -1,0 +1,60 @@
+{
+  "name": "@shopify/shopify-app-session-storage-redis",
+  "version": "3.0.3",
+  "description": "Shopify App Session Storage for Redis",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Shopify/shopify-app-js.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Shopify/shopify-app-js/issues"
+  },
+  "homepage": "https://github.com/Shopify/shopify-app-js/tree/main/packages/apps/session-storage/shopify-app-session-storage-redis",
+  "author": "Shopify Inc.",
+  "license": "MIT",
+  "main": "./dist/cjs/redis.js",
+  "module": "./dist/esm/redis.mjs",
+  "types": "./dist/ts/redis.d.ts",
+  "scripts": {
+    "lint": "eslint . --ext .js,.ts",
+    "build": "yarn run rollup && yarn tsc -p ./tsconfig.build.json",
+    "test": "jest",
+    "test:ci": "yarn test",
+    "rollup": "rollup -c rollup.config.js --bundleConfigAsCjs",
+    "clean": "rimraf .rollup.cache dist",
+    "changeset": "changeset",
+    "version": "changeset version",
+    "release": "yarn build && changeset publish"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "keywords": [
+    "shopify",
+    "node",
+    "app",
+    "graphql",
+    "rest",
+    "webhook",
+    "Admin API",
+    "Storefront API",
+    "session storage",
+    "redis",
+    "Redis"
+  ],
+  "dependencies": {
+    "redis": "^4.6.12"
+  },
+  "peerDependencies": {
+    "@shopify/shopify-api": "^9.7.1",
+    "@shopify/shopify-app-session-storage": "^2.1.3"
+  },
+  "devDependencies": {
+    "@shopify/shopify-app-session-storage-test-utils": "^2.0.3"
+  },
+  "files": [
+    "dist/*",
+    "!tsconfig.tsbuildinfo",
+    "!node_modules"
+  ]
+}

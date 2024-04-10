@@ -1,5 +1,10 @@
 on: [push, pull_request]
+
 name: CI
+
+env:
+  DISABLE_V8_COMPILE_CACHE: 1
+
 jobs:
   CI:
     name: CI_Node_${{ matrix.version }}
@@ -16,7 +21,9 @@ jobs:
         run: yarn install --ignore-engines
       - name: Build packages
         run: yarn build
-      - name: Run tests
-        run: yarn test
+      - name: Run package tests
+        run: yarn test:ci
+      - name: Run session storage tests
+        run: yarn test:ci_sessions
       - name: Run linting
         run: yarn lint
