@@ -1,6 +1,7 @@
 # Shopify API and app tools for JavaScript
 
-This repository contains packages you can use to interact with Shopify's APIs and create apps using TypeScript / JavaScript.
+This repository contains packages you can use to interact with Shopify's APIs.
+You can use these packages to create clients for those APIs directly, or to create apps using TypeScript / JavaScript.
 
 It is organized as a [monorepo](https://monorepo.tools/), which includes multiple packages that can be used together.
 
@@ -14,7 +15,7 @@ The packages in this repository can be used to extend Shopify in different ways:
 
 ### [API clients](/packages/api-clients)
 
-These packages make it easy to interact with Shopify's APIs if you have the required access tokens.
+These packages make it easy to interact with Shopify's APIs if you have the required [access tokens](https://shopify.dev/docs/apps/auth#types-of-authentication-and-authorization-methods).
 
 | Package                                                                                 | Latest version                                                                                                                                          | Description                                                                                                                          |
 | --------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
