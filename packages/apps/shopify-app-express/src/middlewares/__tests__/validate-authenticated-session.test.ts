@@ -25,12 +25,6 @@ describe('validateAuthenticatedSession', () => {
       shopify.api.config.isEmbeddedApp = true;
 
       app = express();
-      // Use a short timeout since everything here should be pretty quick. If you see a `socket hang up` error,
-      // it's probably because the timeout is too short.
-      app.use('*', (_req, res, next) => {
-        res.setTimeout(100);
-        next();
-      });
       app.use('/test/*', shopify.validateAuthenticatedSession());
       app.get('/test/shop', async (req, res) => {
         res.json({data: {shop: {name: req.query.shop}}});
