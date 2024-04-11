@@ -10,5 +10,8 @@ database.sqlite
 packages/**/build
 packages/**/*.tgz
 tmp/
-.loom
 .vscode/
+bundle/
+.turbo
+.rollup.cache
+rollup.config-*.cjs

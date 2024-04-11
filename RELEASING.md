@@ -53,8 +53,9 @@ See the sections below for specific details related to the steps outlined above.
    git checkout changeset-release/main
    ```
 
-1. If releasing the Express package, update the version string in the `packages/shopify-app-express/src/version.ts` file to match the version in the `packages/shopify-app-express/package.json` file.
-1. If releasing the Remix package, update the version string in the `packages/shopify-app-remix/src/version.ts` file to match the version in the `packages/shopify-app-remix/package.json` file.
+1. If releasing the `shopify-api` package, update the version string in the `packages/apps/shopify-api/lib/version.ts` file to match the version in the `packages/apps/shopify-api/package.json` file.
+1. If releasing the Express package, update the version string in the `packages/apps/shopify-app-express/src/version.ts` file to match the version in the `packages/apps/shopify-app-express/package.json` file.
+1. If releasing the Remix package, update the version string in the `packages/apps/shopify-app-remix/src/version.ts` file to match the version in the `packages/apps/shopify-app-remix/package.json` file.
 
 1. If needed, edit/remove any of the comments in the `CHANGELOG.md` files and commit them to the `changeset-release/main` branch.
 
@@ -95,13 +96,13 @@ For significant API changes that could result in significant refactoring on the 
    git checkout changeset-release/release-candidate
    ```
 
-1. If releasing the Express package, update the version string in the `packages/shopify-app-express/src/version.ts` file to match the version in the `packages/shopify-app-express/package.json` file. Make sure to add an `-rc.X` to the version, like so:
+1. If releasing the Express package, update the version string in the `packages/apps/shopify-app-express/src/version.ts` file to match the version in the `packages/apps/shopify-app-express/package.json` file. Make sure to add an `-rc.X` to the version, like so:
 
    ```text
    2.0.0-rc.1
    ```
 
-1. If releasing the Remix package, update the version string in the `packages/shopify-app-remix/src/version.ts` file to match the version in the `packages/shopify-app-remix/package.json` file. Make sure to add an `-rc.X` to the version, like so:
+1. If releasing the Remix package, update the version string in the `packages/apps/shopify-app-remix/src/version.ts` file to match the version in the `packages/apps/shopify-app-remix/package.json` file. Make sure to add an `-rc.X` to the version, like so:
 
    ```text
    2.0.0-rc.1
