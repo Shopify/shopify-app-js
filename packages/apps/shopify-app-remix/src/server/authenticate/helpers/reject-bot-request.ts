@@ -1,4 +1,4 @@
-import isbot from 'isbot';
+import {isbot} from 'isbot';
 
 import type {BasicParams} from '../../types';
 
