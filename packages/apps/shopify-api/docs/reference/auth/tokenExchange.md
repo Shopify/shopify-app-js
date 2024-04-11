@@ -71,7 +71,7 @@ A Shopify domain name in the form `{exampleshop}.myshopify.com`.
 
 `enum` | :exclamation: required
 
-[`RequestedTokenType` in token-exchange.ts](/packages/apps/shopify-api/lib/auth/oauth/token-exchange.ts)
+[`RequestedTokenType` in token-exchange.ts](../../../lib/auth/oauth/token-exchange.ts)
 
 - `RequestedTokenType.OnlineAccessToken` - Learn more about [online tokens](https://shopify.dev/docs/apps/auth/access-token-types/online.md)
 - `RequestedTokenType.OfflineAccessToken` - Learn more about [offline tokens](https://shopify.dev/docs/apps/auth/access-token-types/offline.md)

@@ -403,7 +403,7 @@
 
   <!-- markdown-link-check-disable -->
 
-  For details on what's changed in this version, please see the [V8 migration guide](/packages/apps/shopify-api/docs/migrating-to-v8.md).
+  For details on what's changed in this version, please see the [V8 migration guide](./docs/migrating-to-v8.md).
 
   <!-- markdown-link-check-enable -->
 

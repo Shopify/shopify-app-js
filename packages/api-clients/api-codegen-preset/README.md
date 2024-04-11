@@ -2,7 +2,7 @@
 
 <!-- ![Build Status]() -->
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](../../LICENSE.md)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](../../../LICENSE.md)
 [![npm version](https://badge.fury.io/js/@shopify%2Fapi-codegen-preset.svg)](https://badge.fury.io/js/@shopify%2Fapi-codegen-preset)
 
 This package enables JavaScript / TypeScript apps to use a `#graphql` tag to parse queries with [`graphql-codegen`](https://the-guild.dev/graphql/codegen).
@@ -41,36 +41,36 @@ This gives you complete control over your configuration if you want to set up a 
 
 | Option  | Type      | Default              | Description                                                                                                                          |
 | ------- | --------- | -------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
-| apiType | `ApiType` | *N/A*                | The API to pull schemas from.                                                                                                        |
+| apiType | `ApiType` | _N/A_                | The API to pull schemas from.                                                                                                        |
 | module  | `string?` | Depends on `ApiType` | Change the module whose types will be overridden. Use this to override the types for any package, as long as it uses the same names. |
 
 #### Example `.graphqlrc.ts` file
 
 ```ts
-import { ApiType, pluckConfig, preset } from "@shopify/api-codegen-preset";
+import {ApiType, pluckConfig, preset} from '@shopify/api-codegen-preset';
 
 export default {
   // For syntax highlighting / auto-complete when writing operations
-  schema: "https://shopify.dev/admin-graphql-direct-proxy",
-  documents: ["./**/*.{js,ts,jsx,tsx}"],
+  schema: 'https://shopify.dev/admin-graphql-direct-proxy',
+  documents: ['./**/*.{js,ts,jsx,tsx}'],
   projects: {
     default: {
       // For type extraction
-      schema: "https://shopify.dev/admin-graphql-direct-proxy",
-      documents: ["./**/*.{js,ts,jsx,tsx}"],
+      schema: 'https://shopify.dev/admin-graphql-direct-proxy',
+      documents: ['./**/*.{js,ts,jsx,tsx}'],
       extensions: {
         codegen: {
           // Enables support for `#graphql` tags, as well as `/* GraphQL */`
           pluckConfig,
           generates: {
-            "./types/admin.schema.json": {
-              plugins: ["introspection"],
-              config: { minify: true },
+            './types/admin.schema.json': {
+              plugins: ['introspection'],
+              config: {minify: true},
             },
-            "./types/admin.types.d.ts": {
-              plugins: ["typescript"],
+            './types/admin.types.d.ts': {
+              plugins: ['typescript'],
             },
-            "./types/admin.generated.d.ts": {
+            './types/admin.generated.d.ts': {
               preset,
               presetConfig: {
                 apiType: ApiType.Admin,
@@ -91,7 +91,7 @@ Use this function if you want to configure a custom project, or add your own `ge
 
 | Option     | Type        | Default              | Description                                                                                                                          |
 | ---------- | ----------- | -------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
-| apiType    | `ApiType`   | *N/A*                | The API to pull schemas from.                                                                                                        |
+| apiType    | `ApiType`   | _N/A_                | The API to pull schemas from.                                                                                                        |
 | apiVersion | `string?`   | Latest               | Pull schemas for a specific version.                                                                                                 |
 | outputDir  | `string?`   | `.`                  | Where to output the types files.                                                                                                     |
 | documents  | `string[]?` | `./**/*.{ts,tsx}`    | Glob pattern for files to parse.                                                                                                     |
@@ -104,24 +104,24 @@ import {
   ApiType,
   pluckConfig,
   shopifyApiTypes,
-} from "@shopify/api-codegen-preset";
+} from '@shopify/api-codegen-preset';
 
 export default {
   // For syntax highlighting / auto-complete when writing operations
-  schema: "https://shopify.dev/admin-graphql-direct-proxy/2023-10",
-  documents: ["./app/**/*.{js,ts,jsx,tsx}"],
+  schema: 'https://shopify.dev/admin-graphql-direct-proxy/2023-10',
+  documents: ['./app/**/*.{js,ts,jsx,tsx}'],
   projects: {
     // To produce variable / return types for Admin API operations
-    schema: "https://shopify.dev/admin-graphql-direct-proxy/2023-10",
-    documents: ["./app/**/*.{js,ts,jsx,tsx}"],
+    schema: 'https://shopify.dev/admin-graphql-direct-proxy/2023-10',
+    documents: ['./app/**/*.{js,ts,jsx,tsx}'],
     extensions: {
       codegen: {
         pluckConfig,
         generates: shopifyApiTypes({
           apiType: ApiType.Admin,
-          apiVersion: "2023-10",
-          documents: ["./app/**/*.{js,ts,jsx,tsx}"],
-          outputDir: "./app/types",
+          apiVersion: '2023-10',
+          documents: ['./app/**/*.{js,ts,jsx,tsx}'],
+          outputDir: './app/types',
         }),
       },
     },
@@ -135,7 +135,7 @@ This function creates a fully-functional project configuration.
 
 | Option     | Type        | Default              | Description                                                                                                                          |
 | ---------- | ----------- | -------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
-| apiType    | `ApiType`   | *N/A*                | The API to pull schemas from.                                                                                                        |
+| apiType    | `ApiType`   | _N/A_                | The API to pull schemas from.                                                                                                        |
 | apiVersion | `string?`   | Latest               | Pull schemas for a specific version.                                                                                                 |
 | outputDir  | `string?`   | `.`                  | Where to output the types files.                                                                                                     |
 | documents  | `string[]?` | `./**/*.{ts,tsx}`    | Glob pattern for files to parse.                                                                                                     |
@@ -144,19 +144,19 @@ This function creates a fully-functional project configuration.
 #### Example `.graphqlrc.ts` file
 
 ```js
-import { shopifyApiProject, ApiType } from "@shopify/api-codegen-preset";
+import {shopifyApiProject, ApiType} from '@shopify/api-codegen-preset';
 
 export default {
   // For syntax highlighting / auto-complete when writing operations
-  schema: "https://shopify.dev/admin-graphql-direct-proxy/2023-10",
-  documents: ["./app/**/*.{js,ts,jsx,tsx}"],
+  schema: 'https://shopify.dev/admin-graphql-direct-proxy/2023-10',
+  documents: ['./app/**/*.{js,ts,jsx,tsx}'],
   projects: {
     // To produce variable / return types for Admin API operations
     default: shopifyApiProject({
       apiType: ApiType.Admin,
-      apiVersion: "2023-10",
-      documents: ["./app/**/*.{js,ts,jsx,tsx}"],
-      outputDir: "./app/types",
+      apiVersion: '2023-10',
+      documents: ['./app/**/*.{js,ts,jsx,tsx}'],
+      outputDir: './app/types',
     }),
   },
 };
@@ -200,7 +200,7 @@ Once the script parses your operations, you can mark any operations for parsing 
 For example:
 
 ```ts
-import "../types/admin.generated.d.ts";
+import '../types/admin.generated.d.ts';
 
 const response = await myGraphqlClient.graphql(
   `#graphql
@@ -218,7 +218,7 @@ const response = await myGraphqlClient.graphql(
     variables: {
       first: 1,
     } as GetProductsQueryVariables,
-  }
+  },
 );
 
 const data: GetProductsQuery = response.data;

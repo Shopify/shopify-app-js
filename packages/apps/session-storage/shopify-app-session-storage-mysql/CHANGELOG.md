@@ -167,7 +167,7 @@
 
 - e1d4f4f: Add @shopify/shopify-api as a peerDependencies entry for each session-storage package, to avoid API library conflicts (e.g., scopesArray.map error). Should help avoid issues like #93
 - 2dd9ba5: Bumps [mysql2](Bumps mysql2 from 3.2.1 to 3.2.4.) from 3.2.1 to 3.2.4. See mysql2 [changelog](https://github.com/sidorares/node-mysql2/blob/master/Changelog.md) for more details.
-- 1d007e8: Bumps [@shopify/shopify-api](/packages/apps/shopify-api) from 7.0.0 to 7.1.0. See `@shopify/shopify-api`'s [changelog](/packages/apps/shopify-api/CHANGELOG.md) for more details.
+- 1d007e8: Bumps [@shopify/shopify-api](../../shopify-api) from 7.0.0 to 7.1.0. See `@shopify/shopify-api`'s [changelog](../../shopify-api/CHANGELOG.md) for more details.
 - 9aaf402: Bumps [mysql2](https://github.com/sidorares/node-mysql2) from 3.2.4 to 3.3.0. See mysql2's [changelog](https://github.com/sidorares/node-mysql2/blob/master/Changelog.md) for more details.
 - Updated dependencies [e1d4f4f]
 - Updated dependencies [1d007e8]
@@ -186,7 +186,7 @@
 
 - 335c8df: MySQL session storage to use a connection pool instead of a single client connection. Fixes #150, #185
 - 502b4c7: Bumps mysql2 from 3.1.2 to 3.2.0.
-- e4f3415: Bump @shopify/shopify-api from 6.2.0 to 7.0.0. See [changelog](/packages/apps/shopify-api/CHANGELOG.md) for details.
+- e4f3415: Bump @shopify/shopify-api from 6.2.0 to 7.0.0. See [changelog](../../shopify-api/CHANGELOG.md) for details.
 - 3969855: Use decodeURIComponent on password, user, database name fields prior to calling underlying MySQL connection. Fixes #163. Also applied to postgresql adapter.
 - Updated dependencies [e4f3415]
   - @shopify/shopify-app-session-storage@1.1.2
