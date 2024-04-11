@@ -8,7 +8,7 @@ This function creates an object that contains everything an Express app needs to
 
 `ApiConfigParams` | :exclamation: required when not using the Shopify CLI
 
-All values allowed by the `@shopify/shopify-api` package [when calling `shopifyApi`](/packages/apps/shopify-api/docs/reference/shopifyApi.md).
+All values allowed by the `@shopify/shopify-api` package [when calling `shopifyApi`](../../../shopify-api/docs/reference/shopifyApi.md).
 
 ### auth
 
@@ -66,7 +66,7 @@ The configuration used to set up this object.
 
 ### api
 
-The object created by the `@shopify/shopify-api` package. See [the API package documentation](/packages/apps/shopify-api#readme) for more details.
+The object created by the `@shopify/shopify-api` package. See [the API package documentation](../../../shopify-api#readme) for more details.
 
 ### [auth](./auth.md)
 

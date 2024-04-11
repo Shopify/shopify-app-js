@@ -35,7 +35,7 @@ pnpm add @shopify/admin-api-client @shopify/storefront-api-client
 The codegen package includes all the dependencies you'll need to run [`@graphql-codegen/cli`](https://www.npmjs.com/package/@graphql-codegen/cli), including the `graphql-codegen` script.
 
 Then, you can add a `.graphqlrc.ts` file in your app's root.
-See the [package documentation](../../../api-codegen-preset/README.md#configuration) for more details on setting up the appropriate configuration.
+See the [package documentation](../../../../api-clients/api-codegen-preset/README.md#configuration) for more details on setting up the appropriate configuration.
 
 ## Generating types
 

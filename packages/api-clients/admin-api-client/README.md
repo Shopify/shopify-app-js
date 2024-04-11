@@ -289,7 +289,7 @@ const {data, errors, extensions} = await client.request(productQuery, {
 This client is compatible with the `@shopify/api-codegen-preset` package.
 You can use that package to create types from your operations with the [Codegen CLI](https://www.graphql-cli.com/codegen/).
 
-There are different ways to [configure codegen](/packages/api-clients/api-codegen-preset#configuration) with it, but the simplest way is to:
+There are different ways to [configure codegen](../api-codegen-preset#configuration) with it, but the simplest way is to:
 
 1. Add the preset package as a dev dependency to your project, for example:
    ```bash
