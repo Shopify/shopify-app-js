@@ -176,10 +176,16 @@ export class Session {
    */
   public isActive(scopes: AuthScopes | string | string[]): boolean {
     return (
-      !this.isScopeChanged(scopes) &&
+      (!this.isUsingScopes(scopes) || !this.isScopeChanged(scopes)) &&
       Boolean(this.accessToken) &&
       !this.isExpired()
     );
+  }
+
+  public isUsingScopes(scopes: AuthScopes | string | string[]): boolean {
+    if (scopes instanceof AuthScopes) return scopes.toArray().length > 0;
+    if (Array.isArray(scopes)) return scopes.length > 0;
+    return scopes !== '' && typeof scopes !== 'undefined' && scopes !== null;
   }
 
   /**

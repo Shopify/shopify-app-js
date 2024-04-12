@@ -6,6 +6,7 @@ import {
   InvalidOAuthError,
   Session,
   Shopify,
+  ShopifyHeader,
   ShopifyRestResources,
 } from '@shopify/shopify-api';
 
@@ -86,12 +87,19 @@ export class AuthCodeFlowStrategy<
     if (!session) {
       logger.debug('No session found, redirecting to OAuth', {shop});
       await redirectToAuthPage({config, logger, api}, request, shop);
-    } else if (!session.isActive(config.scopes)) {
+    } else if (
+      !session.isActive(config.scopes) ||
+      request.headers.get(ShopifyHeader.OptionalScopes) !== null
+    ) {
       logger.debug(
         'Found a session, but it has expired, redirecting to OAuth',
         {shop},
       );
-      await redirectToAuthPage({config, logger, api}, request, shop);
+      await redirectToAuthPage(
+        {config, logger, api},
+        request,
+        shop ?? session.shop,
+      );
     }
 
     logger.debug('Found a valid session', {shop});
