@@ -482,12 +482,12 @@
     "@smithy/types" "^2.11.0"
     tslib "^2.5.0"
 
-"@aws-sdk/util-dynamodb@^3.499.0":
-  version "3.529.1"
-  resolved "https://registry.yarnpkg.com/@aws-sdk/util-dynamodb/-/util-dynamodb-3.529.1.tgz#28e59cabc03ff3702f0f1d30bf809cba425af663"
-  integrity sha512-SXVK/eT7iJwLO4/Kq9Qvlm1zs5gUnpshE1EJ9+9yks9Q79KYI5FuRQxU0qZ0vxHuLHsesDAIJy59iKsWmVls6A==
+"@aws-sdk/util-dynamodb@^3.554.0":
+  version "3.554.0"
+  resolved "https://registry.yarnpkg.com/@aws-sdk/util-dynamodb/-/util-dynamodb-3.554.0.tgz#f789d307c9845488dbc401b154fad4ad12dc0be3"
+  integrity sha512-Q81Rj38Ban8iV0C1b0cOEHWVHveIW67zVyd2gJvn1xdeKz+N4zCCUviL9Dwfsi6YgOaP+eQaaCptsBA0Nrx7YA==
   dependencies:
-    tslib "^2.5.0"
+    tslib "^2.6.2"
 
 "@aws-sdk/util-endpoints@3.533.0":
   version "3.533.0"
@@ -3907,10 +3907,10 @@
     pkg-dir "^5.0.0"
     pluralize "^8.0.0"
 
-"@shopify/generate-docs@^0.13.2":
-  version "0.13.2"
-  resolved "https://registry.yarnpkg.com/@shopify/generate-docs/-/generate-docs-0.13.2.tgz#4a308476271f5a45d6e73e6009876bbf14855953"
-  integrity sha512-3F733/9wXQMSXbOH2t6WEmmtw+4zao4K51DLOZy/ppxtTFnHywCGXTeTa/E6/He4jrX2kPaZP171IrIPd4E85Q==
+"@shopify/generate-docs@^0.15.2":
+  version "0.15.2"
+  resolved "https://registry.yarnpkg.com/@shopify/generate-docs/-/generate-docs-0.15.2.tgz#f92cbcb29f8768d65120467f1a992428dbcf3d95"
+  integrity sha512-cD2kOkb7uGgzzXycd2cU7CrZk/BSlJEamKzBPgFI/qsT0+DzF+9YP5LD9LWQRM8W93IR30cIaxPnQ+RObcxY5A==
   dependencies:
     "@types/react" "^18.0.21"
     globby "^11.1.0"
