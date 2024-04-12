@@ -69,7 +69,9 @@ export function begin(config: ConfigInterface): OAuthBegin {
       'Cannot perform OAuth for private apps',
     );
     if (!config.scopes) {
-      throw new ShopifyErrors.MissingRequiredArgument('Apps that use OAuth must define the required scopes in the config');
+      throw new ShopifyErrors.MissingRequiredArgument(
+        'Apps that use OAuth must define the required scopes in the config',
+      );
     }
 
     const log = logger(config);
