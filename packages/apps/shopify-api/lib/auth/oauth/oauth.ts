@@ -68,11 +68,6 @@ export function begin(config: ConfigInterface): OAuthBegin {
       config.isCustomStoreApp,
       'Cannot perform OAuth for private apps',
     );
-    if (!config.scopes) {
-      throw new ShopifyErrors.MissingRequiredArgument(
-        'Apps that use OAuth must define the required scopes in the config',
-      );
-    }
 
     const log = logger(config);
     log.info('Beginning OAuth', {shop, isOnline, callbackPath});
@@ -104,9 +99,10 @@ export function begin(config: ConfigInterface): OAuthBegin {
       path: callbackPath,
     });
 
+    const scopes = config.scopes ? config.scopes.toString() : '';
     const query = {
       client_id: config.apiKey,
-      scope: config.scopes.toString(),
+      scope: scopes,
       redirect_uri: `${config.hostScheme}://${config.hostName}${callbackPath}`,
       state,
       'grant_options[]': isOnline ? 'per-user' : '',
