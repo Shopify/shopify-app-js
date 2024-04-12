@@ -172,14 +172,24 @@ export class Session {
   }
 
   /**
-   * Whether the session is active. Active sessions have an access token that is not expired, and has the given scopes.
+   * Whether the session is active. Active sessions have an access token that is not expired, and has has the given
+   * scopes if scopes is equal to a truthy value.
    */
-  public isActive(scopes: AuthScopes | string | string[]): boolean {
-    return (
-      !this.isScopeChanged(scopes) &&
-      Boolean(this.accessToken) &&
-      !this.isExpired()
-    );
+  public isActive(scopes: AuthScopes | string | string[] | undefined): boolean {
+    const usingScopes =
+      scopes instanceof AuthScopes
+        ? scopes.toArray().length > 0
+        : scopes !== '' && typeof scopes !== undefined && scopes !== null;
+    const hasAccessToken = Boolean(this.accessToken);
+    const isTokenNotExpired = !this.isExpired();
+    if (usingScopes) {
+      const isScopeChanged = this.isScopeChanged(
+        scopes as AuthScopes | string | string[],
+      );
+      return !isScopeChanged && hasAccessToken && isTokenNotExpired;
+    } else {
+      return hasAccessToken && isTokenNotExpired;
+    }
   }
 
   /**

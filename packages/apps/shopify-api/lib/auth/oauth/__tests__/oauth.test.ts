@@ -78,9 +78,13 @@ describe('beginAuth', () => {
       rawRequest: request,
     });
 
+    const scopes = shopify.config.scopes
+      ? shopify.config.scopes.toString()
+      : '';
+
     const query = {
       client_id: shopify.config.apiKey,
-      scope: shopify.config.scopes.toString(),
+      scope: scopes,
       redirect_uri: `${shopify.config.hostScheme}://${shopify.config.hostName}/some-callback`,
       state: VALID_NONCE,
       'grant_options[]': '',
@@ -102,10 +106,13 @@ describe('beginAuth', () => {
       callbackPath: '/some-callback',
       rawRequest: request,
     });
+    const scopes = shopify.config.scopes
+      ? shopify.config.scopes.toString()
+      : '';
 
     const query = {
       client_id: shopify.config.apiKey,
-      scope: shopify.config.scopes.toString(),
+      scope: scopes,
       redirect_uri: `http://${shopify.config.hostName}/some-callback`,
       state: VALID_NONCE,
       'grant_options[]': '',
@@ -127,10 +134,13 @@ describe('beginAuth', () => {
       callbackPath: '/some-callback',
       rawRequest: request,
     });
+    const scopes = shopify.config.scopes
+      ? shopify.config.scopes.toString()
+      : '';
 
     const query = {
       client_id: shopify.config.apiKey,
-      scope: shopify.config.scopes.toString(),
+      scope: scopes,
       redirect_uri: `${shopify.config.hostScheme}://${shopify.config.hostName}/some-callback`,
       state: VALID_NONCE,
       'grant_options[]': 'per-user',
@@ -293,9 +303,13 @@ describe('callback', () => {
     testCallbackQuery.hmac = expectedHmac;
     request.url += `?${new URLSearchParams(testCallbackQuery).toString()}`;
 
+    const scopes = shopify.config.scopes
+      ? shopify.config.scopes.toString()
+      : '';
+
     const successResponse = {
       access_token: 'some access token string',
-      scope: shopify.config.scopes.toString(),
+      scope: scopes,
     };
 
     queueMockResponse(JSON.stringify(successResponse));
