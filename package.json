@@ -8,7 +8,7 @@
     "lint": "turbo lint",
     "test": "CI=true turbo run test",
     "test:ci": "turbo run test:ci --filter='!./packages/apps/session-storage/*'",
-    "test:ci_sessions": "turbo run test:ci --filter=./packages/apps/session-storage/*",
+    "test:ci_sessions": "turbo run test:ci --filter=./packages/apps/session-storage/* --concurrency 3",
     "release": "turbo build && changeset publish",
     "dev": "turbo dev --no-cache --continue",
     "clean": "turbo clean",
