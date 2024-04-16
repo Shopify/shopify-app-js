@@ -1,6 +1,6 @@
 on: [push, pull_request]
 
-name: CI
+name: CI - Session storage packages
 
 env:
   DISABLE_V8_COMPILE_CACHE: 1
@@ -19,7 +19,5 @@ jobs:
           node-version: ${{ matrix.version }}
       - name: Install
         run: yarn install --ignore-engines
-      - name: Run package tests
-        run: yarn test:ci
-      - name: Run linting
-        run: yarn lint
+      - name: Run session storage tests
+        run: yarn test:ci_sessions

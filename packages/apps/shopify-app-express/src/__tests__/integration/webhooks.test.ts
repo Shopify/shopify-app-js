@@ -56,13 +56,6 @@ describe('webhook integration', () => {
 
           app = express();
 
-          // Use a short timeout since everything here should be pretty quick. If you see a `socket hang up` error,
-          // it's probably because the timeout is too short.
-          app.use('*', (_req, res, next) => {
-            res.setTimeout(100);
-            next();
-          });
-
           app.get('/test/auth', shopify.auth.begin());
           app.get(
             '/test/auth/callback',

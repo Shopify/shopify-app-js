@@ -53,9 +53,7 @@
     "@types/cookie-parser": "^1.4.6",
     "@types/express": "^4.17.21",
     "@types/jsonwebtoken": "^9.0.5",
-    "@types/supertest": "^6.0.2",
-    "jsonwebtoken": "^9.0.2",
-    "supertest": "^6.3.3"
+    "jsonwebtoken": "^9.0.2"
   },
   "files": [
     "dist/*",
