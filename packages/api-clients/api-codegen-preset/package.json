@@ -34,7 +34,7 @@
   },
   "scripts": {
     "lint": "eslint . --ext .js,.ts",
-    "build": "yarn run rollup",
+    "build": "yarn tsc -p ./tsconfig.build.json && yarn run rollup",
     "test": "jest",
     "test:ci": "yarn test",
     "rollup": "rollup -c --bundleConfigAsCjs",

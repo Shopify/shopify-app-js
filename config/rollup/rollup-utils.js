@@ -5,9 +5,22 @@ import replace from '@rollup/plugin-replace';
 import terser from '@rollup/plugin-terser';
 import excludeDependenciesFromBundle from 'rollup-plugin-exclude-dependencies-from-bundle';
 
-export function getPlugins({outDir, tsconfig, minify, replacements}) {
+export function getPlugins({
+  outDir,
+  tsconfig,
+  minify,
+  replacements,
+  bundleDependencies = false,
+}) {
   return [
-    excludeDependenciesFromBundle({dependencies: true, peerDependencies: true}),
+    ...(bundleDependencies
+      ? []
+      : [
+          excludeDependenciesFromBundle({
+            dependencies: true,
+            peerDependencies: true,
+          }),
+        ]),
     resolve({
       extensions: ['.js', '.jsx', '.ts', '.tsx'],
     }),
