@@ -178,9 +178,7 @@ export class Session {
   public isActive(scopes: AuthScopes | string | string[] | undefined): boolean {
     const hasAccessToken = Boolean(this.accessToken);
     const isTokenNotExpired = !this.isExpired();
-    const isScopeChanged = this.isScopeChanged(
-      scopes as AuthScopes | string | string[],
-    );
+    const isScopeChanged = this.isScopeChanged(scopes);
     return !isScopeChanged && hasAccessToken && isTokenNotExpired;
   }
 
@@ -192,7 +190,9 @@ export class Session {
   ): boolean {
     const scopesObject =
       scopes instanceof AuthScopes ? scopes : new AuthScopes(scopes);
-    if (scopesObject.toArray().length === 0) return false;
+    if (typeof scopes === undefined || scopesObject.toArray().length === 0) {
+      return false;
+    }
 
     return !scopesObject.equals(this.scope);
   }
