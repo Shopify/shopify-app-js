@@ -153,11 +153,20 @@ export class PrismaSessionStorage<T extends PrismaClient>
       firstName: String(row.firstName),
       lastName: String(row.lastName),
       email: String(row.email),
-      accountOwner: Boolean(row.accountOwner),
       locale: String(row.locale),
-      collaborator: Boolean(row.collaborator),
-      emailVerified: Boolean(row.emailVerified),
     };
+
+    if (row.accountOwner !== null) {
+      sessionParams.accountOwner = row.accountOwner;
+    }
+
+    if (row.collaborator !== null) {
+      sessionParams.collaborator = row.collaborator;
+    }
+
+    if (row.emailVerified !== null) {
+      sessionParams.emailVerified = row.emailVerified;
+    }
 
     if (row.expires) {
       sessionParams.expires = row.expires.getTime();

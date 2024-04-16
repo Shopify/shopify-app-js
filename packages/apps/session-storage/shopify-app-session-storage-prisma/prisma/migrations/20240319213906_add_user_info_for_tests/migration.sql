@@ -12,10 +12,10 @@ CREATE TABLE "new_MySession" (
     "firstName" TEXT,
     "lastName" TEXT,
     "email" TEXT,
-    "accountOwner" BOOLEAN NOT NULL DEFAULT false,
+    "accountOwner" BOOLEAN,
     "locale" TEXT,
-    "collaborator" BOOLEAN NOT NULL DEFAULT false,
-    "emailVerified" BOOLEAN NOT NULL DEFAULT false
+    "collaborator" BOOLEAN,
+    "emailVerified" BOOLEAN
 );
 INSERT INTO "new_MySession" ("accessToken", "expires", "id", "isOnline", "scope", "shop", "state", "userId") SELECT "accessToken", "expires", "id", "isOnline", "scope", "shop", "state", "userId" FROM "MySession";
 DROP TABLE "MySession";

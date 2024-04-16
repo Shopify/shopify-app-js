@@ -19,10 +19,10 @@ model Session {
   firstName     String?
   lastName      String?
   email         String?
-  accountOwner  Boolean   @default(false)
+  accountOwner  Boolean?
   locale        String?
-  collaborator  Boolean  @default(false)
-  emailVerified Boolean  @default(false)
+  collaborator  Boolean?
+  emailVerified Boolean?
 }
 
 // We use this in unit tests to ensure it works with a different model name
@@ -38,8 +38,8 @@ model MySession {
   firstName     String?
   lastName      String?
   email         String?
-  accountOwner  Boolean   @default(false)
+  accountOwner  Boolean?
   locale        String?
-  collaborator  Boolean  @default(false)
-  emailVerified Boolean  @default(false)
+  collaborator  Boolean?
+  emailVerified Boolean?
 }
