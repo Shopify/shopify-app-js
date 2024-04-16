@@ -1,12 +1,11 @@
-import path from 'path';
-
 import typescript from '@rollup/plugin-typescript';
 import resolve from '@rollup/plugin-node-resolve';
 import commonjs from '@rollup/plugin-commonjs';
 import replace from '@rollup/plugin-replace';
+import terser from '@rollup/plugin-terser';
 import excludeDependenciesFromBundle from 'rollup-plugin-exclude-dependencies-from-bundle';
 
-export function getPlugins(outDir) {
+export function getPlugins({outDir, tsconfig, minify, replacements}) {
   return [
     excludeDependenciesFromBundle({dependencies: true, peerDependencies: true}),
     resolve({
@@ -14,16 +13,18 @@ export function getPlugins(outDir) {
     }),
     replace({
       preventAssignment: true,
+      ...(replacements ?? {}),
     }),
     commonjs(),
     typescript({
-      tsconfig: path.resolve('./tsconfig.build.json'),
+      tsconfig: tsconfig ? tsconfig : './tsconfig.build.json',
       outDir,
       outputToFilesystem: false,
       noEmit: true,
       declaration: false,
       moduleResolution: 'Bundler',
     }),
+    ...(minify === true ? [terser({keep_fnames: new RegExp('fetch')})] : []),
   ];
 }
 
@@ -45,19 +46,36 @@ export const cjsConfigs = {
   exports: 'named',
 };
 
-export function getConfig(pkg, input = 'src/index.ts') {
+export function getConfig({
+  pkg,
+  minify,
+  tsconfig,
+  replacements,
+  input = 'src/index.ts',
+  flatOutput = false,
+}) {
   return [
     {
       input,
-      plugins: getPlugins('./dist/esm'),
+      plugins: getPlugins({
+        outDir: flatOutput ? './dist' : './dist/esm',
+        minify,
+        tsconfig,
+        replacements,
+      }),
       external: Object.keys(pkg.dependencies),
-      output: [esmConfigs],
+      output: [{...esmConfigs, dir: flatOutput ? './dist' : './dist/esm'}],
     },
     {
       input,
-      plugins: getPlugins('./dist/cjs'),
+      plugins: getPlugins({
+        outDir: flatOutput ? './dist' : './dist/cjs',
+        minify,
+        tsconfig,
+        replacements,
+      }),
       external: Object.keys(pkg.dependencies),
-      output: [cjsConfigs],
+      output: [{...cjsConfigs, dir: flatOutput ? './dist' : './dist/cjs'}],
     },
   ];
 }

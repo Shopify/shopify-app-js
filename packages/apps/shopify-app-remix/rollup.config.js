@@ -11,8 +11,7 @@ const adapterInputs = fs
   .filter((dirent) => dirent.isDirectory() && dirent.name !== '__tests__')
   .map(({name}) => `src/server/adapters/${name}/index.ts`);
 
-export default getConfig(pkg, [
-  'src/server/index.ts',
-  'src/react/index.ts',
-  ...adapterInputs,
-]);
+export default getConfig({
+  pkg,
+  input: ['src/server/index.ts', 'src/react/index.ts', ...adapterInputs],
+});
