@@ -176,28 +176,23 @@ export class Session {
    * scopes if scopes is equal to a truthy value.
    */
   public isActive(scopes: AuthScopes | string | string[] | undefined): boolean {
-    const usingScopes =
-      scopes instanceof AuthScopes
-        ? scopes.toArray().length > 0
-        : scopes !== '' && typeof scopes !== undefined && scopes !== null;
     const hasAccessToken = Boolean(this.accessToken);
     const isTokenNotExpired = !this.isExpired();
-    if (usingScopes) {
-      const isScopeChanged = this.isScopeChanged(
-        scopes as AuthScopes | string | string[],
-      );
-      return !isScopeChanged && hasAccessToken && isTokenNotExpired;
-    } else {
-      return hasAccessToken && isTokenNotExpired;
-    }
+    const isScopeChanged = this.isScopeChanged(
+      scopes as AuthScopes | string | string[],
+    );
+    return !isScopeChanged && hasAccessToken && isTokenNotExpired;
   }
 
   /**
    * Whether the access token has the given scopes.
    */
-  public isScopeChanged(scopes: AuthScopes | string | string[]): boolean {
+  public isScopeChanged(
+    scopes: AuthScopes | string | string[] | undefined,
+  ): boolean {
     const scopesObject =
       scopes instanceof AuthScopes ? scopes : new AuthScopes(scopes);
+    if (scopesObject.toArray().length === 0) return false;
 
     return !scopesObject.equals(this.scope);
   }
