@@ -5,6 +5,7 @@ export async function beginAuth(
   request: Request,
   isOnline: boolean,
   shop: string,
+  optionalScopes: string[] = [],
 ): Promise<never> {
   const {api, config} = params;
 
@@ -13,5 +14,6 @@ export async function beginAuth(
     callbackPath: config.auth.callbackPath,
     isOnline,
     rawRequest: request,
+    optionalScopes,
   });
 }

@@ -13,3 +13,5 @@ export const CORS_HEADERS = {
   'Access-Control-Allow-Headers': 'Authorization',
   'Access-Control-Expose-Headers': REAUTH_URL_HEADER,
 };
+
+export const OPTIONAL_SCOPES_HEADER = 'X-Shopify-Optional-Scopes';

@@ -10,6 +10,7 @@ import {
   respondToOptionsRequest,
   validateSessionToken,
 } from '../helpers';
+import {OPTIONAL_SCOPES_HEADER} from '../const';
 
 import {
   cancelBillingFactory,
@@ -108,8 +109,17 @@ export function authStrategyFactory<
     }
   }
 
-  return async function authenticateAdmin(request: Request) {
+  return async function authenticateAdmin(
+    request: Request,
+    {optionalScopes}: {optionalScopes: string[]} = {
+      optionalScopes: [],
+    },
+  ) {
     try {
+      const missingScopes = manageOptionalScopesRequest(
+        request,
+        optionalScopes,
+      );
       respondToBotRequest(params, request);
       respondToOptionsRequest(params, request);
       await respondToBouncePageRequest(request);
@@ -138,6 +148,7 @@ export function authStrategyFactory<
         session: existingSession,
         sessionToken,
         shop,
+        optionalScopes: missingScopes.request ? missingScopes.scopes : [],
       });
 
       logger.debug('Request is valid, loaded session from session token', {
@@ -195,4 +206,23 @@ async function getSessionTokenContext(
   });
 
   return {shop, sessionId, payload: undefined, sessionToken};
+}
+
+function manageOptionalScopesRequest(
+  request: Request,
+  optionalScopes: string[],
+) {
+  const url = new URL(request.url);
+
+  let scopes = optionalScopes.length > 0 ? optionalScopes.join(',') : undefined;
+  scopes =
+    url.pathname === '/auth/missingScopes'
+      ? url.searchParams.get('scopes') || undefined
+      : scopes;
+  if (scopes) request.headers.append(OPTIONAL_SCOPES_HEADER, scopes);
+
+  return {
+    scopes: scopes?.split(',') ?? [],
+    request: url.searchParams.has('scopes'),
+  };
 }

@@ -9,6 +9,7 @@ export async function redirectToAuthPage(
   request: Request,
   shop: string,
   isOnline = false,
+  optionalScopes: string[] = [],
 ): Promise<never> {
   const {config} = params;
 
@@ -23,6 +24,6 @@ export async function redirectToAuthPage(
   } else if (isEmbeddedRequest) {
     redirectWithExitIframe(params, request, shop);
   } else {
-    throw await beginAuth(params, request, isOnline, shop);
+    throw await beginAuth(params, request, isOnline, shop, optionalScopes);
   }
 }

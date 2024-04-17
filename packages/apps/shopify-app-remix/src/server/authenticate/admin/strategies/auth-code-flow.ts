@@ -6,7 +6,6 @@ import {
   InvalidOAuthError,
   Session,
   Shopify,
-  ShopifyHeader,
   ShopifyRestResources,
 } from '@shopify/shopify-api';
 
@@ -82,15 +81,12 @@ export class AuthCodeFlowStrategy<
   ): Promise<Session | never> {
     const {api, config, logger} = this;
 
-    const {shop, session} = sessionContext;
+    const {shop, session, optionalScopes} = sessionContext;
 
     if (!session) {
       logger.debug('No session found, redirecting to OAuth', {shop});
       await redirectToAuthPage({config, logger, api}, request, shop);
-    } else if (
-      !session.isActive(config.scopes) ||
-      request.headers.get(ShopifyHeader.OptionalScopes) !== null
-    ) {
+    } else if (!session.isActive(config.scopes) || optionalScopes.length > 0) {
       logger.debug(
         'Found a session, but it has expired, redirecting to OAuth',
         {shop},
@@ -99,6 +95,8 @@ export class AuthCodeFlowStrategy<
         {config, logger, api},
         request,
         shop ?? session.shop,
+        false,
+        optionalScopes,
       );
     }
 

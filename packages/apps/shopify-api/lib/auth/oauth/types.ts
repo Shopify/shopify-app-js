@@ -13,6 +13,7 @@ export interface BeginParams extends AdapterArgs {
   shop: string;
   callbackPath: string;
   isOnline: boolean;
+  optionalScopes?: string[];
 }
 
 export interface CallbackParams extends AdapterArgs {}

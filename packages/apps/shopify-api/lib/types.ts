@@ -31,7 +31,6 @@ export enum ShopifyHeader {
   StorefrontPrivateToken = 'Shopify-Storefront-Private-Token',
   StorefrontSDKVariant = 'X-SDK-Variant',
   StorefrontSDKVersion = 'X-SDK-Version',
-  OptionalScopes = 'X-Shopify-Optional-Scopes',
 }
 /* eslint-enable @shopify/typescript/prefer-pascal-case-enums */
 

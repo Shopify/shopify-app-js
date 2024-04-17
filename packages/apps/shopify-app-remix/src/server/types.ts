@@ -517,3 +517,10 @@ export type ShopifyApp<Config extends AppConfigArg> =
       : Config['distribution'] extends AppDistribution.AppStore
         ? AppStoreApp<Config>
         : AppStoreApp<Config>;
+
+export interface MissingScopesResponse {
+  type: 'missingScopes';
+  data: {
+    scopes: string[];
+  };
+}

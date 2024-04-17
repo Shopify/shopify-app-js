@@ -46,6 +46,13 @@
       "import": "./dist/esm/react/index.mjs",
       "default": "./dist/cjs/react/index.js"
     }
+    ,
+    "./utils": {
+      "types": "./dist/ts/utils/index.d.ts",
+      "require": "./dist/cjs/utils/index.js",
+      "import": "./dist/esm/utils/index.mjs",
+      "default": "./dist/cjs/utils/index.js"
+    }
   },
   "scripts": {
     "build-docs": "sh docs/build-docs.sh",

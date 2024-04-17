@@ -188,6 +188,14 @@ export class Session {
     return scopes !== '' && typeof scopes !== 'undefined' && scopes !== null;
   }
 
+  public areScopesIncluded(scopes: AuthScopes | string | string[]): boolean {
+    const requiredScopes =
+      scopes instanceof AuthScopes ? scopes : new AuthScopes(scopes);
+    const sessionScopes = new AuthScopes(this.scope);
+
+    return sessionScopes.has(requiredScopes);
+  }
+
   /**
    * Whether the access token has the given scopes.
    */

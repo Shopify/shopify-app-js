@@ -6,6 +6,7 @@ export interface SessionContext {
   shop: string;
   session?: Session;
   sessionToken?: string;
+  optionalScopes: string[];
 }
 
 export interface OnErrorOptions {

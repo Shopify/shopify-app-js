@@ -21,7 +21,6 @@ import {
 import {logger, ShopifyLogger} from '../../logger';
 import {DataType} from '../../clients/types';
 import {fetchRequestFactory} from '../../utils/fetch-request';
-import {ShopifyHeader} from '../../types';
 
 import {
   SESSION_COOKIE_NAME,
@@ -34,7 +33,6 @@ import {
 import {nonce} from './nonce';
 import {safeCompare} from './safe-compare';
 import {createSession} from './create-session';
-
 
 export type OAuthBegin = (beginParams: BeginParams) => Promise<AdapterResponse>;
 
@@ -64,6 +62,7 @@ export function begin(config: ConfigInterface): OAuthBegin {
     shop,
     callbackPath,
     isOnline,
+    optionalScopes,
     ...adapterArgs
   }: BeginParams): Promise<AdapterResponse> => {
     throwIfCustomStoreApp(
@@ -101,14 +100,15 @@ export function begin(config: ConfigInterface): OAuthBegin {
       path: callbackPath,
     });
 
-    const optionalScopes = (
-      request.headers[ShopifyHeader.OptionalScopes] as string[]
-    )?.join(',');
+    const optionalScopesParam =
+      optionalScopes && optionalScopes.length > 0
+        ? {optional_scope: optionalScopes.join(',')}
+        : {};
 
     const query = {
       client_id: config.apiKey,
       scope: config.scopes.toString(),
-      ...(optionalScopes ? {optional_scope: optionalScopes} : {}),
+      ...optionalScopesParam,
       redirect_uri: `${config.hostScheme}://${config.hostName}${callbackPath}`,
       state,
       'grant_options[]': isOnline ? 'per-user' : '',
