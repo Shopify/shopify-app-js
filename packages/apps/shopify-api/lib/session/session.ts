@@ -196,6 +196,15 @@ export class Session {
     return sessionScopes.has(requiredScopes);
   }
 
+  removeScopes(scopes: string) {
+    const sessionScopes = new AuthScopes(this.scope);
+    const scopesToRemove = new AuthScopes(scopes);
+    this.scope = sessionScopes
+      .toArray()
+      .filter((scope) => !scopesToRemove.toArray().includes(scope))
+      .join(',');
+  }
+
   /**
    * Whether the access token has the given scopes.
    */
