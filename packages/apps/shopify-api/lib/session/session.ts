@@ -188,11 +188,11 @@ export class Session {
   public isScopeChanged(
     scopes: AuthScopes | string | string[] | undefined,
   ): boolean {
-    const scopesObject =
-      scopes instanceof AuthScopes ? scopes : new AuthScopes(scopes);
-    if (typeof scopes === undefined || scopesObject.toArray().length === 0) {
+    if (typeof scopes === 'undefined') {
       return false;
     }
+    const scopesObject =
+      scopes instanceof AuthScopes ? scopes : new AuthScopes(scopes);
 
     return !scopesObject.equals(this.scope);
   }

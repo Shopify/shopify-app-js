@@ -66,12 +66,18 @@ export function validateConfig<Params extends ConfigParams>(
     ...mandatoryParams
   } = params;
 
+  let scopes;
+  if (params.scopes === undefined) {
+    scopes = undefined;
+  } else if (params.scopes instanceof AuthScopes) {
+    scopes = params.scopes;
+  } else {
+    scopes = new AuthScopes(params.scopes);
+  }
+
   Object.assign(config, mandatoryParams, {
     hostName: params.hostName.replace(/\/$/, ''),
-    scopes:
-      params.scopes instanceof AuthScopes
-        ? params.scopes
-        : new AuthScopes(params.scopes),
+    scopes,
     hostScheme: hostScheme ?? config.hostScheme,
     isCustomStoreApp: isCustomStoreApp ?? config.isCustomStoreApp,
     adminApiAccessToken: adminApiAccessToken ?? config.adminApiAccessToken,

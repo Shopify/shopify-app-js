@@ -1,6 +1,7 @@
 import {Session} from '../session';
 import {testConfig} from '../../__tests__/test-config';
 import {shopifyApi} from '../..';
+import {AuthScopes} from '../../auth';
 
 describe('session', () => {
   it('can create a session from another session', () => {
@@ -60,7 +61,7 @@ describe('isActive', () => {
   });
 });
 
-it('returns true when scopes that passed in empty and scopes are not equal', () => {
+it('returns true when scopes that passed in undefined and scopes are not equal', () => {
   const session = new Session({
     id: 'active',
     shop: 'active-shop',
@@ -71,7 +72,22 @@ it('returns true when scopes that passed in empty and scopes are not equal', () 
     expires: new Date(Date.now() + 86400),
   });
 
-  expect(session.isActive('')).toBeTruthy();
+  expect(session.isActive(undefined)).toBeTruthy();
+});
+
+it('returns false when scopes that passed in empty and scopes are not equal', () => {
+  const session = new Session({
+    id: 'active',
+    shop: 'active-shop',
+    state: 'test_state',
+    isOnline: true,
+    scope: 'test_scope',
+    accessToken: 'indeed',
+    expires: new Date(Date.now() + 86400),
+  });
+
+  const scopes = new AuthScopes([]);
+  expect(session.isActive(scopes)).toBeFalsy();
 });
 
 it('returns false if session is not active', () => {
