@@ -1,5 +1,15 @@
 # @shopify/shopify-app-session-storage-prisma
 
+## 4.0.4
+
+### Patch Changes
+
+- b2c0b36: Update dependency on Prisma
+- Updated dependencies [16f52ee]
+- Updated dependencies [8c97e8a]
+  - @shopify/shopify-api@9.7.2
+  - @shopify/shopify-app-session-storage@2.1.4
+
 ## 4.0.3
 
 ### Patch Changes

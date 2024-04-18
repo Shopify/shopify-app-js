@@ -1,28 +1,17 @@
 {
   "$schema": "https://turbo.build/schema.json",
-  "globalDependencies": [
-    "**/.env.*local"
-  ],
+  "globalDependencies": ["**/.env.*local"],
   "pipeline": {
     "build": {
-      "outputs": [
-        "dist/**"
-      ],
-      "dependsOn": [
-        "^build"
-      ],
-      "cache": false
-    },
-    "test": {
-      "dependsOn": [
-        "^build"
-      ],
+      "outputs": ["dist/**"],
+      "dependsOn": ["^build"],
       "cache": false
     },
     "test:ci": {
-      "dependsOn": [
-        "^build"
-      ],
+      "dependsOn": ["^build"],
+      "cache": false
+    },
+    "test": {
       "cache": false
     },
     "lint": {

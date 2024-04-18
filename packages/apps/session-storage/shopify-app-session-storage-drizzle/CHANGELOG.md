@@ -1,5 +1,14 @@
 # @shopify/shopify-app-session-storage-drizzle
 
+## 1.1.1
+
+### Patch Changes
+
+- Updated dependencies [16f52ee]
+- Updated dependencies [8c97e8a]
+  - @shopify/shopify-api@9.7.2
+  - @shopify/shopify-app-session-storage@2.1.4
+
 ## 1.1.0
 
 ### Minor Changes

@@ -1,5 +1,12 @@
 # Changelog
 
+## 9.7.2
+
+### Patch Changes
+
+- 16f52ee: Include error message into HttpRequestError
+- 8c97e8a: Updated dependency on isbot
+
 ## 9.7.1
 
 ### Patch Changes
@@ -93,7 +100,7 @@
   <details>
 
   ```ts
-  const {session, headers} = shopify.auth.callback({
+  const { session, headers } = shopify.auth.callback({
     rawRequest: req,
     rawResponse: res,
   });
@@ -297,13 +304,13 @@
   Before:
 
   ```ts
-  import {gdprTopics} from '@shopify/shopify-api';
+  import { gdprTopics } from "@shopify/shopify-api";
   ```
 
   After:
 
   ```ts
-  import {privacyTopics} from '@shopify/shopify-api';
+  import { privacyTopics } from "@shopify/shopify-api";
   ```
 
 ### Minor Changes
@@ -356,13 +363,13 @@
           {
             interval: BillingInterval.Usage,
             amount: 30,
-            currencyCode: 'USD',
-            terms: 'per 1000 emails',
+            currencyCode: "USD",
+            terms: "per 1000 emails",
           },
           {
             interval: BillingInterval.Every30Days,
             amount: 30,
-            currencyCode: 'USD',
+            currencyCode: "USD",
             discount: {
               durationLimitInIntervals: 3,
               value: {
@@ -734,7 +741,7 @@
   Before:
 
   ```js
-  app.post('/graphql', async (req, res) => {
+  app.post("/graphql", async (req, res) => {
     await Shopify.Utils.graphqlProxy(req, res);
   });
   ```
@@ -742,7 +749,7 @@
   After:
 
   ```js
-  app.post('/graphql', async (req, res) => {
+  app.post("/graphql", async (req, res) => {
     const response = await Shopify.Utils.graphqlProxy(req, res);
     res.status(200).send(response.body);
   });

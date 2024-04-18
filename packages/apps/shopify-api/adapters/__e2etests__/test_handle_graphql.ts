@@ -1,4 +1,3 @@
-// eslint-disable-next-line import/no-extraneous-dependencies
 import {createGraphQLClient, Headers} from '@shopify/graphql-client';
 
 import {abstractFetch} from '../../runtime';
