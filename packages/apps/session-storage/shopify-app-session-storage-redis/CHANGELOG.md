@@ -1,5 +1,14 @@
 # @shopify/shopify-app-session-storage-redis
 
+## 3.0.4
+
+### Patch Changes
+
+- Updated dependencies [16f52ee]
+- Updated dependencies [8c97e8a]
+  - @shopify/shopify-api@9.7.2
+  - @shopify/shopify-app-session-storage@2.1.4
+
 ## 3.0.3
 
 ### Patch Changes
