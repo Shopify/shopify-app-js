@@ -49,6 +49,7 @@ export class GiftCardAdjustment extends Base {
   ): Promise<GiftCardAdjustment | null> {
     const result = await this.baseFind<GiftCardAdjustment>({
       session: session,
+      requireIds: true,
       urlIds: {"id": id, "gift_card_id": gift_card_id},
       params: {},
     });

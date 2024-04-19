@@ -181,6 +181,7 @@ export class Metafield extends Base {
   ): Promise<Metafield | null> {
     const result = await this.baseFind<Metafield>({
       session: session,
+      requireIds: true,
       urlIds: {"id": id, "article_id": article_id, "blog_id": blog_id, "collection_id": collection_id, "customer_id": customer_id, "draft_order_id": draft_order_id, "order_id": order_id, "page_id": page_id, "product_image_id": product_image_id, "product_id": product_id, "variant_id": variant_id},
       params: {"fields": fields},
     });

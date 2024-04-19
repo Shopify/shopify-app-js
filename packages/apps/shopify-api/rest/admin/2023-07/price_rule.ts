@@ -63,6 +63,7 @@ export class PriceRule extends Base {
   ): Promise<PriceRule | null> {
     const result = await this.baseFind<PriceRule>({
       session: session,
+      requireIds: true,
       urlIds: {"id": id},
       params: {},
     });

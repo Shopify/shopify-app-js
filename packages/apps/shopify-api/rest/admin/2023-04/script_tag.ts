@@ -63,6 +63,7 @@ export class ScriptTag extends Base {
   ): Promise<ScriptTag | null> {
     const result = await this.baseFind<ScriptTag>({
       session: session,
+      requireIds: true,
       urlIds: {"id": id},
       params: {"fields": fields},
     });

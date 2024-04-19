@@ -47,6 +47,7 @@ export class PaymentGateway extends Base {
   ): Promise<PaymentGateway | null> {
     const result = await this.baseFind<PaymentGateway>({
       session: session,
+      requireIds: true,
       urlIds: {"id": id},
       params: {},
     });

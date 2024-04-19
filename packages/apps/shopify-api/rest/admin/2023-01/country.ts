@@ -60,6 +60,7 @@ export class Country extends Base {
   ): Promise<Country | null> {
     const result = await this.baseFind<Country>({
       session: session,
+      requireIds: true,
       urlIds: {"id": id},
       params: {"fields": fields},
     });

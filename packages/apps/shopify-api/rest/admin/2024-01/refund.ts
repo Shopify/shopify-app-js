@@ -63,6 +63,7 @@ export class Refund extends Base {
   ): Promise<Refund | null> {
     const result = await this.baseFind<Refund>({
       session: session,
+      requireIds: true,
       urlIds: {"id": id, "order_id": order_id},
       params: {"fields": fields, "in_shop_currency": in_shop_currency},
     });

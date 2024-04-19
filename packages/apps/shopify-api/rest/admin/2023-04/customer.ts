@@ -97,6 +97,7 @@ export class Customer extends Base {
   ): Promise<Customer | null> {
     const result = await this.baseFind<Customer>({
       session: session,
+      requireIds: true,
       urlIds: {"id": id},
       params: {"fields": fields},
     });

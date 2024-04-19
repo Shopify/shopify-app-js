@@ -55,6 +55,7 @@ export class Report extends Base {
   ): Promise<Report | null> {
     const result = await this.baseFind<Report>({
       session: session,
+      requireIds: true,
       urlIds: {"id": id},
       params: {"fields": fields},
     });

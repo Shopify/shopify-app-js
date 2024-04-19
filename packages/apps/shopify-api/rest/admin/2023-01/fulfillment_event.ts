@@ -67,6 +67,7 @@ export class FulfillmentEvent extends Base {
   ): Promise<FulfillmentEvent | null> {
     const result = await this.baseFind<FulfillmentEvent>({
       session: session,
+      requireIds: true,
       urlIds: {"id": id, "order_id": order_id, "fulfillment_id": fulfillment_id},
       params: {"event_id": event_id},
     });

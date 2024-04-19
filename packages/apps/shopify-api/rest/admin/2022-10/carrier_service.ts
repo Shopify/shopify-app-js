@@ -47,6 +47,7 @@ export class CarrierService extends Base {
   ): Promise<CarrierService | null> {
     const result = await this.baseFind<CarrierService>({
       session: session,
+      requireIds: true,
       urlIds: {"id": id},
       params: {},
     });
