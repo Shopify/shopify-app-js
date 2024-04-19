@@ -16,6 +16,7 @@ import type {
 import type {AppDistribution} from './types';
 import type {AdminApiContext} from './clients';
 import {IdempotentPromiseHandler} from './authenticate/helpers/idempotent-promise-handler';
+import {OptionalScopesOptions} from './scopes/types';
 
 export interface AppConfigArg<
   Resources extends ShopifyRestResources = ShopifyRestResources,
@@ -227,6 +228,8 @@ export interface AppConfigArg<
    * releases in advance and provide feedback on the new features.
    */
   future?: Future;
+
+  optionalScopes?: OptionalScopesOptions;
 }
 
 export interface AppConfig<Storage extends SessionStorage = SessionStorage>
@@ -239,6 +242,7 @@ export interface AppConfig<Storage extends SessionStorage = SessionStorage>
   hooks: HooksConfig;
   future: FutureFlags;
   idempotentPromiseHandler: IdempotentPromiseHandler;
+  optionalScopes: OptionalScopesOptions;
 }
 
 export interface AuthConfig {

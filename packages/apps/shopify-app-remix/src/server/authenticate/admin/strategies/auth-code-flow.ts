@@ -8,6 +8,7 @@ import {
   Shopify,
   ShopifyRestResources,
 } from '@shopify/shopify-api';
+import {handleScopesError} from 'src/server/scopes/optional-scopes';
 
 import type {BasicParams} from '../../../types';
 import {
@@ -118,6 +119,10 @@ export class AuthCodeFlowStrategy<
           );
         }
       },
+      onApiError:
+        config.optionalScopes.errorHandling === 'automatic'
+          ? handleScopesError
+          : undefined,
     });
   }
 

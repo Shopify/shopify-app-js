@@ -18,6 +18,7 @@ export interface OnErrorOptions {
 export interface HandleClientErrorOptions {
   request: Request;
   onError?: ({session, error}: OnErrorOptions) => Promise<void | never>;
+  onApiError?: ({session, error}: OnErrorOptions) => Promise<void>;
 }
 
 export interface AuthorizationStrategy {

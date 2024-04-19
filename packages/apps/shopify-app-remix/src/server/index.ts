@@ -14,7 +14,8 @@ export {
 } from '@shopify/shopify-api';
 
 export type {ShopifyApp, LoginError} from './types';
-export {LoginErrorType, AppDistribution, MissingScopesResponse} from './types';
+export {LoginErrorType, AppDistribution} from './types';
+export {MissingScopesResponse} from './scopes/types';
 export {boundary} from './boundary';
 export {shopifyApp} from './shopify-app';
 export * from './errors';

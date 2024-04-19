@@ -35,6 +35,10 @@ import {IdempotentPromiseHandler} from './authenticate/helpers/idempotent-promis
 import {authenticateFlowFactory} from './authenticate/flow/authenticate';
 import {authenticateFulfillmentServiceFactory} from './authenticate/fulfillment-service/authenticate';
 import {FutureFlagOptions, logDisabledFutureFlags} from './future/flags';
+import {
+  errorBoundaryFactory,
+  handleScopesError,
+} from './scopes/optional-scopes';
 
 /**
  * Creates an object your app will use to interact with Shopify.
@@ -102,6 +106,13 @@ export function shopifyApp<
     unauthenticated: {
       admin: unauthenticatedAdminContextFactory(params),
       storefront: unauthenticatedStorefrontContextFactory(params),
+    },
+    optionalScopes: {
+      onMissingScope:
+        config.optionalScopes.errorHandling === 'automatic'
+          ? handleScopesError
+          : undefined,
+      onErrorBoundary: errorBoundaryFactory(config.optionalScopes.redirection),
     },
   };
 
@@ -196,6 +207,10 @@ function deriveConfig<Storage extends SessionStorage>(
       patchSessionTokenPath: `${authPathPrefix}/session-token`,
       exitIframePath: `${authPathPrefix}/exit-iframe`,
       loginPath: `${authPathPrefix}/login`,
+    },
+    optionalScopes: {
+      errorHandling: appConfig.optionalScopes?.errorHandling ?? 'automatic',
+      redirection: appConfig.optionalScopes?.redirection ?? 'inline',
     },
   };
 }

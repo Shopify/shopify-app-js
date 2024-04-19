@@ -20,6 +20,7 @@ import type {
   FutureFlagOptions,
 } from './future/flags';
 import {AuthenticateFulfillmentService} from './authenticate/fulfillment-service/types';
+import { OptionalScopes } from './scopes/types';
 
 export interface BasicParams<
   Future extends FutureFlagOptions = FutureFlagOptions,
@@ -424,6 +425,8 @@ export interface ShopifyAppBase<Config extends AppConfigArg> {
    * ```
    */
   unauthenticated: Unauthenticated<RestResourcesType<Config>>;
+
+  optionalScopes: OptionalScopes;
 }
 
 interface ShopifyAppLogin {
@@ -517,10 +520,3 @@ export type ShopifyApp<Config extends AppConfigArg> =
       : Config['distribution'] extends AppDistribution.AppStore
         ? AppStoreApp<Config>
         : AppStoreApp<Config>;
-
-export interface MissingScopesResponse {
-  type: 'missingScopes';
-  data: {
-    scopes: string[];
-  };
-}

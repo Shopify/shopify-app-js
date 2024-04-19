@@ -1,13 +1,12 @@
 import {HttpResponseError} from '@shopify/shopify-api';
 
 import type {HandleAdminClientError} from '../../../clients/admin/types';
-import {HandleClientErrorOptions, OnErrorOptions} from '../strategies/types';
-import {OPTIONAL_SCOPES_HEADER} from '../../const';
-import { MissingScopesResponse } from 'src/server/types';
+import {HandleClientErrorOptions} from '../strategies/types';
 
 export function handleClientErrorFactory({
   request,
   onError,
+  onApiError,
 }: HandleClientErrorOptions): HandleAdminClientError {
   return async function handleClientError({
     error,
@@ -18,7 +17,9 @@ export function handleClientErrorFactory({
       params.logger.debug(
         `Got a response error from the API: ${error.message}`,
       );
-      handleScopesError({request, error, session});
+      if (onApiError) {
+        await onApiError({request, session, error});
+      }
       throw error;
     }
 
@@ -43,22 +44,4 @@ export function handleClientErrorFactory({
       },
     });
   };
-}
-
-function handleScopesError({request, error}: OnErrorOptions) {
-  if (
-    error.message.includes('Required access') ||
-    error.message.includes('Access denied for')
-  ) {
-    const optionalScopes = (
-      request.headers.get(OPTIONAL_SCOPES_HEADER) ?? ''
-    ).split(',');
-    const responseContent: MissingScopesResponse = {
-      type: 'missingScopes',
-      data: {scopes: optionalScopes},
-    };
-    throw new Response(JSON.stringify(responseContent), {
-      status: 500,
-    });
-  }
 }
