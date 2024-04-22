@@ -61,6 +61,7 @@ export class Redirect extends Base {
   ): Promise<Redirect | null> {
     const result = await this.baseFind<Redirect>({
       session: session,
+      requireIds: true,
       urlIds: {"id": id},
       params: {"fields": fields},
     });

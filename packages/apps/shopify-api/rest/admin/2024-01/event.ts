@@ -60,6 +60,7 @@ export class Event extends Base {
   ): Promise<Event | null> {
     const result = await this.baseFind<Event>({
       session: session,
+      requireIds: true,
       urlIds: {"id": id},
       params: {"fields": fields},
     });

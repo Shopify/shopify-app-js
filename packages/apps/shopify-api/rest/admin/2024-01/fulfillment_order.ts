@@ -93,6 +93,7 @@ export class FulfillmentOrder extends Base {
   ): Promise<FulfillmentOrder | null> {
     const result = await this.baseFind<FulfillmentOrder>({
       session: session,
+      requireIds: true,
       urlIds: {"id": id},
       params: {"include_financial_summaries": include_financial_summaries, "include_order_reference_fields": include_order_reference_fields},
     });

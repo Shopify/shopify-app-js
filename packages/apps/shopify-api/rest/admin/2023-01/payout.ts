@@ -46,6 +46,7 @@ export class Payout extends Base {
   ): Promise<Payout | null> {
     const result = await this.baseFind<Payout>({
       session: session,
+      requireIds: true,
       urlIds: {"id": id},
       params: {},
     });

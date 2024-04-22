@@ -97,6 +97,7 @@ export class Article extends Base {
   ): Promise<Article | null> {
     const result = await this.baseFind<Article>({
       session: session,
+      requireIds: true,
       urlIds: {"id": id, "blog_id": blog_id},
       params: {"fields": fields},
     });

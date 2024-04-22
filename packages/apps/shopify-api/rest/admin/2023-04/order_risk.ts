@@ -56,6 +56,7 @@ export class OrderRisk extends Base {
   ): Promise<OrderRisk | null> {
     const result = await this.baseFind<OrderRisk>({
       session: session,
+      requireIds: true,
       urlIds: {"id": id, "order_id": order_id},
       params: {},
     });

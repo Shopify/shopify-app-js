@@ -48,6 +48,7 @@ export class ApplePayCertificate extends Base {
   ): Promise<ApplePayCertificate | null> {
     const result = await this.baseFind<ApplePayCertificate>({
       session: session,
+      requireIds: true,
       urlIds: {"id": id},
       params: {},
     });

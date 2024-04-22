@@ -93,6 +93,7 @@ export class Comment extends Base {
   ): Promise<Comment | null> {
     const result = await this.baseFind<Comment>({
       session: session,
+      requireIds: true,
       urlIds: {"id": id},
       params: {"fields": fields},
     });

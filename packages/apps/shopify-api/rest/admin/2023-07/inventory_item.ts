@@ -43,6 +43,7 @@ export class InventoryItem extends Base {
   ): Promise<InventoryItem | null> {
     const result = await this.baseFind<InventoryItem>({
       session: session,
+      requireIds: true,
       urlIds: {"id": id},
       params: {},
     });

@@ -51,6 +51,7 @@ export class Location extends Base {
   ): Promise<Location | null> {
     const result = await this.baseFind<Location>({
       session: session,
+      requireIds: true,
       urlIds: {"id": id},
       params: {},
     });

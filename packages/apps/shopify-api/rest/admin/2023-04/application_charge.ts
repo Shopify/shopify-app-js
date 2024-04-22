@@ -49,6 +49,7 @@ export class ApplicationCharge extends Base {
   ): Promise<ApplicationCharge | null> {
     const result = await this.baseFind<ApplicationCharge>({
       session: session,
+      requireIds: true,
       urlIds: {"id": id},
       params: {"fields": fields},
     });

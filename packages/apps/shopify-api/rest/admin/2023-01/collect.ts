@@ -56,6 +56,7 @@ export class Collect extends Base {
   ): Promise<Collect | null> {
     const result = await this.baseFind<Collect>({
       session: session,
+      requireIds: true,
       urlIds: {"id": id},
       params: {"fields": fields},
     });

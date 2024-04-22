@@ -68,6 +68,7 @@ export class MarketingEvent extends Base {
   ): Promise<MarketingEvent | null> {
     const result = await this.baseFind<MarketingEvent>({
       session: session,
+      requireIds: true,
       urlIds: {"id": id},
       params: {},
     });

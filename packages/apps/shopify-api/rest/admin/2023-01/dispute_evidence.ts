@@ -41,6 +41,7 @@ export class DisputeEvidence extends Base {
   ): Promise<DisputeEvidence | null> {
     const result = await this.baseFind<DisputeEvidence>({
       session: session,
+      requireIds: true,
       urlIds: {"dispute_id": dispute_id},
       params: {},
     });

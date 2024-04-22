@@ -50,6 +50,7 @@ export class Theme extends Base {
   ): Promise<Theme | null> {
     const result = await this.baseFind<Theme>({
       session: session,
+      requireIds: true,
       urlIds: {"id": id},
       params: {"fields": fields},
     });
