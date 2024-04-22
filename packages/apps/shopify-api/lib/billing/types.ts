@@ -119,7 +119,7 @@ export type BillingConfigLegacyItem =
 export type BillingConfigItem<
   Future extends FutureFlagOptions = FutureFlagOptions,
 > =
-  FeatureEnabled<Future, 'v10_lineItemBilling'> extends true
+  FeatureEnabled<Future, 'v11_lineItemBilling'> extends true
     ? BillingConfigOneTimePlan | BillingConfigSubscriptionLineItemPlan
     : BillingConfigLegacyItem;
 

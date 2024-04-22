@@ -6,9 +6,15 @@ import {type ConfigInterface} from '../lib/base-types';
  */
 export interface FutureFlags {
   /**
-   * Enable line item billing, to make billing configuration more similar to the GraphQL API.
+   * Enable line item billing, to make billing configuration more similar to the GraphQL API. Default enabling of this
+   * feature has been moved to v11. Use v11_lineItemBilling instead.
    */
   v10_lineItemBilling?: boolean;
+
+  /**
+   * Enable line item billing, to make billing configuration more similar to the GraphQL API.
+   */
+  v11_lineItemBilling?: boolean;
 }
 
 /**
@@ -36,10 +42,15 @@ export function logDisabledFutureFlags(
   const logFlag = (flag: string, message: string) =>
     logger.info(`Future flag ${flag} is disabled.\n\n  ${message}\n`);
 
-  if (!config.future?.v10_lineItemBilling) {
+  if (!config.future?.v11_lineItemBilling) {
     logFlag(
-      'v10_lineItemBilling',
+      'v11_lineItemBilling',
       'Enable this flag to use the new billing API, that supports multiple line items per plan.',
+    );
+  }
+  if (config.future?.v10_lineItemBilling) {
+    logger.info(
+      'This feature will become enabled in v11. Use flag v11_lineItemBilling instead',
     );
   }
 }

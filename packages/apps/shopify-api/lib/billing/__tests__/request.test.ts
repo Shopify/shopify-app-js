@@ -23,7 +23,7 @@ const GRAPHQL_BASE_REQUEST = {
 
 interface TestConfigInterface {
   name: string;
-  billingConfig: BillingConfig<{v10_lineItemBilling: true}>;
+  billingConfig: BillingConfig<{v11_lineItemBilling: true}>;
   paymentResponse: string;
   responseObject: any;
   errorResponse: string;

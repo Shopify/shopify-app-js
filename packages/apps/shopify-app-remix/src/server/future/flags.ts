@@ -43,7 +43,10 @@ export interface FutureFlags {
 // When adding new flags, use this format:
 // vX_myFutureFlag: Future extends FutureFlags ? Future['vX_myFutureFlag'] : false;
 export interface ApiFutureFlags<Future extends FutureFlagOptions> {
-  v10_lineItemBilling: Future extends FutureFlags
+  v10_lineItemBilling?: Future extends FutureFlags
+    ? Future['v3_lineItemBilling']
+    : false;
+  v11_lineItemBilling: Future extends FutureFlags
     ? Future['v3_lineItemBilling']
     : false;
 }

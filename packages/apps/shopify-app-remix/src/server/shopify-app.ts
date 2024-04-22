@@ -162,7 +162,7 @@ function deriveApi(appConfig: AppConfigArg) {
     apiVersion: appConfig.apiVersion ?? LATEST_API_VERSION,
     isCustomStoreApp: appConfig.distribution === AppDistribution.ShopifyAdmin,
     future: {
-      v10_lineItemBilling: appConfig.future?.v3_lineItemBilling,
+      v11_lineItemBilling: appConfig.future?.v3_lineItemBilling,
     },
     _logDisabledFutureFlags: false,
   });

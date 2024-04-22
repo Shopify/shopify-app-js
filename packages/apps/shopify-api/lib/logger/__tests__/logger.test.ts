@@ -194,7 +194,7 @@ describe('shopify.logger', () => {
       // We always log an INFO line with the runtime when starting up
       const expectedCallCount =
         config.expectedLevels.length +
-        (config.logLevel >= LogSeverity.Info ? 1 : 0);
+        (config.logLevel >= LogSeverity.Info ? 2 : 0);
 
       expect(shopify.config.logger.log).toHaveBeenCalledTimes(
         expectedCallCount,
@@ -277,8 +277,8 @@ describe('shopify.logger', () => {
     await logPromise;
 
     // We always log the runtime before the actual message
-    expect(loggedMessages.length).toEqual(2);
-    expect(loggedMessages[1]).toEqual(
+    expect(loggedMessages.length).toEqual(3);
+    expect(loggedMessages[2]).toEqual(
       `${LogSeverity.Debug}: [shopify-api/DEBUG] debug message`,
     );
   });

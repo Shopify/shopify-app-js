@@ -594,7 +594,7 @@ describe('REST client', () => {
     await client.get({path: '/url/path'});
 
     // first call to .log is .debug with package and runtime info during initialization
-    expect(shopify.config.logger.log).toHaveBeenCalledTimes(2);
+    expect(shopify.config.logger.log).toHaveBeenCalledTimes(3);
     expect(shopify.config.logger.log).toHaveBeenLastCalledWith(
       LogSeverity.Warning,
       expect.stringContaining('API Deprecation Notice'),
@@ -615,7 +615,7 @@ describe('REST client', () => {
       data: postBody,
     });
 
-    expect(shopify.config.logger.log).toHaveBeenCalledTimes(3);
+    expect(shopify.config.logger.log).toHaveBeenCalledTimes(4);
     expect(shopify.config.logger.log).toHaveBeenLastCalledWith(
       LogSeverity.Warning,
       expect.stringContaining(
@@ -678,7 +678,7 @@ describe('REST client', () => {
     // this one should skip it
     await client.get({path: '/url/path'});
     // first call to .log is .debug with package and runtime info during initialization
-    expect(shopify.config.logger.log).toHaveBeenCalledTimes(2);
+    expect(shopify.config.logger.log).toHaveBeenCalledTimes(3);
     expect(shopify.config.logger.log).toHaveBeenLastCalledWith(
       LogSeverity.Warning,
       expect.anything(),
@@ -691,7 +691,7 @@ describe('REST client', () => {
     // should warn a second time since 5 mins have passed
     await client.get({path: '/url/path'});
 
-    expect(shopify.config.logger.log).toHaveBeenCalledTimes(3);
+    expect(shopify.config.logger.log).toHaveBeenCalledTimes(4);
     expect(shopify.config.logger.log).toHaveBeenLastCalledWith(
       LogSeverity.Warning,
       expect.anything(),
@@ -893,7 +893,7 @@ describe('REST client', () => {
     await client.post({path: '/url/path', data});
 
     // The first log call is the runtime info
-    expect(shopify.config.logger.log).toHaveBeenCalledTimes(1);
+    expect(shopify.config.logger.log).toHaveBeenCalledTimes(2);
   });
 
   it('logs HTTP requests when the setting is on', async () => {
@@ -915,7 +915,7 @@ describe('REST client', () => {
       expect.anything(),
     );
     const logMessage = (shopify.config.logger.log as jest.Mock).mock
-      .calls[1][1];
+      .calls[2][1];
     expect(logMessage).toContain('Received response for HTTP');
     expect(logMessage).toContain(
       `https://test-shop.myshopify.io/admin/api/${shopify.config.apiVersion}/url/path`,
