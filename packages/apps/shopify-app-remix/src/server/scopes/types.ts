@@ -8,6 +8,7 @@ export interface OptionalScopesOptions {
 export interface OptionalScopes {
   onMissingScope?: (options: OnErrorOptions) => void;
   onErrorBoundary?: (error: any) => void;
+  config: OptionalScopesOptions;
 }
 
 export interface MissingScopesResponse {

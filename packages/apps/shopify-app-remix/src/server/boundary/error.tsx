@@ -1,10 +1,14 @@
 import {redirect} from '../scopes/strategies/inline-redirection';
 import {MissingScopesResponse} from '../scopes/types';
 
-export function errorBoundary(error: any) {
+export function errorBoundary(error: any, params: any) {
   const missingScopesError = parseJsonError(error);
   if (missingScopesError) {
-    return redirect(missingScopesError);
+    if (params && params.redirection === 'inline') {
+      return redirect(missingScopesError);
+    } else {
+      <div dangerouslySetInnerHTML={{__html: missingScopesError}} />;
+    }
   }
 
   if (

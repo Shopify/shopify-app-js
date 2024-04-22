@@ -113,6 +113,7 @@ export function shopifyApp<
           ? handleScopesError
           : undefined,
       onErrorBoundary: errorBoundaryFactory(config.optionalScopes.redirection),
+      config: config.optionalScopes,
     },
   };
 
