@@ -1,1 +1,0 @@
-export {useShopifyFetcher} from './UseFetcher';
