@@ -2,6 +2,7 @@ import {Session} from '../session';
 import {testConfig} from '../../__tests__/test-config';
 import {shopifyApi} from '../..';
 import {AuthScopes} from '../../auth';
+import {getCryptoLib} from '../../../runtime';
 
 describe('session', () => {
   it('can create a session from another session', () => {
@@ -239,8 +240,8 @@ const testSessions = [
       ['state', 'offline-session-state'],
       ['isOnline', false],
       ['scope', 'offline-session-scope'],
-      ['accessToken', 'offline-session-token'],
       ['expires', expiresNumber],
+      ['accessToken', 'offline-session-token'],
     ],
     returnUserData: false,
   },
@@ -340,8 +341,8 @@ const testSessions = [
       ['state', 'online-session-state'],
       ['isOnline', true],
       ['scope', 'online-session-scope'],
-      ['accessToken', 'online-session-token'],
       ['expires', expiresNumber],
+      ['accessToken', 'online-session-token'],
       ['onlineAccessInfo', 1],
     ],
     returnUserData: false,
@@ -392,8 +393,8 @@ const testSessions = [
       ['state', 'offline-session-state'],
       ['isOnline', false],
       ['scope', 'offline-session-scope'],
-      ['accessToken', 'offline-session-token'],
       ['expires', expiresNumber],
+      ['accessToken', 'offline-session-token'],
     ],
     returnUserData: true,
   },
@@ -427,8 +428,8 @@ const testSessions = [
       ['state', 'online-session-state'],
       ['isOnline', true],
       ['scope', 'online-session-scope'],
-      ['accessToken', 'online-session-token'],
       ['expires', expiresNumber],
+      ['accessToken', 'online-session-token'],
       ['userId', 1],
       ['firstName', 'online-session-first-name'],
       ['lastName', 'online-session-last-name'],
@@ -463,8 +464,8 @@ const testSessions = [
       ['state', 'online-session-state'],
       ['isOnline', true],
       ['scope', 'online-session-scope'],
-      ['accessToken', 'online-session-token'],
       ['expires', expiresNumber],
+      ['accessToken', 'online-session-token'],
       ['userId', 1],
     ],
     returnUserData: true,
@@ -634,5 +635,153 @@ describe('toPropertyArray and fromPropertyArray', () => {
         expect(sessionCopy.onlineAccessInfo).toBeUndefined();
       }
     });
+  });
+});
+
+describe('toEncryptedPropertyArray and fromEncryptedPropertyArray', () => {
+  let key: CryptoKey;
+
+  beforeEach(async () => {
+    const cryptoLib = getCryptoLib();
+
+    key = await cryptoLib.subtle.generateKey(
+      {name: 'AES-GCM', length: 256},
+      true,
+      ['encrypt', 'decrypt'],
+    );
+  });
+
+  testSessions.forEach((test) => {
+    const onlineOrOffline = test.session.isOnline ? 'online' : 'offline';
+    const userData = test.returnUserData ? 'with' : 'without';
+
+    it(`returns a property array of an ${onlineOrOffline} session ${userData} user data`, async () => {
+      // GIVEN
+      const getPropIndex = (object: any, prop: string, check = true) => {
+        const index = object.findIndex((property: any) => property[0] === prop);
+
+        if (check) expect(index).toBeGreaterThan(-1);
+
+        return index;
+      };
+
+      const session = new Session(test.session);
+      const testProps = [...test.propertyArray];
+
+      // WHEN
+      const actualProps = await session.toEncryptedPropertyArray(
+        key,
+        test.returnUserData,
+      );
+
+      // THEN
+
+      // The token is encrypted, so the values will be different
+      const tokenIndex = getPropIndex(testProps, 'accessToken', false);
+      const actualTokenIndex = getPropIndex(actualProps, 'accessToken', false);
+
+      if (actualTokenIndex > -1 && tokenIndex > -1) {
+        expect(
+          actualProps[actualTokenIndex][1].toString().startsWith('encrypted#'),
+        ).toBeTruthy();
+
+        actualProps.splice(actualTokenIndex, 1);
+        testProps.splice(tokenIndex, 1);
+      }
+
+      expect(actualProps).toStrictEqual(testProps);
+    });
+
+    it(`recreates a Session from a property array of an ${onlineOrOffline} session ${userData} user data`, async () => {
+      // GIVEN
+      const session = new Session(test.session);
+
+      // WHEN
+      const actualSession = await Session.fromEncryptedPropertyArray(
+        await session.toEncryptedPropertyArray(key, test.returnUserData),
+        key,
+        test.returnUserData,
+      );
+
+      // THEN
+      expect(actualSession.id).toStrictEqual(session.id);
+      expect(actualSession.shop).toStrictEqual(session.shop);
+      expect(actualSession.state).toStrictEqual(session.state);
+      expect(actualSession.isOnline).toStrictEqual(session.isOnline);
+      expect(actualSession.scope).toStrictEqual(session.scope);
+      expect(actualSession.accessToken).toStrictEqual(session.accessToken);
+      expect(actualSession.expires).toStrictEqual(session.expires);
+
+      const user = session.onlineAccessInfo?.associated_user;
+      const actualUser = actualSession.onlineAccessInfo?.associated_user;
+      expect(actualUser?.id).toStrictEqual(user?.id);
+
+      if (test.returnUserData) {
+        if (user && actualUser) {
+          expect(actualUser).toMatchObject(user);
+        } else {
+          expect(actualUser).toBeUndefined();
+          expect(user).toBeUndefined();
+        }
+      } else {
+        expect(actualUser?.first_name).toBeUndefined();
+        expect(actualUser?.last_name).toBeUndefined();
+        expect(actualUser?.email).toBeUndefined();
+        expect(actualUser?.locale).toBeUndefined();
+        expect(actualUser?.email_verified).toBeUndefined();
+        expect(actualUser?.account_owner).toBeUndefined();
+        expect(actualUser?.collaborator).toBeUndefined();
+      }
+    });
+
+    const describe = test.session.isOnline ? 'Does' : 'Does not';
+    const isOnline = test.session.isOnline ? 'online' : 'offline';
+
+    it(`${describe} have online access info when the token is ${isOnline}`, async () => {
+      // GIVEN
+      const session = new Session(test.session);
+
+      // WHEN
+      const actualSession = await Session.fromEncryptedPropertyArray(
+        await session.toEncryptedPropertyArray(key, test.returnUserData),
+        key,
+        test.returnUserData,
+      );
+
+      // THEN
+      if (test.session.isOnline) {
+        expect(actualSession.onlineAccessInfo).toBeDefined();
+      } else {
+        expect(actualSession.onlineAccessInfo).toBeUndefined();
+      }
+    });
+  });
+
+  it('fails to decrypt an invalid token', async () => {
+    // GIVEN
+    const session = new Session({
+      id: 'offline_session_id',
+      shop: 'offline-session-shop',
+      state: 'offline-session-state',
+      isOnline: false,
+      scope: 'offline-session-scope',
+      accessToken: 'offline-session-token',
+      expires: expiresDate,
+    });
+
+    const props = await session.toEncryptedPropertyArray(key, false);
+
+    // WHEN
+    const tamperedProps = props.map((derp) => {
+      return [
+        derp[0],
+        derp[0] === 'accessToken' ? 'encrypted#invalid token' : derp[1],
+      ] as [string, string | number | boolean];
+    });
+
+    // THEN
+    await expect(async () =>
+      Session.fromEncryptedPropertyArray(tamperedProps, key, false),
+    ).rejects.toThrow('The provided data is too small.');
   });
 });

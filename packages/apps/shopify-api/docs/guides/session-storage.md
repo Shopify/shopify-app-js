@@ -61,11 +61,9 @@ const sessionCopy = new Session(callbackResponse.session.toObject());
 // sessionCopy is an identical copy of the callbackResponse.session instance
 ```
 
-Now that the app has a JavaScript object containing the data of a `Session`, it can convert the data into whatever means necessary to store it in the apps preferred storage mechanism. Various implementations of session storage can be found in the [`session-storages` folder](../../../session-storage#readme).
+When converting the data for storage, the `Session` class also includes an instance method called `.toPropertyArray` that returns an array of key-value pairs constructed from the result of `toObject`. `toPropertyArray` has an optional parameter `returnUserData`, defaulted to false, when set to true it will return the associated user data as part of the property array object.
 
-The `Session` class also includes an instance method called `.toPropertyArray` that returns an array of key-value pairs, e.g.,
-
-`toPropertyArray` has an optional parameter `returnUserData`, defaulted to false, when set to true it will return the associated user data as part of the property array object.
+With that object containing the data of a `Session`, the app can convert the data into whatever it needs to store using its preferred mechanism. Various implementations of session storage can be found in the [`session-storages` folder](../../../session-storage#readme).
 
 ```ts
 const {session, headers} = shopify.auth.callback({
@@ -293,5 +291,15 @@ const session = Session.fromPropertyArray(sessionProperties);
 > In v6, the `.fromPropertyArray` method now returns the `expires` property in _milliseconds_ and leaves it to the app to convert it (if needed) from seconds.
 >
 > The existing [SQL-based implementations](../../../session-storage#readme), i.e., MySQL, PostgreSQL and SQLite, convert it from seconds from storage. The remaining implementations do not change the retrieved `expires` property.
+
+### Encrypting data for storage
+
+If you want to encrypt your access tokens before storing them, the `Session` class provides two methods: `fromEncryptedPropertyArray` and `toEncryptedPropertyArray`.
+
+These behave the same as their non-encrypted counterparts, and take in a `CryptoKey` object. If a session is currently not encrypted in storage, these methods will still load it normally, and will encrypt them when saving them.
+Currently, only the `accessToken` is encrypted.
+
+`fromEncryptedPropertyArray` will return ciphers for the encrypted fields, prefixed with `encrypted#`.
+That way, storage providers can progressively update sessions as they're loaded and saved, or run a migration script that simply loads and saves every session.
 
 [Back to guide index](../../README.md#guides)

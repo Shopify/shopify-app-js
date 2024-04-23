@@ -8,10 +8,7 @@ export async function createSHA256HMAC(
   payload: string,
   returnFormat: HashFormat = HashFormat.Base64,
 ): Promise<string> {
-  const cryptoLib =
-    typeof (crypto as any)?.webcrypto === 'undefined'
-      ? crypto
-      : (crypto as any).webcrypto;
+  const cryptoLib = getCryptoLib();
 
   const enc = new TextEncoder();
   const key = await cryptoLib.subtle.importKey(
@@ -43,6 +40,11 @@ export function asHex(buffer: ArrayBuffer): string {
 
 const LookupTable =
   'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=';
+const ReverseLookupTable = new Uint8Array(256);
+for (let i = 0; i < LookupTable.length; i++) {
+  ReverseLookupTable[LookupTable.charCodeAt(i)] = i;
+}
+
 export function asBase64(buffer: ArrayBuffer): string {
   let output = '';
 
@@ -73,6 +75,40 @@ export function asBase64(buffer: ArrayBuffer): string {
   return output;
 }
 
+export function fromBase64(base64: string): ArrayBuffer {
+  let bufferLength = base64.length * 0.75;
+  const len = base64.length;
+  let i;
+  let part = 0;
+  let encoded1;
+  let encoded2;
+  let encoded3;
+  let encoded4;
+
+  if (base64[base64.length - 1] === '=') {
+    bufferLength--;
+    if (base64[base64.length - 2] === '=') {
+      bufferLength--;
+    }
+  }
+
+  const arraybuffer = new ArrayBuffer(bufferLength);
+  const bytes = new Uint8Array(arraybuffer);
+
+  for (i = 0; i < len; i += 4) {
+    encoded1 = ReverseLookupTable[base64.charCodeAt(i)];
+    encoded2 = ReverseLookupTable[base64.charCodeAt(i + 1)];
+    encoded3 = ReverseLookupTable[base64.charCodeAt(i + 2)];
+    encoded4 = ReverseLookupTable[base64.charCodeAt(i + 3)];
+
+    bytes[part++] = (encoded1 << 2) | (encoded2 >> 4);
+    bytes[part++] = ((encoded2 & 15) << 4) | (encoded3 >> 2);
+    bytes[part++] = ((encoded3 & 3) << 6) | (encoded4 & 63);
+  }
+
+  return arraybuffer;
+}
+
 export function hashString(str: string, returnFormat: HashFormat): string {
   const buffer = new TextEncoder().encode(str);
 
@@ -84,4 +120,10 @@ export function hashString(str: string, returnFormat: HashFormat): string {
     default:
       throw new ShopifyError(`Unrecognized hash format '${returnFormat}'`);
   }
+}
+
+export function getCryptoLib(): Crypto {
+  return typeof (crypto as any)?.webcrypto === 'undefined'
+    ? crypto
+    : (crypto as any).webcrypto;
 }

@@ -1,9 +1,19 @@
 /* eslint-disable no-fallthrough */
+
 import {InvalidSession} from '../error';
 import {OnlineAccessInfo} from '../auth/oauth/types';
 import {AuthScopes} from '../auth/scopes';
+import {
+  decryptString,
+  encryptString,
+  generateIV,
+  asBase64,
+  fromBase64,
+} from '../../runtime/crypto';
 
 import {SessionParams} from './types';
+
+type SessionParamsArray = [string, string | number | boolean][];
 
 const propertiesToSave = [
   'id',
@@ -20,8 +30,10 @@ const propertiesToSave = [
  * Stores App information from logged in merchants so they can make authenticated requests to the Admin API.
  */
 export class Session {
+  private static CIPHER_PREFIX = 'encrypted#';
+
   public static fromPropertyArray(
-    entries: [string, string | number | boolean][],
+    entries: SessionParamsArray,
     returnUserData = false,
   ): Session {
     if (!Array.isArray(entries)) {
@@ -134,6 +146,48 @@ export class Session {
     return session;
   }
 
+  public static async fromEncryptedPropertyArray(
+    entries: SessionParamsArray,
+    cryptoKey: CryptoKey,
+    returnUserData = false,
+  ) {
+    const decryptedEntries: SessionParamsArray = [];
+    for (const [key, value] of entries) {
+      switch (key) {
+        case 'accessToken':
+          decryptedEntries.push([
+            key,
+            await this.decryptValue(value as string, cryptoKey),
+          ]);
+          break;
+        default:
+          decryptedEntries.push([key, value]);
+          break;
+      }
+    }
+
+    return this.fromPropertyArray(decryptedEntries, returnUserData);
+  }
+
+  private static async encryptValue(value: string, key: CryptoKey) {
+    const iv = generateIV();
+    const cipher = await encryptString(value, {key, iv});
+
+    return `${Session.CIPHER_PREFIX}${asBase64(iv)}${cipher}`;
+  }
+
+  private static async decryptValue(value: string, key: CryptoKey) {
+    if (!value.startsWith(Session.CIPHER_PREFIX)) {
+      return value;
+    }
+
+    const keyString = value.slice(Session.CIPHER_PREFIX.length);
+    const iv = new Uint8Array(fromBase64(keyString.slice(0, 16)));
+    const cipher = keyString.slice(16);
+
+    return decryptString(cipher, {key, iv});
+  }
+
   /**
    * The unique identifier for the session.
    */
@@ -208,7 +262,7 @@ export class Session {
   }
 
   /**
-   * Converts an object with data into a Session.
+   * Converts a Session into an object with its data, that can be used to construct another Session.
    */
   public toObject(): SessionParams {
     const object: SessionParams = {
@@ -259,11 +313,34 @@ export class Session {
   /**
    * Converts the session into an array of key-value pairs.
    */
-  public toPropertyArray(
+  public toPropertyArray(returnUserData = false): SessionParamsArray {
+    return this.flattenProperties(this.toObject(), returnUserData);
+  }
+
+  /**
+   * Converts the session into an array of key-value pairs, encrypting sensitive data.
+   *
+   * The encrypted string will contain both the IV and the encrypted value.
+   */
+  public async toEncryptedPropertyArray(
+    key: CryptoKey,
     returnUserData = false,
-  ): [string, string | number | boolean][] {
+  ): Promise<SessionParamsArray> {
+    const object = this.toObject();
+
+    if (object.accessToken) {
+      object.accessToken = await Session.encryptValue(object.accessToken, key);
+    }
+
+    return this.flattenProperties(object, returnUserData);
+  }
+
+  private flattenProperties(
+    params: SessionParams,
+    returnUserData: boolean,
+  ): SessionParamsArray {
     return (
-      Object.entries(this)
+      Object.entries(params)
         .filter(
           ([key, value]) =>
             propertiesToSave.includes(key) &&
@@ -271,7 +348,7 @@ export class Session {
             value !== null,
         )
         // Prepare values for db storage
-        .flatMap(([key, value]): [string, string | number | boolean][] => {
+        .flatMap(([key, value]): SessionParamsArray => {
           switch (key) {
             case 'expires':
               return [[key, value ? value.getTime() : undefined]];
