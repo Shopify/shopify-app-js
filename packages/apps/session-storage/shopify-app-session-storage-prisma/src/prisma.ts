@@ -1,9 +1,10 @@
-import {Session} from '@shopify/shopify-api';
+import {Session, SessionParams} from '@shopify/shopify-api';
 import {SessionStorage} from '@shopify/shopify-app-session-storage';
 import type {PrismaClient, Session as Row} from '@prisma/client';
 import {Prisma} from '@prisma/client';
 
 interface PrismaSessionStorageOptions {
+  encryptionKey?: CryptoKey;
   tableName?: string;
 }
 
@@ -14,13 +15,18 @@ export class PrismaSessionStorage<T extends PrismaClient>
 {
   private ready: Promise<any>;
   private readonly tableName: string = 'session';
+  private readonly encryptionKey: CryptoKey | undefined;
 
   constructor(
     private prisma: T,
-    {tableName}: PrismaSessionStorageOptions = {},
+    {tableName, encryptionKey}: PrismaSessionStorageOptions = {},
   ) {
     if (tableName) {
       this.tableName = tableName;
+    }
+
+    if (encryptionKey) {
+      this.encryptionKey = encryptionKey;
     }
 
     if (this.getSessionTable() === undefined) {
@@ -39,7 +45,7 @@ export class PrismaSessionStorage<T extends PrismaClient>
   public async storeSession(session: Session): Promise<boolean> {
     await this.ready;
 
-    const data = this.sessionToRow(session);
+    const data = await this.sessionToRow(session);
 
     try {
       await this.getSessionTable().upsert({
@@ -111,27 +117,39 @@ export class PrismaSessionStorage<T extends PrismaClient>
       orderBy: [{expires: 'desc'}],
     });
 
-    return sessions.map((session) => this.rowToSession(session));
+    const sessionObjects: Session[] = [];
+    for (const session of sessions) {
+      sessionObjects.push(await this.rowToSession(session));
+    }
+
+    return sessionObjects;
   }
 
-  private sessionToRow(session: Session): Row {
-    const sessionParams = session.toObject();
+  private async sessionToRow(session: Session): Promise<Row> {
+    let sessionParams: SessionParams;
+    if (this.encryptionKey) {
+      sessionParams = Object.fromEntries(
+        await session.toEncryptedPropertyArray(this.encryptionKey),
+      ) as SessionParams;
+    } else {
+      sessionParams = Object.fromEntries(
+        session.toPropertyArray(),
+      ) as SessionParams;
+    }
 
     return {
-      id: session.id,
-      shop: session.shop,
-      state: session.state,
-      isOnline: session.isOnline,
-      scope: session.scope || null,
-      expires: session.expires || null,
-      accessToken: session.accessToken || '',
-      userId:
-        (sessionParams.onlineAccessInfo?.associated_user
-          .id as unknown as bigint) || null,
+      id: sessionParams.id,
+      shop: sessionParams.shop,
+      state: sessionParams.state,
+      isOnline: sessionParams.isOnline,
+      scope: sessionParams.scope || null,
+      expires: sessionParams.expires ? new Date(sessionParams.expires) : null,
+      accessToken: sessionParams.accessToken || '',
+      userId: (sessionParams.onlineAccessInfo as unknown as bigint) || null,
     };
   }
 
-  private rowToSession(row: Row): Session {
+  private async rowToSession(row: Row): Promise<Session> {
     const sessionParams: Record<string, boolean | string | number> = {
       id: row.id,
       shop: row.shop,
@@ -155,7 +173,14 @@ export class PrismaSessionStorage<T extends PrismaClient>
       sessionParams.onlineAccessInfo = String(row.userId);
     }
 
-    return Session.fromPropertyArray(Object.entries(sessionParams));
+    if (this.encryptionKey) {
+      return Session.fromEncryptedPropertyArray(
+        Object.entries(sessionParams),
+        this.encryptionKey,
+      );
+    } else {
+      return Session.fromPropertyArray(Object.entries(sessionParams));
+    }
   }
 
   private getSessionTable(): T['session'] {

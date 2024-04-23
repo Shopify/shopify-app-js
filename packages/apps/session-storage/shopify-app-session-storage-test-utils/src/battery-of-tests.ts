@@ -79,6 +79,7 @@ export function batteryOfTests(storageFactory: () => Promise<SessionStorage>) {
 
       await expect(storage.storeSession(session)).resolves.toBeTruthy();
       const storedSession = await storage.loadSession(sessionId);
+
       expect(session.equals(storedSession)).toBeTruthy();
 
       expect(storedSession?.isActive(testScopes)).toBeTruthy();
@@ -104,6 +105,7 @@ export function batteryOfTests(storageFactory: () => Promise<SessionStorage>) {
 
     await expect(storage.storeSession(session)).resolves.toBeTruthy();
     const storedSession = await storage.loadSession(sessionId);
+
     expect(session.equals(storedSession)).toBeTruthy();
   });
 
@@ -120,6 +122,7 @@ export function batteryOfTests(storageFactory: () => Promise<SessionStorage>) {
 
     await expect(storage.storeSession(session)).resolves.toBeTruthy();
     const storedSession = await storage.loadSession(sessionId);
+
     expect(session.equals(storedSession)).toBeTruthy();
   });
 
@@ -171,11 +174,9 @@ export function batteryOfTests(storageFactory: () => Promise<SessionStorage>) {
       expect(shop1Sessions).toBeDefined();
       if (shop1Sessions) {
         expect(shop1Sessions.length).toBe(2);
+
         expect(
-          sessionArraysEqual(shop1Sessions, [
-            sessions[0] as Session,
-            sessions[2] as Session,
-          ]),
+          sessionArraysEqual(shop1Sessions, [sessions[0], sessions[2]]),
         ).toBeTruthy();
       }
     }
@@ -246,6 +247,7 @@ export function batteryOfTests(storageFactory: () => Promise<SessionStorage>) {
 
     await expect(storage.storeSession(session)).resolves.toBeTruthy();
     const storedSession = await storage.loadSession(sessionId);
+
     expect(session.equals(storedSession)).toBeTruthy();
   });
 }
