@@ -13189,7 +13189,7 @@
             "filePath": "../shopify-api/lib/billing/types.ts",
             "syntaxKind": "TypeAliasDeclaration",
             "name": "BillingConfigItem",
-            "value": "FeatureEnabled<Future, 'v11_lineItemBilling'> extends true\n    ? BillingConfigOneTimePlan | BillingConfigSubscriptionLineItemPlan\n    : BillingConfigLegacyItem",
+            "value": "FeatureEnabled<Future, 'lineItemBilling'> extends true\n    ? BillingConfigOneTimePlan | BillingConfigSubscriptionLineItemPlan\n    : BillingConfigLegacyItem",
             "description": ""
           },
           "BillingConfigOneTimePlan": {

@@ -183,7 +183,10 @@ describe('shopify.logger', () => {
       config,
     )}`, async () => {
       const shopify = shopifyApi(
-        testConfig({logger: {level: config.logLevel}}),
+        testConfig({
+          logger: {level: config.logLevel},
+          future: {lineItemBilling: true, v10_lineItemBilling: false},
+        }),
       );
 
       shopify.logger.log(LogSeverity.Debug, 'debug message');
@@ -194,7 +197,7 @@ describe('shopify.logger', () => {
       // We always log an INFO line with the runtime when starting up
       const expectedCallCount =
         config.expectedLevels.length +
-        (config.logLevel >= LogSeverity.Info ? 2 : 0);
+        (config.logLevel >= LogSeverity.Info ? 1 : 0);
 
       expect(shopify.config.logger.log).toHaveBeenCalledTimes(
         expectedCallCount,

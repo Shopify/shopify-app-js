@@ -169,4 +169,11 @@ describe('Config object', () => {
 
     expect(LATEST_API_VERSION).toEqual(enumVersions[enumVersions.length - 2]);
   });
+
+  it('can alias billing future flags', () => {
+    validParams.future = {v10_lineItemBilling: true};
+    const config = validateConfig(validParams);
+
+    expect(config.future?.lineItemBilling).toBeTruthy();
+  });
 });

@@ -56,10 +56,10 @@ export function validateConfig<Params extends ConfigParams>(
     );
   }
 
-  // Alias the v10_lineItemBilling flag to v11_lineItemBilling because we aren't releasing in v10
+  // Alias the v10_lineItemBilling flag to lineItemBilling because we aren't releasing in v10
   const future = params.future?.v10_lineItemBilling
     ? {
-        v11_lineItemBilling: params.future?.v10_lineItemBilling,
+        lineItemBilling: params.future?.v10_lineItemBilling,
         ...params.future,
       }
     : params.future;

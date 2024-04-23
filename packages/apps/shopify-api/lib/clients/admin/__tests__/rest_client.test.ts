@@ -555,7 +555,11 @@ describe('REST client', () => {
   });
 
   it('logs deprecation headers to the console when they are present', async () => {
-    const shopify = shopifyApi(testConfig());
+    const shopify = shopifyApi(
+      testConfig({
+        future: {lineItemBilling: true, v10_lineItemBilling: false},
+      }),
+    );
 
     const client = new shopify.clients.Rest({session});
 
@@ -594,7 +598,7 @@ describe('REST client', () => {
     await client.get({path: '/url/path'});
 
     // first call to .log is .debug with package and runtime info during initialization
-    expect(shopify.config.logger.log).toHaveBeenCalledTimes(3);
+    expect(shopify.config.logger.log).toHaveBeenCalledTimes(2);
     expect(shopify.config.logger.log).toHaveBeenLastCalledWith(
       LogSeverity.Warning,
       expect.stringContaining('API Deprecation Notice'),
@@ -615,7 +619,7 @@ describe('REST client', () => {
       data: postBody,
     });
 
-    expect(shopify.config.logger.log).toHaveBeenCalledTimes(4);
+    expect(shopify.config.logger.log).toHaveBeenCalledTimes(3);
     expect(shopify.config.logger.log).toHaveBeenLastCalledWith(
       LogSeverity.Warning,
       expect.stringContaining(
@@ -631,7 +635,11 @@ describe('REST client', () => {
   it('will wait 5 minutes before logging repeat deprecation alerts', async () => {
     jest.useFakeTimers();
 
-    const shopify = shopifyApi(testConfig());
+    const shopify = shopifyApi(
+      testConfig({
+        future: {lineItemBilling: true, v10_lineItemBilling: false},
+      }),
+    );
 
     const client = new shopify.clients.Rest({session});
 
@@ -678,7 +686,7 @@ describe('REST client', () => {
     // this one should skip it
     await client.get({path: '/url/path'});
     // first call to .log is .debug with package and runtime info during initialization
-    expect(shopify.config.logger.log).toHaveBeenCalledTimes(3);
+    expect(shopify.config.logger.log).toHaveBeenCalledTimes(2);
     expect(shopify.config.logger.log).toHaveBeenLastCalledWith(
       LogSeverity.Warning,
       expect.anything(),
@@ -691,7 +699,7 @@ describe('REST client', () => {
     // should warn a second time since 5 mins have passed
     await client.get({path: '/url/path'});
 
-    expect(shopify.config.logger.log).toHaveBeenCalledTimes(4);
+    expect(shopify.config.logger.log).toHaveBeenCalledTimes(3);
     expect(shopify.config.logger.log).toHaveBeenLastCalledWith(
       LogSeverity.Warning,
       expect.anything(),
@@ -856,7 +864,11 @@ describe('REST client', () => {
   });
 
   it('throws exceptions with response details on any other errors', async () => {
-    const shopify = shopifyApi(testConfig());
+    const shopify = shopifyApi(
+      testConfig({
+        future: {lineItemBilling: true, v10_lineItemBilling: false},
+      }),
+    );
 
     const client = new shopify.clients.Rest({session});
 
@@ -882,6 +894,7 @@ describe('REST client', () => {
     const shopify = shopifyApi(
       testConfig({
         logger: {level: LogSeverity.Debug, httpRequests: false, log: jest.fn()},
+        future: {lineItemBilling: true, v10_lineItemBilling: false},
       }),
     );
 
@@ -893,13 +906,14 @@ describe('REST client', () => {
     await client.post({path: '/url/path', data});
 
     // The first log call is the runtime info
-    expect(shopify.config.logger.log).toHaveBeenCalledTimes(2);
+    expect(shopify.config.logger.log).toHaveBeenCalledTimes(1);
   });
 
   it('logs HTTP requests when the setting is on', async () => {
     const shopify = shopifyApi(
       testConfig({
         logger: {level: LogSeverity.Debug, httpRequests: true, log: jest.fn()},
+        future: {lineItemBilling: true, v10_lineItemBilling: false},
       }),
     );
 
@@ -915,7 +929,7 @@ describe('REST client', () => {
       expect.anything(),
     );
     const logMessage = (shopify.config.logger.log as jest.Mock).mock
-      .calls[2][1];
+      .calls[1][1];
     expect(logMessage).toContain('Received response for HTTP');
     expect(logMessage).toContain(
       `https://test-shop.myshopify.io/admin/api/${shopify.config.apiVersion}/url/path`,
