@@ -55,6 +55,7 @@ export class RecurringApplicationCharge extends Base {
   ): Promise<RecurringApplicationCharge | null> {
     const result = await this.baseFind<RecurringApplicationCharge>({
       session: session,
+      requireIds: true,
       urlIds: {"id": id},
       params: {"fields": fields},
     });

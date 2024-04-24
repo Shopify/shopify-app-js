@@ -107,6 +107,7 @@ export class Order extends Base {
   ): Promise<Order | null> {
     const result = await this.baseFind<Order>({
       session: session,
+      requireIds: true,
       urlIds: {"id": id},
       params: {"fields": fields},
     });

@@ -131,7 +131,9 @@ function isSingleMerchantApp<Config extends AppConfigArg>(
   return config.distribution === AppDistribution.SingleMerchant;
 }
 
-function deriveApi(appConfig: AppConfigArg) {
+// This function is only exported so we can unit test it without having to mock the underlying module.
+// It's not available to consumers of the library because it is not exported in the index module, and never should be.
+export function deriveApi(appConfig: AppConfigArg): BasicParams['api'] {
   let appUrl: URL;
   try {
     appUrl = new URL(appConfig.appUrl);
@@ -162,7 +164,7 @@ function deriveApi(appConfig: AppConfigArg) {
     apiVersion: appConfig.apiVersion ?? LATEST_API_VERSION,
     isCustomStoreApp: appConfig.distribution === AppDistribution.ShopifyAdmin,
     future: {
-      v10_lineItemBilling: appConfig.future?.v3_lineItemBilling,
+      lineItemBilling: appConfig.future?.v3_lineItemBilling,
     },
     _logDisabledFutureFlags: false,
   });

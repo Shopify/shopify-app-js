@@ -54,6 +54,14 @@ export function validateConfig<Params extends ConfigParams>(
     );
   }
 
+  // Alias the v10_lineItemBilling flag to lineItemBilling because we aren't releasing in v10
+  const future = params.future?.v10_lineItemBilling
+    ? {
+        lineItemBilling: params.future?.v10_lineItemBilling,
+        ...params.future,
+      }
+    : params.future;
+
   const {
     hostScheme,
     isCustomStoreApp,
@@ -87,6 +95,7 @@ export function validateConfig<Params extends ConfigParams>(
       privateAppStorefrontAccessToken ?? config.privateAppStorefrontAccessToken,
     customShopDomains: customShopDomains ?? config.customShopDomains,
     billing: billing ?? config.billing,
+    future: future ?? config.future,
   });
 
   if (

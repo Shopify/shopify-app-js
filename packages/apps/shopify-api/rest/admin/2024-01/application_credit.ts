@@ -47,6 +47,7 @@ export class ApplicationCredit extends Base {
   ): Promise<ApplicationCredit | null> {
     const result = await this.baseFind<ApplicationCredit>({
       session: session,
+      requireIds: true,
       urlIds: {"id": id},
       params: {"fields": fields},
     });

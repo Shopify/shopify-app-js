@@ -65,6 +65,7 @@ export class Webhook extends Base {
   ): Promise<Webhook | null> {
     const result = await this.baseFind<Webhook>({
       session: session,
+      requireIds: true,
       urlIds: {"id": id},
       params: {"fields": fields},
     });

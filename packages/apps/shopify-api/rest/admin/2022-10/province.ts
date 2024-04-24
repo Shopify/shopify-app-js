@@ -54,6 +54,7 @@ export class Province extends Base {
   ): Promise<Province | null> {
     const result = await this.baseFind<Province>({
       session: session,
+      requireIds: true,
       urlIds: {"id": id, "country_id": country_id},
       params: {"fields": fields},
     });

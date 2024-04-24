@@ -79,6 +79,7 @@ export class DiscountCode extends Base {
   ): Promise<DiscountCode | null> {
     const result = await this.baseFind<DiscountCode>({
       session: session,
+      requireIds: true,
       urlIds: {"id": id, "price_rule_id": price_rule_id},
       params: {},
     });

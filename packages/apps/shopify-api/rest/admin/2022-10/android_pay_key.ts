@@ -41,6 +41,7 @@ export class AndroidPayKey extends Base {
   ): Promise<AndroidPayKey | null> {
     const result = await this.baseFind<AndroidPayKey>({
       session: session,
+      requireIds: true,
       urlIds: {"id": id},
       params: {},
     });

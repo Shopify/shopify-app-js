@@ -62,6 +62,7 @@ export class Image extends Base {
   ): Promise<Image | null> {
     const result = await this.baseFind<Image>({
       session: session,
+      requireIds: true,
       urlIds: {"id": id, "product_id": product_id},
       params: {"fields": fields},
     });

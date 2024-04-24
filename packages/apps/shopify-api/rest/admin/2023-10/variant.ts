@@ -64,6 +64,7 @@ export class Variant extends Base {
   ): Promise<Variant | null> {
     const result = await this.baseFind<Variant>({
       session: session,
+      requireIds: true,
       urlIds: {"id": id},
       params: {"fields": fields},
     });

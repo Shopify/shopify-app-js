@@ -47,6 +47,7 @@ export class MobilePlatformApplication extends Base {
   ): Promise<MobilePlatformApplication | null> {
     const result = await this.baseFind<MobilePlatformApplication>({
       session: session,
+      requireIds: true,
       urlIds: {"id": id},
       params: {},
     });

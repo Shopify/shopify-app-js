@@ -103,6 +103,7 @@ export class FakeResource extends Base {
       session,
       urlIds: {id, other_resource_id},
       params: {param, ...otherArgs},
+      requireIds: true,
     });
     return result.data ? result.data[0] : null;
   }
