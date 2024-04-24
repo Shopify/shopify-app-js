@@ -555,7 +555,11 @@ describe('REST client', () => {
   });
 
   it('logs deprecation headers to the console when they are present', async () => {
-    const shopify = shopifyApi(testConfig());
+    const shopify = shopifyApi(
+      testConfig({
+        future: {lineItemBilling: true, v10_lineItemBilling: false},
+      }),
+    );
 
     const client = new shopify.clients.Rest({session});
 
@@ -631,7 +635,11 @@ describe('REST client', () => {
   it('will wait 5 minutes before logging repeat deprecation alerts', async () => {
     jest.useFakeTimers();
 
-    const shopify = shopifyApi(testConfig());
+    const shopify = shopifyApi(
+      testConfig({
+        future: {lineItemBilling: true, v10_lineItemBilling: false},
+      }),
+    );
 
     const client = new shopify.clients.Rest({session});
 
@@ -856,7 +864,11 @@ describe('REST client', () => {
   });
 
   it('throws exceptions with response details on any other errors', async () => {
-    const shopify = shopifyApi(testConfig());
+    const shopify = shopifyApi(
+      testConfig({
+        future: {lineItemBilling: true, v10_lineItemBilling: false},
+      }),
+    );
 
     const client = new shopify.clients.Rest({session});
 
@@ -882,6 +894,7 @@ describe('REST client', () => {
     const shopify = shopifyApi(
       testConfig({
         logger: {level: LogSeverity.Debug, httpRequests: false, log: jest.fn()},
+        future: {lineItemBilling: true, v10_lineItemBilling: false},
       }),
     );
 
@@ -900,6 +913,7 @@ describe('REST client', () => {
     const shopify = shopifyApi(
       testConfig({
         logger: {level: LogSeverity.Debug, httpRequests: true, log: jest.fn()},
+        future: {lineItemBilling: true, v10_lineItemBilling: false},
       }),
     );
 

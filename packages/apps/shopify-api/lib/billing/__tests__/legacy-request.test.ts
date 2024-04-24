@@ -23,7 +23,7 @@ const GRAPHQL_BASE_REQUEST = {
 
 interface TestConfigInterface {
   name: string;
-  billingConfig: BillingConfig | BillingConfig<{v10_lineItemBilling: false}>;
+  billingConfig: BillingConfig | BillingConfig<{lineItemBilling: false}>;
   paymentResponse: string;
   responseObject: any;
   errorResponse: string;
@@ -195,7 +195,7 @@ describe('shopify.billing.request', () => {
         testConfig({
           billing: undefined,
           future: {
-            v10_lineItemBilling: false,
+            lineItemBilling: false,
           },
         }),
       );
@@ -222,7 +222,7 @@ describe('shopify.billing.request', () => {
                 testConfig({
                   billing: config.billingConfig,
                   future: {
-                    v10_lineItemBilling: false,
+                    lineItemBilling: false,
                   },
                 }),
               );
@@ -259,7 +259,7 @@ describe('shopify.billing.request', () => {
               testConfig({
                 billing: config.billingConfig,
                 future: {
-                  v10_lineItemBilling: false,
+                  lineItemBilling: false,
                 },
               }),
             );
@@ -296,7 +296,7 @@ describe('shopify.billing.request', () => {
               testConfig({
                 billing: config.billingConfig,
                 future: {
-                  v10_lineItemBilling: false,
+                  lineItemBilling: false,
                 },
               }),
             );
@@ -328,7 +328,7 @@ describe('shopify.billing.request', () => {
               testConfig({
                 billing: config.billingConfig,
                 future: {
-                  v10_lineItemBilling: false,
+                  lineItemBilling: false,
                 },
               }),
             );
@@ -386,7 +386,7 @@ describe('shopify.billing.request', () => {
               testConfig({
                 billing: config.billingConfig,
                 future: {
-                  v10_lineItemBilling: false,
+                  lineItemBilling: false,
                 },
               }),
             );
@@ -417,7 +417,7 @@ describe('shopify.billing.request', () => {
               testConfig({
                 billing: config.billingConfig,
                 future: {
-                  v10_lineItemBilling: false,
+                  lineItemBilling: false,
                 },
               }),
             );
@@ -497,7 +497,7 @@ describe('shopify.billing.request', () => {
             },
           },
           future: {
-            v10_lineItemBilling: false,
+            lineItemBilling: false,
           },
         }),
       );
@@ -530,7 +530,7 @@ describe('shopify.billing.request', () => {
             },
           },
           future: {
-            v10_lineItemBilling: false,
+            lineItemBilling: false,
           },
         }),
       );
@@ -568,7 +568,7 @@ describe('shopify.billing.request', () => {
             },
           },
           future: {
-            v10_lineItemBilling: false,
+            lineItemBilling: false,
           },
         }),
       );
