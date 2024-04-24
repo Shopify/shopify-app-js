@@ -111,7 +111,7 @@ it('returns false if checking scopes and scopes are not equal', () => {
     state: 'not_same',
     isOnline: true,
     scope: 'test_scope',
-    expires: new Date(Date.now() - 1),
+    expires: new Date(Date.now() + 86400),
   });
   expect(session.isActive('fake_scope')).toBeFalsy();
 });
