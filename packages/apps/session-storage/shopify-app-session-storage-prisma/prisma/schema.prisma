@@ -16,6 +16,7 @@ model Session {
   expires     DateTime?
   accessToken String
   userId      BigInt?
+  scopesUpdated DateTime  @default(now())
 }
 
 // We use this in unit tests to ensure it works with a different model name

@@ -128,6 +128,7 @@ export class PrismaSessionStorage<T extends PrismaClient>
       userId:
         (sessionParams.onlineAccessInfo?.associated_user
           .id as unknown as bigint) || null,
+      scopesUpdated: session.scopesUpdated || new Date(),
     };
   }
 
@@ -153,6 +154,10 @@ export class PrismaSessionStorage<T extends PrismaClient>
 
     if (row.userId) {
       sessionParams.onlineAccessInfo = String(row.userId);
+    }
+
+    if (row.scopesUpdated) {
+      sessionParams.scopesUpdated = row.scopesUpdated.getTime();
     }
 
     return Session.fromPropertyArray(Object.entries(sessionParams));

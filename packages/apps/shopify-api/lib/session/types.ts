@@ -34,6 +34,8 @@ export interface SessionParams {
    * Information on the user for the session. Only present for online sessions.
    */
   onlineAccessInfo?: OnlineAccessInfo | StoredOnlineAccessInfo;
+
+  scopesUpdated?: Date;
   /**
    * Additional properties of the session allowing for extension
    */

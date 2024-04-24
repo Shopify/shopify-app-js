@@ -54,6 +54,7 @@ export function createSession({
       scope,
       expires: sessionExpiration,
       onlineAccessInfo: rest,
+      scopesUpdated: new Date(),
     });
   } else {
     return new Session({
@@ -63,6 +64,7 @@ export function createSession({
       isOnline,
       accessToken: accessTokenResponse.access_token,
       scope: accessTokenResponse.scope,
+      scopesUpdated: new Date(),
     });
   }
 }

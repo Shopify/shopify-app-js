@@ -1,4 +1,4 @@
-import {Session} from '@shopify/shopify-api';
+import {AuthScopes, Session} from '@shopify/shopify-api';
 
 import {AdminApiContext} from '../../../clients';
 import type {BasicParams} from '../../../types';
@@ -18,11 +18,18 @@ export function getScopesFactory(
       ...{forceRemote},
     });
 
-    if (session) {
-      return session.scope?.split(',') ?? [];
+    if (session && session.isScopesExpired()) {
+      const installedScopes = await getInstalledRemoteScopes(admin);
+      const installedScopesSet = new AuthScopes(installedScopes);
+      // eslint-disable-next-line require-atomic-updates
+      session.scope = installedScopesSet.toArray().join(',');
+      // eslint-disable-next-line require-atomic-updates
+      session.scopesUpdated = new Date();
+      params.config.sessionStorage.storeSession(session);
+      logger.info('Scopes cache updated');
     }
 
-    return getInstalledRemoteScopes(admin);
+    return session.scope?.split(',') ?? [];
   };
 }
 

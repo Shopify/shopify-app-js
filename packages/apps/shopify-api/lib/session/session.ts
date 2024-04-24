@@ -14,6 +14,7 @@ const propertiesToSave = [
   'accessToken',
   'expires',
   'onlineAccessInfo',
+  'scopesUpdated',
 ];
 
 /**
@@ -52,6 +53,8 @@ export class Session {
               return ['accountOwner', value];
             case 'emailverified':
               return ['emailVerified', value];
+            case 'scopesupdated':
+              return ['scopesUpdated', value];
             default:
               return [key.toLowerCase(), value];
           }
@@ -75,6 +78,9 @@ export class Session {
           break;
         case 'scope':
           sessionData[key] = value.toString();
+          break;
+        case 'scopesUpdated':
+          sessionData[key] = new Date(Number(value));
           break;
         case 'expires':
           sessionData[key] = value ? new Date(Number(value)) : undefined;
@@ -167,6 +173,8 @@ export class Session {
    */
   public onlineAccessInfo?: OnlineAccessInfo;
 
+  public scopesUpdated?: Date;
+
   constructor(params: SessionParams) {
     Object.assign(this, params);
   }
@@ -225,6 +233,13 @@ export class Session {
     );
   }
 
+  public isScopesExpired(withinMillisecondsOfExpiry = 60 * 60 * 1000): boolean {
+    return Boolean(
+      this.scopesUpdated &&
+        this.scopesUpdated.getTime() + withinMillisecondsOfExpiry < Date.now(),
+    );
+  }
+
   /**
    * Converts an object with data into a Session.
    */
@@ -247,6 +262,9 @@ export class Session {
     }
     if (this.onlineAccessInfo) {
       object.onlineAccessInfo = this.onlineAccessInfo;
+    }
+    if (this.scopesUpdated) {
+      object.scopesUpdated = this.scopesUpdated;
     }
     return object;
   }
