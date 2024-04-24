@@ -2,28 +2,33 @@
   "name": "@shopify/shopify-api",
   "version": "9.7.2",
   "description": "Shopify API Library for Node - accelerate development with support for authentication, graphql proxy, webhooks",
-  "main": "./lib/index.js",
-  "types": "./lib/index.d.ts",
+  "types": "./dist/ts/lib/index.d.ts",
+  "module": "./dist/esm/lib/index.mjs",
+  "main": "./dist/cjs/lib/index.js",
   "exports": {
     ".": {
-      "require": "./lib/index.js",
-      "types": "./lib/index.d.ts",
-      "default": "./lib/index.js"
+      "types": "./dist/ts/lib/index.d.ts",
+      "import": "./dist/esm/lib/index.mjs",
+      "require": "./dist/cjs/lib/index.js",
+      "default": "./dist/cjs/lib/index.js"
     },
     "./rest/admin/*": {
-      "import": "./rest/admin/*/index.js",
-      "require": "./rest/admin/*/index.js",
-      "types": "./rest/admin/*/index.d.ts"
+      "types": "./dist/ts/rest/admin/*/index.d.ts",
+      "import": "./dist/esm/rest/admin/*/index.mjs",
+      "require": "./dist/cjs/rest/admin/*/index.js",
+      "default": "./dist/cjs/rest/admin/*/index.js"
     },
     "./runtime": {
-      "import": "./runtime/index.js",
-      "require": "./runtime/index.js",
-      "types": "./runtime/index.d.ts"
+      "types": "./dist/ts/runtime/index.d.ts",
+      "import": "./dist/esm/runtime/index.mjs",
+      "require": "./dist/cjs/runtime/index.js",
+      "default": "./dist/cjs/runtime/index.js"
     },
     "./adapters/*": {
-      "import": "./adapters/*/index.js",
-      "require": "./adapters/*/index.js",
-      "types": "./adapters/*/index.d.ts"
+      "types": "./dist/ts/adapters/*/index.d.ts",
+      "import": "./dist/esm/adapters/*/index.mjs",
+      "require": "./dist/cjs/adapters/*/index.js",
+      "default": "./dist/cjs/adapters/*/index.js"
     }
   },
   "prettier": "@shopify/prettier-config",
@@ -31,14 +36,13 @@
     "test:all": "yarn pretest:adapters && jest && yarn posttest:adapters",
     "test:ci": "yarn test && yarn test:rest_resources && yarn test:adapters",
     "test": "jest --selectProjects library",
-    "pretest:adapters": "yarn build && yarn rollup -c adapters/__e2etests__/rollup.test-web-api-app.config.js",
+    "pretest:adapters": "yarn rollup --bundleConfigAsCjs -c adapters/__e2etests__/rollup.test-apps.config.js",
     "test:adapters": "jest --selectProjects adapters:mock adapters:node adapters:cf-worker adapters:web-api",
     "test:rest_resources": "jest --selectProjects rest_resources",
     "lint": "jest --selectProjects lint",
     "test:dev": "jest --selectProjects library lint",
-    "clean": "yarn tsc --build --clean",
-    "prebuild": "yarn tsc --build --clean",
-    "build": "tsc",
+    "build": "yarn run rollup -c rollup.config.js --bundleConfigAsCjs && yarn tsc -p ./tsconfig.build.json",
+    "clean": "rimraf .rollup.cache dist bundle",
     "release": "yarn build && changeset publish"
   },
   "publishConfig": {
@@ -94,10 +98,7 @@
     "wrangler": "^3.33.0"
   },
   "files": [
-    "**/*.d.ts",
-    "**/*.d.ts.map",
-    "**/*.js",
-    "**/*.js.map",
+    "dist/*",
     "!bundle/*",
     "!node_modules",
     "!adapters/__e2etests__/*"
