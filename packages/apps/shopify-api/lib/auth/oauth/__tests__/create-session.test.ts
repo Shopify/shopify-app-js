@@ -20,10 +20,13 @@ describe('createSession', () => {
       `creates a new offline session when embedded is %s`,
       (isEmbeddedApp) => {
         const shopify = shopifyApi(testConfig({isEmbeddedApp}));
+        const scopes = shopify.config.scopes
+          ? shopify.config.scopes.toString()
+          : '';
 
         const accessTokenResponse = {
           access_token: 'some access token string',
-          scope: shopify.config.scopes.toString(),
+          scope: scopes,
         };
 
         const session = createSession({

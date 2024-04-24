@@ -103,10 +103,12 @@ describe('tokenExchange', () => {
         shopify.config.apiSecretKey,
         sessionTokenPayload,
       );
-
+      const scopes = shopify.config.scopes
+        ? shopify.config.scopes.toString()
+        : '';
       const successResponse = {
         access_token: 'some access token string',
-        scope: shopify.config.scopes.toString(),
+        scope: scopes,
       };
 
       queueMockResponse(JSON.stringify(successResponse));

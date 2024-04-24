@@ -11,6 +11,8 @@ import {
 } from './get-embedded-app-url';
 import {TokenExchange, tokenExchange} from './oauth/token-exchange';
 
+export {AuthScopes} from './scopes';
+
 export function shopifyAuth<Config extends ConfigInterface>(
   config: Config,
 ): ShopifyAuth {
