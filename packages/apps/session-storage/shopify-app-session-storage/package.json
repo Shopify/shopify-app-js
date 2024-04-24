@@ -43,10 +43,10 @@
   ],
   "dependencies": {},
   "peerDependencies": {
-    "@shopify/shopify-api": "^9.7.2"
+    "@shopify/shopify-api": "^9.7.2 || ^10.0.0"
   },
   "devDependencies": {
-    "@shopify/shopify-api": "^9.7.2"
+    "@shopify/shopify-api": "^9.7.2 || ^10.0.0"
   },
   "files": [
     "dist/*",

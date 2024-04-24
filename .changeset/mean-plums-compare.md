@@ -1,0 +1,16 @@
+---
+"@shopify/shopify-app-session-storage-postgresql": patch
+"@shopify/shopify-app-session-storage-test-utils": patch
+"@shopify/shopify-app-session-storage-dynamodb": patch
+"@shopify/shopify-app-session-storage-drizzle": patch
+"@shopify/shopify-app-session-storage-mongodb": patch
+"@shopify/shopify-app-session-storage-memory": patch
+"@shopify/shopify-app-session-storage-prisma": patch
+"@shopify/shopify-app-session-storage-sqlite": patch
+"@shopify/shopify-app-session-storage-mysql": patch
+"@shopify/shopify-app-session-storage-redis": patch
+"@shopify/shopify-app-session-storage-kv": patch
+"@shopify/shopify-app-session-storage": patch
+---
+
+Updated @shopify/shopify-api dependency to also allow v10+ since there were no breaking changes affecting this package.
