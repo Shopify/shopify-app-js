@@ -1,5 +1,4 @@
 import {ShopifyError} from '@shopify/shopify-api';
-import * as shopifyApiPackage from '@shopify/shopify-api';
 
 import {
   shopifyApp,
@@ -11,13 +10,13 @@ import {
   ApiVersion,
 } from '../index';
 import {testConfig} from '../__test-helpers';
+import {deriveApi} from '../shopify-app';
 
 describe('shopifyApp', () => {
   /* eslint-disable no-process-env */
   const oldEnv = process.env;
 
   beforeEach(() => {
-    jest.resetModules();
     process.env = {...oldEnv};
   });
 
@@ -61,36 +60,22 @@ describe('shopifyApp', () => {
 
   it("fixes the port if it's not set", () => {
     // GIVEN
-    jest.spyOn(shopifyApiPackage, 'shopifyApi');
     // eslint-disable-next-line no-process-env
     process.env.PORT = '1234';
 
     // WHEN
-    shopifyApp(testConfig({appUrl: 'http://localhost'}));
+    const apiObject = deriveApi(testConfig({appUrl: 'http://localhost'}));
 
     // THEN
-    expect(shopifyApiPackage.shopifyApi).toHaveBeenCalledWith(
-      expect.objectContaining({
-        appUrl: 'http://localhost:1234',
-      }),
-    );
+    expect(apiObject.config.hostName).toBe('localhost:1234');
   });
 
   it('applies user agent prefix', () => {
-    // GIVEN
-    jest.spyOn(shopifyApiPackage, 'shopifyApi');
-    const config = testConfig({
-      userAgentPrefix: 'test',
-    });
-
     // WHEN
-    shopifyApp(config);
+    const apiObject = deriveApi(testConfig({userAgentPrefix: 'test'}));
 
     // THEN
-    const {userAgentPrefix} = (shopifyApiPackage.shopifyApi as any).mock
-      .calls[1][0];
-
-    expect(userAgentPrefix).toMatch(
+    expect(apiObject.config.userAgentPrefix).toMatch(
       /^test \| Shopify Remix Library v[0-9]+\.[0-9]+\.[0-9]+(-rc.[0-9]+)?$/,
     );
   });
