@@ -33,6 +33,7 @@ import {
   validateShopAndHostParams,
 } from './helpers';
 import {AuthorizationStrategy} from './strategies/types';
+import {scopesApiFactory} from './scopes/factory';
 
 export interface SessionTokenContext {
   shop: string;
@@ -80,20 +81,22 @@ export function authStrategyFactory<
     authStrategy: AuthorizationStrategy,
     sessionToken?: JwtPayload,
   ): AdminContext<ConfigArg, Resources> {
+    const admin = createAdminApiContext<Resources>(
+      session,
+      params,
+      authStrategy.handleClientError(request),
+    );
     const context:
       | EmbeddedAdminContext<ConfigArg, Resources>
       | NonEmbeddedAdminContext<ConfigArg, Resources> = {
-      admin: createAdminApiContext<Resources>(
-        session,
-        params,
-        authStrategy.handleClientError(request),
-      ),
+      admin,
       billing: {
         require: requireBillingFactory(params, request, session),
         check: checkBillingFactory(params, request, session),
         request: requestBillingFactory(params, request, session),
         cancel: cancelBillingFactory(params, request, session),
       },
+      scopes: scopesApiFactory(params, session, admin),
       session,
       cors: ensureCORSHeadersFactory(params, request),
     };
@@ -156,7 +159,9 @@ export function authStrategyFactory<
         isOnline: session.isOnline,
       });
 
-      return createContext(request, session, strategy, payload);
+      const context = createContext(request, session, strategy, payload);
+      await manageCheckOptionalScopesRequest(request, context.scopes.check);
+      return context;
     } catch (errorOrResponse) {
       if (errorOrResponse instanceof Response) {
         ensureCORSHeadersFactory(params, request)(errorOrResponse);
@@ -225,4 +230,19 @@ function manageOptionalScopesRequest(
     scopes: scopes?.split(',') ?? [],
     request: url.searchParams.has('scopes'),
   };
+}
+
+async function manageCheckOptionalScopesRequest(
+  request: Request,
+  check: (scopes: string[], forceRemote?: boolean) => Promise<boolean>,
+) {
+  const url = new URL(request.url);
+  if (url.pathname !== '/auth/checkScopes') return;
+
+  const scopes = url.searchParams.get('scopes')?.split(',') ?? [];
+
+  const granted = await check(scopes);
+  if (granted) return;
+
+  throw new Response(undefined, {status: 403});
 }
