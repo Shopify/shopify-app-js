@@ -76,6 +76,7 @@
     "Storefront API"
   ],
   "devDependencies": {
+    "@remix-run/node": "^2.6.0",
     "@remix-run/react": "^2.8.1",
     "@shopify/generate-docs": "^0.15.2",
     "@shopify/polaris": "^12.18.0",
@@ -91,7 +92,6 @@
     "react-router-dom": "^6.22.3"
   },
   "dependencies": {
-    "@remix-run/node": "^2.6.0",
     "@remix-run/server-runtime": "^2.5.1",
     "@shopify/admin-api-client": "^0.2.8",
     "@shopify/shopify-api": "^9.7.2",
@@ -102,11 +102,15 @@
   },
   "peerDependencies": {
     "@remix-run/react": "*",
+    "@remix-run/node": "*",
     "@shopify/polaris": "*",
     "react": "*"
   },
   "peerDependenciesMeta": {
     "@shopify/polaris": {
+      "optional": true
+    },
+    "@remix-run/node": {
       "optional": true
     }
   },
