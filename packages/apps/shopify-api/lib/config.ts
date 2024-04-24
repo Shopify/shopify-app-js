@@ -10,7 +10,6 @@ export function validateConfig<Params extends ConfigParams>(
   const config = {
     apiKey: '',
     apiSecretKey: '',
-    scopes: new AuthScopes([]),
     hostName: '',
     hostScheme: 'https',
     apiVersion: LATEST_API_VERSION,
@@ -30,7 +29,6 @@ export function validateConfig<Params extends ConfigParams>(
   const mandatory: (keyof Params)[] = ['apiSecretKey', 'hostName'];
   if (!('isCustomStoreApp' in params) || !params.isCustomStoreApp) {
     mandatory.push('apiKey');
-    mandatory.push('scopes');
   }
   if ('isCustomStoreApp' in params && params.isCustomStoreApp) {
     if (
@@ -76,12 +74,18 @@ export function validateConfig<Params extends ConfigParams>(
     ...mandatoryParams
   } = params;
 
+  let scopes;
+  if (params.scopes === undefined) {
+    scopes = undefined;
+  } else if (params.scopes instanceof AuthScopes) {
+    scopes = params.scopes;
+  } else {
+    scopes = new AuthScopes(params.scopes);
+  }
+
   Object.assign(config, mandatoryParams, {
     hostName: params.hostName.replace(/\/$/, ''),
-    scopes:
-      params.scopes instanceof AuthScopes
-        ? params.scopes
-        : new AuthScopes(params.scopes),
+    scopes,
     hostScheme: hostScheme ?? config.hostScheme,
     isCustomStoreApp: isCustomStoreApp ?? config.isCustomStoreApp,
     adminApiAccessToken: adminApiAccessToken ?? config.adminApiAccessToken,

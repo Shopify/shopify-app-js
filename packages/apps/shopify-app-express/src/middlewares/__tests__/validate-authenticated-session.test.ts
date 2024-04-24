@@ -41,13 +41,16 @@ describe('validateAuthenticatedSession', () => {
           algorithm: 'HS256',
         },
       );
+      const scopes = shopify.api.config.scopes
+        ? shopify.api.config.scopes.toString()
+        : '';
 
       session = new Session({
         id: sessionId,
         shop,
         state: '123-this-is-a-state',
         isOnline: shopify.config.useOnlineTokens,
-        scope: shopify.api.config.scopes.toString(),
+        scope: scopes,
         expires: undefined,
         accessToken: 'totally-real-access-token',
       });
@@ -164,13 +167,14 @@ describe('validateAuthenticatedSession', () => {
       );
       const location = new URL(response.header.location);
       const locationParams = location.searchParams;
+      const scopes = shopify.api.config.scopes
+        ? shopify.api.config.scopes.toString()
+        : '';
 
       expect(location.hostname).toBe('other-shop.myshopify.io');
       expect(location.pathname).toBe('/admin/oauth/authorize');
       expect(locationParams.get('client_id')).toBe(shopify.api.config.apiKey);
-      expect(locationParams.get('scope')).toBe(
-        shopify.api.config.scopes.toString(),
-      );
+      expect(locationParams.get('scope')).toBe(scopes);
       expect(locationParams.get('redirect_uri')).toEqual(
         expect.stringMatching(expectedRedirectUriStart.href),
       );
@@ -246,13 +250,16 @@ describe('validateAuthenticatedSession', () => {
           sessionId,
         )}`,
       ];
+      const scopes = shopify.api.config.scopes
+        ? shopify.api.config.scopes.toString()
+        : '';
 
       session = new Session({
         id: sessionId,
         shop: 'my-shop.myshopify.io',
         state: '123-this-is-a-state',
         isOnline: shopify.config.useOnlineTokens,
-        scope: shopify.api.config.scopes.toString(),
+        scope: scopes,
         expires: undefined,
         accessToken: 'totally-real-access-token',
       });

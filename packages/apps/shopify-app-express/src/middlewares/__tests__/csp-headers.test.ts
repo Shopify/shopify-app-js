@@ -34,12 +34,16 @@ describe('cspHeaders', () => {
       res.send(htmlPage);
     });
 
+    const scopes = shopify.api.config.scopes
+      ? shopify.api.config.scopes.toString()
+      : '';
+
     session = new Session({
       id: '123-this-is-a-session-id',
       shop: TEST_SHOP,
       state: '123-this-is-a-state',
       isOnline: shopify.config.useOnlineTokens,
-      scope: shopify.api.config.scopes.toString(),
+      scope: scopes,
       expires: undefined,
       accessToken: 'totally-real-access-token',
     });

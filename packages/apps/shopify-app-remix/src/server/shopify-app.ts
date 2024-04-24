@@ -186,6 +186,7 @@ function deriveConfig<Storage extends SessionStorage>(
   return {
     ...appConfig,
     ...apiConfig,
+    scopes: apiConfig.scopes,
     idempotentPromiseHandler: new IdempotentPromiseHandler(),
     canUseLoginForm: appConfig.distribution !== AppDistribution.ShopifyAdmin,
     useOnlineTokens: appConfig.useOnlineTokens ?? false,

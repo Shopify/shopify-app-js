@@ -99,9 +99,10 @@ export function begin(config: ConfigInterface): OAuthBegin {
       path: callbackPath,
     });
 
+    const scopes = config.scopes ? config.scopes.toString() : '';
     const query = {
       client_id: config.apiKey,
-      scope: config.scopes.toString(),
+      scope: scopes,
       redirect_uri: `${config.hostScheme}://${config.hostName}${callbackPath}`,
       state,
       'grant_options[]': isOnline ? 'per-user' : '',

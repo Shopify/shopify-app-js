@@ -50,11 +50,14 @@ describe('shopifyApp', () => {
         logger: testConfig.api.logger,
       },
     });
+    const scopes = shopify.api.config.scopes
+      ? shopify.api.config.scopes.toString()
+      : '';
 
     expect(shopify).toBeDefined();
     expect(shopify.api.config.apiKey).toEqual('envKey');
     expect(shopify.api.config.apiSecretKey).toEqual('envSecret');
-    expect(shopify.api.config.scopes.toString()).toEqual('envScope1,envScope2');
+    expect(scopes).toEqual('envScope1,envScope2');
     expect(shopify.api.config.hostName).toEqual('envHost');
     expect(shopify.api.config.hostScheme).toEqual('https');
     expect(shopify.api.config.customShopDomains).toEqual(['*.envCustomDomain']);
