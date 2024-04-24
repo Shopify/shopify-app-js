@@ -3931,25 +3931,25 @@
   resolved "https://registry.yarnpkg.com/@shopify/network/-/network-3.2.1.tgz#c51590bb9ccd177bb7a35c2bad482233198d215b"
   integrity sha512-Ih/6Oe80dynlUsRfEqptWBfsySCqI0rjQvPAjS8HuWeK9nZ+TvmYScfxjucKXZ2deXwAClnU6SMdh3/B1lMMog==
 
-"@shopify/polaris-icons@^8.8.0":
-  version "8.8.0"
-  resolved "https://registry.yarnpkg.com/@shopify/polaris-icons/-/polaris-icons-8.8.0.tgz#b16f629c6ba077f94a1a8e24e7d3556ab6ec2aba"
-  integrity sha512-B4kym/sWAif0pSClysCeOMxfKBPhCZaAdoR+7J50SAoI6gg47jBAUS+PRexj+gXAmxLOystcCCibwyL1QZDW+A==
+"@shopify/polaris-icons@^9.0.0":
+  version "9.0.0"
+  resolved "https://registry.yarnpkg.com/@shopify/polaris-icons/-/polaris-icons-9.0.0.tgz#b5c6d60d2921e6e166065fcda261767baae69f52"
+  integrity sha512-RVgHc/c/bmU53PMDmtNVnAHDyD1cAyYGJhBAdpo7dgUhuDnz+/vFy5Pc68mERJtWe9Uqcyk288vpIScWF8NiPw==
 
-"@shopify/polaris-tokens@^8.8.0":
-  version "8.8.0"
-  resolved "https://registry.yarnpkg.com/@shopify/polaris-tokens/-/polaris-tokens-8.8.0.tgz#348841e58d25c17759a162501a2ab08e9724705c"
-  integrity sha512-Ml0sR+hu/uZJVDZjF2+2qgogCrXSvQ8TOwkrRNUuzhDG58f99FHnyuQ1kprUFyDt0DSEZJ0Jf4pzrBnkI0UgVg==
+"@shopify/polaris-tokens@^9.0.0":
+  version "9.0.0"
+  resolved "https://registry.yarnpkg.com/@shopify/polaris-tokens/-/polaris-tokens-9.0.0.tgz#db6d68b02ffcf2d1a3eb737ad5fde09aee283e32"
+  integrity sha512-DiRqmlIsJGZUiOHcAWrxxX9y2YRLu5H8hKxVNI0BNNqpRnyo4XyTmx5ntXhjA9i930oMcUspPIgYP2NsyNklEg==
   dependencies:
     deepmerge "^4.3.1"
 
-"@shopify/polaris@^12.18.0":
-  version "12.21.0"
-  resolved "https://registry.yarnpkg.com/@shopify/polaris/-/polaris-12.21.0.tgz#ff4e51d54efbb12011453dfa0f8d0f7418a0dab9"
-  integrity sha512-QnNgJN+NAvRMKb5JcKSpNGUyCo+vzR+eNraBts2Y3KWKqjqrHCRCMGJLsTHSEHckw/9ZvkG3dJcN40sH9eI+sg==
+"@shopify/polaris@^13.1.2":
+  version "13.1.2"
+  resolved "https://registry.yarnpkg.com/@shopify/polaris/-/polaris-13.1.2.tgz#d2a092179d7a6d6a8b47a620d45d67f7b159310c"
+  integrity sha512-bfaFtwCJStXhctdM9fdZdmI1ytoE57I8rP2GuYI9c1Ql4SF7ju+qRedye6mMa0MqCIUvxua/zz5y2I8ZK6AL5Q==
   dependencies:
-    "@shopify/polaris-icons" "^8.8.0"
-    "@shopify/polaris-tokens" "^8.8.0"
+    "@shopify/polaris-icons" "^9.0.0"
+    "@shopify/polaris-tokens" "^9.0.0"
     "@types/react" "^18.2.0"
     "@types/react-dom" "^18.2.0"
     "@types/react-transition-group" "^4.4.2"
@@ -11862,7 +11862,16 @@ string-length@^4.0.1:
     char-regex "^1.0.2"
     strip-ansi "^6.0.0"
 
-"string-width-cjs@npm:string-width@^4.2.0", "string-width@^1.0.2 || 2 || 3 || 4", string-width@^4.1.0, string-width@^4.2.0, string-width@^4.2.3:
+"string-width-cjs@npm:string-width@^4.2.0":
+  version "4.2.3"
+  resolved "https://registry.yarnpkg.com/string-width/-/string-width-4.2.3.tgz#269c7117d27b05ad2e536830a8ec895ef9c6d010"
+  integrity sha512-wKyQRQpjJ0sIp62ErSZdGsjMJWsap5oRNihHhu6G7JVO/9jIB6UyevL+tXuOqrng8j/cxKTWyWUwvSTriiZz/g==
+  dependencies:
+    emoji-regex "^8.0.0"
+    is-fullwidth-code-point "^3.0.0"
+    strip-ansi "^6.0.1"
+
+"string-width@^1.0.2 || 2 || 3 || 4", string-width@^4.1.0, string-width@^4.2.0, string-width@^4.2.3:
   version "4.2.3"
   resolved "https://registry.yarnpkg.com/string-width/-/string-width-4.2.3.tgz#269c7117d27b05ad2e536830a8ec895ef9c6d010"
   integrity sha512-wKyQRQpjJ0sIp62ErSZdGsjMJWsap5oRNihHhu6G7JVO/9jIB6UyevL+tXuOqrng8j/cxKTWyWUwvSTriiZz/g==
@@ -11930,7 +11939,14 @@ string_decoder@^1.1.1:
   dependencies:
     safe-buffer "~5.2.0"
 
-"strip-ansi-cjs@npm:strip-ansi@^6.0.1", strip-ansi@^6.0.0, strip-ansi@^6.0.1:
+"strip-ansi-cjs@npm:strip-ansi@^6.0.1":
+  version "6.0.1"
+  resolved "https://registry.yarnpkg.com/strip-ansi/-/strip-ansi-6.0.1.tgz#9e26c63d30f53443e9489495b2105d37b67a85d9"
+  integrity sha512-Y38VPSHcqkFrCpFnQ9vuSXmquuv5oXOKpGeT6aGrr3o3Gc9AlVa6JBfUSOCnbxGGZF+/0ooI7KrPuUSztUdU5A==
+  dependencies:
+    ansi-regex "^5.0.1"
+
+strip-ansi@^6.0.0, strip-ansi@^6.0.1:
   version "6.0.1"
   resolved "https://registry.yarnpkg.com/strip-ansi/-/strip-ansi-6.0.1.tgz#9e26c63d30f53443e9489495b2105d37b67a85d9"
   integrity sha512-Y38VPSHcqkFrCpFnQ9vuSXmquuv5oXOKpGeT6aGrr3o3Gc9AlVa6JBfUSOCnbxGGZF+/0ooI7KrPuUSztUdU5A==
@@ -12888,7 +12904,7 @@ wrangler@^3.33.0:
   optionalDependencies:
     fsevents "~2.3.2"
 
-"wrap-ansi-cjs@npm:wrap-ansi@^7.0.0", wrap-ansi@^7.0.0:
+"wrap-ansi-cjs@npm:wrap-ansi@^7.0.0":
   version "7.0.0"
   resolved "https://registry.yarnpkg.com/wrap-ansi/-/wrap-ansi-7.0.0.tgz#67e145cff510a6a6984bdf1152911d69d2eb9e43"
   integrity sha512-YVGIj2kamLSTxw6NsZjoBxfSwsn0ycdesmc4p+Q21c5zPuZ1pl+NfxVdxPtdHvmNVOQ6XSYG4AUtyt/Fi7D16Q==
@@ -12901,6 +12917,15 @@ wrap-ansi@^6.0.1, wrap-ansi@^6.2.0:
   version "6.2.0"
   resolved "https://registry.yarnpkg.com/wrap-ansi/-/wrap-ansi-6.2.0.tgz#e9393ba07102e6c91a3b221478f0257cd2856e53"
   integrity sha512-r6lPcBGxZXlIcymEu7InxDMhdW0KDxpLgoFLcguasxCaJ/SOIZwINatK9KY/tf+ZrlywOKU0UDj3ATXUBfxJXA==
+  dependencies:
+    ansi-styles "^4.0.0"
+    string-width "^4.1.0"
+    strip-ansi "^6.0.0"
+
+wrap-ansi@^7.0.0:
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/wrap-ansi/-/wrap-ansi-7.0.0.tgz#67e145cff510a6a6984bdf1152911d69d2eb9e43"
+  integrity sha512-YVGIj2kamLSTxw6NsZjoBxfSwsn0ycdesmc4p+Q21c5zPuZ1pl+NfxVdxPtdHvmNVOQ6XSYG4AUtyt/Fi7D16Q==
   dependencies:
     ansi-styles "^4.0.0"
     string-width "^4.1.0"
