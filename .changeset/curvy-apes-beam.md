@@ -2,4 +2,4 @@
 "@shopify/shopify-app-remix": patch
 ---
 
-Fix back stack for embedded apps
+Fix a bug that prevents using the browser's back stack for embedded apps
