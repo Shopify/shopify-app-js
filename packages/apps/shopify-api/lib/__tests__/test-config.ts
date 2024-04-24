@@ -56,6 +56,7 @@ const TEST_FUTURE_FLAGS: Required<{
   [key in keyof FutureFlags]: true;
 }> = {
   v10_lineItemBilling: true,
+  lineItemBilling: true,
 } as const;
 
 const TEST_CONFIG = {
