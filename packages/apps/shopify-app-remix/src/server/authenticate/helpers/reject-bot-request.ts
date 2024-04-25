@@ -2,14 +2,10 @@ import {isbot} from 'isbot';
 
 import type {BasicParams} from '../../types';
 
-const SHOPIFY_POS_USER_AGENT = /Shopify POS\/[0-9]+\.[0-9]+\.[0-9]+\/Android/;
-const SHOPIFY_MOBILE_ANDROID_USER_AGENT =
-  /Shopify Mobile\/Android\/[0-9]+\.[0-9]+\.[0-9]+/;
+const SHOPIFY_POS_USER_AGENT = /Shopify POS\//;
+const SHOPIFY_MOBILE_USER_AGENT = /Shopify Mobile\//;
 
-const SHOPIFY_USER_AGENTS = [
-  SHOPIFY_POS_USER_AGENT,
-  SHOPIFY_MOBILE_ANDROID_USER_AGENT,
-];
+const SHOPIFY_USER_AGENTS = [SHOPIFY_POS_USER_AGENT, SHOPIFY_MOBILE_USER_AGENT];
 
 export function respondToBotRequest(
   {logger}: BasicParams,
