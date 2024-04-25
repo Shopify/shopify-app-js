@@ -69,7 +69,7 @@ export class GraphqlClient {
     params: GraphqlParams,
   ): Promise<RequestReturn<T>> {
     logger(this.graphqlClass().config).deprecated(
-      '10.0.0',
+      '11.0.0',
       'The query method is deprecated, and was replaced with the request method.\n' +
         'See the migration guide: https://github.com/Shopify/shopify-app-js/blob/main/packages/apps/shopify-api/docs/migrating-to-v9.md#using-the-new-clients.',
     );
