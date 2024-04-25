@@ -2,7 +2,7 @@
 import React, {useState, useContext, ReactNode, useEffect} from 'react';
 // import {useNavigate} from '@remix-run/react';
 import {Modal, Spinner} from '@shopify/polaris';
-import { checkScopes } from 'src/react/clients/optionalScopes';
+import {checkScopes} from 'src/react/clients/optionalScopes';
 
 interface OptionalScopesContextProps {
   requestScopes: (

@@ -8,3 +8,13 @@ export const checkScopes = async (scopes: string[]) => {
   }
   return [];
 };
+
+export const revokeScopes = async (scopes: string[]) => {
+  const response = await fetch(
+    `/auth/scopes/revoke?scopes=${scopes.join(',')}`,
+  );
+  if (response.status === 200) {
+    return true;
+  }
+  throw new Error('Failed to revoke scopes');
+};
