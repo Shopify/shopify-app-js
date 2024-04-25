@@ -20,6 +20,6 @@ export function checkScopesFactory(
     const installedScopesSet = new AuthScopes(installedScopes);
     const scopesToCheckSet = new AuthScopes(scopes);
 
-    return installedScopesSet.has(scopesToCheckSet);
+    return installedScopesSet.notIncluded(scopesToCheckSet);
   };
 }

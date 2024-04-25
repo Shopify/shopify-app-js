@@ -38,6 +38,10 @@ class AuthScopes {
    * Checks whether the current set of scopes includes the given one.
    */
   public has(scope: string | string[] | AuthScopes | undefined) {
+    return this.notIncluded(scope).length === 0;
+  }
+
+  public notIncluded(scope: string | string[] | AuthScopes | undefined) {
     let other: AuthScopes;
 
     if (scope instanceof AuthScopes) {
@@ -46,9 +50,7 @@ class AuthScopes {
       other = new AuthScopes(scope);
     }
 
-    return (
-      other.toArray().filter((x) => !this.expandedScopes.has(x)).length === 0
-    );
+    return other.toArray().filter((x) => !this.expandedScopes.has(x));
   }
 
   /**

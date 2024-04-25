@@ -10,7 +10,10 @@ import {
   respondToOptionsRequest,
   validateSessionToken,
 } from '../helpers';
-import {OPTIONAL_SCOPES_HEADER} from '../const';
+import {
+  addScopesToErrorHandling,
+  respondToScopeRequest,
+} from '../helpers/respond-to-scope-request';
 
 import {
   cancelBillingFactory,
@@ -119,10 +122,7 @@ export function authStrategyFactory<
     },
   ) {
     try {
-      const missingScopes = manageOptionalScopesRequest(
-        request,
-        optionalScopes,
-      );
+      addScopesToErrorHandling(optionalScopes, request);
       respondToBotRequest(params, request);
       respondToOptionsRequest(params, request);
       await respondToBouncePageRequest(request);
@@ -151,7 +151,7 @@ export function authStrategyFactory<
         session: existingSession,
         sessionToken,
         shop,
-        optionalScopes: missingScopes.request ? missingScopes.scopes : [],
+        optionalScopes: await respondToScopeRequest(request, config),
       });
 
       logger.debug('Request is valid, loaded session from session token', {
@@ -160,7 +160,7 @@ export function authStrategyFactory<
       });
 
       const context = createContext(request, session, strategy, payload);
-      await manageCheckOptionalScopesRequest(request, context.scopes.check);
+      await respondToScopeRequest(request, config, context.scopes);
       return context;
     } catch (errorOrResponse) {
       if (errorOrResponse instanceof Response) {
@@ -211,38 +211,4 @@ async function getSessionTokenContext(
   });
 
   return {shop, sessionId, payload: undefined, sessionToken};
-}
-
-function manageOptionalScopesRequest(
-  request: Request,
-  optionalScopes: string[],
-) {
-  const url = new URL(request.url);
-
-  let scopes = optionalScopes.length > 0 ? optionalScopes.join(',') : undefined;
-  scopes =
-    url.pathname === '/auth/missingScopes'
-      ? url.searchParams.get('scopes') || undefined
-      : scopes;
-  if (scopes) request.headers.append(OPTIONAL_SCOPES_HEADER, scopes);
-
-  return {
-    scopes: scopes?.split(',') ?? [],
-    request: url.searchParams.has('scopes'),
-  };
-}
-
-async function manageCheckOptionalScopesRequest(
-  request: Request,
-  check: (scopes: string[], forceRemote?: boolean) => Promise<boolean>,
-) {
-  const url = new URL(request.url);
-  if (url.pathname !== '/auth/checkScopes') return;
-
-  const scopes = url.searchParams.get('scopes')?.split(',') ?? [];
-
-  const granted = await check(scopes);
-  if (granted) return;
-
-  throw new Response(undefined, {status: 403});
 }

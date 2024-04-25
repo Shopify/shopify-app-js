@@ -1,6 +1,7 @@
 import {OnErrorOptions} from '../authenticate/admin/strategies/types';
 
 export interface OptionalScopesOptions {
+  path: string;
   errorHandling: 'automatic' | 'none';
   redirection: 'inline' | 'modal';
 }

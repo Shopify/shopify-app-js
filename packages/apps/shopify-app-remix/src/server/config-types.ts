@@ -229,7 +229,7 @@ export interface AppConfigArg<
    */
   future?: Future;
 
-  optionalScopes?: OptionalScopesOptions;
+  optionalScopes: OptionalScopesOptions;
 }
 
 export interface AppConfig<Storage extends SessionStorage = SessionStorage>

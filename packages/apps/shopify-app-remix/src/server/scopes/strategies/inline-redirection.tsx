@@ -5,7 +5,7 @@ export function redirect(error: MissingScopesResponse) {
     <div>
       <meta
         httpEquiv="refresh"
-        content={`0;url=/auth/missingScopes?scopes=${error.data.scopes.join(',')}`}
+        content={`0;url=/auth/scopes/request?scopes=${error.data.scopes.join(',')}`}
       />
     </div>
   );

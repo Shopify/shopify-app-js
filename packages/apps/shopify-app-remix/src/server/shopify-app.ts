@@ -210,6 +210,7 @@ function deriveConfig<Storage extends SessionStorage>(
       loginPath: `${authPathPrefix}/login`,
     },
     optionalScopes: {
+      path: `${authPathPrefix}/scopes`,
       errorHandling: appConfig.optionalScopes?.errorHandling ?? 'automatic',
       redirection: appConfig.optionalScopes?.redirection ?? 'inline',
     },

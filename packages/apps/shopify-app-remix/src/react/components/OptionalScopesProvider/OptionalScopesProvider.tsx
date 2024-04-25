@@ -35,6 +35,19 @@ export function OptionalScopesProvider({
   const [currentScopes, setCurrentScopes] = useState<string[]>([]);
   const [onGrant, setOnGrant] = useState<(() => void) | null>(null);
 
+  const checkScopes = async (scopes: string[]) => {
+    const response = await fetch(
+      `/auth/scopes/check?scopes=${scopes.join(',')}`,
+    );
+    if (response.status === 200) {
+      const responseContent = (await response.json()) as unknown as {
+        missingScopes: string[];
+      };
+      return responseContent.missingScopes || [];
+    }
+    return [];
+  };
+
   const requestScopes = async (
     scopes: string[],
     onGrant: () => void,
@@ -42,10 +55,8 @@ export function OptionalScopesProvider({
   ) => {
     setCurrentScopes(scopes);
     setOnGrant(() => onGrant);
-    const response = await fetch(
-      `/auth/checkScopes?scopes=${scopes.join(',')}`,
-    );
-    if (response.status === 200) {
+    const missingScopes = await checkScopes(scopes);
+    if (missingScopes.length === 0) {
       if (onAlreadyGranted) {
         onAlreadyGranted();
       } else {
@@ -64,12 +75,12 @@ export function OptionalScopesProvider({
     const left = screen.width / 2 - width / 2;
     const top = screen.height / 2 - height / 2;
     const authWindow = window.open(
-      `/auth/missingScopes?scopes=${currentScopes}`,
+      `/auth/scopes/request?scopes=${currentScopes}`,
       'Shopify - Grant Scopes',
       `scrollbars=no, resizable=no, width=${width}, height=${height}, top=${top}, left=${left}`,
     );
     setAuthWindow(authWindow);
-    // navigate(`/auth/missingScopes?scopes=${currentScopes}`);
+    // navigate(`/auth/scopes/request?scopes=${currentScopes}`);
   };
 
   const onCancel = () => {
@@ -132,10 +143,8 @@ export function OptionalScopesProvider({
     if (loading) {
       let count = 0;
       const interval = setInterval(async () => {
-        const response = await fetch(
-          `/auth/checkScopes?scopes=${currentScopes.join(',')}`,
-        );
-        if (response.status === 200) {
+        const missingScopes = await checkScopes(currentScopes);
+        if (missingScopes.length === 0) {
           if (authWindow) authWindow.close();
           if (checkWindowClosed) clearInterval(checkWindowClosed);
           clearInterval(interval);

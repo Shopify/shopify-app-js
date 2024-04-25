@@ -1,6 +1,6 @@
 export interface ScopesApiContext {
   get: (forceRemote?: boolean) => Promise<string[]>;
-  check: (scopes: string[], forceRemote?: boolean) => Promise<boolean>;
+  check: (scopes: string[], forceRemote?: boolean) => Promise<string[]>;
 }
 
 export interface GetResponse {
