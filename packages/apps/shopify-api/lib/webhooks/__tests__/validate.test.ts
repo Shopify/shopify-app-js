@@ -33,7 +33,6 @@ describe('shopify.webhooks.validate', () => {
   it.each([
     {headers: {apiVersion: ''}, missingHeader: ShopifyHeader.ApiVersion},
     {headers: {domain: ''}, missingHeader: ShopifyHeader.Domain},
-    {headers: {hmac: ''}, missingHeader: ShopifyHeader.Hmac},
     {headers: {topic: ''}, missingHeader: ShopifyHeader.Topic},
     {headers: {webhookId: ''}, missingHeader: ShopifyHeader.WebhookId},
   ])(`returns false on missing header $missingHeader`, async (config) => {
@@ -70,6 +69,22 @@ describe('shopify.webhooks.validate', () => {
     expect(response.body.data).toEqual({
       valid: false,
       reason: WebhookValidationErrorReason.MissingBody,
+    });
+  });
+
+  it('returns false on missing HMAC', async () => {
+    const shopify = shopifyApi(testConfig());
+    const app = getTestApp(shopify);
+
+    const response = await request(app)
+      .post('/webhooks')
+      .set(headers({hmac: ''}))
+      .send(rawBody)
+      .expect(200);
+
+    expect(response.body.data).toEqual({
+      valid: false,
+      reason: WebhookValidationErrorReason.MissingHmac,
     });
   });
 
