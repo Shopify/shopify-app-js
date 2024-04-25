@@ -4,6 +4,9 @@
 
 ### Major Changes
 
+> [!NOTE]
+> For more details on migrating to v10, please follow see the [migration guide](./docs/migrating-to-v10.md).
+
 - 379206c: Webhook validation will now return a different `reason` value when the HMAC value is missing from the request. Instead of returning `WebhookValidationErrorReason.MissingHeaders` as it does for the other headers it validates, it will now return a new `WebhookValidationErrorReason.MissingHmac` error so this check matches other HMAC validations.
 
   If your app doesn't explicitly check for the error after calling `webhook.validate()`, you don't need to make any changes.
@@ -17,17 +20,17 @@
   Before:
 
   ```ts
-  import "node_modules/@shopify/shopify-api/lib/clients/admin/graphql/client";
-  import "@shopify/shopify-api/adapters/node";
+  import 'node_modules/@shopify/shopify-api/lib/clients/admin/graphql/client';
+  import '@shopify/shopify-api/adapters/node';
   ```
 
   After:
 
   ```ts
   // Add `dist/esm|cjs/` before the file
-  import "node_modules/@shopify/shopify-api/dist/esm/lib/clients/admin/graphql/client";
+  import 'node_modules/@shopify/shopify-api/dist/esm/lib/clients/admin/graphql/client';
   // Unchanged
-  import "@shopify/shopify-api/adapters/node";
+  import '@shopify/shopify-api/adapters/node';
   ```
 
 ### Patch Changes
@@ -139,7 +142,7 @@
   <details>
 
   ```ts
-  const { session, headers } = shopify.auth.callback({
+  const {session, headers} = shopify.auth.callback({
     rawRequest: req,
     rawResponse: res,
   });
@@ -343,13 +346,13 @@
   Before:
 
   ```ts
-  import { gdprTopics } from "@shopify/shopify-api";
+  import {gdprTopics} from '@shopify/shopify-api';
   ```
 
   After:
 
   ```ts
-  import { privacyTopics } from "@shopify/shopify-api";
+  import {privacyTopics} from '@shopify/shopify-api';
   ```
 
 ### Minor Changes
@@ -402,13 +405,13 @@
           {
             interval: BillingInterval.Usage,
             amount: 30,
-            currencyCode: "USD",
-            terms: "per 1000 emails",
+            currencyCode: 'USD',
+            terms: 'per 1000 emails',
           },
           {
             interval: BillingInterval.Every30Days,
             amount: 30,
-            currencyCode: "USD",
+            currencyCode: 'USD',
             discount: {
               durationLimitInIntervals: 3,
               value: {
@@ -780,7 +783,7 @@
   Before:
 
   ```js
-  app.post("/graphql", async (req, res) => {
+  app.post('/graphql', async (req, res) => {
     await Shopify.Utils.graphqlProxy(req, res);
   });
   ```
@@ -788,7 +791,7 @@
   After:
 
   ```js
-  app.post("/graphql", async (req, res) => {
+  app.post('/graphql', async (req, res) => {
     const response = await Shopify.Utils.graphqlProxy(req, res);
     res.status(200).send(response.body);
   });
