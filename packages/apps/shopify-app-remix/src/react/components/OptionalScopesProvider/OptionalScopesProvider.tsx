@@ -2,6 +2,7 @@
 import React, {useState, useContext, ReactNode, useEffect} from 'react';
 // import {useNavigate} from '@remix-run/react';
 import {Modal, Spinner} from '@shopify/polaris';
+import { checkScopes } from 'src/react/clients/optionalScopes';
 
 interface OptionalScopesContextProps {
   requestScopes: (
@@ -34,19 +35,6 @@ export function OptionalScopesProvider({
   const [timeout, setTimeoutReached] = useState(false);
   const [currentScopes, setCurrentScopes] = useState<string[]>([]);
   const [onGrant, setOnGrant] = useState<(() => void) | null>(null);
-
-  const checkScopes = async (scopes: string[]) => {
-    const response = await fetch(
-      `/auth/scopes/check?scopes=${scopes.join(',')}`,
-    );
-    if (response.status === 200) {
-      const responseContent = (await response.json()) as unknown as {
-        missingScopes: string[];
-      };
-      return responseContent.missingScopes || [];
-    }
-    return [];
-  };
 
   const requestScopes = async (
     scopes: string[],

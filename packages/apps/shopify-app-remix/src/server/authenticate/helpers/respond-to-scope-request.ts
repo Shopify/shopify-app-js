@@ -26,6 +26,10 @@ export async function respondToScopeRequest(
       return url.searchParams.get('scopes')?.split(',') ?? [];
     case path('check'):
       await check(url, api);
+      break;
+    case path('revoke'):
+      await revoke(url, api);
+      break;
   }
 
   return [];
@@ -40,8 +44,17 @@ async function check(url: URL, api?: ScopesApiContext) {
   throw buildJsonResponse({missingScopes});
 }
 
-function buildJsonResponse(content: object, status = 200) {
-  return new Response(JSON.stringify(content), {
+async function revoke(url: URL, api?: ScopesApiContext) {
+  if (!api) return;
+  const scopes = url.searchParams.get('scopes')?.split(',') ?? [];
+
+  await api.revoke(scopes);
+
+  throw buildJsonResponse();
+}
+
+function buildJsonResponse(content?: object, status = 200) {
+  return new Response(content ? JSON.stringify(content) : undefined, {
     status,
     headers: {
       'Content-Type': 'application/json',

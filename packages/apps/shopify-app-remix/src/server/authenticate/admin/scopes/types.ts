@@ -1,6 +1,7 @@
 export interface ScopesApiContext {
   get: (forceRemote?: boolean) => Promise<string[]>;
   check: (scopes: string[], forceRemote?: boolean) => Promise<string[]>;
+  revoke: (scopes: string[]) => Promise<boolean>;
 }
 
 export interface GetResponse {
@@ -17,5 +18,11 @@ export interface GetResponse {
         handle: string;
       }[];
     };
+  };
+}
+
+export interface GetAppId {
+  app: {
+    id: string;
   };
 }

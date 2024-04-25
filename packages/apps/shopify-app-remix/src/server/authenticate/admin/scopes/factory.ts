@@ -5,6 +5,7 @@ import {BasicParams} from '../../../types';
 
 import {getScopesFactory} from './get';
 import {checkScopesFactory} from './check';
+import {getRevokeFactory} from './revoke';
 
 export function scopesApiFactory(
   params: BasicParams,
@@ -15,5 +16,6 @@ export function scopesApiFactory(
   return {
     get: getScopes,
     check: checkScopesFactory(params, session, getScopes),
+    revoke: getRevokeFactory(params, session, admin),
   };
 }
