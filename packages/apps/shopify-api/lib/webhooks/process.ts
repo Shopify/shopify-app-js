@@ -181,6 +181,10 @@ async function handleInvalidWebhook(
       response.statusCode = StatusCode.BadRequest;
       response.errorMessage = 'No body was received when processing webhook';
       break;
+    case WebhookValidationErrorReason.MissingHmac:
+      response.statusCode = StatusCode.BadRequest;
+      response.errorMessage = `Missing HMAC header in request`;
+      break;
     case WebhookValidationErrorReason.InvalidHmac:
       response.statusCode = StatusCode.Unauthorized;
       response.errorMessage = `Could not validate request HMAC`;
