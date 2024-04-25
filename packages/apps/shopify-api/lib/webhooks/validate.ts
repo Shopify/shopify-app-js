@@ -48,15 +48,6 @@ export function validateFactory(config: ConfigInterface) {
     });
 
     if (!validHmacResult.valid) {
-      // Deprecated: this is for backwards compatibility with the old HMAC validation
-      // This will be removed in the next major version, and missing_hmac will be returned instead of missing_header when the hmac is missing
-      if (validHmacResult.reason === ValidationErrorReason.MissingHmac) {
-        return {
-          valid: false,
-          reason: WebhookValidationErrorReason.MissingHeaders,
-          missingHeaders: [ShopifyHeader.Hmac],
-        };
-      }
       if (validHmacResult.reason === ValidationErrorReason.InvalidHmac) {
         const log = logger(config);
         await log.debug(

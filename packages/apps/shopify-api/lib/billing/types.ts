@@ -4,7 +4,11 @@ import {
   RecurringBillingIntervals,
 } from '../types';
 import {Session} from '../session/session';
-import {FeatureEnabled, FutureFlagOptions} from '../../future/flags';
+import {
+  FeatureEnabled,
+  FutureFlagOptions,
+  FutureFlags,
+} from '../../future/flags';
 
 export interface BillingConfigPlan {
   /**
@@ -119,7 +123,7 @@ export type BillingConfigLegacyItem =
 export type BillingConfigItem<
   Future extends FutureFlagOptions = FutureFlagOptions,
 > =
-  FeatureEnabled<Future, 'v10_lineItemBilling'> extends true
+  FeatureEnabled<Future, 'lineItemBilling'> extends true
     ? BillingConfigOneTimePlan | BillingConfigSubscriptionLineItemPlan
     : BillingConfigLegacyItem;
 
@@ -134,7 +138,19 @@ export interface BillingConfig<
   /**
    * An individual billing plan.
    */
-  [plan: string]: BillingConfigItem<Future>;
+  [plan: string]: BillingConfigItem<
+    Future & {
+      lineItemBilling: Future extends FutureFlags
+        ? Future['lineItemBilling'] extends true
+          ? true
+          : Future['lineItemBilling'] extends false
+            ? false
+            : Future['v10_lineItemBilling'] extends true
+              ? true
+              : false
+        : false;
+    }
+  >;
 }
 
 export type RequestConfigOverrides =

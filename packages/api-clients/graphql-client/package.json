@@ -1,6 +1,6 @@
 {
   "name": "@shopify/graphql-client",
-  "version": "0.10.3",
+  "version": "0.10.4",
   "description": "Shopify GraphQL Client - A lightweight generic GraphQL JS client to interact with Shopify GraphQL APIs",
   "repository": {
     "type": "git",
@@ -31,7 +31,7 @@
   },
   "scripts": {
     "lint": "eslint . --ext .js,.ts",
-    "build": "yarn run rollup",
+    "build": "yarn tsc -p ./tsconfig.build.json && yarn run rollup",
     "test": "jest",
     "test:ci": "yarn test",
     "rollup": "rollup -c --bundleConfigAsCjs",

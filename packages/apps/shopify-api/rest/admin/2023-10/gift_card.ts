@@ -71,6 +71,7 @@ export class GiftCard extends Base {
   ): Promise<GiftCard | null> {
     const result = await this.baseFind<GiftCard>({
       session: session,
+      requireIds: true,
       urlIds: {"id": id},
       params: {},
     });

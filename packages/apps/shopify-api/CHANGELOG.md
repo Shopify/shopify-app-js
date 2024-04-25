@@ -1,5 +1,47 @@
 # Changelog
 
+## 10.0.0
+
+### Major Changes
+
+> [!NOTE]
+> For more details on migrating to v10, please follow see the [migration guide](./docs/migrating-to-v10.md).
+
+- 379206c: Webhook validation will now return a different `reason` value when the HMAC value is missing from the request. Instead of returning `WebhookValidationErrorReason.MissingHeaders` as it does for the other headers it validates, it will now return a new `WebhookValidationErrorReason.MissingHmac` error so this check matches other HMAC validations.
+
+  If your app doesn't explicitly check for the error after calling `webhook.validate()`, you don't need to make any changes.
+
+- 637c6c3: This `scopes` field on the API config object is now optional. If your app is using the new [managed install flow](https://shopify.dev/docs/apps/auth/installation), it is now recommended you omit the `scopes` property from the config object.
+- 61576be: Changed the package's build process to produce both ESM and CJS outputs.
+
+  While this should have no effect on most apps, if you're directly importing a file from the package, its path will have changed.
+  Regular imports for package files remain unchanged.
+
+  Before:
+
+  ```ts
+  import 'node_modules/@shopify/shopify-api/lib/clients/admin/graphql/client';
+  import '@shopify/shopify-api/adapters/node';
+  ```
+
+  After:
+
+  ```ts
+  // Add `dist/esm|cjs/` before the file
+  import 'node_modules/@shopify/shopify-api/dist/esm/lib/clients/admin/graphql/client';
+  // Unchanged
+  import '@shopify/shopify-api/adapters/node';
+  ```
+
+### Patch Changes
+
+- 65325b8: Change v10_lineItemBilling flag to lineItemBilling
+- 6f1a98e: Fixing REST resource `find()` methods to fail when missing all ids, instead of defaulting to the same behaviour as `all()`.
+- 379206c: Postponed deprecating the GraphQL clients' `query` method because they haven't been deprecated for long enough. They'll be removed when v11 is released instead.
+- Updated dependencies [715a120]
+  - @shopify/storefront-api-client@0.3.4
+  - @shopify/admin-api-client@0.2.9
+
 ## 9.7.2
 
 ### Patch Changes
@@ -100,7 +142,7 @@
   <details>
 
   ```ts
-  const { session, headers } = shopify.auth.callback({
+  const {session, headers} = shopify.auth.callback({
     rawRequest: req,
     rawResponse: res,
   });
@@ -304,13 +346,13 @@
   Before:
 
   ```ts
-  import { gdprTopics } from "@shopify/shopify-api";
+  import {gdprTopics} from '@shopify/shopify-api';
   ```
 
   After:
 
   ```ts
-  import { privacyTopics } from "@shopify/shopify-api";
+  import {privacyTopics} from '@shopify/shopify-api';
   ```
 
 ### Minor Changes
@@ -363,13 +405,13 @@
           {
             interval: BillingInterval.Usage,
             amount: 30,
-            currencyCode: "USD",
-            terms: "per 1000 emails",
+            currencyCode: 'USD',
+            terms: 'per 1000 emails',
           },
           {
             interval: BillingInterval.Every30Days,
             amount: 30,
-            currencyCode: "USD",
+            currencyCode: 'USD',
             discount: {
               durationLimitInIntervals: 3,
               value: {
@@ -741,7 +783,7 @@
   Before:
 
   ```js
-  app.post("/graphql", async (req, res) => {
+  app.post('/graphql', async (req, res) => {
     await Shopify.Utils.graphqlProxy(req, res);
   });
   ```
@@ -749,7 +791,7 @@
   After:
 
   ```js
-  app.post("/graphql", async (req, res) => {
+  app.post('/graphql', async (req, res) => {
     const response = await Shopify.Utils.graphqlProxy(req, res);
     res.status(200).send(response.body);
   });

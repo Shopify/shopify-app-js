@@ -4,7 +4,7 @@ import {
 } from '../../../../__tests__/test-helper';
 import {testConfig} from '../../../../__tests__/test-config';
 import {Session} from '../../../../session/session';
-import {HttpResponseError} from '../../../../error';
+import {HttpResponseError, RestResourceError} from '../../../../error';
 import {PageInfo} from '../../../types';
 import {ApiVersion, LATEST_API_VERSION} from '../../../../types';
 import {shopifyApi} from '../../../../index';
@@ -43,6 +43,14 @@ describe('Base REST resource', () => {
       path: `${prefix}/fake_resources/1.json`,
       headers,
     }).toMatchMadeHttpRequest();
+  });
+
+  it.each([NaN, null, undefined])('throws an error if id is %s', async (id) => {
+    const shopify = shopifyApi(testConfig({restResources}));
+
+    expect(async () =>
+      shopify.rest.FakeResource.find({id: id as number, session}),
+    ).rejects.toThrow(RestResourceError);
   });
 
   it('finds resource with param', async () => {

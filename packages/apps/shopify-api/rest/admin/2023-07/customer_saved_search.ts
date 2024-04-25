@@ -67,6 +67,7 @@ export class CustomerSavedSearch extends Base {
   ): Promise<CustomerSavedSearch | null> {
     const result = await this.baseFind<CustomerSavedSearch>({
       session: session,
+      requireIds: true,
       urlIds: {"id": id},
       params: {"fields": fields},
     });

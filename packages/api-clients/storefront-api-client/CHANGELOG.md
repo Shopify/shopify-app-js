@@ -1,5 +1,13 @@
 # @shopify/storefront-api-client
 
+## 0.3.4
+
+### Patch Changes
+
+- 715a120: Fixed the minified build process to not mangle the `fetch` function, which led to requests failing in the final package.
+- Updated dependencies [715a120]
+  - @shopify/graphql-client@0.10.4
+
 ## 0.3.3
 
 ### Patch Changes

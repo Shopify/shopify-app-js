@@ -13,6 +13,7 @@ interface BaseFindArgs {
   session: Session;
   params?: ParamSet;
   urlIds: IdSet;
+  requireIds?: boolean;
 }
 
 interface BaseConstructorArgs {
@@ -77,7 +78,18 @@ export class Base {
     session,
     urlIds,
     params,
+    requireIds = false,
   }: BaseFindArgs): Promise<FindAllResponse<T>> {
+    if (requireIds) {
+      const hasIds = Object.entries(urlIds).some(([_key, value]) => value);
+
+      if (!hasIds) {
+        throw new RestResourceError(
+          'No IDs given for request, cannot find path',
+        );
+      }
+    }
+
     const response = await this.request<T>({
       http_method: 'get',
       operation: 'get',

@@ -20,12 +20,15 @@ describe('ensureInstalledOnShop', () => {
     app.get('/test/shop', async (req, res) => {
       res.json({data: {shop: {name: req.query.shop}}});
     });
+    const scopes = shopify.api.config.scopes
+      ? shopify.api.config.scopes.toString()
+      : '';
     session = new Session({
       id: `offline_${TEST_SHOP}`,
       shop: TEST_SHOP,
       state: '123-this-is-a-state',
       isOnline: false,
-      scope: shopify.api.config.scopes.toString(),
+      scope: scopes,
       expires: undefined,
       accessToken: 'totally-real-access-token',
     });

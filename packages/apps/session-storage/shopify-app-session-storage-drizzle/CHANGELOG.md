@@ -1,5 +1,11 @@
 # @shopify/shopify-app-session-storage-drizzle
 
+## 1.1.2
+
+### Patch Changes
+
+- a8d4b3e: Updated @shopify/shopify-api dependency to also allow v10+ since there were no breaking changes affecting this package.
+
 ## 1.1.1
 
 ### Patch Changes

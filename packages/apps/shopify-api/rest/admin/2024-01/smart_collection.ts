@@ -80,6 +80,7 @@ export class SmartCollection extends Base {
   ): Promise<SmartCollection | null> {
     const result = await this.baseFind<SmartCollection>({
       session: session,
+      requireIds: true,
       urlIds: {"id": id},
       params: {"fields": fields},
     });

@@ -29,7 +29,6 @@ describe('Config object', () => {
 
     expect(config.apiKey).toEqual(validParams.apiKey);
     expect(config.apiSecretKey).toEqual(validParams.apiSecretKey);
-    expect(config.scopes.equals(validParams.scopes)).toBeTruthy();
     expect(config.hostName).toEqual(validParams.hostName);
   });
 
@@ -52,16 +51,6 @@ describe('Config object', () => {
     } catch (error) {
       expect(error).toBeInstanceOf(ShopifyErrors.ShopifyError);
       expect(error.message).toContain('Missing values for: apiSecretKey');
-    }
-
-    invalid = {...validParams};
-    invalid.scopes = [];
-    try {
-      validateConfig(invalid);
-      fail('Initializing without scopes did not throw an exception');
-    } catch (error) {
-      expect(error).toBeInstanceOf(ShopifyErrors.ShopifyError);
-      expect(error.message).toContain('Missing values for: scopes');
     }
 
     invalid = {...validParams};
@@ -95,6 +84,14 @@ describe('Config object', () => {
       ShopifyErrors.ShopifyError,
     );
     validParams.isCustomStoreApp = false;
+  });
+
+  it('scopes can be not defined', () => {
+    delete (validParams as any).scopes;
+
+    expect(() => validateConfig(validParams)).not.toThrow(
+      ShopifyErrors.ShopifyError,
+    );
   });
 
   it("ignores a missing 'apiKey' when isCustomStoreApp is true", () => {
@@ -168,5 +165,12 @@ describe('Config object', () => {
     const enumVersions = Object.values(ApiVersion);
 
     expect(LATEST_API_VERSION).toEqual(enumVersions[enumVersions.length - 2]);
+  });
+
+  it('can alias billing future flags', () => {
+    validParams.future = {v10_lineItemBilling: true};
+    const config = validateConfig(validParams);
+
+    expect(config.future?.lineItemBilling).toBeTruthy();
   });
 });

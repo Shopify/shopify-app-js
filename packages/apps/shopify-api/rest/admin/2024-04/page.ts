@@ -78,6 +78,7 @@ export class Page extends Base {
   ): Promise<Page | null> {
     const result = await this.baseFind<Page>({
       session: session,
+      requireIds: true,
       urlIds: {"id": id},
       params: {"fields": fields},
     });

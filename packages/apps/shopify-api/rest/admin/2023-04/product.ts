@@ -88,6 +88,7 @@ export class Product extends Base {
   ): Promise<Product | null> {
     const result = await this.baseFind<Product>({
       session: session,
+      requireIds: true,
       urlIds: {"id": id},
       params: {"fields": fields},
     });

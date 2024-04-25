@@ -240,9 +240,10 @@ function assertOAuthBeginRedirectUrl(
   expect(redirecUri.pathname).toBe('/test/auth/callback');
 
   expect(url.searchParams.get('client_id')).toEqual(shopify.api.config.apiKey);
-  expect(url.searchParams.get('scope')).toEqual(
-    shopify.api.config.scopes.toString(),
-  );
+  const scopes = shopify.api.config.scopes
+    ? shopify.api.config.scopes.toString()
+    : '';
+  expect(url.searchParams.get('scope')).toEqual(scopes);
   expect(url.searchParams.get('state')).toEqual(expect.stringMatching(/.{15}/));
 
   if (isOnline) {

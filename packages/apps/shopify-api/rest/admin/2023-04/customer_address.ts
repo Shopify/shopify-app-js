@@ -72,6 +72,7 @@ export class CustomerAddress extends Base {
   ): Promise<CustomerAddress | null> {
     const result = await this.baseFind<CustomerAddress>({
       session: session,
+      requireIds: true,
       urlIds: {"id": id, "customer_id": customer_id},
       params: {},
     });

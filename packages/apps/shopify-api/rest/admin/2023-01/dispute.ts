@@ -44,6 +44,7 @@ export class Dispute extends Base {
   ): Promise<Dispute | null> {
     const result = await this.baseFind<Dispute>({
       session: session,
+      requireIds: true,
       urlIds: {"id": id},
       params: {},
     });
