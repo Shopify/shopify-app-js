@@ -1,5 +1,21 @@
 # Changelog
 
+## 4.1.6
+
+### Patch Changes
+
+- 637c6c3: This `scopes` field on the API config object is now optional. If your app is using the new [managed install flow](https://shopify.dev/docs/apps/auth/installation), it is now recommended you omit the `scopes` property from the config object.
+- Updated dependencies [379206c]
+- Updated dependencies [65325b8]
+- Updated dependencies [637c6c3]
+- Updated dependencies [a8d4b3e]
+- Updated dependencies [6f1a98e]
+- Updated dependencies [61576be]
+- Updated dependencies [379206c]
+  - @shopify/shopify-api@10.0.0
+  - @shopify/shopify-app-session-storage-memory@3.0.5
+  - @shopify/shopify-app-session-storage@2.1.5
+
 ## 4.1.5
 
 ### Patch Changes

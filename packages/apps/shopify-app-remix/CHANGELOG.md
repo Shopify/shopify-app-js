@@ -1,5 +1,26 @@
 # @shopify/shopify-app-remix
 
+## 2.8.2
+
+### Patch Changes
+
+- 65325b8: Change v10_lineItemBilling flag to lineItemBilling
+- fa94e85: Fix an issue that rejected requests from Shopify POS / Mobile due to their User-Agents being labeled as bots.
+- 637c6c3: This `scopes` field on the API config object is now optional. If your app is using the new [managed install flow](https://shopify.dev/docs/apps/auth/installation), it is now recommended you omit the `scopes` property from the config object.
+- 1b5d80e: Removed `@remix-run/node` as a direct dependency. Any app using the Vercel adapter already needs `@remix-run/node`, so this shouldn't affect any apps.
+- Updated dependencies [379206c]
+- Updated dependencies [715a120]
+- Updated dependencies [65325b8]
+- Updated dependencies [637c6c3]
+- Updated dependencies [a8d4b3e]
+- Updated dependencies [6f1a98e]
+- Updated dependencies [61576be]
+- Updated dependencies [379206c]
+  - @shopify/shopify-api@10.0.0
+  - @shopify/storefront-api-client@0.3.4
+  - @shopify/shopify-app-session-storage@2.1.5
+  - @shopify/admin-api-client@0.2.9
+
 ## 2.8.1
 
 ### Patch Changes

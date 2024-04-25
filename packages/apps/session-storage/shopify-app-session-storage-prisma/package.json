@@ -1,6 +1,6 @@
 {
   "name": "@shopify/shopify-app-session-storage-prisma",
-  "version": "4.0.4",
+  "version": "4.0.5",
   "description": "Shopify App Session Storage for Prisma",
   "repository": {
     "type": "git",
@@ -50,7 +50,7 @@
   },
   "devDependencies": {
     "@prisma/client": "^5.10.2",
-    "@shopify/shopify-app-session-storage-test-utils": "^2.0.4",
+    "@shopify/shopify-app-session-storage-test-utils": "^2.0.5",
     "prisma": "^5.12.1"
   },
   "files": [
