@@ -1,5 +1,11 @@
 # @shopify/shopify-app-session-storage-prisma
 
+## 4.0.5
+
+### Patch Changes
+
+- a8d4b3e: Updated @shopify/shopify-api dependency to also allow v10+ since there were no breaking changes affecting this package.
+
 ## 4.0.4
 
 ### Patch Changes

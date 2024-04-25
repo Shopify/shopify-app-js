@@ -1,5 +1,11 @@
 # @shopify/graphql-client
 
+## 0.10.4
+
+### Patch Changes
+
+- 715a120: Fixed the minified build process to not mangle the `fetch` function, which led to requests failing in the final package.
+
 ## 0.10.3
 
 ### Patch Changes
