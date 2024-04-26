@@ -1,4 +1,11 @@
 export * from './types';
 export * from './crypto';
-export {encryptString, decryptString, generateIV} from './encrypt';
+export {
+  CIPHER_PREFIX,
+  encrypt as encryptString,
+  encryptValue,
+  decrypt as decryptString,
+  decryptValue,
+  generateIV,
+} from './encrypt';
 export * from './utils';

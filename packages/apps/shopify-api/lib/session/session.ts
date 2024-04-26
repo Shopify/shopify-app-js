@@ -3,34 +3,44 @@
 import {InvalidSession} from '../error';
 import {OnlineAccessInfo} from '../auth/oauth/types';
 import {AuthScopes} from '../auth/scopes';
-import {
-  decryptString,
-  encryptString,
-  generateIV,
-  asBase64,
-  fromBase64,
-} from '../../runtime/crypto';
+import {decryptValue, encryptValue, CIPHER_PREFIX} from '../../runtime/crypto';
 
 import {SessionParams} from './types';
 
 type SessionParamsArray = [string, string | number | boolean][];
 
-const propertiesToSave = [
-  'id',
-  'shop',
-  'state',
-  'isOnline',
-  'scope',
-  'accessToken',
-  'expires',
-  'onlineAccessInfo',
-];
+interface ToEncryptedPropertyArrayOptions {
+  cryptoKey: CryptoKey;
+  returnUserData?: boolean;
+  propertiesToEncrypt?: string[];
+}
+
+interface FromEncryptedPropertyArrayOptions {
+  cryptoKey: CryptoKey;
+  returnUserData?: boolean;
+}
+
+interface FlattenPropertiesOptions {
+  returnUserData: boolean;
+  propertiesToSave?: string[];
+}
 
 /**
  * Stores App information from logged in merchants so they can make authenticated requests to the Admin API.
  */
 export class Session {
-  private static CIPHER_PREFIX = 'encrypted#';
+  public static DEFAULT_ENCRYPTED_PROPERTIES = ['accessToken'];
+
+  private static DEFAULT_PROPERTIES_TO_SAVE = [
+    'id',
+    'shop',
+    'state',
+    'isOnline',
+    'scope',
+    'accessToken',
+    'expires',
+    'onlineAccessInfo',
+  ];
 
   public static fromPropertyArray(
     entries: SessionParamsArray,
@@ -65,7 +75,7 @@ export class Session {
             case 'emailverified':
               return ['emailVerified', value];
             default:
-              return [key.toLowerCase(), value];
+              return [key, value];
           }
         }),
     );
@@ -148,44 +158,21 @@ export class Session {
 
   public static async fromEncryptedPropertyArray(
     entries: SessionParamsArray,
-    cryptoKey: CryptoKey,
-    returnUserData = false,
+    {cryptoKey, returnUserData = false}: FromEncryptedPropertyArrayOptions,
   ) {
     const decryptedEntries: SessionParamsArray = [];
     for (const [key, value] of entries) {
-      switch (key) {
-        case 'accessToken':
-          decryptedEntries.push([
-            key,
-            await this.decryptValue(value as string, cryptoKey),
-          ]);
-          break;
-        default:
-          decryptedEntries.push([key, value]);
-          break;
+      if (value.toString().startsWith(CIPHER_PREFIX)) {
+        decryptedEntries.push([
+          key,
+          await decryptValue(value as string, cryptoKey),
+        ]);
+      } else {
+        decryptedEntries.push([key, value]);
       }
     }
 
     return this.fromPropertyArray(decryptedEntries, returnUserData);
-  }
-
-  private static async encryptValue(value: string, key: CryptoKey) {
-    const iv = generateIV();
-    const cipher = await encryptString(value, {key, iv});
-
-    return `${Session.CIPHER_PREFIX}${asBase64(iv)}${cipher}`;
-  }
-
-  private static async decryptValue(value: string, key: CryptoKey) {
-    if (!value.startsWith(Session.CIPHER_PREFIX)) {
-      return value;
-    }
-
-    const keyString = value.slice(Session.CIPHER_PREFIX.length);
-    const iv = new Uint8Array(fromBase64(keyString.slice(0, 16)));
-    const cipher = keyString.slice(16);
-
-    return decryptString(cipher, {key, iv});
   }
 
   /**
@@ -265,26 +252,7 @@ export class Session {
    * Converts a Session into an object with its data, that can be used to construct another Session.
    */
   public toObject(): SessionParams {
-    const object: SessionParams = {
-      id: this.id,
-      shop: this.shop,
-      state: this.state,
-      isOnline: this.isOnline,
-    };
-
-    if (this.scope) {
-      object.scope = this.scope;
-    }
-    if (this.expires) {
-      object.expires = this.expires;
-    }
-    if (this.accessToken) {
-      object.accessToken = this.accessToken;
-    }
-    if (this.onlineAccessInfo) {
-      object.onlineAccessInfo = this.onlineAccessInfo;
-    }
-    return object;
+    return {...this};
   }
 
   /**
@@ -314,7 +282,7 @@ export class Session {
    * Converts the session into an array of key-value pairs.
    */
   public toPropertyArray(returnUserData = false): SessionParamsArray {
-    return this.flattenProperties(this.toObject(), returnUserData);
+    return this.flattenProperties(this.toObject(), {returnUserData});
   }
 
   /**
@@ -322,22 +290,53 @@ export class Session {
    *
    * The encrypted string will contain both the IV and the encrypted value.
    */
-  public async toEncryptedPropertyArray(
-    key: CryptoKey,
+  public async toEncryptedPropertyArray({
+    cryptoKey,
+    propertiesToEncrypt = Session.DEFAULT_ENCRYPTED_PROPERTIES,
     returnUserData = false,
-  ): Promise<SessionParamsArray> {
-    const object = this.toObject();
-
-    if (object.accessToken) {
-      object.accessToken = await Session.encryptValue(object.accessToken, key);
+  }: ToEncryptedPropertyArrayOptions): Promise<SessionParamsArray> {
+    const disallowedFields = propertiesToEncrypt.filter((field) =>
+      [
+        'id',
+        'expires',
+        'emailVerified',
+        'accountOwner',
+        'collaborator',
+      ].includes(field),
+    );
+    if (disallowedFields.length > 0) {
+      throw new InvalidSession(
+        `Can't encrypt fields: [${disallowedFields.join(', ')}]`,
+      );
     }
 
-    return this.flattenProperties(object, returnUserData);
+    const allPropertiesToSave = [
+      ...new Set([
+        ...propertiesToEncrypt,
+        ...Session.DEFAULT_PROPERTIES_TO_SAVE,
+      ]),
+    ];
+    const properties = this.flattenProperties(this.toObject(), {
+      returnUserData,
+      propertiesToSave: allPropertiesToSave,
+    });
+
+    return Promise.all(
+      properties.map(async ([key, value]) => {
+        if (propertiesToEncrypt.includes(key) && value) {
+          return [key, await encryptValue(value.toString(), cryptoKey)];
+        }
+        return [key, value];
+      }),
+    );
   }
 
   private flattenProperties(
     params: SessionParams,
-    returnUserData: boolean,
+    {
+      returnUserData = false,
+      propertiesToSave = Session.DEFAULT_PROPERTIES_TO_SAVE,
+    }: FlattenPropertiesOptions,
   ): SessionParamsArray {
     return (
       Object.entries(params)

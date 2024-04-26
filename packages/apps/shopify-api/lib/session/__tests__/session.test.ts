@@ -240,8 +240,8 @@ const testSessions = [
       ['state', 'offline-session-state'],
       ['isOnline', false],
       ['scope', 'offline-session-scope'],
-      ['expires', expiresNumber],
       ['accessToken', 'offline-session-token'],
+      ['expires', expiresNumber],
     ],
     returnUserData: false,
   },
@@ -341,8 +341,8 @@ const testSessions = [
       ['state', 'online-session-state'],
       ['isOnline', true],
       ['scope', 'online-session-scope'],
-      ['expires', expiresNumber],
       ['accessToken', 'online-session-token'],
+      ['expires', expiresNumber],
       ['onlineAccessInfo', 1],
     ],
     returnUserData: false,
@@ -393,8 +393,8 @@ const testSessions = [
       ['state', 'offline-session-state'],
       ['isOnline', false],
       ['scope', 'offline-session-scope'],
-      ['expires', expiresNumber],
       ['accessToken', 'offline-session-token'],
+      ['expires', expiresNumber],
     ],
     returnUserData: true,
   },
@@ -428,8 +428,8 @@ const testSessions = [
       ['state', 'online-session-state'],
       ['isOnline', true],
       ['scope', 'online-session-scope'],
-      ['expires', expiresNumber],
       ['accessToken', 'online-session-token'],
+      ['expires', expiresNumber],
       ['userId', 1],
       ['firstName', 'online-session-first-name'],
       ['lastName', 'online-session-last-name'],
@@ -464,8 +464,8 @@ const testSessions = [
       ['state', 'online-session-state'],
       ['isOnline', true],
       ['scope', 'online-session-scope'],
-      ['expires', expiresNumber],
       ['accessToken', 'online-session-token'],
+      ['expires', expiresNumber],
       ['userId', 1],
     ],
     returnUserData: true,
@@ -639,12 +639,12 @@ describe('toPropertyArray and fromPropertyArray', () => {
 });
 
 describe('toEncryptedPropertyArray and fromEncryptedPropertyArray', () => {
-  let key: CryptoKey;
+  let cryptoKey: CryptoKey;
 
   beforeEach(async () => {
     const cryptoLib = getCryptoLib();
 
-    key = await cryptoLib.subtle.generateKey(
+    cryptoKey = await cryptoLib.subtle.generateKey(
       {name: 'AES-GCM', length: 256},
       true,
       ['encrypt', 'decrypt'],
@@ -669,10 +669,10 @@ describe('toEncryptedPropertyArray and fromEncryptedPropertyArray', () => {
       const testProps = [...test.propertyArray];
 
       // WHEN
-      const actualProps = await session.toEncryptedPropertyArray(
-        key,
-        test.returnUserData,
-      );
+      const actualProps = await session.toEncryptedPropertyArray({
+        cryptoKey,
+        returnUserData: test.returnUserData,
+      });
 
       // THEN
 
@@ -698,9 +698,11 @@ describe('toEncryptedPropertyArray and fromEncryptedPropertyArray', () => {
 
       // WHEN
       const actualSession = await Session.fromEncryptedPropertyArray(
-        await session.toEncryptedPropertyArray(key, test.returnUserData),
-        key,
-        test.returnUserData,
+        await session.toEncryptedPropertyArray({
+          cryptoKey,
+          returnUserData: test.returnUserData,
+        }),
+        {cryptoKey, returnUserData: test.returnUserData},
       );
 
       // THEN
@@ -743,9 +745,11 @@ describe('toEncryptedPropertyArray and fromEncryptedPropertyArray', () => {
 
       // WHEN
       const actualSession = await Session.fromEncryptedPropertyArray(
-        await session.toEncryptedPropertyArray(key, test.returnUserData),
-        key,
-        test.returnUserData,
+        await session.toEncryptedPropertyArray({
+          cryptoKey,
+          returnUserData: test.returnUserData,
+        }),
+        {cryptoKey, returnUserData: test.returnUserData},
       );
 
       // THEN
@@ -769,7 +773,10 @@ describe('toEncryptedPropertyArray and fromEncryptedPropertyArray', () => {
       expires: expiresDate,
     });
 
-    const props = await session.toEncryptedPropertyArray(key, false);
+    const props = await session.toEncryptedPropertyArray({
+      cryptoKey,
+      returnUserData: false,
+    });
 
     // WHEN
     const tamperedProps = props.map((derp) => {
@@ -781,7 +788,128 @@ describe('toEncryptedPropertyArray and fromEncryptedPropertyArray', () => {
 
     // THEN
     await expect(async () =>
-      Session.fromEncryptedPropertyArray(tamperedProps, key, false),
+      Session.fromEncryptedPropertyArray(tamperedProps, {
+        cryptoKey,
+        returnUserData: false,
+      }),
     ).rejects.toThrow('The provided data is too small.');
+  });
+
+  describe('encrypting multiple fields', () => {
+    let session: Session;
+
+    beforeEach(() => {
+      session = new Session({
+        id: 'offline_session_id',
+        shop: 'example.myshopify.io',
+        state: 'offline-session-state',
+        isOnline: true,
+        scope: 'test_scope',
+        accessToken: 'offline-session-token',
+        expires: expiresDate,
+        onlineAccessInfo: {
+          expires_in: 1,
+          associated_user_scope: 'user_scope',
+          associated_user: {
+            id: 1,
+            first_name: 'first-name',
+            last_name: 'last-name',
+            email: 'email',
+            locale: 'locale',
+            email_verified: true,
+            account_owner: true,
+            collaborator: false,
+          },
+        },
+      });
+    });
+
+    it('can encrypt and decrypt all fields', async () => {
+      // GIVEN
+      const encryptFields = [
+        'shop',
+        'state',
+        'scope',
+        'accessToken',
+        'userId',
+        'firstName',
+        'lastName',
+        'email',
+        'locale',
+      ];
+
+      // WHEN
+      const encryptedProps = await session.toEncryptedPropertyArray({
+        cryptoKey,
+        propertiesToEncrypt: encryptFields,
+        returnUserData: true,
+      });
+      const newSession = await Session.fromEncryptedPropertyArray(
+        encryptedProps,
+        {cryptoKey, returnUserData: true},
+      );
+
+      // THEN
+      expect(encryptedProps).toMatchObject([
+        ['id', 'offline_session_id'],
+        ['shop', expect.stringMatching(/^encrypted#/)],
+        ['state', expect.stringMatching(/^encrypted#/)],
+        ['isOnline', true],
+        ['scope', expect.stringMatching(/^encrypted#/)],
+        ['accessToken', expect.stringMatching(/^encrypted#/)],
+        ['expires', expect.any(Number)],
+        ['userId', expect.stringMatching(/^encrypted#/)],
+        ['firstName', expect.stringMatching(/^encrypted#/)],
+        ['lastName', expect.stringMatching(/^encrypted#/)],
+        ['email', expect.stringMatching(/^encrypted#/)],
+        ['locale', expect.stringMatching(/^encrypted#/)],
+        ['emailVerified', true],
+        ['accountOwner', true],
+        ['collaborator', false],
+      ]);
+      expect(newSession.equals(session)).toBeTruthy();
+    });
+
+    it('can encrypt and decrypt custom fields', async () => {
+      // GIVEN
+      const sessionWithCustomFields = new Session({
+        ...session.toObject(),
+        customField: 'custom',
+      });
+
+      // WHEN
+      const encryptedProps =
+        await sessionWithCustomFields.toEncryptedPropertyArray({
+          cryptoKey,
+          propertiesToEncrypt: ['customField'],
+          returnUserData: true,
+        });
+      const newSession = await Session.fromEncryptedPropertyArray(
+        encryptedProps,
+        {cryptoKey, returnUserData: true},
+      );
+
+      // THEN
+      const index = encryptedProps.findIndex(([key]) => key === 'customField');
+      expect(index).toBeGreaterThan(-1);
+      expect(encryptedProps[index][1]).toMatch(/^encrypted#/);
+      expect((newSession as any).customField).toEqual(
+        (sessionWithCustomFields as any).customField,
+      );
+    });
+
+    it.each(['id', 'expires', 'emailVerified', 'accountOwner', 'collaborator'])(
+      "can't encrypt '%s' field",
+      async (field) => {
+        // WHEN
+        await expect(
+          session.toEncryptedPropertyArray({
+            cryptoKey,
+            propertiesToEncrypt: [field],
+            returnUserData: true,
+          }),
+        ).rejects.toThrow(`Can't encrypt fields: [${field}]`);
+      },
+    );
   });
 });

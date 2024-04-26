@@ -1,22 +1,16 @@
 # Storing sessions
 
-As of v6 of the library, there are no `SessionStorage` implementations included and the responsibility for implementing session storage is now delegated to the application.
+In order to be able to load user data without using cookies, your app will need to store its access tokens and other relevant data.
 
-The previous implementations of `SessionStorage` are now available in their own packages, the source of which is available in the [respective directory](../../../session-storage#readme).
+This package provides a `SessionStorage` interface that makes it easy to plug in a new storage strategy to your app.
+You can use of one the [packages we provide](../../../session-storage/README.md), or implement your own following the instructions in this page.
 
-|                      Package                      |  Session storage object  | Notes                                    |
-| :-----------------------------------------------: | :----------------------: | ---------------------------------------- |
-|   `@shopify/shopify-app-session-storage-memory`   |   MemorySessionStorage   |                                          |
-|  `@shopify/shopify-app-session-storage-mongodb`   |  MongoDBSessionStorage   |                                          |
-|   `@shopify/shopify-app-session-storage-mysql`    |   MySQLSessionStorage    |                                          |
-| `@shopify/shopify-app-session-storage-postgresql` | PostgreSQLSessionStorage |                                          |
-|   `@shopify/shopify-app-session-storage-redis`    |   RedisSessionStorage    |                                          |
-|   `@shopify/shopify-app-session-storage-sqlite`   |   SQLiteSessionStorage   |                                          |
-|  `@shopify/shopify-app-session-storage-dynamodb`  |  DynamoDBSessionStorage  |                                          |
-|     `@shopify/shopify-app-session-storage-kv`     |     KVSessionStorage     |                                          |
-|      `@shopify/shopify-app-session-storage`       |      SessionStorage      | Abstract class used by the classes above |
+In this page, you'll file:
 
-## Basics
+- [What data is in a `Session` object?](#what-data-is-in-a-session-object)
+- [Save a session to storage](#save-a-session-to-storage)
+- [Load a session from storage](#load-a-session-from-storage)
+- [Encrypting data for storage](#encrypting-data-for-storage)
 
 ### What data is in a `Session` object?
 
@@ -294,12 +288,35 @@ const session = Session.fromPropertyArray(sessionProperties);
 
 ### Encrypting data for storage
 
-If you want to encrypt your access tokens before storing them, the `Session` class provides two methods: `fromEncryptedPropertyArray` and `toEncryptedPropertyArray`.
+If you want to encrypt your sessions before storing them, the `Session` class provides two methods: `fromEncryptedPropertyArray` and `toEncryptedPropertyArray`.
 
-These behave the same as their non-encrypted counterparts, and take in a `CryptoKey` object. If a session is currently not encrypted in storage, these methods will still load it normally, and will encrypt them when saving them.
-Currently, only the `accessToken` is encrypted.
+These behave the same as their non-encrypted counterparts, but are `async` and take in a `CryptoKey` object.
+If a session is currently not encrypted in storage, these methods will still load it normally, and will encrypt them when saving them.
 
 `fromEncryptedPropertyArray` will return ciphers for the encrypted fields, prefixed with `encrypted#`.
 That way, storage providers can progressively update sessions as they're loaded and saved, or run a migration script that simply loads and saves every session.
+
+By default, only the access token is encrypted, but you can pass in any fields (including custom ones not from the `Session` class) you want to encrypt.
+Note that some fields are not allowed for encryption: `id`, `expires`, and any of the boolean fields.
+
+You can use the static `Session.DEFAULT_ENCRYPTED_PROPERTIES` to encrypt the default properties, in addition to your own.
+That enables apps to continue using the default behaviour while customizing it.
+
+```ts
+// Get encrypted data array
+const sessionProperties = await session.toEncryptedPropertyArray({
+  cryptoKey,
+  // Use the default encrypted columns
+  propertiesToEncrypt: [...Session.DEFAULT_ENCRYPTED_PROPERTIES, 'customField'],
+});
+
+// Store and load data
+// ...
+
+// Create session from encrypted data
+const newSession = Session.fromEncryptedPropertyArray(sessionProperties, {
+  cryptoKey,
+});
+```
 
 [Back to guide index](../../README.md#guides)
