@@ -1,4 +1,1 @@
-export {
-  useOptionalScopes,
-  OptionalScopesProvider,
-} from './OptionalScopesProvider';
+export * from './OptionalScopesProvider';

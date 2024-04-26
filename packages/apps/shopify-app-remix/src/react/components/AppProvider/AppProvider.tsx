@@ -6,26 +6,11 @@ import {
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import englishI18n from '@shopify/polaris/locales/en.json' with {type: 'json'};
-import {createContext, useContext} from 'react';
 
 import {APP_BRIDGE_URL} from '../../const';
 import {RemixPolarisLink} from '../RemixPolarisLink';
 import {OptionalScopesProvider} from '../OptionalScopesProvider';
-
-interface AppContext {
-  baseAuthPath: string;
-  isEmbeddedApp: boolean;
-}
-
-const AppContext = createContext<AppContext | undefined>(undefined);
-
-export const useAppContext = () => {
-  const context = useContext(AppContext);
-  if (!context) {
-    throw new Error('useAppContext must be used within an AppProvider');
-  }
-  return context;
-};
+import {AppContext} from '../AppContext';
 
 export interface AppProviderProps
   extends Omit<PolarisAppProviderProps, 'linkComponent' | 'i18n'> {

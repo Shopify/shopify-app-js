@@ -4,7 +4,9 @@ import {useState, createContext, useContext, ReactNode, useEffect} from 'react';
 import {Modal, Spinner} from '@shopify/polaris';
 
 import {useScopesApi} from '../../clients';
-import {useAppContext} from '../AppProvider';
+import {useAppContext} from '../AppContext';
+
+declare const shopify: any;
 
 interface OptionalScopesContextProps {
   requestScopes: (
@@ -26,7 +28,7 @@ export function OptionalScopesProvider({
   children,
 }: OptionalScopesProviderProps) {
   const {checkScopes} = useScopesApi();
-  const {baseAuthPath} = useAppContext();
+  const {baseAuthPath, isEmbeddedApp} = useAppContext();
   const scopesApiPath = `${baseAuthPath}/scopes`;
   const [showModal, setShowModal] = useState(false);
   const [authWindow, setAuthWindow] = useState<Window | null>(null);
@@ -62,18 +64,33 @@ export function OptionalScopesProvider({
   };
 
   const onConfirm = () => {
-    setLoading(true);
-    const width = 600;
-    const height = 600;
-    const left = screen.width / 2 - width / 2;
-    const top = screen.height / 2 - height / 2;
-    const authWindow = window.open(
-      `${scopesApiPath}/request?scopes=${currentScopes}`,
-      'Shopify - Grant Scopes',
-      `scrollbars=no, resizable=no, width=${width}, height=${height}, top=${top}, left=${left}`,
-    );
-    setAuthWindow(authWindow);
-    // navigate(`/auth/scopes/request?scopes=${currentScopes}`);
+    if (isEmbeddedApp) {
+      setLoading(true);
+      shopify.requestOptionalScopes({
+        optionalScopes: currentScopes,
+        onGrant: async () => {
+          setLoading(false);
+          setGranted(true);
+        },
+        onCancel: () => {
+          setLoading(false);
+          setTimeoutReached(true);
+        },
+      });
+    } else {
+      setLoading(true);
+      const width = 600;
+      const height = 600;
+      const left = screen.width / 2 - width / 2;
+      const top = screen.height / 2 - height / 2;
+      const authWindow = window.open(
+        `${scopesApiPath}/request?scopes=${currentScopes}`,
+        'Shopify - Grant Scopes',
+        `scrollbars=no, resizable=no, width=${width}, height=${height}, top=${top}, left=${left}`,
+      );
+      setAuthWindow(authWindow);
+      // navigate(`/auth/scopes/request?scopes=${currentScopes}`);
+    }
   };
 
   const onCancel = () => {
@@ -131,48 +148,50 @@ export function OptionalScopesProvider({
     return undefined;
   };
 
-  // eslint-disable-next-line consistent-return
-  useEffect(() => {
-    if (loading) {
-      let count = 0;
-      const interval = setInterval(async () => {
-        const missingScopes = await checkScopes(currentScopes);
-        if (missingScopes.length === 0) {
-          if (authWindow) authWindow.close();
-          if (checkWindowClosed) clearInterval(checkWindowClosed);
-          clearInterval(interval);
-          setLoading(false);
-          setGranted(true);
-        } else if (count > 60) {
-          if (authWindow) authWindow.close();
-          if (checkWindowClosed) clearInterval(checkWindowClosed);
-          clearInterval(interval);
-          setLoading(false);
-          setTimeoutReached(true);
-        }
-        count++;
-      }, 1000);
+  if (!isEmbeddedApp) {
+    // eslint-disable-next-line consistent-return
+    useEffect(() => {
+      if (loading) {
+        let count = 0;
+        const interval = setInterval(async () => {
+          const missingScopes = await checkScopes(currentScopes);
+          if (missingScopes.length === 0) {
+            if (authWindow) authWindow.close();
+            if (checkWindowClosed) clearInterval(checkWindowClosed);
+            clearInterval(interval);
+            setLoading(false);
+            setGranted(true);
+          } else if (count > 60) {
+            if (authWindow) authWindow.close();
+            if (checkWindowClosed) clearInterval(checkWindowClosed);
+            clearInterval(interval);
+            setLoading(false);
+            setTimeoutReached(true);
+          }
+          count++;
+        }, 1000);
 
-      setIntervalChecker(interval);
-      return () => clearInterval(interval);
-    }
-  }, [loading, currentScopes]);
+        setIntervalChecker(interval);
+        return () => clearInterval(interval);
+      }
+    }, [loading, currentScopes]);
 
-  // eslint-disable-next-line consistent-return
-  useEffect(() => {
-    if (authWindow) {
-      const checkWindowClosed = setInterval(() => {
-        if (authWindow.closed) {
-          clearInterval(checkWindowClosed);
-          if (intervalChecker) clearInterval(intervalChecker);
-          setLoading(false);
-          setTimeoutReached(true);
-        }
-      }, 1000);
-      setCheckWindowClosed(checkWindowClosed);
-      return () => clearInterval(checkWindowClosed);
-    }
-  }, [authWindow, intervalChecker]);
+    // eslint-disable-next-line consistent-return
+    useEffect(() => {
+      if (authWindow) {
+        const checkWindowClosed = setInterval(() => {
+          if (authWindow.closed) {
+            clearInterval(checkWindowClosed);
+            if (intervalChecker) clearInterval(intervalChecker);
+            setLoading(false);
+            setTimeoutReached(true);
+          }
+        }, 1000);
+        setCheckWindowClosed(checkWindowClosed);
+        return () => clearInterval(checkWindowClosed);
+      }
+    }, [authWindow, intervalChecker]);
+  }
 
   return (
     <OptionalScopesContext.Provider value={{requestScopes}}>
