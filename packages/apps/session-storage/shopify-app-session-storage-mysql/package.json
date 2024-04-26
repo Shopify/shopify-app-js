@@ -43,7 +43,7 @@
     "session storage"
   ],
   "dependencies": {
-    "mysql2": "^3.9.2"
+    "mysql2": "^3.9.7"
   },
   "peerDependencies": {
     "@shopify/shopify-api": "^9.7.2 || ^10.0.0",
