@@ -1,8 +1,10 @@
 /* eslint-disable no-nested-ternary */
-import React, {useState, useContext, ReactNode, useEffect} from 'react';
+import {useState, createContext, useContext, ReactNode, useEffect} from 'react';
 // import {useNavigate} from '@remix-run/react';
 import {Modal, Spinner} from '@shopify/polaris';
-import {checkScopes} from 'src/react/clients/optionalScopes';
+
+import {useScopesApi} from '../../clients';
+import {useAppContext} from '../AppProvider';
 
 interface OptionalScopesContextProps {
   requestScopes: (
@@ -12,7 +14,7 @@ interface OptionalScopesContextProps {
   ) => Promise<void>;
 }
 
-const OptionalScopesContext = React.createContext<
+const OptionalScopesContext = createContext<
   OptionalScopesContextProps | undefined
 >(undefined);
 
@@ -23,6 +25,9 @@ interface OptionalScopesProviderProps {
 export function OptionalScopesProvider({
   children,
 }: OptionalScopesProviderProps) {
+  const {checkScopes} = useScopesApi();
+  const {baseAuthPath} = useAppContext();
+  const scopesApiPath = `${baseAuthPath}/scopes`;
   const [showModal, setShowModal] = useState(false);
   const [authWindow, setAuthWindow] = useState<Window | null>(null);
   const [loading, setLoading] = useState(false);
@@ -63,7 +68,7 @@ export function OptionalScopesProvider({
     const left = screen.width / 2 - width / 2;
     const top = screen.height / 2 - height / 2;
     const authWindow = window.open(
-      `/auth/scopes/request?scopes=${currentScopes}`,
+      `${scopesApiPath}/request?scopes=${currentScopes}`,
       'Shopify - Grant Scopes',
       `scrollbars=no, resizable=no, width=${width}, height=${height}, top=${top}, left=${left}`,
     );
