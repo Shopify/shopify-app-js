@@ -1,5 +1,5 @@
 /* eslint-disable no-nested-ternary */
-import {useState, createContext, useContext, ReactNode, useEffect} from 'react';
+import {useState, createContext, useContext, ReactNode, useEffect, useRef} from 'react';
 // import {useNavigate} from '@remix-run/react';
 import {Modal, Spinner} from '@shopify/polaris';
 
@@ -8,12 +8,17 @@ import {useAppContext} from '../AppContext';
 
 declare const shopify: any;
 
+interface RequestScopesConfig {
+  modal?: boolean;
+}
+export interface RequestScopesParams {
+  scopes: string[];
+  onGrant: () => void;
+  onAlreadyGranted?: () => void;
+  config?: RequestScopesConfig;
+}
 interface OptionalScopesContextProps {
-  requestScopes: (
-    scopes: string[],
-    onGrant: () => void,
-    onAlreadyGranted?: () => void,
-  ) => Promise<void>;
+  requestScopes: (params: RequestScopesParams) => Promise<void>;
 }
 
 const OptionalScopesContext = createContext<
@@ -41,13 +46,25 @@ export function OptionalScopesProvider({
     useState<NodeJS.Timeout | null>(null);
   const [timeout, setTimeoutReached] = useState(false);
   const [currentScopes, setCurrentScopes] = useState<string[]>([]);
+  const currentScopesRef = useRef(currentScopes);
+  currentScopesRef.current = currentScopes;
   const [onGrant, setOnGrant] = useState<(() => void) | null>(null);
+  const [providerConfig, setProviderConfig] = useState<
+    RequestScopesConfig | undefined
+  >(undefined);
 
-  const requestScopes = async (
-    scopes: string[],
-    onGrant: () => void,
-    onAlreadyGranted?: () => void,
-  ) => {
+  const showModalEnabled = (config?: RequestScopesConfig) =>
+    isEmbeddedApp && config?.modal === undefined
+      ? false
+      : config?.modal !== false;
+
+  const requestScopes = async ({
+    scopes,
+    onGrant,
+    onAlreadyGranted,
+    config,
+  }: RequestScopesParams) => {
+    setProviderConfig(config);
     setCurrentScopes(scopes);
     setOnGrant(() => onGrant);
     const missingScopes = await checkScopes(scopes);
@@ -57,9 +74,10 @@ export function OptionalScopesProvider({
       } else {
         onGrant();
       }
-    } else {
-      console.log('showModal');
+    } else if (showModalEnabled(config)) {
       setShowModal(true);
+    } else {
+      onConfirm();
     }
   };
 
@@ -67,14 +85,20 @@ export function OptionalScopesProvider({
     if (isEmbeddedApp) {
       setLoading(true);
       shopify.requestOptionalScopes({
-        optionalScopes: currentScopes,
+        optionalScopes: currentScopesRef.current,
         onGrant: async () => {
           setLoading(false);
           setGranted(true);
+          if (!showModalEnabled(providerConfig)) {
+            onOk();
+          }
         },
         onCancel: () => {
           setLoading(false);
           setTimeoutReached(true);
+          if (!showModalEnabled(providerConfig)) {
+            onOk();
+          }
         },
       });
     } else {
@@ -84,7 +108,7 @@ export function OptionalScopesProvider({
       const left = screen.width / 2 - width / 2;
       const top = screen.height / 2 - height / 2;
       const authWindow = window.open(
-        `${scopesApiPath}/request?scopes=${currentScopes}`,
+        `${scopesApiPath}/request?scopes=${currentScopesRef.current}`,
         'Shopify - Grant Scopes',
         `scrollbars=no, resizable=no, width=${width}, height=${height}, top=${top}, left=${left}`,
       );
@@ -113,9 +137,9 @@ export function OptionalScopesProvider({
     if (authWindow) authWindow.close();
     setAuthWindow(null);
     setLoading(false);
+    setCurrentScopes([]);
     setGranted(false);
     setTimeoutReached(false);
-    setCurrentScopes([]);
     setOnGrant(null);
   };
 
@@ -154,19 +178,25 @@ export function OptionalScopesProvider({
       if (loading) {
         let count = 0;
         const interval = setInterval(async () => {
-          const missingScopes = await checkScopes(currentScopes);
+          const missingScopes = await checkScopes(currentScopesRef.current);
           if (missingScopes.length === 0) {
             if (authWindow) authWindow.close();
             if (checkWindowClosed) clearInterval(checkWindowClosed);
             clearInterval(interval);
             setLoading(false);
             setGranted(true);
+            if (!showModalEnabled(providerConfig)) {
+              onOk();
+            }
           } else if (count > 60) {
             if (authWindow) authWindow.close();
             if (checkWindowClosed) clearInterval(checkWindowClosed);
             clearInterval(interval);
             setLoading(false);
             setTimeoutReached(true);
+            if (!showModalEnabled(providerConfig)) {
+              onCancel();
+            }
           }
           count++;
         }, 1000);
@@ -174,7 +204,7 @@ export function OptionalScopesProvider({
         setIntervalChecker(interval);
         return () => clearInterval(interval);
       }
-    }, [loading, currentScopes]);
+    }, [loading, currentScopesRef]);
 
     // eslint-disable-next-line consistent-return
     useEffect(() => {
@@ -185,6 +215,9 @@ export function OptionalScopesProvider({
             if (intervalChecker) clearInterval(intervalChecker);
             setLoading(false);
             setTimeoutReached(true);
+            if (!showModalEnabled(providerConfig)) {
+              onCancel();
+            }
           }
         }, 1000);
         setCheckWindowClosed(checkWindowClosed);
