@@ -29,7 +29,7 @@ with [token exchange](#token-exchange) instead of the authorization code grant f
 
 ## Token Exchange
 OAuth process by exchanging the current user's [session token](https://shopify.dev/docs/apps/auth/session-tokens) for an
-[access token](https://shopify-dev-staging2.shopifycloud.com/docs/apps/auth/access-token-types/online.md) to make
+[access token](https://shopify.dev/docs/apps/auth/access-token-types/online.md) to make
 authenticated Shopify API queries.
 
 This can replace authorization code grant flow completely if you also take advantage of [Shopify managed installation](https://shopify.dev/docs/apps/auth/installation#shopify-managed-installation).
