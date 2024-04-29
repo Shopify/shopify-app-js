@@ -35,6 +35,11 @@ export function authenticateAppProxyFactory<
     const session = await config.sessionStorage.loadSession(sessionId);
 
     if (!session) {
+      logger.debug('Could not find offline session, returning empty context', {
+        shop,
+        ...Object.fromEntries(url.searchParams.entries()),
+      });
+
       const context: AppProxyContext = {
         liquid,
         session: undefined,
