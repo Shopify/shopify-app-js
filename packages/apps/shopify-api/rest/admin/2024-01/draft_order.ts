@@ -81,6 +81,7 @@ export class DraftOrder extends Base {
   ): Promise<DraftOrder | null> {
     const result = await this.baseFind<DraftOrder>({
       session: session,
+      requireIds: true,
       urlIds: {"id": id},
       params: {"fields": fields},
     });

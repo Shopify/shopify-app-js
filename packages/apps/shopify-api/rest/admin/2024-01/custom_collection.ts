@@ -73,6 +73,7 @@ export class CustomCollection extends Base {
   ): Promise<CustomCollection | null> {
     const result = await this.baseFind<CustomCollection>({
       session: session,
+      requireIds: true,
       urlIds: {"id": id},
       params: {"fields": fields},
     });

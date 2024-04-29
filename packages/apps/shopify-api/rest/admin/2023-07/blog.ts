@@ -62,6 +62,7 @@ export class Blog extends Base {
   ): Promise<Blog | null> {
     const result = await this.baseFind<Blog>({
       session: session,
+      requireIds: true,
       urlIds: {"id": id},
       params: {"fields": fields},
     });

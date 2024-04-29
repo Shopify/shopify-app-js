@@ -1,6 +1,6 @@
 {
   "name": "@shopify/shopify-app-session-storage-mysql",
-  "version": "3.0.4",
+  "version": "3.0.5",
   "description": "Shopify App Session Storage for MySQL",
   "repository": {
     "type": "git",
@@ -43,14 +43,14 @@
     "session storage"
   ],
   "dependencies": {
-    "mysql2": "^3.9.2"
+    "mysql2": "^3.9.7"
   },
   "peerDependencies": {
-    "@shopify/shopify-api": "^9.7.2",
+    "@shopify/shopify-api": "^9.7.2 || ^10.0.0",
     "@shopify/shopify-app-session-storage": "^2.1.4"
   },
   "devDependencies": {
-    "@shopify/shopify-app-session-storage-test-utils": "^2.0.4"
+    "@shopify/shopify-app-session-storage-test-utils": "^2.0.5"
   },
   "files": [
     "dist/*",

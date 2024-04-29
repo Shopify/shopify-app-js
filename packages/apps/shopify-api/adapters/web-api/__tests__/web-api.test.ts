@@ -26,7 +26,7 @@ const webApiEnvironment: E2eTestEnvironment = {
       `${webApiAppPort}`,
       '--inspector-port',
       '9259',
-      'bundle/test-web-api-app.js',
+      'bundle/test-web-api-app.mjs',
     ],
     {
       detached: true,

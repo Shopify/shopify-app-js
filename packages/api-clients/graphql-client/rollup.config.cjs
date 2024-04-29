@@ -1,30 +1,11 @@
 import dts from 'rollup-plugin-dts';
-import typescript from '@rollup/plugin-typescript';
-import resolve from '@rollup/plugin-node-resolve';
-import commonjs from '@rollup/plugin-commonjs';
-import terser from '@rollup/plugin-terser';
-import replace from '@rollup/plugin-replace';
+
+import {getConfig, getPlugins} from '../../../config/rollup/rollup-utils';
 
 import * as pkg from './package.json';
 
 const mainSrcInput = 'src/index.ts';
 const clientSrcInput = 'src/graphql-client/index.ts';
-
-export function getPlugins({tsconfig, minify} = {}) {
-  return [
-    replace({
-      preventAssignment: true,
-      ROLLUP_REPLACE_CLIENT_VERSION: pkg.version,
-    }),
-    resolve(),
-    commonjs(),
-    typescript({
-      tsconfig: tsconfig ? tsconfig : './tsconfig.json',
-      outDir: './dist/ts',
-    }),
-    ...(minify === true ? [terser({keep_fnames: new RegExp('fetch')})] : []),
-  ];
-}
 
 const packageName = pkg.name.substring(1);
 export const bannerConfig = {
@@ -35,8 +16,11 @@ const config = [
   {
     input: clientSrcInput,
     plugins: getPlugins({
+      outDir: './dist/ts',
       minify: true,
       tsconfig: './tsconfig.umd.json',
+      replacements: {ROLLUP_REPLACE_CLIENT_VERSION: pkg.version},
+      bundleDependencies: true,
     }),
     output: [
       {
@@ -51,7 +35,10 @@ const config = [
   {
     input: clientSrcInput,
     plugins: getPlugins({
+      outDir: './dist/ts',
       tsconfig: './tsconfig.umd.json',
+      replacements: {ROLLUP_REPLACE_CLIENT_VERSION: pkg.version},
+      bundleDependencies: true,
     }),
     output: [
       {
@@ -63,34 +50,12 @@ const config = [
       },
     ],
   },
-  {
+  ...getConfig({
+    pkg,
     input: mainSrcInput,
-    plugins: getPlugins(),
-    output: [
-      {
-        dir: './dist',
-        format: 'es',
-        sourcemap: true,
-        preserveModules: true,
-        preserveModulesRoot: 'src',
-        entryFileNames: '[name].mjs',
-      },
-    ],
-  },
-  {
-    input: mainSrcInput,
-    plugins: getPlugins(),
-    output: [
-      {
-        dir: './dist',
-        format: 'cjs',
-        sourcemap: true,
-        exports: 'named',
-        preserveModules: true,
-        preserveModulesRoot: 'src',
-      },
-    ],
-  },
+    flatOutput: true,
+    replacements: {ROLLUP_REPLACE_CLIENT_VERSION: pkg.version},
+  }),
   {
     input: './dist/ts/index.d.ts',
     output: [{file: 'dist/graphql-client.d.ts', format: 'es'}],

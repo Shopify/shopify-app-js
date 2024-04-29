@@ -1,0 +1,22 @@
+{
+  "extends": "../../../tsconfig.build.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "outDir": "./dist/ts",
+    "rootDir": "."
+  },
+  "include": [
+    "lib/**/*.ts",
+    "future/**/*.ts",
+    "adapters/**/*.ts",
+    "rest/**/*.ts",
+    "runtime/**/*.ts",
+  ],
+  "exclude": [
+    "**/*.test.ts",
+    "**/test/*",
+    "**/__tests__/*",
+    "**/__e2etests__/*",
+    "**/__test-helpers"
+  ]
+}

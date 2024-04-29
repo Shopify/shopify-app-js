@@ -1,6 +1,6 @@
 {
   "name": "@shopify/storefront-api-client",
-  "version": "0.3.3",
+  "version": "0.3.4",
   "description": "Shopify Storefront API Client - A lightweight JS client to interact with Shopify's Storefront API",
   "repository": {
     "type": "git",
@@ -31,7 +31,7 @@
   },
   "scripts": {
     "lint": "eslint . --ext .js,.ts",
-    "build": "yarn run rollup",
+    "build": "yarn tsc -p ./tsconfig.build.json && yarn run rollup",
     "test": "jest",
     "test:ci": "yarn test",
     "rollup": "rollup -c --bundleConfigAsCjs",
@@ -83,7 +83,7 @@
     "!node_modules"
   ],
   "dependencies": {
-    "@shopify/graphql-client": "^0.10.3"
+    "@shopify/graphql-client": "^0.10.4"
   },
   "devDependencies": {
     "jest-environment-jsdom": "^29.5.0"

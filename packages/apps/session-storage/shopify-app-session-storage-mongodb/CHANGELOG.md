@@ -1,5 +1,11 @@
 # @shopify/shopify-app-session-storage-mongodb
 
+## 3.0.5
+
+### Patch Changes
+
+- a8d4b3e: Updated @shopify/shopify-api dependency to also allow v10+ since there were no breaking changes affecting this package.
+
 ## 3.0.4
 
 ### Patch Changes

@@ -48,6 +48,7 @@ export class FulfillmentService extends Base {
   ): Promise<FulfillmentService | null> {
     const result = await this.baseFind<FulfillmentService>({
       session: session,
+      requireIds: true,
       urlIds: {"id": id},
       params: {},
     });

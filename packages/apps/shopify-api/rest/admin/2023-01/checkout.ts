@@ -58,6 +58,7 @@ export class Checkout extends Base {
   ): Promise<Checkout | null> {
     const result = await this.baseFind<Checkout>({
       session: session,
+      requireIds: true,
       urlIds: {"token": token},
       params: {},
     });

@@ -47,6 +47,7 @@ export class User extends Base {
   ): Promise<User | null> {
     const result = await this.baseFind<User>({
       session: session,
+      requireIds: true,
       urlIds: {"id": id},
       params: {},
     });
