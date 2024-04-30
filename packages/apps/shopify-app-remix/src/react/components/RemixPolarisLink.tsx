@@ -16,7 +16,7 @@ export const RemixPolarisLink = React.forwardRef<
   navigateRef.current = navigate;
 
   useEffect(() => {
-    async function onClick(event: MouseEvent) {
+    async function onClick(event: Event) {
       const isAnchorTag = event.target instanceof HTMLAnchorElement;
       if (!hasAppBridgeCDN() || !isAnchorTag) return;
 

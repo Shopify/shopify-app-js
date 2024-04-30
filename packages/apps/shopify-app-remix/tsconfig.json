@@ -3,7 +3,8 @@
   "compilerOptions": {
     "baseUrl": ".",
     "outDir": "./dist/ts",
-    "rootDir": "src"
+    "rootDir": "src",
+    "types": ["@cloudflare/workers-types", "node", "jest", "jsdom"]
   },
   "include": ["src/**/*.ts", "src/**/*.tsx"],
   "exclude": [
