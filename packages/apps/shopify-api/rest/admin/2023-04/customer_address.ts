@@ -3,7 +3,7 @@
 ***********************************************************************************************************************/
 
 import {Base, FindAllResponse} from '../../base';
-import {ResourcePath, ResourceNames} from '../../types';
+import {ResourcePath, ResourceNames, Body} from '../../types';
 import {Session} from '../../../lib/session/session';
 import {ApiVersion} from '../../../lib/types';
 
@@ -61,6 +61,17 @@ export class CustomerAddress extends Base {
   protected static getJsonBodyName(): string
   {
     return "address";
+  }
+
+  protected setData(data: Body): void {
+    if ('default' in data) {
+      data['is_default'] = Boolean(data['default']);
+      delete data['default'];
+    } else {
+      data['is_default'] = false;
+    }
+
+    return super.setData(data);
   }
 
   public static async find(
@@ -163,6 +174,7 @@ export class CustomerAddress extends Base {
   public customer_id: number | null;
   public first_name: string | null;
   public id: number | null;
+  public is_default: boolean | null;
   public last_name: string | null;
   public name: string | null;
   public phone: string | null;
