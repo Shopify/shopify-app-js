@@ -73,11 +73,43 @@ pnpm run graphql-codegen
 When the script runs, it'll create a new `admin.generated.d.ts` file - or `storefront` depending on your configuration.
 The `@shopify/shopify-api` package will automatically apply the types created in those files, so your queries will have variables and return types automatically!
 
-> [!NOTE]
+> [!TIP]
 > Make sure to include the `.generated.d.ts` files in your `tsconfig` `"include"` configuration for the types to load.
 
 To make your development flow faster, you can pass in the `--watch` flag to update the query types whenever you save a file:
 
 ```sh
 npm run graphql-codegen -- --watch
+```
+
+## Using the types
+
+Once you've run the script, you can use the `request` method in the client to use the types.
+
+> [!TIP]
+> Only named queries are parsed by `graphql-codegen`, for instance `productHandles` below.
+> Always make sure to name your queries for them to be typed.
+
+```ts
+const client = new api.clients.Graphql({session});
+
+const response = await client.request(
+  `#graphql
+  query productHandles($first: Int!) {
+    products(first: $first) {
+      edges {
+        node {
+          handle
+        }
+      }
+    }
+  }`,
+  {
+    variables: {
+      first: 10,
+    },
+  },
+);
+
+console.log(response.data?.products?.edges[0].node.handle);
 ```
