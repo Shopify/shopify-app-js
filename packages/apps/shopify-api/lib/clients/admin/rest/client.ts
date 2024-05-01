@@ -166,7 +166,14 @@ export class RestClient {
         );
     }
 
-    const body: any = await response.json();
+    const bodyString: string = await response.text();
+
+    // Some DELETE requests return an empty body but are still valid responses, we want those to go through
+    const body: any =
+      params.method === Method.Delete && bodyString === ''
+        ? {}
+        : JSON.parse(bodyString);
+
     const responseHeaders = canonicalizeHeaders(
       Object.fromEntries(response.headers.entries()),
     );
