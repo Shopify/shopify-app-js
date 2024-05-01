@@ -193,7 +193,7 @@ describe('REST client', () => {
     }).toMatchMadeHttpRequest();
   });
 
-  it("doesn't fail when a DELETE response is empty", async () => {
+  it('succeeds when a DELETE response is empty', async () => {
     const shopify = shopifyApi(testConfig());
 
     const client = new shopify.clients.Rest({session});
