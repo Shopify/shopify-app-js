@@ -1,7 +1,7 @@
 import {ReferenceEntityTemplateSchema} from '@shopify/generate-docs';
 
 const data: ReferenceEntityTemplateSchema = {
-  name: 'CustomerAccount',
+  name: 'Customer account',
   description:
     'The `authenticate.public.customerAccount` function ensures that customer account extension requests are coming from Shopify, and returns helpers to respond with the correct headers.',
   category: 'Authenticate',

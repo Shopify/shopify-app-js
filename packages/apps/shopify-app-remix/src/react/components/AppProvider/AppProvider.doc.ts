@@ -12,6 +12,7 @@ const data: ReferenceEntityTemplateSchema = {
       title: 'AppProviderProps',
       description: 'Props for the `AppProvider` component.',
       type: 'AppProviderProps',
+      filePath: 'src/react/components/AppProvider/AppProvider.tsx',
     },
   ],
   jsDocTypeExamples: ['AppProviderGeneratedType'],
