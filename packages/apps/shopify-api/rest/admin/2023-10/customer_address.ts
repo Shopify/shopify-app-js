@@ -64,11 +64,13 @@ export class CustomerAddress extends Base {
   }
 
   protected setData(data: Body): void {
-    if ('default' in data) {
-      data['is_default'] = Boolean(data['default']);
-      delete data['default'];
-    } else {
-      data['is_default'] = false;
+    if (this.resource().config.future?.customerAddressDefaultFix) {
+      if ('default' in data) {
+        data['is_default'] = Boolean(data['default']);
+        delete data['default'];
+      } else {
+        data['is_default'] = false;
+      }
     }
 
     return super.setData(data);
