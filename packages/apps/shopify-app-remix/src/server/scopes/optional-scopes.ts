@@ -17,7 +17,7 @@ export async function handleScopesError({request, error}: OnErrorOptions) {
       data: {scopes: optionalScopes},
     };
     throw new Response(JSON.stringify(responseContent), {
-      status: 500,
+      status: 403,
     });
   }
 }

@@ -1,5 +1,12 @@
 /* eslint-disable no-nested-ternary */
-import {useState, createContext, useContext, ReactNode, useEffect, useRef} from 'react';
+import {
+  useState,
+  createContext,
+  useContext,
+  ReactNode,
+  useEffect,
+  useRef,
+} from 'react';
 // import {useNavigate} from '@remix-run/react';
 import {Modal, Spinner} from '@shopify/polaris';
 
@@ -97,7 +104,7 @@ export function OptionalScopesProvider({
           setLoading(false);
           setTimeoutReached(true);
           if (!showModalEnabled(providerConfig)) {
-            onOk();
+            onCancel();
           }
         },
       });
