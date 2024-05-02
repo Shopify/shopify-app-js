@@ -1,8 +1,9 @@
 import {FeatureEnabled, FutureFlagOptions} from '../../future/flags';
 
-import type {AuthenticateCheckout} from './checkout/types';
+import type {CheckoutContext} from './checkout/types';
 import type {AuthenticateAppProxy} from './appProxy/types';
-import {AuthenticateCustomerAccount} from './customer-account/types';
+import type {CustomerAccountContext} from './customer-account/types';
+import type {AuthenticateExtension} from './extension/types';
 
 // Eventually this will be just the `{}` bit without `AuthenticateCheckout &`
 // We have this is because in v1 public WAS the only public authenticate method
@@ -28,7 +29,7 @@ export interface AuthenticatePublicObject {
    * };
    * ```
    */
-  checkout: AuthenticateCheckout;
+  checkout: AuthenticateExtension<CheckoutContext>;
 
   /**
    * Authenticate a request from an app proxy
@@ -73,7 +74,7 @@ export interface AuthenticatePublicObject {
    * };
    * ```
    */
-  customerAccount: AuthenticateCustomerAccount;
+  customerAccount: AuthenticateExtension<CustomerAccountContext>;
 }
 
 export type AuthenticatePublic<Future extends FutureFlagOptions> =
@@ -94,5 +95,5 @@ export type AuthenticatePublic<Future extends FutureFlagOptions> =
  * - `authenticate.public.checkout()` for authenticating requests from checkout extensions
  * - `authenticate.public.appProxy()` for authenticating requests from app proxies
  */
-export type AuthenticatePublicLegacy = AuthenticateCheckout &
+export type AuthenticatePublicLegacy = AuthenticateExtension<CheckoutContext> &
   Omit<AuthenticatePublicObject, 'customerAccount'>;

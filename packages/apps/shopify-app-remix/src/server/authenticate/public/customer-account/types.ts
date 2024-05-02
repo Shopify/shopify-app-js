@@ -1,20 +1,12 @@
 import {JwtPayload} from '@shopify/shopify-api';
 
 import {EnsureCORSFunction} from '../../helpers/ensure-cors-headers';
-
-export type AuthenticateCustomerAccount = (
-  request: Request,
-  options?: AuthenticateCustomerAccountOptions,
-) => Promise<CustomerAccountContext>;
-
-export interface AuthenticateCustomerAccountOptions {
-  corsHeaders?: string[];
-}
+import type {ExtensionContext} from '../extension/types';
 
 /**
  * Authenticated Context for a customer account extension request
  */
-export interface CustomerAccountContext {
+export interface CustomerAccountContext extends ExtensionContext {
   /**
    * The decoded and validated session token for the request
    *

@@ -4,9 +4,9 @@ import {BasicParams} from '../../types';
 import {FutureFlagOptions} from '../../future/flags';
 
 import {authenticateCheckoutFactory} from './checkout/authenticate';
-import {AuthenticateCheckoutOptions} from './checkout/types';
 import {authenticateAppProxyFactory} from './appProxy/authenticate';
 import {authenticateCustomerAccountFactory} from './customer-account/authenticate';
+import type {AuthenticateExtensionOptions} from './extension/types';
 import {
   AuthenticatePublic,
   AuthenticatePublicLegacy,
@@ -36,7 +36,7 @@ export function authenticatePublicFactory<
 
   const authenticatePublic: AuthenticatePublicLegacy = (
     request: Request,
-    options: AuthenticateCheckoutOptions,
+    options: AuthenticateExtensionOptions,
   ) => {
     logger.deprecated(
       '3.0.0',

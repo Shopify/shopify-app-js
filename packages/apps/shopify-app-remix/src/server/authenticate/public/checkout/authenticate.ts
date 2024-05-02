@@ -1,13 +1,8 @@
 import type {BasicParams} from '../../../types';
 import {authenticateExtensionFactory} from '../extension/authenticate';
 
-import type {AuthenticateCheckout} from './types';
+import type {CheckoutContext} from './types';
 
-export function authenticateCheckoutFactory(
-  params: BasicParams,
-): AuthenticateCheckout {
-  return authenticateExtensionFactory(
-    params,
-    'checkout',
-  ) as AuthenticateCheckout;
+export function authenticateCheckoutFactory(params: BasicParams) {
+  return authenticateExtensionFactory<CheckoutContext>(params, 'checkout');
 }

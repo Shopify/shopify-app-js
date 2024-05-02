@@ -1,20 +1,12 @@
 import {JwtPayload} from '@shopify/shopify-api';
 
 import {EnsureCORSFunction} from '../../helpers/ensure-cors-headers';
-
-export type AuthenticateCheckout = (
-  request: Request,
-  options?: AuthenticateCheckoutOptions,
-) => Promise<CheckoutContext>;
-
-export interface AuthenticateCheckoutOptions {
-  corsHeaders?: string[];
-}
+import type {ExtensionContext} from '../extension/types';
 
 /**
  * Authenticated Context for a checkout request
  */
-export interface CheckoutContext {
+export interface CheckoutContext extends ExtensionContext {
   /**
    * The decoded and validated session token for the request
    *

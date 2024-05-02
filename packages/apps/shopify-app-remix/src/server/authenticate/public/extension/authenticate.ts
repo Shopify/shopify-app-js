@@ -8,19 +8,23 @@ import {
   ensureCORSHeadersFactory,
 } from '../../helpers';
 
-import {AuthenticateExtension, ExtensionContext} from './types';
+import {
+  AuthenticateExtension,
+  AuthenticateExtensionOptions,
+  ExtensionContext,
+} from './types';
 
-export function authenticateExtensionFactory(
+export function authenticateExtensionFactory<
+  Context extends ExtensionContext,
+  Options extends AuthenticateExtensionOptions = AuthenticateExtensionOptions,
+>(
   params: BasicParams,
   requestType: string,
-): AuthenticateExtension {
-  return async function authenticateExtension(
-    request,
-    options = {},
-  ): Promise<ExtensionContext> {
+): AuthenticateExtension<Context, Options> {
+  return async function authenticateExtension(request, options) {
     const {logger} = params;
 
-    const corsHeaders = options.corsHeaders ?? [];
+    const corsHeaders = options?.corsHeaders ?? [];
 
     respondToBotRequest(params, request);
     respondToOptionsRequest(params, request, corsHeaders);
@@ -45,6 +49,6 @@ export function authenticateExtensionFactory(
         {checkAudience: false},
       ),
       cors: ensureCORSHeadersFactory(params, request, corsHeaders),
-    };
+    } as Context;
   };
 }
