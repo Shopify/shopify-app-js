@@ -15,6 +15,12 @@ export interface FutureFlags {
    * Enable line item billing, to make billing configuration more similar to the GraphQL API.
    */
   lineItemBilling?: boolean;
+
+  /**
+   * Change the CustomerAddress classes to expose a `is_default` property instead of `default` when fetching data. This
+   * resolves a conflict with the default() method in that class.
+   */
+  customerAddressDefaultFix?: boolean;
 }
 
 /**
@@ -52,6 +58,13 @@ export function logDisabledFutureFlags(
     logger.deprecated(
       '11.0.0',
       'v10_lineItemBilling will become enabled in v11. Use flag lineItemBilling instead',
+    );
+  }
+
+  if (!config.future?.customerAddressDefaultFix) {
+    logFlag(
+      'customerAddressDefaultFix',
+      "Enable this flag to change the CustomerAddress classes to expose a 'is_default' property instead of 'default' when fetching data.",
     );
   }
 }
