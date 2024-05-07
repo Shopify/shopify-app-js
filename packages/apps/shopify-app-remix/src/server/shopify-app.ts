@@ -202,3 +202,12 @@ function deriveConfig<Storage extends SessionStorage>(
     },
   };
 }
+
+export function appConfig<
+  Config extends AppConfigArg<Resources, Storage, Future>,
+  Resources extends ShopifyRestResources,
+  Storage extends SessionStorage,
+  Future extends FutureFlagOptions = Config['future'],
+>(appConfig: Readonly<Config>): Config {
+  return appConfig;
+}

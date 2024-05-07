@@ -517,3 +517,5 @@ export type ShopifyApp<Config extends AppConfigArg> =
       : Config['distribution'] extends AppDistribution.AppStore
         ? AppStoreApp<Config>
         : AppStoreApp<Config>;
+
+export type {AdminApiContextFromConfig} from './config-types';

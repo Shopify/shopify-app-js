@@ -17,19 +17,29 @@ import type {AppDistribution} from './types';
 import type {AdminApiContext} from './clients';
 import {IdempotentPromiseHandler} from './authenticate/helpers/idempotent-promise-handler';
 
+export type AdminApiContextFromConfig<T extends AppConfigArgBase> =
+  T['restResources'] extends ShopifyRestResources
+    ? AdminApiContext<T['restResources']>
+    : AdminApiContext;
+
+export type AppConfigArgBase<
+  Resources extends ShopifyRestResources = ShopifyRestResources,
+  Future extends FutureFlagOptions = FutureFlagOptions,
+> = Omit<
+  ApiConfigArg<Resources, ApiFutureFlags<Future>>,
+  | 'hostName'
+  | 'hostScheme'
+  | 'isEmbeddedApp'
+  | 'apiVersion'
+  | 'isCustomStoreApp'
+  | 'future'
+>;
+
 export interface AppConfigArg<
   Resources extends ShopifyRestResources = ShopifyRestResources,
   Storage extends SessionStorage = SessionStorage,
   Future extends FutureFlagOptions = FutureFlagOptions,
-> extends Omit<
-    ApiConfigArg<Resources, ApiFutureFlags<Future>>,
-    | 'hostName'
-    | 'hostScheme'
-    | 'isEmbeddedApp'
-    | 'apiVersion'
-    | 'isCustomStoreApp'
-    | 'future'
-  > {
+> extends AppConfigArgBase<Resources, Future> {
   /**
    * The URL your app is running on.
    *

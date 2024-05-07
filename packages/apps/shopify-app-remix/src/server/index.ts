@@ -13,8 +13,9 @@ export {
   ApiVersion,
 } from '@shopify/shopify-api';
 
-export type {ShopifyApp, LoginError} from './types';
+export type {ShopifyApp, LoginError, AdminApiContextFromConfig} from './types';
+export type {AdminApiContext} from './clients';
 export {LoginErrorType, AppDistribution} from './types';
 export {boundary} from './boundary';
-export {shopifyApp} from './shopify-app';
+export {shopifyApp, appConfig} from './shopify-app';
 export * from './errors';
