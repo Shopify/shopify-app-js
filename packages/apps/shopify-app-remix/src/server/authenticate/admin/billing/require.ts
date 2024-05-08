@@ -37,7 +37,9 @@ export function requireBillingFactory<Config extends AppConfigArg>(
     } catch (error) {
       if (error instanceof HttpResponseError && error.response.code === 401) {
         logger.debug('API token was invalid, redirecting to OAuth', logContext);
-        await config.sessionStorage.deleteSession(session.id);
+        // eslint-disable-next-line require-atomic-updates
+        session.accessToken = undefined;
+        await config.sessionStorage.storeSession(session);
         throw await redirectToAuthPage(params, request, session.shop);
       } else {
         throw error;

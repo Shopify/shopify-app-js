@@ -46,7 +46,8 @@ export function requestBillingFactory<Config extends AppConfigArg>(
         logger.debug('API token was invalid, redirecting to OAuth', {
           shop: session.shop,
         });
-        await config.sessionStorage.deleteSession(session.id);
+        session.accessToken = undefined;
+        await config.sessionStorage.storeSession(session);
         throw await redirectToAuthPage(params, request, session.shop);
       } else {
         throw error;
