@@ -286,7 +286,7 @@ export function useOptionalScopes() {
   const context = useContext(OptionalScopesContext);
   if (!context) {
     throw new Error(
-      'useConditionChecker must be used within a ConditionCheckerProvider',
+      'useOptionalScopes must be used within a OptionalScopesProvider',
     );
   }
   return context;
