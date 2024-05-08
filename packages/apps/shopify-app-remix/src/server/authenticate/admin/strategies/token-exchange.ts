@@ -48,7 +48,7 @@ export class TokenExchangeStrategy<Config extends AppConfigArg>
 
     if (!sessionToken) throw new InvalidJwtError();
 
-    if (!session || session.isExpired()) {
+    if (!session || !session.accessToken || session.isExpired()) {
       logger.info('No valid session found');
       logger.info('Requesting offline access token');
       const {session: offlineSession} = await this.exchangeToken({
@@ -101,7 +101,8 @@ export class TokenExchangeStrategy<Config extends AppConfigArg>
       request,
       onError: async ({session, error}: OnErrorOptions) => {
         if (error.response.code === 401) {
-          config.sessionStorage.deleteSession(session.id);
+          session.accessToken = undefined;
+          await config.sessionStorage.storeSession(session);
 
           respondToInvalidSessionToken({
             params: {config, api, logger},

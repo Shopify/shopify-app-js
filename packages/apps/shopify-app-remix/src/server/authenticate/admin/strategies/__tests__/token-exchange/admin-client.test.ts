@@ -78,9 +78,12 @@ describe('admin.authenticate context', () => {
         const {pathname} = new URL(response.headers.get('location')!, APP_URL);
         expect(pathname).toBe('/auth/session-token');
 
-        expect(
-          await shopify.sessionStorage.loadSession(session.id),
-        ).toBeUndefined();
+        const modifiedSession = await shopify.sessionStorage.loadSession(
+          session.id,
+        );
+
+        expect(modifiedSession).toBeDefined();
+        expect(modifiedSession!.accessToken).toBeUndefined();
       });
 
       it('returns 401 when receives a 401 response on fetch requests', async () => {
@@ -100,9 +103,12 @@ describe('admin.authenticate context', () => {
           response.headers.get('X-Shopify-Retry-Invalid-Session-Request'),
         ).toBeNull();
 
-        expect(
-          await shopify.sessionStorage.loadSession(session.id),
-        ).toBeUndefined();
+        const modifiedSession = await shopify.sessionStorage.loadSession(
+          session.id,
+        );
+
+        expect(modifiedSession).toBeDefined();
+        expect(modifiedSession!.accessToken).toBeUndefined();
       });
     },
   );
