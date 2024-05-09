@@ -46,7 +46,7 @@ const {data, errors, extensions} = await client.request(operation, {
 ```
 
 > [!NOTE]
-> If you want to query the Admin REST API, you can [use the REST client](#using-the-rest-api-client) instead.
+> If you want to query the Admin REST API, you can [use the REST client](#rest-client) instead.
 
 #### `createAdminApiClient()` parameters
 
