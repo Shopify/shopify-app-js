@@ -9,7 +9,10 @@ import {
 
 import {AppConfig, AppConfigArg} from '../../../config-types';
 import {BasicParams} from '../../../types';
-import {respondToInvalidSessionToken} from '../../helpers';
+import {
+  respondToInvalidSessionToken,
+  invalidateAccessToken,
+} from '../../helpers';
 import {handleClientErrorFactory, triggerAfterAuthHook} from '../helpers';
 import {HandleAdminClientError} from '../../../clients';
 import type {
@@ -101,8 +104,8 @@ export class TokenExchangeStrategy<Config extends AppConfigArg>
       request,
       onError: async ({session, error}: OnErrorOptions) => {
         if (error.response.code === 401) {
-          session.accessToken = undefined;
-          await config.sessionStorage.storeSession(session);
+          logger.debug('Responding to invalid access token');
+          await invalidateAccessToken({config, api, logger}, session);
 
           respondToInvalidSessionToken({
             params: {config, api, logger},

@@ -2,6 +2,7 @@ import {HttpResponseError, Session} from '@shopify/shopify-api';
 
 import type {BasicParams} from '../../../types';
 import {redirectToAuthPage} from '../helpers';
+import {invalidateAccessToken} from '../../helpers';
 
 import type {CancelBillingOptions} from './types';
 
@@ -11,7 +12,7 @@ export function cancelBillingFactory(
   session: Session,
 ) {
   return async function cancelBilling(options: CancelBillingOptions) {
-    const {api, logger, config} = params;
+    const {api, logger} = params;
 
     logger.debug('Cancelling billing', {shop: session.shop, ...options});
 
@@ -27,8 +28,7 @@ export function cancelBillingFactory(
         logger.debug('API token was invalid, redirecting to OAuth', {
           shop: session.shop,
         });
-        session.accessToken = undefined;
-        await config.sessionStorage.storeSession(session);
+        await invalidateAccessToken(params, session);
         throw await redirectToAuthPage(params, request, session.shop);
       } else {
         throw error;
