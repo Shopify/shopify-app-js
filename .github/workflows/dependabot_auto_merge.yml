@@ -14,7 +14,13 @@ jobs:
         id: metadata
         uses: dependabot/fetch-metadata@v1
         with:
-          github-token: "${{ secrets.GITHUB_TOKEN }}"
+          github-token: '${{ secrets.GITHUB_TOKEN }}'
+      - name: Add skip changelog label
+        uses: actions-ecosystem/action-add-labels@v1
+        if: ${{ steps.metadata.outputs.update-type != 'version-update:semver-major' && steps.metadata.outputs.dependency-type == 'direct:development' }}
+        with:
+          labels: Skip Changelog
+          github_token: ${{ secrets.GITHUB_TOKEN }}
       - name: Enable auto-merge for Dependabot PRs
         if: ${{ steps.metadata.outputs.update-type != 'version-update:semver-major' && steps.metadata.outputs.dependency-type == 'direct:development' }}
         run: gh pr merge --auto --merge "$PR_URL"

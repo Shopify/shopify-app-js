@@ -3,13 +3,13 @@ import {type ActionFunctionArgs} from '@remix-run/node';
 import {authenticate} from '../shopify.server';
 
 export const action = async ({request}: ActionFunctionArgs) => {
-  const {admin, payload} = await authenticate.flow(request);
+  const {admin, payload} = await authenticate.fulfillmentService(request);
 
   const kind = payload.kind;
 
-  if(kind === 'FULFILLMENT_REQUEST') {
+  if (kind === 'FULFILLMENT_REQUEST') {
     const response = await admin?.graphql(
-        `#graphql
+      `#graphql
          query {
            shop {
              assignedFulfillmentOrders(first: 10, assignmentStatus: FULFILLMENT_REQUESTED) {
@@ -41,12 +41,12 @@ export const action = async ({request}: ActionFunctionArgs) => {
            }
          }
        }
-      }`);
+      }`,
+    );
 
-        const fulfillments = await response.json();
-        console.log(fulfillments);
+    const fulfillments = await response.json();
+    console.log(fulfillments);
   }
-
 
   return new Response();
 };

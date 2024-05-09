@@ -6,6 +6,7 @@ import {FutureFlagOptions} from '../../future/flags';
 import {authenticateCheckoutFactory} from './checkout/authenticate';
 import {AuthenticateCheckoutOptions} from './checkout/types';
 import {authenticateAppProxyFactory} from './appProxy/authenticate';
+import {authenticateCustomerAccountFactory} from './customer-account/authenticate';
 import {
   AuthenticatePublic,
   AuthenticatePublicLegacy,
@@ -20,11 +21,14 @@ export function authenticatePublicFactory<
 
   const authenticateCheckout = authenticateCheckoutFactory(params);
   const authenticateAppProxy = authenticateAppProxyFactory<Resources>(params);
+  const authenticateCustomerAccount =
+    authenticateCustomerAccountFactory(params);
 
   if (config.future.v3_authenticatePublic) {
     const context: AuthenticatePublicObject = {
       checkout: authenticateCheckout,
       appProxy: authenticateAppProxy,
+      customerAccount: authenticateCustomerAccount,
     };
 
     return context as AuthenticatePublic<Future>;
@@ -45,5 +49,5 @@ export function authenticatePublicFactory<
   authenticatePublic.checkout = authenticateCheckout;
   authenticatePublic.appProxy = authenticateAppProxy;
 
-  return authenticatePublic;
+  return authenticatePublic as AuthenticatePublic<Future>;
 }

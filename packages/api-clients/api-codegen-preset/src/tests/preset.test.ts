@@ -34,7 +34,7 @@ describe('Preset', () => {
 
     // Imports Admin API
     expect(generatedCode).toMatch(
-      `import * as AdminTypes from './admin.types.d.ts';`,
+      `import type * as AdminTypes from './admin.types.d.ts';`,
     );
 
     // Uses Pick<...>
@@ -59,7 +59,7 @@ describe('Preset', () => {
       .toBe(`/* eslint-disable eslint-comments/disable-enable-pair */
 /* eslint-disable eslint-comments/no-unlimited-disable */
 /* eslint-disable */
-import * as AdminTypes from './admin.types.d.ts';
+import type * as AdminTypes from './admin.types.d.ts';
 
 export type TestQueryQueryVariables = AdminTypes.Exact<{ [key: string]: never; }>;
 

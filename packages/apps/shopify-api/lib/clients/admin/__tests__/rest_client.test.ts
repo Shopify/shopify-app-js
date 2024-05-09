@@ -193,6 +193,24 @@ describe('REST client', () => {
     }).toMatchMadeHttpRequest();
   });
 
+  it('succeeds when a DELETE response is empty', async () => {
+    const shopify = shopifyApi(testConfig());
+
+    const client = new shopify.clients.Rest({session});
+
+    queueMockResponse('');
+
+    await expect(client.delete({path: 'products/123'})).resolves.toEqual(
+      buildExpectedResponse({}),
+    );
+
+    expect({
+      method: 'DELETE',
+      domain,
+      path: `/admin/api/${shopify.config.apiVersion}/products/123.json`,
+    }).toMatchMadeHttpRequest();
+  });
+
   it('merges custom headers with the default ones', async () => {
     const shopify = shopifyApi(testConfig());
 

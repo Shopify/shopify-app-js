@@ -84,7 +84,7 @@
     "uuid": "^9.0.0"
   },
   "devDependencies": {
-    "@cloudflare/workers-types": "^4.20240320.1",
+    "@cloudflare/workers-types": "^4.20240502.0",
     "@swc/core": "^1.4.8",
     "@types/express": "^4.17.13",
     "@types/node": "^20.12.7",
@@ -93,9 +93,9 @@
     "express": "^4.19.2",
     "jest-environment-miniflare": "^2.14.2",
     "miniflare": "^3.20240329.0",
-    "rollup": "^4.12.1",
+    "rollup": "^4.17.2",
     "rollup-plugin-swc": "^0.2.1",
-    "wrangler": "^3.33.0"
+    "wrangler": "^3.52.0"
   },
   "files": [
     "dist/*",

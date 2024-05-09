@@ -389,7 +389,7 @@ export class Base {
     });
   }
 
-  private resource(): typeof Base {
+  protected resource(): typeof Base {
     return this.constructor as unknown as typeof Base;
   }
 

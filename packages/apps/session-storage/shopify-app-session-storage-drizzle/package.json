@@ -54,7 +54,7 @@
     "@shopify/shopify-app-session-storage-test-utils": "^2.0.5",
     "@types/better-sqlite3": "^7.6.9",
     "better-sqlite3": "^9.5.0",
-    "drizzle-kit": "^0.20.12",
+    "drizzle-kit": "^0.20.17",
     "drizzle-orm": "^0.29.3",
     "mysql2": "^3.9.7",
     "pg": "^8.11.5"

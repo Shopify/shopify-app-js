@@ -2,6 +2,7 @@ import {FeatureEnabled, FutureFlagOptions} from '../../future/flags';
 
 import type {AuthenticateCheckout} from './checkout/types';
 import type {AuthenticateAppProxy} from './appProxy/types';
+import {AuthenticateCustomerAccount} from './customer-account/types';
 
 // Eventually this will be just the `{}` bit without `AuthenticateCheckout &`
 // We have this is because in v1 public WAS the only public authenticate method
@@ -53,6 +54,26 @@ export interface AuthenticatePublicObject {
    * ```
    */
   appProxy: AuthenticateAppProxy;
+
+  /**
+   * Authenticate a request from a customer account extension
+   *
+   * @example
+   * <caption>Authenticating a customer account extension request</caption>
+   * ```ts
+   * // /app/routes/public/widgets.ts
+   * import { LoaderFunctionArgs, json } from "@remix-run/node";
+   * import { authenticate } from "../shopify.server";
+   *
+   * export const loader = async ({ request }: LoaderFunctionArgs) => {
+   *   const { sessionToken, cors } = await authenticate.public.customerAccount(
+   *     request,
+   *   );
+   *   return cors(json({my: "data", shop: sessionToken.dest}));
+   * };
+   * ```
+   */
+  customerAccount: AuthenticateCustomerAccount;
 }
 
 export type AuthenticatePublic<Future extends FutureFlagOptions> =
@@ -63,7 +84,7 @@ export type AuthenticatePublic<Future extends FutureFlagOptions> =
 /**
  * Methods for authenticating Requests from Shopify's public surfaces
  *
- * To maintain backwards compatability this is a function and an object.
+ * To maintain backwards compatibility this is a function and an object.
  *
  * Do not use `authenticate.public()`. Use `authenticate.public.checkout()` instead.
  * `authenticate.public()` will be removed in v2.
@@ -74,4 +95,4 @@ export type AuthenticatePublic<Future extends FutureFlagOptions> =
  * - `authenticate.public.appProxy()` for authenticating requests from app proxies
  */
 export type AuthenticatePublicLegacy = AuthenticateCheckout &
-  AuthenticatePublicObject;
+  Omit<AuthenticatePublicObject, 'customerAccount'>;
