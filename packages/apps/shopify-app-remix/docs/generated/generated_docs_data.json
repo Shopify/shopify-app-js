@@ -1006,7 +1006,7 @@
                 "filePath": "../shopify-api/dist/ts/lib/clients/types.d.ts",
                 "syntaxKind": "PropertySignature",
                 "name": "data",
-                "value": "string | Record<string, any>",
+                "value": "Record<string, any> | string",
                 "description": "The request body.",
                 "isOptional": true
               },
@@ -3718,7 +3718,7 @@
                 "filePath": "../shopify-api/dist/ts/lib/clients/types.d.ts",
                 "syntaxKind": "PropertySignature",
                 "name": "data",
-                "value": "string | Record<string, any>",
+                "value": "Record<string, any> | string",
                 "description": "The request body.",
                 "isOptional": true
               },
@@ -4576,7 +4576,7 @@
                 "filePath": "../shopify-api/dist/ts/lib/clients/types.d.ts",
                 "syntaxKind": "PropertySignature",
                 "name": "data",
-                "value": "string | Record<string, any>",
+                "value": "Record<string, any> | string",
                 "description": "The request body.",
                 "isOptional": true
               },
@@ -5585,7 +5585,7 @@
                 "filePath": "../shopify-api/dist/ts/lib/clients/types.d.ts",
                 "syntaxKind": "PropertySignature",
                 "name": "data",
-                "value": "string | Record<string, any>",
+                "value": "Record<string, any> | string",
                 "description": "The request body.",
                 "isOptional": true
               },
@@ -6055,7 +6055,14 @@
     "jsDocTypeExamples": [
       "CheckoutContext"
     ],
-    "related": [],
+    "related": [
+      {
+        "name": "Session token API",
+        "subtitle": "Checkout UI extension API for interacting with session tokens.",
+        "url": "/docs/api/checkout-ui-extensions/latest/apis/session-token",
+        "type": "shopify"
+      }
+    ],
     "examples": {
       "description": "",
       "exampleGroups": [
@@ -6302,7 +6309,14 @@
     "jsDocTypeExamples": [
       "CustomerAccountContext"
     ],
-    "related": [],
+    "related": [
+      {
+        "name": "Session token API",
+        "subtitle": "Customer account UI extensions API for interacting with session tokens.",
+        "url": "/docs/api/customer-account-ui-extensions/latest/apis/session-token",
+        "type": "shopify"
+      }
+    ],
     "examples": {
       "description": "",
       "exampleGroups": [
@@ -7357,7 +7371,7 @@
                 "filePath": "../shopify-api/dist/ts/lib/clients/types.d.ts",
                 "syntaxKind": "PropertySignature",
                 "name": "data",
-                "value": "string | Record<string, any>",
+                "value": "Record<string, any> | string",
                 "description": "The request body.",
                 "isOptional": true
               },
@@ -8801,7 +8815,7 @@
                 "filePath": "../shopify-api/dist/ts/lib/billing/types.d.ts",
                 "syntaxKind": "PropertySignature",
                 "name": "plans",
-                "value": "string | string[]",
+                "value": "string[] | string",
                 "description": "The plans to accept for this check."
               },
               {
@@ -11957,7 +11971,7 @@
                 "filePath": "../shopify-api/dist/ts/lib/clients/types.d.ts",
                 "syntaxKind": "PropertySignature",
                 "name": "data",
-                "value": "string | Record<string, any>",
+                "value": "Record<string, any> | string",
                 "description": "The request body.",
                 "isOptional": true
               },
@@ -13430,7 +13444,7 @@
                 "filePath": "../shopify-api/dist/ts/lib/clients/types.d.ts",
                 "syntaxKind": "PropertySignature",
                 "name": "data",
-                "value": "string | Record<string, any>",
+                "value": "Record<string, any> | string",
                 "description": "The request body.",
                 "isOptional": true
               },
@@ -15922,7 +15936,7 @@
                 "filePath": "../shopify-api/dist/ts/lib/billing/types.d.ts",
                 "syntaxKind": "PropertySignature",
                 "name": "plans",
-                "value": "string | string[]",
+                "value": "string[] | string",
                 "description": "The plans to accept for this check."
               },
               {
@@ -19981,7 +19995,7 @@
                 "filePath": "../shopify-api/dist/ts/lib/clients/types.d.ts",
                 "syntaxKind": "PropertySignature",
                 "name": "data",
-                "value": "string | Record<string, any>",
+                "value": "Record<string, any> | string",
                 "description": "The request body.",
                 "isOptional": true
               },
