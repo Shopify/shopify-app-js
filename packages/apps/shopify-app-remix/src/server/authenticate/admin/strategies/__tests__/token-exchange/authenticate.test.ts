@@ -47,7 +47,7 @@ describe('authenticate', () => {
     });
   });
 
-  it('performs token exchange when existing session is no longer valid', async () => {
+  it('performs token exchange when existing session has expired', async () => {
     // GIVEN
     const config = testConfig({useOnlineTokens: true});
     const shopify = shopifyApp(config);
@@ -81,6 +81,45 @@ describe('authenticate', () => {
       shop: TEST_SHOP,
       state: '',
       onlineAccessInfo: expect.any(Object),
+    });
+  });
+
+  it('performs token exchange when existing session is invalid', async () => {
+    // GIVEN
+    const config = testConfig();
+    const shopify = shopifyApp(config);
+    const invalidatedSession = new Session({
+      id: `offline_${TEST_SHOP}`,
+      shop: TEST_SHOP,
+      isOnline: false,
+      state: 'test',
+      accessToken: undefined,
+      scope: 'testScope',
+    });
+    await shopify.sessionStorage.storeSession(invalidatedSession);
+
+    const {token} = getJwt();
+    await mockTokenExchangeRequest(token, 'offline');
+
+    // WHEN
+    const {session} = await shopify.authenticate.admin(
+      new Request(
+        `${APP_URL}?embedded=1&shop=${TEST_SHOP}&host=${BASE64_HOST}&id_token=${token}`,
+      ),
+    );
+
+    // THEN
+    const [persistedSession] =
+      await config.sessionStorage.findSessionsByShop(TEST_SHOP);
+
+    expect(persistedSession).toEqual(session);
+    expect(persistedSession).toMatchObject({
+      accessToken: '123abc-exchanged-from-session-token',
+      id: `offline_${TEST_SHOP}`,
+      isOnline: false,
+      scope: 'read_orders',
+      shop: TEST_SHOP,
+      state: '',
     });
   });
 

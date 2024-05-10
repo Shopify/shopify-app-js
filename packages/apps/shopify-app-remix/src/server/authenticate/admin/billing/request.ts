@@ -8,6 +8,7 @@ import {redirect} from '@remix-run/server-runtime';
 import {AppConfigArg} from '../../../config-types';
 import {BasicParams} from '../../../types';
 import {getAppBridgeHeaders, redirectToAuthPage} from '../helpers';
+import {invalidateAccessToken} from '../../helpers';
 
 import type {RequestBillingOptions} from './types';
 
@@ -22,7 +23,7 @@ export function requestBillingFactory<Config extends AppConfigArg>(
     returnUrl,
     ...overrides
   }: RequestBillingOptions<Config>): Promise<never> {
-    const {api, logger, config} = params;
+    const {api, logger} = params;
 
     logger.info('Requesting billing', {
       shop: session.shop,
@@ -46,7 +47,7 @@ export function requestBillingFactory<Config extends AppConfigArg>(
         logger.debug('API token was invalid, redirecting to OAuth', {
           shop: session.shop,
         });
-        await config.sessionStorage.deleteSession(session.id);
+        await invalidateAccessToken(params, session);
         throw await redirectToAuthPage(params, request, session.shop);
       } else {
         throw error;
