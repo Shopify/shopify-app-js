@@ -9,7 +9,10 @@ import {
 
 import {AppConfig, AppConfigArg} from '../../../config-types';
 import {BasicParams} from '../../../types';
-import {respondToInvalidSessionToken} from '../../helpers';
+import {
+  respondToInvalidSessionToken,
+  invalidateAccessToken,
+} from '../../helpers';
 import {handleClientErrorFactory, triggerAfterAuthHook} from '../helpers';
 import {HandleAdminClientError} from '../../../clients';
 import type {
@@ -48,7 +51,7 @@ export class TokenExchangeStrategy<Config extends AppConfigArg>
 
     if (!sessionToken) throw new InvalidJwtError();
 
-    if (!session || session.isExpired()) {
+    if (!session || !session.isActive(undefined)) {
       logger.info('No valid session found');
       logger.info('Requesting offline access token');
       const {session: offlineSession} = await this.exchangeToken({
@@ -101,7 +104,8 @@ export class TokenExchangeStrategy<Config extends AppConfigArg>
       request,
       onError: async ({session, error}: OnErrorOptions) => {
         if (error.response.code === 401) {
-          config.sessionStorage.deleteSession(session.id);
+          logger.debug('Responding to invalid access token');
+          await invalidateAccessToken({config, api, logger}, session);
 
           respondToInvalidSessionToken({
             params: {config, api, logger},

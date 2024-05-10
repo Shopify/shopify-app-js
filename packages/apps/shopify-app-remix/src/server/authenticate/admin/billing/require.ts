@@ -7,6 +7,7 @@ import {
 import type {BasicParams} from '../../../types';
 import type {AppConfigArg} from '../../../config-types';
 import {redirectToAuthPage} from '../helpers';
+import {invalidateAccessToken} from '../../helpers';
 
 import type {RequireBillingOptions} from './types';
 
@@ -15,7 +16,7 @@ export function requireBillingFactory<Config extends AppConfigArg>(
   request: Request,
   session: Session,
 ) {
-  const {api, logger, config} = params;
+  const {api, logger} = params;
 
   return async function requireBilling(options: RequireBillingOptions<Config>) {
     const logContext = {
@@ -37,7 +38,8 @@ export function requireBillingFactory<Config extends AppConfigArg>(
     } catch (error) {
       if (error instanceof HttpResponseError && error.response.code === 401) {
         logger.debug('API token was invalid, redirecting to OAuth', logContext);
-        await config.sessionStorage.deleteSession(session.id);
+
+        await invalidateAccessToken(params, session);
         throw await redirectToAuthPage(params, request, session.shop);
       } else {
         throw error;

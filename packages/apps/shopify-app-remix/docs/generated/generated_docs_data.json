@@ -1006,7 +1006,7 @@
                 "filePath": "../shopify-api/dist/ts/lib/clients/types.d.ts",
                 "syntaxKind": "PropertySignature",
                 "name": "data",
-                "value": "string | Record<string, any>",
+                "value": "Record<string, any> | string",
                 "description": "The request body.",
                 "isOptional": true
               },
@@ -3718,7 +3718,7 @@
                 "filePath": "../shopify-api/dist/ts/lib/clients/types.d.ts",
                 "syntaxKind": "PropertySignature",
                 "name": "data",
-                "value": "string | Record<string, any>",
+                "value": "Record<string, any> | string",
                 "description": "The request body.",
                 "isOptional": true
               },
@@ -4576,7 +4576,7 @@
                 "filePath": "../shopify-api/dist/ts/lib/clients/types.d.ts",
                 "syntaxKind": "PropertySignature",
                 "name": "data",
-                "value": "string | Record<string, any>",
+                "value": "Record<string, any> | string",
                 "description": "The request body.",
                 "isOptional": true
               },
@@ -5585,7 +5585,7 @@
                 "filePath": "../shopify-api/dist/ts/lib/clients/types.d.ts",
                 "syntaxKind": "PropertySignature",
                 "name": "data",
-                "value": "string | Record<string, any>",
+                "value": "Record<string, any> | string",
                 "description": "The request body.",
                 "isOptional": true
               },
@@ -6055,7 +6055,14 @@
     "jsDocTypeExamples": [
       "CheckoutContext"
     ],
-    "related": [],
+    "related": [
+      {
+        "name": "Session token API",
+        "subtitle": "Checkout UI extension API for interacting with session tokens.",
+        "url": "/docs/api/checkout-ui-extensions/latest/apis/session-token",
+        "type": "shopify"
+      }
+    ],
     "examples": {
       "description": "",
       "exampleGroups": [
@@ -6302,7 +6309,14 @@
     "jsDocTypeExamples": [
       "CustomerAccountContext"
     ],
-    "related": [],
+    "related": [
+      {
+        "name": "Session token API",
+        "subtitle": "Customer account UI extensions API for interacting with session tokens.",
+        "url": "/docs/api/customer-account-ui-extensions/latest/apis/session-token",
+        "type": "shopify"
+      }
+    ],
     "examples": {
       "description": "",
       "exampleGroups": [
@@ -7357,7 +7371,7 @@
                 "filePath": "../shopify-api/dist/ts/lib/clients/types.d.ts",
                 "syntaxKind": "PropertySignature",
                 "name": "data",
-                "value": "string | Record<string, any>",
+                "value": "Record<string, any> | string",
                 "description": "The request body.",
                 "isOptional": true
               },
@@ -8801,7 +8815,7 @@
                 "filePath": "../shopify-api/dist/ts/lib/billing/types.d.ts",
                 "syntaxKind": "PropertySignature",
                 "name": "plans",
-                "value": "string | string[]",
+                "value": "string[] | string",
                 "description": "The plans to accept for this check."
               },
               {
@@ -11957,7 +11971,7 @@
                 "filePath": "../shopify-api/dist/ts/lib/clients/types.d.ts",
                 "syntaxKind": "PropertySignature",
                 "name": "data",
-                "value": "string | Record<string, any>",
+                "value": "Record<string, any> | string",
                 "description": "The request body.",
                 "isOptional": true
               },
@@ -13430,7 +13444,7 @@
                 "filePath": "../shopify-api/dist/ts/lib/clients/types.d.ts",
                 "syntaxKind": "PropertySignature",
                 "name": "data",
-                "value": "string | Record<string, any>",
+                "value": "Record<string, any> | string",
                 "description": "The request body.",
                 "isOptional": true
               },
@@ -15922,7 +15936,7 @@
                 "filePath": "../shopify-api/dist/ts/lib/billing/types.d.ts",
                 "syntaxKind": "PropertySignature",
                 "name": "plans",
-                "value": "string | string[]",
+                "value": "string[] | string",
                 "description": "The plans to accept for this check."
               },
               {
@@ -18542,10 +18556,36 @@
                 "syntaxKind": "PropertySignature",
                 "name": "storefront",
                 "value": "StorefrontContext",
-                "description": "Method for interacting with the Shopify GraphQL Storefront API for the given store."
+                "description": "Method for interacting with the Shopify GraphQL Storefront API for the given store.",
+                "examples": [
+                  {
+                    "title": "Querying the GraphQL API",
+                    "description": "Use `storefront.graphql` to make query / mutation requests.",
+                    "tabs": [
+                      {
+                        "code": "import { json } from \"@remix-run/node\";\nimport { authenticate } from \"../shopify.server\";\n\nexport async function action({ request }: ActionFunctionArgs) {\n  const shop = getShopFromExternalRequest(request);\n  const { storefront } = await unauthenticated.storefront(shop);\n\n  const response = await storefront.graphql(`{blogs(first: 10) { edges { node { id } } } }`);\n\n  return json(await response.json());\n}",
+                        "title": "app/routes/**\\/.ts"
+                      }
+                    ]
+                  },
+                  {
+                    "title": "Handling GraphQL errors",
+                    "description": "Catch `GraphqlQueryError` errors to see error messages from the API.",
+                    "tabs": [
+                      {
+                        "code": "import { ActionFunctionArgs } from \"@remix-run/node\";\nimport { authenticate } from \"../shopify.server\";\n\nexport const action = async ({ request }: ActionFunctionArgs) => {\n  const shop = getShopFromExternalRequest(request);\n  const { storefront } = await unauthenticated.storefront(shop);\n\n  try {\n    const response = await storefront.graphql(\n      `#graphql\n      query incorrectQuery {\n        products(first: 10) {\n          nodes {\n            not_a_field\n          }\n        }\n      }`,\n    );\n\n    return json({ data: await response.json() });\n  } catch (error) {\n    if (error instanceof GraphqlQueryError) {\n      // { errors: { graphQLErrors: [\n      //   { message: \"Field 'not_a_field' doesn't exist on type 'Product'\" }\n      // ] } }\n      return json({ errors: error.body?.errors }, { status: 500 });\n    }\n    return json({ message: \"An error occurred\" }, { status: 500 });\n  }\n}",
+                        "title": "/app/routes/**\\/*.ts"
+                      },
+                      {
+                        "code": "import { shopifyApp } from \"@shopify/shopify-app-remix/server\";\n\nconst shopify = shopifyApp({\n  // ...\n});\nexport default shopify;\nexport const authenticate = shopify.authenticate;",
+                        "title": "/app/shopify.server.ts"
+                      }
+                    ]
+                  }
+                ]
               }
             ],
-            "value": "export interface UnauthenticatedStorefrontContext {\n  /**\n   * The session for the given shop.\n   *\n   * This comes from the session storage which `shopifyApp` uses to store sessions in your database of choice.\n   *\n   * This will always be an offline session. You can use this to get shop specific data.\n   *\n   * @example\n   * <caption>Using the offline session.</caption>\n   * <description>Get your app's shop-specific data using the returned offline `session` object.</description>\n   * ```ts\n   * // app/routes/**\\/.ts\n   * import { LoaderFunctionArgs, json } from \"@remix-run/node\";\n   * import { unauthenticated } from \"../shopify.server\";\n   * import { getMyAppData } from \"~/db/model.server\";\n   *\n   * export const loader = async ({ request }: LoaderFunctionArgs) => {\n   *   const shop = getShopFromExternalRequest(request);\n   *   const { session } = await unauthenticated.storefront(shop);\n   *   return json(await getMyAppData({shop: session.shop));\n   * };\n   * ```\n   */\n  session: Session;\n\n  /**\n   * Method for interacting with the Shopify GraphQL Storefront API for the given store.\n   */\n  storefront: StorefrontContext;\n}"
+            "value": "export interface UnauthenticatedStorefrontContext {\n  /**\n   * The session for the given shop.\n   *\n   * This comes from the session storage which `shopifyApp` uses to store sessions in your database of choice.\n   *\n   * This will always be an offline session. You can use this to get shop specific data.\n   *\n   * @example\n   * <caption>Using the offline session.</caption>\n   * <description>Get your app's shop-specific data using the returned offline `session` object.</description>\n   * ```ts\n   * // app/routes/**\\/.ts\n   * import { LoaderFunctionArgs, json } from \"@remix-run/node\";\n   * import { unauthenticated } from \"../shopify.server\";\n   * import { getMyAppData } from \"~/db/model.server\";\n   *\n   * export const loader = async ({ request }: LoaderFunctionArgs) => {\n   *   const shop = getShopFromExternalRequest(request);\n   *   const { session } = await unauthenticated.storefront(shop);\n   *   return json(await getMyAppData({shop: session.shop));\n   * };\n   * ```\n   */\n  session: Session;\n\n  /**\n   * Method for interacting with the Shopify GraphQL Storefront API for the given store.\n   *\n   * @example\n   * <caption>Querying the GraphQL API.</caption>\n   * <description>Use `storefront.graphql` to make query / mutation requests.</description>\n   * ```ts\n   * // app/routes/**\\/.ts\n   * import { json } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   *\n   * export async function action({ request }: ActionFunctionArgs) {\n   *   const shop = getShopFromExternalRequest(request);\n   *   const { storefront } = await unauthenticated.storefront(shop);\n   *\n   *   const response = await storefront.graphql(`{blogs(first: 10) { edges { node { id } } } }`);\n   *\n   *   return json(await response.json());\n   * }\n   * ```\n   *\n   * @example\n   * <caption>Handling GraphQL errors.</caption>\n   * <description>Catch `GraphqlQueryError` errors to see error messages from the API.</description>\n   * ```ts\n   * // /app/routes/**\\/*.ts\n   * import { ActionFunctionArgs } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   *\n   * export const action = async ({ request }: ActionFunctionArgs) => {\n   *   const shop = getShopFromExternalRequest(request);\n   *   const { storefront } = await unauthenticated.storefront(shop);\n   *\n   *   try {\n   *     const response = await storefront.graphql(\n   *       `#graphql\n   *       query incorrectQuery {\n   *         products(first: 10) {\n   *           nodes {\n   *             not_a_field\n   *           }\n   *         }\n   *       }`,\n   *     );\n   *\n   *     return json({ data: await response.json() });\n   *   } catch (error) {\n   *     if (error instanceof GraphqlQueryError) {\n   *       // { errors: { graphQLErrors: [\n   *       //   { message: \"Field 'not_a_field' doesn't exist on type 'Product'\" }\n   *       // ] } }\n   *       return json({ errors: error.body?.errors }, { status: 500 });\n   *     }\n   *     return json({ message: \"An error occurred\" }, { status: 500 });\n   *   }\n   * }\n   * ```\n   *\n   * ```ts\n   * // /app/shopify.server.ts\n   * import { shopifyApp } from \"@shopify/shopify-app-remix/server\";\n   *\n   * const shopify = shopifyApp({\n   *   // ...\n   * });\n   * export default shopify;\n   * export const authenticate = shopify.authenticate;\n   * ```\n   */\n  storefront: StorefrontContext;\n}"
           },
           "SingleMerchantApp": {
             "filePath": "src/server/types.ts",
@@ -19955,7 +19995,7 @@
                 "filePath": "../shopify-api/dist/ts/lib/clients/types.d.ts",
                 "syntaxKind": "PropertySignature",
                 "name": "data",
-                "value": "string | Record<string, any>",
+                "value": "Record<string, any> | string",
                 "description": "The request body.",
                 "isOptional": true
               },
@@ -20178,10 +20218,36 @@
                 "syntaxKind": "PropertySignature",
                 "name": "storefront",
                 "value": "StorefrontContext",
-                "description": "Method for interacting with the Shopify GraphQL Storefront API for the given store."
+                "description": "Method for interacting with the Shopify GraphQL Storefront API for the given store.",
+                "examples": [
+                  {
+                    "title": "Querying the GraphQL API",
+                    "description": "Use `storefront.graphql` to make query / mutation requests.",
+                    "tabs": [
+                      {
+                        "code": "import { json } from \"@remix-run/node\";\nimport { authenticate } from \"../shopify.server\";\n\nexport async function action({ request }: ActionFunctionArgs) {\n  const shop = getShopFromExternalRequest(request);\n  const { storefront } = await unauthenticated.storefront(shop);\n\n  const response = await storefront.graphql(`{blogs(first: 10) { edges { node { id } } } }`);\n\n  return json(await response.json());\n}",
+                        "title": "app/routes/**\\/.ts"
+                      }
+                    ]
+                  },
+                  {
+                    "title": "Handling GraphQL errors",
+                    "description": "Catch `GraphqlQueryError` errors to see error messages from the API.",
+                    "tabs": [
+                      {
+                        "code": "import { ActionFunctionArgs } from \"@remix-run/node\";\nimport { authenticate } from \"../shopify.server\";\n\nexport const action = async ({ request }: ActionFunctionArgs) => {\n  const shop = getShopFromExternalRequest(request);\n  const { storefront } = await unauthenticated.storefront(shop);\n\n  try {\n    const response = await storefront.graphql(\n      `#graphql\n      query incorrectQuery {\n        products(first: 10) {\n          nodes {\n            not_a_field\n          }\n        }\n      }`,\n    );\n\n    return json({ data: await response.json() });\n  } catch (error) {\n    if (error instanceof GraphqlQueryError) {\n      // { errors: { graphQLErrors: [\n      //   { message: \"Field 'not_a_field' doesn't exist on type 'Product'\" }\n      // ] } }\n      return json({ errors: error.body?.errors }, { status: 500 });\n    }\n    return json({ message: \"An error occurred\" }, { status: 500 });\n  }\n}",
+                        "title": "/app/routes/**\\/*.ts"
+                      },
+                      {
+                        "code": "import { shopifyApp } from \"@shopify/shopify-app-remix/server\";\n\nconst shopify = shopifyApp({\n  // ...\n});\nexport default shopify;\nexport const authenticate = shopify.authenticate;",
+                        "title": "/app/shopify.server.ts"
+                      }
+                    ]
+                  }
+                ]
               }
             ],
-            "value": "export interface UnauthenticatedStorefrontContext {\n  /**\n   * The session for the given shop.\n   *\n   * This comes from the session storage which `shopifyApp` uses to store sessions in your database of choice.\n   *\n   * This will always be an offline session. You can use this to get shop specific data.\n   *\n   * @example\n   * <caption>Using the offline session.</caption>\n   * <description>Get your app's shop-specific data using the returned offline `session` object.</description>\n   * ```ts\n   * // app/routes/**\\/.ts\n   * import { LoaderFunctionArgs, json } from \"@remix-run/node\";\n   * import { unauthenticated } from \"../shopify.server\";\n   * import { getMyAppData } from \"~/db/model.server\";\n   *\n   * export const loader = async ({ request }: LoaderFunctionArgs) => {\n   *   const shop = getShopFromExternalRequest(request);\n   *   const { session } = await unauthenticated.storefront(shop);\n   *   return json(await getMyAppData({shop: session.shop));\n   * };\n   * ```\n   */\n  session: Session;\n\n  /**\n   * Method for interacting with the Shopify GraphQL Storefront API for the given store.\n   */\n  storefront: StorefrontContext;\n}"
+            "value": "export interface UnauthenticatedStorefrontContext {\n  /**\n   * The session for the given shop.\n   *\n   * This comes from the session storage which `shopifyApp` uses to store sessions in your database of choice.\n   *\n   * This will always be an offline session. You can use this to get shop specific data.\n   *\n   * @example\n   * <caption>Using the offline session.</caption>\n   * <description>Get your app's shop-specific data using the returned offline `session` object.</description>\n   * ```ts\n   * // app/routes/**\\/.ts\n   * import { LoaderFunctionArgs, json } from \"@remix-run/node\";\n   * import { unauthenticated } from \"../shopify.server\";\n   * import { getMyAppData } from \"~/db/model.server\";\n   *\n   * export const loader = async ({ request }: LoaderFunctionArgs) => {\n   *   const shop = getShopFromExternalRequest(request);\n   *   const { session } = await unauthenticated.storefront(shop);\n   *   return json(await getMyAppData({shop: session.shop));\n   * };\n   * ```\n   */\n  session: Session;\n\n  /**\n   * Method for interacting with the Shopify GraphQL Storefront API for the given store.\n   *\n   * @example\n   * <caption>Querying the GraphQL API.</caption>\n   * <description>Use `storefront.graphql` to make query / mutation requests.</description>\n   * ```ts\n   * // app/routes/**\\/.ts\n   * import { json } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   *\n   * export async function action({ request }: ActionFunctionArgs) {\n   *   const shop = getShopFromExternalRequest(request);\n   *   const { storefront } = await unauthenticated.storefront(shop);\n   *\n   *   const response = await storefront.graphql(`{blogs(first: 10) { edges { node { id } } } }`);\n   *\n   *   return json(await response.json());\n   * }\n   * ```\n   *\n   * @example\n   * <caption>Handling GraphQL errors.</caption>\n   * <description>Catch `GraphqlQueryError` errors to see error messages from the API.</description>\n   * ```ts\n   * // /app/routes/**\\/*.ts\n   * import { ActionFunctionArgs } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   *\n   * export const action = async ({ request }: ActionFunctionArgs) => {\n   *   const shop = getShopFromExternalRequest(request);\n   *   const { storefront } = await unauthenticated.storefront(shop);\n   *\n   *   try {\n   *     const response = await storefront.graphql(\n   *       `#graphql\n   *       query incorrectQuery {\n   *         products(first: 10) {\n   *           nodes {\n   *             not_a_field\n   *           }\n   *         }\n   *       }`,\n   *     );\n   *\n   *     return json({ data: await response.json() });\n   *   } catch (error) {\n   *     if (error instanceof GraphqlQueryError) {\n   *       // { errors: { graphQLErrors: [\n   *       //   { message: \"Field 'not_a_field' doesn't exist on type 'Product'\" }\n   *       // ] } }\n   *       return json({ errors: error.body?.errors }, { status: 500 });\n   *     }\n   *     return json({ message: \"An error occurred\" }, { status: 500 });\n   *   }\n   * }\n   * ```\n   *\n   * ```ts\n   * // /app/shopify.server.ts\n   * import { shopifyApp } from \"@shopify/shopify-app-remix/server\";\n   *\n   * const shopify = shopifyApp({\n   *   // ...\n   * });\n   * export default shopify;\n   * export const authenticate = shopify.authenticate;\n   * ```\n   */\n  storefront: StorefrontContext;\n}"
           },
           "Session": {
             "filePath": "../shopify-api/dist/ts/lib/session/session.d.ts",
@@ -20658,8 +20724,7 @@
       }
     ],
     "jsDocTypeExamples": [
-      "UnauthenticatedStorefrontContext",
-      "StorefrontContext"
+      "UnauthenticatedStorefrontContext"
     ],
     "related": [
       {
@@ -20690,7 +20755,7 @@
           ]
         },
         {
-          "title": "graphql",
+          "title": "storefront",
           "examples": [
             {
               "description": "Use `storefront.graphql` to make query / mutation requests.",
@@ -20699,7 +20764,7 @@
                 "tabs": [
                   {
                     "title": "app/routes/**\\/.ts",
-                    "code": "import { json } from \"@remix-run/node\";\nimport { authenticate } from \"../shopify.server\";\n\nexport async function action({ request }: ActionFunctionArgs) {\n  const { storefront } = await authenticate.public.appProxy(request);\n\n  const response = await storefront.graphql(`{blogs(first: 10) { edges { node { id } } } }`);\n\n  return json(await response.json());\n}",
+                    "code": "import { json } from \"@remix-run/node\";\nimport { authenticate } from \"../shopify.server\";\n\nexport async function action({ request }: ActionFunctionArgs) {\n  const shop = getShopFromExternalRequest(request);\n  const { storefront } = await unauthenticated.storefront(shop);\n\n  const response = await storefront.graphql(`{blogs(first: 10) { edges { node { id } } } }`);\n\n  return json(await response.json());\n}",
                     "language": "typescript"
                   }
                 ]
@@ -20712,7 +20777,7 @@
                 "tabs": [
                   {
                     "title": "/app/routes/**\\/*.ts",
-                    "code": "import { ActionFunctionArgs } from \"@remix-run/node\";\nimport { authenticate } from \"../shopify.server\";\n\nexport const action = async ({ request }: ActionFunctionArgs) =&gt; {\n  const { storefront } = await authenticate.public.appProxy(request);\n\n  try {\n    const response = await storefront.graphql(\n      `#graphql\n      query incorrectQuery {\n        products(first: 10) {\n          nodes {\n            not_a_field\n          }\n        }\n      }`,\n    );\n\n    return json({ data: await response.json() });\n  } catch (error) {\n    if (error instanceof GraphqlQueryError) {\n      // { errors: { graphQLErrors: [\n      //   { message: \"Field 'not_a_field' doesn't exist on type 'Product'\" }\n      // ] } }\n      return json({ errors: error.body?.errors }, { status: 500 });\n    }\n    return json({ message: \"An error occurred\" }, { status: 500 });\n  }\n}",
+                    "code": "import { ActionFunctionArgs } from \"@remix-run/node\";\nimport { authenticate } from \"../shopify.server\";\n\nexport const action = async ({ request }: ActionFunctionArgs) =&gt; {\n  const shop = getShopFromExternalRequest(request);\n  const { storefront } = await unauthenticated.storefront(shop);\n\n  try {\n    const response = await storefront.graphql(\n      `#graphql\n      query incorrectQuery {\n        products(first: 10) {\n          nodes {\n            not_a_field\n          }\n        }\n      }`,\n    );\n\n    return json({ data: await response.json() });\n  } catch (error) {\n    if (error instanceof GraphqlQueryError) {\n      // { errors: { graphQLErrors: [\n      //   { message: \"Field 'not_a_field' doesn't exist on type 'Product'\" }\n      // ] } }\n      return json({ errors: error.body?.errors }, { status: 500 });\n    }\n    return json({ message: \"An error occurred\" }, { status: 500 });\n  }\n}",
                     "language": "typescript"
                   },
                   {

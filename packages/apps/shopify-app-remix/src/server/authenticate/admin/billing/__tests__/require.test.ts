@@ -227,9 +227,11 @@ describe('Billing require', () => {
     );
 
     // THEN
-    const shopSessions =
-      await config.sessionStorage.findSessionsByShop(TEST_SHOP);
-    expect(shopSessions).toStrictEqual([]);
+    const shopSession = await config.sessionStorage.loadSession(
+      `offline_${TEST_SHOP}`,
+    );
+    expect(shopSession).toBeDefined();
+    expect(shopSession!.accessToken).toBeUndefined();
     expectExitIframeRedirect(response);
   });
 

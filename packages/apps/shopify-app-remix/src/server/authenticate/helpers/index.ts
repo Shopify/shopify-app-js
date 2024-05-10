@@ -3,6 +3,7 @@ export * from './add-response-headers';
 export * from './ensure-cors-headers';
 export * from './validate-session-token';
 export * from './get-session-token-header';
+export * from './invalidate-access-token';
 export * from './reject-bot-request';
 export * from './respond-to-options-request';
 export * from './respond-to-invalid-session-token';
