@@ -128,6 +128,18 @@ export class PrismaSessionStorage<T extends PrismaClient>
       userId:
         (sessionParams.onlineAccessInfo?.associated_user
           .id as unknown as bigint) || null,
+      firstName:
+        sessionParams.onlineAccessInfo?.associated_user.first_name || null,
+      lastName:
+        sessionParams.onlineAccessInfo?.associated_user.last_name || null,
+      email: sessionParams.onlineAccessInfo?.associated_user.email || null,
+      accountOwner:
+        sessionParams.onlineAccessInfo?.associated_user.account_owner || false,
+      locale: sessionParams.onlineAccessInfo?.associated_user.locale || null,
+      collaborator:
+        sessionParams.onlineAccessInfo?.associated_user.collaborator || false,
+      emailVerified:
+        sessionParams.onlineAccessInfo?.associated_user.email_verified || false,
     };
   }
 
@@ -137,7 +149,24 @@ export class PrismaSessionStorage<T extends PrismaClient>
       shop: row.shop,
       state: row.state,
       isOnline: row.isOnline,
+      userId: String(row.userId),
+      firstName: String(row.firstName),
+      lastName: String(row.lastName),
+      email: String(row.email),
+      locale: String(row.locale),
     };
+
+    if (row.accountOwner !== null) {
+      sessionParams.accountOwner = row.accountOwner;
+    }
+
+    if (row.collaborator !== null) {
+      sessionParams.collaborator = row.collaborator;
+    }
+
+    if (row.emailVerified !== null) {
+      sessionParams.emailVerified = row.emailVerified;
+    }
 
     if (row.expires) {
       sessionParams.expires = row.expires.getTime();
@@ -151,11 +180,7 @@ export class PrismaSessionStorage<T extends PrismaClient>
       sessionParams.accessToken = row.accessToken;
     }
 
-    if (row.userId) {
-      sessionParams.onlineAccessInfo = String(row.userId);
-    }
-
-    return Session.fromPropertyArray(Object.entries(sessionParams));
+    return Session.fromPropertyArray(Object.entries(sessionParams), true);
   }
 
   private getSessionTable(): T['session'] {
