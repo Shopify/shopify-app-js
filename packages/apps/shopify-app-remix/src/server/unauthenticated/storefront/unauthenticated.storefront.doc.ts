@@ -27,7 +27,7 @@ Apps must obtain the shop domain from the 3rd party service in a secure way.`,
       type: 'GetUnauthenticatedStorefrontContext',
     },
   ],
-  jsDocTypeExamples: ['UnauthenticatedStorefrontContext', 'StorefrontContext'],
+  jsDocTypeExamples: ['UnauthenticatedStorefrontContext'],
   related: [
     {
       name: 'API context',
