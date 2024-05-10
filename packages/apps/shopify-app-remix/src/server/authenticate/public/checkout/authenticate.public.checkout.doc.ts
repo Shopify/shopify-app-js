@@ -35,7 +35,15 @@ const data: ReferenceEntityTemplateSchema = {
     },
   },
   jsDocTypeExamples: ['CheckoutContext'],
-  related: [],
+  related: [
+    {
+      name: 'Session token API',
+      subtitle:
+        'Checkout UI extension API for interacting with session tokens.',
+      url: '/docs/api/checkout-ui-extensions/latest/apis/session-token',
+      type: 'shopify',
+    },
+  ],
 };
 
 export default data;

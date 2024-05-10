@@ -35,7 +35,15 @@ const data: ReferenceEntityTemplateSchema = {
     },
   },
   jsDocTypeExamples: ['CustomerAccountContext'],
-  related: [],
+  related: [
+    {
+      name: 'Session token API',
+      subtitle:
+        'Customer account UI extensions API for interacting with session tokens.',
+      url: '/docs/api/customer-account-ui-extensions/latest/apis/session-token',
+      type: 'shopify',
+    },
+  ],
 };
 
 export default data;
