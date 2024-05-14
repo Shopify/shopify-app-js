@@ -6,6 +6,7 @@ import {
   LATEST_API_VERSION,
   Shopify,
   FeatureDeprecatedError,
+  ShopifyRestResources,
 } from '@shopify/shopify-api';
 import {MemorySessionStorage} from '@shopify/shopify-app-session-storage-memory';
 
@@ -49,7 +50,10 @@ type ConfigInterfaceFromParams<Params extends AppConfigParams> =
 
 export interface ShopifyApp<Params extends AppConfigParams = AppConfigParams> {
   config: ConfigInterfaceFromParams<Params>;
-  api: Shopify<DefaultedConfigs<Params['api']>>;
+  api: Shopify<
+    DefaultedConfigs<Params['api']>,
+    DefaultedConfigs<Params['api']>['restResources'] & ShopifyRestResources
+  >;
   auth: AuthMiddleware;
   processWebhooks: ProcessWebhooksMiddleware;
   validateAuthenticatedSession: ValidateAuthenticatedSessionMiddleware;
@@ -69,7 +73,10 @@ export function shopifyApp<Params extends AppConfigParams>(
 
   return {
     config: validatedConfig,
-    api: api as Shopify<DefaultedConfigs<Params['api']>>,
+    api: api as Shopify<
+      DefaultedConfigs<Params['api']>,
+      DefaultedConfigs<Params['api']>['restResources'] & ShopifyRestResources
+    >,
     auth: auth({api, config: validatedConfig}),
     processWebhooks: processWebhooks({api, config: validatedConfig}),
     validateAuthenticatedSession: validateAuthenticatedSession({
