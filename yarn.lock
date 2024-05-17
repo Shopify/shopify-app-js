@@ -3986,10 +3986,10 @@
   resolved "https://registry.yarnpkg.com/@shopify/prettier-config/-/prettier-config-1.1.2.tgz#612f87c0cd1196e8b43c85425e587d0fa7f1172d"
   integrity sha512-5ugCL9sPGzmOaZjeRGaWUWhHgAbemrS6z+R7v6gwiD+BiqSeoFhIY+imLpfdFCVpuOGalpHeCv6o3gv++EHs0A==
 
-"@shopify/react-testing@^5.1.3":
-  version "5.1.4"
-  resolved "https://registry.yarnpkg.com/@shopify/react-testing/-/react-testing-5.1.4.tgz#ef71f91c8e08ff60040773802b0bc7d1c1816a1a"
-  integrity sha512-2ey9OH/LnISfJtdfT3Y5WLEj9VsXnyKrekKacsXiiDhKx4s2zT5Gep4oIsnyyACDhAykxwiFV9rV0TKmA+LrIg==
+"@shopify/react-testing@^5.2.0":
+  version "5.2.0"
+  resolved "https://registry.yarnpkg.com/@shopify/react-testing/-/react-testing-5.2.0.tgz#21cd043da91b5833935244a6224d0b8f4bdad450"
+  integrity sha512-qYHa+LTLDux0PO3F1U7Ohaz6gzmV7ka3pCVBaZj+OyRdol45ghh3vI/mdSUDmTmFfG0yrHyXEKhCXUEIuHxx5Q==
   dependencies:
     "@shopify/useful-types" "^5.1.2"
     jest-matcher-utils "^26.6.2"
