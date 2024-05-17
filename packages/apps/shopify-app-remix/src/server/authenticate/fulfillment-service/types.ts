@@ -2,6 +2,10 @@ import {Session, ShopifyRestResources} from '@shopify/shopify-api';
 
 import type {AdminApiContext} from '../../clients';
 
+export type FulfillmentServicePayload = Record<string, any> & {
+  kind: string;
+};
+
 export interface FulfillmentServiceContext<
   Resources extends ShopifyRestResources = ShopifyRestResources,
 > {
@@ -106,9 +110,7 @@ export interface FulfillmentServiceContext<
    * return new Response();
    * ```
    */
-  payload: Record<string, any> & {
-    kind: string;
-  };
+  payload: FulfillmentServicePayload;
 }
 
 export type AuthenticateFulfillmentService<

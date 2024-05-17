@@ -163,6 +163,7 @@ export function deriveApi(appConfig: AppConfigArg): BasicParams['api'] {
     isEmbeddedApp: appConfig.isEmbeddedApp ?? true,
     apiVersion: appConfig.apiVersion ?? LATEST_API_VERSION,
     isCustomStoreApp: appConfig.distribution === AppDistribution.ShopifyAdmin,
+    billing: appConfig.billing as ApiConfig['billing'],
     future: {
       lineItemBilling: appConfig.future?.v3_lineItemBilling,
     },
@@ -186,6 +187,7 @@ function deriveConfig<Storage extends SessionStorage>(
   return {
     ...appConfig,
     ...apiConfig,
+    billing: appConfig.billing as ApiConfig['billing'],
     scopes: apiConfig.scopes,
     idempotentPromiseHandler: new IdempotentPromiseHandler(),
     canUseLoginForm: appConfig.distribution !== AppDistribution.ShopifyAdmin,
