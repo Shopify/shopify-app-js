@@ -77,7 +77,7 @@
   ],
   "devDependencies": {
     "@remix-run/node": "^2.9.2",
-    "@remix-run/react": "^2.8.1",
+    "@remix-run/react": "^2.9.2",
     "@shopify/generate-docs": "^0.15.12",
     "@shopify/polaris": "^12.18.0",
     "@shopify/react-testing": "^5.2.0",
@@ -98,7 +98,7 @@
     "@shopify/shopify-app-session-storage": "^2.1.5",
     "@shopify/storefront-api-client": "^0.3.4",
     "isbot": "^5.1.4",
-    "semver": "^7.6.0"
+    "semver": "^7.6.2"
   },
   "peerDependencies": {
     "@remix-run/react": "*",

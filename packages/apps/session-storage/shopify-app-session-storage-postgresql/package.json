@@ -52,7 +52,7 @@
   },
   "devDependencies": {
     "@shopify/shopify-app-session-storage-test-utils": "^2.0.5",
-    "@types/pg": "^8.11.5"
+    "@types/pg": "^8.11.6"
   },
   "files": [
     "dist/*",
