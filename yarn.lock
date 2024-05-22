@@ -6600,10 +6600,10 @@ dreamopt@~0.8.0:
   dependencies:
     wordwrap ">=0.0.2"
 
-drizzle-kit@^0.21.2:
-  version "0.21.2"
-  resolved "https://registry.yarnpkg.com/drizzle-kit/-/drizzle-kit-0.21.2.tgz#a8495cec8ced1112b2c29bb1ac9e3754a0d908da"
-  integrity sha512-U87IhZyCt/9d0ZT/Na3KFJVY31tSxtTx/n9UMcWFpW/5c2Ede39xiCG5efNV/0iimsv97UIRtDI0ldLBW5lbcg==
+drizzle-kit@^0.21.3:
+  version "0.21.3"
+  resolved "https://registry.yarnpkg.com/drizzle-kit/-/drizzle-kit-0.21.3.tgz#78e3c95885f198dd5652c55b7f74e705552a8930"
+  integrity sha512-BqLkHBucr32OOZ/16mMSUFKGBcoBYwZnOLkLMbaSVmd8shTVAjOdh2mleI7c/iw70ZcKlL53n3SFlUlKLzy2lQ==
   dependencies:
     "@esbuild-kit/esm-loader" "^2.5.5"
     commander "^9.4.1"
