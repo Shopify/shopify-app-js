@@ -7,7 +7,7 @@
     "pretty": true,
     "module": "Node16",
     "moduleResolution": "Node16",
-    "target": "ES2021",
+    "target": "ES2022",
     "downlevelIteration": true,
     "esModuleInterop": true,
     "sourceMap": true,

@@ -11,13 +11,13 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        version: [16, 18, 20]
+        version: [18, 20, 22]
     steps:
       - uses: actions/checkout@master
       - uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.version }}
       - name: Install
-        run: yarn install --ignore-engines
+        run: yarn install
       - name: Run session storage tests
         run: yarn test:ci_sessions
