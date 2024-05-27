@@ -83,7 +83,7 @@
     "@shopify/react-testing": "^5.2.0",
     "@shopify/shopify-app-session-storage-memory": "^3.0.5",
     "@types/jsonwebtoken": "^9.0.5",
-    "@types/react": "^18.3.2",
+    "@types/react": "^18.3.3",
     "@types/semver": "^7.5.8",
     "jest-fetch-mock": "^3.0.3",
     "jsonwebtoken": "^9.0.2",
