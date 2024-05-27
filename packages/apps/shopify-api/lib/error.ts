@@ -1,8 +1,8 @@
 import {AdapterResponse} from '../runtime/http/types';
 
 export class ShopifyError extends Error {
-  constructor(...args: any) {
-    super(...args);
+  constructor(message?: string) {
+    super(message);
     Object.setPrototypeOf(this, new.target.prototype);
   }
 }
@@ -26,6 +26,7 @@ interface HttpResponseData {
   body?: Record<string, unknown>;
   headers?: Record<string, unknown>;
 }
+
 interface HttpResponseErrorParams extends HttpResponseData {
   message: string;
 }
@@ -34,7 +35,7 @@ export class HttpResponseError<
 > extends ShopifyError {
   readonly response: ResponseType;
 
-  public constructor({
+  constructor({
     message,
     code,
     statusText,
@@ -62,29 +63,27 @@ interface HttpThrottlingErrorParams extends HttpThrottlingErrorData {
   message: string;
 }
 export class HttpThrottlingError extends HttpRetriableError<HttpThrottlingErrorData> {
-  public constructor({retryAfter, ...params}: HttpThrottlingErrorParams) {
+  constructor({ retryAfter, ...params }: HttpThrottlingErrorParams) {
     super(params);
     this.response.retryAfter = retryAfter;
   }
 }
 
 export class RestResourceError extends ShopifyError {}
-export class GraphqlQueryError extends ShopifyError {
-  readonly response: Record<string, unknown>;
+
+interface GraphqlQueryErrorParams {
+  message: string;
+  response: Record<string, unknown>;
   headers?: Record<string, unknown>;
   body?: Record<string, any>;
+}
 
-  public constructor({
-    message,
-    response,
-    headers,
-    body,
-  }: {
-    message: string;
-    response: Record<string, unknown>;
-    headers?: Record<string, unknown>;
-    body?: Record<string, any>;
-  }) {
+export class GraphqlQueryError extends ShopifyError {
+  readonly response: Record<string, unknown>;
+  readonly headers?: Record<string, unknown>;
+  readonly body?: Record<string, any>;
+
+  constructor({ message, response, headers, body }: GraphqlQueryErrorParams) {
     super(message);
     this.response = response;
     this.headers = headers;
@@ -104,26 +103,25 @@ interface InvalidWebhookParams {
 export class InvalidWebhookError extends ShopifyError {
   readonly response: AdapterResponse;
 
-  public constructor({message, response}: InvalidWebhookParams) {
+  constructor({ message, response }: InvalidWebhookParams) {
     super(message);
     this.response = response;
   }
 }
 export class MissingWebhookCallbackError extends InvalidWebhookError {}
 export class SessionStorageError extends ShopifyError {}
-
 export class MissingRequiredArgument extends ShopifyError {}
 export class UnsupportedClientType extends ShopifyError {}
-
 export class InvalidRequestError extends ShopifyError {}
-
+interface BillingErrorParams {
+  message: string;
+  errorData: any;
+}
 export class BillingError extends ShopifyError {
   readonly errorData: any;
 
-  public constructor({message, errorData}: {message: string; errorData: any}) {
+  constructor({ message, errorData }: BillingErrorParams) {
     super(message);
-
-    this.message = message;
     this.errorData = errorData;
   }
 }
