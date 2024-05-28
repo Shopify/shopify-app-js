@@ -63,15 +63,7 @@ const data: LandingTemplateSchema = {
         'These are the future flags supported in the current version.',
       listItems: [
         {
-          name: 'v3_webhookAdminContext',
-          value: '',
-          description:
-            'Returns the same `admin` context (`AdminApiContext`) from `authenticate.webhook` that is returned from `authenticate.admin`.' +
-            '\n\nSee [authenticate.webhook](/docs/api/shopify-app-remix/authenticate/webhook#example-admin) for more details.',
-          isOptional: true,
-        },
-        {
-          name: 'v3_lineItemBilling',
+          name: 'lineItemBilling',
           value: '',
           description:
             'Allows you to pass billing plans with up to two line items when creating a new app subscription.' +

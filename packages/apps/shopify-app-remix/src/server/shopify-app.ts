@@ -94,7 +94,6 @@ export function shopifyApp<
       fulfillmentService:
         authenticateFulfillmentServiceFactory<Resources>(params),
       webhook: authenticateWebhookFactory<
-        Future,
         Resources,
         keyof Config['webhooks'] | MandatoryTopics
       >(params),

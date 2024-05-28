@@ -9,7 +9,6 @@ import {
   expectAdminApiClient,
   getHmac,
   getThrownResponse,
-  setUpValidSession,
   testConfig,
 } from '../../../__test-helpers';
 
@@ -103,31 +102,6 @@ describe('Webhook validation', () => {
 
       return {admin, expectedSession, actualSession};
     });
-  });
-
-  it('returns a legacy context when the future flag is disabled', async () => {
-    // GIVEN
-    const shopify = shopifyApp(
-      testConfig({restResources, future: {v3_webhookAdminContext: false}}),
-    );
-    const session = await setUpValidSession(shopify.sessionStorage);
-
-    // WHEN
-    const body = {some: 'data'};
-    const {admin} = await shopify.authenticate.webhook(
-      new Request(`${APP_URL}/webhooks`, {
-        method: 'POST',
-        body: JSON.stringify(body),
-        headers: webhookHeaders(JSON.stringify(body)),
-      }),
-    );
-
-    // THEN
-    expect(admin?.rest.apiVersion).toBe('2023-01');
-    expect(admin?.rest.session).toBe(session);
-
-    expect(admin?.graphql.apiVersion).toBe('2023-01');
-    expect(admin?.graphql.session).toBe(session);
   });
 
   it('throws a 401 on invalid HMAC', async () => {

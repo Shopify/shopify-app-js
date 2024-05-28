@@ -2,9 +2,7 @@ import {ReferenceEntityTemplateSchema} from '@shopify/generate-docs';
 
 const data: ReferenceEntityTemplateSchema = {
   name: 'Webhook',
-  description:
-    'Contains functions for verifying Shopify webhooks.' +
-    '\n\n> Note: The format of the `admin` object returned by this function changes with the `v3_webhookAdminContext` future flag. Learn more about [gradual feature adoption](/docs/api/shopify-app-remix/guide-future-flags).',
+  description: 'Contains functions for verifying Shopify webhooks.',
   category: 'Authenticate',
   type: 'object',
   isVisualComponent: false,
