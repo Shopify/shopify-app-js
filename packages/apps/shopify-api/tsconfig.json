@@ -3,7 +3,8 @@
   "compilerOptions": {
     "baseUrl": ".",
     "outDir": ".",
-    "rootDir": "."
+    "rootDir": ".",
+    "useDefineForClassFields": false,
   },
   "include": [
     "lib/**/*.ts",
