@@ -63,7 +63,7 @@ interface HttpThrottlingErrorParams extends HttpThrottlingErrorData {
   message: string;
 }
 export class HttpThrottlingError extends HttpRetriableError<HttpThrottlingErrorData> {
-  constructor({ retryAfter, ...params }: HttpThrottlingErrorParams) {
+  constructor({retryAfter, ...params}: HttpThrottlingErrorParams) {
     super(params);
     this.response.retryAfter = retryAfter;
   }
@@ -83,7 +83,7 @@ export class GraphqlQueryError extends ShopifyError {
   readonly headers?: Record<string, unknown>;
   readonly body?: Record<string, any>;
 
-  constructor({ message, response, headers, body }: GraphqlQueryErrorParams) {
+  constructor({message, response, headers, body}: GraphqlQueryErrorParams) {
     super(message);
     this.response = response;
     this.headers = headers;
@@ -103,7 +103,7 @@ interface InvalidWebhookParams {
 export class InvalidWebhookError extends ShopifyError {
   readonly response: AdapterResponse;
 
-  constructor({ message, response }: InvalidWebhookParams) {
+  constructor({message, response}: InvalidWebhookParams) {
     super(message);
     this.response = response;
   }
@@ -120,7 +120,7 @@ interface BillingErrorParams {
 export class BillingError extends ShopifyError {
   readonly errorData: any;
 
-  constructor({ message, errorData }: BillingErrorParams) {
+  constructor({message, errorData}: BillingErrorParams) {
     super(message);
     this.errorData = errorData;
   }
