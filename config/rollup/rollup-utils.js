@@ -55,7 +55,6 @@ export const esmConfigs = {
   preserveModules: true,
   preserveModulesRoot: 'src',
   entryFileNames: '[name].mjs',
-  importAttributesKey: 'with',
 };
 
 export const cjsConfigs = {
