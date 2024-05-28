@@ -210,8 +210,6 @@ export function batteryOfTests(
       await expect(storage.storeSession(session)).resolves.toBeTruthy();
       const storedSession = await storage.loadSession(sessionId);
 
-      console.log('storedSession', storedSession);
-      console.log('session', session);
       expect(session.equals(storedSession)).toBeTruthy();
     });
   }

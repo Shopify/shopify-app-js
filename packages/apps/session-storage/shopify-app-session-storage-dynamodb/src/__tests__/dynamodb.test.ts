@@ -75,7 +75,7 @@ describe('DynamoDBSessionStorage', () => {
         }
         return true;
       },
-      {interval: 500, timeout: 20000},
+      {interval: 500, timeout: 60000},
     );
 
     storage = new DynamoDBSessionStorage({
