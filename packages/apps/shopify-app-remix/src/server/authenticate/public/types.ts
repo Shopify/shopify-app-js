@@ -1,5 +1,3 @@
-import {FeatureEnabled, FutureFlagOptions} from '../../future/flags';
-
 import type {AuthenticateCheckout} from './checkout/types';
 import type {AuthenticateAppProxy} from './appProxy/types';
 import {AuthenticateCustomerAccount} from './customer-account/types';
@@ -9,7 +7,7 @@ import {AuthenticateCustomerAccount} from './customer-account/types';
 // But it became tightly coupled to authentictaing Checkout requests.
 // In V2 you will have only public.checkout() and public.appProxy(), no public()
 
-export interface AuthenticatePublicObject {
+export interface AuthenticatePublic {
   /**
    * Authenticate a request from a checkout extension
    *
@@ -75,24 +73,3 @@ export interface AuthenticatePublicObject {
    */
   customerAccount: AuthenticateCustomerAccount;
 }
-
-export type AuthenticatePublic<Future extends FutureFlagOptions> =
-  FeatureEnabled<Future, 'v3_authenticatePublic'> extends true
-    ? AuthenticatePublicObject
-    : AuthenticatePublicLegacy;
-
-/**
- * Methods for authenticating Requests from Shopify's public surfaces
- *
- * To maintain backwards compatibility this is a function and an object.
- *
- * Do not use `authenticate.public()`. Use `authenticate.public.checkout()` instead.
- * `authenticate.public()` will be removed in v2.
- *
- * Methods are:
- *
- * - `authenticate.public.checkout()` for authenticating requests from checkout extensions
- * - `authenticate.public.appProxy()` for authenticating requests from app proxies
- */
-export type AuthenticatePublicLegacy = AuthenticateCheckout &
-  Omit<AuthenticatePublicObject, 'customerAccount'>;
