@@ -3,7 +3,7 @@
   "compilerOptions": {
     "baseUrl": ".",
     "outDir": ".",
-    "rootDir": "."
+    "rootDir": ".",
   },
   "include": [
     "lib/**/*.ts",
