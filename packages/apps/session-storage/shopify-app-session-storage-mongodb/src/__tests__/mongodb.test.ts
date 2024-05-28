@@ -40,7 +40,7 @@ describe('MongoDBSessionStorage', () => {
         }
         return true;
       },
-      {interval: 500, timeout: 20000},
+      {interval: 500, timeout: 40000},
     );
     storage = new MongoDBSessionStorage(dbURL, dbName);
   });

@@ -57,7 +57,7 @@ describe('PostgreSQLSessionStorage', () => {
         }
         return true;
       },
-      {interval: 500, timeout: 20000},
+      {interval: 500, timeout: 50000},
     );
     storage = new PostgreSQLSessionStorage(dbURL);
     storage2 = new PostgreSQLSessionStorage(dbURL2);

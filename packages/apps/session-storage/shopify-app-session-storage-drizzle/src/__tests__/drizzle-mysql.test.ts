@@ -62,7 +62,7 @@ describe('DrizzleSessionStorageMySQL', () => {
         }
         return true;
       },
-      {interval: 500, timeout: 20000},
+      {interval: 500, timeout: 60000},
     );
 
     await connection.query(`
