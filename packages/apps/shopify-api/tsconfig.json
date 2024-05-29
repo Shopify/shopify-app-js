@@ -4,6 +4,7 @@
     "baseUrl": ".",
     "outDir": ".",
     "rootDir": ".",
+    "useDefineForClassFields": false,
   },
   "include": [
     "lib/**/*.ts",
