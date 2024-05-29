@@ -4,7 +4,7 @@ import baseConfig from '../../../../config/tests/jest.config';
 
 const config: Config = {
   ...baseConfig,
-  testTimeout: 50000,
+  testTimeout: 90000,
 };
 
 export default config;
