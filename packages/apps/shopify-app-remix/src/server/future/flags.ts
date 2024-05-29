@@ -18,13 +18,6 @@ export interface FutureFlags {
   v3_webhookAdminContext?: boolean;
 
   /**
-   * When enabled authenticate.public() will not work.  Use authenticate.public.checkout() instead.
-   *
-   * @default false
-   */
-  v3_authenticatePublic?: boolean;
-
-  /**
    * When enabled allows you to pass billing plans with line items when creating a new app subscriptions.
    */
   v3_lineItemBilling?: boolean;
@@ -68,13 +61,6 @@ export function logDisabledFutureFlags(
 ) {
   const logFlag = (flag: string, message: string) =>
     logger.info(`Future flag ${flag} is disabled.\n\n  ${message}\n`);
-
-  if (!config.future.v3_authenticatePublic) {
-    logFlag(
-      'v3_authenticatePublic',
-      'Enable this flag to allow appProxy and checkout in `shopify.authenticate.public`.',
-    );
-  }
 
   if (!config.future.v3_lineItemBilling) {
     logFlag(

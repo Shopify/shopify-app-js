@@ -90,7 +90,7 @@ export function shopifyApp<
     authenticate: {
       admin: authStrategy,
       flow: authenticateFlowFactory<Resources>(params),
-      public: authenticatePublicFactory<Future, Resources>(params),
+      public: authenticatePublicFactory<Resources>(params),
       fulfillmentService:
         authenticateFulfillmentServiceFactory<Resources>(params),
       webhook: authenticateWebhookFactory<

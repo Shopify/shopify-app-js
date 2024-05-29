@@ -8,12 +8,13 @@ You can use it as a guide for migrating your app, and ensuring you're ready for 
 
 ## Table of contents
 
-- [Use new authentication strategy for embedded apps](#use-new-authentication-strategy-for-embedded-apps)
-- [Root import path deprecation](#root-import-path-deprecation)
-- [Use the AppProvider component](#use-the-appprovider-component)
-- [Align the `admin` context object for webhooks](#align-the-admin-context-object-for-webhooks)
-- [Replace `authenticate.public()` with `authenticate.public.checkout()`](#replace-authenticatepublic-with-authenticatepubliccheckout)
-- [Use line item billing configs](#use-line-item-billing-configs)
+- [Upcoming breaking changes](#upcoming-breaking-changes)
+  - [Table of contents](#table-of-contents)
+  - [Use new authentication strategy for embedded apps](#use-new-authentication-strategy-for-embedded-apps)
+  - [Root import path deprecation](#root-import-path-deprecation)
+  - [Use the AppProvider component](#use-the-appprovider-component)
+  - [Align the `admin` context object for webhooks](#align-the-admin-context-object-for-webhooks)
+  - [Use line item billing configs](#use-line-item-billing-configs)
 
 ## Use new authentication strategy for embedded apps
 
@@ -169,41 +170,6 @@ export async function action({request}: ActionFunctionArgs) {
   });
 
   // ...
-}
-```
-
-## Replace `authenticate.public()` with `authenticate.public.checkout()`
-
-> [!NOTE]
-> The `v3_authenticatePublic` future flag enabled this behaviour.
-> If you've already enabled the flag, you don't need to follow these instructions.
-
-The `authenticate.public` export used to be a function that was meant to authenticate [checkout extension](https://shopify.dev/docs/api/checkout-extensions) requests.
-
-That was confusing, because:
-
-- It isn't the only type of public requests apps might need to handle
-- It didn't make it clear what the purpose of the export was
-
-We refactored the export so that all public authentication methods are grouped together under `authenticate.public`, for instance `authenticate.public.checkout()` and `authenticate.public.appProxy()`.
-
-Before:
-
-```ts
-export async function loader({request}: LoaderFunctionArgs) {
-  await authenticate.public(request);
-
-  return null;
-}
-```
-
-After:
-
-```ts
-export async function loader({request}: LoaderFunctionArgs) {
-  await authenticate.public.checkout(request);
-
-  return null;
 }
 ```
 
