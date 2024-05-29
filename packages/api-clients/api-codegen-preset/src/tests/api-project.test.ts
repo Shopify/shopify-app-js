@@ -78,8 +78,39 @@ describe('shopifyApiProject', () => {
           schema: `https://shopify.dev/${type}-graphql-direct-proxy`,
           documents: ['**/*.{ts,tsx}', '!node_modules'],
           extensions: {
-            // This is tested by the api-types file
-            codegen: expect.anything(),
+            // The contents of this object are tested by the api-types file
+            codegen: expect.objectContaining({
+              generates: expect.objectContaining({
+                [`./${type}.types.d.ts`]: expect.anything(),
+                [`./${type}.generated.d.ts`]: expect.anything(),
+              }),
+            }),
+          },
+        });
+      });
+
+      it('does not use declaration files when setting is false', () => {
+        // GIVEN
+        const config: ShopifyApiProjectOptions = {
+          apiType,
+          declarations: false,
+        };
+
+        // WHEN
+        const projectConfig = shopifyApiProject(config);
+
+        // THEN
+        expect(projectConfig).toEqual({
+          schema: `https://shopify.dev/${type}-graphql-direct-proxy`,
+          documents: ['**/*.{ts,tsx}', '!node_modules'],
+          extensions: {
+            // The contents of this object are tested by the api-types file
+            codegen: expect.objectContaining({
+              generates: expect.objectContaining({
+                [`./${type}.types.ts`]: expect.anything(),
+                [`./${type}.generated.ts`]: expect.anything(),
+              }),
+            }),
           },
         });
       });

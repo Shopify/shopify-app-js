@@ -104,9 +104,9 @@ describe('shopifyApiTypes', () => {
         });
       });
 
-      it('defaults missing configs to files when file is present', () => {
+      it('does not use declaration files when setting is false', () => {
         // GIVEN
-        const config: ShopifyApiProjectOptions = {apiType};
+        const config: ShopifyApiProjectOptions = {apiType, declarations: false};
 
         const spy = jest.spyOn(fs, 'existsSync');
         spy.mockReturnValueOnce(true);
@@ -116,11 +116,11 @@ describe('shopifyApiTypes', () => {
 
         // THEN
         expect(projectConfig).toEqual({
-          [`./${type}.types.d.ts`]: {
+          [`./${type}.types.ts`]: {
             schema: `./${type}.schema.json`,
             plugins: ['typescript'],
           },
-          [`./${type}.generated.d.ts`]: {
+          [`./${type}.generated.ts`]: {
             schema: `./${type}.schema.json`,
             documents: ['**/*.{ts,tsx}', '!**/node_modules'],
             preset: expect.anything(),

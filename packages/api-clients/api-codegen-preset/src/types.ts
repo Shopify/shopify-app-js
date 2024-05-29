@@ -14,6 +14,7 @@ export interface ShopifyApiProjectOptions {
   outputDir?: string;
   documents?: string[];
   module?: string;
+  declarations?: boolean;
 }
 
 export type ShopifyApiTypesOptions = ShopifyApiProjectOptions;
