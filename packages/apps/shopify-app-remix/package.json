@@ -16,12 +16,6 @@
   "module": "./dist/esm/server/index.mjs",
   "types": "./dist/ts/server/index.d.ts",
   "exports": {
-    ".": {
-      "types": "./dist/ts/server/index.d.ts",
-      "require": "./dist/cjs/server/index.js",
-      "import": "./dist/esm/server/index.mjs",
-      "default": "./dist/cjs/server/index.js"
-    },
     "./adapters/*": {
       "types": "./dist/ts/server/adapters/*/index.d.ts",
       "require": "./dist/cjs/server/adapters/*/index.js",
