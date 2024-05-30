@@ -7,7 +7,7 @@
 
 With this change when using online access tokens, the user information is stored as part of the session. Previously only the user ID was stored. This will enable changing of page content or limiting of page visibility by user, as well as unlock logging users actions. This is a breaking change, as the Prisma schema has been updated to include the user information.
 
-For more information review the [migration guide](../packages/apps/session-storage/shopify-app-session-storage-prisma/MIGRATION_V5.md).
+For more information review the [migration guide](./MIGRATION_V5.md).
 
 
 <details>
