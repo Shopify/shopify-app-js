@@ -1,8 +1,15 @@
 # Migrating to Version 3.0.0
 
+## Table of contents
+
+- [Replace `authenticate.public()` with `authenticate.public.checkout()`](#replace-authenticatepublic-with-authenticatepubliccheckout)
+- [Align the `admin` context object for webhooks](#align-the-admin-context-object-for-webhooks)
+- [Root import path deprecation](#root-import-path-deprecation)
+- [Use the AppProvider component](#use-the-appprovider-component)
+
 ## Replace `authenticate.public()` with `authenticate.public.checkout()`
 
-The `v3_authenticatePublic` future flag has been enabled, and removed.
+The `v3_authenticatePublic` future flag has been enabled, and removed. If you've already enabled that flag, you only need to remove it from your configuration.
 
 The `authenticate.public` export used to be a function that was meant to authenticate [checkout extension](https://shopify.dev/docs/api/checkout-extensions) requests.
 
@@ -35,7 +42,7 @@ export async function loader({request}: LoaderFunctionArgs) {
 
 ## Align the `admin` context object for webhooks
 
-The `v3_webhookAdminContext` future flag has been removed and the feature has been enabled.
+The `v3_webhookAdminContext` future flag has been removed and the feature has been enabled. If you've already enabled that flag, you only need to remove it from your configuration.
 
 The `admin` context returned by `authenticate.webhook` didn't match the object returned by e.g. `authenticate.admin`, which could lead to confusion.
 
