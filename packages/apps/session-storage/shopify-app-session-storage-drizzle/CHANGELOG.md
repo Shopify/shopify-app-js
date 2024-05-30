@@ -1,5 +1,28 @@
 # @shopify/shopify-app-session-storage-drizzle
 
+## 2.0.0
+
+### Major Changes
+
+- 6970109: Drop support for Node 16.
+
+### Minor Changes
+
+- 36e3c62: Add support for Node v.22
+
+### Patch Changes
+
+- ec6bdfc: Bump mysql2 from 3.9.2 to 3.9.7
+- Updated dependencies [d9f2601]
+- Updated dependencies [92b6772]
+- Updated dependencies [b5a4735]
+- Updated dependencies [a42efff]
+- Updated dependencies [9749f45]
+- Updated dependencies [36e3c62]
+- Updated dependencies [6970109]
+  - @shopify/shopify-api@11.0.0
+  - @shopify/shopify-app-session-storage@3.0.0
+
 ## 1.1.2
 
 ### Patch Changes

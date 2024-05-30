@@ -1,5 +1,28 @@
 # @shopify/shopify-app-session-storage-mongodb
 
+## 4.0.0
+
+### Major Changes
+
+- 6970109: Drop support for Node 16.
+
+### Minor Changes
+
+- 36e3c62: Add support for Node v.22
+
+### Patch Changes
+
+- e38bbca: Bump mongodb from 6.5.0 to 6.6.2
+- Updated dependencies [d9f2601]
+- Updated dependencies [92b6772]
+- Updated dependencies [b5a4735]
+- Updated dependencies [a42efff]
+- Updated dependencies [9749f45]
+- Updated dependencies [36e3c62]
+- Updated dependencies [6970109]
+  - @shopify/shopify-api@11.0.0
+  - @shopify/shopify-app-session-storage@3.0.0
+
 ## 3.0.5
 
 ### Patch Changes

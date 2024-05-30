@@ -1,5 +1,64 @@
 # @shopify/shopify-app-remix
 
+## 3.0.0
+
+### Major Changes
+
+- 9ae62fc: Remove v3_authenticate_public future flag and enable functionality be default.
+
+  See more details in the [migration guide](./docs/MIGRATION_V3.md).
+
+- 7179ef9: Remove v3_lineItemBilling future flag and enable functionality be default.
+
+  See more details in the [migration guide](./docs/MIGRATION_V3.md).
+
+- 6970109: Drop support for Node 16.
+- b1e6ff0: Remove v3_webhookAdminContext future flag and enable functionality.
+
+  See more details in the [migration guide](./docs/MIGRATION_V3.md).
+
+- f346f03: Apps can no longer import server-side functions using the following statements:
+
+  ```diff
+  import '@shopify/shopify-app-remix/adapters/node';
+  + import {shopifyApp} from '@shopify/shopify-app-remix';
+  ```
+
+  With the addition of React component to this package, we've separated the exports between server and react code, as in:
+
+  ```diff
+  import '@shopify/shopify-app-remix/server/adapters/node';
+  + import {shopifyApp} from '@shopify/shopify-app-remix/server';
+  - import {shopifyApp} from '@shopify/shopify-app-remix';
+  import {AppProvider} from '@shopify/shopify-app-remix/react';
+  ```
+
+  See more details in the [migration guide](./docs/MIGRATION_V3.md).
+
+### Minor Changes
+
+- a810211: Add API to Authenticate requests from customer account extensions
+- 36e3c62: Add support for Node v.22
+- 8475ae7: Made it possible to create types for the context objects returned by the various `authenticate` methods from the actual `shopifyApp` object. With this, apps can pass the contexts and their components as function arguments much more easily.
+
+### Patch Changes
+
+- 5c72853: Added debugging for request information when we fail to find a session during app proxy authentication.
+- a42efff: Bump isbot from 5.1.4 to 5.1.6
+- e305364: Invalidating accessToken instead of deleting the record when handling 401 errors
+- 94bb896: Bump semver from 7.6.0 to 7.6.2
+- Updated dependencies [d9f2601]
+- Updated dependencies [92b6772]
+- Updated dependencies [b5a4735]
+- Updated dependencies [a42efff]
+- Updated dependencies [9749f45]
+- Updated dependencies [36e3c62]
+- Updated dependencies [6970109]
+  - @shopify/shopify-api@11.0.0
+  - @shopify/admin-api-client@1.0.0
+  - @shopify/storefront-api-client@1.0.0
+  - @shopify/shopify-app-session-storage@3.0.0
+
 ## 2.8.2
 
 ### Patch Changes
@@ -288,11 +347,11 @@
   When using variables, `data` needs to be an object containing `query` and `variables`.
 
   ```ts
-  import { json, ActionFunctionArgs } from "@remix-run/node";
-  import { authenticate } from "../shopify.server";
+  import {json, ActionFunctionArgs} from '@remix-run/node';
+  import {authenticate} from '../shopify.server';
 
-  export async function action({ request }: ActionFunctionArgs) {
-    const { admin } = await authenticate.webhook(request);
+  export async function action({request}: ActionFunctionArgs) {
+    const {admin} = await authenticate.webhook(request);
 
     const response = await admin?.graphql.query<any>({
       data: {
@@ -304,23 +363,23 @@
             }
           }
         }`,
-        variables: { input: { title: "Product Name" } },
+        variables: {input: {title: 'Product Name'}},
       },
     });
 
     const productData = response?.body.data;
-    return json({ data: productData.data });
+    return json({data: productData.data});
   }
   ```
 
   With the `v3_webhookContext` flag enabled, `graphql` _is_ a function that takes in the query string and an optional settings object, including `variables`.
 
   ```ts
-  import { ActionFunctionArgs } from "@remix-run/node";
-  import { authenticate } from "../shopify.server";
+  import {ActionFunctionArgs} from '@remix-run/node';
+  import {authenticate} from '../shopify.server';
 
-  export async function action({ request }: ActionFunctionArgs) {
-    const { admin } = await authenticate.webhook(request);
+  export async function action({request}: ActionFunctionArgs) {
+    const {admin} = await authenticate.webhook(request);
 
     const response = await admin?.graphql(
       `#graphql
@@ -331,11 +390,11 @@
           }
         }
       }`,
-      { variables: { input: { title: "Product Name" } } },
+      {variables: {input: {title: 'Product Name'}}},
     );
 
     const productData = await response.json();
-    return json({ data: productData.data });
+    return json({data: productData.data});
   }
   ```
 
@@ -361,12 +420,12 @@
     <summary>App Proxy</summary>
 
   ```ts
-  import { json } from "@remix-run/node";
-  import { authenticate } from "~/shopify.server";
+  import {json} from '@remix-run/node';
+  import {authenticate} from '~/shopify.server';
 
-  export async function loader({ request }) {
-    const { storefront } = await authenticate.public.appProxy(request);
-    const response = await storefront.graphql("{blogs(first: 10) {nodes{id}}}");
+  export async function loader({request}) {
+    const {storefront} = await authenticate.public.appProxy(request);
+    const response = await storefront.graphql('{blogs(first: 10) {nodes{id}}}');
 
     return json(await response.json());
   }
@@ -378,17 +437,17 @@
     <summary>Unauthenticated Storefront</summary>
 
   ```ts
-  import { json } from "@remix-run/node";
-  import { unauthenticated } from "~/shopify.server";
-  import { customAuthenticateRequest } from "~/helpers";
+  import {json} from '@remix-run/node';
+  import {unauthenticated} from '~/shopify.server';
+  import {customAuthenticateRequest} from '~/helpers';
 
-  export async function loader({ request }) {
+  export async function loader({request}) {
     await customAuthenticateRequest(request);
 
-    const { storefront } = await unauthenticated.storefront(
-      "my-shop.myshopify.com",
+    const {storefront} = await unauthenticated.storefront(
+      'my-shop.myshopify.com',
     );
-    const response = await storefront.graphql("{blogs(first: 10) {nodes{id}}}");
+    const response = await storefront.graphql('{blogs(first: 10) {nodes{id}}}');
 
     return json(await response.json());
   }
@@ -404,17 +463,17 @@
     <summary>Override billing configs when calling <code>request</code></summary>
 
   ```ts
-  import { json } from "@remix-run/node";
-  import { authenticate } from "~/shopify.server";
+  import {json} from '@remix-run/node';
+  import {authenticate} from '~/shopify.server';
 
-  export async function loader({ request }) {
-    const { billing } = await authenticate.admin(request);
+  export async function loader({request}) {
+    const {billing} = await authenticate.admin(request);
 
     await billing.require({
-      plans: ["plan1", "plan2"],
+      plans: ['plan1', 'plan2'],
       onFailure: async () =>
         await billing.request({
-          plan: "plan1",
+          plan: 'plan1',
           trialDays: 5, // Override the trialDays config value
         }),
     });
@@ -446,12 +505,12 @@
 
   ```ts
   // app/routes/**\/.ts
-  import { authenticate } from "~/shopify.server";
+  import {authenticate} from '~/shopify.server';
 
-  export async function loader({ request }) {
-    const { liquid, admin } = authenticate.public.appProxy(request);
+  export async function loader({request}) {
+    const {liquid, admin} = authenticate.public.appProxy(request);
 
-    return liquid("Hello {{shop.name}}");
+    return liquid('Hello {{shop.name}}');
   }
   ```
 
@@ -462,12 +521,12 @@
 
   ```ts
   // app/routes/**\/.ts
-  import { authenticate } from "~/shopify.server";
+  import {authenticate} from '~/shopify.server';
 
-  export async function loader({ request }) {
-    const { liquid, admin } = authenticate.public.appProxy(request);
+  export async function loader({request}) {
+    const {liquid, admin} = authenticate.public.appProxy(request);
 
-    const response = await admin.graphql("QUERY");
+    const response = await admin.graphql('QUERY');
     const json = await response.json();
 
     return json(json);
@@ -504,8 +563,8 @@
 
   ```ts
   // app/shopify.server.ts
-  import { shopifyApp } from "@shopify/shopify-app-remix";
-  import { restResources } from "@shopify/shopify-api/rest/admin/2023-04";
+  import {shopifyApp} from '@shopify/shopify-app-remix';
+  import {restResources} from '@shopify/shopify-api/rest/admin/2023-04';
 
   const shopify = shopifyApp({
     restResources,
@@ -515,15 +574,15 @@
   export default shopify;
 
   // app/routes/\/.jsx
-  import { json } from "@remix-run/node";
-  import { authenticateExternalRequest } from "~/helpers/authenticate";
-  import shopify from "../../shopify.server";
+  import {json} from '@remix-run/node';
+  import {authenticateExternalRequest} from '~/helpers/authenticate';
+  import shopify from '../../shopify.server';
 
-  export async function loader({ request }) {
+  export async function loader({request}) {
     const shop = await authenticateExternalRequest(request);
-    const { admin, session } = await shopify.unauthenticated.admin(shop);
+    const {admin, session} = await shopify.unauthenticated.admin(shop);
 
-    return json(await admin.rest.resources.Product.count({ session }));
+    return json(await admin.rest.resources.Product.count({session}));
   }
   ```
 
@@ -537,10 +596,10 @@
     <summary>See an example</summary>
 
   ```ts
-  export const loader = async ({ request }) => {
-    const { redirect } = await authenticate.admin(request);
+  export const loader = async ({request}) => {
+    const {redirect} = await authenticate.admin(request);
 
-    return redirect("https://www.example.com", { target: "_top" });
+    return redirect('https://www.example.com', {target: '_top'});
   };
   ```
 

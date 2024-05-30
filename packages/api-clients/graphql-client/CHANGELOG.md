@@ -1,5 +1,15 @@
 # @shopify/graphql-client
 
+## 1.0.0
+
+### Major Changes
+
+- 6970109: Drop support for Node 16.
+
+### Minor Changes
+
+- 36e3c62: Add support for Node v.22
+
 ## 0.10.4
 
 ### Patch Changes
