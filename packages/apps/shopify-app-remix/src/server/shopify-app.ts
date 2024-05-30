@@ -164,7 +164,7 @@ export function deriveApi(appConfig: AppConfigArg): BasicParams['api'] {
     isCustomStoreApp: appConfig.distribution === AppDistribution.ShopifyAdmin,
     billing: appConfig.billing as ApiConfig['billing'],
     future: {
-      lineItemBilling: appConfig.future?.v3_lineItemBilling,
+      lineItemBilling: true,
     },
     _logDisabledFutureFlags: false,
   });

@@ -19,7 +19,6 @@ import {API_KEY, API_SECRET_KEY, APP_URL} from './const';
  * old behaviour.
  */
 const TEST_FUTURE_FLAGS: Required<{[key in keyof FutureFlags]: true}> = {
-  v3_lineItemBilling: true,
   unstable_newEmbeddedAuthStrategy: true,
 } as const;
 

@@ -5,10 +5,6 @@ import {
   Session,
   ApiVersion,
   WebhookHandler,
-  type BillingConfigOneTimePlan,
-  type BillingConfigSubscriptionPlan,
-  type BillingConfigUsagePlan,
-  type BillingConfigSubscriptionLineItemPlan,
 } from '@shopify/shopify-api';
 import {SessionStorage} from '@shopify/shopify-app-session-storage';
 
@@ -20,29 +16,6 @@ import type {
 import type {AppDistribution} from './types';
 import type {AdminApiContext} from './clients';
 import {IdempotentPromiseHandler} from './authenticate/helpers/idempotent-promise-handler';
-
-// We're unable to infer these types for the contexts when using future flags to change the config itself.
-// In order to work around this, we're simplifying the type here.
-// These types should be removed when deleting the v3_lineItemBilling future flag.
-interface BillingConfigLegacy {
-  /**
-   * An individual billing plan.
-   */
-  [plan: string]:
-    | BillingConfigOneTimePlan
-    | BillingConfigSubscriptionPlan
-    | BillingConfigUsagePlan;
-  [plan: number | symbol]: never;
-}
-interface BillingConfigNew {
-  /**
-   * An individual billing plan.
-   */
-  [plan: string]:
-    | BillingConfigOneTimePlan
-    | BillingConfigSubscriptionLineItemPlan;
-  [plan: number | symbol]: never;
-}
 
 export interface AppConfigArg<
   Resources extends ShopifyRestResources = ShopifyRestResources,
@@ -56,7 +29,6 @@ export interface AppConfigArg<
     | 'apiVersion'
     | 'isCustomStoreApp'
     | 'future'
-    | 'billing'
   > {
   /**
    * The URL your app is running on.
@@ -255,11 +227,6 @@ export interface AppConfigArg<
    * releases in advance and provide feedback on the new features.
    */
   future?: Future;
-
-  /**
-   * The billing configuration for your app.
-   */
-  billing?: BillingConfigLegacy | BillingConfigNew;
 }
 
 export interface AppConfig<Storage extends SessionStorage = SessionStorage>

@@ -90,20 +90,16 @@ export interface BillingContext<Config extends AppConfigArg> {
    * import { shopifyApp, BillingInterval } from "@shopify/shopify-app-remix/server";
    *
    * export const MONTHLY_PLAN = 'Monthly subscription';
-   * export const ANNUAL_PLAN = 'Annual subscription';
    *
    * const shopify = shopifyApp({
    *   // ...etc
    *   billing: {
    *     [MONTHLY_PLAN]: {
-   *       amount: 5,
-   *       currencyCode: 'USD',
-   *       interval: BillingInterval.Every30Days,
-   *     },
-   *     [ANNUAL_PLAN]: {
-   *       amount: 50,
-   *       currencyCode: 'USD',
-   *       interval: BillingInterval.Annual,
+   *       lineItems: [
+   *         amount: 5,
+   *         currencyCode: 'USD',
+   *         interval: BillingInterval.Every30Days,
+   *       ],
    *     },
    *   }
    * });
@@ -113,7 +109,7 @@ export interface BillingContext<Config extends AppConfigArg> {
    *
    * @example
    * <caption>Redirect to a plan selection page.</caption>
-   * <description> When the app has multiple plans, create a page in your App that allows the merchant to select a plan. If a merchant does not have the required plan you can redirect them to page in your app to select one.</description>
+   * <description>When the app has multiple plans, create a page in your App that allows the merchant to select a plan. If a merchant does not have the required plan you can redirect them to page in your app to select one.</description>
    * ```ts
    * // /app/routes/**\/*.ts
    * import { LoaderFunctionArgs, redirect } from "@remix-run/node";
@@ -144,66 +140,20 @@ export interface BillingContext<Config extends AppConfigArg> {
    *   // ...etc
    *   billing: {
    *     [MONTHLY_PLAN]: {
-   *       amount: 5,
-   *       currencyCode: 'USD',
-   *       interval: BillingInterval.Every30Days,
+   *       lineItems: [
+   *         amount: 5,
+   *         currencyCode: 'USD',
+   *         interval: BillingInterval.Every30Days,
+   *       ],
    *     },
    *     [ANNUAL_PLAN]: {
-   *       amount: 50,
-   *       currencyCode: 'USD',
-   *       interval: BillingInterval.Annual,
-   *     },
-   *   }
-   * });
-   * export default shopify;
-   * export const authenticate = shopify.authenticate;
-   * ```
-   * @example
-   * <caption>Requesting billing with line items</caption>
-   * <description>Call `billing.request` with the `v3_lineItemBilling` future flag enabled</description>
-   * ```ts
-   * // /app/routes/**\/*.ts
-   * import { LoaderFunctionArgs } from "@remix-run/node";
-   * import { authenticate, MONTHLY_PLAN } from "../shopify.server";
-   *
-   * export const loader = async ({ request }: LoaderFunctionArgs) => {
-   *   const { billing } = await authenticate.admin(request);
-   *   await billing.require({
-   *     plans: [MONTHLY_PLAN],
-   *     isTest: true,
-   *     onFailure: async () => billing.request({ plan: MONTHLY_PLAN }),
-   *   });
-   *
-   *   // App logic
-   * };
-   * ```
-   * ```ts
-   * // shopify.server.ts
-   * import { shopifyApp, BillingInterval } from "@shopify/shopify-app-remix/server";
-   *
-   * export const MONTHLY_PLAN = 'Monthly subscription';
-   * export const ANNUAL_PLAN = 'Annual subscription';
-   *
-   * const shopify = shopifyApp({
-   *   // ...etc
-   *   billing: {
-   *     [MONTHLY_PLAN]: {
    *       lineItems: [
-   *        {
-   *          amount: 5,
-   *          currencyCode: 'USD',
-   *          interval: BillingInterval.Every30Days,
-   *         },
-   *         {
-   *          amount: 1,
-   *          currencyCode: 'USD',
-   *          interval: BillingInterval.Usage.
-   *          terms: '1 dollar per 1000 emails',
-   *         },
+   *         amount: 50,
+   *         currencyCode: 'USD',
+   *         interval: BillingInterval.Annual,
    *       ],
    *     },
    *   }
-   *  future: {v3_lineItemBilling: true}
    * });
    * export default shopify;
    * export const authenticate = shopify.authenticate;
@@ -248,14 +198,18 @@ export interface BillingContext<Config extends AppConfigArg> {
    *   // ...etc
    *   billing: {
    *     [MONTHLY_PLAN]: {
-   *       amount: 5,
-   *       currencyCode: 'USD',
-   *       interval: BillingInterval.Every30Days,
+   *       lineItems: [
+   *         amount: 5,
+   *         currencyCode: 'USD',
+   *         interval: BillingInterval.Every30Days,
+   *       ],
    *     },
    *     [ANNUAL_PLAN]: {
-   *       amount: 50,
-   *       currencyCode: 'USD',
-   *       interval: BillingInterval.Annual,
+   *       lineItems: [
+   *         amount: 50,
+   *         currencyCode: 'USD',
+   *         interval: BillingInterval.Annual,
+   *       ],
    *     },
    *   }
    * });
@@ -306,14 +260,18 @@ export interface BillingContext<Config extends AppConfigArg> {
    *   // ...etc
    *   billing: {
    *     [MONTHLY_PLAN]: {
-   *       amount: 5,
-   *       currencyCode: 'USD',
-   *       interval: BillingInterval.Every30Days,
+   *       lineItems: [
+   *         amount: 5,
+   *         currencyCode: 'USD',
+   *         interval: BillingInterval.Every30Days,
+   *       ],
    *     },
    *     [ANNUAL_PLAN]: {
-   *       amount: 50,
-   *       currencyCode: 'USD',
-   *       interval: BillingInterval.Annual,
+   *       lineItems: [
+   *         amount: 50,
+   *         currencyCode: 'USD',
+   *         interval: BillingInterval.Annual,
+   *       ],
    *     },
    *   }
    * });
@@ -364,14 +322,18 @@ export interface BillingContext<Config extends AppConfigArg> {
    *   // ...etc
    *   billing: {
    *     [MONTHLY_PLAN]: {
-   *       amount: 5,
-   *       currencyCode: 'USD',
-   *       interval: BillingInterval.Every30Days,
+   *       lineItems: [
+   *         amount: 5,
+   *         currencyCode: 'USD',
+   *         interval: BillingInterval.Every30Days,
+   *       ],
    *     },
    *     [ANNUAL_PLAN]: {
-   *       amount: 50,
-   *       currencyCode: 'USD',
-   *       interval: BillingInterval.Annual,
+   *       lineItems: [
+   *         amount: 50,
+   *         currencyCode: 'USD',
+   *         interval: BillingInterval.Annual,
+   *       ],
    *     },
    *   }
    * });
