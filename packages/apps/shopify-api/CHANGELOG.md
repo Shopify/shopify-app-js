@@ -1,5 +1,50 @@
 # Changelog
 
+## 11.0.0
+
+### Major Changes
+
+- 6970109: Drop support for Node 16.
+
+### Minor Changes
+
+- b5a4735: chore:robust-typesafe-error-handling
+- 36e3c62: Add support for Node 22.
+
+### Patch Changes
+
+- d9f2601: Bump jose from 5.2.4 to 5.3.0
+- 92b6772: Added an `is_default` field to `CustomerAddress` so it doesn't overlap with the existing `default()` method we provide in the class.
+
+  Before:
+
+  ```ts
+  const address = await shopify.rest.CustomerAddress.find({session, id: 1234});
+  // Boolean
+  console.log(address.default);
+  // Error - not a function
+  await address.default();
+  ```
+
+  After:
+
+  ```ts
+  const address = await shopify.rest.CustomerAddress.find({session, id: 1234});
+  // Boolean
+  console.log(address.is_default);
+  // Function
+  await address.default();
+  ```
+
+  To prevent breaking existing apps, this only happens when the `customerAddressDefaultFix` flag is enabled.
+
+- a42efff: Bump isbot from 5.1.4 to 5.1.6
+- 9749f45: Handle empty responses to REST requests for DELETE endpoints gracefully, instead of throwing an error when parsing the JSON.
+- Updated dependencies [36e3c62]
+- Updated dependencies [6970109]
+  - @shopify/admin-api-client@1.0.0
+  - @shopify/storefront-api-client@1.0.0
+
 ## 10.0.0
 
 ### Major Changes

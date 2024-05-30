@@ -57,7 +57,7 @@ export type WebhookRegistry<Handler extends WebhookHandler = WebhookHandler> =
 
 // eslint-disable-next-line no-warning-comments
 // TODO Rethink the wording for this enum - the operations we're doing are actually "subscribing" and "unsubscribing"
-// Consider changing the values when releasing v9.0.0 when it can be safely deprecated
+// Consider changing the values when releasing v12.0.0 when it can be safely deprecated
 export enum WebhookOperation {
   Create = 'create',
   Update = 'update',

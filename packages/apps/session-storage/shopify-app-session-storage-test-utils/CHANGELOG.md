@@ -1,5 +1,75 @@
 # @shopify/shopify-app-session-storage-test-utils
 
+## 3.0.0
+
+### Major Changes
+
+- 6970109: Drop support for Node 16.
+
+### Minor Changes
+
+- 36e3c62: Add support for Node 22.
+
+### Patch Changes
+
+- c2da994: ## Store user information as part of the session
+
+  With this change when using online access tokens, the user information is stored as part of the session. Previously only the user ID was stored. This will enable changing of page content or limiting of page visibility by user, as well as unlock logging users actions. This is a breaking change, as the Prisma schema has been updated to include the user information.
+
+  For more information review the [migration guide](../shopify-app-session-storage-prisma/MIGRATION_V5.md).
+
+  <details>
+  The new session will include the following data:
+
+  ```ts
+   {
+      id: 'online_session_id',
+      shop: 'online-session-shop',
+      state: 'online-session-state',
+      isOnline: true,
+      scope: 'online-session-scope',
+      accessToken: 'online-session-token',
+      expires: 2022-01-01T05:00:00.000Z,
+      onlineAccessInfo: {
+        associated_user: {
+          id: 1,
+          first_name: 'online-session-first-name'
+          last_name: 'online-session-last-name',
+          email: 'online-session-email',
+          locale: 'online-session-locale',
+          email_verified: false,
+          account_owner: true,
+          collaborator: false,
+        },
+      }
+    }
+  ```
+
+  You will be able to access the user information on the Session object:
+
+  ```ts
+  const {admin, session} = await authenticate.admin(request);
+
+  console.log('user id', session.onlineAccessInfo.associated_user.id);
+  console.log('user email', session.onlineAccessInfo.associated_user.email);
+  console.log(
+    'account owner',
+    session.onlineAccessInfo.associated_user.account_owner,
+  );
+  ```
+
+  </details>
+
+- Updated dependencies [d9f2601]
+- Updated dependencies [92b6772]
+- Updated dependencies [b5a4735]
+- Updated dependencies [a42efff]
+- Updated dependencies [9749f45]
+- Updated dependencies [36e3c62]
+- Updated dependencies [6970109]
+  - @shopify/shopify-api@11.0.0
+  - @shopify/shopify-app-session-storage@3.0.0
+
 ## 2.0.5
 
 ### Patch Changes

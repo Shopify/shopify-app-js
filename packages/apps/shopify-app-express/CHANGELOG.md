@@ -1,5 +1,29 @@
 # Changelog
 
+## 5.0.0
+
+### Major Changes
+
+- 6970109: Drop support for Node 16.
+
+### Minor Changes
+
+- 36e3c62: Add support for Node 22.
+
+### Patch Changes
+
+- 94bb896: Bump semver from 7.6.0 to 7.6.2
+- Updated dependencies [d9f2601]
+- Updated dependencies [92b6772]
+- Updated dependencies [b5a4735]
+- Updated dependencies [a42efff]
+- Updated dependencies [9749f45]
+- Updated dependencies [36e3c62]
+- Updated dependencies [6970109]
+  - @shopify/shopify-api@11.0.0
+  - @shopify/shopify-app-session-storage@3.0.0
+  - @shopify/shopify-app-session-storage-memory@4.0.0
+
 ## 4.1.6
 
 ### Patch Changes
@@ -158,9 +182,9 @@ If you need to explicitly set those generics, you'll need to use the `AppConfigP
 Before:
 
 ```ts
-import { ShopifyApp } from "@shopify/shopify-app-express";
-import { restResources } from "@shopify/shopify-api/rest/admin/2023-10";
-import { MemorySessionStorage } from "@shopify/shopify-app-session-storage-memory";
+import {ShopifyApp} from '@shopify/shopify-app-express';
+import {restResources} from '@shopify/shopify-api/rest/admin/2023-10';
+import {MemorySessionStorage} from '@shopify/shopify-app-session-storage-memory';
 
 const myVariable: ShopifyApp<typeof restResources, MemorySessionStorage>;
 ```
@@ -168,9 +192,9 @@ const myVariable: ShopifyApp<typeof restResources, MemorySessionStorage>;
 After:
 
 ```ts
-import { ShopifyApp, AppConfigParams } from "@shopify/shopify-app-express";
-import { restResources } from "@shopify/shopify-api/rest/admin/2023-10";
-import { MemorySessionStorage } from "@shopify/shopify-app-session-storage-memory";
+import {ShopifyApp, AppConfigParams} from '@shopify/shopify-app-express';
+import {restResources} from '@shopify/shopify-api/rest/admin/2023-10';
+import {MemorySessionStorage} from '@shopify/shopify-app-session-storage-memory';
 
 const myVariable: ShopifyApp<
   AppConfigParams<typeof restResources, MemorySessionStorage>
