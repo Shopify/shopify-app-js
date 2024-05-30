@@ -8714,10 +8714,10 @@ isarray@^2.0.5:
   resolved "https://registry.yarnpkg.com/isarray/-/isarray-2.0.5.tgz#8af1e4c1221244cc62459faf38940d4e644a5723"
   integrity sha512-xHjhDr3cNBK0BzdUJSPXZntQUx/mwMS5Rw4A7lPJ90XGAO6ISP/ePDNuo0vhqOZU+UD5JoodwCAAoZQd3FeAKw==
 
-isbot@^5.1.4:
-  version "5.1.4"
-  resolved "https://registry.yarnpkg.com/isbot/-/isbot-5.1.4.tgz#3123c0fbf98ae867dc74ab95e47a809c13621a82"
-  integrity sha512-KuqD/TAG/qtgCDnO8Ab1v5rGRK3jl9hb+2KfJt+roIPE7R4Hiq99VinR0qrLGFptdUNIkClYjuXEpVTGkD9V/A==
+isbot@^5.1.6:
+  version "5.1.6"
+  resolved "https://registry.yarnpkg.com/isbot/-/isbot-5.1.6.tgz#579a48515e92a3e064da63a41709815d8e641a30"
+  integrity sha512-Phksj1A0dBP/M/5xeOx0zWemKlZRQvrbNzI19/HWso0uodiOcR8YYCXN60IdzwbKsGj5LnxPkMy6FuBtgckMNw==
 
 isexe@^2.0.0:
   version "2.0.0"
