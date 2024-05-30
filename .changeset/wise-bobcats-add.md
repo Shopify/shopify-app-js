@@ -16,3 +16,5 @@ import '@shopify/shopify-app-remix/server/adapters/node';
 - import {shopifyApp} from '@shopify/shopify-app-remix';
 import {AppProvider} from '@shopify/shopify-app-remix/react';
 ```
+
+See more details in the [migration guide](./docs/MIGRATION_V3.md).
