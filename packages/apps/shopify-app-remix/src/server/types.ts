@@ -258,7 +258,6 @@ interface Authenticate<Config extends AppConfigArg> {
    * ```
    */
   webhook: AuthenticateWebhook<
-    Config['future'],
     RestResourcesType<Config>,
     keyof Config['webhooks'] | MandatoryTopics
   >;

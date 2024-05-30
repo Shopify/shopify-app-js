@@ -11,13 +11,6 @@ import {AppConfig} from '../config-types';
 // it doesn't cause regressions.
 export interface FutureFlags {
   /**
-   * When enabled, returns the same `admin` context (`AdminApiContext`) from `authenticate.webhook` that is returned from `authenticate.admin`.
-   *
-   * @default false
-   */
-  v3_webhookAdminContext?: boolean;
-
-  /**
    * When enabled allows you to pass billing plans with line items when creating a new app subscriptions.
    */
   v3_lineItemBilling?: boolean;
@@ -66,13 +59,6 @@ export function logDisabledFutureFlags(
     logFlag(
       'v3_lineItemBilling',
       'Enable this flag to allow billing plans with multiple line items.',
-    );
-  }
-
-  if (!config.future.v3_webhookAdminContext) {
-    logFlag(
-      'v3_webhookAdminContext',
-      'Enable this flag to use the standard Admin context when calling `shopify.authenticate.webhook`.',
     );
   }
 

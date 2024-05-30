@@ -1,7 +1,6 @@
-import {Session, Shopify, ShopifyRestResources} from '@shopify/shopify-api';
+import {Session, ShopifyRestResources} from '@shopify/shopify-api';
 
 import type {AdminApiContext} from '../../clients';
-import type {FeatureEnabled, FutureFlagOptions} from '../../future/flags';
 
 export interface RegisterWebhooksOptions {
   /**
@@ -140,25 +139,7 @@ export interface WebhookContextWithoutSession<Topics = string | number | symbol>
   admin: undefined;
 }
 
-export interface LegacyWebhookAdminApiContext<
-  Resources extends ShopifyRestResources,
-> {
-  /** A REST client. */
-  rest: InstanceType<Shopify['clients']['Rest']> & Resources;
-  /** A GraphQL client. */
-  graphql: InstanceType<Shopify['clients']['Graphql']>;
-}
-
-export type WebhookAdminContext<
-  Future extends FutureFlagOptions,
-  Resources extends ShopifyRestResources,
-> =
-  FeatureEnabled<Future, 'v3_webhookAdminContext'> extends true
-    ? AdminApiContext<Resources>
-    : LegacyWebhookAdminApiContext<Resources>;
-
 export interface WebhookContextWithSession<
-  Future extends FutureFlagOptions,
   Resources extends ShopifyRestResources,
   Topics = string | number | symbol,
 > extends Context<Topics> {
@@ -175,8 +156,8 @@ export interface WebhookContextWithSession<
    * Returned only if there is a session for the shop.
    *
    * @example
-   * <caption>[V3] Webhook admin context.</caption>
-   * <description>With the `v3_webhookAdminContext` future flag enabled, use the `admin` object in the context to interact with the Admin API.</description>
+   * <caption>Webhook admin context.</caption>
+   * <description>Use the `admin` object in the context to interact with the Admin API.</description>
    * ```ts
    * // /app/routes/webhooks.tsx
    * import { ActionFunctionArgs } from "@remix-run/node";
@@ -201,50 +182,18 @@ export interface WebhookContextWithSession<
    *   return json({ data: productData.data });
    * }
    * ```
-   *
-   * @example
-   * <caption>Webhook admin context.</caption>
-   * <description>Use the `admin` object in the context to interact with the Admin API. This format will be removed in V3 of the package.</description>
-   * ```ts
-   * // /app/routes/webhooks.tsx
-   * import { json, ActionFunctionArgs } from "@remix-run/node";
-   * import { authenticate } from "../shopify.server";
-   *
-   * export async function action({ request }: ActionFunctionArgs) {
-   *   const { admin } = await authenticate.webhook(request);
-   *
-   *   const response = await admin?.graphql.query<any>({
-   *     data: {
-   *       query: `#graphql
-   *         mutation populateProduct($input: ProductInput!) {
-   *           productCreate(input: $input) {
-   *             product {
-   *               id
-   *             }
-   *           }
-   *         }`,
-   *       variables: { input: { title: "Product Name" } },
-   *     },
-   *   });
-   *
-   *   const productData = response?.body.data;
-   *   return json({ data: productData.data });
-   * }
-   * ```
    */
-  admin: WebhookAdminContext<Future, Resources>;
+  admin: AdminApiContext<Resources>;
 }
 
 export type WebhookContext<
-  Future extends FutureFlagOptions,
   Resources extends ShopifyRestResources,
   Topics = string | number | symbol,
 > =
   | WebhookContextWithoutSession<Topics>
-  | WebhookContextWithSession<Future, Resources, Topics>;
+  | WebhookContextWithSession<Resources, Topics>;
 
 export type AuthenticateWebhook<
-  Future extends FutureFlagOptions,
   Resources extends ShopifyRestResources,
   Topics = string | number | symbol,
-> = (request: Request) => Promise<WebhookContext<Future, Resources, Topics>>;
+> = (request: Request) => Promise<WebhookContext<Resources, Topics>>;

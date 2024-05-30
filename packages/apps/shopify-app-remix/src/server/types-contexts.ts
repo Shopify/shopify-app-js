@@ -58,7 +58,6 @@ export type CheckoutContext<_App = DefaultApp> = ICheckoutContext;
 export type CustomerAccountContext<_App = DefaultApp> = ICustomerAccountContext;
 
 export type WebhookContext<App = DefaultApp> = IWebhookContext<
-  ConfigComponents<ShopifyConfig<App>>['future'],
   ConfigComponents<ShopifyConfig<App>>['resources'],
   keyof ShopifyConfig<App>['webhooks'] | MandatoryTopics
 >;
