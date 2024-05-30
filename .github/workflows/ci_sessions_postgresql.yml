@@ -1,6 +1,6 @@
 on: [push, pull_request]
 
-name: CI
+name: CI - PostgreSQL adapter
 
 env:
   DISABLE_V8_COMPILE_CACHE: 1
@@ -19,8 +19,6 @@ jobs:
           node-version: ${{ matrix.version }}
           cache: 'yarn'
       - name: Install
-        run: yarn install
-      - name: Run package tests
-        run: yarn test:ci
-      - name: Run linting
-        run: yarn lint
+        run: yarn install --frozen-lockfile
+      - name: Run session storage tests
+        run: yarn test:ci_sessions --filter=./packages/apps/session-storage/shopify-app-session-storage-postgresql
