@@ -18,7 +18,7 @@
   "scripts": {
     "lint": "eslint . --ext .js,.ts",
     "build": "yarn run rollup && yarn tsc -p ./tsconfig.build.json",
-    "test": "jest",
+    "test": "jest --detectOpenHandles",
     "test:ci": "yarn test",
     "rollup": "rollup -c rollup.config.js --bundleConfigAsCjs",
     "clean": "rimraf .rollup.cache dist",
