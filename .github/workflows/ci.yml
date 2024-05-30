@@ -1,4 +1,8 @@
-on: [push, pull_request]
+on:
+  push:
+    branches:
+      - main
+  pull_request:
 
 name: CI
 
@@ -19,7 +23,7 @@ jobs:
           node-version: ${{ matrix.version }}
           cache: 'yarn'
       - name: Install
-        run: yarn install
+        run: yarn install --frozen-lockfile
       - name: Run package tests
         run: yarn test:ci
       - name: Run linting
