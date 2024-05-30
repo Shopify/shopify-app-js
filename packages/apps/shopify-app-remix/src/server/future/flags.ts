@@ -1,5 +1,3 @@
-// When adding new flags, you should also add them to the `TEST_FUTURE_FLAGS` object in `test-config.ts` to ensure that
-
 import type {
   ConfigParams,
   Shopify,
@@ -8,13 +6,9 @@ import type {
 
 import {AppConfig} from '../config-types';
 
+// When adding new flags, you should also add them to the `TEST_FUTURE_FLAGS` object in `test-config.ts` to ensure that
 // it doesn't cause regressions.
 export interface FutureFlags {
-  /**
-   * When enabled allows you to pass billing plans with line items when creating a new app subscriptions.
-   */
-  v3_lineItemBilling?: boolean;
-
   /**
    * When enabled, embedded apps will fetch access tokens via [token exchange](https://shopify.dev/docs/apps/auth/get-access-tokens/token-exchange).
    * This assumes the app has scopes declared for [Shopify managing installation](https://shopify.dev/docs/apps/auth/installation#shopify-managed-installation).
@@ -27,11 +21,10 @@ export interface FutureFlags {
 }
 
 // When adding new flags, use this format:
-// vX_myFutureFlag: Future extends FutureFlags ? Future['vX_myFutureFlag'] : false;
-export interface ApiFutureFlags<Future extends FutureFlagOptions> {
-  lineItemBilling: Future extends FutureFlags
-    ? Future['v3_lineItemBilling']
-    : false;
+// apiFutureFlag: Future extends FutureFlags ? Future['remixFutureFlag'] : false;
+export interface ApiFutureFlags<_Future extends FutureFlagOptions> {
+  // We're currently hardcoding this flag to true in our settings, so we should propagate it here
+  lineItemBilling: true;
 }
 
 export type ApiConfigWithFutureFlags<Future extends FutureFlagOptions> =
@@ -54,13 +47,6 @@ export function logDisabledFutureFlags(
 ) {
   const logFlag = (flag: string, message: string) =>
     logger.info(`Future flag ${flag} is disabled.\n\n  ${message}\n`);
-
-  if (!config.future.v3_lineItemBilling) {
-    logFlag(
-      'v3_lineItemBilling',
-      'Enable this flag to allow billing plans with multiple line items.',
-    );
-  }
 
   if (!config.future.unstable_newEmbeddedAuthStrategy) {
     logFlag(

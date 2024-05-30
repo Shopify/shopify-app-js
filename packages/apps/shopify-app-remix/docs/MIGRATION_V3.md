@@ -4,6 +4,7 @@
 
 - [Replace `authenticate.public()` with `authenticate.public.checkout()`](#replace-authenticatepublic-with-authenticatepubliccheckout)
 - [Align the `admin` context object for webhooks](#align-the-admin-context-object-for-webhooks)
+- [Use line item billing configs](#use-line-item-billing-configs)
 - [Root import path deprecation](#root-import-path-deprecation)
 - [Use the AppProvider component](#use-the-appprovider-component)
 
@@ -100,6 +101,62 @@ export async function action({request}: ActionFunctionArgs) {
 
   // ...
 }
+```
+
+## Use line item billing configs
+
+The `v3_lineItemBilling` future flag has been enabled, and removed. If you've already enabled that flag, you only need to remove it from your configuration.
+
+Before v10 of the `@shopify/shopify-api` package, each recurring payment plan in the app's billing configuration only supported a single item, even though the API itself allows for multiple items per subscription.
+
+To better match the API, the `billing` configuration option was changed to allow for multiple line items per plan, so instead of passing in a single configuration, it now accepts an array of items.
+
+Before:
+
+```ts
+const shopify = shopifyApp({
+  billing: {
+    one_time: {
+      interval: BillingInterval.OneTime,
+      amount: 10,
+      currencyCode: 'USD',
+    },
+    monthly_plan: {
+      interval: BillingInterval.Every30Days,
+      amount: 5,
+      currencyCode: 'USD',
+    },
+  },
+});
+```
+
+After:
+
+```ts
+const shopify = shopifyApp({
+  billing: {
+    one_time: {
+      interval: BillingInterval.OneTime,
+      amount: 10,
+      currencyCode: 'USD',
+    },
+    monthly_plan: {
+      lineItems: [
+        {
+          interval: BillingInterval.Every30Days,
+          amount: 5,
+          currencyCode: 'USD',
+        },
+        {
+          interval: BillingInterval.Usage,
+          amount: 1,
+          currencyCode: 'USD',
+          terms: '1 dollar per 1000 emails',
+        },
+      ],
+    },
+  },
+});
 ```
 
 ## Root import path deprecation
