@@ -8,7 +8,7 @@
 
 ### Minor Changes
 
-- 36e3c62: Add support for Node v.22
+- 36e3c62: Add support for Node 22.
 - 51f257b: Updated dependency on `@shopify/graphql-codegen`, which can now output regular .ts files in addition to .d.ts files, which will allow apps to import enums from the `.types.ts` file in their code.
 
   If you're using `shopifyApiProject` or `shopifyApiTypes`, you can pass in a new `declarations` setting, which defaults to true to maintain the previous behaviour:

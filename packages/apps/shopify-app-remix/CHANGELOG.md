@@ -38,7 +38,7 @@
 ### Minor Changes
 
 - a810211: Add API to Authenticate requests from customer account extensions
-- 36e3c62: Add support for Node v.22
+- 36e3c62: Add support for Node 22.
 - 8475ae7: Made it possible to create types for the context objects returned by the various `authenticate` methods from the actual `shopifyApp` object. With this, apps can pass the contexts and their components as function arguments much more easily.
 
 ### Patch Changes

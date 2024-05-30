@@ -9,7 +9,7 @@
 ### Minor Changes
 
 - b5a4735: chore:robust-typesafe-error-handling
-- 36e3c62: Add support for Node v.22
+- 36e3c62: Add support for Node 22.
 
 ### Patch Changes
 

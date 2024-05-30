@@ -4,7 +4,8 @@
 
 ### Major Changes
 
-- c2da994: ## Store user information as part of the session
+- c2da994:
+## Store user information as part of the session
 
   With this change when using online access tokens, the user information is stored as part of the session. Previously only the user ID was stored. This will enable changing of page content or limiting of page visibility by user, as well as unlock logging users actions. This is a breaking change, as the Prisma schema has been updated to include the user information.
 
@@ -56,7 +57,7 @@
 
 ### Minor Changes
 
-- 36e3c62: Add support for Node v.22
+- 36e3c62: Add support for Node 22.
 
 ### Patch Changes
 

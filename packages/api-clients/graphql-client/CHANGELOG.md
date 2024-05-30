@@ -8,7 +8,7 @@
 
 ### Minor Changes
 
-- 36e3c62: Add support for Node v.22
+- 36e3c62: Add support for Node 22.
 
 ## 0.10.4
 
