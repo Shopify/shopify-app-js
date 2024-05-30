@@ -87,4 +87,36 @@ declare module '@shopify/admin-api-client' {
 }
 `);
   });
+
+  it('imports declaration files when using .d.ts targets', async () => {
+    const result = await executeCodegen(
+      getCodegenOptions('operations.ts', 'out.d.ts'),
+    );
+
+    expect(result).toHaveLength(1);
+
+    const generatedCode = result.find(
+      (file) => file.filename === 'out.d.ts',
+    )!.content;
+
+    expect(generatedCode).toMatch(
+      "import type * as AdminTypes from './admin.types.d.ts';",
+    );
+  });
+
+  it('imports regular files when using .ts targets', async () => {
+    const result = await executeCodegen(
+      getCodegenOptions('operations.ts', 'out.ts'),
+    );
+
+    expect(result).toHaveLength(1);
+
+    const generatedCode = result.find(
+      (file) => file.filename === 'out.ts',
+    )!.content;
+
+    expect(generatedCode).toMatch(
+      "import * as AdminTypes from './admin.types.ts';",
+    );
+  });
 });

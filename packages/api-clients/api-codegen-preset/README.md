@@ -44,6 +44,10 @@ This gives you complete control over your configuration if you want to set up a 
 | apiType | `ApiType` | _N/A_                | The API to pull schemas from.                                                                                                        |
 | module  | `string?` | Depends on `ApiType` | Change the module whose types will be overridden. Use this to override the types for any package, as long as it uses the same names. |
 
+> [!TIP]
+> You can also set your codegen configuration to output `.ts` files, instead of `.d.ts`.
+> That may slightly increase build sizes, but it enables you to import enums from the schema in your app code.
+
 #### Example `.graphqlrc.ts` file
 
 ```ts
@@ -89,13 +93,14 @@ export default {
 This function creates the appropriate `generates` steps for a project.
 Use this function if you want to configure a custom project, or add your own `generates` steps.
 
-| Option     | Type        | Default              | Description                                                                                                                          |
-| ---------- | ----------- | -------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
-| apiType    | `ApiType`   | _N/A_                | The API to pull schemas from.                                                                                                        |
-| apiVersion | `string?`   | Latest               | Pull schemas for a specific version.                                                                                                 |
-| outputDir  | `string?`   | `.`                  | Where to output the types files.                                                                                                     |
-| documents  | `string[]?` | `./**/*.{ts,tsx}`    | Glob pattern for files to parse.                                                                                                     |
-| module     | `string?`   | Depends on `ApiType` | Change the module whose types will be overridden. Use this to override the types for any package, as long as it uses the same names. |
+| Option       | Type        | Default              | Description                                                                                                                                                        |
+| ------------ | ----------- | -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| apiType      | `ApiType`   | _N/A_                | The API to pull schemas from.                                                                                                                                      |
+| apiVersion   | `string?`   | Latest               | Pull schemas for a specific version.                                                                                                                               |
+| outputDir    | `string?`   | `.`                  | Where to output the types files.                                                                                                                                   |
+| documents    | `string[]?` | `./**/*.{ts,tsx}`    | Glob pattern for files to parse.                                                                                                                                   |
+| module       | `string?`   | Depends on `ApiType` | Change the module whose types will be overridden. Use this to override the types for any package, as long as it uses the same names.                               |
+| declarations | `boolean?`  | `true`               | When true, create declaration (`.d.ts`) files with the types. When false, creates `.ts` files that can be imported in app code. May slightly increase build sizes. |
 
 #### Example `.graphqlrc.ts` file
 
@@ -133,13 +138,14 @@ export default {
 
 This function creates a fully-functional project configuration.
 
-| Option     | Type        | Default              | Description                                                                                                                          |
-| ---------- | ----------- | -------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
-| apiType    | `ApiType`   | _N/A_                | The API to pull schemas from.                                                                                                        |
-| apiVersion | `string?`   | Latest               | Pull schemas for a specific version.                                                                                                 |
-| outputDir  | `string?`   | `.`                  | Where to output the types files.                                                                                                     |
-| documents  | `string[]?` | `./**/*.{ts,tsx}`    | Glob pattern for files to parse.                                                                                                     |
-| module     | `string?`   | Depends on `ApiType` | Change the module whose types will be overridden. Use this to override the types for any package, as long as it uses the same names. |
+| Option       | Type        | Default              | Description                                                                                                                                                        |
+| ------------ | ----------- | -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| apiType      | `ApiType`   | _N/A_                | The API to pull schemas from.                                                                                                                                      |
+| apiVersion   | `string?`   | Latest               | Pull schemas for a specific version.                                                                                                                               |
+| outputDir    | `string?`   | `.`                  | Where to output the types files.                                                                                                                                   |
+| documents    | `string[]?` | `./**/*.{ts,tsx}`    | Glob pattern for files to parse.                                                                                                                                   |
+| module       | `string?`   | Depends on `ApiType` | Change the module whose types will be overridden. Use this to override the types for any package, as long as it uses the same names.                               |
+| declarations | `boolean?`  | `true`               | When true, create declaration (`.d.ts`) files with the types. When false, creates `.ts` files that can be imported in app code. May slightly increase build sizes. |
 
 #### Example `.graphqlrc.ts` file
 

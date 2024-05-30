@@ -10,7 +10,6 @@ interface ApiConfig {
   presetConfigs: {
     importTypes: {
       namespace: string;
-      from: string;
     };
   };
 }
@@ -23,14 +22,13 @@ export const apiConfigs: ApiConfigs = {
   Admin: {
     schema: 'https://shopify.dev/admin-graphql-direct-proxy%%API_VERSION%%',
     schemaFile: 'admin%%API_VERSION%%.schema.json',
-    typesFile: 'admin.types.d.ts',
-    queryTypesFile: 'admin.generated.d.ts',
+    typesFile: 'admin.types',
+    queryTypesFile: 'admin.generated',
     interfaceExtension: `declare module '%%MODULE%%' {\n  type InputMaybe<T> = AdminTypes.InputMaybe<T>;\n  interface AdminQueries extends %%QUERY%% {}\n  interface AdminMutations extends %%MUTATION%% {}\n}`,
     module: '@shopify/admin-api-client',
     presetConfigs: {
       importTypes: {
         namespace: 'AdminTypes',
-        from: './admin.types.d.ts',
       },
     },
   },
@@ -38,14 +36,13 @@ export const apiConfigs: ApiConfigs = {
     schema:
       'https://shopify.dev/storefront-graphql-direct-proxy%%API_VERSION%%',
     schemaFile: 'storefront%%API_VERSION%%.schema.json',
-    typesFile: 'storefront.types.d.ts',
-    queryTypesFile: 'storefront.generated.d.ts',
+    typesFile: 'storefront.types',
+    queryTypesFile: 'storefront.generated',
     interfaceExtension: `declare module '%%MODULE%%' {\n  type InputMaybe<T> = StorefrontTypes.InputMaybe<T>;\n  interface StorefrontQueries extends %%QUERY%% {}\n  interface StorefrontMutations extends %%MUTATION%% {}\n}`,
     module: '@shopify/storefront-api-client',
     presetConfigs: {
       importTypes: {
         namespace: 'StorefrontTypes',
-        from: './storefront.types.d.ts',
       },
     },
   },

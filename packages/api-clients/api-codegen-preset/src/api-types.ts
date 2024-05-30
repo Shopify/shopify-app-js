@@ -1,20 +1,20 @@
 import fs from 'fs';
 
-import {apiConfigs} from './helpers/api-configs';
 import {preset} from './preset';
-import {getSchemaData} from './helpers/get-schema-data';
 import type {ShopifyApiTypesOptions} from './types';
+import {getSchemaData} from './helpers/get-schema-data';
+import {getOutputFiles} from './helpers/get-output-files';
 
 export const shopifyApiTypes = ({
   apiType,
   apiVersion,
+  module,
   outputDir = '.',
   documents = ['**/*.{ts,tsx}', '!**/node_modules'],
-  module,
+  declarations = true,
 }: ShopifyApiTypesOptions) => {
-  const config = apiConfigs[apiType];
-
   const {schema, schemaFile} = getSchemaData(outputDir, apiType, apiVersion);
+  const {typesFile, queryTypesFile} = getOutputFiles(apiType, declarations);
 
   const schemaFileExists = fs.existsSync(`${schemaFile}`);
 
@@ -28,11 +28,11 @@ export const shopifyApiTypes = ({
             config: {minify: true},
           },
         }),
-    [`${outputDir}/${config.typesFile}`]: {
+    [`${outputDir}/${typesFile}`]: {
       schema: schemaFileExists ? schemaFile : schema,
       plugins: ['typescript'],
     },
-    [`${outputDir}/${config.queryTypesFile}`]: {
+    [`${outputDir}/${queryTypesFile}`]: {
       schema: schemaFileExists ? schemaFile : schema,
       preset,
       documents,

@@ -9,9 +9,10 @@ import {getSchemaData} from './helpers/get-schema-data';
 export const shopifyApiProject = ({
   apiType,
   apiVersion,
+  module,
   outputDir = '.',
   documents = ['**/*.{ts,tsx}', '!node_modules'],
-  module,
+  declarations = true,
 }: ShopifyApiProjectOptions) => {
   const {schema, schemaFile} = getSchemaData(outputDir, apiType, apiVersion);
 
@@ -29,6 +30,7 @@ export const shopifyApiProject = ({
           outputDir,
           documents,
           module,
+          declarations,
         }),
       },
     },
