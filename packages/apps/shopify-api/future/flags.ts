@@ -56,7 +56,7 @@ export function logDisabledFutureFlags(
   }
   if (config.future?.v10_lineItemBilling) {
     logger.deprecated(
-      '11.0.0',
+      '12.0.0',
       'v10_lineItemBilling will become enabled in v11. Use flag lineItemBilling instead',
     );
   }
