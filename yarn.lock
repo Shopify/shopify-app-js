@@ -9784,10 +9784,10 @@ miniflare@3.20240512.0:
     youch "^3.2.2"
     zod "^3.20.6"
 
-miniflare@^3.20240524.0:
-  version "3.20240524.0"
-  resolved "https://registry.yarnpkg.com/miniflare/-/miniflare-3.20240524.0.tgz#4a6f9e6962096bca94281f92552d058c460b20b7"
-  integrity sha512-RQAfpz7spI6gWlczeUYvJBgGyt0gNR2pYoCydgukCYZ+0bGfJl0yAiNFW62uH7uMZli/4juWPpQOBI5m7URoyA==
+miniflare@^3.20240524.1:
+  version "3.20240524.1"
+  resolved "https://registry.yarnpkg.com/miniflare/-/miniflare-3.20240524.1.tgz#38477cce5123d05ae87ac68e9addf0d0d30534d2"
+  integrity sha512-5d3pRxvd5pT7lX1SsBH9+AjXuyHJnChSNOnYhubfi7pxMek4ZfULwhnUmNUp1R7b2xKuzqdFDZa0fsZuUoFxlw==
   dependencies:
     "@cspotcode/source-map-support" "0.8.1"
     acorn "^8.8.0"
