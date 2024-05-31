@@ -19,7 +19,7 @@
     "@babel/plugin-transform-runtime": "^7.24.6",
     "@babel/preset-env": "^7.24.6",
     "@changesets/cli": "^2.27.5",
-    "@cloudflare/workers-types": "^4.20240512.0",
+    "@cloudflare/workers-types": "^4.20240529.0",
     "@jest/types": "^29.6.3",
     "@rollup/plugin-babel": "^6.0.3",
     "@rollup/plugin-commonjs": "^25.0.8",
