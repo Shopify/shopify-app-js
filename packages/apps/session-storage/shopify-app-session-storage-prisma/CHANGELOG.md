@@ -53,7 +53,7 @@
 
   </details>
 
-- 6970109: Drop support for Node 16.
+- 6970109: Drop support for Node 16. This package is compatible with Node version >=18.2.0.
 
 ### Minor Changes
 
