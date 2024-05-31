@@ -22,9 +22,45 @@ jobs:
         with:
           node-version: ${{ matrix.version }}
           cache: 'yarn'
+
       - name: Install
         run: yarn install --frozen-lockfile
+
+      - name: Build
+        run: yarn build
+
       - name: Run package tests
         run: yarn test:ci
+
       - name: Run linting
         run: yarn lint
+
+      - name: Run Drizzle adapter tests
+        run: yarn test:ci_sessions --filter=./packages/apps/session-storage/shopify-app-session-storage-drizzle
+
+      - name: Run DynamoDB adapter tests
+        run: yarn test:ci_sessions --filter=./packages/apps/session-storage/shopify-app-session-storage-dynamodb
+
+      - name: Run KV adapter tests
+        run: yarn test:ci_sessions --filter=./packages/apps/session-storage/shopify-app-session-storage-kv
+
+      - name: Run Memory adapter tests
+        run: yarn test:ci_sessions --filter=./packages/apps/session-storage/shopify-app-session-storage-memory
+
+      - name: Run MongoDB adapter tests
+        run: yarn test:ci_sessions --filter=./packages/apps/session-storage/shopify-app-session-storage-mongodb
+
+      - name: Run MySQL adapter tests
+        run: yarn test:ci_sessions --filter=./packages/apps/session-storage/shopify-app-session-storage-mysql
+
+      - name: Run PostgreSQL adapter tests
+        run: yarn test:ci_sessions --filter=./packages/apps/session-storage/shopify-app-session-storage-postgresql
+
+      - name: Run Prisma adapter tests
+        run: yarn test:ci_sessions --filter=./packages/apps/session-storage/shopify-app-session-storage-prisma
+
+      - name: Run Redis adapter tests
+        run: yarn test:ci_sessions --filter=./packages/apps/session-storage/shopify-app-session-storage-redis
+
+      - name: Run SQLite adapter tests
+        run: yarn test:ci_sessions --filter=./packages/apps/session-storage/shopify-app-session-storage-sqlite
