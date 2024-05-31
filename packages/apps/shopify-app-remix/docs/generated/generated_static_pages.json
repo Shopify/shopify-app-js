@@ -159,12 +159,6 @@
         "sectionContent": "These are the future flags supported in the current version.",
         "listItems": [
           {
-            "name": "lineItemBilling",
-            "value": "",
-            "description": "Allows you to pass billing plans with up to two line items when creating a new app subscription.\n\n This allows you to create app subscriptions with both recurring and usage based components.",
-            "isOptional": true
-          },
-          {
             "name": "unstable_newEmbeddedAuthStrategy",
             "value": "",
             "description": "Embedded apps will fetch access tokens via token exchange. This assumes the app has declared scopes for Shopify managed installations.\n\nLearn more about this [new embedded app auth strategy](https://shopify.dev/docs/api/shopify-app-remix#embedded-auth-strategy).",
