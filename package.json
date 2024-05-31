@@ -5,10 +5,10 @@
   "private": true,
   "scripts": {
     "build": "turbo build",
-    "lint": "turbo lint",
     "test": "CI=true turbo run test",
-    "test:ci": "turbo run test:ci --filter='!./packages/apps/session-storage/*'",
-    "test:ci_sessions": "turbo run test:ci",
+    "test:ci": "turbo run test --filter='!./packages/apps/session-storage/*'",
+    "test:ci_sessions": "turbo run test",
+    "lint": "turbo lint",
     "release": "turbo build && changeset publish",
     "dev": "turbo dev --no-cache --continue",
     "clean": "turbo clean",
