@@ -12,7 +12,7 @@
 
   See more details in the [migration guide](./docs/MIGRATION_V3.md).
 
-- 6970109: Drop support for Node 16.
+- 6970109: Drop support for Node 16. This package is compatible with Node version >=18.2.0.
 - b1e6ff0: Remove v3_webhookAdminContext future flag and enable functionality.
 
   See more details in the [migration guide](./docs/MIGRATION_V3.md).
