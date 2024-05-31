@@ -7,14 +7,14 @@
       "dependsOn": ["^build"],
       "cache": false
     },
-    "test:ci": {
-      "dependsOn": ["^build"],
-      "cache": false
-    },
     "test": {
       "cache": false
     },
     "lint": {
+      "cache": false
+    },
+    "test:ci": {
+      "dependsOn": ["^build"],
       "cache": false
     },
     "dev": {
