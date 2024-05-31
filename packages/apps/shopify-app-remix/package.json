@@ -72,7 +72,7 @@
   "devDependencies": {
     "@remix-run/node": "^2.9.2",
     "@remix-run/react": "^2.9.2",
-    "@shopify/generate-docs": "^0.15.14",
+    "@shopify/generate-docs": "^0.15.16",
     "@shopify/polaris": "^12.18.0",
     "@shopify/react-testing": "^5.2.0",
     "@shopify/shopify-app-session-storage-memory": "^4.0.0",
