@@ -11,7 +11,7 @@ env:
 
 jobs:
   CI:
-    name: CI_Node_${{ matrix.version }}
+    name: CI_Redis_Node_${{ matrix.version }}
     runs-on: ubuntu-latest
     strategy:
       matrix:
