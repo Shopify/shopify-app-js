@@ -3273,20 +3273,20 @@
   resolved "https://registry.yarnpkg.com/@kamilkisiela/fast-url-parser/-/fast-url-parser-1.1.4.tgz#9d68877a489107411b953c54ea65d0658b515809"
   integrity sha512-gbkePEBupNydxCelHCESvFSFM8XPh1Zs/OAVRW/rKpEqPAl5PbOM90Si8mv9bvnR53uPD2s/FiRxdvSejpRJew==
 
-"@libsql/client@^0.6.1":
-  version "0.6.1"
-  resolved "https://registry.yarnpkg.com/@libsql/client/-/client-0.6.1.tgz#81fa48f558e617dd17bff88c32347054d8581793"
-  integrity sha512-j32pZMzsuKJ8bWi0rtlszrexXV7mXSxoSA/2C6DfIL7kelI7SHsFgscrQD3wHBJVguitwMklWBe2EuMMRW0img==
+"@libsql/client@^0.6.2":
+  version "0.6.2"
+  resolved "https://registry.yarnpkg.com/@libsql/client/-/client-0.6.2.tgz#3a7b34549310b4e6c857d5128675ff538c341978"
+  integrity sha512-xRNfRLv/dOCbV4qd+M0baQwGmvuZpMd2wG2UAPs8XmcdaPvu5ErkcaeITkxlm3hDEJVabQM1cFhMBxsugWW9fQ==
   dependencies:
-    "@libsql/core" "^0.6.1"
+    "@libsql/core" "^0.6.2"
     "@libsql/hrana-client" "^0.6.0"
     js-base64 "^3.7.5"
     libsql "^0.3.10"
 
-"@libsql/core@^0.6.1":
-  version "0.6.1"
-  resolved "https://registry.yarnpkg.com/@libsql/core/-/core-0.6.1.tgz#565506ae3cde1b1b369d97f96feae557483e1e13"
-  integrity sha512-xVV7w4iQcWgkhvmcJ6RZQdImlNvJGIW4Tlx1KJVWh6+l1sdAAz8hNXEXO04rYGAg6oeIXZF1j1E/AW1mwomO1g==
+"@libsql/core@^0.6.2":
+  version "0.6.2"
+  resolved "https://registry.yarnpkg.com/@libsql/core/-/core-0.6.2.tgz#e489aa11a4ad39bde131c6b04e7a5071fde9aa8a"
+  integrity sha512-c2P4M+4u/4b2L02A0KjggO3UW51rGkhxr/7fzJO0fEAqsqrWGxuNj2YtRkina/oxfYvAof6xjp8RucNoIV/Odw==
   dependencies:
     js-base64 "^3.7.5"
 
