@@ -9,7 +9,7 @@ export interface RegisterWebhooksOptions {
   session: Session;
 }
 
-interface Context<Topics = string | number | symbol> {
+interface Context {
   /**
    * The API version used for the webhook.
    *
@@ -72,7 +72,7 @@ interface Context<Topics = string | number | symbol> {
    * };
    * ```
    */
-  topic: Topics;
+  topic: string;
 
   /**
    * A unique ID for the webhook. Useful to keep track of which events your app has already processed.
@@ -133,16 +133,14 @@ interface Context<Topics = string | number | symbol> {
   subTopic?: string;
 }
 
-export interface WebhookContextWithoutSession<Topics = string | number | symbol>
-  extends Context<Topics> {
+export interface WebhookContextWithoutSession extends Context {
   session: undefined;
   admin: undefined;
 }
 
 export interface WebhookContextWithSession<
   Resources extends ShopifyRestResources,
-  Topics = string | number | symbol,
-> extends Context<Topics> {
+> extends Context {
   /**
    * A session with an offline token for the shop.
    *
@@ -186,14 +184,10 @@ export interface WebhookContextWithSession<
   admin: AdminApiContext<Resources>;
 }
 
-export type WebhookContext<
-  Resources extends ShopifyRestResources,
-  Topics = string | number | symbol,
-> =
-  | WebhookContextWithoutSession<Topics>
-  | WebhookContextWithSession<Resources, Topics>;
+export type WebhookContext<Resources extends ShopifyRestResources> =
+  | WebhookContextWithoutSession
+  | WebhookContextWithSession<Resources>;
 
-export type AuthenticateWebhook<
-  Resources extends ShopifyRestResources,
-  Topics = string | number | symbol,
-> = (request: Request) => Promise<WebhookContext<Resources, Topics>>;
+export type AuthenticateWebhook<Resources extends ShopifyRestResources> = (
+  request: Request,
+) => Promise<WebhookContext<Resources>>;

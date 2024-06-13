@@ -41,11 +41,6 @@ export enum AppDistribution {
   ShopifyAdmin = 'shopify_admin',
 }
 
-export type MandatoryTopics =
-  | 'CUSTOMERS_DATA_REQUEST'
-  | 'CUSTOMERS_REDACT'
-  | 'SHOP_REDACT';
-
 type RegisterWebhooks = (
   options: RegisterWebhooksOptions,
 ) => Promise<RegisterReturn | void>;
@@ -257,10 +252,7 @@ interface Authenticate<Config extends AppConfigArg> {
    * };
    * ```
    */
-  webhook: AuthenticateWebhook<
-    RestResourcesType<Config>,
-    keyof Config['webhooks'] | MandatoryTopics
-  >;
+  webhook: AuthenticateWebhook<RestResourcesType<Config>>;
 }
 
 export interface ShopifyAppBase<Config extends AppConfigArg> {

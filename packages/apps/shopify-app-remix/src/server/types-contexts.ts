@@ -1,7 +1,7 @@
 // This file contains types we want to export to make it easier for apps to pass the contexts we return as types
 
 import type {AppConfigArg} from './config-types';
-import type {MandatoryTopics, ShopifyApp} from './types';
+import type {ShopifyApp} from './types';
 import type {AdminContext as IAdminContext} from './authenticate/admin/types';
 import type {UnauthenticatedAdminContext as IUnauthenticatedAdminContext} from './unauthenticated/admin/types';
 import type {UnauthenticatedStorefrontContext as IUnauthenticatedStorefrontContext} from './unauthenticated/storefront/types';
@@ -58,8 +58,7 @@ export type CheckoutContext<_App = DefaultApp> = ICheckoutContext;
 export type CustomerAccountContext<_App = DefaultApp> = ICustomerAccountContext;
 
 export type WebhookContext<App = DefaultApp> = IWebhookContext<
-  ConfigComponents<ShopifyConfig<App>>['resources'],
-  keyof ShopifyConfig<App>['webhooks'] | MandatoryTopics
+  ConfigComponents<ShopifyConfig<App>>['resources']
 >;
 
 // Extra types for the Admin API context

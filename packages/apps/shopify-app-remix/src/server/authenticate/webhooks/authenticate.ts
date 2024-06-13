@@ -3,7 +3,7 @@ import {
   WebhookValidationErrorReason,
 } from '@shopify/shopify-api';
 
-import type {BasicParams, MandatoryTopics} from '../../types';
+import type {BasicParams} from '../../types';
 import {adminClientFactory} from '../../clients';
 import {handleClientErrorFactory} from '../admin/helpers';
 
@@ -15,13 +15,12 @@ import type {
 
 export function authenticateWebhookFactory<
   Resources extends ShopifyRestResources,
-  Topics extends string | number | symbol | MandatoryTopics,
->(params: BasicParams): AuthenticateWebhook<Resources, Topics> {
+>(params: BasicParams): AuthenticateWebhook<Resources> {
   const {api, config, logger} = params;
 
   return async function authenticate(
     request: Request,
-  ): Promise<WebhookContext<Resources, Topics>> {
+  ): Promise<WebhookContext<Resources>> {
     if (request.method !== 'POST') {
       logger.debug(
         'Received a non-POST request for a webhook. Only POST requests are allowed.',
@@ -55,10 +54,10 @@ export function authenticateWebhookFactory<
 
     const sessionId = api.session.getOfflineId(check.domain);
     const session = await config.sessionStorage.loadSession(sessionId);
-    const webhookContext: WebhookContextWithoutSession<Topics> = {
+    const webhookContext: WebhookContextWithoutSession = {
       apiVersion: check.apiVersion,
       shop: check.domain,
-      topic: check.topic as Topics,
+      topic: check.topic as string,
       webhookId: check.webhookId,
       payload: JSON.parse(rawBody),
       subTopic: check.subTopic || undefined,
