@@ -175,14 +175,6 @@ export class Cookies {
     this.updateHeader();
   }
 
-  private cookieExists(cookieName: string) {
-    return !!this.get(cookieName);
-  }
-
-  private deleteInvalidCookies(...cookieNames: string[]): void {
-    cookieNames.forEach((cookieName) => this.deleteCookie(cookieName));
-  }
-
   async isSignedCookieValid(cookieName: string): Promise<boolean> {
     const signedCookieName = `${cookieName}.sig`;
     if (
@@ -210,5 +202,13 @@ export class Cookies {
     }
 
     return true;
+  }
+
+  private cookieExists(cookieName: string) {
+    return Boolean(this.get(cookieName));
+  }
+
+  private deleteInvalidCookies(...cookieNames: string[]): void {
+    cookieNames.forEach((cookieName) => this.deleteCookie(cookieName));
   }
 }
