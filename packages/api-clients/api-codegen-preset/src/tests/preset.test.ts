@@ -34,7 +34,7 @@ describe('Preset', () => {
 
     // Imports Admin API
     expect(generatedCode).toMatch(
-      `import type * as AdminTypes from './admin.types.d.ts';`,
+      `import type * as AdminTypes from './admin.types';`,
     );
 
     // Uses Pick<...>
@@ -59,7 +59,7 @@ describe('Preset', () => {
       .toBe(`/* eslint-disable eslint-comments/disable-enable-pair */
 /* eslint-disable eslint-comments/no-unlimited-disable */
 /* eslint-disable */
-import type * as AdminTypes from './admin.types.d.ts';
+import type * as AdminTypes from './admin.types';
 
 export type TestQueryQueryVariables = AdminTypes.Exact<{ [key: string]: never; }>;
 
@@ -100,7 +100,7 @@ declare module '@shopify/admin-api-client' {
     )!.content;
 
     expect(generatedCode).toMatch(
-      "import type * as AdminTypes from './admin.types.d.ts';",
+      "import type * as AdminTypes from './admin.types';",
     );
   });
 
@@ -116,7 +116,7 @@ declare module '@shopify/admin-api-client' {
     )!.content;
 
     expect(generatedCode).toMatch(
-      "import * as AdminTypes from './admin.types.ts';",
+      "import * as AdminTypes from './admin.types';",
     );
   });
 });

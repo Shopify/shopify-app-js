@@ -3,16 +3,13 @@ import {preset as hydrogenPreset} from '@shopify/graphql-codegen';
 
 import {type ShopifyApiPresetConfig} from './types';
 import {apiConfigs} from './helpers/api-configs';
-import {getOutputFiles} from './helpers/get-output-files';
 
 export const preset: Types.OutputPreset<ShopifyApiPresetConfig> = {
   buildGeneratesSection: (options) => {
     const apiType = options.presetConfig.apiType;
 
     const {interfaceExtension, module, presetConfigs} = apiConfigs[apiType];
-    const declarations = options.baseOutputDir.endsWith('.d.ts');
-
-    const {typesFile} = getOutputFiles(apiType, declarations);
+    const typesFile = apiConfigs[apiType].typesFile;
 
     return hydrogenPreset.buildGeneratesSection({
       ...options,
