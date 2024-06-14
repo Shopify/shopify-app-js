@@ -80,7 +80,7 @@
     "isbot": "^5.1.6",
     "jose": "^5.3.0",
     "node-fetch": "^2.6.1",
-    "tslib": "^2.0.3",
+    "tslib": "^2.6.3",
     "uuid": "^9.0.0"
   },
   "devDependencies": {
