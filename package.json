@@ -49,7 +49,7 @@
     "supertest": "^7.0.0",
     "ts-jest": "^29.1.3",
     "ts-node": "^10.9.2",
-    "tslib": "^2.6.2",
+    "tslib": "^2.6.3",
     "turbo": "^1.13.3",
     "typescript": "5.4.5"
   },
