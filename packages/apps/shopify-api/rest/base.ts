@@ -373,16 +373,15 @@ export class Base {
         const HasManyResource: typeof Base = hasMany[attribute];
         this[attribute] = [];
         val.forEach((entry: Body) => {
-          this[attribute].push(
-            new HasManyResource({session: this.session, fromData: entry}),
-          );
+          const obj = new HasManyResource({session: this.session});
+          obj.setData(entry);
+          this[attribute].push(obj);
         });
       } else if (attribute in hasOne) {
         const HasOneResource: typeof Base = hasOne[attribute];
-        this[attribute] = new HasOneResource({
-          session: this.session,
-          fromData: val,
-        });
+        const obj = new HasOneResource({session: this.session});
+        obj.setData(val);
+        this[attribute] = obj;
       } else {
         this[attribute] = val;
       }
