@@ -72,7 +72,7 @@
     "@graphql-codegen/typescript": "^4.0.7",
     "@parcel/watcher": "^2.4.1",
     "@shopify/graphql-codegen": "^0.1.0",
-    "graphql": "^16.8.1"
+    "graphql": "^16.8.2"
   },
   "devDependencies": {
     "regenerator-runtime": "^0.14.1"
