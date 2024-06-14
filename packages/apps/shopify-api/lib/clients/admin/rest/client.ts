@@ -97,6 +97,7 @@ export class RestClient {
       userAgentPrefix: getUserAgent(config),
       defaultRetryTime: this.restClass().RETRY_WAIT_TIME,
       formatPaths: this.restClass().formatPaths,
+      isTesting: config.isTesting,
     });
   }
 

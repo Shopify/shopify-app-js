@@ -113,6 +113,10 @@ export interface ConfigParams<
    * @private
    */
   _logDisabledFutureFlags?: boolean;
+  /**
+   * Whether the app is initialised for local testing.
+   */
+  isTesting?: boolean;
 }
 
 export type ConfigInterface<Params extends ConfigParams = ConfigParams> = Omit<
@@ -131,4 +135,5 @@ export type ConfigInterface<Params extends ConfigParams = ConfigParams> = Omit<
     timestamps: boolean;
   };
   future: FutureFlagOptions;
+  isTesting?: boolean;
 };
