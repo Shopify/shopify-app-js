@@ -16,8 +16,8 @@ export function validateRequiredAccessToken(accessToken: string) {
   }
 }
 
-export function validateServerSideUsage() {
-  if (typeof window !== 'undefined') {
+export function validateServerSideUsage(isTesting = false) {
+  if (typeof window !== 'undefined' && !isTesting) {
     throw new Error(`${CLIENT}: this client should not be used in the browser`);
   }
 }
