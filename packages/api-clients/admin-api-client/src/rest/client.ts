@@ -47,6 +47,7 @@ export function createAdminRestApiClient({
   scheme = 'https',
   defaultRetryTime = DEFAULT_RETRY_WAIT_TIME,
   formatPaths = true,
+  isTesting,
 }: AdminRestApiClientOptions): AdminRestApiClient {
   const currentSupportedApiVersions = getCurrentSupportedApiVersions();
 
@@ -61,7 +62,7 @@ export function createAdminRestApiClient({
     logger,
   };
 
-  validateServerSideUsage();
+  validateServerSideUsage(isTesting);
   validateApiVersion({
     client: CLIENT,
     currentSupportedApiVersions,
