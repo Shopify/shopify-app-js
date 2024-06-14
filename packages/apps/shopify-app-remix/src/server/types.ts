@@ -257,10 +257,7 @@ interface Authenticate<Config extends AppConfigArg> {
    * };
    * ```
    */
-  webhook: AuthenticateWebhook<
-    RestResourcesType<Config>,
-    keyof Config['webhooks'] | MandatoryTopics
-  >;
+  webhook: AuthenticateWebhook<RestResourcesType<Config>, string>;
 }
 
 export interface ShopifyAppBase<Config extends AppConfigArg> {
