@@ -1,6 +1,6 @@
 import {APP_BRIDGE_URL} from '../authenticate/const';
 
-import {TEST_SHOP} from './const';
+import {TEST_SHOP} from '../test-helpers/const';
 
 export function expectDocumentRequestHeaders(
   response: Response,

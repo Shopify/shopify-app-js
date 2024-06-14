@@ -4,7 +4,7 @@ import {LATEST_API_VERSION} from '..';
 import type {AdminApiContext} from '../clients';
 
 import {mockExternalRequest} from './request-mock';
-import {TEST_SHOP} from './const';
+import {TEST_SHOP} from '../test-helpers/const';
 
 const REQUEST_URL = `https://${TEST_SHOP}/admin/api/${LATEST_API_VERSION}/customers.json`;
 

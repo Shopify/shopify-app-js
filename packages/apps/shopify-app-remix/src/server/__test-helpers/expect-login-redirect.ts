@@ -1,4 +1,4 @@
-import {APP_URL} from './const';
+import {APP_URL} from '../test-helpers/const';
 
 export function expectLoginRedirect(response: Response) {
   expect(response.status).toBe(302);

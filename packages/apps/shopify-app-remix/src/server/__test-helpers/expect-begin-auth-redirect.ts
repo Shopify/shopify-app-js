@@ -1,4 +1,4 @@
-import {TEST_SHOP} from './const';
+import {TEST_SHOP} from '../test-helpers/const';
 import {testConfig} from './test-config';
 
 export function expectBeginAuthRedirect(

@@ -2,7 +2,7 @@ import {HashFormat, createSHA256HMAC} from '@shopify/shopify-api/runtime';
 
 import {ShopifyApp} from '../types';
 
-import {API_SECRET_KEY, APP_URL, BASE64_HOST, TEST_SHOP} from './const';
+import {API_SECRET_KEY, APP_URL, BASE64_HOST, TEST_SHOP} from '../test-helpers/const';
 import {setUpValidSession} from './setup-valid-session';
 import {getJwt} from './get-jwt';
 import {getHmac} from './get-hmac';

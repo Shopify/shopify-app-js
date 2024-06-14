@@ -4,7 +4,7 @@ import {LATEST_API_VERSION} from '..';
 import type {StorefrontContext} from '../clients';
 
 import {mockExternalRequest} from './request-mock';
-import {TEST_SHOP} from './const';
+import {TEST_SHOP} from '../test-helpers/const';
 
 export function expectStorefrontApiClient(
   factory: () => Promise<{

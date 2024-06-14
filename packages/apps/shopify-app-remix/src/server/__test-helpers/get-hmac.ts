@@ -1,6 +1,6 @@
 import crypto from 'crypto';
 
-import {API_SECRET_KEY} from './const';
+import {API_SECRET_KEY} from '../test-helpers/const';
 
 export function getHmac(body: string): string {
   return crypto

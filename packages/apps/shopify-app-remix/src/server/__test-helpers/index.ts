@@ -1,4 +1,4 @@
-export * from './const';
+export * from '../test-helpers/const';
 export * from './expect-admin-api-client';
 export * from './expect-begin-auth-redirect';
 export * from './expect-document-request-headers';

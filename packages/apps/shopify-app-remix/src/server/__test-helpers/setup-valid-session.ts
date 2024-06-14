@@ -1,7 +1,7 @@
 import {SessionStorage} from '@shopify/shopify-app-session-storage';
 import {Session} from '@shopify/shopify-api';
 
-import {TEST_SHOP, USER_ID} from './const';
+import {TEST_SHOP, USER_ID} from '../test-helpers/const';
 
 export async function setUpValidSession(
   sessionStorage: SessionStorage,

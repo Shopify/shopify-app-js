@@ -1,4 +1,4 @@
-import {APP_URL, BASE64_HOST, TEST_SHOP} from './const';
+import {APP_URL, BASE64_HOST, TEST_SHOP} from '../test-helpers/const';
 
 interface ExpectExitIframeRedirectOptions {
   shop?: string;

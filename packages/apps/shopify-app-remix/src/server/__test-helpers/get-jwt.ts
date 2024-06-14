@@ -1,7 +1,7 @@
 import {JwtPayload} from '@shopify/shopify-api';
 import jwt from 'jsonwebtoken';
 
-import {API_KEY, API_SECRET_KEY, TEST_SHOP, USER_ID} from './const';
+import {API_KEY, API_SECRET_KEY, TEST_SHOP, USER_ID} from '../test-helpers/const';
 
 interface TestJwt {
   token: string;
