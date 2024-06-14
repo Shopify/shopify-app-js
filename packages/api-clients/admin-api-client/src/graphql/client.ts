@@ -29,6 +29,7 @@ export function createAdminApiClient({
   retries = 0,
   customFetchApi,
   logger,
+  isTesting,
 }: AdminApiClientOptions): AdminApiClient {
   const currentSupportedApiVersions = getCurrentSupportedApiVersions();
 
@@ -43,7 +44,7 @@ export function createAdminApiClient({
     logger,
   };
 
-  validateServerSideUsage();
+  validateServerSideUsage(isTesting);
   validateApiVersion({
     client: CLIENT,
     currentSupportedApiVersions,

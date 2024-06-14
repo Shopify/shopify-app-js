@@ -18,4 +18,5 @@ export type AdminApiClientOptions = Omit<
 > & {
   customFetchApi?: CustomFetchApi;
   logger?: ApiClientLogger<AdminApiClientLogContentTypes>;
+  isTesting?: boolean;
 };
