@@ -116,6 +116,49 @@ describe('admin.authenticate context', () => {
       });
     },
   );
+
+  it('can parse a nested response object', async () => {
+    const {admin, session} = await setUpEmbeddedFlow();
+
+    const body = {
+      product: {
+        id: 12345,
+        title: 'Product title',
+        variants: [
+          {
+            id: 54321,
+            product_id: 12345,
+            title: 'Variant title',
+            price: '34.02',
+          },
+        ],
+        options: [
+          {
+            id: 54321,
+            product_id: 12345,
+            name: 'Title',
+            position: 1,
+            values: ['Option title'],
+          },
+        ],
+        images: [],
+        image: null,
+      },
+    };
+
+    await mockRestRequest(200, 'products/12345.json', body);
+
+    const resource = await admin.rest.resources.Product.find({
+      session,
+      id: 12345,
+    });
+    const variants = resource!.variants! as InstanceType<
+      (typeof admin)['rest']['resources']['Variant']
+    >[];
+
+    expect(resource!.title).toBe('Product title');
+    expect(variants[0].title).toBe('Variant title');
+  });
 });
 
 async function setUpEmbeddedFlow() {
@@ -151,14 +194,18 @@ async function setUpNonEmbeddedFlow() {
   };
 }
 
-async function mockRestRequest(status: any) {
+async function mockRestRequest(
+  status: number,
+  path = 'customers.json',
+  response = {},
+) {
   const requestMock = new Request(
-    `https://${TEST_SHOP}/admin/api/${LATEST_API_VERSION}/customers.json`,
+    `https://${TEST_SHOP}/admin/api/${LATEST_API_VERSION}/${path}`,
   );
 
   await mockExternalRequest({
     request: requestMock,
-    response: new Response('{}', {status}),
+    response: new Response(JSON.stringify(response), {status}),
   });
 
   return requestMock;
