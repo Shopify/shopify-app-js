@@ -163,6 +163,10 @@ export interface AppConfigArg<
   /**
    * How your app is distributed. Default is `AppDistribution.AppStore`.
    *
+   * AppStore should be used for public apps that are distributed in the Shopify App Store.
+   * SingleMerchant should be used for custom apps managed in the Partner Dashboard.
+   * ShopifyAdmin should be used for apps that are managed in the merchant's Shopify Admin.
+   *
    * {@link https://shopify.dev/docs/apps/distribution}
    */
   distribution?: AppDistribution;
