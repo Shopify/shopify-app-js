@@ -1,5 +1,11 @@
 # @shopify/shopify-app-session-storage-mysql
 
+## 4.0.1
+
+### Patch Changes
+
+- 1bb1034: Updated `mysql2` to v3.10.0
+
 ## 4.0.0
 
 ### Major Changes
