@@ -3,7 +3,7 @@ import {
   WebhookValidationErrorReason,
 } from '@shopify/shopify-api';
 
-import type {BasicParams, MandatoryTopics} from '../../types';
+import type {BasicParams} from '../../types';
 import {adminClientFactory} from '../../clients';
 import {handleClientErrorFactory} from '../admin/helpers';
 
@@ -15,7 +15,7 @@ import type {
 
 export function authenticateWebhookFactory<
   Resources extends ShopifyRestResources,
-  Topics extends string | number | symbol | MandatoryTopics,
+  Topics extends string,
 >(params: BasicParams): AuthenticateWebhook<Resources, Topics> {
   const {api, config, logger} = params;
 

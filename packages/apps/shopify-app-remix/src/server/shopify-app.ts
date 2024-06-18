@@ -12,7 +12,6 @@ import {type AppConfig, type AppConfigArg} from './config-types';
 import {
   AppDistribution,
   type BasicParams,
-  type MandatoryTopics,
   type ShopifyApp,
   type ShopifyAppBase,
   type AdminApp,
@@ -93,10 +92,7 @@ export function shopifyApp<
       public: authenticatePublicFactory<Resources>(params),
       fulfillmentService:
         authenticateFulfillmentServiceFactory<Resources>(params),
-      webhook: authenticateWebhookFactory<
-        Resources,
-        keyof Config['webhooks'] | MandatoryTopics
-      >(params),
+      webhook: authenticateWebhookFactory<Resources, string>(params),
     },
     unauthenticated: {
       admin: unauthenticatedAdminContextFactory(params),

@@ -81,10 +81,10 @@
     "jose": "^5.4.0",
     "node-fetch": "^2.6.1",
     "tslib": "^2.6.3",
-    "uuid": "^9.0.0"
+    "uuid": "^10.0.0"
   },
   "devDependencies": {
-    "@cloudflare/workers-types": "^4.20240605.0",
+    "@cloudflare/workers-types": "^4.20240614.0",
     "@swc/core": "^1.5.29",
     "@types/express": "^4.17.13",
     "@types/node": "^20.14.2",
