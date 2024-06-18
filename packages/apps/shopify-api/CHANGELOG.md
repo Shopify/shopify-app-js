@@ -1,5 +1,12 @@
 # Changelog
 
+## 11.0.1
+
+### Patch Changes
+
+- 58fb360: Updated dependency on `uuid`
+- 8eafd2b: Fixed creation of nested REST resource objects in the Remix package.
+
 ## 11.0.0
 
 ### Major Changes
