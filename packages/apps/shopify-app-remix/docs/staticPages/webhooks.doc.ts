@@ -18,7 +18,7 @@ const data: LandingTemplateSchema = {
         '\n1. Review the required scopes for the webhook topics, and update your [app scopes](/docs/apps/tools/cli/configuration#access_scopes) as necessary.' +
         '\n1. Run `shopify app deploy` from the CLI to save your webhooks configuration.',
       codeblock: {
-        title: 'Configure webhooks subscriptions via app configuration',
+        title: 'Configure webhooks subscriptions with the app configuration',
         tabs: [
           {
             title: 'shopify.app.toml',
@@ -39,7 +39,7 @@ const data: LandingTemplateSchema = {
         '\n1. Review the required scopes for the webhook topics, and update your [app scopes](/docs/apps/tools/cli/configuration#access_scopes) as necessary.' +
         "\n\n> Note: You can't register mandatory topics using this package, you must [configure those in the Partner Dashboard](/docs/apps/webhooks/configuration/mandatory-webhooks) instead.",
       codeblock: {
-        title: 'Configure webhooks subscriptions via API',
+        title: 'Configure webhooks subscriptions with the API',
         tabs: [
           {
             title: '/app/shopify.server.ts',
