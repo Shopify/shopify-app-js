@@ -165,11 +165,6 @@ export function authStrategyFactory<
         shop,
       });
 
-      logger.debug('Request is valid, loaded session from session token', {
-        shop: session.shop,
-        isOnline: session.isOnline,
-      });
-
       return createContext(request, session, strategy, payload);
     } catch (errorOrResponse) {
       if (errorOrResponse instanceof Response) {
