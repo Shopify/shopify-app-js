@@ -8,7 +8,7 @@ describe('shopifyApiProject', () => {
     jest.restoreAllMocks();
   });
 
-  describe.each([ApiType.Admin, ApiType.Storefront])(
+  describe.each([ApiType.Admin, ApiType.Storefront, ApiType.Customer])(
     'when API type is %s',
     (apiType) => {
       const type = apiType.toLowerCase();

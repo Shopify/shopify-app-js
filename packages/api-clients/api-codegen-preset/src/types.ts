@@ -1,6 +1,7 @@
 export enum ApiType {
   Admin = 'Admin',
   Storefront = 'Storefront',
+  Customer = 'Customer',
 }
 
 export interface ShopifyApiPresetConfig {
