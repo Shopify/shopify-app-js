@@ -197,5 +197,6 @@ function deriveConfig<Storage extends SessionStorage>(
       exitIframePath: `${authPathPrefix}/exit-iframe`,
       loginPath: `${authPathPrefix}/login`,
     },
+    distribution: appConfig.distribution,
   };
 }

@@ -1,6 +1,6 @@
 import {JwtPayload, Session, ShopifyRestResources} from '@shopify/shopify-api';
 
-import type {BasicParams} from '../../types';
+import {AppDistribution, type BasicParams} from '../../types';
 import type {AppConfigArg} from '../../config-types';
 import {
   getSessionTokenHeader,
@@ -114,7 +114,15 @@ export function authStrategyFactory<
       respondToOptionsRequest(params, request);
       await respondToBouncePageRequest(request);
       await respondToExitIframeRequest(request);
-      await strategy.respondToOAuthRequests(request);
+
+      if (
+        config.distribution === AppDistribution.AppStore ||
+        config.distribution === AppDistribution.SingleMerchant
+      ) {
+        await strategy.respondToOAuthRequests(request);
+      } else {
+        logger.debug('Skipping OAuth request for merchant custom app');
+      }
 
       // If this is a valid request, but it doesn't have a session token header, this is a document request. We need to
       // ensure we're embedded if needed and we have the information needed to load the session.
@@ -129,21 +137,31 @@ export function authStrategyFactory<
       const {payload, shop, sessionId, sessionToken} =
         await getSessionTokenContext(params, request);
 
-      logger.debug('Loading session from storage', {sessionId});
-      const existingSession = sessionId
-        ? await config.sessionStorage.loadSession(sessionId)
-        : undefined;
+      let session: Session;
 
-      const session = await strategy.authenticate(request, {
-        session: existingSession,
-        sessionToken,
-        shop,
-      });
+      if (
+        config.distribution === AppDistribution.SingleMerchant ||
+        config.distribution === AppDistribution.AppStore
+      ) {
+        logger.debug('Loading session from storage', {sessionId});
+        const existingSession = sessionId
+          ? await config.sessionStorage.loadSession(sessionId)
+          : undefined;
 
-      logger.debug('Request is valid, loaded session from session token', {
-        shop: session.shop,
-        isOnline: session.isOnline,
-      });
+        session = await strategy.authenticate(request, {
+          session: existingSession,
+          sessionToken,
+          shop,
+        });
+
+        logger.debug('Request is valid, loaded session from session token', {
+          shop: session.shop,
+          isOnline: session.isOnline,
+        });
+      } else {
+        logger.debug('Loading session from custom app session', {shop});
+        session = api.session.customAppSession(shop);
+      }
 
       return createContext(request, session, strategy, payload);
     } catch (errorOrResponse) {
