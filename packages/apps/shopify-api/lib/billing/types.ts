@@ -223,7 +223,7 @@ export interface BillingCheckParams {
    */
   plans: string[] | string;
   /**
-   * Whether to consider test purchases.
+   * Whether to include charges that were created on test mode. Test shops and demo shops cannot be charged.
    */
   isTest?: boolean;
   /**

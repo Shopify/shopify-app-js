@@ -545,7 +545,7 @@
                 "syntaxKind": "PropertySignature",
                 "name": "isTest",
                 "value": "boolean",
-                "description": "",
+                "description": "Whether to use the test mode. This prevents the credit card from being charged.",
                 "isOptional": true
               },
               {
@@ -553,7 +553,7 @@
                 "syntaxKind": "PropertySignature",
                 "name": "prorate",
                 "value": "boolean",
-                "description": "Whether to prorate the cancellation.\n\n\n\n\n",
+                "description": "Whether to issue prorated credits for the unused portion of the app subscription. There will be a corresponding deduction (based on revenue share) to your Partner account. For example, if a $10.00 app subscription (with 0% revenue share) is cancelled and prorated half way through the billing cycle, then the merchant will be credited $5.00 and that amount will be deducted from your Partner account.",
                 "isOptional": true
               },
               {
@@ -564,7 +564,7 @@
                 "description": "The ID of the subscription to cancel."
               }
             ],
-            "value": "export interface CancelBillingOptions {\n  /**\n   * The ID of the subscription to cancel.\n   */\n  subscriptionId: string;\n  /**\n   * Whether to prorate the cancellation.\n   *\n   * {@link https://shopify.dev/docs/apps/billing/subscriptions/cancel-recurring-charges}\n   */\n  prorate?: boolean;\n  /*\n   * Whether to use the test mode. This prevents the credit card from being charged. Test shops and demo shops cannot be charged.\n   */\n  isTest?: boolean;\n}"
+            "value": "export interface CancelBillingOptions {\n  /**\n   * The ID of the subscription to cancel.\n   */\n  subscriptionId: string;\n  /**\n   * Whether to issue prorated credits for the unused portion of the app subscription. There will be a corresponding\n   * deduction (based on revenue share) to your Partner account. For example, if a $10.00 app subscription\n   * (with 0% revenue share) is cancelled and prorated half way through the billing cycle, then the merchant will be\n   * credited $5.00 and that amount will be deducted from your Partner account.\n   */\n  prorate?: boolean;\n  /**\n   * Whether to use the test mode. This prevents the credit card from being charged.\n   */\n  isTest?: boolean;\n}"
           },
           "AppSubscription": {
             "filePath": "../shopify-api/dist/ts/lib/billing/types.d.ts",
@@ -2048,7 +2048,7 @@
                 "syntaxKind": "PropertySignature",
                 "name": "isTest",
                 "value": "boolean",
-                "description": "",
+                "description": "Whether to use the test mode. This prevents the credit card from being charged.",
                 "isOptional": true
               },
               {
@@ -2056,7 +2056,7 @@
                 "syntaxKind": "PropertySignature",
                 "name": "prorate",
                 "value": "boolean",
-                "description": "Whether to prorate the cancellation.\n\n\n\n\n",
+                "description": "Whether to issue prorated credits for the unused portion of the app subscription. There will be a corresponding deduction (based on revenue share) to your Partner account. For example, if a $10.00 app subscription (with 0% revenue share) is cancelled and prorated half way through the billing cycle, then the merchant will be credited $5.00 and that amount will be deducted from your Partner account.",
                 "isOptional": true
               },
               {
@@ -2067,7 +2067,7 @@
                 "description": "The ID of the subscription to cancel."
               }
             ],
-            "value": "export interface CancelBillingOptions {\n  /**\n   * The ID of the subscription to cancel.\n   */\n  subscriptionId: string;\n  /**\n   * Whether to prorate the cancellation.\n   *\n   * {@link https://shopify.dev/docs/apps/billing/subscriptions/cancel-recurring-charges}\n   */\n  prorate?: boolean;\n  /*\n   * Whether to use the test mode. This prevents the credit card from being charged. Test shops and demo shops cannot be charged.\n   */\n  isTest?: boolean;\n}"
+            "value": "export interface CancelBillingOptions {\n  /**\n   * The ID of the subscription to cancel.\n   */\n  subscriptionId: string;\n  /**\n   * Whether to issue prorated credits for the unused portion of the app subscription. There will be a corresponding\n   * deduction (based on revenue share) to your Partner account. For example, if a $10.00 app subscription\n   * (with 0% revenue share) is cancelled and prorated half way through the billing cycle, then the merchant will be\n   * credited $5.00 and that amount will be deducted from your Partner account.\n   */\n  prorate?: boolean;\n  /**\n   * Whether to use the test mode. This prevents the credit card from being charged.\n   */\n  isTest?: boolean;\n}"
           },
           "AppSubscription": {
             "filePath": "../shopify-api/dist/ts/lib/billing/types.d.ts",
@@ -7408,7 +7408,7 @@
                 "syntaxKind": "PropertySignature",
                 "name": "isTest",
                 "value": "boolean",
-                "description": "",
+                "description": "Whether to use the test mode. This prevents the credit card from being charged.",
                 "isOptional": true
               },
               {
@@ -7416,7 +7416,7 @@
                 "syntaxKind": "PropertySignature",
                 "name": "prorate",
                 "value": "boolean",
-                "description": "Whether to prorate the cancellation.\n\n\n\n\n",
+                "description": "Whether to issue prorated credits for the unused portion of the app subscription. There will be a corresponding deduction (based on revenue share) to your Partner account. For example, if a $10.00 app subscription (with 0% revenue share) is cancelled and prorated half way through the billing cycle, then the merchant will be credited $5.00 and that amount will be deducted from your Partner account.",
                 "isOptional": true
               },
               {
@@ -7427,7 +7427,7 @@
                 "description": "The ID of the subscription to cancel."
               }
             ],
-            "value": "export interface CancelBillingOptions {\n  /**\n   * The ID of the subscription to cancel.\n   */\n  subscriptionId: string;\n  /**\n   * Whether to prorate the cancellation.\n   *\n   * {@link https://shopify.dev/docs/apps/billing/subscriptions/cancel-recurring-charges}\n   */\n  prorate?: boolean;\n  /*\n   * Whether to use the test mode. This prevents the credit card from being charged. Test shops and demo shops cannot be charged.\n   */\n  isTest?: boolean;\n}"
+            "value": "export interface CancelBillingOptions {\n  /**\n   * The ID of the subscription to cancel.\n   */\n  subscriptionId: string;\n  /**\n   * Whether to issue prorated credits for the unused portion of the app subscription. There will be a corresponding\n   * deduction (based on revenue share) to your Partner account. For example, if a $10.00 app subscription\n   * (with 0% revenue share) is cancelled and prorated half way through the billing cycle, then the merchant will be\n   * credited $5.00 and that amount will be deducted from your Partner account.\n   */\n  prorate?: boolean;\n  /**\n   * Whether to use the test mode. This prevents the credit card from being charged.\n   */\n  isTest?: boolean;\n}"
           },
           "AppSubscription": {
             "filePath": "../shopify-api/dist/ts/lib/billing/types.d.ts",
