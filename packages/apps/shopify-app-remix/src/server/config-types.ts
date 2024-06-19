@@ -21,6 +21,7 @@ export interface AppConfigArg<
   Resources extends ShopifyRestResources = ShopifyRestResources,
   Storage extends SessionStorage = SessionStorage,
   Future extends FutureFlagOptions = FutureFlagOptions,
+  Distribution extends AppDistribution = AppDistribution,
 > extends Omit<
     ApiConfigArg<Resources, ApiFutureFlags<Future>>,
     | 'hostName'
@@ -60,7 +61,9 @@ export interface AppConfigArg<
    * export default shopify;
    * ```
    */
-  sessionStorage: Storage;
+  sessionStorage: Distribution extends AppDistribution.ShopifyAdmin
+    ? Storage | undefined
+    : Storage;
 
   /**
    * Whether your app use online or offline tokens.
@@ -296,3 +299,8 @@ export interface AfterAuthOptions<
   session: Session;
   admin: AdminApiContext<R>;
 }
+
+type ConditionalSessionStorage<Storage, Distribution> =
+  Distribution extends AppDistribution.ShopifyAdmin
+    ? {sessionStorage?: Storage}
+    : {sessionStorage: Storage};
