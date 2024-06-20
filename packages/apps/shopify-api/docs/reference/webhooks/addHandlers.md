@@ -64,6 +64,11 @@ Fields to be included in the callback, defaulting to including all of them.
 
 Namespaces to be included in the callback, defaulting to including all of them.
 
+### subTopic
+`string`
+
+Deprecated. Webhook sub-topics are an extra level of grouping available for some webhook topics.
+
 ## Delivery method-specific parameters
 
 ### Http
