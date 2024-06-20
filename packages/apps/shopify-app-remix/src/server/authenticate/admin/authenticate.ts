@@ -32,6 +32,7 @@ import {
   validateShopAndHostParams,
 } from './helpers';
 import {AuthorizationStrategy} from './strategies/types';
+import {scopesApiFactory} from './scope/factory';
 
 export interface SessionTokenContext {
   shop: string;
@@ -93,6 +94,7 @@ export function authStrategyFactory<
         request: requestBillingFactory(params, request, session),
         cancel: cancelBillingFactory(params, request, session),
       },
+      scopes: scopesApiFactory(params, session),
       session,
       cors: ensureCORSHeadersFactory(params, request),
     };

@@ -6,6 +6,7 @@ import type {AdminApiContext} from '../../clients';
 
 import type {BillingContext} from './billing/types';
 import {RedirectFunction} from './helpers/redirect';
+import {ScopesApiContext} from './scope/types';
 
 interface AdminContextInternal<
   Config extends AppConfigArg,
@@ -102,6 +103,11 @@ interface AdminContextInternal<
    * ```
    */
   cors: EnsureCORSFunction;
+
+  /**
+   * Methods to manage optional scopes for the store that made the request.
+   */
+  scopes: ScopesApiContext;
 }
 
 export interface EmbeddedAdminContext<
