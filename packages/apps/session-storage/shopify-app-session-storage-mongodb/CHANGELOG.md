@@ -1,5 +1,11 @@
 # @shopify/shopify-app-session-storage-mongodb
 
+## 4.0.1
+
+### Patch Changes
+
+- 9d531eb: Updated `mongodb` to v6.7.0
+
 ## 4.0.0
 
 ### Major Changes

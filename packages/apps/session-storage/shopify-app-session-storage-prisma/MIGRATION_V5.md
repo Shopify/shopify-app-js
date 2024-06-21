@@ -1,6 +1,6 @@
 # Migrating to `v.5.0.0`
 
-Version `5.0.0` of the `@shopify/shopify-app-session-storage-prisma` introduces a breaking change to the session storage schema. The user information is now stored as part of the session. Previously only the user ID was stored. This change requires updating the Prisma schema to include the user information.
+Version `5.0.0` of the `@shopify/shopify-app-session-storage-prisma` introduces a breaking change to the session storage schema. The user information is now stored as part of the session if your app is using *online access tokens**. Previously only the user ID was stored. This change requires updating the Prisma schema to include the user information.
 
 ## Updating the Prisma schema
 
@@ -43,7 +43,17 @@ npx prisma generate
 
 ## Using the user information
 
-The user information will now be available on the `Session` object:
+The user information will now be available on the `Session` object if your app is using [online access tokens](https://shopify.dev/docs/apps/build/authentication-authorization/access-token-types/online-access-tokens).
+
+Online access tokens can be enabled in the `shopifyApp` object in your `shopify.server` file.
+
+```diff
+const shopify = shopifyApp({
+  apiKey: process.env.SHOPIFY_API_KEY,
+  sessionStorage: new PrismaSessionStorage(prisma),
+  distribution: AppDistribution.AppStore,
++ useOnlineTokens: true,
+```
 
 ```ts
 const {admin, session} = await authenticate.admin(request);

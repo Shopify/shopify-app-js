@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.1
+
+### Patch Changes
+
+- 50ead0a: type imports in generated codegen files will not include the extension
+
 ## 1.0.0
 
 ### Major Changes
