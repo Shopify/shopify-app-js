@@ -1,5 +1,16 @@
 # @shopify/shopify-app-remix
 
+## 3.0.1
+
+### Patch Changes
+
+- 8eafd2b: Fixed creation of nested REST resource objects in the Remix package.
+- 07ed16a: Loosen type check on topics to allow declarative webhooks
+- Updated dependencies [58fb360]
+- Updated dependencies [8eafd2b]
+  - @shopify/shopify-api@11.0.1
+  - @shopify/shopify-app-session-storage@3.0.1
+
 ## 3.0.0
 
 ### Major Changes

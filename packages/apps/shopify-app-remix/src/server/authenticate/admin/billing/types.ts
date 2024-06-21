@@ -49,13 +49,14 @@ export interface CancelBillingOptions {
    */
   subscriptionId: string;
   /**
-   * Whether to prorate the cancellation.
-   *
-   * {@link https://shopify.dev/docs/apps/billing/subscriptions/cancel-recurring-charges}
+   * Whether to issue prorated credits for the unused portion of the app subscription. There will be a corresponding
+   * deduction (based on revenue share) to your Partner account. For example, if a $10.00 app subscription
+   * (with 0% revenue share) is cancelled and prorated half way through the billing cycle, then the merchant will be
+   * credited $5.00 and that amount will be deducted from your Partner account.
    */
   prorate?: boolean;
-  /*
-   * Whether to use the test mode. This prevents the credit card from being charged. Test shops and demo shops cannot be charged.
+  /**
+   * Whether to use the test mode. This prevents the credit card from being charged.
    */
   isTest?: boolean;
 }
