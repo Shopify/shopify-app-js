@@ -326,6 +326,31 @@ describe('authorize.admin auth callback path', () => {
           );
         });
       }
+
+      test('throws a response if afterAuth hook throws a response', async () => {
+        // GIVEN
+        const redirectResponse = new Response(null, { status: 302 });
+        const config = testConfig({
+          hooks: {
+            afterAuth: () => {
+              throw redirectResponse;
+            },
+          },
+          future: { unstable_newEmbeddedAuthStrategy: !isEmbeddedApp },
+          isEmbeddedApp,
+        });
+        const shopify = shopifyApp(config);
+
+        // WHEN
+        await mockCodeExchangeRequest();
+        const response = await getThrownResponse(
+          shopify.authenticate.admin,
+          await getValidCallbackRequest(config),
+        );
+
+        // THEN
+        expect(response).toBe(redirectResponse);
+      });  
     });
   });
 });

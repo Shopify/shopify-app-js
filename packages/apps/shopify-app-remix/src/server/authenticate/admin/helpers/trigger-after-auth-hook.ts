@@ -4,6 +4,8 @@ import type {BasicParams} from '../../../types';
 import {AuthorizationStrategy} from '../strategies/types';
 
 import {createAdminApiContext} from './create-admin-api-context';
+import { redirectFactory } from './redirect';
+import { redirect as remixRedirect } from '@remix-run/server-runtime';
 
 export async function triggerAfterAuthHook<
   Resources extends ShopifyRestResources = ShopifyRestResources,
@@ -23,6 +25,7 @@ export async function triggerAfterAuthHook<
         params,
         authStrategy.handleClientError(request),
       ),
+      redirect: config.isEmbeddedApp ? redirectFactory(params, request) : remixRedirect,
     });
   }
 }

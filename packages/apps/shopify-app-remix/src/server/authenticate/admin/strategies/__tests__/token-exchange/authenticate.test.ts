@@ -283,6 +283,34 @@ describe('authenticate', () => {
     expect(session).toBeDefined();
     expect(afterAuthMock).toHaveBeenCalledTimes(1);
   });
+
+  test('throws a response if afterAuth hook throws a response', async () => {
+    // GIVEN
+    const config = testConfig();
+    const redirectResponse = new Response(null, {status: 302});
+    const shopify = shopifyApp({
+      ...config,
+      hooks: {
+        afterAuth: () => {
+          throw redirectResponse;
+        },
+      },
+    });
+
+    const { token } = getJwt();
+    await mockTokenExchangeRequest(token, 'offline');
+
+    // WHEN
+    const response = await getThrownResponse(
+      shopify.authenticate.admin,
+      new Request(
+        `${APP_URL}?embedded=1&shop=${TEST_SHOP}&host=${BASE64_HOST}&id_token=${token}`,
+      ),
+    );
+
+    // THEN
+    expect(response).toBe(redirectResponse);
+  });  
 });
 
 async function mockTokenExchangeRequest(

@@ -78,6 +78,11 @@ export class TokenExchangeStrategy<Config extends AppConfigArg>
         newSession = onlineSession;
       }
 
+      logger.debug('Request is valid, loaded session from session token', {
+        shop: newSession.shop,
+        isOnline: newSession.isOnline,
+      });
+
       try {
         await this.handleAfterAuthHook(
           {api, config, logger},
@@ -85,7 +90,11 @@ export class TokenExchangeStrategy<Config extends AppConfigArg>
           request,
           sessionToken,
         );
-      } catch (error) {
+      } catch (errorOrResponse) {
+        if (errorOrResponse instanceof Response) {
+          throw errorOrResponse;
+        }
+
         throw new Response(undefined, {
           status: 500,
           statusText: 'Internal Server Error',
