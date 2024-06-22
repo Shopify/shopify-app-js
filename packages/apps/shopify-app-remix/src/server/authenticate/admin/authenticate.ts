@@ -143,7 +143,7 @@ export function authStrategyFactory<
       return createContext(request, session, strategy, payload);
     } catch (errorOrResponse) {
       if (errorOrResponse instanceof Response) {
-        logger.debug('Authenticate returned a response', { url: errorOrResponse.url });
+        logger.debug('Authenticate returned a response');
         ensureCORSHeadersFactory(params, request)(errorOrResponse);
       }
 
