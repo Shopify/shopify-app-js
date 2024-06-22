@@ -297,7 +297,7 @@ describe('authenticate', () => {
       },
     });
 
-    const { token } = getJwt();
+    const {token} = getJwt();
     await mockTokenExchangeRequest(token, 'offline');
 
     // WHEN
@@ -310,7 +310,7 @@ describe('authenticate', () => {
 
     // THEN
     expect(response).toBe(redirectResponse);
-  });  
+  });
 });
 
 async function mockTokenExchangeRequest(

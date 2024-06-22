@@ -16,7 +16,7 @@ import type {
 import type {AppDistribution} from './types';
 import type {AdminApiContext} from './clients';
 import {IdempotentPromiseHandler} from './authenticate/helpers/idempotent-promise-handler';
-import { RedirectFunction } from './authenticate/admin/helpers/redirect';
+import {RedirectFunction} from './authenticate/admin/helpers/redirect';
 
 export interface AppConfigArg<
   Resources extends ShopifyRestResources = ShopifyRestResources,
