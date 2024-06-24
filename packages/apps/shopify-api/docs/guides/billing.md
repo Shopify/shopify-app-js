@@ -234,7 +234,7 @@ With the `cancel` method you'll be able to cancel a single subscription. First, 
 As of version `7.3.0`, the `check` and `request` methods can take an optional `returnObject` parameter that modifies the return value to be an object that will include the payment/subscription plan `id`'s, among other data. This allows the app to save the id's for a future call to `cancel`. See the [billing reference](../reference/billing/README.md) for more details.
 
 ```js
-const activeSubscriptions = await shopify.api.billing.subscriptions({
+const activeSubscriptions = await shopify.billing.subscriptions({
   session: res.locals.shopify.session,
 });
 
