@@ -4,6 +4,7 @@ import {
   APP_URL,
   BASE64_HOST,
   TEST_SHOP,
+  TEST_SHOP_NAME,
   getJwt,
   getThrownResponse,
   setUpValidSession,
@@ -58,7 +59,6 @@ it('when scopes are empty the request is not redirected', async () => {
 
   const spyRedirect = jest.spyOn(redirect, 'redirectToInstallPage');
 
-
   // WHEN
   const {scopes} = await shopify.authenticate.admin(request);
   const response = await scopes.request([]);
@@ -66,6 +66,32 @@ it('when scopes are empty the request is not redirected', async () => {
   // THEN
   expect(response).toBeUndefined();
   expect(spyRedirect).not.toHaveBeenCalled();
+});
+
+it('when the shop is invalid an error is thrown', async () => {
+  // GIVEN
+  const shopify = shopifyApp(
+    testConfig({
+      isEmbeddedApp: false,
+      scopes: undefined,
+      future: {unstable_optionalScopesApi: true},
+    }),
+  );
+  const session = await setUpValidSession(shopify.sessionStorage);
+  session.shop = `${TEST_SHOP_NAME}.invalid-domain.com`;
+
+  const request = new Request(`${APP_URL}/scopes`);
+  signRequestCookie({
+    request,
+    cookieName: SESSION_COOKIE_NAME,
+    cookieValue: session.id,
+  });
+
+  // WHEN
+  const {scopes} = await shopify.authenticate.admin(request);
+  await expect(scopes.request(['write_products'])).rejects.toThrow(
+    'Received invalid shop argument',
+  );
 });
 
 describe('request from a non embedded app', () => {

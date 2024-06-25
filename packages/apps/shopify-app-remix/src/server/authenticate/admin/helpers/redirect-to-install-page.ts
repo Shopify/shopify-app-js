@@ -8,10 +8,9 @@ export async function redirectToInstallPage(
   params: BasicParams,
   shop: string,
   optionalScopes: string[] = [],
-  isEmbedded: boolean,
 ): Promise<never> {
   const installUrl = buildInstallUrl(params, shop, optionalScopes);
-  if (isEmbedded) {
+  if (params.config.isEmbeddedApp) {
     throw redirectWithAppBridgeHeaders(installUrl);
   } else {
     throw remixRedirect(installUrl);
@@ -32,7 +31,7 @@ function buildInstallUrl(
 }
 
 function buildBaseInstallUrl({api}: BasicParams, shop: string) {
-  const cleanShop = api.utils.sanitizeShop(shop);
+  const cleanShop = api.utils.sanitizeShop(shop, true);
   return new URL(`https://${cleanShop}/admin/oauth/install`);
 }
 

@@ -5,20 +5,15 @@ import {redirectToInstallPage} from '../helpers/redirect-to-install-page';
 
 export function requestScopesFactory(params: BasicParams, session: Session) {
   return async function requestScopes(scopes: string[]) {
-    const {logger, api} = params;
+    const {logger} = params;
 
-    logger.debug('Request scopes: ', {
+    logger.debug('Request optional scopes: ', {
       shop: session.shop,
       ...{scopes},
     });
 
     if (scopes.length === 0) return;
 
-    throw await redirectToInstallPage(
-      params,
-      session.shop,
-      scopes,
-      api.config.isEmbeddedApp,
-    );
+    throw await redirectToInstallPage(params, session.shop, scopes);
   };
 }
