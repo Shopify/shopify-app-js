@@ -11,6 +11,7 @@ import {
   testConfig,
 } from '../../../../__test-helpers';
 import {shopifyApp} from '../../../..';
+import * as redirect from '../../helpers/redirect-to-install-page';
 
 it('when the future flag is disabled returns an error', async () => {
   // GIVEN
@@ -35,6 +36,36 @@ it('when the future flag is disabled returns an error', async () => {
 
   // THEN
   expect(adminApi).not.toHaveProperty('scopes');
+});
+
+it('when scopes are empty the request is not redirected', async () => {
+  // GIVEN
+  const shopify = shopifyApp(
+    testConfig({
+      isEmbeddedApp: false,
+      scopes: undefined,
+      future: {unstable_optionalScopesApi: true},
+    }),
+  );
+  const session = await setUpValidSession(shopify.sessionStorage);
+
+  const request = new Request(`${APP_URL}/scopes`);
+  signRequestCookie({
+    request,
+    cookieName: SESSION_COOKIE_NAME,
+    cookieValue: session.id,
+  });
+
+  const spyRedirect = jest.spyOn(redirect, 'redirectToInstallPage');
+
+
+  // WHEN
+  const {scopes} = await shopify.authenticate.admin(request);
+  const response = await scopes.request([]);
+
+  // THEN
+  expect(response).toBeUndefined();
+  expect(spyRedirect).not.toHaveBeenCalled();
 });
 
 describe('request from a non embedded app', () => {

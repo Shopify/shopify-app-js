@@ -12,6 +12,8 @@ export function requestScopesFactory(params: BasicParams, session: Session) {
       ...{scopes},
     });
 
+    if (scopes.length === 0) return;
+
     throw await redirectToInstallPage(
       params,
       session.shop,
