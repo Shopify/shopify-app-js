@@ -3,6 +3,7 @@ import {JwtPayload, Session, ShopifyRestResources} from '@shopify/shopify-api';
 import {EnsureCORSFunction} from '../helpers/ensure-cors-headers';
 import type {AppConfigArg} from '../../config-types';
 import type {AdminApiContext} from '../../clients';
+import {FeatureEnabled} from '../../future/flags';
 
 import type {BillingContext} from './billing/types';
 import {RedirectFunction} from './helpers/redirect';
@@ -103,11 +104,6 @@ interface AdminContextInternal<
    * ```
    */
   cors: EnsureCORSFunction;
-
-  /**
-   * Methods to manage optional scopes for the store that made the request.
-   */
-  scopes: ScopesApiContext;
 }
 
 export interface EmbeddedAdminContext<
@@ -192,12 +188,27 @@ export interface NonEmbeddedAdminContext<
   Resources extends ShopifyRestResources = ShopifyRestResources,
 > extends AdminContextInternal<Config, Resources> {}
 
-export type AdminContext<
+type EmbeddedTypedAdminContext<
   Config extends AppConfigArg,
   Resources extends ShopifyRestResources = ShopifyRestResources,
 > = Config['isEmbeddedApp'] extends false
   ? NonEmbeddedAdminContext<Config, Resources>
   : EmbeddedAdminContext<Config, Resources>;
+
+interface ScopesContext {
+  /**
+   * Methods to manage optional scopes for the store that made the request.
+   */
+  scopes: ScopesApiContext;
+}
+
+export type AdminContext<
+  Config extends AppConfigArg,
+  Resources extends ShopifyRestResources,
+> =
+  FeatureEnabled<Config['future'], 'unstable_optionalScopesApi'> extends true
+    ? EmbeddedTypedAdminContext<Config, Resources> & ScopesContext
+    : EmbeddedTypedAdminContext<Config, Resources>;
 
 export type AuthenticateAdmin<
   Config extends AppConfigArg,

@@ -74,15 +74,17 @@ export function authStrategyFactory<
     }
   }
 
+  type AdminContextBase =
+    | EmbeddedAdminContext<ConfigArg, Resources>
+    | NonEmbeddedAdminContext<ConfigArg, Resources>;
+
   function createContext(
     request: Request,
     session: Session,
     authStrategy: AuthorizationStrategy,
     sessionToken?: JwtPayload,
   ): AdminContext<ConfigArg, Resources> {
-    const context:
-      | EmbeddedAdminContext<ConfigArg, Resources>
-      | NonEmbeddedAdminContext<ConfigArg, Resources> = {
+    let context: AdminContextBase = {
       admin: createAdminApiContext<Resources>(
         session,
         params,
@@ -94,20 +96,41 @@ export function authStrategyFactory<
         request: requestBillingFactory(params, request, session),
         cancel: cancelBillingFactory(params, request, session),
       },
-      scopes: scopesApiFactory(params, session),
+
       session,
       cors: ensureCORSHeadersFactory(params, request),
     };
 
+    context = addEmbeddedFeatures(context, request, session, sessionToken);
+    context = addScopesFeatures(context);
+
+    return context as AdminContext<ConfigArg, Resources>;
+  }
+
+  function addEmbeddedFeatures(
+    context: AdminContextBase,
+    request: Request,
+    session: Session,
+    sessionToken?: JwtPayload,
+  ) {
     if (config.isEmbeddedApp) {
       return {
         ...context,
         sessionToken,
         redirect: redirectFactory(params, request, session.shop),
-      } as AdminContext<ConfigArg, Resources>;
-    } else {
-      return context as AdminContext<ConfigArg, Resources>;
+      };
     }
+    return context;
+  }
+
+  function addScopesFeatures(context: AdminContextBase) {
+    if (config.future.unstable_optionalScopesApi) {
+      return {
+        ...context,
+        scopes: scopesApiFactory(params, context.session),
+      };
+    }
+    return context;
   }
 
   return async function authenticateAdmin(request: Request) {

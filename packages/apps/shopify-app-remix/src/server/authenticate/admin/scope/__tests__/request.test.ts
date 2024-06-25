@@ -30,12 +30,11 @@ it('when the future flag is disabled returns an error', async () => {
     cookieValue: session.id,
   });
 
-  const {scopes} = await shopify.authenticate.admin(request);
+  // WHEN
+  const adminApi = await shopify.authenticate.admin(request);
 
-  // WHEN / THEN
-  await expect(scopes.request(['write_products'])).rejects.toThrow(
-    'Scopes API is disabled. Please enable the unstable_optionalScopesApi future flag.',
-  );
+  // THEN
+  expect(adminApi).not.toHaveProperty('scopes');
 });
 
 describe('request from a non embedded app', () => {
