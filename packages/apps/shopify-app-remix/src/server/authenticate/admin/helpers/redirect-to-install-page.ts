@@ -19,24 +19,36 @@ export async function redirectToInstallPage(
 }
 
 function buildInstallUrl(
-  {api, config}: BasicParams,
+  params: BasicParams,
   shop: string,
+  optionalScopes: string[] = [],
+) {
+  const baseInstallUrl = buildBaseInstallUrl(params, shop);
+  baseInstallUrl.search = buildParamsInstallUrl(
+    params,
+    optionalScopes,
+  ).toString();
+  return baseInstallUrl.href;
+}
+
+function buildBaseInstallUrl({api}: BasicParams, shop: string) {
+  const cleanShop = api.utils.sanitizeShop(shop);
+  return new URL(`https://${cleanShop}/admin/oauth/install`);
+}
+
+function buildParamsInstallUrl(
+  {config}: BasicParams,
   optionalScopes: string[] = [],
 ) {
   const optionalScopesParam =
     optionalScopes && optionalScopes.length > 0
       ? {optional_scopes: optionalScopes.join(',')}
-      : {};
+      : undefined;
 
   const query = {
     client_id: config.apiKey,
     scope: config.scopes?.toString() || '',
     ...optionalScopesParam,
   };
-
-  const processedQuery = new api.utils.ProcessedQuery();
-  processedQuery.putAll(query);
-
-  const cleanShop = api.utils.sanitizeShop(shop);
-  return `https://${cleanShop}/admin/oauth/install${processedQuery.stringify()}`;
+  return new URLSearchParams(query);
 }

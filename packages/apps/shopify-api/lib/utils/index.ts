@@ -7,7 +7,6 @@ import {
   shopAdminUrlToLegacyUrl,
   legacyUrlToShopAdminUrl,
 } from './shop-admin-url-helper';
-import ProcessedQuery from './processed-query';
 
 export function shopifyUtils(config: ConfigInterface) {
   return {
@@ -18,7 +17,6 @@ export function shopifyUtils(config: ConfigInterface) {
     versionPriorTo: versionPriorTo(config),
     shopAdminUrlToLegacyUrl,
     legacyUrlToShopAdminUrl,
-    ProcessedQuery,
   };
 }
 
