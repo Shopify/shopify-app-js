@@ -43,3 +43,12 @@ export async function setUpValidSession(
 
   return session;
 }
+
+export function setupValidCustomAppSession(shop: string): Session {
+  return new Session({
+    id: '',
+    shop,
+    state: '',
+    isOnline: false,
+  });
+}
