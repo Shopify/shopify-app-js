@@ -89,7 +89,11 @@ export function removeHeader(headers: Headers, needle: string) {
     // ...
   ]
 */
-export function flatHeaders(headers: Headers): [string, string][] {
+export function flatHeaders(
+  headers: Headers | undefined | null,
+): [string, string][] {
+  if (!headers) return [];
+
   return Object.entries(headers).flatMap(([header, values]) =>
     Array.isArray(values)
       ? values.map((value): [string, string] => [header, value])
