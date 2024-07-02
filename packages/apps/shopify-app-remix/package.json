@@ -73,7 +73,7 @@
     "@remix-run/node": "^2.9.2",
     "@remix-run/react": "^2.9.2",
     "@shopify/generate-docs": "^0.16.0",
-    "@shopify/polaris": "^12.18.0",
+    "@shopify/polaris": "^13.6.0",
     "@shopify/react-testing": "^5.3.0",
     "@shopify/shopify-app-session-storage-memory": "^4.0.2",
     "@types/jsonwebtoken": "^9.0.5",
