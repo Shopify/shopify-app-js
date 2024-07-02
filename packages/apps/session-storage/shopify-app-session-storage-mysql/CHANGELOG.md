@@ -1,5 +1,11 @@
 # @shopify/shopify-app-session-storage-mysql
 
+## 4.0.2
+
+### Patch Changes
+
+- 1de1f15: bump jose from 5.4.0 to 5.4.1
+
 ## 4.0.1
 
 ### Patch Changes
