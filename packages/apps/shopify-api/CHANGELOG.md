@@ -1,5 +1,15 @@
 # Changelog
 
+## 11.1.0
+
+### Minor Changes
+
+- ea7c05d: Added support for API version 2024-07
+
+### Patch Changes
+
+- 1de1f15: bump jose from 5.4.0 to 5.4.1
+
 ## 11.0.1
 
 ### Patch Changes

@@ -1,5 +1,12 @@
 # @shopify/shopify-app-session-storage-prisma
 
+## 5.0.2
+
+### Patch Changes
+
+- 11dad60: bump @prisma/client from 5.15.0 to 5.15.1
+- bc01c34: bump prisma from 5.15.0 to 5.15.1
+
 ## 5.0.1
 
 ## 5.0.0
