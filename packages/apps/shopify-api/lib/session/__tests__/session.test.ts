@@ -1,7 +1,6 @@
 import {Session} from '../session';
 import {testConfig} from '../../__tests__/test-config';
 import {shopifyApi} from '../..';
-import {AuthScopes} from '../../auth';
 
 describe('session', () => {
   it('can create a session from another session', () => {
@@ -73,21 +72,6 @@ it('returns true when scopes that passed in undefined and scopes are not equal',
   });
 
   expect(session.isActive(undefined)).toBeTruthy();
-});
-
-it('returns false when scopes that passed in empty and scopes are not equal', () => {
-  const session = new Session({
-    id: 'active',
-    shop: 'active-shop',
-    state: 'test_state',
-    isOnline: true,
-    scope: 'test_scope',
-    accessToken: 'indeed',
-    expires: new Date(Date.now() + 86400),
-  });
-
-  const scopes = new AuthScopes([]);
-  expect(session.isActive(scopes)).toBeFalsy();
 });
 
 it('returns false if session is not active', () => {
@@ -182,40 +166,79 @@ describe('isExpired', () => {
 });
 
 describe('isScopeChanged', () => {
-  it('returns true if scopes requested have changed', () => {
-    const shopify = shopifyApi(testConfig());
-    const scopes = shopify.config.scopes
-      ? shopify.config.scopes.toString()
-      : '';
+  it('returns true if requested scopes is not a subset if the session scopes', () => {
+    const requestedScopes = 'write_products, read_orders';
+    const sessionScopes = 'write_products, read_customers';
 
     const session = new Session({
       id: 'not_active',
       shop: 'inactive-shop',
       state: 'not_same',
       isOnline: true,
-      scope: scopes,
+      scope: sessionScopes,
       expires: new Date(Date.now() - 1),
     });
-    expect(
-      session.isScopeChanged(`${shopify.config.scopes}, new_scope`),
-    ).toBeTruthy();
+    expect(session.isScopeChanged(requestedScopes)).toBeTruthy();
+  });
+
+  it('returns true if the session scopes include implied scopes', () => {
+    const requestedScopes = 'write_products, write_customers';
+    const sessionScopes = 'write_products, read_customers';
+
+    const session = new Session({
+      id: 'not_active',
+      shop: 'inactive-shop',
+      state: 'not_same',
+      isOnline: true,
+      scope: sessionScopes,
+      expires: new Date(Date.now() - 1),
+    });
+    expect(session.isScopeChanged(requestedScopes)).toBeTruthy();
   });
 
   it('returns false if scopes requested are unchanged', () => {
-    const shopify = shopifyApi(testConfig());
-    const scopes = shopify.config.scopes
-      ? shopify.config.scopes.toString()
-      : '';
+    const requestedScopes = 'write_products, read_customers';
+    const sessionScopes = 'write_products, read_customers';
 
     const session = new Session({
       id: 'not_active',
       shop: 'inactive-shop',
       state: 'not_same',
       isOnline: true,
-      scope: scopes,
+      scope: sessionScopes,
       expires: new Date(Date.now() - 1),
     });
-    expect(session.isScopeChanged(scopes)).toBeFalsy();
+    expect(session.isScopeChanged(requestedScopes)).toBeFalsy();
+  });
+
+  it('returns false if the requested scopes include implied scopes', () => {
+    const requestedScopes = 'write_products, read_customers';
+    const sessionScopes = 'write_products, write_customers';
+
+    const session = new Session({
+      id: 'not_active',
+      shop: 'inactive-shop',
+      state: 'not_same',
+      isOnline: true,
+      scope: sessionScopes,
+      expires: new Date(Date.now() - 1),
+    });
+    expect(session.isScopeChanged(requestedScopes)).toBeFalsy();
+  });
+
+  it('returns false if the session scopes is a subset of the requested', () => {
+    const requestedScopes = 'write_products, read_customers';
+    const sessionScopes = 'write_products, read_customers, optional_scope';
+
+    const session = new Session({
+      id: 'not_active',
+      shop: 'inactive-shop',
+      state: 'not_same',
+      isOnline: true,
+      scope: sessionScopes,
+      expires: new Date(Date.now() - 1),
+    });
+    expect(session.isScopeChanged(requestedScopes)).toBeFalsy();
   });
 });
 

@@ -20,6 +20,7 @@ import {API_KEY, API_SECRET_KEY, APP_URL} from './const';
  */
 const TEST_FUTURE_FLAGS: Required<{[key in keyof FutureFlags]: true}> = {
   unstable_newEmbeddedAuthStrategy: true,
+  unstable_optionalScopesApi: true,
 } as const;
 
 const TEST_CONFIG = {

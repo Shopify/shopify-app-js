@@ -18,6 +18,13 @@ export interface FutureFlags {
    * @default false
    */
   unstable_newEmbeddedAuthStrategy?: boolean;
+
+  /**
+   * When enabled, the `optionalScopes` API will be available.
+   *
+   * @default false
+   */
+  unstable_optionalScopesApi?: boolean;
 }
 
 // When adding new flags, use this format:
@@ -53,6 +60,13 @@ export function logDisabledFutureFlags(
       'unstable_newEmbeddedAuthStrategy',
       'Enable this to use OAuth token exchange instead of auth code to generate API access tokens.' +
         '\n  Your app must be using Shopify managed install: https://shopify.dev/docs/apps/auth/installation',
+    );
+  }
+
+  if (!config.future.unstable_optionalScopesApi) {
+    logFlag(
+      'unstable_optionalScopesApi',
+      'Enable this to use the optionalScopes API to request additional scopes and manage them. ',
     );
   }
 }

@@ -183,7 +183,7 @@ export class Session {
   }
 
   /**
-   * Whether the access token has the given scopes.
+   * Whether the access token includes the given scopes if they are provided.
    */
   public isScopeChanged(
     scopes: AuthScopes | string | string[] | undefined,
@@ -191,10 +191,19 @@ export class Session {
     if (typeof scopes === 'undefined') {
       return false;
     }
-    const scopesObject =
-      scopes instanceof AuthScopes ? scopes : new AuthScopes(scopes);
 
-    return !scopesObject.equals(this.scope);
+    return !this.isScopeIncluded(scopes);
+  }
+
+  /**
+   * Whether the access token includes the given scopes.
+   */
+  public isScopeIncluded(scopes: AuthScopes | string | string[]): boolean {
+    const requiredScopes =
+      scopes instanceof AuthScopes ? scopes : new AuthScopes(scopes);
+    const sessionScopes = new AuthScopes(this.scope);
+
+    return sessionScopes.has(requiredScopes);
   }
 
   /**
