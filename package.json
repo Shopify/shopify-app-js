@@ -7,7 +7,7 @@
   "scripts": {
     "build": "turbo build",
     "test": "turbo run test",
-    "test:ci": "CI=true turbo run test --filter='!./packages/apps/session-storage/*'",
+    "test:ci": "CI=true turbo run test:ci --filter='!./packages/apps/session-storage/*'",
     "test:ci_sessions": "CI=true turbo run test",
     "lint": "CI=true turbo lint",
     "release": "turbo build && changeset publish",
