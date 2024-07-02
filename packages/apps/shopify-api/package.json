@@ -78,7 +78,7 @@
     "@shopify/storefront-api-client": "^1.0.0",
     "compare-versions": "^6.1.0",
     "isbot": "^5.1.9",
-    "jose": "^5.4.1",
+    "jose": "^5.6.2",
     "node-fetch": "^2.6.1",
     "tslib": "^2.6.3",
     "uuid": "^10.0.0"
