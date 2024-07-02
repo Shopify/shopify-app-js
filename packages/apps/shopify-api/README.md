@@ -66,8 +66,8 @@ import '@shopify/shopify-api/adapters/web-api';
 
 Next, configure the library - you'll need some values in advance:
 
-- Your app's API key from [Partners dashboard](https://www.shopify.com/partners)
-- Your app's API secret from Partners dashboard
+- Your app's API key from [Partners dashboard](https://www.shopify.com/partners) (also called `Client ID`)
+- Your app's API secret from Partners dashboard (also called `Client secret`)
 - The [scopes](https://shopify.dev/docs/api/usage/access-scopes) you need for your app
 
 Call `shopifyApi` ([see reference](./docs/reference/shopifyApi.md)) to create your library object before setting up your app itself:
