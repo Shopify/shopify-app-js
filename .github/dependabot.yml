@@ -1,11 +1,27 @@
 version: 2
 updates:
   # Enable version updates for npm
-  - package-ecosystem: "npm"
+  - package-ecosystem: 'npm'
     # Look for `package.json` and `lock` files in the `root` directory
-    directory: "/"
+    directory: '/'
     # Check the npm registry for updates every day (weekdays)
     schedule:
-      interval: "daily"
+      interval: 'daily'
     # Dependabot defaults to 5 open pull requests at a time
     open-pull-requests-limit: 100
+    # Enable auto-merge for dev dependencies with minor or patch version updates
+    commit-message:
+      prefix: 'deps'
+    ignore:
+      - dependency-name: '*'
+        update-types: ['version-update:semver-major']
+    labels:
+      - 'dependencies'
+      - 'automerge'
+    automerge: true
+    automerge-type: 'pr'
+    target-branch: 'main'
+    allow:
+      - dependency-type: 'development'
+        update-types:
+          ['version-update:semver-minor', 'version-update:semver-patch']
