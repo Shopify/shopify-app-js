@@ -29,6 +29,12 @@
       "import": "./dist/esm/adapters/*/index.mjs",
       "require": "./dist/cjs/adapters/*/index.js",
       "default": "./dist/cjs/adapters/*/index.js"
+    },
+    "./test-helpers": {
+      "types": "./dist/ts/test-helpers/index.d.ts",
+      "import": "./dist/esm/test-helpers/index.mjs",
+      "require": "./dist/cjs/test-helpers/index.js",
+      "default": "./dist/cjs/test-helpers/index.js"
     }
   },
   "prettier": "@shopify/prettier-config",
