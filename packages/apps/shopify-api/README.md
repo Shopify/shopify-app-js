@@ -124,3 +124,34 @@ If an adapter for the runtime you wish to use doesn't exist, you can create your
 
 In addition to updating the library to work on different runtimes, we've also improved its public interface to make it easier for apps to load only the features they need from the library.
 If you're upgrading an existing app on v5 or earlier, please see [the migration guide for v6](docs/migrating-to-v6.md).
+
+## Testing
+
+This library exports the method `setUpValidSession()` through `@shopify/shopify-api/test-helpers` to simplify the process of creating valid sessions for end-to-end testing.
+
+```ts
+import prisma from "~/db.server";
+import { PrismaSessionStorage } from "@shopify/shopify-app-session-storage-prisma";
+import { setUpValidSession } from "@shopify/shopify-api/test-helpers";
+
+// set up test Session
+const sessionStorage = new PrismaSessionStorage(prisma);
+const session = await setUpValidSession(sessionStorage);
+
+... // complete testing here
+
+// tear down test Session
+sessionStorage.deleteSession(session.id);
+```
+
+`setUpValidSession()` can also be called with an optional second parameters that implements [Session](https://github.com/Shopify/shopify-app-js/blob/main/packages/apps/shopify-api/docs/guides/session-storage.md#what-data-is-in-a-session-object) (except all parameters are optional). This is especially useful when, for example, an end-to-end testing framework runs tests in parallel, and you need a separate session with a unique `shop` parameter for each parallel process. In such a situation, you might modify the above code snipped to look something like this:
+
+```ts
+...
+
+const session = await setUpValidSession(sessionStorage, {
+  shop: `test-shop-${process.env.TEST_PARALLEL_INDEX}.myshopify.com`,
+});
+
+...
+```
