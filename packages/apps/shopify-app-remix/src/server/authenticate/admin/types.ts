@@ -166,8 +166,8 @@ export interface EmbeddedAdminContext<
    * ```
    *
    * @example
-   * <caption>Redirecting outside of Shopify admin.</caption>
-   * <description>Pass in a `target` option of `_top` or `_parent` to go to an external URL.</description>
+   * <caption>Redirecting outside of the Admin embedded app page.</caption>
+   * <description>Pass in a `target` option of `_top` or `_parent` to navigate in the current window, or `_blank` to open a new tab.</description>
    * ```ts
    * // /app/routes/admin/my-route.ts
    * import { LoaderFunctionArgs, json } from "@remix-run/node";
