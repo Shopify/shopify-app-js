@@ -10818,7 +10818,7 @@ react-reconciler@^0.28.0:
     loose-envify "^1.1.0"
     scheduler "^0.22.0"
 
-react-router-dom@6.23.1, react-router-dom@^6.22.3:
+react-router-dom@6.23.1:
   version "6.23.1"
   resolved "https://registry.yarnpkg.com/react-router-dom/-/react-router-dom-6.23.1.tgz#30cbf266669693e9492aa4fc0dde2541ab02322f"
   integrity sha512-utP+K+aSTtEdbWpC+4gxhdlPFwuEfDKq8ZrPFU65bbRJY+l706qjR7yaidBpo3MSeA/fzwbXWbKBI6ftOnP3OQ==
@@ -10826,12 +10826,27 @@ react-router-dom@6.23.1, react-router-dom@^6.22.3:
     "@remix-run/router" "1.16.1"
     react-router "6.23.1"
 
+react-router-dom@^6.24.1:
+  version "6.24.1"
+  resolved "https://registry.yarnpkg.com/react-router-dom/-/react-router-dom-6.24.1.tgz#b1a22f7d6c5a1bfce30732bd370713f991ab4de4"
+  integrity sha512-U19KtXqooqw967Vw0Qcn5cOvrX5Ejo9ORmOtJMzYWtCT4/WOfFLIZGGsVLxcd9UkBO0mSTZtXqhZBsWlHr7+Sg==
+  dependencies:
+    "@remix-run/router" "1.17.1"
+    react-router "6.24.1"
+
 react-router@6.23.1:
   version "6.23.1"
   resolved "https://registry.yarnpkg.com/react-router/-/react-router-6.23.1.tgz#d08cbdbd9d6aedc13eea6e94bc6d9b29cb1c4be9"
   integrity sha512-fzcOaRF69uvqbbM7OhvQyBTFDVrrGlsFdS3AL+1KfIBtGETibHzi3FkoTRyiDJnWNc2VxrfvR+657ROHjaNjqQ==
   dependencies:
     "@remix-run/router" "1.16.1"
+
+react-router@6.24.1:
+  version "6.24.1"
+  resolved "https://registry.yarnpkg.com/react-router/-/react-router-6.24.1.tgz#5a3bbba0000afba68d42915456ca4c806f37a7de"
+  integrity sha512-PTXFXGK2pyXpHzVo3rR9H7ip4lSPZZc0bHG5CARmj65fTT6qG7sTngmb6lcYu1gf3y/8KxORoy9yn59pGpCnpg==
+  dependencies:
+    "@remix-run/router" "1.17.1"
 
 react-transition-group@^4.4.2:
   version "4.4.5"
