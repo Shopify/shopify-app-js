@@ -197,7 +197,7 @@ export class AuthCodeFlowStrategy<
         rawRequest: request,
       });
 
-      await config.sessionStorage.storeSession(session);
+      await config.sessionStorage!.storeSession(session);
 
       if (config.useOnlineTokens && !session.isOnline) {
         logger.info('Requesting online access token for offline session');
@@ -227,7 +227,7 @@ export class AuthCodeFlowStrategy<
     request: Request,
   ): Promise<Session | undefined> {
     const offlineId = await this.getOfflineSessionId(request);
-    return this.config.sessionStorage.loadSession(offlineId!);
+    return this.config.sessionStorage!.loadSession(offlineId!);
   }
 
   private async hasValidOfflineId(request: Request) {

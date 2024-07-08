@@ -60,7 +60,7 @@ export interface AppConfigArg<
    * export default shopify;
    * ```
    */
-  sessionStorage: Storage;
+  sessionStorage?: Storage;
 
   /**
    * Whether your app use online or offline tokens.
@@ -238,7 +238,7 @@ export interface AppConfig<Storage extends SessionStorage = SessionStorage>
   canUseLoginForm: boolean;
   appUrl: string;
   auth: AuthConfig;
-  sessionStorage: Storage;
+  sessionStorage?: Storage;
   useOnlineTokens: boolean;
   hooks: HooksConfig;
   future: FutureFlags;

@@ -61,7 +61,7 @@ export class TokenExchangeStrategy<Config extends AppConfigArg>
         requestedTokenType: RequestedTokenType.OfflineAccessToken,
       });
 
-      await config.sessionStorage.storeSession(offlineSession);
+      await config.sessionStorage!.storeSession(offlineSession);
 
       let newSession = offlineSession;
 
@@ -74,7 +74,7 @@ export class TokenExchangeStrategy<Config extends AppConfigArg>
           requestedTokenType: RequestedTokenType.OnlineAccessToken,
         });
 
-        await config.sessionStorage.storeSession(onlineSession);
+        await config.sessionStorage!.storeSession(onlineSession);
         newSession = onlineSession;
       }
 

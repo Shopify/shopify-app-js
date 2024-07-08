@@ -6,6 +6,7 @@ import {
 import type {BasicParams} from '../../types';
 import {adminClientFactory} from '../../clients';
 import {handleClientErrorFactory} from '../admin/helpers';
+import {loadSession} from '../helpers';
 
 import type {
   AuthenticateWebhook,
@@ -17,7 +18,7 @@ export function authenticateWebhookFactory<
   Resources extends ShopifyRestResources,
   Topics extends string,
 >(params: BasicParams): AuthenticateWebhook<Resources, Topics> {
-  const {api, config, logger} = params;
+  const {api, logger} = params;
 
   return async function authenticate(
     request: Request,
@@ -52,9 +53,7 @@ export function authenticateWebhookFactory<
         throw new Response(undefined, {status: 400, statusText: 'Bad Request'});
       }
     }
-
-    const sessionId = api.session.getOfflineId(check.domain);
-    const session = await config.sessionStorage.loadSession(sessionId);
+    const session = await loadSession(check.domain, params);
     const webhookContext: WebhookContextWithoutSession<Topics> = {
       apiVersion: check.apiVersion,
       shop: check.domain,

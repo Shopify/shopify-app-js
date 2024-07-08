@@ -1,13 +1,13 @@
 import {Session} from '@shopify/shopify-api';
 
+import {loadSession} from '../../authenticate/helpers/load-session';
 import {BasicParams} from '../../types';
 
 export async function getOfflineSession(
   shop: string,
-  {api, config}: BasicParams,
+  params: BasicParams,
 ): Promise<Session | undefined> {
-  const offlineSessionId = api.session.getOfflineId(shop);
-  const session = await config.sessionStorage.loadSession(offlineSessionId);
+  const session = await loadSession(shop, params);
 
   return session;
 }

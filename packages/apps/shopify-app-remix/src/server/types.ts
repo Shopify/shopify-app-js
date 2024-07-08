@@ -276,7 +276,7 @@ export interface ShopifyAppBase<Config extends AppConfigArg> {
    * // shopify.sessionStorage is an instance of PrismaSessionStorage
    * ```
    */
-  sessionStorage: SessionStorageType<Config>;
+  sessionStorage?: SessionStorageType<Config>;
 
   /**
    * Adds the required Content Security Policy headers for Shopify apps to the given Headers object.
@@ -495,6 +495,13 @@ export type SingleMerchantApp<Config extends AppConfigArg> =
 export type AppStoreApp<Config extends AppConfigArg> = ShopifyAppBase<Config> &
   ShopifyAppLogin;
 
+type EnforceSessionStorage<
+  Config extends AppConfigArg,
+  Base,
+> = Config['distribution'] extends AppDistribution.ShopifyAdmin
+  ? Base
+  : Base & {sessionStorage: SessionStorageType<Config>};
+
 /**
  * An object your app can use to interact with Shopify.
  *
@@ -504,7 +511,7 @@ export type ShopifyApp<Config extends AppConfigArg> =
   Config['distribution'] extends AppDistribution.ShopifyAdmin
     ? AdminApp<Config>
     : Config['distribution'] extends AppDistribution.SingleMerchant
-      ? SingleMerchantApp<Config>
+      ? EnforceSessionStorage<Config, SingleMerchantApp<Config>>
       : Config['distribution'] extends AppDistribution.AppStore
-        ? AppStoreApp<Config>
-        : AppStoreApp<Config>;
+        ? EnforceSessionStorage<Config, AppStoreApp<Config>>
+        : EnforceSessionStorage<Config, AppStoreApp<Config>>;

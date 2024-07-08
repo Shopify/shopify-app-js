@@ -32,7 +32,7 @@ export function authenticateAppProxyFactory<
 
     const shop = url.searchParams.get('shop')!;
     const sessionId = api.session.getOfflineId(shop);
-    const session = await config.sessionStorage.loadSession(sessionId);
+    const session = await config.sessionStorage!.loadSession(sessionId);
 
     if (!session) {
       logger.debug('Could not find offline session, returning empty context', {

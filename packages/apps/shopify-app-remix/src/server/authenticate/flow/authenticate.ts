@@ -48,7 +48,7 @@ export function authenticateFlowFactory<
     });
 
     const sessionId = api.session.getOfflineId(payload.shopify_domain);
-    const session = await config.sessionStorage.loadSession(sessionId);
+    const session = await config.sessionStorage!.loadSession(sessionId);
 
     if (!session) {
       logger.info('Flow request could not find session', {
