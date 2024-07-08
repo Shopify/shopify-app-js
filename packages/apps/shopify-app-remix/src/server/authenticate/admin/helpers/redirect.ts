@@ -19,12 +19,15 @@ export type RedirectFunction = (
 export function redirectFactory(
   params: BasicParams,
   request: Request,
+  shop: string,
 ): RedirectFunction {
-  const {config} = params;
+  const {config, logger} = params;
 
   return function redirect(url, init: RedirectInit) {
     const {searchParams} = new URL(request.url);
-    const parsedUrl = new URL(url, config.appUrl);
+    const parsedUrl = parseURL(url, request.url, shop);
+
+    logger.debug('Redirecting', {url: parsedUrl.toString()});
 
     const isSameOrigin = parsedUrl.origin === config.appUrl;
     if (isSameOrigin || url.startsWith('/')) {
@@ -53,7 +56,6 @@ export function redirectFactory(
         target,
       });
     }
-
     return remixRedirect(url, init);
   };
 }
@@ -80,4 +82,49 @@ function isEmbeddedRequest(request: Request) {
   const {searchParams} = new URL(request.url);
 
   return searchParams.get('embedded') === '1';
+}
+
+function parseURL(url: string, base: string, shop: string) {
+  if (isAdminRemotePath(url)) {
+    const adminPath = getAdminRemotePath(url);
+    const cleanShopName = shop.replace('.myshopify.com', '');
+    return new URL(
+      `https://admin.shopify.com/store/${cleanShopName}${adminPath}`,
+    );
+  } else {
+    return new URL(url, base);
+  }
+}
+
+const ADMIN_REGEX = /^shopify:\/*admin\//i;
+
+function isAdminRemotePath(url: string) {
+  return ADMIN_REGEX.test(url);
+}
+
+function getAdminRemotePath(url: string | URL) {
+  const parsedUrl = removeRestrictedParams(new URL(url)).href;
+  return parsedUrl.replace(ADMIN_REGEX, '/');
+}
+
+const embeddedFrameParamsToRemove = [
+  'hmac',
+  'locale',
+  'protocol',
+  'session',
+  'id_token',
+  'shop',
+  'timestamp',
+  'host',
+  'embedded',
+  // sent when clicking rel="home" nav item
+  'appLoadId',
+];
+
+function removeRestrictedParams(url: URL | string) {
+  const newUrl = new URL(url);
+  embeddedFrameParamsToRemove.forEach((param) =>
+    newUrl.searchParams.delete(param),
+  );
+  return newUrl;
 }

@@ -1011,7 +1011,7 @@
                 "syntaxKind": "PropertySignature",
                 "name": "isTest",
                 "value": "boolean",
-                "description": "Whether to include charges that were created on test mode. Test shops and demo shops cannot be charged.",
+                "description": "Whether to consider test purchases.",
                 "isOptional": true
               },
               {
@@ -1169,7 +1169,7 @@
                 "syntaxKind": "PropertySignature",
                 "name": "isTest",
                 "value": "boolean",
-                "description": "Whether to include charges that were created on test mode. Test shops and demo shops cannot be charged.",
+                "description": "Whether to consider test purchases.",
                 "isOptional": true
               },
               {
@@ -1738,7 +1738,7 @@
             },
             "syntaxKind": "TypeAliasDeclaration",
             "name": "RedirectTarget",
-            "value": "'_self' | '_parent' | '_top'",
+            "value": "'_self' | '_parent' | '_top' | '_blank'",
             "description": ""
           },
           "JwtPayload": {
@@ -2735,7 +2735,7 @@
                 "syntaxKind": "PropertySignature",
                 "name": "isTest",
                 "value": "boolean",
-                "description": "Whether to include charges that were created on test mode. Test shops and demo shops cannot be charged.",
+                "description": "Whether to consider test purchases.",
                 "isOptional": true
               },
               {
@@ -2893,7 +2893,7 @@
                 "syntaxKind": "PropertySignature",
                 "name": "isTest",
                 "value": "boolean",
-                "description": "Whether to include charges that were created on test mode. Test shops and demo shops cannot be charged.",
+                "description": "Whether to consider test purchases.",
                 "isOptional": true
               },
               {
@@ -4870,7 +4870,7 @@
             "filePath": "../shopify-api/dist/ts/lib/types.d.ts",
             "syntaxKind": "EnumDeclaration",
             "name": "ApiVersion",
-            "value": "export declare enum ApiVersion {\n    October22 = \"2022-10\",\n    January23 = \"2023-01\",\n    April23 = \"2023-04\",\n    July23 = \"2023-07\",\n    October23 = \"2023-10\",\n    January24 = \"2024-01\",\n    April24 = \"2024-04\",\n    July24 = \"2024-07\",\n    Unstable = \"unstable\"\n}",
+            "value": "export declare enum ApiVersion {\n    October22 = \"2022-10\",\n    January23 = \"2023-01\",\n    April23 = \"2023-04\",\n    July23 = \"2023-07\",\n    October23 = \"2023-10\",\n    January24 = \"2024-01\",\n    April24 = \"2024-04\",\n    Unstable = \"unstable\"\n}",
             "members": [
               {
                 "filePath": "../shopify-api/dist/ts/lib/types.d.ts",
@@ -4906,11 +4906,6 @@
                 "filePath": "../shopify-api/dist/ts/lib/types.d.ts",
                 "name": "April24",
                 "value": "2024-04"
-              },
-              {
-                "filePath": "../shopify-api/dist/ts/lib/types.d.ts",
-                "name": "July24",
-                "value": "2024-07"
               },
               {
                 "filePath": "../shopify-api/dist/ts/lib/types.d.ts",
@@ -6652,7 +6647,7 @@
             "filePath": "../shopify-api/dist/ts/lib/types.d.ts",
             "syntaxKind": "EnumDeclaration",
             "name": "ApiVersion",
-            "value": "export declare enum ApiVersion {\n    October22 = \"2022-10\",\n    January23 = \"2023-01\",\n    April23 = \"2023-04\",\n    July23 = \"2023-07\",\n    October23 = \"2023-10\",\n    January24 = \"2024-01\",\n    April24 = \"2024-04\",\n    July24 = \"2024-07\",\n    Unstable = \"unstable\"\n}",
+            "value": "export declare enum ApiVersion {\n    October22 = \"2022-10\",\n    January23 = \"2023-01\",\n    April23 = \"2023-04\",\n    July23 = \"2023-07\",\n    October23 = \"2023-10\",\n    January24 = \"2024-01\",\n    April24 = \"2024-04\",\n    Unstable = \"unstable\"\n}",
             "members": [
               {
                 "filePath": "../shopify-api/dist/ts/lib/types.d.ts",
@@ -6688,11 +6683,6 @@
                 "filePath": "../shopify-api/dist/ts/lib/types.d.ts",
                 "name": "April24",
                 "value": "2024-04"
-              },
-              {
-                "filePath": "../shopify-api/dist/ts/lib/types.d.ts",
-                "name": "July24",
-                "value": "2024-07"
               },
               {
                 "filePath": "../shopify-api/dist/ts/lib/types.d.ts",
@@ -7522,7 +7512,7 @@
             "filePath": "../shopify-api/dist/ts/lib/types.d.ts",
             "syntaxKind": "EnumDeclaration",
             "name": "ApiVersion",
-            "value": "export declare enum ApiVersion {\n    October22 = \"2022-10\",\n    January23 = \"2023-01\",\n    April23 = \"2023-04\",\n    July23 = \"2023-07\",\n    October23 = \"2023-10\",\n    January24 = \"2024-01\",\n    April24 = \"2024-04\",\n    July24 = \"2024-07\",\n    Unstable = \"unstable\"\n}",
+            "value": "export declare enum ApiVersion {\n    October22 = \"2022-10\",\n    January23 = \"2023-01\",\n    April23 = \"2023-04\",\n    July23 = \"2023-07\",\n    October23 = \"2023-10\",\n    January24 = \"2024-01\",\n    April24 = \"2024-04\",\n    Unstable = \"unstable\"\n}",
             "members": [
               {
                 "filePath": "../shopify-api/dist/ts/lib/types.d.ts",
@@ -7558,11 +7548,6 @@
                 "filePath": "../shopify-api/dist/ts/lib/types.d.ts",
                 "name": "April24",
                 "value": "2024-04"
-              },
-              {
-                "filePath": "../shopify-api/dist/ts/lib/types.d.ts",
-                "name": "July24",
-                "value": "2024-07"
               },
               {
                 "filePath": "../shopify-api/dist/ts/lib/types.d.ts",
@@ -8785,7 +8770,7 @@
                 "syntaxKind": "PropertySignature",
                 "name": "isTest",
                 "value": "boolean",
-                "description": "Whether to include charges that were created on test mode. Test shops and demo shops cannot be charged.",
+                "description": "Whether to consider test purchases.",
                 "isOptional": true
               },
               {
@@ -8943,7 +8928,7 @@
                 "syntaxKind": "PropertySignature",
                 "name": "isTest",
                 "value": "boolean",
-                "description": "Whether to include charges that were created on test mode. Test shops and demo shops cannot be charged.",
+                "description": "Whether to consider test purchases.",
                 "isOptional": true
               },
               {
@@ -9512,7 +9497,7 @@
             },
             "syntaxKind": "TypeAliasDeclaration",
             "name": "RedirectTarget",
-            "value": "'_self' | '_parent' | '_top'",
+            "value": "'_self' | '_parent' | '_top' | '_blank'",
             "description": ""
           },
           "JwtPayload": {
@@ -10293,7 +10278,7 @@
             "filePath": "../shopify-api/dist/ts/lib/types.d.ts",
             "syntaxKind": "EnumDeclaration",
             "name": "ApiVersion",
-            "value": "export declare enum ApiVersion {\n    October22 = \"2022-10\",\n    January23 = \"2023-01\",\n    April23 = \"2023-04\",\n    July23 = \"2023-07\",\n    October23 = \"2023-10\",\n    January24 = \"2024-01\",\n    April24 = \"2024-04\",\n    July24 = \"2024-07\",\n    Unstable = \"unstable\"\n}",
+            "value": "export declare enum ApiVersion {\n    October22 = \"2022-10\",\n    January23 = \"2023-01\",\n    April23 = \"2023-04\",\n    July23 = \"2023-07\",\n    October23 = \"2023-10\",\n    January24 = \"2024-01\",\n    April24 = \"2024-04\",\n    Unstable = \"unstable\"\n}",
             "members": [
               {
                 "filePath": "../shopify-api/dist/ts/lib/types.d.ts",
@@ -10329,11 +10314,6 @@
                 "filePath": "../shopify-api/dist/ts/lib/types.d.ts",
                 "name": "April24",
                 "value": "2024-04"
-              },
-              {
-                "filePath": "../shopify-api/dist/ts/lib/types.d.ts",
-                "name": "July24",
-                "value": "2024-07"
               },
               {
                 "filePath": "../shopify-api/dist/ts/lib/types.d.ts",
@@ -13711,7 +13691,7 @@
             "filePath": "../shopify-api/dist/ts/lib/types.d.ts",
             "syntaxKind": "EnumDeclaration",
             "name": "ApiVersion",
-            "value": "export declare enum ApiVersion {\n    October22 = \"2022-10\",\n    January23 = \"2023-01\",\n    April23 = \"2023-04\",\n    July23 = \"2023-07\",\n    October23 = \"2023-10\",\n    January24 = \"2024-01\",\n    April24 = \"2024-04\",\n    July24 = \"2024-07\",\n    Unstable = \"unstable\"\n}",
+            "value": "export declare enum ApiVersion {\n    October22 = \"2022-10\",\n    January23 = \"2023-01\",\n    April23 = \"2023-04\",\n    July23 = \"2023-07\",\n    October23 = \"2023-10\",\n    January24 = \"2024-01\",\n    April24 = \"2024-04\",\n    Unstable = \"unstable\"\n}",
             "members": [
               {
                 "filePath": "../shopify-api/dist/ts/lib/types.d.ts",
@@ -13747,11 +13727,6 @@
                 "filePath": "../shopify-api/dist/ts/lib/types.d.ts",
                 "name": "April24",
                 "value": "2024-04"
-              },
-              {
-                "filePath": "../shopify-api/dist/ts/lib/types.d.ts",
-                "name": "July24",
-                "value": "2024-07"
               },
               {
                 "filePath": "../shopify-api/dist/ts/lib/types.d.ts",
