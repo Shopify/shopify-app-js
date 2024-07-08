@@ -1011,7 +1011,7 @@
                 "syntaxKind": "PropertySignature",
                 "name": "isTest",
                 "value": "boolean",
-                "description": "Whether to consider test purchases.",
+                "description": "Whether to include charges that were created on test mode. Test shops and demo shops cannot be charged.",
                 "isOptional": true
               },
               {
@@ -1169,7 +1169,7 @@
                 "syntaxKind": "PropertySignature",
                 "name": "isTest",
                 "value": "boolean",
-                "description": "Whether to consider test purchases.",
+                "description": "Whether to include charges that were created on test mode. Test shops and demo shops cannot be charged.",
                 "isOptional": true
               },
               {
@@ -1602,8 +1602,8 @@
                     ]
                   },
                   {
-                    "title": "Redirecting outside of Shopify admin",
-                    "description": "Pass in a `target` option of `_top` or `_parent` to go to an external URL.",
+                    "title": "Redirecting outside of the Admin embedded app page",
+                    "description": "Pass in a `target` option of `_top` or `_parent` to navigate in the current window, or `_blank` to open a new tab.",
                     "tabs": [
                       {
                         "code": "import { LoaderFunctionArgs, json } from \"@remix-run/node\";\nimport { authenticate } from \"../shopify.server\";\n\nexport const loader = async ({ request }: LoaderFunctionArgs) => {\n  const { session, redirect } = await authenticate.admin(request);\n  return redirect(\"/\", { target: '_parent' });\n};",
@@ -1674,7 +1674,7 @@
                 ]
               }
             ],
-            "value": "export interface EmbeddedAdminContext<\n  Config extends AppConfigArg,\n  Resources extends ShopifyRestResources = ShopifyRestResources,\n> extends AdminContextInternal<Config, Resources> {\n  /**\n   * The decoded and validated session token for the request.\n   *\n   * Returned only if `isEmbeddedApp` is `true`.\n   *\n   * {@link https://shopify.dev/docs/apps/auth/oauth/session-tokens#payload}\n   *\n   * @example\n   * <caption>Using the decoded session token.</caption>\n   * <description>Get user-specific data using the `sessionToken` object.</description>\n   * ```ts\n   * // /app/routes/**\\/*.ts\n   * import { LoaderFunctionArgs, json } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   * import { getMyAppData } from \"~/db/model.server\";\n   *\n   * export const loader = async ({ request }: LoaderFunctionArgs) => {\n   *   const { sessionToken } = await authenticate.admin(\n   *     request\n   *   );\n   *   return json(await getMyAppData({user: sessionToken.sub}));\n   * };\n   * ```\n   * ```ts\n   * // shopify.server.ts\n   * import { shopifyApp } from \"@shopify/shopify-app-remix/server\";\n   *\n   * const shopify = shopifyApp({\n   *   // ...etc\n   *   useOnlineTokens: true,\n   * });\n   * export default shopify;\n   * export const authenticate = shopify.authenticate;\n   * ```\n   */\n  sessionToken: JwtPayload;\n\n  /**\n   * A function that redirects the user to a new page, ensuring that the appropriate parameters are set for embedded\n   * apps.\n   *\n   * Returned only if `isEmbeddedApp` is `true`.\n   *\n   * @example\n   * <caption>Redirecting to an app route.</caption>\n   * <description>Use the `redirect` helper to safely redirect between pages.</description>\n   * ```ts\n   * // /app/routes/admin/my-route.ts\n   * import { LoaderFunctionArgs, json } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   *\n   * export const loader = async ({ request }: LoaderFunctionArgs) => {\n   *   const { session, redirect } = await authenticate.admin(request);\n   *   return redirect(\"/\");\n   * };\n   * ```\n   *\n   * @example\n   * <caption>Redirecting outside of Shopify admin.</caption>\n   * <description>Pass in a `target` option of `_top` or `_parent` to go to an external URL.</description>\n   * ```ts\n   * // /app/routes/admin/my-route.ts\n   * import { LoaderFunctionArgs, json } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   *\n   * export const loader = async ({ request }: LoaderFunctionArgs) => {\n   *   const { session, redirect } = await authenticate.admin(request);\n   *   return redirect(\"/\", { target: '_parent' });\n   * };\n   * ```\n   */\n  redirect: RedirectFunction;\n}"
+            "value": "export interface EmbeddedAdminContext<\n  Config extends AppConfigArg,\n  Resources extends ShopifyRestResources = ShopifyRestResources,\n> extends AdminContextInternal<Config, Resources> {\n  /**\n   * The decoded and validated session token for the request.\n   *\n   * Returned only if `isEmbeddedApp` is `true`.\n   *\n   * {@link https://shopify.dev/docs/apps/auth/oauth/session-tokens#payload}\n   *\n   * @example\n   * <caption>Using the decoded session token.</caption>\n   * <description>Get user-specific data using the `sessionToken` object.</description>\n   * ```ts\n   * // /app/routes/**\\/*.ts\n   * import { LoaderFunctionArgs, json } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   * import { getMyAppData } from \"~/db/model.server\";\n   *\n   * export const loader = async ({ request }: LoaderFunctionArgs) => {\n   *   const { sessionToken } = await authenticate.admin(\n   *     request\n   *   );\n   *   return json(await getMyAppData({user: sessionToken.sub}));\n   * };\n   * ```\n   * ```ts\n   * // shopify.server.ts\n   * import { shopifyApp } from \"@shopify/shopify-app-remix/server\";\n   *\n   * const shopify = shopifyApp({\n   *   // ...etc\n   *   useOnlineTokens: true,\n   * });\n   * export default shopify;\n   * export const authenticate = shopify.authenticate;\n   * ```\n   */\n  sessionToken: JwtPayload;\n\n  /**\n   * A function that redirects the user to a new page, ensuring that the appropriate parameters are set for embedded\n   * apps.\n   *\n   * Returned only if `isEmbeddedApp` is `true`.\n   *\n   * @example\n   * <caption>Redirecting to an app route.</caption>\n   * <description>Use the `redirect` helper to safely redirect between pages.</description>\n   * ```ts\n   * // /app/routes/admin/my-route.ts\n   * import { LoaderFunctionArgs, json } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   *\n   * export const loader = async ({ request }: LoaderFunctionArgs) => {\n   *   const { session, redirect } = await authenticate.admin(request);\n   *   return redirect(\"/\");\n   * };\n   * ```\n   *\n   * @example\n   * <caption>Redirecting outside of the Admin embedded app page.</caption>\n   * <description>Pass in a `target` option of `_top` or `_parent` to navigate in the current window, or `_blank` to open a new tab.</description>\n   * ```ts\n   * // /app/routes/admin/my-route.ts\n   * import { LoaderFunctionArgs, json } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   *\n   * export const loader = async ({ request }: LoaderFunctionArgs) => {\n   *   const { session, redirect } = await authenticate.admin(request);\n   *   return redirect(\"/\", { target: '_parent' });\n   * };\n   * ```\n   */\n  redirect: RedirectFunction;\n}"
           },
           "RedirectFunction": {
             "filePath": "src/server/authenticate/admin/helpers/redirect.ts",
@@ -1888,9 +1888,9 @@
               }
             },
             {
-              "description": "Pass in a `target` option of `_top` or `_parent` to go to an external URL.",
+              "description": "Pass in a `target` option of `_top` or `_parent` to navigate in the current window, or `_blank` to open a new tab.",
               "codeblock": {
-                "title": "Redirecting outside of Shopify admin",
+                "title": "Redirecting outside of the Admin embedded app page",
                 "tabs": [
                   {
                     "title": "/app/routes/admin/my-route.ts",
@@ -2735,7 +2735,7 @@
                 "syntaxKind": "PropertySignature",
                 "name": "isTest",
                 "value": "boolean",
-                "description": "Whether to consider test purchases.",
+                "description": "Whether to include charges that were created on test mode. Test shops and demo shops cannot be charged.",
                 "isOptional": true
               },
               {
@@ -2893,7 +2893,7 @@
                 "syntaxKind": "PropertySignature",
                 "name": "isTest",
                 "value": "boolean",
-                "description": "Whether to consider test purchases.",
+                "description": "Whether to include charges that were created on test mode. Test shops and demo shops cannot be charged.",
                 "isOptional": true
               },
               {
@@ -4870,7 +4870,7 @@
             "filePath": "../shopify-api/dist/ts/lib/types.d.ts",
             "syntaxKind": "EnumDeclaration",
             "name": "ApiVersion",
-            "value": "export declare enum ApiVersion {\n    October22 = \"2022-10\",\n    January23 = \"2023-01\",\n    April23 = \"2023-04\",\n    July23 = \"2023-07\",\n    October23 = \"2023-10\",\n    January24 = \"2024-01\",\n    April24 = \"2024-04\",\n    Unstable = \"unstable\"\n}",
+            "value": "export declare enum ApiVersion {\n    October22 = \"2022-10\",\n    January23 = \"2023-01\",\n    April23 = \"2023-04\",\n    July23 = \"2023-07\",\n    October23 = \"2023-10\",\n    January24 = \"2024-01\",\n    April24 = \"2024-04\",\n    July24 = \"2024-07\",\n    Unstable = \"unstable\"\n}",
             "members": [
               {
                 "filePath": "../shopify-api/dist/ts/lib/types.d.ts",
@@ -4906,6 +4906,11 @@
                 "filePath": "../shopify-api/dist/ts/lib/types.d.ts",
                 "name": "April24",
                 "value": "2024-04"
+              },
+              {
+                "filePath": "../shopify-api/dist/ts/lib/types.d.ts",
+                "name": "July24",
+                "value": "2024-07"
               },
               {
                 "filePath": "../shopify-api/dist/ts/lib/types.d.ts",
@@ -6647,7 +6652,7 @@
             "filePath": "../shopify-api/dist/ts/lib/types.d.ts",
             "syntaxKind": "EnumDeclaration",
             "name": "ApiVersion",
-            "value": "export declare enum ApiVersion {\n    October22 = \"2022-10\",\n    January23 = \"2023-01\",\n    April23 = \"2023-04\",\n    July23 = \"2023-07\",\n    October23 = \"2023-10\",\n    January24 = \"2024-01\",\n    April24 = \"2024-04\",\n    Unstable = \"unstable\"\n}",
+            "value": "export declare enum ApiVersion {\n    October22 = \"2022-10\",\n    January23 = \"2023-01\",\n    April23 = \"2023-04\",\n    July23 = \"2023-07\",\n    October23 = \"2023-10\",\n    January24 = \"2024-01\",\n    April24 = \"2024-04\",\n    July24 = \"2024-07\",\n    Unstable = \"unstable\"\n}",
             "members": [
               {
                 "filePath": "../shopify-api/dist/ts/lib/types.d.ts",
@@ -6683,6 +6688,11 @@
                 "filePath": "../shopify-api/dist/ts/lib/types.d.ts",
                 "name": "April24",
                 "value": "2024-04"
+              },
+              {
+                "filePath": "../shopify-api/dist/ts/lib/types.d.ts",
+                "name": "July24",
+                "value": "2024-07"
               },
               {
                 "filePath": "../shopify-api/dist/ts/lib/types.d.ts",
@@ -7512,7 +7522,7 @@
             "filePath": "../shopify-api/dist/ts/lib/types.d.ts",
             "syntaxKind": "EnumDeclaration",
             "name": "ApiVersion",
-            "value": "export declare enum ApiVersion {\n    October22 = \"2022-10\",\n    January23 = \"2023-01\",\n    April23 = \"2023-04\",\n    July23 = \"2023-07\",\n    October23 = \"2023-10\",\n    January24 = \"2024-01\",\n    April24 = \"2024-04\",\n    Unstable = \"unstable\"\n}",
+            "value": "export declare enum ApiVersion {\n    October22 = \"2022-10\",\n    January23 = \"2023-01\",\n    April23 = \"2023-04\",\n    July23 = \"2023-07\",\n    October23 = \"2023-10\",\n    January24 = \"2024-01\",\n    April24 = \"2024-04\",\n    July24 = \"2024-07\",\n    Unstable = \"unstable\"\n}",
             "members": [
               {
                 "filePath": "../shopify-api/dist/ts/lib/types.d.ts",
@@ -7548,6 +7558,11 @@
                 "filePath": "../shopify-api/dist/ts/lib/types.d.ts",
                 "name": "April24",
                 "value": "2024-04"
+              },
+              {
+                "filePath": "../shopify-api/dist/ts/lib/types.d.ts",
+                "name": "July24",
+                "value": "2024-07"
               },
               {
                 "filePath": "../shopify-api/dist/ts/lib/types.d.ts",
@@ -8770,7 +8785,7 @@
                 "syntaxKind": "PropertySignature",
                 "name": "isTest",
                 "value": "boolean",
-                "description": "Whether to consider test purchases.",
+                "description": "Whether to include charges that were created on test mode. Test shops and demo shops cannot be charged.",
                 "isOptional": true
               },
               {
@@ -8928,7 +8943,7 @@
                 "syntaxKind": "PropertySignature",
                 "name": "isTest",
                 "value": "boolean",
-                "description": "Whether to consider test purchases.",
+                "description": "Whether to include charges that were created on test mode. Test shops and demo shops cannot be charged.",
                 "isOptional": true
               },
               {
@@ -9361,8 +9376,8 @@
                     ]
                   },
                   {
-                    "title": "Redirecting outside of Shopify admin",
-                    "description": "Pass in a `target` option of `_top` or `_parent` to go to an external URL.",
+                    "title": "Redirecting outside of the Admin embedded app page",
+                    "description": "Pass in a `target` option of `_top` or `_parent` to navigate in the current window, or `_blank` to open a new tab.",
                     "tabs": [
                       {
                         "code": "import { LoaderFunctionArgs, json } from \"@remix-run/node\";\nimport { authenticate } from \"../shopify.server\";\n\nexport const loader = async ({ request }: LoaderFunctionArgs) => {\n  const { session, redirect } = await authenticate.admin(request);\n  return redirect(\"/\", { target: '_parent' });\n};",
@@ -9433,7 +9448,7 @@
                 ]
               }
             ],
-            "value": "export interface EmbeddedAdminContext<\n  Config extends AppConfigArg,\n  Resources extends ShopifyRestResources = ShopifyRestResources,\n> extends AdminContextInternal<Config, Resources> {\n  /**\n   * The decoded and validated session token for the request.\n   *\n   * Returned only if `isEmbeddedApp` is `true`.\n   *\n   * {@link https://shopify.dev/docs/apps/auth/oauth/session-tokens#payload}\n   *\n   * @example\n   * <caption>Using the decoded session token.</caption>\n   * <description>Get user-specific data using the `sessionToken` object.</description>\n   * ```ts\n   * // /app/routes/**\\/*.ts\n   * import { LoaderFunctionArgs, json } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   * import { getMyAppData } from \"~/db/model.server\";\n   *\n   * export const loader = async ({ request }: LoaderFunctionArgs) => {\n   *   const { sessionToken } = await authenticate.admin(\n   *     request\n   *   );\n   *   return json(await getMyAppData({user: sessionToken.sub}));\n   * };\n   * ```\n   * ```ts\n   * // shopify.server.ts\n   * import { shopifyApp } from \"@shopify/shopify-app-remix/server\";\n   *\n   * const shopify = shopifyApp({\n   *   // ...etc\n   *   useOnlineTokens: true,\n   * });\n   * export default shopify;\n   * export const authenticate = shopify.authenticate;\n   * ```\n   */\n  sessionToken: JwtPayload;\n\n  /**\n   * A function that redirects the user to a new page, ensuring that the appropriate parameters are set for embedded\n   * apps.\n   *\n   * Returned only if `isEmbeddedApp` is `true`.\n   *\n   * @example\n   * <caption>Redirecting to an app route.</caption>\n   * <description>Use the `redirect` helper to safely redirect between pages.</description>\n   * ```ts\n   * // /app/routes/admin/my-route.ts\n   * import { LoaderFunctionArgs, json } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   *\n   * export const loader = async ({ request }: LoaderFunctionArgs) => {\n   *   const { session, redirect } = await authenticate.admin(request);\n   *   return redirect(\"/\");\n   * };\n   * ```\n   *\n   * @example\n   * <caption>Redirecting outside of Shopify admin.</caption>\n   * <description>Pass in a `target` option of `_top` or `_parent` to go to an external URL.</description>\n   * ```ts\n   * // /app/routes/admin/my-route.ts\n   * import { LoaderFunctionArgs, json } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   *\n   * export const loader = async ({ request }: LoaderFunctionArgs) => {\n   *   const { session, redirect } = await authenticate.admin(request);\n   *   return redirect(\"/\", { target: '_parent' });\n   * };\n   * ```\n   */\n  redirect: RedirectFunction;\n}"
+            "value": "export interface EmbeddedAdminContext<\n  Config extends AppConfigArg,\n  Resources extends ShopifyRestResources = ShopifyRestResources,\n> extends AdminContextInternal<Config, Resources> {\n  /**\n   * The decoded and validated session token for the request.\n   *\n   * Returned only if `isEmbeddedApp` is `true`.\n   *\n   * {@link https://shopify.dev/docs/apps/auth/oauth/session-tokens#payload}\n   *\n   * @example\n   * <caption>Using the decoded session token.</caption>\n   * <description>Get user-specific data using the `sessionToken` object.</description>\n   * ```ts\n   * // /app/routes/**\\/*.ts\n   * import { LoaderFunctionArgs, json } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   * import { getMyAppData } from \"~/db/model.server\";\n   *\n   * export const loader = async ({ request }: LoaderFunctionArgs) => {\n   *   const { sessionToken } = await authenticate.admin(\n   *     request\n   *   );\n   *   return json(await getMyAppData({user: sessionToken.sub}));\n   * };\n   * ```\n   * ```ts\n   * // shopify.server.ts\n   * import { shopifyApp } from \"@shopify/shopify-app-remix/server\";\n   *\n   * const shopify = shopifyApp({\n   *   // ...etc\n   *   useOnlineTokens: true,\n   * });\n   * export default shopify;\n   * export const authenticate = shopify.authenticate;\n   * ```\n   */\n  sessionToken: JwtPayload;\n\n  /**\n   * A function that redirects the user to a new page, ensuring that the appropriate parameters are set for embedded\n   * apps.\n   *\n   * Returned only if `isEmbeddedApp` is `true`.\n   *\n   * @example\n   * <caption>Redirecting to an app route.</caption>\n   * <description>Use the `redirect` helper to safely redirect between pages.</description>\n   * ```ts\n   * // /app/routes/admin/my-route.ts\n   * import { LoaderFunctionArgs, json } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   *\n   * export const loader = async ({ request }: LoaderFunctionArgs) => {\n   *   const { session, redirect } = await authenticate.admin(request);\n   *   return redirect(\"/\");\n   * };\n   * ```\n   *\n   * @example\n   * <caption>Redirecting outside of the Admin embedded app page.</caption>\n   * <description>Pass in a `target` option of `_top` or `_parent` to navigate in the current window, or `_blank` to open a new tab.</description>\n   * ```ts\n   * // /app/routes/admin/my-route.ts\n   * import { LoaderFunctionArgs, json } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   *\n   * export const loader = async ({ request }: LoaderFunctionArgs) => {\n   *   const { session, redirect } = await authenticate.admin(request);\n   *   return redirect(\"/\", { target: '_parent' });\n   * };\n   * ```\n   */\n  redirect: RedirectFunction;\n}"
           },
           "RedirectFunction": {
             "filePath": "src/server/authenticate/admin/helpers/redirect.ts",
@@ -10278,7 +10293,7 @@
             "filePath": "../shopify-api/dist/ts/lib/types.d.ts",
             "syntaxKind": "EnumDeclaration",
             "name": "ApiVersion",
-            "value": "export declare enum ApiVersion {\n    October22 = \"2022-10\",\n    January23 = \"2023-01\",\n    April23 = \"2023-04\",\n    July23 = \"2023-07\",\n    October23 = \"2023-10\",\n    January24 = \"2024-01\",\n    April24 = \"2024-04\",\n    Unstable = \"unstable\"\n}",
+            "value": "export declare enum ApiVersion {\n    October22 = \"2022-10\",\n    January23 = \"2023-01\",\n    April23 = \"2023-04\",\n    July23 = \"2023-07\",\n    October23 = \"2023-10\",\n    January24 = \"2024-01\",\n    April24 = \"2024-04\",\n    July24 = \"2024-07\",\n    Unstable = \"unstable\"\n}",
             "members": [
               {
                 "filePath": "../shopify-api/dist/ts/lib/types.d.ts",
@@ -10314,6 +10329,11 @@
                 "filePath": "../shopify-api/dist/ts/lib/types.d.ts",
                 "name": "April24",
                 "value": "2024-04"
+              },
+              {
+                "filePath": "../shopify-api/dist/ts/lib/types.d.ts",
+                "name": "July24",
+                "value": "2024-07"
               },
               {
                 "filePath": "../shopify-api/dist/ts/lib/types.d.ts",
@@ -13691,7 +13711,7 @@
             "filePath": "../shopify-api/dist/ts/lib/types.d.ts",
             "syntaxKind": "EnumDeclaration",
             "name": "ApiVersion",
-            "value": "export declare enum ApiVersion {\n    October22 = \"2022-10\",\n    January23 = \"2023-01\",\n    April23 = \"2023-04\",\n    July23 = \"2023-07\",\n    October23 = \"2023-10\",\n    January24 = \"2024-01\",\n    April24 = \"2024-04\",\n    Unstable = \"unstable\"\n}",
+            "value": "export declare enum ApiVersion {\n    October22 = \"2022-10\",\n    January23 = \"2023-01\",\n    April23 = \"2023-04\",\n    July23 = \"2023-07\",\n    October23 = \"2023-10\",\n    January24 = \"2024-01\",\n    April24 = \"2024-04\",\n    July24 = \"2024-07\",\n    Unstable = \"unstable\"\n}",
             "members": [
               {
                 "filePath": "../shopify-api/dist/ts/lib/types.d.ts",
@@ -13727,6 +13747,11 @@
                 "filePath": "../shopify-api/dist/ts/lib/types.d.ts",
                 "name": "April24",
                 "value": "2024-04"
+              },
+              {
+                "filePath": "../shopify-api/dist/ts/lib/types.d.ts",
+                "name": "July24",
+                "value": "2024-07"
               },
               {
                 "filePath": "../shopify-api/dist/ts/lib/types.d.ts",

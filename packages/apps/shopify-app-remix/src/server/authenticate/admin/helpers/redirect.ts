@@ -9,7 +9,7 @@ import {getSessionTokenHeader} from '../../helpers/get-session-token-header';
 import {renderAppBridge} from './render-app-bridge';
 import {redirectWithAppBridgeHeaders} from './redirect-with-app-bridge-headers';
 
-export type RedirectTarget = '_self' | '_parent' | '_top';
+export type RedirectTarget = '_self' | '_parent' | '_top' | '_blank';
 export type RedirectInit = number | (ResponseInit & {target?: RedirectTarget});
 export type RedirectFunction = (
   url: string,
