@@ -1,5 +1,7 @@
 # @shopify/shopify-app-session-storage-test-utils
 
+## 3.0.2
+
 ## 3.0.1
 
 ## 3.0.0

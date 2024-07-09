@@ -101,7 +101,7 @@ export function authStrategyFactory<
       return {
         ...context,
         sessionToken,
-        redirect: redirectFactory(params, request),
+        redirect: redirectFactory(params, request, session.shop),
       } as AdminContext<ConfigArg, Resources>;
     } else {
       return context as AdminContext<ConfigArg, Resources>;
