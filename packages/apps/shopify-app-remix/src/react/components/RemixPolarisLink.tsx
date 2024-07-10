@@ -9,6 +9,24 @@ import type {
 export const RemixPolarisLink = React.forwardRef<
   HTMLAnchorElement,
   LinkLikeComponentProps
->((props, ref) => (
-  <Link {...props} to={props.url ?? props.to} ref={ref} />
-)) as LinkLikeComponent;
+>((props, ref) => {
+  const {url, external, ...otherProps} = props;
+
+  // Handle external links with target="_blank"
+  if (url && external) {
+    return (
+      <a
+        href={url}
+        target="_blank"
+        rel="noopener noreferrer"
+        {...otherProps}
+        ref={ref}
+      >
+        {props.children}
+      </a>
+    );
+  }
+
+  // Use Remix Link for internal routing
+  return <Link {...otherProps} to={url ?? props.to} ref={ref} />;
+}) as LinkLikeComponent;
