@@ -127,16 +127,20 @@ If you're upgrading an existing app on v5 or earlier, please see [the migration 
 
 ## Testing
 
-This library exports the method `setUpValidSession()` through `@shopify/shopify-api/test-helpers` to simplify the process of creating valid sessions for end-to-end testing.
+This library exports two helper methods through `@shopify/shopify-api/test-helpers` to simplify end-to-end testing: `setUpValidSession()` and `setUpValidRequest()`. These methods can be used together to fake authorization during end-to-end testing. `setUpValidSession()` creats a fake session, and `setUpValidRequest()` modifies Requests so that this library authorizes them against the fake session.
+
+`setUpValidSession()` populates a provided SessionStorage with a fake but valid session to use in testing. The second parameter implements [Session](https://github.com/Shopify/shopify-app-js/blob/main/packages/apps/shopify-api/docs/guides/session-storage.md#what-data-is-in-a-session-object), and is used to define the parameters of the Session object that's populated into the SessionStorage. All Session parameters are optional except `shop`. A companion helper method, `getShop()`, is exported to help generate a fake shop URL for the required `shop` parameter.
 
 ```ts
-import prisma from "~/db.server";
-import { PrismaSessionStorage } from "@shopify/shopify-app-session-storage-prisma";
-import { setUpValidSession } from "@shopify/shopify-api/test-helpers";
+import prisma from '~/db.server';
+import { PrismaSessionStorage } from '@shopify/shopify-app-session-storage-prisma';
+import { setUpValidSession } from '@shopify/shopify-api/test-helpers';
 
 // set up test Session
 const sessionStorage = new PrismaSessionStorage(prisma);
-const session = await setUpValidSession(sessionStorage);
+const session = await setUpValidSession(sessionStorage, {
+  shop: getShop('test-shop');
+});
 
 ... // complete testing here
 
@@ -144,14 +148,56 @@ const session = await setUpValidSession(sessionStorage);
 sessionStorage.deleteSession(session.id);
 ```
 
-`setUpValidSession()` can also be called with an optional second parameters that implements [Session](https://github.com/Shopify/shopify-app-js/blob/main/packages/apps/shopify-api/docs/guides/session-storage.md#what-data-is-in-a-session-object) (except all parameters are optional). This is especially useful when, for example, an end-to-end testing framework runs tests in parallel, and you need a separate session with a unique `shop` parameter for each parallel process. In such a situation, you might modify the above code snipped to look something like this:
+When an end-to-end testing framework runs tests in parallel, and you need a separate Session with a unique `shop` parameter for each parallel process, you can modify the above code snipped to incorporate a unique process identifier into the shop name, for example:
 
 ```ts
 ...
 
 const session = await setUpValidSession(sessionStorage, {
-  shop: `test-shop-${process.env.TEST_PARALLEL_INDEX}.myshopify.com`,
+  shop: getShop(`test-shop-${process.env.TEST_PARALLEL_INDEX}`),
 });
 
 ...
 ```
+
+`setUpValidRequest()` duplicates and decorates a provided Request object with authorization parameters to use in testing. The first parameter determines the authorization method to fake, and provides any inputs required to fake the authorization. There are four authorization methods that can be faked:
+1. Admin: This authorization method is used by Shopify when making HTTP GET request to your app through the Shopify Admin interface. It appends authorization parameters to the query string of the URL.
+1. Bearer: This authorization method is used by App Bridge when your app's front-end makes `fetch` requests to your app's back-end. It appends an `authorization` header to the [Request](https://developer.mozilla.org/en-US/docs/Web/API/Request).
+1. Extension: This authorization method is used by Shopify when making HTTP POST requests to your app extension. It appends authorization headers to the [Request](https://developer.mozilla.org/en-US/docs/Web/API/Request).
+1. Public: This authorization method is used by Shopify when making requests to an [app proxy](https://shopify.dev/docs/apps/build/online-store/display-dynamic-data#handling-proxy-requests). It appends a `signature` query string parameter to the URL.
+
+Each of these four authorization methods matches an enumerated value on `RequestType`. `RequestType` is exported as a companion to this method.
+
+```ts
+import {
+  RequestType,
+  setUpValidRequest,
+} from '@shopify/shopify-api/test-helpers';
+
+if (typeof process.env.SHOPIFY_API_SECRET === 'undefined') { // narrow type or throw error if undefined
+  throw new Error('Required environmental variable SHOPIFY_API_SECRET is undefined');
+}
+
+if (typeof process.env.SHOPIFY_API_KEY === 'undefined') { // narrow type or throw error if undefined
+  throw new Error('Required environmental variable SHOPIFY_API_KEY is undefined');
+}
+
+let request: Request = ... // the request intercepted by end-to-end testing framework
+
+const authorizedRequest = setUpValidRequest(
+  {
+    type: RequestType.Extension,
+    store: `test-shop-${process.env.TEST_PARALLEL_INDEX}`,
+    apiKey: process.env.SHOPIFY_API_KEY,
+    apiSecret: process.env.SHOPIFY_API_SECRET,
+  },
+  request
+);
+
+// now use authorizedRequest to complete the request, or if that's not possible, use it to modify the original request, using your testing framework's methods to add the headers or query string parameters to the request
+```
+
+### Troubleshooting
+Most end-to-end testing frameworks run their tests in different environments to the environment in which the Shopify development server is started, so the test environments don't have access to the environmental variables set by the Shopify CLI when running `shopify app dev`. If this is true for your testing framework, you must manually set the values for the `SHOPIFY_API_KEY` and `SHOPIFY_API_SECRET` environmental variables such that they are the same value in both the Shopify development server environment and the test environment(s).
+
+For example, using Playwright, you can set the environment variable in `playwright.config.ts`, and its value will be the same in all environments.
