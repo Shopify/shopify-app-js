@@ -14,7 +14,7 @@ import {
 const FULFILLMENT_URL =
   'https://example.myapp.io/authenticate/fulfillment_order_notification';
 
-const TEST_CONFIGS = {
+const MERCHANT_CUSTOM_APP_CONFIG = {
   distribution: AppDistribution.ShopifyAdmin,
   adminApiAccessToken: 'shpat_accesstoken',
   sessionStorage: undefined,
@@ -25,7 +25,7 @@ const TEST_CONFIGS = {
   describe(`authenticating fulfillment service notification requests for ${isCustomApp}`, () => {
     it('throws a 405 response if the request method is not POST', async () => {
       // GIVEN
-      const config = isMerchantCustomApp ? TEST_CONFIGS : {};
+      const config = isMerchantCustomApp ? MERCHANT_CUSTOM_APP_CONFIG : {};
       const shopify = shopifyApp(testConfig(config));
 
       // WHEN

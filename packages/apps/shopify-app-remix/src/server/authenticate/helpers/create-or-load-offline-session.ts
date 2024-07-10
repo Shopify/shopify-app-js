@@ -1,6 +1,6 @@
 import {AppDistribution, BasicParams} from '../../types';
 
-export async function loadSession(
+export async function createOrLoadOfflineSession(
   shop: string,
   {api, config, logger}: BasicParams,
 ) {

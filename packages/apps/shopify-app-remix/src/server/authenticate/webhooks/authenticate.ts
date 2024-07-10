@@ -6,7 +6,7 @@ import {
 import type {BasicParams} from '../../types';
 import {adminClientFactory} from '../../clients';
 import {handleClientErrorFactory} from '../admin/helpers';
-import {loadSession} from '../helpers';
+import {createOrLoadOfflineSession} from '../helpers';
 
 import type {
   AuthenticateWebhook,
@@ -53,7 +53,7 @@ export function authenticateWebhookFactory<
         throw new Response(undefined, {status: 400, statusText: 'Bad Request'});
       }
     }
-    const session = await loadSession(check.domain, params);
+    const session = await createOrLoadOfflineSession(check.domain, params);
     const webhookContext: WebhookContextWithoutSession<Topics> = {
       apiVersion: check.apiVersion,
       shop: check.domain,

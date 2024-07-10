@@ -495,12 +495,9 @@ export type SingleMerchantApp<Config extends AppConfigArg> =
 export type AppStoreApp<Config extends AppConfigArg> = ShopifyAppBase<Config> &
   ShopifyAppLogin;
 
-type EnforceSessionStorage<
-  Config extends AppConfigArg,
-  Base,
-> = Config['distribution'] extends AppDistribution.ShopifyAdmin
-  ? Base
-  : Base & {sessionStorage: SessionStorageType<Config>};
+type EnforceSessionStorage<Config extends AppConfigArg, Base> = Base & {
+  sessionStorage: SessionStorageType<Config>;
+};
 
 /**
  * An object your app can use to interact with Shopify.

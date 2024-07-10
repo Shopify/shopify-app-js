@@ -2,7 +2,7 @@ import {ShopifyRestResources, ShopifyHeader} from '@shopify/shopify-api';
 
 import {adminClientFactory} from '../../clients/admin';
 import {BasicParams} from '../../types';
-import {loadSession} from '../helpers';
+import {createOrLoadOfflineSession} from '../helpers';
 
 import type {
   AuthenticateFulfillmentService,
@@ -57,7 +57,7 @@ export function authenticateFulfillmentServiceFactory<
       },
     );
 
-    const session = await loadSession(shop, params);
+    const session = await createOrLoadOfflineSession(shop, params);
 
     if (!session) {
       logger.info('Fulfillment service request could not find session', {
