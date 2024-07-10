@@ -43,9 +43,15 @@ describe('PrismaSessionStorage when with no database set up', () => {
     clearTestDatabase();
   });
 
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+
   it('throws an appropriate error when Prisma migrations were not run', async () => {
     const prisma = new PrismaClient();
-    const storage = new PrismaSessionStorage<PrismaClient>(prisma);
+    const storage = new PrismaSessionStorage<PrismaClient>(prisma, {
+      connectionRetries: 0,
+    });
 
     try {
       await storage.findSessionsByShop('shop.myshopify.com');
@@ -60,6 +66,46 @@ describe('PrismaSessionStorage when with no database set up', () => {
         'The table `main.Session` does not exist in the current database.',
       );
     }
+  });
+
+  it('defaults to 3 tries with 5s intervals', async () => {
+    const spy = jest
+      .spyOn(global, 'setTimeout')
+      .mockImplementation((callback) => callback() as any);
+
+    const prisma = new PrismaClient();
+    const storage = new PrismaSessionStorage<PrismaClient>(prisma);
+
+    await expect(() =>
+      storage.findSessionsByShop('shop.myshopify.com'),
+    ).rejects.toThrow(MissingSessionTableError);
+
+    expect(spy).toHaveBeenCalledTimes(2);
+    expect(spy).toHaveBeenNthCalledWith(1, expect.any(Function), 5000);
+    expect(spy).toHaveBeenNthCalledWith(2, expect.any(Function), 5000);
+  });
+
+  it('allows overriding connection retry settings', async () => {
+    const spy = jest
+      .spyOn(global, 'setTimeout')
+      .mockImplementation((callback) => callback() as any);
+
+    const prisma = new PrismaClient();
+    const storage = new PrismaSessionStorage<PrismaClient>(prisma, {
+      connectionRetries: 5,
+      connectionRetryIntervalMs: 1000,
+    });
+
+    await expect(() =>
+      storage.findSessionsByShop('shop.myshopify.com'),
+    ).rejects.toThrow(MissingSessionTableError);
+
+    expect(spy).toHaveBeenCalledTimes(5);
+    expect(spy).toHaveBeenNthCalledWith(1, expect.any(Function), 1000);
+    expect(spy).toHaveBeenNthCalledWith(2, expect.any(Function), 1000);
+    expect(spy).toHaveBeenNthCalledWith(3, expect.any(Function), 1000);
+    expect(spy).toHaveBeenNthCalledWith(4, expect.any(Function), 1000);
+    expect(spy).toHaveBeenNthCalledWith(5, expect.any(Function), 1000);
   });
 });
 
