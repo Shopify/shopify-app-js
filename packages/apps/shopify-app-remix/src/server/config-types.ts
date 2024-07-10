@@ -42,6 +42,8 @@ export interface AppConfigArg<
    *
    * Shopify provides multiple session storage adaptors and you can create your own.
    *
+   * Optional for apps created in the Shopify Admin.
+   *
    * {@link https://github.com/Shopify/shopify-app-js/blob/main/README.md#session-storage-options}
    *
    * @example
