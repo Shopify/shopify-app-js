@@ -177,23 +177,38 @@ export class Cookies {
 
   async isSignedCookieValid(cookieName: string): Promise<boolean> {
     const signedCookieName = `${cookieName}.sig`;
-    // No cookie or no signature cookie makes the cookie it invalid.
-    if (!this.get(cookieName) || !this.get(signedCookieName)) {
-      this.deleteCookie(signedCookieName);
-      this.deleteCookie(cookieName);
+    if (
+      !this.cookieExists(cookieName) ||
+      !this.cookieExists(signedCookieName)
+    ) {
+      this.deleteInvalidCookies(cookieName, signedCookieName);
+      return false;
+    }
+    const cookieValue = this.get(cookieName);
+    const signature = this.get(signedCookieName);
+
+    if (!cookieValue || !signature) {
+      this.deleteInvalidCookies(cookieName, signedCookieName);
       return false;
     }
 
-    const value = this.get(cookieName)!;
-    const signature = this.get(signedCookieName)!;
     const allCheckSignatures = await Promise.all(
-      this.keys.map((key) => createSHA256HMAC(key, value)),
+      this.keys.map((key) => createSHA256HMAC(key, cookieValue)),
     );
+
     if (!allCheckSignatures.includes(signature)) {
-      this.deleteCookie(signedCookieName);
-      this.deleteCookie(cookieName);
+      this.deleteInvalidCookies(cookieName, signedCookieName);
       return false;
     }
+
     return true;
+  }
+
+  private cookieExists(cookieName: string) {
+    return Boolean(this.get(cookieName));
+  }
+
+  private deleteInvalidCookies(...cookieNames: string[]): void {
+    cookieNames.forEach((cookieName) => this.deleteCookie(cookieName));
   }
 }
