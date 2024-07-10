@@ -1,17 +1,26 @@
+import {Session as TSSession} from '@shopify/shopify-api';
 import {SessionStorage} from '@shopify/shopify-app-session-storage';
+
 import {Session} from '../lib/session/session';
 
+import {USER_ID} from './const';
+
+/**
+ * Creates a fake Session in the provided SessionStorage for the shop defined in sessionParams.
+ *
+ * @param {SessionStorage} sessionStorage The SessionStorage object through which to create the fake Session.
+ * @param sessionParams The Session parameters to use when creating the fake Session.
+ * @returns {Session} The fake Session created.
+ */
 export async function setUpValidSession(
   sessionStorage: SessionStorage,
-  sessionParams: Partial<Session> & Required<Pick<Session, 'shop'>> = {
-    shop: 'test-shop.myshopify.com',
-  },
-): Promise<Session> {
+  sessionParams: Partial<Session> & Required<Pick<Session, 'shop'>>,
+): Promise<TSSession> {
   const overrides: Partial<Session> = {};
-  let id = `offline_${sessionParams.shop}`;
+  const shop = sessionParams.shop;
+  let id = `offline_${shop}`;
   if (sessionParams?.isOnline) {
-    const USER_ID = 12345;
-    id = `${sessionParams.shop}_${USER_ID}`;
+    id = `${shop}_${USER_ID}`;
     // Expires one day from now
     overrides.expires =
       sessionParams.expires || new Date(Date.now() + 1000 * 3600 * 24);
@@ -33,13 +42,13 @@ export async function setUpValidSession(
 
   const session = new Session({
     id,
-    shop: sessionParams.shop,
+    shop,
     isOnline: Boolean(sessionParams.isOnline),
     state: 'test',
     accessToken: 'totally_real_token',
     scope: 'testScope',
     ...overrides,
-  });
+  }) as TSSession;
   await sessionStorage.storeSession(session);
 
   return session;
