@@ -5,5 +5,5 @@
  * @returns A fake Base64Encoded host for the store name.
  */
 export function getHost(store: string): string {
-  return btoa(`admin.shopify.com/store/${store}`);
+  return Buffer.from(`admin.shopify.com/store/${store}`).toString('base64');
 }
