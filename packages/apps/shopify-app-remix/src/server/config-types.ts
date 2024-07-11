@@ -243,6 +243,7 @@ export interface AppConfig<Storage extends SessionStorage = SessionStorage>
   hooks: HooksConfig;
   future: FutureFlags;
   idempotentPromiseHandler: IdempotentPromiseHandler;
+  distribution: AppDistribution;
 }
 
 export interface AuthConfig {

@@ -374,13 +374,18 @@ export class Base {
         this[attribute] = [];
         val.forEach((entry: Body) => {
           const obj = new HasManyResource({session: this.session});
-          obj.setData(entry);
+          if (entry) {
+            obj.setData(entry);
+          }
+
           this[attribute].push(obj);
         });
       } else if (attribute in hasOne) {
         const HasOneResource: typeof Base = hasOne[attribute];
         const obj = new HasOneResource({session: this.session});
-        obj.setData(val);
+        if (val) {
+          obj.setData(val);
+        }
         this[attribute] = obj;
       } else {
         this[attribute] = val;

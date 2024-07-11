@@ -13,3 +13,4 @@ export * from './setup-valid-session';
 export * from './setup-valid-request';
 export * from './sign-request-cookie';
 export * from './test-config';
+export * from './get-thrown-error';
