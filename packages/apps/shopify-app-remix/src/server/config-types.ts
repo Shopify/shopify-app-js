@@ -262,7 +262,6 @@ interface HooksConfig {
    * @param context - An object with context about the request that triggered the hook.
    * @param context.session - The session of the merchant that installed your app. This is the output of sessionStorage.loadSession in case people want to load their own.
    * @param context.admin - An object with access to the Shopify Admin API's.
-   * @param context.redirect - A function that redirects the user to a new page, ensuring that the appropriate parameters are set for embedded apps. Non-embedded apps will receive Remix's default redirect function.
    *
    * @example
    * <caption>Registering webhooks and seeding data when a merchant installs your app.</caption>
