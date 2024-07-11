@@ -52,6 +52,7 @@ export async function setupValidRequest(
     case RequestType.Extension:
       decoratedOptions = {
         store: TEST_SHOP_NAME,
+        apiSecret: API_SECRET_KEY,
         ...options,
       };
       break;
