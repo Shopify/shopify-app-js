@@ -5,6 +5,8 @@ import {Prisma} from '@prisma/client';
 
 interface PrismaSessionStorageOptions {
   tableName?: string;
+  connectionRetries?: number;
+  connectionRetryIntervalMs?: number;
 }
 
 const UNIQUE_KEY_CONSTRAINT_ERROR_CODE = 'P2002';
@@ -14,26 +16,39 @@ export class PrismaSessionStorage<T extends PrismaClient>
 {
   private ready: Promise<any>;
   private readonly tableName: string = 'session';
+  private connectionRetries = 2;
+  private connectionRetryIntervalMs = 5000;
 
   constructor(
     private prisma: T,
-    {tableName}: PrismaSessionStorageOptions = {},
+    {
+      tableName,
+      connectionRetries,
+      connectionRetryIntervalMs,
+    }: PrismaSessionStorageOptions = {},
   ) {
     if (tableName) {
       this.tableName = tableName;
     }
 
+    if (connectionRetries !== undefined) {
+      this.connectionRetries = connectionRetries;
+    }
+
+    if (connectionRetryIntervalMs !== undefined) {
+      this.connectionRetryIntervalMs = connectionRetryIntervalMs;
+    }
+
     if (this.getSessionTable() === undefined) {
       throw new Error(`PrismaClient does not have a ${this.tableName} table`);
     }
-    this.ready = this.getSessionTable()
-      .count()
-      .catch((cause) => {
-        throw new MissingSessionTableError(
-          `Prisma ${this.tableName} table does not exist. This could happen for a few reasons, see https://github.com/Shopify/shopify-app-js/tree/main/packages/apps/session-storage/shopify-app-session-storage-prisma#troubleshooting for more information`,
-          cause,
-        );
-      });
+
+    this.ready = this.pollForTable().catch((cause) => {
+      throw new MissingSessionTableError(
+        `Prisma ${this.tableName} table does not exist. This could happen for a few reasons, see https://github.com/Shopify/shopify-app-js/tree/main/packages/apps/session-storage/shopify-app-session-storage-prisma#troubleshooting for more information`,
+        cause,
+      );
+    });
   }
 
   public async storeSession(session: Session): Promise<boolean> {
@@ -112,6 +127,31 @@ export class PrismaSessionStorage<T extends PrismaClient>
     });
 
     return sessions.map((session) => this.rowToSession(session));
+  }
+
+  private async pollForTable(): Promise<void> {
+    const promise = new Promise<void>((resolve, reject) => {
+      let retries = 0;
+      const doPoll = () => {
+        this.getSessionTable()
+          .count()
+          .then(() => {
+            resolve();
+          })
+          .catch((error) => {
+            if (retries < this.connectionRetries) {
+              retries++;
+              setTimeout(doPoll, this.connectionRetryIntervalMs);
+            } else {
+              reject(error);
+            }
+          });
+      };
+
+      doPoll();
+    });
+
+    return promise;
   }
 
   private sessionToRow(session: Session): Row {

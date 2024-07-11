@@ -56,16 +56,34 @@ const storage = new PrismaSessionStorage(prisma, {
 
 If you prefer to use your own implementation of a session storage mechanism that is compatible with the `@shopify/shopify-app-express` package, see the [implementing session storage guide](../shopify-app-session-storage/implementing-session-storage.md).
 
+### Connection retries
+
+When the storage starts up, it will connect to the database during startup so the app can start.
+If the DB server takes too long to start, the setup may fail.
+
+To avoid that, you can pass in the `connectionRetries` and `connectionRetryIntervalMs` options to control how many times to retry, and how long to wait between tries, respectively.
+For example:
+
+```ts
+const storage = new PrismaSessionStorage(prisma, {
+  // Default values
+  connectionRetries: 2,
+  connectionRetryIntervalMs: 5000,
+});
+```
 
 ## Updating your database
+
 When updating the type of database you are using, you may need to make some changes to your project for Prisma to work correctly. Please review the prisma documentation for your specific database type for configuration.
-* [MongoDB](https://www.prisma.io/docs/orm/overview/databases/mongodb)
-* [MySQL](https://www.prisma.io/docs/orm/overview/databases/mysql)
-* [PostgreSQL](https://www.prisma.io/docs/orm/overview/databases/postgresql)
+
+- [MongoDB](https://www.prisma.io/docs/orm/overview/databases/mongodb)
+- [MySQL](https://www.prisma.io/docs/orm/overview/databases/mysql)
+- [PostgreSQL](https://www.prisma.io/docs/orm/overview/databases/postgresql)
 
 ## Troubleshooting
 
 ### `MissingSessionTableError` error is thrown
+
 Some common reasons for that are:
 
 1. The database was not migrated.
@@ -78,5 +96,6 @@ Here are some possible solutions for this issue:
 1. Ensure you've copied the schema above into your `prisma.schema` file.
 1. If you've made changes to the table, make sure it's still called `Session`.
 
-###  Error: The "mongodb" provider is not supported with this command
+### Error: The "mongodb" provider is not supported with this command
+
 MongoDB does not support the [prisma migrate](https://www.prisma.io/docs/orm/prisma-migrate/understanding-prisma-migrate/overview) command. If you are using MongoDB please see the [Prisma documentation](https://www.prisma.io/docs/orm/overview/databases/mongodb) for configuring your database.
