@@ -11,5 +11,5 @@ export async function invalidateAccessToken(
   logger.debug(`Invalidating access token for session - ${session.id}`);
 
   session.accessToken = undefined;
-  await config.sessionStorage.storeSession(session);
+  await config.sessionStorage!.storeSession(session);
 }

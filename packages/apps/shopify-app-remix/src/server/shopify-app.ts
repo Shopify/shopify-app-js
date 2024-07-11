@@ -181,7 +181,10 @@ function deriveConfig<Storage extends SessionStorage>(
   appConfig: AppConfigArg,
   apiConfig: ApiConfig,
 ): AppConfig<Storage> {
-  if (!appConfig.sessionStorage) {
+  if (
+    !appConfig.sessionStorage &&
+    appConfig.distribution !== AppDistribution.ShopifyAdmin
+  ) {
     throw new ShopifyError(
       'Please provide a valid session storage. Refer to https://github.com/Shopify/shopify-app-js/blob/main/README.md#session-storage-options for options.',
     );

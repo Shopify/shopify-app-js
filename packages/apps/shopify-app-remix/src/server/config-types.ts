@@ -42,6 +42,8 @@ export interface AppConfigArg<
    *
    * Shopify provides multiple session storage adaptors and you can create your own.
    *
+   * Optional for apps created in the Shopify Admin.
+   *
    * {@link https://github.com/Shopify/shopify-app-js/blob/main/README.md#session-storage-options}
    *
    * @example
@@ -60,7 +62,7 @@ export interface AppConfigArg<
    * export default shopify;
    * ```
    */
-  sessionStorage: Storage;
+  sessionStorage?: Storage;
 
   /**
    * Whether your app use online or offline tokens.
@@ -238,7 +240,7 @@ export interface AppConfig<Storage extends SessionStorage = SessionStorage>
   canUseLoginForm: boolean;
   appUrl: string;
   auth: AuthConfig;
-  sessionStorage: Storage;
+  sessionStorage?: Storage;
   useOnlineTokens: boolean;
   hooks: HooksConfig;
   future: FutureFlags;

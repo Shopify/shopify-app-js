@@ -341,8 +341,10 @@
               "EnsureCORSFunction": "src/server/authenticate/helpers/ensure-cors-headers.ts",
               "AppConfigArg": "src/server/config-types.ts",
               "AdminApiContext": "src/server/clients/index.ts",
+              "FeatureEnabled": "src/server/future/flags.ts",
               "BillingContext": "src/server/authenticate/admin/billing/types.ts",
-              "RedirectFunction": "src/server/authenticate/admin/helpers/redirect.ts"
+              "RedirectFunction": "src/server/authenticate/admin/helpers/redirect.ts",
+              "ScopesApiContext": "src/server/authenticate/admin/scope/types.ts"
             },
             "name": "AuthenticateAdmin",
             "description": "",
@@ -371,11 +373,77 @@
               "EnsureCORSFunction": "src/server/authenticate/helpers/ensure-cors-headers.ts",
               "AppConfigArg": "src/server/config-types.ts",
               "AdminApiContext": "src/server/clients/index.ts",
+              "FeatureEnabled": "src/server/future/flags.ts",
               "BillingContext": "src/server/authenticate/admin/billing/types.ts",
-              "RedirectFunction": "src/server/authenticate/admin/helpers/redirect.ts"
+              "RedirectFunction": "src/server/authenticate/admin/helpers/redirect.ts",
+              "ScopesApiContext": "src/server/authenticate/admin/scope/types.ts"
             },
             "syntaxKind": "TypeAliasDeclaration",
             "name": "AdminContext",
+            "value": "FeatureEnabled<Config['future'], 'unstable_optionalScopesApi'> extends true\n    ? EmbeddedTypedAdminContext<Config, Resources> & ScopesContext\n    : EmbeddedTypedAdminContext<Config, Resources>",
+            "description": ""
+          },
+          "FeatureEnabled": {
+            "filePath": "src/server/future/flags.ts",
+            "importMap": {
+              "ConfigParams": "../shopify-api/dist/ts/lib/index.d.ts",
+              "Shopify": "../shopify-api/dist/ts/lib/index.d.ts",
+              "ShopifyRestResources": "../shopify-api/dist/ts/lib/index.d.ts",
+              "AppConfig": "src/server/config-types.ts"
+            },
+            "syntaxKind": "TypeAliasDeclaration",
+            "name": "FeatureEnabled",
+            "value": "Future extends FutureFlags\n  ? Future[Flag] extends true\n    ? true\n    : false\n  : false",
+            "description": ""
+          },
+          "FutureFlags": {
+            "filePath": "src/server/future/flags.ts",
+            "importMap": {
+              "ConfigParams": "../shopify-api/dist/ts/lib/index.d.ts",
+              "Shopify": "../shopify-api/dist/ts/lib/index.d.ts",
+              "ShopifyRestResources": "../shopify-api/dist/ts/lib/index.d.ts",
+              "AppConfig": "src/server/config-types.ts"
+            },
+            "name": "FutureFlags",
+            "description": "",
+            "members": [
+              {
+                "filePath": "src/server/future/flags.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "unstable_newEmbeddedAuthStrategy",
+                "value": "boolean",
+                "description": "When enabled, embedded apps will fetch access tokens via [token exchange](https://shopify.dev/docs/apps/auth/get-access-tokens/token-exchange). This assumes the app has scopes declared for [Shopify managing installation](https://shopify.dev/docs/apps/auth/installation#shopify-managed-installation).\n\nLearn more about this [new embedded app auth strategy](https://shopify.dev/docs/api/shopify-app-remix#embedded-auth-strategy).",
+                "isOptional": true,
+                "defaultValue": "false"
+              },
+              {
+                "filePath": "src/server/future/flags.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "unstable_optionalScopesApi",
+                "value": "boolean",
+                "description": "When enabled, the `optionalScopes` API will be available.",
+                "isOptional": true,
+                "defaultValue": "false"
+              }
+            ],
+            "value": "export interface FutureFlags {\n  /**\n   * When enabled, embedded apps will fetch access tokens via [token exchange](https://shopify.dev/docs/apps/auth/get-access-tokens/token-exchange).\n   * This assumes the app has scopes declared for [Shopify managing installation](https://shopify.dev/docs/apps/auth/installation#shopify-managed-installation).\n   *\n   * Learn more about this [new embedded app auth strategy](https://shopify.dev/docs/api/shopify-app-remix#embedded-auth-strategy).\n   *\n   * @default false\n   */\n  unstable_newEmbeddedAuthStrategy?: boolean;\n\n  /**\n   * When enabled, the `optionalScopes` API will be available.\n   *\n   * @default false\n   */\n  unstable_optionalScopesApi?: boolean;\n}"
+          },
+          "EmbeddedTypedAdminContext": {
+            "filePath": "src/server/authenticate/admin/types.ts",
+            "importMap": {
+              "JwtPayload": "../shopify-api/dist/ts/lib/index.d.ts",
+              "Session": "../shopify-api/dist/ts/lib/index.d.ts",
+              "ShopifyRestResources": "../shopify-api/dist/ts/lib/index.d.ts",
+              "EnsureCORSFunction": "src/server/authenticate/helpers/ensure-cors-headers.ts",
+              "AppConfigArg": "src/server/config-types.ts",
+              "AdminApiContext": "src/server/clients/index.ts",
+              "FeatureEnabled": "src/server/future/flags.ts",
+              "BillingContext": "src/server/authenticate/admin/billing/types.ts",
+              "RedirectFunction": "src/server/authenticate/admin/helpers/redirect.ts",
+              "ScopesApiContext": "src/server/authenticate/admin/scope/types.ts"
+            },
+            "syntaxKind": "TypeAliasDeclaration",
+            "name": "EmbeddedTypedAdminContext",
             "value": "Config['isEmbeddedApp'] extends false\n  ? NonEmbeddedAdminContext<Config, Resources>\n  : EmbeddedAdminContext<Config, Resources>",
             "description": ""
           },
@@ -388,8 +456,10 @@
               "EnsureCORSFunction": "src/server/authenticate/helpers/ensure-cors-headers.ts",
               "AppConfigArg": "src/server/config-types.ts",
               "AdminApiContext": "src/server/clients/index.ts",
+              "FeatureEnabled": "src/server/future/flags.ts",
               "BillingContext": "src/server/authenticate/admin/billing/types.ts",
-              "RedirectFunction": "src/server/authenticate/admin/helpers/redirect.ts"
+              "RedirectFunction": "src/server/authenticate/admin/helpers/redirect.ts",
+              "ScopesApiContext": "src/server/authenticate/admin/scope/types.ts"
             },
             "name": "NonEmbeddedAdminContext",
             "description": "",
@@ -1545,8 +1615,10 @@
               "EnsureCORSFunction": "src/server/authenticate/helpers/ensure-cors-headers.ts",
               "AppConfigArg": "src/server/config-types.ts",
               "AdminApiContext": "src/server/clients/index.ts",
+              "FeatureEnabled": "src/server/future/flags.ts",
               "BillingContext": "src/server/authenticate/admin/billing/types.ts",
-              "RedirectFunction": "src/server/authenticate/admin/helpers/redirect.ts"
+              "RedirectFunction": "src/server/authenticate/admin/helpers/redirect.ts",
+              "ScopesApiContext": "src/server/authenticate/admin/scope/types.ts"
             },
             "name": "EmbeddedAdminContext",
             "description": "",
@@ -1816,6 +1888,48 @@
               }
             ],
             "value": "export interface JwtPayload {\n    /**\n     * The shop's admin domain.\n     */\n    iss: string;\n    /**\n     * The shop's domain.\n     */\n    dest: string;\n    /**\n     * The client ID of the receiving app.\n     */\n    aud: string;\n    /**\n     * The User that the session token is intended for.\n     */\n    sub: string;\n    /**\n     * When the session token expires.\n     */\n    exp: number;\n    /**\n     * When the session token activates.\n     */\n    nbf: number;\n    /**\n     * When the session token was issued.\n     */\n    iat: number;\n    /**\n     * A secure random UUID.\n     */\n    jti: string;\n    /**\n     * A unique session ID per user and app.\n     */\n    sid: string;\n}"
+          },
+          "ScopesContext": {
+            "filePath": "src/server/authenticate/admin/types.ts",
+            "importMap": {
+              "JwtPayload": "../shopify-api/dist/ts/lib/index.d.ts",
+              "Session": "../shopify-api/dist/ts/lib/index.d.ts",
+              "ShopifyRestResources": "../shopify-api/dist/ts/lib/index.d.ts",
+              "EnsureCORSFunction": "src/server/authenticate/helpers/ensure-cors-headers.ts",
+              "AppConfigArg": "src/server/config-types.ts",
+              "AdminApiContext": "src/server/clients/index.ts",
+              "FeatureEnabled": "src/server/future/flags.ts",
+              "BillingContext": "src/server/authenticate/admin/billing/types.ts",
+              "RedirectFunction": "src/server/authenticate/admin/helpers/redirect.ts",
+              "ScopesApiContext": "src/server/authenticate/admin/scope/types.ts"
+            },
+            "name": "ScopesContext",
+            "description": "",
+            "members": [
+              {
+                "filePath": "src/server/authenticate/admin/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "scopes",
+                "value": "ScopesApiContext",
+                "description": "Methods to manage optional scopes for the store that made the request."
+              }
+            ],
+            "value": "interface ScopesContext {\n  /**\n   * Methods to manage optional scopes for the store that made the request.\n   */\n  scopes: ScopesApiContext;\n}"
+          },
+          "ScopesApiContext": {
+            "filePath": "src/server/authenticate/admin/scope/types.ts",
+            "name": "ScopesApiContext",
+            "description": "",
+            "members": [
+              {
+                "filePath": "src/server/authenticate/admin/scope/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "request",
+                "value": "(scopes: string[]) => Promise<void>",
+                "description": ""
+              }
+            ],
+            "value": "export interface ScopesApiContext {\n  request: (scopes: string[]) => Promise<void>;\n}"
           }
         }
       }
@@ -7737,7 +7851,7 @@
             },
             "syntaxKind": "TypeAliasDeclaration",
             "name": "ShopifyApp",
-            "value": "Config['distribution'] extends AppDistribution.ShopifyAdmin\n    ? AdminApp<Config>\n    : Config['distribution'] extends AppDistribution.SingleMerchant\n      ? SingleMerchantApp<Config>\n      : Config['distribution'] extends AppDistribution.AppStore\n        ? AppStoreApp<Config>\n        : AppStoreApp<Config>",
+            "value": "Config['distribution'] extends AppDistribution.ShopifyAdmin\n    ? AdminApp<Config>\n    : Config['distribution'] extends AppDistribution.SingleMerchant\n      ? EnforceSessionStorage<Config, SingleMerchantApp<Config>>\n      : Config['distribution'] extends AppDistribution.AppStore\n        ? EnforceSessionStorage<Config, AppStoreApp<Config>>\n        : EnforceSessionStorage<Config, AppStoreApp<Config>>",
             "description": "An object your app can use to interact with Shopify.\n\nBy default, the app's distribution is `AppStore`."
           },
           "AppDistribution": {
@@ -8102,8 +8216,10 @@
               "EnsureCORSFunction": "src/server/authenticate/helpers/ensure-cors-headers.ts",
               "AppConfigArg": "src/server/config-types.ts",
               "AdminApiContext": "src/server/clients/index.ts",
+              "FeatureEnabled": "src/server/future/flags.ts",
               "BillingContext": "src/server/authenticate/admin/billing/types.ts",
-              "RedirectFunction": "src/server/authenticate/admin/helpers/redirect.ts"
+              "RedirectFunction": "src/server/authenticate/admin/helpers/redirect.ts",
+              "ScopesApiContext": "src/server/authenticate/admin/scope/types.ts"
             },
             "name": "AuthenticateAdmin",
             "description": "",
@@ -8132,11 +8248,77 @@
               "EnsureCORSFunction": "src/server/authenticate/helpers/ensure-cors-headers.ts",
               "AppConfigArg": "src/server/config-types.ts",
               "AdminApiContext": "src/server/clients/index.ts",
+              "FeatureEnabled": "src/server/future/flags.ts",
               "BillingContext": "src/server/authenticate/admin/billing/types.ts",
-              "RedirectFunction": "src/server/authenticate/admin/helpers/redirect.ts"
+              "RedirectFunction": "src/server/authenticate/admin/helpers/redirect.ts",
+              "ScopesApiContext": "src/server/authenticate/admin/scope/types.ts"
             },
             "syntaxKind": "TypeAliasDeclaration",
             "name": "AdminContext",
+            "value": "FeatureEnabled<Config['future'], 'unstable_optionalScopesApi'> extends true\n    ? EmbeddedTypedAdminContext<Config, Resources> & ScopesContext\n    : EmbeddedTypedAdminContext<Config, Resources>",
+            "description": ""
+          },
+          "FeatureEnabled": {
+            "filePath": "src/server/future/flags.ts",
+            "importMap": {
+              "ConfigParams": "../shopify-api/dist/ts/lib/index.d.ts",
+              "Shopify": "../shopify-api/dist/ts/lib/index.d.ts",
+              "ShopifyRestResources": "../shopify-api/dist/ts/lib/index.d.ts",
+              "AppConfig": "src/server/config-types.ts"
+            },
+            "syntaxKind": "TypeAliasDeclaration",
+            "name": "FeatureEnabled",
+            "value": "Future extends FutureFlags\n  ? Future[Flag] extends true\n    ? true\n    : false\n  : false",
+            "description": ""
+          },
+          "FutureFlags": {
+            "filePath": "src/server/future/flags.ts",
+            "importMap": {
+              "ConfigParams": "../shopify-api/dist/ts/lib/index.d.ts",
+              "Shopify": "../shopify-api/dist/ts/lib/index.d.ts",
+              "ShopifyRestResources": "../shopify-api/dist/ts/lib/index.d.ts",
+              "AppConfig": "src/server/config-types.ts"
+            },
+            "name": "FutureFlags",
+            "description": "",
+            "members": [
+              {
+                "filePath": "src/server/future/flags.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "unstable_newEmbeddedAuthStrategy",
+                "value": "boolean",
+                "description": "When enabled, embedded apps will fetch access tokens via [token exchange](https://shopify.dev/docs/apps/auth/get-access-tokens/token-exchange). This assumes the app has scopes declared for [Shopify managing installation](https://shopify.dev/docs/apps/auth/installation#shopify-managed-installation).\n\nLearn more about this [new embedded app auth strategy](https://shopify.dev/docs/api/shopify-app-remix#embedded-auth-strategy).",
+                "isOptional": true,
+                "defaultValue": "false"
+              },
+              {
+                "filePath": "src/server/future/flags.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "unstable_optionalScopesApi",
+                "value": "boolean",
+                "description": "When enabled, the `optionalScopes` API will be available.",
+                "isOptional": true,
+                "defaultValue": "false"
+              }
+            ],
+            "value": "export interface FutureFlags {\n  /**\n   * When enabled, embedded apps will fetch access tokens via [token exchange](https://shopify.dev/docs/apps/auth/get-access-tokens/token-exchange).\n   * This assumes the app has scopes declared for [Shopify managing installation](https://shopify.dev/docs/apps/auth/installation#shopify-managed-installation).\n   *\n   * Learn more about this [new embedded app auth strategy](https://shopify.dev/docs/api/shopify-app-remix#embedded-auth-strategy).\n   *\n   * @default false\n   */\n  unstable_newEmbeddedAuthStrategy?: boolean;\n\n  /**\n   * When enabled, the `optionalScopes` API will be available.\n   *\n   * @default false\n   */\n  unstable_optionalScopesApi?: boolean;\n}"
+          },
+          "EmbeddedTypedAdminContext": {
+            "filePath": "src/server/authenticate/admin/types.ts",
+            "importMap": {
+              "JwtPayload": "../shopify-api/dist/ts/lib/index.d.ts",
+              "Session": "../shopify-api/dist/ts/lib/index.d.ts",
+              "ShopifyRestResources": "../shopify-api/dist/ts/lib/index.d.ts",
+              "EnsureCORSFunction": "src/server/authenticate/helpers/ensure-cors-headers.ts",
+              "AppConfigArg": "src/server/config-types.ts",
+              "AdminApiContext": "src/server/clients/index.ts",
+              "FeatureEnabled": "src/server/future/flags.ts",
+              "BillingContext": "src/server/authenticate/admin/billing/types.ts",
+              "RedirectFunction": "src/server/authenticate/admin/helpers/redirect.ts",
+              "ScopesApiContext": "src/server/authenticate/admin/scope/types.ts"
+            },
+            "syntaxKind": "TypeAliasDeclaration",
+            "name": "EmbeddedTypedAdminContext",
             "value": "Config['isEmbeddedApp'] extends false\n  ? NonEmbeddedAdminContext<Config, Resources>\n  : EmbeddedAdminContext<Config, Resources>",
             "description": ""
           },
@@ -8149,8 +8331,10 @@
               "EnsureCORSFunction": "src/server/authenticate/helpers/ensure-cors-headers.ts",
               "AppConfigArg": "src/server/config-types.ts",
               "AdminApiContext": "src/server/clients/index.ts",
+              "FeatureEnabled": "src/server/future/flags.ts",
               "BillingContext": "src/server/authenticate/admin/billing/types.ts",
-              "RedirectFunction": "src/server/authenticate/admin/helpers/redirect.ts"
+              "RedirectFunction": "src/server/authenticate/admin/helpers/redirect.ts",
+              "ScopesApiContext": "src/server/authenticate/admin/scope/types.ts"
             },
             "name": "NonEmbeddedAdminContext",
             "description": "",
@@ -9306,8 +9490,10 @@
               "EnsureCORSFunction": "src/server/authenticate/helpers/ensure-cors-headers.ts",
               "AppConfigArg": "src/server/config-types.ts",
               "AdminApiContext": "src/server/clients/index.ts",
+              "FeatureEnabled": "src/server/future/flags.ts",
               "BillingContext": "src/server/authenticate/admin/billing/types.ts",
-              "RedirectFunction": "src/server/authenticate/admin/helpers/redirect.ts"
+              "RedirectFunction": "src/server/authenticate/admin/helpers/redirect.ts",
+              "ScopesApiContext": "src/server/authenticate/admin/scope/types.ts"
             },
             "name": "EmbeddedAdminContext",
             "description": "",
@@ -9577,6 +9763,48 @@
               }
             ],
             "value": "export interface JwtPayload {\n    /**\n     * The shop's admin domain.\n     */\n    iss: string;\n    /**\n     * The shop's domain.\n     */\n    dest: string;\n    /**\n     * The client ID of the receiving app.\n     */\n    aud: string;\n    /**\n     * The User that the session token is intended for.\n     */\n    sub: string;\n    /**\n     * When the session token expires.\n     */\n    exp: number;\n    /**\n     * When the session token activates.\n     */\n    nbf: number;\n    /**\n     * When the session token was issued.\n     */\n    iat: number;\n    /**\n     * A secure random UUID.\n     */\n    jti: string;\n    /**\n     * A unique session ID per user and app.\n     */\n    sid: string;\n}"
+          },
+          "ScopesContext": {
+            "filePath": "src/server/authenticate/admin/types.ts",
+            "importMap": {
+              "JwtPayload": "../shopify-api/dist/ts/lib/index.d.ts",
+              "Session": "../shopify-api/dist/ts/lib/index.d.ts",
+              "ShopifyRestResources": "../shopify-api/dist/ts/lib/index.d.ts",
+              "EnsureCORSFunction": "src/server/authenticate/helpers/ensure-cors-headers.ts",
+              "AppConfigArg": "src/server/config-types.ts",
+              "AdminApiContext": "src/server/clients/index.ts",
+              "FeatureEnabled": "src/server/future/flags.ts",
+              "BillingContext": "src/server/authenticate/admin/billing/types.ts",
+              "RedirectFunction": "src/server/authenticate/admin/helpers/redirect.ts",
+              "ScopesApiContext": "src/server/authenticate/admin/scope/types.ts"
+            },
+            "name": "ScopesContext",
+            "description": "",
+            "members": [
+              {
+                "filePath": "src/server/authenticate/admin/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "scopes",
+                "value": "ScopesApiContext",
+                "description": "Methods to manage optional scopes for the store that made the request."
+              }
+            ],
+            "value": "interface ScopesContext {\n  /**\n   * Methods to manage optional scopes for the store that made the request.\n   */\n  scopes: ScopesApiContext;\n}"
+          },
+          "ScopesApiContext": {
+            "filePath": "src/server/authenticate/admin/scope/types.ts",
+            "name": "ScopesApiContext",
+            "description": "",
+            "members": [
+              {
+                "filePath": "src/server/authenticate/admin/scope/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "request",
+                "value": "(scopes: string[]) => Promise<void>",
+                "description": ""
+              }
+            ],
+            "value": "export interface ScopesApiContext {\n  request: (scopes: string[]) => Promise<void>;\n}"
           },
           "RestResourcesType": {
             "filePath": "src/server/types.ts",
@@ -11192,6 +11420,31 @@
             ],
             "value": "export interface UnauthenticatedStorefrontContext {\n  /**\n   * The session for the given shop.\n   *\n   * This comes from the session storage which `shopifyApp` uses to store sessions in your database of choice.\n   *\n   * This will always be an offline session. You can use this to get shop specific data.\n   *\n   * @example\n   * <caption>Using the offline session.</caption>\n   * <description>Get your app's shop-specific data using the returned offline `session` object.</description>\n   * ```ts\n   * // app/routes/**\\/.ts\n   * import { LoaderFunctionArgs, json } from \"@remix-run/node\";\n   * import { unauthenticated } from \"../shopify.server\";\n   * import { getMyAppData } from \"~/db/model.server\";\n   *\n   * export const loader = async ({ request }: LoaderFunctionArgs) => {\n   *   const shop = getShopFromExternalRequest(request);\n   *   const { session } = await unauthenticated.storefront(shop);\n   *   return json(await getMyAppData({shop: session.shop));\n   * };\n   * ```\n   */\n  session: Session;\n\n  /**\n   * Method for interacting with the Shopify GraphQL Storefront API for the given store.\n   *\n   * @example\n   * <caption>Querying the GraphQL API.</caption>\n   * <description>Use `storefront.graphql` to make query / mutation requests.</description>\n   * ```ts\n   * // app/routes/**\\/.ts\n   * import { json } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   *\n   * export async function action({ request }: ActionFunctionArgs) {\n   *   const shop = getShopFromExternalRequest(request);\n   *   const { storefront } = await unauthenticated.storefront(shop);\n   *\n   *   const response = await storefront.graphql(`{blogs(first: 10) { edges { node { id } } } }`);\n   *\n   *   return json(await response.json());\n   * }\n   * ```\n   *\n   * @example\n   * <caption>Handling GraphQL errors.</caption>\n   * <description>Catch `GraphqlQueryError` errors to see error messages from the API.</description>\n   * ```ts\n   * // /app/routes/**\\/*.ts\n   * import { ActionFunctionArgs } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   *\n   * export const action = async ({ request }: ActionFunctionArgs) => {\n   *   const shop = getShopFromExternalRequest(request);\n   *   const { storefront } = await unauthenticated.storefront(shop);\n   *\n   *   try {\n   *     const response = await storefront.graphql(\n   *       `#graphql\n   *       query incorrectQuery {\n   *         products(first: 10) {\n   *           nodes {\n   *             not_a_field\n   *           }\n   *         }\n   *       }`,\n   *     );\n   *\n   *     return json({ data: await response.json() });\n   *   } catch (error) {\n   *     if (error instanceof GraphqlQueryError) {\n   *       // { errors: { graphQLErrors: [\n   *       //   { message: \"Field 'not_a_field' doesn't exist on type 'Product'\" }\n   *       // ] } }\n   *       return json({ errors: error.body?.errors }, { status: 500 });\n   *     }\n   *     return json({ message: \"An error occurred\" }, { status: 500 });\n   *   }\n   * }\n   * ```\n   *\n   * ```ts\n   * // /app/shopify.server.ts\n   * import { shopifyApp } from \"@shopify/shopify-app-remix/server\";\n   *\n   * const shopify = shopifyApp({\n   *   // ...\n   * });\n   * export default shopify;\n   * export const unauthenticated = shopify.unauthenticated;\n   * ```\n   */\n  storefront: StorefrontContext;\n}"
           },
+          "EnforceSessionStorage": {
+            "filePath": "src/server/types.ts",
+            "importMap": {
+              "RegisterReturn": "../shopify-api/dist/ts/lib/index.d.ts",
+              "Shopify": "../shopify-api/dist/ts/lib/index.d.ts",
+              "ShopifyRestResources": "../shopify-api/dist/ts/lib/index.d.ts",
+              "SessionStorage": "../session-storage/shopify-app-session-storage/dist/ts/index.d.ts",
+              "AppConfig": "src/server/config-types.ts",
+              "AppConfigArg": "src/server/config-types.ts",
+              "AuthenticateWebhook": "src/server/authenticate/webhooks/types.ts",
+              "RegisterWebhooksOptions": "src/server/authenticate/webhooks/types.ts",
+              "AuthenticatePublic": "src/server/authenticate/public/types.ts",
+              "AuthenticateAdmin": "src/server/authenticate/admin/types.ts",
+              "Unauthenticated": "src/server/unauthenticated/types.ts",
+              "AuthenticateFlow": "src/server/authenticate/flow/types.ts",
+              "ApiConfigWithFutureFlags": "src/server/future/flags.ts",
+              "ApiFutureFlags": "src/server/future/flags.ts",
+              "FutureFlagOptions": "src/server/future/flags.ts",
+              "AuthenticateFulfillmentService": "src/server/authenticate/fulfillment-service/types.ts"
+            },
+            "syntaxKind": "TypeAliasDeclaration",
+            "name": "EnforceSessionStorage",
+            "value": "Config['distribution'] extends AppDistribution.ShopifyAdmin\n  ? Base\n  : Base & {sessionStorage: SessionStorageType<Config>}",
+            "description": ""
+          },
           "SingleMerchantApp": {
             "filePath": "src/server/types.ts",
             "importMap": {
@@ -11735,7 +11988,7 @@
                 "syntaxKind": "PropertySignature",
                 "name": "sessionStorage",
                 "value": "Storage",
-                "description": "An adaptor for storing sessions in your database of choice.\n\nShopify provides multiple session storage adaptors and you can create your own.\n\n\n\n\n",
+                "description": "An adaptor for storing sessions in your database of choice.\n\nShopify provides multiple session storage adaptors and you can create your own.\n\nOptional for apps created in the Shopify Admin.\n\n\n\n\n",
                 "isOptional": true,
                 "examples": [
                   {
@@ -11788,7 +12041,7 @@
                 ]
               }
             ],
-            "value": "export interface AppConfigArg<\n  Resources extends ShopifyRestResources = ShopifyRestResources,\n  Storage extends SessionStorage = SessionStorage,\n  Future extends FutureFlagOptions = FutureFlagOptions,\n> extends Omit<\n    ApiConfigArg<Resources, ApiFutureFlags<Future>>,\n    | 'hostName'\n    | 'hostScheme'\n    | 'isEmbeddedApp'\n    | 'apiVersion'\n    | 'isCustomStoreApp'\n    | 'future'\n  > {\n  /**\n   * The URL your app is running on.\n   *\n   * The `@shopify/cli` provides this URL as `process.env.SHOPIFY_APP_URL`.  For development this is probably a tunnel URL that points to your local machine.  If this is a production app, this is your production URL.\n   */\n  appUrl: string;\n\n  /**\n   * An adaptor for storing sessions in your database of choice.\n   *\n   * Shopify provides multiple session storage adaptors and you can create your own.\n   *\n   * {@link https://github.com/Shopify/shopify-app-js/blob/main/README.md#session-storage-options}\n   *\n   * @example\n   * <caption>Storing sessions with Prisma.</caption>\n   * <description>Add the `@shopify/shopify-app-session-storage-prisma` package to use the Prisma session storage.</description>\n   * ```ts\n   * import { shopifyApp } from \"@shopify/shopify-app-remix/server\";\n   * import { PrismaSessionStorage } from \"@shopify/shopify-app-session-storage-prisma\";\n   *\n   * import prisma from \"~/db.server\";\n   *\n   * const shopify = shopifyApp({\n   *   // ... etc\n   *   sessionStorage: new PrismaSessionStorage(prisma),\n   * });\n   * export default shopify;\n   * ```\n   */\n  sessionStorage?: Storage;\n\n  /**\n   * Whether your app use online or offline tokens.\n   *\n   * If your app uses online tokens, then both online and offline tokens will be saved to your database.  This ensures your app can perform background jobs.\n   *\n   * {@link https://shopify.dev/docs/apps/auth/oauth/access-modes}\n   *\n   * @defaultValue `false`\n   */\n  useOnlineTokens?: boolean;\n\n  /**\n   * The config for the webhook topics your app would like to subscribe to.\n   *\n   * {@link https://shopify.dev/docs/apps/webhooks}\n   *\n   * This can be in used in conjunction with the afterAuth hook to register webhook topics when a user installs your app.  Or you can use this function in other processes such as background jobs.\n   *\n   * @example\n   * <caption>Registering for a webhook when a merchant uninstalls your app.</caption>\n   * ```ts\n   * // /app/shopify.server.ts\n   * import { DeliveryMethod, shopifyApp } from \"@shopify/shopify-app-remix/server\";\n   *\n   * const shopify = shopifyApp({\n   *   webhooks: {\n   *     APP_UNINSTALLED: {\n   *       deliveryMethod: DeliveryMethod.Http,\n   *        callbackUrl: \"/webhooks\",\n   *     },\n   *   },\n   *   hooks: {\n   *     afterAuth: async ({ session }) => {\n   *       shopify.registerWebhooks({ session });\n   *     }\n   *   },\n   *   // ...etc\n   * });\n   * export default shopify;\n   * export const authenticate = shopify.authenticate;\n   *\n   * // /app/routes/webhooks.jsx\n   * import { ActionFunctionArgs } from \"@remix-run/node\";\n   *\n   * import { authenticate } from \"../shopify.server\";\n   * import db from \"../db.server\";\n   *\n   * export const action = async ({ request }: ActionFunctionArgs) => {\n   *   const { topic, shop } = await authenticate.webhook(request);\n   *\n   *   switch (topic) {\n   *     case \"APP_UNINSTALLED\":\n   *       await db.session.deleteMany({ where: { shop } });\n   *       break;\n   *     case \"CUSTOMERS_DATA_REQUEST\":\n   *     case \"CUSTOMERS_REDACT\":\n   *     case \"SHOP_REDACT\":\n   *     default:\n   *       throw new Response(\"Unhandled webhook topic\", { status: 404 });\n   *   }\n   *   throw new Response();\n   * };\n   * ```\n   */\n  webhooks?: WebhookConfig;\n\n  /**\n   * Functions to call at key places during your apps lifecycle.\n   *\n   * These functions are called in the context of the request that triggered them.  This means you can access the session.\n   *\n   * @example\n   * <caption>Seeding your database custom data when a merchant installs your app.</caption>\n   * ```ts\n   * import { DeliveryMethod, shopifyApp } from \"@shopify/shopify-app-remix/server\";\n   * import { seedStoreData } from \"~/db/seeds\"\n   *\n   * const shopify = shopifyApp({\n   *   hooks: {\n   *     afterAuth: async ({ session }) => {\n   *       seedStoreData({session})\n   *     }\n   *   },\n   *   // ...etc\n   * });\n   * ```\n   */\n  hooks?: HooksConfig;\n\n  /**\n   * Does your app render embedded inside the Shopify Admin or on its own.\n   *\n   * Unless you have very specific needs, this should be true.\n   *\n   * @defaultValue `true`\n   */\n  isEmbeddedApp?: boolean;\n\n  /**\n   * How your app is distributed. Default is `AppDistribution.AppStore`.\n   *\n   * AppStore should be used for public apps that are distributed in the Shopify App Store.\n   * SingleMerchant should be used for custom apps managed in the Partner Dashboard.\n   * ShopifyAdmin should be used for apps that are managed in the merchant's Shopify Admin.\n   *\n   * {@link https://shopify.dev/docs/apps/distribution}\n   */\n  distribution?: AppDistribution;\n\n  /**\n   * What version of Shopify's Admin API's would you like to use.\n   *\n   * {@link https://shopify.dev/docs/api/}\n   *\n   * @defaultValue `LATEST_API_VERSION` from `@shopify/shopify-app-remix`\n   *\n   * @example\n   * <caption>Using the latest API Version (Recommended)</caption>\n   * ```ts\n   * import { LATEST_API_VERSION, shopifyApp } from \"@shopify/shopify-app-remix/server\";\n   *\n   * const shopify = shopifyApp({\n   *   // ...etc\n   *   apiVersion: LATEST_API_VERSION,\n   * });\n   * ```\n   */\n  apiVersion?: ApiVersion;\n\n  /**\n   * A path that Shopify can reserve for auth related endpoints.\n   *\n   * This must match a $ route in your Remix app.  That route must export a loader function that calls `shopify.authenticate.admin(request)`.\n   *\n   * @default `\"/auth\"`\n   *\n   * @example\n   * <caption>Using the latest API Version (Recommended)</caption>\n   * ```ts\n   * // /app/shopify.server.ts\n   * import { LATEST_API_VERSION, shopifyApp } from \"@shopify/shopify-app-remix/server\";\n   *\n   * const shopify = shopifyApp({\n   *   // ...etc\n   *   apiVersion: LATEST_API_VERSION,\n   * });\n   * export default shopify;\n   * export const authenticate = shopify.authenticate;\n   *\n   * // /app/routes/auth/$.jsx\n   * import { LoaderFunctionArgs } from \"@remix-run/node\";\n   * import { authenticate } from \"../../shopify.server\";\n   *\n   * export async function loader({ request }: LoaderFunctionArgs) {\n   *   await authenticate.admin(request);\n   *\n   *   return null\n   * }\n   * ```\n   */\n  authPathPrefix?: string;\n\n  /**\n   * Features that will be introduced in future releases of this package.\n   *\n   * You can opt in to these features by setting the corresponding flags. By doing so, you can prepare for future\n   * releases in advance and provide feedback on the new features.\n   */\n  future?: Future;\n}"
+            "value": "export interface AppConfigArg<\n  Resources extends ShopifyRestResources = ShopifyRestResources,\n  Storage extends SessionStorage = SessionStorage,\n  Future extends FutureFlagOptions = FutureFlagOptions,\n> extends Omit<\n    ApiConfigArg<Resources, ApiFutureFlags<Future>>,\n    | 'hostName'\n    | 'hostScheme'\n    | 'isEmbeddedApp'\n    | 'apiVersion'\n    | 'isCustomStoreApp'\n    | 'future'\n  > {\n  /**\n   * The URL your app is running on.\n   *\n   * The `@shopify/cli` provides this URL as `process.env.SHOPIFY_APP_URL`.  For development this is probably a tunnel URL that points to your local machine.  If this is a production app, this is your production URL.\n   */\n  appUrl: string;\n\n  /**\n   * An adaptor for storing sessions in your database of choice.\n   *\n   * Shopify provides multiple session storage adaptors and you can create your own.\n   *\n   * Optional for apps created in the Shopify Admin.\n   *\n   * {@link https://github.com/Shopify/shopify-app-js/blob/main/README.md#session-storage-options}\n   *\n   * @example\n   * <caption>Storing sessions with Prisma.</caption>\n   * <description>Add the `@shopify/shopify-app-session-storage-prisma` package to use the Prisma session storage.</description>\n   * ```ts\n   * import { shopifyApp } from \"@shopify/shopify-app-remix/server\";\n   * import { PrismaSessionStorage } from \"@shopify/shopify-app-session-storage-prisma\";\n   *\n   * import prisma from \"~/db.server\";\n   *\n   * const shopify = shopifyApp({\n   *   // ... etc\n   *   sessionStorage: new PrismaSessionStorage(prisma),\n   * });\n   * export default shopify;\n   * ```\n   */\n  sessionStorage?: Storage;\n\n  /**\n   * Whether your app use online or offline tokens.\n   *\n   * If your app uses online tokens, then both online and offline tokens will be saved to your database.  This ensures your app can perform background jobs.\n   *\n   * {@link https://shopify.dev/docs/apps/auth/oauth/access-modes}\n   *\n   * @defaultValue `false`\n   */\n  useOnlineTokens?: boolean;\n\n  /**\n   * The config for the webhook topics your app would like to subscribe to.\n   *\n   * {@link https://shopify.dev/docs/apps/webhooks}\n   *\n   * This can be in used in conjunction with the afterAuth hook to register webhook topics when a user installs your app.  Or you can use this function in other processes such as background jobs.\n   *\n   * @example\n   * <caption>Registering for a webhook when a merchant uninstalls your app.</caption>\n   * ```ts\n   * // /app/shopify.server.ts\n   * import { DeliveryMethod, shopifyApp } from \"@shopify/shopify-app-remix/server\";\n   *\n   * const shopify = shopifyApp({\n   *   webhooks: {\n   *     APP_UNINSTALLED: {\n   *       deliveryMethod: DeliveryMethod.Http,\n   *        callbackUrl: \"/webhooks\",\n   *     },\n   *   },\n   *   hooks: {\n   *     afterAuth: async ({ session }) => {\n   *       shopify.registerWebhooks({ session });\n   *     }\n   *   },\n   *   // ...etc\n   * });\n   * export default shopify;\n   * export const authenticate = shopify.authenticate;\n   *\n   * // /app/routes/webhooks.jsx\n   * import { ActionFunctionArgs } from \"@remix-run/node\";\n   *\n   * import { authenticate } from \"../shopify.server\";\n   * import db from \"../db.server\";\n   *\n   * export const action = async ({ request }: ActionFunctionArgs) => {\n   *   const { topic, shop } = await authenticate.webhook(request);\n   *\n   *   switch (topic) {\n   *     case \"APP_UNINSTALLED\":\n   *       await db.session.deleteMany({ where: { shop } });\n   *       break;\n   *     case \"CUSTOMERS_DATA_REQUEST\":\n   *     case \"CUSTOMERS_REDACT\":\n   *     case \"SHOP_REDACT\":\n   *     default:\n   *       throw new Response(\"Unhandled webhook topic\", { status: 404 });\n   *   }\n   *   throw new Response();\n   * };\n   * ```\n   */\n  webhooks?: WebhookConfig;\n\n  /**\n   * Functions to call at key places during your apps lifecycle.\n   *\n   * These functions are called in the context of the request that triggered them.  This means you can access the session.\n   *\n   * @example\n   * <caption>Seeding your database custom data when a merchant installs your app.</caption>\n   * ```ts\n   * import { DeliveryMethod, shopifyApp } from \"@shopify/shopify-app-remix/server\";\n   * import { seedStoreData } from \"~/db/seeds\"\n   *\n   * const shopify = shopifyApp({\n   *   hooks: {\n   *     afterAuth: async ({ session }) => {\n   *       seedStoreData({session})\n   *     }\n   *   },\n   *   // ...etc\n   * });\n   * ```\n   */\n  hooks?: HooksConfig;\n\n  /**\n   * Does your app render embedded inside the Shopify Admin or on its own.\n   *\n   * Unless you have very specific needs, this should be true.\n   *\n   * @defaultValue `true`\n   */\n  isEmbeddedApp?: boolean;\n\n  /**\n   * How your app is distributed. Default is `AppDistribution.AppStore`.\n   *\n   * AppStore should be used for public apps that are distributed in the Shopify App Store.\n   * SingleMerchant should be used for custom apps managed in the Partner Dashboard.\n   * ShopifyAdmin should be used for apps that are managed in the merchant's Shopify Admin.\n   *\n   * {@link https://shopify.dev/docs/apps/distribution}\n   */\n  distribution?: AppDistribution;\n\n  /**\n   * What version of Shopify's Admin API's would you like to use.\n   *\n   * {@link https://shopify.dev/docs/api/}\n   *\n   * @defaultValue `LATEST_API_VERSION` from `@shopify/shopify-app-remix`\n   *\n   * @example\n   * <caption>Using the latest API Version (Recommended)</caption>\n   * ```ts\n   * import { LATEST_API_VERSION, shopifyApp } from \"@shopify/shopify-app-remix/server\";\n   *\n   * const shopify = shopifyApp({\n   *   // ...etc\n   *   apiVersion: LATEST_API_VERSION,\n   * });\n   * ```\n   */\n  apiVersion?: ApiVersion;\n\n  /**\n   * A path that Shopify can reserve for auth related endpoints.\n   *\n   * This must match a $ route in your Remix app.  That route must export a loader function that calls `shopify.authenticate.admin(request)`.\n   *\n   * @default `\"/auth\"`\n   *\n   * @example\n   * <caption>Using the latest API Version (Recommended)</caption>\n   * ```ts\n   * // /app/shopify.server.ts\n   * import { LATEST_API_VERSION, shopifyApp } from \"@shopify/shopify-app-remix/server\";\n   *\n   * const shopify = shopifyApp({\n   *   // ...etc\n   *   apiVersion: LATEST_API_VERSION,\n   * });\n   * export default shopify;\n   * export const authenticate = shopify.authenticate;\n   *\n   * // /app/routes/auth/$.jsx\n   * import { LoaderFunctionArgs } from \"@remix-run/node\";\n   * import { authenticate } from \"../../shopify.server\";\n   *\n   * export async function loader({ request }: LoaderFunctionArgs) {\n   *   await authenticate.admin(request);\n   *\n   *   return null\n   * }\n   * ```\n   */\n  authPathPrefix?: string;\n\n  /**\n   * Features that will be introduced in future releases of this package.\n   *\n   * You can opt in to these features by setting the corresponding flags. By doing so, you can prepare for future\n   * releases in advance and provide feedback on the new features.\n   */\n  future?: Future;\n}"
           },
           "BillingConfig": {
             "filePath": "../shopify-api/dist/ts/lib/billing/types.d.ts",
@@ -11827,53 +12080,6 @@
             "name": "BillingConfigItem",
             "value": "FeatureEnabled<Future, 'lineItemBilling'> extends true ? BillingConfigOneTimePlan | BillingConfigSubscriptionLineItemPlan : BillingConfigLegacyItem",
             "description": ""
-          },
-          "FeatureEnabled": {
-            "filePath": "../shopify-api/dist/ts/future/flags.d.ts",
-            "importMap": {
-              "ShopifyLogger": "../shopify-api/dist/ts/lib/logger/index.d.ts",
-              "ConfigInterface": "../shopify-api/dist/ts/lib/base-types.d.ts"
-            },
-            "syntaxKind": "TypeAliasDeclaration",
-            "name": "FeatureEnabled",
-            "value": "Future extends FutureFlags ? Future[Flag] extends true ? true : false : false",
-            "description": ""
-          },
-          "FutureFlags": {
-            "filePath": "../shopify-api/dist/ts/future/flags.d.ts",
-            "importMap": {
-              "ShopifyLogger": "../shopify-api/dist/ts/lib/logger/index.d.ts",
-              "ConfigInterface": "../shopify-api/dist/ts/lib/base-types.d.ts"
-            },
-            "name": "FutureFlags",
-            "description": "Future flags are used to enable features that are not yet available by default.",
-            "members": [
-              {
-                "filePath": "../shopify-api/dist/ts/future/flags.d.ts",
-                "syntaxKind": "PropertySignature",
-                "name": "customerAddressDefaultFix",
-                "value": "boolean",
-                "description": "Change the CustomerAddress classes to expose a `is_default` property instead of `default` when fetching data. This resolves a conflict with the default() method in that class.",
-                "isOptional": true
-              },
-              {
-                "filePath": "../shopify-api/dist/ts/future/flags.d.ts",
-                "syntaxKind": "PropertySignature",
-                "name": "lineItemBilling",
-                "value": "boolean",
-                "description": "Enable line item billing, to make billing configuration more similar to the GraphQL API.",
-                "isOptional": true
-              },
-              {
-                "filePath": "../shopify-api/dist/ts/future/flags.d.ts",
-                "syntaxKind": "PropertySignature",
-                "name": "v10_lineItemBilling",
-                "value": "boolean",
-                "description": "Enable line item billing, to make billing configuration more similar to the GraphQL API. Default enabling of this feature has been moved to v11. Use lineItemBilling instead.",
-                "isOptional": true
-              }
-            ],
-            "value": "export interface FutureFlags {\n    /**\n     * Enable line item billing, to make billing configuration more similar to the GraphQL API. Default enabling of this\n     * feature has been moved to v11. Use lineItemBilling instead.\n     */\n    v10_lineItemBilling?: boolean;\n    /**\n     * Enable line item billing, to make billing configuration more similar to the GraphQL API.\n     */\n    lineItemBilling?: boolean;\n    /**\n     * Change the CustomerAddress classes to expose a `is_default` property instead of `default` when fetching data. This\n     * resolves a conflict with the default() method in that class.\n     */\n    customerAddressDefaultFix?: boolean;\n}"
           },
           "BillingConfigOneTimePlan": {
             "filePath": "../shopify-api/dist/ts/lib/billing/types.d.ts",
@@ -12436,9 +12642,18 @@
                 "description": "When enabled, embedded apps will fetch access tokens via [token exchange](https://shopify.dev/docs/apps/auth/get-access-tokens/token-exchange). This assumes the app has scopes declared for [Shopify managing installation](https://shopify.dev/docs/apps/auth/installation#shopify-managed-installation).\n\nLearn more about this [new embedded app auth strategy](https://shopify.dev/docs/api/shopify-app-remix#embedded-auth-strategy).",
                 "isOptional": true,
                 "defaultValue": "false"
+              },
+              {
+                "filePath": "src/server/future/flags.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "unstable_optionalScopesApi",
+                "value": "boolean",
+                "description": "When enabled, the `optionalScopes` API will be available.",
+                "isOptional": true,
+                "defaultValue": "false"
               }
             ],
-            "value": "export interface FutureFlags {\n  /**\n   * When enabled, embedded apps will fetch access tokens via [token exchange](https://shopify.dev/docs/apps/auth/get-access-tokens/token-exchange).\n   * This assumes the app has scopes declared for [Shopify managing installation](https://shopify.dev/docs/apps/auth/installation#shopify-managed-installation).\n   *\n   * Learn more about this [new embedded app auth strategy](https://shopify.dev/docs/api/shopify-app-remix#embedded-auth-strategy).\n   *\n   * @default false\n   */\n  unstable_newEmbeddedAuthStrategy?: boolean;\n}"
+            "value": "export interface FutureFlags {\n  /**\n   * When enabled, embedded apps will fetch access tokens via [token exchange](https://shopify.dev/docs/apps/auth/get-access-tokens/token-exchange).\n   * This assumes the app has scopes declared for [Shopify managing installation](https://shopify.dev/docs/apps/auth/installation#shopify-managed-installation).\n   *\n   * Learn more about this [new embedded app auth strategy](https://shopify.dev/docs/api/shopify-app-remix#embedded-auth-strategy).\n   *\n   * @default false\n   */\n  unstable_newEmbeddedAuthStrategy?: boolean;\n\n  /**\n   * When enabled, the `optionalScopes` API will be available.\n   *\n   * @default false\n   */\n  unstable_optionalScopesApi?: boolean;\n}"
           }
         }
       }

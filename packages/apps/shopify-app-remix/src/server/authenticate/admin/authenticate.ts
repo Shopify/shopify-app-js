@@ -156,7 +156,7 @@ export function authStrategyFactory<
 
       logger.debug('Loading session from storage', {sessionId});
       const existingSession = sessionId
-        ? await config.sessionStorage.loadSession(sessionId)
+        ? await config.sessionStorage!.loadSession(sessionId)
         : undefined;
 
       const session = await strategy.authenticate(request, {
