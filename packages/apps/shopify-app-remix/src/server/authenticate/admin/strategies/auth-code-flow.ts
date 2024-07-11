@@ -204,6 +204,11 @@ export class AuthCodeFlowStrategy<
         await beginAuth({api, config, logger}, request, true, shop);
       }
 
+      logger.debug('Request is valid, loaded session from OAuth callback', {
+        shop: session.shop,
+        isOnline: session.isOnline,
+      });
+
       await triggerAfterAuthHook<Resources>(
         {api, config, logger},
         session,
