@@ -391,6 +391,30 @@ describe('GraphQL Client', () => {
           expect(response).toHaveProperty('data', mockResponseData.data);
         });
 
+        it('includes headers if headers are included in the response.', async () => {
+          const headers = {
+            'content-type': 'application/json',
+            'x-request-id': '1234',
+          };
+          const mockResponseData = {
+            data: {shop: {name: 'Test shop'}},
+            headers,
+          };
+          const mockedSuccessResponse = new Response(
+            JSON.stringify(mockResponseData),
+            {
+              status: 200,
+              headers: new Headers(headers),
+            },
+          );
+
+          fetchMock.mockResolvedValue(mockedSuccessResponse);
+
+          const response = await client.request(operation, {variables});
+          console.log(response, 'RESPONSE IN TEST');
+          expect(response).toHaveProperty('headers', new Headers(headers));
+        });
+
         it('includes an API extensions object if it is included in the response', async () => {
           const extensions = {
             context: {
