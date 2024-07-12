@@ -91,7 +91,7 @@ const response = await client.request(
     },
   },
 );
-console.log(response.data, response.extensions);
+console.log(response.data, response.extensions, response.headers);
 ```
 
 > **Note**: If using TypeScript, you can pass in a type argument for the response body:
@@ -158,7 +158,7 @@ The maximum number of times to retry the request.
 
 ### Return
 
-`Promise<ClientResponse>`
+`Promise<GraphQLClientResponse>`
 
 Returns an object containing:
 
@@ -173,5 +173,9 @@ The [`data` component](https://shopify.dev/docs/api/admin/getting-started#graphq
 `any`
 
 The [`extensions` component](https://shopify.dev/docs/api/admin-graphql#rate_limits) of the response.
+
+#### Headers
+`Record<string, string | string[]>`
+The headers from the response.
 
 [Back to shopify.clients](./README.md)

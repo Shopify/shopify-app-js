@@ -1081,7 +1081,7 @@
                 "syntaxKind": "PropertySignature",
                 "name": "isTest",
                 "value": "boolean",
-                "description": "Whether to consider test purchases.",
+                "description": "Whether to include charges that were created on test mode. Test shops and demo shops cannot be charged.",
                 "isOptional": true
               },
               {
@@ -1239,7 +1239,7 @@
                 "syntaxKind": "PropertySignature",
                 "name": "isTest",
                 "value": "boolean",
-                "description": "Whether to consider test purchases.",
+                "description": "Whether to include charges that were created on test mode. Test shops and demo shops cannot be charged.",
                 "isOptional": true
               },
               {
@@ -1348,7 +1348,14 @@
                 "syntaxKind": "MethodDeclaration",
                 "name": "isScopeChanged",
                 "value": "(scopes: string | string[] | AuthScopes) => boolean",
-                "description": "Whether the access token has the given scopes."
+                "description": "Whether the access token includes the given scopes if they are provided."
+              },
+              {
+                "filePath": "../shopify-api/dist/ts/lib/session/session.d.ts",
+                "syntaxKind": "MethodDeclaration",
+                "name": "isScopeIncluded",
+                "value": "(scopes: string | string[] | AuthScopes) => boolean",
+                "description": "Whether the access token includes the given scopes."
               },
               {
                 "filePath": "../shopify-api/dist/ts/lib/session/session.d.ts",
@@ -1379,7 +1386,7 @@
                 "description": "Converts the session into an array of key-value pairs."
               }
             ],
-            "value": "export declare class Session {\n    static fromPropertyArray(entries: [string, string | number | boolean][], returnUserData?: boolean): Session;\n    /**\n     * The unique identifier for the session.\n     */\n    readonly id: string;\n    /**\n     * The Shopify shop domain, such as `example.myshopify.com`.\n     */\n    shop: string;\n    /**\n     * The state of the session. Used for the OAuth authentication code flow.\n     */\n    state: string;\n    /**\n     * Whether the access token in the session is online or offline.\n     */\n    isOnline: boolean;\n    /**\n     * The desired scopes for the access token, at the time the session was created.\n     */\n    scope?: string;\n    /**\n     * The date the access token expires.\n     */\n    expires?: Date;\n    /**\n     * The access token for the session.\n     */\n    accessToken?: string;\n    /**\n     * Information on the user for the session. Only present for online sessions.\n     */\n    onlineAccessInfo?: OnlineAccessInfo;\n    constructor(params: SessionParams);\n    /**\n     * Whether the session is active. Active sessions have an access token that is not expired, and has has the given\n     * scopes if scopes is equal to a truthy value.\n     */\n    isActive(scopes: AuthScopes | string | string[] | undefined): boolean;\n    /**\n     * Whether the access token has the given scopes.\n     */\n    isScopeChanged(scopes: AuthScopes | string | string[] | undefined): boolean;\n    /**\n     * Whether the access token is expired.\n     */\n    isExpired(withinMillisecondsOfExpiry?: number): boolean;\n    /**\n     * Converts an object with data into a Session.\n     */\n    toObject(): SessionParams;\n    /**\n     * Checks whether the given session is equal to this session.\n     */\n    equals(other: Session | undefined): boolean;\n    /**\n     * Converts the session into an array of key-value pairs.\n     */\n    toPropertyArray(returnUserData?: boolean): [string, string | number | boolean][];\n}"
+            "value": "export declare class Session {\n    static fromPropertyArray(entries: [string, string | number | boolean][], returnUserData?: boolean): Session;\n    /**\n     * The unique identifier for the session.\n     */\n    readonly id: string;\n    /**\n     * The Shopify shop domain, such as `example.myshopify.com`.\n     */\n    shop: string;\n    /**\n     * The state of the session. Used for the OAuth authentication code flow.\n     */\n    state: string;\n    /**\n     * Whether the access token in the session is online or offline.\n     */\n    isOnline: boolean;\n    /**\n     * The desired scopes for the access token, at the time the session was created.\n     */\n    scope?: string;\n    /**\n     * The date the access token expires.\n     */\n    expires?: Date;\n    /**\n     * The access token for the session.\n     */\n    accessToken?: string;\n    /**\n     * Information on the user for the session. Only present for online sessions.\n     */\n    onlineAccessInfo?: OnlineAccessInfo;\n    constructor(params: SessionParams);\n    /**\n     * Whether the session is active. Active sessions have an access token that is not expired, and has has the given\n     * scopes if scopes is equal to a truthy value.\n     */\n    isActive(scopes: AuthScopes | string | string[] | undefined): boolean;\n    /**\n     * Whether the access token includes the given scopes if they are provided.\n     */\n    isScopeChanged(scopes: AuthScopes | string | string[] | undefined): boolean;\n    /**\n     * Whether the access token includes the given scopes.\n     */\n    isScopeIncluded(scopes: AuthScopes | string | string[]): boolean;\n    /**\n     * Whether the access token is expired.\n     */\n    isExpired(withinMillisecondsOfExpiry?: number): boolean;\n    /**\n     * Converts an object with data into a Session.\n     */\n    toObject(): SessionParams;\n    /**\n     * Checks whether the given session is equal to this session.\n     */\n    equals(other: Session | undefined): boolean;\n    /**\n     * Converts the session into an array of key-value pairs.\n     */\n    toPropertyArray(returnUserData?: boolean): [string, string | number | boolean][];\n}"
           },
           "OnlineAccessInfo": {
             "filePath": "../shopify-api/dist/ts/lib/auth/oauth/types.d.ts",
@@ -2849,7 +2856,7 @@
                 "syntaxKind": "PropertySignature",
                 "name": "isTest",
                 "value": "boolean",
-                "description": "Whether to consider test purchases.",
+                "description": "Whether to include charges that were created on test mode. Test shops and demo shops cannot be charged.",
                 "isOptional": true
               },
               {
@@ -3007,7 +3014,7 @@
                 "syntaxKind": "PropertySignature",
                 "name": "isTest",
                 "value": "boolean",
-                "description": "Whether to consider test purchases.",
+                "description": "Whether to include charges that were created on test mode. Test shops and demo shops cannot be charged.",
                 "isOptional": true
               },
               {
@@ -3341,7 +3348,14 @@
                 "syntaxKind": "MethodDeclaration",
                 "name": "isScopeChanged",
                 "value": "(scopes: string | string[] | AuthScopes) => boolean",
-                "description": "Whether the access token has the given scopes."
+                "description": "Whether the access token includes the given scopes if they are provided."
+              },
+              {
+                "filePath": "../shopify-api/dist/ts/lib/session/session.d.ts",
+                "syntaxKind": "MethodDeclaration",
+                "name": "isScopeIncluded",
+                "value": "(scopes: string | string[] | AuthScopes) => boolean",
+                "description": "Whether the access token includes the given scopes."
               },
               {
                 "filePath": "../shopify-api/dist/ts/lib/session/session.d.ts",
@@ -3372,7 +3386,7 @@
                 "description": "Converts the session into an array of key-value pairs."
               }
             ],
-            "value": "export declare class Session {\n    static fromPropertyArray(entries: [string, string | number | boolean][], returnUserData?: boolean): Session;\n    /**\n     * The unique identifier for the session.\n     */\n    readonly id: string;\n    /**\n     * The Shopify shop domain, such as `example.myshopify.com`.\n     */\n    shop: string;\n    /**\n     * The state of the session. Used for the OAuth authentication code flow.\n     */\n    state: string;\n    /**\n     * Whether the access token in the session is online or offline.\n     */\n    isOnline: boolean;\n    /**\n     * The desired scopes for the access token, at the time the session was created.\n     */\n    scope?: string;\n    /**\n     * The date the access token expires.\n     */\n    expires?: Date;\n    /**\n     * The access token for the session.\n     */\n    accessToken?: string;\n    /**\n     * Information on the user for the session. Only present for online sessions.\n     */\n    onlineAccessInfo?: OnlineAccessInfo;\n    constructor(params: SessionParams);\n    /**\n     * Whether the session is active. Active sessions have an access token that is not expired, and has has the given\n     * scopes if scopes is equal to a truthy value.\n     */\n    isActive(scopes: AuthScopes | string | string[] | undefined): boolean;\n    /**\n     * Whether the access token has the given scopes.\n     */\n    isScopeChanged(scopes: AuthScopes | string | string[] | undefined): boolean;\n    /**\n     * Whether the access token is expired.\n     */\n    isExpired(withinMillisecondsOfExpiry?: number): boolean;\n    /**\n     * Converts an object with data into a Session.\n     */\n    toObject(): SessionParams;\n    /**\n     * Checks whether the given session is equal to this session.\n     */\n    equals(other: Session | undefined): boolean;\n    /**\n     * Converts the session into an array of key-value pairs.\n     */\n    toPropertyArray(returnUserData?: boolean): [string, string | number | boolean][];\n}"
+            "value": "export declare class Session {\n    static fromPropertyArray(entries: [string, string | number | boolean][], returnUserData?: boolean): Session;\n    /**\n     * The unique identifier for the session.\n     */\n    readonly id: string;\n    /**\n     * The Shopify shop domain, such as `example.myshopify.com`.\n     */\n    shop: string;\n    /**\n     * The state of the session. Used for the OAuth authentication code flow.\n     */\n    state: string;\n    /**\n     * Whether the access token in the session is online or offline.\n     */\n    isOnline: boolean;\n    /**\n     * The desired scopes for the access token, at the time the session was created.\n     */\n    scope?: string;\n    /**\n     * The date the access token expires.\n     */\n    expires?: Date;\n    /**\n     * The access token for the session.\n     */\n    accessToken?: string;\n    /**\n     * Information on the user for the session. Only present for online sessions.\n     */\n    onlineAccessInfo?: OnlineAccessInfo;\n    constructor(params: SessionParams);\n    /**\n     * Whether the session is active. Active sessions have an access token that is not expired, and has has the given\n     * scopes if scopes is equal to a truthy value.\n     */\n    isActive(scopes: AuthScopes | string | string[] | undefined): boolean;\n    /**\n     * Whether the access token includes the given scopes if they are provided.\n     */\n    isScopeChanged(scopes: AuthScopes | string | string[] | undefined): boolean;\n    /**\n     * Whether the access token includes the given scopes.\n     */\n    isScopeIncluded(scopes: AuthScopes | string | string[]): boolean;\n    /**\n     * Whether the access token is expired.\n     */\n    isExpired(withinMillisecondsOfExpiry?: number): boolean;\n    /**\n     * Converts an object with data into a Session.\n     */\n    toObject(): SessionParams;\n    /**\n     * Checks whether the given session is equal to this session.\n     */\n    equals(other: Session | undefined): boolean;\n    /**\n     * Converts the session into an array of key-value pairs.\n     */\n    toPropertyArray(returnUserData?: boolean): [string, string | number | boolean][];\n}"
           },
           "OnlineAccessInfo": {
             "filePath": "../shopify-api/dist/ts/lib/auth/oauth/types.d.ts",
@@ -3888,7 +3902,14 @@
                 "syntaxKind": "MethodDeclaration",
                 "name": "isScopeChanged",
                 "value": "(scopes: string | string[] | AuthScopes) => boolean",
-                "description": "Whether the access token has the given scopes."
+                "description": "Whether the access token includes the given scopes if they are provided."
+              },
+              {
+                "filePath": "../shopify-api/dist/ts/lib/session/session.d.ts",
+                "syntaxKind": "MethodDeclaration",
+                "name": "isScopeIncluded",
+                "value": "(scopes: string | string[] | AuthScopes) => boolean",
+                "description": "Whether the access token includes the given scopes."
               },
               {
                 "filePath": "../shopify-api/dist/ts/lib/session/session.d.ts",
@@ -3919,7 +3940,7 @@
                 "description": "Converts the session into an array of key-value pairs."
               }
             ],
-            "value": "export declare class Session {\n    static fromPropertyArray(entries: [string, string | number | boolean][], returnUserData?: boolean): Session;\n    /**\n     * The unique identifier for the session.\n     */\n    readonly id: string;\n    /**\n     * The Shopify shop domain, such as `example.myshopify.com`.\n     */\n    shop: string;\n    /**\n     * The state of the session. Used for the OAuth authentication code flow.\n     */\n    state: string;\n    /**\n     * Whether the access token in the session is online or offline.\n     */\n    isOnline: boolean;\n    /**\n     * The desired scopes for the access token, at the time the session was created.\n     */\n    scope?: string;\n    /**\n     * The date the access token expires.\n     */\n    expires?: Date;\n    /**\n     * The access token for the session.\n     */\n    accessToken?: string;\n    /**\n     * Information on the user for the session. Only present for online sessions.\n     */\n    onlineAccessInfo?: OnlineAccessInfo;\n    constructor(params: SessionParams);\n    /**\n     * Whether the session is active. Active sessions have an access token that is not expired, and has has the given\n     * scopes if scopes is equal to a truthy value.\n     */\n    isActive(scopes: AuthScopes | string | string[] | undefined): boolean;\n    /**\n     * Whether the access token has the given scopes.\n     */\n    isScopeChanged(scopes: AuthScopes | string | string[] | undefined): boolean;\n    /**\n     * Whether the access token is expired.\n     */\n    isExpired(withinMillisecondsOfExpiry?: number): boolean;\n    /**\n     * Converts an object with data into a Session.\n     */\n    toObject(): SessionParams;\n    /**\n     * Checks whether the given session is equal to this session.\n     */\n    equals(other: Session | undefined): boolean;\n    /**\n     * Converts the session into an array of key-value pairs.\n     */\n    toPropertyArray(returnUserData?: boolean): [string, string | number | boolean][];\n}"
+            "value": "export declare class Session {\n    static fromPropertyArray(entries: [string, string | number | boolean][], returnUserData?: boolean): Session;\n    /**\n     * The unique identifier for the session.\n     */\n    readonly id: string;\n    /**\n     * The Shopify shop domain, such as `example.myshopify.com`.\n     */\n    shop: string;\n    /**\n     * The state of the session. Used for the OAuth authentication code flow.\n     */\n    state: string;\n    /**\n     * Whether the access token in the session is online or offline.\n     */\n    isOnline: boolean;\n    /**\n     * The desired scopes for the access token, at the time the session was created.\n     */\n    scope?: string;\n    /**\n     * The date the access token expires.\n     */\n    expires?: Date;\n    /**\n     * The access token for the session.\n     */\n    accessToken?: string;\n    /**\n     * Information on the user for the session. Only present for online sessions.\n     */\n    onlineAccessInfo?: OnlineAccessInfo;\n    constructor(params: SessionParams);\n    /**\n     * Whether the session is active. Active sessions have an access token that is not expired, and has has the given\n     * scopes if scopes is equal to a truthy value.\n     */\n    isActive(scopes: AuthScopes | string | string[] | undefined): boolean;\n    /**\n     * Whether the access token includes the given scopes if they are provided.\n     */\n    isScopeChanged(scopes: AuthScopes | string | string[] | undefined): boolean;\n    /**\n     * Whether the access token includes the given scopes.\n     */\n    isScopeIncluded(scopes: AuthScopes | string | string[]): boolean;\n    /**\n     * Whether the access token is expired.\n     */\n    isExpired(withinMillisecondsOfExpiry?: number): boolean;\n    /**\n     * Converts an object with data into a Session.\n     */\n    toObject(): SessionParams;\n    /**\n     * Checks whether the given session is equal to this session.\n     */\n    equals(other: Session | undefined): boolean;\n    /**\n     * Converts the session into an array of key-value pairs.\n     */\n    toPropertyArray(returnUserData?: boolean): [string, string | number | boolean][];\n}"
           },
           "OnlineAccessInfo": {
             "filePath": "../shopify-api/dist/ts/lib/auth/oauth/types.d.ts",
@@ -4594,7 +4615,14 @@
                 "syntaxKind": "MethodDeclaration",
                 "name": "isScopeChanged",
                 "value": "(scopes: string | string[] | AuthScopes) => boolean",
-                "description": "Whether the access token has the given scopes."
+                "description": "Whether the access token includes the given scopes if they are provided."
+              },
+              {
+                "filePath": "../shopify-api/dist/ts/lib/session/session.d.ts",
+                "syntaxKind": "MethodDeclaration",
+                "name": "isScopeIncluded",
+                "value": "(scopes: string | string[] | AuthScopes) => boolean",
+                "description": "Whether the access token includes the given scopes."
               },
               {
                 "filePath": "../shopify-api/dist/ts/lib/session/session.d.ts",
@@ -4625,7 +4653,7 @@
                 "description": "Converts the session into an array of key-value pairs."
               }
             ],
-            "value": "export declare class Session {\n    static fromPropertyArray(entries: [string, string | number | boolean][], returnUserData?: boolean): Session;\n    /**\n     * The unique identifier for the session.\n     */\n    readonly id: string;\n    /**\n     * The Shopify shop domain, such as `example.myshopify.com`.\n     */\n    shop: string;\n    /**\n     * The state of the session. Used for the OAuth authentication code flow.\n     */\n    state: string;\n    /**\n     * Whether the access token in the session is online or offline.\n     */\n    isOnline: boolean;\n    /**\n     * The desired scopes for the access token, at the time the session was created.\n     */\n    scope?: string;\n    /**\n     * The date the access token expires.\n     */\n    expires?: Date;\n    /**\n     * The access token for the session.\n     */\n    accessToken?: string;\n    /**\n     * Information on the user for the session. Only present for online sessions.\n     */\n    onlineAccessInfo?: OnlineAccessInfo;\n    constructor(params: SessionParams);\n    /**\n     * Whether the session is active. Active sessions have an access token that is not expired, and has has the given\n     * scopes if scopes is equal to a truthy value.\n     */\n    isActive(scopes: AuthScopes | string | string[] | undefined): boolean;\n    /**\n     * Whether the access token has the given scopes.\n     */\n    isScopeChanged(scopes: AuthScopes | string | string[] | undefined): boolean;\n    /**\n     * Whether the access token is expired.\n     */\n    isExpired(withinMillisecondsOfExpiry?: number): boolean;\n    /**\n     * Converts an object with data into a Session.\n     */\n    toObject(): SessionParams;\n    /**\n     * Checks whether the given session is equal to this session.\n     */\n    equals(other: Session | undefined): boolean;\n    /**\n     * Converts the session into an array of key-value pairs.\n     */\n    toPropertyArray(returnUserData?: boolean): [string, string | number | boolean][];\n}"
+            "value": "export declare class Session {\n    static fromPropertyArray(entries: [string, string | number | boolean][], returnUserData?: boolean): Session;\n    /**\n     * The unique identifier for the session.\n     */\n    readonly id: string;\n    /**\n     * The Shopify shop domain, such as `example.myshopify.com`.\n     */\n    shop: string;\n    /**\n     * The state of the session. Used for the OAuth authentication code flow.\n     */\n    state: string;\n    /**\n     * Whether the access token in the session is online or offline.\n     */\n    isOnline: boolean;\n    /**\n     * The desired scopes for the access token, at the time the session was created.\n     */\n    scope?: string;\n    /**\n     * The date the access token expires.\n     */\n    expires?: Date;\n    /**\n     * The access token for the session.\n     */\n    accessToken?: string;\n    /**\n     * Information on the user for the session. Only present for online sessions.\n     */\n    onlineAccessInfo?: OnlineAccessInfo;\n    constructor(params: SessionParams);\n    /**\n     * Whether the session is active. Active sessions have an access token that is not expired, and has has the given\n     * scopes if scopes is equal to a truthy value.\n     */\n    isActive(scopes: AuthScopes | string | string[] | undefined): boolean;\n    /**\n     * Whether the access token includes the given scopes if they are provided.\n     */\n    isScopeChanged(scopes: AuthScopes | string | string[] | undefined): boolean;\n    /**\n     * Whether the access token includes the given scopes.\n     */\n    isScopeIncluded(scopes: AuthScopes | string | string[]): boolean;\n    /**\n     * Whether the access token is expired.\n     */\n    isExpired(withinMillisecondsOfExpiry?: number): boolean;\n    /**\n     * Converts an object with data into a Session.\n     */\n    toObject(): SessionParams;\n    /**\n     * Checks whether the given session is equal to this session.\n     */\n    equals(other: Session | undefined): boolean;\n    /**\n     * Converts the session into an array of key-value pairs.\n     */\n    toPropertyArray(returnUserData?: boolean): [string, string | number | boolean][];\n}"
           },
           "OnlineAccessInfo": {
             "filePath": "../shopify-api/dist/ts/lib/auth/oauth/types.d.ts",
@@ -4905,7 +4933,8 @@
               "FetchResponseBody": "../../api-clients/admin-api-client/dist/ts/index.d.ts",
               "ApiClientRequestOptions": "../../api-clients/admin-api-client/dist/ts/index.d.ts",
               "ResponseWithType": "../../api-clients/admin-api-client/dist/ts/index.d.ts",
-              "ApiVersion": "../shopify-api/dist/ts/lib/index.d.ts"
+              "ApiVersion": "../shopify-api/dist/ts/lib/index.d.ts",
+              "Headers": "../shopify-api/runtime/index.ts"
             },
             "name": "GraphQLClient",
             "description": "",
@@ -4940,7 +4969,8 @@
               "FetchResponseBody": "../../api-clients/admin-api-client/dist/ts/index.d.ts",
               "ApiClientRequestOptions": "../../api-clients/admin-api-client/dist/ts/index.d.ts",
               "ResponseWithType": "../../api-clients/admin-api-client/dist/ts/index.d.ts",
-              "ApiVersion": "../shopify-api/dist/ts/lib/index.d.ts"
+              "ApiVersion": "../shopify-api/dist/ts/lib/index.d.ts",
+              "Headers": "../shopify-api/runtime/index.ts"
             },
             "name": "GraphQLQueryOptions",
             "description": "",
@@ -4984,7 +5014,7 @@
             "filePath": "../shopify-api/dist/ts/lib/types.d.ts",
             "syntaxKind": "EnumDeclaration",
             "name": "ApiVersion",
-            "value": "export declare enum ApiVersion {\n    October22 = \"2022-10\",\n    January23 = \"2023-01\",\n    April23 = \"2023-04\",\n    July23 = \"2023-07\",\n    October23 = \"2023-10\",\n    January24 = \"2024-01\",\n    April24 = \"2024-04\",\n    Unstable = \"unstable\"\n}",
+            "value": "export declare enum ApiVersion {\n    October22 = \"2022-10\",\n    January23 = \"2023-01\",\n    April23 = \"2023-04\",\n    July23 = \"2023-07\",\n    October23 = \"2023-10\",\n    January24 = \"2024-01\",\n    April24 = \"2024-04\",\n    July24 = \"2024-07\",\n    Unstable = \"unstable\"\n}",
             "members": [
               {
                 "filePath": "../shopify-api/dist/ts/lib/types.d.ts",
@@ -5020,6 +5050,11 @@
                 "filePath": "../shopify-api/dist/ts/lib/types.d.ts",
                 "name": "April24",
                 "value": "2024-04"
+              },
+              {
+                "filePath": "../shopify-api/dist/ts/lib/types.d.ts",
+                "name": "July24",
+                "value": "2024-07"
               },
               {
                 "filePath": "../shopify-api/dist/ts/lib/types.d.ts",
@@ -6142,7 +6177,14 @@
                 "syntaxKind": "MethodDeclaration",
                 "name": "isScopeChanged",
                 "value": "(scopes: string | string[] | AuthScopes) => boolean",
-                "description": "Whether the access token has the given scopes."
+                "description": "Whether the access token includes the given scopes if they are provided."
+              },
+              {
+                "filePath": "../shopify-api/dist/ts/lib/session/session.d.ts",
+                "syntaxKind": "MethodDeclaration",
+                "name": "isScopeIncluded",
+                "value": "(scopes: string | string[] | AuthScopes) => boolean",
+                "description": "Whether the access token includes the given scopes."
               },
               {
                 "filePath": "../shopify-api/dist/ts/lib/session/session.d.ts",
@@ -6173,7 +6215,7 @@
                 "description": "Converts the session into an array of key-value pairs."
               }
             ],
-            "value": "export declare class Session {\n    static fromPropertyArray(entries: [string, string | number | boolean][], returnUserData?: boolean): Session;\n    /**\n     * The unique identifier for the session.\n     */\n    readonly id: string;\n    /**\n     * The Shopify shop domain, such as `example.myshopify.com`.\n     */\n    shop: string;\n    /**\n     * The state of the session. Used for the OAuth authentication code flow.\n     */\n    state: string;\n    /**\n     * Whether the access token in the session is online or offline.\n     */\n    isOnline: boolean;\n    /**\n     * The desired scopes for the access token, at the time the session was created.\n     */\n    scope?: string;\n    /**\n     * The date the access token expires.\n     */\n    expires?: Date;\n    /**\n     * The access token for the session.\n     */\n    accessToken?: string;\n    /**\n     * Information on the user for the session. Only present for online sessions.\n     */\n    onlineAccessInfo?: OnlineAccessInfo;\n    constructor(params: SessionParams);\n    /**\n     * Whether the session is active. Active sessions have an access token that is not expired, and has has the given\n     * scopes if scopes is equal to a truthy value.\n     */\n    isActive(scopes: AuthScopes | string | string[] | undefined): boolean;\n    /**\n     * Whether the access token has the given scopes.\n     */\n    isScopeChanged(scopes: AuthScopes | string | string[] | undefined): boolean;\n    /**\n     * Whether the access token is expired.\n     */\n    isExpired(withinMillisecondsOfExpiry?: number): boolean;\n    /**\n     * Converts an object with data into a Session.\n     */\n    toObject(): SessionParams;\n    /**\n     * Checks whether the given session is equal to this session.\n     */\n    equals(other: Session | undefined): boolean;\n    /**\n     * Converts the session into an array of key-value pairs.\n     */\n    toPropertyArray(returnUserData?: boolean): [string, string | number | boolean][];\n}"
+            "value": "export declare class Session {\n    static fromPropertyArray(entries: [string, string | number | boolean][], returnUserData?: boolean): Session;\n    /**\n     * The unique identifier for the session.\n     */\n    readonly id: string;\n    /**\n     * The Shopify shop domain, such as `example.myshopify.com`.\n     */\n    shop: string;\n    /**\n     * The state of the session. Used for the OAuth authentication code flow.\n     */\n    state: string;\n    /**\n     * Whether the access token in the session is online or offline.\n     */\n    isOnline: boolean;\n    /**\n     * The desired scopes for the access token, at the time the session was created.\n     */\n    scope?: string;\n    /**\n     * The date the access token expires.\n     */\n    expires?: Date;\n    /**\n     * The access token for the session.\n     */\n    accessToken?: string;\n    /**\n     * Information on the user for the session. Only present for online sessions.\n     */\n    onlineAccessInfo?: OnlineAccessInfo;\n    constructor(params: SessionParams);\n    /**\n     * Whether the session is active. Active sessions have an access token that is not expired, and has has the given\n     * scopes if scopes is equal to a truthy value.\n     */\n    isActive(scopes: AuthScopes | string | string[] | undefined): boolean;\n    /**\n     * Whether the access token includes the given scopes if they are provided.\n     */\n    isScopeChanged(scopes: AuthScopes | string | string[] | undefined): boolean;\n    /**\n     * Whether the access token includes the given scopes.\n     */\n    isScopeIncluded(scopes: AuthScopes | string | string[]): boolean;\n    /**\n     * Whether the access token is expired.\n     */\n    isExpired(withinMillisecondsOfExpiry?: number): boolean;\n    /**\n     * Converts an object with data into a Session.\n     */\n    toObject(): SessionParams;\n    /**\n     * Checks whether the given session is equal to this session.\n     */\n    equals(other: Session | undefined): boolean;\n    /**\n     * Converts the session into an array of key-value pairs.\n     */\n    toPropertyArray(returnUserData?: boolean): [string, string | number | boolean][];\n}"
           },
           "OnlineAccessInfo": {
             "filePath": "../shopify-api/dist/ts/lib/auth/oauth/types.d.ts",
@@ -6682,7 +6724,8 @@
               "FetchResponseBody": "../../api-clients/admin-api-client/dist/ts/index.d.ts",
               "ApiClientRequestOptions": "../../api-clients/admin-api-client/dist/ts/index.d.ts",
               "ResponseWithType": "../../api-clients/admin-api-client/dist/ts/index.d.ts",
-              "ApiVersion": "../shopify-api/dist/ts/lib/index.d.ts"
+              "ApiVersion": "../shopify-api/dist/ts/lib/index.d.ts",
+              "Headers": "../shopify-api/runtime/index.ts"
             },
             "name": "GraphQLClient",
             "description": "",
@@ -6717,7 +6760,8 @@
               "FetchResponseBody": "../../api-clients/admin-api-client/dist/ts/index.d.ts",
               "ApiClientRequestOptions": "../../api-clients/admin-api-client/dist/ts/index.d.ts",
               "ResponseWithType": "../../api-clients/admin-api-client/dist/ts/index.d.ts",
-              "ApiVersion": "../shopify-api/dist/ts/lib/index.d.ts"
+              "ApiVersion": "../shopify-api/dist/ts/lib/index.d.ts",
+              "Headers": "../shopify-api/runtime/index.ts"
             },
             "name": "GraphQLQueryOptions",
             "description": "",
@@ -6761,7 +6805,7 @@
             "filePath": "../shopify-api/dist/ts/lib/types.d.ts",
             "syntaxKind": "EnumDeclaration",
             "name": "ApiVersion",
-            "value": "export declare enum ApiVersion {\n    October22 = \"2022-10\",\n    January23 = \"2023-01\",\n    April23 = \"2023-04\",\n    July23 = \"2023-07\",\n    October23 = \"2023-10\",\n    January24 = \"2024-01\",\n    April24 = \"2024-04\",\n    Unstable = \"unstable\"\n}",
+            "value": "export declare enum ApiVersion {\n    October22 = \"2022-10\",\n    January23 = \"2023-01\",\n    April23 = \"2023-04\",\n    July23 = \"2023-07\",\n    October23 = \"2023-10\",\n    January24 = \"2024-01\",\n    April24 = \"2024-04\",\n    July24 = \"2024-07\",\n    Unstable = \"unstable\"\n}",
             "members": [
               {
                 "filePath": "../shopify-api/dist/ts/lib/types.d.ts",
@@ -6797,6 +6841,11 @@
                 "filePath": "../shopify-api/dist/ts/lib/types.d.ts",
                 "name": "April24",
                 "value": "2024-04"
+              },
+              {
+                "filePath": "../shopify-api/dist/ts/lib/types.d.ts",
+                "name": "July24",
+                "value": "2024-07"
               },
               {
                 "filePath": "../shopify-api/dist/ts/lib/types.d.ts",
@@ -6955,7 +7004,14 @@
                 "syntaxKind": "MethodDeclaration",
                 "name": "isScopeChanged",
                 "value": "(scopes: string | string[] | AuthScopes) => boolean",
-                "description": "Whether the access token has the given scopes."
+                "description": "Whether the access token includes the given scopes if they are provided."
+              },
+              {
+                "filePath": "../shopify-api/dist/ts/lib/session/session.d.ts",
+                "syntaxKind": "MethodDeclaration",
+                "name": "isScopeIncluded",
+                "value": "(scopes: string | string[] | AuthScopes) => boolean",
+                "description": "Whether the access token includes the given scopes."
               },
               {
                 "filePath": "../shopify-api/dist/ts/lib/session/session.d.ts",
@@ -6986,7 +7042,7 @@
                 "description": "Converts the session into an array of key-value pairs."
               }
             ],
-            "value": "export declare class Session {\n    static fromPropertyArray(entries: [string, string | number | boolean][], returnUserData?: boolean): Session;\n    /**\n     * The unique identifier for the session.\n     */\n    readonly id: string;\n    /**\n     * The Shopify shop domain, such as `example.myshopify.com`.\n     */\n    shop: string;\n    /**\n     * The state of the session. Used for the OAuth authentication code flow.\n     */\n    state: string;\n    /**\n     * Whether the access token in the session is online or offline.\n     */\n    isOnline: boolean;\n    /**\n     * The desired scopes for the access token, at the time the session was created.\n     */\n    scope?: string;\n    /**\n     * The date the access token expires.\n     */\n    expires?: Date;\n    /**\n     * The access token for the session.\n     */\n    accessToken?: string;\n    /**\n     * Information on the user for the session. Only present for online sessions.\n     */\n    onlineAccessInfo?: OnlineAccessInfo;\n    constructor(params: SessionParams);\n    /**\n     * Whether the session is active. Active sessions have an access token that is not expired, and has has the given\n     * scopes if scopes is equal to a truthy value.\n     */\n    isActive(scopes: AuthScopes | string | string[] | undefined): boolean;\n    /**\n     * Whether the access token has the given scopes.\n     */\n    isScopeChanged(scopes: AuthScopes | string | string[] | undefined): boolean;\n    /**\n     * Whether the access token is expired.\n     */\n    isExpired(withinMillisecondsOfExpiry?: number): boolean;\n    /**\n     * Converts an object with data into a Session.\n     */\n    toObject(): SessionParams;\n    /**\n     * Checks whether the given session is equal to this session.\n     */\n    equals(other: Session | undefined): boolean;\n    /**\n     * Converts the session into an array of key-value pairs.\n     */\n    toPropertyArray(returnUserData?: boolean): [string, string | number | boolean][];\n}"
+            "value": "export declare class Session {\n    static fromPropertyArray(entries: [string, string | number | boolean][], returnUserData?: boolean): Session;\n    /**\n     * The unique identifier for the session.\n     */\n    readonly id: string;\n    /**\n     * The Shopify shop domain, such as `example.myshopify.com`.\n     */\n    shop: string;\n    /**\n     * The state of the session. Used for the OAuth authentication code flow.\n     */\n    state: string;\n    /**\n     * Whether the access token in the session is online or offline.\n     */\n    isOnline: boolean;\n    /**\n     * The desired scopes for the access token, at the time the session was created.\n     */\n    scope?: string;\n    /**\n     * The date the access token expires.\n     */\n    expires?: Date;\n    /**\n     * The access token for the session.\n     */\n    accessToken?: string;\n    /**\n     * Information on the user for the session. Only present for online sessions.\n     */\n    onlineAccessInfo?: OnlineAccessInfo;\n    constructor(params: SessionParams);\n    /**\n     * Whether the session is active. Active sessions have an access token that is not expired, and has has the given\n     * scopes if scopes is equal to a truthy value.\n     */\n    isActive(scopes: AuthScopes | string | string[] | undefined): boolean;\n    /**\n     * Whether the access token includes the given scopes if they are provided.\n     */\n    isScopeChanged(scopes: AuthScopes | string | string[] | undefined): boolean;\n    /**\n     * Whether the access token includes the given scopes.\n     */\n    isScopeIncluded(scopes: AuthScopes | string | string[]): boolean;\n    /**\n     * Whether the access token is expired.\n     */\n    isExpired(withinMillisecondsOfExpiry?: number): boolean;\n    /**\n     * Converts an object with data into a Session.\n     */\n    toObject(): SessionParams;\n    /**\n     * Checks whether the given session is equal to this session.\n     */\n    equals(other: Session | undefined): boolean;\n    /**\n     * Converts the session into an array of key-value pairs.\n     */\n    toPropertyArray(returnUserData?: boolean): [string, string | number | boolean][];\n}"
           },
           "OnlineAccessInfo": {
             "filePath": "../shopify-api/dist/ts/lib/auth/oauth/types.d.ts",
@@ -7547,7 +7603,8 @@
               "FetchResponseBody": "../../api-clients/admin-api-client/dist/ts/index.d.ts",
               "ApiClientRequestOptions": "../../api-clients/admin-api-client/dist/ts/index.d.ts",
               "ResponseWithType": "../../api-clients/admin-api-client/dist/ts/index.d.ts",
-              "ApiVersion": "../shopify-api/dist/ts/lib/index.d.ts"
+              "ApiVersion": "../shopify-api/dist/ts/lib/index.d.ts",
+              "Headers": "../shopify-api/runtime/index.ts"
             },
             "name": "GraphQLClient",
             "description": "",
@@ -7582,7 +7639,8 @@
               "FetchResponseBody": "../../api-clients/admin-api-client/dist/ts/index.d.ts",
               "ApiClientRequestOptions": "../../api-clients/admin-api-client/dist/ts/index.d.ts",
               "ResponseWithType": "../../api-clients/admin-api-client/dist/ts/index.d.ts",
-              "ApiVersion": "../shopify-api/dist/ts/lib/index.d.ts"
+              "ApiVersion": "../shopify-api/dist/ts/lib/index.d.ts",
+              "Headers": "../shopify-api/runtime/index.ts"
             },
             "name": "GraphQLQueryOptions",
             "description": "",
@@ -7626,7 +7684,7 @@
             "filePath": "../shopify-api/dist/ts/lib/types.d.ts",
             "syntaxKind": "EnumDeclaration",
             "name": "ApiVersion",
-            "value": "export declare enum ApiVersion {\n    October22 = \"2022-10\",\n    January23 = \"2023-01\",\n    April23 = \"2023-04\",\n    July23 = \"2023-07\",\n    October23 = \"2023-10\",\n    January24 = \"2024-01\",\n    April24 = \"2024-04\",\n    Unstable = \"unstable\"\n}",
+            "value": "export declare enum ApiVersion {\n    October22 = \"2022-10\",\n    January23 = \"2023-01\",\n    April23 = \"2023-04\",\n    July23 = \"2023-07\",\n    October23 = \"2023-10\",\n    January24 = \"2024-01\",\n    April24 = \"2024-04\",\n    July24 = \"2024-07\",\n    Unstable = \"unstable\"\n}",
             "members": [
               {
                 "filePath": "../shopify-api/dist/ts/lib/types.d.ts",
@@ -7662,6 +7720,11 @@
                 "filePath": "../shopify-api/dist/ts/lib/types.d.ts",
                 "name": "April24",
                 "value": "2024-04"
+              },
+              {
+                "filePath": "../shopify-api/dist/ts/lib/types.d.ts",
+                "name": "July24",
+                "value": "2024-07"
               },
               {
                 "filePath": "../shopify-api/dist/ts/lib/types.d.ts",
@@ -8956,7 +9019,7 @@
                 "syntaxKind": "PropertySignature",
                 "name": "isTest",
                 "value": "boolean",
-                "description": "Whether to consider test purchases.",
+                "description": "Whether to include charges that were created on test mode. Test shops and demo shops cannot be charged.",
                 "isOptional": true
               },
               {
@@ -9114,7 +9177,7 @@
                 "syntaxKind": "PropertySignature",
                 "name": "isTest",
                 "value": "boolean",
-                "description": "Whether to consider test purchases.",
+                "description": "Whether to include charges that were created on test mode. Test shops and demo shops cannot be charged.",
                 "isOptional": true
               },
               {
@@ -9223,7 +9286,14 @@
                 "syntaxKind": "MethodDeclaration",
                 "name": "isScopeChanged",
                 "value": "(scopes: string | string[] | AuthScopes) => boolean",
-                "description": "Whether the access token has the given scopes."
+                "description": "Whether the access token includes the given scopes if they are provided."
+              },
+              {
+                "filePath": "../shopify-api/dist/ts/lib/session/session.d.ts",
+                "syntaxKind": "MethodDeclaration",
+                "name": "isScopeIncluded",
+                "value": "(scopes: string | string[] | AuthScopes) => boolean",
+                "description": "Whether the access token includes the given scopes."
               },
               {
                 "filePath": "../shopify-api/dist/ts/lib/session/session.d.ts",
@@ -9254,7 +9324,7 @@
                 "description": "Converts the session into an array of key-value pairs."
               }
             ],
-            "value": "export declare class Session {\n    static fromPropertyArray(entries: [string, string | number | boolean][], returnUserData?: boolean): Session;\n    /**\n     * The unique identifier for the session.\n     */\n    readonly id: string;\n    /**\n     * The Shopify shop domain, such as `example.myshopify.com`.\n     */\n    shop: string;\n    /**\n     * The state of the session. Used for the OAuth authentication code flow.\n     */\n    state: string;\n    /**\n     * Whether the access token in the session is online or offline.\n     */\n    isOnline: boolean;\n    /**\n     * The desired scopes for the access token, at the time the session was created.\n     */\n    scope?: string;\n    /**\n     * The date the access token expires.\n     */\n    expires?: Date;\n    /**\n     * The access token for the session.\n     */\n    accessToken?: string;\n    /**\n     * Information on the user for the session. Only present for online sessions.\n     */\n    onlineAccessInfo?: OnlineAccessInfo;\n    constructor(params: SessionParams);\n    /**\n     * Whether the session is active. Active sessions have an access token that is not expired, and has has the given\n     * scopes if scopes is equal to a truthy value.\n     */\n    isActive(scopes: AuthScopes | string | string[] | undefined): boolean;\n    /**\n     * Whether the access token has the given scopes.\n     */\n    isScopeChanged(scopes: AuthScopes | string | string[] | undefined): boolean;\n    /**\n     * Whether the access token is expired.\n     */\n    isExpired(withinMillisecondsOfExpiry?: number): boolean;\n    /**\n     * Converts an object with data into a Session.\n     */\n    toObject(): SessionParams;\n    /**\n     * Checks whether the given session is equal to this session.\n     */\n    equals(other: Session | undefined): boolean;\n    /**\n     * Converts the session into an array of key-value pairs.\n     */\n    toPropertyArray(returnUserData?: boolean): [string, string | number | boolean][];\n}"
+            "value": "export declare class Session {\n    static fromPropertyArray(entries: [string, string | number | boolean][], returnUserData?: boolean): Session;\n    /**\n     * The unique identifier for the session.\n     */\n    readonly id: string;\n    /**\n     * The Shopify shop domain, such as `example.myshopify.com`.\n     */\n    shop: string;\n    /**\n     * The state of the session. Used for the OAuth authentication code flow.\n     */\n    state: string;\n    /**\n     * Whether the access token in the session is online or offline.\n     */\n    isOnline: boolean;\n    /**\n     * The desired scopes for the access token, at the time the session was created.\n     */\n    scope?: string;\n    /**\n     * The date the access token expires.\n     */\n    expires?: Date;\n    /**\n     * The access token for the session.\n     */\n    accessToken?: string;\n    /**\n     * Information on the user for the session. Only present for online sessions.\n     */\n    onlineAccessInfo?: OnlineAccessInfo;\n    constructor(params: SessionParams);\n    /**\n     * Whether the session is active. Active sessions have an access token that is not expired, and has has the given\n     * scopes if scopes is equal to a truthy value.\n     */\n    isActive(scopes: AuthScopes | string | string[] | undefined): boolean;\n    /**\n     * Whether the access token includes the given scopes if they are provided.\n     */\n    isScopeChanged(scopes: AuthScopes | string | string[] | undefined): boolean;\n    /**\n     * Whether the access token includes the given scopes.\n     */\n    isScopeIncluded(scopes: AuthScopes | string | string[]): boolean;\n    /**\n     * Whether the access token is expired.\n     */\n    isExpired(withinMillisecondsOfExpiry?: number): boolean;\n    /**\n     * Converts an object with data into a Session.\n     */\n    toObject(): SessionParams;\n    /**\n     * Checks whether the given session is equal to this session.\n     */\n    equals(other: Session | undefined): boolean;\n    /**\n     * Converts the session into an array of key-value pairs.\n     */\n    toPropertyArray(returnUserData?: boolean): [string, string | number | boolean][];\n}"
           },
           "OnlineAccessInfo": {
             "filePath": "../shopify-api/dist/ts/lib/auth/oauth/types.d.ts",
@@ -10429,7 +10499,8 @@
               "FetchResponseBody": "../../api-clients/admin-api-client/dist/ts/index.d.ts",
               "ApiClientRequestOptions": "../../api-clients/admin-api-client/dist/ts/index.d.ts",
               "ResponseWithType": "../../api-clients/admin-api-client/dist/ts/index.d.ts",
-              "ApiVersion": "../shopify-api/dist/ts/lib/index.d.ts"
+              "ApiVersion": "../shopify-api/dist/ts/lib/index.d.ts",
+              "Headers": "../shopify-api/runtime/index.ts"
             },
             "name": "GraphQLClient",
             "description": "",
@@ -10464,7 +10535,8 @@
               "FetchResponseBody": "../../api-clients/admin-api-client/dist/ts/index.d.ts",
               "ApiClientRequestOptions": "../../api-clients/admin-api-client/dist/ts/index.d.ts",
               "ResponseWithType": "../../api-clients/admin-api-client/dist/ts/index.d.ts",
-              "ApiVersion": "../shopify-api/dist/ts/lib/index.d.ts"
+              "ApiVersion": "../shopify-api/dist/ts/lib/index.d.ts",
+              "Headers": "../shopify-api/runtime/index.ts"
             },
             "name": "GraphQLQueryOptions",
             "description": "",
@@ -10508,7 +10580,7 @@
             "filePath": "../shopify-api/dist/ts/lib/types.d.ts",
             "syntaxKind": "EnumDeclaration",
             "name": "ApiVersion",
-            "value": "export declare enum ApiVersion {\n    October22 = \"2022-10\",\n    January23 = \"2023-01\",\n    April23 = \"2023-04\",\n    July23 = \"2023-07\",\n    October23 = \"2023-10\",\n    January24 = \"2024-01\",\n    April24 = \"2024-04\",\n    Unstable = \"unstable\"\n}",
+            "value": "export declare enum ApiVersion {\n    October22 = \"2022-10\",\n    January23 = \"2023-01\",\n    April23 = \"2023-04\",\n    July23 = \"2023-07\",\n    October23 = \"2023-10\",\n    January24 = \"2024-01\",\n    April24 = \"2024-04\",\n    July24 = \"2024-07\",\n    Unstable = \"unstable\"\n}",
             "members": [
               {
                 "filePath": "../shopify-api/dist/ts/lib/types.d.ts",
@@ -10544,6 +10616,11 @@
                 "filePath": "../shopify-api/dist/ts/lib/types.d.ts",
                 "name": "April24",
                 "value": "2024-04"
+              },
+              {
+                "filePath": "../shopify-api/dist/ts/lib/types.d.ts",
+                "name": "July24",
+                "value": "2024-07"
               },
               {
                 "filePath": "../shopify-api/dist/ts/lib/types.d.ts",
@@ -11442,7 +11519,7 @@
             },
             "syntaxKind": "TypeAliasDeclaration",
             "name": "EnforceSessionStorage",
-            "value": "Config['distribution'] extends AppDistribution.ShopifyAdmin\n  ? Base\n  : Base & {sessionStorage: SessionStorageType<Config>}",
+            "value": "Base & {\n  sessionStorage: SessionStorageType<Config>;\n}",
             "description": ""
           },
           "SingleMerchantApp": {
@@ -13006,7 +13083,14 @@
                 "syntaxKind": "MethodDeclaration",
                 "name": "isScopeChanged",
                 "value": "(scopes: string | string[] | AuthScopes) => boolean",
-                "description": "Whether the access token has the given scopes."
+                "description": "Whether the access token includes the given scopes if they are provided."
+              },
+              {
+                "filePath": "../shopify-api/dist/ts/lib/session/session.d.ts",
+                "syntaxKind": "MethodDeclaration",
+                "name": "isScopeIncluded",
+                "value": "(scopes: string | string[] | AuthScopes) => boolean",
+                "description": "Whether the access token includes the given scopes."
               },
               {
                 "filePath": "../shopify-api/dist/ts/lib/session/session.d.ts",
@@ -13037,7 +13121,7 @@
                 "description": "Converts the session into an array of key-value pairs."
               }
             ],
-            "value": "export declare class Session {\n    static fromPropertyArray(entries: [string, string | number | boolean][], returnUserData?: boolean): Session;\n    /**\n     * The unique identifier for the session.\n     */\n    readonly id: string;\n    /**\n     * The Shopify shop domain, such as `example.myshopify.com`.\n     */\n    shop: string;\n    /**\n     * The state of the session. Used for the OAuth authentication code flow.\n     */\n    state: string;\n    /**\n     * Whether the access token in the session is online or offline.\n     */\n    isOnline: boolean;\n    /**\n     * The desired scopes for the access token, at the time the session was created.\n     */\n    scope?: string;\n    /**\n     * The date the access token expires.\n     */\n    expires?: Date;\n    /**\n     * The access token for the session.\n     */\n    accessToken?: string;\n    /**\n     * Information on the user for the session. Only present for online sessions.\n     */\n    onlineAccessInfo?: OnlineAccessInfo;\n    constructor(params: SessionParams);\n    /**\n     * Whether the session is active. Active sessions have an access token that is not expired, and has has the given\n     * scopes if scopes is equal to a truthy value.\n     */\n    isActive(scopes: AuthScopes | string | string[] | undefined): boolean;\n    /**\n     * Whether the access token has the given scopes.\n     */\n    isScopeChanged(scopes: AuthScopes | string | string[] | undefined): boolean;\n    /**\n     * Whether the access token is expired.\n     */\n    isExpired(withinMillisecondsOfExpiry?: number): boolean;\n    /**\n     * Converts an object with data into a Session.\n     */\n    toObject(): SessionParams;\n    /**\n     * Checks whether the given session is equal to this session.\n     */\n    equals(other: Session | undefined): boolean;\n    /**\n     * Converts the session into an array of key-value pairs.\n     */\n    toPropertyArray(returnUserData?: boolean): [string, string | number | boolean][];\n}"
+            "value": "export declare class Session {\n    static fromPropertyArray(entries: [string, string | number | boolean][], returnUserData?: boolean): Session;\n    /**\n     * The unique identifier for the session.\n     */\n    readonly id: string;\n    /**\n     * The Shopify shop domain, such as `example.myshopify.com`.\n     */\n    shop: string;\n    /**\n     * The state of the session. Used for the OAuth authentication code flow.\n     */\n    state: string;\n    /**\n     * Whether the access token in the session is online or offline.\n     */\n    isOnline: boolean;\n    /**\n     * The desired scopes for the access token, at the time the session was created.\n     */\n    scope?: string;\n    /**\n     * The date the access token expires.\n     */\n    expires?: Date;\n    /**\n     * The access token for the session.\n     */\n    accessToken?: string;\n    /**\n     * Information on the user for the session. Only present for online sessions.\n     */\n    onlineAccessInfo?: OnlineAccessInfo;\n    constructor(params: SessionParams);\n    /**\n     * Whether the session is active. Active sessions have an access token that is not expired, and has has the given\n     * scopes if scopes is equal to a truthy value.\n     */\n    isActive(scopes: AuthScopes | string | string[] | undefined): boolean;\n    /**\n     * Whether the access token includes the given scopes if they are provided.\n     */\n    isScopeChanged(scopes: AuthScopes | string | string[] | undefined): boolean;\n    /**\n     * Whether the access token includes the given scopes.\n     */\n    isScopeIncluded(scopes: AuthScopes | string | string[]): boolean;\n    /**\n     * Whether the access token is expired.\n     */\n    isExpired(withinMillisecondsOfExpiry?: number): boolean;\n    /**\n     * Converts an object with data into a Session.\n     */\n    toObject(): SessionParams;\n    /**\n     * Checks whether the given session is equal to this session.\n     */\n    equals(other: Session | undefined): boolean;\n    /**\n     * Converts the session into an array of key-value pairs.\n     */\n    toPropertyArray(returnUserData?: boolean): [string, string | number | boolean][];\n}"
           },
           "OnlineAccessInfo": {
             "filePath": "../shopify-api/dist/ts/lib/auth/oauth/types.d.ts",
@@ -13520,7 +13604,14 @@
                 "syntaxKind": "MethodDeclaration",
                 "name": "isScopeChanged",
                 "value": "(scopes: string | string[] | AuthScopes) => boolean",
-                "description": "Whether the access token has the given scopes."
+                "description": "Whether the access token includes the given scopes if they are provided."
+              },
+              {
+                "filePath": "../shopify-api/dist/ts/lib/session/session.d.ts",
+                "syntaxKind": "MethodDeclaration",
+                "name": "isScopeIncluded",
+                "value": "(scopes: string | string[] | AuthScopes) => boolean",
+                "description": "Whether the access token includes the given scopes."
               },
               {
                 "filePath": "../shopify-api/dist/ts/lib/session/session.d.ts",
@@ -13551,7 +13642,7 @@
                 "description": "Converts the session into an array of key-value pairs."
               }
             ],
-            "value": "export declare class Session {\n    static fromPropertyArray(entries: [string, string | number | boolean][], returnUserData?: boolean): Session;\n    /**\n     * The unique identifier for the session.\n     */\n    readonly id: string;\n    /**\n     * The Shopify shop domain, such as `example.myshopify.com`.\n     */\n    shop: string;\n    /**\n     * The state of the session. Used for the OAuth authentication code flow.\n     */\n    state: string;\n    /**\n     * Whether the access token in the session is online or offline.\n     */\n    isOnline: boolean;\n    /**\n     * The desired scopes for the access token, at the time the session was created.\n     */\n    scope?: string;\n    /**\n     * The date the access token expires.\n     */\n    expires?: Date;\n    /**\n     * The access token for the session.\n     */\n    accessToken?: string;\n    /**\n     * Information on the user for the session. Only present for online sessions.\n     */\n    onlineAccessInfo?: OnlineAccessInfo;\n    constructor(params: SessionParams);\n    /**\n     * Whether the session is active. Active sessions have an access token that is not expired, and has has the given\n     * scopes if scopes is equal to a truthy value.\n     */\n    isActive(scopes: AuthScopes | string | string[] | undefined): boolean;\n    /**\n     * Whether the access token has the given scopes.\n     */\n    isScopeChanged(scopes: AuthScopes | string | string[] | undefined): boolean;\n    /**\n     * Whether the access token is expired.\n     */\n    isExpired(withinMillisecondsOfExpiry?: number): boolean;\n    /**\n     * Converts an object with data into a Session.\n     */\n    toObject(): SessionParams;\n    /**\n     * Checks whether the given session is equal to this session.\n     */\n    equals(other: Session | undefined): boolean;\n    /**\n     * Converts the session into an array of key-value pairs.\n     */\n    toPropertyArray(returnUserData?: boolean): [string, string | number | boolean][];\n}"
+            "value": "export declare class Session {\n    static fromPropertyArray(entries: [string, string | number | boolean][], returnUserData?: boolean): Session;\n    /**\n     * The unique identifier for the session.\n     */\n    readonly id: string;\n    /**\n     * The Shopify shop domain, such as `example.myshopify.com`.\n     */\n    shop: string;\n    /**\n     * The state of the session. Used for the OAuth authentication code flow.\n     */\n    state: string;\n    /**\n     * Whether the access token in the session is online or offline.\n     */\n    isOnline: boolean;\n    /**\n     * The desired scopes for the access token, at the time the session was created.\n     */\n    scope?: string;\n    /**\n     * The date the access token expires.\n     */\n    expires?: Date;\n    /**\n     * The access token for the session.\n     */\n    accessToken?: string;\n    /**\n     * Information on the user for the session. Only present for online sessions.\n     */\n    onlineAccessInfo?: OnlineAccessInfo;\n    constructor(params: SessionParams);\n    /**\n     * Whether the session is active. Active sessions have an access token that is not expired, and has has the given\n     * scopes if scopes is equal to a truthy value.\n     */\n    isActive(scopes: AuthScopes | string | string[] | undefined): boolean;\n    /**\n     * Whether the access token includes the given scopes if they are provided.\n     */\n    isScopeChanged(scopes: AuthScopes | string | string[] | undefined): boolean;\n    /**\n     * Whether the access token includes the given scopes.\n     */\n    isScopeIncluded(scopes: AuthScopes | string | string[]): boolean;\n    /**\n     * Whether the access token is expired.\n     */\n    isExpired(withinMillisecondsOfExpiry?: number): boolean;\n    /**\n     * Converts an object with data into a Session.\n     */\n    toObject(): SessionParams;\n    /**\n     * Checks whether the given session is equal to this session.\n     */\n    equals(other: Session | undefined): boolean;\n    /**\n     * Converts the session into an array of key-value pairs.\n     */\n    toPropertyArray(returnUserData?: boolean): [string, string | number | boolean][];\n}"
           },
           "OnlineAccessInfo": {
             "filePath": "../shopify-api/dist/ts/lib/auth/oauth/types.d.ts",
@@ -13831,7 +13922,8 @@
               "FetchResponseBody": "../../api-clients/admin-api-client/dist/ts/index.d.ts",
               "ApiClientRequestOptions": "../../api-clients/admin-api-client/dist/ts/index.d.ts",
               "ResponseWithType": "../../api-clients/admin-api-client/dist/ts/index.d.ts",
-              "ApiVersion": "../shopify-api/dist/ts/lib/index.d.ts"
+              "ApiVersion": "../shopify-api/dist/ts/lib/index.d.ts",
+              "Headers": "../shopify-api/runtime/index.ts"
             },
             "name": "GraphQLClient",
             "description": "",
@@ -13866,7 +13958,8 @@
               "FetchResponseBody": "../../api-clients/admin-api-client/dist/ts/index.d.ts",
               "ApiClientRequestOptions": "../../api-clients/admin-api-client/dist/ts/index.d.ts",
               "ResponseWithType": "../../api-clients/admin-api-client/dist/ts/index.d.ts",
-              "ApiVersion": "../shopify-api/dist/ts/lib/index.d.ts"
+              "ApiVersion": "../shopify-api/dist/ts/lib/index.d.ts",
+              "Headers": "../shopify-api/runtime/index.ts"
             },
             "name": "GraphQLQueryOptions",
             "description": "",
@@ -13910,7 +14003,7 @@
             "filePath": "../shopify-api/dist/ts/lib/types.d.ts",
             "syntaxKind": "EnumDeclaration",
             "name": "ApiVersion",
-            "value": "export declare enum ApiVersion {\n    October22 = \"2022-10\",\n    January23 = \"2023-01\",\n    April23 = \"2023-04\",\n    July23 = \"2023-07\",\n    October23 = \"2023-10\",\n    January24 = \"2024-01\",\n    April24 = \"2024-04\",\n    Unstable = \"unstable\"\n}",
+            "value": "export declare enum ApiVersion {\n    October22 = \"2022-10\",\n    January23 = \"2023-01\",\n    April23 = \"2023-04\",\n    July23 = \"2023-07\",\n    October23 = \"2023-10\",\n    January24 = \"2024-01\",\n    April24 = \"2024-04\",\n    July24 = \"2024-07\",\n    Unstable = \"unstable\"\n}",
             "members": [
               {
                 "filePath": "../shopify-api/dist/ts/lib/types.d.ts",
@@ -13946,6 +14039,11 @@
                 "filePath": "../shopify-api/dist/ts/lib/types.d.ts",
                 "name": "April24",
                 "value": "2024-04"
+              },
+              {
+                "filePath": "../shopify-api/dist/ts/lib/types.d.ts",
+                "name": "July24",
+                "value": "2024-07"
               },
               {
                 "filePath": "../shopify-api/dist/ts/lib/types.d.ts",
