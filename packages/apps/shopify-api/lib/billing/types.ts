@@ -190,6 +190,10 @@ export interface BillingConfigUsageLineItem extends BillingConfigLineItem {
    */
   interval: BillingInterval.Usage;
   /**
+   * The capped amount or the maximum amount to be charged in the interval.
+   */
+  amount: number;
+  /**
    * Usage terms for this line item.
    */
   terms: string;
