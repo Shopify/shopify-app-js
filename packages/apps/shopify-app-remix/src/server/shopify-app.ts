@@ -65,10 +65,7 @@ export function shopifyApp<
   Future extends FutureFlagOptions = Config['future'],
 >(appConfig: Readonly<Config>): ShopifyApp<Config> {
   if (appConfig.isTesting === true) {
-    appConfig = {
-      ...appConfig,
-      ...testConfig(),
-    };
+    Object.assign(appConfig, testConfig());
   }
 
   const api = deriveApi(appConfig);
@@ -200,13 +197,6 @@ function deriveConfig<Storage extends SessionStorage>(
 
   const authPathPrefix = appConfig.authPathPrefix || '/auth';
   appConfig.distribution = appConfig.distribution ?? AppDistribution.AppStore;
-
-  if (appConfig.isTesting === true) {
-    appConfig = {
-      ...appConfig,
-      ...testConfig(),
-    };
-  }
 
   return {
     ...appConfig,
