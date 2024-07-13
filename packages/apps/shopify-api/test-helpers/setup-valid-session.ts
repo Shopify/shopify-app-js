@@ -1,25 +1,32 @@
-import {Session as TSSession} from '@shopify/shopify-api';
-import {SessionStorage} from '@shopify/shopify-app-session-storage';
-
+import type {SessionParams} from '../lib/session/types';
 import {Session} from '../lib/session/session';
 
 import {USER_ID} from './const';
 
+// Utility type to mark all nested parameters as optional
+type DeepPartial<T> = T extends object
+  ? {[P in keyof T]?: DeepPartial<T[P]>}
+  : T;
+
 /**
  * Creates a fake Session in the provided SessionStorage for the shop defined in sessionParams.
  *
- * @param {SessionStorage} sessionStorage The SessionStorage object through which to create the fake Session.
  * @param sessionParams The Session parameters to use when creating the fake Session.
  * @returns {Session} The fake Session created.
  */
-export async function setUpValidSession(
-  sessionStorage: SessionStorage,
-  sessionParams: Partial<Session> & Required<Pick<Session, 'shop'>>,
-): Promise<TSSession> {
-  const overrides: Partial<Session> = {};
+export function setUpValidSession(
+  sessionParams: DeepPartial<SessionParams> &
+    Pick<SessionParams, 'shop' | 'expires'>,
+): Session {
+  const overrides: Partial<SessionParams> = {...sessionParams} as SessionParams;
   const shop = sessionParams.shop;
   let id = `offline_${shop}`;
-  if (sessionParams?.isOnline) {
+  if (sessionParams.isOnline) {
+    const onlineAccessInfo = sessionParams.onlineAccessInfo;
+    const associated_user = onlineAccessInfo?.associated_user;
+    delete sessionParams.onlineAccessInfo?.associated_user;
+    delete sessionParams.onlineAccessInfo;
+
     id = `${shop}_${USER_ID}`;
     // Expires one day from now
     overrides.expires =
@@ -36,7 +43,9 @@ export async function setUpValidSession(
         first_name: 'Test',
         last_name: 'User',
         locale: 'en-US',
+        ...associated_user,
       },
+      ...onlineAccessInfo,
     };
   }
 
@@ -48,8 +57,7 @@ export async function setUpValidSession(
     accessToken: 'totally_real_token',
     scope: 'testScope',
     ...overrides,
-  }) as TSSession;
-  await sessionStorage.storeSession(session);
+  });
 
   return session;
 }
