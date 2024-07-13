@@ -5,10 +5,14 @@ import {
 } from '@shopify/shopify-api';
 import {SessionStorage} from '@shopify/shopify-app-session-storage';
 import {MemorySessionStorage} from '@shopify/shopify-app-session-storage-memory';
+import {
+  API_KEY,
+  API_SECRET_KEY,
+  APP_URL,
+} from '@shopify/shopify-api/test-helpers';
 
 import type {AppConfigArg} from '../config-types';
 import type {FutureFlagOptions} from '../future/flags';
-import {API_KEY, API_SECRET_KEY, APP_URL} from '../__test-helpers/const';
 
 const TEST_CONFIG = {
   apiKey: API_KEY,
