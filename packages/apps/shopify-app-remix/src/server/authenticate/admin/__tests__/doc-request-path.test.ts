@@ -156,6 +156,7 @@ describe('authorize.admin doc request path', () => {
     // GIVEN
     const config = testConfig();
     const shopify = shopifyApp(config);
+    const host = new URL(`https://${SHOPIFY_HOST}`);
     await setUpValidSession(shopify.sessionStorage);
 
     // WHEN
@@ -168,7 +169,7 @@ describe('authorize.admin doc request path', () => {
     const {hostname, pathname} = new URL(response.headers.get('location')!);
 
     expect(response.status).toBe(302);
-    expect(hostname).toBe(SHOPIFY_HOST);
-    expect(pathname).toBe(`/apps/${API_KEY}`);
+    expect(hostname).toBe(host.hostname);
+    expect(pathname).toBe(`${host.pathname}/apps/${API_KEY}`);
   });
 });

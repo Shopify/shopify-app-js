@@ -83,8 +83,10 @@
     "@shopify/network": "^3.3.0",
     "@shopify/storefront-api-client": "^1.0.0",
     "compare-versions": "^6.1.0",
+    "crypto": "^1.0.1",
     "isbot": "^5.1.9",
     "jose": "^5.4.1",
+    "jsonwebtoken": "^9.0.2",
     "node-fetch": "^2.6.1",
     "tslib": "^2.6.3",
     "uuid": "^10.0.0"
@@ -93,6 +95,7 @@
     "@cloudflare/workers-types": "^4.20240620.0",
     "@swc/core": "^1.6.13",
     "@types/express": "^4.17.13",
+    "@types/jsonwebtoken": "^9.0.6",
     "@types/node": "^20.14.10",
     "@types/node-fetch": "^2.6.11",
     "@types/uuid": "^9.0.8",
