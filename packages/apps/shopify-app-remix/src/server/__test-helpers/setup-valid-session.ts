@@ -8,10 +8,14 @@ export async function setUpValidSession(
   sessionStorage: SessionStorage,
   sessionParams?: Partial<Session>,
 ): Promise<Session> {
-  return setUpValidSessionImport(sessionStorage, {
+  const session = setUpValidSessionImport({
     shop: TEST_SHOP,
     ...sessionParams,
   });
+
+  await sessionStorage.storeSession(session);
+
+  return session;
 }
 
 export function setupValidCustomAppSession(shop: string): Session {
