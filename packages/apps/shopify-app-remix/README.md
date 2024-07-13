@@ -218,6 +218,16 @@ const shopify = shopifyApp({
 - [Using Shopify managed installation](https://shopify.dev/docs/apps/auth/installation#shopify-managed-installation)
 - [Configuring access scopes through the Shopify CLI](https://shopify.dev/docs/apps/tools/cli/configuration)
 
+### Unit testing
+To unit test your application, you can simply set the `isTesting` flag to true in the configuration object passed to `shopifyApp`. It can be helpful to set this value based on an environmental variable flag.
+
+```ts
+// my-app/app/shopify.server.ts
+const shopify = shopifyApp({
+  ...
+  isTesting: process.env.SHOPIFY_TESTING === "1"
+})
+
 ## Gotchas / Troubleshooting
 
 If you're experiencing unexpected behaviors when using this package, check our [app template's documentation](https://github.com/Shopify/shopify-app-template-remix#gotchas--troubleshooting) for the solution to common issues.
