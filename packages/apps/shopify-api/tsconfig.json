@@ -12,6 +12,7 @@
     "adapters/**/*.ts",
     "rest/**/*.ts",
     "runtime/**/*.ts",
+    "test-helpers/**/*.ts",
   ],
   "exclude": [
     "**/*.test.ts", "**/test/*", "**/__tests__/*",

@@ -4,10 +4,9 @@ import {getConfig} from '../../../config/rollup/rollup-utils';
 
 import * as pkg from './package.json';
 
-const basePath = `${__dirname}/adapters`;
-
+const adapterPath = `${__dirname}/adapters`;
 const adapterInputs = fs
-  .readdirSync(basePath, {withFileTypes: true})
+  .readdirSync(adapterPath, {withFileTypes: true})
   .filter(
     (dirent) =>
       dirent.isDirectory() &&

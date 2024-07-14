@@ -90,6 +90,7 @@
     "@shopify/admin-api-client": "^1.0.1",
     "@shopify/shopify-api": "^11.2.0",
     "@shopify/shopify-app-session-storage": "^3.0.3",
+    "@shopify/shopify-app-session-storage-memory": "^4.0.2",
     "@shopify/storefront-api-client": "^1.0.1",
     "isbot": "^5.1.16",
     "semver": "^7.6.2"
