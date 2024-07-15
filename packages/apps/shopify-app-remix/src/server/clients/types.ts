@@ -6,7 +6,6 @@ import type {
   ResponseWithType,
 } from '@shopify/admin-api-client';
 import {ApiVersion} from '@shopify/shopify-api';
-import {Headers} from '@shopify/shopify-api/runtime';
 
 export interface GraphQLQueryOptions<
   Operation extends keyof Operations,
@@ -30,15 +29,10 @@ export interface GraphQLQueryOptions<
   tries?: number;
 }
 
-export interface FetchResponse<TData = any>
-  extends Omit<FetchResponseBody<TData>, 'headers'> {
-  headers?: Headers;
-}
-
 export type GraphQLResponse<
   Operation extends keyof Operations,
   Operations extends AllOperations,
-> = ResponseWithType<FetchResponse<ReturnData<Operation, Operations>>>;
+> = ResponseWithType<FetchResponseBody<ReturnData<Operation, Operations>>>;
 
 export type GraphQLClient<Operations extends AllOperations> = <
   Operation extends keyof Operations,

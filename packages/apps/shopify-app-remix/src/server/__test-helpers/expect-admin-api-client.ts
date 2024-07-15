@@ -106,7 +106,10 @@ export function expectAdminApiClient(
 
     // THEN
     expect(response.status).toEqual(200);
-    expect(await response.json()).toEqual({data: {shop: {name: 'Test shop'}}});
+    expect(await response.json()).toEqual({
+      data: {shop: {name: 'Test shop'}},
+      headers: {'Content-Type': ['application/json']},
+    });
   });
 
   it('returns a session object as part of the context', async () => {
