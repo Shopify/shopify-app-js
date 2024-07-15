@@ -37,14 +37,7 @@ export function getPlugins({
       declaration: false,
       moduleResolution: 'Bundler',
     }),
-    ...(minify === true
-      ? [
-          terser({
-            keep_fnames: new RegExp('fetch'),
-            mangle: {reserved: ['fetch']},
-          }),
-        ]
-      : []),
+    ...(minify === true ? [terser()] : []),
   ];
 }
 
