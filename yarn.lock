@@ -6682,10 +6682,10 @@ dotenv@^16.0.0:
   resolved "https://registry.yarnpkg.com/dotenv/-/dotenv-16.4.5.tgz#cdd3b3b604cb327e286b4762e13502f717cb099f"
   integrity sha512-ZmdL2rui+eB2YwhsWzjInR8LldtZHGDoQ1ugH85ppHKwpUHL7j7rN0Ti9NCnGiQbhaZ11FpR+7ao1dNsmduNUg==
 
-drizzle-kit@^0.22.8:
-  version "0.22.8"
-  resolved "https://registry.yarnpkg.com/drizzle-kit/-/drizzle-kit-0.22.8.tgz#0f85d84cd5a1dbad045228067105ff636fc597bf"
-  integrity sha512-VjI4wsJjk3hSqHSa3TwBf+uvH6M6pRHyxyoVbt935GUzP9tUR/BRZ+MhEJNgryqbzN2Za1KP0eJMTgKEPsalYQ==
+drizzle-kit@^0.23.0:
+  version "0.23.0"
+  resolved "https://registry.yarnpkg.com/drizzle-kit/-/drizzle-kit-0.23.0.tgz#4ac8b4034a75091569666242e99df7bafd590148"
+  integrity sha512-w9jE97z193dd4jzAyj4Uv2SOh8Ydue70Ki6W0awy4bGM1aPXan6zD6Yv+nNTA6oGgNTDl2MJFxutjHG4fden5g==
   dependencies:
     "@esbuild-kit/esm-loader" "^2.5.5"
     esbuild "^0.19.7"
