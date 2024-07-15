@@ -1,4 +1,4 @@
-import {SearchParams} from '@shopify/admin-api-client';
+import {ClientResponse, SearchParams} from '@shopify/admin-api-client';
 
 import {ApiVersion} from '../../types';
 import {Session} from '../../session/session';
@@ -27,4 +27,9 @@ export interface RestRequestReturn<T = any> {
 export interface RestClientParams {
   session: Session;
   apiVersion?: ApiVersion;
+}
+
+export interface GraphQLClientResponse<TData = any>
+  extends Omit<ClientResponse<TData>, 'headers'> {
+  headers?: Headers;
 }
