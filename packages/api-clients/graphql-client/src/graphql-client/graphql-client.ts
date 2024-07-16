@@ -77,13 +77,15 @@ export function generateClientLogger(logger?: Logger): Logger {
 }
 
 async function processJSONResponse<TData = any>(
-  response: any,
+  response: Response,
 ): Promise<ClientResponse<TData>> {
-  const {errors, data, extensions} = await response.json();
+  const {errors, data, extensions} = await response.json<any>();
 
   return {
     ...getKeyValueIfValid('data', data),
     ...getKeyValueIfValid('extensions', extensions),
+    headers: response.headers,
+
     ...(errors || !data
       ? {
           errors: {

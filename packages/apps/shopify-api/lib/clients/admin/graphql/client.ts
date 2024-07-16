@@ -2,7 +2,6 @@ import {
   AdminApiClient,
   AdminOperations,
   ApiClientRequestOptions,
-  ClientResponse,
   createAdminApiClient,
   ReturnData,
 } from '@shopify/admin-api-client';
@@ -14,11 +13,12 @@ import type {
   GraphqlParams,
   GraphqlClientParams,
   GraphqlQueryOptions,
+  GraphQLClientResponse,
 } from '../../types';
 import {Session} from '../../../session/session';
 import {logger} from '../../../logger';
 import * as ShopifyErrors from '../../../error';
-import {abstractFetch} from '../../../../runtime';
+import {abstractFetch, canonicalizeHeaders} from '../../../../runtime';
 import {
   clientLoggerFactory,
   getUserAgent,
@@ -114,9 +114,14 @@ export class GraphqlClient {
     operation: Operation,
     options?: GraphqlQueryOptions<Operation, Operations>,
   ): Promise<
-    ClientResponse<T extends undefined ? ReturnData<Operation, Operations> : T>
+    GraphQLClientResponse<
+      T extends undefined ? ReturnData<Operation, Operations> : T
+    >
   > {
-    const response = await this.client.request<T, Operation>(operation, {
+    const response = await this.client.request<
+      T extends undefined ? ReturnData<Operation, Operations> : T,
+      Operation
+    >(operation, {
       apiVersion: this.apiVersion || this.graphqlClass().config.apiVersion,
       ...(options as ApiClientRequestOptions<Operation, AdminOperations>),
     });
@@ -127,7 +132,14 @@ export class GraphqlClient {
       throwFailedRequest(response, (options?.retries ?? 0) > 0, fetchResponse);
     }
 
-    return response;
+    const headerObject = Object.fromEntries(
+      response.headers ? response.headers.entries() : [],
+    );
+
+    return {
+      ...response,
+      headers: canonicalizeHeaders(headerObject ?? {}),
+    };
   }
 
   private graphqlClass() {

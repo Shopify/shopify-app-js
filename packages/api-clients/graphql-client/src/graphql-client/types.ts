@@ -11,7 +11,9 @@ type OperationVariables = Record<string, any>;
 
 export type DataChunk = Buffer | Uint8Array;
 
-export type Headers = Record<string, string | string[]>;
+type HeadersObject = Record<string, string | string[]>;
+
+export type {HeadersObject as Headers};
 
 export interface ResponseErrors {
   networkStatusCode?: number;
@@ -25,6 +27,7 @@ export type GQLExtensions = Record<string, any>;
 export interface FetchResponseBody<TData = any> {
   data?: TData;
   extensions?: GQLExtensions;
+  headers?: Headers;
 }
 
 export interface ClientResponse<TData = any> extends FetchResponseBody<TData> {
@@ -70,7 +73,7 @@ export type Logger<TLogContentTypes = LogContentTypes> = (
 ) => void;
 
 export interface ClientOptions {
-  headers: Headers;
+  headers: HeadersObject;
   url: string;
   customFetchApi?: CustomFetchApi;
   retries?: number;
@@ -86,7 +89,7 @@ export interface ClientConfig {
 export interface RequestOptions {
   variables?: OperationVariables;
   url?: string;
-  headers?: Headers;
+  headers?: HeadersObject;
   retries?: number;
 }
 
