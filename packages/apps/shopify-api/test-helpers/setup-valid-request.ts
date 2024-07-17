@@ -15,14 +15,14 @@ export enum RequestType {
 interface ValidBaseRequestOptions {
   type: RequestType.Admin | RequestType.Bearer;
   store: string;
-  apiSecret: string;
+  apiSecretKey: string;
   apiKey: string;
 }
 
 interface ValidExtensionRequestOptions {
   type: RequestType.Extension;
   store: string;
-  apiSecret: string;
+  apiSecretKey: string;
   body?: any;
   headers?: Record<string, string>;
 }
@@ -30,7 +30,7 @@ interface ValidExtensionRequestOptions {
 interface ValidPublicRequestOptions {
   type: RequestType.Public;
   store: string;
-  apiSecret: string;
+  apiSecretKey: string;
 }
 
 export type ValidRequestOptions =
@@ -56,7 +56,7 @@ export async function setUpValidRequest(
         request,
         options.store,
         options.apiKey,
-        options.apiSecret,
+        options.apiSecretKey,
       );
       break;
     case RequestType.Bearer:
@@ -64,14 +64,14 @@ export async function setUpValidRequest(
         request,
         options.store,
         options.apiKey,
-        options.apiSecret,
+        options.apiSecretKey,
       );
       break;
     case RequestType.Extension:
       authenticatedRequest = extensionRequest(
         request,
         options.store,
-        options.apiSecret,
+        options.apiSecretKey,
         options.body,
         options.headers,
       );
@@ -80,7 +80,7 @@ export async function setUpValidRequest(
       authenticatedRequest = await publicRequest(
         request,
         options.store,
-        options.apiSecret,
+        options.apiSecretKey,
       );
       break;
   }
@@ -92,9 +92,9 @@ function adminRequest(
   request: Request,
   store: string,
   apiKey: string,
-  apiSecret: string,
+  apiSecretKey: string,
 ) {
-  const {token} = getJwt(store, apiKey, apiSecret);
+  const {token} = getJwt(store, apiKey, apiSecretKey);
 
   const url = new URL(request.url);
   url.searchParams.set('embedded', '1');
@@ -108,9 +108,9 @@ function bearerRequest(
   request: Request,
   store: string,
   apiKey: string,
-  apiSecret: string,
+  apiSecretKey: string,
 ) {
-  const {token} = getJwt(store, apiKey, apiSecret);
+  const {token} = getJwt(store, apiKey, apiSecretKey);
 
   return new Request(request, {
     headers: {
@@ -122,7 +122,7 @@ function bearerRequest(
 function extensionRequest(
   request: Request,
   store: string,
-  apiSecret: string,
+  apiSecretKey: string,
   body: any,
   headers?: Record<string, string>,
 ) {
@@ -132,7 +132,7 @@ function extensionRequest(
     method: 'POST',
     body: bodyString,
     headers: {
-      'X-Shopify-Hmac-Sha256': getHmac(bodyString, apiSecret),
+      'X-Shopify-Hmac-Sha256': getHmac(bodyString, apiSecretKey),
       'X-Shopify-Shop-Domain': getShop(store),
       ...headers,
     },
@@ -142,7 +142,7 @@ function extensionRequest(
 async function publicRequest(
   request: Request,
   store: string,
-  apiSecret: string,
+  apiSecretKey: string,
 ) {
   const url = new URL(request.url);
   url.searchParams.set('shop', getShop(store));
@@ -157,7 +157,7 @@ async function publicRequest(
 
   url.searchParams.set(
     'signature',
-    await createSHA256HMAC(apiSecret, string, HashFormat.Hex),
+    await createSHA256HMAC(apiSecretKey, string, HashFormat.Hex),
   );
 
   return new Request(url.href, request);

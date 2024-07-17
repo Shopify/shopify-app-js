@@ -26,7 +26,7 @@ describe('setUpValidRequest', () => {
       type: RequestType.Admin,
       store: TEST_SHOP_NAME,
       apiKey: API_KEY,
-      apiSecret: API_SECRET_KEY,
+      apiSecretKey: API_SECRET_KEY,
     };
 
     const authorizedRequest = await setUpValidRequest(options, request);
@@ -47,7 +47,7 @@ describe('setUpValidRequest', () => {
       type: RequestType.Bearer,
       store: TEST_SHOP_NAME,
       apiKey: API_KEY,
-      apiSecret: API_SECRET_KEY,
+      apiSecretKey: API_SECRET_KEY,
     };
 
     const authorizedRequest = await setUpValidRequest(options, request);
@@ -61,14 +61,14 @@ describe('setUpValidRequest', () => {
     options = {
       type: RequestType.Extension,
       store: TEST_SHOP_NAME,
-      apiSecret: API_SECRET_KEY,
+      apiSecretKey: API_SECRET_KEY,
       body: 'test',
       headers: {
         'test-header': 'test value',
       },
     };
     const bodyString = JSON.stringify(options.body);
-    const hmac = getHmac(bodyString, options.apiSecret);
+    const hmac = getHmac(bodyString, options.apiSecretKey);
 
     const authorizedRequest = await setUpValidRequest(options, request);
     const hmacHeader = authorizedRequest.headers.get('X-Shopify-Hmac-Sha256');
@@ -86,7 +86,7 @@ describe('setUpValidRequest', () => {
     options = {
       type: RequestType.Public,
       store: TEST_SHOP_NAME,
-      apiSecret: API_SECRET_KEY,
+      apiSecretKey: API_SECRET_KEY,
     };
 
     const authorizedRequest = await setUpValidRequest(options, request);
