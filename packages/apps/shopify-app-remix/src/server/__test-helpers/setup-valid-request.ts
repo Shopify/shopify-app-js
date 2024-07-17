@@ -37,7 +37,7 @@ export async function setupValidRequest(
       decoratedOptions = {
         store: TEST_SHOP_NAME,
         apiKey: API_KEY,
-        apiSecret: API_SECRET_KEY,
+        apiSecretKey: API_SECRET_KEY,
         ...options,
       };
       break;
@@ -45,21 +45,21 @@ export async function setupValidRequest(
       decoratedOptions = {
         store: TEST_SHOP_NAME,
         apiKey: API_KEY,
-        apiSecret: API_SECRET_KEY,
+        apiSecretKey: API_SECRET_KEY,
         ...options,
       };
       break;
     case RequestType.Extension:
       decoratedOptions = {
         store: TEST_SHOP_NAME,
-        apiSecret: API_SECRET_KEY,
+        apiSecretKey: API_SECRET_KEY,
         ...options,
       };
       break;
     case RequestType.Public:
       decoratedOptions = {
         store: TEST_SHOP_NAME,
-        apiSecret: API_SECRET_KEY,
+        apiSecretKey: API_SECRET_KEY,
         ...options,
         type: options.type,
       };

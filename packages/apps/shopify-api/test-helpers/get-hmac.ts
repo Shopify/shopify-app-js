@@ -1,8 +1,8 @@
 import crypto from 'crypto';
 
-export function getHmac(body: string, apiSecret: string): string {
+export function getHmac(body: string, apiSecretKey: string): string {
   return crypto
-    .createHmac('sha256', apiSecret)
+    .createHmac('sha256', apiSecretKey)
     .update(body, 'utf8')
     .digest('base64');
 }

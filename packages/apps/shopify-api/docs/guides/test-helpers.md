@@ -46,19 +46,13 @@ const session = await setUpValidSession(sessionStorage, {
 
 Each of these four authorization methods matches an enumerated value on `RequestType`. `RequestType` is exported as a companion to this method.
 
+The `store` property must match the `shop` property used for `setUpValidSession()`, and the `apiKey` and `apiSecretKey` properties must match the `apiKey` and `apiSecretKey` passed to `shopifyApi()`.
+
 ```ts
 import {
   RequestType,
   setUpValidRequest,
 } from '@shopify/shopify-api/test-helpers';
-
-if (typeof process.env.SHOPIFY_API_SECRET === 'undefined') { // narrow type or throw error if undefined
-  throw new Error('Required environmental variable SHOPIFY_API_SECRET is undefined');
-}
-
-if (typeof process.env.SHOPIFY_API_KEY === 'undefined') { // narrow type or throw error if undefined
-  throw new Error('Required environmental variable SHOPIFY_API_KEY is undefined');
-}
 
 let request: Request = ... // the request intercepted by end-to-end testing framework
 
@@ -66,16 +60,14 @@ const authorizedRequest = setUpValidRequest(
   {
     type: RequestType.Extension,
     store: `test-shop-${process.env.TEST_PARALLEL_INDEX}`,
-    apiKey: process.env.SHOPIFY_API_KEY,
-    apiSecret: process.env.SHOPIFY_API_SECRET,
+    apiKey: ..., // the same value as `apiKey` passed to shopifyApi()
+    apiSecretKey: ..., // the same value as `apiSecretKey` passed to shopifyAPI()
   },
   request
 );
 
-// now use authorizedRequest to complete the request, or if that's not possible, use it to modify the original request, using your testing framework's methods to add the headers or query string parameters to the request
+// now use authorizedRequest to complete the request, or use the url or headers of authorizedRequest to modify the original request.
 ```
 
 ## Troubleshooting
-Most end-to-end testing frameworks run their tests in different environments to the environment in which the Shopify development server is started, so the test environments don't have access to the environmental variables set by the Shopify CLI when running `shopify app dev`. If this is true for your testing framework, you must manually set the values for the `SHOPIFY_API_KEY` and `SHOPIFY_API_SECRET` environmental variables such that they are the same value in both the Shopify development server environment and the test environment(s).
-
-For example, using Playwright, you can set the environment variable in `playwright.config.ts`, and its value will be the same in all environments.
+Some end-to-end testing frameworks run their tests in different environments to the environment in which the Shopify development server is started, so the test environments don't have access to the environmental variables set by the Shopify CLI when running `shopify app dev`. If this is true for your testing framework, you cannot set the values for `apiKey` and `apiSecretKey` to the `SHOPIFY_API_KEY` and `SHOPIFY_API_SECRET` environmental variables respectively. **NB: DO NOT commit your real API key and secret to a code respository.**

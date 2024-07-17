@@ -15,14 +15,14 @@ interface TestJwt {
  *
  * @param store The name of the store for which to create a valid JWT token.
  * @param apiKey The Client ID/API key for the store for which to create a valid JWT token.
- * @param apiSecret The API secret for the store for which to create a valid JWT token.
+ * @param apiSecretKey The API secret for the store for which to create a valid JWT token.
  * @param overrides Optional overrides for the JWT payload.
  * @returns {TestJwt} The JWT token and the JWT payload used to create the token.
  */
 export function getJwt(
   store: string,
   apiKey: string,
-  apiSecret: string,
+  apiSecretKey: string,
   overrides: Partial<JwtPayload> = {},
 ): TestJwt {
   const date = new Date();
@@ -40,7 +40,7 @@ export function getJwt(
     ...overrides,
   };
 
-  const token = jwt.sign(payload, apiSecret, {
+  const token = jwt.sign(payload, apiSecretKey, {
     algorithm: 'HS256',
   });
 
