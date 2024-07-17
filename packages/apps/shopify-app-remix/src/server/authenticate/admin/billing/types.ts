@@ -1,8 +1,10 @@
 import {
   AppSubscription,
   BillingCheckParams,
+  BillingCheckResponse,
   BillingCheckResponseObject,
   BillingRequestParams,
+  Session,
 } from '@shopify/shopify-api';
 
 import type {AppConfigArg} from '../../../config-types';
@@ -24,7 +26,7 @@ export interface CheckBillingOptions<Config extends AppConfigArg>
   /**
    * The plans to check for. Must be one of the values defined in the `billing` config option.
    */
-  plans: (keyof Config['billing'])[];
+  plans?: (keyof Config['billing'])[];
 }
 
 export interface RequestBillingOptions<Config extends AppConfigArg>
@@ -219,9 +221,19 @@ export interface BillingContext<Config extends AppConfigArg> {
    * ```
    *
    */
-  check: (
-    options: CheckBillingOptions<Config>,
-  ) => Promise<BillingCheckResponseObject>;
+  check: <Options extends CheckBillingOptions<Config>>(
+    options?: Options,
+  ) => Promise<
+    BillingCheckResponse<
+      Options & {
+        session: Session;
+        returnObject: true;
+        plans?: Options['plans'] extends (keyof Config['billing'])[]
+          ? string[]
+          : undefined;
+      }
+    >
+  >;
 
   /**
    * Requests payment for the plan.

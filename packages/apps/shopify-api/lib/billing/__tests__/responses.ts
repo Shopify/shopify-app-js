@@ -158,6 +158,21 @@ export const EXISTING_SUBSCRIPTION = JSON.stringify(
   EXISTING_SUBSCRIPTION_OBJECT,
 );
 
+export const MULTIPLE_SUBSCRIPTIONS = JSON.stringify({
+  data: {
+    currentAppInstallation: {
+      oneTimePurchases: {
+        edges: [],
+        pageInfo: {hasNextPage: false, endCursor: null},
+      },
+      activeSubscriptions: [
+        {id: 'gid://123', name: PLAN_1, test: true},
+        {id: 'gid://321', name: PLAN_2, test: true},
+      ],
+    },
+  },
+});
+
 export const PURCHASE_ONE_TIME_RESPONSE = JSON.stringify({
   data: {
     appPurchaseOneTimeCreate: {

@@ -225,7 +225,7 @@ export interface BillingCheckParams {
   /**
    * The plans to accept for this check.
    */
-  plans: string[] | string;
+  plans?: string[] | string;
   /**
    * Whether to include charges that were created on test mode. Test shops and demo shops cannot be charged.
    */
@@ -236,11 +236,7 @@ export interface BillingCheckParams {
   returnObject?: boolean;
 }
 
-export interface BillingCheckResponseObject {
-  /**
-   * Whether the user has an active payment method.
-   */
-  hasActivePayment: boolean;
+export interface BillingCheckResults {
   /**
    * The one-time purchases the shop has.
    */
@@ -251,8 +247,19 @@ export interface BillingCheckResponseObject {
   appSubscriptions: AppSubscription[];
 }
 
+export interface BillingCheckResponseObject extends BillingCheckResults {
+  /**
+   * Whether the user has an active payment method.
+   */
+  hasActivePayment: boolean;
+}
+
 export type BillingCheckResponse<Params extends BillingCheckParams> =
-  Params['returnObject'] extends true ? BillingCheckResponseObject : boolean;
+  Params['plans'] extends string[]
+    ? Params['returnObject'] extends true
+      ? BillingCheckResponseObject
+      : boolean
+    : BillingCheckResults;
 
 export type BillingRequestParams = {
   /**

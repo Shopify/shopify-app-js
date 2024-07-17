@@ -68,6 +68,36 @@ describe('Billing check', () => {
     ]);
   });
 
+  it('returns multiple plans when not filtering by any', async () => {
+    // GIVEN
+    const config = testConfig();
+    await setUpValidSession(config.sessionStorage);
+    const shopify = shopifyApp({...config, billing: BILLING_CONFIG});
+
+    await mockExternalRequest({
+      request: new Request(GRAPHQL_URL, {method: 'POST', body: 'test'}),
+      response: new Response(responses.MULTIPLE_SUBSCRIPTIONS),
+    });
+
+    const {billing} = await shopify.authenticate.admin(
+      new Request(`${APP_URL}/billing`, {
+        headers: {
+          Authorization: `Bearer ${getJwt().token}`,
+        },
+      }),
+    );
+
+    // WHEN
+    const result = await billing.check();
+
+    // THEN
+    expect(result.oneTimePurchases).toEqual([]);
+    expect(result.appSubscriptions).toEqual([
+      {id: 'gid://123', name: responses.PLAN_1, test: true},
+      {id: 'gid://321', name: responses.PLAN_2, test: true},
+    ]);
+  });
+
   it('returns empty plans when none are active', async () => {
     // GIVEN
     const config = testConfig();

@@ -54,7 +54,7 @@ describe('shopify.billing.check', () => {
   });
 
   describe('with no billing config', () => {
-    test('throws error', async () => {
+    test('throws error if plans are given', async () => {
       const shopify = shopifyApi(testConfig({billing: undefined}));
 
       expect(() =>
@@ -64,6 +64,22 @@ describe('shopify.billing.check', () => {
           isTest: true,
         }),
       ).rejects.toThrowError(BillingError);
+    });
+
+    test('returns all purchases if no plans are given', async () => {
+      const shopify = shopifyApi(testConfig({billing: undefined}));
+
+      queueMockResponses([Responses.MULTIPLE_SUBSCRIPTIONS]);
+
+      const response = await shopify.billing.check({session, isTest: true});
+
+      expect({
+        ...GRAPHQL_BASE_REQUEST,
+        data: expect.stringContaining('activeSubscriptions'),
+      }).toMatchMadeHttpRequest();
+
+      expect(response.oneTimePurchases.length).toBe(0);
+      expect(response.appSubscriptions.length).toBe(2);
     });
   });
 
