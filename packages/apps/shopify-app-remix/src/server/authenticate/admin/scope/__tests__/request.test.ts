@@ -14,7 +14,10 @@ import {
 import {shopifyApp} from '../../../..';
 import * as redirect from '../../helpers/redirect-to-install-page';
 
-it('when the future flag is disabled returns an error', async () => {
+import {mockGraphqlRequest} from './utils';
+import * as responses from './mock-responses';
+
+it('when the future flag is disabled the scopes api is not available', async () => {
   // GIVEN
   const shopify = shopifyApp(
     testConfig({
@@ -68,6 +71,36 @@ it('when scopes are empty the request is not redirected', async () => {
   expect(spyRedirect).not.toHaveBeenCalled();
 });
 
+it('when all the scopes are already granted the request is not redirected', async () => {
+  // GIVEN
+  const shopify = shopifyApp(
+    testConfig({
+      isEmbeddedApp: false,
+      scopes: undefined,
+      future: {unstable_optionalScopesApi: true},
+    }),
+  );
+  const session = await setUpValidSession(shopify.sessionStorage);
+
+  const request = new Request(`${APP_URL}/scopes`);
+  signRequestCookie({
+    request,
+    cookieName: SESSION_COOKIE_NAME,
+    cookieValue: session.id,
+  });
+
+  const spyRedirect = jest.spyOn(redirect, 'redirectToInstallPage');
+  await mockGraphqlRequest(200, responses.WITH_GRANTED_AND_DECLARED);
+
+  // WHEN
+  const {scopes} = await shopify.authenticate.admin(request);
+  const response = await scopes.request(['read_orders', 'write_customers']);
+
+  // THEN
+  expect(response).toBeUndefined();
+  expect(spyRedirect).not.toHaveBeenCalled();
+});
+
 it('when the shop is invalid an error is thrown', async () => {
   // GIVEN
   const shopify = shopifyApp(
@@ -86,6 +119,7 @@ it('when the shop is invalid an error is thrown', async () => {
     cookieName: SESSION_COOKIE_NAME,
     cookieValue: session.id,
   });
+  await mockGraphqlRequest(200, responses.WITH_GRANTED_AND_DECLARED);
 
   // WHEN
   const {scopes} = await shopify.authenticate.admin(request);
@@ -109,11 +143,13 @@ describe('request from a non embedded app', () => {
       cookieValue: session.id,
     });
 
+    await mockGraphqlRequest(200, responses.WITH_GRANTED_AND_DECLARED);
     const {scopes} = await shopify.authenticate.admin(request);
 
     // WHEN
     const response = await getThrownResponse(
-      async () => scopes.request(['write_products']),
+      async () =>
+        scopes.request(['write_products', 'read_orders', 'write_customers']),
       request,
     );
 
@@ -125,7 +161,9 @@ describe('request from a non embedded app', () => {
     expect(location.hostname).toBe(TEST_SHOP);
     expect(location.pathname).toBe('/admin/oauth/install');
     const locationParams = location.searchParams;
-    expect(locationParams.get('optional_scopes')).toBe('write_products');
+    expect(locationParams.get('optional_scopes')).toBe(
+      'write_products,read_orders,write_customers',
+    );
   });
 });
 
@@ -140,11 +178,13 @@ describe('request from an embedded app', () => {
       `${APP_URL}/scopes?embedded=1&shop=${TEST_SHOP}&host=${BASE64_HOST}&id_token=${token}`,
     );
 
+    await mockGraphqlRequest(200, responses.WITH_GRANTED_AND_DECLARED);
     const {scopes} = await shopify.authenticate.admin(request);
 
     // WHEN
     const response = await getThrownResponse(
-      async () => scopes.request(['write_products']),
+      async () =>
+        scopes.request(['write_products', 'read_orders', 'write_customers']),
       request,
     );
 
@@ -158,6 +198,8 @@ describe('request from an embedded app', () => {
     expect(location.hostname).toBe(TEST_SHOP);
     expect(location.pathname).toBe('/admin/oauth/install');
     const locationParams = location.searchParams;
-    expect(locationParams.get('optional_scopes')).toBe('write_products');
+    expect(locationParams.get('optional_scopes')).toBe(
+      'write_products,read_orders,write_customers',
+    );
   });
 });

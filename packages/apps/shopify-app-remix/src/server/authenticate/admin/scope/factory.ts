@@ -14,6 +14,6 @@ export function scopesApiFactory(
 ): ScopesApiContext {
   return {
     query: queryScopesFactory(params, session, admin),
-    request: requestScopesFactory(params, session),
+    request: requestScopesFactory(params, session, admin),
   };
 }
