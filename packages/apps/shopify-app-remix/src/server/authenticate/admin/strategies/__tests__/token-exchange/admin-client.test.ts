@@ -148,4 +148,3 @@ async function mockRestRequest(status = 401) {
 
   return requestMock;
 }
-

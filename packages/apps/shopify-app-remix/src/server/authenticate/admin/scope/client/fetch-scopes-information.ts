@@ -30,11 +30,13 @@ query FetchAccessScopes{
   }
 }`;
 
-export async function fetchScopeInformation(admin: AdminApiContext) {
+export async function fetchScopeInformation(
+  admin: AdminApiContext,
+): Promise<FetchScopeInformationResponse> {
   const fetchScopeInformationResult = await admin.graphql(
     FETCH_SCOPE_INFORMATION_QUERY,
   );
 
-  return (await fetchScopeInformationResult.json())
-    .data as FetchScopeInformationResponse;
+  const resultContent = await fetchScopeInformationResult.json();
+  return resultContent.data;
 }
