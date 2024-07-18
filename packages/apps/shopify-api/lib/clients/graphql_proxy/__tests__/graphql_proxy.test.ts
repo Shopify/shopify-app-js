@@ -15,6 +15,9 @@ const successResponse = {
       name: 'Shop',
     },
   },
+  headers: {
+    'Content-Type': ['application/json'],
+  },
 };
 const shopQuery = `{
   shop {

@@ -56,13 +56,13 @@ export function createGraphQLClient({
     clientLogger,
     defaultRetryWaitTime: RETRY_WAIT_TIME,
   });
-  const fetch = generateFetch(httpFetch, config);
-  const request = generateRequest(fetch);
-  const requestStream = generateRequestStream(fetch);
+  const fetchFn = generateFetch(httpFetch, config);
+  const request = generateRequest(fetchFn);
+  const requestStream = generateRequestStream(fetchFn);
 
   return {
     config,
-    fetch,
+    fetch: fetchFn,
     request,
     requestStream,
   };
@@ -77,13 +77,15 @@ export function generateClientLogger(logger?: Logger): Logger {
 }
 
 async function processJSONResponse<TData = any>(
-  response: any,
+  response: Response,
 ): Promise<ClientResponse<TData>> {
-  const {errors, data, extensions} = await response.json();
+  const {errors, data, extensions} = await response.json<any>();
 
   return {
     ...getKeyValueIfValid('data', data),
     ...getKeyValueIfValid('extensions', extensions),
+    headers: response.headers,
+
     ...(errors || !data
       ? {
           errors: {
@@ -145,7 +147,7 @@ function generateFetch(
 }
 
 function generateRequest(
-  fetch: ReturnType<typeof generateFetch>,
+  fetchFn: ReturnType<typeof generateFetch>,
 ): GraphQLClient['request'] {
   return async (...props) => {
     if (DEFER_OPERATION_REGEX.test(props[0])) {
@@ -157,7 +159,7 @@ function generateRequest(
     }
 
     try {
-      const response = await fetch(...props);
+      const response = await fetchFn(...props);
       const {status, statusText} = response;
       const contentType = response.headers.get('content-type') || '';
 
@@ -429,7 +431,7 @@ function createMultipartResponseAsyncInterator(
 }
 
 function generateRequestStream(
-  fetch: ReturnType<typeof generateFetch>,
+  fetchFn: ReturnType<typeof generateFetch>,
 ): GraphQLClient['requestStream'] {
   return async (...props) => {
     if (!DEFER_OPERATION_REGEX.test(props[0])) {
@@ -441,7 +443,7 @@ function generateRequestStream(
     }
 
     try {
-      const response = await fetch(...props);
+      const response = await fetchFn(...props);
 
       const {statusText} = response;
 

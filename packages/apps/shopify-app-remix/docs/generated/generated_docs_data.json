@@ -4933,7 +4933,8 @@
               "FetchResponseBody": "../../api-clients/admin-api-client/dist/ts/index.d.ts",
               "ApiClientRequestOptions": "../../api-clients/admin-api-client/dist/ts/index.d.ts",
               "ResponseWithType": "../../api-clients/admin-api-client/dist/ts/index.d.ts",
-              "ApiVersion": "../shopify-api/dist/ts/lib/index.d.ts"
+              "ApiVersion": "../shopify-api/dist/ts/lib/index.d.ts",
+              "Headers": "../shopify-api/runtime/index.ts"
             },
             "name": "GraphQLClient",
             "description": "",
@@ -4968,7 +4969,8 @@
               "FetchResponseBody": "../../api-clients/admin-api-client/dist/ts/index.d.ts",
               "ApiClientRequestOptions": "../../api-clients/admin-api-client/dist/ts/index.d.ts",
               "ResponseWithType": "../../api-clients/admin-api-client/dist/ts/index.d.ts",
-              "ApiVersion": "../shopify-api/dist/ts/lib/index.d.ts"
+              "ApiVersion": "../shopify-api/dist/ts/lib/index.d.ts",
+              "Headers": "../shopify-api/runtime/index.ts"
             },
             "name": "GraphQLQueryOptions",
             "description": "",
@@ -6722,7 +6724,8 @@
               "FetchResponseBody": "../../api-clients/admin-api-client/dist/ts/index.d.ts",
               "ApiClientRequestOptions": "../../api-clients/admin-api-client/dist/ts/index.d.ts",
               "ResponseWithType": "../../api-clients/admin-api-client/dist/ts/index.d.ts",
-              "ApiVersion": "../shopify-api/dist/ts/lib/index.d.ts"
+              "ApiVersion": "../shopify-api/dist/ts/lib/index.d.ts",
+              "Headers": "../shopify-api/runtime/index.ts"
             },
             "name": "GraphQLClient",
             "description": "",
@@ -6757,7 +6760,8 @@
               "FetchResponseBody": "../../api-clients/admin-api-client/dist/ts/index.d.ts",
               "ApiClientRequestOptions": "../../api-clients/admin-api-client/dist/ts/index.d.ts",
               "ResponseWithType": "../../api-clients/admin-api-client/dist/ts/index.d.ts",
-              "ApiVersion": "../shopify-api/dist/ts/lib/index.d.ts"
+              "ApiVersion": "../shopify-api/dist/ts/lib/index.d.ts",
+              "Headers": "../shopify-api/runtime/index.ts"
             },
             "name": "GraphQLQueryOptions",
             "description": "",
@@ -7599,7 +7603,8 @@
               "FetchResponseBody": "../../api-clients/admin-api-client/dist/ts/index.d.ts",
               "ApiClientRequestOptions": "../../api-clients/admin-api-client/dist/ts/index.d.ts",
               "ResponseWithType": "../../api-clients/admin-api-client/dist/ts/index.d.ts",
-              "ApiVersion": "../shopify-api/dist/ts/lib/index.d.ts"
+              "ApiVersion": "../shopify-api/dist/ts/lib/index.d.ts",
+              "Headers": "../shopify-api/runtime/index.ts"
             },
             "name": "GraphQLClient",
             "description": "",
@@ -7634,7 +7639,8 @@
               "FetchResponseBody": "../../api-clients/admin-api-client/dist/ts/index.d.ts",
               "ApiClientRequestOptions": "../../api-clients/admin-api-client/dist/ts/index.d.ts",
               "ResponseWithType": "../../api-clients/admin-api-client/dist/ts/index.d.ts",
-              "ApiVersion": "../shopify-api/dist/ts/lib/index.d.ts"
+              "ApiVersion": "../shopify-api/dist/ts/lib/index.d.ts",
+              "Headers": "../shopify-api/runtime/index.ts"
             },
             "name": "GraphQLQueryOptions",
             "description": "",
@@ -10493,7 +10499,8 @@
               "FetchResponseBody": "../../api-clients/admin-api-client/dist/ts/index.d.ts",
               "ApiClientRequestOptions": "../../api-clients/admin-api-client/dist/ts/index.d.ts",
               "ResponseWithType": "../../api-clients/admin-api-client/dist/ts/index.d.ts",
-              "ApiVersion": "../shopify-api/dist/ts/lib/index.d.ts"
+              "ApiVersion": "../shopify-api/dist/ts/lib/index.d.ts",
+              "Headers": "../shopify-api/runtime/index.ts"
             },
             "name": "GraphQLClient",
             "description": "",
@@ -10528,7 +10535,8 @@
               "FetchResponseBody": "../../api-clients/admin-api-client/dist/ts/index.d.ts",
               "ApiClientRequestOptions": "../../api-clients/admin-api-client/dist/ts/index.d.ts",
               "ResponseWithType": "../../api-clients/admin-api-client/dist/ts/index.d.ts",
-              "ApiVersion": "../shopify-api/dist/ts/lib/index.d.ts"
+              "ApiVersion": "../shopify-api/dist/ts/lib/index.d.ts",
+              "Headers": "../shopify-api/runtime/index.ts"
             },
             "name": "GraphQLQueryOptions",
             "description": "",
@@ -13914,7 +13922,8 @@
               "FetchResponseBody": "../../api-clients/admin-api-client/dist/ts/index.d.ts",
               "ApiClientRequestOptions": "../../api-clients/admin-api-client/dist/ts/index.d.ts",
               "ResponseWithType": "../../api-clients/admin-api-client/dist/ts/index.d.ts",
-              "ApiVersion": "../shopify-api/dist/ts/lib/index.d.ts"
+              "ApiVersion": "../shopify-api/dist/ts/lib/index.d.ts",
+              "Headers": "../shopify-api/runtime/index.ts"
             },
             "name": "GraphQLClient",
             "description": "",
@@ -13949,7 +13958,8 @@
               "FetchResponseBody": "../../api-clients/admin-api-client/dist/ts/index.d.ts",
               "ApiClientRequestOptions": "../../api-clients/admin-api-client/dist/ts/index.d.ts",
               "ResponseWithType": "../../api-clients/admin-api-client/dist/ts/index.d.ts",
-              "ApiVersion": "../shopify-api/dist/ts/lib/index.d.ts"
+              "ApiVersion": "../shopify-api/dist/ts/lib/index.d.ts",
+              "Headers": "../shopify-api/runtime/index.ts"
             },
             "name": "GraphQLQueryOptions",
             "description": "",
