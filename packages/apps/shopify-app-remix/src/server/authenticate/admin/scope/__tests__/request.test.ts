@@ -2,19 +2,19 @@ import {SESSION_COOKIE_NAME} from '@shopify/shopify-api';
 
 import {
   APP_URL,
-  BASE64_HOST,
   TEST_SHOP,
   TEST_SHOP_NAME,
-  getJwt,
   getThrownResponse,
+  setUpEmbeddedFlow,
+  setUpNonEmbeddedFlow,
   setUpValidSession,
   signRequestCookie,
   testConfig,
+  mockGraphqlRequest,
 } from '../../../../__test-helpers';
 import {shopifyApp} from '../../../..';
 import * as redirect from '../../helpers/redirect-to-install-page';
 
-import {mockGraphqlRequest} from './utils';
 import * as responses from './mock-responses';
 
 it('when the future flag is disabled the scopes api is not available', async () => {
@@ -44,26 +44,10 @@ it('when the future flag is disabled the scopes api is not available', async () 
 
 it('when scopes are empty the request is not redirected', async () => {
   // GIVEN
-  const shopify = shopifyApp(
-    testConfig({
-      isEmbeddedApp: false,
-      scopes: undefined,
-      future: {unstable_optionalScopesApi: true},
-    }),
-  );
-  const session = await setUpValidSession(shopify.sessionStorage);
-
-  const request = new Request(`${APP_URL}/scopes`);
-  signRequestCookie({
-    request,
-    cookieName: SESSION_COOKIE_NAME,
-    cookieValue: session.id,
-  });
-
+  const {scopes} = await setUpNonEmbeddedFlow();
   const spyRedirect = jest.spyOn(redirect, 'redirectToInstallPage');
 
   // WHEN
-  const {scopes} = await shopify.authenticate.admin(request);
   const response = await scopes.request([]);
 
   // THEN
@@ -73,27 +57,11 @@ it('when scopes are empty the request is not redirected', async () => {
 
 it('when all the scopes are already granted the request is not redirected', async () => {
   // GIVEN
-  const shopify = shopifyApp(
-    testConfig({
-      isEmbeddedApp: false,
-      scopes: undefined,
-      future: {unstable_optionalScopesApi: true},
-    }),
-  );
-  const session = await setUpValidSession(shopify.sessionStorage);
-
-  const request = new Request(`${APP_URL}/scopes`);
-  signRequestCookie({
-    request,
-    cookieName: SESSION_COOKIE_NAME,
-    cookieValue: session.id,
-  });
-
+  const {scopes} = await setUpNonEmbeddedFlow();
   const spyRedirect = jest.spyOn(redirect, 'redirectToInstallPage');
-  await mockGraphqlRequest(200, responses.WITH_GRANTED_AND_DECLARED);
+  await mockGraphqlRequest()(200, responses.WITH_GRANTED_AND_DECLARED);
 
   // WHEN
-  const {scopes} = await shopify.authenticate.admin(request);
   const response = await scopes.request(['read_orders', 'write_customers']);
 
   // THEN
@@ -119,7 +87,7 @@ it('when the shop is invalid an error is thrown', async () => {
     cookieName: SESSION_COOKIE_NAME,
     cookieValue: session.id,
   });
-  await mockGraphqlRequest(200, responses.WITH_GRANTED_AND_DECLARED);
+  await mockGraphqlRequest()(200, responses.WITH_GRANTED_AND_DECLARED);
 
   // WHEN
   const {scopes} = await shopify.authenticate.admin(request);
@@ -131,20 +99,8 @@ it('when the shop is invalid an error is thrown', async () => {
 describe('request from a non embedded app', () => {
   it('redirects to install URL when successful', async () => {
     // GIVEN
-    const shopify = shopifyApp(
-      testConfig({isEmbeddedApp: false, scopes: undefined}),
-    );
-    const session = await setUpValidSession(shopify.sessionStorage);
-
-    const request = new Request(`${APP_URL}/scopes`);
-    signRequestCookie({
-      request,
-      cookieName: SESSION_COOKIE_NAME,
-      cookieValue: session.id,
-    });
-
-    await mockGraphqlRequest(200, responses.WITH_GRANTED_AND_DECLARED);
-    const {scopes} = await shopify.authenticate.admin(request);
+    const {scopes, request} = await setUpNonEmbeddedFlow();
+    await mockGraphqlRequest()(200, responses.WITH_GRANTED_AND_DECLARED);
 
     // WHEN
     const response = await getThrownResponse(
@@ -170,16 +126,8 @@ describe('request from a non embedded app', () => {
 describe('request from an embedded app', () => {
   it('redirects to install URL when successful', async () => {
     // GIVEN
-    const shopify = shopifyApp(testConfig({scopes: undefined}));
-    await setUpValidSession(shopify.sessionStorage);
-
-    const {token} = getJwt();
-    const request = new Request(
-      `${APP_URL}/scopes?embedded=1&shop=${TEST_SHOP}&host=${BASE64_HOST}&id_token=${token}`,
-    );
-
-    await mockGraphqlRequest(200, responses.WITH_GRANTED_AND_DECLARED);
-    const {scopes} = await shopify.authenticate.admin(request);
+    const {scopes, request} = await setUpEmbeddedFlow();
+    await mockGraphqlRequest()(200, responses.WITH_GRANTED_AND_DECLARED);
 
     // WHEN
     const response = await getThrownResponse(

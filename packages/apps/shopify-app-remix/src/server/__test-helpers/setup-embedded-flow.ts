@@ -25,5 +25,6 @@ export async function setUpEmbeddedFlow() {
     shopify,
     expectedSession,
     ...(await shopify.authenticate.admin(request)),
+    request,
   };
 }
