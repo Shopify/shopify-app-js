@@ -9,15 +9,15 @@ import {restResources} from '@shopify/shopify-api/rest/admin/2023-04';
 
 import {
   APP_URL,
-  BASE64_HOST,
   TEST_SHOP,
-  getJwt,
   getThrownResponse,
   setUpValidSession,
   signRequestCookie,
   testConfig,
   mockExternalRequest,
   expectAdminApiClient,
+  setUpEmbeddedFlow,
+  mockGraphqlRequest,
 } from '../../../__test-helpers';
 import {shopifyApp} from '../../..';
 import {AdminApiContext} from '../../../clients';
@@ -161,22 +161,6 @@ describe('admin.authenticate context', () => {
   });
 });
 
-async function setUpEmbeddedFlow() {
-  const shopify = shopifyApp(testConfig({restResources}));
-  const expectedSession = await setUpValidSession(shopify.sessionStorage);
-
-  const {token} = getJwt();
-  const request = new Request(
-    `${APP_URL}?embedded=1&shop=${TEST_SHOP}&host=${BASE64_HOST}&id_token=${token}`,
-  );
-
-  return {
-    shopify,
-    expectedSession,
-    ...(await shopify.authenticate.admin(request)),
-  };
-}
-
 async function setUpNonEmbeddedFlow() {
   const shopify = shopifyApp(testConfig({restResources, isEmbeddedApp: false}));
   const session = await setUpValidSession(shopify.sessionStorage);
@@ -209,20 +193,4 @@ async function mockRestRequest(
   });
 
   return requestMock;
-}
-
-function mockGraphqlRequest(apiVersion = LATEST_API_VERSION) {
-  return async function (status: any) {
-    const requestMock = new Request(
-      `https://${TEST_SHOP}/admin/api/${apiVersion}/graphql.json`,
-      {method: 'POST'},
-    );
-
-    await mockExternalRequest({
-      request: requestMock,
-      response: new Response(undefined, {status}),
-    });
-
-    return requestMock;
-  };
 }

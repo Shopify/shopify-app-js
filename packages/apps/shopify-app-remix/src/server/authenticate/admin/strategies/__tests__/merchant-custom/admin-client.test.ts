@@ -17,6 +17,7 @@ import {
   setupValidCustomAppSession,
   testConfig,
   getThrownError,
+  mockGraphqlRequest,
 } from '../../../../../__test-helpers';
 
 describe('admin.authenticate context', () => {
@@ -117,18 +118,3 @@ async function mockRestRequest(status = 401) {
   return requestMock;
 }
 
-function mockGraphqlRequest(apiVersion = LATEST_API_VERSION) {
-  return async function (status = 401) {
-    const requestMock = new Request(
-      `https://${TEST_SHOP}/admin/api/${apiVersion}/graphql.json`,
-      {method: 'POST'},
-    );
-
-    await mockExternalRequest({
-      request: requestMock,
-      response: new Response(undefined, {status}),
-    });
-
-    return requestMock;
-  };
-}

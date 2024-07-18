@@ -14,3 +14,6 @@ export * from './setup-valid-request';
 export * from './sign-request-cookie';
 export * from './test-config';
 export * from './get-thrown-error';
+export * from './setup-embedded-flow';
+export * from './setup-fetch-flow';
+export * from './mock-graphql-request';

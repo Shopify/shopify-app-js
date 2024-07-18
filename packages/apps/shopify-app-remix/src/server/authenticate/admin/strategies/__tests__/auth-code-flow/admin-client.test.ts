@@ -8,16 +8,17 @@ import {restResources} from '@shopify/shopify-api/rest/admin/2023-04';
 
 import {
   APP_URL,
-  BASE64_HOST,
   TEST_SHOP,
   expectExitIframeRedirect,
-  getJwt,
   getThrownResponse,
   setUpValidSession,
   signRequestCookie,
   testConfig,
   mockExternalRequest,
   expectAdminApiClient,
+  setUpEmbeddedFlow,
+  setUpFetchFlow,
+  mockGraphqlRequest,
 } from '../../../../../__test-helpers';
 import {shopifyApp} from '../../../../..';
 import {REAUTH_URL_HEADER} from '../../../../const';
@@ -105,7 +106,9 @@ describe('admin.authenticate context', () => {
 
       it('returns app bridge redirection headers when request receives a 401 response on fetch requests', async () => {
         // GIVEN
-        const {admin, session} = await setUpFetchFlow();
+        const {admin, session} = await setUpFetchFlow({
+          unstable_newEmbeddedAuthStrategy: false,
+        });
         const requestMock = await mockRequest(401);
 
         // WHEN
@@ -127,47 +130,6 @@ describe('admin.authenticate context', () => {
     },
   );
 });
-
-async function setUpEmbeddedFlow() {
-  const shopify = shopifyApp(
-    testConfig({
-      future: {unstable_newEmbeddedAuthStrategy: false},
-      restResources,
-    }),
-  );
-  const expectedSession = await setUpValidSession(shopify.sessionStorage);
-
-  const {token} = getJwt();
-  const request = new Request(
-    `${APP_URL}?embedded=1&shop=${TEST_SHOP}&host=${BASE64_HOST}&id_token=${token}`,
-  );
-
-  return {
-    shopify,
-    expectedSession,
-    ...(await shopify.authenticate.admin(request)),
-  };
-}
-
-async function setUpFetchFlow() {
-  const shopify = shopifyApp(
-    testConfig({
-      future: {unstable_newEmbeddedAuthStrategy: false},
-      restResources,
-    }),
-  );
-  await setUpValidSession(shopify.sessionStorage);
-
-  const {token} = getJwt();
-  const request = new Request(APP_URL, {
-    headers: {Authorization: `Bearer ${token}`},
-  });
-
-  return {
-    shopify,
-    ...(await shopify.authenticate.admin(request)),
-  };
-}
 
 async function setUpNonEmbeddedFlow() {
   const shopify = shopifyApp(
@@ -203,20 +165,4 @@ async function mockRestRequest(status: any) {
   });
 
   return requestMock;
-}
-
-function mockGraphqlRequest(apiVersion = LATEST_API_VERSION) {
-  return async function (status = 401) {
-    const requestMock = new Request(
-      `https://${TEST_SHOP}/admin/api/${apiVersion}/graphql.json`,
-      {method: 'POST'},
-    );
-
-    await mockExternalRequest({
-      request: requestMock,
-      response: new Response(undefined, {status}),
-    });
-
-    return requestMock;
-  };
 }
