@@ -1,26 +1,17 @@
-import {
-  ApiVersion,
-  LATEST_API_VERSION,
-  SESSION_COOKIE_NAME,
-  Session,
-} from '@shopify/shopify-api';
-import {restResources} from '@shopify/shopify-api/rest/admin/2023-04';
+import {ApiVersion, LATEST_API_VERSION, Session} from '@shopify/shopify-api';
 
 import {
   APP_URL,
   TEST_SHOP,
   expectExitIframeRedirect,
   getThrownResponse,
-  setUpValidSession,
-  signRequestCookie,
-  testConfig,
   mockExternalRequest,
   expectAdminApiClient,
   setUpEmbeddedFlow,
   setUpFetchFlow,
   mockGraphqlRequest,
+  setUpNonEmbeddedFlow,
 } from '../../../../../__test-helpers';
-import {shopifyApp} from '../../../../..';
 import {REAUTH_URL_HEADER} from '../../../../const';
 import {AdminApiContext} from '../../../../../clients';
 
@@ -130,29 +121,6 @@ describe('admin.authenticate context', () => {
     },
   );
 });
-
-async function setUpNonEmbeddedFlow() {
-  const shopify = shopifyApp(
-    testConfig({
-      future: {unstable_newEmbeddedAuthStrategy: false},
-      restResources,
-      isEmbeddedApp: false,
-    }),
-  );
-  const session = await setUpValidSession(shopify.sessionStorage);
-
-  const request = new Request(`${APP_URL}?shop=${TEST_SHOP}`);
-  signRequestCookie({
-    request,
-    cookieName: SESSION_COOKIE_NAME,
-    cookieValue: session.id,
-  });
-
-  return {
-    shopify,
-    ...(await shopify.authenticate.admin(request)),
-  };
-}
 
 async function mockRestRequest(status: any) {
   const requestMock = new Request(
