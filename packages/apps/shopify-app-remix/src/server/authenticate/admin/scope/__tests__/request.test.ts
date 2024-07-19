@@ -1,4 +1,4 @@
-import {SESSION_COOKIE_NAME} from '@shopify/shopify-api';
+import {LATEST_API_VERSION, SESSION_COOKIE_NAME} from '@shopify/shopify-api';
 
 import {
   APP_URL,
@@ -71,26 +71,14 @@ it('when all the scopes are already granted the request is not redirected', asyn
 
 it('when the shop is invalid an error is thrown', async () => {
   // GIVEN
-  const shopify = shopifyApp(
-    testConfig({
-      isEmbeddedApp: false,
-      scopes: undefined,
-      future: {unstable_optionalScopesApi: true},
-    }),
-  );
-  const session = await setUpValidSession(shopify.sessionStorage);
+  const {scopes, session} = await setUpNonEmbeddedFlow();
   session.shop = `${TEST_SHOP_NAME}.invalid-domain.com`;
+  await mockGraphqlRequest(LATEST_API_VERSION, session.shop)(
+    200,
+    responses.WITH_GRANTED_AND_DECLARED,
+  );
 
-  const request = new Request(`${APP_URL}/scopes`);
-  signRequestCookie({
-    request,
-    cookieName: SESSION_COOKIE_NAME,
-    cookieValue: session.id,
-  });
-  await mockGraphqlRequest()(200, responses.WITH_GRANTED_AND_DECLARED);
-
-  // WHEN
-  const {scopes} = await shopify.authenticate.admin(request);
+  // WHEN;
   await expect(scopes.request(['write_products'])).rejects.toThrow(
     'Received invalid shop argument',
   );
