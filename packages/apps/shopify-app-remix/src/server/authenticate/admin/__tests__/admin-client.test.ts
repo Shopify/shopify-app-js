@@ -2,24 +2,18 @@ import {
   ApiVersion,
   HttpMaxRetriesError,
   LATEST_API_VERSION,
-  SESSION_COOKIE_NAME,
   Session,
 } from '@shopify/shopify-api';
-import {restResources} from '@shopify/shopify-api/rest/admin/2023-04';
 
 import {
-  APP_URL,
-  BASE64_HOST,
   TEST_SHOP,
-  getJwt,
   getThrownResponse,
-  setUpValidSession,
-  signRequestCookie,
-  testConfig,
   mockExternalRequest,
   expectAdminApiClient,
+  setUpEmbeddedFlow,
+  mockGraphqlRequest,
+  setUpNonEmbeddedFlow,
 } from '../../../__test-helpers';
-import {shopifyApp} from '../../..';
 import {AdminApiContext} from '../../../clients';
 
 describe('admin.authenticate context', () => {
@@ -161,39 +155,6 @@ describe('admin.authenticate context', () => {
   });
 });
 
-async function setUpEmbeddedFlow() {
-  const shopify = shopifyApp(testConfig({restResources}));
-  const expectedSession = await setUpValidSession(shopify.sessionStorage);
-
-  const {token} = getJwt();
-  const request = new Request(
-    `${APP_URL}?embedded=1&shop=${TEST_SHOP}&host=${BASE64_HOST}&id_token=${token}`,
-  );
-
-  return {
-    shopify,
-    expectedSession,
-    ...(await shopify.authenticate.admin(request)),
-  };
-}
-
-async function setUpNonEmbeddedFlow() {
-  const shopify = shopifyApp(testConfig({restResources, isEmbeddedApp: false}));
-  const session = await setUpValidSession(shopify.sessionStorage);
-
-  const request = new Request(`${APP_URL}?shop=${TEST_SHOP}`);
-  signRequestCookie({
-    request,
-    cookieName: SESSION_COOKIE_NAME,
-    cookieValue: session.id,
-  });
-
-  return {
-    shopify,
-    ...(await shopify.authenticate.admin(request)),
-  };
-}
-
 async function mockRestRequest(
   status: number,
   path = 'customers.json',
@@ -209,20 +170,4 @@ async function mockRestRequest(
   });
 
   return requestMock;
-}
-
-function mockGraphqlRequest(apiVersion = LATEST_API_VERSION) {
-  return async function (status: any) {
-    const requestMock = new Request(
-      `https://${TEST_SHOP}/admin/api/${apiVersion}/graphql.json`,
-      {method: 'POST'},
-    );
-
-    await mockExternalRequest({
-      request: requestMock,
-      response: new Response(undefined, {status}),
-    });
-
-    return requestMock;
-  };
 }
