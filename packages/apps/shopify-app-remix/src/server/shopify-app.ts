@@ -35,7 +35,6 @@ import {IdempotentPromiseHandler} from './authenticate/helpers/idempotent-promis
 import {authenticateFlowFactory} from './authenticate/flow/authenticate';
 import {authenticateFulfillmentServiceFactory} from './authenticate/fulfillment-service/authenticate';
 import {FutureFlagOptions, logDisabledFutureFlags} from './future/flags';
-import {testConfig} from './test-helpers/test-config';
 
 /**
  * Creates an object your app will use to interact with Shopify.
@@ -64,10 +63,6 @@ export function shopifyApp<
   Storage extends SessionStorage,
   Future extends FutureFlagOptions = Config['future'],
 >(appConfig: Readonly<Config>): ShopifyApp<Config> {
-  if (appConfig.isTesting === true) {
-    Object.assign(appConfig, testConfig());
-  }
-
   const api = deriveApi(appConfig);
   const config = deriveConfig<Storage>(appConfig, api.config);
   const logger = overrideLogger(api.logger);
