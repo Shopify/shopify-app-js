@@ -25,6 +25,7 @@ const TEST_CONFIG = {
   },
   isEmbeddedApp: true,
   sessionStorage: new MemorySessionStorage(),
+  isTesting: true,
 };
 
 export function testConfig<
@@ -35,7 +36,6 @@ export function testConfig<
     future?: Future;
   },
 ): TestConfig<Overrides> {
-  console.log(overrides);
   return {
     ...TEST_CONFIG,
     ...overrides,
