@@ -217,15 +217,50 @@ authenticated API access.
 - [Using Shopify managed installation](https://shopify.dev/docs/apps/auth/installation#shopify-managed-installation)
 - [Configuring access scopes through the Shopify CLI](https://shopify.dev/docs/apps/tools/cli/configuration)
 
-### Unit testing
-To unit test your application, you can simply set the `isTesting` flag to true in the configuration object passed to `shopifyApp`. It can be helpful to set this value based on an environmental variable flag.
+### Testing your app
+
+This package exports a helper method through `@shopify/shopify-app-remix/test-helpers` to simplify testing: `testConfig()`. This method can be used to pass dummy configuration properties to `shopifyApp()`.
+
+If your testing framework supports setting environment variables, we recommend using an environment variable, for example "SHOPIFY_TESTING" to replace your default config with the config returned from `testConfig()`.
 
 ```ts
 // my-app/app/shopify.server.ts
-const shopify = shopifyApp({
+import { testConfig } from "@shopify/shopify-app-remix/test-helpers";
+...
+const config = {
   ...
-  isTesting: process.env.SHOPIFY_TESTING === "1"
-})
+};
+
+if (process.env.SHOPIFY_TESTING) {
+  Object.assign(config, testConfig());
+}
+
+const shopify = shopifyApp(config);
+...
+```
+
+`testConfig()` accepts a config object as an optional parameter. The config values provided override the default config values returned by `testConfig()`. This is especially useful for end-to-end testing to ensure `shopifyApp()` reads the sessions from the development database.
+
+```ts
+// my-app/app/shopify.server.ts
+import { testConfig } from "@shopify/shopify-app-remix/test-helpers";
+...
+const sessionStorage = new PrismaSessionStorage(prisma);
+const config = {
+  ...
+  sessionStorage,
+  ...
+};
+
+if (process.env.SHOPIFY_TESTING) {
+  Object.assign(config, testConfig());
+}
+
+if (process.env.SHOPIFY_TESTING === "e2e") {
+  Object.assign(config, testConfig({ sessionStorage }));
+}
+...
+```
 
 ## Gotchas / Troubleshooting
 
