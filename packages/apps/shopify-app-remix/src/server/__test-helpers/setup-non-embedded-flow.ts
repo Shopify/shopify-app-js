@@ -22,5 +22,7 @@ export async function setUpNonEmbeddedFlow() {
   return {
     shopify,
     ...(await shopify.authenticate.admin(request)),
+    request,
+    session,
   };
 }

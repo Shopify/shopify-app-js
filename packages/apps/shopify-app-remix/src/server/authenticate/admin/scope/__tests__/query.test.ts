@@ -93,9 +93,9 @@ it('return an unexpected error when there is no authentication error', async () 
   await mockGraphqlRequest()(500);
 
   // WHEN / THEN
-  try {
-    await scopes.query();
-  } catch (error) {
-    expect(error.status).toEqual(500);
-  }
+  await expect(scopes.query()).rejects.toEqual(
+    expect.objectContaining({
+      status: 500,
+    }),
+  );
 });
