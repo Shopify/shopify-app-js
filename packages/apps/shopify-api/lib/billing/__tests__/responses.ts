@@ -167,7 +167,7 @@ export const MULTIPLE_SUBSCRIPTIONS = JSON.stringify({
       },
       activeSubscriptions: [
         {id: 'gid://123', name: PLAN_1, test: true},
-        {id: 'gid://321', name: PLAN_2, test: true},
+        {id: 'gid://321', name: PLAN_2, test: false},
       ],
     },
   },

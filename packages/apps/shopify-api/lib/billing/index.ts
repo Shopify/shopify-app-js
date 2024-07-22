@@ -1,11 +1,17 @@
 import {ConfigInterface} from '../base-types';
+import {FutureFlagOptions} from '../../future/flags';
 
 import {check} from './check';
 import {request} from './request';
 import {cancel} from './cancel';
 import {subscriptions} from './subscriptions';
+import {ShopifyBilling} from './types';
 
-export function shopifyBilling(config: ConfigInterface) {
+export {ShopifyBilling} from './types';
+
+export function shopifyBilling<Future extends FutureFlagOptions>(
+  config: ConfigInterface,
+): ShopifyBilling<Future> {
   return {
     check: check(config),
     request: request(config),
@@ -13,5 +19,3 @@ export function shopifyBilling(config: ConfigInterface) {
     subscriptions: subscriptions(config),
   };
 }
-
-export type ShopifyBilling = ReturnType<typeof shopifyBilling>;

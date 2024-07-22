@@ -1,86 +1,76 @@
+import {FutureFlagOptions} from '../../future/flags';
 import {ConfigInterface} from '../base-types';
 import {graphqlClientClass, GraphqlClient} from '../clients/admin';
 import {BillingError} from '../error';
 
 import {
   AppSubscription,
+  BillingCheck,
   BillingCheckParams,
   BillingCheckResponse,
   BillingCheckResponseObject,
-  BillingCheckResults,
   CurrentAppInstallation,
   CurrentAppInstallations,
   OneTimePurchase,
 } from './types';
 
-interface GetPaymentsParams {
-  client: GraphqlClient;
-  isTest: boolean;
-}
-
 interface SubscriptionMeetsCriteriaParams {
   subscription: AppSubscription;
-  isTest: boolean;
+  isTest?: boolean;
+  plans?: string | string[];
 }
 
 interface PurchaseMeetsCriteriaParams {
   purchase: OneTimePurchase;
-  isTest: boolean;
+  isTest?: boolean;
+  plans?: string | string[];
 }
 
 interface InternalParams {
-  payments: BillingCheckResults;
-  plans: string[];
+  client: GraphqlClient;
+  isTest?: boolean;
+  plans?: string | string[];
 }
 
-export function check(config: ConfigInterface) {
-  return async function check<Params extends BillingCheckParams>({
-    session,
-    plans,
-    isTest = true,
-    returnObject = false,
-  }: Params): Promise<BillingCheckResponse<Params>> {
-    if (plans && !config.billing) {
+export function check<
+  Config extends ConfigInterface,
+  Future extends FutureFlagOptions = Config['future'],
+>(config: Config): BillingCheck<Future> {
+  return async function check<Params extends BillingCheckParams<Future>>(
+    params: Params,
+  ): Promise<BillingCheckResponse<Params, Future>> {
+    if (!config.future?.unstable_managedPricingSupport && !config.billing) {
       throw new BillingError({
-        message:
-          'Attempted to look for purchases for specific plans without billing configs',
+        message: 'Attempted to look for purchases without billing configs',
         errorData: [],
       });
     }
 
+    const {session, isTest = true, plans} = params;
+    const returnObject =
+      (params as BillingCheckParams<{unstable_managedPricingSupport: false}>)
+        .returnObject ?? false;
+
     const GraphqlClient = graphqlClientClass({config});
     const client = new GraphqlClient({session});
 
-    const payments = await getPayments({client, isTest});
+    const payments = await assessPayments({client, isTest, plans});
 
-    if (plans === undefined) {
-      // Not filtering by plans, return everything
-      return payments as BillingCheckResponse<Params>;
+    if (config.future?.unstable_managedPricingSupport || returnObject) {
+      return payments as BillingCheckResponse<Params, Future>;
     } else {
-      const plansArray = Array.isArray(plans) ? plans : [plans];
-
-      if (returnObject) {
-        // Return the full object
-        return assessPayments({
-          payments,
-          plans: plansArray,
-        }) as BillingCheckResponse<Params>;
-      } else {
-        // Just return a boolean
-        return hasPayment({
-          payments,
-          plans: plansArray,
-        }) as BillingCheckResponse<Params>;
-      }
+      return payments.hasActivePayment as BillingCheckResponse<Params, Future>;
     }
   };
 }
 
-async function getPayments({
+async function assessPayments({
   client,
   isTest,
-}: GetPaymentsParams): Promise<BillingCheckResults> {
-  const returnValue: BillingCheckResults = {
+  plans,
+}: InternalParams): Promise<BillingCheckResponseObject> {
+  const returnValue: BillingCheckResponseObject = {
+    hasActivePayment: false,
     oneTimePurchases: [],
     appSubscriptions: [],
   };
@@ -95,12 +85,14 @@ async function getPayments({
 
     installation = currentInstallations.data?.currentAppInstallation!;
     installation.activeSubscriptions.forEach((subscription) => {
-      if (subscriptionMeetsCriteria({isTest, subscription})) {
+      if (subscriptionMeetsCriteria({subscription, isTest, plans})) {
+        returnValue.hasActivePayment = true;
         returnValue.appSubscriptions.push(subscription);
       }
     });
     installation.oneTimePurchases.edges.forEach(({node: purchase}) => {
-      if (purchaseMeetsCriteria({isTest, purchase})) {
+      if (purchaseMeetsCriteria({purchase, isTest, plans})) {
+        returnValue.hasActivePayment = true;
         returnValue.oneTimePurchases.push(purchase);
       }
     });
@@ -111,58 +103,27 @@ async function getPayments({
   return returnValue;
 }
 
-function assessPayments({
-  payments,
-  plans,
-}: InternalParams): BillingCheckResponseObject {
-  const {oneTimePurchases, appSubscriptions} = filterPayments({
-    payments,
-    plans,
-  });
-
-  return {
-    hasActivePayment:
-      oneTimePurchases.length > 0 || appSubscriptions.length > 0,
-    oneTimePurchases,
-    appSubscriptions,
-  };
-}
-
-function hasPayment({payments, plans}: InternalParams): boolean {
-  const {oneTimePurchases, appSubscriptions} = filterPayments({
-    payments,
-    plans,
-  });
-
-  return oneTimePurchases.length > 0 || appSubscriptions.length > 0;
-}
-
-function filterPayments({
-  payments,
-  plans,
-}: InternalParams): BillingCheckResults {
-  return {
-    oneTimePurchases: payments.oneTimePurchases.filter((purchase) =>
-      plans.includes(purchase.name),
-    ),
-    appSubscriptions: payments.appSubscriptions.filter((subscription) =>
-      plans.includes(subscription.name),
-    ),
-  };
-}
-
 function subscriptionMeetsCriteria({
   subscription,
   isTest,
+  plans,
 }: SubscriptionMeetsCriteriaParams): boolean {
-  return isTest || !subscription.test;
+  return (
+    (typeof plans === 'undefined' || plans.includes(subscription.name)) &&
+    (isTest || !subscription.test)
+  );
 }
 
 function purchaseMeetsCriteria({
   purchase,
   isTest,
+  plans,
 }: PurchaseMeetsCriteriaParams): boolean {
-  return (isTest || !purchase.test) && purchase.status === 'ACTIVE';
+  return (
+    (typeof plans === 'undefined' || plans.includes(purchase.name)) &&
+    (isTest || !purchase.test) &&
+    purchase.status === 'ACTIVE'
+  );
 }
 
 const HAS_PAYMENTS_QUERY = `

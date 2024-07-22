@@ -17,6 +17,11 @@ export interface FutureFlags {
   lineItemBilling?: boolean;
 
   /**
+   * Enable support for managed pricing, so apps can check for payments without needing a billing config.
+   */
+  unstable_managedPricingSupport?: boolean;
+
+  /**
    * Change the CustomerAddress classes to expose a `is_default` property instead of `default` when fetching data. This
    * resolves a conflict with the default() method in that class.
    */
@@ -65,6 +70,13 @@ export function logDisabledFutureFlags(
     logFlag(
       'customerAddressDefaultFix',
       "Enable this flag to change the CustomerAddress classes to expose a 'is_default' property instead of 'default' when fetching data.",
+    );
+  }
+
+  if (!config.future?.unstable_managedPricingSupport) {
+    logFlag(
+      'unstable_managedPricingSupport',
+      'Enable this flag to support managed pricing, so apps can check for payments without needing a billing config. Learn more at https://shopify.dev/docs/apps/launch/billing/managed-pricing',
     );
   }
 }
