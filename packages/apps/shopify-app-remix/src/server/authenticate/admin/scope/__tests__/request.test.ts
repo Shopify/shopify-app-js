@@ -69,18 +69,20 @@ it('when all the scopes are already granted the request is not redirected', asyn
   expect(spyRedirect).not.toHaveBeenCalled();
 });
 
-it('when the shop is invalid an error is thrown', async () => {
+it('when the shop is invalid the query to check the granted scopes returns an error', async () => {
   // GIVEN
   const {scopes, session} = await setUpNonEmbeddedFlow();
   session.shop = `${TEST_SHOP_NAME}.invalid-domain.com`;
   await mockGraphqlRequest(LATEST_API_VERSION, session.shop)(
-    200,
+    400,
     responses.WITH_GRANTED_AND_DECLARED,
   );
 
-  // WHEN;
-  await expect(scopes.request(['write_products'])).rejects.toThrow(
-    'Received invalid shop argument',
+  // WHEN / THEN
+  await expect(scopes.request(['write_products'])).rejects.toEqual(
+    expect.objectContaining({
+      status: 400,
+    }),
   );
 });
 
