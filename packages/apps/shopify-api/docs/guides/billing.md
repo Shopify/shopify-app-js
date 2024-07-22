@@ -1,13 +1,27 @@
 # Configuring App Billing
 
-Some partners might wish to charge merchants for using their app.
-The Admin API provides endpoints that enable apps to trigger purchases in the Shopify platform, so that merchants can pay for apps as part of their Shopify payments.
+Some partners might wish to charge merchants for using their app. Shopify makes it possible to do that in two ways, so that merchants can pay for apps as part of their Shopify payments:
+
+- Using Shopify managed app pricing
+- Using the Admin billing API to trigger purchases in the Shopify platform.
+
+In this guide you'll learn how to use this package for both of those scenarios.
+
+## Using managed app pricing
+
+The easiest way to add billing to your app is to follow the [Shopify managed app pricing documentation](https://shopify.dev/docs/apps/launch/billing/managed-pricing). You can set up one or more plans for the app, and Shopify will host a page where merchants can select which plan they want.
+
+Since Shopify handles billing in this scenario, you don't have to add a `billing` setting to your configuration, but you can still use the [`check`](../reference/billing/check.md) method to get the plans for the current merchant.
+
+## Using the billing API
+
+If you'd prefer to have full control over billing, you can use the helpers in this package to interact with the billing API directly.
 
 See the [billing reference](../reference/billing/README.md) for details on how to call those endpoints, using this configuration.
 
 To trigger the billing behaviour, you'll need to set the `billing` value when calling `shopifyApi()`.
 
-## Configuring LineItem billing
+### Configuring LineItem billing
 
 With the future flag `v10_lineItemBilling`, the billing configuration can now specify the the `AppSubscriptionLineItems`. This will allow you to create app subscription plans with both recurring and usage based charges.
 
@@ -15,7 +29,8 @@ Subscription plans can have 1 or 2 line items. There can be a maximum of 1 of ea
 
 For configuring billing without line items see [Configuring Billing](#configuring-billing).
 
-### Configuring a Subscription Plan with a Single LineItem
+#### Configuring a Subscription Plan with a Single LineItem
+
 ```ts
 import {
   shopifyApi,
@@ -51,7 +66,8 @@ future: {
 });
 ```
 
-### Configuring a Subscription Plan with Multiple LineItems
+#### Configuring a Subscription Plan with Multiple LineItems
+
 ```ts
 import {
   shopifyApi,
@@ -93,7 +109,8 @@ future: {
 });
 ```
 
-### Configuring a one-time charge
+#### Configuring a one-time charge
+
 ```ts
 import {
   shopifyApi,
@@ -117,7 +134,7 @@ future: {
 });
 ```
 
-### Subscription Plan with LineItems
+#### Subscription Plan with LineItems
 
 | Parameter                           | Type                         | Required? | Default Value | Notes                                                                                                                                                                                  |
 | ----------------------------------- | ---------------------------- | :-------: | :-----------: | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -125,8 +142,7 @@ future: {
 | `trialDays`                         | `number`                     |    No     |       -       | Give merchants this many days before charging                                                                                                                                          |
 | `replacementBehavior`               | `BillingReplacementBehavior` |    No     |       -       | `BillingReplacementBehavior` value, see [the reference](https://shopify.dev/docs/api/admin-graphql/latest/mutations/appSubscriptionCreate) for more information.                       |
 
-
-### Recurring Charge LineItem
+#### Recurring Charge LineItem
 
 | Parameter                           | Type                         | Required? | Default Value | Notes                                                                                                                                                                                  |
 | ----------------------------------- | ---------------------------- | :-------: | :-----------: | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -137,7 +153,7 @@ future: {
 | `discount.value.amount`             | `number`                     |    No     |       -       | The amount of the discount in the currency that the merchant is being billed in.                                                                                                       |
 | `discount.value.percentage`         | `number`                     |    No     |       -       | The percentage value of the discount.                                                                                                                                                  |
 
-### Usage Charge LineItem
+#### Usage Charge LineItem
 
 | Parameter             | Type                         | Required? | Default Value | Notes                                                                                                                                                            |
 | --------------------- | ---------------------------- | :-------: | :-----------: | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -146,9 +162,7 @@ future: {
 | `currencyCode`        | `string`                     |    Yes    |       -       | The currency to charge, USD or merchant's shop currency<sup>1</sup>                                                                                              |
 | `usageTerms`          | `string`                     |    Yes    |       -       | These terms stipulate the pricing model for the charges that an app creates.                                                                                     |
 
-
-
-### One Time Billing Plans
+#### One Time Billing Plans
 
 | Parameter      | Type       | Required? | Default Value | Notes                                                               |
 | -------------- | ---------- | :-------: | :-----------: | ------------------------------------------------------------------- |
@@ -156,7 +170,7 @@ future: {
 | `amount`       | `number`   |    Yes    |       -       | The amount to charge                                                |
 | `currencyCode` | `string`   |    Yes    |       -       | The currency to charge, USD or merchant's shop currency<sup>1</sup> |
 
-## Configuring Billing
+### Configuring Billing
 
 Prior to the future flag `v10_lineItemBilling` and when the flag is set to false you will configure billing as follows. For example, the following configuration will allow you to charge merchants $30 every 30 days. The first three charges will be discounted by $10, so merchants would be charged $20.
 
@@ -186,7 +200,7 @@ const shopify = shopifyApi({
 });
 ```
 
-### Recurring Billing Plans
+#### Recurring Billing Plans
 
 | Parameter                           | Type                         | Required? | Default Value | Notes                                                                                                                                                                                  |
 | ----------------------------------- | ---------------------------- | :-------: | :-----------: | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -201,8 +215,7 @@ const shopify = shopifyApi({
 
 > **Note** `discount.value` can only include either `amount` or `percentage` but not both.
 
-### Usage Billing Plans
-
+#### Usage Billing Plans
 
 | Parameter             | Type                         | Required? | Default Value | Notes                                                                                                                                                            |
 | --------------------- | ---------------------------- | :-------: | :-----------: | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -215,7 +228,7 @@ const shopify = shopifyApi({
 
 1. Prior to `ApiVersion.April23` the currency code must be `USD`.
 
-## When should the app check for payment?
+### When should the app check for payment?
 
 As mentioned above, billing requires a session to access the API, which means that the app must actually be installed before it can request payment.
 
@@ -227,7 +240,7 @@ If you're gating access to the entire app, you should check for billing:
 
 **Note**: the merchant may refuse payment when prompted or cancel subscriptions later on, but the app will already be installed at that point. We recommend using [billing webhooks](https://shopify.dev/docs/apps/billing#webhooks-for-billing) to revoke access for merchants when they cancel / decline payment.
 
-## Canceling a subscription
+### Canceling a subscription
 
 With the `cancel` method you'll be able to cancel a single subscription. First, you'll need to obtain the id for the subscription you wish to cancel. You can use the `subscriptions` method to obtain a list of current subscriptions.
 

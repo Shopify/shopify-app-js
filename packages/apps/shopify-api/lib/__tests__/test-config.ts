@@ -58,6 +58,7 @@ const TEST_FUTURE_FLAGS: Required<{
   v10_lineItemBilling: true,
   lineItemBilling: true,
   customerAddressDefaultFix: true,
+  unstable_managedPricingSupport: true,
 } as const;
 
 const TEST_CONFIG = {

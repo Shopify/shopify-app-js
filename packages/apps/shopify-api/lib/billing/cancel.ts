@@ -2,7 +2,12 @@ import {ConfigInterface} from '../base-types';
 import {graphqlClientClass} from '../clients/admin';
 import {BillingError, GraphqlQueryError} from '../error';
 
-import {AppSubscription, BillingCancelParams, CancelResponse} from './types';
+import {
+  AppSubscription,
+  BillingCancel,
+  BillingCancelParams,
+  CancelResponse,
+} from './types';
 
 const CANCEL_MUTATION = `
   mutation appSubscriptionCancel($id: ID!, $prorate: Boolean) {
@@ -20,7 +25,7 @@ const CANCEL_MUTATION = `
   }
 `;
 
-export function cancel(config: ConfigInterface) {
+export function cancel(config: ConfigInterface): BillingCancel {
   return async function (
     subscriptionInfo: BillingCancelParams,
   ): Promise<AppSubscription> {

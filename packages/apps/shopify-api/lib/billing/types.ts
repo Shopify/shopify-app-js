@@ -217,7 +217,7 @@ export interface BillingConfigSubscriptionLineItemPlan {
 export type RequestConfigLineItemOverrides =
   Partial<BillingConfigSubscriptionLineItemPlan>;
 
-export interface BillingCheckParams {
+interface BillingCheckParamsNew {
   /**
    * The session to use for this check.
    */
@@ -225,16 +225,30 @@ export interface BillingCheckParams {
   /**
    * The plans to accept for this check.
    */
-  plans: string[] | string;
+  plans?: string[] | string;
   /**
    * Whether to include charges that were created on test mode. Test shops and demo shops cannot be charged.
    */
   isTest?: boolean;
+}
+
+interface BillingCheckParamsOld extends BillingCheckParamsNew {
+  /**
+   * The plans to accept for this check.
+   */
+  plans: string[] | string;
   /**
    * Whether to return the full response object.
    */
   returnObject?: boolean;
 }
+
+export type BillingCheckParams<
+  Future extends FutureFlagOptions = FutureFlagOptions,
+> =
+  FeatureEnabled<Future, 'unstable_managedPricingSupport'> extends true
+    ? BillingCheckParamsNew
+    : BillingCheckParamsOld;
 
 export interface BillingCheckResponseObject {
   /**
@@ -251,8 +265,17 @@ export interface BillingCheckResponseObject {
   appSubscriptions: AppSubscription[];
 }
 
-export type BillingCheckResponse<Params extends BillingCheckParams> =
-  Params['returnObject'] extends true ? BillingCheckResponseObject : boolean;
+export type BillingCheckResponse<
+  Params extends BillingCheckParams<Future>,
+  Future extends FutureFlagOptions = FutureFlagOptions,
+> =
+  FeatureEnabled<Future, 'unstable_managedPricingSupport'> extends true
+    ? BillingCheckResponseObject
+    : Params extends BillingCheckParamsOld
+      ? Params['returnObject'] extends true
+        ? BillingCheckResponseObject
+        : boolean
+      : never;
 
 export type BillingRequestParams = {
   /**
@@ -495,4 +518,29 @@ export interface CancelResponse {
     appSubscription: AppSubscription;
     userErrors: string[];
   };
+}
+
+export type BillingCheck<Future extends FutureFlagOptions> = <
+  Params extends BillingCheckParams<Future>,
+>(
+  params: Params,
+) => Promise<BillingCheckResponse<Params, Future>>;
+
+export type BillingRequest = <Params extends BillingRequestParams>(
+  params: Params,
+) => Promise<BillingRequestResponse<Params>>;
+
+export type BillingCancel = (
+  params: BillingCancelParams,
+) => Promise<AppSubscription>;
+
+export type BillingSubscriptions = (
+  params: BillingSubscriptionParams,
+) => Promise<ActiveSubscriptions>;
+
+export interface ShopifyBilling<Future extends FutureFlagOptions> {
+  check: BillingCheck<Future>;
+  request: BillingRequest;
+  cancel: BillingCancel;
+  subscriptions: BillingSubscriptions;
 }

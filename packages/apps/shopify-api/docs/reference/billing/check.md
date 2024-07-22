@@ -4,6 +4,35 @@ Checks if a payment exists for any of the given plans, by querying the Shopify A
 
 > **Note**: Depending on the number of requests your app handles, you might want to cache a merchant's payment status, but you should periodically call this method to ensure you're blocking unpaid access.
 
+## Example (using Shopify managed pricing)
+
+```ts
+// You can also use a middleware to get the current plan for the user
+app.get('/billed-page', (req, res) => {
+  const sessionId = shopify.session.getCurrentId({
+    isOnline: true,
+    rawRequest: req,
+    rawResponse: res,
+  });
+
+  // use sessionId to retrieve session from app's session storage
+  // In this example, getSessionFromStorage() must be provided by app
+  const session = await getSessionFromStorage(sessionId);
+
+  const payments = await shopify.billing.check({
+    session,
+    isTest: true,
+  });
+
+  // The above will fetch all subscriptions, so you can filter by the plan you want
+  const hasPlan1 = payments.appSubscriptions.some((subscription) => {
+    return subscription.name === 'Plan 1';
+  });
+
+  // Return request here, or render a dynamic page based on the plan
+});
+```
+
 ## Example (not using return objects)
 
 ```ts
@@ -120,7 +149,7 @@ The `Session` for the current request.
 
 ### plans
 
-`string | string[]` | :exclamation: required
+`string | string[]` | :exclamation: required when not using managed pricing
 
 Which plans to look for.
 

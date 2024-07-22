@@ -2,7 +2,7 @@ import {queueMockResponses} from '../../__tests__/test-helper';
 import {testConfig} from '../../__tests__/test-config';
 import {Session} from '../../session/session';
 import {LATEST_API_VERSION} from '../../types';
-import {shopifyApi, BillingInterval} from '../..';
+import {shopifyApi, BillingInterval, BillingError} from '../..';
 
 import * as Responses from './responses';
 
@@ -25,33 +25,69 @@ describe('shopify.billing.subscriptions', () => {
     scope: 'read_returns',
   });
 
-  test('Returns a list of subscriptions', async () => {
-    const shopify = shopifyApi(
-      testConfig({
-        billing: {
-          basic: {
-            amount: 5.0,
-            currencyCode: 'USD',
-            interval: BillingInterval.OneTime,
+  describe('Returns a list of subscriptions', () => {
+    it('with a billing config', async () => {
+      const shopify = shopifyApi(
+        testConfig({
+          billing: {
+            basic: {
+              amount: 5.0,
+              currencyCode: 'USD',
+              interval: BillingInterval.OneTime,
+            },
           },
+        }),
+      );
+
+      queueMockResponses([Responses.SUBSCRIPTIONS_RESPONSE]);
+
+      const response = await shopify.billing.subscriptions({
+        session,
+      });
+
+      expect(response).toEqual(
+        JSON.parse(Responses.SUBSCRIPTIONS_RESPONSE).data
+          .currentAppInstallation,
+      );
+      expect({
+        ...GRAPHQL_BASE_REQUEST,
+        data: {
+          query: expect.stringContaining('currentAppInstallation'),
         },
-      }),
-    );
-
-    queueMockResponses([Responses.SUBSCRIPTIONS_RESPONSE]);
-
-    const response = await shopify.billing.subscriptions({
-      session,
+      }).toMatchMadeHttpRequest();
     });
 
-    expect(response).toEqual(
-      JSON.parse(Responses.SUBSCRIPTIONS_RESPONSE).data.currentAppInstallation,
-    );
-    expect({
-      ...GRAPHQL_BASE_REQUEST,
-      data: {
-        query: expect.stringContaining('currentAppInstallation'),
-      },
-    }).toMatchMadeHttpRequest();
+    it('without a billing config', async () => {
+      const shopify = shopifyApi(testConfig());
+
+      queueMockResponses([Responses.SUBSCRIPTIONS_RESPONSE]);
+
+      const response = await shopify.billing.subscriptions({
+        session,
+      });
+
+      expect(response).toEqual(
+        JSON.parse(Responses.SUBSCRIPTIONS_RESPONSE).data
+          .currentAppInstallation,
+      );
+      expect({
+        ...GRAPHQL_BASE_REQUEST,
+        data: {
+          query: expect.stringContaining('currentAppInstallation'),
+        },
+      }).toMatchMadeHttpRequest();
+    });
+
+    it('throws error without a billing config and no future flag', async () => {
+      const shopify = shopifyApi(
+        testConfig({future: {unstable_managedPricingSupport: false}}),
+      );
+
+      await expect(
+        shopify.billing.subscriptions({
+          session,
+        }),
+      ).rejects.toThrow(BillingError);
+    });
   });
 });
