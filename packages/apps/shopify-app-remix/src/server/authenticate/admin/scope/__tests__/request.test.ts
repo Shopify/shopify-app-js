@@ -1,20 +1,23 @@
-import {SESSION_COOKIE_NAME} from '@shopify/shopify-api';
+import {LATEST_API_VERSION, SESSION_COOKIE_NAME} from '@shopify/shopify-api';
 
 import {
   APP_URL,
-  BASE64_HOST,
   TEST_SHOP,
   TEST_SHOP_NAME,
-  getJwt,
   getThrownResponse,
+  setUpEmbeddedFlow,
+  setUpNonEmbeddedFlow,
   setUpValidSession,
   signRequestCookie,
   testConfig,
+  mockGraphqlRequest,
 } from '../../../../__test-helpers';
 import {shopifyApp} from '../../../..';
 import * as redirect from '../../helpers/redirect-to-install-page';
 
-it('when the future flag is disabled returns an error', async () => {
+import * as responses from './mock-responses';
+
+it('when the future flag is disabled the scopes api is not available', async () => {
   // GIVEN
   const shopify = shopifyApp(
     testConfig({
@@ -41,26 +44,10 @@ it('when the future flag is disabled returns an error', async () => {
 
 it('when scopes are empty the request is not redirected', async () => {
   // GIVEN
-  const shopify = shopifyApp(
-    testConfig({
-      isEmbeddedApp: false,
-      scopes: undefined,
-      future: {unstable_optionalScopesApi: true},
-    }),
-  );
-  const session = await setUpValidSession(shopify.sessionStorage);
-
-  const request = new Request(`${APP_URL}/scopes`);
-  signRequestCookie({
-    request,
-    cookieName: SESSION_COOKIE_NAME,
-    cookieValue: session.id,
-  });
-
+  const {scopes} = await setUpNonEmbeddedFlow();
   const spyRedirect = jest.spyOn(redirect, 'redirectToInstallPage');
 
   // WHEN
-  const {scopes} = await shopify.authenticate.admin(request);
   const response = await scopes.request([]);
 
   // THEN
@@ -68,52 +55,47 @@ it('when scopes are empty the request is not redirected', async () => {
   expect(spyRedirect).not.toHaveBeenCalled();
 });
 
-it('when the shop is invalid an error is thrown', async () => {
+it('when all the scopes are already granted the request is not redirected', async () => {
   // GIVEN
-  const shopify = shopifyApp(
-    testConfig({
-      isEmbeddedApp: false,
-      scopes: undefined,
-      future: {unstable_optionalScopesApi: true},
-    }),
-  );
-  const session = await setUpValidSession(shopify.sessionStorage);
-  session.shop = `${TEST_SHOP_NAME}.invalid-domain.com`;
-
-  const request = new Request(`${APP_URL}/scopes`);
-  signRequestCookie({
-    request,
-    cookieName: SESSION_COOKIE_NAME,
-    cookieValue: session.id,
-  });
+  const {scopes} = await setUpNonEmbeddedFlow();
+  const spyRedirect = jest.spyOn(redirect, 'redirectToInstallPage');
+  await mockGraphqlRequest()(200, responses.WITH_GRANTED_AND_DECLARED);
 
   // WHEN
-  const {scopes} = await shopify.authenticate.admin(request);
-  await expect(scopes.request(['write_products'])).rejects.toThrow(
-    'Received invalid shop argument',
+  const response = await scopes.request(['read_orders', 'write_customers']);
+
+  // THEN
+  expect(response).toBeUndefined();
+  expect(spyRedirect).not.toHaveBeenCalled();
+});
+
+it('when the shop is invalid the query to check the granted scopes returns an error', async () => {
+  // GIVEN
+  const {scopes, session} = await setUpNonEmbeddedFlow();
+  session.shop = `${TEST_SHOP_NAME}.invalid-domain.com`;
+  await mockGraphqlRequest(LATEST_API_VERSION, session.shop)(
+    400,
+    responses.WITH_GRANTED_AND_DECLARED,
+  );
+
+  // WHEN / THEN
+  await expect(scopes.request(['write_products'])).rejects.toEqual(
+    expect.objectContaining({
+      status: 400,
+    }),
   );
 });
 
 describe('request from a non embedded app', () => {
   it('redirects to install URL when successful', async () => {
     // GIVEN
-    const shopify = shopifyApp(
-      testConfig({isEmbeddedApp: false, scopes: undefined}),
-    );
-    const session = await setUpValidSession(shopify.sessionStorage);
-
-    const request = new Request(`${APP_URL}/scopes`);
-    signRequestCookie({
-      request,
-      cookieName: SESSION_COOKIE_NAME,
-      cookieValue: session.id,
-    });
-
-    const {scopes} = await shopify.authenticate.admin(request);
+    const {scopes, request} = await setUpNonEmbeddedFlow();
+    await mockGraphqlRequest()(200, responses.WITH_GRANTED_AND_DECLARED);
 
     // WHEN
     const response = await getThrownResponse(
-      async () => scopes.request(['write_products']),
+      async () =>
+        scopes.request(['write_products', 'read_orders', 'write_customers']),
       request,
     );
 
@@ -125,26 +107,22 @@ describe('request from a non embedded app', () => {
     expect(location.hostname).toBe(TEST_SHOP);
     expect(location.pathname).toBe('/admin/oauth/install');
     const locationParams = location.searchParams;
-    expect(locationParams.get('optional_scopes')).toBe('write_products');
+    expect(locationParams.get('optional_scopes')).toBe(
+      'write_products,read_orders,write_customers',
+    );
   });
 });
 
 describe('request from an embedded app', () => {
   it('redirects to install URL when successful', async () => {
     // GIVEN
-    const shopify = shopifyApp(testConfig({scopes: undefined}));
-    await setUpValidSession(shopify.sessionStorage);
-
-    const {token} = getJwt();
-    const request = new Request(
-      `${APP_URL}/scopes?embedded=1&shop=${TEST_SHOP}&host=${BASE64_HOST}&id_token=${token}`,
-    );
-
-    const {scopes} = await shopify.authenticate.admin(request);
+    const {scopes, request} = await setUpEmbeddedFlow();
+    await mockGraphqlRequest()(200, responses.WITH_GRANTED_AND_DECLARED);
 
     // WHEN
     const response = await getThrownResponse(
-      async () => scopes.request(['write_products']),
+      async () =>
+        scopes.request(['write_products', 'read_orders', 'write_customers']),
       request,
     );
 
@@ -158,6 +136,8 @@ describe('request from an embedded app', () => {
     expect(location.hostname).toBe(TEST_SHOP);
     expect(location.pathname).toBe('/admin/oauth/install');
     const locationParams = location.searchParams;
-    expect(locationParams.get('optional_scopes')).toBe('write_products');
+    expect(locationParams.get('optional_scopes')).toBe(
+      'write_products,read_orders,write_customers',
+    );
   });
 });
