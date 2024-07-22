@@ -4189,12 +4189,12 @@
   resolved "https://registry.yarnpkg.com/@shopify/prettier-config/-/prettier-config-1.1.2.tgz#612f87c0cd1196e8b43c85425e587d0fa7f1172d"
   integrity sha512-5ugCL9sPGzmOaZjeRGaWUWhHgAbemrS6z+R7v6gwiD+BiqSeoFhIY+imLpfdFCVpuOGalpHeCv6o3gv++EHs0A==
 
-"@shopify/react-testing@^5.3.0":
-  version "5.3.0"
-  resolved "https://registry.yarnpkg.com/@shopify/react-testing/-/react-testing-5.3.0.tgz#6558dc5c42b2cd44c0ff5f4d9f80391278ed964b"
-  integrity sha512-7qdK1icQ5lZNQvfiJrLm6c7hI6411DBVONVjV8jk74BnjVWyw4O3xfsXOlX6foJzG7zL+cyYP4mObEM5Vtk67w==
+"@shopify/react-testing@^5.4.0":
+  version "5.4.0"
+  resolved "https://registry.yarnpkg.com/@shopify/react-testing/-/react-testing-5.4.0.tgz#3e629e525aa69302278ed70c045fcd9afd6bb07a"
+  integrity sha512-qlu6NUnMK9Mq/1lu6MIvZMSKT/AtXnHGyuu148DMshVF8d7E5+JDtgTVGeKKV8nnjL5cly4K91dyPVt6fHq5yA==
   dependencies:
-    "@shopify/useful-types" "^5.2.0"
+    "@shopify/useful-types" "^5.3.0"
     jest-matcher-utils "^26.6.2"
     react-is "^18.0.0"
     react-reconciler "^0.28.0"
@@ -4204,10 +4204,10 @@
   resolved "https://registry.yarnpkg.com/@shopify/typescript-configs/-/typescript-configs-5.1.0.tgz#f6e8fdd3291bf0a406578b2c6eb21f8c542d3c0a"
   integrity sha512-RywGBTR+nQyJLxcrUcihPkHPIG3pIQI6i0YwMrM5rs9nWJ0+9A5HKEcboyGPLH+8V08EXGfFQ6H820O9ajyk4A==
 
-"@shopify/useful-types@^5.2.0":
-  version "5.2.0"
-  resolved "https://registry.yarnpkg.com/@shopify/useful-types/-/useful-types-5.2.0.tgz#ac39b80b86a4e90383b3f4a888dd142faf9a05dd"
-  integrity sha512-qyYXdb2eEb1oLxhEZoLoakf72wEJJvwn8io122uZn+ZUjz8t3bfxmhCKXCfgL6S5Fxw/yqEUBlcW8tYgVNlCgw==
+"@shopify/useful-types@^5.3.0":
+  version "5.3.0"
+  resolved "https://registry.yarnpkg.com/@shopify/useful-types/-/useful-types-5.3.0.tgz#aa6ee340223b02a082bb0fcd05ba70241e000157"
+  integrity sha512-8BlaedSqR7ssQAhCsa88K+l2eIImSBlTLlnf7/dlqSlMSEqGVUf+O8oPsnyy9Oh3aDMt+rD4Q5JPOo984Cbz7Q==
 
 "@sinclair/typebox@^0.27.8":
   version "0.27.8"
