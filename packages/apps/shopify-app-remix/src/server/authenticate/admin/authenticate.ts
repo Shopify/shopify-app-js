@@ -127,7 +127,7 @@ export function authStrategyFactory<
     if (config.future.unstable_optionalScopesApi) {
       return {
         ...context,
-        scopes: scopesApiFactory(params, context.session),
+        scopes: scopesApiFactory(params, context.session, context.admin),
       };
     }
     return context;
