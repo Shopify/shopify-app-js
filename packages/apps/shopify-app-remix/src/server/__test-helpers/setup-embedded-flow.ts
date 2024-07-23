@@ -7,10 +7,14 @@ import {getJwt} from './get-jwt';
 import {setUpValidSession} from './setup-valid-session';
 import {testConfig} from './test-config';
 
-export async function setUpEmbeddedFlow(basePath = `${APP_URL}?`) {
+export async function setUpEmbeddedFlow(
+  basePath = `${APP_URL}?`,
+  scopesPath = '/scopes',
+) {
   const shopify = shopifyApp(
     testConfig({
       authPathPrefix: '/auth',
+      scopePathPrefix: scopesPath,
       future: {unstable_newEmbeddedAuthStrategy: false},
       restResources,
     }),

@@ -12,7 +12,9 @@ export async function respondToScopeRequest(
 
   const url = new URL(request.url);
 
-  const path = (path: string) => `${config.authPathPrefix}/scopes/${path}`;
+  const scopeApiSubPath = config.scopePathPrefix ?? '/scopes';
+  const path = (path: string) =>
+    `${config.authPathPrefix}${scopeApiSubPath}/${path}`;
 
   switch (url.pathname) {
     case path('request'):

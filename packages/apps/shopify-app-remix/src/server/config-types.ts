@@ -233,6 +233,8 @@ export interface AppConfigArg<
    * releases in advance and provide feedback on the new features.
    */
   future?: Future;
+
+  scopePathPrefix?: string;
 }
 
 export interface AppConfig<Storage extends SessionStorage = SessionStorage>

@@ -23,6 +23,27 @@ it('returns not found error when the scopes api is disabled', async () => {
   }
 });
 
+it('query request returns scopes information using a different scopes api subpath', async () => {
+  // GIVEN
+  await mockGraphqlRequest(ApiVersion.Unstable)(
+    200,
+    responses.WITH_GRANTED_AND_DECLARED,
+  );
+
+  // WHEN
+  try {
+    await requestToScopesApi('query', undefined, '/customscopessubpath');
+  } catch (response) {
+    // THEN
+    expect(response instanceof Response).toBeTruthy();
+    const data = await response.json();
+
+    expect(data.granted.required).toEqual(['read_orders']);
+    expect(data.granted.optional).toEqual(['write_customers']);
+    expect(data.declared.required).toEqual(['write_orders', 'read_reports']);
+  }
+});
+
 it('query request returns scopes information', async () => {
   // GIVEN
   await mockGraphqlRequest(ApiVersion.Unstable)(
@@ -99,10 +120,10 @@ it('revokes request revoke the scope and returns scopes information', async () =
   }
 });
 
-async function requestToScopesApi(api: string, params?: any) {
+async function requestToScopesApi(api: string, params?: any, scopesPath = '/scopes') {
   const queryParams = new URLSearchParams(params);
-  const queryRequestPath = `${APP_URL}/auth/scopes/${api}?${queryParams.toString()}&`;
-  await setUpEmbeddedFlow(queryRequestPath);
+  const queryRequestPath = `${APP_URL}/auth${scopesPath}/${api}?${queryParams.toString()}&`;
+  await setUpEmbeddedFlow(queryRequestPath, scopesPath);
 }
 
 async function requestToDisabledScopesApi(api: string) {
