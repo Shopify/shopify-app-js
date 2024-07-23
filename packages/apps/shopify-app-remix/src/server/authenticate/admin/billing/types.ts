@@ -24,7 +24,7 @@ export interface CheckBillingOptions<Config extends AppConfigArg>
   /**
    * The plans to check for. Must be one of the values defined in the `billing` config option.
    */
-  plans: (keyof Config['billing'])[];
+  plans?: (keyof Config['billing'])[];
 }
 
 export interface RequestBillingOptions<Config extends AppConfigArg>
@@ -184,8 +184,8 @@ export interface BillingContext<Config extends AppConfigArg> {
    *     plans: [MONTHLY_PLAN],
    *     isTest: false,
    *   });
-   *  console.log(hasActivePayment)
-   *  console.log(appSubscriptions)
+   *   console.log(hasActivePayment);
+   *   console.log(appSubscriptions);
    * };
    * ```
    * ```ts
@@ -218,9 +218,26 @@ export interface BillingContext<Config extends AppConfigArg> {
    * export const authenticate = shopify.authenticate;
    * ```
    *
+   * @example
+   * <caption>Check for payments without filtering.</caption>
+   * <description>Use billing.check to see if any payments exist for the store, regardless of whether it's a test or
+   * matches one or more plans.</description>
+   * ```ts
+   * // /app/routes/**\/*.ts
+   * import { LoaderFunctionArgs } from "@remix-run/node";
+   * import { authenticate, MONTHLY_PLAN } from "../shopify.server";
+   *
+   * export const loader = async ({ request }: LoaderFunctionArgs) => {
+   *   const { billing } = await authenticate.admin(request);
+   *   const { hasActivePayment, appSubscriptions } = await billing.check();
+   *   // This will be true if any payment is found
+   *   console.log(hasActivePayment);
+   *   console.log(appSubscriptions);
+   * };
+   * ```
    */
-  check: (
-    options: CheckBillingOptions<Config>,
+  check: <Options extends CheckBillingOptions<Config>>(
+    options?: Options,
   ) => Promise<BillingCheckResponseObject>;
 
   /**

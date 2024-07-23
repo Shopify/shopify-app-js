@@ -1,5 +1,6 @@
 import {redirect} from '@remix-run/server-runtime';
-import {BasicParams} from 'src/server/types';
+
+import {BasicParams} from '../../../types';
 
 export function validateShopAndHostParams(
   params: BasicParams,
@@ -14,7 +15,7 @@ export function validateShopAndHostParams(
       logger.debug('Missing or invalid shop, redirecting to login path', {
         shop,
       });
-      throw redirect(config.auth.loginPath);
+      throw redirectToLoginPath(request, params);
     }
 
     const host = api.utils.sanitizeHost(url.searchParams.get('host')!);
@@ -22,7 +23,23 @@ export function validateShopAndHostParams(
       logger.debug('Invalid host, redirecting to login path', {
         host: url.searchParams.get('host'),
       });
-      throw redirect(config.auth.loginPath);
+      throw redirectToLoginPath(request, params);
     }
   }
+}
+
+function redirectToLoginPath(request: Request, params: BasicParams): never {
+  const {config, logger} = params;
+
+  const {pathname} = new URL(request.url);
+  if (pathname === config.auth.loginPath) {
+    const message =
+      `Detected call to shopify.authenticate.admin() from configured login path ` +
+      `('${config.auth.loginPath}'), please make sure to call shopify.login() from that route instead.`;
+
+    logger.debug(message);
+    throw new Response(message, {status: 500});
+  }
+
+  throw redirect(config.auth.loginPath);
 }

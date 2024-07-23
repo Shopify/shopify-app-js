@@ -2,7 +2,6 @@ import {queueMockResponses} from '../../__tests__/test-helper';
 import {testConfig} from '../../__tests__/test-config';
 import {Session} from '../../session/session';
 import {LATEST_API_VERSION, BillingInterval} from '../../types';
-import {BillingError} from '../../error';
 import {shopifyApi} from '../..';
 import {BillingCheckResponseObject, BillingConfig} from '../types';
 
@@ -54,16 +53,21 @@ describe('shopify.billing.check', () => {
   });
 
   describe('with no billing config', () => {
-    test('throws error', async () => {
+    test('returns all purchases if no plans are given', async () => {
       const shopify = shopifyApi(testConfig({billing: undefined}));
 
-      expect(() =>
-        shopify.billing.check({
-          session,
-          plans: Responses.ALL_PLANS,
-          isTest: true,
-        }),
-      ).rejects.toThrowError(BillingError);
+      queueMockResponses([Responses.MULTIPLE_SUBSCRIPTIONS]);
+
+      const response = await shopify.billing.check({session, isTest: true});
+
+      expect({
+        ...GRAPHQL_BASE_REQUEST,
+        data: expect.stringContaining('activeSubscriptions'),
+      }).toMatchMadeHttpRequest();
+
+      expect(response.hasActivePayment).toBe(true);
+      expect(response.oneTimePurchases.length).toBe(0);
+      expect(response.appSubscriptions.length).toBe(2);
     });
   });
 
@@ -79,7 +83,7 @@ describe('shopify.billing.check', () => {
         isTest: true,
       });
 
-      expect(response).toBe(false);
+      expect(response.hasActivePayment).toBe(false);
       expect({
         ...GRAPHQL_BASE_REQUEST,
         data: expect.stringContaining('oneTimePurchases'),
@@ -97,7 +101,7 @@ describe('shopify.billing.check', () => {
         isTest: false,
       });
 
-      expect(response).toBe(false);
+      expect(response.hasActivePayment).toBe(false);
       expect({
         ...GRAPHQL_BASE_REQUEST,
         data: expect.stringContaining('oneTimePurchases'),
@@ -115,7 +119,7 @@ describe('shopify.billing.check', () => {
         isTest: false,
       });
 
-      expect(response).toBe(false);
+      expect(response.hasActivePayment).toBe(false);
       expect({
         ...GRAPHQL_BASE_REQUEST,
         data: expect.stringContaining('oneTimePurchases'),
@@ -132,7 +136,7 @@ describe('shopify.billing.check', () => {
         plans: Responses.ALL_PLANS,
       });
 
-      expect(response).toBe(true);
+      expect(response.hasActivePayment).toBe(true);
       expect({
         ...GRAPHQL_BASE_REQUEST,
         data: expect.stringContaining('oneTimePurchases'),
@@ -150,7 +154,7 @@ describe('shopify.billing.check', () => {
         isTest: true,
       });
 
-      expect(response).toBe(false);
+      expect(response.hasActivePayment).toBe(false);
       expect({
         ...GRAPHQL_BASE_REQUEST,
         data: expect.stringContaining('oneTimePurchases'),
@@ -171,7 +175,7 @@ describe('shopify.billing.check', () => {
         isTest: true,
       });
 
-      expect(response).toBe(true);
+      expect(response.hasActivePayment).toBe(true);
       expect({
         ...GRAPHQL_BASE_REQUEST,
         data: {
@@ -201,7 +205,7 @@ describe('shopify.billing.check', () => {
         isTest: true,
       });
 
-      expect(response).toBe(false);
+      expect(response.hasActivePayment).toBe(false);
       expect({
         ...GRAPHQL_BASE_REQUEST,
         data: expect.stringContaining('activeSubscriptions'),
@@ -219,7 +223,7 @@ describe('shopify.billing.check', () => {
         isTest: false,
       });
 
-      expect(response).toBe(false);
+      expect(response.hasActivePayment).toBe(false);
       expect({
         ...GRAPHQL_BASE_REQUEST,
         data: expect.stringContaining('activeSubscriptions'),
@@ -237,7 +241,7 @@ describe('shopify.billing.check', () => {
         isTest: false,
       });
 
-      expect(response).toBe(false);
+      expect(response.hasActivePayment).toBe(false);
       expect({
         ...GRAPHQL_BASE_REQUEST,
         data: expect.stringContaining('activeSubscriptions'),
@@ -254,7 +258,7 @@ describe('shopify.billing.check', () => {
         plans: Responses.ALL_PLANS,
       });
 
-      expect(response).toBe(true);
+      expect(response.hasActivePayment).toBe(true);
       expect({
         ...GRAPHQL_BASE_REQUEST,
         data: expect.stringContaining('activeSubscriptions'),
@@ -293,6 +297,70 @@ describe('shopify.billing.check', () => {
         expect(Responses.ALL_PLANS.includes(subscription.name)).toBeTruthy();
         expect(subscription.id).toBeDefined();
       });
+    });
+  });
+
+  describe('with disabled future flag', () => {
+    test('check returns valid response object', async () => {
+      const shopify = shopifyApi(
+        testConfig({
+          billing: RECURRING_CONFIGS,
+          future: {unstable_managedPricingSupport: false},
+        }),
+      );
+
+      queueMockResponses(
+        [
+          Responses
+            .EXISTING_ONE_TIME_PAYMENTS_WITH_PAGINATION_AND_SUBSCRIPTION[0],
+        ],
+        [
+          Responses
+            .EXISTING_ONE_TIME_PAYMENTS_WITH_PAGINATION_AND_SUBSCRIPTION[1],
+        ],
+      );
+
+      const responseObject = (await shopify.billing.check({
+        session,
+        plans: Responses.ALL_PLANS,
+        returnObject: true,
+      })) as BillingCheckResponseObject;
+
+      expect(responseObject.hasActivePayment).toBeTruthy();
+      expect(responseObject.oneTimePurchases.length).toBe(2);
+      responseObject.oneTimePurchases.map((purchase) => {
+        expect(Responses.ALL_PLANS.includes(purchase.name)).toBeTruthy();
+        expect(purchase.status).toBe('ACTIVE');
+        expect(purchase.id).toBeDefined();
+      });
+      expect(responseObject.appSubscriptions.length).toBe(1);
+      responseObject.appSubscriptions.map((subscription) => {
+        expect(Responses.ALL_PLANS.includes(subscription.name)).toBeTruthy();
+        expect(subscription.id).toBeDefined();
+      });
+    });
+
+    test('returns boolean response when not requesting object (default)', async () => {
+      const shopify = shopifyApi(
+        testConfig({
+          billing: RECURRING_CONFIGS,
+          future: {unstable_managedPricingSupport: false},
+        }),
+      );
+
+      queueMockResponses([Responses.EXISTING_SUBSCRIPTION]);
+
+      const response = await shopify.billing.check({
+        session,
+        plans: [Responses.PLAN_2],
+        isTest: false,
+      });
+
+      expect(response).toBe(false);
+      expect({
+        ...GRAPHQL_BASE_REQUEST,
+        data: expect.stringContaining('activeSubscriptions'),
+      }).toMatchMadeHttpRequest();
     });
   });
 });
