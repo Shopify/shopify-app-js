@@ -7,9 +7,10 @@ import {getJwt} from './get-jwt';
 import {setUpValidSession} from './setup-valid-session';
 import {testConfig} from './test-config';
 
-export async function setUpEmbeddedFlow() {
+export async function setUpEmbeddedFlow(basePath = `${APP_URL}?`) {
   const shopify = shopifyApp(
     testConfig({
+      authPathPrefix: '/auth',
       future: {unstable_newEmbeddedAuthStrategy: false},
       restResources,
     }),
@@ -18,7 +19,7 @@ export async function setUpEmbeddedFlow() {
 
   const {token} = getJwt();
   const request = new Request(
-    `${APP_URL}?embedded=1&shop=${TEST_SHOP}&host=${BASE64_HOST}&id_token=${token}`,
+    `${basePath}embedded=1&shop=${TEST_SHOP}&host=${BASE64_HOST}&id_token=${token}`,
   );
 
   return {

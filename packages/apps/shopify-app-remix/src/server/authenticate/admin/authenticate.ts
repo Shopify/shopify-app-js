@@ -10,6 +10,7 @@ import {
   respondToOptionsRequest,
   validateSessionToken,
 } from '../helpers';
+import {respondToScopeRequest} from '../helpers/respond-to-scopes-api-request';
 
 import {
   cancelBillingFactory,
@@ -165,6 +166,13 @@ export function authStrategyFactory<
         shop,
       });
 
+      const context = createContext(request, session, strategy, payload);
+      const scopesApi = scopesApiFactory(
+        params,
+        context.session,
+        context.admin,
+      );
+      await respondToScopeRequest(request, config, scopesApi);
       return createContext(request, session, strategy, payload);
     } catch (errorOrResponse) {
       if (errorOrResponse instanceof Response) {
