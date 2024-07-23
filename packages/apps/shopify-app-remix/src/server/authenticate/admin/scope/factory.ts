@@ -6,6 +6,7 @@ import {AdminApiContext} from '../../../clients';
 import {ScopesApiContext} from './types';
 import {requestScopesFactory} from './request';
 import {queryScopesFactory} from './query';
+import {revokeScopesFactory} from './revoke';
 
 export function scopesApiFactory(
   params: BasicParams,
@@ -15,5 +16,6 @@ export function scopesApiFactory(
   return {
     query: queryScopesFactory(params, session, admin),
     request: requestScopesFactory(params, session, admin),
+    revoke: revokeScopesFactory(params, session, admin),
   };
 }

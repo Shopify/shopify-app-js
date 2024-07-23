@@ -26,7 +26,7 @@ export function queryScopesFactory(
   };
 }
 
-function mapFetchScopeInformation(
+export function mapFetchScopeInformation(
   fetchScopeInformation: FetchScopeInformationResponse,
 ): ScopesInformation {
   const appInformation = fetchScopeInformation.app;
