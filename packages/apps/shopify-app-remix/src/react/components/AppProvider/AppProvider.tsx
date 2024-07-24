@@ -9,6 +9,8 @@ import englishI18n from '@shopify/polaris/locales/en.json' with {type: 'json'};
 
 import {APP_BRIDGE_URL} from '../../const';
 import {RemixPolarisLink} from '../RemixPolarisLink';
+import {AppContext, ScopesApiConfig} from '../AppContext';
+import {OptionalScopesProvider} from '../OptionalScopesProvider';
 
 export interface AppProviderProps
   extends Omit<PolarisAppProviderProps, 'linkComponent' | 'i18n'> {
@@ -36,6 +38,8 @@ export interface AppProviderProps
    * @private
    */
   __APP_BRIDGE_URL?: string;
+
+  scopesApiConfig?: Partial<ScopesApiConfig>;
 }
 
 /**
@@ -108,6 +112,7 @@ export function AppProvider(props: AppProviderProps) {
     i18n,
     isEmbeddedApp = true,
     __APP_BRIDGE_URL = APP_BRIDGE_URL,
+    scopesApiConfig,
     ...polarisProps
   } = props;
 
@@ -119,8 +124,35 @@ export function AppProvider(props: AppProviderProps) {
         linkComponent={RemixPolarisLink}
         i18n={i18n || englishI18n}
       >
-        {children}
+        <AppContext.Provider
+          value={deriveAppContext(isEmbeddedApp, scopesApiConfig)}
+        >
+          <OptionalScopesProvider>{children}</OptionalScopesProvider>
+        </AppContext.Provider>
       </PolarisAppProvider>
     </>
   );
+}
+
+function deriveAppContext(
+  isEmbeddedApp: boolean,
+  scopesApiConfig?: Partial<ScopesApiConfig>,
+) {
+  return {
+    scopesApi: deriveScopesApiConfig(scopesApiConfig),
+    isEmbeddedApp,
+  };
+}
+
+function deriveScopesApiConfig(scopesApiConfig?: Partial<ScopesApiConfig>) {
+  const defaultScopesApiConfig: ScopesApiConfig = {
+    basePath: '/auth/scopes',
+    requestPath: '/request',
+    queryPath: '/query',
+  };
+
+  return {
+    ...defaultScopesApiConfig,
+    ...scopesApiConfig,
+  };
 }
