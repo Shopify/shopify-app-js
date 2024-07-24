@@ -13,7 +13,10 @@ export function mockGraphqlRequest(
   apiVersion = LATEST_API_VERSION,
   shopUrl = TEST_SHOP,
 ) {
-  return async function (status = 401, responseContent?: string) {
+  return async function ({
+    status = 401,
+    responseContent,
+  }: MockGraphqlRequestArg = {}) {
     const requestMock = new Request(
       `https://${shopUrl}/admin/api/${apiVersion}/graphql.json`,
       {method: 'POST'},

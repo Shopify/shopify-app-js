@@ -17,7 +17,7 @@ export function revokeScopesFactory(
 
     logger.debug('Revoke scopes: ', {
       shop: session.shop,
-      ...{scopes},
+      scopes,
     });
 
     await validateScopes(scopes);

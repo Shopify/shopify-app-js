@@ -15,7 +15,10 @@ import * as responses from './mock-responses';
 it('returns scopes information', async () => {
   // GIVEN
   const {scopes} = await setUpEmbeddedFlow();
-  await mockGraphqlRequest()(200, responses.WITH_GRANTED_AND_DECLARED);
+  await mockGraphqlRequest()({
+    status: 200,
+    responseContent: responses.WITH_GRANTED_AND_DECLARED,
+  });
 
   // WHEN
   const result = await scopes.query();
@@ -30,7 +33,7 @@ it('returns scopes information', async () => {
 it('redirects to exit-iframe with authentication using app bridge when embedded and Shopify invalidated the session', async () => {
   // GIVEN
   const {scopes} = await setUpEmbeddedFlow();
-  const requestMock = await mockGraphqlRequest()(401);
+  const requestMock = await mockGraphqlRequest()({status: 401});
 
   // WHEN
   const response = await getThrownResponse(
@@ -47,7 +50,7 @@ it('returns app bridge redirection during request headers when Shopify invalidat
   const {scopes} = await setUpFetchFlow({
     unstable_newEmbeddedAuthStrategy: false,
   });
-  const requestMock = await mockGraphqlRequest()(401);
+  const requestMock = await mockGraphqlRequest()({status: 401});
 
   // WHEN
   const response = await getThrownResponse(
@@ -69,7 +72,7 @@ it('returns app bridge redirection during request headers when Shopify invalidat
 it('returns a normal redirection when the app is non embedded and Shopify invalidated the session', async () => {
   // GIVEN
   const {scopes} = await setUpNonEmbeddedFlow();
-  const requestMock = await mockGraphqlRequest()(401);
+  const requestMock = await mockGraphqlRequest()({status: 401});
 
   // WHEN
   const response = await getThrownResponse(
@@ -90,7 +93,7 @@ it('return an unexpected error when there is no authentication error', async () 
   const {scopes} = await setUpFetchFlow({
     unstable_newEmbeddedAuthStrategy: false,
   });
-  await mockGraphqlRequest()(500);
+  await mockGraphqlRequest()({status: 500});
 
   // WHEN / THEN
   await expect(scopes.query()).rejects.toEqual(
