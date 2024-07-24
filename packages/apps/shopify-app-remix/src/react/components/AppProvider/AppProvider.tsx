@@ -9,6 +9,7 @@ import englishI18n from '@shopify/polaris/locales/en.json' with {type: 'json'};
 
 import {APP_BRIDGE_URL} from '../../const';
 import {RemixPolarisLink} from '../RemixPolarisLink';
+import {AppContext} from '../AppContext';
 
 export interface AppProviderProps
   extends Omit<PolarisAppProviderProps, 'linkComponent' | 'i18n'> {
@@ -36,6 +37,10 @@ export interface AppProviderProps
    * @private
    */
   __APP_BRIDGE_URL?: string;
+
+  baseAuthPath?: string;
+
+  scopesApiSubpath?: string;
 }
 
 /**
@@ -108,6 +113,8 @@ export function AppProvider(props: AppProviderProps) {
     i18n,
     isEmbeddedApp = true,
     __APP_BRIDGE_URL = APP_BRIDGE_URL,
+    baseAuthPath = '/auth',
+    scopesApiSubpath = '/scopes',
     ...polarisProps
   } = props;
 
@@ -119,7 +126,9 @@ export function AppProvider(props: AppProviderProps) {
         linkComponent={RemixPolarisLink}
         i18n={i18n || englishI18n}
       >
-        {children}
+        <AppContext.Provider value={{baseAuthPath, scopesApiSubpath}}>
+          {children}
+        </AppContext.Provider>
       </PolarisAppProvider>
     </>
   );
