@@ -23,7 +23,7 @@ it('when the future flag is disabled the scopes api is not available', async () 
     testConfig({
       isEmbeddedApp: false,
       scopes: undefined,
-      future: {unstable_optionalScopesApi: false},
+      future: {wip_optionalScopesApi: false},
     }),
   );
   const session = await setUpValidSession(shopify.sessionStorage);

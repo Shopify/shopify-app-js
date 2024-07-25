@@ -124,7 +124,7 @@ export function authStrategyFactory<
   }
 
   function addScopesFeatures(context: AdminContextBase) {
-    if (config.future.unstable_optionalScopesApi) {
+    if (config.future.wip_optionalScopesApi) {
       return {
         ...context,
         scopes: scopesApiFactory(params, context.session, context.admin),

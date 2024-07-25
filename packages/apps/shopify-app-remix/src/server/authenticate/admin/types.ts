@@ -206,7 +206,7 @@ export type AdminContext<
   Config extends AppConfigArg,
   Resources extends ShopifyRestResources,
 > =
-  FeatureEnabled<Config['future'], 'unstable_optionalScopesApi'> extends true
+  FeatureEnabled<Config['future'], 'wip_optionalScopesApi'> extends true
     ? EmbeddedTypedAdminContext<Config, Resources> & ScopesContext
     : EmbeddedTypedAdminContext<Config, Resources>;
 
