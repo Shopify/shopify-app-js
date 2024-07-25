@@ -1,5 +1,41 @@
 # Changelog
 
+## 11.2.0
+
+### Minor Changes
+
+- 05fb23d: Added a new future flag `unstable_managedPricingSupport` to support apps using [Shopify managed pricing](https://shopify.dev/docs/apps/launch/billing/managed-pricing), which will:
+
+  - Change `billing.check` to always return an object.
+  - Change `billing.check` and `billing.subscription` to work without a billing config.
+  - Allow calling charges with `billing.check` without a `plans` filter. The `hasActivePayment` value will be true if any purchases are found with the given filters.
+
+- 1aa226b: Return headers in responses from GraphQL client.
+
+  Headers are now returned in the response object from the GraphQL client.
+
+  In apps using the `@shopify/shopify-app-remix` package the headers can be access as follows:
+
+  ```ts
+    const response = await admin.graphql(
+      ...
+
+    const responseJson = await response.json();
+    const responseHeaders = responseJson.headers
+    const xRequestID = responseHeaders? responseHeaders["X-Request-Id"] : '';
+    console.log(responseHeaders);
+    console.log(xRequestID, 'x-request-id');
+  ```
+
+### Patch Changes
+
+- 192cc6b: Expose AuthScopes type
+- 06793fb: Session is active if the scopes list includes the scopes received. Token wont be regenerated if the current includes additional scopes.
+- 3a0a3d4: Improved code readability and execution time of cookie/header helper functions
+- 3cf3c56: Updated dependency on the `jose` package.
+  - @shopify/admin-api-client@1.0.1
+  - @shopify/storefront-api-client@1.0.1
+
 ## 11.1.0
 
 ### Minor Changes

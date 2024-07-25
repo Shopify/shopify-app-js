@@ -1,5 +1,15 @@
 # @shopify/shopify-app-session-storage-prisma
 
+## 5.1.0
+
+### Minor Changes
+
+- dfcee21: Add option to retry setting up the Prisma DB table at startup
+
+### Patch Changes
+
+- 12a03a4: Updated dependency on Prisma
+
 ## 5.0.2
 
 ### Patch Changes
