@@ -20,11 +20,11 @@ export interface FutureFlags {
   unstable_newEmbeddedAuthStrategy?: boolean;
 
   /**
-   * When enabled, the `optionalScopes` API will be available.
+   * When enabled, the Scopes API will be available. This feature is in development and requires special permissions from Shopify for now.
    *
    * @default false
    */
-  unstable_optionalScopesApi?: boolean;
+  wip_optionalScopesApi?: boolean;
 }
 
 // When adding new flags, use this format:
@@ -64,9 +64,9 @@ export function logDisabledFutureFlags(
     );
   }
 
-  if (!config.future.unstable_optionalScopesApi) {
+  if (!config.future.wip_optionalScopesApi) {
     logFlag(
-      'unstable_optionalScopesApi',
+      'wip_optionalScopesApi',
       'Enable this to use the optionalScopes API to request additional scopes and manage them. ',
     );
   }
