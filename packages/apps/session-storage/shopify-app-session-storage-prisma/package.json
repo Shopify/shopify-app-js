@@ -46,12 +46,12 @@
     "@prisma/client": "^5.16.1",
     "@shopify/shopify-api": "^11.0.0",
     "@shopify/shopify-app-session-storage": "^3.0.0",
-    "prisma": "^5.16.1"
+    "prisma": "^5.17.0"
   },
   "devDependencies": {
     "@prisma/client": "^5.16.1",
     "@shopify/shopify-app-session-storage-test-utils": "^3.0.3",
-    "prisma": "^5.16.1"
+    "prisma": "^5.17.0"
   },
   "files": [
     "dist/*",
