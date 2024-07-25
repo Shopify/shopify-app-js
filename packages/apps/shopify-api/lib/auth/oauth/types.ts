@@ -10,8 +10,19 @@ export interface AuthQuery {
 }
 
 export interface BeginParams extends AdapterArgs {
+  /**
+   * The shop domain. For example: `{exampleshop}.myshopify.com`.
+   */
   shop: string;
+  /**
+   * The path to the callback endpoint, with a leading `/`.
+   * This URL must be allowed in the Partners dashboard, or using the CLI to run your app.
+   */
   callbackPath: string;
+  /**
+   * Defines if the session is online or offline.
+   * Learn more about [OAuth access modes](https://shopify.dev/docs/apps/auth/oauth/access-modes).
+   */
   isOnline: boolean;
 }
 

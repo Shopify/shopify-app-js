@@ -32,8 +32,8 @@ describe('admin.authenticate context', () => {
     const {admin} = await setUpEmbeddedFlow();
 
     // WHEN
-    await mockGraphqlRequest()(429);
-    await mockGraphqlRequest()(429);
+    await mockGraphqlRequest()({status: 429});
+    await mockGraphqlRequest()({status: 429});
 
     // THEN
     await expect(async () =>
@@ -71,6 +71,27 @@ describe('admin.authenticate context', () => {
       action: async (admin: AdminApiContext, session: Session) =>
         admin.rest.resources.Customer.all({session}),
     },
+  ])(
+    '$testGroup re-authentication',
+    ({testGroup: _testGroup, mockRequest, action}) => {
+      it('throws a response when REST request receives a non-401 response and not embedded', async () => {
+        // GIVEN
+        const {admin, session} = await setUpNonEmbeddedFlow();
+        const requestMock = await mockRequest(403);
+
+        // WHEN
+        const response = await getThrownResponse(
+          async () => action(admin, session),
+          requestMock,
+        );
+
+        // THEN
+        expect(response.status).toEqual(403);
+      });
+    },
+  );
+
+  describe.each([
     {
       testGroup: 'GraphQL client',
       mockRequest: mockGraphqlRequest(),
@@ -94,10 +115,10 @@ describe('admin.authenticate context', () => {
   ])(
     '$testGroup re-authentication',
     ({testGroup: _testGroup, mockRequest, action}) => {
-      it('throws a response when request receives a non-401 response and not embedded', async () => {
+      it('throws a response when GraphQL request receives a non-401 response and not embedded', async () => {
         // GIVEN
         const {admin, session} = await setUpNonEmbeddedFlow();
-        const requestMock = await mockRequest(403);
+        const requestMock = await mockRequest({status: 403});
 
         // WHEN
         const response = await getThrownResponse(

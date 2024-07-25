@@ -12,7 +12,9 @@ export function checkBillingFactory<Config extends AppConfigArg>(
   request: Request,
   session: Session,
 ) {
-  return async function checkBilling(options: CheckBillingOptions<Config>) {
+  return async function checkBilling(
+    options: CheckBillingOptions<Config> = {},
+  ) {
     const {api, logger} = params;
 
     logger.debug('Checking billing plans', {shop: session.shop, ...options});

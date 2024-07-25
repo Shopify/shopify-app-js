@@ -5,6 +5,7 @@ import {graphqlClientClass} from '../clients/admin';
 import {
   ActiveSubscriptions,
   BillingSubscriptionParams,
+  BillingSubscriptions,
   SubscriptionResponse,
 } from './types';
 
@@ -63,11 +64,11 @@ query appSubscription {
 }
 `;
 
-export function subscriptions(config: ConfigInterface) {
+export function subscriptions(config: ConfigInterface): BillingSubscriptions {
   return async function ({
     session,
   }: BillingSubscriptionParams): Promise<ActiveSubscriptions> {
-    if (!config.billing) {
+    if (!config.future?.unstable_managedPricingSupport && !config.billing) {
       throw new BillingError({
         message: 'Attempted to look for purchases without billing configs',
         errorData: [],

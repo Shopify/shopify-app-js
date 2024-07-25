@@ -1,27 +1,33 @@
+import {REAUTH_URL_HEADER} from '../../../const';
 import {
   APP_URL,
   TEST_SHOP,
   expectExitIframeRedirect,
   getThrownResponse,
-  mockGraphqlRequest,
+  mockGraphqlRequests,
   setUpEmbeddedFlow,
   setUpFetchFlow,
   setUpNonEmbeddedFlow,
 } from '../../../../__test-helpers';
-import {REAUTH_URL_HEADER} from '../../../const';
 
 import * as responses from './mock-responses';
 
 it('returns scopes information', async () => {
   // GIVEN
   const {scopes} = await setUpEmbeddedFlow();
-  await mockGraphqlRequest()({
-    status: 200,
-    responseContent: responses.WITH_GRANTED_AND_DECLARED,
-  });
+  await mockGraphqlRequests()(
+    {
+      body: 'AppRevokeAccessScopes',
+      responseContent: responses.REVOKED_WITHOUT_ERROR,
+    },
+    {
+      body: 'FetchAccessScopes',
+      responseContent: responses.WITH_GRANTED_AND_DECLARED,
+    },
+  );
 
   // WHEN
-  const result = await scopes.query();
+  const result = await scopes.revoke(['read_orders']);
 
   // THEN
   expect(result).not.toBeUndefined();
@@ -30,15 +36,46 @@ it('returns scopes information', async () => {
   expect(result.declared.required).toEqual(['write_orders', 'read_reports']);
 });
 
+it('returns error if the list of scopes is empty', async () => {
+  // GIVEN
+  const {scopes} = await setUpEmbeddedFlow();
+
+  // WHEN / THEN
+  await expect(scopes.revoke([])).rejects.toEqual(
+    expect.objectContaining({
+      status: 400,
+    }),
+  );
+});
+
+it('returns revoke server errors', async () => {
+  // GIVEN
+  const {scopes} = await setUpEmbeddedFlow();
+  await mockGraphqlRequests()({
+    body: 'AppRevokeAccessScopes',
+    responseContent: responses.REVOKED_WITH_ERROR,
+  });
+
+  // WHEN / THEN
+  await expect(scopes.revoke(['invalid_scope'])).rejects.toEqual(
+    expect.objectContaining({
+      status: 422,
+    }),
+  );
+});
+
 it('redirects to exit-iframe with authentication using app bridge when embedded and Shopify invalidated the session', async () => {
   // GIVEN
   const {scopes} = await setUpEmbeddedFlow();
-  const requestMock = await mockGraphqlRequest()({status: 401});
+  const mockedRequests = await mockGraphqlRequests()({
+    body: 'AppRevokeAccessScopes',
+    status: 401,
+  });
 
   // WHEN
   const response = await getThrownResponse(
-    async () => scopes.query(),
-    requestMock,
+    async () => scopes.revoke(['read_orders']),
+    mockedRequests[0],
   );
 
   // THEN
@@ -50,12 +87,15 @@ it('returns app bridge redirection during request headers when Shopify invalidat
   const {scopes} = await setUpFetchFlow({
     unstable_newEmbeddedAuthStrategy: false,
   });
-  const requestMock = await mockGraphqlRequest()({status: 401});
+  const mockedRequests = await mockGraphqlRequests()({
+    body: 'AppRevokeAccessScopes',
+    status: 401,
+  });
 
   // WHEN
   const response = await getThrownResponse(
-    async () => scopes.query(),
-    requestMock,
+    async () => scopes.revoke(['read_orders']),
+    mockedRequests[0],
   );
 
   // THEN
@@ -72,12 +112,15 @@ it('returns app bridge redirection during request headers when Shopify invalidat
 it('returns a normal redirection when the app is non embedded and Shopify invalidated the session', async () => {
   // GIVEN
   const {scopes} = await setUpNonEmbeddedFlow();
-  const requestMock = await mockGraphqlRequest()({status: 401});
+  const mockedRequests = await mockGraphqlRequests()({
+    body: 'AppRevokeAccessScopes',
+    status: 401,
+  });
 
   // WHEN
   const response = await getThrownResponse(
-    async () => scopes.query(),
-    requestMock,
+    async () => scopes.revoke(['read_orders']),
+    mockedRequests[0],
   );
 
   // THEN
@@ -93,10 +136,13 @@ it('return an unexpected error when there is no authentication error', async () 
   const {scopes} = await setUpFetchFlow({
     unstable_newEmbeddedAuthStrategy: false,
   });
-  await mockGraphqlRequest()({status: 500});
+  await mockGraphqlRequests()({
+    body: 'AppRevokeAccessScopes',
+    status: 500,
+  });
 
   // WHEN / THEN
-  await expect(scopes.query()).rejects.toEqual(
+  await expect(scopes.revoke(['read_orders'])).rejects.toEqual(
     expect.objectContaining({
       status: 500,
     }),

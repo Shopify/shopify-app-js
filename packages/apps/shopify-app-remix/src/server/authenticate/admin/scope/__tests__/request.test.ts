@@ -59,7 +59,10 @@ it('when all the scopes are already granted the request is not redirected', asyn
   // GIVEN
   const {scopes} = await setUpNonEmbeddedFlow();
   const spyRedirect = jest.spyOn(redirect, 'redirectToInstallPage');
-  await mockGraphqlRequest()(200, responses.WITH_GRANTED_AND_DECLARED);
+  await mockGraphqlRequest()({
+    status: 200,
+    responseContent: responses.WITH_GRANTED_AND_DECLARED,
+  });
 
   // WHEN
   const response = await scopes.request(['read_orders', 'write_customers']);
@@ -73,10 +76,13 @@ it('when the shop is invalid the query to check the granted scopes returns an er
   // GIVEN
   const {scopes, session} = await setUpNonEmbeddedFlow();
   session.shop = `${TEST_SHOP_NAME}.invalid-domain.com`;
-  await mockGraphqlRequest(LATEST_API_VERSION, session.shop)(
-    400,
-    responses.WITH_GRANTED_AND_DECLARED,
-  );
+  await mockGraphqlRequest(
+    LATEST_API_VERSION,
+    session.shop,
+  )({
+    status: 400,
+    responseContent: responses.WITH_GRANTED_AND_DECLARED,
+  });
 
   // WHEN / THEN
   await expect(scopes.request(['write_products'])).rejects.toEqual(
@@ -90,7 +96,10 @@ describe('request from a non embedded app', () => {
   it('redirects to install URL when successful', async () => {
     // GIVEN
     const {scopes, request} = await setUpNonEmbeddedFlow();
-    await mockGraphqlRequest()(200, responses.WITH_GRANTED_AND_DECLARED);
+    await mockGraphqlRequest()({
+      status: 200,
+      responseContent: responses.WITH_GRANTED_AND_DECLARED,
+    });
 
     // WHEN
     const response = await getThrownResponse(
@@ -117,7 +126,10 @@ describe('request from an embedded app', () => {
   it('redirects to install URL when successful', async () => {
     // GIVEN
     const {scopes, request} = await setUpEmbeddedFlow();
-    await mockGraphqlRequest()(200, responses.WITH_GRANTED_AND_DECLARED);
+    await mockGraphqlRequest()({
+      status: 200,
+      responseContent: responses.WITH_GRANTED_AND_DECLARED,
+    });
 
     // WHEN
     const response = await getThrownResponse(

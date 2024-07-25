@@ -33,7 +33,7 @@ export * from './utils/types';
 export interface Shopify<
   Params extends ConfigParams = ConfigParams,
   Resources extends ShopifyRestResources = ShopifyRestResources,
-  _Future extends FutureFlagOptions = FutureFlagOptions,
+  Future extends FutureFlagOptions = FutureFlagOptions,
 > {
   config: ConfigInterface<Params>;
   clients: ShopifyClients;
@@ -41,7 +41,7 @@ export interface Shopify<
   session: ShopifySession;
   utils: ShopifyUtils;
   webhooks: ShopifyWebhooks;
-  billing: ShopifyBilling;
+  billing: ShopifyBilling<Future>;
   logger: ShopifyLogger;
   rest: Resources;
   flow: ShopifyFlow;

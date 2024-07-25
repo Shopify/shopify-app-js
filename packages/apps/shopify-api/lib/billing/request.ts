@@ -18,6 +18,7 @@ import {
   SinglePaymentResponse,
   BillingConfigSubscriptionLineItemPlan,
   RequestConfigLineItemOverrides,
+  BillingRequest,
 } from './types';
 
 interface RequestInternalParams {
@@ -47,7 +48,7 @@ export function request<
   Config extends ConfigInterface<Params>,
   Params extends ConfigParams<any, Future>,
   Future extends FutureFlagOptions,
->(config: Config) {
+>(config: Config): BillingRequest {
   return async function <Params extends BillingRequestParams>({
     session,
     plan,

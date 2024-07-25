@@ -172,6 +172,7 @@ export function deriveApi(appConfig: AppConfigArg): BasicParams['api'] {
     billing: appConfig.billing as ApiConfig['billing'],
     future: {
       lineItemBilling: true,
+      unstable_managedPricingSupport: true,
     },
     _logDisabledFutureFlags: false,
   });

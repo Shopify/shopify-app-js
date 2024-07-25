@@ -35,6 +35,21 @@ describe('authorize.admin doc request path', () => {
       expectLoginRedirect(response);
     });
 
+    it('throws an error if the request URL is the login path', async () => {
+      // GIVEN
+      const shopify = shopifyApp(testConfig());
+      const request = new Request(`${APP_URL}/auth/login`);
+
+      // WHEN
+      const response = await getThrownResponse(
+        shopify.authenticate.admin,
+        request,
+      );
+
+      // THEN
+      expect(response.status).toBe(500);
+    });
+
     it('redirects to the bounce page URL if id_token search param is missing', async () => {
       // GIVEN
       const shopify = shopifyApp(testConfig());
