@@ -1,0 +1,25 @@
+{
+  "files": [],
+  "include": [],
+  "references": [
+    {"path": "./packages/api-clients/admin-api-client"},
+    {"path": "./packages/api-clients/api-codegen-preset"},
+    {"path": "./packages/api-clients/graphql-client"},
+    {"path": "./packages/api-clients/storefront-api-client"},
+    {"path": "./packages/apps/session-storage/shopify-app-session-storage"},
+    {"path": "./packages/apps/session-storage/shopify-app-session-storage-test-utils"},
+    {"path": "./packages/apps/session-storage/shopify-app-session-storage-dynamodb"},
+    {"path": "./packages/apps/session-storage/shopify-app-session-storage-memory"},
+    {"path": "./packages/apps/session-storage/shopify-app-session-storage-mongodb"},
+    {"path": "./packages/apps/session-storage/shopify-app-session-storage-mysql"},
+    {"path": "./packages/apps/session-storage/shopify-app-session-storage-postgresql"},
+    {"path": "./packages/apps/session-storage/shopify-app-session-storage-prisma"},
+    {"path": "./packages/apps/session-storage/shopify-app-session-storage-drizzle"},
+    {"path": "./packages/apps/session-storage/shopify-app-session-storage-redis"},
+    {"path": "./packages/apps/session-storage/shopify-app-session-storage-sqlite"},
+    {"path": "./packages/apps/session-storage/shopify-app-session-storage-kv"},
+    {"path": "./packages/apps/shopify-api"},
+    {"path": "./packages/apps/shopify-app-express"},
+    {"path": "./packages/apps/shopify-app-remix"}
+  ]
+}

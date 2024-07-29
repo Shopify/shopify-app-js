@@ -1,0 +1,67 @@
+{
+  "name": "@shopify/shopify-app-session-storage-drizzle",
+  "version": "2.0.3",
+  "description": "Shopify App Session Storage for Drizzle",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Shopify/shopify-app-js.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Shopify/shopify-app-js/issues"
+  },
+  "homepage": "https://github.com/Shopify/shopify-app-js/tree/main/packages/apps/session-storage/shopify-app-session-storage-drizzle",
+  "author": "Shopify Inc.",
+  "license": "MIT",
+  "main": "./dist/cjs/drizzle.js",
+  "module": "./dist/esm/drizzle.mjs",
+  "types": "./dist/ts/drizzle.d.ts",
+  "scripts": {
+    "lint": "eslint . --ext .js,.ts",
+    "build": "yarn run rollup && yarn tsc -p ./tsconfig.build.json",
+    "test": "jest",
+    "test:ci": "yarn test",
+    "rollup": "rollup -c rollup.config.js --bundleConfigAsCjs",
+    "clean": "rimraf .rollup.cache dist",
+    "changeset": "changeset",
+    "version": "changeset version",
+    "release": "yarn build && changeset publish"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "keywords": [
+    "shopify",
+    "node",
+    "app",
+    "graphql",
+    "rest",
+    "webhook",
+    "Admin API",
+    "Storefront API",
+    "session storage",
+    "Drizzle"
+  ],
+  "dependencies": {
+    "tslib": "^2.6.3"
+  },
+  "peerDependencies": {
+    "@shopify/shopify-api": "^11.0.0",
+    "@shopify/shopify-app-session-storage": "^3.0.0",
+    "drizzle-orm": "^0.30.6"
+  },
+  "devDependencies": {
+    "@libsql/client": "^0.7.0",
+    "@shopify/shopify-app-session-storage-test-utils": "^3.0.3",
+    "@types/better-sqlite3": "^7.6.11",
+    "better-sqlite3": "^11.1.2",
+    "drizzle-kit": "^0.23.0",
+    "drizzle-orm": "^0.30.10",
+    "mysql2": "^3.11.0",
+    "pg": "^8.12.0"
+  },
+  "files": [
+    "dist/*",
+    "!tsconfig.tsbuildinfo",
+    "!node_modules"
+  ]
+}

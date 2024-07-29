@@ -1,0 +1,17 @@
+node_modules
+.DS_STORE
+yarn-error.log
+dist/
+build/
+coverage/
+tsdocs/
+tsconfig.tsbuildinfo
+database.sqlite
+packages/**/build
+packages/**/*.tgz
+tmp/
+.vscode/
+bundle/
+.turbo
+.rollup.cache
+rollup.config-*.cjs

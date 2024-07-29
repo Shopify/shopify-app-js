@@ -1,0 +1,26 @@
+name: Close inactive issues
+on:
+  schedule:
+    - cron: "30 1 * * *"
+
+jobs:
+  close-issues:
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+      pull-requests: write
+    steps:
+      - uses: actions/stale@v5
+        with:
+          days-before-issue-stale: 60
+          operations-per-run: 1000
+          stale-issue-label: "Stale"
+          stale-issue-message: |
+            We're labeling this issue as stale because there hasn't been any activity on it for 60 days. While the issue will stay open and we hope to resolve it, this helps us prioritize community requests.
+
+            You can add a comment to remove the label if it's still relevant, and we can re-evaluate it.
+          days-before-issue-close: -1
+          days-before-pr-stale: -1
+          days-before-pr-close: -1
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          exempt-issue-labels: "feature request"

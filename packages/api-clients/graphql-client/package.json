@@ -1,0 +1,97 @@
+{
+  "name": "@shopify/graphql-client",
+  "version": "1.1.0",
+  "description": "Shopify GraphQL Client - A lightweight generic GraphQL JS client to interact with Shopify GraphQL APIs",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Shopify/shopify-app-js.git"
+  },
+  "author": "Shopify",
+  "license": "MIT",
+  "main": "./dist/umd/graphql-client.min.js",
+  "browser": "./dist/umd/graphql-client.min.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/graphql-client.d.ts",
+  "exports": {
+    ".": {
+      "module": {
+        "types": "./dist/ts/index.d.ts",
+        "default": "./dist/index.mjs"
+      },
+      "import": {
+        "types": "./dist/ts/index.d.ts",
+        "default": "./dist/index.mjs"
+      },
+      "require": {
+        "types": "./dist/ts/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "default": "./dist/index.mjs"
+    }
+  },
+  "scripts": {
+    "lint": "eslint . --ext .js,.ts",
+    "build": "yarn tsc -p ./tsconfig.build.json && yarn run rollup",
+    "test": "jest",
+    "test:ci": "yarn test",
+    "rollup": "rollup -c --bundleConfigAsCjs",
+    "clean": "rimraf dist/*",
+    "changeset": "changeset",
+    "version": "changeset version",
+    "release": "yarn build && changeset publish"
+  },
+  "jest": {
+    "projects": [
+      {
+        "displayName": {
+          "name": "test:browser",
+          "color": "blue"
+        },
+        "testEnvironment": "jsdom",
+        "testPathIgnorePatterns": [
+          "(/__tests__/.*|(\\.|/)server(\\.|/)(test|spec))\\.[jt]sx?$"
+        ]
+      },
+      {
+        "displayName": {
+          "name": "test:server",
+          "color": "yellow"
+        },
+        "testPathIgnorePatterns": [
+          "(/__tests__/.*|(\\.|/)browser(\\.|/)(test|spec))\\.[jt]sx?$"
+        ]
+      }
+    ],
+    "setupFilesAfterEnv": [
+      "./src/tests/setupTests.ts"
+    ],
+    "transform": {
+      ".*": "babel-jest"
+    }
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "keywords": [
+    "shopify",
+    "node",
+    "graphql",
+    "Admin API",
+    "Storefront API"
+  ],
+  "files": [
+    "dist/**/*.*",
+    "!node_modules"
+  ],
+  "dependencies": {},
+  "devDependencies": {
+    "jest-environment-jsdom": "^29.5.0",
+    "jest-fetch-mock": "^3.0.3",
+    "regenerator-runtime": "^0.14.1",
+    "web-streams-polyfill": "^4.0.0"
+  },
+  "bugs": {
+    "url": "https://github.com/Shopify/shopify-app-js/issues"
+  },
+  "homepage": "https://github.com/Shopify/shopify-app-js/tree/main/packages/api-clients/graphql-client#readme"
+}
