@@ -19,6 +19,8 @@ jobs:
       - name: Checkout (not dev dep)
         uses: actions/checkout@master
         if: ${{ steps.metadata.outputs.update-type != 'version-update:semver-major' && steps.metadata.outputs.dependency-type != 'direct:development' }}
+        with:
+          ref: ${{ github.head_ref }}
 
       - name: Create changeset (not dev dep)
         run: .github/workflows/dependabot_auto_merge_changeset.sh
