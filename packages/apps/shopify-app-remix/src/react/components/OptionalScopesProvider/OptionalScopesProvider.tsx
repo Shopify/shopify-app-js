@@ -12,18 +12,24 @@ import {Modal, Spinner} from '@shopify/polaris';
 
 import {useAppContext} from '../AppContext';
 import {ScopesInformation} from '../../../server/authenticate/admin/scope/types';
+import {defer} from '../../utilities';
 
 interface RequestScopesConfig {
   modal?: boolean;
 }
+
+export interface RequestScopesResponse {
+  status: 'not-supported' | 'already-granted' | 'granted';
+}
+
 export interface RequestScopesParams {
   scopes: string[];
-  onGrant: () => void;
-  onAlreadyGranted?: () => void;
   config?: RequestScopesConfig;
 }
 interface OptionalScopesContextProps {
-  requestScopes: (params: RequestScopesParams) => Promise<void>;
+  requestScopes: (
+    params: RequestScopesParams,
+  ) => Promise<RequestScopesResponse>;
 }
 
 const OptionalScopesContext = createContext<
@@ -51,10 +57,10 @@ export function OptionalScopesProvider({
   const [currentScopes, setCurrentScopes] = useState<string[]>([]);
   const currentScopesRef = useRef(currentScopes);
   currentScopesRef.current = currentScopes;
-  const [onGrant, setOnGrant] = useState<(() => void) | null>(null);
   const [providerConfig, setProviderConfig] = useState<
     RequestScopesConfig | undefined
   >(undefined);
+  const deferredStatusReponse = useRef(defer<RequestScopesResponse>());
 
   const showModalEnabled = (config?: RequestScopesConfig) =>
     config?.modal !== false;
@@ -81,28 +87,24 @@ export function OptionalScopesProvider({
 
   const requestScopes = async ({
     scopes,
-    onGrant,
-    onAlreadyGranted,
     config,
-  }: RequestScopesParams) => {
+  }: RequestScopesParams): Promise<RequestScopesResponse> => {
     // Compnent not supported for embedded apps. Once the app bridge api to request optioanl scopes is available,
     // it will be integrated here so the component can be used for embedded apps as well.
-    if (isEmbeddedApp) return;
+    if (isEmbeddedApp) return {status: 'not-supported'};
 
     setProviderConfig(config);
     setCurrentScopes(scopes);
-    setOnGrant(() => onGrant);
     if (await scopesAlreadyGranted(scopes)) {
-      if (onAlreadyGranted) {
-        onAlreadyGranted();
-      } else {
-        onGrant();
-      }
+      return {status: 'already-granted'};
     } else if (showModalEnabled(config)) {
       setShowModal(true);
     } else {
       onConfirm();
     }
+
+    // eslint-disable-next-line no-return-await
+    return await deferredStatusReponse.current.promise;
   };
 
   const onConfirm = () => {
@@ -120,13 +122,12 @@ export function OptionalScopesProvider({
   };
 
   const onCancel = () => {
+    deferredStatusReponse.current.reject('grant-rejected');
     resetState();
   };
 
   const onOk = async () => {
-    if (onGrant) {
-      onGrant();
-    }
+    deferredStatusReponse.current.resolve({status: 'granted'});
     resetState();
   };
 
@@ -142,7 +143,6 @@ export function OptionalScopesProvider({
     setCurrentScopes([]);
     setGranted(false);
     setTimeoutReached(false);
-    setOnGrant(null);
   };
 
   const getTitle = () => {
