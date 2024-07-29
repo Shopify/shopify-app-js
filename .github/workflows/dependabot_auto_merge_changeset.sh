@@ -36,6 +36,7 @@ git config user.name github-actions
 git config user.email github-actions@github.com
 
 echo "Adding changeset to git"
+git checkout $BRANCH
 git add $changeset_filename
-git commit --amend --no-edit
-git push --force-with-lease
+git commit -m "[dependabot skip] Adding changeset for dependabot update"
+git push
