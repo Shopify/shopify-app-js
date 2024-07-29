@@ -1,0 +1,106 @@
+{
+  "name": "@shopify/shopify-api",
+  "version": "11.2.0",
+  "description": "Shopify API Library for Node - accelerate development with support for authentication, graphql proxy, webhooks",
+  "types": "./dist/ts/lib/index.d.ts",
+  "module": "./dist/esm/lib/index.mjs",
+  "main": "./dist/cjs/lib/index.js",
+  "exports": {
+    ".": {
+      "types": "./dist/ts/lib/index.d.ts",
+      "import": "./dist/esm/lib/index.mjs",
+      "require": "./dist/cjs/lib/index.js",
+      "default": "./dist/cjs/lib/index.js"
+    },
+    "./rest/admin/*": {
+      "types": "./dist/ts/rest/admin/*/index.d.ts",
+      "import": "./dist/esm/rest/admin/*/index.mjs",
+      "require": "./dist/cjs/rest/admin/*/index.js",
+      "default": "./dist/cjs/rest/admin/*/index.js"
+    },
+    "./runtime": {
+      "types": "./dist/ts/runtime/index.d.ts",
+      "import": "./dist/esm/runtime/index.mjs",
+      "require": "./dist/cjs/runtime/index.js",
+      "default": "./dist/cjs/runtime/index.js"
+    },
+    "./adapters/*": {
+      "types": "./dist/ts/adapters/*/index.d.ts",
+      "import": "./dist/esm/adapters/*/index.mjs",
+      "require": "./dist/cjs/adapters/*/index.js",
+      "default": "./dist/cjs/adapters/*/index.js"
+    }
+  },
+  "prettier": "@shopify/prettier-config",
+  "scripts": {
+    "test:all": "yarn pretest:adapters && jest && yarn posttest:adapters",
+    "test:ci": "yarn test && yarn test:rest_resources && yarn test:adapters",
+    "test": "jest --selectProjects library",
+    "pretest:adapters": "yarn rollup --bundleConfigAsCjs -c adapters/__e2etests__/rollup.test-apps.config.js",
+    "test:adapters": "jest --selectProjects adapters:mock adapters:node adapters:cf-worker adapters:web-api",
+    "test:rest_resources": "jest --selectProjects rest_resources",
+    "lint": "jest --selectProjects lint",
+    "test:dev": "jest --selectProjects library lint",
+    "build": "yarn run rollup -c rollup.config.js --bundleConfigAsCjs && yarn tsc -p ./tsconfig.build.json",
+    "clean": "rimraf .rollup.cache dist bundle",
+    "release": "yarn build && changeset publish"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Shopify/shopify-app-js.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Shopify/shopify-app-js/issues"
+  },
+  "homepage": "https://github.com/Shopify/shopify-app-js/tree/main/packages/apps/shopify-api",
+  "author": "Shopify Inc.",
+  "license": "MIT",
+  "keywords": [
+    "shopify",
+    "node",
+    "jwt",
+    "app",
+    "graphql",
+    "rest",
+    "webhook",
+    "Admin API",
+    "Storefront API"
+  ],
+  "resolutions": {
+    "node-fetch": "^2.6.7"
+  },
+  "dependencies": {
+    "@shopify/admin-api-client": "^1.0.1",
+    "@shopify/network": "^3.3.0",
+    "@shopify/storefront-api-client": "^1.0.1",
+    "compare-versions": "^6.1.1",
+    "isbot": "^5.1.13",
+    "jose": "^5.6.3",
+    "node-fetch": "^2.6.1",
+    "tslib": "^2.6.3",
+    "uuid": "^10.0.0"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20240725.0",
+    "@swc/core": "^1.7.0",
+    "@types/express": "^4.17.13",
+    "@types/node": "^20.14.12",
+    "@types/node-fetch": "^2.6.11",
+    "@types/uuid": "^10.0.0",
+    "express": "^4.19.2",
+    "jest-environment-miniflare": "^2.14.2",
+    "miniflare": "^3.20240718.0",
+    "rollup": "^4.19.0",
+    "rollup-plugin-swc": "^0.2.1",
+    "wrangler": "^3.65.1"
+  },
+  "files": [
+    "dist/*",
+    "!bundle/*",
+    "!node_modules",
+    "!adapters/__e2etests__/*"
+  ]
+}

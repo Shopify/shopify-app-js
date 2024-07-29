@@ -1,0 +1,11 @@
+{
+  "compilerOptions": {
+    "declaration": true,
+    "emitDeclarationOnly": true,
+    "moduleResolution": "Bundler",
+    "module": "Preserve",
+    "outDir": "dist/ts",
+  },
+  "extends": "./tsconfig.json",
+  "exclude": ["./node_modules", "./src/**/tests/*.ts"]
+}

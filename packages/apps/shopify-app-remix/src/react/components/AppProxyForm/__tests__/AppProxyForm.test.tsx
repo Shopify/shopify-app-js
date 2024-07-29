@@ -1,0 +1,63 @@
+import {RouterProvider, createMemoryRouter} from 'react-router-dom';
+import {mount} from '@shopify/react-testing';
+
+import '../../../__tests__/test-helper';
+
+import {AppProxyForm} from '../AppProxyForm';
+import {AppProxyProvider} from '../../AppProxyProvider';
+
+describe('<AppProxyForm />', () => {
+  it('throws an error if used outside of an AppProxyProvider', () => {
+    // GIVEN
+    jest.spyOn(console, 'error').mockImplementation(() => {});
+
+    // WHEN
+    expect(() =>
+      mount(<AppProxyForm action="/my-action">Hello world</AppProxyForm>),
+    ).toThrow('AppProxyForm must be used within an AppProxyProvider component');
+  });
+
+  it('adds a trailing slash if one is missing', () => {
+    // WHEN
+    const component = mount(
+      <RouterProvider
+        router={createMemoryRouter([
+          {
+            path: '/',
+            element: (
+              <AppProxyProvider appUrl="http://my-app.example.io">
+                <AppProxyForm action="/my-action">Hello world</AppProxyForm>
+              </AppProxyProvider>
+            ),
+          },
+        ])}
+      />,
+    );
+
+    // THEN
+    expect(component).toContainReactComponent('form', {action: '/my-action/'});
+    expect(component).toContainReactHtml('Hello world');
+  });
+
+  it("doesn't alter the action if it has a trailing slash", () => {
+    // WHEN
+    const component = mount(
+      <RouterProvider
+        router={createMemoryRouter([
+          {
+            path: '/',
+            element: (
+              <AppProxyProvider appUrl="http://my-app.example.io">
+                <AppProxyForm action="/my-action/">Hello world</AppProxyForm>
+              </AppProxyProvider>
+            ),
+          },
+        ])}
+      />,
+    );
+
+    // THEN
+    expect(component).toContainReactComponent('form', {action: '/my-action/'});
+    expect(component).toContainReactHtml('Hello world');
+  });
+});

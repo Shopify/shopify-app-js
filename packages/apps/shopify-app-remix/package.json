@@ -1,0 +1,117 @@
+{
+  "name": "@shopify/shopify-app-remix",
+  "version": "3.1.0",
+  "description": "Shopify Remix - to simplify the building of Shopify Apps with Remix",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Shopify/shopify-app-js.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Shopify/shopify-app-js/issues"
+  },
+  "homepage": "https://github.com/Shopify/shopify-app-js/tree/main/packages/apps/shopify-app-remix",
+  "author": "Shopify Inc.",
+  "license": "MIT",
+  "main": "./dist/cjs/server/index.js",
+  "module": "./dist/esm/server/index.mjs",
+  "types": "./dist/ts/server/index.d.ts",
+  "exports": {
+    "./adapters/*": {
+      "types": "./dist/ts/server/adapters/*/index.d.ts",
+      "require": "./dist/cjs/server/adapters/*/index.js",
+      "import": "./dist/esm/server/adapters/*/index.mjs",
+      "default": "./dist/cjs/server/adapters/*/index.js"
+    },
+    "./server/adapters/*": {
+      "types": "./dist/ts/server/adapters/*/index.d.ts",
+      "require": "./dist/cjs/server/adapters/*/index.js",
+      "import": "./dist/esm/server/adapters/*/index.mjs",
+      "default": "./dist/cjs/server/adapters/*/index.js"
+    },
+    "./server": {
+      "types": "./dist/ts/server/index.d.ts",
+      "require": "./dist/cjs/server/index.js",
+      "import": "./dist/esm/server/index.mjs",
+      "default": "./dist/cjs/server/index.js"
+    },
+    "./react": {
+      "types": "./dist/ts/react/index.d.ts",
+      "require": "./dist/cjs/react/index.js",
+      "import": "./dist/esm/react/index.mjs",
+      "default": "./dist/cjs/react/index.js"
+    }
+  },
+  "scripts": {
+    "build-docs": "sh docs/build-docs.sh",
+    "validate-docs": "sh ./docs/build-docs.sh isTest && yarn compare-docs",
+    "lint": "eslint . --ext .js,.ts",
+    "build": "yarn run rollup && yarn tsc -p ./tsconfig.build.json",
+    "test": "jest",
+    "test:ci": "yarn test",
+    "rollup": "rollup -c rollup.config.js --bundleConfigAsCjs",
+    "clean": "rimraf .rollup.cache dist",
+    "changeset": "changeset",
+    "version": "changeset version",
+    "release": "yarn build && changeset publish"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "keywords": [
+    "shopify",
+    "javascript",
+    "typescript",
+    "remix",
+    "app",
+    "graphql",
+    "rest",
+    "webhook",
+    "Admin API",
+    "Storefront API"
+  ],
+  "devDependencies": {
+    "@remix-run/node": "^2.10.3",
+    "@remix-run/react": "^2.10.3",
+    "@shopify/generate-docs": "^0.16.2",
+    "@shopify/polaris": "^12.18.0",
+    "@shopify/react-testing": "^5.4.0",
+    "@shopify/shopify-app-session-storage-memory": "^4.0.3",
+    "@types/jsonwebtoken": "^9.0.5",
+    "@types/react": "^18.3.3",
+    "@types/semver": "^7.5.8",
+    "jest-fetch-mock": "^3.0.3",
+    "jsonwebtoken": "^9.0.2",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-router-dom": "^6.25.0"
+  },
+  "dependencies": {
+    "@remix-run/server-runtime": "^2.5.1",
+    "@shopify/admin-api-client": "^1.0.1",
+    "@shopify/shopify-api": "^11.2.0",
+    "@shopify/shopify-app-session-storage": "^3.0.3",
+    "@shopify/storefront-api-client": "^1.0.1",
+    "isbot": "^5.1.13",
+    "semver": "^7.6.2"
+  },
+  "peerDependencies": {
+    "@remix-run/react": "*",
+    "@remix-run/node": "*",
+    "@shopify/polaris": "*",
+    "react": "*"
+  },
+  "peerDependenciesMeta": {
+    "@shopify/polaris": {
+      "optional": true
+    },
+    "@remix-run/node": {
+      "optional": true
+    }
+  },
+  "files": [
+    "dist/*",
+    "!build/**/__tests__",
+    "!tsconfig.tsbuildinfo",
+    "!node_modules"
+  ]
+}
