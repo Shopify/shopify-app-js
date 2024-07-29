@@ -24,12 +24,16 @@ do
 done
 
 dependencies='`'$(sed "s/,/\`, \`/g" <<< "$DEPENDENCIES")'`'
-echo "\nCreating changeset: $changeset_filename"
+echo "Creating changeset: $changeset_filename"
 echo "---
 $package_updates---
 
 Updated $dependencies dependencies
 " > $changeset_filename
+
+echo "Configuring git"
+git config user.name github-actions
+git config user.email github-actions@github.com
 
 echo "Adding changeset to git"
 git add $changeset_filename
