@@ -3777,10 +3777,10 @@
   resolved "https://registry.yarnpkg.com/@redis/bloom/-/bloom-1.2.0.tgz#d3fd6d3c0af3ef92f26767b56414a370c7b63b71"
   integrity sha512-HG2DFjYKbpNmVXsa0keLHp/3leGJz1mjh09f2RLGGLQZzSHpkmZWuwJbAvo3QcRY8p80m5+ZdXZdYOSBLlp7Cg==
 
-"@redis/client@1.5.16":
-  version "1.5.16"
-  resolved "https://registry.yarnpkg.com/@redis/client/-/client-1.5.16.tgz#1d5919077a06a4b935b0e4bef9e036eef1a10371"
-  integrity sha512-X1a3xQ5kEMvTib5fBrHKh6Y+pXbeKXqziYuxOUo1ojQNECg4M5Etd1qqyhMap+lFUOAh8S7UYevgJHOm4A+NOg==
+"@redis/client@1.5.17":
+  version "1.5.17"
+  resolved "https://registry.yarnpkg.com/@redis/client/-/client-1.5.17.tgz#44d179f2b5b542754d6f218bb352bac3ccf150eb"
+  integrity sha512-IPvU9A31qRCZ7lds/x+ksuK/UMndd0EASveAvCvEtFFKIZjZ+m/a4a0L7S28KEWoR5ka8526hlSghDo4Hrc2Hg==
   dependencies:
     cluster-key-slot "1.1.2"
     generic-pool "3.9.0"
@@ -10948,13 +10948,13 @@ readdirp@~3.6.0:
   dependencies:
     picomatch "^2.2.1"
 
-redis@^4.6.14:
-  version "4.6.14"
-  resolved "https://registry.yarnpkg.com/redis/-/redis-4.6.14.tgz#599e49b65816c56a6683f6b19dc374c8e786d091"
-  integrity sha512-GrNg/e33HtsQwNXL7kJT+iNFPSwE1IPmd7wzV3j4f2z0EYxZfZE7FVTmUysgAtqQQtg5NXF5SNLR9OdO/UHOfw==
+redis@^4.6.15:
+  version "4.6.15"
+  resolved "https://registry.yarnpkg.com/redis/-/redis-4.6.15.tgz#b94599fbbd8279182b02f5bb34866c2a1556d71c"
+  integrity sha512-2NtuOpMW3tnYzBw6S8mbXSX7RPzvVFCA2wFJq9oErushO2UeBkxObk+uvo7gv7n0rhWeOj/IzrHO8TjcFlRSOg==
   dependencies:
     "@redis/bloom" "1.2.0"
-    "@redis/client" "1.5.16"
+    "@redis/client" "1.5.17"
     "@redis/graph" "1.1.1"
     "@redis/json" "1.0.6"
     "@redis/search" "1.1.6"
