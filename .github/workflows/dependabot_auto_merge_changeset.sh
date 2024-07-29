@@ -20,7 +20,7 @@ done
 package_updates=""
 for package_name in "${package_names[@]}"
 do
-  package_updates="$package_updates'$package_name': patch\n"
+  package_updates="$package_updates"`printf "'%s': patch%s" $package_name "\n"`
 done
 
 dependencies='`'$(sed "s/,/\`, \`/g" <<< "$DEPENDENCIES")'`'
@@ -30,13 +30,3 @@ $package_updates---
 
 Updated $dependencies dependencies
 " > $changeset_filename
-
-echo "Configuring git"
-git config user.name github-actions
-git config user.email github-actions@github.com
-
-echo "Adding changeset to git"
-git checkout $BRANCH
-git add $changeset_filename
-git commit -m "[dependabot skip] Adding changeset for dependabot update"
-git push
