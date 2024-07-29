@@ -21,7 +21,7 @@ jobs:
         if: ${{ steps.metadata.outputs.update-type != 'version-update:semver-major' && steps.metadata.outputs.dependency-type != 'direct:development' }}
 
       - name: Create changeset (not dev dep)
-        run: ./dependabot_auto_merge_changeset.sh
+        run: .github/workflows/dependabot_auto_merge_changeset.sh
         if: ${{ steps.metadata.outputs.update-type != 'version-update:semver-major' && steps.metadata.outputs.dependency-type != 'direct:development' }}
         env:
           DEPENDENCIES: ${{ steps.metadata.outputs.dependency-names }}
