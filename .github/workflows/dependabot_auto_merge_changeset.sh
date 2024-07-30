@@ -20,13 +20,13 @@ done
 package_updates=""
 for package_name in "${package_names[@]}"
 do
-  package_updates="$package_updates"`printf "'%s': patch%s" $package_name "\n"`
+  package_updates="$package_updates"`printf "
+'%s': patch" $package_name`
 done
 
 dependencies='`'$(sed "s/,/\`, \`/g" <<< "$DEPENDENCIES")'`'
 echo "Creating changeset: $changeset_filename"
-echo "---
-$package_updates---
+echo "---$package_updates
+---
 
-Updated $dependencies dependencies
-" > $changeset_filename
+Updated $dependencies dependencies" > $changeset_filename
