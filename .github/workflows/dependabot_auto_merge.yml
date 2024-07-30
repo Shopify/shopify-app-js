@@ -28,7 +28,6 @@ jobs:
           .github/workflows/dependabot_auto_merge_changeset.sh
           git config user.name "github-actions[bot]"
           git config user.email "noreply@shopify.com"
-          git checkout ${{ github.ref_name }}
           git add .changeset
           git commit -m "[dependabot skip] Adding changeset for dependabot update"
           git push
