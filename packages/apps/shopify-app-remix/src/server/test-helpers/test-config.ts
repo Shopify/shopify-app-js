@@ -26,7 +26,7 @@ const TEST_CONFIG = {
   isEmbeddedApp: true,
   sessionStorage: new MemorySessionStorage(),
   isTesting: true,
-};
+} as const;
 
 export function testConfig<
   Overrides extends TestOverridesArg,
@@ -43,9 +43,7 @@ export function testConfig<
       ...TEST_CONFIG.logger,
       ...(overrides as NonNullable<Overrides>).logger,
     },
-    future: {
-      ...future,
-    },
+    future,
   } as any;
 }
 
