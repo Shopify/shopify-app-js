@@ -24,13 +24,7 @@ jobs:
           ref: ${{ github.head_ref }}
 
       - name: Create changeset (not dev dep)
-        run: |
-          .github/workflows/dependabot_auto_merge_changeset.sh
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add .changeset
-          git commit -m "[dependabot skip] Adding changeset for dependabot update"
-          git push
+        run: .github/workflows/dependabot_auto_merge_changeset.sh
 
         if: ${{ steps.metadata.outputs.update-type != 'version-update:semver-major' && steps.metadata.outputs.dependency-type != 'direct:development' }}
         env:
