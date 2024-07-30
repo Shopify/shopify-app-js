@@ -24,11 +24,18 @@ jobs:
           ref: ${{ github.head_ref }}
 
       - name: Create changeset (not dev dep)
-        run: .github/workflows/dependabot_auto_merge_changeset.sh
+        run: |
+          .github/workflows/dependabot_auto_merge_changeset.sh
+          git config user.name "github-actions[bot]"
+          git config user.email "noreply@shopify.com"
+          git checkout ${{ github.ref_name }}
+          git add .changeset
+          git commit -m "[dependabot skip] Adding changeset for dependabot update"
+          git push
+
         if: ${{ steps.metadata.outputs.update-type != 'version-update:semver-major' && steps.metadata.outputs.dependency-type != 'direct:development' }}
         env:
           DEPENDENCIES: ${{ steps.metadata.outputs.dependency-names }}
-          BRANCH: ${{ github.ref_name }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Add skip changelog label (dev dep)
