@@ -1,7 +1,7 @@
 import {MemorySessionStorage} from '@shopify/shopify-app-session-storage-memory';
 
 import {testConfig as testConfigImport} from '../test-helpers/test-config';
-import type {TestOverridesArg, TestConfig} from '../test-helpers/test-config';
+import type {TestOverridesArg} from '../test-helpers/test-config';
 import type {FutureFlags, FutureFlagOptions} from '../future/flags';
 
 /*
@@ -16,11 +16,13 @@ const TEST_FUTURE_FLAGS: Required<{[key in keyof FutureFlags]: true}> = {
   wip_optionalScopesApi: true,
 } as const;
 
+// Override the helper's future flags and logger settings for our purposes
 const TEST_CONFIG = {
+  future: TEST_FUTURE_FLAGS,
   logger: {
     log: jest.fn(),
   },
-};
+} as const;
 
 // Reset the config object before each test
 beforeEach(() => {
@@ -35,13 +37,17 @@ export function testConfig<
   {future, ...overrides}: Overrides & {future?: Future} = {} as Overrides & {
     future?: Future;
   },
-): TestConfig<Overrides> {
+) {
   return testConfigImport({
-    future: {
-      ...TEST_FUTURE_FLAGS,
-      ...future,
-    },
     ...TEST_CONFIG,
     ...overrides,
-  }) as any;
+    future: {
+      ...TEST_CONFIG.future,
+      ...future,
+    },
+    logger: {
+      ...TEST_CONFIG.logger,
+      ...(overrides as NonNullable<Overrides>).logger,
+    },
+  });
 }
