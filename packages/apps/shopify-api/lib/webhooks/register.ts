@@ -127,15 +127,17 @@ async function getExistingHandlers(
 
     const response = await client.request<WebhookCheckResponse>(query);
 
-    response.data?.webhookSubscriptions?.edges.forEach((edge) => {
-      const handler = buildHandlerFromNode(edge);
+    response.data?.webhookSubscriptions?.edges.forEach(
+      (edge: WebhookCheckResponseNode) => {
+        const handler = buildHandlerFromNode(edge);
 
-      if (!existingHandlers[edge.node.topic]) {
-        existingHandlers[edge.node.topic] = [];
-      }
+        if (!existingHandlers[edge.node.topic]) {
+          existingHandlers[edge.node.topic] = [];
+        }
 
-      existingHandlers[edge.node.topic].push(handler);
-    });
+        existingHandlers[edge.node.topic].push(handler);
+      },
+    );
 
     endCursor = response.data?.webhookSubscriptions?.pageInfo.endCursor!;
     hasNextPage = response.data?.webhookSubscriptions?.pageInfo.hasNextPage!;
