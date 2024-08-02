@@ -6,7 +6,7 @@ import {TestConfig, E2eTestEnvironment} from './test_config_types';
 import {runEnvironments, shutdownEnvironments} from './test_environments';
 import {testSuite} from './test_suite';
 
-export {E2eTestEnvironment} from './test_config_types';
+export type {E2eTestEnvironment} from './test_config_types';
 
 export function runTests(env: E2eTestEnvironment) {
   const dummyShopifyServerEnvironment = {
