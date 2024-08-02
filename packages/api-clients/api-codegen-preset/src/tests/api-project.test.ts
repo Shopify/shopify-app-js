@@ -29,7 +29,7 @@ describe('shopifyApiProject', () => {
         // THEN
         expect(projectConfig).toEqual({
           schema:
-            type === ApiType.Customer
+            type === 'customer'
               ? 'shopify:customer-accounts/customer/api/2023-10'
               : `https://shopify.dev/${type}-graphql-direct-proxy/2023-10`,
           documents: config.documents,
@@ -79,7 +79,7 @@ describe('shopifyApiProject', () => {
         // THEN
         expect(projectConfig).toEqual({
           schema:
-            type === ApiType.Customer
+            type === 'customer'
               ? 'shopify:customer-accounts/customer/api'
               : `https://shopify.dev/${type}-graphql-direct-proxy`,
           documents: ['**/*.{ts,tsx}', '!node_modules'],
@@ -108,7 +108,7 @@ describe('shopifyApiProject', () => {
         // THEN
         expect(projectConfig).toEqual({
           schema:
-            type === ApiType.Customer
+            type === 'customer'
               ? 'shopify:customer-accounts/customer/api'
               : `https://shopify.dev/${type}-graphql-direct-proxy`,
           documents: ['**/*.{ts,tsx}', '!node_modules'],
