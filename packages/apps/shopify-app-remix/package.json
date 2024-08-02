@@ -86,7 +86,7 @@
     "react-router-dom": "^6.25.0"
   },
   "dependencies": {
-    "@remix-run/server-runtime": "^2.5.1",
+    "@remix-run/server-runtime": "^2.11.0",
     "@shopify/admin-api-client": "^1.0.1",
     "@shopify/shopify-api": "^11.2.0",
     "@shopify/shopify-app-session-storage": "^3.0.3",
