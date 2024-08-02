@@ -14,7 +14,7 @@ jobs:
         id: metadata
         uses: dependabot/fetch-metadata@v1
         with:
-          github-token: '${{ secrets.GITHUB_TOKEN }}'
+          github-token: '${{ secrets.SHOPIFY_GH_ACCESS_TOKEN }}'
 
       - name: Checkout (not dev dep)
         uses: actions/checkout@master
@@ -22,10 +22,10 @@ jobs:
         with:
           fetch-depth: 2
           ref: ${{ github.head_ref }}
+          token: ${{ secrets.SHOPIFY_GH_ACCESS_TOKEN }}
 
       - name: Create changeset (not dev dep)
         run: .github/workflows/dependabot_auto_merge_changeset.sh
-
         if: ${{ steps.metadata.outputs.update-type != 'version-update:semver-major' && steps.metadata.outputs.dependency-type != 'direct:development' }}
         env:
           DEPENDENCIES: ${{ steps.metadata.outputs.dependency-names }}
@@ -36,11 +36,11 @@ jobs:
         if: ${{ steps.metadata.outputs.update-type != 'version-update:semver-major' && steps.metadata.outputs.dependency-type == 'direct:development' }}
         with:
           labels: Skip Changelog
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          github_token: ${{ secrets.SHOPIFY_GH_ACCESS_TOKEN }}
 
       - name: Enable auto-merge for Dependabot PRs (dev dep)
         if: ${{ steps.metadata.outputs.update-type != 'version-update:semver-major' && steps.metadata.outputs.dependency-type == 'direct:development' }}
         run: gh pr merge --auto --merge "$PR_URL"
         env:
           PR_URL: ${{ github.event.pull_request.html_url }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.SHOPIFY_GH_ACCESS_TOKEN }}
