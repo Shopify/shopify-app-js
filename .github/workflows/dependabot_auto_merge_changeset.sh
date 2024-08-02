@@ -32,8 +32,8 @@ echo "---$package_updates
 Updated $dependencies dependencies" > $changeset_filename
 
 echo "Committing changeset"
-git config user.name "github-actions[bot]"
-git config user.email "github-actions[bot]@users.noreply.github.com"
+git config user.name "shopify-github-actions-access[bot]"
+git config user.email "shopify-github-actions-access[bot]@users.noreply.github.com"
 git add .changeset
 git commit -m "[dependabot skip] Adding changeset for dependabot update"
 git push
