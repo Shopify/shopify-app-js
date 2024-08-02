@@ -1,5 +1,5 @@
 export {createAdminApiClient} from './graphql';
-export {
+export type {
   AdminApiClient,
   AdminQueries,
   AdminMutations,
@@ -7,7 +7,7 @@ export {
 } from './graphql/types';
 
 export {createAdminRestApiClient} from './rest';
-export {AdminRestApiClient, SearchParams} from './rest/types';
+export type {AdminRestApiClient, SearchParams} from './rest/types';
 
 export type {
   AllOperations,

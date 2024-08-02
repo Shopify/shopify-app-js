@@ -15,7 +15,7 @@ import {
   ReturnData,
 } from './operation-types';
 
-export {
+export type {
   AllOperations,
   InputMaybe,
   OperationVariables,

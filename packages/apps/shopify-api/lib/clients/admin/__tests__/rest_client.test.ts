@@ -510,7 +510,7 @@ describe('REST client', () => {
 
     const testErrorResponse = async (
       status: number | null,
-      expectedError: NewableFunction,
+      expectedError: ErrorConstructor | NewableFunction,
       expectRequestId: boolean,
     ) => {
       let caught = false;
