@@ -9,7 +9,7 @@ type DeepPartial<T> = T extends object
   : T;
 
 /**
- * Creates a fake Session in the provided SessionStorage for the shop defined in sessionParams.
+ * Creates and returns a fake Session for the shop defined in sessionParams.
  *
  * @param sessionParams The Session parameters to use when creating the fake Session.
  * @returns {Session} The fake Session created.
