@@ -1,3 +1,4 @@
+import {LATEST_API_VERSION} from '@shopify/shopify-api';
 import {MemorySessionStorage} from '@shopify/shopify-app-session-storage-memory';
 
 import {testConfig as testConfigImport} from '../test-helpers/test-config';
@@ -18,6 +19,8 @@ const TEST_FUTURE_FLAGS: Required<{[key in keyof FutureFlags]: true}> = {
 
 // Override the helper's future flags and logger settings for our purposes
 const TEST_CONFIG = {
+  apiVersion: LATEST_API_VERSION,
+  isEmbeddedApp: true,
   future: TEST_FUTURE_FLAGS,
   logger: {
     log: jest.fn(),

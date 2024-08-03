@@ -1,8 +1,4 @@
-import {
-  LATEST_API_VERSION,
-  LogSeverity,
-  ShopifyRestResources,
-} from '@shopify/shopify-api';
+import {LogSeverity, ShopifyRestResources} from '@shopify/shopify-api';
 import {SessionStorage} from '@shopify/shopify-app-session-storage';
 import {MemorySessionStorage} from '@shopify/shopify-app-session-storage-memory';
 import {
@@ -18,12 +14,12 @@ const TEST_CONFIG = {
   apiKey: API_KEY,
   apiSecretKey: API_SECRET_KEY,
   scopes: ['testScope'] as any,
-  apiVersion: LATEST_API_VERSION,
   appUrl: APP_URL,
+  adminApiAccessToken: API_KEY,
+  privateAppStorefrontAccessToken: API_KEY,
   logger: {
     level: LogSeverity.Debug,
   },
-  isEmbeddedApp: true,
   sessionStorage: new MemorySessionStorage(),
   isTesting: true,
 } as const;
