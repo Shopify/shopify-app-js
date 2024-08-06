@@ -284,4 +284,17 @@ const canceledSubscription = await shopify.billing.cancel({
 
 See the [billing reference](../reference/billing/README.md) for details on how to call the `subscriptions` and `cancel` endpoints.
 
+### Creating a usage record
+When using a usage based billing plan you must create usage records to charge the merchant. The `createUsageRecord` method will create a usage record for a usage billing plan.
+
+| Parameter             | Type                         | Required? | Default Value | Notes                                                                                                                                                            |
+| ---------------------  | ---------------------------- | :-------: | :-----------: | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `session`              | `Session`                    |    Yes    |       -       | The session to be used for this request                                                                                                                                          |
+| `description`          | `string`                     |    Yes    |       -       | The description of the usage record.                                                                                                                  |
+| `price.amount`                | `number`                     |    Yes    |       -       | The amount and currency to be charged
+| `price.currency`                | `string`                     |    Yes    |       -       | The amount and currency to be charged                                                                                             |
+|`subscriptionLineItemId`| `string`                     |    No     |       -       | The line item to create the usage record for. If no value is provided a record will be created on the active usage line item                                                                                     |
+| `idempotencyKey`       | `string`                     |    No     |       -       | A unique key that can be passed to the request to prevent duplicate charges                                                                                                                    |
+| `isTest`  | `Boolean` |    No     |       -       | Whether this is a test charge |
+
 [Back to guide index](../../README.md#guides)

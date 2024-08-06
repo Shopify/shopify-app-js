@@ -64,7 +64,7 @@ export function check<
   };
 }
 
-async function assessPayments({
+export async function assessPayments({
   client,
   isTest,
   plans,
@@ -133,6 +133,7 @@ const HAS_PAYMENTS_QUERY = `
         id
         name
         test
+        status
         lineItems {
           id
           plan {

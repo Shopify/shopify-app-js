@@ -3,6 +3,7 @@ import {
   BillingCheckParams,
   BillingCheckResponseObject,
   BillingRequestParams,
+  UsageRecord,
 } from '@shopify/shopify-api';
 
 import type {AppConfigArg} from '../../../config-types';
@@ -59,6 +60,38 @@ export interface CancelBillingOptions {
    * Whether to use the test mode. This prevents the credit card from being charged.
    */
   isTest?: boolean;
+}
+
+export interface CreateUsageRecordOptions {
+  /**
+   * The description of the app usage record.
+   */
+  description: string;
+  /**
+   * The price of the app usage record.
+   */
+  price: {
+    /**
+     * The amount to charge for this usage record.
+     */
+    amount: number;
+    /**
+     * The currency code for this usage record.
+     */
+    currencyCode: string;
+  };
+  /**
+   * Whether to use the test mode. This prevents the credit card from being charged.
+   */
+  isTest: boolean;
+  /*
+   * Defines the usage pricing plan the merchant is subscribed to.
+   */
+  subscriptionLineItemId?: string;
+  /*
+   * A unique key generated to avoid duplicate charges.
+   */
+  idempotencyKey?: string;
 }
 
 export interface BillingContext<Config extends AppConfigArg> {
@@ -360,4 +393,12 @@ export interface BillingContext<Config extends AppConfigArg> {
    * ```
    */
   cancel: (options: CancelBillingOptions) => Promise<AppSubscription>;
+
+  /**
+   *
+   * @returns Returns a usage record when one was created successfully.
+   */
+  createUsageRecord: (
+    options: CreateUsageRecordOptions,
+  ) => Promise<UsageRecord>;
 }
