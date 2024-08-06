@@ -8,6 +8,7 @@ const projects = [
   './lib/__tests__/jest_projects/adapters.node.jest.config.ts',
   './lib/__tests__/jest_projects/adapters.cf-worker.jest.config.ts',
   './lib/__tests__/jest_projects/adapters.web-api.jest.config.ts',
+  './lib/__tests__/jest_projects/test_helpers.jest.config.ts',
 ];
 
 const config: Config = {

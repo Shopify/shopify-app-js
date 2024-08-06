@@ -9,6 +9,7 @@ import {
   testConfig,
   mockExternalRequest,
   APP_URL,
+  SHOPIFY_HOST,
 } from '../../../../../__test-helpers';
 
 describe('authorize.admin auth callback path', () => {
@@ -291,7 +292,7 @@ describe('authorize.admin auth callback path', () => {
           // THEN
           expect(response.status).toBe(302);
           expect(response.headers.get('location')).toBe(
-            'https://totally-real-host.myshopify.io/apps/testApiKey',
+            `https://${SHOPIFY_HOST}/apps/testApiKey`,
           );
         });
       } else {
