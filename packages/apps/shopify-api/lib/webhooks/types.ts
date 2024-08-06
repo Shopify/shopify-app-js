@@ -30,6 +30,7 @@ export interface HttpWebhookHandler extends BaseWebhookHandler {
   deliveryMethod: DeliveryMethod.Http;
   callbackUrl: string;
 }
+
 export interface HttpWebhookHandlerWithCallback extends HttpWebhookHandler {
   callback: WebhookHandlerFunction;
 }
@@ -77,22 +78,28 @@ export interface RegisterResult {
 
 export type RegisterReturn = Record<string, RegisterResult[]>;
 
+interface WebhookHttpEndpoint {
+  __typename: 'WebhookHttpEndpoint';
+  callbackUrl: string;
+}
+interface WebhookEventBridgeEndpoint {
+  __typename: 'WebhookEventBridgeEndpoint';
+  arn: string;
+}
+interface WebhookPubSubEndpoint {
+  __typename: 'WebhookPubSubEndpoint';
+  pubSubProject: string;
+  pubSubTopic: string;
+}
+
+type WebhookEndpoint =
+  | WebhookHttpEndpoint
+  | WebhookEventBridgeEndpoint
+  | WebhookPubSubEndpoint;
+
 export interface WebhookCheckResponseNode<
   T = {
-    endpoint:
-      | {
-          __typename: 'WebhookHttpEndpoint';
-          callbackUrl: string;
-        }
-      | {
-          __typename: 'WebhookEventBridgeEndpoint';
-          arn: string;
-        }
-      | {
-          __typename: 'WebhookPubSubEndpoint';
-          pubSubProject: string;
-          pubSubTopic: string;
-        };
+    endpoint: WebhookEndpoint;
   },
 > {
   node: {
