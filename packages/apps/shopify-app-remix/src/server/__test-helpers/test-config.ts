@@ -25,7 +25,7 @@ const TEST_CONFIG = {
   logger: {
     log: jest.fn(),
   },
-} as const;
+};
 
 // Reset the config object before each test
 beforeEach(() => {
