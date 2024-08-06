@@ -380,7 +380,7 @@
             },
             "syntaxKind": "TypeAliasDeclaration",
             "name": "AdminContext",
-            "value": "FeatureEnabled<Config['future'], 'unstable_optionalScopesApi'> extends true\n    ? EmbeddedTypedAdminContext<Config, Resources> & ScopesContext\n    : EmbeddedTypedAdminContext<Config, Resources>",
+            "value": "FeatureEnabled<Config['future'], 'wip_optionalScopesApi'> extends true\n    ? EmbeddedTypedAdminContext<Config, Resources> & ScopesContext\n    : EmbeddedTypedAdminContext<Config, Resources>",
             "description": ""
           },
           "FeatureEnabled": {
@@ -419,14 +419,14 @@
               {
                 "filePath": "src/server/future/flags.ts",
                 "syntaxKind": "PropertySignature",
-                "name": "unstable_optionalScopesApi",
+                "name": "wip_optionalScopesApi",
                 "value": "boolean",
-                "description": "When enabled, the `optionalScopes` API will be available.",
+                "description": "When enabled, the Scopes API will be available. This feature is in development and requires special permissions from Shopify for now.",
                 "isOptional": true,
                 "defaultValue": "false"
               }
             ],
-            "value": "export interface FutureFlags {\n  /**\n   * When enabled, embedded apps will fetch access tokens via [token exchange](https://shopify.dev/docs/apps/auth/get-access-tokens/token-exchange).\n   * This assumes the app has scopes declared for [Shopify managing installation](https://shopify.dev/docs/apps/auth/installation#shopify-managed-installation).\n   *\n   * Learn more about this [new embedded app auth strategy](https://shopify.dev/docs/api/shopify-app-remix#embedded-auth-strategy).\n   *\n   * @default false\n   */\n  unstable_newEmbeddedAuthStrategy?: boolean;\n\n  /**\n   * When enabled, the `optionalScopes` API will be available.\n   *\n   * @default false\n   */\n  unstable_optionalScopesApi?: boolean;\n}"
+            "value": "export interface FutureFlags {\n  /**\n   * When enabled, embedded apps will fetch access tokens via [token exchange](https://shopify.dev/docs/apps/auth/get-access-tokens/token-exchange).\n   * This assumes the app has scopes declared for [Shopify managing installation](https://shopify.dev/docs/apps/auth/installation#shopify-managed-installation).\n   *\n   * Learn more about this [new embedded app auth strategy](https://shopify.dev/docs/api/shopify-app-remix#embedded-auth-strategy).\n   *\n   * @default false\n   */\n  unstable_newEmbeddedAuthStrategy?: boolean;\n\n  /**\n   * When enabled, the Scopes API will be available. This feature is in development and requires special permissions from Shopify for now.\n   *\n   * @default false\n   */\n  wip_optionalScopesApi?: boolean;\n}"
           },
           "EmbeddedTypedAdminContext": {
             "filePath": "src/server/authenticate/admin/types.ts",
@@ -1089,9 +1089,16 @@
                 "name": "request",
                 "value": "(scopes: string[]) => Promise<void>",
                 "description": ""
+              },
+              {
+                "filePath": "src/server/authenticate/admin/scope/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "revoke",
+                "value": "(scopes: string[]) => Promise<ScopesInformation>",
+                "description": ""
               }
             ],
-            "value": "export interface ScopesApiContext {\n  query: () => Promise<ScopesInformation>;\n  request: (scopes: string[]) => Promise<void>;\n}"
+            "value": "export interface ScopesApiContext {\n  query: () => Promise<ScopesInformation>;\n  request: (scopes: string[]) => Promise<void>;\n  revoke: (scopes: string[]) => Promise<ScopesInformation>;\n}"
           },
           "ScopesInformation": {
             "filePath": "src/server/authenticate/admin/scope/types.ts",
@@ -4948,7 +4955,7 @@
             },
             "syntaxKind": "TypeAliasDeclaration",
             "name": "AdminContext",
-            "value": "FeatureEnabled<Config['future'], 'unstable_optionalScopesApi'> extends true\n    ? EmbeddedTypedAdminContext<Config, Resources> & ScopesContext\n    : EmbeddedTypedAdminContext<Config, Resources>",
+            "value": "FeatureEnabled<Config['future'], 'wip_optionalScopesApi'> extends true\n    ? EmbeddedTypedAdminContext<Config, Resources> & ScopesContext\n    : EmbeddedTypedAdminContext<Config, Resources>",
             "description": ""
           },
           "FeatureEnabled": {
@@ -4987,14 +4994,14 @@
               {
                 "filePath": "src/server/future/flags.ts",
                 "syntaxKind": "PropertySignature",
-                "name": "unstable_optionalScopesApi",
+                "name": "wip_optionalScopesApi",
                 "value": "boolean",
-                "description": "When enabled, the `optionalScopes` API will be available.",
+                "description": "When enabled, the Scopes API will be available. This feature is in development and requires special permissions from Shopify for now.",
                 "isOptional": true,
                 "defaultValue": "false"
               }
             ],
-            "value": "export interface FutureFlags {\n  /**\n   * When enabled, embedded apps will fetch access tokens via [token exchange](https://shopify.dev/docs/apps/auth/get-access-tokens/token-exchange).\n   * This assumes the app has scopes declared for [Shopify managing installation](https://shopify.dev/docs/apps/auth/installation#shopify-managed-installation).\n   *\n   * Learn more about this [new embedded app auth strategy](https://shopify.dev/docs/api/shopify-app-remix#embedded-auth-strategy).\n   *\n   * @default false\n   */\n  unstable_newEmbeddedAuthStrategy?: boolean;\n\n  /**\n   * When enabled, the `optionalScopes` API will be available.\n   *\n   * @default false\n   */\n  unstable_optionalScopesApi?: boolean;\n}"
+            "value": "export interface FutureFlags {\n  /**\n   * When enabled, embedded apps will fetch access tokens via [token exchange](https://shopify.dev/docs/apps/auth/get-access-tokens/token-exchange).\n   * This assumes the app has scopes declared for [Shopify managing installation](https://shopify.dev/docs/apps/auth/installation#shopify-managed-installation).\n   *\n   * Learn more about this [new embedded app auth strategy](https://shopify.dev/docs/api/shopify-app-remix#embedded-auth-strategy).\n   *\n   * @default false\n   */\n  unstable_newEmbeddedAuthStrategy?: boolean;\n\n  /**\n   * When enabled, the Scopes API will be available. This feature is in development and requires special permissions from Shopify for now.\n   *\n   * @default false\n   */\n  wip_optionalScopesApi?: boolean;\n}"
           },
           "EmbeddedTypedAdminContext": {
             "filePath": "src/server/authenticate/admin/types.ts",
@@ -5657,9 +5664,16 @@
                 "name": "request",
                 "value": "(scopes: string[]) => Promise<void>",
                 "description": ""
+              },
+              {
+                "filePath": "src/server/authenticate/admin/scope/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "revoke",
+                "value": "(scopes: string[]) => Promise<ScopesInformation>",
+                "description": ""
               }
             ],
-            "value": "export interface ScopesApiContext {\n  query: () => Promise<ScopesInformation>;\n  request: (scopes: string[]) => Promise<void>;\n}"
+            "value": "export interface ScopesApiContext {\n  query: () => Promise<ScopesInformation>;\n  request: (scopes: string[]) => Promise<void>;\n  revoke: (scopes: string[]) => Promise<ScopesInformation>;\n}"
           },
           "ScopesInformation": {
             "filePath": "src/server/authenticate/admin/scope/types.ts",
@@ -9307,14 +9321,14 @@
               {
                 "filePath": "src/server/future/flags.ts",
                 "syntaxKind": "PropertySignature",
-                "name": "unstable_optionalScopesApi",
+                "name": "wip_optionalScopesApi",
                 "value": "boolean",
-                "description": "When enabled, the `optionalScopes` API will be available.",
+                "description": "When enabled, the Scopes API will be available. This feature is in development and requires special permissions from Shopify for now.",
                 "isOptional": true,
                 "defaultValue": "false"
               }
             ],
-            "value": "export interface FutureFlags {\n  /**\n   * When enabled, embedded apps will fetch access tokens via [token exchange](https://shopify.dev/docs/apps/auth/get-access-tokens/token-exchange).\n   * This assumes the app has scopes declared for [Shopify managing installation](https://shopify.dev/docs/apps/auth/installation#shopify-managed-installation).\n   *\n   * Learn more about this [new embedded app auth strategy](https://shopify.dev/docs/api/shopify-app-remix#embedded-auth-strategy).\n   *\n   * @default false\n   */\n  unstable_newEmbeddedAuthStrategy?: boolean;\n\n  /**\n   * When enabled, the `optionalScopes` API will be available.\n   *\n   * @default false\n   */\n  unstable_optionalScopesApi?: boolean;\n}"
+            "value": "export interface FutureFlags {\n  /**\n   * When enabled, embedded apps will fetch access tokens via [token exchange](https://shopify.dev/docs/apps/auth/get-access-tokens/token-exchange).\n   * This assumes the app has scopes declared for [Shopify managing installation](https://shopify.dev/docs/apps/auth/installation#shopify-managed-installation).\n   *\n   * Learn more about this [new embedded app auth strategy](https://shopify.dev/docs/api/shopify-app-remix#embedded-auth-strategy).\n   *\n   * @default false\n   */\n  unstable_newEmbeddedAuthStrategy?: boolean;\n\n  /**\n   * When enabled, the Scopes API will be available. This feature is in development and requires special permissions from Shopify for now.\n   *\n   * @default false\n   */\n  wip_optionalScopesApi?: boolean;\n}"
           }
         }
       }
