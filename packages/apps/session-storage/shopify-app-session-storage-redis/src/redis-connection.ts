@@ -7,7 +7,11 @@ export class RedisConnection implements DBConnection {
   sessionStorageIdentifier: string;
   private client: RedisClient;
 
-  constructor(dbUrl: string, options: RedisClientOptions, keyPrefix: string) {
+  constructor(
+    dbUrl: string | URL | RedisClient,
+    options: RedisClientOptions,
+    keyPrefix: string,
+  ) {
     this.init(dbUrl, options);
     this.sessionStorageIdentifier = keyPrefix;
   }
@@ -17,7 +21,9 @@ export class RedisConnection implements DBConnection {
   }
 
   async connect(): Promise<void> {
-    await this.client.connect();
+    if (!this.client.isReady) {
+      await this.client.connect();
+    }
   }
 
   async disconnect(): Promise<void> {
@@ -48,16 +54,19 @@ export class RedisConnection implements DBConnection {
     return addKeyPrefix ? this.generateFullKey(baseKey) : baseKey;
   }
 
-  private init(dbUrl: string, options: RedisClientOptions) {
-    this.client = createClient({
-      ...options,
-      url: dbUrl,
-    });
-
-    this.client.on('error', this.eventHandler);
-    this.client.on('connect', this.eventHandler);
-    this.client.on('reconnecting', this.eventHandler);
-    this.client.on('ready', this.eventHandler);
+  private init(
+    urlOrClient: string | URL | RedisClient,
+    options: RedisClientOptions,
+  ) {
+    if (typeof urlOrClient === 'string' || urlOrClient instanceof URL) {
+      this.client = createClient({...options, url: urlOrClient.toString()});
+      this.client.on('error', this.eventHandler);
+      this.client.on('connect', this.eventHandler);
+      this.client.on('reconnecting', this.eventHandler);
+      this.client.on('ready', this.eventHandler);
+    } else {
+      this.client = urlOrClient;
+    }
   }
 
   private eventHandler = (..._args: any[]) => {};
