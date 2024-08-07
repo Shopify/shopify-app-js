@@ -25,7 +25,6 @@ type RedisClient = ReturnType<typeof createClient>;
 
 describe('RedisSessionStorage', () => {
   let containerId: string | undefined;
-  let client: RedisClient;
 
   beforeAll(async () => {
     const configPath = resolve(__dirname, './redis.conf');
@@ -37,168 +36,189 @@ describe('RedisSessionStorage', () => {
 
     // Give the container a lot of time to set up since polling is ineffective with podman
     await wait(10000);
-
-    client = createClient({url: dbURL.toString()});
-    client.on('error', () => {});
-    client.on('connect', () => {});
-    client.on('reconnecting', () => {});
-    client.on('ready', () => {});
-    await client.connect();
   });
 
   afterAll(async () => {
-    await client.disconnect();
     if (containerId) await exec(`podman rm -f ${containerId}`);
   });
 
-  describe('batteryOfTests', () => {
-    let storage: RedisSessionStorage | undefined;
+  describe('using connection URLs', () => {
+    let client: RedisClient;
     beforeAll(async () => {
-      // flush the DB
-      await client.flushDb();
-      await initWithNonSessionData(client);
-
-      storage = new RedisSessionStorage(dbURL);
-      await storage.ready;
+      client = createClient({url: dbURL.toString()});
+      client.on('error', () => {});
+      client.on('connect', () => {});
+      client.on('reconnecting', () => {});
+      client.on('ready', () => {});
+      await client.connect();
     });
 
     afterAll(async () => {
-      await storage?.disconnect();
+      await client.disconnect();
     });
 
-    batteryOfTests(async () => storage!);
-  });
+    describe('batteryOfTests', () => {
+      let storage: RedisSessionStorage | undefined;
+      beforeAll(async () => {
+        // flush the DB
+        await client.flushDb();
+        await initWithNonSessionData(client);
 
-  describe('migrateAddShopKeyToTrackSessionsByShop tests', () => {
-    let storage: RedisSessionStorage | undefined;
-    beforeAll(async () => {
-      // flush the DB
-      await client.flushDb();
-      await initWithNonSessionData(client);
-      await initWithVersion1_0_0Data(client);
+        storage = new RedisSessionStorage(dbURL);
+        await storage.ready;
+      });
+
+      afterAll(async () => {
+        await storage?.disconnect();
+      });
+
+      batteryOfTests(async () => storage!);
     });
 
-    afterEach(async () => {
-      await storage?.disconnect();
+    describe('migrateAddShopKeyToTrackSessionsByShop tests', () => {
+      let storage: RedisSessionStorage | undefined;
+      beforeAll(async () => {
+        // flush the DB
+        await client.flushDb();
+        await initWithNonSessionData(client);
+        await initWithVersion1_0_0Data(client);
+      });
+
+      afterEach(async () => {
+        await storage?.disconnect();
+      });
+
+      it('initially satisfies pre-migrateAddShopKeyToTrackSessionsByShop conditions', async () => {
+        const shop1SessionIds = await client.get(
+          'shopify_sessions_shop1.myshopify.com',
+        );
+        expect(shop1SessionIds).toBeNull();
+
+        const shop2SessionIds = await client.get(
+          'shopify_sessions_shop2.myshopify.com',
+        );
+        expect(shop2SessionIds).toBeNull();
+      });
+
+      it('migrates previous data to migrateAddShopKeyToTrackSessionsByShop', async () => {
+        storage = new RedisSessionStorage(dbURL);
+        await storage.ready;
+
+        const shop1SessionIds = await client.get(
+          'shopify_sessions_shop1.myshopify.com',
+        );
+        expect(shop1SessionIds).toBeDefined();
+        const shop1SessionIdsArray = JSON.parse(shop1SessionIds as string);
+        expect(shop1SessionIdsArray).toContain('shopify_sessions_abcde-12345');
+        expect(shop1SessionIdsArray).toContain('shopify_sessions_abcde-67890');
+
+        const shop2SessionIds = await client.get(
+          'shopify_sessions_shop2.myshopify.com',
+        );
+        expect(shop2SessionIds).toBeDefined();
+        const shop2SessionIdsArray = JSON.parse(shop2SessionIds as string);
+        expect(shop2SessionIdsArray).toContain('shopify_sessions_vwxyz-12345');
+        expect(shop2SessionIdsArray).toContain('shopify_sessions_vwxyz-67890');
+      });
+
+      it('manipulates migrateAddShopKeyToTrackSessionsByShop data structures correctly', async () => {
+        storage = new RedisSessionStorage(dbURL);
+        await storage.ready;
+
+        await storage.deleteSession('abcde-12345');
+        const shop1SessionIds = await client.get(
+          'shopify_sessions_shop1.myshopify.com',
+        );
+        expect(shop1SessionIds).toBeDefined();
+        const shop1SessionIdsArray = JSON.parse(shop1SessionIds as string);
+        expect(shop1SessionIdsArray).not.toContain(
+          'shopify_sessions_abcde-12345',
+        );
+        expect(shop1SessionIdsArray).toContain('shopify_sessions_abcde-67890');
+        const shop1Sessions = await storage.findSessionsByShop(
+          'shop1.myshopify.com',
+        );
+        expect(shop1Sessions).toHaveLength(1);
+        expect(shop1Sessions[0].id).toBe('abcde-67890');
+
+        const newSession = new Session({
+          id: 'vwxyz-abcde',
+          shop: 'shop2.myshopify.com',
+          state: 'state',
+          isOnline: false,
+          scope: ['test_scope2'].toString(),
+          accessToken: 'vwxyz-abcde-678',
+        });
+        await storage.storeSession(newSession);
+        const shop2SessionIds = await client.get(
+          'shopify_sessions_shop2.myshopify.com',
+        );
+        expect(shop2SessionIds).toBeDefined();
+        const shop2SessionIdsArray = JSON.parse(shop2SessionIds as string);
+        expect(shop2SessionIdsArray).toContain('shopify_sessions_vwxyz-12345');
+        expect(shop2SessionIdsArray).toContain('shopify_sessions_vwxyz-67890');
+        expect(shop2SessionIdsArray).toContain('shopify_sessions_vwxyz-abcde');
+        const shop2Sessions = await storage.findSessionsByShop(
+          'shop2.myshopify.com',
+        );
+        expect(shop2Sessions).toHaveLength(3);
+      });
     });
 
-    it('initially satisfies pre-migrateAddShopKeyToTrackSessionsByShop conditions', async () => {
-      const shop1SessionIds = await client.get(
-        'shopify_sessions_shop1.myshopify.com',
-      );
-      expect(shop1SessionIds).toBeNull();
+    it(`one-time initialisation like migrations and table creations are run only once`, async () => {
+      const storageClone1 = new RedisSessionStorage(dbURL);
+      await storageClone1.ready;
 
-      const shop2SessionIds = await client.get(
-        'shopify_sessions_shop2.myshopify.com',
-      );
-      expect(shop2SessionIds).toBeNull();
+      const storageClone2 = new RedisSessionStorage(dbURL);
+      await storageClone2.ready;
+
+      storageClone1.disconnect();
+      storageClone2.disconnect();
     });
 
-    it('migrates previous data to migrateAddShopKeyToTrackSessionsByShop', async () => {
-      storage = new RedisSessionStorage(dbURL);
+    it(`reconnects after a timeout`, async () => {
+      const storage = new RedisSessionStorage(dbURL);
       await storage.ready;
 
-      const shop1SessionIds = await client.get(
-        'shopify_sessions_shop1.myshopify.com',
-      );
-      expect(shop1SessionIds).toBeDefined();
-      const shop1SessionIdsArray = JSON.parse(shop1SessionIds as string);
-      expect(shop1SessionIdsArray).toContain('shopify_sessions_abcde-12345');
-      expect(shop1SessionIdsArray).toContain('shopify_sessions_abcde-67890');
-
-      const shop2SessionIds = await client.get(
-        'shopify_sessions_shop2.myshopify.com',
-      );
-      expect(shop2SessionIds).toBeDefined();
-      const shop2SessionIdsArray = JSON.parse(shop2SessionIds as string);
-      expect(shop2SessionIdsArray).toContain('shopify_sessions_vwxyz-12345');
-      expect(shop2SessionIdsArray).toContain('shopify_sessions_vwxyz-67890');
-    });
-
-    it('manipulates migrateAddShopKeyToTrackSessionsByShop data structures correctly', async () => {
-      storage = new RedisSessionStorage(dbURL);
-      await storage.ready;
-
-      await storage.deleteSession('abcde-12345');
-      const shop1SessionIds = await client.get(
-        'shopify_sessions_shop1.myshopify.com',
-      );
-      expect(shop1SessionIds).toBeDefined();
-      const shop1SessionIdsArray = JSON.parse(shop1SessionIds as string);
-      expect(shop1SessionIdsArray).not.toContain(
-        'shopify_sessions_abcde-12345',
-      );
-      expect(shop1SessionIdsArray).toContain('shopify_sessions_abcde-67890');
-      const shop1Sessions = await storage.findSessionsByShop(
-        'shop1.myshopify.com',
-      );
-      expect(shop1Sessions).toHaveLength(1);
-      expect(shop1Sessions[0].id).toBe('abcde-67890');
-
-      const newSession = new Session({
-        id: 'vwxyz-abcde',
-        shop: 'shop2.myshopify.com',
+      const sessionId = 'timeout_connection_test';
+      const session = new Session({
+        id: sessionId,
+        shop: 'shop1.myshopify.com',
         state: 'state',
         isOnline: false,
-        scope: ['test_scope2'].toString(),
-        accessToken: 'vwxyz-abcde-678',
+        scope: ['test_scope'].toString(),
+        accessToken: 'abcde-12345-123',
       });
-      await storage.storeSession(newSession);
-      const shop2SessionIds = await client.get(
-        'shopify_sessions_shop2.myshopify.com',
-      );
-      expect(shop2SessionIds).toBeDefined();
-      const shop2SessionIdsArray = JSON.parse(shop2SessionIds as string);
-      expect(shop2SessionIdsArray).toContain('shopify_sessions_vwxyz-12345');
-      expect(shop2SessionIdsArray).toContain('shopify_sessions_vwxyz-67890');
-      expect(shop2SessionIdsArray).toContain('shopify_sessions_vwxyz-abcde');
-      const shop2Sessions = await storage.findSessionsByShop(
-        'shop2.myshopify.com',
-      );
-      expect(shop2Sessions).toHaveLength(3);
+
+      await storage.storeSession(session);
+
+      // Wait for the redis client to disconnect
+      await wait(2500);
+
+      const storedSession = await storage.loadSession(sessionId);
+      expect(storedSession).toBeDefined();
+      expect(storedSession?.id).toBe(sessionId);
+
+      await storage.disconnect();
+    });
+
+    it(`can successfully connect with a url string instead of a URL object`, async () => {
+      const storage = new RedisSessionStorage(dbURL.toString());
+      await storage.ready;
+      const session = new Session({
+        id: '456',
+        shop: 'test-shop.myshopify.com',
+        state: 'test-state',
+        isOnline: false,
+        scope: 'fake_scope',
+      });
+
+      expect(await storage.storeSession(session)).toBeTruthy();
+      await storage.disconnect();
     });
   });
 
-  it(`one-time initialisation like migrations and table creations are run only once`, async () => {
-    const storageClone1 = new RedisSessionStorage(dbURL);
-    await storageClone1.ready;
-
-    const storageClone2 = new RedisSessionStorage(dbURL);
-    await storageClone2.ready;
-
-    storageClone1.disconnect();
-    storageClone2.disconnect();
-  });
-
-  it(`reconnects after a timeout`, async () => {
-    const storage = new RedisSessionStorage(dbURL);
-    await storage.ready;
-
-    const sessionId = 'timeout_connection_test';
-    const session = new Session({
-      id: sessionId,
-      shop: 'shop1.myshopify.com',
-      state: 'state',
-      isOnline: false,
-      scope: ['test_scope'].toString(),
-      accessToken: 'abcde-12345-123',
-    });
-
-    await storage.storeSession(session);
-
-    // Wait for the redis client to disconnect
-    await wait(2500);
-
-    const storedSession = await storage.loadSession(sessionId);
-    expect(storedSession).toBeDefined();
-    expect(storedSession?.id).toBe(sessionId);
-
-    await storage.disconnect();
-  });
-
-  it(`can successfully connect with a url string instead of a URL object`, async () => {
-    const storage = new RedisSessionStorage(dbURL.toString());
-    await storage.ready;
+  describe('using a redis client', () => {
     const session = new Session({
       id: '456',
       shop: 'test-shop.myshopify.com',
@@ -207,8 +227,76 @@ describe('RedisSessionStorage', () => {
       scope: 'fake_scope',
     });
 
-    expect(await storage.storeSession(session)).toBeTruthy();
-    await storage.disconnect();
+    describe('without connecting', () => {
+      let client: RedisClient;
+
+      beforeEach(async () => {
+        client = createClient({url: dbURL.toString()});
+      });
+
+      it('throws when passing in non-Shopify options', async () => {
+        expect(
+          () => new RedisSessionStorage(client, {url: dbURL.toString()}),
+        ).toThrow(Error);
+      });
+
+      it('can connect', async () => {
+        const storage = new RedisSessionStorage(client);
+
+        await storage.ready;
+        const session = new Session({
+          id: '456',
+          shop: 'test-shop.myshopify.com',
+          state: 'test-state',
+          isOnline: false,
+          scope: 'fake_scope',
+        });
+
+        expect(await storage.storeSession(session)).toBeTruthy();
+        await client.disconnect();
+      });
+    });
+
+    describe('with an existing connection', () => {
+      let client: RedisClient;
+
+      beforeEach(async () => {
+        client = createClient({url: dbURL.toString()});
+        client.on('error', () => {});
+        client.on('connect', () => {});
+        client.on('reconnecting', () => {});
+        client.on('ready', () => {});
+        await client.connect();
+      });
+
+      afterEach(async () => {
+        await client.disconnect();
+      });
+
+      it('can connect', async () => {
+        const storage = new RedisSessionStorage(client);
+
+        await storage.ready;
+
+        expect(await storage.storeSession(session)).toBeTruthy();
+      });
+
+      it('can override Shopify options', async () => {
+        const storage = new RedisSessionStorage(client, {
+          migratorOptions: {
+            migrationDBIdentifier: 'migrations_override',
+          },
+          sessionKeyPrefix: 'shopify_sessions_override',
+        });
+
+        await storage.ready;
+
+        const expectedKey = `shopify_sessions_override_${session.id}`;
+        expect(await client.keys(expectedKey)).toHaveLength(0);
+        expect(await storage.storeSession(session)).toBeTruthy();
+        expect(await client.keys(expectedKey)).toHaveLength(1);
+      });
+    });
   });
 });
 

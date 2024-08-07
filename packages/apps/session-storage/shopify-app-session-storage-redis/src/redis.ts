@@ -1,4 +1,4 @@
-import {RedisClientOptions} from 'redis';
+import {RedisClientOptions, createClient} from 'redis';
 import {Session} from '@shopify/shopify-api';
 import {
   SessionStorage,
@@ -10,11 +10,22 @@ import {migrationList} from './migrations';
 import {RedisConnection} from './redis-connection';
 import {RedisSessionStorageMigrator} from './redis-migrator';
 
-export interface RedisSessionStorageOptions extends RedisClientOptions {
-  sessionKeyPrefix: string;
-  onError?: (...args: any[]) => void;
-  migratorOptions?: SessionStorageMigratorOptions;
+type RedisClient = ReturnType<typeof createClient>;
+
+/* eslint-disable @shopify/typescript/prefer-pascal-case-enums */
+enum ShopifyStorageOption {
+  sessionKeyPrefix = 'sessionKeyPrefix',
+  migratorOptions = 'migratorOptions',
+  onError = 'onError',
 }
+/* eslint-enable @shopify/typescript/prefer-pascal-case-enums */
+
+export interface RedisSessionStorageOptions extends RedisClientOptions {
+  [ShopifyStorageOption.sessionKeyPrefix]: string;
+  [ShopifyStorageOption.migratorOptions]?: SessionStorageMigratorOptions;
+  [ShopifyStorageOption.onError]?: (...args: any[]) => void;
+}
+
 const defaultRedisSessionStorageOptions: RedisSessionStorageOptions = {
   sessionKeyPrefix: 'shopify_sessions',
   migratorOptions: {
@@ -47,13 +58,27 @@ export class RedisSessionStorage implements SessionStorage {
   private migrator: SessionStorageMigrator;
 
   constructor(
-    dbUrl: URL | string,
+    urlOrClient: URL | string | RedisClient,
     opts: Partial<RedisSessionStorageOptions> = {},
   ) {
-    this.options = {...defaultRedisSessionStorageOptions, ...opts};
-    this.internalInit = this.init(
-      typeof dbUrl === 'string' ? dbUrl : dbUrl.toString(),
+    const allowedClientKeys = Object.keys(ShopifyStorageOption);
+    const disallowedClientKeys = Object.keys(opts).filter(
+      (key) => !allowedClientKeys.includes(key),
     );
+
+    if (
+      typeof urlOrClient !== 'string' &&
+      !(urlOrClient instanceof URL) &&
+      disallowedClientKeys.length > 0
+    ) {
+      throw new Error(
+        'Passing a RedisClient instance is not supported with options. Set the options when creating the client ' +
+          'instead.',
+      );
+    }
+
+    this.options = {...defaultRedisSessionStorageOptions, ...opts};
+    this.internalInit = this.init(urlOrClient);
     this.migrator = new RedisSessionStorageMigrator(
       this.client,
       this.options.migratorOptions,
@@ -156,9 +181,9 @@ export class RedisSessionStorage implements SessionStorage {
     }
   }
 
-  private async init(dbUrl: string) {
+  private async init(urlOrClient: URL | string | RedisClient) {
     this.client = new RedisConnection(
-      dbUrl,
+      urlOrClient,
       this.options,
       this.options.sessionKeyPrefix,
     );
