@@ -1,5 +1,11 @@
 # Changelog
 
+## 11.3.0
+
+### Minor Changes
+
+- e9b4f22: fixes/webhook-typesafety
+
 ## 11.2.0
 
 ### Minor Changes
