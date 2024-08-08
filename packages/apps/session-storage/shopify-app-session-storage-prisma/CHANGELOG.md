@@ -1,5 +1,11 @@
 # @shopify/shopify-app-session-storage-prisma
 
+## 5.1.1
+
+### Patch Changes
+
+- 760cb0e: Updating prisma dependencies
+
 ## 5.1.0
 
 ### Minor Changes
