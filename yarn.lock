@@ -4250,10 +4250,10 @@
     pkg-dir "^5.0.0"
     pluralize "^8.0.0"
 
-"@shopify/generate-docs@^0.16.2":
-  version "0.16.2"
-  resolved "https://registry.yarnpkg.com/@shopify/generate-docs/-/generate-docs-0.16.2.tgz#4e88ffbf9c38255decb67aa53fe4eba40c0500ae"
-  integrity sha512-eD3rKvXFPAZgovtX6pWlnNbFVtbS5NeGx7u8atACzAgrN0TOxRdkVxB+vSB/ap89SHcoU2fYXlRO2g4YYL473w==
+"@shopify/generate-docs@^0.16.3":
+  version "0.16.3"
+  resolved "https://registry.yarnpkg.com/@shopify/generate-docs/-/generate-docs-0.16.3.tgz#65ccb10fde526f1a88e6dd44cc8f93dafe600914"
+  integrity sha512-JebkdZ1u0oF3iKDaejrT3nn/tI0Q2az81h/GSbM/viTQ6Qs4IPxOJr8coPmcGBelMjbT5/zZE03N5YYJl/YlOA==
   dependencies:
     "@types/react" "^18.0.21"
     globby "^11.1.0"
@@ -12188,9 +12188,9 @@ ts-api-utils@^1.3.0:
   integrity sha512-UQMIo7pb8WRomKR1/+MFVLTroIvDVtMX3K6OUir8ynLyzB8Jeriont2bTAtmNPa1ekAgN7YPDyf6V+ygrdU+eQ==
 
 ts-jest@^29.1.2, ts-jest@^29.1.3:
-  version "29.2.3"
-  resolved "https://registry.yarnpkg.com/ts-jest/-/ts-jest-29.2.3.tgz#3d226ac36b8b820151a38f164414f9f6b412131f"
-  integrity sha512-yCcfVdiBFngVz9/keHin9EnsrQtQtEu3nRykNy9RVp+FiPFFbPJ3Sg6Qg4+TkmH0vMP5qsTKgXSsk80HRwvdgQ==
+  version "29.2.4"
+  resolved "https://registry.yarnpkg.com/ts-jest/-/ts-jest-29.2.4.tgz#38ccf487407d7a63054a72689f6f99b075e296e5"
+  integrity sha512-3d6tgDyhCI29HlpwIq87sNuI+3Q6GLTTCeYRHCs7vDz+/3GCMwEtV9jezLyl4ZtnBgx00I7hm8PCP8cTksMGrw==
   dependencies:
     bs-logger "0.x"
     ejs "^3.1.10"
