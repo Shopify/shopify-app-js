@@ -411,7 +411,6 @@ describe('GraphQL Client', () => {
           fetchMock.mockResolvedValue(mockedSuccessResponse);
 
           const response = await client.request(operation, {variables});
-          console.log(response, 'RESPONSE IN TEST');
           expect(response).toHaveProperty('headers', new Headers(headers));
         });
 

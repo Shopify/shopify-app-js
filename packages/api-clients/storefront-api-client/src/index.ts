@@ -1,5 +1,5 @@
 export {createStorefrontApiClient} from './storefront-api-client';
-export {
+export type {
   StorefrontQueries,
   StorefrontMutations,
   StorefrontOperations,
