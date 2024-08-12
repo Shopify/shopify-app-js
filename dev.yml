@@ -5,7 +5,7 @@ type: node
 up:
   - node:
       version: v18.19.0
-      package_manager: pnpm@8.15.6
+      package_manager: pnpm@9.7.0
       packages:
         - .
 env:

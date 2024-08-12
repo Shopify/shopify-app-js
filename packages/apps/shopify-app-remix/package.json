@@ -96,8 +96,8 @@
     "semver": "^7.6.2"
   },
   "peerDependencies": {
-    "@remix-run/react": "*",
     "@remix-run/node": "*",
+    "@remix-run/react": "*",
     "@shopify/polaris": "*",
     "react": "*"
   },
