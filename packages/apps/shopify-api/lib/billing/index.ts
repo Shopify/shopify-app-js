@@ -7,7 +7,7 @@ import {cancel} from './cancel';
 import {subscriptions} from './subscriptions';
 import {ShopifyBilling} from './types';
 
-export {ShopifyBilling} from './types';
+export type {ShopifyBilling} from './types';
 
 export function shopifyBilling<Future extends FutureFlagOptions>(
   config: ConfigInterface,
