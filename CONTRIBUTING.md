@@ -9,6 +9,9 @@ We welcome your contributions to the project. There are a few steps to take when
 - Update the docs for any API changes.
 - Submit a pull request.
 
+> [!NOTE]
+> If you're contributing changes to optimize or refactor existing code, you must also provide data proving that the changes have a positive performance impact.
+
 ## Bug Reporting
 
 Shopify App Express package for Node uses GitHub issue tracking to manage bugs, please open an issue there.
@@ -17,23 +20,6 @@ Shopify App Express package for Node uses GitHub issue tracking to manage bugs, 
 
 You can open a new issue on the GitHub issues and describe the feature you would like to see.
 
-## Developing the package
+## Developing the packages
 
-Requirements:
-
-- [Node](https://nodejs.org/en/) v14 or above
-- [Yarn](https://yarnpkg.com/) v1.22 or above
-
-You can set up your development environment by running the following:
-
-```shell
-git clone git@github.com:Shopify/shopify-app-js.git # get the code
-cd shopify-app-js                                   # change into the source directory
-yarn install                                        # install dependencies
-yarn build                                          # build package
-```
-
-Helpful commands
-
-- `yarn lint` will run linting to make sure your code is of high standard
-- `yarn test` will run testing to ensure your code is covered by test cases
+For instructions on how to set up for developing in this repo, please see the [instructions in the README](./README.md#developing-in-this-repo).
