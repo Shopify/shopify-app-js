@@ -16,8 +16,9 @@ const webApiEnvironment: E2eTestEnvironment = {
   domain: `http://localhost:${webApiAppPort}`,
   dummyServerPort,
   process: spawn(
-    'yarn',
+    'pnpm',
     [
+      'run',
       'wrangler',
       'dev',
       '-c',

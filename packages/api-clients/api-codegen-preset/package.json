@@ -34,14 +34,15 @@
   },
   "scripts": {
     "lint": "eslint . --ext .js,.ts",
-    "build": "yarn tsc -p ./tsconfig.build.json && yarn run rollup",
+    "build": "pnpm run tsc -p ./tsconfig.build.json && pnpm run rollup",
+    "tsc": "tsc",
     "test": "jest",
-    "test:ci": "yarn test",
+    "test:ci": "pnpm run test",
     "rollup": "rollup -c --bundleConfigAsCjs",
     "clean": "rimraf dist/*",
     "changeset": "changeset",
     "version": "changeset version",
-    "release": "yarn build && changeset publish"
+    "release": "pnpm run build && changeset publish"
   },
   "jest": {
     "setupFilesAfterEnv": [
@@ -75,6 +76,7 @@
     "graphql": "^16.9.0"
   },
   "devDependencies": {
+    "@graphql-codegen/plugin-helpers": "^5.0.4",
     "regenerator-runtime": "^0.14.1"
   }
 }

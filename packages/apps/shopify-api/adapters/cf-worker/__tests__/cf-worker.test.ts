@@ -15,8 +15,9 @@ const workerEnvironment: E2eTestEnvironment = {
   domain: `http://localhost:${cfWorkerAppPort}`,
   dummyServerPort,
   process: spawn(
-    'yarn',
+    'pnpm',
     [
+      'run',
       'wrangler',
       'dev',
       '-c',

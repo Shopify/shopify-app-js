@@ -12,7 +12,7 @@ const nodeEnvironment: E2eTestEnvironment = {
   name: 'NodeJS',
   domain: `http://localhost:${nodeAppPort}`,
   dummyServerPort,
-  process: spawn('yarn', ['node', 'bundle/test-node-app.mjs'], {
+  process: spawn('pnpm', ['run', 'node', 'bundle/test-node-app.mjs'], {
     env: {
       ...process.env, // eslint-disable-line no-process-env
       PORT: nodeAppPort,

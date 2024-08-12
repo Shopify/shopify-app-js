@@ -1,0 +1,4 @@
+packages:
+  - 'packages/api-clients/*'
+  - 'packages/apps/*'
+  - 'packages/apps/session-storage/*'

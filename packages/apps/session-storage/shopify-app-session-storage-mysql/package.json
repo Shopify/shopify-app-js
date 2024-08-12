@@ -17,14 +17,15 @@
   "types": "./dist/ts/mysql.d.ts",
   "scripts": {
     "lint": "eslint . --ext .js,.ts",
-    "build": "yarn run rollup && yarn tsc -p ./tsconfig.build.json",
+    "build": "pnpm run rollup && pnpm run tsc -p ./tsconfig.build.json",
+    "tsc": "tsc",
     "test": "jest",
-    "test:ci": "yarn test",
+    "test:ci": "pnpm run test",
     "rollup": "rollup -c rollup.config.js --bundleConfigAsCjs",
     "clean": "rimraf .rollup.cache dist",
     "changeset": "changeset",
     "version": "changeset version",
-    "release": "yarn build && changeset publish"
+    "release": "pnpm run build && changeset publish"
   },
   "publishConfig": {
     "access": "public"

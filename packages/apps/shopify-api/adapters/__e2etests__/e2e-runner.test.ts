@@ -14,14 +14,18 @@ export function runTests(env: E2eTestEnvironment) {
     domain: `http://localhost:${env.dummyServerPort}`,
     dummyServerPort: 'not actually used',
 
-    process: spawn('yarn', ['node', 'bundle/test-dummy-shopify-server.mjs'], {
-      env: {
-        ...process.env, // eslint-disable-line no-process-env
-        HTTP_SERVER_PORT: env.dummyServerPort,
+    process: spawn(
+      'pnpm',
+      ['run', 'node', 'bundle/test-dummy-shopify-server.mjs'],
+      {
+        env: {
+          ...process.env, // eslint-disable-line no-process-env
+          HTTP_SERVER_PORT: env.dummyServerPort,
+        },
+        detached: true,
+        // stdio: 'inherit',
       },
-      detached: true,
-      // stdio: 'inherit',
-    }),
+    ),
     testable: false,
     ready: false,
   };
