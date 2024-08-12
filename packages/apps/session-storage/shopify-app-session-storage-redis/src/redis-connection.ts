@@ -8,11 +8,11 @@ export class RedisConnection implements DBConnection {
   private client: RedisClient;
 
   constructor(
-    dbUrl: string | URL | RedisClient,
+    urlOrClient: string | URL | RedisClient,
     options: RedisClientOptions,
     keyPrefix: string,
   ) {
-    this.init(dbUrl, options);
+    this.init(urlOrClient, options);
     this.sessionStorageIdentifier = keyPrefix;
   }
 
