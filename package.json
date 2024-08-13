@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "license": "UNLICENSED",
   "private": true,
-  "packageManager": "yarn@1.22.21",
+  "packageManager": "pnpm@9.7.0",
   "scripts": {
     "build": "turbo build",
     "test": "turbo run test",
@@ -34,6 +34,7 @@
     "@shopify/prettier-config": "^1.1.2",
     "@shopify/typescript-configs": "^5.1.0",
     "@types/jest": "^29.5.12",
+    "@types/node": "^20.14.12",
     "@types/supertest": "^6.0.2",
     "eslint": "^8.57.0",
     "eslint-plugin-jest": "^28.8.0",
@@ -58,13 +59,7 @@
   "resolutions": {
     "jest": "^29.7.0",
     "jest-circus": "^29.7.0",
+    "node-fetch": "^2.6.7",
     "ts-jest": "^29.1.2"
-  },
-  "workspaces": [
-    "packages/api-clients/*",
-    "packages/apps/shopify-api",
-    "packages/apps/shopify-app-remix",
-    "packages/apps/shopify-app-express",
-    "packages/apps/session-storage/*"
-  ]
+  }
 }

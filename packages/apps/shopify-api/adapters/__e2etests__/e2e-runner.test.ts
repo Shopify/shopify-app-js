@@ -6,7 +6,7 @@ import {TestConfig, E2eTestEnvironment} from './test_config_types';
 import {runEnvironments, shutdownEnvironments} from './test_environments';
 import {testSuite} from './test_suite';
 
-export {E2eTestEnvironment} from './test_config_types';
+export type {E2eTestEnvironment} from './test_config_types';
 
 export function runTests(env: E2eTestEnvironment) {
   const dummyShopifyServerEnvironment = {
@@ -14,13 +14,13 @@ export function runTests(env: E2eTestEnvironment) {
     domain: `http://localhost:${env.dummyServerPort}`,
     dummyServerPort: 'not actually used',
 
-    process: spawn('yarn', ['node', 'bundle/test-dummy-shopify-server.mjs'], {
+    process: spawn('pnpm', ['node', 'bundle/test-dummy-shopify-server.mjs'], {
       env: {
         ...process.env, // eslint-disable-line no-process-env
         HTTP_SERVER_PORT: env.dummyServerPort,
       },
       detached: true,
-      // stdio: 'inherit',
+      stdio: process.env.SHOPIFY_E2E_TEST_DEBUG ? 'inherit' : undefined, // eslint-disable-line no-process-env
     }),
     testable: false,
     ready: false,
