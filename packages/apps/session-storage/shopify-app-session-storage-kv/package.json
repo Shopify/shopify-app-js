@@ -17,15 +17,15 @@
   "types": "./dist/ts/kv.d.ts",
   "scripts": {
     "lint": "eslint . --ext .js,.ts",
-    "build": "pnpm run rollup && pnpm run tsc -p ./tsconfig.build.json",
+    "build": "pnpm rollup && pnpm tsc -p ./tsconfig.build.json",
     "tsc": "tsc",
     "test": "jest",
-    "test:ci": "pnpm run test",
+    "test:ci": "pnpm test",
     "rollup": "rollup -c rollup.config.js --bundleConfigAsCjs",
     "clean": "rimraf .rollup.cache dist",
     "changeset": "changeset",
     "version": "changeset version",
-    "release": "pnpm run build && changeset publish"
+    "release": "pnpm build && changeset publish"
   },
   "publishConfig": {
     "access": "public"

@@ -25,13 +25,13 @@ jobs:
         run: pnpm install
 
       - name: Build
-        run: pnpm run build
+        run: pnpm build
 
       - name: Version
-        run: pnpm run changeset version --snapshot experimental
+        run: pnpm changeset version --snapshot experimental
 
       - name: Publish to NPM
-        run: pnpm run changeset publish --tag experimental
+        run: pnpm changeset publish --tag experimental
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}

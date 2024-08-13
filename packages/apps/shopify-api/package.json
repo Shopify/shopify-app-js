@@ -33,19 +33,19 @@
   },
   "prettier": "@shopify/prettier-config",
   "scripts": {
-    "test:all": "pnpm run pretest:adapters && jest && pnpm run posttest:adapters",
-    "test:ci": "pnpm run test && pnpm run test:rest_resources && pnpm run test:adapters",
+    "test:all": "pnpm pretest:adapters && jest && pnpm posttest:adapters",
+    "test:ci": "pnpm test && pnpm test:rest_resources && pnpm test:adapters",
     "test": "jest --selectProjects library",
-    "pretest:adapters": "pnpm run rollup -c adapters/__e2etests__/rollup.test-apps.config.js",
+    "pretest:adapters": "pnpm rollup -c adapters/__e2etests__/rollup.test-apps.config.js",
     "test:adapters": "jest --selectProjects adapters:mock adapters:node adapters:cf-worker adapters:web-api",
     "test:rest_resources": "jest --selectProjects rest_resources",
     "lint": "jest --selectProjects lint",
     "test:dev": "jest --selectProjects library lint",
-    "build": "pnpm run rollup -c rollup.config.js && pnpm run tsc -p ./tsconfig.build.json",
+    "build": "pnpm rollup -c rollup.config.js && pnpm tsc -p ./tsconfig.build.json",
     "tsc": "tsc",
     "rollup": "rollup --bundleConfigAsCjs",
     "clean": "rimraf .rollup.cache dist bundle",
-    "release": "pnpm run build && changeset publish"
+    "release": "pnpm build && changeset publish"
   },
   "publishConfig": {
     "access": "public"
