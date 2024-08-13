@@ -1,4 +1,4 @@
-import type {Headers} from './types';
+import type { Headers } from './types';
 
 /**
  * Canonicalizes a header name by capitalizing each segment and ensuring consistent hyphenation.
@@ -7,14 +7,13 @@ import type {Headers} from './types';
  * @returns The canonicalized header name.
  */
 export function canonicalizeHeaderName(hdr: string): string {
-  return hdr
-    .split('-')
-    .map(
-      (segment) =>
-        segment.slice(0, 1).toLocaleUpperCase() +
-        segment.slice(1).toLocaleLowerCase(),
-    )
-    .join('-');
+  return hdr.replace(
+    /(^|-)(\w+)/g,
+    (_fullMatch, start, letters) =>
+      start +
+      letters.slice(0, 1).toUpperCase() +
+      letters.slice(1).toLowerCase(),
+  );
 }
 
 /**
@@ -25,27 +24,20 @@ export function canonicalizeHeaderName(hdr: string): string {
  * @returns An array of header values associated with the canonicalized header name.
  */
 export function getHeaders(
-  headers: Headers | Record<string, string | string[]> | undefined,
+  headers: Headers | undefined,
   needle_: string,
 ): string[] {
-  if (!headers) return [];
-
-  const needle = canonicalizeHeaderName(needle_);
   const result: string[] = [];
-
-  for (const key in headers) {
-    if (Object.prototype.hasOwnProperty.call(headers, key)) {
-      if (canonicalizeHeaderName(key) === needle) {
-        const values = headers[key];
-        if (Array.isArray(values)) {
-          result.push(...values);
-        } else if (typeof values === 'string') {
-          result.push(values);
-        }
-      }
+  if (!headers) return result;
+  const needle = canonicalizeHeaderName(needle_);
+  for (const [key, values] of Object.entries(headers)) {
+    if (canonicalizeHeaderName(key) !== needle) continue;
+    if (Array.isArray(values)) {
+      result.push(...values);
+    } else {
+      result.push(values);
     }
   }
-
   return result;
 }
 
@@ -57,23 +49,11 @@ export function getHeaders(
  * @returns The first value associated with the canonicalized header name, or undefined if not found.
  */
 export function getHeader(
-  headers: Headers | Record<string, string | string[]> | undefined,
+  headers: Headers | undefined,
   needle: string,
 ): string | undefined {
   if (!headers) return undefined;
-
-  const needleCanonical = canonicalizeHeaderName(needle);
-
-  for (const key in headers) {
-    if (Object.prototype.hasOwnProperty.call(headers, key)) {
-      if (canonicalizeHeaderName(key) === needleCanonical) {
-        const values = headers[key];
-        return Array.isArray(values) ? values[0] : values;
-      }
-    }
-  }
-
-  return undefined;
+  return getHeaders(headers, needle)?.[0];
 }
 
 /**
@@ -84,12 +64,12 @@ export function getHeader(
  * @param value - The value to assign to the header.
  */
 export function setHeader(
-  headers: Headers | Record<string, string | string[]>,
+  headers: Headers,
   key: string,
   value: string,
 ): void {
-  const canonicalKey = canonicalizeHeaderName(key);
-  headers[canonicalKey] = [value];
+  canonicalizeHeaders(headers);
+  headers[canonicalizeHeaderName(key)] = [value];
 }
 
 /**
@@ -100,20 +80,20 @@ export function setHeader(
  * @param value - The value to add.
  */
 export function addHeader(
-  headers: Headers | Record<string, string | string[]>,
+  headers: Headers,
   key: string,
   value: string,
 ): void {
-  const canonicalKey = canonicalizeHeaderName(key);
-  const existingValue = headers[canonicalKey];
-
-  if (Array.isArray(existingValue)) {
-    existingValue.push(value);
-  } else if (typeof existingValue === 'string') {
-    headers[canonicalKey] = [existingValue, value];
-  } else {
-    headers[canonicalKey] = [value];
+  canonicalizeHeaders(headers);
+  const canonKey = canonicalizeHeaderName(key);
+  let list = headers[canonKey];
+  if (!list) {
+    list = [];
+  } else if (!Array.isArray(list)) {
+    list = [list];
   }
+  headers[canonKey] = list;
+  list.push(value);
 }
 
 /**
@@ -123,47 +103,29 @@ export function addHeader(
  * @returns The canonicalized value as a string.
  */
 function canonicalizeValue(value: unknown): string {
-  if (typeof value === 'number') {
-    return value.toString();
-  }
-  return String(value);
+  return typeof value === 'number' ? value.toString() : String(value);
 }
 
 /**
  * Canonicalizes all headers in the headers object by ensuring consistent header names and values.
  *
  * @param hdr - The headers object to canonicalize.
- * @returns A new headers object with canonicalized header names and values.
+ * @returns The headers object with canonicalized header names and values.
  */
-export function canonicalizeHeaders(
-  hdr: Headers | Record<string, string | string[]>,
-): Headers | Record<string, string | string[]> {
-  const normalizedHeaders: Headers | Record<string, string | string[]> = {};
-
-  for (const key in hdr) {
-    if (Object.prototype.hasOwnProperty.call(hdr, key)) {
-      const canonKey = canonicalizeHeaderName(key);
-      const canonValues = [hdr[key]].flat().map(canonicalizeValue);
-
-      if (normalizedHeaders[canonKey]) {
-        if (Array.isArray(normalizedHeaders[canonKey])) {
-          (normalizedHeaders[canonKey] as string[]).push(
-            ...(canonValues as string[]),
-          );
-        } else {
-          normalizedHeaders[canonKey] = [
-            normalizedHeaders[canonKey] as string,
-            ...canonValues,
-          ];
-        }
-      } else {
-        normalizedHeaders[canonKey] =
-          canonValues.length > 1 ? canonValues : canonValues[0];
-      }
+export function canonicalizeHeaders(hdr: Headers): Headers {
+  for (const [key, values] of Object.entries(hdr)) {
+    const canonKey = canonicalizeHeaderName(key);
+    if (!hdr[canonKey]) hdr[canonKey] = [];
+    if (!Array.isArray(hdr[canonKey])) {
+      hdr[canonKey] = [canonicalizeValue(hdr[canonKey])];
     }
+    if (key === canonKey) continue;
+    delete hdr[key];
+    (hdr[canonKey] as string[]).push(
+      ...[values].flat().map((value) => canonicalizeValue(value)),
+    );
   }
-
-  return normalizedHeaders;
+  return hdr;
 }
 
 /**
@@ -172,10 +134,8 @@ export function canonicalizeHeaders(
  * @param headers - The headers object.
  * @param needle - The header name to remove.
  */
-export function removeHeader(
-  headers: Headers | Record<string, string | string[]>,
-  needle: string,
-): void {
+export function removeHeader(headers: Headers, needle: string): void {
+  canonicalizeHeaders(headers);
   const canonKey = canonicalizeHeaderName(needle);
   delete headers[canonKey];
 }
@@ -187,13 +147,13 @@ export function removeHeader(
  * @returns An array of tuples where each tuple contains a header name and its corresponding value.
  */
 export function flatHeaders(
-  headers: Headers | Record<string, string | string[]> | undefined | null,
+  headers: Headers | undefined | null,
 ): [string, string][] {
   if (!headers) return [];
 
   return Object.entries(headers).flatMap(([header, values]) =>
     Array.isArray(values)
-      ? values.map((value) => [header, value] as [string, string])
-      : [[header, values] as [string, string]],
+      ? values.map((value): [string, string] => [header, value])
+      : [[header, values as string]],
   );
 }
