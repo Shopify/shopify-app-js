@@ -92,9 +92,14 @@ pnpm build
 pnpm pack
 
 cd <app folder>
+
+# Install local package with pnpm
 pnpm add <path to shopify-app-js>/packages/<package>/<path to .tar.gz file>
+# OR use npm instead
+npm add <path to shopify-app-js>/packages/<package>/<path to .tar.gz file>
+
 shopify app dev
 ```
 
-> [!TIP]
-> If you need to make changes after that, you can repeat the above steps to update the local package.
+> [!CAUTION]
+> We don't recommend using yarn to install the local package, because yarn caches the tar file, so it only works the first time.
