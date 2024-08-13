@@ -14,9 +14,9 @@ const config: Config = {
       testEnvironment: 'jsdom',
       testPathIgnorePatterns: ['src/server'],
       transform: {
-        '\\.js$': ['babel-jest', {configFile: './babel.config.jest.js'}],
+        '^.+\\.(js|jsx)$': ['babel-jest', {configFile: './babel.config.js'}],
       },
-      transformIgnorePatterns: [`node_modules/(?!${esModules})`],
+      transformIgnorePatterns: [`node_modules/.pnpm/(?!${esModules})`],
     },
     {
       displayName: 'shopify-app-remix-server-node',

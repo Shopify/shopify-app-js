@@ -194,7 +194,7 @@ npm run graphql-codegen
 ```
 
 ```sh
-pnpm run graphql-codegen
+pnpm graphql-codegen
 ```
 
 > [!NOTE]

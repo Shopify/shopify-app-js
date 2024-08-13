@@ -36,7 +36,7 @@ To install this package, you can run this on your terminal:
 
 ```bash
 # You can use your preferred Node package manager
-yarn add @shopify/shopify-api
+pnpm add @shopify/shopify-api
 ```
 
 **Note**: throughout these docs, we'll provide some examples of how this library may be used in an app using the [Express.js](https://expressjs.com/) framework for simplicity, but you can use it with any framework you prefer, as mentioned before.

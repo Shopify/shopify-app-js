@@ -5,7 +5,7 @@ type: node
 up:
   - node:
       version: v18.19.0
-      yarn: 1.22.21
+      package_manager: pnpm@9.7.0
       packages:
         - .
 env:
@@ -13,4 +13,4 @@ env:
 
 commands:
   server:
-    run: yarn dev
+    run: pnpm dev

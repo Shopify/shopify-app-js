@@ -350,7 +350,7 @@
             {
               "title": "pnpm",
               "language": "sh",
-              "code": "pnpm run graphql-codegen\n"
+              "code": "pnpm graphql-codegen\n"
             }
           ]
         }
