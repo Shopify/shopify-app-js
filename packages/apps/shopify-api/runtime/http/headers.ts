@@ -129,7 +129,7 @@ export function canonicalizeHeaders(hdr: Headers): Headers {
 }
 
 /**
- * Removes a header from the headers object by canonicalizing the header name.
+ * Removes a header from the headers object.
  *
  * @param headers - The headers object.
  * @param needle - The header name to remove.
@@ -142,10 +142,26 @@ export function removeHeader(headers: Headers, needle: string): void {
 
 /**
  * Converts a headers object into an array of tuples, where each tuple represents a header name and value.
- *
- * @param headers - The headers object or undefined/null.
- * @returns An array of tuples where each tuple contains a header name and its corresponding value.
+ * 
+ * @param {Object|string[][]} headers - The headers object or undefined/null.
+ * @returns {string[][]} An array of tuples where each tuple contains a header name and its corresponding value.
+ * 
+ * @example
+ * // Example headers object
+ * const headers = {
+ *   'Set-Cookie': 'a=b',
+ *   'Set-Cookie': 'x=y'
+ * };
+ * 
+ * // Converted to an array of tuples
+ * const result = convertHeadersToTuples(headers);
+ * console.log(result);
+ * // Output: [
+ * //   ["Set-Cookie", "a=b"],
+ * //   ["Set-Cookie", "x=y"]
+ * // ]
  */
+
 export function flatHeaders(
   headers: Headers | undefined | null,
 ): [string, string][] {
