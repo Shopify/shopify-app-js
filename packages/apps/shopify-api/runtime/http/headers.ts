@@ -129,7 +129,7 @@ export function canonicalizeHeaders(hdr: Headers): Headers {
 }
 
 /**
- * Removes a header from the headers object by canonicalizing the header name.
+ * Removes a header from the headers object.
  *
  * @param headers - The headers object.
  * @param needle - The header name to remove.
