@@ -4,7 +4,7 @@ import type {BasicParams} from '../../../types';
 import {redirectToInstallPage} from '../helpers/redirect-to-install-page';
 import {AdminApiContext} from '../../../clients';
 
-import {fetchScopeInformation} from './client/fetch-scopes-information';
+import {fetchScopeDetail} from './client/fetch-scopes-details';
 
 export function requestScopesFactory(
   params: BasicParams,
@@ -14,7 +14,7 @@ export function requestScopesFactory(
   return async function requestScopes(scopes: string[]) {
     const {logger} = params;
 
-    logger.debug('Request optional scopes: ', {
+    logger.debug('Requesting optional scopes: ', {
       shop: session.shop,
       ...{scopes},
     });
@@ -26,8 +26,8 @@ export function requestScopesFactory(
   };
 
   async function alreadyGranted(scopes: string[], admin: AdminApiContext) {
-    const scopesInformation = await fetchScopeInformation(admin);
-    const grantedScopes = scopesInformation.app.installation.accessScopes.map(
+    const scopesDetail = await fetchScopeDetail(admin);
+    const grantedScopes = scopesDetail.app.installation.accessScopes.map(
       (scope) => scope.handle,
     );
     return new AuthScopes(grantedScopes).has(scopes);

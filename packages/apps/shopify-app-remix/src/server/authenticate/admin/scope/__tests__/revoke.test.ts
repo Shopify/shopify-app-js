@@ -31,9 +31,9 @@ it('returns scopes information', async () => {
 
   // THEN
   expect(result).not.toBeUndefined();
-  expect(result.granted.required).toEqual(['read_orders']);
-  expect(result.granted.optional).toEqual(['write_customers']);
-  expect(result.declared.required).toEqual(['write_orders', 'read_reports']);
+  expect(result.detail.granted).toEqual(['read_orders', 'write_customers']);
+  expect(result.detail.required).toEqual(['read_orders', 'read_reports']);
+  expect(result.detail.optional).toEqual(['write_customers']);
 });
 
 it('returns error if the list of scopes is empty', async () => {

@@ -2,10 +2,15 @@ export const WITH_GRANTED_AND_DECLARED = buildGraphqlResponseContent({
   app: {
     requestedAccessScopes: [
       {
-        handle: 'write_orders',
+        handle: 'read_orders',
       },
       {
         handle: 'read_reports',
+      },
+    ],
+    optionalAccessScopes: [
+      {
+        handle: 'write_customers',
       },
     ],
     installation: {
