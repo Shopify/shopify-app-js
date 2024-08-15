@@ -195,7 +195,7 @@ type EmbeddedTypedAdminContext<
   ? NonEmbeddedAdminContext<Config, Resources>
   : EmbeddedAdminContext<Config, Resources>;
 
-interface ScopesContext {
+export interface ScopesContext {
   /**
    * Methods to manage optional scopes for the store that made the request.
    */

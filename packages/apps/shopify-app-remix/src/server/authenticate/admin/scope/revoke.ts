@@ -4,8 +4,8 @@ import {AdminApiContext} from '../../../clients';
 import type {BasicParams} from '../../../types';
 
 import {revokeScopes} from './client/revoke-scopes';
-import {fetchScopeInformation} from './client/fetch-scopes-information';
-import {mapFetchScopeInformation} from './query';
+import {fetchScopeDetail} from './client/fetch-scopes-details';
+import {mapFetchScopeDetail} from './query';
 
 export function revokeScopesFactory(
   params: BasicParams,
@@ -37,8 +37,10 @@ export function revokeScopesFactory(
       });
     }
 
-    const scopesInfo = await fetchScopeInformation(admin);
-    return mapFetchScopeInformation(scopesInfo);
+    const scopesDetail = await fetchScopeDetail(admin);
+    return {
+      detail: mapFetchScopeDetail(scopesDetail),
+    };
   };
 }
 

@@ -1,6 +1,6 @@
 import {AdminApiContext} from '../../../../clients';
 
-export interface FetchScopeInformationResponse {
+export interface FetchScopesDetailResponse {
   app: {
     requestedAccessScopes: {
       handle: string;
@@ -16,10 +16,13 @@ export interface FetchScopeInformationResponse {
   };
 }
 
-const FETCH_SCOPE_INFORMATION_QUERY = `#graphql
+const FETCH_SCOPES_DETAIL_QUERY = `#graphql
 query FetchAccessScopes{
   app {
     requestedAccessScopes {
+      handle
+    }
+    optionalAccessScopes {
       handle
     }
     installation {
@@ -30,13 +33,11 @@ query FetchAccessScopes{
   }
 }`;
 
-export async function fetchScopeInformation(
+export async function fetchScopeDetail(
   admin: AdminApiContext,
-): Promise<FetchScopeInformationResponse> {
-  const fetchScopeInformationResult = await admin.graphql(
-    FETCH_SCOPE_INFORMATION_QUERY,
-  );
+): Promise<FetchScopesDetailResponse> {
+  const fetchScopeDetailResult = await admin.graphql(FETCH_SCOPES_DETAIL_QUERY);
 
-  const resultContent = await fetchScopeInformationResult.json();
+  const resultContent = await fetchScopeDetailResult.json();
   return resultContent.data;
 }
