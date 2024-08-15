@@ -5,7 +5,7 @@ import {storefrontClientClass} from './storefront';
 import {graphqlProxy} from './graphql_proxy/graphql_proxy';
 import {ShopifyClients} from './types';
 
-export {ShopifyClients} from './types';
+export type {ShopifyClients} from './types';
 
 export function clientClasses(config: ConfigInterface): ShopifyClients {
   return {

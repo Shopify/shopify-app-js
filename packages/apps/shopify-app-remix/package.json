@@ -43,16 +43,17 @@
   },
   "scripts": {
     "build-docs": "sh docs/build-docs.sh",
-    "validate-docs": "sh ./docs/build-docs.sh isTest && yarn compare-docs",
+    "validate-docs": "sh ./docs/build-docs.sh isTest && pnpm compare-docs",
     "lint": "eslint . --ext .js,.ts",
-    "build": "yarn run rollup && yarn tsc -p ./tsconfig.build.json",
+    "build": "pnpm rollup && pnpm tsc -p ./tsconfig.build.json",
+    "tsc": "tsc",
     "test": "jest",
-    "test:ci": "yarn test",
+    "test:ci": "pnpm test",
     "rollup": "rollup -c rollup.config.js --bundleConfigAsCjs",
     "clean": "rimraf .rollup.cache dist",
     "changeset": "changeset",
     "version": "changeset version",
-    "release": "yarn build && changeset publish"
+    "release": "pnpm build && changeset publish"
   },
   "publishConfig": {
     "access": "public"
@@ -91,12 +92,12 @@
     "@shopify/shopify-api": "^11.2.0",
     "@shopify/shopify-app-session-storage": "^3.0.3",
     "@shopify/storefront-api-client": "^1.0.1",
-    "isbot": "^5.1.13",
+    "isbot": "^5.1.15",
     "semver": "^7.6.2"
   },
   "peerDependencies": {
-    "@remix-run/react": "*",
     "@remix-run/node": "*",
+    "@remix-run/react": "*",
     "@shopify/polaris": "*",
     "react": "*"
   },

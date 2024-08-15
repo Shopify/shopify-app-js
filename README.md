@@ -9,9 +9,12 @@ It is organized as a [monorepo](https://monorepo.tools/), which includes multipl
 
 The packages in this repository can be used to extend Shopify in different ways:
 
-- [API clients](#api-clients)
-- [Apps and middlewares](#apps-and-middlewares)
-- [Session storage](#session-storage)
+- [Shopify API and app tools for JavaScript](#shopify-api-and-app-tools-for-javascript)
+  - [Packages](#packages)
+    - [API clients](#api-clients)
+    - [Apps and middlewares](#apps-and-middlewares)
+    - [Session storage](#session-storage)
+  - [Developing in this repo](#developing-in-this-repo)
 
 ### [API clients](./packages/api-clients)
 
@@ -51,3 +54,52 @@ These packages provide database-specific implementations to manage `@shopify/sho
 | [`@shopify/shopify-app-session-storage-prisma`](./packages/apps/session-storage/shopify-app-session-storage-prisma#readme)         | [![Latest badge](https://img.shields.io/npm/v/@shopify/shopify-app-session-storage-prisma/latest.svg)](https://www.npmjs.com/package/@shopify/shopify-app-session-storage-prisma)         | Prisma implementation of the session storage interface.                               |
 | [`@shopify/shopify-app-session-storage-redis`](./packages/apps/session-storage/shopify-app-session-storage-redis#readme)           | [![Latest badge](https://img.shields.io/npm/v/@shopify/shopify-app-session-storage-redis/latest.svg)](https://www.npmjs.com/package/@shopify/shopify-app-session-storage-redis)           | Redis implementation of the session storage interface.                                |
 | [`@shopify/shopify-app-session-storage-sqlite`](./packages/apps/session-storage/shopify-app-session-storage-sqlite#readme)         | [![Latest badge](https://img.shields.io/npm/v/@shopify/shopify-app-session-storage-sqlite/latest.svg)](https://www.npmjs.com/package/@shopify/shopify-app-session-storage-sqlite)         | SQLite implementation of the session storage interface.                               |
+
+## Developing in this repo
+
+We use `pnpm` to develop this package. To get started, install the dependencies, and build the packages:
+
+```bash
+cd shopify-app-js
+pnpm install
+pnpm build
+```
+
+Once the packages are built, you'll be able to make changes. Note that if you're working on multiple packages, you'll need to build them for changes to affect other packages.
+
+We aim to add test coverage for every change to help prevent regressions. You can run the whole suite by running this at the root:
+
+```bash
+pnpm test
+```
+
+> [!NOTE]
+> Make sure to run `build` before `test` to ensure the internal dependencies are available.
+
+If you're only working on one package, you can build and run tests individually:
+
+```bash
+cd packages/<package>
+pnpm build
+pnpm test
+```
+
+When you're ready to test a package in an app, you can build it, pack it, and install it in e.g. a [Remix app](https://github.com/Shopify/shopify-app-template-remix):
+
+```bash
+cd packages/<package>
+pnpm build
+pnpm pack
+
+cd <app folder>
+
+# Install local package with pnpm
+pnpm add <path to shopify-app-js>/packages/<package>/<path to .tar.gz file>
+# OR use npm instead
+npm add <path to shopify-app-js>/packages/<package>/<path to .tar.gz file>
+
+shopify app dev
+```
+
+> [!CAUTION]
+> We don't recommend using yarn to install the local package, because yarn caches the tar file, so it only works the first time.

@@ -189,7 +189,7 @@ to handle automatic app installations and scope updates, while utilizing
 [token exchange](https://shopify.dev/docs/apps/auth/get-access-tokens/token-exchange) to retrieve an access token for
 authenticated API access.
 
-##### Enabling this new strategy in your app
+#### Enabling this new strategy in your app
 
 > [!NOTE]
 > Newly created Remix apps from the template after February 1st 2024 has this feature enabled by default.
@@ -198,69 +198,24 @@ authenticated API access.
    by configuring your scopes [through the Shopify CLI](https://shopify.dev/docs/apps/tools/cli/configuration).
 2. Enable the future flag `unstable_newEmbeddedAuthStrategy` in your app's server configuration file.
 
-```ts
-// my-app/app/shopify.server.ts
-const shopify = shopifyApp({
-  ...
-  isEmbeddedApp: true,
-  future: {
-    unstable_newEmbeddedAuthStrategy: true,
-  }
-})
-
-```
+   ```ts
+   // my-app/app/shopify.server.ts
+   const shopify = shopifyApp({
+     ...
+     isEmbeddedApp: true,
+     future: {
+       unstable_newEmbeddedAuthStrategy: true,
+     }
+   })
+   ```
 
 3. Enjoy a smoother and faster app installation process.
 
-###### Learn more about:
+##### Learn more about
 
 - [How token exchange works](https://shopify.dev/docs/apps/auth/get-access-tokens/token-exchange)
 - [Using Shopify managed installation](https://shopify.dev/docs/apps/auth/installation#shopify-managed-installation)
 - [Configuring access scopes through the Shopify CLI](https://shopify.dev/docs/apps/tools/cli/configuration)
-
-## Developing in this repo
-
-We use `yarn` to develop this package. To get started, install the dependencies, and build the packages:
-
-```bash
-cd shopify-app-js
-yarn install
-yarn build
-```
-
-Once the packages are built, you'll be able to make changes. Note that if you're working on multiple packages, you'll need to build them for changes to affect other packages.
-
-We aim to add test coverage for every change to help prevent regressions. You can run the whole suite by running this at the root:
-
-```bash
-yarn test
-```
-
-> [!NOTE]
-> Make sure to run `build` before `test` to ensure the internal dependencies are available.
-
-If you're only working on one package, you can build and run tests individually:
-
-```bash
-cd packages/<package>
-yarn build
-yarn test
-```
-
-When you're ready to test a package in an app, you can build it, pack it, and install it in e.g. a [Remix app](https://github.com/Shopify/shopify-app-template-remix):
-
-```bash
-cd packages/<package>
-yarn build
-npm pack
-
-cd <app folder>
-npm add <path to shopify-app-js>/packages/<package>/<path to .tar.gz file>
-shopify app dev
-```
-
-> [!NOTE]
-> We recommend using `npm pack` and `npm install` because `yarn` caches the `.tar.gz` file, so you'd have to manually delete the yarn cache contents every time you install it.
 
 ## Gotchas / Troubleshooting
 

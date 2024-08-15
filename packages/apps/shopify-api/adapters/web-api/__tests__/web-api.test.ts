@@ -16,7 +16,7 @@ const webApiEnvironment: E2eTestEnvironment = {
   domain: `http://localhost:${webApiAppPort}`,
   dummyServerPort,
   process: spawn(
-    'yarn',
+    'pnpm',
     [
       'wrangler',
       'dev',
@@ -30,7 +30,7 @@ const webApiEnvironment: E2eTestEnvironment = {
     ],
     {
       detached: true,
-      // stdio: 'inherit',
+      stdio: process.env.SHOPIFY_E2E_TEST_DEBUG ? 'inherit' : undefined, // eslint-disable-line no-process-env
     },
   ),
   testable: true,

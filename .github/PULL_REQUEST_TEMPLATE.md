@@ -29,6 +29,6 @@ Fixes #0000 <!-- link to issue if one exists -->
 
 ## Checklist
 
-- [ ] I have used `yarn changeset` to create a draft changelog entry (do NOT update the `CHANGELOG.md` files manually)
+- [ ] I have used `pnpm changeset` to create a draft changelog entry (do NOT update the `CHANGELOG.md` files manually)
 - [ ] I have added/updated tests for this change
 - [ ] I have documented new APIs/updated the documentation for modified APIs (for public APIs)

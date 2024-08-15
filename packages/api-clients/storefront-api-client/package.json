@@ -31,14 +31,15 @@
   },
   "scripts": {
     "lint": "eslint . --ext .js,.ts",
-    "build": "yarn tsc -p ./tsconfig.build.json && yarn run rollup",
+    "build": "pnpm tsc -p ./tsconfig.build.json && pnpm rollup",
+    "tsc": "tsc",
     "test": "jest",
-    "test:ci": "yarn test",
+    "test:ci": "pnpm test",
     "rollup": "rollup -c --bundleConfigAsCjs",
     "clean": "rimraf dist/*",
     "changeset": "changeset",
     "version": "changeset version",
-    "release": "yarn build && changeset publish"
+    "release": "pnpm build && changeset publish"
   },
   "jest": {
     "projects": [
