@@ -57,7 +57,9 @@ These packages provide database-specific implementations to manage `@shopify/sho
 
 ## Developing in this repo
 
-We use `pnpm` to develop this package. To get started, install the dependencies, and build the packages:
+We use `pnpm` to develop this package, and we recommend using it for development to ensure your environment is consistent with ours.
+
+To get started, install the dependencies, and build the packages:
 
 ```bash
 cd shopify-app-js
@@ -84,22 +86,15 @@ pnpm build
 pnpm test
 ```
 
-When you're ready to test a package in an app, you can build it, pack it, and install it in e.g. a [Remix app](https://github.com/Shopify/shopify-app-template-remix):
+When you're ready to test a package in an app, you can build it, and install it with a `file:` protocol in e.g. a [Remix app](https://github.com/Shopify/shopify-app-template-remix):
 
 ```bash
 cd packages/<package>
 pnpm build
-pnpm pack
 
 cd <app folder>
-
-# Install local package with pnpm
-pnpm add <path to shopify-app-js>/packages/<package>/<path to .tar.gz file>
-# OR use npm instead
-npm add <path to shopify-app-js>/packages/<package>/<path to .tar.gz file>
-
+pnpm add "file:<path to shopify-app-js>/packages/<package>"
 shopify app dev
 ```
 
-> [!CAUTION]
-> We don't recommend using yarn to install the local package, because yarn caches the tar file, so it only works the first time.
+To update the local package, run `pnpm build` in the package folder, and restart your app.
