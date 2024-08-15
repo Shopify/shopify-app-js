@@ -14,10 +14,7 @@ export function requestScopesFactory(
   return async function requestScopes(scopes: string[]) {
     const {logger} = params;
 
-    logger.debug('Requesting optional scopes: ', {
-      shop: session.shop,
-      ...{scopes},
-    });
+    logger.debug('Requesting optional scopes: ', {shop: session.shop, scopes});
 
     if (scopes.length === 0) return;
     if (await alreadyGranted(scopes, admin)) return;
