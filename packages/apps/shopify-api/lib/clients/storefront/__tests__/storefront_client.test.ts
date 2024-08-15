@@ -1,5 +1,4 @@
 import {FetchError} from 'node-fetch';
-
 import {queueError, queueMockResponse} from '../../../__tests__/test-helper';
 import {testConfig} from '../../../__tests__/test-config';
 import {
@@ -8,6 +7,7 @@ import {
   LogSeverity,
   ShopifyHeader,
 } from '../../../types';
+import isEqual from 'lodash/isEqual';
 import {Session} from '../../../session/session';
 import {JwtPayload} from '../../../session/types';
 import {HttpRequestError, MissingRequiredArgument} from '../../../error';
@@ -31,6 +31,40 @@ const successResponse = {
 };
 const accessToken = 'dangit';
 let session: Session;
+
+function matchesAny(value: any, expected: any): boolean {
+  if (
+    typeof expected === 'object' &&
+    expected !== null &&
+    'asymmetricMatch' in expected
+  ) {
+    return expected.asymmetricMatch(value);
+  }
+  return isEqual(value, expected);
+}
+
+expect.extend({
+  toMatchMadeHttpRequest(received: any, expected: any) {
+    const matchHeaders = (receivedHeaders: any, expectedHeaders: any) => {
+      return Object.entries(expectedHeaders).every(([key, expectedValue]) =>
+        matchesAny(receivedHeaders[key], expectedValue),
+      );
+    };
+
+    const matches =
+      received.method === expected.method &&
+      received.domain === expected.domain &&
+      received.path === expected.path &&
+      isEqual(received.data, expected.data) &&
+      matchHeaders(received.headers, expected.headers);
+
+    return {
+      pass: matches,
+      message: () =>
+        `Expected ${JSON.stringify(received)} to ${matches ? 'not ' : ''}match ${JSON.stringify(expected)}`,
+    };
+  },
+});
 
 describe('Storefront GraphQL client', () => {
   beforeEach(() => {
@@ -57,7 +91,6 @@ describe('Storefront GraphQL client', () => {
 
   it('can return response from specific access token', async () => {
     const shopify = shopifyApi(testConfig());
-
     const client = new shopify.clients.Storefront({session});
 
     queueMockResponse(JSON.stringify(successResponse));
@@ -119,7 +152,6 @@ describe('Storefront GraphQL client', () => {
 
   it('sets specific SF API headers', async () => {
     const shopify = shopifyApi(testConfig());
-
     const client = new shopify.clients.Storefront({session});
 
     queueMockResponse(JSON.stringify(successResponse));
