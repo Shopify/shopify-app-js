@@ -1,4 +1,4 @@
-import type { Headers } from './types';
+import type {Headers} from './types';
 
 /**
  * Canonicalizes a header name by capitalizing each segment and ensuring consistent hyphenation.
@@ -64,11 +64,7 @@ export function getHeader(
  * @param key - The header name to set.
  * @param value - The value to assign to the header.
  */
-export function setHeader(
-  headers: Headers,
-  key: string,
-  value: string,
-): void {
+export function setHeader(headers: Headers, key: string, value: string): void {
   canonicalizeHeaders(headers);
   headers[canonicalizeHeaderName(key)] = [value];
 }
@@ -80,11 +76,7 @@ export function setHeader(
  * @param key - The header name to add to.
  * @param value - The value to add.
  */
-export function addHeader(
-  headers: Headers,
-  key: string,
-  value: string,
-): void {
+export function addHeader(headers: Headers, key: string, value: string): void {
   canonicalizeHeaders(headers);
   const canonKey = canonicalizeHeaderName(key);
   let list = headers[canonKey];
@@ -143,17 +135,17 @@ export function removeHeader(headers: Headers, needle: string): void {
 
 /**
  * Converts a headers object into an array of tuples, where each tuple represents a header name and value.
- * 
+ *
  * @param {Object|string[][]} headers - The headers object or undefined/null.
  * @returns {string[][]} An array of tuples where each tuple contains a header name and its corresponding value.
- * 
+ *
  * @example
  * // Example headers object
  * const headers = {
  *   'Set-Cookie': 'a=b',
  *   'Set-Cookie': 'x=y'
  * };
- * 
+ *
  * // Converted to an array of tuples
  * const result = convertHeadersToTuples(headers);
  * console.log(result);
