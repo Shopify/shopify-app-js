@@ -7,13 +7,14 @@ import type { Headers } from './types';
  * @returns The canonicalized header name.
  */
 export function canonicalizeHeaderName(hdr: string): string {
-  return hdr.replace(
-    /(^|-)(\w+)/g,
-    (_fullMatch, start, letters) =>
-      start +
-      letters.slice(0, 1).toUpperCase() +
-      letters.slice(1).toLowerCase(),
-  );
+  return hdr
+    .split('-')
+    .map(
+      (segment) =>
+        segment.slice(0, 1).toLocaleUpperCase() +
+        segment.slice(1).toLocaleLowerCase(),
+    )
+    .join('-');
 }
 
 /**
