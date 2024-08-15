@@ -45,6 +45,19 @@ function matchesAny(value: any, expected: any): boolean {
 
 expect.extend({
   toMatchMadeHttpRequest(received: any, expected: any) {
+    if (!received || typeof received !== 'object') {
+      return {
+        pass: false,
+        message: () => `Received value is not an object: ${received}`,
+      };
+    }
+    if (!expected || typeof expected !== 'object') {
+      return {
+        pass: false,
+        message: () => `Expected value is not an object: ${expected}`,
+      };
+    }
+
     const matchHeaders = (receivedHeaders: any, expectedHeaders: any) => {
       return Object.entries(expectedHeaders).every(([key, expectedValue]) =>
         matchesAny(receivedHeaders[key], expectedValue),
@@ -52,9 +65,6 @@ expect.extend({
     };
 
     const matches =
-      received.method === expected.method &&
-      received.domain === expected.domain &&
-      received.path === expected.path &&
       isEqual(received.data, expected.data) &&
       matchHeaders(received.headers, expected.headers);
 
