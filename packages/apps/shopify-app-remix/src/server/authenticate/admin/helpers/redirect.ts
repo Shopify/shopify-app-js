@@ -25,7 +25,7 @@ export function redirectFactory(
 
   return function redirect(url, init: RedirectInit) {
     const {searchParams} = new URL(request.url);
-    const parsedUrl = parseURL(url, request.url, shop);
+    const parsedUrl = parseURL(url, config.appUrl, shop);
 
     logger.debug('Redirecting', {url: parsedUrl.toString()});
 
