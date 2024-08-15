@@ -1,4 +1,5 @@
 import {FetchError} from 'node-fetch';
+
 import {queueError, queueMockResponse} from '../../../__tests__/test-helper';
 import {testConfig} from '../../../__tests__/test-config';
 import {
@@ -7,7 +8,6 @@ import {
   LogSeverity,
   ShopifyHeader,
 } from '../../../types';
-import isEqual from 'lodash/isEqual';
 import {Session} from '../../../session/session';
 import {JwtPayload} from '../../../session/types';
 import {HttpRequestError, MissingRequiredArgument} from '../../../error';
@@ -31,50 +31,6 @@ const successResponse = {
 };
 const accessToken = 'dangit';
 let session: Session;
-
-function matchesAny(value: any, expected: any): boolean {
-  if (
-    typeof expected === 'object' &&
-    expected !== null &&
-    'asymmetricMatch' in expected
-  ) {
-    return expected.asymmetricMatch(value);
-  }
-  return isEqual(value, expected);
-}
-
-expect.extend({
-  toMatchMadeHttpRequest(received: any, expected: any) {
-    if (!received || typeof received !== 'object') {
-      return {
-        pass: false,
-        message: () => `Received value is not an object: ${received}`,
-      };
-    }
-    if (!expected || typeof expected !== 'object') {
-      return {
-        pass: false,
-        message: () => `Expected value is not an object: ${expected}`,
-      };
-    }
-
-    const matchHeaders = (receivedHeaders: any, expectedHeaders: any) => {
-      return Object.entries(expectedHeaders).every(([key, expectedValue]) =>
-        matchesAny(receivedHeaders[key], expectedValue),
-      );
-    };
-
-    const matches =
-      isEqual(received.data, expected.data) &&
-      matchHeaders(received.headers, expected.headers);
-
-    return {
-      pass: matches,
-      message: () =>
-        `Expected ${JSON.stringify(received)} to ${matches ? 'not ' : ''}match ${JSON.stringify(expected)}`,
-    };
-  },
-});
 
 describe('Storefront GraphQL client', () => {
   beforeEach(() => {
@@ -101,6 +57,7 @@ describe('Storefront GraphQL client', () => {
 
   it('can return response from specific access token', async () => {
     const shopify = shopifyApi(testConfig());
+
     const client = new shopify.clients.Storefront({session});
 
     queueMockResponse(JSON.stringify(successResponse));
@@ -162,6 +119,7 @@ describe('Storefront GraphQL client', () => {
 
   it('sets specific SF API headers', async () => {
     const shopify = shopifyApi(testConfig());
+
     const client = new shopify.clients.Storefront({session});
 
     queueMockResponse(JSON.stringify(successResponse));
@@ -178,7 +136,7 @@ describe('Storefront GraphQL client', () => {
       headers: {
         [ShopifyHeader.StorefrontPrivateToken]: session.accessToken,
         [ShopifyHeader.StorefrontSDKVariant]: 'storefront-api-client',
-        [ShopifyHeader.StorefrontSDKVersion]: expect.any(String),
+        [ShopifyHeader.StorefrontSDKVersion]: '1.0.1', // Leaving this to test out if Jest is freaking out over nothing
       },
     }).toMatchMadeHttpRequest();
   });
@@ -220,7 +178,7 @@ describe('Storefront GraphQL client', () => {
 
     const client = new shopify.clients.Storefront({
       session,
-      apiVersion: '2020-01' as any as ApiVersion,
+      apiVersion: '2020-01' as ApiVersion,
     });
 
     const fetchError = new FetchError(
