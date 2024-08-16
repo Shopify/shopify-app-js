@@ -3,12 +3,14 @@ import fs from 'fs';
 import {shopifyApiTypes} from '../api-types';
 import {ApiType, ShopifyApiProjectOptions} from '../types';
 
+import {getExpectedSchema} from './helpers';
+
 describe('shopifyApiTypes', () => {
   beforeEach(() => {
     jest.restoreAllMocks();
   });
 
-  describe.each([ApiType.Admin, ApiType.Storefront])(
+  describe.each([ApiType.Admin, ApiType.Storefront, ApiType.Customer])(
     'when API type is %s',
     (apiType) => {
       const type = apiType.toLowerCase();
@@ -18,6 +20,7 @@ describe('shopifyApiTypes', () => {
         const config: ShopifyApiProjectOptions = {
           apiType,
           apiVersion: '2023-10',
+          apiKey: 'test',
           outputDir: './testDir',
           documents: ['./src/**/*.ts'],
           module: 'module',
@@ -27,18 +30,20 @@ describe('shopifyApiTypes', () => {
         const projectConfig = shopifyApiTypes(config);
 
         // THEN
+        const expectedSchema = getExpectedSchema(type, true);
+
         expect(projectConfig).toEqual({
           [`./testDir/${type}-2023-10.schema.json`]: {
-            schema: `https://shopify.dev/${type}-graphql-direct-proxy/2023-10`,
+            schema: expectedSchema,
             plugins: ['introspection'],
             config: {minify: true},
           },
           [`./testDir/${type}.types.d.ts`]: {
-            schema: `https://shopify.dev/${type}-graphql-direct-proxy/2023-10`,
+            schema: expectedSchema,
             plugins: ['typescript'],
           },
           [`./testDir/${type}.generated.d.ts`]: {
-            schema: `https://shopify.dev/${type}-graphql-direct-proxy/2023-10`,
+            schema: expectedSchema,
             documents: config.documents,
             preset: expect.anything(),
             presetConfig: {apiType, module: 'module'},
@@ -51,6 +56,7 @@ describe('shopifyApiTypes', () => {
         const config: ShopifyApiProjectOptions = {
           apiType,
           apiVersion: '2023-10',
+          apiKey: 'test',
           outputDir: './testDir',
           documents: ['./src/**/*.ts'],
           module: 'module',
@@ -79,24 +85,26 @@ describe('shopifyApiTypes', () => {
 
       it('defaults missing configs to URLs when file is not present', () => {
         // GIVEN
-        const config: ShopifyApiProjectOptions = {apiType};
+        const config: ShopifyApiProjectOptions = {apiType, apiKey: 'test'};
 
         // WHEN
         const projectConfig = shopifyApiTypes(config);
 
         // THEN
+        const expectedSchema = getExpectedSchema(type, false);
+
         expect(projectConfig).toEqual({
           [`./${type}.schema.json`]: {
-            schema: `https://shopify.dev/${type}-graphql-direct-proxy`,
+            schema: expectedSchema,
             plugins: ['introspection'],
             config: {minify: true},
           },
           [`./${type}.types.d.ts`]: {
-            schema: `https://shopify.dev/${type}-graphql-direct-proxy`,
+            schema: expectedSchema,
             plugins: ['typescript'],
           },
           [`./${type}.generated.d.ts`]: {
-            schema: `https://shopify.dev/${type}-graphql-direct-proxy`,
+            schema: expectedSchema,
             documents: ['**/*.{ts,tsx}', '!**/node_modules'],
             preset: expect.anything(),
             presetConfig: {apiType, module: undefined},
@@ -106,7 +114,11 @@ describe('shopifyApiTypes', () => {
 
       it('does not use declaration files when setting is false', () => {
         // GIVEN
-        const config: ShopifyApiProjectOptions = {apiType, declarations: false};
+        const config: ShopifyApiProjectOptions = {
+          apiType,
+          apiKey: 'test',
+          declarations: false,
+        };
 
         const spy = jest.spyOn(fs, 'existsSync');
         spy.mockReturnValueOnce(true);
