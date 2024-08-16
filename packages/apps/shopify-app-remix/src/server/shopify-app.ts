@@ -144,9 +144,12 @@ export function deriveApi(appConfig: AppConfigArg): BasicParams['api'] {
   try {
     appUrl = new URL(appConfig.appUrl);
   } catch (error) {
-    throw new ShopifyError(
-      'Invalid appUrl provided. Please provide a valid URL.',
-    );
+    const message =
+      appConfig.appUrl === ''
+        ? `Detected an empty appUrl configuration. If you're deploying your app, make sure to set the necessary environment variables.\n` +
+          `Learn more at https://shopify.dev/docs/apps/launch/deployment/deploy-web-app/deploy-to-hosting-service#step-4-set-up-environment-variables`
+        : `Invalid appUrl configuration '${appConfig.appUrl}', please provide a valid URL.`;
+    throw new ShopifyError(message);
   }
 
   /* eslint-disable no-process-env */
