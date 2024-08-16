@@ -229,8 +229,8 @@ importers:
         specifier: ^0.24.0
         version: 0.24.0
       drizzle-orm:
-        specifier: ^0.30.10
-        version: 0.30.10(@cloudflare/workers-types@4.20240815.0)(@libsql/client@0.9.0(encoding@0.1.13))(@types/better-sqlite3@7.6.11)(@types/pg@8.11.6)(@types/react@18.3.3)(better-sqlite3@11.1.2)(mysql2@3.11.0)(pg@8.12.0)(react@18.3.1)(sqlite3@5.1.7)
+        specifier: ^0.33.0
+        version: 0.33.0(@cloudflare/workers-types@4.20240815.0)(@libsql/client@0.9.0(encoding@0.1.13))(@prisma/client@5.18.0(prisma@5.18.0))(@types/better-sqlite3@7.6.11)(@types/pg@8.11.6)(@types/react@18.3.3)(better-sqlite3@11.1.2)(mysql2@3.11.0)(pg@8.12.0)(prisma@5.18.0)(react@18.3.1)(sqlite3@5.1.7)
       mysql2:
         specifier: ^3.10.1
         version: 3.11.0
@@ -4328,8 +4328,8 @@ packages:
     resolution: {integrity: sha512-rUl5Rf5HLOVkAwHEVEi8xgulIRWzoys0q77RHGCxv5e9v8AI3JGFg7Ug5K1kn513RwNZbuNJMUKOXo0j8kPRgg==}
     hasBin: true
 
-  drizzle-orm@0.30.10:
-    resolution: {integrity: sha512-IRy/QmMWw9lAQHpwbUh1b8fcn27S/a9zMIzqea1WNOxK9/4EB8gIo+FZWLiPXzl2n9ixGSv8BhsLZiOppWEwBw==}
+  drizzle-orm@0.33.0:
+    resolution: {integrity: sha512-SHy72R2Rdkz0LEq0PSG/IdvnT3nGiWuRk+2tXZQ90GVq/XQhpCzu/EFT3V2rox+w8MlkBQxifF8pCStNYnERfA==}
     peerDependencies:
       '@aws-sdk/client-rds-data': '>=3'
       '@cloudflare/workers-types': '>=3'
@@ -4339,6 +4339,8 @@ packages:
       '@op-engineering/op-sqlite': '>=2'
       '@opentelemetry/api': ^1.4.1
       '@planetscale/database': '>=1'
+      '@prisma/client': '*'
+      '@tidbcloud/serverless': '*'
       '@types/better-sqlite3': '*'
       '@types/pg': '*'
       '@types/react': '>=18'
@@ -4353,6 +4355,7 @@ packages:
       mysql2: '>=2'
       pg: '>=8'
       postgres: '>=3'
+      prisma: '*'
       react: '>=18'
       sql.js: '>=1'
       sqlite3: '>=5'
@@ -4372,6 +4375,10 @@ packages:
       '@opentelemetry/api':
         optional: true
       '@planetscale/database':
+        optional: true
+      '@prisma/client':
+        optional: true
+      '@tidbcloud/serverless':
         optional: true
       '@types/better-sqlite3':
         optional: true
@@ -4400,6 +4407,8 @@ packages:
       pg:
         optional: true
       postgres:
+        optional: true
+      prisma:
         optional: true
       react:
         optional: true
@@ -12434,16 +12443,18 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  drizzle-orm@0.30.10(@cloudflare/workers-types@4.20240815.0)(@libsql/client@0.9.0(encoding@0.1.13))(@types/better-sqlite3@7.6.11)(@types/pg@8.11.6)(@types/react@18.3.3)(better-sqlite3@11.1.2)(mysql2@3.11.0)(pg@8.12.0)(react@18.3.1)(sqlite3@5.1.7):
+  drizzle-orm@0.33.0(@cloudflare/workers-types@4.20240815.0)(@libsql/client@0.9.0(encoding@0.1.13))(@prisma/client@5.18.0(prisma@5.18.0))(@types/better-sqlite3@7.6.11)(@types/pg@8.11.6)(@types/react@18.3.3)(better-sqlite3@11.1.2)(mysql2@3.11.0)(pg@8.12.0)(prisma@5.18.0)(react@18.3.1)(sqlite3@5.1.7):
     optionalDependencies:
       '@cloudflare/workers-types': 4.20240815.0
       '@libsql/client': 0.9.0(encoding@0.1.13)
+      '@prisma/client': 5.18.0(prisma@5.18.0)
       '@types/better-sqlite3': 7.6.11
       '@types/pg': 8.11.6
       '@types/react': 18.3.3
       better-sqlite3: 11.1.2
       mysql2: 3.11.0
       pg: 8.12.0
+      prisma: 5.18.0
       react: 18.3.1
       sqlite3: 5.1.7
 
