@@ -1,9 +1,6 @@
 export {setUpValidSession} from './setup-valid-session';
-export {
-  RequestType,
-  ValidRequestOptions,
-  setUpValidRequest,
-} from './setup-valid-request';
+export type {RequestType, ValidRequestOptions} from './setup-valid-request';
+export {setUpValidRequest} from './setup-valid-request';
 export {getJwt} from './get-jwt';
 export {getHmac} from './get-hmac';
 export {getShopValue} from './get-shop-value';
