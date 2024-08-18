@@ -4,7 +4,7 @@ This package exports two helper methods through `@shopify/shopify-api/test-helpe
 
 ## setUpValidSession()
 
-`setUpValidSession()` creates a fake but valid [Session](./session-storage.md#what-data-is-in-a-session-object) to use in testing. The function parameter is used to define the properties of the Session object. All Session properties are optional except `shop`. A companion helper method, `getShop()`, is exported to help generate a fake shop URL for the required `shop` property.
+`setUpValidSession()` creates a fake but valid [Session](./session-storage.md#what-data-is-in-a-session-object) to use in testing. The function parameter is used to define the properties of the Session object. All Session properties are optional except `shop`. A companion helper method, `getShopValue()`, is exported to help generate a fake shop URL for the required `shop` property.
 
 ```ts
 import prisma from '~/db.server';
@@ -14,7 +14,7 @@ import { setUpValidSession } from '@shopify/shopify-api/test-helpers';
 // set up test Session
 const sessionStorage = new PrismaSessionStorage(prisma);
 const session = await setUpValidSession({
-  shop: getShop('test-shop');
+  shop: getShopValue('test-shop');
 });
 await sessionStorage.storeSession(session);
 
@@ -30,7 +30,7 @@ When an end-to-end testing framework runs tests in parallel, and you need a sepa
 ...
 
 const session = await setUpValidSession(sessionStorage, {
-  shop: getShop(`test-shop-${process.env.TEST_PARALLEL_INDEX}`),
+  shop: getShopValue(`test-shop-${process.env.TEST_PARALLEL_INDEX}`),
 });
 
 ...

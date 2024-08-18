@@ -3,7 +3,7 @@ import jwt from 'jsonwebtoken';
 import {JwtPayload} from '../lib';
 
 import {USER_ID} from './const';
-import {getShop} from './get-shop';
+import {getShopValue} from './get-shop-value';
 
 interface TestJwt {
   token: string;
@@ -26,7 +26,7 @@ export function getJwt(
   overrides: Partial<JwtPayload> = {},
 ): TestJwt {
   const date = new Date();
-  const shop: string = getShop(store);
+  const shop: string = getShopValue(store);
   const payload = {
     iss: `${shop}/admin`,
     dest: `https://${shop}`,

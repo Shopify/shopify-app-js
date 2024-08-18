@@ -1,7 +1,7 @@
 import {HashFormat, createSHA256HMAC} from '../runtime/crypto';
 
-import {getShop} from './get-shop';
-import {getHost} from './get-host';
+import {getShopValue} from './get-shop-value';
+import {getHostValue} from './get-host-value';
 import {getJwt} from './get-jwt';
 import {getHmac} from './get-hmac';
 
@@ -98,8 +98,8 @@ function adminRequest(
 
   const url = new URL(request.url);
   url.searchParams.set('embedded', '1');
-  url.searchParams.set('shop', getShop(store));
-  url.searchParams.set('host', getHost(store));
+  url.searchParams.set('shop', getShopValue(store));
+  url.searchParams.set('host', getHostValue(store));
   url.searchParams.set('id_token', token);
   return new Request(url.href, request);
 }
@@ -133,7 +133,7 @@ function extensionRequest(
     body: bodyString,
     headers: {
       'X-Shopify-Hmac-Sha256': getHmac(bodyString, apiSecretKey),
-      'X-Shopify-Shop-Domain': getShop(store),
+      'X-Shopify-Shop-Domain': getShopValue(store),
       ...headers,
     },
   });
@@ -145,7 +145,7 @@ async function publicRequest(
   apiSecretKey: string,
 ) {
   const url = new URL(request.url);
-  url.searchParams.set('shop', getShop(store));
+  url.searchParams.set('shop', getShopValue(store));
   url.searchParams.set('timestamp', String(Math.trunc(Date.now() / 1000) - 1));
 
   const params = Object.fromEntries(url.searchParams.entries());

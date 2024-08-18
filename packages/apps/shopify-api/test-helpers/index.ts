@@ -6,7 +6,7 @@ export {
 } from './setup-valid-request';
 export {getJwt} from './get-jwt';
 export {getHmac} from './get-hmac';
-export {getShop} from './get-shop';
+export {getShopValue} from './get-shop-value';
 export {
   API_KEY,
   API_SECRET_KEY,
