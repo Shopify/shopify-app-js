@@ -1,5 +1,11 @@
 # @shopify/shopify-app-session-storage-redis
 
+## 4.1.0
+
+### Minor Changes
+
+- 25dc094: Added support for passing in a `RedisClient` instance as argument in addition to connection URL.
+
 ## 4.0.3
 
 ## 4.0.2
