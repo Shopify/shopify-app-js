@@ -1,5 +1,7 @@
 import fs from 'fs';
 
+import type {CodegenConfig} from '@graphql-codegen/cli';
+
 import {preset} from './preset';
 import {type ShopifyApiTypesOptions} from './types';
 import {getSchemaData} from './helpers/get-schema-data';
@@ -13,13 +15,11 @@ export const shopifyApiTypes = ({
   documents = ['**/*.{ts,tsx}', '!**/node_modules'],
   declarations = true,
   apiKey,
-}: ShopifyApiTypesOptions) => {
-  const {schema, schemaFile} = getSchemaData(
-    outputDir,
-    apiType,
+}: ShopifyApiTypesOptions): CodegenConfig['generates'] => {
+  const {schema, schemaFile} = getSchemaData(outputDir, apiType, {
     apiVersion,
     apiKey,
-  );
+  });
   const {typesFile, queryTypesFile} = getOutputFiles(apiType, declarations);
 
   const schemaFileExists = fs.existsSync(`${schemaFile}`);
