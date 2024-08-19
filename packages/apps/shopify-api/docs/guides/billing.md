@@ -287,6 +287,11 @@ See the [billing reference](../reference/billing/README.md) for details on how t
 ### Creating a usage record
 When using a usage based billing plan you must create usage records to charge the merchant. The `createUsageRecord` method will create a usage record for a usage billing plan.
 
+The call to `createUsageRecord` will return an `UsageRecord` object, containing the details of the usage record just created successfully, and will throw a `BillingError` if any errors occur.
+
+See the [billing reference](../reference/billing/README.md) for details on how to call the `createUsageRecord` endpoint.
+
+
 | Parameter             | Type                         | Required? | Default Value | Notes                                                                                                                                                            |
 | ---------------------  | ---------------------------- | :-------: | :-----------: | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `session`              | `Session`                    |    Yes    |       -       | The session to be used for this request                                                                                                                                          |
