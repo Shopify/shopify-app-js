@@ -6,7 +6,7 @@
 
 - 8f92455: Test helpers and changes to enable automated unit and e2e testing for @shopify/shopify-app-remix
 
-  See [documentation](./packages/apps/shopify-api/docs/guides/test-helpers.md) for examples on how to use these helper methods.
+  See [documentation](../shopify-api/docs/guides/test-helpers.md) for examples on how to use these helper methods.
 
   ```ts
   import prisma from '~/db.server';
@@ -46,7 +46,6 @@
 
 ### Patch Changes
 
-- cf8cc7c: Updated `isbot` dependencies
 - e944c72: Updated `isbot` dependencies
 - 446ef79: Updates the interface of the Scopes API
 - edb1515: Fixed an issue with relative URLs in the admin context `redirect` helper, which caused it to fail on Safari.

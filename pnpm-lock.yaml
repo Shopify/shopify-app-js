@@ -196,7 +196,7 @@ importers:
   packages/apps/session-storage/shopify-app-session-storage:
     devDependencies:
       '@shopify/shopify-api':
-        specifier: ^11.2.0
+        specifier: ^11.3.0
         version: link:../../shopify-api
 
   packages/apps/session-storage/shopify-app-session-storage-drizzle:
@@ -215,7 +215,7 @@ importers:
         specifier: ^0.9.0
         version: 0.9.0(encoding@0.1.13)
       '@shopify/shopify-app-session-storage-test-utils':
-        specifier: ^3.0.3
+        specifier: ^3.0.4
         version: link:../shopify-app-session-storage-test-utils
       '@types/better-sqlite3':
         specifier: ^7.6.11
@@ -255,7 +255,7 @@ importers:
         version: link:../shopify-app-session-storage
     devDependencies:
       '@shopify/shopify-app-session-storage-test-utils':
-        specifier: ^3.0.3
+        specifier: ^3.0.4
         version: link:../shopify-app-session-storage-test-utils
 
   packages/apps/session-storage/shopify-app-session-storage-kv:
@@ -274,7 +274,7 @@ importers:
         specifier: ^4.20240815.0
         version: 4.20240815.0
       '@shopify/shopify-app-session-storage-test-utils':
-        specifier: ^3.0.3
+        specifier: ^3.0.4
         version: link:../shopify-app-session-storage-test-utils
       miniflare:
         specifier: ^3.20240806.1
@@ -290,7 +290,7 @@ importers:
         version: link:../shopify-app-session-storage
     devDependencies:
       '@shopify/shopify-app-session-storage-test-utils':
-        specifier: ^3.0.3
+        specifier: ^3.0.4
         version: link:../shopify-app-session-storage-test-utils
 
   packages/apps/session-storage/shopify-app-session-storage-mongodb:
@@ -306,7 +306,7 @@ importers:
         version: 6.8.0(socks@2.8.3)
     devDependencies:
       '@shopify/shopify-app-session-storage-test-utils':
-        specifier: ^3.0.3
+        specifier: ^3.0.4
         version: link:../shopify-app-session-storage-test-utils
 
   packages/apps/session-storage/shopify-app-session-storage-mysql:
@@ -322,7 +322,7 @@ importers:
         version: 3.11.0
     devDependencies:
       '@shopify/shopify-app-session-storage-test-utils':
-        specifier: ^3.0.3
+        specifier: ^3.0.4
         version: link:../shopify-app-session-storage-test-utils
 
   packages/apps/session-storage/shopify-app-session-storage-postgresql:
@@ -341,7 +341,7 @@ importers:
         version: 2.6.4
     devDependencies:
       '@shopify/shopify-app-session-storage-test-utils':
-        specifier: ^3.0.3
+        specifier: ^3.0.4
         version: link:../shopify-app-session-storage-test-utils
       '@types/pg':
         specifier: ^8.11.6
@@ -360,7 +360,7 @@ importers:
         specifier: ^5.17.0
         version: 5.18.0(prisma@5.18.0)
       '@shopify/shopify-app-session-storage-test-utils':
-        specifier: ^3.0.3
+        specifier: ^3.0.4
         version: link:../shopify-app-session-storage-test-utils
       prisma:
         specifier: ^5.17.0
@@ -379,7 +379,7 @@ importers:
         version: 4.7.0
     devDependencies:
       '@shopify/shopify-app-session-storage-test-utils':
-        specifier: ^3.0.3
+        specifier: ^3.0.4
         version: link:../shopify-app-session-storage-test-utils
 
   packages/apps/session-storage/shopify-app-session-storage-sqlite:
@@ -395,7 +395,7 @@ importers:
         version: 5.1.7
     devDependencies:
       '@shopify/shopify-app-session-storage-test-utils':
-        specifier: ^3.0.3
+        specifier: ^3.0.4
         version: link:../shopify-app-session-storage-test-utils
       '@types/sqlite3':
         specifier: ^3.1.8
@@ -404,10 +404,10 @@ importers:
   packages/apps/session-storage/shopify-app-session-storage-test-utils:
     devDependencies:
       '@shopify/shopify-api':
-        specifier: ^11.2.0
+        specifier: ^11.3.0
         version: link:../../shopify-api
       '@shopify/shopify-app-session-storage':
-        specifier: ^3.0.3
+        specifier: ^3.0.4
         version: link:../shopify-app-session-storage
 
   packages/apps/shopify-api:
@@ -489,13 +489,13 @@ importers:
   packages/apps/shopify-app-express:
     dependencies:
       '@shopify/shopify-api':
-        specifier: ^11.2.0
+        specifier: ^11.3.0
         version: link:../shopify-api
       '@shopify/shopify-app-session-storage':
-        specifier: ^3.0.3
+        specifier: ^3.0.4
         version: link:../session-storage/shopify-app-session-storage
       '@shopify/shopify-app-session-storage-memory':
-        specifier: ^4.0.3
+        specifier: ^4.0.4
         version: link:../session-storage/shopify-app-session-storage-memory
       cookie-parser:
         specifier: ^1.4.6
@@ -535,10 +535,10 @@ importers:
         specifier: ^1.0.1
         version: link:../../api-clients/admin-api-client
       '@shopify/shopify-api':
-        specifier: ^11.2.0
+        specifier: ^11.3.0
         version: link:../shopify-api
       '@shopify/shopify-app-session-storage':
-        specifier: ^3.0.3
+        specifier: ^3.0.4
         version: link:../session-storage/shopify-app-session-storage
       '@shopify/storefront-api-client':
         specifier: ^1.0.1
@@ -572,7 +572,7 @@ importers:
         specifier: ^5.4.0
         version: 5.4.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@shopify/shopify-app-session-storage-memory':
-        specifier: ^4.0.3
+        specifier: ^4.0.4
         version: link:../session-storage/shopify-app-session-storage-memory
       '@types/jsonwebtoken':
         specifier: ^9.0.5

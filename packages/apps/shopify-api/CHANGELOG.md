@@ -7,7 +7,7 @@
 - e9b4f22: fixes/webhook-typesafety
 - 8f92455: Test helpers and changes to enable automated unit and e2e testing for @shopify/shopify-app-remix
 
-  See [documentation](./packages/apps/shopify-api/docs/guides/test-helpers.md) for examples on how to use these helper methods.
+  See [documentation](./docs/guides/test-helpers.md) for examples on how to use these helper methods.
 
   ```ts
   import prisma from '~/db.server';
@@ -47,7 +47,6 @@
 
 ### Patch Changes
 
-- cf8cc7c: Updated `isbot` dependencies
 - e944c72: Updated `isbot` dependencies
 
 ## 11.2.0
