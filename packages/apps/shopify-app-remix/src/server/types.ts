@@ -417,7 +417,7 @@ export interface ShopifyAppBase<Config extends AppConfigArg> {
   unauthenticated: Unauthenticated<RestResourcesType<Config>>;
 }
 
-interface ShopifyAppLogin {
+export interface ShopifyAppLogin {
   /**
    * Log a merchant in, and redirect them to the app root. Will redirect the merchant to authentication if a shop is
    * present in the URL search parameters or form data.

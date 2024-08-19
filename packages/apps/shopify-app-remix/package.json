@@ -39,6 +39,12 @@
       "require": "./dist/cjs/react/index.js",
       "import": "./dist/esm/react/index.mjs",
       "default": "./dist/cjs/react/index.js"
+    },
+    "./test-helpers": {
+      "types": "./dist/ts/server/test-helpers/index.d.ts",
+      "require": "./dist/cjs/server/test-helpers/index.js",
+      "import": "./dist/esm/server/test-helpers/index.mjs",
+      "default": "./dist/cjs/server/test-helpers/index.js"
     }
   },
   "scripts": {
@@ -81,7 +87,6 @@
     "@types/react": "^18.3.3",
     "@types/semver": "^7.5.8",
     "jest-fetch-mock": "^3.0.3",
-    "jsonwebtoken": "^9.0.2",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-router-dom": "^6.25.0"

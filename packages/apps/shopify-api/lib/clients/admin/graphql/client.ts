@@ -62,6 +62,7 @@ export class GraphqlClient {
       customFetchApi: abstractFetch,
       logger: clientLoggerFactory(config),
       userAgentPrefix: getUserAgent(config),
+      isTesting: config.isTesting,
     });
   }
 
