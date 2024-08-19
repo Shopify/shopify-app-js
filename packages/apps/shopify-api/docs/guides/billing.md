@@ -7,6 +7,24 @@ Some partners might wish to charge merchants for using their app. Shopify makes 
 
 In this guide you'll learn how to use this package for both of those scenarios.
 
+- [Configuring App Billing](#configuring-app-billing)
+  - [Using managed app pricing](#using-managed-app-pricing)
+  - [Using the billing API](#using-the-billing-api)
+    - [Configuring LineItem billing](#configuring-lineitem-billing)
+      - [Configuring a Subscription Plan with a Single LineItem](#configuring-a-subscription-plan-with-a-single-lineitem)
+      - [Configuring a Subscription Plan with Multiple LineItems](#configuring-a-subscription-plan-with-multiple-lineitems)
+      - [Configuring a one-time charge](#configuring-a-one-time-charge)
+      - [Subscription Plan with LineItems](#subscription-plan-with-lineitems)
+      - [Recurring Charge LineItem](#recurring-charge-lineitem)
+      - [Usage Charge LineItem](#usage-charge-lineitem)
+      - [One Time Billing Plans](#one-time-billing-plans)
+    - [Configuring Billing](#configuring-billing)
+      - [Recurring Billing Plans](#recurring-billing-plans)
+      - [Usage Billing Plans](#usage-billing-plans)
+    - [When should the app check for payment?](#when-should-the-app-check-for-payment)
+    - [Canceling a subscription](#canceling-a-subscription)
+    - [Creating a usage record](#creating-a-usage-record)
+
 ## Using managed app pricing
 
 The easiest way to add billing to your app is to follow the [Shopify managed app pricing documentation](https://shopify.dev/docs/apps/launch/billing/managed-pricing). You can set up one or more plans for the app, and Shopify will host a page where merchants can select which plan they want.
