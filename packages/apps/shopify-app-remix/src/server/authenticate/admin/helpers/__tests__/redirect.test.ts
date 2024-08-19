@@ -76,6 +76,28 @@ describe('Redirect helper', () => {
     );
   });
 
+  it('parses shopify admin routes and defaults to _parent for embedded apps', async () => {
+    // GIVEN
+    const shopify = shopifyApp(testConfig({isEmbeddedApp: true}));
+    await setUpValidSession(shopify.sessionStorage);
+
+    const {request} = documentLoadRequest(true);
+    const {redirect} = await shopify.authenticate.admin(request);
+
+    // WHEN
+    const response = await getThrownResponse(
+      async () => redirect('shopify://admin/products'),
+      request,
+    );
+
+    // THEN
+    await assertAppBridgeScript(
+      response,
+      `https://admin.shopify.com/store/${TEST_SHOP_NAME}/products`,
+      '_parent',
+    );
+  });
+
   describe('and the target is _self', () => {
     it('returns a 302 on embedded document loads', async () => {
       // GIVEN
@@ -148,6 +170,24 @@ describe('Redirect helper', () => {
       expect(response.status).toBe(302);
       expect(response.headers.get('location')).toBe(`${APP_URL}/`);
     });
+
+    it('parses shopify admin routes and respects target init', async () => {
+      // GIVEN
+      const shopify = shopifyApp(testConfig());
+      await setUpValidSession(shopify.sessionStorage);
+
+      const {request} = documentLoadRequest(true);
+      const {redirect} = await shopify.authenticate.admin(request);
+
+      // WHEN
+      const response = redirect('shopify://admin/products', {target: '_self'});
+
+      // THEN
+      expect(response.status).toBe(302);
+      expect(response.headers.get('location')).toBe(
+        `https://admin.shopify.com/store/${TEST_SHOP_NAME}/products`,
+      );
+    });
   });
 
   describe('and the target is _parent', () => {
@@ -170,53 +210,6 @@ describe('Redirect helper', () => {
         response,
         `${APP_URL}/?${searchParams}`,
         '_parent',
-      );
-    });
-
-    it('parses shopify admin routes', async () => {
-      // GIVEN
-      const shopify = shopifyApp(testConfig());
-      await setUpValidSession(shopify.sessionStorage);
-
-      const {request} = documentLoadRequest(true);
-      const {redirect} = await shopify.authenticate.admin(request);
-
-      // WHEN
-      const response = await getThrownResponse(
-        async () => redirect('shopify://admin/products/', {target: '_top'}),
-        request,
-      );
-
-      // THEN
-      await assertAppBridgeScript(
-        response,
-        `https://admin.shopify.com/store/${TEST_SHOP_NAME}/products/`,
-        '_top',
-      );
-    });
-
-    it('parses shopify admin routes and removes embedded params, and leaves other params', async () => {
-      // GIVEN
-      const shopify = shopifyApp(testConfig());
-      await setUpValidSession(shopify.sessionStorage);
-
-      const {request, searchParams} = documentLoadRequest(true);
-      const {redirect} = await shopify.authenticate.admin(request);
-
-      // WHEN
-      const response = await getThrownResponse(
-        async () =>
-          redirect(`shopify://admin/products?${searchParams}&extra=param`, {
-            target: '_top',
-          }),
-        request,
-      );
-
-      // THEN
-      await assertAppBridgeScript(
-        response,
-        `https://admin.shopify.com/store/${TEST_SHOP_NAME}/products?extra=param`,
-        '_top',
       );
     });
 
@@ -276,6 +269,55 @@ describe('Redirect helper', () => {
 
       // THEN
       await assertAppBridgeHeaders(response, `${APP_URL}/`);
+    });
+  });
+
+  describe('and the target is _top', () => {
+    it('parses shopify admin routes', async () => {
+      // GIVEN
+      const shopify = shopifyApp(testConfig());
+      await setUpValidSession(shopify.sessionStorage);
+
+      const {request} = documentLoadRequest(true);
+      const {redirect} = await shopify.authenticate.admin(request);
+
+      // WHEN
+      const response = await getThrownResponse(
+        async () => redirect('shopify://admin/products/', {target: '_top'}),
+        request,
+      );
+
+      // THEN
+      await assertAppBridgeScript(
+        response,
+        `https://admin.shopify.com/store/${TEST_SHOP_NAME}/products/`,
+        '_top',
+      );
+    });
+
+    it('parses shopify admin routes and removes embedded params, and leaves other params', async () => {
+      // GIVEN
+      const shopify = shopifyApp(testConfig());
+      await setUpValidSession(shopify.sessionStorage);
+
+      const {request, searchParams} = documentLoadRequest(true);
+      const {redirect} = await shopify.authenticate.admin(request);
+
+      // WHEN
+      const response = await getThrownResponse(
+        async () =>
+          redirect(`shopify://admin/products?${searchParams}&extra=param`, {
+            target: '_top',
+          }),
+        request,
+      );
+
+      // THEN
+      await assertAppBridgeScript(
+        response,
+        `https://admin.shopify.com/store/${TEST_SHOP_NAME}/products?extra=param`,
+        '_top',
+      );
     });
   });
 

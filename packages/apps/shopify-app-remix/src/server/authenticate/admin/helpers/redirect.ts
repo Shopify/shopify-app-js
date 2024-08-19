@@ -16,6 +16,19 @@ export type RedirectFunction = (
   init?: RedirectInit,
 ) => TypedResponse<never>;
 
+interface ParseURLOptions {
+  params: BasicParams;
+  url: string;
+  base: string;
+  shop: string;
+  init: RedirectInit;
+}
+
+interface ParsedURL {
+  url: URL;
+  target: RedirectTarget;
+}
+
 export function redirectFactory(
   params: BasicParams,
   request: Request,
@@ -25,7 +38,13 @@ export function redirectFactory(
 
   return function redirect(url, init: RedirectInit) {
     const {searchParams} = new URL(request.url);
-    const parsedUrl = parseURL(url, config.appUrl, shop);
+    const {url: parsedUrl, target} = parseURL({
+      params,
+      url,
+      base: config.appUrl,
+      shop,
+      init,
+    });
 
     logger.debug('Redirecting', {url: parsedUrl.toString()});
 
@@ -38,7 +57,6 @@ export function redirectFactory(
       });
     }
 
-    const target = (typeof init !== 'number' && init?.target) || '_self';
     if (target === '_self') {
       if (isBounceRequest(request)) {
         throw renderAppBridge(params, request, {
@@ -84,15 +102,31 @@ function isEmbeddedRequest(request: Request) {
   return searchParams.get('embedded') === '1';
 }
 
-function parseURL(url: string, base: string, shop: string) {
+function parseURL({params, base, init, shop, url}: ParseURLOptions): ParsedURL {
+  let target: RedirectTarget | undefined =
+    typeof init !== 'number' && init?.target ? init.target : undefined;
+
   if (isAdminRemotePath(url)) {
+    const {config} = params;
+
     const adminPath = getAdminRemotePath(url);
     const cleanShopName = shop.replace('.myshopify.com', '');
-    return new URL(
-      `https://admin.shopify.com/store/${cleanShopName}${adminPath}`,
-    );
+
+    if (!target) {
+      target = config.isEmbeddedApp ? '_parent' : '_self';
+    }
+
+    return {
+      url: new URL(
+        `https://admin.shopify.com/store/${cleanShopName}${adminPath}`,
+      ),
+      target,
+    };
   } else {
-    return new URL(url, base);
+    return {
+      url: new URL(url, base),
+      target: target ?? '_self',
+    };
   }
 }
 
