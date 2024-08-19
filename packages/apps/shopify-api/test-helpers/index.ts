@@ -1,5 +1,6 @@
 export {setUpValidSession} from './setup-valid-session';
-export type {RequestType, ValidRequestOptions} from './setup-valid-request';
+export {RequestType} from './setup-valid-request';
+export type {ValidRequestOptions} from './setup-valid-request';
 export {setUpValidRequest} from './setup-valid-request';
 export {getJwt} from './get-jwt';
 export {getHmac} from './get-hmac';
