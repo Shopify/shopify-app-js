@@ -7,6 +7,24 @@ Some partners might wish to charge merchants for using their app. Shopify makes 
 
 In this guide you'll learn how to use this package for both of those scenarios.
 
+- [Configuring App Billing](#configuring-app-billing)
+  - [Using managed app pricing](#using-managed-app-pricing)
+  - [Using the billing API](#using-the-billing-api)
+    - [Configuring LineItem billing](#configuring-lineitem-billing)
+      - [Configuring a Subscription Plan with a Single LineItem](#configuring-a-subscription-plan-with-a-single-lineitem)
+      - [Configuring a Subscription Plan with Multiple LineItems](#configuring-a-subscription-plan-with-multiple-lineitems)
+      - [Configuring a one-time charge](#configuring-a-one-time-charge)
+      - [Subscription Plan with LineItems](#subscription-plan-with-lineitems)
+      - [Recurring Charge LineItem](#recurring-charge-lineitem)
+      - [Usage Charge LineItem](#usage-charge-lineitem)
+      - [One Time Billing Plans](#one-time-billing-plans)
+    - [Configuring Billing](#configuring-billing)
+      - [Recurring Billing Plans](#recurring-billing-plans)
+      - [Usage Billing Plans](#usage-billing-plans)
+    - [When should the app check for payment?](#when-should-the-app-check-for-payment)
+    - [Canceling a subscription](#canceling-a-subscription)
+    - [Creating a usage record](#creating-a-usage-record)
+
 ## Using managed app pricing
 
 The easiest way to add billing to your app is to follow the [Shopify managed app pricing documentation](https://shopify.dev/docs/apps/launch/billing/managed-pricing). You can set up one or more plans for the app, and Shopify will host a page where merchants can select which plan they want.
@@ -283,5 +301,23 @@ const canceledSubscription = await shopify.billing.cancel({
 ```
 
 See the [billing reference](../reference/billing/README.md) for details on how to call the `subscriptions` and `cancel` endpoints.
+
+### Creating a usage record
+When using a usage based billing plan you must create usage records to charge the merchant. The `createUsageRecord` method will create a usage record for a usage billing plan.
+
+The call to `createUsageRecord` will return an `UsageRecord` object, containing the details of the usage record just created successfully, and will throw a `BillingError` if any errors occur.
+
+See the [billing reference](../reference/billing/README.md) for details on how to call the `createUsageRecord` endpoint.
+
+
+| Parameter             | Type                         | Required? | Default Value | Notes                                                                                                                                                            |
+| ---------------------  | ---------------------------- | :-------: | :-----------: | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `session`              | `Session`                    |    Yes    |       -       | The session to be used for this request                                                                                                                                          |
+| `description`          | `string`                     |    Yes    |       -       | The description of the usage record.                                                                                                                  |
+| `price.amount`                | `number`                     |    Yes    |       -       | The amount and currency to be charged
+| `price.currency`                | `string`                     |    Yes    |       -       | The amount and currency to be charged                                                                                             |
+|`subscriptionLineItemId`| `string`                     |    No     |       -       | The line item to create the usage record for. If no value is provided a record will be created on the active usage line item                                                                                     |
+| `idempotencyKey`       | `string`                     |    No     |       -       | A unique key that can be passed to the request to prevent duplicate charges                                                                                                                    |
+| `isTest`  | `Boolean` |    No     |       -       | Whether this is a test charge |
 
 [Back to guide index](../../README.md#guides)

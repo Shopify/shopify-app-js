@@ -362,6 +362,11 @@ export interface AppSubscription {
    * The line items for this plan. This will become mandatory in v10.
    */
   lineItems?: ActiveSubscriptionLineItem[];
+
+  /*
+   * The status of the subscription. [ACTIVE, CANCELLED, PENDING, DECLINED, EXPIRED, FROZEN, ACCEPTED]
+   */
+  status: string;
 }
 
 export interface ActiveSubscriptions {
@@ -409,7 +414,7 @@ export interface UsageAppPlan {
   terms: string;
 }
 
-interface Money {
+export interface Money {
   amount: number;
   currencyCode: string;
 }
@@ -460,6 +465,74 @@ export interface OneTimePurchase {
    * The status of the one-time purchase.
    */
   status: string;
+}
+
+export interface BillingCreateUsageRecordParams {
+  /**
+   * The session to use for this request.
+   */
+  session: Session;
+  /**
+   * The description of the usage record.
+   */
+  description: string;
+  /**
+   * The price and currency of the usage record.
+   */
+  price: {
+    /**
+     * The amount to charge for this usage record.
+     */
+    amount: number;
+    /**
+     * The currency code for this usage record.
+     */
+    currencyCode: string;
+  };
+  /**
+   * The subscription line item ID to associate the usage record with.
+   */
+  subscriptionLineItemId?: string;
+  /**
+   * The idempotency key for this request.
+   */
+  idempotencyKey?: string;
+  /**
+   * Whether this is a test charge.
+   * */
+  isTest?: boolean;
+}
+
+export interface UsageRecord {
+  /**
+   * The ID of the usage record.
+   */
+  id: string;
+  /**
+   * The description of the usage record.
+   */
+  description: string;
+  /**
+   * The price and currency of the usage record.
+   */
+  price: {
+    /**
+     * The amount to charge for this usage record.
+     */
+    amount: number;
+    /**
+     * The currency code for this usage record.
+     */
+    currencyCode: string;
+  };
+  /**
+   * The subscription line item associated with the usage record.
+   */
+  plan: ActiveSubscriptionLineItem;
+  /**
+   * The idempotency key for this request.
+   */
+  idempotencyKey?: string;
 }
 
 interface OneTimePurchases {
@@ -520,6 +593,13 @@ export interface CancelResponse {
   };
 }
 
+export interface UsageRecordCreateResponse {
+  appUsageRecordCreate?: {
+    appUsageRecord: UsageRecord;
+    userErrors: string[];
+  };
+}
+
 export type BillingCheck<Future extends FutureFlagOptions> = <
   Params extends BillingCheckParams<Future>,
 >(
@@ -538,9 +618,14 @@ export type BillingSubscriptions = (
   params: BillingSubscriptionParams,
 ) => Promise<ActiveSubscriptions>;
 
+export type BillingCreateUsageRecord = (
+  params: BillingCreateUsageRecordParams,
+) => Promise<UsageRecord>;
+
 export interface ShopifyBilling<Future extends FutureFlagOptions> {
   check: BillingCheck<Future>;
   request: BillingRequest;
   cancel: BillingCancel;
   subscriptions: BillingSubscriptions;
+  createUsageRecord: BillingCreateUsageRecord;
 }
