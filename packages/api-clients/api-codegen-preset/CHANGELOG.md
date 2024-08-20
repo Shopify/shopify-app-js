@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.1.1
+
+### Patch Changes
+
+- 77aa5cc: Improved type safety of generated configurations
+
 ## 1.1.0
 
 ### Minor Changes

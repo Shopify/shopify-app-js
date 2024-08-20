@@ -1,6 +1,7 @@
 import fs from 'fs';
 
 import {pluckConfig} from '@shopify/graphql-codegen';
+import type {IGraphQLProject, SchemaPointer} from 'graphql-config';
 
 import {type ShopifyApiProjectOptions} from './types';
 import {shopifyApiTypes} from './api-types';
@@ -14,18 +15,16 @@ export const shopifyApiProject = ({
   documents = ['**/*.{ts,tsx}', '!node_modules'],
   declarations = true,
   apiKey,
-}: ShopifyApiProjectOptions) => {
-  const {schema, schemaFile} = getSchemaData(
-    outputDir,
-    apiType,
+}: ShopifyApiProjectOptions): IGraphQLProject => {
+  const {schema, schemaFile} = getSchemaData(outputDir, apiType, {
     apiVersion,
     apiKey,
-  );
+  });
 
   const schemaFileExists = fs.existsSync(`${schemaFile}`);
 
   return {
-    schema: schemaFileExists ? schemaFile : schema,
+    schema: schemaFileExists ? schemaFile : (schema as SchemaPointer),
     documents,
     extensions: {
       codegen: {

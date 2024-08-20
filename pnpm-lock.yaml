@@ -9,7 +9,6 @@ overrides:
   jest-circus: ^29.7.0
   node-fetch: ^2.6.7
   ts-jest: ^29.1.3
-  graphql-config: 5.1.0
 
 importers:
 
@@ -164,6 +163,9 @@ importers:
       '@graphql-codegen/plugin-helpers':
         specifier: ^5.0.4
         version: 5.0.4(graphql@16.9.0)
+      graphql-config:
+        specifier: 5.1.0
+        version: 5.1.0(@types/node@22.3.0)(encoding@0.1.13)(graphql@16.9.0)(typescript@5.5.4)
       regenerator-runtime:
         specifier: ^0.14.1
         version: 0.14.1
@@ -2943,29 +2945,29 @@ packages:
     os: [win32]
 
   '@shopify/babel-preset@25.0.0':
-    resolution: {integrity: sha512-2eVmLPGMLEdZ2u93pikVcwAf+XTpzYMtphFwuE1ZwlxBSQZg2H6OWbt/rnS79fAiJUmS7DSUel+ZlBzdSlg6Bg==}
+    resolution: {integrity: sha512-2eVmLPGMLEdZ2u93pikVcwAf+XTpzYMtphFwuE1ZwlxBSQZg2H6OWbt/rnS79fAiJUmS7DSUel+ZlBzdSlg6Bg==, tarball: https://registry.npmjs.org/@shopify/babel-preset/-/babel-preset-25.0.0.tgz}
 
   '@shopify/eslint-plugin@45.0.0':
-    resolution: {integrity: sha512-aRgVkl+EovLk6OC4WzT+C6hgAyta5VReEIdetpe+/bJhVovlqbFjYa3yHGvEM4VuWv8sim7XH2VV3ZsDiwpgvQ==}
+    resolution: {integrity: sha512-aRgVkl+EovLk6OC4WzT+C6hgAyta5VReEIdetpe+/bJhVovlqbFjYa3yHGvEM4VuWv8sim7XH2VV3ZsDiwpgvQ==, tarball: https://registry.npmjs.org/@shopify/eslint-plugin/-/eslint-plugin-45.0.0.tgz}
     peerDependencies:
       eslint: ^8.56.0
 
   '@shopify/generate-docs@0.16.3':
-    resolution: {integrity: sha512-JebkdZ1u0oF3iKDaejrT3nn/tI0Q2az81h/GSbM/viTQ6Qs4IPxOJr8coPmcGBelMjbT5/zZE03N5YYJl/YlOA==}
+    resolution: {integrity: sha512-JebkdZ1u0oF3iKDaejrT3nn/tI0Q2az81h/GSbM/viTQ6Qs4IPxOJr8coPmcGBelMjbT5/zZE03N5YYJl/YlOA==, tarball: https://registry.npmjs.org/@shopify/generate-docs/-/generate-docs-0.16.3.tgz}
     hasBin: true
 
   '@shopify/graphql-codegen@0.1.0':
-    resolution: {integrity: sha512-G3sSesLj7Czt/J2Bj+XlQ8u4pkfQEt32hsjoS3UGZlf1eAiVw0aBBddp+NI5HqBAi0gM/f7GLRAhG3kktPhZmA==}
+    resolution: {integrity: sha512-G3sSesLj7Czt/J2Bj+XlQ8u4pkfQEt32hsjoS3UGZlf1eAiVw0aBBddp+NI5HqBAi0gM/f7GLRAhG3kktPhZmA==, tarball: https://registry.npmjs.org/@shopify/graphql-codegen/-/graphql-codegen-0.1.0.tgz}
     engines: {node: '>=18'}
     peerDependencies:
       graphql: ^0.8.0 || ^0.9.0 || ^0.10.0 || ^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0 || ^16.0.0
 
   '@shopify/network@3.3.0':
-    resolution: {integrity: sha512-Lln7vglzLK9KiYhl9ucQFVM7ArlpUM21xkDriBX8kVrqsoBsi+4vFIjf1wjhNPT0J/zHMjky7jiTnxVfdm+xXw==}
+    resolution: {integrity: sha512-Lln7vglzLK9KiYhl9ucQFVM7ArlpUM21xkDriBX8kVrqsoBsi+4vFIjf1wjhNPT0J/zHMjky7jiTnxVfdm+xXw==, tarball: https://registry.npmjs.org/@shopify/network/-/network-3.3.0.tgz}
     engines: {node: '>=18.12.0'}
 
   '@shopify/polaris-icons@8.11.1':
-    resolution: {integrity: sha512-2HLzvJWMejKIwS5P2bs7k5CAjBKwPnD/iy9ncPzcgqRjmFInBXLtUXFQhPWDw6JwXzb1ZjNQK/ssTctcfz87Sw==}
+    resolution: {integrity: sha512-2HLzvJWMejKIwS5P2bs7k5CAjBKwPnD/iy9ncPzcgqRjmFInBXLtUXFQhPWDw6JwXzb1ZjNQK/ssTctcfz87Sw==, tarball: https://registry.npmjs.org/@shopify/polaris-icons/-/polaris-icons-8.11.1.tgz}
     engines: {node: ^16.17.0 || >=18.12.0}
     peerDependencies:
       react: '*'
@@ -2974,31 +2976,31 @@ packages:
         optional: true
 
   '@shopify/polaris-tokens@8.10.0':
-    resolution: {integrity: sha512-y4PDtRbFKGHwA6Lu7a3L4N9SDP6gZv4tw6u0viumtcXcbF0T2j1xPmyuJZNc9c7vmhNSARCg27NGQFpPgxuaEg==}
+    resolution: {integrity: sha512-y4PDtRbFKGHwA6Lu7a3L4N9SDP6gZv4tw6u0viumtcXcbF0T2j1xPmyuJZNc9c7vmhNSARCg27NGQFpPgxuaEg==, tarball: https://registry.npmjs.org/@shopify/polaris-tokens/-/polaris-tokens-8.10.0.tgz}
     engines: {node: ^16.17.0 || >=18.12.0}
 
   '@shopify/polaris@12.27.0':
-    resolution: {integrity: sha512-Y8yus6iEjcfW2ZtEJtlqxbWeDJqTX3S/MOLH4GWRvU5gFYJQhlaHaETs0+OimbhEpO95mXbY8qB+KnIJaVBHwA==}
+    resolution: {integrity: sha512-Y8yus6iEjcfW2ZtEJtlqxbWeDJqTX3S/MOLH4GWRvU5gFYJQhlaHaETs0+OimbhEpO95mXbY8qB+KnIJaVBHwA==, tarball: https://registry.npmjs.org/@shopify/polaris/-/polaris-12.27.0.tgz}
     engines: {node: ^16.17.0 || >=18.12.0}
     peerDependencies:
       react: ^18.0.0
       react-dom: ^18.0.0
 
   '@shopify/prettier-config@1.1.2':
-    resolution: {integrity: sha512-5ugCL9sPGzmOaZjeRGaWUWhHgAbemrS6z+R7v6gwiD+BiqSeoFhIY+imLpfdFCVpuOGalpHeCv6o3gv++EHs0A==}
+    resolution: {integrity: sha512-5ugCL9sPGzmOaZjeRGaWUWhHgAbemrS6z+R7v6gwiD+BiqSeoFhIY+imLpfdFCVpuOGalpHeCv6o3gv++EHs0A==, tarball: https://registry.npmjs.org/@shopify/prettier-config/-/prettier-config-1.1.2.tgz}
 
   '@shopify/react-testing@5.4.0':
-    resolution: {integrity: sha512-qlu6NUnMK9Mq/1lu6MIvZMSKT/AtXnHGyuu148DMshVF8d7E5+JDtgTVGeKKV8nnjL5cly4K91dyPVt6fHq5yA==}
+    resolution: {integrity: sha512-qlu6NUnMK9Mq/1lu6MIvZMSKT/AtXnHGyuu148DMshVF8d7E5+JDtgTVGeKKV8nnjL5cly4K91dyPVt6fHq5yA==, tarball: https://registry.npmjs.org/@shopify/react-testing/-/react-testing-5.4.0.tgz}
     engines: {node: '>=18.12.0'}
     peerDependencies:
       react: '>=18.0.0 <19.0.0'
       react-dom: '>=16.8.0 <19.0.0'
 
   '@shopify/typescript-configs@5.1.0':
-    resolution: {integrity: sha512-RywGBTR+nQyJLxcrUcihPkHPIG3pIQI6i0YwMrM5rs9nWJ0+9A5HKEcboyGPLH+8V08EXGfFQ6H820O9ajyk4A==}
+    resolution: {integrity: sha512-RywGBTR+nQyJLxcrUcihPkHPIG3pIQI6i0YwMrM5rs9nWJ0+9A5HKEcboyGPLH+8V08EXGfFQ6H820O9ajyk4A==, tarball: https://registry.npmjs.org/@shopify/typescript-configs/-/typescript-configs-5.1.0.tgz}
 
   '@shopify/useful-types@5.3.0':
-    resolution: {integrity: sha512-8BlaedSqR7ssQAhCsa88K+l2eIImSBlTLlnf7/dlqSlMSEqGVUf+O8oPsnyy9Oh3aDMt+rD4Q5JPOo984Cbz7Q==}
+    resolution: {integrity: sha512-8BlaedSqR7ssQAhCsa88K+l2eIImSBlTLlnf7/dlqSlMSEqGVUf+O8oPsnyy9Oh3aDMt+rD4Q5JPOo984Cbz7Q==, tarball: https://registry.npmjs.org/@shopify/useful-types/-/useful-types-5.3.0.tgz}
     engines: {node: '>=18.12.0'}
 
   '@sinclair/typebox@0.27.8':
@@ -7368,9 +7370,9 @@ packages:
     resolution: {integrity: sha512-72RFADWFqKmUb2hmmvNODKL3p9hcB6Gt2DOQMis1SEBaV6a4MH8soBvzg+95CYhCKPFedut2JY9bMfrDl9D23g==}
     engines: {node: '>=14.0'}
 
-  undici@6.19.7:
-    resolution: {integrity: sha512-HR3W/bMGPSr90i8AAp2C4DM3wChFdJPLrWYpIS++LxS8K+W535qftjt+4MyjNYHeWabMj1nvtmLIi7l++iq91A==}
-    engines: {node: '>=18.17'}
+  undici@6.13.0:
+    resolution: {integrity: sha512-Q2rtqmZWrbP8nePMq7mOJIN98M0fYvSgV89vwl/BQRT4mDOeY2GXZngfGpcBBhtky3woM7G24wZV3Q304Bv6cw==}
+    engines: {node: '>=18.0'}
 
   unenv-nightly@1.10.0-1717606461.a117952:
     resolution: {integrity: sha512-u3TfBX02WzbHTpaEfWEKwDijDSFAHcgXkayUZ+MVDrjhLFvgAJzFGTSTmwlEhwWi2exyRQey23ah9wELMM6etg==}
@@ -10569,7 +10571,7 @@ snapshots:
       cookie-signature: 1.2.1
       source-map-support: 0.5.21
       stream-slice: 0.1.2
-      undici: 6.19.7
+      undici: 6.13.0
     optionalDependencies:
       typescript: 5.5.4
 
@@ -16072,7 +16074,7 @@ snapshots:
     dependencies:
       '@fastify/busboy': 2.1.1
 
-  undici@6.19.7: {}
+  undici@6.13.0: {}
 
   unenv-nightly@1.10.0-1717606461.a117952:
     dependencies:

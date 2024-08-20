@@ -5,6 +5,7 @@ export function getExpectedSchema(type: string, versioned: boolean) {
           [`https://app.myshopify.com/services/graphql/introspection/customer?api_client_api_key=test${versioned ? '&api_version=2023-10' : ''}`]:
             {
               method: 'GET',
+              headers: {},
             },
         },
       ]

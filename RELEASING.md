@@ -54,16 +54,20 @@ See the sections below for specific details related to the steps outlined above.
    ```
 
 1. If releasing the `shopify-api` package, update the version string in the `packages/apps/shopify-api/lib/version.ts` file to match the version in the `packages/apps/shopify-api/package.json` file.
+
 1. If releasing the Express package, update the version string in the `packages/apps/shopify-app-express/src/version.ts` file to match the version in the `packages/apps/shopify-app-express/package.json` file.
+
 1. If releasing the Remix package, update the version string in the `packages/apps/shopify-app-remix/src/version.ts` file to match the version in the `packages/apps/shopify-app-remix/package.json` file.
+
+1. Run `pnpm install` to update the lock file
 
 1. If needed, edit/remove any of the comments in the `CHANGELOG.md` files and commit them to the `changeset-release/main` branch.
 
 1. Once the files in the PR reflect the desired release changes, merge the `Packages for release` PR into `main` - this triggers the release.
 
-1. The same `changesets/action` in the `main-release.yml` workflow will call `pnpm release`, which builds the packages and pushes the changed packages to `npmjs.org`.
+The same `changesets/action` in the `main-release.yml` workflow will call `pnpm release`, which builds the packages and pushes the changed packages to `npmjs.org`.
 
-1. After the release, there will no longer be a `Packages for release` PR. `changesets` will re-create it when a branch that contains `changesets`-created changelog files is merged into `main`.
+After the release, there will no longer be a `Packages for release` PR. `changesets` will re-create it when a branch that contains `changesets`-created changelog files is merged into `main`.
 
 ---
 
@@ -108,13 +112,15 @@ For significant API changes that could result in significant refactoring on the 
    2.0.0-rc.1
    ```
 
+1. Run `pnpm install` to update the lock file
+
 1. If needed, edit/remove any of the comments in the changed `CHANGELOG.md` files and commit them to the `changeset-release/release-candidate` branch.
 
 1. Once the files in the PR reflect the desired release changes, merge the `Packages for release-candidate (rc)` PR into `release-candidate` - this triggers the release.
 
-1. The same `changesets/action` in the `release-candidate.yml` workflow will call `pnpm release`, which builds and pushes the release candidates to `npmjs.org`.
+The same `changesets/action` in the `release-candidate.yml` workflow will call `pnpm release`, which builds and pushes the release candidates to `npmjs.org`.
 
-1. After the release, there will no longer be a `Packages for release-candidate (rc)` PR. `changesets` will re-create it when a branch that contains `changesets`-created changelog files is merged into `release-candidate`.
+After the release, there will no longer be a `Packages for release-candidate (rc)` PR. `changesets` will re-create it when a branch that contains `changesets`-created changelog files is merged into `release-candidate`.
 
 ## Merging `release-candidate` into `main` (moving from pre-release to main release)
 
