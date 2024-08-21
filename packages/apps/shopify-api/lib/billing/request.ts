@@ -374,7 +374,7 @@ async function requestSinglePayment({
 function mergeBillingConfigs(
   billingConfig: BillingConfigSubscriptionLineItemPlan,
   overrides: RequestConfigLineItemOverrides,
-) {
+): BillingConfigSubscriptionLineItemPlan {
   const mergedConfig = {...billingConfig, ...overrides};
   const mergedLineItems = [];
 
@@ -383,7 +383,7 @@ function mergeBillingConfigs(
       let found = false;
 
       for (const j of overrides.lineItems) {
-        if (i.interval === j.interval) {
+        if (i.interval === j!.interval) {
           mergedLineItems.push({...i, ...j});
           found = true;
           break;
@@ -398,7 +398,7 @@ function mergeBillingConfigs(
     mergedConfig.lineItems = mergedLineItems;
   }
 
-  return mergedConfig;
+  return mergedConfig as BillingConfigSubscriptionLineItemPlan;
 }
 const RECURRING_PURCHASE_MUTATION = `
   mutation test(

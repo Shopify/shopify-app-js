@@ -214,8 +214,11 @@ export interface BillingConfigSubscriptionLineItemPlan {
   lineItems: (BillingConfigRecurringLineItem | BillingConfigUsageLineItem)[];
 }
 
+type DeepPartial<T> = T extends object
+  ? {[P in keyof T]?: DeepPartial<T[P]>}
+  : T;
 export type RequestConfigLineItemOverrides =
-  Partial<BillingConfigSubscriptionLineItemPlan>;
+  DeepPartial<BillingConfigSubscriptionLineItemPlan>;
 
 interface BillingCheckParamsNew {
   /**
@@ -277,7 +280,16 @@ export type BillingCheckResponse<
         : boolean
       : never;
 
-export type BillingRequestParams = {
+type BillingRequestOverridesType<
+  Future extends FutureFlagOptions = FutureFlagOptions,
+> =
+  FeatureEnabled<Future, 'lineItemBilling'> extends true
+    ? RequestConfigOverrides & RequestConfigLineItemOverrides
+    : RequestConfigOverrides;
+
+export type BillingRequestParams<
+  Future extends FutureFlagOptions = FutureFlagOptions,
+> = {
   /**
    * The session to use for this request.
    */
@@ -298,7 +310,7 @@ export type BillingRequestParams = {
    * Whether to return the full response object.
    */
   returnObject?: boolean;
-} & RequestConfigOverrides;
+} & BillingRequestOverridesType<Future>;
 
 export interface BillingRequestResponseObject {
   /**
