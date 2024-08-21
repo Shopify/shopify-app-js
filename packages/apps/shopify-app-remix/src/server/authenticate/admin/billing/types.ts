@@ -333,6 +333,64 @@ export interface BillingContext<Config extends AppConfigArg> {
    * export default shopify;
    * export const authenticate = shopify.authenticate;
    * ```
+   *
+   * @example
+   * <caption>Overriding plan settings.</caption>
+   * <description>Customize the plan for a merchant when requesting billing. Any fields from the plan can be overridden, as long as the billing interval for line items matches the config.</description>
+   * ```ts
+   * // /app/routes/**\/*.ts
+   * import { LoaderFunctionArgs } from "@remix-run/node";
+   * import { authenticate, MONTHLY_PLAN } from "../shopify.server";
+   *
+   * export const loader = async ({ request }: LoaderFunctionArgs) => {
+   *   const { billing } = await authenticate.admin(request);
+   *   await billing.require({
+   *     plans: [MONTHLY_PLAN],
+   *     onFailure: async () => billing.request({
+   *       plan: MONTHLY_PLAN,
+   *       isTest: true,
+   *       trialDays: 14,
+   *       lineItems: [
+   *         {
+   *           interval: BillingInterval.Every30Days,
+   *           discount: { value: { percentage: 0.1 } },
+   *         },
+   *       ],
+   *     }),
+   *   });
+   *
+   *   // App logic
+   * };
+   * ```
+   * ```ts
+   * // shopify.server.ts
+   * import { shopifyApp, BillingInterval } from "@shopify/shopify-app-remix/server";
+   *
+   * export const MONTHLY_PLAN = 'Monthly subscription';
+   * export const ANNUAL_PLAN = 'Annual subscription';
+   *
+   * const shopify = shopifyApp({
+   *   // ...etc
+   *   billing: {
+   *     [MONTHLY_PLAN]: {
+   *       lineItems: [
+   *         amount: 5,
+   *         currencyCode: 'USD',
+   *         interval: BillingInterval.Every30Days,
+   *       ],
+   *     },
+   *     [ANNUAL_PLAN]: {
+   *       lineItems: [
+   *         amount: 50,
+   *         currencyCode: 'USD',
+   *         interval: BillingInterval.Annual,
+   *       ],
+   *     },
+   *   }
+   * });
+   * export default shopify;
+   * export const authenticate = shopify.authenticate;
+   * ```
    */
   request: (options: RequestBillingOptions<Config>) => Promise<never>;
 
