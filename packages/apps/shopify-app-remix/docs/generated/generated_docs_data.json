@@ -668,7 +668,7 @@
                 "filePath": "src/server/authenticate/admin/billing/types.ts",
                 "syntaxKind": "PropertySignature",
                 "name": "price",
-                "value": "Money",
+                "value": "{ amount: number; currencyCode: string; }",
                 "description": "The price of the app usage record."
               },
               {
@@ -680,7 +680,7 @@
                 "isOptional": true
               }
             ],
-            "value": "export interface CreateUsageRecordOptions {\n  /**\n   * The description of the app usage record.\n   */\n  description: string;\n  /**\n   * The price of the app usage record.\n   */\n  price: Money;\n  /**\n   * Whether to use the test mode. This prevents the credit card from being charged.\n   */\n  isTest: boolean;\n  /*\n   * Defines the usage pricing plan the merchant is subscribed to.\n   */\n  subscriptionLineItemId?: string;\n  /*\n   * A unique key generated to avoid duplicate charges.\n   */\n  idempotencyKey?: string;\n}"
+            "value": "export interface CreateUsageRecordOptions {\n  /**\n   * The description of the app usage record.\n   */\n  description: string;\n  /**\n   * The price of the app usage record.\n   */\n  price: {\n    /**\n     * The amount to charge for this usage record.\n     */\n    amount: number;\n    /**\n     * The currency code for this usage record.\n     */\n    currencyCode: string;\n  };\n  /**\n   * Whether to use the test mode. This prevents the credit card from being charged.\n   */\n  isTest: boolean;\n  /*\n   * Defines the usage pricing plan the merchant is subscribed to.\n   */\n  subscriptionLineItemId?: string;\n  /*\n   * A unique key generated to avoid duplicate charges.\n   */\n  idempotencyKey?: string;\n}"
           },
           "RequestBillingOptions": {
             "filePath": "src/server/authenticate/admin/billing/types.ts",
@@ -1652,7 +1652,7 @@
                 "filePath": "src/server/authenticate/admin/billing/types.ts",
                 "syntaxKind": "PropertySignature",
                 "name": "price",
-                "value": "Money",
+                "value": "{ amount: number; currencyCode: string; }",
                 "description": "The price of the app usage record."
               },
               {
@@ -1664,7 +1664,7 @@
                 "isOptional": true
               }
             ],
-            "value": "export interface CreateUsageRecordOptions {\n  /**\n   * The description of the app usage record.\n   */\n  description: string;\n  /**\n   * The price of the app usage record.\n   */\n  price: Money;\n  /**\n   * Whether to use the test mode. This prevents the credit card from being charged.\n   */\n  isTest: boolean;\n  /*\n   * Defines the usage pricing plan the merchant is subscribed to.\n   */\n  subscriptionLineItemId?: string;\n  /*\n   * A unique key generated to avoid duplicate charges.\n   */\n  idempotencyKey?: string;\n}"
+            "value": "export interface CreateUsageRecordOptions {\n  /**\n   * The description of the app usage record.\n   */\n  description: string;\n  /**\n   * The price of the app usage record.\n   */\n  price: {\n    /**\n     * The amount to charge for this usage record.\n     */\n    amount: number;\n    /**\n     * The currency code for this usage record.\n     */\n    currencyCode: string;\n  };\n  /**\n   * Whether to use the test mode. This prevents the credit card from being charged.\n   */\n  isTest: boolean;\n  /*\n   * Defines the usage pricing plan the merchant is subscribed to.\n   */\n  subscriptionLineItemId?: string;\n  /*\n   * A unique key generated to avoid duplicate charges.\n   */\n  idempotencyKey?: string;\n}"
           },
           "RequestBillingOptions": {
             "filePath": "src/server/authenticate/admin/billing/types.ts",
@@ -4862,7 +4862,7 @@
                 "filePath": "src/server/authenticate/admin/billing/types.ts",
                 "syntaxKind": "PropertySignature",
                 "name": "price",
-                "value": "Money",
+                "value": "{ amount: number; currencyCode: string; }",
                 "description": "The price of the app usage record."
               },
               {
@@ -4874,7 +4874,7 @@
                 "isOptional": true
               }
             ],
-            "value": "export interface CreateUsageRecordOptions {\n  /**\n   * The description of the app usage record.\n   */\n  description: string;\n  /**\n   * The price of the app usage record.\n   */\n  price: Money;\n  /**\n   * Whether to use the test mode. This prevents the credit card from being charged.\n   */\n  isTest: boolean;\n  /*\n   * Defines the usage pricing plan the merchant is subscribed to.\n   */\n  subscriptionLineItemId?: string;\n  /*\n   * A unique key generated to avoid duplicate charges.\n   */\n  idempotencyKey?: string;\n}"
+            "value": "export interface CreateUsageRecordOptions {\n  /**\n   * The description of the app usage record.\n   */\n  description: string;\n  /**\n   * The price of the app usage record.\n   */\n  price: {\n    /**\n     * The amount to charge for this usage record.\n     */\n    amount: number;\n    /**\n     * The currency code for this usage record.\n     */\n    currencyCode: string;\n  };\n  /**\n   * Whether to use the test mode. This prevents the credit card from being charged.\n   */\n  isTest: boolean;\n  /*\n   * Defines the usage pricing plan the merchant is subscribed to.\n   */\n  subscriptionLineItemId?: string;\n  /*\n   * A unique key generated to avoid duplicate charges.\n   */\n  idempotencyKey?: string;\n}"
           },
           "RequestBillingOptions": {
             "filePath": "src/server/authenticate/admin/billing/types.ts",
@@ -6321,14 +6321,6 @@
             ],
             "value": "export interface RegisterWebhooksOptions {\n  /**\n   * The Shopify session used to register webhooks using the Admin API.\n   */\n  session: Session;\n}"
           },
-          "RegisterReturn": {
-            "filePath": "../shopify-api/dist/ts/lib/webhooks/types.d.ts",
-            "syntaxKind": "TypeAliasDeclaration",
-            "name": "RegisterReturn",
-            "value": "Record<string, RegisterResult[]>",
-            "description": "",
-            "members": []
-          },
           "SessionStorageType": {
             "filePath": "src/server/types.ts",
             "syntaxKind": "TypeAliasDeclaration",
@@ -7310,7 +7302,7 @@
                 ]
               }
             ],
-            "value": "interface ShopifyAppLogin {\n  /**\n   * Log a merchant in, and redirect them to the app root. Will redirect the merchant to authentication if a shop is\n   * present in the URL search parameters or form data.\n   *\n   * This function won't be present when the `distribution` config option is set to `AppDistribution.ShopifyAdmin`,\n   * because Admin apps aren't allowed to show a login page.\n   *\n   * @example\n   * <caption>Creating a login page.</caption>\n   * <description>Use `shopify.login` to create a login form, in a route that can handle GET and POST requests.</description>\n   * ```ts\n   * // /app/shopify.server.ts\n   * import { LATEST_API_VERSION, shopifyApp } from \"@shopify/shopify-app-remix/server\";\n   *\n   * const shopify = shopifyApp({\n   *   // ...etc\n   * });\n   * export default shopify;\n   * ```\n   * ```ts\n   * // /app/routes/auth/login.tsx\n   * import shopify from \"../../shopify.server\";\n   *\n   * export async function loader({ request }: LoaderFunctionArgs) {\n   *   const errors = shopify.login(request);\n   *\n   *   return json(errors);\n   * }\n   *\n   * export async function action({ request }: ActionFunctionArgs) {\n   *   const errors = shopify.login(request);\n   *\n   *   return json(errors);\n   * }\n   *\n   * export default function Auth() {\n   *   const actionData = useActionData<typeof action>();\n   *   const [shop, setShop] = useState(\"\");\n   *\n   *   return (\n   *     <Page>\n   *       <Card>\n   *         <Form method=\"post\">\n   *           <FormLayout>\n   *             <Text variant=\"headingMd\" as=\"h2\">\n   *               Login\n   *             </Text>\n   *             <TextField\n   *               type=\"text\"\n   *               name=\"shop\"\n   *               label=\"Shop domain\"\n   *               helpText=\"e.g: my-shop-domain.myshopify.com\"\n   *               value={shop}\n   *               onChange={setShop}\n   *               autoComplete=\"on\"\n   *               error={actionData?.errors.shop}\n   *             />\n   *             <Button submit primary>\n   *               Submit\n   *             </Button>\n   *           </FormLayout>\n   *         </Form>\n   *       </Card>\n   *     </Page>\n   *   );\n   * }\n   * ```\n   */\n  login: Login;\n}"
+            "value": "export interface ShopifyAppLogin {\n  /**\n   * Log a merchant in, and redirect them to the app root. Will redirect the merchant to authentication if a shop is\n   * present in the URL search parameters or form data.\n   *\n   * This function won't be present when the `distribution` config option is set to `AppDistribution.ShopifyAdmin`,\n   * because Admin apps aren't allowed to show a login page.\n   *\n   * @example\n   * <caption>Creating a login page.</caption>\n   * <description>Use `shopify.login` to create a login form, in a route that can handle GET and POST requests.</description>\n   * ```ts\n   * // /app/shopify.server.ts\n   * import { LATEST_API_VERSION, shopifyApp } from \"@shopify/shopify-app-remix/server\";\n   *\n   * const shopify = shopifyApp({\n   *   // ...etc\n   * });\n   * export default shopify;\n   * ```\n   * ```ts\n   * // /app/routes/auth/login.tsx\n   * import shopify from \"../../shopify.server\";\n   *\n   * export async function loader({ request }: LoaderFunctionArgs) {\n   *   const errors = shopify.login(request);\n   *\n   *   return json(errors);\n   * }\n   *\n   * export async function action({ request }: ActionFunctionArgs) {\n   *   const errors = shopify.login(request);\n   *\n   *   return json(errors);\n   * }\n   *\n   * export default function Auth() {\n   *   const actionData = useActionData<typeof action>();\n   *   const [shop, setShop] = useState(\"\");\n   *\n   *   return (\n   *     <Page>\n   *       <Card>\n   *         <Form method=\"post\">\n   *           <FormLayout>\n   *             <Text variant=\"headingMd\" as=\"h2\">\n   *               Login\n   *             </Text>\n   *             <TextField\n   *               type=\"text\"\n   *               name=\"shop\"\n   *               label=\"Shop domain\"\n   *               helpText=\"e.g: my-shop-domain.myshopify.com\"\n   *               value={shop}\n   *               onChange={setShop}\n   *               autoComplete=\"on\"\n   *               error={actionData?.errors.shop}\n   *             />\n   *             <Button submit primary>\n   *               Submit\n   *             </Button>\n   *           </FormLayout>\n   *         </Form>\n   *       </Card>\n   *     </Page>\n   *   );\n   * }\n   * ```\n   */\n  login: Login;\n}"
           },
           "Login": {
             "filePath": "src/server/types.ts",
@@ -7519,6 +7511,14 @@
                 "description": "Does your app render embedded inside the Shopify Admin or on its own.\n\nUnless you have very specific needs, this should be true.",
                 "isOptional": true,
                 "defaultValue": "`true`"
+              },
+              {
+                "filePath": "src/server/config-types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "isTesting",
+                "value": "boolean",
+                "description": "Whether the app is initialised for local testing.",
+                "isOptional": true
               },
               {
                 "filePath": "src/server/config-types.ts",
