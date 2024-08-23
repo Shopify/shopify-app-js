@@ -34,5 +34,5 @@ export async function revokeScopes(
   });
 
   const resultContent = await revokeScopesResult.json();
-  return resultContent.data;
+  return resultContent.data.appRevokeAccessScopes;
 }
