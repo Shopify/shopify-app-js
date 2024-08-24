@@ -1,6 +1,6 @@
 # Testing your app
 
-This package exports two helper methods through `@shopify/shopify-api/test-helpers` to simplify end-to-end testing: `setUpValidSession()` and `setUpValidRequest()`. These methods can be used together to fake authorization during integration testing or end-to-end testing. `setUpValidSession()` creats a fake session, and `setUpValidRequest()` modifies Requests so that this package authorizes them against the fake session.
+This package exports two helper methods through `@shopify/shopify-api/test-helpers` to simplify integration testing and local end-to-end testing: `setUpValidSession()` and `setUpValidRequest()`. These methods can be used together to fake authorization. `setUpValidSession()` creats a fake session, and `setUpValidRequest()` modifies Requests so that this package authorizes them against the fake session.
 
 ## setUpValidSession()
 
