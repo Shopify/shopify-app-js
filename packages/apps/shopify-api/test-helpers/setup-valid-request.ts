@@ -112,11 +112,10 @@ function bearerRequest(
 ) {
   const {token} = getJwt(store, apiKey, apiSecretKey);
 
-  return new Request(request, {
-    headers: {
-      authorization: `Bearer ${token}`,
-    },
-  });
+  const authenticatedRequest = new Request(request);
+  authenticatedRequest.headers.set('authorization', `Bearer ${token}`);
+
+  return authenticatedRequest;
 }
 
 function extensionRequest(
@@ -128,15 +127,25 @@ function extensionRequest(
 ) {
   const bodyString = JSON.stringify(body);
 
-  return new Request(request, {
+  const authenticatedRequest = new Request(request, {
     method: 'POST',
     body: bodyString,
-    headers: {
-      'X-Shopify-Hmac-Sha256': getHmac(bodyString, apiSecretKey),
-      'X-Shopify-Shop-Domain': getShopValue(store),
-      ...headers,
-    },
   });
+  authenticatedRequest.headers.set(
+    'X-Shopify-Hmac-Sha256',
+    getHmac(bodyString, apiSecretKey),
+  );
+  authenticatedRequest.headers.set(
+    'X-Shopify-Shop-Domain',
+    getShopValue(store),
+  );
+  if (headers) {
+    for (const [key, value] of Object.entries(headers)) {
+      authenticatedRequest.headers.set(key, value);
+    }
+  }
+
+  return authenticatedRequest;
 }
 
 async function publicRequest(

@@ -57,6 +57,22 @@ describe('setUpValidRequest', () => {
     expect(token?.length).toBeGreaterThan(0);
   });
 
+  it('bearer requests preserve headers', async () => {
+    options = {
+      type: RequestType.Bearer,
+      store: TEST_SHOP_NAME,
+      apiKey: API_KEY,
+      apiSecretKey: API_SECRET_KEY,
+    };
+
+    request.headers.set('preserved-header', 'preserved header value');
+
+    const authorizedRequest = await setUpValidRequest(options, request);
+    const preservedHeader = authorizedRequest.headers.get('preserved-header');
+
+    expect(preservedHeader).toBe('preserved header value');
+  });
+
   it('can create an extension request', async () => {
     options = {
       type: RequestType.Extension,
@@ -80,6 +96,22 @@ describe('setUpValidRequest', () => {
     expect(shopHeader).toEqual(TEST_SHOP);
     expect(testHeader).toEqual('test value');
     expect(requestBody).toEqual('test');
+  });
+
+  it('extension requests preserve headers', async () => {
+    options = {
+      type: RequestType.Extension,
+      store: TEST_SHOP_NAME,
+      apiSecretKey: API_SECRET_KEY,
+      body: 'test',
+    };
+
+    request.headers.set('preserved-header', 'preserved header value');
+
+    const authorizedRequest = await setUpValidRequest(options, request);
+    const preservedHeader = authorizedRequest.headers.get('preserved-header');
+
+    expect(preservedHeader).toBe('preserved header value');
   });
 
   it('can create a public request', async () => {
