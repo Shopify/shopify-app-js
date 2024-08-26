@@ -13,5 +13,10 @@ const adapterInputs = fs
 
 export default getConfig({
   pkg,
-  input: ['src/server/index.ts', 'src/react/index.ts', ...adapterInputs],
+  input: [
+    'src/server/index.ts',
+    'src/server/test-helpers/index.ts',
+    'src/react/index.ts',
+    ...adapterInputs,
+  ],
 });

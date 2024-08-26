@@ -1,5 +1,5 @@
-import {RouterProvider, createMemoryRouter} from 'react-router-dom';
 import {mount} from '@shopify/react-testing';
+import {createRemixStub} from '@remix-run/testing';
 
 import '../../../__tests__/test-helper';
 
@@ -19,20 +19,16 @@ describe('<AppProxyForm />', () => {
 
   it('adds a trailing slash if one is missing', () => {
     // WHEN
-    const component = mount(
-      <RouterProvider
-        router={createMemoryRouter([
-          {
-            path: '/',
-            element: (
-              <AppProxyProvider appUrl="http://my-app.example.io">
-                <AppProxyForm action="/my-action">Hello world</AppProxyForm>
-              </AppProxyProvider>
-            ),
-          },
-        ])}
-      />,
-    );
+    function MyComponent() {
+      return (
+        <AppProxyProvider appUrl="http://my-app.example.io">
+          <AppProxyForm action="/my-action">Hello world</AppProxyForm>
+        </AppProxyProvider>
+      );
+    }
+
+    const RemixStub = createRemixStub([{path: '/', Component: MyComponent}]);
+    const component = mount(<RemixStub />);
 
     // THEN
     expect(component).toContainReactComponent('form', {action: '/my-action/'});
@@ -41,20 +37,16 @@ describe('<AppProxyForm />', () => {
 
   it("doesn't alter the action if it has a trailing slash", () => {
     // WHEN
-    const component = mount(
-      <RouterProvider
-        router={createMemoryRouter([
-          {
-            path: '/',
-            element: (
-              <AppProxyProvider appUrl="http://my-app.example.io">
-                <AppProxyForm action="/my-action/">Hello world</AppProxyForm>
-              </AppProxyProvider>
-            ),
-          },
-        ])}
-      />,
-    );
+    function MyComponent() {
+      return (
+        <AppProxyProvider appUrl="http://my-app.example.io">
+          <AppProxyForm action="/my-action/">Hello world</AppProxyForm>
+        </AppProxyProvider>
+      );
+    }
+
+    const RemixStub = createRemixStub([{path: '/', Component: MyComponent}]);
+    const component = mount(<RemixStub />);
 
     // THEN
     expect(component).toContainReactComponent('form', {action: '/my-action/'});

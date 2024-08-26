@@ -1,5 +1,21 @@
 # Changelog
 
+## 1.1.1
+
+### Patch Changes
+
+- 77aa5cc: Improved type safety of generated configurations
+
+## 1.1.0
+
+### Minor Changes
+
+- 4101a85: Added the [customer API](https://shopify.dev/docs/api/customer) as a codegen preset
+
+### Patch Changes
+
+- 00b542a: Pinned `graphql-config` version to prevent a forced upgrade to Node 20+
+
 ## 1.0.1
 
 ### Patch Changes

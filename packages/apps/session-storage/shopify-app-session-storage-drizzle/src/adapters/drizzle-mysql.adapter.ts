@@ -10,7 +10,7 @@ import {
 import {
   MySqlDatabase,
   PreparedQueryHKTBase,
-  QueryResultHKT,
+  MySqlQueryResultHKT,
 } from 'drizzle-orm/mysql-core';
 
 import {MySQLSessionTable} from '../schemas/mysql.schema';
@@ -18,7 +18,7 @@ import {MySQLSessionTable} from '../schemas/mysql.schema';
 export class DrizzleSessionStorageMySQL implements SessionStorage {
   constructor(
     private readonly db: MySqlDatabase<
-      QueryResultHKT,
+      MySqlQueryResultHKT,
       PreparedQueryHKTBase,
       any
     >,

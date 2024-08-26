@@ -1,3 +1,5 @@
+import {Money} from '../types';
+
 export const PLAN_1 = 'Shopify app plan 1';
 export const PLAN_2 = 'Shopify app plan 2';
 export const PLAN_3 = 'Shopify app plan 3';
@@ -273,6 +275,134 @@ export const SUBSCRIPTIONS_RESPONSE = JSON.stringify({
   data: {
     currentAppInstallation: {
       activeSubscriptions: [{id: 'gid://123', name: PLAN_1, test: true}],
+    },
+  },
+});
+
+export const SUBSCRIPTIONS_WITH_USAGE_PLANS_RESPONSE = JSON.stringify({
+  data: {
+    currentAppInstallation: {
+      oneTimePurchases: {
+        edges: [],
+        pageInfo: {
+          hasNextPage: false,
+          endCursor: null,
+        },
+      },
+      activeSubscriptions: [
+        {
+          id: 'gid://123',
+          test: true,
+          status: 'ACTIVE',
+          name: 'Basic Usage Plan',
+          lineItems: [
+            {
+              id: 'gid://456',
+              plan: {
+                pricingDetails: {
+                  balanceUsed: {
+                    amount: 0,
+                    currencyCode: 'USD',
+                  },
+                  cappedAmount: {
+                    amount: '5.00',
+                    currencyCode: 'USD',
+                  },
+                  terms: '1 dollar per usage',
+                },
+              },
+            },
+          ],
+        },
+      ],
+      hasActivePayment: true,
+    },
+  },
+});
+
+export const SUBSCRIPTIONS_WITH_USAGE_PLANS_NOT_ACTIVE_RESPONSE =
+  JSON.stringify({
+    data: {
+      currentAppInstallation: {
+        oneTimePurchases: {
+          edges: [],
+          pageInfo: {
+            hasNextPage: false,
+            endCursor: null,
+          },
+        },
+        activeSubscriptions: [],
+        hasActivePayment: false,
+      },
+    },
+  });
+
+export const USAGE_RECORD_DESCRIPTION = 'Usage record description';
+export const USAGE_RECORD_PRICE = {
+  amount: 1.0,
+  currencyCode: 'USD',
+} as Money;
+export const USAGE_RECORD_SUBSCRIPTION_ID = 'gid://456';
+export const APP_USAGE_RECORD = {
+  id: 'gid://123',
+  description: USAGE_RECORD_DESCRIPTION,
+  price: USAGE_RECORD_PRICE,
+  subscriptionLineItem: {
+    id: USAGE_RECORD_SUBSCRIPTION_ID,
+    plan: {
+      pricingDetails: {
+        balanceUsed: USAGE_RECORD_PRICE,
+        cappedAmount: {
+          amount: '5.00',
+          currencyCode: 'USD',
+        },
+        terms: '1 dollar per usage',
+      },
+    },
+  },
+};
+
+export const USAGE_RECORD_CREATE_RESPONSE = JSON.stringify({
+  data: {
+    appUsageRecordCreate: {
+      appUsageRecord: APP_USAGE_RECORD,
+      userErrors: [],
+    },
+  },
+});
+
+export const USAGE_RECORD_CREATE_IDEMPOTENCY_RESPONSE = JSON.stringify({
+  data: {
+    appUsageRecordCreate: {
+      appUsageRecord: {
+        id: 'gid://123',
+        description: USAGE_RECORD_DESCRIPTION,
+        idempotencyKey: 'idempotency-key',
+        price: USAGE_RECORD_PRICE,
+        subscriptionLineItem: {
+          id: USAGE_RECORD_SUBSCRIPTION_ID,
+          plan: {
+            pricingDetails: {
+              balanceUsed: USAGE_RECORD_PRICE,
+              cappedAmount: {
+                amount: '5.00',
+                currencyCode: 'USD',
+              },
+              terms: '1 dollar per usage',
+            },
+          },
+        },
+      },
+      userErrors: [],
+    },
+  },
+});
+
+export const USAGE_RECORD_CREATE_RESPONSE_ERROR = JSON.stringify({
+  data: {
+    appUsageRecordCreate: {
+      appUsageRecord: {},
+      userErrors: ['There was an error in billing'],
     },
   },
 });

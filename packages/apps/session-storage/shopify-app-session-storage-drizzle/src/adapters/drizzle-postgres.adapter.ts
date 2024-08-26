@@ -7,13 +7,13 @@ import {
   eq,
   inArray,
 } from 'drizzle-orm';
-import {PgDatabase, QueryResultHKT} from 'drizzle-orm/pg-core';
+import {PgDatabase, PgQueryResultHKT} from 'drizzle-orm/pg-core';
 
 import {PostgresSessionTable} from '../schemas/postgres.schema';
 
 export class DrizzleSessionStoragePostgres implements SessionStorage {
   constructor(
-    private readonly db: PgDatabase<QueryResultHKT, any>,
+    private readonly db: PgDatabase<PgQueryResultHKT, any>,
     private readonly sessionTable: PostgresSessionTable,
   ) {}
 

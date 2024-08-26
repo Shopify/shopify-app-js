@@ -3,12 +3,14 @@ import fs from 'fs';
 import {shopifyApiProject} from '../api-project';
 import {ApiType, ShopifyApiProjectOptions} from '../types';
 
+import {getExpectedSchema} from './helpers';
+
 describe('shopifyApiProject', () => {
   beforeEach(() => {
     jest.restoreAllMocks();
   });
 
-  describe.each([ApiType.Admin, ApiType.Storefront])(
+  describe.each([ApiType.Admin, ApiType.Storefront, ApiType.Customer])(
     'when API type is %s',
     (apiType) => {
       const type = apiType.toLowerCase();
@@ -18,6 +20,7 @@ describe('shopifyApiProject', () => {
         const config: ShopifyApiProjectOptions = {
           apiType,
           apiVersion: '2023-10',
+          apiKey: 'test',
           outputDir: './testDir',
           documents: ['./src/**/*.ts'],
           module: 'module',
@@ -28,7 +31,7 @@ describe('shopifyApiProject', () => {
 
         // THEN
         expect(projectConfig).toEqual({
-          schema: `https://shopify.dev/${type}-graphql-direct-proxy/2023-10`,
+          schema: getExpectedSchema(type, true),
           documents: config.documents,
           extensions: {
             // This is tested by the api-types file
@@ -42,6 +45,7 @@ describe('shopifyApiProject', () => {
         const config: ShopifyApiProjectOptions = {
           apiType,
           apiVersion: '2023-10',
+          apiKey: 'test',
           outputDir: './testDir',
           documents: ['./src/**/*.ts'],
           module: 'module',
@@ -68,6 +72,7 @@ describe('shopifyApiProject', () => {
         // GIVEN
         const config: ShopifyApiProjectOptions = {
           apiType,
+          apiKey: 'test',
         };
 
         // WHEN
@@ -75,7 +80,7 @@ describe('shopifyApiProject', () => {
 
         // THEN
         expect(projectConfig).toEqual({
-          schema: `https://shopify.dev/${type}-graphql-direct-proxy`,
+          schema: getExpectedSchema(type, false),
           documents: ['**/*.{ts,tsx}', '!node_modules'],
           extensions: {
             // The contents of this object are tested by the api-types file
@@ -94,6 +99,7 @@ describe('shopifyApiProject', () => {
         const config: ShopifyApiProjectOptions = {
           apiType,
           declarations: false,
+          apiKey: 'test',
         };
 
         // WHEN
@@ -101,7 +107,7 @@ describe('shopifyApiProject', () => {
 
         // THEN
         expect(projectConfig).toEqual({
-          schema: `https://shopify.dev/${type}-graphql-direct-proxy`,
+          schema: getExpectedSchema(type, false),
           documents: ['**/*.{ts,tsx}', '!node_modules'],
           extensions: {
             // The contents of this object are tested by the api-types file

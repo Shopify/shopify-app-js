@@ -15,6 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
+        # When removing v18, unpin graphql-config version
         version: [18, 20, 22]
     steps:
       - uses: actions/checkout@master

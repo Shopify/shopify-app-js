@@ -3,6 +3,7 @@ import {
   BillingCheckParams,
   BillingCheckResponseObject,
   BillingRequestParams,
+  UsageRecord,
 } from '@shopify/shopify-api';
 
 import type {AppConfigArg} from '../../../config-types';
@@ -59,6 +60,38 @@ export interface CancelBillingOptions {
    * Whether to use the test mode. This prevents the credit card from being charged.
    */
   isTest?: boolean;
+}
+
+export interface CreateUsageRecordOptions {
+  /**
+   * The description of the app usage record.
+   */
+  description: string;
+  /**
+   * The price of the app usage record.
+   */
+  price: {
+    /**
+     * The amount to charge for this usage record.
+     */
+    amount: number;
+    /**
+     * The currency code for this usage record.
+     */
+    currencyCode: string;
+  };
+  /**
+   * Whether to use the test mode. This prevents the credit card from being charged.
+   */
+  isTest: boolean;
+  /*
+   * Defines the usage pricing plan the merchant is subscribed to.
+   */
+  subscriptionLineItemId?: string;
+  /*
+   * A unique key generated to avoid duplicate charges.
+   */
+  idempotencyKey?: string;
 }
 
 export interface BillingContext<Config extends AppConfigArg> {
@@ -360,4 +393,59 @@ export interface BillingContext<Config extends AppConfigArg> {
    * ```
    */
   cancel: (options: CancelBillingOptions) => Promise<AppSubscription>;
+
+  /**
+   * Creates a usage record for an app subscription.
+   *
+   * @returns Returns a usage record when one was created successfully.
+   *
+   * @example
+   * <caption>Creating a usage record</caption>
+   * <description>Create a usage record for the active usage billing plan</description>
+   * ```ts
+   * // /app/routes/create-usage-record.ts
+   * import { ActionFunctionArgs } from "@remix-run/node";
+   * import { authenticate, MONTHLY_PLAN } from "../shopify.server";
+   *
+   * export const action = async ({ request }: ActionFunctionArgs) => {
+   *    const { billing } = await authenticate.admin(request);
+   *
+   *   const chargeBilling = await billing.createUsageRecord({
+   *      description: "Usage record for product creation",
+   *      price: {
+   *        amount: 1,
+   *        currencyCode: "USD",
+   *       },
+   *      isTest: true,
+   *    });
+   *  console.log(chargeBilling);
+   *
+   *   // App logic
+   * };
+   * ```
+   * ```ts
+   * // shopify.server.ts
+   * import { shopifyApp, BillingInterval } from "@shopify/shopify-app-remix/server";
+   *
+   * export const USAGE_PLAN = 'Usage subscription';
+   *
+   * const shopify = shopifyApp({
+   *   // ...etc
+   *   billing: {
+   *     [USAGE_PLAN]: {
+   *       lineItems: [
+   *         amount: 5,
+   *         currencyCode: 'USD',
+   *         interval: BillingInterval.Usage,
+   *       ],
+   *     },
+   *   }
+   * });
+   * export default shopify;
+   * export const authenticate = shopify.authenticate;
+   * ```
+   */
+  createUsageRecord: (
+    options: CreateUsageRecordOptions,
+  ) => Promise<UsageRecord>;
 }

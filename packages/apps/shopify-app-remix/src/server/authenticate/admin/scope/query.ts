@@ -3,11 +3,11 @@ import {AuthScopes, Session} from '@shopify/shopify-api';
 import {AdminApiContext} from '../../../clients';
 import type {BasicParams} from '../../../types';
 
-import {ScopesInformation} from './types';
+import {ScopesDetail} from './types';
 import {
-  FetchScopeInformationResponse,
-  fetchScopeInformation,
-} from './client/fetch-scopes-information';
+  FetchScopesDetailResponse,
+  fetchScopeDetail,
+} from './client/fetch-scopes-details';
 
 export function queryScopesFactory(
   params: BasicParams,
@@ -17,38 +17,33 @@ export function queryScopesFactory(
   return async function queryScopes() {
     const {logger} = params;
 
-    logger.debug('Query scopes information: ', {
+    logger.debug('Querying scopes details: ', {
       shop: session.shop,
     });
 
-    const scopesInformation = await fetchScopeInformation(admin);
-    return mapFetchScopeInformation(scopesInformation);
+    const scopesDetail = await fetchScopeDetail(admin);
+    return mapFetchScopeDetail(scopesDetail);
   };
 }
 
-export function mapFetchScopeInformation(
-  fetchScopeInformation: FetchScopeInformationResponse,
-): ScopesInformation {
-  const appInformation = fetchScopeInformation.app;
-  const declaredRequired = new AuthScopes(
+export function mapFetchScopeDetail(
+  scopesDetailResponse: FetchScopesDetailResponse,
+): ScopesDetail {
+  const appInformation = scopesDetailResponse.app;
+
+  const granted = new AuthScopes(
+    appInformation.installation.accessScopes.map((scope) => scope.handle),
+  );
+  const required = new AuthScopes(
     appInformation.requestedAccessScopes.map((scope) => scope.handle),
   );
-
-  const grantedRequired = appInformation.installation.accessScopes
-    .map((scope) => scope.handle)
-    .filter((scope) => declaredRequired.has(scope));
-
-  const grantedOptional = appInformation.installation.accessScopes
-    .map((scope) => scope.handle)
-    .filter((scope) => !declaredRequired.has(scope));
+  const optional = new AuthScopes(
+    appInformation.optionalAccessScopes.map((scope) => scope.handle),
+  );
 
   return {
-    granted: {
-      required: grantedRequired,
-      optional: grantedOptional,
-    },
-    declared: {
-      required: declaredRequired.toArray(),
-    },
+    granted: granted.toArray(),
+    required: required.toArray(),
+    optional: optional.toArray(),
   };
 }

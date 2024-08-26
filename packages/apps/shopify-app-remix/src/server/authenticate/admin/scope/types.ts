@@ -1,19 +1,14 @@
 export interface ScopesApiContext {
-  query: () => Promise<ScopesInformation>;
+  query: () => Promise<ScopesDetail>;
   request: (scopes: string[]) => Promise<void>;
-  revoke: (scopes: string[]) => Promise<ScopesInformation>;
+  revoke: (scopes: string[]) => Promise<RevokeResponse>;
 }
 
-export interface ScopesInformation {
-  granted: GrantedScopes;
-  declared: DeclaredScopes;
+export interface RevokeResponse {
+  detail: ScopesDetail;
 }
-
-export interface DeclaredScopes {
-  required: string[];
-}
-
-export interface GrantedScopes {
+export interface ScopesDetail {
+  granted: string[];
   required: string[];
   optional: string[];
 }

@@ -116,6 +116,7 @@ To do that, apps will need to:
 - [Adding custom runtimes](docs/guides/runtimes.md)
 - [Customizing logging configuration](docs/guides/logger.md)
 - [Setting up a custom store app](docs/guides/custom-store-app.md)
+- [Testing your app](docs/guides/test-helpers.md)
 
 ## Migrating to v6
 
