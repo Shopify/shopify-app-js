@@ -7,14 +7,13 @@ import type {Headers} from './types';
  * @returns The canonicalized header name.
  */
 export function canonicalizeHeaderName(hdr: string): string {
-  return hdr
-    .split('-')
-    .map(
-      (segment) =>
-        segment.slice(0, 1).toLocaleUpperCase() +
-        segment.slice(1).toLocaleLowerCase(),
-    )
-    .join('-');
+  return hdr.replace(
+    /(^|-)(\w+)/g,
+    (_fullMatch, start, letters) =>
+      start +
+      letters.slice(0, 1).toUpperCase() +
+      letters.slice(1).toLowerCase(),
+);
 }
 
 /**
@@ -35,7 +34,7 @@ export function getHeaders(
     if (canonicalizeHeaderName(key) !== needle) continue;
     if (Array.isArray(values)) {
       result.push(...values);
-    } else {
+    } else if (typeof values === 'string') {
       result.push(values);
     }
   }
@@ -106,20 +105,18 @@ function canonicalizeValue(value: unknown): string {
  * @returns The headers object with canonicalized header names and values.
  */
 export function canonicalizeHeaders(hdr: Headers): Headers {
+  const result: Headers = {};
   for (const [key, values] of Object.entries(hdr)) {
     const canonKey = canonicalizeHeaderName(key);
-    if (!hdr[canonKey]) hdr[canonKey] = [];
-    if (!Array.isArray(hdr[canonKey])) {
-      hdr[canonKey] = [canonicalizeValue(hdr[canonKey])];
+    if (!result[canonKey]) result[canonKey] = [];
+    if (!Array.isArray(result[canonKey])) {
+      result[canonKey] = [canonicalizeValue(result[canonKey])];
     }
-    if (key === canonKey) continue;
-    delete hdr[key];
-    (hdr[canonKey] as string[]).push(
-      ...[values].flat().map((value) => canonicalizeValue(value)),
-    );
+    result[canonKey].push(...[values].flat().map(value => canonicalizeValue(value)));
   }
-  return hdr;
+  return result;
 }
+
 
 /**
  * Removes a header from the headers object.
@@ -163,6 +160,6 @@ export function flatHeaders(
   return Object.entries(headers).flatMap(([header, values]) =>
     Array.isArray(values)
       ? values.map((value): [string, string] => [header, value])
-      : [[header, values as string]],
+      : [[header, values]],
   );
 }

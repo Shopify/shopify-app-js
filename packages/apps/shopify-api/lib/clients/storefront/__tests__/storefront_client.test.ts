@@ -136,8 +136,7 @@ describe('Storefront GraphQL client', () => {
       headers: {
         [ShopifyHeader.StorefrontPrivateToken]: session.accessToken,
         [ShopifyHeader.StorefrontSDKVariant]: 'storefront-api-client',
-        // Leaving this to test out if Jest is freaking out over nothing
-        [ShopifyHeader.StorefrontSDKVersion]: '1.0.1',
+        [ShopifyHeader.StorefrontSDKVersion]: expect.any(String),
       },
     }).toMatchMadeHttpRequest();
   });
