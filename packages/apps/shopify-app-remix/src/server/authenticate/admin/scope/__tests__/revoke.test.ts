@@ -12,7 +12,7 @@ import {
 
 import * as responses from './mock-responses';
 
-it('returns scopes information', async () => {
+it('returns successfully revoked scopes', async () => {
   // GIVEN
   const {scopes} = await setUpEmbeddedFlow();
   await mockGraphqlRequests()(
@@ -20,9 +20,23 @@ it('returns scopes information', async () => {
       body: 'AppRevokeAccessScopes',
       responseContent: responses.REVOKED_WITHOUT_ERROR,
     },
+  );
+
+  // WHEN
+  const result = await scopes.revoke(['write_discounts', 'read_orders']);
+
+  // THEN
+  expect(result).not.toBeUndefined();
+  expect(result.revoked).toEqual(['write_discounts', 'read_orders']);
+});
+
+it('returns successfully with empty list when graphql returns an empty list for the revoke operation', async () => {
+  // GIVEN
+  const {scopes} = await setUpEmbeddedFlow();
+  await mockGraphqlRequests()(
     {
-      body: 'FetchAccessScopes',
-      responseContent: responses.WITH_GRANTED_AND_DECLARED,
+      body: 'AppRevokeAccessScopes',
+      responseContent: responses.REVOKED_NOTHING,
     },
   );
 
@@ -31,9 +45,7 @@ it('returns scopes information', async () => {
 
   // THEN
   expect(result).not.toBeUndefined();
-  expect(result.detail.granted).toEqual(['read_orders', 'write_customers']);
-  expect(result.detail.required).toEqual(['read_orders', 'read_reports']);
-  expect(result.detail.optional).toEqual(['write_customers']);
+  expect(result.revoked).toEqual([]);
 });
 
 it('returns error if the list of scopes is empty', async () => {
