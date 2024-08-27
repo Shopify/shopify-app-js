@@ -15,12 +15,10 @@ import * as responses from './mock-responses';
 it('returns successfully revoked scopes', async () => {
   // GIVEN
   const {scopes} = await setUpEmbeddedFlow();
-  await mockGraphqlRequests()(
-    {
-      body: 'AppRevokeAccessScopes',
-      responseContent: responses.REVOKED_WITHOUT_ERROR,
-    },
-  );
+  await mockGraphqlRequests()({
+    body: 'AppRevokeAccessScopes',
+    responseContent: responses.REVOKED_WITHOUT_ERROR,
+  });
 
   // WHEN
   const result = await scopes.revoke(['write_discounts', 'read_orders']);
@@ -33,12 +31,10 @@ it('returns successfully revoked scopes', async () => {
 it('returns successfully with empty list when graphql returns an empty list for the revoke operation', async () => {
   // GIVEN
   const {scopes} = await setUpEmbeddedFlow();
-  await mockGraphqlRequests()(
-    {
-      body: 'AppRevokeAccessScopes',
-      responseContent: responses.REVOKED_NOTHING,
-    },
-  );
+  await mockGraphqlRequests()({
+    body: 'AppRevokeAccessScopes',
+    responseContent: responses.REVOKED_NOTHING,
+  });
 
   // WHEN
   const result = await scopes.revoke(['read_orders']);

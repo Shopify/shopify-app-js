@@ -30,11 +30,11 @@ export const REVOKED_WITHOUT_ERROR = buildGraphqlResponseContent({
   appRevokeAccessScopes: {
     revoked: [
       {
-        handle: 'write_discounts'
+        handle: 'write_discounts',
       },
       {
-        handle: 'read_orders'
-      }
+        handle: 'read_orders',
+      },
     ],
     userErrors: [],
   },
@@ -56,7 +56,7 @@ export const REVOKED_WITH_ERROR = buildGraphqlResponseContent({
         messages:
           'The requested list of scopes to revoke includes invalid handles.',
       },
-    ]
+    ],
   },
 });
 
