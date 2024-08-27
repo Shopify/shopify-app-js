@@ -239,7 +239,7 @@ const shopify = shopifyApp(config);
 ...
 ```
 
-`testConfig()` accepts a config object as an optional parameter. The config values provided override the default config values returned by `testConfig()`. This is especially useful for end-to-end testing to ensure `shopifyApp()` reads the sessions from the development database.
+`testConfig()` accepts a config object as an optional parameter. The config values provided override the default config values returned by `testConfig()`. This is especially useful for integration testing and end-to-end testing to ensure `shopifyApp()` reads the sessions from the development database.
 
 ```ts
 // my-app/app/shopify.server.ts
