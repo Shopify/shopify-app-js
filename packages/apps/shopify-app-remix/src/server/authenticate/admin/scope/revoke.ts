@@ -4,8 +4,6 @@ import {AdminApiContext} from '../../../clients';
 import type {BasicParams} from '../../../types';
 
 import {revokeScopes} from './client/revoke-scopes';
-import {fetchScopeDetail} from './client/fetch-scopes-details';
-import {mapFetchScopeDetail} from './query';
 
 export function revokeScopesFactory(
   params: BasicParams,
@@ -15,12 +13,12 @@ export function revokeScopesFactory(
   return async function revoke(scopes: string[]) {
     const {logger} = params;
 
+    await validateScopes(scopes);
+
     logger.debug('Revoke scopes: ', {
       shop: session.shop,
       scopes,
     });
-
-    await validateScopes(scopes);
 
     const revokeScopesResult = await revokeScopes(admin, scopes);
     if (revokeScopesResult.userErrors?.length > 0) {
@@ -37,9 +35,8 @@ export function revokeScopesFactory(
       });
     }
 
-    const scopesDetail = await fetchScopeDetail(admin);
     return {
-      detail: mapFetchScopeDetail(scopesDetail),
+      revoked: revokeScopesResult.revoked.map((scope) => scope.handle),
     };
   };
 }

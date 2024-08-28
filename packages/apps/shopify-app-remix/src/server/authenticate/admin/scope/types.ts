@@ -5,7 +5,7 @@ export interface ScopesApiContext {
 }
 
 export interface RevokeResponse {
-  detail: ScopesDetail;
+  revoked: string[];
 }
 export interface ScopesDetail {
   granted: string[];
