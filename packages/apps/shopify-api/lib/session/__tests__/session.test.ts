@@ -56,6 +56,10 @@ describe('isActive', () => {
       expires: new Date(Date.now() + 86400),
     });
 
+    if (typeof shopify.config.scopes === 'function') {
+      // This is to satisfy the typing
+      fail('Scopes should be a string.');
+    }
     expect(session.isActive(shopify.config.scopes)).toBeTruthy();
   });
 });
@@ -85,6 +89,10 @@ it('returns false if session is not active', () => {
     scope: 'test_scope',
     expires: new Date(Date.now() - 1),
   });
+  if (typeof shopify.config.scopes === 'function') {
+    // This is to satisfy the typing
+    fail('Scopes should be a string.');
+  }
   expect(session.isActive(shopify.config.scopes)).toBeFalsy();
 });
 

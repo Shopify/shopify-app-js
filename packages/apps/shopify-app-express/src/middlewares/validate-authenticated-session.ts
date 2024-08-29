@@ -66,7 +66,12 @@ export function validateAuthenticatedSession({
           shop: session.shop,
         });
 
-        if (session.isActive(api.config.scopes)) {
+        const scopes =
+          api.config.scopes && typeof api.config.scopes === 'function'
+            ? await api.config.scopes(session.shop)
+            : api.config.scopes;
+
+        if (session.isActive(scopes)) {
           config.logger.debug('Request session exists and is active', {
             shop: session.shop,
           });

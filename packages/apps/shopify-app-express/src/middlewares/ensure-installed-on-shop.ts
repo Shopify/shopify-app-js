@@ -130,10 +130,14 @@ async function sessionHasValidAccessToken(
     return false;
   }
 
+  const scopes =
+    api.config.scopes && typeof api.config.scopes === 'function'
+      ? await api.config.scopes(session.shop)
+      : api.config.scopes;
+
   try {
     return (
-      session.isActive(api.config.scopes) &&
-      (await hasValidAccessToken(api, session))
+      session.isActive(scopes) && (await hasValidAccessToken(api, session))
     );
   } catch (error) {
     config.logger.error(`Could not check if session was valid: ${error}`, {

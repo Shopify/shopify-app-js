@@ -99,7 +99,15 @@ export function begin(config: ConfigInterface): OAuthBegin {
       path: callbackPath,
     });
 
-    const scopes = config.scopes ? config.scopes.toString() : '';
+    let scopes = '';
+    if (config.scopes) {
+      if (typeof config.scopes === 'function') {
+        scopes = (await config.scopes(shop)).toString();
+      } else {
+        scopes = config.scopes.toString();
+      }
+    }
+
     const query = {
       client_id: config.apiKey,
       scope: scopes,

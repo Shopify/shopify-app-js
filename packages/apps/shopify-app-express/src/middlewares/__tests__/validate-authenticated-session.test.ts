@@ -1,6 +1,6 @@
 import request from 'supertest';
 import express, {Express} from 'express';
-import {LATEST_API_VERSION, Session} from '@shopify/shopify-api';
+import {AuthScopes, LATEST_API_VERSION, Session} from '@shopify/shopify-api';
 import jwt from 'jsonwebtoken';
 
 import {
@@ -194,6 +194,22 @@ describe('validateAuthenticatedSession', () => {
       expect(
         response.headers['x-shopify-api-request-failure-reauthorize-url'],
       ).toBe(`/api/auth?shop=my-shop.myshopify.io`);
+    });
+
+    it('correctly gets scopes from callback', async () => {
+      mockShopifyResponse({data: {shop: {name: shop}}});
+      const callbackFn = jest.fn((_shop) =>
+        Promise.resolve(new AuthScopes('write_orders')),
+      );
+      shopify.api.config.scopes = callbackFn;
+      session.scope = 'write_orders';
+
+      await request(app)
+        .get('/test/shop?shop=my-shop.myshopify.io')
+        .set({Authorization: `Bearer ${validJWT}`})
+        .expect(200);
+
+      expect(callbackFn).toHaveBeenCalledWith(shop);
     });
 
     it('returns a 401 if the session token is invalid', async () => {

@@ -95,4 +95,6 @@ class AuthScopes {
   }
 }
 
+export type AuthScopesCallback = (shop: string) => Promise<AuthScopes>;
+
 export {AuthScopes};

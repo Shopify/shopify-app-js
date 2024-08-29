@@ -77,7 +77,10 @@ export function validateConfig<Params extends ConfigParams>(
   let scopes;
   if (params.scopes === undefined) {
     scopes = undefined;
-  } else if (params.scopes instanceof AuthScopes) {
+  } else if (
+    params.scopes instanceof AuthScopes ||
+    typeof params.scopes === 'function'
+  ) {
     scopes = params.scopes;
   } else {
     scopes = new AuthScopes(params.scopes);

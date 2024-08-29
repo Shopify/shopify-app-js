@@ -1,6 +1,11 @@
 import request from 'supertest';
 import express, {Express} from 'express';
-import {LATEST_API_VERSION, LogSeverity, Session} from '@shopify/shopify-api';
+import {
+  AuthScopes,
+  LATEST_API_VERSION,
+  LogSeverity,
+  Session,
+} from '@shopify/shopify-api';
 
 import {
   createTestHmac,
@@ -54,6 +59,27 @@ describe('ensureInstalledOnShop', () => {
     expect(response.headers['content-security-policy']).toEqual(
       `frame-ancestors https://${TEST_SHOP} https://admin.shopify.com https://*.spin.dev;`,
     );
+  });
+
+  it('correctly fetches scopes using callback', async () => {
+    mockShopifyResponse({data: {shop: {name: TEST_SHOP}}});
+    const callbackFn = jest.fn((_shop) =>
+      Promise.resolve(new AuthScopes(['write_orders'])),
+    );
+
+    shopify.api.config.scopes = callbackFn;
+    session.scope = 'write_orders';
+    await shopify.config.sessionStorage.storeSession(session);
+
+    const encodedHost = Buffer.from(SHOPIFY_HOST, 'utf-8').toString('base64');
+    const response = await request(app)
+      .get(`/test/shop?shop=${TEST_SHOP}&host=${encodedHost}`)
+      .expect(302);
+
+    const location = new URL(response.header.location);
+    expect(location.host).toEqual(SHOPIFY_HOST);
+    expect(location.pathname).toEqual('/apps/testApiKey/');
+    expect(callbackFn).toHaveBeenCalledWith(TEST_SHOP);
   });
 
   it('returns 400 if no shop provided', async () => {

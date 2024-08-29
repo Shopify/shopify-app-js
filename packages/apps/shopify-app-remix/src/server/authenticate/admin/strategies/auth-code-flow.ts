@@ -83,10 +83,15 @@ export class AuthCodeFlowStrategy<
 
     const {shop, session} = sessionContext;
 
+    const scopes =
+      typeof config.scopes === 'function'
+        ? await config.scopes(shop)
+        : config.scopes;
+
     if (!session) {
       logger.debug('No session found, redirecting to OAuth', {shop});
       await redirectToAuthPage({config, logger, api}, request, shop);
-    } else if (!session.isActive(config.scopes)) {
+    } else if (!session.isActive(scopes)) {
       logger.debug(
         'Found a session, but it has expired, redirecting to OAuth',
         {shop},

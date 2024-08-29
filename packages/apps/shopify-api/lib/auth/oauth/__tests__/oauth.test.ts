@@ -15,7 +15,7 @@ import {
 import {queueMockResponse, signJWT} from '../../../__tests__/test-helper';
 import {testConfig} from '../../../__tests__/test-config';
 import {getOfflineId} from '../../../session/session-utils';
-import {shopifyApi} from '../../..';
+import {AuthScopes, shopifyApi} from '../../..';
 
 const VALID_NONCE = 'noncenoncenonce';
 jest.mock('../nonce', () => ({nonce: jest.fn(() => VALID_NONCE)}));
@@ -123,6 +123,37 @@ describe('beginAuth', () => {
     expect(response.headers?.Location).toBe(
       `https://${shop}/admin/oauth/authorize?${expectedQueryString}`,
     );
+  });
+
+  test('correctly gets scopes from a callback', async () => {
+    const callbackFn = jest.fn((_shop) =>
+      Promise.resolve(new AuthScopes(['read_products'])),
+    );
+    const shopify = shopifyApi(testConfig({scopes: callbackFn}));
+
+    const response: NormalizedResponse = await shopify.auth.begin({
+      shop,
+      isOnline: false,
+      callbackPath: '/some-callback',
+      rawRequest: request,
+    });
+
+    const scopes = 'read_products';
+
+    const query = {
+      client_id: shopify.config.apiKey,
+      scope: scopes,
+      redirect_uri: `${shopify.config.hostScheme}://${shopify.config.hostName}/some-callback`,
+      state: VALID_NONCE,
+      'grant_options[]': '',
+    };
+    const expectedQueryString = querystring.stringify(query);
+
+    expect(response.statusCode).toBe(302);
+    expect(response.headers?.Location).toBe(
+      `https://${shop}/admin/oauth/authorize?${expectedQueryString}`,
+    );
+    expect(callbackFn).toHaveBeenCalledWith(shop);
   });
 
   test('appends per_user access mode to url when isOnline is set to true', async () => {

@@ -1,4 +1,4 @@
-import {SESSION_COOKIE_NAME, Session} from '@shopify/shopify-api';
+import {AuthScopes, SESSION_COOKIE_NAME, Session} from '@shopify/shopify-api';
 
 import {shopifyApp} from '../../../../..';
 import {
@@ -124,6 +124,42 @@ describe('authenticate', () => {
         // THEN
         expect(session).toBe(testSession);
         expect(admin.rest.session).toBe(testSession);
+      });
+
+      it('correctly retrieves scopes when scopes is a callback', async () => {
+        // GIVEN
+        const callbackFn = jest.fn((_shop) =>
+          Promise.resolve(new AuthScopes(['write_orders'])),
+        );
+        const shopify = shopifyApp(
+          testConfig({
+            useOnlineTokens: isOnline,
+            future: {unstable_newEmbeddedAuthStrategy: false},
+            isEmbeddedApp: true,
+            scopes: callbackFn,
+          }),
+        );
+
+        await setUpValidSession(shopify.sessionStorage, {
+          scope: 'write_orders',
+        });
+        if (isOnline) {
+          await setUpValidSession(shopify.sessionStorage, {
+            isOnline,
+            scope: 'write_orders',
+          });
+        }
+
+        // WHEN
+        const {token} = getJwt();
+        await shopify.authenticate.admin(
+          new Request(
+            `${APP_URL}?embedded=1&shop=${TEST_SHOP}&host=${BASE64_HOST}&id_token=${token}`,
+          ),
+        );
+
+        // THEN
+        expect(callbackFn).toHaveBeenCalledWith(TEST_SHOP);
       });
 
       it('returns the context if the session is valid and the app is not embedded', async () => {

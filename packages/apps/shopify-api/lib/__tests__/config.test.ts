@@ -2,6 +2,7 @@ import * as ShopifyErrors from '../error';
 import {validateConfig} from '../config';
 import {ConfigParams} from '../base-types';
 import {ApiVersion, LATEST_API_VERSION, LogSeverity} from '../types';
+import {AuthScopes} from '../auth';
 
 let validParams: ConfigParams;
 
@@ -92,6 +93,19 @@ describe('Config object', () => {
     expect(() => validateConfig(validParams)).not.toThrow(
       ShopifyErrors.ShopifyError,
     );
+  });
+
+  it('converts array scopes to an AuthScopes instance', () => {
+    const validatedScopes = validateConfig(validParams).scopes;
+    expect(validatedScopes).toBeInstanceOf(AuthScopes);
+    expect(validatedScopes?.toString()).toEqual('scope');
+  });
+
+  it('passes scopes callback through', () => {
+    const callbackFn = (_shop: string) =>
+      Promise.resolve(new AuthScopes(['scope']));
+    validParams.scopes = callbackFn;
+    expect(validateConfig(validParams).scopes).toBe(callbackFn);
   });
 
   it("ignores a missing 'apiKey' when isCustomStoreApp is true", () => {

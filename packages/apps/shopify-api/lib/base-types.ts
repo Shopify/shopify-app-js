@@ -1,7 +1,7 @@
 import {FutureFlagOptions} from '../future/flags';
 import {ShopifyRestResources} from '../rest/types';
 
-import {AuthScopes} from './auth/scopes';
+import {AuthScopes, AuthScopesCallback} from './auth/scopes';
 import {BillingConfig} from './billing/types';
 import {ApiVersion, LogSeverity} from './types';
 
@@ -29,7 +29,7 @@ export interface ConfigParams<
   /**
    * The scopes your app needs to access the API. Not required if using Shopify managed installation.
    */
-  scopes?: string[] | AuthScopes;
+  scopes?: string[] | AuthScopes | AuthScopesCallback;
   /**
    * The host name of your app.
    */
@@ -125,7 +125,7 @@ export type ConfigInterface<Params extends ConfigParams = ConfigParams> = Omit<
 > & {
   apiKey: string;
   hostScheme: 'http' | 'https';
-  scopes?: AuthScopes;
+  scopes?: AuthScopes | AuthScopesCallback;
   isCustomStoreApp: boolean;
   billing?: BillingConfig<Params['future']>;
   logger: {
