@@ -36,7 +36,7 @@ export function validateAuthenticatedSession({
       // Handle preflight OPTIONS requests for CORS
       // Bypasses authentication and responds with the necessary CORS headers.
       if (req.method === 'OPTIONS') {
-        res.header('Access-Control-Allow-Origin', '*'); 
+        res.header('Access-Control-Allow-Origin', '*');
         res.header(
           'Access-Control-Allow-Methods',
           'GET,POST,PUT,DELETE,OPTIONS',
@@ -45,7 +45,8 @@ export function validateAuthenticatedSession({
           'Access-Control-Allow-Headers',
           'Content-Type, Authorization',
         );
-        return res.sendStatus(200); // Respond with 200 OK for OPTIONS requests
+        // Respond with 200 OK for OPTIONS requests
+        return res.sendStatus(200);
       }
 
       let sessionId: string | undefined;
