@@ -10,6 +10,7 @@ export {
   LogSeverity,
   DeliveryMethod,
   BillingInterval,
+  BillingReplacementBehavior,
   ApiVersion,
   Session,
 } from '@shopify/shopify-api';
