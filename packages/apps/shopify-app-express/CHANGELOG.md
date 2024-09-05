@@ -1,5 +1,17 @@
 # Changelog
 
+## 5.0.5
+
+### Patch Changes
+
+- Updated dependencies [4e143ec]
+- Updated dependencies [4a1ffad]
+- Updated dependencies [a426889]
+- Updated dependencies [8e61a39]
+  - @shopify/shopify-api@11.4.0
+  - @shopify/shopify-app-session-storage@3.0.5
+  - @shopify/shopify-app-session-storage-memory@4.0.5
+
 ## 5.0.4
 
 ### Patch Changes

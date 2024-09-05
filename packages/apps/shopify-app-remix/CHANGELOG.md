@@ -1,5 +1,41 @@
 # @shopify/shopify-app-remix
 
+## 3.3.0
+
+### Minor Changes
+
+- 4a1ffad: Adds API to create usage records for billing
+
+  A new billing helper function has been added to create usage records for a usage billing plan.
+
+  ```ts
+  const chargeBilling = await billing.createUsageRecord({
+    description: 'Usage record for product creation',
+    price: {
+      amount: 1,
+      currencyCode: 'USD',
+    },
+    isTest: true,
+  });
+  console.log(chargeBilling);
+  ```
+
+  Learn more about [App Billing](https://shopify.dev/docs/apps/launch/billing/subscription-billing).
+
+### Patch Changes
+
+- a426889: Exposing override types for `lineItems` in the billing `request` method.
+- 8e61a39: setUpValidRequest in shopify-api now preserves headers. Documentation for test helpers now more accurately describes use cases.
+- 2266e7f: Return revoked scopes instead of querying for scopes after revoking
+- Updated dependencies [4e143ec]
+- Updated dependencies [4a1ffad]
+- Updated dependencies [a426889]
+- Updated dependencies [8e61a39]
+  - @shopify/shopify-api@11.4.0
+  - @shopify/shopify-app-session-storage@3.0.5
+  - @shopify/admin-api-client@1.0.2
+  - @shopify/storefront-api-client@1.0.2
+
 ## 3.2.0
 
 ### Minor Changes
