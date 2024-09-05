@@ -84,12 +84,14 @@ const client = createGraphQLClient({
 
 ## `RequestOptions` properties
 
-| Name       | Type                  | Description                                                      |
-| ---------- | --------------------- | ---------------------------------------------------------------- |
-| variables? | `Record<string, any>` | Variable values needed in the graphQL operation                  |
-| url?       | `string`              | Alternative request API URL                                     |
-| headers?   | `Record<string, string \| string[]>`             | Additional and/or replacement headers to be used in the request |
-| retries?   | `number`             | Alternative number of retries for the request. Retries only occur for requests that were abandoned or if the server responds with a `Too Many Request (429)` or `Service Unavailable (503)` response. Minimum value is `0` and maximum value is `3`.|
+| Name       | Type                                 | Description                                                                                                                                                                                                                                          |
+| ---------- | ------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| variables? | `Record<string, any>`                | Variable values needed in the graphQL operation                                                                                                                                                                                                      |
+| url?       | `string`                             | Alternative request API URL                                                                                                                                                                                                                          |
+| headers?   | `Record<string, string \| string[]>` | Additional and/or replacement headers to be used in the request                                                                                                                                                                                      |
+| retries?   | `number`                             | Alternative number of retries for the request. Retries only occur for requests that were abandoned or if the server responds with a `Too Many Request (429)` or `Service Unavailable (503)` response. Minimum value is `0` and maximum value is `3`. |
+| signal?    | `AbortSignal`                        | If this option is set, the request can be canceled by calling `abort()` on the corresponding  `AbortController`.                                                                                                                                     |
+
 
 ## `ClientResponse<TData>`
 
