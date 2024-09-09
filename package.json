@@ -34,7 +34,7 @@
     "@shopify/prettier-config": "^1.1.2",
     "@shopify/typescript-configs": "^5.1.0",
     "@types/jest": "^29.5.12",
-    "@types/node": "^22.3.0",
+    "@types/node": "^22.5.4",
     "@types/supertest": "^6.0.2",
     "eslint": "^8.57.0",
     "eslint-plugin-jest": "^28.8.3",
