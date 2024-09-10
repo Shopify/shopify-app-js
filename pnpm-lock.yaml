@@ -244,11 +244,11 @@ importers:
   packages/apps/session-storage/shopify-app-session-storage-dynamodb:
     dependencies:
       '@aws-sdk/client-dynamodb':
-        specifier: ^3.645.0
-        version: 3.645.0
+        specifier: ^3.648.0
+        version: 3.648.0
       '@aws-sdk/util-dynamodb':
         specifier: ^3.632.0
-        version: 3.632.0(@aws-sdk/client-dynamodb@3.645.0)
+        version: 3.632.0(@aws-sdk/client-dynamodb@3.648.0)
       '@shopify/shopify-api':
         specifier: ^11.0.0
         version: link:../../shopify-api
@@ -625,8 +625,8 @@ packages:
   '@aws-crypto/util@5.2.0':
     resolution: {integrity: sha512-4RkU9EsI6ZpBve5fseQlGNUWKMa1RLPQ1dnjnQoe07ldfIzcsGb5hC5W0Dm7u423KWzawlrpbjXBrXCEv9zazQ==}
 
-  '@aws-sdk/client-dynamodb@3.645.0':
-    resolution: {integrity: sha512-y7UHtIIAWQOzJXNh3KLU91ILz1Ivb2/FuEXnhdJhRurbNI9AwKIVZQlXGq31O8EHO6MU64ptxooNa0WVTezoxg==}
+  '@aws-sdk/client-dynamodb@3.648.0':
+    resolution: {integrity: sha512-61yU6wQRlwOhD0mfJS/N8SYmv9hxkVYGKsXqSJ5PNNnySutoNof7cmX8cTuijpTQqLL9sKPfvPMlJCv7/M1AiA==}
     engines: {node: '>=16.0.0'}
 
   '@aws-sdk/client-sso-oidc@3.645.0':
@@ -7736,7 +7736,7 @@ snapshots:
       '@smithy/util-utf8': 2.3.0
       tslib: 2.6.3
 
-  '@aws-sdk/client-dynamodb@3.645.0':
+  '@aws-sdk/client-dynamodb@3.648.0':
     dependencies:
       '@aws-crypto/sha256-browser': 5.2.0
       '@aws-crypto/sha256-js': 5.2.0
@@ -8081,9 +8081,9 @@ snapshots:
       '@smithy/types': 3.3.0
       tslib: 2.6.3
 
-  '@aws-sdk/util-dynamodb@3.632.0(@aws-sdk/client-dynamodb@3.645.0)':
+  '@aws-sdk/util-dynamodb@3.632.0(@aws-sdk/client-dynamodb@3.648.0)':
     dependencies:
-      '@aws-sdk/client-dynamodb': 3.645.0
+      '@aws-sdk/client-dynamodb': 3.648.0
       tslib: 2.6.3
 
   '@aws-sdk/util-endpoints@3.645.0':
