@@ -1,6 +1,6 @@
 {
   "name": "@shopify/shopify-app-session-storage-test-utils",
-  "version": "3.0.4",
+  "version": "3.0.5",
   "description": "Utilities for testing Shopify App Session Storage",
   "repository": {
     "type": "git",
@@ -49,8 +49,8 @@
     "@shopify/shopify-app-session-storage": "^3.0.0"
   },
   "devDependencies": {
-    "@shopify/shopify-api": "^11.3.0",
-    "@shopify/shopify-app-session-storage": "^3.0.4"
+    "@shopify/shopify-api": "^11.4.0",
+    "@shopify/shopify-app-session-storage": "^3.0.5"
   },
   "files": [
     "dist/*",

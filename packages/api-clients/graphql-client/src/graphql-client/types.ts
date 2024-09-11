@@ -1,10 +1,13 @@
+interface CustomRequestInit {
+  method?: string;
+  headers?: HeadersInit;
+  body?: string;
+  signal?: AbortSignal;
+}
+
 export type CustomFetchApi = (
   url: string,
-  init?: {
-    method?: string;
-    headers?: HeadersInit;
-    body?: string;
-  },
+  init?: CustomRequestInit,
 ) => Promise<Response>;
 
 type OperationVariables = Record<string, any>;
@@ -91,6 +94,7 @@ export interface RequestOptions {
   url?: string;
   headers?: HeadersObject;
   retries?: number;
+  signal?: AbortSignal;
 }
 
 export type RequestParams = [operation: string, options?: RequestOptions];

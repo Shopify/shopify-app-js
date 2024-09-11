@@ -111,6 +111,7 @@ function generateFetch(
       headers: overrideHeaders,
       url: overrideUrl,
       retries: overrideRetries,
+      signal,
     } = options;
 
     const body = JSON.stringify({
@@ -139,6 +140,7 @@ function generateFetch(
         method: 'POST',
         headers: flatHeaders,
         body,
+        signal,
       },
     ];
 

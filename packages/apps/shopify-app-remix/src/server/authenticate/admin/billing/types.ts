@@ -6,6 +6,7 @@ import {
   UsageRecord,
 } from '@shopify/shopify-api';
 
+import {ApiFutureFlags} from '../../../future/flags';
 import type {AppConfigArg} from '../../../config-types';
 
 export interface RequireBillingOptions<Config extends AppConfigArg>
@@ -29,7 +30,10 @@ export interface CheckBillingOptions<Config extends AppConfigArg>
 }
 
 export interface RequestBillingOptions<Config extends AppConfigArg>
-  extends Omit<BillingRequestParams, 'session' | 'plan' | 'returnObject'> {
+  extends Omit<
+    BillingRequestParams<ApiFutureFlags<Config['future']>>,
+    'session' | 'plan' | 'returnObject'
+  > {
   /**
    * The plan to request. Must be one of the values defined in the `billing` config option.
    */
@@ -294,6 +298,64 @@ export interface BillingContext<Config extends AppConfigArg> {
    *       plan: MONTHLY_PLAN,
    *       isTest: true,
    *       returnUrl: 'https://admin.shopify.com/store/my-store/apps/my-app/billing-page',
+   *     }),
+   *   });
+   *
+   *   // App logic
+   * };
+   * ```
+   * ```ts
+   * // shopify.server.ts
+   * import { shopifyApp, BillingInterval } from "@shopify/shopify-app-remix/server";
+   *
+   * export const MONTHLY_PLAN = 'Monthly subscription';
+   * export const ANNUAL_PLAN = 'Annual subscription';
+   *
+   * const shopify = shopifyApp({
+   *   // ...etc
+   *   billing: {
+   *     [MONTHLY_PLAN]: {
+   *       lineItems: [
+   *         amount: 5,
+   *         currencyCode: 'USD',
+   *         interval: BillingInterval.Every30Days,
+   *       ],
+   *     },
+   *     [ANNUAL_PLAN]: {
+   *       lineItems: [
+   *         amount: 50,
+   *         currencyCode: 'USD',
+   *         interval: BillingInterval.Annual,
+   *       ],
+   *     },
+   *   }
+   * });
+   * export default shopify;
+   * export const authenticate = shopify.authenticate;
+   * ```
+   *
+   * @example
+   * <caption>Overriding plan settings.</caption>
+   * <description>Customize the plan for a merchant when requesting billing. Any fields from the plan can be overridden, as long as the billing interval for line items matches the config.</description>
+   * ```ts
+   * // /app/routes/**\/*.ts
+   * import { LoaderFunctionArgs } from "@remix-run/node";
+   * import { authenticate, MONTHLY_PLAN } from "../shopify.server";
+   *
+   * export const loader = async ({ request }: LoaderFunctionArgs) => {
+   *   const { billing } = await authenticate.admin(request);
+   *   await billing.require({
+   *     plans: [MONTHLY_PLAN],
+   *     onFailure: async () => billing.request({
+   *       plan: MONTHLY_PLAN,
+   *       isTest: true,
+   *       trialDays: 14,
+   *       lineItems: [
+   *         {
+   *           interval: BillingInterval.Every30Days,
+   *           discount: { value: { percentage: 0.1 } },
+   *         },
+   *       ],
    *     }),
    *   });
    *

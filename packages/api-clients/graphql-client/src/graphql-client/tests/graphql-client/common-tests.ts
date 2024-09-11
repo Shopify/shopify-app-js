@@ -140,6 +140,21 @@ export const parametersTests = (
       }),
     });
   });
+
+  it('calls fetch API with provided signal', async () => {
+    const signal = new AbortController().signal;
+
+    await client[functionName](gqlOperation, {signal});
+
+    expect(fetchMock).toHaveBeenCalledWith(clientConfig.url, {
+      method: 'POST',
+      headers: defaultHeaders,
+      body: JSON.stringify({
+        query: gqlOperation,
+      }),
+      signal,
+    });
+  });
 };
 
 export const sdkHeadersTests = (

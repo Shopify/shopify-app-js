@@ -552,23 +552,37 @@ describe('shopify.billing.request', () => {
 
   describe('billing config overrides', () => {
     it.each([
-      {field: 'trialDays', value: 20, expected: '"trialDays":20'},
       {
+        test: 'trial days',
+        plan: Responses.PLAN_1,
+        field: 'trialDays',
+        value: 20,
+        expected: '"trialDays":20',
+      },
+      {
+        test: 'amount',
+        plan: Responses.PLAN_1,
         field: 'lineItems',
         value: [{interval: BillingInterval.Every30Days, amount: 10}],
         expected: '"amount":10',
       },
       {
+        test: 'currency',
+        plan: Responses.PLAN_1,
         field: 'lineItems',
         value: [{interval: BillingInterval.Every30Days, currencyCode: 'CAD'}],
         expected: '"currencyCode":"CAD"',
       },
       {
+        test: 'replacement behavior',
+        plan: Responses.PLAN_1,
         field: 'replacementBehavior',
         value: BillingReplacementBehavior.ApplyImmediately,
         expected: '"replacementBehavior":"APPLY_IMMEDIATELY"',
       },
       {
+        test: 'usage terms',
+        plan: Responses.PLAN_2,
         field: 'lineItems',
         value: [
           {
@@ -579,6 +593,8 @@ describe('shopify.billing.request', () => {
         expected: '"terms":"Different usage terms"',
       },
       {
+        test: 'discount',
+        plan: Responses.PLAN_1,
         field: 'lineItems',
         value: [
           {
@@ -589,54 +605,57 @@ describe('shopify.billing.request', () => {
         expected:
           '"discount":{"durationLimitInIntervals":10,"value":{"amount":2}}',
       },
-    ])('applies $field override when set', async ({field, value, expected}) => {
-      const shopify = shopifyApi(
-        testConfig({
-          billing: {
-            [Responses.PLAN_1]: {
-              replacementBehavior: BillingReplacementBehavior.ApplyImmediately,
-              trialDays: 10,
-              lineItems: [
-                {
-                  interval: BillingInterval.Every30Days,
-                  amount: 5,
-                  currencyCode: 'USD',
-                  discount: {durationLimitInIntervals: 5, value: {amount: 2}},
-                },
-              ],
-              [field]: value,
+    ])(
+      'applies override when setting $test',
+      async ({plan, field, value, expected}) => {
+        const shopify = shopifyApi(
+          testConfig({
+            billing: {
+              [Responses.PLAN_1]: {
+                replacementBehavior:
+                  BillingReplacementBehavior.ApplyImmediately,
+                trialDays: 10,
+                lineItems: [
+                  {
+                    interval: BillingInterval.Every30Days,
+                    amount: 5,
+                    currencyCode: 'USD',
+                    discount: {durationLimitInIntervals: 5, value: {amount: 2}},
+                  },
+                ],
+              },
+              [Responses.PLAN_2]: {
+                replacementBehavior:
+                  BillingReplacementBehavior.ApplyImmediately,
+                trialDays: 10,
+                lineItems: [
+                  {
+                    interval: BillingInterval.Usage,
+                    amount: 5,
+                    currencyCode: 'USD',
+                    terms: 'Usage terms',
+                  },
+                ],
+              },
             },
-            [Responses.PLAN_2]: {
-              replacementBehavior: BillingReplacementBehavior.ApplyImmediately,
-              trialDays: 10,
-              lineItems: [
-                {
-                  interval: BillingInterval.Usage,
-                  amount: 5,
-                  currencyCode: 'USD',
-                  terms: 'Usage terms',
-                },
-              ],
-              [field]: value,
-            },
-          },
-        }),
-      );
+          }),
+        );
 
-      queueMockResponses([Responses.PURCHASE_SUBSCRIPTION_RESPONSE]);
+        queueMockResponses([Responses.PURCHASE_SUBSCRIPTION_RESPONSE]);
 
-      await shopify.billing.request({
-        session,
-        plan: field === 'usageTerms' ? Responses.PLAN_2 : Responses.PLAN_1,
-        returnObject: true,
-        [field]: value,
-      });
+        await shopify.billing.request({
+          session,
+          plan,
+          returnObject: true,
+          [field]: value,
+        });
 
-      expect({
-        ...GRAPHQL_BASE_REQUEST,
-        data: expect.stringContaining(expected),
-      }).toMatchMadeHttpRequest();
-    });
+        expect({
+          ...GRAPHQL_BASE_REQUEST,
+          data: expect.stringContaining(expected),
+        }).toMatchMadeHttpRequest();
+      },
+    );
 
     it('applies a trialDays override of 0', async () => {
       const shopify = shopifyApi(

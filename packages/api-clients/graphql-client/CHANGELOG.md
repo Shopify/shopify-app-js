@@ -1,5 +1,11 @@
 # @shopify/graphql-client
 
+## 1.2.0
+
+### Minor Changes
+
+- ada2cc3: Adds support for `signal` request option
+
 ## 1.1.0
 
 ### Minor Changes
