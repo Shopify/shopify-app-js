@@ -9,6 +9,8 @@ export const action = async ({request}: ActionFunctionArgs) => {
 
   switch (topic) {
     case 'APP_UNINSTALLED':
+      // Webhook requests can trigger after an app is uninstalled
+      // If the app is already uninstalled, the session may be undefined.
       if (session) {
         await db.session.deleteMany({where: {shop}});
       }

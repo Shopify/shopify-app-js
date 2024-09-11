@@ -9,16 +9,18 @@ const data: LandingTemplateSchema = {
     {
       type: 'Generic',
       anchorLink: 'config',
-      title: 'Subscribe using the app configuration file',
+      title: 'App-specific webhooks (recommended)',
       sectionContent:
-        'The easiest and recommended way to configure your webhooks is to edit your app configuration file. ' +
+        'The easiest way to configure webhooks is to use app-specific webhooks in `shopify.app.toml`. ' +
         'You can find more info in the [webhooks documentation](/docs/apps/webhooks/getting-started-declarative).' +
+        'App-specific webhooks are perfect for apps that require the same webhook topics for all shops.' +
+        'In many cases, app-specific webhooks are sufficient and easier to manage than shop-specific webhooks.' +
         '\n\nTo set up a simple HTTPS webhook subscription, you can follow these steps:' +
-        '\n1. Add in `shopify.app.toml` the topic you want to subscribe to. In this example we subscribe to the `APP_UNINSTALLED` topic.' +
+        '\n1. Add the topic to subscribe to in `shopify.app.toml`. In this example we subscribe to the `APP_UNINSTALLED` topic.' +
         '\n1. Review the required scopes for the webhook topics, and update your [app scopes](/docs/apps/tools/cli/configuration#access_scopes) as necessary.' +
         '\n1. Run `shopify app deploy` from the CLI to save your webhooks configuration.',
       codeblock: {
-        title: 'Configure webhooks subscriptions with the app configuration',
+        title: 'Configure app-specific webhooks',
         tabs: [
           {
             title: 'shopify.app.toml',
@@ -31,15 +33,17 @@ const data: LandingTemplateSchema = {
     {
       type: 'Generic',
       anchorLink: 'config',
-      title: 'Subscribe using the API',
+      title: 'Shop-specific webhooks',
       sectionContent:
+        'Shop-specific webhooks are useful when you need to subscribe to different webhook topics for different shops. ' +
+        'In many cases, the extra overhead of keeping shop-specific webhooks in sync may not be worth it and app-specific webhooks are a better approach. ' +
         'Configure `shopifyApp` and setup webhook subscription with the following steps:' +
         '\n1. The webhooks you want to subscribe to. In this example we subscribe to the `APP_UNINSTALLED` topic.' +
         '\n1. The code to register the `APP_UNINSTALLED` topic after a merchant installs you app. Here `shopifyApp` provides an `afterAuth` hook.' +
         '\n1. Review the required scopes for the webhook topics, and update your [app scopes](/docs/apps/tools/cli/configuration#access_scopes) as necessary.' +
         "\n\n> Note: You can't register mandatory topics using this package, you must [configure those in the Partner Dashboard](/docs/apps/webhooks/configuration/mandatory-webhooks) instead.",
       codeblock: {
-        title: 'Configure webhooks subscriptions with the API',
+        title: 'Configure shop-specific webhooks',
         tabs: [
           {
             title: '/app/shopify.server.ts',

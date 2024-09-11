@@ -147,6 +147,32 @@ export interface WebhookContextWithSession<
    * A session with an offline token for the shop.
    *
    * Returned only if there is a session for the shop.
+   * Webhook requests can trigger after an app is uninstalled
+   * If the app is already uninstalled, the session may be undefined.
+   * Therefore, you should check for the session before using it.
+   *
+   * @example
+   * <caption>Protecting against uninstalled apps.</caption>
+   * ```ts
+   * // /app/routes/webhooks.tsx
+   * import type { ActionFunctionArgs } from "@remix-run/node";
+   * import { authenticate } from "~/shopify.server";
+
+   * export const action = async ({ request }: ActionFunctionArgs) => {
+   *   const { session } = await authenticate.webhook(request);
+   *   
+   *   // Webhook requests can trigger after an app is uninstalled
+   *   // If the app is already uninstalled, the session may be undefined.
+   *   if (!session) {
+   *     throw new Response();
+   *   }
+   *
+   *   // Handle webhook request
+   *   console.log("Received webhook webhook");
+   *
+   *   return new Response();
+   * };
+   * ```
    */
   session: Session;
 
@@ -165,7 +191,13 @@ export interface WebhookContextWithSession<
    *
    * export async function action({ request }: ActionFunctionArgs) {
    *   const { admin } = await authenticate.webhook(request);
-   *
+   * 
+   *   // Webhook requests can trigger after an app is uninstalled
+   *   // If the app is already uninstalled, the session may be undefined.
+   *   if (!session) {
+   *     throw new Response();
+   *   }
+   * 
    *   const response = await admin?.graphql(
    *     `#graphql
    *     mutation populateProduct($input: ProductInput!) {
