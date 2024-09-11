@@ -214,8 +214,8 @@ importers:
         version: 2.6.3
     devDependencies:
       '@libsql/client':
-        specifier: ^0.9.0
-        version: 0.9.0(encoding@0.1.13)
+        specifier: ^0.10.0
+        version: 0.10.0(encoding@0.1.13)
       '@shopify/shopify-app-session-storage-test-utils':
         specifier: ^3.0.5
         version: link:../shopify-app-session-storage-test-utils
@@ -233,7 +233,7 @@ importers:
         version: 0.24.0
       drizzle-orm:
         specifier: ^0.33.0
-        version: 0.33.0(@cloudflare/workers-types@4.20240903.0)(@libsql/client@0.9.0(encoding@0.1.13))(@prisma/client@5.19.1(prisma@5.19.1))(@types/better-sqlite3@7.6.11)(@types/pg@8.11.6)(@types/react@18.3.3)(better-sqlite3@11.1.2)(mysql2@3.11.0)(pg@8.12.0)(prisma@5.19.1)(react@18.3.1)(sqlite3@5.1.7)
+        version: 0.33.0(@cloudflare/workers-types@4.20240903.0)(@libsql/client@0.10.0(encoding@0.1.13))(@prisma/client@5.19.1(prisma@5.19.1))(@types/better-sqlite3@7.6.11)(@types/pg@8.11.6)(@types/react@18.3.3)(better-sqlite3@11.1.2)(mysql2@3.11.0)(pg@8.12.0)(prisma@5.19.1)(react@18.3.1)(sqlite3@5.1.7)
       mysql2:
         specifier: ^3.10.1
         version: 3.11.0
@@ -2373,11 +2373,11 @@ packages:
   '@kamilkisiela/fast-url-parser@1.1.4':
     resolution: {integrity: sha512-gbkePEBupNydxCelHCESvFSFM8XPh1Zs/OAVRW/rKpEqPAl5PbOM90Si8mv9bvnR53uPD2s/FiRxdvSejpRJew==}
 
-  '@libsql/client@0.9.0':
-    resolution: {integrity: sha512-mT+91wtb8pxK9SWd566D5W2VUCemksUMqICRBtf0WXiS7XzNcQhWyrwYOnVrVmTSze/SCCsNNEKIkCRwk/pr2Q==}
+  '@libsql/client@0.10.0':
+    resolution: {integrity: sha512-2ERn08T4XOVx34yBtUPq0RDjAdd9TJ5qNH/izugr208ml2F94mk92qC64kXyDVQINodWJvp3kAdq6P4zTtCZ7g==}
 
-  '@libsql/core@0.9.0':
-    resolution: {integrity: sha512-rCsS/EC32K8ARjDQJGqauGZmkR6orOOY4I7898PyQ/mmltAkMwRgz5kjEmYRZ42o7mP0ayJfbw28qgv7SRFEgg==}
+  '@libsql/core@0.10.0':
+    resolution: {integrity: sha512-rqynAXGaiSpTsykOZdBtI1N4z4O+KZ6mt33K/aHeXAY0gSIfK/ctxuWa0Y1Bjo4FMz1idBTCXz4Ps5kITOvZZw==}
 
   '@libsql/darwin-arm64@0.3.19':
     resolution: {integrity: sha512-rmOqsLcDI65zzxlUOoEiPJLhqmbFsZF6p4UJQ2kMqB+Kc0Rt5/A1OAdOZ/Wo8fQfJWjR1IbkbpEINFioyKf+nQ==}
@@ -10170,9 +10170,9 @@ snapshots:
 
   '@kamilkisiela/fast-url-parser@1.1.4': {}
 
-  '@libsql/client@0.9.0(encoding@0.1.13)':
+  '@libsql/client@0.10.0(encoding@0.1.13)':
     dependencies:
-      '@libsql/core': 0.9.0
+      '@libsql/core': 0.10.0
       '@libsql/hrana-client': 0.6.2(encoding@0.1.13)
       js-base64: 3.7.7
       libsql: 0.4.1
@@ -10182,7 +10182,7 @@ snapshots:
       - encoding
       - utf-8-validate
 
-  '@libsql/core@0.9.0':
+  '@libsql/core@0.10.0':
     dependencies:
       js-base64: 3.7.7
 
@@ -12486,10 +12486,10 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  drizzle-orm@0.33.0(@cloudflare/workers-types@4.20240903.0)(@libsql/client@0.9.0(encoding@0.1.13))(@prisma/client@5.19.1(prisma@5.19.1))(@types/better-sqlite3@7.6.11)(@types/pg@8.11.6)(@types/react@18.3.3)(better-sqlite3@11.1.2)(mysql2@3.11.0)(pg@8.12.0)(prisma@5.19.1)(react@18.3.1)(sqlite3@5.1.7):
+  drizzle-orm@0.33.0(@cloudflare/workers-types@4.20240903.0)(@libsql/client@0.10.0(encoding@0.1.13))(@prisma/client@5.19.1(prisma@5.19.1))(@types/better-sqlite3@7.6.11)(@types/pg@8.11.6)(@types/react@18.3.3)(better-sqlite3@11.1.2)(mysql2@3.11.0)(pg@8.12.0)(prisma@5.19.1)(react@18.3.1)(sqlite3@5.1.7):
     optionalDependencies:
       '@cloudflare/workers-types': 4.20240903.0
-      '@libsql/client': 0.9.0(encoding@0.1.13)
+      '@libsql/client': 0.10.0(encoding@0.1.13)
       '@prisma/client': 5.19.1(prisma@5.19.1)
       '@types/better-sqlite3': 7.6.11
       '@types/pg': 8.11.6
