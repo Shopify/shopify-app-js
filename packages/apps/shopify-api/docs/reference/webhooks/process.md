@@ -1,6 +1,6 @@
 # shopify.webhooks.process
 
-This method validates and triggers the callbacks you configured using [`webhooks.addHandlers`](./addHandlers.md) for `Http` handlers.
+This method validates and triggers the callbacks you configured for shop-specific webhooks using [`webhooks.addHandlers`](./addHandlers.md) for `Http` handlers.  Unless your app needs different webhooks for different shops, we recommend using [app-specific webhooks](https://shopify.dev/docs/apps/build/webhooks/subscribe#app-specific-subscriptions) instead.  If you use only app-specific webhooks, you do not need to use `shopify.webhooks.process`.
 
 If no handler is found, it will throw an error.
 

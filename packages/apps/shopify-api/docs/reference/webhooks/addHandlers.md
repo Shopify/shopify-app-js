@@ -1,6 +1,6 @@
 # shopify.webhooks.addHandlers
 
-Adds webhook handlers to the library registry, allowing you to register them with Shopify and process HTTP webhook requests from Shopify.
+Add shop-specific webhook handlers to the library registry, allowing you to register webhooks with Shopify and process HTTP webhook requests from Shopify.  Unless your app needs different webhooks for different shops, we recommend using [app-specific webhooks](https://shopify.dev/docs/apps/build/webhooks/subscribe#app-specific-subscriptions) instead.  If you use only app-specific webhooks, you do not need to use `shopify.webhooks.addHandlers`.
 
 See the documentation for [the full list](https://shopify.dev/docs/api/admin-graphql/latest/enums/WebhookSubscriptionTopic) of accepted topics.
 

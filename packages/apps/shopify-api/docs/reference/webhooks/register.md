@@ -1,6 +1,6 @@
 # shopify.webhooks.register
 
-Registers all of the configured handlers using [`webhooks.addHandlers`](./addHandlers.md) with Shopify.
+Registers all of the configured handlers for shop-specific webhooksusing [`webhooks.addHandlers`](./addHandlers.md) with Shopify.  Unless your app needs different webhooks for different shops, we recommend using [app-specific webhooks](https://shopify.dev/docs/apps/build/webhooks/subscribe#app-specific-subscriptions) instead.  If you use only app-specific webhooks, you do not need to use `shopify.webhooks.register`. 
 
 You can safely call this method every time a shop logs in, as it will add, update, or remove subscriptions as necessary so that all configured handlers are registered.
 

@@ -1,6 +1,6 @@
 # shopify.webhooks.getTopicsAdded
 
-Fetches all topics that were added to the registry.
+Fetches all topics that were added to the registry. Unless your app needs different webhooks for different shops, we recommend using [app-specific webhooks](https://shopify.dev/docs/apps/build/webhooks/subscribe#app-specific-subscriptions) instead.  If you use only app-specific webhooks, you do not need to use `shopify.webhooks.getTopicsAdded`.
 
 ## Example
 
