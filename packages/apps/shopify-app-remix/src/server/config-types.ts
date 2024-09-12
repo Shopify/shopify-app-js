@@ -78,12 +78,11 @@ export interface AppConfigArg<
   /**
    * The config for the shop-specific webhooks your app needs.
    * 
-   * Use this only if you need different webhooks per shop (shop-specific webhooks). For many apps, shop will have the same webhooks.
-   * In these cases, using app-specific webhooks in the `shopify.app.toml` will be easier:
-   *
-   * {@link https://shopify.dev/docs/apps/build/webhooks/subscribe}
+   * Use this to configure shop-specific webhooks. In many cases defining app-specific webhooks in the `shopify.app.toml` will be sufficient and easier to manage.  Please see:
    * 
-   * If you do need shop-specific webhooks this can be in used in conjunction with the afterAuth hook, loaders or processes such as background jobs.
+   * {@link https://shopify.dev/docs/apps/build/webhooks/subscribe#app-specific-vs-shop-specific-subscriptions}
+   * 
+   * You should only use this if you need shop-specific webhooks. If you do need shop-specific webhooks this can be in used in conjunction with the afterAuth hook, loaders or processes such as background jobs.
    *
    * @example
    * <caption>Registering shop-specific webhooks.</caption>

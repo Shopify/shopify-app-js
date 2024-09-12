@@ -242,7 +242,8 @@ interface Authenticate<Config extends AppConfigArg> {
    * 
    * @example
    * <caption>Registering shop-specific webhooks.</caption>
-   * <description>In most cases you won't need this. Use shop-specific webhooks only if you need different webhooks per shop. Use app-specific webhooks instead.</description>
+   * <description>In many cases you won't need this. Please see: [https://shopify.dev/docs/apps/build/webhooks/subscribe#app-specific-vs-shop-specific-subscriptions](https://shopify.dev/docs/apps/build/webhooks/subscribe#app-specific-vs-shop-specific-subscriptions)
+   * </description>
    * ```ts
    * // app/shopify.server.ts
    * import { DeliveryMethod, shopifyApp } from "@shopify/shopify-app-remix/server";
@@ -341,10 +342,11 @@ export interface ShopifyAppBase<Config extends AppConfigArg> {
   /**
    * Register shop-specific webhook subscriptions using the Admin GraphQL API.
    *
-   * Use this only if you need different webhooks per shop (shop-specific webhooks). For many apps, shop will have the same webhooks.
-   * In these cases, using app-specific webhooks in the `shopify.app.toml` will be easier:
+   * In many cases defining app-specific webhooks in the `shopify.app.toml` will be sufficient and easier to manage.  Please see:
    *
    * {@link https://shopify.dev/docs/apps/build/webhooks/subscribe#app-specific-vs-shop-specific-subscriptions}
+   *
+   * You should only use this if you need shop-specific webhooks.
    *
    * @example
    * <caption>Registering shop-specific webhooks after install</caption>
