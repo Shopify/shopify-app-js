@@ -11,6 +11,9 @@ const shopify = shopifyApp({
   },
   hooks: {
     afterAuth: async ({session}) => {
+      // Register webhooks for the shop
+      // In this example, every shop will have these webhooks
+      // You could wrap this in some custom shop specific conditional logic if needed
       shopify.registerWebhooks({session});
     },
   },

@@ -76,27 +76,32 @@ export interface AppConfigArg<
   useOnlineTokens?: boolean;
 
   /**
-   * The config for the webhook topics your app would like to subscribe to.
-   *
-   * {@link https://shopify.dev/docs/apps/webhooks}
-   *
-   * This can be in used in conjunction with the afterAuth hook to register webhook topics when a user installs your app.  Or you can use this function in other processes such as background jobs.
+   * The config for the shop-specific webhooks your app needs.
+   * 
+   * Use this to configure shop-specific webhooks. In many cases defining app-specific webhooks in the `shopify.app.toml` will be sufficient and easier to manage.  Please see:
+   * 
+   * {@link https://shopify.dev/docs/apps/build/webhooks/subscribe#app-specific-vs-shop-specific-subscriptions}
+   * 
+   * You should only use this if you need shop-specific webhooks. If you do need shop-specific webhooks this can be in used in conjunction with the afterAuth hook, loaders or processes such as background jobs.
    *
    * @example
-   * <caption>Registering for a webhook when a merchant uninstalls your app.</caption>
+   * <caption>Registering shop-specific webhooks.</caption>
    * ```ts
-   * // /app/shopify.server.ts
+   * // app/shopify.server.ts
    * import { DeliveryMethod, shopifyApp } from "@shopify/shopify-app-remix/server";
    *
    * const shopify = shopifyApp({
    *   webhooks: {
-   *     APP_UNINSTALLED: {
+   *     PRODUCTS_CREATE: {
    *       deliveryMethod: DeliveryMethod.Http,
-   *        callbackUrl: "/webhooks",
+   *        callbackUrl: "/webhooks/products/create",
    *     },
    *   },
    *   hooks: {
    *     afterAuth: async ({ session }) => {
+   *       // Register webhooks for the shop
+   *       // In this example, every shop will have these webhooks
+   *       // But you could wrap this in some custom shop specific conditional logic
    *       shopify.registerWebhooks({ session });
    *     }
    *   },
@@ -104,26 +109,42 @@ export interface AppConfigArg<
    * });
    * export default shopify;
    * export const authenticate = shopify.authenticate;
+   * ```
+   * 
+   * @example
+   * <caption>Registering app-specific webhooks (Recommended)</caption>
+   * ```toml
+   * # shopify.app.toml
+   * [webhooks]
+   * api_version = "2024-07"
+
+   *   [[webhooks.subscriptions]]
+   *   topics = ["products/create"]
+   *   uri = "/webhooks/products/create"
+   * 
+   * ```
+   * 
+   * @example
+   * <caption>Authenticating a webhook request</caption>
    *
-   * // /app/routes/webhooks.jsx
+   * ```ts
+   * // /app/routes/webhooks.ts
    * import { ActionFunctionArgs } from "@remix-run/node";
-   *
    * import { authenticate } from "../shopify.server";
    * import db from "../db.server";
    *
    * export const action = async ({ request }: ActionFunctionArgs) => {
-   *   const { topic, shop } = await authenticate.webhook(request);
-   *
-   *   switch (topic) {
-   *     case "APP_UNINSTALLED":
-   *       await db.session.deleteMany({ where: { shop } });
-   *       break;
-   *     case "CUSTOMERS_DATA_REQUEST":
-   *     case "CUSTOMERS_REDACT":
-   *     case "SHOP_REDACT":
-   *     default:
-   *       throw new Response("Unhandled webhook topic", { status: 404 });
+   *   const { topic, shop, session, payload } = await authenticate.webhook(request);
+   * 
+   *   // Webhook requests can trigger after an app is uninstalled
+   *   // If the app is already uninstalled, the session may be undefined.
+   *   if (!session) {
+   *     throw new Response();
    *   }
+   * 
+   *   // Handle the webhook
+   *   console.log(`${TOPIC} webhook received with`, JSON.stringify(payload))
+   *
    *   throw new Response();
    * };
    * ```
@@ -267,7 +288,7 @@ interface HooksConfig {
    * @param context.admin - An object with access to the Shopify Admin API's.
    *
    * @example
-   * <caption>Registering webhooks and seeding data when a merchant installs your app.</caption>
+   * <caption>Seeding data when a merchant installs your app.</caption>
    * ```ts
    * import { DeliveryMethod, shopifyApp } from "@shopify/shopify-app-remix/server";
    * import { seedStoreData } from "~/db/seeds"
@@ -275,15 +296,8 @@ interface HooksConfig {
    * const shopify = shopifyApp({
    *   hooks: {
    *     afterAuth: async ({ session }) => {
-   *       shopify.registerWebhooks({ session });
    *       seedStoreData({session})
    *     }
-   *   },
-   *   webhooks: {
-   *     APP_UNINSTALLED: {
-   *       deliveryMethod: DeliveryMethod.Http,
-   *        callbackUrl: "/webhooks",
-   *     },
    *   },
    *   // ...etc
    * });
