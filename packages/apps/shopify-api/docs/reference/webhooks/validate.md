@@ -3,7 +3,7 @@
 This method validates an incoming request for `Http` handlers.
 If the call is invalid, it will return a `valid` field set to `false`.
 
-This method can be used to validate all Shopify webhook requests, regardless of if they are app-specific or shop-specific.
+This method can be used to validate app-specific and shop-specific webhooks.
 
 ## Example
 

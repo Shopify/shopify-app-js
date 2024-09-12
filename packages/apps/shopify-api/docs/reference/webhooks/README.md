@@ -2,7 +2,11 @@
 
 This object contains functions used to configure, register and process webhooks.
 
-Most of these functions are used for interacting with shop-specific webhooks. Unless your app needs different webhooks for different shops, we recommend using [app-specific webhooks](https://shopify.dev/docs/apps/build/webhooks/subscribe#app-specific-subscriptions) instead.  If you use only app-specific webhooks, the only method you will need is [shopify.webhooks.validate](./validate.md).
+Most of these functions are used for interacting with shop-specific webhooks. In most cases, you should use app-specific webhooks:
+
+[App-specific vs shop-specific webhooks](https://shopify.dev/docs/apps/build/webhooks/subscribe#app-specific-vs-shop-specific-subscriptions)
+
+If you only use app-specific webhooks, the only method you will need is [shopify.webhooks.validate](./validate.md).
 
 | Property                              | Description                                            | 
 | ------------------------------------- | ------------------------------------------------------ |

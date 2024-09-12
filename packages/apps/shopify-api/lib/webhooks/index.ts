@@ -10,9 +10,9 @@ interface Webhooks {
   /**
    * Add shop-specific webhook handlers to the library registry,
    * allowing you to register webhooks with Shopify and process HTTP webhook requests from Shopify.
-   * Unless your app needs different webhooks for different shops, we recommend using app-specific webhooks:
+   * In most cases, you should use app-specific webhooks:
    *
-   * {@link https://shopify.dev/docs/apps/build/webhooks/subscribe#app-specific-subscriptions}
+   * {@link https://shopify.dev/docs/apps/build/webhooks/subscribe#app-specific-vs-shop-specific-subscriptions}
    *
    * If you use only app-specific webhooks, you do not need to use `addHandlers`.
    *
@@ -22,9 +22,9 @@ interface Webhooks {
   /**
    * Fetches the configured handlers for shop-specific webhooks for the given topic.
    *
-   * Unless your app needs different webhooks for different shops, we recommend using app-specific webhooks:
+   * In most cases, you should use app-specific webhooks:
    *
-   * {@link https://shopify.dev/docs/apps/build/webhooks/subscribe#app-specific-subscriptions}
+   * {@link https://shopify.dev/docs/apps/build/webhooks/subscribe#app-specific-vs-shop-specific-subscriptions}
    *
    * If you use only app-specific webhooks, you do not need to use `getTopicsAdded`.
    *
@@ -34,9 +34,9 @@ interface Webhooks {
   /**
    * Fetches all topics that were added to the registry.
    *
-   * Unless your app needs different webhooks for different shops, we recommend using app-specific webhooks:
+   * In most cases, you should use app-specific webhooks:
    *
-   * {@link https://shopify.dev/docs/apps/build/webhooks/subscribe#app-specific-subscriptions}
+   * {@link https://shopify.dev/docs/apps/build/webhooks/subscribe#app-specific-vs-shop-specific-subscriptions}
    *
    * If you use only app-specific webhooks, you do not need to use `getHandlers`.
    *
@@ -46,9 +46,9 @@ interface Webhooks {
   /**
    * Registers a webhook handler for a given topic.
    *
-   * Unless your app needs different webhooks for different shops, we recommend using app-specific webhooks:
+   * In most cases, you should use app-specific webhooks:
    *
-   * {@link https://shopify.dev/docs/apps/build/webhooks/subscribe#app-specific-subscriptions}
+   * {@link https://shopify.dev/docs/apps/build/webhooks/subscribe#app-specific-vs-shop-specific-subscriptions}
    *
    * If you use only app-specific webhooks, you do not need to use `register`.
    *
@@ -58,9 +58,9 @@ interface Webhooks {
   /**
    * Processes a webhook request.
    *
-   * Unless your app needs different webhooks for different shops, we recommend using app-specific webhooks:
+   * In most cases, you should use app-specific webhooks:
    *
-   * {@link https://shopify.dev/docs/apps/build/webhooks/subscribe#app-specific-subscriptions}
+   * {@link https://shopify.dev/docs/apps/build/webhooks/subscribe#app-specific-vs-shop-specific-subscriptions}
    *
    * If you use only app-specific webhooks, you do not need to use `process`.
    *
@@ -72,7 +72,7 @@ interface Webhooks {
    *
    * If the call is invalid, it will return a `valid` field set to `false`.
    *
-   * `validate` can be used to validate all Shopify webhook requests, regardless of if they are app-specific or shop-specific.
+   * `validate` can be used to validate app-specific and shop-specific webhook requests.
    *
    */
   validate: ReturnType<typeof validateFactory>;
