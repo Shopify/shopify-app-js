@@ -40,6 +40,17 @@ export interface Shopify<
   auth: ShopifyAuth;
   session: ShopifySession;
   utils: ShopifyUtils;
+
+  /**
+   * Functions for working with webhooks.
+   *
+   * Most of these functions are used for interacting with shop-specific webhooks.
+   * Unless your app needs different webhooks for different shops, we recommend using app-specific webhooks instead:
+   *
+   * {@link https://shopify.dev/docs/apps/build/webhooks/subscribe#app-specific-subscriptions}
+   *
+   * If you use only app-specific webhooks, the only function you will need is `shopify.webhooks.validate`.
+   */
   webhooks: ShopifyWebhooks;
   billing: ShopifyBilling<Future>;
   logger: ShopifyLogger;

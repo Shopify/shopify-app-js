@@ -1,6 +1,10 @@
 # shopify.webhooks.getHandlers
 
-Fetches the configured handlers for the given topic.
+Fetches the configured handlers for shop-specific webhooks for the given topic. In most cases, you should use app-specific webhooks:
+
+[App-specific vs shop-specific webhooks](https://shopify.dev/docs/apps/build/webhooks/subscribe#app-specific-vs-shop-specific-subscriptions).
+
+If you use only app-specific webhooks, you do not need to use `shopify.webhooks.getHandlers`.
 
 ## Example
 

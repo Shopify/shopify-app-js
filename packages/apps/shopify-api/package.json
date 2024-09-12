@@ -92,7 +92,7 @@
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^4.20240909.0",
-    "@swc/core": "^1.7.23",
+    "@swc/core": "^1.7.26",
     "@types/express": "^4.17.13",
     "@types/jsonwebtoken": "^9.0.6",
     "@types/node-fetch": "^2.6.11",
@@ -100,10 +100,10 @@
     "expect": "^29.7.0",
     "express": "^4.19.2",
     "jest-environment-miniflare": "^2.14.3",
-    "miniflare": "^3.20240821.1",
+    "miniflare": "^3.20240821.2",
     "rollup": "^4.21.2",
     "rollup-plugin-swc": "^0.2.1",
-    "wrangler": "^3.75.0"
+    "wrangler": "^3.76.0"
   },
   "files": [
     "dist/*",
