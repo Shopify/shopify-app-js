@@ -100,7 +100,7 @@
     "expect": "^29.7.0",
     "express": "^4.19.2",
     "jest-environment-miniflare": "^2.14.3",
-    "miniflare": "^3.20240821.1",
+    "miniflare": "^3.20240821.2",
     "rollup": "^4.21.2",
     "rollup-plugin-swc": "^0.2.1",
     "wrangler": "^3.75.0"
