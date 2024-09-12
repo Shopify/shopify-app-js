@@ -191,13 +191,13 @@ export interface WebhookContextWithSession<
    *
    * export async function action({ request }: ActionFunctionArgs) {
    *   const { admin } = await authenticate.webhook(request);
-   * 
+   *
    *   // Webhook requests can trigger after an app is uninstalled
    *   // If the app is already uninstalled, the session may be undefined.
    *   if (!session) {
    *     throw new Response();
    *   }
-   * 
+   *
    *   const response = await admin?.graphql(
    *     `#graphql
    *     mutation populateProduct($input: ProductInput!) {

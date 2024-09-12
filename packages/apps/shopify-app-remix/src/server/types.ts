@@ -339,11 +339,11 @@ export interface ShopifyAppBase<Config extends AppConfigArg> {
   addDocumentResponseHeaders: AddDocumentResponseHeaders;
 
   /**
-   * Register shop-specific webhook subscriptions using the Admin GraphQL API. 
-   * 
+   * Register shop-specific webhook subscriptions using the Admin GraphQL API.
+   *
    * Use this only if you need different webhooks per shop (shop-specific webhooks). For many apps, shop will have the same webhooks.
    * In these cases, using app-specific webhooks in the `shopify.app.toml` will be easier:
-   * 
+   *
    * {@link https://shopify.dev/docs/apps/build/webhooks/subscribe#app-specific-vs-shop-specific-subscriptions}
    *
    * @example
