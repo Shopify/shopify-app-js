@@ -1,8 +1,10 @@
 # shopify.webhooks.process
 
-This method validates and triggers the callbacks you configured using [`webhooks.addHandlers`](./addHandlers.md) for `Http` handlers.
+This method validates and triggers the callbacks you configured for shop-specific webhooks using [`webhooks.addHandlers`](./addHandlers.md) for `Http` handlers.  If no handler is found, it will throw an error. In most cases, you should use app-specific webhooks:
 
-If no handler is found, it will throw an error.
+[App-specific vs shop-specific webhooks](https://shopify.dev/docs/apps/build/webhooks/subscribe#app-specific-vs-shop-specific-subscriptions).
+
+If you use only app-specific webhooks, you do not need to use `shopify.webhooks.process`.
 
 **Important**: In Node, the `process` method will always respond to Shopify, even if your call throws an error. You can catch and log errors, but you can't change the response.
 
