@@ -20,7 +20,7 @@ interface Webhooks {
   addHandlers: ReturnType<typeof addHandlers>;
 
   /**
-   * Fetches the configured handlers for shop-specific webhooks for the given topic.
+   * Fetches all topics that were added to the registry.
    *
    * In most cases, you should use app-specific webhooks:
    *
@@ -32,7 +32,7 @@ interface Webhooks {
   getTopicsAdded: ReturnType<typeof getTopicsAdded>;
 
   /**
-   * Fetches all topics that were added to the registry.
+   * Fetches the configured handlers for shop-specific webhooks for the given topic.
    *
    * In most cases, you should use app-specific webhooks:
    *
