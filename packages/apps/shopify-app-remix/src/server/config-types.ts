@@ -90,7 +90,6 @@ export interface AppConfigArg<
    * ```ts
    * // app/shopify.server.ts
    * import { DeliveryMethod, shopifyApp } from "@shopify/shopify-app-remix/server";
-   * import { requiresShopSpecificWebhooks } from "~/utils/webhooks"
    *
    * const shopify = shopifyApp({
    *   webhooks: {
@@ -101,9 +100,11 @@ export interface AppConfigArg<
    *   },
    *   hooks: {
    *     afterAuth: async ({ session }) => {
-   *       if (requiresShopSpecificWebhooks(session.shop)) {
-   *         shopify.registerWebhooks({ session });
-   *       }
+   *       // Register webhooks for the shop
+   *       // In this example, every shop will have these webhooks
+   *       // But you could wrap this in some custom shop specific conditional logic
+   *       shopify.registerWebhooks({ session });
+   *     }
    *   },
    *   // ...etc
    * });

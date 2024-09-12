@@ -246,7 +246,6 @@ interface Authenticate<Config extends AppConfigArg> {
    * ```ts
    * // app/shopify.server.ts
    * import { DeliveryMethod, shopifyApp } from "@shopify/shopify-app-remix/server";
-   * import { requiresShopSpecificWebhooks } from "~/utils/webhooks"
    *
    * const shopify = shopifyApp({
    *   webhooks: {
@@ -257,9 +256,10 @@ interface Authenticate<Config extends AppConfigArg> {
    *   },
    *   hooks: {
    *     afterAuth: async ({ session }) => {
-   *       if (requiresShopSpecificWebhooks(session)) {
-   *         shopify.registerWebhooks({ session });
-   *       }
+   *       // Register webhooks for the shop
+   *       // In this example, every shop will have these webhooks
+   *       // You could wrap this in some custom shop specific conditional logic if needed
+   *       shopify.registerWebhooks({ session });
    *     },
    *   },
    *   // ...etc
@@ -352,7 +352,6 @@ export interface ShopifyAppBase<Config extends AppConfigArg> {
    * ```ts
    * // app/shopify.server.ts
    * import { DeliveryMethod, shopifyApp } from "@shopify/shopify-app-remix/server";
-   * import { requiresShopSpecificWebhooks } from "~/utils/webhooks"
    *
    * const shopify = shopifyApp({
    *   webhooks: {
@@ -363,9 +362,10 @@ export interface ShopifyAppBase<Config extends AppConfigArg> {
    *   },
    *   hooks: {
    *     afterAuth: async ({ session }) => {
-   *       if (requiresShopSpecificWebhooks(session)) {
-   *         shopify.registerWebhooks({ session });
-   *       }
+   *       // Register webhooks for the shop
+   *       // In this example, every shop will have these webhooks
+   *       // You could wrap this in some custom shop specific conditional logic if needed
+   *       shopify.registerWebhooks({ session });
    *     },
    *   },
    *   // ...etc
