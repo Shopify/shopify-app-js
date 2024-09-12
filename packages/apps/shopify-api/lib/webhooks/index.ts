@@ -6,7 +6,6 @@ import {process} from './process';
 import {validateFactory} from './validate';
 import {HttpWebhookHandlerWithCallback, WebhookRegistry} from './types';
 
-
 interface Webhooks {
   /**
    * Add shop-specific webhook handlers to the library registry,
