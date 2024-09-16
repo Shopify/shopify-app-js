@@ -1,8 +1,10 @@
-# Setting up webhooks
+# Setting up shop-specific webhooks
 
-If your app needs to keep track of specific events happening on a shop, you can use [Shopify webhooks](https://shopify.dev/docs/apps/webhooks) to subscribe to those events.
+We recommend using [app-specific webhooks](https://shopify.dev/docs/apps/build/webhooks/subscribe#app-specific-subscriptions).  App-specific webhooks can be configured in the [shopify.app.toml](https://shopify.dev/docs/apps/build/webhooks/subscribe/get-started?framework=remix&deliveryMethod=https#set-your-app-up-to-receive-webhooks-using-https-delivery) and do not require the methods in this documentation.
 
-To do that, you'll need to perform the following steps:
+If your app requires different webhooks subscriptions per shop, you can use this documentation to get started.  But in many cases, the extra complexity is not needed.
+
+To configure shop-specific webhooks, perform the following steps:
 
 1. Set up your webhook handlers by calling [shopify.webhooks.addHandlers](../reference/webhooks/addHandlers.md).
 1. Register your handlers with Shopify after the app is installed by calling [shopify.webhooks.register](../reference/webhooks/register.md).
@@ -10,7 +12,7 @@ To do that, you'll need to perform the following steps:
    1. setting up an endpoint that calls [shopfiy.webhooks.validate](../reference/webhooks/validate.md).
    1. setting up an endpoint that calls [shopfiy.webhooks.process](../reference/webhooks/process.md).
 
-Below is an example of how to register webhooks after OAuth completes:
+Below is an example of how to register shop-specific webhooks after OAuth completes:
 
 ```ts
 const shopify = shopifyApi({
@@ -48,7 +50,7 @@ app.get('/auth/callback', async (req, res) => {
 });
 ```
 
-You can use `validate` to process your webhooks:
+You can use `validate` to process your webhooks.  This applies to both app-specific and shop-specific webhooks:
 
 ```ts
 // Add handlers for the events you want to subscribe to. You don't need a callback if you're just using `validate`

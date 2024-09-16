@@ -4,21 +4,22 @@ const data: LandingTemplateSchema = {
   id: 'guide-webhooks',
   title: 'Subscribing to webhooks',
   description:
-    'Your app must respond to [mandatory webhook topics](/docs/apps/webhooks/configuration/mandatory-webhooks). In addition, your app can register [optional webhook topics](/docs/api/admin-rest/current/resources/webhook#event-topics).',
+    'Your app must respond to [mandatory webhook topics](/docs/apps/webhooks/configuration/mandatory-webhooks). In addition, your app can register [optional webhook topics](/docs/api/admin-rest/current/resources/webhook#event-topics).\n\n' +
+    'There are app-specific and shop-specific webhooks. We recommend app-specific webhooks for most apps, but there are reasons to register shop-specific webhooks. For more information, please read [App-specific vs shop-specific webhooks](https://shopify.dev/docs/apps/build/webhooks/subscribe#app-specific-vs-shop-specific-subscriptions).' ,
   sections: [
     {
       type: 'Generic',
       anchorLink: 'config',
-      title: 'Subscribe using the app configuration file',
+      title: 'App-specific webhooks (recommended)',
       sectionContent:
-        'The easiest and recommended way to configure your webhooks is to edit your app configuration file. ' +
+        'The easiest way to configure webhooks is to use app-specific webhooks in `shopify.app.toml`. ' +
         'You can find more info in the [webhooks documentation](/docs/apps/webhooks/getting-started-declarative).' +
         '\n\nTo set up a simple HTTPS webhook subscription, you can follow these steps:' +
-        '\n1. Add in `shopify.app.toml` the topic you want to subscribe to. In this example we subscribe to the `APP_UNINSTALLED` topic.' +
+        '\n1. Add the topic to subscribe to in `shopify.app.toml`. In this example we subscribe to the `APP_UNINSTALLED` topic.' +
         '\n1. Review the required scopes for the webhook topics, and update your [app scopes](/docs/apps/tools/cli/configuration#access_scopes) as necessary.' +
         '\n1. Run `shopify app deploy` from the CLI to save your webhooks configuration.',
       codeblock: {
-        title: 'Configure webhooks subscriptions with the app configuration',
+        title: 'Configure app-specific webhooks',
         tabs: [
           {
             title: 'shopify.app.toml',
@@ -31,15 +32,16 @@ const data: LandingTemplateSchema = {
     {
       type: 'Generic',
       anchorLink: 'config',
-      title: 'Subscribe using the API',
+      title: 'Shop-specific webhooks',
       sectionContent:
-        'Configure `shopifyApp` and setup webhook subscription with the following steps:' +
+        'Shop-specific webhooks are useful when you need to subscribe to different webhook topics for different shops, or when a topic is not supported by app-specific webhooks.' +
+        'Configure `shopifyApp` and to setup shop-specific webhook subscriptions with the following steps:' +
         '\n1. The webhooks you want to subscribe to. In this example we subscribe to the `APP_UNINSTALLED` topic.' +
         '\n1. The code to register the `APP_UNINSTALLED` topic after a merchant installs you app. Here `shopifyApp` provides an `afterAuth` hook.' +
         '\n1. Review the required scopes for the webhook topics, and update your [app scopes](/docs/apps/tools/cli/configuration#access_scopes) as necessary.' +
         "\n\n> Note: You can't register mandatory topics using this package, you must [configure those in the Partner Dashboard](/docs/apps/webhooks/configuration/mandatory-webhooks) instead.",
       codeblock: {
-        title: 'Configure webhooks subscriptions with the API',
+        title: 'Configure shop-specific webhooks',
         tabs: [
           {
             title: '/app/shopify.server.ts',
