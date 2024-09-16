@@ -7,8 +7,6 @@ import {ResourcePath, ResourceNames} from '../../types';
 import {Session} from '../../../lib/session/session';
 import {ApiVersion} from '../../../lib/types';
 
-import {Currency} from './currency';
-
 interface FindArgs {
   session: Session;
   id: number | string;
@@ -24,9 +22,7 @@ interface AllArgs {
 export class ApplicationCharge extends Base {
   public static apiVersion = ApiVersion.July24;
 
-  protected static hasOne: {[key: string]: typeof Base} = {
-    "currency": Currency
-  };
+  protected static hasOne: {[key: string]: typeof Base} = {};
   protected static hasMany: {[key: string]: typeof Base} = {};
   protected static paths: ResourcePath[] = [
     {"http_method": "get", "operation": "get", "ids": [], "path": "application_charges.json"},
@@ -70,12 +66,14 @@ export class ApplicationCharge extends Base {
       params: {"since_id": since_id, "fields": fields, ...otherArgs},
     });
 
+    console.log("response", response);
+
     return response;
   }
 
   public confirmation_url: string | null;
   public created_at: string | null;
-  public currency: Currency | null | {[key: string]: any};
+  public currency: string | null;
   public id: number | null;
   public name: string | null;
   public price: string | number | null;
