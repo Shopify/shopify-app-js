@@ -223,8 +223,8 @@ importers:
         specifier: ^7.6.11
         version: 7.6.11
       '@types/pg':
-        specifier: ^8.11.6
-        version: 8.11.6
+        specifier: ^8.11.10
+        version: 8.11.10
       better-sqlite3:
         specifier: ^11.1.2
         version: 11.1.2
@@ -233,7 +233,7 @@ importers:
         version: 0.24.0
       drizzle-orm:
         specifier: ^0.33.0
-        version: 0.33.0(@cloudflare/workers-types@4.20240909.0)(@libsql/client@0.10.0(encoding@0.1.13))(@prisma/client@5.19.1(prisma@5.19.1))(@types/better-sqlite3@7.6.11)(@types/pg@8.11.6)(@types/react@18.3.5)(better-sqlite3@11.1.2)(mysql2@3.11.0)(pg@8.12.0)(prisma@5.19.1)(react@18.3.1)(sqlite3@5.1.7)
+        version: 0.33.0(@cloudflare/workers-types@4.20240909.0)(@libsql/client@0.10.0(encoding@0.1.13))(@prisma/client@5.19.1(prisma@5.19.1))(@types/better-sqlite3@7.6.11)(@types/pg@8.11.10)(@types/react@18.3.5)(better-sqlite3@11.1.2)(mysql2@3.11.0)(pg@8.12.0)(prisma@5.19.1)(react@18.3.1)(sqlite3@5.1.7)
       mysql2:
         specifier: ^3.10.1
         version: 3.11.0
@@ -346,8 +346,8 @@ importers:
         specifier: ^3.0.5
         version: link:../shopify-app-session-storage-test-utils
       '@types/pg':
-        specifier: ^8.11.6
-        version: 8.11.6
+        specifier: ^8.11.10
+        version: 8.11.10
 
   packages/apps/session-storage/shopify-app-session-storage-prisma:
     dependencies:
@@ -3432,8 +3432,8 @@ packages:
   '@types/parse-json@4.0.2':
     resolution: {integrity: sha512-dISoDXWWQwUquiKsyZ4Ng+HX2KsPL7LyHKHQwgGFEA3IaKac4Obd+h2a/a6waisAoepJlBcx9paWqjA8/HVjCw==}
 
-  '@types/pg@8.11.6':
-    resolution: {integrity: sha512-/2WmmBXHLsfRqzfHW7BNZ8SbYzE8OSk7i3WjFYvfgRHj7S1xj+16Je5fUKv3lVdVzk/zn9TXOqf+avFCFIE0yQ==}
+  '@types/pg@8.11.10':
+    resolution: {integrity: sha512-LczQUW4dbOQzsH2RQ5qoeJ6qJPdrcM/DcMLoqWQkMLMsq83J5lAX3LXjdkWdpscFy67JSOWDnh7Ny/sPFykmkg==}
 
   '@types/prop-types@15.7.12':
     resolution: {integrity: sha512-5zvhXYtRNRluoE/jAp4GVsSduVUzNWKkOZrCDBWYtE7biZywwdC2AcEzg+cSMLFRfVgeAFqpfNabiPjxFddV1Q==}
@@ -11412,7 +11412,7 @@ snapshots:
   '@types/body-parser@1.19.5':
     dependencies:
       '@types/connect': 3.4.38
-      '@types/node': 22.3.0
+      '@types/node': 22.5.4
 
   '@types/compression@1.7.5':
     dependencies:
@@ -11434,7 +11434,7 @@ snapshots:
 
   '@types/express-serve-static-core@4.19.5':
     dependencies:
-      '@types/node': 22.3.0
+      '@types/node': 22.5.4
       '@types/qs': 6.9.15
       '@types/range-parser': 1.2.7
       '@types/send': 0.17.4
@@ -11506,9 +11506,9 @@ snapshots:
 
   '@types/parse-json@4.0.2': {}
 
-  '@types/pg@8.11.6':
+  '@types/pg@8.11.10':
     dependencies:
-      '@types/node': 22.3.0
+      '@types/node': 22.5.4
       pg-protocol: 1.6.1
       pg-types: 4.0.2
 
@@ -11543,7 +11543,7 @@ snapshots:
   '@types/serve-static@1.15.7':
     dependencies:
       '@types/http-errors': 2.0.4
-      '@types/node': 22.3.0
+      '@types/node': 22.5.4
       '@types/send': 0.17.4
 
   '@types/sqlite3@3.1.11':
@@ -12647,13 +12647,13 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  drizzle-orm@0.33.0(@cloudflare/workers-types@4.20240909.0)(@libsql/client@0.10.0(encoding@0.1.13))(@prisma/client@5.19.1(prisma@5.19.1))(@types/better-sqlite3@7.6.11)(@types/pg@8.11.6)(@types/react@18.3.5)(better-sqlite3@11.1.2)(mysql2@3.11.0)(pg@8.12.0)(prisma@5.19.1)(react@18.3.1)(sqlite3@5.1.7):
+  drizzle-orm@0.33.0(@cloudflare/workers-types@4.20240909.0)(@libsql/client@0.10.0(encoding@0.1.13))(@prisma/client@5.19.1(prisma@5.19.1))(@types/better-sqlite3@7.6.11)(@types/pg@8.11.10)(@types/react@18.3.5)(better-sqlite3@11.1.2)(mysql2@3.11.0)(pg@8.12.0)(prisma@5.19.1)(react@18.3.1)(sqlite3@5.1.7):
     optionalDependencies:
       '@cloudflare/workers-types': 4.20240909.0
       '@libsql/client': 0.10.0(encoding@0.1.13)
       '@prisma/client': 5.19.1(prisma@5.19.1)
       '@types/better-sqlite3': 7.6.11
-      '@types/pg': 8.11.6
+      '@types/pg': 8.11.10
       '@types/react': 18.3.5
       better-sqlite3: 11.1.2
       mysql2: 3.11.0
