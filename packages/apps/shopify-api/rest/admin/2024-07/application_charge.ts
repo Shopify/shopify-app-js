@@ -65,9 +65,7 @@ export class ApplicationCharge extends Base {
       urlIds: {},
       params: {"since_id": since_id, "fields": fields, ...otherArgs},
     });
-
-    console.log("response", response);
-
+    
     return response;
   }
 
