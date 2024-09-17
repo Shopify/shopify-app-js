@@ -458,8 +458,8 @@ importers:
         specifier: ^4.17.13
         version: 4.17.21
       '@types/jsonwebtoken':
-        specifier: ^9.0.6
-        version: 9.0.6
+        specifier: ^9.0.7
+        version: 9.0.7
       '@types/node-fetch':
         specifier: ^2.6.11
         version: 2.6.11
@@ -519,8 +519,8 @@ importers:
         specifier: ^4.17.21
         version: 4.17.21
       '@types/jsonwebtoken':
-        specifier: ^9.0.5
-        version: 9.0.6
+        specifier: ^9.0.7
+        version: 9.0.7
       '@types/semver':
         specifier: ^7.5.8
         version: 7.5.8
@@ -577,8 +577,8 @@ importers:
         specifier: ^4.0.6
         version: link:../session-storage/shopify-app-session-storage-memory
       '@types/jsonwebtoken':
-        specifier: ^9.0.5
-        version: 9.0.6
+        specifier: ^9.0.7
+        version: 9.0.7
       '@types/react':
         specifier: ^18.3.5
         version: 18.3.5
@@ -3435,8 +3435,8 @@ packages:
   '@types/json5@0.0.29':
     resolution: {integrity: sha512-dRLjCWHYg4oaA77cxO64oO+7JwCwnIzkZPdrrC71jQmQtlhM556pwKo5bUzqvZndkVbeFLIIi+9TC40JNF5hNQ==}
 
-  '@types/jsonwebtoken@9.0.6':
-    resolution: {integrity: sha512-/5hndP5dCjloafCXns6SZyESp3Ldq7YjH3zwzwczYnjxIT0Fqzk5ROSYVGfFyczIue7IUEj8hkvLbPoLQ18vQw==}
+  '@types/jsonwebtoken@9.0.7':
+    resolution: {integrity: sha512-ugo316mmTYBl2g81zDFnZ7cfxlut3o+/EQdaP7J8QN2kY6lJ22hmQYCK5EHcJHbrW+dkCGSCPgbG8JtYj6qSrg==}
 
   '@types/methods@1.1.4':
     resolution: {integrity: sha512-ymXWVrDiCxTBE3+RIrrP533E70eA+9qu7zdWoHuOmGujkYtzf4HQF96b8nwHLqhuf4ykX61IGRIB38CC6/sImQ==}
@@ -11470,7 +11470,7 @@ snapshots:
   '@types/body-parser@1.19.5':
     dependencies:
       '@types/connect': 3.4.38
-      '@types/node': 22.3.0
+      '@types/node': 22.5.4
 
   '@types/compression@1.7.5':
     dependencies:
@@ -11492,7 +11492,7 @@ snapshots:
 
   '@types/express-serve-static-core@4.19.5':
     dependencies:
-      '@types/node': 22.3.0
+      '@types/node': 22.5.4
       '@types/qs': 6.9.15
       '@types/range-parser': 1.2.7
       '@types/send': 0.17.4
@@ -11535,9 +11535,9 @@ snapshots:
 
   '@types/json5@0.0.29': {}
 
-  '@types/jsonwebtoken@9.0.6':
+  '@types/jsonwebtoken@9.0.7':
     dependencies:
-      '@types/node': 22.3.0
+      '@types/node': 22.5.4
 
   '@types/methods@1.1.4': {}
 
@@ -11601,7 +11601,7 @@ snapshots:
   '@types/serve-static@1.15.7':
     dependencies:
       '@types/http-errors': 2.0.4
-      '@types/node': 22.3.0
+      '@types/node': 22.5.4
       '@types/send': 0.17.4
 
   '@types/sqlite3@3.1.11':
