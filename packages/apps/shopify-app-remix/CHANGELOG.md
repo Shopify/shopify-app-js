@@ -1,5 +1,15 @@
 # @shopify/shopify-app-remix
 
+## 3.3.1
+
+### Patch Changes
+
+- 2ecb1ac: Add more docs on when to use app-specific vs shop-specific webhooks and which methods/config uses which approach
+- Updated dependencies [323bef3]
+- Updated dependencies [fb48795]
+  - @shopify/shopify-api@11.4.1
+  - @shopify/shopify-app-session-storage@3.0.6
+
 ## 3.3.0
 
 ### Minor Changes
