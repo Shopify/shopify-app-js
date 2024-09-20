@@ -19,6 +19,10 @@ interface TransactionsArgs {
   payout_status?: unknown;
 }
 
+interface TransactionsResponse {
+  transactions: PaymentTransaction[];
+}
+
 export class PaymentTransaction extends Base {
   public static apiVersion = ApiVersion.April23;
 
@@ -46,8 +50,8 @@ export class PaymentTransaction extends Base {
       payout_status = null,
       ...otherArgs
     }: TransactionsArgs
-  ): Promise<unknown> {
-    const response = await this.request<PaymentTransaction>({
+  ): Promise<TransactionsResponse | null> {
+    const response = await this.request<TransactionsResponse>({
       http_method: "get",
       operation: "transactions",
       session: session,
