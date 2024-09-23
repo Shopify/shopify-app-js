@@ -247,8 +247,8 @@ importers:
         specifier: ^3.645.0
         version: 3.645.0
       '@aws-sdk/util-dynamodb':
-        specifier: ^3.632.0
-        version: 3.632.0(@aws-sdk/client-dynamodb@3.645.0)
+        specifier: ^3.656.0
+        version: 3.656.0(@aws-sdk/client-dynamodb@3.645.0)
       '@shopify/shopify-api':
         specifier: ^11.0.0
         version: link:../../shopify-api
@@ -717,11 +717,11 @@ packages:
     resolution: {integrity: sha512-+Tqnh9w0h2LcrUsdXyT1F8mNhXz+tVYBtP19LpeEGntmvHwa2XzvLUCWpoIAIVsHp5+HdB2X9Sn0KAtmbFXc2Q==}
     engines: {node: '>=16.0.0'}
 
-  '@aws-sdk/util-dynamodb@3.632.0':
-    resolution: {integrity: sha512-uvfHEk7y9JKLTOXPOQi+GhQLs0Eo09xNNMGk8ptZUeXS4u/Qs6lHKJK6i1khoeeQ6+ASSxmYmTbDhpPqUKGPEg==}
+  '@aws-sdk/util-dynamodb@3.656.0':
+    resolution: {integrity: sha512-vavQ0AZ4t7US3zWCv8mSS9wH6O2nB2lW4yFMO5pkd1Y8YFE3DDFSbzl0zI2A2YSrU1n4fqFbCfXhQhK6sRYoNA==}
     engines: {node: '>=16.0.0'}
     peerDependencies:
-      '@aws-sdk/client-dynamodb': ^3.632.0
+      '@aws-sdk/client-dynamodb': ^3.656.0
 
   '@aws-sdk/util-endpoints@3.645.0':
     resolution: {integrity: sha512-Oe+xaU4ic4PB1k3pb5VTC1/MWES13IlgpaQw01bVHGfwP6Yv6zZOxizRzca2Y3E+AyR+nKD7vXtHRY+w3bi4bg==}
@@ -8090,7 +8090,7 @@ snapshots:
       '@smithy/types': 3.3.0
       tslib: 2.6.3
 
-  '@aws-sdk/util-dynamodb@3.632.0(@aws-sdk/client-dynamodb@3.645.0)':
+  '@aws-sdk/util-dynamodb@3.656.0(@aws-sdk/client-dynamodb@3.645.0)':
     dependencies:
       '@aws-sdk/client-dynamodb': 3.645.0
       tslib: 2.6.3
