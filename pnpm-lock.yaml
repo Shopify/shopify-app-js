@@ -531,8 +531,8 @@ importers:
   packages/apps/shopify-app-remix:
     dependencies:
       '@remix-run/server-runtime':
-        specifier: ^2.5.1
-        version: 2.11.1(typescript@5.6.2)
+        specifier: ^2.12.1
+        version: 2.12.1(typescript@5.6.2)
       '@shopify/admin-api-client':
         specifier: ^1.0.2
         version: link:../../api-clients/admin-api-client
@@ -2738,10 +2738,6 @@ packages:
       typescript:
         optional: true
 
-  '@remix-run/router@1.19.0':
-    resolution: {integrity: sha512-zDICCLKEwbVYTS6TjYaWtHXxkdoUvD/QXvyVZjGCsWz5vyH7aFeONlPffPdW+Y/t6KT0MgXb2Mfjun9YpWN1dA==}
-    engines: {node: '>=14.0.0'}
-
   '@remix-run/router@1.19.1':
     resolution: {integrity: sha512-S45oynt/WH19bHbIXjtli6QmwNYvaz+vtnubvNpNDvUOoA/OWh6j1OikIP3G+v5GHdxyC6EXoChG3HgYGEUfcg==}
     engines: {node: '>=14.0.0'}
@@ -2749,15 +2745,6 @@ packages:
   '@remix-run/router@1.19.2':
     resolution: {integrity: sha512-baiMx18+IMuD1yyvOGaHM9QrVUPGGG0jC+z+IPHnRJWUAUvaKuWKyE8gjDj2rzv3sz9zOGoRSPgeBVHRhZnBlA==}
     engines: {node: '>=14.0.0'}
-
-  '@remix-run/server-runtime@2.11.1':
-    resolution: {integrity: sha512-j3AlrZul0javvPR6ZWdN32/l12t1E90sLeZI/k+4HpT0ifjqJVg8uG6alRJ0LLN9ae5BERYEslUebUqdfejSkQ==}
-    engines: {node: '>=18.0.0'}
-    peerDependencies:
-      typescript: ^5.1.0
-    peerDependenciesMeta:
-      typescript:
-        optional: true
 
   '@remix-run/server-runtime@2.11.2':
     resolution: {integrity: sha512-abG6ENj0X3eHqDxqO2thWM2NSEiPnqyt58z1BbiQCv+t8g0Zuqd5QHbB4wzdNvfS0vKhg+jJiigcJneAc4sZzw==}
@@ -7292,9 +7279,6 @@ packages:
     cpu: [arm64]
     os: [linux]
 
-  turbo-stream@2.2.0:
-    resolution: {integrity: sha512-FKFg7A0To1VU4CH9YmSMON5QphK0BXjSoiC7D9yMh+mEEbXLUP9qJ4hEt1qcjKtzncs1OpcnjZO8NgrlVbZH+g==}
-
   turbo-stream@2.3.0:
     resolution: {integrity: sha512-PhEr9mdexoVv+rJkQ3c8TjrN3DUghX37GNJkSMksoPR4KrXIPnM2MnqRt07sViIqX9IdlhrgtTSyjoVOASq6cg==}
 
@@ -10651,23 +10635,9 @@ snapshots:
     optionalDependencies:
       typescript: 5.6.2
 
-  '@remix-run/router@1.19.0': {}
-
   '@remix-run/router@1.19.1': {}
 
   '@remix-run/router@1.19.2': {}
-
-  '@remix-run/server-runtime@2.11.1(typescript@5.6.2)':
-    dependencies:
-      '@remix-run/router': 1.19.0
-      '@types/cookie': 0.6.0
-      '@web3-storage/multipart-parser': 1.0.0
-      cookie: 0.6.0
-      set-cookie-parser: 2.7.0
-      source-map: 0.7.4
-      turbo-stream: 2.2.0
-    optionalDependencies:
-      typescript: 5.6.2
 
   '@remix-run/server-runtime@2.11.2(typescript@5.6.2)':
     dependencies:
@@ -15983,8 +15953,6 @@ snapshots:
 
   turbo-linux-arm64@2.1.2:
     optional: true
-
-  turbo-stream@2.2.0: {}
 
   turbo-stream@2.3.0: {}
 
