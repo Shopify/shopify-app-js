@@ -134,11 +134,9 @@ export interface BillingContext<Config extends AppConfigArg> {
    *   billing: {
    *     [MONTHLY_PLAN]: {
    *       lineItems: [
-   *         {
-   *           amount: 5,
-   *           currencyCode: 'USD',
-   *           interval: BillingInterval.Every30Days,
-   *         }
+   *         amount: 5,
+   *         currencyCode: 'USD',
+   *         interval: BillingInterval.Every30Days,
    *       ],
    *     },
    *   }
@@ -181,20 +179,16 @@ export interface BillingContext<Config extends AppConfigArg> {
    *   billing: {
    *     [MONTHLY_PLAN]: {
    *       lineItems: [
-   *         {
-   *           amount: 5,
-   *           currencyCode: 'USD',
-   *           interval: BillingInterval.Every30Days,
-   *         }
+   *         amount: 5,
+   *         currencyCode: 'USD',
+   *         interval: BillingInterval.Every30Days,
    *       ],
    *     },
    *     [ANNUAL_PLAN]: {
    *       lineItems: [
-   *         {
-   *           amount: 50,
-   *           currencyCode: 'USD',
-   *           interval: BillingInterval.Annual,
-   *         }
+   *         amount: 50,
+   *         currencyCode: 'USD',
+   *         interval: BillingInterval.Annual,
    *       ],
    *     },
    *   }
@@ -243,20 +237,16 @@ export interface BillingContext<Config extends AppConfigArg> {
    *   billing: {
    *     [MONTHLY_PLAN]: {
    *       lineItems: [
-   *         {
-   *           amount: 5,
-   *           currencyCode: 'USD',
-   *           interval: BillingInterval.Every30Days,
-   *         }
+   *         amount: 5,
+   *         currencyCode: 'USD',
+   *         interval: BillingInterval.Every30Days,
    *       ],
    *     },
    *     [ANNUAL_PLAN]: {
    *       lineItems: [
-   *         {
-   *           amount: 50,
-   *           currencyCode: 'USD',
-   *           interval: BillingInterval.Annual,
-   *         }
+   *         amount: 50,
+   *         currencyCode: 'USD',
+   *         interval: BillingInterval.Annual,
    *       ],
    *     },
    *   }
@@ -326,20 +316,16 @@ export interface BillingContext<Config extends AppConfigArg> {
    *   billing: {
    *     [MONTHLY_PLAN]: {
    *       lineItems: [
-   *         {
-   *           amount: 5,
-   *           currencyCode: 'USD',
-   *           interval: BillingInterval.Every30Days,
-   *         }
+   *         amount: 5,
+   *         currencyCode: 'USD',
+   *         interval: BillingInterval.Every30Days,
    *       ],
    *     },
    *     [ANNUAL_PLAN]: {
    *       lineItems: [
-   *         {
-   *           amount: 50,
-   *           currencyCode: 'USD',
-   *           interval: BillingInterval.Annual,
-   *         }
+   *         amount: 50,
+   *         currencyCode: 'USD',
+   *         interval: BillingInterval.Annual,
    *       ],
    *     },
    *   }
@@ -388,20 +374,16 @@ export interface BillingContext<Config extends AppConfigArg> {
    *   billing: {
    *     [MONTHLY_PLAN]: {
    *       lineItems: [
-   *         {
-   *           amount: 5,
-   *           currencyCode: 'USD',
-   *           interval: BillingInterval.Every30Days,
-   *         }
+   *         amount: 5,
+   *         currencyCode: 'USD',
+   *         interval: BillingInterval.Every30Days,
    *       ],
    *     },
    *     [ANNUAL_PLAN]: {
    *       lineItems: [
-   *         {
-   *           amount: 50,
-   *           currencyCode: 'USD',
-   *           interval: BillingInterval.Annual,
-   *         }
+   *         amount: 50,
+   *         currencyCode: 'USD',
+   *         interval: BillingInterval.Annual,
    *       ],
    *     },
    *   }
@@ -454,20 +436,16 @@ export interface BillingContext<Config extends AppConfigArg> {
    *   billing: {
    *     [MONTHLY_PLAN]: {
    *       lineItems: [
-   *         {
-   *           amount: 5,
-   *           currencyCode: 'USD',
-   *           interval: BillingInterval.Every30Days,
-   *         }
+   *         amount: 5,
+   *         currencyCode: 'USD',
+   *         interval: BillingInterval.Every30Days,
    *       ],
    *     },
    *     [ANNUAL_PLAN]: {
    *       lineItems: [
-   *         {
-   *           amount: 50,
-   *           currencyCode: 'USD',
-   *           interval: BillingInterval.Annual,
-   *         }
+   *         amount: 50,
+   *         currencyCode: 'USD',
+   *         interval: BillingInterval.Annual,
    *       ],
    *     },
    *   }
@@ -518,11 +496,9 @@ export interface BillingContext<Config extends AppConfigArg> {
    *   billing: {
    *     [USAGE_PLAN]: {
    *       lineItems: [
-   *         {
-   *           amount: 5,
-   *           currencyCode: 'USD',
-   *           interval: BillingInterval.Usage,
-   *         }
+   *         amount: 5,
+   *         currencyCode: 'USD',
+   *         interval: BillingInterval.Usage,
    *       ],
    *     },
    *   }
