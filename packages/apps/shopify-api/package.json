@@ -91,7 +91,7 @@
     "uuid": "^10.0.0"
   },
   "devDependencies": {
-    "@cloudflare/workers-types": "^4.20240919.0",
+    "@cloudflare/workers-types": "^4.20240924.0",
     "@swc/core": "^1.7.26",
     "@types/express": "^4.17.13",
     "@types/jsonwebtoken": "^9.0.7",
