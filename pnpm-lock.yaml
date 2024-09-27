@@ -485,8 +485,8 @@ importers:
         specifier: ^0.2.1
         version: 0.2.1(@swc/core@1.7.28)(rollup@4.22.4)
       wrangler:
-        specifier: ^3.78.10
-        version: 3.78.10(@cloudflare/workers-types@4.20240925.0)
+        specifier: ^3.78.11
+        version: 3.78.11(@cloudflare/workers-types@4.20240925.0)
 
   packages/apps/shopify-app-express:
     dependencies:
@@ -7564,8 +7564,8 @@ packages:
     engines: {node: '>=16'}
     hasBin: true
 
-  wrangler@3.78.10:
-    resolution: {integrity: sha512-Q8Ia0xz0RCzj5X7TMIEQ/EbADSG2cWPmTDRaulGSWnYqfIlFyKoxl7Zx1XXCo1EkDcKfSpX6TZa22pCDmtl4LA==}
+  wrangler@3.78.11:
+    resolution: {integrity: sha512-+dWXHgq2DVad03gETiT09cCp+sr7IFcnEquR4gesVdkC4/6E51qHcSC7zAG6S26JMZe+fCaUujhBXQnkWI/Q1g==}
     engines: {node: '>=16.17.0'}
     hasBin: true
     peerDependencies:
@@ -16259,7 +16259,7 @@ snapshots:
       '@cloudflare/workerd-linux-arm64': 1.20240925.0
       '@cloudflare/workerd-windows-64': 1.20240925.0
 
-  wrangler@3.78.10(@cloudflare/workers-types@4.20240925.0):
+  wrangler@3.78.11(@cloudflare/workers-types@4.20240925.0):
     dependencies:
       '@cloudflare/kv-asset-handler': 0.3.4
       '@cloudflare/workers-shared': 0.5.4
