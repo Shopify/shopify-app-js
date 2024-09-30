@@ -12,7 +12,9 @@ const propertiesToSave = [
   'isOnline',
   'scope',
   'accessToken',
+  'refreshToken',
   'expires',
+  'refreshTokenExpires',
   'onlineAccessInfo',
 ];
 
@@ -40,6 +42,8 @@ export class Session {
               return ['isOnline', value];
             case 'accesstoken':
               return ['accessToken', value];
+            case 'refreshToken':
+              return ['refreshToken', value];
             case 'onlineaccessinfo':
               return ['onlineAccessInfo', value];
             case 'userid':
@@ -77,6 +81,9 @@ export class Session {
           sessionData[key] = value.toString();
           break;
         case 'expires':
+          sessionData[key] = value ? new Date(Number(value)) : undefined;
+          break;
+        case 'refreshTokenExpires':
           sessionData[key] = value ? new Date(Number(value)) : undefined;
           break;
         case 'onlineAccessInfo':
@@ -244,6 +251,12 @@ export class Session {
     if (this.accessToken) {
       object.accessToken = this.accessToken;
     }
+    if (this.refreshToken) {
+      object.refreshToken = this.refreshToken;
+    }
+    if (this.refreshTokenExpires) {
+      object.refreshTokenExpires = this.refreshTokenExpires;
+    }
     if (this.onlineAccessInfo) {
       object.onlineAccessInfo = this.onlineAccessInfo;
     }
@@ -291,6 +304,8 @@ export class Session {
         .flatMap(([key, value]): [string, string | number | boolean][] => {
           switch (key) {
             case 'expires':
+              return [[key, value ? value.getTime() : undefined]];
+            case 'refreshTokenExpires':
               return [[key, value ? value.getTime() : undefined]];
             case 'onlineAccessInfo':
               // eslint-disable-next-line no-negated-condition

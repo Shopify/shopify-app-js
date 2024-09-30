@@ -165,6 +165,8 @@ export class PrismaSessionStorage<T extends PrismaClient>
       scope: session.scope || null,
       expires: session.expires || null,
       accessToken: session.accessToken || '',
+      refreshToken: session.refreshToken || '',
+      refreshTokenExpires: session.refreshTokenExpires || null,
       userId:
         (sessionParams.onlineAccessInfo?.associated_user
           .id as unknown as bigint) || null,
