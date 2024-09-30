@@ -10,6 +10,10 @@ import {
   BuildEmbeddedAppUrl,
 } from './get-embedded-app-url';
 import {TokenExchange, tokenExchange} from './oauth/token-exchange';
+import {
+  RefreshAccessToken,
+  refreshAccessToken,
+} from './oauth/refresh-access-token';
 
 export {AuthScopes} from './scopes';
 
@@ -24,6 +28,7 @@ export function shopifyAuth<Config extends ConfigInterface>(
     getEmbeddedAppUrl: getEmbeddedAppUrl(config),
     buildEmbeddedAppUrl: buildEmbeddedAppUrl(config),
     tokenExchange: tokenExchange(config),
+    refreshAccessToken: refreshAccessToken(config),
   } as ShopifyAuth;
 
   return shopify;
@@ -37,4 +42,5 @@ export interface ShopifyAuth {
   getEmbeddedAppUrl: GetEmbeddedAppUrl;
   buildEmbeddedAppUrl: BuildEmbeddedAppUrl;
   tokenExchange: TokenExchange;
+  refreshAccessToken: RefreshAccessToken;
 }
