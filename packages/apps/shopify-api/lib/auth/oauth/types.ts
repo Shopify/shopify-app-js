@@ -31,13 +31,15 @@ export interface CallbackParams extends AdapterArgs {}
 export interface AccessTokenResponse {
   access_token: string;
   scope: string;
+  refresh_token?: string;
+  /**
+   * How long the access token is valid for, in seconds, if applicable.
+   */
+  expires_in?: number;
+  refresh_token_expires_in?: number;
 }
 
 export interface OnlineAccessInfo {
-  /**
-   * How long the access token is valid for, in seconds.
-   */
-  expires_in: number;
   /**
    * The effective set of scopes for the session.
    */

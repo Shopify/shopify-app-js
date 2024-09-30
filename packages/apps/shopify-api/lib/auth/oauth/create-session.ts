@@ -28,13 +28,18 @@ export function createSession({
 
   logger(config).info('Creating new session', {shop, isOnline});
 
+  const sessionExpiration = accessTokenResponse.expires_in
+    ? new Date(Date.now() + accessTokenResponse.expires_in * 1000)
+    : undefined;
+
+  const refreshTokenExpiration = accessTokenResponse.refresh_token_expires_in
+    ? new Date(Date.now() + accessTokenResponse.refresh_token_expires_in * 1000)
+    : undefined;
+
   if (isOnline) {
     let sessionId: string;
     const responseBody = accessTokenResponse as OnlineAccessResponse;
     const {access_token, scope, ...rest} = responseBody;
-    const sessionExpiration = new Date(
-      Date.now() + responseBody.expires_in * 1000,
-    );
 
     if (config.isEmbeddedApp) {
       sessionId = getJwtSessionId(config)(
@@ -62,7 +67,10 @@ export function createSession({
       state,
       isOnline,
       accessToken: accessTokenResponse.access_token,
+      expires: sessionExpiration,
       scope: accessTokenResponse.scope,
+      refreshToken: accessTokenResponse.refresh_token,
+      refreshTokenExpires: refreshTokenExpiration,
     });
   }
 }

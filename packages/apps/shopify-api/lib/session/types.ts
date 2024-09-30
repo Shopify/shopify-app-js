@@ -35,6 +35,14 @@ export interface SessionParams {
    */
   onlineAccessInfo?: OnlineAccessInfo | StoredOnlineAccessInfo;
   /**
+   * The refresh token that allows the access token to be refreshed.
+   */
+  refreshToken?: string;
+  /**
+   * The date the refresh token expires.
+   */
+  refreshTokenExpires?: Date;
+  /**
    * Additional properties of the session allowing for extension
    */
   [key: string]: any;

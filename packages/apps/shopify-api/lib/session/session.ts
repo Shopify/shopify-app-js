@@ -163,6 +163,14 @@ export class Session {
    */
   public accessToken?: string;
   /**
+   * The refresh token that allows the access token to be refreshed.
+   */
+  public refreshToken?: string;
+  /**
+   * The date the refresh token expires.
+   */
+  public refreshTokenExpires?: Date;
+  /**
    * Information on the user for the session. Only present for online sessions.
    */
   public onlineAccessInfo?: OnlineAccessInfo;
