@@ -19,7 +19,7 @@ describe('shopifyApiProject', () => {
         // GIVEN
         const config: ShopifyApiProjectOptions = {
           apiType,
-          apiVersion: '2023-10',
+          apiVersion: '2024-10',
           apiKey: 'test',
           outputDir: './testDir',
           documents: ['./src/**/*.ts'],
@@ -44,7 +44,7 @@ describe('shopifyApiProject', () => {
         // GIVEN
         const config: ShopifyApiProjectOptions = {
           apiType,
-          apiVersion: '2023-10',
+          apiVersion: '2024-10',
           apiKey: 'test',
           outputDir: './testDir',
           documents: ['./src/**/*.ts'],
@@ -59,7 +59,7 @@ describe('shopifyApiProject', () => {
 
         // THEN
         expect(projectConfig).toEqual({
-          schema: `./testDir/${type}-2023-10.schema.json`,
+          schema: `./testDir/${type}-2024-10.schema.json`,
           documents: config.documents,
           extensions: {
             // This is tested by the api-types file

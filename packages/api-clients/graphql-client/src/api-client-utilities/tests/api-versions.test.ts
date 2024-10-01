@@ -3,7 +3,7 @@ import {
   getCurrentSupportedApiVersions,
 } from '../api-versions';
 
-const mockDate = new Date('2023-10-15');
+const mockDate = new Date('2024-10-15');
 
 describe('getCurrentApiVersion()', () => {
   beforeEach(() => {
@@ -18,9 +18,9 @@ describe('getCurrentApiVersion()', () => {
     const currentVersion = getCurrentApiVersion();
 
     expect(currentVersion).toEqual({
-      year: 2023,
+      year: 2024,
       quarter: 4,
-      version: '2023-10',
+      version: '2024-10',
     });
   });
 });
@@ -38,11 +38,11 @@ describe('getCurrentSupportedApiVersions()', () => {
     const currentVersions = getCurrentSupportedApiVersions();
 
     expect(currentVersions).toEqual([
-      '2023-01',
-      '2023-04',
-      '2023-07',
-      '2023-10',
       '2024-01',
+      '2024-04',
+      '2024-07',
+      '2024-10',
+      '2025-01',
       'unstable',
     ]);
   });

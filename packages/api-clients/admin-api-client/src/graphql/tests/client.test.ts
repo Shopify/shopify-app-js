@@ -10,6 +10,7 @@ const mockApiVersions = [
   '2023-07',
   '2023-10',
   '2024-01',
+  '2024-10',
   'unstable',
 ];
 
@@ -25,10 +26,10 @@ describe('Admin API Client', () => {
   describe('createAdminApiClient()', () => {
     const config = {
       storeDomain: 'https://test-store.myshopify.io',
-      apiVersion: '2023-10',
+      apiVersion: '2024-10',
       accessToken: 'access-token',
     };
-    const mockApiUrl = `${config.storeDomain}/admin/api/2023-10/graphql.json`;
+    const mockApiUrl = `${config.storeDomain}/admin/api/2024-10/graphql.json`;
 
     const graphqlClientMock: GraphQLClient = {
       config: {
