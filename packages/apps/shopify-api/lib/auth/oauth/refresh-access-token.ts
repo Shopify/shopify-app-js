@@ -11,7 +11,8 @@ import { sanitizeShop } from 'lib/utils/shop-validator';
 const RefreshTokenGrantType = 'refresh_token';
 
 export interface RefreshAccessTokenParams {
-  session: Session;
+  refreshToken: string;
+  shop: string;
 }
 
 export type RefreshAccessToken = (
@@ -21,19 +22,20 @@ export type RefreshAccessToken = (
 export function refreshAccessToken(
   config: ConfigInterface,
 ): RefreshAccessToken {
-  return async ({session}: RefreshAccessTokenParams) => {
+  return async ({refreshToken, shop}: RefreshAccessTokenParams) => {
     console.log('💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥');
     console.log('refreshing access token')
-    console.log('session', session);
+    console.log('refreshToken', refreshToken);
+    console.log('shop', shop);
 
     const body = {
       client_id: config.apiKey,
       client_secret: config.apiSecretKey,
       grant_type: RefreshTokenGrantType,
-      refresh_token: session.refreshToken,
+      refresh_token: refreshToken,
     };
 
-    const cleanShop = sanitizeShop(config)(session.shop, true)!;
+    const cleanShop = sanitizeShop(config)(shop, true)!;
     console.log('cleanShop', cleanShop);
     console.log('💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥');
 
