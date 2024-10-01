@@ -63,9 +63,19 @@ export function tokenExchange(config: ConfigInterface): TokenExchange {
       throwFailedRequest(await postResponse.json(), false, postResponse);
     }
 
+    const accessTokenResponse = await postResponse.json<AccessTokenResponse>();
+
+    console.log(
+      '👇👇👇👇👇👇👇👇👇👇👇👇👇👇👇👇👇👇👇👇👇👇👇👇👇👇👇👇👇👇👇👇👇👇👇👇👇👇👇👇👇👇👇👇👇👇👇👇👇👇👇👇👇👇👇👇',
+    );
+    console.log('accessTokenResponse', accessTokenResponse);
+    console.log(
+      '👆👆👆👆👆👆👆👆👆👆👆👆👆👆👆👆👆👆👆👆👆👆👆👆👆👆👆👆👆👆👆👆👆👆👆👆👆👆👆👆👆👆👆👆👆👆👆👆👆👆👆👆👆👆👆👆',
+    );
+
     return {
       session: createSession({
-        accessTokenResponse: await postResponse.json<AccessTokenResponse>(),
+        accessTokenResponse,
         shop: cleanShop,
         // We need to keep this as an empty string as our template DB schemas have this required
         state: '',

@@ -42,8 +42,10 @@ export class Session {
               return ['isOnline', value];
             case 'accesstoken':
               return ['accessToken', value];
-            case 'refreshToken':
+            case 'refreshtoken':
               return ['refreshToken', value];
+            case 'refreshtokenexpires':
+              return ['refreshTokenExpires', value];
             case 'onlineaccessinfo':
               return ['onlineAccessInfo', value];
             case 'userid':
