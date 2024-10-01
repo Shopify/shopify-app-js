@@ -222,6 +222,14 @@ export class PrismaSessionStorage<T extends PrismaClient>
       sessionParams.accessToken = row.accessToken;
     }
 
+    if (row.refreshToken) {
+      sessionParams.refreshToken = row.refreshToken;
+    }
+
+    if (row.refreshTokenExpires) {
+      sessionParams.refreshTokenExpires = row.refreshTokenExpires.getTime();
+    }
+
     return Session.fromPropertyArray(Object.entries(sessionParams), true);
   }
 

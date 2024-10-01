@@ -33,7 +33,6 @@ export function setUpValidSession(
       sessionParams.expires || new Date(Date.now() + 1000 * 3600 * 24);
     overrides.onlineAccessInfo = {
       associated_user_scope: 'testScope',
-      expires_in: 3600 * 24,
       associated_user: {
         id: USER_ID,
         account_owner: true,
