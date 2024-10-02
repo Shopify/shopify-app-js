@@ -1,5 +1,11 @@
 # @shopify/shopify-app-session-storage-redis
 
+## 4.2.0
+
+### Minor Changes
+
+- 9cb261e: Fixed saving/loading online access info and associated user data for redis
+
 ## 4.1.2
 
 ## 4.1.1
