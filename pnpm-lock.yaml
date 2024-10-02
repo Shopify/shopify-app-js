@@ -562,8 +562,8 @@ importers:
         specifier: ^2.11.2
         version: 2.11.2(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.6.2)
       '@remix-run/testing':
-        specifier: ^2.11.2
-        version: 2.11.2(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.6.2)
+        specifier: ^2.12.1
+        version: 2.12.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.6.2)
       '@shopify/generate-docs':
         specifier: ^0.16.4
         version: 0.16.4
@@ -2709,15 +2709,6 @@ packages:
     peerDependencies:
       '@redis/client': ^1.0.0
 
-  '@remix-run/node@2.11.2':
-    resolution: {integrity: sha512-gRNFM61EOYWNmYgf+pvBt6MrirWlkDz1G6RQsJNowtRqbYoy05AdDe5HiHGF5w8ZMAZVeXnZiwbL0Nt7ykYBCA==}
-    engines: {node: '>=18.0.0'}
-    peerDependencies:
-      typescript: ^5.1.0
-    peerDependenciesMeta:
-      typescript:
-        optional: true
-
   '@remix-run/node@2.12.1':
     resolution: {integrity: sha512-d+IHvEEU3qziporgpEyKFvKdmNaDu+a/9pIxBkNKVWdKx2JR0VRFIaUxxpxISWtkJcoNuERhW2xYa6YvtFp4ig==}
     engines: {node: '>=18.0.0'}
@@ -2729,6 +2720,17 @@ packages:
 
   '@remix-run/react@2.11.2':
     resolution: {integrity: sha512-SjjuK3aD/9wnIC5r0ZBNCpVSwEwt67YOQM7DCXhHiS8BtCvAxWEC4k4t8CvO9IwBG0gczqxzSqASH7U1RVtWqw==}
+    engines: {node: '>=18.0.0'}
+    peerDependencies:
+      react: ^18.0.0
+      react-dom: ^18.0.0
+      typescript: ^5.1.0
+    peerDependenciesMeta:
+      typescript:
+        optional: true
+
+  '@remix-run/react@2.12.1':
+    resolution: {integrity: sha512-+AFR6oCcAndlUZvr42dNrY2zprhf5Yo5Wl7TBocO3YPmwLkdrzJz+e8Sezk25qgHBB9cCTigt+yyliXmsZ1mpg==}
     engines: {node: '>=18.0.0'}
     peerDependencies:
       react: ^18.0.0
@@ -2764,8 +2766,8 @@ packages:
       typescript:
         optional: true
 
-  '@remix-run/testing@2.11.2':
-    resolution: {integrity: sha512-Wmi/TXWlngkbLFFDYbWPB2WH7jZDcd55MIZyRmBIVtva7mSzK5GKX+LWdoaTFcL6IxXvJtOszuJpneC0Sf75HA==}
+  '@remix-run/testing@2.12.1':
+    resolution: {integrity: sha512-H6lCbrk94BM4vhePFc4QEuWn+fgPugwc74sv0sziPMLgxOdFwocpi/dy2zCUGOW371Nz2vtO0MT06XLggXi3VQ==}
     engines: {node: '>=18.0.0'}
     peerDependencies:
       react: ^18.0.0
@@ -5771,6 +5773,7 @@ packages:
 
   libsql@0.4.5:
     resolution: {integrity: sha512-sorTJV6PNt94Wap27Sai5gtVLIea4Otb2LUiAUyr3p6BPOScGMKGt5F1b5X/XgkNtcsDKeX5qfeBDj+PdShclQ==}
+    cpu: [x64, arm64, wasm32]
     os: [darwin, linux, win32]
 
   lines-and-columns@1.2.4:
@@ -6629,8 +6632,21 @@ packages:
       react: '>=16.8'
       react-dom: '>=16.8'
 
+  react-router-dom@6.26.2:
+    resolution: {integrity: sha512-z7YkaEW0Dy35T3/QKPYB1LjMK2R1fxnHO8kWpUMTBdfVzZrWOiY9a7CtN8HqdWtDUWd5FY6Dl8HFsqVwH4uOtQ==}
+    engines: {node: '>=14.0.0'}
+    peerDependencies:
+      react: '>=16.8'
+      react-dom: '>=16.8'
+
   react-router@6.26.1:
     resolution: {integrity: sha512-kIwJveZNwp7teQRI5QmwWo39A5bXRyqpH0COKKmPnyD2vBvDwgFXSqDUYtt1h+FEyfnE8eXr7oe0MxRzVwCcvQ==}
+    engines: {node: '>=14.0.0'}
+    peerDependencies:
+      react: '>=16.8'
+
+  react-router@6.26.2:
+    resolution: {integrity: sha512-tvN1iuT03kHgOFnLPfLJ8V95eijteveqdOSk+srqfePtQvqCExB8eHOYnlilbOcyJyKnYkr1vJvf7YqotAJu1A==}
     engines: {node: '>=14.0.0'}
     peerDependencies:
       react: '>=16.8'
@@ -10595,18 +10611,6 @@ snapshots:
     dependencies:
       '@redis/client': 1.6.0
 
-  '@remix-run/node@2.11.2(typescript@5.6.2)':
-    dependencies:
-      '@remix-run/server-runtime': 2.11.2(typescript@5.6.2)
-      '@remix-run/web-fetch': 4.4.2
-      '@web3-storage/multipart-parser': 1.0.0
-      cookie-signature: 1.2.1
-      source-map-support: 0.5.21
-      stream-slice: 0.1.2
-      undici: 6.13.0
-    optionalDependencies:
-      typescript: 5.6.2
-
   '@remix-run/node@2.12.1(typescript@5.6.2)':
     dependencies:
       '@remix-run/server-runtime': 2.12.1(typescript@5.6.2)
@@ -10628,6 +10632,18 @@ snapshots:
       react-router: 6.26.1(react@18.3.1)
       react-router-dom: 6.26.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       turbo-stream: 2.3.0
+    optionalDependencies:
+      typescript: 5.6.2
+
+  '@remix-run/react@2.12.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.6.2)':
+    dependencies:
+      '@remix-run/router': 1.19.2
+      '@remix-run/server-runtime': 2.12.1(typescript@5.6.2)
+      react: 18.3.1
+      react-dom: 18.3.1(react@18.3.1)
+      react-router: 6.26.2(react@18.3.1)
+      react-router-dom: 6.26.2(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      turbo-stream: 2.4.0
     optionalDependencies:
       typescript: 5.6.2
 
@@ -10659,13 +10675,13 @@ snapshots:
     optionalDependencies:
       typescript: 5.6.2
 
-  '@remix-run/testing@2.11.2(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.6.2)':
+  '@remix-run/testing@2.12.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.6.2)':
     dependencies:
-      '@remix-run/node': 2.11.2(typescript@5.6.2)
-      '@remix-run/react': 2.11.2(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.6.2)
-      '@remix-run/router': 1.19.1
+      '@remix-run/node': 2.12.1(typescript@5.6.2)
+      '@remix-run/react': 2.12.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.6.2)
+      '@remix-run/router': 1.19.2
       react: 18.3.1
-      react-router-dom: 6.26.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      react-router-dom: 6.26.2(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
     optionalDependencies:
       typescript: 5.6.2
     transitivePeerDependencies:
@@ -15207,9 +15223,21 @@ snapshots:
       react-dom: 18.3.1(react@18.3.1)
       react-router: 6.26.1(react@18.3.1)
 
+  react-router-dom@6.26.2(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
+    dependencies:
+      '@remix-run/router': 1.19.2
+      react: 18.3.1
+      react-dom: 18.3.1(react@18.3.1)
+      react-router: 6.26.2(react@18.3.1)
+
   react-router@6.26.1(react@18.3.1):
     dependencies:
       '@remix-run/router': 1.19.1
+      react: 18.3.1
+
+  react-router@6.26.2(react@18.3.1):
+    dependencies:
+      '@remix-run/router': 1.19.2
       react: 18.3.1
 
   react-transition-group@4.4.5(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
