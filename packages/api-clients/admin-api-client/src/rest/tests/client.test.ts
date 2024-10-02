@@ -33,7 +33,7 @@ describe('REST Admin API Client', () => {
   describe('createAdminRestApiClient()', () => {
     const config = {
       storeDomain: 'https://test-store.myshopify.io',
-      apiVersion: '2023-10',
+      apiVersion: '2024-10',
       accessToken: 'access-token',
     };
 

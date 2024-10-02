@@ -6,17 +6,18 @@ export const mockApiVersions = [
   '2023-07',
   '2023-10',
   '2024-01',
+  '2024-10',
   'unstable',
 ];
 
 export const domain = 'test-store.myshopify.io';
 export const config = {
   storeDomain: `https://${domain}`,
-  apiVersion: '2023-10',
+  apiVersion: '2024-10',
   publicAccessToken: 'public-token',
 };
 
-export const mockApiUrl = `${config.storeDomain}/api/2023-10/graphql.json`;
+export const mockApiUrl = `${config.storeDomain}/api/2024-10/graphql.json`;
 
 export const graphqlClientMock: GraphQLClient = {
   config: {
