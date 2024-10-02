@@ -1,5 +1,18 @@
 # @shopify/shopify-app-remix
 
+## 3.3.2
+
+### Patch Changes
+
+- 50f8ab0: Updated `@remix-run/server-runtime` dependencies
+- Updated dependencies [18ee7e2]
+- Updated dependencies [97c31fb]
+- Updated dependencies [6bda2fc]
+- Updated dependencies [7a2e78a]
+  - @shopify/shopify-api@11.5.0
+  - @shopify/admin-api-client@1.0.3
+  - @shopify/shopify-app-session-storage@3.0.7
+
 ## 3.3.1
 
 ### Patch Changes
@@ -916,4 +929,3 @@
 ## 1.0.0
 
 Initial release of the @shopify/shopify-app-remix package 🎉
-
