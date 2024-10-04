@@ -79,8 +79,8 @@ class AuthScopes {
   /**
    * Returns an array with the current set of scopes.
    */
-  public toArray() {
-    return [...this.compressedScopes];
+  public toArray(compress:boolean = true) {
+    return compress ? [...this.compressedScopes] : [...this.expandedScopes];
   }
 
   private getImpliedScopes(scopesArray: string[]): string[] {

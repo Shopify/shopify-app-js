@@ -42,8 +42,8 @@ export function mapFetchScopeDetail(
   );
 
   return {
-    granted: granted.toArray(),
-    required: required.toArray(),
-    optional: optional.toArray(),
+    granted: granted.toArray(false),
+    required: required.toArray(false),
+    optional: optional.toArray(false),
   };
 }
