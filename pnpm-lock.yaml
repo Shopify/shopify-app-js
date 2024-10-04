@@ -339,8 +339,8 @@ importers:
         specifier: ^8.12.0
         version: 8.12.0
       pg-connection-string:
-        specifier: ^2.6.2
-        version: 2.6.4
+        specifier: ^2.7.0
+        version: 2.7.0
     devDependencies:
       '@shopify/shopify-app-session-storage-test-utils':
         specifier: ^3.0.7
@@ -6372,6 +6372,9 @@ packages:
 
   pg-connection-string@2.6.4:
     resolution: {integrity: sha512-v+Z7W/0EO707aNMaAEfiGnGL9sxxumwLl2fJvCQtMn9Fxsg+lPpPkdcyBSv/KFgpGdYkMfn+EI1Or2EHjpgLCA==}
+
+  pg-connection-string@2.7.0:
+    resolution: {integrity: sha512-PI2W9mv53rXJQEOb8xNR8lH7Hr+EKa6oJa38zsK0S/ky2er16ios1wLKhZyxzD7jUReiWokc9WK5nxSnC7W1TA==}
 
   pg-int8@1.0.1:
     resolution: {integrity: sha512-WCtabS6t3c8SkpDBUlb1kjOs7l66xsGdKpIPZsg4wR+B3+u9UAum2odSsF9tnvxg80h4ZxLWMy4pRjOsFIqQpw==}
@@ -14964,6 +14967,8 @@ snapshots:
     optional: true
 
   pg-connection-string@2.6.4: {}
+
+  pg-connection-string@2.7.0: {}
 
   pg-int8@1.0.1: {}
 
