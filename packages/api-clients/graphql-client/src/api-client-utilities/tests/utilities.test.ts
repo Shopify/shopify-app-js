@@ -3,8 +3,8 @@ import {generateGetHeaders, generateGetGQLClientParams} from '../utilities';
 describe('generateGetHeaders()', () => {
   const config = {
     storeDomain: 'https://test.shopify.io',
-    apiUrl: 'https://test.shopify.io/api/2023-10/graphql.json',
-    apiVersion: '2023-10',
+    apiUrl: 'https://test.shopify.io/api/2024-10/graphql.json',
+    apiVersion: '2024-10',
     headers: {
       'X-Shopify-Storefront-Access-Token': 'public-access-token',
     },

@@ -1,6 +1,6 @@
 {
   "name": "@shopify/admin-api-client",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Shopify Admin API Client - A lightweight JS client to interact with Shopify's Admin API",
   "repository": {
     "type": "git",

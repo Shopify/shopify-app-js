@@ -19,7 +19,7 @@ describe('shopifyApiTypes', () => {
         // GIVEN
         const config: ShopifyApiProjectOptions = {
           apiType,
-          apiVersion: '2023-10',
+          apiVersion: '2024-10',
           apiKey: 'test',
           outputDir: './testDir',
           documents: ['./src/**/*.ts'],
@@ -33,7 +33,7 @@ describe('shopifyApiTypes', () => {
         const expectedSchema = getExpectedSchema(type, true);
 
         expect(projectConfig).toEqual({
-          [`./testDir/${type}-2023-10.schema.json`]: {
+          [`./testDir/${type}-2024-10.schema.json`]: {
             schema: expectedSchema,
             plugins: ['introspection'],
             config: {minify: true},
@@ -55,7 +55,7 @@ describe('shopifyApiTypes', () => {
         // GIVEN
         const config: ShopifyApiProjectOptions = {
           apiType,
-          apiVersion: '2023-10',
+          apiVersion: '2024-10',
           apiKey: 'test',
           outputDir: './testDir',
           documents: ['./src/**/*.ts'],
@@ -71,11 +71,11 @@ describe('shopifyApiTypes', () => {
         // THEN
         expect(projectConfig).toEqual({
           [`./testDir/${type}.types.d.ts`]: {
-            schema: `./testDir/${type}-2023-10.schema.json`,
+            schema: `./testDir/${type}-2024-10.schema.json`,
             plugins: ['typescript'],
           },
           [`./testDir/${type}.generated.d.ts`]: {
-            schema: `./testDir/${type}-2023-10.schema.json`,
+            schema: `./testDir/${type}-2024-10.schema.json`,
             documents: config.documents,
             preset: expect.anything(),
             presetConfig: {apiType, module: 'module'},
