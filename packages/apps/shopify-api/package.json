@@ -1,6 +1,6 @@
 {
   "name": "@shopify/shopify-api",
-  "version": "11.4.1",
+  "version": "11.5.0",
   "description": "Shopify API Library for Node - accelerate development with support for authentication, graphql proxy, webhooks",
   "types": "./dist/ts/lib/index.d.ts",
   "module": "./dist/esm/lib/index.mjs",
@@ -78,7 +78,7 @@
     "Storefront API"
   ],
   "dependencies": {
-    "@shopify/admin-api-client": "^1.0.2",
+    "@shopify/admin-api-client": "^1.0.3",
     "@shopify/graphql-client": "^1.2.0",
     "@shopify/network": "^3.3.0",
     "@shopify/storefront-api-client": "^1.0.2",

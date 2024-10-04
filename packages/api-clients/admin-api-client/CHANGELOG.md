@@ -1,5 +1,11 @@
 # @shopify/admin-api-client
 
+## 1.0.3
+
+### Patch Changes
+
+- 97c31fb: Fix issue with tsconfig.json causing intellisense errors
+
 ## 1.0.2
 
 ### Patch Changes
