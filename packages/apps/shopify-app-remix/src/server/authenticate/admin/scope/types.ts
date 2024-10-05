@@ -22,8 +22,8 @@ export interface ScopesApiContext {
    *}: LoaderFunctionArgs) {
    *  const { scopes } = await authenticate.admin(request);
    *
-   *  const response = await scopes.query();
-   *  return json({scopesDetail : response});
+   *  const scopesDetail = await scopes.query();
+   *  return json({scopesDetail});
    *}
    * ```
    * ```ts
