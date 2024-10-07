@@ -80,6 +80,13 @@ export function updateMaxUsageCharge(
         },
       );
 
+      if (response.data?.appSubscriptionLineItemUpdate?.userErrors.length) {
+        throw new BillingError({
+          message: 'Error while updating usage charge',
+          errorData: response.data?.appSubscriptionLineItemUpdate?.userErrors,
+        });
+      }
+
       return response.data?.appSubscriptionLineItemUpdate!;
     } catch (error) {
       if (error instanceof GraphqlQueryError) {
