@@ -216,6 +216,59 @@ describe('RedisSessionStorage', () => {
       expect(await storage.storeSession(session)).toBeTruthy();
       await storage.disconnect();
     });
+
+    it(`can retrieve online access info when using online access tokens`, async () => {
+      const storage = new RedisSessionStorage(dbURL);
+      await storage.ready;
+      const session = new Session({
+        id: '456',
+        shop: 'test-shop.myshopify.com',
+        state: 'test-state',
+        isOnline: true,
+        accessToken: 'fake_access_token',
+        expires: new Date(),
+        scope: 'fake_scope',
+        onlineAccessInfo: {
+          expires_in: 1,
+          associated_user_scope: 'fake_scope',
+          associated_user: {
+            id: 1,
+            first_name: 'fake-first-name',
+            last_name: 'fake-last-name',
+            email: 'fake-email',
+            locale: 'fake-locale',
+            email_verified: true,
+            account_owner: true,
+            collaborator: false,
+          },
+        },
+      });
+
+      await storage.storeSession(session);
+      expect(
+        (await storage.loadSession('456'))?.onlineAccessInfo?.associated_user,
+      ).toEqual(session.onlineAccessInfo?.associated_user);
+      await storage.disconnect();
+    });
+
+    it(`does not retrieve online access info when using offline access tokens`, async () => {
+      const storage = new RedisSessionStorage(dbURL);
+      await storage.ready;
+      const session = new Session({
+        id: '456',
+        shop: 'shop1.myshopify.com',
+        state: 'state',
+        isOnline: false,
+        scope: ['test_scope'].toString(),
+        accessToken: 'abcde-12345-123',
+      });
+
+      await storage.storeSession(session);
+      expect(
+        (await storage.loadSession('456'))?.onlineAccessInfo,
+      ).toBeUndefined();
+      await storage.disconnect();
+    });
   });
 
   describe('using a redis client', () => {
@@ -295,6 +348,57 @@ describe('RedisSessionStorage', () => {
         expect(await client.keys(expectedKey)).toHaveLength(0);
         expect(await storage.storeSession(session)).toBeTruthy();
         expect(await client.keys(expectedKey)).toHaveLength(1);
+      });
+
+      it(`can retrieve online access info when using online access tokens`, async () => {
+        const storage = new RedisSessionStorage(client);
+        await storage.ready;
+        const session = new Session({
+          id: '456',
+          shop: 'test-shop.myshopify.com',
+          state: 'test-state',
+          isOnline: true,
+          accessToken: 'fake_access_token',
+          expires: new Date(),
+          scope: 'fake_scope',
+          onlineAccessInfo: {
+            expires_in: 1,
+            associated_user_scope: 'fake_scope',
+            associated_user: {
+              id: 1,
+              first_name: 'fake-first-name',
+              last_name: 'fake-last-name',
+              email: 'fake-email',
+              locale: 'fake-locale',
+              email_verified: true,
+              account_owner: true,
+              collaborator: false,
+            },
+          },
+        });
+
+        await storage.storeSession(session);
+        expect(
+          (await storage.loadSession('456'))?.onlineAccessInfo?.associated_user,
+        ).toEqual(session.onlineAccessInfo?.associated_user);
+      });
+
+      it(`does not retrieve online access info when using offline access tokens`, async () => {
+        const storage = new RedisSessionStorage(client);
+        await storage.ready;
+        const session = new Session({
+          id: '456',
+          shop: 'shop1.myshopify.com',
+          state: 'state',
+          isOnline: false,
+          scope: ['test_scope'].toString(),
+          accessToken: 'abcde-12345-123',
+        });
+
+        await storage.storeSession(session);
+        expect(
+          (await storage.loadSession('456'))?.onlineAccessInfo,
+        ).toBeUndefined();
       });
     });
   });

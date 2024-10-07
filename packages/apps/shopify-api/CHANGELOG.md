@@ -1,5 +1,18 @@
 # Changelog
 
+## 11.5.0
+
+### Minor Changes
+
+- 7a2e78a: Add October 2024 REST resources
+
+### Patch Changes
+
+- 18ee7e2: Updated `jose` dependencies
+- 6bda2fc: Fix type declaration for payment_transaction
+- Updated dependencies [97c31fb]
+  - @shopify/admin-api-client@1.0.3
+
 ## 11.4.1
 
 ### Patch Changes

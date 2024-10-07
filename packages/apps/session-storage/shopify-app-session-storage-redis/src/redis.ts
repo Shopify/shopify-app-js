@@ -92,7 +92,7 @@ export class RedisSessionStorage implements SessionStorage {
 
     await this.client.set(
       session.id,
-      JSON.stringify(session.toPropertyArray()),
+      JSON.stringify(session.toPropertyArray(true)),
     );
     await this.addKeyToShopList(session);
     return true;
@@ -106,7 +106,7 @@ export class RedisSessionStorage implements SessionStorage {
     if (!rawResult) return undefined;
     rawResult = JSON.parse(rawResult);
 
-    return Session.fromPropertyArray(rawResult);
+    return Session.fromPropertyArray(rawResult, true);
   }
 
   public async deleteSession(id: string): Promise<boolean> {
@@ -137,7 +137,7 @@ export class RedisSessionStorage implements SessionStorage {
       const rawResult = await this.client.get(idKey, false);
       if (!rawResult) continue;
 
-      const session = Session.fromPropertyArray(JSON.parse(rawResult));
+      const session = Session.fromPropertyArray(JSON.parse(rawResult), true);
       results.push(session);
     }
 

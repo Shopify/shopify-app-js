@@ -1,7 +1,7 @@
+import {createOrLoadOfflineSession} from '../../authenticate/helpers/create-or-load-offline-session';
 import {SessionNotFoundError} from '../../errors';
 import {BasicParams} from '../../types';
 import {storefrontClientFactory} from '../../clients/storefront';
-import {getOfflineSession} from '../helpers';
 
 import {
   UnauthenticatedStorefrontContext,
@@ -12,7 +12,7 @@ export function unauthenticatedStorefrontContextFactory(
   params: BasicParams,
 ): GetUnauthenticatedStorefrontContext {
   return async (shop: string): Promise<UnauthenticatedStorefrontContext> => {
-    const session = await getOfflineSession(shop, params);
+    const session = await createOrLoadOfflineSession(shop, params);
 
     if (!session) {
       throw new SessionNotFoundError(

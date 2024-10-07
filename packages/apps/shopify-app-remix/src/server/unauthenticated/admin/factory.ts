@@ -1,9 +1,9 @@
 import {ShopifyRestResources} from '@shopify/shopify-api';
 
+import {createOrLoadOfflineSession} from '../../authenticate/helpers/create-or-load-offline-session';
 import {SessionNotFoundError} from '../../errors';
 import {BasicParams} from '../../types';
 import {adminClientFactory} from '../../clients/admin';
-import {getOfflineSession} from '../helpers';
 
 import {UnauthenticatedAdminContext} from './types';
 
@@ -13,7 +13,7 @@ export function unauthenticatedAdminContextFactory<
   return async (
     shop: string,
   ): Promise<UnauthenticatedAdminContext<Resources>> => {
-    const session = await getOfflineSession(shop, params);
+    const session = await createOrLoadOfflineSession(shop, params);
 
     if (!session) {
       throw new SessionNotFoundError(

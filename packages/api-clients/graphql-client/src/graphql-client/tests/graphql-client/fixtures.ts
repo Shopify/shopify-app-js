@@ -20,7 +20,7 @@ global.TextEncoder = TextEncoder;
 global.TextDecoder = TextDecoder as any;
 
 export const clientConfig = {
-  url: 'http://test-store.myshopify.com/api/2023-10/graphql.json',
+  url: 'http://test-store.myshopify.com/api/2024-10/graphql.json',
   headers: {
     'Content-Type': 'application/json',
     'X-Shopify-Storefront-Access-Token': 'public-token',
