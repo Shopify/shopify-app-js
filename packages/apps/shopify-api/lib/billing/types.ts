@@ -356,6 +356,21 @@ export interface BillingSubscriptionParams {
   session: Session;
 }
 
+export interface BillingUpdateUsageChargeParams {
+  /**
+   * The session to use for this request.
+   */
+  session: Session;
+  /**
+   * The subscription line item ID to update.
+   */
+  subscriptionLineItemId: string;
+  cappedAmount: {
+    amount: number;
+    currencyCode: string;
+  };
+}
+
 export interface AppSubscription {
   /**
    * The ID of the app subscription.
@@ -634,10 +649,33 @@ export type BillingCreateUsageRecord = (
   params: BillingCreateUsageRecordParams,
 ) => Promise<UsageRecord>;
 
+export type BillingUpdateUsageCharge = (
+  params: BillingUpdateUsageChargeParams,
+) => Promise<unknown>;
+
 export interface ShopifyBilling<Future extends FutureFlagOptions> {
   check: BillingCheck<Future>;
   request: BillingRequest;
   cancel: BillingCancel;
   subscriptions: BillingSubscriptions;
   createUsageRecord: BillingCreateUsageRecord;
+  updateMaxUsageCharge: BillingUpdateUsageCharge;
+}
+
+export interface ExtendTrialParams {
+  session: Session;
+  subscriptionId: string;
+  days: number;
+}
+
+export interface ExtendTrialResponse {
+  appSubscription: {
+    id: string;
+    status: string;
+  };
+  userErrors: {
+    field: string[];
+    message: string;
+    code: string;
+  }[];
 }
