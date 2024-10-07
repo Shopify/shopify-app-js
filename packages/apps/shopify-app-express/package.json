@@ -52,7 +52,7 @@
   "devDependencies": {
     "@types/compression": "^1.7.5",
     "@types/cookie-parser": "^1.4.6",
-    "@types/express": "^4.17.21",
+    "@types/express": "^5.0.0",
     "@types/jsonwebtoken": "^9.0.7",
     "@types/semver": "^7.5.8",
     "jsonwebtoken": "^9.0.2"
