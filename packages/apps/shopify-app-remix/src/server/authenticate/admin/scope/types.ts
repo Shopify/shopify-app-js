@@ -32,7 +32,7 @@ export interface ScopesApiContext {
   /**
    * Requests the merchant to grant the provided scopes for this app on this shop
    *
-   * **Warning:** This method performs a server-side redirect.
+   * Warning: This method performs a server-side redirect.
    *
    * @example
    * <caption>Request consent from the merchant to grant the provided scopes for this app.</caption>
@@ -64,7 +64,7 @@ export interface ScopesApiContext {
   /**
    * Revokes the provided scopes from this app on this shop
    *
-   * **Warning:** This method throws an [error](https://shopify.dev/docs/api/admin-graphql/unstable/objects/AppRevokeAccessScopesAppRevokeScopeError) if the provided optional scopes contains a required scope. 
+   * Warning: This method throws an [error](https://shopify.dev/docs/api/admin-graphql/unstable/objects/AppRevokeAccessScopesAppRevokeScopeError) if the provided optional scopes contains a required scope. 
    *
    * @example
    * <caption>Revoke optional scopes.</caption>
