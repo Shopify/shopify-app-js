@@ -49,14 +49,14 @@ export interface ScopesApiContext {
    * <description>Call `scopes.request` to request optional scopes.</description>
    * ```ts
    * // /app/routes/app.request.tsx
-   *import type { LoaderFunctionArgs } from "@remix-run/node";
+   *import type { ActionFunctionArgs } from "@remix-run/node";
    *import { json } from "@remix-run/node";
    *
    *import { authenticate } from "../shopify.server";
    *import { AuthScopes } from "@shopify/shopify-api";
-   *export async function loader({
+   *export async function action({
    *  request,
-   *}: LoaderFunctionArgs) {
+   *}: ActionFunctionArgs) {
    *  const { scopes } = await authenticate.admin(request);
    *
    *  const body = await request.formData();
@@ -91,14 +91,14 @@ export interface ScopesApiContext {
    * <description>Call `scopes.revoke` to revoke optional scopes.</description>
    * ```ts
    * // /app/routes/app.revoke.tsx
-   *import type { LoaderFunctionArgs } from "@remix-run/node";
+   *import type { ActionFunctionArgs } from "@remix-run/node";
    *import { json } from "@remix-run/node";
    *import { authenticate } from "../shopify.server";
    *import { AuthScopes } from "@shopify/shopify-api";
    *
-   *export async function loader({
+   *export async function action({
    *  request,
-   *}: LoaderFunctionArgs) {
+   *}: ActionFunctionArgs) {
    *  const { scopes } = await authenticate.admin(request);
    *
    *  const body = await request.formData();
