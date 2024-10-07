@@ -27,7 +27,7 @@ export function updateMaxUsageCharge(
 ): BillingUpdateUsageCharge {
   return async function updateMaxUsageCharge(
     params: BillingUpdateUsageChargeParams,
-  ) {
+  ): Promise<unknown> {
     if (!config.billing) {
       throw new BillingError({
         message: 'Attempted to update line item without billing configs',
