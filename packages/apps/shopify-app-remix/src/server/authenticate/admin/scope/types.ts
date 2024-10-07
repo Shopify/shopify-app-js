@@ -64,7 +64,7 @@ export interface ScopesApiContext {
   /**
    * Revokes the provided scopes from this app on this shop
    *
-   * Warning: This method throws an [error](https://shopify.dev/docs/api/admin-graphql/unstable/objects/AppRevokeAccessScopesAppRevokeScopeError) if the provided optional scopes contains a required scope. 
+   * Warning: This method throws an [error](https://shopify.dev/docs/api/admin-graphql/unstable/objects/AppRevokeAccessScopesAppRevokeScopeError) if the provided optional scopes contains a required scope.
    *
    * @example
    * <caption>Revoke optional scopes.</caption>

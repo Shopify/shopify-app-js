@@ -2,7 +2,10 @@
 
 import type {AppConfigArg} from './config-types';
 import type {ShopifyApp} from './types';
-import type {AdminContext as IAdminContext, ScopesContext as IScopesContext} from './authenticate/admin/types';
+import type {
+  AdminContext as IAdminContext,
+  ScopesContext as IScopesContext,
+} from './authenticate/admin/types';
 import type {ScopesDetail as IScopesDetail} from './authenticate/admin/scope/types';
 import type {UnauthenticatedAdminContext as IUnauthenticatedAdminContext} from './unauthenticated/admin/types';
 import type {UnauthenticatedStorefrontContext as IUnauthenticatedStorefrontContext} from './unauthenticated/storefront/types';
