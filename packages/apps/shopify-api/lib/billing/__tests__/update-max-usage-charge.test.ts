@@ -3,23 +3,18 @@ import {
   BillingConfigUsageLineItem,
   BillingError,
   BillingInterval,
-  LATEST_API_VERSION,
   shopifyApi,
 } from '../..';
 import {TEST_FUTURE_FLAGS, testConfig} from '../../__tests__/test-config';
 import {queueMockResponses} from '../../__tests__/test-helper';
 import {Session} from '../../session/session';
+import {
+  DOMAIN,
+  ACCESS_TOKEN,
+  GRAPHQL_BASE_REQUEST,
+} from '../../__test-helpers__';
 
 import * as Responses from './responses';
-
-const DOMAIN = 'test-shop.myshopify.io';
-const ACCESS_TOKEN = 'access-token';
-const GRAPHQL_BASE_REQUEST = {
-  method: 'POST',
-  domain: DOMAIN,
-  path: `/admin/api/${LATEST_API_VERSION}/graphql.json`,
-  headers: {'X-Shopify-Access-Token': ACCESS_TOKEN},
-};
 
 describe('shopify.billing.updateMaxUsageCharge', () => {
   const session = new Session({

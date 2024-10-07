@@ -1,20 +1,16 @@
 import {queueMockResponses} from '../../__tests__/test-helper';
 import {testConfig} from '../../__tests__/test-config';
 import {Session} from '../../session/session';
-import {LATEST_API_VERSION, BillingInterval} from '../../types';
+import {BillingInterval} from '../../types';
 import {shopifyApi} from '../..';
 import {BillingCheckResponseObject, BillingConfig} from '../types';
+import {
+  DOMAIN,
+  ACCESS_TOKEN,
+  GRAPHQL_BASE_REQUEST,
+} from '../../__test-helpers__';
 
 import * as Responses from './responses';
-
-const DOMAIN = 'test-shop.myshopify.io';
-const ACCESS_TOKEN = 'access-token';
-const GRAPHQL_BASE_REQUEST = {
-  method: 'POST',
-  domain: DOMAIN,
-  path: `/admin/api/${LATEST_API_VERSION}/graphql.json`,
-  headers: {'X-Shopify-Access-Token': ACCESS_TOKEN},
-};
 
 const NON_RECURRING_CONFIGS: BillingConfig = {
   [Responses.PLAN_1]: {
