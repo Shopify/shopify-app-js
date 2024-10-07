@@ -55,7 +55,7 @@ export function updateMaxUsageCharge(
         },
       });
 
-      return response;
+      return response.data?.appSubscriptionLineItemUpdate;
     } catch (error) {
       if (error instanceof GraphqlQueryError) {
         throw new BillingError({

@@ -661,21 +661,3 @@ export interface ShopifyBilling<Future extends FutureFlagOptions> {
   createUsageRecord: BillingCreateUsageRecord;
   updateMaxUsageCharge: BillingUpdateUsageCharge;
 }
-
-export interface ExtendTrialParams {
-  session: Session;
-  subscriptionId: string;
-  days: number;
-}
-
-export interface ExtendTrialResponse {
-  appSubscription: {
-    id: string;
-    status: string;
-  };
-  userErrors: {
-    field: string[];
-    message: string;
-    code: string;
-  }[];
-}
