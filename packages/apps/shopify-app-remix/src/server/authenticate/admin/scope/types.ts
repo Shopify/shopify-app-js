@@ -26,16 +26,6 @@ export interface ScopesApiContext {
    *  return json({scopesDetail});
    *}
    * ```
-   * ```ts
-   * // /app/shopify.server.ts
-   * import { LATEST_API_VERSION, shopifyApp } from "@shopify/shopify-app-remix/server";
-   *
-   * const shopify = shopifyApp({
-   *   // ...etc
-   * });
-   * export default shopify;
-   * export const authenticate = shopify.authenticate;
-   * ```
    */
   query: () => Promise<ScopesDetail>;
 
@@ -67,16 +57,6 @@ export interface ScopesApiContext {
    *  // nothing to grant
    *  return json({});
    *}
-   * ```
-   * ```ts
-   * // /app/shopify.server.ts
-   * import { LATEST_API_VERSION, shopifyApp } from "@shopify/shopify-app-remix/server";
-   *
-   * const shopify = shopifyApp({
-   *   // ...etc
-   * });
-   * export default shopify;
-   * export const authenticate = shopify.authenticate;
    * ```
    */
   request: (scopes: Scope[]) => Promise<void>;
@@ -113,16 +93,6 @@ export interface ScopesApiContext {
    *    return json({});
    *  }
    *}
-   * ```
-   * ```ts
-   * // /app/shopify.server.ts
-   * import { LATEST_API_VERSION, shopifyApp } from "@shopify/shopify-app-remix/server";
-   *
-   * const shopify = shopifyApp({
-   *   // ...etc
-   * });
-   * export default shopify;
-   * export const authenticate = shopify.authenticate;
    * ```
    */
   revoke: (scopes: Scope[]) => Promise<ScopesRevokeResponse>;
