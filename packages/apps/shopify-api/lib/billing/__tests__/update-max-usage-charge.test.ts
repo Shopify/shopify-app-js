@@ -71,25 +71,25 @@ describe('shopify.billing.updateMaxUsageCharge', () => {
   it('throws a BillingError when no billing config is set', async () => {
     const shopify = shopifyApi(testConfig({billing: undefined}));
 
-    const response = shopify.billing.updateMaxUsageCharge({
-      session,
-      subscriptionLineItemId: '1234',
-      cappedAmount: {amount: 100, currencyCode: 'USD'},
-    });
-
-    expect(response).rejects.toThrow(BillingError);
+    await expect(() =>
+      shopify.billing.updateMaxUsageCharge({
+        session,
+        subscriptionLineItemId: '1234',
+        cappedAmount: {amount: 100, currencyCode: 'USD'},
+      }),
+    ).rejects.toThrow(BillingError);
   });
 
   it('throws a BillingError when an error occurs in the GraphQL query', async () => {
     const shopify = shopifyApi(testConfig({billing}));
     queueMockResponses([Responses.MAX_USAGE_CHARGE_UPDATE_RESPONSE_ERROR]);
 
-    const response = shopify.billing.updateMaxUsageCharge({
-      session,
-      subscriptionLineItemId: Responses.USAGE_CHARGE_SUBSCRIPTION_ID,
-      cappedAmount: {amount: 100, currencyCode: 'USD'},
-    });
-
-    expect(response).rejects.toThrow(BillingError);
+    await expect(() =>
+      shopify.billing.updateMaxUsageCharge({
+        session,
+        subscriptionLineItemId: Responses.USAGE_CHARGE_SUBSCRIPTION_ID,
+        cappedAmount: {amount: 100, currencyCode: 'USD'},
+      }),
+    ).rejects.toThrow(BillingError);
   });
 });
