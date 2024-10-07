@@ -19,6 +19,26 @@ mutation appSubscriptionLineItemUpdate($cappedAmount: MoneyInput!, $id: ID!) {
     confirmationUrl
     appSubscription {
       id
+      name
+      test
+      lineItems {
+        id
+        plan {
+          pricingDetails {
+            ... on AppUsagePricing {
+              balanceUsed {
+                amount
+                currencyCode
+              }
+              cappedAmount {
+                amount
+                currencyCode
+              }
+              terms
+            }
+          }
+        }
+      }
     }
   }
 }
