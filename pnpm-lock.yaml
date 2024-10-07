@@ -93,8 +93,8 @@ importers:
         specifier: ^3.0.3
         version: 3.0.3(encoding@0.1.13)
       jest-runner-eslint:
-        specifier: ^2.1.2
-        version: 2.2.0(eslint@8.57.1)(jest@29.7.0(@types/node@22.5.5)(ts-node@10.9.2(@swc/core@1.7.28)(@types/node@22.5.5)(typescript@5.6.2)))
+        specifier: ^2.2.1
+        version: 2.2.1(eslint@8.57.1)(jest@29.7.0(@types/node@22.5.5)(ts-node@10.9.2(@swc/core@1.7.28)(@types/node@22.5.5)(typescript@5.6.2)))
       prettier:
         specifier: ^3.3.3
         version: 3.3.3
@@ -5629,8 +5629,8 @@ packages:
     resolution: {integrity: sha512-IOVhZSrg+UvVAshDSDtHyFCCBUl/Q3AAJv8iZ6ZjnZ74xzvwuzLXid9IIIPgTnY62SJjfuupMKZsZQRsCvxEgA==}
     engines: {node: ^14.15.0 || ^16.10.0 || >=18.0.0}
 
-  jest-runner-eslint@2.2.0:
-    resolution: {integrity: sha512-uR0kS/PCwCybIFh1yvbJSr3ajmusrueO8vnA4H3ItTpKCoYpQ9k2j2COrR1rdb4MnnbVBczrodCChrcJ/Hq3AQ==}
+  jest-runner-eslint@2.2.1:
+    resolution: {integrity: sha512-BSAB65hGhtr/Kmb7tSkfqFmK9LYwCMK8L1xcp+XaSToPFqr7sY1jleMZUeDhV0ITA33pW+JUCx5a02veVD2Q2w==}
     engines: {node: ^12.13.0 || ^14.15.0 || ^16.10.0 || >=18.0.0}
     peerDependencies:
       eslint: ^7 || ^8
@@ -14111,7 +14111,7 @@ snapshots:
       resolve.exports: 2.0.2
       slash: 3.0.0
 
-  jest-runner-eslint@2.2.0(eslint@8.57.1)(jest@29.7.0(@types/node@22.5.5)(ts-node@10.9.2(@swc/core@1.7.28)(@types/node@22.5.5)(typescript@5.6.2))):
+  jest-runner-eslint@2.2.1(eslint@8.57.1)(jest@29.7.0(@types/node@22.5.5)(ts-node@10.9.2(@swc/core@1.7.28)(@types/node@22.5.5)(typescript@5.6.2))):
     dependencies:
       chalk: 4.1.2
       cosmiconfig: 7.1.0
