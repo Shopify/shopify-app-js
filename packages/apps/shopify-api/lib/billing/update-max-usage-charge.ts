@@ -3,8 +3,10 @@ import {ConfigInterface} from '../base-types';
 import {graphqlClientClass} from '../clients/admin';
 
 import {
+  AppSubscriptionLineItemUpdatePayload,
   BillingUpdateUsageCharge,
   BillingUpdateUsageChargeParams,
+  BillingUpdateUsageChargeResponse,
 } from './types';
 
 const UPDATE_MAX_USAGE_CHARGE_MUTATION = `
@@ -27,7 +29,7 @@ export function updateMaxUsageCharge(
 ): BillingUpdateUsageCharge {
   return async function updateMaxUsageCharge(
     params: BillingUpdateUsageChargeParams,
-  ): Promise<unknown> {
+  ): Promise<AppSubscriptionLineItemUpdatePayload> {
     if (!config.billing) {
       throw new BillingError({
         message: 'Attempted to update line item without billing configs',
@@ -45,17 +47,20 @@ export function updateMaxUsageCharge(
     const client = new GraphqlClient({session});
 
     try {
-      const response = await client.request(UPDATE_MAX_USAGE_CHARGE_MUTATION, {
-        variables: {
-          id: subscriptionLineItemId,
-          cappedAmount: {
-            amount,
-            currencyCode,
+      const response = await client.request<BillingUpdateUsageChargeResponse>(
+        UPDATE_MAX_USAGE_CHARGE_MUTATION,
+        {
+          variables: {
+            id: subscriptionLineItemId,
+            cappedAmount: {
+              amount,
+              currencyCode,
+            },
           },
         },
-      });
+      );
 
-      return response.data?.appSubscriptionLineItemUpdate;
+      return response.data?.appSubscriptionLineItemUpdate!;
     } catch (error) {
       if (error instanceof GraphqlQueryError) {
         throw new BillingError({
