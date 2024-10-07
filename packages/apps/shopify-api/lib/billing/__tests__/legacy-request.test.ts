@@ -2,24 +2,16 @@ import {queueMockResponses} from '../../__tests__/test-helper';
 import {testConfig} from '../../__tests__/test-config';
 import {Session} from '../../session/session';
 import {BillingError} from '../../error';
-import {
-  LATEST_API_VERSION,
-  BillingInterval,
-  BillingReplacementBehavior,
-} from '../../types';
+import {BillingInterval, BillingReplacementBehavior} from '../../types';
 import {BillingConfig} from '../types';
 import {shopifyApi} from '../..';
+import {
+  DOMAIN,
+  ACCESS_TOKEN,
+  GRAPHQL_BASE_REQUEST,
+} from '../../__test-helpers__';
 
 import * as Responses from './responses';
-
-const DOMAIN = 'test-shop.myshopify.io';
-const ACCESS_TOKEN = 'access-token';
-const GRAPHQL_BASE_REQUEST = {
-  method: 'POST',
-  domain: DOMAIN,
-  path: `/admin/api/${LATEST_API_VERSION}/graphql.json`,
-  headers: {'X-Shopify-Access-Token': ACCESS_TOKEN},
-};
 
 interface TestConfigInterface {
   name: string;
