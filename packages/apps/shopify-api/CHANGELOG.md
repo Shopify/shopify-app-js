@@ -1,5 +1,11 @@
 # Changelog
 
+## 11.5.1
+
+### Patch Changes
+
+- 2e396f3: Updated `express` dependencies
+
 ## 11.5.0
 
 ### Minor Changes
