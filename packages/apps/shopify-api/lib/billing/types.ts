@@ -571,10 +571,6 @@ export interface BillingUpdateUsageChargeParams {
   };
 }
 
-export interface BillingUpdateUsageChargeResponse {
-  appSubscriptionLineItemUpdate?: AppSubscriptionLineItemUpdatePayload;
-}
-
 interface OneTimePurchases {
   oneTimePurchases: {
     edges: {
@@ -638,6 +634,10 @@ export interface UsageRecordCreateResponse {
     appUsageRecord: UsageRecord;
     userErrors: string[];
   };
+}
+
+export interface BillingUpdateUsageChargeResponse {
+  appSubscriptionLineItemUpdate?: AppSubscriptionLineItemUpdatePayload;
 }
 
 export type BillingCheck<Future extends FutureFlagOptions> = <
