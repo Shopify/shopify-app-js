@@ -1,5 +1,7 @@
 # @shopify/shopify-app-session-storage-memory
 
+## 4.0.8
+
 ## 4.0.7
 
 ## 4.0.6
