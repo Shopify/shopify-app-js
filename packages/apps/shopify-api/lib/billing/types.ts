@@ -356,21 +356,6 @@ export interface BillingSubscriptionParams {
   session: Session;
 }
 
-export interface BillingUpdateUsageChargeParams {
-  /**
-   * The session to use for this request.
-   */
-  session: Session;
-  /**
-   * The subscription line item ID to update.
-   */
-  subscriptionLineItemId: string;
-  cappedAmount: {
-    amount: number;
-    currencyCode: string;
-  };
-}
-
 export interface AppSubscription {
   /**
    * The ID of the app subscription.
@@ -463,6 +448,12 @@ export interface AppPlanDiscount {
    * The value of the discount applied every billing interval.
    */
   value: AppPlanDiscountAmount;
+}
+
+export interface AppSubscriptionLineItemUpdatePayload {
+  userErrors: string[];
+  confirmationUrl: string;
+  appSubscription: AppSubscription;
 }
 
 type AppPlanDiscountAmount =
@@ -562,6 +553,28 @@ export interface UsageRecord {
   idempotencyKey?: string;
 }
 
+export interface BillingUpdateUsageChargeParams {
+  /**
+   * The session to use for this request.
+   */
+  session: Session;
+  /**
+   * The subscription line item ID to update.
+   */
+  subscriptionLineItemId: string;
+  /**
+   * The capped amount to update.
+   */
+  cappedAmount: {
+    amount: number;
+    currencyCode: string;
+  };
+}
+
+export interface BillingUpdateUsageChargeResponse {
+  appSubscriptionLineItemUpdate?: AppSubscriptionLineItemUpdatePayload;
+}
+
 interface OneTimePurchases {
   oneTimePurchases: {
     edges: {
@@ -651,7 +664,7 @@ export type BillingCreateUsageRecord = (
 
 export type BillingUpdateUsageCharge = (
   params: BillingUpdateUsageChargeParams,
-) => Promise<unknown>;
+) => Promise<AppSubscriptionLineItemUpdatePayload>;
 
 export interface ShopifyBilling<Future extends FutureFlagOptions> {
   check: BillingCheck<Future>;
