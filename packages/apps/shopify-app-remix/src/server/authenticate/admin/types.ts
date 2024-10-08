@@ -76,7 +76,7 @@ interface AdminContextInternal<
   /**
    * Methods for interacting with the GraphQL / REST Admin APIs for the store that made the request.
    */
-  admin: AdminApiContext<Resources>;
+  admin: AdminApiContext<Config, Resources>;
 
   /**
    * Billing methods for this store, based on the plans defined in the `billing` config option.

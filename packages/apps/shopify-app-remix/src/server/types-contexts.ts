@@ -19,6 +19,7 @@ import type {
 import type {CheckoutContext as ICheckoutContext} from './authenticate/public/checkout/types';
 import type {CustomerAccountContext as ICustomerAccountContext} from './authenticate/public/customer-account/types';
 import type {
+  AdminApiContextWithRest,
   AdminApiContext as IAdminApiContext,
   StorefrontContext as IStorefrontContext,
 } from './clients';
@@ -35,6 +36,7 @@ type DefaultApp = ShopifyApp<AppConfigArg>;
 
 export type UnauthenticatedAdminContext<App = DefaultApp> =
   IUnauthenticatedAdminContext<
+    ShopifyConfig<App>,
     ConfigComponents<ShopifyConfig<App>>['resources']
   >;
 
@@ -50,31 +52,39 @@ export type UnauthenticatedStorefrontContext<_App = DefaultApp> =
   IUnauthenticatedStorefrontContext;
 
 export type FlowContext<App = DefaultApp> = IFlowContext<
+  ShopifyConfig<App>,
   ConfigComponents<ShopifyConfig<App>>['resources']
 >;
 
 export type FulfillmentServiceContext<App = DefaultApp> =
-  IFulfillmentServiceContext<ConfigComponents<ShopifyConfig<App>>['resources']>;
+  IFulfillmentServiceContext<
+    ShopifyConfig<App>,
+    ConfigComponents<ShopifyConfig<App>>['resources']
+  >;
 
-export type AppProxyContext<_App = DefaultApp> =
+export type AppProxyContext<App = DefaultApp> =
   | IAppProxyContext
-  | IAppProxyContextWithSession;
+  | IAppProxyContextWithSession<ShopifyConfig<App>>;
 
 export type CheckoutContext<_App = DefaultApp> = ICheckoutContext;
 
 export type CustomerAccountContext<_App = DefaultApp> = ICustomerAccountContext;
 
 export type WebhookContext<App = DefaultApp> = IWebhookContext<
+  ShopifyConfig<App>,
   ConfigComponents<ShopifyConfig<App>>['resources'],
   string
 >;
 
 // Extra types for the Admin API context
 export type AdminApiContext<App = DefaultApp> = IAdminApiContext<
+  ShopifyConfig<App>,
   ConfigComponents<ShopifyConfig<App>>['resources']
 >;
 
-export type AdminRestClient<App = DefaultApp> = AdminApiContext<App>['rest'];
+export type AdminRestClient<App = DefaultApp> = AdminApiContextWithRest<
+  ShopifyConfig<App>
+>['rest'];
 
 export type AdminGraphqlClient<App = DefaultApp> =
   AdminApiContext<App>['graphql'];
