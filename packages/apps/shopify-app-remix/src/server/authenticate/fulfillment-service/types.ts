@@ -1,4 +1,5 @@
 import {Session, ShopifyRestResources} from '@shopify/shopify-api';
+import {AppConfigArg} from 'src/server/config-types';
 
 import type {AdminApiContext} from '../../clients';
 
@@ -7,6 +8,7 @@ export type FulfillmentServicePayload = Record<string, any> & {
 };
 
 export interface FulfillmentServiceContext<
+  ConfigArg extends AppConfigArg,
   Resources extends ShopifyRestResources = ShopifyRestResources,
 > {
   /**
@@ -87,7 +89,7 @@ export interface FulfillmentServiceContext<
    * }
    * ```
    */
-  admin: AdminApiContext<Resources>;
+  admin: AdminApiContext<ConfigArg, Resources>;
 
   /**
    * The payload from the fulfillment service request.
@@ -114,5 +116,8 @@ export interface FulfillmentServiceContext<
 }
 
 export type AuthenticateFulfillmentService<
+  ConfigArg extends AppConfigArg,
   Resources extends ShopifyRestResources = ShopifyRestResources,
-> = (request: Request) => Promise<FulfillmentServiceContext<Resources>>;
+> = (
+  request: Request,
+) => Promise<FulfillmentServiceContext<ConfigArg, Resources>>;
