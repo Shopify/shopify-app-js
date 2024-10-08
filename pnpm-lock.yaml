@@ -282,8 +282,8 @@ importers:
         specifier: ^3.0.7
         version: link:../shopify-app-session-storage-test-utils
       miniflare:
-        specifier: ^3.20240925.0
-        version: 3.20240925.0
+        specifier: ^3.20240925.1
+        version: 3.20240925.1
 
   packages/apps/session-storage/shopify-app-session-storage-memory:
     dependencies:
@@ -479,8 +479,8 @@ importers:
         specifier: ^2.14.3
         version: 2.14.3(jest@29.7.0(@types/node@22.5.5)(ts-node@10.9.2(@swc/core@1.7.28)(@types/node@22.5.5)(typescript@5.6.2)))
       miniflare:
-        specifier: ^3.20240925.0
-        version: 3.20240925.0
+        specifier: ^3.20240925.1
+        version: 3.20240925.1
       rollup:
         specifier: ^4.22.4
         version: 4.22.4
@@ -5974,11 +5974,6 @@ packages:
   mimic-response@3.1.0:
     resolution: {integrity: sha512-z0yWI+4FDrrweS8Zmt4Ej5HdJmky15+L2e6Wgn3+iK5fWzb6T3fhNFq2+MeTRb064c6Wr4N/wv0DzQTjNzHNGQ==}
     engines: {node: '>=10'}
-
-  miniflare@3.20240925.0:
-    resolution: {integrity: sha512-2LmQbKHf0n6ertUKhT+Iltixi53giqDH7P71+wCir3OnGyXIODqYwOECx1mSDNhYThpxM2dav8UdPn6SQiMoXw==}
-    engines: {node: '>=16.13'}
-    hasBin: true
 
   miniflare@3.20240925.1:
     resolution: {integrity: sha512-odavnAwWLevMWOi/efIdAI9AVlg8C8NfXe2YLoAeG+Fj5BDHPDxCoY7AjZvBj3CJ7bszkoYyhoPEH60X+Vk+7g==}
@@ -14534,25 +14529,6 @@ snapshots:
   mimic-fn@4.0.0: {}
 
   mimic-response@3.1.0: {}
-
-  miniflare@3.20240925.0:
-    dependencies:
-      '@cspotcode/source-map-support': 0.8.1
-      acorn: 8.11.3
-      acorn-walk: 8.3.2
-      capnp-ts: 0.7.0
-      exit-hook: 2.2.1
-      glob-to-regexp: 0.4.1
-      stoppable: 1.1.0
-      undici: 5.28.4
-      workerd: 1.20240925.0
-      ws: 8.18.0
-      youch: 3.3.3
-      zod: 3.23.8
-    transitivePeerDependencies:
-      - bufferutil
-      - supports-color
-      - utf-8-validate
 
   miniflare@3.20240925.1:
     dependencies:
