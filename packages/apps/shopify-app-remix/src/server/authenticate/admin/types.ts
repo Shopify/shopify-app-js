@@ -197,7 +197,9 @@ type EmbeddedTypedAdminContext<
 
 export interface ScopesContext {
   /**
-   * Methods to manage optional scopes for the store that made the request.
+   * Methods to manage scopes for the store that made the request.
+   *
+   * // TODO: {@link https://shopify.dev/docs/}
    */
   scopes: ScopesApiContext;
 }

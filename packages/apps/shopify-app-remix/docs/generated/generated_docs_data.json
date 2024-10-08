@@ -314,7 +314,7 @@
             "filePath": "src/server/authenticate/admin/types.ts",
             "syntaxKind": "TypeAliasDeclaration",
             "name": "AdminContext",
-            "value": "FeatureEnabled<Config['future'], 'wip_optionalScopesApi'> extends true\n    ? EmbeddedTypedAdminContext<Config, Resources> & ScopesContext\n    : EmbeddedTypedAdminContext<Config, Resources>",
+            "value": "FeatureEnabled<Config['future'], 'wip_optionalScopesApi'> extends true\n    ? EmbeddedTypedAdminContext<Config, Resources> & ScopesApiContext\n    : EmbeddedTypedAdminContext<Config, Resources>",
             "description": ""
           },
           "FeatureEnabled": {
@@ -394,6 +394,13 @@
                     ]
                   }
                 ]
+              },
+              {
+                "filePath": "src/server/authenticate/admin/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "scopes",
+                "value": "ScopesApiContext",
+                "description": "Methods to manage optional scopes for the store that made the request.\n\n\n\n\n"
               },
               {
                 "filePath": "src/server/authenticate/admin/types.ts",
