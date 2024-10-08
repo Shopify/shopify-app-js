@@ -87,7 +87,7 @@ export function authStrategyFactory<
     sessionToken?: JwtPayload,
   ): AdminContext<ConfigArg, Resources> {
     let context: AdminContextBase = {
-      admin: createAdminApiContext<Resources>(
+      admin: createAdminApiContext<ConfigArg, Resources>(
         session,
         params,
         authStrategy.handleClientError(request),

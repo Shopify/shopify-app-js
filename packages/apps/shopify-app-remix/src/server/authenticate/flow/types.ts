@@ -1,8 +1,10 @@
 import {Session, ShopifyRestResources} from '@shopify/shopify-api';
+import {AppConfigArg} from 'src/server/config-types';
 
 import type {AdminApiContext} from '../../clients';
 
 export interface FlowContext<
+  ConfigArg extends AppConfigArg,
   Resources extends ShopifyRestResources = ShopifyRestResources,
 > {
   /**
@@ -82,9 +84,10 @@ export interface FlowContext<
    * }
    * ```
    */
-  admin: AdminApiContext<Resources>;
+  admin: AdminApiContext<ConfigArg, Resources>;
 }
 
 export type AuthenticateFlow<
+  ConfigArg extends AppConfigArg,
   Resources extends ShopifyRestResources = ShopifyRestResources,
-> = (request: Request) => Promise<FlowContext<Resources>>;
+> = (request: Request) => Promise<FlowContext<ConfigArg, Resources>>;

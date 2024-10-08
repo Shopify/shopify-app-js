@@ -209,7 +209,7 @@ export class AuthCodeFlowStrategy<
         isOnline: session.isOnline,
       });
 
-      await triggerAfterAuthHook<Resources>(
+      await triggerAfterAuthHook<Config, Resources>(
         {api, config, logger},
         session,
         request,

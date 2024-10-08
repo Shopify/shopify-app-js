@@ -99,14 +99,16 @@ export function shopifyApp<
     registerWebhooks: registerWebhooksFactory(params),
     authenticate: {
       admin: authStrategy,
-      flow: authenticateFlowFactory<Resources>(params),
-      public: authenticatePublicFactory<Resources>(params),
-      fulfillmentService:
-        authenticateFulfillmentServiceFactory<Resources>(params),
-      webhook: authenticateWebhookFactory<Resources, string>(params),
+      flow: authenticateFlowFactory<Config, Resources>(params),
+      public: authenticatePublicFactory<Config, Resources>(params),
+      fulfillmentService: authenticateFulfillmentServiceFactory<
+        Config,
+        Resources
+      >(params),
+      webhook: authenticateWebhookFactory<Config, Resources, string>(params),
     },
     unauthenticated: {
-      admin: unauthenticatedAdminContextFactory(params),
+      admin: unauthenticatedAdminContextFactory<Config, Resources>(params),
       storefront: unauthenticatedStorefrontContextFactory(params),
     },
   };

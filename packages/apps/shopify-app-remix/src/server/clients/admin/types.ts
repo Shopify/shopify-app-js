@@ -1,5 +1,7 @@
 import {Session, ShopifyRestResources} from '@shopify/shopify-api';
 import {AdminOperations} from '@shopify/admin-api-client';
+import type {AppConfigArg} from 'src/server/config-types';
+import type {FeatureEnabled} from 'src/server/future/flags';
 
 import {BasicParams} from '../../types';
 import {GraphQLClient} from '../types';
@@ -18,9 +20,120 @@ export type HandleAdminClientError = (arg: {
   session: Session;
 }) => Promise<void>;
 
-export interface AdminApiContext<
+export type AdminApiContext<
+  ConfigArg extends AppConfigArg,
   Resources extends ShopifyRestResources = ShopifyRestResources,
-> {
+> =
+  FeatureEnabled<ConfigArg['future'], 'removeRest'> extends true
+    ? AdminApiContextWithoutRest
+    : AdminApiContextWithRest<Resources>;
+
+export interface AdminApiContextWithoutRest {
+  /**
+   * Methods for interacting with the Shopify Admin GraphQL API
+   *
+   * {@link https://shopify.dev/docs/api/admin-graphql}
+   * {@link https://github.com/Shopify/shopify-app-js/blob/main/packages/apps/shopify-api/docs/reference/clients/Graphql.md}
+   *
+   * @example
+   * <caption>Querying the GraphQL API.</caption>
+   * <description>Use `admin.graphql` to make query / mutation requests.</description>
+   * ```ts
+   * // /app/routes/**\/*.ts
+   * import { ActionFunctionArgs } from "@remix-run/node";
+   * import { authenticate } from "../shopify.server";
+   *
+   * export const action = async ({ request }: ActionFunctionArgs) => {
+   *   const { admin } = await authenticate.admin(request);
+   *
+   *   const response = await admin.graphql(
+   *     `#graphql
+   *     mutation populateProduct($input: ProductInput!) {
+   *       productCreate(input: $input) {
+   *         product {
+   *           id
+   *         }
+   *       }
+   *     }`,
+   *     {
+   *       variables: {
+   *         input: { title: "Product Name" },
+   *       },
+   *     },
+   *   );
+   *
+   *   const productData = await response.json();
+   *   return json({
+   *     productId: productData.data?.productCreate?.product?.id,
+   *   });
+   * }
+   * ```
+   *
+   * ```ts
+   * // /app/shopify.server.ts
+   * import { shopifyApp } from "@shopify/shopify-app-remix/server";
+   *
+   * const shopify = shopifyApp({
+   *   // ...
+   * });
+   * export default shopify;
+   * export const authenticate = shopify.authenticate;
+   * ```
+   *
+   * @example
+   * <caption>Handling GraphQL errors.</caption>
+   * <description>Catch `GraphqlQueryError` errors to see error messages from the API.</description>
+   * ```ts
+   * // /app/routes/**\/*.ts
+   * import { ActionFunctionArgs } from "@remix-run/node";
+   * import { authenticate } from "../shopify.server";
+   *
+   * export const action = async ({ request }: ActionFunctionArgs) => {
+   *   const { admin } = await authenticate.admin(request);
+   *
+   *   try {
+   *     const response = await admin.graphql(
+   *       `#graphql
+   *       query incorrectQuery {
+   *         products(first: 10) {
+   *           nodes {
+   *             not_a_field
+   *           }
+   *         }
+   *       }`,
+   *     );
+   *
+   *     return json({ data: await response.json() });
+   *   } catch (error) {
+   *     if (error instanceof GraphqlQueryError) {
+   *       // error.body.errors:
+   *       // { graphQLErrors: [
+   *       //   { message: "Field 'not_a_field' doesn't exist on type 'Product'" }
+   *       // ] }
+   *       return json({ errors: error.body?.errors }, { status: 500 });
+   *     }
+   *     return json({ message: "An error occurred" }, { status: 500 });
+   *   }
+   * }
+   * ```
+   *
+   * ```ts
+   * // /app/shopify.server.ts
+   * import { shopifyApp } from "@shopify/shopify-app-remix/server";
+   *
+   * const shopify = shopifyApp({
+   *   // ...
+   * });
+   * export default shopify;
+   * export const authenticate = shopify.authenticate;
+   * ```
+   */
+  graphql: GraphQLClient<AdminOperations>;
+}
+
+export interface AdminApiContextWithRest<
+  Resources extends ShopifyRestResources = ShopifyRestResources,
+> extends AdminApiContextWithoutRest {
   /**
    * Methods for interacting with the Shopify Admin REST API
    *
@@ -145,105 +258,4 @@ export interface AdminApiContext<
    * ```
    */
   rest: RestClientWithResources<Resources>;
-
-  /**
-   * Methods for interacting with the Shopify Admin GraphQL API
-   *
-   * {@link https://shopify.dev/docs/api/admin-graphql}
-   * {@link https://github.com/Shopify/shopify-app-js/blob/main/packages/apps/shopify-api/docs/reference/clients/Graphql.md}
-   *
-   * @example
-   * <caption>Querying the GraphQL API.</caption>
-   * <description>Use `admin.graphql` to make query / mutation requests.</description>
-   * ```ts
-   * // /app/routes/**\/*.ts
-   * import { ActionFunctionArgs } from "@remix-run/node";
-   * import { authenticate } from "../shopify.server";
-   *
-   * export const action = async ({ request }: ActionFunctionArgs) => {
-   *   const { admin } = await authenticate.admin(request);
-   *
-   *   const response = await admin.graphql(
-   *     `#graphql
-   *     mutation populateProduct($input: ProductInput!) {
-   *       productCreate(input: $input) {
-   *         product {
-   *           id
-   *         }
-   *       }
-   *     }`,
-   *     {
-   *       variables: {
-   *         input: { title: "Product Name" },
-   *       },
-   *     },
-   *   );
-   *
-   *   const productData = await response.json();
-   *   return json({
-   *     productId: productData.data?.productCreate?.product?.id,
-   *   });
-   * }
-   * ```
-   *
-   * ```ts
-   * // /app/shopify.server.ts
-   * import { shopifyApp } from "@shopify/shopify-app-remix/server";
-   *
-   * const shopify = shopifyApp({
-   *   // ...
-   * });
-   * export default shopify;
-   * export const authenticate = shopify.authenticate;
-   * ```
-   *
-   * @example
-   * <caption>Handling GraphQL errors.</caption>
-   * <description>Catch `GraphqlQueryError` errors to see error messages from the API.</description>
-   * ```ts
-   * // /app/routes/**\/*.ts
-   * import { ActionFunctionArgs } from "@remix-run/node";
-   * import { authenticate } from "../shopify.server";
-   *
-   * export const action = async ({ request }: ActionFunctionArgs) => {
-   *   const { admin } = await authenticate.admin(request);
-   *
-   *   try {
-   *     const response = await admin.graphql(
-   *       `#graphql
-   *       query incorrectQuery {
-   *         products(first: 10) {
-   *           nodes {
-   *             not_a_field
-   *           }
-   *         }
-   *       }`,
-   *     );
-   *
-   *     return json({ data: await response.json() });
-   *   } catch (error) {
-   *     if (error instanceof GraphqlQueryError) {
-   *       // error.body.errors:
-   *       // { graphQLErrors: [
-   *       //   { message: "Field 'not_a_field' doesn't exist on type 'Product'" }
-   *       // ] }
-   *       return json({ errors: error.body?.errors }, { status: 500 });
-   *     }
-   *     return json({ message: "An error occurred" }, { status: 500 });
-   *   }
-   * }
-   * ```
-   *
-   * ```ts
-   * // /app/shopify.server.ts
-   * import { shopifyApp } from "@shopify/shopify-app-remix/server";
-   *
-   * const shopify = shopifyApp({
-   *   // ...
-   * });
-   * export default shopify;
-   * export const authenticate = shopify.authenticate;
-   * ```
-   */
-  graphql: GraphQLClient<AdminOperations>;
 }
