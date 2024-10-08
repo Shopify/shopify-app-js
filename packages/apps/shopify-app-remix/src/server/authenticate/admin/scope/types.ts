@@ -11,7 +11,7 @@ export interface ScopesApiContext {
    * <caption>Query for scopes details.</caption>
    * <description>Call `scopes.query` to get scope details.</description>
    * ```ts
-   * // /app/routes/app.query.tsx
+   * // /app._index.ts
    *import type { LoaderFunctionArgs } from "@remix-run/node";
    *import { json } from "@remix-run/node";
    *
@@ -22,8 +22,14 @@ export interface ScopesApiContext {
    *}: LoaderFunctionArgs) {
    *  const { scopes } = await authenticate.admin(request);
    *
-   *  const scopesDetail = await scopes.query();
-   *  return json({scopesDetail});
+   *  const response = await scopes.query();
+   *  return json({scopesDetail : response});
+   *}
+   * 
+   *export default function Index(){
+   *  ...
+   *  const {scopesDetail} = useLoaderData<typeof loader>();
+   *   ...
    *}
    * ```
    */
@@ -52,9 +58,11 @@ export interface ScopesApiContext {
    *  const body = await request.formData();
    *  const optionalScopesData = body.getAll("scopes") as string[];
    *  const optionalScopes = new AuthScopes(optionalScopesData);
-   *
+   * 
+   *  // Full Page Redirect to grant requested scopes
    *  await scopes.request(optionalScopes.toArray());
-   *  // nothing to grant
+   * 
+   *  // if there are no newly requested scopes to grant, return
    *  return json({});
    *}
    * ```
@@ -70,7 +78,7 @@ export interface ScopesApiContext {
    * <caption>Revoke optional scopes.</caption>
    * <description>Call `scopes.revoke` to revoke optional scopes.</description>
    * ```ts
-   * // /app/routes/app.revoke.tsx
+   * // /app._index.tsx
    *import type { ActionFunctionArgs } from "@remix-run/node";
    *import { json } from "@remix-run/node";
    *import { authenticate } from "../shopify.server";
@@ -89,10 +97,15 @@ export interface ScopesApiContext {
    *    const revokedResponse = await scopes.revoke(scopesToRevoke.toArray());
    *    return json(revokedResponse);
    *  } catch (e) {
-   *    console.log(JSON.stringify(e));
    *    return json({});
    *  }
    *}
+   * 
+   * export default function Index(){
+   * ...
+   * const {revokedResponse} = useLoaderData<typeof loader>();
+   * ...
+   * }
    * ```
    */
   revoke: (scopes: Scope[]) => Promise<ScopesRevokeResponse>;
