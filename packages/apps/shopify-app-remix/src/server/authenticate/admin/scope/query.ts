@@ -43,9 +43,6 @@ export function mapFetchScopeDetail(
     appInformation.optionalAccessScopes.map((scope) => scope.handle),
   ).toArray(true);
 
-  // Remove any optional scopes that are also required
-  // optional = optional.filter((scope) => !required.includes(scope));
-
   return {
     granted,
     required,
