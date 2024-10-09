@@ -28,17 +28,14 @@ it('returns scopes information', async () => {
   expect(result.granted).toEqual([
     'read_orders',
     'read_reports',
-    'write_customers',
-    'write_orders',
     'read_customers',
   ]);
-  expect(result.required).toEqual(['read_orders', 'read_reports']);
-  expect(result.optional).toEqual([
-    'write_customers',
-    'write_orders',
-    'read_customers',
+  expect(result.required).toEqual([
     'read_orders',
+    'read_reports',
+    'read_customers',
   ]);
+  expect(result.optional).toEqual(['write_customers']);
 });
 
 it('redirects to exit-iframe with authentication using app bridge when embedded and Shopify invalidated the session', async () => {
