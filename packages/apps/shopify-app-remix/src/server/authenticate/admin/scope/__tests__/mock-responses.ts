@@ -9,7 +9,7 @@ export const WITH_GRANTED_AND_DECLARED = buildGraphqlResponseContent({
       },
       {
         handle: 'read_products',
-      }
+      },
     ],
     optionalAccessScopes: [
       {
@@ -17,7 +17,7 @@ export const WITH_GRANTED_AND_DECLARED = buildGraphqlResponseContent({
       },
       {
         handle: 'write_products',
-      }
+      },
     ],
     installation: {
       accessScopes: [
@@ -35,7 +35,7 @@ export const WITH_GRANTED_AND_DECLARED = buildGraphqlResponseContent({
         },
         {
           handle: 'write_customers',
-        }
+        },
       ],
     },
   },
