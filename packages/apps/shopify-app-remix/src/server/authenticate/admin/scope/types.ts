@@ -78,7 +78,7 @@ export interface ScopesApiContext {
    * <caption>Revoke optional scopes.</caption>
    * <description>Call `scopes.revoke` to revoke optional scopes.</description>
    * ```ts
-   * // /app._index.tsx
+   * // /app._index.ts
    *import type { ActionFunctionArgs } from "@remix-run/node";
    *import { json } from "@remix-run/node";
    *import { authenticate } from "../shopify.server";
