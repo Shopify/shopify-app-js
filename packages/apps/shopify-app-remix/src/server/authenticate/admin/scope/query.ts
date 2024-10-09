@@ -33,17 +33,22 @@ export function mapFetchScopeDetail(
 
   const granted = new AuthScopes(
     appInformation.installation.accessScopes.map((scope) => scope.handle),
-  );
+  ).toArray();
+
   const required = new AuthScopes(
     appInformation.requestedAccessScopes.map((scope) => scope.handle),
-  );
+  ).toArray();
+
   const optional = new AuthScopes(
     appInformation.optionalAccessScopes.map((scope) => scope.handle),
-  );
+  ).toArray(true);
+
+  // Remove any optional scopes that are also required
+  // optional = optional.filter((scope) => !required.includes(scope));
 
   return {
-    granted: granted.toArray(false),
-    required: required.toArray(false),
-    optional: optional.toArray(false),
+    granted,
+    required,
+    optional,
   };
 }
