@@ -33,11 +33,11 @@ export function mapFetchScopeDetail(
 
   const granted = new AuthScopes(
     appInformation.installation.accessScopes.map((scope) => scope.handle),
-  ).toArray();
+  ).toArray(true);
 
   const required = new AuthScopes(
     appInformation.requestedAccessScopes.map((scope) => scope.handle),
-  ).toArray();
+  ).toArray(true);
 
   const optional = new AuthScopes(
     appInformation.optionalAccessScopes.map((scope) => scope.handle),
