@@ -488,8 +488,8 @@ importers:
         specifier: ^0.2.1
         version: 0.2.1(@swc/core@1.7.28)(rollup@4.22.4)
       wrangler:
-        specifier: ^3.80.1
-        version: 3.80.1(@cloudflare/workers-types@4.20240925.0)
+        specifier: ^3.80.3
+        version: 3.80.3(@cloudflare/workers-types@4.20240925.0)
 
   packages/apps/shopify-app-express:
     dependencies:
@@ -7371,8 +7371,8 @@ packages:
     resolution: {integrity: sha512-Q2rtqmZWrbP8nePMq7mOJIN98M0fYvSgV89vwl/BQRT4mDOeY2GXZngfGpcBBhtky3woM7G24wZV3Q304Bv6cw==}
     engines: {node: '>=18.0'}
 
-  unenv-nightly@2.0.0-20240919-125358-9a64854:
-    resolution: {integrity: sha512-XjsgUTrTHR7iw+k/SRTNjh6EQgwpC9voygnoCJo5kh4hKqsSDHUW84MhL9EsHTNfLctvVBHaSw8e2k3R2fKXsQ==}
+  unenv-nightly@2.0.0-20241009-125958-e8ea22f:
+    resolution: {integrity: sha512-hRxmKz1iSVRmuFx/vBdPsx7rX4o7Cas9vdjDNeUeWpQTK2LzU3Xy3Jz0zbo7MJX0bpqo/LEFCA+GPwsbl6zKEQ==}
 
   unicode-canonical-property-names-ecmascript@2.0.0:
     resolution: {integrity: sha512-yY5PpDlfVIU5+y/BSCxAJRBIS1Zc2dDG3Ujq+sR0U+JjUevW2JhocOF+soROYDSaAezOzOKuyyixhD6mBknSmQ==}
@@ -7555,8 +7555,8 @@ packages:
     engines: {node: '>=16'}
     hasBin: true
 
-  wrangler@3.80.1:
-    resolution: {integrity: sha512-5pBZpzrGpfAtIzF3iBXfZZ9DoP8OjwfIUYjYmddfkmoe6fSyY5r/+IFP56fb/biK5q6FV5HxUnonDiuNyJKnug==}
+  wrangler@3.80.3:
+    resolution: {integrity: sha512-Qe/7Sp8Vf7LYrdLPVsQFznac/1FweLI4aRgHmdCr6SCP5V81PP5ArogQX6BcuZ1tHvtNLNk4B4JC39awJdZvUg==}
     engines: {node: '>=16.17.0'}
     hasBin: true
     peerDependencies:
@@ -16030,7 +16030,7 @@ snapshots:
 
   undici@6.13.0: {}
 
-  unenv-nightly@2.0.0-20240919-125358-9a64854:
+  unenv-nightly@2.0.0-20241009-125958-e8ea22f:
     dependencies:
       defu: 6.1.4
       ohash: 1.1.4
@@ -16235,7 +16235,7 @@ snapshots:
       '@cloudflare/workerd-linux-arm64': 1.20240925.0
       '@cloudflare/workerd-windows-64': 1.20240925.0
 
-  wrangler@3.80.1(@cloudflare/workers-types@4.20240925.0):
+  wrangler@3.80.3(@cloudflare/workers-types@4.20240925.0):
     dependencies:
       '@cloudflare/kv-asset-handler': 0.3.4
       '@cloudflare/workers-shared': 0.5.4
@@ -16251,7 +16251,7 @@ snapshots:
       resolve.exports: 2.0.2
       selfsigned: 2.4.1
       source-map: 0.6.1
-      unenv: unenv-nightly@2.0.0-20240919-125358-9a64854
+      unenv: unenv-nightly@2.0.0-20241009-125958-e8ea22f
       workerd: 1.20240925.0
       xxhash-wasm: 1.0.2
     optionalDependencies:
