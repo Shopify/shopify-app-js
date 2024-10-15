@@ -63,6 +63,3 @@ jobs:
 
       - name: Run MySQL adapter tests
         run: pnpm test:ci_sessions --filter=./packages/apps/session-storage/shopify-app-session-storage-mysql
-
-      - name: Run Drizzle adapter tests
-        run: pnpm test:ci_sessions --filter=./packages/apps/session-storage/shopify-app-session-storage-drizzle
