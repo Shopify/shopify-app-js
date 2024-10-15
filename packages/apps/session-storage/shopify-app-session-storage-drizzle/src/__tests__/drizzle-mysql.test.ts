@@ -41,7 +41,7 @@ const sessionTable = mysqlTable('session', {
 
 describe('DrizzleSessionStorageMySQL', () => {
   let drizzleSessionStorage: DrizzleSessionStorageMySQL;
-  // let containerId: string;
+  let containerId: string;
   let connection: mysql2.Connection;
 
   beforeAll(async () => {
@@ -49,9 +49,8 @@ describe('DrizzleSessionStorageMySQL', () => {
       "podman run -d -e MYSQL_DATABASE='shop&test' -e MYSQL_USER='shop&fy' -e MYSQL_PASSWORD='passify#$' -e MYSQL_ROOT_PASSWORD='passify#$' -p 3307:3306 mysql:8-oracle",
       {encoding: 'utf8'},
     );
-    runCommand.stdout.trim();
 
-    // containerId = runCommand.stdout.trim();
+    containerId = runCommand.stdout.trim();
 
     await poll(
       async () => {
@@ -94,13 +93,11 @@ describe('DrizzleSessionStorageMySQL', () => {
     }
 
     // eslint-disable-next-line no-process-env
-    console.log(process.env.IS_WORKFLOW_RUN);
-    // eslint-disable-next-line no-process-env
-    console.log(process.env.IS_WORKFLOW_RUN !== 'true');
+    console.log(process.env.CI);
 
-    // if (process.env.IS_WORKFLOW_RUN !== 'true') {
-    //   await exec(`podman rm -f ${containerId}`);
-    // }
+    if (!process.env.CI) {
+      await exec(`podman rm -f ${containerId}`);
+    }
   });
 
   batteryOfTests(async () => drizzleSessionStorage);
