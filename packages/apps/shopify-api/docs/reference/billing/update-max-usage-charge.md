@@ -46,7 +46,7 @@ The new maximum charge amount for the usage billing plan.
 
 The currency code for the maximum charge amount.
 
-## Return
+## Returns
 
 `userErrors: {field: string, message: string}[]`
 
