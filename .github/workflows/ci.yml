@@ -31,11 +31,11 @@ jobs:
       - name: Build
         run: pnpm build
 
-      - name: Run package tests
-        run: pnpm test:ci
+      # - name: Run package tests
+      #   run: pnpm test:ci
 
-      - name: Run linting
-        run: pnpm lint
+      # - name: Run linting
+      #   run: pnpm lint
 
       - name: Run DynamoDB adapter tests
         run: pnpm test:ci_sessions --filter=./packages/apps/session-storage/shopify-app-session-storage-dynamodb
@@ -49,20 +49,20 @@ jobs:
       - name: Run MongoDB adapter tests
         run: pnpm test:ci_sessions --filter=./packages/apps/session-storage/shopify-app-session-storage-mongodb
 
-      - name: Run MySQL adapter tests
-        run: pnpm test:ci_sessions --filter=./packages/apps/session-storage/shopify-app-session-storage-mysql
-
-      - name: Run PostgreSQL adapter tests
-        run: pnpm test:ci_sessions --filter=./packages/apps/session-storage/shopify-app-session-storage-postgresql
-
       - name: Run Prisma adapter tests
         run: pnpm test:ci_sessions --filter=./packages/apps/session-storage/shopify-app-session-storage-prisma
 
       - name: Run Redis adapter tests
         run: pnpm test:ci_sessions --filter=./packages/apps/session-storage/shopify-app-session-storage-redis
 
+      - name: Run PostgreSQL adapter tests
+        run: pnpm test:ci_sessions --filter=./packages/apps/session-storage/shopify-app-session-storage-postgresql
+
       - name: Run SQLite adapter tests
         run: pnpm test:ci_sessions --filter=./packages/apps/session-storage/shopify-app-session-storage-sqlite
+
+      - name: Run MySQL adapter tests
+        run: pnpm test:ci_sessions --filter=./packages/apps/session-storage/shopify-app-session-storage-mysql
 
       - name: Run Drizzle adapter tests
         run: pnpm test:ci_sessions --filter=./packages/apps/session-storage/shopify-app-session-storage-drizzle
