@@ -37,9 +37,6 @@ jobs:
       - name: Run linting
         run: pnpm lint
 
-      - name: Run Drizzle adapter tests
-        run: pnpm test:ci_sessions --filter=./packages/apps/session-storage/shopify-app-session-storage-drizzle
-
       - name: Run DynamoDB adapter tests
         run: pnpm test:ci_sessions --filter=./packages/apps/session-storage/shopify-app-session-storage-dynamodb
 
@@ -66,3 +63,6 @@ jobs:
 
       - name: Run SQLite adapter tests
         run: pnpm test:ci_sessions --filter=./packages/apps/session-storage/shopify-app-session-storage-sqlite
+
+      - name: Run Drizzle adapter tests
+        run: pnpm test:ci_sessions --filter=./packages/apps/session-storage/shopify-app-session-storage-drizzle
