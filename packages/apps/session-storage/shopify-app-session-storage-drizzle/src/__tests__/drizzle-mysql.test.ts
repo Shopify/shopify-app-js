@@ -93,8 +93,6 @@ describe('DrizzleSessionStorageMySQL', () => {
     }
 
     // eslint-disable-next-line no-process-env
-    console.log(process.env.CI);
-
     if (!process.env.CI) {
       await exec(`podman rm -f ${containerId}`);
     }

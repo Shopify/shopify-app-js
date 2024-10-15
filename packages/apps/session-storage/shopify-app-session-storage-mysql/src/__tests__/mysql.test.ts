@@ -33,13 +33,13 @@ describe('MySQLSessionStorage', () => {
   let storage: MySQLSessionStorage;
   let storage2: MySQLSessionStorage;
 
-   let containerId: string;
+  let containerId: string;
   beforeAll(async () => {
     const runCommand = await exec(
       "podman run -d -e MYSQL_DATABASE='shop&test' -e MYSQL_USER='shop&fy' -e MYSQL_PASSWORD='passify#$' -e MYSQL_ROOT_PASSWORD='passify#$' -p 3306:3306 mysql:8-oracle",
       {encoding: 'utf8'},
     );
-    
+
     containerId = runCommand.stdout.trim();
 
     await poll(
@@ -73,6 +73,7 @@ describe('MySQLSessionStorage', () => {
     await storage.disconnect();
     await storage2.disconnect();
 
+    // eslint-disable-next-line no-process-env
     if (!process.env.CI) {
       await exec(`podman rm -f ${containerId}`);
     }
