@@ -67,3 +67,6 @@ jobs:
 
       - name: Run MySQL adapter tests
         run: pnpm test:ci_sessions --filter=./packages/apps/session-storage/shopify-app-session-storage-mysql
+
+      - name: Remove Podman containers
+        run: podman rm -f -a
