@@ -25,7 +25,7 @@ export interface ScopesApiContext {
    *  const response = await scopes.query();
    *  return json({scopesDetail : response});
    *}
-   * 
+   *
    *export default function Index(){
    *  ...
    *  const {scopesDetail} = useLoaderData<typeof loader>();
@@ -58,10 +58,10 @@ export interface ScopesApiContext {
    *  const body = await request.formData();
    *  const optionalScopesData = body.getAll("scopes") as string[];
    *  const optionalScopes = new AuthScopes(optionalScopesData);
-   * 
+   *
    *  // Full Page Redirect to grant requested scopes
    *  await scopes.request(optionalScopes.toArray());
-   * 
+   *
    *  // if there are no newly requested scopes to grant, return
    *  return json({});
    *}
@@ -100,7 +100,7 @@ export interface ScopesApiContext {
    *    return json({});
    *  }
    *}
-   * 
+   *
    * export default function Index(){
    * ...
    * const {revokedResponse} = useLoaderData<typeof loader>();
