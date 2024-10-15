@@ -46,7 +46,7 @@ describe('DrizzleSessionStorageMySQL', () => {
 
   beforeAll(async () => {
     const runCommand = await exec(
-      "podman run -d -e MYSQL_DATABASE='shop&test' -e MYSQL_USER='shop&fy' -e MYSQL_PASSWORD='passify#$' -e MYSQL_ROOT_PASSWORD='passify#$' -p 3307:3306 mysql:8-oracle",
+      "podman run -d -e MYSQL_DATABASE='shop&test' -e MYSQL_USER='shop&fy' -e MYSQL_PASSWORD='passify#$' -e MYSQL_ROOT_PASSWORD='passify#$' -p 3307:3306 mysql:8-oracle --stop-signal=SIGKILL",
       {encoding: 'utf8'},
     );
 
@@ -94,7 +94,7 @@ describe('DrizzleSessionStorageMySQL', () => {
 
     // await exec(`podman kill ${containerId}`);
     // await exec(`podman rm -f ${containerId} --time=60`);
-    await exec(`podman stop ${containerId} `);
+    await exec(`podman stop ${containerId}`);
     await exec(`podman rm ${containerId}`);
   });
 
