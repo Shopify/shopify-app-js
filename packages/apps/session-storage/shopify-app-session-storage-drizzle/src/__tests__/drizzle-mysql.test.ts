@@ -93,7 +93,8 @@ describe('DrizzleSessionStorageMySQL', () => {
     }
 
     // await exec(`podman kill ${containerId}`);
-    await exec(`podman rm -f ${containerId} --time=60`);
+    // await exec(`podman rm -f ${containerId} --time=60`);
+    await exec(`podman stop ${containerId} && podman rm ${containerId}`);
   });
 
   batteryOfTests(async () => drizzleSessionStorage);
