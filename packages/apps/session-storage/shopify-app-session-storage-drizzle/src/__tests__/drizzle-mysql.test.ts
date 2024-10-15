@@ -41,7 +41,7 @@ const sessionTable = mysqlTable('session', {
 
 describe('DrizzleSessionStorageMySQL', () => {
   let drizzleSessionStorage: DrizzleSessionStorageMySQL;
-  // let containerId: string;
+  let containerId: string;
   let connection: mysql2.Connection;
 
   beforeAll(async () => {
@@ -51,7 +51,7 @@ describe('DrizzleSessionStorageMySQL', () => {
     );
     runCommand.stdout.trim();
 
-    // containerId = runCommand.stdout.trim();
+    containerId = runCommand.stdout.trim();
 
     await poll(
       async () => {
@@ -93,10 +93,10 @@ describe('DrizzleSessionStorageMySQL', () => {
       await connection.end();
     }
 
-    // await exec(`podman kill ${containerId}`);
-    // await exec(`podman rm -f ${containerId}`);
-    // await exec(`podman stop ${containerId}`);
-    // await exec(`podman rm ${containerId}`);
+    // eslint-disable-next-line no-process-env
+    if (process.env.IS_WORKFLOW_RUN !== 'true') {
+      await exec(`podman rm -f ${containerId}`);
+    }
   });
 
   batteryOfTests(async () => drizzleSessionStorage);

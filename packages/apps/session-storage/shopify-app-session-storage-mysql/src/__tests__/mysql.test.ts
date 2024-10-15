@@ -72,7 +72,10 @@ describe('MySQLSessionStorage', () => {
     await storage.disconnect();
     await storage2.disconnect();
 
-    await exec(`podman rm -f ${containerId}`);
+    // eslint-disable-next-line no-process-env
+    if (process.env.IS_WORKFLOW_RUN !== 'true') {
+      await exec(`podman rm -f ${containerId}`);
+    }
   });
 
   const tests = [
