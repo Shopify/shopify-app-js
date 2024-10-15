@@ -323,6 +323,10 @@ See the [billing reference](../reference/billing/README.md) for details on how t
 
 ### Updating the maximum charge for a usage billing plan
 
+Usage billing plans allow merchants to be charged based on their usage of an app. The maximum charge for a usage billing plan is the highest amount that a merchant will be charged for the usage of an app.
+
+The response from `updateMaxUsageCharge` will contain a `confirmationUrl` that will need to be sent to the merchant to confirm the update to the maximum charge for the usage billing plan.
+
 See the [billing reference](../reference/billing/README.md) for details on how to call the `updateMaxUsageCharge` endpoint.
 
 [Back to guide index](../../README.md#guides)

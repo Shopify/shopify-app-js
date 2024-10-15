@@ -50,13 +50,13 @@ The currency code for the maximum charge amount.
 
 `userErrors: {field: string, message: string}[]`
 
-An array of user errors that occurred while updating the maximum charge for the usage billing plan.
+An array of user errors that occurred.
 
 ### confirmationUrl
 
 `string`
 
-The URL to confirm the update to the maximum charge for the usage billing plan.
+A URL to confirm the update to the maximum charge for the usage billing plan.
 
 ### appSubscription
 
