@@ -32,11 +32,11 @@ jobs:
       - name: Build
         run: pnpm build
 
-      # - name: Run package tests
-      #   run: pnpm test:ci
+      - name: Run package tests
+        run: pnpm test:ci
 
-      # - name: Run linting
-      #   run: pnpm lint
+      - name: Run linting
+        run: pnpm lint
 
       - name: Run Drizzle adapter tests
         run: pnpm test:ci_sessions --filter=./packages/apps/session-storage/shopify-app-session-storage-drizzle

@@ -39,7 +39,7 @@ describe('MySQLSessionStorage', () => {
       "podman run -d -e MYSQL_DATABASE='shop&test' -e MYSQL_USER='shop&fy' -e MYSQL_PASSWORD='passify#$' -e MYSQL_ROOT_PASSWORD='passify#$' -p 3306:3306 mysql:8-oracle",
       {encoding: 'utf8'},
     );
-    runCommand.stdout.trim();
+    
     containerId = runCommand.stdout.trim();
 
     await poll(
