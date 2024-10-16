@@ -323,7 +323,7 @@ See the [billing reference](../reference/billing/README.md) for details on how t
 
 ### Updating the capped amount for a usage billing plan
 
-A usage-based subscription is a pricing model that charges merchants continuously based on app use during Shopify's 30-day billing cycle. The cappedAmount is the maximum that a merchant is billed for during the cycle.
+A usage-based subscription is a pricing model that charges merchants continuously based on app use during Shopify's 30-day billing cycle. The capped amount is the maximum that a merchant is billed for during the cycle.
 
 The response from `updateUsageCappedAmount` contains a `confirmationUrl` that will need to be sent to the merchant to confirm the update.
 
