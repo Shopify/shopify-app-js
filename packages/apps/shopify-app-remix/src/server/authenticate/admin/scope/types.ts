@@ -97,7 +97,7 @@ export interface ScopesApiContext {
    *  try {
    *    const revokedResponse = await scopes.revoke(scopesToRevoke.toArray());
    *    return json(revokedResponse);
-   *  } 
+   *  }
    *  catch (e) {
    *    return json({});
    *  }
