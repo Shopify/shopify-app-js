@@ -14,7 +14,6 @@ export interface ScopesApiContext {
    * // /app._index.ts
    *import type { LoaderFunctionArgs } from "@remix-run/node";
    *import { json } from "@remix-run/node";
-   *
    *import { authenticate } from "../shopify.server";
    *
    *export async function loader({
@@ -83,6 +82,7 @@ export interface ScopesApiContext {
    *import { json } from "@remix-run/node";
    *import { authenticate } from "../shopify.server";
    *import { AuthScopes } from "@shopify/shopify-api";
+   *import { useActionData } from "@remix-run/react";
    *
    *export async function action({
    *  request,
@@ -103,7 +103,7 @@ export interface ScopesApiContext {
    *
    * export default function Index(){
    * ...
-   * const {revokedResponse} = useLoaderData<typeof loader>();
+   * const {revokedResponse} = useActionData<typeof loader>();
    * ...
    * }
    * ```
