@@ -11,7 +11,7 @@ export interface ScopesApiContext {
    * <caption>Query for scopes details.</caption>
    * <description>Call `scopes.query` to get scope details.</description>
    * ```ts
-   * // /app._index.ts
+   * // /app._index.tsx
    *import type { LoaderFunctionArgs } from "@remix-run/node";
    *import { json } from "@remix-run/node";
    *import { authenticate } from "../shopify.server";
@@ -25,8 +25,7 @@ export interface ScopesApiContext {
    *  return json({scopesDetail : response});
    *}
    *
-   *export default function Index(){
-   *  ...
+   *export default function Index() {
    *  const {scopesDetail} = useLoaderData<typeof loader>();
    *  ...
    *}
@@ -77,7 +76,7 @@ export interface ScopesApiContext {
    * <caption>Revoke optional scopes.</caption>
    * <description>Call `scopes.revoke` to revoke optional scopes.</description>
    * ```ts
-   * // /app._index.ts
+   * // /app._index.tsx
    *import type { ActionFunctionArgs } from "@remix-run/node";
    *import { json } from "@remix-run/node";
    *import { authenticate } from "../shopify.server";
@@ -96,15 +95,15 @@ export interface ScopesApiContext {
    *  try {
    *    const revokedResponse = await scopes.revoke(scopesToRevoke.toArray());
    *    return json(revokedResponse);
-   *  } catch (e) {
+   *  } 
+   *  catch (e) {
    *    return json({});
    *  }
    *}
    *
-   * export default function Index(){
-   * ...
-   * const {revokedResponse} = useActionData<typeof loader>();
-   * ...
+   * export default function Index() {
+   *  const {revokedResponse} = useActionData<typeof loader>();
+   *  ...
    * }
    * ```
    */
