@@ -72,7 +72,11 @@ describe('MySQLSessionStorage', () => {
     await storage.disconnect();
     await storage2.disconnect();
 
-    await exec(`podman rm -f ${containerId}`);
+    // Added to prevent errors in CI when stopping MySQL containers
+    // eslint-disable-next-line no-process-env
+    if (!process.env.CI) {
+      await exec(`podman rm -f ${containerId}`);
+    }
   });
 
   const tests = [
