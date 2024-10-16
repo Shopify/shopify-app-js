@@ -563,10 +563,16 @@ export interface BillingUpdateUsageChargeParams {
    */
   subscriptionLineItemId: string;
   /**
-   * The capped amount to update.
+   * The maximum charge for the usage billing plan.
    */
   cappedAmount: {
+    /**
+     * The amount to update.
+     */
     amount: number;
+    /**
+     * The currency code to update.
+     */
     currencyCode: string;
   };
 }

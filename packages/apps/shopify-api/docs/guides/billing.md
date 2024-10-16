@@ -329,4 +329,11 @@ The response from `updateMaxUsageCharge` will contain a `confirmationUrl` that w
 
 See the [billing reference](../reference/billing/README.md) for details on how to call the `updateMaxUsageCharge` endpoint.
 
+| Parameter                | Type      | Required? | Default Value | Notes                                          |
+| ------------------------ | --------- | :-------: | :-----------: | ---------------------------------------------- |
+| `session`                | `Session` |    Yes    |       -       | The session to be used for this request        |
+| `subscriptionLineItemId` | `string`  |    Yes    |       -       | The line item to update the maximum charge for |
+| `cappedAmount.amount`    | `number`  |    Yes    |       -       | The maximum amount to charge the merchant      |
+| `cappedAmount.currency`  | `string`  |    Yes    |       -       | The currency to charge                         |
+
 [Back to guide index](../../README.md#guides)
