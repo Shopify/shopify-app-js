@@ -48,7 +48,7 @@ The currency code for the capped amount.
 
 ## Returns
 
-`userErrors: {field: string, message: string}[]`
+`userErrors: string[]`
 
 An array of user errors that occurred.
 
