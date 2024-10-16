@@ -12,7 +12,8 @@ interface PrismaSessionStorageOptions {
 const UNIQUE_KEY_CONSTRAINT_ERROR_CODE = 'P2002';
 
 export class PrismaSessionStorage<T extends PrismaClient>
-  implements SessionStorage {
+  implements SessionStorage
+{
   private ready: Promise<any>;
   private readonly tableName: string = 'session';
   private connectionRetries = 2;
@@ -57,7 +58,7 @@ export class PrismaSessionStorage<T extends PrismaClient>
 
     try {
       await this.getSessionTable().upsert({
-        where: { id: session.id },
+        where: {id: session.id},
         update: data,
         create: data,
       });
@@ -70,7 +71,7 @@ export class PrismaSessionStorage<T extends PrismaClient>
           'Caught PrismaClientKnownRequestError P2002 - Unique Key Key Constraint, retrying upsert.',
         );
         await this.getSessionTable().upsert({
-          where: { id: session.id },
+          where: {id: session.id},
           update: data,
           create: data,
         });
@@ -86,7 +87,7 @@ export class PrismaSessionStorage<T extends PrismaClient>
     await this.ready;
 
     const row = await this.getSessionTable().findUnique({
-      where: { id },
+      where: {id},
     });
 
     if (!row) {
@@ -100,7 +101,7 @@ export class PrismaSessionStorage<T extends PrismaClient>
     await this.ready;
 
     try {
-      await this.getSessionTable().delete({ where: { id } });
+      await this.getSessionTable().delete({where: {id}});
     } catch {
       return true;
     }
@@ -111,7 +112,7 @@ export class PrismaSessionStorage<T extends PrismaClient>
   public async deleteSessions(ids: string[]): Promise<boolean> {
     await this.ready;
 
-    await this.getSessionTable().deleteMany({ where: { id: { in: ids } } });
+    await this.getSessionTable().deleteMany({where: {id: {in: ids}}});
 
     return true;
   }
@@ -120,9 +121,9 @@ export class PrismaSessionStorage<T extends PrismaClient>
     await this.ready;
 
     const sessions = await this.getSessionTable().findMany({
-      where: { shop },
+      where: {shop},
       take: 25,
-      orderBy: [{ expires: 'desc' }],
+      orderBy: [{expires: 'desc'}],
     });
 
     return sessions.map((session) => this.rowToSession(session));
@@ -136,7 +137,7 @@ export class PrismaSessionStorage<T extends PrismaClient>
       } catch (error) {
         console.log(`Error obtaing session table: ${error}`);
       }
-      await sleep(this.connectionRetryIntervalMs)
+      await sleep(this.connectionRetryIntervalMs);
     }
   }
 
@@ -224,5 +225,5 @@ export class MissingSessionTableError extends Error {
 }
 
 async function sleep(ms: number) {
-  return new Promise(resolve => setTimeout(resolve, ms));
+  return new Promise((resolve) => setTimeout(resolve, ms));
 }
