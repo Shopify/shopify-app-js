@@ -236,7 +236,7 @@ importers:
         version: 0.25.0
       drizzle-orm:
         specifier: ^0.34.1
-        version: 0.34.1(@cloudflare/workers-types@4.20240925.0)(@libsql/client@0.14.0(encoding@0.1.13))(@prisma/client@5.20.0(prisma@5.20.0))(@types/better-sqlite3@7.6.11)(@types/pg@8.11.6)(@types/react@18.3.9)(better-sqlite3@11.1.2)(mysql2@3.11.3)(pg@8.12.0)(prisma@5.20.0)(react@18.3.1)(sqlite3@5.1.7)
+        version: 0.34.1(@cloudflare/workers-types@4.20240925.0)(@libsql/client@0.14.0(encoding@0.1.13))(@prisma/client@5.20.0(prisma@5.21.0))(@types/better-sqlite3@7.6.11)(@types/pg@8.11.6)(@types/react@18.3.9)(better-sqlite3@11.1.2)(mysql2@3.11.3)(pg@8.12.0)(prisma@5.21.0)(react@18.3.1)(sqlite3@5.1.7)
       mysql2:
         specifier: ^3.11.3
         version: 3.11.3
@@ -363,13 +363,13 @@ importers:
     devDependencies:
       '@prisma/client':
         specifier: ^5.20.0
-        version: 5.20.0(prisma@5.20.0)
+        version: 5.20.0(prisma@5.21.0)
       '@shopify/shopify-app-session-storage-test-utils':
         specifier: ^3.0.7
         version: link:../shopify-app-session-storage-test-utils
       prisma:
-        specifier: ^5.20.0
-        version: 5.20.0
+        specifier: ^5.21.0
+        version: 5.21.0
 
   packages/apps/session-storage/shopify-app-session-storage-redis:
     dependencies:
@@ -2703,20 +2703,20 @@ packages:
       prisma:
         optional: true
 
-  '@prisma/debug@5.20.0':
-    resolution: {integrity: sha512-oCx79MJ4HSujokA8S1g0xgZUGybD4SyIOydoHMngFYiwEwYDQ5tBQkK5XoEHuwOYDKUOKRn/J0MEymckc4IgsQ==}
+  '@prisma/debug@5.21.0':
+    resolution: {integrity: sha512-8gX68E36OKImh7LBz5fFIuTRLZgM1ObnDA8ukhC1kZvTK7k7Unti6pJe3ZiudzuFAxae06PV1rhq1u9DZbXVnQ==}
 
-  '@prisma/engines-version@5.20.0-12.06fc58a368dc7be9fbbbe894adf8d445d208c284':
-    resolution: {integrity: sha512-Lg8AS5lpi0auZe2Mn4gjuCg081UZf88k3cn0RCwHgR+6cyHHpttPZBElJTHf83ZGsRNAmVCZCfUGA57WB4u4JA==}
+  '@prisma/engines-version@5.21.0-36.08713a93b99d58f31485621c634b04983ae01d95':
+    resolution: {integrity: sha512-hfq7c8MnkhcZTY0bGXG6bV5Cr7OsnHLERNy4xkZy6rbpWnhtfjuj3yUVM4u1GKXd6uWmFbg0+HDw8KXTgTVepQ==}
 
-  '@prisma/engines@5.20.0':
-    resolution: {integrity: sha512-DtqkP+hcZvPEbj8t8dK5df2b7d3B8GNauKqaddRRqQBBlgkbdhJkxhoJTrOowlS3vaRt2iMCkU0+CSNn0KhqAQ==}
+  '@prisma/engines@5.21.0':
+    resolution: {integrity: sha512-IBewQJiDnFiz39pl8kEIzmzV4RAoBPBD2DoLDntMMXObg1an90Dp+xeb1mmwrTgRDE3elu/LYxyVPEkKw9LZ7A==}
 
-  '@prisma/fetch-engine@5.20.0':
-    resolution: {integrity: sha512-JVcaPXC940wOGpCOwuqQRTz6I9SaBK0c1BAyC1pcz9xBi+dzFgUu3G/p9GV1FhFs9OKpfSpIhQfUJE9y00zhqw==}
+  '@prisma/fetch-engine@5.21.0':
+    resolution: {integrity: sha512-nXKJrsxVKng6yjJzl7vBjrr3S34cOmWQ9SiGTo9xidVTmVSgg5GCTwDL4r2be8DE3RntqK5BW2LWQ1gF80eINw==}
 
-  '@prisma/get-platform@5.20.0':
-    resolution: {integrity: sha512-8/+CehTZZNzJlvuryRgc77hZCWrUDYd/PmlZ7p2yNXtmf2Una4BWnTbak3us6WVdqoz5wmptk6IhsXdG2v5fmA==}
+  '@prisma/get-platform@5.21.0':
+    resolution: {integrity: sha512-NAyaAcHJhs0IysGYJtM6Fm3ccEs/LkCZqz/8riVkkJswFrRtFV93jAUIVKWO/wj1Ca1gO7HaMd/tr6e/9Xmvww==}
 
   '@redis/bloom@1.2.0':
     resolution: {integrity: sha512-HG2DFjYKbpNmVXsa0keLHp/3leGJz1mjh09f2RLGGLQZzSHpkmZWuwJbAvo3QcRY8p80m5+ZdXZdYOSBLlp7Cg==}
@@ -6549,8 +6549,8 @@ packages:
   printable-characters@1.0.42:
     resolution: {integrity: sha512-dKp+C4iXWK4vVYZmYSd0KBH5F/h1HoZRsbJ82AVKRO3PEo8L4lBS/vLwhVtpwwuYcoIsVY+1JYKR268yn480uQ==}
 
-  prisma@5.20.0:
-    resolution: {integrity: sha512-6obb3ucKgAnsGS9x9gLOe8qa51XxvJ3vLQtmyf52CTey1Qcez3A6W6ROH5HIz5Q5bW+0VpmZb8WBohieMFGpig==}
+  prisma@5.21.0:
+    resolution: {integrity: sha512-Pc/xn2eZPiANbFFGp+YoCQSKQ5t9W/dBzQ+3HrcfrOWZAzt7n77VsVCPa9WdfTjim4CuodkCFyiP2+uGY5/gqw==}
     engines: {node: '>=16.13'}
     hasBin: true
 
@@ -10594,30 +10594,30 @@ snapshots:
 
   '@pkgr/core@0.1.1': {}
 
-  '@prisma/client@5.20.0(prisma@5.20.0)':
+  '@prisma/client@5.20.0(prisma@5.21.0)':
     optionalDependencies:
-      prisma: 5.20.0
+      prisma: 5.21.0
 
-  '@prisma/debug@5.20.0': {}
+  '@prisma/debug@5.21.0': {}
 
-  '@prisma/engines-version@5.20.0-12.06fc58a368dc7be9fbbbe894adf8d445d208c284': {}
+  '@prisma/engines-version@5.21.0-36.08713a93b99d58f31485621c634b04983ae01d95': {}
 
-  '@prisma/engines@5.20.0':
+  '@prisma/engines@5.21.0':
     dependencies:
-      '@prisma/debug': 5.20.0
-      '@prisma/engines-version': 5.20.0-12.06fc58a368dc7be9fbbbe894adf8d445d208c284
-      '@prisma/fetch-engine': 5.20.0
-      '@prisma/get-platform': 5.20.0
+      '@prisma/debug': 5.21.0
+      '@prisma/engines-version': 5.21.0-36.08713a93b99d58f31485621c634b04983ae01d95
+      '@prisma/fetch-engine': 5.21.0
+      '@prisma/get-platform': 5.21.0
 
-  '@prisma/fetch-engine@5.20.0':
+  '@prisma/fetch-engine@5.21.0':
     dependencies:
-      '@prisma/debug': 5.20.0
-      '@prisma/engines-version': 5.20.0-12.06fc58a368dc7be9fbbbe894adf8d445d208c284
-      '@prisma/get-platform': 5.20.0
+      '@prisma/debug': 5.21.0
+      '@prisma/engines-version': 5.21.0-36.08713a93b99d58f31485621c634b04983ae01d95
+      '@prisma/get-platform': 5.21.0
 
-  '@prisma/get-platform@5.20.0':
+  '@prisma/get-platform@5.21.0':
     dependencies:
-      '@prisma/debug': 5.20.0
+      '@prisma/debug': 5.21.0
 
   '@redis/bloom@1.2.0(@redis/client@1.6.0)':
     dependencies:
@@ -12580,18 +12580,18 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  drizzle-orm@0.34.1(@cloudflare/workers-types@4.20240925.0)(@libsql/client@0.14.0(encoding@0.1.13))(@prisma/client@5.20.0(prisma@5.20.0))(@types/better-sqlite3@7.6.11)(@types/pg@8.11.6)(@types/react@18.3.9)(better-sqlite3@11.1.2)(mysql2@3.11.3)(pg@8.12.0)(prisma@5.20.0)(react@18.3.1)(sqlite3@5.1.7):
+  drizzle-orm@0.34.1(@cloudflare/workers-types@4.20240925.0)(@libsql/client@0.14.0(encoding@0.1.13))(@prisma/client@5.20.0(prisma@5.21.0))(@types/better-sqlite3@7.6.11)(@types/pg@8.11.6)(@types/react@18.3.9)(better-sqlite3@11.1.2)(mysql2@3.11.3)(pg@8.12.0)(prisma@5.21.0)(react@18.3.1)(sqlite3@5.1.7):
     optionalDependencies:
       '@cloudflare/workers-types': 4.20240925.0
       '@libsql/client': 0.14.0(encoding@0.1.13)
-      '@prisma/client': 5.20.0(prisma@5.20.0)
+      '@prisma/client': 5.20.0(prisma@5.21.0)
       '@types/better-sqlite3': 7.6.11
       '@types/pg': 8.11.6
       '@types/react': 18.3.9
       better-sqlite3: 11.1.2
       mysql2: 3.11.3
       pg: 8.12.0
-      prisma: 5.20.0
+      prisma: 5.21.0
       react: 18.3.1
       sqlite3: 5.1.7
 
@@ -15137,9 +15137,9 @@ snapshots:
 
   printable-characters@1.0.42: {}
 
-  prisma@5.20.0:
+  prisma@5.21.0:
     dependencies:
-      '@prisma/engines': 5.20.0
+      '@prisma/engines': 5.21.0
     optionalDependencies:
       fsevents: 2.3.3
 
