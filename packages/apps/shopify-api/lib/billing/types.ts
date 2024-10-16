@@ -553,7 +553,7 @@ export interface UsageRecord {
   idempotencyKey?: string;
 }
 
-export interface BillingUpdateUsageChargeParams {
+export interface BillingUpdateUsageCappedAmountParams {
   /**
    * The session to use for this request.
    */
@@ -642,7 +642,7 @@ export interface UsageRecordCreateResponse {
   };
 }
 
-export interface BillingUpdateUsageChargeResponse {
+export interface BillingUpdateUsageCappedAmountResponse {
   appSubscriptionLineItemUpdate?: AppSubscriptionLineItemUpdatePayload;
 }
 
@@ -668,8 +668,8 @@ export type BillingCreateUsageRecord = (
   params: BillingCreateUsageRecordParams,
 ) => Promise<UsageRecord>;
 
-export type BillingUpdateUsageCharge = (
-  params: BillingUpdateUsageChargeParams,
+export type BillingUpdateUsageCappedAmount = (
+  params: BillingUpdateUsageCappedAmountParams,
 ) => Promise<AppSubscriptionLineItemUpdatePayload>;
 
 export interface ShopifyBilling<Future extends FutureFlagOptions> {
@@ -678,5 +678,5 @@ export interface ShopifyBilling<Future extends FutureFlagOptions> {
   cancel: BillingCancel;
   subscriptions: BillingSubscriptions;
   createUsageRecord: BillingCreateUsageRecord;
-  updateMaxUsageCharge: BillingUpdateUsageCharge;
+  updateUsageCappedAmount: BillingUpdateUsageCappedAmount;
 }

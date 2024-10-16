@@ -419,17 +419,18 @@ export const APP_SUBSCRIPTION_LINE_ITEM_UPDATE_PAYLOAD = {
   },
 };
 
-export const MAX_USAGE_CHARGE_UPDATE_RESPONSE = JSON.stringify({
+export const USAGE_SUBSRIPTION_CAPPED_AMOUNT_UPDATE_RESPONSE = JSON.stringify({
   data: {
     appSubscriptionLineItemUpdate: APP_SUBSCRIPTION_LINE_ITEM_UPDATE_PAYLOAD,
   },
 });
 
-export const MAX_USAGE_CHARGE_UPDATE_RESPONSE_ERROR = JSON.stringify({
-  data: {
-    appSubscriptionLineItemUpdate: {
-      appSubscriptionLineItemUpdate: {},
-      userErrors: ['There was an error in billing'],
+export const USAGE_SUBSCRIPTION_CAPPED_AMOUNT_UPDATE_RESPONSE_ERROR =
+  JSON.stringify({
+    data: {
+      appSubscriptionLineItemUpdate: {
+        appSubscriptionLineItemUpdate: {},
+        userErrors: ['There was an error in billing'],
+      },
     },
-  },
-});
+  });

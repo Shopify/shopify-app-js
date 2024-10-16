@@ -16,7 +16,7 @@ import {
 
 import * as Responses from './responses';
 
-describe('shopify.billing.updateMaxUsageCharge', () => {
+describe('shopify.billing.updateUsageCappedAmount', () => {
   const session = new Session({
     id: '1234',
     shop: DOMAIN,
@@ -38,11 +38,13 @@ describe('shopify.billing.updateMaxUsageCharge', () => {
     },
   };
 
-  it('updates the max usage charge successfully', async () => {
+  it('updates the usage subscription capped amount successfully', async () => {
     const shopify = shopifyApi(testConfig({billing}));
-    queueMockResponses([Responses.MAX_USAGE_CHARGE_UPDATE_RESPONSE]);
+    queueMockResponses([
+      Responses.USAGE_SUBSRIPTION_CAPPED_AMOUNT_UPDATE_RESPONSE,
+    ]);
 
-    const response = await shopify.billing.updateMaxUsageCharge({
+    const response = await shopify.billing.updateUsageCappedAmount({
       session,
       subscriptionLineItemId: Responses.USAGE_CHARGE_SUBSCRIPTION_ID,
       cappedAmount: {amount: 100, currencyCode: 'USD'},
@@ -67,7 +69,7 @@ describe('shopify.billing.updateMaxUsageCharge', () => {
     const shopify = shopifyApi(testConfig({billing: undefined}));
 
     await expect(() =>
-      shopify.billing.updateMaxUsageCharge({
+      shopify.billing.updateUsageCappedAmount({
         session,
         subscriptionLineItemId: '1234',
         cappedAmount: {amount: 100, currencyCode: 'USD'},
@@ -77,10 +79,12 @@ describe('shopify.billing.updateMaxUsageCharge', () => {
 
   it('throws a BillingError when an error occurs in the GraphQL query', async () => {
     const shopify = shopifyApi(testConfig({billing}));
-    queueMockResponses([Responses.MAX_USAGE_CHARGE_UPDATE_RESPONSE_ERROR]);
+    queueMockResponses([
+      Responses.USAGE_SUBSCRIPTION_CAPPED_AMOUNT_UPDATE_RESPONSE_ERROR,
+    ]);
 
     await expect(() =>
-      shopify.billing.updateMaxUsageCharge({
+      shopify.billing.updateUsageCappedAmount({
         session,
         subscriptionLineItemId: Responses.USAGE_CHARGE_SUBSCRIPTION_ID,
         cappedAmount: {amount: 100, currencyCode: 'USD'},

@@ -24,7 +24,7 @@ In this guide you'll learn how to use this package for both of those scenarios.
     - [When should the app check for payment?](#when-should-the-app-check-for-payment)
     - [Canceling a subscription](#canceling-a-subscription)
     - [Creating a usage record](#creating-a-usage-record)
-    - [Updating the maximum charge for a usage billing plan](#updating-the-maximum-charge-for-a-usage-billing-plan)
+    - [Updating the capped amount for a usage billing plan](#updating-the-capped-amount-for-a-usage-billing-plan)
 
 ## Using managed app pricing
 
@@ -321,13 +321,13 @@ See the [billing reference](../reference/billing/README.md) for details on how t
 | `idempotencyKey`         | `string`  |    No     |       -       | A unique key that can be passed to the request to prevent duplicate charges                                                  |
 | `isTest`                 | `Boolean` |    No     |       -       | Whether this is a test charge                                                                                                |
 
-### Updating the maximum charge for a usage billing plan
+### Updating the capped amount for a usage billing plan
 
-Usage billing plans allow merchants to be charged based on their usage of an app. The maximum charge for a usage billing plan is the highest amount that a merchant will be charged for the usage of an app.
+A usage-based subscription is a pricing model that charges merchants continuously based on app use during Shopify's 30-day billing cycle. The cappedAmount is the maximum that a merchant is billed for during the cycle.
 
-The response from `updateMaxUsageCharge` will contain a `confirmationUrl` that will need to be sent to the merchant to confirm the update to the maximum charge for the usage billing plan.
+The response from `updateUsageCappedAmount` contains a `confirmationUrl` that will need to be sent to the merchant to confirm the update.
 
-See the [billing reference](../reference/billing/README.md) for details on how to call the `updateMaxUsageCharge` endpoint.
+See the [billing reference](../reference/billing/README.md) for details on how to call the `updateUsageCappedAmount` endpoint.
 
 | Parameter                | Type      | Required? | Default Value | Notes                                          |
 | ------------------------ | --------- | :-------: | :-----------: | ---------------------------------------------- |

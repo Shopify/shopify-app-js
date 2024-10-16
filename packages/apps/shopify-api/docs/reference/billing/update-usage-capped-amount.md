@@ -1,13 +1,13 @@
-# shopify.billing.updateMaxUsageCharge
+# shopify.billing.updateUsageCappedAmount
 
-Updates the maximum charge for a usage billing plan.
+Updates the capped amount for a usage billing plan.
 
 ## Example
 
-### Update the maximum charge for a usage billing plan
+### Update the capped amount for a usage billing plan
 
 ```ts
-const response = await shopify.billing.updateMaxUsageCharge({
+const response = await shopify.billing.updateUsageCappedAmount({
   session,
   subscriptionLineItemId: 'gid://shopify/AppSubscriptionLineItem/1234567890',
   cappedAmount: {
@@ -38,13 +38,13 @@ The ID of the subscription line item to update.
 
 `number` | :exclamation: required
 
-The new maximum charge amount for the usage billing plan.
+The new capped amount for the usage billing plan.
 
 ### cappedAmount.currencyCode
 
 `string` | :exclamation: required
 
-The currency code for the maximum charge amount.
+The currency code for the capped amount.
 
 ## Returns
 
@@ -56,7 +56,7 @@ An array of user errors that occurred.
 
 `string`
 
-A URL to confirm the update to the maximum charge for the usage billing plan.
+A URL to confirm the update to the capped amount for the usage billing plan.
 
 ### appSubscription
 
