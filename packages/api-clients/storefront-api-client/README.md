@@ -497,3 +497,23 @@ This log content is sent to the logger whenever the client attempts to retry HTT
 | -------- | -------------------------------------------------------- | ----------------------- |
 | url      | `string`                                                 | Requested URL           |
 | init?    | `{method?: string, headers?: HeaderInit, body?: string}` | The request information |
+
+## Gotchas / Troubleshooting
+
+### URL validation errors when using React Native
+
+If you're using this package in a React Native project, you might encounter URL validation errors when instantiating the storefront api client. To avoid issues:
+
+1. Install the [`react-native-url-polyfill`](https://www.npmjs.com/package/react-native-url-polyfill) package:
+
+```sh
+npm i react-native-url-polyfill
+```
+
+2. Add the following import to the top of your entry file, typically `index.js`:
+
+```ts
+import 'react-native-url-polyfill/auto';
+```
+
+This will apply a global polyfill for the `URL` object, allowing you to instantiate the storefront api client without encountering URL validation errors.
