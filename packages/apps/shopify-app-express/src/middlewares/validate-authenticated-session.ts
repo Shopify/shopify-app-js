@@ -16,7 +16,7 @@ export function validateAuthenticatedSession({
 }: validateAuthenticatedSessionParams): ValidateAuthenticatedSessionMiddleware {
   return function validateAuthenticatedSession() {
     return async (req: Request, res: Response, next: NextFunction) => {
-      config.logger.info('Running validateAuthenticatedSession');
+      config.logger.debug('Running validateAuthenticatedSession');
 
       let sessionId: string | undefined;
       try {
@@ -72,7 +72,7 @@ export function validateAuthenticatedSession({
           });
 
           if (await hasValidAccessToken(api, session)) {
-            config.logger.info('Request session has a valid access token', {
+            config.logger.debug('Request session has a valid access token', {
               shop: session.shop,
             });
 
