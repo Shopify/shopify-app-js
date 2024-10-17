@@ -9,7 +9,7 @@ export function validateDomainAndGetStoreUrl({
 }) {
   try {
     if (!storeDomain || typeof storeDomain !== 'string') {
-      throw new Error();
+      throw new Error(`A valid store domain must be provided`);
     }
 
     const trimmedDomain = storeDomain.trim();
@@ -24,7 +24,10 @@ export function validateDomainAndGetStoreUrl({
     return url.origin;
   } catch (_error) {
     throw new Error(
-      `${client}: a valid store domain ("${storeDomain}") must be provided`,
+      `${client}: An error has occurred when validating the store domain`,
+      {
+        cause: _error,
+      },
     );
   }
 }
