@@ -406,3 +406,31 @@ export const USAGE_RECORD_CREATE_RESPONSE_ERROR = JSON.stringify({
     },
   },
 });
+
+export const USAGE_CHARGE_SUBSCRIPTION_ID = 'gid://123';
+export const APP_SUBSCRIPTION_LINE_ITEM_UPDATE_PAYLOAD = {
+  userErrors: [],
+  confirmationUrl: CONFIRMATION_URL,
+  appSubscription: {
+    id: USAGE_CHARGE_SUBSCRIPTION_ID,
+    name: PLAN_1,
+    test: true,
+    status: 'ACTIVE',
+  },
+};
+
+export const USAGE_SUBSRIPTION_CAPPED_AMOUNT_UPDATE_RESPONSE = JSON.stringify({
+  data: {
+    appSubscriptionLineItemUpdate: APP_SUBSCRIPTION_LINE_ITEM_UPDATE_PAYLOAD,
+  },
+});
+
+export const USAGE_SUBSCRIPTION_CAPPED_AMOUNT_UPDATE_RESPONSE_ERROR =
+  JSON.stringify({
+    data: {
+      appSubscriptionLineItemUpdate: {
+        appSubscriptionLineItemUpdate: {},
+        userErrors: ['There was an error in billing'],
+      },
+    },
+  });
