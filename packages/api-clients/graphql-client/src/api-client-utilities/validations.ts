@@ -25,6 +25,7 @@ export function validateDomainAndGetStoreUrl({
   } catch (_error) {
     throw new Error(
       `${client}: a valid store domain ("${storeDomain}") must be provided`,
+      {cause: _error},
     );
   }
 }
