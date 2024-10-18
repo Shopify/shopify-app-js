@@ -167,8 +167,8 @@ importers:
         specifier: ^5.0.4
         version: 5.0.4(graphql@16.9.0)
       graphql-config:
-        specifier: 5.1.2
-        version: 5.1.2(@types/node@22.5.5)(encoding@0.1.13)(graphql@16.9.0)(typescript@5.6.2)
+        specifier: 5.1.3
+        version: 5.1.3(@types/node@22.5.5)(encoding@0.1.13)(graphql@16.9.0)(typescript@5.6.2)
       regenerator-runtime:
         specifier: ^0.14.1
         version: 0.14.1
@@ -4113,15 +4113,6 @@ packages:
       typescript:
         optional: true
 
-  cosmiconfig@9.0.0:
-    resolution: {integrity: sha512-itvL5h8RETACmOTFc4UfIyB2RfEHi71Ax6E/PivVxq9NseKbOWpeyHEOIbmAw1rs8Ak0VursQNww7lf7YtUwzg==}
-    engines: {node: '>=14'}
-    peerDependencies:
-      typescript: '>=4.9.5'
-    peerDependenciesMeta:
-      typescript:
-        optional: true
-
   create-jest-runner@0.11.2:
     resolution: {integrity: sha512-6lwspphs4M1PLKV9baBNxHQtWVBPZuDU8kAP4MyrVWa6aEpEcpi2HZeeA6WncwaqgsGNXpP0N2STS7XNM/nHKQ==}
     hasBin: true
@@ -5070,8 +5061,8 @@ packages:
   graphemer@1.4.0:
     resolution: {integrity: sha512-EtKwoO6kxCL9WO5xipiHTZlSzBm7WLT627TqC/uVRd0HKmq8NXyebnNYxDoBi7wt8eTWrUrKXCOVaFq9x1kgag==}
 
-  graphql-config@5.1.2:
-    resolution: {integrity: sha512-kVwUuFz1h9u7B0nDPtnLFWN+x018niaH3zi1ChFCNfbunhDVJ911Z3YcglK5EfDfySeeH+zCa1aGxd1wMgNd7g==}
+  graphql-config@5.1.3:
+    resolution: {integrity: sha512-RBhejsPjrNSuwtckRlilWzLVt2j8itl74W9Gke1KejDTz7oaA5kVd6wRn9zK9TS5mcmIYGxf7zN7a1ORMdxp1Q==}
     engines: {node: '>= 16.0.0'}
     peerDependencies:
       cosmiconfig-toml-loader: ^1.0.0
@@ -5667,6 +5658,10 @@ packages:
 
   jiti@1.21.6:
     resolution: {integrity: sha512-2yTgeWTWzMWkHu6Jp9NKgePDaYHbntiwvYuuJLbbN9vl7DC9DvXKOB2BC3ZZ92D3cvV/aflH0osDfwpHepQ53w==}
+    hasBin: true
+
+  jiti@2.3.3:
+    resolution: {integrity: sha512-EX4oNDwcXSivPrw2qKH2LB5PoFxEvgtv2JgwW0bU858HoLQ+kutSvjLMUqBd0PeJYEinLWhoI9Ol0eYMqj/wNQ==}
     hasBin: true
 
   jose@5.9.3:
@@ -9576,7 +9571,7 @@ snapshots:
       debounce: 1.2.1
       detect-indent: 6.1.0
       graphql: 16.9.0
-      graphql-config: 5.1.2(@types/node@22.5.5)(encoding@0.1.13)(graphql@16.9.0)(typescript@5.6.2)
+      graphql-config: 5.1.3(@types/node@22.5.5)(encoding@0.1.13)(graphql@16.9.0)(typescript@5.6.2)
       inquirer: 8.2.6
       is-glob: 4.0.3
       jiti: 1.21.6
@@ -12302,15 +12297,6 @@ snapshots:
     optionalDependencies:
       typescript: 5.6.2
 
-  cosmiconfig@9.0.0(typescript@5.6.2):
-    dependencies:
-      env-paths: 2.2.1
-      import-fresh: 3.3.0
-      js-yaml: 4.1.0
-      parse-json: 5.2.0
-    optionalDependencies:
-      typescript: 5.6.2
-
   create-jest-runner@0.11.2:
     dependencies:
       chalk: 4.1.2
@@ -12582,7 +12568,8 @@ snapshots:
 
   entities@4.5.0: {}
 
-  env-paths@2.2.1: {}
+  env-paths@2.2.1:
+    optional: true
 
   err-code@2.0.3:
     optional: true
@@ -13381,7 +13368,7 @@ snapshots:
 
   graphemer@1.4.0: {}
 
-  graphql-config@5.1.2(@types/node@22.5.5)(encoding@0.1.13)(graphql@16.9.0)(typescript@5.6.2):
+  graphql-config@5.1.3(@types/node@22.5.5)(encoding@0.1.13)(graphql@16.9.0)(typescript@5.6.2):
     dependencies:
       '@graphql-tools/graphql-file-loader': 8.0.1(graphql@16.9.0)
       '@graphql-tools/json-file-loader': 8.0.1(graphql@16.9.0)
@@ -13389,9 +13376,9 @@ snapshots:
       '@graphql-tools/merge': 9.0.5(graphql@16.9.0)
       '@graphql-tools/url-loader': 8.0.2(@types/node@22.5.5)(encoding@0.1.13)(graphql@16.9.0)
       '@graphql-tools/utils': 10.5.1(graphql@16.9.0)
-      cosmiconfig: 9.0.0(typescript@5.6.2)
+      cosmiconfig: 8.3.6(typescript@5.6.2)
       graphql: 16.9.0
-      jiti: 1.21.6
+      jiti: 2.3.3
       minimatch: 9.0.5
       string-env-interpolation: 1.0.1
       tslib: 2.6.3
@@ -14209,6 +14196,8 @@ snapshots:
       - ts-node
 
   jiti@1.21.6: {}
+
+  jiti@2.3.3: {}
 
   jose@5.9.3: {}
 
