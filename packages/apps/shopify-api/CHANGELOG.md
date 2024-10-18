@@ -1,5 +1,16 @@
 # Changelog
 
+## 11.5.1
+
+### Patch Changes
+
+- 2e396f3: Updated `express` dependencies
+- cd0b3e1: Updated `jose` dependencies
+- Updated dependencies [f38dfc0]
+  - @shopify/graphql-client@1.2.1
+  - @shopify/admin-api-client@1.0.4
+  - @shopify/storefront-api-client@1.0.3
+
 ## 11.5.0
 
 ### Minor Changes

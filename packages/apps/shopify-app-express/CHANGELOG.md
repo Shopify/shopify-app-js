@@ -1,5 +1,17 @@
 # Changelog
 
+## 5.0.8
+
+### Patch Changes
+
+- 2e396f3: Updated `express` dependencies
+- 2faad6c: Changing common connection logs from info level to debug to avoid spam
+- Updated dependencies [2e396f3]
+- Updated dependencies [cd0b3e1]
+  - @shopify/shopify-api@11.5.1
+  - @shopify/shopify-app-session-storage@3.0.8
+  - @shopify/shopify-app-session-storage-memory@4.0.8
+
 ## 5.0.7
 
 ### Patch Changes
