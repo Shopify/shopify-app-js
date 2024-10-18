@@ -128,9 +128,7 @@ describe('Storefront API Client', () => {
               storeDomain: undefined as any,
             }),
           ).toThrow(
-            new Error(
-              'Storefront API Client: a valid store domain ("undefined") must be provided',
-            ),
+            'Storefront API Client: a valid store domain ("undefined") must be provided',
           );
         });
 
@@ -141,9 +139,7 @@ describe('Storefront API Client', () => {
               storeDomain: '   ',
             }),
           ).toThrow(
-            new Error(
-              'Storefront API Client: a valid store domain ("   ") must be provided',
-            ),
+            'Storefront API Client: a valid store domain ("   ") must be provided',
           );
         });
 
@@ -154,9 +150,7 @@ describe('Storefront API Client', () => {
               storeDomain: 123 as any,
             }),
           ).toThrow(
-            new Error(
-              'Storefront API Client: a valid store domain ("123") must be provided',
-            ),
+            'Storefront API Client: a valid store domain ("123") must be provided',
           );
         });
 
