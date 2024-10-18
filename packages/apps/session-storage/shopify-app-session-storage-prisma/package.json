@@ -45,13 +45,13 @@
   ],
   "dependencies": {},
   "peerDependencies": {
-    "@prisma/client": "^5.20.0",
+    "@prisma/client": "^5.21.1",
     "@shopify/shopify-api": "^11.0.0",
     "@shopify/shopify-app-session-storage": "^3.0.0",
     "prisma": "^5.21.1"
   },
   "devDependencies": {
-    "@prisma/client": "^5.20.0",
+    "@prisma/client": "^5.21.1",
     "@shopify/shopify-app-session-storage-test-utils": "^3.0.7",
     "prisma": "^5.21.1"
   },
