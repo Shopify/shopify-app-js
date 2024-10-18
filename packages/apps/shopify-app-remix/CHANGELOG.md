@@ -1,5 +1,16 @@
 # @shopify/shopify-app-remix
 
+## 3.3.3
+
+### Patch Changes
+
+- Updated dependencies [2e396f3]
+- Updated dependencies [cd0b3e1]
+  - @shopify/shopify-api@11.5.1
+  - @shopify/shopify-app-session-storage@3.0.8
+  - @shopify/admin-api-client@1.0.4
+  - @shopify/storefront-api-client@1.0.3
+
 ## 3.3.2
 
 ### Patch Changes
