@@ -3,7 +3,7 @@ import {ReferenceEntityTemplateSchema} from '@shopify/generate-docs';
 const data: ReferenceEntityTemplateSchema = {
   name: 'Admin',
   description:
-    'Contains functions for authenticating and interacting with the Admin API.\n\nThis function can handle requests for apps embedded in the Admin, Admin extensions, or non-embedded apps.',
+    'Contains methods for authenticating and interacting with the Admin API.\n\nThis function can handle requests for apps embedded in the Admin, Admin extensions, or non-embedded apps.',
   category: 'Authenticate',
   type: 'object',
   isVisualComponent: false,
@@ -32,6 +32,7 @@ const data: ReferenceEntityTemplateSchema = {
     'EmbeddedAdminContext',
     'AdminApiContext',
     'BillingContext',
+    'ScopesApiContext',
   ],
   related: [
     {
