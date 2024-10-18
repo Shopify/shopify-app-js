@@ -6,6 +6,7 @@ class AuthScopes {
 
   private compressedScopes: Set<string>;
   private expandedScopes: Set<string>;
+  private originalScopes: Set<string>;
 
   constructor(scopes: string | string[] | AuthScopes | undefined) {
     let scopesArray: string[] = [];
@@ -32,6 +33,7 @@ class AuthScopes {
       [...scopeSet].filter((x) => !impliedSet.has(x)),
     );
     this.expandedScopes = new Set([...scopeSet, ...impliedSet]);
+    this.originalScopes = scopeSet;
   }
 
   /**
@@ -79,8 +81,10 @@ class AuthScopes {
   /**
    * Returns an array with the current set of scopes.
    */
-  public toArray() {
-    return [...this.compressedScopes];
+  public toArray(returnOriginalScopes = false) {
+    return returnOriginalScopes
+      ? [...this.originalScopes]
+      : [...this.compressedScopes];
   }
 
   private getImpliedScopes(scopesArray: string[]): string[] {
