@@ -502,7 +502,13 @@ This log content is sent to the logger whenever the client attempts to retry HTT
 
 ### URL validation errors when using React Native
 
-If you're using this package in a React Native project, you might encounter URL validation errors when initializing the storefront api client. To avoid issues:
+If you're using this package in a React Native project, you might encounter URL validation errors when initializing the storefront api client. For example:
+
+```
+Error: Storefront API Client: a valid store domain ("http://shop.myshopify.com/") must be provided
+```
+
+To avoid issues:
 
 1. Install the [`react-native-url-polyfill`](https://www.npmjs.com/package/react-native-url-polyfill) package:
 
