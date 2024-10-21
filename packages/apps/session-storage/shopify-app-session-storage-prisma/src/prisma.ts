@@ -139,7 +139,7 @@ export class PrismaSessionStorage<T extends PrismaClient>
       }
       await sleep(this.connectionRetryIntervalMs);
     }
-    throw Error("Error obtaining session table");
+    throw Error('Error obtaining session table');
   }
 
   private sessionToRow(session: Session): Row {
