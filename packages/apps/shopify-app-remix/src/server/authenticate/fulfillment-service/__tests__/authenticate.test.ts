@@ -120,7 +120,10 @@ const MERCHANT_CUSTOM_APP_CONFIG = {
     describe('valid requests include an API client object', () => {
       expectAdminApiClient(async () => {
         const sessionStorage = new MemorySessionStorage();
-        const shopify = shopifyApp(testConfig({sessionStorage}));
+        const shopify = shopifyApp({
+          ...testConfig({sessionStorage}),
+          future: {removeRest: false},
+        });
 
         const {request, session: expectedSession} =
           await getValidRequest(sessionStorage);

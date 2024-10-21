@@ -14,7 +14,6 @@ import {
   mockGraphqlRequest,
   setUpNonEmbeddedFlow,
 } from '../../../__test-helpers';
-import {AdminApiContext} from '../../../clients';
 
 describe('admin.authenticate context', () => {
   expectAdminApiClient(async () => {
@@ -62,14 +61,18 @@ describe('admin.authenticate context', () => {
     {
       testGroup: 'REST client',
       mockRequest: mockRestRequest,
-      action: async (admin: AdminApiContext, _session: Session) =>
-        admin.rest.get({path: '/customers.json'}),
+      action: async (
+        admin: Awaited<ReturnType<typeof setUpNonEmbeddedFlow>>['admin'],
+        _session: Session,
+      ) => admin.rest.get({path: '/customers.json'}),
     },
     {
       testGroup: 'REST resources',
       mockRequest: mockRestRequest,
-      action: async (admin: AdminApiContext, session: Session) =>
-        admin.rest.resources.Customer.all({session}),
+      action: async (
+        admin: Awaited<ReturnType<typeof setUpNonEmbeddedFlow>>['admin'],
+        session: Session,
+      ) => admin.rest.resources.Customer.all({session}),
     },
   ])(
     '$testGroup re-authentication',
@@ -95,13 +98,18 @@ describe('admin.authenticate context', () => {
     {
       testGroup: 'GraphQL client',
       mockRequest: mockGraphqlRequest(),
-      action: async (admin: AdminApiContext, _session: Session) =>
-        admin.graphql('{ shop { name } }'),
+      action: async (
+        admin: Awaited<ReturnType<typeof setUpNonEmbeddedFlow>>['admin'],
+        _session: Session,
+      ) => admin.graphql('{ shop { name } }'),
     },
     {
       testGroup: 'GraphQL client with options',
       mockRequest: mockGraphqlRequest('2021-01' as ApiVersion),
-      action: async (admin: AdminApiContext, _session: Session) =>
+      action: async (
+        admin: Awaited<ReturnType<typeof setUpNonEmbeddedFlow>>['admin'],
+        _session: Session,
+      ) =>
         admin.graphql(
           'mutation myMutation($ID: String!) { shop(ID: $ID) { name } }',
           {

@@ -60,7 +60,10 @@ describe('Webhook validation', () => {
     expectAdminApiClient(async () => {
       // GIVEN
       const sessionStorage = new MemorySessionStorage();
-      const shopify = shopifyApp(testConfig({sessionStorage, restResources}));
+      const shopify = shopifyApp({
+        ...testConfig({sessionStorage, restResources}),
+        future: {removeRest: false},
+      });
       const body = {some: 'data'};
 
       const expectedSession = new Session({

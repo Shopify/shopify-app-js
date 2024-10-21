@@ -25,9 +25,12 @@ describe('shopifyApp', () => {
   });
   /* eslint-enable no-process-env */
 
-  it('can create shopify object', () => {
+  it('can create shopify object', async () => {
     // GIVEN
-    const shopify = shopifyApp(testConfig());
+    const shopify = shopifyApp({
+      ...testConfig(),
+      future: {removeRest: false},
+    });
 
     // THEN
     expect(shopify).toBeDefined();

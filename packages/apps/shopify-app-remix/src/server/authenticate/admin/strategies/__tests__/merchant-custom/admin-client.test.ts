@@ -7,7 +7,6 @@ import {
 } from '@shopify/shopify-api';
 
 import {AppDistribution} from '../../../../../types';
-import {AdminApiContext} from '../../../../../clients';
 import {shopifyApp} from '../../../../..';
 import {
   APP_URL,
@@ -34,25 +33,34 @@ describe('admin.authenticate context', () => {
     {
       testGroup: 'REST client',
       mockRequest: mockRestRequest,
-      action: async (admin: AdminApiContext, _session: Session) =>
-        admin.rest.get({path: '/customers.json'}),
+      action: async (
+        admin: Awaited<ReturnType<typeof setUpMerchantCustomFlow>>['admin'],
+        _session: Session,
+      ) => admin.rest.get({path: '/customers.json'}),
     },
     {
       testGroup: 'REST resources',
       mockRequest: mockRestRequest,
-      action: async (admin: AdminApiContext, session: Session) =>
-        admin.rest.resources.Customer.all({session}),
+      action: async (
+        admin: Awaited<ReturnType<typeof setUpMerchantCustomFlow>>['admin'],
+        session: Session,
+      ) => admin.rest.resources.Customer.all({session}),
     },
     {
       testGroup: 'GraphQL client',
       mockRequest: mockGraphqlRequest(),
-      action: async (admin: AdminApiContext, _session: Session) =>
-        admin.graphql('{ shop { name } }'),
+      action: async (
+        admin: Awaited<ReturnType<typeof setUpMerchantCustomFlow>>['admin'],
+        _session: Session,
+      ) => admin.graphql('{ shop { name } }'),
     },
     {
       testGroup: 'GraphQL client with options',
       mockRequest: mockGraphqlRequest('2021-01' as ApiVersion),
-      action: async (admin: AdminApiContext, _session: Session) =>
+      action: async (
+        admin: Awaited<ReturnType<typeof setUpMerchantCustomFlow>>['admin'],
+        _session: Session,
+      ) =>
         admin.graphql(
           'mutation myMutation($ID: String!) { shop(ID: $ID) { name } }',
           {
@@ -85,14 +93,15 @@ describe('admin.authenticate context', () => {
 });
 
 async function setUpMerchantCustomFlow() {
-  const shopify = shopifyApp(
-    testConfig({
+  const shopify = shopifyApp({
+    ...testConfig({
       restResources,
       isEmbeddedApp: false,
       distribution: AppDistribution.ShopifyAdmin,
       adminApiAccessToken: 'test-token',
     }),
-  );
+    future: {removeRest: false},
+  });
 
   const expectedSession = setupValidCustomAppSession(TEST_SHOP);
 

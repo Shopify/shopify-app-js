@@ -128,7 +128,10 @@ describe('authenticate', () => {
     (isOnline) => {
       it('returns the context if the session is valid', async () => {
         // GIVEN
-        const shopify = shopifyApp(testConfig({useOnlineTokens: isOnline}));
+        const shopify = shopifyApp({
+          ...testConfig({useOnlineTokens: isOnline}),
+          future: {removeRest: false},
+        });
 
         let testSession: Session;
         testSession = await setUpValidSession(shopify.sessionStorage);
