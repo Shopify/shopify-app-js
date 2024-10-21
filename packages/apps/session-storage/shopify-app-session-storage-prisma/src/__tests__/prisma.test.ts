@@ -63,7 +63,7 @@ describe('PrismaSessionStorage when with no database set up', () => {
 
       const {cause} = error;
       expect(cause.message).toContain(
-        'The table `main.Session` does not exist in the current database.',
+        'The table `session` does not exist in the current database.',
       );
     }
   });
