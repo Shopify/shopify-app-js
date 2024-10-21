@@ -9,7 +9,10 @@ import {signRequestCookie} from './sign-request-cookie';
 import {testConfig} from './test-config';
 
 export async function setUpNonEmbeddedFlow() {
-  const shopify = shopifyApp(testConfig({restResources, isEmbeddedApp: false}));
+  const shopify = shopifyApp({
+    ...testConfig({restResources, isEmbeddedApp: false}),
+    future: {removeRest: false, wip_optionalScopesApi: true},
+  });
   const session = await setUpValidSession(shopify.sessionStorage);
 
   const request = new Request(`${APP_URL}?shop=${TEST_SHOP}`);
@@ -19,9 +22,11 @@ export async function setUpNonEmbeddedFlow() {
     cookieValue: session.id,
   });
 
+  const result = await shopify.authenticate.admin(request);
+
   return {
     shopify,
-    ...(await shopify.authenticate.admin(request)),
+    ...result,
     request,
     session,
   };

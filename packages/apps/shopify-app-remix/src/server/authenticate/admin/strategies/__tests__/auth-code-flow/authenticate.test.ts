@@ -97,13 +97,14 @@ describe('authenticate', () => {
     (isOnline) => {
       it('returns the context if the session is valid and the app is embedded', async () => {
         // GIVEN
-        const shopify = shopifyApp(
-          testConfig({
+        const shopify = shopifyApp({
+          ...testConfig({
             useOnlineTokens: isOnline,
             future: {unstable_newEmbeddedAuthStrategy: false},
             isEmbeddedApp: true,
           }),
-        );
+          future: {removeRest: false},
+        });
 
         let testSession: Session;
         testSession = await setUpValidSession(shopify.sessionStorage);
@@ -128,11 +129,12 @@ describe('authenticate', () => {
 
       it('returns the context if the session is valid and the app is not embedded', async () => {
         // GIVEN
-        const shopify = shopifyApp(
-          testConfig({
+        const shopify = shopifyApp({
+          ...testConfig({
             isEmbeddedApp: false,
           }),
-        );
+          future: {removeRest: false},
+        });
 
         let testSession: Session;
         testSession = await setUpValidSession(shopify.sessionStorage);

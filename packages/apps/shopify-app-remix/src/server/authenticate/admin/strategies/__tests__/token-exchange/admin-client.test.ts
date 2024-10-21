@@ -15,7 +15,6 @@ import {
   mockGraphqlRequest,
 } from '../../../../../__test-helpers';
 import {shopifyApp} from '../../../../..';
-import {AdminApiContext} from '../../../../../clients';
 
 describe('admin.authenticate context', () => {
   expectAdminApiClient(async () => {
@@ -31,25 +30,34 @@ describe('admin.authenticate context', () => {
     {
       testGroup: 'REST client',
       mockRequest: mockRestRequest,
-      action: async (admin: AdminApiContext, _session: Session) =>
-        admin.rest.get({path: '/customers.json'}),
+      action: async (
+        admin: Awaited<ReturnType<typeof setUpDocumentFlow>>['admin'],
+        _session: Session,
+      ) => admin.rest.get({path: '/customers.json'}),
     },
     {
       testGroup: 'REST resources',
       mockRequest: mockRestRequest,
-      action: async (admin: AdminApiContext, session: Session) =>
-        admin.rest.resources.Customer.all({session}),
+      action: async (
+        admin: Awaited<ReturnType<typeof setUpDocumentFlow>>['admin'],
+        session: Session,
+      ) => admin.rest.resources.Customer.all({session}),
     },
     {
       testGroup: 'GraphQL client',
       mockRequest: mockGraphqlRequest(),
-      action: async (admin: AdminApiContext, _session: Session) =>
-        admin.graphql('{ shop { name } }'),
+      action: async (
+        admin: Awaited<ReturnType<typeof setUpDocumentFlow>>['admin'],
+        _session: Session,
+      ) => admin.graphql('{ shop { name } }'),
     },
     {
       testGroup: 'GraphQL client with options',
       mockRequest: mockGraphqlRequest('2021-01' as ApiVersion),
-      action: async (admin: AdminApiContext, _session: Session) =>
+      action: async (
+        admin: Awaited<ReturnType<typeof setUpDocumentFlow>>['admin'],
+        _session: Session,
+      ) =>
         admin.graphql(
           'mutation myMutation($ID: String!) { shop(ID: $ID) { name } }',
           {
@@ -90,7 +98,9 @@ describe('admin.authenticate context', () => {
 
       it('returns 401 when receives a 401 response on fetch requests', async () => {
         // GIVEN
-        const {admin, session, shopify} = await setUpFetchFlow();
+        const {admin, session, shopify} = await setUpFetchFlow({
+          unstable_newEmbeddedAuthStrategy: true,
+        });
         const requestMock = await mockRequest();
 
         // WHEN
@@ -117,11 +127,18 @@ describe('admin.authenticate context', () => {
 });
 
 async function setUpDocumentFlow() {
-  const shopify = shopifyApp(
-    testConfig({
-      restResources,
-    }),
-  );
+  const config = testConfig({
+    restResources,
+  });
+
+  const shopify = shopifyApp({
+    ...config,
+    future: {
+      ...config.future,
+      unstable_newEmbeddedAuthStrategy: true,
+      removeRest: false,
+    },
+  });
   const expectedSession = await setUpValidSession(shopify.sessionStorage);
 
   const {token} = getJwt();

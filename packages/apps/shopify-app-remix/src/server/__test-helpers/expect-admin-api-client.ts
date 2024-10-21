@@ -2,6 +2,7 @@ import {Session} from '@shopify/shopify-api';
 
 import {LATEST_API_VERSION} from '..';
 import type {AdminApiContext} from '../clients';
+import {AppConfigArg} from '../config-types';
 
 import {mockExternalRequest} from './request-mock';
 import {TEST_SHOP} from './const';
@@ -10,7 +11,7 @@ const REQUEST_URL = `https://${TEST_SHOP}/admin/api/${LATEST_API_VERSION}/custom
 
 export function expectAdminApiClient(
   factory: () => Promise<{
-    admin: AdminApiContext;
+    admin: AdminApiContext<AppConfigArg>;
     expectedSession: Session;
     actualSession: Session;
   }>,

@@ -8,14 +8,16 @@ import {setUpValidSession} from './setup-valid-session';
 import {testConfig} from './test-config';
 
 export async function setUpFetchFlow(flags?: {
-  unstable_newEmbeddedAuthStrategy: boolean;
+  unstable_newEmbeddedAuthStrategy?: boolean;
+  wip_optionalScopesApi?: boolean;
 }) {
-  const shopify = shopifyApp(
-    testConfig({
-      future: {...flags},
+  const shopify = shopifyApp({
+    ...testConfig({
       restResources,
     }),
-  );
+    future: {...flags, removeRest: false, wip_optionalScopesApi: true},
+  });
+
   await setUpValidSession(shopify.sessionStorage);
 
   const {token} = getJwt();
@@ -23,8 +25,10 @@ export async function setUpFetchFlow(flags?: {
     headers: {Authorization: `Bearer ${token}`},
   });
 
+  const result = await shopify.authenticate.admin(request);
+
   return {
     shopify,
-    ...(await shopify.authenticate.admin(request)),
+    ...result,
   };
 }

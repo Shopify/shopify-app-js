@@ -14,7 +14,10 @@ import {
 describe('unauthenticated admin context', () => {
   it('throws an error if there is no offline session for the shop', async () => {
     // GIVEN
-    const shopify = shopifyApp(testConfig());
+    const shopify = shopifyApp({
+      ...testConfig(),
+      future: {removeRest: false},
+    });
 
     // EXPECT
     await expect(shopify.unauthenticated.admin(TEST_SHOP)).rejects.toThrow(
@@ -23,7 +26,7 @@ describe('unauthenticated admin context', () => {
   });
 
   expectAdminApiClient(async () => {
-    const shopify = shopifyApp(testConfig());
+    const shopify = shopifyApp({...testConfig(), future: {removeRest: false}});
     const expectedSession = await setUpValidSession(shopify.sessionStorage, {
       isOnline: false,
     });
@@ -36,13 +39,14 @@ describe('unauthenticated admin context', () => {
 
 describe('unauthenticated admin context for merchant custom apps', () => {
   expectAdminApiClient(async () => {
-    const shopify = shopifyApp(
-      testConfig({
+    const shopify = shopifyApp({
+      ...testConfig({
         distribution: AppDistribution.ShopifyAdmin,
         adminApiAccessToken: 'admin-access-token',
         sessionStorage: undefined,
       }),
-    );
+      future: {removeRest: false},
+    });
     const expectedSession = setupValidCustomAppSession(TEST_SHOP);
     const {admin, session: actualSession} =
       await shopify.unauthenticated.admin(TEST_SHOP);
