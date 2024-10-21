@@ -139,7 +139,9 @@ export class PrismaSessionStorage<T extends PrismaClient>
       }
       await sleep(this.connectionRetryIntervalMs);
     }
-    throw Error(`The table \`${this.tableName}\` does not exist in the current database.`);
+    throw Error(
+      `The table \`${this.tableName}\` does not exist in the current database.`,
+    );
   }
 
   private sessionToRow(session: Session): Row {
