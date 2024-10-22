@@ -450,6 +450,17 @@ export interface AppPlanDiscount {
   value: AppPlanDiscountAmount;
 }
 
+export interface AppSubscriptionLineItemUpdatePayload {
+  userErrors: string[];
+  confirmationUrl: string;
+  appSubscription: AppSubscription;
+}
+
+export type UpdateCappedAmountConfirmation = Omit<
+  AppSubscriptionLineItemUpdatePayload,
+  'userErrors'
+>;
+
 type AppPlanDiscountAmount =
   | BillingConfigSubscriptionPlanDiscountAmount
   | BillingConfigSubscriptionPlanDiscountPercentage;
@@ -547,6 +558,30 @@ export interface UsageRecord {
   idempotencyKey?: string;
 }
 
+export interface BillingUpdateUsageCappedAmountParams {
+  /**
+   * The session to use for this request.
+   */
+  session: Session;
+  /**
+   * The subscription line item ID to update.
+   */
+  subscriptionLineItemId: string;
+  /**
+   * The maximum charge for the usage billing plan.
+   */
+  cappedAmount: {
+    /**
+     * The amount to update.
+     */
+    amount: number;
+    /**
+     * The currency code to update.
+     */
+    currencyCode: string;
+  };
+}
+
 interface OneTimePurchases {
   oneTimePurchases: {
     edges: {
@@ -612,6 +647,10 @@ export interface UsageRecordCreateResponse {
   };
 }
 
+export interface BillingUpdateUsageCappedAmountResponse {
+  appSubscriptionLineItemUpdate?: AppSubscriptionLineItemUpdatePayload;
+}
+
 export type BillingCheck<Future extends FutureFlagOptions> = <
   Params extends BillingCheckParams<Future>,
 >(
@@ -634,10 +673,15 @@ export type BillingCreateUsageRecord = (
   params: BillingCreateUsageRecordParams,
 ) => Promise<UsageRecord>;
 
+export type BillingUpdateUsageCappedAmount = (
+  params: BillingUpdateUsageCappedAmountParams,
+) => Promise<UpdateCappedAmountConfirmation>;
+
 export interface ShopifyBilling<Future extends FutureFlagOptions> {
   check: BillingCheck<Future>;
   request: BillingRequest;
   cancel: BillingCancel;
   subscriptions: BillingSubscriptions;
   createUsageRecord: BillingCreateUsageRecord;
+  updateUsageCappedAmount: BillingUpdateUsageCappedAmount;
 }

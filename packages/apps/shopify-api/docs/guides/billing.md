@@ -24,6 +24,7 @@ In this guide you'll learn how to use this package for both of those scenarios.
     - [When should the app check for payment?](#when-should-the-app-check-for-payment)
     - [Canceling a subscription](#canceling-a-subscription)
     - [Creating a usage record](#creating-a-usage-record)
+    - [Updating the capped amount for a usage billing plan](#updating-the-capped-amount-for-a-usage-billing-plan)
 
 ## Using managed app pricing
 
@@ -154,31 +155,31 @@ future: {
 
 #### Subscription Plan with LineItems
 
-| Parameter                           | Type                         | Required? | Default Value | Notes                                                                                                                                                                                  |
-| ----------------------------------- | ---------------------------- | :-------: | :-----------: | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `LineItems`                         | `LineItems[]`                |    Yes    |       -       | An array of LineItems to be included in the subscription plan.                                                                                                                         |
-| `trialDays`                         | `number`                     |    No     |       -       | Give merchants this many days before charging                                                                                                                                          |
-| `replacementBehavior`               | `BillingReplacementBehavior` |    No     |       -       | `BillingReplacementBehavior` value, see [the reference](https://shopify.dev/docs/api/admin-graphql/latest/mutations/appSubscriptionCreate) for more information.                       |
+| Parameter             | Type                         | Required? | Default Value | Notes                                                                                                                                                            |
+| --------------------- | ---------------------------- | :-------: | :-----------: | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `LineItems`           | `LineItems[]`                |    Yes    |       -       | An array of LineItems to be included in the subscription plan.                                                                                                   |
+| `trialDays`           | `number`                     |    No     |       -       | Give merchants this many days before charging                                                                                                                    |
+| `replacementBehavior` | `BillingReplacementBehavior` |    No     |       -       | `BillingReplacementBehavior` value, see [the reference](https://shopify.dev/docs/api/admin-graphql/latest/mutations/appSubscriptionCreate) for more information. |
 
 #### Recurring Charge LineItem
 
-| Parameter                           | Type                         | Required? | Default Value | Notes                                                                                                                                                                                  |
-| ----------------------------------- | ---------------------------- | :-------: | :-----------: | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `interval`                          | `EVERY_30_DAYS`, `ANNUAL`    |    Yes    |       -       | `BillingInterval.Every30Days`, `BillingInterval.Annual` value                                                                                                                          |
-| `amount`                            | `number`                     |    Yes    |       -       | The amount to charge                                                                                                                                                                   |
-| `currencyCode`                      | `string`                     |    Yes    |       -       | The currency to charge, USD or merchant's shop currency<sup>1<sup>                                                                                                                    |
-| `discount.durationLimitInIntervals` | `number`                     |    No     |       -       | The number of billing intervals to apply the discount for. See [the reference](https://shopify.dev/docs/apps/billing/purchase-adjustments/subscription-discounts) for more information |
-| `discount.value.amount`             | `number`                     |    No     |       -       | The amount of the discount in the currency that the merchant is being billed in.                                                                                                       |
-| `discount.value.percentage`         | `number`                     |    No     |       -       | The percentage value of the discount.                                                                                                                                                  |
+| Parameter                           | Type                      | Required? | Default Value | Notes                                                                                                                                                                                  |
+| ----------------------------------- | ------------------------- | :-------: | :-----------: | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `interval`                          | `EVERY_30_DAYS`, `ANNUAL` |    Yes    |       -       | `BillingInterval.Every30Days`, `BillingInterval.Annual` value                                                                                                                          |
+| `amount`                            | `number`                  |    Yes    |       -       | The amount to charge                                                                                                                                                                   |
+| `currencyCode`                      | `string`                  |    Yes    |       -       | The currency to charge, USD or merchant's shop currency<sup>1<sup>                                                                                                                     |
+| `discount.durationLimitInIntervals` | `number`                  |    No     |       -       | The number of billing intervals to apply the discount for. See [the reference](https://shopify.dev/docs/apps/billing/purchase-adjustments/subscription-discounts) for more information |
+| `discount.value.amount`             | `number`                  |    No     |       -       | The amount of the discount in the currency that the merchant is being billed in.                                                                                                       |
+| `discount.value.percentage`         | `number`                  |    No     |       -       | The percentage value of the discount.                                                                                                                                                  |
 
 #### Usage Charge LineItem
 
-| Parameter             | Type                         | Required? | Default Value | Notes                                                                                                                                                            |
-| --------------------- | ---------------------------- | :-------: | :-----------: | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `interval`            | `USAGE`                      |    Yes    |       -       | `BillingInterval.Usage`                                                                                                                                          |
-| `amount`              | `number`                     |    Yes    |       -       | The maximum amount the merchant will be charged                                                                                                                  |
-| `currencyCode`        | `string`                     |    Yes    |       -       | The currency to charge, USD or merchant's shop currency<sup>1</sup>                                                                                              |
-| `usageTerms`          | `string`                     |    Yes    |       -       | These terms stipulate the pricing model for the charges that an app creates.                                                                                     |
+| Parameter      | Type     | Required? | Default Value | Notes                                                                        |
+| -------------- | -------- | :-------: | :-----------: | ---------------------------------------------------------------------------- |
+| `interval`     | `USAGE`  |    Yes    |       -       | `BillingInterval.Usage`                                                      |
+| `amount`       | `number` |    Yes    |       -       | The maximum amount the merchant will be charged                              |
+| `currencyCode` | `string` |    Yes    |       -       | The currency to charge, USD or merchant's shop currency<sup>1</sup>          |
+| `usageTerms`   | `string` |    Yes    |       -       | These terms stipulate the pricing model for the charges that an app creates. |
 
 #### One Time Billing Plans
 
@@ -303,21 +304,36 @@ const canceledSubscription = await shopify.billing.cancel({
 See the [billing reference](../reference/billing/README.md) for details on how to call the `subscriptions` and `cancel` endpoints.
 
 ### Creating a usage record
+
 When using a usage based billing plan you must create usage records to charge the merchant. The `createUsageRecord` method will create a usage record for a usage billing plan.
 
 The call to `createUsageRecord` will return an `UsageRecord` object, containing the details of the usage record just created successfully, and will throw a `BillingError` if any errors occur.
 
 See the [billing reference](../reference/billing/README.md) for details on how to call the `createUsageRecord` endpoint.
 
+| Parameter                | Type      | Required? | Default Value | Notes                                                                                                                        |
+| ------------------------ | --------- | :-------: | :-----------: | ---------------------------------------------------------------------------------------------------------------------------- |
+| `session`                | `Session` |    Yes    |       -       | The session to be used for this request                                                                                      |
+| `description`            | `string`  |    Yes    |       -       | The description of the usage record.                                                                                         |
+| `price.amount`           | `number`  |    Yes    |       -       | The amount and currency to be charged                                                                                        |
+| `price.currency`         | `string`  |    Yes    |       -       | The amount and currency to be charged                                                                                        |
+| `subscriptionLineItemId` | `string`  |    No     |       -       | The line item to create the usage record for. If no value is provided a record will be created on the active usage line item |
+| `idempotencyKey`         | `string`  |    No     |       -       | A unique key that can be passed to the request to prevent duplicate charges                                                  |
+| `isTest`                 | `Boolean` |    No     |       -       | Whether this is a test charge                                                                                                |
 
-| Parameter             | Type                         | Required? | Default Value | Notes                                                                                                                                                            |
-| ---------------------  | ---------------------------- | :-------: | :-----------: | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `session`              | `Session`                    |    Yes    |       -       | The session to be used for this request                                                                                                                                          |
-| `description`          | `string`                     |    Yes    |       -       | The description of the usage record.                                                                                                                  |
-| `price.amount`                | `number`                     |    Yes    |       -       | The amount and currency to be charged
-| `price.currency`                | `string`                     |    Yes    |       -       | The amount and currency to be charged                                                                                             |
-|`subscriptionLineItemId`| `string`                     |    No     |       -       | The line item to create the usage record for. If no value is provided a record will be created on the active usage line item                                                                                     |
-| `idempotencyKey`       | `string`                     |    No     |       -       | A unique key that can be passed to the request to prevent duplicate charges                                                                                                                    |
-| `isTest`  | `Boolean` |    No     |       -       | Whether this is a test charge |
+### Updating the capped amount for a usage billing plan
+
+A usage-based subscription is a pricing model that charges merchants continuously based on app use during Shopify's 30-day billing cycle. The capped amount is the maximum that a merchant is billed for during the cycle.
+
+The response from `updateUsageCappedAmount` contains a `confirmationUrl` that will need to be sent to the merchant to confirm the update.
+
+See the [billing reference](../reference/billing/README.md) for details on how to call the `updateUsageCappedAmount` endpoint.
+
+| Parameter                | Type      | Required? | Default Value | Notes                                          |
+| ------------------------ | --------- | :-------: | :-----------: | ---------------------------------------------- |
+| `session`                | `Session` |    Yes    |       -       | The session to be used for this request        |
+| `subscriptionLineItemId` | `string`  |    Yes    |       -       | The line item to update the maximum charge for |
+| `cappedAmount.amount`    | `number`  |    Yes    |       -       | The maximum amount to charge the merchant      |
+| `cappedAmount.currency`  | `string`  |    Yes    |       -       | The currency to charge                         |
 
 [Back to guide index](../../README.md#guides)
