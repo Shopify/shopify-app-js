@@ -130,28 +130,18 @@ export class PrismaSessionStorage<T extends PrismaClient>
   }
 
   private async pollForTable(): Promise<void> {
-    const promise = new Promise<void>((resolve, reject) => {
-      let retries = 0;
-      const doPoll = () => {
-        this.getSessionTable()
-          .count()
-          .then(() => {
-            resolve();
-          })
-          .catch((error) => {
-            if (retries < this.connectionRetries) {
-              retries++;
-              setTimeout(doPoll, this.connectionRetryIntervalMs);
-            } else {
-              reject(error);
-            }
-          });
-      };
-
-      doPoll();
-    });
-
-    return promise;
+    for (let i = 0; i < this.connectionRetries; i++) {
+      try {
+        await this.getSessionTable().count();
+        return;
+      } catch (error) {
+        console.log(`Error obtaing session table: ${error}`);
+      }
+      await sleep(this.connectionRetryIntervalMs);
+    }
+    throw Error(
+      `The table \`${this.tableName}\` does not exist in the current database.`,
+    );
   }
 
   private sessionToRow(session: Session): Row {
@@ -235,4 +225,8 @@ export class MissingSessionTableError extends Error {
   ) {
     super(message);
   }
+}
+
+async function sleep(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
 }
