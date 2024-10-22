@@ -3,10 +3,10 @@ import {ConfigInterface} from '../base-types';
 import {graphqlClientClass} from '../clients/admin';
 
 import {
-  AppSubscriptionLineItemUpdatePayload,
   BillingUpdateUsageCappedAmount,
   BillingUpdateUsageCappedAmountParams,
   BillingUpdateUsageCappedAmountResponse,
+  UpdateCappedAmountConfirmation,
 } from './types';
 
 const UPDATE_USAGE_CAPPED_AMOUNT_MUTATION = `
@@ -49,7 +49,7 @@ export function updateUsageCappedAmount(
 ): BillingUpdateUsageCappedAmount {
   return async function updateUsageCappedAmount(
     params: BillingUpdateUsageCappedAmountParams,
-  ): Promise<AppSubscriptionLineItemUpdatePayload> {
+  ): Promise<UpdateCappedAmountConfirmation> {
     if (!config.billing) {
       throw new BillingError({
         message: 'Attempted to update line item without billing configs',
@@ -88,7 +88,12 @@ export function updateUsageCappedAmount(
         });
       }
 
-      return response.data?.appSubscriptionLineItemUpdate!;
+      return {
+        confirmationUrl:
+          response.data?.appSubscriptionLineItemUpdate?.confirmationUrl!,
+        appSubscription:
+          response.data?.appSubscriptionLineItemUpdate?.appSubscription!,
+      };
     } catch (error) {
       if (error instanceof GraphqlQueryError) {
         throw new BillingError({

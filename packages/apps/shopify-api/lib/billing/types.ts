@@ -456,6 +456,11 @@ export interface AppSubscriptionLineItemUpdatePayload {
   appSubscription: AppSubscription;
 }
 
+export type UpdateCappedAmountConfirmation = Omit<
+  AppSubscriptionLineItemUpdatePayload,
+  'userErrors'
+>;
+
 type AppPlanDiscountAmount =
   | BillingConfigSubscriptionPlanDiscountAmount
   | BillingConfigSubscriptionPlanDiscountPercentage;
@@ -670,7 +675,7 @@ export type BillingCreateUsageRecord = (
 
 export type BillingUpdateUsageCappedAmount = (
   params: BillingUpdateUsageCappedAmountParams,
-) => Promise<AppSubscriptionLineItemUpdatePayload>;
+) => Promise<UpdateCappedAmountConfirmation>;
 
 export interface ShopifyBilling<Future extends FutureFlagOptions> {
   check: BillingCheck<Future>;

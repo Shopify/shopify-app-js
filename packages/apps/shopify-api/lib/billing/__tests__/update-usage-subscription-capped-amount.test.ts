@@ -51,7 +51,7 @@ describe('shopify.billing.updateUsageCappedAmount', () => {
     });
 
     expect(response).toEqual(
-      Responses.APP_SUBSCRIPTION_LINE_ITEM_UPDATE_PAYLOAD,
+      Responses.UPDATE_CAPPED_AMOUNT_CONFIRMATION_RESPONSE,
     );
 
     expect({

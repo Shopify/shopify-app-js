@@ -48,10 +48,6 @@ The currency code for the capped amount.
 
 ## Returns
 
-`userErrors: string[]`
-
-An array of user errors that occurred.
-
 ### confirmationUrl
 
 `string`
