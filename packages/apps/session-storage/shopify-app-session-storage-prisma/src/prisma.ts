@@ -42,17 +42,10 @@ export class PrismaSessionStorage<T extends PrismaClient>
     if (this.getSessionTable() === undefined) {
       throw new Error(`PrismaClient does not have a ${this.tableName} table`);
     }
-
-    this.ready = this.pollForTable().catch((cause) => {
-      throw new MissingSessionTableError(
-        `Prisma ${this.tableName} table does not exist. This could happen for a few reasons, see https://github.com/Shopify/shopify-app-js/tree/main/packages/apps/session-storage/shopify-app-session-storage-prisma#troubleshooting for more information`,
-        cause,
-      );
-    });
   }
 
   public async storeSession(session: Session): Promise<boolean> {
-    await this.ready;
+    await this.isReady();
 
     const data = this.sessionToRow(session);
 
@@ -84,7 +77,7 @@ export class PrismaSessionStorage<T extends PrismaClient>
   }
 
   public async loadSession(id: string): Promise<Session | undefined> {
-    await this.ready;
+    await this.isReady();
 
     const row = await this.getSessionTable().findUnique({
       where: {id},
@@ -98,7 +91,7 @@ export class PrismaSessionStorage<T extends PrismaClient>
   }
 
   public async deleteSession(id: string): Promise<boolean> {
-    await this.ready;
+    await this.isReady();
 
     try {
       await this.getSessionTable().delete({where: {id}});
@@ -110,7 +103,7 @@ export class PrismaSessionStorage<T extends PrismaClient>
   }
 
   public async deleteSessions(ids: string[]): Promise<boolean> {
-    await this.ready;
+    await this.isReady();
 
     await this.getSessionTable().deleteMany({where: {id: {in: ids}}});
 
@@ -118,7 +111,7 @@ export class PrismaSessionStorage<T extends PrismaClient>
   }
 
   public async findSessionsByShop(shop: string): Promise<Session[]> {
-    await this.ready;
+    await this.isReady();
 
     const sessions = await this.getSessionTable().findMany({
       where: {shop},
@@ -127,6 +120,22 @@ export class PrismaSessionStorage<T extends PrismaClient>
     });
 
     return sessions.map((session) => this.rowToSession(session));
+  }
+
+  private async isReady() {
+    if (this.ready) {
+      return this.ready;
+    }
+    return this.pollForTable()
+      .then(() => {
+        this.ready = Promise.resolve();
+      })
+      .catch((cause) => {
+        throw new MissingSessionTableError(
+          `Prisma ${this.tableName} table does not exist. This could happen for a few reasons, see https://github.com/Shopify/shopify-app-js/tree/main/packages/apps/session-storage/shopify-app-session-storage-prisma#troubleshooting for more information`,
+          cause,
+        );
+      });
   }
 
   private async pollForTable(): Promise<void> {
