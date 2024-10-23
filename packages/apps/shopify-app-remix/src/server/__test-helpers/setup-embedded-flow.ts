@@ -34,3 +34,32 @@ export async function setUpEmbeddedFlow() {
     request,
   };
 }
+
+export async function setUpEmbeddedFlowWithRemoveRestFlag() {
+  const shopify = shopifyApp({
+    ...testConfig({
+      restResources,
+    }),
+    future: {
+      removeRest: true,
+      unstable_newEmbeddedAuthStrategy: false,
+      wip_optionalScopesApi: true,
+    },
+  });
+
+  const expectedSession = await setUpValidSession(shopify.sessionStorage);
+
+  const {token} = getJwt();
+  const request = new Request(
+    `${APP_URL}?embedded=1&shop=${TEST_SHOP}&host=${BASE64_HOST}&id_token=${token}`,
+  );
+
+  const result = await shopify.authenticate.admin(request);
+
+  return {
+    shopify,
+    expectedSession,
+    ...result,
+    request,
+  };
+}

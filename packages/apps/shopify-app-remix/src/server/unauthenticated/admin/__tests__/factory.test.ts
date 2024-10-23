@@ -1,15 +1,15 @@
 import {
+  TEST_SHOP,
+  expectAdminApiClient,
+  setUpValidSession,
+  setupValidCustomAppSession,
+  testConfig,
+} from '../../../__test-helpers';
+import {
   AppDistribution,
   SessionNotFoundError,
   shopifyApp,
 } from '../../../index';
-import {
-  TEST_SHOP,
-  setUpValidSession,
-  testConfig,
-  expectAdminApiClient,
-  setupValidCustomAppSession,
-} from '../../../__test-helpers';
 
 describe('unauthenticated admin context', () => {
   it('throws an error if there is no offline session for the shop', async () => {
@@ -33,24 +33,41 @@ describe('unauthenticated admin context', () => {
     const {admin, session: actualSession} =
       await shopify.unauthenticated.admin(TEST_SHOP);
 
-    return {admin, expectedSession, actualSession};
+    const shopifyWithoutRest = shopifyApp({
+      ...testConfig(),
+      future: {removeRest: true},
+    });
+
+    const {admin: adminWithoutRest} =
+      await shopifyWithoutRest.unauthenticated.admin(TEST_SHOP);
+
+    return {admin, adminWithoutRest, expectedSession, actualSession};
   });
 });
 
 describe('unauthenticated admin context for merchant custom apps', () => {
   expectAdminApiClient(async () => {
+    const config = testConfig({
+      distribution: AppDistribution.ShopifyAdmin,
+      adminApiAccessToken: 'admin-access-token',
+      sessionStorage: undefined,
+    });
+
     const shopify = shopifyApp({
-      ...testConfig({
-        distribution: AppDistribution.ShopifyAdmin,
-        adminApiAccessToken: 'admin-access-token',
-        sessionStorage: undefined,
-      }),
+      ...config,
       future: {removeRest: false},
     });
     const expectedSession = setupValidCustomAppSession(TEST_SHOP);
     const {admin, session: actualSession} =
       await shopify.unauthenticated.admin(TEST_SHOP);
 
-    return {admin, expectedSession, actualSession};
+    const shopifyWithoutRest = shopifyApp({
+      ...config,
+      future: {removeRest: true},
+    });
+    const {admin: adminWithoutRest} =
+      await shopifyWithoutRest.unauthenticated.admin(TEST_SHOP);
+
+    return {admin, adminWithoutRest, expectedSession, actualSession};
   });
 });

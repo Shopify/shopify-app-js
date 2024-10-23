@@ -7,8 +7,8 @@ import {
   getHmac,
   getThrownResponse,
   setUpValidSession,
-  testConfig,
   TEST_SHOP,
+  testConfig,
 } from '../../../__test-helpers';
 
 const FULFILLMENT_URL =
@@ -131,11 +131,20 @@ const MERCHANT_CUSTOM_APP_CONFIG = {
         const {admin, session: actualSession} =
           await shopify.authenticate.fulfillmentService(request);
 
-        if (!admin) {
-          throw new Error('No admin client');
-        }
+        const shopifyWithoutRest = shopifyApp({
+          ...testConfig({sessionStorage}),
+          future: {removeRest: true},
+        });
 
-        return {admin, expectedSession, actualSession};
+        const {request: requestForWithoutRest} =
+          await getValidRequest(sessionStorage);
+
+        const {admin: adminWithoutRest} =
+          await shopifyWithoutRest.authenticate.fulfillmentService(
+            requestForWithoutRest,
+          );
+
+        return {admin, adminWithoutRest, expectedSession, actualSession};
       });
     });
   });

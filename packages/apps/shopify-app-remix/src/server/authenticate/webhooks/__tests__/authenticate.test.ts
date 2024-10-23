@@ -75,6 +75,13 @@ describe('Webhook validation', () => {
       });
       await sessionStorage.storeSession(expectedSession);
 
+      const requestURL = `${APP_URL}/webhooks`;
+      const requestOptions = {
+        method: 'POST',
+        body: JSON.stringify(body),
+        headers: webhookHeaders(JSON.stringify(body)),
+      };
+
       // WHEN
       const {
         admin,
@@ -85,11 +92,7 @@ describe('Webhook validation', () => {
         webhookId,
         payload,
       } = await shopify.authenticate.webhook(
-        new Request(`${APP_URL}/webhooks`, {
-          method: 'POST',
-          body: JSON.stringify(body),
-          headers: webhookHeaders(JSON.stringify(body)),
-        }),
+        new Request(requestURL, requestOptions),
       );
 
       // THEN
@@ -103,7 +106,17 @@ describe('Webhook validation', () => {
       if (!admin) throw new Error('Expected admin to be defined');
       if (!actualSession) throw new Error('Expected session to be defined');
 
-      return {admin, expectedSession, actualSession};
+      const shopifyWithoutRest = shopifyApp({
+        ...testConfig({sessionStorage, restResources}),
+        future: {removeRest: true},
+      });
+
+      const {admin: adminWithoutRest} =
+        await shopifyWithoutRest.authenticate.webhook(
+          new Request(requestURL, requestOptions),
+        );
+
+      return {admin, adminWithoutRest, expectedSession, actualSession};
     });
   });
 

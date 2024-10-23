@@ -118,11 +118,18 @@ describe('authenticating flow requests', () => {
       const {admin, session: actualSession} =
         await shopify.authenticate.flow(request);
 
-      if (!admin) {
-        throw new Error('No admin client');
-      }
+      const shopifyWithoutRest = shopifyApp({
+        ...testConfig({sessionStorage}),
+        future: {removeRest: true},
+      });
 
-      return {admin, expectedSession, actualSession};
+      const {request: requestForWithoutRest} =
+        await getValidRequest(sessionStorage);
+
+      const {admin: adminWithoutRest} =
+        await shopifyWithoutRest.authenticate.flow(requestForWithoutRest);
+
+      return {admin, adminWithoutRest, expectedSession, actualSession};
     });
   });
 });
