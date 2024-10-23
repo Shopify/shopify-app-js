@@ -38,6 +38,8 @@ export interface FutureFlags {
    * * `authenticate.fulfillmentService(request)`
    * * `unauthenticated.admin(shop)`
    *
+   * In a future release we will remove REST from the package completely.
+   *
    * Please see: [https://www.shopify.com/ca/partners/blog/all-in-on-graphql](https://www.shopify.com/ca/partners/blog/all-in-on-graphql)
    *
    * @default false
