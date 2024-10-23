@@ -45,7 +45,7 @@
   ],
   "dependencies": {
     "@aws-sdk/client-dynamodb": "^3.645.0",
-    "@aws-sdk/util-dynamodb": "^3.662.0"
+    "@aws-sdk/util-dynamodb": "^3.677.0"
   },
   "peerDependencies": {
     "@shopify/shopify-api": "^11.0.0",
