@@ -1,20 +1,21 @@
 import {ApiVersion, LATEST_API_VERSION, Session} from '@shopify/shopify-api';
 import {restResources} from '@shopify/shopify-api/rest/admin/2023-04';
+import {AdminApiContextWithRest} from 'src/server/clients';
 
+import {shopifyApp} from '../../../../..';
 import {
   APP_URL,
   BASE64_HOST,
   TEST_SHOP,
+  expectAdminApiClient,
   getJwt,
   getThrownResponse,
+  mockExternalRequest,
+  mockGraphqlRequest,
+  setUpFetchFlow,
   setUpValidSession,
   testConfig,
-  mockExternalRequest,
-  expectAdminApiClient,
-  setUpFetchFlow,
-  mockGraphqlRequest,
 } from '../../../../../__test-helpers';
-import {shopifyApp} from '../../../../..';
 
 describe('admin.authenticate context', () => {
   expectAdminApiClient(async () => {
@@ -24,40 +25,34 @@ describe('admin.authenticate context', () => {
       session: actualSession,
     } = await setUpDocumentFlow();
 
-    return {admin, expectedSession, actualSession};
+    const {admin: adminWithoutRest} =
+      await setUpDocumentFlowWithRemoveRestFlag();
+
+    return {admin, adminWithoutRest, expectedSession, actualSession};
   });
   describe.each([
     {
       testGroup: 'REST client',
       mockRequest: mockRestRequest,
-      action: async (
-        admin: Awaited<ReturnType<typeof setUpDocumentFlow>>['admin'],
-        _session: Session,
-      ) => admin.rest.get({path: '/customers.json'}),
+      action: async (admin: AdminApiContextWithRest, _session: Session) =>
+        admin.rest.get({path: '/customers.json'}),
     },
     {
       testGroup: 'REST resources',
       mockRequest: mockRestRequest,
-      action: async (
-        admin: Awaited<ReturnType<typeof setUpDocumentFlow>>['admin'],
-        session: Session,
-      ) => admin.rest.resources.Customer.all({session}),
+      action: async (admin: AdminApiContextWithRest, session: Session) =>
+        admin.rest.resources.Customer.all({session}),
     },
     {
       testGroup: 'GraphQL client',
       mockRequest: mockGraphqlRequest(),
-      action: async (
-        admin: Awaited<ReturnType<typeof setUpDocumentFlow>>['admin'],
-        _session: Session,
-      ) => admin.graphql('{ shop { name } }'),
+      action: async (admin: AdminApiContextWithRest, _session: Session) =>
+        admin.graphql('{ shop { name } }'),
     },
     {
       testGroup: 'GraphQL client with options',
       mockRequest: mockGraphqlRequest('2021-01' as ApiVersion),
-      action: async (
-        admin: Awaited<ReturnType<typeof setUpDocumentFlow>>['admin'],
-        _session: Session,
-      ) =>
+      action: async (admin: AdminApiContextWithRest, _session: Session) =>
         admin.graphql(
           'mutation myMutation($ID: String!) { shop(ID: $ID) { name } }',
           {
@@ -151,6 +146,28 @@ async function setUpDocumentFlow() {
     expectedSession,
     ...(await shopify.authenticate.admin(request)),
   };
+}
+
+async function setUpDocumentFlowWithRemoveRestFlag() {
+  const config = testConfig({
+    restResources,
+  });
+
+  const shopify = shopifyApp({
+    ...config,
+    future: {
+      ...config.future,
+      unstable_newEmbeddedAuthStrategy: true,
+      removeRest: true,
+    },
+  });
+
+  const {token} = getJwt();
+  const request = new Request(
+    `${APP_URL}?embedded=1&shop=${TEST_SHOP}&host=${BASE64_HOST}&id_token=${token}`,
+  );
+
+  return shopify.authenticate.admin(request);
 }
 
 async function mockRestRequest(status = 401) {
