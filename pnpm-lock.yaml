@@ -38,9 +38,6 @@ importers:
       '@rollup/plugin-eslint':
         specifier: ^9.0.3
         version: 9.0.5(rollup@4.24.0)
-      '@rollup/plugin-json':
-        specifier: ^6.1.0
-        version: 6.1.0(rollup@4.24.0)
       '@rollup/plugin-node-resolve':
         specifier: ^15.3.0
         version: 15.3.0(rollup@4.24.0)
@@ -3016,15 +3013,6 @@ packages:
 
   '@rollup/plugin-eslint@9.0.5':
     resolution: {integrity: sha512-C4nh0sSeJuxVW5u5tDX+dCMjKcNfHm4hS+zeUVh1si7gttnhgGbrmPkUxIX7iZgYABwdEh/ewyMbZB+WXjSJdA==}
-    engines: {node: '>=14.0.0'}
-    peerDependencies:
-      rollup: ^1.20.0||^2.0.0||^3.0.0||^4.0.0
-    peerDependenciesMeta:
-      rollup:
-        optional: true
-
-  '@rollup/plugin-json@6.1.0':
-    resolution: {integrity: sha512-EGI2te5ENk1coGeADSIwZ7G2Q8CJS2sF120T7jLw4xFw9n7wIOXHo+kIYRAoVpJAN+kmqZSoO3Fp4JtoNF4ReA==}
     engines: {node: '>=14.0.0'}
     peerDependencies:
       rollup: ^1.20.0||^2.0.0||^3.0.0||^4.0.0
@@ -11145,12 +11133,6 @@ snapshots:
       rollup: 4.24.0
     transitivePeerDependencies:
       - supports-color
-
-  '@rollup/plugin-json@6.1.0(rollup@4.24.0)':
-    dependencies:
-      '@rollup/pluginutils': 5.1.0(rollup@4.24.0)
-    optionalDependencies:
-      rollup: 4.24.0
 
   '@rollup/plugin-node-resolve@15.3.0(rollup@4.24.0)':
     dependencies:
