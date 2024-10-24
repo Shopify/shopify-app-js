@@ -184,3 +184,38 @@ describe('AuthScopes.has', () => {
     expect(scopes2.toString()).toEqual('write_customers,read_products');
   });
 });
+
+describe('AuthScopes.toArray', () => {
+  it('returns compressed set of scopes by default', () => {
+    const scopesArray = [
+      'read_customers',
+      'write_customers',
+      'read_products',
+      'write_channels',
+    ];
+    const scopes = new AuthScopes(scopesArray);
+
+    expect(scopes.toArray()).toEqual([
+      'write_customers',
+      'read_products',
+      'write_channels',
+    ]);
+  });
+
+  it('returns original set of scopes when requested', () => {
+    const scopesArray = [
+      'read_customers',
+      'write_customers',
+      'read_products',
+      'write_channels',
+    ];
+    const scopes = new AuthScopes(scopesArray);
+
+    expect(scopes.toArray(true)).toEqual([
+      'read_customers',
+      'write_customers',
+      'read_products',
+      'write_channels',
+    ]);
+  });
+});
