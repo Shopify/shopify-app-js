@@ -1,5 +1,12 @@
 # @shopify/admin-api-client
 
+## 1.0.4
+
+### Patch Changes
+
+- Updated dependencies [f38dfc0]
+  - @shopify/graphql-client@1.2.1
+
 ## 1.0.3
 
 ### Patch Changes

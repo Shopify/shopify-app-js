@@ -1,5 +1,11 @@
 # @shopify/graphql-client
 
+## 1.2.1
+
+### Patch Changes
+
+- f38dfc0: Improved error messages when validating store domain urls
+
 ## 1.2.0
 
 ### Minor Changes
