@@ -55,6 +55,7 @@
     "turbo": "^2.2.0",
     "typescript": "5.6.3"
   },
+  "dependencies": {},
   "resolutions": {
     "jest": "^29.7.0",
     "jest-circus": "^29.7.0",
