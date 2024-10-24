@@ -1,5 +1,36 @@
 # Changelog
 
+## 11.6.0
+
+### Minor Changes
+
+- 50634c0: Adds API to update the capped amount for a usage billing plan.
+
+  A new billing helper function has been added to update the capped amount for a usage billing plan.
+
+  ```ts
+  const response = await shopify.billing.updateUsageCappedAmount({
+    session,
+    subscriptionLineItemId: 'gid://shopify/AppSubscriptionLineItem/1234567890',
+    cappedAmount: {
+      amount: 100,
+      currencyCode: 'USD',
+    },
+  });
+  console.log(response);
+  ```
+
+  Learn more about [App Billing](https://shopify.dev/docs/apps/launch/billing/subscription-billing).
+
+### Patch Changes
+
+- 2e396f3: Updated `express` dependencies
+- cd0b3e1: Updated `jose` dependencies
+- Updated dependencies [f38dfc0]
+  - @shopify/graphql-client@1.2.1
+  - @shopify/admin-api-client@1.0.4
+  - @shopify/storefront-api-client@1.0.3
+
 ## 11.5.0
 
 ### Minor Changes

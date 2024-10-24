@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.1.2
+
+### Patch Changes
+
+- 0c5501b: Updated `@graphql-codegen/cli` dependencies
+
 ## 1.1.1
 
 ### Patch Changes

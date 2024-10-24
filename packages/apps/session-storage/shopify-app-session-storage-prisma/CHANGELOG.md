@@ -1,5 +1,11 @@
 # @shopify/shopify-app-session-storage-prisma
 
+## 5.1.5
+
+### Patch Changes
+
+- e7921c0: Log (instead of swallow) errors that may happen during attempts to conenct to DB
+
 ## 5.1.4
 
 ## 5.1.3
