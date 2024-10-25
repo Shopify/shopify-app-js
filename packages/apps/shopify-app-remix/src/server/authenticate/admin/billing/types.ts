@@ -98,6 +98,26 @@ export interface CreateUsageRecordOptions {
   idempotencyKey?: string;
 }
 
+export interface UpdateUsageCappedAmountOptions {
+  /**
+   * The subscription line item ID to update.
+   */
+  subscriptionLineItemId: string;
+  /**
+   * The maximum charge for the usage billing plan.
+   */
+  cappedAmount: {
+    /**
+     * The amount to update.
+     */
+    amount: number;
+    /**
+     * The currency code to update.
+     */
+    currencyCode: string;
+  };
+}
+
 export interface BillingContext<Config extends AppConfigArg> {
   /**
    * Checks if the shop has an active payment for any plan defined in the `billing` config option.
@@ -534,4 +554,60 @@ export interface BillingContext<Config extends AppConfigArg> {
   createUsageRecord: (
     options: CreateUsageRecordOptions,
   ) => Promise<UsageRecord>;
+
+  /**
+   * Updates the capped amount for a usage billing plan.
+   *
+   * @returns Redirects to a confirmation page to update the usage billing plan.
+   *
+   * @example
+   * <caption>Updating the capped amount for a usage billing plan.</caption>
+   * <description>Update the capped amount for the usage billing plan specified by `subscriptionLineItemId`.</description>
+   * ```ts
+   * // /app/routes/**\/*.ts
+   * import { ActionFunctionArgs } from "@remix-run/node";
+   * import { authenticate } from "../shopify.server";
+   *
+   * export const action = async ({ request }: ActionFunctionArgs) => {
+   *   const { billing } = await authenticate.admin(request);
+   *
+   *   await billing.updateUsageCappedAmount({
+   *     subscriptionLineItemId: "SUBSCRIPTION_LINE_ITEM_ID",
+   *     cappedAmount: {
+   *       amount: 10,
+   *       currencyCode: "USD"
+   *     },
+   *   });
+   *
+   *   // App logic
+   * };
+   * ```
+   * ```ts
+   * // shopify.server.ts
+   * import { shopifyApp, BillingInterval } from "@shopify/shopify-app-remix/server";
+   *
+   * export const USAGE_PLAN = 'Usage subscription';
+   *
+   * const shopify = shopifyApp({
+   *   // ...etc
+   *   billing: {
+   *     [USAGE_PLAN]: {
+   *       lineItems: [
+   *         {
+   *           amount: 5,
+   *           currencyCode: 'USD',
+   *           interval: BillingInterval.Usage,
+   *           terms: "Usage based"
+   *         }
+   *       ],
+   *     },
+   *   }
+   * });
+   * export default shopify;
+   * export const authenticate = shopify.authenticate;
+   * ```
+   */
+  updateUsageCappedAmount: (
+    options: UpdateUsageCappedAmountOptions,
+  ) => Promise<never>;
 }
