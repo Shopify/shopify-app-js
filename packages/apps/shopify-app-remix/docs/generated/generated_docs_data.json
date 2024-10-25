@@ -592,9 +592,32 @@
                     ]
                   }
                 ]
+              },
+              {
+                "filePath": "src/server/authenticate/admin/billing/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "updateUsageCappedAmount",
+                "value": "(options: UpdateUsageCappedAmountOptions) => Promise<never>",
+                "description": "Updates the capped amount for a usage billing plan.",
+                "examples": [
+                  {
+                    "title": "Updating the capped amount for a usage billing plan",
+                    "description": "Update the capped amount for the usage billing plan specified by `subscriptionLineItemId`.",
+                    "tabs": [
+                      {
+                        "code": "import { ActionFunctionArgs } from \"@remix-run/node\";\nimport { authenticate } from \"../shopify.server\";\n\nexport const action = async ({ request }: ActionFunctionArgs) => {\n  const { billing } = await authenticate.admin(request);\n\n  await billing.updateUsageCappedAmount({\n    subscriptionLineItemId: \"SUBSCRIPTION_LINE_ITEM_ID\",\n    cappedAmount: {\n      amount: 10,\n      currencyCode: \"USD\"\n    },\n  });\n\n  // App logic\n};",
+                        "title": "/app/routes/**\\/*.ts"
+                      },
+                      {
+                        "code": "import { shopifyApp, BillingInterval } from \"@shopify/shopify-app-remix/server\";\n\nexport const USAGE_PLAN = 'Usage subscription';\n\nconst shopify = shopifyApp({\n  // ...etc\n  billing: {\n    [USAGE_PLAN]: {\n      lineItems: [\n        {\n          amount: 5,\n          currencyCode: 'USD',\n          interval: BillingInterval.Usage,\n          terms: \"Usage based\"\n        }\n      ],\n    },\n  }\n});\nexport default shopify;\nexport const authenticate = shopify.authenticate;",
+                        "title": "shopify.server.ts"
+                      }
+                    ]
+                  }
+                ]
               }
             ],
-            "value": "export interface BillingContext<Config extends AppConfigArg> {\n  /**\n   * Checks if the shop has an active payment for any plan defined in the `billing` config option.\n   *\n   * @returns A promise that resolves to an object containing the active purchases for the shop.\n   *\n   * @example\n   * <caption>Requesting billing right away.</caption>\n   * <description>Call `billing.request` in the `onFailure` callback to immediately redirect to the Shopify page to request payment.</description>\n   * ```ts\n   * // /app/routes/**\\/*.ts\n   * import { LoaderFunctionArgs } from \"@remix-run/node\";\n   * import { authenticate, MONTHLY_PLAN } from \"../shopify.server\";\n   *\n   * export const loader = async ({ request }: LoaderFunctionArgs) => {\n   *   const { billing } = await authenticate.admin(request);\n   *   await billing.require({\n   *     plans: [MONTHLY_PLAN],\n   *     isTest: true,\n   *     onFailure: async () => billing.request({ plan: MONTHLY_PLAN }),\n   *   });\n   *\n   *   // App logic\n   * };\n   * ```\n   * ```ts\n   * // shopify.server.ts\n   * import { shopifyApp, BillingInterval } from \"@shopify/shopify-app-remix/server\";\n   *\n   * export const MONTHLY_PLAN = 'Monthly subscription';\n   *\n   * const shopify = shopifyApp({\n   *   // ...etc\n   *   billing: {\n   *     [MONTHLY_PLAN]: {\n   *       lineItems: [\n   *         {\n   *           amount: 5,\n   *           currencyCode: 'USD',\n   *           interval: BillingInterval.Every30Days,\n   *         }\n   *       ],\n   *     },\n   *   }\n   * });\n   * export default shopify;\n   * export const authenticate = shopify.authenticate;\n   * ```\n   *\n   * @example\n   * <caption>Redirect to a plan selection page.</caption>\n   * <description>When the app has multiple plans, create a page in your App that allows the merchant to select a plan. If a merchant does not have the required plan you can redirect them to page in your app to select one.</description>\n   * ```ts\n   * // /app/routes/**\\/*.ts\n   * import { LoaderFunctionArgs, redirect } from \"@remix-run/node\";\n   * import { authenticate, MONTHLY_PLAN, ANNUAL_PLAN } from \"../shopify.server\";\n   *\n   * export const loader = async ({ request }: LoaderFunctionArgs) => {\n   *   const { billing } = await authenticate.admin(request);\n   *   const billingCheck = await billing.require({\n   *     plans: [MONTHLY_PLAN, ANNUAL_PLAN],\n   *     isTest: true,\n   *     onFailure: () => redirect('/select-plan'),\n   *   });\n   *\n   *   const subscription = billingCheck.appSubscriptions[0];\n   *   console.log(`Shop is on ${subscription.name} (id ${subscription.id})`);\n   *\n   *   // App logic\n   * };\n   * ```\n   * ```ts\n   * // shopify.server.ts\n   * import { shopifyApp, BillingInterval } from \"@shopify/shopify-app-remix/server\";\n   *\n   * export const MONTHLY_PLAN = 'Monthly subscription';\n   * export const ANNUAL_PLAN = 'Annual subscription';\n   *\n   * const shopify = shopifyApp({\n   *   // ...etc\n   *   billing: {\n   *     [MONTHLY_PLAN]: {\n   *       lineItems: [\n   *         {\n   *           amount: 5,\n   *           currencyCode: 'USD',\n   *           interval: BillingInterval.Every30Days,\n   *         }\n   *       ],\n   *     },\n   *     [ANNUAL_PLAN]: {\n   *       lineItems: [\n   *         {\n   *           amount: 50,\n   *           currencyCode: 'USD',\n   *           interval: BillingInterval.Annual,\n   *         }\n   *       ],\n   *     },\n   *   }\n   * });\n   * export default shopify;\n   * export const authenticate = shopify.authenticate;\n   * ```\n   */\n  require: (\n    options: RequireBillingOptions<Config>,\n  ) => Promise<BillingCheckResponseObject>;\n\n  /**\n   * Checks if the shop has an active payment for any plan defined in the `billing` config option.\n   *\n   * @returns A promise that resolves to an object containing the active purchases for the shop.\n   *\n   * @example\n   * <caption>Check what billing plans a merchant is subscribed to.</caption>\n   * <description>Use billing.check if you want to determine which plans are in use. Unlike `require`, `check` does not\n   * throw an error if no active billing plans are present. </description>\n   * ```ts\n   * // /app/routes/**\\/*.ts\n   * import { LoaderFunctionArgs } from \"@remix-run/node\";\n   * import { authenticate, MONTHLY_PLAN } from \"../shopify.server\";\n   *\n   * export const loader = async ({ request }: LoaderFunctionArgs) => {\n   *   const { billing } = await authenticate.admin(request);\n   *   const { hasActivePayment, appSubscriptions } = await billing.check({\n   *     plans: [MONTHLY_PLAN],\n   *     isTest: false,\n   *   });\n   *   console.log(hasActivePayment);\n   *   console.log(appSubscriptions);\n   * };\n   * ```\n   * ```ts\n   * // shopify.server.ts\n   * import { shopifyApp, BillingInterval } from \"@shopify/shopify-app-remix/server\";\n   *\n   * export const MONTHLY_PLAN = 'Monthly subscription';\n   * export const ANNUAL_PLAN = 'Annual subscription';\n   *\n   * const shopify = shopifyApp({\n   *   // ...etc\n   *   billing: {\n   *     [MONTHLY_PLAN]: {\n   *       lineItems: [\n   *         {\n   *           amount: 5,\n   *           currencyCode: 'USD',\n   *           interval: BillingInterval.Every30Days,\n   *         }\n   *       ],\n   *     },\n   *     [ANNUAL_PLAN]: {\n   *       lineItems: [\n   *         {\n   *           amount: 50,\n   *           currencyCode: 'USD',\n   *           interval: BillingInterval.Annual,\n   *         }\n   *       ],\n   *     },\n   *   }\n   * });\n   * export default shopify;\n   * export const authenticate = shopify.authenticate;\n   * ```\n   *\n   * @example\n   * <caption>Check for payments without filtering.</caption>\n   * <description>Use billing.check to see if any payments exist for the store, regardless of whether it's a test or\n   * matches one or more plans.</description>\n   * ```ts\n   * // /app/routes/**\\/*.ts\n   * import { LoaderFunctionArgs } from \"@remix-run/node\";\n   * import { authenticate, MONTHLY_PLAN } from \"../shopify.server\";\n   *\n   * export const loader = async ({ request }: LoaderFunctionArgs) => {\n   *   const { billing } = await authenticate.admin(request);\n   *   const { hasActivePayment, appSubscriptions } = await billing.check();\n   *   // This will be true if any payment is found\n   *   console.log(hasActivePayment);\n   *   console.log(appSubscriptions);\n   * };\n   * ```\n   */\n  check: <Options extends CheckBillingOptions<Config>>(\n    options?: Options,\n  ) => Promise<BillingCheckResponseObject>;\n\n  /**\n   * Requests payment for the plan.\n   *\n   * @returns Redirects to the confirmation URL for the payment.\n   *\n   * @example\n   * <caption>Using a custom return URL.</caption>\n   * <description>Change where the merchant is returned to after approving the purchase using the `returnUrl` option.</description>\n   * ```ts\n   * // /app/routes/**\\/*.ts\n   * import { LoaderFunctionArgs } from \"@remix-run/node\";\n   * import { authenticate, MONTHLY_PLAN } from \"../shopify.server\";\n   *\n   * export const loader = async ({ request }: LoaderFunctionArgs) => {\n   *   const { billing } = await authenticate.admin(request);\n   *   await billing.require({\n   *     plans: [MONTHLY_PLAN],\n   *     onFailure: async () => billing.request({\n   *       plan: MONTHLY_PLAN,\n   *       isTest: true,\n   *       returnUrl: 'https://admin.shopify.com/store/my-store/apps/my-app/billing-page',\n   *     }),\n   *   });\n   *\n   *   // App logic\n   * };\n   * ```\n   * ```ts\n   * // shopify.server.ts\n   * import { shopifyApp, BillingInterval } from \"@shopify/shopify-app-remix/server\";\n   *\n   * export const MONTHLY_PLAN = 'Monthly subscription';\n   * export const ANNUAL_PLAN = 'Annual subscription';\n   *\n   * const shopify = shopifyApp({\n   *   // ...etc\n   *   billing: {\n   *     [MONTHLY_PLAN]: {\n   *       lineItems: [\n   *         {\n   *           amount: 5,\n   *           currencyCode: 'USD',\n   *           interval: BillingInterval.Every30Days,\n   *         }\n   *       ],\n   *     },\n   *     [ANNUAL_PLAN]: {\n   *       lineItems: [\n   *         {\n   *           amount: 50,\n   *           currencyCode: 'USD',\n   *           interval: BillingInterval.Annual,\n   *         }\n   *       ],\n   *     },\n   *   }\n   * });\n   * export default shopify;\n   * export const authenticate = shopify.authenticate;\n   * ```\n   *\n   * @example\n   * <caption>Overriding plan settings.</caption>\n   * <description>Customize the plan for a merchant when requesting billing. Any fields from the plan can be overridden, as long as the billing interval for line items matches the config.</description>\n   * ```ts\n   * // /app/routes/**\\/*.ts\n   * import { LoaderFunctionArgs } from \"@remix-run/node\";\n   * import { authenticate, MONTHLY_PLAN } from \"../shopify.server\";\n   *\n   * export const loader = async ({ request }: LoaderFunctionArgs) => {\n   *   const { billing } = await authenticate.admin(request);\n   *   await billing.require({\n   *     plans: [MONTHLY_PLAN],\n   *     onFailure: async () => billing.request({\n   *       plan: MONTHLY_PLAN,\n   *       isTest: true,\n   *       trialDays: 14,\n   *       lineItems: [\n   *         {\n   *           interval: BillingInterval.Every30Days,\n   *           discount: { value: { percentage: 0.1 } },\n   *         },\n   *       ],\n   *     }),\n   *   });\n   *\n   *   // App logic\n   * };\n   * ```\n   * ```ts\n   * // shopify.server.ts\n   * import { shopifyApp, BillingInterval } from \"@shopify/shopify-app-remix/server\";\n   *\n   * export const MONTHLY_PLAN = 'Monthly subscription';\n   * export const ANNUAL_PLAN = 'Annual subscription';\n   *\n   * const shopify = shopifyApp({\n   *   // ...etc\n   *   billing: {\n   *     [MONTHLY_PLAN]: {\n   *       lineItems: [\n   *         {\n   *           amount: 5,\n   *           currencyCode: 'USD',\n   *           interval: BillingInterval.Every30Days,\n   *         }\n   *       ],\n   *     },\n   *     [ANNUAL_PLAN]: {\n   *       lineItems: [\n   *         {\n   *           amount: 50,\n   *           currencyCode: 'USD',\n   *           interval: BillingInterval.Annual,\n   *         }\n   *       ],\n   *     },\n   *   }\n   * });\n   * export default shopify;\n   * export const authenticate = shopify.authenticate;\n   * ```\n   */\n  request: (options: RequestBillingOptions<Config>) => Promise<never>;\n\n  /**\n   * Cancels an ongoing subscription, given its ID.\n   *\n   * @returns The cancelled subscription.\n   *\n   * @example\n   * <caption>Cancelling a subscription.</caption>\n   * <description>Use the `billing.cancel` function to cancel an active subscription with the id returned from `billing.require`.</description>\n   * ```ts\n   * // /app/routes/cancel-subscription.ts\n   * import { LoaderFunctionArgs } from \"@remix-run/node\";\n   * import { authenticate, MONTHLY_PLAN } from \"../shopify.server\";\n   *\n   * export const loader = async ({ request }: LoaderFunctionArgs) => {\n   *   const { billing } = await authenticate.admin(request);\n   *   const billingCheck = await billing.require({\n   *     plans: [MONTHLY_PLAN],\n   *     onFailure: async () => billing.request({ plan: MONTHLY_PLAN }),\n   *   });\n   *\n   *   const subscription = billingCheck.appSubscriptions[0];\n   *   const cancelledSubscription = await billing.cancel({\n   *     subscriptionId: subscription.id,\n   *     isTest: true,\n   *     prorate: true,\n   *    });\n   *\n   *   // App logic\n   * };\n   * ```\n   * ```ts\n   * // shopify.server.ts\n   * import { shopifyApp, BillingInterval } from \"@shopify/shopify-app-remix/server\";\n   *\n   * export const MONTHLY_PLAN = 'Monthly subscription';\n   * export const ANNUAL_PLAN = 'Annual subscription';\n   *\n   * const shopify = shopifyApp({\n   *   // ...etc\n   *   billing: {\n   *     [MONTHLY_PLAN]: {\n   *       lineItems: [\n   *         {\n   *           amount: 5,\n   *           currencyCode: 'USD',\n   *           interval: BillingInterval.Every30Days,\n   *         }\n   *       ],\n   *     },\n   *     [ANNUAL_PLAN]: {\n   *       lineItems: [\n   *         {\n   *           amount: 50,\n   *           currencyCode: 'USD',\n   *           interval: BillingInterval.Annual,\n   *         }\n   *       ],\n   *     },\n   *   }\n   * });\n   * export default shopify;\n   * export const authenticate = shopify.authenticate;\n   * ```\n   */\n  cancel: (options: CancelBillingOptions) => Promise<AppSubscription>;\n\n  /**\n   * Creates a usage record for an app subscription.\n   *\n   * @returns Returns a usage record when one was created successfully.\n   *\n   * @example\n   * <caption>Creating a usage record</caption>\n   * <description>Create a usage record for the active usage billing plan</description>\n   * ```ts\n   * // /app/routes/create-usage-record.ts\n   * import { ActionFunctionArgs } from \"@remix-run/node\";\n   * import { authenticate, MONTHLY_PLAN } from \"../shopify.server\";\n   *\n   * export const action = async ({ request }: ActionFunctionArgs) => {\n   *    const { billing } = await authenticate.admin(request);\n   *\n   *   const chargeBilling = await billing.createUsageRecord({\n   *      description: \"Usage record for product creation\",\n   *      price: {\n   *        amount: 1,\n   *        currencyCode: \"USD\",\n   *       },\n   *      isTest: true,\n   *    });\n   *  console.log(chargeBilling);\n   *\n   *   // App logic\n   * };\n   * ```\n   * ```ts\n   * // shopify.server.ts\n   * import { shopifyApp, BillingInterval } from \"@shopify/shopify-app-remix/server\";\n   *\n   * export const USAGE_PLAN = 'Usage subscription';\n   *\n   * const shopify = shopifyApp({\n   *   // ...etc\n   *   billing: {\n   *     [USAGE_PLAN]: {\n   *       lineItems: [\n   *         {\n   *           amount: 5,\n   *           currencyCode: 'USD',\n   *           interval: BillingInterval.Usage,\n   *         }\n   *       ],\n   *     },\n   *   }\n   * });\n   * export default shopify;\n   * export const authenticate = shopify.authenticate;\n   * ```\n   */\n  createUsageRecord: (\n    options: CreateUsageRecordOptions,\n  ) => Promise<UsageRecord>;\n}"
+            "value": "export interface BillingContext<Config extends AppConfigArg> {\n  /**\n   * Checks if the shop has an active payment for any plan defined in the `billing` config option.\n   *\n   * @returns A promise that resolves to an object containing the active purchases for the shop.\n   *\n   * @example\n   * <caption>Requesting billing right away.</caption>\n   * <description>Call `billing.request` in the `onFailure` callback to immediately redirect to the Shopify page to request payment.</description>\n   * ```ts\n   * // /app/routes/**\\/*.ts\n   * import { LoaderFunctionArgs } from \"@remix-run/node\";\n   * import { authenticate, MONTHLY_PLAN } from \"../shopify.server\";\n   *\n   * export const loader = async ({ request }: LoaderFunctionArgs) => {\n   *   const { billing } = await authenticate.admin(request);\n   *   await billing.require({\n   *     plans: [MONTHLY_PLAN],\n   *     isTest: true,\n   *     onFailure: async () => billing.request({ plan: MONTHLY_PLAN }),\n   *   });\n   *\n   *   // App logic\n   * };\n   * ```\n   * ```ts\n   * // shopify.server.ts\n   * import { shopifyApp, BillingInterval } from \"@shopify/shopify-app-remix/server\";\n   *\n   * export const MONTHLY_PLAN = 'Monthly subscription';\n   *\n   * const shopify = shopifyApp({\n   *   // ...etc\n   *   billing: {\n   *     [MONTHLY_PLAN]: {\n   *       lineItems: [\n   *         {\n   *           amount: 5,\n   *           currencyCode: 'USD',\n   *           interval: BillingInterval.Every30Days,\n   *         }\n   *       ],\n   *     },\n   *   }\n   * });\n   * export default shopify;\n   * export const authenticate = shopify.authenticate;\n   * ```\n   *\n   * @example\n   * <caption>Redirect to a plan selection page.</caption>\n   * <description>When the app has multiple plans, create a page in your App that allows the merchant to select a plan. If a merchant does not have the required plan you can redirect them to page in your app to select one.</description>\n   * ```ts\n   * // /app/routes/**\\/*.ts\n   * import { LoaderFunctionArgs, redirect } from \"@remix-run/node\";\n   * import { authenticate, MONTHLY_PLAN, ANNUAL_PLAN } from \"../shopify.server\";\n   *\n   * export const loader = async ({ request }: LoaderFunctionArgs) => {\n   *   const { billing } = await authenticate.admin(request);\n   *   const billingCheck = await billing.require({\n   *     plans: [MONTHLY_PLAN, ANNUAL_PLAN],\n   *     isTest: true,\n   *     onFailure: () => redirect('/select-plan'),\n   *   });\n   *\n   *   const subscription = billingCheck.appSubscriptions[0];\n   *   console.log(`Shop is on ${subscription.name} (id ${subscription.id})`);\n   *\n   *   // App logic\n   * };\n   * ```\n   * ```ts\n   * // shopify.server.ts\n   * import { shopifyApp, BillingInterval } from \"@shopify/shopify-app-remix/server\";\n   *\n   * export const MONTHLY_PLAN = 'Monthly subscription';\n   * export const ANNUAL_PLAN = 'Annual subscription';\n   *\n   * const shopify = shopifyApp({\n   *   // ...etc\n   *   billing: {\n   *     [MONTHLY_PLAN]: {\n   *       lineItems: [\n   *         {\n   *           amount: 5,\n   *           currencyCode: 'USD',\n   *           interval: BillingInterval.Every30Days,\n   *         }\n   *       ],\n   *     },\n   *     [ANNUAL_PLAN]: {\n   *       lineItems: [\n   *         {\n   *           amount: 50,\n   *           currencyCode: 'USD',\n   *           interval: BillingInterval.Annual,\n   *         }\n   *       ],\n   *     },\n   *   }\n   * });\n   * export default shopify;\n   * export const authenticate = shopify.authenticate;\n   * ```\n   */\n  require: (\n    options: RequireBillingOptions<Config>,\n  ) => Promise<BillingCheckResponseObject>;\n\n  /**\n   * Checks if the shop has an active payment for any plan defined in the `billing` config option.\n   *\n   * @returns A promise that resolves to an object containing the active purchases for the shop.\n   *\n   * @example\n   * <caption>Check what billing plans a merchant is subscribed to.</caption>\n   * <description>Use billing.check if you want to determine which plans are in use. Unlike `require`, `check` does not\n   * throw an error if no active billing plans are present. </description>\n   * ```ts\n   * // /app/routes/**\\/*.ts\n   * import { LoaderFunctionArgs } from \"@remix-run/node\";\n   * import { authenticate, MONTHLY_PLAN } from \"../shopify.server\";\n   *\n   * export const loader = async ({ request }: LoaderFunctionArgs) => {\n   *   const { billing } = await authenticate.admin(request);\n   *   const { hasActivePayment, appSubscriptions } = await billing.check({\n   *     plans: [MONTHLY_PLAN],\n   *     isTest: false,\n   *   });\n   *   console.log(hasActivePayment);\n   *   console.log(appSubscriptions);\n   * };\n   * ```\n   * ```ts\n   * // shopify.server.ts\n   * import { shopifyApp, BillingInterval } from \"@shopify/shopify-app-remix/server\";\n   *\n   * export const MONTHLY_PLAN = 'Monthly subscription';\n   * export const ANNUAL_PLAN = 'Annual subscription';\n   *\n   * const shopify = shopifyApp({\n   *   // ...etc\n   *   billing: {\n   *     [MONTHLY_PLAN]: {\n   *       lineItems: [\n   *         {\n   *           amount: 5,\n   *           currencyCode: 'USD',\n   *           interval: BillingInterval.Every30Days,\n   *         }\n   *       ],\n   *     },\n   *     [ANNUAL_PLAN]: {\n   *       lineItems: [\n   *         {\n   *           amount: 50,\n   *           currencyCode: 'USD',\n   *           interval: BillingInterval.Annual,\n   *         }\n   *       ],\n   *     },\n   *   }\n   * });\n   * export default shopify;\n   * export const authenticate = shopify.authenticate;\n   * ```\n   *\n   * @example\n   * <caption>Check for payments without filtering.</caption>\n   * <description>Use billing.check to see if any payments exist for the store, regardless of whether it's a test or\n   * matches one or more plans.</description>\n   * ```ts\n   * // /app/routes/**\\/*.ts\n   * import { LoaderFunctionArgs } from \"@remix-run/node\";\n   * import { authenticate, MONTHLY_PLAN } from \"../shopify.server\";\n   *\n   * export const loader = async ({ request }: LoaderFunctionArgs) => {\n   *   const { billing } = await authenticate.admin(request);\n   *   const { hasActivePayment, appSubscriptions } = await billing.check();\n   *   // This will be true if any payment is found\n   *   console.log(hasActivePayment);\n   *   console.log(appSubscriptions);\n   * };\n   * ```\n   */\n  check: <Options extends CheckBillingOptions<Config>>(\n    options?: Options,\n  ) => Promise<BillingCheckResponseObject>;\n\n  /**\n   * Requests payment for the plan.\n   *\n   * @returns Redirects to the confirmation URL for the payment.\n   *\n   * @example\n   * <caption>Using a custom return URL.</caption>\n   * <description>Change where the merchant is returned to after approving the purchase using the `returnUrl` option.</description>\n   * ```ts\n   * // /app/routes/**\\/*.ts\n   * import { LoaderFunctionArgs } from \"@remix-run/node\";\n   * import { authenticate, MONTHLY_PLAN } from \"../shopify.server\";\n   *\n   * export const loader = async ({ request }: LoaderFunctionArgs) => {\n   *   const { billing } = await authenticate.admin(request);\n   *   await billing.require({\n   *     plans: [MONTHLY_PLAN],\n   *     onFailure: async () => billing.request({\n   *       plan: MONTHLY_PLAN,\n   *       isTest: true,\n   *       returnUrl: 'https://admin.shopify.com/store/my-store/apps/my-app/billing-page',\n   *     }),\n   *   });\n   *\n   *   // App logic\n   * };\n   * ```\n   * ```ts\n   * // shopify.server.ts\n   * import { shopifyApp, BillingInterval } from \"@shopify/shopify-app-remix/server\";\n   *\n   * export const MONTHLY_PLAN = 'Monthly subscription';\n   * export const ANNUAL_PLAN = 'Annual subscription';\n   *\n   * const shopify = shopifyApp({\n   *   // ...etc\n   *   billing: {\n   *     [MONTHLY_PLAN]: {\n   *       lineItems: [\n   *         {\n   *           amount: 5,\n   *           currencyCode: 'USD',\n   *           interval: BillingInterval.Every30Days,\n   *         }\n   *       ],\n   *     },\n   *     [ANNUAL_PLAN]: {\n   *       lineItems: [\n   *         {\n   *           amount: 50,\n   *           currencyCode: 'USD',\n   *           interval: BillingInterval.Annual,\n   *         }\n   *       ],\n   *     },\n   *   }\n   * });\n   * export default shopify;\n   * export const authenticate = shopify.authenticate;\n   * ```\n   *\n   * @example\n   * <caption>Overriding plan settings.</caption>\n   * <description>Customize the plan for a merchant when requesting billing. Any fields from the plan can be overridden, as long as the billing interval for line items matches the config.</description>\n   * ```ts\n   * // /app/routes/**\\/*.ts\n   * import { LoaderFunctionArgs } from \"@remix-run/node\";\n   * import { authenticate, MONTHLY_PLAN } from \"../shopify.server\";\n   *\n   * export const loader = async ({ request }: LoaderFunctionArgs) => {\n   *   const { billing } = await authenticate.admin(request);\n   *   await billing.require({\n   *     plans: [MONTHLY_PLAN],\n   *     onFailure: async () => billing.request({\n   *       plan: MONTHLY_PLAN,\n   *       isTest: true,\n   *       trialDays: 14,\n   *       lineItems: [\n   *         {\n   *           interval: BillingInterval.Every30Days,\n   *           discount: { value: { percentage: 0.1 } },\n   *         },\n   *       ],\n   *     }),\n   *   });\n   *\n   *   // App logic\n   * };\n   * ```\n   * ```ts\n   * // shopify.server.ts\n   * import { shopifyApp, BillingInterval } from \"@shopify/shopify-app-remix/server\";\n   *\n   * export const MONTHLY_PLAN = 'Monthly subscription';\n   * export const ANNUAL_PLAN = 'Annual subscription';\n   *\n   * const shopify = shopifyApp({\n   *   // ...etc\n   *   billing: {\n   *     [MONTHLY_PLAN]: {\n   *       lineItems: [\n   *         {\n   *           amount: 5,\n   *           currencyCode: 'USD',\n   *           interval: BillingInterval.Every30Days,\n   *         }\n   *       ],\n   *     },\n   *     [ANNUAL_PLAN]: {\n   *       lineItems: [\n   *         {\n   *           amount: 50,\n   *           currencyCode: 'USD',\n   *           interval: BillingInterval.Annual,\n   *         }\n   *       ],\n   *     },\n   *   }\n   * });\n   * export default shopify;\n   * export const authenticate = shopify.authenticate;\n   * ```\n   */\n  request: (options: RequestBillingOptions<Config>) => Promise<never>;\n\n  /**\n   * Cancels an ongoing subscription, given its ID.\n   *\n   * @returns The cancelled subscription.\n   *\n   * @example\n   * <caption>Cancelling a subscription.</caption>\n   * <description>Use the `billing.cancel` function to cancel an active subscription with the id returned from `billing.require`.</description>\n   * ```ts\n   * // /app/routes/cancel-subscription.ts\n   * import { LoaderFunctionArgs } from \"@remix-run/node\";\n   * import { authenticate, MONTHLY_PLAN } from \"../shopify.server\";\n   *\n   * export const loader = async ({ request }: LoaderFunctionArgs) => {\n   *   const { billing } = await authenticate.admin(request);\n   *   const billingCheck = await billing.require({\n   *     plans: [MONTHLY_PLAN],\n   *     onFailure: async () => billing.request({ plan: MONTHLY_PLAN }),\n   *   });\n   *\n   *   const subscription = billingCheck.appSubscriptions[0];\n   *   const cancelledSubscription = await billing.cancel({\n   *     subscriptionId: subscription.id,\n   *     isTest: true,\n   *     prorate: true,\n   *    });\n   *\n   *   // App logic\n   * };\n   * ```\n   * ```ts\n   * // shopify.server.ts\n   * import { shopifyApp, BillingInterval } from \"@shopify/shopify-app-remix/server\";\n   *\n   * export const MONTHLY_PLAN = 'Monthly subscription';\n   * export const ANNUAL_PLAN = 'Annual subscription';\n   *\n   * const shopify = shopifyApp({\n   *   // ...etc\n   *   billing: {\n   *     [MONTHLY_PLAN]: {\n   *       lineItems: [\n   *         {\n   *           amount: 5,\n   *           currencyCode: 'USD',\n   *           interval: BillingInterval.Every30Days,\n   *         }\n   *       ],\n   *     },\n   *     [ANNUAL_PLAN]: {\n   *       lineItems: [\n   *         {\n   *           amount: 50,\n   *           currencyCode: 'USD',\n   *           interval: BillingInterval.Annual,\n   *         }\n   *       ],\n   *     },\n   *   }\n   * });\n   * export default shopify;\n   * export const authenticate = shopify.authenticate;\n   * ```\n   */\n  cancel: (options: CancelBillingOptions) => Promise<AppSubscription>;\n\n  /**\n   * Creates a usage record for an app subscription.\n   *\n   * @returns Returns a usage record when one was created successfully.\n   *\n   * @example\n   * <caption>Creating a usage record</caption>\n   * <description>Create a usage record for the active usage billing plan</description>\n   * ```ts\n   * // /app/routes/create-usage-record.ts\n   * import { ActionFunctionArgs } from \"@remix-run/node\";\n   * import { authenticate, MONTHLY_PLAN } from \"../shopify.server\";\n   *\n   * export const action = async ({ request }: ActionFunctionArgs) => {\n   *    const { billing } = await authenticate.admin(request);\n   *\n   *   const chargeBilling = await billing.createUsageRecord({\n   *      description: \"Usage record for product creation\",\n   *      price: {\n   *        amount: 1,\n   *        currencyCode: \"USD\",\n   *       },\n   *      isTest: true,\n   *    });\n   *  console.log(chargeBilling);\n   *\n   *   // App logic\n   * };\n   * ```\n   * ```ts\n   * // shopify.server.ts\n   * import { shopifyApp, BillingInterval } from \"@shopify/shopify-app-remix/server\";\n   *\n   * export const USAGE_PLAN = 'Usage subscription';\n   *\n   * const shopify = shopifyApp({\n   *   // ...etc\n   *   billing: {\n   *     [USAGE_PLAN]: {\n   *       lineItems: [\n   *         {\n   *           amount: 5,\n   *           currencyCode: 'USD',\n   *           interval: BillingInterval.Usage,\n   *         }\n   *       ],\n   *     },\n   *   }\n   * });\n   * export default shopify;\n   * export const authenticate = shopify.authenticate;\n   * ```\n   */\n  createUsageRecord: (\n    options: CreateUsageRecordOptions,\n  ) => Promise<UsageRecord>;\n\n  /**\n   * Updates the capped amount for a usage billing plan.\n   *\n   * @returns Redirects to a confirmation page to update the usage billing plan.\n   *\n   * @example\n   * <caption>Updating the capped amount for a usage billing plan.</caption>\n   * <description>Update the capped amount for the usage billing plan specified by `subscriptionLineItemId`.</description>\n   * ```ts\n   * // /app/routes/**\\/*.ts\n   * import { ActionFunctionArgs } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   *\n   * export const action = async ({ request }: ActionFunctionArgs) => {\n   *   const { billing } = await authenticate.admin(request);\n   *\n   *   await billing.updateUsageCappedAmount({\n   *     subscriptionLineItemId: \"SUBSCRIPTION_LINE_ITEM_ID\",\n   *     cappedAmount: {\n   *       amount: 10,\n   *       currencyCode: \"USD\"\n   *     },\n   *   });\n   *\n   *   // App logic\n   * };\n   * ```\n   * ```ts\n   * // shopify.server.ts\n   * import { shopifyApp, BillingInterval } from \"@shopify/shopify-app-remix/server\";\n   *\n   * export const USAGE_PLAN = 'Usage subscription';\n   *\n   * const shopify = shopifyApp({\n   *   // ...etc\n   *   billing: {\n   *     [USAGE_PLAN]: {\n   *       lineItems: [\n   *         {\n   *           amount: 5,\n   *           currencyCode: 'USD',\n   *           interval: BillingInterval.Usage,\n   *           terms: \"Usage based\"\n   *         }\n   *       ],\n   *     },\n   *   }\n   * });\n   * export default shopify;\n   * export const authenticate = shopify.authenticate;\n   * ```\n   */\n  updateUsageCappedAmount: (\n    options: UpdateUsageCappedAmountOptions,\n  ) => Promise<never>;\n}"
           },
           "CancelBillingOptions": {
             "filePath": "src/server/authenticate/admin/billing/types.ts",
@@ -756,6 +779,28 @@
               }
             ],
             "value": "export interface RequireBillingOptions<Config extends AppConfigArg>\n  extends Omit<BillingCheckParams, 'session' | 'plans' | 'returnObject'> {\n  /**\n   * The plans to check for. Must be one of the values defined in the `billing` config option.\n   */\n  plans: (keyof Config['billing'])[];\n  /**\n   * How to handle the request if the shop doesn't have an active payment for any plan.\n   */\n  onFailure: (error: any) => Promise<Response>;\n}"
+          },
+          "UpdateUsageCappedAmountOptions": {
+            "filePath": "src/server/authenticate/admin/billing/types.ts",
+            "name": "UpdateUsageCappedAmountOptions",
+            "description": "",
+            "members": [
+              {
+                "filePath": "src/server/authenticate/admin/billing/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "cappedAmount",
+                "value": "{ amount: number; currencyCode: string; }",
+                "description": "The maximum charge for the usage billing plan."
+              },
+              {
+                "filePath": "src/server/authenticate/admin/billing/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "subscriptionLineItemId",
+                "value": "string",
+                "description": "The subscription line item ID to update."
+              }
+            ],
+            "value": "export interface UpdateUsageCappedAmountOptions {\n  /**\n   * The subscription line item ID to update.\n   */\n  subscriptionLineItemId: string;\n  /**\n   * The maximum charge for the usage billing plan.\n   */\n  cappedAmount: {\n    /**\n     * The amount to update.\n     */\n    amount: number;\n    /**\n     * The currency code to update.\n     */\n    currencyCode: string;\n  };\n}"
           },
           "EnsureCORSFunction": {
             "filePath": "src/server/authenticate/helpers/ensure-cors-headers.ts",
@@ -1435,6 +1480,29 @@
               }
             }
           ]
+        },
+        {
+          "title": "updateUsageCappedAmount",
+          "examples": [
+            {
+              "description": "Update the capped amount for the usage billing plan specified by `subscriptionLineItemId`.",
+              "codeblock": {
+                "title": "Updating the capped amount for a usage billing plan",
+                "tabs": [
+                  {
+                    "title": "/app/routes/**\\/*.ts",
+                    "code": "import { ActionFunctionArgs } from \"@remix-run/node\";\nimport { authenticate } from \"../shopify.server\";\n\nexport const action = async ({ request }: ActionFunctionArgs) =&gt; {\n  const { billing } = await authenticate.admin(request);\n\n  await billing.updateUsageCappedAmount({\n    subscriptionLineItemId: \"SUBSCRIPTION_LINE_ITEM_ID\",\n    cappedAmount: {\n      amount: 10,\n      currencyCode: \"USD\"\n    },\n  });\n\n  // App logic\n};",
+                    "language": "typescript"
+                  },
+                  {
+                    "title": "shopify.server.ts",
+                    "code": "import { shopifyApp, BillingInterval } from \"@shopify/shopify-app-remix/server\";\n\nexport const USAGE_PLAN = 'Usage subscription';\n\nconst shopify = shopifyApp({\n  // ...etc\n  billing: {\n    [USAGE_PLAN]: {\n      lineItems: [\n        {\n          amount: 5,\n          currencyCode: 'USD',\n          interval: BillingInterval.Usage,\n          terms: \"Usage based\"\n        }\n      ],\n    },\n  }\n});\nexport default shopify;\nexport const authenticate = shopify.authenticate;",
+                    "language": "typescript"
+                  }
+                ]
+              }
+            }
+          ]
         }
       ]
     }
@@ -1608,9 +1676,32 @@
                     ]
                   }
                 ]
+              },
+              {
+                "filePath": "src/server/authenticate/admin/billing/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "updateUsageCappedAmount",
+                "value": "(options: UpdateUsageCappedAmountOptions) => Promise<never>",
+                "description": "Updates the capped amount for a usage billing plan.",
+                "examples": [
+                  {
+                    "title": "Updating the capped amount for a usage billing plan",
+                    "description": "Update the capped amount for the usage billing plan specified by `subscriptionLineItemId`.",
+                    "tabs": [
+                      {
+                        "code": "import { ActionFunctionArgs } from \"@remix-run/node\";\nimport { authenticate } from \"../shopify.server\";\n\nexport const action = async ({ request }: ActionFunctionArgs) => {\n  const { billing } = await authenticate.admin(request);\n\n  await billing.updateUsageCappedAmount({\n    subscriptionLineItemId: \"SUBSCRIPTION_LINE_ITEM_ID\",\n    cappedAmount: {\n      amount: 10,\n      currencyCode: \"USD\"\n    },\n  });\n\n  // App logic\n};",
+                        "title": "/app/routes/**\\/*.ts"
+                      },
+                      {
+                        "code": "import { shopifyApp, BillingInterval } from \"@shopify/shopify-app-remix/server\";\n\nexport const USAGE_PLAN = 'Usage subscription';\n\nconst shopify = shopifyApp({\n  // ...etc\n  billing: {\n    [USAGE_PLAN]: {\n      lineItems: [\n        {\n          amount: 5,\n          currencyCode: 'USD',\n          interval: BillingInterval.Usage,\n          terms: \"Usage based\"\n        }\n      ],\n    },\n  }\n});\nexport default shopify;\nexport const authenticate = shopify.authenticate;",
+                        "title": "shopify.server.ts"
+                      }
+                    ]
+                  }
+                ]
               }
             ],
-            "value": "export interface BillingContext<Config extends AppConfigArg> {\n  /**\n   * Checks if the shop has an active payment for any plan defined in the `billing` config option.\n   *\n   * @returns A promise that resolves to an object containing the active purchases for the shop.\n   *\n   * @example\n   * <caption>Requesting billing right away.</caption>\n   * <description>Call `billing.request` in the `onFailure` callback to immediately redirect to the Shopify page to request payment.</description>\n   * ```ts\n   * // /app/routes/**\\/*.ts\n   * import { LoaderFunctionArgs } from \"@remix-run/node\";\n   * import { authenticate, MONTHLY_PLAN } from \"../shopify.server\";\n   *\n   * export const loader = async ({ request }: LoaderFunctionArgs) => {\n   *   const { billing } = await authenticate.admin(request);\n   *   await billing.require({\n   *     plans: [MONTHLY_PLAN],\n   *     isTest: true,\n   *     onFailure: async () => billing.request({ plan: MONTHLY_PLAN }),\n   *   });\n   *\n   *   // App logic\n   * };\n   * ```\n   * ```ts\n   * // shopify.server.ts\n   * import { shopifyApp, BillingInterval } from \"@shopify/shopify-app-remix/server\";\n   *\n   * export const MONTHLY_PLAN = 'Monthly subscription';\n   *\n   * const shopify = shopifyApp({\n   *   // ...etc\n   *   billing: {\n   *     [MONTHLY_PLAN]: {\n   *       lineItems: [\n   *         {\n   *           amount: 5,\n   *           currencyCode: 'USD',\n   *           interval: BillingInterval.Every30Days,\n   *         }\n   *       ],\n   *     },\n   *   }\n   * });\n   * export default shopify;\n   * export const authenticate = shopify.authenticate;\n   * ```\n   *\n   * @example\n   * <caption>Redirect to a plan selection page.</caption>\n   * <description>When the app has multiple plans, create a page in your App that allows the merchant to select a plan. If a merchant does not have the required plan you can redirect them to page in your app to select one.</description>\n   * ```ts\n   * // /app/routes/**\\/*.ts\n   * import { LoaderFunctionArgs, redirect } from \"@remix-run/node\";\n   * import { authenticate, MONTHLY_PLAN, ANNUAL_PLAN } from \"../shopify.server\";\n   *\n   * export const loader = async ({ request }: LoaderFunctionArgs) => {\n   *   const { billing } = await authenticate.admin(request);\n   *   const billingCheck = await billing.require({\n   *     plans: [MONTHLY_PLAN, ANNUAL_PLAN],\n   *     isTest: true,\n   *     onFailure: () => redirect('/select-plan'),\n   *   });\n   *\n   *   const subscription = billingCheck.appSubscriptions[0];\n   *   console.log(`Shop is on ${subscription.name} (id ${subscription.id})`);\n   *\n   *   // App logic\n   * };\n   * ```\n   * ```ts\n   * // shopify.server.ts\n   * import { shopifyApp, BillingInterval } from \"@shopify/shopify-app-remix/server\";\n   *\n   * export const MONTHLY_PLAN = 'Monthly subscription';\n   * export const ANNUAL_PLAN = 'Annual subscription';\n   *\n   * const shopify = shopifyApp({\n   *   // ...etc\n   *   billing: {\n   *     [MONTHLY_PLAN]: {\n   *       lineItems: [\n   *         {\n   *           amount: 5,\n   *           currencyCode: 'USD',\n   *           interval: BillingInterval.Every30Days,\n   *         }\n   *       ],\n   *     },\n   *     [ANNUAL_PLAN]: {\n   *       lineItems: [\n   *         {\n   *           amount: 50,\n   *           currencyCode: 'USD',\n   *           interval: BillingInterval.Annual,\n   *         }\n   *       ],\n   *     },\n   *   }\n   * });\n   * export default shopify;\n   * export const authenticate = shopify.authenticate;\n   * ```\n   */\n  require: (\n    options: RequireBillingOptions<Config>,\n  ) => Promise<BillingCheckResponseObject>;\n\n  /**\n   * Checks if the shop has an active payment for any plan defined in the `billing` config option.\n   *\n   * @returns A promise that resolves to an object containing the active purchases for the shop.\n   *\n   * @example\n   * <caption>Check what billing plans a merchant is subscribed to.</caption>\n   * <description>Use billing.check if you want to determine which plans are in use. Unlike `require`, `check` does not\n   * throw an error if no active billing plans are present. </description>\n   * ```ts\n   * // /app/routes/**\\/*.ts\n   * import { LoaderFunctionArgs } from \"@remix-run/node\";\n   * import { authenticate, MONTHLY_PLAN } from \"../shopify.server\";\n   *\n   * export const loader = async ({ request }: LoaderFunctionArgs) => {\n   *   const { billing } = await authenticate.admin(request);\n   *   const { hasActivePayment, appSubscriptions } = await billing.check({\n   *     plans: [MONTHLY_PLAN],\n   *     isTest: false,\n   *   });\n   *   console.log(hasActivePayment);\n   *   console.log(appSubscriptions);\n   * };\n   * ```\n   * ```ts\n   * // shopify.server.ts\n   * import { shopifyApp, BillingInterval } from \"@shopify/shopify-app-remix/server\";\n   *\n   * export const MONTHLY_PLAN = 'Monthly subscription';\n   * export const ANNUAL_PLAN = 'Annual subscription';\n   *\n   * const shopify = shopifyApp({\n   *   // ...etc\n   *   billing: {\n   *     [MONTHLY_PLAN]: {\n   *       lineItems: [\n   *         {\n   *           amount: 5,\n   *           currencyCode: 'USD',\n   *           interval: BillingInterval.Every30Days,\n   *         }\n   *       ],\n   *     },\n   *     [ANNUAL_PLAN]: {\n   *       lineItems: [\n   *         {\n   *           amount: 50,\n   *           currencyCode: 'USD',\n   *           interval: BillingInterval.Annual,\n   *         }\n   *       ],\n   *     },\n   *   }\n   * });\n   * export default shopify;\n   * export const authenticate = shopify.authenticate;\n   * ```\n   *\n   * @example\n   * <caption>Check for payments without filtering.</caption>\n   * <description>Use billing.check to see if any payments exist for the store, regardless of whether it's a test or\n   * matches one or more plans.</description>\n   * ```ts\n   * // /app/routes/**\\/*.ts\n   * import { LoaderFunctionArgs } from \"@remix-run/node\";\n   * import { authenticate, MONTHLY_PLAN } from \"../shopify.server\";\n   *\n   * export const loader = async ({ request }: LoaderFunctionArgs) => {\n   *   const { billing } = await authenticate.admin(request);\n   *   const { hasActivePayment, appSubscriptions } = await billing.check();\n   *   // This will be true if any payment is found\n   *   console.log(hasActivePayment);\n   *   console.log(appSubscriptions);\n   * };\n   * ```\n   */\n  check: <Options extends CheckBillingOptions<Config>>(\n    options?: Options,\n  ) => Promise<BillingCheckResponseObject>;\n\n  /**\n   * Requests payment for the plan.\n   *\n   * @returns Redirects to the confirmation URL for the payment.\n   *\n   * @example\n   * <caption>Using a custom return URL.</caption>\n   * <description>Change where the merchant is returned to after approving the purchase using the `returnUrl` option.</description>\n   * ```ts\n   * // /app/routes/**\\/*.ts\n   * import { LoaderFunctionArgs } from \"@remix-run/node\";\n   * import { authenticate, MONTHLY_PLAN } from \"../shopify.server\";\n   *\n   * export const loader = async ({ request }: LoaderFunctionArgs) => {\n   *   const { billing } = await authenticate.admin(request);\n   *   await billing.require({\n   *     plans: [MONTHLY_PLAN],\n   *     onFailure: async () => billing.request({\n   *       plan: MONTHLY_PLAN,\n   *       isTest: true,\n   *       returnUrl: 'https://admin.shopify.com/store/my-store/apps/my-app/billing-page',\n   *     }),\n   *   });\n   *\n   *   // App logic\n   * };\n   * ```\n   * ```ts\n   * // shopify.server.ts\n   * import { shopifyApp, BillingInterval } from \"@shopify/shopify-app-remix/server\";\n   *\n   * export const MONTHLY_PLAN = 'Monthly subscription';\n   * export const ANNUAL_PLAN = 'Annual subscription';\n   *\n   * const shopify = shopifyApp({\n   *   // ...etc\n   *   billing: {\n   *     [MONTHLY_PLAN]: {\n   *       lineItems: [\n   *         {\n   *           amount: 5,\n   *           currencyCode: 'USD',\n   *           interval: BillingInterval.Every30Days,\n   *         }\n   *       ],\n   *     },\n   *     [ANNUAL_PLAN]: {\n   *       lineItems: [\n   *         {\n   *           amount: 50,\n   *           currencyCode: 'USD',\n   *           interval: BillingInterval.Annual,\n   *         }\n   *       ],\n   *     },\n   *   }\n   * });\n   * export default shopify;\n   * export const authenticate = shopify.authenticate;\n   * ```\n   *\n   * @example\n   * <caption>Overriding plan settings.</caption>\n   * <description>Customize the plan for a merchant when requesting billing. Any fields from the plan can be overridden, as long as the billing interval for line items matches the config.</description>\n   * ```ts\n   * // /app/routes/**\\/*.ts\n   * import { LoaderFunctionArgs } from \"@remix-run/node\";\n   * import { authenticate, MONTHLY_PLAN } from \"../shopify.server\";\n   *\n   * export const loader = async ({ request }: LoaderFunctionArgs) => {\n   *   const { billing } = await authenticate.admin(request);\n   *   await billing.require({\n   *     plans: [MONTHLY_PLAN],\n   *     onFailure: async () => billing.request({\n   *       plan: MONTHLY_PLAN,\n   *       isTest: true,\n   *       trialDays: 14,\n   *       lineItems: [\n   *         {\n   *           interval: BillingInterval.Every30Days,\n   *           discount: { value: { percentage: 0.1 } },\n   *         },\n   *       ],\n   *     }),\n   *   });\n   *\n   *   // App logic\n   * };\n   * ```\n   * ```ts\n   * // shopify.server.ts\n   * import { shopifyApp, BillingInterval } from \"@shopify/shopify-app-remix/server\";\n   *\n   * export const MONTHLY_PLAN = 'Monthly subscription';\n   * export const ANNUAL_PLAN = 'Annual subscription';\n   *\n   * const shopify = shopifyApp({\n   *   // ...etc\n   *   billing: {\n   *     [MONTHLY_PLAN]: {\n   *       lineItems: [\n   *         {\n   *           amount: 5,\n   *           currencyCode: 'USD',\n   *           interval: BillingInterval.Every30Days,\n   *         }\n   *       ],\n   *     },\n   *     [ANNUAL_PLAN]: {\n   *       lineItems: [\n   *         {\n   *           amount: 50,\n   *           currencyCode: 'USD',\n   *           interval: BillingInterval.Annual,\n   *         }\n   *       ],\n   *     },\n   *   }\n   * });\n   * export default shopify;\n   * export const authenticate = shopify.authenticate;\n   * ```\n   */\n  request: (options: RequestBillingOptions<Config>) => Promise<never>;\n\n  /**\n   * Cancels an ongoing subscription, given its ID.\n   *\n   * @returns The cancelled subscription.\n   *\n   * @example\n   * <caption>Cancelling a subscription.</caption>\n   * <description>Use the `billing.cancel` function to cancel an active subscription with the id returned from `billing.require`.</description>\n   * ```ts\n   * // /app/routes/cancel-subscription.ts\n   * import { LoaderFunctionArgs } from \"@remix-run/node\";\n   * import { authenticate, MONTHLY_PLAN } from \"../shopify.server\";\n   *\n   * export const loader = async ({ request }: LoaderFunctionArgs) => {\n   *   const { billing } = await authenticate.admin(request);\n   *   const billingCheck = await billing.require({\n   *     plans: [MONTHLY_PLAN],\n   *     onFailure: async () => billing.request({ plan: MONTHLY_PLAN }),\n   *   });\n   *\n   *   const subscription = billingCheck.appSubscriptions[0];\n   *   const cancelledSubscription = await billing.cancel({\n   *     subscriptionId: subscription.id,\n   *     isTest: true,\n   *     prorate: true,\n   *    });\n   *\n   *   // App logic\n   * };\n   * ```\n   * ```ts\n   * // shopify.server.ts\n   * import { shopifyApp, BillingInterval } from \"@shopify/shopify-app-remix/server\";\n   *\n   * export const MONTHLY_PLAN = 'Monthly subscription';\n   * export const ANNUAL_PLAN = 'Annual subscription';\n   *\n   * const shopify = shopifyApp({\n   *   // ...etc\n   *   billing: {\n   *     [MONTHLY_PLAN]: {\n   *       lineItems: [\n   *         {\n   *           amount: 5,\n   *           currencyCode: 'USD',\n   *           interval: BillingInterval.Every30Days,\n   *         }\n   *       ],\n   *     },\n   *     [ANNUAL_PLAN]: {\n   *       lineItems: [\n   *         {\n   *           amount: 50,\n   *           currencyCode: 'USD',\n   *           interval: BillingInterval.Annual,\n   *         }\n   *       ],\n   *     },\n   *   }\n   * });\n   * export default shopify;\n   * export const authenticate = shopify.authenticate;\n   * ```\n   */\n  cancel: (options: CancelBillingOptions) => Promise<AppSubscription>;\n\n  /**\n   * Creates a usage record for an app subscription.\n   *\n   * @returns Returns a usage record when one was created successfully.\n   *\n   * @example\n   * <caption>Creating a usage record</caption>\n   * <description>Create a usage record for the active usage billing plan</description>\n   * ```ts\n   * // /app/routes/create-usage-record.ts\n   * import { ActionFunctionArgs } from \"@remix-run/node\";\n   * import { authenticate, MONTHLY_PLAN } from \"../shopify.server\";\n   *\n   * export const action = async ({ request }: ActionFunctionArgs) => {\n   *    const { billing } = await authenticate.admin(request);\n   *\n   *   const chargeBilling = await billing.createUsageRecord({\n   *      description: \"Usage record for product creation\",\n   *      price: {\n   *        amount: 1,\n   *        currencyCode: \"USD\",\n   *       },\n   *      isTest: true,\n   *    });\n   *  console.log(chargeBilling);\n   *\n   *   // App logic\n   * };\n   * ```\n   * ```ts\n   * // shopify.server.ts\n   * import { shopifyApp, BillingInterval } from \"@shopify/shopify-app-remix/server\";\n   *\n   * export const USAGE_PLAN = 'Usage subscription';\n   *\n   * const shopify = shopifyApp({\n   *   // ...etc\n   *   billing: {\n   *     [USAGE_PLAN]: {\n   *       lineItems: [\n   *         {\n   *           amount: 5,\n   *           currencyCode: 'USD',\n   *           interval: BillingInterval.Usage,\n   *         }\n   *       ],\n   *     },\n   *   }\n   * });\n   * export default shopify;\n   * export const authenticate = shopify.authenticate;\n   * ```\n   */\n  createUsageRecord: (\n    options: CreateUsageRecordOptions,\n  ) => Promise<UsageRecord>;\n}"
+            "value": "export interface BillingContext<Config extends AppConfigArg> {\n  /**\n   * Checks if the shop has an active payment for any plan defined in the `billing` config option.\n   *\n   * @returns A promise that resolves to an object containing the active purchases for the shop.\n   *\n   * @example\n   * <caption>Requesting billing right away.</caption>\n   * <description>Call `billing.request` in the `onFailure` callback to immediately redirect to the Shopify page to request payment.</description>\n   * ```ts\n   * // /app/routes/**\\/*.ts\n   * import { LoaderFunctionArgs } from \"@remix-run/node\";\n   * import { authenticate, MONTHLY_PLAN } from \"../shopify.server\";\n   *\n   * export const loader = async ({ request }: LoaderFunctionArgs) => {\n   *   const { billing } = await authenticate.admin(request);\n   *   await billing.require({\n   *     plans: [MONTHLY_PLAN],\n   *     isTest: true,\n   *     onFailure: async () => billing.request({ plan: MONTHLY_PLAN }),\n   *   });\n   *\n   *   // App logic\n   * };\n   * ```\n   * ```ts\n   * // shopify.server.ts\n   * import { shopifyApp, BillingInterval } from \"@shopify/shopify-app-remix/server\";\n   *\n   * export const MONTHLY_PLAN = 'Monthly subscription';\n   *\n   * const shopify = shopifyApp({\n   *   // ...etc\n   *   billing: {\n   *     [MONTHLY_PLAN]: {\n   *       lineItems: [\n   *         {\n   *           amount: 5,\n   *           currencyCode: 'USD',\n   *           interval: BillingInterval.Every30Days,\n   *         }\n   *       ],\n   *     },\n   *   }\n   * });\n   * export default shopify;\n   * export const authenticate = shopify.authenticate;\n   * ```\n   *\n   * @example\n   * <caption>Redirect to a plan selection page.</caption>\n   * <description>When the app has multiple plans, create a page in your App that allows the merchant to select a plan. If a merchant does not have the required plan you can redirect them to page in your app to select one.</description>\n   * ```ts\n   * // /app/routes/**\\/*.ts\n   * import { LoaderFunctionArgs, redirect } from \"@remix-run/node\";\n   * import { authenticate, MONTHLY_PLAN, ANNUAL_PLAN } from \"../shopify.server\";\n   *\n   * export const loader = async ({ request }: LoaderFunctionArgs) => {\n   *   const { billing } = await authenticate.admin(request);\n   *   const billingCheck = await billing.require({\n   *     plans: [MONTHLY_PLAN, ANNUAL_PLAN],\n   *     isTest: true,\n   *     onFailure: () => redirect('/select-plan'),\n   *   });\n   *\n   *   const subscription = billingCheck.appSubscriptions[0];\n   *   console.log(`Shop is on ${subscription.name} (id ${subscription.id})`);\n   *\n   *   // App logic\n   * };\n   * ```\n   * ```ts\n   * // shopify.server.ts\n   * import { shopifyApp, BillingInterval } from \"@shopify/shopify-app-remix/server\";\n   *\n   * export const MONTHLY_PLAN = 'Monthly subscription';\n   * export const ANNUAL_PLAN = 'Annual subscription';\n   *\n   * const shopify = shopifyApp({\n   *   // ...etc\n   *   billing: {\n   *     [MONTHLY_PLAN]: {\n   *       lineItems: [\n   *         {\n   *           amount: 5,\n   *           currencyCode: 'USD',\n   *           interval: BillingInterval.Every30Days,\n   *         }\n   *       ],\n   *     },\n   *     [ANNUAL_PLAN]: {\n   *       lineItems: [\n   *         {\n   *           amount: 50,\n   *           currencyCode: 'USD',\n   *           interval: BillingInterval.Annual,\n   *         }\n   *       ],\n   *     },\n   *   }\n   * });\n   * export default shopify;\n   * export const authenticate = shopify.authenticate;\n   * ```\n   */\n  require: (\n    options: RequireBillingOptions<Config>,\n  ) => Promise<BillingCheckResponseObject>;\n\n  /**\n   * Checks if the shop has an active payment for any plan defined in the `billing` config option.\n   *\n   * @returns A promise that resolves to an object containing the active purchases for the shop.\n   *\n   * @example\n   * <caption>Check what billing plans a merchant is subscribed to.</caption>\n   * <description>Use billing.check if you want to determine which plans are in use. Unlike `require`, `check` does not\n   * throw an error if no active billing plans are present. </description>\n   * ```ts\n   * // /app/routes/**\\/*.ts\n   * import { LoaderFunctionArgs } from \"@remix-run/node\";\n   * import { authenticate, MONTHLY_PLAN } from \"../shopify.server\";\n   *\n   * export const loader = async ({ request }: LoaderFunctionArgs) => {\n   *   const { billing } = await authenticate.admin(request);\n   *   const { hasActivePayment, appSubscriptions } = await billing.check({\n   *     plans: [MONTHLY_PLAN],\n   *     isTest: false,\n   *   });\n   *   console.log(hasActivePayment);\n   *   console.log(appSubscriptions);\n   * };\n   * ```\n   * ```ts\n   * // shopify.server.ts\n   * import { shopifyApp, BillingInterval } from \"@shopify/shopify-app-remix/server\";\n   *\n   * export const MONTHLY_PLAN = 'Monthly subscription';\n   * export const ANNUAL_PLAN = 'Annual subscription';\n   *\n   * const shopify = shopifyApp({\n   *   // ...etc\n   *   billing: {\n   *     [MONTHLY_PLAN]: {\n   *       lineItems: [\n   *         {\n   *           amount: 5,\n   *           currencyCode: 'USD',\n   *           interval: BillingInterval.Every30Days,\n   *         }\n   *       ],\n   *     },\n   *     [ANNUAL_PLAN]: {\n   *       lineItems: [\n   *         {\n   *           amount: 50,\n   *           currencyCode: 'USD',\n   *           interval: BillingInterval.Annual,\n   *         }\n   *       ],\n   *     },\n   *   }\n   * });\n   * export default shopify;\n   * export const authenticate = shopify.authenticate;\n   * ```\n   *\n   * @example\n   * <caption>Check for payments without filtering.</caption>\n   * <description>Use billing.check to see if any payments exist for the store, regardless of whether it's a test or\n   * matches one or more plans.</description>\n   * ```ts\n   * // /app/routes/**\\/*.ts\n   * import { LoaderFunctionArgs } from \"@remix-run/node\";\n   * import { authenticate, MONTHLY_PLAN } from \"../shopify.server\";\n   *\n   * export const loader = async ({ request }: LoaderFunctionArgs) => {\n   *   const { billing } = await authenticate.admin(request);\n   *   const { hasActivePayment, appSubscriptions } = await billing.check();\n   *   // This will be true if any payment is found\n   *   console.log(hasActivePayment);\n   *   console.log(appSubscriptions);\n   * };\n   * ```\n   */\n  check: <Options extends CheckBillingOptions<Config>>(\n    options?: Options,\n  ) => Promise<BillingCheckResponseObject>;\n\n  /**\n   * Requests payment for the plan.\n   *\n   * @returns Redirects to the confirmation URL for the payment.\n   *\n   * @example\n   * <caption>Using a custom return URL.</caption>\n   * <description>Change where the merchant is returned to after approving the purchase using the `returnUrl` option.</description>\n   * ```ts\n   * // /app/routes/**\\/*.ts\n   * import { LoaderFunctionArgs } from \"@remix-run/node\";\n   * import { authenticate, MONTHLY_PLAN } from \"../shopify.server\";\n   *\n   * export const loader = async ({ request }: LoaderFunctionArgs) => {\n   *   const { billing } = await authenticate.admin(request);\n   *   await billing.require({\n   *     plans: [MONTHLY_PLAN],\n   *     onFailure: async () => billing.request({\n   *       plan: MONTHLY_PLAN,\n   *       isTest: true,\n   *       returnUrl: 'https://admin.shopify.com/store/my-store/apps/my-app/billing-page',\n   *     }),\n   *   });\n   *\n   *   // App logic\n   * };\n   * ```\n   * ```ts\n   * // shopify.server.ts\n   * import { shopifyApp, BillingInterval } from \"@shopify/shopify-app-remix/server\";\n   *\n   * export const MONTHLY_PLAN = 'Monthly subscription';\n   * export const ANNUAL_PLAN = 'Annual subscription';\n   *\n   * const shopify = shopifyApp({\n   *   // ...etc\n   *   billing: {\n   *     [MONTHLY_PLAN]: {\n   *       lineItems: [\n   *         {\n   *           amount: 5,\n   *           currencyCode: 'USD',\n   *           interval: BillingInterval.Every30Days,\n   *         }\n   *       ],\n   *     },\n   *     [ANNUAL_PLAN]: {\n   *       lineItems: [\n   *         {\n   *           amount: 50,\n   *           currencyCode: 'USD',\n   *           interval: BillingInterval.Annual,\n   *         }\n   *       ],\n   *     },\n   *   }\n   * });\n   * export default shopify;\n   * export const authenticate = shopify.authenticate;\n   * ```\n   *\n   * @example\n   * <caption>Overriding plan settings.</caption>\n   * <description>Customize the plan for a merchant when requesting billing. Any fields from the plan can be overridden, as long as the billing interval for line items matches the config.</description>\n   * ```ts\n   * // /app/routes/**\\/*.ts\n   * import { LoaderFunctionArgs } from \"@remix-run/node\";\n   * import { authenticate, MONTHLY_PLAN } from \"../shopify.server\";\n   *\n   * export const loader = async ({ request }: LoaderFunctionArgs) => {\n   *   const { billing } = await authenticate.admin(request);\n   *   await billing.require({\n   *     plans: [MONTHLY_PLAN],\n   *     onFailure: async () => billing.request({\n   *       plan: MONTHLY_PLAN,\n   *       isTest: true,\n   *       trialDays: 14,\n   *       lineItems: [\n   *         {\n   *           interval: BillingInterval.Every30Days,\n   *           discount: { value: { percentage: 0.1 } },\n   *         },\n   *       ],\n   *     }),\n   *   });\n   *\n   *   // App logic\n   * };\n   * ```\n   * ```ts\n   * // shopify.server.ts\n   * import { shopifyApp, BillingInterval } from \"@shopify/shopify-app-remix/server\";\n   *\n   * export const MONTHLY_PLAN = 'Monthly subscription';\n   * export const ANNUAL_PLAN = 'Annual subscription';\n   *\n   * const shopify = shopifyApp({\n   *   // ...etc\n   *   billing: {\n   *     [MONTHLY_PLAN]: {\n   *       lineItems: [\n   *         {\n   *           amount: 5,\n   *           currencyCode: 'USD',\n   *           interval: BillingInterval.Every30Days,\n   *         }\n   *       ],\n   *     },\n   *     [ANNUAL_PLAN]: {\n   *       lineItems: [\n   *         {\n   *           amount: 50,\n   *           currencyCode: 'USD',\n   *           interval: BillingInterval.Annual,\n   *         }\n   *       ],\n   *     },\n   *   }\n   * });\n   * export default shopify;\n   * export const authenticate = shopify.authenticate;\n   * ```\n   */\n  request: (options: RequestBillingOptions<Config>) => Promise<never>;\n\n  /**\n   * Cancels an ongoing subscription, given its ID.\n   *\n   * @returns The cancelled subscription.\n   *\n   * @example\n   * <caption>Cancelling a subscription.</caption>\n   * <description>Use the `billing.cancel` function to cancel an active subscription with the id returned from `billing.require`.</description>\n   * ```ts\n   * // /app/routes/cancel-subscription.ts\n   * import { LoaderFunctionArgs } from \"@remix-run/node\";\n   * import { authenticate, MONTHLY_PLAN } from \"../shopify.server\";\n   *\n   * export const loader = async ({ request }: LoaderFunctionArgs) => {\n   *   const { billing } = await authenticate.admin(request);\n   *   const billingCheck = await billing.require({\n   *     plans: [MONTHLY_PLAN],\n   *     onFailure: async () => billing.request({ plan: MONTHLY_PLAN }),\n   *   });\n   *\n   *   const subscription = billingCheck.appSubscriptions[0];\n   *   const cancelledSubscription = await billing.cancel({\n   *     subscriptionId: subscription.id,\n   *     isTest: true,\n   *     prorate: true,\n   *    });\n   *\n   *   // App logic\n   * };\n   * ```\n   * ```ts\n   * // shopify.server.ts\n   * import { shopifyApp, BillingInterval } from \"@shopify/shopify-app-remix/server\";\n   *\n   * export const MONTHLY_PLAN = 'Monthly subscription';\n   * export const ANNUAL_PLAN = 'Annual subscription';\n   *\n   * const shopify = shopifyApp({\n   *   // ...etc\n   *   billing: {\n   *     [MONTHLY_PLAN]: {\n   *       lineItems: [\n   *         {\n   *           amount: 5,\n   *           currencyCode: 'USD',\n   *           interval: BillingInterval.Every30Days,\n   *         }\n   *       ],\n   *     },\n   *     [ANNUAL_PLAN]: {\n   *       lineItems: [\n   *         {\n   *           amount: 50,\n   *           currencyCode: 'USD',\n   *           interval: BillingInterval.Annual,\n   *         }\n   *       ],\n   *     },\n   *   }\n   * });\n   * export default shopify;\n   * export const authenticate = shopify.authenticate;\n   * ```\n   */\n  cancel: (options: CancelBillingOptions) => Promise<AppSubscription>;\n\n  /**\n   * Creates a usage record for an app subscription.\n   *\n   * @returns Returns a usage record when one was created successfully.\n   *\n   * @example\n   * <caption>Creating a usage record</caption>\n   * <description>Create a usage record for the active usage billing plan</description>\n   * ```ts\n   * // /app/routes/create-usage-record.ts\n   * import { ActionFunctionArgs } from \"@remix-run/node\";\n   * import { authenticate, MONTHLY_PLAN } from \"../shopify.server\";\n   *\n   * export const action = async ({ request }: ActionFunctionArgs) => {\n   *    const { billing } = await authenticate.admin(request);\n   *\n   *   const chargeBilling = await billing.createUsageRecord({\n   *      description: \"Usage record for product creation\",\n   *      price: {\n   *        amount: 1,\n   *        currencyCode: \"USD\",\n   *       },\n   *      isTest: true,\n   *    });\n   *  console.log(chargeBilling);\n   *\n   *   // App logic\n   * };\n   * ```\n   * ```ts\n   * // shopify.server.ts\n   * import { shopifyApp, BillingInterval } from \"@shopify/shopify-app-remix/server\";\n   *\n   * export const USAGE_PLAN = 'Usage subscription';\n   *\n   * const shopify = shopifyApp({\n   *   // ...etc\n   *   billing: {\n   *     [USAGE_PLAN]: {\n   *       lineItems: [\n   *         {\n   *           amount: 5,\n   *           currencyCode: 'USD',\n   *           interval: BillingInterval.Usage,\n   *         }\n   *       ],\n   *     },\n   *   }\n   * });\n   * export default shopify;\n   * export const authenticate = shopify.authenticate;\n   * ```\n   */\n  createUsageRecord: (\n    options: CreateUsageRecordOptions,\n  ) => Promise<UsageRecord>;\n\n  /**\n   * Updates the capped amount for a usage billing plan.\n   *\n   * @returns Redirects to a confirmation page to update the usage billing plan.\n   *\n   * @example\n   * <caption>Updating the capped amount for a usage billing plan.</caption>\n   * <description>Update the capped amount for the usage billing plan specified by `subscriptionLineItemId`.</description>\n   * ```ts\n   * // /app/routes/**\\/*.ts\n   * import { ActionFunctionArgs } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   *\n   * export const action = async ({ request }: ActionFunctionArgs) => {\n   *   const { billing } = await authenticate.admin(request);\n   *\n   *   await billing.updateUsageCappedAmount({\n   *     subscriptionLineItemId: \"SUBSCRIPTION_LINE_ITEM_ID\",\n   *     cappedAmount: {\n   *       amount: 10,\n   *       currencyCode: \"USD\"\n   *     },\n   *   });\n   *\n   *   // App logic\n   * };\n   * ```\n   * ```ts\n   * // shopify.server.ts\n   * import { shopifyApp, BillingInterval } from \"@shopify/shopify-app-remix/server\";\n   *\n   * export const USAGE_PLAN = 'Usage subscription';\n   *\n   * const shopify = shopifyApp({\n   *   // ...etc\n   *   billing: {\n   *     [USAGE_PLAN]: {\n   *       lineItems: [\n   *         {\n   *           amount: 5,\n   *           currencyCode: 'USD',\n   *           interval: BillingInterval.Usage,\n   *           terms: \"Usage based\"\n   *         }\n   *       ],\n   *     },\n   *   }\n   * });\n   * export default shopify;\n   * export const authenticate = shopify.authenticate;\n   * ```\n   */\n  updateUsageCappedAmount: (\n    options: UpdateUsageCappedAmountOptions,\n  ) => Promise<never>;\n}"
           },
           "CancelBillingOptions": {
             "filePath": "src/server/authenticate/admin/billing/types.ts",
@@ -1772,6 +1863,28 @@
               }
             ],
             "value": "export interface RequireBillingOptions<Config extends AppConfigArg>\n  extends Omit<BillingCheckParams, 'session' | 'plans' | 'returnObject'> {\n  /**\n   * The plans to check for. Must be one of the values defined in the `billing` config option.\n   */\n  plans: (keyof Config['billing'])[];\n  /**\n   * How to handle the request if the shop doesn't have an active payment for any plan.\n   */\n  onFailure: (error: any) => Promise<Response>;\n}"
+          },
+          "UpdateUsageCappedAmountOptions": {
+            "filePath": "src/server/authenticate/admin/billing/types.ts",
+            "name": "UpdateUsageCappedAmountOptions",
+            "description": "",
+            "members": [
+              {
+                "filePath": "src/server/authenticate/admin/billing/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "cappedAmount",
+                "value": "{ amount: number; currencyCode: string; }",
+                "description": "The maximum charge for the usage billing plan."
+              },
+              {
+                "filePath": "src/server/authenticate/admin/billing/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "subscriptionLineItemId",
+                "value": "string",
+                "description": "The subscription line item ID to update."
+              }
+            ],
+            "value": "export interface UpdateUsageCappedAmountOptions {\n  /**\n   * The subscription line item ID to update.\n   */\n  subscriptionLineItemId: string;\n  /**\n   * The maximum charge for the usage billing plan.\n   */\n  cappedAmount: {\n    /**\n     * The amount to update.\n     */\n    amount: number;\n    /**\n     * The currency code to update.\n     */\n    currencyCode: string;\n  };\n}"
           }
         }
       }
@@ -1946,6 +2059,29 @@
                   {
                     "title": "shopify.server.ts",
                     "code": "import { shopifyApp, BillingInterval } from \"@shopify/shopify-app-remix/server\";\n\nexport const MONTHLY_PLAN = 'Monthly subscription';\nexport const ANNUAL_PLAN = 'Annual subscription';\n\nconst shopify = shopifyApp({\n  // ...etc\n  billing: {\n    [MONTHLY_PLAN]: {\n      lineItems: [\n        {\n          amount: 5,\n          currencyCode: 'USD',\n          interval: BillingInterval.Every30Days,\n        }\n      ],\n    },\n    [ANNUAL_PLAN]: {\n      lineItems: [\n        {\n          amount: 50,\n          currencyCode: 'USD',\n          interval: BillingInterval.Annual,\n        }\n      ],\n    },\n  }\n});\nexport default shopify;\nexport const authenticate = shopify.authenticate;",
+                    "language": "typescript"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "title": "updateUsageCappedAmount",
+          "examples": [
+            {
+              "description": "Update the capped amount for the usage billing plan specified by `subscriptionLineItemId`.",
+              "codeblock": {
+                "title": "Updating the capped amount for a usage billing plan",
+                "tabs": [
+                  {
+                    "title": "/app/routes/**\\/*.ts",
+                    "code": "import { ActionFunctionArgs } from \"@remix-run/node\";\nimport { authenticate } from \"../shopify.server\";\n\nexport const action = async ({ request }: ActionFunctionArgs) =&gt; {\n  const { billing } = await authenticate.admin(request);\n\n  await billing.updateUsageCappedAmount({\n    subscriptionLineItemId: \"SUBSCRIPTION_LINE_ITEM_ID\",\n    cappedAmount: {\n      amount: 10,\n      currencyCode: \"USD\"\n    },\n  });\n\n  // App logic\n};",
+                    "language": "typescript"
+                  },
+                  {
+                    "title": "shopify.server.ts",
+                    "code": "import { shopifyApp, BillingInterval } from \"@shopify/shopify-app-remix/server\";\n\nexport const USAGE_PLAN = 'Usage subscription';\n\nconst shopify = shopifyApp({\n  // ...etc\n  billing: {\n    [USAGE_PLAN]: {\n      lineItems: [\n        {\n          amount: 5,\n          currencyCode: 'USD',\n          interval: BillingInterval.Usage,\n          terms: \"Usage based\"\n        }\n      ],\n    },\n  }\n});\nexport default shopify;\nexport const authenticate = shopify.authenticate;",
                     "language": "typescript"
                   }
                 ]
@@ -4896,9 +5032,32 @@
                     ]
                   }
                 ]
+              },
+              {
+                "filePath": "src/server/authenticate/admin/billing/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "updateUsageCappedAmount",
+                "value": "(options: UpdateUsageCappedAmountOptions) => Promise<never>",
+                "description": "Updates the capped amount for a usage billing plan.",
+                "examples": [
+                  {
+                    "title": "Updating the capped amount for a usage billing plan",
+                    "description": "Update the capped amount for the usage billing plan specified by `subscriptionLineItemId`.",
+                    "tabs": [
+                      {
+                        "code": "import { ActionFunctionArgs } from \"@remix-run/node\";\nimport { authenticate } from \"../shopify.server\";\n\nexport const action = async ({ request }: ActionFunctionArgs) => {\n  const { billing } = await authenticate.admin(request);\n\n  await billing.updateUsageCappedAmount({\n    subscriptionLineItemId: \"SUBSCRIPTION_LINE_ITEM_ID\",\n    cappedAmount: {\n      amount: 10,\n      currencyCode: \"USD\"\n    },\n  });\n\n  // App logic\n};",
+                        "title": "/app/routes/**\\/*.ts"
+                      },
+                      {
+                        "code": "import { shopifyApp, BillingInterval } from \"@shopify/shopify-app-remix/server\";\n\nexport const USAGE_PLAN = 'Usage subscription';\n\nconst shopify = shopifyApp({\n  // ...etc\n  billing: {\n    [USAGE_PLAN]: {\n      lineItems: [\n        {\n          amount: 5,\n          currencyCode: 'USD',\n          interval: BillingInterval.Usage,\n          terms: \"Usage based\"\n        }\n      ],\n    },\n  }\n});\nexport default shopify;\nexport const authenticate = shopify.authenticate;",
+                        "title": "shopify.server.ts"
+                      }
+                    ]
+                  }
+                ]
               }
             ],
-            "value": "export interface BillingContext<Config extends AppConfigArg> {\n  /**\n   * Checks if the shop has an active payment for any plan defined in the `billing` config option.\n   *\n   * @returns A promise that resolves to an object containing the active purchases for the shop.\n   *\n   * @example\n   * <caption>Requesting billing right away.</caption>\n   * <description>Call `billing.request` in the `onFailure` callback to immediately redirect to the Shopify page to request payment.</description>\n   * ```ts\n   * // /app/routes/**\\/*.ts\n   * import { LoaderFunctionArgs } from \"@remix-run/node\";\n   * import { authenticate, MONTHLY_PLAN } from \"../shopify.server\";\n   *\n   * export const loader = async ({ request }: LoaderFunctionArgs) => {\n   *   const { billing } = await authenticate.admin(request);\n   *   await billing.require({\n   *     plans: [MONTHLY_PLAN],\n   *     isTest: true,\n   *     onFailure: async () => billing.request({ plan: MONTHLY_PLAN }),\n   *   });\n   *\n   *   // App logic\n   * };\n   * ```\n   * ```ts\n   * // shopify.server.ts\n   * import { shopifyApp, BillingInterval } from \"@shopify/shopify-app-remix/server\";\n   *\n   * export const MONTHLY_PLAN = 'Monthly subscription';\n   *\n   * const shopify = shopifyApp({\n   *   // ...etc\n   *   billing: {\n   *     [MONTHLY_PLAN]: {\n   *       lineItems: [\n   *         {\n   *           amount: 5,\n   *           currencyCode: 'USD',\n   *           interval: BillingInterval.Every30Days,\n   *         }\n   *       ],\n   *     },\n   *   }\n   * });\n   * export default shopify;\n   * export const authenticate = shopify.authenticate;\n   * ```\n   *\n   * @example\n   * <caption>Redirect to a plan selection page.</caption>\n   * <description>When the app has multiple plans, create a page in your App that allows the merchant to select a plan. If a merchant does not have the required plan you can redirect them to page in your app to select one.</description>\n   * ```ts\n   * // /app/routes/**\\/*.ts\n   * import { LoaderFunctionArgs, redirect } from \"@remix-run/node\";\n   * import { authenticate, MONTHLY_PLAN, ANNUAL_PLAN } from \"../shopify.server\";\n   *\n   * export const loader = async ({ request }: LoaderFunctionArgs) => {\n   *   const { billing } = await authenticate.admin(request);\n   *   const billingCheck = await billing.require({\n   *     plans: [MONTHLY_PLAN, ANNUAL_PLAN],\n   *     isTest: true,\n   *     onFailure: () => redirect('/select-plan'),\n   *   });\n   *\n   *   const subscription = billingCheck.appSubscriptions[0];\n   *   console.log(`Shop is on ${subscription.name} (id ${subscription.id})`);\n   *\n   *   // App logic\n   * };\n   * ```\n   * ```ts\n   * // shopify.server.ts\n   * import { shopifyApp, BillingInterval } from \"@shopify/shopify-app-remix/server\";\n   *\n   * export const MONTHLY_PLAN = 'Monthly subscription';\n   * export const ANNUAL_PLAN = 'Annual subscription';\n   *\n   * const shopify = shopifyApp({\n   *   // ...etc\n   *   billing: {\n   *     [MONTHLY_PLAN]: {\n   *       lineItems: [\n   *         {\n   *           amount: 5,\n   *           currencyCode: 'USD',\n   *           interval: BillingInterval.Every30Days,\n   *         }\n   *       ],\n   *     },\n   *     [ANNUAL_PLAN]: {\n   *       lineItems: [\n   *         {\n   *           amount: 50,\n   *           currencyCode: 'USD',\n   *           interval: BillingInterval.Annual,\n   *         }\n   *       ],\n   *     },\n   *   }\n   * });\n   * export default shopify;\n   * export const authenticate = shopify.authenticate;\n   * ```\n   */\n  require: (\n    options: RequireBillingOptions<Config>,\n  ) => Promise<BillingCheckResponseObject>;\n\n  /**\n   * Checks if the shop has an active payment for any plan defined in the `billing` config option.\n   *\n   * @returns A promise that resolves to an object containing the active purchases for the shop.\n   *\n   * @example\n   * <caption>Check what billing plans a merchant is subscribed to.</caption>\n   * <description>Use billing.check if you want to determine which plans are in use. Unlike `require`, `check` does not\n   * throw an error if no active billing plans are present. </description>\n   * ```ts\n   * // /app/routes/**\\/*.ts\n   * import { LoaderFunctionArgs } from \"@remix-run/node\";\n   * import { authenticate, MONTHLY_PLAN } from \"../shopify.server\";\n   *\n   * export const loader = async ({ request }: LoaderFunctionArgs) => {\n   *   const { billing } = await authenticate.admin(request);\n   *   const { hasActivePayment, appSubscriptions } = await billing.check({\n   *     plans: [MONTHLY_PLAN],\n   *     isTest: false,\n   *   });\n   *   console.log(hasActivePayment);\n   *   console.log(appSubscriptions);\n   * };\n   * ```\n   * ```ts\n   * // shopify.server.ts\n   * import { shopifyApp, BillingInterval } from \"@shopify/shopify-app-remix/server\";\n   *\n   * export const MONTHLY_PLAN = 'Monthly subscription';\n   * export const ANNUAL_PLAN = 'Annual subscription';\n   *\n   * const shopify = shopifyApp({\n   *   // ...etc\n   *   billing: {\n   *     [MONTHLY_PLAN]: {\n   *       lineItems: [\n   *         {\n   *           amount: 5,\n   *           currencyCode: 'USD',\n   *           interval: BillingInterval.Every30Days,\n   *         }\n   *       ],\n   *     },\n   *     [ANNUAL_PLAN]: {\n   *       lineItems: [\n   *         {\n   *           amount: 50,\n   *           currencyCode: 'USD',\n   *           interval: BillingInterval.Annual,\n   *         }\n   *       ],\n   *     },\n   *   }\n   * });\n   * export default shopify;\n   * export const authenticate = shopify.authenticate;\n   * ```\n   *\n   * @example\n   * <caption>Check for payments without filtering.</caption>\n   * <description>Use billing.check to see if any payments exist for the store, regardless of whether it's a test or\n   * matches one or more plans.</description>\n   * ```ts\n   * // /app/routes/**\\/*.ts\n   * import { LoaderFunctionArgs } from \"@remix-run/node\";\n   * import { authenticate, MONTHLY_PLAN } from \"../shopify.server\";\n   *\n   * export const loader = async ({ request }: LoaderFunctionArgs) => {\n   *   const { billing } = await authenticate.admin(request);\n   *   const { hasActivePayment, appSubscriptions } = await billing.check();\n   *   // This will be true if any payment is found\n   *   console.log(hasActivePayment);\n   *   console.log(appSubscriptions);\n   * };\n   * ```\n   */\n  check: <Options extends CheckBillingOptions<Config>>(\n    options?: Options,\n  ) => Promise<BillingCheckResponseObject>;\n\n  /**\n   * Requests payment for the plan.\n   *\n   * @returns Redirects to the confirmation URL for the payment.\n   *\n   * @example\n   * <caption>Using a custom return URL.</caption>\n   * <description>Change where the merchant is returned to after approving the purchase using the `returnUrl` option.</description>\n   * ```ts\n   * // /app/routes/**\\/*.ts\n   * import { LoaderFunctionArgs } from \"@remix-run/node\";\n   * import { authenticate, MONTHLY_PLAN } from \"../shopify.server\";\n   *\n   * export const loader = async ({ request }: LoaderFunctionArgs) => {\n   *   const { billing } = await authenticate.admin(request);\n   *   await billing.require({\n   *     plans: [MONTHLY_PLAN],\n   *     onFailure: async () => billing.request({\n   *       plan: MONTHLY_PLAN,\n   *       isTest: true,\n   *       returnUrl: 'https://admin.shopify.com/store/my-store/apps/my-app/billing-page',\n   *     }),\n   *   });\n   *\n   *   // App logic\n   * };\n   * ```\n   * ```ts\n   * // shopify.server.ts\n   * import { shopifyApp, BillingInterval } from \"@shopify/shopify-app-remix/server\";\n   *\n   * export const MONTHLY_PLAN = 'Monthly subscription';\n   * export const ANNUAL_PLAN = 'Annual subscription';\n   *\n   * const shopify = shopifyApp({\n   *   // ...etc\n   *   billing: {\n   *     [MONTHLY_PLAN]: {\n   *       lineItems: [\n   *         {\n   *           amount: 5,\n   *           currencyCode: 'USD',\n   *           interval: BillingInterval.Every30Days,\n   *         }\n   *       ],\n   *     },\n   *     [ANNUAL_PLAN]: {\n   *       lineItems: [\n   *         {\n   *           amount: 50,\n   *           currencyCode: 'USD',\n   *           interval: BillingInterval.Annual,\n   *         }\n   *       ],\n   *     },\n   *   }\n   * });\n   * export default shopify;\n   * export const authenticate = shopify.authenticate;\n   * ```\n   *\n   * @example\n   * <caption>Overriding plan settings.</caption>\n   * <description>Customize the plan for a merchant when requesting billing. Any fields from the plan can be overridden, as long as the billing interval for line items matches the config.</description>\n   * ```ts\n   * // /app/routes/**\\/*.ts\n   * import { LoaderFunctionArgs } from \"@remix-run/node\";\n   * import { authenticate, MONTHLY_PLAN } from \"../shopify.server\";\n   *\n   * export const loader = async ({ request }: LoaderFunctionArgs) => {\n   *   const { billing } = await authenticate.admin(request);\n   *   await billing.require({\n   *     plans: [MONTHLY_PLAN],\n   *     onFailure: async () => billing.request({\n   *       plan: MONTHLY_PLAN,\n   *       isTest: true,\n   *       trialDays: 14,\n   *       lineItems: [\n   *         {\n   *           interval: BillingInterval.Every30Days,\n   *           discount: { value: { percentage: 0.1 } },\n   *         },\n   *       ],\n   *     }),\n   *   });\n   *\n   *   // App logic\n   * };\n   * ```\n   * ```ts\n   * // shopify.server.ts\n   * import { shopifyApp, BillingInterval } from \"@shopify/shopify-app-remix/server\";\n   *\n   * export const MONTHLY_PLAN = 'Monthly subscription';\n   * export const ANNUAL_PLAN = 'Annual subscription';\n   *\n   * const shopify = shopifyApp({\n   *   // ...etc\n   *   billing: {\n   *     [MONTHLY_PLAN]: {\n   *       lineItems: [\n   *         {\n   *           amount: 5,\n   *           currencyCode: 'USD',\n   *           interval: BillingInterval.Every30Days,\n   *         }\n   *       ],\n   *     },\n   *     [ANNUAL_PLAN]: {\n   *       lineItems: [\n   *         {\n   *           amount: 50,\n   *           currencyCode: 'USD',\n   *           interval: BillingInterval.Annual,\n   *         }\n   *       ],\n   *     },\n   *   }\n   * });\n   * export default shopify;\n   * export const authenticate = shopify.authenticate;\n   * ```\n   */\n  request: (options: RequestBillingOptions<Config>) => Promise<never>;\n\n  /**\n   * Cancels an ongoing subscription, given its ID.\n   *\n   * @returns The cancelled subscription.\n   *\n   * @example\n   * <caption>Cancelling a subscription.</caption>\n   * <description>Use the `billing.cancel` function to cancel an active subscription with the id returned from `billing.require`.</description>\n   * ```ts\n   * // /app/routes/cancel-subscription.ts\n   * import { LoaderFunctionArgs } from \"@remix-run/node\";\n   * import { authenticate, MONTHLY_PLAN } from \"../shopify.server\";\n   *\n   * export const loader = async ({ request }: LoaderFunctionArgs) => {\n   *   const { billing } = await authenticate.admin(request);\n   *   const billingCheck = await billing.require({\n   *     plans: [MONTHLY_PLAN],\n   *     onFailure: async () => billing.request({ plan: MONTHLY_PLAN }),\n   *   });\n   *\n   *   const subscription = billingCheck.appSubscriptions[0];\n   *   const cancelledSubscription = await billing.cancel({\n   *     subscriptionId: subscription.id,\n   *     isTest: true,\n   *     prorate: true,\n   *    });\n   *\n   *   // App logic\n   * };\n   * ```\n   * ```ts\n   * // shopify.server.ts\n   * import { shopifyApp, BillingInterval } from \"@shopify/shopify-app-remix/server\";\n   *\n   * export const MONTHLY_PLAN = 'Monthly subscription';\n   * export const ANNUAL_PLAN = 'Annual subscription';\n   *\n   * const shopify = shopifyApp({\n   *   // ...etc\n   *   billing: {\n   *     [MONTHLY_PLAN]: {\n   *       lineItems: [\n   *         {\n   *           amount: 5,\n   *           currencyCode: 'USD',\n   *           interval: BillingInterval.Every30Days,\n   *         }\n   *       ],\n   *     },\n   *     [ANNUAL_PLAN]: {\n   *       lineItems: [\n   *         {\n   *           amount: 50,\n   *           currencyCode: 'USD',\n   *           interval: BillingInterval.Annual,\n   *         }\n   *       ],\n   *     },\n   *   }\n   * });\n   * export default shopify;\n   * export const authenticate = shopify.authenticate;\n   * ```\n   */\n  cancel: (options: CancelBillingOptions) => Promise<AppSubscription>;\n\n  /**\n   * Creates a usage record for an app subscription.\n   *\n   * @returns Returns a usage record when one was created successfully.\n   *\n   * @example\n   * <caption>Creating a usage record</caption>\n   * <description>Create a usage record for the active usage billing plan</description>\n   * ```ts\n   * // /app/routes/create-usage-record.ts\n   * import { ActionFunctionArgs } from \"@remix-run/node\";\n   * import { authenticate, MONTHLY_PLAN } from \"../shopify.server\";\n   *\n   * export const action = async ({ request }: ActionFunctionArgs) => {\n   *    const { billing } = await authenticate.admin(request);\n   *\n   *   const chargeBilling = await billing.createUsageRecord({\n   *      description: \"Usage record for product creation\",\n   *      price: {\n   *        amount: 1,\n   *        currencyCode: \"USD\",\n   *       },\n   *      isTest: true,\n   *    });\n   *  console.log(chargeBilling);\n   *\n   *   // App logic\n   * };\n   * ```\n   * ```ts\n   * // shopify.server.ts\n   * import { shopifyApp, BillingInterval } from \"@shopify/shopify-app-remix/server\";\n   *\n   * export const USAGE_PLAN = 'Usage subscription';\n   *\n   * const shopify = shopifyApp({\n   *   // ...etc\n   *   billing: {\n   *     [USAGE_PLAN]: {\n   *       lineItems: [\n   *         {\n   *           amount: 5,\n   *           currencyCode: 'USD',\n   *           interval: BillingInterval.Usage,\n   *         }\n   *       ],\n   *     },\n   *   }\n   * });\n   * export default shopify;\n   * export const authenticate = shopify.authenticate;\n   * ```\n   */\n  createUsageRecord: (\n    options: CreateUsageRecordOptions,\n  ) => Promise<UsageRecord>;\n}"
+            "value": "export interface BillingContext<Config extends AppConfigArg> {\n  /**\n   * Checks if the shop has an active payment for any plan defined in the `billing` config option.\n   *\n   * @returns A promise that resolves to an object containing the active purchases for the shop.\n   *\n   * @example\n   * <caption>Requesting billing right away.</caption>\n   * <description>Call `billing.request` in the `onFailure` callback to immediately redirect to the Shopify page to request payment.</description>\n   * ```ts\n   * // /app/routes/**\\/*.ts\n   * import { LoaderFunctionArgs } from \"@remix-run/node\";\n   * import { authenticate, MONTHLY_PLAN } from \"../shopify.server\";\n   *\n   * export const loader = async ({ request }: LoaderFunctionArgs) => {\n   *   const { billing } = await authenticate.admin(request);\n   *   await billing.require({\n   *     plans: [MONTHLY_PLAN],\n   *     isTest: true,\n   *     onFailure: async () => billing.request({ plan: MONTHLY_PLAN }),\n   *   });\n   *\n   *   // App logic\n   * };\n   * ```\n   * ```ts\n   * // shopify.server.ts\n   * import { shopifyApp, BillingInterval } from \"@shopify/shopify-app-remix/server\";\n   *\n   * export const MONTHLY_PLAN = 'Monthly subscription';\n   *\n   * const shopify = shopifyApp({\n   *   // ...etc\n   *   billing: {\n   *     [MONTHLY_PLAN]: {\n   *       lineItems: [\n   *         {\n   *           amount: 5,\n   *           currencyCode: 'USD',\n   *           interval: BillingInterval.Every30Days,\n   *         }\n   *       ],\n   *     },\n   *   }\n   * });\n   * export default shopify;\n   * export const authenticate = shopify.authenticate;\n   * ```\n   *\n   * @example\n   * <caption>Redirect to a plan selection page.</caption>\n   * <description>When the app has multiple plans, create a page in your App that allows the merchant to select a plan. If a merchant does not have the required plan you can redirect them to page in your app to select one.</description>\n   * ```ts\n   * // /app/routes/**\\/*.ts\n   * import { LoaderFunctionArgs, redirect } from \"@remix-run/node\";\n   * import { authenticate, MONTHLY_PLAN, ANNUAL_PLAN } from \"../shopify.server\";\n   *\n   * export const loader = async ({ request }: LoaderFunctionArgs) => {\n   *   const { billing } = await authenticate.admin(request);\n   *   const billingCheck = await billing.require({\n   *     plans: [MONTHLY_PLAN, ANNUAL_PLAN],\n   *     isTest: true,\n   *     onFailure: () => redirect('/select-plan'),\n   *   });\n   *\n   *   const subscription = billingCheck.appSubscriptions[0];\n   *   console.log(`Shop is on ${subscription.name} (id ${subscription.id})`);\n   *\n   *   // App logic\n   * };\n   * ```\n   * ```ts\n   * // shopify.server.ts\n   * import { shopifyApp, BillingInterval } from \"@shopify/shopify-app-remix/server\";\n   *\n   * export const MONTHLY_PLAN = 'Monthly subscription';\n   * export const ANNUAL_PLAN = 'Annual subscription';\n   *\n   * const shopify = shopifyApp({\n   *   // ...etc\n   *   billing: {\n   *     [MONTHLY_PLAN]: {\n   *       lineItems: [\n   *         {\n   *           amount: 5,\n   *           currencyCode: 'USD',\n   *           interval: BillingInterval.Every30Days,\n   *         }\n   *       ],\n   *     },\n   *     [ANNUAL_PLAN]: {\n   *       lineItems: [\n   *         {\n   *           amount: 50,\n   *           currencyCode: 'USD',\n   *           interval: BillingInterval.Annual,\n   *         }\n   *       ],\n   *     },\n   *   }\n   * });\n   * export default shopify;\n   * export const authenticate = shopify.authenticate;\n   * ```\n   */\n  require: (\n    options: RequireBillingOptions<Config>,\n  ) => Promise<BillingCheckResponseObject>;\n\n  /**\n   * Checks if the shop has an active payment for any plan defined in the `billing` config option.\n   *\n   * @returns A promise that resolves to an object containing the active purchases for the shop.\n   *\n   * @example\n   * <caption>Check what billing plans a merchant is subscribed to.</caption>\n   * <description>Use billing.check if you want to determine which plans are in use. Unlike `require`, `check` does not\n   * throw an error if no active billing plans are present. </description>\n   * ```ts\n   * // /app/routes/**\\/*.ts\n   * import { LoaderFunctionArgs } from \"@remix-run/node\";\n   * import { authenticate, MONTHLY_PLAN } from \"../shopify.server\";\n   *\n   * export const loader = async ({ request }: LoaderFunctionArgs) => {\n   *   const { billing } = await authenticate.admin(request);\n   *   const { hasActivePayment, appSubscriptions } = await billing.check({\n   *     plans: [MONTHLY_PLAN],\n   *     isTest: false,\n   *   });\n   *   console.log(hasActivePayment);\n   *   console.log(appSubscriptions);\n   * };\n   * ```\n   * ```ts\n   * // shopify.server.ts\n   * import { shopifyApp, BillingInterval } from \"@shopify/shopify-app-remix/server\";\n   *\n   * export const MONTHLY_PLAN = 'Monthly subscription';\n   * export const ANNUAL_PLAN = 'Annual subscription';\n   *\n   * const shopify = shopifyApp({\n   *   // ...etc\n   *   billing: {\n   *     [MONTHLY_PLAN]: {\n   *       lineItems: [\n   *         {\n   *           amount: 5,\n   *           currencyCode: 'USD',\n   *           interval: BillingInterval.Every30Days,\n   *         }\n   *       ],\n   *     },\n   *     [ANNUAL_PLAN]: {\n   *       lineItems: [\n   *         {\n   *           amount: 50,\n   *           currencyCode: 'USD',\n   *           interval: BillingInterval.Annual,\n   *         }\n   *       ],\n   *     },\n   *   }\n   * });\n   * export default shopify;\n   * export const authenticate = shopify.authenticate;\n   * ```\n   *\n   * @example\n   * <caption>Check for payments without filtering.</caption>\n   * <description>Use billing.check to see if any payments exist for the store, regardless of whether it's a test or\n   * matches one or more plans.</description>\n   * ```ts\n   * // /app/routes/**\\/*.ts\n   * import { LoaderFunctionArgs } from \"@remix-run/node\";\n   * import { authenticate, MONTHLY_PLAN } from \"../shopify.server\";\n   *\n   * export const loader = async ({ request }: LoaderFunctionArgs) => {\n   *   const { billing } = await authenticate.admin(request);\n   *   const { hasActivePayment, appSubscriptions } = await billing.check();\n   *   // This will be true if any payment is found\n   *   console.log(hasActivePayment);\n   *   console.log(appSubscriptions);\n   * };\n   * ```\n   */\n  check: <Options extends CheckBillingOptions<Config>>(\n    options?: Options,\n  ) => Promise<BillingCheckResponseObject>;\n\n  /**\n   * Requests payment for the plan.\n   *\n   * @returns Redirects to the confirmation URL for the payment.\n   *\n   * @example\n   * <caption>Using a custom return URL.</caption>\n   * <description>Change where the merchant is returned to after approving the purchase using the `returnUrl` option.</description>\n   * ```ts\n   * // /app/routes/**\\/*.ts\n   * import { LoaderFunctionArgs } from \"@remix-run/node\";\n   * import { authenticate, MONTHLY_PLAN } from \"../shopify.server\";\n   *\n   * export const loader = async ({ request }: LoaderFunctionArgs) => {\n   *   const { billing } = await authenticate.admin(request);\n   *   await billing.require({\n   *     plans: [MONTHLY_PLAN],\n   *     onFailure: async () => billing.request({\n   *       plan: MONTHLY_PLAN,\n   *       isTest: true,\n   *       returnUrl: 'https://admin.shopify.com/store/my-store/apps/my-app/billing-page',\n   *     }),\n   *   });\n   *\n   *   // App logic\n   * };\n   * ```\n   * ```ts\n   * // shopify.server.ts\n   * import { shopifyApp, BillingInterval } from \"@shopify/shopify-app-remix/server\";\n   *\n   * export const MONTHLY_PLAN = 'Monthly subscription';\n   * export const ANNUAL_PLAN = 'Annual subscription';\n   *\n   * const shopify = shopifyApp({\n   *   // ...etc\n   *   billing: {\n   *     [MONTHLY_PLAN]: {\n   *       lineItems: [\n   *         {\n   *           amount: 5,\n   *           currencyCode: 'USD',\n   *           interval: BillingInterval.Every30Days,\n   *         }\n   *       ],\n   *     },\n   *     [ANNUAL_PLAN]: {\n   *       lineItems: [\n   *         {\n   *           amount: 50,\n   *           currencyCode: 'USD',\n   *           interval: BillingInterval.Annual,\n   *         }\n   *       ],\n   *     },\n   *   }\n   * });\n   * export default shopify;\n   * export const authenticate = shopify.authenticate;\n   * ```\n   *\n   * @example\n   * <caption>Overriding plan settings.</caption>\n   * <description>Customize the plan for a merchant when requesting billing. Any fields from the plan can be overridden, as long as the billing interval for line items matches the config.</description>\n   * ```ts\n   * // /app/routes/**\\/*.ts\n   * import { LoaderFunctionArgs } from \"@remix-run/node\";\n   * import { authenticate, MONTHLY_PLAN } from \"../shopify.server\";\n   *\n   * export const loader = async ({ request }: LoaderFunctionArgs) => {\n   *   const { billing } = await authenticate.admin(request);\n   *   await billing.require({\n   *     plans: [MONTHLY_PLAN],\n   *     onFailure: async () => billing.request({\n   *       plan: MONTHLY_PLAN,\n   *       isTest: true,\n   *       trialDays: 14,\n   *       lineItems: [\n   *         {\n   *           interval: BillingInterval.Every30Days,\n   *           discount: { value: { percentage: 0.1 } },\n   *         },\n   *       ],\n   *     }),\n   *   });\n   *\n   *   // App logic\n   * };\n   * ```\n   * ```ts\n   * // shopify.server.ts\n   * import { shopifyApp, BillingInterval } from \"@shopify/shopify-app-remix/server\";\n   *\n   * export const MONTHLY_PLAN = 'Monthly subscription';\n   * export const ANNUAL_PLAN = 'Annual subscription';\n   *\n   * const shopify = shopifyApp({\n   *   // ...etc\n   *   billing: {\n   *     [MONTHLY_PLAN]: {\n   *       lineItems: [\n   *         {\n   *           amount: 5,\n   *           currencyCode: 'USD',\n   *           interval: BillingInterval.Every30Days,\n   *         }\n   *       ],\n   *     },\n   *     [ANNUAL_PLAN]: {\n   *       lineItems: [\n   *         {\n   *           amount: 50,\n   *           currencyCode: 'USD',\n   *           interval: BillingInterval.Annual,\n   *         }\n   *       ],\n   *     },\n   *   }\n   * });\n   * export default shopify;\n   * export const authenticate = shopify.authenticate;\n   * ```\n   */\n  request: (options: RequestBillingOptions<Config>) => Promise<never>;\n\n  /**\n   * Cancels an ongoing subscription, given its ID.\n   *\n   * @returns The cancelled subscription.\n   *\n   * @example\n   * <caption>Cancelling a subscription.</caption>\n   * <description>Use the `billing.cancel` function to cancel an active subscription with the id returned from `billing.require`.</description>\n   * ```ts\n   * // /app/routes/cancel-subscription.ts\n   * import { LoaderFunctionArgs } from \"@remix-run/node\";\n   * import { authenticate, MONTHLY_PLAN } from \"../shopify.server\";\n   *\n   * export const loader = async ({ request }: LoaderFunctionArgs) => {\n   *   const { billing } = await authenticate.admin(request);\n   *   const billingCheck = await billing.require({\n   *     plans: [MONTHLY_PLAN],\n   *     onFailure: async () => billing.request({ plan: MONTHLY_PLAN }),\n   *   });\n   *\n   *   const subscription = billingCheck.appSubscriptions[0];\n   *   const cancelledSubscription = await billing.cancel({\n   *     subscriptionId: subscription.id,\n   *     isTest: true,\n   *     prorate: true,\n   *    });\n   *\n   *   // App logic\n   * };\n   * ```\n   * ```ts\n   * // shopify.server.ts\n   * import { shopifyApp, BillingInterval } from \"@shopify/shopify-app-remix/server\";\n   *\n   * export const MONTHLY_PLAN = 'Monthly subscription';\n   * export const ANNUAL_PLAN = 'Annual subscription';\n   *\n   * const shopify = shopifyApp({\n   *   // ...etc\n   *   billing: {\n   *     [MONTHLY_PLAN]: {\n   *       lineItems: [\n   *         {\n   *           amount: 5,\n   *           currencyCode: 'USD',\n   *           interval: BillingInterval.Every30Days,\n   *         }\n   *       ],\n   *     },\n   *     [ANNUAL_PLAN]: {\n   *       lineItems: [\n   *         {\n   *           amount: 50,\n   *           currencyCode: 'USD',\n   *           interval: BillingInterval.Annual,\n   *         }\n   *       ],\n   *     },\n   *   }\n   * });\n   * export default shopify;\n   * export const authenticate = shopify.authenticate;\n   * ```\n   */\n  cancel: (options: CancelBillingOptions) => Promise<AppSubscription>;\n\n  /**\n   * Creates a usage record for an app subscription.\n   *\n   * @returns Returns a usage record when one was created successfully.\n   *\n   * @example\n   * <caption>Creating a usage record</caption>\n   * <description>Create a usage record for the active usage billing plan</description>\n   * ```ts\n   * // /app/routes/create-usage-record.ts\n   * import { ActionFunctionArgs } from \"@remix-run/node\";\n   * import { authenticate, MONTHLY_PLAN } from \"../shopify.server\";\n   *\n   * export const action = async ({ request }: ActionFunctionArgs) => {\n   *    const { billing } = await authenticate.admin(request);\n   *\n   *   const chargeBilling = await billing.createUsageRecord({\n   *      description: \"Usage record for product creation\",\n   *      price: {\n   *        amount: 1,\n   *        currencyCode: \"USD\",\n   *       },\n   *      isTest: true,\n   *    });\n   *  console.log(chargeBilling);\n   *\n   *   // App logic\n   * };\n   * ```\n   * ```ts\n   * // shopify.server.ts\n   * import { shopifyApp, BillingInterval } from \"@shopify/shopify-app-remix/server\";\n   *\n   * export const USAGE_PLAN = 'Usage subscription';\n   *\n   * const shopify = shopifyApp({\n   *   // ...etc\n   *   billing: {\n   *     [USAGE_PLAN]: {\n   *       lineItems: [\n   *         {\n   *           amount: 5,\n   *           currencyCode: 'USD',\n   *           interval: BillingInterval.Usage,\n   *         }\n   *       ],\n   *     },\n   *   }\n   * });\n   * export default shopify;\n   * export const authenticate = shopify.authenticate;\n   * ```\n   */\n  createUsageRecord: (\n    options: CreateUsageRecordOptions,\n  ) => Promise<UsageRecord>;\n\n  /**\n   * Updates the capped amount for a usage billing plan.\n   *\n   * @returns Redirects to a confirmation page to update the usage billing plan.\n   *\n   * @example\n   * <caption>Updating the capped amount for a usage billing plan.</caption>\n   * <description>Update the capped amount for the usage billing plan specified by `subscriptionLineItemId`.</description>\n   * ```ts\n   * // /app/routes/**\\/*.ts\n   * import { ActionFunctionArgs } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   *\n   * export const action = async ({ request }: ActionFunctionArgs) => {\n   *   const { billing } = await authenticate.admin(request);\n   *\n   *   await billing.updateUsageCappedAmount({\n   *     subscriptionLineItemId: \"SUBSCRIPTION_LINE_ITEM_ID\",\n   *     cappedAmount: {\n   *       amount: 10,\n   *       currencyCode: \"USD\"\n   *     },\n   *   });\n   *\n   *   // App logic\n   * };\n   * ```\n   * ```ts\n   * // shopify.server.ts\n   * import { shopifyApp, BillingInterval } from \"@shopify/shopify-app-remix/server\";\n   *\n   * export const USAGE_PLAN = 'Usage subscription';\n   *\n   * const shopify = shopifyApp({\n   *   // ...etc\n   *   billing: {\n   *     [USAGE_PLAN]: {\n   *       lineItems: [\n   *         {\n   *           amount: 5,\n   *           currencyCode: 'USD',\n   *           interval: BillingInterval.Usage,\n   *           terms: \"Usage based\"\n   *         }\n   *       ],\n   *     },\n   *   }\n   * });\n   * export default shopify;\n   * export const authenticate = shopify.authenticate;\n   * ```\n   */\n  updateUsageCappedAmount: (\n    options: UpdateUsageCappedAmountOptions,\n  ) => Promise<never>;\n}"
           },
           "CancelBillingOptions": {
             "filePath": "src/server/authenticate/admin/billing/types.ts",
@@ -5060,6 +5219,28 @@
               }
             ],
             "value": "export interface RequireBillingOptions<Config extends AppConfigArg>\n  extends Omit<BillingCheckParams, 'session' | 'plans' | 'returnObject'> {\n  /**\n   * The plans to check for. Must be one of the values defined in the `billing` config option.\n   */\n  plans: (keyof Config['billing'])[];\n  /**\n   * How to handle the request if the shop doesn't have an active payment for any plan.\n   */\n  onFailure: (error: any) => Promise<Response>;\n}"
+          },
+          "UpdateUsageCappedAmountOptions": {
+            "filePath": "src/server/authenticate/admin/billing/types.ts",
+            "name": "UpdateUsageCappedAmountOptions",
+            "description": "",
+            "members": [
+              {
+                "filePath": "src/server/authenticate/admin/billing/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "cappedAmount",
+                "value": "{ amount: number; currencyCode: string; }",
+                "description": "The maximum charge for the usage billing plan."
+              },
+              {
+                "filePath": "src/server/authenticate/admin/billing/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "subscriptionLineItemId",
+                "value": "string",
+                "description": "The subscription line item ID to update."
+              }
+            ],
+            "value": "export interface UpdateUsageCappedAmountOptions {\n  /**\n   * The subscription line item ID to update.\n   */\n  subscriptionLineItemId: string;\n  /**\n   * The maximum charge for the usage billing plan.\n   */\n  cappedAmount: {\n    /**\n     * The amount to update.\n     */\n    amount: number;\n    /**\n     * The currency code to update.\n     */\n    currencyCode: string;\n  };\n}"
           },
           "EnsureCORSFunction": {
             "filePath": "src/server/authenticate/helpers/ensure-cors-headers.ts",
@@ -6685,607 +6866,6 @@
             "value": "Base & {\n  sessionStorage: SessionStorageType<Config>;\n}",
             "description": ""
           },
-          "Base": {
-            "filePath": "../shopify-api/rest/base.ts",
-            "name": "Base",
-            "description": "",
-            "members": [
-              {
-                "filePath": "../shopify-api/rest/base.ts",
-                "syntaxKind": "PropertyDeclaration",
-                "name": "#session",
-                "value": "Session",
-                "description": ""
-              },
-              {
-                "filePath": "../shopify-api/rest/base.ts",
-                "syntaxKind": "GetAccessor",
-                "name": "session",
-                "value": "Session",
-                "description": ""
-              },
-              {
-                "filePath": "../shopify-api/rest/base.ts",
-                "syntaxKind": "MethodDeclaration",
-                "name": "save",
-                "value": "({ update }?: SaveArgs) => Promise<void>",
-                "description": ""
-              },
-              {
-                "filePath": "../shopify-api/rest/base.ts",
-                "syntaxKind": "MethodDeclaration",
-                "name": "saveAndUpdate",
-                "value": "() => Promise<void>",
-                "description": ""
-              },
-              {
-                "filePath": "../shopify-api/rest/base.ts",
-                "syntaxKind": "MethodDeclaration",
-                "name": "delete",
-                "value": "() => Promise<void>",
-                "description": ""
-              },
-              {
-                "filePath": "../shopify-api/rest/base.ts",
-                "syntaxKind": "MethodDeclaration",
-                "name": "serialize",
-                "value": "(saving?: boolean) => Body",
-                "description": ""
-              },
-              {
-                "filePath": "../shopify-api/rest/base.ts",
-                "syntaxKind": "MethodDeclaration",
-                "name": "toJSON",
-                "value": "() => Body",
-                "description": ""
-              },
-              {
-                "filePath": "../shopify-api/rest/base.ts",
-                "syntaxKind": "MethodDeclaration",
-                "name": "request",
-                "value": "<T = unknown>(args: RequestArgs) => Promise<RestRequestReturn<T>>",
-                "description": ""
-              }
-            ],
-            "value": "export class Base {\n  // For instance attributes\n  [key: string]: any;\n\n  public static Client: typeof RestClient;\n  public static config: ConfigInterface;\n\n  public static apiVersion: string;\n  protected static resourceNames: ResourceNames[] = [];\n\n  protected static primaryKey = 'id';\n  protected static customPrefix: string | null = null;\n  protected static readOnlyAttributes: string[] = [];\n\n  protected static hasOne: Record<string, typeof Base> = {};\n  protected static hasMany: Record<string, typeof Base> = {};\n\n  protected static paths: ResourcePath[] = [];\n\n  public static setClassProperties({Client, config}: SetClassPropertiesArgs) {\n    this.Client = Client;\n    this.config = config;\n  }\n\n  protected static async baseFind<T extends Base = Base>({\n    session,\n    urlIds,\n    params,\n    requireIds = false,\n  }: BaseFindArgs): Promise<FindAllResponse<T>> {\n    if (requireIds) {\n      const hasIds = Object.entries(urlIds).some(([_key, value]) => value);\n\n      if (!hasIds) {\n        throw new RestResourceError(\n          'No IDs given for request, cannot find path',\n        );\n      }\n    }\n\n    const response = await this.request<T>({\n      http_method: 'get',\n      operation: 'get',\n      session,\n      urlIds,\n      params,\n    });\n\n    return {\n      data: this.createInstancesFromResponse<T>(session, response.body as Body),\n      headers: response.headers,\n      pageInfo: response.pageInfo,\n    };\n  }\n\n  protected static async request<T = unknown>({\n    session,\n    http_method,\n    operation,\n    urlIds,\n    params,\n    body,\n    entity,\n  }: RequestArgs): Promise<RestRequestReturn<T>> {\n    const client = new this.Client({\n      session,\n      apiVersion: this.apiVersion as ApiVersion,\n    });\n\n    const path = this.getPath({http_method, operation, urlIds, entity});\n\n    const cleanParams: Record<string, string | number> = {};\n    if (params) {\n      for (const key in params) {\n        if (params[key] !== null) {\n          cleanParams[key] = params[key];\n        }\n      }\n    }\n\n    switch (http_method) {\n      case 'get':\n        return client.get<T>({path, query: cleanParams});\n      case 'post':\n        return client.post<T>({\n          path,\n          query: cleanParams,\n          data: body!,\n          type: DataType.JSON,\n        });\n      case 'put':\n        return client.put<T>({\n          path,\n          query: cleanParams,\n          data: body!,\n          type: DataType.JSON,\n        });\n      case 'delete':\n        return client.delete<T>({path, query: cleanParams});\n      default:\n        throw new Error(`Unrecognized HTTP method \"${http_method}\"`);\n    }\n  }\n\n  protected static getJsonBodyName(): string {\n    return this.name.replace(/([a-z])([A-Z])/g, '$1_$2').toLowerCase();\n  }\n\n  protected static getPath({\n    http_method,\n    operation,\n    urlIds,\n    entity,\n  }: GetPathArgs): string {\n    let match: string | null = null;\n    let specificity = -1;\n\n    const potentialPaths: ResourcePath[] = [];\n    this.paths.forEach((path: ResourcePath) => {\n      if (\n        http_method !== path.http_method ||\n        operation !== path.operation ||\n        path.ids.length <= specificity\n      ) {\n        return;\n      }\n\n      potentialPaths.push(path);\n\n      let pathUrlIds: IdSet = {...urlIds};\n      path.ids.forEach((id) => {\n        if (!pathUrlIds[id] && entity && entity[id]) {\n          pathUrlIds[id] = entity[id];\n        }\n      });\n\n      pathUrlIds = Object.entries(pathUrlIds).reduce(\n        (acc: IdSet, [key, value]: [string, string | number | null]) => {\n          if (value) {\n            acc[key] = value;\n          }\n          return acc;\n        },\n        {},\n      );\n\n      // If we weren't given all of the path's required ids, we can't use it\n      const diff = path.ids.reduce(\n        (acc: string[], id: string) => (pathUrlIds[id] ? acc : acc.concat(id)),\n        [],\n      );\n      if (diff.length > 0) {\n        return;\n      }\n\n      specificity = path.ids.length;\n      match = path.path.replace(\n        /(<([^>]+)>)/g,\n        (_m1, _m2, id) => `${pathUrlIds[id]}`,\n      );\n    });\n\n    if (!match) {\n      const pathOptions = potentialPaths.map((path) => path.path);\n\n      throw new RestResourceError(\n        `Could not find a path for request. If you are trying to make a request to one of the following paths, ensure all relevant IDs are set. :\\n - ${pathOptions.join(\n          '\\n - ',\n        )}`,\n      );\n    }\n\n    if (this.customPrefix) {\n      return `${this.customPrefix}/${match}`;\n    } else {\n      return match;\n    }\n  }\n\n  protected static createInstancesFromResponse<T extends Base = Base>(\n    session: Session,\n    data: Body,\n  ): T[] {\n    let instances: T[] = [];\n    this.resourceNames.forEach((resourceName) => {\n      const singular = resourceName.singular;\n      const plural = resourceName.plural;\n      if (data[plural] || Array.isArray(data[singular])) {\n        instances = instances.concat(\n          (data[plural] || data[singular]).reduce(\n            (acc: T[], entry: Body) =>\n              acc.concat(this.createInstance<T>(session, entry)),\n            [],\n          ),\n        );\n      } else if (data[singular]) {\n        instances.push(this.createInstance<T>(session, data[singular]));\n      }\n    });\n\n    return instances;\n  }\n\n  protected static createInstance<T extends Base = Base>(\n    session: Session,\n    data: Body,\n    prevInstance?: T,\n  ): T {\n    const instance: T = prevInstance\n      ? prevInstance\n      : new (this as any)({session});\n\n    if (data) {\n      instance.setData(data);\n    }\n\n    return instance;\n  }\n\n  #session: Session;\n\n  get session(): Session {\n    return this.#session;\n  }\n\n  constructor({session, fromData}: BaseConstructorArgs) {\n    this.#session = session;\n\n    if (fromData) {\n      this.setData(fromData);\n    }\n  }\n\n  public async save({update = false}: SaveArgs = {}): Promise<void> {\n    const {primaryKey, resourceNames} = this.resource();\n    const method = this[primaryKey] ? 'put' : 'post';\n\n    const data = this.serialize(true);\n\n    const response = await this.resource().request({\n      http_method: method,\n      operation: method,\n      session: this.session,\n      urlIds: {},\n      body: {[this.resource().getJsonBodyName()]: data},\n      entity: this,\n    });\n\n    const flattenResourceNames: string[] = resourceNames.reduce<string[]>(\n      (acc, obj) => {\n        return acc.concat(Object.values(obj));\n      },\n      [],\n    );\n\n    const matchResourceName = Object.keys(response.body as Body).filter(\n      (key: string) => flattenResourceNames.includes(key),\n    );\n\n    const body: Body | undefined = (response.body as Body)[\n      matchResourceName[0]\n    ];\n\n    if (update && body) {\n      this.setData(body);\n    }\n  }\n\n  public async saveAndUpdate(): Promise<void> {\n    await this.save({update: true});\n  }\n\n  public async delete(): Promise<void> {\n    await this.resource().request({\n      http_method: 'delete',\n      operation: 'delete',\n      session: this.session,\n      urlIds: {},\n      entity: this,\n    });\n  }\n\n  public serialize(saving = false): Body {\n    const {hasMany, hasOne, readOnlyAttributes} = this.resource();\n\n    return Object.entries(this).reduce((acc: Body, [attribute, value]) => {\n      if (\n        ['#session'].includes(attribute) ||\n        (saving && readOnlyAttributes.includes(attribute))\n      ) {\n        return acc;\n      }\n\n      if (attribute in hasMany && value) {\n        acc[attribute] = value.reduce((attrAcc: Body, entry: Base) => {\n          return attrAcc.concat(this.serializeSubAttribute(entry, saving));\n        }, []);\n      } else if (attribute in hasOne && value) {\n        acc[attribute] = this.serializeSubAttribute(value, saving);\n      } else {\n        acc[attribute] = value;\n      }\n\n      return acc;\n    }, {});\n  }\n\n  public toJSON(): Body {\n    return this.serialize();\n  }\n\n  public request<T = unknown>(args: RequestArgs) {\n    return this.resource().request<T>(args);\n  }\n\n  protected setData(data: Body): void {\n    const {hasMany, hasOne} = this.resource();\n\n    Object.entries(data).forEach(([attribute, val]) => {\n      if (attribute in hasMany) {\n        const HasManyResource: typeof Base = hasMany[attribute];\n        this[attribute] = [];\n        val.forEach((entry: Body) => {\n          const obj = new HasManyResource({session: this.session});\n          if (entry) {\n            obj.setData(entry);\n          }\n\n          this[attribute].push(obj);\n        });\n      } else if (attribute in hasOne) {\n        const HasOneResource: typeof Base = hasOne[attribute];\n        const obj = new HasOneResource({session: this.session});\n        if (val) {\n          obj.setData(val);\n        }\n        this[attribute] = obj;\n      } else {\n        this[attribute] = val;\n      }\n    });\n  }\n\n  protected resource(): typeof Base {\n    return this.constructor as unknown as typeof Base;\n  }\n\n  private serializeSubAttribute(attribute: Base, saving: boolean): Body {\n    return attribute.serialize\n      ? attribute.serialize(saving)\n      : this.resource()\n          .createInstance(this.session, attribute)\n          .serialize(saving);\n  }\n}"
-          },
-          "Session": {
-            "filePath": "../shopify-api/lib/session/session.ts",
-            "name": "Session",
-            "description": "Stores App information from logged in merchants so they can make authenticated requests to the Admin API.",
-            "members": [
-              {
-                "filePath": "../shopify-api/lib/session/session.ts",
-                "syntaxKind": "PropertyDeclaration",
-                "name": "id",
-                "value": "string",
-                "description": "The unique identifier for the session."
-              },
-              {
-                "filePath": "../shopify-api/lib/session/session.ts",
-                "syntaxKind": "PropertyDeclaration",
-                "name": "shop",
-                "value": "string",
-                "description": "The Shopify shop domain, such as `example.myshopify.com`."
-              },
-              {
-                "filePath": "../shopify-api/lib/session/session.ts",
-                "syntaxKind": "PropertyDeclaration",
-                "name": "state",
-                "value": "string",
-                "description": "The state of the session. Used for the OAuth authentication code flow."
-              },
-              {
-                "filePath": "../shopify-api/lib/session/session.ts",
-                "syntaxKind": "PropertyDeclaration",
-                "name": "isOnline",
-                "value": "boolean",
-                "description": "Whether the access token in the session is online or offline."
-              },
-              {
-                "filePath": "../shopify-api/lib/session/session.ts",
-                "syntaxKind": "PropertyDeclaration",
-                "name": "scope",
-                "value": "string",
-                "description": "The desired scopes for the access token, at the time the session was created."
-              },
-              {
-                "filePath": "../shopify-api/lib/session/session.ts",
-                "syntaxKind": "PropertyDeclaration",
-                "name": "expires",
-                "value": "Date",
-                "description": "The date the access token expires."
-              },
-              {
-                "filePath": "../shopify-api/lib/session/session.ts",
-                "syntaxKind": "PropertyDeclaration",
-                "name": "accessToken",
-                "value": "string",
-                "description": "The access token for the session."
-              },
-              {
-                "filePath": "../shopify-api/lib/session/session.ts",
-                "syntaxKind": "PropertyDeclaration",
-                "name": "onlineAccessInfo",
-                "value": "OnlineAccessInfo",
-                "description": "Information on the user for the session. Only present for online sessions."
-              },
-              {
-                "filePath": "../shopify-api/lib/session/session.ts",
-                "syntaxKind": "MethodDeclaration",
-                "name": "isActive",
-                "value": "(scopes: string | string[] | AuthScopes) => boolean",
-                "description": "Whether the session is active. Active sessions have an access token that is not expired, and has has the given scopes if scopes is equal to a truthy value."
-              },
-              {
-                "filePath": "../shopify-api/lib/session/session.ts",
-                "syntaxKind": "MethodDeclaration",
-                "name": "isScopeChanged",
-                "value": "(scopes: string | string[] | AuthScopes) => boolean",
-                "description": "Whether the access token includes the given scopes if they are provided."
-              },
-              {
-                "filePath": "../shopify-api/lib/session/session.ts",
-                "syntaxKind": "MethodDeclaration",
-                "name": "isScopeIncluded",
-                "value": "(scopes: string | string[] | AuthScopes) => boolean",
-                "description": "Whether the access token includes the given scopes."
-              },
-              {
-                "filePath": "../shopify-api/lib/session/session.ts",
-                "syntaxKind": "MethodDeclaration",
-                "name": "isExpired",
-                "value": "(withinMillisecondsOfExpiry?: number) => boolean",
-                "description": "Whether the access token is expired."
-              },
-              {
-                "filePath": "../shopify-api/lib/session/session.ts",
-                "syntaxKind": "MethodDeclaration",
-                "name": "toObject",
-                "value": "() => SessionParams",
-                "description": "Converts an object with data into a Session."
-              },
-              {
-                "filePath": "../shopify-api/lib/session/session.ts",
-                "syntaxKind": "MethodDeclaration",
-                "name": "equals",
-                "value": "(other: Session) => boolean",
-                "description": "Checks whether the given session is equal to this session."
-              },
-              {
-                "filePath": "../shopify-api/lib/session/session.ts",
-                "syntaxKind": "MethodDeclaration",
-                "name": "toPropertyArray",
-                "value": "(returnUserData?: boolean) => [string, string | number | boolean][]",
-                "description": "Converts the session into an array of key-value pairs."
-              }
-            ],
-            "value": "export class Session {\n  public static fromPropertyArray(\n    entries: [string, string | number | boolean][],\n    returnUserData = false,\n  ): Session {\n    if (!Array.isArray(entries)) {\n      throw new InvalidSession(\n        'The parameter is not an array: a Session cannot be created from this object.',\n      );\n    }\n\n    const obj = Object.fromEntries(\n      entries\n        .filter(([_key, value]) => value !== null && value !== undefined)\n        // Sanitize keys\n        .map(([key, value]) => {\n          switch (key.toLowerCase()) {\n            case 'isonline':\n              return ['isOnline', value];\n            case 'accesstoken':\n              return ['accessToken', value];\n            case 'onlineaccessinfo':\n              return ['onlineAccessInfo', value];\n            case 'userid':\n              return ['userId', value];\n            case 'firstname':\n              return ['firstName', value];\n            case 'lastname':\n              return ['lastName', value];\n            case 'accountowner':\n              return ['accountOwner', value];\n            case 'emailverified':\n              return ['emailVerified', value];\n            default:\n              return [key.toLowerCase(), value];\n          }\n        }),\n    );\n\n    const sessionData = {} as SessionParams;\n    const onlineAccessInfo = {\n      associated_user: {},\n    } as OnlineAccessInfo;\n    Object.entries(obj).forEach(([key, value]) => {\n      switch (key) {\n        case 'isOnline':\n          if (typeof value === 'string') {\n            sessionData[key] = value.toString().toLowerCase() === 'true';\n          } else if (typeof value === 'number') {\n            sessionData[key] = Boolean(value);\n          } else {\n            sessionData[key] = value;\n          }\n          break;\n        case 'scope':\n          sessionData[key] = value.toString();\n          break;\n        case 'expires':\n          sessionData[key] = value ? new Date(Number(value)) : undefined;\n          break;\n        case 'onlineAccessInfo':\n          onlineAccessInfo.associated_user.id = Number(value);\n          break;\n        case 'userId':\n          if (returnUserData) {\n            onlineAccessInfo.associated_user.id = Number(value);\n            break;\n          }\n        case 'firstName':\n          if (returnUserData) {\n            onlineAccessInfo.associated_user.first_name = String(value);\n            break;\n          }\n        case 'lastName':\n          if (returnUserData) {\n            onlineAccessInfo.associated_user.last_name = String(value);\n            break;\n          }\n        case 'email':\n          if (returnUserData) {\n            onlineAccessInfo.associated_user.email = String(value);\n            break;\n          }\n        case 'accountOwner':\n          if (returnUserData) {\n            onlineAccessInfo.associated_user.account_owner = Boolean(value);\n            break;\n          }\n        case 'locale':\n          if (returnUserData) {\n            onlineAccessInfo.associated_user.locale = String(value);\n            break;\n          }\n        case 'collaborator':\n          if (returnUserData) {\n            onlineAccessInfo.associated_user.collaborator = Boolean(value);\n            break;\n          }\n        case 'emailVerified':\n          if (returnUserData) {\n            onlineAccessInfo.associated_user.email_verified = Boolean(value);\n            break;\n          }\n        // Return any user keys as passed in\n        default:\n          sessionData[key] = value;\n      }\n    });\n    if (sessionData.isOnline) {\n      sessionData.onlineAccessInfo = onlineAccessInfo;\n    }\n    const session = new Session(sessionData);\n    return session;\n  }\n\n  /**\n   * The unique identifier for the session.\n   */\n  readonly id: string;\n  /**\n   * The Shopify shop domain, such as `example.myshopify.com`.\n   */\n  public shop: string;\n  /**\n   * The state of the session. Used for the OAuth authentication code flow.\n   */\n  public state: string;\n  /**\n   * Whether the access token in the session is online or offline.\n   */\n  public isOnline: boolean;\n  /**\n   * The desired scopes for the access token, at the time the session was created.\n   */\n  public scope?: string;\n  /**\n   * The date the access token expires.\n   */\n  public expires?: Date;\n  /**\n   * The access token for the session.\n   */\n  public accessToken?: string;\n  /**\n   * Information on the user for the session. Only present for online sessions.\n   */\n  public onlineAccessInfo?: OnlineAccessInfo;\n\n  constructor(params: SessionParams) {\n    Object.assign(this, params);\n  }\n\n  /**\n   * Whether the session is active. Active sessions have an access token that is not expired, and has has the given\n   * scopes if scopes is equal to a truthy value.\n   */\n  public isActive(scopes: AuthScopes | string | string[] | undefined): boolean {\n    const hasAccessToken = Boolean(this.accessToken);\n    const isTokenNotExpired = !this.isExpired();\n    const isScopeChanged = this.isScopeChanged(scopes);\n    return !isScopeChanged && hasAccessToken && isTokenNotExpired;\n  }\n\n  /**\n   * Whether the access token includes the given scopes if they are provided.\n   */\n  public isScopeChanged(\n    scopes: AuthScopes | string | string[] | undefined,\n  ): boolean {\n    if (typeof scopes === 'undefined') {\n      return false;\n    }\n\n    return !this.isScopeIncluded(scopes);\n  }\n\n  /**\n   * Whether the access token includes the given scopes.\n   */\n  public isScopeIncluded(scopes: AuthScopes | string | string[]): boolean {\n    const requiredScopes =\n      scopes instanceof AuthScopes ? scopes : new AuthScopes(scopes);\n    const sessionScopes = new AuthScopes(this.scope);\n\n    return sessionScopes.has(requiredScopes);\n  }\n\n  /**\n   * Whether the access token is expired.\n   */\n  public isExpired(withinMillisecondsOfExpiry = 0): boolean {\n    return Boolean(\n      this.expires &&\n        this.expires.getTime() - withinMillisecondsOfExpiry < Date.now(),\n    );\n  }\n\n  /**\n   * Converts an object with data into a Session.\n   */\n  public toObject(): SessionParams {\n    const object: SessionParams = {\n      id: this.id,\n      shop: this.shop,\n      state: this.state,\n      isOnline: this.isOnline,\n    };\n\n    if (this.scope) {\n      object.scope = this.scope;\n    }\n    if (this.expires) {\n      object.expires = this.expires;\n    }\n    if (this.accessToken) {\n      object.accessToken = this.accessToken;\n    }\n    if (this.onlineAccessInfo) {\n      object.onlineAccessInfo = this.onlineAccessInfo;\n    }\n    return object;\n  }\n\n  /**\n   * Checks whether the given session is equal to this session.\n   */\n  public equals(other: Session | undefined): boolean {\n    if (!other) return false;\n\n    const mandatoryPropsMatch =\n      this.id === other.id &&\n      this.shop === other.shop &&\n      this.state === other.state &&\n      this.isOnline === other.isOnline;\n\n    if (!mandatoryPropsMatch) return false;\n\n    const copyA = this.toPropertyArray(true);\n    copyA.sort(([k1], [k2]) => (k1 < k2 ? -1 : 1));\n\n    const copyB = other.toPropertyArray(true);\n    copyB.sort(([k1], [k2]) => (k1 < k2 ? -1 : 1));\n\n    return JSON.stringify(copyA) === JSON.stringify(copyB);\n  }\n\n  /**\n   * Converts the session into an array of key-value pairs.\n   */\n  public toPropertyArray(\n    returnUserData = false,\n  ): [string, string | number | boolean][] {\n    return (\n      Object.entries(this)\n        .filter(\n          ([key, value]) =>\n            propertiesToSave.includes(key) &&\n            value !== undefined &&\n            value !== null,\n        )\n        // Prepare values for db storage\n        .flatMap(([key, value]): [string, string | number | boolean][] => {\n          switch (key) {\n            case 'expires':\n              return [[key, value ? value.getTime() : undefined]];\n            case 'onlineAccessInfo':\n              // eslint-disable-next-line no-negated-condition\n              if (!returnUserData) {\n                return [[key, value.associated_user.id]];\n              } else {\n                return [\n                  ['userId', value?.associated_user?.id],\n                  ['firstName', value?.associated_user?.first_name],\n                  ['lastName', value?.associated_user?.last_name],\n                  ['email', value?.associated_user?.email],\n                  ['locale', value?.associated_user?.locale],\n                  ['emailVerified', value?.associated_user?.email_verified],\n                  ['accountOwner', value?.associated_user?.account_owner],\n                  ['collaborator', value?.associated_user?.collaborator],\n                ];\n              }\n            default:\n              return [[key, value]];\n          }\n        })\n        // Filter out tuples with undefined values\n        .filter(([_key, value]) => value !== undefined)\n    );\n  }\n}"
-          },
-          "OnlineAccessInfo": {
-            "filePath": "../shopify-api/lib/auth/oauth/types.ts",
-            "name": "OnlineAccessInfo",
-            "description": "",
-            "members": [
-              {
-                "filePath": "../shopify-api/lib/auth/oauth/types.ts",
-                "syntaxKind": "PropertySignature",
-                "name": "associated_user",
-                "value": "OnlineAccessUser",
-                "description": "The user associated with the access token."
-              },
-              {
-                "filePath": "../shopify-api/lib/auth/oauth/types.ts",
-                "syntaxKind": "PropertySignature",
-                "name": "associated_user_scope",
-                "value": "string",
-                "description": "The effective set of scopes for the session."
-              },
-              {
-                "filePath": "../shopify-api/lib/auth/oauth/types.ts",
-                "syntaxKind": "PropertySignature",
-                "name": "expires_in",
-                "value": "number",
-                "description": "How long the access token is valid for, in seconds."
-              }
-            ],
-            "value": "export interface OnlineAccessInfo {\n  /**\n   * How long the access token is valid for, in seconds.\n   */\n  expires_in: number;\n  /**\n   * The effective set of scopes for the session.\n   */\n  associated_user_scope: string;\n  /**\n   * The user associated with the access token.\n   */\n  associated_user: OnlineAccessUser;\n}"
-          },
-          "OnlineAccessUser": {
-            "filePath": "../shopify-api/lib/auth/oauth/types.ts",
-            "name": "OnlineAccessUser",
-            "description": "",
-            "members": [
-              {
-                "filePath": "../shopify-api/lib/auth/oauth/types.ts",
-                "syntaxKind": "PropertySignature",
-                "name": "account_owner",
-                "value": "boolean",
-                "description": "Whether the user is the account owner."
-              },
-              {
-                "filePath": "../shopify-api/lib/auth/oauth/types.ts",
-                "syntaxKind": "PropertySignature",
-                "name": "collaborator",
-                "value": "boolean",
-                "description": "Whether the user is a collaborator."
-              },
-              {
-                "filePath": "../shopify-api/lib/auth/oauth/types.ts",
-                "syntaxKind": "PropertySignature",
-                "name": "email",
-                "value": "string",
-                "description": "The user's email address."
-              },
-              {
-                "filePath": "../shopify-api/lib/auth/oauth/types.ts",
-                "syntaxKind": "PropertySignature",
-                "name": "email_verified",
-                "value": "boolean",
-                "description": "Whether the user has verified their email address."
-              },
-              {
-                "filePath": "../shopify-api/lib/auth/oauth/types.ts",
-                "syntaxKind": "PropertySignature",
-                "name": "first_name",
-                "value": "string",
-                "description": "The user's first name."
-              },
-              {
-                "filePath": "../shopify-api/lib/auth/oauth/types.ts",
-                "syntaxKind": "PropertySignature",
-                "name": "id",
-                "value": "number",
-                "description": "The user's ID."
-              },
-              {
-                "filePath": "../shopify-api/lib/auth/oauth/types.ts",
-                "syntaxKind": "PropertySignature",
-                "name": "last_name",
-                "value": "string",
-                "description": "The user's last name."
-              },
-              {
-                "filePath": "../shopify-api/lib/auth/oauth/types.ts",
-                "syntaxKind": "PropertySignature",
-                "name": "locale",
-                "value": "string",
-                "description": "The user's locale."
-              }
-            ],
-            "value": "export interface OnlineAccessUser {\n  /**\n   * The user's ID.\n   */\n  id: number;\n  /**\n   * The user's first name.\n   */\n  first_name: string;\n  /**\n   * The user's last name.\n   */\n  last_name: string;\n  /**\n   * The user's email address.\n   */\n  email: string;\n  /**\n   * Whether the user has verified their email address.\n   */\n  email_verified: boolean;\n  /**\n   * Whether the user is the account owner.\n   */\n  account_owner: boolean;\n  /**\n   * The user's locale.\n   */\n  locale: string;\n  /**\n   * Whether the user is a collaborator.\n   */\n  collaborator: boolean;\n}"
-          },
-          "AuthScopes": {
-            "filePath": "../shopify-api/lib/auth/scopes/index.ts",
-            "name": "AuthScopes",
-            "description": "A class that represents a set of access token scopes.",
-            "members": [
-              {
-                "filePath": "../shopify-api/lib/auth/scopes/index.ts",
-                "syntaxKind": "MethodDeclaration",
-                "name": "has",
-                "value": "(scope: string | string[] | AuthScopes) => boolean",
-                "description": "Checks whether the current set of scopes includes the given one."
-              },
-              {
-                "filePath": "../shopify-api/lib/auth/scopes/index.ts",
-                "syntaxKind": "MethodDeclaration",
-                "name": "equals",
-                "value": "(otherScopes: string | string[] | AuthScopes) => boolean",
-                "description": "Checks whether the current set of scopes equals the given one."
-              },
-              {
-                "filePath": "../shopify-api/lib/auth/scopes/index.ts",
-                "syntaxKind": "MethodDeclaration",
-                "name": "toString",
-                "value": "() => string",
-                "description": "Returns a comma-separated string with the current set of scopes."
-              },
-              {
-                "filePath": "../shopify-api/lib/auth/scopes/index.ts",
-                "syntaxKind": "MethodDeclaration",
-                "name": "toArray",
-                "value": "() => any[]",
-                "description": "Returns an array with the current set of scopes."
-              }
-            ],
-            "value": "class AuthScopes {\n  public static SCOPE_DELIMITER = ',';\n\n  private compressedScopes: Set<string>;\n  private expandedScopes: Set<string>;\n\n  constructor(scopes: string | string[] | AuthScopes | undefined) {\n    let scopesArray: string[] = [];\n    if (typeof scopes === 'string') {\n      scopesArray = scopes.split(\n        new RegExp(`${AuthScopes.SCOPE_DELIMITER}\\\\s*`),\n      );\n    } else if (Array.isArray(scopes)) {\n      scopesArray = scopes;\n    } else if (scopes) {\n      scopesArray = Array.from(scopes.expandedScopes);\n    }\n\n    scopesArray = scopesArray\n      .map((scope) => scope.trim())\n      .filter((scope) => scope.length);\n\n    const impliedScopes = this.getImpliedScopes(scopesArray);\n\n    const scopeSet = new Set(scopesArray);\n    const impliedSet = new Set(impliedScopes);\n\n    this.compressedScopes = new Set(\n      [...scopeSet].filter((x) => !impliedSet.has(x)),\n    );\n    this.expandedScopes = new Set([...scopeSet, ...impliedSet]);\n  }\n\n  /**\n   * Checks whether the current set of scopes includes the given one.\n   */\n  public has(scope: string | string[] | AuthScopes | undefined) {\n    let other: AuthScopes;\n\n    if (scope instanceof AuthScopes) {\n      other = scope;\n    } else {\n      other = new AuthScopes(scope);\n    }\n\n    return (\n      other.toArray().filter((x) => !this.expandedScopes.has(x)).length === 0\n    );\n  }\n\n  /**\n   * Checks whether the current set of scopes equals the given one.\n   */\n  public equals(otherScopes: string | string[] | AuthScopes | undefined) {\n    let other: AuthScopes;\n\n    if (otherScopes instanceof AuthScopes) {\n      other = otherScopes;\n    } else {\n      other = new AuthScopes(otherScopes);\n    }\n\n    return (\n      this.compressedScopes.size === other.compressedScopes.size &&\n      this.toArray().filter((x) => !other.has(x)).length === 0\n    );\n  }\n\n  /**\n   * Returns a comma-separated string with the current set of scopes.\n   */\n  public toString() {\n    return this.toArray().join(AuthScopes.SCOPE_DELIMITER);\n  }\n\n  /**\n   * Returns an array with the current set of scopes.\n   */\n  public toArray() {\n    return [...this.compressedScopes];\n  }\n\n  private getImpliedScopes(scopesArray: string[]): string[] {\n    return scopesArray.reduce((array: string[], current: string) => {\n      const matches = current.match(/^(unauthenticated_)?write_(.*)$/);\n      if (matches) {\n        array.push(`${matches[1] ? matches[1] : ''}read_${matches[2]}`);\n      }\n\n      return array;\n    }, []);\n  }\n}"
-          },
-          "SessionParams": {
-            "filePath": "../shopify-api/lib/session/types.ts",
-            "name": "SessionParams",
-            "description": "",
-            "members": [
-              {
-                "filePath": "../shopify-api/lib/session/types.ts",
-                "name": "[key: string]",
-                "value": "any"
-              },
-              {
-                "filePath": "../shopify-api/lib/session/types.ts",
-                "syntaxKind": "PropertySignature",
-                "name": "accessToken",
-                "value": "string",
-                "description": "The access token for the session.",
-                "isOptional": true
-              },
-              {
-                "filePath": "../shopify-api/lib/session/types.ts",
-                "syntaxKind": "PropertySignature",
-                "name": "expires",
-                "value": "Date",
-                "description": "The date the access token expires.",
-                "isOptional": true
-              },
-              {
-                "filePath": "../shopify-api/lib/session/types.ts",
-                "syntaxKind": "PropertySignature",
-                "name": "id",
-                "value": "string",
-                "description": "The unique identifier for the session."
-              },
-              {
-                "filePath": "../shopify-api/lib/session/types.ts",
-                "syntaxKind": "PropertySignature",
-                "name": "isOnline",
-                "value": "boolean",
-                "description": "Whether the access token in the session is online or offline."
-              },
-              {
-                "filePath": "../shopify-api/lib/session/types.ts",
-                "syntaxKind": "PropertySignature",
-                "name": "onlineAccessInfo",
-                "value": "OnlineAccessInfo | StoredOnlineAccessInfo",
-                "description": "Information on the user for the session. Only present for online sessions.",
-                "isOptional": true
-              },
-              {
-                "filePath": "../shopify-api/lib/session/types.ts",
-                "syntaxKind": "PropertySignature",
-                "name": "scope",
-                "value": "string",
-                "description": "The scopes for the access token.",
-                "isOptional": true
-              },
-              {
-                "filePath": "../shopify-api/lib/session/types.ts",
-                "syntaxKind": "PropertySignature",
-                "name": "shop",
-                "value": "string",
-                "description": "The Shopify shop domain."
-              },
-              {
-                "filePath": "../shopify-api/lib/session/types.ts",
-                "syntaxKind": "PropertySignature",
-                "name": "state",
-                "value": "string",
-                "description": "The state of the session. Used for the OAuth authentication code flow."
-              }
-            ],
-            "value": "export interface SessionParams {\n  /**\n   * The unique identifier for the session.\n   */\n  readonly id: string;\n  /**\n   * The Shopify shop domain.\n   */\n  shop: string;\n  /**\n   * The state of the session. Used for the OAuth authentication code flow.\n   */\n  state: string;\n  /**\n   * Whether the access token in the session is online or offline.\n   */\n  isOnline: boolean;\n  /**\n   * The scopes for the access token.\n   */\n  scope?: string;\n  /**\n   * The date the access token expires.\n   */\n  expires?: Date;\n  /**\n   * The access token for the session.\n   */\n  accessToken?: string;\n  /**\n   * Information on the user for the session. Only present for online sessions.\n   */\n  onlineAccessInfo?: OnlineAccessInfo | StoredOnlineAccessInfo;\n  /**\n   * Additional properties of the session allowing for extension\n   */\n  [key: string]: any;\n}"
-          },
-          "StoredOnlineAccessInfo": {
-            "filePath": "../shopify-api/lib/session/types.ts",
-            "syntaxKind": "TypeAliasDeclaration",
-            "name": "StoredOnlineAccessInfo",
-            "value": "Omit<OnlineAccessInfo, 'associated_user'> & {\n  associated_user: Partial<OnlineAccessUser>;\n}",
-            "description": ""
-          },
-          "SaveArgs": {
-            "filePath": "../shopify-api/rest/base.ts",
-            "name": "SaveArgs",
-            "description": "",
-            "members": [
-              {
-                "filePath": "../shopify-api/rest/base.ts",
-                "syntaxKind": "PropertySignature",
-                "name": "update",
-                "value": "boolean",
-                "description": "",
-                "isOptional": true
-              }
-            ],
-            "value": "interface SaveArgs {\n  update?: boolean;\n}"
-          },
-          "Body": {
-            "filePath": "../shopify-api/rest/types.ts",
-            "syntaxKind": "TypeAliasDeclaration",
-            "name": "Body",
-            "value": "Record<string, any>",
-            "description": "",
-            "members": []
-          },
-          "RequestArgs": {
-            "filePath": "../shopify-api/rest/base.ts",
-            "name": "RequestArgs",
-            "description": "",
-            "members": [
-              {
-                "filePath": "../shopify-api/rest/base.ts",
-                "syntaxKind": "PropertySignature",
-                "name": "body",
-                "value": "Body | null",
-                "description": "",
-                "isOptional": true
-              },
-              {
-                "filePath": "../shopify-api/rest/base.ts",
-                "syntaxKind": "PropertySignature",
-                "name": "entity",
-                "value": "Base | null",
-                "description": "",
-                "isOptional": true
-              },
-              {
-                "filePath": "../shopify-api/rest/base.ts",
-                "syntaxKind": "PropertySignature",
-                "name": "http_method",
-                "value": "string",
-                "description": ""
-              },
-              {
-                "filePath": "../shopify-api/rest/base.ts",
-                "syntaxKind": "PropertySignature",
-                "name": "operation",
-                "value": "string",
-                "description": ""
-              },
-              {
-                "filePath": "../shopify-api/rest/base.ts",
-                "syntaxKind": "PropertySignature",
-                "name": "params",
-                "value": "ParamSet",
-                "description": "",
-                "isOptional": true
-              },
-              {
-                "filePath": "../shopify-api/rest/base.ts",
-                "syntaxKind": "PropertySignature",
-                "name": "requireIds",
-                "value": "boolean",
-                "description": "",
-                "isOptional": true
-              },
-              {
-                "filePath": "../shopify-api/rest/base.ts",
-                "syntaxKind": "PropertySignature",
-                "name": "session",
-                "value": "Session",
-                "description": ""
-              },
-              {
-                "filePath": "../shopify-api/rest/base.ts",
-                "syntaxKind": "PropertySignature",
-                "name": "urlIds",
-                "value": "IdSet",
-                "description": ""
-              }
-            ],
-            "value": "interface RequestArgs extends BaseFindArgs {\n  http_method: string;\n  operation: string;\n  body?: Body | null;\n  entity?: Base | null;\n}"
-          },
-          "ParamSet": {
-            "filePath": "../shopify-api/rest/types.ts",
-            "syntaxKind": "TypeAliasDeclaration",
-            "name": "ParamSet",
-            "value": "Record<string, any>",
-            "description": "",
-            "members": []
-          },
-          "IdSet": {
-            "filePath": "../shopify-api/rest/types.ts",
-            "syntaxKind": "TypeAliasDeclaration",
-            "name": "IdSet",
-            "value": "Record<string, string | number | null>",
-            "description": "",
-            "members": []
-          },
-          "RestRequestReturn": {
-            "filePath": "../shopify-api/lib/clients/admin/types.ts",
-            "name": "RestRequestReturn",
-            "description": "",
-            "members": [
-              {
-                "filePath": "../shopify-api/lib/clients/admin/types.ts",
-                "syntaxKind": "PropertySignature",
-                "name": "body",
-                "value": "T",
-                "description": ""
-              },
-              {
-                "filePath": "../shopify-api/lib/clients/admin/types.ts",
-                "syntaxKind": "PropertySignature",
-                "name": "headers",
-                "value": "Headers",
-                "description": ""
-              },
-              {
-                "filePath": "../shopify-api/lib/clients/admin/types.ts",
-                "syntaxKind": "PropertySignature",
-                "name": "pageInfo",
-                "value": "PageInfo",
-                "description": "",
-                "isOptional": true
-              }
-            ],
-            "value": "export interface RestRequestReturn<T = any> {\n  body: T;\n  headers: Headers;\n  pageInfo?: PageInfo;\n}"
-          },
-          "PageInfo": {
-            "filePath": "../shopify-api/lib/clients/admin/types.ts",
-            "name": "PageInfo",
-            "description": "",
-            "members": [
-              {
-                "filePath": "../shopify-api/lib/clients/admin/types.ts",
-                "syntaxKind": "PropertySignature",
-                "name": "fields",
-                "value": "string[]",
-                "description": "",
-                "isOptional": true
-              },
-              {
-                "filePath": "../shopify-api/lib/clients/admin/types.ts",
-                "syntaxKind": "PropertySignature",
-                "name": "limit",
-                "value": "string",
-                "description": ""
-              },
-              {
-                "filePath": "../shopify-api/lib/clients/admin/types.ts",
-                "syntaxKind": "PropertySignature",
-                "name": "nextPage",
-                "value": "PageInfoParams",
-                "description": "",
-                "isOptional": true
-              },
-              {
-                "filePath": "../shopify-api/lib/clients/admin/types.ts",
-                "syntaxKind": "PropertySignature",
-                "name": "nextPageUrl",
-                "value": "string",
-                "description": "",
-                "isOptional": true
-              },
-              {
-                "filePath": "../shopify-api/lib/clients/admin/types.ts",
-                "syntaxKind": "PropertySignature",
-                "name": "previousPageUrl",
-                "value": "string",
-                "description": "",
-                "isOptional": true
-              },
-              {
-                "filePath": "../shopify-api/lib/clients/admin/types.ts",
-                "syntaxKind": "PropertySignature",
-                "name": "prevPage",
-                "value": "PageInfoParams",
-                "description": "",
-                "isOptional": true
-              }
-            ],
-            "value": "export interface PageInfo {\n  limit: string;\n  fields?: string[];\n  previousPageUrl?: string;\n  nextPageUrl?: string;\n  prevPage?: PageInfoParams;\n  nextPage?: PageInfoParams;\n}"
-          },
-          "PageInfoParams": {
-            "filePath": "../shopify-api/lib/clients/admin/types.ts",
-            "name": "PageInfoParams",
-            "description": "",
-            "members": [
-              {
-                "filePath": "../shopify-api/lib/clients/admin/types.ts",
-                "syntaxKind": "PropertySignature",
-                "name": "path",
-                "value": "string",
-                "description": ""
-              },
-              {
-                "filePath": "../shopify-api/lib/clients/admin/types.ts",
-                "syntaxKind": "PropertySignature",
-                "name": "query",
-                "value": "SearchParams",
-                "description": ""
-              }
-            ],
-            "value": "export interface PageInfoParams {\n  path: string;\n  query: SearchParams;\n}"
-          },
           "SingleMerchantApp": {
             "filePath": "src/server/types.ts",
             "syntaxKind": "TypeAliasDeclaration",
@@ -7768,451 +7348,6 @@
             ],
             "value": "export interface AppConfigArg<\n  Resources extends ShopifyRestResources = ShopifyRestResources,\n  Storage extends SessionStorage = SessionStorage,\n  Future extends FutureFlagOptions = FutureFlagOptions,\n> extends Omit<\n    ApiConfigArg<Resources, ApiFutureFlags<Future>>,\n    | 'hostName'\n    | 'hostScheme'\n    | 'isEmbeddedApp'\n    | 'apiVersion'\n    | 'isCustomStoreApp'\n    | 'future'\n  > {\n  /**\n   * The URL your app is running on.\n   *\n   * The `@shopify/cli` provides this URL as `process.env.SHOPIFY_APP_URL`.  For development this is probably a tunnel URL that points to your local machine.  If this is a production app, this is your production URL.\n   */\n  appUrl: string;\n\n  /**\n   * An adaptor for storing sessions in your database of choice.\n   *\n   * Shopify provides multiple session storage adaptors and you can create your own.\n   *\n   * Optional for apps created in the Shopify Admin.\n   *\n   * {@link https://github.com/Shopify/shopify-app-js/blob/main/README.md#session-storage-options}\n   *\n   * @example\n   * <caption>Storing sessions with Prisma.</caption>\n   * <description>Add the `@shopify/shopify-app-session-storage-prisma` package to use the Prisma session storage.</description>\n   * ```ts\n   * import { shopifyApp } from \"@shopify/shopify-app-remix/server\";\n   * import { PrismaSessionStorage } from \"@shopify/shopify-app-session-storage-prisma\";\n   *\n   * import prisma from \"~/db.server\";\n   *\n   * const shopify = shopifyApp({\n   *   // ... etc\n   *   sessionStorage: new PrismaSessionStorage(prisma),\n   * });\n   * export default shopify;\n   * ```\n   */\n  sessionStorage?: Storage;\n\n  /**\n   * Whether your app use online or offline tokens.\n   *\n   * If your app uses online tokens, then both online and offline tokens will be saved to your database.  This ensures your app can perform background jobs.\n   *\n   * {@link https://shopify.dev/docs/apps/auth/oauth/access-modes}\n   *\n   * @defaultValue `false`\n   */\n  useOnlineTokens?: boolean;\n\n  /**\n   * The config for the shop-specific webhooks your app needs.\n   * \n   * Use this to configure shop-specific webhooks. In many cases defining app-specific webhooks in the `shopify.app.toml` will be sufficient and easier to manage.  Please see:\n   * \n   * {@link https://shopify.dev/docs/apps/build/webhooks/subscribe#app-specific-vs-shop-specific-subscriptions}\n   * \n   * You should only use this if you need shop-specific webhooks. If you do need shop-specific webhooks this can be in used in conjunction with the afterAuth hook, loaders or processes such as background jobs.\n   *\n   * @example\n   * <caption>Registering shop-specific webhooks.</caption>\n   * ```ts\n   * // app/shopify.server.ts\n   * import { DeliveryMethod, shopifyApp } from \"@shopify/shopify-app-remix/server\";\n   *\n   * const shopify = shopifyApp({\n   *   webhooks: {\n   *     PRODUCTS_CREATE: {\n   *       deliveryMethod: DeliveryMethod.Http,\n   *        callbackUrl: \"/webhooks/products/create\",\n   *     },\n   *   },\n   *   hooks: {\n   *     afterAuth: async ({ session }) => {\n   *       // Register webhooks for the shop\n   *       // In this example, every shop will have these webhooks\n   *       // But you could wrap this in some custom shop specific conditional logic\n   *       shopify.registerWebhooks({ session });\n   *     }\n   *   },\n   *   // ...etc\n   * });\n   * export default shopify;\n   * export const authenticate = shopify.authenticate;\n   * ```\n   * \n   * @example\n   * <caption>Registering app-specific webhooks (Recommended)</caption>\n   * ```toml\n   * # shopify.app.toml\n   * [webhooks]\n   * api_version = \"2024-07\"\n\n   *   [[webhooks.subscriptions]]\n   *   topics = [\"products/create\"]\n   *   uri = \"/webhooks/products/create\"\n   * \n   * ```\n   * \n   * @example\n   * <caption>Authenticating a webhook request</caption>\n   *\n   * ```ts\n   * // /app/routes/webhooks.ts\n   * import { ActionFunctionArgs } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   * import db from \"../db.server\";\n   *\n   * export const action = async ({ request }: ActionFunctionArgs) => {\n   *   const { topic, shop, session, payload } = await authenticate.webhook(request);\n   * \n   *   // Webhook requests can trigger after an app is uninstalled\n   *   // If the app is already uninstalled, the session may be undefined.\n   *   if (!session) {\n   *     throw new Response();\n   *   }\n   * \n   *   // Handle the webhook\n   *   console.log(`${TOPIC} webhook received with`, JSON.stringify(payload))\n   *\n   *   throw new Response();\n   * };\n   * ```\n   */\n  webhooks?: WebhookConfig;\n\n  /**\n   * Functions to call at key places during your apps lifecycle.\n   *\n   * These functions are called in the context of the request that triggered them.  This means you can access the session.\n   *\n   * @example\n   * <caption>Seeding your database custom data when a merchant installs your app.</caption>\n   * ```ts\n   * import { DeliveryMethod, shopifyApp } from \"@shopify/shopify-app-remix/server\";\n   * import { seedStoreData } from \"~/db/seeds\"\n   *\n   * const shopify = shopifyApp({\n   *   hooks: {\n   *     afterAuth: async ({ session }) => {\n   *       seedStoreData({session})\n   *     }\n   *   },\n   *   // ...etc\n   * });\n   * ```\n   */\n  hooks?: HooksConfig;\n\n  /**\n   * Does your app render embedded inside the Shopify Admin or on its own.\n   *\n   * Unless you have very specific needs, this should be true.\n   *\n   * @defaultValue `true`\n   */\n  isEmbeddedApp?: boolean;\n\n  /**\n   * How your app is distributed. Default is `AppDistribution.AppStore`.\n   *\n   * AppStore should be used for public apps that are distributed in the Shopify App Store.\n   * SingleMerchant should be used for custom apps managed in the Partner Dashboard.\n   * ShopifyAdmin should be used for apps that are managed in the merchant's Shopify Admin.\n   *\n   * {@link https://shopify.dev/docs/apps/distribution}\n   */\n  distribution?: AppDistribution;\n\n  /**\n   * What version of Shopify's Admin API's would you like to use.\n   *\n   * {@link https://shopify.dev/docs/api/}\n   *\n   * @defaultValue `LATEST_API_VERSION` from `@shopify/shopify-app-remix`\n   *\n   * @example\n   * <caption>Using the latest API Version (Recommended)</caption>\n   * ```ts\n   * import { LATEST_API_VERSION, shopifyApp } from \"@shopify/shopify-app-remix/server\";\n   *\n   * const shopify = shopifyApp({\n   *   // ...etc\n   *   apiVersion: LATEST_API_VERSION,\n   * });\n   * ```\n   */\n  apiVersion?: ApiVersion;\n\n  /**\n   * A path that Shopify can reserve for auth related endpoints.\n   *\n   * This must match a $ route in your Remix app.  That route must export a loader function that calls `shopify.authenticate.admin(request)`.\n   *\n   * @default `\"/auth\"`\n   *\n   * @example\n   * <caption>Using the latest API Version (Recommended)</caption>\n   * ```ts\n   * // /app/shopify.server.ts\n   * import { LATEST_API_VERSION, shopifyApp } from \"@shopify/shopify-app-remix/server\";\n   *\n   * const shopify = shopifyApp({\n   *   // ...etc\n   *   apiVersion: LATEST_API_VERSION,\n   * });\n   * export default shopify;\n   * export const authenticate = shopify.authenticate;\n   *\n   * // /app/routes/auth/$.jsx\n   * import { LoaderFunctionArgs } from \"@remix-run/node\";\n   * import { authenticate } from \"../../shopify.server\";\n   *\n   * export async function loader({ request }: LoaderFunctionArgs) {\n   *   await authenticate.admin(request);\n   *\n   *   return null\n   * }\n   * ```\n   */\n  authPathPrefix?: string;\n\n  /**\n   * Features that will be introduced in future releases of this package.\n   *\n   * You can opt in to these features by setting the corresponding flags. By doing so, you can prepare for future\n   * releases in advance and provide feedback on the new features.\n   */\n  future?: Future;\n}"
           },
-          "ApiVersion": {
-            "filePath": "../shopify-api/dist/ts/lib/types.d.ts",
-            "syntaxKind": "EnumDeclaration",
-            "name": "ApiVersion",
-            "value": "export declare enum ApiVersion {\n    October22 = \"2022-10\",\n    January23 = \"2023-01\",\n    April23 = \"2023-04\",\n    July23 = \"2023-07\",\n    October23 = \"2023-10\",\n    January24 = \"2024-01\",\n    April24 = \"2024-04\",\n    July24 = \"2024-07\",\n    Unstable = \"unstable\"\n}",
-            "members": [
-              {
-                "filePath": "../shopify-api/dist/ts/lib/types.d.ts",
-                "name": "October22",
-                "value": "2022-10"
-              },
-              {
-                "filePath": "../shopify-api/dist/ts/lib/types.d.ts",
-                "name": "January23",
-                "value": "2023-01"
-              },
-              {
-                "filePath": "../shopify-api/dist/ts/lib/types.d.ts",
-                "name": "April23",
-                "value": "2023-04"
-              },
-              {
-                "filePath": "../shopify-api/dist/ts/lib/types.d.ts",
-                "name": "July23",
-                "value": "2023-07"
-              },
-              {
-                "filePath": "../shopify-api/dist/ts/lib/types.d.ts",
-                "name": "October23",
-                "value": "2023-10"
-              },
-              {
-                "filePath": "../shopify-api/dist/ts/lib/types.d.ts",
-                "name": "January24",
-                "value": "2024-01"
-              },
-              {
-                "filePath": "../shopify-api/dist/ts/lib/types.d.ts",
-                "name": "April24",
-                "value": "2024-04"
-              },
-              {
-                "filePath": "../shopify-api/dist/ts/lib/types.d.ts",
-                "name": "July24",
-                "value": "2024-07"
-              },
-              {
-                "filePath": "../shopify-api/dist/ts/lib/types.d.ts",
-                "name": "Unstable",
-                "value": "unstable"
-              }
-            ]
-          },
-          "BillingConfig": {
-            "filePath": "../shopify-api/dist/ts/lib/billing/types.d.ts",
-            "name": "BillingConfig",
-            "description": "Billing configuration options, indexed by an app-specific plan name.",
-            "members": [
-              {
-                "filePath": "../shopify-api/dist/ts/lib/billing/types.d.ts",
-                "name": "[plan: string]",
-                "value": "BillingConfigItem<Future & {\n        lineItemBilling: Future extends FutureFlags ? Future['lineItemBilling'] extends true ? true : Future['lineItemBilling'] extends false ? false : Future['v10_lineItemBilling'] extends true ? true : false : false;\n    }>"
-              }
-            ],
-            "value": "export interface BillingConfig<Future extends FutureFlagOptions = FutureFlagOptions> {\n    /**\n     * An individual billing plan.\n     */\n    [plan: string]: BillingConfigItem<Future & {\n        lineItemBilling: Future extends FutureFlags ? Future['lineItemBilling'] extends true ? true : Future['lineItemBilling'] extends false ? false : Future['v10_lineItemBilling'] extends true ? true : false : false;\n    }>;\n}"
-          },
-          "BillingConfigItem": {
-            "filePath": "../shopify-api/dist/ts/lib/billing/types.d.ts",
-            "syntaxKind": "TypeAliasDeclaration",
-            "name": "BillingConfigItem",
-            "value": "FeatureEnabled<Future, 'lineItemBilling'> extends true ? BillingConfigOneTimePlan | BillingConfigSubscriptionLineItemPlan : BillingConfigLegacyItem",
-            "description": ""
-          },
-          "BillingConfigOneTimePlan": {
-            "filePath": "../shopify-api/dist/ts/lib/billing/types.d.ts",
-            "name": "BillingConfigOneTimePlan",
-            "description": "",
-            "members": [
-              {
-                "filePath": "../shopify-api/dist/ts/lib/billing/types.d.ts",
-                "syntaxKind": "PropertySignature",
-                "name": "amount",
-                "value": "number",
-                "description": "Amount to charge for this plan."
-              },
-              {
-                "filePath": "../shopify-api/dist/ts/lib/billing/types.d.ts",
-                "syntaxKind": "PropertySignature",
-                "name": "currencyCode",
-                "value": "string",
-                "description": "Currency code for this plan."
-              },
-              {
-                "filePath": "../shopify-api/dist/ts/lib/billing/types.d.ts",
-                "syntaxKind": "PropertySignature",
-                "name": "interval",
-                "value": "BillingInterval.OneTime",
-                "description": "Interval for this plan.\n\nMust be set to `OneTime`."
-              }
-            ],
-            "value": "export interface BillingConfigOneTimePlan extends BillingConfigPlan {\n    /**\n     * Interval for this plan.\n     *\n     * Must be set to `OneTime`.\n     */\n    interval: BillingInterval.OneTime;\n}"
-          },
-          "BillingInterval": {
-            "filePath": "../shopify-api/dist/ts/lib/types.d.ts",
-            "syntaxKind": "EnumDeclaration",
-            "name": "BillingInterval",
-            "value": "export declare enum BillingInterval {\n    OneTime = \"ONE_TIME\",\n    Every30Days = \"EVERY_30_DAYS\",\n    Annual = \"ANNUAL\",\n    Usage = \"USAGE\"\n}",
-            "members": [
-              {
-                "filePath": "../shopify-api/dist/ts/lib/types.d.ts",
-                "name": "OneTime",
-                "value": "ONE_TIME"
-              },
-              {
-                "filePath": "../shopify-api/dist/ts/lib/types.d.ts",
-                "name": "Every30Days",
-                "value": "EVERY_30_DAYS"
-              },
-              {
-                "filePath": "../shopify-api/dist/ts/lib/types.d.ts",
-                "name": "Annual",
-                "value": "ANNUAL"
-              },
-              {
-                "filePath": "../shopify-api/dist/ts/lib/types.d.ts",
-                "name": "Usage",
-                "value": "USAGE"
-              }
-            ]
-          },
-          "BillingConfigSubscriptionLineItemPlan": {
-            "filePath": "../shopify-api/dist/ts/lib/billing/types.d.ts",
-            "name": "BillingConfigSubscriptionLineItemPlan",
-            "description": "",
-            "members": [
-              {
-                "filePath": "../shopify-api/dist/ts/lib/billing/types.d.ts",
-                "syntaxKind": "PropertySignature",
-                "name": "lineItems",
-                "value": "(BillingConfigRecurringLineItem | BillingConfigUsageLineItem)[]",
-                "description": "The line items for this plan."
-              },
-              {
-                "filePath": "../shopify-api/dist/ts/lib/billing/types.d.ts",
-                "syntaxKind": "PropertySignature",
-                "name": "replacementBehavior",
-                "value": "BillingReplacementBehavior",
-                "description": "The replacement behavior to use for this plan.",
-                "isOptional": true
-              },
-              {
-                "filePath": "../shopify-api/dist/ts/lib/billing/types.d.ts",
-                "syntaxKind": "PropertySignature",
-                "name": "trialDays",
-                "value": "number",
-                "description": "How many trial days to give before charging for this plan.",
-                "isOptional": true
-              }
-            ],
-            "value": "export interface BillingConfigSubscriptionLineItemPlan {\n    /**\n     * The replacement behavior to use for this plan.\n     */\n    replacementBehavior?: BillingReplacementBehavior;\n    /**\n     * How many trial days to give before charging for this plan.\n     */\n    trialDays?: number;\n    /**\n     * The line items for this plan.\n     */\n    lineItems: (BillingConfigRecurringLineItem | BillingConfigUsageLineItem)[];\n}"
-          },
-          "BillingConfigRecurringLineItem": {
-            "filePath": "../shopify-api/dist/ts/lib/billing/types.d.ts",
-            "name": "BillingConfigRecurringLineItem",
-            "description": "",
-            "members": [
-              {
-                "filePath": "../shopify-api/dist/ts/lib/billing/types.d.ts",
-                "syntaxKind": "PropertySignature",
-                "name": "amount",
-                "value": "number",
-                "description": "The amount to charge for this line item."
-              },
-              {
-                "filePath": "../shopify-api/dist/ts/lib/billing/types.d.ts",
-                "syntaxKind": "PropertySignature",
-                "name": "currencyCode",
-                "value": "string",
-                "description": "The currency code for this line item."
-              },
-              {
-                "filePath": "../shopify-api/dist/ts/lib/billing/types.d.ts",
-                "syntaxKind": "PropertySignature",
-                "name": "discount",
-                "value": "BillingConfigSubscriptionPlanDiscount",
-                "description": "An optional discount to apply for this line item.",
-                "isOptional": true
-              },
-              {
-                "filePath": "../shopify-api/dist/ts/lib/billing/types.d.ts",
-                "syntaxKind": "PropertySignature",
-                "name": "interval",
-                "value": "BillingInterval.Every30Days | BillingInterval.Annual",
-                "description": "The recurring interval for this line item.\n\nMust be either `Every30Days` or `Annual`."
-              }
-            ],
-            "value": "export interface BillingConfigRecurringLineItem extends BillingConfigLineItem {\n    /**\n     * The recurring interval for this line item.\n     *\n     * Must be either `Every30Days` or `Annual`.\n     */\n    interval: BillingInterval.Every30Days | BillingInterval.Annual;\n    /**\n     * An optional discount to apply for this line item.\n     */\n    discount?: BillingConfigSubscriptionPlanDiscount;\n}"
-          },
-          "BillingConfigSubscriptionPlanDiscount": {
-            "filePath": "../shopify-api/dist/ts/lib/billing/types.d.ts",
-            "name": "BillingConfigSubscriptionPlanDiscount",
-            "description": "",
-            "members": [
-              {
-                "filePath": "../shopify-api/dist/ts/lib/billing/types.d.ts",
-                "syntaxKind": "PropertySignature",
-                "name": "durationLimitInIntervals",
-                "value": "number",
-                "description": "The number of intervals to apply the discount for.",
-                "isOptional": true
-              },
-              {
-                "filePath": "../shopify-api/dist/ts/lib/billing/types.d.ts",
-                "syntaxKind": "PropertySignature",
-                "name": "value",
-                "value": "BillingConfigSubscriptionPlanDiscountAmount | BillingConfigSubscriptionPlanDiscountPercentage",
-                "description": "The discount to apply."
-              }
-            ],
-            "value": "export interface BillingConfigSubscriptionPlanDiscount {\n    /**\n     * The number of intervals to apply the discount for.\n     */\n    durationLimitInIntervals?: number;\n    /**\n     * The discount to apply.\n     */\n    value: BillingConfigSubscriptionPlanDiscountAmount | BillingConfigSubscriptionPlanDiscountPercentage;\n}"
-          },
-          "BillingConfigSubscriptionPlanDiscountAmount": {
-            "filePath": "../shopify-api/dist/ts/lib/billing/types.d.ts",
-            "name": "BillingConfigSubscriptionPlanDiscountAmount",
-            "description": "",
-            "members": [
-              {
-                "filePath": "../shopify-api/dist/ts/lib/billing/types.d.ts",
-                "syntaxKind": "PropertySignature",
-                "name": "amount",
-                "value": "number",
-                "description": "The amount to discount.\n\nCannot be set if `percentage` is set."
-              },
-              {
-                "filePath": "../shopify-api/dist/ts/lib/billing/types.d.ts",
-                "syntaxKind": "PropertySignature",
-                "name": "percentage",
-                "value": "never",
-                "description": "The percentage to discount.\n\nCannot be set if `amount` is set.",
-                "isOptional": true
-              }
-            ],
-            "value": "export interface BillingConfigSubscriptionPlanDiscountAmount {\n    /**\n     * The amount to discount.\n     *\n     * Cannot be set if `percentage` is set.\n     */\n    amount: number;\n    /**\n     * The percentage to discount.\n     *\n     * Cannot be set if `amount` is set.\n     */\n    percentage?: never;\n}"
-          },
-          "BillingConfigSubscriptionPlanDiscountPercentage": {
-            "filePath": "../shopify-api/dist/ts/lib/billing/types.d.ts",
-            "name": "BillingConfigSubscriptionPlanDiscountPercentage",
-            "description": "",
-            "members": [
-              {
-                "filePath": "../shopify-api/dist/ts/lib/billing/types.d.ts",
-                "syntaxKind": "PropertySignature",
-                "name": "amount",
-                "value": "never",
-                "description": "The amount to discount.\n\nCannot be set if `percentage` is set.",
-                "isOptional": true
-              },
-              {
-                "filePath": "../shopify-api/dist/ts/lib/billing/types.d.ts",
-                "syntaxKind": "PropertySignature",
-                "name": "percentage",
-                "value": "number",
-                "description": "The percentage to discount.\n\nCannot be set if `amount` is set."
-              }
-            ],
-            "value": "export interface BillingConfigSubscriptionPlanDiscountPercentage {\n    /**\n     * The amount to discount.\n     *\n     * Cannot be set if `percentage` is set.\n     */\n    amount?: never;\n    /**\n     * The percentage to discount.\n     *\n     * Cannot be set if `amount` is set.\n     */\n    percentage: number;\n}"
-          },
-          "BillingConfigUsageLineItem": {
-            "filePath": "../shopify-api/dist/ts/lib/billing/types.d.ts",
-            "name": "BillingConfigUsageLineItem",
-            "description": "",
-            "members": [
-              {
-                "filePath": "../shopify-api/dist/ts/lib/billing/types.d.ts",
-                "syntaxKind": "PropertySignature",
-                "name": "amount",
-                "value": "number",
-                "description": "The capped amount or the maximum amount to be charged in the interval."
-              },
-              {
-                "filePath": "../shopify-api/dist/ts/lib/billing/types.d.ts",
-                "syntaxKind": "PropertySignature",
-                "name": "currencyCode",
-                "value": "string",
-                "description": "The currency code for this line item."
-              },
-              {
-                "filePath": "../shopify-api/dist/ts/lib/billing/types.d.ts",
-                "syntaxKind": "PropertySignature",
-                "name": "interval",
-                "value": "BillingInterval.Usage",
-                "description": "The usage interval for this line item.\n\nMust be set to `Usage`."
-              },
-              {
-                "filePath": "../shopify-api/dist/ts/lib/billing/types.d.ts",
-                "syntaxKind": "PropertySignature",
-                "name": "terms",
-                "value": "string",
-                "description": "Usage terms for this line item."
-              }
-            ],
-            "value": "export interface BillingConfigUsageLineItem extends BillingConfigLineItem {\n    /**\n     * The usage interval for this line item.\n     *\n     * Must be set to `Usage`.\n     */\n    interval: BillingInterval.Usage;\n    /**\n     * The capped amount or the maximum amount to be charged in the interval.\n     */\n    amount: number;\n    /**\n     * Usage terms for this line item.\n     */\n    terms: string;\n}"
-          },
-          "BillingReplacementBehavior": {
-            "filePath": "../shopify-api/dist/ts/lib/types.d.ts",
-            "syntaxKind": "EnumDeclaration",
-            "name": "BillingReplacementBehavior",
-            "value": "export declare enum BillingReplacementBehavior {\n    ApplyImmediately = \"APPLY_IMMEDIATELY\",\n    ApplyOnNextBillingCycle = \"APPLY_ON_NEXT_BILLING_CYCLE\",\n    Standard = \"STANDARD\"\n}",
-            "members": [
-              {
-                "filePath": "../shopify-api/dist/ts/lib/types.d.ts",
-                "name": "ApplyImmediately",
-                "value": "APPLY_IMMEDIATELY"
-              },
-              {
-                "filePath": "../shopify-api/dist/ts/lib/types.d.ts",
-                "name": "ApplyOnNextBillingCycle",
-                "value": "APPLY_ON_NEXT_BILLING_CYCLE"
-              },
-              {
-                "filePath": "../shopify-api/dist/ts/lib/types.d.ts",
-                "name": "Standard",
-                "value": "STANDARD"
-              }
-            ]
-          },
-          "BillingConfigLegacyItem": {
-            "filePath": "../shopify-api/dist/ts/lib/billing/types.d.ts",
-            "syntaxKind": "TypeAliasDeclaration",
-            "name": "BillingConfigLegacyItem",
-            "value": "BillingConfigOneTimePlan | BillingConfigSubscriptionPlan | BillingConfigUsagePlan",
-            "description": ""
-          },
-          "BillingConfigSubscriptionPlan": {
-            "filePath": "../shopify-api/dist/ts/lib/billing/types.d.ts",
-            "name": "BillingConfigSubscriptionPlan",
-            "description": "",
-            "members": [
-              {
-                "filePath": "../shopify-api/dist/ts/lib/billing/types.d.ts",
-                "syntaxKind": "PropertySignature",
-                "name": "amount",
-                "value": "number",
-                "description": "Amount to charge for this plan."
-              },
-              {
-                "filePath": "../shopify-api/dist/ts/lib/billing/types.d.ts",
-                "syntaxKind": "PropertySignature",
-                "name": "currencyCode",
-                "value": "string",
-                "description": "Currency code for this plan."
-              },
-              {
-                "filePath": "../shopify-api/dist/ts/lib/billing/types.d.ts",
-                "syntaxKind": "PropertySignature",
-                "name": "discount",
-                "value": "BillingConfigSubscriptionPlanDiscount",
-                "description": "The discount to apply to this plan.",
-                "isOptional": true
-              },
-              {
-                "filePath": "../shopify-api/dist/ts/lib/billing/types.d.ts",
-                "syntaxKind": "PropertySignature",
-                "name": "interval",
-                "value": "Exclude<RecurringBillingIntervals, BillingInterval.Usage>",
-                "description": "Recurring interval for this plan.\n\nMust be either `Every30Days` or `Annual`."
-              },
-              {
-                "filePath": "../shopify-api/dist/ts/lib/billing/types.d.ts",
-                "syntaxKind": "PropertySignature",
-                "name": "replacementBehavior",
-                "value": "BillingReplacementBehavior",
-                "description": "The behavior to use when replacing an existing subscription with a new one.",
-                "isOptional": true
-              },
-              {
-                "filePath": "../shopify-api/dist/ts/lib/billing/types.d.ts",
-                "syntaxKind": "PropertySignature",
-                "name": "trialDays",
-                "value": "number",
-                "description": "How many trial days to give before charging for this plan.",
-                "isOptional": true
-              }
-            ],
-            "value": "export interface BillingConfigSubscriptionPlan extends BillingConfigPlan {\n    /**\n     * Recurring interval for this plan.\n     *\n     * Must be either `Every30Days` or `Annual`.\n     */\n    interval: Exclude<RecurringBillingIntervals, BillingInterval.Usage>;\n    /**\n     * How many trial days to give before charging for this plan.\n     */\n    trialDays?: number;\n    /**\n     * The behavior to use when replacing an existing subscription with a new one.\n     */\n    replacementBehavior?: BillingReplacementBehavior;\n    /**\n     * The discount to apply to this plan.\n     */\n    discount?: BillingConfigSubscriptionPlanDiscount;\n}"
-          },
-          "RecurringBillingIntervals": {
-            "filePath": "../shopify-api/dist/ts/lib/types.d.ts",
-            "syntaxKind": "TypeAliasDeclaration",
-            "name": "RecurringBillingIntervals",
-            "value": "Exclude<BillingInterval, BillingInterval.OneTime>",
-            "description": ""
-          },
-          "BillingConfigUsagePlan": {
-            "filePath": "../shopify-api/dist/ts/lib/billing/types.d.ts",
-            "name": "BillingConfigUsagePlan",
-            "description": "",
-            "members": [
-              {
-                "filePath": "../shopify-api/dist/ts/lib/billing/types.d.ts",
-                "syntaxKind": "PropertySignature",
-                "name": "amount",
-                "value": "number",
-                "description": "Amount to charge for this plan."
-              },
-              {
-                "filePath": "../shopify-api/dist/ts/lib/billing/types.d.ts",
-                "syntaxKind": "PropertySignature",
-                "name": "currencyCode",
-                "value": "string",
-                "description": "Currency code for this plan."
-              },
-              {
-                "filePath": "../shopify-api/dist/ts/lib/billing/types.d.ts",
-                "syntaxKind": "PropertySignature",
-                "name": "interval",
-                "value": "BillingInterval.Usage",
-                "description": "Interval for this plan.\n\nMust be set to `Usage`."
-              },
-              {
-                "filePath": "../shopify-api/dist/ts/lib/billing/types.d.ts",
-                "syntaxKind": "PropertySignature",
-                "name": "replacementBehavior",
-                "value": "BillingReplacementBehavior",
-                "description": "The behavior to use when replacing an existing subscription with a new one.",
-                "isOptional": true
-              },
-              {
-                "filePath": "../shopify-api/dist/ts/lib/billing/types.d.ts",
-                "syntaxKind": "PropertySignature",
-                "name": "trialDays",
-                "value": "number",
-                "description": "How many trial days to give before charging for this plan.",
-                "isOptional": true
-              },
-              {
-                "filePath": "../shopify-api/dist/ts/lib/billing/types.d.ts",
-                "syntaxKind": "PropertySignature",
-                "name": "usageTerms",
-                "value": "string",
-                "description": "Usage terms for this plan."
-              }
-            ],
-            "value": "export interface BillingConfigUsagePlan extends BillingConfigPlan {\n    /**\n     * Interval for this plan.\n     *\n     * Must be set to `Usage`.\n     */\n    interval: BillingInterval.Usage;\n    /**\n     * Usage terms for this plan.\n     */\n    usageTerms: string;\n    /**\n     * How many trial days to give before charging for this plan.\n     */\n    trialDays?: number;\n    /**\n     * The behavior to use when replacing an existing subscription with a new one.\n     */\n    replacementBehavior?: BillingReplacementBehavior;\n}"
-          },
           "HooksConfig": {
             "filePath": "src/server/config-types.ts",
             "name": "HooksConfig",
@@ -8262,34 +7397,6 @@
               }
             ],
             "value": "export interface AfterAuthOptions<\n  R extends ShopifyRestResources = ShopifyRestResources,\n> {\n  session: Session;\n  admin: AdminApiContext<R>;\n}"
-          },
-          "LogSeverity": {
-            "filePath": "../shopify-api/dist/ts/lib/types.d.ts",
-            "syntaxKind": "EnumDeclaration",
-            "name": "LogSeverity",
-            "value": "export declare enum LogSeverity {\n    Error = 0,\n    Warning = 1,\n    Info = 2,\n    Debug = 3\n}",
-            "members": [
-              {
-                "filePath": "../shopify-api/dist/ts/lib/types.d.ts",
-                "name": "Error",
-                "value": 0
-              },
-              {
-                "filePath": "../shopify-api/dist/ts/lib/types.d.ts",
-                "name": "Warning",
-                "value": 1
-              },
-              {
-                "filePath": "../shopify-api/dist/ts/lib/types.d.ts",
-                "name": "Info",
-                "value": 2
-              },
-              {
-                "filePath": "../shopify-api/dist/ts/lib/types.d.ts",
-                "name": "Debug",
-                "value": 3
-              }
-            ]
           },
           "WebhookConfig": {
             "filePath": "src/server/config-types.ts",
