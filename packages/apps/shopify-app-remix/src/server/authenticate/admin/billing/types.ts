@@ -572,7 +572,7 @@ export interface BillingContext<Config extends AppConfigArg> {
    *   const { billing } = await authenticate.admin(request);
    *
    *   await billing.updateUsageCappedAmount({
-   *     subscriptionLineItemId: "SUBSCRIPTION_LINE_ITEM_ID",
+   *     subscriptionLineItemId: "gid://shopify/AppSubscriptionLineItem/12345?v=1&index=1",
    *     cappedAmount: {
    *       amount: 10,
    *       currencyCode: "USD"

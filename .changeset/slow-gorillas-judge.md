@@ -8,7 +8,7 @@ A new billing helper function has been added to update the capped amount for a u
 
 ```ts
 await billing.updateUsageCappedAmount({
-  subscriptionLineItemId: "SUBSCRIPTION_LINE_ITEM_ID",
+  subscriptionLineItemId: "gid://shopify/AppSubscriptionLineItem/12345?v=1&index=1",
   cappedAmount: {
     amount: 10,
     currencyCode: "USD"
