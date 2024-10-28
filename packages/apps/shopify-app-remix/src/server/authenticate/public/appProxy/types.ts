@@ -157,7 +157,7 @@ export interface AppProxyContextWithSession<
    *
    * @example
    * <caption>Interacting with the Admin API.</caption>
-   * <description>Use the `admin` object to interact with the REST or GraphQL APIs.</description>
+   * <description>Use the `admin` object to interact with the admin GraphQL API.</description>
    * ```ts
    * // app/routes/**\/.ts
    * import { json } from "@remix-run/node";

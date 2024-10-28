@@ -14,7 +14,7 @@ export interface FlowContext<
    *
    * @example
    * <caption>Shopify session for the Flow request.</caption>
-   * <description>Use the session associated with this request to use REST resources.</description>
+   * <description>Use the session associated with this request.</description>
    * ```ts
    * // /app/routes/flow.tsx
    * import { ActionFunctionArgs } from "@remix-run/node";
@@ -23,8 +23,7 @@ export interface FlowContext<
    * export const action = async ({ request }: ActionFunctionArgs) => {
    *   const { session, admin } = await authenticate.flow(request);
    *
-   *   const products = await admin?.rest.resources.Product.all({ session });
-   *   // Use products
+   *   console.log(session.id)
    *
    *   return new Response();
    * };

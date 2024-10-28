@@ -17,17 +17,16 @@ export interface FulfillmentServiceContext<
    * Returned only if there is a session for the shop.
    * @example
    * <caption>Shopify session for the fulfillment service notification request.</caption>
-   * <description>Use the session associated with this request to use REST resources.</description>
+   * <description>Use the session associated with this request.</description>
    * ```ts
    * // /app/routes/fulfillment_service_notification.tsx
    * import { ActionFunctionArgs } from "@remix-run/node";
    * import { authenticate } from "../shopify.server";
    *
-   *   export const action = async ({ request }: ActionFunctionArgs) => {
+   * export const action = async ({ request }: ActionFunctionArgs) => {
    *   const { session, admin } = await authenticate.fulfillmentService(request);
    *
-   *   const products = await admin?.rest.resources.Product.all({ session });
-   *   // Use products
+   *   console.log(session.id)
    *
    *   return new Response();
    * };
@@ -48,44 +47,11 @@ export interface FulfillmentServiceContext<
    * import { authenticate } from "../shopify.server";
    *
    * export async function action({ request }: ActionFunctionArgs) {
-   *   const { admin } = await authenticate.fulfillmentService(request);
-   *   const response = await admin?.graphql(
-   *  `#graphql
-   *    query {
-   *      shop {
-   *        assignedFulfillmentOrders(first: 10, assignmentStatus: FULFILLMENT_REQUESTED) {
-   *          edges {
-   *            node {
-   *              id
-   *              destination {
-   *              firstName
-   *              lastName
-   *            }
-   *            lineItems(first: 10) {
-   *              edges {
-   *                node {
-   *                id
-   *                productTitle
-   *                sku
-   *                remainingQuantity
-   *              }
-   *            }
-   *          }
-   *          merchantRequests(first: 10, kind: FULFILLMENT_REQUEST) {
-   *            edges {
-   *              node {
-   *                message
-   *              }
-   *            }
-   *          }
-   *        }
-   *      }
-   *    }
-   *  }
-   * }`);
+   *   const { admin, session } = await authenticate.fulfillmentService(request);
    *
-   *   const fulfillments = await response.json();
-   *   return json({ data: fulfillments.data });
+   *   console.log(session.id)
+   *
+   *   return new Response();
    * }
    * ```
    */

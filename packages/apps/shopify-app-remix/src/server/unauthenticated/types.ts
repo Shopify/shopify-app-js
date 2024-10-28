@@ -21,10 +21,8 @@ export interface Unauthenticated<
    * ```ts
    * // /app/shopify.server.ts
    * import { LATEST_API_VERSION, shopifyApp } from "@shopify/shopify-app-remix/server";
-   * import { restResources } from "@shopify/shopify-api/rest/admin/2023-04";
    *
    * const shopify = shopifyApp({
-   *   restResources,
    *   // ...etc
    * });
    * export default shopify;
@@ -38,8 +36,9 @@ export interface Unauthenticated<
    * export async function loader({ request }: LoaderFunctionArgs) {
    *   const shop = await authenticateExternal(request)
    *   const {admin} = await shopify.unauthenticated.admin(shop);
+   *   const response = await admin.graphql("{ shop { name} }")
    *
-   *   return json(await admin.rest.resources.Product.count({ session }));
+   *   return json(await response.json());
    * }
    * ```
    */
