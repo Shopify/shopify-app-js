@@ -19,7 +19,7 @@ export function expectAdminApiClient(
     actualSession: Session;
   }>,
 ) {
-  describe('when future.removeRest is falsey there is a REST client', () => {
+  describe('when future.v4_removeRest is falsey there is a REST client', () => {
     it('can perform GET requests', async () => {
       // GIVEN
       const {admin} = await factory();
@@ -91,7 +91,7 @@ export function expectAdminApiClient(
     });
   });
 
-  describe('when future.removeRest is truthy', () => {
+  describe('when future.v4_removeRest is truthy', () => {
     it('does not include a rest property on the admin object', async () => {
       // GIVEN
       const {adminWithoutRest} = await factory();

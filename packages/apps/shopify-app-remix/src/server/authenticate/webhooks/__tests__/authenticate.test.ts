@@ -62,7 +62,7 @@ describe('Webhook validation', () => {
       const sessionStorage = new MemorySessionStorage();
       const shopify = shopifyApp({
         ...testConfig({sessionStorage, restResources}),
-        future: {removeRest: false},
+        future: {v4_removeRest: false},
       });
       const body = {some: 'data'};
 
@@ -108,7 +108,7 @@ describe('Webhook validation', () => {
 
       const shopifyWithoutRest = shopifyApp({
         ...testConfig({sessionStorage, restResources}),
-        future: {removeRest: true},
+        future: {v4_removeRest: true},
       });
 
       const {admin: adminWithoutRest} =

@@ -308,7 +308,7 @@ describe('authenticating app proxy requests', () => {
     expectAdminApiClient(async () => {
       const shopify = shopifyApp({
         ...testConfig(),
-        future: {removeRest: false},
+        future: {v4_removeRest: false},
       });
       const expectedSession = await setUpValidSession(shopify.sessionStorage, {
         isOnline: false,
@@ -323,7 +323,7 @@ describe('authenticating app proxy requests', () => {
 
       const shopifyWithoutRest = shopifyApp({
         ...testConfig(),
-        future: {removeRest: true},
+        future: {v4_removeRest: true},
       });
 
       const {admin: adminWithoutRest} =

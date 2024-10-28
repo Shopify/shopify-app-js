@@ -131,7 +131,7 @@ async function setUpDocumentFlow() {
     future: {
       ...config.future,
       unstable_newEmbeddedAuthStrategy: true,
-      removeRest: false,
+      v4_removeRest: false,
     },
   });
   const expectedSession = await setUpValidSession(shopify.sessionStorage);
@@ -158,7 +158,7 @@ async function setUpDocumentFlowWithRemoveRestFlag() {
     future: {
       ...config.future,
       unstable_newEmbeddedAuthStrategy: true,
-      removeRest: true,
+      v4_removeRest: true,
     },
   });
 

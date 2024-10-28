@@ -38,7 +38,7 @@ describe('authorize.session token header path', () => {
         // GIVEN
         const shopify = shopifyApp({
           ...testConfig({useOnlineTokens: isOnline}),
-          future: {removeRest: false},
+          future: {v4_removeRest: false},
         });
 
         const testSession = await setUpValidSession(shopify.sessionStorage, {
@@ -63,7 +63,7 @@ describe('authorize.session token header path', () => {
         // GIVEN
         const shopify = shopifyApp({
           ...testConfig({isEmbeddedApp: false, useOnlineTokens: isOnline}),
-          future: {removeRest: false},
+          future: {v4_removeRest: false},
         });
 
         let testSession: Session;

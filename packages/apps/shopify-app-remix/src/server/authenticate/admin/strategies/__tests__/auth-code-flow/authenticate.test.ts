@@ -10,8 +10,8 @@ import {
   getJwt,
   getThrownResponse,
   setUpValidSession,
-  testConfig,
   signRequestCookie,
+  testConfig,
 } from '../../../../../__test-helpers';
 
 describe('authenticate', () => {
@@ -103,7 +103,7 @@ describe('authenticate', () => {
             future: {unstable_newEmbeddedAuthStrategy: false},
             isEmbeddedApp: true,
           }),
-          future: {removeRest: false},
+          future: {v4_removeRest: false},
         });
 
         let testSession: Session;
@@ -133,7 +133,7 @@ describe('authenticate', () => {
           ...testConfig({
             isEmbeddedApp: false,
           }),
-          future: {removeRest: false},
+          future: {v4_removeRest: false},
         });
 
         let testSession: Session;

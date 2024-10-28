@@ -1,5 +1,5 @@
-import {Session, ShopifyRestResources} from '@shopify/shopify-api';
 import {AdminOperations} from '@shopify/admin-api-client';
+import {Session, ShopifyRestResources} from '@shopify/shopify-api';
 import type {AppConfigArg} from 'src/server/config-types';
 import type {FeatureEnabled} from 'src/server/future/flags';
 
@@ -24,7 +24,7 @@ export type AdminApiContext<
   ConfigArg extends AppConfigArg,
   Resources extends ShopifyRestResources = ShopifyRestResources,
 > =
-  FeatureEnabled<ConfigArg['future'], 'removeRest'> extends true
+  FeatureEnabled<ConfigArg['future'], 'v4_removeRest'> extends true
     ? AdminApiContextWithoutRest
     : AdminApiContextWithRest<Resources>;
 
