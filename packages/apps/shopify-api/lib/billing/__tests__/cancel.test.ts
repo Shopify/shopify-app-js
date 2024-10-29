@@ -1,24 +1,19 @@
 import {queueMockResponses} from '../../__tests__/test-helper';
 import {testConfig} from '../../__tests__/test-config';
 import {Session} from '../../session/session';
-import {LATEST_API_VERSION} from '../../types';
 import {
   shopifyApi,
   BillingError,
   BillingInterval,
   BillingConfigOneTimePlan,
 } from '../..';
+import {
+  DOMAIN,
+  ACCESS_TOKEN,
+  GRAPHQL_BASE_REQUEST,
+} from '../../__test-helpers__';
 
 import * as Responses from './responses';
-
-const DOMAIN = 'test-shop.myshopify.io';
-const ACCESS_TOKEN = 'access-token';
-const GRAPHQL_BASE_REQUEST = {
-  method: 'POST',
-  domain: DOMAIN,
-  path: `/admin/api/${LATEST_API_VERSION}/graphql.json`,
-  headers: {'X-Shopify-Access-Token': ACCESS_TOKEN},
-};
 
 describe('shopify.billing.cancel', () => {
   const session = new Session({

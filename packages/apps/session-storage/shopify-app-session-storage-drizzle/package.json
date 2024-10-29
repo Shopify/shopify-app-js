@@ -43,7 +43,7 @@
     "Drizzle"
   ],
   "dependencies": {
-    "tslib": "^2.6.3"
+    "tslib": "^2.8.0"
   },
   "peerDependencies": {
     "@shopify/shopify-api": "^11.0.0",
@@ -55,9 +55,9 @@
     "@shopify/shopify-app-session-storage-test-utils": "^3.0.7",
     "@types/better-sqlite3": "^7.6.11",
     "@types/pg": "^8.11.6",
-    "better-sqlite3": "^11.4.0",
+    "better-sqlite3": "^11.5.0",
     "drizzle-kit": "^0.26.2",
-    "drizzle-orm": "^0.35.2",
+    "drizzle-orm": "^0.35.3",
     "mysql2": "^3.11.3",
     "pg": "^8.12.0"
   },

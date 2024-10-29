@@ -17,6 +17,7 @@ import {
   requireBillingFactory,
   checkBillingFactory,
   createUsageRecordFactory,
+  updateUsageCappedAmountFactory,
 } from './billing';
 import type {
   AdminContext,
@@ -97,6 +98,11 @@ export function authStrategyFactory<
         request: requestBillingFactory(params, request, session),
         cancel: cancelBillingFactory(params, request, session),
         createUsageRecord: createUsageRecordFactory(params, request, session),
+        updateUsageCappedAmount: updateUsageCappedAmountFactory(
+          params,
+          request,
+          session,
+        ),
       },
 
       session,

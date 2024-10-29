@@ -4,7 +4,6 @@
     "baseUrl": ".",
     "outDir": "./dist/ts",
     "rootDir": "src",
-    "resolveJsonModule": true
   },
   "include": ["src/**/*.ts", "src/**/*.tsx"],
   "exclude": [

@@ -1,46 +1,37 @@
 import {
-  BillingRequestResponseObject,
   HttpResponseError,
   Session,
+  UpdateCappedAmountConfirmation,
 } from '@shopify/shopify-api';
 
-import {AppConfigArg} from '../../../config-types';
-import {BasicParams} from '../../../types';
+import type {BasicParams} from '../../../types';
 import {redirectToAuthPage} from '../helpers';
 import {invalidateAccessToken} from '../../helpers';
 
+import {UpdateUsageCappedAmountOptions} from './types';
 import {redirectOutOfApp} from './helpers';
-import type {RequestBillingOptions} from './types';
 
-export function requestBillingFactory<Config extends AppConfigArg>(
+export function updateUsageCappedAmountFactory(
   params: BasicParams,
   request: Request,
   session: Session,
 ) {
-  return async function requestBilling({
-    plan,
-    isTest,
-    returnUrl,
-    ...overrides
-  }: RequestBillingOptions<Config>): Promise<never> {
+  return async function updateUsageCappedAmount(
+    options: UpdateUsageCappedAmountOptions,
+  ): Promise<never> {
     const {api, logger} = params;
 
-    logger.info('Requesting billing', {
+    logger.debug('Updating usage subscription capped amount', {
       shop: session.shop,
-      plan,
-      isTest,
-      returnUrl,
+      ...options,
     });
 
-    let result: BillingRequestResponseObject;
+    let result: UpdateCappedAmountConfirmation;
     try {
-      result = await api.billing.request({
-        plan: plan as string,
+      result = await api.billing.updateUsageCappedAmount({
         session,
-        isTest,
-        returnUrl,
-        returnObject: true,
-        ...overrides,
+        subscriptionLineItemId: options.subscriptionLineItemId,
+        cappedAmount: options.cappedAmount,
       });
     } catch (error) {
       if (error instanceof HttpResponseError && error.response.code === 401) {
