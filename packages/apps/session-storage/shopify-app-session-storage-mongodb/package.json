@@ -43,7 +43,7 @@
     "session storage"
   ],
   "dependencies": {
-    "mongodb": "^6.9.0"
+    "mongodb": "^6.10.0"
   },
   "peerDependencies": {
     "@shopify/shopify-api": "^11.0.0",
