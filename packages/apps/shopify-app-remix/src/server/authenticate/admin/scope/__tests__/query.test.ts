@@ -22,12 +22,21 @@ it('returns scopes information', async () => {
 
   // WHEN
   const result = await scopes.query();
-
   // THEN
   expect(result).not.toBeUndefined();
-  expect(result.granted).toEqual(['read_orders', 'write_customers']);
-  expect(result.required).toEqual(['read_orders', 'read_reports']);
-  expect(result.optional).toEqual(['write_customers']);
+  expect(result.granted).toEqual([
+    'read_orders',
+    'read_reports',
+    'read_products',
+    'read_customers',
+    'write_customers',
+  ]);
+  expect(result.required).toEqual([
+    'read_orders',
+    'read_reports',
+    'read_products',
+  ]);
+  expect(result.optional).toEqual(['write_customers', 'write_products']);
 });
 
 it('redirects to exit-iframe with authentication using app bridge when embedded and Shopify invalidated the session', async () => {
