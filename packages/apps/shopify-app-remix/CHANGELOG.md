@@ -1,5 +1,49 @@
 # @shopify/shopify-app-remix
 
+## 3.4.0
+
+### Minor Changes
+
+- 9b217e5: Adds API to update the capped amount for a usage billing plan.
+
+  A new billing helper function has been added to update the capped amount for a usage billing plan. This function redirects to a confirmation page where the merchant can confirm the update.
+
+  ```ts
+  await billing.updateUsageCappedAmount({
+    subscriptionLineItemId:
+      'gid://shopify/AppSubscriptionLineItem/12345?v=1&index=1',
+    cappedAmount: {
+      amount: 10,
+      currencyCode: 'USD',
+    },
+  });
+  ```
+
+  Learn more about [App Billing](https://shopify.dev/docs/apps/launch/billing/subscription-billing).
+
+### Patch Changes
+
+- 59896e3: Updated `isbot` dependencies
+- 5c01460: Adding toggle parameter flag to return implied scopes from Remix API Query by returning original scopes from AuthScopes instantiation
+
+  Example:
+  const scopes = new AuthScopes(['read_customers', 'write_customers', 'read_products', 'write_channels']);
+  scopes.toArray() returns ['write_customers', 'read_products', 'write_channels']
+  scopes.toArray(true) returns ['read_customers', 'write_customers', 'read_products', 'write_channels']
+
+- Updated dependencies [50634c0]
+- Updated dependencies [59896e3]
+- Updated dependencies [2e396f3]
+- Updated dependencies [5efb3a2]
+- Updated dependencies [cd0b3e1]
+- Updated dependencies [bad62cc]
+- Updated dependencies [10f4fd0]
+- Updated dependencies [5c01460]
+  - @shopify/shopify-api@11.6.0
+  - @shopify/shopify-app-session-storage@3.0.8
+  - @shopify/admin-api-client@1.0.4
+  - @shopify/storefront-api-client@1.0.3
+
 ## 3.3.2
 
 ### Patch Changes
