@@ -17,13 +17,13 @@ import * as redirect from '../../helpers/redirect-to-install-page';
 
 import * as responses from './mock-responses';
 
-it('when the future flag is disabled the scopes api is not available', async () => {
+it('scopes api is available without any future flags', async () => {
   // GIVEN
   const shopify = shopifyApp(
     testConfig({
       isEmbeddedApp: false,
       scopes: undefined,
-      future: {wip_optionalScopesApi: false},
+      future: {},
     }),
   );
   const session = await setUpValidSession(shopify.sessionStorage);
@@ -39,7 +39,7 @@ it('when the future flag is disabled the scopes api is not available', async () 
   const adminApi = await shopify.authenticate.admin(request);
 
   // THEN
-  expect(adminApi).not.toHaveProperty('scopes');
+  expect(adminApi).toHaveProperty('scopes');
 });
 
 it('when scopes are empty the request is not redirected', async () => {

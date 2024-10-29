@@ -9,13 +9,12 @@ import {testConfig} from './test-config';
 
 export async function setUpFetchFlow(flags?: {
   unstable_newEmbeddedAuthStrategy?: boolean;
-  wip_optionalScopesApi?: boolean;
 }) {
   const shopify = shopifyApp({
     ...testConfig({
       restResources,
     }),
-    future: {...flags, removeRest: false, wip_optionalScopesApi: true},
+    future: {...flags, removeRest: false},
   });
 
   await setUpValidSession(shopify.sessionStorage);

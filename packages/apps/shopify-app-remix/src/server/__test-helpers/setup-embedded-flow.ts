@@ -15,7 +15,6 @@ export async function setUpEmbeddedFlow() {
     future: {
       removeRest: false,
       unstable_newEmbeddedAuthStrategy: false,
-      wip_optionalScopesApi: true,
     },
   });
   const expectedSession = await setUpValidSession(shopify.sessionStorage);
@@ -43,7 +42,6 @@ export async function setUpEmbeddedFlowWithRemoveRestFlag() {
     future: {
       removeRest: true,
       unstable_newEmbeddedAuthStrategy: false,
-      wip_optionalScopesApi: true,
     },
   });
 
