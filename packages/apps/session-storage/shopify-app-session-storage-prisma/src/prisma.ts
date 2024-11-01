@@ -10,6 +10,8 @@ interface PrismaSessionStorageOptions {
 }
 
 const UNIQUE_KEY_CONSTRAINT_ERROR_CODE = 'P2002';
+const PRISMA_CLIENT_IS_NOT_READY_MESSAGE =
+  'Prisma session storage is not ready. Use the `isReady` method to poll for the table.';
 
 export interface PrismaSessionStorageInterface extends SessionStorage {
   isReady(): Promise<boolean>;
@@ -18,7 +20,7 @@ export interface PrismaSessionStorageInterface extends SessionStorage {
 export class PrismaSessionStorage<T extends PrismaClient>
   implements PrismaSessionStorageInterface
 {
-  private ready: Promise<any>;
+  private ready: Promise<boolean>;
   private readonly tableName: string = 'session';
   private connectionRetries = 2;
   private connectionRetryIntervalMs = 5000;
@@ -47,16 +49,19 @@ export class PrismaSessionStorage<T extends PrismaClient>
       throw new Error(`PrismaClient does not have a ${this.tableName} table`);
     }
 
-    this.ready = this.pollForTable().catch((cause) => {
-      throw new MissingSessionTableError(
-        `Prisma ${this.tableName} table does not exist. This could happen for a few reasons, see https://github.com/Shopify/shopify-app-js/tree/main/packages/apps/session-storage/shopify-app-session-storage-prisma#troubleshooting for more information`,
-        cause,
-      );
-    });
+    this.ready = this.pollForTable()
+      .then(() => true)
+      .catch((cause) => {
+        throw new MissingSessionTableError(
+          `Prisma ${this.tableName} table does not exist. This could happen for a few reasons, see https://github.com/Shopify/shopify-app-js/tree/main/packages/apps/session-storage/shopify-app-session-storage-prisma#troubleshooting for more information`,
+          cause,
+        );
+      });
   }
 
   public async storeSession(session: Session): Promise<boolean> {
-    await this.ready;
+    const isReady = await this.ready;
+    if (!isReady) throw new Error(PRISMA_CLIENT_IS_NOT_READY_MESSAGE);
 
     const data = this.sessionToRow(session);
 
@@ -88,7 +93,8 @@ export class PrismaSessionStorage<T extends PrismaClient>
   }
 
   public async loadSession(id: string): Promise<Session | undefined> {
-    await this.ready;
+    const isReady = await this.ready;
+    if (!isReady) throw new Error(PRISMA_CLIENT_IS_NOT_READY_MESSAGE);
 
     const row = await this.getSessionTable().findUnique({
       where: {id},
@@ -102,7 +108,8 @@ export class PrismaSessionStorage<T extends PrismaClient>
   }
 
   public async deleteSession(id: string): Promise<boolean> {
-    await this.ready;
+    const isReady = await this.ready;
+    if (!isReady) throw new Error(PRISMA_CLIENT_IS_NOT_READY_MESSAGE);
 
     try {
       await this.getSessionTable().delete({where: {id}});
@@ -114,7 +121,8 @@ export class PrismaSessionStorage<T extends PrismaClient>
   }
 
   public async deleteSessions(ids: string[]): Promise<boolean> {
-    await this.ready;
+    const isReady = await this.ready;
+    if (!isReady) throw new Error(PRISMA_CLIENT_IS_NOT_READY_MESSAGE);
 
     await this.getSessionTable().deleteMany({where: {id: {in: ids}}});
 
@@ -122,8 +130,8 @@ export class PrismaSessionStorage<T extends PrismaClient>
   }
 
   public async findSessionsByShop(shop: string): Promise<Session[]> {
-    await this.ready;
-
+    const isReady = await this.ready;
+    if (!isReady) throw new Error(PRISMA_CLIENT_IS_NOT_READY_MESSAGE);
     const sessions = await this.getSessionTable().findMany({
       where: {shop},
       take: 25,
@@ -139,8 +147,8 @@ export class PrismaSessionStorage<T extends PrismaClient>
         this.ready = Promise.resolve(true);
         return true;
       })
-      .catch((cause) => {
-        this.ready = Promise.reject(cause);
+      .catch(() => {
+        this.ready = Promise.resolve(false);
         return false;
       });
   }
