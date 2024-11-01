@@ -11,12 +11,12 @@ interface PrismaSessionStorageOptions {
 
 const UNIQUE_KEY_CONSTRAINT_ERROR_CODE = 'P2002';
 
-export interface PrismaSessionStorageType extends SessionStorage {
+export interface PrismaSessionStorageInterface extends SessionStorage {
   isReady(): Promise<boolean>;
 }
 
 export class PrismaSessionStorage<T extends PrismaClient>
-  implements PrismaSessionStorageType
+  implements PrismaSessionStorageInterface
 {
   private ready: Promise<any>;
   private readonly tableName: string = 'session';
@@ -121,18 +121,6 @@ export class PrismaSessionStorage<T extends PrismaClient>
     return true;
   }
 
-  public async isReady(): Promise<boolean> {
-    return this.pollForTable()
-      .then(() => {
-        this.ready = Promise.resolve(true);
-        return true;
-      })
-      .catch((cause) => {
-        this.ready = Promise.reject(cause);
-        return false;
-      });
-  }
-
   public async findSessionsByShop(shop: string): Promise<Session[]> {
     await this.ready;
 
@@ -143,6 +131,18 @@ export class PrismaSessionStorage<T extends PrismaClient>
     });
 
     return sessions.map((session) => this.rowToSession(session));
+  }
+
+  public async isReady(): Promise<boolean> {
+    return this.pollForTable()
+      .then(() => {
+        this.ready = Promise.resolve(true);
+        return true;
+      })
+      .catch((cause) => {
+        this.ready = Promise.reject(cause);
+        return false;
+      });
   }
 
   private async pollForTable(): Promise<void> {
