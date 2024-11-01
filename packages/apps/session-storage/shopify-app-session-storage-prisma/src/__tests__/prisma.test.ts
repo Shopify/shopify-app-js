@@ -36,6 +36,11 @@ describe('PrismaSessionStorage', () => {
       new PrismaSessionStorage<PrismaClient>(prisma, {tableName: 'mySession'}),
     true,
   );
+
+  it('properly handles the database being ready', async () => {
+    const storage = new PrismaSessionStorage<PrismaClient>(prisma);
+    await expect(storage.isReady()).resolves.toBe(true);
+  });
 });
 
 describe('PrismaSessionStorage when with no database set up', () => {
