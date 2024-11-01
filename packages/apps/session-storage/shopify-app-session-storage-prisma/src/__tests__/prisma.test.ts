@@ -37,6 +37,8 @@ describe('PrismaSessionStorage', () => {
     true,
   );
 
+  // eslint-disable-next-line no-warning-comments
+  // TODO: Move this test into the battery of tests when all session storages have implemented the isReady method
   it('properly handles the database being ready', async () => {
     const storage = new PrismaSessionStorage<PrismaClient>(prisma);
     await expect(storage.isReady()).resolves.toBe(true);
