@@ -43,7 +43,7 @@
     "Drizzle"
   ],
   "dependencies": {
-    "tslib": "^2.8.0"
+    "tslib": "^2.8.1"
   },
   "peerDependencies": {
     "@shopify/shopify-api": "^11.0.0",
