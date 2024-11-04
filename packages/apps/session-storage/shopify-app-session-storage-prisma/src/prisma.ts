@@ -13,6 +13,8 @@ const UNIQUE_KEY_CONSTRAINT_ERROR_CODE = 'P2002';
 const PRISMA_CLIENT_IS_NOT_READY_MESSAGE =
   'Prisma session storage is not ready. Use the `isReady` method to poll for the table.';
 
+// eslint-disable-next-line no-warning-comments
+// TODO: Remove this when all session storages have implemented the isReady method
 export interface PrismaSessionStorageInterface extends SessionStorage {
   isReady(): Promise<boolean>;
 }
