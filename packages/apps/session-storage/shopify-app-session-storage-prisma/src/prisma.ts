@@ -142,15 +142,11 @@ export class PrismaSessionStorage<T extends PrismaClient>
   }
 
   public async isReady(): Promise<boolean> {
-    return this.pollForTable()
-      .then(() => {
-        this.ready = Promise.resolve(true);
-        return true;
-      })
-      .catch(() => {
-        this.ready = Promise.resolve(false);
-        return false;
-      });
+    const isReady = await this.pollForTable()
+      .then(() => true)
+      .catch(() => false);
+    this.ready = Promise.resolve(isReady);
+    return isReady;
   }
 
   private async pollForTable(): Promise<void> {
