@@ -62,9 +62,7 @@ export class PrismaSessionStorage<T extends PrismaClient>
   }
 
   public async storeSession(session: Session): Promise<boolean> {
-    const isReady = await this.ready;
-    if (!isReady) throw new Error(PRISMA_CLIENT_IS_NOT_READY_MESSAGE);
-
+    await this.ensureReady();
     const data = this.sessionToRow(session);
 
     try {
@@ -95,9 +93,7 @@ export class PrismaSessionStorage<T extends PrismaClient>
   }
 
   public async loadSession(id: string): Promise<Session | undefined> {
-    const isReady = await this.ready;
-    if (!isReady) throw new Error(PRISMA_CLIENT_IS_NOT_READY_MESSAGE);
-
+    await this.ensureReady();
     const row = await this.getSessionTable().findUnique({
       where: {id},
     });
@@ -110,9 +106,7 @@ export class PrismaSessionStorage<T extends PrismaClient>
   }
 
   public async deleteSession(id: string): Promise<boolean> {
-    const isReady = await this.ready;
-    if (!isReady) throw new Error(PRISMA_CLIENT_IS_NOT_READY_MESSAGE);
-
+    await this.ensureReady();
     try {
       await this.getSessionTable().delete({where: {id}});
     } catch {
@@ -123,17 +117,14 @@ export class PrismaSessionStorage<T extends PrismaClient>
   }
 
   public async deleteSessions(ids: string[]): Promise<boolean> {
-    const isReady = await this.ready;
-    if (!isReady) throw new Error(PRISMA_CLIENT_IS_NOT_READY_MESSAGE);
-
+    await this.ensureReady();
     await this.getSessionTable().deleteMany({where: {id: {in: ids}}});
 
     return true;
   }
 
   public async findSessionsByShop(shop: string): Promise<Session[]> {
-    const isReady = await this.ready;
-    if (!isReady) throw new Error(PRISMA_CLIENT_IS_NOT_READY_MESSAGE);
+    await this.ensureReady();
     const sessions = await this.getSessionTable().findMany({
       where: {shop},
       take: 25,
@@ -154,6 +145,11 @@ export class PrismaSessionStorage<T extends PrismaClient>
       this.ready = Promise.resolve(false);
       return false;
     }
+  }
+
+  private async ensureReady(): Promise<void> {
+    if (!(await this.ready))
+      throw new Error(PRISMA_CLIENT_IS_NOT_READY_MESSAGE);
   }
 
   private async pollForTable(): Promise<void> {

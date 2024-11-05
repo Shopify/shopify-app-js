@@ -37,11 +37,24 @@ describe('PrismaSessionStorage', () => {
     true,
   );
 
-  // eslint-disable-next-line no-warning-comments
-  // TODO: Move this test into the battery of tests when all session storages have implemented the isReady method
   it('properly handles the database being ready', async () => {
     const storage = new PrismaSessionStorage<PrismaClient>(prisma);
     await expect(storage.isReady()).resolves.toBe(true);
+  });
+
+  it('properly handles the database not being ready', async () => {
+    const storage = new PrismaSessionStorage<PrismaClient>(prisma);
+
+    jest
+      .spyOn(PrismaSessionStorage.prototype as any, 'pollForTable')
+      .mockImplementationOnce(() => {
+        throw new Error('Database not ready');
+      });
+
+    expect(await storage.isReady()).toBe(false);
+    await expect(() =>
+      storage.findSessionsByShop('shop.myshopify.com'),
+    ).rejects.toThrow(Error);
   });
 });
 
@@ -113,20 +126,6 @@ describe('PrismaSessionStorage when with no database set up', () => {
     expect(spy).toHaveBeenNthCalledWith(3, expect.any(Function), 1000);
     expect(spy).toHaveBeenNthCalledWith(4, expect.any(Function), 1000);
     expect(spy).toHaveBeenNthCalledWith(5, expect.any(Function), 1000);
-  });
-
-  it('isReady returns false when the database is not ready', async () => {
-    execSync('npx prisma migrate dev --name init --preview-feature');
-    const prisma = new PrismaClient();
-    const storage = new PrismaSessionStorage<PrismaClient>(prisma);
-
-    jest
-      .spyOn(PrismaSessionStorage.prototype as any, 'pollForTable')
-      .mockImplementationOnce(() => {
-        throw new Error('Database not ready');
-      });
-
-    expect(await storage.isReady()).toBe(false);
   });
 });
 
