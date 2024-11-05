@@ -10,8 +10,6 @@ interface PrismaSessionStorageOptions {
 }
 
 const UNIQUE_KEY_CONSTRAINT_ERROR_CODE = 'P2002';
-const PRISMA_CLIENT_IS_NOT_READY_MESSAGE =
-  'Prisma session storage is not ready. Use the `isReady` method to poll for the table.';
 
 // eslint-disable-next-line no-warning-comments
 // TODO: Remove this when all session storages have implemented the isReady method
@@ -149,7 +147,9 @@ export class PrismaSessionStorage<T extends PrismaClient>
 
   private async ensureReady(): Promise<void> {
     if (!(await this.ready))
-      throw new Error(PRISMA_CLIENT_IS_NOT_READY_MESSAGE);
+      throw new Error(
+        'Prisma session storage is not ready. Use the `isReady` method to poll for the table.',
+      );
   }
 
   private async pollForTable(): Promise<void> {
