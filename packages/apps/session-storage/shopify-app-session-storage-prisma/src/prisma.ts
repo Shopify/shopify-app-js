@@ -155,7 +155,7 @@ export class PrismaSessionStorage<T extends PrismaClient>
         await this.getSessionTable().count();
         return;
       } catch (error) {
-        console.log(`Error obtaing session table: ${error}`);
+        console.log(`Error obtaining session table: ${error}`);
       }
       await sleep(this.connectionRetryIntervalMs);
     }
