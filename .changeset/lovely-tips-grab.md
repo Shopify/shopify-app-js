@@ -2,7 +2,7 @@
 '@shopify/shopify-app-session-storage-prisma': minor
 ---
 
-Adds `isReady` method to `PrismaSessionStorage`. `isReady` will poll until the session table is found to exist and return `true`. If the table is not found within the timeout, it will return `false`.
+Adds `isReady` method to `PrismaSessionStorage`. `isReady` will poll based on the configuration or until the table is found to exist. If the table is not found within the timeout, it will return `false`.
 
 `isReady` will update the internal state of the `PrismaSessionStorage` instance to reflect whether the session table exists and can be used. In case of an unexpected disconnect, use `isReady` to check if the table has recovered. 
 
