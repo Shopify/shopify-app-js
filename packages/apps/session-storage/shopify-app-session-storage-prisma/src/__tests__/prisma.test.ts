@@ -37,7 +37,7 @@ describe('PrismaSessionStorage', () => {
     true,
   );
 
-  it('properly handles the database being ready', async () => {
+  it('isReady is true when no errors are thrown', async () => {
     const storage = new PrismaSessionStorage<PrismaClient>(prisma);
     await expect(storage.isReady()).resolves.toBe(true);
   });
