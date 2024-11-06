@@ -5,7 +5,11 @@ import {Session} from '@shopify/shopify-api';
 import {batteryOfTests} from '@shopify/shopify-app-session-storage-test-utils';
 import {Prisma, PrismaClient} from '@prisma/client';
 
-import {MissingSessionTableError, PrismaSessionStorage} from '../prisma';
+import {
+  MissingSessionStorageError,
+  MissingSessionTableError,
+  PrismaSessionStorage,
+} from '../prisma';
 
 describe('PrismaSessionStorage', () => {
   let prisma: PrismaClient;
@@ -54,7 +58,7 @@ describe('PrismaSessionStorage', () => {
     expect(await storage.isReady()).toBe(false);
     await expect(() =>
       storage.findSessionsByShop('shop.myshopify.com'),
-    ).rejects.toThrow(Error);
+    ).rejects.toThrow(MissingSessionStorageError);
   });
 });
 

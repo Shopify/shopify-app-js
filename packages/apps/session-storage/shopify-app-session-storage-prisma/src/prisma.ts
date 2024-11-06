@@ -144,7 +144,7 @@ export class PrismaSessionStorage<T extends PrismaClient>
 
   private async ensureReady(): Promise<void> {
     if (!(await this.ready))
-      throw new Error(
+      throw new MissingSessionStorageError(
         'Prisma session storage is not ready. Use the `isReady` method to poll for the table.',
       );
   }
@@ -243,6 +243,12 @@ export class MissingSessionTableError extends Error {
     message: string,
     public readonly cause: Error,
   ) {
+    super(message);
+  }
+}
+
+export class MissingSessionStorageError extends Error {
+  constructor(message: string) {
     super(message);
   }
 }
