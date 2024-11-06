@@ -13,7 +13,7 @@ export async function setUpEmbeddedFlow() {
       restResources,
     }),
     future: {
-      v4_removeRest: false,
+      removeRest: false,
       unstable_newEmbeddedAuthStrategy: false,
       wip_optionalScopesApi: true,
     },
@@ -41,7 +41,7 @@ export async function setUpEmbeddedFlowWithRemoveRestFlag() {
       restResources,
     }),
     future: {
-      v4_removeRest: true,
+      removeRest: true,
       unstable_newEmbeddedAuthStrategy: false,
       wip_optionalScopesApi: true,
     },

@@ -27,7 +27,7 @@ For more details on how this works, please see the [new embedded authorization s
 ## Removing the REST API
 
 > [!NOTE]
-> The `v4_removeRest` future flag removed the REST API.
+> The `removeRest` future flag removed the REST API.
 > If you've already enabled the flag, you don't need to follow these instructions.
 
-In the next major release, the REST API will be removed from the `@shopify/shopify-app-remix` package. Please use the GraphQL API instead. See [Shopify is all-in on graphql](https://www.shopify.com/ca/partners/blog/all-in-on-graphql) for more information.
+The REST API will be removed from this package. Please use the GraphQL API instead. See [Shopify is all-in on graphql](https://www.shopify.com/ca/partners/blog/all-in-on-graphql) for more information.

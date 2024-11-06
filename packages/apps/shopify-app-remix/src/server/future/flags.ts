@@ -44,7 +44,7 @@ export interface FutureFlags {
    *
    * @default false
    */
-  v4_removeRest?: boolean;
+  removeRest?: boolean;
 }
 
 // When adding new flags, use this format:

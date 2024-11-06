@@ -29,7 +29,7 @@ describe('shopifyApp', () => {
     // GIVEN
     const shopify = shopifyApp({
       ...testConfig(),
-      future: {v4_removeRest: false},
+      future: {removeRest: false},
     });
 
     // THEN

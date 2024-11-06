@@ -24,7 +24,7 @@ export type AdminApiContext<
   ConfigArg extends AppConfigArg,
   Resources extends ShopifyRestResources = ShopifyRestResources,
 > =
-  FeatureEnabled<ConfigArg['future'], 'v4_removeRest'> extends true
+  FeatureEnabled<ConfigArg['future'], 'removeRest'> extends true
     ? AdminApiContextWithoutRest
     : AdminApiContextWithRest<Resources>;
 

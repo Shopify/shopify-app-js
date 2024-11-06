@@ -15,7 +15,7 @@ export async function setUpFetchFlow(flags?: {
     ...testConfig({
       restResources,
     }),
-    future: {...flags, v4_removeRest: false, wip_optionalScopesApi: true},
+    future: {...flags, removeRest: false, wip_optionalScopesApi: true},
   });
 
   await setUpValidSession(shopify.sessionStorage);

@@ -103,7 +103,7 @@ describe('authenticate', () => {
             future: {unstable_newEmbeddedAuthStrategy: false},
             isEmbeddedApp: true,
           }),
-          future: {v4_removeRest: false},
+          future: {removeRest: false},
         });
 
         let testSession: Session;
@@ -133,7 +133,7 @@ describe('authenticate', () => {
           ...testConfig({
             isEmbeddedApp: false,
           }),
-          future: {v4_removeRest: false},
+          future: {removeRest: false},
         });
 
         let testSession: Session;

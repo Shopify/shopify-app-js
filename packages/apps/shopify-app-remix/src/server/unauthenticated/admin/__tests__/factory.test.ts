@@ -16,7 +16,7 @@ describe('unauthenticated admin context', () => {
     // GIVEN
     const shopify = shopifyApp({
       ...testConfig(),
-      future: {v4_removeRest: false},
+      future: {removeRest: false},
     });
 
     // EXPECT
@@ -28,7 +28,7 @@ describe('unauthenticated admin context', () => {
   expectAdminApiClient(async () => {
     const shopify = shopifyApp({
       ...testConfig(),
-      future: {v4_removeRest: false},
+      future: {removeRest: false},
     });
     const expectedSession = await setUpValidSession(shopify.sessionStorage, {
       isOnline: false,
@@ -38,7 +38,7 @@ describe('unauthenticated admin context', () => {
 
     const shopifyWithoutRest = shopifyApp({
       ...testConfig(),
-      future: {v4_removeRest: true},
+      future: {removeRest: true},
     });
 
     const {admin: adminWithoutRest} =
@@ -58,7 +58,7 @@ describe('unauthenticated admin context for merchant custom apps', () => {
 
     const shopify = shopifyApp({
       ...config,
-      future: {v4_removeRest: false},
+      future: {removeRest: false},
     });
     const expectedSession = setupValidCustomAppSession(TEST_SHOP);
     const {admin, session: actualSession} =
@@ -66,7 +66,7 @@ describe('unauthenticated admin context for merchant custom apps', () => {
 
     const shopifyWithoutRest = shopifyApp({
       ...config,
-      future: {v4_removeRest: true},
+      future: {removeRest: true},
     });
     const {admin: adminWithoutRest} =
       await shopifyWithoutRest.unauthenticated.admin(TEST_SHOP);

@@ -95,7 +95,7 @@ const data: LandingTemplateSchema = {
       title: 'Using the REST API (Deprecated)',
       sectionContent:
         '**Shopify is [all-in on graphql](https://www.shopify.com/ca/partners/blog/all-in-on-graphql). In the next major release, the REST API will be removed from the `@shopify/shopify-app-remix` package.' +
-        'If the `v4_removeRest` [future flag](/docs/api/shopify-app-remix/v3/guide-future-flags) is true, then the REST API will not be available.**' +
+        'If the `removeRest` [future flag](/docs/api/shopify-app-remix/v3/guide-future-flags) is true, then the REST API will not be available.**' +
         '\n\nOnce a request is authenticated, `authenticate.admin` will return an `admin` object that contains a REST client that can interact with the [REST Admin API](/docs/api/admin-rest).' +
         '\n\nYou can also import a set of resource classes from the `@shopify/shopify-api` package, which is included in `@shopify/shopify-app-remix`.' +
         '\n\nThese classes map to the individual REST endpoints, and will be returned under `admin.rest.resources`.',

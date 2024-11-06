@@ -130,7 +130,7 @@ describe('authenticate', () => {
         // GIVEN
         const shopify = shopifyApp({
           ...testConfig({useOnlineTokens: isOnline}),
-          future: {v4_removeRest: false},
+          future: {removeRest: false},
         });
 
         let testSession: Session;

@@ -109,7 +109,7 @@ describe('authenticating flow requests', () => {
       const sessionStorage = new MemorySessionStorage();
       const shopify = shopifyApp({
         ...testConfig({sessionStorage}),
-        future: {v4_removeRest: false},
+        future: {removeRest: false},
       });
 
       const {request, session: expectedSession} =
@@ -120,7 +120,7 @@ describe('authenticating flow requests', () => {
 
       const shopifyWithoutRest = shopifyApp({
         ...testConfig({sessionStorage}),
-        future: {v4_removeRest: true},
+        future: {removeRest: true},
       });
 
       const {request: requestForWithoutRest} =

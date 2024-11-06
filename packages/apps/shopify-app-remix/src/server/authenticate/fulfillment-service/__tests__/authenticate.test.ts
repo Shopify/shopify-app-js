@@ -122,7 +122,7 @@ const MERCHANT_CUSTOM_APP_CONFIG = {
         const sessionStorage = new MemorySessionStorage();
         const shopify = shopifyApp({
           ...testConfig({sessionStorage}),
-          future: {v4_removeRest: false},
+          future: {removeRest: false},
         });
 
         const {request, session: expectedSession} =
@@ -133,7 +133,7 @@ const MERCHANT_CUSTOM_APP_CONFIG = {
 
         const shopifyWithoutRest = shopifyApp({
           ...testConfig({sessionStorage}),
-          future: {v4_removeRest: true},
+          future: {removeRest: true},
         });
 
         const {request: requestForWithoutRest} =

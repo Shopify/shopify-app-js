@@ -95,7 +95,7 @@ async function setUpMerchantCustomFlow() {
       distribution: AppDistribution.ShopifyAdmin,
       adminApiAccessToken: 'test-token',
     }),
-    future: {v4_removeRest: false},
+    future: {removeRest: false},
   });
 
   const expectedSession = setupValidCustomAppSession(TEST_SHOP);
@@ -117,7 +117,7 @@ async function setUpMerchantCustomFlowWithRemoveRestFlag() {
       distribution: AppDistribution.ShopifyAdmin,
       adminApiAccessToken: 'test-token',
     }),
-    future: {v4_removeRest: true},
+    future: {removeRest: true},
   });
 
   const request = new Request(`${APP_URL}?shop=${TEST_SHOP}`);

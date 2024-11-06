@@ -21,7 +21,7 @@ export function adminClientFactory<
   handleClientError,
   session,
 }: RestClientOptions): AdminApiContext<ConfigArg, Resources> {
-  if (params.config.future.v4_removeRest) {
+  if (params.config.future.removeRest) {
     return {
       graphql: graphqlClientFactory({params, session, handleClientError}),
     } as AdminApiContext<ConfigArg, Resources>;

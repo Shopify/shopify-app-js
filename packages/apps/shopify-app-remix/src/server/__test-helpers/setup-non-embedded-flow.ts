@@ -11,7 +11,7 @@ import {testConfig} from './test-config';
 export async function setUpNonEmbeddedFlow() {
   const shopify = shopifyApp({
     ...testConfig({restResources, isEmbeddedApp: false}),
-    future: {v4_removeRest: false, wip_optionalScopesApi: true},
+    future: {removeRest: false, wip_optionalScopesApi: true},
   });
   const session = await setUpValidSession(shopify.sessionStorage);
 

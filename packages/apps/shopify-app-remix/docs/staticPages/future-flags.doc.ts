@@ -51,7 +51,7 @@ const data: LandingTemplateSchema = {
       anchorLink: 'breaking-changes',
       title: 'Breaking changes',
       sectionContent:
-        'Similarly to unstable APIs, breaking changes will be introduced behind a future flag, but the prefix will be the next major version (e.g. `v4_`).' +
+        'Similarly to unstable APIs, breaking changes will be introduced behind a future flag, but the prefix will be the next major version (e.g. ``).' +
         '\n\nThis allows apps to prepare for the next major version ahead of time, and to gradually adopt the new APIs.' +
         '\n\nWhen the next major version is released, the future flag will be removed, and the old code it changes will be removed. Apps that adopted the flag before then will continue to work the same way with no new changes.',
     },
@@ -71,7 +71,7 @@ const data: LandingTemplateSchema = {
           isOptional: true,
         },
         {
-          name: 'v4_removeRest',
+          name: 'removeRest',
           value: '',
           description:
             'Methods for interacting with the admin REST API will not be returned\n\n' +
