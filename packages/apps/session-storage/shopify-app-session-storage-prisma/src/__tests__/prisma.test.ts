@@ -1,11 +1,15 @@
-import fs from 'fs';
+import * as fs from 'fs';
 import {execSync} from 'child_process';
 
 import {Session} from '@shopify/shopify-api';
 import {batteryOfTests} from '@shopify/shopify-app-session-storage-test-utils';
 import {Prisma, PrismaClient} from '@prisma/client';
 
-import {MissingSessionTableError, PrismaSessionStorage} from '../prisma';
+import {
+  MissingSessionStorageError,
+  MissingSessionTableError,
+  PrismaSessionStorage,
+} from '../prisma';
 
 describe('PrismaSessionStorage', () => {
   let prisma: PrismaClient;
@@ -36,6 +40,26 @@ describe('PrismaSessionStorage', () => {
       new PrismaSessionStorage<PrismaClient>(prisma, {tableName: 'mySession'}),
     true,
   );
+
+  it('isReady is true when no errors are thrown', async () => {
+    const storage = new PrismaSessionStorage<PrismaClient>(prisma);
+    await expect(storage.isReady()).resolves.toBe(true);
+  });
+
+  it('isReady is false when pollForTable throw an error', async () => {
+    const storage = new PrismaSessionStorage<PrismaClient>(prisma);
+
+    jest
+      .spyOn(PrismaSessionStorage.prototype as any, 'pollForTable')
+      .mockImplementationOnce(() => {
+        throw new Error('Database not ready');
+      });
+
+    expect(await storage.isReady()).toBe(false);
+    await expect(() =>
+      storage.findSessionsByShop('shop.myshopify.com'),
+    ).rejects.toThrow(MissingSessionStorageError);
+  });
 });
 
 describe('PrismaSessionStorage when with no database set up', () => {
