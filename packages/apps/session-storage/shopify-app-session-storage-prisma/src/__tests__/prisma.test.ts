@@ -42,7 +42,7 @@ describe('PrismaSessionStorage', () => {
     await expect(storage.isReady()).resolves.toBe(true);
   });
 
-  it('properly handles the database not being ready', async () => {
+  it('isReady is false when pollForTable throw an error', async () => {
     const storage = new PrismaSessionStorage<PrismaClient>(prisma);
 
     jest
