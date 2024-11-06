@@ -12,9 +12,9 @@ interface PrismaSessionStorageOptions {
 const UNIQUE_KEY_CONSTRAINT_ERROR_CODE = 'P2002';
 
 // eslint-disable-next-line no-warning-comments
-// TODO: Remove this when all session storages have implemented the isConnected method
+// TODO: Remove this when all session storages have implemented the isReady method
 export interface PrismaSessionStorageInterface extends SessionStorage {
-  isConnected(): Promise<boolean>;
+  isReady(): Promise<boolean>;
 }
 
 export class PrismaSessionStorage<T extends PrismaClient>
@@ -132,7 +132,7 @@ export class PrismaSessionStorage<T extends PrismaClient>
     return sessions.map((session) => this.rowToSession(session));
   }
 
-  public async isConnected(): Promise<boolean> {
+  public async isReady(): Promise<boolean> {
     try {
       await this.pollForTable();
       this.ready = Promise.resolve(true);
@@ -145,7 +145,7 @@ export class PrismaSessionStorage<T extends PrismaClient>
   private async ensureReady(): Promise<void> {
     if (!(await this.ready))
       throw new MissingSessionStorageError(
-        'Prisma session storage is not ready. Use the `isConnected` method to poll for the table.',
+        'Prisma session storage is not ready. Use the `isReady` method to poll for the table.',
       );
   }
 

@@ -41,12 +41,12 @@ describe('PrismaSessionStorage', () => {
     true,
   );
 
-  it('isConnected is true when no errors are thrown', async () => {
+  it('isReady is true when no errors are thrown', async () => {
     const storage = new PrismaSessionStorage<PrismaClient>(prisma);
-    await expect(storage.isConnected()).resolves.toBe(true);
+    await expect(storage.isReady()).resolves.toBe(true);
   });
 
-  it('isConnected is false when pollForTable throw an error', async () => {
+  it('isReady is false when pollForTable throw an error', async () => {
     const storage = new PrismaSessionStorage<PrismaClient>(prisma);
 
     jest
@@ -55,7 +55,7 @@ describe('PrismaSessionStorage', () => {
         throw new Error('Database not ready');
       });
 
-    expect(await storage.isConnected()).toBe(false);
+    expect(await storage.isReady()).toBe(false);
     await expect(() =>
       storage.findSessionsByShop('shop.myshopify.com'),
     ).rejects.toThrow(MissingSessionStorageError);
