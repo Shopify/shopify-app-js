@@ -14,7 +14,6 @@ import type {FutureFlags, FutureFlagOptions} from '../future/flags';
  */
 const TEST_FUTURE_FLAGS: Required<{[key in keyof FutureFlags]: true}> = {
   unstable_newEmbeddedAuthStrategy: true,
-  wip_optionalScopesApi: true,
 } as const;
 
 // Override the helper's future flags and logger settings for our purposes
