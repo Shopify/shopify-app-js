@@ -132,10 +132,13 @@ export function authStrategyFactory<
   }
 
   function addScopesFeatures(context: AdminContextBase) {
-    return {
-      ...context,
-      scopes: scopesApiFactory(params, context.session, context.admin),
-    };
+    if (config.future.wip_optionalScopesApi) {
+      return {
+        ...context,
+        scopes: scopesApiFactory(params, context.session, context.admin),
+      };
+    }
+    return context;
   }
 
   return async function authenticateAdmin(request: Request) {
