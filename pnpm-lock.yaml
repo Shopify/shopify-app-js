@@ -233,7 +233,7 @@ importers:
         version: 0.28.0
       drizzle-orm:
         specifier: ^0.35.3
-        version: 0.35.3(@cloudflare/workers-types@4.20241022.0)(@libsql/client-wasm@0.14.0)(@libsql/client@0.14.0(encoding@0.1.13))(@prisma/client@5.21.1(prisma@5.21.1))(@types/better-sqlite3@7.6.11)(@types/pg@8.11.6)(@types/react@18.3.12)(better-sqlite3@11.5.0)(mysql2@3.11.3)(pg@8.12.0)(prisma@5.21.1)(react@18.3.1)(sqlite3@5.1.7)
+        version: 0.35.3(@cloudflare/workers-types@4.20241022.0)(@libsql/client-wasm@0.14.0)(@libsql/client@0.14.0(encoding@0.1.13))(@prisma/client@5.22.0(prisma@5.21.1))(@types/better-sqlite3@7.6.11)(@types/pg@8.11.6)(@types/react@18.3.12)(better-sqlite3@11.5.0)(mysql2@3.11.3)(pg@8.12.0)(prisma@5.21.1)(react@18.3.1)(sqlite3@5.1.7)
       mysql2:
         specifier: ^3.11.3
         version: 3.11.3
@@ -359,8 +359,8 @@ importers:
         version: link:../shopify-app-session-storage
     devDependencies:
       '@prisma/client':
-        specifier: ^5.21.1
-        version: 5.21.1(prisma@5.21.1)
+        specifier: ^5.22.0
+        version: 5.22.0(prisma@5.21.1)
       '@shopify/shopify-app-session-storage-test-utils':
         specifier: ^3.0.8
         version: link:../shopify-app-session-storage-test-utils
@@ -2833,8 +2833,8 @@ packages:
     resolution: {integrity: sha512-cq8o4cWH0ibXh9VGi5P20Tu9XF/0fFXl9EUinr9QfTM7a7p0oTA4iJRCQWppXR1Pg8dSM0UCItCkPwsk9qWWYA==}
     engines: {node: ^12.20.0 || ^14.18.0 || >=16.0.0}
 
-  '@prisma/client@5.21.1':
-    resolution: {integrity: sha512-3n+GgbAZYjaS/k0M03yQsQfR1APbr411r74foknnsGpmhNKBG49VuUkxIU6jORgvJPChoD4WC4PqoHImN1FP0w==}
+  '@prisma/client@5.22.0':
+    resolution: {integrity: sha512-M0SVXfyHnQREBKxCgyo7sffrKttwE6R8PMq330MIUF0pTwjUhLbW84pFDlf06B27XyCR++VtjugEnIHdr07SVA==}
     engines: {node: '>=16.13'}
     peerDependencies:
       prisma: '*'
@@ -10941,7 +10941,7 @@ snapshots:
 
   '@pkgr/core@0.1.1': {}
 
-  '@prisma/client@5.21.1(prisma@5.21.1)':
+  '@prisma/client@5.22.0(prisma@5.21.1)':
     optionalDependencies:
       prisma: 5.21.1
 
@@ -12946,13 +12946,13 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  drizzle-orm@0.35.3(@cloudflare/workers-types@4.20241022.0)(@libsql/client-wasm@0.14.0)(@libsql/client@0.14.0(encoding@0.1.13))(@prisma/client@5.21.1(prisma@5.21.1))(@types/better-sqlite3@7.6.11)(@types/pg@8.11.6)(@types/react@18.3.12)(better-sqlite3@11.5.0)(mysql2@3.11.3)(pg@8.12.0)(prisma@5.21.1)(react@18.3.1)(sqlite3@5.1.7):
+  drizzle-orm@0.35.3(@cloudflare/workers-types@4.20241022.0)(@libsql/client-wasm@0.14.0)(@libsql/client@0.14.0(encoding@0.1.13))(@prisma/client@5.22.0(prisma@5.21.1))(@types/better-sqlite3@7.6.11)(@types/pg@8.11.6)(@types/react@18.3.12)(better-sqlite3@11.5.0)(mysql2@3.11.3)(pg@8.12.0)(prisma@5.21.1)(react@18.3.1)(sqlite3@5.1.7):
     dependencies:
       '@libsql/client-wasm': 0.14.0
     optionalDependencies:
       '@cloudflare/workers-types': 4.20241022.0
       '@libsql/client': 0.14.0(encoding@0.1.13)
-      '@prisma/client': 5.21.1(prisma@5.21.1)
+      '@prisma/client': 5.22.0(prisma@5.21.1)
       '@types/better-sqlite3': 7.6.11
       '@types/pg': 8.11.6
       '@types/react': 18.3.12
