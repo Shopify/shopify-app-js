@@ -16,7 +16,7 @@ const config = [
   {
     input: clientSrcInput,
     plugins: getPlugins({
-      outDir: './dist/ts',
+      outDir: './dist/umd',
       minify: true,
       tsconfig: './tsconfig.umd.json',
       replacements: {ROLLUP_REPLACE_CLIENT_VERSION: pkg.version},
@@ -35,7 +35,7 @@ const config = [
   {
     input: clientSrcInput,
     plugins: getPlugins({
-      outDir: './dist/ts',
+      outDir: './dist/umd',
       tsconfig: './tsconfig.umd.json',
       replacements: {ROLLUP_REPLACE_CLIENT_VERSION: pkg.version},
       bundleDependencies: true,
