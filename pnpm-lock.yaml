@@ -531,8 +531,8 @@ importers:
   packages/apps/shopify-app-remix:
     dependencies:
       '@remix-run/server-runtime':
-        specifier: ^2.12.1
-        version: 2.12.1(typescript@5.6.3)
+        specifier: ^2.14.0
+        version: 2.14.0(typescript@5.6.3)
       '@shopify/admin-api-client':
         specifier: ^1.0.4
         version: link:../../api-clients/admin-api-client
@@ -2889,12 +2889,12 @@ packages:
     resolution: {integrity: sha512-S45oynt/WH19bHbIXjtli6QmwNYvaz+vtnubvNpNDvUOoA/OWh6j1OikIP3G+v5GHdxyC6EXoChG3HgYGEUfcg==}
     engines: {node: '>=14.0.0'}
 
-  '@remix-run/router@1.19.2':
-    resolution: {integrity: sha512-baiMx18+IMuD1yyvOGaHM9QrVUPGGG0jC+z+IPHnRJWUAUvaKuWKyE8gjDj2rzv3sz9zOGoRSPgeBVHRhZnBlA==}
-    engines: {node: '>=14.0.0'}
-
   '@remix-run/router@1.20.0':
     resolution: {integrity: sha512-mUnk8rPJBI9loFDZ+YzPGdeniYK+FTmRD1TMCz7ev2SNIozyKKpnGgsxO34u6Z4z/t0ITuu7voi/AshfsGsgFg==}
+    engines: {node: '>=14.0.0'}
+
+  '@remix-run/router@1.21.0':
+    resolution: {integrity: sha512-xfSkCAchbdG5PnbrKqFWwia4Bi61nH+wm8wLEqfHDyp7Y3dZzgqS2itV8i4gAq9pC2HsTpwyBC6Ds8VHZ96JlA==}
     engines: {node: '>=14.0.0'}
 
   '@remix-run/server-runtime@2.11.2':
@@ -2906,8 +2906,8 @@ packages:
       typescript:
         optional: true
 
-  '@remix-run/server-runtime@2.12.1':
-    resolution: {integrity: sha512-iuj9ju34f0LztPpd5dVuTXgt4x/MJeRsBiLuEx02nDSMGoNCAIx2LdeNYvE+XXdsf1Ht2NMlpRU+HBPCz3QLZg==}
+  '@remix-run/server-runtime@2.13.1':
+    resolution: {integrity: sha512-2DfBPRcHKVzE4bCNsNkKB50BhCCKF73x+jiS836OyxSIAL+x0tguV2AEjmGXefEXc5AGGzoxkus0AUUEYa29Vg==}
     engines: {node: '>=18.0.0'}
     peerDependencies:
       typescript: ^5.1.0
@@ -2915,8 +2915,8 @@ packages:
       typescript:
         optional: true
 
-  '@remix-run/server-runtime@2.13.1':
-    resolution: {integrity: sha512-2DfBPRcHKVzE4bCNsNkKB50BhCCKF73x+jiS836OyxSIAL+x0tguV2AEjmGXefEXc5AGGzoxkus0AUUEYa29Vg==}
+  '@remix-run/server-runtime@2.14.0':
+    resolution: {integrity: sha512-9Th9UzDaoFFBD7zA5mRI1KT8JktFLN4ij9jPygrKBhG/kYmNIvhcMtq9VyjcbMvFK5natTyhOhrrKRIHtijD4w==}
     engines: {node: '>=18.0.0'}
     peerDependencies:
       typescript: ^5.1.0
@@ -10978,9 +10978,9 @@ snapshots:
 
   '@remix-run/router@1.19.1': {}
 
-  '@remix-run/router@1.19.2': {}
-
   '@remix-run/router@1.20.0': {}
+
+  '@remix-run/router@1.21.0': {}
 
   '@remix-run/server-runtime@2.11.2(typescript@5.6.3)':
     dependencies:
@@ -10994,9 +10994,9 @@ snapshots:
     optionalDependencies:
       typescript: 5.6.3
 
-  '@remix-run/server-runtime@2.12.1(typescript@5.6.3)':
+  '@remix-run/server-runtime@2.13.1(typescript@5.6.3)':
     dependencies:
-      '@remix-run/router': 1.19.2
+      '@remix-run/router': 1.20.0
       '@types/cookie': 0.6.0
       '@web3-storage/multipart-parser': 1.0.0
       cookie: 0.6.0
@@ -11006,9 +11006,9 @@ snapshots:
     optionalDependencies:
       typescript: 5.6.3
 
-  '@remix-run/server-runtime@2.13.1(typescript@5.6.3)':
+  '@remix-run/server-runtime@2.14.0(typescript@5.6.3)':
     dependencies:
-      '@remix-run/router': 1.20.0
+      '@remix-run/router': 1.21.0
       '@types/cookie': 0.6.0
       '@web3-storage/multipart-parser': 1.0.0
       cookie: 0.6.0
