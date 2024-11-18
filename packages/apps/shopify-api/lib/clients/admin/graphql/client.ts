@@ -56,6 +56,7 @@ export class GraphqlClient {
 
     this.session = params.session;
     this.apiVersion = params.apiVersion;
+
     this.client = createAdminApiClient({
       accessToken: config.isCustomStoreApp
         ? customStoreAppAccessToken

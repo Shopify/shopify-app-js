@@ -444,7 +444,7 @@ describe('REST client', () => {
       headers: customHeaders,
     }).toMatchMadeHttpRequest();
   });
-  
+
   it('fails to instantiate without access token', () => {
     const shopify = shopifyApi(testConfig());
 
