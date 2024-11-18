@@ -67,7 +67,7 @@ class RemixRestClient {
   /**
    * Performs a GET request on the given path.
    *
-   * @deprecated In the next major release REST will be removed from this package. Please see [all-in on graphql](https://www.shopify.com/ca/partners/blog/all-in-on-graphql).
+   * @deprecated In a future major release REST will be removed from this package. Please see [all-in on graphql](https://www.shopify.com/ca/partners/blog/all-in-on-graphql).
    */
   public async get(params: GetRequestParams) {
     return this.makeRequest({
@@ -79,7 +79,7 @@ class RemixRestClient {
   /**
    * Performs a POST request on the given path.
    *
-   * @deprecated In the next major release REST will be removed from this package. Please see [all-in on graphql](https://www.shopify.com/ca/partners/blog/all-in-on-graphql).
+   * @deprecated In a future major release REST will be removed from this package. Please see [all-in on graphql](https://www.shopify.com/ca/partners/blog/all-in-on-graphql).
    */
   public async post(params: PostRequestParams) {
     return this.makeRequest({
@@ -91,7 +91,7 @@ class RemixRestClient {
   /**
    * Performs a PUT request on the given path.
    *
-   * @deprecated In the next major release REST will be removed from this package. Please see [all-in on graphql](https://www.shopify.com/ca/partners/blog/all-in-on-graphql).
+   * @deprecated In a future major release REST will be removed from this package. Please see [all-in on graphql](https://www.shopify.com/ca/partners/blog/all-in-on-graphql).
    */
   public async put(params: PutRequestParams) {
     return this.makeRequest({
@@ -103,7 +103,7 @@ class RemixRestClient {
   /**
    * Performs a DELETE request on the given path.
    *
-   * @deprecated In the next major release REST will be removed from this package. Please see [all-in on graphql](https://www.shopify.com/ca/partners/blog/all-in-on-graphql).
+   * @deprecated In a future major release REST will be removed from this package. Please see [all-in on graphql](https://www.shopify.com/ca/partners/blog/all-in-on-graphql).
    */
   public async delete(params: DeleteRequestParams) {
     return this.makeRequest({

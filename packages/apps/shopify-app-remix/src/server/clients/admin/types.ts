@@ -137,7 +137,7 @@ export interface AdminApiContextWithRest<
   /**
    * Methods for interacting with the Shopify Admin REST API
    *
-   * @deprecated In the next major release REST will be removed from this package. Please see [all-in on graphql](https://www.shopify.com/ca/partners/blog/all-in-on-graphql).
+   * @deprecated In a future major release REST will be removed from this package. Please see [all-in on graphql](https://www.shopify.com/ca/partners/blog/all-in-on-graphql).
    *
    * There are methods for interacting with individual REST resources. You can also make `GET`, `POST`, `PUT` and `DELETE` requests should the REST resources not meet your needs.
    *
