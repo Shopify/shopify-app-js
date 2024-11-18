@@ -7,9 +7,7 @@ describe('validateDomainAndGetStoreUrl())', () => {
     const storeDomain = undefined;
 
     expect(() => validateDomainAndGetStoreUrl({client, storeDomain})).toThrow(
-      new Error(
-        `${client}: a valid store domain ("${storeDomain}") must be provided`,
-      ),
+      `${client}: a valid store domain ("${storeDomain}") must be provided`,
     );
   });
 
@@ -22,9 +20,7 @@ describe('validateDomainAndGetStoreUrl())', () => {
         storeDomain: storeDomain as any,
       }),
     ).toThrow(
-      new Error(
-        `${client}: a valid store domain ("${storeDomain}") must be provided`,
-      ),
+      `${client}: a valid store domain ("${storeDomain}") must be provided`,
     );
   });
 
@@ -37,9 +33,7 @@ describe('validateDomainAndGetStoreUrl())', () => {
         storeDomain: storeDomain as any,
       }),
     ).toThrow(
-      new Error(
-        `${client}: a valid store domain ("${storeDomain}") must be provided`,
-      ),
+      `${client}: a valid store domain ("${storeDomain}") must be provided`,
     );
   });
 

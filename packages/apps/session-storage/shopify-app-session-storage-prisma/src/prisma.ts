@@ -11,10 +11,16 @@ interface PrismaSessionStorageOptions {
 
 const UNIQUE_KEY_CONSTRAINT_ERROR_CODE = 'P2002';
 
+// eslint-disable-next-line no-warning-comments
+// TODO: Remove this when all session storages have implemented the isReady method
+export interface PrismaSessionStorageInterface extends SessionStorage {
+  isReady(): Promise<boolean>;
+}
+
 export class PrismaSessionStorage<T extends PrismaClient>
-  implements SessionStorage
+  implements PrismaSessionStorageInterface
 {
-  private ready: Promise<any>;
+  private ready: Promise<boolean>;
   private readonly tableName: string = 'session';
   private connectionRetries = 2;
   private connectionRetryIntervalMs = 5000;
@@ -43,17 +49,18 @@ export class PrismaSessionStorage<T extends PrismaClient>
       throw new Error(`PrismaClient does not have a ${this.tableName} table`);
     }
 
-    this.ready = this.pollForTable().catch((cause) => {
-      throw new MissingSessionTableError(
-        `Prisma ${this.tableName} table does not exist. This could happen for a few reasons, see https://github.com/Shopify/shopify-app-js/tree/main/packages/apps/session-storage/shopify-app-session-storage-prisma#troubleshooting for more information`,
-        cause,
-      );
-    });
+    this.ready = this.pollForTable()
+      .then(() => true)
+      .catch((cause) => {
+        throw new MissingSessionTableError(
+          `Prisma ${this.tableName} table does not exist. This could happen for a few reasons, see https://github.com/Shopify/shopify-app-js/tree/main/packages/apps/session-storage/shopify-app-session-storage-prisma#troubleshooting for more information`,
+          cause,
+        );
+      });
   }
 
   public async storeSession(session: Session): Promise<boolean> {
-    await this.ready;
-
+    await this.ensureReady();
     const data = this.sessionToRow(session);
 
     try {
@@ -84,8 +91,7 @@ export class PrismaSessionStorage<T extends PrismaClient>
   }
 
   public async loadSession(id: string): Promise<Session | undefined> {
-    await this.ready;
-
+    await this.ensureReady();
     const row = await this.getSessionTable().findUnique({
       where: {id},
     });
@@ -98,8 +104,7 @@ export class PrismaSessionStorage<T extends PrismaClient>
   }
 
   public async deleteSession(id: string): Promise<boolean> {
-    await this.ready;
-
+    await this.ensureReady();
     try {
       await this.getSessionTable().delete({where: {id}});
     } catch {
@@ -110,16 +115,14 @@ export class PrismaSessionStorage<T extends PrismaClient>
   }
 
   public async deleteSessions(ids: string[]): Promise<boolean> {
-    await this.ready;
-
+    await this.ensureReady();
     await this.getSessionTable().deleteMany({where: {id: {in: ids}}});
 
     return true;
   }
 
   public async findSessionsByShop(shop: string): Promise<Session[]> {
-    await this.ready;
-
+    await this.ensureReady();
     const sessions = await this.getSessionTable().findMany({
       where: {shop},
       take: 25,
@@ -129,29 +132,36 @@ export class PrismaSessionStorage<T extends PrismaClient>
     return sessions.map((session) => this.rowToSession(session));
   }
 
+  public async isReady(): Promise<boolean> {
+    try {
+      await this.pollForTable();
+      this.ready = Promise.resolve(true);
+    } catch (_error) {
+      this.ready = Promise.resolve(false);
+    }
+    return this.ready;
+  }
+
+  private async ensureReady(): Promise<void> {
+    if (!(await this.ready))
+      throw new MissingSessionStorageError(
+        'Prisma session storage is not ready. Use the `isReady` method to poll for the table.',
+      );
+  }
+
   private async pollForTable(): Promise<void> {
-    const promise = new Promise<void>((resolve, reject) => {
-      let retries = 0;
-      const doPoll = () => {
-        this.getSessionTable()
-          .count()
-          .then(() => {
-            resolve();
-          })
-          .catch((error) => {
-            if (retries < this.connectionRetries) {
-              retries++;
-              setTimeout(doPoll, this.connectionRetryIntervalMs);
-            } else {
-              reject(error);
-            }
-          });
-      };
-
-      doPoll();
-    });
-
-    return promise;
+    for (let i = 0; i < this.connectionRetries; i++) {
+      try {
+        await this.getSessionTable().count();
+        return;
+      } catch (error) {
+        console.log(`Error obtaining session table: ${error}`);
+      }
+      await sleep(this.connectionRetryIntervalMs);
+    }
+    throw Error(
+      `The table \`${this.tableName}\` does not exist in the current database.`,
+    );
   }
 
   private sessionToRow(session: Session): Row {
@@ -235,4 +245,14 @@ export class MissingSessionTableError extends Error {
   ) {
     super(message);
   }
+}
+
+export class MissingSessionStorageError extends Error {
+  constructor(message: string) {
+    super(message);
+  }
+}
+
+async function sleep(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
 }

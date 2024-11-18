@@ -22,9 +22,10 @@ export function validateDomainAndGetStoreUrl({
     url.protocol = 'https';
 
     return url.origin;
-  } catch (_error) {
+  } catch (error) {
     throw new Error(
       `${client}: a valid store domain ("${storeDomain}") must be provided`,
+      {cause: error},
     );
   }
 }
