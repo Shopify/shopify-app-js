@@ -52,6 +52,7 @@ export class GraphqlClient {
 
       logger(config).debug(message);
     }
+
     const customStoreAppAccessToken = config.adminApiAccessToken ?? config.apiSecretKey;
 
     this.session = params.session;
