@@ -52,11 +52,14 @@ export class GraphqlClient {
 
       logger(config).debug(message);
     }
+    const customStoreAppAccessToken = config.adminApiAccessToken ?? config.apiSecretKey;
 
     this.session = params.session;
     this.apiVersion = params.apiVersion;
     this.client = createAdminApiClient({
-      accessToken: config.adminApiAccessToken ?? this.session.accessToken!,
+      accessToken: config.isCustomStoreApp
+        ? customStoreAppAccessToken
+        : this.session.accessToken!,
       apiVersion: this.apiVersion ?? config.apiVersion,
       storeDomain: this.session.shop,
       customFetchApi: abstractFetch,
