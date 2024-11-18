@@ -5,8 +5,8 @@ import {
   ShopifyError,
 } from '@shopify/shopify-api';
 import {restResources} from '@shopify/shopify-api/rest/admin/2023-04';
-import {AdminApiContextWithRest} from 'src/server/clients';
 
+import {AdminApiContextWithRest} from '../../../../../clients';
 import {shopifyApp} from '../../../../..';
 import {
   APP_URL,

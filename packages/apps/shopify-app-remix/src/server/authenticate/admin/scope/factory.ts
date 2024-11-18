@@ -1,6 +1,6 @@
 import {Session} from '@shopify/shopify-api';
-import {AppConfigArg} from 'src/server/config-types';
 
+import {AppConfigArg} from '../../../config-types';
 import {BasicParams} from '../../../types';
 import {AdminApiContext} from '../../../clients';
 

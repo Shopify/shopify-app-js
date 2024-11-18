@@ -1,6 +1,6 @@
 import {Session, ShopifyRestResources} from '@shopify/shopify-api';
-import type {AppConfigArg} from 'src/server/config-types';
 
+import type {AppConfigArg} from '../../config-types';
 import {BasicParams} from '../../types';
 
 import {graphqlClientFactory} from './graphql';

@@ -1,5 +1,4 @@
-import {AppConfigArg} from 'src/server/config-types';
-
+import {AppConfigArg} from '../../../../config-types';
 import {AdminApiContext} from '../../../../clients';
 
 export interface RevokeScopesResponse {

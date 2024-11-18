@@ -1,6 +1,6 @@
 import {AuthScopes, Session} from '@shopify/shopify-api';
-import {AppConfigArg} from 'src/server/config-types';
 
+import {AppConfigArg} from '../../../config-types';
 import type {BasicParams} from '../../../types';
 import {redirectToInstallPage} from '../helpers/redirect-to-install-page';
 import {AdminApiContext} from '../../../clients';

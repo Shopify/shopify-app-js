@@ -1,6 +1,6 @@
 import {ShopifyRestResources} from '@shopify/shopify-api';
-import {AppConfigArg} from 'src/server/config-types';
 
+import {AppConfigArg} from '../../../config-types';
 import {adminClientFactory, storefrontClientFactory} from '../../../clients';
 import {BasicParams} from '../../../types';
 

@@ -1,8 +1,8 @@
 import {AdminOperations} from '@shopify/admin-api-client';
 import {Session, ShopifyRestResources} from '@shopify/shopify-api';
-import type {AppConfigArg} from 'src/server/config-types';
-import type {FeatureEnabled} from 'src/server/future/flags';
 
+import type {AppConfigArg} from '../../config-types';
+import type {FeatureEnabled} from '../../future/flags';
 import {BasicParams} from '../../types';
 import {GraphQLClient} from '../types';
 

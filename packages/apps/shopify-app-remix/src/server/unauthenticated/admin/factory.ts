@@ -1,6 +1,6 @@
 import {ShopifyRestResources} from '@shopify/shopify-api';
-import {AppConfigArg} from 'src/server/config-types';
 
+import {AppConfigArg} from '../../config-types';
 import {createOrLoadOfflineSession} from '../../authenticate/helpers/create-or-load-offline-session';
 import {SessionNotFoundError} from '../../errors';
 import {BasicParams} from '../../types';

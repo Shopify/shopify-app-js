@@ -1,6 +1,6 @@
 import {ApiVersion, LATEST_API_VERSION, Session} from '@shopify/shopify-api';
-import {AdminApiContextWithRest} from 'src/server/clients';
 
+import {AdminApiContextWithRest} from '../../../../../clients';
 import {
   APP_URL,
   TEST_SHOP,

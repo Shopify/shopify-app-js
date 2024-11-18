@@ -1,4 +1,4 @@
-import type {AppConfigArg} from 'src/server/config-types';
+import type {AppConfigArg} from '../../config-types';
 
 import type {AuthenticateCheckout} from './checkout/types';
 import type {AuthenticateAppProxy} from './appProxy/types';
@@ -6,7 +6,7 @@ import type {AuthenticateCustomerAccount} from './customer-account/types';
 
 // Eventually this will be just the `{}` bit without `AuthenticateCheckout &`
 // We have this is because in v1 public WAS the only public authenticate method
-// But it became tightly coupled to authentictaing Checkout requests.
+// But it became tightly coupled to authenticating Checkout requests.
 // In V2 you will have only public.checkout() and public.appProxy(), no public()
 
 export interface AuthenticatePublic<Config extends AppConfigArg> {

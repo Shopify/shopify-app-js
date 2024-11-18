@@ -4,7 +4,6 @@ import {
   LATEST_API_VERSION,
   Session,
 } from '@shopify/shopify-api';
-import {AdminApiContextWithRest} from 'src/server/clients';
 
 import {
   TEST_SHOP,
@@ -16,6 +15,7 @@ import {
   setUpEmbeddedFlowWithRemoveRestFlag,
   setUpNonEmbeddedFlow,
 } from '../../../__test-helpers';
+import {AdminApiContextWithRest} from '../../../clients';
 
 describe('admin.authenticate context', () => {
   expectAdminApiClient(async () => {

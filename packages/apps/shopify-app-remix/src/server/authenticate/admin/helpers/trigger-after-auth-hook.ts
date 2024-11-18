@@ -1,7 +1,7 @@
 import {Session, ShopifyRestResources} from '@shopify/shopify-api';
-import type {AppConfigArg} from 'src/server/config-types';
-import {AdminApiContextWithRest} from 'src/server/clients';
 
+import type {AppConfigArg} from '../../../config-types';
+import {AdminApiContextWithRest} from '../../../clients';
 import type {BasicParams} from '../../../types';
 import {AuthorizationStrategy} from '../strategies/types';
 
