@@ -25,6 +25,26 @@ export interface FutureFlags {
    * @default false
    */
   wip_optionalScopesApi?: boolean;
+
+  /**
+   * When enabled, methods for interacting with the admin REST API will not be returned.
+   *
+   * This affects:
+   *
+   * * `authenticate.admin(request)`
+   * * `authenticate.webhook(request)`
+   * * `authenticate.flow(request)`
+   * * `authenticate.appProxy(request)`
+   * * `authenticate.fulfillmentService(request)`
+   * * `unauthenticated.admin(shop)`
+   *
+   * In a future release we will remove REST from the package completely.
+   *
+   * Please see: [https://www.shopify.com/ca/partners/blog/all-in-on-graphql](https://www.shopify.com/ca/partners/blog/all-in-on-graphql)
+   *
+   * @default false
+   */
+  removeRest?: boolean;
 }
 
 // When adding new flags, use this format:

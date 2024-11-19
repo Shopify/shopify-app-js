@@ -1,17 +1,14 @@
-import {AppConfig, AppConfigArg} from 'src/server/config-types';
 import {
   Session,
   Shopify,
   ShopifyError,
   ShopifyRestResources,
 } from '@shopify/shopify-api';
-import {BasicParams} from 'src/server/types';
-import {
-  ApiConfigWithFutureFlags,
-  ApiFutureFlags,
-} from 'src/server/future/flags';
-import {HandleAdminClientError} from 'src/server/clients';
 
+import {AppConfig, AppConfigArg} from '../../../config-types';
+import {BasicParams} from '../../../types';
+import {ApiConfigWithFutureFlags, ApiFutureFlags} from '../../../future/flags';
+import {HandleAdminClientError} from '../../../clients';
 import {handleClientErrorFactory} from '../helpers';
 
 import {AuthorizationStrategy, OnErrorOptions, SessionContext} from './types';

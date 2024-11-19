@@ -1,5 +1,6 @@
 import {AuthScopes, Session} from '@shopify/shopify-api';
 
+import {AppConfigArg} from '../../../config-types';
 import {AdminApiContext} from '../../../clients';
 import type {BasicParams} from '../../../types';
 
@@ -9,10 +10,10 @@ import {
   fetchScopeDetail,
 } from './client/fetch-scopes-details';
 
-export function queryScopesFactory(
+export function queryScopesFactory<ConfigArg extends AppConfigArg>(
   params: BasicParams,
   session: Session,
-  admin: AdminApiContext,
+  admin: AdminApiContext<ConfigArg>,
 ) {
   return async function queryScopes() {
     const {logger} = params;

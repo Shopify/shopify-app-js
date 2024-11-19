@@ -1,5 +1,6 @@
 import {ShopifyRestResources} from '@shopify/shopify-api';
 
+import {AppConfigArg} from '../../../config-types';
 import {adminClientFactory, storefrontClientFactory} from '../../../clients';
 import {BasicParams} from '../../../types';
 
@@ -11,13 +12,16 @@ import {
 } from './types';
 
 export function authenticateAppProxyFactory<
+  ConfigArg extends AppConfigArg,
   Resources extends ShopifyRestResources,
->(params: BasicParams): AuthenticateAppProxy {
+>(params: BasicParams): AuthenticateAppProxy<ConfigArg, Resources> {
   const {api, config, logger} = params;
 
   return async function authenticate(
     request,
-  ): Promise<AppProxyContext | AppProxyContextWithSession<Resources>> {
+  ): Promise<
+    AppProxyContext | AppProxyContextWithSession<ConfigArg, Resources>
+  > {
     logger.info('Authenticating app proxy request');
 
     const url = new URL(request.url);
@@ -50,10 +54,10 @@ export function authenticateAppProxyFactory<
       return context;
     }
 
-    const context: AppProxyContextWithSession<Resources> = {
+    const context: AppProxyContextWithSession<ConfigArg, Resources> = {
       liquid,
       session,
-      admin: adminClientFactory({params, session}),
+      admin: adminClientFactory<ConfigArg, Resources>({params, session}),
       storefront: storefrontClientFactory({params, session}),
     };
 

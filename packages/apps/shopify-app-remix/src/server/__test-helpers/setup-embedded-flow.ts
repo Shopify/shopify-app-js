@@ -8,12 +8,16 @@ import {setUpValidSession} from './setup-valid-session';
 import {testConfig} from './test-config';
 
 export async function setUpEmbeddedFlow() {
-  const shopify = shopifyApp(
-    testConfig({
-      future: {unstable_newEmbeddedAuthStrategy: false},
+  const shopify = shopifyApp({
+    ...testConfig({
       restResources,
     }),
-  );
+    future: {
+      removeRest: false,
+      unstable_newEmbeddedAuthStrategy: false,
+      wip_optionalScopesApi: true,
+    },
+  });
   const expectedSession = await setUpValidSession(shopify.sessionStorage);
 
   const {token} = getJwt();
@@ -21,10 +25,41 @@ export async function setUpEmbeddedFlow() {
     `${APP_URL}?embedded=1&shop=${TEST_SHOP}&host=${BASE64_HOST}&id_token=${token}`,
   );
 
+  const result = await shopify.authenticate.admin(request);
+
   return {
     shopify,
     expectedSession,
-    ...(await shopify.authenticate.admin(request)),
+    ...result,
+    request,
+  };
+}
+
+export async function setUpEmbeddedFlowWithRemoveRestFlag() {
+  const shopify = shopifyApp({
+    ...testConfig({
+      restResources,
+    }),
+    future: {
+      removeRest: true,
+      unstable_newEmbeddedAuthStrategy: false,
+      wip_optionalScopesApi: true,
+    },
+  });
+
+  const expectedSession = await setUpValidSession(shopify.sessionStorage);
+
+  const {token} = getJwt();
+  const request = new Request(
+    `${APP_URL}?embedded=1&shop=${TEST_SHOP}&host=${BASE64_HOST}&id_token=${token}`,
+  );
+
+  const result = await shopify.authenticate.admin(request);
+
+  return {
+    shopify,
+    expectedSession,
+    ...result,
     request,
   };
 }

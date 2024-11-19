@@ -22,3 +22,12 @@ This package will automatically use token exchange, but that only works if [Shop
 Before updating this package in your app, please ensure you've enabled managed installation.
 
 For more details on how this works, please see the [new embedded authorization strategy](../README.md#new-embedded-authorization-strategy) section in the README.
+
+
+## Removing the REST API
+
+> [!NOTE]
+> The `removeRest` future flag removed the REST API.
+> If you've already enabled the flag, you don't need to follow these instructions.
+
+The REST API will be removed from this package. Please use the GraphQL API instead. See [Shopify is all-in on graphql](https://www.shopify.com/ca/partners/blog/all-in-on-graphql) for more information.

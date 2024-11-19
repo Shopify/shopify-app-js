@@ -1,5 +1,6 @@
 import {Session, ShopifyRestResources} from '@shopify/shopify-api';
 
+import {AppConfigArg} from '../../config-types';
 import type {AdminApiContext} from '../../clients';
 
 export interface RegisterWebhooksOptions {
@@ -140,6 +141,7 @@ export interface WebhookContextWithoutSession<Topics = string | number | symbol>
 }
 
 export interface WebhookContextWithSession<
+  ConfigArg extends AppConfigArg,
   Resources extends ShopifyRestResources,
   Topics = string | number | symbol,
 > extends Context<Topics> {
@@ -215,17 +217,19 @@ export interface WebhookContextWithSession<
    * }
    * ```
    */
-  admin: AdminApiContext<Resources>;
+  admin: AdminApiContext<ConfigArg, Resources>;
 }
 
 export type WebhookContext<
+  ConfigArg extends AppConfigArg,
   Resources extends ShopifyRestResources,
   Topics = string | number | symbol,
 > =
   | WebhookContextWithoutSession<Topics>
-  | WebhookContextWithSession<Resources, Topics>;
+  | WebhookContextWithSession<ConfigArg, Resources, Topics>;
 
 export type AuthenticateWebhook<
+  ConfigArg extends AppConfigArg,
   Resources extends ShopifyRestResources,
   Topics = string | number | symbol,
-> = (request: Request) => Promise<WebhookContext<Resources, Topics>>;
+> = (request: Request) => Promise<WebhookContext<ConfigArg, Resources, Topics>>;

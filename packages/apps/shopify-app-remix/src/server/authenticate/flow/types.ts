@@ -1,8 +1,10 @@
 import {Session, ShopifyRestResources} from '@shopify/shopify-api';
 
+import {AppConfigArg} from '../../config-types';
 import type {AdminApiContext} from '../../clients';
 
 export interface FlowContext<
+  ConfigArg extends AppConfigArg,
   Resources extends ShopifyRestResources = ShopifyRestResources,
 > {
   /**
@@ -12,7 +14,7 @@ export interface FlowContext<
    *
    * @example
    * <caption>Shopify session for the Flow request.</caption>
-   * <description>Use the session associated with this request to use REST resources.</description>
+   * <description>Use the session associated with this request.</description>
    * ```ts
    * // /app/routes/flow.tsx
    * import { ActionFunctionArgs } from "@remix-run/node";
@@ -21,8 +23,7 @@ export interface FlowContext<
    * export const action = async ({ request }: ActionFunctionArgs) => {
    *   const { session, admin } = await authenticate.flow(request);
    *
-   *   const products = await admin?.rest.resources.Product.all({ session });
-   *   // Use products
+   *   console.log(session.id)
    *
    *   return new Response();
    * };
@@ -82,9 +83,10 @@ export interface FlowContext<
    * }
    * ```
    */
-  admin: AdminApiContext<Resources>;
+  admin: AdminApiContext<ConfigArg, Resources>;
 }
 
 export type AuthenticateFlow<
+  ConfigArg extends AppConfigArg,
   Resources extends ShopifyRestResources = ShopifyRestResources,
-> = (request: Request) => Promise<FlowContext<Resources>>;
+> = (request: Request) => Promise<FlowContext<ConfigArg, Resources>>;

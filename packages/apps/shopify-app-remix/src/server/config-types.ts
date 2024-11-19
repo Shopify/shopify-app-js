@@ -172,7 +172,7 @@ export interface AppConfigArg<
    * });
    * ```
    */
-  hooks?: HooksConfig;
+  hooks?: HooksConfig<AppConfigArg<Resources, Storage, Future>, Resources>;
 
   /**
    * Does your app render embedded inside the Shopify Admin or on its own.
@@ -279,7 +279,10 @@ export interface AuthConfig {
 
 export type WebhookConfig = Record<string, WebhookHandler | WebhookHandler[]>;
 
-interface HooksConfig {
+interface HooksConfig<
+  ConfigArg extends AppConfigArg = AppConfigArg,
+  Resources extends ShopifyRestResources = ShopifyRestResources,
+> {
   /**
    * A function to call after a merchant installs your app
    *
@@ -303,12 +306,15 @@ interface HooksConfig {
    * });
    * ```
    */
-  afterAuth?: (options: AfterAuthOptions) => void | Promise<void>;
+  afterAuth?: (
+    options: AfterAuthOptions<ConfigArg, Resources>,
+  ) => void | Promise<void>;
 }
 
 export interface AfterAuthOptions<
-  R extends ShopifyRestResources = ShopifyRestResources,
+  ConfigArg extends AppConfigArg,
+  Resources extends ShopifyRestResources = ShopifyRestResources,
 > {
   session: Session;
-  admin: AdminApiContext<R>;
+  admin: AdminApiContext<ConfigArg, Resources>;
 }

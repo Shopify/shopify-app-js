@@ -306,7 +306,10 @@ describe('authenticating app proxy requests', () => {
 
   describe('Valid requests with a session return an admin API client', () => {
     expectAdminApiClient(async () => {
-      const shopify = shopifyApp(testConfig());
+      const shopify = shopifyApp({
+        ...testConfig(),
+        future: {removeRest: false},
+      });
       const expectedSession = await setUpValidSession(shopify.sessionStorage, {
         isOnline: false,
       });
@@ -318,7 +321,17 @@ describe('authenticating app proxy requests', () => {
         throw new Error('No admin client');
       }
 
-      return {admin, expectedSession, actualSession};
+      const shopifyWithoutRest = shopifyApp({
+        ...testConfig(),
+        future: {removeRest: true},
+      });
+
+      const {admin: adminWithoutRest} =
+        await shopifyWithoutRest.authenticate.public.appProxy(
+          await getValidRequest(),
+        );
+
+      return {admin, adminWithoutRest, expectedSession, actualSession};
     });
   });
 

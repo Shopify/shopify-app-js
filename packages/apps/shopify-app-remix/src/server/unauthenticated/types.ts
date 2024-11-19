@@ -1,9 +1,14 @@
 import type {ShopifyRestResources} from '@shopify/shopify-api';
 
+import type {AppConfigArg} from '../config-types';
+
 import type {GetUnauthenticatedAdminContext} from './admin/types';
 import type {GetUnauthenticatedStorefrontContext} from './storefront/types';
 
-export interface Unauthenticated<Resources extends ShopifyRestResources> {
+export interface Unauthenticated<
+  ConfigArg extends AppConfigArg,
+  Resources extends ShopifyRestResources,
+> {
   /**
    * Get an admin context by passing a shop
    *
@@ -16,10 +21,8 @@ export interface Unauthenticated<Resources extends ShopifyRestResources> {
    * ```ts
    * // /app/shopify.server.ts
    * import { LATEST_API_VERSION, shopifyApp } from "@shopify/shopify-app-remix/server";
-   * import { restResources } from "@shopify/shopify-api/rest/admin/2023-04";
    *
    * const shopify = shopifyApp({
-   *   restResources,
    *   // ...etc
    * });
    * export default shopify;
@@ -33,12 +36,13 @@ export interface Unauthenticated<Resources extends ShopifyRestResources> {
    * export async function loader({ request }: LoaderFunctionArgs) {
    *   const shop = await authenticateExternal(request)
    *   const {admin} = await shopify.unauthenticated.admin(shop);
+   *   const response = await admin.graphql("{ shop { name} }")
    *
-   *   return json(await admin.rest.resources.Product.count({ session }));
+   *   return json(await response.json());
    * }
    * ```
    */
-  admin: GetUnauthenticatedAdminContext<Resources>;
+  admin: GetUnauthenticatedAdminContext<ConfigArg, Resources>;
 
   /**
    * Get a storefront context by passing a shop

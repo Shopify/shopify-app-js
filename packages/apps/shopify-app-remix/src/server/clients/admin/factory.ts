@@ -1,5 +1,6 @@
 import {Session, ShopifyRestResources} from '@shopify/shopify-api';
 
+import type {AppConfigArg} from '../../config-types';
 import {BasicParams} from '../../types';
 
 import {graphqlClientFactory} from './graphql';
@@ -13,12 +14,19 @@ interface RestClientOptions {
 }
 
 export function adminClientFactory<
+  ConfigArg extends AppConfigArg,
   Resources extends ShopifyRestResources = ShopifyRestResources,
 >({
   params,
   handleClientError,
   session,
-}: RestClientOptions): AdminApiContext<Resources> {
+}: RestClientOptions): AdminApiContext<ConfigArg, Resources> {
+  if (params.config.future.removeRest) {
+    return {
+      graphql: graphqlClientFactory({params, session, handleClientError}),
+    } as AdminApiContext<ConfigArg, Resources>;
+  }
+
   return {
     rest: restClientFactory<Resources>({
       params,
@@ -26,5 +34,5 @@ export function adminClientFactory<
       handleClientError,
     }),
     graphql: graphqlClientFactory({params, session, handleClientError}),
-  };
+  } as AdminApiContext<ConfigArg, Resources>;
 }
