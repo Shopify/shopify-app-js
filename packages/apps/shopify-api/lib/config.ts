@@ -98,15 +98,6 @@ export function validateConfig<Params extends ConfigParams>(
     future: future ?? config.future,
   });
 
-  if (
-    config.isCustomStoreApp &&
-    params.adminApiAccessToken === params.apiSecretKey
-  ) {
-    createLogger(config).warning(
-      "adminApiAccessToken is set to the same value as apiSecretKey. adminApiAccessToken should be set to the Admin API access token for custom store apps; apiSecretKey should be set to the custom store app's API secret key.",
-    );
-  }
-
   return config;
 }
 
