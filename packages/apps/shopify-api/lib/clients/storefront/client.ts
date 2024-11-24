@@ -28,10 +28,14 @@ interface GraphqlClientClassParams {
 
 export class StorefrontClient {
   public static config: ConfigInterface;
+  private _client?: StorefrontApiClient;
 
   readonly session: Session;
-  readonly client: StorefrontApiClient;
   readonly apiVersion?: ApiVersion;
+
+  private static readonly QUERY_DEPRECATION_WARNING =
+    'The query method is deprecated, and was replaced with the request method.\n' +
+    'See the migration guide: https://github.com/Shopify/shopify-app-js/blob/main/packages/apps/shopify-api/docs/migrating-to-v9.md#using-the-new-clients.';
 
   constructor(params: GraphqlClientParams) {
     const config = this.storefrontClass().config;
@@ -42,42 +46,29 @@ export class StorefrontClient {
       );
     }
 
-    if (params.apiVersion) {
-      const message =
-        params.apiVersion === config.apiVersion
-          ? `Storefront client has a redundant API version override to the default ${params.apiVersion}`
-          : `Storefront client overriding default API version ${config.apiVersion} with ${params.apiVersion}`;
-
-      logger(config).debug(message);
-    }
-
-    let accessToken: string | undefined;
-    if (config.isCustomStoreApp) {
-      accessToken = config.privateAppStorefrontAccessToken;
-
-      if (!accessToken) {
-        throw new MissingRequiredArgument(
-          'Custom store apps must set the privateAppStorefrontAccessToken property to call the Storefront API.',
-        );
-      }
-    } else {
-      accessToken = params.session.accessToken;
-
-      if (!accessToken) {
-        throw new MissingRequiredArgument('Session missing access token.');
-      }
+    if (params.apiVersion && params.apiVersion !== config.apiVersion) {
+      logger(config).debug(
+        `Storefront client overriding default API version ${config.apiVersion} with ${params.apiVersion}`,
+      );
     }
 
     this.session = params.session;
     this.apiVersion = params.apiVersion;
-    this.client = createStorefrontApiClient({
-      privateAccessToken: accessToken,
-      apiVersion: this.apiVersion ?? config.apiVersion,
-      storeDomain: this.session.shop,
-      customFetchApi: abstractFetch,
-      logger: clientLoggerFactory(config),
-      clientName: getUserAgent(config),
-    });
+  }
+
+  private get client(): StorefrontApiClient {
+    if (!this._client) {
+      const config = this.storefrontClass().config;
+      this._client = createStorefrontApiClient({
+        privateAccessToken: this.resolveAccessToken(config, this.session),
+        apiVersion: this.apiVersion ?? config.apiVersion,
+        storeDomain: this.session.shop,
+        customFetchApi: abstractFetch,
+        logger: clientLoggerFactory(config),
+        clientName: getUserAgent(config),
+      });
+    }
+    return this._client;
   }
 
   public async query<T = undefined>(
@@ -85,8 +76,7 @@ export class StorefrontClient {
   ): Promise<RequestReturn<T>> {
     logger(this.storefrontClass().config).deprecated(
       '12.0.0',
-      'The query method is deprecated, and was replaced with the request method.\n' +
-        'See the migration guide: https://github.com/Shopify/shopify-app-js/blob/main/packages/apps/shopify-api/docs/migrating-to-v9.md#using-the-new-clients.',
+      StorefrontClient.QUERY_DEPRECATION_WARNING,
     );
 
     if (
@@ -105,16 +95,17 @@ export class StorefrontClient {
       variables = params.data.variables;
     }
 
-    const headers = Object.fromEntries(
-      Object.entries(params?.extraHeaders ?? {}).map(([key, value]) => [
-        key,
-        Array.isArray(value) ? value.join(', ') : value.toString(),
-      ]),
+    const headers = Object.entries(params?.extraHeaders ?? {}).reduce(
+      (acc, [key, value]) => {
+        acc[key] = Array.isArray(value) ? value.join(', ') : value.toString();
+        return acc;
+      },
+      {} as Record<string, string>,
     );
 
     const response = await this.request<T>(operation, {
       headers,
-      retries: params.tries ? params.tries - 1 : undefined,
+      retries: params?.tries ? params.tries - 1 : undefined,
       variables,
     });
 
@@ -137,12 +128,34 @@ export class StorefrontClient {
     });
 
     if (response.errors) {
-      const fetchResponse = response.errors.response;
-
-      throwFailedRequest(response, (options?.retries ?? 0) > 0, fetchResponse);
+      throwFailedRequest(
+        response,
+        Boolean(options?.retries && options.retries > 0),
+        response.errors.response,
+      );
     }
 
     return response;
+  }
+
+  private resolveAccessToken(
+    config: ConfigInterface,
+    session: Session,
+  ): string {
+    if (config.isCustomStoreApp) {
+      if (!config.privateAppStorefrontAccessToken) {
+        throw new MissingRequiredArgument(
+          'Custom store apps must set the privateAppStorefrontAccessToken property to call the Storefront API.',
+        );
+      }
+      return config.privateAppStorefrontAccessToken;
+    }
+
+    if (!session.accessToken) {
+      throw new MissingRequiredArgument('Session missing access token.');
+    }
+
+    return session.accessToken;
   }
 
   private storefrontClass() {
