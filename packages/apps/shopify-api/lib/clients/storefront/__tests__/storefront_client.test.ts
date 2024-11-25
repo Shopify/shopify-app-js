@@ -1,5 +1,4 @@
 import {FetchError} from 'node-fetch';
-
 import {queueError, queueMockResponse} from '../../../__tests__/test-helper';
 import {testConfig} from '../../../__tests__/test-config';
 import {
@@ -55,7 +54,7 @@ describe('Storefront GraphQL client', () => {
     });
   });
 
-  it('can return response from specific access token', async () => {
+  it('returns response from specific access token', async () => {
     const shopify = shopifyApi(testConfig());
 
     const client = new shopify.clients.Storefront({session});
@@ -77,7 +76,22 @@ describe('Storefront GraphQL client', () => {
     }).toMatchMadeHttpRequest();
   });
 
-  it('can return response from private access token in config setting', async () => {
+  it('throws an error if privateAppStorefrontAccessToken is missing when isCustomStoreApp is true', () => {
+    const shopify = shopifyApi(
+      testConfig({
+        isCustomStoreApp: true,
+        adminApiAccessToken: 'dummy_token',
+      }),
+    );
+
+    const customSession = shopify.session.customAppSession(session.shop);
+
+    expect(
+      () => new shopify.clients.Storefront({session: customSession}),
+    ).toThrow(MissingRequiredArgument);
+  });
+
+  it('uses private access token from config if available and isCustomStoreApp is true', async () => {
     const shopify = shopifyApi(
       testConfig({
         isCustomStoreApp: true,
@@ -106,18 +120,7 @@ describe('Storefront GraphQL client', () => {
     }).toMatchMadeHttpRequest();
   });
 
-  it('fails when missing privateAppStorefrontAccessToken, if isCustomStoreApp is true', async () => {
-    const shopify = shopifyApi(
-      testConfig({isCustomStoreApp: true, adminApiAccessToken: 'dummy_token'}),
-    );
-
-    const customSession = shopify.session.customAppSession(session.shop);
-    expect(
-      () => new shopify.clients.Storefront({session: customSession}),
-    ).toThrow(MissingRequiredArgument);
-  });
-
-  it('sets specific SF API headers', async () => {
+  it('sets specific API headers including custom Storefront SDK details', async () => {
     const shopify = shopifyApi(testConfig());
 
     const client = new shopify.clients.Storefront({session});
@@ -141,12 +144,12 @@ describe('Storefront GraphQL client', () => {
     }).toMatchMadeHttpRequest();
   });
 
-  it('allows overriding the API version', async () => {
+  it('allows overriding the API version explicitly', async () => {
     const shopify = shopifyApi(testConfig());
 
     const client = new shopify.clients.Storefront({
       session,
-      apiVersion: '2020-01' as any as ApiVersion,
+      apiVersion: '2020-01' as ApiVersion,
     });
 
     queueMockResponse(JSON.stringify(successResponse));
@@ -173,12 +176,12 @@ describe('Storefront GraphQL client', () => {
     );
   });
 
-  it('throws error if no response is available', async () => {
+  it('throws an HttpRequestError when no response is available', async () => {
     const shopify = shopifyApi(testConfig());
 
     const client = new shopify.clients.Storefront({
       session,
-      apiVersion: '2020-01' as any as ApiVersion,
+      apiVersion: '2020-01' as ApiVersion,
     });
 
     const fetchError = new FetchError(
