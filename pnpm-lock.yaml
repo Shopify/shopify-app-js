@@ -513,8 +513,8 @@ importers:
         specifier: ^1.7.5
         version: 1.7.5
       '@types/cookie-parser':
-        specifier: ^1.4.6
-        version: 1.4.7
+        specifier: ^1.4.8
+        version: 1.4.8(@types/express@4.17.21)
       '@types/express':
         specifier: ^4.17.21
         version: 4.17.21
@@ -3485,8 +3485,10 @@ packages:
   '@types/connect@3.4.38':
     resolution: {integrity: sha512-K6uROf1LD88uDQqJCktA4yzL1YYAK6NgfsI0v/mTgyPKWsX1CnJ0XPSDhViejru1GcRkLWb8RlzFYJRqGUbaug==}
 
-  '@types/cookie-parser@1.4.7':
-    resolution: {integrity: sha512-Fvuyi354Z+uayxzIGCwYTayFKocfV7TuDYZClCdIP9ckhvAu/ixDtCB6qx2TT0FKjPLf1f3P/J1rgf6lPs64mw==}
+  '@types/cookie-parser@1.4.8':
+    resolution: {integrity: sha512-l37JqFrOJ9yQfRQkljb41l0xVphc7kg5JTjjr+pLRZ0IyZ49V4BQ8vbF4Ut2C2e+WH4al3xD3ZwYwIUfnbT4NQ==}
+    peerDependencies:
+      '@types/express': '*'
 
   '@types/cookie@0.6.0':
     resolution: {integrity: sha512-4Kh9a6B2bQciAhf7FSuMRRkUWecJgJu9nPnx3yzpsfXX/c50REIqpHY4C82bXP90qrLtXtkDxTZosYO3UpOwlA==}
@@ -11684,7 +11686,7 @@ snapshots:
     dependencies:
       '@types/node': 22.9.0
 
-  '@types/cookie-parser@1.4.7':
+  '@types/cookie-parser@1.4.8(@types/express@4.17.21)':
     dependencies:
       '@types/express': 4.17.21
 
