@@ -3,6 +3,10 @@ import {ShopifyRestResources} from '@shopify/shopify-api';
 import {AppConfigArg} from '../../../config-types';
 import {adminClientFactory, storefrontClientFactory} from '../../../clients';
 import {BasicParams} from '../../../types';
+import {
+  getSessionTokenHeader,
+  tokenExchangeHeadlessRequest,
+} from '../../helpers';
 
 import {
   AppProxyContext,
@@ -35,22 +39,35 @@ export function authenticateAppProxyFactory<
     }
 
     const sessionId = api.session.getOfflineId(shop);
-    const session = await config.sessionStorage!.loadSession(sessionId);
+    let session = await config.sessionStorage!.loadSession(sessionId);
 
     if (!session) {
-      logger.debug('Could not find offline session, returning empty context', {
-        shop,
-        ...Object.fromEntries(url.searchParams.entries()),
-      });
+      logger.debug(
+        'Could not find offline session. Attempting token exchange',
+        {
+          shop,
+          ...Object.fromEntries(url.searchParams.entries()),
+        },
+      );
 
-      const context: AppProxyContext = {
-        liquid,
-        session: undefined,
-        admin: undefined,
-        storefront: undefined,
-      };
+      const idToken = getSessionTokenHeader(request);
 
-      return context;
+      if (idToken) {
+        session = await tokenExchangeHeadlessRequest(params, idToken, shop);
+      }
+
+      if (!session) {
+        logger.debug('Token Exchange failed', {
+          shop,
+          ...Object.fromEntries(url.searchParams.entries()),
+        });
+        return {
+          liquid,
+          session: undefined,
+          admin: undefined,
+          storefront: undefined,
+        } satisfies AppProxyContext;
+      }
     }
 
     const context: AppProxyContextWithSession<ConfigArg, Resources> = {
