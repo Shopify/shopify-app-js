@@ -1,8 +1,4 @@
 import {
-  InvalidJwtError,
-  InvalidShopError,
-  RequestedTokenType,
-  Session,
   ShopifyRestResources,
   WebhookValidationErrorReason,
 } from '@shopify/shopify-api';
@@ -10,7 +6,11 @@ import {
 import {AppConfigArg} from '../../config-types';
 import type {BasicParams} from '../../types';
 import {adminClientFactory} from '../../clients';
-import {createOrLoadOfflineSession, getSessionTokenHeader} from '../helpers';
+import {
+  createOrLoadOfflineSession,
+  getSessionTokenHeader,
+  tokenExchangeHeadlessRequest,
+} from '../helpers';
 
 import type {
   AuthenticateWebhook,
@@ -79,7 +79,7 @@ export function authenticateWebhookFactory<
       const idToken = getSessionTokenHeader(request);
 
       if (idToken) {
-        session = await getSessionFromTokenExchange(
+        session = await tokenExchangeHeadlessRequest(
           params,
           idToken,
           check.domain,
@@ -111,49 +111,4 @@ export function authenticateWebhookFactory<
 
     return webhookContext;
   };
-}
-
-async function getSessionFromTokenExchange(
-  params: BasicParams,
-  idToken: string,
-  shop: string,
-): Promise<Session | undefined> {
-  const {api, config} = params;
-
-  try {
-    const {session} = await api.auth.tokenExchange({
-      shop,
-      sessionToken: idToken,
-      requestedTokenType: RequestedTokenType.OfflineAccessToken,
-    });
-
-    /**
-     * We may be in this code path because the DB has availability issues
-     *
-     * By catching we prevent the same DB issues from rejecting the request
-     * and the Remix action that called this code will still get Webhook context.
-     * There just won't be a session and that's ok, since webhooks can fire after uninstall.
-     * */
-    try {
-      await config.sessionStorage!.storeSession(session);
-    } catch (error) {
-      api.logger.error('Failed to store session after token exchange', {error});
-    }
-
-    return session;
-  } catch (error) {
-    /**
-     * InvalidJwtError or InvalidShopError means the request can't be trusted
-     * api.webhooks.validate() should reject any request that would trigger
-     * a InvalidJwtError or InvalidShopError. So this is just a belts and braces.
-     * If any other error is thrown, it's ok, we just can't create a new session.
-     * That's ok since webhooks can fire after the app is uninstalled.
-     */
-    if (error instanceof InvalidJwtError || error instanceof InvalidShopError) {
-      api.logger.error('Webhook validation failed. Invalid JWT', {error});
-      throw new Response(undefined, {status: 400, statusText: 'Bad Request'});
-    }
-
-    return undefined;
-  }
 }

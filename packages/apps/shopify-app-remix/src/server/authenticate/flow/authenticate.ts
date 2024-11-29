@@ -2,7 +2,8 @@ import {ShopifyRestResources} from '@shopify/shopify-api';
 
 import {AppConfigArg} from '../../config-types';
 import {adminClientFactory} from '../../clients/admin';
-import {BasicParams} from '../../types';
+import type {BasicParams} from '../../types';
+import {getSessionTokenHeader, tokenExchangeHeadlessRequest} from '../helpers';
 
 import type {AuthenticateFlow, FlowContext} from './types';
 
@@ -19,7 +20,7 @@ export function authenticateFlowFactory<
 
     if (request.method !== 'POST') {
       logger.debug(
-        'Received a non-POST request for flow. Only POST requests are allowed.',
+        `Received a ${request.method} request for flow. Only POST requests are allowed.`,
         {url: request.url, method: request.method},
       );
       throw new Response(undefined, {
@@ -50,19 +51,33 @@ export function authenticateFlowFactory<
     });
 
     const sessionId = api.session.getOfflineId(payload.shopify_domain);
-    const session = await config.sessionStorage!.loadSession(sessionId);
+    let session = await config.sessionStorage!.loadSession(sessionId);
 
-    if (!session) {
-      logger.info('Flow request could not find session', {
-        shop: payload.shopify_domain,
+    if (session) {
+      logger.debug('Found a session for the flow request', {
+        shop: session.shop,
       });
-      throw new Response(undefined, {
-        status: 400,
-        statusText: 'Bad Request',
-      });
+    } else {
+      logger.debug('Could not find a session for the flow request');
+
+      const idToken = getSessionTokenHeader(request);
+
+      if (!idToken) {
+        logger.debug('Could not find an idToken to perform Token Exchange');
+        throw BadRequestError();
+      }
+
+      session = await tokenExchangeHeadlessRequest(
+        params,
+        idToken,
+        payload.shopify_domain,
+      );
+
+      if (!session) {
+        logger.debug('Token Exchange failed, cannot continue');
+        throw BadRequestError();
+      }
     }
-
-    logger.debug('Found a session for the flow request', {shop: session.shop});
 
     return {
       session,
@@ -70,4 +85,11 @@ export function authenticateFlowFactory<
       admin: adminClientFactory<ConfigArg, Resources>({params, session}),
     };
   };
+}
+
+function BadRequestError() {
+  return new Response(undefined, {
+    status: 400,
+    statusText: 'Bad Request',
+  });
 }
