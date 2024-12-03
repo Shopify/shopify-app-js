@@ -247,8 +247,8 @@ importers:
         specifier: ^3.679.0
         version: 3.679.0
       '@aws-sdk/util-dynamodb':
-        specifier: ^3.682.0
-        version: 3.682.0(@aws-sdk/client-dynamodb@3.679.0)
+        specifier: ^3.704.0
+        version: 3.704.0(@aws-sdk/client-dynamodb@3.679.0)
       '@shopify/shopify-api':
         specifier: ^11.0.0
         version: link:../../shopify-api
@@ -717,11 +717,11 @@ packages:
     resolution: {integrity: sha512-NwVq8YvInxQdJ47+zz4fH3BRRLC6lL+WLkvr242PVBbUOLRyK/lkwHlfiKUoeVIMyK5NF+up6TRg71t/8Bny6Q==}
     engines: {node: '>=16.0.0'}
 
-  '@aws-sdk/util-dynamodb@3.682.0':
-    resolution: {integrity: sha512-adG2DgR3QszwmlvqKSHMOqGlGXOFcrdjAeH9alfydqOEzIAjLSu/14w2SnPGC5SeIAJpr/ApUTjJTJT5el91/Q==}
+  '@aws-sdk/util-dynamodb@3.704.0':
+    resolution: {integrity: sha512-AynXGhZP7KdmHtOvVfClZBVs/3R+rnrr53vm2PWjcMndjaKw8bv7DVRROIp7tXHdu/q4G0WPRi8L2RFKnGOBow==}
     engines: {node: '>=16.0.0'}
     peerDependencies:
-      '@aws-sdk/client-dynamodb': ^3.682.0
+      '@aws-sdk/client-dynamodb': ^3.699.0
 
   '@aws-sdk/util-endpoints@3.679.0':
     resolution: {integrity: sha512-YL6s4Y/1zC45OvddvgE139fjeWSKKPgLlnfrvhVL7alNyY9n7beR4uhoDpNrt5mI6sn9qiBF17790o+xLAXjjg==}
@@ -6949,6 +6949,7 @@ packages:
 
   rollup-plugin-swc@0.2.1:
     resolution: {integrity: sha512-wWRYt9tC0aIBvRQHNnVtwJ6DRPDj9XYpOAcOyFB11sKSkR/R+NAmbrjBACCPNVmZcxg6joV29wXgb5mU1DI7eA==}
+    deprecated: Package no longer supported. Contact Support at https://www.npmjs.com/support for more info.
     peerDependencies:
       '@swc/core': '>=1.0'
       rollup: '>=1.5.0'
@@ -8238,7 +8239,7 @@ snapshots:
       '@smithy/types': 3.6.0
       tslib: 2.8.1
 
-  '@aws-sdk/util-dynamodb@3.682.0(@aws-sdk/client-dynamodb@3.679.0)':
+  '@aws-sdk/util-dynamodb@3.704.0(@aws-sdk/client-dynamodb@3.679.0)':
     dependencies:
       '@aws-sdk/client-dynamodb': 3.679.0
       tslib: 2.8.1
