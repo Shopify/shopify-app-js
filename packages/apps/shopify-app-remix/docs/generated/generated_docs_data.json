@@ -129,7 +129,7 @@
   },
   {
     "name": "AppProxyForm",
-    "description": "Sets up a Remix `<Form>` component that works when rendered behind an app proxy.\n\nSupports any properties accepted by the `<Form>` component.",
+    "description": "Sets up a Remix `<Form>` component that works when rendered on an app proxy page.\n\nSupports any properties accepted by the `<Form>` component.\n\nBecause Remix doesn't support URL rewriting, any route using this component should <b>match the pathname of the proxy URL exactly</b>, and <b>end in a trailing slash</b> (e.g., `https://<shop>/apps/proxy/`), or set the Remix Form prop `navigate` to `false`.",
     "category": "App proxy components",
     "type": "component",
     "isVisualComponent": false,
@@ -157,8 +157,8 @@
         "title": "Render a form element in a proxied route",
         "tabs": [
           {
-            "title": "/app/routes/**\\/*.ts",
-            "code": "import {\n  AppProxyProvider,\n  AppProxyForm,\n} from \"@shopify/shopify-app-remix/react\";\nimport { authenticate } from \"~/shopify.server\";\n\nexport async function loader({ request }) {\n  await authenticate.public.appProxy(request);\n\n  return json({ appUrl: process.env.SHOPIFY_APP_URL });\n}\n\nexport async function action({ request }) {\n  await authenticate.public.appProxy(request);\n\n  const formData = await request.formData();\n  const field = formData.get(\"field\")?.toString();\n\n  // Perform actions\n  if (field) {\n    console.log(\"Field:\", field);\n  }\n\n  // Return JSON to the client\n  return json({ message: \"Success!\" });\n}\n\nexport default function App() {\n  const { appUrl } = useLoaderData();\n  const data = useActionData();\n\n  return (\n    &lt;AppProxyProvider appUrl={appUrl}&gt;\n      &lt;AppProxyForm action=\"/\"&gt;\n        &lt;input type=\"text\" name=\"field\" defaultValue={data?.field} /&gt;\n\n        &lt;input type=\"submit\" name=\"Submit\" /&gt;\n      &lt;/AppProxyForm&gt;\n    &lt;/AppProxyProvider&gt;\n  );\n}",
+            "title": "/app/routes/apps/appProxy.ts",
+            "code": "import {\n  AppProxyProvider,\n  AppProxyForm,\n} from \"@shopify/shopify-app-remix/react\";\nimport { authenticate } from \"~/shopify.server\";\n\nexport async function loader({ request }) {\n  await authenticate.public.appProxy(request);\n\n  return json({ appUrl: process.env.SHOPIFY_APP_URL });\n}\n\nexport async function action({ request }) {\n  await authenticate.public.appProxy(request);\n\n  const formData = await request.formData();\n  const field = formData.get(\"field\")?.toString();\n\n  // Perform actions\n  if (field) {\n    console.log(\"Field:\", field);\n  }\n\n  // Return JSON to the client\n  return json({ message: \"Success!\" });\n}\n\nexport default function App() {\n  const { appUrl } = useLoaderData();\n\n  return (\n    &lt;AppProxyProvider appUrl={appUrl}&gt;\n      &lt;AppProxyForm action=\"/apps/appProxy\" method=\"post\"&gt;\n        &lt;input type=\"text\" name=\"field\" /&gt;\n\n        &lt;input type=\"submit\" name=\"Submit\" /&gt;\n      &lt;/AppProxyForm&gt;\n    &lt;/AppProxyProvider&gt;\n  );\n}",
             "language": "typescript"
           }
         ]
@@ -254,13 +254,13 @@
       {
         "name": "AppProxyForm",
         "subtitle": "Render form elements in proxies.",
-        "url": "/docs/api/shopify-app-remix/app-proxy-components/appproxy-form",
+        "url": "/docs/api/shopify-app-remix/app-proxy-components/appproxyform",
         "type": "remix"
       },
       {
         "name": "AppProxyLink",
         "subtitle": "Render link elements in proxies.",
-        "url": "/docs/api/shopify-app-remix/app-proxy-components/appproxy-link",
+        "url": "/docs/api/shopify-app-remix/app-proxy-components/appproxylink",
         "type": "remix"
       }
     ],
@@ -316,6 +316,48 @@
             "name": "AdminContext",
             "value": "EmbeddedTypedAdminContext<Config, Resources> & ScopesContext",
             "description": ""
+          },
+          "FeatureEnabled": {
+            "filePath": "src/server/future/flags.ts",
+            "syntaxKind": "TypeAliasDeclaration",
+            "name": "FeatureEnabled",
+            "value": "Future extends FutureFlags\n  ? Future[Flag] extends true\n    ? true\n    : false\n  : false",
+            "description": ""
+          },
+          "FutureFlags": {
+            "filePath": "src/server/future/flags.ts",
+            "name": "FutureFlags",
+            "description": "",
+            "members": [
+              {
+                "filePath": "src/server/future/flags.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "removeRest",
+                "value": "boolean",
+                "description": "When enabled, methods for interacting with the admin REST API will not be returned.\n\nThis affects:\n\n* `authenticate.admin(request)` * `authenticate.webhook(request)` * `authenticate.flow(request)` * `authenticate.appProxy(request)` * `authenticate.fulfillmentService(request)` * `unauthenticated.admin(shop)`\n\nIn a future release we will remove REST from the package completely.\n\nPlease see: [https://www.shopify.com/ca/partners/blog/all-in-on-graphql](https://www.shopify.com/ca/partners/blog/all-in-on-graphql)",
+                "isOptional": true,
+                "defaultValue": "false"
+              },
+              {
+                "filePath": "src/server/future/flags.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "unstable_newEmbeddedAuthStrategy",
+                "value": "boolean",
+                "description": "When enabled, embedded apps will fetch access tokens via [token exchange](https://shopify.dev/docs/apps/auth/get-access-tokens/token-exchange). This assumes the app has scopes declared for [Shopify managing installation](https://shopify.dev/docs/apps/auth/installation#shopify-managed-installation).\n\nLearn more about this [new embedded app auth strategy](https://shopify.dev/docs/api/shopify-app-remix#embedded-auth-strategy).",
+                "isOptional": true,
+                "defaultValue": "false"
+              },
+              {
+                "filePath": "src/server/future/flags.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "wip_optionalScopesApi",
+                "value": "boolean",
+                "description": "When enabled, the Scopes API will be available. This feature is in development and requires special permissions from Shopify for now.",
+                "isOptional": true,
+                "defaultValue": "false"
+              }
+            ],
+            "value": "export interface FutureFlags {\n  /**\n   * When enabled, embedded apps will fetch access tokens via [token exchange](https://shopify.dev/docs/apps/auth/get-access-tokens/token-exchange).\n   * This assumes the app has scopes declared for [Shopify managing installation](https://shopify.dev/docs/apps/auth/installation#shopify-managed-installation).\n   *\n   * Learn more about this [new embedded app auth strategy](https://shopify.dev/docs/api/shopify-app-remix#embedded-auth-strategy).\n   *\n   * @default false\n   */\n  unstable_newEmbeddedAuthStrategy?: boolean;\n\n  /**\n   * When enabled, the Scopes API will be available. This feature is in development and requires special permissions from Shopify for now.\n   *\n   * @default false\n   */\n  wip_optionalScopesApi?: boolean;\n\n  /**\n   * When enabled, methods for interacting with the admin REST API will not be returned.\n   *\n   * This affects:\n   *\n   * * `authenticate.admin(request)`\n   * * `authenticate.webhook(request)`\n   * * `authenticate.flow(request)`\n   * * `authenticate.appProxy(request)`\n   * * `authenticate.fulfillmentService(request)`\n   * * `unauthenticated.admin(shop)`\n   *\n   * In a future release we will remove REST from the package completely.\n   *\n   * Please see: [https://www.shopify.com/ca/partners/blog/all-in-on-graphql](https://www.shopify.com/ca/partners/blog/all-in-on-graphql)\n   *\n   * @default false\n   */\n  removeRest?: boolean;\n}"
           },
           "EmbeddedTypedAdminContext": {
             "filePath": "src/server/authenticate/admin/types.ts",
@@ -4020,6 +4062,7 @@
           "AdminApiContext": {
             "filePath": "src/server/clients/admin/types.ts",
             "syntaxKind": "TypeAliasDeclaration",
+            "syntaxKind": "TypeAliasDeclaration",
             "name": "AdminApiContext",
             "value": "FeatureEnabled<ConfigArg['future'], 'removeRest'> extends true\n    ? AdminApiContextWithoutRest\n    : AdminApiContextWithRest<Resources>",
             "description": ""
@@ -4053,9 +4096,18 @@
                 "description": "When enabled, embedded apps will fetch access tokens via [token exchange](https://shopify.dev/docs/apps/auth/get-access-tokens/token-exchange). This assumes the app has scopes declared for [Shopify managing installation](https://shopify.dev/docs/apps/auth/installation#shopify-managed-installation).\n\nLearn more about this [new embedded app auth strategy](https://shopify.dev/docs/api/shopify-app-remix#embedded-auth-strategy).",
                 "isOptional": true,
                 "defaultValue": "false"
+              },
+              {
+                "filePath": "src/server/future/flags.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "wip_optionalScopesApi",
+                "value": "boolean",
+                "description": "When enabled, the Scopes API will be available. This feature is in development and requires special permissions from Shopify for now.",
+                "isOptional": true,
+                "defaultValue": "false"
               }
             ],
-            "value": "export interface FutureFlags {\n  /**\n   * When enabled, embedded apps will fetch access tokens via [token exchange](https://shopify.dev/docs/apps/auth/get-access-tokens/token-exchange).\n   * This assumes the app has scopes declared for [Shopify managing installation](https://shopify.dev/docs/apps/auth/installation#shopify-managed-installation).\n   *\n   * Learn more about this [new embedded app auth strategy](https://shopify.dev/docs/api/shopify-app-remix#embedded-auth-strategy).\n   *\n   * @default false\n   */\n  unstable_newEmbeddedAuthStrategy?: boolean;\n\n  /**\n   * When enabled, methods for interacting with the admin REST API will not be returned.\n   *\n   * This affects:\n   *\n   * * `authenticate.admin(request)`\n   * * `authenticate.webhook(request)`\n   * * `authenticate.flow(request)`\n   * * `authenticate.appProxy(request)`\n   * * `authenticate.fulfillmentService(request)`\n   * * `unauthenticated.admin(shop)`\n   *\n   * In a future release we will remove REST from the package completely.\n   *\n   * Please see: [https://www.shopify.com/ca/partners/blog/all-in-on-graphql](https://www.shopify.com/ca/partners/blog/all-in-on-graphql)\n   *\n   * @default false\n   */\n  removeRest?: boolean;\n}"
+            "value": "export interface FutureFlags {\n  /**\n   * When enabled, embedded apps will fetch access tokens via [token exchange](https://shopify.dev/docs/apps/auth/get-access-tokens/token-exchange).\n   * This assumes the app has scopes declared for [Shopify managing installation](https://shopify.dev/docs/apps/auth/installation#shopify-managed-installation).\n   *\n   * Learn more about this [new embedded app auth strategy](https://shopify.dev/docs/api/shopify-app-remix#embedded-auth-strategy).\n   *\n   * @default false\n   */\n  unstable_newEmbeddedAuthStrategy?: boolean;\n\n  /**\n   * When enabled, the Scopes API will be available. This feature is in development and requires special permissions from Shopify for now.\n   *\n   * @default false\n   */\n  wip_optionalScopesApi?: boolean;\n\n  /**\n   * When enabled, methods for interacting with the admin REST API will not be returned.\n   *\n   * This affects:\n   *\n   * * `authenticate.admin(request)`\n   * * `authenticate.webhook(request)`\n   * * `authenticate.flow(request)`\n   * * `authenticate.appProxy(request)`\n   * * `authenticate.fulfillmentService(request)`\n   * * `unauthenticated.admin(shop)`\n   *\n   * In a future release we will remove REST from the package completely.\n   *\n   * Please see: [https://www.shopify.com/ca/partners/blog/all-in-on-graphql](https://www.shopify.com/ca/partners/blog/all-in-on-graphql)\n   *\n   * @default false\n   */\n  removeRest?: boolean;\n}"
           },
           "AdminApiContextWithoutRest": {
             "filePath": "src/server/clients/admin/types.ts",
@@ -4098,6 +4150,9 @@
                     ]
                   }
                 ]
+              }
+            ],
+            "value": "export interface AdminApiContextWithoutRest {\n  /**\n   * Methods for interacting with the Shopify Admin GraphQL API\n   *\n   * {@link https://shopify.dev/docs/api/admin-graphql}\n   * {@link https://github.com/Shopify/shopify-app-js/blob/main/packages/apps/shopify-api/docs/reference/clients/Graphql.md}\n   *\n   * @example\n   * <caption>Querying the GraphQL API.</caption>\n   * <description>Use `admin.graphql` to make query / mutation requests.</description>\n   * ```ts\n   * // /app/routes/**\\/*.ts\n   * import { ActionFunctionArgs } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   *\n   * export const action = async ({ request }: ActionFunctionArgs) => {\n   *   const { admin } = await authenticate.admin(request);\n   *\n   *   const response = await admin.graphql(\n   *     `#graphql\n   *     mutation populateProduct($input: ProductInput!) {\n   *       productCreate(input: $input) {\n   *         product {\n   *           id\n   *         }\n   *       }\n   *     }`,\n   *     {\n   *       variables: {\n   *         input: { title: \"Product Name\" },\n   *       },\n   *     },\n   *   );\n   *\n   *   const productData = await response.json();\n   *   return json({\n   *     productId: productData.data?.productCreate?.product?.id,\n   *   });\n   * }\n   * ```\n   *\n   * ```ts\n   * // /app/shopify.server.ts\n   * import { shopifyApp } from \"@shopify/shopify-app-remix/server\";\n   *\n   * const shopify = shopifyApp({\n   *   // ...\n   * });\n   * export default shopify;\n   * export const authenticate = shopify.authenticate;\n   * ```\n   *\n   * @example\n   * <caption>Handling GraphQL errors.</caption>\n   * <description>Catch `GraphqlQueryError` errors to see error messages from the API.</description>\n   * ```ts\n   * // /app/routes/**\\/*.ts\n   * import { ActionFunctionArgs } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   *\n   * export const action = async ({ request }: ActionFunctionArgs) => {\n   *   const { admin } = await authenticate.admin(request);\n   *\n   *   try {\n   *     const response = await admin.graphql(\n   *       `#graphql\n   *       query incorrectQuery {\n   *         products(first: 10) {\n   *           nodes {\n   *             not_a_field\n   *           }\n   *         }\n   *       }`,\n   *     );\n   *\n   *     return json({ data: await response.json() });\n   *   } catch (error) {\n   *     if (error instanceof GraphqlQueryError) {\n   *       // error.body.errors:\n   *       // { graphQLErrors: [\n   *       //   { message: \"Field 'not_a_field' doesn't exist on type 'Product'\" }\n   *       // ] }\n   *       return json({ errors: error.body?.errors }, { status: 500 });\n   *     }\n   *     return json({ message: \"An error occurred\" }, { status: 500 });\n   *   }\n   * }\n   * ```\n   *\n   * ```ts\n   * // /app/shopify.server.ts\n   * import { shopifyApp } from \"@shopify/shopify-app-remix/server\";\n   *\n   * const shopify = shopifyApp({\n   *   // ...\n   * });\n   * export default shopify;\n   * export const authenticate = shopify.authenticate;\n   * ```\n   */\n  graphql: GraphQLClient<AdminOperations>;\n}"
               }
             ],
             "value": "export interface AdminApiContextWithoutRest {\n  /**\n   * Methods for interacting with the Shopify Admin GraphQL API\n   *\n   * {@link https://shopify.dev/docs/api/admin-graphql}\n   * {@link https://github.com/Shopify/shopify-app-js/blob/main/packages/apps/shopify-api/docs/reference/clients/Graphql.md}\n   *\n   * @example\n   * <caption>Querying the GraphQL API.</caption>\n   * <description>Use `admin.graphql` to make query / mutation requests.</description>\n   * ```ts\n   * // /app/routes/**\\/*.ts\n   * import { ActionFunctionArgs } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   *\n   * export const action = async ({ request }: ActionFunctionArgs) => {\n   *   const { admin } = await authenticate.admin(request);\n   *\n   *   const response = await admin.graphql(\n   *     `#graphql\n   *     mutation populateProduct($input: ProductInput!) {\n   *       productCreate(input: $input) {\n   *         product {\n   *           id\n   *         }\n   *       }\n   *     }`,\n   *     {\n   *       variables: {\n   *         input: { title: \"Product Name\" },\n   *       },\n   *     },\n   *   );\n   *\n   *   const productData = await response.json();\n   *   return json({\n   *     productId: productData.data?.productCreate?.product?.id,\n   *   });\n   * }\n   * ```\n   *\n   * ```ts\n   * // /app/shopify.server.ts\n   * import { shopifyApp } from \"@shopify/shopify-app-remix/server\";\n   *\n   * const shopify = shopifyApp({\n   *   // ...\n   * });\n   * export default shopify;\n   * export const authenticate = shopify.authenticate;\n   * ```\n   *\n   * @example\n   * <caption>Handling GraphQL errors.</caption>\n   * <description>Catch `GraphqlQueryError` errors to see error messages from the API.</description>\n   * ```ts\n   * // /app/routes/**\\/*.ts\n   * import { ActionFunctionArgs } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   *\n   * export const action = async ({ request }: ActionFunctionArgs) => {\n   *   const { admin } = await authenticate.admin(request);\n   *\n   *   try {\n   *     const response = await admin.graphql(\n   *       `#graphql\n   *       query incorrectQuery {\n   *         products(first: 10) {\n   *           nodes {\n   *             not_a_field\n   *           }\n   *         }\n   *       }`,\n   *     );\n   *\n   *     return json({ data: await response.json() });\n   *   } catch (error) {\n   *     if (error instanceof GraphqlQueryError) {\n   *       // error.body.errors:\n   *       // { graphQLErrors: [\n   *       //   { message: \"Field 'not_a_field' doesn't exist on type 'Product'\" }\n   *       // ] }\n   *       return json({ errors: error.body?.errors }, { status: 500 });\n   *     }\n   *     return json({ message: \"An error occurred\" }, { status: 500 });\n   *   }\n   * }\n   * ```\n   *\n   * ```ts\n   * // /app/shopify.server.ts\n   * import { shopifyApp } from \"@shopify/shopify-app-remix/server\";\n   *\n   * const shopify = shopifyApp({\n   *   // ...\n   * });\n   * export default shopify;\n   * export const authenticate = shopify.authenticate;\n   * ```\n   */\n  graphql: GraphQLClient<AdminOperations>;\n}"
@@ -4893,6 +4948,48 @@
             "name": "AdminContext",
             "value": "EmbeddedTypedAdminContext<Config, Resources> & ScopesContext",
             "description": ""
+          },
+          "FeatureEnabled": {
+            "filePath": "src/server/future/flags.ts",
+            "syntaxKind": "TypeAliasDeclaration",
+            "name": "FeatureEnabled",
+            "value": "Future extends FutureFlags\n  ? Future[Flag] extends true\n    ? true\n    : false\n  : false",
+            "description": ""
+          },
+          "FutureFlags": {
+            "filePath": "src/server/future/flags.ts",
+            "name": "FutureFlags",
+            "description": "",
+            "members": [
+              {
+                "filePath": "src/server/future/flags.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "removeRest",
+                "value": "boolean",
+                "description": "When enabled, methods for interacting with the admin REST API will not be returned.\n\nThis affects:\n\n* `authenticate.admin(request)` * `authenticate.webhook(request)` * `authenticate.flow(request)` * `authenticate.appProxy(request)` * `authenticate.fulfillmentService(request)` * `unauthenticated.admin(shop)`\n\nIn a future release we will remove REST from the package completely.\n\nPlease see: [https://www.shopify.com/ca/partners/blog/all-in-on-graphql](https://www.shopify.com/ca/partners/blog/all-in-on-graphql)",
+                "isOptional": true,
+                "defaultValue": "false"
+              },
+              {
+                "filePath": "src/server/future/flags.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "unstable_newEmbeddedAuthStrategy",
+                "value": "boolean",
+                "description": "When enabled, embedded apps will fetch access tokens via [token exchange](https://shopify.dev/docs/apps/auth/get-access-tokens/token-exchange). This assumes the app has scopes declared for [Shopify managing installation](https://shopify.dev/docs/apps/auth/installation#shopify-managed-installation).\n\nLearn more about this [new embedded app auth strategy](https://shopify.dev/docs/api/shopify-app-remix#embedded-auth-strategy).",
+                "isOptional": true,
+                "defaultValue": "false"
+              },
+              {
+                "filePath": "src/server/future/flags.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "wip_optionalScopesApi",
+                "value": "boolean",
+                "description": "When enabled, the Scopes API will be available. This feature is in development and requires special permissions from Shopify for now.",
+                "isOptional": true,
+                "defaultValue": "false"
+              }
+            ],
+            "value": "export interface FutureFlags {\n  /**\n   * When enabled, embedded apps will fetch access tokens via [token exchange](https://shopify.dev/docs/apps/auth/get-access-tokens/token-exchange).\n   * This assumes the app has scopes declared for [Shopify managing installation](https://shopify.dev/docs/apps/auth/installation#shopify-managed-installation).\n   *\n   * Learn more about this [new embedded app auth strategy](https://shopify.dev/docs/api/shopify-app-remix#embedded-auth-strategy).\n   *\n   * @default false\n   */\n  unstable_newEmbeddedAuthStrategy?: boolean;\n\n  /**\n   * When enabled, the Scopes API will be available. This feature is in development and requires special permissions from Shopify for now.\n   *\n   * @default false\n   */\n  wip_optionalScopesApi?: boolean;\n\n  /**\n   * When enabled, methods for interacting with the admin REST API will not be returned.\n   *\n   * This affects:\n   *\n   * * `authenticate.admin(request)`\n   * * `authenticate.webhook(request)`\n   * * `authenticate.flow(request)`\n   * * `authenticate.appProxy(request)`\n   * * `authenticate.fulfillmentService(request)`\n   * * `unauthenticated.admin(shop)`\n   *\n   * In a future release we will remove REST from the package completely.\n   *\n   * Please see: [https://www.shopify.com/ca/partners/blog/all-in-on-graphql](https://www.shopify.com/ca/partners/blog/all-in-on-graphql)\n   *\n   * @default false\n   */\n  removeRest?: boolean;\n}"
           },
           "EmbeddedTypedAdminContext": {
             "filePath": "src/server/authenticate/admin/types.ts",
@@ -8682,13 +8779,23 @@
               {
                 "filePath": "src/server/future/flags.ts",
                 "syntaxKind": "PropertySignature",
-                "name": "unstable_newEmbeddedAuthStrategy",
+                "name": "removeRest",
                 "value": "boolean",
-                "description": "When enabled, embedded apps will fetch access tokens via [token exchange](https://shopify.dev/docs/apps/auth/get-access-tokens/token-exchange). This assumes the app has scopes declared for [Shopify managing installation](https://shopify.dev/docs/apps/auth/installation#shopify-managed-installation).\n\nLearn more about this [new embedded app auth strategy](https://shopify.dev/docs/api/shopify-app-remix#embedded-auth-strategy).",
+                "description": "When enabled, methods for interacting with the admin REST API will not be returned.\n\nThis affects:\n\n* `authenticate.admin(request)` * `authenticate.webhook(request)` * `authenticate.flow(request)` * `authenticate.appProxy(request)` * `authenticate.fulfillmentService(request)` * `unauthenticated.admin(shop)`\n\nIn a future release we will remove REST from the package completely.\n\nPlease see: [https://www.shopify.com/ca/partners/blog/all-in-on-graphql](https://www.shopify.com/ca/partners/blog/all-in-on-graphql)",
+                "isOptional": true,
+                "defaultValue": "false"
+              },
+              {
+                "filePath": "src/server/future/flags.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "wip_optionalScopesApi",
+                "value": "boolean",
+                "description": "When enabled, the Scopes API will be available. This feature is in development and requires special permissions from Shopify for now.",
                 "isOptional": true,
                 "defaultValue": "false"
               }
             ],
+            "value": "export interface FutureFlags {\n  /**\n   * When enabled, embedded apps will fetch access tokens via [token exchange](https://shopify.dev/docs/apps/auth/get-access-tokens/token-exchange).\n   * This assumes the app has scopes declared for [Shopify managing installation](https://shopify.dev/docs/apps/auth/installation#shopify-managed-installation).\n   *\n   * Learn more about this [new embedded app auth strategy](https://shopify.dev/docs/api/shopify-app-remix#embedded-auth-strategy).\n   *\n   * @default false\n   */\n  unstable_newEmbeddedAuthStrategy?: boolean;\n\n  /**\n   * When enabled, the Scopes API will be available. This feature is in development and requires special permissions from Shopify for now.\n   *\n   * @default false\n   */\n  wip_optionalScopesApi?: boolean;\n\n  /**\n   * When enabled, methods for interacting with the admin REST API will not be returned.\n   *\n   * This affects:\n   *\n   * * `authenticate.admin(request)`\n   * * `authenticate.webhook(request)`\n   * * `authenticate.flow(request)`\n   * * `authenticate.appProxy(request)`\n   * * `authenticate.fulfillmentService(request)`\n   * * `unauthenticated.admin(shop)`\n   *\n   * In a future release we will remove REST from the package completely.\n   *\n   * Please see: [https://www.shopify.com/ca/partners/blog/all-in-on-graphql](https://www.shopify.com/ca/partners/blog/all-in-on-graphql)\n   *\n   * @default false\n   */\n  removeRest?: boolean;\n}"
             "value": "export interface FutureFlags {\n  /**\n   * When enabled, embedded apps will fetch access tokens via [token exchange](https://shopify.dev/docs/apps/auth/get-access-tokens/token-exchange).\n   * This assumes the app has scopes declared for [Shopify managing installation](https://shopify.dev/docs/apps/auth/installation#shopify-managed-installation).\n   *\n   * Learn more about this [new embedded app auth strategy](https://shopify.dev/docs/api/shopify-app-remix#embedded-auth-strategy).\n   *\n   * @default false\n   */\n  unstable_newEmbeddedAuthStrategy?: boolean;\n\n  /**\n   * When enabled, methods for interacting with the admin REST API will not be returned.\n   *\n   * This affects:\n   *\n   * * `authenticate.admin(request)`\n   * * `authenticate.webhook(request)`\n   * * `authenticate.flow(request)`\n   * * `authenticate.appProxy(request)`\n   * * `authenticate.fulfillmentService(request)`\n   * * `unauthenticated.admin(shop)`\n   *\n   * In a future release we will remove REST from the package completely.\n   *\n   * Please see: [https://www.shopify.com/ca/partners/blog/all-in-on-graphql](https://www.shopify.com/ca/partners/blog/all-in-on-graphql)\n   *\n   * @default false\n   */\n  removeRest?: boolean;\n}"
           }
         }
