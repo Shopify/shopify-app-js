@@ -1,5 +1,11 @@
 # Changelog
 
+## 11.6.1
+
+### Patch Changes
+
+- 6910d3d: Updated `tslib` dependencies
+
 ## 11.6.0
 
 ### Minor Changes

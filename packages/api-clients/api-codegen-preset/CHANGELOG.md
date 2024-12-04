@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.1.3
+
+### Patch Changes
+
+- cd39dff: Updated `@parcel/watcher` dependencies
+
 ## 1.1.2
 
 ### Patch Changes

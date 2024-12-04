@@ -1,5 +1,47 @@
 # @shopify/shopify-app-remix
 
+## 3.5.0
+
+### Minor Changes
+
+- 7147103: Add Scopes API documentation for Remix
+- 4bba5d4: Added `removeRest` future flag.
+
+  When `removeRest` is `true`, the REST API will no longer be available. Please use the GraphQL API instead. See [Shopify is all-in on graphql](https://www.shopify.com/ca/partners/blog/all-in-on-graphql) for more information.
+
+  If your app doesn't use the REST API, you can safely set `removeRest` to `true` and be ready for a future major release. If your app does use the REST API, you should migrate to the GraphQL API and then set `removeRest` to `true`.
+
+- 301882d: Update logging to include Shop information
+- dc75db6: Remove `wip_optionalScopesApi` future flag and enable [the Remix Scopes API](https://shopify.dev/docs/api/shopify-app-remix/v3/apis/scopes) by default.
+
+  Example of checking for a granted scope on a shop with `scopes.query()`:
+
+  ```ts
+  export const loader = async ({ request }: LoaderFunctionArgs) => {
+    const { scopes } = await authenticate.admin(request);
+
+    const scopesDetail =  await scopes.query();
+
+    return json({
+      hasWriteProducts: scopesDetail.granted.includes('write_products'),
+    });
+  };
+
+  export default function Index() {
+    const {hasWriteProducts} = useLoaderData<typeof loader>();
+
+    ...
+  }
+  ```
+
+  See the [Remix Scopes API documentation](https://shopify.dev/docs/api/shopify-app-remix/v3/apis/scopes) for more details on this API, and the [Manage Access Scopes page](https://shopify.dev/docs/apps/build/authentication-authorization/app-installation/manage-access-scopes) on shopify.dev for more context how the Scopes APIs can be used to manage access scopes from one shop to another.
+
+### Patch Changes
+
+- Updated dependencies [6910d3d]
+  - @shopify/shopify-api@11.6.1
+  - @shopify/shopify-app-session-storage@3.0.9
+
 ## 3.4.0
 
 ### Minor Changes
