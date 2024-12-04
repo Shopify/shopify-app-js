@@ -1,3 +1,5 @@
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-nocheck
 import * as child_process from 'child_process';
 import {promisify} from 'util';
 
