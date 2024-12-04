@@ -14,7 +14,6 @@ import {testConfig as testConfigImport} from '../test-helpers/test-config';
  */
 const TEST_FUTURE_FLAGS: Required<{[key in keyof FutureFlags]: true}> = {
   unstable_newEmbeddedAuthStrategy: true,
-  wip_optionalScopesApi: true,
   removeRest: true,
 } as const;
 

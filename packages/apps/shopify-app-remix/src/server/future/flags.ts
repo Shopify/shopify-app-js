@@ -20,13 +20,6 @@ export interface FutureFlags {
   unstable_newEmbeddedAuthStrategy?: boolean;
 
   /**
-   * When enabled, the Scopes API will be available. This feature is in development and requires special permissions from Shopify for now.
-   *
-   * @default false
-   */
-  wip_optionalScopesApi?: boolean;
-
-  /**
    * When enabled, methods for interacting with the admin REST API will not be returned.
    *
    * This affects:
@@ -81,13 +74,6 @@ export function logDisabledFutureFlags(
       'unstable_newEmbeddedAuthStrategy',
       'Enable this to use OAuth token exchange instead of auth code to generate API access tokens.' +
         '\n  Your app must be using Shopify managed install: https://shopify.dev/docs/apps/auth/installation',
-    );
-  }
-
-  if (!config.future.wip_optionalScopesApi) {
-    logFlag(
-      'wip_optionalScopesApi',
-      'Enable this to use the optionalScopes API to request additional scopes and manage them. ',
     );
   }
 }
