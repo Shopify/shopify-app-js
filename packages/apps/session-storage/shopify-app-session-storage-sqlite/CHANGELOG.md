@@ -1,5 +1,7 @@
 # @shopify/shopify-app-session-storage-sqlite
 
+## 4.0.9
+
 ## 4.0.8
 
 ## 4.0.7
