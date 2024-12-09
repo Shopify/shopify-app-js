@@ -8,3 +8,4 @@ export * from './reject-bot-request';
 export * from './respond-to-options-request';
 export * from './respond-to-invalid-session-token';
 export * from './create-or-load-offline-session';
+export * from './get-shop-from-request';
