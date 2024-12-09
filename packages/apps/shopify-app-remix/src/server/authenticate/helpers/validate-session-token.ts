@@ -16,14 +16,13 @@ export async function validateSessionToken(
   {checkAudience = true}: ValidateSessionTokenOptions = {},
 ): Promise<JwtPayload> {
   const {api, logger} = params;
-  logger.debug('Validating session token', {shop: getShopFromRequest(request)});
+  const shop = getShopFromRequest(request);
+  logger.debug('Validating session token', {shop});
 
   try {
     const payload = await api.session.decodeSessionToken(token, {
       checkAudience,
     });
-    const dest = new URL(payload.dest);
-    const shop = dest.hostname;
     logger.debug('Session token is valid - validated', {
       shop,
       payload: JSON.stringify(payload),
@@ -32,7 +31,7 @@ export async function validateSessionToken(
     return payload;
   } catch (error) {
     logger.debug(`Failed to validate session token: ${error.message}`, {
-      shop: getShopFromRequest(request),
+      shop,
     });
 
     throw respondToInvalidSessionToken({params, request, retryRequest: true});
