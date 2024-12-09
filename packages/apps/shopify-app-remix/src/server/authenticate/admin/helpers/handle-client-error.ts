@@ -15,6 +15,7 @@ export function handleClientErrorFactory({
     if (error instanceof HttpResponseError !== true) {
       params.logger.debug(
         `Got a response error from the API: ${error.message}`,
+        {shop: session.shop},
       );
       throw error;
     }
@@ -22,6 +23,7 @@ export function handleClientErrorFactory({
     params.logger.debug(
       `Got an HTTP response error from the API: ${error.message}`,
       {
+        shop: session.shop,
         code: error.response.code,
         statusText: error.response.statusText,
         body: JSON.stringify(error.response.body),

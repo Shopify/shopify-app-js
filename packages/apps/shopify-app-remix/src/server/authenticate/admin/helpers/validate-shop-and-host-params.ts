@@ -21,6 +21,7 @@ export function validateShopAndHostParams(
     const host = api.utils.sanitizeHost(url.searchParams.get('host')!);
     if (!host) {
       logger.debug('Invalid host, redirecting to login path', {
+        shop,
         host: url.searchParams.get('host'),
       });
       throw redirectToLoginPath(request, params);
