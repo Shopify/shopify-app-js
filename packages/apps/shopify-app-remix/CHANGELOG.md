@@ -1,5 +1,11 @@
 # @shopify/shopify-app-remix
 
+## 3.5.1
+
+### Patch Changes
+
+- 62b533e: Revert shop logging
+
 ## 3.5.0
 
 ### Minor Changes
