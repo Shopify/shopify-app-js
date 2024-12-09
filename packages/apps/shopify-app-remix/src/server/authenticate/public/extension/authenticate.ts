@@ -5,7 +5,6 @@ import {
   getSessionTokenHeader,
   validateSessionToken,
   ensureCORSHeadersFactory,
-  getShopFromRequest,
 } from '../../helpers';
 
 import {AuthenticateExtension, ExtensionContext} from './types';
@@ -27,14 +26,10 @@ export function authenticateExtensionFactory(
 
     const sessionTokenHeader = getSessionTokenHeader(request);
 
-    logger.info(`Authenticating ${requestType} request`, {
-      shop: getShopFromRequest(request),
-    });
+    logger.info(`Authenticating ${requestType} request`);
 
     if (!sessionTokenHeader) {
-      logger.debug('Request did not contain a session token', {
-        shop: getShopFromRequest(request),
-      });
+      logger.debug('Request did not contain a session token');
       throw new Response(undefined, {
         status: 401,
         statusText: 'Unauthorized',

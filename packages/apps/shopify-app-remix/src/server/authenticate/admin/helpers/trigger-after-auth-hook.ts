@@ -18,7 +18,7 @@ export async function triggerAfterAuthHook<
 ) {
   const {config, logger} = params;
   if (config.hooks.afterAuth) {
-    logger.info('Running afterAuth hook', {shop: session.shop});
+    logger.info('Running afterAuth hook');
 
     const admin = createAdminApiContext<ConfigArg, Resources>(
       session,

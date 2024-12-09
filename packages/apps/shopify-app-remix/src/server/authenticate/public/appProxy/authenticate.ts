@@ -22,18 +22,19 @@ export function authenticateAppProxyFactory<
   ): Promise<
     AppProxyContext | AppProxyContextWithSession<ConfigArg, Resources>
   > {
+    logger.info('Authenticating app proxy request');
+
     const url = new URL(request.url);
-    const shop = url.searchParams.get('shop')!;
-    logger.info('Authenticating app proxy request', {shop});
 
     if (!(await validateAppProxyHmac(params, url))) {
-      logger.info('App proxy request has invalid signature', {shop});
+      logger.info('App proxy request has invalid signature');
       throw new Response(undefined, {
         status: 400,
         statusText: 'Bad Request',
       });
     }
 
+    const shop = url.searchParams.get('shop')!;
     const sessionId = api.session.getOfflineId(shop);
     const session = await config.sessionStorage!.loadSession(sessionId);
 
@@ -136,8 +137,7 @@ async function validateAppProxyHmac(
 
     return isValid;
   } catch (error) {
-    const shop = url.searchParams.get('shop')!;
-    logger.info(error.message, {shop});
+    logger.info(error.message);
     throw new Response(undefined, {status: 400, statusText: 'Bad Request'});
   }
 }

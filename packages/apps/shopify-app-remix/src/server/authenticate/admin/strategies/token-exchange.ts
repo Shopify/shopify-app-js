@@ -12,7 +12,6 @@ import {BasicParams} from '../../../types';
 import {
   respondToInvalidSessionToken,
   invalidateAccessToken,
-  getShopFromRequest,
 } from '../../helpers';
 import {handleClientErrorFactory, triggerAfterAuthHook} from '../helpers';
 import {HandleAdminClientError} from '../../../clients';
@@ -53,8 +52,8 @@ export class TokenExchangeStrategy<Config extends AppConfigArg>
     if (!sessionToken) throw new InvalidJwtError();
 
     if (!session || !session.isActive(undefined)) {
-      logger.info('No valid session found', {shop});
-      logger.info('Requesting offline access token', {shop});
+      logger.info('No valid session found');
+      logger.info('Requesting offline access token');
       const {session: offlineSession} = await this.exchangeToken({
         request,
         sessionToken,
@@ -67,7 +66,7 @@ export class TokenExchangeStrategy<Config extends AppConfigArg>
       let newSession = offlineSession;
 
       if (config.useOnlineTokens) {
-        logger.info('Requesting online access token', {shop});
+        logger.info('Requesting online access token');
         const {session: onlineSession} = await this.exchangeToken({
           request,
           sessionToken,
@@ -114,9 +113,7 @@ export class TokenExchangeStrategy<Config extends AppConfigArg>
       request,
       onError: async ({session, error}: OnErrorOptions) => {
         if (error.response.code === 401) {
-          logger.debug('Responding to invalid access token', {
-            shop: getShopFromRequest(request),
-          });
+          logger.debug('Responding to invalid access token');
           await invalidateAccessToken({config, api, logger}, session);
 
           respondToInvalidSessionToken({
