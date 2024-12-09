@@ -3,7 +3,6 @@ import {JwtPayload} from '@shopify/shopify-api';
 import type {BasicParams} from '../../types';
 
 import {respondToInvalidSessionToken} from './respond-to-invalid-session-token';
-import {getShopFromRequest} from './get-shop-from-request';
 
 interface ValidateSessionTokenOptions {
   checkAudience?: boolean;
@@ -16,7 +15,6 @@ export async function validateSessionToken(
   {checkAudience = true}: ValidateSessionTokenOptions = {},
 ): Promise<JwtPayload> {
   const {api, logger} = params;
-  logger.debug('Validating session token', {shop: getShopFromRequest(request)});
 
   try {
     const payload = await api.session.decodeSessionToken(token, {
@@ -31,9 +29,7 @@ export async function validateSessionToken(
 
     return payload;
   } catch (error) {
-    logger.debug(`Failed to validate session token: ${error.message}`, {
-      shop: getShopFromRequest(request),
-    });
+    logger.debug(`Failed to validate session token: ${error.message}`);
 
     throw respondToInvalidSessionToken({params, request, retryRequest: true});
   }

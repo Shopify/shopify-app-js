@@ -12,7 +12,6 @@ import {BasicParams} from '../../../types';
 import {
   respondToInvalidSessionToken,
   invalidateAccessToken,
-  getShopFromRequest,
 } from '../../helpers';
 import {handleClientErrorFactory, triggerAfterAuthHook} from '../helpers';
 import {HandleAdminClientError} from '../../../clients';
@@ -114,9 +113,7 @@ export class TokenExchangeStrategy<Config extends AppConfigArg>
       request,
       onError: async ({session, error}: OnErrorOptions) => {
         if (error.response.code === 401) {
-          logger.debug('Responding to invalid access token', {
-            shop: getShopFromRequest(request),
-          });
+          logger.debug('Responding to invalid access token');
           await invalidateAccessToken({config, api, logger}, session);
 
           respondToInvalidSessionToken({

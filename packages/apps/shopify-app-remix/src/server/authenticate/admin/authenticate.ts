@@ -9,7 +9,6 @@ import {
   respondToBotRequest,
   respondToOptionsRequest,
   validateSessionToken,
-  getShopFromRequest,
 } from '../helpers';
 
 import {
@@ -61,9 +60,7 @@ export function authStrategyFactory<
     const url = new URL(request.url);
 
     if (url.pathname === config.auth.patchSessionTokenPath) {
-      logger.debug('Rendering bounce page', {
-        shop: getShopFromRequest(request),
-      });
+      logger.debug('Rendering bounce page');
       throw renderAppBridge({config, logger, api}, request);
     }
   }
@@ -74,10 +71,7 @@ export function authStrategyFactory<
     if (url.pathname === config.auth.exitIframePath) {
       const destination = url.searchParams.get('exitIframe')!;
 
-      logger.debug('Rendering exit iframe page', {
-        shop: getShopFromRequest(request),
-        destination,
-      });
+      logger.debug('Rendering exit iframe page');
       throw renderAppBridge({config, logger, api}, request, {url: destination});
     }
   }
@@ -160,9 +154,7 @@ export function authStrategyFactory<
         await ensureSessionTokenSearchParamIfRequired(params, request);
       }
 
-      logger.info('Authenticating admin request', {
-        shop: getShopFromRequest(request),
-      });
+      logger.info('Authenticating admin request');
 
       const {payload, shop, sessionId, sessionToken} =
         await getSessionTokenContext(params, request);
@@ -181,9 +173,7 @@ export function authStrategyFactory<
       return createContext(request, session, strategy, payload);
     } catch (errorOrResponse) {
       if (errorOrResponse instanceof Response) {
-        logger.debug('Authenticate returned a response', {
-          shop: getShopFromRequest(request),
-        });
+        logger.debug('Authenticate returned a response');
         ensureCORSHeadersFactory(params, request)(errorOrResponse);
       }
 
@@ -203,7 +193,6 @@ async function getSessionTokenContext(
   const sessionToken = (headerSessionToken || searchParamSessionToken)!;
 
   logger.debug('Attempting to authenticate session token', {
-    shop: getShopFromRequest(request),
     sessionToken: JSON.stringify({
       header: headerSessionToken,
       search: searchParamSessionToken,
