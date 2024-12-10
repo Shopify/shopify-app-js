@@ -301,7 +301,7 @@ export const SUBSCRIPTIONS_WITH_USAGE_PLANS_RESPONSE = JSON.stringify({
               plan: {
                 pricingDetails: {
                   balanceUsed: {
-                    amount: 0,
+                    amount: '0',
                     currencyCode: 'USD',
                   },
                   cappedAmount: {
@@ -339,7 +339,7 @@ export const SUBSCRIPTIONS_WITH_USAGE_PLANS_NOT_ACTIVE_RESPONSE =
 
 export const USAGE_RECORD_DESCRIPTION = 'Usage record description';
 export const USAGE_RECORD_PRICE = {
-  amount: 1.0,
+  amount: '1.0',
   currencyCode: 'USD',
 } as Money;
 export const USAGE_RECORD_SUBSCRIPTION_ID = 'gid://456';
