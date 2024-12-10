@@ -158,12 +158,12 @@ export const USAGE_RECORD_CREATE_RESPONSE = JSON.stringify({
 export const USAGE_RECORD = {
   description: 'Usage record description',
   id: 'gid://123',
-  price: {amount: 1, currencyCode: 'USD'},
+  price: {amount: '1.0', currencyCode: 'USD'},
   subscriptionLineItem: {
     id: 'gid://456',
     plan: {
       pricingDetails: {
-        balanceUsed: {amount: 1, currencyCode: 'USD'},
+        balanceUsed: {amount: '1.0', currencyCode: 'USD'},
         cappedAmount: {amount: '5.00', currencyCode: 'USD'},
         terms: '1 dollar per usage',
       },
