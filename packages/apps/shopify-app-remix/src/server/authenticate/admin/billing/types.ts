@@ -78,7 +78,7 @@ export interface CreateUsageRecordOptions {
     /**
      * The amount to charge for this usage record.
      */
-    amount: number;
+    amount: string;
     /**
      * The currency code for this usage record.
      */
