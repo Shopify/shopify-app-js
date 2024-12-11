@@ -88,7 +88,9 @@ export async function assessPayments({
     installation.activeSubscriptions.forEach((subscription) => {
       if (subscriptionMeetsCriteria({subscription, isTest, plans})) {
         returnValue.hasActivePayment = true;
-        subscription.lineItems = convertLineItems(subscription.lineItems || []);
+        if (subscription.lineItems) {
+          subscription.lineItems = convertLineItems(subscription.lineItems);
+        }
         returnValue.appSubscriptions.push(subscription);
       }
     });
