@@ -142,7 +142,7 @@ describe('Create usage record', () => {
         billing.createUsageRecord({
           subscriptionLineItemId: '123',
           price: {
-            amount: 5,
+            amount: '5',
             currencyCode: 'USD',
           },
           description: 'A usage record',
@@ -185,7 +185,7 @@ describe('Create usage record', () => {
         billing.createUsageRecord({
           subscriptionLineItemId: '123',
           price: {
-            amount: 5,
+            amount: '5',
             currencyCode: 'USD',
           },
           description: 'A usage record',
@@ -233,7 +233,7 @@ describe('Create usage record', () => {
         billing.createUsageRecord({
           subscriptionLineItemId: '123',
           price: {
-            amount: 5,
+            amount: '5',
             currencyCode: 'USD',
           },
           description: 'A usage record',
@@ -285,7 +285,7 @@ describe('Create usage record', () => {
         subscriptionLineItemId: '123',
         isTest: true,
         price: {
-          amount: 5,
+          amount: '5',
           currencyCode: 'USD',
         },
         description: 'A usage record',

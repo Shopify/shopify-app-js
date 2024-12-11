@@ -427,7 +427,7 @@ export interface UsageAppPlan {
 }
 
 export interface Money {
-  amount: number;
+  amount: string;
   currencyCode: string;
 }
 
@@ -506,7 +506,7 @@ export interface BillingCreateUsageRecordParams {
     /**
      * The amount to charge for this usage record.
      */
-    amount: number;
+    amount: string;
     /**
      * The currency code for this usage record.
      */
@@ -542,7 +542,7 @@ export interface UsageRecord {
     /**
      * The amount to charge for this usage record.
      */
-    amount: number;
+    amount: string;
     /**
      * The currency code for this usage record.
      */
