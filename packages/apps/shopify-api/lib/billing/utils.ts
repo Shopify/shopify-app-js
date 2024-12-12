@@ -1,11 +1,11 @@
-import { ActiveSubscriptionLineItem } from './types';
+import {ActiveSubscriptionLineItem} from './types';
 
 /**
  * Converts string amounts to numbers in Money type objects
  */
 export function convertMoneyAmount(data: any) {
   if (!data) return data;
-  
+
   convertAppUsagePricingMoney(data);
   convertAppRecurringPricingMoney(data);
   convertAppDiscountMoney(data);
@@ -24,12 +24,22 @@ export function convertAppRecurringPricingMoney(data: any): void {
 export function convertAppDiscountMoney(data: any): void {
   if (!data) return;
 
-  if (data.discount?.priceAfterDiscount?.amount && typeof data.discount.priceAfterDiscount.amount === 'string') {
-    data.discount.priceAfterDiscount.amount = parseFloat(data.discount.priceAfterDiscount.amount);
+  if (
+    data.discount?.priceAfterDiscount?.amount &&
+    typeof data.discount.priceAfterDiscount.amount === 'string'
+  ) {
+    data.discount.priceAfterDiscount.amount = parseFloat(
+      data.discount.priceAfterDiscount.amount,
+    );
   }
-  
-  if (data.discount?.value?.amount?.amount && typeof data.discount.value.amount.amount === 'string') {
-    data.discount.value.amount.amount = parseFloat(data.discount.value.amount.amount);
+
+  if (
+    data.discount?.value?.amount?.amount &&
+    typeof data.discount.value.amount.amount === 'string'
+  ) {
+    data.discount.value.amount.amount = parseFloat(
+      data.discount.value.amount.amount,
+    );
   }
 }
 
@@ -40,7 +50,10 @@ export function convertAppUsagePricingMoney(data: any): void {
     data.balanceUsed.amount = parseFloat(data.balanceUsed.amount);
   }
 
-  if (data.cappedAmount?.amount && typeof data.cappedAmount.amount === 'string') {
+  if (
+    data.cappedAmount?.amount &&
+    typeof data.cappedAmount.amount === 'string'
+  ) {
     data.cappedAmount.amount = parseFloat(data.cappedAmount.amount);
   }
 }

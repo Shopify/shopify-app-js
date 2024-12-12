@@ -79,13 +79,15 @@ export function subscriptions(config: ConfigInterface): BillingSubscriptions {
     const GraphqlClient = graphqlClientClass({config});
     const client = new GraphqlClient({session});
 
-    const response = await client.request<SubscriptionResponse>(SUBSCRIPTION_QUERY);
+    const response =
+      await client.request<SubscriptionResponse>(SUBSCRIPTION_QUERY);
 
     if (!response.data?.currentAppInstallation?.activeSubscriptions) {
       return {activeSubscriptions: []};
     }
 
-    const activeSubscriptions = response.data.currentAppInstallation.activeSubscriptions;
+    const activeSubscriptions =
+      response.data.currentAppInstallation.activeSubscriptions;
     activeSubscriptions.forEach((subscription) => {
       if (subscription.lineItems) {
         subscription.lineItems = convertLineItems(subscription.lineItems);

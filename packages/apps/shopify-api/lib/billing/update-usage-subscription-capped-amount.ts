@@ -89,7 +89,8 @@ export function updateUsageCappedAmount(
         });
       }
 
-      const appSubscription = response.data?.appSubscriptionLineItemUpdate?.appSubscription!;
+      const appSubscription =
+        response.data?.appSubscriptionLineItemUpdate?.appSubscription!;
       if (appSubscription && appSubscription.lineItems) {
         appSubscription.lineItems = convertLineItems(appSubscription.lineItems);
       }
@@ -97,7 +98,7 @@ export function updateUsageCappedAmount(
       return {
         confirmationUrl:
           response.data?.appSubscriptionLineItemUpdate?.confirmationUrl!,
-        appSubscription: appSubscription,
+        appSubscription,
       };
     } catch (error) {
       if (error instanceof GraphqlQueryError) {
