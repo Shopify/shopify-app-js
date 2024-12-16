@@ -1,10 +1,14 @@
 import {ShopifyRestResources} from '@shopify/shopify-api';
 
 import {AppConfigArg} from '../../config-types';
-import {adminClientFactory} from '../../clients/admin';
+import {adminClientFactory, lazyAdminClientFactory} from '../../clients/admin';
 import {BasicParams} from '../../types';
 
 import type {AuthenticateFlow, FlowContext} from './types';
+import {
+  getMemoizedSessionForHeadlessRequest,
+  getSessionTokenHeader,
+} from '../helpers';
 
 export function authenticateFlowFactory<
   ConfigArg extends AppConfigArg,
@@ -45,29 +49,51 @@ export function authenticateFlowFactory<
 
     const payload = JSON.parse(rawBody);
 
-    logger.debug('Flow request is valid, looking for an offline session', {
-      shop: payload.shopify_domain,
-    });
-
-    const sessionId = api.session.getOfflineId(payload.shopify_domain);
-    const session = await config.sessionStorage!.loadSession(sessionId);
-
-    if (!session) {
-      logger.info('Flow request could not find session', {
+    if (config.future?.lazy_session_creation !== true) {
+      logger.debug('Flow request is valid, looking for an offline session', {
         shop: payload.shopify_domain,
       });
+
+      const sessionId = api.session.getOfflineId(payload.shopify_domain);
+      const session = await config.sessionStorage!.loadSession(sessionId);
+
+      if (!session) {
+        logger.info('Flow request could not find session', {
+          shop: payload.shopify_domain,
+        });
+        throw new Response(undefined, {
+          status: 400,
+          statusText: 'Bad Request',
+        });
+      }
+
+      logger.debug('Found a session for the flow request', {
+        shop: session.shop,
+      });
+
+      return {
+        session,
+        payload,
+        admin: adminClientFactory<ConfigArg, Resources>({params, session}),
+      };
+    }
+
+    const idToken = getSessionTokenHeader(request);
+
+    if (!idToken) {
+      logger.debug('No authorization header found. Request can not be trusted');
       throw new Response(undefined, {
-        status: 400,
-        statusText: 'Bad Request',
+        status: 401,
+        statusText: 'Unauthorized',
       });
     }
 
-    logger.debug('Found a session for the flow request', {shop: session.shop});
-
     return {
-      session,
       payload,
-      admin: adminClientFactory<ConfigArg, Resources>({params, session}),
+      admin: lazyAdminClientFactory<ConfigArg, Resources>({
+        params,
+        getSession: getMemoizedSessionForHeadlessRequest(params, request),
+      }),
     };
   };
 }

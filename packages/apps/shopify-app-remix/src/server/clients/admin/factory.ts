@@ -1,7 +1,9 @@
 import {Session, ShopifyRestResources} from '@shopify/shopify-api';
+import {AdminOperations} from '@shopify/admin-api-client';
 
 import type {AppConfigArg} from '../../config-types';
 import {BasicParams} from '../../types';
+import {GraphQLClient} from '../types';
 
 import {graphqlClientFactory} from './graphql';
 import {restClientFactory} from './rest';
@@ -34,5 +36,38 @@ export function adminClientFactory<
       handleClientError,
     }),
     graphql: graphqlClientFactory({params, session, handleClientError}),
+  } as AdminApiContext<ConfigArg, Resources>;
+}
+
+export function lazyAdminClientFactory<
+  ConfigArg extends AppConfigArg,
+  Resources extends ShopifyRestResources = ShopifyRestResources,
+>({
+  params,
+  getSession,
+  handleClientError,
+}: {
+  params: BasicParams;
+  handleClientError?: (error: any) => Promise<void>;
+  getSession: () => Promise<Session | undefined>;
+}): AdminApiContext<ConfigArg, Resources> {
+  const graphql: GraphQLClient<AdminOperations> = async (query, options) => {
+    const session = await getSession();
+
+    if (!session) {
+      throw new Response('', {status: 401});
+    }
+
+    const graphql = graphqlClientFactory({
+      params,
+      session,
+      handleClientError,
+    });
+
+    return graphql(query, options);
+  };
+
+  return {
+    graphql,
   } as AdminApiContext<ConfigArg, Resources>;
 }

@@ -45,6 +45,17 @@ export interface FutureFlags {
    * @default false
    */
   removeRest?: boolean;
+
+  /**
+   * When enabled:
+   *
+   * 1. Sessions are only created when needed, not proactively.
+   * 2. Instead of {session} being returned, {getSession} is returned.  This unlocks lazy session creation.
+   * 3. Headless requests (webhooks, app proxy, flow extensions) do not return sessions.
+   *
+   * @default false
+   */
+  lazy_session_creation?: boolean;
 }
 
 // When adding new flags, use this format:

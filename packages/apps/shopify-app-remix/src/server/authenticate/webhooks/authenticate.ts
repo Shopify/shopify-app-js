@@ -6,8 +6,12 @@ import {
 import {AppConfigArg} from '../../config-types';
 import type {BasicParams} from '../../types';
 import {adminClientFactory} from '../../clients';
-import {handleClientErrorFactory} from '../admin/helpers';
-import {createOrLoadOfflineSession} from '../helpers';
+import {
+  createOrLoadOfflineSession,
+  getMemoizedSessionForHeadlessRequest,
+  getSessionTokenHeader,
+} from '../helpers';
+import {lazyAdminClientFactory} from '../../clients/admin';
 
 import type {
   AuthenticateWebhook,
@@ -20,7 +24,7 @@ export function authenticateWebhookFactory<
   Resources extends ShopifyRestResources,
   Topics extends string,
 >(params: BasicParams): AuthenticateWebhook<ConfigArg, Resources, Topics> {
-  const {api, logger} = params;
+  const {api, logger, config} = params;
 
   return async function authenticate(
     request: Request,
@@ -55,8 +59,8 @@ export function authenticateWebhookFactory<
         throw new Response(undefined, {status: 400, statusText: 'Bad Request'});
       }
     }
-    const session = await createOrLoadOfflineSession(check.domain, params);
-    const webhookContext: WebhookContextWithoutSession<Topics> = {
+
+    const webhookContext = {
       apiVersion: check.apiVersion,
       shop: check.domain,
       topic: check.topic as Topics,
@@ -67,20 +71,32 @@ export function authenticateWebhookFactory<
       admin: undefined,
     };
 
-    if (!session) {
-      return webhookContext;
+    if (config.future?.lazy_session_creation !== true) {
+      const session = await createOrLoadOfflineSession(check.domain, params);
+
+      if (!session) {
+        // PENDING: Probably not type safe
+        return webhookContext as WebhookContext<ConfigArg, Resources, Topics>;
+      }
+
+      // PENDING: Probably not type safe
+      return {
+        ...webhookContext,
+        session,
+        admin: adminClientFactory<ConfigArg, Resources>({
+          params,
+          session,
+        }),
+      } as WebhookContext<ConfigArg, Resources, Topics>;
     }
 
-    const admin = adminClientFactory<ConfigArg, Resources>({
-      params,
-      session,
-      handleClientError: handleClientErrorFactory({request}),
-    });
-
+    // PENDING: Probably not type safe
     return {
       ...webhookContext,
-      session,
-      admin,
-    };
+      admin: lazyAdminClientFactory({
+        params,
+        getSession: getMemoizedSessionForHeadlessRequest(params, request),
+      }),
+    } as WebhookContext<ConfigArg, Resources, Topics>;
   };
 }

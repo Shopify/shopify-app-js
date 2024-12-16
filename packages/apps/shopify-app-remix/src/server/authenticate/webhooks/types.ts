@@ -2,6 +2,7 @@ import {Session, ShopifyRestResources} from '@shopify/shopify-api';
 
 import {AppConfigArg} from '../../config-types';
 import type {AdminApiContext} from '../../clients';
+import {FeatureEnabled} from '../../future/flags';
 
 export interface RegisterWebhooksOptions {
   /**
@@ -220,13 +221,25 @@ export interface WebhookContextWithSession<
   admin: AdminApiContext<ConfigArg, Resources>;
 }
 
+export interface WebhookContextWithLazySession<
+  ConfigArg extends AppConfigArg,
+  Resources extends ShopifyRestResources,
+  Topics = string | number | symbol,
+> extends Context<Topics> {
+  session: undefined;
+  admin: AdminApiContext<ConfigArg, Resources>;
+}
+
 export type WebhookContext<
   ConfigArg extends AppConfigArg,
   Resources extends ShopifyRestResources,
   Topics = string | number | symbol,
 > =
-  | WebhookContextWithoutSession<Topics>
-  | WebhookContextWithSession<ConfigArg, Resources, Topics>;
+  FeatureEnabled<ConfigArg['future'], 'lazy_session_creation'> extends true
+    ? WebhookContextWithLazySession<ConfigArg, Resources, Topics>
+    :
+        | WebhookContextWithoutSession<Topics>
+        | WebhookContextWithSession<ConfigArg, Resources, Topics>;
 
 export type AuthenticateWebhook<
   ConfigArg extends AppConfigArg,
