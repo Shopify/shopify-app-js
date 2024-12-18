@@ -1,6 +1,6 @@
-# Migrating to v12
+# Migrating to v11
 
-This document outlines the changes you need to make to your app to migrate from v11 to v12 of this package.
+This document outlines the changes you need to make to your app to migrate from v10 to v11 of this package.
 
 ## Shopify managed pricing support
 
