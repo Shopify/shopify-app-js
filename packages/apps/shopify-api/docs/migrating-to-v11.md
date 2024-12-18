@@ -15,7 +15,7 @@ To make it easier to navigate this guide, here is an overview of the sections it
 ---
 
 ## Updates `CustomerAddress` REST Admin API
-Added an is_default field to CustomerAddress so it doesn't overlap with the existing default() method we provide in the class.
+Added an `is_default` field to `CustomerAddress` so it doesn't overlap with the existing `default()` method we provide in the class.
 
 Before:
 ```ts
