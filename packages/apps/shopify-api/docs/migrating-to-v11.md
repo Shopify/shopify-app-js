@@ -10,7 +10,7 @@ To make it easier to navigate this guide, here is an overview of the sections it
 
 - Removing Node 16 support
 - Add Node 22 support
-- [Updates `CustomerAddress` REST Admin API](#updates-curstomeraddress-rest-admin-api)
+- [Updates `CustomerAddress` REST Admin API](#updates-customeraddress-rest-admin-api)
 
 ---
 
