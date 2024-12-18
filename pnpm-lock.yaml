@@ -233,7 +233,7 @@ importers:
         version: 0.30.0
       drizzle-orm:
         specifier: ^0.38.2
-        version: 0.38.2(@cloudflare/workers-types@4.20241202.0)(@libsql/client@0.14.0(encoding@0.1.13))(@prisma/client@5.22.0(prisma@5.22.0))(@types/better-sqlite3@7.6.12)(@types/pg@8.11.6)(@types/react@18.3.12)(better-sqlite3@11.7.0)(mysql2@3.11.5)(pg@8.12.0)(prisma@5.22.0)(react@18.3.1)(sqlite3@5.1.7)
+        version: 0.38.2(@cloudflare/workers-types@4.20241202.0)(@libsql/client@0.14.0(encoding@0.1.13))(@prisma/client@5.22.0(prisma@5.22.0))(@types/better-sqlite3@7.6.12)(@types/pg@8.11.6)(@types/react@19.0.1)(better-sqlite3@11.7.0)(mysql2@3.11.5)(pg@8.12.0)(prisma@5.22.0)(react@18.3.1)(sqlite3@5.1.7)
       mysql2:
         specifier: ^3.11.5
         version: 3.11.5
@@ -580,8 +580,8 @@ importers:
         specifier: ^9.0.7
         version: 9.0.7
       '@types/react':
-        specifier: ^18.3.12
-        version: 18.3.12
+        specifier: ^19.0.1
+        version: 19.0.1
       '@types/semver':
         specifier: ^7.5.8
         version: 7.5.8
@@ -3535,6 +3535,9 @@ packages:
 
   '@types/react@18.3.12':
     resolution: {integrity: sha512-D2wOSq/d6Agt28q7rSI3jhU7G6aiuzljDGZ2hTZHIkrTLUI+AF3WMeKkEZ9nN2fkBAlcktT6vcZjDFiIhMYEQw==}
+
+  '@types/react@19.0.1':
+    resolution: {integrity: sha512-YW6614BDhqbpR5KtUYzTA+zlA7nayzJRA9ljz9CQoxthR0sDisYZLuvSMsil36t4EH/uAt8T52Xb4sVw17G+SQ==}
 
   '@types/resolve@1.20.2':
     resolution: {integrity: sha512-60BCwRFOZCQhDncwQdxxeOEEkbc5dIMccYLwbxsS4TUNeVECQ/pBJ0j09mrHOl/JJvpRPGwO9SvE4nR2Nb/a4Q==}
@@ -11403,7 +11406,7 @@ snapshots:
     dependencies:
       '@shopify/polaris-icons': 8.11.1(react@18.3.1)
       '@shopify/polaris-tokens': 8.10.0
-      '@types/react': 18.3.12
+      '@types/react': 19.0.1
       '@types/react-dom': 18.3.0
       '@types/react-transition-group': 4.4.11
       react: 18.3.1
@@ -11914,15 +11917,19 @@ snapshots:
 
   '@types/react-dom@18.3.0':
     dependencies:
-      '@types/react': 18.3.12
+      '@types/react': 19.0.1
 
   '@types/react-transition-group@4.4.11':
     dependencies:
-      '@types/react': 18.3.12
+      '@types/react': 19.0.1
 
   '@types/react@18.3.12':
     dependencies:
       '@types/prop-types': 15.7.13
+      csstype: 3.1.3
+
+  '@types/react@19.0.1':
+    dependencies:
       csstype: 3.1.3
 
   '@types/resolve@1.20.2': {}
@@ -13017,14 +13024,14 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  drizzle-orm@0.38.2(@cloudflare/workers-types@4.20241202.0)(@libsql/client@0.14.0(encoding@0.1.13))(@prisma/client@5.22.0(prisma@5.22.0))(@types/better-sqlite3@7.6.12)(@types/pg@8.11.6)(@types/react@18.3.12)(better-sqlite3@11.7.0)(mysql2@3.11.5)(pg@8.12.0)(prisma@5.22.0)(react@18.3.1)(sqlite3@5.1.7):
+  drizzle-orm@0.38.2(@cloudflare/workers-types@4.20241202.0)(@libsql/client@0.14.0(encoding@0.1.13))(@prisma/client@5.22.0(prisma@5.22.0))(@types/better-sqlite3@7.6.12)(@types/pg@8.11.6)(@types/react@19.0.1)(better-sqlite3@11.7.0)(mysql2@3.11.5)(pg@8.12.0)(prisma@5.22.0)(react@18.3.1)(sqlite3@5.1.7):
     optionalDependencies:
       '@cloudflare/workers-types': 4.20241202.0
       '@libsql/client': 0.14.0(encoding@0.1.13)
       '@prisma/client': 5.22.0(prisma@5.22.0)
       '@types/better-sqlite3': 7.6.12
       '@types/pg': 8.11.6
-      '@types/react': 18.3.12
+      '@types/react': 19.0.1
       better-sqlite3: 11.7.0
       mysql2: 3.11.5
       pg: 8.12.0
