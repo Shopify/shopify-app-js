@@ -8,7 +8,9 @@ export async function invalidateAccessToken(
 ): Promise<void> {
   const {logger, config} = params;
 
-  logger.debug(`Invalidating access token for session - ${session.id}`);
+  logger.debug(`Invalidating access token for session - ${session.id}`, {
+    shop: session.shop,
+  });
 
   session.accessToken = undefined;
   await config.sessionStorage!.storeSession(session);

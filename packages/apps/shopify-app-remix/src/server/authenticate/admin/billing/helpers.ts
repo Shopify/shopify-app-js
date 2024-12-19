@@ -11,7 +11,7 @@ export function redirectOutOfApp(
 ): never {
   const {config, logger} = params;
 
-  logger.debug('Redirecting out of app', {url});
+  logger.debug('Redirecting out of app', {shop, url});
 
   const requestUrl = new URL(request.url);
   const isEmbeddedRequest = requestUrl.searchParams.get('embedded') === '1';
