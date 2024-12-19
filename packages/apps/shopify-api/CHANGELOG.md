@@ -1,5 +1,12 @@
 # Changelog
 
+## 11.6.2
+
+### Patch Changes
+
+- 6b71f39: Updated `express` dependencies
+- 6681802: Updated `isbot` dependencies
+
 ## 11.6.1
 
 ### Patch Changes
