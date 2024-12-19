@@ -10,6 +10,7 @@ import {BasicParams} from '../../../types';
 import {ApiConfigWithFutureFlags, ApiFutureFlags} from '../../../future/flags';
 import {HandleAdminClientError} from '../../../clients';
 import {handleClientErrorFactory} from '../helpers';
+import {getShopFromRequest} from '../../helpers';
 
 import {AuthorizationStrategy, OnErrorOptions, SessionContext} from './types';
 
@@ -31,8 +32,10 @@ export class MerchantCustomAuth<Config extends AppConfigArg>
     this.logger = logger;
   }
 
-  public async respondToOAuthRequests(_request: Request): Promise<void> {
-    this.logger.debug('Skipping OAuth request for merchant custom app');
+  public async respondToOAuthRequests(request: Request): Promise<void> {
+    this.logger.debug('Skipping OAuth request for merchant custom app', {
+      shop: getShopFromRequest(request),
+    });
   }
 
   public async authenticate(
@@ -43,6 +46,7 @@ export class MerchantCustomAuth<Config extends AppConfigArg>
 
     this.logger.debug(
       'Building session from configured access token for merchant custom app',
+      {shop},
     );
     const session = this.api.session.customAppSession(shop);
 
