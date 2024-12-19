@@ -1,5 +1,15 @@
 # @shopify/shopify-app-remix
 
+## 3.5.2
+
+### Patch Changes
+
+- 6681802: Updated `isbot` dependencies
+- Updated dependencies [6b71f39]
+- Updated dependencies [6681802]
+  - @shopify/shopify-api@11.6.2
+  - @shopify/shopify-app-session-storage@3.0.10
+
 ## 3.5.1
 
 ### Patch Changes

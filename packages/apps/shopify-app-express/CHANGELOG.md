@@ -1,5 +1,16 @@
 # Changelog
 
+## 5.0.10
+
+### Patch Changes
+
+- 6b71f39: Updated `express` dependencies
+- Updated dependencies [6b71f39]
+- Updated dependencies [6681802]
+  - @shopify/shopify-api@11.6.2
+  - @shopify/shopify-app-session-storage@3.0.10
+  - @shopify/shopify-app-session-storage-memory@4.0.10
+
 ## 5.0.9
 
 ### Patch Changes
