@@ -87,7 +87,7 @@ export class MobilePlatformApplication extends Base {
 
   public app_clip_application_id: string | null;
   public application_id: string | null;
-  public enabled_app_clips: {[key: string]: unknown} | null;
+  public enabled_app_clips: boolean | null;
   public enabled_shared_webcredentials: boolean | null;
   public enabled_universal_or_app_links: boolean | null;
   public id: number | null;
