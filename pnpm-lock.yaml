@@ -198,7 +198,7 @@ importers:
   packages/apps/session-storage/shopify-app-session-storage:
     devDependencies:
       '@shopify/shopify-api':
-        specifier: ^11.6.2
+        specifier: ^11.7.0
         version: link:../../shopify-api
 
   packages/apps/session-storage/shopify-app-session-storage-drizzle:
@@ -406,7 +406,7 @@ importers:
   packages/apps/session-storage/shopify-app-session-storage-test-utils:
     devDependencies:
       '@shopify/shopify-api':
-        specifier: ^11.6.2
+        specifier: ^11.7.0
         version: link:../../shopify-api
       '@shopify/shopify-app-session-storage':
         specifier: ^3.0.10
@@ -491,7 +491,7 @@ importers:
   packages/apps/shopify-app-express:
     dependencies:
       '@shopify/shopify-api':
-        specifier: ^11.6.2
+        specifier: ^11.7.0
         version: link:../shopify-api
       '@shopify/shopify-app-session-storage':
         specifier: ^3.0.10
@@ -537,7 +537,7 @@ importers:
         specifier: ^1.0.4
         version: link:../../api-clients/admin-api-client
       '@shopify/shopify-api':
-        specifier: ^11.6.2
+        specifier: ^11.7.0
         version: link:../shopify-api
       '@shopify/shopify-app-session-storage':
         specifier: ^3.0.10
