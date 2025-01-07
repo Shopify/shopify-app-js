@@ -10,7 +10,8 @@ describe('JWT validation', () => {
   it('returns token when successful', async () => {
     // GIVEN
     const shopify = shopifyApp(testConfig());
-    const {token, payload} = getJwt();
+    // Checkout UI session tokens don't include the protocol
+    const {token, payload} = getJwt({dest: 'test-shop.myshopify.com'});
 
     // WHEN
     const {sessionToken} = await shopify.authenticate.public.checkout(
@@ -28,7 +29,7 @@ describe('JWT validation', () => {
   it('sets extra CORS allowed headers when requested from a different origin', async () => {
     // GIVEN
     const shopify = shopifyApp(testConfig());
-    const {token} = getJwt();
+    const {token} = getJwt({dest: 'test-shop.myshopify.com'});
 
     // WHEN
     const {cors} = await shopify.authenticate.public.checkout(
@@ -51,7 +52,7 @@ describe('JWT validation', () => {
   it('responds to preflight requests', async () => {
     // GIVEN
     const shopify = shopifyApp(testConfig());
-    const {token} = getJwt();
+    const {token} = getJwt({dest: 'test-shop.myshopify.com'});
 
     // WHEN
     const response = await getThrownResponse(
@@ -69,7 +70,7 @@ describe('JWT validation', () => {
   it('responds to preflight requests from a different origin with extra CORS allowed headers', async () => {
     // GIVEN
     const shopify = shopifyApp(testConfig());
-    const {token} = getJwt();
+    const {token} = getJwt({dest: 'test-shop.myshopify.com'});
     const request = new Request(APP_URL, {
       method: 'OPTIONS',
       headers: {
