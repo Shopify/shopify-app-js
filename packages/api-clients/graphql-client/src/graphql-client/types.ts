@@ -99,11 +99,11 @@ export type Logger<TLogContentTypes = LogContentTypes> = (
 ) => void;
 
 export interface ClientOptions {
-  readonly headers: HeadersObject;
+  headers: HeadersObject;
   url: string;
   customFetchApi?: CustomFetchApi;
   retries?: number;
-  readonly logger?: Logger;
+  logger?: Logger;
 }
 
 export interface ClientConfig {
