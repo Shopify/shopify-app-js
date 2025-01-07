@@ -21,10 +21,10 @@ export type {HeadersObject as Headers};
 export interface ResponseErrors {
   networkStatusCode?: number;
   message?: string;
-  graphQLErrors?: Array<{
+  graphQLErrors?: {
     message: string;
     extensions?: GQLExtensions;
-  }>;
+  }[];
   response?: Response;
 }
 
