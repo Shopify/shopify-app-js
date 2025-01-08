@@ -430,8 +430,8 @@ importers:
         specifier: ^6.1.1
         version: 6.1.1
       isbot:
-        specifier: ^5.1.18
-        version: 5.1.18
+        specifier: ^5.1.20
+        version: 5.1.20
       jose:
         specifier: ^5.9.6
         version: 5.9.6
@@ -546,8 +546,8 @@ importers:
         specifier: ^1.0.3
         version: link:../../api-clients/storefront-api-client
       isbot:
-        specifier: ^5.1.18
-        version: 5.1.18
+        specifier: ^5.1.20
+        version: 5.1.20
       react:
         specifier: '*'
         version: 18.3.1
@@ -5558,8 +5558,8 @@ packages:
   isarray@2.0.5:
     resolution: {integrity: sha512-xHjhDr3cNBK0BzdUJSPXZntQUx/mwMS5Rw4A7lPJ90XGAO6ISP/ePDNuo0vhqOZU+UD5JoodwCAAoZQd3FeAKw==}
 
-  isbot@5.1.18:
-    resolution: {integrity: sha512-df9RdChv1DheItzN5pNKtblc9/otzJYmxjf9GhCZG/f0TCcGCbQFmtM3e+SD0e8EI3/O2tIXPYVaG4FUaIIa6Q==}
+  isbot@5.1.20:
+    resolution: {integrity: sha512-cW535S5c05UBfx8bTAZHACjEXyY/p10bvAx5YeqoLEFoGC1HQ6A5n3ScpZRYd1zSwwNF8yYkEOq2F7WjFhX2ig==}
     engines: {node: '>=18'}
 
   isexe@2.0.0:
@@ -14226,7 +14226,7 @@ snapshots:
 
   isarray@2.0.5: {}
 
-  isbot@5.1.18: {}
+  isbot@5.1.20: {}
 
   isexe@2.0.0: {}
 
