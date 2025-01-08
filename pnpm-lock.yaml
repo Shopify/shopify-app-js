@@ -205,10 +205,10 @@ importers:
     dependencies:
       '@shopify/shopify-api':
         specifier: ^11.0.0
-        version: link:../../shopify-api
+        version: 11.7.0(encoding@0.1.13)
       '@shopify/shopify-app-session-storage':
         specifier: ^3.0.0
-        version: link:../shopify-app-session-storage
+        version: 3.0.10(@shopify/shopify-api@11.7.0(encoding@0.1.13))
       tslib:
         specifier: ^2.8.1
         version: 2.8.1
@@ -233,7 +233,7 @@ importers:
         version: 0.30.1
       drizzle-orm:
         specifier: ^0.38.3
-        version: 0.38.3(@cloudflare/workers-types@4.20241230.0)(@libsql/client@0.14.0(encoding@0.1.13))(@prisma/client@6.2.0(prisma@5.22.0))(@types/better-sqlite3@7.6.12)(@types/pg@8.11.6)(@types/react@18.3.12)(better-sqlite3@11.7.2)(mysql2@3.12.0)(pg@8.12.0)(prisma@5.22.0)(react@18.3.1)(sqlite3@5.1.7)
+        version: 0.38.3(@cloudflare/workers-types@4.20241230.0)(@libsql/client@0.14.0(encoding@0.1.13))(@prisma/client@6.2.1(prisma@5.22.0))(@types/better-sqlite3@7.6.12)(@types/pg@8.11.6)(@types/react@18.3.12)(better-sqlite3@11.7.2)(mysql2@3.12.0)(pg@8.12.0)(prisma@5.22.0)(react@18.3.1)(sqlite3@5.1.7)
       mysql2:
         specifier: ^3.12.0
         version: 3.12.0
@@ -251,10 +251,10 @@ importers:
         version: 3.724.0(@aws-sdk/client-dynamodb@3.724.0)
       '@shopify/shopify-api':
         specifier: ^11.0.0
-        version: link:../../shopify-api
+        version: 11.7.0(encoding@0.1.13)
       '@shopify/shopify-app-session-storage':
         specifier: ^3.0.0
-        version: link:../shopify-app-session-storage
+        version: 3.0.10(@shopify/shopify-api@11.7.0(encoding@0.1.13))
     devDependencies:
       '@shopify/shopify-app-session-storage-test-utils':
         specifier: ^3.0.10
@@ -264,10 +264,10 @@ importers:
     dependencies:
       '@shopify/shopify-api':
         specifier: ^11.0.0
-        version: link:../../shopify-api
+        version: 11.7.0(encoding@0.1.13)
       '@shopify/shopify-app-session-storage':
         specifier: ^3.0.0
-        version: link:../shopify-app-session-storage
+        version: 3.0.10(@shopify/shopify-api@11.7.0(encoding@0.1.13))
       semver:
         specifier: ^7.6.2
         version: 7.6.3
@@ -286,10 +286,10 @@ importers:
     dependencies:
       '@shopify/shopify-api':
         specifier: ^11.0.0
-        version: link:../../shopify-api
+        version: 11.7.0(encoding@0.1.13)
       '@shopify/shopify-app-session-storage':
         specifier: ^3.0.0
-        version: link:../shopify-app-session-storage
+        version: 3.0.10(@shopify/shopify-api@11.7.0(encoding@0.1.13))
     devDependencies:
       '@shopify/shopify-app-session-storage-test-utils':
         specifier: ^3.0.10
@@ -299,10 +299,10 @@ importers:
     dependencies:
       '@shopify/shopify-api':
         specifier: ^11.0.0
-        version: link:../../shopify-api
+        version: 11.7.0(encoding@0.1.13)
       '@shopify/shopify-app-session-storage':
         specifier: ^3.0.0
-        version: link:../shopify-app-session-storage
+        version: 3.0.10(@shopify/shopify-api@11.7.0(encoding@0.1.13))
       mongodb:
         specifier: ^6.12.0
         version: 6.12.0(socks@2.8.3)
@@ -315,10 +315,10 @@ importers:
     dependencies:
       '@shopify/shopify-api':
         specifier: ^11.0.0
-        version: link:../../shopify-api
+        version: 11.7.0(encoding@0.1.13)
       '@shopify/shopify-app-session-storage':
         specifier: ^3.0.0
-        version: link:../shopify-app-session-storage
+        version: 3.0.10(@shopify/shopify-api@11.7.0(encoding@0.1.13))
       mysql2:
         specifier: ^3.12.0
         version: 3.12.0
@@ -331,10 +331,10 @@ importers:
     dependencies:
       '@shopify/shopify-api':
         specifier: ^11.0.0
-        version: link:../../shopify-api
+        version: 11.7.0(encoding@0.1.13)
       '@shopify/shopify-app-session-storage':
         specifier: ^3.0.0
-        version: link:../shopify-app-session-storage
+        version: 3.0.10(@shopify/shopify-api@11.7.0(encoding@0.1.13))
       pg:
         specifier: ^8.12.0
         version: 8.12.0
@@ -353,14 +353,14 @@ importers:
     dependencies:
       '@shopify/shopify-api':
         specifier: ^11.0.0
-        version: link:../../shopify-api
+        version: 11.7.0(encoding@0.1.13)
       '@shopify/shopify-app-session-storage':
         specifier: ^3.0.0
-        version: link:../shopify-app-session-storage
+        version: 3.0.10(@shopify/shopify-api@11.7.0(encoding@0.1.13))
     devDependencies:
       '@prisma/client':
         specifier: ^6.2.0
-        version: 6.2.0(prisma@5.22.0)
+        version: 6.2.1(prisma@5.22.0)
       '@shopify/shopify-app-session-storage-test-utils':
         specifier: ^3.0.10
         version: link:../shopify-app-session-storage-test-utils
@@ -372,10 +372,10 @@ importers:
     dependencies:
       '@shopify/shopify-api':
         specifier: ^11.0.0
-        version: link:../../shopify-api
+        version: 11.7.0(encoding@0.1.13)
       '@shopify/shopify-app-session-storage':
         specifier: ^3.0.0
-        version: link:../shopify-app-session-storage
+        version: 3.0.10(@shopify/shopify-api@11.7.0(encoding@0.1.13))
       redis:
         specifier: ^4.6.14
         version: 4.7.0
@@ -388,10 +388,10 @@ importers:
     dependencies:
       '@shopify/shopify-api':
         specifier: ^11.0.0
-        version: link:../../shopify-api
+        version: 11.7.0(encoding@0.1.13)
       '@shopify/shopify-app-session-storage':
         specifier: ^3.0.0
-        version: link:../shopify-app-session-storage
+        version: 3.0.10(@shopify/shopify-api@11.7.0(encoding@0.1.13))
       sqlite3:
         specifier: ^5.1.7
         version: 5.1.7
@@ -585,12 +585,18 @@ importers:
       '@types/semver':
         specifier: ^7.5.8
         version: 7.5.8
+      cross-fetch:
+        specifier: ^4.1.0
+        version: 4.1.0(encoding@0.1.13)
       jest-fetch-mock:
         specifier: ^3.0.3
         version: 3.0.3(encoding@0.1.13)
       jsonwebtoken:
         specifier: ^9.0.2
         version: 9.0.2
+      react-router-dom:
+        specifier: ~6.28.1
+        version: 6.28.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
 
 packages:
 
@@ -2745,8 +2751,8 @@ packages:
     resolution: {integrity: sha512-cq8o4cWH0ibXh9VGi5P20Tu9XF/0fFXl9EUinr9QfTM7a7p0oTA4iJRCQWppXR1Pg8dSM0UCItCkPwsk9qWWYA==}
     engines: {node: ^12.20.0 || ^14.18.0 || >=16.0.0}
 
-  '@prisma/client@6.2.0':
-    resolution: {integrity: sha512-tmEgej4OR+Wqk8MwZQcu58JzA1iFPmi/z7VPEmjTuTIQDLqHQZ6+MDRLL4wgNJXJkMHUKD9yMD5AkwYH0/0hKA==}
+  '@prisma/client@6.2.1':
+    resolution: {integrity: sha512-msKY2iRLISN8t5X0Tj7hU0UWet1u0KuxSPHWuf3IRkB4J95mCvGpyQBfQ6ufcmvKNOMQSq90O2iUmJEN2e5fiA==}
     engines: {node: '>=18.18'}
     peerDependencies:
       prisma: '*'
@@ -3081,30 +3087,36 @@ packages:
     cpu: [x64]
     os: [win32]
 
+  '@shopify/admin-api-client@1.0.4':
+    resolution: {integrity: sha512-IJ50MrVy245ivuxnrg0R1lwXoAmzqQ6FDeq/vFEhbxe20ub3CFL8lIUmbG+2Uql8vrsW4b7RML4COs22sPxArw==, tarball: https://npm.shopify.io/node/@shopify/admin-api-client/-/1.0.4/admin-api-client-1.0.4.tgz}
+
   '@shopify/babel-preset@25.0.0':
-    resolution: {integrity: sha512-2eVmLPGMLEdZ2u93pikVcwAf+XTpzYMtphFwuE1ZwlxBSQZg2H6OWbt/rnS79fAiJUmS7DSUel+ZlBzdSlg6Bg==}
+    resolution: {integrity: sha512-2eVmLPGMLEdZ2u93pikVcwAf+XTpzYMtphFwuE1ZwlxBSQZg2H6OWbt/rnS79fAiJUmS7DSUel+ZlBzdSlg6Bg==, tarball: https://npm.shopify.io/node/@shopify/babel-preset/-/25.0.0/babel-preset-25.0.0.tgz}
 
   '@shopify/eslint-plugin@45.0.0':
-    resolution: {integrity: sha512-aRgVkl+EovLk6OC4WzT+C6hgAyta5VReEIdetpe+/bJhVovlqbFjYa3yHGvEM4VuWv8sim7XH2VV3ZsDiwpgvQ==}
+    resolution: {integrity: sha512-aRgVkl+EovLk6OC4WzT+C6hgAyta5VReEIdetpe+/bJhVovlqbFjYa3yHGvEM4VuWv8sim7XH2VV3ZsDiwpgvQ==, tarball: https://npm.shopify.io/node/@shopify/eslint-plugin/-/45.0.0/eslint-plugin-45.0.0.tgz}
     peerDependencies:
       eslint: ^8.56.0
 
   '@shopify/generate-docs@0.16.4':
-    resolution: {integrity: sha512-lYtnB2gPPSBf73YvbrNM9u6p1cm/qbg1uEqkMW9sG4/dORb5tBPDDC/KkckaCaMF7soHg9PsinNXHAa0/Hlf4g==}
+    resolution: {integrity: sha512-lYtnB2gPPSBf73YvbrNM9u6p1cm/qbg1uEqkMW9sG4/dORb5tBPDDC/KkckaCaMF7soHg9PsinNXHAa0/Hlf4g==, tarball: https://npm.shopify.io/node/@shopify/generate-docs/-/0.16.4/generate-docs-0.16.4.tgz}
     hasBin: true
 
+  '@shopify/graphql-client@1.2.1':
+    resolution: {integrity: sha512-wySl/G7M/ZDxtcUEOF24wyfTigFnzW0hr3AzcldoQTl0OToLK2mQ7FBDSSwmfa00VrQ3TQwFM+tAAByK9tr3JQ==, tarball: https://npm.shopify.io/node/@shopify/graphql-client/-/1.2.1/graphql-client-1.2.1.tgz}
+
   '@shopify/graphql-codegen@0.1.0':
-    resolution: {integrity: sha512-G3sSesLj7Czt/J2Bj+XlQ8u4pkfQEt32hsjoS3UGZlf1eAiVw0aBBddp+NI5HqBAi0gM/f7GLRAhG3kktPhZmA==}
+    resolution: {integrity: sha512-G3sSesLj7Czt/J2Bj+XlQ8u4pkfQEt32hsjoS3UGZlf1eAiVw0aBBddp+NI5HqBAi0gM/f7GLRAhG3kktPhZmA==, tarball: https://npm.shopify.io/node/@shopify/graphql-codegen/-/0.1.0/graphql-codegen-0.1.0.tgz}
     engines: {node: '>=18'}
     peerDependencies:
       graphql: ^0.8.0 || ^0.9.0 || ^0.10.0 || ^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0 || ^16.0.0
 
   '@shopify/network@3.3.0':
-    resolution: {integrity: sha512-Lln7vglzLK9KiYhl9ucQFVM7ArlpUM21xkDriBX8kVrqsoBsi+4vFIjf1wjhNPT0J/zHMjky7jiTnxVfdm+xXw==}
+    resolution: {integrity: sha512-Lln7vglzLK9KiYhl9ucQFVM7ArlpUM21xkDriBX8kVrqsoBsi+4vFIjf1wjhNPT0J/zHMjky7jiTnxVfdm+xXw==, tarball: https://npm.shopify.io/node/@shopify/network/-/3.3.0/network-3.3.0.tgz}
     engines: {node: '>=18.12.0'}
 
   '@shopify/polaris-icons@8.11.1':
-    resolution: {integrity: sha512-2HLzvJWMejKIwS5P2bs7k5CAjBKwPnD/iy9ncPzcgqRjmFInBXLtUXFQhPWDw6JwXzb1ZjNQK/ssTctcfz87Sw==}
+    resolution: {integrity: sha512-2HLzvJWMejKIwS5P2bs7k5CAjBKwPnD/iy9ncPzcgqRjmFInBXLtUXFQhPWDw6JwXzb1ZjNQK/ssTctcfz87Sw==, tarball: https://npm.shopify.io/node/@shopify/polaris-icons/-/8.11.1/polaris-icons-8.11.1.tgz}
     engines: {node: ^16.17.0 || >=18.12.0}
     peerDependencies:
       react: '*'
@@ -3113,31 +3125,42 @@ packages:
         optional: true
 
   '@shopify/polaris-tokens@8.10.0':
-    resolution: {integrity: sha512-y4PDtRbFKGHwA6Lu7a3L4N9SDP6gZv4tw6u0viumtcXcbF0T2j1xPmyuJZNc9c7vmhNSARCg27NGQFpPgxuaEg==}
+    resolution: {integrity: sha512-y4PDtRbFKGHwA6Lu7a3L4N9SDP6gZv4tw6u0viumtcXcbF0T2j1xPmyuJZNc9c7vmhNSARCg27NGQFpPgxuaEg==, tarball: https://npm.shopify.io/node/@shopify/polaris-tokens/-/8.10.0/polaris-tokens-8.10.0.tgz}
     engines: {node: ^16.17.0 || >=18.12.0}
 
   '@shopify/polaris@12.27.0':
-    resolution: {integrity: sha512-Y8yus6iEjcfW2ZtEJtlqxbWeDJqTX3S/MOLH4GWRvU5gFYJQhlaHaETs0+OimbhEpO95mXbY8qB+KnIJaVBHwA==}
+    resolution: {integrity: sha512-Y8yus6iEjcfW2ZtEJtlqxbWeDJqTX3S/MOLH4GWRvU5gFYJQhlaHaETs0+OimbhEpO95mXbY8qB+KnIJaVBHwA==, tarball: https://npm.shopify.io/node/@shopify/polaris/-/12.27.0/polaris-12.27.0.tgz}
     engines: {node: ^16.17.0 || >=18.12.0}
     peerDependencies:
       react: ^18.0.0
       react-dom: ^18.0.0
 
   '@shopify/prettier-config@1.1.2':
-    resolution: {integrity: sha512-5ugCL9sPGzmOaZjeRGaWUWhHgAbemrS6z+R7v6gwiD+BiqSeoFhIY+imLpfdFCVpuOGalpHeCv6o3gv++EHs0A==}
+    resolution: {integrity: sha512-5ugCL9sPGzmOaZjeRGaWUWhHgAbemrS6z+R7v6gwiD+BiqSeoFhIY+imLpfdFCVpuOGalpHeCv6o3gv++EHs0A==, tarball: https://npm.shopify.io/node/@shopify/prettier-config/-/1.1.2/prettier-config-1.1.2.tgz}
 
   '@shopify/react-testing@5.4.0':
-    resolution: {integrity: sha512-qlu6NUnMK9Mq/1lu6MIvZMSKT/AtXnHGyuu148DMshVF8d7E5+JDtgTVGeKKV8nnjL5cly4K91dyPVt6fHq5yA==}
+    resolution: {integrity: sha512-qlu6NUnMK9Mq/1lu6MIvZMSKT/AtXnHGyuu148DMshVF8d7E5+JDtgTVGeKKV8nnjL5cly4K91dyPVt6fHq5yA==, tarball: https://npm.shopify.io/node/@shopify/react-testing/-/5.4.0/react-testing-5.4.0.tgz}
     engines: {node: '>=18.12.0'}
     peerDependencies:
       react: '>=18.0.0 <19.0.0'
       react-dom: '>=16.8.0 <19.0.0'
 
+  '@shopify/shopify-api@11.7.0':
+    resolution: {integrity: sha512-3PEdluHURMReSwL7Bf2XtRMVE1fSQEgvNHxzzRLmW66ShqMoHUCxnVXOq/60AATEQGPGtmAqo0OQD3V1Hj2gQA==, tarball: https://npm.shopify.io/node/@shopify/shopify-api/-/11.7.0/api-11.7.0.tgz}
+
+  '@shopify/shopify-app-session-storage@3.0.10':
+    resolution: {integrity: sha512-/fduFH/TecDqFuzFUBC7lLXUScZN9Jn1Me9ql5TnnaLrR27+W89DgT/oy3awymvlzLqI7QtoENFMqfStLZ6Muw==, tarball: https://npm.shopify.io/node/@shopify/shopify-app-session-storage/-/3.0.10/app-session-storage-3.0.10.tgz}
+    peerDependencies:
+      '@shopify/shopify-api': ^11.0.0
+
+  '@shopify/storefront-api-client@1.0.3':
+    resolution: {integrity: sha512-U0XHSU5/Xno8r3iNOMfKT1y5tvxl6UJCezC5LYKYDow09cSGar+Z7cTL4NNOMmMHstnueEyfJtPka+G+P5vufA==, tarball: https://npm.shopify.io/node/@shopify/storefront-api-client/-/1.0.3/storefront-api-client-1.0.3.tgz}
+
   '@shopify/typescript-configs@5.1.0':
-    resolution: {integrity: sha512-RywGBTR+nQyJLxcrUcihPkHPIG3pIQI6i0YwMrM5rs9nWJ0+9A5HKEcboyGPLH+8V08EXGfFQ6H820O9ajyk4A==}
+    resolution: {integrity: sha512-RywGBTR+nQyJLxcrUcihPkHPIG3pIQI6i0YwMrM5rs9nWJ0+9A5HKEcboyGPLH+8V08EXGfFQ6H820O9ajyk4A==, tarball: https://npm.shopify.io/node/@shopify/typescript-configs/-/5.1.0/typescript-configs-5.1.0.tgz}
 
   '@shopify/useful-types@5.3.0':
-    resolution: {integrity: sha512-8BlaedSqR7ssQAhCsa88K+l2eIImSBlTLlnf7/dlqSlMSEqGVUf+O8oPsnyy9Oh3aDMt+rD4Q5JPOo984Cbz7Q==}
+    resolution: {integrity: sha512-8BlaedSqR7ssQAhCsa88K+l2eIImSBlTLlnf7/dlqSlMSEqGVUf+O8oPsnyy9Oh3aDMt+rD4Q5JPOo984Cbz7Q==, tarball: https://npm.shopify.io/node/@shopify/useful-types/-/5.3.0/useful-types-5.3.0.tgz}
     engines: {node: '>=18.12.0'}
 
   '@sinclair/typebox@0.27.8':
@@ -3317,8 +3340,8 @@ packages:
     resolution: {integrity: sha512-b+zebfKCfRdgNJDknHCob3O7FpeYQN6ZG6YLExMcasDHsCXlsXCEuiPZeLnJLpwa5dvPetGlnGCiMHuLwGvFow==}
     engines: {node: '>=18.0.0'}
 
-  '@smithy/util-waiter@4.0.0':
-    resolution: {integrity: sha512-C8dSfGmZH0ecrmnJOw4aDXJ47krihnUtee8eDZ2fA+28wTjD4TVM3L/bBQYnBBlDVWcYzldLV7loPRsPc1kERg==}
+  '@smithy/util-waiter@4.0.1':
+    resolution: {integrity: sha512-PiLI5OMSDOw0IyA+lB8Ta0CIgaJuIyXE97Khvrk1G1ab71WbMTruzLKP9j3nS6QJScGirkUVN9sTOhZHU8q3OQ==}
     engines: {node: '>=18.0.0'}
 
   '@swc/core-darwin-arm64@1.10.6':
@@ -3504,6 +3527,9 @@ packages:
 
   '@types/node@12.20.55':
     resolution: {integrity: sha512-J8xLz7q2OFulZ2cyGTLE1TbbZcjpno7FaN6zdJNrgAdrJ+DZzh/uFR6YrTb4C+nXakvud8Q4+rbhoIWlYQbUFQ==}
+
+  '@types/node@22.10.1':
+    resolution: {integrity: sha512-qKgsUwfHZV2WCWLAnVP1JqnpE6Im6h3Y0+fYgMTasNQ7V++CBX5OT1as0g0f+OyubbFqhf6XVNIsmN4IIhEgGQ==}
 
   '@types/node@22.10.2':
     resolution: {integrity: sha512-Xxr6BBRCAOQixvonOye19wnzyDiUtTeqldOOmj3CkeblonbccA12PFwlufvRdrpjXxqnmUaeiU5EOA+7s5diUQ==}
@@ -4250,6 +4276,9 @@ packages:
 
   cross-fetch@3.1.8:
     resolution: {integrity: sha512-cvA+JwZoU0Xq+h6WkMvAUqPEYy92Obet6UdKLfW60qn99ftItKjB5T+BkyWOFWe2pUyfQ+IJHmpOTznqk1M6Kg==}
+
+  cross-fetch@4.1.0:
+    resolution: {integrity: sha512-uKm5PU+MHTootlWEY+mZ4vvXoCn4fLQxT9dSc1sXVMSFkINTJVN8cAQROpwcKm8bJ/c7rgZVIBWzH5T78sNZZw==}
 
   cross-inspect@1.0.1:
     resolution: {integrity: sha512-Pcw1JTvZLSJH83iiGWt6fRcT+BjZlCDRVwYLbUcHzv/CRpB7r0MlSrGbIyQvVSNyGnbt7G4AXuyCiDR3POvZ1A==}
@@ -5573,6 +5602,10 @@ packages:
   isarray@2.0.5:
     resolution: {integrity: sha512-xHjhDr3cNBK0BzdUJSPXZntQUx/mwMS5Rw4A7lPJ90XGAO6ISP/ePDNuo0vhqOZU+UD5JoodwCAAoZQd3FeAKw==}
 
+  isbot@5.1.18:
+    resolution: {integrity: sha512-df9RdChv1DheItzN5pNKtblc9/otzJYmxjf9GhCZG/f0TCcGCbQFmtM3e+SD0e8EI3/O2tIXPYVaG4FUaIIa6Q==}
+    engines: {node: '>=18'}
+
   isbot@5.1.20:
     resolution: {integrity: sha512-cW535S5c05UBfx8bTAZHACjEXyY/p10bvAx5YeqoLEFoGC1HQ6A5n3ScpZRYd1zSwwNF8yYkEOq2F7WjFhX2ig==}
     engines: {node: '>=18'}
@@ -5910,7 +5943,6 @@ packages:
 
   libsql@0.4.5:
     resolution: {integrity: sha512-sorTJV6PNt94Wap27Sai5gtVLIea4Otb2LUiAUyr3p6BPOScGMKGt5F1b5X/XgkNtcsDKeX5qfeBDj+PdShclQ==}
-    cpu: [x64, arm64, wasm32]
     os: [darwin, linux, win32]
 
   lines-and-columns@1.2.4:
@@ -7612,6 +7644,10 @@ packages:
     resolution: {integrity: sha512-pMZTvIkT1d+TFGvDOqodOclx0QWkkgi6Tdoa8gC8ffGAAqz9pzPTZWAybbsHHoED/ztMtkv/VoYTYyShUn81hA==}
     engines: {node: '>= 0.4.0'}
 
+  uuid@10.0.0:
+    resolution: {integrity: sha512-8XkAphELsDnEGrDxUOHB3RGvXz6TeuYSGEZBOjtTtPm2lwhGBjLgOzLHB63IUWfBpNucQjND6d3AOudO+H3RWQ==}
+    hasBin: true
+
   uuid@11.0.4:
     resolution: {integrity: sha512-IzL6VtTTYcAhA/oghbFJ1Dkmqev+FpQWnCBaKq/gUluLxliWvO8DPFWfIviRmYbtaavtSQe4WBL++rFjdcGWEg==}
     hasBin: true
@@ -7937,7 +7973,7 @@ snapshots:
       '@smithy/util-middleware': 4.0.0
       '@smithy/util-retry': 4.0.0
       '@smithy/util-utf8': 4.0.0
-      '@smithy/util-waiter': 4.0.0
+      '@smithy/util-waiter': 4.0.1
       '@types/uuid': 9.0.8
       tslib: 2.8.1
       uuid: 9.0.1
@@ -11007,7 +11043,7 @@ snapshots:
 
   '@pkgr/core@0.1.1': {}
 
-  '@prisma/client@6.2.0(prisma@5.22.0)':
+  '@prisma/client@6.2.1(prisma@5.22.0)':
     optionalDependencies:
       prisma: 5.22.0
 
@@ -11320,6 +11356,10 @@ snapshots:
   '@rollup/rollup-win32-x64-msvc@4.30.1':
     optional: true
 
+  '@shopify/admin-api-client@1.0.4':
+    dependencies:
+      '@shopify/graphql-client': 1.2.1
+
   '@shopify/babel-preset@25.0.0':
     dependencies:
       '@babel/core': 7.25.2
@@ -11385,6 +11425,8 @@ snapshots:
       globby: 11.1.0
       typescript: 5.6.2
 
+  '@shopify/graphql-client@1.2.1': {}
+
   '@shopify/graphql-codegen@0.1.0(encoding@0.1.13)(graphql@16.10.0)':
     dependencies:
       '@graphql-codegen/add': 5.0.3(graphql@16.10.0)
@@ -11428,6 +11470,30 @@ snapshots:
       react-dom: 18.3.1(react@18.3.1)
       react-is: 18.3.1
       react-reconciler: 0.28.0(react@18.3.1)
+
+  '@shopify/shopify-api@11.7.0(encoding@0.1.13)':
+    dependencies:
+      '@shopify/admin-api-client': 1.0.4
+      '@shopify/graphql-client': 1.2.1
+      '@shopify/network': 3.3.0
+      '@shopify/storefront-api-client': 1.0.3
+      compare-versions: 6.1.1
+      isbot: 5.1.18
+      jose: 5.9.6
+      jsonwebtoken: 9.0.2
+      node-fetch: 2.7.0(encoding@0.1.13)
+      tslib: 2.8.1
+      uuid: 10.0.0
+    transitivePeerDependencies:
+      - encoding
+
+  '@shopify/shopify-app-session-storage@3.0.10(@shopify/shopify-api@11.7.0(encoding@0.1.13))':
+    dependencies:
+      '@shopify/shopify-api': 11.7.0(encoding@0.1.13)
+
+  '@shopify/storefront-api-client@1.0.3':
+    dependencies:
+      '@shopify/graphql-client': 1.2.1
 
   '@shopify/typescript-configs@5.1.0': {}
 
@@ -11710,7 +11776,7 @@ snapshots:
       '@smithy/util-buffer-from': 4.0.0
       tslib: 2.8.1
 
-  '@smithy/util-waiter@4.0.0':
+  '@smithy/util-waiter@4.0.1':
     dependencies:
       '@smithy/abort-controller': 4.0.0
       '@smithy/types': 4.0.0
@@ -11804,12 +11870,12 @@ snapshots:
 
   '@types/better-sqlite3@7.6.12':
     dependencies:
-      '@types/node': 22.10.2
+      '@types/node': 22.10.1
 
   '@types/body-parser@1.19.5':
     dependencies:
       '@types/connect': 3.4.38
-      '@types/node': 22.10.2
+      '@types/node': 22.10.5
 
   '@types/compression@1.7.5':
     dependencies:
@@ -11817,7 +11883,7 @@ snapshots:
 
   '@types/connect@3.4.38':
     dependencies:
-      '@types/node': 22.10.2
+      '@types/node': 22.10.5
 
   '@types/cookie-parser@1.4.8(@types/express@4.17.21)':
     dependencies:
@@ -11831,7 +11897,7 @@ snapshots:
 
   '@types/express-serve-static-core@4.19.5':
     dependencies:
-      '@types/node': 22.10.2
+      '@types/node': 22.10.5
       '@types/qs': 6.9.15
       '@types/range-parser': 1.2.7
       '@types/send': 0.17.4
@@ -11876,7 +11942,7 @@ snapshots:
 
   '@types/jsonwebtoken@9.0.7':
     dependencies:
-      '@types/node': 22.10.2
+      '@types/node': 22.10.1
 
   '@types/methods@1.1.4': {}
 
@@ -11884,7 +11950,7 @@ snapshots:
 
   '@types/node-fetch@2.6.11':
     dependencies:
-      '@types/node': 22.10.2
+      '@types/node': 22.10.1
       form-data: 4.0.0
 
   '@types/node-forge@1.3.11':
@@ -11892,6 +11958,10 @@ snapshots:
       '@types/node': 22.10.5
 
   '@types/node@12.20.55': {}
+
+  '@types/node@22.10.1':
+    dependencies:
+      undici-types: 6.20.0
 
   '@types/node@22.10.2':
     dependencies:
@@ -11905,7 +11975,7 @@ snapshots:
 
   '@types/pg@8.11.6':
     dependencies:
-      '@types/node': 22.10.2
+      '@types/node': 22.10.1
       pg-protocol: 1.6.1
       pg-types: 4.0.2
 
@@ -11935,17 +12005,17 @@ snapshots:
   '@types/send@0.17.4':
     dependencies:
       '@types/mime': 1.3.5
-      '@types/node': 22.10.2
+      '@types/node': 22.10.5
 
   '@types/serve-static@1.15.7':
     dependencies:
       '@types/http-errors': 2.0.4
-      '@types/node': 22.10.2
+      '@types/node': 22.10.5
       '@types/send': 0.17.4
 
   '@types/sqlite3@3.1.11':
     dependencies:
-      '@types/node': 22.10.2
+      '@types/node': 22.10.1
 
   '@types/stack-utils@2.0.3': {}
 
@@ -11975,7 +12045,7 @@ snapshots:
 
   '@types/ws@8.5.12':
     dependencies:
-      '@types/node': 22.10.2
+      '@types/node': 22.10.5
 
   '@types/yargs-parser@21.0.3': {}
 
@@ -12812,6 +12882,12 @@ snapshots:
     transitivePeerDependencies:
       - encoding
 
+  cross-fetch@4.1.0(encoding@0.1.13):
+    dependencies:
+      node-fetch: 2.7.0(encoding@0.1.13)
+    transitivePeerDependencies:
+      - encoding
+
   cross-inspect@1.0.1:
     dependencies:
       tslib: 2.8.1
@@ -13022,11 +13098,11 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  drizzle-orm@0.38.3(@cloudflare/workers-types@4.20241230.0)(@libsql/client@0.14.0(encoding@0.1.13))(@prisma/client@6.2.0(prisma@5.22.0))(@types/better-sqlite3@7.6.12)(@types/pg@8.11.6)(@types/react@18.3.12)(better-sqlite3@11.7.2)(mysql2@3.12.0)(pg@8.12.0)(prisma@5.22.0)(react@18.3.1)(sqlite3@5.1.7):
+  drizzle-orm@0.38.3(@cloudflare/workers-types@4.20241230.0)(@libsql/client@0.14.0(encoding@0.1.13))(@prisma/client@6.2.1(prisma@5.22.0))(@types/better-sqlite3@7.6.12)(@types/pg@8.11.6)(@types/react@18.3.12)(better-sqlite3@11.7.2)(mysql2@3.12.0)(pg@8.12.0)(prisma@5.22.0)(react@18.3.1)(sqlite3@5.1.7):
     optionalDependencies:
       '@cloudflare/workers-types': 4.20241230.0
       '@libsql/client': 0.14.0(encoding@0.1.13)
-      '@prisma/client': 6.2.0(prisma@5.22.0)
+      '@prisma/client': 6.2.1(prisma@5.22.0)
       '@types/better-sqlite3': 7.6.12
       '@types/pg': 8.11.6
       '@types/react': 18.3.12
@@ -14266,6 +14342,8 @@ snapshots:
 
   isarray@2.0.5: {}
 
+  isbot@5.1.18: {}
+
   isbot@5.1.20: {}
 
   isexe@2.0.0: {}
@@ -14452,7 +14530,7 @@ snapshots:
       '@jest/fake-timers': 29.7.0
       '@jest/types': 29.6.3
       '@types/jsdom': 20.0.1
-      '@types/node': 22.10.5
+      '@types/node': 22.10.2
       jest-mock: 29.7.0
       jest-util: 29.7.0
       jsdom: 20.0.3
@@ -16638,6 +16716,8 @@ snapshots:
       which-typed-array: 1.1.15
 
   utils-merge@1.0.1: {}
+
+  uuid@10.0.0: {}
 
   uuid@11.0.4: {}
 
