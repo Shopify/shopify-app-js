@@ -91,7 +91,7 @@
     "jsonwebtoken": "^9.0.2"
   },
   "dependencies": {
-    "@remix-run/server-runtime": "^2.12.1",
+    "@remix-run/server-runtime": "^2.15.2",
     "@shopify/admin-api-client": "^1.0.4",
     "@shopify/shopify-api": "^11.7.0",
     "@shopify/shopify-app-session-storage": "^3.0.10",
