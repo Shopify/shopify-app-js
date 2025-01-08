@@ -78,7 +78,7 @@
   ],
   "devDependencies": {
     "@remix-run/node": "^2.15.2",
-    "@remix-run/react": "^2.11.2",
+    "@remix-run/react": "^2.15.2",
     "@remix-run/testing": "^2.11.2",
     "@shopify/generate-docs": "^0.16.4",
     "@shopify/polaris": "^12.18.0",
@@ -87,8 +87,10 @@
     "@types/jsonwebtoken": "^9.0.7",
     "@types/react": "^18.3.12",
     "@types/semver": "^7.5.8",
+    "cross-fetch": "^4.1.0",
     "jest-fetch-mock": "^3.0.3",
-    "jsonwebtoken": "^9.0.2"
+    "jsonwebtoken": "^9.0.2",
+    "react-router-dom": "~6.28.1"
   },
   "dependencies": {
     "@remix-run/server-runtime": "^2.15.2",
