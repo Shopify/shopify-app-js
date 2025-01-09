@@ -1,5 +1,15 @@
 # @shopify/shopify-app-remix
 
+## 3.6.1
+
+### Patch Changes
+
+- 32b86a3: Updated `@remix-run/server-runtime` dependencies
+- 54eb408: Updated `isbot` dependencies
+- Updated dependencies [54eb408]
+  - @shopify/shopify-api@11.7.1
+  - @shopify/shopify-app-session-storage@3.0.11
+
 ## 3.6.0
 
 ### Minor Changes

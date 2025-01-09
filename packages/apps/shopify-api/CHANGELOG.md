@@ -1,5 +1,11 @@
 # Changelog
 
+## 11.7.1
+
+### Patch Changes
+
+- 54eb408: Updated `isbot` dependencies
+
 ## 11.7.0
 
 ### Minor Changes
