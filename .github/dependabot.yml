@@ -22,3 +22,7 @@ updates:
           - '@remix-run/react'
           - '@remix-run/testing'
           - '@remix-run/server-runtime'
+      prisma:
+        patterns:
+          - 'prisma'
+          - '@prisma/client'
