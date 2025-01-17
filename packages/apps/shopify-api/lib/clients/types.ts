@@ -109,6 +109,10 @@ export interface GraphqlQueryOptions<
    * The maximum number of times to retry the request if it fails with a throttling or server error.
    */
   retries?: number;
+  /**
+   * An optional AbortSignal to cancel the request.
+   */
+  signal?: AbortSignal;
 }
 
 export {GraphqlClient} from './admin/graphql/client';

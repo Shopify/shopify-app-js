@@ -94,7 +94,9 @@ const response = await client.request(
 console.log(response.data, response.extensions, response.headers);
 ```
 
-> **Note**: If using TypeScript, you can pass in a type argument for the response body:
+#### Using a type argument
+
+If using TypeScript, you can pass in a type argument for the response body:
 
 ```ts
 // If using TypeScript, you can type the response body
@@ -110,7 +112,9 @@ const response = await client.request<MyResponseBodyType>(/* ... */);
 console.log(response.body.data);
 ```
 
-> **Note**: If there are any errors in the response, `request` will throw a `GraphqlQueryError` which includes details from the API response:
+#### Handling errors
+
+If there are any errors in the response, `request` will throw a `GraphqlQueryError` which includes details from the API response:
 
 ```ts
 import {GraphqlQueryError} from '@shopify/shopify-api';
@@ -128,6 +132,31 @@ try {
     // handle other errors
   }
 }
+```
+
+#### Setting a timeout
+You can set a timeout for the request by passing in a signal with an AbortController. If the request takes longer than the timeout, it will be aborted and an AbortError will be thrown.
+
+```ts
+const response = await client.request(
+  `query GetProducts($first: Int!) {
+    products (first: $first) {
+      edges {
+        node {
+          id
+          title
+          descriptionHtml
+        }
+      }
+    }
+  }`,
+  {
+    variables: {
+      first: 10,
+    },
+    signal: AbortSignal.timeout(3000), // 3 seconds
+  },
+);
 ```
 
 ### Parameters
@@ -155,6 +184,12 @@ Add custom headers to the request.
 `number` | _Must be between_ `0 and 3`
 
 The maximum number of times to retry the request.
+
+#### options.signal
+
+`AbortSignal`
+
+An optional AbortSignal to cancel the request.
 
 ### Return
 
