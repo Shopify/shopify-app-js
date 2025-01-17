@@ -10,9 +10,15 @@ updates:
     # Dependabot defaults to 5 open pull requests at a time
     open-pull-requests-limit: 100
 
-    # Add a group for AWS SDK packages
+    # Group together PRs of interdependant packages
     groups:
       aws-sdk:
         patterns:
           - '@aws-sdk/client-dynamodb'
           - '@aws-sdk/util-dynamodb'
+      remix-run:
+        patterns:
+          - '@remix-run/node'
+          - '@remix-run/react'
+          - '@remix-run/testing'
+          - '@remix-run/server-runtime'
