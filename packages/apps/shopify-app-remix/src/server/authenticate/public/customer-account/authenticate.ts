@@ -1,5 +1,4 @@
-import {BasicParams} from 'src/server/types';
-
+import {BasicParams} from '../../../types';
 import {authenticateExtensionFactory} from '../extension/authenticate';
 
 import {AuthenticateCustomerAccount} from './types';

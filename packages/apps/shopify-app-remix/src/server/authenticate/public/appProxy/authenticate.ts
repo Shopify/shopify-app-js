@@ -1,5 +1,6 @@
 import {ShopifyRestResources} from '@shopify/shopify-api';
 
+import {AppConfigArg} from '../../../config-types';
 import {adminClientFactory, storefrontClientFactory} from '../../../clients';
 import {BasicParams} from '../../../types';
 
@@ -11,26 +12,28 @@ import {
 } from './types';
 
 export function authenticateAppProxyFactory<
+  ConfigArg extends AppConfigArg,
   Resources extends ShopifyRestResources,
->(params: BasicParams): AuthenticateAppProxy {
+>(params: BasicParams): AuthenticateAppProxy<ConfigArg, Resources> {
   const {api, config, logger} = params;
 
   return async function authenticate(
     request,
-  ): Promise<AppProxyContext | AppProxyContextWithSession<Resources>> {
-    logger.info('Authenticating app proxy request');
-
+  ): Promise<
+    AppProxyContext | AppProxyContextWithSession<ConfigArg, Resources>
+  > {
     const url = new URL(request.url);
+    const shop = url.searchParams.get('shop')!;
+    logger.info('Authenticating app proxy request', {shop});
 
     if (!(await validateAppProxyHmac(params, url))) {
-      logger.info('App proxy request has invalid signature');
+      logger.info('App proxy request has invalid signature', {shop});
       throw new Response(undefined, {
         status: 400,
         statusText: 'Bad Request',
       });
     }
 
-    const shop = url.searchParams.get('shop')!;
     const sessionId = api.session.getOfflineId(shop);
     const session = await config.sessionStorage!.loadSession(sessionId);
 
@@ -50,10 +53,10 @@ export function authenticateAppProxyFactory<
       return context;
     }
 
-    const context: AppProxyContextWithSession<Resources> = {
+    const context: AppProxyContextWithSession<ConfigArg, Resources> = {
       liquid,
       session,
-      admin: adminClientFactory({params, session}),
+      admin: adminClientFactory<ConfigArg, Resources>({params, session}),
       storefront: storefrontClientFactory({params, session}),
     };
 
@@ -133,7 +136,8 @@ async function validateAppProxyHmac(
 
     return isValid;
   } catch (error) {
-    logger.info(error.message);
+    const shop = url.searchParams.get('shop')!;
+    logger.info(error.message, {shop});
     throw new Response(undefined, {status: 400, statusText: 'Bad Request'});
   }
 }

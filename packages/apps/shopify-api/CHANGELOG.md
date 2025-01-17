@@ -1,5 +1,64 @@
 # Changelog
 
+## 11.7.0
+
+### Minor Changes
+
+- dc6b8ad: Adds 2025-01 Admin REST resources
+
+### Patch Changes
+
+- 6b71f39: Updated `express` dependencies
+- 6681802: Updated `isbot` dependencies
+
+## 11.6.1
+
+### Patch Changes
+
+- 6910d3d: Updated `tslib` dependencies
+
+## 11.6.0
+
+### Minor Changes
+
+- 50634c0: Adds API to update the capped amount for a usage billing plan.
+
+  A new billing helper function has been added to update the capped amount for a usage billing plan.
+
+  ```ts
+  const response = await shopify.billing.updateUsageCappedAmount({
+    session,
+    subscriptionLineItemId: 'gid://shopify/AppSubscriptionLineItem/1234567890',
+    cappedAmount: {
+      amount: 100,
+      currencyCode: 'USD',
+    },
+  });
+  console.log(response);
+  ```
+
+  Learn more about [App Billing](https://shopify.dev/docs/apps/launch/billing/subscription-billing).
+
+- 5c01460: Adding toggle parameter flag to return implied scopes from Remix API Query by returning original scopes from AuthScopes instantiation
+
+  Example:
+  const scopes = new AuthScopes(['read_customers', 'write_customers', 'read_products', 'write_channels']);
+  scopes.toArray() returns ['write_customers', 'read_products', 'write_channels']
+  scopes.toArray(true) returns ['read_customers', 'write_customers', 'read_products', 'write_channels']
+
+### Patch Changes
+
+- 59896e3: Updated `isbot` dependencies
+- 2e396f3: Updated `express` dependencies
+- 5efb3a2: Updated `express` dependencies
+- cd0b3e1: Updated `jose` dependencies
+- bad62cc: Updated `tslib` dependencies
+- 10f4fd0: Updated `jose` dependencies
+- Updated dependencies [f38dfc0]
+  - @shopify/graphql-client@1.2.1
+  - @shopify/admin-api-client@1.0.4
+  - @shopify/storefront-api-client@1.0.3
+
 ## 11.5.0
 
 ### Minor Changes

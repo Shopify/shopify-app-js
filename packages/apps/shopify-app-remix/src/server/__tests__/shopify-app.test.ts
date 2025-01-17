@@ -1,15 +1,15 @@
 import {ShopifyError} from '@shopify/shopify-api';
 
-import {
-  shopifyApp,
-  LATEST_API_VERSION as APP_LATEST_API_VERSION,
-  LogSeverity,
-  DeliveryMethod,
-  BillingInterval,
-  AppDistribution,
-  ApiVersion,
-} from '../index';
 import {testConfig} from '../__test-helpers';
+import {
+  ApiVersion,
+  LATEST_API_VERSION as APP_LATEST_API_VERSION,
+  AppDistribution,
+  BillingInterval,
+  DeliveryMethod,
+  LogSeverity,
+  shopifyApp,
+} from '../index';
 import {deriveApi} from '../shopify-app';
 
 describe('shopifyApp', () => {
@@ -25,9 +25,12 @@ describe('shopifyApp', () => {
   });
   /* eslint-enable no-process-env */
 
-  it('can create shopify object', () => {
+  it('can create shopify object', async () => {
     // GIVEN
-    const shopify = shopifyApp(testConfig());
+    const shopify = shopifyApp({
+      ...testConfig(),
+      future: {removeRest: false},
+    });
 
     // THEN
     expect(shopify).toBeDefined();

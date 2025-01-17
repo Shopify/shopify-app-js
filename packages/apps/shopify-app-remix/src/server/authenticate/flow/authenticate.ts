@@ -1,18 +1,20 @@
 import {ShopifyRestResources} from '@shopify/shopify-api';
 
+import {AppConfigArg} from '../../config-types';
 import {adminClientFactory} from '../../clients/admin';
 import {BasicParams} from '../../types';
 
 import type {AuthenticateFlow, FlowContext} from './types';
 
 export function authenticateFlowFactory<
+  ConfigArg extends AppConfigArg,
   Resources extends ShopifyRestResources = ShopifyRestResources,
->(params: BasicParams): AuthenticateFlow<Resources> {
+>(params: BasicParams): AuthenticateFlow<ConfigArg, Resources> {
   const {api, config, logger} = params;
 
   return async function authenticate(
     request: Request,
-  ): Promise<FlowContext<Resources>> {
+  ): Promise<FlowContext<ConfigArg, Resources>> {
     logger.info('Authenticating flow request');
 
     if (request.method !== 'POST') {
@@ -65,7 +67,7 @@ export function authenticateFlowFactory<
     return {
       session,
       payload,
-      admin: adminClientFactory<Resources>({params, session}),
+      admin: adminClientFactory<ConfigArg, Resources>({params, session}),
     };
   };
 }

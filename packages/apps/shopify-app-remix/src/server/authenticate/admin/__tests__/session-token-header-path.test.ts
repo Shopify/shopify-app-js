@@ -36,7 +36,10 @@ describe('authorize.session token header path', () => {
     (isOnline) => {
       it('returns context when session exists for embedded apps', async () => {
         // GIVEN
-        const shopify = shopifyApp(testConfig({useOnlineTokens: isOnline}));
+        const shopify = shopifyApp({
+          ...testConfig({useOnlineTokens: isOnline}),
+          future: {removeRest: false},
+        });
 
         const testSession = await setUpValidSession(shopify.sessionStorage, {
           isOnline,
@@ -58,9 +61,10 @@ describe('authorize.session token header path', () => {
 
       it('returns context when session exists for non-embedded apps', async () => {
         // GIVEN
-        const shopify = shopifyApp(
-          testConfig({isEmbeddedApp: false, useOnlineTokens: isOnline}),
-        );
+        const shopify = shopifyApp({
+          ...testConfig({isEmbeddedApp: false, useOnlineTokens: isOnline}),
+          future: {removeRest: false},
+        });
 
         let testSession: Session;
         testSession = await setUpValidSession(shopify.sessionStorage);

@@ -1,5 +1,24 @@
 # @shopify/shopify-app-session-storage-drizzle
 
+## 2.0.10
+
+### Patch Changes
+
+- 8fbff4d: Updated `mysql2` dependencies
+
+## 2.0.9
+
+### Patch Changes
+
+- 6910d3d: Updated `tslib` dependencies
+- 71b6144: Updated `mysql2` dependencies
+
+## 2.0.8
+
+### Patch Changes
+
+- bad62cc: Updated `tslib` dependencies
+
 ## 2.0.7
 
 ### Patch Changes

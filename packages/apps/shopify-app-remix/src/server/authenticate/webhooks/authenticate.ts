@@ -3,6 +3,7 @@ import {
   WebhookValidationErrorReason,
 } from '@shopify/shopify-api';
 
+import {AppConfigArg} from '../../config-types';
 import type {BasicParams} from '../../types';
 import {adminClientFactory} from '../../clients';
 import {handleClientErrorFactory} from '../admin/helpers';
@@ -15,14 +16,15 @@ import type {
 } from './types';
 
 export function authenticateWebhookFactory<
+  ConfigArg extends AppConfigArg,
   Resources extends ShopifyRestResources,
   Topics extends string,
->(params: BasicParams): AuthenticateWebhook<Resources, Topics> {
+>(params: BasicParams): AuthenticateWebhook<ConfigArg, Resources, Topics> {
   const {api, logger} = params;
 
   return async function authenticate(
     request: Request,
-  ): Promise<WebhookContext<Resources, Topics>> {
+  ): Promise<WebhookContext<ConfigArg, Resources, Topics>> {
     if (request.method !== 'POST') {
       logger.debug(
         'Received a non-POST request for a webhook. Only POST requests are allowed.',
@@ -69,7 +71,7 @@ export function authenticateWebhookFactory<
       return webhookContext;
     }
 
-    const admin = adminClientFactory<Resources>({
+    const admin = adminClientFactory<ConfigArg, Resources>({
       params,
       session,
       handleClientError: handleClientErrorFactory({request}),

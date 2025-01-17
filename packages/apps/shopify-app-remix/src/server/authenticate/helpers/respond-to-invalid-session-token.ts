@@ -1,7 +1,6 @@
-import {BasicParams} from 'src/server/types';
-
 import {redirectToBouncePage} from '../admin/helpers/redirect-to-bounce-page';
 import {RETRY_INVALID_SESSION_HEADER} from '../const';
+import {BasicParams} from '../../types';
 
 interface RespondToInvalidSessionTokenParams {
   params: BasicParams;

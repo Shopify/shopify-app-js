@@ -1,10 +1,16 @@
 import {Session, ShopifyRestResources} from '@shopify/shopify-api';
 
+import {AppConfigArg} from '../../../config-types';
 import {AdminApiContext, StorefrontContext} from '../../../clients';
 
-export type AuthenticateAppProxy = (
+export type AuthenticateAppProxy<
+  ConfigArg extends AppConfigArg,
+  Resources extends ShopifyRestResources = ShopifyRestResources,
+> = (
   request: Request,
-) => Promise<AppProxyContext | AppProxyContextWithSession>;
+) => Promise<
+  AppProxyContext | AppProxyContextWithSession<ConfigArg, Resources>
+>;
 
 interface Options {
   /**
@@ -113,6 +119,7 @@ export interface AppProxyContext extends Context {
 }
 
 export interface AppProxyContextWithSession<
+  ConfigArg extends AppConfigArg,
   Resources extends ShopifyRestResources = ShopifyRestResources,
 > extends Context {
   /**
@@ -150,7 +157,7 @@ export interface AppProxyContextWithSession<
    *
    * @example
    * <caption>Interacting with the Admin API.</caption>
-   * <description>Use the `admin` object to interact with the REST or GraphQL APIs.</description>
+   * <description>Use the `admin` object to interact with the admin GraphQL API.</description>
    * ```ts
    * // app/routes/**\/.ts
    * import { json } from "@remix-run/node";
@@ -180,7 +187,7 @@ export interface AppProxyContextWithSession<
    * }
    * ```
    */
-  admin: AdminApiContext<Resources>;
+  admin: AdminApiContext<ConfigArg, Resources>;
 
   /**
    * Method for interacting with the Shopify Storefront Graphql API for the store that made the request.

@@ -1,9 +1,9 @@
 import {LATEST_API_VERSION} from '@shopify/shopify-api';
 import {MemorySessionStorage} from '@shopify/shopify-app-session-storage-memory';
 
-import {testConfig as testConfigImport} from '../test-helpers/test-config';
+import type {FutureFlagOptions, FutureFlags} from '../future/flags';
 import type {TestOverridesArg} from '../test-helpers/test-config';
-import type {FutureFlags, FutureFlagOptions} from '../future/flags';
+import {testConfig as testConfigImport} from '../test-helpers/test-config';
 
 /*
  * This object mandates that all existing future flags be activated for tests. If a new flag is added, this object must
@@ -14,7 +14,7 @@ import type {FutureFlags, FutureFlagOptions} from '../future/flags';
  */
 const TEST_FUTURE_FLAGS: Required<{[key in keyof FutureFlags]: true}> = {
   unstable_newEmbeddedAuthStrategy: true,
-  wip_optionalScopesApi: true,
+  removeRest: true,
 } as const;
 
 // Override the helper's future flags and logger settings for our purposes

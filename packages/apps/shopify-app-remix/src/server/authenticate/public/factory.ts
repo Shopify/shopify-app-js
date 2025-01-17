@@ -1,5 +1,6 @@
 import {ShopifyRestResources} from '@shopify/shopify-api';
 
+import {AppConfigArg} from '../../config-types';
 import {BasicParams} from '../../types';
 
 import {authenticateCheckoutFactory} from './checkout/authenticate';
@@ -8,14 +9,18 @@ import {authenticateCustomerAccountFactory} from './customer-account/authenticat
 import {AuthenticatePublic} from './types';
 
 export function authenticatePublicFactory<
+  ConfigArg extends AppConfigArg,
   Resources extends ShopifyRestResources,
 >(params: BasicParams) {
   const authenticateCheckout = authenticateCheckoutFactory(params);
-  const authenticateAppProxy = authenticateAppProxyFactory<Resources>(params);
+  const authenticateAppProxy = authenticateAppProxyFactory<
+    ConfigArg,
+    Resources
+  >(params);
   const authenticateCustomerAccount =
     authenticateCustomerAccountFactory(params);
 
-  const context: AuthenticatePublic = {
+  const context: AuthenticatePublic<ConfigArg> = {
     checkout: authenticateCheckout,
     appProxy: authenticateAppProxy,
     customerAccount: authenticateCustomerAccount,

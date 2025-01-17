@@ -20,11 +20,24 @@ export interface FutureFlags {
   unstable_newEmbeddedAuthStrategy?: boolean;
 
   /**
-   * When enabled, the Scopes API will be available. This feature is in development and requires special permissions from Shopify for now.
+   * When enabled, methods for interacting with the admin REST API will not be returned.
+   *
+   * This affects:
+   *
+   * * `authenticate.admin(request)`
+   * * `authenticate.webhook(request)`
+   * * `authenticate.flow(request)`
+   * * `authenticate.appProxy(request)`
+   * * `authenticate.fulfillmentService(request)`
+   * * `unauthenticated.admin(shop)`
+   *
+   * In a future release we will remove REST from the package completely.
+   *
+   * Please see: [https://www.shopify.com/ca/partners/blog/all-in-on-graphql](https://www.shopify.com/ca/partners/blog/all-in-on-graphql)
    *
    * @default false
    */
-  wip_optionalScopesApi?: boolean;
+  removeRest?: boolean;
 }
 
 // When adding new flags, use this format:
@@ -61,13 +74,6 @@ export function logDisabledFutureFlags(
       'unstable_newEmbeddedAuthStrategy',
       'Enable this to use OAuth token exchange instead of auth code to generate API access tokens.' +
         '\n  Your app must be using Shopify managed install: https://shopify.dev/docs/apps/auth/installation',
-    );
-  }
-
-  if (!config.future.wip_optionalScopesApi) {
-    logFlag(
-      'wip_optionalScopesApi',
-      'Enable this to use the optionalScopes API to request additional scopes and manage them. ',
     );
   }
 }

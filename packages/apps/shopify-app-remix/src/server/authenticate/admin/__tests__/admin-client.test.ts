@@ -7,14 +7,15 @@ import {
 
 import {
   TEST_SHOP,
+  expectAdminApiClient,
   getThrownResponse,
   mockExternalRequest,
-  expectAdminApiClient,
-  setUpEmbeddedFlow,
   mockGraphqlRequest,
+  setUpEmbeddedFlow,
+  setUpEmbeddedFlowWithRemoveRestFlag,
   setUpNonEmbeddedFlow,
 } from '../../../__test-helpers';
-import {AdminApiContext} from '../../../clients';
+import {AdminApiContextWithRest} from '../../../clients';
 
 describe('admin.authenticate context', () => {
   expectAdminApiClient(async () => {
@@ -24,7 +25,10 @@ describe('admin.authenticate context', () => {
       session: actualSession,
     } = await setUpEmbeddedFlow();
 
-    return {admin, expectedSession, actualSession};
+    const {admin: adminWithoutRest} =
+      await setUpEmbeddedFlowWithRemoveRestFlag();
+
+    return {admin, adminWithoutRest, expectedSession, actualSession};
   });
 
   it('re-throws errors other than HttpResponseErrors on GraphQL requests', async () => {
@@ -62,13 +66,13 @@ describe('admin.authenticate context', () => {
     {
       testGroup: 'REST client',
       mockRequest: mockRestRequest,
-      action: async (admin: AdminApiContext, _session: Session) =>
+      action: async (admin: AdminApiContextWithRest, _session: Session) =>
         admin.rest.get({path: '/customers.json'}),
     },
     {
       testGroup: 'REST resources',
       mockRequest: mockRestRequest,
-      action: async (admin: AdminApiContext, session: Session) =>
+      action: async (admin: AdminApiContextWithRest, session: Session) =>
         admin.rest.resources.Customer.all({session}),
     },
   ])(
@@ -95,13 +99,13 @@ describe('admin.authenticate context', () => {
     {
       testGroup: 'GraphQL client',
       mockRequest: mockGraphqlRequest(),
-      action: async (admin: AdminApiContext, _session: Session) =>
+      action: async (admin: AdminApiContextWithRest, _session: Session) =>
         admin.graphql('{ shop { name } }'),
     },
     {
       testGroup: 'GraphQL client with options',
       mockRequest: mockGraphqlRequest('2021-01' as ApiVersion),
-      action: async (admin: AdminApiContext, _session: Session) =>
+      action: async (admin: AdminApiContextWithRest, _session: Session) =>
         admin.graphql(
           'mutation myMutation($ID: String!) { shop(ID: $ID) { name } }',
           {

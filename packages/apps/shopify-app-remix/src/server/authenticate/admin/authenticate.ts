@@ -9,6 +9,7 @@ import {
   respondToBotRequest,
   respondToOptionsRequest,
   validateSessionToken,
+  getShopFromRequest,
 } from '../helpers';
 
 import {
@@ -17,6 +18,7 @@ import {
   requireBillingFactory,
   checkBillingFactory,
   createUsageRecordFactory,
+  updateUsageCappedAmountFactory,
 } from './billing';
 import type {
   AdminContext,
@@ -59,7 +61,9 @@ export function authStrategyFactory<
     const url = new URL(request.url);
 
     if (url.pathname === config.auth.patchSessionTokenPath) {
-      logger.debug('Rendering bounce page');
+      logger.debug('Rendering bounce page', {
+        shop: getShopFromRequest(request),
+      });
       throw renderAppBridge({config, logger, api}, request);
     }
   }
@@ -70,7 +74,10 @@ export function authStrategyFactory<
     if (url.pathname === config.auth.exitIframePath) {
       const destination = url.searchParams.get('exitIframe')!;
 
-      logger.debug('Rendering exit iframe page', {destination});
+      logger.debug('Rendering exit iframe page', {
+        shop: getShopFromRequest(request),
+        destination,
+      });
       throw renderAppBridge({config, logger, api}, request, {url: destination});
     }
   }
@@ -86,7 +93,7 @@ export function authStrategyFactory<
     sessionToken?: JwtPayload,
   ): AdminContext<ConfigArg, Resources> {
     let context: AdminContextBase = {
-      admin: createAdminApiContext<Resources>(
+      admin: createAdminApiContext<ConfigArg, Resources>(
         session,
         params,
         authStrategy.handleClientError(request),
@@ -97,6 +104,11 @@ export function authStrategyFactory<
         request: requestBillingFactory(params, request, session),
         cancel: cancelBillingFactory(params, request, session),
         createUsageRecord: createUsageRecordFactory(params, request, session),
+        updateUsageCappedAmount: updateUsageCappedAmountFactory(
+          params,
+          request,
+          session,
+        ),
       },
 
       session,
@@ -126,13 +138,10 @@ export function authStrategyFactory<
   }
 
   function addScopesFeatures(context: AdminContextBase) {
-    if (config.future.wip_optionalScopesApi) {
-      return {
-        ...context,
-        scopes: scopesApiFactory(params, context.session, context.admin),
-      };
-    }
-    return context;
+    return {
+      ...context,
+      scopes: scopesApiFactory(params, context.session, context.admin),
+    };
   }
 
   return async function authenticateAdmin(request: Request) {
@@ -151,12 +160,14 @@ export function authStrategyFactory<
         await ensureSessionTokenSearchParamIfRequired(params, request);
       }
 
-      logger.info('Authenticating admin request');
+      logger.info('Authenticating admin request', {
+        shop: getShopFromRequest(request),
+      });
 
       const {payload, shop, sessionId, sessionToken} =
         await getSessionTokenContext(params, request);
 
-      logger.debug('Loading session from storage', {sessionId});
+      logger.debug('Loading session from storage', {shop, sessionId});
       const existingSession = sessionId
         ? await config.sessionStorage!.loadSession(sessionId)
         : undefined;
@@ -170,7 +181,9 @@ export function authStrategyFactory<
       return createContext(request, session, strategy, payload);
     } catch (errorOrResponse) {
       if (errorOrResponse instanceof Response) {
-        logger.debug('Authenticate returned a response');
+        logger.debug('Authenticate returned a response', {
+          shop: getShopFromRequest(request),
+        });
         ensureCORSHeadersFactory(params, request)(errorOrResponse);
       }
 
@@ -190,6 +203,7 @@ async function getSessionTokenContext(
   const sessionToken = (headerSessionToken || searchParamSessionToken)!;
 
   logger.debug('Attempting to authenticate session token', {
+    shop: getShopFromRequest(request),
     sessionToken: JSON.stringify({
       header: headerSessionToken,
       search: searchParamSessionToken,
@@ -201,7 +215,7 @@ async function getSessionTokenContext(
     const dest = new URL(payload.dest);
     const shop = dest.hostname;
 
-    logger.debug('Session token is valid', {shop, payload});
+    logger.debug('Session token is valid - authenticated', {shop, payload});
     const sessionId = config.useOnlineTokens
       ? api.session.getJwtSessionId(shop, payload.sub)
       : api.session.getOfflineId(shop);

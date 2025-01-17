@@ -190,7 +190,7 @@ export class AuthCodeFlowStrategy<
   ): Promise<never> {
     const {api, config, logger} = this;
 
-    logger.info('Handling OAuth callback request');
+    logger.info('Handling OAuth callback request', {shop});
 
     try {
       const {session, headers: responseHeaders} = await api.auth.callback({
@@ -200,7 +200,9 @@ export class AuthCodeFlowStrategy<
       await config.sessionStorage!.storeSession(session);
 
       if (config.useOnlineTokens && !session.isOnline) {
-        logger.info('Requesting online access token for offline session');
+        logger.info('Requesting online access token for offline session', {
+          shop,
+        });
         await beginAuth({api, config, logger}, request, true, shop);
       }
 
@@ -209,7 +211,7 @@ export class AuthCodeFlowStrategy<
         isOnline: session.isOnline,
       });
 
-      await triggerAfterAuthHook<Resources>(
+      await triggerAfterAuthHook<Config, Resources>(
         {api, config, logger},
         session,
         request,
@@ -273,7 +275,7 @@ export class AuthCodeFlowStrategy<
     shop: string,
   ) {
     const {logger} = this;
-    logger.error('Error during OAuth callback', {error: error.message});
+    logger.error('Error during OAuth callback', {shop, error: error.message});
 
     if (error instanceof CookieNotFound) {
       return this.handleAuthBeginRequest(request, shop);

@@ -5,21 +5,21 @@ import {
 } from '@shopify/shopify-api';
 import {SessionStorage} from '@shopify/shopify-app-session-storage';
 
-import type {AppConfig, AppConfigArg} from './config-types';
+import type {AuthenticateAdmin} from './authenticate/admin/types';
+import type {AuthenticateFlow} from './authenticate/flow/types';
+import {AuthenticateFulfillmentService} from './authenticate/fulfillment-service/types';
+import type {AuthenticatePublic} from './authenticate/public/types';
 import type {
   AuthenticateWebhook,
   RegisterWebhooksOptions,
 } from './authenticate/webhooks/types';
-import type {AuthenticatePublic} from './authenticate/public/types';
-import type {AuthenticateAdmin} from './authenticate/admin/types';
-import type {Unauthenticated} from './unauthenticated/types';
-import type {AuthenticateFlow} from './authenticate/flow/types';
+import type {AppConfig, AppConfigArg} from './config-types';
 import type {
   ApiConfigWithFutureFlags,
   ApiFutureFlags,
   FutureFlagOptions,
 } from './future/flags';
-import {AuthenticateFulfillmentService} from './authenticate/fulfillment-service/types';
+import type {Unauthenticated} from './unauthenticated/types';
 
 export interface BasicParams<
   Future extends FutureFlagOptions = FutureFlagOptions,
@@ -85,17 +85,16 @@ interface Authenticate<Config extends AppConfigArg> {
    *
    * export async function loader({ request }: LoaderFunctionArgs) {
    *   const {admin, session, sessionToken, billing} = authenticate.admin(request);
+   *   const response = await admin.graphql(`{ shop { name } }`)
    *
-   *   return json(await admin.rest.resources.Product.count({ session }));
+   *   return json(await response.json());
    * }
    * ```
    * ```ts
    * // /app/shopify.server.ts
    * import { LATEST_API_VERSION, shopifyApp } from "@shopify/shopify-app-remix/server";
-   * import { restResources } from "@shopify/shopify-api/rest/admin/2023-04";
    *
    * const shopify = shopifyApp({
-   *   restResources,
    *   // ...etc
    * });
    * export default shopify;
@@ -131,17 +130,15 @@ interface Authenticate<Config extends AppConfigArg> {
    * ```ts
    * // /app/shopify.server.ts
    * import { LATEST_API_VERSION, shopifyApp } from "@shopify/shopify-app-remix/server";
-   * import { restResources } from "@shopify/shopify-api/rest/admin/2023-04";
    *
    * const shopify = shopifyApp({
-   *   restResources,
    *   // ...etc
    * });
    * export default shopify;
    * export const authenticate = shopify.authenticate;
    * ```
    */
-  flow: AuthenticateFlow<RestResourcesType<Config>>;
+  flow: AuthenticateFlow<Config, RestResourcesType<Config>>;
 
   /**
    * Authenticate a request from a fulfillment service and get back an authenticated context.
@@ -155,28 +152,18 @@ interface Authenticate<Config extends AppConfigArg> {
    * import { authenticate } from "../shopify.server";
    *
    * export async function action({ request }: ActionFunctionArgs) {
-   *   const { admin } = await authenticate.fulfillmentService(request);
+   *   const { admin, session } = await authenticate.fulfillmentService(request);
    *
-   *   const response = await admin.graphql(
-   *     `#graphql
-   *     mutation acceptFulfillmentRequest {
-   *       fulfillmentOrderAcceptFulfillmentRequest(
-   *            id: "gid://shopify/FulfillmentOrder/5014440902678",
-   *            message: "Reminder that tomorrow is a holiday. We won't be able to ship this until Monday."){
-   *             fulfillmentOrder {
-   *                 status
-   *                requestStatus
-   *            }
-   *         }
-   *     }
-   *    );
+   *   console.log(session.id)
    *
-   *   const productData = await response.json();
-   *   return json({ data: productData.data });
+   *   return new Response();
    * }
    * ```
    * */
-  fulfillmentService: AuthenticateFulfillmentService<RestResourcesType<Config>>;
+  fulfillmentService: AuthenticateFulfillmentService<
+    Config,
+    RestResourcesType<Config>
+  >;
 
   /**
    * Authenticate a public request and get back a session token.
@@ -197,7 +184,7 @@ interface Authenticate<Config extends AppConfigArg> {
    * }
    * ```
    */
-  public: AuthenticatePublic;
+  public: AuthenticatePublic<Config>;
 
   /**
    * Authenticate a Shopify webhook request, get back an authenticated admin context and details on the webhook request
@@ -267,7 +254,7 @@ interface Authenticate<Config extends AppConfigArg> {
    * });
    * ```
    */
-  webhook: AuthenticateWebhook<RestResourcesType<Config>, string>;
+  webhook: AuthenticateWebhook<Config, RestResourcesType<Config>, string>;
 }
 
 export interface ShopifyAppBase<Config extends AppConfigArg> {
@@ -385,10 +372,8 @@ export interface ShopifyAppBase<Config extends AppConfigArg> {
    * ```ts
    * // /app/shopify.server.ts
    * import { LATEST_API_VERSION, shopifyApp } from "@shopify/shopify-app-remix/server";
-   * import { restResources } from "@shopify/shopify-api/rest/admin/2023-04";
    *
    * const shopify = shopifyApp({
-   *   restResources,
    *   // ...etc
    * });
    * export default shopify;
@@ -400,8 +385,9 @@ export interface ShopifyAppBase<Config extends AppConfigArg> {
    *
    * export async function loader({ request }: LoaderFunctionArgs) {
    *   const {admin, session, sessionToken, billing} = shopify.authenticate.admin(request);
+   *   const response = admin.graphql(`{ shop { name } }`)
    *
-   *   return json(await admin.rest.resources.Product.count({ session }));
+   *   return json(await response.json());
    * }
    * ```
    */
@@ -416,10 +402,8 @@ export interface ShopifyAppBase<Config extends AppConfigArg> {
    * ```ts
    * // /app/shopify.server.ts
    * import { LATEST_API_VERSION, shopifyApp } from "@shopify/shopify-app-remix/server";
-   * import { restResources } from "@shopify/shopify-api/rest/admin/2023-04";
    *
    * const shopify = shopifyApp({
-   *   restResources,
    *   // ...etc
    * });
    * export default shopify;
@@ -433,12 +417,13 @@ export interface ShopifyAppBase<Config extends AppConfigArg> {
    * export async function loader({ request }: LoaderFunctionArgs) {
    *   const shop = await authenticateExternal(request)
    *   const {admin} = await shopify.unauthenticated.admin(shop);
+   *   const response = admin.graphql(`{ shop { currencyCode } }`)
    *
-   *   return json(await admin.rest.resources.Product.count({ session }));
+   *   return json(await response.json());
    * }
    * ```
    */
-  unauthenticated: Unauthenticated<RestResourcesType<Config>>;
+  unauthenticated: Unauthenticated<Config, RestResourcesType<Config>>;
 }
 
 export interface ShopifyAppLogin {

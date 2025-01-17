@@ -1,5 +1,112 @@
 # @shopify/shopify-app-remix
 
+## 3.6.0
+
+### Minor Changes
+
+- 34fc75d: Add Shop context to logging
+
+### Patch Changes
+
+- 6681802: Updated `isbot` dependencies
+- Updated dependencies [6b71f39]
+- Updated dependencies [6681802]
+- Updated dependencies [dc6b8ad]
+  - @shopify/shopify-api@11.7.0
+  - @shopify/shopify-app-session-storage@3.0.10
+
+## 3.5.1
+
+### Patch Changes
+
+- 62b533e: Revert shop logging
+
+## 3.5.0
+
+### Minor Changes
+
+- 7147103: Add Scopes API documentation for Remix
+- 4bba5d4: Added `removeRest` future flag.
+
+  When `removeRest` is `true`, the REST API will no longer be available. Please use the GraphQL API instead. See [Shopify is all-in on graphql](https://www.shopify.com/ca/partners/blog/all-in-on-graphql) for more information.
+
+  If your app doesn't use the REST API, you can safely set `removeRest` to `true` and be ready for a future major release. If your app does use the REST API, you should migrate to the GraphQL API and then set `removeRest` to `true`.
+
+- 301882d: Update logging to include Shop information
+- dc75db6: Remove `wip_optionalScopesApi` future flag and enable [the Remix Scopes API](https://shopify.dev/docs/api/shopify-app-remix/v3/apis/scopes) by default.
+
+  Example of checking for a granted scope on a shop with `scopes.query()`:
+
+  ```ts
+  export const loader = async ({ request }: LoaderFunctionArgs) => {
+    const { scopes } = await authenticate.admin(request);
+
+    const scopesDetail =  await scopes.query();
+
+    return json({
+      hasWriteProducts: scopesDetail.granted.includes('write_products'),
+    });
+  };
+
+  export default function Index() {
+    const {hasWriteProducts} = useLoaderData<typeof loader>();
+
+    ...
+  }
+  ```
+
+  See the [Remix Scopes API documentation](https://shopify.dev/docs/api/shopify-app-remix/v3/apis/scopes) for more details on this API, and the [Manage Access Scopes page](https://shopify.dev/docs/apps/build/authentication-authorization/app-installation/manage-access-scopes) on shopify.dev for more context how the Scopes APIs can be used to manage access scopes from one shop to another.
+
+### Patch Changes
+
+- Updated dependencies [6910d3d]
+  - @shopify/shopify-api@11.6.1
+  - @shopify/shopify-app-session-storage@3.0.9
+
+## 3.4.0
+
+### Minor Changes
+
+- 9b217e5: Adds API to update the capped amount for a usage billing plan.
+
+  A new billing helper function has been added to update the capped amount for a usage billing plan. This function redirects to a confirmation page where the merchant can confirm the update.
+
+  ```ts
+  await billing.updateUsageCappedAmount({
+    subscriptionLineItemId:
+      'gid://shopify/AppSubscriptionLineItem/12345?v=1&index=1',
+    cappedAmount: {
+      amount: 10,
+      currencyCode: 'USD',
+    },
+  });
+  ```
+
+  Learn more about [App Billing](https://shopify.dev/docs/apps/launch/billing/subscription-billing).
+
+### Patch Changes
+
+- 59896e3: Updated `isbot` dependencies
+- 5c01460: Adding toggle parameter flag to return implied scopes from Remix API Query by returning original scopes from AuthScopes instantiation
+
+  Example:
+  const scopes = new AuthScopes(['read_customers', 'write_customers', 'read_products', 'write_channels']);
+  scopes.toArray() returns ['write_customers', 'read_products', 'write_channels']
+  scopes.toArray(true) returns ['read_customers', 'write_customers', 'read_products', 'write_channels']
+
+- Updated dependencies [50634c0]
+- Updated dependencies [59896e3]
+- Updated dependencies [2e396f3]
+- Updated dependencies [5efb3a2]
+- Updated dependencies [cd0b3e1]
+- Updated dependencies [bad62cc]
+- Updated dependencies [10f4fd0]
+- Updated dependencies [5c01460]
+  - @shopify/shopify-api@11.6.0
+  - @shopify/shopify-app-session-storage@3.0.8
+  - @shopify/admin-api-client@1.0.4
+  - @shopify/storefront-api-client@1.0.3
+
 ## 3.3.2
 
 ### Patch Changes

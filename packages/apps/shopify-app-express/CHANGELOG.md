@@ -1,5 +1,46 @@
 # Changelog
 
+## 5.0.10
+
+### Patch Changes
+
+- 6b71f39: Updated `express` dependencies
+- Updated dependencies [6b71f39]
+- Updated dependencies [6681802]
+- Updated dependencies [dc6b8ad]
+  - @shopify/shopify-api@11.7.0
+  - @shopify/shopify-app-session-storage@3.0.10
+  - @shopify/shopify-app-session-storage-memory@4.0.10
+
+## 5.0.9
+
+### Patch Changes
+
+- Updated dependencies [6910d3d]
+  - @shopify/shopify-api@11.6.1
+  - @shopify/shopify-app-session-storage@3.0.9
+  - @shopify/shopify-app-session-storage-memory@4.0.9
+
+## 5.0.8
+
+### Patch Changes
+
+- 2e396f3: Updated `express` dependencies
+- 0b3526d: Updated `cookie-parser` dependencies
+- 5efb3a2: Updated `express` dependencies
+- 2faad6c: Changing common connection logs from info level to debug to avoid spam
+- Updated dependencies [50634c0]
+- Updated dependencies [59896e3]
+- Updated dependencies [2e396f3]
+- Updated dependencies [5efb3a2]
+- Updated dependencies [cd0b3e1]
+- Updated dependencies [bad62cc]
+- Updated dependencies [10f4fd0]
+- Updated dependencies [5c01460]
+  - @shopify/shopify-api@11.6.0
+  - @shopify/shopify-app-session-storage@3.0.8
+  - @shopify/shopify-app-session-storage-memory@4.0.8
+
 ## 5.0.7
 
 ### Patch Changes

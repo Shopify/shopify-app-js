@@ -3,7 +3,6 @@ import {JwtPayload, Session, ShopifyRestResources} from '@shopify/shopify-api';
 import {EnsureCORSFunction} from '../helpers/ensure-cors-headers';
 import type {AppConfigArg} from '../../config-types';
 import type {AdminApiContext} from '../../clients';
-import {FeatureEnabled} from '../../future/flags';
 
 import type {BillingContext} from './billing/types';
 import {RedirectFunction} from './helpers/redirect';
@@ -76,7 +75,7 @@ interface AdminContextInternal<
   /**
    * Methods for interacting with the GraphQL / REST Admin APIs for the store that made the request.
    */
-  admin: AdminApiContext<Resources>;
+  admin: AdminApiContext<Config, Resources>;
 
   /**
    * Billing methods for this store, based on the plans defined in the `billing` config option.
@@ -197,7 +196,7 @@ type EmbeddedTypedAdminContext<
 
 export interface ScopesContext {
   /**
-   * Methods to manage optional scopes for the store that made the request.
+   * Methods to manage scopes for the store that made the request.
    */
   scopes: ScopesApiContext;
 }
@@ -205,10 +204,7 @@ export interface ScopesContext {
 export type AdminContext<
   Config extends AppConfigArg,
   Resources extends ShopifyRestResources,
-> =
-  FeatureEnabled<Config['future'], 'wip_optionalScopesApi'> extends true
-    ? EmbeddedTypedAdminContext<Config, Resources> & ScopesContext
-    : EmbeddedTypedAdminContext<Config, Resources>;
+> = EmbeddedTypedAdminContext<Config, Resources> & ScopesContext;
 
 export type AuthenticateAdmin<
   Config extends AppConfigArg,

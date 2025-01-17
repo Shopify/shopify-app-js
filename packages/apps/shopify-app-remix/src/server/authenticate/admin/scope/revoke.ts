@@ -1,14 +1,15 @@
 import {Session} from '@shopify/shopify-api';
 
+import {AppConfigArg} from '../../../config-types';
 import {AdminApiContext} from '../../../clients';
 import type {BasicParams} from '../../../types';
 
 import {revokeScopes} from './client/revoke-scopes';
 
-export function revokeScopesFactory(
+export function revokeScopesFactory<ConfigArg extends AppConfigArg>(
   params: BasicParams,
   session: Session,
-  admin: AdminApiContext,
+  admin: AdminApiContext<ConfigArg>,
 ) {
   return async function revoke(scopes: string[]) {
     const {logger} = params;

@@ -1,5 +1,26 @@
 # Changelog
 
+## 1.1.4
+
+### Patch Changes
+
+- 694092c: Updated `@graphql-codegen/typescript` dependencies
+- 12ab42a: Updated `graphql` dependencies
+
+## 1.1.3
+
+### Patch Changes
+
+- cd39dff: Updated `@parcel/watcher` dependencies
+
+## 1.1.2
+
+### Patch Changes
+
+- 8c089b4: Updated `@graphql-codegen/typescript` dependencies
+- 0c5501b: Updated `@graphql-codegen/cli` dependencies
+- 827085d: Updated `@graphql-codegen/typescript` dependencies
+
 ## 1.1.1
 
 ### Patch Changes

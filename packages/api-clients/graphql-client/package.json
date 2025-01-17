@@ -1,6 +1,6 @@
 {
   "name": "@shopify/graphql-client",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "Shopify GraphQL Client - A lightweight generic GraphQL JS client to interact with Shopify GraphQL APIs",
   "repository": {
     "type": "git",
@@ -89,7 +89,7 @@
     "jest-environment-jsdom": "^29.5.0",
     "jest-fetch-mock": "^3.0.3",
     "regenerator-runtime": "^0.14.1",
-    "web-streams-polyfill": "^4.0.0"
+    "web-streams-polyfill": "^4.1.0"
   },
   "bugs": {
     "url": "https://github.com/Shopify/shopify-app-js/issues"
