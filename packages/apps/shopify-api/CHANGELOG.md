@@ -1,5 +1,13 @@
 # Changelog
 
+## 11.7.1
+
+### Patch Changes
+
+- 54eb408: Updated `isbot` dependencies
+- a573a6c: Updated `isbot` dependencies
+- 409597b: Updated `uuid` dependencies
+
 ## 11.7.0
 
 ### Minor Changes
