@@ -1,5 +1,16 @@
 # Changelog
 
+## 11.7.0
+
+### Minor Changes
+
+- dc6b8ad: Adds 2025-01 Admin REST resources
+
+### Patch Changes
+
+- 6b71f39: Updated `express` dependencies
+- 6681802: Updated `isbot` dependencies
+
 ## 11.6.1
 
 ### Patch Changes
