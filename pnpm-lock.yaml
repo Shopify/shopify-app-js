@@ -226,14 +226,14 @@ importers:
         specifier: ^8.11.6
         version: 8.11.6
       better-sqlite3:
-        specifier: ^11.8.0
-        version: 11.8.0
+        specifier: ^11.8.1
+        version: 11.8.1
       drizzle-kit:
         specifier: ^0.30.2
         version: 0.30.2
       drizzle-orm:
         specifier: ^0.38.4
-        version: 0.38.4(@cloudflare/workers-types@4.20250109.0)(@libsql/client@0.14.0(encoding@0.1.13))(@prisma/client@6.2.1(prisma@6.2.1))(@types/better-sqlite3@7.6.12)(@types/pg@8.11.6)(@types/react@19.0.7)(better-sqlite3@11.8.0)(mysql2@3.12.0)(pg@8.12.0)(prisma@6.2.1)(react@18.3.1)(sqlite3@5.1.7)
+        version: 0.38.4(@cloudflare/workers-types@4.20250109.0)(@libsql/client@0.14.0(encoding@0.1.13))(@prisma/client@6.2.1(prisma@6.2.1))(@types/better-sqlite3@7.6.12)(@types/pg@8.11.6)(@types/react@19.0.7)(better-sqlite3@11.8.1)(mysql2@3.12.0)(pg@8.12.0)(prisma@6.2.1)(react@18.3.1)(sqlite3@5.1.7)
       mysql2:
         specifier: ^3.12.0
         version: 3.12.0
@@ -3903,8 +3903,8 @@ packages:
     resolution: {integrity: sha512-pbnl5XzGBdrFU/wT4jqmJVPn2B6UHPBOhzMQkY/SPUPB6QtUXtmBHBIwCbXJol93mOpGMnQyP/+BB19q04xj7g==}
     engines: {node: '>=4'}
 
-  better-sqlite3@11.8.0:
-    resolution: {integrity: sha512-aKv9s2dir7bsEX5RIjL9HHWB9uQ+f6Vch5B4qmeAOop4Y9OYHX+PNKLr+mpv6+d8L/ZYh4l7H8zPuVMbWkVMLw==}
+  better-sqlite3@11.8.1:
+    resolution: {integrity: sha512-9BxNaBkblMjhJW8sMRZxnxVTRgbRmssZW0Oxc1MPBTfiR+WW21e2Mk4qu8CzrcZb1LwPCnFsfDEzq+SNcBU8eg==}
 
   bindings@1.5.0:
     resolution: {integrity: sha512-p2q/t/mhvuOj/UeLlV6566GD/guowlr0hHxClI0W9m7MWYkL1F0hLo+0Aexs9HSPCtR1SXQ0TD3MMKrXZajbiQ==}
@@ -6220,8 +6220,8 @@ packages:
   no-case@3.0.4:
     resolution: {integrity: sha512-fgAN3jGAh+RoxUGZHTSOLJIqUc2wmoBwGR4tbpNAKmmovFoWq0OdRkb0VkldReO2a2iBT/OEulG9XSUc10r3zg==}
 
-  node-abi@3.71.0:
-    resolution: {integrity: sha512-SZ40vRiy/+wRTf21hxkkEjPJZpARzUMVcJoQse2EF8qkUWbbO2z7vd5oA/H6bVH6SZQ5STGcu0KRDS7biNRfxw==}
+  node-abi@3.73.0:
+    resolution: {integrity: sha512-z8iYzQGBu35ZkTQ9mtR8RqugJZ9RCLn8fv3d7LsgDBzOijGQP3RdKTX4LA7LXw03ZhU5z0l4xfhIMgSES31+cg==}
     engines: {node: '>=10'}
 
   node-addon-api@7.1.1:
@@ -7241,8 +7241,8 @@ packages:
     resolution: {integrity: sha512-7gr8p9TQP6RAHusBOSLs46F4564ZrjV8xFmw5zCmgmhGUcw2hxsShhJ6CEiHQMgPDwAQ1fWHPM0ypc4RMAig4A==}
     engines: {node: ^14.18.0 || >=16.0.0}
 
-  tar-fs@2.1.1:
-    resolution: {integrity: sha512-V0r2Y9scmbDRLCNex/+hYzvp/zyYjvFbHPNgVTKfQvVrb6guiE/fxP+XblDNR011utopbkex2nM4dHNV6GDsng==}
+  tar-fs@2.1.2:
+    resolution: {integrity: sha512-EsaAXwxmx8UB7FRKqeozqEPop69DXcmYwTQwXvyAPF352HJsPdkVhvTaDPYqfNgruveJIJy3TA2l+2zj8LJIJA==}
 
   tar-stream@2.2.0:
     resolution: {integrity: sha512-ujeqbceABgwMZxEJnk2HDY2DlnUZ+9oEcb1KzTVfYHio0UE6dG71n60d8D2I4qNvleWrrXpmjpt7vZeF1LnMZQ==}
@@ -12328,7 +12328,7 @@ snapshots:
     dependencies:
       is-windows: 1.0.2
 
-  better-sqlite3@11.8.0:
+  better-sqlite3@11.8.1:
     dependencies:
       bindings: 1.5.0
       prebuild-install: 7.1.2
@@ -12890,7 +12890,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  drizzle-orm@0.38.4(@cloudflare/workers-types@4.20250109.0)(@libsql/client@0.14.0(encoding@0.1.13))(@prisma/client@6.2.1(prisma@6.2.1))(@types/better-sqlite3@7.6.12)(@types/pg@8.11.6)(@types/react@19.0.7)(better-sqlite3@11.8.0)(mysql2@3.12.0)(pg@8.12.0)(prisma@6.2.1)(react@18.3.1)(sqlite3@5.1.7):
+  drizzle-orm@0.38.4(@cloudflare/workers-types@4.20250109.0)(@libsql/client@0.14.0(encoding@0.1.13))(@prisma/client@6.2.1(prisma@6.2.1))(@types/better-sqlite3@7.6.12)(@types/pg@8.11.6)(@types/react@19.0.7)(better-sqlite3@11.8.1)(mysql2@3.12.0)(pg@8.12.0)(prisma@6.2.1)(react@18.3.1)(sqlite3@5.1.7):
     optionalDependencies:
       '@cloudflare/workers-types': 4.20250109.0
       '@libsql/client': 0.14.0(encoding@0.1.13)
@@ -12898,7 +12898,7 @@ snapshots:
       '@types/better-sqlite3': 7.6.12
       '@types/pg': 8.11.6
       '@types/react': 19.0.7
-      better-sqlite3: 11.8.0
+      better-sqlite3: 11.8.1
       mysql2: 3.12.0
       pg: 8.12.0
       prisma: 6.2.1
@@ -15076,7 +15076,7 @@ snapshots:
       lower-case: 2.0.2
       tslib: 2.8.1
 
-  node-abi@3.71.0:
+  node-abi@3.73.0:
     dependencies:
       semver: 7.6.3
 
@@ -15449,11 +15449,11 @@ snapshots:
       minimist: 1.2.8
       mkdirp-classic: 0.5.3
       napi-build-utils: 1.0.2
-      node-abi: 3.71.0
+      node-abi: 3.73.0
       pump: 3.0.2
       rc: 1.2.8
       simple-get: 4.0.1
-      tar-fs: 2.1.1
+      tar-fs: 2.1.2
       tunnel-agent: 0.6.0
 
   prelude-ls@1.2.1: {}
@@ -16189,7 +16189,7 @@ snapshots:
       '@pkgr/core': 0.1.1
       tslib: 2.8.1
 
-  tar-fs@2.1.1:
+  tar-fs@2.1.2:
     dependencies:
       chownr: 1.1.4
       mkdirp-classic: 0.5.3
