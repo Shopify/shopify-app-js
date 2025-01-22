@@ -25,6 +25,7 @@ export function graphqlClientFactory({
         variables: options?.variables,
         retries: options?.tries ? options.tries - 1 : 0,
         headers: options?.headers,
+        signal: options?.signal,
       });
 
       return new Response(JSON.stringify(apiResponse));

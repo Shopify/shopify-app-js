@@ -27,6 +27,11 @@ export interface GraphQLQueryOptions<
    * The total number of times to try the request if it fails.
    */
   tries?: number;
+
+  /**
+   * An optional AbortSignal to cancel the request.
+   */
+  signal?: AbortSignal;
 }
 
 export type GraphQLResponse<
