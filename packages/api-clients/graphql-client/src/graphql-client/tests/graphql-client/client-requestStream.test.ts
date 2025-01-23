@@ -712,6 +712,36 @@ describe('GraphQL Client', () => {
                   });
                 });
 
+                it('returns an async iterator that returns a response object with an error when Response.body is undefined', async () => {
+                  const mockedResponse = new Response(undefined, {
+                    status: 200,
+                    headers: new Headers({
+                      'Content-Type': 'multipart/mixed; boundary=graphql',
+                    }),
+                  });
+                  Object.defineProperty(mockedResponse, 'body', {
+                    value: undefined,
+                    writable: true,
+                  });
+
+                  fetchMock.mockResolvedValue(mockedResponse);
+
+                  const responseStream = await client.requestStream(operation);
+
+                  const results: any = [];
+                  for await (const response of responseStream) {
+                    results.push(response);
+                  }
+
+                  expect(results[0].errors).toEqual({
+                    message:
+                      'GraphQL Client: API multipart response did not return an iterable body',
+                    networkStatusCode: 200,
+                    response: mockedResponse,
+                  });
+                  expect(results[0].data).toBeUndefined();
+                });
+
                 it('returns an async iterator that returns a response object with no data value and a JSON parsing error if the returned data is a malformed JSON', async () => {
                   const multipleResponsesArray = [
                     `
