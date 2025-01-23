@@ -4,7 +4,7 @@
 
 ### Major Changes
 
-- e6fc6cd: Update Prisma dependency
+- 12c387e: # Update Prisma dependency
 
   This updates the `prisma` peer dependency to `^6.2.1`.
 
