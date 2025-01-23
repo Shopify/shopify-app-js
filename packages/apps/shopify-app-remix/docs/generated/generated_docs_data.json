@@ -5893,9 +5893,28 @@
                     ]
                   }
                 ]
+              },
+              {
+                "filePath": "src/server/authenticate/public/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "pos",
+                "value": "AuthenticatePOS",
+                "description": "Authenticate a request from a POS UI extension",
+                "examples": [
+                  {
+                    "title": "Authenticating a POS UI extension request",
+                    "description": "",
+                    "tabs": [
+                      {
+                        "code": "import { LoaderFunctionArgs, json } from \"@remix-run/node\";\nimport { authenticate } from \"../shopify.server\";\n\nexport const loader = async ({ request }: LoaderFunctionArgs) => {\n  const { sessionToken, cors } = await authenticate.public.pos(\n    request,\n  );\n  return cors(json({my: \"data\", shop: sessionToken.dest}));\n};",
+                        "title": "/app/routes/public/widgets.ts"
+                      }
+                    ]
+                  }
+                ]
               }
             ],
-            "value": "export interface AuthenticatePublic<Config extends AppConfigArg> {\n  /**\n   * Authenticate a request from a checkout extension\n   *\n   * @example\n   * <caption>Authenticating a checkout extension request</caption>\n   * ```ts\n   * // /app/routes/public/widgets.ts\n   * import { LoaderFunctionArgs, json } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   *\n   * export const loader = async ({ request }: LoaderFunctionArgs) => {\n   *   const { sessionToken, cors } = await authenticate.public.checkout(\n   *     request,\n   *   );\n   *   return cors(json({my: \"data\", shop: sessionToken.dest}));\n   * };\n   * ```\n   */\n  checkout: AuthenticateCheckout;\n\n  /**\n   * Authenticate a request from an app proxy\n   *\n   * @example\n   * <caption>Authenticating an app proxy request</caption>\n   * ```ts\n   * // /app/routes/public/widgets.ts\n   * import { LoaderFunctionArgs, json } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   *\n   * export const loader = async ({ request }: LoaderFunctionArgs) => {\n   *   await authenticate.public.appProxy(\n   *     request,\n   *   );\n   *\n   *   const {searchParams} = new URL(request.url);\n   *   const shop = searchParams.get(\"shop\");\n   *   const customerId = searchParams.get(\"logged_in_customer_id\")\n   *\n   *   return json({my: \"data\", shop, customerId});\n   * };\n   * ```\n   */\n  appProxy: AuthenticateAppProxy<Config>;\n\n  /**\n   * Authenticate a request from a customer account extension\n   *\n   * @example\n   * <caption>Authenticating a customer account extension request</caption>\n   * ```ts\n   * // /app/routes/public/widgets.ts\n   * import { LoaderFunctionArgs, json } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   *\n   * export const loader = async ({ request }: LoaderFunctionArgs) => {\n   *   const { sessionToken, cors } = await authenticate.public.customerAccount(\n   *     request,\n   *   );\n   *   return cors(json({my: \"data\", shop: sessionToken.dest}));\n   * };\n   * ```\n   */\n  customerAccount: AuthenticateCustomerAccount;\n}"
+            "value": "export interface AuthenticatePublic<Config extends AppConfigArg> {\n  /**\n   * Authenticate a request from a checkout extension\n   *\n   * @example\n   * <caption>Authenticating a checkout extension request</caption>\n   * ```ts\n   * // /app/routes/public/widgets.ts\n   * import { LoaderFunctionArgs, json } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   *\n   * export const loader = async ({ request }: LoaderFunctionArgs) => {\n   *   const { sessionToken, cors } = await authenticate.public.checkout(\n   *     request,\n   *   );\n   *   return cors(json({my: \"data\", shop: sessionToken.dest}));\n   * };\n   * ```\n   */\n  checkout: AuthenticateCheckout;\n\n  /**\n   * Authenticate a request from an app proxy\n   *\n   * @example\n   * <caption>Authenticating an app proxy request</caption>\n   * ```ts\n   * // /app/routes/public/widgets.ts\n   * import { LoaderFunctionArgs, json } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   *\n   * export const loader = async ({ request }: LoaderFunctionArgs) => {\n   *   await authenticate.public.appProxy(\n   *     request,\n   *   );\n   *\n   *   const {searchParams} = new URL(request.url);\n   *   const shop = searchParams.get(\"shop\");\n   *   const customerId = searchParams.get(\"logged_in_customer_id\")\n   *\n   *   return json({my: \"data\", shop, customerId});\n   * };\n   * ```\n   */\n  appProxy: AuthenticateAppProxy<Config>;\n\n  /**\n   * Authenticate a request from a customer account extension\n   *\n   * @example\n   * <caption>Authenticating a customer account extension request</caption>\n   * ```ts\n   * // /app/routes/public/widgets.ts\n   * import { LoaderFunctionArgs, json } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   *\n   * export const loader = async ({ request }: LoaderFunctionArgs) => {\n   *   const { sessionToken, cors } = await authenticate.public.customerAccount(\n   *     request,\n   *   );\n   *   return cors(json({my: \"data\", shop: sessionToken.dest}));\n   * };\n   * ```\n   */\n  customerAccount: AuthenticateCustomerAccount;\n\n  /**\n   * Authenticate a request from a POS UI extension\n   *\n   * @example\n   * <caption>Authenticating a POS UI extension request</caption>\n   * ```ts\n   * // /app/routes/public/widgets.ts\n   * import { LoaderFunctionArgs, json } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   *\n   * export const loader = async ({ request }: LoaderFunctionArgs) => {\n   *   const { sessionToken, cors } = await authenticate.public.pos(\n   *     request,\n   *   );\n   *   return cors(json({my: \"data\", shop: sessionToken.dest}));\n   * };\n   * ```\n   */\n  pos: AuthenticatePOS;\n}"
           },
           "AuthenticateAppProxy": {
             "filePath": "src/server/authenticate/public/appProxy/types.ts",
@@ -8079,8 +8098,13 @@
             "filePath": "../shopify-api/dist/ts/lib/types.d.ts",
             "syntaxKind": "EnumDeclaration",
             "name": "ApiVersion",
-            "value": "export declare enum ApiVersion {\n    October22 = \"2022-10\",\n    January23 = \"2023-01\",\n    April23 = \"2023-04\",\n    July23 = \"2023-07\",\n    October23 = \"2023-10\",\n    January24 = \"2024-01\",\n    April24 = \"2024-04\",\n    July24 = \"2024-07\",\n    October24 = \"2024-10\",\n    Unstable = \"unstable\"\n}",
+            "value": "export declare enum ApiVersion {\n    January25 = \"2025-01\",\n    October22 = \"2022-10\",\n    January23 = \"2023-01\",\n    April23 = \"2023-04\",\n    July23 = \"2023-07\",\n    October23 = \"2023-10\",\n    January24 = \"2024-01\",\n    April24 = \"2024-04\",\n    July24 = \"2024-07\",\n    October24 = \"2024-10\",\n    Unstable = \"unstable\"\n}",
             "members": [
+              {
+                "filePath": "../shopify-api/dist/ts/lib/types.d.ts",
+                "name": "January25",
+                "value": "2025-01"
+              },
               {
                 "filePath": "../shopify-api/dist/ts/lib/types.d.ts",
                 "name": "October22",
