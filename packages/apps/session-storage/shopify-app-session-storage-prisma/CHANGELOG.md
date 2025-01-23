@@ -1,5 +1,15 @@
 # @shopify/shopify-app-session-storage-prisma
 
+## 7.0.0
+
+### Major Changes
+
+- 12c387e: # Update Prisma dependency
+
+  This updates the `prisma` peer dependency to `^6.2.1`.
+
+  Please update your `prisma` and `@prisma/client` dependencies to `^6.2.1` in your project.
+
 ## 6.0.0
 
 ### Major Changes
