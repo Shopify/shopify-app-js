@@ -1,5 +1,42 @@
 # Changelog
 
+## 11.8.0
+
+### Minor Changes
+
+- 89d803e: # Adds signal as request option
+
+  This adds the `signal` option to the `request` method of the GraphQL client, for the shopify-api and shopify-app-remix packages to pass in an [AbortSignal](https://developer.mozilla.org/en-US/docs/Web/API/AbortSignal) to abort requests, and set a timeout.
+
+  If a request is aborted, an `HttpRequestError` will be thrown.
+
+  This will allow you to set your own custom timeout, and abort requests.
+
+  ```ts
+  // Abort the request after 3 seconds
+  await admin.graphql('{ shop { name } }', {
+    signal: AbortSignal.timeout(3000),
+  });
+  ```
+
+  ```ts
+  // Abort the request after 3 seconds, and retry the request up to 2 times
+  await admin.graphql('{ shop { name } }', {
+    signal: AbortSignal.timeout(3000),
+    tries: 2,
+  });
+  ```
+
+### Patch Changes
+
+- 54eb408: Updated `isbot` dependencies
+- a573a6c: Updated `isbot` dependencies
+- 409597b: Updated `uuid` dependencies
+- Updated dependencies [d3531c5]
+  - @shopify/graphql-client@1.2.2
+  - @shopify/admin-api-client@1.0.5
+  - @shopify/storefront-api-client@1.0.4
+
 ## 11.7.0
 
 ### Minor Changes

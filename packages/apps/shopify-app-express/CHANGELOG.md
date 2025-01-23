@@ -1,5 +1,18 @@
 # Changelog
 
+## 5.0.11
+
+### Patch Changes
+
+- e38c710: Change common logs from info level to debug
+- Updated dependencies [54eb408]
+- Updated dependencies [a573a6c]
+- Updated dependencies [409597b]
+- Updated dependencies [89d803e]
+  - @shopify/shopify-api@11.8.0
+  - @shopify/shopify-app-session-storage@3.0.11
+  - @shopify/shopify-app-session-storage-memory@4.0.11
+
 ## 5.0.10
 
 ### Patch Changes
