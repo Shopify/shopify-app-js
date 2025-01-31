@@ -269,8 +269,8 @@ importers:
         specifier: ^3.0.0
         version: link:../shopify-app-session-storage
       semver:
-        specifier: ^7.6.2
-        version: 7.6.3
+        specifier: ^7.7.0
+        version: 7.7.0
     devDependencies:
       '@cloudflare/workers-types':
         specifier: ^4.20250129.0
@@ -506,8 +506,8 @@ importers:
         specifier: ^4.21.2
         version: 4.21.2
       semver:
-        specifier: ^7.6.2
-        version: 7.6.3
+        specifier: ^7.7.0
+        version: 7.7.0
     devDependencies:
       '@types/compression':
         specifier: ^1.7.5
@@ -552,8 +552,8 @@ importers:
         specifier: '*'
         version: 18.3.1
       semver:
-        specifier: ^7.6.2
-        version: 7.6.3
+        specifier: ^7.7.0
+        version: 7.7.0
     devDependencies:
       '@remix-run/node':
         specifier: ^2.15.2
@@ -6985,11 +6985,6 @@ packages:
     resolution: {integrity: sha512-BR7VvDCVHO+q2xBEWskxS6DJE1qRnb7DxzUrogb71CWoSficBxYsiAGd+Kl0mmq/MprG9yArRkyrQxTO6XjMzA==}
     hasBin: true
 
-  semver@7.6.3:
-    resolution: {integrity: sha512-oVekP1cKtI+CTDvHWYFUcMtsK/00wmAEfyqKfNdARm8u1wNVhSgaX7A8d4UuIlUI5e84iEwOhs7ZPYRmzU9U6A==}
-    engines: {node: '>=10'}
-    hasBin: true
-
   semver@7.7.0:
     resolution: {integrity: sha512-DrfFnPzblFmNrIZzg5RzHegbiRWg7KMR7btwi2yjHwx06zsUbO5g613sVwEV7FTwmzJu+Io0lJe2GJ3LxqpvBQ==}
     engines: {node: '>=10'}
@@ -9146,7 +9141,7 @@ snapshots:
       outdent: 0.5.0
       prettier: 2.8.8
       resolve-from: 5.0.0
-      semver: 7.6.3
+      semver: 7.7.0
 
   '@changesets/assemble-release-plan@6.0.5':
     dependencies:
@@ -9155,7 +9150,7 @@ snapshots:
       '@changesets/should-skip-package': 0.1.1
       '@changesets/types': 6.0.0
       '@manypkg/get-packages': 1.1.3
-      semver: 7.6.3
+      semver: 7.7.0
 
   '@changesets/changelog-git@0.2.0':
     dependencies:
@@ -9188,7 +9183,7 @@ snapshots:
       package-manager-detector: 0.2.8
       picocolors: 1.1.1
       resolve-from: 5.0.0
-      semver: 7.6.3
+      semver: 7.7.0
       spawndamnit: 3.0.1
       term-size: 2.2.1
 
@@ -9211,7 +9206,7 @@ snapshots:
       '@changesets/types': 6.0.0
       '@manypkg/get-packages': 1.1.3
       picocolors: 1.1.1
-      semver: 7.6.3
+      semver: 7.7.0
 
   '@changesets/get-release-plan@4.0.6':
     dependencies:
@@ -14415,7 +14410,7 @@ snapshots:
       lodash.isstring: 4.0.1
       lodash.once: 4.1.1
       ms: 2.1.3
-      semver: 7.6.3
+      semver: 7.7.0
 
   jsx-ast-utils@3.3.5:
     dependencies:
@@ -14813,7 +14808,7 @@ snapshots:
 
   node-abi@3.73.0:
     dependencies:
-      semver: 7.6.3
+      semver: 7.7.0
 
   node-addon-api@7.1.1: {}
 
@@ -14832,7 +14827,7 @@ snapshots:
       nopt: 5.0.0
       npmlog: 6.0.2
       rimraf: 3.0.2
-      semver: 7.6.3
+      semver: 7.7.0
       tar: 6.2.1
       which: 2.0.2
     transitivePeerDependencies:
@@ -15596,8 +15591,6 @@ snapshots:
 
   semver@6.3.1: {}
 
-  semver@7.6.3: {}
-
   semver@7.7.0: {}
 
   send@0.19.0:
@@ -16110,7 +16103,7 @@ snapshots:
       json5: 2.2.3
       lodash.memoize: 4.1.2
       make-error: 1.3.6
-      semver: 7.6.3
+      semver: 7.7.0
       typescript: 5.7.3
       yargs-parser: 21.1.1
     optionalDependencies:
