@@ -1,5 +1,11 @@
 # Changelog
 
+## 11.8.1
+
+### Patch Changes
+
+- 7ff4467: Updates LATEST_API_VERSION to 2025-01
+
 ## 11.8.0
 
 ### Minor Changes

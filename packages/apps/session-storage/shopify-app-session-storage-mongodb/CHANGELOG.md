@@ -1,5 +1,7 @@
 # @shopify/shopify-app-session-storage-mongodb
 
+## 4.0.12
+
 ## 4.0.11
 
 ## 4.0.10
