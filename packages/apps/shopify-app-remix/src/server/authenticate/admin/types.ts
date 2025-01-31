@@ -167,6 +167,20 @@ export interface EmbeddedAdminContext<
    * ```
    *
    * @example
+   * <caption>Redirecting to a page in the Shopify Admin.</caption>
+   * <description>Redirects to a product page in the Shopify admin. Pass in a `target` option of `_top` or `_parent` to navigate in the current window, or `_blank` to open a new tab.</description>
+   * ```ts
+   * // /app/routes/admin/my-route.ts
+   * import { LoaderFunctionArgs, json } from "@remix-run/node";
+   * import { authenticate } from "../shopify.server";
+   *
+   * export const loader = async ({ request }: LoaderFunctionArgs) => {
+   *   const { session, redirect } = await authenticate.admin(request);
+   *   return redirect("shopify://admin/products/123456", { target: '_parent' });
+   * };
+   * ```
+   *
+   * @example
    * <caption>Redirecting outside of the Admin embedded app page.</caption>
    * <description>Pass in a `target` option of `_top` or `_parent` to navigate in the current window, or `_blank` to open a new tab.</description>
    * ```ts

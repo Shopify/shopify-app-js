@@ -74,6 +74,40 @@
               }
             ],
             "value": "export interface AppProviderProps\n  extends Omit<PolarisAppProviderProps, 'linkComponent' | 'i18n'> {\n  /**\n   * The API key for your Shopify app. This is the `Client ID` from the Partner Dashboard.\n   *\n   * When using the Shopify CLI, this is the `SHOPIFY_API_KEY` environment variable. If you're using the environment\n   * variable, then you need to pass it from the loader to the component.\n   */\n  apiKey: string;\n  /**\n   * Whether the app is loaded inside the Shopify Admin. Default is `true`.\n   *\n   * {@link https://shopify.dev/docs/apps/admin/embedded-app-home}\n   */\n  isEmbeddedApp?: boolean;\n  /**\n   * The internationalization (i18n) configuration for your Polaris provider.\n   *\n   * {@link https://polaris.shopify.com/components/utilities/app-provider}\n   */\n  i18n?: PolarisAppProviderProps['i18n'];\n  /**\n   * Used internally by Shopify. You don't need to set this.\n   * @private\n   */\n  __APP_BRIDGE_URL?: string;\n}"
+          },
+          "FeaturesConfig": {
+            "filePath": "../../../node_modules/@shopify/polaris/build/ts/src/utilities/features/types.d.ts",
+            "name": "FeaturesConfig",
+            "description": "",
+            "members": [
+              {
+                "filePath": "../../../node_modules/@shopify/polaris/build/ts/src/utilities/features/types.d.ts",
+                "name": "[key: string]",
+                "value": "boolean | undefined"
+              },
+              {
+                "filePath": "../../../node_modules/@shopify/polaris/build/ts/src/utilities/features/types.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "dynamicTopBarAndReframe",
+                "value": "boolean",
+                "description": "",
+                "isOptional": true
+              }
+            ],
+            "value": "export interface FeaturesConfig {\n    dynamicTopBarAndReframe?: boolean;\n    [key: string]: boolean | undefined;\n}"
+          },
+          "TranslationDictionary": {
+            "filePath": "../../../node_modules/@shopify/polaris/build/ts/src/utilities/i18n/I18n.d.ts",
+            "name": "TranslationDictionary",
+            "description": "",
+            "members": [
+              {
+                "filePath": "../../../node_modules/@shopify/polaris/build/ts/src/utilities/i18n/I18n.d.ts",
+                "name": "[key: string]",
+                "value": "string | TranslationDictionary"
+              }
+            ],
+            "value": "interface TranslationDictionary {\n    [key: string]: string | TranslationDictionary;\n}"
           }
         }
       }
@@ -832,6 +866,16 @@
                     ]
                   },
                   {
+                    "title": "Redirecting to a page in the Shopify Admin",
+                    "description": "Redirects to a product page in the Shopify admin. Pass in a `target` option of `_top` or `_parent` to navigate in the current window, or `_blank` to open a new tab.",
+                    "tabs": [
+                      {
+                        "code": "import { LoaderFunctionArgs, json } from \"@remix-run/node\";\nimport { authenticate } from \"../shopify.server\";\n\nexport const loader = async ({ request }: LoaderFunctionArgs) => {\n  const { session, redirect } = await authenticate.admin(request);\n  return redirect(\"shopify://admin/products/123456\", { target: '_parent' });\n};",
+                        "title": "/app/routes/admin/my-route.ts"
+                      }
+                    ]
+                  },
+                  {
                     "title": "Redirecting outside of the Admin embedded app page",
                     "description": "Pass in a `target` option of `_top` or `_parent` to navigate in the current window, or `_blank` to open a new tab.",
                     "tabs": [
@@ -904,7 +948,7 @@
                 ]
               }
             ],
-            "value": "export interface EmbeddedAdminContext<\n  Config extends AppConfigArg,\n  Resources extends ShopifyRestResources = ShopifyRestResources,\n> extends AdminContextInternal<Config, Resources> {\n  /**\n   * The decoded and validated session token for the request.\n   *\n   * Returned only if `isEmbeddedApp` is `true`.\n   *\n   * {@link https://shopify.dev/docs/apps/auth/oauth/session-tokens#payload}\n   *\n   * @example\n   * <caption>Using the decoded session token.</caption>\n   * <description>Get user-specific data using the `sessionToken` object.</description>\n   * ```ts\n   * // /app/routes/**\\/*.ts\n   * import { LoaderFunctionArgs, json } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   * import { getMyAppData } from \"~/db/model.server\";\n   *\n   * export const loader = async ({ request }: LoaderFunctionArgs) => {\n   *   const { sessionToken } = await authenticate.admin(\n   *     request\n   *   );\n   *   return json(await getMyAppData({user: sessionToken.sub}));\n   * };\n   * ```\n   * ```ts\n   * // shopify.server.ts\n   * import { shopifyApp } from \"@shopify/shopify-app-remix/server\";\n   *\n   * const shopify = shopifyApp({\n   *   // ...etc\n   *   useOnlineTokens: true,\n   * });\n   * export default shopify;\n   * export const authenticate = shopify.authenticate;\n   * ```\n   */\n  sessionToken: JwtPayload;\n\n  /**\n   * A function that redirects the user to a new page, ensuring that the appropriate parameters are set for embedded\n   * apps.\n   *\n   * Returned only if `isEmbeddedApp` is `true`.\n   *\n   * @example\n   * <caption>Redirecting to an app route.</caption>\n   * <description>Use the `redirect` helper to safely redirect between pages.</description>\n   * ```ts\n   * // /app/routes/admin/my-route.ts\n   * import { LoaderFunctionArgs, json } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   *\n   * export const loader = async ({ request }: LoaderFunctionArgs) => {\n   *   const { session, redirect } = await authenticate.admin(request);\n   *   return redirect(\"/\");\n   * };\n   * ```\n   *\n   * @example\n   * <caption>Redirecting outside of the Admin embedded app page.</caption>\n   * <description>Pass in a `target` option of `_top` or `_parent` to navigate in the current window, or `_blank` to open a new tab.</description>\n   * ```ts\n   * // /app/routes/admin/my-route.ts\n   * import { LoaderFunctionArgs, json } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   *\n   * export const loader = async ({ request }: LoaderFunctionArgs) => {\n   *   const { session, redirect } = await authenticate.admin(request);\n   *   return redirect(\"/\", { target: '_parent' });\n   * };\n   * ```\n   */\n  redirect: RedirectFunction;\n}"
+            "value": "export interface EmbeddedAdminContext<\n  Config extends AppConfigArg,\n  Resources extends ShopifyRestResources = ShopifyRestResources,\n> extends AdminContextInternal<Config, Resources> {\n  /**\n   * The decoded and validated session token for the request.\n   *\n   * Returned only if `isEmbeddedApp` is `true`.\n   *\n   * {@link https://shopify.dev/docs/apps/auth/oauth/session-tokens#payload}\n   *\n   * @example\n   * <caption>Using the decoded session token.</caption>\n   * <description>Get user-specific data using the `sessionToken` object.</description>\n   * ```ts\n   * // /app/routes/**\\/*.ts\n   * import { LoaderFunctionArgs, json } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   * import { getMyAppData } from \"~/db/model.server\";\n   *\n   * export const loader = async ({ request }: LoaderFunctionArgs) => {\n   *   const { sessionToken } = await authenticate.admin(\n   *     request\n   *   );\n   *   return json(await getMyAppData({user: sessionToken.sub}));\n   * };\n   * ```\n   * ```ts\n   * // shopify.server.ts\n   * import { shopifyApp } from \"@shopify/shopify-app-remix/server\";\n   *\n   * const shopify = shopifyApp({\n   *   // ...etc\n   *   useOnlineTokens: true,\n   * });\n   * export default shopify;\n   * export const authenticate = shopify.authenticate;\n   * ```\n   */\n  sessionToken: JwtPayload;\n\n  /**\n   * A function that redirects the user to a new page, ensuring that the appropriate parameters are set for embedded\n   * apps.\n   *\n   * Returned only if `isEmbeddedApp` is `true`.\n   *\n   * @example\n   * <caption>Redirecting to an app route.</caption>\n   * <description>Use the `redirect` helper to safely redirect between pages.</description>\n   * ```ts\n   * // /app/routes/admin/my-route.ts\n   * import { LoaderFunctionArgs, json } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   *\n   * export const loader = async ({ request }: LoaderFunctionArgs) => {\n   *   const { session, redirect } = await authenticate.admin(request);\n   *   return redirect(\"/\");\n   * };\n   * ```\n   *\n   * @example\n   * <caption>Redirecting to a page in the Shopify Admin.</caption>\n   * <description>Redirects to a product page in the Shopify admin. Pass in a `target` option of `_top` or `_parent` to navigate in the current window, or `_blank` to open a new tab.</description>\n   * ```ts\n   * // /app/routes/admin/my-route.ts\n   * import { LoaderFunctionArgs, json } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   *\n   * export const loader = async ({ request }: LoaderFunctionArgs) => {\n   *   const { session, redirect } = await authenticate.admin(request);\n   *   return redirect(\"shopify://admin/products/123456\", { target: '_parent' });\n   * };\n   * ```\n   *\n   * @example\n   * <caption>Redirecting outside of the Admin embedded app page.</caption>\n   * <description>Pass in a `target` option of `_top` or `_parent` to navigate in the current window, or `_blank` to open a new tab.</description>\n   * ```ts\n   * // /app/routes/admin/my-route.ts\n   * import { LoaderFunctionArgs, json } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   *\n   * export const loader = async ({ request }: LoaderFunctionArgs) => {\n   *   const { session, redirect } = await authenticate.admin(request);\n   *   return redirect(\"/\", { target: '_parent' });\n   * };\n   * ```\n   */\n  redirect: RedirectFunction;\n}"
           },
           "RedirectFunction": {
             "filePath": "src/server/authenticate/admin/helpers/redirect.ts",
@@ -1137,6 +1181,19 @@
                   {
                     "title": "/app/routes/admin/my-route.ts",
                     "code": "import { LoaderFunctionArgs, json } from \"@remix-run/node\";\nimport { authenticate } from \"../shopify.server\";\n\nexport const loader = async ({ request }: LoaderFunctionArgs) =&gt; {\n  const { session, redirect } = await authenticate.admin(request);\n  return redirect(\"/\");\n};",
+                    "language": "typescript"
+                  }
+                ]
+              }
+            },
+            {
+              "description": "Redirects to a product page in the Shopify admin. Pass in a `target` option of `_top` or `_parent` to navigate in the current window, or `_blank` to open a new tab.",
+              "codeblock": {
+                "title": "Redirecting to a page in the Shopify Admin",
+                "tabs": [
+                  {
+                    "title": "/app/routes/admin/my-route.ts",
+                    "code": "import { LoaderFunctionArgs, json } from \"@remix-run/node\";\nimport { authenticate } from \"../shopify.server\";\n\nexport const loader = async ({ request }: LoaderFunctionArgs) =&gt; {\n  const { session, redirect } = await authenticate.admin(request);\n  return redirect(\"shopify://admin/products/123456\", { target: '_parent' });\n};",
                     "language": "typescript"
                   }
                 ]
@@ -2969,6 +3026,14 @@
               {
                 "filePath": "src/server/clients/types.ts",
                 "syntaxKind": "PropertySignature",
+                "name": "signal",
+                "value": "AbortSignal",
+                "description": "An optional AbortSignal to cancel the request.",
+                "isOptional": true
+              },
+              {
+                "filePath": "src/server/clients/types.ts",
+                "syntaxKind": "PropertySignature",
                 "name": "tries",
                 "value": "number",
                 "description": "The total number of times to try the request if it fails.",
@@ -2983,7 +3048,7 @@
                 "isOptional": true
               }
             ],
-            "value": "export interface GraphQLQueryOptions<\n  Operation extends keyof Operations,\n  Operations extends AllOperations,\n> {\n  /**\n   * The variables to pass to the operation.\n   */\n  variables?: ApiClientRequestOptions<Operation, Operations>['variables'];\n  /**\n   * The version of the API to use for the request.\n   */\n  apiVersion?: ApiVersion;\n  /**\n   * Additional headers to include in the request.\n   */\n  headers?: Record<string, any>;\n  /**\n   * The total number of times to try the request if it fails.\n   */\n  tries?: number;\n}"
+            "value": "export interface GraphQLQueryOptions<\n  Operation extends keyof Operations,\n  Operations extends AllOperations,\n> {\n  /**\n   * The variables to pass to the operation.\n   */\n  variables?: ApiClientRequestOptions<Operation, Operations>['variables'];\n  /**\n   * The version of the API to use for the request.\n   */\n  apiVersion?: ApiVersion;\n  /**\n   * Additional headers to include in the request.\n   */\n  headers?: Record<string, any>;\n  /**\n   * The total number of times to try the request if it fails.\n   */\n  tries?: number;\n\n  /**\n   * An optional AbortSignal to cancel the request.\n   */\n  signal?: AbortSignal;\n}"
           }
         }
       }
@@ -4153,6 +4218,14 @@
               {
                 "filePath": "src/server/clients/types.ts",
                 "syntaxKind": "PropertySignature",
+                "name": "signal",
+                "value": "AbortSignal",
+                "description": "An optional AbortSignal to cancel the request.",
+                "isOptional": true
+              },
+              {
+                "filePath": "src/server/clients/types.ts",
+                "syntaxKind": "PropertySignature",
                 "name": "tries",
                 "value": "number",
                 "description": "The total number of times to try the request if it fails.",
@@ -4167,7 +4240,7 @@
                 "isOptional": true
               }
             ],
-            "value": "export interface GraphQLQueryOptions<\n  Operation extends keyof Operations,\n  Operations extends AllOperations,\n> {\n  /**\n   * The variables to pass to the operation.\n   */\n  variables?: ApiClientRequestOptions<Operation, Operations>['variables'];\n  /**\n   * The version of the API to use for the request.\n   */\n  apiVersion?: ApiVersion;\n  /**\n   * Additional headers to include in the request.\n   */\n  headers?: Record<string, any>;\n  /**\n   * The total number of times to try the request if it fails.\n   */\n  tries?: number;\n}"
+            "value": "export interface GraphQLQueryOptions<\n  Operation extends keyof Operations,\n  Operations extends AllOperations,\n> {\n  /**\n   * The variables to pass to the operation.\n   */\n  variables?: ApiClientRequestOptions<Operation, Operations>['variables'];\n  /**\n   * The version of the API to use for the request.\n   */\n  apiVersion?: ApiVersion;\n  /**\n   * Additional headers to include in the request.\n   */\n  headers?: Record<string, any>;\n  /**\n   * The total number of times to try the request if it fails.\n   */\n  tries?: number;\n\n  /**\n   * An optional AbortSignal to cancel the request.\n   */\n  signal?: AbortSignal;\n}"
           },
           "AdminApiContextWithRest": {
             "filePath": "src/server/clients/admin/types.ts",
@@ -4443,6 +4516,14 @@
               {
                 "filePath": "src/server/clients/types.ts",
                 "syntaxKind": "PropertySignature",
+                "name": "signal",
+                "value": "AbortSignal",
+                "description": "An optional AbortSignal to cancel the request.",
+                "isOptional": true
+              },
+              {
+                "filePath": "src/server/clients/types.ts",
+                "syntaxKind": "PropertySignature",
                 "name": "tries",
                 "value": "number",
                 "description": "The total number of times to try the request if it fails.",
@@ -4457,7 +4538,7 @@
                 "isOptional": true
               }
             ],
-            "value": "export interface GraphQLQueryOptions<\n  Operation extends keyof Operations,\n  Operations extends AllOperations,\n> {\n  /**\n   * The variables to pass to the operation.\n   */\n  variables?: ApiClientRequestOptions<Operation, Operations>['variables'];\n  /**\n   * The version of the API to use for the request.\n   */\n  apiVersion?: ApiVersion;\n  /**\n   * Additional headers to include in the request.\n   */\n  headers?: Record<string, any>;\n  /**\n   * The total number of times to try the request if it fails.\n   */\n  tries?: number;\n}"
+            "value": "export interface GraphQLQueryOptions<\n  Operation extends keyof Operations,\n  Operations extends AllOperations,\n> {\n  /**\n   * The variables to pass to the operation.\n   */\n  variables?: ApiClientRequestOptions<Operation, Operations>['variables'];\n  /**\n   * The version of the API to use for the request.\n   */\n  apiVersion?: ApiVersion;\n  /**\n   * Additional headers to include in the request.\n   */\n  headers?: Record<string, any>;\n  /**\n   * The total number of times to try the request if it fails.\n   */\n  tries?: number;\n\n  /**\n   * An optional AbortSignal to cancel the request.\n   */\n  signal?: AbortSignal;\n}"
           }
         }
       }
@@ -4562,6 +4643,22 @@
                 ]
               }
             ]
+          },
+          "Readonly": {
+            "filePath": "../../../node_modules/@shopify/polaris/build/ts/src/components/TextField/TextField.d.ts",
+            "name": "Readonly",
+            "description": "",
+            "members": [
+              {
+                "filePath": "../../../node_modules/@shopify/polaris/build/ts/src/components/TextField/TextField.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "readonly",
+                "value": "true",
+                "description": "",
+                "isOptional": true
+              }
+            ],
+            "value": "interface Readonly {\n    readonly?: true;\n}"
           },
           "ShopifyApp": {
             "filePath": "src/server/types.ts",
@@ -5409,6 +5506,16 @@
                     ]
                   },
                   {
+                    "title": "Redirecting to a page in the Shopify Admin",
+                    "description": "Redirects to a product page in the Shopify admin. Pass in a `target` option of `_top` or `_parent` to navigate in the current window, or `_blank` to open a new tab.",
+                    "tabs": [
+                      {
+                        "code": "import { LoaderFunctionArgs, json } from \"@remix-run/node\";\nimport { authenticate } from \"../shopify.server\";\n\nexport const loader = async ({ request }: LoaderFunctionArgs) => {\n  const { session, redirect } = await authenticate.admin(request);\n  return redirect(\"shopify://admin/products/123456\", { target: '_parent' });\n};",
+                        "title": "/app/routes/admin/my-route.ts"
+                      }
+                    ]
+                  },
+                  {
                     "title": "Redirecting outside of the Admin embedded app page",
                     "description": "Pass in a `target` option of `_top` or `_parent` to navigate in the current window, or `_blank` to open a new tab.",
                     "tabs": [
@@ -5481,7 +5588,7 @@
                 ]
               }
             ],
-            "value": "export interface EmbeddedAdminContext<\n  Config extends AppConfigArg,\n  Resources extends ShopifyRestResources = ShopifyRestResources,\n> extends AdminContextInternal<Config, Resources> {\n  /**\n   * The decoded and validated session token for the request.\n   *\n   * Returned only if `isEmbeddedApp` is `true`.\n   *\n   * {@link https://shopify.dev/docs/apps/auth/oauth/session-tokens#payload}\n   *\n   * @example\n   * <caption>Using the decoded session token.</caption>\n   * <description>Get user-specific data using the `sessionToken` object.</description>\n   * ```ts\n   * // /app/routes/**\\/*.ts\n   * import { LoaderFunctionArgs, json } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   * import { getMyAppData } from \"~/db/model.server\";\n   *\n   * export const loader = async ({ request }: LoaderFunctionArgs) => {\n   *   const { sessionToken } = await authenticate.admin(\n   *     request\n   *   );\n   *   return json(await getMyAppData({user: sessionToken.sub}));\n   * };\n   * ```\n   * ```ts\n   * // shopify.server.ts\n   * import { shopifyApp } from \"@shopify/shopify-app-remix/server\";\n   *\n   * const shopify = shopifyApp({\n   *   // ...etc\n   *   useOnlineTokens: true,\n   * });\n   * export default shopify;\n   * export const authenticate = shopify.authenticate;\n   * ```\n   */\n  sessionToken: JwtPayload;\n\n  /**\n   * A function that redirects the user to a new page, ensuring that the appropriate parameters are set for embedded\n   * apps.\n   *\n   * Returned only if `isEmbeddedApp` is `true`.\n   *\n   * @example\n   * <caption>Redirecting to an app route.</caption>\n   * <description>Use the `redirect` helper to safely redirect between pages.</description>\n   * ```ts\n   * // /app/routes/admin/my-route.ts\n   * import { LoaderFunctionArgs, json } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   *\n   * export const loader = async ({ request }: LoaderFunctionArgs) => {\n   *   const { session, redirect } = await authenticate.admin(request);\n   *   return redirect(\"/\");\n   * };\n   * ```\n   *\n   * @example\n   * <caption>Redirecting outside of the Admin embedded app page.</caption>\n   * <description>Pass in a `target` option of `_top` or `_parent` to navigate in the current window, or `_blank` to open a new tab.</description>\n   * ```ts\n   * // /app/routes/admin/my-route.ts\n   * import { LoaderFunctionArgs, json } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   *\n   * export const loader = async ({ request }: LoaderFunctionArgs) => {\n   *   const { session, redirect } = await authenticate.admin(request);\n   *   return redirect(\"/\", { target: '_parent' });\n   * };\n   * ```\n   */\n  redirect: RedirectFunction;\n}"
+            "value": "export interface EmbeddedAdminContext<\n  Config extends AppConfigArg,\n  Resources extends ShopifyRestResources = ShopifyRestResources,\n> extends AdminContextInternal<Config, Resources> {\n  /**\n   * The decoded and validated session token for the request.\n   *\n   * Returned only if `isEmbeddedApp` is `true`.\n   *\n   * {@link https://shopify.dev/docs/apps/auth/oauth/session-tokens#payload}\n   *\n   * @example\n   * <caption>Using the decoded session token.</caption>\n   * <description>Get user-specific data using the `sessionToken` object.</description>\n   * ```ts\n   * // /app/routes/**\\/*.ts\n   * import { LoaderFunctionArgs, json } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   * import { getMyAppData } from \"~/db/model.server\";\n   *\n   * export const loader = async ({ request }: LoaderFunctionArgs) => {\n   *   const { sessionToken } = await authenticate.admin(\n   *     request\n   *   );\n   *   return json(await getMyAppData({user: sessionToken.sub}));\n   * };\n   * ```\n   * ```ts\n   * // shopify.server.ts\n   * import { shopifyApp } from \"@shopify/shopify-app-remix/server\";\n   *\n   * const shopify = shopifyApp({\n   *   // ...etc\n   *   useOnlineTokens: true,\n   * });\n   * export default shopify;\n   * export const authenticate = shopify.authenticate;\n   * ```\n   */\n  sessionToken: JwtPayload;\n\n  /**\n   * A function that redirects the user to a new page, ensuring that the appropriate parameters are set for embedded\n   * apps.\n   *\n   * Returned only if `isEmbeddedApp` is `true`.\n   *\n   * @example\n   * <caption>Redirecting to an app route.</caption>\n   * <description>Use the `redirect` helper to safely redirect between pages.</description>\n   * ```ts\n   * // /app/routes/admin/my-route.ts\n   * import { LoaderFunctionArgs, json } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   *\n   * export const loader = async ({ request }: LoaderFunctionArgs) => {\n   *   const { session, redirect } = await authenticate.admin(request);\n   *   return redirect(\"/\");\n   * };\n   * ```\n   *\n   * @example\n   * <caption>Redirecting to a page in the Shopify Admin.</caption>\n   * <description>Redirects to a product page in the Shopify admin. Pass in a `target` option of `_top` or `_parent` to navigate in the current window, or `_blank` to open a new tab.</description>\n   * ```ts\n   * // /app/routes/admin/my-route.ts\n   * import { LoaderFunctionArgs, json } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   *\n   * export const loader = async ({ request }: LoaderFunctionArgs) => {\n   *   const { session, redirect } = await authenticate.admin(request);\n   *   return redirect(\"shopify://admin/products/123456\", { target: '_parent' });\n   * };\n   * ```\n   *\n   * @example\n   * <caption>Redirecting outside of the Admin embedded app page.</caption>\n   * <description>Pass in a `target` option of `_top` or `_parent` to navigate in the current window, or `_blank` to open a new tab.</description>\n   * ```ts\n   * // /app/routes/admin/my-route.ts\n   * import { LoaderFunctionArgs, json } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   *\n   * export const loader = async ({ request }: LoaderFunctionArgs) => {\n   *   const { session, redirect } = await authenticate.admin(request);\n   *   return redirect(\"/\", { target: '_parent' });\n   * };\n   * ```\n   */\n  redirect: RedirectFunction;\n}"
           },
           "RedirectFunction": {
             "filePath": "src/server/authenticate/admin/helpers/redirect.ts",
@@ -6243,6 +6350,14 @@
               {
                 "filePath": "src/server/clients/types.ts",
                 "syntaxKind": "PropertySignature",
+                "name": "signal",
+                "value": "AbortSignal",
+                "description": "An optional AbortSignal to cancel the request.",
+                "isOptional": true
+              },
+              {
+                "filePath": "src/server/clients/types.ts",
+                "syntaxKind": "PropertySignature",
                 "name": "tries",
                 "value": "number",
                 "description": "The total number of times to try the request if it fails.",
@@ -6257,7 +6372,7 @@
                 "isOptional": true
               }
             ],
-            "value": "export interface GraphQLQueryOptions<\n  Operation extends keyof Operations,\n  Operations extends AllOperations,\n> {\n  /**\n   * The variables to pass to the operation.\n   */\n  variables?: ApiClientRequestOptions<Operation, Operations>['variables'];\n  /**\n   * The version of the API to use for the request.\n   */\n  apiVersion?: ApiVersion;\n  /**\n   * Additional headers to include in the request.\n   */\n  headers?: Record<string, any>;\n  /**\n   * The total number of times to try the request if it fails.\n   */\n  tries?: number;\n}"
+            "value": "export interface GraphQLQueryOptions<\n  Operation extends keyof Operations,\n  Operations extends AllOperations,\n> {\n  /**\n   * The variables to pass to the operation.\n   */\n  variables?: ApiClientRequestOptions<Operation, Operations>['variables'];\n  /**\n   * The version of the API to use for the request.\n   */\n  apiVersion?: ApiVersion;\n  /**\n   * Additional headers to include in the request.\n   */\n  headers?: Record<string, any>;\n  /**\n   * The total number of times to try the request if it fails.\n   */\n  tries?: number;\n\n  /**\n   * An optional AbortSignal to cancel the request.\n   */\n  signal?: AbortSignal;\n}"
           },
           "AuthenticateCheckout": {
             "filePath": "src/server/authenticate/public/checkout/types.ts",
@@ -9208,6 +9323,14 @@
               {
                 "filePath": "src/server/clients/types.ts",
                 "syntaxKind": "PropertySignature",
+                "name": "signal",
+                "value": "AbortSignal",
+                "description": "An optional AbortSignal to cancel the request.",
+                "isOptional": true
+              },
+              {
+                "filePath": "src/server/clients/types.ts",
+                "syntaxKind": "PropertySignature",
                 "name": "tries",
                 "value": "number",
                 "description": "The total number of times to try the request if it fails.",
@@ -9222,7 +9345,7 @@
                 "isOptional": true
               }
             ],
-            "value": "export interface GraphQLQueryOptions<\n  Operation extends keyof Operations,\n  Operations extends AllOperations,\n> {\n  /**\n   * The variables to pass to the operation.\n   */\n  variables?: ApiClientRequestOptions<Operation, Operations>['variables'];\n  /**\n   * The version of the API to use for the request.\n   */\n  apiVersion?: ApiVersion;\n  /**\n   * Additional headers to include in the request.\n   */\n  headers?: Record<string, any>;\n  /**\n   * The total number of times to try the request if it fails.\n   */\n  tries?: number;\n}"
+            "value": "export interface GraphQLQueryOptions<\n  Operation extends keyof Operations,\n  Operations extends AllOperations,\n> {\n  /**\n   * The variables to pass to the operation.\n   */\n  variables?: ApiClientRequestOptions<Operation, Operations>['variables'];\n  /**\n   * The version of the API to use for the request.\n   */\n  apiVersion?: ApiVersion;\n  /**\n   * Additional headers to include in the request.\n   */\n  headers?: Record<string, any>;\n  /**\n   * The total number of times to try the request if it fails.\n   */\n  tries?: number;\n\n  /**\n   * An optional AbortSignal to cancel the request.\n   */\n  signal?: AbortSignal;\n}"
           }
         }
       }
