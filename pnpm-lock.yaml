@@ -304,8 +304,8 @@ importers:
         specifier: ^3.0.0
         version: link:../shopify-app-session-storage
       mongodb:
-        specifier: ^6.12.0
-        version: 6.12.0(socks@2.8.3)
+        specifier: ^6.13.0
+        version: 6.13.0(socks@2.8.3)
     devDependencies:
       '@shopify/shopify-app-session-storage-test-utils':
         specifier: ^3.0.12
@@ -3978,8 +3978,8 @@ packages:
   bser@2.1.1:
     resolution: {integrity: sha512-gQxTNE/GAfIIrmHLUE3oJyp5FO6HRBfhjnw4/wMmA63ZGDJnWBmgY/lyQBpnDUkGmAhbSe39tx2d/iTOAfglwQ==}
 
-  bson@6.10.1:
-    resolution: {integrity: sha512-P92xmHDQjSKPLHqFxefqMxASNq/aWJMEZugpCjf+AF/pgcUpMMQCg7t7+ewko0/u8AapvF3luf/FoehddEK+sA==}
+  bson@6.10.2:
+    resolution: {integrity: sha512-5afhLTjqDSA3akH56E+/2J6kTDuSIlBxyXPdQslj9hcIgOUE378xdOfZvC/9q3LifJNI6KR/juZ+d0NRNYBwXg==}
     engines: {node: '>=16.20.1'}
 
   buffer-equal-constant-time@1.0.1:
@@ -6182,8 +6182,8 @@ packages:
   mongodb-connection-string-url@3.0.2:
     resolution: {integrity: sha512-rMO7CGo/9BFwyZABcKAWL8UJwH/Kc2x0g72uhDWzG48URRax5TCIcJ7Rc3RZqffZzO/Gwff/jyKwCU9TN8gehA==}
 
-  mongodb@6.12.0:
-    resolution: {integrity: sha512-RM7AHlvYfS7jv7+BXund/kR64DryVI+cHbVAy9P61fnb1RcWZqOW1/Wj2YhqMCx+MuYhqTRGv7AwHBzmsCKBfA==}
+  mongodb@6.13.0:
+    resolution: {integrity: sha512-KeESYR5TEaFxOuwRqkOm3XOsMqCSkdeDMjaW5u2nuKfX7rqaofp7JQGoi7sVqQcNJTKuveNbzZtWMstb8ABP6Q==}
     engines: {node: '>=16.20.1'}
     peerDependencies:
       '@aws-sdk/credential-providers': ^3.188.0
@@ -12140,7 +12140,7 @@ snapshots:
     dependencies:
       node-int64: 0.4.0
 
-  bson@6.10.1: {}
+  bson@6.10.2: {}
 
   buffer-equal-constant-time@1.0.1: {}
 
@@ -14773,10 +14773,10 @@ snapshots:
       '@types/whatwg-url': 11.0.5
       whatwg-url: 14.1.0
 
-  mongodb@6.12.0(socks@2.8.3):
+  mongodb@6.13.0(socks@2.8.3):
     dependencies:
       '@mongodb-js/saslprep': 1.1.9
-      bson: 6.10.1
+      bson: 6.10.2
       mongodb-connection-string-url: 3.0.2
     optionalDependencies:
       socks: 2.8.3
