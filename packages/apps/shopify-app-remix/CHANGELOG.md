@@ -1,5 +1,11 @@
 # @shopify/shopify-app-remix
 
+## 3.7.2
+
+### Patch Changes
+
+- b83364c: Updated `semver` dependencies
+
 ## 3.7.1
 
 ### Patch Changes

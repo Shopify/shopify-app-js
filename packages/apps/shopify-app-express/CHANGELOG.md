@@ -1,5 +1,11 @@
 # Changelog
 
+## 5.0.13
+
+### Patch Changes
+
+- b83364c: Updated `semver` dependencies
+
 ## 5.0.12
 
 ### Patch Changes
