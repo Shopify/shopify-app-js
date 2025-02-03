@@ -69,6 +69,10 @@ The same `changesets/action` in the `main-release.yml` workflow will call `pnpm 
 
 After the release, there will no longer be a `Packages for release` PR. `changesets` will re-create it when a branch that contains `changesets`-created changelog files is merged into `main`.
 
+> **Note**
+>
+> If the release contains a new API version in the shopify-api package, consider updating all references to the old API to the new API version. For example, [shopify.server.ts](https://github.com/Shopify/shopify-app-template-remix/blob/acc6e6690f745fb8167a18548ba713c287e0275e/app/shopify.server.ts#L13) in the Remix template
+
 ---
 
 ## Release Candidates
