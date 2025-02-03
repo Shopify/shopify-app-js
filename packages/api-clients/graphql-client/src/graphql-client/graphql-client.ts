@@ -365,7 +365,7 @@ function createMultipartResponseAsyncInterator(
 
   if (
     !response.body?.getReader &&
-    !(response.body as any)![Symbol.asyncIterator]
+    !(response.body as any)?.[Symbol.asyncIterator]
   ) {
     throw new Error('API multipart response did not return an iterable body', {
       cause: response,

@@ -48,6 +48,21 @@ describe('admin.authenticate context', () => {
     ).rejects.toThrowError(HttpMaxRetriesError);
   });
 
+  it('respects the abort signal', async () => {
+    // GIVEN
+    const {admin} = await setUpEmbeddedFlow();
+    const controller = new AbortController();
+    await mockGraphqlRequest()({status: 200});
+
+    // Abort the request immediately
+    controller.abort();
+
+    // WHEN/THEN
+    await expect(
+      admin.graphql('{ shop { name } }', {signal: controller.signal}),
+    ).rejects.toThrowError(Error);
+  });
+
   it('re-throws errors other than HttpResponseErrors on REST requests', async () => {
     // GIVEN
     const {admin} = await setUpEmbeddedFlow();

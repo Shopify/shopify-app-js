@@ -1,5 +1,13 @@
 # @shopify/shopify-app-session-storage-mysql
 
+## 4.0.12
+
+## 4.0.11
+
+### Patch Changes
+
+- e7d9103: Updated `mysql2` dependencies
+
 ## 4.0.10
 
 ### Patch Changes
