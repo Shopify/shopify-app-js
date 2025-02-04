@@ -21,7 +21,7 @@ export function addCSPHeader(api: Shopify, req: Request, res: Response) {
   if (api.config.isEmbeddedApp && shop) {
     res.setHeader(
       'Content-Security-Policy',
-      `frame-ancestors https://${encodeURIComponent(
+      `frame-ancestors https://admin.myshopify.io https://${encodeURIComponent(
         shop,
       )} https://admin.shopify.com https://*.spin.dev;`,
     );

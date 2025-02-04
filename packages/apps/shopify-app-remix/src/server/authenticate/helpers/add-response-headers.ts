@@ -34,7 +34,7 @@ export function addDocumentResponseHeaders(
     if (shop) {
       headers.set(
         'Content-Security-Policy',
-        `frame-ancestors https://${shop} https://admin.shopify.com https://*.spin.dev;`,
+        `frame-ancestors https://admin.myshopify.io https://${shop} https://admin.shopify.com https://*.spin.dev;`,
       );
     }
   } else {
