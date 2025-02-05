@@ -105,8 +105,8 @@ importers:
         specifier: ^6.1.1
         version: 6.1.1(rollup@4.32.1)(typescript@5.7.3)
       rollup-plugin-exclude-dependencies-from-bundle:
-        specifier: ^1.1.23
-        version: 1.1.23(rollup@4.32.1)
+        specifier: ^1.1.24
+        version: 1.1.24(rollup@4.32.1)
       supertest:
         specifier: ^7.0.0
         version: 7.0.0
@@ -6766,8 +6766,8 @@ packages:
       rollup: ^3.29.4 || ^4
       typescript: ^4.5 || ^5.0
 
-  rollup-plugin-exclude-dependencies-from-bundle@1.1.23:
-    resolution: {integrity: sha512-nDoFtxlpajcqaLkPftoUcHxHYFd8tydHleOVubdf2JmyQtWTbhCNK05O4VGxLr7EUKSK9KeXqbWuQXkTqeJcRg==}
+  rollup-plugin-exclude-dependencies-from-bundle@1.1.24:
+    resolution: {integrity: sha512-3Bt5215TF9AAWhE/PikYL74ySBAtHE3e1gC8BN9XqOcL3rlPLdNMfe8UwnOueke5Tn3JTJBHRjw+D0Bv4PuOmA==}
     peerDependencies:
       rollup: '*'
 
@@ -15247,7 +15247,7 @@ snapshots:
     optionalDependencies:
       '@babel/code-frame': 7.26.2
 
-  rollup-plugin-exclude-dependencies-from-bundle@1.1.23(rollup@4.32.1):
+  rollup-plugin-exclude-dependencies-from-bundle@1.1.24(rollup@4.32.1):
     dependencies:
       rollup: 4.32.1
 
