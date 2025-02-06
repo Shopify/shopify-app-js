@@ -3,6 +3,7 @@ interface CustomRequestInit {
   headers?: HeadersInit;
   body?: string;
   signal?: AbortSignal;
+  keepalive?: boolean;
 }
 
 export type CustomFetchApi = (
@@ -94,6 +95,7 @@ export interface RequestOptions {
   url?: string;
   headers?: HeadersObject;
   retries?: number;
+  keepalive?: boolean;
   signal?: AbortSignal;
 }
 

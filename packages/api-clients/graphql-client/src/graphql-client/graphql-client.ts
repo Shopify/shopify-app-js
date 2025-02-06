@@ -111,6 +111,7 @@ function generateFetch(
       headers: overrideHeaders,
       url: overrideUrl,
       retries: overrideRetries,
+      keepalive,
       signal,
     } = options;
 
@@ -141,6 +142,7 @@ function generateFetch(
         headers: flatHeaders,
         body,
         signal,
+        keepalive,
       },
     ];
 
