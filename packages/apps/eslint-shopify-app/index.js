@@ -55,19 +55,62 @@ const shopifyAppRule = {
         },
       // When we finish processing the file, check if we need both and only have one
       'Program:exit': function (node) {
-        if (hasAuthenticateCall && !hasHeadersExport) {
-          context.report({
-            node,
-            message:
-              'Files using authenticate.admin() or authenticate.public.* must export a headers function',
-            fix(fixer) {
-              return fixer.insertTextAfter(
-                node,
-                '\n\n          export const headers = (headersArgs) => {\n            return boundary.headers(headersArgs);\n          };        \n',
-              );
-            },
-          });
-        }
+        if (!hasAuthenticateCall || hasHeadersExport) return;
+
+        const isTypeScript =
+          context.getFilename().endsWith('.ts') ||
+          context.getFilename().endsWith('.tsx');
+
+        const hasBoundaryImport = node.body.some(
+          (statement) =>
+            statement.type === 'ImportDeclaration' &&
+            statement.source.value === '@shopify/shopify-app-remix/server' &&
+            statement.specifiers.some(
+              (specifier) =>
+                specifier.type === 'ImportSpecifier' &&
+                specifier.imported.name === 'boundary',
+            ),
+        );
+
+        const hasHeadersTypeImport = node.body.some(
+          (statement) =>
+            statement.type === 'ImportDeclaration' &&
+            statement.source.value === '@remix-run/node' &&
+            statement.specifiers.some(
+              (specifier) =>
+                specifier.type === 'ImportSpecifier' &&
+                specifier.imported.name === 'HeadersFunction' &&
+                specifier.importKind === 'type',
+            ),
+        );
+
+        const importFix = hasBoundaryImport
+          ? ''
+          : '\nimport {boundary} from "@shopify/shopify-app-remix/server";';
+        const typeImportFix =
+          isTypeScript && !hasHeadersTypeImport
+            ? '\nimport type {HeadersFunction} from "@remix-run/node";'
+            : '';
+        const headersFix = isTypeScript
+          ? '\n\nexport const headers: HeadersFunction = (headersArgs) => {\n  return boundary.headers(headersArgs);\n};\n'
+          : '\n\nexport const headers = (headersArgs) => {\n  return boundary.headers(headersArgs);\n};\n';
+
+        context.report({
+          node,
+          message:
+            'Files using authenticate.admin() or authenticate.public.* must export a headers function',
+          fix(fixer) {
+            return [
+              hasBoundaryImport
+                ? null
+                : fixer.insertTextAfter(node.body[0], importFix),
+              isTypeScript && !hasHeadersTypeImport
+                ? fixer.insertTextAfter(node.body[0], typeImportFix)
+                : null,
+              fixer.insertTextAfter(node, headersFix),
+            ].filter(Boolean);
+          },
+        });
       },
     };
   },
