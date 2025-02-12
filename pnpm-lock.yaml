@@ -233,13 +233,13 @@ importers:
         version: 0.30.4
       drizzle-orm:
         specifier: ^0.39.3
-        version: 0.39.3(@cloudflare/workers-types@4.20250204.0)(@libsql/client@0.14.0(encoding@0.1.13))(@prisma/client@6.3.1(prisma@6.3.1(typescript@5.7.3))(typescript@5.7.3))(@types/better-sqlite3@7.6.12)(@types/pg@8.11.11)(better-sqlite3@11.8.1)(mysql2@3.12.0)(pg@8.13.1)(prisma@6.3.1(typescript@5.7.3))(sqlite3@5.1.7)
+        version: 0.39.3(@cloudflare/workers-types@4.20250204.0)(@libsql/client@0.14.0(encoding@0.1.13))(@prisma/client@6.3.1(prisma@6.3.1(typescript@5.7.3))(typescript@5.7.3))(@types/better-sqlite3@7.6.12)(@types/pg@8.11.11)(better-sqlite3@11.8.1)(mysql2@3.12.0)(pg@8.13.2)(prisma@6.3.1(typescript@5.7.3))(sqlite3@5.1.7)
       mysql2:
         specifier: ^3.12.0
         version: 3.12.0
       pg:
-        specifier: ^8.12.0
-        version: 8.13.1
+        specifier: ^8.13.2
+        version: 8.13.2
 
   packages/apps/session-storage/shopify-app-session-storage-dynamodb:
     dependencies:
@@ -336,8 +336,8 @@ importers:
         specifier: ^3.0.0
         version: link:../shopify-app-session-storage
       pg:
-        specifier: ^8.12.0
-        version: 8.13.1
+        specifier: ^8.13.2
+        version: 8.13.2
       pg-connection-string:
         specifier: ^2.7.0
         version: 2.7.0
@@ -6438,13 +6438,16 @@ packages:
     resolution: {integrity: sha512-BM/Thnrw5jm2kKLE5uJkXqqExRUY/toLHda65XgFTBTFYZyopbKjBe29Ii3RbkvlsMoFwD+tHeGaCjjv0gHlyw==}
     engines: {node: '>=4'}
 
-  pg-pool@3.7.0:
-    resolution: {integrity: sha512-ZOBQForurqh4zZWjrgSwwAtzJ7QiRX0ovFkZr2klsen3Nm0aoh33Ls0fzfv3imeH/nw/O27cjdz5kzYJfeGp/g==}
+  pg-pool@3.7.1:
+    resolution: {integrity: sha512-xIOsFoh7Vdhojas6q3596mXFsR8nwBQBXX5JiV7p9buEVAGqYL4yFzclON5P9vFrpu1u7Zwl2oriyDa89n0wbw==}
     peerDependencies:
       pg: '>=8.0'
 
   pg-protocol@1.7.0:
     resolution: {integrity: sha512-hTK/mE36i8fDDhgDFjy6xNOG+LCorxLG3WO17tku+ij6sVHXh1jQUJ8hYAnRhNla4QVD2H8er/FOjc/+EgC6yQ==}
+
+  pg-protocol@1.7.1:
+    resolution: {integrity: sha512-gjTHWGYWsEgy9MsY0Gp6ZJxV24IjDqdpTW7Eh0x+WfJLFsm/TJx1MzL6T0D88mBvkpxotCQ6TwW6N+Kko7lhgQ==}
 
   pg-types@2.2.0:
     resolution: {integrity: sha512-qTAAlrEsl8s4OiEQY69wDvcMIdQN6wdz5ojQiOy6YRMuynxenON0O5oCpJI6lshc6scgAY8qvJ2On/p+CXY0GA==}
@@ -6454,8 +6457,8 @@ packages:
     resolution: {integrity: sha512-cRL3JpS3lKMGsKaWndugWQoLOCoP+Cic8oseVcbr0qhPzYD5DWXK+RZ9LY9wxRf7RQia4SCwQlXk0q6FCPrVng==}
     engines: {node: '>=10'}
 
-  pg@8.13.1:
-    resolution: {integrity: sha512-OUir1A0rPNZlX//c7ksiu7crsGZTKSOXJPgtNiHGIlC9H0lO+NC6ZDYksSgBYY/thSWhnSRBv8w1lieNNGATNQ==}
+  pg@8.13.2:
+    resolution: {integrity: sha512-L5QkPvTjVWWHbLaFjCkOSplpb2uCiRYbg0IJ2okCy5ClYfWlSgDDnvdR6dyw3EWAH2AfS4j8E61QFI7gLfTtlw==}
     engines: {node: '>= 8.0.0'}
     peerDependencies:
       pg-native: '>=3.0.1'
@@ -12490,7 +12493,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  drizzle-orm@0.39.3(@cloudflare/workers-types@4.20250204.0)(@libsql/client@0.14.0(encoding@0.1.13))(@prisma/client@6.3.1(prisma@6.3.1(typescript@5.7.3))(typescript@5.7.3))(@types/better-sqlite3@7.6.12)(@types/pg@8.11.11)(better-sqlite3@11.8.1)(mysql2@3.12.0)(pg@8.13.1)(prisma@6.3.1(typescript@5.7.3))(sqlite3@5.1.7):
+  drizzle-orm@0.39.3(@cloudflare/workers-types@4.20250204.0)(@libsql/client@0.14.0(encoding@0.1.13))(@prisma/client@6.3.1(prisma@6.3.1(typescript@5.7.3))(typescript@5.7.3))(@types/better-sqlite3@7.6.12)(@types/pg@8.11.11)(better-sqlite3@11.8.1)(mysql2@3.12.0)(pg@8.13.2)(prisma@6.3.1(typescript@5.7.3))(sqlite3@5.1.7):
     optionalDependencies:
       '@cloudflare/workers-types': 4.20250204.0
       '@libsql/client': 0.14.0(encoding@0.1.13)
@@ -12499,7 +12502,7 @@ snapshots:
       '@types/pg': 8.11.11
       better-sqlite3: 11.8.1
       mysql2: 3.12.0
-      pg: 8.13.1
+      pg: 8.13.2
       prisma: 6.3.1(typescript@5.7.3)
       sqlite3: 5.1.7
 
@@ -14971,11 +14974,13 @@ snapshots:
 
   pg-numeric@1.0.2: {}
 
-  pg-pool@3.7.0(pg@8.13.1):
+  pg-pool@3.7.1(pg@8.13.2):
     dependencies:
-      pg: 8.13.1
+      pg: 8.13.2
 
   pg-protocol@1.7.0: {}
+
+  pg-protocol@1.7.1: {}
 
   pg-types@2.2.0:
     dependencies:
@@ -14995,11 +15000,11 @@ snapshots:
       postgres-interval: 3.0.0
       postgres-range: 1.1.4
 
-  pg@8.13.1:
+  pg@8.13.2:
     dependencies:
       pg-connection-string: 2.7.0
-      pg-pool: 3.7.0(pg@8.13.1)
-      pg-protocol: 1.7.0
+      pg-pool: 3.7.1(pg@8.13.2)
+      pg-protocol: 1.7.1
       pg-types: 2.2.0
       pgpass: 1.0.5
     optionalDependencies:
