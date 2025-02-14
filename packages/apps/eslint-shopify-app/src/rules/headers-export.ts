@@ -95,8 +95,8 @@ export const rule = createRule({
             ? '\nimport type {HeadersFunction} from "@remix-run/node";'
             : '';
         const headersFix = isTypeScript
-          ? '\n\nexport const headers: HeadersFunction = (headersArgs) => {\n  return boundary.headers(headersArgs);\n};\n'
-          : '\n\nexport const headers = (headersArgs) => {\n  return boundary.headers(headersArgs);\n};';
+          ? '\nexport const headers: HeadersFunction = (headersArgs) => {\n  return boundary.headers(headersArgs);\n};'
+          : '\nexport const headers = (headersArgs) => {\n  return boundary.headers(headersArgs);};';
 
         context.report({
           node,
