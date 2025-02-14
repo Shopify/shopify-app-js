@@ -2,8 +2,31 @@
   "name": "eslint-shopify-app",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/ts/index.d.ts",
+  "exports": {
+    ".": {
+      "module": {
+        "types": "./dist/ts/index.d.ts",
+        "default": "./dist/index.mjs"
+      },
+      "import": {
+        "types": "./dist/ts/index.d.ts",
+        "default": "./dist/index.mjs"
+      },
+      "require": {
+        "types": "./dist/ts/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "default": "./dist/index.mjs"
+    }
+  },
   "scripts": {
+    "build": "pnpm tsc -p ./tsconfig.build.json && pnpm rollup",
+    "tsc": "tsc",
+    "rollup": "rollup -c --bundleConfigAsCjs",
+    "clean": "rimraf dist/*",
     "test": "jest",
     "test:watch": "jest --watch",
     "test:ci": "pnpm test"
@@ -16,15 +39,27 @@
       ".*": "babel-jest"
     }
   },
+  "dependencies": {
+    "@typescript-eslint/utils": "^8.24.0"
+  },
   "devDependencies": {
     "@babel/core": "^7.24.0",
     "@babel/plugin-transform-runtime": "^7.24.0",
     "@babel/preset-env": "^7.24.0",
     "@babel/preset-typescript": "^7.24.0",
+    "@rollup/plugin-commonjs": "^25.0.0",
+    "@rollup/plugin-node-resolve": "^15.0.0",
+    "@rollup/plugin-replace": "^5.0.0",
+    "@rollup/plugin-typescript": "^11.0.0",
+    "@types/eslint": "^9.6.1",
     "@typescript-eslint/parser": "^8.24.0",
     "@typescript-eslint/rule-tester": "^8.24.0",
-    "@typescript-eslint/utils": "^8.24.0",
     "babel-jest": "^29.7.0",
-    "jest": "^29.7.0"
+    "jest": "^29.7.0",
+    "rimraf": "^5.0.0",
+    "rollup": "^4.0.0",
+    "rollup-plugin-dts": "^6.0.0",
+    "rollup-plugin-exclude-dependencies-from-bundle": "^1.1.23",
+    "typescript": "^5.0.0"
   }
 }
