@@ -1,0 +1,22 @@
+{
+    "include": ["./**/*.ts", "./**/*.js"],
+    "exclude": ["./node_modules", "./dist"],
+    "compilerOptions": {
+      "declaration": true,
+      "declarationMap": true,
+      "target": "ES2022",
+      "module": "NodeNext",
+      "moduleResolution": "NodeNext",
+      "lib": ["ESNext"],
+      "outDir": "./dist",
+      "rootDir": ".",
+      "baseUrl": ".",
+      "strict": true,
+      "pretty": true,
+      "allowSyntheticDefaultImports": true,
+      "strictPropertyInitialization": true,
+      "allowImportingTsExtensions": true,
+      "noEmit": true
+    },
+    "extends": "../../../tsconfig.base.json"
+}

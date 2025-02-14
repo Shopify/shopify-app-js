@@ -1,4 +1,16 @@
-const shopifyAppRule = {
+import {ESLintUtils} from '@typescript-eslint/utils';
+import type {TSESTree} from '@typescript-eslint/utils';
+
+const createRule = ESLintUtils.RuleCreator(
+  (name: string) =>
+    `https://shopify.dev/docs/api/shopify-app-remix/rules/${name}`,
+);
+
+type MessageIds = 'missingHeaders';
+type Options = [];
+
+export default createRule<Options, MessageIds>({
+  name: 'shopify-app',
   meta: {
     //  The rule is identifying code that either will cause an error or may cause a confusing behavior. Developers should consider this a high priority to resolve.
     type: 'problem',
@@ -8,7 +20,12 @@ const shopifyAppRule = {
     },
     fixable: 'code',
     schema: [],
+    messages: {
+      missingHeaders:
+        'Files using authenticate.admin() or authenticate.public.* must export a headers function',
+    },
   },
+  defaultOptions: [],
   create(context) {
     let hasAuthenticateCall = false;
     let hasHeadersExport = false;
@@ -39,11 +56,16 @@ const shopifyAppRule = {
         },
       // Check for headers export
       'ExportNamedDeclaration[declaration.type="VariableDeclaration"]':
-        function (node) {
+        function (
+          node: TSESTree.ExportNamedDeclaration & {
+            declaration: TSESTree.VariableDeclaration;
+          },
+        ) {
           const declarations = node.declaration.declarations;
           if (
             declarations.some(
-              (declaration) => declaration.id.name === 'headers',
+              (declaration) =>
+                (declaration.id as TSESTree.Identifier).name === 'headers',
             )
           ) {
             hasHeadersExport = true;
@@ -54,7 +76,7 @@ const shopifyAppRule = {
           hasHeadersExport = true;
         },
       // When we finish processing the file, check if we need both and only have one
-      'Program:exit': function (node) {
+      'Program:exit': function (node: TSESTree.Program) {
         if (!hasAuthenticateCall || hasHeadersExport) return;
 
         const isTypeScript =
@@ -62,24 +84,25 @@ const shopifyAppRule = {
           context.getFilename().endsWith('.tsx');
 
         const hasBoundaryImport = node.body.some(
-          (statement) =>
+          (statement): statement is TSESTree.ImportDeclaration =>
             statement.type === 'ImportDeclaration' &&
             statement.source.value === '@shopify/shopify-app-remix/server' &&
             statement.specifiers.some(
-              (specifier) =>
+              (specifier): specifier is TSESTree.ImportSpecifier =>
                 specifier.type === 'ImportSpecifier' &&
-                specifier.imported.name === 'boundary',
+                (specifier.imported as TSESTree.Identifier).name === 'boundary',
             ),
         );
 
         const hasHeadersTypeImport = node.body.some(
-          (statement) =>
+          (statement): statement is TSESTree.ImportDeclaration =>
             statement.type === 'ImportDeclaration' &&
             statement.source.value === '@remix-run/node' &&
             statement.specifiers.some(
-              (specifier) =>
+              (specifier): specifier is TSESTree.ImportSpecifier =>
                 specifier.type === 'ImportSpecifier' &&
-                specifier.imported.name === 'HeadersFunction' &&
+                (specifier.imported as TSESTree.Identifier).name ===
+                  'HeadersFunction' &&
                 specifier.importKind === 'type',
             ),
         );
@@ -97,23 +120,24 @@ const shopifyAppRule = {
 
         context.report({
           node,
-          message:
-            'Files using authenticate.admin() or authenticate.public.* must export a headers function',
+          messageId: 'missingHeaders',
           fix(fixer) {
-            return [
-              hasBoundaryImport
-                ? null
-                : fixer.insertTextAfter(node.body[0], importFix),
-              isTypeScript && !hasHeadersTypeImport
-                ? fixer.insertTextAfter(node.body[0], typeImportFix)
-                : null,
-              fixer.insertTextAfter(node, headersFix),
-            ].filter(Boolean);
+            const fixes = [];
+
+            if (!hasBoundaryImport) {
+              fixes.push(fixer.insertTextAfter(node.body[0], importFix));
+            }
+
+            if (isTypeScript && !hasHeadersTypeImport) {
+              fixes.push(fixer.insertTextAfter(node.body[0], typeImportFix));
+            }
+
+            fixes.push(fixer.insertTextAfter(node, headersFix));
+
+            return fixes;
           },
         });
       },
     };
   },
-};
-
-export default shopifyAppRule;
+});

@@ -4,7 +4,8 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "test": "node index-ts.test.js"
+    "build": "tsc",
+    "test": "node --loader ts-node/esm index.test.ts"
   },
   "keywords": [],
   "author": "",
@@ -18,11 +19,15 @@
   "devDependencies": {
     "@babel/core": "^7.24.0",
     "@babel/preset-env": "^7.24.0",
+    "@types/node": "^20.17.19",
     "@typescript-eslint/eslint-plugin": "^8.23.0",
     "@typescript-eslint/parser": "^8.23.0",
+    "@typescript-eslint/rule-tester": "^8.24.0",
     "babel-jest": "^29.7.0",
     "dedent": "^1.5.3",
-    "eslint": "^8.57.1"
+    "eslint": "^8.57.1",
+    "ts-node": "^10.9.2",
+    "typescript": "5.7.3"
   },
   "dependencies": {
     "typescript-eslint": "^8.24.0"
