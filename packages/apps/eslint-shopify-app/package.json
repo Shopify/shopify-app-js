@@ -4,15 +4,27 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "test": "node index.test.js"
+    "test": "node index-ts.test.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "description": "",
+  "jest": {
+    "transform": {
+      ".*": "babel-jest"
+    }
+  },
   "devDependencies": {
+    "@babel/core": "^7.24.0",
+    "@babel/preset-env": "^7.24.0",
     "@typescript-eslint/eslint-plugin": "^8.23.0",
     "@typescript-eslint/parser": "^8.23.0",
+    "babel-jest": "^29.7.0",
+    "dedent": "^1.5.3",
     "eslint": "^8.57.1"
+  },
+  "dependencies": {
+    "typescript-eslint": "^8.24.0"
   }
 }

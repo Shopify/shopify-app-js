@@ -93,7 +93,7 @@ const shopifyAppRule = {
             : '';
         const headersFix = isTypeScript
           ? '\n\nexport const headers: HeadersFunction = (headersArgs) => {\n  return boundary.headers(headersArgs);\n};\n'
-          : '\n\nexport const headers = (headersArgs) => {\n  return boundary.headers(headersArgs);\n};\n';
+          : '\n\nexport const headers = (headersArgs) => {\n  return boundary.headers(headersArgs);\n};';
 
         context.report({
           node,
