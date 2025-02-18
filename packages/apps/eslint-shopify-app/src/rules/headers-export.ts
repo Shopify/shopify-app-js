@@ -80,10 +80,8 @@ export const rule = createRule({
             statement.specifiers.some(
               (specifier) =>
                 specifier.type === 'ImportSpecifier' &&
-                'imported' in specifier &&
                 specifier.imported.type === 'Identifier' &&
-                specifier.imported.name === 'HeadersFunction' &&
-                specifier.importKind === 'type',
+                specifier.imported.name === 'HeadersFunction',
             ),
         );
 
@@ -96,7 +94,7 @@ export const rule = createRule({
             : '';
         const headersFix = isTypeScript
           ? '\nexport const headers: HeadersFunction = (headersArgs) => {\n  return boundary.headers(headersArgs);\n};'
-          : '\nexport const headers = (headersArgs) => {\n  return boundary.headers(headersArgs);};';
+          : '\nexport const headers = (headersArgs) => {\n  return boundary.headers(headersArgs);\n};';
 
         context.report({
           node,
@@ -104,14 +102,28 @@ export const rule = createRule({
           fix(fixer: TSESLint.RuleFixer) {
             const fixes: TSESLint.RuleFix[] = [];
 
-            if (!hasBoundaryImport) {
-              fixes.push(fixer.insertTextAfter(node.body[0], importFix));
+            // Find the last import to add new imports after it
+            const lastImport = [...node.body]
+              .reverse()
+              .find(
+                (statement): statement is TSESTree.ImportDeclaration =>
+                  statement.type === 'ImportDeclaration',
+              );
+
+            const targetNode = lastImport || node.body[0];
+            let currentTarget = targetNode;
+
+            // Add imports in sequence, updating the target node each time
+            if (!hasBoundaryImport && importFix) {
+              fixes.push(fixer.insertTextAfter(currentTarget, importFix));
+              currentTarget = lastImport || node.body[0];
             }
 
-            if (isTypeScript && !hasHeadersTypeImport) {
-              fixes.push(fixer.insertTextAfter(node.body[0], typeImportFix));
+            if (isTypeScript && !hasHeadersTypeImport && typeImportFix) {
+              fixes.push(fixer.insertTextAfter(currentTarget, typeImportFix));
             }
 
+            // Add the headers export at the end of the file
             fixes.push(fixer.insertTextAfter(node, headersFix));
 
             return fixes;

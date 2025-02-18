@@ -9,14 +9,14 @@ const ruleTester = new TSESLint.RuleTester({
   parser: require.resolve('@typescript-eslint/parser'),
   parserOptions: {
     projectService: {
-      allowDefaultProject: ['src/__virtual__/*.ts'],
+      allowDefaultProject: ['src/__virtual__/*.js'],
       defaultProject: 'tsconfig.json',
     },
     tsconfigRootDir: path.join(__dirname, '../..'),
   },
 });
 
-console.info('Running headers export TypeScript test');
+console.info('Running headers export JavaScript test');
 
 ruleTester.run('headers-export', rule, {
   valid: [
@@ -25,30 +25,30 @@ ruleTester.run('headers-export', rule, {
       // Should: Pass without any errors
       code: `
         import {authenticate} from '../shopify.server';
-        export const headers = (headersArgs: any) => {
+        export const headers = (headersArgs) => {
           return boundary.headers(headersArgs);
         };
-        export async function loader({request}: {request: Request}) {
+        export async function loader({request}) {
           await authenticate.admin(request);
           return null;
         }
       `,
-      filename: 'src/__virtual__/test-file.ts',
+      filename: 'src/__virtual__/test-file.js',
     },
     {
       // Test case: File has authenticate.public.pos() call with proper headers export
       // Should: Pass without any errors
       code: `
         import {authenticate} from '../shopify.server';
-        export const headers = (headersArgs: any) => {
+        export const headers = (headersArgs) => {
           return boundary.headers(headersArgs);
         };
-        export async function loader({request}: {request: Request}) {
+        export async function loader({request}) {
           await authenticate.public.pos(request);
           return null;
         }
       `,
-      filename: 'src/__virtual__/test-file.ts',
+      filename: 'src/__virtual__/test-file.js',
     },
     {
       // Test case: File has authenticate.admin() call with custom headers implementation
@@ -61,12 +61,12 @@ ruleTester.run('headers-export', rule, {
             'Another-Header': 'another-value',
           });
         };
-        export async function loader({request}: {request: Request}) {
+        export async function loader({request}) {
           await authenticate.admin(request);
           return null;
         }
       `,
-      filename: 'src/__virtual__/test-file.ts',
+      filename: 'src/__virtual__/test-file.js',
     },
   ],
   invalid: [
@@ -75,7 +75,7 @@ ruleTester.run('headers-export', rule, {
       // Should: Fail and auto-fix by adding the headers export
       code: dedent`
         import {authenticate} from '../shopify.server';
-        export async function loader({request}: {request: Request}) {
+        export async function loader({request}) {
           await authenticate.admin(request);
           return null;
         }`,
@@ -87,22 +87,21 @@ ruleTester.run('headers-export', rule, {
       output: dedent`
         import {authenticate} from '../shopify.server';
         import {boundary} from "@shopify/shopify-app-remix/server";
-        import type {HeadersFunction} from "@remix-run/node";
-        export async function loader({request}: {request: Request}) {
+        export async function loader({request}) {
           await authenticate.admin(request);
           return null;
         }
-        export const headers: HeadersFunction = (headersArgs) => {
+        export const headers = (headersArgs) => {
           return boundary.headers(headersArgs);
         };`,
-      filename: 'src/__virtual__/test-file.ts',
+      filename: 'src/__virtual__/test-file.js',
     },
     {
       // Test case: File has authenticate.public.pos() call but missing headers export
       // Should: Fail and auto-fix by adding the headers export
       code: dedent`
         import {authenticate} from '../shopify.server';
-        export async function loader({request}: {request: Request}) {
+        export async function loader({request}) {
           await authenticate.public.pos(request);
           return null;
         }`,
@@ -114,15 +113,14 @@ ruleTester.run('headers-export', rule, {
       output: dedent`
         import {authenticate} from '../shopify.server';
         import {boundary} from "@shopify/shopify-app-remix/server";
-        import type {HeadersFunction} from "@remix-run/node";
-        export async function loader({request}: {request: Request}) {
+        export async function loader({request}) {
           await authenticate.public.pos(request);
           return null;
         }
-        export const headers: HeadersFunction = (headersArgs) => {
+        export const headers = (headersArgs) => {
           return boundary.headers(headersArgs);
         };`,
-      filename: 'src/__virtual__/test-file.ts',
+      filename: 'src/__virtual__/test-file.js',
     },
     {
       // Test case: File has authenticate.admin() call but missing headers export, has correct imports
@@ -130,8 +128,7 @@ ruleTester.run('headers-export', rule, {
       code: dedent`
         import {authenticate} from '../shopify.server';
         import {boundary} from "@shopify/shopify-app-remix/server";
-        import type {HeadersFunction} from "@remix-run/node";
-        export async function loader({request}: {request: Request}) {
+        export async function loader({request}) {
           await authenticate.admin(request);
           return null;
         }`,
@@ -143,15 +140,14 @@ ruleTester.run('headers-export', rule, {
       output: dedent`
         import {authenticate} from '../shopify.server';
         import {boundary} from "@shopify/shopify-app-remix/server";
-        import type {HeadersFunction} from "@remix-run/node";
-        export async function loader({request}: {request: Request}) {
+        export async function loader({request}) {
           await authenticate.admin(request);
           return null;
         }
-        export const headers: HeadersFunction = (headersArgs) => {
+        export const headers = (headersArgs) => {
           return boundary.headers(headersArgs);
         };`,
-      filename: 'src/__virtual__/test-file.ts',
+      filename: 'src/__virtual__/test-file.js',
     },
   ],
 });
