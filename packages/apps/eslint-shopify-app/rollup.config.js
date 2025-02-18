@@ -3,9 +3,6 @@ import resolve from '@rollup/plugin-node-resolve';
 import commonjs from '@rollup/plugin-commonjs';
 import dts from 'rollup-plugin-dts';
 
-import * as pkg from './package.json';
-import {getConfig} from '../../../config/rollup/rollup-utils';
-
 export default [
   {
     input: 'src/index.ts',
