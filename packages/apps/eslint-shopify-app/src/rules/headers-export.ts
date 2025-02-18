@@ -2,131 +2,148 @@ import type {TSESTree, TSESLint} from '@typescript-eslint/utils';
 
 import {createRule} from '../utils';
 
+const AUTHENTICATE_SELECTORS = [
+  // Direct admin calls
+  'CallExpression[callee.object.object.name="authenticate"][callee.object.property.name="admin"][callee.property.name="call"]',
+  'CallExpression[callee.object.name="authenticate"][callee.property.name="admin"]',
+  // Awaited admin calls
+  'AwaitExpression > CallExpression[callee.object.name="authenticate"][callee.property.name="admin"]',
+  // Public calls
+  'CallExpression[callee.object.object.object.name="authenticate"][callee.object.object.property.name="public"]',
+  'AwaitExpression > CallExpression[callee.object.object.name="authenticate"][callee.object.property.name="public"]',
+];
+
+const IMPORT_FIXES = {
+  BOUNDARY: '\nimport {boundary} from "@shopify/shopify-app-remix/server";',
+  HEADERS_TYPE: '\nimport type {HeadersFunction} from "@remix-run/node";',
+} as const;
+
+const HEADERS_EXPORT_FIXES = {
+  TYPESCRIPT:
+    '\nexport const headers: HeadersFunction = (headersArgs) => {\n  return boundary.headers(headersArgs);\n};',
+  JAVASCRIPT:
+    '\nexport const headers = (headersArgs) => {\n  return boundary.headers(headersArgs);\n};',
+} as const;
+
+function checkHeadersNamedExport(
+  node: TSESTree.ExportNamedDeclaration,
+): boolean {
+  if (node.declaration?.type === 'VariableDeclaration') {
+    return node.declaration.declarations.some(
+      (declaration) =>
+        declaration.type === 'VariableDeclarator' &&
+        declaration.id.type === 'Identifier' &&
+        declaration.id.name === 'headers',
+    );
+  }
+
+  return (
+    node.declaration?.type === 'FunctionDeclaration' &&
+    node.declaration.id?.name === 'headers'
+  );
+}
+
+function hasRequiredImport(
+  node: TSESTree.Program,
+  packageName: string,
+  importName: string,
+): boolean {
+  return node.body.some(
+    (statement): statement is TSESTree.ImportDeclaration =>
+      statement.type === 'ImportDeclaration' &&
+      statement.source.value === packageName &&
+      statement.specifiers.some(
+        (specifier) =>
+          specifier.type === 'ImportSpecifier' &&
+          'imported' in specifier &&
+          specifier.imported.type === 'Identifier' &&
+          specifier.imported.name === importName,
+      ),
+  );
+}
+
+function generateFixes(
+  node: TSESTree.Program,
+  fixer: TSESLint.RuleFixer,
+  {
+    isTypeScript,
+    hasBoundaryImport,
+    hasHeadersTypeImport,
+  }: {
+    isTypeScript: boolean;
+    hasBoundaryImport: boolean;
+    hasHeadersTypeImport: boolean;
+  },
+): TSESLint.RuleFix[] {
+  const fixes: TSESLint.RuleFix[] = [];
+  const lastImport = [...node.body]
+    .reverse()
+    .find(
+      (statement): statement is TSESTree.ImportDeclaration =>
+        statement.type === 'ImportDeclaration',
+    );
+  const targetNode = lastImport || node.body[0];
+
+  // Add required imports
+  if (!hasBoundaryImport) {
+    fixes.push(fixer.insertTextAfter(targetNode, IMPORT_FIXES.BOUNDARY));
+  }
+
+  if (isTypeScript && !hasHeadersTypeImport) {
+    fixes.push(fixer.insertTextAfter(targetNode, IMPORT_FIXES.HEADERS_TYPE));
+  }
+
+  // Add headers export
+  const headersFix = isTypeScript
+    ? HEADERS_EXPORT_FIXES.TYPESCRIPT
+    : HEADERS_EXPORT_FIXES.JAVASCRIPT;
+  fixes.push(fixer.insertTextAfter(node, headersFix));
+
+  return fixes;
+}
+
 export const rule = createRule({
   create(context) {
     let hasAuthenticateCall = false;
     let hasHeadersExport = false;
 
     return {
-      // Check for authenticate.admin(request) calls
-      'CallExpression[callee.object.object.name="authenticate"][callee.object.property.name="admin"][callee.property.name="call"]':
-        function () {
-          hasAuthenticateCall = true;
-        },
-      'CallExpression[callee.object.name="authenticate"][callee.property.name="admin"]':
-        function () {
-          hasAuthenticateCall = true;
-        },
-      // Check for await authenticate.admin(request) calls
-      'AwaitExpression > CallExpression[callee.object.name="authenticate"][callee.property.name="admin"]':
-        function () {
-          hasAuthenticateCall = true;
-        },
-      // Check for authenticate.public.* calls
-      'CallExpression[callee.object.object.object.name="authenticate"][callee.object.object.property.name="public"]':
-        function () {
-          hasAuthenticateCall = true;
-        },
-      'AwaitExpression > CallExpression[callee.object.object.name="authenticate"][callee.object.property.name="public"]':
-        function () {
-          hasAuthenticateCall = true;
-        },
-      // Check for headers export
+      [AUTHENTICATE_SELECTORS.join(', ')]() {
+        hasAuthenticateCall = true;
+      },
+
       ExportNamedDeclaration(node: TSESTree.ExportNamedDeclaration) {
-        if (node.declaration?.type === 'VariableDeclaration') {
-          const declarations = node.declaration.declarations;
-          if (
-            declarations.some(
-              (declaration) =>
-                declaration.type === 'VariableDeclarator' &&
-                declaration.id.type === 'Identifier' &&
-                declaration.id.name === 'headers',
-            )
-          ) {
-            hasHeadersExport = true;
-          }
-        } else if (
-          node.declaration?.type === 'FunctionDeclaration' &&
-          node.declaration.id?.name === 'headers'
-        ) {
+        if (checkHeadersNamedExport(node)) {
           hasHeadersExport = true;
         }
       },
-      // When we finish processing the file, check if we need both and only have one
+
       'Program:exit': function (node: TSESTree.Program) {
         if (!hasAuthenticateCall || hasHeadersExport) return;
 
         const filename = context.getFilename();
         const isTypeScript =
           filename.endsWith('.ts') || filename.endsWith('.tsx');
-
-        const hasBoundaryImport = node.body.some(
-          (statement): statement is TSESTree.ImportDeclaration =>
-            statement.type === 'ImportDeclaration' &&
-            statement.source.value === '@shopify/shopify-app-remix/server' &&
-            statement.specifiers.some(
-              (specifier) =>
-                specifier.type === 'ImportSpecifier' &&
-                'imported' in specifier &&
-                specifier.imported.type === 'Identifier' &&
-                specifier.imported.name === 'boundary',
-            ),
+        const hasBoundaryImport = hasRequiredImport(
+          node,
+          '@shopify/shopify-app-remix/server',
+          'boundary',
         );
-
-        const hasHeadersTypeImport = node.body.some(
-          (statement): statement is TSESTree.ImportDeclaration =>
-            statement.type === 'ImportDeclaration' &&
-            statement.source.value === '@remix-run/node' &&
-            statement.specifiers.some(
-              (specifier) =>
-                specifier.type === 'ImportSpecifier' &&
-                specifier.imported.type === 'Identifier' &&
-                specifier.imported.name === 'HeadersFunction',
-            ),
+        const hasHeadersTypeImport = hasRequiredImport(
+          node,
+          '@remix-run/node',
+          'HeadersFunction',
         );
-
-        const importFix = hasBoundaryImport
-          ? ''
-          : '\nimport {boundary} from "@shopify/shopify-app-remix/server";';
-        const typeImportFix =
-          isTypeScript && !hasHeadersTypeImport
-            ? '\nimport type {HeadersFunction} from "@remix-run/node";'
-            : '';
-        const headersFix = isTypeScript
-          ? '\nexport const headers: HeadersFunction = (headersArgs) => {\n  return boundary.headers(headersArgs);\n};'
-          : '\nexport const headers = (headersArgs) => {\n  return boundary.headers(headersArgs);\n};';
 
         context.report({
           node,
           messageId: 'missingHeadersExport',
           fix(fixer: TSESLint.RuleFixer) {
-            const fixes: TSESLint.RuleFix[] = [];
-
-            // Find the last import to add new imports after it
-            const lastImport = [...node.body]
-              .reverse()
-              .find(
-                (statement): statement is TSESTree.ImportDeclaration =>
-                  statement.type === 'ImportDeclaration',
-              );
-
-            const targetNode = lastImport || node.body[0];
-            let currentTarget = targetNode;
-
-            // Add imports in sequence, updating the target node each time
-            if (!hasBoundaryImport && importFix) {
-              fixes.push(fixer.insertTextAfter(currentTarget, importFix));
-              currentTarget = lastImport || node.body[0];
-            }
-
-            if (isTypeScript && !hasHeadersTypeImport && typeImportFix) {
-              fixes.push(fixer.insertTextAfter(currentTarget, typeImportFix));
-            }
-
-            // Add the headers export at the end of the file
-            fixes.push(fixer.insertTextAfter(node, headersFix));
-
-            return fixes;
+            return generateFixes(node, fixer, {
+              isTypeScript,
+              hasBoundaryImport,
+              hasHeadersTypeImport,
+            });
           },
         });
       },
