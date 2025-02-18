@@ -152,7 +152,7 @@ export const rule = createRule({
   meta: {
     type: 'problem',
     docs: {
-      description: 'Missing headers export',
+      description: 'Missing headers export WIP better description needed',
       recommended: true,
       requiresTypeChecking: true,
       url: 'https://shopify.dev/',
