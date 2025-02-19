@@ -19,7 +19,7 @@
   "devDependencies": {
     "@babel/plugin-transform-runtime": "^7.26.8",
     "@babel/preset-env": "^7.26.8",
-    "@changesets/cli": "^2.27.12",
+    "@changesets/cli": "^2.28.0",
     "@cloudflare/workers-types": "^4.20250204.0",
     "@jest/types": "^29.6.3",
     "@rollup/plugin-babel": "^6.0.3",
