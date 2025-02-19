@@ -85,6 +85,7 @@ describe('httpFetch utility', () => {
             body: JSON.stringify({query: operation}),
             headers: {'X-My-Header': '1'},
             signal: new AbortController().signal,
+            keepalive: true,
           },
         ];
 
