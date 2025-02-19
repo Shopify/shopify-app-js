@@ -65,23 +65,32 @@ describe('admin.authenticate context', () => {
   ])(
     '$testGroup re-authentication',
     ({testGroup: _testGroup, mockRequest, action}) => {
-      it('redirects to auth when request receives a 401 response and not embedded', async () => {
-        // GIVEN
-        const {admin, session} = await setUpNonEmbeddedFlow();
-        const requestMock = await mockRequest(401);
+      describe.each([
+        ['with standard non-embedded flow', false],
+        ['with single fetch non-embedded flow', true],
+      ])('%s', (_, remixSingleFetch) => {
+        it('redirects to auth when request receives a 401 response and not embedded', async () => {
+          // GIVEN
+          const {admin, session} = await setUpNonEmbeddedFlow({
+            remixSingleFetch,
+          });
+          const requestMock = await mockRequest(401);
 
-        // WHEN
-        const response = await getThrownResponse(
-          async () => action(admin, session),
-          requestMock,
-        );
+          // WHEN
+          const response = await getThrownResponse(
+            async () => action(admin, session),
+            requestMock,
+          );
 
-        // THEN
-        expect(response.status).toEqual(302);
+          // THEN
+          expect(response.status).toEqual(302);
 
-        const {hostname, pathname} = new URL(response.headers.get('Location')!);
-        expect(hostname).toEqual(TEST_SHOP);
-        expect(pathname).toEqual('/admin/oauth/authorize');
+          const {hostname, pathname} = new URL(
+            response.headers.get('Location')!,
+          );
+          expect(hostname).toEqual(TEST_SHOP);
+          expect(pathname).toEqual('/admin/oauth/authorize');
+        });
       });
 
       it('redirects to exit iframe when request receives a 401 response and embedded', async () => {
@@ -99,28 +108,34 @@ describe('admin.authenticate context', () => {
         expectExitIframeRedirect(response);
       });
 
-      it('returns app bridge redirection headers when request receives a 401 response on fetch requests', async () => {
-        // GIVEN
-        const {admin, session} = await setUpFetchFlow({
-          unstable_newEmbeddedAuthStrategy: false,
+      describe.each([
+        ['with standard fetch flow', false],
+        ['with single fetch flow', true],
+      ])('%s', (_, remixSingleFetch) => {
+        it('returns app bridge redirection headers when request receives a 401 response on fetch requests', async () => {
+          // GIVEN
+          const {admin, session} = await setUpFetchFlow({
+            unstable_newEmbeddedAuthStrategy: false,
+            remixSingleFetch,
+          });
+          const requestMock = await mockRequest(401);
+
+          // WHEN
+          const response = await getThrownResponse(
+            async () => action(admin, session),
+            requestMock,
+          );
+
+          // THEN
+          expect(response.status).toEqual(remixSingleFetch ? 302 : 401);
+
+          const {origin, pathname, searchParams} = new URL(
+            response.headers.get(REAUTH_URL_HEADER)!,
+          );
+          expect(origin).toEqual(APP_URL);
+          expect(pathname).toEqual('/auth');
+          expect(searchParams.get('shop')).toEqual(TEST_SHOP);
         });
-        const requestMock = await mockRequest(401);
-
-        // WHEN
-        const response = await getThrownResponse(
-          async () => action(admin, session),
-          requestMock,
-        );
-
-        // THEN
-        expect(response.status).toEqual(302);
-
-        const {origin, pathname, searchParams} = new URL(
-          response.headers.get(REAUTH_URL_HEADER)!,
-        );
-        expect(origin).toEqual(APP_URL);
-        expect(pathname).toEqual('/auth');
-        expect(searchParams.get('shop')).toEqual(TEST_SHOP);
       });
     },
   );

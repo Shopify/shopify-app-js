@@ -6,6 +6,7 @@ import {
   TEST_SHOP_NAME,
   getThrownResponse,
   setUpEmbeddedFlow,
+  setUpEmbeddedFlowWithSingleFetch,
   setUpNonEmbeddedFlow,
   setUpValidSession,
   signRequestCookie,
@@ -123,33 +124,38 @@ describe('request from a non embedded app', () => {
 });
 
 describe('request from an embedded app', () => {
-  it('redirects to install URL when successful', async () => {
-    // GIVEN
-    const {scopes, request} = await setUpEmbeddedFlow();
-    await mockGraphqlRequest()({
-      status: 200,
-      responseContent: responses.WITH_GRANTED_AND_DECLARED,
+  describe.each([
+    ['with standard embedded flow', setUpEmbeddedFlow, 401],
+    ['with single fetch embedded flow', setUpEmbeddedFlowWithSingleFetch, 302],
+  ])('%s', (_, setupFn, expectedStatus) => {
+    it('redirects to install URL when successful', async () => {
+      // GIVEN
+      const {scopes, request} = await setupFn();
+      await mockGraphqlRequest()({
+        status: 200,
+        responseContent: responses.WITH_GRANTED_AND_DECLARED,
+      });
+
+      // WHEN
+      const response = await getThrownResponse(
+        async () =>
+          scopes.request(['write_products', 'read_orders', 'write_customers']),
+        request,
+      );
+
+      // THEN
+      expect(response.status).toEqual(expectedStatus);
+      const reuthorizeHeader = response.headers.get(
+        'x-shopify-api-request-failure-reauthorize-url',
+      );
+      expect(reuthorizeHeader).not.toBeUndefined();
+      const location = new URL(reuthorizeHeader!);
+      expect(location.hostname).toBe(TEST_SHOP);
+      expect(location.pathname).toBe('/admin/oauth/install');
+      const locationParams = location.searchParams;
+      expect(locationParams.get('optional_scopes')).toBe(
+        'write_products,read_orders,write_customers',
+      );
     });
-
-    // WHEN
-    const response = await getThrownResponse(
-      async () =>
-        scopes.request(['write_products', 'read_orders', 'write_customers']),
-      request,
-    );
-
-    // THEN
-    expect(response.status).toEqual(302);
-    const reuthorizeHeader = response.headers.get(
-      'x-shopify-api-request-failure-reauthorize-url',
-    );
-    expect(reuthorizeHeader).not.toBeUndefined();
-    const location = new URL(reuthorizeHeader!);
-    expect(location.hostname).toBe(TEST_SHOP);
-    expect(location.pathname).toBe('/admin/oauth/install');
-    const locationParams = location.searchParams;
-    expect(locationParams.get('optional_scopes')).toBe(
-      'write_products,read_orders,write_customers',
-    );
   });
 });

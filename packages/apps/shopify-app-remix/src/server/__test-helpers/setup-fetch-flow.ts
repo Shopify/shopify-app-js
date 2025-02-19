@@ -9,6 +9,7 @@ import {testConfig} from './test-config';
 
 export async function setUpFetchFlow(flags?: {
   unstable_newEmbeddedAuthStrategy?: boolean;
+  remixSingleFetch?: boolean;
 }) {
   const shopify = shopifyApp({
     ...testConfig({
