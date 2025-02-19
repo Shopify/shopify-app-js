@@ -46,7 +46,7 @@ export function authenticateExtensionFactory(
         params,
         request,
         sessionTokenHeader,
-        {checkAudience: false},
+        {checkAudience: false, retryRequest: false},
       ),
       cors: ensureCORSHeadersFactory(params, request, corsHeaders),
     };
