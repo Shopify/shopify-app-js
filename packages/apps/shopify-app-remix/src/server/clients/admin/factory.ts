@@ -12,7 +12,6 @@ interface RestClientOptions {
   session: Session;
   handleClientError?: (error: any) => Promise<void>;
 }
-
 export function adminClientFactory<
   ConfigArg extends AppConfigArg,
   Resources extends ShopifyRestResources = ShopifyRestResources,
@@ -27,6 +26,7 @@ export function adminClientFactory<
     } as AdminApiContext<ConfigArg, Resources>;
   }
 
+  // THIS IS A TEST PR
   return {
     rest: restClientFactory<Resources>({
       params,
