@@ -1,5 +1,16 @@
 # Changelog
 
+## 5.0.13
+
+### Patch Changes
+
+- b83364c: Updated `semver` dependencies
+- Updated dependencies [7aaa0a8]
+- Updated dependencies [86a1df6]
+  - @shopify/shopify-api@11.9.0
+  - @shopify/shopify-app-session-storage@3.0.13
+  - @shopify/shopify-app-session-storage-memory@4.0.13
+
 ## 5.0.12
 
 ### Patch Changes

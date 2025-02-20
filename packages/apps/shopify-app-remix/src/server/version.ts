@@ -1,1 +1,1 @@
-export const SHOPIFY_REMIX_LIBRARY_VERSION = '3.7.1';
+export const SHOPIFY_REMIX_LIBRARY_VERSION = '3.7.2';
