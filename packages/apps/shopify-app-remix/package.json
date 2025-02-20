@@ -1,6 +1,6 @@
 {
   "name": "@shopify/shopify-app-remix",
-  "version": "3.7.2",
+  "version": "3.7.3",
   "description": "Shopify Remix - to simplify the building of Shopify Apps with Remix",
   "repository": {
     "type": "git",
