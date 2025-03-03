@@ -109,7 +109,7 @@ describe('JWT validation', () => {
     expect(response.status).toBe(401);
   });
 
-  it('throws a 401 on invalid Authorization bearer token', async () => {
+  it('throws 401 on invalid Authorization bearer token', async () => {
     // GIVEN
     const shopify = shopifyApp(testConfig());
 
