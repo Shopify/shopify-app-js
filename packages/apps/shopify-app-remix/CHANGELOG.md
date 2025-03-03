@@ -1,5 +1,20 @@
 # @shopify/shopify-app-remix
 
+## 3.7.3
+
+### Patch Changes
+
+- e3d94f2: # Don't retry extension requests with invalid session tokens
+
+  Requests from the embedded app admin UI are not retried when the session token is invalid. This is done with the special app bridge header `x-shopify-session-token-retry-request`.
+
+  Requests from extensions cannot be retried, so we are no longer adding this header to the response.
+
+- 4f03d6e: Updated `@remix-run/server-runtime`, ` @remix-run/node`, ` @remix-run/react`, ` @remix-run/testing` dependencies
+- Updated dependencies [85b4fb8]
+  - @shopify/shopify-api@11.10.0
+  - @shopify/shopify-app-session-storage@3.0.14
+
 ## 3.7.2
 
 ### Patch Changes
