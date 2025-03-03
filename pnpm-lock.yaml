@@ -400,8 +400,8 @@ importers:
         specifier: ^3.0.13
         version: link:../shopify-app-session-storage-test-utils
       '@types/sqlite3':
-        specifier: ^3.1.8
-        version: 3.1.11
+        specifier: ^5.1.0
+        version: 5.1.0
 
   packages/apps/session-storage/shopify-app-session-storage-test-utils:
     devDependencies:
@@ -3596,8 +3596,9 @@ packages:
   '@types/serve-static@1.15.7':
     resolution: {integrity: sha512-W8Ym+h8nhuRwaKPaDw34QUkwsGi6Rc4yYqvKFo5rm2FUEhCFbzVWrxXUxuKK8TASjWsysJY0nsmNCGhCOIsrOw==}
 
-  '@types/sqlite3@3.1.11':
-    resolution: {integrity: sha512-KYF+QgxAnnAh7DWPdNDroxkDI3/MspH1NMx6m/N/6fT1G6+jvsw4/ZePt8R8cr7ta58aboeTfYFBDxTJ5yv15w==}
+  '@types/sqlite3@5.1.0':
+    resolution: {integrity: sha512-w25Gd6OzcN0Sb6g/BO7cyee0ugkiLgonhgGYfG+H0W9Ub6PUsC2/4R+KXy2tc80faPIWO3Qytbvr8gP1fU4siA==}
+    deprecated: This is a stub types definition. sqlite3 provides its own type definitions, so you do not need this installed.
 
   '@types/stack-utils@2.0.3':
     resolution: {integrity: sha512-9aEbYZ3TbYMznPdcdr3SmIrLXwC/AKZXQeCf9Pgao5CKb8CyHuEX5jzWPTkvregvhRJHcpRO6BFoGW9ycaOkYw==}
@@ -12054,9 +12055,12 @@ snapshots:
       '@types/node': 22.13.5
       '@types/send': 0.17.4
 
-  '@types/sqlite3@3.1.11':
+  '@types/sqlite3@5.1.0':
     dependencies:
-      '@types/node': 22.10.7
+      sqlite3: 5.1.7
+    transitivePeerDependencies:
+      - bluebird
+      - supports-color
 
   '@types/stack-utils@2.0.3': {}
 
