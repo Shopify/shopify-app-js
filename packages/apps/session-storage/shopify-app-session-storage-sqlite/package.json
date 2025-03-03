@@ -52,7 +52,7 @@
   },
   "devDependencies": {
     "@shopify/shopify-app-session-storage-test-utils": "^3.0.13",
-    "@types/sqlite3": "^3.1.8"
+    "@types/sqlite3": "^5.1.0"
   },
   "files": [
     "dist/*",
