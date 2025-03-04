@@ -279,8 +279,8 @@ importers:
         specifier: ^3.0.13
         version: link:../shopify-app-session-storage-test-utils
       miniflare:
-        specifier: ^3.20250214.1
-        version: 3.20250214.1
+        specifier: ^3.20250214.2
+        version: 3.20250214.2
 
   packages/apps/session-storage/shopify-app-session-storage-memory:
     dependencies:
@@ -476,8 +476,8 @@ importers:
         specifier: ^2.14.4
         version: 2.14.4(jest@29.7.0(@types/node@22.13.5)(ts-node@10.9.2(@swc/core@1.10.15)(@types/node@22.13.5)(typescript@5.7.3)))
       miniflare:
-        specifier: ^3.20250214.1
-        version: 3.20250214.1
+        specifier: ^3.20250214.2
+        version: 3.20250214.2
       rollup:
         specifier: ^4.34.6
         version: 4.34.6
@@ -6184,8 +6184,8 @@ packages:
     engines: {node: '>=16.13'}
     hasBin: true
 
-  miniflare@3.20250214.1:
-    resolution: {integrity: sha512-NE66QV+2n9ZndaP5jgPlcVref3Arvizb+l2QqhgeXtKM5Orhi8UU2mijoiN3mHEUexKaBES2S1VubT4LDPqkxQ==}
+  miniflare@3.20250214.2:
+    resolution: {integrity: sha512-t+lT4p2lbOcKv4PS3sx1F/wcDAlbEYZCO2VooLp4H7JErWWYIi9yjD3UillC3CGOpiBahVg5nrPCoFltZf6UlA==}
     engines: {node: '>=16.13'}
     hasBin: true
 
@@ -10245,9 +10245,9 @@ snapshots:
       '@whatwg-node/disposablestack': 0.0.5
       graphql: 16.10.0
       graphql-ws: 5.16.2(graphql@16.10.0)
-      isomorphic-ws: 5.0.0(ws@8.18.0)
+      isomorphic-ws: 5.0.0(ws@8.18.1)
       tslib: 2.8.1
-      ws: 8.18.0
+      ws: 8.18.1
     transitivePeerDependencies:
       - bufferutil
       - utf-8-validate
@@ -10304,9 +10304,9 @@ snapshots:
       '@graphql-tools/utils': 10.8.3(graphql@16.10.0)
       '@types/ws': 8.5.13
       graphql: 16.10.0
-      isomorphic-ws: 5.0.0(ws@8.18.0)
+      isomorphic-ws: 5.0.0(ws@8.18.1)
       tslib: 2.8.1
-      ws: 8.18.0
+      ws: 8.18.1
     transitivePeerDependencies:
       - bufferutil
       - utf-8-validate
@@ -15176,7 +15176,7 @@ snapshots:
       - bufferutil
       - utf-8-validate
 
-  miniflare@3.20250214.1:
+  miniflare@3.20250214.2:
     dependencies:
       '@cspotcode/source-map-support': 0.8.1
       acorn: 8.14.0
