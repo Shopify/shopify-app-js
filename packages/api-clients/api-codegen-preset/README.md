@@ -336,3 +336,38 @@ To make your development flow faster, you can pass in the `--watch` flag to upda
 ```sh
 npm run graphql-codegen -- --watch
 ```
+
+### Using Generated Types with Direct API Access
+
+With Shopify App Bridge, you can use [Direct API Access](https://shopify.dev/docs/api/app-bridge-library#direct-api-access) to make API requests from your apps frontend directly to the Admin API.
+
+Because you are using the Fetch API directly, the responses cannot be automatically typed.  Here is how to manually type them using the automatically generated types:
+
+```js
+import type {  GetProductsQuery } from "app/types/admin.generated";
+
+const fetchProduct = async () => {
+  const res = await fetch('shopify:admin/api/graphql.json', {
+    method: 'POST',
+    body: JSON.stringify({
+      query: `#graphql
+        query getProducts($first: Int) {
+          products(first: $first) {
+            edges {
+              cursor
+              node {
+                title
+                handle
+              }
+            }
+          }
+        }
+      ` as const,
+      variables: { first: 1 },
+    }),
+  });
+
+  const { data } = (await res.json()) as { data: GetProductsQuery };
+  console.log(data.products.edges[0]?.node);
+};
+```
