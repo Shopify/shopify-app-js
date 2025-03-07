@@ -23,7 +23,7 @@ export function addCSPHeader(api: Shopify, req: Request, res: Response) {
       'Content-Security-Policy',
       `frame-ancestors https://${encodeURIComponent(
         shop,
-      )} https://admin.shopify.com https://*.spin.dev;`,
+      )} https://admin.shopify.com https://*.spin.dev https://admin.myshopify.io https://admin.shop.dev;`,
     );
   } else {
     res.setHeader('Content-Security-Policy', `frame-ancestors 'none';`);
