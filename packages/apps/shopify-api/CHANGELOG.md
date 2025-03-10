@@ -1,5 +1,17 @@
 # Changelog
 
+## 11.10.0
+
+### Minor Changes
+
+- 85b4fb8: Add optional param with default to add buffer to session token active check
+
+  Now by default a session will be considered non active if it is within 500ms of expiry.
+
+### Patch Changes
+
+- 7bb22bc: fix Shopify internal local app development
+
 ## 11.9.0
 
 ### Minor Changes
