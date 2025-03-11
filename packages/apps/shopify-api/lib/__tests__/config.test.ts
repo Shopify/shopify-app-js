@@ -161,10 +161,10 @@ describe('Config object', () => {
     expect(config.hostName).toEqual('my-host-name');
   });
 
-  it('points LATEST_API_VERSION to the last non-unstable version in the enum', () => {
+  it('points LATEST_API_VERSION to the last non-unstable, and non release candidate version in the enum', () => {
     const enumVersions = Object.values(ApiVersion);
 
-    expect(LATEST_API_VERSION).toEqual(enumVersions[enumVersions.length - 2]);
+    expect(LATEST_API_VERSION).toEqual(enumVersions[enumVersions.length - 3]);
   });
 
   it('can alias billing future flags', () => {
