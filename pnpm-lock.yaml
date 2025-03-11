@@ -433,8 +433,8 @@ importers:
         specifier: ^5.1.21
         version: 5.1.21
       jose:
-        specifier: ^5.9.6
-        version: 5.9.6
+        specifier: ^6.0.9
+        version: 6.0.9
       jsonwebtoken:
         specifier: ^9.0.2
         version: 9.0.2
@@ -5986,8 +5986,8 @@ packages:
   jose@5.10.0:
     resolution: {integrity: sha512-s+3Al/p9g32Iq+oqXxkW//7jk2Vig6FF1CFqzVXoTUXt2qz89YWbL+OwS17NFYEvxC35n0FKeGO2LGYSxeM2Gg==}
 
-  jose@5.9.6:
-    resolution: {integrity: sha512-AMlnetc9+CV9asI19zHmrgS/WYsWUwCn2R7RzlbJWD7F9eWYUTGyBmU9o6PxngtLGOiDGPRu+Uc4fhKzbpteZQ==}
+  jose@6.0.9:
+    resolution: {integrity: sha512-6HEy/G3IBiGwOeT0phvu19yt/zagFKSpQPpQ6YUIiCxBUPfThVkOv9wlwHGkatUqbHvkWHYPtJJil4U5jHwllw==}
 
   js-base64@3.7.7:
     resolution: {integrity: sha512-7rCnleh0z2CkXhH67J8K1Ytz0b2Y+yxTPL+/KOJoa20hfnVQ/3/T6W/KflYI4bRHRagNeXeU2bkNGI3v1oS/lw==}
@@ -15072,7 +15072,7 @@ snapshots:
 
   jose@5.10.0: {}
 
-  jose@5.9.6: {}
+  jose@6.0.9: {}
 
   js-base64@3.7.7: {}
 
