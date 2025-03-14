@@ -19,7 +19,65 @@ import {
   BillingConfigSubscriptionLineItemPlan,
   RequestConfigLineItemOverrides,
   BillingRequest,
+  APP_SUBSCRIPTION_FRAGMENT,
 } from './types';
+
+const RECURRING_PURCHASE_MUTATION = `
+  ${APP_SUBSCRIPTION_FRAGMENT}
+  mutation AppSubscriptionCreate(
+    $name: String!
+    $returnUrl: URL!
+    $test: Boolean
+    $trialDays: Int
+    $replacementBehavior: AppSubscriptionReplacementBehavior
+    $lineItems: [AppSubscriptionLineItemInput!]!
+  ) {
+    appSubscriptionCreate(
+      name: $name
+      returnUrl: $returnUrl
+      test: $test
+      trialDays: $trialDays
+      replacementBehavior: $replacementBehavior
+      lineItems: $lineItems
+    ) {
+      appSubscription {
+        ...AppSubscriptionFragment
+      }
+      confirmationUrl
+      userErrors {
+        field
+        message
+      }
+    }
+  }
+`;
+
+const ONE_TIME_PURCHASE_MUTATION = `
+  mutation test(
+    $name: String!
+    $price: MoneyInput!
+    $returnUrl: URL!
+    $test: Boolean
+  ) {
+    appPurchaseOneTimeCreate(
+      name: $name
+      price: $price
+      returnUrl: $returnUrl
+      test: $test
+    ) {
+      appPurchaseOneTime {
+        id
+        name
+        test
+      }
+      confirmationUrl
+      userErrors {
+        field
+        message
+      }
+    }
+  }
+`;
 
 interface RequestInternalParams {
   client: GraphqlClient;
@@ -245,6 +303,7 @@ async function requestSubscriptionPayment({
 
   return mutationResponse.data!;
 }
+
 async function requestRecurringPayment({
   billingConfig,
   plan,
@@ -257,10 +316,10 @@ async function requestRecurringPayment({
     {
       variables: {
         name: plan,
-        trialDays: billingConfig.trialDays,
-        replacementBehavior: billingConfig.replacementBehavior,
         returnUrl,
         test: isTest,
+        trialDays: billingConfig.trialDays,
+        replacementBehavior: billingConfig.replacementBehavior,
         lineItems: [
           {
             plan: {
@@ -270,14 +329,16 @@ async function requestRecurringPayment({
                   amount: billingConfig.amount,
                   currencyCode: billingConfig.currencyCode,
                 },
-                discount: {
-                  durationLimitInIntervals:
-                    billingConfig.discount?.durationLimitInIntervals,
-                  value: {
-                    amount: billingConfig.discount?.value?.amount,
-                    percentage: billingConfig.discount?.value?.percentage,
-                  },
-                },
+                discount: billingConfig.discount
+                  ? {
+                      durationLimitInIntervals:
+                        billingConfig.discount?.durationLimitInIntervals,
+                      value: {
+                        amount: billingConfig.discount?.value?.amount,
+                        percentage: billingConfig.discount?.value?.percentage,
+                      },
+                    }
+                  : undefined,
               },
             },
           },
@@ -286,10 +347,10 @@ async function requestRecurringPayment({
     },
   );
 
-  if (mutationResponse.errors) {
+  if (mutationResponse.data?.appSubscriptionCreate?.userErrors.length) {
     throw new BillingError({
-      message: 'Error while billing the store',
-      errorData: mutationResponse.errors,
+      message: 'Error while creating a subscription',
+      errorData: mutationResponse.data?.appSubscriptionCreate?.userErrors,
     });
   }
 
@@ -329,10 +390,10 @@ async function requestUsagePayment({
     },
   );
 
-  if (mutationResponse.errors) {
+  if (mutationResponse.data?.appSubscriptionCreate?.userErrors.length) {
     throw new BillingError({
-      message: `Error while billing the store:: ${mutationResponse.errors}`,
-      errorData: mutationResponse.errors,
+      message: 'Error while creating a subscription',
+      errorData: mutationResponse.data?.appSubscriptionCreate?.userErrors,
     });
   }
 
@@ -400,60 +461,4 @@ function mergeBillingConfigs(
 
   return mergedConfig as BillingConfigSubscriptionLineItemPlan;
 }
-const RECURRING_PURCHASE_MUTATION = `
-  mutation test(
-    $name: String!
-    $lineItems: [AppSubscriptionLineItemInput!]!
-    $returnUrl: URL!
-    $test: Boolean
-    $trialDays: Int
-    $replacementBehavior: AppSubscriptionReplacementBehavior
-  ) {
-    appSubscriptionCreate(
-      name: $name
-      lineItems: $lineItems
-      returnUrl: $returnUrl
-      test: $test
-      trialDays: $trialDays
-      replacementBehavior: $replacementBehavior
-    ) {
-      appSubscription {
-        id
-        name
-        test
-      }
-      confirmationUrl
-      userErrors {
-        field
-        message
-      }
-    }
-  }
-`;
 
-const ONE_TIME_PURCHASE_MUTATION = `
-  mutation test(
-    $name: String!
-    $price: MoneyInput!
-    $returnUrl: URL!
-    $test: Boolean
-  ) {
-    appPurchaseOneTimeCreate(
-      name: $name
-      price: $price
-      returnUrl: $returnUrl
-      test: $test
-    ) {
-      appPurchaseOneTime {
-        id
-        name
-        test
-      }
-      confirmationUrl
-      userErrors {
-        field
-        message
-      }
-    }
-  }
-`;
