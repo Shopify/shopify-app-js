@@ -1,5 +1,7 @@
 # @shopify/shopify-app-session-storage-postgresql
 
+## 4.0.14
+
 ## 4.0.13
 
 ## 4.0.12
