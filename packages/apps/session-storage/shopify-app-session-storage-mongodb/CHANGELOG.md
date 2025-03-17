@@ -1,5 +1,7 @@
 # @shopify/shopify-app-session-storage-mongodb
 
+## 4.0.14
+
 ## 4.0.13
 
 ### Patch Changes

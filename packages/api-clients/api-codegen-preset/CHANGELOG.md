@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.1.5
+
+### Patch Changes
+
+- 6727c3c: Updated `@graphql-codegen/cli` dependencies
+- acbe27b: Updated `@graphql-codegen/typescript` dependencies
+
 ## 1.1.4
 
 ### Patch Changes

@@ -7,7 +7,12 @@ import {shopAdminUrlToLegacyUrl} from './shop-admin-url-helper';
 export function sanitizeShop(config: ConfigInterface) {
   return (shop: string, throwOnInvalid = false): string | null => {
     let shopUrl = shop;
-    const domainsRegex = ['myshopify\\.com', 'shopify\\.com', 'myshopify\\.io'];
+    const domainsRegex = [
+      'myshopify\\.com',
+      'shopify\\.com',
+      'myshopify\\.io',
+      'shop\\.dev',
+    ];
     if (config.customShopDomains) {
       domainsRegex.push(
         ...config.customShopDomains.map((regex) =>
@@ -51,6 +56,7 @@ export function sanitizeHost() {
         'shopify\\.com',
         'myshopify\\.io',
         'spin\\.dev',
+        'shop\\.dev',
       ];
 
       const hostRegex = new RegExp(`\\.(${originsRegex.join('|')})$`);

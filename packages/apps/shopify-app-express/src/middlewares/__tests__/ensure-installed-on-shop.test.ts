@@ -52,7 +52,7 @@ describe('ensureInstalledOnShop', () => {
       },
     });
     expect(response.headers['content-security-policy']).toEqual(
-      `frame-ancestors https://${TEST_SHOP} https://admin.shopify.com https://*.spin.dev;`,
+      `frame-ancestors https://${TEST_SHOP} https://admin.shopify.com https://*.spin.dev https://admin.myshopify.io https://admin.shop.dev;`,
     );
   });
 

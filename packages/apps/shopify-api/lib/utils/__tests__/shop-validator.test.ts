@@ -26,6 +26,7 @@ const VALID_HOSTS = [
   'my-other-other-host.myshopify.io/admin',
   'admin.shopify.com/store/my-shop',
   'admin.spin.dev/store/my-shop',
+  'admin.shop.dev/store/my-shop',
 ].map((testhost) => {
   return {testhost, base64host: Buffer.from(testhost).toString('base64')};
 });

@@ -100,6 +100,38 @@ it('returns false if checking scopes and scopes are not equal', () => {
   expect(session.isActive('fake_scope')).toBeFalsy();
 });
 
+it('returns false if session is within milliseconds of expiry threshold', () => {
+  const shopify = shopifyApi(testConfig());
+
+  const session = new Session({
+    id: 'active',
+    shop: 'active-shop',
+    state: 'test_state',
+    isOnline: true,
+    scope: 'test_scope',
+    accessToken: 'indeed',
+    expires: new Date(Date.now() + 300),
+  });
+
+  expect(session.isActive(shopify.config.scopes)).toBeFalsy();
+});
+
+it('returns true if session is not within milliseconds of expiry threshold', () => {
+  const shopify = shopifyApi(testConfig());
+
+  const session = new Session({
+    id: 'active',
+    shop: 'active-shop',
+    state: 'test_state',
+    isOnline: true,
+    scope: 'test_scope',
+    accessToken: 'indeed',
+    expires: new Date(Date.now() + 300),
+  });
+
+  expect(session.isActive(shopify.config.scopes, 200)).toBeTruthy();
+});
+
 describe('isExpired', () => {
   it('returns true if session is expired', () => {
     const session = new Session({
