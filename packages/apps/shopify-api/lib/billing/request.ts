@@ -461,4 +461,3 @@ function mergeBillingConfigs(
 
   return mergedConfig as BillingConfigSubscriptionLineItemPlan;
 }
-
