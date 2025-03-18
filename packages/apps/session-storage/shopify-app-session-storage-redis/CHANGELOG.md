@@ -1,5 +1,7 @@
 # @shopify/shopify-app-session-storage-redis
 
+## 4.2.9
+
 ## 4.2.8
 
 ## 4.2.7

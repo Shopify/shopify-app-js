@@ -1,5 +1,21 @@
 # Changelog
 
+## 5.0.16
+
+### Patch Changes
+
+- 4adbc2b: # Generate Provenance Statements
+
+  This changes no functionality.
+
+  The provenance attestation is established by publicly providing a link to a package's source code and build instructions from the build environment. This allows developers to verify where and how your package was built before they download it.
+
+  Learn more about [npm provenance](https://docs.npmjs.com/generating-provenance-statements#about-npm-provenance)
+
+  - @shopify/shopify-api@11.11.1
+  - @shopify/shopify-app-session-storage@3.0.16
+  - @shopify/shopify-app-session-storage-memory@4.0.16
+
 ## 5.0.15
 
 ### Patch Changes

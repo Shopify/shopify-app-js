@@ -1,5 +1,7 @@
 # @shopify/shopify-app-session-storage-mysql
 
+## 4.0.16
+
 ## 4.0.15
 
 ### Patch Changes

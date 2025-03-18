@@ -1,5 +1,17 @@
 # Changelog
 
+## 1.1.6
+
+### Patch Changes
+
+- 4adbc2b: # Generate Provenance Statements
+
+  This changes no functionality.
+
+  The provenance attestation is established by publicly providing a link to a package's source code and build instructions from the build environment. This allows developers to verify where and how your package was built before they download it.
+
+  Learn more about [npm provenance](https://docs.npmjs.com/generating-provenance-statements#about-npm-provenance)
+
 ## 1.1.5
 
 ### Patch Changes
