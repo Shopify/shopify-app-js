@@ -44,7 +44,7 @@
     "session storage"
   ],
   "dependencies": {
-    "pg": "^8.12.0",
+    "pg": "^8.14.1",
     "pg-connection-string": "^2.7.0"
   },
   "peerDependencies": {
