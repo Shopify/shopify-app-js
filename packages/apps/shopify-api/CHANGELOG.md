@@ -1,5 +1,14 @@
 # Changelog
 
+## 11.11.1
+
+### Patch Changes
+
+- Updated dependencies [4adbc2b]
+  - @shopify/admin-api-client@1.0.7
+  - @shopify/graphql-client@1.3.1
+  - @shopify/storefront-api-client@1.0.6
+
 ## 11.11.0
 
 ### Minor Changes
