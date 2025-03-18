@@ -3,10 +3,9 @@ import {
   ApiClientRequestOptions,
   SearchParams,
 } from '@shopify/admin-api-client';
-import {Method} from '@shopify/network';
 
 import {Session} from '../session/session';
-import type {ApiVersion} from '../types';
+import type {ApiVersion, Method} from '../types';
 import {Headers} from '../../runtime/http';
 
 import {GraphqlClient} from './admin/graphql/client';

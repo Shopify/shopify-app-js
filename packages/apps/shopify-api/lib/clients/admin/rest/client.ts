@@ -2,7 +2,6 @@ import {
   AdminRestApiClient,
   createAdminRestApiClient,
 } from '@shopify/admin-api-client';
-import {Method} from '@shopify/network';
 
 import {
   clientLoggerFactory,
@@ -33,7 +32,7 @@ import type {
   PostRequestParams,
   DeleteRequestParams,
 } from '../../types';
-import {ApiVersion} from '../../../types';
+import {ApiVersion, Method} from '../../../types';
 import {Session} from '../../../session/session';
 
 export interface RestClientClassParams {

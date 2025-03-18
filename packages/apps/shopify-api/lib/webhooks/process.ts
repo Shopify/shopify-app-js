@@ -1,5 +1,4 @@
-import {StatusCode} from '@shopify/network';
-
+import {StatusCode} from '../types';
 import {
   abstractConvertResponse,
   AdapterResponse,

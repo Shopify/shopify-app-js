@@ -3,10 +3,9 @@ import {
   HTTPRetryLog,
   LogContent,
 } from '@shopify/admin-api-client';
-import {StatusCode} from '@shopify/network';
 
 import * as ShopifyErrors from '../error';
-import {LIBRARY_NAME} from '../types';
+import {LIBRARY_NAME, StatusCode} from '../types';
 import {ConfigInterface} from '../base-types';
 import {SHOPIFY_API_LIBRARY_VERSION} from '../version';
 import {
