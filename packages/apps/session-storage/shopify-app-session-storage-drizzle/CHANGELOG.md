@@ -1,5 +1,20 @@
 # @shopify/shopify-app-session-storage-drizzle
 
+## 2.0.16
+
+## 2.0.15
+
+### Patch Changes
+
+- 4455445: Updated `mysql2` dependencies
+- 9a025e7: Updated `pg` dependencies
+
+## 2.0.14
+
+## 2.0.13
+
+## 2.0.12
+
 ## 2.0.11
 
 ### Patch Changes

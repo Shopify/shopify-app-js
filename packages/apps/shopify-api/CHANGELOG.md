@@ -1,5 +1,57 @@
 # Changelog
 
+## 11.11.1
+
+### Patch Changes
+
+- Updated dependencies [4adbc2b]
+  - @shopify/admin-api-client@1.0.7
+  - @shopify/graphql-client@1.3.1
+  - @shopify/storefront-api-client@1.0.6
+
+## 11.11.0
+
+### Minor Changes
+
+- ea406d3: # Add release candidate API version
+  Adds a constant that points to the [release candidate API version](https://shopify.dev/docs/api/usage/versioning#release-candidates).
+
+  ```
+  import { RELEASE_CANDIDATE_API_VERSION } from "@shopify/shopify-api";
+  ```
+
+## 11.10.0
+
+### Minor Changes
+
+- 85b4fb8: Add optional param with default to add buffer to session token active check
+
+  Now by default a session will be considered non active if it is within 500ms of expiry.
+
+### Patch Changes
+
+- 7bb22bc: fix Shopify internal local app development
+
+## 11.9.0
+
+### Minor Changes
+
+- 86a1df6: Introduces Client credentials token acquisition flow to `shopify-api-js` library
+
+### Patch Changes
+
+- 7aaa0a8: Convert all Money.amount returned from the Billing GraphQL API from string to number type
+- Updated dependencies [4603b69]
+  - @shopify/graphql-client@1.3.0
+  - @shopify/admin-api-client@1.0.6
+  - @shopify/storefront-api-client@1.0.5
+
+## 11.8.1
+
+### Patch Changes
+
+- 7ff4467: Updates LATEST_API_VERSION to 2025-01
+
 ## 11.8.0
 
 ### Minor Changes

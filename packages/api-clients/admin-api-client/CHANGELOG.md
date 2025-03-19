@@ -1,5 +1,27 @@
 # @shopify/admin-api-client
 
+## 1.0.7
+
+### Patch Changes
+
+- 4adbc2b: # Generate Provenance Statements
+
+  This changes no functionality.
+
+  The provenance attestation is established by publicly providing a link to a package's source code and build instructions from the build environment. This allows developers to verify where and how your package was built before they download it.
+
+  Learn more about [npm provenance](https://docs.npmjs.com/generating-provenance-statements#about-npm-provenance)
+
+- Updated dependencies [4adbc2b]
+  - @shopify/graphql-client@1.3.1
+
+## 1.0.6
+
+### Patch Changes
+
+- Updated dependencies [4603b69]
+  - @shopify/graphql-client@1.3.0
+
 ## 1.0.5
 
 ### Patch Changes

@@ -7,13 +7,14 @@ import {getShopFromRequest} from './get-shop-from-request';
 
 interface ValidateSessionTokenOptions {
   checkAudience?: boolean;
+  retryRequest?: boolean;
 }
 
 export async function validateSessionToken(
   params: BasicParams,
   request: Request,
   token: string,
-  {checkAudience = true}: ValidateSessionTokenOptions = {},
+  {checkAudience = true, retryRequest = true}: ValidateSessionTokenOptions = {},
 ): Promise<JwtPayload> {
   const {api, logger} = params;
   const shop = getShopFromRequest(request);
@@ -34,6 +35,6 @@ export async function validateSessionToken(
       shop,
     });
 
-    throw respondToInvalidSessionToken({params, request, retryRequest: true});
+    throw respondToInvalidSessionToken({params, request, retryRequest});
   }
 }
