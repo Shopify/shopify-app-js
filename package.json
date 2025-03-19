@@ -46,7 +46,7 @@
     "prettier": "^3.5.3",
     "rimraf": "^6.0.1",
     "rollup": "^4.36.0",
-    "rollup-plugin-dts": "^6.1.1",
+    "rollup-plugin-dts": "^6.2.0",
     "rollup-plugin-exclude-dependencies-from-bundle": "^1.1.24",
     "supertest": "^7.0.0",
     "ts-jest": "^29.2.6",
