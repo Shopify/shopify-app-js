@@ -91,6 +91,43 @@ const data: LandingTemplateSchema = {
     },
     {
       type: 'Generic',
+      anchorLink: 'graphql-api',
+      title: 'Using the GraphQL API in background jobs',
+      sectionContent: `Allows interacting with the Admin API when working outside of Shopify requests.
+          This enables apps to integrate with 3rd party services and perform background tasks.
+
+          > Caution:
+          > This function doesn't perform **any** validation and shouldn't rely on raw user input.
+
+          When using this function, consider the following:
+
+          #### Background tasks
+
+          Apps should ensure that the shop domain is authenticated when enqueueing jobs.
+
+          #### 3rd party service requests
+
+          Apps must obtain the shop domain from the 3rd party service in a secure way.`,
+      codeblock: {
+        title: 'Make GraphQL requests',
+        tabs: [
+          {
+            title: '/app/routes/**/*.tsx',
+            code: './examples/guides/admin/unauthenticated.example.tsx',
+            language: 'tsx',
+          },
+        ],
+      },
+      sectionCard: [
+        {
+          url: '/docs/api/shopify-app-remix/unauthenticated/unauthenticated-admin',
+          name: 'Unauthenticated Admin',
+          type: 'tutorial',
+        },
+      ],
+    },
+    {
+      type: 'Generic',
       anchorLink: 'rest-api',
       title: 'Using the REST API (Deprecated)',
       sectionContent:
