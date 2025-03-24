@@ -4,7 +4,7 @@
 
 # Standardize App Subscription returns on billing operations
 
-Now all billing operations will return the same data, when returning App Subscriptions. Previously all operations returned the same type, but they underlying GraphQL requests returned different data. Now all operations will return the same data.
+Now all billing operations will return the same data, when returning App Subscriptions. Previously all operations returned the same type, but the underlying GraphQL requests returned different data. Now all operations will return the same data.
 
 Now all billing operations will return the following information when returning `AppSubscriptions`
 
@@ -47,6 +47,6 @@ export interface AppSubscription {
   /*
    * The status of the subscription. [ACTIVE, CANCELLED, PENDING, DECLINED, EXPIRED, FROZEN, ACCEPTED]
    */
-  status: string;
+  status: "ACTIVE" | "CANCELLED" | "PENDING" | "DECLINED" | "EXPIRED" | "FROZEN" | "ACCEPTED"
 }
 ```

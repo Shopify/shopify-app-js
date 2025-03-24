@@ -394,7 +394,14 @@ export interface AppSubscription {
   /*
    * The status of the subscription. [ACTIVE, CANCELLED, PENDING, DECLINED, EXPIRED, FROZEN, ACCEPTED]
    */
-  status: string;
+  status:
+    | 'ACTIVE'
+    | 'CANCELLED'
+    | 'PENDING'
+    | 'DECLINED'
+    | 'EXPIRED'
+    | 'FROZEN'
+    | 'ACCEPTED';
 }
 
 export interface ActiveSubscriptions {
@@ -500,10 +507,17 @@ export interface OneTimePurchase {
    * Whether this is a test purchase.
    */
   test: boolean;
-  /**
-   * The status of the one-time purchase.
+  /*
+   * The status of the subscription. [ACTIVE, CANCELLED, PENDING, DECLINED, EXPIRED, FROZEN, ACCEPTED]
    */
-  status: string;
+  status:
+    | 'ACTIVE'
+    | 'CANCELLED'
+    | 'PENDING'
+    | 'DECLINED'
+    | 'EXPIRED'
+    | 'FROZEN'
+    | 'ACCEPTED';
 }
 
 export interface BillingCreateUsageRecordParams {
