@@ -1,5 +1,25 @@
 # Changelog
 
+## 11.11.1
+
+### Patch Changes
+
+- Updated dependencies [4adbc2b]
+  - @shopify/admin-api-client@1.0.7
+  - @shopify/graphql-client@1.3.1
+  - @shopify/storefront-api-client@1.0.6
+
+## 11.11.0
+
+### Minor Changes
+
+- ea406d3: # Add release candidate API version
+  Adds a constant that points to the [release candidate API version](https://shopify.dev/docs/api/usage/versioning#release-candidates).
+
+  ```
+  import { RELEASE_CANDIDATE_API_VERSION } from "@shopify/shopify-api";
+  ```
+
 ## 11.10.0
 
 ### Minor Changes

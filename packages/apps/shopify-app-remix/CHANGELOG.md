@@ -1,5 +1,32 @@
 # @shopify/shopify-app-remix
 
+## 3.8.1
+
+### Patch Changes
+
+- Updated dependencies [4adbc2b]
+  - @shopify/admin-api-client@1.0.7
+  - @shopify/storefront-api-client@1.0.6
+  - @shopify/shopify-api@11.11.1
+  - @shopify/shopify-app-session-storage@3.0.16
+
+## 3.8.0
+
+### Minor Changes
+
+- ea406d3: # Add release candidate API version
+  Adds a constant that points to the [release candidate API version](https://shopify.dev/docs/api/usage/versioning#release-candidates).
+
+  ```
+  import { RELEASE_CANDIDATE_API_VERSION } from "@shopify/shopify-api";
+  ```
+
+### Patch Changes
+
+- Updated dependencies [ea406d3]
+  - @shopify/shopify-api@11.11.0
+  - @shopify/shopify-app-session-storage@3.0.15
+
 ## 3.7.3
 
 ### Patch Changes

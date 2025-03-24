@@ -1,5 +1,13 @@
 # @shopify/shopify-app-session-storage-dynamodb
 
+## 4.0.16
+
+## 4.0.15
+
+### Patch Changes
+
+- e3cee00: Updated `@aws-sdk/client-dynamodb`, ` @aws-sdk/util-dynamodb` dependencies
+
 ## 4.0.14
 
 ## 4.0.13
