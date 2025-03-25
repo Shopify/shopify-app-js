@@ -55,12 +55,12 @@ import {ApiType, pluckConfig, preset} from '@shopify/api-codegen-preset';
 
 export default {
   // For syntax highlighting / auto-complete when writing operations
-  schema: 'https://shopify.dev/admin-graphql-direct-proxy',
+  schema: 'https://shopify.dev/admin-graphql-direct-proxy/2025-01',
   documents: ['./**/*.{js,ts,jsx,tsx}'],
   projects: {
     default: {
       // For type extraction
-      schema: 'https://shopify.dev/admin-graphql-direct-proxy',
+      schema: 'https://shopify.dev/admin-graphql-direct-proxy/2025-01',
       documents: ['./**/*.{js,ts,jsx,tsx}'],
       extensions: {
         codegen: {
@@ -114,18 +114,18 @@ import {
 
 export default {
   // For syntax highlighting / auto-complete when writing operations
-  schema: 'https://shopify.dev/admin-graphql-direct-proxy/2023-10',
+  schema: 'https://shopify.dev/admin-graphql-direct-proxy/2025-01',
   documents: ['./app/**/*.{js,ts,jsx,tsx}'],
   projects: {
     // To produce variable / return types for Admin API operations
-    schema: 'https://shopify.dev/admin-graphql-direct-proxy/2023-10',
+    schema: 'https://shopify.dev/admin-graphql-direct-proxy/2025-01',
     documents: ['./app/**/*.{js,ts,jsx,tsx}'],
     extensions: {
       codegen: {
         pluckConfig,
         generates: shopifyApiTypes({
           apiType: ApiType.Admin,
-          apiVersion: '2023-10',
+          apiVersion: '2025-01',
           documents: ['./app/**/*.{js,ts,jsx,tsx}'],
           outputDir: './app/types',
         }),
@@ -155,13 +155,13 @@ import {shopifyApiProject, ApiType} from '@shopify/api-codegen-preset';
 
 export default {
   // For syntax highlighting / auto-complete when writing operations
-  schema: 'https://shopify.dev/admin-graphql-direct-proxy/2023-10',
+  schema: 'https://shopify.dev/admin-graphql-direct-proxy/2025-01',
   documents: ['./app/**/*.{js,ts,jsx,tsx}'],
   projects: {
     // To produce variable / return types for Admin API operations
     default: shopifyApiProject({
       apiType: ApiType.Admin,
-      apiVersion: '2023-10',
+      apiVersion: '2025-01',
       documents: ['./app/**/*.{js,ts,jsx,tsx}'],
       outputDir: './app/types',
     }),
