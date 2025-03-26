@@ -60,6 +60,14 @@ export interface HTTPResponseLog extends LogContent {
   };
 }
 
+export interface HTTPResponseGraphQLDeprecationNotice extends LogContent {
+  type: 'HTTP-Response-GraphQL-Deprecation-Notice';
+  content: {
+    requestParams: Parameters<CustomFetchApi>;
+    deprecationNotice: string;
+  };
+}
+
 export interface HTTPRetryLog extends LogContent {
   type: 'HTTP-Retry';
   content: {
@@ -70,7 +78,7 @@ export interface HTTPRetryLog extends LogContent {
   };
 }
 
-export type LogContentTypes = HTTPResponseLog | HTTPRetryLog;
+export type LogContentTypes = HTTPResponseLog | HTTPRetryLog | HTTPResponseGraphQLDeprecationNotice;
 
 export type Logger<TLogContentTypes = LogContentTypes> = (
   logContent: TLogContentTypes,
