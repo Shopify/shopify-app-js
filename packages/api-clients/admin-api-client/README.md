@@ -58,7 +58,7 @@ const {data, errors, extensions} = await client.request(operation, {
 | userAgentPrefix? | `string`                                                                                                                                                      | Any prefix you wish to include in the User-Agent for requests made by the library.                                                                                                                            |
 | retries?         | `number`                                                                                                                                                      | The number of HTTP request retries if the request was abandoned or the server responded with a `Too Many Requests (429)` or `Service Unavailable (503)` response. Default value is `0`. Maximum value is `3`. |
 | customFetchApi?  | `(url: string, init?: {method?: string, headers?: HeaderInit, body?: string}) => Promise<Response>`                                                           | A replacement `fetch` function that will be used in all client network requests. By default, the client uses `window.fetch()`.                                                                                |
-| logger?          | `(logContent:`[`UnsupportedApiVersionLog`](#unsupportedapiversionlog) `\|`[`HTTPResponseLog`](#httpresponselog)`\|`[`HTTPRetryLog`](#httpretrylog)`) => void` | A logger function that accepts [log content objects](#log-content-types). This logger will be called in certain conditions with contextual information.                                                       |
+| logger?          | `(logContent:`[`UnsupportedApiVersionLog`](#unsupportedapiversionlog) `\|`[`HTTPResponseLog`](#httpresponselog)`\|`[`HTTPRetryLog`](#httpretrylog)`\|`[`HTTPResponseGraphQLDeprecationNotice`](#httpresponsegraphqldeprecationnotice)`) => void` | A logger function that accepts [log content objects](#log-content-types). This logger will be called in certain conditions with contextual information.                                                       |
 
 ### Client properties
 
@@ -362,6 +362,15 @@ This log content is sent to the logger whenever the client attempts to retry HTT
 | -------- | ------------------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | type     | `LogType['HTTP-Retry']`                                                                                                  | The type of log content. Is always set to `HTTP-Retry`                                                                                                                                                                                                                           |
 | content  | `{`[`requestParams`](#requestparams)`: [url, init?], lastResponse?: Response, retryAttempt: number, maxRetries: number}` | Contextual data regarding the upcoming retry attempt. <br /><br/>`requestParams`: [parameters](#requestparams) used in the request<br/>`lastResponse`: previous response <br/> `retryAttempt`: the current retry attempt count <br/> `maxRetries`: the maximum number of retries |
+
+### `HTTPResponseGraphQLDeprecationNotice`
+
+This log content is sent to the logger whenever a HTTP response with a `X-Shopify-API-Deprecated-Reason` is received by the client.
+
+| Property | Type                     | Description                        |
+| -------- | ------------------------ | ---------------------------------- |
+| type      | `LogType['HTTP-Response-GraphQL-Deprecation-Notice']`                 | The type of log content. Is always set to `HTTP-Response-GraphQL-Deprecation-Notice`            |
+| content  | `{`[`requestParams`](#requestparams)`: [url, init?], deprecationNotice: string}` | Contextual data regarding the request and received deprecation information |
 
 #### `RequestParams`
 
