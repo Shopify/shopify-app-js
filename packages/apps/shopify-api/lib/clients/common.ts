@@ -1,6 +1,7 @@
 import {
   HTTPResponseLog,
   HTTPRetryLog,
+  HTTPResponseGraphQLDeprecationNotice,
   LogContent,
 } from '@shopify/admin-api-client';
 import {StatusCode} from '@shopify/network';
@@ -44,6 +45,14 @@ export function clientLoggerFactory(config: ConfigInterface) {
             retryAttempt: responseLog.retryAttempt,
             maxRetries: responseLog.maxRetries,
             response: JSON.stringify(responseLog.lastResponse),
+          });
+          break;
+        }
+        case 'HTTP-Response-GraphQL-Deprecation-Notice': {
+          const responseLog: HTTPResponseGraphQLDeprecationNotice['content'] = logContent.content;
+          logger(config).debug('Received response containing Deprecated GraphQL Notice', {
+            requestParams: JSON.stringify(responseLog.requestParams),
+            deprecationNotice: responseLog.deprecationNotice,
           });
           break;
         }

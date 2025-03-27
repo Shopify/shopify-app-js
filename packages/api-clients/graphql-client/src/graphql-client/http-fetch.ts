@@ -1,6 +1,6 @@
-import {CLIENT, RETRIABLE_STATUS_CODES, RETRY_WAIT_TIME} from './constants';
-import {CustomFetchApi, GraphQLClient, Logger} from './types';
-import {formatErrorMessage, getErrorMessage} from './utilities';
+import { CLIENT, RETRIABLE_STATUS_CODES, RETRY_WAIT_TIME } from './constants';
+import { CustomFetchApi, GraphQLClient, Logger } from './types';
+import { formatErrorMessage, getErrorMessage } from './utilities';
 
 interface GenerateHttpFetchOptions {
   clientLogger: Logger;
@@ -45,6 +45,17 @@ export function generateHttpFetch({
         throw new Error();
       }
 
+      const deprecationNotice = response?.headers.get('X-Shopify-API-Deprecated-Reason') || '';
+      if (deprecationNotice) {
+        clientLogger({
+          type: 'HTTP-Response-GraphQL-Deprecation-Notice',
+          content: {
+            requestParams,
+            deprecationNotice,
+          },
+        });
+      }
+
       return response;
     } catch (error) {
       if (nextCount <= maxTries) {
@@ -68,10 +79,9 @@ export function generateHttpFetch({
 
       throw new Error(
         formatErrorMessage(
-          `${
-            maxRetries > 0
-              ? `Attempted maximum number of ${maxRetries} network retries. Last message - `
-              : ''
+          `${maxRetries > 0
+            ? `Attempted maximum number of ${maxRetries} network retries. Last message - `
+            : ''
           }${getErrorMessage(error)}`,
           client,
         ),
