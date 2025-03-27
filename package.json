@@ -32,7 +32,7 @@
     "@shopify/babel-preset": "^25.0.0",
     "@shopify/eslint-plugin": "^45.0.0",
     "@shopify/prettier-config": "^1.1.2",
-    "@shopify/typescript-configs": "^5.1.0",
+    "@shopify/typescript-configs": "^5.1.2",
     "@types/jest": "^29.5.14",
     "@types/node": "^22.13.10",
     "@types/supertest": "^6.0.2",
