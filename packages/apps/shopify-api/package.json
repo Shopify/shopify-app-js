@@ -93,7 +93,7 @@
   "devDependencies": {
     "@cloudflare/workers-types": "^4.20250321.0",
     "@swc/core": "^1.11.13",
-    "@types/express": "^4.17.13",
+    "@types/express": "^5.0.1",
     "@types/jsonwebtoken": "^9.0.9",
     "@types/node-fetch": "^2.6.11",
     "@types/uuid": "^10.0.0",
