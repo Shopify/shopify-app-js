@@ -229,11 +229,11 @@ importers:
         specifier: ^11.9.1
         version: 11.9.1
       drizzle-kit:
-        specifier: ^0.30.5
-        version: 0.30.5
+        specifier: ^0.30.6
+        version: 0.30.6
       drizzle-orm:
         specifier: ^0.41.0
-        version: 0.41.0(@cloudflare/workers-types@4.20250321.0)(@libsql/client@0.15.1(encoding@0.1.13))(@prisma/client@6.5.0(prisma@6.5.0(typescript@5.7.3))(typescript@5.7.3))(@types/better-sqlite3@7.6.12)(@types/pg@8.11.11)(better-sqlite3@11.9.1)(gel@2.0.0)(mysql2@3.13.0)(pg@8.14.1)(prisma@6.5.0(typescript@5.7.3))(sqlite3@5.1.7)
+        version: 0.41.0(@cloudflare/workers-types@4.20250321.0)(@libsql/client@0.15.1(encoding@0.1.13))(@prisma/client@6.5.0(prisma@6.5.0(typescript@5.7.3))(typescript@5.7.3))(@types/better-sqlite3@7.6.12)(@types/pg@8.11.11)(better-sqlite3@11.9.1)(gel@2.0.1)(mysql2@3.13.0)(pg@8.14.1)(prisma@6.5.0(typescript@5.7.3))(sqlite3@5.1.7)
       mysql2:
         specifier: ^3.13.0
         version: 3.13.0
@@ -3067,8 +3067,8 @@ packages:
     resolution: {integrity: sha512-i0GV1yJnm2n3Yq1qw6QrUrd/LI9bE8WEBOTtOkpCXHHdyN3TAGgqAK/DAT05z4fq2x04cARXt2pDmjWjL92iTQ==}
     engines: {node: '>= 10.0.0'}
 
-  '@petamoriken/float16@3.9.1':
-    resolution: {integrity: sha512-j+ejhYwY6PeB+v1kn7lZFACUIG97u90WxMuGosILFsl9d4Ovi0sjk0GlPfoEcx+FzvXZDAfioD+NGnnPamXgMA==}
+  '@petamoriken/float16@3.9.2':
+    resolution: {integrity: sha512-VgffxawQde93xKxT3qap3OH+meZf7VaSB5Sqd4Rqc+FP5alWbpOyan/7tRbOAvynjpG3GpdtAuGU/NdhQpmrog==}
 
   '@pkgr/core@0.2.0':
     resolution: {integrity: sha512-vsJDAkYR6qCPu+ioGScGiMYR7LvZYIXh/dlQeviqoTWNCVfKTLYD/LkNWH4Mxsv2a5vpIRc77FN5DnmK1eBggQ==}
@@ -4862,8 +4862,8 @@ packages:
     resolution: {integrity: sha512-47qPchRCykZC03FhkYAhrvwU4xDBFIj1QPqaarj6mdM/hgUzfPHcpkHJOn3mJAufFeeAxAzeGsr5X0M4k6fLZQ==}
     engines: {node: '>=12'}
 
-  drizzle-kit@0.30.5:
-    resolution: {integrity: sha512-l6dMSE100u7sDaTbLczibrQZjA35jLsHNqIV+jmhNVO3O8jzM6kywMOmV9uOz9ZVSCMPQhAZEFjL/qDPVrqpUA==}
+  drizzle-kit@0.30.6:
+    resolution: {integrity: sha512-U4wWit0fyZuGuP7iNmRleQyK2V8wCuv57vf5l3MnG4z4fzNTjY/U13M8owyQ5RavqvqxBifWORaR3wIUzlN64g==}
     hasBin: true
 
   drizzle-orm@0.41.0:
@@ -5491,8 +5491,8 @@ packages:
     engines: {node: ^12.13.0 || ^14.15.0 || >=16.0.0}
     deprecated: This package is no longer supported.
 
-  gel@2.0.0:
-    resolution: {integrity: sha512-Oq3Fjay71s00xzDc0BF/mpcLmnA+uRqMEJK8p5K4PaZjUEsxaeo+kR9OHBVAf289/qPd+0OcLOLUN0UhqiUCog==}
+  gel@2.0.1:
+    resolution: {integrity: sha512-gfem3IGvqKqXwEq7XseBogyaRwGsQGuE7Cw/yQsjLGdgiyqX92G1xENPCE0ltunPGcsJIa6XBOTx/PK169mOqw==}
     engines: {node: '>= 18.0.0'}
     hasBin: true
 
@@ -11678,7 +11678,7 @@ snapshots:
       '@parcel/watcher-win32-ia32': 2.5.0
       '@parcel/watcher-win32-x64': 2.5.0
 
-  '@petamoriken/float16@3.9.1': {}
+  '@petamoriken/float16@3.9.2': {}
 
   '@pkgr/core@0.2.0': {}
 
@@ -13714,17 +13714,17 @@ snapshots:
 
   dotenv@16.4.7: {}
 
-  drizzle-kit@0.30.5:
+  drizzle-kit@0.30.6:
     dependencies:
       '@drizzle-team/brocli': 0.10.2
       '@esbuild-kit/esm-loader': 2.6.5
       esbuild: 0.19.12
       esbuild-register: 3.6.0(esbuild@0.19.12)
-      gel: 2.0.0
+      gel: 2.0.1
     transitivePeerDependencies:
       - supports-color
 
-  drizzle-orm@0.41.0(@cloudflare/workers-types@4.20250321.0)(@libsql/client@0.15.1(encoding@0.1.13))(@prisma/client@6.5.0(prisma@6.5.0(typescript@5.7.3))(typescript@5.7.3))(@types/better-sqlite3@7.6.12)(@types/pg@8.11.11)(better-sqlite3@11.9.1)(gel@2.0.0)(mysql2@3.13.0)(pg@8.14.1)(prisma@6.5.0(typescript@5.7.3))(sqlite3@5.1.7):
+  drizzle-orm@0.41.0(@cloudflare/workers-types@4.20250321.0)(@libsql/client@0.15.1(encoding@0.1.13))(@prisma/client@6.5.0(prisma@6.5.0(typescript@5.7.3))(typescript@5.7.3))(@types/better-sqlite3@7.6.12)(@types/pg@8.11.11)(better-sqlite3@11.9.1)(gel@2.0.1)(mysql2@3.13.0)(pg@8.14.1)(prisma@6.5.0(typescript@5.7.3))(sqlite3@5.1.7):
     optionalDependencies:
       '@cloudflare/workers-types': 4.20250321.0
       '@libsql/client': 0.15.1(encoding@0.1.13)
@@ -13732,7 +13732,7 @@ snapshots:
       '@types/better-sqlite3': 7.6.12
       '@types/pg': 8.11.11
       better-sqlite3: 11.9.1
-      gel: 2.0.0
+      gel: 2.0.1
       mysql2: 3.13.0
       pg: 8.14.1
       prisma: 6.5.0(typescript@5.7.3)
@@ -14539,9 +14539,9 @@ snapshots:
       wide-align: 1.1.5
     optional: true
 
-  gel@2.0.0:
+  gel@2.0.1:
     dependencies:
-      '@petamoriken/float16': 3.9.1
+      '@petamoriken/float16': 3.9.2
       debug: 4.4.0
       env-paths: 3.0.0
       semver: 7.7.1
