@@ -60,8 +60,8 @@ importers:
         specifier: ^1.1.2
         version: 1.1.2
       '@shopify/typescript-configs':
-        specifier: ^5.1.0
-        version: 5.1.0
+        specifier: ^5.1.2
+        version: 5.1.2
       '@types/jest':
         specifier: ^29.5.14
         version: 29.5.14
@@ -3436,8 +3436,8 @@ packages:
       react: '>=18.0.0 <19.0.0'
       react-dom: '>=16.8.0 <19.0.0'
 
-  '@shopify/typescript-configs@5.1.0':
-    resolution: {integrity: sha512-RywGBTR+nQyJLxcrUcihPkHPIG3pIQI6i0YwMrM5rs9nWJ0+9A5HKEcboyGPLH+8V08EXGfFQ6H820O9ajyk4A==}
+  '@shopify/typescript-configs@5.1.2':
+    resolution: {integrity: sha512-QNQlCxJGyKXXbLHsf4y0ZUZhmK/1LL5MN/YHl54UxakDILiBRKiWh0t7qbVo01tsyyH+YcrH7d8y9Ch2ywP8pg==}
 
   '@shopify/useful-types@5.3.0':
     resolution: {integrity: sha512-8BlaedSqR7ssQAhCsa88K+l2eIImSBlTLlnf7/dlqSlMSEqGVUf+O8oPsnyy9Oh3aDMt+rD4Q5JPOo984Cbz7Q==}
@@ -12066,7 +12066,7 @@ snapshots:
       react-is: 18.3.1
       react-reconciler: 0.28.0(react@18.3.1)
 
-  '@shopify/typescript-configs@5.1.0': {}
+  '@shopify/typescript-configs@5.1.2': {}
 
   '@shopify/useful-types@5.3.0': {}
 
