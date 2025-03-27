@@ -57,8 +57,8 @@ importers:
         specifier: ^45.0.0
         version: 45.0.0(@babel/core@7.26.0)(eslint@8.57.1)(jest@29.7.0(@types/node@22.13.10)(ts-node@10.9.2(@swc/core@1.11.13)(@types/node@22.13.10)(typescript@5.7.3)))(prettier@3.5.3)(typescript@5.7.3)
       '@shopify/prettier-config':
-        specifier: ^1.1.2
-        version: 1.1.2
+        specifier: ^1.1.4
+        version: 1.1.4
       '@shopify/typescript-configs':
         specifier: ^5.1.2
         version: 5.1.2
@@ -3425,8 +3425,8 @@ packages:
       react: ^18.0.0
       react-dom: ^18.0.0
 
-  '@shopify/prettier-config@1.1.2':
-    resolution: {integrity: sha512-5ugCL9sPGzmOaZjeRGaWUWhHgAbemrS6z+R7v6gwiD+BiqSeoFhIY+imLpfdFCVpuOGalpHeCv6o3gv++EHs0A==}
+  '@shopify/prettier-config@1.1.4':
+    resolution: {integrity: sha512-BmM8zRVvtu2eKyZ7HmKqG6lI/U6uiZgs/UK4qLnVmdmx8r5hSL9alMRguuV8MXgDUdt17nWoZKvvUVXF2OAoqA==}
 
   '@shopify/react-testing@6.0.0':
     resolution: {integrity: sha512-dkP0R8KRKbG5ftj20kdid1T3C0TLPnumI/nlaiWvopBV6zoqc1xuIHX83BAHjuutR2Y+Is97GkC231J76gXEUA==}
@@ -12055,7 +12055,7 @@ snapshots:
       react-fast-compare: 3.2.2
       react-transition-group: 4.4.5(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
 
-  '@shopify/prettier-config@1.1.2': {}
+  '@shopify/prettier-config@1.1.4': {}
 
   '@shopify/react-testing@6.0.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
     dependencies:
