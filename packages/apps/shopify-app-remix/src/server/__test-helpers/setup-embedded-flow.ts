@@ -61,3 +61,31 @@ export async function setUpEmbeddedFlowWithRemoveRestFlag() {
     request,
   };
 }
+
+export async function setUpEmbeddedFlowWithSingleFetch() {
+  const shopify = shopifyApp({
+    ...testConfig({
+      restResources,
+    }),
+    future: {
+      removeRest: false,
+      unstable_newEmbeddedAuthStrategy: false,
+      remixSingleFetch: true,
+    },
+  });
+  const expectedSession = await setUpValidSession(shopify.sessionStorage);
+
+  const {token} = getJwt();
+  const request = new Request(
+    `${APP_URL}?embedded=1&shop=${TEST_SHOP}&host=${BASE64_HOST}&id_token=${token}`,
+  );
+
+  const result = await shopify.authenticate.admin(request);
+
+  return {
+    shopify,
+    expectedSession,
+    ...result,
+    request,
+  };
+}

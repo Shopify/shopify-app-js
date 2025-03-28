@@ -8,10 +8,24 @@ import {setUpValidSession} from './setup-valid-session';
 import {signRequestCookie} from './sign-request-cookie';
 import {testConfig} from './test-config';
 
-export async function setUpNonEmbeddedFlow() {
+interface NonEmbeddedFlowOptions {
+  remixSingleFetch?: boolean;
+  unstable_newEmbeddedAuthStrategy?: boolean;
+}
+
+export async function setUpNonEmbeddedFlow(
+  options: NonEmbeddedFlowOptions = {},
+) {
+  const {remixSingleFetch = false, unstable_newEmbeddedAuthStrategy = false} =
+    options;
+
   const shopify = shopifyApp({
     ...testConfig({restResources, isEmbeddedApp: false}),
-    future: {removeRest: false},
+    future: {
+      removeRest: false,
+      remixSingleFetch,
+      unstable_newEmbeddedAuthStrategy,
+    },
   });
   const session = await setUpValidSession(shopify.sessionStorage);
 
