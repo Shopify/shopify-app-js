@@ -51,13 +51,13 @@
     "drizzle-orm": "^0.30.6"
   },
   "devDependencies": {
-    "@libsql/client": "^0.14.0",
+    "@libsql/client": "^0.15.1",
     "@shopify/shopify-app-session-storage-test-utils": "^3.0.16",
     "@types/better-sqlite3": "^7.6.12",
     "@types/pg": "^8.11.11",
-    "better-sqlite3": "^11.9.0",
-    "drizzle-kit": "^0.30.5",
-    "drizzle-orm": "^0.40.0",
+    "better-sqlite3": "^11.9.1",
+    "drizzle-kit": "^0.30.6",
+    "drizzle-orm": "^0.41.0",
     "mysql2": "^3.13.0",
     "pg": "^8.14.1"
   },
