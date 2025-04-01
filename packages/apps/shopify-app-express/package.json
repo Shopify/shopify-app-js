@@ -4,7 +4,8 @@
   "description": "Shopify Express Middleware - to simplify the building of Shopify Apps with Express",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Shopify/shopify-app-js.git"
+    "url": "git+https://github.com/Shopify/shopify-app-js.git",
+    "directory": "packages/apps/shopify-app-express"
   },
   "bugs": {
     "url": "https://github.com/Shopify/shopify-app-js/issues"

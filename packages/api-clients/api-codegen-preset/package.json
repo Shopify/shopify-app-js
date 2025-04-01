@@ -7,7 +7,8 @@
   "homepage": "https://github.com/Shopify/shopify-app-js/tree/main/packages/api-clients/api-codegen-preset#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Shopify/shopify-app-js.git"
+    "url": "git+https://github.com/Shopify/shopify-app-js.git",
+    "directory": "packages/api-clients/api-codegen-preset"
   },
   "bugs": {
     "url": "https://github.com/Shopify/shopify-app-js/issues"

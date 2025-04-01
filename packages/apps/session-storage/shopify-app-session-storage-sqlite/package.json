@@ -4,7 +4,8 @@
   "description": "Shopify App Session Storage for SQLite",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Shopify/shopify-app-js.git"
+    "url": "git+https://github.com/Shopify/shopify-app-js.git",
+    "directory": "packages/apps/session-storage/shopify-app-session-storage-sqlite"
   },
   "bugs": {
     "url": "https://github.com/Shopify/shopify-app-js/issues"
