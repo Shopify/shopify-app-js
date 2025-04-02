@@ -1,5 +1,11 @@
 # @shopify/graphql-client
 
+## 1.3.2
+
+### Patch Changes
+
+- 981c948: Update directory path
+
 ## 1.3.1
 
 ### Patch Changes
