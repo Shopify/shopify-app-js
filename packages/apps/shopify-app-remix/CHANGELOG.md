@@ -1,5 +1,18 @@
 # @shopify/shopify-app-remix
 
+## 3.8.2
+
+### Patch Changes
+
+- 981c948: Update directory path
+- Updated dependencies [7a076ac]
+- Updated dependencies [ecacdf3]
+- Updated dependencies [981c948]
+  - @shopify/shopify-api@11.12.0
+  - @shopify/shopify-app-session-storage@3.0.17
+  - @shopify/storefront-api-client@1.0.7
+  - @shopify/admin-api-client@1.0.8
+
 ## 3.8.1
 
 ### Patch Changes
