@@ -49,11 +49,15 @@ export function clientLoggerFactory(config: ConfigInterface) {
           break;
         }
         case 'HTTP-Response-GraphQL-Deprecation-Notice': {
-          const responseLog: HTTPResponseGraphQLDeprecationNotice['content'] = logContent.content;
-          logger(config).debug('Received response containing Deprecated GraphQL Notice', {
-            requestParams: JSON.stringify(responseLog.requestParams),
-            deprecationNotice: responseLog.deprecationNotice,
-          });
+          const responseLog: HTTPResponseGraphQLDeprecationNotice['content'] =
+            logContent.content;
+          logger(config).debug(
+            'Received response containing Deprecated GraphQL Notice',
+            {
+              requestParams: JSON.stringify(responseLog.requestParams),
+              deprecationNotice: responseLog.deprecationNotice,
+            },
+          );
           break;
         }
         default: {
