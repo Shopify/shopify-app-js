@@ -331,4 +331,34 @@ describe('GraphQL client', () => {
       client.request(QUERY, {signal: controller.signal}),
     ).rejects.toThrow(HttpRequestError);
   });
+
+  it('logs deprecation headers when they are present', async () => {
+    const shopify = shopifyApi(
+      testConfig({
+        logger: {
+          ...testConfig().logger,
+          httpRequests: true,
+        },
+      }),
+    );
+    const client = new shopify.clients.Graphql({session});
+
+    queueMockResponse(JSON.stringify(successResponse), {
+      headers: {
+        'X-Shopify-API-Deprecated-Reason':
+          'This API endpoint has been deprecated',
+      },
+    });
+
+    await client.request(QUERY);
+
+    expect(shopify.config.logger.log).toHaveBeenCalledTimes(4);
+    expect(shopify.config.logger.log).toHaveBeenNthCalledWith(
+      4,
+      LogSeverity.Debug,
+      expect.stringMatching(
+        /.*Received response containing Deprecated GraphQL Notice.*deprecationNotice: This API endpoint has been deprecated.*/,
+      ),
+    );
+  });
 });
