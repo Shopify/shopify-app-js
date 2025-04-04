@@ -1,5 +1,11 @@
 # @shopify/shopify-app-session-storage-redis
 
+## 4.2.10
+
+### Patch Changes
+
+- 981c948: Update directory path
+
 ## 4.2.9
 
 ## 4.2.8

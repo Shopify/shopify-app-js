@@ -1,5 +1,11 @@
 # @shopify/shopify-app-session-storage-prisma
 
+## 6.0.6
+
+### Patch Changes
+
+- 981c948: Update directory path
+
 ## 6.0.5
 
 ## 6.0.4

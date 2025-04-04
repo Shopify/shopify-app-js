@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.1.7
+
+### Patch Changes
+
+- 981c948: Update directory path
+
 ## 1.1.6
 
 ### Patch Changes

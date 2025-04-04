@@ -1,5 +1,11 @@
 # @shopify/shopify-app-session-storage-drizzle
 
+## 2.0.17
+
+### Patch Changes
+
+- 981c948: Update directory path
+
 ## 2.0.16
 
 ## 2.0.15

@@ -24,8 +24,8 @@ importers:
         specifier: ^2.27.12
         version: 2.27.12
       '@cloudflare/workers-types':
-        specifier: ^4.20250321.0
-        version: 4.20250321.0
+        specifier: ^4.20250402.0
+        version: 4.20250402.0
       '@jest/types':
         specifier: ^29.6.3
         version: 29.6.3
@@ -129,7 +129,7 @@ importers:
   packages/api-clients/admin-api-client:
     dependencies:
       '@shopify/graphql-client':
-        specifier: ^1.3.1
+        specifier: ^1.3.2
         version: link:../graphql-client
     devDependencies:
       jest-environment-jsdom:
@@ -188,7 +188,7 @@ importers:
   packages/api-clients/storefront-api-client:
     dependencies:
       '@shopify/graphql-client':
-        specifier: ^1.3.1
+        specifier: ^1.3.2
         version: link:../graphql-client
     devDependencies:
       jest-environment-jsdom:
@@ -198,7 +198,7 @@ importers:
   packages/apps/session-storage/shopify-app-session-storage:
     devDependencies:
       '@shopify/shopify-api':
-        specifier: ^11.11.1
+        specifier: ^11.12.0
         version: link:../../shopify-api
 
   packages/apps/session-storage/shopify-app-session-storage-drizzle:
@@ -217,7 +217,7 @@ importers:
         specifier: ^0.15.1
         version: 0.15.1(encoding@0.1.13)
       '@shopify/shopify-app-session-storage-test-utils':
-        specifier: ^3.0.16
+        specifier: ^3.0.17
         version: link:../shopify-app-session-storage-test-utils
       '@types/better-sqlite3':
         specifier: ^7.6.12
@@ -233,7 +233,7 @@ importers:
         version: 0.30.6
       drizzle-orm:
         specifier: ^0.41.0
-        version: 0.41.0(@cloudflare/workers-types@4.20250321.0)(@libsql/client@0.15.1(encoding@0.1.13))(@prisma/client@6.5.0(prisma@6.5.0(typescript@5.7.3))(typescript@5.7.3))(@types/better-sqlite3@7.6.12)(@types/pg@8.11.11)(better-sqlite3@11.9.1)(gel@2.0.1)(mysql2@3.13.0)(pg@8.14.1)(prisma@6.5.0(typescript@5.7.3))(sqlite3@5.1.7)
+        version: 0.41.0(@cloudflare/workers-types@4.20250402.0)(@libsql/client@0.15.1(encoding@0.1.13))(@prisma/client@6.5.0(prisma@6.5.0(typescript@5.7.3))(typescript@5.7.3))(@types/better-sqlite3@7.6.12)(@types/pg@8.11.11)(better-sqlite3@11.9.1)(gel@2.0.1)(mysql2@3.13.0)(pg@8.14.1)(prisma@6.5.0(typescript@5.7.3))(sqlite3@5.1.7)
       mysql2:
         specifier: ^3.13.0
         version: 3.13.0
@@ -257,7 +257,7 @@ importers:
         version: link:../shopify-app-session-storage
     devDependencies:
       '@shopify/shopify-app-session-storage-test-utils':
-        specifier: ^3.0.16
+        specifier: ^3.0.17
         version: link:../shopify-app-session-storage-test-utils
 
   packages/apps/session-storage/shopify-app-session-storage-kv:
@@ -273,10 +273,10 @@ importers:
         version: 7.7.1
     devDependencies:
       '@cloudflare/workers-types':
-        specifier: ^4.20250321.0
-        version: 4.20250321.0
+        specifier: ^4.20250402.0
+        version: 4.20250402.0
       '@shopify/shopify-app-session-storage-test-utils':
-        specifier: ^3.0.16
+        specifier: ^3.0.17
         version: link:../shopify-app-session-storage-test-utils
       miniflare:
         specifier: ^3.20250214.2
@@ -292,7 +292,7 @@ importers:
         version: link:../shopify-app-session-storage
     devDependencies:
       '@shopify/shopify-app-session-storage-test-utils':
-        specifier: ^3.0.16
+        specifier: ^3.0.17
         version: link:../shopify-app-session-storage-test-utils
 
   packages/apps/session-storage/shopify-app-session-storage-mongodb:
@@ -308,7 +308,7 @@ importers:
         version: 6.14.2(socks@2.8.3)
     devDependencies:
       '@shopify/shopify-app-session-storage-test-utils':
-        specifier: ^3.0.16
+        specifier: ^3.0.17
         version: link:../shopify-app-session-storage-test-utils
 
   packages/apps/session-storage/shopify-app-session-storage-mysql:
@@ -324,7 +324,7 @@ importers:
         version: 3.13.0
     devDependencies:
       '@shopify/shopify-app-session-storage-test-utils':
-        specifier: ^3.0.16
+        specifier: ^3.0.17
         version: link:../shopify-app-session-storage-test-utils
 
   packages/apps/session-storage/shopify-app-session-storage-postgresql:
@@ -343,7 +343,7 @@ importers:
         version: 2.7.0
     devDependencies:
       '@shopify/shopify-app-session-storage-test-utils':
-        specifier: ^3.0.16
+        specifier: ^3.0.17
         version: link:../shopify-app-session-storage-test-utils
       '@types/pg':
         specifier: ^8.11.11
@@ -362,7 +362,7 @@ importers:
         specifier: ^6.5.0
         version: 6.5.0(prisma@6.5.0(typescript@5.7.3))(typescript@5.7.3)
       '@shopify/shopify-app-session-storage-test-utils':
-        specifier: ^3.0.16
+        specifier: ^3.0.17
         version: link:../shopify-app-session-storage-test-utils
       prisma:
         specifier: ^6.5.0
@@ -381,7 +381,7 @@ importers:
         version: 4.7.0
     devDependencies:
       '@shopify/shopify-app-session-storage-test-utils':
-        specifier: ^3.0.16
+        specifier: ^3.0.17
         version: link:../shopify-app-session-storage-test-utils
 
   packages/apps/session-storage/shopify-app-session-storage-sqlite:
@@ -397,7 +397,7 @@ importers:
         version: 5.1.7
     devDependencies:
       '@shopify/shopify-app-session-storage-test-utils':
-        specifier: ^3.0.16
+        specifier: ^3.0.17
         version: link:../shopify-app-session-storage-test-utils
       '@types/sqlite3':
         specifier: ^3.1.8
@@ -406,25 +406,25 @@ importers:
   packages/apps/session-storage/shopify-app-session-storage-test-utils:
     devDependencies:
       '@shopify/shopify-api':
-        specifier: ^11.11.1
+        specifier: ^11.12.0
         version: link:../../shopify-api
       '@shopify/shopify-app-session-storage':
-        specifier: ^3.0.16
+        specifier: ^3.0.17
         version: link:../shopify-app-session-storage
 
   packages/apps/shopify-api:
     dependencies:
       '@shopify/admin-api-client':
-        specifier: ^1.0.7
+        specifier: ^1.0.8
         version: link:../../api-clients/admin-api-client
       '@shopify/graphql-client':
-        specifier: ^1.3.1
+        specifier: ^1.3.2
         version: link:../../api-clients/graphql-client
       '@shopify/network':
         specifier: ^3.3.0
         version: 3.3.0
       '@shopify/storefront-api-client':
-        specifier: ^1.0.6
+        specifier: ^1.0.7
         version: link:../../api-clients/storefront-api-client
       compare-versions:
         specifier: ^6.1.1
@@ -449,8 +449,8 @@ importers:
         version: 11.0.5
     devDependencies:
       '@cloudflare/workers-types':
-        specifier: ^4.20250321.0
-        version: 4.20250321.0
+        specifier: ^4.20250402.0
+        version: 4.20250402.0
       '@swc/core':
         specifier: ^1.11.13
         version: 1.11.13
@@ -486,18 +486,18 @@ importers:
         version: 0.2.1(@swc/core@1.11.13)(rollup@4.37.0)
       wrangler:
         specifier: ^3.112.0
-        version: 3.112.0(@cloudflare/workers-types@4.20250321.0)
+        version: 3.112.0(@cloudflare/workers-types@4.20250402.0)
 
   packages/apps/shopify-app-express:
     dependencies:
       '@shopify/shopify-api':
-        specifier: ^11.11.1
+        specifier: ^11.12.0
         version: link:../shopify-api
       '@shopify/shopify-app-session-storage':
-        specifier: ^3.0.16
+        specifier: ^3.0.17
         version: link:../session-storage/shopify-app-session-storage
       '@shopify/shopify-app-session-storage-memory':
-        specifier: ^4.0.16
+        specifier: ^4.0.17
         version: link:../session-storage/shopify-app-session-storage-memory
       cookie-parser:
         specifier: ^1.4.7
@@ -534,16 +534,16 @@ importers:
         specifier: ^2.16.0
         version: 2.16.0(typescript@5.7.3)
       '@shopify/admin-api-client':
-        specifier: ^1.0.7
+        specifier: ^1.0.8
         version: link:../../api-clients/admin-api-client
       '@shopify/shopify-api':
-        specifier: ^11.11.1
+        specifier: ^11.12.0
         version: link:../shopify-api
       '@shopify/shopify-app-session-storage':
-        specifier: ^3.0.16
+        specifier: ^3.0.17
         version: link:../session-storage/shopify-app-session-storage
       '@shopify/storefront-api-client':
-        specifier: ^1.0.6
+        specifier: ^1.0.7
         version: link:../../api-clients/storefront-api-client
       isbot:
         specifier: ^5.1.21
@@ -574,7 +574,7 @@ importers:
         specifier: ^6.0.0
         version: 6.0.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@shopify/shopify-app-session-storage-memory':
-        specifier: ^4.0.16
+        specifier: ^4.0.17
         version: link:../session-storage/shopify-app-session-storage-memory
       '@testing-library/jest-dom':
         specifier: ^6.6.3
@@ -1593,8 +1593,8 @@ packages:
     cpu: [x64]
     os: [win32]
 
-  '@cloudflare/workers-types@4.20250321.0':
-    resolution: {integrity: sha512-jPwtZJC7tVFOwFazuwq96be8haTnY9qik8hJ+oLFi50d9LTWPPrnrNHC4OxZmJTEcPIAy0y1WFZHe8C/b7xFXQ==}
+  '@cloudflare/workers-types@4.20250402.0':
+    resolution: {integrity: sha512-Jlt7R6qfzODhE0v621sTLcoUWRtTnx80W04DWM71VYucQo/oF9CLwfxlbTcL7GssPk55jobbQBlALL0STRYK2w==}
 
   '@cspotcode/source-map-support@0.8.1':
     resolution: {integrity: sha512-IchNf6dN4tHoMFIn/7OE8LWZ19Y6q/67Bmf6vnGREv8RSbBVb9LPJxEcnwrcwX6ixSvaiGoomAUvu4YSxXrVgw==}
@@ -9828,7 +9828,7 @@ snapshots:
   '@cloudflare/workerd-windows-64@1.20250214.0':
     optional: true
 
-  '@cloudflare/workers-types@4.20250321.0': {}
+  '@cloudflare/workers-types@4.20250402.0': {}
 
   '@cspotcode/source-map-support@0.8.1':
     dependencies:
@@ -11326,7 +11326,7 @@ snapshots:
 
   '@miniflare/shared-test-environment@2.14.4':
     dependencies:
-      '@cloudflare/workers-types': 4.20250321.0
+      '@cloudflare/workers-types': 4.20250402.0
       '@miniflare/cache': 2.14.4
       '@miniflare/core': 2.14.4
       '@miniflare/d1': 2.14.4
@@ -13511,9 +13511,9 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  drizzle-orm@0.41.0(@cloudflare/workers-types@4.20250321.0)(@libsql/client@0.15.1(encoding@0.1.13))(@prisma/client@6.5.0(prisma@6.5.0(typescript@5.7.3))(typescript@5.7.3))(@types/better-sqlite3@7.6.12)(@types/pg@8.11.11)(better-sqlite3@11.9.1)(gel@2.0.1)(mysql2@3.13.0)(pg@8.14.1)(prisma@6.5.0(typescript@5.7.3))(sqlite3@5.1.7):
+  drizzle-orm@0.41.0(@cloudflare/workers-types@4.20250402.0)(@libsql/client@0.15.1(encoding@0.1.13))(@prisma/client@6.5.0(prisma@6.5.0(typescript@5.7.3))(typescript@5.7.3))(@types/better-sqlite3@7.6.12)(@types/pg@8.11.11)(better-sqlite3@11.9.1)(gel@2.0.1)(mysql2@3.13.0)(pg@8.14.1)(prisma@6.5.0(typescript@5.7.3))(sqlite3@5.1.7):
     optionalDependencies:
-      '@cloudflare/workers-types': 4.20250321.0
+      '@cloudflare/workers-types': 4.20250402.0
       '@libsql/client': 0.15.1(encoding@0.1.13)
       '@prisma/client': 6.5.0(prisma@6.5.0(typescript@5.7.3))(typescript@5.7.3)
       '@types/better-sqlite3': 7.6.12
@@ -17475,7 +17475,7 @@ snapshots:
       '@cloudflare/workerd-linux-arm64': 1.20250214.0
       '@cloudflare/workerd-windows-64': 1.20250214.0
 
-  wrangler@3.112.0(@cloudflare/workers-types@4.20250321.0):
+  wrangler@3.112.0(@cloudflare/workers-types@4.20250402.0):
     dependencies:
       '@cloudflare/kv-asset-handler': 0.3.4
       '@esbuild-plugins/node-globals-polyfill': 0.2.3(esbuild@0.17.19)
@@ -17487,7 +17487,7 @@ snapshots:
       unenv: 2.0.0-rc.1
       workerd: 1.20250214.0
     optionalDependencies:
-      '@cloudflare/workers-types': 4.20250321.0
+      '@cloudflare/workers-types': 4.20250402.0
       fsevents: 2.3.3
       sharp: 0.33.5
     transitivePeerDependencies:
