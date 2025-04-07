@@ -2,7 +2,7 @@
 '@shopify/shopify-api': minor
 ---
 
-Update missing Shopify header in webhook
+Add TriggeredAt and EventId headers to Shopify webhook. Previously these were missing
 
 https://shopify.dev/docs/apps/build/webhooks#key-terminology
 ```ts
