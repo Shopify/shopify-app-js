@@ -16,7 +16,7 @@ const data: ReferenceEntityTemplateSchema = {
       type: 'AdminApiContext',
     },
   ],
-  jsDocTypeExamples: ['AdminApiContext'],
+  jsDocTypeExamples: ['AdminApiContextWithoutRest'],
   related: [
     {
       name: 'Authenticated context',

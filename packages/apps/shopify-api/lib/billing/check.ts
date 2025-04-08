@@ -12,6 +12,7 @@ import {
   CurrentAppInstallation,
   CurrentAppInstallations,
   OneTimePurchase,
+  APP_SUBSCRIPTION_FRAGMENT,
 } from './types';
 import {convertLineItems} from './utils';
 
@@ -131,56 +132,11 @@ function purchaseMeetsCriteria({
 }
 
 const HAS_PAYMENTS_QUERY = `
+  ${APP_SUBSCRIPTION_FRAGMENT}
   query appSubscription($endCursor: String) {
     currentAppInstallation {
       activeSubscriptions {
-        id
-        name
-        test
-        status
-        lineItems {
-          id
-          plan {
-            pricingDetails {
-              ... on AppRecurringPricing {
-                price {
-                  amount
-                  currencyCode
-                }
-                interval
-                discount {
-                  durationLimitInIntervals
-                  remainingDurationInIntervals
-                  priceAfterDiscount {
-                    amount
-                  }
-                  value {
-                    ... on AppSubscriptionDiscountAmount {
-                      amount {
-                        amount
-                        currencyCode
-                      }
-                    }
-                    ... on AppSubscriptionDiscountPercentage {
-                      percentage
-                    }
-                  }
-                }
-              }
-              ... on AppUsagePricing {
-                balanceUsed {
-                  amount
-                  currencyCode
-                }
-                cappedAmount {
-                  amount
-                  currencyCode
-                }
-                terms
-              }
-            }
-          }
-        }
+        ...AppSubscriptionFragment
       }
       oneTimePurchases(first: 250, sortKey: CREATED_AT, after: $endCursor) {
         edges {

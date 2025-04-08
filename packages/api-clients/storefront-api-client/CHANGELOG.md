@@ -1,5 +1,13 @@
 # @shopify/storefront-api-client
 
+## 1.0.7
+
+### Patch Changes
+
+- 981c948: Update directory path
+- Updated dependencies [981c948]
+  - @shopify/graphql-client@1.3.2
+
 ## 1.0.6
 
 ### Patch Changes

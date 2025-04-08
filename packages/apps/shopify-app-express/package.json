@@ -1,10 +1,11 @@
 {
   "name": "@shopify/shopify-app-express",
-  "version": "5.0.16",
+  "version": "5.0.17",
   "description": "Shopify Express Middleware - to simplify the building of Shopify Apps with Express",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Shopify/shopify-app-js.git"
+    "url": "git+https://github.com/Shopify/shopify-app-js.git",
+    "directory": "packages/apps/shopify-app-express"
   },
   "bugs": {
     "url": "https://github.com/Shopify/shopify-app-js/issues"
@@ -42,9 +43,9 @@
     "Storefront API"
   ],
   "dependencies": {
-    "@shopify/shopify-api": "^11.11.1",
-    "@shopify/shopify-app-session-storage": "^3.0.16",
-    "@shopify/shopify-app-session-storage-memory": "^4.0.16",
+    "@shopify/shopify-api": "^11.12.0",
+    "@shopify/shopify-app-session-storage": "^3.0.17",
+    "@shopify/shopify-app-session-storage-memory": "^4.0.17",
     "cookie-parser": "^1.4.7",
     "express": "^4.21.2",
     "semver": "^7.7.1"
@@ -54,7 +55,7 @@
     "@types/cookie-parser": "^1.4.8",
     "@types/express": "^4.17.21",
     "@types/jsonwebtoken": "^9.0.9",
-    "@types/semver": "^7.5.8",
+    "@types/semver": "^7.7.0",
     "jsonwebtoken": "^9.0.2"
   },
   "files": [

@@ -1,5 +1,68 @@
 # Changelog
 
+## 11.12.0
+
+### Minor Changes
+
+- 7a076ac: # Standardize App Subscription returns on billing operations
+
+  Now all billing operations will return the same data, when returning App Subscriptions. Previously all operations returned the same type, but the underlying GraphQL requests returned different data. Now all operations will return the same data.
+
+  Now all billing operations will return the following information when returning `AppSubscriptions`
+
+  ```js
+  export interface AppSubscription {
+    /**
+     * The ID of the app subscription.
+     */
+    id: string;
+    /**
+     * The name of the purchased plan.
+     */
+    name: string;
+    /**
+     * Whether this is a test subscription.
+     */
+    test: boolean;
+    /**
+     * The number of trial days for this subscription.
+     */
+    trialDays: number;
+    /**
+     * The date and time when the subscription was created.
+     */
+    createdAt: string;
+    /**
+     * The date and time when the current period ends.
+     */
+    currentPeriodEnd: string;
+    /**
+     * The return URL for this subscription.
+     */
+    returnUrl: string;
+
+    /*
+     * The line items for this plan. This will become mandatory in v10.
+     */
+    lineItems?: ActiveSubscriptionLineItem[];
+
+    /*
+     * The status of the subscription. [ACTIVE, CANCELLED, PENDING, DECLINED, EXPIRED, FROZEN, ACCEPTED]
+     */
+    status: "ACTIVE" | "CANCELLED" | "PENDING" | "DECLINED" | "EXPIRED" | "FROZEN" | "ACCEPTED"
+  }
+  ```
+
+- ecacdf3: Adds 2025-04 REST resources
+
+### Patch Changes
+
+- 981c948: Update directory path
+- Updated dependencies [981c948]
+  - @shopify/storefront-api-client@1.0.7
+  - @shopify/admin-api-client@1.0.8
+  - @shopify/graphql-client@1.3.2
+
 ## 11.11.1
 
 ### Patch Changes

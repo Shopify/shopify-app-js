@@ -1,5 +1,11 @@
 # @shopify/shopify-app-session-storage-sqlite
 
+## 4.0.17
+
+### Patch Changes
+
+- 981c948: Update directory path
+
 ## 4.0.16
 
 ## 4.0.15

@@ -1,5 +1,17 @@
 # Changelog
 
+## 5.0.17
+
+### Patch Changes
+
+- 981c948: Update directory path
+- Updated dependencies [7a076ac]
+- Updated dependencies [ecacdf3]
+- Updated dependencies [981c948]
+  - @shopify/shopify-api@11.12.0
+  - @shopify/shopify-app-session-storage-memory@4.0.17
+  - @shopify/shopify-app-session-storage@3.0.17
+
 ## 5.0.16
 
 ### Patch Changes
