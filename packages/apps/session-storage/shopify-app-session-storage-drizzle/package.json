@@ -54,7 +54,7 @@
   "devDependencies": {
     "@libsql/client": "^0.15.1",
     "@shopify/shopify-app-session-storage-test-utils": "^3.0.17",
-    "@types/better-sqlite3": "^7.6.12",
+    "@types/better-sqlite3": "^7.6.13",
     "@types/pg": "^8.11.11",
     "better-sqlite3": "^11.9.1",
     "drizzle-kit": "^0.30.6",

@@ -220,8 +220,8 @@ importers:
         specifier: ^3.0.17
         version: link:../shopify-app-session-storage-test-utils
       '@types/better-sqlite3':
-        specifier: ^7.6.12
-        version: 7.6.12
+        specifier: ^7.6.13
+        version: 7.6.13
       '@types/pg':
         specifier: ^8.11.11
         version: 8.11.11
@@ -233,7 +233,7 @@ importers:
         version: 0.30.6
       drizzle-orm:
         specifier: ^0.41.0
-        version: 0.41.0(@cloudflare/workers-types@4.20250408.0)(@libsql/client@0.15.1(encoding@0.1.13))(@prisma/client@6.5.0(prisma@6.5.0(typescript@5.8.3))(typescript@5.8.3))(@types/better-sqlite3@7.6.12)(@types/pg@8.11.11)(better-sqlite3@11.9.1)(gel@2.0.1)(mysql2@3.13.0)(pg@8.14.1)(prisma@6.5.0(typescript@5.8.3))(sqlite3@5.1.7)
+        version: 0.41.0(@cloudflare/workers-types@4.20250408.0)(@libsql/client@0.15.1(encoding@0.1.13))(@prisma/client@6.5.0(prisma@6.5.0(typescript@5.8.3))(typescript@5.8.3))(@types/better-sqlite3@7.6.13)(@types/pg@8.11.11)(better-sqlite3@11.9.1)(gel@2.0.1)(mysql2@3.13.0)(pg@8.14.1)(prisma@6.5.0(typescript@5.8.3))(sqlite3@5.1.7)
       mysql2:
         specifier: ^3.13.0
         version: 3.13.0
@@ -3781,8 +3781,8 @@ packages:
   '@types/babel__traverse@7.20.6':
     resolution: {integrity: sha512-r1bzfrm0tomOI8g1SzvCaQHo6Lcv6zu0EA+W2kHrt8dyrHQxGzBBL4kdkzIS+jBMV+EYcMAEAqXqYaLJq5rOZg==}
 
-  '@types/better-sqlite3@7.6.12':
-    resolution: {integrity: sha512-fnQmj8lELIj7BSrZQAdBMHEHX8OZLYIHXqAKT1O7tDfLxaINzf00PMjw22r3N/xXh0w/sGHlO6SVaCQ2mj78lg==}
+  '@types/better-sqlite3@7.6.13':
+    resolution: {integrity: sha512-NMv9ASNARoKksWtsq/SHakpYAYnhBrQgGD8zkLYk/jaK8jUGn08CfEdTRgYhMypUQAfzSP8W6gNLe0q19/t4VA==}
 
   '@types/body-parser@1.19.5':
     resolution: {integrity: sha512-fB3Zu92ucau0iQ0JMCFQE7b/dv8Ot07NI3KaZIkIUNXq82k4eBAqUaneXfleGY9JWskeS9y+u0nXMyspcuQrCg==}
@@ -11439,7 +11439,7 @@ snapshots:
 
   '@miniflare/shared@2.14.4':
     dependencies:
-      '@types/better-sqlite3': 7.6.12
+      '@types/better-sqlite3': 7.6.13
       kleur: 4.1.5
       npx-import: 1.1.4
       picomatch: 2.3.1
@@ -12367,9 +12367,9 @@ snapshots:
     dependencies:
       '@babel/types': 7.27.0
 
-  '@types/better-sqlite3@7.6.12':
+  '@types/better-sqlite3@7.6.13':
     dependencies:
-      '@types/node': 22.10.7
+      '@types/node': 22.14.0
 
   '@types/body-parser@1.19.5':
     dependencies:
@@ -13614,12 +13614,12 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  drizzle-orm@0.41.0(@cloudflare/workers-types@4.20250408.0)(@libsql/client@0.15.1(encoding@0.1.13))(@prisma/client@6.5.0(prisma@6.5.0(typescript@5.8.3))(typescript@5.8.3))(@types/better-sqlite3@7.6.12)(@types/pg@8.11.11)(better-sqlite3@11.9.1)(gel@2.0.1)(mysql2@3.13.0)(pg@8.14.1)(prisma@6.5.0(typescript@5.8.3))(sqlite3@5.1.7):
+  drizzle-orm@0.41.0(@cloudflare/workers-types@4.20250408.0)(@libsql/client@0.15.1(encoding@0.1.13))(@prisma/client@6.5.0(prisma@6.5.0(typescript@5.8.3))(typescript@5.8.3))(@types/better-sqlite3@7.6.13)(@types/pg@8.11.11)(better-sqlite3@11.9.1)(gel@2.0.1)(mysql2@3.13.0)(pg@8.14.1)(prisma@6.5.0(typescript@5.8.3))(sqlite3@5.1.7):
     optionalDependencies:
       '@cloudflare/workers-types': 4.20250408.0
       '@libsql/client': 0.15.1(encoding@0.1.13)
       '@prisma/client': 6.5.0(prisma@6.5.0(typescript@5.8.3))(typescript@5.8.3)
-      '@types/better-sqlite3': 7.6.12
+      '@types/better-sqlite3': 7.6.13
       '@types/pg': 8.11.11
       better-sqlite3: 11.9.1
       gel: 2.0.1
