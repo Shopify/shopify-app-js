@@ -86,7 +86,7 @@
     "@shopify/react-testing": "^6.0.0",
     "@shopify/shopify-app-session-storage-memory": "^4.0.17",
     "@testing-library/jest-dom": "^6.6.3",
-    "@testing-library/react": "^16.2.0",
+    "@testing-library/react": "^16.3.0",
     "@types/jsonwebtoken": "^9.0.9",
     "@types/react": "^19.1.0",
     "@types/semver": "^7.7.0",
