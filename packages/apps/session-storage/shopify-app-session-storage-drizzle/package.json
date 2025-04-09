@@ -59,7 +59,7 @@
     "better-sqlite3": "^11.9.1",
     "drizzle-kit": "^0.30.6",
     "drizzle-orm": "^0.41.0",
-    "mysql2": "^3.13.0",
+    "mysql2": "^3.14.0",
     "pg": "^8.14.1"
   },
   "files": [
