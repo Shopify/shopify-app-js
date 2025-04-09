@@ -1,5 +1,5 @@
 interface CustomRequestInit {
-  method?: 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH';
+  method?: 'GET' | 'POST';
   headers?: HeadersInit;
   body?: string;
   signal?: AbortSignal;
