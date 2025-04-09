@@ -74,6 +74,40 @@
               }
             ],
             "value": "export interface AppProviderProps\n  extends Omit<PolarisAppProviderProps, 'linkComponent' | 'i18n'> {\n  /**\n   * The API key for your Shopify app. This is the `Client ID` from the Partner Dashboard.\n   *\n   * When using the Shopify CLI, this is the `SHOPIFY_API_KEY` environment variable. If you're using the environment\n   * variable, then you need to pass it from the loader to the component.\n   */\n  apiKey: string;\n  /**\n   * Whether the app is loaded inside the Shopify Admin. Default is `true`.\n   *\n   * {@link https://shopify.dev/docs/apps/admin/embedded-app-home}\n   */\n  isEmbeddedApp?: boolean;\n  /**\n   * The internationalization (i18n) configuration for your Polaris provider.\n   *\n   * {@link https://polaris.shopify.com/components/utilities/app-provider}\n   */\n  i18n?: PolarisAppProviderProps['i18n'];\n  /**\n   * Used internally by Shopify. You don't need to set this.\n   * @private\n   */\n  __APP_BRIDGE_URL?: string;\n}"
+          },
+          "FeaturesConfig": {
+            "filePath": "../../../node_modules/@shopify/polaris/build/ts/src/utilities/features/types.d.ts",
+            "name": "FeaturesConfig",
+            "description": "",
+            "members": [
+              {
+                "filePath": "../../../node_modules/@shopify/polaris/build/ts/src/utilities/features/types.d.ts",
+                "name": "[key: string]",
+                "value": "boolean | undefined"
+              },
+              {
+                "filePath": "../../../node_modules/@shopify/polaris/build/ts/src/utilities/features/types.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "dynamicTopBarAndReframe",
+                "value": "boolean",
+                "description": "",
+                "isOptional": true
+              }
+            ],
+            "value": "export interface FeaturesConfig {\n    dynamicTopBarAndReframe?: boolean;\n    [key: string]: boolean | undefined;\n}"
+          },
+          "TranslationDictionary": {
+            "filePath": "../../../node_modules/@shopify/polaris/build/ts/src/utilities/i18n/I18n.d.ts",
+            "name": "TranslationDictionary",
+            "description": "",
+            "members": [
+              {
+                "filePath": "../../../node_modules/@shopify/polaris/build/ts/src/utilities/i18n/I18n.d.ts",
+                "name": "[key: string]",
+                "value": "string | TranslationDictionary"
+              }
+            ],
+            "value": "interface TranslationDictionary {\n    [key: string]: string | TranslationDictionary;\n}"
           }
         }
       }
@@ -129,7 +163,7 @@
   },
   {
     "name": "AppProxyForm",
-    "description": "Sets up a Remix `<Form>` component that works when rendered behind an app proxy.\n\nSupports any properties accepted by the `<Form>` component.",
+    "description": "Sets up a Remix `<Form>` component that works when rendered on an app proxy page.\n\nSupports any properties accepted by the `<Form>` component.\n\nBecause Remix doesn't support URL rewriting, any route using this component should <b>match the pathname of the proxy URL exactly</b>, and <b>end in a trailing slash</b> (e.g., `https://<shop>/apps/proxy/`), or set the Remix Form prop `navigate` to `false`.",
     "category": "App proxy components",
     "type": "component",
     "isVisualComponent": false,
@@ -157,8 +191,8 @@
         "title": "Render a form element in a proxied route",
         "tabs": [
           {
-            "title": "/app/routes/**\\/*.ts",
-            "code": "import {\n  AppProxyProvider,\n  AppProxyForm,\n} from \"@shopify/shopify-app-remix/react\";\nimport { authenticate } from \"~/shopify.server\";\n\nexport async function loader({ request }) {\n  await authenticate.public.appProxy(request);\n\n  return json({ appUrl: process.env.SHOPIFY_APP_URL });\n}\n\nexport async function action({ request }) {\n  await authenticate.public.appProxy(request);\n\n  const formData = await request.formData();\n  const field = formData.get(\"field\")?.toString();\n\n  // Perform actions\n  if (field) {\n    console.log(\"Field:\", field);\n  }\n\n  // Return JSON to the client\n  return json({ message: \"Success!\" });\n}\n\nexport default function App() {\n  const { appUrl } = useLoaderData();\n  const data = useActionData();\n\n  return (\n    &lt;AppProxyProvider appUrl={appUrl}&gt;\n      &lt;AppProxyForm action=\"/\"&gt;\n        &lt;input type=\"text\" name=\"field\" defaultValue={data?.field} /&gt;\n\n        &lt;input type=\"submit\" name=\"Submit\" /&gt;\n      &lt;/AppProxyForm&gt;\n    &lt;/AppProxyProvider&gt;\n  );\n}",
+            "title": "/app/routes/apps/appProxy.ts",
+            "code": "import {\n  AppProxyProvider,\n  AppProxyForm,\n} from \"@shopify/shopify-app-remix/react\";\nimport { authenticate } from \"~/shopify.server\";\n\nexport async function loader({ request }) {\n  await authenticate.public.appProxy(request);\n\n  return json({ appUrl: process.env.SHOPIFY_APP_URL });\n}\n\nexport async function action({ request }) {\n  await authenticate.public.appProxy(request);\n\n  const formData = await request.formData();\n  const field = formData.get(\"field\")?.toString();\n\n  // Perform actions\n  if (field) {\n    console.log(\"Field:\", field);\n  }\n\n  // Return JSON to the client\n  return json({ message: \"Success!\" });\n}\n\nexport default function App() {\n  const { appUrl } = useLoaderData();\n\n  return (\n    &lt;AppProxyProvider appUrl={appUrl}&gt;\n      &lt;AppProxyForm action=\"/apps/appProxy\" method=\"post\"&gt;\n        &lt;input type=\"text\" name=\"field\" /&gt;\n\n        &lt;input type=\"submit\" name=\"Submit\" /&gt;\n      &lt;/AppProxyForm&gt;\n    &lt;/AppProxyProvider&gt;\n  );\n}",
             "language": "typescript"
           }
         ]
@@ -254,13 +288,13 @@
       {
         "name": "AppProxyForm",
         "subtitle": "Render form elements in proxies.",
-        "url": "/docs/api/shopify-app-remix/app-proxy-components/appproxy-form",
+        "url": "/docs/api/shopify-app-remix/app-proxy-components/appproxyform",
         "type": "remix"
       },
       {
         "name": "AppProxyLink",
         "subtitle": "Render link elements in proxies.",
-        "url": "/docs/api/shopify-app-remix/app-proxy-components/appproxy-link",
+        "url": "/docs/api/shopify-app-remix/app-proxy-components/appproxylink",
         "type": "remix"
       }
     ],
@@ -832,6 +866,16 @@
                     ]
                   },
                   {
+                    "title": "Redirecting to a page in the Shopify Admin",
+                    "description": "Redirects to a product page in the Shopify admin. Pass in a `target` option of `_top` or `_parent` to navigate in the current window, or `_blank` to open a new tab.",
+                    "tabs": [
+                      {
+                        "code": "import { LoaderFunctionArgs, json } from \"@remix-run/node\";\nimport { authenticate } from \"../shopify.server\";\n\nexport const loader = async ({ request }: LoaderFunctionArgs) => {\n  const { session, redirect } = await authenticate.admin(request);\n  return redirect(\"shopify://admin/products/123456\", { target: '_parent' });\n};",
+                        "title": "/app/routes/admin/my-route.ts"
+                      }
+                    ]
+                  },
+                  {
                     "title": "Redirecting outside of the Admin embedded app page",
                     "description": "Pass in a `target` option of `_top` or `_parent` to navigate in the current window, or `_blank` to open a new tab.",
                     "tabs": [
@@ -904,7 +948,7 @@
                 ]
               }
             ],
-            "value": "export interface EmbeddedAdminContext<\n  Config extends AppConfigArg,\n  Resources extends ShopifyRestResources = ShopifyRestResources,\n> extends AdminContextInternal<Config, Resources> {\n  /**\n   * The decoded and validated session token for the request.\n   *\n   * Returned only if `isEmbeddedApp` is `true`.\n   *\n   * {@link https://shopify.dev/docs/apps/auth/oauth/session-tokens#payload}\n   *\n   * @example\n   * <caption>Using the decoded session token.</caption>\n   * <description>Get user-specific data using the `sessionToken` object.</description>\n   * ```ts\n   * // /app/routes/**\\/*.ts\n   * import { LoaderFunctionArgs, json } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   * import { getMyAppData } from \"~/db/model.server\";\n   *\n   * export const loader = async ({ request }: LoaderFunctionArgs) => {\n   *   const { sessionToken } = await authenticate.admin(\n   *     request\n   *   );\n   *   return json(await getMyAppData({user: sessionToken.sub}));\n   * };\n   * ```\n   * ```ts\n   * // shopify.server.ts\n   * import { shopifyApp } from \"@shopify/shopify-app-remix/server\";\n   *\n   * const shopify = shopifyApp({\n   *   // ...etc\n   *   useOnlineTokens: true,\n   * });\n   * export default shopify;\n   * export const authenticate = shopify.authenticate;\n   * ```\n   */\n  sessionToken: JwtPayload;\n\n  /**\n   * A function that redirects the user to a new page, ensuring that the appropriate parameters are set for embedded\n   * apps.\n   *\n   * Returned only if `isEmbeddedApp` is `true`.\n   *\n   * @example\n   * <caption>Redirecting to an app route.</caption>\n   * <description>Use the `redirect` helper to safely redirect between pages.</description>\n   * ```ts\n   * // /app/routes/admin/my-route.ts\n   * import { LoaderFunctionArgs, json } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   *\n   * export const loader = async ({ request }: LoaderFunctionArgs) => {\n   *   const { session, redirect } = await authenticate.admin(request);\n   *   return redirect(\"/\");\n   * };\n   * ```\n   *\n   * @example\n   * <caption>Redirecting outside of the Admin embedded app page.</caption>\n   * <description>Pass in a `target` option of `_top` or `_parent` to navigate in the current window, or `_blank` to open a new tab.</description>\n   * ```ts\n   * // /app/routes/admin/my-route.ts\n   * import { LoaderFunctionArgs, json } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   *\n   * export const loader = async ({ request }: LoaderFunctionArgs) => {\n   *   const { session, redirect } = await authenticate.admin(request);\n   *   return redirect(\"/\", { target: '_parent' });\n   * };\n   * ```\n   */\n  redirect: RedirectFunction;\n}"
+            "value": "export interface EmbeddedAdminContext<\n  Config extends AppConfigArg,\n  Resources extends ShopifyRestResources = ShopifyRestResources,\n> extends AdminContextInternal<Config, Resources> {\n  /**\n   * The decoded and validated session token for the request.\n   *\n   * Returned only if `isEmbeddedApp` is `true`.\n   *\n   * {@link https://shopify.dev/docs/apps/auth/oauth/session-tokens#payload}\n   *\n   * @example\n   * <caption>Using the decoded session token.</caption>\n   * <description>Get user-specific data using the `sessionToken` object.</description>\n   * ```ts\n   * // /app/routes/**\\/*.ts\n   * import { LoaderFunctionArgs, json } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   * import { getMyAppData } from \"~/db/model.server\";\n   *\n   * export const loader = async ({ request }: LoaderFunctionArgs) => {\n   *   const { sessionToken } = await authenticate.admin(\n   *     request\n   *   );\n   *   return json(await getMyAppData({user: sessionToken.sub}));\n   * };\n   * ```\n   * ```ts\n   * // shopify.server.ts\n   * import { shopifyApp } from \"@shopify/shopify-app-remix/server\";\n   *\n   * const shopify = shopifyApp({\n   *   // ...etc\n   *   useOnlineTokens: true,\n   * });\n   * export default shopify;\n   * export const authenticate = shopify.authenticate;\n   * ```\n   */\n  sessionToken: JwtPayload;\n\n  /**\n   * A function that redirects the user to a new page, ensuring that the appropriate parameters are set for embedded\n   * apps.\n   *\n   * Returned only if `isEmbeddedApp` is `true`.\n   *\n   * @example\n   * <caption>Redirecting to an app route.</caption>\n   * <description>Use the `redirect` helper to safely redirect between pages.</description>\n   * ```ts\n   * // /app/routes/admin/my-route.ts\n   * import { LoaderFunctionArgs, json } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   *\n   * export const loader = async ({ request }: LoaderFunctionArgs) => {\n   *   const { session, redirect } = await authenticate.admin(request);\n   *   return redirect(\"/\");\n   * };\n   * ```\n   *\n   * @example\n   * <caption>Redirecting to a page in the Shopify Admin.</caption>\n   * <description>Redirects to a product page in the Shopify admin. Pass in a `target` option of `_top` or `_parent` to navigate in the current window, or `_blank` to open a new tab.</description>\n   * ```ts\n   * // /app/routes/admin/my-route.ts\n   * import { LoaderFunctionArgs, json } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   *\n   * export const loader = async ({ request }: LoaderFunctionArgs) => {\n   *   const { session, redirect } = await authenticate.admin(request);\n   *   return redirect(\"shopify://admin/products/123456\", { target: '_parent' });\n   * };\n   * ```\n   *\n   * @example\n   * <caption>Redirecting outside of the Admin embedded app page.</caption>\n   * <description>Pass in a `target` option of `_top` or `_parent` to navigate in the current window, or `_blank` to open a new tab.</description>\n   * ```ts\n   * // /app/routes/admin/my-route.ts\n   * import { LoaderFunctionArgs, json } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   *\n   * export const loader = async ({ request }: LoaderFunctionArgs) => {\n   *   const { session, redirect } = await authenticate.admin(request);\n   *   return redirect(\"/\", { target: '_parent' });\n   * };\n   * ```\n   */\n  redirect: RedirectFunction;\n}"
           },
           "RedirectFunction": {
             "filePath": "src/server/authenticate/admin/helpers/redirect.ts",
@@ -1089,7 +1133,7 @@
     },
     "jsDocTypeExamples": [
       "EmbeddedAdminContext",
-      "AdminApiContext",
+      "AdminApiContextWithoutRest",
       "BillingContext",
       "ScopesApiContext"
     ],
@@ -1137,6 +1181,19 @@
                   {
                     "title": "/app/routes/admin/my-route.ts",
                     "code": "import { LoaderFunctionArgs, json } from \"@remix-run/node\";\nimport { authenticate } from \"../shopify.server\";\n\nexport const loader = async ({ request }: LoaderFunctionArgs) =&gt; {\n  const { session, redirect } = await authenticate.admin(request);\n  return redirect(\"/\");\n};",
+                    "language": "typescript"
+                  }
+                ]
+              }
+            },
+            {
+              "description": "Redirects to a product page in the Shopify admin. Pass in a `target` option of `_top` or `_parent` to navigate in the current window, or `_blank` to open a new tab.",
+              "codeblock": {
+                "title": "Redirecting to a page in the Shopify Admin",
+                "tabs": [
+                  {
+                    "title": "/app/routes/admin/my-route.ts",
+                    "code": "import { LoaderFunctionArgs, json } from \"@remix-run/node\";\nimport { authenticate } from \"../shopify.server\";\n\nexport const loader = async ({ request }: LoaderFunctionArgs) =&gt; {\n  const { session, redirect } = await authenticate.admin(request);\n  return redirect(\"shopify://admin/products/123456\", { target: '_parent' });\n};",
                     "language": "typescript"
                   }
                 ]
@@ -1214,6 +1271,47 @@
                   {
                     "title": "shopify.server.ts",
                     "code": "import { shopifyApp } from \"@shopify/shopify-app-remix/server\";\n\nconst shopify = shopifyApp({\n  // ...etc\n  useOnlineTokens: true,\n});\nexport default shopify;\nexport const authenticate = shopify.authenticate;",
+                    "language": "typescript"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "title": "graphql",
+          "examples": [
+            {
+              "description": "Use `admin.graphql` to make query / mutation requests.",
+              "codeblock": {
+                "title": "Querying the GraphQL API",
+                "tabs": [
+                  {
+                    "title": "/app/routes/**\\/*.ts",
+                    "code": "import { ActionFunctionArgs } from \"@remix-run/node\";\nimport { authenticate } from \"../shopify.server\";\n\nexport const action = async ({ request }: ActionFunctionArgs) =&gt; {\n  const { admin } = await authenticate.admin(request);\n\n  const response = await admin.graphql(\n    `#graphql\n    mutation populateProduct($input: ProductInput!) {\n      productCreate(input: $input) {\n        product {\n          id\n        }\n      }\n    }`,\n    {\n      variables: {\n        input: { title: \"Product Name\" },\n      },\n    },\n  );\n\n  const productData = await response.json();\n  return json({\n    productId: productData.data?.productCreate?.product?.id,\n  });\n}",
+                    "language": "typescript"
+                  },
+                  {
+                    "title": "/app/shopify.server.ts",
+                    "code": "import { shopifyApp } from \"@shopify/shopify-app-remix/server\";\n\nconst shopify = shopifyApp({\n  // ...\n});\nexport default shopify;\nexport const authenticate = shopify.authenticate;",
+                    "language": "typescript"
+                  }
+                ]
+              }
+            },
+            {
+              "description": "Catch `GraphqlQueryError` errors to see error messages from the API.",
+              "codeblock": {
+                "title": "Handling GraphQL errors",
+                "tabs": [
+                  {
+                    "title": "/app/routes/**\\/*.ts",
+                    "code": "import { ActionFunctionArgs } from \"@remix-run/node\";\nimport { authenticate } from \"../shopify.server\";\n\nexport const action = async ({ request }: ActionFunctionArgs) =&gt; {\n  const { admin } = await authenticate.admin(request);\n\n  try {\n    const response = await admin.graphql(\n      `#graphql\n      query incorrectQuery {\n        products(first: 10) {\n          nodes {\n            not_a_field\n          }\n        }\n      }`,\n    );\n\n    return json({ data: await response.json() });\n  } catch (error) {\n    if (error instanceof GraphqlQueryError) {\n      // error.body.errors:\n      // { graphQLErrors: [\n      //   { message: \"Field 'not_a_field' doesn't exist on type 'Product'\" }\n      // ] }\n      return json({ errors: error.body?.errors }, { status: 500 });\n    }\n    return json({ message: \"An error occurred\" }, { status: 500 });\n  }\n}",
+                    "language": "typescript"
+                  },
+                  {
+                    "title": "/app/shopify.server.ts",
+                    "code": "import { shopifyApp } from \"@shopify/shopify-app-remix/server\";\n\nconst shopify = shopifyApp({\n  // ...\n});\nexport default shopify;\nexport const authenticate = shopify.authenticate;",
                     "language": "typescript"
                   }
                 ]
@@ -1467,7 +1565,7 @@
   },
   {
     "name": "Billing",
-    "description": "Contains function used to bill merchants for your app.\n\nThis object is returned on authenticated Admin requests.",
+    "description": "Contains function used to bill merchants for your app with the Billing API.\n\nThis object is returned on authenticated Admin requests.\n\n> Note: [Managed App Pricing](/docs/apps/launch/billing/managed-pricing) is now available. Define your app’s pricing plans directly in the Shopify Partner Dashboard, without needing to use the Billing API.",
     "category": "APIs",
     "type": "object",
     "isVisualComponent": false,
@@ -2969,6 +3067,14 @@
               {
                 "filePath": "src/server/clients/types.ts",
                 "syntaxKind": "PropertySignature",
+                "name": "signal",
+                "value": "AbortSignal",
+                "description": "An optional AbortSignal to cancel the request.",
+                "isOptional": true
+              },
+              {
+                "filePath": "src/server/clients/types.ts",
+                "syntaxKind": "PropertySignature",
                 "name": "tries",
                 "value": "number",
                 "description": "The total number of times to try the request if it fails.",
@@ -2983,7 +3089,7 @@
                 "isOptional": true
               }
             ],
-            "value": "export interface GraphQLQueryOptions<\n  Operation extends keyof Operations,\n  Operations extends AllOperations,\n> {\n  /**\n   * The variables to pass to the operation.\n   */\n  variables?: ApiClientRequestOptions<Operation, Operations>['variables'];\n  /**\n   * The version of the API to use for the request.\n   */\n  apiVersion?: ApiVersion;\n  /**\n   * Additional headers to include in the request.\n   */\n  headers?: Record<string, any>;\n  /**\n   * The total number of times to try the request if it fails.\n   */\n  tries?: number;\n}"
+            "value": "export interface GraphQLQueryOptions<\n  Operation extends keyof Operations,\n  Operations extends AllOperations,\n> {\n  /**\n   * The variables to pass to the operation.\n   */\n  variables?: ApiClientRequestOptions<Operation, Operations>['variables'];\n  /**\n   * The version of the API to use for the request.\n   */\n  apiVersion?: ApiVersion;\n  /**\n   * Additional headers to include in the request.\n   */\n  headers?: Record<string, any>;\n  /**\n   * The total number of times to try the request if it fails.\n   */\n  tries?: number;\n\n  /**\n   * An optional AbortSignal to cancel the request.\n   */\n  signal?: AbortSignal;\n}"
           }
         }
       }
@@ -4153,6 +4259,14 @@
               {
                 "filePath": "src/server/clients/types.ts",
                 "syntaxKind": "PropertySignature",
+                "name": "signal",
+                "value": "AbortSignal",
+                "description": "An optional AbortSignal to cancel the request.",
+                "isOptional": true
+              },
+              {
+                "filePath": "src/server/clients/types.ts",
+                "syntaxKind": "PropertySignature",
                 "name": "tries",
                 "value": "number",
                 "description": "The total number of times to try the request if it fails.",
@@ -4167,7 +4281,7 @@
                 "isOptional": true
               }
             ],
-            "value": "export interface GraphQLQueryOptions<\n  Operation extends keyof Operations,\n  Operations extends AllOperations,\n> {\n  /**\n   * The variables to pass to the operation.\n   */\n  variables?: ApiClientRequestOptions<Operation, Operations>['variables'];\n  /**\n   * The version of the API to use for the request.\n   */\n  apiVersion?: ApiVersion;\n  /**\n   * Additional headers to include in the request.\n   */\n  headers?: Record<string, any>;\n  /**\n   * The total number of times to try the request if it fails.\n   */\n  tries?: number;\n}"
+            "value": "export interface GraphQLQueryOptions<\n  Operation extends keyof Operations,\n  Operations extends AllOperations,\n> {\n  /**\n   * The variables to pass to the operation.\n   */\n  variables?: ApiClientRequestOptions<Operation, Operations>['variables'];\n  /**\n   * The version of the API to use for the request.\n   */\n  apiVersion?: ApiVersion;\n  /**\n   * Additional headers to include in the request.\n   */\n  headers?: Record<string, any>;\n  /**\n   * The total number of times to try the request if it fails.\n   */\n  tries?: number;\n\n  /**\n   * An optional AbortSignal to cancel the request.\n   */\n  signal?: AbortSignal;\n}"
           },
           "AdminApiContextWithRest": {
             "filePath": "src/server/clients/admin/types.ts",
@@ -4324,7 +4438,7 @@
       }
     ],
     "jsDocTypeExamples": [
-      "AdminApiContext"
+      "AdminApiContextWithoutRest"
     ],
     "related": [
       {
@@ -4337,7 +4451,53 @@
         "subtitle": "Interact with the Admin API on non-Shopify requests.",
         "url": "/docs/api/shopify-app-remix/unauthenticated/unauthenticated-admin"
       }
-    ]
+    ],
+    "examples": {
+      "description": "",
+      "exampleGroups": [
+        {
+          "title": "graphql",
+          "examples": [
+            {
+              "description": "Use `admin.graphql` to make query / mutation requests.",
+              "codeblock": {
+                "title": "Querying the GraphQL API",
+                "tabs": [
+                  {
+                    "title": "/app/routes/**\\/*.ts",
+                    "code": "import { ActionFunctionArgs } from \"@remix-run/node\";\nimport { authenticate } from \"../shopify.server\";\n\nexport const action = async ({ request }: ActionFunctionArgs) =&gt; {\n  const { admin } = await authenticate.admin(request);\n\n  const response = await admin.graphql(\n    `#graphql\n    mutation populateProduct($input: ProductInput!) {\n      productCreate(input: $input) {\n        product {\n          id\n        }\n      }\n    }`,\n    {\n      variables: {\n        input: { title: \"Product Name\" },\n      },\n    },\n  );\n\n  const productData = await response.json();\n  return json({\n    productId: productData.data?.productCreate?.product?.id,\n  });\n}",
+                    "language": "typescript"
+                  },
+                  {
+                    "title": "/app/shopify.server.ts",
+                    "code": "import { shopifyApp } from \"@shopify/shopify-app-remix/server\";\n\nconst shopify = shopifyApp({\n  // ...\n});\nexport default shopify;\nexport const authenticate = shopify.authenticate;",
+                    "language": "typescript"
+                  }
+                ]
+              }
+            },
+            {
+              "description": "Catch `GraphqlQueryError` errors to see error messages from the API.",
+              "codeblock": {
+                "title": "Handling GraphQL errors",
+                "tabs": [
+                  {
+                    "title": "/app/routes/**\\/*.ts",
+                    "code": "import { ActionFunctionArgs } from \"@remix-run/node\";\nimport { authenticate } from \"../shopify.server\";\n\nexport const action = async ({ request }: ActionFunctionArgs) =&gt; {\n  const { admin } = await authenticate.admin(request);\n\n  try {\n    const response = await admin.graphql(\n      `#graphql\n      query incorrectQuery {\n        products(first: 10) {\n          nodes {\n            not_a_field\n          }\n        }\n      }`,\n    );\n\n    return json({ data: await response.json() });\n  } catch (error) {\n    if (error instanceof GraphqlQueryError) {\n      // error.body.errors:\n      // { graphQLErrors: [\n      //   { message: \"Field 'not_a_field' doesn't exist on type 'Product'\" }\n      // ] }\n      return json({ errors: error.body?.errors }, { status: 500 });\n    }\n    return json({ message: \"An error occurred\" }, { status: 500 });\n  }\n}",
+                    "language": "typescript"
+                  },
+                  {
+                    "title": "/app/shopify.server.ts",
+                    "code": "import { shopifyApp } from \"@shopify/shopify-app-remix/server\";\n\nconst shopify = shopifyApp({\n  // ...\n});\nexport default shopify;\nexport const authenticate = shopify.authenticate;",
+                    "language": "typescript"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
   },
   {
     "name": "Storefront API",
@@ -4443,6 +4603,14 @@
               {
                 "filePath": "src/server/clients/types.ts",
                 "syntaxKind": "PropertySignature",
+                "name": "signal",
+                "value": "AbortSignal",
+                "description": "An optional AbortSignal to cancel the request.",
+                "isOptional": true
+              },
+              {
+                "filePath": "src/server/clients/types.ts",
+                "syntaxKind": "PropertySignature",
                 "name": "tries",
                 "value": "number",
                 "description": "The total number of times to try the request if it fails.",
@@ -4457,7 +4625,7 @@
                 "isOptional": true
               }
             ],
-            "value": "export interface GraphQLQueryOptions<\n  Operation extends keyof Operations,\n  Operations extends AllOperations,\n> {\n  /**\n   * The variables to pass to the operation.\n   */\n  variables?: ApiClientRequestOptions<Operation, Operations>['variables'];\n  /**\n   * The version of the API to use for the request.\n   */\n  apiVersion?: ApiVersion;\n  /**\n   * Additional headers to include in the request.\n   */\n  headers?: Record<string, any>;\n  /**\n   * The total number of times to try the request if it fails.\n   */\n  tries?: number;\n}"
+            "value": "export interface GraphQLQueryOptions<\n  Operation extends keyof Operations,\n  Operations extends AllOperations,\n> {\n  /**\n   * The variables to pass to the operation.\n   */\n  variables?: ApiClientRequestOptions<Operation, Operations>['variables'];\n  /**\n   * The version of the API to use for the request.\n   */\n  apiVersion?: ApiVersion;\n  /**\n   * Additional headers to include in the request.\n   */\n  headers?: Record<string, any>;\n  /**\n   * The total number of times to try the request if it fails.\n   */\n  tries?: number;\n\n  /**\n   * An optional AbortSignal to cancel the request.\n   */\n  signal?: AbortSignal;\n}"
           }
         }
       }
@@ -4562,6 +4730,22 @@
                 ]
               }
             ]
+          },
+          "Readonly": {
+            "filePath": "../../../node_modules/@shopify/polaris/build/ts/src/components/TextField/TextField.d.ts",
+            "name": "Readonly",
+            "description": "",
+            "members": [
+              {
+                "filePath": "../../../node_modules/@shopify/polaris/build/ts/src/components/TextField/TextField.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "readonly",
+                "value": "true",
+                "description": "",
+                "isOptional": true
+              }
+            ],
+            "value": "interface Readonly {\n    readonly?: true;\n}"
           },
           "ShopifyApp": {
             "filePath": "src/server/types.ts",
@@ -5409,6 +5593,16 @@
                     ]
                   },
                   {
+                    "title": "Redirecting to a page in the Shopify Admin",
+                    "description": "Redirects to a product page in the Shopify admin. Pass in a `target` option of `_top` or `_parent` to navigate in the current window, or `_blank` to open a new tab.",
+                    "tabs": [
+                      {
+                        "code": "import { LoaderFunctionArgs, json } from \"@remix-run/node\";\nimport { authenticate } from \"../shopify.server\";\n\nexport const loader = async ({ request }: LoaderFunctionArgs) => {\n  const { session, redirect } = await authenticate.admin(request);\n  return redirect(\"shopify://admin/products/123456\", { target: '_parent' });\n};",
+                        "title": "/app/routes/admin/my-route.ts"
+                      }
+                    ]
+                  },
+                  {
                     "title": "Redirecting outside of the Admin embedded app page",
                     "description": "Pass in a `target` option of `_top` or `_parent` to navigate in the current window, or `_blank` to open a new tab.",
                     "tabs": [
@@ -5481,7 +5675,7 @@
                 ]
               }
             ],
-            "value": "export interface EmbeddedAdminContext<\n  Config extends AppConfigArg,\n  Resources extends ShopifyRestResources = ShopifyRestResources,\n> extends AdminContextInternal<Config, Resources> {\n  /**\n   * The decoded and validated session token for the request.\n   *\n   * Returned only if `isEmbeddedApp` is `true`.\n   *\n   * {@link https://shopify.dev/docs/apps/auth/oauth/session-tokens#payload}\n   *\n   * @example\n   * <caption>Using the decoded session token.</caption>\n   * <description>Get user-specific data using the `sessionToken` object.</description>\n   * ```ts\n   * // /app/routes/**\\/*.ts\n   * import { LoaderFunctionArgs, json } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   * import { getMyAppData } from \"~/db/model.server\";\n   *\n   * export const loader = async ({ request }: LoaderFunctionArgs) => {\n   *   const { sessionToken } = await authenticate.admin(\n   *     request\n   *   );\n   *   return json(await getMyAppData({user: sessionToken.sub}));\n   * };\n   * ```\n   * ```ts\n   * // shopify.server.ts\n   * import { shopifyApp } from \"@shopify/shopify-app-remix/server\";\n   *\n   * const shopify = shopifyApp({\n   *   // ...etc\n   *   useOnlineTokens: true,\n   * });\n   * export default shopify;\n   * export const authenticate = shopify.authenticate;\n   * ```\n   */\n  sessionToken: JwtPayload;\n\n  /**\n   * A function that redirects the user to a new page, ensuring that the appropriate parameters are set for embedded\n   * apps.\n   *\n   * Returned only if `isEmbeddedApp` is `true`.\n   *\n   * @example\n   * <caption>Redirecting to an app route.</caption>\n   * <description>Use the `redirect` helper to safely redirect between pages.</description>\n   * ```ts\n   * // /app/routes/admin/my-route.ts\n   * import { LoaderFunctionArgs, json } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   *\n   * export const loader = async ({ request }: LoaderFunctionArgs) => {\n   *   const { session, redirect } = await authenticate.admin(request);\n   *   return redirect(\"/\");\n   * };\n   * ```\n   *\n   * @example\n   * <caption>Redirecting outside of the Admin embedded app page.</caption>\n   * <description>Pass in a `target` option of `_top` or `_parent` to navigate in the current window, or `_blank` to open a new tab.</description>\n   * ```ts\n   * // /app/routes/admin/my-route.ts\n   * import { LoaderFunctionArgs, json } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   *\n   * export const loader = async ({ request }: LoaderFunctionArgs) => {\n   *   const { session, redirect } = await authenticate.admin(request);\n   *   return redirect(\"/\", { target: '_parent' });\n   * };\n   * ```\n   */\n  redirect: RedirectFunction;\n}"
+            "value": "export interface EmbeddedAdminContext<\n  Config extends AppConfigArg,\n  Resources extends ShopifyRestResources = ShopifyRestResources,\n> extends AdminContextInternal<Config, Resources> {\n  /**\n   * The decoded and validated session token for the request.\n   *\n   * Returned only if `isEmbeddedApp` is `true`.\n   *\n   * {@link https://shopify.dev/docs/apps/auth/oauth/session-tokens#payload}\n   *\n   * @example\n   * <caption>Using the decoded session token.</caption>\n   * <description>Get user-specific data using the `sessionToken` object.</description>\n   * ```ts\n   * // /app/routes/**\\/*.ts\n   * import { LoaderFunctionArgs, json } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   * import { getMyAppData } from \"~/db/model.server\";\n   *\n   * export const loader = async ({ request }: LoaderFunctionArgs) => {\n   *   const { sessionToken } = await authenticate.admin(\n   *     request\n   *   );\n   *   return json(await getMyAppData({user: sessionToken.sub}));\n   * };\n   * ```\n   * ```ts\n   * // shopify.server.ts\n   * import { shopifyApp } from \"@shopify/shopify-app-remix/server\";\n   *\n   * const shopify = shopifyApp({\n   *   // ...etc\n   *   useOnlineTokens: true,\n   * });\n   * export default shopify;\n   * export const authenticate = shopify.authenticate;\n   * ```\n   */\n  sessionToken: JwtPayload;\n\n  /**\n   * A function that redirects the user to a new page, ensuring that the appropriate parameters are set for embedded\n   * apps.\n   *\n   * Returned only if `isEmbeddedApp` is `true`.\n   *\n   * @example\n   * <caption>Redirecting to an app route.</caption>\n   * <description>Use the `redirect` helper to safely redirect between pages.</description>\n   * ```ts\n   * // /app/routes/admin/my-route.ts\n   * import { LoaderFunctionArgs, json } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   *\n   * export const loader = async ({ request }: LoaderFunctionArgs) => {\n   *   const { session, redirect } = await authenticate.admin(request);\n   *   return redirect(\"/\");\n   * };\n   * ```\n   *\n   * @example\n   * <caption>Redirecting to a page in the Shopify Admin.</caption>\n   * <description>Redirects to a product page in the Shopify admin. Pass in a `target` option of `_top` or `_parent` to navigate in the current window, or `_blank` to open a new tab.</description>\n   * ```ts\n   * // /app/routes/admin/my-route.ts\n   * import { LoaderFunctionArgs, json } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   *\n   * export const loader = async ({ request }: LoaderFunctionArgs) => {\n   *   const { session, redirect } = await authenticate.admin(request);\n   *   return redirect(\"shopify://admin/products/123456\", { target: '_parent' });\n   * };\n   * ```\n   *\n   * @example\n   * <caption>Redirecting outside of the Admin embedded app page.</caption>\n   * <description>Pass in a `target` option of `_top` or `_parent` to navigate in the current window, or `_blank` to open a new tab.</description>\n   * ```ts\n   * // /app/routes/admin/my-route.ts\n   * import { LoaderFunctionArgs, json } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   *\n   * export const loader = async ({ request }: LoaderFunctionArgs) => {\n   *   const { session, redirect } = await authenticate.admin(request);\n   *   return redirect(\"/\", { target: '_parent' });\n   * };\n   * ```\n   */\n  redirect: RedirectFunction;\n}"
           },
           "RedirectFunction": {
             "filePath": "src/server/authenticate/admin/helpers/redirect.ts",
@@ -5893,9 +6087,28 @@
                     ]
                   }
                 ]
+              },
+              {
+                "filePath": "src/server/authenticate/public/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "pos",
+                "value": "AuthenticatePOS",
+                "description": "Authenticate a request from a POS UI extension",
+                "examples": [
+                  {
+                    "title": "Authenticating a POS UI extension request",
+                    "description": "",
+                    "tabs": [
+                      {
+                        "code": "import { LoaderFunctionArgs, json } from \"@remix-run/node\";\nimport { authenticate } from \"../shopify.server\";\n\nexport const loader = async ({ request }: LoaderFunctionArgs) => {\n  const { sessionToken, cors } = await authenticate.public.pos(\n    request,\n  );\n  return cors(json({my: \"data\", shop: sessionToken.dest}));\n};",
+                        "title": "/app/routes/public/widgets.ts"
+                      }
+                    ]
+                  }
+                ]
               }
             ],
-            "value": "export interface AuthenticatePublic<Config extends AppConfigArg> {\n  /**\n   * Authenticate a request from a checkout extension\n   *\n   * @example\n   * <caption>Authenticating a checkout extension request</caption>\n   * ```ts\n   * // /app/routes/public/widgets.ts\n   * import { LoaderFunctionArgs, json } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   *\n   * export const loader = async ({ request }: LoaderFunctionArgs) => {\n   *   const { sessionToken, cors } = await authenticate.public.checkout(\n   *     request,\n   *   );\n   *   return cors(json({my: \"data\", shop: sessionToken.dest}));\n   * };\n   * ```\n   */\n  checkout: AuthenticateCheckout;\n\n  /**\n   * Authenticate a request from an app proxy\n   *\n   * @example\n   * <caption>Authenticating an app proxy request</caption>\n   * ```ts\n   * // /app/routes/public/widgets.ts\n   * import { LoaderFunctionArgs, json } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   *\n   * export const loader = async ({ request }: LoaderFunctionArgs) => {\n   *   await authenticate.public.appProxy(\n   *     request,\n   *   );\n   *\n   *   const {searchParams} = new URL(request.url);\n   *   const shop = searchParams.get(\"shop\");\n   *   const customerId = searchParams.get(\"logged_in_customer_id\")\n   *\n   *   return json({my: \"data\", shop, customerId});\n   * };\n   * ```\n   */\n  appProxy: AuthenticateAppProxy<Config>;\n\n  /**\n   * Authenticate a request from a customer account extension\n   *\n   * @example\n   * <caption>Authenticating a customer account extension request</caption>\n   * ```ts\n   * // /app/routes/public/widgets.ts\n   * import { LoaderFunctionArgs, json } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   *\n   * export const loader = async ({ request }: LoaderFunctionArgs) => {\n   *   const { sessionToken, cors } = await authenticate.public.customerAccount(\n   *     request,\n   *   );\n   *   return cors(json({my: \"data\", shop: sessionToken.dest}));\n   * };\n   * ```\n   */\n  customerAccount: AuthenticateCustomerAccount;\n}"
+            "value": "export interface AuthenticatePublic<Config extends AppConfigArg> {\n  /**\n   * Authenticate a request from a checkout extension\n   *\n   * @example\n   * <caption>Authenticating a checkout extension request</caption>\n   * ```ts\n   * // /app/routes/public/widgets.ts\n   * import { LoaderFunctionArgs, json } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   *\n   * export const loader = async ({ request }: LoaderFunctionArgs) => {\n   *   const { sessionToken, cors } = await authenticate.public.checkout(\n   *     request,\n   *   );\n   *   return cors(json({my: \"data\", shop: sessionToken.dest}));\n   * };\n   * ```\n   */\n  checkout: AuthenticateCheckout;\n\n  /**\n   * Authenticate a request from an app proxy\n   *\n   * @example\n   * <caption>Authenticating an app proxy request</caption>\n   * ```ts\n   * // /app/routes/public/widgets.ts\n   * import { LoaderFunctionArgs, json } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   *\n   * export const loader = async ({ request }: LoaderFunctionArgs) => {\n   *   await authenticate.public.appProxy(\n   *     request,\n   *   );\n   *\n   *   const {searchParams} = new URL(request.url);\n   *   const shop = searchParams.get(\"shop\");\n   *   const customerId = searchParams.get(\"logged_in_customer_id\")\n   *\n   *   return json({my: \"data\", shop, customerId});\n   * };\n   * ```\n   */\n  appProxy: AuthenticateAppProxy<Config>;\n\n  /**\n   * Authenticate a request from a customer account extension\n   *\n   * @example\n   * <caption>Authenticating a customer account extension request</caption>\n   * ```ts\n   * // /app/routes/public/widgets.ts\n   * import { LoaderFunctionArgs, json } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   *\n   * export const loader = async ({ request }: LoaderFunctionArgs) => {\n   *   const { sessionToken, cors } = await authenticate.public.customerAccount(\n   *     request,\n   *   );\n   *   return cors(json({my: \"data\", shop: sessionToken.dest}));\n   * };\n   * ```\n   */\n  customerAccount: AuthenticateCustomerAccount;\n\n  /**\n   * Authenticate a request from a POS UI extension\n   *\n   * @example\n   * <caption>Authenticating a POS UI extension request</caption>\n   * ```ts\n   * // /app/routes/public/widgets.ts\n   * import { LoaderFunctionArgs, json } from \"@remix-run/node\";\n   * import { authenticate } from \"../shopify.server\";\n   *\n   * export const loader = async ({ request }: LoaderFunctionArgs) => {\n   *   const { sessionToken, cors } = await authenticate.public.pos(\n   *     request,\n   *   );\n   *   return cors(json({my: \"data\", shop: sessionToken.dest}));\n   * };\n   * ```\n   */\n  pos: AuthenticatePOS;\n}"
           },
           "AuthenticateAppProxy": {
             "filePath": "src/server/authenticate/public/appProxy/types.ts",
@@ -6224,6 +6437,14 @@
               {
                 "filePath": "src/server/clients/types.ts",
                 "syntaxKind": "PropertySignature",
+                "name": "signal",
+                "value": "AbortSignal",
+                "description": "An optional AbortSignal to cancel the request.",
+                "isOptional": true
+              },
+              {
+                "filePath": "src/server/clients/types.ts",
+                "syntaxKind": "PropertySignature",
                 "name": "tries",
                 "value": "number",
                 "description": "The total number of times to try the request if it fails.",
@@ -6238,7 +6459,7 @@
                 "isOptional": true
               }
             ],
-            "value": "export interface GraphQLQueryOptions<\n  Operation extends keyof Operations,\n  Operations extends AllOperations,\n> {\n  /**\n   * The variables to pass to the operation.\n   */\n  variables?: ApiClientRequestOptions<Operation, Operations>['variables'];\n  /**\n   * The version of the API to use for the request.\n   */\n  apiVersion?: ApiVersion;\n  /**\n   * Additional headers to include in the request.\n   */\n  headers?: Record<string, any>;\n  /**\n   * The total number of times to try the request if it fails.\n   */\n  tries?: number;\n}"
+            "value": "export interface GraphQLQueryOptions<\n  Operation extends keyof Operations,\n  Operations extends AllOperations,\n> {\n  /**\n   * The variables to pass to the operation.\n   */\n  variables?: ApiClientRequestOptions<Operation, Operations>['variables'];\n  /**\n   * The version of the API to use for the request.\n   */\n  apiVersion?: ApiVersion;\n  /**\n   * Additional headers to include in the request.\n   */\n  headers?: Record<string, any>;\n  /**\n   * The total number of times to try the request if it fails.\n   */\n  tries?: number;\n\n  /**\n   * An optional AbortSignal to cancel the request.\n   */\n  signal?: AbortSignal;\n}"
           },
           "AuthenticateCheckout": {
             "filePath": "src/server/authenticate/public/checkout/types.ts",
@@ -6872,7 +7093,7 @@
                     "description": "Use `admin.graphql` to make query / mutation requests.",
                     "tabs": [
                       {
-                        "code": "import { ActionFunctionArgs } from \"@remix-run/node\";\nimport { unauthenticated } from \"../shopify.server\";\n\nexport async function action({ request }: ActionFunctionArgs) {\n const { admin } = await unauthenticated.admin(request);\n\n const response = await admin.graphql(\n   `#graphql\n   mutation populateProduct($input: ProductInput!) {\n     productCreate(input: $input) {\n       product {\n         id\n       }\n     }\n    }`,\n    { variables: { input: { title: \"Product Name\" } } }\n  );\n\n const productData = await response.json();\n return json({ data: productData.data });\n}",
+                        "code": "import { ActionFunctionArgs } from \"@remix-run/node\";\nimport { unauthenticated } from \"../shopify.server\";\n\nexport async function action({ request }: ActionFunctionArgs) {\n const shop = getShopFromExternalRequest(request);\n const { admin } = await unauthenticated.admin(shop);\n\n const response = await admin.graphql(\n   `#graphql\n   mutation populateProduct($input: ProductInput!) {\n     productCreate(input: $input) {\n       product {\n         id\n       }\n     }\n    }`,\n    { variables: { input: { title: \"Product Name\" } } }\n  );\n\n const productData = await response.json();\n return json({ data: productData.data });\n}",
                         "title": "/app/routes/**\\/*.ts"
                       },
                       {
@@ -6903,7 +7124,7 @@
                 ]
               }
             ],
-            "value": "export interface UnauthenticatedAdminContext<\n  ConfigArg extends AppConfigArg,\n  Resources extends ShopifyRestResources,\n> {\n  /**\n   * The session for the given shop.\n   *\n   * This comes from the session storage which `shopifyApp` uses to store sessions in your database of choice.\n   *\n   * This will always be an offline session. You can use to get shop-specific data.\n   *\n   * @example\n   * <caption>Using the offline session.</caption>\n   * <description>Get your app's shop-specific data using the returned offline `session` object.</description>\n   * ```ts\n   * // /app/routes/**\\/*.ts\n   * import { LoaderFunctionArgs, json } from \"@remix-run/node\";\n   * import { unauthenticated } from \"../shopify.server\";\n   * import { getMyAppData } from \"~/db/model.server\";\n   *\n   * export const loader = async ({ request }: LoaderFunctionArgs) => {\n   *   const shop = getShopFromExternalRequest(request);\n   *   const { session } = await unauthenticated.admin(shop);\n   *   return json(await getMyAppData({shop: session.shop));\n   * };\n   * ```\n   */\n  session: Session;\n\n  /**\n   * Methods for interacting with the GraphQL / REST Admin APIs for the given store.\n   *\n   * @example\n   * <caption>Querying the GraphQL API.</caption>\n   * <description>Use `admin.graphql` to make query / mutation requests.</description>\n   * ```ts\n   * // /app/routes/**\\/*.ts\n   * import { ActionFunctionArgs } from \"@remix-run/node\";\n   * import { unauthenticated } from \"../shopify.server\";\n   *\n   * export async function action({ request }: ActionFunctionArgs) {\n   *  const { admin } = await unauthenticated.admin(request);\n   *\n   *  const response = await admin.graphql(\n   *    `#graphql\n   *    mutation populateProduct($input: ProductInput!) {\n   *      productCreate(input: $input) {\n   *        product {\n   *          id\n   *        }\n   *      }\n   *     }`,\n   *     { variables: { input: { title: \"Product Name\" } } }\n   *   );\n   *\n   *  const productData = await response.json();\n   *  return json({ data: productData.data });\n   * }\n   * ```\n   *\n   * ```ts\n   * // /app/shopify.server.ts\n   * import { shopifyApp } from \"@shopify/shopify-app-remix/server\";\n   *\n   * const shopify = shopifyApp({\n   *  // ...etc\n   * });\n   * export default shopify;\n   * export const unauthenticated = shopify.unauthenticated;\n   * ```\n   */\n  admin: AdminApiContext<ConfigArg, Resources>;\n}"
+            "value": "export interface UnauthenticatedAdminContext<\n  ConfigArg extends AppConfigArg,\n  Resources extends ShopifyRestResources,\n> {\n  /**\n   * The session for the given shop.\n   *\n   * This comes from the session storage which `shopifyApp` uses to store sessions in your database of choice.\n   *\n   * This will always be an offline session. You can use to get shop-specific data.\n   *\n   * @example\n   * <caption>Using the offline session.</caption>\n   * <description>Get your app's shop-specific data using the returned offline `session` object.</description>\n   * ```ts\n   * // /app/routes/**\\/*.ts\n   * import { LoaderFunctionArgs, json } from \"@remix-run/node\";\n   * import { unauthenticated } from \"../shopify.server\";\n   * import { getMyAppData } from \"~/db/model.server\";\n   *\n   * export const loader = async ({ request }: LoaderFunctionArgs) => {\n   *   const shop = getShopFromExternalRequest(request);\n   *   const { session } = await unauthenticated.admin(shop);\n   *   return json(await getMyAppData({shop: session.shop));\n   * };\n   * ```\n   */\n  session: Session;\n\n  /**\n   * Methods for interacting with the GraphQL / REST Admin APIs for the given store.\n   *\n   * @example\n   * <caption>Querying the GraphQL API.</caption>\n   * <description>Use `admin.graphql` to make query / mutation requests.</description>\n   * ```ts\n   * // /app/routes/**\\/*.ts\n   * import { ActionFunctionArgs } from \"@remix-run/node\";\n   * import { unauthenticated } from \"../shopify.server\";\n   *\n   * export async function action({ request }: ActionFunctionArgs) {\n   *  const shop = getShopFromExternalRequest(request);\n   *  const { admin } = await unauthenticated.admin(shop);\n   *\n   *  const response = await admin.graphql(\n   *    `#graphql\n   *    mutation populateProduct($input: ProductInput!) {\n   *      productCreate(input: $input) {\n   *        product {\n   *          id\n   *        }\n   *      }\n   *     }`,\n   *     { variables: { input: { title: \"Product Name\" } } }\n   *   );\n   *\n   *  const productData = await response.json();\n   *  return json({ data: productData.data });\n   * }\n   * ```\n   *\n   * ```ts\n   * // /app/shopify.server.ts\n   * import { shopifyApp } from \"@shopify/shopify-app-remix/server\";\n   *\n   * const shopify = shopifyApp({\n   *  // ...etc\n   * });\n   * export default shopify;\n   * export const unauthenticated = shopify.unauthenticated;\n   * ```\n   */\n  admin: AdminApiContext<ConfigArg, Resources>;\n}"
           },
           "GetUnauthenticatedStorefrontContext": {
             "filePath": "src/server/unauthenticated/storefront/types.ts",
@@ -7121,7 +7342,7 @@
                 "filePath": "../shopify-api/lib/session/session.ts",
                 "syntaxKind": "MethodDeclaration",
                 "name": "isActive",
-                "value": "(scopes: string | string[] | AuthScopes) => boolean",
+                "value": "(scopes: string | string[] | AuthScopes, withinMillisecondsOfExpiry?: number) => boolean",
                 "description": "Whether the session is active. Active sessions have an access token that is not expired, and has has the given scopes if scopes is equal to a truthy value."
               },
               {
@@ -7167,7 +7388,7 @@
                 "description": "Converts the session into an array of key-value pairs."
               }
             ],
-            "value": "export class Session {\n  public static fromPropertyArray(\n    entries: [string, string | number | boolean][],\n    returnUserData = false,\n  ): Session {\n    if (!Array.isArray(entries)) {\n      throw new InvalidSession(\n        'The parameter is not an array: a Session cannot be created from this object.',\n      );\n    }\n\n    const obj = Object.fromEntries(\n      entries\n        .filter(([_key, value]) => value !== null && value !== undefined)\n        // Sanitize keys\n        .map(([key, value]) => {\n          switch (key.toLowerCase()) {\n            case 'isonline':\n              return ['isOnline', value];\n            case 'accesstoken':\n              return ['accessToken', value];\n            case 'onlineaccessinfo':\n              return ['onlineAccessInfo', value];\n            case 'userid':\n              return ['userId', value];\n            case 'firstname':\n              return ['firstName', value];\n            case 'lastname':\n              return ['lastName', value];\n            case 'accountowner':\n              return ['accountOwner', value];\n            case 'emailverified':\n              return ['emailVerified', value];\n            default:\n              return [key.toLowerCase(), value];\n          }\n        }),\n    );\n\n    const sessionData = {} as SessionParams;\n    const onlineAccessInfo = {\n      associated_user: {},\n    } as OnlineAccessInfo;\n    Object.entries(obj).forEach(([key, value]) => {\n      switch (key) {\n        case 'isOnline':\n          if (typeof value === 'string') {\n            sessionData[key] = value.toString().toLowerCase() === 'true';\n          } else if (typeof value === 'number') {\n            sessionData[key] = Boolean(value);\n          } else {\n            sessionData[key] = value;\n          }\n          break;\n        case 'scope':\n          sessionData[key] = value.toString();\n          break;\n        case 'expires':\n          sessionData[key] = value ? new Date(Number(value)) : undefined;\n          break;\n        case 'onlineAccessInfo':\n          onlineAccessInfo.associated_user.id = Number(value);\n          break;\n        case 'userId':\n          if (returnUserData) {\n            onlineAccessInfo.associated_user.id = Number(value);\n            break;\n          }\n        case 'firstName':\n          if (returnUserData) {\n            onlineAccessInfo.associated_user.first_name = String(value);\n            break;\n          }\n        case 'lastName':\n          if (returnUserData) {\n            onlineAccessInfo.associated_user.last_name = String(value);\n            break;\n          }\n        case 'email':\n          if (returnUserData) {\n            onlineAccessInfo.associated_user.email = String(value);\n            break;\n          }\n        case 'accountOwner':\n          if (returnUserData) {\n            onlineAccessInfo.associated_user.account_owner = Boolean(value);\n            break;\n          }\n        case 'locale':\n          if (returnUserData) {\n            onlineAccessInfo.associated_user.locale = String(value);\n            break;\n          }\n        case 'collaborator':\n          if (returnUserData) {\n            onlineAccessInfo.associated_user.collaborator = Boolean(value);\n            break;\n          }\n        case 'emailVerified':\n          if (returnUserData) {\n            onlineAccessInfo.associated_user.email_verified = Boolean(value);\n            break;\n          }\n        // Return any user keys as passed in\n        default:\n          sessionData[key] = value;\n      }\n    });\n    if (sessionData.isOnline) {\n      sessionData.onlineAccessInfo = onlineAccessInfo;\n    }\n    const session = new Session(sessionData);\n    return session;\n  }\n\n  /**\n   * The unique identifier for the session.\n   */\n  readonly id: string;\n  /**\n   * The Shopify shop domain, such as `example.myshopify.com`.\n   */\n  public shop: string;\n  /**\n   * The state of the session. Used for the OAuth authentication code flow.\n   */\n  public state: string;\n  /**\n   * Whether the access token in the session is online or offline.\n   */\n  public isOnline: boolean;\n  /**\n   * The desired scopes for the access token, at the time the session was created.\n   */\n  public scope?: string;\n  /**\n   * The date the access token expires.\n   */\n  public expires?: Date;\n  /**\n   * The access token for the session.\n   */\n  public accessToken?: string;\n  /**\n   * Information on the user for the session. Only present for online sessions.\n   */\n  public onlineAccessInfo?: OnlineAccessInfo;\n\n  constructor(params: SessionParams) {\n    Object.assign(this, params);\n  }\n\n  /**\n   * Whether the session is active. Active sessions have an access token that is not expired, and has has the given\n   * scopes if scopes is equal to a truthy value.\n   */\n  public isActive(scopes: AuthScopes | string | string[] | undefined): boolean {\n    const hasAccessToken = Boolean(this.accessToken);\n    const isTokenNotExpired = !this.isExpired();\n    const isScopeChanged = this.isScopeChanged(scopes);\n    return !isScopeChanged && hasAccessToken && isTokenNotExpired;\n  }\n\n  /**\n   * Whether the access token includes the given scopes if they are provided.\n   */\n  public isScopeChanged(\n    scopes: AuthScopes | string | string[] | undefined,\n  ): boolean {\n    if (typeof scopes === 'undefined') {\n      return false;\n    }\n\n    return !this.isScopeIncluded(scopes);\n  }\n\n  /**\n   * Whether the access token includes the given scopes.\n   */\n  public isScopeIncluded(scopes: AuthScopes | string | string[]): boolean {\n    const requiredScopes =\n      scopes instanceof AuthScopes ? scopes : new AuthScopes(scopes);\n    const sessionScopes = new AuthScopes(this.scope);\n\n    return sessionScopes.has(requiredScopes);\n  }\n\n  /**\n   * Whether the access token is expired.\n   */\n  public isExpired(withinMillisecondsOfExpiry = 0): boolean {\n    return Boolean(\n      this.expires &&\n        this.expires.getTime() - withinMillisecondsOfExpiry < Date.now(),\n    );\n  }\n\n  /**\n   * Converts an object with data into a Session.\n   */\n  public toObject(): SessionParams {\n    const object: SessionParams = {\n      id: this.id,\n      shop: this.shop,\n      state: this.state,\n      isOnline: this.isOnline,\n    };\n\n    if (this.scope) {\n      object.scope = this.scope;\n    }\n    if (this.expires) {\n      object.expires = this.expires;\n    }\n    if (this.accessToken) {\n      object.accessToken = this.accessToken;\n    }\n    if (this.onlineAccessInfo) {\n      object.onlineAccessInfo = this.onlineAccessInfo;\n    }\n    return object;\n  }\n\n  /**\n   * Checks whether the given session is equal to this session.\n   */\n  public equals(other: Session | undefined): boolean {\n    if (!other) return false;\n\n    const mandatoryPropsMatch =\n      this.id === other.id &&\n      this.shop === other.shop &&\n      this.state === other.state &&\n      this.isOnline === other.isOnline;\n\n    if (!mandatoryPropsMatch) return false;\n\n    const copyA = this.toPropertyArray(true);\n    copyA.sort(([k1], [k2]) => (k1 < k2 ? -1 : 1));\n\n    const copyB = other.toPropertyArray(true);\n    copyB.sort(([k1], [k2]) => (k1 < k2 ? -1 : 1));\n\n    return JSON.stringify(copyA) === JSON.stringify(copyB);\n  }\n\n  /**\n   * Converts the session into an array of key-value pairs.\n   */\n  public toPropertyArray(\n    returnUserData = false,\n  ): [string, string | number | boolean][] {\n    return (\n      Object.entries(this)\n        .filter(\n          ([key, value]) =>\n            propertiesToSave.includes(key) &&\n            value !== undefined &&\n            value !== null,\n        )\n        // Prepare values for db storage\n        .flatMap(([key, value]): [string, string | number | boolean][] => {\n          switch (key) {\n            case 'expires':\n              return [[key, value ? value.getTime() : undefined]];\n            case 'onlineAccessInfo':\n              // eslint-disable-next-line no-negated-condition\n              if (!returnUserData) {\n                return [[key, value.associated_user.id]];\n              } else {\n                return [\n                  ['userId', value?.associated_user?.id],\n                  ['firstName', value?.associated_user?.first_name],\n                  ['lastName', value?.associated_user?.last_name],\n                  ['email', value?.associated_user?.email],\n                  ['locale', value?.associated_user?.locale],\n                  ['emailVerified', value?.associated_user?.email_verified],\n                  ['accountOwner', value?.associated_user?.account_owner],\n                  ['collaborator', value?.associated_user?.collaborator],\n                ];\n              }\n            default:\n              return [[key, value]];\n          }\n        })\n        // Filter out tuples with undefined values\n        .filter(([_key, value]) => value !== undefined)\n    );\n  }\n}"
+            "value": "export class Session {\n  public static fromPropertyArray(\n    entries: [string, string | number | boolean][],\n    returnUserData = false,\n  ): Session {\n    if (!Array.isArray(entries)) {\n      throw new InvalidSession(\n        'The parameter is not an array: a Session cannot be created from this object.',\n      );\n    }\n\n    const obj = Object.fromEntries(\n      entries\n        .filter(([_key, value]) => value !== null && value !== undefined)\n        // Sanitize keys\n        .map(([key, value]) => {\n          switch (key.toLowerCase()) {\n            case 'isonline':\n              return ['isOnline', value];\n            case 'accesstoken':\n              return ['accessToken', value];\n            case 'onlineaccessinfo':\n              return ['onlineAccessInfo', value];\n            case 'userid':\n              return ['userId', value];\n            case 'firstname':\n              return ['firstName', value];\n            case 'lastname':\n              return ['lastName', value];\n            case 'accountowner':\n              return ['accountOwner', value];\n            case 'emailverified':\n              return ['emailVerified', value];\n            default:\n              return [key.toLowerCase(), value];\n          }\n        }),\n    );\n\n    const sessionData = {} as SessionParams;\n    const onlineAccessInfo = {\n      associated_user: {},\n    } as OnlineAccessInfo;\n    Object.entries(obj).forEach(([key, value]) => {\n      switch (key) {\n        case 'isOnline':\n          if (typeof value === 'string') {\n            sessionData[key] = value.toString().toLowerCase() === 'true';\n          } else if (typeof value === 'number') {\n            sessionData[key] = Boolean(value);\n          } else {\n            sessionData[key] = value;\n          }\n          break;\n        case 'scope':\n          sessionData[key] = value.toString();\n          break;\n        case 'expires':\n          sessionData[key] = value ? new Date(Number(value)) : undefined;\n          break;\n        case 'onlineAccessInfo':\n          onlineAccessInfo.associated_user.id = Number(value);\n          break;\n        case 'userId':\n          if (returnUserData) {\n            onlineAccessInfo.associated_user.id = Number(value);\n            break;\n          }\n        case 'firstName':\n          if (returnUserData) {\n            onlineAccessInfo.associated_user.first_name = String(value);\n            break;\n          }\n        case 'lastName':\n          if (returnUserData) {\n            onlineAccessInfo.associated_user.last_name = String(value);\n            break;\n          }\n        case 'email':\n          if (returnUserData) {\n            onlineAccessInfo.associated_user.email = String(value);\n            break;\n          }\n        case 'accountOwner':\n          if (returnUserData) {\n            onlineAccessInfo.associated_user.account_owner = Boolean(value);\n            break;\n          }\n        case 'locale':\n          if (returnUserData) {\n            onlineAccessInfo.associated_user.locale = String(value);\n            break;\n          }\n        case 'collaborator':\n          if (returnUserData) {\n            onlineAccessInfo.associated_user.collaborator = Boolean(value);\n            break;\n          }\n        case 'emailVerified':\n          if (returnUserData) {\n            onlineAccessInfo.associated_user.email_verified = Boolean(value);\n            break;\n          }\n        // Return any user keys as passed in\n        default:\n          sessionData[key] = value;\n      }\n    });\n    if (sessionData.isOnline) {\n      sessionData.onlineAccessInfo = onlineAccessInfo;\n    }\n    const session = new Session(sessionData);\n    return session;\n  }\n\n  /**\n   * The unique identifier for the session.\n   */\n  readonly id: string;\n  /**\n   * The Shopify shop domain, such as `example.myshopify.com`.\n   */\n  public shop: string;\n  /**\n   * The state of the session. Used for the OAuth authentication code flow.\n   */\n  public state: string;\n  /**\n   * Whether the access token in the session is online or offline.\n   */\n  public isOnline: boolean;\n  /**\n   * The desired scopes for the access token, at the time the session was created.\n   */\n  public scope?: string;\n  /**\n   * The date the access token expires.\n   */\n  public expires?: Date;\n  /**\n   * The access token for the session.\n   */\n  public accessToken?: string;\n  /**\n   * Information on the user for the session. Only present for online sessions.\n   */\n  public onlineAccessInfo?: OnlineAccessInfo;\n\n  constructor(params: SessionParams) {\n    Object.assign(this, params);\n  }\n\n  /**\n   * Whether the session is active. Active sessions have an access token that is not expired, and has has the given\n   * scopes if scopes is equal to a truthy value.\n   */\n  public isActive(\n    scopes: AuthScopes | string | string[] | undefined,\n    withinMillisecondsOfExpiry = 500,\n  ): boolean {\n    const hasAccessToken = Boolean(this.accessToken);\n    const isTokenNotExpired = !this.isExpired(withinMillisecondsOfExpiry);\n    const isScopeChanged = this.isScopeChanged(scopes);\n    return !isScopeChanged && hasAccessToken && isTokenNotExpired;\n  }\n\n  /**\n   * Whether the access token includes the given scopes if they are provided.\n   */\n  public isScopeChanged(\n    scopes: AuthScopes | string | string[] | undefined,\n  ): boolean {\n    if (typeof scopes === 'undefined') {\n      return false;\n    }\n\n    return !this.isScopeIncluded(scopes);\n  }\n\n  /**\n   * Whether the access token includes the given scopes.\n   */\n  public isScopeIncluded(scopes: AuthScopes | string | string[]): boolean {\n    const requiredScopes =\n      scopes instanceof AuthScopes ? scopes : new AuthScopes(scopes);\n    const sessionScopes = new AuthScopes(this.scope);\n\n    return sessionScopes.has(requiredScopes);\n  }\n\n  /**\n   * Whether the access token is expired.\n   */\n  public isExpired(withinMillisecondsOfExpiry = 0): boolean {\n    return Boolean(\n      this.expires &&\n        this.expires.getTime() - withinMillisecondsOfExpiry < Date.now(),\n    );\n  }\n\n  /**\n   * Converts an object with data into a Session.\n   */\n  public toObject(): SessionParams {\n    const object: SessionParams = {\n      id: this.id,\n      shop: this.shop,\n      state: this.state,\n      isOnline: this.isOnline,\n    };\n\n    if (this.scope) {\n      object.scope = this.scope;\n    }\n    if (this.expires) {\n      object.expires = this.expires;\n    }\n    if (this.accessToken) {\n      object.accessToken = this.accessToken;\n    }\n    if (this.onlineAccessInfo) {\n      object.onlineAccessInfo = this.onlineAccessInfo;\n    }\n    return object;\n  }\n\n  /**\n   * Checks whether the given session is equal to this session.\n   */\n  public equals(other: Session | undefined): boolean {\n    if (!other) return false;\n\n    const mandatoryPropsMatch =\n      this.id === other.id &&\n      this.shop === other.shop &&\n      this.state === other.state &&\n      this.isOnline === other.isOnline;\n\n    if (!mandatoryPropsMatch) return false;\n\n    const copyA = this.toPropertyArray(true);\n    copyA.sort(([k1], [k2]) => (k1 < k2 ? -1 : 1));\n\n    const copyB = other.toPropertyArray(true);\n    copyB.sort(([k1], [k2]) => (k1 < k2 ? -1 : 1));\n\n    return JSON.stringify(copyA) === JSON.stringify(copyB);\n  }\n\n  /**\n   * Converts the session into an array of key-value pairs.\n   */\n  public toPropertyArray(\n    returnUserData = false,\n  ): [string, string | number | boolean][] {\n    return (\n      Object.entries(this)\n        .filter(\n          ([key, value]) =>\n            propertiesToSave.includes(key) &&\n            value !== undefined &&\n            value !== null,\n        )\n        // Prepare values for db storage\n        .flatMap(([key, value]): [string, string | number | boolean][] => {\n          switch (key) {\n            case 'expires':\n              return [[key, value ? value.getTime() : undefined]];\n            case 'onlineAccessInfo':\n              // eslint-disable-next-line no-negated-condition\n              if (!returnUserData) {\n                return [[key, value.associated_user.id]];\n              } else {\n                return [\n                  ['userId', value?.associated_user?.id],\n                  ['firstName', value?.associated_user?.first_name],\n                  ['lastName', value?.associated_user?.last_name],\n                  ['email', value?.associated_user?.email],\n                  ['locale', value?.associated_user?.locale],\n                  ['emailVerified', value?.associated_user?.email_verified],\n                  ['accountOwner', value?.associated_user?.account_owner],\n                  ['collaborator', value?.associated_user?.collaborator],\n                ];\n              }\n            default:\n              return [[key, value]];\n          }\n        })\n        // Filter out tuples with undefined values\n        .filter(([_key, value]) => value !== undefined)\n    );\n  }\n}"
           },
           "OnlineAccessInfo": {
             "filePath": "../shopify-api/lib/auth/oauth/types.ts",
@@ -8079,7 +8300,7 @@
             "filePath": "../shopify-api/dist/ts/lib/types.d.ts",
             "syntaxKind": "EnumDeclaration",
             "name": "ApiVersion",
-            "value": "export declare enum ApiVersion {\n    October22 = \"2022-10\",\n    January23 = \"2023-01\",\n    April23 = \"2023-04\",\n    July23 = \"2023-07\",\n    October23 = \"2023-10\",\n    January24 = \"2024-01\",\n    April24 = \"2024-04\",\n    July24 = \"2024-07\",\n    October24 = \"2024-10\",\n    Unstable = \"unstable\"\n}",
+            "value": "export declare enum ApiVersion {\n    October22 = \"2022-10\",\n    January23 = \"2023-01\",\n    April23 = \"2023-04\",\n    July23 = \"2023-07\",\n    October23 = \"2023-10\",\n    January24 = \"2024-01\",\n    April24 = \"2024-04\",\n    July24 = \"2024-07\",\n    October24 = \"2024-10\",\n    January25 = \"2025-01\",\n    Unstable = \"unstable\"\n}",
             "members": [
               {
                 "filePath": "../shopify-api/dist/ts/lib/types.d.ts",
@@ -8125,6 +8346,11 @@
                 "filePath": "../shopify-api/dist/ts/lib/types.d.ts",
                 "name": "October24",
                 "value": "2024-10"
+              },
+              {
+                "filePath": "../shopify-api/dist/ts/lib/types.d.ts",
+                "name": "January25",
+                "value": "2025-01"
               },
               {
                 "filePath": "../shopify-api/dist/ts/lib/types.d.ts",
@@ -8907,7 +9133,7 @@
                     "description": "Use `admin.graphql` to make query / mutation requests.",
                     "tabs": [
                       {
-                        "code": "import { ActionFunctionArgs } from \"@remix-run/node\";\nimport { unauthenticated } from \"../shopify.server\";\n\nexport async function action({ request }: ActionFunctionArgs) {\n const { admin } = await unauthenticated.admin(request);\n\n const response = await admin.graphql(\n   `#graphql\n   mutation populateProduct($input: ProductInput!) {\n     productCreate(input: $input) {\n       product {\n         id\n       }\n     }\n    }`,\n    { variables: { input: { title: \"Product Name\" } } }\n  );\n\n const productData = await response.json();\n return json({ data: productData.data });\n}",
+                        "code": "import { ActionFunctionArgs } from \"@remix-run/node\";\nimport { unauthenticated } from \"../shopify.server\";\n\nexport async function action({ request }: ActionFunctionArgs) {\n const shop = getShopFromExternalRequest(request);\n const { admin } = await unauthenticated.admin(shop);\n\n const response = await admin.graphql(\n   `#graphql\n   mutation populateProduct($input: ProductInput!) {\n     productCreate(input: $input) {\n       product {\n         id\n       }\n     }\n    }`,\n    { variables: { input: { title: \"Product Name\" } } }\n  );\n\n const productData = await response.json();\n return json({ data: productData.data });\n}",
                         "title": "/app/routes/**\\/*.ts"
                       },
                       {
@@ -8938,7 +9164,7 @@
                 ]
               }
             ],
-            "value": "export interface UnauthenticatedAdminContext<\n  ConfigArg extends AppConfigArg,\n  Resources extends ShopifyRestResources,\n> {\n  /**\n   * The session for the given shop.\n   *\n   * This comes from the session storage which `shopifyApp` uses to store sessions in your database of choice.\n   *\n   * This will always be an offline session. You can use to get shop-specific data.\n   *\n   * @example\n   * <caption>Using the offline session.</caption>\n   * <description>Get your app's shop-specific data using the returned offline `session` object.</description>\n   * ```ts\n   * // /app/routes/**\\/*.ts\n   * import { LoaderFunctionArgs, json } from \"@remix-run/node\";\n   * import { unauthenticated } from \"../shopify.server\";\n   * import { getMyAppData } from \"~/db/model.server\";\n   *\n   * export const loader = async ({ request }: LoaderFunctionArgs) => {\n   *   const shop = getShopFromExternalRequest(request);\n   *   const { session } = await unauthenticated.admin(shop);\n   *   return json(await getMyAppData({shop: session.shop));\n   * };\n   * ```\n   */\n  session: Session;\n\n  /**\n   * Methods for interacting with the GraphQL / REST Admin APIs for the given store.\n   *\n   * @example\n   * <caption>Querying the GraphQL API.</caption>\n   * <description>Use `admin.graphql` to make query / mutation requests.</description>\n   * ```ts\n   * // /app/routes/**\\/*.ts\n   * import { ActionFunctionArgs } from \"@remix-run/node\";\n   * import { unauthenticated } from \"../shopify.server\";\n   *\n   * export async function action({ request }: ActionFunctionArgs) {\n   *  const { admin } = await unauthenticated.admin(request);\n   *\n   *  const response = await admin.graphql(\n   *    `#graphql\n   *    mutation populateProduct($input: ProductInput!) {\n   *      productCreate(input: $input) {\n   *        product {\n   *          id\n   *        }\n   *      }\n   *     }`,\n   *     { variables: { input: { title: \"Product Name\" } } }\n   *   );\n   *\n   *  const productData = await response.json();\n   *  return json({ data: productData.data });\n   * }\n   * ```\n   *\n   * ```ts\n   * // /app/shopify.server.ts\n   * import { shopifyApp } from \"@shopify/shopify-app-remix/server\";\n   *\n   * const shopify = shopifyApp({\n   *  // ...etc\n   * });\n   * export default shopify;\n   * export const unauthenticated = shopify.unauthenticated;\n   * ```\n   */\n  admin: AdminApiContext<ConfigArg, Resources>;\n}"
+            "value": "export interface UnauthenticatedAdminContext<\n  ConfigArg extends AppConfigArg,\n  Resources extends ShopifyRestResources,\n> {\n  /**\n   * The session for the given shop.\n   *\n   * This comes from the session storage which `shopifyApp` uses to store sessions in your database of choice.\n   *\n   * This will always be an offline session. You can use to get shop-specific data.\n   *\n   * @example\n   * <caption>Using the offline session.</caption>\n   * <description>Get your app's shop-specific data using the returned offline `session` object.</description>\n   * ```ts\n   * // /app/routes/**\\/*.ts\n   * import { LoaderFunctionArgs, json } from \"@remix-run/node\";\n   * import { unauthenticated } from \"../shopify.server\";\n   * import { getMyAppData } from \"~/db/model.server\";\n   *\n   * export const loader = async ({ request }: LoaderFunctionArgs) => {\n   *   const shop = getShopFromExternalRequest(request);\n   *   const { session } = await unauthenticated.admin(shop);\n   *   return json(await getMyAppData({shop: session.shop));\n   * };\n   * ```\n   */\n  session: Session;\n\n  /**\n   * Methods for interacting with the GraphQL / REST Admin APIs for the given store.\n   *\n   * @example\n   * <caption>Querying the GraphQL API.</caption>\n   * <description>Use `admin.graphql` to make query / mutation requests.</description>\n   * ```ts\n   * // /app/routes/**\\/*.ts\n   * import { ActionFunctionArgs } from \"@remix-run/node\";\n   * import { unauthenticated } from \"../shopify.server\";\n   *\n   * export async function action({ request }: ActionFunctionArgs) {\n   *  const shop = getShopFromExternalRequest(request);\n   *  const { admin } = await unauthenticated.admin(shop);\n   *\n   *  const response = await admin.graphql(\n   *    `#graphql\n   *    mutation populateProduct($input: ProductInput!) {\n   *      productCreate(input: $input) {\n   *        product {\n   *          id\n   *        }\n   *      }\n   *     }`,\n   *     { variables: { input: { title: \"Product Name\" } } }\n   *   );\n   *\n   *  const productData = await response.json();\n   *  return json({ data: productData.data });\n   * }\n   * ```\n   *\n   * ```ts\n   * // /app/shopify.server.ts\n   * import { shopifyApp } from \"@shopify/shopify-app-remix/server\";\n   *\n   * const shopify = shopifyApp({\n   *  // ...etc\n   * });\n   * export default shopify;\n   * export const unauthenticated = shopify.unauthenticated;\n   * ```\n   */\n  admin: AdminApiContext<ConfigArg, Resources>;\n}"
           }
         }
       }
@@ -8966,7 +9192,7 @@
                 "tabs": [
                   {
                     "title": "/app/routes/**\\/*.ts",
-                    "code": "import { ActionFunctionArgs } from \"@remix-run/node\";\nimport { unauthenticated } from \"../shopify.server\";\n\nexport async function action({ request }: ActionFunctionArgs) {\n const { admin } = await unauthenticated.admin(request);\n\n const response = await admin.graphql(\n   `#graphql\n   mutation populateProduct($input: ProductInput!) {\n     productCreate(input: $input) {\n       product {\n         id\n       }\n     }\n    }`,\n    { variables: { input: { title: \"Product Name\" } } }\n  );\n\n const productData = await response.json();\n return json({ data: productData.data });\n}",
+                    "code": "import { ActionFunctionArgs } from \"@remix-run/node\";\nimport { unauthenticated } from \"../shopify.server\";\n\nexport async function action({ request }: ActionFunctionArgs) {\n const shop = getShopFromExternalRequest(request);\n const { admin } = await unauthenticated.admin(shop);\n\n const response = await admin.graphql(\n   `#graphql\n   mutation populateProduct($input: ProductInput!) {\n     productCreate(input: $input) {\n       product {\n         id\n       }\n     }\n    }`,\n    { variables: { input: { title: \"Product Name\" } } }\n  );\n\n const productData = await response.json();\n return json({ data: productData.data });\n}",
                     "language": "typescript"
                   },
                   {
@@ -9184,6 +9410,14 @@
               {
                 "filePath": "src/server/clients/types.ts",
                 "syntaxKind": "PropertySignature",
+                "name": "signal",
+                "value": "AbortSignal",
+                "description": "An optional AbortSignal to cancel the request.",
+                "isOptional": true
+              },
+              {
+                "filePath": "src/server/clients/types.ts",
+                "syntaxKind": "PropertySignature",
                 "name": "tries",
                 "value": "number",
                 "description": "The total number of times to try the request if it fails.",
@@ -9198,7 +9432,7 @@
                 "isOptional": true
               }
             ],
-            "value": "export interface GraphQLQueryOptions<\n  Operation extends keyof Operations,\n  Operations extends AllOperations,\n> {\n  /**\n   * The variables to pass to the operation.\n   */\n  variables?: ApiClientRequestOptions<Operation, Operations>['variables'];\n  /**\n   * The version of the API to use for the request.\n   */\n  apiVersion?: ApiVersion;\n  /**\n   * Additional headers to include in the request.\n   */\n  headers?: Record<string, any>;\n  /**\n   * The total number of times to try the request if it fails.\n   */\n  tries?: number;\n}"
+            "value": "export interface GraphQLQueryOptions<\n  Operation extends keyof Operations,\n  Operations extends AllOperations,\n> {\n  /**\n   * The variables to pass to the operation.\n   */\n  variables?: ApiClientRequestOptions<Operation, Operations>['variables'];\n  /**\n   * The version of the API to use for the request.\n   */\n  apiVersion?: ApiVersion;\n  /**\n   * Additional headers to include in the request.\n   */\n  headers?: Record<string, any>;\n  /**\n   * The total number of times to try the request if it fails.\n   */\n  tries?: number;\n\n  /**\n   * An optional AbortSignal to cancel the request.\n   */\n  signal?: AbortSignal;\n}"
           }
         }
       }

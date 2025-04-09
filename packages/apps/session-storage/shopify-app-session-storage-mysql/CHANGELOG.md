@@ -1,5 +1,37 @@
 # @shopify/shopify-app-session-storage-mysql
 
+## 4.0.17
+
+### Patch Changes
+
+- 981c948: Update directory path
+
+## 4.0.16
+
+## 4.0.15
+
+### Patch Changes
+
+- 4455445: Updated `mysql2` dependencies
+
+## 4.0.14
+
+## 4.0.13
+
+## 4.0.12
+
+## 4.0.11
+
+### Patch Changes
+
+- e7d9103: Updated `mysql2` dependencies
+
+## 4.0.10
+
+### Patch Changes
+
+- 8fbff4d: Updated `mysql2` dependencies
+
 ## 4.0.9
 
 ### Patch Changes

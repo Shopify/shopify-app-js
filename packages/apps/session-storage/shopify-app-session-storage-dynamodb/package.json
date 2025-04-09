@@ -1,10 +1,11 @@
 {
   "name": "@shopify/shopify-app-session-storage-dynamodb",
-  "version": "4.0.9",
+  "version": "4.0.17",
   "description": "Shopify App Session Storage for DynamoDB",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Shopify/shopify-app-js.git"
+    "url": "git+https://github.com/Shopify/shopify-app-js.git",
+    "directory": "packages/apps/session-storage/shopify-app-session-storage-dynamodb"
   },
   "bugs": {
     "url": "https://github.com/Shopify/shopify-app-js/issues"
@@ -44,15 +45,15 @@
     "AWS"
   ],
   "dependencies": {
-    "@aws-sdk/client-dynamodb": "^3.714.0",
-    "@aws-sdk/util-dynamodb": "^3.714.0"
+    "@aws-sdk/client-dynamodb": "^3.767.0",
+    "@aws-sdk/util-dynamodb": "^3.767.0"
   },
   "peerDependencies": {
     "@shopify/shopify-api": "^11.0.0",
     "@shopify/shopify-app-session-storage": "^3.0.0"
   },
   "devDependencies": {
-    "@shopify/shopify-app-session-storage-test-utils": "^3.0.9"
+    "@shopify/shopify-app-session-storage-test-utils": "^3.0.17"
   },
   "files": [
     "dist/*",

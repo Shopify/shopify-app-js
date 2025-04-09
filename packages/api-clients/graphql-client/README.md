@@ -90,6 +90,7 @@ const client = createGraphQLClient({
 | url?       | `string`                             | Alternative request API URL                                                                                                                                                                                                                          |
 | headers?   | `Record<string, string \| string[]>` | Additional and/or replacement headers to be used in the request                                                                                                                                                                                      |
 | retries?   | `number`                             | Alternative number of retries for the request. Retries only occur for requests that were abandoned or if the server responds with a `Too Many Request (429)` or `Service Unavailable (503)` response. Minimum value is `0` and maximum value is `3`. |
+| keepalive? | `boolean`                            | Whether to keep a connection alive when page is unloaded before a request has completed. Default value is `false`. |
 | signal?    | `AbortSignal`                        | If this option is set, the request can be canceled by calling `abort()` on the corresponding  `AbortController`.                                                                                                                                     |
 
 
@@ -226,6 +227,23 @@ const shopQuery = `
 // Will retry the HTTP request to the server 2 times if the requests were abandoned or the server responded with a 429 or 503 error
 const {data, errors, extensions} = await client.request(shopQuery, {
   retries: 2,
+});
+```
+
+### Make a request that should run even if page is unloaded
+
+```typescript
+const shopQuery = `
+  query ShopQuery {
+    shop {
+      name
+      id
+    }
+  }
+`;
+
+const {data, errors, extensions} = await client.request(shopQuery, {
+  keepalive: true,
 });
 ```
 

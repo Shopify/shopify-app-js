@@ -111,6 +111,7 @@ function generateFetch(
       headers: overrideHeaders,
       url: overrideUrl,
       retries: overrideRetries,
+      keepalive,
       signal,
     } = options;
 
@@ -141,6 +142,7 @@ function generateFetch(
         headers: flatHeaders,
         body,
         signal,
+        keepalive,
       },
     ];
 
@@ -365,7 +367,7 @@ function createMultipartResponseAsyncInterator(
 
   if (
     !response.body?.getReader &&
-    !(response.body as any)![Symbol.asyncIterator]
+    !(response.body as any)?.[Symbol.asyncIterator]
   ) {
     throw new Error('API multipart response did not return an iterable body', {
       cause: response,

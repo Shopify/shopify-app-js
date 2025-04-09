@@ -1,10 +1,11 @@
 {
   "name": "@shopify/shopify-app-session-storage-test-utils",
-  "version": "3.0.9",
+  "version": "3.0.17",
   "description": "Utilities for testing Shopify App Session Storage",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Shopify/shopify-app-js.git"
+    "url": "git+https://github.com/Shopify/shopify-app-js.git",
+    "directory": "packages/apps/session-storage/shopify-app-session-storage-test-utils"
   },
   "bugs": {
     "url": "https://github.com/Shopify/shopify-app-js/issues"
@@ -49,8 +50,8 @@
     "@shopify/shopify-app-session-storage": "^3.0.0"
   },
   "devDependencies": {
-    "@shopify/shopify-api": "^11.6.1",
-    "@shopify/shopify-app-session-storage": "^3.0.9"
+    "@shopify/shopify-api": "^11.12.0",
+    "@shopify/shopify-app-session-storage": "^3.0.17"
   },
   "files": [
     "dist/*",

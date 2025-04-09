@@ -1,5 +1,210 @@
 # @shopify/shopify-app-remix
 
+## 3.8.2
+
+### Patch Changes
+
+- 981c948: Update directory path
+- Updated dependencies [7a076ac]
+- Updated dependencies [ecacdf3]
+- Updated dependencies [981c948]
+  - @shopify/shopify-api@11.12.0
+  - @shopify/shopify-app-session-storage@3.0.17
+  - @shopify/storefront-api-client@1.0.7
+  - @shopify/admin-api-client@1.0.8
+
+## 3.8.1
+
+### Patch Changes
+
+- Updated dependencies [4adbc2b]
+  - @shopify/admin-api-client@1.0.7
+  - @shopify/storefront-api-client@1.0.6
+  - @shopify/shopify-api@11.11.1
+  - @shopify/shopify-app-session-storage@3.0.16
+
+## 3.8.0
+
+### Minor Changes
+
+- ea406d3: # Add release candidate API version
+  Adds a constant that points to the [release candidate API version](https://shopify.dev/docs/api/usage/versioning#release-candidates).
+
+  ```
+  import { RELEASE_CANDIDATE_API_VERSION } from "@shopify/shopify-api";
+  ```
+
+### Patch Changes
+
+- Updated dependencies [ea406d3]
+  - @shopify/shopify-api@11.11.0
+  - @shopify/shopify-app-session-storage@3.0.15
+
+## 3.7.3
+
+### Patch Changes
+
+- e3d94f2: # Don't retry extension requests with invalid session tokens
+
+  Requests from the embedded app admin UI are not retried when the session token is invalid. This is done with the special app bridge header `x-shopify-session-token-retry-request`.
+
+  Requests from extensions cannot be retried, so we are no longer adding this header to the response.
+
+- 9c1dac6: Updated `semver` dependencies
+- 4f03d6e: Updated `@remix-run/server-runtime`, ` @remix-run/node`, ` @remix-run/react`, ` @remix-run/testing` dependencies
+- 7bb22bc: fix Shopify internal local app development
+- Updated dependencies [7bb22bc]
+- Updated dependencies [85b4fb8]
+  - @shopify/shopify-api@11.10.0
+  - @shopify/shopify-app-session-storage@3.0.14
+
+## 3.7.2
+
+### Patch Changes
+
+- b83364c: Updated `semver` dependencies
+- Updated dependencies [7aaa0a8]
+- Updated dependencies [86a1df6]
+  - @shopify/shopify-api@11.9.0
+  - @shopify/shopify-app-session-storage@3.0.13
+  - @shopify/admin-api-client@1.0.6
+  - @shopify/storefront-api-client@1.0.5
+
+## 3.7.1
+
+### Patch Changes
+
+- Updated dependencies [7ff4467]
+  - @shopify/shopify-api@11.8.1
+  - @shopify/shopify-app-session-storage@3.0.12
+
+## 3.7.0
+
+### Minor Changes
+
+- 89d803e: # Adds signal as request option
+
+  This adds the `signal` option to the `request` method of the GraphQL client, for the shopify-api and shopify-app-remix packages to pass in an [AbortSignal](https://developer.mozilla.org/en-US/docs/Web/API/AbortSignal) to abort requests, and set a timeout.
+
+  If a request is aborted, an `HttpRequestError` will be thrown.
+
+  This will allow you to set your own custom timeout, and abort requests.
+
+  ```ts
+  // Abort the request after 3 seconds
+  await admin.graphql('{ shop { name } }', {
+    signal: AbortSignal.timeout(3000),
+  });
+  ```
+
+  ```ts
+  // Abort the request after 3 seconds, and retry the request up to 2 times
+  await admin.graphql('{ shop { name } }', {
+    signal: AbortSignal.timeout(3000),
+    tries: 2,
+  });
+  ```
+
+- 724f3d9: # Function to authenticate POS UI extension requests
+
+  A new API had been added to the `authenticate` module to authenticate POS UI extension requests.
+
+  The `authenticate.public.pos` function is now available to authenticate POS UI extension requests.
+
+  It returns the session token that was sent with the request and a `cors` function to ensure your app can respond to POS UI extension requests.
+
+  ```ts
+  //app/routes/pos.jsx
+  import { authenticate } from "../shopify.server";
+  export const action = async ({ request }) => {
+
+          const {sessionToken } = await authenticate.public.pos(request);
+          console.log(sessionToken, "sessionToken");
+
+      return "hello world"
+  }
+
+  // extensions/pos-ui/src/Modal.jsx
+  import React, { useEffect, useState } from 'react'
+
+  import { Text, Screen, ScrollView, Navigator, reactExtension, useApi } from '@shopify/ui-extensions-react/point-of-sale'
+
+  const Modal = () => {
+    const api = useApi()
+    const {getSessionToken} = api.session;
+    const [token, setToken] = useState('');
+    const [result, setResult] = useState('');
+
+    useEffect(() => {
+      const fetchToken = async () => {
+        const newToken = await getSessionToken();
+        setToken(newToken);
+        await fetchWithToken(newToken);
+      };
+
+      async function fetchWithToken(token) {
+        const result = await fetch(
+          'https://decor-plasma-showtimes-beverages.trycloudflare.com/pos',
+          {
+            method: 'POST',
+            headers: {
+              'Authorization': `Bearer ${token}`,
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({}) // Add your POST data here
+          },
+        );
+        const resultJson = await result.json();
+        setResult(resultJson);
+      }
+
+     fetchToken();
+    }, []); // Empty dependency array means this runs once on mount
+
+    return (
+      <Navigator>
+        <Screen name="HelloWorld" title="Hello World!">
+          <ScrollView>
+            <Text>Welcome to the extension</Text>
+            <Text> The result is: {JSON.stringify(result)}</Text>
+          </ScrollView>
+        </Screen>
+      </Navigator>
+    )
+  }
+
+  export default reactExtension('pos.home.modal.render', () => <Modal />);
+  ```
+
+### Patch Changes
+
+- 32b86a3: Updated `@remix-run/server-runtime` dependencies
+- 54eb408: Updated `isbot` dependencies
+- a573a6c: Updated `isbot` dependencies
+- Updated dependencies [54eb408]
+- Updated dependencies [a573a6c]
+- Updated dependencies [409597b]
+- Updated dependencies [89d803e]
+  - @shopify/shopify-api@11.8.0
+  - @shopify/shopify-app-session-storage@3.0.11
+  - @shopify/admin-api-client@1.0.5
+  - @shopify/storefront-api-client@1.0.4
+
+## 3.6.0
+
+### Minor Changes
+
+- 34fc75d: Add Shop context to logging
+
+### Patch Changes
+
+- 6681802: Updated `isbot` dependencies
+- Updated dependencies [6b71f39]
+- Updated dependencies [6681802]
+- Updated dependencies [dc6b8ad]
+  - @shopify/shopify-api@11.7.0
+  - @shopify/shopify-app-session-storage@3.0.10
+
 ## 3.5.1
 
 ### Patch Changes

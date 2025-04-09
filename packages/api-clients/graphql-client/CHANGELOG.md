@@ -1,5 +1,52 @@
 # @shopify/graphql-client
 
+## 1.3.2
+
+### Patch Changes
+
+- 981c948: Update directory path
+
+## 1.3.1
+
+### Patch Changes
+
+- 4adbc2b: # Generate Provenance Statements
+
+  This changes no functionality.
+
+  The provenance attestation is established by publicly providing a link to a package's source code and build instructions from the build environment. This allows developers to verify where and how your package was built before they download it.
+
+  Learn more about [npm provenance](https://docs.npmjs.com/generating-provenance-statements#about-npm-provenance)
+
+## 1.3.0
+
+### Minor Changes
+
+- 4603b69: Make fetch's keepalive configurable when making requests
+
+  Example:
+
+  ```typescript
+  const shopQuery = `
+    query ShopQuery {
+      shop {
+        name
+        id
+      }
+    }
+  `;
+
+  const {data, errors, extensions} = await client.request(shopQuery, {
+    keepalive: true,
+  });
+  ```
+
+## 1.2.2
+
+### Patch Changes
+
+- d3531c5: Better error handling for missing Response.body in multipart requests. Instead of being "Cannot read properties of undefined (reading 'Symbol(Symbol.asyncIterator)')", it will now be the more useful and accurate message "API multipart response did not return an iterable body".
+
 ## 1.2.1
 
 ### Patch Changes

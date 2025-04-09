@@ -369,6 +369,22 @@ export interface AppSubscription {
    * Whether this is a test subscription.
    */
   test: boolean;
+  /**
+   * The number of trial days for this subscription.
+   */
+  trialDays: number;
+  /**
+   * The date and time when the subscription was created.
+   */
+  createdAt: string;
+  /**
+   * The date and time when the current period ends.
+   */
+  currentPeriodEnd: string;
+  /**
+   * The return URL for this subscription.
+   */
+  returnUrl: string;
 
   /*
    * The line items for this plan. This will become mandatory in v10.
@@ -378,7 +394,14 @@ export interface AppSubscription {
   /*
    * The status of the subscription. [ACTIVE, CANCELLED, PENDING, DECLINED, EXPIRED, FROZEN, ACCEPTED]
    */
-  status: string;
+  status:
+    | 'ACTIVE'
+    | 'CANCELLED'
+    | 'PENDING'
+    | 'DECLINED'
+    | 'EXPIRED'
+    | 'FROZEN'
+    | 'ACCEPTED';
 }
 
 export interface ActiveSubscriptions {
@@ -484,10 +507,17 @@ export interface OneTimePurchase {
    * Whether this is a test purchase.
    */
   test: boolean;
-  /**
-   * The status of the one-time purchase.
+  /*
+   * The status of the subscription. [ACTIVE, CANCELLED, PENDING, DECLINED, EXPIRED, FROZEN, ACCEPTED]
    */
-  status: string;
+  status:
+    | 'ACTIVE'
+    | 'CANCELLED'
+    | 'PENDING'
+    | 'DECLINED'
+    | 'EXPIRED'
+    | 'FROZEN'
+    | 'ACCEPTED';
 }
 
 export interface BillingCreateUsageRecordParams {
@@ -556,6 +586,21 @@ export interface UsageRecord {
    * The idempotency key for this request.
    */
   idempotencyKey?: string;
+  /**
+   * The subscription line item associated with the usage record.
+   */
+  subscriptionLineItem: AppSubscriptionLineItem;
+}
+
+export interface AppSubscriptionLineItem {
+  /**
+   * The ID of the subscription line item.
+   */
+  id: string;
+  /**
+   * The plan associated with the subscription line item.
+   */
+  plan: AppPlan;
 }
 
 export interface BillingUpdateUsageCappedAmountParams {
@@ -685,3 +730,59 @@ export interface ShopifyBilling<Future extends FutureFlagOptions> {
   createUsageRecord: BillingCreateUsageRecord;
   updateUsageCappedAmount: BillingUpdateUsageCappedAmount;
 }
+
+export const APP_SUBSCRIPTION_FRAGMENT = `
+  fragment AppSubscriptionFragment on AppSubscription {
+    id
+    name
+    test
+    status
+    trialDays
+    createdAt
+    currentPeriodEnd
+    returnUrl
+    lineItems {
+      id
+      plan {
+        pricingDetails {
+          ... on AppRecurringPricing {
+            price {
+              amount
+              currencyCode
+            }
+            interval
+            discount {
+              durationLimitInIntervals
+              remainingDurationInIntervals
+              priceAfterDiscount {
+                amount
+              }
+              value {
+                ... on AppSubscriptionDiscountAmount {
+                  amount {
+                    amount
+                    currencyCode
+                  }
+                }
+                ... on AppSubscriptionDiscountPercentage {
+                  percentage
+                }
+              }
+            }
+          }
+          ... on AppUsagePricing {
+            balanceUsed {
+              amount
+              currencyCode
+            }
+            cappedAmount {
+              amount
+              currencyCode
+            }
+            terms
+          }
+        }
+      }
+    }
+  }
+`;

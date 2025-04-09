@@ -1,5 +1,99 @@
 # Changelog
 
+## 5.0.17
+
+### Patch Changes
+
+- 981c948: Update directory path
+- Updated dependencies [7a076ac]
+- Updated dependencies [ecacdf3]
+- Updated dependencies [981c948]
+  - @shopify/shopify-api@11.12.0
+  - @shopify/shopify-app-session-storage-memory@4.0.17
+  - @shopify/shopify-app-session-storage@3.0.17
+
+## 5.0.16
+
+### Patch Changes
+
+- 4adbc2b: # Generate Provenance Statements
+
+  This changes no functionality.
+
+  The provenance attestation is established by publicly providing a link to a package's source code and build instructions from the build environment. This allows developers to verify where and how your package was built before they download it.
+
+  Learn more about [npm provenance](https://docs.npmjs.com/generating-provenance-statements#about-npm-provenance)
+
+  - @shopify/shopify-api@11.11.1
+  - @shopify/shopify-app-session-storage@3.0.16
+  - @shopify/shopify-app-session-storage-memory@4.0.16
+
+## 5.0.15
+
+### Patch Changes
+
+- Updated dependencies [ea406d3]
+  - @shopify/shopify-api@11.11.0
+  - @shopify/shopify-app-session-storage@3.0.15
+  - @shopify/shopify-app-session-storage-memory@4.0.15
+
+## 5.0.14
+
+### Patch Changes
+
+- 9c1dac6: Updated `semver` dependencies
+- 7bb22bc: fix Shopify internal local app development
+- Updated dependencies [7bb22bc]
+- Updated dependencies [85b4fb8]
+  - @shopify/shopify-api@11.10.0
+  - @shopify/shopify-app-session-storage@3.0.14
+  - @shopify/shopify-app-session-storage-memory@4.0.14
+
+## 5.0.13
+
+### Patch Changes
+
+- b83364c: Updated `semver` dependencies
+- Updated dependencies [7aaa0a8]
+- Updated dependencies [86a1df6]
+  - @shopify/shopify-api@11.9.0
+  - @shopify/shopify-app-session-storage@3.0.13
+  - @shopify/shopify-app-session-storage-memory@4.0.13
+
+## 5.0.12
+
+### Patch Changes
+
+- Updated dependencies [7ff4467]
+  - @shopify/shopify-api@11.8.1
+  - @shopify/shopify-app-session-storage@3.0.12
+  - @shopify/shopify-app-session-storage-memory@4.0.12
+
+## 5.0.11
+
+### Patch Changes
+
+- e38c710: Change common logs from info level to debug
+- Updated dependencies [54eb408]
+- Updated dependencies [a573a6c]
+- Updated dependencies [409597b]
+- Updated dependencies [89d803e]
+  - @shopify/shopify-api@11.8.0
+  - @shopify/shopify-app-session-storage@3.0.11
+  - @shopify/shopify-app-session-storage-memory@4.0.11
+
+## 5.0.10
+
+### Patch Changes
+
+- 6b71f39: Updated `express` dependencies
+- Updated dependencies [6b71f39]
+- Updated dependencies [6681802]
+- Updated dependencies [dc6b8ad]
+  - @shopify/shopify-api@11.7.0
+  - @shopify/shopify-app-session-storage@3.0.10
+  - @shopify/shopify-app-session-storage-memory@4.0.10
+
 ## 5.0.9
 
 ### Patch Changes

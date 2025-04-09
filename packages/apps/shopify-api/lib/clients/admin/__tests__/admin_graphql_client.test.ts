@@ -319,4 +319,16 @@ describe('GraphQL client', () => {
       ),
     );
   });
+
+  it('respects the abort signal', async () => {
+    const shopify = shopifyApi(testConfig());
+    const client = new shopify.clients.Graphql({session});
+    const controller = new AbortController();
+
+    controller.abort();
+
+    await expect(
+      client.request(QUERY, {signal: controller.signal}),
+    ).rejects.toThrow(HttpRequestError);
+  });
 });

@@ -12,7 +12,9 @@ import {
   CurrentAppInstallation,
   CurrentAppInstallations,
   OneTimePurchase,
+  APP_SUBSCRIPTION_FRAGMENT,
 } from './types';
+import {convertLineItems} from './utils';
 
 interface SubscriptionMeetsCriteriaParams {
   subscription: AppSubscription;
@@ -87,6 +89,9 @@ export async function assessPayments({
     installation.activeSubscriptions.forEach((subscription) => {
       if (subscriptionMeetsCriteria({subscription, isTest, plans})) {
         returnValue.hasActivePayment = true;
+        if (subscription.lineItems) {
+          subscription.lineItems = convertLineItems(subscription.lineItems);
+        }
         returnValue.appSubscriptions.push(subscription);
       }
     });
@@ -127,56 +132,11 @@ function purchaseMeetsCriteria({
 }
 
 const HAS_PAYMENTS_QUERY = `
+  ${APP_SUBSCRIPTION_FRAGMENT}
   query appSubscription($endCursor: String) {
     currentAppInstallation {
       activeSubscriptions {
-        id
-        name
-        test
-        status
-        lineItems {
-          id
-          plan {
-            pricingDetails {
-              ... on AppRecurringPricing {
-                price {
-                  amount
-                  currencyCode
-                }
-                interval
-                discount {
-                  durationLimitInIntervals
-                  remainingDurationInIntervals
-                  priceAfterDiscount {
-                    amount
-                  }
-                  value {
-                    ... on AppSubscriptionDiscountAmount {
-                      amount {
-                        amount
-                        currencyCode
-                      }
-                    }
-                    ... on AppSubscriptionDiscountPercentage {
-                      percentage
-                    }
-                  }
-                }
-              }
-              ... on AppUsagePricing {
-                balanceUsed {
-                  amount
-                  currencyCode
-                }
-                cappedAmount {
-                  amount
-                  currencyCode
-                }
-                terms
-              }
-            }
-          }
-        }
+        ...AppSubscriptionFragment
       }
       oneTimePurchases(first: 250, sortKey: CREATED_AT, after: $endCursor) {
         edges {

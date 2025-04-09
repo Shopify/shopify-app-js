@@ -1,5 +1,29 @@
 # @shopify/shopify-app-session-storage-postgresql
 
+## 4.0.17
+
+### Patch Changes
+
+- 981c948: Update directory path
+
+## 4.0.16
+
+## 4.0.15
+
+### Patch Changes
+
+- 9a025e7: Updated `pg` dependencies
+
+## 4.0.14
+
+## 4.0.13
+
+## 4.0.12
+
+## 4.0.11
+
+## 4.0.10
+
 ## 4.0.9
 
 ## 4.0.8

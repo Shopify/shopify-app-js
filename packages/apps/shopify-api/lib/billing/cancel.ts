@@ -7,15 +7,15 @@ import {
   BillingCancel,
   BillingCancelParams,
   CancelResponse,
+  APP_SUBSCRIPTION_FRAGMENT,
 } from './types';
 
 const CANCEL_MUTATION = `
+  ${APP_SUBSCRIPTION_FRAGMENT}
   mutation appSubscriptionCancel($id: ID!, $prorate: Boolean) {
     appSubscriptionCancel(id: $id, prorate: $prorate) {
       appSubscription {
-        id
-        name
-        test
+        ...AppSubscriptionFragment
       }
       userErrors {
         field

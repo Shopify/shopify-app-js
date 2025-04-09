@@ -1,5 +1,168 @@
 # Changelog
 
+## 11.12.0
+
+### Minor Changes
+
+- 7a076ac: # Standardize App Subscription returns on billing operations
+
+  Now all billing operations will return the same data, when returning App Subscriptions. Previously all operations returned the same type, but the underlying GraphQL requests returned different data. Now all operations will return the same data.
+
+  Now all billing operations will return the following information when returning `AppSubscriptions`
+
+  ```js
+  export interface AppSubscription {
+    /**
+     * The ID of the app subscription.
+     */
+    id: string;
+    /**
+     * The name of the purchased plan.
+     */
+    name: string;
+    /**
+     * Whether this is a test subscription.
+     */
+    test: boolean;
+    /**
+     * The number of trial days for this subscription.
+     */
+    trialDays: number;
+    /**
+     * The date and time when the subscription was created.
+     */
+    createdAt: string;
+    /**
+     * The date and time when the current period ends.
+     */
+    currentPeriodEnd: string;
+    /**
+     * The return URL for this subscription.
+     */
+    returnUrl: string;
+
+    /*
+     * The line items for this plan. This will become mandatory in v10.
+     */
+    lineItems?: ActiveSubscriptionLineItem[];
+
+    /*
+     * The status of the subscription. [ACTIVE, CANCELLED, PENDING, DECLINED, EXPIRED, FROZEN, ACCEPTED]
+     */
+    status: "ACTIVE" | "CANCELLED" | "PENDING" | "DECLINED" | "EXPIRED" | "FROZEN" | "ACCEPTED"
+  }
+  ```
+
+- ecacdf3: Adds 2025-04 REST resources
+
+### Patch Changes
+
+- 981c948: Update directory path
+- Updated dependencies [981c948]
+  - @shopify/storefront-api-client@1.0.7
+  - @shopify/admin-api-client@1.0.8
+  - @shopify/graphql-client@1.3.2
+
+## 11.11.1
+
+### Patch Changes
+
+- Updated dependencies [4adbc2b]
+  - @shopify/admin-api-client@1.0.7
+  - @shopify/graphql-client@1.3.1
+  - @shopify/storefront-api-client@1.0.6
+
+## 11.11.0
+
+### Minor Changes
+
+- ea406d3: # Add release candidate API version
+  Adds a constant that points to the [release candidate API version](https://shopify.dev/docs/api/usage/versioning#release-candidates).
+
+  ```
+  import { RELEASE_CANDIDATE_API_VERSION } from "@shopify/shopify-api";
+  ```
+
+## 11.10.0
+
+### Minor Changes
+
+- 85b4fb8: Add optional param with default to add buffer to session token active check
+
+  Now by default a session will be considered non active if it is within 500ms of expiry.
+
+### Patch Changes
+
+- 7bb22bc: fix Shopify internal local app development
+
+## 11.9.0
+
+### Minor Changes
+
+- 86a1df6: Introduces Client credentials token acquisition flow to `shopify-api-js` library
+
+### Patch Changes
+
+- 7aaa0a8: Convert all Money.amount returned from the Billing GraphQL API from string to number type
+- Updated dependencies [4603b69]
+  - @shopify/graphql-client@1.3.0
+  - @shopify/admin-api-client@1.0.6
+  - @shopify/storefront-api-client@1.0.5
+
+## 11.8.1
+
+### Patch Changes
+
+- 7ff4467: Updates LATEST_API_VERSION to 2025-01
+
+## 11.8.0
+
+### Minor Changes
+
+- 89d803e: # Adds signal as request option
+
+  This adds the `signal` option to the `request` method of the GraphQL client, for the shopify-api and shopify-app-remix packages to pass in an [AbortSignal](https://developer.mozilla.org/en-US/docs/Web/API/AbortSignal) to abort requests, and set a timeout.
+
+  If a request is aborted, an `HttpRequestError` will be thrown.
+
+  This will allow you to set your own custom timeout, and abort requests.
+
+  ```ts
+  // Abort the request after 3 seconds
+  await admin.graphql('{ shop { name } }', {
+    signal: AbortSignal.timeout(3000),
+  });
+  ```
+
+  ```ts
+  // Abort the request after 3 seconds, and retry the request up to 2 times
+  await admin.graphql('{ shop { name } }', {
+    signal: AbortSignal.timeout(3000),
+    tries: 2,
+  });
+  ```
+
+### Patch Changes
+
+- 54eb408: Updated `isbot` dependencies
+- a573a6c: Updated `isbot` dependencies
+- 409597b: Updated `uuid` dependencies
+- Updated dependencies [d3531c5]
+  - @shopify/graphql-client@1.2.2
+  - @shopify/admin-api-client@1.0.5
+  - @shopify/storefront-api-client@1.0.4
+
+## 11.7.0
+
+### Minor Changes
+
+- dc6b8ad: Adds 2025-01 Admin REST resources
+
+### Patch Changes
+
+- 6b71f39: Updated `express` dependencies
+- 6681802: Updated `isbot` dependencies
+
 ## 11.6.1
 
 ### Patch Changes

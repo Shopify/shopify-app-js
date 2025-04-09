@@ -1,5 +1,25 @@
 # @shopify/shopify-app-session-storage
 
+## 3.0.17
+
+### Patch Changes
+
+- 981c948: Update directory path
+
+## 3.0.16
+
+## 3.0.15
+
+## 3.0.14
+
+## 3.0.13
+
+## 3.0.12
+
+## 3.0.11
+
+## 3.0.10
+
 ## 3.0.9
 
 ## 3.0.8
