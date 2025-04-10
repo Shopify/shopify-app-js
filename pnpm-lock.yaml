@@ -244,11 +244,11 @@ importers:
   packages/apps/session-storage/shopify-app-session-storage-dynamodb:
     dependencies:
       '@aws-sdk/client-dynamodb':
-        specifier: ^3.782.0
-        version: 3.782.0
+        specifier: ^3.786.0
+        version: 3.786.0
       '@aws-sdk/util-dynamodb':
-        specifier: ^3.782.0
-        version: 3.782.0(@aws-sdk/client-dynamodb@3.782.0)
+        specifier: ^3.786.0
+        version: 3.786.0(@aws-sdk/client-dynamodb@3.786.0)
       '@shopify/shopify-api':
         specifier: ^11.0.0
         version: link:../../shopify-api
@@ -639,8 +639,8 @@ packages:
   '@aws-crypto/util@5.2.0':
     resolution: {integrity: sha512-4RkU9EsI6ZpBve5fseQlGNUWKMa1RLPQ1dnjnQoe07ldfIzcsGb5hC5W0Dm7u423KWzawlrpbjXBrXCEv9zazQ==}
 
-  '@aws-sdk/client-dynamodb@3.782.0':
-    resolution: {integrity: sha512-WS9GhnHjo5GeunVYSjExzKIWhE+5ZsdvlGlz1Z0FL02DjyTU+irJlNC1H0PiLISGN0/pwB9TIAvfbkdlsNSCGg==}
+  '@aws-sdk/client-dynamodb@3.786.0':
+    resolution: {integrity: sha512-UNDZUhgGZMTidmqPfxW94Dkk3Qe4dKtV2lAq2zjvc4zTAXr4t220p8XI6JgwCuA7vo3UdGT/7LvR1A6+l5HuJA==}
     engines: {node: '>=18.0.0'}
 
   '@aws-sdk/client-sso@3.782.0':
@@ -719,11 +719,11 @@ packages:
     resolution: {integrity: sha512-ZoGKwa4C9fC9Av6bdfqcW6Ix5ot05F/S4VxWR2nHuMv7hzfmAjTOcUiWT7UR4hM/U0whf84VhDtXN/DWAk52KA==}
     engines: {node: '>=18.0.0'}
 
-  '@aws-sdk/util-dynamodb@3.782.0':
-    resolution: {integrity: sha512-DsYJaP418Qmb1eGrTabtH5mjO4XHRyE9NzBdcKEWSFtDvLfUxUzzoCdNcW0GHy0Mqh5/tB52IDNjKQg5q3G1OA==}
+  '@aws-sdk/util-dynamodb@3.786.0':
+    resolution: {integrity: sha512-/qlHy3x4RHZ7c20hzvpe+Kbc2VSlO7UHmWy8/Dd9P0wrPsCUJlEyAdwLpNCystET6aoKYNFdPWMqd6Rd2q03Tw==}
     engines: {node: '>=18.0.0'}
     peerDependencies:
-      '@aws-sdk/client-dynamodb': ^3.782.0
+      '@aws-sdk/client-dynamodb': ^3.786.0
 
   '@aws-sdk/util-endpoints@3.782.0':
     resolution: {integrity: sha512-/RJOAO7o7HI6lEa4ASbFFLHGU9iPK876BhsVfnl54MvApPVYWQ9sHO0anOUim2S5lQTwd/6ghuH3rFYSq/+rdw==}
@@ -8436,7 +8436,7 @@ snapshots:
       '@smithy/util-utf8': 2.3.0
       tslib: 2.8.1
 
-  '@aws-sdk/client-dynamodb@3.782.0':
+  '@aws-sdk/client-dynamodb@3.786.0':
     dependencies:
       '@aws-crypto/sha256-browser': 5.2.0
       '@aws-crypto/sha256-js': 5.2.0
@@ -8742,9 +8742,9 @@ snapshots:
       '@smithy/types': 4.2.0
       tslib: 2.8.1
 
-  '@aws-sdk/util-dynamodb@3.782.0(@aws-sdk/client-dynamodb@3.782.0)':
+  '@aws-sdk/util-dynamodb@3.786.0(@aws-sdk/client-dynamodb@3.786.0)':
     dependencies:
-      '@aws-sdk/client-dynamodb': 3.782.0
+      '@aws-sdk/client-dynamodb': 3.786.0
       tslib: 2.8.1
 
   '@aws-sdk/util-endpoints@3.782.0':
