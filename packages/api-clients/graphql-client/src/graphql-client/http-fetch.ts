@@ -45,6 +45,18 @@ export function generateHttpFetch({
         throw new Error();
       }
 
+      const deprecationNotice =
+        response?.headers.get('X-Shopify-API-Deprecated-Reason') || '';
+      if (deprecationNotice) {
+        clientLogger({
+          type: 'HTTP-Response-GraphQL-Deprecation-Notice',
+          content: {
+            requestParams,
+            deprecationNotice,
+          },
+        });
+      }
+
       return response;
     } catch (error) {
       if (nextCount <= maxTries) {
