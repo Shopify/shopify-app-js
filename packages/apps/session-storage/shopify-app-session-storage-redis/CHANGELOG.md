@@ -1,5 +1,7 @@
 # @shopify/shopify-app-session-storage-redis
 
+## 4.2.11
+
 ## 4.2.10
 
 ### Patch Changes
