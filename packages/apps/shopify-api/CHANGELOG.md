@@ -1,5 +1,13 @@
 # Changelog
 
+## 11.12.1
+
+### Patch Changes
+
+- 6aed7c0: Updated `uuid` dependencies
+- 5926c00: Updated `isbot` dependencies
+- cbe1c10: Updated `isbot` dependencies
+
 ## 11.12.0
 
 ### Minor Changes

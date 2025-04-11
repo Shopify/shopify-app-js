@@ -1,5 +1,7 @@
 # @shopify/shopify-app-session-storage-prisma
 
+## 6.0.7
+
 ## 6.0.6
 
 ### Patch Changes

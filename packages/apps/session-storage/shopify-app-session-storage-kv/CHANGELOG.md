@@ -1,5 +1,7 @@
 # @shopify/shopify-app-session-storage-kv
 
+## 4.0.18
+
 ## 4.0.17
 
 ### Patch Changes
