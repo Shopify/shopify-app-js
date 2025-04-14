@@ -1,4 +1,4 @@
-import {type ActionFunctionArgs, json} from '@remix-run/node';
+import {type ActionFunctionArgs, json} from '@react-router/node';
 import {GraphqlQueryError} from '@shopify/shopify-api';
 
 import {authenticate} from '../shopify.server';

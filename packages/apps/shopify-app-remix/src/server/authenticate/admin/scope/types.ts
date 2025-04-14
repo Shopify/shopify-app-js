@@ -12,10 +12,10 @@ export interface ScopesApiContext {
    * <description>Call `scopes.query` to get scope details.</description>
    * ```ts
    * // /app._index.tsx
-   * import type { LoaderFunctionArgs } from "@remix-run/node";
-   * import { useLoaderData } from "@remix-run/react";
+   * import type { LoaderFunctionArgs } from "@react-router/node";
+   * import { useLoaderData } from "react-router";
    * import { authenticate } from "../shopify.server";
-   * import { json } from "@remix-run/node";
+   * import { json } from "@react-router/node";
    *
    * export const loader = async ({ request }: LoaderFunctionArgs) => {
    *   const { scopes } = await authenticate.admin(request);
@@ -46,10 +46,10 @@ export interface ScopesApiContext {
    * <description>Call `scopes.request` to request optional scopes.</description>
    * ```ts
    * // /app/routes/app.request.tsx
-   * import type { ActionFunctionArgs } from "@remix-run/node";
-   * import { useFetcher } from "@remix-run/react";
+   * import type { ActionFunctionArgs } from "@react-router/node";
+   * import { useFetcher } from "react-router";
    * import { authenticate } from "../shopify.server";
-   * import { json } from "@remix-run/node";
+   * import { json } from "@react-router/node";
    *
    * // Example of an action to POST a request to for optional scopes
    * export const action = async ({ request }: ActionFunctionArgs) => {
@@ -89,10 +89,10 @@ export interface ScopesApiContext {
    * <description>Call `scopes.revoke` to revoke optional scopes.</description>
    * ```ts
    * // /app._index.tsx
-   * import type { ActionFunctionArgs } from "@remix-run/node";
-   * import { useFetcher } from "@remix-run/react";
+   * import type { ActionFunctionArgs } from "@react-router/node";
+   * import { useFetcher } from "react-router";
    * import { authenticate } from "../shopify.server";
-   * import { json } from "@remix-run/node";
+   * import { json } from "@react-router/node";
    *
    * // Example of an action to POST optional scopes to revoke
    * export const action = async ({ request }: ActionFunctionArgs) => {

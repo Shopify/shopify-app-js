@@ -129,7 +129,7 @@ export interface BillingContext<Config extends AppConfigArg> {
    * <description>Call `billing.request` in the `onFailure` callback to immediately redirect to the Shopify page to request payment.</description>
    * ```ts
    * // /app/routes/**\/*.ts
-   * import { LoaderFunctionArgs } from "@remix-run/node";
+   * import { LoaderFunctionArgs } from "@react-router/node";
    * import { authenticate, MONTHLY_PLAN } from "../shopify.server";
    *
    * export const loader = async ({ request }: LoaderFunctionArgs) => {
@@ -172,7 +172,7 @@ export interface BillingContext<Config extends AppConfigArg> {
    * <description>When the app has multiple plans, create a page in your App that allows the merchant to select a plan. If a merchant does not have the required plan you can redirect them to page in your app to select one.</description>
    * ```ts
    * // /app/routes/**\/*.ts
-   * import { LoaderFunctionArgs, redirect } from "@remix-run/node";
+   * import { LoaderFunctionArgs, redirect } from "@react-router/node";
    * import { authenticate, MONTHLY_PLAN, ANNUAL_PLAN } from "../shopify.server";
    *
    * export const loader = async ({ request }: LoaderFunctionArgs) => {
@@ -238,7 +238,7 @@ export interface BillingContext<Config extends AppConfigArg> {
    * throw an error if no active billing plans are present. </description>
    * ```ts
    * // /app/routes/**\/*.ts
-   * import { LoaderFunctionArgs } from "@remix-run/node";
+   * import { LoaderFunctionArgs } from "@react-router/node";
    * import { authenticate, MONTHLY_PLAN } from "../shopify.server";
    *
    * export const loader = async ({ request }: LoaderFunctionArgs) => {
@@ -291,7 +291,7 @@ export interface BillingContext<Config extends AppConfigArg> {
    * matches one or more plans.</description>
    * ```ts
    * // /app/routes/**\/*.ts
-   * import { LoaderFunctionArgs } from "@remix-run/node";
+   * import { LoaderFunctionArgs } from "@react-router/node";
    * import { authenticate, MONTHLY_PLAN } from "../shopify.server";
    *
    * export const loader = async ({ request }: LoaderFunctionArgs) => {
@@ -317,7 +317,7 @@ export interface BillingContext<Config extends AppConfigArg> {
    * <description>Change where the merchant is returned to after approving the purchase using the `returnUrl` option.</description>
    * ```ts
    * // /app/routes/**\/*.ts
-   * import { LoaderFunctionArgs } from "@remix-run/node";
+   * import { LoaderFunctionArgs } from "@react-router/node";
    * import { authenticate, MONTHLY_PLAN } from "../shopify.server";
    *
    * export const loader = async ({ request }: LoaderFunctionArgs) => {
@@ -373,7 +373,7 @@ export interface BillingContext<Config extends AppConfigArg> {
    * <description>Customize the plan for a merchant when requesting billing. Any fields from the plan can be overridden, as long as the billing interval for line items matches the config.</description>
    * ```ts
    * // /app/routes/**\/*.ts
-   * import { LoaderFunctionArgs } from "@remix-run/node";
+   * import { LoaderFunctionArgs } from "@react-router/node";
    * import { authenticate, MONTHLY_PLAN } from "../shopify.server";
    *
    * export const loader = async ({ request }: LoaderFunctionArgs) => {
@@ -442,7 +442,7 @@ export interface BillingContext<Config extends AppConfigArg> {
    * <description>Use the `billing.cancel` function to cancel an active subscription with the id returned from `billing.require`.</description>
    * ```ts
    * // /app/routes/cancel-subscription.ts
-   * import { LoaderFunctionArgs } from "@remix-run/node";
+   * import { LoaderFunctionArgs } from "@react-router/node";
    * import { authenticate, MONTHLY_PLAN } from "../shopify.server";
    *
    * export const loader = async ({ request }: LoaderFunctionArgs) => {
@@ -508,7 +508,7 @@ export interface BillingContext<Config extends AppConfigArg> {
    * <description>Create a usage record for the active usage billing plan</description>
    * ```ts
    * // /app/routes/create-usage-record.ts
-   * import { ActionFunctionArgs } from "@remix-run/node";
+   * import { ActionFunctionArgs } from "@react-router/node";
    * import { authenticate, MONTHLY_PLAN } from "../shopify.server";
    *
    * export const action = async ({ request }: ActionFunctionArgs) => {
@@ -565,7 +565,7 @@ export interface BillingContext<Config extends AppConfigArg> {
    * <description>Update the capped amount for the usage billing plan specified by `subscriptionLineItemId`.</description>
    * ```ts
    * // /app/routes/**\/*.ts
-   * import { ActionFunctionArgs } from "@remix-run/node";
+   * import { ActionFunctionArgs } from "@react-router/node";
    * import { authenticate } from "../shopify.server";
    *
    * export const action = async ({ request }: ActionFunctionArgs) => {

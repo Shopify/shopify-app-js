@@ -1,5 +1,5 @@
-import {LoaderFunction, json} from '@remix-run/node';
-import {useRouteError} from '@remix-run/react';
+import {LoaderFunction, json} from '@react-router/node';
+import {useRouteError} from 'react-router';
 
 import {authenticate} from '~/shopify.server';
 

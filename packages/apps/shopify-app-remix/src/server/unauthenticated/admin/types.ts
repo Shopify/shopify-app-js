@@ -19,7 +19,7 @@ export interface UnauthenticatedAdminContext<
    * <description>Get your app's shop-specific data using the returned offline `session` object.</description>
    * ```ts
    * // /app/routes/**\/*.ts
-   * import { LoaderFunctionArgs, json } from "@remix-run/node";
+   * import { LoaderFunctionArgs, json } from "@react-router/node";
    * import { unauthenticated } from "../shopify.server";
    * import { getMyAppData } from "~/db/model.server";
    *
@@ -40,7 +40,7 @@ export interface UnauthenticatedAdminContext<
    * <description>Use `admin.graphql` to make query / mutation requests.</description>
    * ```ts
    * // /app/routes/**\/*.ts
-   * import { ActionFunctionArgs } from "@remix-run/node";
+   * import { ActionFunctionArgs } from "@react-router/node";
    * import { unauthenticated } from "../shopify.server";
    *
    * export async function action({ request }: ActionFunctionArgs) {

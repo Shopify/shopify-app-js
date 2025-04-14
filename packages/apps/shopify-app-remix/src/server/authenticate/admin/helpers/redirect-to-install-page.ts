@@ -1,4 +1,4 @@
-import {redirect as remixRedirect} from '@remix-run/server-runtime';
+import {redirect as remixRedirect} from 'react-router';
 
 import type {BasicParams} from '../../../types';
 

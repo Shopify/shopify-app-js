@@ -29,7 +29,7 @@ export interface Unauthenticated<
    * ```
    * ```ts
    * // /app/routes/**\/*.jsx
-   * import { LoaderFunctionArgs, json } from "@remix-run/node";
+   * import { LoaderFunctionArgs, json } from "@react-router/node";
    * import { authenticateExternal } from "~/helpers/authenticate"
    * import shopify from "../../shopify.server";
    *
@@ -55,7 +55,7 @@ export interface Unauthenticated<
    * <caption>Responding to a request not controlled by Shopify</caption>
    * ```ts
    * // /app/routes/**\/*.jsx
-   * import { LoaderFunctionArgs, json } from "@remix-run/node";
+   * import { LoaderFunctionArgs, json } from "@react-router/node";
    * import { authenticateExternal } from "~/helpers/authenticate"
    * import shopify from "../../shopify.server";
    *

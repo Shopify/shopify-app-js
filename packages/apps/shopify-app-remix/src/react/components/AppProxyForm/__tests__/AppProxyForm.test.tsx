@@ -1,5 +1,5 @@
 import {mount} from '@shopify/react-testing';
-import {createRemixStub} from '@remix-run/testing';
+import {createRoutesStub} from 'react-router';
 
 import '../../../__tests__/test-helper';
 
@@ -27,7 +27,7 @@ describe('<AppProxyForm />', () => {
       );
     }
 
-    const RemixStub = createRemixStub([{path: '/', Component: MyComponent}]);
+    const RemixStub = createRoutesStub([{path: '/', Component: MyComponent}]);
     const component = mount(<RemixStub />);
 
     // THEN
@@ -45,7 +45,7 @@ describe('<AppProxyForm />', () => {
       );
     }
 
-    const RemixStub = createRemixStub([{path: '/', Component: MyComponent}]);
+    const RemixStub = createRoutesStub([{path: '/', Component: MyComponent}]);
     const component = mount(<RemixStub />);
 
     // THEN

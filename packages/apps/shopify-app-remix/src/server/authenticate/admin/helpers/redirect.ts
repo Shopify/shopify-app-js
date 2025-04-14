@@ -1,7 +1,6 @@
 import {
-  TypedResponse,
   redirect as remixRedirect,
-} from '@remix-run/server-runtime';
+} from 'react-router';
 
 import {BasicParams} from '../../../types';
 import {getSessionTokenHeader} from '../../helpers/get-session-token-header';
@@ -11,10 +10,7 @@ import {redirectWithAppBridgeHeaders} from './redirect-with-app-bridge-headers';
 
 export type RedirectTarget = '_self' | '_parent' | '_top' | '_blank';
 export type RedirectInit = number | (ResponseInit & {target?: RedirectTarget});
-export type RedirectFunction = (
-  url: string,
-  init?: RedirectInit,
-) => TypedResponse<never>;
+export type RedirectFunction = typeof remixRedirect
 
 interface ParseURLOptions {
   params: BasicParams;

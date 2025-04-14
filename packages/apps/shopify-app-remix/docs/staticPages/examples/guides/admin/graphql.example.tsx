@@ -1,4 +1,4 @@
-import {ActionFunction, json} from '@remix-run/node';
+import {ActionFunction, json} from '@react-router/node';
 
 import {authenticate} from '../shopify.server';
 

@@ -1,4 +1,4 @@
-import {type ActionFunctionArgs} from '@remix-run/node';
+import {type ActionFunctionArgs} from '@react-router/node';
 
 import {authenticate} from '../shopify.server';
 

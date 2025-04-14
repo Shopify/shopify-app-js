@@ -1,4 +1,4 @@
-import {json, LoaderFunction} from '@remix-run/node';
+import {json, LoaderFunction} from '@react-router/node';
 
 import {authenticate} from '~/shopify.server';
 

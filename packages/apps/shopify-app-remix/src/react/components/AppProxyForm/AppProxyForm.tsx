@@ -1,5 +1,5 @@
 import {useContext} from 'react';
-import {Form, type FormProps} from '@remix-run/react';
+import {Form, type FormProps} from 'react-router';
 
 import {AppProxyProviderContext} from '../AppProxyProvider';
 

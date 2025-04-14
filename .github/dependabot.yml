@@ -19,7 +19,7 @@ updates:
       remix-run:
         patterns:
           - '@remix-run/node'
-          - '@remix-run/react'
+          - 'react-router'
           - '@remix-run/testing'
           - '@remix-run/server-runtime'
       prisma:

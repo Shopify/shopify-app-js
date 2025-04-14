@@ -18,7 +18,7 @@ export interface AuthenticatePublic<Config extends AppConfigArg> {
    * <caption>Authenticating a checkout extension request</caption>
    * ```ts
    * // /app/routes/public/widgets.ts
-   * import { LoaderFunctionArgs, json } from "@remix-run/node";
+   * import { LoaderFunctionArgs, json } from "@react-router/node";
    * import { authenticate } from "../shopify.server";
    *
    * export const loader = async ({ request }: LoaderFunctionArgs) => {
@@ -38,7 +38,7 @@ export interface AuthenticatePublic<Config extends AppConfigArg> {
    * <caption>Authenticating an app proxy request</caption>
    * ```ts
    * // /app/routes/public/widgets.ts
-   * import { LoaderFunctionArgs, json } from "@remix-run/node";
+   * import { LoaderFunctionArgs, json } from "@react-router/node";
    * import { authenticate } from "../shopify.server";
    *
    * export const loader = async ({ request }: LoaderFunctionArgs) => {
@@ -63,7 +63,7 @@ export interface AuthenticatePublic<Config extends AppConfigArg> {
    * <caption>Authenticating a customer account extension request</caption>
    * ```ts
    * // /app/routes/public/widgets.ts
-   * import { LoaderFunctionArgs, json } from "@remix-run/node";
+   * import { LoaderFunctionArgs, json } from "@react-router/node";
    * import { authenticate } from "../shopify.server";
    *
    * export const loader = async ({ request }: LoaderFunctionArgs) => {
@@ -83,7 +83,7 @@ export interface AuthenticatePublic<Config extends AppConfigArg> {
    * <caption>Authenticating a POS UI extension request</caption>
    * ```ts
    * // /app/routes/public/widgets.ts
-   * import { LoaderFunctionArgs, json } from "@remix-run/node";
+   * import { LoaderFunctionArgs, json } from "@react-router/node";
    * import { authenticate } from "../shopify.server";
    *
    * export const loader = async ({ request }: LoaderFunctionArgs) => {

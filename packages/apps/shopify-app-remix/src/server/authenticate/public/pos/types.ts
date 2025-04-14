@@ -25,7 +25,7 @@ export interface POSContext {
    * <description>Get store-specific data using the `sessionToken` object.</description>
    * ```ts
    * // app/routes/public/my-route.ts
-   * import { LoaderFunctionArgs, json } from "@remix-run/node";
+   * import { LoaderFunctionArgs, json } from "@react-router/node";
    * import { authenticate } from "../shopify.server";
    * import { getMyAppData } from "~/db/model.server";
    *
@@ -47,7 +47,7 @@ export interface POSContext {
    * <description>Use the `cors` helper to ensure your app can respond to POS UI extension requests.</description>
    * ```ts
    * // app/routes/public/my-route.ts
-   * import { LoaderFunctionArgs, json } from "@remix-run/node";
+   * import { LoaderFunctionArgs, json } from "@react-router/node";
    * import { authenticate } from "../shopify.server";
    * import { getMyAppData } from "~/db/model.server";
    *

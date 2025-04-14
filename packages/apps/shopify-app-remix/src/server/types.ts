@@ -80,7 +80,7 @@ interface Authenticate<Config extends AppConfigArg> {
    * <caption>Authenticating a request for an embedded app.</caption>
    * ```ts
    * // /app/routes/**\/*.jsx
-   * import { LoaderFunctionArgs, json } from "@remix-run/node";
+   * import { LoaderFunctionArgs, json } from "@react-router/node";
    * import { authenticate } from "../../shopify.server";
    *
    * export async function loader({ request }: LoaderFunctionArgs) {
@@ -115,7 +115,7 @@ interface Authenticate<Config extends AppConfigArg> {
    * <caption>Authenticating a Flow extension request.</caption>
    * ```ts
    * // /app/routes/**\/*.jsx
-   * import { ActionFunctionArgs, json } from "@remix-run/node";
+   * import { ActionFunctionArgs, json } from "@react-router/node";
    * import { authenticate } from "../../shopify.server";
    *
    * export async function action({ request }: ActionFunctionArgs) {
@@ -148,7 +148,7 @@ interface Authenticate<Config extends AppConfigArg> {
    * <description>Use the session associated with this request to use the Admin GraphQL API </description>
    * ```ts
    * // /app/routes/fulfillment_order_notification.ts
-   * import { ActionFunctionArgs } from "@remix-run/node";
+   * import { ActionFunctionArgs } from "@react-router/node";
    * import { authenticate } from "../shopify.server";
    *
    * export async function action({ request }: ActionFunctionArgs) {
@@ -173,7 +173,7 @@ interface Authenticate<Config extends AppConfigArg> {
    *
    * ```ts
    * // /app/routes/api/checkout.jsx
-   * import { LoaderFunctionArgs, json } from "@remix-run/node";
+   * import { LoaderFunctionArgs, json } from "@react-router/node";
    * import { authenticate } from "../../shopify.server";
    * import { getWidgets } from "~/db/widgets";
    *
@@ -194,7 +194,7 @@ interface Authenticate<Config extends AppConfigArg> {
    *
    * ```ts
    * // app/routes/webhooks.ts
-   * import { ActionFunctionArgs } from "@remix-run/node";
+   * import { ActionFunctionArgs } from "@react-router/node";
    * import { authenticate } from "../shopify.server";
    * import db from "../db.server";
    *
@@ -380,7 +380,7 @@ export interface ShopifyAppBase<Config extends AppConfigArg> {
    * ```
    * ```ts
    * // /app/routes/**\/*.jsx
-   * import { LoaderFunctionArgs, json } from "@remix-run/node";
+   * import { LoaderFunctionArgs, json } from "@react-router/node";
    * import shopify from "../../shopify.server";
    *
    * export async function loader({ request }: LoaderFunctionArgs) {
@@ -410,7 +410,7 @@ export interface ShopifyAppBase<Config extends AppConfigArg> {
    * ```
    * ```ts
    * // /app/routes/**\/*.jsx
-   * import { LoaderFunctionArgs, json } from "@remix-run/node";
+   * import { LoaderFunctionArgs, json } from "@react-router/node";
    * import { authenticateExternal } from "~/helpers/authenticate"
    * import shopify from "../../shopify.server";
    *

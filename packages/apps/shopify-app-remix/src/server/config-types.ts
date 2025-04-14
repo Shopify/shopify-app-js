@@ -129,7 +129,7 @@ export interface AppConfigArg<
    *
    * ```ts
    * // /app/routes/webhooks.ts
-   * import { ActionFunctionArgs } from "@remix-run/node";
+   * import { ActionFunctionArgs } from "@react-router/node";
    * import { authenticate } from "../shopify.server";
    * import db from "../db.server";
    *
@@ -235,7 +235,7 @@ export interface AppConfigArg<
    * export const authenticate = shopify.authenticate;
    *
    * // /app/routes/auth/$.jsx
-   * import { LoaderFunctionArgs } from "@remix-run/node";
+   * import { LoaderFunctionArgs } from "@react-router/node";
    * import { authenticate } from "../../shopify.server";
    *
    * export async function loader({ request }: LoaderFunctionArgs) {

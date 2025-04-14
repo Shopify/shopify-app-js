@@ -1,4 +1,4 @@
-import {redirect} from '@remix-run/server-runtime';
+import {redirect} from 'react-router';
 
 import {BasicParams} from '../../../types';
 import {getAppBridgeHeaders} from '../helpers';
