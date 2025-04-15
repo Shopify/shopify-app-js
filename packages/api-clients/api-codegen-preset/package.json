@@ -78,7 +78,7 @@
   },
   "devDependencies": {
     "@graphql-codegen/plugin-helpers": "^5.1.0",
-    "graphql-config": "5.1.3",
+    "graphql-config": "5.1.4",
     "regenerator-runtime": "^0.14.1"
   }
 }
