@@ -40,10 +40,17 @@ export function loginFactory(params: BasicParams) {
     const adminPath = api.utils.legacyUrlToShopAdminUrl(sanitizedShop);
     const installPath = `https://${adminPath}/oauth/install?client_id=${config.apiKey}`;
 
+    logger.info(`####################### authPath: ${authPath}`);
+    logger.info(`####################### adminPath: ${adminPath}`);
+    logger.info(`####################### installPath: ${installPath}`);
+
     const shouldInstall =
       config.isEmbeddedApp && config.future.unstable_newEmbeddedAuthStrategy;
-    const redirectUrl = shouldInstall ? installPath : authPath;
+    let redirectUrl = shouldInstall ? installPath : authPath;
 
+    // shouldn't embedded apps break out of the iframe for this redirect?
+    // probably why we are seeing the Identity issue?
+    //
     logger.info(`Redirecting login request to ${redirectUrl}`, {
       shop: sanitizedShop,
     });

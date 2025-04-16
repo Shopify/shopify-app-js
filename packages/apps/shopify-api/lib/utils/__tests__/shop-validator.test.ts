@@ -33,8 +33,12 @@ const VALID_HOSTS = [
 
 const VALID_SHOP_ADMIN_URLS = [
   {
-    adminUrl: 'admin.shopify.com/store/my-shop',
-    legacyAdminUrl: 'my-shop.myshopify.com',
+    adminUrl: 'admin.shop.dev/store/my-shop',
+    legacyAdminUrl: 'my-shop.dev-api.shop.dev',
+  },
+  {
+    adminUrl: 'shop1.dev-api.shop.dev',
+    legacyAdminUrl: 'shop1.dev-api.shop.dev',
   },
 ];
 

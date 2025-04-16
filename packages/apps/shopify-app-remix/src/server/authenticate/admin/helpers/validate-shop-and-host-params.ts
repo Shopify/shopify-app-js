@@ -10,6 +10,7 @@ export function validateShopAndHostParams(
 
   if (config.isEmbeddedApp) {
     const url = new URL(request.url);
+    logger.debug(`ZL --------- FTW ${url}`);
     const shop = api.utils.sanitizeShop(url.searchParams.get('shop')!);
     if (!shop) {
       logger.debug('Missing or invalid shop, redirecting to login path', {

@@ -12,7 +12,7 @@ const VALID_URLS = [
   },
   {
     adminUrl: 'admin.shop.dev/store/my-shop',
-    legacyAdminUrl: 'my-shop.shop.dev',
+    legacyAdminUrl: 'my-shop.dev-api.shop.dev',
   },
 ];
 

@@ -1,5 +1,6 @@
 // Converts admin.shopify.com/store/my-shop to my-shop.myshopify.com
 export function shopAdminUrlToLegacyUrl(shopAdminUrl: string): string | null {
+  console.log('ZLLLLLl------------- HELLOOO?');
   const shopUrl = removeProtocol(shopAdminUrl);
 
   const isShopAdminUrl = shopUrl.split('.')[0] === 'admin';
@@ -14,7 +15,7 @@ export function shopAdminUrlToLegacyUrl(shopAdminUrl: string): string | null {
   if (matches && matches.length === 2) {
     const shopName = matches[1];
     const isSpinUrl = shopUrl.includes('spin.dev/store/');
-    const isLocalUrl = shopUrl.includes('shop.dev/store/');
+    const isLocalUrl = shopUrl.includes('shop.dev');
 
     if (isSpinUrl) {
       return spinAdminUrlToLegacyUrl(shopUrl);
@@ -64,15 +65,19 @@ function spinAdminUrlToLegacyUrl(shopAdminUrl: string) {
 }
 
 function localAdminUrlToLegacyUrl(shopAdminUrl: string) {
-  const localRegex = new RegExp(`admin\\.shop\\.dev/store/(.+)`);
-  const localMatches = shopAdminUrl.match(localRegex);
+  const regex = /^(.*)\.dev-api\.shop\.dev$|admin\.shop\.dev\/store\/(.*)$/;
+  const match = shopAdminUrl.match(regex);
+  const shopName = match ? match[1] || match[2] : null;
 
-  if (localMatches && localMatches.length === 2) {
-    const shopName = localMatches[1];
-    return `${shopName}.shop.dev`;
-  } else {
-    return null;
-  }
+  throw new Error(`ZL ------ localAdminUrlToLegacyUrl shopname: ${shopName}`);
+
+  // if (localMatches && localMatches.length === 2) {
+  // const shopName = localMatches[1];
+
+  return `${shopName}.dev-api.shop.dev`;
+  // } else {
+  // return null;
+  // }
 }
 
 function spinLegacyUrlToAdminUrl(legacyAdminUrl: string) {
@@ -94,7 +99,7 @@ function localLegacyUrlToAdminUrl(legacyAdminUrl: string) {
 
   if (localMatches && localMatches.length === 2) {
     const shopName = localMatches[1];
-    return `admin.shop.dev/store/${shopName}`;
+    return `${shopName}.dev-api.shop.dev`;
   } else {
     return null;
   }

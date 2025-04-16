@@ -6,13 +6,17 @@ import {shopAdminUrlToLegacyUrl} from './shop-admin-url-helper';
 
 export function sanitizeShop(config: ConfigInterface) {
   return (shop: string, throwOnInvalid = false): string | null => {
+    config.logger.log(3, 'ZL-------------- IN HERE YO');
     let shopUrl = shop;
     const domainsRegex = [
       'myshopify\\.com',
       'shopify\\.com',
       'myshopify\\.io',
-      'shop\\.dev',
+      'shop\\.dev\*',
+      'dev-api\\.shop\\.dev',
     ];
+    config.logger.log(3, `ZL-------------- shopULR ${shopUrl}`);
+
     if (config.customShopDomains) {
       domainsRegex.push(
         ...config.customShopDomains.map((regex) =>
@@ -20,6 +24,7 @@ export function sanitizeShop(config: ConfigInterface) {
         ),
       );
     }
+    config.logger.log(3, `ZL-------------- 1`);
 
     const shopUrlRegex = new RegExp(
       `^[a-zA-Z0-9][a-zA-Z0-9-_]*\\.(${domainsRegex.join('|')})[/]*$`,
@@ -29,10 +34,13 @@ export function sanitizeShop(config: ConfigInterface) {
       `^admin\\.(${domainsRegex.join('|')})/store/([a-zA-Z0-9][a-zA-Z0-9-_]*)$`,
     );
 
+    config.logger.log(3, `ZL-------------- 2`);
     const isShopAdminUrl = shopAdminRegex.test(shopUrl);
     if (isShopAdminUrl) {
       shopUrl = shopAdminUrlToLegacyUrl(shopUrl) || '';
     }
+
+    console.log(`### ### ### ISADMIN: ${isShopAdminUrl}`);
 
     const sanitizedShop = shopUrlRegex.test(shopUrl) ? shopUrl : null;
     if (!sanitizedShop && throwOnInvalid) {
