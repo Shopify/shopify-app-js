@@ -118,6 +118,7 @@ export interface RequestOptions {
   readonly url?: string;
   readonly headers?: HeadersObject;
   readonly retries?: number;
+  readonly keepalive?: boolean;
   readonly signal?: AbortSignal;
 }
 
