@@ -1,0 +1,10 @@
+{
+    "compilerOptions": {
+        "rootDir": "/",
+    },
+    "include": [
+        "../src/**/*.doc.ts",
+        "../../shopify-app-remix/src/**/*.doc.ts"
+    ],
+    "exclude": []
+}
