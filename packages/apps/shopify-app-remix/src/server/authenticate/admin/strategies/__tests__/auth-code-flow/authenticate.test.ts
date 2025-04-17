@@ -21,7 +21,7 @@ describe('authenticate', () => {
       const shopify = shopifyApp(
         testConfig({
           scopes: ['otherTestScope'],
-          future: {unstable_newEmbeddedAuthStrategy: false},
+          disableTokenExchange: true,
           isEmbeddedApp: true,
         }),
       );
@@ -100,7 +100,7 @@ describe('authenticate', () => {
         const shopify = shopifyApp({
           ...testConfig({
             useOnlineTokens: isOnline,
-            future: {unstable_newEmbeddedAuthStrategy: false},
+            disableTokenExchange: true,
             isEmbeddedApp: true,
           }),
           future: {removeRest: false},

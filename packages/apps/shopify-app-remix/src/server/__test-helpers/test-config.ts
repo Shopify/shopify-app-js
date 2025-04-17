@@ -13,7 +13,6 @@ import {testConfig as testConfigImport} from '../test-helpers/test-config';
  * old behaviour.
  */
 const TEST_FUTURE_FLAGS: Required<{[key in keyof FutureFlags]: true}> = {
-  unstable_newEmbeddedAuthStrategy: true,
   removeRest: true,
 } as const;
 

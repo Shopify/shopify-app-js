@@ -12,9 +12,9 @@ export async function setUpEmbeddedFlow() {
     ...testConfig({
       restResources,
     }),
+    disableTokenExchange: true,
     future: {
       removeRest: false,
-      unstable_newEmbeddedAuthStrategy: false,
     },
   });
   const expectedSession = await setUpValidSession(shopify.sessionStorage);
@@ -39,9 +39,9 @@ export async function setUpEmbeddedFlowWithRemoveRestFlag() {
     ...testConfig({
       restResources,
     }),
+    disableTokenExchange: true,
     future: {
       removeRest: true,
-      unstable_newEmbeddedAuthStrategy: false,
     },
   });
 
