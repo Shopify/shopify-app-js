@@ -56,9 +56,7 @@ it('redirects to exit-iframe with authentication using app bridge when embedded 
 
 it('returns app bridge redirection during request headers when Shopify invalidated the session', async () => {
   // GIVEN
-  const {scopes} = await setUpFetchFlow({
-    unstable_newEmbeddedAuthStrategy: false,
-  });
+  const {scopes} = await setUpFetchFlow({useTokenExchange: false});
   const requestMock = await mockGraphqlRequest()({status: 401});
 
   // WHEN
@@ -99,9 +97,7 @@ it('returns a normal redirection when the app is non embedded and Shopify invali
 
 it('return an unexpected error when there is no authentication error', async () => {
   // GIVEN
-  const {scopes} = await setUpFetchFlow({
-    unstable_newEmbeddedAuthStrategy: false,
-  });
+  const {scopes} = await setUpFetchFlow({useTokenExchange: false});
   await mockGraphqlRequest()({status: 500});
 
   // WHEN / THEN

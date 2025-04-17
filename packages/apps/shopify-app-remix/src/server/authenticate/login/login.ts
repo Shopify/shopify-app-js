@@ -40,8 +40,7 @@ export function loginFactory(params: BasicParams) {
     const adminPath = api.utils.legacyUrlToShopAdminUrl(sanitizedShop);
     const installPath = `https://${adminPath}/oauth/install?client_id=${config.apiKey}`;
 
-    const shouldInstall =
-      config.isEmbeddedApp && config.future.unstable_newEmbeddedAuthStrategy;
+    const shouldInstall = config.isEmbeddedApp && config.useTokenExchange;
     const redirectUrl = shouldInstall ? installPath : authPath;
 
     logger.info(`Redirecting login request to ${redirectUrl}`, {

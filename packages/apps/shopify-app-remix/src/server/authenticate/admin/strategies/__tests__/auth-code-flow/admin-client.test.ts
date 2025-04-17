@@ -102,7 +102,7 @@ describe('admin.authenticate context', () => {
       it('returns app bridge redirection headers when request receives a 401 response on fetch requests', async () => {
         // GIVEN
         const {admin, session} = await setUpFetchFlow({
-          unstable_newEmbeddedAuthStrategy: false,
+          useTokenExchange: false,
         });
         const requestMock = await mockRequest(401);
 

@@ -12,7 +12,7 @@ describe('authorize.admin auth path', () => {
   test('throws an 400 Response if the shop param is missing', async () => {
     // GIVEN
     const config = testConfig({
-      future: {unstable_newEmbeddedAuthStrategy: false},
+      useTokenExchange: false,
     });
     const shopify = shopifyApp(config);
 
@@ -30,7 +30,7 @@ describe('authorize.admin auth path', () => {
   test('throws an 400 Response if the shop param is invalid', async () => {
     // GIVEN
     const config = testConfig({
-      future: {unstable_newEmbeddedAuthStrategy: false},
+      useTokenExchange: false,
     });
     const shopify = shopifyApp(config);
 
@@ -48,7 +48,7 @@ describe('authorize.admin auth path', () => {
   test('throws an 302 Response to begin auth', async () => {
     // GIVEN
     const config = testConfig({
-      future: {unstable_newEmbeddedAuthStrategy: false},
+      useTokenExchange: false,
     });
     const shopify = shopifyApp(config);
 
@@ -66,7 +66,7 @@ describe('authorize.admin auth path', () => {
   test('redirects to exit-iframe when loading the auth path while in an iframe request', async () => {
     // GIVEN
     const config = testConfig({
-      future: {unstable_newEmbeddedAuthStrategy: false},
+      useTokenExchange: false,
     });
     const shopify = shopifyApp(config);
 

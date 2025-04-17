@@ -37,7 +37,7 @@ describe('authorize.admin doc request path', () => {
       // GIVEN
       const shopify = shopifyApp(
         testConfig({
-          future: {unstable_newEmbeddedAuthStrategy: false},
+          useTokenExchange: false,
           isEmbeddedApp: true,
         }),
       );
@@ -57,7 +57,7 @@ describe('authorize.admin doc request path', () => {
     it('redirects to auth when not embedded on an embedded app, and the API token is invalid', async () => {
       // GIVEN
       const config = testConfig({
-        future: {unstable_newEmbeddedAuthStrategy: false},
+        useTokenExchange: false,
         isEmbeddedApp: true,
       });
       const shopify = shopifyApp(config);
@@ -81,7 +81,7 @@ describe('authorize.admin doc request path', () => {
     it('returns non-401 codes when not embedded on an embedded app and the request fails', async () => {
       // GIVEN
       const config = testConfig({
-        future: {unstable_newEmbeddedAuthStrategy: false},
+        useTokenExchange: false,
         isEmbeddedApp: true,
       });
       const shopify = shopifyApp(config);
@@ -112,7 +112,7 @@ describe('authorize.admin doc request path', () => {
     it('returns a 500 when not embedded on an embedded app and the request fails', async () => {
       // GIVEN
       const config = testConfig({
-        future: {unstable_newEmbeddedAuthStrategy: false},
+        useTokenExchange: false,
         isEmbeddedApp: true,
       });
       const shopify = shopifyApp(config);
@@ -143,7 +143,7 @@ describe('authorize.admin doc request path', () => {
       // GIVEN
       const shopify = shopifyApp(
         testConfig({
-          future: {unstable_newEmbeddedAuthStrategy: false},
+          useTokenExchange: false,
           isEmbeddedApp: true,
         }),
       );

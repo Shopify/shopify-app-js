@@ -10,16 +10,6 @@ import {AppConfig} from '../config-types';
 // it doesn't cause regressions.
 export interface FutureFlags {
   /**
-   * When enabled, embedded apps will fetch access tokens via [token exchange](https://shopify.dev/docs/apps/auth/get-access-tokens/token-exchange).
-   * This assumes the app has scopes declared for [Shopify managing installation](https://shopify.dev/docs/apps/auth/installation#shopify-managed-installation).
-   *
-   * Learn more about this [new embedded app auth strategy](https://shopify.dev/docs/api/shopify-app-remix#embedded-auth-strategy).
-   *
-   * @default false
-   */
-  unstable_newEmbeddedAuthStrategy?: boolean;
-
-  /**
    * When enabled, methods for interacting with the admin REST API will not be returned.
    *
    * This affects:
@@ -69,11 +59,11 @@ export function logDisabledFutureFlags(
   const logFlag = (flag: string, message: string) =>
     logger.info(`Future flag ${flag} is disabled.\n\n  ${message}\n`);
 
-  if (!config.future.unstable_newEmbeddedAuthStrategy) {
+  if (!config.future.removeRest) {
     logFlag(
-      'unstable_newEmbeddedAuthStrategy',
-      'Enable this to use OAuth token exchange instead of auth code to generate API access tokens.' +
-        '\n  Your app must be using Shopify managed install: https://shopify.dev/docs/apps/auth/installation',
+      'removeRest',
+      'Enable this to remove REST API methods from the package. Shopify is going all-in on GraphQL.' +
+        '\n  Learn more at: https://www.shopify.com/ca/partners/blog/all-in-on-graphql',
     );
   }
 }

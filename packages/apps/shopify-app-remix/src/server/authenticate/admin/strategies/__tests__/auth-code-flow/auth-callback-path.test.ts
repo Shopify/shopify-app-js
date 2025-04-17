@@ -18,7 +18,7 @@ describe('authorize.admin auth callback path', () => {
       test('throws an error if the shop param is missing', async () => {
         // GIVEN
         const config = testConfig({
-          future: {unstable_newEmbeddedAuthStrategy: !isEmbeddedApp},
+          useTokenExchange: !isEmbeddedApp,
           isEmbeddedApp,
         });
         const shopify = shopifyApp(config);
@@ -37,7 +37,7 @@ describe('authorize.admin auth callback path', () => {
       test('throws an error if the shop param is not valid', async () => {
         // GIVEN
         const config = testConfig({
-          future: {unstable_newEmbeddedAuthStrategy: !isEmbeddedApp},
+          useTokenExchange: !isEmbeddedApp,
           isEmbeddedApp,
         });
         const shopify = shopifyApp(config);
@@ -56,7 +56,7 @@ describe('authorize.admin auth callback path', () => {
       test('throws an 302 Response to begin auth if CookieNotFound error', async () => {
         // GIVEN
         const config = testConfig({
-          future: {unstable_newEmbeddedAuthStrategy: !isEmbeddedApp},
+          useTokenExchange: !isEmbeddedApp,
           isEmbeddedApp,
         });
         const shopify = shopifyApp(config);
@@ -84,7 +84,7 @@ describe('authorize.admin auth callback path', () => {
       test('throws a 400 if there is no HMAC param', async () => {
         // GIVEN
         const config = testConfig({
-          future: {unstable_newEmbeddedAuthStrategy: !isEmbeddedApp},
+          useTokenExchange: !isEmbeddedApp,
           isEmbeddedApp,
         });
         const shopify = shopifyApp(config);
@@ -114,7 +114,7 @@ describe('authorize.admin auth callback path', () => {
       test('throws a 400 if the HMAC param is invalid', async () => {
         // GIVEN
         const config = testConfig({
-          future: {unstable_newEmbeddedAuthStrategy: !isEmbeddedApp},
+          useTokenExchange: !isEmbeddedApp,
           isEmbeddedApp,
         });
         const shopify = shopifyApp(config);
@@ -145,7 +145,7 @@ describe('authorize.admin auth callback path', () => {
       test('throws a 500 if any other errors are thrown', async () => {
         // GIVEN
         const config = testConfig({
-          future: {unstable_newEmbeddedAuthStrategy: !isEmbeddedApp},
+          useTokenExchange: !isEmbeddedApp,
           isEmbeddedApp,
         });
         const shopify = shopifyApp({
@@ -173,7 +173,7 @@ describe('authorize.admin auth callback path', () => {
       test('Exchanges the code for a token and saves it to SessionStorage', async () => {
         // GIVEN
         const config = testConfig({
-          future: {unstable_newEmbeddedAuthStrategy: !isEmbeddedApp},
+          useTokenExchange: !isEmbeddedApp,
           isEmbeddedApp,
         });
         const shopify = shopifyApp(config);
@@ -203,7 +203,7 @@ describe('authorize.admin auth callback path', () => {
         // GIVEN
         const config = testConfig({
           useOnlineTokens: true,
-          future: {unstable_newEmbeddedAuthStrategy: !isEmbeddedApp},
+          useTokenExchange: !isEmbeddedApp,
           isEmbeddedApp,
         });
         const shopify = shopifyApp(config);
@@ -232,7 +232,7 @@ describe('authorize.admin auth callback path', () => {
         // GIVEN
         const config = testConfig({
           useOnlineTokens: true,
-          future: {unstable_newEmbeddedAuthStrategy: !isEmbeddedApp},
+          useTokenExchange: !isEmbeddedApp,
           isEmbeddedApp,
         });
         const shopify = shopifyApp(config);
@@ -257,7 +257,7 @@ describe('authorize.admin auth callback path', () => {
           hooks: {
             afterAuth: afterAuthMock,
           },
-          future: {unstable_newEmbeddedAuthStrategy: !isEmbeddedApp},
+          useTokenExchange: !isEmbeddedApp,
           isEmbeddedApp,
         });
         const shopify = shopifyApp(config);
@@ -277,7 +277,7 @@ describe('authorize.admin auth callback path', () => {
         test('throws a 302 response to the embedded app URL', async () => {
           // GIVEN
           const config = testConfig({
-            future: {unstable_newEmbeddedAuthStrategy: false},
+            useTokenExchange: false,
             isEmbeddedApp: true,
           });
           const shopify = shopifyApp(config);
@@ -337,7 +337,7 @@ describe('authorize.admin auth callback path', () => {
               throw redirectResponse;
             },
           },
-          future: {unstable_newEmbeddedAuthStrategy: !isEmbeddedApp},
+          useTokenExchange: !isEmbeddedApp,
           isEmbeddedApp,
         });
         const shopify = shopifyApp(config);

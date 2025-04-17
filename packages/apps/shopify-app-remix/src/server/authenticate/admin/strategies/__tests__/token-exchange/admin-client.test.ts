@@ -93,9 +93,7 @@ describe('admin.authenticate context', () => {
 
       it('returns 401 when receives a 401 response on fetch requests', async () => {
         // GIVEN
-        const {admin, session, shopify} = await setUpFetchFlow({
-          unstable_newEmbeddedAuthStrategy: true,
-        });
+        const {admin, session, shopify} = await setUpFetchFlow();
         const requestMock = await mockRequest();
 
         // WHEN
@@ -128,9 +126,9 @@ async function setUpDocumentFlow() {
 
   const shopify = shopifyApp({
     ...config,
+    useTokenExchange: true,
     future: {
       ...config.future,
-      unstable_newEmbeddedAuthStrategy: true,
       removeRest: false,
     },
   });
@@ -155,9 +153,9 @@ async function setUpDocumentFlowWithRemoveRestFlag() {
 
   const shopify = shopifyApp({
     ...config,
+    useTokenExchange: true,
     future: {
       ...config.future,
-      unstable_newEmbeddedAuthStrategy: true,
       removeRest: true,
     },
   });
