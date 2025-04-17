@@ -37,7 +37,7 @@ const VALID_SHOP_ADMIN_URLS = [
     legacyAdminUrl: 'my-shop.dev-api.shop.dev',
   },
   {
-    adminUrl: 'shop1.dev-api.shop.dev',
+    adminUrl: 'shop1.my.shop.dev',
     legacyAdminUrl: 'shop1.dev-api.shop.dev',
   },
 ];

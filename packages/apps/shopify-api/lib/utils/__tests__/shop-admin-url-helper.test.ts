@@ -14,6 +14,10 @@ const VALID_URLS = [
     adminUrl: 'admin.shop.dev/store/my-shop',
     legacyAdminUrl: 'my-shop.dev-api.shop.dev',
   },
+  {
+    adminUrl: 'shop1.my.shop.dev',
+    legacyAdminUrl: 'shop1.dev-api.shop.dev',
+  },
 ];
 
 const INVALID_ADMIN_URLS = [

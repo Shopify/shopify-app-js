@@ -41,8 +41,23 @@ export function sanitizeShop(config: ConfigInterface) {
     }
 
     console.log(`### ### ### ISADMIN: ${isShopAdminUrl}`);
+    const localDevUrlRegex = new RegExp(
+      `^[a-zA-Z0-9][a-zA-Z0-9-_]*\\.[a-zA-Z0-9][a-zA-Z0-9-_]*\\.shop\\.dev$`,
+    );
 
-    const sanitizedShop = shopUrlRegex.test(shopUrl) ? shopUrl : null;
+    let sanitizedShop = null;
+    if (shopUrlRegex.test(shopUrl)) {
+      sanitizedShop = shopUrl;
+    } else if (localDevUrlRegex.test(shopUrl)) {
+      const match = shopUrl.match(localDevUrlRegex);
+
+      if (match) {
+        const shopName = match[1];
+        const transformedShopUrl = `${shopName}.dev-api.shop.dev`;
+        // transformedShopUrl will be "shop1.dev-api.shop.dev"
+      }
+    }
+
     if (!sanitizedShop && throwOnInvalid) {
       throw new InvalidShopError('Received invalid shop argument');
     }
