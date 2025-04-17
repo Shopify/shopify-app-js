@@ -3,13 +3,18 @@ export interface IdempotentHandlePromiseParams {
   identifier: string;
 }
 
+interface PromiseCacheEntry {
+  promise: Promise<any>;
+  startTime: number;
+}
+
 const IDENTIFIER_TTL_MS = 60000;
 
 export class IdempotentPromiseHandler {
-  protected identifiers: Map<string, number>;
+  protected identifiers: Map<string, PromiseCacheEntry>;
 
   constructor() {
-    this.identifiers = new Map<string, number>();
+    this.identifiers = new Map<string, PromiseCacheEntry>();
   }
 
   async handlePromise({
@@ -17,27 +22,27 @@ export class IdempotentPromiseHandler {
     identifier,
   }: IdempotentHandlePromiseParams): Promise<any> {
     try {
-      if (this.isPromiseRunnable(identifier)) {
-        await promiseFunction();
-      }
+      const entry = this.identifiers.get(identifier);
+
+      if (entry)  return entry.promise;
+  
+      const promise = promiseFunction();
+
+      this.identifiers.set(identifier, {
+        promise,
+        startTime: Date.now(),
+      });
+
+      return promise;
     } finally {
-      this.clearStaleIdentifiers();
+      this.clearStaleIdentifiers(); 
     }
-
-    return Promise.resolve();
   }
 
-  private isPromiseRunnable(identifier: string) {
-    if (!this.identifiers.has(identifier)) {
-      this.identifiers.set(identifier, Date.now());
-      return true;
-    }
-    return false;
-  }
-
-  private async clearStaleIdentifiers() {
-    this.identifiers.forEach((date, identifier, map) => {
-      if (Date.now() - date > IDENTIFIER_TTL_MS) {
+  private clearStaleIdentifiers() {
+    const now = Date.now();
+    this.identifiers.forEach((entry, identifier, map) => {
+      if (now - entry.startTime > IDENTIFIER_TTL_MS) {
         map.delete(identifier);
       }
     });

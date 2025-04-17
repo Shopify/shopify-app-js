@@ -17,12 +17,12 @@ describe('IdempotentPromiseHandler', () => {
     const promiseHandler = new IdempotentPromiseHandler();
 
     // WHEN
-    promiseHandler.handlePromise({
+    await promiseHandler.handlePromise({
       promiseFunction,
       identifier: 'first-promise',
     });
 
-    promiseHandler.handlePromise({
+    await promiseHandler.handlePromise({
       promiseFunction,
       identifier: 'first-promise',
     });
@@ -37,12 +37,12 @@ describe('IdempotentPromiseHandler', () => {
     const promiseHandler = new IdempotentPromiseHandler();
 
     // WHEN
-    promiseHandler.handlePromise({
+    await promiseHandler.handlePromise({
       promiseFunction,
       identifier: 'first-promise',
     });
 
-    promiseHandler.handlePromise({
+    await promiseHandler.handlePromise({
       promiseFunction,
       identifier: 'second-promise',
     });
@@ -51,14 +51,27 @@ describe('IdempotentPromiseHandler', () => {
     expect(mockFunction).toHaveBeenCalledTimes(2);
   });
 
+  it('returns the same promise for the same identifier', async () => {
+    // GIVEN
+    const promiseHandler = new IdempotentPromiseHandler();
+
+    // WHEN
+    const promise1 = promiseHandler.handlePromise({promiseFunction, identifier: 'same-promise'});
+    const promise2 = promiseHandler.handlePromise({promiseFunction, identifier: 'same-promise'});
+
+    // THEN
+    expect(promise1).toStrictEqual(promise2);
+    expect(mockFunction).toHaveBeenCalledTimes(1);
+  });
+
   it('clears stale identifier from hash', async () => {
     // GIVEN
     const currentDate = Date.now();
     jest.useFakeTimers().setSystemTime(currentDate);
-    const promiseHandler = new IdempotentPromiseHandler() as any;
+    const promiseHandler = new IdempotentPromiseHandler();
 
     // WHEN
-    promiseHandler.handlePromise({
+    await promiseHandler.handlePromise({
       promiseFunction,
       identifier: 'old-promise',
     });
@@ -75,15 +88,15 @@ describe('IdempotentPromiseHandler', () => {
 
   it('clears stale identifier from hash even when promise fails', async () => {
     // GIVEN
-    const promiseFunctionErr = () => {
+    const promiseFunctionErr = async () => {
       throw new ShopifyError();
     };
     const currentDate = Date.now();
     jest.useFakeTimers().setSystemTime(currentDate);
-    const promiseHandler = new IdempotentPromiseHandler() as any;
+    const promiseHandler = new IdempotentPromiseHandler();
 
     // WHEN
-    expect(
+    await expect(
       promiseHandler.handlePromise({
         promiseFunction: promiseFunctionErr,
         identifier: 'old-promise',
@@ -92,7 +105,7 @@ describe('IdempotentPromiseHandler', () => {
 
     jest.useFakeTimers().setSystemTime(currentDate + 70000);
 
-    expect(
+    await expect(
       promiseHandler.handlePromise({
         promiseFunction: promiseFunctionErr,
         identifier: 'new-promise',
