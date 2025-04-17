@@ -81,10 +81,34 @@ describe('login helper', () => {
   );
 
   describe.each([
-    {isEmbeddedApp: false, futureFlag: false, redirectToInstall: false},
-    {isEmbeddedApp: true, futureFlag: false, redirectToInstall: false},
-    {isEmbeddedApp: false, futureFlag: true, redirectToInstall: false},
-    {isEmbeddedApp: true, futureFlag: true, redirectToInstall: true},
+    {
+      isEmbeddedApp: false,
+      disableTokenExchange: false,
+      useTokenExchange: false,
+    },
+    {isEmbeddedApp: true, disableTokenExchange: false, useTokenExchange: true},
+    {isEmbeddedApp: false, disableTokenExchange: true, useTokenExchange: false},
+    {isEmbeddedApp: true, disableTokenExchange: true, useTokenExchange: false},
+    {
+      isEmbeddedApp: true,
+      disableTokenExchange: undefined,
+      useTokenExchange: true,
+    },
+    {
+      isEmbeddedApp: undefined,
+      disableTokenExchange: false,
+      useTokenExchange: true,
+    },
+    {
+      isEmbeddedApp: undefined,
+      disableTokenExchange: true,
+      useTokenExchange: false,
+    },
+    {
+      isEmbeddedApp: undefined,
+      disableTokenExchange: undefined,
+      useTokenExchange: true,
+    },
   ])('Given setup: %s', (testCaseConfig) => {
     it.each([
       {urlShop: null, formShop: TEST_SHOP, method: 'POST'},
@@ -98,7 +122,7 @@ describe('login helper', () => {
       async ({urlShop, formShop, method}) => {
         // GIVEN
         const config = testConfig({
-          future: {unstable_newEmbeddedAuthStrategy: testCaseConfig.futureFlag},
+          disableTokenExchange: testCaseConfig.disableTokenExchange,
           isEmbeddedApp: testCaseConfig.isEmbeddedApp,
         });
         const shopify = shopifyApp(config);
@@ -117,7 +141,7 @@ describe('login helper', () => {
         );
 
         // THEN
-        const expectedPath = testCaseConfig.redirectToInstall
+        const expectedPath = testCaseConfig.useTokenExchange
           ? `https://admin.shopify.com/store/${TEST_SHOP_NAME}/oauth/install?client_id=${config.apiKey}`
           : `${APP_URL}/auth?shop=${TEST_SHOP}`;
 
@@ -129,7 +153,7 @@ describe('login helper', () => {
     it('sanitizes the shop parameter', async () => {
       // GIVEN
       const config = testConfig({
-        future: {unstable_newEmbeddedAuthStrategy: testCaseConfig.futureFlag},
+        disableTokenExchange: testCaseConfig.disableTokenExchange,
         isEmbeddedApp: testCaseConfig.isEmbeddedApp,
       });
       const shopify = shopifyApp(config);
@@ -145,7 +169,7 @@ describe('login helper', () => {
         requestMock as any as Request,
       );
 
-      const expectedPath = testCaseConfig.redirectToInstall
+      const expectedPath = testCaseConfig.useTokenExchange
         ? `https://admin.shopify.com/store/${TEST_SHOP_NAME}/oauth/install?client_id=${config.apiKey}`
         : `${APP_URL}/auth?shop=${TEST_SHOP}`;
 

@@ -18,7 +18,7 @@ describe('authorize.session token header path', () => {
         const shopify = shopifyApp(
           testConfig({
             useOnlineTokens: isOnline,
-            future: {unstable_newEmbeddedAuthStrategy: false},
+            disableTokenExchange: true,
           }),
         );
 
@@ -48,7 +48,7 @@ describe('authorize.session token header path', () => {
           testConfig({
             useOnlineTokens: isOnline,
             scopes: ['otherTestScope'],
-            future: {unstable_newEmbeddedAuthStrategy: false},
+            disableTokenExchange: true,
           }),
         );
         // The session scopes don't match the configured scopes, so it needs to be reset

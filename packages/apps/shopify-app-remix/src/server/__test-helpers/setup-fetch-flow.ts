@@ -7,14 +7,13 @@ import {getJwt} from './get-jwt';
 import {setUpValidSession} from './setup-valid-session';
 import {testConfig} from './test-config';
 
-export async function setUpFetchFlow(flags?: {
-  unstable_newEmbeddedAuthStrategy?: boolean;
-}) {
+export async function setUpFetchFlow(disableTokenExchange = false) {
   const shopify = shopifyApp({
     ...testConfig({
       restResources,
     }),
-    future: {...flags, removeRest: false},
+    disableTokenExchange,
+    future: {removeRest: false},
   });
 
   await setUpValidSession(shopify.sessionStorage);
