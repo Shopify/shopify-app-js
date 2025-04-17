@@ -13,8 +13,7 @@ You can use it as a guide for migrating your app, and ensuring you're ready for 
 ## Use new authentication strategy for embedded apps
 
 > [!NOTE]
-> The `unstable_newEmbeddedAuthStrategy` future flag enabled this behaviour.
-> If you've already enabled the flag, you don't need to follow these instructions.
+> If you've already enabled the `unstable_newEmbeddedAuthStrategy` future flag , you don't need to follow these instructions.
 
 Shopify apps can now use [OAuth token exchange](https://shopify.dev/docs/apps/auth/get-access-tokens/token-exchange) to obtain an API access token without having to redirect the user, which makes the process much faster, and less error prone.
 
