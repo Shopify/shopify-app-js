@@ -1,0 +1,59 @@
+{
+  "name": "@shopify/shopify-app-router",
+  "version": "1.0.0",
+  "description": "React Router version of shopify-app-remix",
+  "main": "./dist/cjs/server/index.js",
+  "module": "./dist/esm/server/index.mjs",
+  "types": "./dist/ts/server/index.d.ts",
+  "exports": {
+    "./adapters/*": {
+      "types": "./dist/ts/server/adapters/*/index.d.ts",
+      "require": "./dist/cjs/server/adapters/*/index.js",
+      "import": "./dist/esm/server/adapters/*/index.mjs",
+      "default": "./dist/cjs/server/adapters/*/index.js"
+    },
+    "./server/adapters/*": {
+      "types": "./dist/ts/server/adapters/*/index.d.ts",
+      "require": "./dist/cjs/server/adapters/*/index.js",
+      "import": "./dist/esm/server/adapters/*/index.mjs",
+      "default": "./dist/cjs/server/adapters/*/index.js"
+    },
+    "./server": {
+      "types": "./dist/ts/server/index.d.ts",
+      "require": "./dist/cjs/server/index.js",
+      "import": "./dist/esm/server/index.mjs",
+      "default": "./dist/cjs/server/index.js"
+    },
+    "./react": {
+      "types": "./dist/ts/react/index.d.ts",
+      "require": "./dist/cjs/react/index.js",
+      "import": "./dist/esm/react/index.mjs",
+      "default": "./dist/cjs/react/index.js"
+    },
+    "./test-helpers": {
+      "types": "./dist/ts/server/test-helpers/index.d.ts",
+      "require": "./dist/cjs/server/test-helpers/index.js",
+      "import": "./dist/esm/server/test-helpers/index.mjs",
+      "default": "./dist/cjs/server/test-helpers/index.js"
+    }
+  },
+  "files": [
+    "dist/*"
+  ],
+  "type": "module",
+  "sideEffects": false,
+  "dependencies": {
+    "react-router": "^7.0.0",
+    "react-router-dom": "^7.0.0",
+    "@shopify/shopify-api": "^11.12.0",
+    "@shopify/admin-api-client": "^1.0.8",
+    "@shopify/storefront-api-client": "^1.0.7",
+    "@shopify/shopify-app-session-storage": "^3.0.17",
+    "isbot": "^5.1.26",
+    "semver": "^7.7.1"
+  },
+  "peerDependencies": {
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0"
+  }
+} 
