@@ -1,0 +1,13 @@
+{
+  "extends": "../../../tsconfig.json",
+  "include": ["**/*.ts", "**/*.tsx"],
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@remix-run/node": ["./node_modules/@react-router/node"],
+      "@remix-run/react": ["./node_modules/react-router"],
+      "@remix-run/server-runtime": ["./node_modules/react-router"],
+      "@remix-run/testing": ["./node_modules/react-router"]
+    }
+  }
+} 
