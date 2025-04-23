@@ -69,7 +69,7 @@ function localAdminUrlToLegacyUrl(shopAdminUrl: string) {
 
   if (localMatches && localMatches.length === 2) {
     const shopName = localMatches[1];
-    return `${shopName}.shop.dev`;
+    return `${shopName}.dev-api.shop.dev`;
   } else {
     return null;
   }
@@ -89,15 +89,25 @@ function spinLegacyUrlToAdminUrl(legacyAdminUrl: string) {
 }
 
 function localLegacyUrlToAdminUrl(legacyAdminUrl: string) {
-  const localRegex = new RegExp(`(.+)\\.shop\\.dev$`);
-  const localMatches = legacyAdminUrl.match(localRegex);
+  // Handle the traditional format: shop.shop.dev
+  const legacyLocalRegex = new RegExp(`(.+)\\.shop\\.dev$`);
+  const legacyLocalMatches = legacyAdminUrl.match(legacyLocalRegex);
 
-  if (localMatches && localMatches.length === 2) {
-    const shopName = localMatches[1];
+  if (legacyLocalMatches && legacyLocalMatches.length === 2) {
+    const shopName = legacyLocalMatches[1];
     return `admin.shop.dev/store/${shopName}`;
-  } else {
-    return null;
   }
+
+  // Handle the new dev-api format: shop.dev-api.shop.dev
+  const devApiRegex = new RegExp(`(.+)\\.dev-api\\.shop\\.dev$`);
+  const devApiMatches = legacyAdminUrl.match(devApiRegex);
+
+  if (devApiMatches && devApiMatches.length === 2) {
+    const shopName = devApiMatches[1];
+    return `admin.shop.dev/store/${shopName}`;
+  }
+
+  return null;
 }
 function removeProtocol(url: string): string {
   return url.replace(/^https?:\/\//, '').replace(/\/$/, '');

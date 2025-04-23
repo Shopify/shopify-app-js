@@ -6,6 +6,8 @@ const VALID_SHOP_URL_1 = 'someshop.myshopify.com';
 const VALID_SHOP_URL_2 = 'devshop.myshopify.io';
 const VALID_SHOP_URL_3 = 'test-shop.myshopify.com';
 const VALID_SHOP_URL_4 = 'dev-shop-.myshopify.io';
+const VALID_LOCAL_DEV_SHOP_URL = 'test-shop.my.shop.dev';
+const EXPECTED_SANITIZED_LOCAL_DEV_URL = 'test-shop.dev-api.shop.dev';
 
 const INVALID_SHOP_URL_1 = 'notshopify.com';
 const INVALID_SHOP_URL_2 = '-invalid.myshopify.io';
@@ -72,6 +74,14 @@ describe('sanitizeShop', () => {
     );
     expect(shopify.utils.sanitizeShop(VALID_SHOP_URL_4)).toEqual(
       VALID_SHOP_URL_4,
+    );
+  });
+
+  test('converts local development shop URL to sanitized format', () => {
+    const shopify = shopifyApi(testConfig());
+
+    expect(shopify.utils.sanitizeShop(VALID_LOCAL_DEV_SHOP_URL)).toEqual(
+      EXPECTED_SANITIZED_LOCAL_DEV_URL,
     );
   });
 
