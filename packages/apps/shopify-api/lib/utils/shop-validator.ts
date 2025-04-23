@@ -2,27 +2,13 @@ import {ConfigInterface} from '../base-types';
 import {InvalidHostError, InvalidShopError} from '../error';
 import {decodeHost} from '../auth/decode-host';
 
-import {shopAdminUrlToLegacyUrl} from './shop-admin-url-helper';
-
-// Helper function to convert shop1.my.shop.dev to shop1.dev-api.shop.dev
-function sanitizeLocalDevShop(shopUrl: string): string | null {
-  const myShopDevRegex = /^([a-zA-Z0-9][a-zA-Z0-9-_]*)\.my\.shop\.dev$/;
-  const matches = shopUrl.match(myShopDevRegex);
-
-  if (matches && matches.length === 2) {
-    const shopName = matches[1];
-    return `${shopName}.dev-api.shop.dev`;
-  }
-
-  return null;
-}
+import {shopAdminUrlToLegacyUrl, localDevShopToApiUrl} from './shop-admin-url-helper';
 
 export function sanitizeShop(config: ConfigInterface) {
   return (shop: string, throwOnInvalid = false): string | null => {
     let shopUrl = shop;
 
-    // Check for local dev shop URL format
-    const sanitizedLocalDevShop = sanitizeLocalDevShop(shopUrl);
+    const sanitizedLocalDevShop = localDevShopToApiUrl(shopUrl);
     if (sanitizedLocalDevShop) {
       return sanitizedLocalDevShop;
     }

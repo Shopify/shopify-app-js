@@ -1,3 +1,20 @@
+// Converts shop1.my.shop.dev to shop1.dev-api.shop.dev
+export function localDevShopToApiUrl(shopUrl: string): string | null {
+  if (!shopUrl) {
+    return null;
+  }
+
+  const myShopDevRegex = /^([a-zA-Z0-9][a-zA-Z0-9-_]*)\.my\.shop\.dev$/;
+  const matches = shopUrl.match(myShopDevRegex);
+
+  if (matches && matches.length === 2) {
+    const shopName = matches[1];
+    return `${shopName}.dev-api.shop.dev`;
+  }
+
+  return null;
+}
+
 // Converts admin.shopify.com/store/my-shop to my-shop.myshopify.com
 export function shopAdminUrlToLegacyUrl(shopAdminUrl: string): string | null {
   const shopUrl = removeProtocol(shopAdminUrl);
@@ -39,10 +56,10 @@ export function legacyUrlToShopAdminUrl(legacyAdminUrl: string): string | null {
     return `admin.shopify.com/store/${shopName}`;
   } else {
     const isSpinUrl = shopUrl.endsWith('spin.dev');
-    const isLocalUrl = shopUrl.endsWith('shop.dev');
+    const isDevApiUrl = shopUrl.endsWith('dev-api.shop.dev');
     if (isSpinUrl) {
       return spinLegacyUrlToAdminUrl(shopUrl);
-    } else if (isLocalUrl) {
+    } else if (isDevApiUrl) {
       return localLegacyUrlToAdminUrl(shopUrl);
     } else {
       return null;
@@ -89,7 +106,7 @@ function spinLegacyUrlToAdminUrl(legacyAdminUrl: string) {
 }
 
 function localLegacyUrlToAdminUrl(legacyAdminUrl: string) {
-  // Handle the traditional format: shop.shop.dev
+  // For backward compatibility
   const legacyLocalRegex = new RegExp(`(.+)\\.shop\\.dev$`);
   const legacyLocalMatches = legacyAdminUrl.match(legacyLocalRegex);
 
@@ -98,13 +115,14 @@ function localLegacyUrlToAdminUrl(legacyAdminUrl: string) {
     return `admin.shop.dev/store/${shopName}`;
   }
 
-  // Handle the new dev-api format: shop.dev-api.shop.dev
-  const devApiRegex = new RegExp(`(.+)\\.dev-api\\.shop\\.dev$`);
-  const devApiMatches = legacyAdminUrl.match(devApiRegex);
-
-  if (devApiMatches && devApiMatches.length === 2) {
-    const shopName = devApiMatches[1];
-    return `admin.shop.dev/store/${shopName}`;
+  // Handle the new dev-api format shop.dev-api.shop.dev
+  if (legacyAdminUrl.endsWith('.dev-api.shop.dev')) {
+    // Extract just the shop name part
+    const parts = legacyAdminUrl.split('.');
+    if (parts.length >= 3) {
+      const shopName = parts[0];
+      return `admin.shop.dev/store/${shopName}`;
+    }
   }
 
   return null;
