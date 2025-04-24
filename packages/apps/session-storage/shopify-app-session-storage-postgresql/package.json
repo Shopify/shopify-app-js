@@ -45,7 +45,7 @@
     "session storage"
   ],
   "dependencies": {
-    "pg": "^8.14.1",
+    "pg": "^8.15.5",
     "pg-connection-string": "^2.7.0"
   },
   "peerDependencies": {
@@ -54,7 +54,7 @@
   },
   "devDependencies": {
     "@shopify/shopify-app-session-storage-test-utils": "^3.0.17",
-    "@types/pg": "^8.11.13"
+    "@types/pg": "^8.11.14"
   },
   "files": [
     "dist/*",
