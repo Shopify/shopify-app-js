@@ -59,13 +59,11 @@
   "resolutions": {
     "jest": "^29.7.0",
     "jest-circus": "^29.7.0",
-    "node-fetch": "^2.6.7",
-    "ts-jest": "^29.3.1"
+    "node-fetch": "^2.6.7"
   },
   "overrides": {
     "jest": "^29.7.0",
     "jest-circus": "^29.7.0",
-    "node-fetch": "^2.6.7",
-    "ts-jest": "^29.3.1"
+    "node-fetch": "^2.6.7"
   }
 }
