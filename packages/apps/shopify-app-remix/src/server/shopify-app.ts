@@ -76,10 +76,7 @@ export function shopifyApp<
   let strategy;
   if (config.distribution === AppDistribution.ShopifyAdmin) {
     strategy = new MerchantCustomAuth(params);
-  } else if (
-    config.future.unstable_newEmbeddedAuthStrategy &&
-    config.isEmbeddedApp
-  ) {
+  } else if (config.useTokenExchange && config.isEmbeddedApp) {
     strategy = new TokenExchangeStrategy(params);
   } else {
     strategy = new AuthCodeFlowStrategy(params);
@@ -210,6 +207,7 @@ function deriveConfig<Storage extends SessionStorage>(
     hooks: appConfig.hooks ?? {},
     sessionStorage: appConfig.sessionStorage as Storage,
     future: appConfig.future ?? {},
+    useTokenExchange: appConfig.useTokenExchange ?? true,
     auth: {
       path: authPathPrefix,
       callbackPath: `${authPathPrefix}/callback`,

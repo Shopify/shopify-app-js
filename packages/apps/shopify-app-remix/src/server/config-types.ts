@@ -184,6 +184,16 @@ export interface AppConfigArg<
   isEmbeddedApp?: boolean;
 
   /**
+   * When set to `true`, embedded apps will fetch access tokens via [token exchange](https://shopify.dev/docs/apps/auth/get-access-tokens/token-exchange).
+   * This assumes the app has scopes declared for [Shopify managing installation](https://shopify.dev/docs/apps/auth/installation#shopify-managed-installation).
+   *
+   * When set to `false`, apps will fetch access tokens via [Authorization Code Grant](https://shopify.dev/docs/apps/auth/get-access-tokens/authorization-code-grant).
+   *
+   * @defaultValue `true`
+   */
+  useTokenExchange?: boolean;
+
+  /**
    * How your app is distributed. Default is `AppDistribution.AppStore`.
    *
    * AppStore should be used for public apps that are distributed in the Shopify App Store.
@@ -264,6 +274,7 @@ export interface AppConfig<Storage extends SessionStorage = SessionStorage>
   sessionStorage?: Storage;
   useOnlineTokens: boolean;
   hooks: HooksConfig;
+  useTokenExchange: boolean;
   future: FutureFlags;
   idempotentPromiseHandler: IdempotentPromiseHandler;
   distribution: AppDistribution;
