@@ -14,3 +14,4 @@ bundle/
 .turbo
 .rollup.cache
 rollup.config-*.cjs
+.cursor
