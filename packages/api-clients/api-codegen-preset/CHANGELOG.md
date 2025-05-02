@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.1.8
+
+### Patch Changes
+
+- 1e694e9: Updated `@parcel/watcher` dependencies
+- fc54fc2: Updated `@graphql-codegen/typescript` dependencies
+
 ## 1.1.7
 
 ### Patch Changes
