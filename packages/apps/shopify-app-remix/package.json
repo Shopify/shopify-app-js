@@ -82,7 +82,6 @@
     "@remix-run/react": "^2.16.5",
     "@remix-run/testing": "^2.16.5",
     "@shopify/generate-docs": "^0.16.6",
-    "@shopify/polaris": "^12.18.0",
     "@shopify/react-testing": "^6.0.0",
     "@shopify/shopify-app-session-storage-memory": "^4.0.17",
     "@testing-library/jest-dom": "^6.6.3",
@@ -106,13 +105,9 @@
   "peerDependencies": {
     "@remix-run/node": "*",
     "@remix-run/react": "*",
-    "@shopify/polaris": "*",
     "react": "*"
   },
   "peerDependenciesMeta": {
-    "@shopify/polaris": {
-      "optional": true
-    },
     "@remix-run/node": {
       "optional": true
     }
