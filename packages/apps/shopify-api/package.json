@@ -92,8 +92,8 @@
     "uuid": "^11.1.0"
   },
   "devDependencies": {
-    "@cloudflare/workers-types": "^4.20250415.0",
-    "@swc/core": "^1.11.21",
+    "@cloudflare/workers-types": "^4.20250430.0",
+    "@swc/core": "^1.11.24",
     "@types/express": "^4.17.13",
     "@types/jsonwebtoken": "^9.0.9",
     "@types/node-fetch": "^2.6.11",
@@ -101,8 +101,8 @@
     "expect": "^29.7.0",
     "express": "^4.21.2",
     "jest-environment-miniflare": "^2.14.4",
-    "miniflare": "^4.20250410.0",
-    "rollup": "^4.40.0",
+    "miniflare": "^4.20250428.1",
+    "rollup": "^4.40.1",
     "rollup-plugin-swc": "^0.2.1",
     "wrangler": "^3.112.0"
   },

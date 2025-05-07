@@ -16,6 +16,7 @@ export type {
   FetchResponseBody,
   HTTPResponseLog,
   HTTPRetryLog,
+  HTTPResponseGraphQLDeprecationNotice,
   LogContent,
   ResponseWithType,
   ReturnData,
