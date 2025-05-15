@@ -432,6 +432,10 @@ export interface RecurringAppPlan {
    * The discount applied to the plan.
    */
   discount: AppPlanDiscount;
+  /*
+   * The app store pricing plan handle.
+   */
+  planHandle: string;
 }
 
 export interface UsageAppPlan {
