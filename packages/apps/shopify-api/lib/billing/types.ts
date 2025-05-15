@@ -432,6 +432,10 @@ export interface RecurringAppPlan {
    * The discount applied to the plan.
    */
   discount: AppPlanDiscount;
+  /*
+   * The app store pricing plan handle.
+   */
+  planHandle: string;
 }
 
 export interface UsageAppPlan {
@@ -751,6 +755,7 @@ export const APP_SUBSCRIPTION_FRAGMENT = `
               currencyCode
             }
             interval
+            planHandle
             discount {
               durationLimitInIntervals
               remainingDurationInIntervals
