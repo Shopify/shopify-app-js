@@ -755,6 +755,7 @@ export const APP_SUBSCRIPTION_FRAGMENT = `
               currencyCode
             }
             interval
+            planHandle
             discount {
               durationLimitInIntervals
               remainingDurationInIntervals
