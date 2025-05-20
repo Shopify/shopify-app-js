@@ -104,7 +104,7 @@
     "miniflare": "^4.20250428.1",
     "rollup": "^4.40.1",
     "rollup-plugin-swc": "^0.2.1",
-    "wrangler": "^3.112.0"
+    "wrangler": "^4.16.0"
   },
   "files": [
     "dist/*",
