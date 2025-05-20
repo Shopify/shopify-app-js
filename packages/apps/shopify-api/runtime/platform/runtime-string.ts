@@ -1,11 +1,19 @@
 import {AbstractRuntimeStringFunc} from './types';
 
 // eslint-disable-next-line import/no-mutable-exports
-export let abstractRuntimeString: AbstractRuntimeStringFunc = () => {
+let _abstractRuntimeString: AbstractRuntimeStringFunc = () => {
   throw new Error(
-    "Missing adapter implementation for 'abstractRuntimeString' - make sure to import the appropriate adapter for your platform",
+    "Missing adapter implementation for 'abstractRuntimeString' – make sure to call `setAbstractRuntimeString()` with a platform-specific implementation.",
   );
 };
-export function setAbstractRuntimeString(func: AbstractRuntimeStringFunc) {
-  abstractRuntimeString = func;
+
+// Mutable state managed internally via getters - For Nuxt and other SSR managed frameworks.
+export function getAbstractRuntimeString(): AbstractRuntimeStringFunc {
+  return _abstractRuntimeString;
+}
+
+export function setAbstractRuntimeString(
+  func: AbstractRuntimeStringFunc,
+): void {
+  _abstractRuntimeString = func;
 }
