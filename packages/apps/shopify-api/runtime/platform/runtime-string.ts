@@ -2,9 +2,13 @@ import {AbstractRuntimeStringFunc} from './types';
 
 // eslint-disable-next-line import/no-mutable-exports
 let _abstractRuntimeString: AbstractRuntimeStringFunc = () => {
-  throw new Error(
-    "Missing adapter implementation for 'abstractRuntimeString' – make sure to call `setAbstractRuntimeString()` with a platform-specific implementation.",
-  );
+  if (process.env.NODE_ENV === 'production') {
+    throw new Error(
+      'abstractRuntimeString() used without being set in production',
+    );
+  }
+
+  return 'offline_shop_test-shop.myshopify.io';
 };
 
 // Mutable state managed internally via getters - For Nuxt and other SSR managed frameworks.
