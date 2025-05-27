@@ -56,8 +56,14 @@ describe('IdempotentPromiseHandler', () => {
     const promiseHandler = new IdempotentPromiseHandler();
 
     // WHEN
-    const promise1 = promiseHandler.handlePromise({promiseFunction, identifier: 'same-promise'});
-    const promise2 = promiseHandler.handlePromise({promiseFunction, identifier: 'same-promise'});
+    const promise1 = promiseHandler.handlePromise({
+      promiseFunction,
+      identifier: 'same-promise',
+    });
+    const promise2 = promiseHandler.handlePromise({
+      promiseFunction,
+      identifier: 'same-promise',
+    });
 
     // THEN
     expect(promise1).toStrictEqual(promise2);

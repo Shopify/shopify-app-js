@@ -24,8 +24,8 @@ export class IdempotentPromiseHandler {
     try {
       const entry = this.identifiers.get(identifier);
 
-      if (entry)  return entry.promise;
-  
+      if (entry) return entry.promise;
+
       const promise = promiseFunction();
 
       this.identifiers.set(identifier, {
@@ -35,7 +35,7 @@ export class IdempotentPromiseHandler {
 
       return promise;
     } finally {
-      this.clearStaleIdentifiers(); 
+      this.clearStaleIdentifiers();
     }
   }
 
