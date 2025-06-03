@@ -26,6 +26,35 @@ export function getUserAgent(config: ConfigInterface): string {
   return userAgentPrefix;
 }
 
+function serializeResponse(response: Response | any) {
+  if (!response) {
+    return {error: 'No response object provided'};
+  }
+
+  try {
+    const {status, statusText, ok, redirected, type, url, headers} = response;
+
+    const serialized: any = {
+      status,
+      statusText,
+      ok,
+      redirected,
+      type,
+      url,
+    };
+
+    if (headers?.entries) {
+      serialized.headers = Object.fromEntries(headers.entries());
+    } else if (headers) {
+      serialized.headers = headers;
+    }
+
+    return serialized;
+  } catch {
+    return response;
+  }
+}
+
 export function clientLoggerFactory(config: ConfigInterface) {
   return (logContent: LogContent) => {
     if (config.logger.httpRequests) {
@@ -34,7 +63,7 @@ export function clientLoggerFactory(config: ConfigInterface) {
           const responseLog: HTTPResponseLog['content'] = logContent.content;
           logger(config).debug('Received response for HTTP request', {
             requestParams: JSON.stringify(responseLog.requestParams),
-            response: JSON.stringify(responseLog.response),
+            response: JSON.stringify(serializeResponse(responseLog.response)),
           });
           break;
         }
@@ -44,7 +73,9 @@ export function clientLoggerFactory(config: ConfigInterface) {
             requestParams: JSON.stringify(responseLog.requestParams),
             retryAttempt: responseLog.retryAttempt,
             maxRetries: responseLog.maxRetries,
-            response: JSON.stringify(responseLog.lastResponse),
+            response: responseLog.lastResponse
+              ? JSON.stringify(serializeResponse(responseLog.lastResponse))
+              : 'undefined',
           });
           break;
         }
