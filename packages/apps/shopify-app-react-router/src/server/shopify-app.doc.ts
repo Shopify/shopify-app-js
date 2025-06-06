@@ -32,12 +32,12 @@ const data: ReferenceEntityTemplateSchema = {
     {
       name: 'Authenticated contexts',
       subtitle: 'Authenticate requests coming from Shopify.',
-      url: '/docs/api/shopify-app-remix/authenticate',
+      url: '/docs/api/shopify-app-react-router/authenticate',
     },
     {
       name: 'Unauthenticated contexts',
       subtitle: 'Interact with the API on non-Shopify requests.',
-      url: '/docs/api/shopify-app-remix/unauthenticated',
+      url: '/docs/api/shopify-app-react-router/unauthenticated',
     },
   ],
 };

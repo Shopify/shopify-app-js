@@ -64,7 +64,7 @@ interface Context {
    * <description>Handle form submissions through an app proxy.</description>
    * ```ts
    * // app/routes/apps.proxy.my-action.tsx
-   * import { redirect } from "@remix-run/node";
+   * import { redirect } from "react-router";
    * import { authenticate } from "~/shopify.server";
    *
    * export async function loader({ request }) {
@@ -134,7 +134,7 @@ export interface AppProxyContextWithSession<
    * <description>Get the session for the shop that initiated the request to the app proxy.</description>
    * ```ts
    * // app/routes/**\/.ts
-   * import { json } from "@remix-run/node";
+   * import { json } from "react-router";
    * import { authenticate } from "../shopify.server";
    * import { getMyAppModelData } from "~/db/model.server";
    *
@@ -144,7 +144,7 @@ export interface AppProxyContextWithSession<
    *     await authenticate.public.appProxy(request);
    *
    *   // Use the session data to make to queries to your database or additional requests.
-   *   return json(
+   *   return (
    *     await getMyAppModelData({shop: session.shop})
    *   );
    * };
@@ -160,7 +160,7 @@ export interface AppProxyContextWithSession<
    * <description>Use the `admin` object to interact with the admin GraphQL API.</description>
    * ```ts
    * // app/routes/**\/.ts
-   * import { json } from "@remix-run/node";
+   * import { json } from "react-router";
    * import { authenticate } from "../shopify.server";
    *
    * export async function action({ request }: ActionFunctionArgs) {
@@ -183,7 +183,7 @@ export interface AppProxyContextWithSession<
    *   );
    *
    *   const productData = await response.json();
-   *   return json({ data: productData.data });
+   *   return ({ data: productData.data });
    * }
    * ```
    */
@@ -197,7 +197,7 @@ export interface AppProxyContextWithSession<
    * <description>Use the `storefront` object to interact with the GraphQL API.</description>
    * ```ts
    * // app/routes/**\/.ts
-   * import { json } from "@remix-run/node";
+   * import { json } from "react-router";
    * import { authenticate } from "../shopify.server";
    *
    * export async function action({ request }: ActionFunctionArgs) {
@@ -216,7 +216,7 @@ export interface AppProxyContextWithSession<
    *     }`
    *   );
    *
-   *   return json(await response.json());
+   *   return (await response.json());
    * }
    * ```
    */

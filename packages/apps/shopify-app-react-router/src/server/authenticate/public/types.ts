@@ -18,14 +18,14 @@ export interface AuthenticatePublic<Config extends AppConfigArg> {
    * <caption>Authenticating a checkout extension request</caption>
    * ```ts
    * // /app/routes/public/widgets.ts
-   * import { LoaderFunctionArgs, json } from "@remix-run/node";
+   * import { LoaderFunctionArgs, json } from "react-router";
    * import { authenticate } from "../shopify.server";
    *
    * export const loader = async ({ request }: LoaderFunctionArgs) => {
    *   const { sessionToken, cors } = await authenticate.public.checkout(
    *     request,
    *   );
-   *   return cors(json({my: "data", shop: sessionToken.dest}));
+   *   return cors({my: "data", shop: sessionToken.dest}));
    * };
    * ```
    */
@@ -38,7 +38,7 @@ export interface AuthenticatePublic<Config extends AppConfigArg> {
    * <caption>Authenticating an app proxy request</caption>
    * ```ts
    * // /app/routes/public/widgets.ts
-   * import { LoaderFunctionArgs, json } from "@remix-run/node";
+   * import { LoaderFunctionArgs, json } from "react-router";
    * import { authenticate } from "../shopify.server";
    *
    * export const loader = async ({ request }: LoaderFunctionArgs) => {
@@ -50,7 +50,7 @@ export interface AuthenticatePublic<Config extends AppConfigArg> {
    *   const shop = searchParams.get("shop");
    *   const customerId = searchParams.get("logged_in_customer_id")
    *
-   *   return json({my: "data", shop, customerId});
+   *   return ({my: "data", shop, customerId});
    * };
    * ```
    */
@@ -63,14 +63,14 @@ export interface AuthenticatePublic<Config extends AppConfigArg> {
    * <caption>Authenticating a customer account extension request</caption>
    * ```ts
    * // /app/routes/public/widgets.ts
-   * import { LoaderFunctionArgs, json } from "@remix-run/node";
+   * import { LoaderFunctionArgs, json } from "react-router";
    * import { authenticate } from "../shopify.server";
    *
    * export const loader = async ({ request }: LoaderFunctionArgs) => {
    *   const { sessionToken, cors } = await authenticate.public.customerAccount(
    *     request,
    *   );
-   *   return cors(json({my: "data", shop: sessionToken.dest}));
+   *   return cors({my: "data", shop: sessionToken.dest}));
    * };
    * ```
    */
@@ -83,14 +83,14 @@ export interface AuthenticatePublic<Config extends AppConfigArg> {
    * <caption>Authenticating a POS UI extension request</caption>
    * ```ts
    * // /app/routes/public/widgets.ts
-   * import { LoaderFunctionArgs, json } from "@remix-run/node";
+   * import { LoaderFunctionArgs, json } from "react-router";
    * import { authenticate } from "../shopify.server";
    *
    * export const loader = async ({ request }: LoaderFunctionArgs) => {
    *   const { sessionToken, cors } = await authenticate.public.pos(
    *     request,
    *   );
-   *   return cors(json({my: "data", shop: sessionToken.dest}));
+   *   return cors({my: "data", shop: sessionToken.dest}));
    * };
    * ```
    */

@@ -1,5 +1,5 @@
-import {useRouteError} from '@remix-run/react';
-import {boundary} from '@shopify/shopify-app-remix';
+import {useRouteError} from 'react-router';
+import {boundary} from '@shopify/shopify-app-react-router';
 
 export function ErrorBoundary() {
   return boundary.error(useRouteError());

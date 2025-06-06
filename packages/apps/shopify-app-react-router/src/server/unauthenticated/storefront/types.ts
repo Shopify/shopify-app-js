@@ -15,14 +15,14 @@ export interface UnauthenticatedStorefrontContext {
    * <description>Get your app's shop-specific data using the returned offline `session` object.</description>
    * ```ts
    * // app/routes/**\/.ts
-   * import { LoaderFunctionArgs, json } from "@remix-run/node";
+   * import { LoaderFunctionArgs, json } from "react-router";
    * import { unauthenticated } from "../shopify.server";
    * import { getMyAppData } from "~/db/model.server";
    *
    * export const loader = async ({ request }: LoaderFunctionArgs) => {
    *   const shop = getShopFromExternalRequest(request);
    *   const { session } = await unauthenticated.storefront(shop);
-   *   return json(await getMyAppData({shop: session.shop));
+   *   return (await getMyAppData({shop: session.shop}));
    * };
    * ```
    */
@@ -36,7 +36,7 @@ export interface UnauthenticatedStorefrontContext {
    * <description>Use `storefront.graphql` to make query / mutation requests.</description>
    * ```ts
    * // app/routes/**\/.ts
-   * import { json } from "@remix-run/node";
+   * import { json } from "react-router";
    * import { authenticate } from "../shopify.server";
    *
    * export async function action({ request }: ActionFunctionArgs) {
@@ -45,7 +45,7 @@ export interface UnauthenticatedStorefrontContext {
    *
    *   const response = await storefront.graphql(`{blogs(first: 10) { edges { node { id } } } }`);
    *
-   *   return json(await response.json());
+   *   return (await response.json());
    * }
    * ```
    *
@@ -54,7 +54,7 @@ export interface UnauthenticatedStorefrontContext {
    * <description>Catch `GraphqlQueryError` errors to see error messages from the API.</description>
    * ```ts
    * // /app/routes/**\/*.ts
-   * import { ActionFunctionArgs } from "@remix-run/node";
+   * import { ActionFunctionArgs } from "react-router";
    * import { authenticate } from "../shopify.server";
    *
    * export const action = async ({ request }: ActionFunctionArgs) => {
@@ -73,22 +73,22 @@ export interface UnauthenticatedStorefrontContext {
    *       }`,
    *     );
    *
-   *     return json({ data: await response.json() });
+   *     return ({ data: await response.json() });
    *   } catch (error) {
    *     if (error instanceof GraphqlQueryError) {
    *       // { errors: { graphQLErrors: [
    *       //   { message: "Field 'not_a_field' doesn't exist on type 'Product'" }
    *       // ] } }
-   *       return json({ errors: error.body?.errors }, { status: 500 });
+   *       return ({ errors: error.body?.errors }, { status: 500 });
    *     }
-   *     return json({ message: "An error occurred" }, { status: 500 });
+   *     return ({ message: "An error occurred" }, { status: 500 });
    *   }
    * }
    * ```
    *
    * ```ts
    * // /app/shopify.server.ts
-   * import { shopifyApp } from "@shopify/shopify-app-remix/server";
+   * import { shopifyApp } from "@shopify/shopify-app-react-router/server";
    *
    * const shopify = shopifyApp({
    *   // ...

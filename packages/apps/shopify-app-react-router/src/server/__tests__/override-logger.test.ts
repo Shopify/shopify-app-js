@@ -9,7 +9,7 @@ import {
 } from '@shopify/shopify-api';
 
 import {overrideLogger} from '../override-logger';
-import {SHOPIFY_REMIX_LIBRARY_VERSION} from '../version';
+import {SHOPIFY_REACT_ROUTER_LIBRARY_VERSION} from '../version';
 
 const LOG_FN = jest.fn();
 const VALID_API_CONFIG: ConfigParams<any, any> = {
@@ -62,11 +62,11 @@ describe('override logger', () => {
     // THEN
     expect(() =>
       logger.deprecated(
-        SHOPIFY_REMIX_LIBRARY_VERSION,
+        SHOPIFY_REACT_ROUTER_LIBRARY_VERSION,
         'Test deprecation message',
       ),
     ).toThrowError(
-      `Feature was deprecated in version ${SHOPIFY_REMIX_LIBRARY_VERSION}`,
+      `Feature was deprecated in version ${SHOPIFY_REACT_ROUTER_LIBRARY_VERSION}`,
     );
   });
 

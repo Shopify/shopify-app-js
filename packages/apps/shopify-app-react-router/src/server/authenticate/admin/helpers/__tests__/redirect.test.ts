@@ -139,12 +139,12 @@ describe('Redirect helper', () => {
       );
     });
 
-    it("uses Remix's default behaviour for GET data requests", async () => {
+    it("uses React Router's default behaviour for GET data requests", async () => {
       // GIVEN
       const shopify = shopifyApp(testConfig());
       await setUpValidSession(shopify.sessionStorage);
 
-      const {request} = remixDataLoadRequest('GET');
+      const {request} = reactRouterDataLoadRequest('GET');
       const {redirect} = await shopify.authenticate.admin(request);
 
       // WHEN
@@ -155,12 +155,12 @@ describe('Redirect helper', () => {
       expect(response.headers.get('location')).toBe(`${APP_URL}/`);
     });
 
-    it("uses Remix's default behaviour for POST data requests", async () => {
+    it("uses React Router's default behaviour for POST data requests", async () => {
       // GIVEN
       const shopify = shopifyApp(testConfig());
       await setUpValidSession(shopify.sessionStorage);
 
-      const {request} = remixDataLoadRequest('POST');
+      const {request} = reactRouterDataLoadRequest('POST');
       const {redirect} = await shopify.authenticate.admin(request);
 
       // WHEN
@@ -240,7 +240,7 @@ describe('Redirect helper', () => {
       const shopify = shopifyApp(testConfig());
       await setUpValidSession(shopify.sessionStorage);
 
-      const {request} = remixDataLoadRequest('GET');
+      const {request} = reactRouterDataLoadRequest('GET');
       const {redirect} = await shopify.authenticate.admin(request);
 
       // WHEN
@@ -258,7 +258,7 @@ describe('Redirect helper', () => {
       const shopify = shopifyApp(testConfig());
       await setUpValidSession(shopify.sessionStorage);
 
-      const {request} = remixDataLoadRequest('POST');
+      const {request} = reactRouterDataLoadRequest('POST');
       const {redirect} = await shopify.authenticate.admin(request);
 
       // WHEN
@@ -349,7 +349,7 @@ describe('Redirect helper', () => {
     };
   }
 
-  function remixDataLoadRequest(method: string) {
+  function reactRouterDataLoadRequest(method: string) {
     const {token} = getJwt();
 
     return {

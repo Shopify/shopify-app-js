@@ -1,4 +1,4 @@
-import {type ActionFunctionArgs, json} from '@remix-run/node';
+import {type ActionFunctionArgs, data} from 'react-router';
 import {GraphqlQueryError} from '@shopify/shopify-api';
 
 import {authenticate} from '../shopify.server';
@@ -26,7 +26,7 @@ export const action = async ({request}: ActionFunctionArgs) => {
     return redirect('/app/product-updated');
   } catch (error) {
     if (error instanceof GraphqlQueryError) {
-      return json({errors: error.body?.errors}, {status: 500});
+      return data({errors: error.body?.errors}, {status: 500});
     }
 
     return new Response('Failed to update product title', {status: 500});

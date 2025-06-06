@@ -80,19 +80,19 @@ interface Authenticate<Config extends AppConfigArg> {
    * <caption>Authenticating a request for an embedded app.</caption>
    * ```ts
    * // /app/routes/**\/*.jsx
-   * import { LoaderFunctionArgs, json } from "@remix-run/node";
+   * import { LoaderFunctionArgs, json } from "react-router";
    * import { authenticate } from "../../shopify.server";
    *
    * export async function loader({ request }: LoaderFunctionArgs) {
    *   const {admin, session, sessionToken, billing} = authenticate.admin(request);
    *   const response = await admin.graphql(`{ shop { name } }`)
    *
-   *   return json(await response.json());
+   *   return (await response.json());
    * }
    * ```
    * ```ts
    * // /app/shopify.server.ts
-   * import { LATEST_API_VERSION, shopifyApp } from "@shopify/shopify-app-remix/server";
+   * import { LATEST_API_VERSION, shopifyApp } from "@shopify/shopify-app-react-router/server";
    *
    * const shopify = shopifyApp({
    *   // ...etc
@@ -115,7 +115,7 @@ interface Authenticate<Config extends AppConfigArg> {
    * <caption>Authenticating a Flow extension request.</caption>
    * ```ts
    * // /app/routes/**\/*.jsx
-   * import { ActionFunctionArgs, json } from "@remix-run/node";
+   * import { ActionFunctionArgs, json } from "react-router";
    * import { authenticate } from "../../shopify.server";
    *
    * export async function action({ request }: ActionFunctionArgs) {
@@ -129,7 +129,7 @@ interface Authenticate<Config extends AppConfigArg> {
    * ```
    * ```ts
    * // /app/shopify.server.ts
-   * import { LATEST_API_VERSION, shopifyApp } from "@shopify/shopify-app-remix/server";
+   * import { LATEST_API_VERSION, shopifyApp } from "@shopify/shopify-app-react-router/server";
    *
    * const shopify = shopifyApp({
    *   // ...etc
@@ -148,7 +148,7 @@ interface Authenticate<Config extends AppConfigArg> {
    * <description>Use the session associated with this request to use the Admin GraphQL API </description>
    * ```ts
    * // /app/routes/fulfillment_order_notification.ts
-   * import { ActionFunctionArgs } from "@remix-run/node";
+   * import { ActionFunctionArgs } from "react-router";
    * import { authenticate } from "../shopify.server";
    *
    * export async function action({ request }: ActionFunctionArgs) {
@@ -173,14 +173,14 @@ interface Authenticate<Config extends AppConfigArg> {
    *
    * ```ts
    * // /app/routes/api/checkout.jsx
-   * import { LoaderFunctionArgs, json } from "@remix-run/node";
+   * import { LoaderFunctionArgs, json } from "react-router";
    * import { authenticate } from "../../shopify.server";
    * import { getWidgets } from "~/db/widgets";
    *
    * export async function loader({ request }: LoaderFunctionArgs) {
    *   const {sessionToken} = authenticate.public.checkout(request);
    *
-   *   return json(await getWidgets(sessionToken));
+   *   return (await getWidgets(sessionToken));
    * }
    * ```
    */
@@ -194,7 +194,7 @@ interface Authenticate<Config extends AppConfigArg> {
    *
    * ```ts
    * // app/routes/webhooks.ts
-   * import { ActionFunctionArgs } from "@remix-run/node";
+   * import { ActionFunctionArgs } from "react-router";
    * import { authenticate } from "../shopify.server";
    * import db from "../db.server";
    *
@@ -233,7 +233,7 @@ interface Authenticate<Config extends AppConfigArg> {
    * </description>
    * ```ts
    * // app/shopify.server.ts
-   * import { DeliveryMethod, shopifyApp } from "@shopify/shopify-app-remix/server";
+   * import { DeliveryMethod, shopifyApp } from "@shopify/shopify-app-react-router/server";
    *
    * const shopify = shopifyApp({
    *   webhooks: {
@@ -266,7 +266,7 @@ export interface ShopifyAppBase<Config extends AppConfigArg> {
    * <description>Import the `@shopify/shopify-app-session-storage-prisma` package to store sessions in your Prisma database.</description>
    * ```ts
    * // /app/shopify.server.ts
-   * import { shopifyApp } from "@shopify/shopify-app-remix/server";
+   * import { shopifyApp } from "@shopify/shopify-app-react-router/server";
    * import { PrismaSessionStorage } from "@shopify/shopify-app-session-storage-prisma";
    * import prisma from "~/db.server";
    *
@@ -291,7 +291,7 @@ export interface ShopifyAppBase<Config extends AppConfigArg> {
    *
    * ```
    * // ~/shopify.server.ts
-   * import { shopifyApp } from "@shopify/shopify-app-remix/server";
+   * import { shopifyApp } from "@shopify/shopify-app-react-router/server";
    *
    * const shopify = shopifyApp({
    *   // ...etc
@@ -308,10 +308,10 @@ export interface ShopifyAppBase<Config extends AppConfigArg> {
    *   request: Request,
    *   responseStatusCode: number,
    *   responseHeaders: Headers,
-   *   remixContext: EntryContext
+   *   reactRouterContext: EntryContext
    * ) {
    *   const markup = renderToString(
-   *     <RemixServer context={remixContext} url={request.url} />
+   *     <ReactRouterServer context={reactRouterContext} url={request.url} />
    *   );
    *
    *   responseHeaders.set("Content-Type", "text/html");
@@ -337,10 +337,10 @@ export interface ShopifyAppBase<Config extends AppConfigArg> {
    *
    * @example
    * <caption>Registering shop-specific webhooks after install</caption>
-   * <description>Trigger the registration to create the shop-specific webhook subscriptions after a merchant installs your app using the `afterAuth` hook. Learn more about [subscribing to webhooks.](https://shopify.dev/docs/api/shopify-app-remix/v3/guide-webhooks)</description>
+   * <description>Trigger the registration to create the shop-specific webhook subscriptions after a merchant installs your app using the `afterAuth` hook. Learn more about [subscribing to webhooks.](https://shopify.dev/docs/api/shopify-app-react-router/v3/guide-webhooks)</description>
    * ```ts
    * // app/shopify.server.ts
-   * import { DeliveryMethod, shopifyApp } from "@shopify/shopify-app-remix/server";
+   * import { DeliveryMethod, shopifyApp } from "@shopify/shopify-app-react-router/server";
    *
    * const shopify = shopifyApp({
    *   webhooks: {
@@ -371,7 +371,7 @@ export interface ShopifyAppBase<Config extends AppConfigArg> {
    * <description>Use the functions in `authenticate` to validate requests coming from Shopify.</description>
    * ```ts
    * // /app/shopify.server.ts
-   * import { LATEST_API_VERSION, shopifyApp } from "@shopify/shopify-app-remix/server";
+   * import { LATEST_API_VERSION, shopifyApp } from "@shopify/shopify-app-react-router/server";
    *
    * const shopify = shopifyApp({
    *   // ...etc
@@ -380,14 +380,14 @@ export interface ShopifyAppBase<Config extends AppConfigArg> {
    * ```
    * ```ts
    * // /app/routes/**\/*.jsx
-   * import { LoaderFunctionArgs, json } from "@remix-run/node";
+   * import { LoaderFunctionArgs, json } from "react-router";
    * import shopify from "../../shopify.server";
    *
    * export async function loader({ request }: LoaderFunctionArgs) {
    *   const {admin, session, sessionToken, billing} = shopify.authenticate.admin(request);
    *   const response = admin.graphql(`{ shop { name } }`)
    *
-   *   return json(await response.json());
+   *   return (await response.json());
    * }
    * ```
    */
@@ -401,7 +401,7 @@ export interface ShopifyAppBase<Config extends AppConfigArg> {
    * <description>Create contexts for requests that don't come from Shopify.</description>
    * ```ts
    * // /app/shopify.server.ts
-   * import { LATEST_API_VERSION, shopifyApp } from "@shopify/shopify-app-remix/server";
+   * import { LATEST_API_VERSION, shopifyApp } from "@shopify/shopify-app-react-router/server";
    *
    * const shopify = shopifyApp({
    *   // ...etc
@@ -410,7 +410,7 @@ export interface ShopifyAppBase<Config extends AppConfigArg> {
    * ```
    * ```ts
    * // /app/routes/**\/*.jsx
-   * import { LoaderFunctionArgs, json } from "@remix-run/node";
+   * import { LoaderFunctionArgs, json } from "react-router";
    * import { authenticateExternal } from "~/helpers/authenticate"
    * import shopify from "../../shopify.server";
    *
@@ -419,7 +419,7 @@ export interface ShopifyAppBase<Config extends AppConfigArg> {
    *   const {admin} = await shopify.unauthenticated.admin(shop);
    *   const response = admin.graphql(`{ shop { currencyCode } }`)
    *
-   *   return json(await response.json());
+   *   return (await response.json());
    * }
    * ```
    */
@@ -439,7 +439,7 @@ export interface ShopifyAppLogin {
    * <description>Use `shopify.login` to create a login form, in a route that can handle GET and POST requests.</description>
    * ```ts
    * // /app/shopify.server.ts
-   * import { LATEST_API_VERSION, shopifyApp } from "@shopify/shopify-app-remix/server";
+   * import { LATEST_API_VERSION, shopifyApp } from "@shopify/shopify-app-react-router/server";
    *
    * const shopify = shopifyApp({
    *   // ...etc
@@ -453,13 +453,13 @@ export interface ShopifyAppLogin {
    * export async function loader({ request }: LoaderFunctionArgs) {
    *   const errors = shopify.login(request);
    *
-   *   return json(errors);
+   *   return (errors);
    * }
    *
    * export async function action({ request }: ActionFunctionArgs) {
    *   const errors = shopify.login(request);
    *
-   *   return json(errors);
+   *   return (errors);
    * }
    *
    * export default function Auth() {

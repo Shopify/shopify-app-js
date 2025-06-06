@@ -1,4 +1,4 @@
-import {ActionFunction, json} from '@remix-run/node';
+import {ActionFunction} from 'react-router';
 
 import {authenticate} from '../shopify.server';
 
@@ -25,5 +25,5 @@ export const action: ActionFunction = async ({request}) => {
   );
   const parsedResponse = await response.json();
 
-  return json({data: parsedResponse.data});
+  return {data: parsedResponse.data};
 };

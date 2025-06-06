@@ -1,5 +1,4 @@
-import type {ActionFunctionArgs, LoaderFunctionArgs} from '@remix-run/node';
-import {json} from '@remix-run/node';
+import type {ActionFunctionArgs, LoaderFunctionArgs} from 'react-router';
 
 import {authenticate} from '../shopify.server';
 import {getOffers} from '../offers.server';
@@ -13,5 +12,5 @@ export const action = async ({request}: ActionFunctionArgs) => {
   const {cors, sessionToken} = await authenticate.public.checkout(request);
 
   const offers = getOffers(sessionToken.dest);
-  return cors(json({offers}));
+  return cors({offers});
 };

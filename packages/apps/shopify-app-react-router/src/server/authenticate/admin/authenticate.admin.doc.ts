@@ -39,12 +39,12 @@ const data: ReferenceEntityTemplateSchema = {
     {
       name: 'API context',
       subtitle: 'Interact with the Admin API.',
-      url: '/docs/api/shopify-app-remix/apis/admin-api',
+      url: '/docs/api/shopify-app-react-router/apis/admin-api',
     },
     {
       name: 'Billing context',
       subtitle: 'Bill merchants for your app using the Admin API.',
-      url: '/docs/api/shopify-app-remix/apis/billing',
+      url: '/docs/api/shopify-app-react-router/apis/billing',
     },
   ],
 };

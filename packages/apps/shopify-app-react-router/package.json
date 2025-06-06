@@ -1,16 +1,16 @@
 {
-  "name": "@shopify/shopify-app-remix",
-  "version": "3.8.3",
-  "description": "Shopify Remix - to simplify the building of Shopify Apps with Remix",
+  "name": "@shopify/shopify-app-react-router",
+  "version": "0.0.1",
+  "description": "Shopify React Router - to simplify the building of Shopify Apps with React Router",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Shopify/shopify-app-js.git",
-    "directory": "packages/apps/shopify-app-remix"
+    "directory": "packages/apps/shopify-app-react-router"
   },
   "bugs": {
     "url": "https://github.com/Shopify/shopify-app-js/issues"
   },
-  "homepage": "https://github.com/Shopify/shopify-app-js/tree/main/packages/apps/shopify-app-remix",
+  "homepage": "https://github.com/Shopify/shopify-app-js/tree/main/packages/apps/shopify-app-react-router",
   "author": "Shopify Inc.",
   "license": "MIT",
   "main": "./dist/cjs/server/index.js",
@@ -69,7 +69,7 @@
     "shopify",
     "javascript",
     "typescript",
-    "remix",
+    "react-router",
     "app",
     "graphql",
     "rest",
@@ -78,9 +78,7 @@
     "Storefront API"
   ],
   "devDependencies": {
-    "@remix-run/node": "^2.16.5",
-    "@remix-run/react": "^2.16.5",
-    "@remix-run/testing": "^2.16.5",
+    "react-router": "7.6.2",
     "@shopify/generate-docs": "^0.16.6",
     "@shopify/polaris": "^12.18.0",
     "@shopify/react-testing": "^6.0.0",
@@ -95,7 +93,6 @@
     "jsonwebtoken": "^9.0.2"
   },
   "dependencies": {
-    "@remix-run/server-runtime": "^2.16.5",
     "@shopify/admin-api-client": "^1.1.0",
     "@shopify/shopify-api": "^11.13.0",
     "@shopify/shopify-app-session-storage": "^3.0.18",
@@ -104,16 +101,12 @@
     "semver": "^7.7.1"
   },
   "peerDependencies": {
-    "@remix-run/node": "*",
-    "@remix-run/react": "*",
+    "react-router": "^7.6.2",
     "@shopify/polaris": "*",
     "react": "*"
   },
   "peerDependenciesMeta": {
     "@shopify/polaris": {
-      "optional": true
-    },
-    "@remix-run/node": {
       "optional": true
     }
   },

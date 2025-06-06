@@ -8,18 +8,19 @@ const config: Config = {
   ...baseConfig,
   projects: [
     {
-      displayName: 'shopify-app-remix-react',
+      displayName: 'shopify-app-react-router-react',
       preset: 'ts-jest',
       testMatch: ['**/*.test.ts', '**/*.test.tsx'],
       testEnvironment: 'jsdom',
       testPathIgnorePatterns: ['src/server'],
+      setupFilesAfterEnv: [...(baseConfig.setupFilesAfterEnv ?? [])],
       transform: {
         '^.+\\.(js|jsx)$': ['babel-jest', {configFile: './babel.config.js'}],
       },
       transformIgnorePatterns: [`node_modules/.pnpm/(?!${esModules})`],
     },
     {
-      displayName: 'shopify-app-remix-server-node',
+      displayName: 'shopify-app-react-router-server-node',
       preset: 'ts-jest',
       testMatch: ['**/*.test.ts', '**/*.test.tsx'],
       setupFilesAfterEnv: [
@@ -29,20 +30,11 @@ const config: Config = {
       testPathIgnorePatterns: ['src/react', 'src/server/adapters/__tests__'],
     },
     {
-      displayName: 'shopify-app-remix-server-vercel',
-      preset: 'ts-jest',
-      testMatch: ['**/*.test.ts', '**/*.test.tsx'],
-      setupFilesAfterEnv: [
-        ...(baseConfig.setupFilesAfterEnv ?? []),
-        `${__dirname}/src/server/adapters/vercel/__tests__/setup-jest.ts`,
-      ],
-      testPathIgnorePatterns: ['src/react', 'src/server/adapters/__tests__'],
-    },
-    {
-      displayName: 'shopify-app-remix-server-adapters',
+      displayName: 'shopify-app-react-router-server-adapters',
       preset: 'ts-jest',
       rootDir: './src/server/adapters',
       testMatch: ['**/*.test.ts', '**/*.test.tsx'],
+      setupFilesAfterEnv: [...(baseConfig.setupFilesAfterEnv ?? [])],
     },
   ],
 };
