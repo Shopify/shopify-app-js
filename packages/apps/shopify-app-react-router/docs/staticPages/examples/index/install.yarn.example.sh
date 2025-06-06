@@ -1,1 +1,1 @@
-yarn add @shopify/shopify-app-remix
+yarn add @shopify/shopify-app-react-router

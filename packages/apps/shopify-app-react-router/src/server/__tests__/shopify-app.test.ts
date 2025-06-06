@@ -79,7 +79,7 @@ describe('shopifyApp', () => {
 
     // THEN
     expect(apiObject.config.userAgentPrefix).toMatch(
-      /^test \| Shopify Remix Library v[0-9]+\.[0-9]+\.[0-9]+(-rc.[0-9]+)?$/,
+      /^test \| Shopify React Router Library v[0-9]+\.[0-9]+\.[0-9]+(-rc.[0-9]+)?$/,
     );
   });
 

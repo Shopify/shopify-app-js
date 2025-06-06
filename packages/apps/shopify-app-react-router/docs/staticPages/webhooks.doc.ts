@@ -78,7 +78,7 @@ const data: LandingTemplateSchema = {
       resources: [
         {
           name: 'authenticate.webhook',
-          url: '/docs/api/shopify-app-remix/authenticate/webhook',
+          url: '/docs/api/shopify-app-react-router/authenticate/webhook',
         },
       ],
     },

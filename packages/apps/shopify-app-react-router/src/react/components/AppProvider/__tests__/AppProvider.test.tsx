@@ -4,7 +4,7 @@ import {AppProvider as PolarisAppProvider} from '@shopify/polaris';
 import '../../../__tests__/test-helper';
 
 import {AppProvider} from '../AppProvider';
-import {RemixPolarisLink} from '../../RemixPolarisLink';
+import {ReactRouterPolarisLink} from '../../ReactRouterPolarisLink';
 
 describe('<AppProvider />', () => {
   const defaultProps = {
@@ -61,7 +61,7 @@ describe('<AppProvider />', () => {
     // THEN
     expect(component).toContainReactComponent(PolarisAppProvider, {
       i18n: dummyI18n,
-      linkComponent: RemixPolarisLink,
+      linkComponent: ReactRouterPolarisLink,
     });
   });
 });

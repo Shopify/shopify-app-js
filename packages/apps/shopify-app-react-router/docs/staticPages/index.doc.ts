@@ -1,10 +1,10 @@
 import {LandingTemplateSchema} from '@shopify/generate-docs';
 
 const data: LandingTemplateSchema = {
-  id: 'shopify-app-remix',
-  title: 'Shopify App package for Remix',
+  id: 'shopify-app-react-router',
+  title: 'Shopify App package for React Router',
   description:
-    'The [@shopify/shopify-app-remix](https://www.npmjs.com/package/@shopify/shopify-app-remix) package enables Remix apps to authenticate with Shopify and make API calls. It uses [App Bridge](/docs/api/app-bridge-library) to enable apps to embed themselves in the Shopify Admin.' +
+    'The [@shopify/shopify-app-react-router](https://www.npmjs.com/package/@shopify/shopify-app-react-router) package enables React Router apps to authenticate with Shopify and make API calls. It uses [App Bridge](/docs/api/app-bridge-library) to enable apps to embed themselves in the Shopify Admin.' +
     "\n\nIn this page we'll go over the main components you need to integrate an app with Shopify.",
   sections: [
     {
@@ -13,7 +13,7 @@ const data: LandingTemplateSchema = {
       title: 'Quick start',
       sectionContent:
         "The quickest way to create a new app is using the Shopify CLI. You can use your preferred package manager for that." +
-        "\n\nCheck out the [getting started guide](/docs/apps/getting-started), or the [app template](https://github.com/Shopify/shopify-app-template-remix) for a complete example.",
+        "\n\nCheck out the [getting started guide](/docs/apps/getting-started), or the [app template](https://github.com/Shopify/shopify-app-template-react-router) for a complete example.",
       codeblock: {
         title: 'Create an app',
         tabs: [
@@ -81,7 +81,7 @@ const data: LandingTemplateSchema = {
       sectionCard: [
         {
           name: 'shopifyApp',
-          url: '/docs/api/shopify-app-remix/entrypoints/shopifyapp',
+          url: '/docs/api/shopify-app-react-router/entrypoints/shopifyapp',
           type: 'clicode',
         },
       ],
@@ -119,9 +119,9 @@ const data: LandingTemplateSchema = {
       anchorLink: 'boundaries',
       title: 'Error boundaries',
       sectionContent:
-        "The OAuth process can't happen inside the admin iframe, and this package is capable of detecting that scenario and properly redirecting using the [Remix `ErrorBoundary`](https://remix.run/docs/en/main/guides/errors) export to set the correct headers for App Bridge." +
+        "The OAuth process can't happen inside the admin iframe, and this package is capable of detecting that scenario and properly redirecting using the [React Router `ErrorBoundary`](https://reactrouter.com/how-to/error-boundary) export to set the correct headers for App Bridge." +
         "\n\nUse the abstractions provided by this package in your authenticated routes, to automatically set up the error and headers boundaries to redirect outside the iframe when needed." +
-        "\n\n> Tip: You can also add this to a [Remix layout](https://remix.run/docs/en/main/file-conventions/route-files-v2) if you want to authenticate more than one route, but make sure to call the Shopify boundary methods whenever you need to add your own exports.",
+        "\n\n> Tip: You can also add this to a [React Router layout](https://reactrouter.com/start/framework/routing#layout-routes) if you want to authenticate more than one route, but make sure to call the Shopify boundary methods whenever you need to add your own exports.",
       codeblock: {
         title: 'Configure header boundaries',
         tabs: [
@@ -140,7 +140,7 @@ const data: LandingTemplateSchema = {
       sectionContent:
         "> Tip: This is only applicable to non-embedded apps or legacy embedded apps that are **not** using the [new embedded app authorization strategy](#embedded-auth-strategy) for OAuth and installation flow. If you're building an embedded app, we **strongly** recommend using the" +
         " [new embedded app authorization strategy](#embedded-auth-strategy)" +
-        "\n\nTo install an app or refresh tokens, you'll need to set up an [OAuth](docs/apps/auth/oauth) route. To do that, set up a [splat route](https://remix.run/docs/en/main/guides/routing#splats) that calls `authenticate.admin`." +
+        "\n\nTo install an app or refresh tokens, you'll need to set up an [OAuth](docs/apps/auth/oauth) route. To do that, set up a [splat route](https://reactrouter.com/start/framework/routing#splats) that calls `authenticate.admin`." +
         '\n\nWhen that function is called, the package will start the OAuth process, and handle the callback from Shopify after it completes.' +
         '\n\nThe default route is `/app/routes/auth/$.tsx`, but you can configure this route using the `authPathPrefix` option.',
       codeblock: {
@@ -166,7 +166,7 @@ const data: LandingTemplateSchema = {
         "\n\nIt takes advantage of [Shopify managed installation](https://shopify.dev/docs/apps/auth/installation#shopify-managed-installation)" +
         " to handle automatic app installations and scope updates, while using" +
         " [token exchange](https://shopify.dev/docs/apps/auth/get-access-tokens/token-exchange) to get an access token for the logged-in user." +
-        "\n\n If you wish to learn about scopes management and APIs, please read through [Manage access scopes](https://shopify.dev/docs/apps/build/authentication-authorization/app-installation/manage-access-scopes)" +        "\n\n > Note: Newly created Remix apps from the template after February 1st 2024 has this feature enabled by default." +
+        "\n\n If you wish to learn about scopes management and APIs, please read through [Manage access scopes](https://shopify.dev/docs/apps/build/authentication-authorization/app-installation/manage-access-scopes)" +        "\n\n > Note: Newly created React Router apps from the template after February 1st 2024 has this feature enabled by default." +
         "\n\n1. Enable [Shopify managed installation](https://shopify.dev/docs/apps/auth/installation#shopify-managed-installation)" +
         " by configuring your scopes [through the Shopify CLI](https://shopify.dev/docs/apps/tools/cli/configuration)." +
         "\n2. Enable the future flag `unstable_newEmbeddedAuthStrategy` in your app's server configuration file." +
@@ -206,7 +206,7 @@ const data: LandingTemplateSchema = {
         },
         {
           name: 'AppProvider',
-          url: '/docs/api/shopify-app-remix/entrypoints/appprovider',
+          url: '/docs/api/shopify-app-react-router/entrypoints/appprovider',
           type: 'clicode',
         },
       ],

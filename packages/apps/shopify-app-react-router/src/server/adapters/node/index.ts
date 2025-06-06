@@ -10,7 +10,7 @@ import {setAppBridgeUrlOverride} from '../../authenticate/helpers';
 setCrypto(crypto as any);
 
 setAbstractRuntimeString(() => {
-  return `Remix (Node)`;
+  return `React Router (Node)`;
 });
 
 /* eslint-disable no-process-env */

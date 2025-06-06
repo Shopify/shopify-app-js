@@ -1,12 +1,12 @@
 import React from 'react';
-import {Link} from '@remix-run/react';
+import {Link} from 'react-router';
 // Polaris' LinkProps doesn't match this type, so we need to import it directly
 import type {
   LinkLikeComponent,
   LinkLikeComponentProps,
 } from '@shopify/polaris/build/ts/src/utilities/link';
 
-export const RemixPolarisLink = React.forwardRef<
+export const ReactRouterPolarisLink = React.forwardRef<
   HTMLAnchorElement,
   LinkLikeComponentProps
 >((props, ref) => (

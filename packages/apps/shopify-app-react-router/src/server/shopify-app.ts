@@ -18,7 +18,7 @@ import {
   type SingleMerchantApp,
   type AppStoreApp,
 } from './types';
-import {SHOPIFY_REMIX_LIBRARY_VERSION} from './version';
+import {SHOPIFY_REACT_ROUTER_LIBRARY_VERSION} from './version';
 import {registerWebhooksFactory} from './authenticate/webhooks';
 import {authStrategyFactory} from './authenticate/admin/authenticate';
 import {authenticateWebhookFactory} from './authenticate/webhooks/authenticate';
@@ -46,7 +46,7 @@ import {FutureFlagOptions, logDisabledFutureFlags} from './future/flags';
  * <caption>The minimum viable configuration</caption>
  * ```ts
  * // /shopify.server.ts
- * import { shopifyApp } from "@shopify/shopify-app-remix/server";
+ * import { shopifyApp } from "@shopify/shopify-app-react-router/server";
  *
  * const shopify = shopifyApp({
  *   apiKey: process.env.SHOPIFY_API_KEY!,
@@ -161,7 +161,7 @@ export function deriveApi(appConfig: AppConfigArg): BasicParams['api'] {
   /* eslint-enable no-process-env */
   appConfig.appUrl = appUrl.origin;
 
-  let userAgentPrefix = `Shopify Remix Library v${SHOPIFY_REMIX_LIBRARY_VERSION}`;
+  let userAgentPrefix = `Shopify React Router Library v${SHOPIFY_REACT_ROUTER_LIBRARY_VERSION}`;
   if (appConfig.userAgentPrefix) {
     userAgentPrefix = `${appConfig.userAgentPrefix} | ${userAgentPrefix}`;
   }

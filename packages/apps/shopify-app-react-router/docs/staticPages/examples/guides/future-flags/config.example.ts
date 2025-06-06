@@ -1,4 +1,4 @@
-import {shopifyApp} from '@shopify/shopify-app-remix/server';
+import {shopifyApp} from '@shopify/shopify-app-react-router/server';
 
 export const shopify = shopifyApp({
   // ...

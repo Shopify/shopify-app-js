@@ -19,14 +19,14 @@ export interface UnauthenticatedAdminContext<
    * <description>Get your app's shop-specific data using the returned offline `session` object.</description>
    * ```ts
    * // /app/routes/**\/*.ts
-   * import { LoaderFunctionArgs, json } from "@remix-run/node";
+   * import { LoaderFunctionArgs, json } from "react-router";
    * import { unauthenticated } from "../shopify.server";
    * import { getMyAppData } from "~/db/model.server";
    *
    * export const loader = async ({ request }: LoaderFunctionArgs) => {
    *   const shop = getShopFromExternalRequest(request);
    *   const { session } = await unauthenticated.admin(shop);
-   *   return json(await getMyAppData({shop: session.shop));
+   *   return (await getMyAppData({shop: session.shop}));
    * };
    * ```
    */
@@ -40,7 +40,7 @@ export interface UnauthenticatedAdminContext<
    * <description>Use `admin.graphql` to make query / mutation requests.</description>
    * ```ts
    * // /app/routes/**\/*.ts
-   * import { ActionFunctionArgs } from "@remix-run/node";
+   * import { ActionFunctionArgs } from "react-router";
    * import { unauthenticated } from "../shopify.server";
    *
    * export async function action({ request }: ActionFunctionArgs) {
@@ -60,13 +60,13 @@ export interface UnauthenticatedAdminContext<
    *   );
    *
    *  const productData = await response.json();
-   *  return json({ data: productData.data });
+   *  return ({ data: productData.data });
    * }
    * ```
    *
    * ```ts
    * // /app/shopify.server.ts
-   * import { shopifyApp } from "@shopify/shopify-app-remix/server";
+   * import { shopifyApp } from "@shopify/shopify-app-react-router/server";
    *
    * const shopify = shopifyApp({
    *  // ...etc

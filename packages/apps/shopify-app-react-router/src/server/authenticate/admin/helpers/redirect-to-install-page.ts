@@ -1,4 +1,4 @@
-import {redirect as remixRedirect} from '@remix-run/server-runtime';
+import {redirect as reactRouterRedirect} from 'react-router';
 
 import type {BasicParams} from '../../../types';
 
@@ -13,7 +13,7 @@ export async function redirectToInstallPage(
   if (params.config.isEmbeddedApp) {
     throw redirectWithAppBridgeHeaders(installUrl);
   } else {
-    throw remixRedirect(installUrl);
+    throw reactRouterRedirect(installUrl);
   }
 }
 

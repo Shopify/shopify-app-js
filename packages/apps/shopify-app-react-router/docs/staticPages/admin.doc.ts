@@ -4,7 +4,7 @@ const data: LandingTemplateSchema = {
   id: 'guide-admin',
   title: 'Interacting with Shopify Admin',
   description:
-    'Once you [set up your backend](/docs/api/shopify-app-remix#shopify-app), you can use the [`authenticate.admin` function](/docs/api/shopify-app-remix/authenticate/admin) to integrate your app with Shopify Admin.' +
+    'Once you [set up your backend](/docs/api/shopify-app-react-router#shopify-app), you can use the [`authenticate.admin` function](/docs/api/shopify-app-react-router/authenticate/admin) to integrate your app with Shopify Admin.' +
     '\n\nThis function works for both embedded and non-embedded apps, and ensures the app is installed on the current store.' +
     '\n\nIt returns a context with functions to enable loaders and actions to respond to any requests made by or in Shopify Admin.' +
     '\n\nThis page goes over the basics of authenticating those requests, and some of the things you can do with it, like querying the Admin API.',
@@ -16,7 +16,7 @@ const data: LandingTemplateSchema = {
       sectionContent:
         'To authenticate admin requests you can call `authenticate.admin(request)` in a loader or an action.' +
         "\n\nIf there's a session for this user, then this loader will return null. If there's no session for the user, then the loader will throw the appropriate redirect Response." +
-        '\n\n> Tip: If you are authenticating more than one route, then we recommend using [Remix layout routes](https://remix.run/docs/en/1.18.1/file-conventions/routes-files#layout-routes) to automatically authenticate them.',
+        '\n\n> Tip: If you are authenticating more than one route, then we recommend using [React router layout routes](https://reactrouter.com/start/framework/routing#layout-routes) to automatically authenticate them.',
       codeblock: {
         title: 'Authenticating requests',
         tabs: [
@@ -33,9 +33,9 @@ const data: LandingTemplateSchema = {
       anchorLink: 'headers',
       title: 'Headers',
       sectionContent:
-        "The OAuth process can't happen inside the admin iframe, and this package is capable of detecting that scenario and properly redirecting using the [Remix `ErrorBoundary`](https://remix.run/docs/en/main/guides/errors) export to set the correct headers for App Bridge." +
+        "The OAuth process can't happen inside the admin iframe, and this package is capable of detecting that scenario and properly redirecting using the [React Router `ErrorBoundary`](https://reactrouter.com/how-to/error-boundary) export to set the correct headers for App Bridge." +
         '\n\nUse the abstractions provided by this package in your authenticated routes, to automatically set up the error and headers boundaries to redirect outside the iframe when needed.' +
-        '\n\n> Tip: You can also add this to a [Remix layout](https://remix.run/docs/en/main/file-conventions/route-files-v2) if you want to authenticate more than one route, but make sure to call the Shopify boundary methods whenever you need to add your own exports.',
+        '\n\n> Tip: You can also add this to a [React router layout](https://reactrouter.com/start/framework/routing#layout-routes) if you want to authenticate more than one route, but make sure to call the Shopify boundary methods whenever you need to add your own exports.',
       codeblock: {
         title: 'Configure header boundaries',
         tabs: [
@@ -52,7 +52,7 @@ const data: LandingTemplateSchema = {
       anchorLink: 'cors-auth',
       title: 'Authenticating cross-origin admin requests',
       sectionContent:
-        'If your Remix server is authenticating an admin extension, then a request from the extension to Remix will be cross-origin.' +
+        'If your React Router server is authenticating an admin extension, then a request from the extension to the server will be cross-origin.' +
         '\n\nHere `authenticate.admin` provides a `cors` function to add the required cross-origin headers.',
       codeblock: {
         title: 'Add cross-origin headers',
@@ -83,7 +83,7 @@ const data: LandingTemplateSchema = {
       },
       sectionCard: [
         {
-          url: '/docs/api/shopify-app-remix/guide-graphql-types',
+          url: '/docs/api/shopify-app-react-router/guide-graphql-types',
           name: 'Typing GraphQL operations',
           type: 'tutorial',
         },
@@ -114,7 +114,7 @@ const data: LandingTemplateSchema = {
       },
       sectionCard: [
         {
-          url: '/docs/api/shopify-app-remix/unauthenticated/unauthenticated-admin',
+          url: '/docs/api/shopify-app-react-router/unauthenticated/unauthenticated-admin',
           name: 'Unauthenticated Admin',
           type: 'tutorial',
         },
@@ -125,10 +125,10 @@ const data: LandingTemplateSchema = {
       anchorLink: 'rest-api',
       title: 'Using the REST API (Deprecated)',
       sectionContent:
-        '**Shopify is [all-in on graphql](https://www.shopify.com/ca/partners/blog/all-in-on-graphql). In the next major release, the REST API will be removed from the `@shopify/shopify-app-remix` package.' +
-        'If the `removeRest` [future flag](/docs/api/shopify-app-remix/v3/guide-future-flags) is true, then the REST API will not be available.**' +
+        '**Shopify is [all-in on graphql](https://www.shopify.com/ca/partners/blog/all-in-on-graphql). In the next major release, the REST API will be removed from the `@shopify/shopify-app-react-router` package.' +
+        'If the `removeRest` [future flag](/docs/api/shopify-app-react-router/v3/guide-future-flags) is true, then the REST API will not be available.**' +
         '\n\nOnce a request is authenticated, `authenticate.admin` will return an `admin` object that contains a REST client that can interact with the [REST Admin API](/docs/api/admin-rest).' +
-        '\n\nYou can also import a set of resource classes from the `@shopify/shopify-api` package, which is included in `@shopify/shopify-app-remix`.' +
+        '\n\nYou can also import a set of resource classes from the `@shopify/shopify-api` package, which is included in `@shopify/shopify-app-react-router`.' +
         '\n\nThese classes map to the individual REST endpoints, and will be returned under `admin.rest.resources`.',
       codeblock: {
         title: 'Interacting with the REST API',
@@ -153,7 +153,7 @@ const data: LandingTemplateSchema = {
       resources: [
         {
           name: 'authenticate.admin',
-          url: '/docs/api/shopify-app-remix/authenticate/admin',
+          url: '/docs/api/shopify-app-react-router/authenticate/admin',
         },
       ],
     },

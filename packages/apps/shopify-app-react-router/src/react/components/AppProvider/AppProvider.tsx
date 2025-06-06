@@ -8,7 +8,7 @@ import {
 import englishI18n from '@shopify/polaris/locales/en.json' with {type: 'json'};
 
 import {APP_BRIDGE_URL} from '../../const';
-import {RemixPolarisLink} from '../RemixPolarisLink';
+import {ReactRouterPolarisLink} from '../ReactRouterPolarisLink';
 
 export interface AppProviderProps
   extends Omit<PolarisAppProviderProps, 'linkComponent' | 'i18n'> {
@@ -42,7 +42,7 @@ export interface AppProviderProps
  * Sets up the Polaris `AppProvider` and injects the App Bridge script.
  *
  * This component extends the [`AppProvider`](https://polaris.shopify.com/components/utilities/app-provider) component
- * from Polaris, and accepts all of its props except for `linkComponent`, which is overridden to use the Remix `Link`
+ * from Polaris, and accepts all of its props except for `linkComponent`, which is overridden to use the React Router `Link`
  * component.
  *
  * {@link https://polaris.shopify.com/components/utilities/app-provider}
@@ -54,7 +54,7 @@ export interface AppProviderProps
  * ```ts
  * // /app/routes/**\/*.ts
  * import {authenticate} from '~/shopify.server';
- * import {AppProvider} from '@shopify/shopify-app-remix/react';
+ * import {AppProvider} from '@shopify/shopify-app-react-router/react';
  *
  * export async function loader({ request }) {
  *   await authenticate.admin(request);
@@ -79,7 +79,7 @@ export interface AppProviderProps
  * ```ts
  * // /app/routes/**\/*.ts
  * import {authenticate} from '~/shopify.server';
- * import {AppProvider} from '@shopify/shopify-app-remix/react';
+ * import {AppProvider} from '@shopify/shopify-app-react-router/react';
  *
  * export async function loader({ request }) {
  *   await authenticate.admin(request);
@@ -116,7 +116,7 @@ export function AppProvider(props: AppProviderProps) {
       {isEmbeddedApp && <script src={__APP_BRIDGE_URL} data-api-key={apiKey} />}
       <PolarisAppProvider
         {...polarisProps}
-        linkComponent={RemixPolarisLink}
+        linkComponent={ReactRouterPolarisLink}
         i18n={i18n || englishI18n}
       >
         {children}

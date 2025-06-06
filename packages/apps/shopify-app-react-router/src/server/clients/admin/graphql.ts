@@ -20,7 +20,7 @@ export function graphqlClientFactory({
     });
 
     try {
-      // We convert the incoming response to a Response object to bring this client closer to the Remix client.
+      // We convert the incoming response to a Response object to bring this client closer to the React Router client.
       const apiResponse = await client.request(operation, {
         variables: options?.variables,
         retries: options?.tries ? options.tries - 1 : 0,

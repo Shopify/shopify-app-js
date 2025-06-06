@@ -19,19 +19,7 @@ const data: ReferenceEntityTemplateSchema = {
     {
       name: 'authenticate.public.appProxy',
       subtitle: 'Authenticate app proxy requests.',
-      url: '/docs/api/shopify-app-remix/authenticate/public/app-proxy',
-      type: 'remix',
-    },
-    {
-      name: 'AppProxyForm',
-      subtitle: 'Render form elements in proxies.',
-      url: '/docs/api/shopify-app-remix/app-proxy-components/appproxyform',
-      type: 'remix',
-    },
-    {
-      name: 'AppProxyLink',
-      subtitle: 'Render link elements in proxies.',
-      url: '/docs/api/shopify-app-remix/app-proxy-components/appproxylink',
+      url: '/docs/api/shopify-app-react-router/authenticate/public/app-proxy',
       type: 'remix',
     },
   ],

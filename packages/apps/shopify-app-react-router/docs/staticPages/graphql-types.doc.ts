@@ -17,7 +17,7 @@ In this example, we use the \`graphql-codegen\` script to parse a query in the \
 
 Note how VSCode shows the types for both the return type of \`response.json()\`, and the \`variables\` option in the \`graphql\` function.
 
-<video style="width: 100%; height: auto;" muted controls aria-label="A demonstration of a Remix app using GraphQL types">
+<video style="width: 100%; height: auto;" muted controls aria-label="A demonstration of React Router app using GraphQL types">
   <source src="/assets/client-libraries/graphql-types-demo.webm" type="video/webm">
   Your browser doesn't support this video.
 </video>
@@ -130,13 +130,13 @@ Note how VSCode shows the types for both the return type of \`response.json()\`,
       resources: [
         {
           name: 'Admin API',
-          url: '/docs/api/shopify-app-remix/apis/admin-api',
+          url: '/docs/api/shopify-app-react-router/apis/admin-api',
           type: 'shopify',
           subtitle: 'Make requests to the Admin API',
         },
         {
           name: 'Storefront API',
-          url: '/docs/api/shopify-app-remix/apis/storefront-api',
+          url: '/docs/api/shopify-app-react-router/apis/storefront-api',
           type: 'shopify',
           subtitle: 'Make requests to the Storefront API',
         },

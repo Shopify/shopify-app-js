@@ -40,7 +40,7 @@ export interface AdminApiContextWithoutRest {
    * <description>Use `admin.graphql` to make query / mutation requests.</description>
    * ```ts
    * // /app/routes/**\/*.ts
-   * import { ActionFunctionArgs } from "@remix-run/node";
+   * import { ActionFunctionArgs } from "react-router";
    * import { authenticate } from "../shopify.server";
    *
    * export const action = async ({ request }: ActionFunctionArgs) => {
@@ -63,7 +63,7 @@ export interface AdminApiContextWithoutRest {
    *   );
    *
    *   const productData = await response.json();
-   *   return json({
+   *   return ({
    *     productId: productData.data?.productCreate?.product?.id,
    *   });
    * }
@@ -71,7 +71,7 @@ export interface AdminApiContextWithoutRest {
    *
    * ```ts
    * // /app/shopify.server.ts
-   * import { shopifyApp } from "@shopify/shopify-app-remix/server";
+   * import { shopifyApp } from "@shopify/shopify-app-react-router/server";
    *
    * const shopify = shopifyApp({
    *   // ...
@@ -85,7 +85,7 @@ export interface AdminApiContextWithoutRest {
    * <description>Catch `GraphqlQueryError` errors to see error messages from the API.</description>
    * ```ts
    * // /app/routes/**\/*.ts
-   * import { ActionFunctionArgs } from "@remix-run/node";
+   * import { ActionFunctionArgs } from "react-router";
    * import { authenticate } from "../shopify.server";
    *
    * export const action = async ({ request }: ActionFunctionArgs) => {
@@ -103,23 +103,23 @@ export interface AdminApiContextWithoutRest {
    *       }`,
    *     );
    *
-   *     return json({ data: await response.json() });
+   *     return ({ data: await response.json() });
    *   } catch (error) {
    *     if (error instanceof GraphqlQueryError) {
    *       // error.body.errors:
    *       // { graphQLErrors: [
    *       //   { message: "Field 'not_a_field' doesn't exist on type 'Product'" }
    *       // ] }
-   *       return json({ errors: error.body?.errors }, { status: 500 });
+   *       return ({ errors: error.body?.errors }, { status: 500 });
    *     }
-   *     return json({ message: "An error occurred" }, { status: 500 });
+   *     return ({ message: "An error occurred" }, { status: 500 });
    *   }
    * }
    * ```
    *
    * ```ts
    * // /app/shopify.server.ts
-   * import { shopifyApp } from "@shopify/shopify-app-remix/server";
+   * import { shopifyApp } from "@shopify/shopify-app-react-router/server";
    *
    * const shopify = shopifyApp({
    *   // ...
@@ -149,7 +149,7 @@ export interface AdminApiContextWithRest<
    *
    * ```ts
    * // /app/routes/**\/*.ts
-   * import { LoaderFunctionArgs, json } from "@remix-run/node";
+   * import { LoaderFunctionArgs, json } from "react-router";
    * import { authenticate } from "../shopify.server";
    *
    * export const loader = async ({ request }: LoaderFunctionArgs) => {
@@ -158,7 +158,7 @@ export interface AdminApiContextWithRest<
    *     session,
    *   } = await authenticate.admin(request);
    *
-   *   return json(
+   *   return (
    *     admin.rest.resources.Order.count({ session }),
    *   );
    * };
@@ -166,7 +166,7 @@ export interface AdminApiContextWithRest<
    *
    * ```ts
    * // /app/shopify.server.ts
-   * import { shopifyApp } from "@shopify/shopify-app-remix/server";
+   * import { shopifyApp } from "@shopify/shopify-app-react-router/server";
    * import { restResources } from "@shopify/shopify-api/rest/admin/2023-07";
    *
    * const shopify = shopifyApp({
@@ -183,7 +183,7 @@ export interface AdminApiContextWithRest<
    *
    * ```ts
    * // /app/routes/**\/*.ts
-   * import { LoaderFunctionArgs, json } from "@remix-run/node";
+   * import { LoaderFunctionArgs, json } from "react-router";
    * import { authenticate } from "../shopify.server";
    *
    * export const loader = async ({ request }: LoaderFunctionArgs) => {
@@ -197,13 +197,13 @@ export interface AdminApiContextWithRest<
    *   });
    *   const customers = await response.json();
    *
-   *   return json({ customers });
+   *   return ({ customers });
    * };
    * ```
    *
    * ```ts
    * // /app/shopify.server.ts
-   * import { shopifyApp } from "@shopify/shopify-app-remix/server";
+   * import { shopifyApp } from "@shopify/shopify-app-react-router/server";
    * import { restResources } from "@shopify/shopify-api/rest/admin/2023-04";
    *
    * const shopify = shopifyApp({
@@ -219,7 +219,7 @@ export interface AdminApiContextWithRest<
    * <description>Use `admin.rest.post` to make custom requests to make a request to to the `customers.json` endpoint to send a welcome email</description>
    * ```ts
    * // /app/routes/**\/*.ts
-   * import { LoaderFunctionArgs, json } from "@remix-run/node";
+   * import { LoaderFunctionArgs, json } from "react-router";
    * import { authenticate } from "../shopify.server";
    *
    * export const loader = async ({ request }: LoaderFunctionArgs) => {
@@ -242,13 +242,13 @@ export interface AdminApiContextWithRest<
    *   });
    *
    *   const customerInvite = await response.json();
-   *   return json({ customerInvite });
+   *   return ({ customerInvite });
    * };
    * ```
    *
    * ```ts
    * // /app/shopify.server.ts
-   * import { shopifyApp } from "@shopify/shopify-app-remix/server";
+   * import { shopifyApp } from "@shopify/shopify-app-react-router/server";
    * import { restResources } from "@shopify/shopify-api/rest/admin/2023-04";
    *
    * const shopify = shopifyApp({

@@ -1,4 +1,4 @@
-import {redirect} from '@remix-run/server-runtime';
+import {redirect} from 'react-router';
 
 import {BasicParams} from '../../../types';
 import {getAppBridgeHeaders} from '../helpers';
@@ -18,10 +18,6 @@ export function redirectOutOfApp(
   const isXhrRequest = request.headers.get('authorization');
 
   if (isXhrRequest) {
-    // eslint-disable-next-line no-warning-comments
-    // TODO Check this with the beta flag disabled (with the bounce page)
-    // Remix is not including the X-Shopify-API-Request-Failure-Reauthorize-Url when throwing a Response
-    // https://github.com/remix-run/remix/issues/5356
     throw new Response(undefined, {
       status: 401,
       statusText: 'Unauthorized',

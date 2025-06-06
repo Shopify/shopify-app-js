@@ -29,10 +29,8 @@ export const AppProxyProviderContext =
 /**
  * Sets up a page to render behind a Shopify app proxy, enabling JavaScript and CSS to be loaded from the app.
  *
- * Also provides components that enable using other components such as links and forms within proxies.
- *
  * > Caution:
- * Because Remix doesn't support URL rewriting, any route using this component should <b>match the pathname of the proxy
+ * Because React Router doesn't support URL rewriting, any route using this component should <b>match the pathname of the proxy
  * URL exactly</b>, and <b>end in a trailing slash</b> (e.g., `https://<shop>/apps/proxy/`).
  *
  * @example
@@ -41,7 +39,7 @@ export const AppProxyProviderContext =
  * ```ts
  * // /app/routes/**\/*.ts
  * import {authenticate} from '~/shopify.server';
- * import {AppProxyProvider} from '@shopify/shopify-app-remix/react';
+ * import {AppProxyProvider} from '@shopify/shopify-app-react-router/react';
  *
  * export async function loader({ request }) {
  *   await authenticate.public.appProxy(request);

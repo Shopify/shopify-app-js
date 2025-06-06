@@ -1,1 +1,1 @@
-pnpm add @shopify/shopify-app-remix
+pnpm add @shopify/shopify-app-react-router

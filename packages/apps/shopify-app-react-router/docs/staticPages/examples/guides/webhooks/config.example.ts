@@ -1,4 +1,4 @@
-import {shopifyApp, DeliveryMethod} from '@shopify/shopify-app-remix/server';
+import {shopifyApp, DeliveryMethod} from '@shopify/shopify-app-react-router/server';
 
 const shopify = shopifyApp({
   apiKey: 'abcde1234567890',

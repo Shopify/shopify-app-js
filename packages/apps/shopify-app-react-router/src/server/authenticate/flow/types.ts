@@ -17,7 +17,7 @@ export interface FlowContext<
    * <description>Use the session associated with this request.</description>
    * ```ts
    * // /app/routes/flow.tsx
-   * import { ActionFunctionArgs } from "@remix-run/node";
+   * import { ActionFunctionArgs } from "react-router";
    * import { authenticate } from "../shopify.server";
    *
    * export const action = async ({ request }: ActionFunctionArgs) => {
@@ -39,7 +39,7 @@ export interface FlowContext<
    * <description>Get the request's POST payload.</description>
    * ```ts
    * // /app/routes/flow.tsx
-   * import { ActionFunctionArgs } from "@remix-run/node";
+   * import { ActionFunctionArgs } from "react-router";
    * import { authenticate } from "../shopify.server";
    *
    * export const action = async ({ request }: ActionFunctionArgs) => {
@@ -60,7 +60,7 @@ export interface FlowContext<
    * <description>Use the `admin` object in the context to interact with the Admin API.</description>
    * ```ts
    * // /app/routes/flow.tsx
-   * import { ActionFunctionArgs } from "@remix-run/node";
+   * import { ActionFunctionArgs } from "react-router";
    * import { authenticate } from "../shopify.server";
    *
    * export async function action({ request }: ActionFunctionArgs) {
@@ -79,7 +79,7 @@ export interface FlowContext<
    *   );
    *
    *   const productData = await response.json();
-   *   return json({ data: productData.data });
+   *   return ({ data: productData.data });
    * }
    * ```
    */
