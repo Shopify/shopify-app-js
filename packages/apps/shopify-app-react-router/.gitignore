@@ -1,0 +1,4 @@
+dist
+tsconfig.tsbuildinfo
+shopify-shopify-app-remix*.tgz
+coverage
