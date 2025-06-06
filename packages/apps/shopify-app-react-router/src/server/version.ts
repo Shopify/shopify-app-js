@@ -1,0 +1,1 @@
+export const SHOPIFY_REACT_ROUTER_LIBRARY_VERSION = '3.8.3';
