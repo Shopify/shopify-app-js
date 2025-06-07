@@ -9,6 +9,7 @@
     "target": "ES2022",
     "downlevelIteration": true,
     "sourceMap": true,
+    "inlineSources": true,
     "noEmitOnError": false,
     "importHelpers": true,
     "stripInternal": true,
