@@ -278,8 +278,8 @@ importers:
         specifier: ^3.0.18
         version: link:../shopify-app-session-storage-test-utils
       miniflare:
-        specifier: ^4.20250428.1
-        version: 4.20250428.1
+        specifier: ^4.20250525.1
+        version: 4.20250525.1
 
   packages/apps/session-storage/shopify-app-session-storage-memory:
     dependencies:
@@ -475,8 +475,8 @@ importers:
         specifier: ^2.14.4
         version: 2.14.4(jest@29.7.0(@types/node@22.15.30)(ts-node@10.9.2(@swc/core@1.11.24)(@types/node@22.15.30)(typescript@5.7.3)))
       miniflare:
-        specifier: ^4.20250428.1
-        version: 4.20250428.1
+        specifier: ^4.20250525.1
+        version: 4.20250525.1
       rollup:
         specifier: ^4.42.0
         version: 4.42.0
@@ -1628,8 +1628,8 @@ packages:
     cpu: [x64]
     os: [darwin]
 
-  '@cloudflare/workerd-darwin-64@1.20250428.0':
-    resolution: {integrity: sha512-6nVe9oV4Hdec6ctzMtW80TiDvNTd2oFPi3VsKqSDVaJSJbL+4b6seyJ7G/UEPI+si6JhHBSLV2/9lNXNGLjClA==}
+  '@cloudflare/workerd-darwin-64@1.20250525.0':
+    resolution: {integrity: sha512-L5l+7sSJJT2+riR5rS3Q3PKNNySPjWfRIeaNGMVRi1dPO6QPi4lwuxfRUFNoeUdilZJUVPfSZvTtj9RedsKznQ==}
     engines: {node: '>=16'}
     cpu: [x64]
     os: [darwin]
@@ -1640,8 +1640,8 @@ packages:
     cpu: [arm64]
     os: [darwin]
 
-  '@cloudflare/workerd-darwin-arm64@1.20250428.0':
-    resolution: {integrity: sha512-/TB7bh7SIJ5f+6r4PHsAz7+9Qal/TK1cJuKFkUno1kqGlZbdrMwH0ATYwlWC/nBFeu2FB3NUolsTntEuy23hnQ==}
+  '@cloudflare/workerd-darwin-arm64@1.20250525.0':
+    resolution: {integrity: sha512-Y3IbIdrF/vJWh/WBvshwcSyUh175VAiLRW7963S1dXChrZ1N5wuKGQm9xY69cIGVtitpMJWWW3jLq7J/Xxwm0Q==}
     engines: {node: '>=16'}
     cpu: [arm64]
     os: [darwin]
@@ -1652,8 +1652,8 @@ packages:
     cpu: [x64]
     os: [linux]
 
-  '@cloudflare/workerd-linux-64@1.20250428.0':
-    resolution: {integrity: sha512-9eCbj+R3CKqpiXP6DfAA20DxKge+OTj7Hyw3ZewiEhWH9INIHiJwJQYybu4iq9kJEGjnGvxgguLFjSCWm26hgg==}
+  '@cloudflare/workerd-linux-64@1.20250525.0':
+    resolution: {integrity: sha512-KSyQPAby+c6cpENoO0ayCQlY6QIh28l/+QID7VC1SLXfiNHy+hPNsH1vVBTST6CilHVAQSsy9tCZ9O9XECB8yg==}
     engines: {node: '>=16'}
     cpu: [x64]
     os: [linux]
@@ -1664,8 +1664,8 @@ packages:
     cpu: [arm64]
     os: [linux]
 
-  '@cloudflare/workerd-linux-arm64@1.20250428.0':
-    resolution: {integrity: sha512-D9NRBnW46nl1EQsP13qfkYb5lbt4C6nxl38SBKY/NOcZAUoHzNB5K0GaK8LxvpkM7X/97ySojlMfR5jh5DNXYQ==}
+  '@cloudflare/workerd-linux-arm64@1.20250525.0':
+    resolution: {integrity: sha512-Nt0FUxS2kQhJUea4hMCNPaetkrAFDhPnNX/ntwcqVlGgnGt75iaAhupWJbU0GB+gIWlKeuClUUnDZqKbicoKyg==}
     engines: {node: '>=16'}
     cpu: [arm64]
     os: [linux]
@@ -1676,8 +1676,8 @@ packages:
     cpu: [x64]
     os: [win32]
 
-  '@cloudflare/workerd-windows-64@1.20250428.0':
-    resolution: {integrity: sha512-RQCRj28eitjKD0tmei6iFOuWqMuHMHdNGEigRmbkmuTlpbWHNAoHikgCzZQ/dkKDdatA76TmcpbyECNf31oaTA==}
+  '@cloudflare/workerd-windows-64@1.20250525.0':
+    resolution: {integrity: sha512-mwTj+9f3uIa4NEXR1cOa82PjLa6dbrb3J+KCVJFYIaq7e63VxEzOchCXS4tublT2pmOhmFqkgBMXrxozxNkR2Q==}
     engines: {node: '>=16'}
     cpu: [x64]
     os: [win32]
@@ -1692,8 +1692,8 @@ packages:
   '@drizzle-team/brocli@0.10.2':
     resolution: {integrity: sha512-z33Il7l5dKjUgGULTqBsQBQwckHh5AbIuxhdsIxDDiZAzBOrZO6q9ogcWC65kU382AfynTfgNumVcNIjuIua6w==}
 
-  '@emnapi/runtime@1.3.1':
-    resolution: {integrity: sha512-kEBmG8KyqtxJZv+ygbEim+KCGtIq1fC22Ms3S4ziXmYKm8uyoLX0MHONVKwp+9opg390VaKRNt4a7A9NwmpNhw==}
+  '@emnapi/runtime@1.4.3':
+    resolution: {integrity: sha512-pBPWdu6MLKROBX05wSNKcNb++m5Er+KQ9QkB+WVM+pW2Kx9hoSrVTnu3BdkI5eBLZoKu/J6mW/B6i6bJB2ytXQ==}
 
   '@envelop/core@5.0.3':
     resolution: {integrity: sha512-SE3JxL7odst8igN6x77QWyPpXKXz/Hs5o5Y27r+9Br6WHIhkW90lYYVITWIJQ/qYgn5PkpbaVgeFY9rgqQaZ/A==}
@@ -4079,8 +4079,8 @@ packages:
     engines: {node: '>=0.4.0'}
     hasBin: true
 
-  acorn@8.14.1:
-    resolution: {integrity: sha512-OvQ/2pUDKmgfCg++xsTX1wGxfTaszcHVcTctW4UJB4hibJx2HXxxO5UmVgyjMa+ZDsiaf5wWLXYpRWMmBI0QHg==}
+  acorn@8.15.0:
+    resolution: {integrity: sha512-NZyJarBfL7nWwIq+FDL6Zp/yHEhePMNnnJ0y3qfieCrmNvYct8uvtiV41UvlSe6apAfk0fY1FbWx+NwfmpvtTg==}
     engines: {node: '>=0.4.0'}
     hasBin: true
 
@@ -4795,6 +4795,10 @@ packages:
 
   detect-libc@2.0.3:
     resolution: {integrity: sha512-bwy0MGW55bG41VqxxypOsdSdGqLwXPI/focwgTYCFMbdUiBAxLg9CFzG08sz2aqzknwiX7Hkl0bQENjg8iLByw==}
+    engines: {node: '>=8'}
+
+  detect-libc@2.0.4:
+    resolution: {integrity: sha512-3UDv+G9CsCKO1WKMGw9fwq/SWJYbI0c5Y7LU1AXYoDdbhE2AHQ6N6Nb34sG8Fj7T5APy8qXDCKuuIHd1BR0tVA==}
     engines: {node: '>=8'}
 
   detect-newline@3.1.0:
@@ -6537,8 +6541,8 @@ packages:
     engines: {node: '>=16.13'}
     hasBin: true
 
-  miniflare@4.20250428.1:
-    resolution: {integrity: sha512-M3qcJXjeAEimHrEeWXEhrJiC3YHB5M3QSqqK67pOTI+lHn0QyVG/2iFUjVJ/nv+i10uxeAEva8GRGeu+tKRCmQ==}
+  miniflare@4.20250525.1:
+    resolution: {integrity: sha512-4PJlT5WA+hfclFU5Q7xnpG1G1VGYTXaf/3iu6iKQ8IsbSi9QvPTA2bSZ5goCFxmJXDjV4cxttVxB0Wl1CLuQ0w==}
     engines: {node: '>=18.0.0'}
     hasBin: true
 
@@ -8216,8 +8220,8 @@ packages:
     engines: {node: '>=16'}
     hasBin: true
 
-  workerd@1.20250428.0:
-    resolution: {integrity: sha512-JJNWkHkwPQKQdvtM9UORijgYdcdJsihA4SfYjwh02IUQsdMyZ9jizV1sX9yWi9B9ptlohTW8UNHJEATuphGgdg==}
+  workerd@1.20250525.0:
+    resolution: {integrity: sha512-SXJgLREy/Aqw2J71Oah0Pbu+SShbqbTExjVQyRBTM1r7MG7fS5NUlknhnt6sikjA/t4cO09Bi8OJqHdTkrcnYQ==}
     engines: {node: '>=16'}
     hasBin: true
 
@@ -9944,31 +9948,31 @@ snapshots:
   '@cloudflare/workerd-darwin-64@1.20250214.0':
     optional: true
 
-  '@cloudflare/workerd-darwin-64@1.20250428.0':
+  '@cloudflare/workerd-darwin-64@1.20250525.0':
     optional: true
 
   '@cloudflare/workerd-darwin-arm64@1.20250214.0':
     optional: true
 
-  '@cloudflare/workerd-darwin-arm64@1.20250428.0':
+  '@cloudflare/workerd-darwin-arm64@1.20250525.0':
     optional: true
 
   '@cloudflare/workerd-linux-64@1.20250214.0':
     optional: true
 
-  '@cloudflare/workerd-linux-64@1.20250428.0':
+  '@cloudflare/workerd-linux-64@1.20250525.0':
     optional: true
 
   '@cloudflare/workerd-linux-arm64@1.20250214.0':
     optional: true
 
-  '@cloudflare/workerd-linux-arm64@1.20250428.0':
+  '@cloudflare/workerd-linux-arm64@1.20250525.0':
     optional: true
 
   '@cloudflare/workerd-windows-64@1.20250214.0':
     optional: true
 
-  '@cloudflare/workerd-windows-64@1.20250428.0':
+  '@cloudflare/workerd-windows-64@1.20250525.0':
     optional: true
 
   '@cloudflare/workers-types@4.20250607.0': {}
@@ -9979,7 +9983,7 @@ snapshots:
 
   '@drizzle-team/brocli@0.10.2': {}
 
-  '@emnapi/runtime@1.3.1':
+  '@emnapi/runtime@1.4.3':
     dependencies:
       tslib: 2.8.1
     optional: true
@@ -10597,9 +10601,9 @@ snapshots:
       '@whatwg-node/disposablestack': 0.0.5
       graphql: 16.10.0
       graphql-ws: 5.16.2(graphql@16.10.0)
-      isomorphic-ws: 5.0.0(ws@8.18.1)
+      isomorphic-ws: 5.0.0(ws@8.18.2)
       tslib: 2.8.1
-      ws: 8.18.1
+      ws: 8.18.2
     transitivePeerDependencies:
       - bufferutil
       - utf-8-validate
@@ -10610,10 +10614,10 @@ snapshots:
       '@graphql-tools/utils': 10.8.6(graphql@16.10.0)
       '@whatwg-node/disposablestack': 0.0.6
       graphql: 16.10.0
-      graphql-ws: 6.0.4(graphql@16.10.0)(ws@8.18.1)
-      isomorphic-ws: 5.0.0(ws@8.18.1)
+      graphql-ws: 6.0.4(graphql@16.10.0)(ws@8.18.2)
+      isomorphic-ws: 5.0.0(ws@8.18.2)
       tslib: 2.8.1
-      ws: 8.18.1
+      ws: 8.18.2
     transitivePeerDependencies:
       - '@fastify/websocket'
       - bufferutil
@@ -10655,9 +10659,9 @@ snapshots:
       '@graphql-tools/utils': 10.8.6(graphql@16.10.0)
       '@types/ws': 8.18.1
       graphql: 16.10.0
-      isomorphic-ws: 5.0.0(ws@8.18.1)
+      isomorphic-ws: 5.0.0(ws@8.18.2)
       tslib: 2.8.1
-      ws: 8.18.1
+      ws: 8.18.2
     transitivePeerDependencies:
       - bufferutil
       - utf-8-validate
@@ -10667,9 +10671,9 @@ snapshots:
       '@graphql-tools/utils': 10.8.6(graphql@16.10.0)
       '@types/ws': 8.18.1
       graphql: 16.10.0
-      isomorphic-ws: 5.0.0(ws@8.18.1)
+      isomorphic-ws: 5.0.0(ws@8.18.2)
       tslib: 2.8.1
-      ws: 8.18.1
+      ws: 8.18.2
     transitivePeerDependencies:
       - bufferutil
       - utf-8-validate
@@ -11042,7 +11046,7 @@ snapshots:
 
   '@img/sharp-wasm32@0.33.5':
     dependencies:
-      '@emnapi/runtime': 1.3.1
+      '@emnapi/runtime': 1.4.3
     optional: true
 
   '@img/sharp-win32-ia32@0.33.5':
@@ -11454,7 +11458,7 @@ snapshots:
       '@miniflare/core': 2.14.4
       '@miniflare/shared': 2.14.4
       undici: 5.28.4
-      ws: 8.18.1
+      ws: 8.18.2
     transitivePeerDependencies:
       - bufferutil
       - utf-8-validate
@@ -12643,7 +12647,7 @@ snapshots:
       globby: 11.1.0
       is-glob: 4.0.3
       minimatch: 9.0.5
-      semver: 7.7.1
+      semver: 7.7.2
       ts-api-utils: 1.4.3(typescript@5.7.3)
     optionalDependencies:
       typescript: 5.7.3
@@ -12762,22 +12766,22 @@ snapshots:
 
   acorn-globals@7.0.1:
     dependencies:
-      acorn: 8.14.1
+      acorn: 8.15.0
       acorn-walk: 8.3.4
 
-  acorn-jsx@5.3.2(acorn@8.14.1):
+  acorn-jsx@5.3.2(acorn@8.15.0):
     dependencies:
-      acorn: 8.14.1
+      acorn: 8.15.0
 
   acorn-walk@8.3.2: {}
 
   acorn-walk@8.3.4:
     dependencies:
-      acorn: 8.14.1
+      acorn: 8.15.0
 
   acorn@8.14.0: {}
 
-  acorn@8.14.1: {}
+  acorn@8.15.0: {}
 
   agent-base@6.0.2:
     dependencies:
@@ -13314,7 +13318,6 @@ snapshots:
     dependencies:
       color-name: 1.1.4
       simple-swizzle: 0.2.2
-    optional: true
 
   color-support@1.1.3:
     optional: true
@@ -13323,7 +13326,6 @@ snapshots:
     dependencies:
       color-convert: 2.0.1
       color-string: 1.9.1
-    optional: true
 
   colorette@2.0.20: {}
 
@@ -13564,6 +13566,8 @@ snapshots:
   detect-libc@2.0.2: {}
 
   detect-libc@2.0.3: {}
+
+  detect-libc@2.0.4: {}
 
   detect-newline@3.1.0: {}
 
@@ -14119,8 +14123,8 @@ snapshots:
 
   espree@9.6.1:
     dependencies:
-      acorn: 8.14.1
-      acorn-jsx: 5.3.2(acorn@8.14.1)
+      acorn: 8.15.0
+      acorn-jsx: 5.3.2(acorn@8.15.0)
       eslint-visitor-keys: 3.4.3
 
   esprima@4.0.1: {}
@@ -14579,11 +14583,11 @@ snapshots:
     dependencies:
       graphql: 16.10.0
 
-  graphql-ws@6.0.4(graphql@16.10.0)(ws@8.18.1):
+  graphql-ws@6.0.4(graphql@16.10.0)(ws@8.18.2):
     dependencies:
       graphql: 16.10.0
     optionalDependencies:
-      ws: 8.18.1
+      ws: 8.18.2
 
   graphql@16.10.0: {}
 
@@ -14787,8 +14791,7 @@ snapshots:
 
   is-arrayish@0.2.1: {}
 
-  is-arrayish@0.3.2:
-    optional: true
+  is-arrayish@0.3.2: {}
 
   is-async-function@2.1.0:
     dependencies:
@@ -14951,6 +14954,10 @@ snapshots:
   isomorphic-ws@5.0.0(ws@8.18.1):
     dependencies:
       ws: 8.18.1
+
+  isomorphic-ws@5.0.0(ws@8.18.2):
+    dependencies:
+      ws: 8.18.2
 
   istanbul-lib-coverage@3.2.2: {}
 
@@ -15336,7 +15343,7 @@ snapshots:
       jest-util: 29.7.0
       natural-compare: 1.4.0
       pretty-format: 29.7.0
-      semver: 7.7.1
+      semver: 7.7.2
     transitivePeerDependencies:
       - supports-color
 
@@ -15740,16 +15747,17 @@ snapshots:
       - bufferutil
       - utf-8-validate
 
-  miniflare@4.20250428.1:
+  miniflare@4.20250525.1:
     dependencies:
       '@cspotcode/source-map-support': 0.8.1
       acorn: 8.14.0
       acorn-walk: 8.3.2
       exit-hook: 2.2.1
       glob-to-regexp: 0.4.1
+      sharp: 0.33.5
       stoppable: 1.1.0
       undici: 5.29.0
-      workerd: 1.20250428.0
+      workerd: 1.20250525.0
       ws: 8.18.0
       youch: 3.3.4
       zod: 3.22.3
@@ -15823,7 +15831,7 @@ snapshots:
 
   mlly@1.7.4:
     dependencies:
-      acorn: 8.14.1
+      acorn: 8.15.0
       pathe: 2.0.3
       pkg-types: 1.3.1
       ufo: 1.5.4
@@ -15891,7 +15899,7 @@ snapshots:
 
   node-abi@3.73.0:
     dependencies:
-      semver: 7.7.1
+      semver: 7.7.2
 
   node-abi@3.74.0:
     dependencies:
@@ -15957,7 +15965,7 @@ snapshots:
     dependencies:
       execa: 6.1.0
       parse-package-name: 1.0.0
-      semver: 7.7.1
+      semver: 7.7.2
       validate-npm-package-name: 4.0.0
 
   nullthrows@1.1.1: {}
@@ -16777,8 +16785,8 @@ snapshots:
   sharp@0.33.5:
     dependencies:
       color: 4.2.3
-      detect-libc: 2.0.3
-      semver: 7.7.1
+      detect-libc: 2.0.4
+      semver: 7.7.2
     optionalDependencies:
       '@img/sharp-darwin-arm64': 0.33.5
       '@img/sharp-darwin-x64': 0.33.5
@@ -16799,7 +16807,6 @@ snapshots:
       '@img/sharp-wasm32': 0.33.5
       '@img/sharp-win32-ia32': 0.33.5
       '@img/sharp-win32-x64': 0.33.5
-    optional: true
 
   shebang-command@2.0.0:
     dependencies:
@@ -16857,7 +16864,6 @@ snapshots:
   simple-swizzle@0.2.2:
     dependencies:
       is-arrayish: 0.3.2
-    optional: true
 
   sisteransi@1.0.5: {}
 
@@ -17150,7 +17156,7 @@ snapshots:
   terser@5.37.0:
     dependencies:
       '@jridgewell/source-map': 0.3.6
-      acorn: 8.14.1
+      acorn: 8.15.0
       commander: 2.20.3
       source-map-support: 0.5.21
 
@@ -17600,13 +17606,13 @@ snapshots:
       '@cloudflare/workerd-linux-arm64': 1.20250214.0
       '@cloudflare/workerd-windows-64': 1.20250214.0
 
-  workerd@1.20250428.0:
+  workerd@1.20250525.0:
     optionalDependencies:
-      '@cloudflare/workerd-darwin-64': 1.20250428.0
-      '@cloudflare/workerd-darwin-arm64': 1.20250428.0
-      '@cloudflare/workerd-linux-64': 1.20250428.0
-      '@cloudflare/workerd-linux-arm64': 1.20250428.0
-      '@cloudflare/workerd-windows-64': 1.20250428.0
+      '@cloudflare/workerd-darwin-64': 1.20250525.0
+      '@cloudflare/workerd-darwin-arm64': 1.20250525.0
+      '@cloudflare/workerd-linux-64': 1.20250525.0
+      '@cloudflare/workerd-linux-arm64': 1.20250525.0
+      '@cloudflare/workerd-windows-64': 1.20250525.0
 
   wrangler@3.112.0(@cloudflare/workers-types@4.20250607.0):
     dependencies:
