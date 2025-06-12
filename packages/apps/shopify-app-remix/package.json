@@ -95,6 +95,7 @@
     "jsonwebtoken": "^9.0.2"
   },
   "dependencies": {
+    "@shopify/shopify-app-js": "file:/Users/richardpowell/src/github.com/Shopify/shopify-app-packages/packages/js",
     "@remix-run/server-runtime": "^2.16.5",
     "@shopify/admin-api-client": "^1.1.0",
     "@shopify/shopify-api": "^11.13.0",

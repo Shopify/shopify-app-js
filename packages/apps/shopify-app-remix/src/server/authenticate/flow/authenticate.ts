@@ -1,5 +1,7 @@
 import {ShopifyRestResources} from '@shopify/shopify-api';
+import {authWebhook as authenticateFlow} from '@shopify/shopify-app-js';
 
+import {toReq} from '../helpers/to-req';
 import {AppConfigArg} from '../../config-types';
 import {adminClientFactory} from '../../clients/admin';
 import {BasicParams} from '../../types';
@@ -17,32 +19,20 @@ export function authenticateFlowFactory<
   ): Promise<FlowContext<ConfigArg, Resources>> {
     logger.info('Authenticating flow request');
 
-    if (request.method !== 'POST') {
-      logger.debug(
-        'Received a non-POST request for flow. Only POST requests are allowed.',
-        {url: request.url, method: request.method},
-      );
-      throw new Response(undefined, {
-        status: 405,
-        statusText: 'Method not allowed',
+    const result = await authenticateFlow(toReq(request), {
+      clientId: config.apiKey,
+      clientSecret: config.apiSecretKey,
+    });
+
+    if (!result.ok) {
+      logger.error(result.action as string, {reason: result.action});
+
+      throw new Response(result.action as string, {
+        status: result.response.status,
       });
     }
 
     const rawBody = await request.text();
-    const result = await api.flow.validate({
-      rawBody,
-      rawRequest: request,
-    });
-
-    if (!result.valid) {
-      logger.error('Received an invalid flow request', {reason: result.reason});
-
-      throw new Response(undefined, {
-        status: 400,
-        statusText: 'Bad Request',
-      });
-    }
-
     const payload = JSON.parse(rawBody);
 
     logger.debug('Flow request is valid, looking for an offline session', {
