@@ -1,13 +1,12 @@
-import {
-  ShopifyRestResources,
-  WebhookValidationErrorReason,
-} from '@shopify/shopify-api';
+import {ShopifyRestResources} from '@shopify/shopify-api';
+import {authWebhook} from '@shopify/shopify-app-js';
 
 import {AppConfigArg} from '../../config-types';
 import type {BasicParams} from '../../types';
 import {adminClientFactory} from '../../clients';
 import {handleClientErrorFactory} from '../admin/helpers';
 import {createOrLoadOfflineSession} from '../helpers';
+import {toReq} from '../helpers/to-req';
 
 import type {
   AuthenticateWebhook,
@@ -20,49 +19,36 @@ export function authenticateWebhookFactory<
   Resources extends ShopifyRestResources,
   Topics extends string,
 >(params: BasicParams): AuthenticateWebhook<ConfigArg, Resources, Topics> {
-  const {api, logger} = params;
+  const {logger, config} = params;
 
   return async function authenticate(
     request: Request,
   ): Promise<WebhookContext<ConfigArg, Resources, Topics>> {
-    if (request.method !== 'POST') {
-      logger.debug(
-        'Received a non-POST request for a webhook. Only POST requests are allowed.',
-        {url: request.url, method: request.method},
-      );
-      throw new Response(undefined, {
-        status: 405,
-        statusText: 'Method not allowed',
+    const req = toReq(request);
+    const result = await authWebhook(toReq(request), {
+      clientId: config.apiKey,
+      clientSecret: config.apiSecretKey,
+    });
+
+    if (!result.ok) {
+      logger.error(result.action as string, {
+        reason: result.action,
+      });
+
+      throw new Response(result.response.body, {
+        status: result.response.status,
       });
     }
 
-    const rawBody = await request.text();
-
-    const check = await api.webhooks.validate({
-      rawBody,
-      rawRequest: request,
-    });
-
-    if (!check.valid) {
-      if (check.reason === WebhookValidationErrorReason.InvalidHmac) {
-        logger.debug('Webhook HMAC validation failed', check);
-        throw new Response(undefined, {
-          status: 401,
-          statusText: 'Unauthorized',
-        });
-      } else {
-        logger.debug('Webhook validation failed', check);
-        throw new Response(undefined, {status: 400, statusText: 'Bad Request'});
-      }
-    }
-    const session = await createOrLoadOfflineSession(check.domain, params);
+    const domain = req.headers.domain;
+    const session = await createOrLoadOfflineSession(domain, params);
     const webhookContext: WebhookContextWithoutSession<Topics> = {
-      apiVersion: check.apiVersion,
-      shop: check.domain,
-      topic: check.topic as Topics,
-      webhookId: check.webhookId,
-      payload: JSON.parse(rawBody),
-      subTopic: check.subTopic || undefined,
+      shop: domain,
+      apiVersion: req.headers.apiVersion,
+      topic: req.headers.topic as Topics,
+      webhookId: req.headers.webhookId,
+      subTopic: req.headers.subTopic || undefined,
+      payload: JSON.parse(req.body as string),
       session: undefined,
       admin: undefined,
     };
