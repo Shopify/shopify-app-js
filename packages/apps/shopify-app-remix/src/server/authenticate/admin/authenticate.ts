@@ -1,16 +1,14 @@
 import {JwtPayload, Session, ShopifyRestResources} from '@shopify/shopify-api';
+import {
+  authAdminEmbedded,
+  authAdminUnembedded,
+  AuthResult,
+} from '@shopify/shopify-app-js';
 
 import type {BasicParams} from '../../types';
 import type {AppConfigArg} from '../../config-types';
-import {
-  getSessionTokenHeader,
-  ensureCORSHeadersFactory,
-  getSessionTokenFromUrlParam,
-  respondToBotRequest,
-  respondToOptionsRequest,
-  validateSessionToken,
-  getShopFromRequest,
-} from '../helpers';
+import {ensureCORSHeadersFactory, getShopFromRequest} from '../helpers';
+import {toReq} from '../helpers/to-req';
 
 import {
   cancelBillingFactory,
@@ -26,22 +24,13 @@ import type {
   EmbeddedAdminContext,
   NonEmbeddedAdminContext,
 } from './types';
-import {
-  createAdminApiContext,
-  ensureAppIsEmbeddedIfRequired,
-  ensureSessionTokenSearchParamIfRequired,
-  redirectFactory,
-  renderAppBridge,
-  validateShopAndHostParams,
-} from './helpers';
+import {createAdminApiContext, redirectFactory} from './helpers';
 import {AuthorizationStrategy} from './strategies/types';
 import {scopesApiFactory} from './scope/factory';
 
 export interface SessionTokenContext {
   shop: string;
   sessionId?: string;
-  sessionToken?: string;
-  payload?: JwtPayload;
 }
 
 interface AuthStrategyParams extends BasicParams {
@@ -55,32 +44,7 @@ export function authStrategyFactory<
   strategy,
   ...params
 }: AuthStrategyParams): AuthenticateAdmin<ConfigArg, Resources> {
-  const {api, logger, config} = params;
-
-  async function respondToBouncePageRequest(request: Request) {
-    const url = new URL(request.url);
-
-    if (url.pathname === config.auth.patchSessionTokenPath) {
-      logger.debug('Rendering bounce page', {
-        shop: getShopFromRequest(request),
-      });
-      throw renderAppBridge({config, logger, api}, request);
-    }
-  }
-
-  async function respondToExitIframeRequest(request: Request) {
-    const url = new URL(request.url);
-
-    if (url.pathname === config.auth.exitIframePath) {
-      const destination = url.searchParams.get('exitIframe')!;
-
-      logger.debug('Rendering exit iframe page', {
-        shop: getShopFromRequest(request),
-        destination,
-      });
-      throw renderAppBridge({config, logger, api}, request, {url: destination});
-    }
-  }
+  const {logger, config} = params;
 
   type AdminContextBase =
     | EmbeddedAdminContext<ConfigArg, Resources>
@@ -145,27 +109,50 @@ export function authStrategyFactory<
   }
 
   return async function authenticateAdmin(request: Request) {
-    try {
-      respondToBotRequest(params, request);
-      respondToOptionsRequest(params, request);
-      await respondToBouncePageRequest(request);
-      await respondToExitIframeRequest(request);
-      await strategy.respondToOAuthRequests(request);
+    const req = toReq(request);
+    const appConfig = {
+      clientId: config.apiKey,
+      clientSecret: config.apiSecretKey,
+      appOrigin: config.appUrl,
+      loginPath: config.auth.loginPath,
+      exitIFramePath: config.auth.exitIframePath,
+    };
 
-      // If this is a valid request, but it doesn't have a session token header, this is a document request. We need to
-      // ensure we're embedded if needed and we have the information needed to load the session.
-      if (!getSessionTokenHeader(request)) {
-        validateShopAndHostParams(params, request);
-        await ensureAppIsEmbeddedIfRequired(params, request);
-        await ensureSessionTokenSearchParamIfRequired(params, request);
-      }
+    logger.info('Authenticating admin request', {
+      shop: getShopFromRequest(request),
+    });
 
-      logger.info('Authenticating admin request', {
-        shop: getShopFromRequest(request),
+    let result: AuthResult;
+
+    if (config.isEmbeddedApp) {
+      result = await authAdminEmbedded(req, {
+        ...appConfig,
+        patchSessionTokenPath: config.auth.patchSessionTokenPath,
       });
+    } else {
+      result = await authAdminUnembedded(req, {
+        ...appConfig,
+        authPath: config.auth.path,
+        authCallbackPath: config.auth.callbackPath,
+      });
+    }
 
-      const {payload, shop, sessionId, sessionToken} =
-        await getSessionTokenContext(params, request);
+    if (!result.ok || !result.jwt || !result.jwt.object) {
+      logger.error(result.action as string, {
+        reason: result.action,
+      });
+      throw new Response(result.response.body, {
+        status: result.response.status,
+      });
+    }
+
+    try {
+      const sessionToken = result.jwt.object as unknown as JwtPayload;
+      const {shop, sessionId} = await getSessionTokenContext(
+        params,
+        request,
+        sessionToken,
+      );
 
       logger.debug('Loading session from storage', {shop, sessionId});
       const existingSession = sessionId
@@ -174,11 +161,11 @@ export function authStrategyFactory<
 
       const session = await strategy.authenticate(request, {
         session: existingSession,
-        sessionToken,
+        sessionToken: result.jwt.string,
         shop,
       });
 
-      return createContext(request, session, strategy, payload);
+      return createContext(request, session, strategy, sessionToken);
     } catch (errorOrResponse) {
       if (errorOrResponse instanceof Response) {
         logger.debug('Authenticate returned a response', {
@@ -195,32 +182,24 @@ export function authStrategyFactory<
 async function getSessionTokenContext(
   params: BasicParams,
   request: Request,
+  sessionToken?: JwtPayload,
 ): Promise<SessionTokenContext> {
   const {api, config, logger} = params;
 
-  const headerSessionToken = getSessionTokenHeader(request);
-  const searchParamSessionToken = getSessionTokenFromUrlParam(request);
-  const sessionToken = (headerSessionToken || searchParamSessionToken)!;
-
-  logger.debug('Attempting to authenticate session token', {
-    shop: getShopFromRequest(request),
-    sessionToken: JSON.stringify({
-      header: headerSessionToken,
-      search: searchParamSessionToken,
-    }),
-  });
-
-  if (config.isEmbeddedApp) {
-    const payload = await validateSessionToken(params, request, sessionToken);
-    const dest = new URL(payload.dest);
+  if (sessionToken) {
+    const dest = new URL(sessionToken.dest);
     const shop = dest.hostname;
 
-    logger.debug('Session token is valid - authenticated', {shop, payload});
+    logger.debug('Session token is valid - authenticated', {
+      shop,
+      sessionToken,
+    });
+
     const sessionId = config.useOnlineTokens
-      ? api.session.getJwtSessionId(shop, payload.sub)
+      ? api.session.getJwtSessionId(shop, sessionToken.sub)
       : api.session.getOfflineId(shop);
 
-    return {shop, payload, sessionId, sessionToken};
+    return {shop, sessionId};
   }
 
   const url = new URL(request.url);
@@ -231,5 +210,5 @@ async function getSessionTokenContext(
     rawRequest: request,
   });
 
-  return {shop, sessionId, payload: undefined, sessionToken};
+  return {shop, sessionId};
 }
