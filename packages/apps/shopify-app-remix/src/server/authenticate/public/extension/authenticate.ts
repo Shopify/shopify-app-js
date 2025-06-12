@@ -1,12 +1,8 @@
+import {authPublicCheckout} from '@shopify/shopify-app-js';
+
+import {toReq} from '../../helpers/to-req';
 import {BasicParams} from '../../../types';
-import {
-  respondToBotRequest,
-  respondToOptionsRequest,
-  getSessionTokenHeader,
-  validateSessionToken,
-  ensureCORSHeadersFactory,
-  getShopFromRequest,
-} from '../../helpers';
+import {ensureCORSHeadersFactory} from '../../helpers';
 
 import {AuthenticateExtension, ExtensionContext} from './types';
 
@@ -18,37 +14,31 @@ export function authenticateExtensionFactory(
     request,
     options = {},
   ): Promise<ExtensionContext> {
-    const {logger} = params;
+    const {logger, config} = params;
 
-    const corsHeaders = options.corsHeaders ?? [];
+    logger.info(`Authenticating ${requestType} request`);
 
-    respondToBotRequest(params, request);
-    respondToOptionsRequest(params, request, corsHeaders);
-
-    const sessionTokenHeader = getSessionTokenHeader(request);
-
-    logger.info(`Authenticating ${requestType} request`, {
-      shop: getShopFromRequest(request),
+    const result = await authPublicCheckout(toReq(request), {
+      clientId: config.apiKey,
+      clientSecret: config.apiSecretKey,
     });
 
-    if (!sessionTokenHeader) {
-      logger.debug('Request did not contain a session token', {
-        shop: getShopFromRequest(request),
+    if (!result.ok || !result.jwt?.object) {
+      logger.error(result.action as string, {
+        reason: result.action,
       });
-      throw new Response(undefined, {
-        status: 401,
-        statusText: 'Unauthorized',
+      throw new Response(result.response.body, {
+        status: result.response.status,
       });
     }
 
     return {
-      sessionToken: await validateSessionToken(
+      sessionToken: result.jwt.object,
+      cors: ensureCORSHeadersFactory(
         params,
         request,
-        sessionTokenHeader,
-        {checkAudience: false, retryRequest: false},
+        options.corsHeaders ?? [],
       ),
-      cors: ensureCORSHeadersFactory(params, request, corsHeaders),
     };
   };
 }
