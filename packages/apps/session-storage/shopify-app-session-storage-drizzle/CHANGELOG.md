@@ -1,5 +1,11 @@
 # @shopify/shopify-app-session-storage-drizzle
 
+## 2.1.1
+
+### Patch Changes
+
+- e298a0c: Fix issue with missing sourcemaps
+
 ## 2.1.0
 
 ### Minor Changes
