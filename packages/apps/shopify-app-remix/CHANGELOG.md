@@ -1,5 +1,16 @@
 # @shopify/shopify-app-remix
 
+## 3.8.4
+
+### Patch Changes
+
+- e298a0c: Fix issue with missing sourcemaps
+- Updated dependencies [e298a0c]
+  - @shopify/admin-api-client@1.1.1
+  - @shopify/storefront-api-client@1.0.9
+  - @shopify/shopify-app-session-storage@3.0.19
+  - @shopify/shopify-api@11.13.1
+
 ## 3.8.3
 
 ### Patch Changes

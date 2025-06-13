@@ -1,5 +1,11 @@
 # @shopify/shopify-app-session-storage-mysql
 
+## 4.0.19
+
+### Patch Changes
+
+- e298a0c: Fix issue with missing sourcemaps
+
 ## 4.0.18
 
 ### Patch Changes
