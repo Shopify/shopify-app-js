@@ -1,8 +1,4 @@
-import {
-  RegisterReturn,
-  Shopify,
-  ShopifyRestResources,
-} from '@shopify/shopify-api';
+import {RegisterReturn, Shopify} from '@shopify/shopify-api';
 import {SessionStorage} from '@shopify/shopify-app-session-storage';
 
 import type {AuthenticateAdmin} from './authenticate/admin/types';
@@ -24,11 +20,7 @@ import type {Unauthenticated} from './unauthenticated/types';
 export interface BasicParams<
   Future extends FutureFlagOptions = FutureFlagOptions,
 > {
-  api: Shopify<
-    ApiConfigWithFutureFlags<Future>,
-    ShopifyRestResources,
-    ApiFutureFlags<Future>
-  >;
+  api: Shopify<ApiConfigWithFutureFlags<Future>, any, ApiFutureFlags<Future>>;
   config: AppConfig;
   logger: Shopify['logger'];
 }
@@ -57,11 +49,6 @@ export interface LoginError {
 type Login = (request: Request) => Promise<LoginError | never>;
 
 type AddDocumentResponseHeaders = (request: Request, headers: Headers) => void;
-
-type RestResourcesType<Config extends AppConfigArg> =
-  Config['restResources'] extends ShopifyRestResources
-    ? Config['restResources']
-    : ShopifyRestResources;
 
 type SessionStorageType<Config extends AppConfigArg> =
   Config['sessionStorage'] extends SessionStorage
@@ -101,7 +88,7 @@ interface Authenticate<Config extends AppConfigArg> {
    * export const authenticate = shopify.authenticate;
    * ```
    */
-  admin: AuthenticateAdmin<Config, RestResourcesType<Config>>;
+  admin: AuthenticateAdmin<Config>;
 
   /**
    * Authenticate a Flow extension Request and get back an authenticated context, containing an admin context to access
@@ -138,7 +125,7 @@ interface Authenticate<Config extends AppConfigArg> {
    * export const authenticate = shopify.authenticate;
    * ```
    */
-  flow: AuthenticateFlow<Config, RestResourcesType<Config>>;
+  flow: AuthenticateFlow;
 
   /**
    * Authenticate a request from a fulfillment service and get back an authenticated context.
@@ -160,10 +147,7 @@ interface Authenticate<Config extends AppConfigArg> {
    * }
    * ```
    * */
-  fulfillmentService: AuthenticateFulfillmentService<
-    Config,
-    RestResourcesType<Config>
-  >;
+  fulfillmentService: AuthenticateFulfillmentService;
 
   /**
    * Authenticate a public request and get back a session token.
@@ -184,7 +168,7 @@ interface Authenticate<Config extends AppConfigArg> {
    * }
    * ```
    */
-  public: AuthenticatePublic<Config>;
+  public: AuthenticatePublic;
 
   /**
    * Authenticate a Shopify webhook request, get back an authenticated admin context and details on the webhook request
@@ -254,7 +238,7 @@ interface Authenticate<Config extends AppConfigArg> {
    * });
    * ```
    */
-  webhook: AuthenticateWebhook<Config, RestResourcesType<Config>, string>;
+  webhook: AuthenticateWebhook<string>;
 }
 
 export interface ShopifyAppBase<Config extends AppConfigArg> {
@@ -423,7 +407,7 @@ export interface ShopifyAppBase<Config extends AppConfigArg> {
    * }
    * ```
    */
-  unauthenticated: Unauthenticated<Config, RestResourcesType<Config>>;
+  unauthenticated: Unauthenticated;
 }
 
 export interface ShopifyAppLogin {

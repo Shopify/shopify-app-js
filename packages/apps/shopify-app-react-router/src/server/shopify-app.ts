@@ -3,7 +3,6 @@ import {
   ConfigInterface as ApiConfig,
   LATEST_API_VERSION,
   ShopifyError,
-  ShopifyRestResources,
   shopifyApi,
 } from '@shopify/shopify-api';
 import {SessionStorage} from '@shopify/shopify-app-session-storage';
@@ -58,8 +57,7 @@ import {FutureFlagOptions, logDisabledFutureFlags} from './future/flags';
  * ```
  */
 export function shopifyApp<
-  Config extends AppConfigArg<Resources, Storage, Future>,
-  Resources extends ShopifyRestResources,
+  Config extends AppConfigArg<Storage, Future>,
   Storage extends SessionStorage,
   Future extends FutureFlagOptions = Config['future'],
 >(appConfig: Readonly<Config>): ShopifyApp<Config> {
@@ -85,7 +83,7 @@ export function shopifyApp<
     strategy = new AuthCodeFlowStrategy(params);
   }
 
-  const authStrategy = authStrategyFactory<Config, Resources>({
+  const authStrategy = authStrategyFactory({
     ...params,
     strategy,
   });
@@ -99,16 +97,13 @@ export function shopifyApp<
     registerWebhooks: registerWebhooksFactory(params),
     authenticate: {
       admin: authStrategy,
-      flow: authenticateFlowFactory<Config, Resources>(params),
-      public: authenticatePublicFactory<Config, Resources>(params),
-      fulfillmentService: authenticateFulfillmentServiceFactory<
-        Config,
-        Resources
-      >(params),
-      webhook: authenticateWebhookFactory<Config, Resources, string>(params),
+      flow: authenticateFlowFactory(params),
+      public: authenticatePublicFactory(params),
+      fulfillmentService: authenticateFulfillmentServiceFactory(params),
+      webhook: authenticateWebhookFactory<string>(params),
     },
     unauthenticated: {
-      admin: unauthenticatedAdminContextFactory<Config, Resources>(params),
+      admin: unauthenticatedAdminContextFactory(params),
       storefront: unauthenticatedStorefrontContextFactory(params),
     },
   };

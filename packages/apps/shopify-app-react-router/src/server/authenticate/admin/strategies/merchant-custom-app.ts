@@ -1,9 +1,4 @@
-import {
-  Session,
-  Shopify,
-  ShopifyError,
-  ShopifyRestResources,
-} from '@shopify/shopify-api';
+import {Session, Shopify, ShopifyError} from '@shopify/shopify-api';
 
 import {AppConfig, AppConfigArg} from '../../../config-types';
 import {BasicParams} from '../../../types';
@@ -19,7 +14,6 @@ export class MerchantCustomAuth<Config extends AppConfigArg>
 {
   protected api: Shopify<
     ApiConfigWithFutureFlags<Config['future']>,
-    ShopifyRestResources,
     ApiFutureFlags<Config['future']>
   >;
 
