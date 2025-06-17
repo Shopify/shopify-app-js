@@ -1,12 +1,8 @@
-import {Session, ShopifyRestResources} from '@shopify/shopify-api';
+import {Session} from '@shopify/shopify-api';
 
-import {AppConfigArg} from '../../config-types';
 import type {AdminApiContext} from '../../clients';
 
-export interface FlowContext<
-  ConfigArg extends AppConfigArg,
-  Resources extends ShopifyRestResources = ShopifyRestResources,
-> {
+export interface FlowContext {
   /**
    * A session with an offline token for the shop.
    *
@@ -83,10 +79,7 @@ export interface FlowContext<
    * }
    * ```
    */
-  admin: AdminApiContext<ConfigArg, Resources>;
+  admin: AdminApiContext;
 }
 
-export type AuthenticateFlow<
-  ConfigArg extends AppConfigArg,
-  Resources extends ShopifyRestResources = ShopifyRestResources,
-> = (request: Request) => Promise<FlowContext<ConfigArg, Resources>>;
+export type AuthenticateFlow = (request: Request) => Promise<FlowContext>;

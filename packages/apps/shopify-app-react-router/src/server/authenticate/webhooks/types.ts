@@ -1,6 +1,5 @@
-import {Session, ShopifyRestResources} from '@shopify/shopify-api';
+import {Session} from '@shopify/shopify-api';
 
-import {AppConfigArg} from '../../config-types';
 import type {AdminApiContext} from '../../clients';
 
 export interface RegisterWebhooksOptions {
@@ -140,11 +139,8 @@ export interface WebhookContextWithoutSession<Topics = string | number | symbol>
   admin: undefined;
 }
 
-export interface WebhookContextWithSession<
-  ConfigArg extends AppConfigArg,
-  Resources extends ShopifyRestResources,
-  Topics = string | number | symbol,
-> extends Context<Topics> {
+export interface WebhookContextWithSession<Topics = string | number | symbol>
+  extends Context<Topics> {
   /**
    * A session with an offline token for the shop.
    *
@@ -217,19 +213,13 @@ export interface WebhookContextWithSession<
    * }
    * ```
    */
-  admin: AdminApiContext<ConfigArg, Resources>;
+  admin: AdminApiContext;
 }
 
-export type WebhookContext<
-  ConfigArg extends AppConfigArg,
-  Resources extends ShopifyRestResources,
-  Topics = string | number | symbol,
-> =
+export type WebhookContext<Topics = string | number | symbol> =
   | WebhookContextWithoutSession<Topics>
-  | WebhookContextWithSession<ConfigArg, Resources, Topics>;
+  | WebhookContextWithSession<Topics>;
 
-export type AuthenticateWebhook<
-  ConfigArg extends AppConfigArg,
-  Resources extends ShopifyRestResources,
-  Topics = string | number | symbol,
-> = (request: Request) => Promise<WebhookContext<ConfigArg, Resources, Topics>>;
+export type AuthenticateWebhook<Topics = string | number | symbol> = (
+  request: Request,
+) => Promise<WebhookContext<Topics>>;
