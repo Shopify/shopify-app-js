@@ -81,11 +81,9 @@ describe('login helper', () => {
   );
 
   describe.each([
-    {isEmbeddedApp: false, futureFlag: false, redirectToInstall: false},
-    {isEmbeddedApp: true, futureFlag: false, redirectToInstall: false},
-    {isEmbeddedApp: false, futureFlag: true, redirectToInstall: false},
-    {isEmbeddedApp: true, futureFlag: true, redirectToInstall: true},
-  ])('Given setup: %s', (testCaseConfig) => {
+    {futureFlag: false, redirectToInstall: false},
+    {futureFlag: true, redirectToInstall: true},
+  ])('Given embedded app setup: %s', (testCaseConfig) => {
     it.each([
       {urlShop: null, formShop: TEST_SHOP, method: 'POST'},
       {urlShop: TEST_SHOP, formShop: null, method: 'GET'},
@@ -99,7 +97,6 @@ describe('login helper', () => {
         // GIVEN
         const config = testConfig({
           future: {unstable_newEmbeddedAuthStrategy: testCaseConfig.futureFlag},
-          isEmbeddedApp: testCaseConfig.isEmbeddedApp,
         });
         const shopify = shopifyApp(config);
         const requestMock = {
@@ -130,7 +127,6 @@ describe('login helper', () => {
       // GIVEN
       const config = testConfig({
         future: {unstable_newEmbeddedAuthStrategy: testCaseConfig.futureFlag},
-        isEmbeddedApp: testCaseConfig.isEmbeddedApp,
       });
       const shopify = shopifyApp(config);
       const requestMock = {
