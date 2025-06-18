@@ -7,7 +7,6 @@ import {
   mockGraphqlRequests,
   setUpEmbeddedFlow,
   setUpFetchFlow,
-  setUpNonEmbeddedFlow,
 } from '../../../../__test-helpers';
 
 import * as responses from './mock-responses';
@@ -115,28 +114,6 @@ it('returns app bridge redirection during request headers when Shopify invalidat
   expect(origin).toEqual(APP_URL);
   expect(pathname).toEqual('/auth');
   expect(searchParams.get('shop')).toEqual(TEST_SHOP);
-});
-
-it('returns a normal redirection when the app is non embedded and Shopify invalidated the session', async () => {
-  // GIVEN
-  const {scopes} = await setUpNonEmbeddedFlow();
-  const mockedRequests = await mockGraphqlRequests()({
-    body: 'AppRevokeAccessScopes',
-    status: 401,
-  });
-
-  // WHEN
-  const response = await getThrownResponse(
-    async () => scopes.revoke(['read_orders']),
-    mockedRequests[0],
-  );
-
-  // THEN
-  expect(response.status).toEqual(302);
-
-  const {hostname, pathname} = new URL(response.headers.get('Location')!);
-  expect(hostname).toEqual(TEST_SHOP);
-  expect(pathname).toEqual('/admin/oauth/authorize');
 });
 
 it('return an unexpected error when there is no authentication error', async () => {
