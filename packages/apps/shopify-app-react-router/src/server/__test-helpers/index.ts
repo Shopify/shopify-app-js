@@ -17,4 +17,3 @@ export * from './get-thrown-error';
 export * from './setup-embedded-flow';
 export * from './setup-fetch-flow';
 export * from './mock-graphql-request';
-export * from './setup-non-embedded-flow';
