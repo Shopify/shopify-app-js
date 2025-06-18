@@ -21,7 +21,7 @@
     "@babel/preset-env": "^7.27.1",
     "@changesets/cli": "^2.29.2",
     "@cloudflare/workers-types": "^4.20250618.0",
-    "@jest/types": "^29.6.3",
+    "@jest/types": "^30.0.0",
     "@rollup/plugin-babel": "^6.0.3",
     "@rollup/plugin-commonjs": "^28.0.3",
     "@rollup/plugin-eslint": "^9.0.3",
