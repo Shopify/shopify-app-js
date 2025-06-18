@@ -10,7 +10,6 @@ import {
   mockGraphqlRequest,
   setUpEmbeddedFlow,
   setUpFetchFlow,
-  setUpNonEmbeddedFlow,
 } from '../../../../../__test-helpers';
 import {REAUTH_URL_HEADER} from '../../../../const';
 
@@ -49,26 +48,7 @@ describe('admin.authenticate context', () => {
   ])(
     '$testGroup re-authentication',
     ({testGroup: _testGroup, mockRequest, action}) => {
-      it('redirects to auth when request receives a 401 response and not embedded', async () => {
-        // GIVEN
-        const {admin, session} = await setUpNonEmbeddedFlow();
-        const requestMock = await mockRequest({status: 401});
-
-        // WHEN
-        const response = await getThrownResponse(
-          async () => action(admin, session),
-          requestMock,
-        );
-
-        // THEN
-        expect(response.status).toEqual(302);
-
-        const {hostname, pathname} = new URL(response.headers.get('Location')!);
-        expect(hostname).toEqual(TEST_SHOP);
-        expect(pathname).toEqual('/admin/oauth/authorize');
-      });
-
-      it('redirects to exit iframe when request receives a 401 response and embedded', async () => {
+      it('redirects to exit iframe when request receives a 401 response', async () => {
         // GIVEN
         const {admin, session} = await setUpEmbeddedFlow();
         const requestMock = await mockRequest({status: 401});
