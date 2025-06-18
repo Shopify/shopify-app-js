@@ -21,7 +21,12 @@ export interface AppConfigArg<
   Future extends FutureFlagOptions = FutureFlagOptions,
 > extends Omit<
     ApiConfigArg<ApiFutureFlags<Future>>,
-    'hostName' | 'hostScheme' | 'apiVersion' | 'isCustomStoreApp' | 'future'
+    | 'hostName'
+    | 'hostScheme'
+    | 'apiVersion'
+    | 'isCustomStoreApp'
+    | 'isEmbeddedApp'
+    | 'future'
   > {
   /**
    * The URL your app is running on.
