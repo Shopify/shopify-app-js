@@ -108,7 +108,7 @@ export interface EmbeddedAdminContext<Config extends AppConfigArg>
   /**
    * The decoded and validated session token for the request.
    *
-   * Returned only for embedded apps (all apps except merchant-custom apps).
+   * Returned only for embedded apps (all apps except merchant custom apps).
    *
    * {@link https://shopify.dev/docs/apps/auth/oauth/session-tokens#payload}
    *
@@ -146,7 +146,7 @@ export interface EmbeddedAdminContext<Config extends AppConfigArg>
    * A function that redirects the user to a new page, ensuring that the appropriate parameters are set for embedded
    * apps.
    *
-   * Returned only for embedded apps (all apps except merchant-custom apps).
+   * Returned only for embedded apps (all apps except merchant custom apps).
    *
    * @example
    * <caption>Redirecting to an app route.</caption>
