@@ -46,7 +46,7 @@
   ],
   "dependencies": {
     "pg": "^8.14.1",
-    "pg-connection-string": "^2.8.5"
+    "pg-connection-string": "^2.9.1"
   },
   "peerDependencies": {
     "@shopify/shopify-api": "^11.0.0",
