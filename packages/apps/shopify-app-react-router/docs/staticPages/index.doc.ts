@@ -183,44 +183,6 @@ const data: LandingTemplateSchema = {
         ],
       }
     },
-    {
-      type: 'Generic',
-      anchorLink: 'app-provider',
-      title: 'AppProvider',
-      sectionContent:
-        "In order to use all of the features from App Bridge, you'll need to use the `AppProvider` component in your app's routes." +
-        '\n\nThis component will set up App Bridge and Polaris so you can integrate your app into the Shopify Admin, and it helps us ensure your app stays up to date with Shopify requirements.' +
-        '\n\nTo do this pass the `process.env.SHOPIFY_API_KEY` to the frontend via the loader.',
-      sectionCard: [
-        {
-          name: 'App bridge',
-          subtitle: 'Learn more about App Bridge.',
-          url: '/docs/api/app-bridge-library',
-          type: 'shopify',
-        },
-        {
-          name: 'Polaris',
-          subtitle: 'Learn more about Polaris.',
-          url: 'https://polaris.shopify.com',
-          type: 'shopify',
-        },
-        {
-          name: 'AppProvider',
-          url: '/docs/api/shopify-app-react-router/entrypoints/appprovider',
-          type: 'clicode',
-        },
-      ],
-      codeblock: {
-        title: 'Add AppProvider',
-        tabs: [
-          {
-            title: '/app/root.tsx',
-            language: 'tsx',
-            code: './examples/index/app-provider.example.ts',
-          },
-        ],
-      },
-    },
   ],
 };
 
