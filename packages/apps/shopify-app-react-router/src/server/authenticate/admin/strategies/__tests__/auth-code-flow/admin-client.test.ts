@@ -23,7 +23,6 @@ describe('admin.authenticate context', () => {
 
     return {admin, expectedSession, actualSession};
   });
-
   describe.each([
     {
       testGroup: 'GraphQL client',
