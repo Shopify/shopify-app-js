@@ -1,6 +1,11 @@
 import {redirect} from 'react-router';
 
-import {BasicParams, LoginError, LoginErrorType} from '../../types';
+import {
+  BasicParams,
+  LoginError,
+  LoginErrorType,
+  AppDistribution,
+} from '../../types';
 
 export function loginFactory(params: BasicParams) {
   const {api, config, logger} = params;
@@ -41,7 +46,8 @@ export function loginFactory(params: BasicParams) {
     const installPath = `https://${adminPath}/oauth/install?client_id=${config.apiKey}`;
 
     const shouldInstall =
-      config.isEmbeddedApp && config.future.unstable_newEmbeddedAuthStrategy;
+      config.distribution !== AppDistribution.ShopifyAdmin &&
+      config.future.unstable_newEmbeddedAuthStrategy;
     const redirectUrl = shouldInstall ? installPath : authPath;
 
     logger.info(`Redirecting login request to ${redirectUrl}`, {

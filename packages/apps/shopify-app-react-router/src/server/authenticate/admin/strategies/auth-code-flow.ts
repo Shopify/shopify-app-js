@@ -9,6 +9,7 @@ import {
 } from '@shopify/shopify-api';
 
 import type {BasicParams} from '../../../types';
+import {AppDistribution} from '../../../types';
 import {
   beginAuth,
   handleClientErrorFactory,
@@ -146,7 +147,7 @@ export class AuthCodeFlowStrategy<Config extends AppConfigArg>
 
     shop = shop || offlineSession.shop;
 
-    if (config.isEmbeddedApp && !isEmbedded) {
+    if (config.distribution !== AppDistribution.ShopifyAdmin && !isEmbedded) {
       try {
         logger.debug('Ensuring offline session is valid before embedding', {
           shop,
@@ -170,7 +171,7 @@ export class AuthCodeFlowStrategy<Config extends AppConfigArg>
 
     // If we're loading from an iframe, we need to break out of it
     if (
-      config.isEmbeddedApp &&
+      config.distribution !== AppDistribution.ShopifyAdmin &&
       request.headers.get('Sec-Fetch-Dest') === 'iframe'
     ) {
       logger.debug('Auth request in iframe detected, exiting iframe', {shop});

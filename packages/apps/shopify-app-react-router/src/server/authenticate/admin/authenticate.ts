@@ -1,6 +1,7 @@
 import {JwtPayload, Session} from '@shopify/shopify-api';
 
 import type {BasicParams} from '../../types';
+import {AppDistribution} from '../../types';
 import type {AppConfigArg} from '../../config-types';
 import {
   getSessionTokenHeader,
@@ -124,7 +125,7 @@ export function authStrategyFactory<ConfigArg extends AppConfigArg>({
     session: Session,
     sessionToken?: JwtPayload,
   ) {
-    if (config.isEmbeddedApp) {
+    if (config.distribution !== AppDistribution.ShopifyAdmin) {
       return {
         ...context,
         sessionToken,
@@ -207,7 +208,7 @@ async function getSessionTokenContext(
     }),
   });
 
-  if (config.isEmbeddedApp) {
+  if (config.distribution !== AppDistribution.ShopifyAdmin) {
     const payload = await validateSessionToken(params, request, sessionToken);
     const dest = new URL(payload.dest);
     const shop = dest.hostname;
