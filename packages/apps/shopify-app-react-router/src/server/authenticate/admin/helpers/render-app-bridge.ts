@@ -1,4 +1,4 @@
-import {BasicParams} from '../../../types';
+import {BasicParams, AppDistribution} from '../../../types';
 import {appBridgeUrl} from '../../helpers/app-bridge-url';
 import {addDocumentResponseHeaders} from '../../helpers/add-response-headers';
 
@@ -30,9 +30,10 @@ export function renderAppBridge(
   const responseHeaders = new Headers({
     'content-type': 'text/html;charset=utf-8',
   });
+  const isEmbeddedApp = config.distribution !== AppDistribution.ShopifyAdmin;
   addDocumentResponseHeaders(
     responseHeaders,
-    config.isEmbeddedApp,
+    isEmbeddedApp,
     new URL(request.url).searchParams.get('shop'),
   );
 
