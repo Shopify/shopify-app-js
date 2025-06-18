@@ -2,7 +2,6 @@ import {
   BillingConfigSubscriptionLineItemPlan,
   BillingInterval,
   HttpResponseError,
-  SESSION_COOKIE_NAME,
 } from '@shopify/shopify-api';
 
 import {shopifyApp} from '../../../..';
@@ -15,7 +14,6 @@ import {
   getJwt,
   getThrownResponse,
   setUpValidSession,
-  signRequestCookie,
   testConfig,
   mockExternalRequest,
 } from '../../../../__test-helpers';
@@ -208,13 +206,8 @@ describe('Billing check', () => {
 
   it('throws errors other than authentication errors', async () => {
     // GIVEN
-    const config = testConfig();
-    const session = await setUpValidSession(config.sessionStorage);
-    const shopify = shopifyApp({
-      ...config,
-      isEmbeddedApp: false,
-      billing: BILLING_CONFIG,
-    });
+    const shopify = shopifyApp(testConfig({billing: BILLING_CONFIG}));
+    await setUpValidSession(shopify.sessionStorage);
 
     await mockExternalRequest({
       request: new Request(GRAPHQL_URL, {method: 'POST', body: 'test'}),
@@ -224,11 +217,10 @@ describe('Billing check', () => {
       }),
     });
 
-    const request = new Request(`${APP_URL}/billing?shop=${TEST_SHOP}`);
-    signRequestCookie({
-      request,
-      cookieName: SESSION_COOKIE_NAME,
-      cookieValue: session.id,
+    const request = new Request(`${APP_URL}/billing`, {
+      headers: {
+        Authorization: `Bearer ${getJwt().token}`,
+      },
     });
 
     const {billing} = await shopify.authenticate.admin(request);

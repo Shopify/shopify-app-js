@@ -2,7 +2,6 @@ import {
   BillingConfigSubscriptionLineItemPlan,
   BillingInterval,
   HttpResponseError,
-  SESSION_COOKIE_NAME,
 } from '@shopify/shopify-api';
 
 import {shopifyApp} from '../../../..';
@@ -11,12 +10,10 @@ import {
   BASE64_HOST,
   GRAPHQL_URL,
   TEST_SHOP,
-  expectBeginAuthRedirect,
   expectExitIframeRedirect,
   getJwt,
   getThrownResponse,
   setUpValidSession,
-  signRequestCookie,
   testConfig,
   mockExternalRequest,
 } from '../../../../__test-helpers';
@@ -62,44 +59,6 @@ describe('Cancel billing', () => {
 
     // THEN
     expect(subscription).toEqual(responses.APP_SUBSCRIPTION);
-  });
-
-  it('redirects to authentication when at the top level when Shopify invalidated the session', async () => {
-    // GIVEN
-    const config = testConfig({isEmbeddedApp: false, billing: BILLING_CONFIG});
-    const shopify = shopifyApp(config);
-    const session = await setUpValidSession(shopify.sessionStorage);
-
-    const request = new Request(`${APP_URL}/billing?shop=${TEST_SHOP}`);
-    signRequestCookie({
-      request,
-      cookieName: SESSION_COOKIE_NAME,
-      cookieValue: session.id,
-    });
-
-    const {billing} = await shopify.authenticate.admin(request);
-
-    await mockExternalRequest({
-      request: new Request(GRAPHQL_URL, {method: 'POST', body: 'test'}),
-      response: new Response(undefined, {
-        status: 401,
-        statusText: 'Unauthorized',
-      }),
-    });
-
-    // WHEN
-    const response = await getThrownResponse(
-      async () =>
-        billing.cancel({
-          subscriptionId: '123',
-          isTest: true,
-          prorate: true,
-        }),
-      request,
-    );
-
-    // THEN
-    expectBeginAuthRedirect(config, response);
   });
 
   it('redirects to exit-iframe with authentication using app bridge when embedded and Shopify invalidated the session', async () => {
@@ -187,10 +146,8 @@ describe('Cancel billing', () => {
 
   it('throws errors other than authentication errors', async () => {
     // GIVEN
-    const shopify = shopifyApp(
-      testConfig({isEmbeddedApp: false, billing: BILLING_CONFIG}),
-    );
-    const session = await setUpValidSession(shopify.sessionStorage);
+    const shopify = shopifyApp(testConfig({billing: BILLING_CONFIG}));
+    await setUpValidSession(shopify.sessionStorage);
 
     await mockExternalRequest({
       request: new Request(GRAPHQL_URL, {method: 'POST', body: 'test'}),
@@ -200,11 +157,10 @@ describe('Cancel billing', () => {
       }),
     });
 
-    const request = new Request(`${APP_URL}/billing?shop=${TEST_SHOP}`);
-    signRequestCookie({
-      request,
-      cookieName: SESSION_COOKIE_NAME,
-      cookieValue: session.id,
+    const request = new Request(`${APP_URL}/billing`, {
+      headers: {
+        Authorization: `Bearer ${getJwt().token}`,
+      },
     });
 
     const {billing} = await shopify.authenticate.admin(request);
