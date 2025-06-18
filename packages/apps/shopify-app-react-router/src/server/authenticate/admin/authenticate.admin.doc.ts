@@ -11,7 +11,7 @@ const data: ReferenceEntityTemplateSchema = {
     {
       title: 'authenticate.admin',
       description:
-        'Authenticates requests coming from the Shopify admin.\n\nThe shape of the returned object changes depending on the `isEmbeddedApp` config.',
+        'Authenticates requests coming from the Shopify admin.\n\nThe shape of the returned object changes depending on the `distribution` config. Merchant-custom apps (AppDistribution.ShopifyAdmin) return a non-embedded context, while all other distributions return an embedded context with session tokens and redirect functionality.',
       type: 'AuthenticateAdmin',
     },
   ],

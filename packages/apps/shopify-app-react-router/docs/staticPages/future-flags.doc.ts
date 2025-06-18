@@ -66,7 +66,7 @@ const data: LandingTemplateSchema = {
           name: 'unstable_newEmbeddedAuthStrategy',
           value: '',
           description:
-            'Embedded apps will fetch access tokens via token exchange. This assumes the app has declared scopes for Shopify managed installations.' +
+            'All apps except merchant-custom apps will fetch access tokens via token exchange. This assumes the app has declared scopes for Shopify managed installations.' +
             '\n\nLearn more about this [new embedded app auth strategy](https://shopify.dev/docs/api/shopify-app-react-router#embedded-auth-strategy).',
           isOptional: true,
         },

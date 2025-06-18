@@ -5,7 +5,7 @@ const data: LandingTemplateSchema = {
   title: 'Interacting with Shopify Admin',
   description:
     'Once you [set up your backend](/docs/api/shopify-app-react-router#shopify-app), you can use the [`authenticate.admin` function](/docs/api/shopify-app-react-router/authenticate/admin) to integrate your app with Shopify Admin.' +
-    '\n\nThis function works for both embedded and non-embedded apps, and ensures the app is installed on the current store.' +
+    '\n\nThis function ensures the app is installed on the current store and handles authentication for both embedded apps and merchant-custom apps (distributed via AppDistribution.ShopifyAdmin).' +
     '\n\nIt returns a context with functions to enable loaders and actions to respond to any requests made by or in Shopify Admin.' +
     '\n\nThis page goes over the basics of authenticating those requests, and some of the things you can do with it, like querying the Admin API.',
   sections: [
