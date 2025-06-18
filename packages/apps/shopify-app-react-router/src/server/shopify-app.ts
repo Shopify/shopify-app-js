@@ -74,10 +74,7 @@ export function shopifyApp<
   let strategy;
   if (config.distribution === AppDistribution.ShopifyAdmin) {
     strategy = new MerchantCustomAuth(params);
-  } else if (
-    config.future.unstable_newEmbeddedAuthStrategy &&
-    config.isEmbeddedApp
-  ) {
+  } else if (config.future.unstable_newEmbeddedAuthStrategy) {
     strategy = new TokenExchangeStrategy(params);
   } else {
     strategy = new AuthCodeFlowStrategy(params);
@@ -166,7 +163,7 @@ export function deriveApi(appConfig: AppConfigArg): BasicParams['api'] {
     hostName: appUrl.host,
     hostScheme: appUrl.protocol.replace(':', '') as 'http' | 'https',
     userAgentPrefix,
-    isEmbeddedApp: appConfig.isEmbeddedApp ?? true,
+    isEmbeddedApp: true,
     apiVersion: appConfig.apiVersion ?? LATEST_API_VERSION,
     isCustomStoreApp: appConfig.distribution === AppDistribution.ShopifyAdmin,
     billing: appConfig.billing as ApiConfig['billing'],

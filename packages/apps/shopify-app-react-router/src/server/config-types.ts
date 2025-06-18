@@ -21,12 +21,7 @@ export interface AppConfigArg<
   Future extends FutureFlagOptions = FutureFlagOptions,
 > extends Omit<
     ApiConfigArg<ApiFutureFlags<Future>>,
-    | 'hostName'
-    | 'hostScheme'
-    | 'isEmbeddedApp'
-    | 'apiVersion'
-    | 'isCustomStoreApp'
-    | 'future'
+    'hostName' | 'hostScheme' | 'apiVersion' | 'isCustomStoreApp' | 'future'
   > {
   /**
    * The URL your app is running on.
@@ -171,15 +166,6 @@ export interface AppConfigArg<
    * ```
    */
   hooks?: HooksConfig;
-
-  /**
-   * Does your app render embedded inside the Shopify Admin or on its own.
-   *
-   * Unless you have very specific needs, this should be true.
-   *
-   * @defaultValue `true`
-   */
-  isEmbeddedApp?: boolean;
 
   /**
    * How your app is distributed. Default is `AppDistribution.AppStore`.

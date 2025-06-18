@@ -3,6 +3,7 @@ import {JwtPayload, Session} from '@shopify/shopify-api';
 import {EnsureCORSFunction} from '../helpers/ensure-cors-headers';
 import type {AppConfigArg} from '../../config-types';
 import type {AdminApiContext} from '../../clients';
+import type {AppDistribution} from '../../types';
 
 import type {BillingContext} from './billing/types';
 import {RedirectFunction} from './helpers/redirect';
@@ -107,7 +108,7 @@ export interface EmbeddedAdminContext<Config extends AppConfigArg>
   /**
    * The decoded and validated session token for the request.
    *
-   * Returned only if `isEmbeddedApp` is `true`.
+   * Returned only for embedded apps (all apps except merchant-custom apps).
    *
    * {@link https://shopify.dev/docs/apps/auth/oauth/session-tokens#payload}
    *
@@ -145,7 +146,7 @@ export interface EmbeddedAdminContext<Config extends AppConfigArg>
    * A function that redirects the user to a new page, ensuring that the appropriate parameters are set for embedded
    * apps.
    *
-   * Returned only if `isEmbeddedApp` is `true`.
+   * Returned only for embedded apps (all apps except merchant-custom apps).
    *
    * @example
    * <caption>Redirecting to an app route.</caption>
@@ -195,7 +196,7 @@ export interface NonEmbeddedAdminContext<Config extends AppConfigArg>
   extends AdminContextInternal<Config> {}
 
 type EmbeddedTypedAdminContext<Config extends AppConfigArg> =
-  Config['isEmbeddedApp'] extends false
+  Config['distribution'] extends AppDistribution.ShopifyAdmin
     ? NonEmbeddedAdminContext<Config>
     : EmbeddedAdminContext<Config>;
 
