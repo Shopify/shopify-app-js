@@ -21,7 +21,7 @@ export default function App() {
         <Links />
       </head>
       <body>
-        <AppProvider apiKey={apiKey} isEmbeddedApp>
+        <AppProvider apiKey={apiKey}>
           <Outlet />
         </AppProvider>
       </body>
