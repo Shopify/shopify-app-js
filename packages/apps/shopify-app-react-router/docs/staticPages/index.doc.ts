@@ -159,7 +159,7 @@ const data: LandingTemplateSchema = {
       anchorLink: 'embedded-auth-strategy',
       title: 'New embedded app authorization strategy',
       sectionContent:
-        "> Note: This authorization strategy is available for apps using [Shopify managed installation](https://shopify.dev/docs/apps/auth/installation#shopify-managed-installation) and is the default behavior for all embedded apps (all app types except merchant-custom apps)." +
+        "> Note: This authorization strategy is available for apps using [Shopify managed installation](https://shopify.dev/docs/apps/auth/installation#shopify-managed-installation) and is the default behavior for all embedded apps (all app types except merchant custom apps)." +
         "\n\n This authorization strategy eliminates the redirects that were previously necessary for embedded apps." +
         " It replaces the legacy [authorization Code install and grant flow](https://shopify.dev/docs/apps/auth/get-access-tokens/authorization-code-grant)." +
         "\n\nIt takes advantage of [Shopify managed installation](https://shopify.dev/docs/apps/auth/installation#shopify-managed-installation)" +
