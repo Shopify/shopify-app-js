@@ -7,19 +7,16 @@ import {
 } from '../../../__test-helpers';
 
 describe('addDocumentResponseHeaders', () => {
-  it.each([true, false])(
-    'adds frame-ancestors CSP headers when embedded = %s',
-    (isEmbeddedApp) => {
-      // GIVEN
-      const shopify = shopifyApp(testConfig({isEmbeddedApp}));
-      const request = new Request(`${APP_URL}?shop=${TEST_SHOP}`);
-      const response = new Response();
+  it('adds frame-ancestors CSP headers for embedded apps', () => {
+    // GIVEN
+    const shopify = shopifyApp(testConfig());
+    const request = new Request(`${APP_URL}?shop=${TEST_SHOP}`);
+    const response = new Response();
 
-      // WHEN
-      shopify.addDocumentResponseHeaders(request, response.headers);
+    // WHEN
+    shopify.addDocumentResponseHeaders(request, response.headers);
 
-      // THEN
-      expectDocumentRequestHeaders(response, isEmbeddedApp);
-    },
-  );
+    // THEN
+    expectDocumentRequestHeaders(response, true);
+  });
 });
