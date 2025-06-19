@@ -27,7 +27,6 @@ import {loginFactory} from './authenticate/login/login';
 import {unauthenticatedAdminContextFactory} from './unauthenticated/admin';
 import {authenticatePublicFactory} from './authenticate/public';
 import {unauthenticatedStorefrontContextFactory} from './unauthenticated/storefront';
-import {AuthCodeFlowStrategy} from './authenticate/admin/strategies/auth-code-flow';
 import {TokenExchangeStrategy} from './authenticate/admin/strategies/token-exchange';
 import {MerchantCustomAuth} from './authenticate/admin/strategies/merchant-custom-app';
 import {IdempotentPromiseHandler} from './authenticate/helpers/idempotent-promise-handler';
@@ -74,10 +73,8 @@ export function shopifyApp<
   let strategy;
   if (config.distribution === AppDistribution.ShopifyAdmin) {
     strategy = new MerchantCustomAuth(params);
-  } else if (config.future.unstable_newEmbeddedAuthStrategy) {
-    strategy = new TokenExchangeStrategy(params);
   } else {
-    strategy = new AuthCodeFlowStrategy(params);
+    strategy = new TokenExchangeStrategy(params);
   }
 
   const authStrategy = authStrategyFactory({
