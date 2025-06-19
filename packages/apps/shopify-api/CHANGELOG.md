@@ -1,5 +1,15 @@
 # Changelog
 
+## 11.13.1
+
+### Patch Changes
+
+- e298a0c: Fix issue with missing sourcemaps
+- Updated dependencies [e298a0c]
+  - @shopify/admin-api-client@1.1.1
+  - @shopify/graphql-client@1.4.1
+  - @shopify/storefront-api-client@1.0.9
+
 ## 11.13.0
 
 ### Minor Changes

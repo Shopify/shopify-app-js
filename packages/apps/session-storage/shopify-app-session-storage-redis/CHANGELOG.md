@@ -1,5 +1,11 @@
 # @shopify/shopify-app-session-storage-redis
 
+## 4.2.12
+
+### Patch Changes
+
+- e298a0c: Fix issue with missing sourcemaps
+
 ## 4.2.11
 
 ## 4.2.10

@@ -1,5 +1,15 @@
 # Changelog
 
+## 5.0.19
+
+### Patch Changes
+
+- e298a0c: Fix issue with missing sourcemaps
+- Updated dependencies [e298a0c]
+  - @shopify/shopify-app-session-storage@3.0.19
+  - @shopify/shopify-app-session-storage-memory@4.0.19
+  - @shopify/shopify-api@11.13.1
+
 ## 5.0.18
 
 ### Patch Changes
