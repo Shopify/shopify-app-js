@@ -1,6 +1,6 @@
 import type {ConfigParams, Shopify} from '@shopify/shopify-api';
 
-import {AppConfig} from '../config-types';
+import type {AppConfig} from '../config-types';
 
 // When adding new flags, you should also add them to the `TEST_FUTURE_FLAGS` object in `test-config.ts` to ensure that
 // it doesn't cause regressions.
@@ -29,9 +29,15 @@ export type FeatureEnabled<
   : false;
 
 export function logDisabledFutureFlags(
-  config: AppConfig,
-  logger: Shopify['logger'],
+  _config: AppConfig,
+  _logger: Shopify['logger'],
 ) {
-  const logFlag = (flag: string, message: string) =>
-    logger.info(`Future flag ${flag} is disabled.\n\n  ${message}\n`);
+  // When future flags are added to the FutureFlags interface, add logging here
+  // Example:
+  // const logFlag = (flag: string, message: string) =>
+  //   _logger.info(`Future flag ${flag} is disabled.\n\n  ${message}\n`);
+  //
+  // if (!_config.future.someFutureFlag) {
+  //   logFlag('someFutureFlag', 'Description of what this flag enables');
+  // }
 }
