@@ -36,7 +36,6 @@ export function checkBillingFactory<Config extends AppConfigArg>(
 
         await invalidateAccessToken(params, session);
 
-        // Tell the client to refresh its session-token and retry the request
         throw respondToInvalidSessionToken({
           params,
           request,
