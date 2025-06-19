@@ -10,7 +10,6 @@ import {
   BASE64_HOST,
   GRAPHQL_URL,
   TEST_SHOP,
-  expectExitIframeRedirect,
   getJwt,
   getThrownResponse,
   setUpValidSession,
@@ -105,9 +104,9 @@ describe('Billing require', () => {
 
   it('redirects to exit-iframe with authentication using app bridge when Shopify invalidated the session', async () => {
     // GIVEN
-    const config = testConfig({billing: BILLING_CONFIG});
-    await setUpValidSession(config.sessionStorage);
-    const shopify = shopifyApp(config);
+    const config = testConfig();
+    const shopify = shopifyApp({...config, billing: BILLING_CONFIG});
+    await setUpValidSession(shopify.sessionStorage);
 
     await mockExternalRequest({
       request: new Request(GRAPHQL_URL, {method: 'POST', body: 'test'}),
@@ -129,6 +128,7 @@ describe('Billing require', () => {
       async () =>
         billing.require({
           plans: [responses.PLAN_1],
+          isTest: true,
           onFailure: async () => {
             throw new Error('This should not be called');
           },
@@ -137,19 +137,16 @@ describe('Billing require', () => {
     );
 
     // THEN
-    const shopSession = await config.sessionStorage.loadSession(
-      `offline_${TEST_SHOP}`,
-    );
-    expect(shopSession).toBeDefined();
-    expect(shopSession!.accessToken).toBeUndefined();
-    expectExitIframeRedirect(response);
+    // Expect Token Exchange behavior: redirect to session-token path
+    expect(response.status).toBe(302);
+    const {pathname} = new URL(response.headers.get('location')!, APP_URL);
+    expect(pathname).toBe('/auth/session-token');
   });
 
   it('returns redirection headers during fetch requests when Shopify invalidated the session', async () => {
     // GIVEN
-    const config = testConfig();
-    await setUpValidSession(config.sessionStorage);
-    const shopify = shopifyApp({...config, billing: BILLING_CONFIG});
+    const shopify = shopifyApp(testConfig({billing: BILLING_CONFIG}));
+    await setUpValidSession(shopify.sessionStorage);
 
     await mockExternalRequest({
       request: new Request(GRAPHQL_URL, {method: 'POST', body: 'test'}),
@@ -172,6 +169,7 @@ describe('Billing require', () => {
       async () =>
         billing.require({
           plans: [responses.PLAN_1],
+          isTest: true,
           onFailure: async () => {
             throw new Error('This should not be called');
           },
@@ -180,11 +178,13 @@ describe('Billing require', () => {
     );
 
     // THEN
-    const reauthUrl = new URL(response.headers.get(REAUTH_URL_HEADER)!);
-
     expect(response.status).toEqual(401);
-    expect(reauthUrl.origin).toEqual(APP_URL);
-    expect(reauthUrl.pathname).toEqual('/auth');
+    
+    // Expect Token Exchange behavior: retry header instead of reauth URL
+    expect(
+      response.headers.get('X-Shopify-Retry-Invalid-Session-Request'),
+    ).toEqual('1');
+    expect(response.headers.get(REAUTH_URL_HEADER)).toBeNull();
   });
 
   it('throws errors other than authentication errors', async () => {
