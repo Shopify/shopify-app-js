@@ -137,17 +137,24 @@ const data: LandingTemplateSchema = {
       anchorLink: 'setup-app-layout',
       title: 'Setup an admin layout',
       sectionContent:
-        "> Note: This authorization strategy is available for apps using [Shopify managed installation](https://shopify.dev/docs/apps/auth/installation#shopify-managed-installation) and is the default behavior for all embedded apps (all app types except merchant custom apps)." +
-        "\n\n This authorization strategy eliminates the redirects that were previously necessary for embedded apps." +
-        " It replaces the legacy [authorization Code install and grant flow](https://shopify.dev/docs/apps/auth/get-access-tokens/authorization-code-grant)." +
-        "\n\nIt takes advantage of [Shopify managed installation](https://shopify.dev/docs/apps/auth/installation#shopify-managed-installation)" +
-        " to handle automatic app installations and scope updates, while using" +
-        " [token exchange](https://shopify.dev/docs/apps/auth/get-access-tokens/token-exchange) to get an access token for the logged-in user." +
-        "\n\n If you wish to learn about scopes management and APIs, please read through [Manage access scopes](https://shopify.dev/docs/apps/build/authentication-authorization/app-installation/manage-access-scopes)" +
-        "\n\n1. Enable [Shopify managed installation](https://shopify.dev/docs/apps/auth/installation#shopify-managed-installation)" +
-        " by configuring your scopes [through the Shopify CLI](https://shopify.dev/docs/apps/tools/cli/configuration)." +
-        "\n2. Enable the future flag `unstable_newEmbeddedAuthStrategy` in your app's server configuration file." +
-        "\n3. Enjoy no-redirect OAuth flow, and app installation process.",
+        'Every URL that is embedded inside the admin needs to be authenticated and behave like Shopify. ' +
+        'The easiest way to do this is one layout route that all every embedded URL use. ' +
+        'To this correctly, you must complete all these steps.' +
+        '\n\nTo setup authentication: ' +
+        '\n\n1. Add App Bridge. ' +
+        'This ensures that requests from your UI include an Authorization header, allowing your server to verify the requests and provide you with an API client. ' +
+        'To do this pass the `SHOPIFY_API_KEY` env var from the loader to the component. ' +
+        'Then add the App Bridge script tag to the component, with the `data-api-key` attribute set to the `SHOPIFY_API_KEY`. ' +
+        '\n\n2. Authenticate requests to that route by calling `authenticate.admin`. ' +
+        'This ensures that the request can be trusted and that your app has API access tokens to access merchant data. ' +
+        '\n\n3. Add error boundaries to the layout route. ' +
+        'Actions inside the admin sometimes require special Response headers. ' +
+        'These are added automatically by the package, but you must make sure these headers are not lost. ' +
+        'Do this by adding an error boundaries and header exports to every route that authenticates an admin request. ' +
+        '\n\nTo make the layout behave like Shopify: ' +
+        '\n\n1. Synchronize the iframe and parent URL by adding a useEffect that listens for the `shopify:navigate` event. ' +
+        'When the event is triggered, the parent URL is synchronized with the iframe URL.' +
+        '\n\n2. Add Polaris Web Components by adding a script tag and using special elements to construct the page. ',
       codeblock: {
         title: 'Setup Admin Layout',
         tabs: [
