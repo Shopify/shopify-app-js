@@ -1,5 +1,15 @@
 # @shopify/shopify-app-session-storage-drizzle
 
+## 2.1.0
+
+### Minor Changes
+
+- 29ca331: Update drizzle-orm peer dependency
+
+### Patch Changes
+
+- e13f8f2: Updated `mysql2` dependencies
+
 ## 2.0.17
 
 ### Patch Changes

@@ -1,5 +1,23 @@
 # @shopify/shopify-app-remix
 
+## 3.8.3
+
+### Patch Changes
+
+- ea6927b: Updated `@remix-run/server-runtime`, ` @remix-run/node`, ` @remix-run/react`, ` @remix-run/testing` dependencies
+- 5926c00: Updated `isbot` dependencies
+- 4845cda: Updated `@remix-run/server-runtime`, ` @remix-run/node`, ` @remix-run/react`, ` @remix-run/testing` dependencies
+- cbe1c10: Updated `isbot` dependencies
+- Updated dependencies [6aed7c0]
+- Updated dependencies [5926c00]
+- Updated dependencies [cbe1c10]
+- Updated dependencies [b05d09b]
+- Updated dependencies [f8da2d3]
+  - @shopify/shopify-api@11.13.0
+  - @shopify/admin-api-client@1.1.0
+  - @shopify/shopify-app-session-storage@3.0.18
+  - @shopify/storefront-api-client@1.0.8
+
 ## 3.8.2
 
 ### Patch Changes
