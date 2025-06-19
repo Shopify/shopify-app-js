@@ -1,6 +1,5 @@
 export * from './const';
 export * from './expect-admin-api-client';
-export * from './expect-begin-auth-redirect';
 export * from './expect-document-request-headers';
 export * from './expect-exit-iframe';
 export * from './expect-login-redirect';
