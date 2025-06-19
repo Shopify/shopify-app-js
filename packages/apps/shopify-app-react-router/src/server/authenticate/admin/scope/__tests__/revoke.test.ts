@@ -1,9 +1,4 @@
-import {REAUTH_URL_HEADER} from '../../../const';
 import {
-  APP_URL,
-  TEST_SHOP,
-  expectExitIframeRedirect,
-  getThrownResponse,
   mockGraphqlRequests,
   setUpEmbeddedFlow,
   setUpFetchFlow,
@@ -71,56 +66,9 @@ it('returns revoke server errors', async () => {
   );
 });
 
-it('redirects to exit-iframe with authentication using app bridge when embedded and Shopify invalidated the session', async () => {
-  // GIVEN
-  const {scopes} = await setUpEmbeddedFlow();
-  const mockedRequests = await mockGraphqlRequests()({
-    body: 'AppRevokeAccessScopes',
-    status: 401,
-  });
-
-  // WHEN
-  const response = await getThrownResponse(
-    async () => scopes.revoke(['read_orders']),
-    mockedRequests[0],
-  );
-
-  // THEN
-  expectExitIframeRedirect(response);
-});
-
-it('returns app bridge redirection during request headers when Shopify invalidated the session', async () => {
-  // GIVEN
-  const {scopes} = await setUpFetchFlow({
-    unstable_newEmbeddedAuthStrategy: false,
-  });
-  const mockedRequests = await mockGraphqlRequests()({
-    body: 'AppRevokeAccessScopes',
-    status: 401,
-  });
-
-  // WHEN
-  const response = await getThrownResponse(
-    async () => scopes.revoke(['read_orders']),
-    mockedRequests[0],
-  );
-
-  // THEN
-  expect(response.status).toEqual(401);
-
-  const {origin, pathname, searchParams} = new URL(
-    response.headers.get(REAUTH_URL_HEADER)!,
-  );
-  expect(origin).toEqual(APP_URL);
-  expect(pathname).toEqual('/auth');
-  expect(searchParams.get('shop')).toEqual(TEST_SHOP);
-});
-
 it('return an unexpected error when there is no authentication error', async () => {
   // GIVEN
-  const {scopes} = await setUpFetchFlow({
-    unstable_newEmbeddedAuthStrategy: false,
-  });
+  const {scopes} = await setUpFetchFlow();
   await mockGraphqlRequests()({
     body: 'AppRevokeAccessScopes',
     status: 500,
