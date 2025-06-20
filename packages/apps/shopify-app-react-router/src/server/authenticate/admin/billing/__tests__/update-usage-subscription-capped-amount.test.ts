@@ -152,7 +152,7 @@ describe('Update usage billing plan capped amount', () => {
     );
     expect(shopSession).toBeDefined();
     expect(shopSession!.accessToken).toBeUndefined();
-    
+
     // Expect Token Exchange behavior: redirect to session-token path
     expect(response.status).toBe(302);
     const {pathname} = new URL(response.headers.get('location')!, APP_URL);

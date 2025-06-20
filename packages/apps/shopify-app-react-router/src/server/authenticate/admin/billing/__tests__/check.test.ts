@@ -161,7 +161,7 @@ describe('Billing check', () => {
     );
     expect(shopSession).toBeDefined();
     expect(shopSession!.accessToken).toBeUndefined();
-    
+
     // Expect Token Exchange behavior: redirect to session-token path
     expect(response.status).toBe(302);
     const {pathname} = new URL(response.headers.get('location')!, APP_URL);
@@ -201,7 +201,7 @@ describe('Billing check', () => {
 
     // THEN
     expect(response.status).toEqual(401);
-    
+
     // Expect Token Exchange behavior: retry header instead of reauth URL
     expect(
       response.headers.get('X-Shopify-Retry-Invalid-Session-Request'),
