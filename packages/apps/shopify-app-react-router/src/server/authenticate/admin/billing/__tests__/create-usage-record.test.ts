@@ -10,7 +10,6 @@ import {
   BASE64_HOST,
   GRAPHQL_URL,
   TEST_SHOP,
-  expectExitIframeRedirect,
   getJwt,
   getThrownResponse,
   setUpValidSession,
@@ -152,7 +151,11 @@ describe('Create usage record', () => {
     );
     expect(shopSession).toBeDefined();
     expect(shopSession!.accessToken).toBeUndefined();
-    expectExitIframeRedirect(response);
+
+    // Expect Token Exchange behavior: redirect to session-token path
+    expect(response.status).toBe(302);
+    const {pathname} = new URL(response.headers.get('location')!, APP_URL);
+    expect(pathname).toBe('/auth/session-token');
   });
 
   it('returns redirection headers during fetch requests when Shopify invalidated the session', async () => {
@@ -195,13 +198,13 @@ describe('Create usage record', () => {
     );
 
     // THEN
-    const {origin, pathname} = new URL(
-      response.headers.get(REAUTH_URL_HEADER)!,
-    );
-
     expect(response.status).toEqual(401);
-    expect(origin).toEqual(APP_URL);
-    expect(pathname).toEqual('/auth');
+
+    // Expect Token Exchange behavior: retry header instead of reauth URL
+    expect(
+      response.headers.get('X-Shopify-Retry-Invalid-Session-Request'),
+    ).toEqual('1');
+    expect(response.headers.get(REAUTH_URL_HEADER)).toBeNull();
   });
 
   it('throws errors other than authentication errors', async () => {

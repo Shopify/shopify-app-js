@@ -5,13 +5,8 @@ import {getJwt} from './get-jwt';
 import {setUpValidSession} from './setup-valid-session';
 import {testConfig} from './test-config';
 
-export async function setUpFetchFlow(flags?: {
-  unstable_newEmbeddedAuthStrategy?: boolean;
-}) {
-  const shopify = shopifyApp({
-    ...testConfig(),
-    future: {...flags},
-  });
+export async function setUpFetchFlow() {
+  const shopify = shopifyApp(testConfig());
 
   await setUpValidSession(shopify.sessionStorage);
 

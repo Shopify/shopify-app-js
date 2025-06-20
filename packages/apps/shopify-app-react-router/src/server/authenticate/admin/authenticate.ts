@@ -148,7 +148,6 @@ export function authStrategyFactory<ConfigArg extends AppConfigArg>({
       respondToOptionsRequest(params, request);
       await respondToBouncePageRequest(request);
       await respondToExitIframeRequest(request);
-      await strategy.respondToOAuthRequests(request);
 
       // If this is a valid request, but it doesn't have a session token header, this is a document request. We need to
       // ensure we're embedded if needed and we have the information needed to load the session.

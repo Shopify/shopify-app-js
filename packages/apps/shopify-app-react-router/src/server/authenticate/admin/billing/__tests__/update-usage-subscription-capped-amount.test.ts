@@ -12,7 +12,6 @@ import {
   BASE64_HOST,
   GRAPHQL_URL,
   TEST_SHOP,
-  expectBeginAuthRedirect,
   expectExitIframeRedirect,
   getJwt,
   getThrownResponse,
@@ -153,7 +152,11 @@ describe('Update usage billing plan capped amount', () => {
     );
     expect(shopSession).toBeDefined();
     expect(shopSession!.accessToken).toBeUndefined();
-    expectExitIframeRedirect(response);
+
+    // Expect Token Exchange behavior: redirect to session-token path
+    expect(response.status).toBe(302);
+    const {pathname} = new URL(response.headers.get('location')!, APP_URL);
+    expect(pathname).toBe('/auth/session-token');
   });
 
   it('returns redirection headers during fetch requests when Shopify invalidated the session', async () => {
@@ -191,9 +194,11 @@ describe('Update usage billing plan capped amount', () => {
     // THEN
     expect(response.status).toEqual(401);
 
-    const reauthUrl = new URL(response.headers.get(REAUTH_URL_HEADER)!);
-    expect(reauthUrl.origin).toEqual(APP_URL);
-    expect(reauthUrl.pathname).toEqual('/auth');
+    // Expect Token Exchange behavior: retry header instead of reauth URL
+    expect(
+      response.headers.get('X-Shopify-Retry-Invalid-Session-Request'),
+    ).toEqual('1');
+    expect(response.headers.get(REAUTH_URL_HEADER)).toBeNull();
   });
   it('throws a BillingError when the response contains user errors', async () => {
     // GIVEN
