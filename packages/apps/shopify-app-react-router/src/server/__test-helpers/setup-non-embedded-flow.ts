@@ -8,9 +8,7 @@ import {signRequestCookie} from './sign-request-cookie';
 import {testConfig} from './test-config';
 
 export async function setUpNonEmbeddedFlow() {
-  const shopify = shopifyApp({
-    ...testConfig({isEmbeddedApp: false}),
-  });
+  const shopify = shopifyApp(testConfig({isEmbeddedApp: false}));
   const session = await setUpValidSession(shopify.sessionStorage);
 
   const request = new Request(`${APP_URL}?shop=${TEST_SHOP}`);
