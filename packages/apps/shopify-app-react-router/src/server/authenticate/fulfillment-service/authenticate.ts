@@ -1,6 +1,5 @@
-import {ShopifyRestResources, ShopifyHeader} from '@shopify/shopify-api';
+import {ShopifyHeader} from '@shopify/shopify-api';
 
-import {AppConfigArg} from '../../config-types';
 import {adminClientFactory} from '../../clients/admin';
 import {BasicParams} from '../../types';
 import {createOrLoadOfflineSession} from '../helpers';
@@ -10,15 +9,14 @@ import type {
   FulfillmentServiceContext,
 } from './types';
 
-export function authenticateFulfillmentServiceFactory<
-  ConfigArg extends AppConfigArg,
-  Resources extends ShopifyRestResources = ShopifyRestResources,
->(params: BasicParams): AuthenticateFulfillmentService<ConfigArg, Resources> {
+export function authenticateFulfillmentServiceFactory(
+  params: BasicParams,
+): AuthenticateFulfillmentService {
   const {api, logger} = params;
 
   return async function authenticate(
     request: Request,
-  ): Promise<FulfillmentServiceContext<ConfigArg, Resources>> {
+  ): Promise<FulfillmentServiceContext> {
     logger.info('Authenticating fulfillment service request');
 
     if (request.method !== 'POST') {
@@ -78,7 +76,7 @@ export function authenticateFulfillmentServiceFactory<
     return {
       session,
       payload,
-      admin: adminClientFactory<ConfigArg, Resources>({params, session}),
+      admin: adminClientFactory({params, session}),
     };
   };
 }

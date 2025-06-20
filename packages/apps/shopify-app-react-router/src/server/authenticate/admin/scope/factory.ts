@@ -1,6 +1,5 @@
 import {Session} from '@shopify/shopify-api';
 
-import {AppConfigArg} from '../../../config-types';
 import {BasicParams} from '../../../types';
 import {AdminApiContext} from '../../../clients';
 
@@ -9,10 +8,10 @@ import {requestScopesFactory} from './request';
 import {queryScopesFactory} from './query';
 import {revokeScopesFactory} from './revoke';
 
-export function scopesApiFactory<ConfigArg extends AppConfigArg>(
+export function scopesApiFactory(
   params: BasicParams,
   session: Session,
-  admin: AdminApiContext<ConfigArg>,
+  admin: AdminApiContext,
 ): ScopesApiContext {
   return {
     query: queryScopesFactory(params, session, admin),

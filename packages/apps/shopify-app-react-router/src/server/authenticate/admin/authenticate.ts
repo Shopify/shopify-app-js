@@ -1,4 +1,4 @@
-import {JwtPayload, Session, ShopifyRestResources} from '@shopify/shopify-api';
+import {JwtPayload, Session} from '@shopify/shopify-api';
 
 import type {BasicParams} from '../../types';
 import type {AppConfigArg} from '../../config-types';
@@ -48,13 +48,10 @@ interface AuthStrategyParams extends BasicParams {
   strategy: AuthorizationStrategy;
 }
 
-export function authStrategyFactory<
-  ConfigArg extends AppConfigArg,
-  Resources extends ShopifyRestResources = ShopifyRestResources,
->({
+export function authStrategyFactory<ConfigArg extends AppConfigArg>({
   strategy,
   ...params
-}: AuthStrategyParams): AuthenticateAdmin<ConfigArg, Resources> {
+}: AuthStrategyParams): AuthenticateAdmin<ConfigArg> {
   const {api, logger, config} = params;
 
   async function respondToBouncePageRequest(request: Request) {
@@ -83,17 +80,17 @@ export function authStrategyFactory<
   }
 
   type AdminContextBase =
-    | EmbeddedAdminContext<ConfigArg, Resources>
-    | NonEmbeddedAdminContext<ConfigArg, Resources>;
+    | EmbeddedAdminContext<ConfigArg>
+    | NonEmbeddedAdminContext<ConfigArg>;
 
   function createContext(
     request: Request,
     session: Session,
     authStrategy: AuthorizationStrategy,
     sessionToken?: JwtPayload,
-  ): AdminContext<ConfigArg, Resources> {
+  ): AdminContext<ConfigArg> {
     let context: AdminContextBase = {
-      admin: createAdminApiContext<ConfigArg, Resources>(
+      admin: createAdminApiContext(
         session,
         params,
         authStrategy.handleClientError(request),
@@ -118,7 +115,7 @@ export function authStrategyFactory<
     context = addEmbeddedFeatures(context, request, session, sessionToken);
     context = addScopesFeatures(context);
 
-    return context as AdminContext<ConfigArg, Resources>;
+    return context as AdminContext<ConfigArg>;
   }
 
   function addEmbeddedFeatures(

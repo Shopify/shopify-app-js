@@ -121,32 +121,6 @@ const data: LandingTemplateSchema = {
       ],
     },
     {
-      type: 'Generic',
-      anchorLink: 'rest-api',
-      title: 'Using the REST API (Deprecated)',
-      sectionContent:
-        '**Shopify is [all-in on graphql](https://www.shopify.com/ca/partners/blog/all-in-on-graphql). In the next major release, the REST API will be removed from the `@shopify/shopify-app-react-router` package.' +
-        'If the `removeRest` [future flag](/docs/api/shopify-app-react-router/v3/guide-future-flags) is true, then the REST API will not be available.**' +
-        '\n\nOnce a request is authenticated, `authenticate.admin` will return an `admin` object that contains a REST client that can interact with the [REST Admin API](/docs/api/admin-rest).' +
-        '\n\nYou can also import a set of resource classes from the `@shopify/shopify-api` package, which is included in `@shopify/shopify-app-react-router`.' +
-        '\n\nThese classes map to the individual REST endpoints, and will be returned under `admin.rest.resources`.',
-      codeblock: {
-        title: 'Interacting with the REST API',
-        tabs: [
-          {
-            title: '/app/shopify.server.ts',
-            code: './examples/guides/admin/rest-resources.example.tsx',
-            language: 'tsx',
-          },
-          {
-            title: '/app/routes/**/*.tsx',
-            code: './examples/guides/admin/rest.example.tsx',
-            language: 'tsx',
-          },
-        ],
-      },
-    },
-    {
       type: 'Resource',
       title: 'Resources',
       anchorLink: 'resources',

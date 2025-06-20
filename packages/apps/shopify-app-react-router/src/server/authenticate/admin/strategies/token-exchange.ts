@@ -4,7 +4,6 @@ import {
   RequestedTokenType,
   Session,
   Shopify,
-  ShopifyRestResources,
 } from '@shopify/shopify-api';
 
 import {AppConfig, AppConfigArg} from '../../../config-types';
@@ -28,7 +27,6 @@ export class TokenExchangeStrategy<Config extends AppConfigArg>
 {
   protected api: Shopify<
     ApiConfigWithFutureFlags<Config['future']>,
-    ShopifyRestResources,
     ApiFutureFlags<Config['future']>
   >;
 

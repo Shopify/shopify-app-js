@@ -1,4 +1,3 @@
-import {AppConfigArg} from '../../../../config-types';
 import {AdminApiContext} from '../../../../clients';
 
 export interface FetchScopesDetailResponse {
@@ -34,8 +33,8 @@ query FetchAccessScopes{
   }
 }`;
 
-export async function fetchScopeDetail<ConfigArg extends AppConfigArg>(
-  admin: AdminApiContext<ConfigArg>,
+export async function fetchScopeDetail(
+  admin: AdminApiContext,
 ): Promise<FetchScopesDetailResponse> {
   const fetchScopeDetailResult = await admin.graphql(FETCH_SCOPES_DETAIL_QUERY);
 

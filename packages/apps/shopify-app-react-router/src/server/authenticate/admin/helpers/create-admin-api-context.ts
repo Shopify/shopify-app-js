@@ -1,6 +1,5 @@
-import {Session, ShopifyRestResources} from '@shopify/shopify-api';
+import {Session} from '@shopify/shopify-api';
 
-import {AppConfigArg} from '../../../config-types';
 import type {BasicParams} from '../../../types';
 import {
   AdminApiContext,
@@ -8,15 +7,12 @@ import {
   adminClientFactory,
 } from '../../../clients/admin';
 
-export function createAdminApiContext<
-  ConfigArg extends AppConfigArg,
-  Resources extends ShopifyRestResources = ShopifyRestResources,
->(
+export function createAdminApiContext(
   session: Session,
   params: BasicParams,
   handleClientError: HandleAdminClientError,
-): AdminApiContext<ConfigArg, Resources> {
-  return adminClientFactory<ConfigArg, Resources>({
+): AdminApiContext {
+  return adminClientFactory({
     session,
     params,
     handleClientError,

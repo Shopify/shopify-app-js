@@ -107,10 +107,7 @@ describe('authenticating flow requests', () => {
   describe('valid requests include an API client object', () => {
     expectAdminApiClient(async () => {
       const sessionStorage = new MemorySessionStorage();
-      const shopify = shopifyApp({
-        ...testConfig({sessionStorage}),
-        future: {removeRest: false},
-      });
+      const shopify = shopifyApp(testConfig({sessionStorage}));
 
       const {request, session: expectedSession} =
         await getValidRequest(sessionStorage);
@@ -118,18 +115,7 @@ describe('authenticating flow requests', () => {
       const {admin, session: actualSession} =
         await shopify.authenticate.flow(request);
 
-      const shopifyWithoutRest = shopifyApp({
-        ...testConfig({sessionStorage}),
-        future: {removeRest: true},
-      });
-
-      const {request: requestForWithoutRest} =
-        await getValidRequest(sessionStorage);
-
-      const {admin: adminWithoutRest} =
-        await shopifyWithoutRest.authenticate.flow(requestForWithoutRest);
-
-      return {admin, adminWithoutRest, expectedSession, actualSession};
+      return {admin, expectedSession, actualSession};
     });
   });
 });
