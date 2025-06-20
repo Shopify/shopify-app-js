@@ -4,7 +4,7 @@ const data: ReferenceEntityTemplateSchema = {
   name: 'Admin API',
   description:
     'Contains objects used to interact with the Admin API.' +
-    '\n\nThis object is returned as part of different contexts, such as [`admin`](/docs/api/shopify-app-remix/authenticate/admin), [`unauthenticated.admin`](/docs/api/shopify-app-remix/unauthenticated/unauthenticated-admin), and [`webhook`](/docs/api/shopify-app-remix/authenticate/webhook).',
+    '\n\nThis object is returned as part of different contexts, such as [`admin`](/docs/api/shopify-app-react-router/authenticate/admin), [`unauthenticated.admin`](/docs/api/shopify-app-react-router/unauthenticated/unauthenticated-admin), and [`webhook`](/docs/api/shopify-app-react-router/authenticate/webhook).',
   category: 'APIs',
   type: 'object',
   isVisualComponent: false,
@@ -21,12 +21,12 @@ const data: ReferenceEntityTemplateSchema = {
     {
       name: 'Authenticated context',
       subtitle: 'Authenticate requests from Shopify Admin.',
-      url: '/docs/api/shopify-app-remix/authenticate/admin',
+      url: '/docs/api/shopify-app-react-router/authenticate/admin',
     },
     {
       name: 'Unauthenticated context',
       subtitle: 'Interact with the Admin API on non-Shopify requests.',
-      url: '/docs/api/shopify-app-remix/unauthenticated/unauthenticated-admin',
+      url: '/docs/api/shopify-app-react-router/unauthenticated/unauthenticated-admin',
     },
   ],
 };

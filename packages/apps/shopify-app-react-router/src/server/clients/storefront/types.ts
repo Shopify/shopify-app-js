@@ -6,7 +6,7 @@ export interface StorefrontContext {
   /**
    * Method for interacting with the Shopify Storefront GraphQL API
    *
-   * If you're getting incorrect type hints in the Shopify template, follow [these instructions](https://github.com/Shopify/shopify-app-template-remix/tree/main#incorrect-graphql-hints).
+   * If you're getting incorrect type hints in the Shopify template, follow [these instructions](https://github.com/Shopify/shopify-app-template-react-router/tree/main#incorrect-graphql-hints).
    *
    * {@link https://shopify.dev/docs/api/storefront}
    *
@@ -15,7 +15,7 @@ export interface StorefrontContext {
    * <description>Use `storefront.graphql` to make query / mutation requests.</description>
    * ```ts
    * // app/routes/**\/.ts
-   * import { json } from "@remix-run/node";
+   * import { json } from "react-router";
    * import { authenticate } from "../shopify.server";
    *
    * export async function action({ request }: ActionFunctionArgs) {
@@ -23,7 +23,7 @@ export interface StorefrontContext {
    *
    *   const response = await storefront.graphql(`{blogs(first: 10) { edges { node { id } } } }`);
    *
-   *   return json(await response.json());
+   *   return (await response.json());
    * }
    * ```
    *
@@ -32,7 +32,7 @@ export interface StorefrontContext {
    * <description>Catch `GraphqlQueryError` errors to see error messages from the API.</description>
    * ```ts
    * // /app/routes/**\/*.ts
-   * import { ActionFunctionArgs } from "@remix-run/node";
+   * import { ActionFunctionArgs } from "react-router";
    * import { authenticate } from "../shopify.server";
    *
    * export const action = async ({ request }: ActionFunctionArgs) => {
@@ -50,22 +50,22 @@ export interface StorefrontContext {
    *       }`,
    *     );
    *
-   *     return json({ data: await response.json() });
+   *     return ({ data: await response.json() });
    *   } catch (error) {
    *     if (error instanceof GraphqlQueryError) {
    *       // { errors: { graphQLErrors: [
    *       //   { message: "Field 'not_a_field' doesn't exist on type 'Product'" }
    *       // ] } }
-   *       return json({ errors: error.body?.errors }, { status: 500 });
+   *       return ({ errors: error.body?.errors }, { status: 500 });
    *     }
-   *     return json({ message: "An error occurred" }, { status: 500 });
+   *     return ({ message: "An error occurred" }, { status: 500 });
    *   }
    * }
    * ```
    *
    * ```ts
    * // /app/shopify.server.ts
-   * import { shopifyApp } from "@shopify/shopify-app-remix/server";
+   * import { shopifyApp } from "@shopify/shopify-app-react-router/server";
    *
    * const shopify = shopifyApp({
    *   // ...

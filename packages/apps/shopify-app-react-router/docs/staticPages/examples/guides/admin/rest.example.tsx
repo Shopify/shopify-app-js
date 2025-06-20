@@ -1,5 +1,4 @@
-import {LoaderFunction, json} from '@remix-run/node';
-import {useRouteError} from '@remix-run/react';
+import {LoaderFunction} from 'react-router';
 
 import {authenticate} from '~/shopify.server';
 
@@ -13,5 +12,5 @@ export const loader: LoaderFunction = async ({request}) => {
   const response = await admin.rest.get({path: 'products/count'});
   const data = response.body;
 
-  return json({productCount: data.count});
+  return {productCount: data.count};
 };

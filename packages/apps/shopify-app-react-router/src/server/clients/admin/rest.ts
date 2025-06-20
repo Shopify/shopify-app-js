@@ -12,7 +12,7 @@ import {
 import type {AdminClientOptions} from './types';
 
 export type RestClientWithResources<Resources extends ShopifyRestResources> =
-  RemixRestClient & {resources: Resources};
+  ReactRouterRestClient & {resources: Resources};
 
 export function restClientFactory<
   Resources extends ShopifyRestResources = ShopifyRestResources,
@@ -22,7 +22,7 @@ export function restClientFactory<
   session,
 }: AdminClientOptions): RestClientWithResources<Resources> {
   const {api} = params;
-  const client = new RemixRestClient({
+  const client = new ReactRouterRestClient({
     params,
     handleClientError,
     session,
@@ -38,22 +38,22 @@ export function restClientFactory<
     });
 
     Object.entries(api.rest).forEach(([name, resource]) => {
-      class RemixResource extends resource {
+      class ReactRouterResource extends resource {
         public static Client = RestResourceClient;
       }
 
-      Reflect.defineProperty(RemixResource, 'name', {
+      Reflect.defineProperty(ReactRouterResource, 'name', {
         value: name,
       });
 
-      Reflect.set(client.resources, name, RemixResource);
+      Reflect.set(client.resources, name, ReactRouterResource);
     });
   }
 
   return client;
 }
 
-class RemixRestClient {
+class ReactRouterRestClient {
   public session: Session;
   private params: AdminClientOptions['params'];
   private handleClientError: AdminClientOptions['handleClientError'];

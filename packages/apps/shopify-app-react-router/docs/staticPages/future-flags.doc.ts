@@ -4,7 +4,7 @@ const data: LandingTemplateSchema = {
   id: 'guide-future-flags',
   title: 'Future flags',
   description:
-    'Similarly to how [Remix approaches breaking changes](https://remix.run/docs/en/main/start/future-flags), the `@shopify/shopify-app-remix` package also uses future flags.' +
+    'Similarly to how [React Router approaches breaking changes](https://reactrouter.com/6.30.0/guides/api-development-strategy#future-flags), the `@shopify/shopify-app-react-router` package also uses future flags.' +
     "\n\nBigger features and breaking changes are initially added behind a future flag. This means that they're disabled by default, and must be manually enabled by setting the appropriate flag in the `future` option of the `shopifyApp` function." +
     '\n\nThis allows apps to gradually adopt new features, and prepare for breaking changes and major releases ahead of time.',
   sections: [
@@ -67,7 +67,7 @@ const data: LandingTemplateSchema = {
           value: '',
           description:
             'Embedded apps will fetch access tokens via token exchange. This assumes the app has declared scopes for Shopify managed installations.' +
-            '\n\nLearn more about this [new embedded app auth strategy](https://shopify.dev/docs/api/shopify-app-remix#embedded-auth-strategy).',
+            '\n\nLearn more about this [new embedded app auth strategy](https://shopify.dev/docs/api/shopify-app-react-router#embedded-auth-strategy).',
           isOptional: true,
         },
         {

@@ -50,7 +50,7 @@ export interface AppConfigArg<
    * <caption>Storing sessions with Prisma.</caption>
    * <description>Add the `@shopify/shopify-app-session-storage-prisma` package to use the Prisma session storage.</description>
    * ```ts
-   * import { shopifyApp } from "@shopify/shopify-app-remix/server";
+   * import { shopifyApp } from "@shopify/shopify-app-react-router/server";
    * import { PrismaSessionStorage } from "@shopify/shopify-app-session-storage-prisma";
    *
    * import prisma from "~/db.server";
@@ -88,7 +88,7 @@ export interface AppConfigArg<
    * <caption>Registering shop-specific webhooks.</caption>
    * ```ts
    * // app/shopify.server.ts
-   * import { DeliveryMethod, shopifyApp } from "@shopify/shopify-app-remix/server";
+   * import { DeliveryMethod, shopifyApp } from "@shopify/shopify-app-react-router/server";
    *
    * const shopify = shopifyApp({
    *   webhooks: {
@@ -129,7 +129,7 @@ export interface AppConfigArg<
    *
    * ```ts
    * // /app/routes/webhooks.ts
-   * import { ActionFunctionArgs } from "@remix-run/node";
+   * import { ActionFunctionArgs } from "react-router";
    * import { authenticate } from "../shopify.server";
    * import db from "../db.server";
    *
@@ -159,7 +159,7 @@ export interface AppConfigArg<
    * @example
    * <caption>Seeding your database custom data when a merchant installs your app.</caption>
    * ```ts
-   * import { DeliveryMethod, shopifyApp } from "@shopify/shopify-app-remix/server";
+   * import { DeliveryMethod, shopifyApp } from "@shopify/shopify-app-react-router/server";
    * import { seedStoreData } from "~/db/seeds"
    *
    * const shopify = shopifyApp({
@@ -199,12 +199,12 @@ export interface AppConfigArg<
    *
    * {@link https://shopify.dev/docs/api/}
    *
-   * @defaultValue `LATEST_API_VERSION` from `@shopify/shopify-app-remix`
+   * @defaultValue `LATEST_API_VERSION` from `@shopify/shopify-app-react-router`
    *
    * @example
    * <caption>Using the latest API Version (Recommended)</caption>
    * ```ts
-   * import { LATEST_API_VERSION, shopifyApp } from "@shopify/shopify-app-remix/server";
+   * import { LATEST_API_VERSION, shopifyApp } from "@shopify/shopify-app-react-router/server";
    *
    * const shopify = shopifyApp({
    *   // ...etc
@@ -217,7 +217,7 @@ export interface AppConfigArg<
   /**
    * A path that Shopify can reserve for auth related endpoints.
    *
-   * This must match a $ route in your Remix app.  That route must export a loader function that calls `shopify.authenticate.admin(request)`.
+   * This must match a $ route in your React Router app.  That route must export a loader function that calls `shopify.authenticate.admin(request)`.
    *
    * @default `"/auth"`
    *
@@ -225,7 +225,7 @@ export interface AppConfigArg<
    * <caption>Using the latest API Version (Recommended)</caption>
    * ```ts
    * // /app/shopify.server.ts
-   * import { LATEST_API_VERSION, shopifyApp } from "@shopify/shopify-app-remix/server";
+   * import { LATEST_API_VERSION, shopifyApp } from "@shopify/shopify-app-react-router/server";
    *
    * const shopify = shopifyApp({
    *   // ...etc
@@ -235,7 +235,7 @@ export interface AppConfigArg<
    * export const authenticate = shopify.authenticate;
    *
    * // /app/routes/auth/$.jsx
-   * import { LoaderFunctionArgs } from "@remix-run/node";
+   * import { LoaderFunctionArgs } from "react-router";
    * import { authenticate } from "../../shopify.server";
    *
    * export async function loader({ request }: LoaderFunctionArgs) {
@@ -293,7 +293,7 @@ interface HooksConfig<
    * @example
    * <caption>Seeding data when a merchant installs your app.</caption>
    * ```ts
-   * import { DeliveryMethod, shopifyApp } from "@shopify/shopify-app-remix/server";
+   * import { DeliveryMethod, shopifyApp } from "@shopify/shopify-app-react-router/server";
    * import { seedStoreData } from "~/db/seeds"
    *
    * const shopify = shopifyApp({
