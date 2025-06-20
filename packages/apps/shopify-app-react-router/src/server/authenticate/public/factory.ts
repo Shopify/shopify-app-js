@@ -1,4 +1,3 @@
-
 import {BasicParams} from '../../types';
 
 import {authenticateCheckoutFactory} from './checkout/authenticate';

@@ -3,11 +3,6 @@ import type {AuthenticateAppProxy} from './appProxy/types';
 import type {AuthenticateCustomerAccount} from './customer-account/types';
 import type {AuthenticatePOS} from './pos/types';
 
-// Eventually this will be just the `{}` bit without `AuthenticateCheckout &`
-// We have this is because in v1 public WAS the only public authenticate method
-// But it became tightly coupled to authenticating Checkout requests.
-// In V2 you will have only public.checkout() and public.appProxy(), no public()
-
 export interface AuthenticatePublic {
   /**
    * Authenticate a request from a checkout extension

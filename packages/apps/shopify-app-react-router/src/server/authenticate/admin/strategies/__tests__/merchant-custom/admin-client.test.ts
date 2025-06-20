@@ -1,8 +1,4 @@
-import {
-  ApiVersion,
-  Session,
-  ShopifyError,
-} from '@shopify/shopify-api';
+import {ApiVersion, Session, ShopifyError} from '@shopify/shopify-api';
 
 import {AdminApiContext} from '../../../../../clients';
 import {shopifyApp} from '../../../../..';
@@ -27,7 +23,7 @@ describe('admin.authenticate context', () => {
 
     return {admin, expectedSession, actualSession};
   });
-  
+
   describe.each([
     {
       testGroup: 'GraphQL client',
