@@ -60,7 +60,7 @@ const data: LandingTemplateSchema = {
       anchorLink: 'flags',
       title: 'Supported flags',
       sectionContent:
-        'There are currently no future flags in the current version. Check back here when new features are being developed.',
+        'There are currently no future flags in the current version.',
     },
   ],
 };
