@@ -126,7 +126,7 @@ describe('Billing check', () => {
     expect(appSubscriptions).toEqual([]);
   });
 
-  it('redirects to exit-iframe with authentication using app bridge when embedded and Shopify invalidated the session', async () => {
+  it('redirects to exit-iframe with authentication using app bridge when Shopify invalidated the session', async () => {
     // GIVEN
     const config = testConfig();
     await setUpValidSession(config.sessionStorage);
