@@ -545,8 +545,11 @@ importers:
         specifier: ^5.1.26
         version: 5.1.26
       react:
-        specifier: '*'
+        specifier: '>=18'
         version: 18.3.1
+      react-dom:
+        specifier: '>=18'
+        version: 18.3.1(react@18.3.1)
       semver:
         specifier: ^7.7.1
         version: 7.7.1
@@ -554,33 +557,15 @@ importers:
       '@shopify/generate-docs':
         specifier: ^0.16.6
         version: 0.16.6
-      '@shopify/polaris':
-        specifier: ^12.18.0
-        version: 12.27.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      '@shopify/react-testing':
-        specifier: ^6.0.0
-        version: 6.0.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@shopify/shopify-app-session-storage-memory':
         specifier: ^4.0.18
         version: link:../session-storage/shopify-app-session-storage-memory
-      '@testing-library/jest-dom':
-        specifier: ^6.6.3
-        version: 6.6.3
-      '@testing-library/react':
-        specifier: ^16.3.0
-        version: 16.3.0(@testing-library/dom@10.4.0)(@types/react-dom@19.0.3(@types/react@19.1.2))(@types/react@19.1.2)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@types/jsonwebtoken':
         specifier: ^9.0.9
         version: 9.0.9
-      '@types/react':
-        specifier: ^19.1.2
-        version: 19.1.2
       '@types/semver':
         specifier: ^7.7.0
         version: 7.7.0
-      '@types/testing-library__jest-dom':
-        specifier: ^6.0.0
-        version: 6.0.0
       jest-fetch-mock:
         specifier: ^3.0.3
         version: 3.0.3(encoding@0.1.13)
