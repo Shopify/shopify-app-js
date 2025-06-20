@@ -6,6 +6,10 @@ import {
   WebhookHandler,
 } from '@shopify/shopify-api';
 import {SessionStorage} from '@shopify/shopify-app-session-storage';
+import type {
+  BillingConfigOneTimePlan,
+  BillingConfigSubscriptionLineItemPlan,
+} from '@shopify/shopify-api';
 
 import type {
   ApiFutureFlags,
@@ -15,6 +19,12 @@ import type {
 import type {AppDistribution} from './types';
 import type {AdminApiContext} from './clients';
 import {IdempotentPromiseHandler} from './authenticate/helpers/idempotent-promise-handler';
+
+export interface BillingConfigWithLineItems {
+  [plan: string]:
+    | BillingConfigOneTimePlan
+    | BillingConfigSubscriptionLineItemPlan;
+}
 
 export interface AppConfigArg<
   Storage extends SessionStorage = SessionStorage,
@@ -27,6 +37,7 @@ export interface AppConfigArg<
     | 'isCustomStoreApp'
     | 'isEmbeddedApp'
     | 'future'
+    | 'billing'
   > {
   /**
    * The URL your app is running on.
@@ -61,6 +72,30 @@ export interface AppConfigArg<
    * ```
    */
   sessionStorage?: Storage;
+
+  /**
+   * Billing configurations for the app.
+   *
+   * Uses the new line item billing format that allows for more complex billing structures.
+   *
+   * @example
+   * ```ts
+   * import { BillingInterval } from "@shopify/shopify-api";
+   *
+   * billing: {
+   *   myPlan: {
+   *     lineItems: [
+   *       {
+   *         amount: 10,
+   *         currencyCode: 'USD',
+   *         interval: BillingInterval.Every30Days,
+   *       }
+   *     ],
+   *   },
+   * }
+   * ```
+   */
+  billing?: BillingConfigWithLineItems;
 
   /**
    * Whether your app use online or offline tokens.
@@ -246,7 +281,7 @@ export interface AppConfigArg<
 }
 
 export interface AppConfig<Storage extends SessionStorage = SessionStorage>
-  extends Omit<ApiConfig, 'future'> {
+  extends Omit<ApiConfig, 'future' | 'billing'> {
   canUseLoginForm: boolean;
   appUrl: string;
   auth: AuthConfig;
@@ -256,6 +291,7 @@ export interface AppConfig<Storage extends SessionStorage = SessionStorage>
   future: FutureFlags;
   idempotentPromiseHandler: IdempotentPromiseHandler;
   distribution: AppDistribution;
+  billing?: BillingConfigWithLineItems;
 }
 
 export interface AuthConfig {
