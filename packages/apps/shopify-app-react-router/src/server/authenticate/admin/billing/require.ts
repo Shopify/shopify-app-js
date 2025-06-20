@@ -6,8 +6,10 @@ import {
 
 import type {BasicParams} from '../../../types';
 import type {AppConfigArg} from '../../../config-types';
-import {redirectToAuthPage} from '../helpers';
-import {invalidateAccessToken} from '../../helpers';
+import {
+  invalidateAccessToken,
+  respondToInvalidSessionToken,
+} from '../../helpers';
 
 import type {RequireBillingOptions} from './types';
 
@@ -37,13 +39,20 @@ export function requireBillingFactory<Config extends AppConfigArg>(
       });
     } catch (error) {
       if (error instanceof HttpResponseError && error.response.code === 401) {
-        logger.debug('API token was invalid, redirecting to OAuth', logContext);
+        logger.debug(
+          'API token was invalid, responding to invalid session',
+          logContext,
+        );
 
         await invalidateAccessToken(params, session);
-        throw await redirectToAuthPage(params, request, session.shop);
-      } else {
-        throw error;
+
+        throw respondToInvalidSessionToken({
+          params,
+          request,
+          retryRequest: true,
+        });
       }
+      throw error;
     }
 
     if (!data.hasActivePayment) {

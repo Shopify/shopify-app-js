@@ -34,7 +34,7 @@ const data: LandingTemplateSchema = {
         'Configure `shopifyApp` with the following values' +
         '\n1. `distribution` - `AppDistribution.ShopifyAdmin`' +
         '\n1. `appUrl` - `https://localhost:3000` or other configured port' +
-        '\n1. `isEmbeddedApp` - `false`, merchant custom apps cannot be embedded',
+        '\n\nMerchant custom apps use a different authentication strategy than embedded apps and cannot be embedded in the Shopify Admin.',
       codeblock: {
         title: 'Configure app settings',
         tabs: [

@@ -77,9 +77,7 @@ describe('admin.authenticate context', () => {
 
       it('returns 401 when receives a 401 response on fetch requests', async () => {
         // GIVEN
-        const {admin, session, shopify} = await setUpFetchFlow({
-          unstable_newEmbeddedAuthStrategy: true,
-        });
+        const {admin, session, shopify} = await setUpFetchFlow();
         const requestMock = await mockRequest({status: 401});
 
         // WHEN
@@ -108,13 +106,7 @@ describe('admin.authenticate context', () => {
 async function setUpDocumentFlow() {
   const config = testConfig();
 
-  const shopify = shopifyApp({
-    ...config,
-    future: {
-      ...config.future,
-      unstable_newEmbeddedAuthStrategy: true,
-    },
-  });
+  const shopify = shopifyApp(config);
   const expectedSession = await setUpValidSession(shopify.sessionStorage);
 
   const {token} = getJwt();

@@ -1,6 +1,7 @@
 import {JwtPayload, Session} from '@shopify/shopify-api';
 
 import type {BasicParams} from '../../types';
+import {AppDistribution} from '../../types';
 import type {AppConfigArg} from '../../config-types';
 import {
   getSessionTokenHeader,
@@ -124,14 +125,14 @@ export function authStrategyFactory<ConfigArg extends AppConfigArg>({
     session: Session,
     sessionToken?: JwtPayload,
   ) {
-    if (config.isEmbeddedApp) {
-      return {
-        ...context,
-        sessionToken,
-        redirect: redirectFactory(params, request, session.shop),
-      };
+    if (config.distribution === AppDistribution.ShopifyAdmin) {
+      return context;
     }
-    return context;
+    return {
+      ...context,
+      sessionToken,
+      redirect: redirectFactory(params, request, session.shop),
+    };
   }
 
   function addScopesFeatures(context: AdminContextBase) {
@@ -147,7 +148,6 @@ export function authStrategyFactory<ConfigArg extends AppConfigArg>({
       respondToOptionsRequest(params, request);
       await respondToBouncePageRequest(request);
       await respondToExitIframeRequest(request);
-      await strategy.respondToOAuthRequests(request);
 
       // If this is a valid request, but it doesn't have a session token header, this is a document request. We need to
       // ensure we're embedded if needed and we have the information needed to load the session.
@@ -207,7 +207,7 @@ async function getSessionTokenContext(
     }),
   });
 
-  if (config.isEmbeddedApp) {
+  if (config.distribution !== AppDistribution.ShopifyAdmin) {
     const payload = await validateSessionToken(params, request, sessionToken);
     const dest = new URL(payload.dest);
     const shop = dest.hostname;

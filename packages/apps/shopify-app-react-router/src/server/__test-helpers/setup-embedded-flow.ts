@@ -6,12 +6,7 @@ import {setUpValidSession} from './setup-valid-session';
 import {testConfig} from './test-config';
 
 export async function setUpEmbeddedFlow() {
-  const shopify = shopifyApp({
-    ...testConfig(),
-    future: {
-      unstable_newEmbeddedAuthStrategy: false,
-    },
-  });
+  const shopify = shopifyApp(testConfig());
   const expectedSession = await setUpValidSession(shopify.sessionStorage);
 
   const {token} = getJwt();

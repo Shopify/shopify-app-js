@@ -56,35 +56,6 @@ describe('authorize.session token header path', () => {
         expect(sessionToken).toEqual(payload);
         expect(session).toBe(testSession);
       });
-
-      it('returns context when session exists for non-embedded apps', async () => {
-        // GIVEN
-        const shopify = shopifyApp({
-          ...testConfig({isEmbeddedApp: false, useOnlineTokens: isOnline}),
-        });
-
-        let testSession: Session;
-        testSession = await setUpValidSession(shopify.sessionStorage);
-        if (isOnline) {
-          testSession = await setUpValidSession(shopify.sessionStorage, {
-            isOnline: true,
-          });
-        }
-
-        // WHEN
-        const request = new Request(
-          `${APP_URL}?shop=${TEST_SHOP}&host=${BASE64_HOST}`,
-        );
-        signRequestCookie({
-          request,
-          cookieName: SESSION_COOKIE_NAME,
-          cookieValue: testSession.id,
-        });
-        const {admin, session} = await shopify.authenticate.admin(request);
-
-        // THEN
-        expect(session).toBe(testSession);
-      });
     },
   );
 });

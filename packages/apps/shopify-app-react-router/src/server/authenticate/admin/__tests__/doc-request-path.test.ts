@@ -152,21 +152,6 @@ describe('authorize.admin doc request path', () => {
     });
   });
 
-  it('returns a 400 response when no shop is available', async () => {
-    // GIVEN
-    const shopify = shopifyApp(testConfig({isEmbeddedApp: false}));
-    await setUpValidSession(shopify.sessionStorage);
-
-    // WHEN
-    const response = await getThrownResponse(
-      shopify.authenticate.admin,
-      new Request(APP_URL),
-    );
-
-    // THEN
-    expect(response.status).toBe(400);
-  });
-
   it("redirects to the embedded app URL if the app isn't embedded yet", async () => {
     // GIVEN
     const config = testConfig();

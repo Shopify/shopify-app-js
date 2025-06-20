@@ -12,9 +12,8 @@ import {testConfig as testConfigImport} from '../test-helpers/test-config';
  * This way, we'll always ensure our tests are covering all future flags. Please make sure to also have tests for the
  * old behaviour.
  */
-const TEST_FUTURE_FLAGS: Required<{[key in keyof FutureFlags]: true}> = {
-  unstable_newEmbeddedAuthStrategy: true,
-} as const;
+const TEST_FUTURE_FLAGS: Required<{[key in keyof FutureFlags]: true}> =
+  {} as const;
 
 // Override the helper's future flags and logger settings for our purposes
 const TEST_CONFIG = {

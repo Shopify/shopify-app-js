@@ -1,6 +1,6 @@
 import {redirect as reactRouterRedirect} from 'react-router';
 
-import {BasicParams} from '../../../types';
+import {BasicParams, AppDistribution} from '../../../types';
 import {getSessionTokenHeader} from '../../helpers/get-session-token-header';
 
 import {renderAppBridge} from './render-app-bridge';
@@ -107,7 +107,10 @@ function parseURL({params, base, init, shop, url}: ParseURLOptions): ParsedURL {
     const cleanShopName = shop.replace('.myshopify.com', '');
 
     if (!target) {
-      target = config.isEmbeddedApp ? '_parent' : '_self';
+      target =
+        config.distribution === AppDistribution.ShopifyAdmin
+          ? '_self'
+          : '_parent';
     }
 
     return {
