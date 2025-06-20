@@ -107,8 +107,6 @@ describe('Create usage record', () => {
     expect(subscription).toEqual(responses.USAGE_RECORD);
   });
 
-
-
   it('redirects to exit-iframe with authentication using app bridge when Shopify invalidated the session', async () => {
     // GIVEN
     const config = testConfig();
