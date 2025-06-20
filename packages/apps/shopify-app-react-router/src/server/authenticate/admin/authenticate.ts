@@ -125,14 +125,14 @@ export function authStrategyFactory<ConfigArg extends AppConfigArg>({
     session: Session,
     sessionToken?: JwtPayload,
   ) {
-    if (config.distribution !== AppDistribution.ShopifyAdmin) {
-      return {
-        ...context,
-        sessionToken,
-        redirect: redirectFactory(params, request, session.shop),
-      };
+    if (config.distribution === AppDistribution.ShopifyAdmin) {
+      return context;
     }
-    return context;
+    return {
+      ...context,
+      sessionToken,
+      redirect: redirectFactory(params, request, session.shop),
+    };
   }
 
   function addScopesFeatures(context: AdminContextBase) {

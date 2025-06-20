@@ -100,7 +100,7 @@ describe('Billing request', () => {
     );
   });
 
-  it('redirects to exit-iframe with authentication using app bridge when embedded and Shopify invalidated the session', async () => {
+  it('redirects to exit-iframe with authentication using app bridge when Shopify invalidated the session', async () => {
     // GIVEN
     const config = testConfig();
     const shopify = shopifyApp({...config, billing: BILLING_CONFIG});

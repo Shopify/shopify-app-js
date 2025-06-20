@@ -108,7 +108,7 @@ export interface EmbeddedAdminContext<Config extends AppConfigArg>
   /**
    * The decoded and validated session token for the request.
    *
-   * Returned only for embedded apps (all apps except merchant custom apps).
+   * Returned only for embedded apps (all distribution types except merchant custom apps)
    *
    * {@link https://shopify.dev/docs/apps/auth/oauth/session-tokens#payload}
    *
