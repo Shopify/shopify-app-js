@@ -179,7 +179,7 @@ describe('Billing require', () => {
 
     // THEN
     expect(response.status).toEqual(401);
-    
+
     // Expect Token Exchange behavior: retry header instead of reauth URL
     expect(
       response.headers.get('X-Shopify-Retry-Invalid-Session-Request'),
