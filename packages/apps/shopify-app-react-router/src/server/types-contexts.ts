@@ -24,6 +24,7 @@ export type {ScopesContext} from './authenticate/admin/types';
 export type {CheckoutContext} from './authenticate/public/checkout/types';
 export type {CustomerAccountContext} from './authenticate/public/customer-account/types';
 export type {StorefrontContext as StorefrontApiContext} from './clients';
+export type {POSContext} from './authenticate/pos/types';
 
 type ShopifyConfig<App> =
   App extends ShopifyApp<infer Config extends AppConfigArg> ? Config : never;
