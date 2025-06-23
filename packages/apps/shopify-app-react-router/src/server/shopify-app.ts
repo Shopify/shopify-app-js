@@ -32,6 +32,7 @@ import {createMerchantCustomAuthStrategy} from './authenticate/admin/strategies/
 import {IdempotentPromiseHandler} from './authenticate/helpers/idempotent-promise-handler';
 import {authenticateFlowFactory} from './authenticate/flow/authenticate';
 import {authenticateFulfillmentServiceFactory} from './authenticate/fulfillment-service/authenticate';
+import {authenticatePOSFactory} from './authenticate/pos/authenticate';
 import {FutureFlagOptions, logDisabledFutureFlags} from './future/flags';
 
 /**
@@ -92,8 +93,9 @@ export function shopifyApp<
     authenticate: {
       admin: authStrategy,
       flow: authenticateFlowFactory(params),
-      public: authenticatePublicFactory(params),
       fulfillmentService: authenticateFulfillmentServiceFactory(params),
+      pos: authenticatePOSFactory(params),
+      public: authenticatePublicFactory(params),
       webhook: authenticateWebhookFactory<string>(params),
     },
     unauthenticated: {
