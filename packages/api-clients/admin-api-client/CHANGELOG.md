@@ -6,7 +6,7 @@
 
 - b05d09b: # Add Logging for Shopify GraphQL Admin API Deprecated Reason
 
-  Enable logging to now show any detected detected deprecations from the Shopify GraphQL Admin API.
+  Enable logging to now show any detected deprecations from the Shopify GraphQL Admin API.
 
   For more information about deprecation detection see the [Shopify.dev Changelog](https://shopify.dev/changelog/graphql-return-actual-deprecation-reasons)
 
