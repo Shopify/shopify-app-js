@@ -1,5 +1,18 @@
 # @shopify/shopify-app-remix
 
+## 3.8.4
+
+### Patch Changes
+
+- 953badc: Updated `@remix-run/server-runtime`, ` @remix-run/node`, ` @remix-run/react`, ` @remix-run/testing` dependencies
+- e298a0c: Fix issue with missing sourcemaps
+- 0b51ba6: Tweak docs for scopes object
+- Updated dependencies [e298a0c]
+  - @shopify/admin-api-client@1.1.1
+  - @shopify/storefront-api-client@1.0.9
+  - @shopify/shopify-app-session-storage@3.0.19
+  - @shopify/shopify-api@11.13.1
+
 ## 3.8.3
 
 ### Patch Changes
