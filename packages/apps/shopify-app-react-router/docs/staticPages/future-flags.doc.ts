@@ -56,36 +56,11 @@ const data: LandingTemplateSchema = {
         '\n\nWhen the next major version is released, the future flag will be removed, and the old code it changes will be removed. Apps that adopted the flag before then will continue to work the same way with no new changes.',
     },
     {
-      type: 'GenericList',
+      type: 'Generic',
       anchorLink: 'flags',
       title: 'Supported flags',
       sectionContent:
-        'These are the future flags supported in the current version.',
-      listItems: [
-        {
-          name: 'unstable_newEmbeddedAuthStrategy',
-          value: '',
-          description:
-            'Embedded apps will fetch access tokens via token exchange. This assumes the app has declared scopes for Shopify managed installations.' +
-            '\n\nLearn more about this [new embedded app auth strategy](https://shopify.dev/docs/api/shopify-app-react-router#embedded-auth-strategy).',
-          isOptional: true,
-        },
-        {
-          name: 'removeRest',
-          value: '',
-          description:
-            'Methods for interacting with the admin REST API will not be returned\n\n' +
-            'This affects:\n\n' +
-            '* `authenticate.admin(request)`\n' +
-            '* `authenticate.webhook(request)`\n' +
-            '* `authenticate.flow(request)`\n' +
-            '* `authenticate.appProxy(request)`\n' +
-            '* `authenticate.fulfillmentService(request)`\n' +
-            '* `unauthenticated.admin(shop)`\n\n' +
-            'Learn more about this change by reading [all-in on graphql](https://www.shopify.com/ca/partners/blog/all-in-on-graphql).',
-          isOptional: true,
-        },
-      ],
+        'There are currently no future flags in the current version.',
     },
   ],
 };

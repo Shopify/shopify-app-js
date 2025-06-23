@@ -1,6 +1,5 @@
 export * from './const';
 export * from './expect-admin-api-client';
-export * from './expect-begin-auth-redirect';
 export * from './expect-document-request-headers';
 export * from './expect-exit-iframe';
 export * from './expect-login-redirect';
@@ -17,4 +16,3 @@ export * from './get-thrown-error';
 export * from './setup-embedded-flow';
 export * from './setup-fetch-flow';
 export * from './mock-graphql-request';
-export * from './setup-non-embedded-flow';

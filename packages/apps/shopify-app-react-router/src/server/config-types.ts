@@ -1,7 +1,6 @@
 import {
   ConfigParams as ApiConfigArg,
   ConfigInterface as ApiConfig,
-  ShopifyRestResources,
   Session,
   ApiVersion,
   WebhookHandler,
@@ -18,16 +17,15 @@ import type {AdminApiContext} from './clients';
 import {IdempotentPromiseHandler} from './authenticate/helpers/idempotent-promise-handler';
 
 export interface AppConfigArg<
-  Resources extends ShopifyRestResources = ShopifyRestResources,
   Storage extends SessionStorage = SessionStorage,
   Future extends FutureFlagOptions = FutureFlagOptions,
 > extends Omit<
-    ApiConfigArg<Resources, ApiFutureFlags<Future>>,
+    ApiConfigArg<ApiFutureFlags<Future>>,
     | 'hostName'
     | 'hostScheme'
-    | 'isEmbeddedApp'
     | 'apiVersion'
     | 'isCustomStoreApp'
+    | 'isEmbeddedApp'
     | 'future'
   > {
   /**
@@ -172,16 +170,7 @@ export interface AppConfigArg<
    * });
    * ```
    */
-  hooks?: HooksConfig<AppConfigArg<Resources, Storage, Future>, Resources>;
-
-  /**
-   * Does your app render embedded inside the Shopify Admin or on its own.
-   *
-   * Unless you have very specific needs, this should be true.
-   *
-   * @defaultValue `true`
-   */
-  isEmbeddedApp?: boolean;
+  hooks?: HooksConfig;
 
   /**
    * How your app is distributed. Default is `AppDistribution.AppStore`.
@@ -279,10 +268,7 @@ export interface AuthConfig {
 
 export type WebhookConfig = Record<string, WebhookHandler | WebhookHandler[]>;
 
-interface HooksConfig<
-  ConfigArg extends AppConfigArg = AppConfigArg,
-  Resources extends ShopifyRestResources = ShopifyRestResources,
-> {
+interface HooksConfig {
   /**
    * A function to call after a merchant installs your app
    *
@@ -306,15 +292,10 @@ interface HooksConfig<
    * });
    * ```
    */
-  afterAuth?: (
-    options: AfterAuthOptions<ConfigArg, Resources>,
-  ) => void | Promise<void>;
+  afterAuth?: (options: AfterAuthOptions) => void | Promise<void>;
 }
 
-export interface AfterAuthOptions<
-  ConfigArg extends AppConfigArg,
-  Resources extends ShopifyRestResources = ShopifyRestResources,
-> {
+export interface AfterAuthOptions {
   session: Session;
-  admin: AdminApiContext<ConfigArg, Resources>;
+  admin: AdminApiContext;
 }

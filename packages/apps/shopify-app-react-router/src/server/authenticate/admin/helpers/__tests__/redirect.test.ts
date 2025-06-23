@@ -1,5 +1,3 @@
-import {SESSION_COOKIE_NAME} from '@shopify/shopify-api';
-
 import {shopifyApp} from '../../../..';
 import {
   API_KEY,
@@ -10,7 +8,6 @@ import {
   getJwt,
   getThrownResponse,
   setUpValidSession,
-  signRequestCookie,
   testConfig,
 } from '../../../../__test-helpers';
 import {APP_BRIDGE_URL, REAUTH_URL_HEADER} from '../../../const';
@@ -78,7 +75,7 @@ describe('Redirect helper', () => {
 
   it('parses shopify admin routes and defaults to _parent for embedded apps', async () => {
     // GIVEN
-    const shopify = shopifyApp(testConfig({isEmbeddedApp: true}));
+    const shopify = shopifyApp(testConfig());
     await setUpValidSession(shopify.sessionStorage);
 
     const {request} = documentLoadRequest(true);
@@ -379,25 +376,4 @@ describe('Redirect helper', () => {
     expect(response.status).toBe(401);
     expect(response.headers.get(REAUTH_URL_HEADER)).toBe(url);
   }
-
-  describe('when not embedded', () => {
-    it('is not returned as part of the context', async () => {
-      // GIVEN
-      const shopify = shopifyApp(testConfig({isEmbeddedApp: false}));
-      const testSession = await setUpValidSession(shopify.sessionStorage);
-
-      const request = new Request(APP_URL);
-      signRequestCookie({
-        request,
-        cookieName: SESSION_COOKIE_NAME,
-        cookieValue: testSession.id,
-      });
-
-      // WHEN
-      const context = await shopify.authenticate.admin(request);
-
-      // THEN
-      expect(context).not.toHaveProperty('redirect');
-    });
-  });
 });

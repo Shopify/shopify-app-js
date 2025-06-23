@@ -1,17 +1,15 @@
-import {JwtPayload, Session, ShopifyRestResources} from '@shopify/shopify-api';
+import {JwtPayload, Session} from '@shopify/shopify-api';
 
 import {EnsureCORSFunction} from '../helpers/ensure-cors-headers';
 import type {AppConfigArg} from '../../config-types';
 import type {AdminApiContext} from '../../clients';
+import type {AppDistribution} from '../../types';
 
 import type {BillingContext} from './billing/types';
 import {RedirectFunction} from './helpers/redirect';
 import {ScopesApiContext} from './scope/types';
 
-interface AdminContextInternal<
-  Config extends AppConfigArg,
-  Resources extends ShopifyRestResources = ShopifyRestResources,
-> {
+interface AdminContextInternal<Config extends AppConfigArg> {
   /**
    * The session for the user who made the request.
    *
@@ -75,7 +73,7 @@ interface AdminContextInternal<
   /**
    * Methods for interacting with the GraphQL / REST Admin APIs for the store that made the request.
    */
-  admin: AdminApiContext<Config, Resources>;
+  admin: AdminApiContext;
 
   /**
    * Billing methods for this store, based on the plans defined in the `billing` config option.
@@ -105,14 +103,12 @@ interface AdminContextInternal<
   cors: EnsureCORSFunction;
 }
 
-export interface EmbeddedAdminContext<
-  Config extends AppConfigArg,
-  Resources extends ShopifyRestResources = ShopifyRestResources,
-> extends AdminContextInternal<Config, Resources> {
+export interface EmbeddedAdminContext<Config extends AppConfigArg>
+  extends AdminContextInternal<Config> {
   /**
    * The decoded and validated session token for the request.
    *
-   * Returned only if `isEmbeddedApp` is `true`.
+   * Returned only for embedded apps (all distribution types except merchant custom apps)
    *
    * {@link https://shopify.dev/docs/apps/auth/oauth/session-tokens#payload}
    *
@@ -150,7 +146,7 @@ export interface EmbeddedAdminContext<
    * A function that redirects the user to a new page, ensuring that the appropriate parameters are set for embedded
    * apps.
    *
-   * Returned only if `isEmbeddedApp` is `true`.
+   * Returned only for embedded apps (all apps except merchant custom apps).
    *
    * @example
    * <caption>Redirecting to an app route.</caption>
@@ -196,17 +192,13 @@ export interface EmbeddedAdminContext<
    */
   redirect: RedirectFunction;
 }
-export interface NonEmbeddedAdminContext<
-  Config extends AppConfigArg,
-  Resources extends ShopifyRestResources = ShopifyRestResources,
-> extends AdminContextInternal<Config, Resources> {}
+export interface NonEmbeddedAdminContext<Config extends AppConfigArg>
+  extends AdminContextInternal<Config> {}
 
-type EmbeddedTypedAdminContext<
-  Config extends AppConfigArg,
-  Resources extends ShopifyRestResources = ShopifyRestResources,
-> = Config['isEmbeddedApp'] extends false
-  ? NonEmbeddedAdminContext<Config, Resources>
-  : EmbeddedAdminContext<Config, Resources>;
+type EmbeddedTypedAdminContext<Config extends AppConfigArg> =
+  Config['distribution'] extends AppDistribution.ShopifyAdmin
+    ? NonEmbeddedAdminContext<Config>
+    : EmbeddedAdminContext<Config>;
 
 export interface ScopesContext {
   /**
@@ -215,12 +207,9 @@ export interface ScopesContext {
   scopes: ScopesApiContext;
 }
 
-export type AdminContext<
-  Config extends AppConfigArg,
-  Resources extends ShopifyRestResources,
-> = EmbeddedTypedAdminContext<Config, Resources> & ScopesContext;
+export type AdminContext<Config extends AppConfigArg> =
+  EmbeddedTypedAdminContext<Config> & ScopesContext;
 
-export type AuthenticateAdmin<
-  Config extends AppConfigArg,
-  Resources extends ShopifyRestResources = ShopifyRestResources,
-> = (request: Request) => Promise<AdminContext<Config, Resources>>;
+export type AuthenticateAdmin<Config extends AppConfigArg> = (
+  request: Request,
+) => Promise<AdminContext<Config>>;

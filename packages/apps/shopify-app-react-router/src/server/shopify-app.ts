@@ -3,7 +3,6 @@ import {
   ConfigInterface as ApiConfig,
   LATEST_API_VERSION,
   ShopifyError,
-  ShopifyRestResources,
   shopifyApi,
 } from '@shopify/shopify-api';
 import {SessionStorage} from '@shopify/shopify-app-session-storage';
@@ -28,9 +27,8 @@ import {loginFactory} from './authenticate/login/login';
 import {unauthenticatedAdminContextFactory} from './unauthenticated/admin';
 import {authenticatePublicFactory} from './authenticate/public';
 import {unauthenticatedStorefrontContextFactory} from './unauthenticated/storefront';
-import {AuthCodeFlowStrategy} from './authenticate/admin/strategies/auth-code-flow';
-import {TokenExchangeStrategy} from './authenticate/admin/strategies/token-exchange';
-import {MerchantCustomAuth} from './authenticate/admin/strategies/merchant-custom-app';
+import {createTokenExchangeStrategy} from './authenticate/admin/strategies/token-exchange';
+import {createMerchantCustomAuthStrategy} from './authenticate/admin/strategies/merchant-custom-app';
 import {IdempotentPromiseHandler} from './authenticate/helpers/idempotent-promise-handler';
 import {authenticateFlowFactory} from './authenticate/flow/authenticate';
 import {authenticateFulfillmentServiceFactory} from './authenticate/fulfillment-service/authenticate';
@@ -58,8 +56,7 @@ import {FutureFlagOptions, logDisabledFutureFlags} from './future/flags';
  * ```
  */
 export function shopifyApp<
-  Config extends AppConfigArg<Resources, Storage, Future>,
-  Resources extends ShopifyRestResources,
+  Config extends AppConfigArg<Storage, Future>,
   Storage extends SessionStorage,
   Future extends FutureFlagOptions = Config['future'],
 >(appConfig: Readonly<Config>): ShopifyApp<Config> {
@@ -75,17 +72,12 @@ export function shopifyApp<
 
   let strategy;
   if (config.distribution === AppDistribution.ShopifyAdmin) {
-    strategy = new MerchantCustomAuth(params);
-  } else if (
-    config.future.unstable_newEmbeddedAuthStrategy &&
-    config.isEmbeddedApp
-  ) {
-    strategy = new TokenExchangeStrategy(params);
+    strategy = createMerchantCustomAuthStrategy(params);
   } else {
-    strategy = new AuthCodeFlowStrategy(params);
+    strategy = createTokenExchangeStrategy(params);
   }
 
-  const authStrategy = authStrategyFactory<Config, Resources>({
+  const authStrategy = authStrategyFactory({
     ...params,
     strategy,
   });
@@ -99,16 +91,13 @@ export function shopifyApp<
     registerWebhooks: registerWebhooksFactory(params),
     authenticate: {
       admin: authStrategy,
-      flow: authenticateFlowFactory<Config, Resources>(params),
-      public: authenticatePublicFactory<Config, Resources>(params),
-      fulfillmentService: authenticateFulfillmentServiceFactory<
-        Config,
-        Resources
-      >(params),
-      webhook: authenticateWebhookFactory<Config, Resources, string>(params),
+      flow: authenticateFlowFactory(params),
+      public: authenticatePublicFactory(params),
+      fulfillmentService: authenticateFulfillmentServiceFactory(params),
+      webhook: authenticateWebhookFactory<string>(params),
     },
     unauthenticated: {
-      admin: unauthenticatedAdminContextFactory<Config, Resources>(params),
+      admin: unauthenticatedAdminContextFactory(params),
       storefront: unauthenticatedStorefrontContextFactory(params),
     },
   };
@@ -171,7 +160,7 @@ export function deriveApi(appConfig: AppConfigArg): BasicParams['api'] {
     hostName: appUrl.host,
     hostScheme: appUrl.protocol.replace(':', '') as 'http' | 'https',
     userAgentPrefix,
-    isEmbeddedApp: appConfig.isEmbeddedApp ?? true,
+    isEmbeddedApp: true,
     apiVersion: appConfig.apiVersion ?? LATEST_API_VERSION,
     isCustomStoreApp: appConfig.distribution === AppDistribution.ShopifyAdmin,
     billing: appConfig.billing as ApiConfig['billing'],

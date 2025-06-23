@@ -1,6 +1,7 @@
-import {JwtPayload, Session, ShopifyRestResources} from '@shopify/shopify-api';
+import {JwtPayload, Session} from '@shopify/shopify-api';
 
 import type {BasicParams} from '../../types';
+import {AppDistribution} from '../../types';
 import type {AppConfigArg} from '../../config-types';
 import {
   getSessionTokenHeader,
@@ -48,13 +49,10 @@ interface AuthStrategyParams extends BasicParams {
   strategy: AuthorizationStrategy;
 }
 
-export function authStrategyFactory<
-  ConfigArg extends AppConfigArg,
-  Resources extends ShopifyRestResources = ShopifyRestResources,
->({
+export function authStrategyFactory<ConfigArg extends AppConfigArg>({
   strategy,
   ...params
-}: AuthStrategyParams): AuthenticateAdmin<ConfigArg, Resources> {
+}: AuthStrategyParams): AuthenticateAdmin<ConfigArg> {
   const {api, logger, config} = params;
 
   async function respondToBouncePageRequest(request: Request) {
@@ -83,17 +81,17 @@ export function authStrategyFactory<
   }
 
   type AdminContextBase =
-    | EmbeddedAdminContext<ConfigArg, Resources>
-    | NonEmbeddedAdminContext<ConfigArg, Resources>;
+    | EmbeddedAdminContext<ConfigArg>
+    | NonEmbeddedAdminContext<ConfigArg>;
 
   function createContext(
     request: Request,
     session: Session,
     authStrategy: AuthorizationStrategy,
     sessionToken?: JwtPayload,
-  ): AdminContext<ConfigArg, Resources> {
+  ): AdminContext<ConfigArg> {
     let context: AdminContextBase = {
-      admin: createAdminApiContext<ConfigArg, Resources>(
+      admin: createAdminApiContext(
         session,
         params,
         authStrategy.handleClientError(request),
@@ -118,7 +116,7 @@ export function authStrategyFactory<
     context = addEmbeddedFeatures(context, request, session, sessionToken);
     context = addScopesFeatures(context);
 
-    return context as AdminContext<ConfigArg, Resources>;
+    return context as AdminContext<ConfigArg>;
   }
 
   function addEmbeddedFeatures(
@@ -127,14 +125,14 @@ export function authStrategyFactory<
     session: Session,
     sessionToken?: JwtPayload,
   ) {
-    if (config.isEmbeddedApp) {
-      return {
-        ...context,
-        sessionToken,
-        redirect: redirectFactory(params, request, session.shop),
-      };
+    if (config.distribution === AppDistribution.ShopifyAdmin) {
+      return context;
     }
-    return context;
+    return {
+      ...context,
+      sessionToken,
+      redirect: redirectFactory(params, request, session.shop),
+    };
   }
 
   function addScopesFeatures(context: AdminContextBase) {
@@ -150,7 +148,6 @@ export function authStrategyFactory<
       respondToOptionsRequest(params, request);
       await respondToBouncePageRequest(request);
       await respondToExitIframeRequest(request);
-      await strategy.respondToOAuthRequests(request);
 
       // If this is a valid request, but it doesn't have a session token header, this is a document request. We need to
       // ensure we're embedded if needed and we have the information needed to load the session.
@@ -210,7 +207,7 @@ async function getSessionTokenContext(
     }),
   });
 
-  if (config.isEmbeddedApp) {
+  if (config.distribution !== AppDistribution.ShopifyAdmin) {
     const payload = await validateSessionToken(params, request, sessionToken);
     const dest = new URL(payload.dest);
     const shop = dest.hostname;
