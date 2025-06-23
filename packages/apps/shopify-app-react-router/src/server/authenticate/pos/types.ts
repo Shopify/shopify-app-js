@@ -1,6 +1,6 @@
 import {JwtPayload} from '@shopify/shopify-api';
 
-import {EnsureCORSFunction} from '../../helpers/ensure-cors-headers';
+import {EnsureCORSFunction} from '../helpers/ensure-cors-headers';
 
 export type AuthenticatePOS = (
   request: Request,
@@ -30,7 +30,7 @@ export interface POSContext {
    * import { getMyAppData } from "~/db/model.server";
    *
    * export const loader = async ({ request }: LoaderFunctionArgs) => {
-   *   const { sessionToken } = await authenticate.public.pos(
+   *   const { sessionToken } = await authenticate.pos(
    *     request
    *   );
    *   return (await getMyAppData({shop: sessionToken.dest}));
@@ -52,7 +52,7 @@ export interface POSContext {
    * import { getMyAppData } from "~/db/model.server";
    *
    * export const loader = async ({ request }: LoaderFunctionArgs) => {
-   *   const { sessionToken, cors } = await authenticate.public.pos(
+   *   const { sessionToken, cors } = await authenticate.pos(
    *     request,
    *     { corsHeaders: ["X-My-Custom-Header"] }
    *   );

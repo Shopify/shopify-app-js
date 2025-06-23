@@ -16,6 +16,7 @@ import type {
   FutureFlagOptions,
 } from './future/flags';
 import type {Unauthenticated} from './unauthenticated/types';
+import type {AuthenticatePOS} from './authenticate/pos/types';
 
 export interface BasicParams<
   Future extends FutureFlagOptions = FutureFlagOptions,
@@ -148,6 +149,26 @@ interface Authenticate<Config extends AppConfigArg> {
    * ```
    * */
   fulfillmentService: AuthenticateFulfillmentService;
+
+  /**
+   * Authenticate a request from a POS UI extension
+   *
+   * @example
+   * <caption>Authenticating a POS UI extension request</caption>
+   * ```ts
+   * // /app/routes/public/widgets.ts
+   * import { LoaderFunctionArgs, json } from "react-router";
+   * import { authenticate } from "../shopify.server";
+   *
+   * export const loader = async ({ request }: LoaderFunctionArgs) => {
+   *   const { sessionToken, cors } = await authenticate.pos(
+   *     request,
+   *   );
+   *   return cors({my: "data", shop: sessionToken.dest}));
+   * };
+   * ```
+   */
+  pos: AuthenticatePOS;
 
   /**
    * Authenticate a public request and get back a session token.

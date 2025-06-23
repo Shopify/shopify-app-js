@@ -1,10 +1,10 @@
-import {shopifyApp} from '../../../..';
+import {shopifyApp} from '../../..';
 import {
   APP_URL,
   getJwt,
   getThrownResponse,
   testConfig,
-} from '../../../../__test-helpers';
+} from '../../../__test-helpers';
 
 describe('JWT validation', () => {
   it('returns token when successful', async () => {
@@ -13,7 +13,7 @@ describe('JWT validation', () => {
     const {token, payload} = getJwt();
 
     // WHEN
-    const {sessionToken} = await shopify.authenticate.public.pos(
+    const {sessionToken} = await shopify.authenticate.pos(
       new Request(APP_URL, {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -31,7 +31,7 @@ describe('JWT validation', () => {
     const {token} = getJwt();
 
     // WHEN
-    const {cors} = await shopify.authenticate.public.pos(
+    const {cors} = await shopify.authenticate.pos(
       new Request(APP_URL, {
         headers: {
           Origin: 'https://some-other.origin',
@@ -55,7 +55,7 @@ describe('JWT validation', () => {
 
     // WHEN
     const response = await getThrownResponse(
-      async (request) => shopify.authenticate.public.pos(request),
+      async (request) => shopify.authenticate.pos(request),
       new Request(APP_URL, {
         method: 'OPTIONS',
         headers: {Authorization: `Bearer ${token}`},
@@ -81,7 +81,7 @@ describe('JWT validation', () => {
     // WHEN
     const response = await getThrownResponse(
       async (request) =>
-        shopify.authenticate.public.pos(request, {
+        shopify.authenticate.pos(request, {
           corsHeaders: ['X-Extra-Header'],
         }),
       request,
@@ -100,7 +100,7 @@ describe('JWT validation', () => {
 
     // WHEN
     const response = await getThrownResponse(
-      async (request) => shopify.authenticate.public.pos(request),
+      async (request) => shopify.authenticate.pos(request),
       new Request(APP_URL),
     );
 
@@ -114,7 +114,7 @@ describe('JWT validation', () => {
 
     // WHEN
     const response = await getThrownResponse(
-      async (request) => shopify.authenticate.public.pos(request),
+      async (request) => shopify.authenticate.pos(request),
       new Request(APP_URL, {
         headers: {Authorization: `Bearer this_is_not_a_valid_token`},
       }),
@@ -130,7 +130,7 @@ describe('JWT validation', () => {
 
     // WHEN
     const response = await getThrownResponse(
-      async (request) => shopify.authenticate.public.pos(request),
+      async (request) => shopify.authenticate.pos(request),
       new Request(APP_URL, {
         headers: {'User-Agent': 'Googlebot'},
       }),

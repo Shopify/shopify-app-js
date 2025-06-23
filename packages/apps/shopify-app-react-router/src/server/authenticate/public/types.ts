@@ -1,7 +1,6 @@
 import type {AuthenticateCheckout} from './checkout/types';
 import type {AuthenticateAppProxy} from './appProxy/types';
 import type {AuthenticateCustomerAccount} from './customer-account/types';
-import type {AuthenticatePOS} from './pos/types';
 
 export interface AuthenticatePublic {
   /**
@@ -68,24 +67,4 @@ export interface AuthenticatePublic {
    * ```
    */
   customerAccount: AuthenticateCustomerAccount;
-
-  /**
-   * Authenticate a request from a POS UI extension
-   *
-   * @example
-   * <caption>Authenticating a POS UI extension request</caption>
-   * ```ts
-   * // /app/routes/public/widgets.ts
-   * import { LoaderFunctionArgs, json } from "react-router";
-   * import { authenticate } from "../shopify.server";
-   *
-   * export const loader = async ({ request }: LoaderFunctionArgs) => {
-   *   const { sessionToken, cors } = await authenticate.public.pos(
-   *     request,
-   *   );
-   *   return cors({my: "data", shop: sessionToken.dest}));
-   * };
-   * ```
-   */
-  pos: AuthenticatePOS;
 }
