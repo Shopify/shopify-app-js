@@ -38,6 +38,7 @@ export interface AppConfigArg<
     | 'isEmbeddedApp'
     | 'future'
     | 'billing'
+    | 'restResources'
   > {
   /**
    * The URL your app is running on.
