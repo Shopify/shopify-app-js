@@ -1,12 +1,15 @@
 import {
   ConfigParams as ApiConfigArg,
   ConfigInterface as ApiConfig,
-  ShopifyRestResources,
   Session,
   ApiVersion,
   WebhookHandler,
 } from '@shopify/shopify-api';
 import {SessionStorage} from '@shopify/shopify-app-session-storage';
+import type {
+  BillingConfigOneTimePlan,
+  BillingConfigSubscriptionLineItemPlan,
+} from '@shopify/shopify-api';
 
 import type {
   ApiFutureFlags,
@@ -17,18 +20,25 @@ import type {AppDistribution} from './types';
 import type {AdminApiContext} from './clients';
 import {IdempotentPromiseHandler} from './authenticate/helpers/idempotent-promise-handler';
 
+export interface BillingConfigWithLineItems {
+  [plan: string]:
+    | BillingConfigOneTimePlan
+    | BillingConfigSubscriptionLineItemPlan;
+}
+
 export interface AppConfigArg<
-  Resources extends ShopifyRestResources = ShopifyRestResources,
   Storage extends SessionStorage = SessionStorage,
   Future extends FutureFlagOptions = FutureFlagOptions,
 > extends Omit<
-    ApiConfigArg<Resources, ApiFutureFlags<Future>>,
+    ApiConfigArg<ApiFutureFlags<Future>>,
     | 'hostName'
     | 'hostScheme'
-    | 'isEmbeddedApp'
     | 'apiVersion'
     | 'isCustomStoreApp'
+    | 'isEmbeddedApp'
     | 'future'
+    | 'billing'
+    | 'restResources'
   > {
   /**
    * The URL your app is running on.
@@ -50,7 +60,7 @@ export interface AppConfigArg<
    * <caption>Storing sessions with Prisma.</caption>
    * <description>Add the `@shopify/shopify-app-session-storage-prisma` package to use the Prisma session storage.</description>
    * ```ts
-   * import { shopifyApp } from "@shopify/shopify-app-remix/server";
+   * import { shopifyApp } from "@shopify/shopify-app-react-router/server";
    * import { PrismaSessionStorage } from "@shopify/shopify-app-session-storage-prisma";
    *
    * import prisma from "~/db.server";
@@ -63,6 +73,30 @@ export interface AppConfigArg<
    * ```
    */
   sessionStorage?: Storage;
+
+  /**
+   * Billing configurations for the app.
+   *
+   * Uses the new line item billing format that allows for more complex billing structures.
+   *
+   * @example
+   * ```ts
+   * import { BillingInterval } from "@shopify/shopify-api";
+   *
+   * billing: {
+   *   myPlan: {
+   *     lineItems: [
+   *       {
+   *         amount: 10,
+   *         currencyCode: 'USD',
+   *         interval: BillingInterval.Every30Days,
+   *       }
+   *     ],
+   *   },
+   * }
+   * ```
+   */
+  billing?: BillingConfigWithLineItems;
 
   /**
    * Whether your app use online or offline tokens.
@@ -88,7 +122,7 @@ export interface AppConfigArg<
    * <caption>Registering shop-specific webhooks.</caption>
    * ```ts
    * // app/shopify.server.ts
-   * import { DeliveryMethod, shopifyApp } from "@shopify/shopify-app-remix/server";
+   * import { DeliveryMethod, shopifyApp } from "@shopify/shopify-app-react-router/server";
    *
    * const shopify = shopifyApp({
    *   webhooks: {
@@ -129,7 +163,7 @@ export interface AppConfigArg<
    *
    * ```ts
    * // /app/routes/webhooks.ts
-   * import { ActionFunctionArgs } from "@remix-run/node";
+   * import { ActionFunctionArgs } from "react-router";
    * import { authenticate } from "../shopify.server";
    * import db from "../db.server";
    *
@@ -159,7 +193,7 @@ export interface AppConfigArg<
    * @example
    * <caption>Seeding your database custom data when a merchant installs your app.</caption>
    * ```ts
-   * import { DeliveryMethod, shopifyApp } from "@shopify/shopify-app-remix/server";
+   * import { DeliveryMethod, shopifyApp } from "@shopify/shopify-app-react-router/server";
    * import { seedStoreData } from "~/db/seeds"
    *
    * const shopify = shopifyApp({
@@ -172,16 +206,7 @@ export interface AppConfigArg<
    * });
    * ```
    */
-  hooks?: HooksConfig<AppConfigArg<Resources, Storage, Future>, Resources>;
-
-  /**
-   * Does your app render embedded inside the Shopify Admin or on its own.
-   *
-   * Unless you have very specific needs, this should be true.
-   *
-   * @defaultValue `true`
-   */
-  isEmbeddedApp?: boolean;
+  hooks?: HooksConfig;
 
   /**
    * How your app is distributed. Default is `AppDistribution.AppStore`.
@@ -199,12 +224,12 @@ export interface AppConfigArg<
    *
    * {@link https://shopify.dev/docs/api/}
    *
-   * @defaultValue `LATEST_API_VERSION` from `@shopify/shopify-app-remix`
+   * @defaultValue `LATEST_API_VERSION` from `@shopify/shopify-app-react-router`
    *
    * @example
    * <caption>Using the latest API Version (Recommended)</caption>
    * ```ts
-   * import { LATEST_API_VERSION, shopifyApp } from "@shopify/shopify-app-remix/server";
+   * import { LATEST_API_VERSION, shopifyApp } from "@shopify/shopify-app-react-router/server";
    *
    * const shopify = shopifyApp({
    *   // ...etc
@@ -217,7 +242,7 @@ export interface AppConfigArg<
   /**
    * A path that Shopify can reserve for auth related endpoints.
    *
-   * This must match a $ route in your Remix app.  That route must export a loader function that calls `shopify.authenticate.admin(request)`.
+   * This must match a $ route in your React Router app.  That route must export a loader function that calls `shopify.authenticate.admin(request)`.
    *
    * @default `"/auth"`
    *
@@ -225,7 +250,7 @@ export interface AppConfigArg<
    * <caption>Using the latest API Version (Recommended)</caption>
    * ```ts
    * // /app/shopify.server.ts
-   * import { LATEST_API_VERSION, shopifyApp } from "@shopify/shopify-app-remix/server";
+   * import { LATEST_API_VERSION, shopifyApp } from "@shopify/shopify-app-react-router/server";
    *
    * const shopify = shopifyApp({
    *   // ...etc
@@ -235,7 +260,7 @@ export interface AppConfigArg<
    * export const authenticate = shopify.authenticate;
    *
    * // /app/routes/auth/$.jsx
-   * import { LoaderFunctionArgs } from "@remix-run/node";
+   * import { LoaderFunctionArgs } from "react-router";
    * import { authenticate } from "../../shopify.server";
    *
    * export async function loader({ request }: LoaderFunctionArgs) {
@@ -257,7 +282,7 @@ export interface AppConfigArg<
 }
 
 export interface AppConfig<Storage extends SessionStorage = SessionStorage>
-  extends Omit<ApiConfig, 'future'> {
+  extends Omit<ApiConfig, 'future' | 'billing'> {
   canUseLoginForm: boolean;
   appUrl: string;
   auth: AuthConfig;
@@ -267,6 +292,7 @@ export interface AppConfig<Storage extends SessionStorage = SessionStorage>
   future: FutureFlags;
   idempotentPromiseHandler: IdempotentPromiseHandler;
   distribution: AppDistribution;
+  billing?: BillingConfigWithLineItems;
 }
 
 export interface AuthConfig {
@@ -279,10 +305,7 @@ export interface AuthConfig {
 
 export type WebhookConfig = Record<string, WebhookHandler | WebhookHandler[]>;
 
-interface HooksConfig<
-  ConfigArg extends AppConfigArg = AppConfigArg,
-  Resources extends ShopifyRestResources = ShopifyRestResources,
-> {
+interface HooksConfig {
   /**
    * A function to call after a merchant installs your app
    *
@@ -293,7 +316,7 @@ interface HooksConfig<
    * @example
    * <caption>Seeding data when a merchant installs your app.</caption>
    * ```ts
-   * import { DeliveryMethod, shopifyApp } from "@shopify/shopify-app-remix/server";
+   * import { DeliveryMethod, shopifyApp } from "@shopify/shopify-app-react-router/server";
    * import { seedStoreData } from "~/db/seeds"
    *
    * const shopify = shopifyApp({
@@ -306,15 +329,10 @@ interface HooksConfig<
    * });
    * ```
    */
-  afterAuth?: (
-    options: AfterAuthOptions<ConfigArg, Resources>,
-  ) => void | Promise<void>;
+  afterAuth?: (options: AfterAuthOptions) => void | Promise<void>;
 }
 
-export interface AfterAuthOptions<
-  ConfigArg extends AppConfigArg,
-  Resources extends ShopifyRestResources = ShopifyRestResources,
-> {
+export interface AfterAuthOptions {
   session: Session;
-  admin: AdminApiContext<ConfigArg, Resources>;
+  admin: AdminApiContext;
 }

@@ -1,5 +1,4 @@
 import {Session} from '@shopify/shopify-api';
-import {restResources} from '@shopify/shopify-api/rest/admin/2023-04';
 import {MemorySessionStorage} from '@shopify/shopify-app-session-storage-memory';
 
 import {shopifyApp} from '../../..';
@@ -25,7 +24,7 @@ describe('Webhook validation', () => {
   it('returns context when there is no session', async () => {
     // GIVEN
     const sessionStorage = new MemorySessionStorage();
-    const shopify = shopifyApp(testConfig({sessionStorage, restResources}));
+    const shopify = shopifyApp(testConfig({sessionStorage}));
     const body = {some: 'data'};
 
     // WHEN
@@ -60,10 +59,7 @@ describe('Webhook validation', () => {
     expectAdminApiClient(async () => {
       // GIVEN
       const sessionStorage = new MemorySessionStorage();
-      const shopify = shopifyApp({
-        ...testConfig({sessionStorage, restResources}),
-        future: {removeRest: false},
-      });
+      const shopify = shopifyApp(testConfig({sessionStorage}));
       const body = {some: 'data'};
 
       const expectedSession = new Session({
@@ -106,17 +102,7 @@ describe('Webhook validation', () => {
       if (!admin) throw new Error('Expected admin to be defined');
       if (!actualSession) throw new Error('Expected session to be defined');
 
-      const shopifyWithoutRest = shopifyApp({
-        ...testConfig({sessionStorage, restResources}),
-        future: {removeRest: true},
-      });
-
-      const {admin: adminWithoutRest} =
-        await shopifyWithoutRest.authenticate.webhook(
-          new Request(requestURL, requestOptions),
-        );
-
-      return {admin, adminWithoutRest, expectedSession, actualSession};
+      return {admin, expectedSession, actualSession};
     });
   });
 

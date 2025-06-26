@@ -80,12 +80,7 @@ describe('login helper', () => {
     },
   );
 
-  describe.each([
-    {isEmbeddedApp: false, futureFlag: false, redirectToInstall: false},
-    {isEmbeddedApp: true, futureFlag: false, redirectToInstall: false},
-    {isEmbeddedApp: false, futureFlag: true, redirectToInstall: false},
-    {isEmbeddedApp: true, futureFlag: true, redirectToInstall: true},
-  ])('Given setup: %s', (testCaseConfig) => {
+  describe('Given embedded app setup', () => {
     it.each([
       {urlShop: null, formShop: TEST_SHOP, method: 'POST'},
       {urlShop: TEST_SHOP, formShop: null, method: 'GET'},
@@ -94,13 +89,10 @@ describe('login helper', () => {
       {urlShop: null, formShop: 'test-shop.myshopify.com', method: 'POST'},
       {urlShop: 'test-shop.myshopify.com', formShop: null, method: 'GET'},
     ])(
-      'returns a redirect to auth or install if the shop is valid: %s',
+      'returns a redirect to install if the shop is valid: %s',
       async ({urlShop, formShop, method}) => {
         // GIVEN
-        const config = testConfig({
-          future: {unstable_newEmbeddedAuthStrategy: testCaseConfig.futureFlag},
-          isEmbeddedApp: testCaseConfig.isEmbeddedApp,
-        });
+        const config = testConfig();
         const shopify = shopifyApp(config);
         const requestMock = {
           url: urlShop
@@ -117,9 +109,7 @@ describe('login helper', () => {
         );
 
         // THEN
-        const expectedPath = testCaseConfig.redirectToInstall
-          ? `https://admin.shopify.com/store/${TEST_SHOP_NAME}/oauth/install?client_id=${config.apiKey}`
-          : `${APP_URL}/auth?shop=${TEST_SHOP}`;
+        const expectedPath = `https://admin.shopify.com/store/${TEST_SHOP_NAME}/oauth/install?client_id=${config.apiKey}`;
 
         expect(response.status).toEqual(302);
         expect(response.headers.get('location')).toEqual(expectedPath);
@@ -128,10 +118,7 @@ describe('login helper', () => {
 
     it('sanitizes the shop parameter', async () => {
       // GIVEN
-      const config = testConfig({
-        future: {unstable_newEmbeddedAuthStrategy: testCaseConfig.futureFlag},
-        isEmbeddedApp: testCaseConfig.isEmbeddedApp,
-      });
+      const config = testConfig();
       const shopify = shopifyApp(config);
       const requestMock = {
         url: `${APP_URL}/auth/login`,
@@ -145,9 +132,7 @@ describe('login helper', () => {
         requestMock as any as Request,
       );
 
-      const expectedPath = testCaseConfig.redirectToInstall
-        ? `https://admin.shopify.com/store/${TEST_SHOP_NAME}/oauth/install?client_id=${config.apiKey}`
-        : `${APP_URL}/auth?shop=${TEST_SHOP}`;
+      const expectedPath = `https://admin.shopify.com/store/${TEST_SHOP_NAME}/oauth/install?client_id=${config.apiKey}`;
 
       // THEN
       expect(response.status).toEqual(302);

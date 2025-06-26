@@ -1,6 +1,11 @@
-import {redirect} from '@remix-run/server-runtime';
+import {redirect} from 'react-router';
 
-import {BasicParams, LoginError, LoginErrorType} from '../../types';
+import {
+  BasicParams,
+  LoginError,
+  LoginErrorType,
+  AppDistribution,
+} from '../../types';
 
 export function loginFactory(params: BasicParams) {
   const {api, config, logger} = params;
@@ -40,8 +45,7 @@ export function loginFactory(params: BasicParams) {
     const adminPath = api.utils.legacyUrlToShopAdminUrl(sanitizedShop);
     const installPath = `https://${adminPath}/oauth/install?client_id=${config.apiKey}`;
 
-    const shouldInstall =
-      config.isEmbeddedApp && config.future.unstable_newEmbeddedAuthStrategy;
+    const shouldInstall = config.distribution !== AppDistribution.ShopifyAdmin;
     const redirectUrl = shouldInstall ? installPath : authPath;
 
     logger.info(`Redirecting login request to ${redirectUrl}`, {

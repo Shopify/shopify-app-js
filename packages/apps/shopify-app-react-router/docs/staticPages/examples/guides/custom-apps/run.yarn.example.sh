@@ -1,1 +1,1 @@
-yarn remix vite:dev
+yarn react-router dev

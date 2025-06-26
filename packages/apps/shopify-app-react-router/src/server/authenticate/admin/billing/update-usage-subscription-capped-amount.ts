@@ -5,8 +5,10 @@ import {
 } from '@shopify/shopify-api';
 
 import type {BasicParams} from '../../../types';
-import {redirectToAuthPage} from '../helpers';
-import {invalidateAccessToken} from '../../helpers';
+import {
+  invalidateAccessToken,
+  respondToInvalidSessionToken,
+} from '../../helpers';
 
 import {UpdateUsageCappedAmountOptions} from './types';
 import {redirectOutOfApp} from './helpers';
@@ -35,14 +37,19 @@ export function updateUsageCappedAmountFactory(
       });
     } catch (error) {
       if (error instanceof HttpResponseError && error.response.code === 401) {
-        logger.debug('API token was invalid, redirecting to OAuth', {
+        logger.debug('API token was invalid, responding to invalid session', {
           shop: session.shop,
         });
+
         await invalidateAccessToken(params, session);
-        throw await redirectToAuthPage(params, request, session.shop);
-      } else {
-        throw error;
+
+        throw respondToInvalidSessionToken({
+          params,
+          request,
+          retryRequest: true,
+        });
       }
+      throw error;
     }
 
     throw redirectOutOfApp(

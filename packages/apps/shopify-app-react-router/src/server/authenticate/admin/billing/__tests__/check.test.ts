@@ -2,7 +2,6 @@ import {
   BillingConfigSubscriptionLineItemPlan,
   BillingInterval,
   HttpResponseError,
-  SESSION_COOKIE_NAME,
 } from '@shopify/shopify-api';
 
 import {shopifyApp} from '../../../..';
@@ -11,11 +10,9 @@ import {
   BASE64_HOST,
   GRAPHQL_URL,
   TEST_SHOP,
-  expectExitIframeRedirect,
   getJwt,
   getThrownResponse,
   setUpValidSession,
-  signRequestCookie,
   testConfig,
   mockExternalRequest,
 } from '../../../../__test-helpers';
@@ -128,7 +125,7 @@ describe('Billing check', () => {
     expect(appSubscriptions).toEqual([]);
   });
 
-  it('redirects to exit-iframe with authentication using app bridge when embedded and Shopify invalidated the session', async () => {
+  it('redirects to exit-iframe with authentication using app bridge when Shopify invalidated the session', async () => {
     // GIVEN
     const config = testConfig();
     await setUpValidSession(config.sessionStorage);
@@ -164,7 +161,11 @@ describe('Billing check', () => {
     );
     expect(shopSession).toBeDefined();
     expect(shopSession!.accessToken).toBeUndefined();
-    expectExitIframeRedirect(response);
+
+    // Expect Token Exchange behavior: redirect to session-token path
+    expect(response.status).toBe(302);
+    const {pathname} = new URL(response.headers.get('location')!, APP_URL);
+    expect(pathname).toBe('/auth/session-token');
   });
 
   it('returns redirection headers during fetch requests when Shopify invalidated the session', async () => {
@@ -199,22 +200,19 @@ describe('Billing check', () => {
     );
 
     // THEN
-    const reauthUrl = new URL(response.headers.get(REAUTH_URL_HEADER)!);
-
     expect(response.status).toEqual(401);
-    expect(reauthUrl.origin).toEqual(APP_URL);
-    expect(reauthUrl.pathname).toEqual('/auth');
+
+    // Expect Token Exchange behavior: retry header instead of reauth URL
+    expect(
+      response.headers.get('X-Shopify-Retry-Invalid-Session-Request'),
+    ).toEqual('1');
+    expect(response.headers.get(REAUTH_URL_HEADER)).toBeNull();
   });
 
   it('throws errors other than authentication errors', async () => {
     // GIVEN
-    const config = testConfig();
-    const session = await setUpValidSession(config.sessionStorage);
-    const shopify = shopifyApp({
-      ...config,
-      isEmbeddedApp: false,
-      billing: BILLING_CONFIG,
-    });
+    const shopify = shopifyApp(testConfig({billing: BILLING_CONFIG}));
+    await setUpValidSession(shopify.sessionStorage);
 
     await mockExternalRequest({
       request: new Request(GRAPHQL_URL, {method: 'POST', body: 'test'}),
@@ -224,11 +222,10 @@ describe('Billing check', () => {
       }),
     });
 
-    const request = new Request(`${APP_URL}/billing?shop=${TEST_SHOP}`);
-    signRequestCookie({
-      request,
-      cookieName: SESSION_COOKIE_NAME,
-      cookieValue: session.id,
+    const request = new Request(`${APP_URL}/billing`, {
+      headers: {
+        Authorization: `Bearer ${getJwt().token}`,
+      },
     });
 
     const {billing} = await shopify.authenticate.admin(request);

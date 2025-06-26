@@ -1,5 +1,5 @@
-import {BasicParams} from '../../../types';
-import {authenticateExtensionFactory} from '../extension/authenticate';
+import {BasicParams} from '../../types';
+import {authenticateExtensionFactory} from '../public/extension/authenticate';
 
 import type {AuthenticatePOS} from './types';
 

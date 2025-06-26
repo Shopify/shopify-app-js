@@ -1,1 +1,1 @@
-npm i --save @shopify/shopify-app-remix
+npm i --save @shopify/shopify-app-react-router

@@ -4,7 +4,7 @@ export default function handleRequest(
   request: Request,
   responseStatusCode: number,
   responseHeaders: Headers,
-  remixContext: EntryContext,
+  reactRouterContext: EntryContext,
 ) {
   shopify.addDocumentResponseHeaders(request, responseHeaders);
 

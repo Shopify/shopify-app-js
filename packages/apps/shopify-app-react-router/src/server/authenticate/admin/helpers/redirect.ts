@@ -1,9 +1,6 @@
-import {
-  TypedResponse,
-  redirect as remixRedirect,
-} from '@remix-run/server-runtime';
+import {redirect as reactRouterRedirect} from 'react-router';
 
-import {BasicParams} from '../../../types';
+import {BasicParams, AppDistribution} from '../../../types';
 import {getSessionTokenHeader} from '../../helpers/get-session-token-header';
 
 import {renderAppBridge} from './render-app-bridge';
@@ -11,10 +8,7 @@ import {redirectWithAppBridgeHeaders} from './redirect-with-app-bridge-headers';
 
 export type RedirectTarget = '_self' | '_parent' | '_top' | '_blank';
 export type RedirectInit = number | (ResponseInit & {target?: RedirectTarget});
-export type RedirectFunction = (
-  url: string,
-  init?: RedirectInit,
-) => TypedResponse<never>;
+export type RedirectFunction = (url: string, init?: RedirectInit) => Response;
 
 interface ParseURLOptions {
   params: BasicParams;
@@ -64,7 +58,7 @@ export function redirectFactory(
           target,
         });
       } else {
-        return remixRedirect(parsedUrl.toString(), init);
+        return reactRouterRedirect(parsedUrl.toString(), init);
       }
     } else if (isDataRequest(request)) {
       throw redirectWithAppBridgeHeaders(parsedUrl.toString());
@@ -74,7 +68,7 @@ export function redirectFactory(
         target,
       });
     }
-    return remixRedirect(url, init);
+    return reactRouterRedirect(url, init);
   };
 }
 
@@ -113,7 +107,10 @@ function parseURL({params, base, init, shop, url}: ParseURLOptions): ParsedURL {
     const cleanShopName = shop.replace('.myshopify.com', '');
 
     if (!target) {
-      target = config.isEmbeddedApp ? '_parent' : '_self';
+      target =
+        config.distribution === AppDistribution.ShopifyAdmin
+          ? '_self'
+          : '_parent';
     }
 
     return {
