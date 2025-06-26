@@ -4,10 +4,9 @@ const data: LandingTemplateSchema = {
   id: 'guide-admin',
   title: 'Interacting with Shopify Admin',
   description:
-    'Once you [set up your backend](/docs/api/shopify-app-react-router#shopify-app), you can use the [`authenticate.admin` function](/docs/api/shopify-app-react-router/authenticate/admin) to integrate your app with Shopify Admin.' +
-    '\n\nThis function ensures the app is installed on the current store and handles authentication for embedded apps and merchant custom apps (configured  when calling shopifyApp, e.g: `shopifyApp({distribution: AppDistribution.ShopifyAdmin})`)' +
-    '\n\nIt returns a context with functions to enable loaders and actions to respond to any requests made by or in Shopify Admin.' +
-    '\n\nThis page goes over the basics of authenticating those requests, and some of the things you can do with it, like querying the Admin API.',
+    'Learn how to authenticate and handle requests from Shopify Admin in your React Router app.' +
+    '\n\nThe [`authenticate.admin`](/docs/api/shopify-app-react-router/authenticate/admin) function handles authentication for embedded apps and merchant custom apps. It verifies app installation and provides context for interacting with the Admin API.' +
+    '\n\nThis guide covers authentication patterns, API usage, and request handling for your app.',
   sections: [
     {
       type: 'Generic',
@@ -15,7 +14,7 @@ const data: LandingTemplateSchema = {
       title: 'Authenticating requests',
       sectionContent:
         'To authenticate admin requests you can call `authenticate.admin(request)` in a loader or an action.' +
-        "\n\nIf there's a session for this user, then this loader will return null. If there's no session for the user, then the loader will throw the appropriate redirect Response." +
+        "\n\nIf there's a session for this user, then this loader will return null. If there's no session for the user, then the package will perform [token exchange](/docs/apps/build/authentication-authorization/access-tokens/#token-exchange) and create a new session." +
         '\n\n> Tip: If you are authenticating more than one route, then we recommend using [React router layout routes](https://reactrouter.com/start/framework/routing#layout-routes) to automatically authenticate them.',
       codeblock: {
         title: 'Authenticating requests',
@@ -33,33 +32,14 @@ const data: LandingTemplateSchema = {
       anchorLink: 'headers',
       title: 'Headers',
       sectionContent:
-        "The OAuth process can't happen inside the admin iframe, and this package is capable of detecting that scenario and properly redirecting using the [React Router `ErrorBoundary`](https://reactrouter.com/how-to/error-boundary) export to set the correct headers for App Bridge." +
-        '\n\nUse the abstractions provided by this package in your authenticated routes, to automatically set up the error and headers boundaries to redirect outside the iframe when needed.' +
-        '\n\n> Tip: You can also add this to a [React router layout](https://reactrouter.com/start/framework/routing#layout-routes) if you want to authenticate more than one route, but make sure to call the Shopify boundary methods whenever you need to add your own exports.',
+        'When redirecting outside the app, and in certain error scenarios, the package will throw a response with specific headers.' +
+        '\n\n To ensure the headers are set correctly use the provided `ErrorBoundary` and `headers` exports.',
       codeblock: {
-        title: 'Configure header boundaries',
+        title: 'Configure headers and error boundaries',
         tabs: [
           {
             title: '/app/routes/**/*.tsx',
             code: './examples/guides/admin/headers.example.tsx',
-            language: 'tsx',
-          },
-        ],
-      },
-    },
-    {
-      type: 'Generic',
-      anchorLink: 'cors-auth',
-      title: 'Authenticating cross-origin admin requests',
-      sectionContent:
-        'If your React Router server is authenticating an admin extension, then a request from the extension to the server will be cross-origin.' +
-        '\n\nHere `authenticate.admin` provides a `cors` function to add the required cross-origin headers.',
-      codeblock: {
-        title: 'Add cross-origin headers',
-        tabs: [
-          {
-            title: '/app/routes/**/*.tsx',
-            code: './examples/guides/admin/auth-cors.example.tsx',
             language: 'tsx',
           },
         ],
@@ -88,6 +68,24 @@ const data: LandingTemplateSchema = {
           type: 'tutorial',
         },
       ],
+    },
+    {
+      type: 'Generic',
+      anchorLink: 'cors-auth',
+      title: 'Authenticating cross-origin admin requests',
+      sectionContent:
+        'If your React Router server is authenticating an admin extension, then a request from the extension to the server will be cross-origin.' +
+        '\n\nHere `authenticate.admin` provides a `cors` function to add the required cross-origin headers.',
+      codeblock: {
+        title: 'Add cross-origin headers',
+        tabs: [
+          {
+            title: '/app/routes/**/*.tsx',
+            code: './examples/guides/admin/auth-cors.example.tsx',
+            language: 'tsx',
+          },
+        ],
+      },
     },
     {
       type: 'Generic',
