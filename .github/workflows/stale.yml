@@ -10,7 +10,7 @@ jobs:
       issues: write
       pull-requests: write
     steps:
-      - uses: actions/stale@f7176fd3007623b69d27091f9b9d4ab7995f0a06 # v5.2.1
+      - uses: actions/stale@5bef64f19d7facfb25b37b414482c7164d639639 # v9.1.0
         with:
           days-before-issue-stale: 60
           operations-per-run: 1000
