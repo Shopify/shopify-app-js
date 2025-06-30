@@ -22,6 +22,12 @@ const data: ReferenceEntityTemplateSchema = {
       url: '/docs/api/shopify-app-react-router/authenticate/public/app-proxy',
       type: 'remix',
     },
+    {
+      name: 'AppProxyLink',
+      subtitle: 'Create links that work within app proxies.',
+      url: '/docs/api/shopify-app-react-router/app-proxy-components/appproxylink',
+      type: 'react-router',
+    },
   ],
 };
 
