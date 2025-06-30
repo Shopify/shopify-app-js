@@ -16,6 +16,7 @@ export default getConfig({
   input: [
     'src/server/index.ts',
     'src/server/test-helpers/index.ts',
+    'src/react/index.ts',
     ...adapterInputs,
   ],
 });
