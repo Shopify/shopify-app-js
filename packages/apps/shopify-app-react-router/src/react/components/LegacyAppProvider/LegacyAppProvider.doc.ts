@@ -1,21 +1,21 @@
 import {ReferenceEntityTemplateSchema} from '@shopify/generate-docs';
 
 const data: ReferenceEntityTemplateSchema = {
-  name: 'AppProvider',
-  descriptionType: 'AppProviderGeneratedType',
+  name: 'LegacyAppProvider',
+  descriptionType: 'LegacyAppProviderGeneratedType',
   description: '',
   category: 'Entrypoints',
   type: 'component',
   isVisualComponent: false,
   definitions: [
     {
-      title: 'AppProviderProps',
-      description: 'Props for the `AppProvider` component.',
-      type: 'AppProviderProps',
-      filePath: 'src/react/components/AppProvider/AppProvider.tsx',
+      title: 'LegacyAppProviderProps',
+      description: 'Props for the `LegacyAppProvider` component.',
+      type: 'LegacyAppProviderProps',
+      filePath: 'src/react/components/LegacyAppProvider/LegacyAppProvider.tsx',
     },
   ],
-  jsDocTypeExamples: ['AppProviderGeneratedType'],
+  jsDocTypeExamples: ['LegacyAppProviderGeneratedType'],
   related: [
     {
       name: 'App bridge',

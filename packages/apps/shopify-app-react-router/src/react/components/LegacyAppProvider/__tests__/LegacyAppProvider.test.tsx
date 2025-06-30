@@ -3,10 +3,10 @@ import {AppProvider as PolarisAppProvider} from '@shopify/polaris';
 
 import '../../../__tests__/test-helper';
 
-import {AppProvider} from '../AppProvider';
+import {LegacyAppProvider} from '../LegacyAppProvider';
 import {ReactRouterPolarisLink} from '../../ReactRouterPolarisLink';
 
-describe('<AppProvider />', () => {
+describe('<LegacyAppProvider />', () => {
   const defaultProps = {
     apiKey: '123abc',
     isEmbeddedApp: true,
@@ -15,7 +15,7 @@ describe('<AppProvider />', () => {
   it('renders the script tag if the embedded app prop is passed in', () => {
     // WHEN
     const component = mount(
-      <AppProvider {...defaultProps}>Hello world</AppProvider>,
+      <LegacyAppProvider {...defaultProps}>Hello world</LegacyAppProvider>,
     );
 
     // THEN
@@ -28,9 +28,9 @@ describe('<AppProvider />', () => {
   it('does not render the script tag if the embedded app prop is not passed in', () => {
     // WHEN
     const component = mount(
-      <AppProvider {...defaultProps} isEmbeddedApp={false}>
+      <LegacyAppProvider {...defaultProps} isEmbeddedApp={false}>
         Hello world
-      </AppProvider>,
+      </LegacyAppProvider>,
     );
 
     // THEN
@@ -40,9 +40,9 @@ describe('<AppProvider />', () => {
   it('allows overriding the app bridge url', () => {
     // WHEN
     const component = mount(
-      <AppProvider {...defaultProps} __APP_BRIDGE_URL="override">
+      <LegacyAppProvider {...defaultProps} __APP_BRIDGE_URL="override">
         Hello world
-      </AppProvider>,
+      </LegacyAppProvider>,
     );
 
     // THEN
@@ -53,9 +53,9 @@ describe('<AppProvider />', () => {
     // WHEN
     const dummyI18n = {hello: 'world'};
     const component = mount(
-      <AppProvider {...defaultProps} i18n={dummyI18n}>
+      <LegacyAppProvider {...defaultProps} i18n={dummyI18n}>
         Hello world
-      </AppProvider>,
+      </LegacyAppProvider>,
     );
 
     // THEN

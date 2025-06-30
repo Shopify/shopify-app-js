@@ -10,7 +10,7 @@ import englishI18n from '@shopify/polaris/locales/en.json' with {type: 'json'};
 import {APP_BRIDGE_URL} from '../../const';
 import {ReactRouterPolarisLink} from '../ReactRouterPolarisLink';
 
-export interface AppProviderProps
+export interface LegacyAppProviderProps
   extends Omit<PolarisAppProviderProps, 'linkComponent' | 'i18n'> {
   /**
    * The API key for your Shopify app. This is the `Client ID` from the Partner Dashboard.
@@ -49,12 +49,12 @@ export interface AppProviderProps
  * {@link https://shopify.dev/tools/app-bridge}
  *
  * @example
- * <caption>Set up AppProvider.</caption>
- * <description>Wrap your app in the `AppProvider` component and pass in your API key.</description>
+ * <caption>Set up LegacyAppProvider.</caption>
+ * <description>Wrap your app in the `LegacyAppProvider` component and pass in your API key.</description>
  * ```ts
  * // /app/routes/**\/*.ts
  * import {authenticate} from '~/shopify.server';
- * import {AppProvider} from '@shopify/shopify-app-react-router/react';
+ * import {LegacyAppProvider} from '@shopify/shopify-app-react-router/react';
  *
  * export async function loader({ request }) {
  *   await authenticate.admin(request);
@@ -66,9 +66,9 @@ export interface AppProviderProps
  *   const { apiKey } = useLoaderData();
  *
  *   return (
- *     <AppProvider isEmbeddedApp apiKey={apiKey}>
+ *     <LegacyAppProvider isEmbeddedApp apiKey={apiKey}>
  *       <Outlet />
- *     </AppProvider>
+ *     </LegacyAppProvider>
  *   );
  * }
  * ```
@@ -79,7 +79,7 @@ export interface AppProviderProps
  * ```ts
  * // /app/routes/**\/*.ts
  * import {authenticate} from '~/shopify.server';
- * import {AppProvider} from '@shopify/shopify-app-react-router/react';
+ * import {LegacyAppProvider} from '@shopify/shopify-app-react-router/react';
  *
  * export async function loader({ request }) {
  *   await authenticate.admin(request);
@@ -94,14 +94,14 @@ export interface AppProviderProps
  *   const { apiKey, polarisTranslations } = useLoaderData();
  *
  *   return (
- *     <AppProvider apiKey={apiKey} i18n={polarisTranslations}>
+ *     <LegacyAppProvider apiKey={apiKey} i18n={polarisTranslations}>
  *       <Outlet />
- *     </AppProvider>
+ *     </LegacyAppProvider>
  *   );
  * }
  * ```
  */
-export function AppProvider(props: AppProviderProps) {
+export function LegacyAppProvider(props: LegacyAppProviderProps) {
   const {
     children,
     apiKey,

@@ -25,4 +25,4 @@ const data: ReferenceEntityTemplateSchema = {
   ],
 };
 
-export default data; 
+export default data;

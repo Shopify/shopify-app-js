@@ -1,5 +1,5 @@
 import {LoaderFunctionArgs} from 'react-router';
-import {AppProvider} from '@shopify/shopify-app-react-router/react';
+import {LegacyAppProvider} from '@shopify/shopify-app-react-router/react';
 
 import shopify from '~/shopify.server';
 
@@ -21,9 +21,9 @@ export default function App() {
         <Links />
       </head>
       <body>
-        <AppProvider apiKey={apiKey} isEmbeddedApp>
+        <LegacyAppProvider apiKey={apiKey} isEmbeddedApp>
           <Outlet />
-        </AppProvider>
+        </LegacyAppProvider>
       </body>
     </html>
   );

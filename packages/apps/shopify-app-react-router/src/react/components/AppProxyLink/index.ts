@@ -1,1 +1,1 @@
-export {AppProxyLink, type AppProxyLinkProps} from './AppProxyLink'; 
+export {AppProxyLink, type AppProxyLinkProps} from './AppProxyLink';
