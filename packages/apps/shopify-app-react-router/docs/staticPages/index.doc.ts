@@ -4,68 +4,23 @@ const data: LandingTemplateSchema = {
   id: 'shopify-app-react-router',
   title: 'Shopify App package for React Router',
   description:
-    'The [@shopify/shopify-app-react-router](https://www.npmjs.com/package/@shopify/shopify-app-react-router) package enables React Router apps to authenticate with Shopify and make API calls. It uses [App Bridge](/docs/api/app-bridge-library) to enable apps to embed themselves in the Shopify Admin.' +
-    "\n\nIn this page we'll go over the main components you need to integrate an app with Shopify.",
+    'The [@shopify/shopify-app-react-router](https://www.npmjs.com/package/@shopify/shopify-app-react-router) package enables [React Router](https://reactrouter.com/home) apps to authenticate with Shopify and make API calls. It uses [App Bridge](/docs/api/app-bridge-library) to enable apps to embed themselves in the Shopify Admin.' +
+    "\n\nOn this page learn the key concepts when building an app with this package.",
   sections: [
     {
       type: 'Generic',
       anchorLink: 'quick-start',
       title: 'Quick start',
       sectionContent:
-        'The quickest way to create a new app is using the Shopify CLI. You can use your preferred package manager for that.' +
-        '\n\nCheck out the [getting started guide](/docs/apps/getting-started), or the [app template](https://github.com/Shopify/shopify-app-template-react-router) for a complete example.',
+        'The quickest way to create a new app is using the Shopify CLI, and the Shopify App Template.' +
+        '\n\nCheck out the [getting started guide](/docs/apps/build/scaffold-app), or the [app template](https://github.com/Shopify/shopify-app-template-react-router).',
       codeblock: {
         title: 'Create an app',
         tabs: [
           {
-            title: 'npm',
+            title: 'Terminal',
             language: 'sh',
-            code: './examples/index/create.npm.example.sh',
-          },
-          {
-            title: 'yarn',
-            language: 'sh',
-            code: './examples/index/create.yarn.example.sh',
-          },
-          {
-            title: 'pnpm',
-            language: 'sh',
-            code: './examples/index/create.pnpm.example.sh',
-          },
-        ],
-      },
-      sectionCard: [
-        {
-          name: 'Build an app',
-          subtitle: 'Navigate to',
-          url: '/docs/apps/getting-started/build-qr-code-app',
-          type: 'tutorial',
-        },
-      ],
-    },
-    {
-      type: 'Generic',
-      anchorLink: 'installation',
-      title: 'Installation',
-      sectionContent:
-        "If you're not using the CLI, then you can use the examples in this page to set up an existing app to use this package. Start by installing it using your preferred package manager.",
-      codeblock: {
-        title: 'Install package',
-        tabs: [
-          {
-            title: 'npm',
-            language: 'sh',
-            code: './examples/index/install.npm.example.sh',
-          },
-          {
-            title: 'yarn',
-            language: 'sh',
-            code: './examples/index/install.yarn.example.sh',
-          },
-          {
-            title: 'pnpm',
-            language: 'sh',
-            code: './examples/index/install.pnpm.example.sh',
+            code: './examples/index/create.example.sh',
           },
         ],
       },
@@ -73,11 +28,9 @@ const data: LandingTemplateSchema = {
     {
       type: 'Generic',
       anchorLink: 'shopify-app',
-      title: 'Backend setup',
+      title: 'Configure the package',
       sectionContent:
-        "Using the `shopifyApp` function, you can create an object that enables your app's backend to authenticate requests coming from Shopify, and interacting with Shopify APIs." +
-        '\n\nThese functions make it easy for your app stays up to date, benefitting from the current best practices and security updates.' +
-        "\n\n> Caution: When running on a node environment, you'll also need to import the node adapter, as per the example. This will ensure your app is using the appropriate implementation of the Web [fetch](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API) and [crypto](https://developer.mozilla.org/en-US/docs/Web/API/Web_Crypto_API) APIs.",
+        "Using the `shopifyApp` function, you can configure the package's functionality for different app distributions types, access tokens, logging levels and future flags.",
       sectionCard: [
         {
           name: 'shopifyApp',
@@ -91,81 +44,123 @@ const data: LandingTemplateSchema = {
           {
             title: '/app/shopify.server.ts',
             language: 'ts',
-            code: './examples/index/shopify-app.example.ts',
+            code: './examples/index/shopify-app.example.tsx',
           },
         ],
       },
     },
     {
       type: 'Generic',
-      anchorLink: 'headers',
-      title: 'Response headers',
+      anchorLink: 'graphql-request',
+      title: 'Make Admin API GraphQL requests',
       sectionContent:
-        'When loading inside the Shopify Admin, your app will need to add the required `Content-Security-Policy` header directives, as per [our documentation](/docs/apps/store/security/iframe-protection). To do that, this package provides the `shopify.addDocumentResponseHeaders` method.' +
-        "\n\nYou should return these headers from any endpoint that renders HTML in your app. Most likely you'll want to add this to every HTML response by updating the `entry.server.tsx` file:",
+        'Authenticated requests with the Admin API GraphQL client are made by calling the `admin.graphql` function. This function returns a GraphQL client that is authenticated with the Admin API.',
+      sectionCard: [
+        {
+          name: 'admin.graphql',
+          url: '/docs/api/shopify-app-react-router/v0/guide-admin#graphql-api',
+          type: 'clicode',
+        },
+      ],
       codeblock: {
-        title: 'Add required headers',
+        title: 'Make a GraphQL request',
         tabs: [
           {
-            title: '/app/entry.server.tsx',
+            title: '/app/routes/admin/$.tsx',
             language: 'tsx',
-            code: './examples/index/entry-server.example.ts',
+            code: './examples/index/admin-graphql.example.tsx',
           },
         ],
-      },
+      }
     },
     {
       type: 'Generic',
-      anchorLink: 'auth-route',
-      title: 'Auth route',
-      sectionContent:
-        "\n\nTo install an app or refresh tokens, you'll need an auth route. To do that, set up a [splat route](https://reactrouter.com/start/framework/routing#splats) that calls `authenticate.admin`." +
-        '\n\nThe default route is `/app/routes/auth/$.tsx`, but you can configure this route using the `authPathPrefix` option.',
+      anchorLink: 'add-routes',
+      title: 'Add a new route to your app',
+      sectionContent: 'Routes embedded in the Shopify Admin must be nested under the layout route for proper authentication and functionality. ' +
+        '\n\nThe template includes a layout route at `/app/routes/app.tsx` that handles App Bridge initialization, authenticates requests via `authenticate.admin`, and provides error boundaries and headers required by the admin. ' +
+        '\n\nWhen creating new routes, place them in the `/app/routes/` directory with the `app.` prefix (e.g., `app.products.tsx`) to ensure they inherit these features. ' +
+        'This structure ensures your app behaves correctly within the Shopify Admin and has access to authenticated API clients.',
       codeblock: {
-        title: 'Add OAuth route',
-        tabs: [
+        title: 'Add a route',
+        tabs: [ 
           {
-            title: '/app/routes/auth/$.tsx',
-            language: 'ts',
-            code: './examples/index/auth-route.example.ts',
+            title: '/app/routes/app.new.tsx',
+            language: 'tsx',
+            code: './examples/index/new-route.example.tsx',
           },
-        ],
-      },
-    },
-    {
-      type: 'Generic',
-      anchorLink: 'setup-app-layout',
-      title: 'Setup an admin layout',
-      sectionContent:
-        'Every URL that is embedded inside the admin needs to be authenticated and behave like Shopify. ' +
-        'The easiest way to do this is one layout route that all every embedded URL use. ' +
-        'To this correctly, you must complete all these steps.' +
-        '\n\nTo setup authentication: ' +
-        '\n\n1. Add App Bridge. ' +
-        'This ensures that requests from your UI include an Authorization header, allowing your server to verify the requests and provide you with an API client. ' +
-        'To do this pass the `SHOPIFY_API_KEY` env var from the loader to the component. ' +
-        'Then add the App Bridge script tag to the component, with the `data-api-key` attribute set to the `SHOPIFY_API_KEY`. ' +
-        '\n\n2. Authenticate requests to that route by calling `authenticate.admin`. ' +
-        'This ensures that the request can be trusted and that your app has API access tokens to access merchant data. ' +
-        '\n\n3. Add error boundaries to the layout route. ' +
-        'Actions inside the admin sometimes require special Response headers. ' +
-        'These are added automatically by the package, but you must make sure these headers are not lost. ' +
-        'Do this by adding an error boundaries and header exports to every route that authenticates an admin request. ' +
-        '\n\nTo make the layout behave like Shopify: ' +
-        '\n\n1. Synchronize the iframe and parent URL by adding a useEffect that listens for the `shopify:navigate` event. ' +
-        'When the event is triggered, the parent URL is synchronized with the iframe URL.' +
-        '\n\n2. Add Polaris Web Components by adding a script tag and using special elements to construct the page. ',
-      codeblock: {
-        title: 'Setup Admin Layout',
-        tabs: [
           {
             title: '/app/routes/app.tsx',
-            language: 'ts',
-            code: './examples/index/setup-admin-layout.example.ts',
+            language: 'tsx',
+            code: './examples/index/setup-admin-layout.example.tsx',
           },
         ],
       },
     },
+    {
+      type: 'Generic',
+      anchorLink: 'authenticate-webhook', 
+      title: 'Authenticate Webhook Requests',
+      sectionContent: 'The package provide functions to authenticate webhook requests. This function returns a webhook client that is authenticated with the Admin API.' +
+        '\n\n> Note: Ensure your webhook route is not nested under you app layout route.',
+      sectionCard: [
+        {
+          name: 'authenticate.webhook',
+          url: '/docs/api/shopify-app-react-router/v0/authenticate/webhook',
+          type: 'clicode',
+        },
+      ],
+      codeblock: {
+        title: 'Authenticate Webhook Requests',
+        tabs: [
+          {
+            title: '/app/routes/webhooks.app.product_updated.tsx',
+            language: 'tsx',
+            code: './examples/index/webhook.example.tsx',
+          },
+        ],
+      },
+    },
+    {
+      type: 'Generic',
+      anchorLink: 'session-storage',
+      title: 'Session Storage',
+      sectionContent: 'When using this package, installed shops access tokens will be stored in session storage.' +
+      'You can configure the storage mechanism by passing a custom storage object to the `shopifyApp` function.' +
+      'By default, the template will use Prisma and SQLite, but other session storage adapters are available.' +
+      '\n\n> Note: The type of session storage you use may impact how your app will be deployed.',
+      sectionCard: [
+        {
+          name: 'Session Storage',
+          url: 'https://github.com/Shopify/shopify-app-js/tree/main/packages/apps/session-storage',
+          type: 'clicode',
+        },
+      ],
+      codeblock: {
+        title: 'Session Storage',
+        tabs: [
+          {
+            title: '/app/shopify.server.ts',
+            language: 'ts',
+            code: './examples/index/session-storage.example.tsx',
+          },
+        ],
+      },
+    },
+    {
+      type: 'Generic',
+      anchorLink: 'deploy-app',
+      title: 'Deploy your app',
+      sectionContent: 'You can deploy your app to your preferred hosting service that is compatible with JavaScript apps. ' +
+      'Review our deployment guide to learn about the requirements for deploying your app.',
+      sectionCard: [
+        {
+          name: 'Deploy your app',
+          url: '/docs/apps/launch/deployment',
+          type: 'clicode',
+        },
+      ],
+    }
   ],
 };
 
