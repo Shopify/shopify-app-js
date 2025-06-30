@@ -18,6 +18,12 @@ const data: ReferenceEntityTemplateSchema = {
   jsDocTypeExamples: ['LegacyAppProviderGeneratedType'],
   related: [
     {
+      name: 'AppProvider',
+      subtitle: 'Learn about the new AppProvider',
+      url: '/docs/api/shopify-app-react-router/entrypoints/appprovider',
+      type: 'shopify',
+    },
+    {
       name: 'App bridge',
       subtitle: 'Learn more about App Bridge.',
       url: '/docs/api/app-bridge-library',
