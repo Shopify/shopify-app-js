@@ -545,8 +545,11 @@ importers:
         specifier: ^5.1.26
         version: 5.1.26
       react:
-        specifier: '*'
+        specifier: '>=18'
         version: 18.3.1
+      react-dom:
+        specifier: '>=18'
+        version: 18.3.1(react@18.3.1)
       semver:
         specifier: ^7.7.1
         version: 7.7.1
@@ -554,9 +557,6 @@ importers:
       '@shopify/generate-docs':
         specifier: ^0.16.6
         version: 0.16.6
-      '@shopify/polaris':
-        specifier: ^12.18.0
-        version: 12.27.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@shopify/react-testing':
         specifier: ^6.0.0
         version: 6.0.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
