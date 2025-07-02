@@ -24,7 +24,7 @@ shopify app init --template=https://github.com/Shopify/shopify-app-template-reac
 
 ## Migrating from Remix
 
-Use the [migration guide]() to migrate from the Shopify App Remix template.
+Use the [migration guide](https://github.com/Shopify/shopify-app-template-react-router/wiki/Upgrading-from-Remix) to migrate from the Shopify App Remix template.
 
 ## Resources
 
