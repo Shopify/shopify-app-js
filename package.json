@@ -28,7 +28,7 @@
     "@rollup/plugin-node-resolve": "^16.0.1",
     "@rollup/plugin-replace": "^6.0.2",
     "@rollup/plugin-terser": "^0.4.0",
-    "@rollup/plugin-typescript": "^12.1.2",
+    "@rollup/plugin-typescript": "^12.1.4",
     "@shopify/babel-preset": "^25.0.2",
     "@shopify/eslint-plugin": "^45.0.0",
     "@shopify/prettier-config": "^1.1.4",
