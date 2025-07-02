@@ -530,16 +530,16 @@ importers:
   packages/apps/shopify-app-react-router:
     dependencies:
       '@shopify/admin-api-client':
-        specifier: ^1.1.0
+        specifier: ^1.1.1
         version: link:../../api-clients/admin-api-client
       '@shopify/shopify-api':
-        specifier: ^11.13.0
+        specifier: ^11.13.1
         version: link:../shopify-api
       '@shopify/shopify-app-session-storage':
-        specifier: ^3.0.18
+        specifier: ^3.0.19
         version: link:../session-storage/shopify-app-session-storage
       '@shopify/storefront-api-client':
-        specifier: ^1.0.8
+        specifier: ^1.0.9
         version: link:../../api-clients/storefront-api-client
       isbot:
         specifier: ^5.1.26
@@ -561,7 +561,7 @@ importers:
         specifier: ^6.0.0
         version: 6.0.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@shopify/shopify-app-session-storage-memory':
-        specifier: ^4.0.18
+        specifier: ^4.0.19
         version: link:../session-storage/shopify-app-session-storage-memory
       '@testing-library/jest-dom':
         specifier: ^6.6.3
