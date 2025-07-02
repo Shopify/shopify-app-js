@@ -35,6 +35,12 @@
       "import": "./dist/esm/server/index.mjs",
       "default": "./dist/cjs/server/index.js"
     },
+    "./react": {
+      "types": "./dist/ts/react/index.d.ts",
+      "require": "./dist/cjs/react/index.js",
+      "import": "./dist/esm/react/index.mjs",
+      "default": "./dist/cjs/react/index.js"
+    },
     "./test-helpers": {
       "types": "./dist/ts/server/test-helpers/index.d.ts",
       "require": "./dist/cjs/server/test-helpers/index.js",
@@ -74,9 +80,15 @@
   "devDependencies": {
     "react-router": "7.6.2",
     "@shopify/generate-docs": "^0.16.6",
+    "@shopify/polaris": "^12.18.0",
+    "@shopify/react-testing": "^6.0.0",
     "@shopify/shopify-app-session-storage-memory": "^4.0.18",
+    "@testing-library/jest-dom": "^6.6.3",
+    "@testing-library/react": "^16.3.0",
     "@types/jsonwebtoken": "^9.0.9",
+    "@types/react": "^19.1.2",
     "@types/semver": "^7.7.0",
+    "@types/testing-library__jest-dom": "^6.0.0",
     "jest-fetch-mock": "^3.0.3",
     "jsonwebtoken": "^9.0.2"
   },
@@ -90,8 +102,13 @@
   },
   "peerDependencies": {
     "react-router": "^7.6.2",
-    "react": ">=18",
-    "react-dom": ">=18"
+    "@shopify/polaris": "*",
+    "react": "*"
+  },
+  "peerDependenciesMeta": {
+    "@shopify/polaris": {
+      "optional": true
+    }
   },
   "files": [
     "dist/*",
