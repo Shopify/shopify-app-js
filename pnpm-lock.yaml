@@ -568,13 +568,13 @@ importers:
         version: 6.6.3
       '@testing-library/react':
         specifier: ^16.3.0
-        version: 16.3.0(@testing-library/dom@10.4.0)(@types/react-dom@19.0.3(@types/react@19.1.2))(@types/react@19.1.2)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+        version: 16.3.0(@testing-library/dom@10.4.0)(@types/react-dom@19.0.3(@types/react@19.1.8))(@types/react@19.1.8)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@types/jsonwebtoken':
         specifier: ^9.0.9
         version: 9.0.9
       '@types/react':
         specifier: ^19.1.2
-        version: 19.1.2
+        version: 19.1.8
       '@types/semver':
         specifier: ^7.7.0
         version: 7.7.0
@@ -3368,6 +3368,10 @@ packages:
     resolution: {integrity: sha512-aRgVkl+EovLk6OC4WzT+C6hgAyta5VReEIdetpe+/bJhVovlqbFjYa3yHGvEM4VuWv8sim7XH2VV3ZsDiwpgvQ==}
     peerDependencies:
       eslint: ^8.56.0
+
+  '@shopify/generate-docs@0.16.6':
+    resolution: {integrity: sha512-noJBsDf+Jj5Dnbmf/MpLFOa4Z/DE4uNd3O4Gq6/BTXjTYarTDP9kMP70BpCBhnZceh4KElo9iCBa9D4DLDISpg==}
+    hasBin: true
 
   '@shopify/generate-docs@0.17.1':
     resolution: {integrity: sha512-xtObqw2vqSbYB4QlB1Cd911aNZYjpKAEwfWnlcOUqkYVGgf+obEuMVNMSFsM3P63vAReH2nS3I7tvG0YWFv7Iw==}
@@ -11985,6 +11989,12 @@ snapshots:
       - prettier
       - supports-color
       - typescript
+
+  '@shopify/generate-docs@0.16.6':
+    dependencies:
+      '@types/react': 18.3.23
+      globby: 11.1.0
+      typescript: 5.8.3
 
   '@shopify/generate-docs@0.17.1':
     dependencies:
