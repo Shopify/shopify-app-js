@@ -40,7 +40,7 @@ Shopify:
 - [Shopify App React Router docs](https://shopify.dev/docs/api/shopify-app-react-router)
 - [Shopify CLI](https://shopify.dev/docs/apps/tools/cli)
 - [Shopify App Bridge](https://shopify.dev/docs/api/app-bridge-library).
-- [Polaris React](https://polaris.shopify.com/).
+- [Polaris Web Components](https://shopify.dev/docs/api/app-home/using-polaris-components).
 - [App extensions](https://shopify.dev/docs/apps/app-extensions/list)
 - [Shopify Functions](https://shopify.dev/docs/api/functions)
 

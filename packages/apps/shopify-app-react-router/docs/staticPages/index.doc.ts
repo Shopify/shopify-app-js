@@ -78,8 +78,8 @@ const data: LandingTemplateSchema = {
       anchorLink: 'add-routes',
       title: 'Add a new route to your app',
       sectionContent:
-        'Routes embedded in the Shopify Admin must be nested under the layout route for proper authentication and functionality. ' +
-        '\n\nThe template includes a layout route at `/app/routes/app.tsx` that handles App Bridge initialization, authenticates requests via `authenticate.admin`, and provides error boundaries and headers required by the admin. ' +
+        'Routes embedded in the Shopify Admin must be nested under an Admin layout route for proper authentication and functionality. ' +
+        '\n\nThe template includes an admin route at `/app/routes/app.tsx` that handles App Bridge initialization, authenticates requests via `authenticate.admin`, provides error boundaries and headers required by the admin. ' +
         '\n\nWhen creating new routes, place them in the `/app/routes/` directory with the `app.` prefix (e.g., `app.products.tsx`) to ensure they inherit these features. ' +
         'This structure ensures your app behaves correctly within the Shopify Admin and has access to authenticated API clients.',
       codeblock: {
