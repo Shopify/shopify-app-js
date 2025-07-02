@@ -1,5 +1,235 @@
 [
   {
+    "name": "AppProvider",
+    "description": "Sets up your app to look like the admin\n\nAdds Polaris Web components to the route. If embedded is true and apiKey is provided, then the App Bridge script will be added to the page.\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n",
+    "category": "Entrypoints",
+    "type": "component",
+    "isVisualComponent": false,
+    "definitions": [
+      {
+        "title": "AppProviderProps",
+        "description": "Props for the `AppProvider` component.",
+        "type": "AppProviderProps",
+        "typeDefinitions": {
+          "AppProviderProps": {
+            "filePath": "src/react/components/AppProvider/AppProvider.tsx",
+            "syntaxKind": "TypeAliasDeclaration",
+            "name": "AppProviderProps",
+            "value": "NonEmbeddedProps | EmbeddedProps",
+            "description": ""
+          },
+          "NonEmbeddedProps": {
+            "filePath": "src/react/components/AppProvider/AppProvider.tsx",
+            "name": "NonEmbeddedProps",
+            "description": "",
+            "members": [
+              {
+                "filePath": "src/react/components/AppProvider/AppProvider.tsx",
+                "syntaxKind": "PropertySignature",
+                "name": "children",
+                "value": "React.ReactNode",
+                "description": ""
+              },
+              {
+                "filePath": "src/react/components/AppProvider/AppProvider.tsx",
+                "syntaxKind": "PropertySignature",
+                "name": "embedded",
+                "value": "false",
+                "description": "If this route should be rendered inside the Shopify admin.\n\nSetting this to false means only Polaris Web components will be added to the route, not App Bridge.\n\nSetting this to true will include the App Bridge script on the page.\n\n\n\n\n",
+                "isOptional": true
+              }
+            ],
+            "value": "interface NonEmbeddedProps extends BaseProps {\n  /**\n   * If this route should be rendered inside the Shopify admin.\n   *\n   * Setting this to false means only Polaris Web components will be added to the route, not App Bridge.\n   *\n   * Setting this to true will include the App Bridge script on the page.\n   *\n   * {@link https://shopify.dev/docs/apps/admin/embedded-app-home}\n   */\n  embedded?: false;\n}"
+          },
+          "EmbeddedProps": {
+            "filePath": "src/react/components/AppProvider/AppProvider.tsx",
+            "name": "EmbeddedProps",
+            "description": "",
+            "members": [
+              {
+                "filePath": "src/react/components/AppProvider/AppProvider.tsx",
+                "syntaxKind": "PropertySignature",
+                "name": "apiKey",
+                "value": "string",
+                "description": "The API key for your Shopify app. This is the `Client ID` from the Partner Dashboard.\n\nWhen using the Shopify CLI, this is the `SHOPIFY_API_KEY` environment variable. If you're using the environment variable, then you need to pass it from the loader to the component."
+              },
+              {
+                "filePath": "src/react/components/AppProvider/AppProvider.tsx",
+                "syntaxKind": "PropertySignature",
+                "name": "children",
+                "value": "React.ReactNode",
+                "description": ""
+              },
+              {
+                "filePath": "src/react/components/AppProvider/AppProvider.tsx",
+                "syntaxKind": "PropertySignature",
+                "name": "embedded",
+                "value": "true",
+                "description": "If this route should be rendered inside the Shopify admin.\n\nSetting this to true will include the App Bridge script on the page. If true and the route is loaded outside the Shopify admin, then the user will be redirected to the Shopify admin.\n\nSetting this to false will not include the App Bridge script on the page.\n\n\n\n\n"
+              }
+            ],
+            "value": "interface EmbeddedProps extends BaseProps {\n  /**\n   * If this route should be rendered inside the Shopify admin.\n   *\n   * Setting this to true will include the App Bridge script on the page.\n   * If true and the route is loaded outside the Shopify admin, then the user will be redirected to the Shopify admin.\n   *\n   * Setting this to false will not include the App Bridge script on the page.\n   *\n   * {@link https://shopify.dev/docs/apps/admin/embedded-app-home}\n   */\n  embedded: true;\n  /**\n   * The API key for your Shopify app. This is the `Client ID` from the Partner Dashboard.\n   *\n   * When using the Shopify CLI, this is the `SHOPIFY_API_KEY` environment variable. If you're using the environment\n   * variable, then you need to pass it from the loader to the component.\n   */\n  apiKey: string;\n}"
+          }
+        }
+      }
+    ],
+    "jsDocTypeExamples": [
+      "AppProviderGeneratedType"
+    ],
+    "related": [
+      {
+        "name": "Polaris Web components",
+        "subtitle": "Learn more about Polaris Web components.",
+        "url": "/docs/api/app-home/using-polaris-components",
+        "type": "shopify"
+      },
+      {
+        "name": "App bridge",
+        "subtitle": "Learn more about App Bridge.",
+        "url": "/docs/api/app-bridge-library",
+        "type": "shopify"
+      }
+    ],
+    "examples": {
+      "description": "",
+      "examples": [
+        {
+          "description": "Wrap your route in the `AppProvider` component and pass in your API key.",
+          "codeblock": {
+            "title": "Set up AppProvider for an embedded route",
+            "tabs": [
+              {
+                "title": "/app/routes/**\\/*.ts",
+                "code": "import {useLoaderData} from 'react-router';\nimport {authenticate} from '~/shopify.server';\nimport {AppProvider} from '@shopify/shopify-app-react-router/react';\n\nexport async function loader({ request }) {\n  await authenticate.admin(request);\n\n  return { apiKey: process.env.SHOPIFY_API_KEY };\n}\n\nexport default function App() {\n  const { apiKey } = useLoaderData();\n\n  return (\n    &lt;AppProvider embedded apiKey={apiKey}&gt;\n      &lt;Outlet /&gt;\n    &lt;/AppProvider&gt;\n  );\n}",
+                "language": "typescript"
+              }
+            ]
+          }
+        },
+        {
+          "description": "Add Polaris web components to the route, without adding the App Bridge script.",
+          "codeblock": {
+            "title": "Set up AppProvider for a non-embedded route",
+            "tabs": [
+              {
+                "title": "/app/routes/**\\/*.ts",
+                "code": "import {AppProvider} from '@shopify/shopify-app-react-router/react';\n\nexport default function App() {\n  return (\n    &lt;AppProvider embedded={false}&gt;\n      &lt;Outlet /&gt;\n    &lt;/AppProvider&gt;\n  );\n}",
+                "language": "typescript"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "name": "AppProxyLink",
+    "description": "Sets up an `<a />` HTML element that works when rendered behind an app proxy.\n\nSupports any properties accepted by the `<a />` HTML element.",
+    "category": "App proxy components",
+    "type": "component",
+    "isVisualComponent": false,
+    "definitions": [],
+    "jsDocTypeExamples": [
+      "AppProxyLinkGeneratedType"
+    ],
+    "related": [
+      {
+        "name": "authenticate.public.appProxy",
+        "subtitle": "Authenticating app proxy requests.",
+        "url": "/docs/api/shopify-app-react-router/authenticate/public/app-proxy",
+        "type": "react-router"
+      },
+      {
+        "name": "AppProxyProvider",
+        "subtitle": "Enable JavaScript in pages loaded through app proxies.",
+        "url": "/docs/api/shopify-app-react-router/app-proxy-components/appproxyprovider",
+        "type": "react-router"
+      }
+    ],
+    "defaultExample": {
+      "description": "Use an `AppProxyLink` within an `AppProxyProvider` to link to a different proxied route.",
+      "codeblock": {
+        "title": "Link to a different route",
+        "tabs": [
+          {
+            "title": "/app/routes/**\\/*.ts",
+            "code": "import {authenticate} from '~/shopify.server';\nimport {AppProxyProvider, AppProxyLink} from '@shopify/shopify-app-react-router/react';\n\nexport async function loader({ request }) {\n  await authenticate.public.appProxy(request);\n\n  return json({ appUrl: process.env.SHOPIFY_APP_URL });\n}\n\nexport default function App() {\n  const { appUrl } = useLoaderData();\n\n  return (\n    &lt;AppProxyProvider appUrl={appUrl}&gt;\n      &lt;AppProxyLink href=\"/other-proxy-route\"&gt;Link to another route&lt;/AppProxyLink&gt;\n    &lt;/AppProxyProvider&gt;\n  );\n}",
+            "language": "typescript"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "name": "AppProxyProvider",
+    "description": "Sets up a page to render behind a Shopify app proxy, enabling JavaScript and CSS to be loaded from the app.\n\n> Caution: Because React Router doesn't support URL rewriting, any route using this component should <b>match the pathname of the proxy URL exactly</b>, and <b>end in a trailing slash</b> (e.g., `https://<shop>/apps/proxy/`).",
+    "category": "Entrypoints",
+    "type": "component",
+    "isVisualComponent": false,
+    "definitions": [
+      {
+        "title": "AppProxyProviderProps",
+        "description": "Props for the `AppProxyProvider` component.",
+        "type": "AppProxyProviderProps",
+        "typeDefinitions": {
+          "AppProxyProviderProps": {
+            "filePath": "src/react/components/AppProxyProvider/AppProxyProvider.tsx",
+            "name": "AppProxyProviderProps",
+            "description": "",
+            "members": [
+              {
+                "filePath": "src/react/components/AppProxyProvider/AppProxyProvider.tsx",
+                "syntaxKind": "PropertySignature",
+                "name": "appUrl",
+                "value": "string",
+                "description": "The URL where the app is hosted. You can set this from the `SHOPIFY_APP_URL` environment variable."
+              },
+              {
+                "filePath": "src/react/components/AppProxyProvider/AppProxyProvider.tsx",
+                "syntaxKind": "PropertySignature",
+                "name": "children",
+                "value": "React.ReactNode",
+                "description": "The children to render.",
+                "isOptional": true
+              }
+            ],
+            "value": "export interface AppProxyProviderProps {\n  /**\n   * The URL where the app is hosted. You can set this from the `SHOPIFY_APP_URL` environment variable.\n   */\n  appUrl: string;\n\n  /**\n   * The children to render.\n   */\n  children?: React.ReactNode;\n}"
+          }
+        }
+      }
+    ],
+    "jsDocTypeExamples": [
+      "AppProxyProviderGeneratedType"
+    ],
+    "related": [
+      {
+        "name": "authenticate.public.appProxy",
+        "subtitle": "Authenticate app proxy requests.",
+        "url": "/docs/api/shopify-app-react-router/authenticate/public/app-proxy",
+        "type": "remix"
+      },
+      {
+        "name": "AppProxyLink",
+        "subtitle": "Create links that work within app proxies.",
+        "url": "/docs/api/shopify-app-react-router/app-proxy-components/appproxylink",
+        "type": "react-router"
+      }
+    ],
+    "defaultExample": {
+      "description": "Wrap your route component in the `AppProxyProvider` component and pass in your app URL.",
+      "codeblock": {
+        "title": "Wrap a route with an AppProxyProvider component",
+        "tabs": [
+          {
+            "title": "/app/routes/**\\/*.ts",
+            "code": "import {authenticate} from '~/shopify.server';\nimport {AppProxyProvider} from '@shopify/shopify-app-react-router/react';\n\nexport async function loader({ request }) {\n  await authenticate.public.appProxy(request);\n\n  return json({ appUrl: process.env.SHOPIFY_APP_URL });\n}\n\nexport default function App() {\n  const { appUrl } = useLoaderData();\n\n  return (\n    &lt;AppProxyProvider appUrl={appUrl}&gt;\n      Page content\n    &lt;/AppProxyProvider&gt;\n  );\n}",
+            "language": "typescript"
+          }
+        ]
+      }
+    }
+  },
+  {
     "name": "Admin",
     "description": "Contains methods for authenticating and interacting with the Admin API.\n\nThis function can handle requests for apps embedded in the Admin, Admin extensions, or non-embedded apps.",
     "category": "Authenticate",
@@ -4761,7 +4991,7 @@
               "name": "ShopifyApp<Config extends AppConfigArg<Storage, Future>>",
               "value": "ShopifyApp<Config extends AppConfigArg<Storage, Future>>"
             },
-            "value": "export function shopifyApp<\n  Config extends AppConfigArg<Storage, Future>,\n  Storage extends SessionStorage,\n  Future extends FutureFlagOptions = Config['future'],\n>(appConfig: Readonly<Config>): ShopifyApp<Config> {\n  const api = deriveApi(appConfig);\n  const config = deriveConfig<Storage>(appConfig, api.config);\n  const logger = overrideLogger(api.logger);\n\n  if (appConfig.webhooks) {\n    api.webhooks.addHandlers(appConfig.webhooks);\n  }\n\n  const params: BasicParams = {api, config, logger};\n\n  let strategy;\n  if (config.distribution === AppDistribution.ShopifyAdmin) {\n    strategy = createMerchantCustomAuthStrategy(params);\n  } else {\n    strategy = createTokenExchangeStrategy(params);\n  }\n\n  const authStrategy = authStrategyFactory({\n    ...params,\n    strategy,\n  });\n\n  const shopify:\n    | AdminApp<Config>\n    | AppStoreApp<Config>\n    | SingleMerchantApp<Config> = {\n    sessionStorage: config.sessionStorage,\n    addDocumentResponseHeaders: addDocumentResponseHeadersFactory(params),\n    registerWebhooks: registerWebhooksFactory(params),\n    authenticate: {\n      admin: authStrategy,\n      flow: authenticateFlowFactory(params),\n      public: authenticatePublicFactory(params),\n      fulfillmentService: authenticateFulfillmentServiceFactory(params),\n      webhook: authenticateWebhookFactory<string>(params),\n    },\n    unauthenticated: {\n      admin: unauthenticatedAdminContextFactory(params),\n      storefront: unauthenticatedStorefrontContextFactory(params),\n    },\n  };\n\n  if (\n    isAppStoreApp(shopify, appConfig) ||\n    isSingleMerchantApp(shopify, appConfig)\n  ) {\n    shopify.login = loginFactory(params);\n  }\n\n  logDisabledFutureFlags(config, logger);\n\n  return shopify as ShopifyApp<Config>;\n}",
+            "value": "export function shopifyApp<\n  Config extends AppConfigArg<Storage, Future>,\n  Storage extends SessionStorage,\n  Future extends FutureFlagOptions = Config['future'],\n>(appConfig: Readonly<Config>): ShopifyApp<Config> {\n  const api = deriveApi(appConfig);\n  const config = deriveConfig<Storage>(appConfig, api.config);\n  const logger = overrideLogger(api.logger);\n\n  if (appConfig.webhooks) {\n    api.webhooks.addHandlers(appConfig.webhooks);\n  }\n\n  const params: BasicParams = {api, config, logger};\n\n  let strategy;\n  if (config.distribution === AppDistribution.ShopifyAdmin) {\n    strategy = createMerchantCustomAuthStrategy(params);\n  } else {\n    strategy = createTokenExchangeStrategy(params);\n  }\n\n  const authStrategy = authStrategyFactory({\n    ...params,\n    strategy,\n  });\n\n  const shopify:\n    | AdminApp<Config>\n    | AppStoreApp<Config>\n    | SingleMerchantApp<Config> = {\n    sessionStorage: config.sessionStorage,\n    addDocumentResponseHeaders: addDocumentResponseHeadersFactory(params),\n    registerWebhooks: registerWebhooksFactory(params),\n    authenticate: {\n      admin: authStrategy,\n      flow: authenticateFlowFactory(params),\n      fulfillmentService: authenticateFulfillmentServiceFactory(params),\n      pos: authenticatePOSFactory(params),\n      public: authenticatePublicFactory(params),\n      webhook: authenticateWebhookFactory<string>(params),\n    },\n    unauthenticated: {\n      admin: unauthenticatedAdminContextFactory(params),\n      storefront: unauthenticatedStorefrontContextFactory(params),\n    },\n  };\n\n  if (\n    isAppStoreApp(shopify, appConfig) ||\n    isSingleMerchantApp(shopify, appConfig)\n  ) {\n    shopify.login = loginFactory(params);\n  }\n\n  logDisabledFutureFlags(config, logger);\n\n  return shopify as ShopifyApp<Config>;\n}",
             "examples": [
               {
                 "title": "The minimum viable configuration",
@@ -5021,6 +5251,25 @@
               {
                 "filePath": "src/server/types.ts",
                 "syntaxKind": "PropertySignature",
+                "name": "pos",
+                "value": "AuthenticatePOS",
+                "description": "Authenticate a request from a POS UI extension",
+                "examples": [
+                  {
+                    "title": "Authenticating a POS UI extension request",
+                    "description": "",
+                    "tabs": [
+                      {
+                        "code": "import { LoaderFunctionArgs, json } from \"react-router\";\nimport { authenticate } from \"../shopify.server\";\n\nexport const loader = async ({ request }: LoaderFunctionArgs) => {\n  const { sessionToken, cors } = await authenticate.pos(\n    request,\n  );\n  return cors({my: \"data\", shop: sessionToken.dest}));\n};",
+                        "title": "/app/routes/public/widgets.ts"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "filePath": "src/server/types.ts",
+                "syntaxKind": "PropertySignature",
                 "name": "public",
                 "value": "AuthenticatePublic",
                 "description": "Authenticate a public request and get back a session token.",
@@ -5077,7 +5326,7 @@
                 ]
               }
             ],
-            "value": "interface Authenticate<Config extends AppConfigArg> {\n  /**\n   * Authenticate an admin Request and get back an authenticated admin context.  Use the authenticated admin context to interact with Shopify.\n   *\n   * Examples of when to use this are requests from your app's UI, or requests from admin extensions.\n   *\n   * If there is no session for the Request, this will redirect the merchant to correct auth flows.\n   *\n   * @example\n   * <caption>Authenticating a request for an embedded app.</caption>\n   * ```ts\n   * // /app/routes/**\\/*.jsx\n   * import { LoaderFunctionArgs, json } from \"react-router\";\n   * import { authenticate } from \"../../shopify.server\";\n   *\n   * export async function loader({ request }: LoaderFunctionArgs) {\n   *   const {admin, session, sessionToken, billing} = authenticate.admin(request);\n   *   const response = await admin.graphql(`{ shop { name } }`)\n   *\n   *   return (await response.json());\n   * }\n   * ```\n   * ```ts\n   * // /app/shopify.server.ts\n   * import { LATEST_API_VERSION, shopifyApp } from \"@shopify/shopify-app-react-router/server\";\n   *\n   * const shopify = shopifyApp({\n   *   // ...etc\n   * });\n   * export default shopify;\n   * export const authenticate = shopify.authenticate;\n   * ```\n   */\n  admin: AuthenticateAdmin<Config>;\n\n  /**\n   * Authenticate a Flow extension Request and get back an authenticated context, containing an admin context to access\n   * the API, and the payload of the request.\n   *\n   * If there is no session for the Request, this will return an HTTP 400 error.\n   *\n   * Note that this will always be a POST request.\n   *\n   * @example\n   * <caption>Authenticating a Flow extension request.</caption>\n   * ```ts\n   * // /app/routes/**\\/*.jsx\n   * import { ActionFunctionArgs, json } from \"react-router\";\n   * import { authenticate } from \"../../shopify.server\";\n   *\n   * export async function action({ request }: ActionFunctionArgs) {\n   *   const {admin, session, payload} = authenticate.flow(request);\n   *\n   *   // Perform flow extension logic\n   *\n   *   // Return a 200 response\n   *   return null;\n   * }\n   * ```\n   * ```ts\n   * // /app/shopify.server.ts\n   * import { LATEST_API_VERSION, shopifyApp } from \"@shopify/shopify-app-react-router/server\";\n   *\n   * const shopify = shopifyApp({\n   *   // ...etc\n   * });\n   * export default shopify;\n   * export const authenticate = shopify.authenticate;\n   * ```\n   */\n  flow: AuthenticateFlow;\n\n  /**\n   * Authenticate a request from a fulfillment service and get back an authenticated context.\n   *\n   * @example\n   * <caption>Shopify session for the fulfillment service request.</caption>\n   * <description>Use the session associated with this request to use the Admin GraphQL API </description>\n   * ```ts\n   * // /app/routes/fulfillment_order_notification.ts\n   * import { ActionFunctionArgs } from \"react-router\";\n   * import { authenticate } from \"../shopify.server\";\n   *\n   * export async function action({ request }: ActionFunctionArgs) {\n   *   const { admin, session } = await authenticate.fulfillmentService(request);\n   *\n   *   console.log(session.id)\n   *\n   *   return new Response();\n   * }\n   * ```\n   * */\n  fulfillmentService: AuthenticateFulfillmentService;\n\n  /**\n   * Authenticate a public request and get back a session token.\n   *\n   * @example\n   * <caption>Authenticating a request from a checkout extension</caption>\n   *\n   * ```ts\n   * // /app/routes/api/checkout.jsx\n   * import { LoaderFunctionArgs, json } from \"react-router\";\n   * import { authenticate } from \"../../shopify.server\";\n   * import { getWidgets } from \"~/db/widgets\";\n   *\n   * export async function loader({ request }: LoaderFunctionArgs) {\n   *   const {sessionToken} = authenticate.public.checkout(request);\n   *\n   *   return (await getWidgets(sessionToken));\n   * }\n   * ```\n   */\n  public: AuthenticatePublic;\n\n  /**\n   * Authenticate a Shopify webhook request, get back an authenticated admin context and details on the webhook request\n   * \n   * @example\n   * <caption>Authenticating a webhook request</caption>\n   *\n   * ```ts\n   * // app/routes/webhooks.ts\n   * import { ActionFunctionArgs } from \"react-router\";\n   * import { authenticate } from \"../shopify.server\";\n   * import db from \"../db.server\";\n   *\n   * export const action = async ({ request }: ActionFunctionArgs) => {\n   *   const { topic, shop, session, payload } = await authenticate.webhook(request);\n   * \n   *   // Webhook requests can trigger after an app is uninstalled\n   *   // If the app is already uninstalled, the session may be undefined.\n   *   if (!session) {\n   *     throw new Response();\n   *   }\n   * \n   *   // Handle the webhook\n   *   console.log(`${TOPIC} webhook received with payload:`, JSON.stringify(payload))\n   *\n   *   throw new Response();\n   * };\n   * ```\n   * \n   * @example\n   * <caption>Registering app-specific webhooks (Recommended)</caption>\n   * ```toml\n   * # shopify.app.toml\n   * [webhooks]\n   * api_version = \"2024-07\"\n\n   *   [[webhooks.subscriptions]]\n   *   topics = [\"products/create\"]\n   *   uri = \"/webhooks/products/create\"\n   * \n   * ```\n   * \n   * @example\n   * <caption>Registering shop-specific webhooks.</caption>\n   * <description>In many cases you won't need this. Please see: [https://shopify.dev/docs/apps/build/webhooks/subscribe#app-specific-vs-shop-specific-subscriptions](https://shopify.dev/docs/apps/build/webhooks/subscribe#app-specific-vs-shop-specific-subscriptions)\n   * </description>\n   * ```ts\n   * // app/shopify.server.ts\n   * import { DeliveryMethod, shopifyApp } from \"@shopify/shopify-app-react-router/server\";\n   *\n   * const shopify = shopifyApp({\n   *   webhooks: {\n   *     PRODUCTS_CREATE: {\n   *       deliveryMethod: DeliveryMethod.Http,\n   *       callbackUrl: \"/webhooks/products/create\",\n   *     },\n   *   },\n   *   hooks: {\n   *     afterAuth: async ({ session }) => {\n   *       // Register webhooks for the shop\n   *       // In this example, every shop will have these webhooks\n   *       // You could wrap this in some custom shop specific conditional logic if needed\n   *       shopify.registerWebhooks({ session });\n   *     },\n   *   },\n   *   // ...etc\n   * });\n   * ```\n   */\n  webhook: AuthenticateWebhook<string>;\n}"
+            "value": "interface Authenticate<Config extends AppConfigArg> {\n  /**\n   * Authenticate an admin Request and get back an authenticated admin context.  Use the authenticated admin context to interact with Shopify.\n   *\n   * Examples of when to use this are requests from your app's UI, or requests from admin extensions.\n   *\n   * If there is no session for the Request, this will redirect the merchant to correct auth flows.\n   *\n   * @example\n   * <caption>Authenticating a request for an embedded app.</caption>\n   * ```ts\n   * // /app/routes/**\\/*.jsx\n   * import { LoaderFunctionArgs, json } from \"react-router\";\n   * import { authenticate } from \"../../shopify.server\";\n   *\n   * export async function loader({ request }: LoaderFunctionArgs) {\n   *   const {admin, session, sessionToken, billing} = authenticate.admin(request);\n   *   const response = await admin.graphql(`{ shop { name } }`)\n   *\n   *   return (await response.json());\n   * }\n   * ```\n   * ```ts\n   * // /app/shopify.server.ts\n   * import { LATEST_API_VERSION, shopifyApp } from \"@shopify/shopify-app-react-router/server\";\n   *\n   * const shopify = shopifyApp({\n   *   // ...etc\n   * });\n   * export default shopify;\n   * export const authenticate = shopify.authenticate;\n   * ```\n   */\n  admin: AuthenticateAdmin<Config>;\n\n  /**\n   * Authenticate a Flow extension Request and get back an authenticated context, containing an admin context to access\n   * the API, and the payload of the request.\n   *\n   * If there is no session for the Request, this will return an HTTP 400 error.\n   *\n   * Note that this will always be a POST request.\n   *\n   * @example\n   * <caption>Authenticating a Flow extension request.</caption>\n   * ```ts\n   * // /app/routes/**\\/*.jsx\n   * import { ActionFunctionArgs, json } from \"react-router\";\n   * import { authenticate } from \"../../shopify.server\";\n   *\n   * export async function action({ request }: ActionFunctionArgs) {\n   *   const {admin, session, payload} = authenticate.flow(request);\n   *\n   *   // Perform flow extension logic\n   *\n   *   // Return a 200 response\n   *   return null;\n   * }\n   * ```\n   * ```ts\n   * // /app/shopify.server.ts\n   * import { LATEST_API_VERSION, shopifyApp } from \"@shopify/shopify-app-react-router/server\";\n   *\n   * const shopify = shopifyApp({\n   *   // ...etc\n   * });\n   * export default shopify;\n   * export const authenticate = shopify.authenticate;\n   * ```\n   */\n  flow: AuthenticateFlow;\n\n  /**\n   * Authenticate a request from a fulfillment service and get back an authenticated context.\n   *\n   * @example\n   * <caption>Shopify session for the fulfillment service request.</caption>\n   * <description>Use the session associated with this request to use the Admin GraphQL API </description>\n   * ```ts\n   * // /app/routes/fulfillment_order_notification.ts\n   * import { ActionFunctionArgs } from \"react-router\";\n   * import { authenticate } from \"../shopify.server\";\n   *\n   * export async function action({ request }: ActionFunctionArgs) {\n   *   const { admin, session } = await authenticate.fulfillmentService(request);\n   *\n   *   console.log(session.id)\n   *\n   *   return new Response();\n   * }\n   * ```\n   * */\n  fulfillmentService: AuthenticateFulfillmentService;\n\n  /**\n   * Authenticate a request from a POS UI extension\n   *\n   * @example\n   * <caption>Authenticating a POS UI extension request</caption>\n   * ```ts\n   * // /app/routes/public/widgets.ts\n   * import { LoaderFunctionArgs, json } from \"react-router\";\n   * import { authenticate } from \"../shopify.server\";\n   *\n   * export const loader = async ({ request }: LoaderFunctionArgs) => {\n   *   const { sessionToken, cors } = await authenticate.pos(\n   *     request,\n   *   );\n   *   return cors({my: \"data\", shop: sessionToken.dest}));\n   * };\n   * ```\n   */\n  pos: AuthenticatePOS;\n\n  /**\n   * Authenticate a public request and get back a session token.\n   *\n   * @example\n   * <caption>Authenticating a request from a checkout extension</caption>\n   *\n   * ```ts\n   * // /app/routes/api/checkout.jsx\n   * import { LoaderFunctionArgs, json } from \"react-router\";\n   * import { authenticate } from \"../../shopify.server\";\n   * import { getWidgets } from \"~/db/widgets\";\n   *\n   * export async function loader({ request }: LoaderFunctionArgs) {\n   *   const {sessionToken} = authenticate.public.checkout(request);\n   *\n   *   return (await getWidgets(sessionToken));\n   * }\n   * ```\n   */\n  public: AuthenticatePublic;\n\n  /**\n   * Authenticate a Shopify webhook request, get back an authenticated admin context and details on the webhook request\n   * \n   * @example\n   * <caption>Authenticating a webhook request</caption>\n   *\n   * ```ts\n   * // app/routes/webhooks.ts\n   * import { ActionFunctionArgs } from \"react-router\";\n   * import { authenticate } from \"../shopify.server\";\n   * import db from \"../db.server\";\n   *\n   * export const action = async ({ request }: ActionFunctionArgs) => {\n   *   const { topic, shop, session, payload } = await authenticate.webhook(request);\n   * \n   *   // Webhook requests can trigger after an app is uninstalled\n   *   // If the app is already uninstalled, the session may be undefined.\n   *   if (!session) {\n   *     throw new Response();\n   *   }\n   * \n   *   // Handle the webhook\n   *   console.log(`${TOPIC} webhook received with payload:`, JSON.stringify(payload))\n   *\n   *   throw new Response();\n   * };\n   * ```\n   * \n   * @example\n   * <caption>Registering app-specific webhooks (Recommended)</caption>\n   * ```toml\n   * # shopify.app.toml\n   * [webhooks]\n   * api_version = \"2024-07\"\n\n   *   [[webhooks.subscriptions]]\n   *   topics = [\"products/create\"]\n   *   uri = \"/webhooks/products/create\"\n   * \n   * ```\n   * \n   * @example\n   * <caption>Registering shop-specific webhooks.</caption>\n   * <description>In many cases you won't need this. Please see: [https://shopify.dev/docs/apps/build/webhooks/subscribe#app-specific-vs-shop-specific-subscriptions](https://shopify.dev/docs/apps/build/webhooks/subscribe#app-specific-vs-shop-specific-subscriptions)\n   * </description>\n   * ```ts\n   * // app/shopify.server.ts\n   * import { DeliveryMethod, shopifyApp } from \"@shopify/shopify-app-react-router/server\";\n   *\n   * const shopify = shopifyApp({\n   *   webhooks: {\n   *     PRODUCTS_CREATE: {\n   *       deliveryMethod: DeliveryMethod.Http,\n   *       callbackUrl: \"/webhooks/products/create\",\n   *     },\n   *   },\n   *   hooks: {\n   *     afterAuth: async ({ session }) => {\n   *       // Register webhooks for the shop\n   *       // In this example, every shop will have these webhooks\n   *       // You could wrap this in some custom shop specific conditional logic if needed\n   *       shopify.registerWebhooks({ session });\n   *     },\n   *   },\n   *   // ...etc\n   * });\n   * ```\n   */\n  webhook: AuthenticateWebhook<string>;\n}"
           },
           "AuthenticateAdmin": {
             "filePath": "src/server/authenticate/admin/types.ts",
@@ -6228,28 +6477,9 @@
                     ]
                   }
                 ]
-              },
-              {
-                "filePath": "src/server/authenticate/public/types.ts",
-                "syntaxKind": "PropertySignature",
-                "name": "pos",
-                "value": "AuthenticatePOS",
-                "description": "Authenticate a request from a POS UI extension",
-                "examples": [
-                  {
-                    "title": "Authenticating a POS UI extension request",
-                    "description": "",
-                    "tabs": [
-                      {
-                        "code": "import { LoaderFunctionArgs, json } from \"react-router\";\nimport { authenticate } from \"../shopify.server\";\n\nexport const loader = async ({ request }: LoaderFunctionArgs) => {\n  const { sessionToken, cors } = await authenticate.public.pos(\n    request,\n  );\n  return cors({my: \"data\", shop: sessionToken.dest}));\n};",
-                        "title": "/app/routes/public/widgets.ts"
-                      }
-                    ]
-                  }
-                ]
               }
             ],
-            "value": "export interface AuthenticatePublic {\n  /**\n   * Authenticate a request from a checkout extension\n   *\n   * @example\n   * <caption>Authenticating a checkout extension request</caption>\n   * ```ts\n   * // /app/routes/public/widgets.ts\n   * import { LoaderFunctionArgs, json } from \"react-router\";\n   * import { authenticate } from \"../shopify.server\";\n   *\n   * export const loader = async ({ request }: LoaderFunctionArgs) => {\n   *   const { sessionToken, cors } = await authenticate.public.checkout(\n   *     request,\n   *   );\n   *   return cors({my: \"data\", shop: sessionToken.dest}));\n   * };\n   * ```\n   */\n  checkout: AuthenticateCheckout;\n\n  /**\n   * Authenticate a request from an app proxy\n   *\n   * @example\n   * <caption>Authenticating an app proxy request</caption>\n   * ```ts\n   * // /app/routes/public/widgets.ts\n   * import { LoaderFunctionArgs, json } from \"react-router\";\n   * import { authenticate } from \"../shopify.server\";\n   *\n   * export const loader = async ({ request }: LoaderFunctionArgs) => {\n   *   await authenticate.public.appProxy(\n   *     request,\n   *   );\n   *\n   *   const {searchParams} = new URL(request.url);\n   *   const shop = searchParams.get(\"shop\");\n   *   const customerId = searchParams.get(\"logged_in_customer_id\")\n   *\n   *   return ({my: \"data\", shop, customerId});\n   * };\n   * ```\n   */\n  appProxy: AuthenticateAppProxy;\n\n  /**\n   * Authenticate a request from a customer account extension\n   *\n   * @example\n   * <caption>Authenticating a customer account extension request</caption>\n   * ```ts\n   * // /app/routes/public/widgets.ts\n   * import { LoaderFunctionArgs, json } from \"react-router\";\n   * import { authenticate } from \"../shopify.server\";\n   *\n   * export const loader = async ({ request }: LoaderFunctionArgs) => {\n   *   const { sessionToken, cors } = await authenticate.public.customerAccount(\n   *     request,\n   *   );\n   *   return cors({my: \"data\", shop: sessionToken.dest}));\n   * };\n   * ```\n   */\n  customerAccount: AuthenticateCustomerAccount;\n\n  /**\n   * Authenticate a request from a POS UI extension\n   *\n   * @example\n   * <caption>Authenticating a POS UI extension request</caption>\n   * ```ts\n   * // /app/routes/public/widgets.ts\n   * import { LoaderFunctionArgs, json } from \"react-router\";\n   * import { authenticate } from \"../shopify.server\";\n   *\n   * export const loader = async ({ request }: LoaderFunctionArgs) => {\n   *   const { sessionToken, cors } = await authenticate.public.pos(\n   *     request,\n   *   );\n   *   return cors({my: \"data\", shop: sessionToken.dest}));\n   * };\n   * ```\n   */\n  pos: AuthenticatePOS;\n}"
+            "value": "export interface AuthenticatePublic {\n  /**\n   * Authenticate a request from a checkout extension\n   *\n   * @example\n   * <caption>Authenticating a checkout extension request</caption>\n   * ```ts\n   * // /app/routes/public/widgets.ts\n   * import { LoaderFunctionArgs, json } from \"react-router\";\n   * import { authenticate } from \"../shopify.server\";\n   *\n   * export const loader = async ({ request }: LoaderFunctionArgs) => {\n   *   const { sessionToken, cors } = await authenticate.public.checkout(\n   *     request,\n   *   );\n   *   return cors({my: \"data\", shop: sessionToken.dest}));\n   * };\n   * ```\n   */\n  checkout: AuthenticateCheckout;\n\n  /**\n   * Authenticate a request from an app proxy\n   *\n   * @example\n   * <caption>Authenticating an app proxy request</caption>\n   * ```ts\n   * // /app/routes/public/widgets.ts\n   * import { LoaderFunctionArgs, json } from \"react-router\";\n   * import { authenticate } from \"../shopify.server\";\n   *\n   * export const loader = async ({ request }: LoaderFunctionArgs) => {\n   *   await authenticate.public.appProxy(\n   *     request,\n   *   );\n   *\n   *   const {searchParams} = new URL(request.url);\n   *   const shop = searchParams.get(\"shop\");\n   *   const customerId = searchParams.get(\"logged_in_customer_id\")\n   *\n   *   return ({my: \"data\", shop, customerId});\n   * };\n   * ```\n   */\n  appProxy: AuthenticateAppProxy;\n\n  /**\n   * Authenticate a request from a customer account extension\n   *\n   * @example\n   * <caption>Authenticating a customer account extension request</caption>\n   * ```ts\n   * // /app/routes/public/widgets.ts\n   * import { LoaderFunctionArgs, json } from \"react-router\";\n   * import { authenticate } from \"../shopify.server\";\n   *\n   * export const loader = async ({ request }: LoaderFunctionArgs) => {\n   *   const { sessionToken, cors } = await authenticate.public.customerAccount(\n   *     request,\n   *   );\n   *   return cors({my: \"data\", shop: sessionToken.dest}));\n   * };\n   * ```\n   */\n  customerAccount: AuthenticateCustomerAccount;\n}"
           },
           "AuthenticateAppProxy": {
             "filePath": "src/server/authenticate/public/appProxy/types.ts",
@@ -8272,14 +8502,6 @@
               {
                 "filePath": "src/server/config-types.ts",
                 "syntaxKind": "PropertySignature",
-                "name": "restResources",
-                "value": "Resources",
-                "description": "REST resources to access the Admin API.\n\nYou can import these from `@shopify/shopify-api/rest/admin/*`.",
-                "isOptional": true
-              },
-              {
-                "filePath": "src/server/config-types.ts",
-                "syntaxKind": "PropertySignature",
                 "name": "scopes",
                 "value": "string[] | AuthScopes",
                 "description": "The scopes your app needs to access the API. Not required if using Shopify managed installation.",
@@ -8363,7 +8585,7 @@
                 ]
               }
             ],
-            "value": "export interface AppConfigArg<\n  Storage extends SessionStorage = SessionStorage,\n  Future extends FutureFlagOptions = FutureFlagOptions,\n> extends Omit<\n    ApiConfigArg<ApiFutureFlags<Future>>,\n    | 'hostName'\n    | 'hostScheme'\n    | 'apiVersion'\n    | 'isCustomStoreApp'\n    | 'isEmbeddedApp'\n    | 'future'\n    | 'billing'\n  > {\n  /**\n   * The URL your app is running on.\n   *\n   * The `@shopify/cli` provides this URL as `process.env.SHOPIFY_APP_URL`.  For development this is probably a tunnel URL that points to your local machine.  If this is a production app, this is your production URL.\n   */\n  appUrl: string;\n\n  /**\n   * An adaptor for storing sessions in your database of choice.\n   *\n   * Shopify provides multiple session storage adaptors and you can create your own.\n   *\n   * Optional for apps created in the Shopify Admin.\n   *\n   * {@link https://github.com/Shopify/shopify-app-js/blob/main/README.md#session-storage-options}\n   *\n   * @example\n   * <caption>Storing sessions with Prisma.</caption>\n   * <description>Add the `@shopify/shopify-app-session-storage-prisma` package to use the Prisma session storage.</description>\n   * ```ts\n   * import { shopifyApp } from \"@shopify/shopify-app-react-router/server\";\n   * import { PrismaSessionStorage } from \"@shopify/shopify-app-session-storage-prisma\";\n   *\n   * import prisma from \"~/db.server\";\n   *\n   * const shopify = shopifyApp({\n   *   // ... etc\n   *   sessionStorage: new PrismaSessionStorage(prisma),\n   * });\n   * export default shopify;\n   * ```\n   */\n  sessionStorage?: Storage;\n\n  /**\n   * Billing configurations for the app.\n   *\n   * Uses the new line item billing format that allows for more complex billing structures.\n   *\n   * @example\n   * ```ts\n   * import { BillingInterval } from \"@shopify/shopify-api\";\n   *\n   * billing: {\n   *   myPlan: {\n   *     lineItems: [\n   *       {\n   *         amount: 10,\n   *         currencyCode: 'USD',\n   *         interval: BillingInterval.Every30Days,\n   *       }\n   *     ],\n   *   },\n   * }\n   * ```\n   */\n  billing?: BillingConfigWithLineItems;\n\n  /**\n   * Whether your app use online or offline tokens.\n   *\n   * If your app uses online tokens, then both online and offline tokens will be saved to your database.  This ensures your app can perform background jobs.\n   *\n   * {@link https://shopify.dev/docs/apps/auth/oauth/access-modes}\n   *\n   * @defaultValue `false`\n   */\n  useOnlineTokens?: boolean;\n\n  /**\n   * The config for the shop-specific webhooks your app needs.\n   * \n   * Use this to configure shop-specific webhooks. In many cases defining app-specific webhooks in the `shopify.app.toml` will be sufficient and easier to manage.  Please see:\n   * \n   * {@link https://shopify.dev/docs/apps/build/webhooks/subscribe#app-specific-vs-shop-specific-subscriptions}\n   * \n   * You should only use this if you need shop-specific webhooks. If you do need shop-specific webhooks this can be in used in conjunction with the afterAuth hook, loaders or processes such as background jobs.\n   *\n   * @example\n   * <caption>Registering shop-specific webhooks.</caption>\n   * ```ts\n   * // app/shopify.server.ts\n   * import { DeliveryMethod, shopifyApp } from \"@shopify/shopify-app-react-router/server\";\n   *\n   * const shopify = shopifyApp({\n   *   webhooks: {\n   *     PRODUCTS_CREATE: {\n   *       deliveryMethod: DeliveryMethod.Http,\n   *        callbackUrl: \"/webhooks/products/create\",\n   *     },\n   *   },\n   *   hooks: {\n   *     afterAuth: async ({ session }) => {\n   *       // Register webhooks for the shop\n   *       // In this example, every shop will have these webhooks\n   *       // But you could wrap this in some custom shop specific conditional logic\n   *       shopify.registerWebhooks({ session });\n   *     }\n   *   },\n   *   // ...etc\n   * });\n   * export default shopify;\n   * export const authenticate = shopify.authenticate;\n   * ```\n   * \n   * @example\n   * <caption>Registering app-specific webhooks (Recommended)</caption>\n   * ```toml\n   * # shopify.app.toml\n   * [webhooks]\n   * api_version = \"2024-07\"\n\n   *   [[webhooks.subscriptions]]\n   *   topics = [\"products/create\"]\n   *   uri = \"/webhooks/products/create\"\n   * \n   * ```\n   * \n   * @example\n   * <caption>Authenticating a webhook request</caption>\n   *\n   * ```ts\n   * // /app/routes/webhooks.ts\n   * import { ActionFunctionArgs } from \"react-router\";\n   * import { authenticate } from \"../shopify.server\";\n   * import db from \"../db.server\";\n   *\n   * export const action = async ({ request }: ActionFunctionArgs) => {\n   *   const { topic, shop, session, payload } = await authenticate.webhook(request);\n   * \n   *   // Webhook requests can trigger after an app is uninstalled\n   *   // If the app is already uninstalled, the session may be undefined.\n   *   if (!session) {\n   *     throw new Response();\n   *   }\n   * \n   *   // Handle the webhook\n   *   console.log(`${TOPIC} webhook received with`, JSON.stringify(payload))\n   *\n   *   throw new Response();\n   * };\n   * ```\n   */\n  webhooks?: WebhookConfig;\n\n  /**\n   * Functions to call at key places during your apps lifecycle.\n   *\n   * These functions are called in the context of the request that triggered them.  This means you can access the session.\n   *\n   * @example\n   * <caption>Seeding your database custom data when a merchant installs your app.</caption>\n   * ```ts\n   * import { DeliveryMethod, shopifyApp } from \"@shopify/shopify-app-react-router/server\";\n   * import { seedStoreData } from \"~/db/seeds\"\n   *\n   * const shopify = shopifyApp({\n   *   hooks: {\n   *     afterAuth: async ({ session }) => {\n   *       seedStoreData({session})\n   *     }\n   *   },\n   *   // ...etc\n   * });\n   * ```\n   */\n  hooks?: HooksConfig;\n\n  /**\n   * How your app is distributed. Default is `AppDistribution.AppStore`.\n   *\n   * AppStore should be used for public apps that are distributed in the Shopify App Store.\n   * SingleMerchant should be used for custom apps managed in the Partner Dashboard.\n   * ShopifyAdmin should be used for apps that are managed in the merchant's Shopify Admin.\n   *\n   * {@link https://shopify.dev/docs/apps/distribution}\n   */\n  distribution?: AppDistribution;\n\n  /**\n   * What version of Shopify's Admin API's would you like to use.\n   *\n   * {@link https://shopify.dev/docs/api/}\n   *\n   * @defaultValue `LATEST_API_VERSION` from `@shopify/shopify-app-react-router`\n   *\n   * @example\n   * <caption>Using the latest API Version (Recommended)</caption>\n   * ```ts\n   * import { LATEST_API_VERSION, shopifyApp } from \"@shopify/shopify-app-react-router/server\";\n   *\n   * const shopify = shopifyApp({\n   *   // ...etc\n   *   apiVersion: LATEST_API_VERSION,\n   * });\n   * ```\n   */\n  apiVersion?: ApiVersion;\n\n  /**\n   * A path that Shopify can reserve for auth related endpoints.\n   *\n   * This must match a $ route in your React Router app.  That route must export a loader function that calls `shopify.authenticate.admin(request)`.\n   *\n   * @default `\"/auth\"`\n   *\n   * @example\n   * <caption>Using the latest API Version (Recommended)</caption>\n   * ```ts\n   * // /app/shopify.server.ts\n   * import { LATEST_API_VERSION, shopifyApp } from \"@shopify/shopify-app-react-router/server\";\n   *\n   * const shopify = shopifyApp({\n   *   // ...etc\n   *   apiVersion: LATEST_API_VERSION,\n   * });\n   * export default shopify;\n   * export const authenticate = shopify.authenticate;\n   *\n   * // /app/routes/auth/$.jsx\n   * import { LoaderFunctionArgs } from \"react-router\";\n   * import { authenticate } from \"../../shopify.server\";\n   *\n   * export async function loader({ request }: LoaderFunctionArgs) {\n   *   await authenticate.admin(request);\n   *\n   *   return null\n   * }\n   * ```\n   */\n  authPathPrefix?: string;\n\n  /**\n   * Features that will be introduced in future releases of this package.\n   *\n   * You can opt in to these features by setting the corresponding flags. By doing so, you can prepare for future\n   * releases in advance and provide feedback on the new features.\n   */\n  future?: Future;\n}"
+            "value": "export interface AppConfigArg<\n  Storage extends SessionStorage = SessionStorage,\n  Future extends FutureFlagOptions = FutureFlagOptions,\n> extends Omit<\n    ApiConfigArg<ApiFutureFlags<Future>>,\n    | 'hostName'\n    | 'hostScheme'\n    | 'apiVersion'\n    | 'isCustomStoreApp'\n    | 'isEmbeddedApp'\n    | 'future'\n    | 'billing'\n    | 'restResources'\n  > {\n  /**\n   * The URL your app is running on.\n   *\n   * The `@shopify/cli` provides this URL as `process.env.SHOPIFY_APP_URL`.  For development this is probably a tunnel URL that points to your local machine.  If this is a production app, this is your production URL.\n   */\n  appUrl: string;\n\n  /**\n   * An adaptor for storing sessions in your database of choice.\n   *\n   * Shopify provides multiple session storage adaptors and you can create your own.\n   *\n   * Optional for apps created in the Shopify Admin.\n   *\n   * {@link https://github.com/Shopify/shopify-app-js/blob/main/README.md#session-storage-options}\n   *\n   * @example\n   * <caption>Storing sessions with Prisma.</caption>\n   * <description>Add the `@shopify/shopify-app-session-storage-prisma` package to use the Prisma session storage.</description>\n   * ```ts\n   * import { shopifyApp } from \"@shopify/shopify-app-react-router/server\";\n   * import { PrismaSessionStorage } from \"@shopify/shopify-app-session-storage-prisma\";\n   *\n   * import prisma from \"~/db.server\";\n   *\n   * const shopify = shopifyApp({\n   *   // ... etc\n   *   sessionStorage: new PrismaSessionStorage(prisma),\n   * });\n   * export default shopify;\n   * ```\n   */\n  sessionStorage?: Storage;\n\n  /**\n   * Billing configurations for the app.\n   *\n   * Uses the new line item billing format that allows for more complex billing structures.\n   *\n   * @example\n   * ```ts\n   * import { BillingInterval } from \"@shopify/shopify-api\";\n   *\n   * billing: {\n   *   myPlan: {\n   *     lineItems: [\n   *       {\n   *         amount: 10,\n   *         currencyCode: 'USD',\n   *         interval: BillingInterval.Every30Days,\n   *       }\n   *     ],\n   *   },\n   * }\n   * ```\n   */\n  billing?: BillingConfigWithLineItems;\n\n  /**\n   * Whether your app use online or offline tokens.\n   *\n   * If your app uses online tokens, then both online and offline tokens will be saved to your database.  This ensures your app can perform background jobs.\n   *\n   * {@link https://shopify.dev/docs/apps/auth/oauth/access-modes}\n   *\n   * @defaultValue `false`\n   */\n  useOnlineTokens?: boolean;\n\n  /**\n   * The config for the shop-specific webhooks your app needs.\n   * \n   * Use this to configure shop-specific webhooks. In many cases defining app-specific webhooks in the `shopify.app.toml` will be sufficient and easier to manage.  Please see:\n   * \n   * {@link https://shopify.dev/docs/apps/build/webhooks/subscribe#app-specific-vs-shop-specific-subscriptions}\n   * \n   * You should only use this if you need shop-specific webhooks. If you do need shop-specific webhooks this can be in used in conjunction with the afterAuth hook, loaders or processes such as background jobs.\n   *\n   * @example\n   * <caption>Registering shop-specific webhooks.</caption>\n   * ```ts\n   * // app/shopify.server.ts\n   * import { DeliveryMethod, shopifyApp } from \"@shopify/shopify-app-react-router/server\";\n   *\n   * const shopify = shopifyApp({\n   *   webhooks: {\n   *     PRODUCTS_CREATE: {\n   *       deliveryMethod: DeliveryMethod.Http,\n   *        callbackUrl: \"/webhooks/products/create\",\n   *     },\n   *   },\n   *   hooks: {\n   *     afterAuth: async ({ session }) => {\n   *       // Register webhooks for the shop\n   *       // In this example, every shop will have these webhooks\n   *       // But you could wrap this in some custom shop specific conditional logic\n   *       shopify.registerWebhooks({ session });\n   *     }\n   *   },\n   *   // ...etc\n   * });\n   * export default shopify;\n   * export const authenticate = shopify.authenticate;\n   * ```\n   * \n   * @example\n   * <caption>Registering app-specific webhooks (Recommended)</caption>\n   * ```toml\n   * # shopify.app.toml\n   * [webhooks]\n   * api_version = \"2024-07\"\n\n   *   [[webhooks.subscriptions]]\n   *   topics = [\"products/create\"]\n   *   uri = \"/webhooks/products/create\"\n   * \n   * ```\n   * \n   * @example\n   * <caption>Authenticating a webhook request</caption>\n   *\n   * ```ts\n   * // /app/routes/webhooks.ts\n   * import { ActionFunctionArgs } from \"react-router\";\n   * import { authenticate } from \"../shopify.server\";\n   * import db from \"../db.server\";\n   *\n   * export const action = async ({ request }: ActionFunctionArgs) => {\n   *   const { topic, shop, session, payload } = await authenticate.webhook(request);\n   * \n   *   // Webhook requests can trigger after an app is uninstalled\n   *   // If the app is already uninstalled, the session may be undefined.\n   *   if (!session) {\n   *     throw new Response();\n   *   }\n   * \n   *   // Handle the webhook\n   *   console.log(`${TOPIC} webhook received with`, JSON.stringify(payload))\n   *\n   *   throw new Response();\n   * };\n   * ```\n   */\n  webhooks?: WebhookConfig;\n\n  /**\n   * Functions to call at key places during your apps lifecycle.\n   *\n   * These functions are called in the context of the request that triggered them.  This means you can access the session.\n   *\n   * @example\n   * <caption>Seeding your database custom data when a merchant installs your app.</caption>\n   * ```ts\n   * import { DeliveryMethod, shopifyApp } from \"@shopify/shopify-app-react-router/server\";\n   * import { seedStoreData } from \"~/db/seeds\"\n   *\n   * const shopify = shopifyApp({\n   *   hooks: {\n   *     afterAuth: async ({ session }) => {\n   *       seedStoreData({session})\n   *     }\n   *   },\n   *   // ...etc\n   * });\n   * ```\n   */\n  hooks?: HooksConfig;\n\n  /**\n   * How your app is distributed. Default is `AppDistribution.AppStore`.\n   *\n   * AppStore should be used for public apps that are distributed in the Shopify App Store.\n   * SingleMerchant should be used for custom apps managed in the Partner Dashboard.\n   * ShopifyAdmin should be used for apps that are managed in the merchant's Shopify Admin.\n   *\n   * {@link https://shopify.dev/docs/apps/distribution}\n   */\n  distribution?: AppDistribution;\n\n  /**\n   * What version of Shopify's Admin API's would you like to use.\n   *\n   * {@link https://shopify.dev/docs/api/}\n   *\n   * @defaultValue `LATEST_API_VERSION` from `@shopify/shopify-app-react-router`\n   *\n   * @example\n   * <caption>Using the latest API Version (Recommended)</caption>\n   * ```ts\n   * import { LATEST_API_VERSION, shopifyApp } from \"@shopify/shopify-app-react-router/server\";\n   *\n   * const shopify = shopifyApp({\n   *   // ...etc\n   *   apiVersion: LATEST_API_VERSION,\n   * });\n   * ```\n   */\n  apiVersion?: ApiVersion;\n\n  /**\n   * A path that Shopify can reserve for auth related endpoints.\n   *\n   * This must match a $ route in your React Router app.  That route must export a loader function that calls `shopify.authenticate.admin(request)`.\n   *\n   * @default `\"/auth\"`\n   *\n   * @example\n   * <caption>Using the latest API Version (Recommended)</caption>\n   * ```ts\n   * // /app/shopify.server.ts\n   * import { LATEST_API_VERSION, shopifyApp } from \"@shopify/shopify-app-react-router/server\";\n   *\n   * const shopify = shopifyApp({\n   *   // ...etc\n   *   apiVersion: LATEST_API_VERSION,\n   * });\n   * export default shopify;\n   * export const authenticate = shopify.authenticate;\n   *\n   * // /app/routes/auth/$.jsx\n   * import { LoaderFunctionArgs } from \"react-router\";\n   * import { authenticate } from \"../../shopify.server\";\n   *\n   * export async function loader({ request }: LoaderFunctionArgs) {\n   *   await authenticate.admin(request);\n   *\n   *   return null\n   * }\n   * ```\n   */\n  authPathPrefix?: string;\n\n  /**\n   * Features that will be introduced in future releases of this package.\n   *\n   * You can opt in to these features by setting the corresponding flags. By doing so, you can prepare for future\n   * releases in advance and provide feedback on the new features.\n   */\n  future?: Future;\n}"
           },
           "ApiVersion": {
             "filePath": "../shopify-api/dist/ts/lib/types.d.ts",

@@ -12,7 +12,6 @@ const shopify = shopifyApp({
   logger: {
     level: LogSeverity.Debug, // Set the log level to debug
   },
-  useTokenExchange: true, // Use online access tokens
   future: {
     exampleFlag: true, // Enable a future flag to true
   },
