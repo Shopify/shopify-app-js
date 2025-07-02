@@ -1,6 +1,6 @@
 {
   "name": "@shopify/shopify-app-react-router",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Shopify React Router - to simplify the building of Shopify Apps with React Router",
   "repository": {
     "type": "git",
