@@ -1,6 +1,7 @@
-import {redirect as remixRedirect} from '@remix-run/server-runtime';
+import {redirect as reactRouterRedirect} from 'react-router';
 
 import type {BasicParams} from '../../../types';
+import {AppDistribution} from '../../../types';
 
 import {redirectWithAppBridgeHeaders} from './redirect-with-app-bridge-headers';
 
@@ -10,10 +11,10 @@ export async function redirectToInstallPage(
   optionalScopes: string[] = [],
 ): Promise<never> {
   const installUrl = buildInstallUrl(params, shop, optionalScopes);
-  if (params.config.isEmbeddedApp) {
-    throw redirectWithAppBridgeHeaders(installUrl);
+  if (params.config.distribution === AppDistribution.ShopifyAdmin) {
+    throw reactRouterRedirect(installUrl);
   } else {
-    throw remixRedirect(installUrl);
+    throw redirectWithAppBridgeHeaders(installUrl);
   }
 }
 

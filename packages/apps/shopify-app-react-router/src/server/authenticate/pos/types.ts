@@ -1,6 +1,6 @@
 import {JwtPayload} from '@shopify/shopify-api';
 
-import {EnsureCORSFunction} from '../../helpers/ensure-cors-headers';
+import {EnsureCORSFunction} from '../helpers/ensure-cors-headers';
 
 export type AuthenticatePOS = (
   request: Request,
@@ -25,15 +25,15 @@ export interface POSContext {
    * <description>Get store-specific data using the `sessionToken` object.</description>
    * ```ts
    * // app/routes/public/my-route.ts
-   * import { LoaderFunctionArgs, json } from "@remix-run/node";
+   * import { LoaderFunctionArgs, json } from "react-router";
    * import { authenticate } from "../shopify.server";
    * import { getMyAppData } from "~/db/model.server";
    *
    * export const loader = async ({ request }: LoaderFunctionArgs) => {
-   *   const { sessionToken } = await authenticate.public.pos(
+   *   const { sessionToken } = await authenticate.pos(
    *     request
    *   );
-   *   return json(await getMyAppData({shop: sessionToken.dest}));
+   *   return (await getMyAppData({shop: sessionToken.dest}));
    * };
    * ```
    */
@@ -47,17 +47,17 @@ export interface POSContext {
    * <description>Use the `cors` helper to ensure your app can respond to POS UI extension requests.</description>
    * ```ts
    * // app/routes/public/my-route.ts
-   * import { LoaderFunctionArgs, json } from "@remix-run/node";
+   * import { LoaderFunctionArgs, json } from "react-router";
    * import { authenticate } from "../shopify.server";
    * import { getMyAppData } from "~/db/model.server";
    *
    * export const loader = async ({ request }: LoaderFunctionArgs) => {
-   *   const { sessionToken, cors } = await authenticate.public.pos(
+   *   const { sessionToken, cors } = await authenticate.pos(
    *     request,
    *     { corsHeaders: ["X-My-Custom-Header"] }
    *   );
    *   const data = await getMyAppData({shop: sessionToken.dest});
-   *   return cors(json(data));
+   *   return cors(data));
    * };
    * ```
    */

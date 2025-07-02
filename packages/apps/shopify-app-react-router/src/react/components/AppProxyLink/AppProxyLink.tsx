@@ -21,7 +21,7 @@ export interface AppProxyLinkProps
  * ```ts
  * // /app/routes/**\/*.ts
  * import {authenticate} from '~/shopify.server';
- * import {AppProxyProvider, AppProxyLink} from '@shopify/shopify-app-remix/react';
+ * import {AppProxyProvider, AppProxyLink} from '@shopify/shopify-app-react-router/react';
  *
  * export async function loader({ request }) {
  *   await authenticate.public.appProxy(request);

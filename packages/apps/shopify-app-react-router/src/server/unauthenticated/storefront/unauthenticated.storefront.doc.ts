@@ -32,7 +32,7 @@ Apps must obtain the shop domain from the 3rd party service in a secure way.`,
     {
       name: 'API context',
       subtitle: 'Interact with the Storefront API.',
-      url: '/docs/api/shopify-app-remix/apis/storefront-api',
+      url: '/docs/api/shopify-app-react-router/apis/storefront-api',
     },
   ],
 };

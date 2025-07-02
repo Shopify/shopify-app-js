@@ -1,16 +1,10 @@
-import {Session, ShopifyRestResources} from '@shopify/shopify-api';
+import {Session} from '@shopify/shopify-api';
 
-import {AppConfigArg} from '../../../config-types';
 import {AdminApiContext, StorefrontContext} from '../../../clients';
 
-export type AuthenticateAppProxy<
-  ConfigArg extends AppConfigArg,
-  Resources extends ShopifyRestResources = ShopifyRestResources,
-> = (
+export type AuthenticateAppProxy = (
   request: Request,
-) => Promise<
-  AppProxyContext | AppProxyContextWithSession<ConfigArg, Resources>
->;
+) => Promise<AppProxyContext | AppProxyContextWithSession>;
 
 interface Options {
   /**
@@ -64,7 +58,7 @@ interface Context {
    * <description>Handle form submissions through an app proxy.</description>
    * ```ts
    * // app/routes/apps.proxy.my-action.tsx
-   * import { redirect } from "@remix-run/node";
+   * import { redirect } from "react-router";
    * import { authenticate } from "~/shopify.server";
    *
    * export async function loader({ request }) {
@@ -118,10 +112,7 @@ export interface AppProxyContext extends Context {
   storefront: undefined;
 }
 
-export interface AppProxyContextWithSession<
-  ConfigArg extends AppConfigArg,
-  Resources extends ShopifyRestResources = ShopifyRestResources,
-> extends Context {
+export interface AppProxyContextWithSession extends Context {
   /**
    * The session for the shop that made the request.
    *
@@ -134,7 +125,7 @@ export interface AppProxyContextWithSession<
    * <description>Get the session for the shop that initiated the request to the app proxy.</description>
    * ```ts
    * // app/routes/**\/.ts
-   * import { json } from "@remix-run/node";
+   * import { json } from "react-router";
    * import { authenticate } from "../shopify.server";
    * import { getMyAppModelData } from "~/db/model.server";
    *
@@ -144,7 +135,7 @@ export interface AppProxyContextWithSession<
    *     await authenticate.public.appProxy(request);
    *
    *   // Use the session data to make to queries to your database or additional requests.
-   *   return json(
+   *   return (
    *     await getMyAppModelData({shop: session.shop})
    *   );
    * };
@@ -160,7 +151,7 @@ export interface AppProxyContextWithSession<
    * <description>Use the `admin` object to interact with the admin GraphQL API.</description>
    * ```ts
    * // app/routes/**\/.ts
-   * import { json } from "@remix-run/node";
+   * import { json } from "react-router";
    * import { authenticate } from "../shopify.server";
    *
    * export async function action({ request }: ActionFunctionArgs) {
@@ -183,11 +174,11 @@ export interface AppProxyContextWithSession<
    *   );
    *
    *   const productData = await response.json();
-   *   return json({ data: productData.data });
+   *   return ({ data: productData.data });
    * }
    * ```
    */
-  admin: AdminApiContext<ConfigArg, Resources>;
+  admin: AdminApiContext;
 
   /**
    * Method for interacting with the Shopify Storefront Graphql API for the store that made the request.
@@ -197,7 +188,7 @@ export interface AppProxyContextWithSession<
    * <description>Use the `storefront` object to interact with the GraphQL API.</description>
    * ```ts
    * // app/routes/**\/.ts
-   * import { json } from "@remix-run/node";
+   * import { json } from "react-router";
    * import { authenticate } from "../shopify.server";
    *
    * export async function action({ request }: ActionFunctionArgs) {
@@ -216,7 +207,7 @@ export interface AppProxyContextWithSession<
    *     }`
    *   );
    *
-   *   return json(await response.json());
+   *   return (await response.json());
    * }
    * ```
    */

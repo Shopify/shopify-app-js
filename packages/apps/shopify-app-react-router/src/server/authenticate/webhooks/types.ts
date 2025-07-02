@@ -1,6 +1,5 @@
-import {Session, ShopifyRestResources} from '@shopify/shopify-api';
+import {Session} from '@shopify/shopify-api';
 
-import {AppConfigArg} from '../../config-types';
 import type {AdminApiContext} from '../../clients';
 
 export interface RegisterWebhooksOptions {
@@ -19,7 +18,7 @@ interface Context<Topics = string | number | symbol> {
    * <description>Get the API version used for webhook request.</description>
    * ```ts
    * // /app/routes/webhooks.tsx
-   * import { ActionFunctionArgs } from "@remix-run/node";
+   * import { ActionFunctionArgs } from "react-router";
    * import { authenticate } from "../shopify.server";
    *
    * export const action = async ({ request }: ActionFunctionArgs) => {
@@ -38,7 +37,7 @@ interface Context<Topics = string | number | symbol> {
    * <description>Get the shop that triggered a webhook.</description>
    * ```ts
    * // /app/routes/webhooks.tsx
-   * import { ActionFunctionArgs } from "@remix-run/node";
+   * import { ActionFunctionArgs } from "react-router";
    * import { authenticate } from "../shopify.server";
    *
    * export const action = async ({ request }: ActionFunctionArgs) => {
@@ -57,7 +56,7 @@ interface Context<Topics = string | number | symbol> {
    * <description>Get the event topic for the webhook.</description>
    * ```ts
    * // /app/routes/webhooks.tsx
-   * import { ActionFunctionArgs } from "@remix-run/node";
+   * import { ActionFunctionArgs } from "react-router";
    * import { authenticate } from "../shopify.server";
    *
    * export const action = async ({ request }: ActionFunctionArgs) => {
@@ -83,7 +82,7 @@ interface Context<Topics = string | number | symbol> {
    * <description>Get the webhook ID.</description>
    * ```ts
    * // /app/routes/webhooks.tsx
-   * import { ActionFunctionArgs } from "@remix-run/node";
+   * import { ActionFunctionArgs } from "react-router";
    * import { authenticate } from "../shopify.server";
    *
    * export const action = async ({ request }: ActionFunctionArgs) => {
@@ -102,7 +101,7 @@ interface Context<Topics = string | number | symbol> {
    * <description>Get the request's POST payload.</description>
    * ```ts
    * // /app/routes/webhooks.tsx
-   * import { ActionFunctionArgs } from "@remix-run/node";
+   * import { ActionFunctionArgs } from "react-router";
    * import { authenticate } from "../shopify.server";
    *
    * export const action = async ({ request }: ActionFunctionArgs) => {
@@ -121,7 +120,7 @@ interface Context<Topics = string | number | symbol> {
    * <description>Get the webhook sub-topic.</description>
    * ```ts
    * // /app/routes/webhooks.tsx
-   * import { ActionFunctionArgs } from "@remix-run/node";
+   * import { ActionFunctionArgs } from "react-router";
    * import { authenticate } from "../shopify.server";
    *
    * export const action = async ({ request }: ActionFunctionArgs) => {
@@ -140,11 +139,8 @@ export interface WebhookContextWithoutSession<Topics = string | number | symbol>
   admin: undefined;
 }
 
-export interface WebhookContextWithSession<
-  ConfigArg extends AppConfigArg,
-  Resources extends ShopifyRestResources,
-  Topics = string | number | symbol,
-> extends Context<Topics> {
+export interface WebhookContextWithSession<Topics = string | number | symbol>
+  extends Context<Topics> {
   /**
    * A session with an offline token for the shop.
    *
@@ -157,7 +153,7 @@ export interface WebhookContextWithSession<
    * <caption>Protecting against uninstalled apps.</caption>
    * ```ts
    * // /app/routes/webhooks.tsx
-   * import type { ActionFunctionArgs } from "@remix-run/node";
+   * import type { ActionFunctionArgs } from "react-router";
    * import { authenticate } from "~/shopify.server";
 
    * export const action = async ({ request }: ActionFunctionArgs) => {
@@ -188,7 +184,7 @@ export interface WebhookContextWithSession<
    * <description>Use the `admin` object in the context to interact with the Admin API.</description>
    * ```ts
    * // /app/routes/webhooks.tsx
-   * import { ActionFunctionArgs } from "@remix-run/node";
+   * import { ActionFunctionArgs } from "react-router";
    * import { authenticate } from "../shopify.server";
    *
    * export async function action({ request }: ActionFunctionArgs) {
@@ -213,23 +209,17 @@ export interface WebhookContextWithSession<
    *   );
    *
    *   const productData = await response.json();
-   *   return json({ data: productData.data });
+   *   return ({ data: productData.data });
    * }
    * ```
    */
-  admin: AdminApiContext<ConfigArg, Resources>;
+  admin: AdminApiContext;
 }
 
-export type WebhookContext<
-  ConfigArg extends AppConfigArg,
-  Resources extends ShopifyRestResources,
-  Topics = string | number | symbol,
-> =
+export type WebhookContext<Topics = string | number | symbol> =
   | WebhookContextWithoutSession<Topics>
-  | WebhookContextWithSession<ConfigArg, Resources, Topics>;
+  | WebhookContextWithSession<Topics>;
 
-export type AuthenticateWebhook<
-  ConfigArg extends AppConfigArg,
-  Resources extends ShopifyRestResources,
-  Topics = string | number | symbol,
-> = (request: Request) => Promise<WebhookContext<ConfigArg, Resources, Topics>>;
+export type AuthenticateWebhook<Topics = string | number | symbol> = (
+  request: Request,
+) => Promise<WebhookContext<Topics>>;

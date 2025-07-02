@@ -1,17 +1,22 @@
-import {
-  AppProvider as PolarisAppProvider,
-  AppProviderProps as PolarisAppProviderProps,
-} from '@shopify/polaris';
-// This leads to some TS errors, but it does compile to something that works
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
-import englishI18n from '@shopify/polaris/locales/en.json' with {type: 'json'};
+import React, {useEffect} from 'react';
+import {useNavigate} from 'react-router';
 
-import {APP_BRIDGE_URL} from '../../const';
-import {RemixPolarisLink} from '../RemixPolarisLink';
+interface BaseProps {
+  children: React.ReactNode;
+}
 
-export interface AppProviderProps
-  extends Omit<PolarisAppProviderProps, 'linkComponent' | 'i18n'> {
+interface EmbeddedProps extends BaseProps {
+  /**
+   * If this route should be rendered inside the Shopify admin.
+   *
+   * Setting this to true will include the App Bridge script on the page.
+   * If true and the route is loaded outside the Shopify admin, then the user will be redirected to the Shopify admin.
+   *
+   * Setting this to false will not include the App Bridge script on the page.
+   *
+   * {@link https://shopify.dev/docs/apps/admin/embedded-app-home}
+   */
+  embedded: true;
   /**
    * The API key for your Shopify app. This is the `Client ID` from the Partner Dashboard.
    *
@@ -19,54 +24,53 @@ export interface AppProviderProps
    * variable, then you need to pass it from the loader to the component.
    */
   apiKey: string;
+}
+
+interface NonEmbeddedProps extends BaseProps {
   /**
-   * Whether the app is loaded inside the Shopify Admin. Default is `true`.
+   * If this route should be rendered inside the Shopify admin.
+   *
+   * Setting this to false means only Polaris Web components will be added to the route, not App Bridge.
+   *
+   * Setting this to true will include the App Bridge script on the page.
    *
    * {@link https://shopify.dev/docs/apps/admin/embedded-app-home}
    */
-  isEmbeddedApp?: boolean;
-  /**
-   * The internationalization (i18n) configuration for your Polaris provider.
-   *
-   * {@link https://polaris.shopify.com/components/utilities/app-provider}
-   */
-  i18n?: PolarisAppProviderProps['i18n'];
-  /**
-   * Used internally by Shopify. You don't need to set this.
-   * @private
-   */
-  __APP_BRIDGE_URL?: string;
+  embedded?: false;
 }
 
+export type AppProviderProps = NonEmbeddedProps | EmbeddedProps;
+
 /**
- * Sets up the Polaris `AppProvider` and injects the App Bridge script.
+ * Sets up your app to look like the admin
  *
- * This component extends the [`AppProvider`](https://polaris.shopify.com/components/utilities/app-provider) component
- * from Polaris, and accepts all of its props except for `linkComponent`, which is overridden to use the Remix `Link`
- * component.
+ * Adds Polaris Web components to the route.
+ * If embedded is true and apiKey is provided, then the App Bridge script will be added to the page.
  *
- * {@link https://polaris.shopify.com/components/utilities/app-provider}
+ * {@link https://shopify.dev/docs/apps/admin/embedded-app-home}
+ * {@link https://shopify.dev/docs/api/app-home/using-polaris-components}
  * {@link https://shopify.dev/tools/app-bridge}
  *
  * @example
- * <caption>Set up AppProvider.</caption>
- * <description>Wrap your app in the `AppProvider` component and pass in your API key.</description>
+ * <caption>Set up AppProvider for an embedded route</caption>
+ * <description>Wrap your route in the `AppProvider` component and pass in your API key.</description>
  * ```ts
  * // /app/routes/**\/*.ts
+ * import {useLoaderData} from 'react-router';
  * import {authenticate} from '~/shopify.server';
- * import {AppProvider} from '@shopify/shopify-app-remix/react';
+ * import {AppProvider} from '@shopify/shopify-app-react-router/react';
  *
  * export async function loader({ request }) {
  *   await authenticate.admin(request);
  *
- *   return json({ apiKey: process.env.SHOPIFY_API_KEY });
+ *   return { apiKey: process.env.SHOPIFY_API_KEY };
  * }
  *
  * export default function App() {
  *   const { apiKey } = useLoaderData();
  *
  *   return (
- *     <AppProvider isEmbeddedApp apiKey={apiKey}>
+ *     <AppProvider embedded apiKey={apiKey}>
  *       <Outlet />
  *     </AppProvider>
  *   );
@@ -74,27 +78,15 @@ export interface AppProviderProps
  * ```
  *
  * @example
- * <caption>Localize Polaris components.</caption>
- * <description>Pass in a different locale for Polaris to translate its components.</description>
+ * <caption>Set up AppProvider for a non-embedded route</caption>
+ * <description>Add Polaris web components to the route, without adding the App Bridge script.</description>
  * ```ts
  * // /app/routes/**\/*.ts
- * import {authenticate} from '~/shopify.server';
- * import {AppProvider} from '@shopify/shopify-app-remix/react';
- *
- * export async function loader({ request }) {
- *   await authenticate.admin(request);
- *
- *   return json({
- *     apiKey: process.env.SHOPIFY_API_KEY,
- *     polarisTranslations: require("@shopify/polaris/locales/fr.json"),
- *   });
- * }
+ * import {AppProvider} from '@shopify/shopify-app-react-router/react';
  *
  * export default function App() {
- *   const { apiKey, polarisTranslations } = useLoaderData();
- *
  *   return (
- *     <AppProvider apiKey={apiKey} i18n={polarisTranslations}>
+ *     <AppProvider embedded={false}>
  *       <Outlet />
  *     </AppProvider>
  *   );
@@ -102,25 +94,41 @@ export interface AppProviderProps
  * ```
  */
 export function AppProvider(props: AppProviderProps) {
-  const {
-    children,
-    apiKey,
-    i18n,
-    isEmbeddedApp = true,
-    __APP_BRIDGE_URL = APP_BRIDGE_URL,
-    ...polarisProps
-  } = props;
-
   return (
     <>
-      {isEmbeddedApp && <script src={__APP_BRIDGE_URL} data-api-key={apiKey} />}
-      <PolarisAppProvider
-        {...polarisProps}
-        linkComponent={RemixPolarisLink}
-        i18n={i18n || englishI18n}
-      >
-        {children}
-      </PolarisAppProvider>
+      {props.embedded && <AppBridge apiKey={props.apiKey} />}
+      <script src="https://cdn.shopify.com/shopifycloud/app-bridge-ui-experimental.js" />
+      {props.children}
     </>
+  );
+}
+
+interface AppBridgeProps {
+  apiKey: EmbeddedProps['apiKey'];
+}
+
+function AppBridge({apiKey}: AppBridgeProps) {
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const handleNavigate = (event: Event) => {
+      const href = (event.target as HTMLElement)?.getAttribute('href');
+      if (href) {
+        navigate(href);
+      }
+    };
+
+    document.addEventListener('shopify:navigate', handleNavigate);
+
+    return () => {
+      document.removeEventListener('shopify:navigate', handleNavigate);
+    };
+  }, [navigate]);
+
+  return (
+    <script
+      src="https://cdn.shopify.com/shopifycloud/app-bridge.js"
+      data-api-key={apiKey}
+    />
   );
 }

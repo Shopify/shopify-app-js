@@ -7,16 +7,12 @@ import {
 } from '../__test-helpers';
 import {shopifyApp} from '../shopify-app';
 import {
-  AdminApiContext,
   AdminContext,
-  AdminGraphqlClient,
   AppProxyContext,
   CheckoutContext,
   CustomerAccountContext,
   FlowContext,
   FulfillmentServiceContext,
-  StorefrontApiContext,
-  StorefrontGraphqlClient,
   UnauthenticatedAdminContext,
   UnauthenticatedStorefrontContext,
   WebhookContext,
@@ -30,16 +26,11 @@ describe('assign authentication contexts to variables', () => {
     const session = await setUpValidSession(shopify.sessionStorage);
 
     // WHEN
-    const realContext = await shopify.unauthenticated.admin(session.shop);
-    const context: UnauthenticatedAdminContext<typeof shopify> = realContext;
-    const apiContext: AdminApiContext<typeof shopify> = realContext.admin;
-    const graphqlClient: AdminGraphqlClient<typeof shopify> =
-      realContext.admin.graphql;
+    const context: UnauthenticatedAdminContext =
+      await shopify.unauthenticated.admin(session.shop);
 
     // THEN
-    expect(context.admin).toBeDefined();
-    expect(apiContext.graphql).toBeDefined();
-    expect(graphqlClient).toBeDefined();
+    expect(context.admin.graphql).toBeDefined();
   });
 
   it('unauthenticated.storefront', async () => {
@@ -48,18 +39,11 @@ describe('assign authentication contexts to variables', () => {
     const session = await setUpValidSession(shopify.sessionStorage);
 
     // WHEN
-    const realContext = await shopify.unauthenticated.storefront(session.shop);
-    const context: UnauthenticatedStorefrontContext<typeof shopify> =
-      realContext;
-    const apiContext: StorefrontApiContext<typeof shopify> =
-      realContext.storefront;
-    const graphqlClient: StorefrontGraphqlClient<typeof shopify> =
-      realContext.storefront.graphql;
+    const context: UnauthenticatedStorefrontContext =
+      await shopify.unauthenticated.storefront(session.shop);
 
     // THEN
-    expect(context.storefront).toBeDefined();
-    expect(apiContext.graphql).toBeDefined();
-    expect(graphqlClient).toBeDefined();
+    expect(context.storefront.graphql).toBeDefined();
   });
 
   it('authenticate.admin', async () => {
@@ -70,16 +54,10 @@ describe('assign authentication contexts to variables', () => {
     });
 
     // WHEN
-    const realContext = await shopify.authenticate.admin(request);
-    const context: AdminContext<typeof shopify> = realContext;
-    const apiContext: AdminApiContext<typeof shopify> = realContext.admin;
-    const graphqlClient: AdminGraphqlClient<typeof shopify> =
-      realContext.admin.graphql;
+    const context: AdminContext = await shopify.authenticate.admin(request);
 
     // THEN
-    expect(context.admin).toBeDefined();
-    expect(apiContext.graphql).toBeDefined();
-    expect(graphqlClient).toBeDefined();
+    expect(context.admin.graphql).toBeDefined();
   });
 
   it('authenticate.flow', async () => {
@@ -91,16 +69,10 @@ describe('assign authentication contexts to variables', () => {
     });
 
     // WHEN
-    const realContext = await shopify.authenticate.flow(request);
-    const context: FlowContext<typeof shopify> = realContext;
-    const apiContext: AdminApiContext<typeof shopify> = realContext.admin;
-    const graphqlClient: AdminGraphqlClient<typeof shopify> =
-      realContext.admin.graphql;
+    const context: FlowContext = await shopify.authenticate.flow(request);
 
     // THEN
-    expect(context.admin).toBeDefined();
-    expect(apiContext.graphql).toBeDefined();
-    expect(graphqlClient).toBeDefined();
+    expect(context.admin.graphql).toBeDefined();
   });
 
   it('authenticate.fulfillmentService', async () => {
@@ -112,16 +84,11 @@ describe('assign authentication contexts to variables', () => {
     });
 
     // WHEN
-    const realContext = await shopify.authenticate.fulfillmentService(request);
-    const context: FulfillmentServiceContext<typeof shopify> = realContext;
-    const apiContext: AdminApiContext<typeof shopify> = realContext.admin;
-    const graphqlClient: AdminGraphqlClient<typeof shopify> =
-      realContext.admin.graphql;
+    const context: FulfillmentServiceContext =
+      await shopify.authenticate.fulfillmentService(request);
 
     // THEN
-    expect(context.admin).toBeDefined();
-    expect(apiContext.graphql).toBeDefined();
-    expect(graphqlClient).toBeDefined();
+    expect(context.admin.graphql).toBeDefined();
   });
 
   it('authenticate.webhook', async () => {
@@ -138,16 +105,10 @@ describe('assign authentication contexts to variables', () => {
     });
 
     // WHEN
-    const realContext = await shopify.authenticate.webhook(request);
-    const context: WebhookContext<typeof shopify> = realContext;
-    const apiContext: AdminApiContext<typeof shopify> = realContext.admin!;
-    const graphqlClient: AdminGraphqlClient<typeof shopify> =
-      realContext.admin!.graphql;
+    const context: WebhookContext = await shopify.authenticate.webhook(request);
 
     // THEN
-    expect(context.admin).toBeDefined();
-    expect(apiContext.graphql).toBeDefined();
-    expect(graphqlClient).toBeDefined();
+    expect(context.admin!.graphql).toBeDefined();
   });
 
   it('authenticate.public.appProxy', async () => {
@@ -158,16 +119,11 @@ describe('assign authentication contexts to variables', () => {
     });
 
     // WHEN
-    const realContext = await shopify.authenticate.public.appProxy(request);
-    const context: AppProxyContext<typeof shopify> = realContext;
-    const apiContext: AdminApiContext<typeof shopify> = realContext.admin!;
-    const graphqlClient: AdminGraphqlClient<typeof shopify> =
-      realContext.admin!.graphql;
+    const context: AppProxyContext =
+      await shopify.authenticate.public.appProxy(request);
 
     // THEN
-    expect(context.admin).toBeDefined();
-    expect(apiContext.graphql).toBeDefined();
-    expect(graphqlClient).toBeDefined();
+    expect(context.admin!.graphql).toBeDefined();
   });
 
   it('authenticate.public.checkout', async () => {
@@ -178,8 +134,8 @@ describe('assign authentication contexts to variables', () => {
     });
 
     // WHEN
-    const realContext = await shopify.authenticate.public.checkout(request);
-    const context: CheckoutContext<typeof shopify> = realContext;
+    const context: CheckoutContext =
+      await shopify.authenticate.public.checkout(request);
 
     // THEN
     expect(context.cors).toBeDefined();
@@ -193,9 +149,8 @@ describe('assign authentication contexts to variables', () => {
     });
 
     // WHEN
-    const realContext =
+    const context: CustomerAccountContext =
       await shopify.authenticate.public.customerAccount(request);
-    const context: CustomerAccountContext<typeof shopify> = realContext;
 
     // THEN
     expect(context.cors).toBeDefined();

@@ -1,6 +1,6 @@
-import {redirect} from '@remix-run/server-runtime';
+import {redirect} from 'react-router';
 
-import {BasicParams} from '../../../types';
+import {BasicParams, AppDistribution} from '../../../types';
 
 export function validateShopAndHostParams(
   params: BasicParams,
@@ -8,7 +8,7 @@ export function validateShopAndHostParams(
 ) {
   const {api, config, logger} = params;
 
-  if (config.isEmbeddedApp) {
+  if (config.distribution !== AppDistribution.ShopifyAdmin) {
     const url = new URL(request.url);
     const shop = api.utils.sanitizeShop(url.searchParams.get('shop')!);
     if (!shop) {

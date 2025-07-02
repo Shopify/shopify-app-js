@@ -1,7 +1,7 @@
 import semver from 'semver';
 import {FeatureDeprecatedError, Shopify} from '@shopify/shopify-api';
 
-import {SHOPIFY_REMIX_LIBRARY_VERSION} from './version';
+import {SHOPIFY_REACT_ROUTER_LIBRARY_VERSION} from './version';
 
 // eslint-disable-next-line no-warning-comments
 // TODO This has been copied from shopify-app-express, it should be extracted into a shared package
@@ -16,7 +16,7 @@ export function overrideLogger(logger: Shopify['logger']): Shopify['logger'] {
 
   function deprecated(warningFunction: Shopify['logger']['warning']) {
     return function (version: string, message: string): Promise<void> {
-      if (semver.gte(SHOPIFY_REMIX_LIBRARY_VERSION, version)) {
+      if (semver.gte(SHOPIFY_REACT_ROUTER_LIBRARY_VERSION, version)) {
         throw new FeatureDeprecatedError(
           `Feature was deprecated in version ${version}`,
         );

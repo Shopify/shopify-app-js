@@ -12,17 +12,17 @@ export interface ScopesApiContext {
    * <description>Call `scopes.query` to get scope details.</description>
    * ```ts
    * // /app._index.tsx
-   * import type { LoaderFunctionArgs } from "@remix-run/node";
-   * import { useLoaderData } from "@remix-run/react";
+   * import type { LoaderFunctionArgs } from "react-router";
+   * import { useLoaderData } from "react-router";
    * import { authenticate } from "../shopify.server";
-   * import { json } from "@remix-run/node";
+   * import { json } from "react-router";
    *
    * export const loader = async ({ request }: LoaderFunctionArgs) => {
    *   const { scopes } = await authenticate.admin(request);
    *
    *   const scopesDetail =  await scopes.query();
    *
-   *   return json({
+   *   return ({
    *     hasWriteProducts: scopesDetail.granted.includes('write_products'),
    *   });
    * };
@@ -46,10 +46,10 @@ export interface ScopesApiContext {
    * <description>Call `scopes.request` to request optional scopes.</description>
    * ```ts
    * // /app/routes/app.request.tsx
-   * import type { ActionFunctionArgs } from "@remix-run/node";
-   * import { useFetcher } from "@remix-run/react";
+   * import type { ActionFunctionArgs } from "react-router";
+   * import { useFetcher } from "react-router";
    * import { authenticate } from "../shopify.server";
-   * import { json } from "@remix-run/node";
+   * import { json } from "react-router";
    *
    * // Example of an action to POST a request to for optional scopes
    * export const action = async ({ request }: ActionFunctionArgs) => {
@@ -61,7 +61,7 @@ export interface ScopesApiContext {
    *   // If the scopes are not already granted, a full page redirect to the request URL occurs
    *   await scopes.request(scopesToRequest);
    *   // otherwise return an empty response
-   *   return json({});
+   *   return ({});
    * };
    *
    * export default function Index() {
@@ -89,10 +89,10 @@ export interface ScopesApiContext {
    * <description>Call `scopes.revoke` to revoke optional scopes.</description>
    * ```ts
    * // /app._index.tsx
-   * import type { ActionFunctionArgs } from "@remix-run/node";
-   * import { useFetcher } from "@remix-run/react";
+   * import type { ActionFunctionArgs } from "react-router";
+   * import { useFetcher } from "react-router";
    * import { authenticate } from "../shopify.server";
-   * import { json } from "@remix-run/node";
+   * import { json } from "react-router";
    *
    * // Example of an action to POST optional scopes to revoke
    * export const action = async ({ request }: ActionFunctionArgs) => {
@@ -103,7 +103,7 @@ export interface ScopesApiContext {
    *
    *   const revokedResponse = await scopes.revoke(scopesToRevoke);
    *
-   *   return json(revokedResponse);
+   *   return (revokedResponse);
    * };
    *
    * export default function Index() {

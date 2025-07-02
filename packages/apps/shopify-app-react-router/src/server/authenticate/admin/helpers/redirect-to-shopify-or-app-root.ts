@@ -1,21 +1,25 @@
-import {redirect} from '@remix-run/server-runtime';
+import {redirect} from 'react-router';
 
 import type {BasicParams} from '../../../types';
+import {AppDistribution} from '../../../types';
 
 export async function redirectToShopifyOrAppRoot(
   request: Request,
   params: BasicParams,
   responseHeaders?: Headers,
 ): Promise<never> {
-  const {api} = params;
+  const {api, config} = params;
   const url = new URL(request.url);
 
   const host = api.utils.sanitizeHost(url.searchParams.get('host')!)!;
   const shop = api.utils.sanitizeShop(url.searchParams.get('shop')!)!;
 
-  const redirectUrl = api.config.isEmbeddedApp
-    ? await api.auth.getEmbeddedAppUrl({rawRequest: request})
-    : `/?shop=${shop}&host=${encodeURIComponent(host)}`;
+  let redirectUrl;
+  if (config.distribution === AppDistribution.ShopifyAdmin) {
+    redirectUrl = `/?shop=${shop}&host=${encodeURIComponent(host)}`;
+  } else {
+    redirectUrl = await api.auth.getEmbeddedAppUrl({rawRequest: request});
+  }
 
   throw redirect(redirectUrl, {headers: responseHeaders});
 }

@@ -1,6 +1,8 @@
 import {HttpResponseError, Session} from '@shopify/shopify-api';
 
 import {HandleAdminClientError} from '../../../clients';
+import {AppConfigArg} from '../../../config-types';
+import {BasicParams} from '../../../types';
 
 export interface SessionContext {
   shop: string;
@@ -20,10 +22,13 @@ export interface HandleClientErrorOptions {
 }
 
 export interface AuthorizationStrategy {
-  respondToOAuthRequests: (request: Request) => Promise<void | never>;
   authenticate: (
     request: Request,
     sessionContext: SessionContext,
   ) => Promise<Session | never>;
   handleClientError: (request: Request) => HandleAdminClientError;
 }
+
+export type AuthStrategyFactory<Config extends AppConfigArg> = (
+  params: BasicParams<Config['future']>,
+) => AuthorizationStrategy;

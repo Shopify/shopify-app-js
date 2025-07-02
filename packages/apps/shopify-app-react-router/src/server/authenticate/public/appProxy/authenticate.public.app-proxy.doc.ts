@@ -36,12 +36,12 @@ const data: ReferenceEntityTemplateSchema = {
     {
       name: 'Admin API context',
       subtitle: 'Interact with the Admin API.',
-      url: '/docs/api/shopify-app-remix/apis/admin-api',
+      url: '/docs/api/shopify-app-react-router/apis/admin-api',
     },
     {
       name: 'Storefront API context',
       subtitle: 'Interact with the Storefront API.',
-      url: '/docs/api/shopify-app-remix/apis/storefront-api',
+      url: '/docs/api/shopify-app-react-router/apis/storefront-api',
     },
     {
       name: 'Liquid reference',

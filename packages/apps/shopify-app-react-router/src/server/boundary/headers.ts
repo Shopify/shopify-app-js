@@ -1,4 +1,4 @@
-import {HeadersArgs} from '@remix-run/server-runtime';
+import {HeadersArgs} from 'react-router';
 
 export function headersBoundary(headers: HeadersArgs): Headers {
   const {parentHeaders, loaderHeaders, actionHeaders, errorHeaders} = headers;

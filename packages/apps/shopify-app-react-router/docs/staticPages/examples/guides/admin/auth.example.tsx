@@ -1,4 +1,4 @@
-import {LoaderFunction, ActionFunction} from '@remix-run/node';
+import {LoaderFunction, ActionFunction} from 'react-router';
 
 import {authenticate} from '~/shopify.server';
 

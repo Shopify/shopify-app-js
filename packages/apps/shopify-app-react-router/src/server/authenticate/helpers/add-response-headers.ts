@@ -1,4 +1,5 @@
 import type {BasicParams} from '../../types';
+import {AppDistribution} from '../../types';
 
 export type AddDocumentResponseHeadersFunction = (
   request: Request,
@@ -14,7 +15,8 @@ export function addDocumentResponseHeadersFactory(
     const {searchParams} = new URL(request.url);
     const shop = api.utils.sanitizeShop(searchParams.get('shop')!);
 
-    addDocumentResponseHeaders(headers, config.isEmbeddedApp, shop);
+    const isEmbeddedApp = config.distribution !== AppDistribution.ShopifyAdmin;
+    addDocumentResponseHeaders(headers, isEmbeddedApp, shop);
   };
 }
 

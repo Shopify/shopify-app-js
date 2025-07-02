@@ -27,10 +27,7 @@ describe('shopifyApp', () => {
 
   it('can create shopify object', async () => {
     // GIVEN
-    const shopify = shopifyApp({
-      ...testConfig(),
-      future: {removeRest: false},
-    });
+    const shopify = shopifyApp(testConfig());
 
     // THEN
     expect(shopify).toBeDefined();
@@ -79,7 +76,7 @@ describe('shopifyApp', () => {
 
     // THEN
     expect(apiObject.config.userAgentPrefix).toMatch(
-      /^test \| Shopify Remix Library v[0-9]+\.[0-9]+\.[0-9]+(-rc.[0-9]+)?$/,
+      /^test \| Shopify React Router Library v[0-9]+\.[0-9]+\.[0-9]+(-rc.[0-9]+)?$/,
     );
   });
 

@@ -1,1 +1,1 @@
-npm exec remix vite:dev
+npm exec react-router dev

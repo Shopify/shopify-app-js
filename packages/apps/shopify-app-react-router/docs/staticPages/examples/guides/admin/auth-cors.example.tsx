@@ -1,4 +1,4 @@
-import {json, LoaderFunction} from '@remix-run/node';
+import {LoaderFunction} from 'react-router';
 
 import {authenticate} from '~/shopify.server';
 
@@ -7,5 +7,5 @@ export const loader: LoaderFunction = async ({request}) => {
 
   // App logic
 
-  return cors(json({my: 'data'}));
+  return cors({my: 'data'});
 };
