@@ -79,7 +79,7 @@
   ],
   "devDependencies": {
     "react-router": "7.6.2",
-    "@shopify/generate-docs": "^0.16.6",
+    "@shopify/generate-docs": "^0.17.1",
     "@shopify/react-testing": "^6.0.0",
     "@shopify/shopify-app-session-storage-memory": "^4.0.18",
     "@testing-library/jest-dom": "^6.6.3",
