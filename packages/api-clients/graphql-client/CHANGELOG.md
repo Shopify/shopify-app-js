@@ -1,5 +1,11 @@
 # @shopify/graphql-client
 
+## 1.4.1
+
+### Patch Changes
+
+- e298a0c: Fix issue with missing sourcemaps
+
 ## 1.4.0
 
 ### Minor Changes
