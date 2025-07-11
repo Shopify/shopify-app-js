@@ -102,7 +102,7 @@
     "express": "^4.21.2",
     "jest-environment-miniflare": "^2.14.4",
     "miniflare": "^4.20250709.0",
-    "rollup": "^4.43.0",
+    "rollup": "^4.44.2",
     "rollup-plugin-swc": "^0.2.1",
     "wrangler": "^3.112.0"
   },
