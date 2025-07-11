@@ -98,7 +98,7 @@
     "@types/jsonwebtoken": "^9.0.10",
     "@types/node-fetch": "^2.6.11",
     "@types/uuid": "^10.0.0",
-    "expect": "^30.0.0",
+    "expect": "^30.0.4",
     "express": "^4.21.2",
     "jest-environment-miniflare": "^2.14.4",
     "miniflare": "^4.20250709.0",
