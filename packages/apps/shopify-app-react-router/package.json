@@ -78,7 +78,7 @@
     "Storefront API"
   ],
   "devDependencies": {
-    "react-router": "7.6.2",
+    "react-router": "7.6.3",
     "@shopify/generate-docs": "^0.16.6",
     "@shopify/react-testing": "^6.0.0",
     "@shopify/shopify-app-session-storage-memory": "^4.0.18",
@@ -100,7 +100,7 @@
     "semver": "^7.7.1"
   },
   "peerDependencies": {
-    "react-router": "^7.6.2",
+    "react-router": "^7.6.3",
     "react": ">=18",
     "react-dom": ">=18"
   },
