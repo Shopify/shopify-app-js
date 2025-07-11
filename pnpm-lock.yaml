@@ -89,8 +89,8 @@ importers:
         specifier: ^3.0.3
         version: 3.0.3(encoding@0.1.13)
       jest-runner-eslint:
-        specifier: ^2.2.1
-        version: 2.2.1(eslint@8.57.1)(jest@29.7.0(@types/node@22.15.30)(ts-node@10.9.2(@swc/core@1.12.1)(@types/node@22.15.30)(typescript@5.8.3)))
+        specifier: ^2.3.0
+        version: 2.3.0(eslint@8.57.1)(jest@29.7.0(@types/node@22.15.30)(ts-node@10.9.2(@swc/core@1.12.1)(@types/node@22.15.30)(typescript@5.8.3)))
       prettier:
         specifier: ^3.5.3
         version: 3.5.3
@@ -6198,8 +6198,8 @@ packages:
     resolution: {integrity: sha512-IOVhZSrg+UvVAshDSDtHyFCCBUl/Q3AAJv8iZ6ZjnZ74xzvwuzLXid9IIIPgTnY62SJjfuupMKZsZQRsCvxEgA==}
     engines: {node: ^14.15.0 || ^16.10.0 || >=18.0.0}
 
-  jest-runner-eslint@2.2.1:
-    resolution: {integrity: sha512-BSAB65hGhtr/Kmb7tSkfqFmK9LYwCMK8L1xcp+XaSToPFqr7sY1jleMZUeDhV0ITA33pW+JUCx5a02veVD2Q2w==}
+  jest-runner-eslint@2.3.0:
+    resolution: {integrity: sha512-ddZJDL1F/HNs/eaw4XxpFkaXDtG+LEUxT6k7xXoIcy96YHeyDosGJW7wu3kKtxWv4u4IcY/jAZtKlcceILwKnA==}
     engines: {node: ^12.13.0 || ^14.15.0 || ^16.10.0 || >=18.0.0}
     peerDependencies:
       eslint: ^7 || ^8
@@ -13542,7 +13542,7 @@ snapshots:
   cosmiconfig@7.1.0:
     dependencies:
       '@types/parse-json': 4.0.2
-      import-fresh: 3.3.0
+      import-fresh: 3.3.1
       parse-json: 5.2.0
       path-type: 4.0.0
       yaml: 1.10.2
@@ -15427,7 +15427,7 @@ snapshots:
       resolve.exports: 2.0.3
       slash: 3.0.0
 
-  jest-runner-eslint@2.2.1(eslint@8.57.1)(jest@29.7.0(@types/node@22.15.30)(ts-node@10.9.2(@swc/core@1.12.1)(@types/node@22.15.30)(typescript@5.8.3))):
+  jest-runner-eslint@2.3.0(eslint@8.57.1)(jest@29.7.0(@types/node@22.15.30)(ts-node@10.9.2(@swc/core@1.12.1)(@types/node@22.15.30)(typescript@5.8.3))):
     dependencies:
       chalk: 4.1.2
       cosmiconfig: 7.1.0
