@@ -92,17 +92,17 @@
     "uuid": "^11.1.0"
   },
   "devDependencies": {
-    "@cloudflare/workers-types": "^4.20250620.0",
-    "@swc/core": "^1.12.1",
+    "@cloudflare/workers-types": "^4.20250711.0",
+    "@swc/core": "^1.12.11",
     "@types/express": "^4.17.13",
-    "@types/jsonwebtoken": "^9.0.9",
+    "@types/jsonwebtoken": "^9.0.10",
     "@types/node-fetch": "^2.6.11",
     "@types/uuid": "^10.0.0",
-    "expect": "^30.0.0",
+    "expect": "^30.0.4",
     "express": "^4.21.2",
     "jest-environment-miniflare": "^2.14.4",
-    "miniflare": "^4.20250604.1",
-    "rollup": "^4.43.0",
+    "miniflare": "^4.20250709.0",
+    "rollup": "^4.44.2",
     "rollup-plugin-swc": "^0.2.1",
     "wrangler": "^3.112.0"
   },
