@@ -162,8 +162,9 @@ function generateRequest(
       );
     }
 
+    let response: Response | null = null;
     try {
-      const response = await fetchFn(...props);
+      response = await fetchFn(...props);
       const {status, statusText} = response;
       const contentType = response.headers.get('content-type') || '';
 
@@ -189,11 +190,17 @@ function generateRequest(
         };
       }
 
-      return processJSONResponse(response);
+      return await processJSONResponse(response);
     } catch (error) {
       return {
         errors: {
           message: getErrorMessage(error),
+          ...(response == null
+            ? {}
+            : {
+                networkStatusCode: response.status,
+                response,
+              }),
         },
       };
     }
