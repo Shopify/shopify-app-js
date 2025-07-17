@@ -16,14 +16,7 @@ import {
 } from '../../runtime/http';
 
 import {mockTestRequests} from './mock_test_requests';
-
-// Store request init objects for testing purposes
-export const mockRequestCapture = {
-  lastRequestInit: undefined as RequestInit | undefined,
-  reset() {
-    this.lastRequestInit = undefined;
-  },
-};
+import {mockRequestCapture} from './mock_request_capture';
 
 interface MockAdapterArgs extends AdapterArgs {
   rawRequest: NormalizedRequest;

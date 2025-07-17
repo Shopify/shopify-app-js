@@ -1,6 +1,6 @@
 import {NormalizedRequest, NormalizedResponse} from '../../runtime/http';
 
-import {mockRequestCapture} from './adapter';
+import {mockRequestCapture} from './mock_request_capture';
 
 type RequestListEntry = NormalizedRequest;
 type ResponseListEntry = NormalizedResponse | Error;

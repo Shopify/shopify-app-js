@@ -13,7 +13,7 @@ import {Session} from '../../../session/session';
 import {JwtPayload} from '../../../session/types';
 import {DataType, shopifyApi} from '../../..';
 import {HttpRequestError} from '../../../error';
-import {mockRequestCapture} from '../../../../adapters/mock/adapter';
+import {mockRequestCapture} from '../../../../adapters/mock/mock_request_capture';
 
 const domain = 'test-shop.myshopify.io';
 const QUERY = `
