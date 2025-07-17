@@ -5,4 +5,4 @@
 '@shopify/shopify-api': patch
 ---
 
-Resolve bug with singal option on requests
+Resolve bug with signal option on requests
