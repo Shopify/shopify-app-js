@@ -17,6 +17,14 @@ import {
 
 import {mockTestRequests} from './mock_test_requests';
 
+// Store request init objects for testing purposes
+export const mockRequestCapture = {
+  lastRequestInit: undefined as RequestInit | undefined,
+  reset() {
+    this.lastRequestInit = undefined;
+  },
+};
+
 interface MockAdapterArgs extends AdapterArgs {
   rawRequest: NormalizedRequest;
 }
@@ -43,6 +51,9 @@ export async function mockConvertHeaders(
 
 export const mockFetch: AbstractFetchFunc = async (url, init) => {
   const mockInit = init as RequestInit;
+
+  // Capture the init object for testing
+  mockRequestCapture.lastRequestInit = mockInit;
 
   const request = new Request(url as string, mockInit);
   const headers = Object.fromEntries(

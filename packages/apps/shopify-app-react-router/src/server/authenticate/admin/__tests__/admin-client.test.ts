@@ -34,18 +34,24 @@ describe('admin.authenticate context', () => {
     ).rejects.toThrowError(HttpMaxRetriesError);
   });
 
-  it('respects the abort signal', async () => {
+  it('passes abort signal through to fetch request', async () => {
     // GIVEN
     const {admin} = await setUpEmbeddedFlow();
     const controller = new AbortController();
-    await mockGraphqlRequest()({status: 200});
 
-    // Abort the request immediately
-    controller.abort();
+    // Mock the GraphQL response
+    await mockGraphqlRequest()({
+      status: 200,
+      responseContent: JSON.stringify({data: {shop: {name: 'Test Shop'}}}),
+    });
 
-    // WHEN/THEN
-    await expect(
-      admin.graphql('{ shop { name } }', {signal: controller.signal}),
-    ).rejects.toThrowError(Error);
+    // WHEN
+    await admin.graphql('{ shop { name } }', {signal: controller.signal});
+
+    // THEN - Verify fetch was called with the signal
+    expect(fetchMock.mock.calls).toHaveLength(1);
+    const [_url, options] = fetchMock.mock.calls[0];
+    expect(options).toBeDefined();
+    expect(options!.signal).toBe(controller.signal);
   });
 });

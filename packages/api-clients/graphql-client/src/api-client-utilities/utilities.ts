@@ -25,13 +25,20 @@ export function generateGetGQLClientParams<
     const props: RequestParams = [operation as string];
 
     if (options && Object.keys(options).length > 0) {
-      const {variables, apiVersion: propApiVersion, headers, retries} = options;
+      const {
+        variables,
+        apiVersion: propApiVersion,
+        headers,
+        retries,
+        signal,
+      } = options as any;
 
       props.push({
         ...(variables ? {variables} : {}),
         ...(headers ? {headers: getHeaders(headers)} : {}),
         ...(propApiVersion ? {url: getApiUrl(propApiVersion)} : {}),
         ...(retries ? {retries} : {}),
+        ...(signal ? {signal} : {}),
       });
     }
 
