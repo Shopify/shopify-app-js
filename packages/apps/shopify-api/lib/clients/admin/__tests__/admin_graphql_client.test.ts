@@ -13,6 +13,7 @@ import {Session} from '../../../session/session';
 import {JwtPayload} from '../../../session/types';
 import {DataType, shopifyApi} from '../../..';
 import {HttpRequestError} from '../../../error';
+import {mockRequestCapture} from '../../../../adapters/mock/mock_request_capture';
 
 const domain = 'test-shop.myshopify.io';
 const QUERY = `
@@ -320,16 +321,23 @@ describe('GraphQL client', () => {
     );
   });
 
-  it('respects the abort signal', async () => {
+  it('passes abort signal through to fetch request', async () => {
     const shopify = shopifyApi(testConfig());
     const client = new shopify.clients.Graphql({session});
     const controller = new AbortController();
 
-    controller.abort();
+    // Reset any previous captures
+    mockRequestCapture.reset();
 
-    await expect(
-      client.request(QUERY, {signal: controller.signal}),
-    ).rejects.toThrow(HttpRequestError);
+    // Mock the response
+    queueMockResponse(JSON.stringify(successResponse));
+
+    // Make the request with abort signal
+    await client.request(QUERY, {signal: controller.signal});
+
+    // Verify the signal was passed through
+    expect(mockRequestCapture.lastRequestInit).toBeDefined();
+    expect(mockRequestCapture.lastRequestInit!.signal).toBe(controller.signal);
   });
 
   it('logs deprecation headers when they are present', async () => {
