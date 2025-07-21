@@ -1,5 +1,13 @@
 # @shopify/shopify-app-react-router
 
+## 0.1.1
+
+### Patch Changes
+
+- Updated dependencies [818450f]
+  - @shopify/shopify-api@11.14.1
+  - @shopify/shopify-app-session-storage@3.0.20
+
 ## 0.1.0
 
 ### Minor Changes
@@ -8,7 +16,7 @@
 
 ### Early Access Shopify App React Router
 
-  This package is in early access. Most apps will be fine to adopt React Router. If you encounter issues [please provide feedback](https://github.com/Shopify/shopify-app-template-react-router/issues).
+This package is in early access. Most apps will be fine to adopt React Router. If you encounter issues [please provide feedback](https://github.com/Shopify/shopify-app-template-react-router/issues).
 
 ### Migrating from Remix
 
@@ -25,7 +33,6 @@ Use the [migration guide](https://github.com/Shopify/shopify-app-template-react-
   - @shopify/admin-api-client@1.1.1
   - @shopify/storefront-api-client@1.0.9
   - @shopify/shopify-app-session-storage@3.0.19
-
 
 This package was forked from the `@shopify/shopify-app-remix` package.
 

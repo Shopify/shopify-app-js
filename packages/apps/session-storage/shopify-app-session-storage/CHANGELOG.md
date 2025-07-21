@@ -1,5 +1,7 @@
 # @shopify/shopify-app-session-storage
 
+## 3.0.20
+
 ## 3.0.19
 
 ### Patch Changes
