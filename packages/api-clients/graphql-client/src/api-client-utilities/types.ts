@@ -53,6 +53,7 @@ export type ApiClientRequestOptions<
   apiVersion?: string;
   headers?: Headers;
   retries?: number;
+  signal?: AbortSignal;
 } & (Operation extends keyof Operations
   ? OperationVariables<Operation, Operations>
   : {variables?: Record<string, any>});
