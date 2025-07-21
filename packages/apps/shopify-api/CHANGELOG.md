@@ -1,5 +1,11 @@
 # Changelog
 
+## 11.14.1
+
+### Patch Changes
+
+- 818450f: Update docs
+
 ## 11.14.0
 
 ### Minor Changes
