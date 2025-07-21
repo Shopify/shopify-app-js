@@ -143,5 +143,15 @@ describe('generateGetGQLClientParams()', () => {
       expect(params[0]).toBe(operation);
       expect(params[1]).toEqual({retries});
     });
+
+    it('returns an array with the operation string and an option with signal when an abort signal was provided', () => {
+      const controller = new AbortController();
+      const params = getGQLClientParams(operation, {signal: controller.signal});
+
+      expect(params).toHaveLength(2);
+
+      expect(params[0]).toBe(operation);
+      expect(params[1]).toEqual({signal: controller.signal});
+    });
   });
 });

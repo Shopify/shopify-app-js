@@ -16,6 +16,7 @@ import {
 } from '../../runtime/http';
 
 import {mockTestRequests} from './mock_test_requests';
+import {mockRequestCapture} from './mock_request_capture';
 
 interface MockAdapterArgs extends AdapterArgs {
   rawRequest: NormalizedRequest;
@@ -43,6 +44,9 @@ export async function mockConvertHeaders(
 
 export const mockFetch: AbstractFetchFunc = async (url, init) => {
   const mockInit = init as RequestInit;
+
+  // Capture the init object for testing
+  mockRequestCapture.lastRequestInit = mockInit;
 
   const request = new Request(url as string, mockInit);
   const headers = Object.fromEntries(

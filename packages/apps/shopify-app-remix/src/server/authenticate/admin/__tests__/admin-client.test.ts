@@ -4,6 +4,7 @@ import {
   LATEST_API_VERSION,
   Session,
 } from '@shopify/shopify-api';
+import fetchMock from 'jest-fetch-mock';
 
 import {
   TEST_SHOP,
@@ -46,21 +47,6 @@ describe('admin.authenticate context', () => {
         {variables: {ID: '123'}, tries: 2},
       ),
     ).rejects.toThrowError(HttpMaxRetriesError);
-  });
-
-  it('respects the abort signal', async () => {
-    // GIVEN
-    const {admin} = await setUpEmbeddedFlow();
-    const controller = new AbortController();
-    await mockGraphqlRequest()({status: 200});
-
-    // Abort the request immediately
-    controller.abort();
-
-    // WHEN/THEN
-    await expect(
-      admin.graphql('{ shop { name } }', {signal: controller.signal}),
-    ).rejects.toThrowError(Error);
   });
 
   it('re-throws errors other than HttpResponseErrors on REST requests', async () => {
@@ -192,6 +178,27 @@ describe('admin.authenticate context', () => {
 
     expect(resource!.title).toBe('Product title');
     expect(variants[0].title).toBe('Variant title');
+  });
+
+  it('passes abort signal through to fetch request', async () => {
+    // GIVEN
+    const {admin} = await setUpEmbeddedFlow();
+    const controller = new AbortController();
+
+    // Mock the GraphQL response
+    await mockGraphqlRequest()({
+      status: 200,
+      responseContent: JSON.stringify({data: {shop: {name: 'Test Shop'}}}),
+    });
+
+    // WHEN
+    await admin.graphql('{ shop { name } }', {signal: controller.signal});
+
+    // THEN - Verify fetch was called with the signal
+    expect(fetchMock.mock.calls).toHaveLength(1);
+    const [_url, options] = fetchMock.mock.calls[0];
+    expect(options).toBeDefined();
+    expect(options!.signal).toBe(controller.signal);
   });
 });
 

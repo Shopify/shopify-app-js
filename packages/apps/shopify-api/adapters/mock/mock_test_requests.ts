@@ -1,5 +1,7 @@
 import {NormalizedRequest, NormalizedResponse} from '../../runtime/http';
 
+import {mockRequestCapture} from './mock_request_capture';
+
 type RequestListEntry = NormalizedRequest;
 type ResponseListEntry = NormalizedResponse | Error;
 
@@ -36,5 +38,7 @@ export const mockTestRequests: MockedAdapter = {
   reset() {
     this.requestList = [];
     this.responseList = [];
+    // Also reset the request capture
+    mockRequestCapture.reset();
   },
 };
