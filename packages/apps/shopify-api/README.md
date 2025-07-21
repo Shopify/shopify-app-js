@@ -26,7 +26,7 @@ To follow these usage guides, you will need to:
 - have a Shopify Partner account and development store
 - _OR_ have a test store where you can create a private app
 - have a private or custom app already set up in your test store or partner account
-- use [ngrok](https://ngrok.com), in order to create a secure tunnel to your app running on your localhost
+- use [ngrok](https://ngrok.com), or [cloudflare tunnel](https://developers.cloudflare.com/cloudflare-one/connections/connect-networks/) in order to create a secure tunnel to your app running on your localhost
 - add the `ngrok` URL and the appropriate redirect for your OAuth callback route to your app settings
 - have a JavaScript package manager such as [yarn](https://yarnpkg.com) installed
 
