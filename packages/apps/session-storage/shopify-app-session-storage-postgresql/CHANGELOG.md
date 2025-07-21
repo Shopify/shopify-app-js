@@ -1,5 +1,12 @@
 # @shopify/shopify-app-session-storage-postgresql
 
+## 4.0.19
+
+### Patch Changes
+
+- b37ae03: Updated `pg-connection-string` dependencies
+- e298a0c: Fix issue with missing sourcemaps
+
 ## 4.0.18
 
 ### Patch Changes

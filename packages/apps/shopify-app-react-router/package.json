@@ -1,6 +1,6 @@
 {
   "name": "@shopify/shopify-app-react-router",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Shopify React Router - to simplify the building of Shopify Apps with React Router",
   "repository": {
     "type": "git",
@@ -81,7 +81,7 @@
     "react-router": "7.6.2",
     "@shopify/generate-docs": "^0.17.1",
     "@shopify/react-testing": "^6.0.0",
-    "@shopify/shopify-app-session-storage-memory": "^4.0.18",
+    "@shopify/shopify-app-session-storage-memory": "^4.0.19",
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.3.0",
     "@types/jsonwebtoken": "^9.0.10",
@@ -92,10 +92,10 @@
     "jsonwebtoken": "^9.0.2"
   },
   "dependencies": {
-    "@shopify/admin-api-client": "^1.1.0",
-    "@shopify/shopify-api": "^11.13.0",
-    "@shopify/shopify-app-session-storage": "^3.0.18",
-    "@shopify/storefront-api-client": "^1.0.8",
+    "@shopify/admin-api-client": "^1.1.1",
+    "@shopify/shopify-api": "^11.14.0",
+    "@shopify/shopify-app-session-storage": "^3.0.19",
+    "@shopify/storefront-api-client": "^1.0.9",
     "isbot": "^5.1.26",
     "semver": "^7.7.1"
   },
