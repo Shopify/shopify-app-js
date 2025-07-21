@@ -1,6 +1,6 @@
 {
   "name": "@shopify/shopify-app-session-storage-kv",
-  "version": "4.0.18",
+  "version": "4.0.19",
   "description": "Shopify App Session Storage for KV",
   "repository": {
     "type": "git",
@@ -53,7 +53,7 @@
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^4.20250711.0",
-    "@shopify/shopify-app-session-storage-test-utils": "^3.0.18",
+    "@shopify/shopify-app-session-storage-test-utils": "^3.0.19",
     "miniflare": "^4.20250709.0"
   },
   "files": [

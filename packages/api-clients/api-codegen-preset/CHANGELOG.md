@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.1.9
+
+### Patch Changes
+
+- f645da4: Updated `@graphql-codegen/cli` dependencies
+- e298a0c: Fix issue with missing sourcemaps
+
 ## 1.1.8
 
 ### Patch Changes

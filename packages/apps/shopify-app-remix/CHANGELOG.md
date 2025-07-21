@@ -1,5 +1,22 @@
 # @shopify/shopify-app-remix
 
+## 3.8.4
+
+### Patch Changes
+
+- 447348f: Resolve bug with signal option on requests
+- 953badc: Updated `@remix-run/server-runtime`, ` @remix-run/node`, ` @remix-run/react`, ` @remix-run/testing` dependencies
+- e298a0c: Fix issue with missing sourcemaps
+- 0b51ba6: Tweak docs for scopes object
+- Updated dependencies [447348f]
+- Updated dependencies [3d9457f]
+- Updated dependencies [e298a0c]
+- Updated dependencies [25bf95f]
+  - @shopify/shopify-api@11.14.0
+  - @shopify/admin-api-client@1.1.1
+  - @shopify/storefront-api-client@1.0.9
+  - @shopify/shopify-app-session-storage@3.0.19
+
 ## 3.8.3
 
 ### Patch Changes
@@ -1085,7 +1102,6 @@
 ### Minor Changes
 
 - 370fc5e: - Internally rearranged source files to create a better separation between backend and frontend code, so we can add frontend-specific exports.
-
   - A new export path `@shopify/shopify-app-remix/react` will now contain those frontend exports.
   - The existing server code will be moved to `@shopify/shopify-app-remix/server`, but the root import will still work until the next major release in the future.
 
