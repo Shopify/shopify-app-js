@@ -1,5 +1,11 @@
 # Changelog
 
+## 11.14.2
+
+### Patch Changes
+
+- 089f4fd: Update loggings for session utils
+
 ## 11.14.1
 
 ### Patch Changes

@@ -1,5 +1,13 @@
 # @shopify/shopify-app-react-router
 
+## 0.1.2
+
+### Patch Changes
+
+- Updated dependencies [089f4fd]
+  - @shopify/shopify-api@11.14.2
+  - @shopify/shopify-app-session-storage@3.0.21
+
 ## 0.1.1
 
 ### Patch Changes

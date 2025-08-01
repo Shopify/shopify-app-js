@@ -1,5 +1,7 @@
 # @shopify/shopify-app-session-storage-kv
 
+## 4.0.21
+
 ## 4.0.20
 
 ## 4.0.19
