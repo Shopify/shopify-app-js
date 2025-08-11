@@ -1,8 +1,7 @@
-import {LATEST_API_VERSION} from '@shopify/shopify-api';
-
 import {
   TEST_SHOP,
   TEST_SHOP_NAME,
+  TEST_API_VERSION,
   getThrownResponse,
   setUpEmbeddedFlow,
   mockGraphqlRequest,
@@ -54,7 +53,7 @@ it('when the shop is invalid the query to check the granted scopes returns an er
   const {scopes, session} = await setUpEmbeddedFlow();
   session.shop = `${TEST_SHOP_NAME}.invalid-domain.com`;
   await mockGraphqlRequest(
-    LATEST_API_VERSION,
+    TEST_API_VERSION,
     session.shop,
   )({
     status: 400,

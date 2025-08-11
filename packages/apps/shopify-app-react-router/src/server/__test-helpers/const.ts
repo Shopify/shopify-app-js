@@ -1,4 +1,4 @@
-import {LATEST_API_VERSION} from '@shopify/shopify-api';
+import {ApiVersion} from '@shopify/shopify-api';
 import {TEST_SHOP} from '@shopify/shopify-api/test-helpers';
 
 export {
@@ -11,4 +11,8 @@ export {
   BASE64_HOST,
   USER_ID,
 } from '@shopify/shopify-api/test-helpers';
-export const GRAPHQL_URL = `https://${TEST_SHOP}/admin/api/${LATEST_API_VERSION}/graphql.json`;
+
+// Test API version constant - update this when testing against a different API version
+export const TEST_API_VERSION = ApiVersion.July25;
+
+export const GRAPHQL_URL = `https://${TEST_SHOP}/admin/api/${TEST_API_VERSION}/graphql.json`;

@@ -1,7 +1,6 @@
 import '@shopify/shopify-api/adapters/web-api';
 import {
   ConfigInterface as ApiConfig,
-  LATEST_API_VERSION,
   ShopifyError,
   shopifyApi,
 } from '@shopify/shopify-api';
@@ -133,6 +132,12 @@ function isSingleMerchantApp<Config extends AppConfigArg>(
 // This function is only exported so we can unit test it without having to mock the underlying module.
 // It's not available to consumers of the library because it is not exported in the index module, and never should be.
 export function deriveApi(appConfig: AppConfigArg): BasicParams['api'] {
+  if (!appConfig.apiVersion) {
+    throw new ShopifyError(
+      'apiVersion is required. Please provide a valid Shopify API version.',
+    );
+  }
+
   let appUrl: URL;
   try {
     appUrl = new URL(appConfig.appUrl);
@@ -163,7 +168,7 @@ export function deriveApi(appConfig: AppConfigArg): BasicParams['api'] {
     hostScheme: appUrl.protocol.replace(':', '') as 'http' | 'https',
     userAgentPrefix,
     isEmbeddedApp: true,
-    apiVersion: appConfig.apiVersion ?? LATEST_API_VERSION,
+    apiVersion: appConfig.apiVersion,
     isCustomStoreApp: appConfig.distribution === AppDistribution.ShopifyAdmin,
     billing: appConfig.billing,
     future: {
