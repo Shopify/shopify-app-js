@@ -49,5 +49,3 @@ const shopify = shopifyApp({
   scopes: process.env.SCOPES?.split(",")!,
   appUrl: process.env.SHOPIFY_APP_URL!,
   apiVersion: ApiVersion.July25, // Now required - choose your desired version
-});
-```
