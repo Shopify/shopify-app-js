@@ -148,7 +148,7 @@ This function creates a fully-functional project configuration.
 | documents    | `string[]?` | `./**/*.{ts,tsx}`    | Glob pattern for files to parse.                                                                                                                                   |
 | module       | `string?`   | Depends on `ApiType` | Change the module whose types will be overridden. Use this to override the types for any package, as long as it uses the same names.                               |
 | declarations | `boolean?`  | `true`               | When true, create declaration (`.d.ts`) files with the types. When false, creates `.ts` files that can be imported in app code. May slightly increase build sizes. |
-| enumsAsConst | `boolean?`  | `undefined`          | When true, generates enums as const assertions instead of TypeScript enums. This removes the need for runtime imports.                                             |
+| enumsAsConst | `boolean?`  | `false`              | When true, generates enums as const assertions instead of TypeScript enums. This removes the need for runtime imports.                                             |
 
 #### Example `.graphqlrc.ts` file
 
