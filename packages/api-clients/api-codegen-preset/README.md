@@ -102,6 +102,7 @@ Use this function if you want to configure a custom project, or add your own `ge
 | documents    | `string[]?` | `./**/*.{ts,tsx}`    | Glob pattern for files to parse.                                                                                                                                   |
 | module       | `string?`   | Depends on `ApiType` | Change the module whose types will be overridden. Use this to override the types for any package, as long as it uses the same names.                               |
 | declarations | `boolean?`  | `true`               | When true, create declaration (`.d.ts`) files with the types. When false, creates `.ts` files that can be imported in app code. May slightly increase build sizes. |
+| enumsAsConst | `boolean?`  | `false`              | When true, generates enums as const assertions instead of TypeScript enums. This removes the need for runtime imports.                                             |
 
 #### Example `.graphqlrc.ts` file
 
@@ -147,6 +148,7 @@ This function creates a fully-functional project configuration.
 | documents    | `string[]?` | `./**/*.{ts,tsx}`    | Glob pattern for files to parse.                                                                                                                                   |
 | module       | `string?`   | Depends on `ApiType` | Change the module whose types will be overridden. Use this to override the types for any package, as long as it uses the same names.                               |
 | declarations | `boolean?`  | `true`               | When true, create declaration (`.d.ts`) files with the types. When false, creates `.ts` files that can be imported in app code. May slightly increase build sizes. |
+| enumsAsConst | `boolean?`  | `false`              | When true, generates enums as const assertions instead of TypeScript enums. This removes the need for runtime imports.                                             |
 
 #### Example `.graphqlrc.ts` file
 
@@ -167,6 +169,37 @@ export default {
     }),
   },
 };
+```
+
+#### Example with `enumsAsConst` option
+
+```js
+import {shopifyApiProject, ApiType} from '@shopify/api-codegen-preset';
+
+export default {
+  schema: 'https://shopify.dev/admin-graphql-direct-proxy/2025-01',
+  documents: ['./app/**/*.{js,ts,jsx,tsx}'],
+  projects: {
+    default: shopifyApiProject({
+      apiType: ApiType.Admin,
+      apiVersion: '2025-01',
+      documents: ['./app/**/*.{js,ts,jsx,tsx}'],
+      outputDir: './app/types',
+      enumsAsConst: true, // Generate enums as const assertions
+    }),
+  },
+};
+```
+
+With `enumsAsConst: true`, you can use enum values directly without imports:
+
+```typescript
+// Without enumsAsConst (default)
+import { MetafieldOwnerType } from './app/types/admin.types';
+const variables = { ownerType: MetafieldOwnerType.Product };
+
+// With enumsAsConst: true
+const variables = { ownerType: 'PRODUCT' }; // No import needed!
 ```
 
 #### Example `.graphqlrc.ts` file with to generate types for UI extensions

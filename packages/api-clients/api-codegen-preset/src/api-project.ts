@@ -15,6 +15,7 @@ export const shopifyApiProject = ({
   documents = ['**/*.{ts,tsx}', '!node_modules'],
   declarations = true,
   apiKey,
+  enumsAsConst,
 }: ShopifyApiProjectOptions): IGraphQLProject => {
   const {schema, schemaFile} = getSchemaData(outputDir, apiType, {
     apiVersion,
@@ -37,6 +38,7 @@ export const shopifyApiProject = ({
           documents,
           module,
           declarations,
+          enumsAsConst,
         }),
       },
     },
