@@ -212,7 +212,9 @@ describe('shopifyApiTypes', () => {
           plugins: ['typescript'],
           // No config property expected
         });
-        expect(projectConfig[`./${type}.types.d.ts`]).not.toHaveProperty('config');
+        expect(projectConfig[`./${type}.types.d.ts`]).not.toHaveProperty(
+          'config',
+        );
       });
     },
   );

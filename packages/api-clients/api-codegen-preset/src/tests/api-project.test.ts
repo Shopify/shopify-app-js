@@ -133,7 +133,9 @@ describe('shopifyApiProject', () => {
         const projectConfig = shopifyApiProject(config);
 
         // THEN
-        expect(projectConfig.extensions.codegen.generates[`./${type}.types.d.ts`]).toEqual(
+        expect(
+          projectConfig.extensions.codegen.generates[`./${type}.types.d.ts`],
+        ).toEqual(
           expect.objectContaining({
             schema: expect.anything(),
             plugins: ['typescript'],
@@ -156,7 +158,9 @@ describe('shopifyApiProject', () => {
         const projectConfig = shopifyApiProject(config);
 
         // THEN
-        expect(projectConfig.extensions.codegen.generates[`./${type}.types.d.ts`]).toEqual(
+        expect(
+          projectConfig.extensions.codegen.generates[`./${type}.types.d.ts`],
+        ).toEqual(
           expect.objectContaining({
             schema: expect.anything(),
             plugins: ['typescript'],
@@ -178,11 +182,15 @@ describe('shopifyApiProject', () => {
         const projectConfig = shopifyApiProject(config);
 
         // THEN
-        expect(projectConfig.extensions.codegen.generates[`./${type}.types.d.ts`]).toEqual({
+        expect(
+          projectConfig.extensions.codegen.generates[`./${type}.types.d.ts`],
+        ).toEqual({
           schema: expect.anything(),
           plugins: ['typescript'],
         });
-        expect(projectConfig.extensions.codegen.generates[`./${type}.types.d.ts`]).not.toHaveProperty('config');
+        expect(
+          projectConfig.extensions.codegen.generates[`./${type}.types.d.ts`],
+        ).not.toHaveProperty('config');
       });
     },
   );
