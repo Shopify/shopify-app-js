@@ -13,6 +13,7 @@ import {Session} from '../../../session/session';
 import {JwtPayload} from '../../../session/types';
 import {DataType, shopifyApi} from '../../..';
 import {HttpRequestError} from '../../../error';
+import {mockRequestCapture} from '../../../../adapters/mock/mock_request_capture';
 
 const domain = 'test-shop.myshopify.io';
 const QUERY = `
@@ -320,15 +321,52 @@ describe('GraphQL client', () => {
     );
   });
 
-  it('respects the abort signal', async () => {
+  it('passes abort signal through to fetch request', async () => {
     const shopify = shopifyApi(testConfig());
     const client = new shopify.clients.Graphql({session});
     const controller = new AbortController();
 
-    controller.abort();
+    // Reset any previous captures
+    mockRequestCapture.reset();
 
-    await expect(
-      client.request(QUERY, {signal: controller.signal}),
-    ).rejects.toThrow(HttpRequestError);
+    // Mock the response
+    queueMockResponse(JSON.stringify(successResponse));
+
+    // Make the request with abort signal
+    await client.request(QUERY, {signal: controller.signal});
+
+    // Verify the signal was passed through
+    expect(mockRequestCapture.lastRequestInit).toBeDefined();
+    expect(mockRequestCapture.lastRequestInit!.signal).toBe(controller.signal);
+  });
+
+  it('logs deprecation headers when they are present', async () => {
+    const shopify = shopifyApi(
+      testConfig({
+        logger: {
+          ...testConfig().logger,
+          httpRequests: true,
+        },
+      }),
+    );
+    const client = new shopify.clients.Graphql({session});
+
+    queueMockResponse(JSON.stringify(successResponse), {
+      headers: {
+        'X-Shopify-API-Deprecated-Reason':
+          'This API endpoint has been deprecated',
+      },
+    });
+
+    await client.request(QUERY);
+
+    expect(shopify.config.logger.log).toHaveBeenCalledTimes(4);
+    expect(shopify.config.logger.log).toHaveBeenNthCalledWith(
+      4,
+      LogSeverity.Debug,
+      expect.stringMatching(
+        /.*Received response containing Deprecated GraphQL Notice.*deprecationNotice: This API endpoint has been deprecated.*/,
+      ),
+    );
   });
 });

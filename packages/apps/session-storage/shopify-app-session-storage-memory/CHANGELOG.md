@@ -1,5 +1,25 @@
 # @shopify/shopify-app-session-storage-memory
 
+## 4.0.20
+
+## 4.0.19
+
+### Patch Changes
+
+- e298a0c: Fix issue with missing sourcemaps
+
+## 4.0.18
+
+## 4.0.17
+
+### Patch Changes
+
+- 981c948: Update directory path
+
+## 4.0.16
+
+## 4.0.15
+
 ## 4.0.14
 
 ## 4.0.13

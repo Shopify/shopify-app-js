@@ -120,6 +120,78 @@ describe('shopifyApiProject', () => {
           },
         });
       });
+
+      it('passes enumsAsConst option to shopifyApiTypes when true', () => {
+        // GIVEN
+        const config: ShopifyApiProjectOptions = {
+          apiType,
+          enumsAsConst: true,
+          apiKey: 'test',
+        };
+
+        // WHEN
+        const projectConfig = shopifyApiProject(config);
+
+        // THEN
+        expect(
+          projectConfig.extensions.codegen.generates[`./${type}.types.d.ts`],
+        ).toEqual(
+          expect.objectContaining({
+            schema: expect.anything(),
+            plugins: ['typescript'],
+            config: {
+              enumsAsConst: true,
+            },
+          }),
+        );
+      });
+
+      it('passes enumsAsConst option to shopifyApiTypes when false', () => {
+        // GIVEN
+        const config: ShopifyApiProjectOptions = {
+          apiType,
+          enumsAsConst: false,
+          apiKey: 'test',
+        };
+
+        // WHEN
+        const projectConfig = shopifyApiProject(config);
+
+        // THEN
+        expect(
+          projectConfig.extensions.codegen.generates[`./${type}.types.d.ts`],
+        ).toEqual(
+          expect.objectContaining({
+            schema: expect.anything(),
+            plugins: ['typescript'],
+            config: {
+              enumsAsConst: false,
+            },
+          }),
+        );
+      });
+
+      it('does not include config when enumsAsConst is not provided', () => {
+        // GIVEN
+        const config: ShopifyApiProjectOptions = {
+          apiType,
+          apiKey: 'test',
+        };
+
+        // WHEN
+        const projectConfig = shopifyApiProject(config);
+
+        // THEN
+        expect(
+          projectConfig.extensions.codegen.generates[`./${type}.types.d.ts`],
+        ).toEqual({
+          schema: expect.anything(),
+          plugins: ['typescript'],
+        });
+        expect(
+          projectConfig.extensions.codegen.generates[`./${type}.types.d.ts`],
+        ).not.toHaveProperty('config');
+      });
     },
   );
 });

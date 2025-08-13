@@ -1,5 +1,39 @@
 # @shopify/shopify-app-session-storage-drizzle
 
+## 2.1.2
+
+## 2.1.1
+
+### Patch Changes
+
+- bbf553e: Updated `mysql2` dependencies
+- e298a0c: Fix issue with missing sourcemaps
+
+## 2.1.0
+
+### Minor Changes
+
+- 29ca331: Update drizzle-orm peer dependency
+
+### Patch Changes
+
+- e13f8f2: Updated `mysql2` dependencies
+
+## 2.0.17
+
+### Patch Changes
+
+- 981c948: Update directory path
+
+## 2.0.16
+
+## 2.0.15
+
+### Patch Changes
+
+- 4455445: Updated `mysql2` dependencies
+- 9a025e7: Updated `pg` dependencies
+
 ## 2.0.14
 
 ## 2.0.13

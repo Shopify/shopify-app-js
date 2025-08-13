@@ -1,5 +1,76 @@
 # Changelog
 
+## 5.0.20
+
+### Patch Changes
+
+- Updated dependencies [818450f]
+  - @shopify/shopify-api@11.14.1
+  - @shopify/shopify-app-session-storage@3.0.20
+  - @shopify/shopify-app-session-storage-memory@4.0.20
+
+## 5.0.19
+
+### Patch Changes
+
+- e298a0c: Fix issue with missing sourcemaps
+- Updated dependencies [447348f]
+- Updated dependencies [3d9457f]
+- Updated dependencies [e298a0c]
+- Updated dependencies [25bf95f]
+  - @shopify/shopify-api@11.14.0
+  - @shopify/shopify-app-session-storage@3.0.19
+  - @shopify/shopify-app-session-storage-memory@4.0.19
+
+## 5.0.18
+
+### Patch Changes
+
+- Updated dependencies [6aed7c0]
+- Updated dependencies [5926c00]
+- Updated dependencies [cbe1c10]
+- Updated dependencies [b05d09b]
+- Updated dependencies [f8da2d3]
+  - @shopify/shopify-api@11.13.0
+  - @shopify/shopify-app-session-storage@3.0.18
+  - @shopify/shopify-app-session-storage-memory@4.0.18
+
+## 5.0.17
+
+### Patch Changes
+
+- 981c948: Update directory path
+- Updated dependencies [7a076ac]
+- Updated dependencies [ecacdf3]
+- Updated dependencies [981c948]
+  - @shopify/shopify-api@11.12.0
+  - @shopify/shopify-app-session-storage-memory@4.0.17
+  - @shopify/shopify-app-session-storage@3.0.17
+
+## 5.0.16
+
+### Patch Changes
+
+- 4adbc2b: # Generate Provenance Statements
+
+  This changes no functionality.
+
+  The provenance attestation is established by publicly providing a link to a package's source code and build instructions from the build environment. This allows developers to verify where and how your package was built before they download it.
+
+  Learn more about [npm provenance](https://docs.npmjs.com/generating-provenance-statements#about-npm-provenance)
+  - @shopify/shopify-api@11.11.1
+  - @shopify/shopify-app-session-storage@3.0.16
+  - @shopify/shopify-app-session-storage-memory@4.0.16
+
+## 5.0.15
+
+### Patch Changes
+
+- Updated dependencies [ea406d3]
+  - @shopify/shopify-api@11.11.0
+  - @shopify/shopify-app-session-storage@3.0.15
+  - @shopify/shopify-app-session-storage-memory@4.0.15
+
 ## 5.0.14
 
 ### Patch Changes
@@ -253,7 +324,6 @@
 - b1ddc74: Return a 403 with X-Shopify headers on XHR requests for non-embedded apps, instead of a 302. The 302 ran into CORS errors and always failed.
 
   These requests will return the following headers:
-
   - `X-Shopify-Api-Request-Failure-Reauthorize`: `1`
   - `X-Shopify-Api-Request-Failure-Reauthorize-Url`: <URL>
 

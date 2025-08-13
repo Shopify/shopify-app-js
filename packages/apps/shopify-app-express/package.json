@@ -1,15 +1,16 @@
 {
   "name": "@shopify/shopify-app-express",
-  "version": "5.0.14",
+  "version": "5.0.20",
   "description": "Shopify Express Middleware - to simplify the building of Shopify Apps with Express",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Shopify/shopify-app-express.git"
+    "url": "git+https://github.com/Shopify/shopify-app-js.git",
+    "directory": "packages/apps/shopify-app-express"
   },
   "bugs": {
-    "url": "https://github.com/Shopify/shopify-app-express/issues"
+    "url": "https://github.com/Shopify/shopify-app-js/issues"
   },
-  "homepage": "https://github.com/Shopify/shopify-app-express/tree/main/packages/apps/shopify-app-express",
+  "homepage": "https://github.com/Shopify/shopify-app-js/tree/main/packages/apps/shopify-app-express",
   "author": "Shopify Inc.",
   "license": "MIT",
   "main": "./dist/cjs/index.js",
@@ -42,19 +43,19 @@
     "Storefront API"
   ],
   "dependencies": {
-    "@shopify/shopify-api": "^11.10.0",
-    "@shopify/shopify-app-session-storage": "^3.0.14",
-    "@shopify/shopify-app-session-storage-memory": "^4.0.14",
+    "@shopify/shopify-api": "^11.14.1",
+    "@shopify/shopify-app-session-storage": "^3.0.20",
+    "@shopify/shopify-app-session-storage-memory": "^4.0.20",
     "cookie-parser": "^1.4.7",
     "express": "^4.21.2",
     "semver": "^7.7.1"
   },
   "devDependencies": {
-    "@types/compression": "^1.7.5",
-    "@types/cookie-parser": "^1.4.8",
+    "@types/compression": "^1.8.1",
+    "@types/cookie-parser": "^1.4.9",
     "@types/express": "^4.17.21",
-    "@types/jsonwebtoken": "^9.0.9",
-    "@types/semver": "^7.5.8",
+    "@types/jsonwebtoken": "^9.0.10",
+    "@types/semver": "^7.7.0",
     "jsonwebtoken": "^9.0.2"
   },
   "files": [

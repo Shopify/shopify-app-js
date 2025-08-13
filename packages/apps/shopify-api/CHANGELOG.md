@@ -1,5 +1,209 @@
 # Changelog
 
+## 11.14.1
+
+### Patch Changes
+
+- 818450f: Update docs
+
+## 11.14.0
+
+### Minor Changes
+
+- 3d9457f: Add 2025-07 REST Resources
+
+### Patch Changes
+
+- 447348f: Resolve bug with signal option on requests
+- e298a0c: Fix issue with missing sourcemaps
+- 25bf95f: Export RestClient from lib/clients/types
+- Updated dependencies [056f464]
+- Updated dependencies [447348f]
+- Updated dependencies [e298a0c]
+  - @shopify/graphql-client@1.4.1
+  - @shopify/admin-api-client@1.1.1
+  - @shopify/storefront-api-client@1.0.9
+
+## 11.13.0
+
+### Minor Changes
+
+- b05d09b: # Add Logging for Shopify GraphQL Admin API Deprecated Reason
+
+  Enable logging to now show any detected detected deprecations from the Shopify GraphQL Admin API.
+
+  For more information about deprecation detection see the [Shopify.dev Changelog](https://shopify.dev/changelog/graphql-return-actual-deprecation-reasons)
+
+  ## Example Usage
+
+  ### [@shopify/shopify-api](https://github.com/Shopify/shopify-app-js/blob/main/packages/apps/shopify-api/#readme)
+
+  Enable logging for `httpRequests` to now show any detected deprecations from the Shopify GraphQL Admin API.
+
+  ```js
+  const shopify = shopifyApi({
+    apiKey: 'APIKeyFromPartnersDashboard',
+    apiSecretKey: 'APISecretFromPartnersDashboard',
+    logger: {
+      httpRequests: true // Enable httpRequest logging
+    }
+    ...
+  ```
+
+  ### [@shopify/admin-api-client](https://github.com/Shopify/shopify-app-js/blob/main/packages/api-clients/admin-api-client/#readme)
+
+  Enable logging to now show any detected deprecations from the Shopify GraphQL Admin API.
+
+  ```js
+  import {createAdminApiClient} from '@shopify/admin-api-client';
+
+  const client = createAdminApiClient({
+    storeDomain: 'your-shop-name.myshopify.com',
+    apiVersion: '2025-01',
+    accessToken: 'your-admin-api-access-token',
+    logger: (logContent: LogContent) => {
+      switch (logContent.type) {
+        case 'HTTP-Response': {
+          const responseLog: HTTPResponseLog['content'] = logContent.content;
+          console.debug('Received response for HTTP request', {
+            requestParams: JSON.stringify(responseLog.requestParams),
+            response: JSON.stringify(responseLog.response),
+          });
+          break;
+        }
+        case 'HTTP-Retry': {
+          const responseLog: HTTPRetryLog['content'] = logContent.content;
+          console.info('Retrying HTTP request', {
+            requestParams: JSON.stringify(responseLog.requestParams),
+            retryAttempt: responseLog.retryAttempt,
+            maxRetries: responseLog.maxRetries,
+            response: JSON.stringify(responseLog.lastResponse),
+          });
+          break;
+        }
+        case 'HTTP-Response-GraphQL-Deprecation-Notice': {
+          const responseLog: HTTPResponseGraphQLDeprecationNotice['content'] = logContent.content;
+          console.warn('Received response containing Deprecated GraphQL Notice', {
+            requestParams: JSON.stringify(responseLog.requestParams),
+            deprecationNotice: responseLog.deprecationNotice,
+          });
+          break;
+        }
+        default: {
+          console.debug(`HTTP request event: ${logContent.content}`);
+          break;
+        }
+      }
+    };
+  });
+  ```
+
+### Patch Changes
+
+- 6aed7c0: Updated `uuid` dependencies
+- 5926c00: Updated `isbot` dependencies
+- cbe1c10: Updated `isbot` dependencies
+- f8da2d3: Log HTTP Response objects
+
+  Resolves a bug where HTTP Response objects were not being logged correctly. Now when `httpRequests` is enabled, the response object is logged as a plain object.
+
+  ```
+  // shopify.server
+  shopifyApp(
+  ...
+  logger: {
+      httpRequests: true,
+  });
+  ```
+
+- Updated dependencies [b05d09b]
+  - @shopify/admin-api-client@1.1.0
+  - @shopify/graphql-client@1.4.0
+  - @shopify/storefront-api-client@1.0.8
+
+## 11.12.0
+
+### Minor Changes
+
+- 7a076ac: # Standardize App Subscription returns on billing operations
+
+  Now all billing operations will return the same data, when returning App Subscriptions. Previously all operations returned the same type, but the underlying GraphQL requests returned different data. Now all operations will return the same data.
+
+  Now all billing operations will return the following information when returning `AppSubscriptions`
+
+  ```js
+  export interface AppSubscription {
+    /**
+     * The ID of the app subscription.
+     */
+    id: string;
+    /**
+     * The name of the purchased plan.
+     */
+    name: string;
+    /**
+     * Whether this is a test subscription.
+     */
+    test: boolean;
+    /**
+     * The number of trial days for this subscription.
+     */
+    trialDays: number;
+    /**
+     * The date and time when the subscription was created.
+     */
+    createdAt: string;
+    /**
+     * The date and time when the current period ends.
+     */
+    currentPeriodEnd: string;
+    /**
+     * The return URL for this subscription.
+     */
+    returnUrl: string;
+
+    /*
+     * The line items for this plan. This will become mandatory in v10.
+     */
+    lineItems?: ActiveSubscriptionLineItem[];
+
+    /*
+     * The status of the subscription. [ACTIVE, CANCELLED, PENDING, DECLINED, EXPIRED, FROZEN, ACCEPTED]
+     */
+    status: "ACTIVE" | "CANCELLED" | "PENDING" | "DECLINED" | "EXPIRED" | "FROZEN" | "ACCEPTED"
+  }
+  ```
+
+- ecacdf3: Adds 2025-04 REST resources
+
+### Patch Changes
+
+- 981c948: Update directory path
+- Updated dependencies [981c948]
+  - @shopify/storefront-api-client@1.0.7
+  - @shopify/admin-api-client@1.0.8
+  - @shopify/graphql-client@1.3.2
+
+## 11.11.1
+
+### Patch Changes
+
+- Updated dependencies [4adbc2b]
+  - @shopify/admin-api-client@1.0.7
+  - @shopify/graphql-client@1.3.1
+  - @shopify/storefront-api-client@1.0.6
+
+## 11.11.0
+
+### Minor Changes
+
+- ea406d3: # Add release candidate API version
+  Adds a constant that points to the [release candidate API version](https://shopify.dev/docs/api/usage/versioning#release-candidates).
+
+  ```
+  import { RELEASE_CANDIDATE_API_VERSION } from "@shopify/shopify-api";
+  ```
+
 ## 11.10.0
 
 ### Minor Changes
@@ -234,7 +438,6 @@
 ### Minor Changes
 
 - 05fb23d: Added a new future flag `unstable_managedPricingSupport` to support apps using [Shopify managed pricing](https://shopify.dev/docs/apps/launch/billing/managed-pricing), which will:
-
   - Change `billing.check` to always return an object.
   - Change `billing.check` and `billing.subscription` to work without a billing config.
   - Allow calling charges with `billing.check` without a `plans` filter. The `hasActivePayment` value will be true if any purchases are found with the given filters.
@@ -886,7 +1089,6 @@
   For apps that don't receive HTTP webhook events from Shopify, no change is required yet - `apiSecretKey` will be used for client authentication as the fallback option.
 
   Starting with the next major release
-
   - `adminApiAccessToken` will be mandatory for custom store apps and must be set to the Admin API access token
   - `apiSecretKey` will not be used for client authentication but must be set for HMAC validation of HTTP webhook events
 
@@ -911,7 +1113,6 @@
   This enables apps to use locally-scoped pagination info, which makes it possible to use pagination in a thread-safe way.
 
   You'll need to make 2 changes to use this version:
-
   1. Where you accessed resources from the response, you'll now access the `data` property.
   1. Where you accessed pagination data from the static variables, you'll now retrieve it from the response.
 
@@ -931,7 +1132,6 @@
   ```
 
 - fc2692f0: ⚠️ [Breaking] Removing deprecated code:
-
   - The `isPrivateApp` param from `shopifyApi()` was removed in favour of `isCustomStoreApp`.
   - The `isOnline` param from `shopify.auth.callback()` was removed, because it's now handled automatically.
 

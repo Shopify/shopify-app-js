@@ -1,10 +1,11 @@
 {
   "name": "@shopify/shopify-app-session-storage-prisma",
-  "version": "6.0.3",
+  "version": "6.0.9",
   "description": "Shopify App Session Storage for Prisma",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Shopify/shopify-app-js.git"
+    "url": "git+https://github.com/Shopify/shopify-app-js.git",
+    "directory": "packages/apps/session-storage/shopify-app-session-storage-prisma"
   },
   "bugs": {
     "url": "https://github.com/Shopify/shopify-app-js/issues"
@@ -44,15 +45,15 @@
     "Prisma"
   ],
   "peerDependencies": {
-    "@prisma/client": "^6.3.1",
+    "@prisma/client": "^6.6.0",
     "@shopify/shopify-api": "^11.0.0",
     "@shopify/shopify-app-session-storage": "^3.0.0",
-    "prisma": "^6.3.1"
+    "prisma": "^6.6.0"
   },
   "devDependencies": {
-    "@prisma/client": "^6.3.1",
-    "@shopify/shopify-app-session-storage-test-utils": "^3.0.14",
-    "prisma": "^6.3.1"
+    "@prisma/client": "^6.6.0",
+    "@shopify/shopify-app-session-storage-test-utils": "^3.0.20",
+    "prisma": "^6.6.0"
   },
   "dependencies": {},
   "files": [

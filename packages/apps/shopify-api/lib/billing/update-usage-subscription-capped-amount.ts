@@ -7,10 +7,12 @@ import {
   BillingUpdateUsageCappedAmountParams,
   BillingUpdateUsageCappedAmountResponse,
   UpdateCappedAmountConfirmation,
+  APP_SUBSCRIPTION_FRAGMENT,
 } from './types';
 import {convertLineItems} from './utils';
 
 const UPDATE_USAGE_CAPPED_AMOUNT_MUTATION = `
+${APP_SUBSCRIPTION_FRAGMENT}
 mutation appSubscriptionLineItemUpdate($cappedAmount: MoneyInput!, $id: ID!) {
   appSubscriptionLineItemUpdate(cappedAmount: $cappedAmount, id: $id) {
     userErrors {
@@ -19,27 +21,7 @@ mutation appSubscriptionLineItemUpdate($cappedAmount: MoneyInput!, $id: ID!) {
     }
     confirmationUrl
     appSubscription {
-      id
-      name
-      test
-      lineItems {
-        id
-        plan {
-          pricingDetails {
-            ... on AppUsagePricing {
-              balanceUsed {
-                amount
-                currencyCode
-              }
-              cappedAmount {
-                amount
-                currencyCode
-              }
-              terms
-            }
-          }
-        }
-      }
+      ...AppSubscriptionFragment
     }
   }
 }

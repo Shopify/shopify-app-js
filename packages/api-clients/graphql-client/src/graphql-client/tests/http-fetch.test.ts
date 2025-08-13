@@ -116,6 +116,86 @@ describe('httpFetch utility', () => {
         expect(fetch).toHaveBeenCalledTimes(1);
       });
 
+      it('logs responses', async () => {
+        const httpFetch = generateHttpFetch({clientLogger});
+        const mockedResponseWithDeprecation = new Response(
+          JSON.stringify({data: {}}),
+          {
+            status: 200,
+          },
+        );
+
+        fetchMock.mockResolvedValue(mockedResponseWithDeprecation);
+
+        const requestParams: Parameters<CustomFetchApi> = [
+          url,
+          {
+            method: 'POST',
+            body: JSON.stringify({query: operation}),
+          },
+        ];
+        const response = await httpFetch(requestParams, 1, 2);
+
+        expect(response.status).toBe(200);
+        expect(fetch).toHaveBeenCalledTimes(1);
+
+        expect(clientLogger).toHaveBeenCalledTimes(1);
+
+        expect(clientLogger).toHaveBeenNthCalledWith(1, {
+          type: 'HTTP-Response',
+          content: {
+            requestParams,
+            response,
+          },
+        });
+      });
+
+      it('logs any graphql deprecation notices', async () => {
+        const httpFetch = generateHttpFetch({clientLogger});
+        const mockedResponseWithDeprecation = new Response(
+          JSON.stringify({data: {}}),
+          {
+            status: 200,
+            headers: new Headers({
+              'X-Shopify-API-Deprecated-Reason': 'A deprecation notice',
+              'Content-Type': 'application/json',
+            }),
+          },
+        );
+
+        fetchMock.mockResolvedValue(mockedResponseWithDeprecation);
+
+        const requestParams: Parameters<CustomFetchApi> = [
+          url,
+          {
+            method: 'POST',
+            body: JSON.stringify({query: operation}),
+          },
+        ];
+        const response = await httpFetch(requestParams, 1, 2);
+
+        expect(response.status).toBe(200);
+        expect(fetch).toHaveBeenCalledTimes(1);
+
+        expect(clientLogger).toHaveBeenCalledTimes(2);
+
+        expect(clientLogger).toHaveBeenNthCalledWith(1, {
+          type: 'HTTP-Response',
+          content: {
+            requestParams,
+            response,
+          },
+        });
+
+        expect(clientLogger).toHaveBeenNthCalledWith(2, {
+          type: 'HTTP-Response-GraphQL-Deprecation-Notice',
+          content: {
+            requestParams,
+            deprecationNotice: 'A deprecation notice',
+          },
+        });
+      });
+
       describe('retries', () => {
         let httpFetch: ReturnType<typeof generateHttpFetch>;
 

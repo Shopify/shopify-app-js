@@ -1,5 +1,117 @@
 # @shopify/admin-api-client
 
+## 1.1.1
+
+### Patch Changes
+
+- e298a0c: Fix issue with missing sourcemaps
+- Updated dependencies [056f464]
+- Updated dependencies [447348f]
+- Updated dependencies [e298a0c]
+  - @shopify/graphql-client@1.4.1
+
+## 1.1.0
+
+### Minor Changes
+
+- b05d09b: # Add Logging for Shopify GraphQL Admin API Deprecated Reason
+
+  Enable logging to now show any detected detected deprecations from the Shopify GraphQL Admin API.
+
+  For more information about deprecation detection see the [Shopify.dev Changelog](https://shopify.dev/changelog/graphql-return-actual-deprecation-reasons)
+
+  ## Example Usage
+
+  ### [@shopify/shopify-api](https://github.com/Shopify/shopify-app-js/blob/main/packages/apps/shopify-api/#readme)
+
+  Enable logging for `httpRequests` to now show any detected deprecations from the Shopify GraphQL Admin API.
+
+  ```js
+  const shopify = shopifyApi({
+    apiKey: 'APIKeyFromPartnersDashboard',
+    apiSecretKey: 'APISecretFromPartnersDashboard',
+    logger: {
+      httpRequests: true // Enable httpRequest logging
+    }
+    ...
+  ```
+
+  ### [@shopify/admin-api-client](https://github.com/Shopify/shopify-app-js/blob/main/packages/api-clients/admin-api-client/#readme)
+
+  Enable logging to now show any detected deprecations from the Shopify GraphQL Admin API.
+
+  ```js
+  import {createAdminApiClient} from '@shopify/admin-api-client';
+
+  const client = createAdminApiClient({
+    storeDomain: 'your-shop-name.myshopify.com',
+    apiVersion: '2025-01',
+    accessToken: 'your-admin-api-access-token',
+    logger: (logContent: LogContent) => {
+      switch (logContent.type) {
+        case 'HTTP-Response': {
+          const responseLog: HTTPResponseLog['content'] = logContent.content;
+          console.debug('Received response for HTTP request', {
+            requestParams: JSON.stringify(responseLog.requestParams),
+            response: JSON.stringify(responseLog.response),
+          });
+          break;
+        }
+        case 'HTTP-Retry': {
+          const responseLog: HTTPRetryLog['content'] = logContent.content;
+          console.info('Retrying HTTP request', {
+            requestParams: JSON.stringify(responseLog.requestParams),
+            retryAttempt: responseLog.retryAttempt,
+            maxRetries: responseLog.maxRetries,
+            response: JSON.stringify(responseLog.lastResponse),
+          });
+          break;
+        }
+        case 'HTTP-Response-GraphQL-Deprecation-Notice': {
+          const responseLog: HTTPResponseGraphQLDeprecationNotice['content'] = logContent.content;
+          console.warn('Received response containing Deprecated GraphQL Notice', {
+            requestParams: JSON.stringify(responseLog.requestParams),
+            deprecationNotice: responseLog.deprecationNotice,
+          });
+          break;
+        }
+        default: {
+          console.debug(`HTTP request event: ${logContent.content}`);
+          break;
+        }
+      }
+    };
+  });
+  ```
+
+### Patch Changes
+
+- Updated dependencies [b05d09b]
+  - @shopify/graphql-client@1.4.0
+
+## 1.0.8
+
+### Patch Changes
+
+- 981c948: Update directory path
+- Updated dependencies [981c948]
+  - @shopify/graphql-client@1.3.2
+
+## 1.0.7
+
+### Patch Changes
+
+- 4adbc2b: # Generate Provenance Statements
+
+  This changes no functionality.
+
+  The provenance attestation is established by publicly providing a link to a package's source code and build instructions from the build environment. This allows developers to verify where and how your package was built before they download it.
+
+  Learn more about [npm provenance](https://docs.npmjs.com/generating-provenance-statements#about-npm-provenance)
+
+- Updated dependencies [4adbc2b]
+  - @shopify/graphql-client@1.3.1
+
 ## 1.0.6
 
 ### Patch Changes

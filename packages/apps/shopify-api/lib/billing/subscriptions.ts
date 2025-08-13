@@ -7,59 +7,16 @@ import {
   BillingSubscriptionParams,
   BillingSubscriptions,
   SubscriptionResponse,
+  APP_SUBSCRIPTION_FRAGMENT,
 } from './types';
 import {convertLineItems} from './utils';
 
 const SUBSCRIPTION_QUERY = `
+${APP_SUBSCRIPTION_FRAGMENT}
 query appSubscription {
   currentAppInstallation {
     activeSubscriptions {
-      id
-      name
-      test
-      lineItems {
-        id
-        plan {
-          pricingDetails {
-            ... on AppRecurringPricing {
-              price {
-                amount
-                currencyCode
-              }
-              interval
-              discount {
-                durationLimitInIntervals
-                remainingDurationInIntervals
-                priceAfterDiscount {
-                  amount
-                }
-                value {
-                  ... on AppSubscriptionDiscountAmount {
-                    amount {
-                      amount
-                      currencyCode
-                    }
-                  }
-                  ... on AppSubscriptionDiscountPercentage {
-                    percentage
-                  }
-                }
-              }
-            }
-            ... on AppUsagePricing {
-              balanceUsed {
-                amount
-                currencyCode
-              }
-              cappedAmount {
-                amount
-                currencyCode
-              }
-              terms
-            }
-          }
-        }
-      }
+      ...AppSubscriptionFragment
     }
   }
 }

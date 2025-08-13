@@ -102,6 +102,7 @@ Use this function if you want to configure a custom project, or add your own `ge
 | documents    | `string[]?` | `./**/*.{ts,tsx}`    | Glob pattern for files to parse.                                                                                                                                   |
 | module       | `string?`   | Depends on `ApiType` | Change the module whose types will be overridden. Use this to override the types for any package, as long as it uses the same names.                               |
 | declarations | `boolean?`  | `true`               | When true, create declaration (`.d.ts`) files with the types. When false, creates `.ts` files that can be imported in app code. May slightly increase build sizes. |
+| enumsAsConst | `boolean?`  | `false`              | When true, generates enums as const assertions instead of TypeScript enums. This removes the need for runtime imports.                                             |
 
 #### Example `.graphqlrc.ts` file
 
@@ -147,6 +148,7 @@ This function creates a fully-functional project configuration.
 | documents    | `string[]?` | `./**/*.{ts,tsx}`    | Glob pattern for files to parse.                                                                                                                                   |
 | module       | `string?`   | Depends on `ApiType` | Change the module whose types will be overridden. Use this to override the types for any package, as long as it uses the same names.                               |
 | declarations | `boolean?`  | `true`               | When true, create declaration (`.d.ts`) files with the types. When false, creates `.ts` files that can be imported in app code. May slightly increase build sizes. |
+| enumsAsConst | `boolean?`  | `false`              | When true, generates enums as const assertions instead of TypeScript enums. This removes the need for runtime imports.                                             |
 
 #### Example `.graphqlrc.ts` file
 
@@ -169,8 +171,39 @@ export default {
 };
 ```
 
+#### Example with `enumsAsConst` option
+
+```js
+import {shopifyApiProject, ApiType} from '@shopify/api-codegen-preset';
+
+export default {
+  schema: 'https://shopify.dev/admin-graphql-direct-proxy/2025-01',
+  documents: ['./app/**/*.{js,ts,jsx,tsx}'],
+  projects: {
+    default: shopifyApiProject({
+      apiType: ApiType.Admin,
+      apiVersion: '2025-01',
+      documents: ['./app/**/*.{js,ts,jsx,tsx}'],
+      outputDir: './app/types',
+      enumsAsConst: true, // Generate enums as const assertions
+    }),
+  },
+};
+```
+
+With `enumsAsConst: true`, you can use enum values directly without imports:
+
+```typescript
+// Without enumsAsConst (default)
+import { MetafieldOwnerType } from './app/types/admin.types';
+const variables = { ownerType: MetafieldOwnerType.Product };
+
+// With enumsAsConst: true
+const variables = { ownerType: 'PRODUCT' }; // No import needed!
+```
+
 #### Example `.graphqlrc.ts` file with to generate types for UI extensions
-You can specify multiple APIs in your `.graphqlrc.ts` file by adding multiple projects.
+You can specify multiple APIs in your `.graphqlrc.ts` file by adding multiple projects. See [Generating types for multiple APIs](#generating-types-for-multiple-apis) for more information.
 
 ```js
 import { LATEST_API_VERSION } from "@shopify/shopify-api";
@@ -181,16 +214,16 @@ function getConfig() {
   const config: IGraphQLConfig = {
     projects: {
       default: shopifyApiProject({
-        apiType: ApiType.Storefront,
-        apiVersion: LATEST_API_VERSION,
-        documents: ["./extensions/**/*.{js,ts,jsx,tsx}", "./extensions/.server/**/*.{js,ts,jsx,tsx}"],
-        outputDir: "./extensions/types",
-      }),
-      UIExtensions: shopifyApiProject({
         apiType: ApiType.Admin,
         apiVersion: LATEST_API_VERSION,
         documents: ["./app/**/*.{js,ts,jsx,tsx}", "./app/.server/**/*.{js,ts,jsx,tsx}" ],
         outputDir: "./app/types",
+      }),
+      UIExtensions: shopifyApiProject({
+        apiType: ApiType.Storefront,
+        apiVersion: LATEST_API_VERSION,
+        documents: ["./extensions/**/*.{js,ts,jsx,tsx}", "./extensions/.server/**/*.{js,ts,jsx,tsx}"],
+        outputDir: "./extensions/types",
       }),
     },
   };
@@ -201,6 +234,7 @@ export default config;
 
 
 ### Example `graphqlrc.ts` file for autocompletion for Shopify Function Extensions
+Enable autocompletion for [Shopify Functions](https://shopify.dev/docs/apps/build/functions).
 ```ts
 import fs from "fs";
 import { LATEST_API_VERSION } from "@shopify/shopify-api";
@@ -210,24 +244,25 @@ import type { IGraphQLConfig } from "graphql-config";
 function getConfig() {
   const config: IGraphQLConfig = {
     projects: {
+      // Generate types for your app
       default: shopifyApiProject({
-        apiType: ApiType.Storefront,
+        apiType: ApiType.Admin,
         apiVersion: LATEST_API_VERSION,
-        documents: ["./extensions/**/*.{js,ts,jsx,tsx}", "./extensions/.server/**/*.{js,ts,jsx,tsx}"],
-        outputDir: "./extensions/types",
+        documents: ["./app/**/*.{js,ts,jsx,tsx}", "./app/.server/**/*.{js,ts,jsx,tsx}"],
+        outputDir: "./app/types",
       }),
+    },
   };
 
+  // Enables autocompletion for your Shopify Functions
   let extensions: string[] = [];
   try {
     extensions = fs.readdirSync("./extensions");
-    console.log(extensions, "extensions");
   } catch {
     // ignore if no extensions
   }
 
   for (const entry of extensions) {
-    console.log(entry, "entry");
     const extensionPath = `./extensions/${entry}`;
     const schema = `${extensionPath}/schema.graphql`;
     if (!fs.existsSync(schema)) {
@@ -239,11 +274,11 @@ function getConfig() {
     };
   }
 
-
   return config;
 }
 
 const config = getConfig();
+
 export default config;
 ```
 
@@ -277,6 +312,7 @@ pnpm graphql-codegen
 ```
 
 ### Generating types for more than one API
+
 If you have specified more than one API in your `.graphqlrc.ts` file, you can run the script for each API by passing the `--project` [flag](https://the-guild.dev/graphql/codegen/docs/config-reference/multiproject-config#command-to-generate-files).
 
 ```sh
@@ -332,4 +368,39 @@ To make your development flow faster, you can pass in the `--watch` flag to upda
 
 ```sh
 npm run graphql-codegen -- --watch
+```
+
+### Using Generated Types with Direct API Access
+
+With Shopify App Bridge, you can use [Direct API Access](https://shopify.dev/docs/api/app-bridge-library#direct-api-access) to make API requests from your apps frontend directly to the Admin API.
+
+Because you are using the Fetch API directly, the responses cannot be automatically typed.  Here is how to manually type them using the automatically generated types:
+
+```js
+import type {  GetProductsQuery } from "app/types/admin.generated";
+
+const fetchProduct = async () => {
+  const res = await fetch('shopify:admin/api/graphql.json', {
+    method: 'POST',
+    body: JSON.stringify({
+      query: `#graphql
+        query getProducts($first: Int) {
+          products(first: $first) {
+            edges {
+              cursor
+              node {
+                title
+                handle
+              }
+            }
+          }
+        }
+      ` as const,
+      variables: { first: 1 },
+    }),
+  });
+
+  const { data } = (await res.json()) as { data: GetProductsQuery };
+  console.log(data.products.edges[0]?.node);
+};
 ```

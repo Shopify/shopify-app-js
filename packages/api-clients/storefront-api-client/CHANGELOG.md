@@ -1,5 +1,45 @@
 # @shopify/storefront-api-client
 
+## 1.0.9
+
+### Patch Changes
+
+- e298a0c: Fix issue with missing sourcemaps
+- Updated dependencies [056f464]
+- Updated dependencies [447348f]
+- Updated dependencies [e298a0c]
+  - @shopify/graphql-client@1.4.1
+
+## 1.0.8
+
+### Patch Changes
+
+- Updated dependencies [b05d09b]
+  - @shopify/graphql-client@1.4.0
+
+## 1.0.7
+
+### Patch Changes
+
+- 981c948: Update directory path
+- Updated dependencies [981c948]
+  - @shopify/graphql-client@1.3.2
+
+## 1.0.6
+
+### Patch Changes
+
+- 4adbc2b: # Generate Provenance Statements
+
+  This changes no functionality.
+
+  The provenance attestation is established by publicly providing a link to a package's source code and build instructions from the build environment. This allows developers to verify where and how your package was built before they download it.
+
+  Learn more about [npm provenance](https://docs.npmjs.com/generating-provenance-statements#about-npm-provenance)
+
+- Updated dependencies [4adbc2b]
+  - @shopify/graphql-client@1.3.1
+
 ## 1.0.5
 
 ### Patch Changes

@@ -33,6 +33,7 @@ export enum DataType {
   GraphQL = 'application/graphql',
   URLEncoded = 'application/x-www-form-urlencoded',
 }
+
 /* eslint-enable @shopify/typescript/prefer-pascal-case-enums */
 
 export interface GetRequestParams {
@@ -115,6 +116,7 @@ export interface GraphqlQueryOptions<
 }
 
 export {GraphqlClient} from './admin/graphql/client';
+export {RestClient} from './admin/rest/client';
 
 export interface ShopifyClients {
   Rest: typeof RestClient;

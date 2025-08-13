@@ -1,5 +1,88 @@
 # @shopify/shopify-app-remix
 
+## 3.8.5
+
+### Patch Changes
+
+- Updated dependencies [818450f]
+  - @shopify/shopify-api@11.14.1
+  - @shopify/shopify-app-session-storage@3.0.20
+
+## 3.8.4
+
+### Patch Changes
+
+- 447348f: Resolve bug with signal option on requests
+- 953badc: Updated `@remix-run/server-runtime`, ` @remix-run/node`, ` @remix-run/react`, ` @remix-run/testing` dependencies
+- e298a0c: Fix issue with missing sourcemaps
+- 0b51ba6: Tweak docs for scopes object
+- Updated dependencies [447348f]
+- Updated dependencies [3d9457f]
+- Updated dependencies [e298a0c]
+- Updated dependencies [25bf95f]
+  - @shopify/shopify-api@11.14.0
+  - @shopify/admin-api-client@1.1.1
+  - @shopify/storefront-api-client@1.0.9
+  - @shopify/shopify-app-session-storage@3.0.19
+
+## 3.8.3
+
+### Patch Changes
+
+- ea6927b: Updated `@remix-run/server-runtime`, ` @remix-run/node`, ` @remix-run/react`, ` @remix-run/testing` dependencies
+- 5926c00: Updated `isbot` dependencies
+- 4845cda: Updated `@remix-run/server-runtime`, ` @remix-run/node`, ` @remix-run/react`, ` @remix-run/testing` dependencies
+- cbe1c10: Updated `isbot` dependencies
+- Updated dependencies [6aed7c0]
+- Updated dependencies [5926c00]
+- Updated dependencies [cbe1c10]
+- Updated dependencies [b05d09b]
+- Updated dependencies [f8da2d3]
+  - @shopify/shopify-api@11.13.0
+  - @shopify/admin-api-client@1.1.0
+  - @shopify/shopify-app-session-storage@3.0.18
+  - @shopify/storefront-api-client@1.0.8
+
+## 3.8.2
+
+### Patch Changes
+
+- 981c948: Update directory path
+- Updated dependencies [7a076ac]
+- Updated dependencies [ecacdf3]
+- Updated dependencies [981c948]
+  - @shopify/shopify-api@11.12.0
+  - @shopify/shopify-app-session-storage@3.0.17
+  - @shopify/storefront-api-client@1.0.7
+  - @shopify/admin-api-client@1.0.8
+
+## 3.8.1
+
+### Patch Changes
+
+- Updated dependencies [4adbc2b]
+  - @shopify/admin-api-client@1.0.7
+  - @shopify/storefront-api-client@1.0.6
+  - @shopify/shopify-api@11.11.1
+  - @shopify/shopify-app-session-storage@3.0.16
+
+## 3.8.0
+
+### Minor Changes
+
+- ea406d3: # Add release candidate API version
+  Adds a constant that points to the [release candidate API version](https://shopify.dev/docs/api/usage/versioning#release-candidates).
+
+  ```
+  import { RELEASE_CANDIDATE_API_VERSION } from "@shopify/shopify-api";
+  ```
+
+### Patch Changes
+
+- Updated dependencies [ea406d3]
+  - @shopify/shopify-api@11.11.0
+  - @shopify/shopify-app-session-storage@3.0.15
+
 ## 3.7.3
 
 ### Patch Changes
@@ -1027,7 +1110,6 @@
 ### Minor Changes
 
 - 370fc5e: - Internally rearranged source files to create a better separation between backend and frontend code, so we can add frontend-specific exports.
-
   - A new export path `@shopify/shopify-app-remix/react` will now contain those frontend exports.
   - The existing server code will be moved to `@shopify/shopify-app-remix/server`, but the root import will still work until the next major release in the future.
 

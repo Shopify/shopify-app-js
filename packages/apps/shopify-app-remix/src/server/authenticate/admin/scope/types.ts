@@ -3,7 +3,7 @@
  */
 export interface ScopesApiContext {
   /**
-   * Queries Shopify for the scopes for this app on this shop
+   * Queries Shopify to see what scopes have been granted
    *
    * @returns {ScopesDetail} The scope details.
    *
@@ -12,75 +12,53 @@ export interface ScopesApiContext {
    * <description>Call `scopes.query` to get scope details.</description>
    * ```ts
    * // /app._index.tsx
-   * import type { LoaderFunctionArgs } from "@remix-run/node";
-   * import { useLoaderData } from "@remix-run/react";
    * import { authenticate } from "../shopify.server";
    * import { json } from "@remix-run/node";
    *
-   * export const loader = async ({ request }: LoaderFunctionArgs) => {
+   * export const loader = async ({ request }) => {
    *   const { scopes } = await authenticate.admin(request);
+   *   const { required, optional, granted } = await scopes.query();
    *
-   *   const scopesDetail =  await scopes.query();
+   *   if (granted.includes("write_products")) {
+   *     // do something
+   *   }
    *
-   *   return json({
-   *     hasWriteProducts: scopesDetail.granted.includes('write_products'),
-   *   });
+   *   return null
    * };
    *
-   * export default function Index() {
-   *   const {hasWriteProducts} = useLoaderData<typeof loader>();
-   *
-   *   ...
-   * }
    * ```
    */
   query: () => Promise<ScopesDetail>;
 
   /**
-   * Requests the merchant to grant the provided scopes for this app on this shop
+   * Requests the merchant grant the provided scopes
    *
-   * Warning: This method performs a server-side redirect.
+   * This method performs a redirect to the grant screen.
    *
    * @example
-   * <caption>Request consent from the merchant to grant the provided scopes for this app.</caption>
+   * <caption>Ask the merchant to grant the provided scopes.</caption>
    * <description>Call `scopes.request` to request optional scopes.</description>
    * ```ts
    * // /app/routes/app.request.tsx
-   * import type { ActionFunctionArgs } from "@remix-run/node";
-   * import { useFetcher } from "@remix-run/react";
    * import { authenticate } from "../shopify.server";
-   * import { json } from "@remix-run/node";
    *
-   * // Example of an action to POST a request to for optional scopes
-   * export const action = async ({ request }: ActionFunctionArgs) => {
+   * // Example of an action to request optional scopes
+   * export const action = async ({ request }) => {
    *   const { scopes } = await authenticate.admin(request);
+   *   const { granted } = await scopes.query();
    *
-   *   const body = await request.formData();
-   *   const scopesToRequest = body.getAll("scopes") as string[];
+   *   if (!granted.includes("write_products")) {
+   *     await scopes.request(["write_products"]);
+   *   }
    *
-   *   // If the scopes are not already granted, a full page redirect to the request URL occurs
-   *   await scopes.request(scopesToRequest);
-   *   // otherwise return an empty response
-   *   return json({});
+   *   return null
    * };
-   *
-   * export default function Index() {
-   *   const fetcher = useFetcher<typeof action>();
-   *
-   *   const handleRequest = () => {
-   *     fetcher.submit({scopes: ["write_products"]}, {
-   *       method: "POST",
-   *     });
-   *   };
-   *
-   *   ...
-   * }
    * ```
    */
   request: (scopes: Scope[]) => Promise<void>;
 
   /**
-   * Revokes the provided scopes from this app on this shop
+   * Revokes the provided scopes
    *
    * Warning: This method throws an [error](https://shopify.dev/docs/api/admin-graphql/unstable/objects/AppRevokeAccessScopesAppRevokeScopeError) if the provided optional scopes contains a required scope.
    *
@@ -89,34 +67,22 @@ export interface ScopesApiContext {
    * <description>Call `scopes.revoke` to revoke optional scopes.</description>
    * ```ts
    * // /app._index.tsx
-   * import type { ActionFunctionArgs } from "@remix-run/node";
-   * import { useFetcher } from "@remix-run/react";
    * import { authenticate } from "../shopify.server";
    * import { json } from "@remix-run/node";
    *
    * // Example of an action to POST optional scopes to revoke
-   * export const action = async ({ request }: ActionFunctionArgs) => {
+   * export const action = async ({ request }) => {
    *   const { scopes } = await authenticate.admin(request);
+   *   const { granted } = await scopes.query();
    *
-   *   const body = await request.formData();
-   *   const scopesToRevoke = body.getAll("scopes") as string[];
+   *   if (granted.includes("write_products")) {
+   *     const revokedResponse = await scopes.revoke(["write_products"]);
+   *     return json(revokedResponse);
+   *   }
    *
-   *   const revokedResponse = await scopes.revoke(scopesToRevoke);
-   *
-   *   return json(revokedResponse);
+   *   return null
    * };
    *
-   * export default function Index() {
-   *   const fetcher = useFetcher<typeof action>();
-   *
-   *   const handleRevoke = () => {
-   *     fetcher.submit({scopes: ["write_products"]}, {
-   *       method: "POST",
-   *     });
-   *   };
-   *
-   *   ...
-   * }
    * ```
    */
   revoke: (scopes: Scope[]) => Promise<ScopesRevokeResponse>;

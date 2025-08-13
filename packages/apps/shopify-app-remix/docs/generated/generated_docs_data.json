@@ -1133,7 +1133,8 @@
     },
     "jsDocTypeExamples": [
       "EmbeddedAdminContext",
-      "AdminApiContext",
+      "AdminApiContextWithRest",
+      "AdminApiContextWithoutRest",
       "BillingContext",
       "ScopesApiContext"
     ],
@@ -1271,6 +1272,147 @@
                   {
                     "title": "shopify.server.ts",
                     "code": "import { shopifyApp } from \"@shopify/shopify-app-remix/server\";\n\nconst shopify = shopifyApp({\n  // ...etc\n  useOnlineTokens: true,\n});\nexport default shopify;\nexport const authenticate = shopify.authenticate;",
+                    "language": "typescript"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "title": "graphql",
+          "examples": [
+            {
+              "description": "Use `admin.graphql` to make query / mutation requests.",
+              "codeblock": {
+                "title": "Querying the GraphQL API",
+                "tabs": [
+                  {
+                    "title": "/app/routes/**\\/*.ts",
+                    "code": "import { ActionFunctionArgs } from \"@remix-run/node\";\nimport { authenticate } from \"../shopify.server\";\n\nexport const action = async ({ request }: ActionFunctionArgs) =&gt; {\n  const { admin } = await authenticate.admin(request);\n\n  const response = await admin.graphql(\n    `#graphql\n    mutation populateProduct($input: ProductInput!) {\n      productCreate(input: $input) {\n        product {\n          id\n        }\n      }\n    }`,\n    {\n      variables: {\n        input: { title: \"Product Name\" },\n      },\n    },\n  );\n\n  const productData = await response.json();\n  return json({\n    productId: productData.data?.productCreate?.product?.id,\n  });\n}",
+                    "language": "typescript"
+                  },
+                  {
+                    "title": "/app/shopify.server.ts",
+                    "code": "import { shopifyApp } from \"@shopify/shopify-app-remix/server\";\n\nconst shopify = shopifyApp({\n  // ...\n});\nexport default shopify;\nexport const authenticate = shopify.authenticate;",
+                    "language": "typescript"
+                  }
+                ]
+              }
+            },
+            {
+              "description": "Catch `GraphqlQueryError` errors to see error messages from the API.",
+              "codeblock": {
+                "title": "Handling GraphQL errors",
+                "tabs": [
+                  {
+                    "title": "/app/routes/**\\/*.ts",
+                    "code": "import { ActionFunctionArgs } from \"@remix-run/node\";\nimport { authenticate } from \"../shopify.server\";\n\nexport const action = async ({ request }: ActionFunctionArgs) =&gt; {\n  const { admin } = await authenticate.admin(request);\n\n  try {\n    const response = await admin.graphql(\n      `#graphql\n      query incorrectQuery {\n        products(first: 10) {\n          nodes {\n            not_a_field\n          }\n        }\n      }`,\n    );\n\n    return json({ data: await response.json() });\n  } catch (error) {\n    if (error instanceof GraphqlQueryError) {\n      // error.body.errors:\n      // { graphQLErrors: [\n      //   { message: \"Field 'not_a_field' doesn't exist on type 'Product'\" }\n      // ] }\n      return json({ errors: error.body?.errors }, { status: 500 });\n    }\n    return json({ message: \"An error occurred\" }, { status: 500 });\n  }\n}",
+                    "language": "typescript"
+                  },
+                  {
+                    "title": "/app/shopify.server.ts",
+                    "code": "import { shopifyApp } from \"@shopify/shopify-app-remix/server\";\n\nconst shopify = shopifyApp({\n  // ...\n});\nexport default shopify;\nexport const authenticate = shopify.authenticate;",
+                    "language": "typescript"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "title": "rest",
+          "examples": [
+            {
+              "description": "Getting the number of orders in a store using REST resources. Visit the [Admin REST API references](/docs/api/admin-rest) for examples on using each resource.",
+              "codeblock": {
+                "title": "Using REST resources",
+                "tabs": [
+                  {
+                    "title": "/app/routes/**\\/*.ts",
+                    "code": "import { LoaderFunctionArgs, json } from \"@remix-run/node\";\nimport { authenticate } from \"../shopify.server\";\n\nexport const loader = async ({ request }: LoaderFunctionArgs) =&gt; {\n  const {\n    admin,\n    session,\n  } = await authenticate.admin(request);\n\n  return json(\n    admin.rest.resources.Order.count({ session }),\n  );\n};",
+                    "language": "typescript"
+                  },
+                  {
+                    "title": "/app/shopify.server.ts",
+                    "code": "import { shopifyApp } from \"@shopify/shopify-app-remix/server\";\nimport { restResources } from \"@shopify/shopify-api/rest/admin/2023-07\";\n\nconst shopify = shopifyApp({\n  restResources,\n  // ...etc\n});\nexport default shopify;\nexport const authenticate = shopify.authenticate;",
+                    "language": "typescript"
+                  }
+                ]
+              }
+            },
+            {
+              "description": "Use `admin.rest.get` to make custom requests to make a request to to the `customer/count` endpoint",
+              "codeblock": {
+                "title": "Performing a GET request to the REST API",
+                "tabs": [
+                  {
+                    "title": "/app/routes/**\\/*.ts",
+                    "code": "import { LoaderFunctionArgs, json } from \"@remix-run/node\";\nimport { authenticate } from \"../shopify.server\";\n\nexport const loader = async ({ request }: LoaderFunctionArgs) =&gt; {\n  const {\n    admin,\n    session,\n  } = await authenticate.admin(request);\n\n  const response = await admin.rest.get({\n    path: \"/customers/count.json\",\n  });\n  const customers = await response.json();\n\n  return json({ customers });\n};",
+                    "language": "typescript"
+                  },
+                  {
+                    "title": "/app/shopify.server.ts",
+                    "code": "import { shopifyApp } from \"@shopify/shopify-app-remix/server\";\nimport { restResources } from \"@shopify/shopify-api/rest/admin/2023-04\";\n\nconst shopify = shopifyApp({\n  restResources,\n  // ...etc\n});\nexport default shopify;\nexport const authenticate = shopify.authenticate;",
+                    "language": "typescript"
+                  }
+                ]
+              }
+            },
+            {
+              "description": "Use `admin.rest.post` to make custom requests to make a request to to the `customers.json` endpoint to send a welcome email",
+              "codeblock": {
+                "title": "Performing a POST request to the REST API",
+                "tabs": [
+                  {
+                    "title": "/app/routes/**\\/*.ts",
+                    "code": "import { LoaderFunctionArgs, json } from \"@remix-run/node\";\nimport { authenticate } from \"../shopify.server\";\n\nexport const loader = async ({ request }: LoaderFunctionArgs) =&gt; {\n  const {\n    admin,\n    session,\n  } = await authenticate.admin(request);\n\n  const response = admin.rest.post({\n    path: \"customers/7392136888625/send_invite.json\",\n    body: {\n      customer_invite: {\n        to: \"new_test_email@shopify.com\",\n        from: \"j.limited@example.com\",\n        bcc: [\"j.limited@example.com\"],\n        subject: \"Welcome to my new shop\",\n        custom_message: \"My awesome new store\",\n      },\n    },\n  });\n\n  const customerInvite = await response.json();\n  return json({ customerInvite });\n};",
+                    "language": "typescript"
+                  },
+                  {
+                    "title": "/app/shopify.server.ts",
+                    "code": "import { shopifyApp } from \"@shopify/shopify-app-remix/server\";\nimport { restResources } from \"@shopify/shopify-api/rest/admin/2023-04\";\n\nconst shopify = shopifyApp({\n  restResources,\n  // ...etc\n});\nexport default shopify;\nexport const authenticate = shopify.authenticate;",
+                    "language": "typescript"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "title": "graphql",
+          "examples": [
+            {
+              "description": "Use `admin.graphql` to make query / mutation requests.",
+              "codeblock": {
+                "title": "Querying the GraphQL API",
+                "tabs": [
+                  {
+                    "title": "/app/routes/**\\/*.ts",
+                    "code": "import { ActionFunctionArgs } from \"@remix-run/node\";\nimport { authenticate } from \"../shopify.server\";\n\nexport const action = async ({ request }: ActionFunctionArgs) =&gt; {\n  const { admin } = await authenticate.admin(request);\n\n  const response = await admin.graphql(\n    `#graphql\n    mutation populateProduct($input: ProductInput!) {\n      productCreate(input: $input) {\n        product {\n          id\n        }\n      }\n    }`,\n    {\n      variables: {\n        input: { title: \"Product Name\" },\n      },\n    },\n  );\n\n  const productData = await response.json();\n  return json({\n    productId: productData.data?.productCreate?.product?.id,\n  });\n}",
+                    "language": "typescript"
+                  },
+                  {
+                    "title": "/app/shopify.server.ts",
+                    "code": "import { shopifyApp } from \"@shopify/shopify-app-remix/server\";\n\nconst shopify = shopifyApp({\n  // ...\n});\nexport default shopify;\nexport const authenticate = shopify.authenticate;",
+                    "language": "typescript"
+                  }
+                ]
+              }
+            },
+            {
+              "description": "Catch `GraphqlQueryError` errors to see error messages from the API.",
+              "codeblock": {
+                "title": "Handling GraphQL errors",
+                "tabs": [
+                  {
+                    "title": "/app/routes/**\\/*.ts",
+                    "code": "import { ActionFunctionArgs } from \"@remix-run/node\";\nimport { authenticate } from \"../shopify.server\";\n\nexport const action = async ({ request }: ActionFunctionArgs) =&gt; {\n  const { admin } = await authenticate.admin(request);\n\n  try {\n    const response = await admin.graphql(\n      `#graphql\n      query incorrectQuery {\n        products(first: 10) {\n          nodes {\n            not_a_field\n          }\n        }\n      }`,\n    );\n\n    return json({ data: await response.json() });\n  } catch (error) {\n    if (error instanceof GraphqlQueryError) {\n      // error.body.errors:\n      // { graphQLErrors: [\n      //   { message: \"Field 'not_a_field' doesn't exist on type 'Product'\" }\n      // ] }\n      return json({ errors: error.body?.errors }, { status: 500 });\n    }\n    return json({ message: \"An error occurred\" }, { status: 500 });\n  }\n}",
+                    "language": "typescript"
+                  },
+                  {
+                    "title": "/app/shopify.server.ts",
+                    "code": "import { shopifyApp } from \"@shopify/shopify-app-remix/server\";\n\nconst shopify = shopifyApp({\n  // ...\n});\nexport default shopify;\nexport const authenticate = shopify.authenticate;",
                     "language": "typescript"
                   }
                 ]
@@ -1524,7 +1666,7 @@
   },
   {
     "name": "Billing",
-    "description": "Contains function used to bill merchants for your app.\n\nThis object is returned on authenticated Admin requests.",
+    "description": "Contains function used to bill merchants for your app with the Billing API.\n\nThis object is returned on authenticated Admin requests.\n\n> Note: [Managed App Pricing](/docs/apps/launch/billing/managed-pricing) is now available. Define your app’s pricing plans directly in the Shopify Partner Dashboard, without needing to use the Billing API.",
     "category": "APIs",
     "type": "object",
     "isVisualComponent": false,
@@ -4397,7 +4539,7 @@
       }
     ],
     "jsDocTypeExamples": [
-      "AdminApiContext"
+      "AdminApiContextWithoutRest"
     ],
     "related": [
       {
@@ -4410,7 +4552,53 @@
         "subtitle": "Interact with the Admin API on non-Shopify requests.",
         "url": "/docs/api/shopify-app-remix/unauthenticated/unauthenticated-admin"
       }
-    ]
+    ],
+    "examples": {
+      "description": "",
+      "exampleGroups": [
+        {
+          "title": "graphql",
+          "examples": [
+            {
+              "description": "Use `admin.graphql` to make query / mutation requests.",
+              "codeblock": {
+                "title": "Querying the GraphQL API",
+                "tabs": [
+                  {
+                    "title": "/app/routes/**\\/*.ts",
+                    "code": "import { ActionFunctionArgs } from \"@remix-run/node\";\nimport { authenticate } from \"../shopify.server\";\n\nexport const action = async ({ request }: ActionFunctionArgs) =&gt; {\n  const { admin } = await authenticate.admin(request);\n\n  const response = await admin.graphql(\n    `#graphql\n    mutation populateProduct($input: ProductInput!) {\n      productCreate(input: $input) {\n        product {\n          id\n        }\n      }\n    }`,\n    {\n      variables: {\n        input: { title: \"Product Name\" },\n      },\n    },\n  );\n\n  const productData = await response.json();\n  return json({\n    productId: productData.data?.productCreate?.product?.id,\n  });\n}",
+                    "language": "typescript"
+                  },
+                  {
+                    "title": "/app/shopify.server.ts",
+                    "code": "import { shopifyApp } from \"@shopify/shopify-app-remix/server\";\n\nconst shopify = shopifyApp({\n  // ...\n});\nexport default shopify;\nexport const authenticate = shopify.authenticate;",
+                    "language": "typescript"
+                  }
+                ]
+              }
+            },
+            {
+              "description": "Catch `GraphqlQueryError` errors to see error messages from the API.",
+              "codeblock": {
+                "title": "Handling GraphQL errors",
+                "tabs": [
+                  {
+                    "title": "/app/routes/**\\/*.ts",
+                    "code": "import { ActionFunctionArgs } from \"@remix-run/node\";\nimport { authenticate } from \"../shopify.server\";\n\nexport const action = async ({ request }: ActionFunctionArgs) =&gt; {\n  const { admin } = await authenticate.admin(request);\n\n  try {\n    const response = await admin.graphql(\n      `#graphql\n      query incorrectQuery {\n        products(first: 10) {\n          nodes {\n            not_a_field\n          }\n        }\n      }`,\n    );\n\n    return json({ data: await response.json() });\n  } catch (error) {\n    if (error instanceof GraphqlQueryError) {\n      // error.body.errors:\n      // { graphQLErrors: [\n      //   { message: \"Field 'not_a_field' doesn't exist on type 'Product'\" }\n      // ] }\n      return json({ errors: error.body?.errors }, { status: 500 });\n    }\n    return json({ message: \"An error occurred\" }, { status: 500 });\n  }\n}",
+                    "language": "typescript"
+                  },
+                  {
+                    "title": "/app/shopify.server.ts",
+                    "code": "import { shopifyApp } from \"@shopify/shopify-app-remix/server\";\n\nconst shopify = shopifyApp({\n  // ...\n});\nexport default shopify;\nexport const authenticate = shopify.authenticate;",
+                    "language": "typescript"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
   },
   {
     "name": "Storefront API",
@@ -7255,7 +7443,7 @@
                 "filePath": "../shopify-api/lib/session/session.ts",
                 "syntaxKind": "MethodDeclaration",
                 "name": "isActive",
-                "value": "(scopes: string | string[] | AuthScopes) => boolean",
+                "value": "(scopes: string | string[] | AuthScopes, withinMillisecondsOfExpiry?: number) => boolean",
                 "description": "Whether the session is active. Active sessions have an access token that is not expired, and has has the given scopes if scopes is equal to a truthy value."
               },
               {
@@ -7301,7 +7489,7 @@
                 "description": "Converts the session into an array of key-value pairs."
               }
             ],
-            "value": "export class Session {\n  public static fromPropertyArray(\n    entries: [string, string | number | boolean][],\n    returnUserData = false,\n  ): Session {\n    if (!Array.isArray(entries)) {\n      throw new InvalidSession(\n        'The parameter is not an array: a Session cannot be created from this object.',\n      );\n    }\n\n    const obj = Object.fromEntries(\n      entries\n        .filter(([_key, value]) => value !== null && value !== undefined)\n        // Sanitize keys\n        .map(([key, value]) => {\n          switch (key.toLowerCase()) {\n            case 'isonline':\n              return ['isOnline', value];\n            case 'accesstoken':\n              return ['accessToken', value];\n            case 'onlineaccessinfo':\n              return ['onlineAccessInfo', value];\n            case 'userid':\n              return ['userId', value];\n            case 'firstname':\n              return ['firstName', value];\n            case 'lastname':\n              return ['lastName', value];\n            case 'accountowner':\n              return ['accountOwner', value];\n            case 'emailverified':\n              return ['emailVerified', value];\n            default:\n              return [key.toLowerCase(), value];\n          }\n        }),\n    );\n\n    const sessionData = {} as SessionParams;\n    const onlineAccessInfo = {\n      associated_user: {},\n    } as OnlineAccessInfo;\n    Object.entries(obj).forEach(([key, value]) => {\n      switch (key) {\n        case 'isOnline':\n          if (typeof value === 'string') {\n            sessionData[key] = value.toString().toLowerCase() === 'true';\n          } else if (typeof value === 'number') {\n            sessionData[key] = Boolean(value);\n          } else {\n            sessionData[key] = value;\n          }\n          break;\n        case 'scope':\n          sessionData[key] = value.toString();\n          break;\n        case 'expires':\n          sessionData[key] = value ? new Date(Number(value)) : undefined;\n          break;\n        case 'onlineAccessInfo':\n          onlineAccessInfo.associated_user.id = Number(value);\n          break;\n        case 'userId':\n          if (returnUserData) {\n            onlineAccessInfo.associated_user.id = Number(value);\n            break;\n          }\n        case 'firstName':\n          if (returnUserData) {\n            onlineAccessInfo.associated_user.first_name = String(value);\n            break;\n          }\n        case 'lastName':\n          if (returnUserData) {\n            onlineAccessInfo.associated_user.last_name = String(value);\n            break;\n          }\n        case 'email':\n          if (returnUserData) {\n            onlineAccessInfo.associated_user.email = String(value);\n            break;\n          }\n        case 'accountOwner':\n          if (returnUserData) {\n            onlineAccessInfo.associated_user.account_owner = Boolean(value);\n            break;\n          }\n        case 'locale':\n          if (returnUserData) {\n            onlineAccessInfo.associated_user.locale = String(value);\n            break;\n          }\n        case 'collaborator':\n          if (returnUserData) {\n            onlineAccessInfo.associated_user.collaborator = Boolean(value);\n            break;\n          }\n        case 'emailVerified':\n          if (returnUserData) {\n            onlineAccessInfo.associated_user.email_verified = Boolean(value);\n            break;\n          }\n        // Return any user keys as passed in\n        default:\n          sessionData[key] = value;\n      }\n    });\n    if (sessionData.isOnline) {\n      sessionData.onlineAccessInfo = onlineAccessInfo;\n    }\n    const session = new Session(sessionData);\n    return session;\n  }\n\n  /**\n   * The unique identifier for the session.\n   */\n  readonly id: string;\n  /**\n   * The Shopify shop domain, such as `example.myshopify.com`.\n   */\n  public shop: string;\n  /**\n   * The state of the session. Used for the OAuth authentication code flow.\n   */\n  public state: string;\n  /**\n   * Whether the access token in the session is online or offline.\n   */\n  public isOnline: boolean;\n  /**\n   * The desired scopes for the access token, at the time the session was created.\n   */\n  public scope?: string;\n  /**\n   * The date the access token expires.\n   */\n  public expires?: Date;\n  /**\n   * The access token for the session.\n   */\n  public accessToken?: string;\n  /**\n   * Information on the user for the session. Only present for online sessions.\n   */\n  public onlineAccessInfo?: OnlineAccessInfo;\n\n  constructor(params: SessionParams) {\n    Object.assign(this, params);\n  }\n\n  /**\n   * Whether the session is active. Active sessions have an access token that is not expired, and has has the given\n   * scopes if scopes is equal to a truthy value.\n   */\n  public isActive(scopes: AuthScopes | string | string[] | undefined): boolean {\n    const hasAccessToken = Boolean(this.accessToken);\n    const isTokenNotExpired = !this.isExpired();\n    const isScopeChanged = this.isScopeChanged(scopes);\n    return !isScopeChanged && hasAccessToken && isTokenNotExpired;\n  }\n\n  /**\n   * Whether the access token includes the given scopes if they are provided.\n   */\n  public isScopeChanged(\n    scopes: AuthScopes | string | string[] | undefined,\n  ): boolean {\n    if (typeof scopes === 'undefined') {\n      return false;\n    }\n\n    return !this.isScopeIncluded(scopes);\n  }\n\n  /**\n   * Whether the access token includes the given scopes.\n   */\n  public isScopeIncluded(scopes: AuthScopes | string | string[]): boolean {\n    const requiredScopes =\n      scopes instanceof AuthScopes ? scopes : new AuthScopes(scopes);\n    const sessionScopes = new AuthScopes(this.scope);\n\n    return sessionScopes.has(requiredScopes);\n  }\n\n  /**\n   * Whether the access token is expired.\n   */\n  public isExpired(withinMillisecondsOfExpiry = 0): boolean {\n    return Boolean(\n      this.expires &&\n        this.expires.getTime() - withinMillisecondsOfExpiry < Date.now(),\n    );\n  }\n\n  /**\n   * Converts an object with data into a Session.\n   */\n  public toObject(): SessionParams {\n    const object: SessionParams = {\n      id: this.id,\n      shop: this.shop,\n      state: this.state,\n      isOnline: this.isOnline,\n    };\n\n    if (this.scope) {\n      object.scope = this.scope;\n    }\n    if (this.expires) {\n      object.expires = this.expires;\n    }\n    if (this.accessToken) {\n      object.accessToken = this.accessToken;\n    }\n    if (this.onlineAccessInfo) {\n      object.onlineAccessInfo = this.onlineAccessInfo;\n    }\n    return object;\n  }\n\n  /**\n   * Checks whether the given session is equal to this session.\n   */\n  public equals(other: Session | undefined): boolean {\n    if (!other) return false;\n\n    const mandatoryPropsMatch =\n      this.id === other.id &&\n      this.shop === other.shop &&\n      this.state === other.state &&\n      this.isOnline === other.isOnline;\n\n    if (!mandatoryPropsMatch) return false;\n\n    const copyA = this.toPropertyArray(true);\n    copyA.sort(([k1], [k2]) => (k1 < k2 ? -1 : 1));\n\n    const copyB = other.toPropertyArray(true);\n    copyB.sort(([k1], [k2]) => (k1 < k2 ? -1 : 1));\n\n    return JSON.stringify(copyA) === JSON.stringify(copyB);\n  }\n\n  /**\n   * Converts the session into an array of key-value pairs.\n   */\n  public toPropertyArray(\n    returnUserData = false,\n  ): [string, string | number | boolean][] {\n    return (\n      Object.entries(this)\n        .filter(\n          ([key, value]) =>\n            propertiesToSave.includes(key) &&\n            value !== undefined &&\n            value !== null,\n        )\n        // Prepare values for db storage\n        .flatMap(([key, value]): [string, string | number | boolean][] => {\n          switch (key) {\n            case 'expires':\n              return [[key, value ? value.getTime() : undefined]];\n            case 'onlineAccessInfo':\n              // eslint-disable-next-line no-negated-condition\n              if (!returnUserData) {\n                return [[key, value.associated_user.id]];\n              } else {\n                return [\n                  ['userId', value?.associated_user?.id],\n                  ['firstName', value?.associated_user?.first_name],\n                  ['lastName', value?.associated_user?.last_name],\n                  ['email', value?.associated_user?.email],\n                  ['locale', value?.associated_user?.locale],\n                  ['emailVerified', value?.associated_user?.email_verified],\n                  ['accountOwner', value?.associated_user?.account_owner],\n                  ['collaborator', value?.associated_user?.collaborator],\n                ];\n              }\n            default:\n              return [[key, value]];\n          }\n        })\n        // Filter out tuples with undefined values\n        .filter(([_key, value]) => value !== undefined)\n    );\n  }\n}"
+            "value": "export class Session {\n  public static fromPropertyArray(\n    entries: [string, string | number | boolean][],\n    returnUserData = false,\n  ): Session {\n    if (!Array.isArray(entries)) {\n      throw new InvalidSession(\n        'The parameter is not an array: a Session cannot be created from this object.',\n      );\n    }\n\n    const obj = Object.fromEntries(\n      entries\n        .filter(([_key, value]) => value !== null && value !== undefined)\n        // Sanitize keys\n        .map(([key, value]) => {\n          switch (key.toLowerCase()) {\n            case 'isonline':\n              return ['isOnline', value];\n            case 'accesstoken':\n              return ['accessToken', value];\n            case 'onlineaccessinfo':\n              return ['onlineAccessInfo', value];\n            case 'userid':\n              return ['userId', value];\n            case 'firstname':\n              return ['firstName', value];\n            case 'lastname':\n              return ['lastName', value];\n            case 'accountowner':\n              return ['accountOwner', value];\n            case 'emailverified':\n              return ['emailVerified', value];\n            default:\n              return [key.toLowerCase(), value];\n          }\n        }),\n    );\n\n    const sessionData = {} as SessionParams;\n    const onlineAccessInfo = {\n      associated_user: {},\n    } as OnlineAccessInfo;\n    Object.entries(obj).forEach(([key, value]) => {\n      switch (key) {\n        case 'isOnline':\n          if (typeof value === 'string') {\n            sessionData[key] = value.toString().toLowerCase() === 'true';\n          } else if (typeof value === 'number') {\n            sessionData[key] = Boolean(value);\n          } else {\n            sessionData[key] = value;\n          }\n          break;\n        case 'scope':\n          sessionData[key] = value.toString();\n          break;\n        case 'expires':\n          sessionData[key] = value ? new Date(Number(value)) : undefined;\n          break;\n        case 'onlineAccessInfo':\n          onlineAccessInfo.associated_user.id = Number(value);\n          break;\n        case 'userId':\n          if (returnUserData) {\n            onlineAccessInfo.associated_user.id = Number(value);\n            break;\n          }\n        case 'firstName':\n          if (returnUserData) {\n            onlineAccessInfo.associated_user.first_name = String(value);\n            break;\n          }\n        case 'lastName':\n          if (returnUserData) {\n            onlineAccessInfo.associated_user.last_name = String(value);\n            break;\n          }\n        case 'email':\n          if (returnUserData) {\n            onlineAccessInfo.associated_user.email = String(value);\n            break;\n          }\n        case 'accountOwner':\n          if (returnUserData) {\n            onlineAccessInfo.associated_user.account_owner = Boolean(value);\n            break;\n          }\n        case 'locale':\n          if (returnUserData) {\n            onlineAccessInfo.associated_user.locale = String(value);\n            break;\n          }\n        case 'collaborator':\n          if (returnUserData) {\n            onlineAccessInfo.associated_user.collaborator = Boolean(value);\n            break;\n          }\n        case 'emailVerified':\n          if (returnUserData) {\n            onlineAccessInfo.associated_user.email_verified = Boolean(value);\n            break;\n          }\n        // Return any user keys as passed in\n        default:\n          sessionData[key] = value;\n      }\n    });\n    if (sessionData.isOnline) {\n      sessionData.onlineAccessInfo = onlineAccessInfo;\n    }\n    const session = new Session(sessionData);\n    return session;\n  }\n\n  /**\n   * The unique identifier for the session.\n   */\n  readonly id: string;\n  /**\n   * The Shopify shop domain, such as `example.myshopify.com`.\n   */\n  public shop: string;\n  /**\n   * The state of the session. Used for the OAuth authentication code flow.\n   */\n  public state: string;\n  /**\n   * Whether the access token in the session is online or offline.\n   */\n  public isOnline: boolean;\n  /**\n   * The desired scopes for the access token, at the time the session was created.\n   */\n  public scope?: string;\n  /**\n   * The date the access token expires.\n   */\n  public expires?: Date;\n  /**\n   * The access token for the session.\n   */\n  public accessToken?: string;\n  /**\n   * Information on the user for the session. Only present for online sessions.\n   */\n  public onlineAccessInfo?: OnlineAccessInfo;\n\n  constructor(params: SessionParams) {\n    Object.assign(this, params);\n  }\n\n  /**\n   * Whether the session is active. Active sessions have an access token that is not expired, and has has the given\n   * scopes if scopes is equal to a truthy value.\n   */\n  public isActive(\n    scopes: AuthScopes | string | string[] | undefined,\n    withinMillisecondsOfExpiry = 500,\n  ): boolean {\n    const hasAccessToken = Boolean(this.accessToken);\n    const isTokenNotExpired = !this.isExpired(withinMillisecondsOfExpiry);\n    const isScopeChanged = this.isScopeChanged(scopes);\n    return !isScopeChanged && hasAccessToken && isTokenNotExpired;\n  }\n\n  /**\n   * Whether the access token includes the given scopes if they are provided.\n   */\n  public isScopeChanged(\n    scopes: AuthScopes | string | string[] | undefined,\n  ): boolean {\n    if (typeof scopes === 'undefined') {\n      return false;\n    }\n\n    return !this.isScopeIncluded(scopes);\n  }\n\n  /**\n   * Whether the access token includes the given scopes.\n   */\n  public isScopeIncluded(scopes: AuthScopes | string | string[]): boolean {\n    const requiredScopes =\n      scopes instanceof AuthScopes ? scopes : new AuthScopes(scopes);\n    const sessionScopes = new AuthScopes(this.scope);\n\n    return sessionScopes.has(requiredScopes);\n  }\n\n  /**\n   * Whether the access token is expired.\n   */\n  public isExpired(withinMillisecondsOfExpiry = 0): boolean {\n    return Boolean(\n      this.expires &&\n        this.expires.getTime() - withinMillisecondsOfExpiry < Date.now(),\n    );\n  }\n\n  /**\n   * Converts an object with data into a Session.\n   */\n  public toObject(): SessionParams {\n    const object: SessionParams = {\n      id: this.id,\n      shop: this.shop,\n      state: this.state,\n      isOnline: this.isOnline,\n    };\n\n    if (this.scope) {\n      object.scope = this.scope;\n    }\n    if (this.expires) {\n      object.expires = this.expires;\n    }\n    if (this.accessToken) {\n      object.accessToken = this.accessToken;\n    }\n    if (this.onlineAccessInfo) {\n      object.onlineAccessInfo = this.onlineAccessInfo;\n    }\n    return object;\n  }\n\n  /**\n   * Checks whether the given session is equal to this session.\n   */\n  public equals(other: Session | undefined): boolean {\n    if (!other) return false;\n\n    const mandatoryPropsMatch =\n      this.id === other.id &&\n      this.shop === other.shop &&\n      this.state === other.state &&\n      this.isOnline === other.isOnline;\n\n    if (!mandatoryPropsMatch) return false;\n\n    const copyA = this.toPropertyArray(true);\n    copyA.sort(([k1], [k2]) => (k1 < k2 ? -1 : 1));\n\n    const copyB = other.toPropertyArray(true);\n    copyB.sort(([k1], [k2]) => (k1 < k2 ? -1 : 1));\n\n    return JSON.stringify(copyA) === JSON.stringify(copyB);\n  }\n\n  /**\n   * Converts the session into an array of key-value pairs.\n   */\n  public toPropertyArray(\n    returnUserData = false,\n  ): [string, string | number | boolean][] {\n    return (\n      Object.entries(this)\n        .filter(\n          ([key, value]) =>\n            propertiesToSave.includes(key) &&\n            value !== undefined &&\n            value !== null,\n        )\n        // Prepare values for db storage\n        .flatMap(([key, value]): [string, string | number | boolean][] => {\n          switch (key) {\n            case 'expires':\n              return [[key, value ? value.getTime() : undefined]];\n            case 'onlineAccessInfo':\n              // eslint-disable-next-line no-negated-condition\n              if (!returnUserData) {\n                return [[key, value.associated_user.id]];\n              } else {\n                return [\n                  ['userId', value?.associated_user?.id],\n                  ['firstName', value?.associated_user?.first_name],\n                  ['lastName', value?.associated_user?.last_name],\n                  ['email', value?.associated_user?.email],\n                  ['locale', value?.associated_user?.locale],\n                  ['emailVerified', value?.associated_user?.email_verified],\n                  ['accountOwner', value?.associated_user?.account_owner],\n                  ['collaborator', value?.associated_user?.collaborator],\n                ];\n              }\n            default:\n              return [[key, value]];\n          }\n        })\n        // Filter out tuples with undefined values\n        .filter(([_key, value]) => value !== undefined)\n    );\n  }\n}"
           },
           "OnlineAccessInfo": {
             "filePath": "../shopify-api/lib/auth/oauth/types.ts",

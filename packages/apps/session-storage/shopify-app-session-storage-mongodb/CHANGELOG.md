@@ -1,5 +1,34 @@
 # @shopify/shopify-app-session-storage-mongodb
 
+## 4.0.20
+
+## 4.0.19
+
+### Patch Changes
+
+- c3a3a43: Updated `mongodb` dependencies
+- e298a0c: Fix issue with missing sourcemaps
+
+## 4.0.18
+
+### Patch Changes
+
+- ce4b699: Updated `mongodb` dependencies
+
+## 4.0.17
+
+### Patch Changes
+
+- 981c948: Update directory path
+
+## 4.0.16
+
+## 4.0.15
+
+### Patch Changes
+
+- a897d60: Updated `mongodb` dependencies
+
 ## 4.0.14
 
 ## 4.0.13
