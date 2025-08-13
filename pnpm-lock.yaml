@@ -419,9 +419,6 @@ importers:
       '@shopify/graphql-client':
         specifier: ^1.4.1
         version: link:../../api-clients/graphql-client
-      '@shopify/network':
-        specifier: ^3.3.0
-        version: 3.3.0
       '@shopify/storefront-api-client':
         specifier: ^1.0.9
         version: link:../../api-clients/storefront-api-client
@@ -3427,11 +3424,6 @@ packages:
     engines: {node: '>=18'}
     peerDependencies:
       graphql: ^0.8.0 || ^0.9.0 || ^0.10.0 || ^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0 || ^16.0.0
-
-  '@shopify/network@3.3.0':
-    resolution: {integrity: sha512-Lln7vglzLK9KiYhl9ucQFVM7ArlpUM21xkDriBX8kVrqsoBsi+4vFIjf1wjhNPT0J/zHMjky7jiTnxVfdm+xXw==}
-    engines: {node: '>=18.12.0'}
-    deprecated: Package no longer supported. Contact Support at https://www.npmjs.com/support for more info.
 
   '@shopify/polaris-icons@8.11.1':
     resolution: {integrity: sha512-2HLzvJWMejKIwS5P2bs7k5CAjBKwPnD/iy9ncPzcgqRjmFInBXLtUXFQhPWDw6JwXzb1ZjNQK/ssTctcfz87Sw==}
@@ -12120,8 +12112,6 @@ snapshots:
       - '@babel/core'
       - encoding
       - supports-color
-
-  '@shopify/network@3.3.0': {}
 
   '@shopify/polaris-icons@8.11.1(react@18.3.1)':
     optionalDependencies:
