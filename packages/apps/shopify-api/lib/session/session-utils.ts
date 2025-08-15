@@ -64,7 +64,7 @@ export function getCurrentSessionId(config: ConfigInterface) {
         }
       } else {
         log.error(
-          'Missing Authorization header, was the request made with authenticatedFetch?',
+          'Missing Authorization header review App Bridge configuration',
           {isOnline},
         );
       }

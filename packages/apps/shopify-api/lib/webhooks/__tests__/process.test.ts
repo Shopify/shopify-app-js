@@ -1,6 +1,6 @@
-import {StatusCode} from '@shopify/network';
 import request from 'supertest';
 
+import {StatusCode} from '../../types';
 import {InvalidWebhookError} from '../../error';
 import {testConfig} from '../../__tests__/test-config';
 import {Shopify, shopifyApi} from '../..';

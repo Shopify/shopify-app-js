@@ -17,6 +17,7 @@ export interface ShopifyApiProjectOptions {
   module?: string;
   declarations?: boolean;
   apiKey?: string;
+  enumsAsConst?: boolean;
 }
 
 export type ShopifyApiTypesOptions = ShopifyApiProjectOptions;

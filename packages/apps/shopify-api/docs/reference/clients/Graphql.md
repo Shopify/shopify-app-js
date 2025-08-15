@@ -9,7 +9,8 @@ Instances of this class can make requests to the Shopify Admin GraphQL API.
 ### Example
 
 ```ts
-// Requests to /my-endpoint must be made with authenticatedFetch from App Bridge for embedded apps
+// Requests to /my-endpoint must include a valid session token in the Authorization header added by App Bridge
+// https://shopify.dev/docs/apps/build/authentication-authorization/set-embedded-app-authorization?extension=javascript#authentication
 app.get('/my-endpoint', async () => {
   const sessionId = await shopify.session.getCurrentId({
     isOnline: true,

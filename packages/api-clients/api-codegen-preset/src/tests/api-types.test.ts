@@ -140,6 +140,82 @@ describe('shopifyApiTypes', () => {
           },
         });
       });
+
+      it('includes enumsAsConst config when option is true', () => {
+        // GIVEN
+        const config: ShopifyApiProjectOptions = {
+          apiType,
+          enumsAsConst: true,
+          apiKey: 'test',
+        };
+
+        const spy = jest.spyOn(fs, 'existsSync');
+        spy.mockReturnValueOnce(true);
+
+        // WHEN
+        const projectConfig = shopifyApiTypes(config);
+
+        // THEN
+        expect(projectConfig[`./${type}.types.d.ts`]).toEqual(
+          expect.objectContaining({
+            schema: `./${type}.schema.json`,
+            plugins: ['typescript'],
+            config: {
+              enumsAsConst: true,
+            },
+          }),
+        );
+      });
+
+      it('includes enumsAsConst config when option is false', () => {
+        // GIVEN
+        const config: ShopifyApiProjectOptions = {
+          apiType,
+          enumsAsConst: false,
+          apiKey: 'test',
+        };
+
+        const spy = jest.spyOn(fs, 'existsSync');
+        spy.mockReturnValueOnce(true);
+
+        // WHEN
+        const projectConfig = shopifyApiTypes(config);
+
+        // THEN
+        expect(projectConfig[`./${type}.types.d.ts`]).toEqual(
+          expect.objectContaining({
+            schema: `./${type}.schema.json`,
+            plugins: ['typescript'],
+            config: {
+              enumsAsConst: false,
+            },
+          }),
+        );
+      });
+
+      it('excludes config when enumsAsConst is not provided', () => {
+        // GIVEN
+        const config: ShopifyApiProjectOptions = {
+          apiType,
+          apiKey: 'test',
+        };
+
+        const spy = jest.spyOn(fs, 'existsSync');
+        spy.mockReturnValueOnce(true);
+
+        // WHEN
+        const projectConfig = shopifyApiTypes(config);
+
+        // THEN
+        expect(projectConfig[`./${type}.types.d.ts`]).toEqual({
+          schema: `./${type}.schema.json`,
+          plugins: ['typescript'],
+          // No config property expected
+        });
+        expect(projectConfig[`./${type}.types.d.ts`]).not.toHaveProperty(
+          'config',
+        );
+      });
     },
   );
 });

@@ -3,8 +3,8 @@
 This function enables apps to redirect out of the app's host, regardless of how a request reached the app.
 It covers the following scenarios:
 
-- If the request came from an `authenticatedFetch` call, it'll return the right headers for App Bridge.
-- If the request came from an app embedded in the Shopify Admin, it'll use `config.exitIframePath`.
+- If the request is a data request call, it'll return the right headers for App Bridge to exit the iframe.
+- If the request is a document request and came from an app embedded in the Shopify Admin, it'll use `config.exitIframePath`.
 - Otherwise, it will trigger a normal HTTP redirect.
 
 ## Parameters
