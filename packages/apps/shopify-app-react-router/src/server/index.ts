@@ -6,8 +6,6 @@ setAbstractRuntimeString(() => {
 });
 
 export {
-  LATEST_API_VERSION,
-  RELEASE_CANDIDATE_API_VERSION,
   LogSeverity,
   DeliveryMethod,
   BillingInterval,

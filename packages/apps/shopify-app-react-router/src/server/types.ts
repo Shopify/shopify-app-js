@@ -80,7 +80,7 @@ interface Authenticate<Config extends AppConfigArg> {
    * ```
    * ```ts
    * // /app/shopify.server.ts
-   * import { LATEST_API_VERSION, shopifyApp } from "@shopify/shopify-app-react-router/server";
+   * import { ApiVersion, shopifyApp } from "@shopify/shopify-app-react-router/server";
    *
    * const shopify = shopifyApp({
    *   // ...etc
@@ -117,7 +117,7 @@ interface Authenticate<Config extends AppConfigArg> {
    * ```
    * ```ts
    * // /app/shopify.server.ts
-   * import { LATEST_API_VERSION, shopifyApp } from "@shopify/shopify-app-react-router/server";
+   * import { ApiVersion, shopifyApp } from "@shopify/shopify-app-react-router/server";
    *
    * const shopify = shopifyApp({
    *   // ...etc
@@ -376,7 +376,7 @@ export interface ShopifyAppBase<Config extends AppConfigArg> {
    * <description>Use the functions in `authenticate` to validate requests coming from Shopify.</description>
    * ```ts
    * // /app/shopify.server.ts
-   * import { LATEST_API_VERSION, shopifyApp } from "@shopify/shopify-app-react-router/server";
+   * import { ApiVersion, shopifyApp } from "@shopify/shopify-app-react-router/server";
    *
    * const shopify = shopifyApp({
    *   // ...etc
@@ -406,7 +406,7 @@ export interface ShopifyAppBase<Config extends AppConfigArg> {
    * <description>Create contexts for requests that don't come from Shopify.</description>
    * ```ts
    * // /app/shopify.server.ts
-   * import { LATEST_API_VERSION, shopifyApp } from "@shopify/shopify-app-react-router/server";
+   * import { ApiVersion, shopifyApp } from "@shopify/shopify-app-react-router/server";
    *
    * const shopify = shopifyApp({
    *   // ...etc
@@ -444,7 +444,7 @@ export interface ShopifyAppLogin {
    * <description>Use `shopify.login` to create a login form, in a route that can handle GET and POST requests.</description>
    * ```ts
    * // /app/shopify.server.ts
-   * import { LATEST_API_VERSION, shopifyApp } from "@shopify/shopify-app-react-router/server";
+   * import { ApiVersion, shopifyApp } from "@shopify/shopify-app-react-router/server";
    *
    * const shopify = shopifyApp({
    *   // ...etc
