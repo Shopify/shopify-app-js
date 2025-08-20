@@ -29,3 +29,6 @@ setAbstractConvertResponseFunc(nodeConvertAndSendResponse);
 setAbstractConvertHeadersFunc(nodeConvertAndSetHeaders);
 setAbstractRuntimeString(nodeRuntimeString);
 setCrypto(crypto as any);
+
+// Export a marker to prevent tree-shaking
+export const nodeAdapterInitialized = true;
