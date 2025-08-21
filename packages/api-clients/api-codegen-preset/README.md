@@ -118,20 +118,22 @@ export default {
   schema: 'https://shopify.dev/admin-graphql-direct-proxy/2025-01',
   documents: ['./app/**/*.{js,ts,jsx,tsx}'],
   projects: {
-    // To produce variable / return types for Admin API operations
-    schema: 'https://shopify.dev/admin-graphql-direct-proxy/2025-01',
-    documents: ['./app/**/*.{js,ts,jsx,tsx}'],
-    extensions: {
-      codegen: {
-        pluckConfig,
-        generates: shopifyApiTypes({
-          apiType: ApiType.Admin,
-          apiVersion: '2025-01',
-          documents: ['./app/**/*.{js,ts,jsx,tsx}'],
-          outputDir: './app/types',
-        }),
+    default: {
+      // To produce variable / return types for Admin API operations
+      schema: 'https://shopify.dev/admin-graphql-direct-proxy/2025-01',
+      documents: ['./app/**/*.{js,ts,jsx,tsx}'],
+      extensions: {
+        codegen: {
+          pluckConfig,
+          generates: shopifyApiTypes({
+            apiType: ApiType.Admin,
+            apiVersion: '2025-01',
+            documents: ['./app/**/*.{js,ts,jsx,tsx}'],
+            outputDir: './app/types',
+          }),
+        },
       },
-    },
+    }
   },
 };
 ```
