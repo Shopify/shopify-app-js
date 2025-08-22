@@ -1,5 +1,29 @@
 # Changelog
 
+## 11.14.1
+
+### Patch Changes
+
+- 818450f: Update docs
+
+## 11.14.0
+
+### Minor Changes
+
+- 3d9457f: Add 2025-07 REST Resources
+
+### Patch Changes
+
+- 447348f: Resolve bug with signal option on requests
+- e298a0c: Fix issue with missing sourcemaps
+- 25bf95f: Export RestClient from lib/clients/types
+- Updated dependencies [056f464]
+- Updated dependencies [447348f]
+- Updated dependencies [e298a0c]
+  - @shopify/graphql-client@1.4.1
+  - @shopify/admin-api-client@1.1.1
+  - @shopify/storefront-api-client@1.0.9
+
 ## 11.13.0
 
 ### Minor Changes
@@ -414,7 +438,6 @@
 ### Minor Changes
 
 - 05fb23d: Added a new future flag `unstable_managedPricingSupport` to support apps using [Shopify managed pricing](https://shopify.dev/docs/apps/launch/billing/managed-pricing), which will:
-
   - Change `billing.check` to always return an object.
   - Change `billing.check` and `billing.subscription` to work without a billing config.
   - Allow calling charges with `billing.check` without a `plans` filter. The `hasActivePayment` value will be true if any purchases are found with the given filters.
@@ -1066,7 +1089,6 @@
   For apps that don't receive HTTP webhook events from Shopify, no change is required yet - `apiSecretKey` will be used for client authentication as the fallback option.
 
   Starting with the next major release
-
   - `adminApiAccessToken` will be mandatory for custom store apps and must be set to the Admin API access token
   - `apiSecretKey` will not be used for client authentication but must be set for HMAC validation of HTTP webhook events
 
@@ -1091,7 +1113,6 @@
   This enables apps to use locally-scoped pagination info, which makes it possible to use pagination in a thread-safe way.
 
   You'll need to make 2 changes to use this version:
-
   1. Where you accessed resources from the response, you'll now access the `data` property.
   1. Where you accessed pagination data from the static variables, you'll now retrieve it from the response.
 
@@ -1111,7 +1132,6 @@
   ```
 
 - fc2692f0: ⚠️ [Breaking] Removing deprecated code:
-
   - The `isPrivateApp` param from `shopifyApi()` was removed in favour of `isCustomStoreApp`.
   - The `isOnline` param from `shopify.auth.callback()` was removed, because it's now handled automatically.
 

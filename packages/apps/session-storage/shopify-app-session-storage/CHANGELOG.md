@@ -1,5 +1,13 @@
 # @shopify/shopify-app-session-storage
 
+## 3.0.20
+
+## 3.0.19
+
+### Patch Changes
+
+- e298a0c: Fix issue with missing sourcemaps
+
 ## 3.0.18
 
 ## 3.0.17

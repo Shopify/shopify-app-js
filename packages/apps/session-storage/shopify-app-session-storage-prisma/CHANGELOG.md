@@ -1,5 +1,13 @@
 # @shopify/shopify-app-session-storage-prisma
 
+## 6.0.9
+
+## 6.0.8
+
+### Patch Changes
+
+- e298a0c: Fix issue with missing sourcemaps
+
 ## 6.0.7
 
 ## 6.0.6

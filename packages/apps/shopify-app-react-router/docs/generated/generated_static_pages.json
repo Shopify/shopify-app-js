@@ -1,0 +1,588 @@
+[
+  {
+    "id": "guide-admin",
+    "title": "Interacting with Shopify Admin",
+    "description": "Learn how to authenticate and handle requests from Shopify Admin in your React Router app.\n\nThe [`authenticate.admin`](/docs/api/shopify-app-react-router/authenticate/admin) function handles authentication for embedded apps and merchant custom apps. It verifies app installation and provides context for interacting with the Admin API.\n\nThis guide covers authentication patterns, API usage, and request handling for your app.",
+    "sections": [
+      {
+        "type": "Generic",
+        "anchorLink": "auth",
+        "title": "Authenticating requests",
+        "sectionContent": "To authenticate admin requests you can call `authenticate.admin(request)` in a loader or an action.\n\nIf there's a session for this user, then this loader will return null. If there's no session for the user, then the package will perform [token exchange](/docs/apps/build/authentication-authorization/access-tokens/#token-exchange) and create a new session.\n\n> Tip: If you are authenticating more than one route, then we recommend using [React router layout routes](https://reactrouter.com/start/framework/routing#layout-routes) to automatically authenticate them.",
+        "codeblock": {
+          "title": "Authenticating requests",
+          "tabs": [
+            {
+              "title": "/app/routes/**/*.tsx",
+              "code": "import {LoaderFunction, ActionFunction} from 'react-router';\n\nimport {authenticate} from '~/shopify.server';\n\nexport const loader: LoaderFunction = async ({request}) =&gt; {\n  await authenticate.admin(request);\n\n  // App logic\n\n  return null;\n};\n\nexport const action: ActionFunction = async ({request}) =&gt; {\n  await authenticate.admin(request);\n\n  // App logic\n\n  return null;\n};\n",
+              "language": "tsx"
+            }
+          ]
+        }
+      },
+      {
+        "type": "Generic",
+        "anchorLink": "headers",
+        "title": "Headers",
+        "sectionContent": "When redirecting outside the app, and in certain error scenarios, the package will throw a response with specific headers.\n\n To ensure the headers are set correctly use the provided `ErrorBoundary` and `headers` exports.",
+        "codeblock": {
+          "title": "Configure headers and error boundaries",
+          "tabs": [
+            {
+              "title": "/app/routes/**/*.tsx",
+              "code": "import {useRouteError} from 'react-router';\nimport {boundary} from '@shopify/shopify-app-react-router';\n\nexport function ErrorBoundary() {\n  return boundary.error(useRouteError());\n}\n\nexport const headers = (headersArgs) =&gt; {\n  return boundary.headers(headersArgs);\n};\n",
+              "language": "tsx"
+            }
+          ]
+        }
+      },
+      {
+        "type": "Generic",
+        "anchorLink": "graphql-api",
+        "title": "Using the GraphQL API",
+        "sectionContent": "Once a request is authenticated, `authenticate.admin` will return an `admin` object that contains a GraphQL client that can interact with the [GraphQL Admin API](/docs/api/admin-graphql).",
+        "codeblock": {
+          "title": "Make GraphQL requests",
+          "tabs": [
+            {
+              "title": "/app/routes/**/*.tsx",
+              "code": "import {ActionFunction} from 'react-router';\n\nimport {authenticate} from '../shopify.server';\n\nexport const action: ActionFunction = async ({request}) =&gt; {\n  const {admin} = await authenticate.admin(request);\n\n  const response = await admin.graphql(\n    `#graphql\n    mutation populateProduct($input: ProductInput!) {\n      productCreate(input: $input) {\n        product {\n          id\n        }\n      }\n    }`,\n    {\n      variables: {\n        input: {\n          title: 'New product',\n          variants: [{price: 100}],\n        },\n      },\n    },\n  );\n  const parsedResponse = await response.json();\n\n  return {data: parsedResponse.data};\n};\n",
+              "language": "tsx"
+            }
+          ]
+        },
+        "sectionCard": [
+          {
+            "url": "/docs/api/shopify-app-react-router/guide-graphql-types",
+            "name": "Typing GraphQL operations",
+            "type": "tutorial"
+          }
+        ]
+      },
+      {
+        "type": "Generic",
+        "anchorLink": "cors-auth",
+        "title": "Authenticating cross-origin admin requests",
+        "sectionContent": "If your React Router server is authenticating an admin extension, then a request from the extension to the server will be cross-origin.\n\nHere `authenticate.admin` provides a `cors` function to add the required cross-origin headers.",
+        "codeblock": {
+          "title": "Add cross-origin headers",
+          "tabs": [
+            {
+              "title": "/app/routes/**/*.tsx",
+              "code": "import {LoaderFunction} from 'react-router';\n\nimport {authenticate} from '~/shopify.server';\n\nexport const loader: LoaderFunction = async ({request}) =&gt; {\n  const {cors} = await authenticate.admin(request);\n\n  // App logic\n\n  return cors({my: 'data'});\n};\n",
+              "language": "tsx"
+            }
+          ]
+        }
+      },
+      {
+        "type": "Generic",
+        "anchorLink": "graphql-api-background",
+        "title": "Using the GraphQL API in background jobs",
+        "sectionContent": "You may need to interact with the Admin API when working outside of Shopify requests. To do so use the `unauthenticated.admin` function.\n\nThis enables apps to integrate with 3rd party services and perform background tasks.\n\n> Caution:\n> This function doesn't perform **any** validation and shouldn't rely on raw user input.\n\nWhen using this function, consider the following:\n\n#### Background tasks\n\nApps should ensure that the shop domain is authenticated when enqueueing jobs.\n\n#### 3rd party service requests\n\nApps must obtain the shop domain from the 3rd party service in a secure way.",
+        "codeblock": {
+          "title": "Make GraphQL requests in background jobs",
+          "tabs": [
+            {
+              "title": "/app/jobs/**/*.tsx",
+              "code": "// /background-jobs/**/*.ts\nimport { unauthenticated } from \"../shopify.server\";\n\n// Background job set up\n\nconst shop = 'mystore.myshopify.com'\nconst { admin } = await unauthenticated.admin(shop);\n\nconst response = await admin.graphql(\n  `#graphql\n    mutation populateProduct($input: ProductInput!) {\n      productCreate(input: $input) {\n        product {\n          id\n        }\n      }\n    }\n  `,\n  { variables: { input: { title: \"Product Name\" } } }\n);\n\nconst productData = await response.json();\n\n// Background job complete",
+              "language": "tsx"
+            }
+          ]
+        },
+        "sectionCard": [
+          {
+            "url": "/docs/api/shopify-app-react-router/unauthenticated/unauthenticated-admin",
+            "name": "Unauthenticated Admin",
+            "type": "tutorial"
+          }
+        ]
+      },
+      {
+        "type": "Resource",
+        "title": "Resources",
+        "anchorLink": "resources",
+        "resources": [
+          {
+            "name": "authenticate.admin",
+            "url": "/docs/api/shopify-app-react-router/authenticate/admin"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "guide-custom-apps",
+    "title": "Custom apps",
+    "description": "You can use this package to build apps that are distributed in the Shopify Admin, also known as merchant custom apps.\nThese apps do not Authorize by OAuth, and instead use a access token that has been generated by the Shopify Admin.\n\n> Note: Before creating a new app to be distributed with the shopify admin, you should be familiar with the [limitations](/docs/apps/launch/distribution#capabilities-and-requirements) of the different distribution types",
+    "sections": [
+      {
+        "type": "Generic",
+        "anchorLink": "config-credentials",
+        "title": "Configure your app",
+        "sectionContent": "After you have [created and configured your app](https://help.shopify.com/en/manual/apps/app-types/custom-apps) in\nthe Shopify Admin update your code with the API Key, API Secret Key, and the access token.",
+        "codeblock": {
+          "title": "Configure your app credentials",
+          "tabs": [
+            {
+              "title": "shopify.server.ts",
+              "code": "const shopify = shopifyApp({\n  apiKey: \"your-api-key\",\n  apiSecretKey: \"your-api-secret-key\",\n  adminApiAccessToken:\"shpat_1234567890\",\n  ...\n}\n",
+              "language": "ts"
+            }
+          ]
+        }
+      },
+      {
+        "type": "Generic",
+        "anchorLink": "config-settings",
+        "title": "Configure your app settings",
+        "sectionContent": "Configure `shopifyApp` with the following values\n1. `distribution` - `AppDistribution.ShopifyAdmin`\n1. `appUrl` - `https://localhost:3000` or other configured port\n\nMerchant custom apps use a different authentication strategy than embedded apps and cannot be embedded in the Shopify Admin.",
+        "codeblock": {
+          "title": "Configure app settings",
+          "tabs": [
+            {
+              "title": "/app/shopify.server.ts",
+              "code": "const shopify = shopifyApp({\n    apiKey: \"your-api-key\",\n    apiSecretKey: \"your-api-secret-key\",\n    adminApiAccessToken:\"shpat_1234567890\",\n    distribution: AppDistribution.ShopifyAdmin,\n    appUrl: \"https://localhost:3000\",\n    ...\n}\n",
+              "language": "tsx"
+            }
+          ]
+        }
+      },
+      {
+        "type": "Generic",
+        "anchorLink": "local-dev",
+        "title": "Run your app locally",
+        "sectionContent": "Merchant custom apps are not compatible with the Shopify CLI, so you must start your app directly.\nAfter your app is running you can access it at the following URL: `http://localhost:3000/app?shop=my-shop.myshopify.com`",
+        "codeblock": {
+          "title": "Run your app",
+          "tabs": [
+            {
+              "title": "npm",
+              "language": "sh",
+              "code": "npm exec react-router dev\n"
+            },
+            {
+              "title": "yarn",
+              "language": "sh",
+              "code": "yarn react-router dev\n"
+            },
+            {
+              "title": "pnpm",
+              "language": "sh",
+              "code": "pnpm exec react-router dev\n"
+            }
+          ]
+        }
+      },
+      {
+        "type": "Resource",
+        "title": "Resources",
+        "anchorLink": "resources",
+        "resources": [
+          {
+            "name": "Custom apps",
+            "subtitle": "Create a new custom app",
+            "url": "https://help.shopify.com/en/manual/apps/app-types/custom-apps",
+            "type": "shopify"
+          },
+          {
+            "name": "App distribution",
+            "subtitle": "Understand the different distribution types",
+            "url": "/docs/apps/launch/distribution",
+            "type": "shopify"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "guide-future-flags",
+    "title": "Future flags",
+    "description": "Similarly to how [React Router approaches breaking changes](https://reactrouter.com/6.30.0/guides/api-development-strategy#future-flags), the `@shopify/shopify-app-react-router` package also uses future flags.\n\nBigger features and breaking changes are initially added behind a future flag. This means that they're disabled by default, and must be manually enabled by setting the appropriate flag in the `future` option of the `shopifyApp` function.\n\nThis allows apps to gradually adopt new features, and prepare for breaking changes and major releases ahead of time.",
+    "sections": [
+      {
+        "type": "Generic",
+        "anchorLink": "configuration",
+        "title": "Setting future flags",
+        "sectionContent": "To opt in to a feature, simply enable the appropriate flag in the `future` option of the `shopifyApp` function.\n\nOnce a flag is set, the returned `shopify` object will start using the new APIs, including using any new types. That allows apps to rely on TypeScript to use a feature regardless of a flag being enabled or not.",
+        "codeblock": {
+          "title": "Enable future flags",
+          "tabs": [
+            {
+              "title": "/app/shopify.server.ts",
+              "language": "ts",
+              "code": "import {shopifyApp} from '@shopify/shopify-app-react-router/server';\n\nexport const shopify = shopifyApp({\n  // ...\n  future: {\n    unstable_newFeature: true,\n  },\n});\n"
+            }
+          ]
+        }
+      },
+      {
+        "type": "Generic",
+        "anchorLink": "unstable-apis",
+        "title": "Unstable APIs",
+        "sectionContent": "When introducing new features to the package for which we want to gather feedback, we will add them behind a future flag, starting with the `unstable_` prefix.\n\nThat allows early adopters to try them out individually, without having to install a release candidate package.\n\nWhen the feature is ready for release, the future flag will be removed and it will be available by default.\n\nIn this example, `shopify` has a new function called `newFeature`. If the future flag is disabled, TypeScript will be unaware of the new function, and the app will fail to compile if it tries to use it.",
+        "codeblock": {
+          "title": "Use unstable APIs",
+          "tabs": [
+            {
+              "title": "/app/routes/*.tsx",
+              "language": "ts",
+              "code": "import type {LoaderFunctionArgs} from 'react-router';\n\nimport {shopify} from '~/shopify.server';\n\nexport const loader = async ({request}: LoaderFunctionArgs) =&gt; {\n  const result = shopify.newFeature(params);\n\n  return null;\n};\n"
+            }
+          ]
+        }
+      },
+      {
+        "type": "Generic",
+        "anchorLink": "breaking-changes",
+        "title": "Breaking changes",
+        "sectionContent": "Similarly to unstable APIs, breaking changes will be introduced behind a future flag.\n\nThis allows apps to prepare for the next major version ahead of time, and to gradually adopt the new APIs.\n\nWhen the next major version is released, the future flag will be removed, and the old code it changes will be removed. Apps that adopted the flag before then will continue to work the same way with no new changes."
+      },
+      {
+        "type": "Generic",
+        "anchorLink": "flags",
+        "title": "Supported flags",
+        "sectionContent": "There are currently no future flags in the current version."
+      }
+    ]
+  },
+  {
+    "id": "guide-graphql-types",
+    "title": "Typing GraphQL operations",
+    "description": "The GraphQL clients provided in this package can use [Codegen](https://the-guild.dev/graphql/codegen) to automatically parse and create types for your queries and mutations.\n\nBy installing a few packages in your app, you can use the `graphql-codegen` script, which will look for strings with the `#graphql` tag and extract types from them.\n\nIf your IDE supports it, you will also get syntax highlighting and auto-complete features when writing your queries.",
+    "sections": [
+      {
+        "type": "Markdown",
+        "anchorLink": "example",
+        "title": "See it in action",
+        "sectionContent": "\nIn this example, we use the `graphql-codegen` script to parse a query in the `/app/routes/new.tsx` file.\n\nNote how VSCode shows the types for both the return type of `response.json()`, and the `variables` option in the `graphql` function.\n\n<video style=\"width: 100%; height: auto;\" muted controls aria-label=\"A demonstration of React Router app using GraphQL types\">\n  <source src=\"/assets/client-libraries/graphql-types-demo.webm\" type=\"video/webm\">\n  Your browser doesn't support this video.\n</video>\n      "
+      },
+      {
+        "type": "Generic",
+        "anchorLink": "install",
+        "title": "Installing packages",
+        "sectionContent": "To use the `graphql-codegen` script, you will need to install a few packages in your app.\n\nThey will include the scripts to run, and the types that will be overridden by the results of parsing your operations.",
+        "codeblock": {
+          "title": "Installing packages",
+          "tabs": [
+            {
+              "title": "npm",
+              "language": "sh",
+              "code": "npm add --save-dev @shopify/api-codegen-preset\nnpm add @shopify/admin-api-client @shopify/storefront-api-client\n"
+            },
+            {
+              "title": "yarn",
+              "language": "sh",
+              "code": "yarn add --dev @shopify/api-codegen-preset\nyarn add @shopify/admin-api-client @shopify/storefront-api-client\n"
+            },
+            {
+              "title": "pnpm",
+              "language": "sh",
+              "code": "pnpm add --save-dev @shopify/api-codegen-preset\npnpm add @shopify/admin-api-client @shopify/storefront-api-client\n"
+            }
+          ]
+        }
+      },
+      {
+        "type": "Generic",
+        "anchorLink": "configure",
+        "title": "Setting up .graphqlrc.ts",
+        "sectionContent": "Before you can parse operations, you'll need to create a `.graphqlrc.ts` file in your project, and configure it to use the `@shopify/api-codegen-preset`.\n\n> Caution: Parsing will not work on `.graphql` documents, because the preset can only apply types from JavaScript and TypeScript const strings.",
+        "codeblock": {
+          "title": "Codegen configuration example",
+          "tabs": [
+            {
+              "title": "/.graphqlrc.ts",
+              "language": "ts",
+              "code": "import {shopifyApiProject, ApiType} from '@shopify/api-codegen-preset';\n\nexport default {\n  // For syntax highlighting / auto-complete when writing operations\n  schema: 'https://shopify.dev/admin-graphql-direct-proxy/2023-10',\n  documents: ['./app/**/*.{js,ts,jsx,tsx}'],\n  projects: {\n    // To produce variable / return types for Admin API operations\n    default: shopifyApiProject({\n      apiType: ApiType.Admin,\n      apiVersion: '2023-10',\n      documents: ['./app/**/*.{js,ts,jsx,tsx}'],\n      outputDir: './app/types',\n    }),\n  },\n};\n"
+            }
+          ]
+        },
+        "sectionCard": [
+          {
+            "url": "https://github.com/Shopify/shopify-app-js/tree/main/packages/api-clients/api-codegen-preset#configuration",
+            "name": "Configuration options",
+            "subtitle": "Learn more about the available configurations.",
+            "type": "github"
+          }
+        ]
+      },
+      {
+        "type": "Generic",
+        "anchorLink": "set-up-script",
+        "title": "Setting up the script",
+        "sectionContent": "To generate types, you'll need to add an entry for `graphql-codegen` in the `\"scripts\"` section of your `package.json` file.",
+        "codeblock": {
+          "title": "Setting up the script",
+          "tabs": [
+            {
+              "title": "/package.json",
+              "language": "json",
+              "code": "{\n  \"scripts\": {\n    \"graphql-codegen\": \"graphql-codegen\"\n  }\n}\n"
+            }
+          ]
+        }
+      },
+      {
+        "type": "Generic",
+        "anchorLink": "run",
+        "title": "Generating types",
+        "sectionContent": "When you run `graphql-codegen`, it will look in all your configured documents for strings marked with a `#graphql` tag.\n\nIDEs that support the `.graphqlrc.ts` file will provide syntax highlighting for your operations, as well as typing.\n\n> Tip: You can pass in a `--watch` flag to the script, which will update your types every time you save a file.",
+        "codeblock": {
+          "title": "Running graphql-codegen",
+          "tabs": [
+            {
+              "title": "npm",
+              "language": "sh",
+              "code": "npm run graphql-codegen\n"
+            },
+            {
+              "title": "yarn",
+              "language": "sh",
+              "code": "yarn graphql-codegen\n"
+            },
+            {
+              "title": "pnpm",
+              "language": "sh",
+              "code": "pnpm graphql-codegen\n"
+            }
+          ]
+        }
+      },
+      {
+        "type": "Resource",
+        "title": "Resources",
+        "anchorLink": "resources",
+        "resources": [
+          {
+            "name": "Admin API",
+            "url": "/docs/api/shopify-app-react-router/apis/admin-api",
+            "type": "shopify",
+            "subtitle": "Make requests to the Admin API"
+          },
+          {
+            "name": "Storefront API",
+            "url": "/docs/api/shopify-app-react-router/apis/storefront-api",
+            "type": "shopify",
+            "subtitle": "Make requests to the Storefront API"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "shopify-app-react-router",
+    "title": "Shopify App package for React Router",
+    "description": "The [@shopify/shopify-app-react-router](https://www.npmjs.com/package/@shopify/shopify-app-react-router) package enables [React Router](https://reactrouter.com/home) apps to authenticate with Shopify and make API calls. It uses [App Bridge](/docs/api/app-bridge-library) to enable apps to embed themselves in the Shopify Admin.\n\nOn this page learn the key concepts when building an app with this package.",
+    "sections": [
+      {
+        "type": "Generic",
+        "anchorLink": "quick-start",
+        "title": "Quick start",
+        "sectionContent": "The quickest way to create a new app is using the Shopify CLI, and the Shopify App Template.\n\nCheck out the [getting started guide](/docs/apps/build/scaffold-app), or the [app template](https://github.com/Shopify/shopify-app-template-react-router).",
+        "codeblock": {
+          "title": "Create an app",
+          "tabs": [
+            {
+              "title": "Terminal",
+              "language": "sh",
+              "code": "shopify app init --template=https://github.com/Shopify/shopify-app-template-react-router\n"
+            }
+          ]
+        }
+      },
+      {
+        "type": "Generic",
+        "anchorLink": "shopify-app",
+        "title": "Configure the package",
+        "sectionContent": "Using the `shopifyApp` function, you can configure the package's functionality for different app distributions types, access tokens, logging levels and future flags.",
+        "sectionCard": [
+          {
+            "name": "shopifyApp",
+            "url": "/docs/api/shopify-app-react-router/entrypoints/shopifyapp",
+            "type": "clicode"
+          }
+        ],
+        "codeblock": {
+          "title": "Configure ShopifyApp",
+          "tabs": [
+            {
+              "title": "/app/shopify.server.ts",
+              "language": "ts",
+              "code": "import {\n  LATEST_API_VERSION,\n  LogSeverity,\n  shopifyApp,\n} from '@shopify/shopify-app-react-router/server';\n\nconst shopify = shopifyApp({\n  apiKey: process.env.SHOPIFY_API_KEY!,\n  apiSecretKey: process.env.SHOPIFY_API_SECRET!,\n  appUrl: process.env.SHOPIFY_APP_URL!,\n  apiVersion: LATEST_API_VERSION,\n  logger: {\n    level: LogSeverity.Debug, // Set the log level to debug\n  },\n  future: {\n    exampleFlag: true, // Enable a future flag to true\n  },\n});\nexport default shopify;\n"
+            }
+          ]
+        }
+      },
+      {
+        "type": "Generic",
+        "anchorLink": "graphql-request",
+        "title": "Make Admin API GraphQL requests",
+        "sectionContent": "Authenticated requests with the Admin API GraphQL client are made by calling the `admin.graphql` function. This function returns a GraphQL client that is authenticated with the Admin API.",
+        "sectionCard": [
+          {
+            "name": "admin.graphql",
+            "url": "/docs/api/shopify-app-react-router/v0/guide-admin#graphql-api",
+            "type": "clicode"
+          }
+        ],
+        "codeblock": {
+          "title": "Make a GraphQL request",
+          "tabs": [
+            {
+              "title": "/app/routes/admin/$.tsx",
+              "language": "tsx",
+              "code": "export const action = async ({ request }: ActionFunctionArgs) =&gt; {\n    const { admin } = await authenticate.admin(request);\n \n    const response = await admin.graphql(\n      `#graphql\n        mutation populateProduct($product: ProductCreateInput!) {\n          productCreate(product: $product) {\n            product {\n              id\n              variants(first: 10) {\n                  nodes {\n                    id\n                    createdAt\n                  }\n                }\n              }\n            }\n          }\n        }`,\n      {\n        variables: {\n          product: {\n            title: 'Test Product',\n          },\n        },\n      },\n    );\n    const responseJson = await response.json();\n  };"
+            }
+          ]
+        }
+      },
+      {
+        "type": "Generic",
+        "anchorLink": "add-routes",
+        "title": "Add a new route to your app",
+        "sectionContent": "Routes embedded in the Shopify Admin must be nested under an Admin layout route for proper authentication and functionality. \n\nThe template includes an admin route at `/app/routes/app.tsx` that handles App Bridge initialization, authenticates requests via `authenticate.admin`, provides error boundaries and headers required by the admin. \n\nWhen creating new routes, place them in the `/app/routes/` directory with the `app.` prefix (e.g., `app.products.tsx`) to ensure they inherit these features. This structure ensures your app behaves correctly within the Shopify Admin and has access to authenticated API clients.",
+        "codeblock": {
+          "title": "Add a route",
+          "tabs": [
+            {
+              "title": "/app/routes/app.new.tsx",
+              "language": "tsx",
+              "code": "import { TitleBar } from \"@shopify/app-bridge-react\";\n\nexport default function AdditionalPage() {\n  return (\n    &lt;s-page&gt;\n      &lt;TitleBar title=\"Additional page\"&gt;&lt;/TitleBar&gt;\n      &lt;s-section heading=\"Multiple pages\"&gt;\n        &lt;s-paragraph&gt;\n          The app template comes with an additional page which demonstrates how\n          to create multiple pages within app navigation using{\" \"}\n          &lt;s-link\n            href=\"https:shopify.dev/docs/apps/tools/app-bridge\"\n            target=\"_blank\"\n          &gt;\n            App Bridge\n          &lt;/s-link&gt;\n        &lt;/s-paragraph&gt;\n      &lt;/s-section&gt;\n    &lt;/s-page&gt;\n  );\n}"
+            },
+            {
+              "title": "/app/routes/app.tsx",
+              "language": "tsx",
+              "code": "import type {HeadersFunction, LoaderFunctionArgs} from 'react-router';\nimport {Link, Outlet, useLoaderData, useRouteError} from 'react-router';\nimport {boundary} from '@shopify/shopify-app-react-router/server';\nimport {NavMenu} from '@shopify/app-bridge-react';\nimport {AppProvider} from '@shopify/shopify-app-react-router/react';\n\nimport {authenticate} from '../shopify.server';\n\nexport const loader = async ({request}: LoaderFunctionArgs) =&gt; {\n  await authenticate.admin(request);\n\n  return {apiKey: process.env.SHOPIFY_API_KEY || ''};\n};\n\nexport default function App() {\n  const {apiKey} = useLoaderData&lt;typeof loader&gt;();\n\n  return (\n    &lt;AppProvider embedded apiKey={apiKey}&gt;\n      &lt;NavMenu&gt;\n        &lt;Link to=\"/app\" rel=\"home\"&gt;\n          Home\n        &lt;/Link&gt;\n        &lt;Link to=\"/app/additional\"&gt;Additional page&lt;/Link&gt;\n      &lt;/NavMenu&gt;\n      &lt;Outlet /&gt;\n    &lt;/AppProvider&gt;\n  );\n}\n\n// Shopify needs React Router to catch some thrown responses, so that their headers are included in the response.\nexport function ErrorBoundary() {\n  return boundary.error(useRouteError());\n}\n\nexport const headers: HeadersFunction = (headersArgs) =&gt; {\n  return boundary.headers(headersArgs);\n};\n"
+            }
+          ]
+        }
+      },
+      {
+        "type": "Generic",
+        "anchorLink": "authenticate-webhook",
+        "title": "Authenticate Webhook Requests",
+        "sectionContent": "The package provide functions to authenticate webhook requests. This function returns a webhook client that is authenticated with the Admin API.\n\n> Note: Ensure your webhook route is not nested under you app layout route.",
+        "sectionCard": [
+          {
+            "name": "authenticate.webhook",
+            "url": "/docs/api/shopify-app-react-router/v0/authenticate/webhook",
+            "type": "clicode"
+          }
+        ],
+        "codeblock": {
+          "title": "Authenticate Webhook Requests",
+          "tabs": [
+            {
+              "title": "/app/routes/webhooks.app.product_updated.tsx",
+              "language": "tsx",
+              "code": "export const action = async ({ request }: ActionFunctionArgs) =&gt; {\n    const { topic, shop } = await authenticate.webhook(request);\n    console.log(`Received ${topic} webhook for ${shop}`);\n\n    return new Response();\n};"
+            }
+          ]
+        }
+      },
+      {
+        "type": "Generic",
+        "anchorLink": "session-storage",
+        "title": "Session Storage",
+        "sectionContent": "When using this package, installed shops access tokens will be stored in session storage.You can configure the storage mechanism by passing a custom storage object to the `shopifyApp` function.By default, the template will use Prisma and SQLite, but other session storage adapters are available.\n\n> Note: The type of session storage you use may impact how your app will be deployed.",
+        "sectionCard": [
+          {
+            "name": "Session Storage",
+            "url": "https://github.com/Shopify/shopify-app-js/tree/main/packages/apps/session-storage",
+            "type": "clicode"
+          }
+        ],
+        "codeblock": {
+          "title": "Session Storage",
+          "tabs": [
+            {
+              "title": "/app/shopify.server.ts",
+              "language": "ts",
+              "code": "import { PrismaSessionStorage } from \"@shopify/shopify-app-session-storage-prisma\";\nimport prisma from \"./db.server\";\n\nconst shopify = shopifyApp({\n  apiKey: process.env.SHOPIFY_API_KEY,\n  apiSecretKey: process.env.SHOPIFY_API_SECRET || \"\",\n  apiVersion: ApiVersion.January25,\n  appUrl: process.env.SHOPIFY_APP_URL || \"\",\n  // use Prisma session storage\n  sessionStorage: new PrismaSessionStorage(prisma),\n});\n\nexport const sessionStorage = shopify.sessionStorage;\n"
+            }
+          ]
+        }
+      },
+      {
+        "type": "Generic",
+        "anchorLink": "deploy-app",
+        "title": "Deploy your app",
+        "sectionContent": "You can deploy your app to your preferred hosting service that is compatible with JavaScript apps. Review our deployment guide to learn about the requirements for deploying your app.",
+        "sectionCard": [
+          {
+            "name": "Deploy your app",
+            "url": "/docs/apps/launch/deployment",
+            "type": "clicode"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "guide-webhooks",
+    "title": "Subscribing to webhooks",
+    "description": "Your app must respond to [mandatory webhook topics](/docs/apps/webhooks/configuration/mandatory-webhooks). In addition, your app can register [optional webhook topics](/docs/api/admin-rest/current/resources/webhook#event-topics).\n\nThere are app-specific and shop-specific webhooks. We recommend app-specific webhooks for most apps, but there are reasons to register shop-specific webhooks. For more information, please read [App-specific vs shop-specific webhooks](https://shopify.dev/docs/apps/build/webhooks/subscribe#app-specific-vs-shop-specific-subscriptions).",
+    "sections": [
+      {
+        "type": "Generic",
+        "anchorLink": "config",
+        "title": "App-specific webhooks (recommended)",
+        "sectionContent": "The easiest way to configure webhooks is to use app-specific webhooks in `shopify.app.toml`. You can find more info in the [webhooks documentation](/docs/apps/webhooks/getting-started-declarative).\n\nTo set up a simple HTTPS webhook subscription, you can follow these steps:\n1. Add the topic to subscribe to in `shopify.app.toml`. In this example we subscribe to the `APP_UNINSTALLED` topic.\n1. Review the required scopes for the webhook topics, and update your [app scopes](/docs/apps/tools/cli/configuration#access_scopes) as necessary.\n1. Run `shopify app deploy` from the CLI to save your webhooks configuration.",
+        "codeblock": {
+          "title": "Configure app-specific webhooks",
+          "tabs": [
+            {
+              "title": "shopify.app.toml",
+              "code": "[webhooks]\napi_version = \"2024-04\"\n\n  [[webhooks.subscriptions]]\n  topics = [ \"app/uninstalled\" ]\n  uri = \"/webhooks\"\n  compliance_topics = [ \"customers/data_request\", \"customers/redact\", \"shop/redact\" ]\n",
+              "language": "tsx"
+            }
+          ]
+        }
+      },
+      {
+        "type": "Generic",
+        "anchorLink": "config",
+        "title": "Shop-specific webhooks",
+        "sectionContent": "Shop-specific webhooks are useful when you need to subscribe to different webhook topics for different shops, or when a topic is not supported by app-specific webhooks.Configure `shopifyApp` and to setup shop-specific webhook subscriptions with the following steps:\n1. The webhooks you want to subscribe to. In this example we subscribe to the `APP_UNINSTALLED` topic.\n1. The code to register the `APP_UNINSTALLED` topic after a merchant installs you app. Here `shopifyApp` provides an `afterAuth` hook.\n1. Review the required scopes for the webhook topics, and update your [app scopes](/docs/apps/tools/cli/configuration#access_scopes) as necessary.\n\n> Note: You can't register mandatory topics using this package, you must [configure those in the Partner Dashboard](/docs/apps/webhooks/configuration/mandatory-webhooks) instead.",
+        "codeblock": {
+          "title": "Configure shop-specific webhooks",
+          "tabs": [
+            {
+              "title": "/app/shopify.server.ts",
+              "code": "import {shopifyApp, DeliveryMethod} from '@shopify/shopify-app-react-router/server';\n\nconst shopify = shopifyApp({\n  apiKey: 'abcde1234567890',\n  // ...etc\n  webhooks: {\n    APP_UNINSTALLED: {\n      deliveryMethod: DeliveryMethod.Http,\n      callbackUrl: '/webhooks',\n    },\n  },\n  hooks: {\n    afterAuth: async ({session}) =&gt; {\n      // Register webhooks for the shop\n      // In this example, every shop will have these webhooks\n      // You could wrap this in some custom shop specific conditional logic if needed\n      shopify.registerWebhooks({session});\n    },\n  },\n});\n\nexport const authenticate = shopify.authenticate;\n",
+              "language": "tsx"
+            }
+          ]
+        }
+      },
+      {
+        "type": "Generic",
+        "anchorLink": "endpoints",
+        "title": "Set up your endpoints",
+        "sectionContent": "Create a route in your app to handle incoming webhook requests for each `callbackUrl` you set in your configuration.Legitimate webhook requests are always `POST` requests signed by Shopify, so you must authenticate them before taking any action. To do this you must set up an `action` that uses the `authenticate.webhook` function to authenticate the request.\n\nPlease keep in mind that webhook endpoints should respond as quickly as possible. If you need to run a long-running job, then consider using background tasks.\n\n> Caution: Webhook endpoints **must** respond with an `HTTP 200` code, or Shopify will retry.",
+        "codeblock": {
+          "title": "Receive webhook requests",
+          "tabs": [
+            {
+              "title": "/app/routes/webhooks.tsx",
+              "code": "import {ActionFunctionArgs} from 'react-router';\n\nimport db from '../db.server';\n\nimport {authenticate} from '~/shopify.server';\n\nexport const action = async ({request}: ActionFunctionArgs) =&gt; {\n  const {topic, shop, session} = await authenticate.webhook(request);\n\n  switch (topic) {\n    case 'APP_UNINSTALLED':\n      // Webhook requests can trigger after an app is uninstalled\n      // If the app is already uninstalled, the session may be undefined.\n      if (session) {\n        await db.session.deleteMany({where: {shop}});\n      }\n      break;\n    case 'CUSTOMERS_DATA_REQUEST':\n    case 'CUSTOMERS_REDACT':\n    case 'SHOP_REDACT':\n    default:\n      throw new Response('Unhandled webhook topic', {status: 404});\n  }\n\n  throw new Response();\n};\n",
+              "language": "tsx"
+            }
+          ]
+        }
+      },
+      {
+        "type": "Resource",
+        "title": "Resources",
+        "anchorLink": "resources",
+        "resources": [
+          {
+            "name": "authenticate.webhook",
+            "url": "/docs/api/shopify-app-react-router/authenticate/webhook"
+          }
+        ]
+      }
+    ]
+  }
+]

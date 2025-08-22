@@ -1,0 +1,113 @@
+{
+  "name": "@shopify/shopify-app-react-router",
+  "version": "0.1.1",
+  "description": "Shopify React Router - to simplify the building of Shopify Apps with React Router",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Shopify/shopify-app-js.git",
+    "directory": "packages/apps/shopify-app-react-router"
+  },
+  "bugs": {
+    "url": "https://github.com/Shopify/shopify-app-js/issues"
+  },
+  "homepage": "https://github.com/Shopify/shopify-app-js/tree/main/packages/apps/shopify-app-react-router",
+  "author": "Shopify Inc.",
+  "license": "MIT",
+  "main": "./dist/cjs/server/index.js",
+  "module": "./dist/esm/server/index.mjs",
+  "types": "./dist/ts/server/index.d.ts",
+  "exports": {
+    "./adapters/*": {
+      "types": "./dist/ts/server/adapters/*/index.d.ts",
+      "require": "./dist/cjs/server/adapters/*/index.js",
+      "import": "./dist/esm/server/adapters/*/index.mjs",
+      "default": "./dist/cjs/server/adapters/*/index.js"
+    },
+    "./server/adapters/*": {
+      "types": "./dist/ts/server/adapters/*/index.d.ts",
+      "require": "./dist/cjs/server/adapters/*/index.js",
+      "import": "./dist/esm/server/adapters/*/index.mjs",
+      "default": "./dist/cjs/server/adapters/*/index.js"
+    },
+    "./server": {
+      "types": "./dist/ts/server/index.d.ts",
+      "require": "./dist/cjs/server/index.js",
+      "import": "./dist/esm/server/index.mjs",
+      "default": "./dist/cjs/server/index.js"
+    },
+    "./react": {
+      "types": "./dist/ts/react/index.d.ts",
+      "require": "./dist/cjs/react/index.js",
+      "import": "./dist/esm/react/index.mjs",
+      "default": "./dist/cjs/react/index.js"
+    },
+    "./test-helpers": {
+      "types": "./dist/ts/server/test-helpers/index.d.ts",
+      "require": "./dist/cjs/server/test-helpers/index.js",
+      "import": "./dist/esm/server/test-helpers/index.mjs",
+      "default": "./dist/cjs/server/test-helpers/index.js"
+    }
+  },
+  "scripts": {
+    "build-docs": "sh docs/build-docs.sh",
+    "validate-docs": "sh ./docs/build-docs.sh isTest && pnpm compare-docs",
+    "lint": "eslint . --ext .js,.ts",
+    "build": "pnpm rollup && pnpm tsc -p ./tsconfig.build.json",
+    "tsc": "tsc",
+    "test": "jest",
+    "test:ci": "pnpm test",
+    "rollup": "rollup -c rollup.config.js --bundleConfigAsCjs",
+    "clean": "rimraf .rollup.cache dist",
+    "changeset": "changeset",
+    "version": "changeset version",
+    "release": "pnpm build && changeset publish"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "keywords": [
+    "shopify",
+    "javascript",
+    "typescript",
+    "react-router",
+    "app",
+    "graphql",
+    "rest",
+    "webhook",
+    "Admin API",
+    "Storefront API"
+  ],
+  "devDependencies": {
+    "react-router": "7.8.1",
+    "@shopify/generate-docs": "^0.17.1",
+    "@shopify/react-testing": "^6.0.0",
+    "@shopify/shopify-app-session-storage-memory": "^4.0.20",
+    "@testing-library/jest-dom": "^6.6.3",
+    "@testing-library/react": "^16.3.0",
+    "@types/jsonwebtoken": "^9.0.10",
+    "@types/react": "^19.1.2",
+    "@types/semver": "^7.7.0",
+    "@types/testing-library__jest-dom": "^6.0.0",
+    "jest-fetch-mock": "^3.0.3",
+    "jsonwebtoken": "^9.0.2"
+  },
+  "dependencies": {
+    "@shopify/admin-api-client": "^1.1.1",
+    "@shopify/shopify-api": "^11.14.1",
+    "@shopify/shopify-app-session-storage": "^3.0.20",
+    "@shopify/storefront-api-client": "^1.0.9",
+    "isbot": "^5.1.26",
+    "semver": "^7.7.1"
+  },
+  "peerDependencies": {
+    "react-router": "^7.6.2",
+    "react": ">=18",
+    "react-dom": ">=18"
+  },
+  "files": [
+    "dist/*",
+    "!build/**/__tests__",
+    "!tsconfig.tsbuildinfo",
+    "!node_modules"
+  ]
+}

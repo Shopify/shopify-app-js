@@ -15,6 +15,7 @@ export const shopifyApiTypes = ({
   documents = ['**/*.{ts,tsx}', '!**/node_modules'],
   declarations = true,
   apiKey,
+  enumsAsConst,
 }: ShopifyApiTypesOptions): CodegenConfig['generates'] => {
   const {schema, schemaFile} = getSchemaData(outputDir, apiType, {
     apiVersion,
@@ -37,6 +38,11 @@ export const shopifyApiTypes = ({
     [`${outputDir}/${typesFile}`]: {
       schema: schemaFileExists ? schemaFile : schema,
       plugins: ['typescript'],
+      ...(enumsAsConst !== undefined && {
+        config: {
+          enumsAsConst,
+        },
+      }),
     },
     [`${outputDir}/${queryTypesFile}`]: {
       schema: schemaFileExists ? schemaFile : schema,

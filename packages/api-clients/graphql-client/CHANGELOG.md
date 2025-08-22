@@ -1,5 +1,16 @@
 # @shopify/graphql-client
 
+## 1.4.1
+
+### Patch Changes
+
+- 056f464: Fix error handling for JSON parse failures in GraphQL responses.
+
+  When a server returns non-JSON content (e.g., HTML error pages, malformed JSON), the client now properly handles the parsing error and includes the response object and status code in the error details. This prevents uncaught promise rejections and provides better debugging information.
+
+- 447348f: Resolve bug with signal option on requests
+- e298a0c: Fix issue with missing sourcemaps
+
 ## 1.4.0
 
 ### Minor Changes

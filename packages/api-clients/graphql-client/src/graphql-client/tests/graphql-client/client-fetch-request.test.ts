@@ -573,6 +573,32 @@ describe('GraphQL Client', () => {
             response: mockedSuccessResponse,
           });
         });
+
+        it('includes an error object with response and status code when there is an error parsing the JSON response', async () => {
+          const invalidJSON = 'This is not valid JSON { "invalid": }';
+          const responseConfig = {
+            status: 200,
+            headers: new Headers({
+              'Content-Type': 'application/json',
+            }),
+          };
+
+          const mockedMalformedResponse = new Response(
+            invalidJSON,
+            responseConfig,
+          );
+
+          fetchMock.mockResolvedValue(mockedMalformedResponse);
+          const response = await client.request(operation, {variables});
+
+          expect(response).toStrictEqual({
+            errors: {
+              message: expect.stringContaining('invalid json response body'),
+              networkStatusCode: 200,
+              response: mockedMalformedResponse,
+            },
+          });
+        });
       });
 
       describe('retries', () => {

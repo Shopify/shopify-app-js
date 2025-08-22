@@ -1,5 +1,15 @@
 # @shopify/admin-api-client
 
+## 1.1.1
+
+### Patch Changes
+
+- e298a0c: Fix issue with missing sourcemaps
+- Updated dependencies [056f464]
+- Updated dependencies [447348f]
+- Updated dependencies [e298a0c]
+  - @shopify/graphql-client@1.4.1
+
 ## 1.1.0
 
 ### Minor Changes

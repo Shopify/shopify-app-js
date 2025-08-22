@@ -1,5 +1,13 @@
 # @shopify/shopify-app-session-storage-kv
 
+## 4.0.20
+
+## 4.0.19
+
+### Patch Changes
+
+- e298a0c: Fix issue with missing sourcemaps
+
 ## 4.0.18
 
 ## 4.0.17

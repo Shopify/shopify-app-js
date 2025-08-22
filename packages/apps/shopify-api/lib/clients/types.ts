@@ -3,10 +3,9 @@ import {
   ApiClientRequestOptions,
   SearchParams,
 } from '@shopify/admin-api-client';
-import {Method} from '@shopify/network';
 
 import {Session} from '../session/session';
-import type {ApiVersion} from '../types';
+import type {ApiVersion, Method} from '../types';
 import {Headers} from '../../runtime/http';
 
 import {GraphqlClient} from './admin/graphql/client';
@@ -34,6 +33,7 @@ export enum DataType {
   GraphQL = 'application/graphql',
   URLEncoded = 'application/x-www-form-urlencoded',
 }
+
 /* eslint-enable @shopify/typescript/prefer-pascal-case-enums */
 
 export interface GetRequestParams {
@@ -116,6 +116,7 @@ export interface GraphqlQueryOptions<
 }
 
 export {GraphqlClient} from './admin/graphql/client';
+export {RestClient} from './admin/rest/client';
 
 export interface ShopifyClients {
   Rest: typeof RestClient;

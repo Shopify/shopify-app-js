@@ -1,6 +1,6 @@
 {
   "name": "@shopify/api-codegen-preset",
-  "version": "1.1.8",
+  "version": "1.1.9",
   "description": "Preset for graphql-codegen to parse and type queries to Shopify APIs",
   "author": "Shopify",
   "license": "MIT",
@@ -78,7 +78,7 @@
   },
   "devDependencies": {
     "@graphql-codegen/plugin-helpers": "^5.1.1",
-    "graphql-config": "5.1.4",
+    "graphql-config": "5.1.5",
     "regenerator-runtime": "^0.14.1"
   }
 }
