@@ -64,6 +64,16 @@ import '@shopify/shopify-api/adapters/web-api';
 
 </div>
 
+> **Note** Some bundlers may aggressively tree-shake the adapter imports in production builds. If you encounter a "Missing adapter implementation" error, you can use the exported constant to ensure the adapter is loaded:
+>
+> ```ts
+> import { nodeAdapterInitialized } from '@shopify/shopify-api/adapters/node';
+> // Optional: Check the adapter loaded successfully
+> if (!nodeAdapterInitialized) {
+>   throw new Error('Failed to initialize Node.js adapter');
+> }
+> ```
+
 Next, configure the library - you'll need some values in advance:
 
 - Your app's API key from [Partners dashboard](https://www.shopify.com/partners) (also called `Client ID`)
