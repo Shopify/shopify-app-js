@@ -1,6 +1,6 @@
 import {loadRestResources} from '../rest/load-rest-resources';
 import {ShopifyRestResources} from '../rest/types';
-import {abstractRuntimeString} from '../runtime/platform';
+import {getAbstractRuntimeString } from '../runtime/platform';
 import {FutureFlagOptions, logDisabledFutureFlags} from '../future/flags';
 
 import {ConfigParams, ConfigInterface} from './base-types';
@@ -99,7 +99,7 @@ export function shopifyApi<
 
   shopify.logger
     .info(
-      `version ${SHOPIFY_API_LIBRARY_VERSION}, environment ${abstractRuntimeString()}`,
+      `version ${SHOPIFY_API_LIBRARY_VERSION}, environment ${getAbstractRuntimeString()}`,
     )
     .catch((err) => console.log(err));
 
