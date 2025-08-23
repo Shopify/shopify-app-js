@@ -1,22 +1,18 @@
 import '@shopify/shopify-api/adapters/web-api';
 import '../adapters/node';
 
-import {
-  ConfigParams,
-  LATEST_API_VERSION,
-  LogSeverity,
-  shopifyApi,
-} from '@shopify/shopify-api';
+import {ConfigParams, LogSeverity, shopifyApi} from '@shopify/shopify-api';
 
 import {overrideLogger} from '../override-logger';
 import {SHOPIFY_REACT_ROUTER_LIBRARY_VERSION} from '../version';
+import {TEST_API_VERSION} from '../__test-helpers/const';
 
 const LOG_FN = jest.fn();
 const VALID_API_CONFIG: ConfigParams<any, any> = {
   apiKey: 'test-key',
   apiSecretKey: 'test-secret',
   scopes: ['test-scope'],
-  apiVersion: LATEST_API_VERSION,
+  apiVersion: TEST_API_VERSION,
   hostName: 'test-host',
   isEmbeddedApp: true,
   logger: {log: LOG_FN, level: LogSeverity.Debug},

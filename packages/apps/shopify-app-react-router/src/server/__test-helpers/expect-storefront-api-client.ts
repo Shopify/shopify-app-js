@@ -1,10 +1,9 @@
 import {Session} from '@shopify/shopify-api';
 
-import {LATEST_API_VERSION} from '..';
 import type {StorefrontContext} from '../clients';
 
 import {mockExternalRequest} from './request-mock';
-import {TEST_SHOP} from './const';
+import {TEST_SHOP, TEST_API_VERSION} from './const';
 
 export function expectStorefrontApiClient(
   factory: () => Promise<{
@@ -19,7 +18,7 @@ export function expectStorefrontApiClient(
     const apiResponse = {data: {blogs: {nodes: [{id: 1}]}}, headers: {}};
     await mockExternalRequest({
       request: new Request(
-        `https://${TEST_SHOP}/api/${LATEST_API_VERSION}/graphql.json`,
+        `https://${TEST_SHOP}/api/${TEST_API_VERSION}/graphql.json`,
         {
           method: 'POST',
           headers: {

@@ -224,20 +224,18 @@ export interface AppConfigArg<
    *
    * {@link https://shopify.dev/docs/api/}
    *
-   * @defaultValue `LATEST_API_VERSION` from `@shopify/shopify-app-react-router`
-   *
    * @example
-   * <caption>Using the latest API Version (Recommended)</caption>
+   * <caption>Setting an API Version</caption>
    * ```ts
-   * import { LATEST_API_VERSION, shopifyApp } from "@shopify/shopify-app-react-router/server";
+   * import { ApiVersion, shopifyApp } from "@shopify/shopify-app-react-router/server";
    *
    * const shopify = shopifyApp({
    *   // ...etc
-   *   apiVersion: LATEST_API_VERSION,
+   *   apiVersion: ApiVersion.October25,
    * });
    * ```
    */
-  apiVersion?: ApiVersion;
+  apiVersion: ApiVersion;
 
   /**
    * A path that Shopify can reserve for auth related endpoints.
@@ -247,14 +245,14 @@ export interface AppConfigArg<
    * @default `"/auth"`
    *
    * @example
-   * <caption>Using the latest API Version (Recommended)</caption>
+   * <caption>Setting auth path prefix</caption>
    * ```ts
    * // /app/shopify.server.ts
-   * import { LATEST_API_VERSION, shopifyApp } from "@shopify/shopify-app-react-router/server";
+   * import { ApiVersion, shopifyApp } from "@shopify/shopify-app-react-router/server";
    *
    * const shopify = shopifyApp({
    *   // ...etc
-   *   apiVersion: LATEST_API_VERSION,
+   *   apiVersion: ApiVersion.October24,
    * });
    * export default shopify;
    * export const authenticate = shopify.authenticate;
