@@ -34,3 +34,7 @@ updates:
         patterns:
           - 'jest'
           - 'jest-circus'
+      react:
+        patterns:
+          - 'react'
+          - 'react-dom'
