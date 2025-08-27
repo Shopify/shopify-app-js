@@ -30,3 +30,7 @@ updates:
         patterns:
           - 'prisma'
           - '@prisma/client'
+      jest-core:
+        patterns:
+          - 'jest'
+          - 'jest-circus'
