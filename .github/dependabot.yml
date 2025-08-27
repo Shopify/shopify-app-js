@@ -26,8 +26,9 @@ updates:
       semver-minor-days: 14
       semver-patch-days: 14
 
-    # Group together PRs of interdependant packages
     groups:
+
+      # Group together PRs of interdependant packages
       aws-sdk:
         patterns:
           - '@aws-sdk/client-dynamodb'
@@ -50,3 +51,13 @@ updates:
         patterns:
           - 'react'
           - 'react-dom'
+
+      # Group all patch updates not accounted for in prior groups in a single PR.
+      # This reduces the number of PRs to review and rebase.
+      # We skip development dependencies because those are auto-merged by .github/workflows/dependabot_auto_merge.yml
+      patch-updates:
+        patterns:
+          - "*"
+        update-types:
+          - "patch"
+        dependency-type: "production"
