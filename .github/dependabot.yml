@@ -17,6 +17,15 @@ updates:
     # e.g: ^1.2.3 -> 1.2.4, would be ignored
     versioning-strategy: increase-if-necessary
 
+    # Cooldown is the number of days after a release to wait until opening a PR
+    # This gives us more confidence changes can be merged because changes have been community tested.
+    # See: https://github.blog/changelog/2025-07-01-dependabot-supports-configuration-of-a-minimum-package-age/
+    cooldown:
+      default-days: 14
+      semver-major-days: 30
+      semver-minor-days: 14
+      semver-patch-days: 14
+
     # Group together PRs of interdependant packages
     groups:
       aws-sdk:
