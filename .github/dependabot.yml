@@ -13,6 +13,9 @@ updates:
       interval: 'weekly'
     # Dependabot defaults to 5 open pull requests at a time
     open-pull-requests-limit: 100
+    # ignore versions already covered by a range
+    # e.g: ^1.2.3 -> 1.2.4, would be ignored
+    versioning-strategy: increase-if-necessary
 
     # Group together PRs of interdependant packages
     groups:
