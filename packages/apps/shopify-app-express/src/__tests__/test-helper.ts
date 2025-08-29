@@ -1,6 +1,6 @@
 import crypto from 'crypto';
 
-import semver from 'semver';
+import {compare} from 'compare-versions';
 import fetchMock, {MockParams} from 'jest-fetch-mock';
 import {LATEST_API_VERSION, ShopifyRestResources} from '@shopify/shopify-api';
 import {MemorySessionStorage} from '@shopify/shopify-app-session-storage-memory';
@@ -167,7 +167,7 @@ expect.extend({
     return {
       message: () =>
         `Found deprecation limited to version ${version}, please update or remove it.`,
-      pass: semver.lt(SHOPIFY_EXPRESS_LIBRARY_VERSION, version),
+      pass: compare(SHOPIFY_EXPRESS_LIBRARY_VERSION, version, '<'),
     };
   },
 });
