@@ -1,5 +1,15 @@
 # Changelog
 
+## 11.14.2
+
+### Patch Changes
+
+- 7d8aa81: # Remove deprecated package
+
+  Removes the deprecated `@shopify/network` package. No change in functionality.
+
+- 089f4fd: Update loggings for session utils
+
 ## 11.14.1
 
 ### Patch Changes
