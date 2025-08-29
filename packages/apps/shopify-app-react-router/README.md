@@ -11,20 +11,9 @@ This package makes it easy to use [React Router](https://reactrouter.com/) to bu
 
 This package is in early access. Most apps will be fine to adopt React Router. If you encounter issues [please provide feedback](https://github.com/Shopify/shopify-app-template-react-router/issues).
 
-## Requirements
-
-To use this package, you will need to have:
-
-- a [Shopify Partner account](https://www.shopify.com/ca/partners) or the [Shopify Dev Dashboard](https://shopify.dev/beta/next-gen-dev-platform/dev-dashboard)
-- The [Shopify CLI](https://shopify.dev/docs/apps/build/cli-for-apps) installed
-
 ## Getting started
 
-Scaffold an app template that uses this package using the [Shopify CLI](https://shopify.dev/docs/apps/build/cli-for-apps).
-
-```
-shopify app init --template=https://github.com/Shopify/shopify-app-template-react-router
-```
+Please follow this [quick start guide](https://github.com/Shopify/shopify-app-template-react-router#quick-start) to get started.
 
 ## Migrating from Remix
 
