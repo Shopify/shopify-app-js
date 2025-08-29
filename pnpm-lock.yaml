@@ -267,9 +267,9 @@ importers:
       '@shopify/shopify-app-session-storage':
         specifier: ^3.0.0
         version: link:../shopify-app-session-storage
-      semver:
-        specifier: ^7.7.1
-        version: 7.7.1
+      compare-versions:
+        specifier: ^6.1.1
+        version: 6.1.1
     devDependencies:
       '@cloudflare/workers-types':
         specifier: ^4.20250711.0
@@ -495,12 +495,12 @@ importers:
       '@shopify/shopify-app-session-storage-memory':
         specifier: ^4.0.20
         version: link:../session-storage/shopify-app-session-storage-memory
+      compare-versions:
+        specifier: ^6.1.1
+        version: 6.1.1
       express:
         specifier: ^4.21.2
         version: 4.21.2
-      semver:
-        specifier: ^7.7.1
-        version: 7.7.1
     devDependencies:
       '@types/compression':
         specifier: ^1.8.1
@@ -511,9 +511,6 @@ importers:
       '@types/jsonwebtoken':
         specifier: ^9.0.10
         version: 9.0.10
-      '@types/semver':
-        specifier: ^7.7.0
-        version: 7.7.0
       jsonwebtoken:
         specifier: ^9.0.2
         version: 9.0.2
@@ -532,6 +529,9 @@ importers:
       '@shopify/storefront-api-client':
         specifier: ^1.0.9
         version: link:../../api-clients/storefront-api-client
+      compare-versions:
+        specifier: ^6.1.1
+        version: 6.1.1
       isbot:
         specifier: ^5.1.26
         version: 5.1.26
@@ -541,9 +541,6 @@ importers:
       react-dom:
         specifier: '>=18'
         version: 18.3.1(react@18.3.1)
-      semver:
-        specifier: ^7.7.1
-        version: 7.7.1
     devDependencies:
       '@shopify/generate-docs':
         specifier: ^0.17.1
@@ -566,9 +563,6 @@ importers:
       '@types/react':
         specifier: ^19.1.2
         version: 19.1.8
-      '@types/semver':
-        specifier: ^7.7.0
-        version: 7.7.0
       '@types/testing-library__jest-dom':
         specifier: ^6.0.0
         version: 6.0.0
@@ -599,15 +593,15 @@ importers:
       '@shopify/storefront-api-client':
         specifier: ^1.0.9
         version: link:../../api-clients/storefront-api-client
+      compare-versions:
+        specifier: ^6.1.1
+        version: 6.1.1
       isbot:
         specifier: ^5.1.26
         version: 5.1.26
       react:
         specifier: '*'
         version: 18.3.1
-      semver:
-        specifier: ^7.7.1
-        version: 7.7.1
     devDependencies:
       '@remix-run/node':
         specifier: ^2.16.8
@@ -642,9 +636,6 @@ importers:
       '@types/react':
         specifier: ^19.1.8
         version: 19.1.8
-      '@types/semver':
-        specifier: ^7.7.0
-        version: 7.7.0
       '@types/testing-library__jest-dom':
         specifier: ^6.0.0
         version: 6.0.0
@@ -3994,9 +3985,6 @@ packages:
 
   '@types/resolve@1.20.2':
     resolution: {integrity: sha512-60BCwRFOZCQhDncwQdxxeOEEkbc5dIMccYLwbxsS4TUNeVECQ/pBJ0j09mrHOl/JJvpRPGwO9SvE4nR2Nb/a4Q==}
-
-  '@types/semver@7.7.0':
-    resolution: {integrity: sha512-k107IF4+Xr7UHjwDc7Cfd6PRQfbdkiRabXGRjo07b4WyPahFBZCZ1sE+BNxYIJPPg73UkfOsVOLwqVc/6ETrIA==}
 
   '@types/send@0.17.4':
     resolution: {integrity: sha512-x2EM6TJOybec7c52BX0ZspPodMsQUd5L6PRwOunVyVUhXiBSKf3AezDL8Dgvgt5o0UfKNfuA0eMLr2wLT4AiBA==}
@@ -10635,7 +10623,7 @@ snapshots:
       ignore: 5.3.2
       import-fresh: 3.3.0
       js-yaml: 4.1.0
-      minimatch: 3.1.2
+      minimatch: 9.0.5
       strip-json-comments: 3.1.1
     transitivePeerDependencies:
       - supports-color
@@ -11306,7 +11294,7 @@ snapshots:
     dependencies:
       '@humanwhocodes/object-schema': 2.0.3
       debug: 4.4.0
-      minimatch: 3.1.2
+      minimatch: 9.0.5
     transitivePeerDependencies:
       - supports-color
 
@@ -12953,8 +12941,6 @@ snapshots:
       csstype: 3.1.3
 
   '@types/resolve@1.20.2': {}
-
-  '@types/semver@7.7.0': {}
 
   '@types/send@0.17.4':
     dependencies:
