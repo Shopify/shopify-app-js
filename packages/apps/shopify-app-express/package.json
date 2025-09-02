@@ -47,13 +47,13 @@
     "@shopify/shopify-app-session-storage": "^3.0.20",
     "@shopify/shopify-app-session-storage-memory": "^4.0.20",
     "express": "^4.21.2",
-    "semver": "^7.7.1"
+    "compare-versions": "^6.1.1"
   },
   "devDependencies": {
     "@types/compression": "^1.8.1",
     "@types/express": "^4.17.21",
     "@types/jsonwebtoken": "^9.0.10",
-    "@types/semver": "^7.7.0",
+    
     "jsonwebtoken": "^9.0.2"
   },
   "files": [

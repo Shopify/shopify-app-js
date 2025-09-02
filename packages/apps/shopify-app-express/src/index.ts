@@ -1,4 +1,4 @@
-import semver from 'semver';
+import {compare} from 'compare-versions';
 import '@shopify/shopify-api/adapters/node';
 import {
   shopifyApi,
@@ -167,7 +167,7 @@ function overrideLoggerPackage(logger: Shopify['logger']): Shopify['logger'] {
 
 function deprecated(warningFunction: Shopify['logger']['warning']) {
   return function (version: string, message: string): Promise<void> {
-    if (semver.gte(SHOPIFY_EXPRESS_LIBRARY_VERSION, version)) {
+    if (compare(SHOPIFY_EXPRESS_LIBRARY_VERSION, version, '>=')) {
       throw new FeatureDeprecatedError(
         `Feature was deprecated in version ${version}`,
       );

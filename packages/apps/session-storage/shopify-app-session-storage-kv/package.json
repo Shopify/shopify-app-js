@@ -45,7 +45,7 @@
     "CloudFlare"
   ],
   "dependencies": {
-    "semver": "^7.7.1"
+    "compare-versions": "^6.1.1"
   },
   "peerDependencies": {
     "@shopify/shopify-api": "^11.0.0",
