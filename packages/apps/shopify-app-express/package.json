@@ -54,9 +54,8 @@
     "@types/compression": "^1.8.1",
     "@types/cookie-parser": "^1.4.9",
     "@types/express": "^4.17.21",
-    "@types/jsonwebtoken": "^9.0.10",
     "@types/semver": "^7.7.0",
-    "jsonwebtoken": "^9.0.2"
+    "jose": "^5.9.6"
   },
   "files": [
     "dist/*",
