@@ -89,7 +89,6 @@
     "isbot": "^5.1.26",
     "jose": "^5.9.6",
     "node-fetch": "^2.6.1",
-    "uuid": "^11.1.0",
     "tslib": "^2.8.1"
   },
   "devDependencies": {
@@ -97,7 +96,6 @@
     "@swc/core": "^1.12.11",
     "@types/express": "^4.17.13",
     "@types/node-fetch": "^2.6.11",
-    "@types/uuid": "^10.0.0",
     "expect": "^30.0.4",
     "express": "^4.21.2",
     "jest-environment-miniflare": "^2.14.4",

@@ -1,6 +1,7 @@
+import crypto from 'crypto';
+
 import {ShopifyError} from '../../lib/error';
 
-import {crypto} from './crypto';
 import {HashFormat} from './types';
 
 export async function createSHA256HMAC(

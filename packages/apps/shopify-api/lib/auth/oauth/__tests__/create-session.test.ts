@@ -7,8 +7,7 @@ const STATIC_UUID = 'test-uuid';
 
 jest.useFakeTimers().setSystemTime(new Date('2023-11-11'));
 
-jest.mock('uuid', () => ({v4: jest.fn(() => STATIC_UUID)}));
-jest.requireMock('uuid');
+jest.mock('crypto', () => ({randomUUID: jest.fn(() => STATIC_UUID)}));
 
 beforeEach(() => {
   shop = 'someshop.myshopify.io';
