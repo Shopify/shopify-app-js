@@ -10,6 +10,9 @@
   "bugs": {
     "url": "https://github.com/Shopify/shopify-app-js/issues"
   },
+  "engines": {
+    "node": ">=20.0.0"
+  },
   "homepage": "https://github.com/Shopify/shopify-app-js/tree/main/packages/apps/shopify-app-express",
   "author": "Shopify Inc.",
   "license": "MIT",
@@ -51,10 +54,7 @@
   },
   "devDependencies": {
     "@types/compression": "^1.8.1",
-    "@types/express": "^4.17.21",
-    "@types/jsonwebtoken": "^9.0.10",
-    
-    "jsonwebtoken": "^9.0.2"
+    "@types/express": "^4.17.21"
   },
   "files": [
     "dist/*",

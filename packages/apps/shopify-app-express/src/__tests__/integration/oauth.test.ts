@@ -1,6 +1,6 @@
 import request from 'supertest';
 import express, {Express} from 'express';
-import jwt from 'jsonwebtoken';
+import * as jose from 'jose';
 import {LATEST_API_VERSION, LogSeverity} from '@shopify/shopify-api';
 
 import {ShopifyApp, shopifyApp} from '../..';
@@ -406,17 +406,13 @@ async function validSession(
   config: OAuthTestCase,
   mock: jest.Mock,
 ) {
-  const validJWT = jwt.sign(
-    {
-      sub: 1234,
-      aud: shopify.api.config.apiKey,
-      dest: `https://${TEST_SHOP}`,
-    },
-    shopify.api.config.apiSecretKey,
-    {
-      algorithm: 'HS256',
-    },
-  );
+  const validJWT = await new jose.SignJWT({
+    sub: '1234',
+    aud: shopify.api.config.apiKey,
+    dest: `https://${TEST_SHOP}`,
+  })
+    .setProtectedHeader({alg: 'HS256'})
+    .sign(new TextEncoder().encode(shopify.api.config.apiSecretKey));
 
   const headers: Record<string, string> = {};
   if (config.embedded) {
