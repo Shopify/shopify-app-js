@@ -1,4 +1,4 @@
-import {crypto} from '../../../runtime/crypto';
+import crypto from 'crypto';
 
 export type Nonce = () => string;
 
