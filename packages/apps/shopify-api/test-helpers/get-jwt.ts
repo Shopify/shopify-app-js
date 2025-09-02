@@ -1,4 +1,4 @@
-import jwt from 'jsonwebtoken';
+import * as jose from 'jose';
 
 import {JwtPayload} from '../lib';
 
@@ -19,12 +19,12 @@ interface TestJwt {
  * @param overrides Optional overrides for the JWT payload.
  * @returns {TestJwt} The JWT token and the JWT payload used to create the token.
  */
-export function getJwt(
+export async function getJwt(
   store: string,
   apiKey: string,
   apiSecretKey: string,
   overrides: Partial<JwtPayload> = {},
-): TestJwt {
+): Promise<TestJwt> {
   const date = new Date();
   const shop: string = getShopValue(store);
   const payload = {
@@ -40,9 +40,9 @@ export function getJwt(
     ...overrides,
   };
 
-  const token = jwt.sign(payload, apiSecretKey, {
-    algorithm: 'HS256',
-  });
+  const token = await new jose.SignJWT(payload as any)
+    .setProtectedHeader({alg: 'HS256'})
+    .sign(new TextEncoder().encode(apiSecretKey));
 
   return {token, payload};
 }
