@@ -12,7 +12,7 @@ const nodeEnvironment: E2eTestEnvironment = {
   name: 'NodeJS',
   domain: `http://localhost:${nodeAppPort}`,
   dummyServerPort,
-  process: spawn('pnpm', ['node', 'bundle/test-node-app.mjs'], {
+  process: spawn('node', ['bundle/test-node-app.mjs'], {
     env: {
       ...process.env, // eslint-disable-line no-process-env
       PORT: nodeAppPort,
@@ -20,6 +20,7 @@ const nodeEnvironment: E2eTestEnvironment = {
     },
     detached: true,
     stdio: process.env.SHOPIFY_E2E_TEST_DEBUG ? 'inherit' : undefined, // eslint-disable-line no-process-env
+    cwd: `${__dirname}/../../..`,
   }),
   testable: true,
   ready: false,
