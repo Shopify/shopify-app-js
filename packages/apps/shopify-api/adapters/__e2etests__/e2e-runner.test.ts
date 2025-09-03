@@ -1,7 +1,5 @@
 import {spawn} from 'child_process';
 
-import fetch from 'node-fetch';
-
 import {TestConfig, E2eTestEnvironment} from './test_config_types';
 import {runEnvironments, shutdownEnvironments} from './test_environments';
 import {testSuite} from './test_suite';
