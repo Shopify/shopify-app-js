@@ -93,7 +93,7 @@ describe('Update usage billing plan capped amount', () => {
       ),
     });
 
-    const {token} = getJwt();
+    const {token} = await getJwt();
     const request = new Request(
       `${APP_URL}/billing?embedded=1&shop=${TEST_SHOP}&host=${BASE64_HOST}&id_token=${token}`,
     );
@@ -132,7 +132,7 @@ describe('Update usage billing plan capped amount', () => {
 
     const request = new Request(`${APP_URL}/billing`, {
       headers: {
-        Authorization: `Bearer ${getJwt().token}`,
+        Authorization: `Bearer ${(await getJwt()).token}`,
       },
     });
 
@@ -210,7 +210,7 @@ describe('Update usage billing plan capped amount', () => {
       }),
     });
 
-    const {token} = getJwt();
+    const {token} = await getJwt();
     const request = new Request(
       `${APP_URL}/billing?embedded=1&shop=${TEST_SHOP}&host=${BASE64_HOST}&id_token=${token}`,
     );
@@ -252,7 +252,7 @@ describe('Update usage billing plan capped amount', () => {
 
     const request = new Request(`${APP_URL}/billing`, {
       headers: {
-        Authorization: `Bearer ${getJwt().token}`,
+        Authorization: `Bearer ${(await getJwt()).token}`,
       },
     });
 
@@ -323,7 +323,7 @@ describe('Update usage billing plan capped amount', () => {
       ),
     });
 
-    const {token} = getJwt();
+    const {token} = await getJwt();
     const {billing} = await shopify.authenticate.admin(
       new Request(
         `${APP_URL}/billing?embedded=1&shop=${TEST_SHOP}&host=${BASE64_HOST}&id_token=${token}`,
