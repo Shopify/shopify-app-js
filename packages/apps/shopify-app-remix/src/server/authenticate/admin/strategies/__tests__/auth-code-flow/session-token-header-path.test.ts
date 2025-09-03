@@ -23,7 +23,7 @@ describe('authorize.session token header path', () => {
         );
 
         // WHEN
-        const {token} = getJwt();
+        const {token} = await getJwt();
         const response = await getThrownResponse(
           shopify.authenticate.admin,
           new Request(`${APP_URL}?shop=${TEST_SHOP}&host=${BASE64_HOST}`, {
@@ -55,7 +55,7 @@ describe('authorize.session token header path', () => {
         await setUpValidSession(shopify.sessionStorage, {isOnline});
 
         // WHEN
-        const {token} = getJwt();
+        const {token} = await getJwt();
         const response = await getThrownResponse(
           shopify.authenticate.admin,
           new Request(`${APP_URL}?shop=${TEST_SHOP}&host=${BASE64_HOST}`, {

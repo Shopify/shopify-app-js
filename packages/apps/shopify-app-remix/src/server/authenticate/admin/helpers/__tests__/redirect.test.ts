@@ -22,7 +22,7 @@ describe('Redirect helper', () => {
       const shopify = shopifyApp(testConfig());
       await setUpValidSession(shopify.sessionStorage);
 
-      const {request, searchParams} = documentLoadRequest(true);
+      const {request, searchParams} = await documentLoadRequest(true);
       const {redirect} = await shopify.authenticate.admin(request);
 
       // WHEN
@@ -41,7 +41,7 @@ describe('Redirect helper', () => {
       const shopify = shopifyApp(testConfig());
       await setUpValidSession(shopify.sessionStorage);
 
-      const {request, searchParams} = documentLoadRequest(true);
+      const {request, searchParams} = await documentLoadRequest(true);
       const {redirect} = await shopify.authenticate.admin(request);
 
       // WHEN
@@ -63,7 +63,7 @@ describe('Redirect helper', () => {
     const shopify = shopifyApp(testConfig());
     await setUpValidSession(shopify.sessionStorage);
 
-    const {request} = documentLoadRequest(true);
+    const {request} = await documentLoadRequest(true);
     const {redirect} = await shopify.authenticate.admin(request);
 
     // WHEN
@@ -81,7 +81,7 @@ describe('Redirect helper', () => {
     const shopify = shopifyApp(testConfig({isEmbeddedApp: true}));
     await setUpValidSession(shopify.sessionStorage);
 
-    const {request} = documentLoadRequest(true);
+    const {request} = await documentLoadRequest(true);
     const {redirect} = await shopify.authenticate.admin(request);
 
     // WHEN
@@ -104,7 +104,7 @@ describe('Redirect helper', () => {
       const shopify = shopifyApp(testConfig());
       await setUpValidSession(shopify.sessionStorage);
 
-      const {request, searchParams} = documentLoadRequest(true);
+      const {request, searchParams} = await documentLoadRequest(true);
       const {redirect} = await shopify.authenticate.admin(request);
 
       // WHEN
@@ -122,7 +122,7 @@ describe('Redirect helper', () => {
       const shopify = shopifyApp(testConfig());
       await setUpValidSession(shopify.sessionStorage);
 
-      const {request, searchParams} = bounceRequest();
+      const {request, searchParams} = await bounceRequest();
       const {redirect} = await shopify.authenticate.admin(request);
 
       // WHEN
@@ -144,7 +144,7 @@ describe('Redirect helper', () => {
       const shopify = shopifyApp(testConfig());
       await setUpValidSession(shopify.sessionStorage);
 
-      const {request} = remixDataLoadRequest('GET');
+      const {request} = await remixDataLoadRequest('GET');
       const {redirect} = await shopify.authenticate.admin(request);
 
       // WHEN
@@ -160,7 +160,7 @@ describe('Redirect helper', () => {
       const shopify = shopifyApp(testConfig());
       await setUpValidSession(shopify.sessionStorage);
 
-      const {request} = remixDataLoadRequest('POST');
+      const {request} = await remixDataLoadRequest('POST');
       const {redirect} = await shopify.authenticate.admin(request);
 
       // WHEN
@@ -176,7 +176,7 @@ describe('Redirect helper', () => {
       const shopify = shopifyApp(testConfig());
       await setUpValidSession(shopify.sessionStorage);
 
-      const {request} = documentLoadRequest(true);
+      const {request} = await documentLoadRequest(true);
       const {redirect} = await shopify.authenticate.admin(request);
 
       // WHEN
@@ -196,7 +196,7 @@ describe('Redirect helper', () => {
       const shopify = shopifyApp(testConfig());
       await setUpValidSession(shopify.sessionStorage);
 
-      const {request, searchParams} = documentLoadRequest(true);
+      const {request, searchParams} = await documentLoadRequest(true);
       const {redirect} = await shopify.authenticate.admin(request);
 
       // WHEN
@@ -218,7 +218,7 @@ describe('Redirect helper', () => {
       const shopify = shopifyApp(testConfig());
       await setUpValidSession(shopify.sessionStorage);
 
-      const {request, searchParams} = bounceRequest();
+      const {request, searchParams} = await bounceRequest();
       const {redirect} = await shopify.authenticate.admin(request);
 
       // WHEN
@@ -240,7 +240,7 @@ describe('Redirect helper', () => {
       const shopify = shopifyApp(testConfig());
       await setUpValidSession(shopify.sessionStorage);
 
-      const {request} = remixDataLoadRequest('GET');
+      const {request} = await remixDataLoadRequest('GET');
       const {redirect} = await shopify.authenticate.admin(request);
 
       // WHEN
@@ -258,7 +258,7 @@ describe('Redirect helper', () => {
       const shopify = shopifyApp(testConfig());
       await setUpValidSession(shopify.sessionStorage);
 
-      const {request} = remixDataLoadRequest('POST');
+      const {request} = await remixDataLoadRequest('POST');
       const {redirect} = await shopify.authenticate.admin(request);
 
       // WHEN
@@ -278,7 +278,7 @@ describe('Redirect helper', () => {
       const shopify = shopifyApp(testConfig());
       await setUpValidSession(shopify.sessionStorage);
 
-      const {request} = documentLoadRequest(true);
+      const {request} = await documentLoadRequest(true);
       const {redirect} = await shopify.authenticate.admin(request);
 
       // WHEN
@@ -300,7 +300,7 @@ describe('Redirect helper', () => {
       const shopify = shopifyApp(testConfig());
       await setUpValidSession(shopify.sessionStorage);
 
-      const {request, searchParams} = documentLoadRequest(true);
+      const {request, searchParams} = await documentLoadRequest(true);
       const {redirect} = await shopify.authenticate.admin(request);
 
       // WHEN
@@ -321,8 +321,8 @@ describe('Redirect helper', () => {
     });
   });
 
-  function documentLoadRequest(embedded: boolean) {
-    const {token} = getJwt();
+  async function documentLoadRequest(embedded: boolean) {
+    const {token} = await getJwt();
     const searchParams = new URLSearchParams({
       shop: TEST_SHOP,
       embedded: embedded ? '1' : '0',
@@ -333,8 +333,8 @@ describe('Redirect helper', () => {
     return {request: new Request(`${APP_URL}?${searchParams}`), searchParams};
   }
 
-  function bounceRequest() {
-    const {token} = getJwt();
+  async function bounceRequest() {
+    const {token} = await getJwt();
     const searchParams = new URLSearchParams({
       shop: TEST_SHOP,
       embedded: '1',
@@ -349,8 +349,8 @@ describe('Redirect helper', () => {
     };
   }
 
-  function remixDataLoadRequest(method: string) {
-    const {token} = getJwt();
+  async function remixDataLoadRequest(method: string) {
+    const {token} = await getJwt();
 
     return {
       request: new Request(APP_URL, {
