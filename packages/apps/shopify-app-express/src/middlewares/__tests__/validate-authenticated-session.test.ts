@@ -1,7 +1,9 @@
+import {createSecretKey} from 'crypto';
+
 import request from 'supertest';
 import express, {Express} from 'express';
 import {LATEST_API_VERSION, Session} from '@shopify/shopify-api';
-import jwt from 'jsonwebtoken';
+import {SignJWT} from 'jose';
 
 import {
   createTestHmac,
@@ -19,7 +21,7 @@ describe('validateAuthenticatedSession', () => {
   describe('for embedded apps', () => {
     let validJWT: any;
 
-    beforeEach(() => {
+    beforeEach(async () => {
       shopify.config.auth.path = '/api/auth';
       shopify.config.auth.callbackPath = '/api/auth/callback';
       shopify.api.config.isEmbeddedApp = true;
@@ -30,17 +32,13 @@ describe('validateAuthenticatedSession', () => {
         res.json({data: {shop: {name: req.query.shop}}});
       });
 
-      validJWT = jwt.sign(
-        {
-          dummy: 'data',
-          aud: shopify.api.config.apiKey,
-          dest: `https://${shop}`,
-        },
-        shopify.api.config.apiSecretKey,
-        {
-          algorithm: 'HS256',
-        },
-      );
+      validJWT = await new SignJWT({
+        dummy: 'data',
+        aud: shopify.api.config.apiKey,
+        dest: `https://${shop}`,
+      })
+        .setProtectedHeader({alg: 'HS256'})
+        .sign(createSecretKey(Buffer.from(shopify.api.config.apiSecretKey)));
       const scopes = shopify.api.config.scopes
         ? shopify.api.config.scopes.toString()
         : '';
@@ -197,15 +195,13 @@ describe('validateAuthenticatedSession', () => {
     });
 
     it('returns a 401 if the session token is invalid', async () => {
-      const invalidJWT = jwt.sign(
-        {
-          dummy: 'data',
-          aud: shopify.api.config.apiKey,
-          dest: `https://${shop}`,
-        },
-        'different-secret-key',
-        {algorithm: 'HS256'},
-      );
+      const invalidJWT = await new SignJWT({
+        dummy: 'data',
+        aud: shopify.api.config.apiKey,
+        dest: `https://${shop}`,
+      })
+        .setProtectedHeader({alg: 'HS256'})
+        .sign(createSecretKey(Buffer.from('different-secret-key')));
 
       const response = await request(app)
         .get('/test/shop?shop=my-shop.myshopify.io')
