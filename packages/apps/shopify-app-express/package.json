@@ -52,9 +52,7 @@
   "devDependencies": {
     "@types/compression": "^1.8.1",
     "@types/express": "^4.17.21",
-    "@types/jsonwebtoken": "^9.0.10",
-    
-    "jsonwebtoken": "^9.0.2"
+    "jose": "^5.9.6"
   },
   "files": [
     "dist/*",
