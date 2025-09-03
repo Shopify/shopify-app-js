@@ -1,5 +1,3 @@
-import crypto from 'crypto';
-
 import fetch from 'node-fetch';
 
 import {
@@ -9,7 +7,6 @@ import {
   setAbstractConvertResponseFunc,
   setAbstractConvertHeadersFunc,
   setAbstractRuntimeString,
-  setCrypto,
   AbstractFetchFunc,
 } from '../../runtime';
 
@@ -28,4 +25,3 @@ setAbstractConvertIncomingResponseFunc(nodeConvertIncomingResponse);
 setAbstractConvertResponseFunc(nodeConvertAndSendResponse);
 setAbstractConvertHeadersFunc(nodeConvertAndSetHeaders);
 setAbstractRuntimeString(nodeRuntimeString);
-setCrypto(crypto as any);
