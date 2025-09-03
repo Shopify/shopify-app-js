@@ -52,7 +52,7 @@ export async function setUpValidRequest(
   let authenticatedRequest: Request;
   switch (options.type) {
     case RequestType.Admin:
-      authenticatedRequest = adminRequest(
+      authenticatedRequest = await adminRequest(
         request,
         options.store,
         options.apiKey,
@@ -60,7 +60,7 @@ export async function setUpValidRequest(
       );
       break;
     case RequestType.Bearer:
-      authenticatedRequest = bearerRequest(
+      authenticatedRequest = await bearerRequest(
         request,
         options.store,
         options.apiKey,
@@ -88,13 +88,13 @@ export async function setUpValidRequest(
   return authenticatedRequest;
 }
 
-function adminRequest(
+async function adminRequest(
   request: Request,
   store: string,
   apiKey: string,
   apiSecretKey: string,
 ) {
-  const {token} = getJwt(store, apiKey, apiSecretKey);
+  const {token} = await getJwt(store, apiKey, apiSecretKey);
 
   const url = new URL(request.url);
   url.searchParams.set('embedded', '1');
@@ -104,13 +104,13 @@ function adminRequest(
   return new Request(url.href, request);
 }
 
-function bearerRequest(
+async function bearerRequest(
   request: Request,
   store: string,
   apiKey: string,
   apiSecretKey: string,
 ) {
-  const {token} = getJwt(store, apiKey, apiSecretKey);
+  const {token} = await getJwt(store, apiKey, apiSecretKey);
 
   const authenticatedRequest = new Request(request);
   authenticatedRequest.headers.set('authorization', `Bearer ${token}`);
