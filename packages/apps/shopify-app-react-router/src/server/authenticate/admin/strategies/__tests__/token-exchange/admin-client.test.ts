@@ -109,7 +109,7 @@ async function setUpDocumentFlow() {
   const shopify = shopifyApp(config);
   const expectedSession = await setUpValidSession(shopify.sessionStorage);
 
-  const {token} = getJwt();
+  const {token} = await getJwt();
   const request = new Request(
     `${APP_URL}?embedded=1&shop=${TEST_SHOP}&host=${BASE64_HOST}&id_token=${token}`,
   );
