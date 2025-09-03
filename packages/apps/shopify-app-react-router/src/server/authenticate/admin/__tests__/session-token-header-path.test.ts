@@ -1,5 +1,3 @@
-import {SESSION_COOKIE_NAME, Session} from '@shopify/shopify-api';
-
 import {shopifyApp} from '../../..';
 import {
   APP_URL,
@@ -8,7 +6,6 @@ import {
   getJwt,
   getThrownResponse,
   setUpValidSession,
-  signRequestCookie,
   testConfig,
 } from '../../../__test-helpers';
 
@@ -45,8 +42,8 @@ describe('authorize.session token header path', () => {
         });
 
         // WHEN
-        const {token, payload} = getJwt();
-        const {sessionToken, admin, session} = await shopify.authenticate.admin(
+        const {token, payload} = await getJwt();
+        const {sessionToken, session} = await shopify.authenticate.admin(
           new Request(`${APP_URL}?shop=${TEST_SHOP}&host=${BASE64_HOST}`, {
             headers: {Authorization: `Bearer ${token}`},
           }),
