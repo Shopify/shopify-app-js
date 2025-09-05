@@ -46,9 +46,6 @@
     "release": "pnpm build && changeset publish"
   },
   "jest": {
-    "setupFilesAfterEnv": [
-      "./src/tests/setupTests.ts"
-    ],
     "transform": {
       ".*": "babel-jest"
     }
@@ -78,7 +75,6 @@
   },
   "devDependencies": {
     "@graphql-codegen/plugin-helpers": "^5.1.1",
-    "graphql-config": "5.1.5",
-    "regenerator-runtime": "^0.14.1"
+    "graphql-config": "^5.1.5"
   }
 }
