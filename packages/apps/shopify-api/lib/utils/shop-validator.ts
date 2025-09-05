@@ -12,6 +12,7 @@ export function sanitizeShop(config: ConfigInterface) {
       'shopify\\.com',
       'myshopify\\.io',
       'shop\\.dev',
+      'my.shop\\.dev',
     ];
     if (config.customShopDomains) {
       domainsRegex.push(
