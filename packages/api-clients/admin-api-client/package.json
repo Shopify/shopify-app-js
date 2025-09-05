@@ -42,9 +42,6 @@
     "release": "pnpm build && changeset publish"
   },
   "jest": {
-    "setupFilesAfterEnv": [
-      "./src/tests/setupTests.ts"
-    ],
     "transform": {
       ".*": "babel-jest"
     }
@@ -65,8 +62,7 @@
     "@shopify/graphql-client": "^1.4.1"
   },
   "devDependencies": {
-    "jest-environment-jsdom": "^30.0.4",
-    "regenerator-runtime": "^0.14.1"
+    "jest-environment-jsdom": "^30.0.4"
   },
   "bugs": {
     "url": "https://github.com/Shopify/shopify-app-js/issues"
