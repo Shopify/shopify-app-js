@@ -9,10 +9,9 @@
   },
   "author": "Shopify",
   "license": "MIT",
-  "main": "./dist/umd/graphql-client.min.js",
-  "browser": "./dist/umd/graphql-client.min.js",
+  "main": "./dist/index.js",
   "module": "./dist/index.mjs",
-  "types": "./dist/graphql-client.d.ts",
+  "types": "./dist/ts/index.d.ts",
   "exports": {
     ".": {
       "module": {
@@ -32,15 +31,15 @@
   },
   "scripts": {
     "lint": "eslint . --ext .js,.ts",
-    "build": "pnpm tsc -p ./tsconfig.build.json && pnpm rollup",
+    "build": "tsup && tsc -p ./tsconfig.build.json",
     "tsc": "tsc",
     "test": "jest",
     "test:ci": "pnpm test",
-    "rollup": "rollup -c --bundleConfigAsCjs",
     "clean": "rimraf dist/*",
     "changeset": "changeset",
     "version": "changeset version",
-    "release": "pnpm build && changeset publish"
+    "release": "pnpm build && changeset publish",
+    "dev": "tsup --watch"
   },
   "jest": {
     "projects": [
