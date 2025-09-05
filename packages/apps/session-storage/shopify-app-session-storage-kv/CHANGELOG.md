@@ -1,5 +1,11 @@
 # @shopify/shopify-app-session-storage-kv
 
+## 4.0.21
+
+### Patch Changes
+
+- 79b2fbe: Swap semver package for compare-versions package. Compare versions is a lighter weight and suits the packages needs just fine
+
 ## 4.0.20
 
 ## 4.0.19
