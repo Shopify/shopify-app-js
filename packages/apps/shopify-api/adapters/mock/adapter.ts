@@ -1,19 +1,12 @@
 import {
-  Headers as FetchHeaders,
-  Request,
-  RequestInit,
-  Response,
-} from 'node-fetch';
-
-import {
   AbstractFetchFunc,
   AdapterArgs,
   AdapterHeaders,
   canonicalizeHeaders,
-  Headers,
   NormalizedRequest,
   NormalizedResponse,
 } from '../../runtime/http';
+import type {Headers as HeaderRecord} from '../../runtime/http';
 
 import {mockTestRequests} from './mock_test_requests';
 import {mockRequestCapture} from './mock_request_capture';
@@ -36,7 +29,7 @@ export async function mockConvertResponse(
 }
 
 export async function mockConvertHeaders(
-  headers: Headers,
+  headers: HeaderRecord,
   _adapterArgs: MockAdapterArgs,
 ): Promise<AdapterHeaders> {
   return Promise.resolve(headers);
@@ -49,9 +42,7 @@ export const mockFetch: AbstractFetchFunc = async (url, init) => {
   mockRequestCapture.lastRequestInit = mockInit;
 
   const request = new Request(url as string, mockInit);
-  const headers = Object.fromEntries(
-    new FetchHeaders(mockInit?.headers).entries(),
-  );
+  const headers = Object.fromEntries(new Headers(mockInit?.headers).entries());
 
   mockTestRequests.requestList.push({
     url: request.url,
@@ -70,7 +61,7 @@ export const mockFetch: AbstractFetchFunc = async (url, init) => {
     throw next;
   }
 
-  const responseHeaders = new FetchHeaders();
+  const responseHeaders = new Headers();
   Object.entries(next.headers ?? {}).forEach(([key, value]) => {
     responseHeaders.set(
       key,

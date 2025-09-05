@@ -1,5 +1,3 @@
-import fetch from 'node-fetch';
-
 import {E2eTestEnvironment} from './test_config_types';
 
 function sleep(ms: number) {
@@ -11,7 +9,14 @@ function sleep(ms: number) {
 export function shutdownEnvironments(environments: E2eTestEnvironment[]): void {
   for (const env of environments) {
     if (typeof env.process.pid !== 'undefined') {
-      process.kill(-env.process.pid);
+      try {
+        process.kill(-env.process.pid);
+      } catch (err) {
+        // Process might already be dead, ignore ESRCH errors
+        if (err.code !== 'ESRCH') {
+          throw err;
+        }
+      }
     }
   }
 }
