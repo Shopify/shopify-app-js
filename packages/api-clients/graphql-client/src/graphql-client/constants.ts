@@ -17,8 +17,8 @@ export const SDK_VARIANT_HEADER = 'X-SDK-Variant';
 export const SDK_VERSION_HEADER = 'X-SDK-Version';
 
 export const DEFAULT_SDK_VARIANT = 'shopify-graphql-client';
-// This is value is replaced with package.json version during rollup build process
-export const DEFAULT_CLIENT_VERSION = 'ROLLUP_REPLACE_CLIENT_VERSION';
+// This value is replaced with package.json version during build process
+export const DEFAULT_CLIENT_VERSION = 'TSUP_REPLACE_CLIENT_VERSION';
 
 export const RETRY_WAIT_TIME = 1000;
 export const RETRIABLE_STATUS_CODES = [429, 503];

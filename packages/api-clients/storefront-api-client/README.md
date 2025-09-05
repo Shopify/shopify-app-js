@@ -18,18 +18,6 @@ npm install @shopify/storefront-api-client --s
 pnpm add @shopify/storefront-api-client
 ```
 
-### CDN
-
-The UMD builds of each release version are available via the [`unpkg` CDN](https://unpkg.com/browse/@shopify/storefront-api-client@latest/dist/umd/)
-
-```html
-// The minified `0.2.3` version of the Storefront API Client
-<script src="https://unpkg.com/@shopify/storefront-api-client@0.2.3/dist/umd/storefront-api-client.min.js"></script>
-
-<script>
-  const client = ShopifyStorefrontAPIClient.createStorefrontApiClient({...});
-</script>
-```
 
 ## Initialization
 

@@ -18,17 +18,6 @@ npm install @shopify/graphql-client --s
 pnpm add @shopify/graphql-client
 ```
 
-### CDN
-The UMD builds of each release version are available via the [`unpkg` CDN](https://unpkg.com/browse/@shopify/graphql-client@latest/dist/umd/)
-
-```html
-// The minified `v0.9.3` version of the GraphQL API Client
-<script src="https://unpkg.com/@shopify/graphql-client@0.9.3/dist/umd/graphql-client.min.js"></script>
-
-<script>
-const client = ShopifyGraphQLClient.createGraphQLClient({...});
-</script>
-```
 
 ## Client initialization
 

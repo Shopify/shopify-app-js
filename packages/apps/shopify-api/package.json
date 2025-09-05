@@ -3,11 +3,11 @@
   "version": "11.14.1",
   "description": "Shopify API Library for Node - accelerate development with support for authentication, graphql proxy, webhooks",
   "types": "./dist/ts/lib/index.d.ts",
-  "module": "./dist/esm/lib/index.mjs",
-  "main": "./dist/cjs/lib/index.js",
   "engines": {
     "node": ">=20.0.0"
   },
+  "module": "./dist/lib/index.mjs",
+  "main": "./dist/lib/index.js",
   "exports": {
     ".": {
       "types": "./dist/ts/lib/index.d.ts",
@@ -45,16 +45,16 @@
     "test:all": "pnpm pretest:adapters && jest && pnpm posttest:adapters",
     "test:ci": "pnpm test && pnpm test:rest_resources && pnpm test:adapters",
     "test": "jest --selectProjects library",
-    "pretest:adapters": "pnpm rollup -c adapters/__e2etests__/rollup.test-apps.config.js",
+    "pretest:adapters": "tsup --config adapters/__e2etests__/tsup.test-apps.config.ts",
     "test:adapters": "jest --selectProjects adapters:mock adapters:node adapters:cf-worker adapters:web-api",
     "test:rest_resources": "jest --selectProjects rest_resources",
     "lint": "jest --selectProjects lint",
     "test:dev": "jest --selectProjects library lint",
-    "build": "pnpm rollup -c rollup.config.js && pnpm tsc -p ./tsconfig.build.json",
+    "build": "tsup && tsc -p ./tsconfig.build.json",
     "tsc": "tsc",
-    "rollup": "rollup --bundleConfigAsCjs",
-    "clean": "rimraf .rollup.cache dist bundle",
-    "release": "pnpm build && changeset publish"
+    "clean": "rimraf dist bundle",
+    "release": "pnpm build && changeset publish",
+    "dev": "tsup --watch"
   },
   "publishConfig": {
     "access": "public"
@@ -100,8 +100,6 @@
     "express": "^4.21.2",
     "jest-environment-miniflare": "^2.14.4",
     "miniflare": "^4.20250709.0",
-    "rollup": "^4.44.2",
-    "rollup-plugin-swc": "^0.2.1",
     "wrangler": "^3.112.0"
   },
   "files": [

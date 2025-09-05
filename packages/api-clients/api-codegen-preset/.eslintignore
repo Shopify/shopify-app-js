@@ -1,6 +1,3 @@
-rollup.config.js
-node_modules/
-dist/
-.turbo/
-.rollup.cache/
-coverage
+node_modules
+dist
+.DS_Store

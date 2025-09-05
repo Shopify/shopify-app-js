@@ -60,7 +60,7 @@ describe('Admin API Client', () => {
           'Content-Type': 'application/json',
           Accept: 'application/json',
           'X-Shopify-Access-Token': 'access-token',
-          'User-Agent': 'Admin API Client vROLLUP_REPLACE_CLIENT_VERSION',
+          'User-Agent': 'Admin API Client vTSUP_REPLACE_CLIENT_VERSION',
         });
         expect(
           (createGraphQLClient as jest.Mock).mock.calls[0][0],
@@ -98,7 +98,7 @@ describe('Admin API Client', () => {
           Accept: 'application/json',
           'X-Shopify-Access-Token': 'access-token',
           'User-Agent':
-            'test-UAP | Admin API Client vROLLUP_REPLACE_CLIENT_VERSION',
+            'test-UAP | Admin API Client vTSUP_REPLACE_CLIENT_VERSION',
         });
         expect(
           (createGraphQLClient as jest.Mock).mock.calls[0][0],
