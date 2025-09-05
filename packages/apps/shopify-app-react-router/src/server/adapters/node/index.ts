@@ -1,13 +1,6 @@
-import crypto from 'crypto';
-
-import {
-  setAbstractRuntimeString,
-  setCrypto,
-} from '@shopify/shopify-api/runtime';
+import {setAbstractRuntimeString} from '@shopify/shopify-api/runtime';
 
 import {setAppBridgeUrlOverride} from '../../authenticate/helpers';
-
-setCrypto(crypto as any);
 
 setAbstractRuntimeString(() => {
   return `React Router (Node)`;

@@ -2,17 +2,9 @@ import {createSession} from '../create-session';
 import {Session, shopifyApi} from '../../..';
 import {testConfig} from '../../../__tests__/test-config';
 
-let shop: string;
-const STATIC_UUID = 'test-uuid';
+const SHOP = 'someshop.myshopify.io';
 
 jest.useFakeTimers().setSystemTime(new Date('2023-11-11'));
-
-jest.mock('uuid', () => ({v4: jest.fn(() => STATIC_UUID)}));
-jest.requireMock('uuid');
-
-beforeEach(() => {
-  shop = 'someshop.myshopify.io';
-});
 
 describe('createSession', () => {
   describe('when receiving an offline token with no expiry', () => {
@@ -32,14 +24,14 @@ describe('createSession', () => {
         const session = createSession({
           config: shopify.config,
           accessTokenResponse,
-          shop,
+          shop: SHOP,
           state: 'test-state',
         });
 
         expect(session).toEqual(
           new Session({
-            id: `offline_${shop}`,
-            shop,
+            id: `offline_${SHOP}`,
+            shop: SHOP,
             isOnline: false,
             state: 'test-state',
             accessToken: accessTokenResponse.access_token,
@@ -67,14 +59,14 @@ describe('createSession', () => {
         const session = createSession({
           config: shopify.config,
           accessTokenResponse,
-          shop,
+          shop: SHOP,
           state: 'test-state',
         });
 
         expect(session).toEqual(
           new Session({
-            id: `offline_${shop}`,
-            shop,
+            id: `offline_${SHOP}`,
+            shop: SHOP,
             isOnline: false,
             state: 'test-state',
             accessToken: accessTokenResponse.access_token,
@@ -116,14 +108,14 @@ describe('createSession', () => {
       const session = createSession({
         config: shopify.config,
         accessTokenResponse,
-        shop,
+        shop: SHOP,
         state: 'test-state',
       });
 
       expect(session).toEqual(
         new Session({
-          id: `${shop}_${onlineAccessInfo.associated_user.id}`,
-          shop,
+          id: `${SHOP}_${onlineAccessInfo.associated_user.id}`,
+          shop: SHOP,
           isOnline: true,
           state: 'test-state',
           accessToken: accessTokenResponse.access_token,
@@ -158,17 +150,20 @@ describe('createSession', () => {
         ...onlineAccessInfo,
       };
 
+      const staticUuid = 'test-uuid-test-uiid-test';
+      jest.spyOn(globalThis.crypto, 'randomUUID').mockReturnValue(staticUuid);
+
       const session = createSession({
         config: shopify.config,
         accessTokenResponse,
-        shop,
+        shop: SHOP,
         state: 'test-state',
       });
 
       expect(session).toEqual(
         new Session({
-          id: STATIC_UUID,
-          shop,
+          id: staticUuid,
+          shop: SHOP,
           isOnline: true,
           state: 'test-state',
           accessToken: accessTokenResponse.access_token,
