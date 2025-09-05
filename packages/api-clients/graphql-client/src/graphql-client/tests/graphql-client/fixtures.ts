@@ -1,7 +1,6 @@
 import {TextEncoder, TextDecoder} from 'util';
 import {Readable} from 'stream';
-
-import {ReadableStream} from 'web-streams-polyfill';
+import {ReadableStream} from 'stream/web';
 
 import {createGraphQLClient} from '../../graphql-client';
 import {

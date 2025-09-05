@@ -165,9 +165,6 @@ importers:
       jest-fetch-mock:
         specifier: ^3.0.3
         version: 3.0.3(encoding@0.1.13)
-      web-streams-polyfill:
-        specifier: ^4.1.0
-        version: 4.2.0
 
   packages/api-clients/storefront-api-client:
     dependencies:
@@ -8352,10 +8349,6 @@ packages:
 
   web-streams-polyfill@3.3.3:
     resolution: {integrity: sha512-d2JWLCivmZYTSIoge9MsgFCZrt571BikcWGYkjC1khllbTeDlGqZ2D8vD8E/lJa8WGWbb7Plm8/XJYV7IJHZZw==}
-    engines: {node: '>= 8'}
-
-  web-streams-polyfill@4.2.0:
-    resolution: {integrity: sha512-0rYDzGOh9EZpig92umN5g5D/9A1Kff7k0/mzPSSCY8jEQeYkgRMoY7LhbXtUCWzLCMX0TUE9aoHkjFNB7D9pfA==}
     engines: {node: '>= 8'}
 
   webidl-conversions@3.0.1:
@@ -18245,8 +18238,6 @@ snapshots:
       '@zxing/text-encoding': 0.9.0
 
   web-streams-polyfill@3.3.3: {}
-
-  web-streams-polyfill@4.2.0: {}
 
   webidl-conversions@3.0.1: {}
 
