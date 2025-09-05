@@ -1,5 +1,15 @@
 # @shopify/shopify-app-react-router
 
+## 0.1.2
+
+### Patch Changes
+
+- 79b2fbe: Swap semver package for compare-versions package. Compare versions is a lighter weight and suits the packages needs just fine
+- Updated dependencies [7d8aa81]
+- Updated dependencies [089f4fd]
+  - @shopify/shopify-api@11.14.2
+  - @shopify/shopify-app-session-storage@3.0.21
+
 ## 0.1.1
 
 ### Patch Changes
