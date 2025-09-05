@@ -85,7 +85,7 @@
     "@shopify/polaris": "^12.18.0",
     "@shopify/react-testing": "^6.0.0",
     "@shopify/shopify-app-session-storage-memory": "^4.0.20",
-    "@testing-library/jest-dom": "^6.6.3",
+    "@testing-library/jest-dom": "^6.8.0",
     "@testing-library/react": "^16.3.0",
     "@types/jsonwebtoken": "^9.0.10",
     "@types/react": "^19.1.8",
