@@ -13,5 +13,5 @@ tmp/
 bundle/
 .turbo
 .rollup.cache
-rollup.config-*.cjs
+rolldown.config-*.mjs
 .cursor

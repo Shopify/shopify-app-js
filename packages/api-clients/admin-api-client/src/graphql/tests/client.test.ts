@@ -2,7 +2,11 @@ import {createGraphQLClient, GraphQLClient} from '@shopify/graphql-client';
 import {AdminApiClient} from 'graphql/types';
 
 import {createAdminApiClient} from '../client';
-import {ACCESS_TOKEN_HEADER, DEFAULT_CONTENT_TYPE} from '../../constants';
+import {
+  ACCESS_TOKEN_HEADER,
+  DEFAULT_CONTENT_TYPE,
+  DEFAULT_CLIENT_VERSION,
+} from '../../constants';
 
 const mockApiVersions = [
   '2023-01',
@@ -60,7 +64,7 @@ describe('Admin API Client', () => {
           'Content-Type': 'application/json',
           Accept: 'application/json',
           'X-Shopify-Access-Token': 'access-token',
-          'User-Agent': 'Admin API Client vROLLUP_REPLACE_CLIENT_VERSION',
+          'User-Agent': `Admin API Client v${DEFAULT_CLIENT_VERSION}`,
         });
         expect(
           (createGraphQLClient as jest.Mock).mock.calls[0][0],
@@ -97,8 +101,7 @@ describe('Admin API Client', () => {
           'Content-Type': 'application/json',
           Accept: 'application/json',
           'X-Shopify-Access-Token': 'access-token',
-          'User-Agent':
-            'test-UAP | Admin API Client vROLLUP_REPLACE_CLIENT_VERSION',
+          'User-Agent': `test-UAP | Admin API Client v${DEFAULT_CLIENT_VERSION}`,
         });
         expect(
           (createGraphQLClient as jest.Mock).mock.calls[0][0],

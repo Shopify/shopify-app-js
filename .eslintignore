@@ -1,6 +1,5 @@
-rollup.config.js
-rollup.config.*.js
-rollup.config.cjs
+rolldown.config.mjs
+rolldown.config.*.mjs
 .eslintrc.cjs
 node_modules/
 dist/

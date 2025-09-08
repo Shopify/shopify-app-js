@@ -18,11 +18,11 @@
   "types": "./dist/ts/sqlite.d.ts",
   "scripts": {
     "lint": "eslint . --ext .js,.ts",
-    "build": "pnpm rollup && pnpm tsc -p ./tsconfig.build.json",
+    "build": "pnpm rolldown && pnpm tsc -p ./tsconfig.build.json",
     "tsc": "tsc",
     "test": "jest",
     "test:ci": "pnpm test",
-    "rollup": "rollup -c rollup.config.js --bundleConfigAsCjs",
+    "rolldown": "rolldown -c rolldown.config.mjs",
     "clean": "rimraf .rollup.cache dist",
     "changeset": "changeset",
     "version": "changeset version",

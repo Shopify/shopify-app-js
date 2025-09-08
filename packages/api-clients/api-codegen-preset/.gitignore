@@ -13,4 +13,4 @@ dist/
 # ignore any locally packed packages
 *.tgz
 !*.d.ts
-!rollup.config.js
+!rolldown.config.mjs

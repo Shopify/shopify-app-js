@@ -14,6 +14,10 @@ if (typeof global.TextDecoder === 'undefined') {
 // Globally disable fetch requests so we don't risk making real ones
 fetchMock.enableMocks();
 
+// Define the global variable that Rolldown replaces during build
+// @ts-expect-error - This will be replaced by Rolldown at build time
+global.ROLLDOWN_REPLACE_CLIENT_VERSION = 'test-version';
+
 beforeEach(() => {
   fetchMock.mockReset();
 });

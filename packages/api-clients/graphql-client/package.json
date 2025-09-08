@@ -32,11 +32,11 @@
   },
   "scripts": {
     "lint": "eslint . --ext .js,.ts",
-    "build": "pnpm tsc -p ./tsconfig.build.json && pnpm rollup",
+    "build": "pnpm tsc -p ./tsconfig.build.json && pnpm rolldown",
     "tsc": "tsc",
     "test": "jest",
     "test:ci": "pnpm test",
-    "rollup": "rollup -c --bundleConfigAsCjs",
+    "rolldown": "rolldown -c rolldown.config.mjs",
     "clean": "rimraf dist/*",
     "changeset": "changeset",
     "version": "changeset version",

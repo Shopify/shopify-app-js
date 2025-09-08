@@ -1,9 +1,10 @@
 import fs from 'fs';
+import {fileURLToPath} from 'url';
+import {dirname} from 'path';
+import {getConfig} from '../../../config/rolldown/rolldown-utils.mjs';
+import pkg from './package.json' with { type: 'json' };
 
-import {getConfig} from '../../../config/rollup/rollup-utils';
-
-import * as pkg from './package.json';
-
+const __dirname = dirname(fileURLToPath(import.meta.url));
 const basePath = `${__dirname}/src/server/adapters`;
 
 const adapterInputs = fs
