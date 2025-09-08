@@ -88,8 +88,7 @@
   "dependencies": {},
   "devDependencies": {
     "jest-environment-jsdom": "^30.0.4",
-    "jest-fetch-mock": "^3.0.3",
-    "web-streams-polyfill": "^4.1.0"
+    "jest-fetch-mock": "^3.0.3"
   },
   "bugs": {
     "url": "https://github.com/Shopify/shopify-app-js/issues"
