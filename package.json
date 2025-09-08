@@ -16,8 +16,8 @@
     "changeset": "changeset",
     "version-packages": "changeset version"
   },
+  "dependencies": {},
   "devDependencies": {
-    "@babel/plugin-transform-runtime": "^7.28.0",
     "@babel/preset-env": "^7.28.0",
     "@changesets/cli": "^2.29.5",
     "@cloudflare/workers-types": "^4.20250711.0",

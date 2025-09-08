@@ -64,9 +64,6 @@
         ]
       }
     ],
-    "setupFilesAfterEnv": [
-      "./src/tests/setupTests.ts"
-    ],
     "transform": {
       ".*": "babel-jest"
     }
