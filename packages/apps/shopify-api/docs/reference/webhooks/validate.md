@@ -9,17 +9,18 @@ This method can be used to validate app-specific and shop-specific webhooks.
 
 ```ts
 app.post('/webhooks', express.text({type: '*/*'}), async (req, res) => {
-  const {valid, topic, domain} = await shopify.webhooks.validate({
+  const result = await shopify.webhooks.validate({
     rawBody: req.body, // is a string
     rawRequest: req,
     rawResponse: res,
   });
 
-  if (!valid) {
+  if (!result.valid) {
     // This is not a valid request!
     res.send(400); // Bad Request
+    return;
   }
-
+  const { topic, domain, webhookId } = result;
   // Run my webhook-processing code here
 });
 ```
