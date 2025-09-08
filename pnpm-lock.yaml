@@ -31,9 +31,6 @@ importers:
       '@rollup/plugin-commonjs':
         specifier: ^28.0.6
         version: 28.0.6(rollup@4.48.1)
-      '@rollup/plugin-eslint':
-        specifier: ^9.0.3
-        version: 9.0.5(rollup@4.48.1)
       '@rollup/plugin-node-resolve':
         specifier: ^16.0.1
         version: 16.0.1(rollup@4.48.1)
@@ -3277,15 +3274,6 @@ packages:
     engines: {node: '>=16.0.0 || 14 >= 14.17'}
     peerDependencies:
       rollup: ^2.68.0||^3.0.0||^4.0.0
-    peerDependenciesMeta:
-      rollup:
-        optional: true
-
-  '@rollup/plugin-eslint@9.0.5':
-    resolution: {integrity: sha512-C4nh0sSeJuxVW5u5tDX+dCMjKcNfHm4hS+zeUVh1si7gttnhgGbrmPkUxIX7iZgYABwdEh/ewyMbZB+WXjSJdA==}
-    engines: {node: '>=14.0.0'}
-    peerDependencies:
-      rollup: ^1.20.0||^2.0.0||^3.0.0||^4.0.0
     peerDependenciesMeta:
       rollup:
         optional: true
@@ -10609,7 +10597,7 @@ snapshots:
       ignore: 5.3.2
       import-fresh: 3.3.0
       js-yaml: 4.1.0
-      minimatch: 3.1.2
+      minimatch: 9.0.5
       strip-json-comments: 3.1.1
     transitivePeerDependencies:
       - supports-color
@@ -11280,7 +11268,7 @@ snapshots:
     dependencies:
       '@humanwhocodes/object-schema': 2.0.3
       debug: 4.4.0
-      minimatch: 3.1.2
+      minimatch: 9.0.5
     transitivePeerDependencies:
       - supports-color
 
@@ -12168,21 +12156,12 @@ snapshots:
       '@rollup/pluginutils': 5.2.0(rollup@4.48.1)
       commondir: 1.0.1
       estree-walker: 2.0.2
-      fdir: 6.4.6(picomatch@4.0.2)
+      fdir: 6.4.6(picomatch@4.0.3)
       is-reference: 1.2.1
-      magic-string: 0.30.17
-      picomatch: 4.0.2
+      magic-string: 0.30.18
+      picomatch: 4.0.3
     optionalDependencies:
       rollup: 4.48.1
-
-  '@rollup/plugin-eslint@9.0.5(rollup@4.48.1)':
-    dependencies:
-      '@rollup/pluginutils': 5.1.4(rollup@4.48.1)
-      eslint: 8.57.1
-    optionalDependencies:
-      rollup: 4.48.1
-    transitivePeerDependencies:
-      - supports-color
 
   '@rollup/plugin-node-resolve@16.0.1(rollup@4.48.1)':
     dependencies:
@@ -14749,9 +14728,9 @@ snapshots:
     transitivePeerDependencies:
       - encoding
 
-  fdir@6.4.6(picomatch@4.0.2):
+  fdir@6.4.6(picomatch@4.0.3):
     optionalDependencies:
-      picomatch: 4.0.2
+      picomatch: 4.0.3
 
   figures@3.2.0:
     dependencies:
