@@ -1,5 +1,3 @@
-import {FetchError} from 'node-fetch';
-
 import {queueError, queueMockResponse} from '../../../__tests__/test-helper';
 import {testConfig} from '../../../__tests__/test-config';
 import {
@@ -181,9 +179,8 @@ describe('Storefront GraphQL client', () => {
       apiVersion: '2020-01' as any as ApiVersion,
     });
 
-    const fetchError = new FetchError(
+    const fetchError = new Error(
       `uri requested responds with an invalid redirect URL: http://test.com`,
-      'invalid-redirect',
     );
     queueError(fetchError);
     queueError(fetchError);
