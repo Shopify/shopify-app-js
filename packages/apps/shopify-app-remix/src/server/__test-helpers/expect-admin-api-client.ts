@@ -1,6 +1,5 @@
-import {Session} from '@shopify/shopify-api';
+import {ApiVersion, Session} from '@shopify/shopify-api';
 
-import {LATEST_API_VERSION} from '..';
 import type {
   AdminApiContextWithoutRest,
   AdminApiContextWithRest,
@@ -9,7 +8,7 @@ import type {
 import {TEST_SHOP} from './const';
 import {mockExternalRequest} from './request-mock';
 
-const REQUEST_URL = `https://${TEST_SHOP}/admin/api/${LATEST_API_VERSION}/customers.json`;
+const REQUEST_URL = `https://${TEST_SHOP}/admin/api/${ApiVersion.July25}/customers.json`;
 
 export function expectAdminApiClient(
   factory: () => Promise<{
@@ -107,7 +106,7 @@ export function expectAdminApiClient(
       const {admin, actualSession} = await factory();
       await mockExternalRequest({
         request: new Request(
-          `https://${TEST_SHOP}/admin/api/${LATEST_API_VERSION}/graphql.json`,
+          `https://${TEST_SHOP}/admin/api/${ApiVersion.July25}/graphql.json`,
           {
             method: 'POST',
             headers: {'X-Shopify-Access-Token': actualSession.accessToken!},

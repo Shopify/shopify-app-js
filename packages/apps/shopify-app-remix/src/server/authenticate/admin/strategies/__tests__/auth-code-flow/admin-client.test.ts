@@ -1,4 +1,4 @@
-import {ApiVersion, LATEST_API_VERSION, Session} from '@shopify/shopify-api';
+import {ApiVersion, Session} from '@shopify/shopify-api';
 
 import {AdminApiContextWithRest} from '../../../../../clients';
 import {
@@ -128,7 +128,7 @@ describe('admin.authenticate context', () => {
 
 async function mockRestRequest(status: any) {
   const requestMock = new Request(
-    `https://${TEST_SHOP}/admin/api/${LATEST_API_VERSION}/customers.json`,
+    `https://${TEST_SHOP}/admin/api/${ApiVersion.July25}/customers.json`,
   );
 
   await mockExternalRequest({

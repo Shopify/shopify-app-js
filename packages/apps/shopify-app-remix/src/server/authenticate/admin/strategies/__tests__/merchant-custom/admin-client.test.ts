@@ -1,9 +1,4 @@
-import {
-  ApiVersion,
-  LATEST_API_VERSION,
-  Session,
-  ShopifyError,
-} from '@shopify/shopify-api';
+import {ApiVersion, Session, ShopifyError} from '@shopify/shopify-api';
 import {restResources} from '@shopify/shopify-api/rest/admin/2023-04';
 
 import {AdminApiContextWithRest} from '../../../../../clients';
@@ -127,7 +122,7 @@ async function setUpMerchantCustomFlowWithRemoveRestFlag() {
 
 async function mockRestRequest(status = 401) {
   const requestMock = new Request(
-    `https://${TEST_SHOP}/admin/api/${LATEST_API_VERSION}/customers.json`,
+    `https://${TEST_SHOP}/admin/api/${ApiVersion.July25}/customers.json`,
   );
 
   await mockExternalRequest({

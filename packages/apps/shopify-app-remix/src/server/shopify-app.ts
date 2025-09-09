@@ -1,7 +1,6 @@
 import '@shopify/shopify-api/adapters/web-api';
 import {
   ConfigInterface as ApiConfig,
-  LATEST_API_VERSION,
   ShopifyError,
   ShopifyRestResources,
   shopifyApi,
@@ -172,7 +171,7 @@ export function deriveApi(appConfig: AppConfigArg): BasicParams['api'] {
     hostScheme: appUrl.protocol.replace(':', '') as 'http' | 'https',
     userAgentPrefix,
     isEmbeddedApp: appConfig.isEmbeddedApp ?? true,
-    apiVersion: appConfig.apiVersion ?? LATEST_API_VERSION,
+    apiVersion: appConfig.apiVersion,
     isCustomStoreApp: appConfig.distribution === AppDistribution.ShopifyAdmin,
     billing: appConfig.billing as ApiConfig['billing'],
     future: {

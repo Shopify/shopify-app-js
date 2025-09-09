@@ -54,15 +54,14 @@ Create `app/shopify.server.js`. We will use this file to configure our Shopify a
 import '@shopify/shopify-app-remix/server/adapters/node';
 // Memory storage makes it easy to set an app up, but should never be used in production.
 import {MemorySessionStorage} from '@shopify/shopify-app-session-storage-memory';
-
-import {LATEST_API_VERSION, shopifyApp} from '@shopify/shopify-app-remix';
+import {ApiVersion, shopifyApp} from '@shopify/shopify-app-remix';
 
 const shopify = shopifyApp({
   apiKey: process.env.SHOPIFY_API_KEY!,
   apiSecretKey: process.env.SHOPIFY_API_SECRET!,
   appUrl: process.env.SHOPIFY_APP_URL!,
   scopes: ['read_products'],
-  apiVersion: LATEST_API_VERSION,
+  apiVersion: ApiVersion.July25,
   sessionStorage: new MemorySessionStorage(),
 });
 export default shopify;
