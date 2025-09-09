@@ -53,6 +53,10 @@
     "clean": "rimraf .rollup.cache dist bundle",
     "release": "pnpm build && changeset publish"
   },
+  "sideEffects": [
+    "./dist/esm/adapters/*/index.mjs",
+    "./dist/cjs/adapters/*/index.js"
+  ],
   "publishConfig": {
     "access": "public"
   },
