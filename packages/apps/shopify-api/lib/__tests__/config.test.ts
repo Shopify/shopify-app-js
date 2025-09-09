@@ -1,7 +1,7 @@
 import * as ShopifyErrors from '../error';
 import {validateConfig} from '../config';
 import {ConfigParams} from '../base-types';
-import {ApiVersion, LATEST_API_VERSION, LogSeverity} from '../types';
+import {ApiVersion, LogSeverity} from '../types';
 
 let validParams: ConfigParams;
 
@@ -161,10 +161,15 @@ describe('Config object', () => {
     expect(config.hostName).toEqual('my-host-name');
   });
 
-  it('points LATEST_API_VERSION to the last non-unstable, and non release candidate version in the enum', () => {
-    const enumVersions = Object.values(ApiVersion);
+  it('requires apiVersion to be provided', () => {
+    const params = {...validParams};
+    delete (params as any).apiVersion;
 
-    expect(LATEST_API_VERSION).toEqual(enumVersions[enumVersions.length - 3]);
+    expect(() => validateConfig(params)).toThrow(
+      new ShopifyErrors.ShopifyError(
+        'Cannot initialize Shopify API Library. Missing values for: apiVersion. For apiVersion, please specify an explicit API version (e.g., ApiVersion.July25). See https://shopify.dev/docs/api/usage/versioning for more information.',
+      ),
+    );
   });
 
   it('can alias billing future flags', () => {

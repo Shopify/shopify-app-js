@@ -1,7 +1,7 @@
 import {Base, FindAllResponse} from '../../../../../rest/base';
 import {ResourceNames, ResourcePath} from '../../../../../rest/types';
 import {Session} from '../../../../session/session';
-import {LATEST_API_VERSION} from '../../../../types';
+import {ApiVersion} from '../../../../types';
 
 interface FakeResourceFindArgs {
   param?: string | null;
@@ -22,7 +22,7 @@ interface FakeResourceCustomArgs {
 }
 
 export class FakeResource extends Base {
-  public static apiVersion = LATEST_API_VERSION;
+  public static apiVersion = ApiVersion.July25;
   protected static resourceNames: ResourceNames[] = [
     {singular: 'fake_resource', plural: 'fake_resources'},
     {
