@@ -3,7 +3,6 @@ import '@shopify/shopify-api/adapters/node';
 import {
   shopifyApi,
   ConfigParams as ApiConfigParams,
-  LATEST_API_VERSION,
   Shopify,
   FeatureDeprecatedError,
   ShopifyRestResources,
@@ -35,18 +34,22 @@ export * from './types';
 export * from './auth/types';
 export * from './middlewares/types';
 export * from './webhooks/types';
-export type {AppConfigParams} from './config-types';
+export type {AppConfigParams, ExpressApiConfigParams} from './config-types';
+export {ApiVersion} from '@shopify/shopify-api';
 
 type DefaultedConfigs<Params extends Partial<ApiConfigParams> | undefined> =
   ApiConfigParams & Params;
 
-type ConfigInterfaceFromParams<Params extends AppConfigParams> =
-  AppConfigInterface<
-    NonNullable<DefaultedConfigs<Params['api']>['restResources']>,
-    Params['sessionStorage'] extends undefined
-      ? MemorySessionStorage
-      : NonNullable<Params['sessionStorage']>
-  >;
+type ConfigInterfaceFromParams<
+  Params extends AppConfigParams | Omit<AppConfigParams, 'api'>,
+> = AppConfigInterface<
+  Params extends AppConfigParams
+    ? NonNullable<DefaultedConfigs<Params['api']>['restResources']>
+    : ShopifyRestResources,
+  Params['sessionStorage'] extends undefined
+    ? MemorySessionStorage
+    : NonNullable<Params['sessionStorage']>
+>;
 
 export interface ShopifyApp<Params extends AppConfigParams = AppConfigParams> {
   config: ConfigInterfaceFromParams<Params>;
@@ -68,7 +71,7 @@ export function shopifyApp<Params extends AppConfigParams>(
 ): ShopifyApp<Params> {
   const {api: apiConfig, ...appConfig} = config;
 
-  const api = shopifyApi(apiConfigWithDefaults(apiConfig ?? {}));
+  const api = shopifyApi(apiConfigWithDefaults(apiConfig));
   const validatedConfig = validateAppConfig(appConfig, api);
 
   return {
@@ -101,7 +104,7 @@ function apiConfigWithDefaults<Params extends Partial<ApiConfigParams>>(
 ): DefaultedConfigs<Params> {
   let userAgent = `Shopify Express Library v${SHOPIFY_EXPRESS_LIBRARY_VERSION}`;
 
-  if (apiConfig.userAgentPrefix) {
+  if (apiConfig?.userAgentPrefix) {
     userAgent = `${apiConfig.userAgentPrefix} | ${userAgent}`;
   }
 
@@ -113,13 +116,12 @@ function apiConfigWithDefaults<Params extends Partial<ApiConfigParams>>(
     hostScheme: (process.env.HOST?.split('://')[0] as 'http' | 'https')!,
     hostName: process.env.HOST?.replace(/https?:\/\//, '')!,
     isEmbeddedApp: true,
-    apiVersion: LATEST_API_VERSION,
     ...(process.env.SHOP_CUSTOM_DOMAIN && {
       customShopDomains: [process.env.SHOP_CUSTOM_DOMAIN],
     }),
-    ...apiConfig,
+    ...(apiConfig || {}),
     userAgentPrefix: userAgent,
-  };
+  } as DefaultedConfigs<Params>;
   /* eslint-enable no-process-env */
 }
 

@@ -1,6 +1,6 @@
 import request from 'supertest';
 import express, {Express} from 'express';
-import {LATEST_API_VERSION, Session} from '@shopify/shopify-api';
+import {ApiVersion, Session} from '@shopify/shopify-api';
 import jwt from 'jsonwebtoken';
 
 import {
@@ -279,7 +279,7 @@ describe('validateAuthenticatedSession', () => {
 
       expect({
         method: 'POST',
-        url: `https://my-shop.myshopify.io/admin/api/${LATEST_API_VERSION}/graphql.json`,
+        url: `https://my-shop.myshopify.io/admin/api/${ApiVersion.July25}/graphql.json`,
       }).toMatchMadeHttpRequest();
 
       expect(response.body).toEqual({

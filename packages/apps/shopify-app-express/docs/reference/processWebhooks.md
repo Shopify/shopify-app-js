@@ -24,11 +24,18 @@ Defines the webhooks your app will listen to, and how to handle them. See [the `
 The following example shows how to setup handlers for the mandatory GDPR webhooks.
 
 ```ts
-const {DeliveryMethod} = require('@shopify/shopify-api');
+const {ApiVersion, DeliveryMethod} = require('@shopify/shopify-api');
 
 const shopify = shopifyApp({
+  auth: {
+    path: '/auth',
+    callbackPath: '/auth/callback',
+  },
   webhooks: {
     path: '/webhooks',
+  },
+  api: {
+    apiVersion: ApiVersion.July25,
   },
 });
 
