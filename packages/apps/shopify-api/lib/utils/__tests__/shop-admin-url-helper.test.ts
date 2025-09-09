@@ -81,3 +81,71 @@ describe.each(INVALID_LEGACY_URLS)(
     });
   },
 );
+
+describe('localDevShopToApiUrl', () => {
+  const validMyShopDevUrls = [
+    {input: 'shop1.my.shop.dev', expected: 'shop1.dev-api.shop.dev'},
+    {input: 'test-shop.my.shop.dev', expected: 'test-shop.dev-api.shop.dev'},
+    {input: 'dev-shop_.my.shop.dev', expected: 'dev-shop_.dev-api.shop.dev'},
+    {input: 'shop123.my.shop.dev', expected: 'shop123.dev-api.shop.dev'},
+  ];
+
+  const invalidMyShopDevUrls = [
+    'shop1.shop.dev',
+    'shop1.myshopify.com',
+    'my.shop.dev',
+    '.my.shop.dev',
+    'shop1.my.shop.dev.com',
+    'shop1.other.my.shop.dev',
+    '',
+    null,
+  ];
+
+  describe.each(validMyShopDevUrls)(
+    'For valid my.shop.dev URL: $input',
+    ({input, expected}) => {
+      it('converts to dev-api.shop.dev URL', () => {
+        const shopify = shopifyApi(testConfig());
+        const actual = shopify.utils.localDevShopToApiUrl(input);
+        expect(actual).toEqual(expected);
+      });
+    },
+  );
+
+  describe.each(invalidMyShopDevUrls)('For invalid URL: %s', (invalidUrl) => {
+    it('returns null', () => {
+      const shopify = shopifyApi(testConfig());
+      expect(shopify.utils.localDevShopToApiUrl(invalidUrl as string)).toBe(
+        null,
+      );
+    });
+  });
+});
+
+describe('localLegacyUrlToAdminUrl with .shop.dev variations', () => {
+  const shopDevUrls = [
+    {
+      input: 'shop1.dev-api.shop.dev',
+      expected: 'admin.shop.dev/store/shop1.dev-api',
+    },
+    {
+      input: 'test-shop.some.shop.dev',
+      expected: 'admin.shop.dev/store/test-shop.some',
+    },
+    {
+      input: 'my-shop.other.shop.dev',
+      expected: 'admin.shop.dev/store/my-shop.other',
+    },
+  ];
+
+  describe.each(shopDevUrls)(
+    'For .shop.dev URL with subdomains: $input',
+    ({input, expected}) => {
+      it('captures all subdomain parts as shop name', () => {
+        const shopify = shopifyApi(testConfig());
+        const actual = shopify.utils.legacyUrlToShopAdminUrl(input);
+        expect(actual).toEqual(expected);
+      });
+    },
+  );
+});
