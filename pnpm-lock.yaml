@@ -213,8 +213,8 @@ importers:
         specifier: ^0.31.4
         version: 0.31.4
       drizzle-orm:
-        specifier: ^0.44.2
-        version: 0.44.4(@cloudflare/workers-types@4.20250826.0)(@libsql/client@0.15.12(encoding@0.1.13))(@prisma/client@6.14.0(prisma@6.14.0(typescript@5.9.2))(typescript@5.9.2))(@types/better-sqlite3@7.6.13)(@types/pg@8.11.13)(better-sqlite3@11.9.1)(gel@2.0.1)(mysql2@3.14.2)(pg@8.14.1)(prisma@6.14.0(typescript@5.9.2))(sqlite3@5.1.7)
+        specifier: ^0.44.5
+        version: 0.44.5(@cloudflare/workers-types@4.20250826.0)(@libsql/client@0.15.12(encoding@0.1.13))(@prisma/client@6.14.0(prisma@6.14.0(typescript@5.9.2))(typescript@5.9.2))(@types/better-sqlite3@7.6.13)(@types/pg@8.11.13)(better-sqlite3@11.9.1)(gel@2.0.1)(mysql2@3.14.2)(pg@8.14.1)(prisma@6.14.0(typescript@5.9.2))(sqlite3@5.1.7)
       mysql2:
         specifier: ^3.14.2
         version: 3.14.2
@@ -4980,8 +4980,8 @@ packages:
     resolution: {integrity: sha512-tCPWVZWZqWVx2XUsVpJRnH9Mx0ClVOf5YUHerZ5so1OKSlqww4zy1R5ksEdGRcO3tM3zj0PYN6V48TbQCL1RfA==}
     hasBin: true
 
-  drizzle-orm@0.44.4:
-    resolution: {integrity: sha512-ZyzKFpTC/Ut3fIqc2c0dPZ6nhchQXriTsqTNs4ayRgl6sZcFlMs9QZKPSHXK4bdOf41GHGWf+FrpcDDYwW+W6Q==}
+  drizzle-orm@0.44.5:
+    resolution: {integrity: sha512-jBe37K7d8ZSKptdKfakQFdeljtu3P2Cbo7tJoJSVZADzIKOBo9IAJPOmMsH2bZl90bZgh8FQlD8BjxXA/zuBkQ==}
     peerDependencies:
       '@aws-sdk/client-rds-data': '>=3'
       '@cloudflare/workers-types': '>=4'
@@ -14189,7 +14189,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  drizzle-orm@0.44.4(@cloudflare/workers-types@4.20250826.0)(@libsql/client@0.15.12(encoding@0.1.13))(@prisma/client@6.14.0(prisma@6.14.0(typescript@5.9.2))(typescript@5.9.2))(@types/better-sqlite3@7.6.13)(@types/pg@8.11.13)(better-sqlite3@11.9.1)(gel@2.0.1)(mysql2@3.14.2)(pg@8.14.1)(prisma@6.14.0(typescript@5.9.2))(sqlite3@5.1.7):
+  drizzle-orm@0.44.5(@cloudflare/workers-types@4.20250826.0)(@libsql/client@0.15.12(encoding@0.1.13))(@prisma/client@6.14.0(prisma@6.14.0(typescript@5.9.2))(typescript@5.9.2))(@types/better-sqlite3@7.6.13)(@types/pg@8.11.13)(better-sqlite3@11.9.1)(gel@2.0.1)(mysql2@3.14.2)(pg@8.14.1)(prisma@6.14.0(typescript@5.9.2))(sqlite3@5.1.7):
     optionalDependencies:
       '@cloudflare/workers-types': 4.20250826.0
       '@libsql/client': 0.15.12(encoding@0.1.13)
