@@ -208,7 +208,7 @@ const variables = { ownerType: 'PRODUCT' }; // No import needed!
 You can specify multiple APIs in your `.graphqlrc.ts` file by adding multiple projects. See [Generating types for multiple APIs](#generating-types-for-multiple-apis) for more information.
 
 ```js
-import { LATEST_API_VERSION } from "@shopify/shopify-api";
+import { ApiVersion } from "@shopify/shopify-api";
 import { shopifyApiProject, ApiType } from "@shopify/api-codegen-preset";
 import type { IGraphQLConfig } from "graphql-config";
 
@@ -217,13 +217,13 @@ function getConfig() {
     projects: {
       default: shopifyApiProject({
         apiType: ApiType.Admin,
-        apiVersion: LATEST_API_VERSION,
+        apiVersion: ApiVersion.July25,
         documents: ["./app/**/*.{js,ts,jsx,tsx}", "./app/.server/**/*.{js,ts,jsx,tsx}" ],
         outputDir: "./app/types",
       }),
       UIExtensions: shopifyApiProject({
         apiType: ApiType.Storefront,
-        apiVersion: LATEST_API_VERSION,
+        apiVersion: ApiVersion.July25,
         documents: ["./extensions/**/*.{js,ts,jsx,tsx}", "./extensions/.server/**/*.{js,ts,jsx,tsx}"],
         outputDir: "./extensions/types",
       }),
@@ -239,7 +239,7 @@ export default config;
 Enable autocompletion for [Shopify Functions](https://shopify.dev/docs/apps/build/functions).
 ```ts
 import fs from "fs";
-import { LATEST_API_VERSION } from "@shopify/shopify-api";
+import { ApiVersion } from "@shopify/shopify-api";
 import { shopifyApiProject, ApiType } from "@shopify/api-codegen-preset";
 import type { IGraphQLConfig } from "graphql-config";
 
@@ -249,7 +249,7 @@ function getConfig() {
       // Generate types for your app
       default: shopifyApiProject({
         apiType: ApiType.Admin,
-        apiVersion: LATEST_API_VERSION,
+        apiVersion: ApiVersion.July25,
         documents: ["./app/**/*.{js,ts,jsx,tsx}", "./app/.server/**/*.{js,ts,jsx,tsx}"],
         outputDir: "./app/types",
       }),
