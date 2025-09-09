@@ -86,7 +86,6 @@
     "@shopify/react-testing": "^6.0.0",
     "@shopify/shopify-app-session-storage-memory": "^4.0.20",
     "@testing-library/jest-dom": "^6.8.0",
-    "@testing-library/react": "^16.3.0",
     "@types/jsonwebtoken": "^9.0.10",
     "@types/react": "^19.1.8",
     "@types/testing-library__jest-dom": "^6.0.0",
@@ -99,8 +98,8 @@
     "@shopify/shopify-api": "^11.14.1",
     "@shopify/shopify-app-session-storage": "^3.0.20",
     "@shopify/storefront-api-client": "^1.0.9",
-    "isbot": "^5.1.26",
-    "compare-versions": "^6.1.1"
+    "compare-versions": "^6.1.1",
+    "isbot": "^5.1.26"
   },
   "peerDependencies": {
     "@remix-run/node": "*",
