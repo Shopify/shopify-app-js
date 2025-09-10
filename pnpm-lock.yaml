@@ -70,9 +70,6 @@ importers:
       eslint-plugin-jest:
         specifier: ^28.13.5
         version: 28.13.5(@typescript-eslint/eslint-plugin@7.18.0(@typescript-eslint/parser@7.18.0(eslint@8.57.1)(typescript@5.8.3))(eslint@8.57.1)(typescript@5.8.3))(eslint@8.57.1)(jest@29.7.0(@types/node@24.3.0)(ts-node@10.9.2(@swc/core@1.13.3)(@types/node@24.3.0)(typescript@5.8.3)))(typescript@5.8.3)
-      eslint-plugin-prettier:
-        specifier: ^5.5.1
-        version: 5.5.4(eslint-config-prettier@9.1.0(eslint@8.57.1))(eslint@8.57.1)(prettier@3.6.2)
       jest:
         specifier: ^29.7.0
         version: 29.7.0(@types/node@24.3.0)(ts-node@10.9.2(@swc/core@1.13.3)(@types/node@24.3.0)(typescript@5.8.3))
@@ -11688,7 +11685,7 @@ snapshots:
   '@jridgewell/trace-mapping@0.3.9':
     dependencies:
       '@jridgewell/resolve-uri': 3.1.2
-      '@jridgewell/sourcemap-codec': 1.5.4
+      '@jridgewell/sourcemap-codec': 1.5.5
 
   '@libsql/client@0.15.12(encoding@0.1.13)':
     dependencies:

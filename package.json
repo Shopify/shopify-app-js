@@ -16,7 +16,6 @@
     "changeset": "changeset",
     "version-packages": "changeset version"
   },
-  "dependencies": {},
   "devDependencies": {
     "@babel/preset-env": "^7.28.0",
     "@changesets/cli": "^2.29.5",
@@ -37,7 +36,6 @@
     "@types/supertest": "^6.0.3",
     "eslint": "^8.57.1",
     "eslint-plugin-jest": "^28.13.5",
-    "eslint-plugin-prettier": "^5.5.1",
     "jest": "^29.7.0",
     "jest-environment-jsdom": "^30.0.4",
     "jest-fetch-mock": "^3.0.3",
