@@ -85,7 +85,10 @@
     "@shopify/graphql-client": "^1.4.1"
   },
   "devDependencies": {
-    "jest-environment-jsdom": "^30.0.4"
+    "@babel/preset-env": "^7.28.0",
+    "@shopify/babel-preset": "^25.0.2",
+    "jest-environment-jsdom": "^30.0.4",
+    "rollup-plugin-dts": "^6.2.1"
   },
   "bugs": {
     "url": "https://github.com/Shopify/shopify-app-js/issues"

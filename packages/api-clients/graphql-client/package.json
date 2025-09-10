@@ -87,8 +87,11 @@
   ],
   "dependencies": {},
   "devDependencies": {
+    "@babel/preset-env": "^7.28.0",
+    "@shopify/babel-preset": "^25.0.2",
     "jest-environment-jsdom": "^30.0.4",
-    "jest-fetch-mock": "^3.0.3"
+    "jest-fetch-mock": "^3.0.3",
+    "rollup-plugin-dts": "^6.2.1"
   },
   "bugs": {
     "url": "https://github.com/Shopify/shopify-app-js/issues"
