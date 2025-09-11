@@ -1,8 +1,7 @@
 import {createSession} from '../create-session';
 import {Session, shopifyApi} from '../../..';
 import {testConfig} from '../../../__tests__/test-config';
-
-const SHOP = 'someshop.myshopify.io';
+import {TEST_SHOP} from '../../../../../shopify-app-express/src/__tests__/test-helper';
 
 jest.useFakeTimers().setSystemTime(new Date('2023-11-11'));
 
@@ -24,14 +23,14 @@ describe('createSession', () => {
         const session = createSession({
           config: shopify.config,
           accessTokenResponse,
-          shop: SHOP,
+          shop: TEST_SHOP,
           state: 'test-state',
         });
 
         expect(session).toEqual(
           new Session({
-            id: `offline_${SHOP}`,
-            shop: SHOP,
+            id: `offline_${TEST_SHOP}`,
+            shop: TEST_SHOP,
             isOnline: false,
             state: 'test-state',
             accessToken: accessTokenResponse.access_token,
@@ -59,14 +58,14 @@ describe('createSession', () => {
         const session = createSession({
           config: shopify.config,
           accessTokenResponse,
-          shop: SHOP,
+          shop: TEST_SHOP,
           state: 'test-state',
         });
 
         expect(session).toEqual(
           new Session({
-            id: `offline_${SHOP}`,
-            shop: SHOP,
+            id: `offline_${TEST_SHOP}`,
+            shop: TEST_SHOP,
             isOnline: false,
             state: 'test-state',
             accessToken: accessTokenResponse.access_token,
@@ -108,14 +107,14 @@ describe('createSession', () => {
       const session = createSession({
         config: shopify.config,
         accessTokenResponse,
-        shop: SHOP,
+        shop: TEST_SHOP,
         state: 'test-state',
       });
 
       expect(session).toEqual(
         new Session({
-          id: `${SHOP}_${onlineAccessInfo.associated_user.id}`,
-          shop: SHOP,
+          id: `${TEST_SHOP}_${onlineAccessInfo.associated_user.id}`,
+          shop: TEST_SHOP,
           isOnline: true,
           state: 'test-state',
           accessToken: accessTokenResponse.access_token,
@@ -156,14 +155,14 @@ describe('createSession', () => {
       const session = createSession({
         config: shopify.config,
         accessTokenResponse,
-        shop: SHOP,
+        shop: TEST_SHOP,
         state: 'test-state',
       });
 
       expect(session).toEqual(
         new Session({
           id: staticUuid,
-          shop: SHOP,
+          shop: TEST_SHOP,
           isOnline: true,
           state: 'test-state',
           accessToken: accessTokenResponse.access_token,
