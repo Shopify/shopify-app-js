@@ -5,7 +5,6 @@ import express, {Express} from 'express';
 import {ApiVersion, LogSeverity} from '@shopify/shopify-api';
 import {SignJWT} from 'jose';
 
-
 import {ShopifyApp, shopifyApp} from '../..';
 import {WebhookHandlersParam} from '../../webhooks/types';
 import {AppInstallations} from '../../app-installations';
