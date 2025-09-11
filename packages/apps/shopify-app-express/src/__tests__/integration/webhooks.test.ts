@@ -1,6 +1,6 @@
 import request from 'supertest';
 import express, {Express} from 'express';
-import {LATEST_API_VERSION, LogSeverity} from '@shopify/shopify-api';
+import {ApiVersion, LogSeverity} from '@shopify/shopify-api';
 
 import {AppInstallations} from '../../app-installations';
 import {
@@ -119,7 +119,7 @@ describe('webhook integration', () => {
           webhookQueries.forEach((query) =>
             expect({
               method: 'POST',
-              url: `https://${TEST_SHOP}/admin/api/${LATEST_API_VERSION}/graphql.json`,
+              url: `https://${TEST_SHOP}/admin/api/${ApiVersion.July25}/graphql.json`,
               body: expect.objectContaining({
                 query: expect.stringContaining(query),
               }),
@@ -148,7 +148,7 @@ describe('webhook integration', () => {
               TEST_SHOP,
               '{}',
               TEST_WEBHOOK_ID,
-              LATEST_API_VERSION,
+              ApiVersion.July25,
               undefined,
             );
           }

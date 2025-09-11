@@ -84,7 +84,7 @@ Call `shopifyApi` ([see reference](./docs/reference/shopifyApi.md)) to create yo
 
 ```ts
 import '@shopify/shopify-api/adapters/node';
-import {shopifyApi, LATEST_API_VERSION} from '@shopify/shopify-api';
+import {shopifyApi, ApiVersion} from '@shopify/shopify-api';
 import express from 'express';
 
 const shopify = shopifyApi({
@@ -93,6 +93,7 @@ const shopify = shopifyApi({
   apiSecretKey: 'APISecretFromPartnersDashboard',
   scopes: ['read_products'],
   hostName: 'ngrok-tunnel-address',
+  apiVersion: ApiVersion.July25
   ...
 });
 

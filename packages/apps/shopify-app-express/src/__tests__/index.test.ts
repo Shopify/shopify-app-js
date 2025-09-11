@@ -1,4 +1,5 @@
 import {
+  ApiVersion,
   FeatureDeprecatedError,
   LogSeverity,
   ShopifyError,
@@ -47,6 +48,7 @@ describe('shopifyApp', () => {
       auth: testConfig.auth,
       webhooks: testConfig.webhooks,
       api: {
+        apiVersion: ApiVersion.July25,
         logger: testConfig.api.logger,
       },
     });

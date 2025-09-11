@@ -1,4 +1,4 @@
-import {LATEST_API_VERSION} from '@shopify/shopify-api';
+import {ApiVersion} from '@shopify/shopify-api';
 
 import {TEST_SHOP} from './const';
 import {mockExternalRequest, mockExternalRequests} from './request-mock';
@@ -10,7 +10,7 @@ export interface MockGraphqlRequestArg {
 }
 
 export function mockGraphqlRequest(
-  apiVersion = LATEST_API_VERSION,
+  apiVersion = ApiVersion.July25,
   shopUrl = TEST_SHOP,
 ) {
   return async function ({
@@ -32,7 +32,7 @@ export function mockGraphqlRequest(
 }
 
 export function mockGraphqlRequests(
-  apiVersion = LATEST_API_VERSION,
+  apiVersion = ApiVersion.July25,
   shopUrl = TEST_SHOP,
 ) {
   return async function (...mocks: MockGraphqlRequestArg[]) {

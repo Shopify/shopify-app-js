@@ -1,7 +1,7 @@
 import {FutureFlagOptions, FutureFlags} from '../../future/flags';
 import {AuthScopes} from '../auth/scopes';
 import type {ConfigParams} from '../base-types';
-import {LATEST_API_VERSION, LogSeverity} from '../types';
+import {ApiVersion, LogSeverity} from '../types';
 
 /*
  * This type combines both passed in types, by ignoring any keys from Type1 that are present (and not undefined)
@@ -67,7 +67,7 @@ const TEST_CONFIG = {
   scopes: new AuthScopes(['test_scope']),
   hostName: 'test_host_name',
   hostScheme: 'https',
-  apiVersion: LATEST_API_VERSION,
+  apiVersion: ApiVersion.July25,
   isEmbeddedApp: false,
   isCustomStoreApp: false,
   customShopDomains: undefined,

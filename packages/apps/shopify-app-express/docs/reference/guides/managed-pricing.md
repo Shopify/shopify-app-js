@@ -9,10 +9,10 @@ For most developers, managed pricing is simpler and more consistent than coding 
 * Complete the [set up for managed pricing](https://shopify.dev/docs/apps/launch/billing/managed-pricing#set-up-managed-pricing) in the Shopify Partner Dashboard.
 * Enable the `unstable_enableManagedPricing` flag in your app.
 
-```js
+```ts
 const shopify = shopifyApp({
   api: {
-    apiVersion: LATEST_API_VERSION,
+    apiVersion: ApiVersion.July25,
     restResources,
     future: {
       customerAddressDefaultFix: true,
@@ -21,6 +21,7 @@ const shopify = shopifyApp({
     },
     billing: undefined, // billing is not needed for managed pricing
   },
+})
 ```
 
 ## Implementing Managed Pricing

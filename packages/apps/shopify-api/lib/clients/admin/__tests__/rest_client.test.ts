@@ -8,12 +8,7 @@ import {testConfig} from '../../../__tests__/test-config';
 import {DataType, GetRequestParams} from '../../types';
 import {RestRequestReturn, PageInfo} from '../types';
 import * as ShopifyErrors from '../../../error';
-import {
-  ApiVersion,
-  LATEST_API_VERSION,
-  LogSeverity,
-  ShopifyHeader,
-} from '../../../types';
+import {ApiVersion, LogSeverity, ShopifyHeader} from '../../../types';
 import {Session} from '../../../session/session';
 import {JwtPayload} from '../../../session/types';
 import {shopifyApi} from '../../..';
@@ -490,7 +485,7 @@ describe('REST client', () => {
     expect(shopify.config.logger.log).toHaveBeenCalledWith(
       LogSeverity.Debug,
       expect.stringContaining(
-        `REST client overriding default API version ${LATEST_API_VERSION} with 2020-01`,
+        `REST client overriding default API version ${ApiVersion.July25} with 2020-01`,
       ),
     );
   });

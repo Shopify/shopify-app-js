@@ -1,9 +1,4 @@
-import {
-  ApiVersion,
-  HttpMaxRetriesError,
-  LATEST_API_VERSION,
-  Session,
-} from '@shopify/shopify-api';
+import {ApiVersion, HttpMaxRetriesError, Session} from '@shopify/shopify-api';
 import fetchMock from 'jest-fetch-mock';
 
 import {
@@ -208,7 +203,7 @@ async function mockRestRequest(
   response = {},
 ) {
   const requestMock = new Request(
-    `https://${TEST_SHOP}/admin/api/${LATEST_API_VERSION}/${path}`,
+    `https://${TEST_SHOP}/admin/api/${ApiVersion.July25}/${path}`,
   );
 
   await mockExternalRequest({

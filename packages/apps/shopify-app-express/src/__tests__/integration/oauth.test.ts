@@ -1,7 +1,7 @@
 import request from 'supertest';
 import express, {Express} from 'express';
 import jwt from 'jsonwebtoken';
-import {LATEST_API_VERSION, LogSeverity} from '@shopify/shopify-api';
+import {ApiVersion, LogSeverity} from '@shopify/shopify-api';
 
 import {ShopifyApp, shopifyApp} from '../..';
 import {WebhookHandlersParam} from '../../webhooks/types';
@@ -123,7 +123,7 @@ describe('OAuth integration tests', () => {
         TEST_SHOP,
         body,
         TEST_WEBHOOK_ID,
-        LATEST_API_VERSION,
+        ApiVersion.July25,
         undefined,
       );
 
@@ -332,7 +332,7 @@ function assertOAuthRequests(
   webhookQueries.forEach((query) =>
     expect({
       method: 'POST',
-      url: `https://${TEST_SHOP}/admin/api/${LATEST_API_VERSION}/graphql.json`,
+      url: `https://${TEST_SHOP}/admin/api/${ApiVersion.July25}/graphql.json`,
       body: expect.objectContaining({query: expect.stringContaining(query)}),
     }).toMatchMadeHttpRequest(),
   );

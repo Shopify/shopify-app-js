@@ -6,7 +6,7 @@ import {testConfig} from '../../../../__tests__/test-config';
 import {Session} from '../../../../session/session';
 import {HttpResponseError, RestResourceError} from '../../../../error';
 import {PageInfo} from '../../../types';
-import {ApiVersion, LATEST_API_VERSION} from '../../../../types';
+import {ApiVersion} from '../../../../types';
 import {shopifyApi} from '../../../../index';
 
 import {restResources} from './test-resources';
@@ -15,7 +15,7 @@ describe('Base REST resource', () => {
   let prefix: string;
 
   beforeEach(() => {
-    prefix = `/admin/api/${LATEST_API_VERSION}`;
+    prefix = `/admin/api/${ApiVersion.July25}`;
   });
 
   const domain = 'test-shop.myshopify.io';
@@ -674,9 +674,9 @@ describe('REST resources with a different API version', () => {
       testConfig({apiVersion: '2020-01' as any as ApiVersion, restResources}),
     );
 
-    // The shopify object is set to an older version, but the resources use the latest
-    expect(shopify.rest.FakeResource.apiVersion).toBe(LATEST_API_VERSION);
-    expect(shopify.config.apiVersion).not.toBe(LATEST_API_VERSION);
+    // The shopify object is set to an older version, but the resources use a specific version
+    expect(shopify.rest.FakeResource.apiVersion).toBe(ApiVersion.July25);
+    expect(shopify.config.apiVersion).not.toBe(ApiVersion.July25);
 
     queueMockResponses(
       [JSON.stringify({fake_resource: {attribute: 'attribute'}})],
@@ -693,7 +693,7 @@ describe('REST resources with a different API version', () => {
     expect({
       method: 'POST',
       domain,
-      path: `/admin/api/${LATEST_API_VERSION}/fake_resources.json`,
+      path: `/admin/api/${ApiVersion.July25}/fake_resources.json`,
       headers,
       data: {fake_resource: {attribute: 'attribute'}},
     }).toMatchMadeHttpRequest();
@@ -709,7 +709,7 @@ describe('REST resources with a different API version', () => {
     expect({
       method: 'GET',
       domain,
-      path: `/admin/api/${LATEST_API_VERSION}/fake_resources/1.json`,
+      path: `/admin/api/${ApiVersion.July25}/fake_resources/1.json`,
       headers,
     }).toMatchMadeHttpRequest();
 
@@ -720,7 +720,7 @@ describe('REST resources with a different API version', () => {
     expect({
       method: 'PUT',
       domain,
-      path: `/admin/api/${LATEST_API_VERSION}/fake_resources/1.json`,
+      path: `/admin/api/${ApiVersion.July25}/fake_resources/1.json`,
       headers,
       data: {fake_resource: {attribute: 'attribute2'}},
     }).toMatchMadeHttpRequest();
@@ -730,7 +730,7 @@ describe('REST resources with a different API version', () => {
     expect({
       method: 'DELETE',
       domain,
-      path: `/admin/api/${LATEST_API_VERSION}/fake_resources/1.json`,
+      path: `/admin/api/${ApiVersion.July25}/fake_resources/1.json`,
       headers,
     }).toMatchMadeHttpRequest();
   });
