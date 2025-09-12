@@ -50,7 +50,7 @@ describe('<AppProvider />', () => {
 
       // THEN
       expect(component).toContainReactComponent('script', {
-        src: 'https://cdn.shopify.com/shopifycloud/app-bridge-ui-experimental.js',
+        src: 'https://cdn.shopify.com/shopifycloud/polaris.js',
       });
     });
 
@@ -92,7 +92,7 @@ describe('<AppProvider />', () => {
 
       // THEN
       expect(component).toContainReactComponent('script', {
-        src: 'https://cdn.shopify.com/shopifycloud/app-bridge-ui-experimental.js',
+        src: 'https://cdn.shopify.com/shopifycloud/polaris.js',
       });
     });
 
