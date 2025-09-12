@@ -46,7 +46,7 @@ describe('authorize.session token header path', () => {
         });
 
         // WHEN
-        const {token, payload} = getJwt();
+        const {token, payload} = await getJwt();
         const {sessionToken, admin, session} = await shopify.authenticate.admin(
           new Request(`${APP_URL}?shop=${TEST_SHOP}&host=${BASE64_HOST}`, {
             headers: {Authorization: `Bearer ${token}`},

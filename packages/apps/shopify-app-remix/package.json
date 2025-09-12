@@ -2,6 +2,9 @@
   "name": "@shopify/shopify-app-remix",
   "version": "3.8.5",
   "description": "Shopify Remix - to simplify the building of Shopify Apps with Remix",
+  "engines": {
+    "node": ">=20.10.0"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Shopify/shopify-app-js.git",
@@ -86,11 +89,8 @@
     "@shopify/polaris": "^12.18.0",
     "@shopify/react-testing": "^6.0.0",
     "@shopify/shopify-app-session-storage-memory": "^4.0.20",
-    "@testing-library/jest-dom": "^6.8.0",
-    "@types/jsonwebtoken": "^9.0.10",
     "@types/react": "^19.1.11",
-    "jest-fetch-mock": "^3.0.3",
-    "jsonwebtoken": "^9.0.2"
+    "jest-fetch-mock": "^3.0.3"
   },
   "dependencies": {
     "@remix-run/server-runtime": "^2.16.8",

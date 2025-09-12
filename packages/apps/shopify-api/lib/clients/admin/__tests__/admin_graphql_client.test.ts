@@ -1,5 +1,3 @@
-import {FetchError} from 'node-fetch';
-
 import * as ShopifyErrors from '../../../error';
 import {ApiVersion, LogSeverity, ShopifyHeader} from '../../../types';
 import {queueError, queueMockResponse} from '../../../__tests__/test-helper';
@@ -272,9 +270,8 @@ describe('GraphQL client', () => {
       }
     }`;
 
-    const fetchError = new FetchError(
+    const fetchError = new Error(
       `uri requested responds with an invalid redirect URL: http://test.com`,
-      'invalid-redirect',
     );
     queueError(fetchError);
     queueError(fetchError);

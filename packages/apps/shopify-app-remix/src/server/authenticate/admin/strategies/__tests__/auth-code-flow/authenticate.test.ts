@@ -28,7 +28,7 @@ describe('authenticate', () => {
       await setUpValidSession(shopify.sessionStorage);
 
       // WHEN
-      const {token} = getJwt();
+      const {token} = await getJwt();
       const response = await getThrownResponse(
         shopify.authenticate.admin,
         new Request(
@@ -115,7 +115,7 @@ describe('authenticate', () => {
         }
 
         // WHEN
-        const {token} = getJwt();
+        const {token} = await getJwt();
         const {admin, session} = await shopify.authenticate.admin(
           new Request(
             `${APP_URL}?embedded=1&shop=${TEST_SHOP}&host=${BASE64_HOST}&id_token=${token}`,

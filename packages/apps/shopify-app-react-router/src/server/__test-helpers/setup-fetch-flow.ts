@@ -10,7 +10,7 @@ export async function setUpFetchFlow() {
 
   await setUpValidSession(shopify.sessionStorage);
 
-  const {token} = getJwt();
+  const {token} = await getJwt();
   const request = new Request(APP_URL, {
     headers: {Authorization: `Bearer ${token}`},
   });

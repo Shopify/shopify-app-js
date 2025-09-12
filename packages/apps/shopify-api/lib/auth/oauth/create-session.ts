@@ -1,5 +1,3 @@
-import {v4 as uuidv4} from 'uuid';
-
 import {Session} from '../../session/session';
 import {ConfigInterface} from '../../base-types';
 import {logger} from '../../logger';
@@ -39,7 +37,7 @@ export function createSession({
           shop,
           `${(rest as OnlineAccessInfo).associated_user.id}`,
         )
-      : uuidv4();
+      : crypto.randomUUID();
 
     return {
       id: sessionId,

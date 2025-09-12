@@ -1,6 +1,6 @@
 import {createServer, IncomingMessage, ServerResponse} from 'http';
 
-import '../../node';
+import './test-node-app/adapter';
 import {Session} from '../../../lib';
 import {Headers} from '../../../runtime/http';
 import {DataType} from '../../../lib/clients/types';
