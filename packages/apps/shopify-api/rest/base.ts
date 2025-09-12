@@ -9,6 +9,45 @@ import {Headers} from '../runtime/http';
 
 import {IdSet, Body, ResourcePath, ParamSet, ResourceNames} from './types';
 
+/**
+ * Normalize an ID value to string format to prevent precision loss
+ * for IDs approaching JavaScript's MAX_SAFE_INTEGER (2^53-1)
+ */
+export function normalizeId(id: number | string | null | undefined): string | null {
+  if (id === null || id === undefined) {
+    return null;
+  }
+  return String(id);
+}
+
+/**
+ * Normalize ID fields in an object, converting all *_id and *_ids fields to strings
+ */
+export function normalizeIdFields(data: Body): Body {
+  if (!data || typeof data !== 'object') return data;
+
+  const normalized = {...data};
+  
+  for (const key in normalized) {
+    const value = normalized[key];
+    
+    // Handle primary id field
+    if (key === 'id') {
+      normalized[key] = normalizeId(value);
+    }
+    // Handle foreign key fields ending with _id
+    else if (key.endsWith('_id') && !key.endsWith('_ids')) {
+      normalized[key] = normalizeId(value);
+    }
+    // Handle array of IDs ending with _ids
+    else if (key.endsWith('_ids') && Array.isArray(value)) {
+      normalized[key] = value.map(normalizeId);
+    }
+  }
+  
+  return normalized;
+}
+
 interface BaseFindArgs {
   session: Session;
   params?: ParamSet;
@@ -263,7 +302,27 @@ export class Base {
       : new (this as any)({session});
 
     if (data) {
-      instance.setData(data);
+      // Check for large numeric IDs that might lose precision
+      if (data.id && typeof data.id === 'number') {
+        const MAX_SAFE_INTEGER = Number.MAX_SAFE_INTEGER;
+        const WARNING_THRESHOLD = Math.floor(MAX_SAFE_INTEGER * 0.9);
+        
+        if (data.id > MAX_SAFE_INTEGER) {
+          console.warn(
+            `⚠️ Shopify ID ${data.id} (${this.name} resource) exceeds JavaScript's safe integer limit (${MAX_SAFE_INTEGER}). ` +
+            `This ID must be handled as a string to prevent precision loss.`
+          );
+        } else if (data.id > WARNING_THRESHOLD) {
+          console.warn(
+            `⚠️ Shopify ID ${data.id} (${this.name} resource) is approaching JavaScript's safe integer limit. ` +
+            `Consider migrating to string-based ID handling.`
+          );
+        }
+      }
+      
+      // Normalize ID fields to prevent precision loss
+      const normalizedData = normalizeIdFields(data);
+      instance.setData(normalizedData);
     }
 
     return instance;
@@ -368,7 +427,10 @@ export class Base {
   protected setData(data: Body): void {
     const {hasMany, hasOne} = this.resource();
 
-    Object.entries(data).forEach(([attribute, val]) => {
+    // Normalize ID fields first to ensure consistency
+    const normalizedData = normalizeIdFields(data);
+
+    Object.entries(normalizedData).forEach(([attribute, val]) => {
       if (attribute in hasMany) {
         const HasManyResource: typeof Base = hasMany[attribute];
         this[attribute] = [];
