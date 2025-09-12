@@ -47,7 +47,7 @@ Below is an example of how REST resources can make it easier to fetch the first 
 // App must provide response types
 interface ProductResponse {
   product: {
-    id: number;
+    id: string;
     title: string;
     // ...
   };
@@ -131,7 +131,7 @@ await product.save({
 
 const product = await shopify.rest.Product.find({
   session: session,
-  id: 632910392,
+  id: "632910392",
 });
 
 console.log(product);
