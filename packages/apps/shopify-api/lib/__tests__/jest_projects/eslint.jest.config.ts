@@ -5,7 +5,6 @@ const config: Config = {
   displayName: 'lint',
   rootDir: '../../../',
   testMatch: ['<rootDir>/**/*.ts'],
-  watchPlugins: ['jest-runner-eslint/watch-fix'],
   modulePathIgnorePatterns: ['<rootDir>/rest/admin/'],
   testPathIgnorePatterns: ['.*.d.ts'],
 };

@@ -1,14 +1,12 @@
 import type {Config} from 'jest';
 
 const config: Config = {
-  // or other ESM presets
-  preset: 'ts-jest/presets/default-esm',
+  preset: 'ts-jest',
   testEnvironment: 'node',
-  moduleFileExtensions: ['ts', 'js', 'json'],
+  moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json'],
   watchPathIgnorePatterns: ['./node_modules'],
   testRegex: '.*\\.test\\.tsx?$',
   coverageDirectory: './coverage/',
-  collectCoverage: false,
 };
 
 export default config;
