@@ -172,12 +172,12 @@ export class Fulfillment extends Base {
   }
 
   public created_at: string | null;
-  public id: number | null;
+  public id: string | null;
   public line_items: {[key: string]: unknown}[] | null;
-  public location_id: number | null;
+  public location_id: string | null;
   public name: string | null;
   public notify_customer: boolean | null;
-  public order_id: number | null;
+  public order_id: string | null;
   public origin_address: {[key: string]: unknown}[] | null;
   public receipt: {[key: string]: unknown} | null;
   public service: string | null;

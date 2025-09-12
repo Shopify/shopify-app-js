@@ -152,7 +152,7 @@ export class CustomCollection extends Base {
   public title: string | null;
   public body_html: string | null;
   public handle: string | null;
-  public id: number | null;
+  public id: string | null;
   public image: string | {[key: string]: unknown} | null;
   public published: boolean | null;
   public published_at: string | null;

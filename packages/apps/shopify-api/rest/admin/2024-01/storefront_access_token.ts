@@ -69,5 +69,5 @@ export class StorefrontAccessToken extends Base {
   public access_scope: string | null;
   public access_token: string | null;
   public created_at: string | null;
-  public id: number | null;
+  public id: string | null;
 }

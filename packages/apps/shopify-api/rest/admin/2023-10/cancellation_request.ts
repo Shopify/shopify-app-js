@@ -74,5 +74,5 @@ export class CancellationRequest extends Base {
     return response ? response.body : null;
   }
 
-  public fulfillment_order_id: number | null;
+  public fulfillment_order_id: string | null;
 }

@@ -153,7 +153,7 @@ export class CustomerSavedSearch extends Base {
   }
 
   public created_at: string | null;
-  public id: number | null;
+  public id: string | null;
   public name: string | null;
   public query: string | null;
   public updated_at: string | null;

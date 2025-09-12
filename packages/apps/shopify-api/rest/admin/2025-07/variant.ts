@@ -133,9 +133,9 @@ export class Variant extends Base {
   public created_at: string | null;
   public fulfillment_service: string | null;
   public grams: number | null;
-  public id: number | null;
-  public image_id: number | null;
-  public inventory_item_id: number | null;
+  public id: string | null;
+  public image_id: string | null;
+  public inventory_item_id: string | null;
   public inventory_management: string | null;
   public inventory_policy: string | null;
   public inventory_quantity: number | null;
@@ -144,7 +144,7 @@ export class Variant extends Base {
   public position: number | null;
   public presentment_prices: {[key: string]: unknown}[] | null;
   public price: string | null;
-  public product_id: number | null;
+  public product_id: string | null;
   public requires_shipping: boolean | null;
   public sku: string | null;
   public tax_code: string | null;

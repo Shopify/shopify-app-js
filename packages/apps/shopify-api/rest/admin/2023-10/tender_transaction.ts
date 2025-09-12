@@ -56,12 +56,12 @@ export class TenderTransaction extends Base {
 
   public amount: string | null;
   public currency: string | null;
-  public id: number | null;
-  public order_id: number | null;
+  public id: string | null;
+  public order_id: string | null;
   public payment_details: {[key: string]: unknown} | null;
   public payment_method: string | null;
   public processed_at: string | null;
   public remote_reference: string | null;
   public test: boolean | null;
-  public user_id: number | null;
+  public user_id: string | null;
 }

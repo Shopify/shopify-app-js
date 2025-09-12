@@ -94,7 +94,7 @@ export class User extends Base {
   public bio: string | null;
   public email: string | null;
   public first_name: string | null;
-  public id: number | null;
+  public id: string | null;
   public im: string | null;
   public last_name: string | null;
   public locale: string | null;

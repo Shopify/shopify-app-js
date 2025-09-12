@@ -269,20 +269,20 @@ export class FulfillmentOrder extends Base {
   }
 
   public assigned_location: {[key: string]: unknown} | null;
-  public assigned_location_id: number | null;
+  public assigned_location_id: string | null;
   public created_at: string | null;
   public delivery_method: {[key: string]: unknown} | null;
   public destination: {[key: string]: unknown} | null;
   public fulfill_at: string | null;
   public fulfill_by: string | null;
   public fulfillment_holds: {[key: string]: unknown}[] | null;
-  public id: number | null;
+  public id: string | null;
   public international_duties: {[key: string]: unknown} | null;
   public line_items: {[key: string]: unknown}[] | null;
   public merchant_requests: {[key: string]: unknown}[] | null;
-  public order_id: number | null;
+  public order_id: string | null;
   public request_status: string | null;
-  public shop_id: number | null;
+  public shop_id: string | null;
   public status: string | null;
   public supported_actions: string[] | null;
   public updated_at: string | null;

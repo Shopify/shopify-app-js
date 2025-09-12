@@ -91,7 +91,7 @@ export class ApplePayCertificate extends Base {
     return response ? response.body : null;
   }
 
-  public id: number | null;
+  public id: string | null;
   public merchant_id: string | null;
   public status: string | null;
 }

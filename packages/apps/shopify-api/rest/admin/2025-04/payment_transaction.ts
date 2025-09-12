@@ -65,13 +65,13 @@ export class PaymentTransaction extends Base {
   public amount: string | null;
   public currency: Currency | null | {[key: string]: any};
   public fee: string | null;
-  public id: number | null;
+  public id: string | null;
   public net: string | null;
-  public payout_id: number | null;
+  public payout_id: string | null;
   public payout_status: string | null;
   public processed_at: string | null;
-  public source_id: number | null;
-  public source_order_id: number | null;
+  public source_id: string | null;
+  public source_order_id: string | null;
   public source_order_transaction_id: string | null;
   public source_type: string | null;
   public test: boolean | null;

@@ -259,9 +259,9 @@ export class Customer extends Base {
   public email: string | null;
   public email_marketing_consent: {[key: string]: unknown} | null;
   public first_name: string | null;
-  public id: number | null;
+  public id: string | null;
   public last_name: string | null;
-  public last_order_id: number | null;
+  public last_order_id: string | null;
   public last_order_name: string | null;
   public marketing_opt_in_level: string | null;
   public metafield: Metafield | null | {[key: string]: any};

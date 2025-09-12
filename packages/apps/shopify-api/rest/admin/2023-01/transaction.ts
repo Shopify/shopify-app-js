@@ -110,15 +110,15 @@ export class Transaction extends Base {
   public created_at: string | null;
   public currency: string | null;
   public currency_exchange_adjustment: {[key: string]: unknown} | null;
-  public device_id: number | null;
+  public device_id: string | null;
   public error_code: string | null;
   public extended_authorization_attributes: {[key: string]: unknown} | null;
   public gateway: string | null;
-  public id: number | null;
-  public location_id: number | null;
+  public id: string | null;
+  public location_id: string | null;
   public message: string | null;
-  public order_id: number | null;
-  public parent_id: number | null;
+  public order_id: string | null;
+  public parent_id: string | null;
   public payment_details: {[key: string]: unknown} | null;
   public payments_refund_attributes: {[key: string]: unknown} | null;
   public processed_at: string | null;
@@ -126,5 +126,5 @@ export class Transaction extends Base {
   public source_name: string | null;
   public status: string | null;
   public test: boolean | null;
-  public user_id: number | null;
+  public user_id: string | null;
 }

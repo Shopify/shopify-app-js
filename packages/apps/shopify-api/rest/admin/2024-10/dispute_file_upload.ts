@@ -47,13 +47,13 @@ export class DisputeFileUpload extends Base {
     return response ? response.body : null;
   }
 
-  public dispute_evidence_id: number | null;
+  public dispute_evidence_id: string | null;
   public dispute_evidence_type: string | null;
   public file_size: number | null;
   public file_type: string | null;
   public filename: string | null;
-  public id: number | null;
+  public id: string | null;
   public original_filename: string | null;
-  public shop_id: number | null;
+  public shop_id: string | null;
   public url: string | null;
 }
