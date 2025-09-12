@@ -55,8 +55,6 @@ type TestConfig<Overrides extends TestOverridesOption<Future>, Future> = Modify<
 export const TEST_FUTURE_FLAGS: Required<{
   [key in keyof FutureFlags]: true;
 }> = {
-  v10_lineItemBilling: true,
-  lineItemBilling: true,
   customerAddressDefaultFix: true,
   unstable_managedPricingSupport: true,
 } as const;
