@@ -76,7 +76,7 @@ describe('shopify.billing.cancel', () => {
 
     expect(() =>
       shopify.billing.cancel({session, subscriptionId}),
-    ).rejects.toThrowError(BillingError);
+    ).rejects.toThrow(BillingError);
   });
 
   test('throws a BillingError when a user error occurs', async () => {
@@ -93,7 +93,7 @@ describe('shopify.billing.cancel', () => {
 
     expect(() =>
       shopify.billing.cancel({session, subscriptionId}),
-    ).rejects.toThrowError(BillingError);
+    ).rejects.toThrow(BillingError);
   });
 
   test('throws a BillingError when a user error occurs', async () => {
@@ -110,7 +110,7 @@ describe('shopify.billing.cancel', () => {
 
     expect(() =>
       shopify.billing.cancel({session, subscriptionId}),
-    ).rejects.toThrowError(BillingError);
+    ).rejects.toThrow(BillingError);
   });
 
   test('throws a BillingError when an error occurs', async () => {
@@ -127,6 +127,6 @@ describe('shopify.billing.cancel', () => {
 
     expect(() =>
       shopify.billing.cancel({session, subscriptionId}),
-    ).rejects.toThrowError(BillingError);
+    ).rejects.toThrow(BillingError);
   });
 });

@@ -57,7 +57,7 @@ describe('shopifyApp', () => {
   });
 
   it('fails with an invalid config', () => {
-    expect(() => shopifyApp({} as any)).toThrowError(ShopifyError);
+    expect(() => shopifyApp({} as any)).toThrow(ShopifyError);
   });
 
   it("fixes the port if it's not set", () => {
@@ -95,6 +95,6 @@ describe('shopifyApp', () => {
     delete (config as any).sessionStorage;
 
     // THEN
-    expect(() => shopifyApp(config as any)).toThrowError(ShopifyError);
+    expect(() => shopifyApp(config as any)).toThrow(ShopifyError);
   });
 });
