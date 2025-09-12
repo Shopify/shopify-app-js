@@ -26,7 +26,7 @@ describe('FulfillmentService resource', () => {
       testConfig({apiVersion: ApiVersion.July25, restResources}),
     );
 
-    queueMockResponse(JSON.stringify({"fulfillment_services": [{"id": 611870435, "name": "Venus Fulfillment", "email": null, "service_name": "Venus Fulfillment", "handle": "venus-fulfillment", "fulfillment_orders_opt_in": true, "include_pending_stock": false, "provider_id": null, "location_id": 611870435, "callback_url": "http://google.com/", "tracking_support": false, "inventory_management": false, "admin_graphql_api_id": "gid://shopify/ApiFulfillmentService/611870435", "permits_sku_sharing": false, "requires_shipping_method": true}, {"id": 755357713, "name": "Mars Fulfillment", "email": null, "service_name": "Mars Fulfillment", "handle": "mars-fulfillment", "fulfillment_orders_opt_in": true, "include_pending_stock": false, "provider_id": null, "location_id": 24826418, "callback_url": "http://google.com/", "tracking_support": true, "inventory_management": true, "admin_graphql_api_id": "gid://shopify/ApiFulfillmentService/755357713", "permits_sku_sharing": true, "requires_shipping_method": true}]}));
+    queueMockResponse(JSON.stringify({"fulfillment_services": [{"id": "611870435", "name": "Venus Fulfillment", "email": null, "service_name": "Venus Fulfillment", "handle": "venus-fulfillment", "fulfillment_orders_opt_in": true, "include_pending_stock": false, "provider_id": null, "location_id": "611870435", "callback_url": "http://google.com/", "tracking_support": false, "inventory_management": false, "admin_graphql_api_id": "gid://shopify/ApiFulfillmentService/611870435", "permits_sku_sharing": false, "requires_shipping_method": true}, {"id": "755357713", "name": "Mars Fulfillment", "email": null, "service_name": "Mars Fulfillment", "handle": "mars-fulfillment", "fulfillment_orders_opt_in": true, "include_pending_stock": false, "provider_id": null, "location_id": "24826418", "callback_url": "http://google.com/", "tracking_support": true, "inventory_management": true, "admin_graphql_api_id": "gid://shopify/ApiFulfillmentService/755357713", "permits_sku_sharing": true, "requires_shipping_method": true}]}));
 
     await shopify.rest.FulfillmentService.all({
       session: session,
@@ -48,7 +48,7 @@ describe('FulfillmentService resource', () => {
       testConfig({apiVersion: ApiVersion.July25, restResources}),
     );
 
-    queueMockResponse(JSON.stringify({"fulfillment_services": [{"id": 755357713, "name": "Mars Fulfillment", "email": null, "service_name": "Mars Fulfillment", "handle": "mars-fulfillment", "fulfillment_orders_opt_in": true, "include_pending_stock": false, "provider_id": null, "location_id": 24826418, "callback_url": "http://google.com/", "tracking_support": true, "inventory_management": true, "admin_graphql_api_id": "gid://shopify/ApiFulfillmentService/755357713", "permits_sku_sharing": true, "requires_shipping_method": true}]}));
+    queueMockResponse(JSON.stringify({"fulfillment_services": [{"id": "755357713", "name": "Mars Fulfillment", "email": null, "service_name": "Mars Fulfillment", "handle": "mars-fulfillment", "fulfillment_orders_opt_in": true, "include_pending_stock": false, "provider_id": null, "location_id": "24826418", "callback_url": "http://google.com/", "tracking_support": true, "inventory_management": true, "admin_graphql_api_id": "gid://shopify/ApiFulfillmentService/755357713", "permits_sku_sharing": true, "requires_shipping_method": true}]}));
 
     await shopify.rest.FulfillmentService.all({
       session: session,
@@ -69,7 +69,7 @@ describe('FulfillmentService resource', () => {
       testConfig({apiVersion: ApiVersion.July25, restResources}),
     );
 
-    queueMockResponse(JSON.stringify({"fulfillment_service": {"id": 1061774487, "name": "Jupiter Fulfillment", "email": null, "service_name": "Jupiter Fulfillment", "handle": "jupiter-fulfillment", "fulfillment_orders_opt_in": true, "include_pending_stock": false, "provider_id": null, "location_id": 1072404544, "callback_url": "http://google.com/", "tracking_support": true, "inventory_management": true, "admin_graphql_api_id": "gid://shopify/ApiFulfillmentService/1061774487", "permits_sku_sharing": true, "requires_shipping_method": true}}));
+    queueMockResponse(JSON.stringify({"fulfillment_service": {"id": "1061774487", "name": "Jupiter Fulfillment", "email": null, "service_name": "Jupiter Fulfillment", "handle": "jupiter-fulfillment", "fulfillment_orders_opt_in": true, "include_pending_stock": false, "provider_id": null, "location_id": "1072404544", "callback_url": "http://google.com/", "tracking_support": true, "inventory_management": true, "admin_graphql_api_id": "gid://shopify/ApiFulfillmentService/1061774487", "permits_sku_sharing": true, "requires_shipping_method": true}}));
 
     const fulfillment_service = new shopify.rest.FulfillmentService({session: session});
     fulfillment_service.name = "Jupiter Fulfillment";
@@ -94,7 +94,7 @@ describe('FulfillmentService resource', () => {
       testConfig({apiVersion: ApiVersion.July25, restResources}),
     );
 
-    queueMockResponse(JSON.stringify({"fulfillment_service": {"id": 755357713, "name": "Mars Fulfillment", "email": null, "service_name": "Mars Fulfillment", "handle": "mars-fulfillment", "fulfillment_orders_opt_in": true, "include_pending_stock": false, "provider_id": null, "location_id": 24826418, "callback_url": "http://google.com/", "tracking_support": true, "inventory_management": true, "admin_graphql_api_id": "gid://shopify/ApiFulfillmentService/755357713", "permits_sku_sharing": true, "requires_shipping_method": true}}));
+    queueMockResponse(JSON.stringify({"fulfillment_service": {"id": "755357713", "name": "Mars Fulfillment", "email": null, "service_name": "Mars Fulfillment", "handle": "mars-fulfillment", "fulfillment_orders_opt_in": true, "include_pending_stock": false, "provider_id": null, "location_id": "24826418", "callback_url": "http://google.com/", "tracking_support": true, "inventory_management": true, "admin_graphql_api_id": "gid://shopify/ApiFulfillmentService/755357713", "permits_sku_sharing": true, "requires_shipping_method": true}}));
 
     await shopify.rest.FulfillmentService.find({
       session: session,
@@ -116,7 +116,7 @@ describe('FulfillmentService resource', () => {
       testConfig({apiVersion: ApiVersion.July25, restResources}),
     );
 
-    queueMockResponse(JSON.stringify({"fulfillment_service": {"id": 755357713, "name": "New Fulfillment Service Name", "email": null, "service_name": "New Fulfillment Service Name", "handle": "mars-fulfillment", "fulfillment_orders_opt_in": true, "include_pending_stock": false, "provider_id": null, "location_id": 24826418, "callback_url": "http://google.com/", "tracking_support": true, "inventory_management": true, "admin_graphql_api_id": "gid://shopify/ApiFulfillmentService/755357713", "permits_sku_sharing": true, "requires_shipping_method": true}}));
+    queueMockResponse(JSON.stringify({"fulfillment_service": {"id": "755357713", "name": "New Fulfillment Service Name", "email": null, "service_name": "New Fulfillment Service Name", "handle": "mars-fulfillment", "fulfillment_orders_opt_in": true, "include_pending_stock": false, "provider_id": null, "location_id": "24826418", "callback_url": "http://google.com/", "tracking_support": true, "inventory_management": true, "admin_graphql_api_id": "gid://shopify/ApiFulfillmentService/755357713", "permits_sku_sharing": true, "requires_shipping_method": true}}));
 
     const fulfillment_service = new shopify.rest.FulfillmentService({session: session});
     fulfillment_service.id = 755357713;

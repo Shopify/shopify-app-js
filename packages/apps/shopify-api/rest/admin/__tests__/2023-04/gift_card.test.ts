@@ -26,7 +26,7 @@ describe('GiftCard resource', () => {
       testConfig({apiVersion: ApiVersion.April23, restResources}),
     );
 
-    queueMockResponse(JSON.stringify({"gift_cards": [{"id": 766118925, "balance": "25.00", "created_at": "2024-01-02T08:59:11-05:00", "updated_at": "2024-01-02T08:59:11-05:00", "currency": "USD", "initial_value": "50.00", "disabled_at": null, "line_item_id": null, "api_client_id": null, "user_id": null, "customer_id": null, "note": null, "expires_on": "2023-01-02", "template_suffix": null, "recipient_id": null, "message": null, "send_on": null, "notify": true, "last_characters": "0e0e", "order_id": null}, {"id": 10274553, "balance": "0.00", "created_at": "2024-01-02T08:59:11-05:00", "updated_at": "2024-01-02T08:59:11-05:00", "currency": "USD", "initial_value": "50.00", "disabled_at": null, "line_item_id": null, "api_client_id": null, "user_id": null, "customer_id": null, "note": null, "expires_on": null, "template_suffix": null, "recipient_id": null, "message": null, "send_on": null, "notify": true, "last_characters": "0y0y", "order_id": null}]}));
+    queueMockResponse(JSON.stringify({"gift_cards": [{"id": "766118925", "balance": "25.00", "created_at": "2024-01-02T08:59:11-05:00", "updated_at": "2024-01-02T08:59:11-05:00", "currency": "USD", "initial_value": "50.00", "disabled_at": null, "line_item_id": null, "api_client_id": null, "user_id": null, "customer_id": null, "note": null, "expires_on": "2023-01-02", "template_suffix": null, "recipient_id": null, "message": null, "send_on": null, "notify": true, "last_characters": "0e0e", "order_id": null}, {"id": "10274553", "balance": "0.00", "created_at": "2024-01-02T08:59:11-05:00", "updated_at": "2024-01-02T08:59:11-05:00", "currency": "USD", "initial_value": "50.00", "disabled_at": null, "line_item_id": null, "api_client_id": null, "user_id": null, "customer_id": null, "note": null, "expires_on": null, "template_suffix": null, "recipient_id": null, "message": null, "send_on": null, "notify": true, "last_characters": "0y0y", "order_id": null}]}));
 
     await shopify.rest.GiftCard.all({
       session: session,
@@ -48,7 +48,7 @@ describe('GiftCard resource', () => {
       testConfig({apiVersion: ApiVersion.April23, restResources}),
     );
 
-    queueMockResponse(JSON.stringify({"gift_cards": [{"id": 1035197676, "balance": "100.00", "created_at": "2024-01-02T08:59:11-05:00", "updated_at": "2024-01-02T08:59:11-05:00", "currency": "USD", "initial_value": "100.00", "disabled_at": null, "line_item_id": null, "api_client_id": null, "user_id": null, "customer_id": null, "note": null, "expires_on": null, "template_suffix": null, "recipient_id": null, "message": null, "send_on": null, "notify": true, "last_characters": "0d0d", "order_id": null}, {"id": 766118925, "balance": "25.00", "created_at": "2024-01-02T08:59:11-05:00", "updated_at": "2024-01-02T08:59:11-05:00", "currency": "USD", "initial_value": "50.00", "disabled_at": null, "line_item_id": null, "api_client_id": null, "user_id": null, "customer_id": null, "note": null, "expires_on": "2023-01-02", "template_suffix": null, "recipient_id": null, "message": null, "send_on": null, "notify": true, "last_characters": "0e0e", "order_id": null}, {"id": 10274553, "balance": "0.00", "created_at": "2024-01-02T08:59:11-05:00", "updated_at": "2024-01-02T08:59:11-05:00", "currency": "USD", "initial_value": "50.00", "disabled_at": null, "line_item_id": null, "api_client_id": null, "user_id": null, "customer_id": null, "note": null, "expires_on": null, "template_suffix": null, "recipient_id": null, "message": null, "send_on": null, "notify": true, "last_characters": "0y0y", "order_id": null}]}));
+    queueMockResponse(JSON.stringify({"gift_cards": [{"id": "1035197676", "balance": "100.00", "created_at": "2024-01-02T08:59:11-05:00", "updated_at": "2024-01-02T08:59:11-05:00", "currency": "USD", "initial_value": "100.00", "disabled_at": null, "line_item_id": null, "api_client_id": null, "user_id": null, "customer_id": null, "note": null, "expires_on": null, "template_suffix": null, "recipient_id": null, "message": null, "send_on": null, "notify": true, "last_characters": "0d0d", "order_id": null}, {"id": "766118925", "balance": "25.00", "created_at": "2024-01-02T08:59:11-05:00", "updated_at": "2024-01-02T08:59:11-05:00", "currency": "USD", "initial_value": "50.00", "disabled_at": null, "line_item_id": null, "api_client_id": null, "user_id": null, "customer_id": null, "note": null, "expires_on": "2023-01-02", "template_suffix": null, "recipient_id": null, "message": null, "send_on": null, "notify": true, "last_characters": "0e0e", "order_id": null}, {"id": "10274553", "balance": "0.00", "created_at": "2024-01-02T08:59:11-05:00", "updated_at": "2024-01-02T08:59:11-05:00", "currency": "USD", "initial_value": "50.00", "disabled_at": null, "line_item_id": null, "api_client_id": null, "user_id": null, "customer_id": null, "note": null, "expires_on": null, "template_suffix": null, "recipient_id": null, "message": null, "send_on": null, "notify": true, "last_characters": "0y0y", "order_id": null}]}));
 
     await shopify.rest.GiftCard.all({
       session: session,
@@ -69,7 +69,7 @@ describe('GiftCard resource', () => {
       testConfig({apiVersion: ApiVersion.April23, restResources}),
     );
 
-    queueMockResponse(JSON.stringify({"gift_card": {"id": 1035197676, "balance": "100.00", "created_at": "2024-01-02T08:59:11-05:00", "updated_at": "2024-01-02T08:59:11-05:00", "currency": "USD", "initial_value": "100.00", "disabled_at": null, "line_item_id": null, "api_client_id": null, "user_id": null, "customer_id": null, "note": null, "expires_on": null, "template_suffix": null, "last_characters": "0d0d", "order_id": null}}));
+    queueMockResponse(JSON.stringify({"gift_card": {"id": "1035197676", "balance": "100.00", "created_at": "2024-01-02T08:59:11-05:00", "updated_at": "2024-01-02T08:59:11-05:00", "currency": "USD", "initial_value": "100.00", "disabled_at": null, "line_item_id": null, "api_client_id": null, "user_id": null, "customer_id": null, "note": null, "expires_on": null, "template_suffix": null, "last_characters": "0d0d", "order_id": null}}));
 
     await shopify.rest.GiftCard.find({
       session: session,
@@ -91,7 +91,7 @@ describe('GiftCard resource', () => {
       testConfig({apiVersion: ApiVersion.April23, restResources}),
     );
 
-    queueMockResponse(JSON.stringify({"gift_card": {"expires_on": "2020-01-01", "template_suffix": null, "initial_value": "100.00", "balance": "100.00", "customer_id": null, "id": 1035197676, "created_at": "2024-01-02T08:59:11-05:00", "updated_at": "2024-01-02T09:01:27-05:00", "currency": "USD", "disabled_at": null, "line_item_id": null, "api_client_id": null, "user_id": null, "note": null, "last_characters": "0d0d", "order_id": null}}));
+    queueMockResponse(JSON.stringify({"gift_card": {"expires_on": "2020-01-01", "template_suffix": null, "initial_value": "100.00", "balance": "100.00", "customer_id": null, "id": "1035197676", "created_at": "2024-01-02T08:59:11-05:00", "updated_at": "2024-01-02T09:01:27-05:00", "currency": "USD", "disabled_at": null, "line_item_id": null, "api_client_id": null, "user_id": null, "note": null, "last_characters": "0d0d", "order_id": null}}));
 
     const gift_card = new shopify.rest.GiftCard({session: session});
     gift_card.id = 1035197676;
@@ -113,7 +113,7 @@ describe('GiftCard resource', () => {
       testConfig({apiVersion: ApiVersion.April23, restResources}),
     );
 
-    queueMockResponse(JSON.stringify({"gift_card": {"note": "Updating with a new note", "template_suffix": null, "initial_value": "100.00", "balance": "100.00", "customer_id": null, "id": 1035197676, "created_at": "2024-01-02T08:59:11-05:00", "updated_at": "2024-01-02T09:01:23-05:00", "currency": "USD", "disabled_at": null, "line_item_id": null, "api_client_id": null, "user_id": null, "expires_on": null, "last_characters": "0d0d", "order_id": null}}));
+    queueMockResponse(JSON.stringify({"gift_card": {"note": "Updating with a new note", "template_suffix": null, "initial_value": "100.00", "balance": "100.00", "customer_id": null, "id": "1035197676", "created_at": "2024-01-02T08:59:11-05:00", "updated_at": "2024-01-02T09:01:23-05:00", "currency": "USD", "disabled_at": null, "line_item_id": null, "api_client_id": null, "user_id": null, "expires_on": null, "last_characters": "0d0d", "order_id": null}}));
 
     const gift_card = new shopify.rest.GiftCard({session: session});
     gift_card.id = 1035197676;
@@ -178,7 +178,7 @@ describe('GiftCard resource', () => {
       testConfig({apiVersion: ApiVersion.April23, restResources}),
     );
 
-    queueMockResponse(JSON.stringify({"gift_card": {"id": 1063936318, "balance": "100.00", "created_at": "2024-01-02T09:01:24-05:00", "updated_at": "2024-01-02T09:01:24-05:00", "currency": "USD", "initial_value": "100.00", "disabled_at": null, "line_item_id": null, "api_client_id": 755357713, "user_id": null, "customer_id": null, "note": "This is a note", "expires_on": null, "template_suffix": "gift_cards.birthday.liquid", "last_characters": "mnop", "order_id": null, "code": "abcdefghijklmnop"}}));
+    queueMockResponse(JSON.stringify({"gift_card": {"id": "1063936318", "balance": "100.00", "created_at": "2024-01-02T09:01:24-05:00", "updated_at": "2024-01-02T09:01:24-05:00", "currency": "USD", "initial_value": "100.00", "disabled_at": null, "line_item_id": null, "api_client_id": "755357713", "user_id": null, "customer_id": null, "note": "This is a note", "expires_on": null, "template_suffix": "gift_cards.birthday.liquid", "last_characters": "mnop", "order_id": null, "code": "abcdefghijklmnop"}}));
 
     const gift_card = new shopify.rest.GiftCard({session: session});
     gift_card.note = "This is a note";
@@ -202,7 +202,7 @@ describe('GiftCard resource', () => {
       testConfig({apiVersion: ApiVersion.April23, restResources}),
     );
 
-    queueMockResponse(JSON.stringify({"gift_card": {"id": 1063936319, "balance": "25.00", "created_at": "2024-01-02T09:01:25-05:00", "updated_at": "2024-01-02T09:01:25-05:00", "currency": "USD", "initial_value": "25.00", "disabled_at": null, "line_item_id": null, "api_client_id": 755357713, "user_id": null, "customer_id": null, "note": null, "expires_on": null, "template_suffix": null, "last_characters": "bc76", "order_id": null, "code": "ad62h8aae5c3bc76"}}));
+    queueMockResponse(JSON.stringify({"gift_card": {"id": "1063936319", "balance": "25.00", "created_at": "2024-01-02T09:01:25-05:00", "updated_at": "2024-01-02T09:01:25-05:00", "currency": "USD", "initial_value": "25.00", "disabled_at": null, "line_item_id": null, "api_client_id": "755357713", "user_id": null, "customer_id": null, "note": null, "expires_on": null, "template_suffix": null, "last_characters": "bc76", "order_id": null, "code": "ad62h8aae5c3bc76"}}));
 
     const gift_card = new shopify.rest.GiftCard({session: session});
     gift_card.initial_value = "25.00";
@@ -223,7 +223,7 @@ describe('GiftCard resource', () => {
       testConfig({apiVersion: ApiVersion.April23, restResources}),
     );
 
-    queueMockResponse(JSON.stringify({"gift_card": {"id": 1063936320, "balance": "100.00", "created_at": "2024-01-02T09:01:26-05:00", "updated_at": "2024-01-02T09:01:26-05:00", "currency": "USD", "initial_value": "100.00", "disabled_at": null, "line_item_id": null, "api_client_id": 755357713, "user_id": null, "customer_id": null, "note": null, "expires_on": null, "template_suffix": null, "last_characters": "6ag3", "order_id": null, "code": "96577h3499436ag3"}}));
+    queueMockResponse(JSON.stringify({"gift_card": {"id": "1063936320", "balance": "100.00", "created_at": "2024-01-02T09:01:26-05:00", "updated_at": "2024-01-02T09:01:26-05:00", "currency": "USD", "initial_value": "100.00", "disabled_at": null, "line_item_id": null, "api_client_id": "755357713", "user_id": null, "customer_id": null, "note": null, "expires_on": null, "template_suffix": null, "last_characters": "6ag3", "order_id": null, "code": "96577h3499436ag3"}}));
 
     const gift_card = new shopify.rest.GiftCard({session: session});
     gift_card.initial_value = "100.00";
@@ -238,7 +238,7 @@ describe('GiftCard resource', () => {
       path: '/admin/api/2023-04/gift_cards.json',
       query: '',
       headers,
-      data: { "gift_card": {"initial_value": "100.00", "recipient_id": 207119551, "message": "Happy birthday!", "send_on": "2023-12-31T19:00:00-05:00"} }
+      data: { "gift_card": {"initial_value": "100.00", "recipient_id": "207119551", "message": "Happy birthday!", "send_on": "2023-12-31T19:00:00-05:00"} }
     }).toMatchMadeHttpRequest();
   });
 
@@ -247,12 +247,12 @@ describe('GiftCard resource', () => {
       testConfig({apiVersion: ApiVersion.April23, restResources}),
     );
 
-    queueMockResponse(JSON.stringify({"gift_card": {"disabled_at": "2024-01-02T09:01:25-05:00", "template_suffix": null, "initial_value": "100.00", "balance": "100.00", "customer_id": null, "id": 1035197676, "created_at": "2024-01-02T08:59:11-05:00", "updated_at": "2024-01-02T09:01:25-05:00", "currency": "USD", "line_item_id": null, "api_client_id": null, "user_id": null, "note": null, "expires_on": null, "last_characters": "0d0d", "order_id": null}}));
+    queueMockResponse(JSON.stringify({"gift_card": {"disabled_at": "2024-01-02T09:01:25-05:00", "template_suffix": null, "initial_value": "100.00", "balance": "100.00", "customer_id": null, "id": "1035197676", "created_at": "2024-01-02T08:59:11-05:00", "updated_at": "2024-01-02T09:01:25-05:00", "currency": "USD", "line_item_id": null, "api_client_id": null, "user_id": null, "note": null, "expires_on": null, "last_characters": "0d0d", "order_id": null}}));
 
     const gift_card = new shopify.rest.GiftCard({session: session});
     gift_card.id = 1035197676;
     await gift_card.disable({
-      body: {"gift_card": {"id": 1035197676}},
+      body: {"gift_card": {"id": "1035197676"}},
     });
 
     expect({
@@ -261,7 +261,7 @@ describe('GiftCard resource', () => {
       path: '/admin/api/2023-04/gift_cards/1035197676/disable.json',
       query: '',
       headers,
-      data: { "gift_card": {"id": 1035197676} }
+      data: { "gift_card": {"id": "1035197676"} }
     }).toMatchMadeHttpRequest();
   });
 
@@ -270,7 +270,7 @@ describe('GiftCard resource', () => {
       testConfig({apiVersion: ApiVersion.April23, restResources}),
     );
 
-    queueMockResponse(JSON.stringify({"gift_cards": [{"id": 1063936321, "balance": "10.00", "created_at": "2024-01-02T09:01:29-05:00", "updated_at": "2024-01-02T09:01:29-05:00", "currency": "USD", "initial_value": "10.00", "disabled_at": null, "line_item_id": null, "api_client_id": null, "user_id": null, "customer_id": null, "note": null, "expires_on": null, "template_suffix": null, "recipient_id": null, "message": null, "send_on": null, "notify": true, "last_characters": "mnop", "order_id": null}]}));
+    queueMockResponse(JSON.stringify({"gift_cards": [{"id": "1063936321", "balance": "10.00", "created_at": "2024-01-02T09:01:29-05:00", "updated_at": "2024-01-02T09:01:29-05:00", "currency": "USD", "initial_value": "10.00", "disabled_at": null, "line_item_id": null, "api_client_id": null, "user_id": null, "customer_id": null, "note": null, "expires_on": null, "template_suffix": null, "recipient_id": null, "message": null, "send_on": null, "notify": true, "last_characters": "mnop", "order_id": null}]}));
 
     await shopify.rest.GiftCard.search({
       session: session,

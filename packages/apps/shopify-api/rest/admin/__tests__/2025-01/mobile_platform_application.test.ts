@@ -26,7 +26,7 @@ describe('MobilePlatformApplication resource', () => {
       testConfig({apiVersion: ApiVersion.January25, restResources}),
     );
 
-    queueMockResponse(JSON.stringify({"mobile_platform_applications": [{"id": 1066176000, "application_id": "X1Y2.ca.domain.app", "platform": "ios", "created_at": "2025-01-02T11:11:11-05:00", "updated_at": "2025-01-02T11:11:11-05:00", "sha256_cert_fingerprints": [], "enabled_universal_or_app_links": true, "enabled_shared_webcredentials": true, "enabled_app_clips": false, "app_clip_application_id": null}, {"id": 1066176001, "application_id": "com.example", "platform": "android", "created_at": "2025-01-02T11:11:11-05:00", "updated_at": "2025-01-02T11:11:11-05:00", "sha256_cert_fingerprints": ["14:6D:E9:83:C5:73:06:50:D8:EE:B9:95:2F:34:FC:64:16:A0:83:42:E6:1D:BE:A8:8A:04:96:B2:3F:CF:44:E5"], "enabled_universal_or_app_links": true, "enabled_shared_webcredentials": false, "enabled_app_clips": false, "app_clip_application_id": null}]}));
+    queueMockResponse(JSON.stringify({"mobile_platform_applications": [{"id": "1066176000", "application_id": "X1Y2.ca.domain.app", "platform": "ios", "created_at": "2025-01-02T11:11:11-05:00", "updated_at": "2025-01-02T11:11:11-05:00", "sha256_cert_fingerprints": [], "enabled_universal_or_app_links": true, "enabled_shared_webcredentials": true, "enabled_app_clips": false, "app_clip_application_id": null}, {"id": "1066176001", "application_id": "com.example", "platform": "android", "created_at": "2025-01-02T11:11:11-05:00", "updated_at": "2025-01-02T11:11:11-05:00", "sha256_cert_fingerprints": ["14:6D:E9:83:C5:73:06:50:D8:EE:B9:95:2F:34:FC:64:16:A0:83:42:E6:1D:BE:A8:8A:04:96:B2:3F:CF:44:E5"], "enabled_universal_or_app_links": true, "enabled_shared_webcredentials": false, "enabled_app_clips": false, "app_clip_application_id": null}]}));
 
     await shopify.rest.MobilePlatformApplication.all({
       session: session,
@@ -47,7 +47,7 @@ describe('MobilePlatformApplication resource', () => {
       testConfig({apiVersion: ApiVersion.January25, restResources}),
     );
 
-    queueMockResponse(JSON.stringify({"mobile_platform_application": {"id": 1066176002, "application_id": "com.example", "platform": "android", "created_at": "2025-01-02T11:11:12-05:00", "updated_at": "2025-01-02T11:11:12-05:00", "sha256_cert_fingerprints": ["14:6D:E9:83:C5:73:06:50:D8:EE:B9:95:2F:34:FC:64:16:A0:83:42:E6:1D:BE:A8:8A:04:96:B2:3F:CF:44:E5"], "enabled_universal_or_app_links": true, "enabled_shared_webcredentials": false, "enabled_app_clips": false, "app_clip_application_id": null}}));
+    queueMockResponse(JSON.stringify({"mobile_platform_application": {"id": "1066176002", "application_id": "com.example", "platform": "android", "created_at": "2025-01-02T11:11:12-05:00", "updated_at": "2025-01-02T11:11:12-05:00", "sha256_cert_fingerprints": ["14:6D:E9:83:C5:73:06:50:D8:EE:B9:95:2F:34:FC:64:16:A0:83:42:E6:1D:BE:A8:8A:04:96:B2:3F:CF:44:E5"], "enabled_universal_or_app_links": true, "enabled_shared_webcredentials": false, "enabled_app_clips": false, "app_clip_application_id": null}}));
 
     const mobile_platform_application = new shopify.rest.MobilePlatformApplication({session: session});
     mobile_platform_application.platform = "android";
@@ -73,7 +73,7 @@ describe('MobilePlatformApplication resource', () => {
       testConfig({apiVersion: ApiVersion.January25, restResources}),
     );
 
-    queueMockResponse(JSON.stringify({"mobile_platform_application": {"id": 1066176003, "application_id": "X1Y2.ca.domain.app", "platform": "ios", "created_at": "2025-01-02T11:11:13-05:00", "updated_at": "2025-01-02T11:11:13-05:00", "sha256_cert_fingerprints": [], "enabled_universal_or_app_links": true, "enabled_shared_webcredentials": true, "enabled_app_clips": false, "app_clip_application_id": null}}));
+    queueMockResponse(JSON.stringify({"mobile_platform_application": {"id": "1066176003", "application_id": "X1Y2.ca.domain.app", "platform": "ios", "created_at": "2025-01-02T11:11:13-05:00", "updated_at": "2025-01-02T11:11:13-05:00", "sha256_cert_fingerprints": [], "enabled_universal_or_app_links": true, "enabled_shared_webcredentials": true, "enabled_app_clips": false, "app_clip_application_id": null}}));
 
     const mobile_platform_application = new shopify.rest.MobilePlatformApplication({session: session});
     mobile_platform_application.platform = "ios";
@@ -97,7 +97,7 @@ describe('MobilePlatformApplication resource', () => {
       testConfig({apiVersion: ApiVersion.January25, restResources}),
     );
 
-    queueMockResponse(JSON.stringify({"mobile_platform_application": {"id": 1066175997, "application_id": "X1Y2.ca.domain.app", "platform": "ios", "created_at": "2025-01-02T11:11:09-05:00", "updated_at": "2025-01-02T11:11:09-05:00", "sha256_cert_fingerprints": [], "enabled_universal_or_app_links": true, "enabled_shared_webcredentials": true, "enabled_app_clips": false, "app_clip_application_id": null}}));
+    queueMockResponse(JSON.stringify({"mobile_platform_application": {"id": "1066175997", "application_id": "X1Y2.ca.domain.app", "platform": "ios", "created_at": "2025-01-02T11:11:09-05:00", "updated_at": "2025-01-02T11:11:09-05:00", "sha256_cert_fingerprints": [], "enabled_universal_or_app_links": true, "enabled_shared_webcredentials": true, "enabled_app_clips": false, "app_clip_application_id": null}}));
 
     await shopify.rest.MobilePlatformApplication.find({
       session: session,
@@ -119,7 +119,7 @@ describe('MobilePlatformApplication resource', () => {
       testConfig({apiVersion: ApiVersion.January25, restResources}),
     );
 
-    queueMockResponse(JSON.stringify({"mobile_platform_application": {"application_id": "com.example.news.app", "platform": "android", "sha256_cert_fingerprints": ["14:6D:E9:83:C5:73:06:50:D8:EE:B9:95:2F:34:FC:64:16:A0:83:42:E6:1D:BE:A8:8A:04:96:B2:3F:CF:44:E5"], "enabled_universal_or_app_links": true, "enabled_shared_webcredentials": false, "id": 1066175998, "created_at": "2025-01-02T11:11:09-05:00", "updated_at": "2025-01-02T11:11:10-05:00", "enabled_app_clips": false, "app_clip_application_id": null}}));
+    queueMockResponse(JSON.stringify({"mobile_platform_application": {"application_id": "com.example.news.app", "platform": "android", "sha256_cert_fingerprints": ["14:6D:E9:83:C5:73:06:50:D8:EE:B9:95:2F:34:FC:64:16:A0:83:42:E6:1D:BE:A8:8A:04:96:B2:3F:CF:44:E5"], "enabled_universal_or_app_links": true, "enabled_shared_webcredentials": false, "id": "1066175998", "created_at": "2025-01-02T11:11:09-05:00", "updated_at": "2025-01-02T11:11:10-05:00", "enabled_app_clips": false, "app_clip_application_id": null}}));
 
     const mobile_platform_application = new shopify.rest.MobilePlatformApplication({session: session});
     mobile_platform_application.id = 1066175998;
@@ -151,7 +151,7 @@ describe('MobilePlatformApplication resource', () => {
       testConfig({apiVersion: ApiVersion.January25, restResources}),
     );
 
-    queueMockResponse(JSON.stringify({"mobile_platform_application": {"application_id": "A1B2.ca.domain.app", "platform": "ios", "sha256_cert_fingerprints": [], "enabled_universal_or_app_links": true, "enabled_shared_webcredentials": true, "id": 1066175996, "created_at": "2025-01-02T11:11:08-05:00", "updated_at": "2025-01-02T11:11:09-05:00", "enabled_app_clips": false, "app_clip_application_id": null}}));
+    queueMockResponse(JSON.stringify({"mobile_platform_application": {"application_id": "A1B2.ca.domain.app", "platform": "ios", "sha256_cert_fingerprints": [], "enabled_universal_or_app_links": true, "enabled_shared_webcredentials": true, "id": "1066175996", "created_at": "2025-01-02T11:11:08-05:00", "updated_at": "2025-01-02T11:11:09-05:00", "enabled_app_clips": false, "app_clip_application_id": null}}));
 
     const mobile_platform_application = new shopify.rest.MobilePlatformApplication({session: session});
     mobile_platform_application.id = 1066175996;

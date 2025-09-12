@@ -26,7 +26,7 @@ describe('TenderTransaction resource', () => {
       testConfig({apiVersion: ApiVersion.October22, restResources}),
     );
 
-    queueMockResponse(JSON.stringify({"tender_transactions": [{"id": 1011222858, "order_id": 450789469, "amount": "250.94", "currency": "USD", "user_id": null, "test": false, "processed_at": "2005-08-07T10:22:51-04:00", "remote_reference": "authorization-key", "payment_details": null, "payment_method": "credit_card"}, {"id": 1011222857, "order_id": 450789469, "amount": "250.94", "currency": "USD", "user_id": null, "test": false, "processed_at": "2005-08-05T10:22:51-04:00", "remote_reference": "authorization-key", "payment_details": null, "payment_method": "credit_card"}]}));
+    queueMockResponse(JSON.stringify({"tender_transactions": [{"id": "1011222858", "order_id": "450789469", "amount": "250.94", "currency": "USD", "user_id": null, "test": false, "processed_at": "2005-08-07T10:22:51-04:00", "remote_reference": "authorization-key", "payment_details": null, "payment_method": "credit_card"}, {"id": "1011222857", "order_id": "450789469", "amount": "250.94", "currency": "USD", "user_id": null, "test": false, "processed_at": "2005-08-05T10:22:51-04:00", "remote_reference": "authorization-key", "payment_details": null, "payment_method": "credit_card"}]}));
 
     await shopify.rest.TenderTransaction.all({
       session: session,
@@ -47,7 +47,7 @@ describe('TenderTransaction resource', () => {
       testConfig({apiVersion: ApiVersion.October22, restResources}),
     );
 
-    queueMockResponse(JSON.stringify({"tender_transactions": [{"id": 1011222848, "order_id": 450789469, "amount": "250.94", "currency": "USD", "user_id": null, "test": false, "processed_at": "2005-08-07T10:22:51-04:00", "remote_reference": "authorization-key", "payment_details": null, "payment_method": "credit_card"}]}));
+    queueMockResponse(JSON.stringify({"tender_transactions": [{"id": "1011222848", "order_id": "450789469", "amount": "250.94", "currency": "USD", "user_id": null, "test": false, "processed_at": "2005-08-07T10:22:51-04:00", "remote_reference": "authorization-key", "payment_details": null, "payment_method": "credit_card"}]}));
 
     await shopify.rest.TenderTransaction.all({
       session: session,
@@ -69,7 +69,7 @@ describe('TenderTransaction resource', () => {
       testConfig({apiVersion: ApiVersion.October22, restResources}),
     );
 
-    queueMockResponse(JSON.stringify({"tender_transactions": [{"id": 1011222849, "order_id": 450789469, "amount": "250.94", "currency": "USD", "user_id": null, "test": false, "processed_at": "2005-08-05T10:22:51-04:00", "remote_reference": "authorization-key", "payment_details": null, "payment_method": "credit_card"}, {"id": 1011222850, "order_id": 450789469, "amount": "250.94", "currency": "USD", "user_id": null, "test": false, "processed_at": "2005-08-07T10:22:51-04:00", "remote_reference": "authorization-key", "payment_details": null, "payment_method": "credit_card"}]}));
+    queueMockResponse(JSON.stringify({"tender_transactions": [{"id": "1011222849", "order_id": "450789469", "amount": "250.94", "currency": "USD", "user_id": null, "test": false, "processed_at": "2005-08-05T10:22:51-04:00", "remote_reference": "authorization-key", "payment_details": null, "payment_method": "credit_card"}, {"id": "1011222850", "order_id": "450789469", "amount": "250.94", "currency": "USD", "user_id": null, "test": false, "processed_at": "2005-08-07T10:22:51-04:00", "remote_reference": "authorization-key", "payment_details": null, "payment_method": "credit_card"}]}));
 
     await shopify.rest.TenderTransaction.all({
       session: session,
@@ -91,7 +91,7 @@ describe('TenderTransaction resource', () => {
       testConfig({apiVersion: ApiVersion.October22, restResources}),
     );
 
-    queueMockResponse(JSON.stringify({"tender_transactions": [{"id": 1011222856, "order_id": 450789469, "amount": "250.94", "currency": "USD", "user_id": null, "test": false, "processed_at": "2005-08-07T10:22:51-04:00", "remote_reference": "authorization-key", "payment_details": null, "payment_method": "credit_card"}]}));
+    queueMockResponse(JSON.stringify({"tender_transactions": [{"id": "1011222856", "order_id": "450789469", "amount": "250.94", "currency": "USD", "user_id": null, "test": false, "processed_at": "2005-08-07T10:22:51-04:00", "remote_reference": "authorization-key", "payment_details": null, "payment_method": "credit_card"}]}));
 
     await shopify.rest.TenderTransaction.all({
       session: session,
@@ -113,7 +113,7 @@ describe('TenderTransaction resource', () => {
       testConfig({apiVersion: ApiVersion.October22, restResources}),
     );
 
-    queueMockResponse(JSON.stringify({"tender_transactions": [{"id": 1011222851, "order_id": 450789469, "amount": "250.94", "currency": "USD", "user_id": null, "test": false, "processed_at": "2005-08-05T10:22:51-04:00", "remote_reference": "authorization-key", "payment_details": null, "payment_method": "credit_card"}]}));
+    queueMockResponse(JSON.stringify({"tender_transactions": [{"id": "1011222851", "order_id": "450789469", "amount": "250.94", "currency": "USD", "user_id": null, "test": false, "processed_at": "2005-08-05T10:22:51-04:00", "remote_reference": "authorization-key", "payment_details": null, "payment_method": "credit_card"}]}));
 
     await shopify.rest.TenderTransaction.all({
       session: session,
@@ -135,7 +135,7 @@ describe('TenderTransaction resource', () => {
       testConfig({apiVersion: ApiVersion.October22, restResources}),
     );
 
-    queueMockResponse(JSON.stringify({"tender_transactions": [{"id": 1011222853, "order_id": 450789469, "amount": "250.94", "currency": "USD", "user_id": null, "test": false, "processed_at": "2005-08-05T10:22:51-04:00", "remote_reference": "authorization-key", "payment_details": null, "payment_method": "credit_card"}]}));
+    queueMockResponse(JSON.stringify({"tender_transactions": [{"id": "1011222853", "order_id": "450789469", "amount": "250.94", "currency": "USD", "user_id": null, "test": false, "processed_at": "2005-08-05T10:22:51-04:00", "remote_reference": "authorization-key", "payment_details": null, "payment_method": "credit_card"}]}));
 
     await shopify.rest.TenderTransaction.all({
       session: session,
