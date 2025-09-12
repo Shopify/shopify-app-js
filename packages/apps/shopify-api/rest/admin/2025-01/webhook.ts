@@ -139,7 +139,7 @@ export class Webhook extends Base {
   public created_at: string | null;
   public fields: string[] | null;
   public format: string | null;
-  public id: number | null;
+  public id: string | null;
   public metafield_namespaces: string[] | null;
   public private_metafield_namespaces: string[] | null;
   public updated_at: string | null;

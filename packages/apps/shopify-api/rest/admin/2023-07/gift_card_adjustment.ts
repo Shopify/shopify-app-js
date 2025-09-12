@@ -73,15 +73,15 @@ export class GiftCardAdjustment extends Base {
   }
 
   public amount: number | null;
-  public api_client_id: number | null;
+  public api_client_id: string | null;
   public created_at: string | null;
-  public gift_card_id: number | null;
-  public id: number | null;
+  public gift_card_id: string | null;
+  public id: string | null;
   public note: string | null;
   public number: number | null;
-  public order_transaction_id: number | null;
+  public order_transaction_id: string | null;
   public processed_at: string | null;
   public remote_transaction_ref: string | null;
   public remote_transaction_url: string | null;
-  public user_id: number | null;
+  public user_id: string | null;
 }

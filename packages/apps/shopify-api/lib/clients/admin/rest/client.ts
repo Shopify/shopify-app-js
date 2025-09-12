@@ -2,6 +2,7 @@ import {
   AdminRestApiClient,
   createAdminRestApiClient,
 } from '@shopify/admin-api-client';
+import * as LosslessJSON from 'lossless-json';
 
 import {
   clientLoggerFactory,
@@ -172,7 +173,7 @@ export class RestClient {
     const body: any =
       params.method === Method.Delete && bodyString === ''
         ? {}
-        : JSON.parse(bodyString);
+        : this.parseJsonWithLosslessNumbers(bodyString);
 
     const responseHeaders = canonicalizeHeaders(
       Object.fromEntries(response.headers.entries()),
@@ -246,6 +247,61 @@ export class RestClient {
 
   private restClass() {
     return this.constructor as typeof RestClient;
+  }
+
+  /**
+   * Parse JSON with lossless-json to preserve numeric precision.
+   * Converts all ID fields (ending with _id, _ids, or named 'id') to strings.
+   */
+  private parseJsonWithLosslessNumbers(jsonString: string): any {
+    // Parse with lossless-json first to preserve precision
+    const parsed = LosslessJSON.parse(jsonString);
+    
+    // Recursively process the parsed object to convert IDs to strings
+    const processValue = (value: any, key?: string): any => {
+      if (value === null || value === undefined) {
+        return value;
+      }
+      
+      // Handle LosslessNumber instances
+      if (value && value.isLosslessNumber === true) {
+        const keyLower = (key || '').toLowerCase();
+        // Always convert ID fields to strings
+        if (keyLower === 'id' || keyLower.endsWith('_id')) {
+          return value.toString();
+        }
+        // For non-ID fields, always convert to regular JavaScript number
+        // The IDs have already been handled, so we can use standard conversion
+        return Number(value.value);
+      }
+      
+      // Handle arrays - special case for _ids arrays
+      if (Array.isArray(value)) {
+        const isIdsArray = key && key.toLowerCase().endsWith('_ids');
+        return value.map(item => {
+          // If this is an _ids array and item is a LosslessNumber, convert to string
+          if (isIdsArray && item && item.isLosslessNumber === true) {
+            return item.toString();
+          }
+          return processValue(item);
+        });
+      }
+      
+      // Handle objects
+      if (typeof value === 'object') {
+        const result: any = {};
+        for (const objKey in value) {
+          if (Object.prototype.hasOwnProperty.call(value, objKey)) {
+            result[objKey] = processValue(value[objKey], objKey);
+          }
+        }
+        return result;
+      }
+      
+      return value;
+    };
+    
+    return processValue(parsed);
   }
 
   private buildRequestParams(newPageUrl: string): PageInfoParams {

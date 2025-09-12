@@ -26,7 +26,7 @@ describe('Redirect resource', () => {
       testConfig({apiVersion: ApiVersion.January23, restResources}),
     );
 
-    queueMockResponse(JSON.stringify({"redirects": [{"id": 950115854, "path": "/ibook", "target": "/products/macbook"}]}));
+    queueMockResponse(JSON.stringify({"redirects": [{"id": "950115854", "path": "/ibook", "target": "/products/macbook"}]}));
 
     await shopify.rest.Redirect.all({
       session: session,
@@ -48,7 +48,7 @@ describe('Redirect resource', () => {
       testConfig({apiVersion: ApiVersion.January23, restResources}),
     );
 
-    queueMockResponse(JSON.stringify({"redirects": [{"id": 304339089, "path": "/products.php", "target": "/products"}, {"id": 668809255, "path": "/leopard", "target": "/pages/macosx"}, {"id": 950115854, "path": "/ibook", "target": "/products/macbook"}]}));
+    queueMockResponse(JSON.stringify({"redirects": [{"id": "304339089", "path": "/products.php", "target": "/products"}, {"id": "668809255", "path": "/leopard", "target": "/pages/macosx"}, {"id": "950115854", "path": "/ibook", "target": "/products/macbook"}]}));
 
     await shopify.rest.Redirect.all({
       session: session,
@@ -90,7 +90,7 @@ describe('Redirect resource', () => {
       testConfig({apiVersion: ApiVersion.January23, restResources}),
     );
 
-    queueMockResponse(JSON.stringify({"redirect": {"id": 668809255, "path": "/leopard", "target": "/pages/macosx"}}));
+    queueMockResponse(JSON.stringify({"redirect": {"id": "668809255", "path": "/leopard", "target": "/pages/macosx"}}));
 
     await shopify.rest.Redirect.find({
       session: session,
@@ -112,7 +112,7 @@ describe('Redirect resource', () => {
       testConfig({apiVersion: ApiVersion.January23, restResources}),
     );
 
-    queueMockResponse(JSON.stringify({"redirect": {"path": "/powermac", "target": "/pages/macpro", "id": 950115854}}));
+    queueMockResponse(JSON.stringify({"redirect": {"path": "/powermac", "target": "/pages/macpro", "id": "950115854"}}));
 
     const redirect = new shopify.rest.Redirect({session: session});
     redirect.id = 950115854;
@@ -135,7 +135,7 @@ describe('Redirect resource', () => {
       testConfig({apiVersion: ApiVersion.January23, restResources}),
     );
 
-    queueMockResponse(JSON.stringify({"redirect": {"path": "/tiger", "target": "/pages/macosx", "id": 668809255}}));
+    queueMockResponse(JSON.stringify({"redirect": {"path": "/tiger", "target": "/pages/macosx", "id": "668809255"}}));
 
     const redirect = new shopify.rest.Redirect({session: session});
     redirect.id = 668809255;
@@ -157,7 +157,7 @@ describe('Redirect resource', () => {
       testConfig({apiVersion: ApiVersion.January23, restResources}),
     );
 
-    queueMockResponse(JSON.stringify({"redirect": {"target": "/pages/macpro", "path": "/leopard", "id": 668809255}}));
+    queueMockResponse(JSON.stringify({"redirect": {"target": "/pages/macpro", "path": "/leopard", "id": "668809255"}}));
 
     const redirect = new shopify.rest.Redirect({session: session});
     redirect.id = 668809255;
@@ -201,7 +201,7 @@ describe('Redirect resource', () => {
       testConfig({apiVersion: ApiVersion.January23, restResources}),
     );
 
-    queueMockResponse(JSON.stringify({"redirect": {"id": 984542200, "path": "/ipod", "target": "/pages/itunes"}}));
+    queueMockResponse(JSON.stringify({"redirect": {"id": "984542200", "path": "/ipod", "target": "/pages/itunes"}}));
 
     const redirect = new shopify.rest.Redirect({session: session});
     redirect.path = "/ipod";
@@ -223,7 +223,7 @@ describe('Redirect resource', () => {
       testConfig({apiVersion: ApiVersion.January23, restResources}),
     );
 
-    queueMockResponse(JSON.stringify({"redirect": {"id": 984542199, "path": "/forums", "target": "http://forums.apple.com/"}}));
+    queueMockResponse(JSON.stringify({"redirect": {"id": "984542199", "path": "/forums", "target": "http://forums.apple.com/"}}));
 
     const redirect = new shopify.rest.Redirect({session: session});
     redirect.path = "http://www.apple.com/forums";

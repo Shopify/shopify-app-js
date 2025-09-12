@@ -65,6 +65,6 @@ export class AndroidPayKey extends Base {
     return response ? response.body : null;
   }
 
-  public id: number | null;
+  public id: string | null;
   public public_key: string | null;
 }

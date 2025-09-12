@@ -183,7 +183,7 @@ export class SmartCollection extends Base {
   public body_html: string | null;
   public disjunctive: boolean | null;
   public handle: string | null;
-  public id: number | null;
+  public id: string | null;
   public image: string | {[key: string]: unknown} | null;
   public published_at: string | null;
   public published_scope: string | null;

@@ -76,6 +76,6 @@ export class Payout extends Base {
   public amount: string | null;
   public currency: string | null;
   public date: string | null;
-  public id: number | null;
+  public id: string | null;
   public status: string | null;
 }

@@ -36,7 +36,7 @@ describe('Base REST resource', () => {
 
     const got = (await shopify.rest.FakeResource.find({id: 1, session}))!;
 
-    expect([got.id, got.attribute]).toEqual([1, 'attribute']);
+    expect([got.id, got.attribute]).toEqual(['1', 'attribute']);
     expect({
       method: 'GET',
       domain,
@@ -65,7 +65,7 @@ describe('Base REST resource', () => {
       param: 'value',
     }))!;
 
-    expect([got.id, got.attribute]).toEqual([1, 'attribute']);
+    expect([got.id, got.attribute]).toEqual(['1', 'attribute']);
     expect({
       method: 'GET',
       domain,
@@ -89,19 +89,19 @@ describe('Base REST resource', () => {
 
     const got = (await shopify.rest.FakeResource.find({id: 1, session}))!;
 
-    expect([got.id, got.attribute]).toEqual([1, 'attribute1']);
+    expect([got.id, got.attribute]).toEqual(['1', 'attribute1']);
 
     expect(got.has_one_attribute!.constructor.name).toEqual('FakeResource');
     expect([
       got.has_one_attribute!.id,
       got.has_one_attribute!.attribute,
-    ]).toEqual([2, 'attribute2']);
+    ]).toEqual(['2', 'attribute2']);
 
     expect(got.has_many_attribute![0].constructor.name).toEqual('FakeResource');
     expect([
       got.has_many_attribute![0].id,
       got.has_many_attribute![0].attribute,
-    ]).toEqual([3, 'attribute3']);
+    ]).toEqual(['3', 'attribute3']);
 
     expect({
       method: 'GET',
@@ -155,8 +155,8 @@ describe('Base REST resource', () => {
 
     const got = (await shopify.rest.FakeResource.all({session})).data;
 
-    expect([got[0].id, got[0].attribute]).toEqual([1, 'attribute1']);
-    expect([got[1].id, got[1].attribute]).toEqual([2, 'attribute2']);
+    expect([got[0].id, got[0].attribute]).toEqual(['1', 'attribute1']);
+    expect([got[1].id, got[1].attribute]).toEqual(['2', 'attribute2']);
     expect({
       method: 'GET',
       domain,
@@ -178,8 +178,8 @@ describe('Base REST resource', () => {
 
     const got = (await shopify.rest.FakeResource.all({session})).data;
 
-    expect([got[0].id, got[0].attribute]).toEqual([1, 'attribute1']);
-    expect([got[1].id, got[1].attribute]).toEqual([2, 'attribute2']);
+    expect([got[0].id, got[0].attribute]).toEqual(['1', 'attribute1']);
+    expect([got[1].id, got[1].attribute]).toEqual(['2', 'attribute2']);
     expect({
       method: 'GET',
       domain,
@@ -220,7 +220,7 @@ describe('Base REST resource', () => {
     resource.attribute = 'attribute';
     await resource.saveAndUpdate();
 
-    expect(resource.id).toEqual(1);
+    expect(resource.id).toEqual('1');
     expect({
       method: 'POST',
       domain,
@@ -244,7 +244,7 @@ describe('Base REST resource', () => {
     resource.attribute = 'attribute';
     await resource.saveAndUpdate();
 
-    expect(resource.id).toEqual(1);
+    expect(resource.id).toEqual('1');
     expect({
       method: 'POST',
       domain,
@@ -469,7 +469,8 @@ describe('Base REST resource', () => {
       other_resource_id: 2,
     });
 
-    expect(got).toEqual(body);
+    // ID should be converted to string by lossless-json parsing
+    expect(got).toEqual({fake_resource: {id: '1', attribute: 'attribute'}});
     expect({
       method: 'GET',
       domain,
@@ -562,7 +563,7 @@ describe('Base REST resource', () => {
       } else {
         expect(response.headers.Link).toBeUndefined();
       }
-      expect(response.data[0].id).toEqual(i + 1);
+      expect(response.data[0].id).toEqual(String(i + 1));
 
       pageInfo = response.pageInfo;
       i++;
@@ -582,7 +583,7 @@ describe('Base REST resource', () => {
       session,
     }))!;
 
-    expect([got.id, got.attribute]).toEqual([1, 'attribute']);
+    expect([got.id, got.attribute]).toEqual(['1', 'attribute']);
     expect({
       method: 'GET',
       domain,
@@ -704,7 +705,7 @@ describe('REST resources with a different API version', () => {
       session,
     }))!;
     expect(fakeResource).not.toEqual(fakeResource2);
-    expect(fakeResource2.id).toEqual(1);
+    expect(fakeResource2.id).toEqual('1');
     expect(fakeResource2.attribute).toEqual('attribute');
     expect({
       method: 'GET',
@@ -733,5 +734,98 @@ describe('REST resources with a different API version', () => {
       path: `/admin/api/${ApiVersion.July25}/fake_resources/1.json`,
       headers,
     }).toMatchMadeHttpRequest();
+  });
+});
+
+describe('ID Normalization', () => {
+  const domain = 'test-shop.myshopify.io';
+  const headers = {'X-Shopify-Access-Token': 'access-token'};
+  const session = new Session({
+    id: '1234',
+    shop: domain,
+    state: '1234',
+    isOnline: true,
+  });
+  session.accessToken = 'access-token';
+
+
+  it('accepts numeric IDs as parameters and returns string IDs', async () => {
+    const shopify = shopifyApi(testConfig({restResources}));
+
+    // Response will have IDs converted to strings by lossless-json
+    const body = {
+      fake_resource: {
+        id: 9007199254740991, // MAX_SAFE_INTEGER
+        attribute: 'test',
+        other_resource_id: 12345
+      }
+    };
+    queueMockResponse(JSON.stringify(body));
+
+    // Can pass numeric ID as parameter (backward compatibility)
+    const resource = await shopify.rest.FakeResource.find({
+      id: 9007199254740991,  // Numeric ID accepted
+      session
+    });
+
+    // But IDs in response are strings (converted by lossless-json)
+    expect(resource!.id).toBe('9007199254740991');
+    expect(resource!.other_resource_id).toBe('12345');
+    expect(resource!.attribute).toBe('test');
+  });
+
+  it('converts IDs to strings in nested resources', async () => {
+    const shopify = shopifyApi(testConfig({restResources}));
+
+    const body = {
+      fake_resource: {
+        id: 1234567890,
+        has_one_attribute: {
+          id: 2345678901,
+          attribute: 'nested'
+        },
+        has_many_attribute: [
+          {id: 3456789012, attribute: 'item1'},
+          {id: 4567890123, attribute: 'item2'}
+        ]
+      }
+    };
+    queueMockResponse(JSON.stringify(body));
+
+    const resource = await shopify.rest.FakeResource.find({
+      id: 1234567890,
+      session
+    });
+
+    // Parent ID converted to string by lossless-json
+    expect(resource!.id).toBe('1234567890');
+    
+    // Nested has_one ID converted to string
+    expect(resource!.has_one_attribute!.id).toBe('2345678901');
+    
+    // Nested has_many IDs converted to strings
+    expect(resource!.has_many_attribute![0].id).toBe('3456789012');
+    expect(resource!.has_many_attribute![1].id).toBe('4567890123');
+  });
+
+  it('handles mixed string and number IDs in arrays', async () => {
+    const shopify = shopifyApi(testConfig({restResources}));
+
+    const body = {
+      fake_resources: [
+        {id: 123, attribute: 'first'},
+        {id: '456', attribute: 'second'},
+        {id: 9007199254740991, attribute: 'third'}
+      ]
+    };
+    queueMockResponse(JSON.stringify(body));
+
+    const response = await shopify.rest.FakeResource.all({session});
+    const resources = response.data;
+
+    // All IDs should be normalized to strings
+    expect(resources[0].id).toBe('123');
+    expect(resources[1].id).toBe('456');
+    expect(resources[2].id).toBe('9007199254740991');
   });
 });

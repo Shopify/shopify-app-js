@@ -26,7 +26,7 @@ describe('AndroidPayKey resource', () => {
       testConfig({apiVersion: ApiVersion.October22, restResources}),
     );
 
-    queueMockResponse(JSON.stringify({"android_pay_key": {"id": 964811894, "public_key": "BPI5no5liIrAC3knvJnxSoMW09D0KwbJOnv+TaAmd3Fur3wYlD85yFaJABZC\n1qb/14GtM+616y8SrKwaVOSu4U8=\n"}}));
+    queueMockResponse(JSON.stringify({"android_pay_key": {"id": "964811894", "public_key": "BPI5no5liIrAC3knvJnxSoMW09D0KwbJOnv+TaAmd3Fur3wYlD85yFaJABZC\n1qb/14GtM+616y8SrKwaVOSu4U8=\n"}}));
 
     const android_pay_key = new shopify.rest.AndroidPayKey({session: session});
 
@@ -47,7 +47,7 @@ describe('AndroidPayKey resource', () => {
       testConfig({apiVersion: ApiVersion.October22, restResources}),
     );
 
-    queueMockResponse(JSON.stringify({"android_pay_key": {"id": 964811895, "public_key": "BPI5no5liIrAC3knvJnxSoMW09D0KwbJOnv+TaAmd3Fur3wYlD85yFaJABZC\n1qb/14GtM+616y8SrKwaVOSu4U8=\n"}}));
+    queueMockResponse(JSON.stringify({"android_pay_key": {"id": "964811895", "public_key": "BPI5no5liIrAC3knvJnxSoMW09D0KwbJOnv+TaAmd3Fur3wYlD85yFaJABZC\n1qb/14GtM+616y8SrKwaVOSu4U8=\n"}}));
 
     await shopify.rest.AndroidPayKey.find({
       session: session,

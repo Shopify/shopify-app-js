@@ -26,7 +26,7 @@ describe('PaymentGateway resource', () => {
       testConfig({apiVersion: ApiVersion.April25, restResources}),
     );
 
-    queueMockResponse(JSON.stringify({"payment_gateways": [{"disabled": true, "id": 170508070, "name": "Cash on Delivery (COD)", "provider_id": 140, "sandbox": false, "supports_network_tokenization": null, "type": "ManualPaymentGateway", "enabled_card_brands": [], "processing_method": "manual", "service_name": "Cash on Delivery (COD)", "metadata": {}, "created_at": "2025-04-02T11:09:43-05:00", "updated_at": "2025-04-02T11:09:43-05:00"}, {"disabled": false, "id": 431363653, "name": "shopify_payments", "provider_id": 87, "sandbox": false, "supports_network_tokenization": null, "type": "DirectPaymentGateway", "enabled_card_brands": ["visa", "master", "american_express", "discover", "diners_club"], "processing_method": "direct", "service_name": "Shopify Payments", "metadata": {"google_pay_merchant_id": 548380009}, "created_at": "2011-12-31T19:00:00-05:00", "updated_at": "2025-04-02T11:20:26-05:00", "credential4": null, "attachment": null}]}));
+    queueMockResponse(JSON.stringify({"payment_gateways": [{"disabled": true, "id": "170508070", "name": "Cash on Delivery (COD)", "provider_id": "140", "sandbox": false, "supports_network_tokenization": null, "type": "ManualPaymentGateway", "enabled_card_brands": [], "processing_method": "manual", "service_name": "Cash on Delivery (COD)", "metadata": {}, "created_at": "2025-04-02T11:09:43-05:00", "updated_at": "2025-04-02T11:09:43-05:00"}, {"disabled": false, "id": "431363653", "name": "shopify_payments", "provider_id": "87", "sandbox": false, "supports_network_tokenization": null, "type": "DirectPaymentGateway", "enabled_card_brands": ["visa", "master", "american_express", "discover", "diners_club"], "processing_method": "direct", "service_name": "Shopify Payments", "metadata": {"google_pay_merchant_id": "548380009"}, "created_at": "2011-12-31T19:00:00-05:00", "updated_at": "2025-04-02T11:20:26-05:00", "credential4": null, "attachment": null}]}));
 
     await shopify.rest.PaymentGateway.all({
       session: session,
@@ -47,7 +47,7 @@ describe('PaymentGateway resource', () => {
       testConfig({apiVersion: ApiVersion.April25, restResources}),
     );
 
-    queueMockResponse(JSON.stringify({"payment_gateways": [{"disabled": false, "id": 431363653, "name": "shopify_payments", "provider_id": 87, "sandbox": false, "supports_network_tokenization": null, "type": "DirectPaymentGateway", "enabled_card_brands": ["visa", "master", "american_express", "discover", "diners_club"], "processing_method": "direct", "service_name": "Shopify Payments", "metadata": {"google_pay_merchant_id": 548380009}, "created_at": "2011-12-31T19:00:00-05:00", "updated_at": "2025-04-02T11:20:25-05:00", "credential4": null, "attachment": null}]}));
+    queueMockResponse(JSON.stringify({"payment_gateways": [{"disabled": false, "id": "431363653", "name": "shopify_payments", "provider_id": "87", "sandbox": false, "supports_network_tokenization": null, "type": "DirectPaymentGateway", "enabled_card_brands": ["visa", "master", "american_express", "discover", "diners_club"], "processing_method": "direct", "service_name": "Shopify Payments", "metadata": {"google_pay_merchant_id": "548380009"}, "created_at": "2011-12-31T19:00:00-05:00", "updated_at": "2025-04-02T11:20:25-05:00", "credential4": null, "attachment": null}]}));
 
     await shopify.rest.PaymentGateway.all({
       session: session,
@@ -69,7 +69,7 @@ describe('PaymentGateway resource', () => {
       testConfig({apiVersion: ApiVersion.April25, restResources}),
     );
 
-    queueMockResponse(JSON.stringify({"payment_gateway": {"disabled": false, "id": 1071179973, "name": "authorize_net", "provider_id": 7, "sandbox": false, "supports_network_tokenization": null, "type": "DirectPaymentGateway", "enabled_card_brands": ["visa", "master", "american_express", "discover", "diners_club", "jcb"], "processing_method": "direct", "service_name": "Authorize.net", "metadata": {}, "created_at": "2025-04-02T11:20:29-05:00", "updated_at": "2025-04-02T11:20:29-05:00", "credential1": "someone@example.com", "credential3": null, "credential4": null, "attachment": null}}));
+    queueMockResponse(JSON.stringify({"payment_gateway": {"disabled": false, "id": "1071179973", "name": "authorize_net", "provider_id": "7", "sandbox": false, "supports_network_tokenization": null, "type": "DirectPaymentGateway", "enabled_card_brands": ["visa", "master", "american_express", "discover", "diners_club", "jcb"], "processing_method": "direct", "service_name": "Authorize.net", "metadata": {}, "created_at": "2025-04-02T11:20:29-05:00", "updated_at": "2025-04-02T11:20:29-05:00", "credential1": "someone@example.com", "credential3": null, "credential4": null, "attachment": null}}));
 
     const payment_gateway = new shopify.rest.PaymentGateway({session: session});
     payment_gateway.credential1 = "someone@example.com";
@@ -82,7 +82,7 @@ describe('PaymentGateway resource', () => {
       path: '/admin/api/2025-04/payment_gateways.json',
       query: '',
       headers,
-      data: { "payment_gateway": {"credential1": "someone@example.com", "provider_id": 7} }
+      data: { "payment_gateway": {"credential1": "someone@example.com", "provider_id": "7"} }
     }).toMatchMadeHttpRequest();
   });
 
@@ -91,7 +91,7 @@ describe('PaymentGateway resource', () => {
       testConfig({apiVersion: ApiVersion.April25, restResources}),
     );
 
-    queueMockResponse(JSON.stringify({"payment": {"disabled": false, "id": 431363653, "name": "shopify_payments", "provider_id": 87, "sandbox": false, "supports_network_tokenization": null, "type": "DirectPaymentGateway", "enabled_card_brands": ["visa", "master", "american_express", "discover", "diners_club"], "processing_method": "direct", "service_name": "Shopify Payments", "metadata": {"google_pay_merchant_id": 548380009}, "created_at": "2011-12-31T19:00:00-05:00", "updated_at": "2025-04-02T11:20:27-05:00", "credential4": null, "attachment": null}}));
+    queueMockResponse(JSON.stringify({"payment": {"disabled": false, "id": "431363653", "name": "shopify_payments", "provider_id": "87", "sandbox": false, "supports_network_tokenization": null, "type": "DirectPaymentGateway", "enabled_card_brands": ["visa", "master", "american_express", "discover", "diners_club"], "processing_method": "direct", "service_name": "Shopify Payments", "metadata": {"google_pay_merchant_id": "548380009"}, "created_at": "2011-12-31T19:00:00-05:00", "updated_at": "2025-04-02T11:20:27-05:00", "credential4": null, "attachment": null}}));
 
     await shopify.rest.PaymentGateway.find({
       session: session,
@@ -113,7 +113,7 @@ describe('PaymentGateway resource', () => {
       testConfig({apiVersion: ApiVersion.April25, restResources}),
     );
 
-    queueMockResponse(JSON.stringify({"payment_gateway": {"disabled": false, "id": 170508070, "name": "Cash on Delivery (COD)", "provider_id": 140, "sandbox": true, "supports_network_tokenization": null, "type": "ManualPaymentGateway", "enabled_card_brands": [], "processing_method": "manual", "service_name": "Cash on Delivery (COD)", "metadata": {}, "created_at": "2025-04-02T11:09:43-05:00", "updated_at": "2025-04-02T11:20:25-05:00"}}));
+    queueMockResponse(JSON.stringify({"payment_gateway": {"disabled": false, "id": "170508070", "name": "Cash on Delivery (COD)", "provider_id": "140", "sandbox": true, "supports_network_tokenization": null, "type": "ManualPaymentGateway", "enabled_card_brands": [], "processing_method": "manual", "service_name": "Cash on Delivery (COD)", "metadata": {}, "created_at": "2025-04-02T11:09:43-05:00", "updated_at": "2025-04-02T11:20:25-05:00"}}));
 
     const payment_gateway = new shopify.rest.PaymentGateway({session: session});
     payment_gateway.id = 170508070;

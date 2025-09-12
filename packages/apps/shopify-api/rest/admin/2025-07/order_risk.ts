@@ -97,12 +97,12 @@ export class OrderRisk extends Base {
   }
 
   public cause_cancel: boolean | null;
-  public checkout_id: number | null;
+  public checkout_id: string | null;
   public display: boolean | null;
-  public id: number | null;
+  public id: string | null;
   public merchant_message: string | null;
   public message: string | null;
-  public order_id: number | null;
+  public order_id: string | null;
   public recommendation: string | null;
   public score: string | null;
   public source: string | null;

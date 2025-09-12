@@ -91,12 +91,12 @@ export class Theme extends Base {
   }
 
   public created_at: string | null;
-  public id: number | null;
+  public id: string | null;
   public name: string | null;
   public previewable: boolean | null;
   public processing: boolean | null;
   public role: string | null;
   public src: string | null;
-  public theme_store_id: number | null;
+  public theme_store_id: string | null;
   public updated_at: string | null;
 }

@@ -178,7 +178,7 @@ export class Product extends Base {
   public body_html: string | null;
   public created_at: string | null;
   public handle: string | null;
-  public id: number | null;
+  public id: string | null;
   public images: Image[] | null | {[key: string]: any};
   public options: {[key: string]: unknown} | {[key: string]: unknown}[] | null;
   public product_type: string | null;

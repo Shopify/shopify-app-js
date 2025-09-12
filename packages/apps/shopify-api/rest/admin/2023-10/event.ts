@@ -116,10 +116,10 @@ export class Event extends Base {
   public body: string | null;
   public created_at: string | null;
   public description: string | null;
-  public id: number | null;
+  public id: string | null;
   public message: string | null;
   public path: string | null;
-  public subject_id: number | null;
+  public subject_id: string | null;
   public subject_type: string | null;
   public verb: string | null;
 }

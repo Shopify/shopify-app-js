@@ -160,10 +160,10 @@ export class Page extends Base {
   public body_html: string | null;
   public created_at: string | null;
   public handle: string | null;
-  public id: number | null;
+  public id: string | null;
   public metafield: Metafield | null | {[key: string]: any};
   public published_at: string | null;
-  public shop_id: number | null;
+  public shop_id: string | null;
   public template_suffix: string | null;
   public title: string | null;
   public updated_at: string | null;

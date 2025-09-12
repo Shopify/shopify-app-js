@@ -166,7 +166,7 @@ export class MarketingEvent extends Base {
   public currency: string | null;
   public description: string | null;
   public ended_at: string | null;
-  public id: number | null;
+  public id: string | null;
   public manage_url: string | null;
   public marketed_resources: {[key: string]: unknown}[] | null;
   public preview_url: string | null;

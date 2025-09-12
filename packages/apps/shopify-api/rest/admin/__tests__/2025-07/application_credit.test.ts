@@ -26,7 +26,7 @@ describe('ApplicationCredit resource', () => {
       testConfig({apiVersion: ApiVersion.July25, restResources}),
     );
 
-    queueMockResponse(JSON.stringify({"application_credit": {"id": 140583599, "amount": "5.00", "description": "credit for application refund", "test": null, "currency": "USD"}}));
+    queueMockResponse(JSON.stringify({"application_credit": {"id": "140583599", "amount": "5.00", "description": "credit for application refund", "test": null, "currency": "USD"}}));
 
     await shopify.rest.ApplicationCredit.find({
       session: session,
@@ -48,7 +48,7 @@ describe('ApplicationCredit resource', () => {
       testConfig({apiVersion: ApiVersion.July25, restResources}),
     );
 
-    queueMockResponse(JSON.stringify({"application_credits": [{"id": 140583599, "amount": "5.00", "description": "credit for application refund", "test": null, "currency": "USD"}]}));
+    queueMockResponse(JSON.stringify({"application_credits": [{"id": "140583599", "amount": "5.00", "description": "credit for application refund", "test": null, "currency": "USD"}]}));
 
     await shopify.rest.ApplicationCredit.all({
       session: session,

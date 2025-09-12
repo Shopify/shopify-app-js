@@ -82,7 +82,7 @@ export class FulfillmentRequest extends Base {
     return response ? response.body : null;
   }
 
-  public fulfillment_order_id: number | null;
+  public fulfillment_order_id: string | null;
   public kind: string | null;
   public message: string | null;
   public request_options: {[key: string]: unknown} | null;

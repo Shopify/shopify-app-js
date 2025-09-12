@@ -116,11 +116,11 @@ export class Collect extends Base {
     return response ? response.body : null;
   }
 
-  public collection_id: number | null;
+  public collection_id: string | null;
   public created_at: string | null;
-  public id: number | null;
+  public id: string | null;
   public position: number | null;
-  public product_id: number | null;
+  public product_id: string | null;
   public sort_value: string | null;
   public updated_at: string | null;
 }

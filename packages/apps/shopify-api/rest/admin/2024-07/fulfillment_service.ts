@@ -92,9 +92,9 @@ export class FulfillmentService extends Base {
   public callback_url: string | null;
   public fulfillment_orders_opt_in: boolean | null;
   public handle: string | null;
-  public id: number | null;
+  public id: string | null;
   public inventory_management: boolean | null;
-  public location_id: number | null;
+  public location_id: string | null;
   public name: string | null;
   public permits_sku_sharing: boolean | null;
   public provider_id: string | null;

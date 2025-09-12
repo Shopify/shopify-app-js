@@ -26,7 +26,7 @@ describe('ApplePayCertificate resource', () => {
       testConfig({apiVersion: ApiVersion.July25, restResources}),
     );
 
-    queueMockResponse(JSON.stringify({"apple_pay_certificate": {"id": 1068938278, "status": "issuing", "merchant_id": null}}));
+    queueMockResponse(JSON.stringify({"apple_pay_certificate": {"id": "1068938278", "status": "issuing", "merchant_id": null}}));
 
     const apple_pay_certificate = new shopify.rest.ApplePayCertificate({session: session});
 
@@ -47,7 +47,7 @@ describe('ApplePayCertificate resource', () => {
       testConfig({apiVersion: ApiVersion.July25, restResources}),
     );
 
-    queueMockResponse(JSON.stringify({"apple_pay_certificate": {"id": 1068938276, "status": "csr", "merchant_id": null}}));
+    queueMockResponse(JSON.stringify({"apple_pay_certificate": {"id": "1068938276", "status": "csr", "merchant_id": null}}));
 
     await shopify.rest.ApplePayCertificate.find({
       session: session,
@@ -69,7 +69,7 @@ describe('ApplePayCertificate resource', () => {
       testConfig({apiVersion: ApiVersion.July25, restResources}),
     );
 
-    queueMockResponse(JSON.stringify({"apple_pay_certificate": {"id": 1068938275, "status": "completed", "merchant_id": "merchant.something"}}));
+    queueMockResponse(JSON.stringify({"apple_pay_certificate": {"id": "1068938275", "status": "completed", "merchant_id": "merchant.something"}}));
 
     const apple_pay_certificate = new shopify.rest.ApplePayCertificate({session: session});
     apple_pay_certificate.id = 1068938275;

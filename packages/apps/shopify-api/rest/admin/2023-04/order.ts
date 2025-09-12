@@ -250,7 +250,7 @@ export class Order extends Base {
   }
 
   public line_items: {[key: string]: unknown}[] | null;
-  public app_id: number | null;
+  public app_id: string | null;
   public billing_address: {[key: string]: unknown} | null;
   public browser_ip: string | null;
   public buyer_accepts_marketing: boolean | null;
@@ -284,10 +284,10 @@ export class Order extends Base {
   public fulfillment_status: string | null;
   public fulfillments: Fulfillment[] | null | {[key: string]: any};
   public gateway: string | null;
-  public id: number | null;
+  public id: string | null;
   public landing_site: string | null;
-  public location_id: number | null;
-  public merchant_of_record_app_id: number | null;
+  public location_id: string | null;
+  public merchant_of_record_app_id: string | null;
   public name: string | null;
   public note: string | null;
   public note_attributes: {[key: string]: unknown}[] | null;
@@ -328,5 +328,5 @@ export class Order extends Base {
   public total_tip_received: string | null;
   public total_weight: number | null;
   public updated_at: string | null;
-  public user_id: number | null;
+  public user_id: string | null;
 }

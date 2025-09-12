@@ -950,6 +950,77 @@ describe('REST client', () => {
     expect(logMessage).toContain('"user-agent":"Shopify API Library');
     expect(logMessage).toContain('"body":"{\\"test\\":\\"data\\"}"');
   });
+
+  it('handles large numeric IDs without losing precision', async () => {
+    const shopify = shopifyApi(testConfig());
+    const client = new shopify.clients.Rest({session});
+
+    // Use an ID that exceeds JavaScript's MAX_SAFE_INTEGER (2^53 - 1 = 9007199254740991)
+    // We need to use a raw string to simulate what Shopify API actually returns
+    // since JavaScript's JSON.stringify would already lose precision
+    const largeIdResponseString = `{
+      "gift_card": {
+        "id": 9007199254740993,
+        "balance": "100.00",
+        "customer_id": 9007199254740994,
+        "order_id": 9007199254740995,
+        "line_item_id": null,
+        "product_ids": [9007199254740996, 9007199254740997],
+        "created_at": "2025-01-01T00:00:00Z",
+        "currency": "USD",
+        "initial_value": "100.00"
+      }
+    }`;
+
+    queueMockResponse(largeIdResponseString);
+
+    const response = await client.get({path: 'gift_cards/9007199254740993'});
+    
+    // Verify that IDs are converted to strings
+    expect(response.body.gift_card.id).toBe('9007199254740993');
+    expect(response.body.gift_card.customer_id).toBe('9007199254740994');
+    expect(response.body.gift_card.order_id).toBe('9007199254740995');
+    expect(response.body.gift_card.product_ids[0]).toBe('9007199254740996');
+    expect(response.body.gift_card.product_ids[1]).toBe('9007199254740997');
+    
+    // Verify that non-ID fields remain their original types
+    expect(response.body.gift_card.balance).toBe("100.00");
+    expect(response.body.gift_card.line_item_id).toBeNull();
+    expect(response.body.gift_card.currency).toBe("USD");
+  });
+
+  it('handles mixed numeric fields correctly', async () => {
+    const shopify = shopifyApi(testConfig());
+    const client = new shopify.clients.Rest({session});
+
+    // Use raw string to ensure precision is preserved in the test
+    const mixedResponseString = `{
+      "product": {
+        "id": 9007199254740993,
+        "variant_id": 123456789,
+        "price": 99.99,
+        "quantity": 10,
+        "weight": 2.5,
+        "position": 1,
+        "inventory_item_id": 9007199254740998
+      }
+    }`;
+
+    queueMockResponse(mixedResponseString);
+
+    const response = await client.get({path: 'products/9007199254740993'});
+    
+    // IDs should be strings
+    expect(response.body.product.id).toBe('9007199254740993');
+    expect(response.body.product.variant_id).toBe('123456789');
+    expect(response.body.product.inventory_item_id).toBe('9007199254740998');
+    
+    // Non-ID numeric fields should remain numbers
+    expect(response.body.product.price).toBe(99.99);
+    expect(response.body.product.quantity).toBe(10);
+    expect(response.body.product.weight).toBe(2.5);
+    expect(response.body.product.position).toBe(1);
+  });
 });
 
 function getDefaultPageInfo(apiVersion: ApiVersion): PageInfo {

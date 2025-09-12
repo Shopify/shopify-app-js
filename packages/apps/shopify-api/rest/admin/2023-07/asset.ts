@@ -82,7 +82,7 @@ export class Asset extends Base {
   public key: string | null;
   public public_url: string | null;
   public size: number | null;
-  public theme_id: number | null;
+  public theme_id: string | null;
   public updated_at: string | null;
   public value: string | null;
 }

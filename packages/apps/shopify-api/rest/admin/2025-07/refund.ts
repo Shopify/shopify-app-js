@@ -112,15 +112,15 @@ export class Refund extends Base {
 
   public created_at: string | null;
   public duties: {[key: string]: unknown}[] | null;
-  public id: number | null;
+  public id: string | null;
   public note: string | null;
   public order_adjustments: {[key: string]: unknown}[] | null;
-  public order_id: number | null;
+  public order_id: string | null;
   public processed_at: string | null;
   public refund_duties: {[key: string]: unknown}[] | null;
   public refund_line_items: {[key: string]: unknown}[] | null;
   public refund_shipping_lines: {[key: string]: unknown}[] | null;
   public restock: boolean | null;
   public transactions: Transaction[] | null | {[key: string]: any};
-  public user_id: number | null;
+  public user_id: string | null;
 }

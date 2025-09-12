@@ -26,7 +26,7 @@ describe('InventoryLevel resource', () => {
       testConfig({apiVersion: ApiVersion.July24, restResources}),
     );
 
-    queueMockResponse(JSON.stringify({"inventory_levels": [{"inventory_item_id": 49148385, "location_id": 655441491, "available": 2, "updated_at": "2024-07-02T08:56:04-05:00", "admin_graphql_api_id": "gid://shopify/InventoryLevel/655441491?inventory_item_id=49148385"}, {"inventory_item_id": 808950810, "location_id": 655441491, "available": 1, "updated_at": "2024-07-02T08:56:04-05:00", "admin_graphql_api_id": "gid://shopify/InventoryLevel/655441491?inventory_item_id=808950810"}, {"inventory_item_id": 457924702, "location_id": 655441491, "available": 4, "updated_at": "2024-07-02T08:56:04-05:00", "admin_graphql_api_id": "gid://shopify/InventoryLevel/655441491?inventory_item_id=457924702"}, {"inventory_item_id": 39072856, "location_id": 655441491, "available": 3, "updated_at": "2024-07-02T08:56:04-05:00", "admin_graphql_api_id": "gid://shopify/InventoryLevel/655441491?inventory_item_id=39072856"}]}));
+    queueMockResponse(JSON.stringify({"inventory_levels": [{"inventory_item_id": "49148385", "location_id": "655441491", "available": 2, "updated_at": "2024-07-02T08:56:04-05:00", "admin_graphql_api_id": "gid://shopify/InventoryLevel/655441491?inventory_item_id=49148385"}, {"inventory_item_id": "808950810", "location_id": "655441491", "available": 1, "updated_at": "2024-07-02T08:56:04-05:00", "admin_graphql_api_id": "gid://shopify/InventoryLevel/655441491?inventory_item_id=808950810"}, {"inventory_item_id": "457924702", "location_id": "655441491", "available": 4, "updated_at": "2024-07-02T08:56:04-05:00", "admin_graphql_api_id": "gid://shopify/InventoryLevel/655441491?inventory_item_id=457924702"}, {"inventory_item_id": "39072856", "location_id": "655441491", "available": 3, "updated_at": "2024-07-02T08:56:04-05:00", "admin_graphql_api_id": "gid://shopify/InventoryLevel/655441491?inventory_item_id=39072856"}]}));
 
     await shopify.rest.InventoryLevel.all({
       session: session,
@@ -48,7 +48,7 @@ describe('InventoryLevel resource', () => {
       testConfig({apiVersion: ApiVersion.July24, restResources}),
     );
 
-    queueMockResponse(JSON.stringify({"inventory_levels": [{"inventory_item_id": 808950810, "location_id": 487838322, "available": 9, "updated_at": "2024-07-02T08:56:04-05:00", "admin_graphql_api_id": "gid://shopify/InventoryLevel/548380009?inventory_item_id=808950810"}, {"inventory_item_id": 808950810, "location_id": 655441491, "available": 1, "updated_at": "2024-07-02T08:56:04-05:00", "admin_graphql_api_id": "gid://shopify/InventoryLevel/655441491?inventory_item_id=808950810"}]}));
+    queueMockResponse(JSON.stringify({"inventory_levels": [{"inventory_item_id": "808950810", "location_id": "487838322", "available": 9, "updated_at": "2024-07-02T08:56:04-05:00", "admin_graphql_api_id": "gid://shopify/InventoryLevel/548380009?inventory_item_id=808950810"}, {"inventory_item_id": "808950810", "location_id": "655441491", "available": 1, "updated_at": "2024-07-02T08:56:04-05:00", "admin_graphql_api_id": "gid://shopify/InventoryLevel/655441491?inventory_item_id=808950810"}]}));
 
     await shopify.rest.InventoryLevel.all({
       session: session,
@@ -70,7 +70,7 @@ describe('InventoryLevel resource', () => {
       testConfig({apiVersion: ApiVersion.July24, restResources}),
     );
 
-    queueMockResponse(JSON.stringify({"inventory_levels": [{"inventory_item_id": 808950810, "location_id": 487838322, "available": 9, "updated_at": "2024-07-02T08:56:04-05:00", "admin_graphql_api_id": "gid://shopify/InventoryLevel/548380009?inventory_item_id=808950810"}, {"inventory_item_id": 39072856, "location_id": 487838322, "available": 27, "updated_at": "2024-07-02T08:56:04-05:00", "admin_graphql_api_id": "gid://shopify/InventoryLevel/548380009?inventory_item_id=39072856"}, {"inventory_item_id": 808950810, "location_id": 655441491, "available": 1, "updated_at": "2024-07-02T08:56:04-05:00", "admin_graphql_api_id": "gid://shopify/InventoryLevel/655441491?inventory_item_id=808950810"}, {"inventory_item_id": 39072856, "location_id": 655441491, "available": 3, "updated_at": "2024-07-02T08:56:04-05:00", "admin_graphql_api_id": "gid://shopify/InventoryLevel/655441491?inventory_item_id=39072856"}]}));
+    queueMockResponse(JSON.stringify({"inventory_levels": [{"inventory_item_id": "808950810", "location_id": "487838322", "available": 9, "updated_at": "2024-07-02T08:56:04-05:00", "admin_graphql_api_id": "gid://shopify/InventoryLevel/548380009?inventory_item_id=808950810"}, {"inventory_item_id": "39072856", "location_id": "487838322", "available": 27, "updated_at": "2024-07-02T08:56:04-05:00", "admin_graphql_api_id": "gid://shopify/InventoryLevel/548380009?inventory_item_id=39072856"}, {"inventory_item_id": "808950810", "location_id": "655441491", "available": 1, "updated_at": "2024-07-02T08:56:04-05:00", "admin_graphql_api_id": "gid://shopify/InventoryLevel/655441491?inventory_item_id=808950810"}, {"inventory_item_id": "39072856", "location_id": "655441491", "available": 3, "updated_at": "2024-07-02T08:56:04-05:00", "admin_graphql_api_id": "gid://shopify/InventoryLevel/655441491?inventory_item_id=39072856"}]}));
 
     await shopify.rest.InventoryLevel.all({
       session: session,
@@ -93,12 +93,12 @@ describe('InventoryLevel resource', () => {
       testConfig({apiVersion: ApiVersion.July24, restResources}),
     );
 
-    queueMockResponse(JSON.stringify({"inventory_level": {"inventory_item_id": 808950810, "location_id": 655441491, "available": 6, "updated_at": "2024-07-02T08:57:27-05:00", "admin_graphql_api_id": "gid://shopify/InventoryLevel/655441491?inventory_item_id=808950810"}}));
+    queueMockResponse(JSON.stringify({"inventory_level": {"inventory_item_id": "808950810", "location_id": "655441491", "available": 6, "updated_at": "2024-07-02T08:57:27-05:00", "admin_graphql_api_id": "gid://shopify/InventoryLevel/655441491?inventory_item_id=808950810"}}));
 
     const inventory_level = new shopify.rest.InventoryLevel({session: session});
 
     await inventory_level.adjust({
-      body: {"location_id": 655441491, "inventory_item_id": 808950810, "available_adjustment": 5},
+      body: {"location_id": "655441491", "inventory_item_id": "808950810", "available_adjustment": 5},
     });
 
     expect({
@@ -107,7 +107,7 @@ describe('InventoryLevel resource', () => {
       path: '/admin/api/2024-07/inventory_levels/adjust.json',
       query: '',
       headers,
-      data: {"location_id": 655441491, "inventory_item_id": 808950810, "available_adjustment": 5}
+      data: {"location_id": "655441491", "inventory_item_id": "808950810", "available_adjustment": 5}
     }).toMatchMadeHttpRequest();
   });
 
@@ -139,12 +139,12 @@ describe('InventoryLevel resource', () => {
       testConfig({apiVersion: ApiVersion.July24, restResources}),
     );
 
-    queueMockResponse(JSON.stringify({"inventory_level": {"inventory_item_id": 457924702, "location_id": 844681632, "available": 0, "updated_at": "2024-07-02T08:57:20-05:00", "admin_graphql_api_id": "gid://shopify/InventoryLevel/844681632?inventory_item_id=457924702"}}));
+    queueMockResponse(JSON.stringify({"inventory_level": {"inventory_item_id": "457924702", "location_id": "844681632", "available": 0, "updated_at": "2024-07-02T08:57:20-05:00", "admin_graphql_api_id": "gid://shopify/InventoryLevel/844681632?inventory_item_id=457924702"}}));
 
     const inventory_level = new shopify.rest.InventoryLevel({session: session});
 
     await inventory_level.connect({
-      body: {"location_id": 844681632, "inventory_item_id": 457924702},
+      body: {"location_id": "844681632", "inventory_item_id": "457924702"},
     });
 
     expect({
@@ -153,7 +153,7 @@ describe('InventoryLevel resource', () => {
       path: '/admin/api/2024-07/inventory_levels/connect.json',
       query: '',
       headers,
-      data: {"location_id": 844681632, "inventory_item_id": 457924702}
+      data: {"location_id": "844681632", "inventory_item_id": "457924702"}
     }).toMatchMadeHttpRequest();
   });
 
@@ -162,12 +162,12 @@ describe('InventoryLevel resource', () => {
       testConfig({apiVersion: ApiVersion.July24, restResources}),
     );
 
-    queueMockResponse(JSON.stringify({"inventory_level": {"inventory_item_id": 808950810, "location_id": 655441491, "available": 42, "updated_at": "2024-07-02T08:57:24-05:00", "admin_graphql_api_id": "gid://shopify/InventoryLevel/655441491?inventory_item_id=808950810"}}));
+    queueMockResponse(JSON.stringify({"inventory_level": {"inventory_item_id": "808950810", "location_id": "655441491", "available": 42, "updated_at": "2024-07-02T08:57:24-05:00", "admin_graphql_api_id": "gid://shopify/InventoryLevel/655441491?inventory_item_id=808950810"}}));
 
     const inventory_level = new shopify.rest.InventoryLevel({session: session});
 
     await inventory_level.set({
-      body: {"location_id": 655441491, "inventory_item_id": 808950810, "available": 42},
+      body: {"location_id": "655441491", "inventory_item_id": "808950810", "available": 42},
     });
 
     expect({
@@ -176,7 +176,7 @@ describe('InventoryLevel resource', () => {
       path: '/admin/api/2024-07/inventory_levels/set.json',
       query: '',
       headers,
-      data: {"location_id": 655441491, "inventory_item_id": 808950810, "available": 42}
+      data: {"location_id": "655441491", "inventory_item_id": "808950810", "available": 42}
     }).toMatchMadeHttpRequest();
   });
 

@@ -173,9 +173,9 @@ export class CustomerAddress extends Base {
   public country: string | null;
   public country_code: string | null;
   public country_name: string | null;
-  public customer_id: number | null;
+  public customer_id: string | null;
   public first_name: string | null;
-  public id: number | null;
+  public id: string | null;
   public is_default: boolean | null;
   public last_name: string | null;
   public name: string | null;

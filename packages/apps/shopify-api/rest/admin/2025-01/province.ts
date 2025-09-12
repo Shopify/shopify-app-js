@@ -99,10 +99,10 @@ export class Province extends Base {
   }
 
   public code: string | null;
-  public country_id: number | null;
-  public id: number | null;
+  public country_id: string | null;
+  public id: string | null;
   public name: string | null;
-  public shipping_zone_id: number | null;
+  public shipping_zone_id: string | null;
   public tax: number | null;
   public tax_name: string | null;
   public tax_percentage: number | null;
