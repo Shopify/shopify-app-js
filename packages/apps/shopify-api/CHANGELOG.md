@@ -1,5 +1,113 @@
 # Changelog
 
+## 12.0.0
+
+### Major Changes
+
+- dc41d09: Swapped `jsonwebtoken` dependency for `jose`
+
+  If you use the `getJwt` function, it is now async.
+
+  Before
+
+  ```javascript
+  import {getJwt} from '@shopify/shopify-api/test-helpers';
+
+  describe(() => {
+    it('tests something', () => {
+      const jwt = getJwt(TEST_SHOP_NAME, API_KEY, API_SECRET_KEY);
+
+      //...etc
+    });
+  });
+  ```
+
+  After:
+
+  ```javascript
+  import {getJwt} from '@shopify/shopify-api/test-helpers';
+
+  describe(() => {
+    it('tests something', async () => {
+      const jwt = await getJwt(TEST_SHOP_NAME, API_KEY, API_SECRET_KEY);
+
+      //...etc
+    });
+  });
+  ```
+
+  This change gives you smaller packages and more standards compliance.
+
+- dc41d09: Require Node >= v20. Remove crypto dependency in favor of globalThis.crypto
+
+  If you are using Node, make sure you are using Node version 20 or above
+
+  If you are using `setCrypto` from `'@shopify/shopify-api'` you can remove this code.
+
+- 48d3631: The `LATEST_API_VERSION` and `RELEASE_CANDIDATE_API_VERSION` constants have been removed from the package. The `apiVersion` parameter is now **required** in the `shopifyApp` configuration.
+
+  We are making this change to ensure the API versions do not change without the developer explicitly opting into the new version. This removes the potential for apps to break unexpectedly and should reduce overall maintenance.
+
+  ### Migration Steps
+
+  **Before:**
+
+  ```typescript
+  import {shopifyApi, LATEST_API_VERSION} from '@shopify/shopify-api';
+
+  const shopify = shopifyApi({
+    apiVersion: LATEST_API_VERSION,
+    // ...
+  });
+  ```
+
+  **After:**
+
+  ```typescript
+  import {shopifyApi, ApiVersion} from '@shopify/shopify-api';
+
+  const shopify = shopifyApi({
+    apiVersion: ApiVersion.July25,
+    // ...
+  });
+  ```
+
+### Patch Changes
+
+- 6606d39: Fix adapter initialization issues with modern bundlers (Vite, Webpack) in SSR frameworks
+
+  Adds `sideEffects` configuration to package.json to prevent bundlers from incorrectly tree-shaking adapter initialization code. This resolves the "Missing adapter implementation for 'abstractRuntimeString'" error that occurred when using the library with Nuxt 3, TanStack Start, and other frameworks.
+
+  The adapters use side effects to initialize runtime functions, and modern bundlers were optimizing these away, causing runtime errors. The fix ensures these critical initialization side effects are preserved during the bundling process.
+
+  Some bundlers may still tree-shake pure side-effect imports. If you encounter issues after this update, you can use the newly
+  exported `nodeAdapterInitialized` constant to ensure the adapter is loaded:
+
+  ```javascript
+  // Instead of just:
+  import '@shopify/shopify-api/adapters/node';
+
+  // You can now also import and check:
+  import {nodeAdapterInitialized} from '@shopify/shopify-api/adapters/node';
+  import {shopifyApi} from '@shopify/shopify-api';
+
+  // Optional: Ensure adapter is initialized (forces bundlers to keep the import)
+  if (!nodeAdapterInitialized) {
+    throw new Error('Node adapter not initialized');
+  }
+
+  const shopify = shopifyApi({
+    // your config
+  });
+  ```
+
+- 7d8aa81: # Remove deprecated package
+
+  Removes the deprecated `@shopify/network` package. No change in functionality.
+
+- 089f4fd: Update loggings for session utils
+- dc41d09: Remove node-fetch from the node adapter since Node >=20 supports globalThis.fetch
+
 ## 11.14.1
 
 ### Patch Changes
