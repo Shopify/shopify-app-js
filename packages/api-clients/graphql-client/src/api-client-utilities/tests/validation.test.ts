@@ -178,7 +178,7 @@ describe('validateRequiredApiVersion()', () => {
       },
     });
 
-    expect(consoleWarnSpy).not.toBeCalled();
+    expect(consoleWarnSpy).not.toHaveBeenCalled();
   });
 
   it('does not throw an error when API version is defined', () => {

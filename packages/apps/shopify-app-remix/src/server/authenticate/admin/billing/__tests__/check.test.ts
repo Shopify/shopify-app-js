@@ -238,6 +238,6 @@ describe('Billing check', () => {
       billing.check({
         plans: [responses.PLAN_1],
       }),
-    ).rejects.toThrowError(HttpResponseError);
+    ).rejects.toThrow(HttpResponseError);
   });
 });

@@ -35,7 +35,7 @@ describe('admin.authenticate context', () => {
         'mutation myMutation($ID: String!) { shop(ID: $ID) { name } }',
         {variables: {ID: '123'}, tries: 2},
       ),
-    ).rejects.toThrowError(HttpMaxRetriesError);
+    ).rejects.toThrow(HttpMaxRetriesError);
   });
 
   describe.each([
