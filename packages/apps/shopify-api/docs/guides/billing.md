@@ -40,13 +40,11 @@ See the [billing reference](../reference/billing/README.md) for details on how t
 
 To trigger the billing behaviour, you'll need to set the `billing` value when calling `shopifyApi()`.
 
-### Configuring LineItem billing
+### Configuring billing
 
-With the future flag `v10_lineItemBilling`, the billing configuration can now specify the the `AppSubscriptionLineItems`. This will allow you to create app subscription plans with both recurring and usage based charges.
+The billing configuration uses `AppSubscriptionLineItems` to specify billing plans. This allows you to create app subscription plans with both recurring and usage based charges.
 
 Subscription plans can have 1 or 2 line items. There can be a maximum of 1 of each type of plan Usage and Recurring. Usage line items can only be used in conjunction with recurring line items when the recurring line item interval is `BillingInterval.Every30Days`.
-
-For configuring billing without line items see [Configuring Billing](#configuring-billing).
 
 #### Configuring a Subscription Plan with a Single LineItem
 
@@ -79,9 +77,6 @@ const shopify = shopifyApi({
       ],
     },
   },
-}
-future: {
-  v10_lineItemBilling: true,
 });
 ```
 
@@ -122,9 +117,6 @@ const shopify = shopifyApi({
       ],
     },
   },
-},
-future: {
-  v10_lineItemBilling: true,
 });
 ```
 
@@ -147,9 +139,6 @@ const shopify = shopifyApi({
       currencyCode: "USD",
     },
   },
-}
-future: {
-  v10_lineItemBilling: true,
 });
 ```
 
@@ -189,9 +178,11 @@ future: {
 | `amount`       | `number`   |    Yes    |       -       | The amount to charge                                                |
 | `currencyCode` | `string`   |    Yes    |       -       | The currency to charge, USD or merchant's shop currency<sup>1</sup> |
 
-### Configuring Billing
+### Legacy Billing Configuration (No Longer Supported)
 
-Prior to the future flag `v10_lineItemBilling` and when the flag is set to false you will configure billing as follows. For example, the following configuration will allow you to charge merchants $30 every 30 days. The first three charges will be discounted by $10, so merchants would be charged $20.
+> **Important:** The legacy billing configuration format described below has been removed. All billing configurations must now use the line items structure shown above. The following documentation is provided for historical reference only and will not work in the current version.
+
+Prior to the removal of the `v10_lineItemBilling` future flag, billing could be configured as follows. This format is no longer supported.
 
 ```ts
 import {

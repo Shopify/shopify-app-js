@@ -2,8 +2,6 @@ import {
   BillingConfigSubscriptionLineItemPlan,
   BillingError,
   BillingInterval,
-  HttpResponseError,
-  SESSION_COOKIE_NAME,
 } from '@shopify/shopify-api';
 
 import {shopifyApp} from '../../../..';
@@ -16,10 +14,8 @@ import {
   getJwt,
   getThrownResponse,
   setUpValidSession,
-  signRequestCookie,
   testConfig,
   mockExternalRequest,
-  mockExternalRequests,
 } from '../../../../__test-helpers';
 import {REAUTH_URL_HEADER} from '../../../const';
 

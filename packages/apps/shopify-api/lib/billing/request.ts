@@ -8,9 +8,7 @@ import {HashFormat} from '../../runtime/crypto/types';
 import {FutureFlagOptions} from '../../future/flags';
 
 import {
-  BillingConfigSubscriptionPlan,
   BillingConfigOneTimePlan,
-  BillingConfigUsagePlan,
   BillingRequestParams,
   BillingRequestResponse,
   RecurringPaymentResponse,
@@ -86,16 +84,8 @@ interface RequestInternalParams {
   isTest: boolean;
 }
 
-interface RequestSubscriptionInternalParams extends RequestInternalParams {
-  billingConfig: BillingConfigSubscriptionPlan;
-}
-
 interface RequestOneTimePaymentInternalParams extends RequestInternalParams {
   billingConfig: BillingConfigOneTimePlan;
-}
-
-interface RequestUsageSubscriptionInternalParams extends RequestInternalParams {
-  billingConfig: BillingConfigUsagePlan;
 }
 
 interface RequestSubscriptionParams extends RequestInternalParams {
@@ -180,29 +170,10 @@ export function request<
       });
       data = mutationOneTimeResponse.appPurchaseOneTimeCreate!;
     } else {
-      switch (billingConfig.interval) {
-        case BillingInterval.Usage: {
-          const mutationUsageResponse = await requestUsagePayment({
-            billingConfig: {...billingConfig, ...filteredOverrides},
-            plan,
-            client,
-            returnUrl,
-            isTest,
-          });
-          data = mutationUsageResponse.appSubscriptionCreate!;
-          break;
-        }
-        default: {
-          const mutationRecurringResponse = await requestRecurringPayment({
-            billingConfig: {...billingConfig, ...filteredOverrides},
-            plan,
-            client,
-            returnUrl,
-            isTest,
-          });
-          data = mutationRecurringResponse.appSubscriptionCreate!;
-        }
-      }
+      throw new BillingError({
+        message: `Invalid billing configuration for plan ${plan}. Must be either a one-time plan or a subscription plan with line items.`,
+        errorData: [],
+      });
     }
 
     if (data.userErrors?.length) {
@@ -298,102 +269,6 @@ async function requestSubscriptionPayment({
     throw new BillingError({
       message: 'Error while billing the store',
       errorData: mutationResponse.errors,
-    });
-  }
-
-  return mutationResponse.data!;
-}
-
-async function requestRecurringPayment({
-  billingConfig,
-  plan,
-  client,
-  returnUrl,
-  isTest,
-}: RequestSubscriptionInternalParams): Promise<RecurringPaymentResponse> {
-  const mutationResponse = await client.request<RecurringPaymentResponse>(
-    RECURRING_PURCHASE_MUTATION,
-    {
-      variables: {
-        name: plan,
-        returnUrl,
-        test: isTest,
-        trialDays: billingConfig.trialDays,
-        replacementBehavior: billingConfig.replacementBehavior,
-        lineItems: [
-          {
-            plan: {
-              appRecurringPricingDetails: {
-                interval: billingConfig.interval,
-                price: {
-                  amount: billingConfig.amount,
-                  currencyCode: billingConfig.currencyCode,
-                },
-                discount: billingConfig.discount
-                  ? {
-                      durationLimitInIntervals:
-                        billingConfig.discount?.durationLimitInIntervals,
-                      value: {
-                        amount: billingConfig.discount?.value?.amount,
-                        percentage: billingConfig.discount?.value?.percentage,
-                      },
-                    }
-                  : undefined,
-              },
-            },
-          },
-        ],
-      },
-    },
-  );
-
-  if (mutationResponse.data?.appSubscriptionCreate?.userErrors.length) {
-    throw new BillingError({
-      message: 'Error while creating a subscription',
-      errorData: mutationResponse.data?.appSubscriptionCreate?.userErrors,
-    });
-  }
-
-  return mutationResponse.data!;
-}
-
-async function requestUsagePayment({
-  billingConfig,
-  plan,
-  client,
-  returnUrl,
-  isTest,
-}: RequestUsageSubscriptionInternalParams): Promise<RecurringPaymentResponse> {
-  const mutationResponse = await client.request<RecurringPaymentResponse>(
-    RECURRING_PURCHASE_MUTATION,
-    {
-      variables: {
-        name: plan,
-        returnUrl,
-        test: isTest,
-        trialDays: billingConfig.trialDays,
-        replacementBehavior: billingConfig.replacementBehavior,
-        lineItems: [
-          {
-            plan: {
-              appUsagePricingDetails: {
-                terms: billingConfig.usageTerms,
-                cappedAmount: {
-                  amount: billingConfig.amount,
-                  currencyCode: billingConfig.currencyCode,
-                },
-              },
-            },
-          },
-        ],
-      },
-    },
-  );
-
-  if (mutationResponse.data?.appSubscriptionCreate?.userErrors.length) {
-    throw new BillingError({
-      message: 'Error while creating a subscription',
-      errorData: mutationResponse.data?.appSubscriptionCreate?.userErrors,
     });
   }
 

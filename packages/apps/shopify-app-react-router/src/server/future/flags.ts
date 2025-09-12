@@ -9,8 +9,6 @@ export interface FutureFlags {}
 // When adding new flags, use this format:
 // apiFutureFlag: Future extends FutureFlags ? Future['reactRouterFutureFlag'] : false;
 export interface ApiFutureFlags<_Future extends FutureFlagOptions> {
-  // We're currently hardcoding this flag to true in our settings, so we should propagate it here
-  lineItemBilling: true;
   unstable_managedPricingSupport: true;
 }
 

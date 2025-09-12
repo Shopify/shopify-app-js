@@ -15,7 +15,7 @@ import * as Responses from './responses';
 
 interface TestConfigInterface {
   name: string;
-  billingConfig: BillingConfig<{lineItemBilling: true}>;
+  billingConfig: BillingConfig;
   paymentResponse: string;
   responseObject: any;
   errorResponse: string;

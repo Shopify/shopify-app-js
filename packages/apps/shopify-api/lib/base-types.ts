@@ -75,7 +75,7 @@ export interface ConfigParams<
   /**
    * Billing configurations for the app.
    */
-  billing?: BillingConfig<Future>;
+  billing?: BillingConfig;
   /**
    * REST resources to access the Admin API.
    *
@@ -127,7 +127,7 @@ export type ConfigInterface<Params extends ConfigParams = ConfigParams> = Omit<
   hostScheme: 'http' | 'https';
   scopes?: AuthScopes;
   isCustomStoreApp: boolean;
-  billing?: BillingConfig<Params['future']>;
+  billing?: BillingConfig;
   logger: {
     log: LogFunction;
     level: LogSeverity;
