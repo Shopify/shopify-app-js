@@ -1,14 +1,6 @@
-import {
-  BillingInterval,
-  BillingReplacementBehavior,
-  RecurringBillingIntervals,
-} from '../types';
+import {BillingInterval, BillingReplacementBehavior} from '../types';
 import {Session} from '../session/session';
-import {
-  FeatureEnabled,
-  FutureFlagOptions,
-  FutureFlags,
-} from '../../future/flags';
+import {FeatureEnabled, FutureFlagOptions} from '../../future/flags';
 
 export interface BillingConfigPlan {
   /**
@@ -28,27 +20,6 @@ export interface BillingConfigOneTimePlan extends BillingConfigPlan {
    * Must be set to `OneTime`.
    */
   interval: BillingInterval.OneTime;
-}
-
-export interface BillingConfigSubscriptionPlan extends BillingConfigPlan {
-  /**
-   * Recurring interval for this plan.
-   *
-   * Must be either `Every30Days` or `Annual`.
-   */
-  interval: Exclude<RecurringBillingIntervals, BillingInterval.Usage>;
-  /**
-   * How many trial days to give before charging for this plan.
-   */
-  trialDays?: number;
-  /**
-   * The behavior to use when replacing an existing subscription with a new one.
-   */
-  replacementBehavior?: BillingReplacementBehavior;
-  /**
-   * The discount to apply to this plan.
-   */
-  discount?: BillingConfigSubscriptionPlanDiscount;
 }
 
 export interface BillingConfigSubscriptionPlanDiscountAmount {
@@ -94,69 +65,23 @@ export interface BillingConfigSubscriptionPlanDiscount {
     | BillingConfigSubscriptionPlanDiscountPercentage;
 }
 
-export interface BillingConfigUsagePlan extends BillingConfigPlan {
-  /**
-   * Interval for this plan.
-   *
-   * Must be set to `Usage`.
-   */
-  interval: BillingInterval.Usage;
-  /**
-   * Usage terms for this plan.
-   */
-  usageTerms: string;
-  /**
-   * How many trial days to give before charging for this plan.
-   */
-  trialDays?: number;
-  /**
-   * The behavior to use when replacing an existing subscription with a new one.
-   */
-  replacementBehavior?: BillingReplacementBehavior;
-}
-
-export type BillingConfigLegacyItem =
+export type BillingConfigItem =
   | BillingConfigOneTimePlan
-  | BillingConfigSubscriptionPlan
-  | BillingConfigUsagePlan;
-
-export type BillingConfigItem<
-  Future extends FutureFlagOptions = FutureFlagOptions,
-> =
-  FeatureEnabled<Future, 'lineItemBilling'> extends true
-    ? BillingConfigOneTimePlan | BillingConfigSubscriptionLineItemPlan
-    : BillingConfigLegacyItem;
+  | BillingConfigSubscriptionLineItemPlan;
 
 // Type this as an interface to improve TSDoc support for it.
 
 /**
  * Billing configuration options, indexed by an app-specific plan name.
  */
-export interface BillingConfig<
-  Future extends FutureFlagOptions = FutureFlagOptions,
-> {
+export interface BillingConfig {
   /**
    * An individual billing plan.
    */
-  [plan: string]: BillingConfigItem<
-    Future & {
-      lineItemBilling: Future extends FutureFlags
-        ? Future['lineItemBilling'] extends true
-          ? true
-          : Future['lineItemBilling'] extends false
-            ? false
-            : Future['v10_lineItemBilling'] extends true
-              ? true
-              : false
-        : false;
-    }
-  >;
+  [plan: string]: BillingConfigItem;
 }
 
-export type RequestConfigOverrides =
-  | Partial<BillingConfigOneTimePlan>
-  | Partial<BillingConfigSubscriptionPlan>
-  | Partial<BillingConfigUsagePlan>;
+export type RequestConfigOverrides = Partial<BillingConfigOneTimePlan>;
 
 export interface BillingConfigLineItem {
   /**
@@ -280,16 +205,10 @@ export type BillingCheckResponse<
         : boolean
       : never;
 
-type BillingRequestOverridesType<
-  Future extends FutureFlagOptions = FutureFlagOptions,
-> =
-  FeatureEnabled<Future, 'lineItemBilling'> extends true
-    ? RequestConfigOverrides & RequestConfigLineItemOverrides
-    : RequestConfigOverrides;
+type BillingRequestOverridesType = RequestConfigOverrides &
+  RequestConfigLineItemOverrides;
 
-export type BillingRequestParams<
-  Future extends FutureFlagOptions = FutureFlagOptions,
-> = {
+export type BillingRequestParams = {
   /**
    * The session to use for this request.
    */
@@ -310,7 +229,7 @@ export type BillingRequestParams<
    * Whether to return the full response object.
    */
   returnObject?: boolean;
-} & BillingRequestOverridesType<Future>;
+} & BillingRequestOverridesType;
 
 export interface BillingRequestResponseObject {
   /**
@@ -387,9 +306,9 @@ export interface AppSubscription {
   returnUrl: string;
 
   /*
-   * The line items for this plan. This will become mandatory in v10.
+   * The line items for this plan.
    */
-  lineItems?: ActiveSubscriptionLineItem[];
+  lineItems: ActiveSubscriptionLineItem[];
 
   /*
    * The status of the subscription. [ACTIVE, CANCELLED, PENDING, DECLINED, EXPIRED, FROZEN, ACCEPTED]
