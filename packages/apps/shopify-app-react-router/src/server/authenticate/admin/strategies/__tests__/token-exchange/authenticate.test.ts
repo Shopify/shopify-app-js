@@ -140,7 +140,7 @@ describe('authenticate', () => {
 
         // WHEN
         const {token} = await getJwt();
-        const {admin, session} = await shopify.authenticate.admin(
+        const {session} = await shopify.authenticate.admin(
           new Request(
             `${APP_URL}?embedded=1&shop=${TEST_SHOP}&host=${BASE64_HOST}&id_token=${token}`,
           ),
