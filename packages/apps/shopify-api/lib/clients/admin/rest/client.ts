@@ -79,9 +79,6 @@ export class RestClient {
       logger(config).debug(message);
     }
 
-    const customStoreAppAccessToken =
-      config.adminApiAccessToken ?? config.apiSecretKey;
-
     this.session = session;
     this.apiVersion = apiVersion ?? config.apiVersion;
     this.client = createAdminRestApiClient({
@@ -89,7 +86,7 @@ export class RestClient {
       storeDomain: session.shop,
       apiVersion: apiVersion ?? config.apiVersion,
       accessToken: config.isCustomStoreApp
-        ? customStoreAppAccessToken
+        ? config.adminApiAccessToken!
         : session.accessToken!,
       customFetchApi: abstractFetch,
       logger: clientLoggerFactory(config),
