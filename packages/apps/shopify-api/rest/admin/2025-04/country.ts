@@ -120,7 +120,7 @@ export class Country extends Base {
   }
 
   public code: string | null;
-  public id: number | null;
+  public id: string | null;
   public name: string | null;
   public provinces: Province[] | null | {[key: string]: any};
   public tax: number | null;

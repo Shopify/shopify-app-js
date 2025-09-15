@@ -101,7 +101,7 @@ export class Report extends Base {
   }
 
   public category: string | null;
-  public id: number | null;
+  public id: string | null;
   public name: string | null;
   public shopify_ql: string | null;
   public updated_at: string | null;

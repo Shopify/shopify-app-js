@@ -90,7 +90,7 @@ export class CarrierService extends Base {
   public callback_url: string | null;
   public carrier_service_type: string | null;
   public format: string | null;
-  public id: number | null;
+  public id: string | null;
   public name: string | null;
   public service_discovery: boolean | null;
 }

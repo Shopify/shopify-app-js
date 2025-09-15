@@ -90,7 +90,7 @@ export class MobilePlatformApplication extends Base {
   public enabled_app_clips: boolean | null;
   public enabled_shared_webcredentials: boolean | null;
   public enabled_universal_or_app_links: boolean | null;
-  public id: number | null;
+  public id: string | null;
   public platform: string | null;
   public sha256_cert_fingerprints: string[] | null;
 }

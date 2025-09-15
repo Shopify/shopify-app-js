@@ -220,11 +220,11 @@ export class Article extends Base {
   }
 
   public author: string | null;
-  public blog_id: number | null;
+  public blog_id: string | null;
   public body_html: string | null;
   public created_at: string | null;
   public handle: string | null;
-  public id: number | null;
+  public id: string | null;
   public image: string | {[key: string]: unknown} | null;
   public metafields: Metafield[] | null | {[key: string]: any};
   public published: boolean | null;
@@ -234,5 +234,5 @@ export class Article extends Base {
   public template_suffix: string | null;
   public title: string | null;
   public updated_at: string | null;
-  public user_id: number | null;
+  public user_id: string | null;
 }

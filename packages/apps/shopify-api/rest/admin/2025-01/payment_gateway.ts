@@ -93,10 +93,10 @@ export class PaymentGateway extends Base {
   public credential4: string | null;
   public disabled: boolean | null;
   public enabled_card_brands: string[] | null;
-  public id: number | null;
+  public id: string | null;
   public name: string | null;
   public processing_method: string | null;
-  public provider_id: number | null;
+  public provider_id: string | null;
   public sandbox: boolean | null;
   public service_name: string | null;
   public supports_network_tokenization: boolean | null;

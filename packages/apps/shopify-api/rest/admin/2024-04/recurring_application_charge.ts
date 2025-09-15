@@ -122,7 +122,7 @@ export class RecurringApplicationCharge extends Base {
   public confirmation_url: string | null;
   public created_at: string | null;
   public currency: string | null;
-  public id: number | null;
+  public id: string | null;
   public name: string | null;
   public price: string | number | null;
   public return_url: string | null;

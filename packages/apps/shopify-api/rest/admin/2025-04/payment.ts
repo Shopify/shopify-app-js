@@ -52,7 +52,7 @@ export class Payment extends Base {
 
   public checkout: Checkout | null | {[key: string]: any};
   public credit_card: {[key: string]: unknown} | null;
-  public id: number | null;
+  public id: string | null;
   public next_action: {[key: string]: unknown} | null;
   public payment_processing_error_message: string | null;
   public transaction: Transaction | null | {[key: string]: any};

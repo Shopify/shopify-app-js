@@ -46,12 +46,12 @@ export class AssignedFulfillmentOrder extends Base {
     return response;
   }
 
-  public assigned_location_id: number | null;
+  public assigned_location_id: string | null;
   public destination: {[key: string]: unknown} | null;
-  public id: number | null;
+  public id: string | null;
   public line_items: {[key: string]: unknown}[] | null;
-  public order_id: number | null;
+  public order_id: string | null;
   public request_status: string | null;
-  public shop_id: number | null;
+  public shop_id: string | null;
   public status: string | null;
 }
