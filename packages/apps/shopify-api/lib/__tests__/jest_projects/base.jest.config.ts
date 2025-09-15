@@ -6,6 +6,7 @@ const config: Config = {
   testEnvironment: 'node',
   moduleFileExtensions: ['ts', 'js', 'json'],
   watchPathIgnorePatterns: ['./node_modules'],
+  testPathIgnorePatterns: ['<rootDir>/dist', '<rootDir>/.rollup.cache'],
   testRegex: '.*\\.test\\.tsx?$',
   coverageDirectory: './coverage/',
   collectCoverage: false,
