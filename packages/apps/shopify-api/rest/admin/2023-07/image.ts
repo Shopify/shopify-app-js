@@ -128,11 +128,11 @@ export class Image extends Base {
 
   public created_at: string | null;
   public height: number | null;
-  public id: number | null;
+  public id: string | null;
   public position: number | null;
-  public product_id: number | null;
+  public product_id: string | null;
   public src: string | null;
   public updated_at: string | null;
-  public variant_ids: number[] | null;
+  public variant_ids: string[] | null;
   public width: number | null;
 }

@@ -120,7 +120,7 @@ export class CollectionListing extends Base {
   }
 
   public body_html: string | null;
-  public collection_id: number | null;
+  public collection_id: string | null;
   public default_product_image: {[key: string]: unknown}[] | null;
   public handle: string | null;
   public image: Image | null | {[key: string]: any};

@@ -167,7 +167,7 @@ export class InventoryLevel extends Base {
   }
 
   public available: number | null;
-  public inventory_item_id: number | null;
-  public location_id: number | null;
+  public inventory_item_id: string | null;
+  public location_id: string | null;
   public updated_at: string | null;
 }

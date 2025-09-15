@@ -167,21 +167,21 @@ export class GiftCard extends Base {
     return response ? response.body : null;
   }
 
-  public api_client_id: number | null;
+  public api_client_id: string | null;
   public balance: Balance | null | {[key: string]: any};
   public code: string | null;
   public created_at: string | null;
   public currency: Currency | null | {[key: string]: any};
-  public customer_id: number | null;
+  public customer_id: string | null;
   public disabled_at: string | null;
   public expires_on: string | null;
-  public id: number | null;
+  public id: string | null;
   public initial_value: string | null;
   public last_characters: string | null;
-  public line_item_id: number | null;
+  public line_item_id: string | null;
   public note: string | null;
-  public order_id: number | null;
+  public order_id: string | null;
   public template_suffix: string | null;
   public updated_at: string | null;
-  public user_id: number | null;
+  public user_id: string | null;
 }
