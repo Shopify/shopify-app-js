@@ -26,10 +26,7 @@ describe('shopifyApp', () => {
 
   it('can create shopify object', async () => {
     // GIVEN
-    const shopify = shopifyApp({
-      ...testConfig(),
-      future: {removeRest: false},
-    });
+    const shopify = shopifyApp(testConfig());
 
     // THEN
     expect(shopify).toBeDefined();

@@ -31,7 +31,7 @@ describe('assign authentication contexts to variables', () => {
 
     // WHEN
     const realContext = await shopify.unauthenticated.admin(session.shop);
-    const context: UnauthenticatedAdminContext<typeof shopify> = realContext;
+    const context: UnauthenticatedAdminContext = realContext;
     const apiContext: AdminApiContext<typeof shopify> = realContext.admin;
     const graphqlClient: AdminGraphqlClient<typeof shopify> =
       realContext.admin.graphql;
@@ -92,7 +92,7 @@ describe('assign authentication contexts to variables', () => {
 
     // WHEN
     const realContext = await shopify.authenticate.flow(request);
-    const context: FlowContext<typeof shopify> = realContext;
+    const context: FlowContext = realContext;
     const apiContext: AdminApiContext<typeof shopify> = realContext.admin;
     const graphqlClient: AdminGraphqlClient<typeof shopify> =
       realContext.admin.graphql;
@@ -113,7 +113,7 @@ describe('assign authentication contexts to variables', () => {
 
     // WHEN
     const realContext = await shopify.authenticate.fulfillmentService(request);
-    const context: FulfillmentServiceContext<typeof shopify> = realContext;
+    const context: FulfillmentServiceContext = realContext;
     const apiContext: AdminApiContext<typeof shopify> = realContext.admin;
     const graphqlClient: AdminGraphqlClient<typeof shopify> =
       realContext.admin.graphql;
@@ -139,7 +139,7 @@ describe('assign authentication contexts to variables', () => {
 
     // WHEN
     const realContext = await shopify.authenticate.webhook(request);
-    const context: WebhookContext<typeof shopify> = realContext;
+    const context: WebhookContext = realContext;
     const apiContext: AdminApiContext<typeof shopify> = realContext.admin!;
     const graphqlClient: AdminGraphqlClient<typeof shopify> =
       realContext.admin!.graphql;
@@ -159,7 +159,7 @@ describe('assign authentication contexts to variables', () => {
 
     // WHEN
     const realContext = await shopify.authenticate.public.appProxy(request);
-    const context: AppProxyContext<typeof shopify> = realContext;
+    const context: AppProxyContext = realContext;
     const apiContext: AdminApiContext<typeof shopify> = realContext.admin!;
     const graphqlClient: AdminGraphqlClient<typeof shopify> =
       realContext.admin!.graphql;

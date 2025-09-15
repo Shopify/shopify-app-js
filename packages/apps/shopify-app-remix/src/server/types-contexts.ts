@@ -19,7 +19,6 @@ import type {
 import type {CheckoutContext as ICheckoutContext} from './authenticate/public/checkout/types';
 import type {CustomerAccountContext as ICustomerAccountContext} from './authenticate/public/customer-account/types';
 import type {
-  AdminApiContextWithRest,
   AdminApiContext as IAdminApiContext,
   StorefrontContext as IStorefrontContext,
 } from './clients';
@@ -27,23 +26,11 @@ import type {
 type ShopifyConfig<App> =
   App extends ShopifyApp<infer Config extends AppConfigArg> ? Config : never;
 
-type ConfigComponents<Config> =
-  Config extends AppConfigArg<infer Resources, infer Storage, infer Future>
-    ? {resources: Resources; storage: Storage; future: Future}
-    : never;
-
 type DefaultApp = ShopifyApp<AppConfigArg>;
 
-export type UnauthenticatedAdminContext<App = DefaultApp> =
-  IUnauthenticatedAdminContext<
-    ShopifyConfig<App>,
-    ConfigComponents<ShopifyConfig<App>>['resources']
-  >;
+export type UnauthenticatedAdminContext = IUnauthenticatedAdminContext;
 
-export type AdminContext<App = DefaultApp> = IAdminContext<
-  ShopifyConfig<App>,
-  ConfigComponents<ShopifyConfig<App>>['resources']
->;
+export type AdminContext<App = DefaultApp> = IAdminContext<ShopifyConfig<App>>;
 
 export type ScopesContext<_App = DefaultApp> = IScopesContext;
 export type ScopesDetail = IScopesDetail;
@@ -51,40 +38,20 @@ export type ScopesDetail = IScopesDetail;
 export type UnauthenticatedStorefrontContext<_App = DefaultApp> =
   IUnauthenticatedStorefrontContext;
 
-export type FlowContext<App = DefaultApp> = IFlowContext<
-  ShopifyConfig<App>,
-  ConfigComponents<ShopifyConfig<App>>['resources']
->;
+export type FlowContext = IFlowContext;
 
-export type FulfillmentServiceContext<App = DefaultApp> =
-  IFulfillmentServiceContext<
-    ShopifyConfig<App>,
-    ConfigComponents<ShopifyConfig<App>>['resources']
-  >;
+export type FulfillmentServiceContext = IFulfillmentServiceContext;
 
-export type AppProxyContext<App = DefaultApp> =
-  | IAppProxyContext
-  | IAppProxyContextWithSession<ShopifyConfig<App>>;
+export type AppProxyContext = IAppProxyContext | IAppProxyContextWithSession;
 
 export type CheckoutContext<_App = DefaultApp> = ICheckoutContext;
 
 export type CustomerAccountContext<_App = DefaultApp> = ICustomerAccountContext;
 
-export type WebhookContext<App = DefaultApp> = IWebhookContext<
-  ShopifyConfig<App>,
-  ConfigComponents<ShopifyConfig<App>>['resources'],
-  string
->;
+export type WebhookContext = IWebhookContext<string>;
 
 // Extra types for the Admin API context
-export type AdminApiContext<App = DefaultApp> = IAdminApiContext<
-  ShopifyConfig<App>,
-  ConfigComponents<ShopifyConfig<App>>['resources']
->;
-
-export type AdminRestClient<App = DefaultApp> = AdminApiContextWithRest<
-  ShopifyConfig<App>
->['rest'];
+export type AdminApiContext<_App = DefaultApp> = IAdminApiContext;
 
 export type AdminGraphqlClient<App = DefaultApp> =
   AdminApiContext<App>['graphql'];

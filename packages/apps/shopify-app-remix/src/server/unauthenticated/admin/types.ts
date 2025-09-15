@@ -1,12 +1,8 @@
-import {Session, ShopifyRestResources} from '@shopify/shopify-api';
+import {Session} from '@shopify/shopify-api';
 
-import {AppConfigArg} from '../../config-types';
 import {AdminApiContext} from '../../clients';
 
-export interface UnauthenticatedAdminContext<
-  ConfigArg extends AppConfigArg,
-  Resources extends ShopifyRestResources,
-> {
+export interface UnauthenticatedAdminContext {
   /**
    * The session for the given shop.
    *
@@ -33,7 +29,7 @@ export interface UnauthenticatedAdminContext<
   session: Session;
 
   /**
-   * Methods for interacting with the GraphQL / REST Admin APIs for the given store.
+   * Methods for interacting with the GraphQL Admin API for the given store.
    *
    * @example
    * <caption>Querying the GraphQL API.</caption>
@@ -75,12 +71,9 @@ export interface UnauthenticatedAdminContext<
    * export const unauthenticated = shopify.unauthenticated;
    * ```
    */
-  admin: AdminApiContext<ConfigArg, Resources>;
+  admin: AdminApiContext;
 }
 
-export type GetUnauthenticatedAdminContext<
-  ConfigArg extends AppConfigArg,
-  Resources extends ShopifyRestResources,
-> = (
+export type GetUnauthenticatedAdminContext = (
   shop: string,
-) => Promise<UnauthenticatedAdminContext<ConfigArg, Resources>>;
+) => Promise<UnauthenticatedAdminContext>;

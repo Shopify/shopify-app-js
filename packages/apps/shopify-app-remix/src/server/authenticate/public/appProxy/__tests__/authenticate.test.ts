@@ -1,4 +1,4 @@
-import {HashFormat, createSHA256HMAC} from '@shopify/shopify-api/runtime';
+import {createSHA256HMAC, HashFormat} from '@shopify/shopify-api/runtime';
 
 import {shopifyApp} from '../../../..';
 import {
@@ -306,32 +306,27 @@ describe('authenticating app proxy requests', () => {
 
   describe('Valid requests with a session return an admin API client', () => {
     expectAdminApiClient(async () => {
-      const shopify = shopifyApp({
-        ...testConfig(),
-        future: {removeRest: false},
-      });
+      const shopify = shopifyApp(testConfig());
       const expectedSession = await setUpValidSession(shopify.sessionStorage, {
         isOnline: false,
       });
 
-      const {admin, session: actualSession} =
-        await shopify.authenticate.public.appProxy(await getValidRequest());
+      const result = await shopify.authenticate.public.appProxy(
+        await getValidRequest(),
+      );
 
-      if (!admin) {
+      if (!result.admin) {
         throw new Error('No admin client');
       }
+      if (!result.session) {
+        throw new Error('No session');
+      }
 
-      const shopifyWithoutRest = shopifyApp({
-        ...testConfig(),
-        future: {removeRest: true},
-      });
-
-      const {admin: adminWithoutRest} =
-        await shopifyWithoutRest.authenticate.public.appProxy(
-          await getValidRequest(),
-        );
-
-      return {admin, adminWithoutRest, expectedSession, actualSession};
+      return {
+        admin: result.admin,
+        expectedSession,
+        actualSession: result.session,
+      };
     });
   });
 

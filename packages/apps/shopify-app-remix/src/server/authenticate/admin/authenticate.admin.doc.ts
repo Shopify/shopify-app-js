@@ -30,8 +30,7 @@ const data: ReferenceEntityTemplateSchema = {
   },
   jsDocTypeExamples: [
     'EmbeddedAdminContext',
-    'AdminApiContextWithRest',
-    'AdminApiContextWithoutRest',
+    'AdminApiContext',
     'BillingContext',
     'ScopesApiContext',
   ],

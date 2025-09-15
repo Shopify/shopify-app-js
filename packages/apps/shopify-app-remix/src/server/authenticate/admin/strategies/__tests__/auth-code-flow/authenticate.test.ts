@@ -97,14 +97,13 @@ describe('authenticate', () => {
     (isOnline) => {
       it('returns the context if the session is valid and the app is embedded', async () => {
         // GIVEN
-        const shopify = shopifyApp({
-          ...testConfig({
+        const shopify = shopifyApp(
+          testConfig({
             useOnlineTokens: isOnline,
             future: {unstable_newEmbeddedAuthStrategy: false},
             isEmbeddedApp: true,
           }),
-          future: {removeRest: false},
-        });
+        );
 
         let testSession: Session;
         testSession = await setUpValidSession(shopify.sessionStorage);
@@ -116,7 +115,7 @@ describe('authenticate', () => {
 
         // WHEN
         const {token} = await getJwt();
-        const {admin, session} = await shopify.authenticate.admin(
+        const {session} = await shopify.authenticate.admin(
           new Request(
             `${APP_URL}?embedded=1&shop=${TEST_SHOP}&host=${BASE64_HOST}&id_token=${token}`,
           ),
@@ -124,17 +123,15 @@ describe('authenticate', () => {
 
         // THEN
         expect(session).toBe(testSession);
-        expect(admin.rest.session).toBe(testSession);
       });
 
       it('returns the context if the session is valid and the app is not embedded', async () => {
         // GIVEN
-        const shopify = shopifyApp({
-          ...testConfig({
+        const shopify = shopifyApp(
+          testConfig({
             isEmbeddedApp: false,
           }),
-          future: {removeRest: false},
-        });
+        );
 
         let testSession: Session;
         testSession = await setUpValidSession(shopify.sessionStorage);
@@ -154,11 +151,10 @@ describe('authenticate', () => {
           cookieValue: testSession.id,
         });
 
-        const {admin, session} = await shopify.authenticate.admin(request);
+        const {session} = await shopify.authenticate.admin(request);
 
         // THEN
         expect(session).toBe(testSession);
-        expect(admin.rest.session).toBe(testSession);
       });
     },
   );

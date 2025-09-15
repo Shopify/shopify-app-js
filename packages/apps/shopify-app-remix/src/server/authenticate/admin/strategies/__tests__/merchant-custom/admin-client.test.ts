@@ -1,14 +1,12 @@
 import {ApiVersion, Session, ShopifyError} from '@shopify/shopify-api';
-import {restResources} from '@shopify/shopify-api/rest/admin/2023-04';
 
-import {AdminApiContextWithRest} from '../../../../../clients';
+import {AdminApiContext} from '../../../../../clients';
 import {shopifyApp} from '../../../../..';
 import {
   APP_URL,
   TEST_SHOP,
   expectAdminApiClient,
   getThrownError,
-  mockExternalRequest,
   mockGraphqlRequest,
   setupValidCustomAppSession,
   testConfig,
@@ -23,34 +21,19 @@ describe('admin.authenticate context', () => {
       session: actualSession,
     } = await setUpMerchantCustomFlow();
 
-    const {admin: adminWithoutRest} =
-      await setUpMerchantCustomFlowWithRemoveRestFlag();
-
-    return {admin, adminWithoutRest, expectedSession, actualSession};
+    return {admin, expectedSession, actualSession};
   });
   describe.each([
     {
-      testGroup: 'REST client',
-      mockRequest: mockRestRequest,
-      action: async (admin: AdminApiContextWithRest, _session: Session) =>
-        admin.rest.get({path: '/customers.json'}),
-    },
-    {
-      testGroup: 'REST resources',
-      mockRequest: mockRestRequest,
-      action: async (admin: AdminApiContextWithRest, session: Session) =>
-        admin.rest.resources.Customer.all({session}),
-    },
-    {
       testGroup: 'GraphQL client',
       mockRequest: mockGraphqlRequest(),
-      action: async (admin: AdminApiContextWithRest, _session: Session) =>
+      action: async (admin: AdminApiContext, _session: Session) =>
         admin.graphql('{ shop { name } }'),
     },
     {
       testGroup: 'GraphQL client with options',
       mockRequest: mockGraphqlRequest('2021-01' as ApiVersion),
-      action: async (admin: AdminApiContextWithRest, _session: Session) =>
+      action: async (admin: AdminApiContext, _session: Session) =>
         admin.graphql(
           'mutation myMutation($ID: String!) { shop(ID: $ID) { name } }',
           {
@@ -83,15 +66,13 @@ describe('admin.authenticate context', () => {
 });
 
 async function setUpMerchantCustomFlow() {
-  const shopify = shopifyApp({
-    ...testConfig({
-      restResources,
+  const shopify = shopifyApp(
+    testConfig({
       isEmbeddedApp: false,
       distribution: AppDistribution.ShopifyAdmin,
       adminApiAccessToken: 'test-token',
     }),
-    future: {removeRest: false},
-  });
+  );
 
   const expectedSession = setupValidCustomAppSession(TEST_SHOP);
 
@@ -102,33 +83,4 @@ async function setUpMerchantCustomFlow() {
     expectedSession,
     ...(await shopify.authenticate.admin(request)),
   };
-}
-
-async function setUpMerchantCustomFlowWithRemoveRestFlag() {
-  const shopify = shopifyApp({
-    ...testConfig({
-      restResources,
-      isEmbeddedApp: false,
-      distribution: AppDistribution.ShopifyAdmin,
-      adminApiAccessToken: 'test-token',
-    }),
-    future: {removeRest: true},
-  });
-
-  const request = new Request(`${APP_URL}?shop=${TEST_SHOP}`);
-
-  return shopify.authenticate.admin(request);
-}
-
-async function mockRestRequest(status = 401) {
-  const requestMock = new Request(
-    `https://${TEST_SHOP}/admin/api/${ApiVersion.July25}/customers.json`,
-  );
-
-  await mockExternalRequest({
-    request: requestMock,
-    response: new Response('{}', {status}),
-  });
-
-  return requestMock;
 }

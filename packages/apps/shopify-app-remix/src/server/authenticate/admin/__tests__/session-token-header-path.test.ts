@@ -36,10 +36,7 @@ describe('authorize.session token header path', () => {
     (isOnline) => {
       it('returns context when session exists for embedded apps', async () => {
         // GIVEN
-        const shopify = shopifyApp({
-          ...testConfig({useOnlineTokens: isOnline}),
-          future: {removeRest: false},
-        });
+        const shopify = shopifyApp(testConfig({useOnlineTokens: isOnline}));
 
         const testSession = await setUpValidSession(shopify.sessionStorage, {
           isOnline,
@@ -47,7 +44,7 @@ describe('authorize.session token header path', () => {
 
         // WHEN
         const {token, payload} = await getJwt();
-        const {sessionToken, admin, session} = await shopify.authenticate.admin(
+        const {sessionToken, session} = await shopify.authenticate.admin(
           new Request(`${APP_URL}?shop=${TEST_SHOP}&host=${BASE64_HOST}`, {
             headers: {Authorization: `Bearer ${token}`},
           }),
@@ -56,15 +53,13 @@ describe('authorize.session token header path', () => {
         // THEN
         expect(sessionToken).toEqual(payload);
         expect(session).toBe(testSession);
-        expect(admin.rest.session).toBe(testSession);
       });
 
       it('returns context when session exists for non-embedded apps', async () => {
         // GIVEN
-        const shopify = shopifyApp({
-          ...testConfig({isEmbeddedApp: false, useOnlineTokens: isOnline}),
-          future: {removeRest: false},
-        });
+        const shopify = shopifyApp(
+          testConfig({isEmbeddedApp: false, useOnlineTokens: isOnline}),
+        );
 
         let testSession: Session;
         testSession = await setUpValidSession(shopify.sessionStorage);
@@ -83,11 +78,10 @@ describe('authorize.session token header path', () => {
           cookieName: SESSION_COOKIE_NAME,
           cookieValue: testSession.id,
         });
-        const {admin, session} = await shopify.authenticate.admin(request);
+        const {session} = await shopify.authenticate.admin(request);
 
         // THEN
         expect(session).toBe(testSession);
-        expect(admin.rest.session).toBe(testSession);
       });
     },
   );

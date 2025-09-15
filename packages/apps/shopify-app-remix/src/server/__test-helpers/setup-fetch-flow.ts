@@ -1,5 +1,3 @@
-import {restResources} from '@shopify/shopify-api/rest/admin/2023-04';
-
 import {shopifyApp} from '../shopify-app';
 
 import {APP_URL} from './const';
@@ -11,10 +9,8 @@ export async function setUpFetchFlow(flags?: {
   unstable_newEmbeddedAuthStrategy?: boolean;
 }) {
   const shopify = shopifyApp({
-    ...testConfig({
-      restResources,
-    }),
-    future: {...flags, removeRest: false},
+    ...testConfig(),
+    future: {...flags},
   });
 
   await setUpValidSession(shopify.sessionStorage);

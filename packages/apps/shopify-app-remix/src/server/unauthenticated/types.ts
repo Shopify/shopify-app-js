@@ -1,14 +1,7 @@
-import type {ShopifyRestResources} from '@shopify/shopify-api';
-
-import type {AppConfigArg} from '../config-types';
-
 import type {GetUnauthenticatedAdminContext} from './admin/types';
 import type {GetUnauthenticatedStorefrontContext} from './storefront/types';
 
-export interface Unauthenticated<
-  ConfigArg extends AppConfigArg,
-  Resources extends ShopifyRestResources,
-> {
+export interface Unauthenticated {
   /**
    * Get an admin context by passing a shop
    *
@@ -42,7 +35,7 @@ export interface Unauthenticated<
    * }
    * ```
    */
-  admin: GetUnauthenticatedAdminContext<ConfigArg, Resources>;
+  admin: GetUnauthenticatedAdminContext;
 
   /**
    * Get a storefront context by passing a shop
