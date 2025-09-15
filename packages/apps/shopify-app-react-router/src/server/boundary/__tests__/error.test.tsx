@@ -26,7 +26,7 @@ describe('Error boundary', () => {
     const result = () => boundary.error(new Error());
 
     // THEN
-    expect(result).toThrowError();
+    expect(result).toThrow();
   });
 });
 

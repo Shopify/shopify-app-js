@@ -31,14 +31,14 @@ describe('GraphQL Client', () => {
 
       it('throws an error when the retries config value is less than 0', () => {
         const retries = -1;
-        expect(() => getValidClient({retries})).toThrowError(
+        expect(() => getValidClient({retries})).toThrow(
           `GraphQL Client: The provided "retries" value (${retries}) is invalid - it cannot be less than 0 or greater than 3`,
         );
       });
 
       it('throws an error when the retries config value is greater than 3', () => {
         const retries = 4;
-        expect(() => getValidClient({retries})).toThrowError(
+        expect(() => getValidClient({retries})).toThrow(
           `GraphQL Client: The provided "retries" value (${retries}) is invalid - it cannot be less than 0 or greater than 3`,
         );
       });

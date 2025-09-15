@@ -42,8 +42,12 @@
     "release": "pnpm build && changeset publish"
   },
   "jest": {
+    "preset": "ts-jest/presets/default-esm",
+    "extensionsToTreatAsEsm": [".ts", ".tsx"],
+    "testPathIgnorePatterns": ["<rootDir>/dist", "<rootDir>/.rollup.cache"],
     "transform": {
-      ".*": "babel-jest"
+      "^.+\\.(ts|tsx)$": ["ts-jest", {"useESM": true}],
+      "^.+\\.(js|jsx)$": ["babel-jest", {"configFile": "./babel.config.json"}]
     }
   },
   "publishConfig": {

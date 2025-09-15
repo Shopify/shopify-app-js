@@ -41,7 +41,7 @@ describe('admin.authenticate context', () => {
         'mutation myMutation($ID: String!) { shop(ID: $ID) { name } }',
         {variables: {ID: '123'}, tries: 2},
       ),
-    ).rejects.toThrowError(HttpMaxRetriesError);
+    ).rejects.toThrow(HttpMaxRetriesError);
   });
 
   it('re-throws errors other than HttpResponseErrors on REST requests', async () => {
@@ -55,7 +55,7 @@ describe('admin.authenticate context', () => {
     // THEN
     await expect(async () =>
       admin.rest.get({path: '/customers.json', tries: 2}),
-    ).rejects.toThrowError(HttpMaxRetriesError);
+    ).rejects.toThrow(HttpMaxRetriesError);
   });
 
   describe.each([

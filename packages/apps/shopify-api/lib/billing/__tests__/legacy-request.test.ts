@@ -198,7 +198,7 @@ describe('shopify.billing.request', () => {
           plan: Responses.PLAN_1,
           isTest: true,
         }),
-      ).rejects.toThrowError(BillingError);
+      ).rejects.toThrow(BillingError);
     });
   });
 
