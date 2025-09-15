@@ -185,7 +185,6 @@ describe('shopify.logger', () => {
       const shopify = shopifyApi(
         testConfig({
           logger: {level: config.logLevel},
-          future: {lineItemBilling: true, v10_lineItemBilling: false},
         }),
       );
 
@@ -280,8 +279,8 @@ describe('shopify.logger', () => {
     await logPromise;
 
     // We always log the runtime before the actual message
-    expect(loggedMessages.length).toEqual(3);
-    expect(loggedMessages[2]).toEqual(
+    expect(loggedMessages.length).toEqual(2);
+    expect(loggedMessages.at(-1)).toEqual(
       `${LogSeverity.Debug}: [shopify-api/DEBUG] debug message`,
     );
   });

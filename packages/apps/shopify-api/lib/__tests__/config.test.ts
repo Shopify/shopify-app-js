@@ -171,11 +171,4 @@ describe('Config object', () => {
       ),
     );
   });
-
-  it('can alias billing future flags', () => {
-    validParams.future = {v10_lineItemBilling: true};
-    const config = validateConfig(validParams);
-
-    expect(config.future?.lineItemBilling).toBeTruthy();
-  });
 });
