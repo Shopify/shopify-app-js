@@ -19,6 +19,12 @@ module.exports = {
       },
     },
     {
+      files: ['**/jest.config.ts', '**/*.jest.config.ts'],
+      rules: {
+        'import/extensions': 'off',
+      },
+    },
+    {
       files: ['**/.eslintrc.js'],
       rules: {
         'no-undef': 'off',
