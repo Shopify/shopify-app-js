@@ -256,13 +256,13 @@ export class RestClient {
   private parseJsonWithLosslessNumbers(jsonString: string): any {
     // Parse with lossless-json first to preserve precision
     const parsed = LosslessJSON.parse(jsonString);
-    
+
     // Recursively process the parsed object to convert IDs to strings
     const processValue = (value: any, key?: string): any => {
       if (value === null || value === undefined) {
         return value;
       }
-      
+
       // Handle LosslessNumber instances
       if (value && value.isLosslessNumber === true) {
         const keyLower = (key || '').toLowerCase();
@@ -274,11 +274,11 @@ export class RestClient {
         // The IDs have already been handled, so we can use standard conversion
         return Number(value.value);
       }
-      
+
       // Handle arrays - special case for _ids arrays
       if (Array.isArray(value)) {
         const isIdsArray = key && key.toLowerCase().endsWith('_ids');
-        return value.map(item => {
+        return value.map((item) => {
           // If this is an _ids array and item is a LosslessNumber, convert to string
           if (isIdsArray && item && item.isLosslessNumber === true) {
             return item.toString();
@@ -286,7 +286,7 @@ export class RestClient {
           return processValue(item);
         });
       }
-      
+
       // Handle objects
       if (typeof value === 'object') {
         const result: any = {};
@@ -297,10 +297,10 @@ export class RestClient {
         }
         return result;
       }
-      
+
       return value;
     };
-    
+
     return processValue(parsed);
   }
 

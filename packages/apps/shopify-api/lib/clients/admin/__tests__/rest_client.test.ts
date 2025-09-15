@@ -975,18 +975,18 @@ describe('REST client', () => {
     queueMockResponse(largeIdResponseString);
 
     const response = await client.get({path: 'gift_cards/9007199254740993'});
-    
+
     // Verify that IDs are converted to strings
     expect(response.body.gift_card.id).toBe('9007199254740993');
     expect(response.body.gift_card.customer_id).toBe('9007199254740994');
     expect(response.body.gift_card.order_id).toBe('9007199254740995');
     expect(response.body.gift_card.product_ids[0]).toBe('9007199254740996');
     expect(response.body.gift_card.product_ids[1]).toBe('9007199254740997');
-    
+
     // Verify that non-ID fields remain their original types
-    expect(response.body.gift_card.balance).toBe("100.00");
+    expect(response.body.gift_card.balance).toBe('100.00');
     expect(response.body.gift_card.line_item_id).toBeNull();
-    expect(response.body.gift_card.currency).toBe("USD");
+    expect(response.body.gift_card.currency).toBe('USD');
   });
 
   it('handles mixed numeric fields correctly', async () => {
@@ -1009,12 +1009,12 @@ describe('REST client', () => {
     queueMockResponse(mixedResponseString);
 
     const response = await client.get({path: 'products/9007199254740993'});
-    
+
     // IDs should be strings
     expect(response.body.product.id).toBe('9007199254740993');
     expect(response.body.product.variant_id).toBe('123456789');
     expect(response.body.product.inventory_item_id).toBe('9007199254740998');
-    
+
     // Non-ID numeric fields should remain numbers
     expect(response.body.product.price).toBe(99.99);
     expect(response.body.product.quantity).toBe(10);

@@ -748,24 +748,25 @@ describe('ID Normalization', () => {
   });
   session.accessToken = 'access-token';
 
-
   it('accepts numeric IDs as parameters and returns string IDs', async () => {
     const shopify = shopifyApi(testConfig({restResources}));
 
     // Response will have IDs converted to strings by lossless-json
     const body = {
       fake_resource: {
-        id: 9007199254740991, // MAX_SAFE_INTEGER
+        // MAX_SAFE_INTEGER
+        id: 9007199254740991,
         attribute: 'test',
-        other_resource_id: 12345
-      }
+        other_resource_id: 12345,
+      },
     };
     queueMockResponse(JSON.stringify(body));
 
     // Can pass numeric ID as parameter (backward compatibility)
     const resource = await shopify.rest.FakeResource.find({
-      id: 9007199254740991,  // Numeric ID accepted
-      session
+      // Numeric ID accepted
+      id: 9007199254740991,
+      session,
     });
 
     // But IDs in response are strings (converted by lossless-json)
@@ -782,27 +783,27 @@ describe('ID Normalization', () => {
         id: 1234567890,
         has_one_attribute: {
           id: 2345678901,
-          attribute: 'nested'
+          attribute: 'nested',
         },
         has_many_attribute: [
           {id: 3456789012, attribute: 'item1'},
-          {id: 4567890123, attribute: 'item2'}
-        ]
-      }
+          {id: 4567890123, attribute: 'item2'},
+        ],
+      },
     };
     queueMockResponse(JSON.stringify(body));
 
     const resource = await shopify.rest.FakeResource.find({
       id: 1234567890,
-      session
+      session,
     });
 
     // Parent ID converted to string by lossless-json
     expect(resource!.id).toBe('1234567890');
-    
+
     // Nested has_one ID converted to string
     expect(resource!.has_one_attribute!.id).toBe('2345678901');
-    
+
     // Nested has_many IDs converted to strings
     expect(resource!.has_many_attribute![0].id).toBe('3456789012');
     expect(resource!.has_many_attribute![1].id).toBe('4567890123');
@@ -815,8 +816,8 @@ describe('ID Normalization', () => {
       fake_resources: [
         {id: 123, attribute: 'first'},
         {id: '456', attribute: 'second'},
-        {id: 9007199254740991, attribute: 'third'}
-      ]
+        {id: 9007199254740991, attribute: 'third'},
+      ],
     };
     queueMockResponse(JSON.stringify(body));
 
