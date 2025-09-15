@@ -126,7 +126,7 @@ export class Redirect extends Base {
     return response ? response.body : null;
   }
 
-  public id: number | null;
+  public id: string | null;
   public path: string | null;
   public target: string | null;
 }

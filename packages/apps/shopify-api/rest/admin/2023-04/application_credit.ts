@@ -74,6 +74,6 @@ export class ApplicationCredit extends Base {
   public amount: string | null;
   public currency: Currency | null | {[key: string]: any};
   public description: string | null;
-  public id: number | null;
+  public id: string | null;
   public test: boolean | null;
 }

@@ -135,6 +135,6 @@ export class ScriptTag extends Base {
   public cache: boolean | null;
   public created_at: string | null;
   public display_scope: string | null;
-  public id: number | null;
+  public id: string | null;
   public updated_at: string | null;
 }

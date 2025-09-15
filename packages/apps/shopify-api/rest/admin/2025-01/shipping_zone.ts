@@ -52,7 +52,7 @@ export class ShippingZone extends Base {
 
   public carrier_shipping_rate_providers: unknown | null;
   public countries: Country[] | null | {[key: string]: any};
-  public id: number | null;
+  public id: string | null;
   public location_group_id: string | null;
   public name: string | null;
   public price_based_shipping_rates: {[key: string]: unknown}[] | null;

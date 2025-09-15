@@ -5,6 +5,8 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](../../../LICENSE.md)
 [![npm version](https://badge.fury.io/js/%40shopify%2Fshopify-api.svg)](https://badge.fury.io/js/%40shopify%2Fshopify-api)
 
+> ⚠️ **Version 12.0.0 Breaking Change**: All REST resource IDs are now `string` type instead of `number` to prevent precision loss. See [MIGRATION_GUIDE_V12.md](./MIGRATION_GUIDE_V12.md) for upgrade instructions.
+
 This library provides support for the backends of TypeScript/JavaScript [Shopify](https://www.shopify.com) apps to access the [Shopify Admin API](https://shopify.dev/docs/api/admin), by making it easier to perform the following actions:
 
 - Creating [online](https://shopify.dev/docs/apps/auth/access-token-types/online) or [offline](https://shopify.dev/docs/apps/auth/access-token-types/offline) access tokens for the Admin API via OAuth

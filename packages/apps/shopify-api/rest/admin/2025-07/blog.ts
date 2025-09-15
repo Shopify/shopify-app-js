@@ -129,7 +129,7 @@ export class Blog extends Base {
   public feedburner: string | null;
   public feedburner_location: string | null;
   public handle: string | null;
-  public id: number | null;
+  public id: string | null;
   public metafields: Metafield[] | null | {[key: string]: any};
   public tags: string | null;
   public template_suffix: string | null;
