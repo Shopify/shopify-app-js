@@ -4,8 +4,8 @@ type: node
 
 up:
   - node:
-      version: v18.19.0
-      package_manager: pnpm@9.7.1
+      version: v20.10.0
+      package_manager: pnpm@10.16.1
       packages:
         - .
 env:
