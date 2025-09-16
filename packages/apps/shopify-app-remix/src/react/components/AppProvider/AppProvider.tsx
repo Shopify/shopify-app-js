@@ -6,6 +6,8 @@ import {
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import englishI18n from '@shopify/polaris/locales/en.json' with {type: 'json'};
+import {useNavigate} from '@remix-run/react';
+import {useEffect} from 'react';
 
 import {APP_BRIDGE_URL} from '../../const';
 import {RemixPolarisLink} from '../RemixPolarisLink';
@@ -110,6 +112,23 @@ export function AppProvider(props: AppProviderProps) {
     __APP_BRIDGE_URL = APP_BRIDGE_URL,
     ...polarisProps
   } = props;
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const handleNavigate = (event: Event) => {
+      const href = (event.target as HTMLElement)?.getAttribute('href');
+      if (href) {
+        navigate(href);
+      }
+    };
+
+    document.addEventListener('shopify:navigate', handleNavigate);
+
+    return () => {
+      document.removeEventListener('shopify:navigate', handleNavigate);
+    };
+  }, [navigate]);
 
   return (
     <>
