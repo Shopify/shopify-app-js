@@ -14,7 +14,6 @@ import {testConfig as testConfigImport} from '../test-helpers/test-config';
  */
 const TEST_FUTURE_FLAGS: Required<{[key in keyof FutureFlags]: true}> = {
   unstable_newEmbeddedAuthStrategy: true,
-  removeRest: true,
 } as const;
 
 // Override the helper's future flags and logger settings for our purposes

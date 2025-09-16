@@ -1,16 +1,14 @@
 import {ApiVersion, Session} from '@shopify/shopify-api';
 
-import {AdminApiContextWithRest} from '../../../../../clients';
+import {AdminApiContext} from '../../../../../clients';
 import {
   APP_URL,
   TEST_SHOP,
   expectAdminApiClient,
   expectExitIframeRedirect,
   getThrownResponse,
-  mockExternalRequest,
   mockGraphqlRequest,
   setUpEmbeddedFlow,
-  setUpEmbeddedFlowWithRemoveRestFlag,
   setUpFetchFlow,
   setUpNonEmbeddedFlow,
 } from '../../../../../__test-helpers';
@@ -24,34 +22,19 @@ describe('admin.authenticate context', () => {
       session: actualSession,
     } = await setUpEmbeddedFlow();
 
-    const {admin: adminWithoutRest} =
-      await setUpEmbeddedFlowWithRemoveRestFlag();
-
-    return {admin, adminWithoutRest, expectedSession, actualSession};
+    return {admin, expectedSession, actualSession};
   });
   describe.each([
     {
-      testGroup: 'REST client',
-      mockRequest: mockRestRequest,
-      action: async (admin: AdminApiContextWithRest, _session: Session) =>
-        admin.rest.get({path: '/customers.json'}),
-    },
-    {
-      testGroup: 'REST resources',
-      mockRequest: mockRestRequest,
-      action: async (admin: AdminApiContextWithRest, session: Session) =>
-        admin.rest.resources.Customer.all({session}),
-    },
-    {
       testGroup: 'GraphQL client',
       mockRequest: mockGraphqlRequest(),
-      action: async (admin: AdminApiContextWithRest, _session: Session) =>
+      action: async (admin: AdminApiContext, _session: Session) =>
         admin.graphql('{ shop { name } }'),
     },
     {
       testGroup: 'GraphQL client with options',
       mockRequest: mockGraphqlRequest('2021-01' as ApiVersion),
-      action: async (admin: AdminApiContextWithRest, _session: Session) =>
+      action: async (admin: AdminApiContext, _session: Session) =>
         admin.graphql(
           'mutation myMutation($ID: String!) { shop(ID: $ID) { name } }',
           {
@@ -68,7 +51,7 @@ describe('admin.authenticate context', () => {
       it('redirects to auth when request receives a 401 response and not embedded', async () => {
         // GIVEN
         const {admin, session} = await setUpNonEmbeddedFlow();
-        const requestMock = await mockRequest(401);
+        const requestMock = await mockRequest({status: 401});
 
         // WHEN
         const response = await getThrownResponse(
@@ -87,7 +70,7 @@ describe('admin.authenticate context', () => {
       it('redirects to exit iframe when request receives a 401 response and embedded', async () => {
         // GIVEN
         const {admin, session} = await setUpEmbeddedFlow();
-        const requestMock = await mockRequest(401);
+        const requestMock = await mockRequest({status: 401});
 
         // WHEN
         const response = await getThrownResponse(
@@ -104,7 +87,7 @@ describe('admin.authenticate context', () => {
         const {admin, session} = await setUpFetchFlow({
           unstable_newEmbeddedAuthStrategy: false,
         });
-        const requestMock = await mockRequest(401);
+        const requestMock = await mockRequest({status: 401});
 
         // WHEN
         const response = await getThrownResponse(
@@ -125,16 +108,3 @@ describe('admin.authenticate context', () => {
     },
   );
 });
-
-async function mockRestRequest(status: any) {
-  const requestMock = new Request(
-    `https://${TEST_SHOP}/admin/api/${ApiVersion.July25}/customers.json`,
-  );
-
-  await mockExternalRequest({
-    request: requestMock,
-    response: new Response('{}', {status}),
-  });
-
-  return requestMock;
-}

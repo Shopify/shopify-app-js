@@ -1,4 +1,4 @@
-import {LogSeverity, ShopifyRestResources} from '@shopify/shopify-api';
+import {LogSeverity} from '@shopify/shopify-api';
 import {SessionStorage} from '@shopify/shopify-app-session-storage';
 import {MemorySessionStorage} from '@shopify/shopify-app-session-storage-memory';
 import {
@@ -63,10 +63,7 @@ type Modify<Type1, Type2> = {
  * to AppConfigArg.
  */
 type TestOverrides = Partial<
-  Omit<
-    AppConfigArg<ShopifyRestResources, SessionStorage, FutureFlagOptions>,
-    'future'
-  > & {
+  Omit<AppConfigArg<SessionStorage, FutureFlagOptions>, 'future'> & {
     future: Partial<FutureFlagOptions>;
   }
 >;

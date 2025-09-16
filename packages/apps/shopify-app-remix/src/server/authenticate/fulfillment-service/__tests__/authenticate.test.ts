@@ -120,10 +120,7 @@ const MERCHANT_CUSTOM_APP_CONFIG = {
     describe('valid requests include an API client object', () => {
       expectAdminApiClient(async () => {
         const sessionStorage = new MemorySessionStorage();
-        const shopify = shopifyApp({
-          ...testConfig({sessionStorage}),
-          future: {removeRest: false},
-        });
+        const shopify = shopifyApp(testConfig({sessionStorage}));
 
         const {request, session: expectedSession} =
           await getValidRequest(sessionStorage);
@@ -131,20 +128,7 @@ const MERCHANT_CUSTOM_APP_CONFIG = {
         const {admin, session: actualSession} =
           await shopify.authenticate.fulfillmentService(request);
 
-        const shopifyWithoutRest = shopifyApp({
-          ...testConfig({sessionStorage}),
-          future: {removeRest: true},
-        });
-
-        const {request: requestForWithoutRest} =
-          await getValidRequest(sessionStorage);
-
-        const {admin: adminWithoutRest} =
-          await shopifyWithoutRest.authenticate.fulfillmentService(
-            requestForWithoutRest,
-          );
-
-        return {admin, adminWithoutRest, expectedSession, actualSession};
+        return {admin, expectedSession, actualSession};
       });
     });
   });

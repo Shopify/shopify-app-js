@@ -1,4 +1,3 @@
-import {AppConfigArg} from '../../../../config-types';
 import {AdminApiContext} from '../../../../clients';
 
 export interface RevokeScopesResponse {
@@ -24,8 +23,8 @@ mutation AppRevokeAccessScopes($scopes: [String!]!) {
   }
 }`;
 
-export async function revokeScopes<ConfigArg extends AppConfigArg>(
-  admin: AdminApiContext<ConfigArg>,
+export async function revokeScopes(
+  admin: AdminApiContext,
   scopes: string[],
 ): Promise<RevokeScopesResponse> {
   const revokeScopesResult = await admin.graphql(REVOKE_SCOPE_MUTATION, {
