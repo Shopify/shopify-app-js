@@ -95,7 +95,7 @@ describe('<AppProvider />', () => {
       </AppProvider>,
     );
 
-    component.find('a', {'data-testid': 'test-link'}).domNode.click();
+    component.find('a', {'data-testid': 'test-link'})!.domNode!.click();
     expect(mockNavigate).toHaveBeenCalledWith('/test-path');
   });
 });

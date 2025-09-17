@@ -123,10 +123,10 @@ export function AppProvider(props: AppProviderProps) {
       }
     };
 
-    document.addEventListener('shopify:navigate', handleNavigate);
+    addEventListener('shopify:navigate', handleNavigate);
 
     return () => {
-      document.removeEventListener('shopify:navigate', handleNavigate);
+      removeEventListener('shopify:navigate', handleNavigate);
     };
   }, [navigate]);
 
