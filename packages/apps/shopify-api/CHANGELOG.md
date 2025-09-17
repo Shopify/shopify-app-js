@@ -1,5 +1,252 @@
 # Changelog
 
+## 12.0.0
+
+### Major Changes
+
+- dc41d09: Swapped `jsonwebtoken` dependency for `jose`
+
+  If you use the `getJwt` function, it is now async.
+
+  Before
+
+  ```javascript
+  import {getJwt} from '@shopify/shopify-api/test-helpers';
+
+  describe(() => {
+    it('tests something', () => {
+      const jwt = getJwt(TEST_SHOP_NAME, API_KEY, API_SECRET_KEY);
+
+      //...etc
+    });
+  });
+  ```
+
+  After:
+
+  ```javascript
+  import {getJwt} from '@shopify/shopify-api/test-helpers';
+
+  describe(() => {
+    it('tests something', async () => {
+      const jwt = await getJwt(TEST_SHOP_NAME, API_KEY, API_SECRET_KEY);
+
+      //...etc
+    });
+  });
+  ```
+
+  This change gives you smaller packages and more standards compliance.
+
+- c3005a6: REST API IDs change from number to string
+  - **BREAKING**: All REST API responses now return ID properties as `string` instead of `number` to prevent precision loss for IDs approaching JavaScript's MAX_SAFE_INTEGER (2^53-1). This affects both REST resources and the REST client.
+
+    #### What Changed
+    - All `id` properties changed from `number` to `string`
+    - All `*_id` properties (like `product_id`, `customer_id`) changed from `number` to `string`
+    - All `*_ids` array properties (like `variant_ids`) changed from `number[]` to `string[]`
+
+    #### Affected APIs
+    - **REST Resources**: `Product.find()`, `Order.save()`, etc.
+    - **REST Client**: Direct usage of `shopify.clients.Rest`
+
+    #### Why This Change
+    - Shopify IDs are 64-bit integers that can exceed JavaScript's safe integer limit
+    - IDs beyond 2^53-1 lose precision when stored as numbers
+    - Prevents data corruption for merchants with large IDs
+
+    #### Migration Examples
+
+    **REST Resources:**
+
+    ```typescript
+    // Before (v11)
+    const product = await shopify.rest.Product.find({session, id: 123});
+    if (product.id === 123) {
+    }
+
+    // After (v12)
+    const product = await shopify.rest.Product.find({session, id: '123'});
+    if (product.id === '123') {
+    }
+    ```
+
+    **REST Client:**
+
+    ```typescript
+    // Before (v11)
+    const client = new shopify.clients.Rest({session});
+    const response = await client.get({path: 'products/123'});
+    if (response.body.product.id === 123) {
+    }
+
+    // After (v12)
+    const client = new shopify.clients.Rest({session});
+    const response = await client.get({path: 'products/123'});
+    if (response.body.product.id === '123') {
+    } // ID is now a string
+    ```
+
+    #### Migration Guide
+
+    See [MIGRATION_GUIDE_V12.md](./MIGRATION_GUIDE_V12.md) for detailed migration instructions.
+
+    #### Backward Compatibility
+    - Methods still accept numeric IDs as parameters (automatically converted to strings)
+    - Uses lossless-json parsing to preserve precision for large IDs
+    - No manual conversion needed for API responses
+
+- dc41d09: Require Node >= v20. Remove crypto dependency in favor of globalThis.crypto
+
+  If you are using Node, make sure you are using Node version 20 or above
+
+  If you are using `setCrypto` from `'@shopify/shopify-api'` you can remove this code.
+
+- a5be0d0: Removed the `v10_lineItemBilling` and `lineItemBilling` future flags.
+
+  ## If you've adopted either flag
+
+  If you have already adopted either of these flags you only need to remove the flags from your shopifyApi config.
+
+  Before
+
+  ```ts
+  import {shopifyApi} from '@shopify/shopify-api';
+
+  const shopify = shopifyApi({
+    future: {
+      lineItemBilling: true, // Or v10_lineItemBilling: true
+    },
+    // ...
+  });
+  ```
+
+  After:
+
+  ```ts
+  import {shopifyApi} from '@shopify/shopify-api';
+
+  const shopify = shopifyApi({
+    // ...
+  });
+  ```
+
+  ## If you have not adopted either flag
+
+  If your shopifyApi config does not contain `future.lineItemBilling` or `future.v10_lineItemBilling` you need may need to change your billing configs:
+
+  Before:
+
+  ```ts
+  const shopify = shopifyApi({
+    // ...
+    billing: {
+      'My billing plan': {
+        interval: BillingInterval.Every30Days,
+        amount: 30,
+        currencyCode: 'USD',
+        replacementBehavior: BillingReplacementBehavior.ApplyImmediately,
+        discount: {
+          durationLimitInIntervals: 3,
+          value: {
+            amount: 10,
+          },
+        },
+      },
+    },
+  });
+  ```
+
+  After:
+
+  ```ts
+  const shopify = shopifyApi({
+    // ...
+    billing: {
+      'My billing plan': {
+        replacementBehavior: BillingReplacementBehavior.ApplyImmediately,
+        lineItems: [
+          {
+            interval: BillingInterval.Every30Days,
+            amount: 30,
+            currencyCode: 'USD',
+            discount: {
+              durationLimitInIntervals: 3,
+              value: {
+                amount: 10,
+              },
+            },
+          },
+        ],
+      },
+    },
+  });
+  ```
+
+- 48d3631: The `LATEST_API_VERSION` and `RELEASE_CANDIDATE_API_VERSION` constants have been removed from the package. The `apiVersion` parameter is now **required** in the `shopifyApp` configuration.
+
+  We are making this change to ensure the API versions do not change without the developer explicitly opting into the new version. This removes the potential for apps to break unexpectedly and should reduce overall maintenance.
+
+  ### Migration Steps
+
+  **Before:**
+
+  ```typescript
+  import {shopifyApi, LATEST_API_VERSION} from '@shopify/shopify-api';
+
+  const shopify = shopifyApi({
+    apiVersion: LATEST_API_VERSION,
+    // ...
+  });
+  ```
+
+  **After:**
+
+  ```typescript
+  import {shopifyApi, ApiVersion} from '@shopify/shopify-api';
+
+  const shopify = shopifyApi({
+    apiVersion: ApiVersion.July25,
+    // ...
+  });
+  ```
+
+### Patch Changes
+
+- 6606d39: Fix adapter initialization issues with modern bundlers (Vite, Webpack) in SSR frameworks
+
+  Adds `sideEffects` configuration to package.json to prevent bundlers from incorrectly tree-shaking adapter initialization code. This resolves the "Missing adapter implementation for 'abstractRuntimeString'" error that occurred when using the library with Nuxt 3, TanStack Start, and other frameworks.
+
+  The adapters use side effects to initialize runtime functions, and modern bundlers were optimizing these away, causing runtime errors. The fix ensures these critical initialization side effects are preserved during the bundling process.
+
+  Some bundlers may still tree-shake pure side-effect imports. If you encounter issues after this update, you can use the newly
+  exported `nodeAdapterInitialized` constant to ensure the adapter is loaded:
+
+  ```javascript
+  // Instead of just:
+  import '@shopify/shopify-api/adapters/node';
+
+  // You can now also import and check:
+  import {nodeAdapterInitialized} from '@shopify/shopify-api/adapters/node';
+  import {shopifyApi} from '@shopify/shopify-api';
+
+  // Optional: Ensure adapter is initialized (forces bundlers to keep the import)
+  if (!nodeAdapterInitialized) {
+    throw new Error('Node adapter not initialized');
+  }
+
+  const shopify = shopifyApi({
+    // your config
+  });
+  ```
+
+- 7d8aa81: # Remove deprecated package
+
+  Removes the deprecated `@shopify/network` package. No change in functionality.
+
+- 089f4fd: Update loggings for session utils
+- dc41d09: Remove node-fetch from the node adapter since Node >=20 supports globalThis.fetch
+
 ## 11.14.1
 
 ### Patch Changes

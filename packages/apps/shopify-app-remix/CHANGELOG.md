@@ -1,5 +1,157 @@
 # @shopify/shopify-app-remix
 
+## 4.0.0
+
+### Major Changes
+
+- dc41d09: Require Node >= v20. Remove crypto dependency in favor of globalThis.crypto
+
+  If you are using Node, make sure you are using Node version 20 or above
+
+  If you are using `setCrypto` from `'@shopify/shopify-api'` you can remove this code.
+
+- d7bd799: Remove REST entirely.
+
+  9 months ago in version 3.5.0 we signalled our intent to remove REST ([Shopify is all-in on GraphQL](https://www.shopify.com/ca/partners/blog/all-in-on-graphql)). At that time we added the `removeRest` flag to allow the small percentage of Remix apps that use REST to gradually migrate to GraphQL in preparation for this version.
+
+  The time has now come to remove REST entirely from the Remix package. As such, you will need to migrate any remaining REST queries to GraphQL.
+
+  If you previously adopted the `removeRest` flag, you'll need to remove that flag.
+
+  BEFORE:
+
+  ```ts
+  import {shopifyApp} from '@shopify/shopify-app-remix/server';
+
+  const shopify = shopifyApp({
+    future: {
+      unstable_newEmbeddedAuthStrategy: true,
+      removeRest: true,
+    },
+    // ...etc
+  });
+  ```
+
+  AFTER:
+
+  ```ts
+  import {shopifyApp} from '@shopify/shopify-app-remix/server';
+
+  const shopify = shopifyApp({
+    future: {
+      unstable_newEmbeddedAuthStrategy: true,
+    },
+    // ...etc
+  });
+  ```
+
+  If you have any REST queries in your app, you'll need to migrate those to GraphQL.
+
+  BEFORE:
+
+  ```ts
+  import {json} from '@remix-run/node';
+  import {authenticate} from '../shopify.server';
+
+  export const loader = async ({request}) => {
+    const {admin} = await authenticate.admin(request);
+
+    const response = await admin.rest.get({
+      path: '/customers/count.json',
+    });
+    const customers = await response.json();
+
+    return json({customers});
+  };
+  ```
+
+  AFTER:
+
+  ```ts
+  import {json} from '@remix-run/node';
+  import {authenticate} from '../shopify.server';
+
+  export const loader = async ({request}) => {
+    const {admin} = await authenticate.admin(request);
+
+    const response = await admin.graphql(QUERY);
+    const customers = await response.json();
+
+    return json({customers});
+  };
+  ```
+
+  Please see the [REST to GraphQL Migration guide](https://shopify.dev/docs/apps/build/graphql/migrate) for more detailed REST to GraphQL examples.
+
+- 762224d: The `LATEST_API_VERSION` and `RELEASE_CANDIDATE_API_VERSION` constants have been removed from the package. The `apiVersion` parameter is now **required** in the `shopifyApp` configuration.
+
+  We are making this change to ensure the API versions do not change without the developer explicitly opting into the new version. This removes the potential for apps to break unexpectedly and should reduce overall maintenance.
+
+  ### Migration Steps
+
+  #### Step 1: Update Your Imports
+
+  **Before:**
+
+  ```typescript
+  import {
+    LATEST_API_VERSION,
+    shopifyApp,
+  } from '@shopify/shopify-app-remix/server';
+  // or
+  import {
+    RELEASE_CANDIDATE_API_VERSION,
+    shopifyApp,
+  } from '@shopify/shopify-app-remix/server';
+  ```
+
+  **After:**
+
+  ```typescript
+  import {ApiVersion, shopifyApp} from '@shopify/shopify-app-remix/server';
+  ```
+
+  #### Step 2: Update Your Configuration
+
+  **Before:**
+
+  ```typescript
+  const shopify = shopifyApp({
+    apiKey: process.env.SHOPIFY_API_KEY!,
+    apiSecretKey: process.env.SHOPIFY_API_SECRET!,
+    scopes: process.env.SCOPES?.split(',')!,
+    appUrl: process.env.SHOPIFY_APP_URL!,
+    apiVersion: LATEST_API_VERSION, // or omitted entirely
+  });
+  ```
+
+  **After:**
+
+  ```typescript
+  const shopify = shopifyApp({
+    apiKey: process.env.SHOPIFY_API_KEY!,
+    apiSecretKey: process.env.SHOPIFY_API_SECRET!,
+    scopes: process.env.SCOPES?.split(',')!,
+    appUrl: process.env.SHOPIFY_APP_URL!,
+    apiVersion: ApiVersion.July25, // Now required - choose your desired version
+  });
+  ```
+
+### Patch Changes
+
+- 79b2fbe: Swap semver package for compare-versions package. Compare versions is a lighter weight and suits the packages needs just fine
+- Updated dependencies [dc41d09]
+- Updated dependencies [c3005a6]
+- Updated dependencies [dc41d09]
+- Updated dependencies [a5be0d0]
+- Updated dependencies [6606d39]
+- Updated dependencies [48d3631]
+- Updated dependencies [7d8aa81]
+- Updated dependencies [089f4fd]
+- Updated dependencies [dc41d09]
+  - @shopify/shopify-api@12.0.0
+  - @shopify/shopify-app-session-storage@4.0.0
+
 ## 3.8.5
 
 ### Patch Changes

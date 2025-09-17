@@ -1,6 +1,6 @@
 {
   "name": "@shopify/shopify-app-session-storage",
-  "version": "3.0.20",
+  "version": "4.0.0",
   "description": "Shopify App Session Storage - abstract class",
   "repository": {
     "type": "git",
@@ -45,10 +45,10 @@
   ],
   "dependencies": {},
   "peerDependencies": {
-    "@shopify/shopify-api": "^11.0.0"
+    "@shopify/shopify-api": "^12.0.0"
   },
   "devDependencies": {
-    "@shopify/shopify-api": "^11.14.1"
+    "@shopify/shopify-api": "^12.0.0"
   },
   "files": [
     "dist/*",
