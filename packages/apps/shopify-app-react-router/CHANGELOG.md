@@ -60,7 +60,7 @@
   });
   ```
 
-- dc41d09: Require Node >= v20. Remove crypto dependency in favor of globalThis.crypto
+- dc41d09: Require Node >= v20.10.0. Remove crypto dependency in favor of globalThis.crypto
 
   **Note:** Technically this is a breaking change. However, React Router and the [Shopify app template for React Router](https://github.com/Shopify/shopify-app-template-react-router) already require Node 20. So we don't think this will affect anyone. Semver allows V0 packages can have breaking changes without major version bumps.
 

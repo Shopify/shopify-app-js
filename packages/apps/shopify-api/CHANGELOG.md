@@ -96,7 +96,7 @@
     - Uses lossless-json parsing to preserve precision for large IDs
     - No manual conversion needed for API responses
 
-- dc41d09: Require Node >= v20. Remove crypto dependency in favor of globalThis.crypto
+- dc41d09: Require Node >= v20.10.0. Remove crypto dependency in favor of globalThis.crypto
 
   If you are using Node, make sure you are using Node version 20 or above
 
