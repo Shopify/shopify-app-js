@@ -103,6 +103,38 @@ Here are some possible solutions for this issue:
 1. Ensure you've copied the schema above into your `prisma.schema` file.
 1. If you've made changes to the table, make sure it's still called `Session`.
 
-### Error: The "mongodb" provider is not supported with this command
+### MongoDB
 
-MongoDB does not support the [prisma migrate](https://www.prisma.io/docs/orm/prisma-migrate/understanding-prisma-migrate/overview) command. If you are using MongoDB please see the [Prisma documentation](https://www.prisma.io/docs/orm/overview/databases/mongodb) for configuring your database.
+If you choose to use MongoDB with prisma, MongoDB support in Prisma has some gotchas that you should be aware of.
+
+Alternatively you can use a MongoDB database directly with the [MongoDB session storage adapter](https://www.npmjs.com/package/@shopify/shopify-app-session-storage-mongodb).
+
+#### Mapping the id field
+
+In MongoDB, an ID must be a single field that defines an `@id` attribute and a `@map("\_id")` attribute. The prisma adapter expects the ID field to be the ID of the session, and not the \_id field of the document.
+
+You'll need to make some modifications to the schema and prisma configuration. For more information please see the [Prisma MongoDB documentation](https://www.prisma.io/docs/orm/overview/databases/mongodb).
+
+To make this work add a new field to the schema that maps the \_id field to the id field. For more information see the [Prisma documentation](https://www.prisma.io/docs/orm/prisma-schema/data-model/models#defining-an-id-field)
+
+```prisma
+model Session {
+  session_id  String    @id @default(auto()) @map("_id") @db.ObjectId
+  id          String    @unique
+...
+}
+```
+
+#### Error: The "mongodb" provider is not supported with this command
+
+MongoDB does not support the [prisma migrate](https://www.prisma.io/docs/orm/prisma-migrate/understanding-prisma-migrate/overview) command. Instead, you can use the [prisma db push](https://www.prisma.io/docs/orm/reference/prisma-cli-reference#db-push) command and update the `shopify.web.toml` file with the following commands. If you are using MongoDB please see the [Prisma documentation](https://www.prisma.io/docs/orm/overview/databases/mongodb) for more information.
+
+```toml
+[commands]
+predev = "npx prisma generate && npx prisma db push"
+dev = "npx prisma migrate deploy && npm exec react-router dev"
+```
+
+#### Prisma needs to perform transactions, which requires your mongodb server to be run as a replica set
+
+See the [Prisma documentation](https://www.prisma.io/docs/getting-started/setup-prisma/start-from-scratch/mongodb/connect-your-database-node-mongodb) for connecting to a MongoDB database.
