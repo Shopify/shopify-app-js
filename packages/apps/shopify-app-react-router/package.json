@@ -1,7 +1,7 @@
 {
   "description": "Shopify React Router - to simplify the building of Shopify Apps with React Router",
   "name": "@shopify/shopify-app-react-router",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "engines": {
     "node": ">=20.0.0"
   },
@@ -84,15 +84,15 @@
     "@babel/preset-env": "^7.28.0",
     "@shopify/generate-docs": "^0.18.1",
     "@shopify/react-testing": "^6.0.0",
-    "@shopify/shopify-app-session-storage-memory": "^4.0.20",
+    "@shopify/shopify-app-session-storage-memory": "^5.0.0",
     "@types/react": "^19.1.12",
     "jest-fetch-mock": "^3.0.3",
     "react-router": "7.8.2"
   },
   "dependencies": {
     "@shopify/admin-api-client": "^1.1.1",
-    "@shopify/shopify-api": "^11.14.1",
-    "@shopify/shopify-app-session-storage": "^3.0.20",
+    "@shopify/shopify-api": "^12.0.0",
+    "@shopify/shopify-app-session-storage": "^4.0.0",
     "@shopify/storefront-api-client": "^1.0.9",
     "compare-versions": "^6.1.1",
     "isbot": "^5.1.26"

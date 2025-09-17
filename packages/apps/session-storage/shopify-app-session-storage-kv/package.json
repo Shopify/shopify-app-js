@@ -1,6 +1,6 @@
 {
   "name": "@shopify/shopify-app-session-storage-kv",
-  "version": "4.0.20",
+  "version": "5.0.0",
   "description": "Shopify App Session Storage for KV",
   "repository": {
     "type": "git",
@@ -48,12 +48,12 @@
     "compare-versions": "^6.1.1"
   },
   "peerDependencies": {
-    "@shopify/shopify-api": "^11.0.0",
-    "@shopify/shopify-app-session-storage": "^3.0.0"
+    "@shopify/shopify-api": "^12.0.0",
+    "@shopify/shopify-app-session-storage": "^4.0.0"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^4.20250831.0",
-    "@shopify/shopify-app-session-storage-test-utils": "^3.0.20",
+    "@shopify/shopify-app-session-storage-test-utils": "^4.0.0",
     "miniflare": "^4.20250709.0"
   },
   "files": [
