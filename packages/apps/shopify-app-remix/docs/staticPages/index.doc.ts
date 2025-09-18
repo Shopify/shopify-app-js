@@ -4,6 +4,7 @@ const data: LandingTemplateSchema = {
   id: 'shopify-app-remix',
   title: 'Shopify App package for Remix',
   description:
+    '> Note: **🚀 Ready to level up?** The new `@shopify/shopify-app-react-router` package is here and is the recommended path forward for building Shopify apps. Developers are already making the switch with our straightforward migration path. Check out the [migration guide](https://github.com/Shopify/shopify-app-template-react-router/wiki/Upgrading-from-Remix) and see what\'s new in the [documentation](/docs/api/shopify-app-react-router).\n\n' +
     'The [@shopify/shopify-app-remix](https://www.npmjs.com/package/@shopify/shopify-app-remix) package enables Remix apps to authenticate with Shopify and make API calls. It uses [App Bridge](/docs/api/app-bridge-library) to enable apps to embed themselves in the Shopify Admin.' +
     "\n\nIn this page we'll go over the main components you need to integrate an app with Shopify.",
   sections: [
