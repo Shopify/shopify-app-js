@@ -99,27 +99,6 @@
         ]
       },
       {
-        "type": "Generic",
-        "anchorLink": "rest-api",
-        "title": "Using the REST API (Deprecated)",
-        "sectionContent": "**Shopify is [all-in on graphql](https://www.shopify.com/ca/partners/blog/all-in-on-graphql). In the next major release, the REST API will be removed from the `@shopify/shopify-app-remix` package.If the `removeRest` [future flag](/docs/api/shopify-app-remix/v3/guide-future-flags) is true, then the REST API will not be available.**\n\nOnce a request is authenticated, `authenticate.admin` will return an `admin` object that contains a REST client that can interact with the [REST Admin API](/docs/api/admin-rest).\n\nYou can also import a set of resource classes from the `@shopify/shopify-api` package, which is included in `@shopify/shopify-app-remix`.\n\nThese classes map to the individual REST endpoints, and will be returned under `admin.rest.resources`.",
-        "codeblock": {
-          "title": "Interacting with the REST API",
-          "tabs": [
-            {
-              "title": "/app/shopify.server.ts",
-              "code": "import {shopifyApp} from '@shopify/shopify-app-remix/server';\nimport {restResources} from '@shopify/shopify-api/rest/admin/2023-07';\n\nconst shopify = shopifyApp({\n  restResources,\n  // ...etc\n});\n\nexport const authenticate = shopify.authenticate;\n",
-              "language": "tsx"
-            },
-            {
-              "title": "/app/routes/**/*.tsx",
-              "code": "import {LoaderFunction, json} from '@remix-run/node';\nimport {useRouteError} from '@remix-run/react';\n\nimport {authenticate} from '~/shopify.server';\n\nexport const loader: LoaderFunction = async ({request}) =&gt; {\n  const {admin, session} = await authenticate.admin(request);\n\n  // Use REST resources\n  const data = await admin.rest.resources.Product.count({session});\n\n  // Or use the REST client\n  const response = await admin.rest.get({path: 'products/count'});\n  const data = response.body;\n\n  return json({productCount: data.count});\n};\n",
-              "language": "tsx"
-            }
-          ]
-        }
-      },
-      {
         "type": "Resource",
         "title": "Resources",
         "anchorLink": "resources",
@@ -270,12 +249,6 @@
             "value": "",
             "description": "Embedded apps will fetch access tokens via token exchange. This assumes the app has declared scopes for Shopify managed installations.\n\nLearn more about this [new embedded app auth strategy](https://shopify.dev/docs/api/shopify-app-remix#embedded-auth-strategy).",
             "isOptional": true
-          },
-          {
-            "name": "removeRest",
-            "value": "",
-            "description": "Methods for interacting with the admin REST API will not be returned\n\nThis affects:\n\n* `authenticate.admin(request)`\n* `authenticate.webhook(request)`\n* `authenticate.flow(request)`\n* `authenticate.appProxy(request)`\n* `authenticate.fulfillmentService(request)`\n* `unauthenticated.admin(shop)`\n\nLearn more about this change by reading [all-in on graphql](https://www.shopify.com/ca/partners/blog/all-in-on-graphql).",
-            "isOptional": true
           }
         ]
       }
@@ -408,7 +381,7 @@
   {
     "id": "shopify-app-remix",
     "title": "Shopify App package for Remix",
-    "description": "The [@shopify/shopify-app-remix](https://www.npmjs.com/package/@shopify/shopify-app-remix) package enables Remix apps to authenticate with Shopify and make API calls. It uses [App Bridge](/docs/api/app-bridge-library) to enable apps to embed themselves in the Shopify Admin.\n\nIn this page we'll go over the main components you need to integrate an app with Shopify.",
+    "description": "> Note: **🚀 Ready to level up?** The new `@shopify/shopify-app-react-router` package is here and is the recommended path forward for building Shopify apps. Developers are already making the switch with our straightforward migration path. Check out the [migration guide](https://github.com/Shopify/shopify-app-template-react-router/wiki/Upgrading-from-Remix) and see what's new in the [documentation](/docs/api/shopify-app-react-router).\n\nThe [@shopify/shopify-app-remix](https://www.npmjs.com/package/@shopify/shopify-app-remix) package enables Remix apps to authenticate with Shopify and make API calls. It uses [App Bridge](/docs/api/app-bridge-library) to enable apps to embed themselves in the Shopify Admin.\n\nIn this page we'll go over the main components you need to integrate an app with Shopify.",
     "sections": [
       {
         "type": "Generic",
@@ -488,7 +461,7 @@
             {
               "title": "/app/shopify.server.ts",
               "language": "ts",
-              "code": "import '@shopify/shopify-app-remix/server/adapters/node';\nimport {\n  LATEST_API_VERSION,\n  shopifyApp,\n} from '@shopify/shopify-app-remix/server';\n\nconst shopify = shopifyApp({\n  apiKey: process.env.SHOPIFY_API_KEY!,\n  apiSecretKey: process.env.SHOPIFY_API_SECRET!,\n  appUrl: process.env.SHOPIFY_APP_URL!,\n  scopes: ['read_products'],\n  apiVersion: LATEST_API_VERSION,\n});\nexport default shopify;\n"
+              "code": "import '@shopify/shopify-app-remix/server/adapters/node';\nimport {ApiVersion, shopifyApp} from '@shopify/shopify-app-remix/server';\n\nconst shopify = shopifyApp({\n  apiKey: process.env.SHOPIFY_API_KEY!,\n  apiSecretKey: process.env.SHOPIFY_API_SECRET!,\n  appUrl: process.env.SHOPIFY_APP_URL!,\n  scopes: ['read_products'],\n  apiVersion: ApiVersion.July25,\n});\nexport default shopify;\n"
             }
           ]
         }
