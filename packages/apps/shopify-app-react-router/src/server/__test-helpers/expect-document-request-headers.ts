@@ -1,4 +1,4 @@
-import {APP_BRIDGE_URL} from '../authenticate/const';
+import {APP_BRIDGE_URL, CDN_URL, POLARIS_URL} from '../authenticate/const';
 
 import {TEST_SHOP} from './const';
 
@@ -15,7 +15,7 @@ export function expectDocumentRequestHeaders(
       )} https://admin.shopify.com https://*.spin.dev https://admin.myshopify.io https://admin.shop.dev;`,
     );
     expect(headers.get('Link')).toEqual(
-      `<${APP_BRIDGE_URL}>; rel="preload"; as="script";`,
+      `<${CDN_URL}>; rel="preconnect", <${APP_BRIDGE_URL}>; rel="preload"; as="script", <${POLARIS_URL}>; rel="preload"; as="script"`,
     );
   } else {
     expect(headers.get('Content-Security-Policy')).toEqual(
