@@ -6,6 +6,13 @@ import '../../../__tests__/test-helper';
 import {AppProvider} from '../AppProvider';
 import {RemixPolarisLink} from '../../RemixPolarisLink';
 
+// Mock Remix's useNavigate hook
+const mockNavigate = jest.fn();
+jest.mock('@remix-run/react', () => ({
+  ...jest.requireActual('@remix-run/react'),
+  useNavigate: () => mockNavigate,
+}));
+
 describe('<AppProvider />', () => {
   const defaultProps = {
     apiKey: '123abc',
@@ -63,5 +70,32 @@ describe('<AppProvider />', () => {
       i18n: dummyI18n,
       linkComponent: RemixPolarisLink,
     });
+  });
+
+  it('handles "shopify:navigate" events correctly', () => {
+    const component = mount(
+      <AppProvider isEmbeddedApp apiKey={'test-api-key'}>
+        <div>Hello world</div>
+        <a
+          data-testid="test-link"
+          href="/test-path"
+          onClick={(event) => {
+            event.preventDefault();
+            event.currentTarget.dispatchEvent(
+              new CustomEvent('shopify:navigate', {
+                bubbles: true,
+                cancelable: true,
+                composed: true,
+              }),
+            );
+          }}
+        >
+          Test path
+        </a>
+      </AppProvider>,
+    );
+
+    component.find('a', {'data-testid': 'test-link'})!.domNode!.click();
+    expect(mockNavigate).toHaveBeenCalledWith('/test-path');
   });
 });
