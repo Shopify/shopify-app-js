@@ -1,5 +1,11 @@
 # @shopify/shopify-app-remix
 
+## 4.0.1
+
+### Patch Changes
+
+- 7488abc: [AppProvider] - automatically handle the "shopify:navigate" event for Remix apps using Polaris Web Components. If using Polars React, this has no effect.
+
 ## 4.0.0
 
 ### Major Changes
