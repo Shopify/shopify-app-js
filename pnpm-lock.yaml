@@ -204,8 +204,8 @@ importers:
         version: 2.8.1
     devDependencies:
       '@libsql/client':
-        specifier: ^0.15.14
-        version: 0.15.14(encoding@0.1.13)
+        specifier: ^0.15.15
+        version: 0.15.15(encoding@0.1.13)
       '@shopify/shopify-app-session-storage-test-utils':
         specifier: ^4.0.0
         version: link:../shopify-app-session-storage-test-utils
@@ -223,7 +223,7 @@ importers:
         version: 0.31.4
       drizzle-orm:
         specifier: ^0.44.5
-        version: 0.44.5(@cloudflare/workers-types@4.20250831.0)(@libsql/client@0.15.14(encoding@0.1.13))(@prisma/client@6.15.0(prisma@6.15.0(typescript@5.9.2))(typescript@5.9.2))(@types/better-sqlite3@7.6.13)(@types/pg@8.15.5)(better-sqlite3@12.2.0)(gel@2.0.1)(mysql2@3.14.2)(pg@8.16.3)(prisma@6.15.0(typescript@5.9.2))(sqlite3@5.1.7)
+        version: 0.44.5(@cloudflare/workers-types@4.20250831.0)(@libsql/client@0.15.15(encoding@0.1.13))(@prisma/client@6.15.0(prisma@6.15.0(typescript@5.9.2))(typescript@5.9.2))(@types/better-sqlite3@7.6.13)(@types/pg@8.15.5)(better-sqlite3@12.2.0)(gel@2.0.1)(mysql2@3.14.2)(pg@8.16.3)(prisma@6.15.0(typescript@5.9.2))(sqlite3@5.1.7)
       mysql2:
         specifier: ^3.14.2
         version: 3.14.2
@@ -2753,8 +2753,8 @@ packages:
   '@jridgewell/trace-mapping@0.3.9':
     resolution: {integrity: sha512-3Belt6tdc8bPgAtbcmdtNJlirVoTmEb5e2gC94PnkwEW9jI6CAHUeoG85tjWP5WquqfavoMtMwiG4P926ZKKuQ==}
 
-  '@libsql/client@0.15.14':
-    resolution: {integrity: sha512-oXeFYcSyAsYWvpWVmynrwNwb+NHNHtMfSIVdfQTF1B9RsgDXQE5YCDP3SS0i1FA8nuLWy2trFDVwP1b2LNdNPQ==}
+  '@libsql/client@0.15.15':
+    resolution: {integrity: sha512-twC0hQxPNHPKfeOv3sNT6u2pturQjLcI+CnpTM0SjRpocEGgfiZ7DWKXLNnsothjyJmDqEsBQJ5ztq9Wlu470w==}
 
   '@libsql/core@0.15.15':
     resolution: {integrity: sha512-C88Z6UKl+OyuKKPwz224riz02ih/zHYI3Ho/LAcVOgjsunIRZoBw7fjRfaH9oPMmSNeQfhGklSG2il1URoOIsA==}
@@ -11151,7 +11151,7 @@ snapshots:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.5.5
 
-  '@libsql/client@0.15.14(encoding@0.1.13)':
+  '@libsql/client@0.15.15(encoding@0.1.13)':
     dependencies:
       '@libsql/core': 0.15.15
       '@libsql/hrana-client': 0.7.0(encoding@0.1.13)
@@ -13472,10 +13472,10 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  drizzle-orm@0.44.5(@cloudflare/workers-types@4.20250831.0)(@libsql/client@0.15.14(encoding@0.1.13))(@prisma/client@6.15.0(prisma@6.15.0(typescript@5.9.2))(typescript@5.9.2))(@types/better-sqlite3@7.6.13)(@types/pg@8.15.5)(better-sqlite3@12.2.0)(gel@2.0.1)(mysql2@3.14.2)(pg@8.16.3)(prisma@6.15.0(typescript@5.9.2))(sqlite3@5.1.7):
+  drizzle-orm@0.44.5(@cloudflare/workers-types@4.20250831.0)(@libsql/client@0.15.15(encoding@0.1.13))(@prisma/client@6.15.0(prisma@6.15.0(typescript@5.9.2))(typescript@5.9.2))(@types/better-sqlite3@7.6.13)(@types/pg@8.15.5)(better-sqlite3@12.2.0)(gel@2.0.1)(mysql2@3.14.2)(pg@8.16.3)(prisma@6.15.0(typescript@5.9.2))(sqlite3@5.1.7):
     optionalDependencies:
       '@cloudflare/workers-types': 4.20250831.0
-      '@libsql/client': 0.15.14(encoding@0.1.13)
+      '@libsql/client': 0.15.15(encoding@0.1.13)
       '@prisma/client': 6.15.0(prisma@6.15.0(typescript@5.9.2))(typescript@5.9.2)
       '@types/better-sqlite3': 7.6.13
       '@types/pg': 8.15.5
