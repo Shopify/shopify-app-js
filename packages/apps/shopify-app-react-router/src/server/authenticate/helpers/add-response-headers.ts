@@ -1,5 +1,6 @@
 import type {BasicParams} from '../../types';
 import {AppDistribution} from '../../types';
+import {APP_BRIDGE_URL, CDN_URL, POLARIS_URL} from '../const';
 
 export type AddDocumentResponseHeadersFunction = (
   request: Request,
@@ -28,7 +29,7 @@ export function addDocumentResponseHeaders(
   if (shop) {
     headers.set(
       'Link',
-      '<https://cdn.shopify.com/shopifycloud/app-bridge.js>; rel="preload"; as="script";',
+      `<${CDN_URL}>; rel="preconnect", <${APP_BRIDGE_URL}>; rel="preload"; as="script", <${POLARIS_URL}>; rel="preload"; as="script"`,
     );
   }
 
