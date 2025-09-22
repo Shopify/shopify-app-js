@@ -75,7 +75,7 @@ SHOPIFY_API_SECRET="[Copy from partners dashboard]"
 SHOPIFY_APP_URL="[The tunnel URL you are using to run your app]"
 ```
 
-`shopifyApp` needs to reserve a [splat route](https://remix.run/docs/en/main/guides/routing#splats) for auth.
+`shopifyApp` needs to reserve a [splat route](https://v2.remix.run/docs/file-conventions/routes#splat-routes) for auth.
 It should export a loader that uses `shopifyApp` to authenticate:
 
 ```ts
