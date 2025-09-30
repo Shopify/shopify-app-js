@@ -82,7 +82,7 @@
   ],
   "devDependencies": {
     "@babel/preset-env": "^7.28.0",
-    "@shopify/generate-docs": "^0.18.1",
+    "@shopify/generate-docs": "^0.19.2",
     "@shopify/react-testing": "^6.0.0",
     "@shopify/shopify-app-session-storage-memory": "^5.0.0",
     "@types/react": "^19.1.13",
