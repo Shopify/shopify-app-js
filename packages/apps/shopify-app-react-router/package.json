@@ -85,7 +85,7 @@
     "@shopify/generate-docs": "^0.18.1",
     "@shopify/react-testing": "^6.0.0",
     "@shopify/shopify-app-session-storage-memory": "^5.0.0",
-    "@types/react": "^19.1.12",
+    "@types/react": "^19.1.13",
     "jest-fetch-mock": "^3.0.3",
     "react-router": "7.8.2"
   },
