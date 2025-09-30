@@ -516,8 +516,8 @@ importers:
         specifier: ^7.28.0
         version: 7.28.3(@babel/core@7.27.4)
       '@shopify/generate-docs':
-        specifier: ^0.18.1
-        version: 0.18.1
+        specifier: ^0.19.2
+        version: 0.19.2
       '@shopify/react-testing':
         specifier: ^6.0.0
         version: 6.0.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -574,8 +574,8 @@ importers:
         specifier: ^2.16.8
         version: 2.17.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.9.2)
       '@shopify/generate-docs':
-        specifier: ^0.18.1
-        version: 0.18.1
+        specifier: ^0.19.2
+        version: 0.19.2
       '@shopify/polaris':
         specifier: ^12.18.0
         version: 12.27.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -3336,8 +3336,8 @@ packages:
     peerDependencies:
       eslint: ^8.56.0
 
-  '@shopify/generate-docs@0.18.1':
-    resolution: {integrity: sha512-brMjEwMwXY+Je/7uFzUqPSx2RmVJc+elLhrMYtdocMFTUOmB7qm1RkRCcUyW1bubq68LvARCVhsruOOeO7mZ6g==}
+  '@shopify/generate-docs@0.19.2':
+    resolution: {integrity: sha512-xRX0W5pnqbFqq1x/si79/kCUklLWCzEqUi6JDp1igs1Ts7pOhwPs7GYV4rCHPHdylxYbtKnvOqQO++GVjxIdeg==}
     hasBin: true
 
   '@shopify/graphql-codegen@0.1.0':
@@ -3791,8 +3791,8 @@ packages:
     peerDependencies:
       '@types/react': '*'
 
-  '@types/react@18.3.24':
-    resolution: {integrity: sha512-0dLEBsA1kI3OezMBF8nSsb7Nk19ZnsyE1LLhB8r27KbgU5H4pvuqZLdtE+aUkJVoXgTVuA+iLIwmZ0TuK4tx6A==}
+  '@types/react@18.3.25':
+    resolution: {integrity: sha512-oSVZmGtDPmRZtVDqvdKUi/qgCsWp5IDY29wp8na8Bj4B3cc99hfNzvNhlMkVVxctkAOGUA3Km7MMpBHAnWfcIA==}
 
   '@types/react@19.1.13':
     resolution: {integrity: sha512-hHkbU/eoO3EG5/MZkuFSKmYqPbSVk5byPFa3e7y/8TybHiLMACgI8seVYlicwk7H5K/rI2px9xrQp/C+AUDTiQ==}
@@ -11676,9 +11676,9 @@ snapshots:
       - supports-color
       - typescript
 
-  '@shopify/generate-docs@0.18.1':
+  '@shopify/generate-docs@0.19.2':
     dependencies:
-      '@types/react': 18.3.24
+      '@types/react': 18.3.25
       globby: 11.1.0
       typescript: 5.8.3
 
@@ -12247,7 +12247,7 @@ snapshots:
     dependencies:
       '@types/react': 19.1.13
 
-  '@types/react@18.3.24':
+  '@types/react@18.3.25':
     dependencies:
       '@types/prop-types': 15.7.15
       csstype: 3.1.3
