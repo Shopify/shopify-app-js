@@ -5,12 +5,10 @@ import {createAdminApiClient} from '../client';
 import {ACCESS_TOKEN_HEADER, DEFAULT_CONTENT_TYPE} from '../../constants';
 
 const mockApiVersions = [
-  '2023-01',
-  '2023-04',
-  '2023-07',
-  '2023-10',
-  '2024-01',
-  '2024-10',
+  '2025-01',
+  '2025-04',
+  '2025-07',
+  '2025-10',
   'unstable',
 ];
 
@@ -26,10 +24,10 @@ describe('Admin API Client', () => {
   describe('createAdminApiClient()', () => {
     const config = {
       storeDomain: 'https://test-store.myshopify.io',
-      apiVersion: '2024-10',
+      apiVersion: '2025-10',
       accessToken: 'access-token',
     };
-    const mockApiUrl = `${config.storeDomain}/admin/api/2024-10/graphql.json`;
+    const mockApiUrl = `${config.storeDomain}/admin/api/2025-10/graphql.json`;
 
     const graphqlClientMock: GraphQLClient = {
       config: {
