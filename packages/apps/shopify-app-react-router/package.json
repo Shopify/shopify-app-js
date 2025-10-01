@@ -1,7 +1,7 @@
 {
   "description": "Shopify React Router - to simplify the building of Shopify Apps with React Router",
   "name": "@shopify/shopify-app-react-router",
-  "version": "0.3.0",
+  "version": "1.0.0",
   "engines": {
     "node": ">=20.0.0"
   },
