@@ -1,6 +1,6 @@
 {
   "name": "@shopify/shopify-app-session-storage-dynamodb",
-  "version": "5.0.1",
+  "version": "5.0.2",
   "description": "Shopify App Session Storage for DynamoDB",
   "repository": {
     "type": "git",

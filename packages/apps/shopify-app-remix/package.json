@@ -1,6 +1,6 @@
 {
   "name": "@shopify/shopify-app-remix",
-  "version": "4.0.1",
+  "version": "4.0.2",
   "description": "Shopify Remix - to simplify the building of Shopify Apps with Remix",
   "engines": {
     "node": ">=20.10.0"
