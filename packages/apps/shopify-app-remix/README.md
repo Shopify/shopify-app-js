@@ -5,8 +5,15 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE.md)
 [![npm version](https://badge.fury.io/js/%40shopify%2Fshopify-app-remix.svg)](https://badge.fury.io/js/%40shopify%2Fshopify-app-remix)
 
-This package makes it easy to use [Remix](https://remix.run/) to build Shopify apps.
-It builds on the `@shopify/shopify-api` package and exposes a `shopifyApp` function. You can use `shopifyApp` to configure your app and then authenticate requests from Shopify.
+This package makes it easy to use [Remix](https://remix.run/) to build Shopify apps. 
+
+## Upgrade to React Router
+
+You should only use this Remix package if you have an existing Remix app and have not yet upgraded.
+
+If you are building a new Shopify app you should use React Router and not Remix.  Please see the [Quick start guide for React Router](https://github.com/Shopify/shopify-app-template-react-router?tab=readme-ov-file#quick-start).
+
+If you already have a Remix app, you should upgrade to React Router.  Please see the [Upgrading to React Router guide](https://github.com/Shopify/shopify-app-template-react-router/wiki/Upgrading-from-Remix).
 
 Visit the [`shopify.dev` documentation](https://shopify.dev/docs/api/shopify-app-remix) for more details on the Remix app package.
 

@@ -7,10 +7,6 @@
 
 This package makes it easy to use [React Router](https://reactrouter.com/) to build Shopify apps.
 
-## Early access
-
-This package is in early access. Most apps will be fine to adopt React Router. If you encounter issues [please provide feedback](https://github.com/Shopify/shopify-app-template-react-router/issues).
-
 ## Getting started
 
 Please follow this [quick start guide](https://github.com/Shopify/shopify-app-template-react-router#quick-start) to get started.
