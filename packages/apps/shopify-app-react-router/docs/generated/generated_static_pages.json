@@ -409,7 +409,7 @@
             {
               "title": "/app/shopify.server.ts",
               "language": "ts",
-              "code": "import {\n  LATEST_API_VERSION,\n  LogSeverity,\n  shopifyApp,\n} from '@shopify/shopify-app-react-router/server';\n\nconst shopify = shopifyApp({\n  apiKey: process.env.SHOPIFY_API_KEY!,\n  apiSecretKey: process.env.SHOPIFY_API_SECRET!,\n  appUrl: process.env.SHOPIFY_APP_URL!,\n  apiVersion: LATEST_API_VERSION,\n  logger: {\n    level: LogSeverity.Debug, // Set the log level to debug\n  },\n  future: {\n    exampleFlag: true, // Enable a future flag to true\n  },\n});\nexport default shopify;\n"
+              "code": "import {\n  ApiVersion,\n  LogSeverity,\n  shopifyApp,\n} from '@shopify/shopify-app-react-router/server';\n\nconst shopify = shopifyApp({\n  apiKey: process.env.SHOPIFY_API_KEY!,\n  apiSecretKey: process.env.SHOPIFY_API_SECRET!,\n  appUrl: process.env.SHOPIFY_APP_URL!,\n  apiVersion: ApiVersion.July25,\n  logger: {\n    level: LogSeverity.Debug, // Set the log level to debug\n  },\n  future: {\n    exampleFlag: true, // Enable a future flag to true\n  },\n});\nexport default shopify;\n"
             }
           ]
         }
