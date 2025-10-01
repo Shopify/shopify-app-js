@@ -17,6 +17,7 @@ import type {
 } from './future/flags';
 import type {Unauthenticated} from './unauthenticated/types';
 import type {AuthenticatePOS} from './authenticate/pos/types';
+import type {AuthenticateCustomerAccount} from './authenticate/customer-account';
 
 export interface BasicParams<
   Future extends FutureFlagOptions = FutureFlagOptions,
@@ -260,6 +261,25 @@ interface Authenticate<Config extends AppConfigArg> {
    * ```
    */
   webhook: AuthenticateWebhook<string>;
+
+  /**
+   * Authenticate a customer account request using PKCE OAuth flow
+   *
+   * @example
+   * <caption>Authenticating a customer account request</caption>
+   * ```ts
+   * // app/routes/customer-account.ts
+   * import { LoaderFunctionArgs } from "react-router";
+   * import { authenticate } from "../shopify.server";
+   *
+   * export const loader = async ({ request }: LoaderFunctionArgs) => {
+   *   const { session, customerAccountClient } = await authenticate.customerAccount(request);
+   *   const response = await customerAccountClient.request(`{ customer { id email } }`);
+   *   return response.data;
+   * };
+   * ```
+   */
+  customerAccount: AuthenticateCustomerAccount;
 }
 
 export interface ShopifyAppBase<Config extends AppConfigArg> {

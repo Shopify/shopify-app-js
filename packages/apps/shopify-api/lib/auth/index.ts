@@ -11,6 +11,12 @@ import {
 } from './get-embedded-app-url';
 import {TokenExchange, tokenExchange} from './oauth/token-exchange';
 import {ClientCredentials, clientCredentials} from './oauth/client-credentials';
+import {
+  beginCustomerAccountOAuth,
+  handleCustomerAccountCallback,
+  CustomerAccountOAuthBegin,
+  CustomerAccountOAuthCallback,
+} from './oauth/customer-account-oauth';
 
 export {AuthScopes} from './scopes';
 
@@ -26,6 +32,8 @@ export function shopifyAuth<Config extends ConfigInterface>(
     buildEmbeddedAppUrl: buildEmbeddedAppUrl(config),
     tokenExchange: tokenExchange(config),
     clientCredentials: clientCredentials(config),
+    beginCustomerAccountOAuth: beginCustomerAccountOAuth(config),
+    handleCustomerAccountCallback: handleCustomerAccountCallback(config),
   } as ShopifyAuth;
 
   return shopify;
@@ -40,4 +48,6 @@ export interface ShopifyAuth {
   buildEmbeddedAppUrl: BuildEmbeddedAppUrl;
   tokenExchange: TokenExchange;
   clientCredentials: ClientCredentials;
+  beginCustomerAccountOAuth: CustomerAccountOAuthBegin;
+  handleCustomerAccountCallback: CustomerAccountOAuthCallback;
 }

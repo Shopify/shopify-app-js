@@ -1,0 +1,74 @@
+{
+  "name": "@shopify/customer-account-api-client",
+  "version": "0.0.1",
+  "description": "Shopify Customer Account API Client - A lightweight JS client to interact with Shopify's Customer Account API",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Shopify/shopify-app-js.git",
+    "directory": "packages/api-clients/customer-account-api-client"
+  },
+  "author": "Shopify",
+  "license": "MIT",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/ts/index.d.ts",
+  "exports": {
+    ".": {
+      "module": {
+        "types": "./dist/ts/index.d.ts",
+        "default": "./dist/index.mjs"
+      },
+      "import": {
+        "types": "./dist/ts/index.d.ts",
+        "default": "./dist/index.mjs"
+      },
+      "require": {
+        "types": "./dist/ts/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "default": "./dist/index.mjs"
+    }
+  },
+  "scripts": {
+    "lint": "eslint . --ext .js,.ts",
+    "build": "pnpm tsc -p ./tsconfig.build.json && pnpm rollup",
+    "tsc": "tsc",
+    "test": "jest",
+    "test:ci": "pnpm test",
+    "rollup": "rollup -c --bundleConfigAsCjs",
+    "clean": "rimraf dist/*",
+    "changeset": "changeset",
+    "version": "changeset version",
+    "release": "pnpm build && changeset publish"
+  },
+  "jest": {
+    "transform": {
+      ".*": "babel-jest"
+    }
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "keywords": [
+    "shopify",
+    "node",
+    "graphql",
+    "customer account API"
+  ],
+  "files": [
+    "dist/**/*.*"
+  ],
+  "dependencies": {
+    "@shopify/graphql-client": "^1.4.1"
+  },
+  "devDependencies": {
+    "@babel/preset-env": "^7.28.0",
+    "@shopify/babel-preset": "^25.0.2",
+    "jest-environment-jsdom": "^30.0.4",
+    "rollup-plugin-dts": "^6.2.1"
+  },
+  "bugs": {
+    "url": "https://github.com/Shopify/shopify-app-js/issues"
+  },
+  "homepage": "https://github.com/Shopify/shopify-app-js/tree/main/packages/api-clients/customer-account-api-client#readme"
+}

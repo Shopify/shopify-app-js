@@ -190,6 +190,8 @@ export class PrismaSessionStorage<T extends PrismaClient>
         sessionParams.onlineAccessInfo?.associated_user.collaborator || false,
       emailVerified:
         sessionParams.onlineAccessInfo?.associated_user.email_verified || false,
+      idToken: session.idToken || null,
+      refreshToken: session.refreshToken || null,
     };
   }
 
@@ -228,6 +230,14 @@ export class PrismaSessionStorage<T extends PrismaClient>
 
     if (row.accessToken) {
       sessionParams.accessToken = row.accessToken;
+    }
+
+    if (row.idToken) {
+      sessionParams.idToken = row.idToken;
+    }
+
+    if (row.refreshToken) {
+      sessionParams.refreshToken = row.refreshToken;
     }
 
     return Session.fromPropertyArray(Object.entries(sessionParams), true);

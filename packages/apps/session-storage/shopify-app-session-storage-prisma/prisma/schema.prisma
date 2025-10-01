@@ -23,6 +23,8 @@ model Session {
   locale        String?
   collaborator  Boolean?
   emailVerified Boolean?
+  idToken       String?
+  refreshToken  String?
 }
 
 // We use this in unit tests to ensure it works with a different model name
@@ -42,4 +44,6 @@ model MySession {
   locale        String?
   collaborator  Boolean?
   emailVerified Boolean?
+  idToken       String?
+  refreshToken  String?
 }

@@ -6,6 +6,7 @@ import {
   getCurrentSessionId,
   getJwtSessionId,
   getOfflineId,
+  getCustomerAccountSessionId,
 } from './session-utils';
 
 export function shopifySession(config: ConfigInterface) {
@@ -14,6 +15,7 @@ export function shopifySession(config: ConfigInterface) {
     getCurrentId: getCurrentSessionId(config),
     getOfflineId: getOfflineId(config),
     getJwtSessionId: getJwtSessionId(config),
+    getCustomerAccountSessionId: getCustomerAccountSessionId(config),
     decodeSessionToken: decodeSessionToken(config),
   };
 }

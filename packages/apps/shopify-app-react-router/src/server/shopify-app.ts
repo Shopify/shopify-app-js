@@ -32,6 +32,7 @@ import {IdempotentPromiseHandler} from './authenticate/helpers/idempotent-promis
 import {authenticateFlowFactory} from './authenticate/flow/authenticate';
 import {authenticateFulfillmentServiceFactory} from './authenticate/fulfillment-service/authenticate';
 import {authenticatePOSFactory} from './authenticate/pos/authenticate';
+import {authenticateCustomerAccountFactory} from './authenticate/customer-account';
 import {FutureFlagOptions, logDisabledFutureFlags} from './future/flags';
 
 /**
@@ -96,6 +97,7 @@ export function shopifyApp<
       pos: authenticatePOSFactory(params),
       public: authenticatePublicFactory(params),
       webhook: authenticateWebhookFactory<string>(params),
+      customerAccount: authenticateCustomerAccountFactory(params),
     },
     unauthenticated: {
       admin: unauthenticatedAdminContextFactory(params),

@@ -35,6 +35,14 @@ export interface SessionParams {
    */
   onlineAccessInfo?: OnlineAccessInfo | StoredOnlineAccessInfo;
   /**
+   * The ID token (JWT) for customer account sessions. Contains customer identity claims.
+   */
+  idToken?: string;
+  /**
+   * The refresh token for customer account sessions. Used to obtain new access tokens.
+   */
+  refreshToken?: string;
+  /**
    * Additional properties of the session allowing for extension
    */
   [key: string]: any;

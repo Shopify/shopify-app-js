@@ -10,6 +10,7 @@ import {Headers} from '../../runtime/http';
 
 import {GraphqlClient} from './admin/graphql/client';
 import {StorefrontClient} from './storefront/client';
+import {CustomerAccountClient} from './customer-account/client';
 import type {GraphqlProxy} from './graphql_proxy/types';
 import {RestClient} from './admin/rest/client';
 
@@ -117,10 +118,12 @@ export interface GraphqlQueryOptions<
 
 export {GraphqlClient} from './admin/graphql/client';
 export {RestClient} from './admin/rest/client';
+export {CustomerAccountClient} from './customer-account/client';
 
 export interface ShopifyClients {
   Rest: typeof RestClient;
   Graphql: typeof GraphqlClient;
   Storefront: typeof StorefrontClient;
+  CustomerAccount: typeof CustomerAccountClient;
   graphqlProxy: GraphqlProxy;
 }

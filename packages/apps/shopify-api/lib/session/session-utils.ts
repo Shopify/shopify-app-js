@@ -25,6 +25,12 @@ export function getOfflineId(config: ConfigInterface) {
   };
 }
 
+export function getCustomerAccountSessionId(config: ConfigInterface) {
+  return (shop: string, customerId: string): string => {
+    return `customer_account_${customerId}_${sanitizeShop(config)(shop, true)}`;
+  };
+}
+
 export function getCurrentSessionId(config: ConfigInterface) {
   return async function getCurrentSessionId({
     isOnline,

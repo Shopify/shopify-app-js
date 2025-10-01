@@ -14,6 +14,8 @@ const propertiesToSave = [
   'accessToken',
   'expires',
   'onlineAccessInfo',
+  'idToken',
+  'refreshToken',
 ];
 
 /**
@@ -42,6 +44,10 @@ export class Session {
               return ['accessToken', value];
             case 'onlineaccessinfo':
               return ['onlineAccessInfo', value];
+            case 'idtoken':
+              return ['idToken', value];
+            case 'refreshtoken':
+              return ['refreshToken', value];
             case 'userid':
               return ['userId', value];
             case 'firstname':
@@ -166,6 +172,14 @@ export class Session {
    * Information on the user for the session. Only present for online sessions.
    */
   public onlineAccessInfo?: OnlineAccessInfo;
+  /**
+   * The ID token (JWT) for customer account sessions. Contains customer identity claims.
+   */
+  public idToken?: string;
+  /**
+   * The refresh token for customer account sessions. Used to obtain new access tokens.
+   */
+  public refreshToken?: string;
 
   constructor(params: SessionParams) {
     Object.assign(this, params);
@@ -241,6 +255,12 @@ export class Session {
     }
     if (this.onlineAccessInfo) {
       object.onlineAccessInfo = this.onlineAccessInfo;
+    }
+    if (this.idToken) {
+      object.idToken = this.idToken;
+    }
+    if (this.refreshToken) {
+      object.refreshToken = this.refreshToken;
     }
     return object;
   }
