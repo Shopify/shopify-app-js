@@ -8,7 +8,6 @@ import {UnauthenticatedAdminContext} from './types';
 export function unauthenticatedAdminContextFactory(params: BasicParams) {
   return async (shop: string): Promise<UnauthenticatedAdminContext> => {
     const session = await createOrLoadOfflineSession(shop, params);
-
     if (!session) {
       throw new SessionNotFoundError(
         `Could not find a session for shop ${shop} when creating unauthenticated admin context`,

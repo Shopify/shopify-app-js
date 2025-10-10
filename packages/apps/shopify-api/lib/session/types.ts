@@ -31,6 +31,14 @@ export interface SessionParams {
    */
   accessToken?: string;
   /**
+   * The refresh token for the session.
+   */
+  refreshToken?: string;
+  /**
+   * The date the refresh token expires.
+   */
+  refreshTokenExpires?: Date;
+  /**
    * Information on the user for the session. Only present for online sessions.
    */
   onlineAccessInfo?: OnlineAccessInfo | StoredOnlineAccessInfo;

@@ -1,5 +1,6 @@
 import {adminClientFactory} from '../../clients/admin';
 import {BasicParams} from '../../types';
+import { getOfflineSession } from '../helpers';
 
 import type {AuthenticateFlow, FlowContext} from './types';
 
@@ -41,8 +42,7 @@ export function authenticateFlowFactory(params: BasicParams): AuthenticateFlow {
       shop: payload.shopify_domain,
     });
 
-    const sessionId = api.session.getOfflineId(payload.shopify_domain);
-    const session = await config.sessionStorage!.loadSession(sessionId);
+    const session = await getOfflineSession(params, payload.shopify_domain, request);
 
     if (!session) {
       logger.info('Flow request could not find session', {

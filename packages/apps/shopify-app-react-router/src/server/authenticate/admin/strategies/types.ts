@@ -27,6 +27,12 @@ export interface AuthorizationStrategy {
     sessionContext: SessionContext,
   ) => Promise<Session | never>;
   handleClientError: (request: Request) => HandleAdminClientError;
+  refreshToken: (
+    shop: string,
+    request?: Request,
+    sessionToken?: string,
+    refreshToken?: string,
+  ) => Promise<Session>;
 }
 
 export type AuthStrategyFactory<Config extends AppConfigArg> = (
