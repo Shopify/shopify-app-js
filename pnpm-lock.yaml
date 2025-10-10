@@ -223,7 +223,7 @@ importers:
         version: 0.31.4
       drizzle-orm:
         specifier: ^0.44.5
-        version: 0.44.5(@cloudflare/workers-types@4.20250913.0)(@libsql/client@0.15.15(encoding@0.1.13))(@prisma/client@6.16.2(prisma@6.16.2(typescript@5.9.3))(typescript@5.9.3))(@types/better-sqlite3@7.6.13)(@types/pg@8.15.5)(better-sqlite3@12.4.1)(gel@2.0.1)(mysql2@3.14.2)(pg@8.16.3)(prisma@6.16.2(typescript@5.9.3))(sqlite3@5.1.7)
+        version: 0.44.5(@cloudflare/workers-types@4.20250926.0)(@libsql/client@0.15.15(encoding@0.1.13))(@prisma/client@6.16.2(prisma@6.16.2(typescript@5.9.3))(typescript@5.9.3))(@types/better-sqlite3@7.6.13)(@types/pg@8.15.5)(better-sqlite3@12.4.1)(gel@2.0.1)(mysql2@3.14.2)(pg@8.16.3)(prisma@6.16.2(typescript@5.9.3))(sqlite3@5.1.7)
       mysql2:
         specifier: ^3.14.2
         version: 3.14.2
@@ -263,8 +263,8 @@ importers:
         version: 6.1.1
     devDependencies:
       '@cloudflare/workers-types':
-        specifier: ^4.20250913.0
-        version: 4.20250913.0
+        specifier: ^4.20250926.0
+        version: 4.20250926.0
       '@shopify/shopify-app-session-storage-test-utils':
         specifier: ^4.0.0
         version: link:../shopify-app-session-storage-test-utils
@@ -430,8 +430,8 @@ importers:
         version: 2.8.1
     devDependencies:
       '@cloudflare/workers-types':
-        specifier: ^4.20250913.0
-        version: 4.20250913.0
+        specifier: ^4.20250926.0
+        version: 4.20250926.0
       '@types/express':
         specifier: ^4.17.13
         version: 4.17.21
@@ -452,7 +452,7 @@ importers:
         version: 7.1.4
       wrangler:
         specifier: ^4.37.1
-        version: 4.37.1(@cloudflare/workers-types@4.20250913.0)
+        version: 4.37.1(@cloudflare/workers-types@4.20250926.0)
 
   packages/apps/shopify-app-express:
     dependencies:
@@ -1588,8 +1588,8 @@ packages:
     cpu: [x64]
     os: [win32]
 
-  '@cloudflare/workers-types@4.20250913.0':
-    resolution: {integrity: sha512-JjrYEvRn7cyALxwoFTw3XChaQneHSJOXqz2t5iKEpNzAnC2iPQU75rtTK/gw03Jjy4SHY5aEBh/uqQePtonZlA==}
+  '@cloudflare/workers-types@4.20250926.0':
+    resolution: {integrity: sha512-DfnfgmV7glnvvSx/BzXHG7FlF08YvZTM7P6RcC3+mRmV4E53N2uLWE4HKBCA16yTf5HFqB18X5Cw3DjyyRTvKA==}
 
   '@cspotcode/source-map-support@0.8.1':
     resolution: {integrity: sha512-IchNf6dN4tHoMFIn/7OE8LWZ19Y6q/67Bmf6vnGREv8RSbBVb9LPJxEcnwrcwX6ixSvaiGoomAUvu4YSxXrVgw==}
@@ -9687,7 +9687,7 @@ snapshots:
   '@cloudflare/workerd-windows-64@1.20250913.0':
     optional: true
 
-  '@cloudflare/workers-types@4.20250913.0': {}
+  '@cloudflare/workers-types@4.20250926.0': {}
 
   '@cspotcode/source-map-support@0.8.1':
     dependencies:
@@ -11159,7 +11159,7 @@ snapshots:
 
   '@miniflare/shared-test-environment@2.14.4':
     dependencies:
-      '@cloudflare/workers-types': 4.20250913.0
+      '@cloudflare/workers-types': 4.20250926.0
       '@miniflare/cache': 2.14.4
       '@miniflare/core': 2.14.4
       '@miniflare/d1': 2.14.4
@@ -13346,9 +13346,9 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  drizzle-orm@0.44.5(@cloudflare/workers-types@4.20250913.0)(@libsql/client@0.15.15(encoding@0.1.13))(@prisma/client@6.16.2(prisma@6.16.2(typescript@5.9.3))(typescript@5.9.3))(@types/better-sqlite3@7.6.13)(@types/pg@8.15.5)(better-sqlite3@12.4.1)(gel@2.0.1)(mysql2@3.14.2)(pg@8.16.3)(prisma@6.16.2(typescript@5.9.3))(sqlite3@5.1.7):
+  drizzle-orm@0.44.5(@cloudflare/workers-types@4.20250926.0)(@libsql/client@0.15.15(encoding@0.1.13))(@prisma/client@6.16.2(prisma@6.16.2(typescript@5.9.3))(typescript@5.9.3))(@types/better-sqlite3@7.6.13)(@types/pg@8.15.5)(better-sqlite3@12.4.1)(gel@2.0.1)(mysql2@3.14.2)(pg@8.16.3)(prisma@6.16.2(typescript@5.9.3))(sqlite3@5.1.7):
     optionalDependencies:
-      '@cloudflare/workers-types': 4.20250913.0
+      '@cloudflare/workers-types': 4.20250926.0
       '@libsql/client': 0.15.15(encoding@0.1.13)
       '@prisma/client': 6.16.2(prisma@6.16.2(typescript@5.9.3))(typescript@5.9.3)
       '@types/better-sqlite3': 7.6.13
@@ -17309,7 +17309,7 @@ snapshots:
       '@cloudflare/workerd-linux-arm64': 1.20250913.0
       '@cloudflare/workerd-windows-64': 1.20250913.0
 
-  wrangler@4.37.1(@cloudflare/workers-types@4.20250913.0):
+  wrangler@4.37.1(@cloudflare/workers-types@4.20250926.0):
     dependencies:
       '@cloudflare/kv-asset-handler': 0.4.0
       '@cloudflare/unenv-preset': 2.7.3(unenv@2.0.0-rc.21)(workerd@1.20250913.0)
@@ -17320,7 +17320,7 @@ snapshots:
       unenv: 2.0.0-rc.21
       workerd: 1.20250913.0
     optionalDependencies:
-      '@cloudflare/workers-types': 4.20250913.0
+      '@cloudflare/workers-types': 4.20250926.0
       fsevents: 2.3.3
     transitivePeerDependencies:
       - bufferutil
