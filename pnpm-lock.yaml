@@ -109,13 +109,13 @@ importers:
         version: 30.0.5
       rollup-plugin-dts:
         specifier: ^6.2.1
-        version: 6.2.3(rollup@4.50.2)(typescript@5.9.2)
+        version: 6.2.3(rollup@4.50.2)(typescript@5.9.3)
 
   packages/api-clients/api-codegen-preset:
     dependencies:
       '@graphql-codegen/cli':
         specifier: ^5.0.7
-        version: 5.0.7(@parcel/watcher@2.5.1)(@types/node@24.5.2)(encoding@0.1.13)(enquirer@2.4.1)(graphql@16.11.0)(typescript@5.9.2)
+        version: 5.0.7(@parcel/watcher@2.5.1)(@types/node@24.5.2)(encoding@0.1.13)(enquirer@2.4.1)(graphql@16.11.0)(typescript@5.9.3)
       '@graphql-codegen/introspection':
         specifier: ^4.0.3
         version: 4.0.3(@babel/core@7.27.4)(encoding@0.1.13)(graphql@16.11.0)
@@ -143,10 +143,10 @@ importers:
         version: 25.0.2
       graphql-config:
         specifier: ^5.1.5
-        version: 5.1.5(@types/node@24.5.2)(encoding@0.1.13)(graphql@16.11.0)(typescript@5.9.2)
+        version: 5.1.5(@types/node@24.5.2)(encoding@0.1.13)(graphql@16.11.0)(typescript@5.9.3)
       rollup-plugin-dts:
         specifier: ^6.2.1
-        version: 6.2.3(rollup@4.50.2)(typescript@5.9.2)
+        version: 6.2.3(rollup@4.50.2)(typescript@5.9.3)
 
   packages/api-clients/graphql-client:
     devDependencies:
@@ -164,7 +164,7 @@ importers:
         version: 3.0.3(encoding@0.1.13)
       rollup-plugin-dts:
         specifier: ^6.2.1
-        version: 6.2.3(rollup@4.50.2)(typescript@5.9.2)
+        version: 6.2.3(rollup@4.50.2)(typescript@5.9.3)
 
   packages/api-clients/storefront-api-client:
     dependencies:
@@ -183,7 +183,7 @@ importers:
         version: 30.0.5
       rollup-plugin-dts:
         specifier: ^6.2.1
-        version: 6.2.3(rollup@4.50.2)(typescript@5.9.2)
+        version: 6.2.3(rollup@4.50.2)(typescript@5.9.3)
 
   packages/apps/session-storage/shopify-app-session-storage:
     devDependencies:
@@ -223,7 +223,7 @@ importers:
         version: 0.31.4
       drizzle-orm:
         specifier: ^0.44.5
-        version: 0.44.5(@cloudflare/workers-types@4.20250913.0)(@libsql/client@0.15.15(encoding@0.1.13))(@prisma/client@6.16.2(prisma@6.16.2(typescript@5.9.2))(typescript@5.9.2))(@types/better-sqlite3@7.6.13)(@types/pg@8.15.5)(better-sqlite3@12.2.0)(gel@2.0.1)(mysql2@3.14.2)(pg@8.16.3)(prisma@6.16.2(typescript@5.9.2))(sqlite3@5.1.7)
+        version: 0.44.5(@cloudflare/workers-types@4.20250913.0)(@libsql/client@0.15.15(encoding@0.1.13))(@prisma/client@6.16.2(prisma@6.16.2(typescript@5.9.3))(typescript@5.9.3))(@types/better-sqlite3@7.6.13)(@types/pg@8.15.5)(better-sqlite3@12.2.0)(gel@2.0.1)(mysql2@3.14.2)(pg@8.16.3)(prisma@6.16.2(typescript@5.9.3))(sqlite3@5.1.7)
       mysql2:
         specifier: ^3.14.2
         version: 3.14.2
@@ -350,13 +350,13 @@ importers:
     devDependencies:
       '@prisma/client':
         specifier: ^6.16.2
-        version: 6.16.2(prisma@6.16.2(typescript@5.9.2))(typescript@5.9.2)
+        version: 6.16.2(prisma@6.16.2(typescript@5.9.3))(typescript@5.9.3)
       '@shopify/shopify-app-session-storage-test-utils':
         specifier: ^4.0.0
         version: link:../shopify-app-session-storage-test-utils
       prisma:
         specifier: ^6.16.2
-        version: 6.16.2(typescript@5.9.2)
+        version: 6.16.2(typescript@5.9.3)
 
   packages/apps/session-storage/shopify-app-session-storage-redis:
     dependencies:
@@ -440,7 +440,7 @@ importers:
         version: 4.21.2
       jest-environment-miniflare:
         specifier: ^2.14.4
-        version: 2.14.4(jest@29.7.0(@types/node@24.5.2)(ts-node@10.9.2(@swc/core@1.13.3)(@types/node@24.5.2)(typescript@5.9.2)))
+        version: 2.14.4(jest@29.7.0(@types/node@24.5.2)(ts-node@10.9.2(@swc/core@1.13.3)(@types/node@24.5.2)(typescript@5.9.3)))
       miniflare:
         specifier: ^4.20250913.0
         version: 4.20250913.0
@@ -516,8 +516,8 @@ importers:
         specifier: ^7.28.0
         version: 7.28.3(@babel/core@7.27.4)
       '@shopify/generate-docs':
-        specifier: ^0.19.2
-        version: 0.19.2
+        specifier: ^0.19.5
+        version: 0.19.5
       '@shopify/react-testing':
         specifier: ^6.0.0
         version: 6.0.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -538,7 +538,7 @@ importers:
     dependencies:
       '@remix-run/server-runtime':
         specifier: ^2.16.8
-        version: 2.17.0(typescript@5.9.2)
+        version: 2.17.0(typescript@5.9.3)
       '@shopify/admin-api-client':
         specifier: ^1.1.1
         version: link:../../api-clients/admin-api-client
@@ -566,16 +566,16 @@ importers:
         version: 7.28.3(@babel/core@7.27.4)
       '@remix-run/node':
         specifier: ^2.16.8
-        version: 2.17.0(typescript@5.9.2)
+        version: 2.17.0(typescript@5.9.3)
       '@remix-run/react':
         specifier: ^2.16.8
-        version: 2.17.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.9.2)
+        version: 2.17.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.9.3)
       '@remix-run/testing':
         specifier: ^2.16.8
-        version: 2.17.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.9.2)
+        version: 2.17.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.9.3)
       '@shopify/generate-docs':
-        specifier: ^0.19.2
-        version: 0.19.2
+        specifier: ^0.19.5
+        version: 0.19.5
       '@shopify/polaris':
         specifier: ^12.18.0
         version: 12.27.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -3314,8 +3314,8 @@ packages:
     peerDependencies:
       eslint: ^8.56.0
 
-  '@shopify/generate-docs@0.19.2':
-    resolution: {integrity: sha512-xRX0W5pnqbFqq1x/si79/kCUklLWCzEqUi6JDp1igs1Ts7pOhwPs7GYV4rCHPHdylxYbtKnvOqQO++GVjxIdeg==}
+  '@shopify/generate-docs@0.19.5':
+    resolution: {integrity: sha512-LL+VNpPJKsoqfdAaZ7RzB/9whwgNIMK9SZs+uf1fKZ7IPsZ0pWe1JQLkhhCktiLnsmXDzoFXwWrP3T9yKgRLQw==}
     hasBin: true
 
   '@shopify/graphql-codegen@0.1.0':
@@ -7808,8 +7808,8 @@ packages:
     engines: {node: '>=14.17'}
     hasBin: true
 
-  typescript@5.9.2:
-    resolution: {integrity: sha512-CWBzXQrc/qOkhidw1OzBTQuYRbfyxDXJMVJ1XNwUHGROVmuaeiEm3OslpZ1RV96d7SKKjZKrSJu3+t/xlw3R9A==}
+  typescript@5.9.3:
+    resolution: {integrity: sha512-jl1vZzPDinLr9eUt3J/t7V6FgNEw9QjvBPdysz9KfQDD41fQrC2Y4vKQdiaUpFT4bXlb1RHhLpp8wtm6M5TgSw==}
     engines: {node: '>=14.17'}
     hasBin: true
 
@@ -9997,7 +9997,7 @@ snapshots:
       graphql: 16.11.0
       tslib: 2.6.3
 
-  '@graphql-codegen/cli@5.0.7(@parcel/watcher@2.5.1)(@types/node@24.5.2)(encoding@0.1.13)(enquirer@2.4.1)(graphql@16.11.0)(typescript@5.9.2)':
+  '@graphql-codegen/cli@5.0.7(@parcel/watcher@2.5.1)(@types/node@24.5.2)(encoding@0.1.13)(enquirer@2.4.1)(graphql@16.11.0)(typescript@5.9.3)':
     dependencies:
       '@babel/generator': 7.27.5
       '@babel/template': 7.27.2
@@ -10017,11 +10017,11 @@ snapshots:
       '@graphql-tools/utils': 10.8.6(graphql@16.11.0)
       '@whatwg-node/fetch': 0.10.8
       chalk: 4.1.2
-      cosmiconfig: 8.3.6(typescript@5.9.2)
+      cosmiconfig: 8.3.6(typescript@5.9.3)
       debounce: 1.2.1
       detect-indent: 6.1.0
       graphql: 16.11.0
-      graphql-config: 5.1.5(@types/node@24.5.2)(encoding@0.1.13)(graphql@16.11.0)(typescript@5.9.2)
+      graphql-config: 5.1.5(@types/node@24.5.2)(encoding@0.1.13)(graphql@16.11.0)(typescript@5.9.3)
       inquirer: 8.2.6
       is-glob: 4.0.3
       jiti: 1.21.7
@@ -10757,7 +10757,7 @@ snapshots:
       - supports-color
       - ts-node
 
-  '@jest/core@29.7.0(ts-node@10.9.2(@swc/core@1.13.3)(@types/node@24.5.2)(typescript@5.9.2))':
+  '@jest/core@29.7.0(ts-node@10.9.2(@swc/core@1.13.3)(@types/node@24.5.2)(typescript@5.9.3))':
     dependencies:
       '@jest/console': 29.7.0
       '@jest/reporters': 29.7.0
@@ -10771,7 +10771,7 @@ snapshots:
       exit: 0.1.2
       graceful-fs: 4.2.11
       jest-changed-files: 29.7.0
-      jest-config: 29.7.0(@types/node@24.5.2)(ts-node@10.9.2(@swc/core@1.13.3)(@types/node@24.5.2)(typescript@5.9.2))
+      jest-config: 29.7.0(@types/node@24.5.2)(ts-node@10.9.2(@swc/core@1.13.3)(@types/node@24.5.2)(typescript@5.9.3))
       jest-haste-map: 29.7.0
       jest-message-util: 29.7.0
       jest-regex-util: 29.6.3
@@ -11319,10 +11319,10 @@ snapshots:
 
   '@poppinss/exception@1.2.2': {}
 
-  '@prisma/client@6.16.2(prisma@6.16.2(typescript@5.9.2))(typescript@5.9.2)':
+  '@prisma/client@6.16.2(prisma@6.16.2(typescript@5.9.3))(typescript@5.9.3)':
     optionalDependencies:
-      prisma: 6.16.2(typescript@5.9.2)
-      typescript: 5.9.2
+      prisma: 6.16.2(typescript@5.9.3)
+      typescript: 5.9.3
 
   '@prisma/config@6.16.2':
     dependencies:
@@ -11380,9 +11380,9 @@ snapshots:
     dependencies:
       '@redis/client': 1.6.0
 
-  '@remix-run/node@2.17.0(typescript@5.9.2)':
+  '@remix-run/node@2.17.0(typescript@5.9.3)':
     dependencies:
-      '@remix-run/server-runtime': 2.17.0(typescript@5.9.2)
+      '@remix-run/server-runtime': 2.17.0(typescript@5.9.3)
       '@remix-run/web-fetch': 4.4.2
       '@web3-storage/multipart-parser': 1.0.0
       cookie-signature: 1.2.2
@@ -11390,23 +11390,23 @@ snapshots:
       stream-slice: 0.1.2
       undici: 6.21.3
     optionalDependencies:
-      typescript: 5.9.2
+      typescript: 5.9.3
 
-  '@remix-run/react@2.17.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.9.2)':
+  '@remix-run/react@2.17.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.9.3)':
     dependencies:
       '@remix-run/router': 1.23.0
-      '@remix-run/server-runtime': 2.17.0(typescript@5.9.2)
+      '@remix-run/server-runtime': 2.17.0(typescript@5.9.3)
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
       react-router: 6.30.0(react@18.3.1)
       react-router-dom: 6.30.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       turbo-stream: 2.4.1
     optionalDependencies:
-      typescript: 5.9.2
+      typescript: 5.9.3
 
   '@remix-run/router@1.23.0': {}
 
-  '@remix-run/server-runtime@2.17.0(typescript@5.9.2)':
+  '@remix-run/server-runtime@2.17.0(typescript@5.9.3)':
     dependencies:
       '@remix-run/router': 1.23.0
       '@types/cookie': 0.6.0
@@ -11416,17 +11416,17 @@ snapshots:
       source-map: 0.7.6
       turbo-stream: 2.4.1
     optionalDependencies:
-      typescript: 5.9.2
+      typescript: 5.9.3
 
-  '@remix-run/testing@2.17.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.9.2)':
+  '@remix-run/testing@2.17.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.9.3)':
     dependencies:
-      '@remix-run/node': 2.17.0(typescript@5.9.2)
-      '@remix-run/react': 2.17.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.9.2)
+      '@remix-run/node': 2.17.0(typescript@5.9.3)
+      '@remix-run/react': 2.17.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.9.3)
       '@remix-run/router': 1.23.0
       react: 18.3.1
       react-router-dom: 6.30.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
     optionalDependencies:
-      typescript: 5.9.2
+      typescript: 5.9.3
     transitivePeerDependencies:
       - react-dom
 
@@ -11646,7 +11646,7 @@ snapshots:
       - supports-color
       - typescript
 
-  '@shopify/generate-docs@0.19.2':
+  '@shopify/generate-docs@0.19.5':
     dependencies:
       '@types/react': 18.3.25
       globby: 11.1.0
@@ -13094,14 +13094,14 @@ snapshots:
       path-type: 4.0.0
       yaml: 1.10.2
 
-  cosmiconfig@8.3.6(typescript@5.9.2):
+  cosmiconfig@8.3.6(typescript@5.9.3):
     dependencies:
       import-fresh: 3.3.1
       js-yaml: 4.1.0
       parse-json: 5.2.0
       path-type: 4.0.0
     optionalDependencies:
-      typescript: 5.9.2
+      typescript: 5.9.3
 
   create-jest-runner@0.11.2:
     dependencies:
@@ -13124,13 +13124,13 @@ snapshots:
       - supports-color
       - ts-node
 
-  create-jest@29.7.0(@types/node@24.5.2)(ts-node@10.9.2(@swc/core@1.13.3)(@types/node@24.5.2)(typescript@5.9.2)):
+  create-jest@29.7.0(@types/node@24.5.2)(ts-node@10.9.2(@swc/core@1.13.3)(@types/node@24.5.2)(typescript@5.9.3)):
     dependencies:
       '@jest/types': 29.6.3
       chalk: 4.1.2
       exit: 0.1.2
       graceful-fs: 4.2.11
-      jest-config: 29.7.0(@types/node@24.5.2)(ts-node@10.9.2(@swc/core@1.13.3)(@types/node@24.5.2)(typescript@5.9.2))
+      jest-config: 29.7.0(@types/node@24.5.2)(ts-node@10.9.2(@swc/core@1.13.3)(@types/node@24.5.2)(typescript@5.9.3))
       jest-util: 29.7.0
       prompts: 2.4.2
     transitivePeerDependencies:
@@ -13333,18 +13333,18 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  drizzle-orm@0.44.5(@cloudflare/workers-types@4.20250913.0)(@libsql/client@0.15.15(encoding@0.1.13))(@prisma/client@6.16.2(prisma@6.16.2(typescript@5.9.2))(typescript@5.9.2))(@types/better-sqlite3@7.6.13)(@types/pg@8.15.5)(better-sqlite3@12.2.0)(gel@2.0.1)(mysql2@3.14.2)(pg@8.16.3)(prisma@6.16.2(typescript@5.9.2))(sqlite3@5.1.7):
+  drizzle-orm@0.44.5(@cloudflare/workers-types@4.20250913.0)(@libsql/client@0.15.15(encoding@0.1.13))(@prisma/client@6.16.2(prisma@6.16.2(typescript@5.9.3))(typescript@5.9.3))(@types/better-sqlite3@7.6.13)(@types/pg@8.15.5)(better-sqlite3@12.2.0)(gel@2.0.1)(mysql2@3.14.2)(pg@8.16.3)(prisma@6.16.2(typescript@5.9.3))(sqlite3@5.1.7):
     optionalDependencies:
       '@cloudflare/workers-types': 4.20250913.0
       '@libsql/client': 0.15.15(encoding@0.1.13)
-      '@prisma/client': 6.16.2(prisma@6.16.2(typescript@5.9.2))(typescript@5.9.2)
+      '@prisma/client': 6.16.2(prisma@6.16.2(typescript@5.9.3))(typescript@5.9.3)
       '@types/better-sqlite3': 7.6.13
       '@types/pg': 8.15.5
       better-sqlite3: 12.2.0
       gel: 2.0.1
       mysql2: 3.14.2
       pg: 8.16.3
-      prisma: 6.16.2(typescript@5.9.2)
+      prisma: 6.16.2(typescript@5.9.3)
       sqlite3: 5.1.7
 
   dset@3.1.4: {}
@@ -14244,7 +14244,7 @@ snapshots:
 
   graphemer@1.4.0: {}
 
-  graphql-config@5.1.5(@types/node@24.5.2)(encoding@0.1.13)(graphql@16.11.0)(typescript@5.9.2):
+  graphql-config@5.1.5(@types/node@24.5.2)(encoding@0.1.13)(graphql@16.11.0)(typescript@5.9.3):
     dependencies:
       '@graphql-tools/graphql-file-loader': 8.0.22(graphql@16.11.0)
       '@graphql-tools/json-file-loader': 8.0.20(graphql@16.11.0)
@@ -14252,7 +14252,7 @@ snapshots:
       '@graphql-tools/merge': 9.1.1(graphql@16.11.0)
       '@graphql-tools/url-loader': 8.0.33(@types/node@24.5.2)(encoding@0.1.13)(graphql@16.11.0)
       '@graphql-tools/utils': 10.9.1(graphql@16.11.0)
-      cosmiconfig: 8.3.6(typescript@5.9.2)
+      cosmiconfig: 8.3.6(typescript@5.9.3)
       graphql: 16.11.0
       jiti: 2.5.1
       minimatch: 9.0.5
@@ -14767,16 +14767,16 @@ snapshots:
       - supports-color
       - ts-node
 
-  jest-cli@29.7.0(@types/node@24.5.2)(ts-node@10.9.2(@swc/core@1.13.3)(@types/node@24.5.2)(typescript@5.9.2)):
+  jest-cli@29.7.0(@types/node@24.5.2)(ts-node@10.9.2(@swc/core@1.13.3)(@types/node@24.5.2)(typescript@5.9.3)):
     dependencies:
-      '@jest/core': 29.7.0(ts-node@10.9.2(@swc/core@1.13.3)(@types/node@24.5.2)(typescript@5.9.2))
+      '@jest/core': 29.7.0(ts-node@10.9.2(@swc/core@1.13.3)(@types/node@24.5.2)(typescript@5.9.3))
       '@jest/test-result': 29.7.0
       '@jest/types': 29.6.3
       chalk: 4.1.2
-      create-jest: 29.7.0(@types/node@24.5.2)(ts-node@10.9.2(@swc/core@1.13.3)(@types/node@24.5.2)(typescript@5.9.2))
+      create-jest: 29.7.0(@types/node@24.5.2)(ts-node@10.9.2(@swc/core@1.13.3)(@types/node@24.5.2)(typescript@5.9.3))
       exit: 0.1.2
       import-local: 3.2.0
-      jest-config: 29.7.0(@types/node@24.5.2)(ts-node@10.9.2(@swc/core@1.13.3)(@types/node@24.5.2)(typescript@5.9.2))
+      jest-config: 29.7.0(@types/node@24.5.2)(ts-node@10.9.2(@swc/core@1.13.3)(@types/node@24.5.2)(typescript@5.9.3))
       jest-util: 29.7.0
       jest-validate: 29.7.0
       yargs: 17.7.2
@@ -14817,7 +14817,7 @@ snapshots:
       - babel-plugin-macros
       - supports-color
 
-  jest-config@29.7.0(@types/node@24.5.2)(ts-node@10.9.2(@swc/core@1.13.3)(@types/node@24.5.2)(typescript@5.9.2)):
+  jest-config@29.7.0(@types/node@24.5.2)(ts-node@10.9.2(@swc/core@1.13.3)(@types/node@24.5.2)(typescript@5.9.3)):
     dependencies:
       '@babel/core': 7.27.4
       '@jest/test-sequencer': 29.7.0
@@ -14843,7 +14843,7 @@ snapshots:
       strip-json-comments: 3.1.1
     optionalDependencies:
       '@types/node': 24.5.2
-      ts-node: 10.9.2(@swc/core@1.13.3)(@types/node@24.5.2)(typescript@5.9.2)
+      ts-node: 10.9.2(@swc/core@1.13.3)(@types/node@24.5.2)(typescript@5.9.3)
     transitivePeerDependencies:
       - babel-plugin-macros
       - supports-color
@@ -14886,7 +14886,7 @@ snapshots:
       - supports-color
       - utf-8-validate
 
-  jest-environment-miniflare@2.14.4(jest@29.7.0(@types/node@24.5.2)(ts-node@10.9.2(@swc/core@1.13.3)(@types/node@24.5.2)(typescript@5.9.2))):
+  jest-environment-miniflare@2.14.4(jest@29.7.0(@types/node@24.5.2)(ts-node@10.9.2(@swc/core@1.13.3)(@types/node@24.5.2)(typescript@5.9.3))):
     dependencies:
       '@jest/environment': 29.7.0
       '@jest/fake-timers': 29.7.0
@@ -14895,7 +14895,7 @@ snapshots:
       '@miniflare/runner-vm': 2.14.4
       '@miniflare/shared': 2.14.4
       '@miniflare/shared-test-environment': 2.14.4
-      jest: 29.7.0(@types/node@24.5.2)(ts-node@10.9.2(@swc/core@1.13.3)(@types/node@24.5.2)(typescript@5.9.2))
+      jest: 29.7.0(@types/node@24.5.2)(ts-node@10.9.2(@swc/core@1.13.3)(@types/node@24.5.2)(typescript@5.9.3))
       jest-mock: 29.7.0
       jest-util: 29.7.0
     transitivePeerDependencies:
@@ -15173,12 +15173,12 @@ snapshots:
       - supports-color
       - ts-node
 
-  jest@29.7.0(@types/node@24.5.2)(ts-node@10.9.2(@swc/core@1.13.3)(@types/node@24.5.2)(typescript@5.9.2)):
+  jest@29.7.0(@types/node@24.5.2)(ts-node@10.9.2(@swc/core@1.13.3)(@types/node@24.5.2)(typescript@5.9.3)):
     dependencies:
-      '@jest/core': 29.7.0(ts-node@10.9.2(@swc/core@1.13.3)(@types/node@24.5.2)(typescript@5.9.2))
+      '@jest/core': 29.7.0(ts-node@10.9.2(@swc/core@1.13.3)(@types/node@24.5.2)(typescript@5.9.3))
       '@jest/types': 29.6.3
       import-local: 3.2.0
-      jest-cli: 29.7.0(@types/node@24.5.2)(ts-node@10.9.2(@swc/core@1.13.3)(@types/node@24.5.2)(typescript@5.9.2))
+      jest-cli: 29.7.0(@types/node@24.5.2)(ts-node@10.9.2(@swc/core@1.13.3)(@types/node@24.5.2)(typescript@5.9.3))
     transitivePeerDependencies:
       - '@types/node'
       - babel-plugin-macros
@@ -16027,12 +16027,12 @@ snapshots:
       ansi-styles: 5.2.0
       react-is: 18.3.1
 
-  prisma@6.16.2(typescript@5.9.2):
+  prisma@6.16.2(typescript@5.9.3):
     dependencies:
       '@prisma/config': 6.16.2
       '@prisma/engines': 6.16.2
     optionalDependencies:
-      typescript: 5.9.2
+      typescript: 5.9.3
     transitivePeerDependencies:
       - magicast
 
@@ -16301,11 +16301,11 @@ snapshots:
       glob: 11.0.1
       package-json-from-dist: 1.0.1
 
-  rollup-plugin-dts@6.2.3(rollup@4.50.2)(typescript@5.9.2):
+  rollup-plugin-dts@6.2.3(rollup@4.50.2)(typescript@5.9.3):
     dependencies:
       magic-string: 0.30.18
       rollup: 4.50.2
-      typescript: 5.9.2
+      typescript: 5.9.3
     optionalDependencies:
       '@babel/code-frame': 7.27.1
 
@@ -16934,7 +16934,7 @@ snapshots:
       '@swc/core': 1.13.3
     optional: true
 
-  ts-node@10.9.2(@swc/core@1.13.3)(@types/node@24.5.2)(typescript@5.9.2):
+  ts-node@10.9.2(@swc/core@1.13.3)(@types/node@24.5.2)(typescript@5.9.3):
     dependencies:
       '@cspotcode/source-map-support': 0.8.1
       '@tsconfig/node10': 1.0.11
@@ -16948,7 +16948,7 @@ snapshots:
       create-require: 1.1.1
       diff: 4.0.2
       make-error: 1.3.6
-      typescript: 5.9.2
+      typescript: 5.9.3
       v8-compile-cache-lib: 3.0.1
       yn: 3.1.1
     optionalDependencies:
@@ -17053,7 +17053,7 @@ snapshots:
 
   typescript@5.8.3: {}
 
-  typescript@5.9.2: {}
+  typescript@5.9.3: {}
 
   ua-parser-js@1.0.40: {}
 
