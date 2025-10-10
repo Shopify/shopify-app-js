@@ -103,7 +103,7 @@
     "miniflare": "^4.20250913.0",
     "rollup": "^4.50.2",
     "supertest": "^7.1.3",
-    "wrangler": "^4.37.1"
+    "wrangler": "^4.40.2"
   },
   "files": [
     "dist/*",
