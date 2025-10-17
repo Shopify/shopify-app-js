@@ -1,5 +1,11 @@
 # @shopify/shopify-app-remix
 
+## 4.0.3
+
+### Patch Changes
+
+- e9e5736: Test Release
+
 ## 4.0.2
 
 ### Patch Changes
