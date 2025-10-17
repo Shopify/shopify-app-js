@@ -525,8 +525,8 @@ importers:
         specifier: ^5.0.0
         version: link:../session-storage/shopify-app-session-storage-memory
       '@types/react':
-        specifier: ^19.1.13
-        version: 19.1.13
+        specifier: ^19.2.0
+        version: 19.2.0
       jest-fetch-mock:
         specifier: ^3.0.3
         version: 3.0.3(encoding@0.1.13)
@@ -586,8 +586,8 @@ importers:
         specifier: ^5.0.0
         version: link:../session-storage/shopify-app-session-storage-memory
       '@types/react':
-        specifier: ^19.1.13
-        version: 19.1.13
+        specifier: ^19.2.0
+        version: 19.2.0
       jest-fetch-mock:
         specifier: ^3.0.3
         version: 3.0.3(encoding@0.1.13)
@@ -3808,11 +3808,11 @@ packages:
     peerDependencies:
       '@types/react': '*'
 
-  '@types/react@18.3.25':
-    resolution: {integrity: sha512-oSVZmGtDPmRZtVDqvdKUi/qgCsWp5IDY29wp8na8Bj4B3cc99hfNzvNhlMkVVxctkAOGUA3Km7MMpBHAnWfcIA==}
+  '@types/react@18.3.26':
+    resolution: {integrity: sha512-RFA/bURkcKzx/X9oumPG9Vp3D3JUgus/d0b67KB0t5S/raciymilkOa66olh78MUI92QLbEJevO7rvqU/kjwKA==}
 
-  '@types/react@19.1.13':
-    resolution: {integrity: sha512-hHkbU/eoO3EG5/MZkuFSKmYqPbSVk5byPFa3e7y/8TybHiLMACgI8seVYlicwk7H5K/rI2px9xrQp/C+AUDTiQ==}
+  '@types/react@19.2.0':
+    resolution: {integrity: sha512-1LOH8xovvsKsCBq1wnT4ntDUdCJKmnEakhsuoUSy6ExlHCkGP2hqnatagYTgFk6oeL0VU31u7SNjunPN+GchtA==}
 
   '@types/resolve@1.20.2':
     resolution: {integrity: sha512-60BCwRFOZCQhDncwQdxxeOEEkbc5dIMccYLwbxsS4TUNeVECQ/pBJ0j09mrHOl/JJvpRPGwO9SvE4nR2Nb/a4Q==}
@@ -11712,7 +11712,7 @@ snapshots:
 
   '@shopify/generate-docs@0.19.5':
     dependencies:
-      '@types/react': 18.3.25
+      '@types/react': 18.3.26
       globby: 11.1.0
       typescript: 5.8.3
 
@@ -11740,9 +11740,9 @@ snapshots:
     dependencies:
       '@shopify/polaris-icons': 8.11.1(react@18.3.1)
       '@shopify/polaris-tokens': 8.10.0
-      '@types/react': 19.1.13
-      '@types/react-dom': 19.0.3(@types/react@19.1.13)
-      '@types/react-transition-group': 4.4.12(@types/react@19.1.13)
+      '@types/react': 19.2.0
+      '@types/react-dom': 19.0.3(@types/react@19.2.0)
+      '@types/react-transition-group': 4.4.12(@types/react@19.2.0)
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
       react-fast-compare: 3.2.2
@@ -12275,20 +12275,20 @@ snapshots:
 
   '@types/range-parser@1.2.7': {}
 
-  '@types/react-dom@19.0.3(@types/react@19.1.13)':
+  '@types/react-dom@19.0.3(@types/react@19.2.0)':
     dependencies:
-      '@types/react': 19.1.13
+      '@types/react': 19.2.0
 
-  '@types/react-transition-group@4.4.12(@types/react@19.1.13)':
+  '@types/react-transition-group@4.4.12(@types/react@19.2.0)':
     dependencies:
-      '@types/react': 19.1.13
+      '@types/react': 19.2.0
 
-  '@types/react@18.3.25':
+  '@types/react@18.3.26':
     dependencies:
       '@types/prop-types': 15.7.15
       csstype: 3.1.3
 
-  '@types/react@19.1.13':
+  '@types/react@19.2.0':
     dependencies:
       csstype: 3.1.3
 
