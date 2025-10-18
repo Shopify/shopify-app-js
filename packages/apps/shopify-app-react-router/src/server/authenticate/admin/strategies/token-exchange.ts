@@ -142,6 +142,48 @@ export const createTokenExchangeStrategy: AuthStrategyFactory<any> = <
     return session!;
   }
 
+  async function refreshToken(
+    shop: string,
+    request?: Request,
+    sessionToken?: string,
+    refreshToken?: string,
+  ): Promise<Session> {
+    try {
+      if (sessionToken) {
+        return await api.auth.tokenExchange({
+          sessionToken,
+          shop,
+          requestedTokenType: RequestedTokenType.OfflineAccessToken,
+          expiring: true,
+        });
+      } else if (refreshToken) {
+        return await api.auth.tokenExchangeRefresh({
+          shop,
+          refreshToken,
+        });
+      } else {
+        throw new Error('No session token or refresh token provided');
+      }
+    } catch (error) {
+      if (
+        error instanceof InvalidJwtError ||
+        (error instanceof HttpResponseError &&
+          error.response.code === 400 &&
+          error.response.body?.error === 'invalid_subject_token')
+      ) {
+        if (request) {
+          throw respondToInvalidSessionToken({
+            params: {api, config, logger},
+            request,
+            retryRequest: true,
+          });
+        } else {
+          throw error;
+        }
+      }
+    }
+  }
+
   function handleClientError(request: Request): HandleAdminClientError {
     return handleClientErrorFactory({
       request,
@@ -164,5 +206,6 @@ export const createTokenExchangeStrategy: AuthStrategyFactory<any> = <
   return {
     authenticate,
     handleClientError,
+    refreshToken,
   };
 };
