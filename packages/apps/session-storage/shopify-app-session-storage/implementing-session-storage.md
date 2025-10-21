@@ -8,7 +8,7 @@ A custom implementaton of `SessionStorage` will need to implement the following 
 |    `loadSession`     |    `string`    | `Promise<Session \| undefined>` | Returns a `Session` matching the given session id from storage, or returns `undefined` if not found           |
 |   `deleteSession`    |    `string`    |       `Promise<boolean>`        | Deletes a session matching the given session id from storage; returns `true` if successful, `false` otherwise |
 |   `deleteSessions`   |   `string[]`   |       `Promise<boolean>`        | Deletes each of the given session ids (array) from storage; returns `true` if successful, `false` otherwise   |
-| `findSessionsByShop` |    `string`    |      `Promise<Session[]>`       | Returns an array of `Session`s for the given shop domain; returns an empty array of none found                |
+| `findSessionsByShop` |    `string`    |      `Promise<Session[]>`       | Returns an array of `Session`s for the given shop domain; returns an empty array if none found                |
 
 ## Example
 
