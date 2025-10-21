@@ -1,5 +1,13 @@
 # @shopify/shopify-app-remix
 
+## 4.0.4
+
+### Patch Changes
+
+- Updated dependencies [a6c4fed]
+  - @shopify/shopify-api@12.1.0
+  - @shopify/shopify-app-session-storage@4.0.1
+
 ## 4.0.3
 
 ### Patch Changes

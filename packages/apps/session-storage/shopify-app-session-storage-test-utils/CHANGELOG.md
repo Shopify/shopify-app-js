@@ -1,10 +1,12 @@
 # @shopify/shopify-app-session-storage-test-utils
 
+## 4.0.1
+
 ## 4.0.0
 
 ### Major Changes
 
-- [dc41d09]: `@shopify/shopify-api` now requires Node >= v20.10.0.  
+- [dc41d09]: `@shopify/shopify-api` now requires Node >= v20.10.0.
 
   As `@shopify/shopify-api` is a peer dependency, this is a breaking change, though we expect real world impact to be minimal for most users.
 

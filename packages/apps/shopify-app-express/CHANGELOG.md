@@ -1,5 +1,14 @@
 # Changelog
 
+## 6.0.1
+
+### Patch Changes
+
+- Updated dependencies [a6c4fed]
+  - @shopify/shopify-api@12.1.0
+  - @shopify/shopify-app-session-storage@4.0.1
+  - @shopify/shopify-app-session-storage-memory@5.0.1
+
 ## 6.0.0
 
 ### Major Changes
