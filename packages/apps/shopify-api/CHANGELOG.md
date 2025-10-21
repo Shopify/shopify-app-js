@@ -1,5 +1,11 @@
 # Changelog
 
+## 12.1.0
+
+### Minor Changes
+
+- a6c4fed: Add 2025-10 REST resources
+
 ## 12.0.0
 
 ### Major Changes

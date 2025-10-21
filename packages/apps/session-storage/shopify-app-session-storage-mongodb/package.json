@@ -1,6 +1,6 @@
 {
   "name": "@shopify/shopify-app-session-storage-mongodb",
-  "version": "5.0.0",
+  "version": "5.0.1",
   "description": "Shopify App Session Storage for MongoDB",
   "repository": {
     "type": "git",
@@ -51,7 +51,7 @@
     "@shopify/shopify-app-session-storage": "^4.0.0"
   },
   "devDependencies": {
-    "@shopify/shopify-app-session-storage-test-utils": "^4.0.0"
+    "@shopify/shopify-app-session-storage-test-utils": "^4.0.1"
   },
   "files": [
     "dist/*",
