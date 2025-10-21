@@ -2,7 +2,10 @@ import {ConfigInterface} from '../base-types';
 import {InvalidHostError, InvalidShopError} from '../error';
 import {decodeHost} from '../auth/decode-host';
 
-import {shopAdminUrlToLegacyUrl} from './shop-admin-url-helper';
+import {
+  shopAdminUrlToLegacyUrl,
+  localDevShopToApiUrl,
+} from './shop-admin-url-helper';
 
 export function sanitizeShop(config: ConfigInterface) {
   return (shop: string, throwOnInvalid = false): string | null => {
@@ -12,6 +15,8 @@ export function sanitizeShop(config: ConfigInterface) {
       'shopify\\.com',
       'myshopify\\.io',
       'shop\\.dev',
+      'my\\.shop\\.dev',
+      'dev-api\\.shop\\.dev',
     ];
     if (config.customShopDomains) {
       domainsRegex.push(
@@ -39,6 +44,10 @@ export function sanitizeShop(config: ConfigInterface) {
       throw new InvalidShopError('Received invalid shop argument');
     }
 
+    if (shopUrl?.endsWith('.my.shop.dev')) {
+      return localDevShopToApiUrl(shopUrl);
+    }
+
     return sanitizedShop;
   };
 }
@@ -57,6 +66,8 @@ export function sanitizeHost() {
         'myshopify\\.io',
         'spin\\.dev',
         'shop\\.dev',
+        'my\\.shop\\.dev',
+        'dev-api\\.shop\\.dev',
       ];
 
       const hostRegex = new RegExp(`\\.(${originsRegex.join('|')})$`);
