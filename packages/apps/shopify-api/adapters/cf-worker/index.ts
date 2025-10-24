@@ -18,3 +18,6 @@ setAbstractConvertRequestFunc(webApiConvertRequest);
 setAbstractConvertResponseFunc(webApiConvertResponse);
 setAbstractConvertHeadersFunc(webApiConvertHeaders);
 setAbstractRuntimeString(workerRuntimeString);
+
+// Export a marker to prevent tree-shaking
+export const cfWorkerAdapterInitialized = true;

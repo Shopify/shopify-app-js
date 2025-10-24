@@ -18,3 +18,6 @@ setAbstractConvertRequestFunc(webApiConvertRequest);
 setAbstractConvertResponseFunc(webApiConvertResponse);
 setAbstractConvertHeadersFunc(webApiConvertHeaders);
 setAbstractRuntimeString(webApiRuntimeString);
+
+// Export a marker to prevent tree-shaking
+export const webApiAdapterInitialized = true;
