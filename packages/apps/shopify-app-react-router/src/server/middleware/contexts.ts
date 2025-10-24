@@ -38,6 +38,41 @@ export const webhookContext = createContext<import('./types').WebhookContext>();
  */
 export const flowContext = createContext<import('./types').FlowContext>();
 
-// Future contexts will be added as we implement additional middleware:
-// - checkoutContext, customerAccountContext, appProxyContext (Phase 4)
-// - fulfillmentContext, posContext (Phase 4)
+/**
+ * Context for checkout extension data.
+ * Set by withCheckout middleware.
+ * Contains session token and CORS helper.
+ */
+export const checkoutContext = createContext<import('./types').CheckoutContext>();
+
+/**
+ * Context for app proxy data.
+ * Set by withAppProxy middleware.
+ * Contains liquid response helper, and optional session/admin/storefront APIs.
+ */
+export const appProxyContext = createContext<import('./types').AppProxyContext>();
+
+/**
+ * Context for customer account extension data.
+ * Set by withCustomerAccount middleware.
+ * Contains session token and CORS helper.
+ */
+export const customerAccountContext = createContext<
+  import('./types').CustomerAccountContext
+>();
+
+/**
+ * Context for fulfillment service data.
+ * Set by withFulfillmentService middleware.
+ * Contains session, payload (with kind), and admin API (all required).
+ */
+export const fulfillmentServiceContext = createContext<
+  import('./types').FulfillmentServiceContext
+>();
+
+/**
+ * Context for POS UI extension data.
+ * Set by withPOS middleware.
+ * Contains session token and CORS helper.
+ */
+export const posContext = createContext<import('./types').POSContext>();

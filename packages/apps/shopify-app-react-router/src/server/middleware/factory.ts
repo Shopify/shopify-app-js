@@ -7,7 +7,18 @@ import {createWithAuthentication} from './auth';
 import {withBillingRequiredFactory} from './billing-required';
 import {withWebhookFactory} from './webhook';
 import {withFlowFactory} from './flow';
-import type {AuthMiddlewareOptions, BillingRequiredOptions} from './types';
+import {withCheckoutFactory} from './checkout';
+import {withAppProxyFactory} from './app-proxy';
+import {withCustomerAccountFactory} from './customer-account';
+import {withFulfillmentServiceFactory} from './fulfillment-service';
+import {withPOSFactory} from './pos';
+import type {
+  AuthMiddlewareOptions,
+  BillingRequiredOptions,
+  CheckoutMiddlewareOptions,
+  CustomerAccountMiddlewareOptions,
+  POSMiddlewareOptions,
+} from './types';
 
 /**
  * Creates the Shopify middleware factory with all available middleware functions
@@ -33,5 +44,15 @@ export function createShopifyMiddleware<Config extends AppConfigArg>(
     withWebhook: withWebhookFactory<Config>(params),
 
     withFlow: withFlowFactory<Config>(params),
+
+    withCheckout: withCheckoutFactory<Config>(params),
+
+    withAppProxy: withAppProxyFactory<Config>(params),
+
+    withCustomerAccount: withCustomerAccountFactory<Config>(params),
+
+    withFulfillmentService: withFulfillmentServiceFactory<Config>(params),
+
+    withPOS: withPOSFactory<Config>(params),
   };
 }

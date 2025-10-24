@@ -11,14 +11,14 @@ export * from './auth';
 export * from './billing-required';
 export * from './webhook';
 export * from './flow';
+export * from './checkout';
+export * from './app-proxy';
+export * from './customer-account';
+export * from './fulfillment-service';
+export * from './pos';
+export * from './extension-base';
 export * from './factory';
 
 // Future exports will include:
 // export * from './scopes-required';
-// export * from './checkout';
-// export * from './app-proxy';
-// export * from './customer-account';
-// export * from './flow';
-// export * from './fulfillment';
-// export * from './pos';
 // export * from './cors';

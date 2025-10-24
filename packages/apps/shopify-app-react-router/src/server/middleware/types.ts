@@ -6,7 +6,7 @@ import {
   BillingCheckResponseObject,
 } from '@shopify/shopify-api';
 
-import type {AdminApiContext} from '../clients';
+import type {AdminApiContext, StorefrontContext} from '../clients';
 import type {AppConfigArg} from '../config-types';
 import type {EnsureCORSFunction} from '../authenticate/helpers/ensure-cors-headers';
 import type {RedirectFunction} from '../authenticate/admin/helpers/redirect';
@@ -273,8 +273,167 @@ export interface FlowContext {
   admin: AdminApiContext;
 }
 
+/**
+ * Checkout context provided by withCheckout middleware
+ * Matches the return value of authenticate.public.checkout()
+ */
+export interface CheckoutContext {
+  /**
+   * The decoded and validated session token for the request
+   */
+  sessionToken: JwtPayload;
+
+  /**
+   * CORS helper function to add CORS headers to responses
+   * Required for checkout extensions which run cross-origin
+   */
+  cors: EnsureCORSFunction;
+}
+
+/**
+ * Options for checkout middleware
+ */
+export interface CheckoutMiddlewareOptions {
+  /**
+   * Additional CORS headers to expose
+   * These will be added to the Access-Control-Expose-Headers
+   */
+  corsHeaders?: string[];
+}
+
+/**
+ * Customer account context provided by withCustomerAccount middleware
+ * Matches the return value of authenticate.public.customerAccount()
+ */
+export interface CustomerAccountContext {
+  /**
+   * The decoded and validated session token for the request
+   */
+  sessionToken: JwtPayload;
+
+  /**
+   * CORS helper function to add CORS headers to responses
+   * Required for customer account extensions which run cross-origin
+   */
+  cors: EnsureCORSFunction;
+}
+
+/**
+ * Options for customer account middleware
+ */
+export interface CustomerAccountMiddlewareOptions {
+  /**
+   * Additional CORS headers to expose
+   * These will be added to the Access-Control-Expose-Headers
+   */
+  corsHeaders?: string[];
+}
+
+/**
+ * Liquid response function options
+ */
+export interface LiquidResponseOptions {
+  /**
+   * Whether to use the shop's theme layout around the Liquid content
+   */
+  layout?: boolean;
+}
+
+/**
+ * Function type for creating Liquid responses
+ */
+export type LiquidResponseFunction = (
+  body: string,
+  initAndOptions?: number | (ResponseInit & LiquidResponseOptions),
+) => Response;
+
+/**
+ * App proxy context provided by withAppProxy middleware
+ * Matches the return value of authenticate.public.appProxy()
+ */
+export interface AppProxyContext {
+  /**
+   * Utility for creating Liquid responses with shop theme
+   */
+  liquid: LiquidResponseFunction;
+
+  /**
+   * Session for the shop (optional - undefined if app not installed)
+   */
+  session?: Session;
+
+  /**
+   * Admin API client (only available when session exists)
+   */
+  admin?: AdminApiContext;
+
+  /**
+   * Storefront API client (only available when session exists)
+   */
+  storefront?: StorefrontContext;
+}
+
+/**
+ * Fulfillment service payload type
+ */
+export type FulfillmentServicePayload = Record<string, any> & {
+  /**
+   * The kind of fulfillment request
+   * Examples: 'FULFILLMENT_REQUEST', 'CANCELLATION_REQUEST'
+   */
+  kind: string;
+};
+
+/**
+ * Fulfillment service context provided by withFulfillmentService middleware
+ * Matches the return value of authenticate.fulfillmentService()
+ */
+export interface FulfillmentServiceContext {
+  /**
+   * Session for the shop (always present - fulfillment service requires a session)
+   */
+  session: Session;
+
+  /**
+   * The parsed fulfillment service request payload
+   * Contains 'kind' field indicating request type
+   */
+  payload: FulfillmentServicePayload;
+
+  /**
+   * Admin API client (always available since session is required)
+   */
+  admin: AdminApiContext;
+}
+
+/**
+ * POS context provided by withPOS middleware
+ * Matches the return value of authenticate.pos()
+ */
+export interface POSContext {
+  /**
+   * The decoded and validated session token for the request
+   */
+  sessionToken: JwtPayload;
+
+  /**
+   * CORS helper function to add CORS headers to responses
+   * Required for POS UI extensions which run cross-origin
+   */
+  cors: EnsureCORSFunction;
+}
+
+/**
+ * Options for POS middleware
+ */
+export interface POSMiddlewareOptions {
+  /**
+   * Additional CORS headers to expose
+   * These will be added to the Access-Control-Expose-Headers
+   */
+  corsHeaders?: string[];
+}
+
 // Future: Additional middleware types will be added as we implement them
 // - ScopesRequiredOptions for scope enforcement middleware
-// - Public extension middleware (checkout, app proxy, customer account, POS)
-// - Fulfillment middleware
 // - CORS utilities

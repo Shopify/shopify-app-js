@@ -30,6 +30,11 @@ export {
   sessionTokenContext,
   webhookContext,
   flowContext,
+  checkoutContext,
+  appProxyContext,
+  customerAccountContext,
+  fulfillmentServiceContext,
+  posContext,
 } from './middleware/contexts';
 
 // Export middleware types
@@ -41,5 +46,15 @@ export type {
   BillingRequiredOptions,
   WebhookContext,
   FlowContext,
+  CheckoutContext,
+  CheckoutMiddlewareOptions,
+  AppProxyContext,
+  LiquidResponseFunction,
+  CustomerAccountContext,
+  CustomerAccountMiddlewareOptions,
+  FulfillmentServiceContext,
+  FulfillmentServicePayload,
+  POSContext,
+  POSMiddlewareOptions,
   GetAdminContext,
 } from './middleware/types';
