@@ -33,6 +33,7 @@ import {authenticateFlowFactory} from './authenticate/flow/authenticate';
 import {authenticateFulfillmentServiceFactory} from './authenticate/fulfillment-service/authenticate';
 import {authenticatePOSFactory} from './authenticate/pos/authenticate';
 import {FutureFlagOptions, logDisabledFutureFlags} from './future/flags';
+import {createShopifyMiddleware} from './middleware/factory';
 
 /**
  * Creates an object your app will use to interact with Shopify.
@@ -89,6 +90,7 @@ export function shopifyApp<
     sessionStorage: config.sessionStorage,
     addDocumentResponseHeaders: addDocumentResponseHeadersFactory(params),
     registerWebhooks: registerWebhooksFactory(params),
+    middleware: createShopifyMiddleware<Config>(params),
     authenticate: {
       admin: authStrategy,
       flow: authenticateFlowFactory(params),

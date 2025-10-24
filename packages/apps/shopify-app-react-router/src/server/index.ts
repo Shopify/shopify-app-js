@@ -22,3 +22,24 @@ export {LoginErrorType, AppDistribution} from './types';
 export {boundary} from './boundary';
 export {shopifyApp} from './shopify-app';
 export * from './errors';
+
+// Export middleware contexts
+export {
+  adminContext,
+  sessionContext,
+  sessionTokenContext,
+  webhookContext,
+  flowContext,
+} from './middleware/contexts';
+
+// Export middleware types
+export type {
+  AdminContext,
+  EmbeddedAdminContext,
+  NonEmbeddedAdminContext,
+  AuthMiddlewareOptions,
+  BillingRequiredOptions,
+  WebhookContext,
+  FlowContext,
+  GetAdminContext,
+} from './middleware/types';

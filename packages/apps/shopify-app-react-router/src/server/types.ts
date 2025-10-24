@@ -17,6 +17,11 @@ import type {
 } from './future/flags';
 import type {Unauthenticated} from './unauthenticated/types';
 import type {AuthenticatePOS} from './authenticate/pos/types';
+import type {
+  AuthMiddlewareOptions,
+  BillingRequiredOptions,
+} from './middleware/types';
+import type {MiddlewareFunction} from 'react-router';
 
 export interface BasicParams<
   Future extends FutureFlagOptions = FutureFlagOptions,
@@ -429,6 +434,184 @@ export interface ShopifyAppBase<Config extends AppConfigArg> {
    * ```
    */
   unauthenticated: Unauthenticated;
+
+  /**
+   * React Router v7 middleware for authentication and authorization.
+   *
+   * These middleware functions provide a performant, idiomatic alternative to the authenticate pattern.
+   * Authorization checks happen BEFORE loaders run, preventing unnecessary work when requests fail validation.
+   *
+   * @example
+   * <caption>Using middleware for authentication and billing</caption>
+   * <description>Compose multiple middleware to protect routes with authentication and billing requirements.</description>
+   * ```ts
+   * // /app/routes/app.premium.tsx
+   * import { LoaderFunctionArgs, json } from "react-router";
+   * import shopify from "../shopify.server";
+   * import { adminContext } from "@shopify/shopify-app-react-router/server";
+   *
+   * export const middleware = [
+   *   shopify.middleware.withAuthentication(),
+   *   shopify.middleware.withBillingRequired({
+   *     plans: ["premium"],
+   *     onFailure: async (error) => {
+   *       // Request billing immediately
+   *       const admin = context.get(adminContext);
+   *       return admin.billing.request({ plan: "premium" });
+   *     }
+   *   })
+   * ];
+   *
+   * export async function loader({ context }: LoaderFunctionArgs) {
+   *   // This only runs if authentication and billing checks pass
+   *   const admin = context.get(adminContext);
+   *   const response = await admin.admin.graphql(`{ shop { name } }`);
+   *   return json(await response.json());
+   * }
+   * ```
+   */
+  middleware: {
+    /**
+     * Authentication middleware that validates sessions and creates admin context.
+     *
+     * This middleware validates the session, creates an admin context with all APIs (GraphQL, billing, scopes),
+     * and makes it available to loaders and actions through React Router's context.
+     *
+     * @example
+     * <caption>Basic authentication for admin routes</caption>
+     * <description>Protect all admin routes by adding authentication middleware to the parent route.</description>
+     * ```ts
+     * // /app/routes/app.tsx
+     * import shopify from "../shopify.server";
+     * import { Outlet } from "react-router";
+     *
+     * export const middleware = [
+     *   shopify.middleware.withAuthentication()
+     * ];
+     *
+     * export default function App() {
+     *   return <Outlet />;
+     * }
+     * ```
+     *
+     * @example
+     * <caption>Accessing the admin context in loaders</caption>
+     * <description>Use the admin context to make API calls and access billing/scopes operations.</description>
+     * ```ts
+     * // /app/routes/app.products.tsx
+     * import { LoaderFunctionArgs, json } from "react-router";
+     * import { adminContext } from "@shopify/shopify-app-react-router/server";
+     *
+     * export async function loader({ context }: LoaderFunctionArgs) {
+     *   const admin = context.get(adminContext);
+     *
+     *   // GraphQL API
+     *   const response = await admin.admin.graphql(`
+     *     query {
+     *       products(first: 10) {
+     *         nodes { id title }
+     *       }
+     *     }
+     *   `);
+     *
+     *   // Billing API (always available)
+     *   const billingStatus = await admin.billing.check();
+     *
+     *   // Scopes API (always available)
+     *   const scopes = await admin.scopes.query();
+     *
+     *   return json({
+     *     products: await response.json(),
+     *     billing: billingStatus,
+     *     scopes
+     *   });
+     * }
+     * ```
+     */
+    withAuthentication: (options?: AuthMiddlewareOptions) => MiddlewareFunction;
+
+    /**
+     * Billing middleware that enforces payment requirements.
+     *
+     * This middleware checks if the shop has an active payment for the specified plans,
+     * and calls the onFailure callback if the requirement is not met. This matches the
+     * behavior of the existing `billing.require()` function.
+     *
+     * Must be used AFTER withAuthentication middleware.
+     *
+     * @example
+     * <caption>Requiring a premium plan with immediate billing request</caption>
+     * <description>Request billing immediately if the merchant doesn't have an active premium plan.</description>
+     * ```ts
+     * // /app/routes/app.premium-features.tsx
+     * import shopify from "../shopify.server";
+     * import { adminContext } from "@shopify/shopify-app-react-router/server";
+     *
+     * export const middleware = [
+     *   shopify.middleware.withAuthentication(),
+     *   shopify.middleware.withBillingRequired({
+     *     plans: ["premium"],
+     *     onFailure: async (error) => {
+     *       // This will redirect to Shopify's billing page
+     *       const admin = context.get(adminContext);
+     *       return admin.billing.request({
+     *         plan: "premium",
+     *         returnUrl: "/app/premium-features"
+     *       });
+     *     }
+     *   })
+     * ];
+     *
+     * export async function loader({ context }: LoaderFunctionArgs) {
+     *   // This only runs if the merchant has an active premium plan
+     *   const admin = context.get(adminContext);
+     *   // ... premium feature logic
+     * }
+     * ```
+     *
+     * @example
+     * <caption>Redirecting to a plan selection page</caption>
+     * <description>Redirect to a custom billing page where merchants can choose a plan.</description>
+     * ```ts
+     * // /app/routes/app.analytics.tsx
+     * import shopify from "../shopify.server";
+     * import { redirect } from "react-router";
+     *
+     * export const middleware = [
+     *   shopify.middleware.withAuthentication(),
+     *   shopify.middleware.withBillingRequired({
+     *     plans: ["professional", "enterprise"],
+     *     isTest: true,
+     *     onFailure: async (error) => {
+     *       // Redirect to a custom plan selection page
+     *       return redirect("/app/select-plan");
+     *     }
+     *   })
+     * ];
+     * ```
+     *
+     * @example
+     * <caption>Multiple acceptable plans</caption>
+     * <description>Allow access if the merchant has any of the specified plans.</description>
+     * ```ts
+     * // /app/routes/app.advanced.tsx
+     * import shopify from "../shopify.server";
+     *
+     * export const middleware = [
+     *   shopify.middleware.withAuthentication(),
+     *   shopify.middleware.withBillingRequired({
+     *     plans: ["professional", "enterprise", "unlimited"],
+     *     onFailure: async (error) => {
+     *       return redirect("/app/billing");
+     *     }
+     *   })
+     * ];
+     * ```
+     */
+    withBillingRequired: (
+      options: BillingRequiredOptions<Config>,
+    ) => MiddlewareFunction;
+  };
 }
 
 export interface ShopifyAppLogin {
