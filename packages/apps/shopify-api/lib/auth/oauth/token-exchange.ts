@@ -22,6 +22,7 @@ export interface TokenExchangeParams {
   shop: string;
   sessionToken: string;
   requestedTokenType: RequestedTokenType;
+  expiring?: boolean;
 }
 
 export type TokenExchange = (
@@ -33,6 +34,7 @@ export function tokenExchange(config: ConfigInterface): TokenExchange {
     shop,
     sessionToken,
     requestedTokenType,
+    expiring,
   }: TokenExchangeParams) => {
     await decodeSessionToken(config)(sessionToken);
 
@@ -43,6 +45,56 @@ export function tokenExchange(config: ConfigInterface): TokenExchange {
       subject_token: sessionToken,
       subject_token_type: IdTokenType,
       requested_token_type: requestedTokenType,
+      expiring: expiring ? '1' : '0',
+    };
+
+    const cleanShop = sanitizeShop(config)(shop, true)!;
+
+    const postResponse = await fetchRequestFactory(config)(
+      `https://${cleanShop}/admin/oauth/access_token`,
+      {
+        method: 'POST',
+        body: JSON.stringify(body),
+        headers: {
+          'Content-Type': DataType.JSON,
+          Accept: DataType.JSON,
+        },
+      },
+    );
+
+    if (!postResponse.ok) {
+      throwFailedRequest(await postResponse.json(), false, postResponse);
+    }
+
+    return {
+      session: createSession({
+        accessTokenResponse: await postResponse.json<AccessTokenResponse>(),
+        shop: cleanShop,
+        // We need to keep this as an empty string as our template DB schemas have this required
+        state: '',
+        config,
+      }),
+    };
+  };
+}
+
+export interface TokenExchangeRefreshParams {
+  shop: string;
+  refreshToken: string;
+}
+
+export type TokenExchangeRefresh = (
+  params: TokenExchangeRefreshParams,
+) => Promise<{session: Session}>;
+
+export function tokenExchangeRefresh(
+  config: ConfigInterface,
+): TokenExchangeRefresh {
+  return async ({shop, refreshToken}: TokenExchangeRefreshParams) => {
+    const body = {
+      client_id: config.apiKey,
+      client_secret: config.apiSecretKey,
+      refresh_token: refreshToken,
     };
 
     const cleanShop = sanitizeShop(config)(shop, true)!;
