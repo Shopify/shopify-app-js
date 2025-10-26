@@ -16,9 +16,9 @@ export * from './app-proxy';
 export * from './customer-account';
 export * from './fulfillment-service';
 export * from './pos';
+export * from './cors';
 export * from './extension-base';
 export * from './factory';
 
 // Future exports will include:
 // export * from './scopes-required';
-// export * from './cors';

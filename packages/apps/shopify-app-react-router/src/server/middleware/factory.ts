@@ -12,12 +12,14 @@ import {withAppProxyFactory} from './app-proxy';
 import {withCustomerAccountFactory} from './customer-account';
 import {withFulfillmentServiceFactory} from './fulfillment-service';
 import {withPOSFactory} from './pos';
+import {withCORSFactory} from './cors';
 import type {
   AuthMiddlewareOptions,
   BillingRequiredOptions,
   CheckoutMiddlewareOptions,
   CustomerAccountMiddlewareOptions,
   POSMiddlewareOptions,
+  CORSMiddlewareOptions,
 } from './types';
 
 /**
@@ -54,5 +56,7 @@ export function createShopifyMiddleware<Config extends AppConfigArg>(
     withFulfillmentService: withFulfillmentServiceFactory<Config>(params),
 
     withPOS: withPOSFactory<Config>(params),
+
+    withCORS: withCORSFactory<Config>(params),
   };
 }

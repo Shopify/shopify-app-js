@@ -8,7 +8,6 @@ import {
 
 import type {AdminApiContext, StorefrontContext} from '../clients';
 import type {AppConfigArg} from '../config-types';
-import type {EnsureCORSFunction} from '../authenticate/helpers/ensure-cors-headers';
 import type {RedirectFunction} from '../authenticate/admin/helpers/redirect';
 import type {
   RequestBillingOptions,
@@ -92,11 +91,6 @@ export interface AdminContext<Config extends AppConfigArg = AppConfigArg> {
    * WARNING: Should only be called in actions, not loaders
    */
   redirect: RedirectFunction;
-
-  /**
-   * CORS helper function
-   */
-  cors: EnsureCORSFunction;
 }
 
 /**
@@ -276,18 +270,14 @@ export interface FlowContext {
 /**
  * Checkout context provided by withCheckout middleware
  * Matches the return value of authenticate.public.checkout()
+ *
+ * Note: Use withCORS() middleware to add CORS headers to responses
  */
 export interface CheckoutContext {
   /**
    * The decoded and validated session token for the request
    */
   sessionToken: JwtPayload;
-
-  /**
-   * CORS helper function to add CORS headers to responses
-   * Required for checkout extensions which run cross-origin
-   */
-  cors: EnsureCORSFunction;
 }
 
 /**
@@ -304,18 +294,14 @@ export interface CheckoutMiddlewareOptions {
 /**
  * Customer account context provided by withCustomerAccount middleware
  * Matches the return value of authenticate.public.customerAccount()
+ *
+ * Note: Use withCORS() middleware to add CORS headers to responses
  */
 export interface CustomerAccountContext {
   /**
    * The decoded and validated session token for the request
    */
   sessionToken: JwtPayload;
-
-  /**
-   * CORS helper function to add CORS headers to responses
-   * Required for customer account extensions which run cross-origin
-   */
-  cors: EnsureCORSFunction;
 }
 
 /**
@@ -409,18 +395,14 @@ export interface FulfillmentServiceContext {
 /**
  * POS context provided by withPOS middleware
  * Matches the return value of authenticate.pos()
+ *
+ * Note: Use withCORS() middleware to add CORS headers to responses
  */
 export interface POSContext {
   /**
    * The decoded and validated session token for the request
    */
   sessionToken: JwtPayload;
-
-  /**
-   * CORS helper function to add CORS headers to responses
-   * Required for POS UI extensions which run cross-origin
-   */
-  cors: EnsureCORSFunction;
 }
 
 /**
@@ -434,6 +416,16 @@ export interface POSMiddlewareOptions {
   corsHeaders?: string[];
 }
 
+/**
+ * Options for CORS middleware
+ */
+export interface CORSMiddlewareOptions {
+  /**
+   * Additional CORS headers to include in Access-Control-Allow-Headers and Access-Control-Expose-Headers
+   * Default headers (Authorization, Content-Type) are always included
+   */
+  corsHeaders?: string[];
+}
+
 // Future: Additional middleware types will be added as we implement them
 // - ScopesRequiredOptions for scope enforcement middleware
-// - CORS utilities

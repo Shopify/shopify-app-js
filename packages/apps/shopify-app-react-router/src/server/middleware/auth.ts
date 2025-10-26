@@ -177,7 +177,6 @@ export function createWithAuthentication<ConfigArg extends AppConfigArg>(
         ),
       },
       session,
-      cors: ensureCORSHeadersFactory(params, request),
     };
 
     // Add embedded features if applicable

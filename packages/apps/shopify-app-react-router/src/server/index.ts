@@ -56,5 +56,6 @@ export type {
   FulfillmentServicePayload,
   POSContext,
   POSMiddlewareOptions,
+  CORSMiddlewareOptions,
   GetAdminContext,
 } from './middleware/types';

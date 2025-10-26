@@ -1,4 +1,3 @@
-import type {MiddlewareFunction} from 'react-router';
 import type {JwtPayload} from '@shopify/shopify-api';
 
 import type {BasicParams} from '../types';
@@ -7,23 +6,27 @@ import {
   respondToOptionsRequest,
   getSessionTokenHeader,
   validateSessionToken,
-  ensureCORSHeadersFactory,
   getShopFromRequest,
 } from '../authenticate/helpers';
-import type {EnsureCORSFunction} from '../authenticate/helpers/ensure-cors-headers';
 
 /**
  * Base context for extension authentication (checkout, customer account, POS, etc.)
+ *
+ * Note: Use withCORS() middleware to add CORS headers to responses
  */
 export interface ExtensionContext {
   sessionToken: JwtPayload;
-  cors: EnsureCORSFunction;
 }
 
 /**
  * Options for extension middleware
  */
 export interface ExtensionMiddlewareOptions {
+  /**
+   * Additional CORS headers (for backward compatibility with authenticate functions)
+   * Note: When using middleware pattern, use withCORS() instead
+   * @deprecated Use withCORS() middleware instead
+   */
   corsHeaders?: string[];
 }
 
@@ -87,12 +90,8 @@ export async function authenticateExtension(
     {checkAudience: false, retryRequest: false},
   );
 
-  // Create CORS helper with custom headers
-  const cors = ensureCORSHeadersFactory(params, request, corsHeaders);
-
-  // Return context
+  // Return context (cors removed - use withCORS() middleware instead)
   return {
     sessionToken,
-    cors,
   };
 }
