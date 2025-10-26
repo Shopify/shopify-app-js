@@ -12,6 +12,7 @@ import {
   respondToOptionsRequest,
   validateSessionToken,
   getShopFromRequest,
+  addDocumentResponseHeaders,
 } from '../authenticate/helpers';
 import {
   cancelBillingFactory,
@@ -258,8 +259,15 @@ export function createWithAuthentication<ConfigArg extends AppConfigArg>(
         context.set(sessionTokenContext, payload);
       }
 
-      // Continue to next middleware/loader
-      return next();
+      const response = (await next()) as Response;
+
+      // Add document response headers for HTML requests
+      const isDocumentRequest = !request.headers.get('authorization');
+      if (isDocumentRequest) {
+        addDocumentResponseHeaders(response.headers, true, session.shop);
+      }
+
+      return response;
     } catch (errorOrResponse) {
       // Handle custom error handler
       if (options?.onError && !(errorOrResponse instanceof Response)) {
