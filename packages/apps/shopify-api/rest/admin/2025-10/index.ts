@@ -5,6 +5,7 @@
 import {ShopifyRestResources} from '../../types';
 
 import {AbandonedCheckout} from './abandoned_checkout';
+import {AccessScope} from './access_scope';
 import {ApplePayCertificate} from './apple_pay_certificate';
 import {ApplicationCharge} from './application_charge';
 import {ApplicationCredit} from './application_credit';
@@ -54,6 +55,10 @@ import {PaymentGateway} from './payment_gateway';
 import {PaymentTransaction} from './payment_transaction';
 import {Payout} from './payout';
 import {Policy} from './policy';
+import {PriceRule} from './price_rule';
+import {Product} from './product';
+import {ProductListing} from './product_listing';
+import {ProductResourceFeedback} from './product_resource_feedback';
 import {Province} from './province';
 import {RecurringApplicationCharge} from './recurring_application_charge';
 import {Redirect} from './redirect';
@@ -74,6 +79,7 @@ import {Webhook} from './webhook';
 
 export interface RestResources extends ShopifyRestResources {
   AbandonedCheckout: typeof AbandonedCheckout;
+  AccessScope: typeof AccessScope;
   ApplePayCertificate: typeof ApplePayCertificate;
   ApplicationCharge: typeof ApplicationCharge;
   ApplicationCredit: typeof ApplicationCredit;
@@ -123,6 +129,10 @@ export interface RestResources extends ShopifyRestResources {
   PaymentTransaction: typeof PaymentTransaction;
   Payout: typeof Payout;
   Policy: typeof Policy;
+  PriceRule: typeof PriceRule;
+  Product: typeof Product;
+  ProductListing: typeof ProductListing;
+  ProductResourceFeedback: typeof ProductResourceFeedback;
   Province: typeof Province;
   RecurringApplicationCharge: typeof RecurringApplicationCharge;
   Redirect: typeof Redirect;
@@ -144,6 +154,7 @@ export interface RestResources extends ShopifyRestResources {
 
 export const restResources: RestResources = {
   AbandonedCheckout,
+  AccessScope,
   ApplePayCertificate,
   ApplicationCharge,
   ApplicationCredit,
@@ -193,6 +204,10 @@ export const restResources: RestResources = {
   PaymentTransaction,
   Payout,
   Policy,
+  PriceRule,
+  Product,
+  ProductListing,
+  ProductResourceFeedback,
   Province,
   RecurringApplicationCharge,
   Redirect,
