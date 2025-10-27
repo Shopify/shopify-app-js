@@ -133,8 +133,7 @@ describe('PostgreSQLSessionStorage', () => {
     await storage.disconnect();
   });
 
-  it(`can be configured with SSL options`, async () => {
-    // Test that SSL options can be passed without throwing errors
+  it(`can be configured with SSL options`, () => {
     const sslOptions = {
       rejectUnauthorized: false,
       ca: 'fake-ca-cert',
@@ -142,35 +141,30 @@ describe('PostgreSQLSessionStorage', () => {
       key: 'fake-client-key',
     };
 
-    const storage = new PostgreSQLSessionStorage(dbURL.toString(), {
-      ssl: sslOptions,
-    });
-
-    // Since we're testing against a local PostgreSQL without SSL,
-    // we just verify that the storage can be created without errors
-    // and that the SSL options are properly stored
-    expect(storage).toBeDefined();
-    // The actual SSL connection would fail in this test environment,
-    // but we can verify the configuration is accepted
-    await storage.disconnect();
+    // Test that the constructor accepts SSL options without throwing
+    expect(() => {
+      new PostgreSQLSessionStorage(dbURL.toString(), {
+        ssl: sslOptions,
+      });
+    }).not.toThrow();
   });
 
-  it(`withCredentials static method supports SSL options`, async () => {
+  it(`withCredentials static method supports SSL options`, () => {
     const sslOptions = {
       rejectUnauthorized: false,
     };
 
-    const storage = PostgreSQLSessionStorage.withCredentials(
-      'localhost',
-      'shop&test',
-      'shop&fy',
-      'passify#$',
-      {
-        ssl: sslOptions,
-      },
-    );
-
-    expect(storage).toBeDefined();
-    await storage.disconnect();
+    // Test that the withCredentials method accepts SSL options without throwing
+    expect(() => {
+      PostgreSQLSessionStorage.withCredentials(
+        'localhost',
+        'shop&test',
+        'shop&fy',
+        'passify#$',
+        {
+          ssl: sslOptions,
+        },
+      );
+    }).not.toThrow();
   });
 });
