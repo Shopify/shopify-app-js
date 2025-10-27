@@ -132,39 +132,4 @@ describe('PostgreSQLSessionStorage', () => {
     expect(await storage.storeSession(session)).toBeTruthy();
     await storage.disconnect();
   });
-
-  it(`can be configured with SSL options`, () => {
-    const sslOptions = {
-      rejectUnauthorized: false,
-      ca: 'fake-ca-cert',
-      cert: 'fake-client-cert',
-      key: 'fake-client-key',
-    };
-
-    // Test that the constructor accepts SSL options without throwing
-    expect(() => {
-      new PostgreSQLSessionStorage(dbURL.toString(), {
-        ssl: sslOptions,
-      });
-    }).not.toThrow();
-  });
-
-  it(`withCredentials static method supports SSL options`, () => {
-    const sslOptions = {
-      rejectUnauthorized: false,
-    };
-
-    // Test that the withCredentials method accepts SSL options without throwing
-    expect(() => {
-      PostgreSQLSessionStorage.withCredentials(
-        'localhost',
-        'shop&test',
-        'shop&fy',
-        'passify#$',
-        {
-          ssl: sslOptions,
-        },
-      );
-    }).not.toThrow();
-  });
 });

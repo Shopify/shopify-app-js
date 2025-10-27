@@ -34,7 +34,7 @@ export class PostgreSQLSessionStorage implements SessionStorage {
     dbName: string,
     username: string,
     password: string,
-    opts: Partial<PostgreSQLSessionStorageOptions> = {},
+    opts: Partial<PostgreSQLSessionStorageOptions>,
   ) {
     return new PostgreSQLSessionStorage(
       new URL(
@@ -151,11 +151,7 @@ export class PostgreSQLSessionStorage implements SessionStorage {
   }
 
   private async init(dbUrl: string) {
-    this.client = new PostgresConnection(
-      dbUrl,
-      this.options.sessionTableName,
-      this.options.ssl,
-    );
+    this.client = new PostgresConnection(dbUrl, this.options.sessionTableName);
     await this.connectClient();
     await this.createTable();
   }
