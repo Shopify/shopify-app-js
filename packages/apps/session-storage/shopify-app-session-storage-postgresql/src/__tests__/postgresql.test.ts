@@ -150,7 +150,6 @@ describe('PostgreSQLSessionStorage', () => {
     // we just verify that the storage can be created without errors
     // and that the SSL options are properly stored
     expect(storage).toBeDefined();
-    
     // The actual SSL connection would fail in this test environment,
     // but we can verify the configuration is accepted
     await storage.disconnect();
