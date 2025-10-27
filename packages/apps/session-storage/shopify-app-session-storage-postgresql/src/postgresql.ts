@@ -3,6 +3,7 @@ import {
   SessionStorage,
   RdbmsSessionStorageOptions,
 } from '@shopify/shopify-app-session-storage';
+import {ConnectionConfig} from 'pg';
 
 import {migrationList} from './migrations';
 import {PostgresConnection} from './postgres-connection';
@@ -11,6 +12,11 @@ import {PostgresSessionStorageMigrator} from './postgres-migrator';
 export interface PostgreSQLSessionStorageOptions
   extends RdbmsSessionStorageOptions {
   port: number;
+  /**
+   * SSL configuration options for PostgreSQL connection.
+   * This allows connecting to databases that require SSL, such as AWS RDS.
+   */
+  ssl?: ConnectionConfig['ssl'];
 }
 const defaultPostgreSQLSessionStorageOptions: PostgreSQLSessionStorageOptions =
   {
@@ -28,7 +34,7 @@ export class PostgreSQLSessionStorage implements SessionStorage {
     dbName: string,
     username: string,
     password: string,
-    opts: Partial<PostgreSQLSessionStorageOptions>,
+    opts: Partial<PostgreSQLSessionStorageOptions> = {},
   ) {
     return new PostgreSQLSessionStorage(
       new URL(
@@ -145,7 +151,11 @@ export class PostgreSQLSessionStorage implements SessionStorage {
   }
 
   private async init(dbUrl: string) {
-    this.client = new PostgresConnection(dbUrl, this.options.sessionTableName);
+    this.client = new PostgresConnection(
+      dbUrl,
+      this.options.sessionTableName,
+      this.options.ssl,
+    );
     await this.connectClient();
     await this.createTable();
   }
