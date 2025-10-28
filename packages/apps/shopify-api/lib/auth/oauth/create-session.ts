@@ -31,7 +31,13 @@ export function createSession({
     new Date(Date.now() + expires_in * 1000);
 
   const getOnlineSessionProperties = (responseBody: OnlineAccessResponse) => {
-    const {access_token, scope, ...rest} = responseBody;
+    const {
+      access_token,
+      scope,
+      refresh_token,
+      refresh_token_expires_in,
+      ...rest
+    } = responseBody;
     const sessionId = config.isEmbeddedApp
       ? getJwtSessionId(config)(
           shop,
@@ -43,14 +49,22 @@ export function createSession({
       id: sessionId,
       onlineAccessInfo: rest,
       expires: getSessionExpiration(rest.expires_in),
+      ...(refresh_token && {refreshToken: refresh_token}),
+      ...(refresh_token_expires_in && {
+        refreshTokenExpires: getSessionExpiration(refresh_token_expires_in),
+      }),
     };
   };
 
   const getOfflineSessionProperties = (responseBody: OfflineAccessResponse) => {
-    const {expires_in} = responseBody;
+    const {expires_in, refresh_token, refresh_token_expires_in} = responseBody;
     return {
       id: getOfflineId(config)(shop),
       ...(expires_in && {expires: getSessionExpiration(expires_in)}),
+      ...(refresh_token && {refreshToken: refresh_token}),
+      ...(refresh_token_expires_in && {
+        refreshTokenExpires: getSessionExpiration(refresh_token_expires_in),
+      }),
     };
   };
 

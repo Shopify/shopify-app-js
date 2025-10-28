@@ -40,6 +40,46 @@ describe('session', () => {
       sessionClone.onlineAccessInfo,
     );
   });
+
+  it('can create a session with refresh token properties', () => {
+    const refreshTokenExpires = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
+    const session = new Session({
+      id: 'session_with_refresh',
+      shop: 'test-shop',
+      state: 'test-state',
+      isOnline: false,
+      accessToken: 'test-access-token',
+      refreshToken: 'test-refresh-token',
+      refreshTokenExpires,
+      expires: new Date(Date.now() + 86400),
+      scope: 'test-scope',
+    });
+
+    expect(session.refreshToken).toEqual('test-refresh-token');
+    expect(session.refreshTokenExpires).toEqual(refreshTokenExpires);
+  });
+
+  it('can clone a session with refresh token properties', () => {
+    const refreshTokenExpires = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
+    const session = new Session({
+      id: 'original',
+      shop: 'original-shop',
+      state: 'original-state',
+      isOnline: false,
+      accessToken: 'original-access-token',
+      refreshToken: 'original-refresh-token',
+      refreshTokenExpires,
+      expires: new Date(),
+      scope: 'original-scope',
+    });
+    const sessionClone = new Session({...session, id: 'clone'});
+
+    expect(session.id).not.toEqual(sessionClone.id);
+    expect(session.refreshToken).toStrictEqual(sessionClone.refreshToken);
+    expect(session.refreshTokenExpires).toStrictEqual(
+      sessionClone.refreshTokenExpires,
+    );
+  });
 });
 
 describe('isActive', () => {
@@ -276,6 +316,8 @@ describe('isScopeChanged', () => {
 
 const expiresDate = new Date(Date.now() + 86400);
 const expiresNumber = expiresDate.getTime();
+const refreshTokenExpiresDate = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
+const refreshTokenExpiresNumber = refreshTokenExpiresDate.getTime();
 
 const testSessions = [
   {
@@ -524,6 +566,143 @@ const testSessions = [
     ],
     returnUserData: true,
   },
+  {
+    session: {
+      id: 'offline_session_with_refresh',
+      shop: 'offline-session-shop',
+      state: 'offline-session-state',
+      isOnline: false,
+      scope: 'offline-session-scope',
+      accessToken: 'offline-session-token',
+      expires: expiresDate,
+      refreshToken: 'offline-refresh-token',
+      refreshTokenExpires: refreshTokenExpiresDate,
+    },
+    propertyArray: [
+      ['id', 'offline_session_with_refresh'],
+      ['shop', 'offline-session-shop'],
+      ['state', 'offline-session-state'],
+      ['isOnline', false],
+      ['scope', 'offline-session-scope'],
+      ['accessToken', 'offline-session-token'],
+      ['expires', expiresNumber],
+      ['refreshToken', 'offline-refresh-token'],
+      ['refreshTokenExpires', refreshTokenExpiresNumber],
+    ],
+    returnUserData: false,
+  },
+  {
+    session: {
+      id: 'offline_session_with_refresh',
+      shop: 'offline-session-shop',
+      state: 'offline-session-state',
+      isOnline: false,
+      scope: 'offline-session-scope',
+      accessToken: 'offline-session-token',
+      expires: expiresDate,
+      refreshToken: 'offline-refresh-token',
+      refreshTokenExpires: refreshTokenExpiresDate,
+    },
+    propertyArray: [
+      ['id', 'offline_session_with_refresh'],
+      ['shop', 'offline-session-shop'],
+      ['state', 'offline-session-state'],
+      ['isOnline', false],
+      ['scope', 'offline-session-scope'],
+      ['accessToken', 'offline-session-token'],
+      ['expires', expiresNumber],
+      ['refreshToken', 'offline-refresh-token'],
+      ['refreshTokenExpires', refreshTokenExpiresNumber],
+    ],
+    returnUserData: true,
+  },
+  {
+    session: {
+      id: 'online_session_with_refresh',
+      shop: 'online-session-shop',
+      state: 'online-session-state',
+      isOnline: true,
+      scope: 'online-session-scope',
+      accessToken: 'online-session-token',
+      expires: expiresDate,
+      refreshToken: 'online-refresh-token',
+      refreshTokenExpires: refreshTokenExpiresDate,
+      onlineAccessInfo: {
+        expires_in: 1,
+        associated_user_scope: 'online-session-user-scope',
+        associated_user: {
+          id: 1,
+          first_name: 'online-session-first-name',
+          last_name: 'online-session-last-name',
+          email: 'online-session-email',
+          locale: 'online-session-locale',
+          email_verified: true,
+          account_owner: true,
+          collaborator: false,
+        },
+      },
+    },
+    propertyArray: [
+      ['id', 'online_session_with_refresh'],
+      ['shop', 'online-session-shop'],
+      ['state', 'online-session-state'],
+      ['isOnline', true],
+      ['scope', 'online-session-scope'],
+      ['accessToken', 'online-session-token'],
+      ['expires', expiresNumber],
+      ['refreshToken', 'online-refresh-token'],
+      ['refreshTokenExpires', refreshTokenExpiresNumber],
+      ['onlineAccessInfo', 1],
+    ],
+    returnUserData: false,
+  },
+  {
+    session: {
+      id: 'online_session_with_refresh',
+      shop: 'online-session-shop',
+      state: 'online-session-state',
+      isOnline: true,
+      scope: 'online-session-scope',
+      accessToken: 'online-session-token',
+      expires: expiresDate,
+      refreshToken: 'online-refresh-token',
+      refreshTokenExpires: refreshTokenExpiresDate,
+      onlineAccessInfo: {
+        expires_in: 1,
+        associated_user_scope: 'online-session-user-scope',
+        associated_user: {
+          id: 1,
+          first_name: 'online-session-first-name',
+          last_name: 'online-session-last-name',
+          email: 'online-session-email',
+          locale: 'online-session-locale',
+          email_verified: true,
+          account_owner: true,
+          collaborator: false,
+        },
+      },
+    },
+    propertyArray: [
+      ['id', 'online_session_with_refresh'],
+      ['shop', 'online-session-shop'],
+      ['state', 'online-session-state'],
+      ['isOnline', true],
+      ['scope', 'online-session-scope'],
+      ['accessToken', 'online-session-token'],
+      ['expires', expiresNumber],
+      ['refreshToken', 'online-refresh-token'],
+      ['refreshTokenExpires', refreshTokenExpiresNumber],
+      ['userId', 1],
+      ['firstName', 'online-session-first-name'],
+      ['lastName', 'online-session-last-name'],
+      ['email', 'online-session-email'],
+      ['locale', 'online-session-locale'],
+      ['emailVerified', true],
+      ['accountOwner', true],
+      ['collaborator', false],
+    ],
+    returnUserData: true,
+  },
 ];
 
 describe('toObject', () => {
@@ -567,6 +746,10 @@ describe('toPropertyArray and fromPropertyArray', () => {
       expect(session.scope).toStrictEqual(sessionCopy.scope);
       expect(session.accessToken).toStrictEqual(sessionCopy.accessToken);
       expect(session.expires).toStrictEqual(sessionCopy.expires);
+      expect(session.refreshToken).toStrictEqual(sessionCopy.refreshToken);
+      expect(session.refreshTokenExpires).toStrictEqual(
+        sessionCopy.refreshTokenExpires,
+      );
       expect(session.onlineAccessInfo?.associated_user.id).toStrictEqual(
         sessionCopy.onlineAccessInfo?.associated_user.id,
       );

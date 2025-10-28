@@ -4,12 +4,17 @@ import type {AppConfig} from '../config-types';
 
 // When adding new flags, you should also add them to the `TEST_FUTURE_FLAGS` object in `test-config.ts` to ensure that
 // it doesn't cause regressions.
-export interface FutureFlags {}
+export interface FutureFlags {
+  unstable_expiringOfflineAccessTokenSupport?: boolean;
+}
 
 // When adding new flags, use this format:
 // apiFutureFlag: Future extends FutureFlags ? Future['reactRouterFutureFlag'] : false;
-export interface ApiFutureFlags<_Future extends FutureFlagOptions> {
+export interface ApiFutureFlags<Future extends FutureFlagOptions> {
   unstable_managedPricingSupport: true;
+  unstable_expiringOfflineAccessTokenSupport: Future extends FutureFlags
+    ? Future['unstable_expiringOfflineAccessTokenSupport']
+    : false;
 }
 
 export type ApiConfigWithFutureFlags<Future extends FutureFlagOptions> =
