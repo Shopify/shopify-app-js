@@ -3,6 +3,7 @@ import {
   SessionStorage,
   RdbmsSessionStorageOptions,
 } from '@shopify/shopify-app-session-storage';
+import {ConnectionConfig} from 'pg';
 
 import {migrationList} from './migrations';
 import {PostgresConnection} from './postgres-connection';
@@ -11,6 +12,11 @@ import {PostgresSessionStorageMigrator} from './postgres-migrator';
 export interface PostgreSQLSessionStorageOptions
   extends RdbmsSessionStorageOptions {
   port: number;
+  /**
+   * SSL configuration options for PostgreSQL connection.
+   * This allows connecting to databases that require SSL, such as AWS RDS.
+   */
+  ssl?: ConnectionConfig['ssl'];
 }
 const defaultPostgreSQLSessionStorageOptions: PostgreSQLSessionStorageOptions =
   {
