@@ -1,5 +1,11 @@
 # Changelog
 
+## 12.1.1
+
+### Patch Changes
+
+- b3716f8: Add back in correctly removed REST resources
+
 ## 12.1.0
 
 ### Minor Changes
