@@ -153,6 +153,26 @@ const billingResponse = await shopify.billing.request({
 res.redirect(billingResponse.confirmationUrl);
 ```
 
+If the plan has lineItems, you can override the billing configuration as following.
+
+```ts
+const billingResponse = await shopify.billing.request({
+  session: callback.session,
+  plan: 'My billing plan',
+  returnObject: true,
+  isTest: true,
+  lineItems: [
+    {
+      interval: BillingInterval.Every30Days, // The interval must match to the lineItem that being overridden
+      amount: 13, // Overrides the amount set in 'My billing plan' lineItem that matches the interval
+      trialDays: 4, // Overrides the trial days set in 'My billing plan' lineItem that matches the interval
+    }
+  ]
+});
+
+res.redirect(billingResponse.confirmationUrl);
+```
+
 ## Return
 
 ### if `returnObject` parameter is `false` (default)
