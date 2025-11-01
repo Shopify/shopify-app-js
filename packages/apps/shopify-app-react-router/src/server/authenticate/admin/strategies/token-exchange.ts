@@ -45,6 +45,7 @@ export const createTokenExchangeStrategy: AuthStrategyFactory<any> = <
         sessionToken,
         shop,
         requestedTokenType,
+        expiring: config.future?.unstable_expiringOfflineAccessTokenSupport,
       });
     } catch (error) {
       if (

@@ -1,7 +1,9 @@
 import {HashFormat, createSHA256HMAC} from '@shopify/shopify-api/runtime';
+import {setUpValidSession as setUpValidSessionImport} from '@shopify/shopify-api/test-helpers';
 
 import {shopifyApp} from '../../../..';
 import {
+  API_KEY,
   API_SECRET_KEY,
   APP_URL,
   TEST_SHOP,
@@ -10,7 +12,9 @@ import {
   getThrownResponse,
   setUpValidSession,
   testConfig,
+  mockExternalRequest,
 } from '../../../../__test-helpers';
+import {AppDistribution} from '../../../../types';
 
 describe('authenticating app proxy requests', () => {
   it('Throws a 400 response if there is no signature param', async () => {
@@ -337,6 +341,208 @@ describe('authenticating app proxy requests', () => {
       }
 
       return {storefront, expectedSession, actualSession};
+    });
+  });
+
+  describe('Valid requests with expired offline session', () => {
+    describe('when feature flag is disabled', () => {
+      it('returns context with expired session without refreshing', async () => {
+        // GIVEN
+        const config = testConfig({
+          future: {
+            unstable_expiringOfflineAccessTokenSupport: false,
+          },
+        });
+        const shopify = shopifyApp(config);
+
+        const expiredDate = new Date(Date.now() - 5000);
+        const expiredSession = setUpValidSessionImport({
+          shop: TEST_SHOP,
+          expires: expiredDate,
+          refreshToken: 'test-refresh-token',
+          isOnline: false,
+          accessToken: 'expired-access-token',
+        });
+
+        await shopify.sessionStorage.storeSession(expiredSession);
+
+        // WHEN
+        const context = await shopify.authenticate.public.appProxy(
+          await getValidRequest(),
+        );
+
+        // THEN
+        expect(context.session).toBeDefined();
+        expect(context.session?.accessToken).toBe('expired-access-token');
+        expect(context.session?.refreshToken).toBe('test-refresh-token');
+        expect(context.admin).toBeDefined();
+        expect(context.storefront).toBeDefined();
+      });
+    });
+
+    describe('when feature flag is enabled', () => {
+      it('refreshes token and returns context with new session', async () => {
+        // GIVEN
+        const config = testConfig({
+          future: {
+            unstable_expiringOfflineAccessTokenSupport: true,
+          },
+          distribution: AppDistribution.AppStore,
+        });
+        const shopify = shopifyApp(config);
+
+        const expiredDate = new Date(Date.now() - 5000);
+        const expiredSession = setUpValidSessionImport({
+          shop: TEST_SHOP,
+          expires: expiredDate,
+          refreshToken: 'old-refresh-token',
+          isOnline: false,
+          accessToken: 'old-access-token',
+        });
+
+        await shopify.sessionStorage!.storeSession(expiredSession);
+
+        // Mock the refresh token API response
+        const refreshResponse = {
+          access_token: 'new-access-token',
+          scope: 'testScope',
+          expires_in: 3600,
+          refresh_token: 'new-refresh-token',
+          refresh_token_expires_in: 2592000,
+        };
+
+        await mockExternalRequest({
+          request: new Request(
+            `https://${TEST_SHOP}/admin/oauth/access_token`,
+            {
+              method: 'POST',
+              headers: {'Content-Type': 'application/json'},
+              body: JSON.stringify({
+                client_id: API_KEY,
+                client_secret: API_SECRET_KEY,
+                refresh_token: 'old-refresh-token',
+              }),
+            },
+          ),
+          response: new Response(JSON.stringify(refreshResponse), {
+            status: 200,
+            headers: {'Content-Type': 'application/json'},
+          }),
+        });
+
+        // WHEN
+        const context = await shopify.authenticate.public.appProxy(
+          await getValidRequest(),
+        );
+
+        // THEN
+        expect(context.session).toBeDefined();
+        expect(context.session?.accessToken).toBe('new-access-token');
+        expect(context.session?.refreshToken).toBe('new-refresh-token');
+        expect(context.admin).toBeDefined();
+        expect(context.storefront).toBeDefined();
+
+        // Verify new session was stored
+        const storedSession = await shopify.sessionStorage!.loadSession(
+          `offline_${TEST_SHOP}`,
+        );
+        expect(storedSession?.accessToken).toBe('new-access-token');
+        expect(storedSession?.refreshToken).toBe('new-refresh-token');
+      });
+
+      it('refreshes token when session expires within threshold', async () => {
+        // GIVEN
+        const config = testConfig({
+          future: {
+            unstable_expiringOfflineAccessTokenSupport: true,
+          },
+          distribution: AppDistribution.AppStore,
+        });
+        const shopify = shopifyApp(config);
+
+        // 900ms from now (within 1000ms threshold)
+        const almostExpiredDate = new Date(Date.now() + 900);
+        const almostExpiredSession = setUpValidSessionImport({
+          shop: TEST_SHOP,
+          expires: almostExpiredDate,
+          refreshToken: 'old-refresh-token',
+          isOnline: false,
+          accessToken: 'old-access-token',
+        });
+
+        await shopify.sessionStorage!.storeSession(almostExpiredSession);
+
+        // Mock the refresh token API response
+        const refreshResponse = {
+          access_token: 'new-access-token',
+          scope: 'testScope',
+          expires_in: 3600,
+          refresh_token: 'new-refresh-token',
+          refresh_token_expires_in: 2592000,
+        };
+
+        await mockExternalRequest({
+          request: new Request(
+            `https://${TEST_SHOP}/admin/oauth/access_token`,
+            {
+              method: 'POST',
+              headers: {'Content-Type': 'application/json'},
+              body: JSON.stringify({
+                client_id: API_KEY,
+                client_secret: API_SECRET_KEY,
+                refresh_token: 'old-refresh-token',
+              }),
+            },
+          ),
+          response: new Response(JSON.stringify(refreshResponse), {
+            status: 200,
+            headers: {'Content-Type': 'application/json'},
+          }),
+        });
+
+        // WHEN
+        const context = await shopify.authenticate.public.appProxy(
+          await getValidRequest(),
+        );
+
+        // THEN
+        expect(context.session?.accessToken).toBe('new-access-token');
+        expect(context.session?.refreshToken).toBe('new-refresh-token');
+      });
+
+      it('does not refresh token when session is not expired', async () => {
+        // GIVEN
+        const config = testConfig({
+          future: {
+            unstable_expiringOfflineAccessTokenSupport: true,
+          },
+          distribution: AppDistribution.AppStore,
+        });
+        const shopify = shopifyApp(config);
+
+        // 24 hours in future
+        const futureDate = new Date(Date.now() + 86400000);
+        const validSession = setUpValidSessionImport({
+          shop: TEST_SHOP,
+          expires: futureDate,
+          refreshToken: 'test-refresh-token',
+          isOnline: false,
+          accessToken: 'valid-access-token',
+        });
+
+        await shopify.sessionStorage!.storeSession(validSession);
+
+        // WHEN
+        const context = await shopify.authenticate.public.appProxy(
+          await getValidRequest(),
+        );
+
+        // THEN - Should not refresh when session is valid
+        expect(context.session?.accessToken).toBe('valid-access-token');
+        expect(context.session?.refreshToken).toBe('test-refresh-token');
+        expect(context.admin).toBeDefined();
+        expect(context.storefront).toBeDefined();
+      });
     });
   });
 });
