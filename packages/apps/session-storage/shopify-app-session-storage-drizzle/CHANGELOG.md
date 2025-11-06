@@ -1,5 +1,7 @@
 # @shopify/shopify-app-session-storage-drizzle
 
+## 3.0.3
+
 ## 3.0.2
 
 ## 3.0.1
