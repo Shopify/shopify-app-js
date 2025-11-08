@@ -1,4 +1,4 @@
-import {AppDistribution, BasicParams} from '../../types';
+import {AppDistribution, BasicParams} from '../types';
 
 export async function createOrLoadOfflineSession(
   shop: string,

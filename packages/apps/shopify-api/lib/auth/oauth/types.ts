@@ -31,6 +31,14 @@ export interface CallbackParams extends AdapterArgs {}
 export interface AccessTokenResponse {
   access_token: string;
   scope: string;
+  /**
+   * The refresh token for the session.
+   */
+  refresh_token?: string;
+  /**
+   * How long the refresh token is valid for, in seconds.
+   */
+  refresh_token_expires_in?: number;
 }
 
 export interface OnlineAccessInfo {

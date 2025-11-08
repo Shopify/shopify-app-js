@@ -22,6 +22,7 @@ export interface TokenExchangeParams {
   shop: string;
   sessionToken: string;
   requestedTokenType: RequestedTokenType;
+  expiring?: boolean;
 }
 
 export type TokenExchange = (
@@ -33,6 +34,7 @@ export function tokenExchange(config: ConfigInterface): TokenExchange {
     shop,
     sessionToken,
     requestedTokenType,
+    expiring,
   }: TokenExchangeParams) => {
     await decodeSessionToken(config)(sessionToken);
 
@@ -43,6 +45,7 @@ export function tokenExchange(config: ConfigInterface): TokenExchange {
       subject_token: sessionToken,
       subject_token_type: IdTokenType,
       requested_token_type: requestedTokenType,
+      expiring: expiring ? '1' : '0',
     };
 
     const cleanShop = sanitizeShop(config)(shop, true)!;
