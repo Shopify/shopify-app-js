@@ -50,6 +50,29 @@ describe('authorize.admin doc request path', () => {
       expect(response.status).toBe(500);
     });
 
+    it('throws an error if the request URL is the login path with basename', async () => {
+      // GIVEN
+      // Simulates an app with React Router basename="/base-path"
+      // When navigating to the login route, the URL becomes /base-path/auth/login
+      const shopify = shopifyApp(testConfig({authPathPrefix: '/auth'}));
+      const request = new Request(`${APP_URL}/base-path/auth/login`);
+
+      // WHEN
+      const response = await getThrownResponse(
+        shopify.authenticate.admin,
+        request,
+      );
+
+      // THEN
+      // SHOULD throw 500 error with helpful message
+      // Currently FAILS because pathname="/base-path/auth/login" doesn't match config.auth.loginPath="/auth/login"
+      // So it doesn't detect this is the login path and throws a different error instead
+      expect(response.status).toBe(500);
+      const errorMessage = await response.text();
+      expect(errorMessage).toContain('Detected call to shopify.authenticate.admin() from configured login path');
+      expect(errorMessage).toContain('/auth/login');
+    });
+
     it('redirects to the bounce page URL if id_token search param is missing', async () => {
       // GIVEN
       const shopify = shopifyApp(testConfig());

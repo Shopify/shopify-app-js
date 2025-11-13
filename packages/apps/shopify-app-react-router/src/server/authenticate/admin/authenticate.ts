@@ -58,7 +58,7 @@ export function authStrategyFactory<ConfigArg extends AppConfigArg>({
   async function respondToBouncePageRequest(request: Request) {
     const url = new URL(request.url);
 
-    if (url.pathname === config.auth.patchSessionTokenPath) {
+    if (url.pathname.endsWith(config.auth.patchSessionTokenPath)) {
       logger.debug('Rendering bounce page', {
         shop: getShopFromRequest(request),
       });
@@ -69,7 +69,7 @@ export function authStrategyFactory<ConfigArg extends AppConfigArg>({
   async function respondToExitIframeRequest(request: Request) {
     const url = new URL(request.url);
 
-    if (url.pathname === config.auth.exitIframePath) {
+    if (url.pathname.endsWith(config.auth.exitIframePath)) {
       const destination = url.searchParams.get('exitIframe')!;
 
       logger.debug('Rendering exit iframe page', {
