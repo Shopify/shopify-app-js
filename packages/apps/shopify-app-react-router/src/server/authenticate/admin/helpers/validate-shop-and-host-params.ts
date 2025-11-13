@@ -33,7 +33,7 @@ function redirectToLoginPath(request: Request, params: BasicParams): never {
   const {config, logger} = params;
 
   const {pathname} = new URL(request.url);
-  if (pathname === config.auth.loginPath) {
+  if (pathname.endsWith(config.auth.loginPath)) {
     const message =
       `Detected call to shopify.authenticate.admin() from configured login path ` +
       `('${config.auth.loginPath}'), please make sure to call shopify.login() from that route instead.`;
