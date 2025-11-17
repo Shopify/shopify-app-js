@@ -1,51 +1,41 @@
-import {throwFailedRequest} from '../../clients/common';
-import {decodeSessionToken} from '../../session/decode-session-token';
-import {sanitizeShop} from '../../utils/shop-validator';
 import {ConfigInterface} from '../../base-types';
-import {Session} from '../../session/session';
+import {throwFailedRequest} from '../../clients/common';
 import {DataType} from '../../clients/types';
+import {Session} from '../../session/session';
 import {fetchRequestFactory} from '../../utils/fetch-request';
+import {sanitizeShop} from '../../utils/shop-validator';
 
 import {createSession} from './create-session';
+import {RequestedTokenType} from './token-exchange';
 import {AccessTokenResponse} from './types';
-
-export enum RequestedTokenType {
-  OnlineAccessToken = 'urn:shopify:params:oauth:token-type:online-access-token',
-  OfflineAccessToken = 'urn:shopify:params:oauth:token-type:offline-access-token',
-}
 
 const TokenExchangeGrantType =
   'urn:ietf:params:oauth:grant-type:token-exchange';
-const IdTokenType = 'urn:ietf:params:oauth:token-type:id_token';
 
-export interface TokenExchangeParams {
+export interface MigrateToExpiringTokenParams {
   shop: string;
-  sessionToken: string;
-  requestedTokenType: RequestedTokenType;
-  expiring?: boolean;
+  nonExpiringOfflineAccessToken: string;
 }
 
-export type TokenExchange = (
-  params: TokenExchangeParams,
+export type MigrateToExpiringToken = (
+  params: MigrateToExpiringTokenParams,
 ) => Promise<{session: Session}>;
 
-export function tokenExchange(config: ConfigInterface): TokenExchange {
+export function migrateToExpiringToken(
+  config: ConfigInterface,
+): MigrateToExpiringToken {
   return async ({
     shop,
-    sessionToken,
-    requestedTokenType,
-    expiring,
-  }: TokenExchangeParams) => {
-    await decodeSessionToken(config)(sessionToken);
-
+    nonExpiringOfflineAccessToken,
+  }: MigrateToExpiringTokenParams) => {
     const body = {
       client_id: config.apiKey,
       client_secret: config.apiSecretKey,
       grant_type: TokenExchangeGrantType,
-      subject_token: sessionToken,
-      subject_token_type: IdTokenType,
-      requested_token_type: requestedTokenType,
-      expiring: expiring ? '1' : '0',
+      subject_token: nonExpiringOfflineAccessToken,
+      subject_token_type: RequestedTokenType.OfflineAccessToken,
+      requested_token_type: RequestedTokenType.OfflineAccessToken,
+      expiring: '1',
     };
 
     const cleanShop = sanitizeShop(config)(shop, true)!;

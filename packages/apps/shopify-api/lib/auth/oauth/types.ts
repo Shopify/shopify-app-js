@@ -53,6 +53,14 @@ export interface OfflineAccessInfo {
    * How long the access token is valid for, in seconds.
    */
   expires_in?: number;
+  /**
+   * The refresh token for the session.
+   */
+  refresh_token?: string;
+  /**
+   * How long the refresh token is valid for, in seconds.
+   */
+  refresh_token_expires_in?: number;
 }
 
 export interface OnlineAccessUser {
