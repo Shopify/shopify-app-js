@@ -69,7 +69,9 @@ describe('authorize.admin doc request path', () => {
       // So it doesn't detect this is the login path and throws a different error instead
       expect(response.status).toBe(500);
       const errorMessage = await response.text();
-      expect(errorMessage).toContain('Detected call to shopify.authenticate.admin() from configured login path');
+      expect(errorMessage).toContain(
+        'Detected call to shopify.authenticate.admin() from configured login path',
+      );
       expect(errorMessage).toContain('/auth/login');
     });
 
