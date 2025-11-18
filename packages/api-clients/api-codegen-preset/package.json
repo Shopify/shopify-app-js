@@ -74,7 +74,7 @@
     "graphql": "^16.10.0"
   },
   "devDependencies": {
-    "@babel/preset-env": "^7.28.0",
+    "@babel/preset-env": "^7.28.5",
     "@graphql-codegen/plugin-helpers": "^5.1.1",
     "@shopify/babel-preset": "^25.0.2",
     "graphql-config": "^5.1.5",
