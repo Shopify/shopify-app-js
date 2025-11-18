@@ -75,7 +75,6 @@ describe('authorize.admin path session token path', () => {
 
     // THEN
     // Should render the bounce page (AppBridge script) even though pathname doesn't exactly match config.auth.patchSessionTokenPath
-    // Currently FAILS because url.pathname="/base-path/auth/session-token" doesn't match config.auth.patchSessionTokenPath="/auth/session-token"
     expect(response.status).toBe(200);
     expectDocumentRequestHeaders(response, config.isEmbeddedApp);
     expect(response.headers.get('content-type')).toBe(
