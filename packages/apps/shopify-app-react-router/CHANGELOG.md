@@ -1,5 +1,14 @@
 # @shopify/shopify-app-react-router
 
+## 1.0.3
+
+### Patch Changes
+
+- f7e0d17: Resolve bug loading embedded app in POS when using React Router basename
+- Updated dependencies [98f1be9]
+  - @shopify/shopify-api@12.1.2
+  - @shopify/shopify-app-session-storage@4.0.3
+
 ## 1.0.2
 
 ### Patch Changes
