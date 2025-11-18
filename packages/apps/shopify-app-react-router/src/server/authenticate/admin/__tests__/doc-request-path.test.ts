@@ -65,8 +65,6 @@ describe('authorize.admin doc request path', () => {
 
       // THEN
       // SHOULD throw 500 error with helpful message
-      // Currently FAILS because pathname="/base-path/auth/login" doesn't match config.auth.loginPath="/auth/login"
-      // So it doesn't detect this is the login path and throws a different error instead
       expect(response.status).toBe(500);
       const errorMessage = await response.text();
       expect(errorMessage).toContain(
