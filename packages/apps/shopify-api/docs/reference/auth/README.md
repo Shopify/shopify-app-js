@@ -9,6 +9,7 @@ Learn more about [token exchange](../../guides/oauth.md#token-exchange).
 | Property                                        | Description                                                                                       |
 | ----------------------------------------------- | ------------------------------------------------------------------------------------------------- |
 | [tokenExchange](./tokenExchange.md)             | Performs token exchange to get access token from session token                                    |
+| [migrateToExpiringToken](./migrateToExpiringToken.md) | Exchanges a non-expiring offline access token for an expiring one                               |
 
 ## Authorization Code Grant Flow
 
@@ -19,6 +20,14 @@ Learn more about [authorization code grant flow](../../guides/oauth.md#authoriza
 | [begin](./begin.md)                             | Redirect the user to Shopify to request authorization for the app.                                |
 | [callback](./callback.md)                       | Receive Shopify's callback after the user approves the app installation.                          |
 | [nonce](./nonce.md)                             | Generates a random string of characters to be used as the state value for OAuth.                  |
+
+## Refresh Token
+
+Learn more about [Refreshing Token](../../guides/oauth.md#refreshing-token).
+
+| Property                                        | Description                                                                                       |
+| ----------------------------------------------- | ------------------------------------------------------------------------------------------------- |
+| [refreshToken](./refreshToken.md)               | Refreshes an access token using a refresh token                                                   |
 
 ## Client Credentials Grant
 
