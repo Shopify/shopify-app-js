@@ -14,6 +14,7 @@ import {
 } from '../../helpers';
 import {handleClientErrorFactory, triggerAfterAuthHook} from '../helpers';
 import {HandleAdminClientError} from '../../../clients';
+import {WITHIN_MILLISECONDS_OF_EXPIRY} from '../../../helpers';
 
 import {
   AuthorizationStrategy,
@@ -45,6 +46,7 @@ export const createTokenExchangeStrategy: AuthStrategyFactory<any> = <
         sessionToken,
         shop,
         requestedTokenType,
+        expiring: config.future.expiringOfflineAccessTokens,
       });
     } catch (error) {
       if (
@@ -91,7 +93,10 @@ export const createTokenExchangeStrategy: AuthStrategyFactory<any> = <
 
     if (!sessionToken) throw new InvalidJwtError();
 
-    if (!session || !session.isActive(undefined)) {
+    if (
+      !session ||
+      !session.isActive(undefined, WITHIN_MILLISECONDS_OF_EXPIRY)
+    ) {
       logger.info('No valid session found', {shop});
       logger.info('Requesting offline access token', {shop});
       const {session: offlineSession} = await exchangeToken({

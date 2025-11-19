@@ -1,15 +1,21 @@
 import {SessionStorage} from '@shopify/shopify-app-session-storage';
 import {MemorySessionStorage} from '@shopify/shopify-app-session-storage-memory';
+import {Session} from '@shopify/shopify-api';
 
 import {AppDistribution, shopifyApp} from '../../..';
 import {
+  API_KEY,
+  API_SECRET_KEY,
   expectAdminApiClient,
+  expectTokenRefresh,
   getHmac,
   getThrownResponse,
+  mockExternalRequest,
   setUpValidSession,
   TEST_SHOP,
   testConfig,
 } from '../../../__test-helpers';
+import {TestOverridesArg} from '../../../test-helpers/test-config';
 
 const FULFILLMENT_URL =
   'https://example.myapp.io/authenticate/fulfillment_order_notification';
@@ -131,11 +137,47 @@ const MERCHANT_CUSTOM_APP_CONFIG = {
         return {admin, expectedSession, actualSession};
       });
     });
+
+    describe('token refresh for expired offline sessions', () => {
+      expectTokenRefresh(
+        async (
+          sessionStorage: SessionStorage,
+          session: Session,
+          configOverrides: TestOverridesArg,
+        ) => {
+          const shopify = shopifyApp(
+            testConfig({
+              sessionStorage,
+              ...configOverrides,
+            }) as any,
+          );
+
+          const body = {kind: 'FULFILLMENT_REQUEST'};
+          const bodyString = JSON.stringify(body);
+
+          const request = new Request(FULFILLMENT_URL, {
+            method: 'POST',
+            body: bodyString,
+            headers: {
+              'X-Shopify-Hmac-Sha256': getHmac(bodyString),
+              'X-Shopify-Shop-Domain': session.shop,
+            },
+          });
+
+          const {session: actualSession} =
+            await shopify.authenticate.fulfillmentService(request);
+
+          return actualSession;
+        },
+      );
+    });
   });
 });
 
 async function getValidRequest(sessionStorage: SessionStorage) {
-  const session = await setUpValidSession(sessionStorage, {isOnline: false});
+  const session = await setUpValidSession(sessionStorage, {
+    isOnline: false,
+  });
 
   const body = {kind: 'FULFILLMENT_REQUEST'};
   const bodyString = JSON.stringify(body);

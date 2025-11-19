@@ -1,4 +1,4 @@
-import {createOrLoadOfflineSession} from '../../authenticate/helpers/create-or-load-offline-session';
+import {ensureValidOfflineSession} from '../../helpers';
 import {SessionNotFoundError} from '../../errors';
 import {BasicParams} from '../../types';
 import {adminClientFactory} from '../../clients/admin';
@@ -7,7 +7,7 @@ import {UnauthenticatedAdminContext} from './types';
 
 export function unauthenticatedAdminContextFactory(params: BasicParams) {
   return async (shop: string): Promise<UnauthenticatedAdminContext> => {
-    const session = await createOrLoadOfflineSession(shop, params);
+    const session = await ensureValidOfflineSession(params, shop);
 
     if (!session) {
       throw new SessionNotFoundError(
