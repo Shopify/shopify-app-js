@@ -1,8 +1,8 @@
-import {AppDistribution, BasicParams} from '../../types';
+import {AppDistribution, BasicParams} from '../types';
 
 export async function createOrLoadOfflineSession(
-  shop: string,
   {api, config, logger}: BasicParams,
+  shop: string,
 ) {
   if (config.distribution === AppDistribution.ShopifyAdmin) {
     logger.debug('Creating custom app session from configured access token', {

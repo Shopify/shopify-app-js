@@ -1,4 +1,5 @@
 import {adminClientFactory, storefrontClientFactory} from '../../../clients';
+import {ensureValidOfflineSession} from '../../../helpers';
 import {BasicParams} from '../../../types';
 
 import {
@@ -11,7 +12,7 @@ import {
 export function authenticateAppProxyFactory(
   params: BasicParams,
 ): AuthenticateAppProxy {
-  const {api, config, logger} = params;
+  const {logger} = params;
 
   return async function authenticate(
     request: Request,
@@ -28,8 +29,7 @@ export function authenticateAppProxyFactory(
       });
     }
 
-    const sessionId = api.session.getOfflineId(shop);
-    const session = await config.sessionStorage!.loadSession(sessionId);
+    const session = await ensureValidOfflineSession(params, shop);
 
     if (!session) {
       logger.debug('Could not find offline session, returning empty context', {
