@@ -57,7 +57,7 @@ const session = await sessionStorage.loadSession(sessionId);
 console.log('refresh token', session.refreshToken);
 console.log('refresh token expires', session.refreshTokenExpires);
 
-// Check if refresh token is available
+// Check if refreshToken is available
 if (session.refreshToken) {
   // Use refresh token to get a new access token
 }
