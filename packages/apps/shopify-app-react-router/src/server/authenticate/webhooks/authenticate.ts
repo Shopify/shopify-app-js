@@ -3,7 +3,7 @@ import {WebhookValidationErrorReason} from '@shopify/shopify-api';
 import type {BasicParams} from '../../types';
 import {adminClientFactory} from '../../clients';
 import {handleClientErrorFactory} from '../admin/helpers';
-import {createOrLoadOfflineSession} from '../helpers';
+import {ensureValidOfflineSession} from '../../helpers';
 
 import type {
   AuthenticateWebhook,
@@ -49,7 +49,7 @@ export function authenticateWebhookFactory<Topics extends string>(
         throw new Response(undefined, {status: 400, statusText: 'Bad Request'});
       }
     }
-    const session = await createOrLoadOfflineSession(check.domain, params);
+    const session = await ensureValidOfflineSession(params, check.domain);
     const webhookContext: WebhookContextWithoutSession<Topics> = {
       apiVersion: check.apiVersion,
       shop: check.domain,

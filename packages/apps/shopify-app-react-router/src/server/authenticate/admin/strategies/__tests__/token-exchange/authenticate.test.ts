@@ -297,7 +297,11 @@ describe('authenticate', () => {
     });
 
     const {token} = await getJwt();
-    await mockTokenExchangeRequest(token, 'offline');
+    await mockTokenExchangeRequest(
+      token,
+      'offline',
+      config.future.expiringOfflineAccessTokens,
+    );
 
     // WHEN
     const response = await getThrownResponse(
@@ -315,6 +319,7 @@ describe('authenticate', () => {
 async function mockTokenExchangeRequest(
   sessionToken: any,
   tokenType: 'online' | 'offline' = 'offline',
+  expiringOfflineAccessTokens = true,
 ) {
   const responseBody = {
     access_token: '123abc-exchanged-from-session-token',
@@ -334,6 +339,7 @@ async function mockTokenExchangeRequest(
           tokenType === 'offline'
             ? 'urn:shopify:params:oauth:token-type:offline-access-token'
             : 'urn:shopify:params:oauth:token-type:online-access-token',
+        expiring: expiringOfflineAccessTokens ? '1' : '0',
       }),
     }),
     response:
