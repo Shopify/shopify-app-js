@@ -47,10 +47,14 @@ export function createSession({
   };
 
   const getOfflineSessionProperties = (responseBody: OfflineAccessResponse) => {
-    const {expires_in} = responseBody;
+    const {expires_in, refresh_token, refresh_token_expires_in} = responseBody;
     return {
       id: getOfflineId(config)(shop),
       ...(expires_in && {expires: getSessionExpiration(expires_in)}),
+      ...(refresh_token && {refreshToken: refresh_token}),
+      ...(refresh_token_expires_in && {
+        refreshTokenExpires: getSessionExpiration(refresh_token_expires_in),
+      }),
     };
   };
 
