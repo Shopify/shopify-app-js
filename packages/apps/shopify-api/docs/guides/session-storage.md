@@ -29,6 +29,8 @@ The previous implementations of `SessionStorage` are now available in their own 
 |      scope       |      string      |     no     |
 |     expires      |       Date       |     no     |
 |   accessToken    |      string      |     no     |
+|   refreshToken   |      string      |     no     |
+| refreshTokenExpires |    Date       |     no     |
 | onlineAccessInfo | OnlineAccessInfo |     no     |
 
 > **Note** 1. These data are the same as the `SessionParams` object that's passed into the `Session` class constructor.
