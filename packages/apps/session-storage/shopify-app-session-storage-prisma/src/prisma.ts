@@ -1,7 +1,11 @@
 import {Session} from '@shopify/shopify-api';
 import {SessionStorage} from '@shopify/shopify-app-session-storage';
-import type {PrismaClient, Session as Row} from '@prisma/client';
-import {Prisma} from '@prisma/client';
+
+import {
+  Prisma,
+  type PrismaClient,
+  type Session as Row,
+} from '../prisma/generated/client';
 
 interface PrismaSessionStorageOptions {
   tableName?: string;
