@@ -33,9 +33,14 @@ You can then instantiate and use `PrismaSessionStorage` like so:
 ```js
 import {shopifyApp} from '@shopify/shopify-app-express';
 import {PrismaSessionStorage} from '@shopify/shopify-app-session-storage-prisma';
-import {PrismaClient} from '@prisma/client';
+import {PrismaBetterSqlite3} from '@prisma/adapter-better-sqlite3';
 
-const prisma = new PrismaClient();
+import {PrismaClient} from '../prisma/generated/client';
+
+const adapter = new PrismaBetterSqlite3({
+  url: process.env.DATABASE_URL,
+});
+const prisma = new PrismaClient({ adapter });
 const storage = new PrismaSessionStorage(prisma);
 
 const shopify = shopifyApp({
