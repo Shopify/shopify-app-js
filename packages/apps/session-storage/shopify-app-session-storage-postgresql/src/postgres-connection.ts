@@ -6,9 +6,15 @@ export class PostgresConnection implements RdbmsConnection {
   private ready: Promise<void>;
   private pool: pg.Pool;
   private dbUrl: URL;
+  private sslOptions?: pg.ConnectionConfig['ssl'];
 
-  constructor(dbUrl: string, sessionStorageIdentifier: string) {
+  constructor(
+    dbUrl: string,
+    sessionStorageIdentifier: string,
+    sslOptions?: pg.ConnectionConfig['ssl'],
+  ) {
     this.dbUrl = new URL(dbUrl);
+    this.sslOptions = sslOptions;
     this.ready = this.init();
     this.sessionStorageIdentifier = sessionStorageIdentifier;
   }
@@ -83,12 +89,19 @@ export class PostgresConnection implements RdbmsConnection {
   }
 
   private async init(): Promise<void> {
-    this.pool = new pg.Pool({
+    const poolConfig: pg.PoolConfig = {
       host: this.dbUrl.hostname,
       user: decodeURIComponent(this.dbUrl.username),
       password: decodeURIComponent(this.dbUrl.password),
       database: this.getDatabase(),
       port: Number(this.dbUrl.port),
-    });
+    };
+
+    // Add SSL configuration if provided
+    if (this.sslOptions) {
+      poolConfig.ssl = this.sslOptions;
+    }
+
+    this.pool = new pg.Pool(poolConfig);
   }
 }
