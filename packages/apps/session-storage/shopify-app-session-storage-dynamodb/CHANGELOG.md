@@ -1,5 +1,11 @@
 # @shopify/shopify-app-session-storage-dynamodb
 
+## 5.0.5
+
+## 5.0.4
+
+## 5.0.3
+
 ## 5.0.2
 
 ### Patch Changes

@@ -19,12 +19,6 @@ export enum ApiVersion {
   July25 = '2025-07',      // Your new version
   October25 = '2025-10',   // If adding a future RC version
 }
-
-// If this is the latest stable version, update LATEST_API_VERSION
-export const LATEST_API_VERSION = ApiVersion.July25;  // Update from previous
-
-// If adding a new RC version, update RELEASE_CANDIDATE_API_VERSION
-export const RELEASE_CANDIDATE_API_VERSION = ApiVersion.October25;  // Update from previous
 ```
 
 **Naming Convention:**

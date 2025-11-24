@@ -1,5 +1,39 @@
 # Changelog
 
+## 12.1.2
+
+### Patch Changes
+
+- 98f1be9: Add Web API and CF Worker adapter intialized constants for aggressive tree-shakers
+
+  For example with the web-api adapter:
+
+  ```ts
+  // Instead of just:
+  import '@shopify/shopify-api/adapters/web-api';
+
+  // You can now also import:
+  import {webApiAdapterInitialized} from '@shopify/shopify-api/adapters/web-api';
+  import {shopifyApi} from '@shopify/shopify-api';
+
+  // And check the adapter is initialized, which forces bundlers to keep the import
+  if (!webApiAdapterInitialized) {
+    throw new Error('Failed to initialize web API adapter');
+  }
+  ```
+
+## 12.1.1
+
+### Patch Changes
+
+- b3716f8: Add back in correctly removed REST resources
+
+## 12.1.0
+
+### Minor Changes
+
+- a6c4fed: Add 2025-10 REST resources
+
 ## 12.0.0
 
 ### Major Changes
