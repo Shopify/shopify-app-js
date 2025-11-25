@@ -3,8 +3,8 @@ import {execSync} from 'child_process';
 
 import {Session} from '@shopify/shopify-api';
 import {batteryOfTests} from '@shopify/shopify-app-session-storage-test-utils';
-import {Prisma, PrismaClient} from '@prisma/client';
 
+import {Prisma, PrismaClient} from '../../prisma/generate/client';
 import {
   MissingSessionStorageError,
   MissingSessionTableError,
