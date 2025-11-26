@@ -19,7 +19,7 @@
   "devDependencies": {
     "@changesets/cli": "^2.29.7",
     "@jest/types": "^29.6.3",
-    "@rollup/plugin-commonjs": "^28.0.6",
+    "@rollup/plugin-commonjs": "^28.0.8",
     "@rollup/plugin-node-resolve": "^16.0.3",
     "@rollup/plugin-replace": "^6.0.2",
     "@rollup/plugin-terser": "^0.4.0",
@@ -37,7 +37,7 @@
     "jest-runner-eslint": "^2.3.0",
     "prettier": "^3.6.2",
     "rimraf": "^6.0.1",
-    "rollup": "^4.52.4",
+    "rollup": "^4.52.5",
     "rollup-plugin-exclude-dependencies-from-bundle": "^1.1.24",
     "ts-jest": "^29.4.5",
     "tslib": "^2.8.1",
