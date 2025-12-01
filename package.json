@@ -36,7 +36,7 @@
     "jest-fetch-mock": "^3.0.3",
     "jest-runner-eslint": "^2.3.0",
     "prettier": "^3.6.2",
-    "rimraf": "^6.0.1",
+    "rimraf": "^6.1.0",
     "rollup": "^4.52.5",
     "rollup-plugin-exclude-dependencies-from-bundle": "^1.1.24",
     "ts-jest": "^29.4.5",
