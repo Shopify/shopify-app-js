@@ -87,7 +87,7 @@
   "devDependencies": {
     "@babel/preset-env": "^7.28.5",
     "@shopify/babel-preset": "^25.0.2",
-    "jest-environment-jsdom": "^30.0.4",
+    "jest-environment-jsdom": "^30.2.0",
     "rollup-plugin-dts": "^6.2.1"
   },
   "bugs": {
