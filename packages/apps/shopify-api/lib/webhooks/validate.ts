@@ -133,9 +133,6 @@ function checkWebhooksHeaders(
     webhookId: webhookId!,
   };
 
-  const subTopic = getHeader(headers, headerNames.subTopic);
-  if (subTopic) fields.subTopic = subTopic;
-
   const name = getHeader(headers, headerNames.name);
   if (name) fields.name = name;
 
