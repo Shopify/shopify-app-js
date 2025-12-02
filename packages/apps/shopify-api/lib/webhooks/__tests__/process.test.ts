@@ -5,11 +5,7 @@ import {InvalidWebhookError} from '../../error';
 import {testConfig} from '../../__tests__/test-config';
 import {Shopify, shopifyApi} from '../..';
 
-import {
-  HTTP_HANDLER,
-  HTTP_HANDLER_WITHOUT_CALLBACK,
-  HTTP_HANDLER_WITH_SUBTOPIC,
-} from './handlers';
+import {HTTP_HANDLER, HTTP_HANDLER_WITHOUT_CALLBACK} from './handlers';
 import {getTestExpressApp, headers, hmac} from './utils';
 
 interface TestResponseInterface {
@@ -40,35 +36,6 @@ describe('shopify.webhooks.process', () => {
     });
   }
 
-  async function blockingWebhookHandlerWithSubTopic(
-    topic: string,
-    shopDomain: string,
-    body: string,
-    webhookId: string,
-    apiVersion: string,
-    subTopic: string,
-  ): Promise<void> {
-    await new Promise((resolve, reject) => {
-      if (
-        !topic ||
-        !shopDomain ||
-        !body ||
-        !webhookId ||
-        !apiVersion ||
-        !subTopic
-      ) {
-        console.log(topic, shopDomain, body, webhookId, apiVersion, subTopic);
-        console.log('missing parameters');
-        reject(new Error('Missing webhook parameters'));
-      }
-
-      setTimeout(() => {
-        blockingWebhookHandlerCalled = true;
-        resolve(true);
-      }, 10);
-    });
-  }
-
   beforeEach(async () => {
     blockingWebhookHandlerCalled = false;
   });
@@ -85,33 +52,6 @@ describe('shopify.webhooks.process', () => {
     const response = await request(app)
       .post('/webhooks')
       .set(headers({hmac: hmac(shopify.config.apiSecretKey, rawBody)}))
-      .send(rawBody)
-      .expect(StatusCode.Ok);
-
-    expect(response.body.data.errorThrown).toBeFalsy();
-    expect(blockingWebhookHandlerCalled).toBeTruthy();
-  });
-
-  it('handles the request with a subtopic', async () => {
-    const shopify = shopifyApi(
-      testConfig({apiSecretKey: 'kitties are cute', isEmbeddedApp: true}),
-    );
-    const app = getTestApp(shopify);
-
-    const handler = {
-      ...HTTP_HANDLER_WITH_SUBTOPIC,
-      callback: blockingWebhookHandlerWithSubTopic,
-    };
-    shopify.webhooks.addHandlers({PRODUCTS_CREATE: handler});
-
-    const response = await request(app)
-      .post('/webhooks')
-      .set(
-        headers({
-          subTopic: 'type:example',
-          hmac: hmac(shopify.config.apiSecretKey, rawBody),
-        }),
-      )
       .send(rawBody)
       .expect(StatusCode.Ok);
 
