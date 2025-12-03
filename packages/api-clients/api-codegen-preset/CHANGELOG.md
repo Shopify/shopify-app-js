@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.2.1
+
+### Patch Changes
+
+- 62394e5: Fixed TypeScript module resolution error by including file extensions (.d.ts or .ts) in generated import paths to support Node16/NodeNext module resolution strategies.
+
 ## 1.2.0
 
 ### Minor Changes
