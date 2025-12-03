@@ -144,6 +144,7 @@ export class TokenExchangeStrategy<Config extends AppConfigArg>
         sessionToken,
         shop,
         requestedTokenType,
+        expiring: config.future.expiringOfflineAccessTokens,
       });
     } catch (error) {
       if (

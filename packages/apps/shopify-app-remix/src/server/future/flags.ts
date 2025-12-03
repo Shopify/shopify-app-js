@@ -14,12 +14,22 @@ export interface FutureFlags {
    * @default false
    */
   unstable_newEmbeddedAuthStrategy?: boolean;
+
+  /**
+   * When enabled, the app will start using expiring offline access tokens and automatically refresh them when they are close to expiring.
+   *
+   * @default false
+   */
+  expiringOfflineAccessTokens?: boolean;
 }
 
 // When adding new flags, use this format:
 // apiFutureFlag: Future extends FutureFlags ? Future['remixFutureFlag'] : false;
-export interface ApiFutureFlags<_Future extends FutureFlagOptions> {
+export interface ApiFutureFlags<Future extends FutureFlagOptions> {
   unstable_managedPricingSupport: true;
+  expiringOfflineAccessTokens: Future extends FutureFlags
+    ? Future['expiringOfflineAccessTokens']
+    : false;
 }
 
 export type ApiConfigWithFutureFlags<Future extends FutureFlagOptions> =
@@ -48,6 +58,13 @@ export function logDisabledFutureFlags(
       'unstable_newEmbeddedAuthStrategy',
       'Enable this to use OAuth token exchange instead of auth code to generate API access tokens.' +
         '\n  Your app must be using Shopify managed install: https://shopify.dev/docs/apps/auth/installation',
+    );
+  }
+
+  if (!config.future.expiringOfflineAccessTokens) {
+    logFlag(
+      'expiringOfflineAccessTokens',
+      'Enable this to start using expiring offline access tokens and automatically refresh them when they are close to expiring.',
     );
   }
 }

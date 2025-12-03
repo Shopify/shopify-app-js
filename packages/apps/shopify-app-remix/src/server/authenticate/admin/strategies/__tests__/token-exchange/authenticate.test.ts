@@ -334,6 +334,7 @@ async function mockTokenExchangeRequest(
           tokenType === 'offline'
             ? 'urn:shopify:params:oauth:token-type:offline-access-token'
             : 'urn:shopify:params:oauth:token-type:online-access-token',
+        expiring: '1',
       }),
     }),
     response:
