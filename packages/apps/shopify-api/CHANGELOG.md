@@ -1,5 +1,11 @@
 # Changelog
 
+## 12.1.3
+
+### Patch Changes
+
+- a6a13bf: Updated `lossless-json` dependencies
+
 ## 12.1.2
 
 ### Patch Changes
