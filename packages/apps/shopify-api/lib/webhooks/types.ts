@@ -14,7 +14,6 @@ export type WebhookHandlerFunction = (
   body: string,
   webhookId: string,
   apiVersion?: string,
-  subTopic?: string,
   context?: any,
 ) => Promise<void>;
 
@@ -22,7 +21,6 @@ interface BaseWebhookHandler {
   id?: string;
   includeFields?: string[];
   metafieldNamespaces?: string[];
-  subTopic?: string;
   context?: any;
 }
 
@@ -146,7 +144,6 @@ export interface WebhookFields {
   domain: string;
   hmac: string;
   topic: string;
-  subTopic?: string;
 }
 
 export interface WebhookValidationInvalid

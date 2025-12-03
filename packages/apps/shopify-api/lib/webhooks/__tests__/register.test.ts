@@ -20,12 +20,7 @@ import {Shopify, shopifyApi} from '../..';
 
 import * as mockResponses from './responses';
 import {MockResponse} from './responses';
-import {
-  EVENT_BRIDGE_HANDLER,
-  HTTP_HANDLER,
-  HTTP_HANDLER_WITH_SUBTOPIC,
-  PUB_SUB_HANDLER,
-} from './handlers';
+import {EVENT_BRIDGE_HANDLER, HTTP_HANDLER, PUB_SUB_HANDLER} from './handlers';
 
 interface RegisterTestWebhook {
   shopify: Shopify;
@@ -77,33 +72,7 @@ describe('shopify.webhooks.register', () => {
     assertRegisterResponse({registerReturn, topic, responses});
   });
 
-  it('sends a request with a subtopic', async () => {
-    const shopify = shopifyApi(testConfig());
-
-    const topic = 'METAOBJECTS_CREATE';
-    const handler = HTTP_HANDLER_WITH_SUBTOPIC;
-    const responses = [mockResponses.successResponse];
-
-    const registerReturn = await registerWebhook({
-      shopify,
-      topic,
-      handler,
-      responses,
-    });
-
-    assertWebhookRegistrationRequest(
-      shopify.config.apiVersion,
-      'webhookSubscriptionCreate',
-      `topic: ${topic}`,
-      {
-        callbackUrl: `"https://test_host_name/webhooks"`,
-      },
-      `subTopic: "${handler.subTopic}",`,
-    );
-    assertRegisterResponse({registerReturn, topic, responses});
-  });
-
-  it('returns a result with success set to false, body set to empty object, when the server doesn’t return a webhookSubscriptionCreate field', async () => {
+  it("returns a result with success set to false, body set to empty object, when the server doesn't return a webhookSubscriptionCreate field", async () => {
     const shopify = shopifyApi(testConfig());
 
     const topic = 'PRODUCTS_CREATE';
@@ -566,19 +535,16 @@ function assertWebhookRegistrationRequest(
   mutationName: string,
   identifier: string,
   mutationParams: MutationParams = {},
-  subTopic?: string,
 ) {
   const paramsString = Object.entries(mutationParams)
     .map(([key, value]) => `${key}: ${value}`)
     .join(', ');
 
-  const subTopicString = subTopic || '';
-
   const webhookQuery = queryTemplate(TEMPLATE_MUTATION, {
     MUTATION_NAME: mutationName,
     IDENTIFIER: identifier,
     MUTATION_PARAMS: paramsString.length
-      ? `${subTopicString}webhookSubscription: {${paramsString}}`
+      ? `webhookSubscription: {${paramsString}}`
       : '',
   });
 
