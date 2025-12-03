@@ -42,6 +42,10 @@ export const createTokenExchangeStrategy: AuthStrategyFactory<any> = <
     requestedTokenType: RequestedTokenType;
   }): Promise<{session: Session}> {
     try {
+      console.log(
+        'config.future.expiringOfflineAccessTokens',
+        config.future.expiringOfflineAccessTokens,
+      );
       return await api.auth.tokenExchange({
         sessionToken,
         shop,
