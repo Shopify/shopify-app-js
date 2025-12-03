@@ -1,15 +1,18 @@
 import {Session} from '@shopify/shopify-api';
 import {MemorySessionStorage} from '@shopify/shopify-app-session-storage-memory';
+import {SessionStorage} from '@shopify/shopify-app-session-storage';
 
 import {shopifyApp} from '../../..';
 import {
   APP_URL,
   TEST_SHOP,
   expectAdminApiClient,
+  expectTokenRefresh,
   getHmac,
   getThrownResponse,
   testConfig,
 } from '../../../__test-helpers';
+import {TestOverridesArg} from '../../../test-helpers/test-config';
 
 interface WebhookHeaders {
   [key: string]: string;
@@ -165,6 +168,41 @@ describe('Webhook validation', () => {
 
     // THEN
     expect(response.status).toBe(405);
+  });
+
+  describe('Offline token expiration handling', () => {
+    expectTokenRefresh(
+      async (
+        sessionStorage: SessionStorage,
+        session: Session,
+        configOverrides: TestOverridesArg,
+      ) => {
+        const shopify = shopifyApp(
+          testConfig({
+            sessionStorage,
+            ...configOverrides,
+          }) as any,
+        );
+
+        const body = {some: 'data'};
+        const bodyString = JSON.stringify(body);
+
+        const request = new Request(`${APP_URL}/webhooks`, {
+          method: 'POST',
+          body: bodyString,
+          headers: webhookHeaders(bodyString),
+        });
+
+        const {session: actualSession} =
+          await shopify.authenticate.webhook(request);
+
+        if (!actualSession) {
+          throw new Error('No session returned from webhook authentication');
+        }
+
+        return actualSession;
+      },
+    );
   });
 });
 
