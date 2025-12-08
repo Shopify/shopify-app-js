@@ -170,10 +170,48 @@ describe('authorize.admin auth callback path', () => {
     });
 
     describe('Success states', () => {
-      test('Exchanges the code for a token and saves it to SessionStorage', async () => {
+      test('exchanges token successfully when expiringOfflineAccessTokens is enabled', async () => {
         // GIVEN
         const config = testConfig({
-          future: {unstable_newEmbeddedAuthStrategy: !isEmbeddedApp},
+          future: {
+            unstable_newEmbeddedAuthStrategy: !isEmbeddedApp,
+            expiringOfflineAccessTokens: true,
+          },
+          isEmbeddedApp,
+        });
+        const shopify = shopifyApp(config);
+
+        // WHEN
+        await mockCodeExchangeRequest('offline', true);
+        await getThrownResponse(
+          shopify.authenticate.admin,
+          await getValidCallbackRequest(config),
+        );
+
+        // THEN
+        const [session] =
+          await config.sessionStorage!.findSessionsByShop(TEST_SHOP);
+
+        expect(session).toMatchObject({
+          accessToken: '123abc',
+          expires: expect.any(Date),
+          id: `offline_${TEST_SHOP}`,
+          isOnline: false,
+          scope: 'read_products',
+          shop: TEST_SHOP,
+          state: 'nonce',
+          refreshToken: '123abc',
+          refreshTokenExpires: expect.any(Date),
+        });
+      });
+
+      test('exchanges token successfully when expiringOfflineAccessTokens is disabled', async () => {
+        // GIVEN
+        const config = testConfig({
+          future: {
+            unstable_newEmbeddedAuthStrategy: !isEmbeddedApp,
+            expiringOfflineAccessTokens: false,
+          },
           isEmbeddedApp,
         });
         const shopify = shopifyApp(config);
@@ -189,14 +227,8 @@ describe('authorize.admin auth callback path', () => {
         const [session] =
           await config.sessionStorage!.findSessionsByShop(TEST_SHOP);
 
-        expect(session).toMatchObject({
-          accessToken: '123abc',
-          id: `offline_${TEST_SHOP}`,
-          isOnline: false,
-          scope: 'read_products',
-          shop: TEST_SHOP,
-          state: 'nonce',
-        });
+        expect(session).toBeDefined();
+        expect(session.accessToken).toBe('123abc');
       });
 
       test('throws an 302 Response to begin auth if token was offline and useOnlineTokens is true', async () => {
@@ -300,11 +332,14 @@ describe('authorize.admin auth callback path', () => {
           // GIVEN
           const config = testConfig({
             isEmbeddedApp: false,
+            future: {
+              expiringOfflineAccessTokens: false,
+            },
           });
           const shopify = shopifyApp(config);
 
           // WHEN
-          await mockCodeExchangeRequest('offline');
+          await mockCodeExchangeRequest('offline', false);
           const request = await getValidCallbackRequest(config);
           const response = await getThrownResponse(
             shopify.authenticate.admin,
@@ -387,10 +422,18 @@ async function getValidCallbackRequest(config: ReturnType<typeof testConfig>) {
 
 async function mockCodeExchangeRequest(
   tokenType: 'online' | 'offline' = 'offline',
+  expiring = true,
 ) {
   const responseBody = {
     access_token: '123abc',
     scope: 'read_products',
+    ...(tokenType === 'offline' && expiring
+      ? {
+          expires_in: Math.trunc(Date.now() / 1000) + 3600,
+          refresh_token: '123abc',
+          refresh_token_expires_in: Math.trunc(Date.now() / 1000) + 3600,
+        }
+      : {}),
   };
 
   await mockExternalRequest({
