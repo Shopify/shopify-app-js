@@ -20,6 +20,7 @@ import {
 } from './types';
 import {topicForStorage} from './registry';
 
+// All webhook headers listed below are required - missing any will result in validation failure
 const HANDLER_PROPERTIES = {
   apiVersion: ShopifyHeader.ApiVersion,
   domain: ShopifyHeader.Domain,
