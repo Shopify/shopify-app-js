@@ -11,7 +11,7 @@ import {
 export function shopifyUtils(config: ConfigInterface) {
   return {
     sanitizeShop: sanitizeShop(config),
-    sanitizeHost: sanitizeHost(),
+    sanitizeHost: sanitizeHost(config),
     validateHmac: validateHmac(config),
     versionCompatible: versionCompatible(config),
     versionPriorTo: versionPriorTo(config),
