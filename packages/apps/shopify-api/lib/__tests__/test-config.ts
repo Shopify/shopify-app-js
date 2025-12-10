@@ -68,7 +68,6 @@ const TEST_CONFIG = {
   apiVersion: ApiVersion.July25,
   isEmbeddedApp: false,
   isCustomStoreApp: false,
-  customShopDomains: undefined,
   billing: undefined,
   restResources: undefined,
   logger: {
