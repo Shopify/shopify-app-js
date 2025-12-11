@@ -21,6 +21,8 @@ model Session {
   locale        String?
   collaborator  Boolean?
   emailVerified Boolean?
+  refreshToken  String?
+  refreshTokenExpires DateTime?
 }
 ```
 

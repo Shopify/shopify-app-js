@@ -53,6 +53,8 @@ describe('createSession', () => {
           access_token: 'some access token string',
           scope: scopes,
           expires_in: 525600,
+          refresh_token: 'some refresh token',
+          refresh_token_expires_in: 2592000,
         };
 
         const session = createSession({
@@ -72,6 +74,10 @@ describe('createSession', () => {
             scope: accessTokenResponse.scope,
             expires: new Date(
               Date.now() + accessTokenResponse.expires_in * 1000,
+            ),
+            refreshToken: accessTokenResponse.refresh_token,
+            refreshTokenExpires: new Date(
+              Date.now() + accessTokenResponse.refresh_token_expires_in * 1000,
             ),
           }),
         );

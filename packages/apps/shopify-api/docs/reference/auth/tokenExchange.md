@@ -22,6 +22,7 @@ app.get('/auth', async (req, res) => {
     sessionToken,
     shop,
     requestedTokenType: RequestedTokenType.OfflineAccessToken, // or RequestedTokenType.OnlineAccessToken
+    expiring: true, // Optional, defaults to false
   });
 });
 
@@ -75,6 +76,12 @@ A Shopify domain name in the form `{exampleshop}.myshopify.com`.
 
 - `RequestedTokenType.OnlineAccessToken` - Learn more about [online tokens](https://shopify.dev/docs/apps/auth/access-token-types/online.md)
 - `RequestedTokenType.OfflineAccessToken` - Learn more about [offline tokens](https://shopify.dev/docs/apps/auth/access-token-types/offline.md)
+
+### expiring
+
+`boolean` | optional
+
+Whether the requested access token should be expiring. If `true`, the response will include an expiring access token and a refresh token. Defaults to `false`.
 
 ## Return
 
