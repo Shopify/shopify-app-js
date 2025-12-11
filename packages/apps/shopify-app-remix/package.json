@@ -81,9 +81,9 @@
   ],
   "devDependencies": {
     "@babel/preset-env": "^7.28.5",
-    "@remix-run/node": "^2.16.8",
-    "@remix-run/react": "^2.16.8",
-    "@remix-run/testing": "^2.16.8",
+    "@remix-run/node": "^2.17.2",
+    "@remix-run/react": "^2.17.2",
+    "@remix-run/testing": "^2.17.2",
     "@shopify/generate-docs": "^0.19.8",
     "@shopify/polaris": "^12.18.0",
     "@shopify/react-testing": "^6.0.0",
@@ -92,7 +92,7 @@
     "jest-fetch-mock": "^3.0.3"
   },
   "dependencies": {
-    "@remix-run/server-runtime": "^2.16.8",
+    "@remix-run/server-runtime": "^2.17.2",
     "@shopify/admin-api-client": "^1.1.1",
     "@shopify/shopify-api": "^12.2.0",
     "@shopify/shopify-app-session-storage": "^4.0.4",
