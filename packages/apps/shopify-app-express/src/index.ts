@@ -116,9 +116,6 @@ function apiConfigWithDefaults<Params extends Partial<ApiConfigParams>>(
     hostScheme: (process.env.HOST?.split('://')[0] as 'http' | 'https')!,
     hostName: process.env.HOST?.replace(/https?:\/\//, '')!,
     isEmbeddedApp: true,
-    ...(process.env.SHOP_CUSTOM_DOMAIN && {
-      customShopDomains: [process.env.SHOP_CUSTOM_DOMAIN],
-    }),
     ...(apiConfig || {}),
     userAgentPrefix: userAgent,
   } as DefaultedConfigs<Params>;

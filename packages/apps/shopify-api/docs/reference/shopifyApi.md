@@ -108,6 +108,56 @@ Fixed Storefront API access token for private apps.
 
 Use this if you need to allow values other than `myshopify.com`.
 
+### domainTransformations
+
+`DomainTransformation[]` | Defaults to `undefined`
+
+Configure domain transformations for split-domain architectures (e.g., separate admin and API domains). Useful for local development environments.
+
+Each transformation can use either template strings with capture groups (`$1`, `$2`, etc.) or custom functions for complex logic.
+
+**Template string example:**
+
+```ts
+domainTransformations: [
+  {
+    match: /^([a-zA-Z0-9][a-zA-Z0-9-_]*)\.my\.shop\.dev$/,
+    transform: '$1.dev-api.shop.dev',
+  },
+];
+```
+
+**Function-based example:**
+
+```ts
+domainTransformations: [
+  {
+    match: /^([a-zA-Z0-9-_]+)\.admin\.example\.com$/,
+    transform: (matches) => {
+      const shopName = matches[1];
+      return shopName.startsWith('test-')
+        ? `${shopName}.api-staging.example.com`
+        : `${shopName}.api.example.com`;
+    },
+  },
+];
+```
+
+**Interface:**
+
+```ts
+interface DomainTransformation {
+  // Pattern to match source domain
+  match: RegExp | string;
+
+  // Transformation: function or template string with $1, $2 capture groups
+  transform: ((matches: RegExpMatchArray) => string | null) | string;
+
+  // Whether to include transformed domains in host validation (default: true)
+  includeHost?: boolean;
+}
+```
+
 ### billing
 
 `BillingConfig` | Defaults to `undefined`
@@ -164,17 +214,17 @@ Whether to add the current timestamp to every logged message.
 
 This function returns an object containing the following properties:
 
-| Property                            | Description                                                                                                                                             |
-| ----------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| config                              | The options used to set up the object, containing the parameters of this function.                                                                      |
-| [auth](./auth/README.md)            | Object containing functions to authenticate with Shopify APIs.                                                                                          |
-| [clients](./clients/README.md)      | Object containing clients to access Shopify APIs.                                                                                                       |
-| [session](./session/README.md)      | Object containing functions to manage Shopify sessions.                                                                                                 |
-| [webhooks](./webhooks/README.md)    | Object containing functions to configure and handle Shopify webhooks.                                                                                   |
-| [billing](./billing/README.md)      | Object containing functions to enable apps to bill merchants.                                                                                           |
-| [flow](./flow/README.md)            | Object containing functions to authenticate Flow extension requests.
-| [fulfillment service](./fulfillment-service/README.md)            | Object containing functions to authenticate and create fulfillment service requests.                                                                                |
-| [utils](./utils/README.md)          | Object containing general functions to help build apps.                                                                                                 |
-| [rest](../guides/rest-resources.md) | Object containing OO representations of the Admin REST API. See the [API reference documentation](https://shopify.dev/docs/api/admin-rest) for details. |
+| Property                                               | Description                                                                                                                                             |
+| ------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| config                                                 | The options used to set up the object, containing the parameters of this function.                                                                      |
+| [auth](./auth/README.md)                               | Object containing functions to authenticate with Shopify APIs.                                                                                          |
+| [clients](./clients/README.md)                         | Object containing clients to access Shopify APIs.                                                                                                       |
+| [session](./session/README.md)                         | Object containing functions to manage Shopify sessions.                                                                                                 |
+| [webhooks](./webhooks/README.md)                       | Object containing functions to configure and handle Shopify webhooks.                                                                                   |
+| [billing](./billing/README.md)                         | Object containing functions to enable apps to bill merchants.                                                                                           |
+| [flow](./flow/README.md)                               | Object containing functions to authenticate Flow extension requests.                                                                                    |
+| [fulfillment service](./fulfillment-service/README.md) | Object containing functions to authenticate and create fulfillment service requests.                                                                    |
+| [utils](./utils/README.md)                             | Object containing general functions to help build apps.                                                                                                 |
+| [rest](../guides/rest-resources.md)                    | Object containing OO representations of the Admin REST API. See the [API reference documentation](https://shopify.dev/docs/api/admin-rest) for details. |
 
 [Back to reference index](./README.md)
