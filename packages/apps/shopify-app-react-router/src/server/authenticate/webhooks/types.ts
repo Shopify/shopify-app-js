@@ -111,26 +111,6 @@ interface Context<Topics = string | number | symbol> {
    * ```
    */
   payload: Record<string, any>;
-
-  /**
-   * The sub-topic of the webhook. This is only available for certain webhooks.
-   *
-   * @example
-   * <caption>Webhook sub-topic.</caption>
-   * <description>Get the webhook sub-topic.</description>
-   * ```ts
-   * // /app/routes/webhooks.tsx
-   * import { ActionFunctionArgs } from "react-router";
-   * import { authenticate } from "../shopify.server";
-   *
-   * export const action = async ({ request }: ActionFunctionArgs) => {
-   *   const { subTopic } = await authenticate.webhook(request);
-   *   return new Response();
-   * };
-   * ```
-   *
-   */
-  subTopic?: string;
 }
 
 export interface WebhookContextWithoutSession<Topics = string | number | symbol>
