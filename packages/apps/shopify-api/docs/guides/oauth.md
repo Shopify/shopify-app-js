@@ -104,6 +104,42 @@ To perform [Client Credentials Grant](https://shopify.dev/beta/developer-dashboa
 3. Use the obtained access token to make authenticated API queries, see [After OAuth](#after-oauth)
 
 
+## Expiring Access Tokens
+
+Expiring offline access tokens have a limited lifetime. When they expire, your app must refresh them to continue making API calls.
+
+### Offline Tokens
+
+Traditionally, offline access tokens did not expire. However, Shopify is moving towards expiring offline access tokens for better security.
+
+#### Migrating to Expiring Offline Tokens
+
+If you have existing non-expiring offline tokens, you can migrate them to expiring tokens using [`shopify.auth.migrateToExpiringToken`](../reference/auth/migrateToExpiringToken.md).
+
+```ts
+const response = await shopify.auth.migrateToExpiringToken({
+  shop: 'my-shop.myshopify.com',
+  nonExpiringOfflineAccessToken: 'existing-offline-token',
+});
+
+const {session} = response;
+// Save the new session which now contains an expiring access token and a refresh token
+```
+
+#### Refreshing Tokens
+
+When a token expires (or is about to), you can use the refresh token stored in the session to obtain a new access token using [`shopify.auth.refreshToken`](../reference/auth/refreshToken.md).
+
+```ts
+const response = await shopify.auth.refreshToken({
+  shop: 'my-shop.myshopify.com',
+  refreshToken: 'refresh-token-from-session',
+});
+
+const {session} = response;
+// Use the new session with updated access token and (potentially) new refresh token
+```
+
 ## After OAuth
 
 Once you complete the OAuth process, you'll be able to call [shopify.session.getCurrentId](../reference/session/getCurrentId.md) to fetch your session, and create API clients.

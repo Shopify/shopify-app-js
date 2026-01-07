@@ -4,6 +4,7 @@ import {
   setUpValidSession,
   testConfig,
   expectStorefrontApiClient,
+  expectTokenRefresh,
   setupValidCustomAppSession,
 } from '../../../__test-helpers';
 
@@ -27,6 +28,20 @@ describe('unauthenticated storefront context', () => {
       await shopify.unauthenticated.storefront(TEST_SHOP);
 
     return {storefront, expectedSession, actualSession};
+  });
+
+  expectTokenRefresh(async (sessionStorage, session, configOverrides) => {
+    const shopify = shopifyApp(
+      testConfig({
+        sessionStorage,
+        ...configOverrides,
+      }) as any,
+    );
+    await shopify.sessionStorage!.storeSession(session);
+
+    const {session: actualSession} =
+      await shopify.unauthenticated.storefront(TEST_SHOP);
+    return actualSession;
   });
 });
 

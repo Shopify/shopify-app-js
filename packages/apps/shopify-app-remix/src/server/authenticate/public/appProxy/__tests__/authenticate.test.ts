@@ -1,4 +1,6 @@
 import {createSHA256HMAC, HashFormat} from '@shopify/shopify-api/runtime';
+import {Session} from '@shopify/shopify-api';
+import {SessionStorage} from '@shopify/shopify-app-session-storage';
 
 import {shopifyApp} from '../../../..';
 import {
@@ -7,10 +9,12 @@ import {
   TEST_SHOP,
   expectAdminApiClient,
   expectStorefrontApiClient,
+  expectTokenRefresh,
   getThrownResponse,
   setUpValidSession,
   testConfig,
 } from '../../../../__test-helpers';
+import {TestOverridesArg} from '../../../../test-helpers/test-config';
 
 describe('authenticating app proxy requests', () => {
   it('Throws a 400 response if there is no signature param', async () => {
@@ -346,6 +350,36 @@ describe('authenticating app proxy requests', () => {
 
       return {storefront, expectedSession, actualSession};
     });
+  });
+
+  describe('Valid requests with expired offline session', () => {
+    expectTokenRefresh(
+      async (
+        sessionStorage: SessionStorage,
+        session: Session,
+        configOverrides: TestOverridesArg,
+      ) => {
+        const shopify = shopifyApp(
+          testConfig({
+            sessionStorage,
+            ...configOverrides,
+          }) as any,
+        );
+
+        const url = new URL(APP_URL);
+        url.searchParams.set('shop', session.shop);
+        url.searchParams.set('timestamp', secondsInPast(1));
+        url.searchParams.set('signature', await createAppProxyHmac(url));
+        const request = new Request(url.toString());
+
+        const context = await shopify.authenticate.public.appProxy(request);
+
+        if (!context.session) {
+          throw new Error('No session returned from app proxy authentication');
+        }
+        return context.session;
+      },
+    );
   });
 });
 
