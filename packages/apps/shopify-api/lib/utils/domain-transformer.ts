@@ -1,0 +1,106 @@
+import {ConfigInterface} from '../base-types';
+import {DomainTransformation} from '../types';
+
+/**
+ * Applies configured domain transformations to a shop URL.
+ * Returns transformed domain or original if no transformation matches.
+ *
+ * @param shopUrl - The shop URL to transform
+ * @param config - Configuration object containing domain transformations
+ * @returns Transformed shop URL or original if no transformation matches
+ *
+ * @example
+ * const config = {
+ *   domainTransformations: [{
+ *     match: /^([a-zA-Z0-9-_]+)\.my\.shop\.dev$/,
+ *     transform: '$1.dev-api.shop.dev'
+ *   }]
+ * };
+ * applyDomainTransformations('shop1.my.shop.dev', config);
+ * // Returns: 'shop1.dev-api.shop.dev'
+ */
+export function applyDomainTransformations(
+  shopUrl: string,
+  config: ConfigInterface,
+): string | null {
+  if (
+    !config.domainTransformations ||
+    config.domainTransformations.length === 0
+  ) {
+    return shopUrl;
+  }
+
+  for (const transformation of config.domainTransformations) {
+    const regex =
+      typeof transformation.match === 'string'
+        ? new RegExp(transformation.match)
+        : transformation.match;
+
+    const matches = shopUrl.match(regex);
+
+    if (!matches) {
+      continue;
+    }
+
+    if (typeof transformation.transform === 'function') {
+      return transformation.transform(matches);
+    }
+
+    let result = transformation.transform;
+    matches.forEach((match, index) => {
+      result = result.replace(new RegExp(`\\$${index}`, 'g'), match || '');
+    });
+
+    return result;
+  }
+
+  return shopUrl;
+}
+
+/**
+ * Extracts all domains (source and target) from transformations for validation.
+ * Uses heuristics to extract domain patterns from regex source.
+ *
+ * @param transformations - Array of domain transformations
+ * @returns Array of domain regex patterns
+ *
+ * @example
+ * const transformations = [{
+ *   match: /^([a-zA-Z0-9-_]+)\.my\.shop\.dev$/,
+ *   transform: '$1.dev-api.shop.dev'
+ * }];
+ * getTransformationDomains(transformations);
+ * // Returns: ['my\\.shop\\.dev', 'dev-api\\.shop\\.dev']
+ */
+export function getTransformationDomains(
+  transformations: DomainTransformation[],
+): string[] {
+  const domains: string[] = [];
+
+  for (const transformation of transformations) {
+    const regex =
+      typeof transformation.match === 'string'
+        ? new RegExp(transformation.match)
+        : transformation.match;
+
+    const domainPattern = regex.source.match(/\\\.([\\.\w-]+)\$?$/);
+
+    if (domainPattern) {
+      domains.push(domainPattern[1]);
+    }
+
+    if (typeof transformation.transform !== 'string') {
+      continue;
+    }
+
+    const templateDomainMatch =
+      transformation.transform.match(/\$\d+\.([.\w-]+)$/);
+
+    if (templateDomainMatch) {
+      const escapedDomain = templateDomainMatch[1].replace(/\./g, '\\.');
+      domains.push(escapedDomain);
+    }
+  }
+
+  return domains;
+}

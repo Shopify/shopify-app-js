@@ -45,7 +45,7 @@ export function buildEmbeddedAppUrl(
   config: ConfigInterface,
 ): BuildEmbeddedAppUrl {
   return (host: string): string => {
-    sanitizeHost()(host, true);
+    sanitizeHost(config)(host, true);
     const decodedHost = decodeHost(host);
 
     return `https://${decodedHost}/apps/${config.apiKey}`;
