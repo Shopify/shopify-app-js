@@ -1,5 +1,15 @@
 # @shopify/shopify-app-react-router
 
+## 1.1.1
+
+### Patch Changes
+
+- 60dc5ce: Updated `isbot` dependencies
+- Updated dependencies [60dc5ce]
+- Updated dependencies [0fa5ef7]
+  - @shopify/shopify-api@12.3.0
+  - @shopify/shopify-app-session-storage@4.0.5
+
 ## 1.1.0
 
 ### Minor Changes

@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.2.2
+
+### Patch Changes
+
+- b69d09f: bump @graphql-codegen/typescript from 4.1.6 to 5.0.1
+
 ## 1.2.1
 
 ### Patch Changes

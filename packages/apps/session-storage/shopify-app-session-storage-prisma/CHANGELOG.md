@@ -1,5 +1,7 @@
 # @shopify/shopify-app-session-storage-prisma
 
+## 8.0.1
+
 ## 8.0.0
 
 ### Major Changes
