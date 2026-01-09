@@ -191,6 +191,7 @@ export class AuthCodeFlowStrategy<Config extends AppConfigArg>
     try {
       const {session, headers: responseHeaders} = await api.auth.callback({
         rawRequest: request,
+        expiring: config.future.expiringOfflineAccessTokens,
       });
 
       await config.sessionStorage!.storeSession(session);

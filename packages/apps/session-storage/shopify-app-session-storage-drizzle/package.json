@@ -1,6 +1,6 @@
 {
   "name": "@shopify/shopify-app-session-storage-drizzle",
-  "version": "3.0.3",
+  "version": "3.0.4",
   "description": "Shopify App Session Storage for Drizzle",
   "repository": {
     "type": "git",
@@ -53,13 +53,13 @@
   },
   "devDependencies": {
     "@libsql/client": "^0.15.15",
-    "@shopify/shopify-app-session-storage-test-utils": "^4.0.3",
+    "@shopify/shopify-app-session-storage-test-utils": "^4.0.4",
     "@types/better-sqlite3": "^7.6.13",
     "@types/pg": "^8.15.6",
     "better-sqlite3": "^12.4.1",
     "drizzle-kit": "^0.31.7",
     "drizzle-orm": "^0.44.7",
-    "mysql2": "^3.14.2",
+    "mysql2": "^3.15.3",
     "pg": "^8.16.3"
   },
   "files": [
