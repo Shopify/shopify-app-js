@@ -14,11 +14,20 @@ export interface FutureFlags {
    * @default false
    */
   unstable_newEmbeddedAuthStrategy?: boolean;
+  /**
+   * When enabled, the app will start using expiring offline access tokens and automatically refresh them when they are close to expiring.
+   *
+   * @default false
+   */
+  expiringOfflineAccessTokens?: boolean;
 }
 
 // When adding new flags, use this format:
 // apiFutureFlag: Future extends FutureFlags ? Future['remixFutureFlag'] : false;
-export interface ApiFutureFlags<_Future extends FutureFlagOptions> {
+export interface ApiFutureFlags<Future extends FutureFlagOptions> {
+  expiringOfflineAccessTokens: Future extends FutureFlags
+    ? Future['expiringOfflineAccessTokens']
+    : false;
   unstable_managedPricingSupport: true;
 }
 

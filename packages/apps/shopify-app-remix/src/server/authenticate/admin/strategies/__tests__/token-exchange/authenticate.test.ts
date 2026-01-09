@@ -310,11 +310,42 @@ describe('authenticate', () => {
     // THEN
     expect(response).toBe(redirectResponse);
   });
+
+  test('passes expiring flag to token exchange when feature flag is enabled', async () => {
+    // GIVEN
+    const config = testConfig();
+    const shopify = shopifyApp(config);
+
+    const {token} = await getJwt();
+    await mockTokenExchangeRequest(
+      token,
+      'offline',
+      config.future.expiringOfflineAccessTokens,
+    );
+
+    // WHEN
+    const {session} = await shopify.authenticate.admin(
+      new Request(
+        `${APP_URL}?embedded=1&shop=${TEST_SHOP}&host=${BASE64_HOST}&id_token=${token}`,
+      ),
+    );
+
+    // THEN
+    const [persistedSession] =
+      await config.sessionStorage.findSessionsByShop(TEST_SHOP);
+
+    expect(persistedSession).toBeDefined();
+    expect(persistedSession).toEqual(session);
+    expect(persistedSession.accessToken).toBe(
+      '123abc-exchanged-from-session-token',
+    );
+  });
 });
 
 async function mockTokenExchangeRequest(
   sessionToken: any,
   tokenType: 'online' | 'offline' = 'offline',
+  expiringOfflineAccessTokens = true,
 ) {
   const responseBody = {
     access_token: '123abc-exchanged-from-session-token',
@@ -334,6 +365,7 @@ async function mockTokenExchangeRequest(
           tokenType === 'offline'
             ? 'urn:shopify:params:oauth:token-type:offline-access-token'
             : 'urn:shopify:params:oauth:token-type:online-access-token',
+        expiring: expiringOfflineAccessTokens ? '1' : '0',
       }),
     }),
     response:

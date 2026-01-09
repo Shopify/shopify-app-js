@@ -26,7 +26,13 @@ export interface BeginParams extends AdapterArgs {
   isOnline: boolean;
 }
 
-export interface CallbackParams extends AdapterArgs {}
+export interface CallbackParams extends AdapterArgs {
+  /**
+   * Whether the access token should be expiring. Defaults to false.
+   * Learn more about [Expiring Access Tokens](https://shopify.dev/docs/apps/auth/oauth/access-modes#expiring-access-tokens).
+   */
+  expiring?: boolean;
+}
 
 export interface AccessTokenResponse {
   access_token: string;
@@ -53,6 +59,14 @@ export interface OfflineAccessInfo {
    * How long the access token is valid for, in seconds.
    */
   expires_in?: number;
+  /**
+   * The refresh token for the session.
+   */
+  refresh_token?: string;
+  /**
+   * How long the refresh token is valid for, in seconds.
+   */
+  refresh_token_expires_in?: number;
 }
 
 export interface OnlineAccessUser {
