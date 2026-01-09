@@ -537,8 +537,8 @@ importers:
   packages/apps/shopify-app-remix:
     dependencies:
       '@remix-run/server-runtime':
-        specifier: ^2.17.2
-        version: 2.17.2(typescript@5.9.3)
+        specifier: ^2.17.3
+        version: 2.17.3(typescript@5.9.3)
       '@shopify/admin-api-client':
         specifier: ^1.1.1
         version: link:../../api-clients/admin-api-client
