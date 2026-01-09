@@ -188,7 +188,7 @@ importers:
   packages/apps/session-storage/shopify-app-session-storage:
     devDependencies:
       '@shopify/shopify-api':
-        specifier: ^12.1.2
+        specifier: ^12.2.0
         version: link:../../shopify-api
 
   packages/apps/session-storage/shopify-app-session-storage-drizzle:
@@ -207,7 +207,7 @@ importers:
         specifier: ^0.15.15
         version: 0.15.15(encoding@0.1.13)
       '@shopify/shopify-app-session-storage-test-utils':
-        specifier: ^4.0.3
+        specifier: ^4.0.4
         version: link:../shopify-app-session-storage-test-utils
       '@types/better-sqlite3':
         specifier: ^7.6.13
@@ -223,10 +223,10 @@ importers:
         version: 0.31.7
       drizzle-orm:
         specifier: ^0.44.7
-        version: 0.44.7(@cloudflare/workers-types@4.20251117.0)(@libsql/client@0.15.15(encoding@0.1.13))(@prisma/client@6.19.0(prisma@6.19.0(typescript@5.9.3))(typescript@5.9.3))(@types/better-sqlite3@7.6.13)(@types/pg@8.15.6)(better-sqlite3@12.4.1)(gel@2.0.1)(mysql2@3.14.2)(pg@8.16.3)(prisma@6.19.0(typescript@5.9.3))(sqlite3@5.1.7)
+        version: 0.44.7(@cloudflare/workers-types@4.20251117.0)(@libsql/client@0.15.15(encoding@0.1.13))(@prisma/client@6.19.0(prisma@6.19.0(typescript@5.9.3))(typescript@5.9.3))(@types/better-sqlite3@7.6.13)(@types/pg@8.15.6)(better-sqlite3@12.4.1)(gel@2.0.1)(mysql2@3.15.3)(pg@8.16.3)(prisma@6.19.0(typescript@5.9.3))(sqlite3@5.1.7)
       mysql2:
-        specifier: ^3.14.2
-        version: 3.14.2
+        specifier: ^3.15.3
+        version: 3.15.3
       pg:
         specifier: ^8.16.3
         version: 8.16.3
@@ -247,7 +247,7 @@ importers:
         version: link:../shopify-app-session-storage
     devDependencies:
       '@shopify/shopify-app-session-storage-test-utils':
-        specifier: ^4.0.3
+        specifier: ^4.0.4
         version: link:../shopify-app-session-storage-test-utils
 
   packages/apps/session-storage/shopify-app-session-storage-kv:
@@ -266,7 +266,7 @@ importers:
         specifier: ^4.20251117.0
         version: 4.20251117.0
       '@shopify/shopify-app-session-storage-test-utils':
-        specifier: ^4.0.3
+        specifier: ^4.0.4
         version: link:../shopify-app-session-storage-test-utils
       miniflare:
         specifier: ^4.20251109.1
@@ -282,7 +282,7 @@ importers:
         version: link:../shopify-app-session-storage
     devDependencies:
       '@shopify/shopify-app-session-storage-test-utils':
-        specifier: ^4.0.3
+        specifier: ^4.0.4
         version: link:../shopify-app-session-storage-test-utils
 
   packages/apps/session-storage/shopify-app-session-storage-mongodb:
@@ -298,7 +298,7 @@ importers:
         version: 6.18.0(socks@2.8.3)
     devDependencies:
       '@shopify/shopify-app-session-storage-test-utils':
-        specifier: ^4.0.3
+        specifier: ^4.0.4
         version: link:../shopify-app-session-storage-test-utils
 
   packages/apps/session-storage/shopify-app-session-storage-mysql:
@@ -310,11 +310,11 @@ importers:
         specifier: ^4.0.0
         version: link:../shopify-app-session-storage
       mysql2:
-        specifier: ^3.14.2
-        version: 3.14.2
+        specifier: ^3.15.3
+        version: 3.15.3
     devDependencies:
       '@shopify/shopify-app-session-storage-test-utils':
-        specifier: ^4.0.3
+        specifier: ^4.0.4
         version: link:../shopify-app-session-storage-test-utils
 
   packages/apps/session-storage/shopify-app-session-storage-postgresql:
@@ -333,7 +333,7 @@ importers:
         version: 2.9.1
     devDependencies:
       '@shopify/shopify-app-session-storage-test-utils':
-        specifier: ^4.0.3
+        specifier: ^4.0.4
         version: link:../shopify-app-session-storage-test-utils
       '@types/pg':
         specifier: ^8.15.6
@@ -352,7 +352,7 @@ importers:
         specifier: ^6.19.0
         version: 6.19.0(prisma@6.19.0(typescript@5.9.3))(typescript@5.9.3)
       '@shopify/shopify-app-session-storage-test-utils':
-        specifier: ^4.0.3
+        specifier: ^4.0.4
         version: link:../shopify-app-session-storage-test-utils
       prisma:
         specifier: ^6.19.0
@@ -371,7 +371,7 @@ importers:
         version: 4.7.0
     devDependencies:
       '@shopify/shopify-app-session-storage-test-utils':
-        specifier: ^4.0.3
+        specifier: ^4.0.4
         version: link:../shopify-app-session-storage-test-utils
 
   packages/apps/session-storage/shopify-app-session-storage-sqlite:
@@ -387,7 +387,7 @@ importers:
         version: 5.1.7
     devDependencies:
       '@shopify/shopify-app-session-storage-test-utils':
-        specifier: ^4.0.3
+        specifier: ^4.0.4
         version: link:../shopify-app-session-storage-test-utils
       '@types/sqlite3':
         specifier: ^3.1.8
@@ -396,10 +396,10 @@ importers:
   packages/apps/session-storage/shopify-app-session-storage-test-utils:
     devDependencies:
       '@shopify/shopify-api':
-        specifier: ^12.1.2
+        specifier: ^12.2.0
         version: link:../../shopify-api
       '@shopify/shopify-app-session-storage':
-        specifier: ^4.0.3
+        specifier: ^4.0.4
         version: link:../shopify-app-session-storage
 
   packages/apps/shopify-api:
@@ -417,14 +417,14 @@ importers:
         specifier: ^6.1.1
         version: 6.1.1
       isbot:
-        specifier: ^5.1.26
-        version: 5.1.30
+        specifier: ^5.1.32
+        version: 5.1.32
       jose:
         specifier: ^5.9.6
         version: 5.9.6
       lossless-json:
-        specifier: ^4.2.0
-        version: 4.2.0
+        specifier: ^4.3.0
+        version: 4.3.0
       tslib:
         specifier: ^2.8.1
         version: 2.8.1
@@ -457,13 +457,13 @@ importers:
   packages/apps/shopify-app-express:
     dependencies:
       '@shopify/shopify-api':
-        specifier: ^12.1.2
+        specifier: ^12.2.0
         version: link:../shopify-api
       '@shopify/shopify-app-session-storage':
-        specifier: ^4.0.3
+        specifier: ^4.0.4
         version: link:../session-storage/shopify-app-session-storage
       '@shopify/shopify-app-session-storage-memory':
-        specifier: ^5.0.3
+        specifier: ^5.0.4
         version: link:../session-storage/shopify-app-session-storage-memory
       compare-versions:
         specifier: ^6.1.1
@@ -491,10 +491,10 @@ importers:
         specifier: ^1.1.1
         version: link:../../api-clients/admin-api-client
       '@shopify/shopify-api':
-        specifier: ^12.1.2
+        specifier: ^12.2.0
         version: link:../shopify-api
       '@shopify/shopify-app-session-storage':
-        specifier: ^4.0.3
+        specifier: ^4.0.4
         version: link:../session-storage/shopify-app-session-storage
       '@shopify/storefront-api-client':
         specifier: ^1.0.9
@@ -503,8 +503,8 @@ importers:
         specifier: ^6.1.1
         version: 6.1.1
       isbot:
-        specifier: ^5.1.26
-        version: 5.1.30
+        specifier: ^5.1.32
+        version: 5.1.32
       react:
         specifier: '>=18'
         version: 18.3.1
@@ -522,7 +522,7 @@ importers:
         specifier: ^6.0.0
         version: 6.0.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@shopify/shopify-app-session-storage-memory':
-        specifier: ^5.0.3
+        specifier: ^5.0.4
         version: link:../session-storage/shopify-app-session-storage-memory
       '@types/react':
         specifier: ^19.2.2
@@ -531,22 +531,22 @@ importers:
         specifier: ^3.0.3
         version: 3.0.3(encoding@0.1.13)
       react-router:
-        specifier: 7.9.6
-        version: 7.9.6(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+        specifier: 7.12.0
+        version: 7.12.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
 
   packages/apps/shopify-app-remix:
     dependencies:
       '@remix-run/server-runtime':
-        specifier: ^2.16.8
-        version: 2.17.0(typescript@5.9.3)
+        specifier: ^2.17.2
+        version: 2.17.2(typescript@5.9.3)
       '@shopify/admin-api-client':
         specifier: ^1.1.1
         version: link:../../api-clients/admin-api-client
       '@shopify/shopify-api':
-        specifier: ^12.1.2
+        specifier: ^12.2.0
         version: link:../shopify-api
       '@shopify/shopify-app-session-storage':
-        specifier: ^4.0.3
+        specifier: ^4.0.4
         version: link:../session-storage/shopify-app-session-storage
       '@shopify/storefront-api-client':
         specifier: ^1.0.9
@@ -555,8 +555,8 @@ importers:
         specifier: ^6.1.1
         version: 6.1.1
       isbot:
-        specifier: ^5.1.26
-        version: 5.1.30
+        specifier: ^5.1.32
+        version: 5.1.32
       react:
         specifier: '*'
         version: 18.3.1
@@ -565,14 +565,14 @@ importers:
         specifier: ^7.28.5
         version: 7.28.5(@babel/core@7.27.4)
       '@remix-run/node':
-        specifier: ^2.16.8
-        version: 2.17.0(typescript@5.9.3)
+        specifier: ^2.17.2
+        version: 2.17.2(typescript@5.9.3)
       '@remix-run/react':
-        specifier: ^2.16.8
-        version: 2.17.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.9.3)
+        specifier: ^2.17.3
+        version: 2.17.3(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.9.3)
       '@remix-run/testing':
-        specifier: ^2.16.8
-        version: 2.17.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.9.3)
+        specifier: ^2.17.2
+        version: 2.17.2(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.9.3)
       '@shopify/generate-docs':
         specifier: ^0.19.8
         version: 0.19.8
@@ -583,7 +583,7 @@ importers:
         specifier: ^6.0.0
         version: 6.0.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@shopify/shopify-app-session-storage-memory':
-        specifier: ^5.0.3
+        specifier: ^5.0.4
         version: link:../session-storage/shopify-app-session-storage-memory
       '@types/react':
         specifier: ^19.2.2
@@ -3097,8 +3097,8 @@ packages:
     peerDependencies:
       '@redis/client': ^1.0.0
 
-  '@remix-run/node@2.17.0':
-    resolution: {integrity: sha512-ISy3N4peKB+Fo8ddh+mU6ki3HzQqLXwJxUrAtqxYxrBDM4Pwc7EvISrcQ4QasB6ORBknJeEZSBu69WDRhGzrjA==}
+  '@remix-run/node@2.17.2':
+    resolution: {integrity: sha512-NHBIQI1Fap3ZmyHMPVsMcma6mvi2oUunvTzOcuWHHkkx1LrvWRzQTlaWqEnqCp/ff5PfX5r0eBEPrSkC8zrHRQ==}
     engines: {node: '>=18.0.0'}
     peerDependencies:
       typescript: ^5.1.0
@@ -3106,8 +3106,19 @@ packages:
       typescript:
         optional: true
 
-  '@remix-run/react@2.17.0':
-    resolution: {integrity: sha512-muOLHqcimMCrIk6VOuqIn51P3buYjKpdYc6qpNy6zE5HlKfyaKEY00a5pzdutRmevYTQy7FiEF/LK4M8sxk70Q==}
+  '@remix-run/react@2.17.2':
+    resolution: {integrity: sha512-/s/PYqDjTsQ/2bpsmY3sytdJYXuFHwPX3IRHKcM+UZXFRVGPKF5dgGuvCfb+KW/TmhVKNgpQv0ybCoGpCuF6aA==}
+    engines: {node: '>=18.0.0'}
+    peerDependencies:
+      react: ^18.0.0
+      react-dom: ^18.0.0
+      typescript: ^5.1.0
+    peerDependenciesMeta:
+      typescript:
+        optional: true
+
+  '@remix-run/react@2.17.3':
+    resolution: {integrity: sha512-Ns4YmtuRZpsgoUoq39K/lhPJ92/N2JkMBHIRPINNZ6/o9MiT7cN1qMwjGoqVfoCy6ZFCpMadsw4sPrwMGdkZiQ==}
     engines: {node: '>=18.0.0'}
     peerDependencies:
       react: ^18.0.0
@@ -3121,8 +3132,8 @@ packages:
     resolution: {integrity: sha512-O3rHJzAQKamUz1fvE0Qaw0xSFqsA/yafi2iqeE0pvdFtCO1viYx8QL6f3Ln/aCCTLxs68SLf0KPM9eSeM8yBnA==}
     engines: {node: '>=14.0.0'}
 
-  '@remix-run/server-runtime@2.17.0':
-    resolution: {integrity: sha512-X0zfGLgvukhuTIL0tdWKnlvHy4xUe7Z17iQ0KMQoITK0SkTZPSud/6cJCsKhPqC8kfdYT1GNFLJKRhHz7Aapmw==}
+  '@remix-run/server-runtime@2.17.2':
+    resolution: {integrity: sha512-dTrAG1SgOLgz1DFBDsLHN0V34YqLsHEReVHYOI4UV/p+ALbn/BRQMw1MaUuqGXmX21ZTuCzzPegtTLNEOc8ixA==}
     engines: {node: '>=18.0.0'}
     peerDependencies:
       typescript: ^5.1.0
@@ -3130,8 +3141,17 @@ packages:
       typescript:
         optional: true
 
-  '@remix-run/testing@2.17.0':
-    resolution: {integrity: sha512-QsxDtyIAj5Ss4r9D6URucrc5j+u7qJLo0C7+ToGCPAJhviLKEFN7cGoczbuVSZj+eCGvagGOx57Ik/7EQot7+w==}
+  '@remix-run/server-runtime@2.17.3':
+    resolution: {integrity: sha512-8uuV0COprImDpyDB8Rx0VLDKxsttBsMjtdv9BFViz8WfJz79jr8YRfp27hXUs9P4/NU6+wQQYcJawkBj/5uuSg==}
+    engines: {node: '>=18.0.0'}
+    peerDependencies:
+      typescript: ^5.1.0
+    peerDependenciesMeta:
+      typescript:
+        optional: true
+
+  '@remix-run/testing@2.17.2':
+    resolution: {integrity: sha512-TqSk8DLRWvHGE33fntDRipQuiURN5DL7aNP9VgAH8bBsfKGEHF/J/XToCgvUJEPw4mS55QBRJqonzkSmZm+ocw==}
     engines: {node: '>=18.0.0'}
     peerDependencies:
       react: ^18.0.0
@@ -5414,6 +5434,10 @@ packages:
   generate-function@2.3.1:
     resolution: {integrity: sha512-eeB5GfMNeevm/GRYq20ShmsaGcmI81kIX2K9XQx5miC8KdHaC6Jm0qQ8ZNeGOi7wYB8OsdxKs+Y2oVuTFuVwKQ==}
 
+  generator-function@2.0.1:
+    resolution: {integrity: sha512-SFdFmIJi+ybC0vjlHN0ZGVGHc3lgE0DxPAT0djjVg+kjOnSqclqmj0KQ7ykTOLP6YxoqOvuAODGdcHJn+43q3g==}
+    engines: {node: '>= 0.4'}
+
   generic-pool@3.9.0:
     resolution: {integrity: sha512-hymDOu5B53XvN4QT9dBmZxPX4CWhBPPLguTZ9MMFeFa/Kg0xWVfylOVNlJji/E7yTZWFd/q9GO5TxDLq156D7g==}
     engines: {node: '>= 4'}
@@ -5780,8 +5804,8 @@ packages:
     resolution: {integrity: sha512-cTIB4yPYL/Grw0EaSzASzg6bBy9gqCofvWN8okThAYIxKJZC+udlRAmGbM0XLeniEJSs8uEgHPGuHSe1XsOLSQ==}
     engines: {node: '>=6'}
 
-  is-generator-function@1.1.0:
-    resolution: {integrity: sha512-nPUB5km40q9e8UfN/Zc24eLlzdSf9OfKByBw9CIdw4H1giPMeA0OIJvbchsCu4npfI2QcMVBsGEBHKZ7wLTWmQ==}
+  is-generator-function@1.1.2:
+    resolution: {integrity: sha512-upqt1SkGkODW9tsGNG5mtXTXtECizwtS2kA161M+gJPc1xdb/Ax629af6YrTwcOeQHbewrPNlE5Dx7kzvXTizA==}
     engines: {node: '>= 0.4'}
 
   is-glob@4.0.3:
@@ -5900,8 +5924,8 @@ packages:
   isarray@2.0.5:
     resolution: {integrity: sha512-xHjhDr3cNBK0BzdUJSPXZntQUx/mwMS5Rw4A7lPJ90XGAO6ISP/ePDNuo0vhqOZU+UD5JoodwCAAoZQd3FeAKw==}
 
-  isbot@5.1.30:
-    resolution: {integrity: sha512-3wVJEonAns1OETX83uWsk5IAne2S5zfDcntD2hbtU23LelSqNXzXs9zKjMPOLMzroCgIjCfjYAEHrd2D6FOkiA==}
+  isbot@5.1.32:
+    resolution: {integrity: sha512-VNfjM73zz2IBZmdShMfAUg10prm6t7HFUQmNAEOAVS4YH92ZrZcvkMcGX6cIgBJAzWDzPent/EeAtYEHNPNPBQ==}
     engines: {node: '>=18'}
 
   isexe@2.0.0:
@@ -6300,8 +6324,8 @@ packages:
     resolution: {integrity: sha512-lyuxPGr/Wfhrlem2CL/UcnUc1zcqKAImBDzukY7Y5F/yQiNdko6+fRLevlw1HgMySw7f611UIY408EtxRSoK3Q==}
     hasBin: true
 
-  lossless-json@4.2.0:
-    resolution: {integrity: sha512-bsHH3x+7acZfqokfn9Ks/ej96yF/z6oGGw1aBmXesq4r3fAjhdG4uYuqzDgZMk5g1CZUd5w3kwwIp9K1LOYUiA==}
+  lossless-json@4.3.0:
+    resolution: {integrity: sha512-ToxOC+SsduRmdSuoLZLYAr5zy1Qu7l5XhmPWM3zefCZ5IcrzW/h108qbJUKfOlDlhvhjUK84+8PSVX0kxnit0g==}
 
   lower-case-first@2.0.2:
     resolution: {integrity: sha512-EVm/rR94FJTZi3zefZ82fLWab+GX14LJN4HrWBcuo6Evmsl9hEfnqxgcHCKb9q+mNf6EVdsjx/qucYFIIB84pg==}
@@ -6327,8 +6351,8 @@ packages:
     resolution: {integrity: sha512-jumlc0BIUrS3qJGgIkWZsyfAM7NCWiBcCDhnd+3NNM5KbBmLTgHVfWBcg6W+rLUsIpzpERPsvwUP7CckAQSOoA==}
     engines: {node: '>=12'}
 
-  lru.min@1.1.2:
-    resolution: {integrity: sha512-Nv9KddBcQSlQopmBHXSsZVY5xsdlZkdH/Iey0BlcBYggMd4two7cZnKOK9vmy3nY0O5RGH99z1PCeTpPqszUYg==}
+  lru.min@1.1.3:
+    resolution: {integrity: sha512-Lkk/vx6ak3rYkRR0Nhu4lFUT2VDnQSxBe8Hbl7f36358p6ow8Bnvr8lrLt98H8J1aGxfhbX4Fs5tYg2+FTwr5Q==}
     engines: {bun: '>=1.0.0', deno: '>=1.30.0', node: '>=8.0.0'}
 
   magic-string@0.30.18:
@@ -6546,8 +6570,8 @@ packages:
   mute-stream@0.0.8:
     resolution: {integrity: sha512-nnbWWOkoWyUsTjKrhgD0dcz22mdkSnpYqbEjIm2nhwhuxlSkpywJmBo8h0ZqJdkp73mb90SssHkN4rsRaBAfAA==}
 
-  mysql2@3.14.2:
-    resolution: {integrity: sha512-YD6mZMeoypmheHT6b2BrVmQFvouEpRICuvPIREulx2OvP1xAxxeqkMQqZSTBefv0PiOBKGYFa2zQtY+gf/4eQw==}
+  mysql2@3.15.3:
+    resolution: {integrity: sha512-FBrGau0IXmuqg4haEZRBfHNWB5mUARw6hNwPDXXGg0XzVJ50mr/9hb267lvpVMnhZ1FON3qNd4Xfcez1rbFwSg==}
     engines: {node: '>= 8.0'}
 
   named-placeholders@1.1.3:
@@ -7090,8 +7114,8 @@ packages:
     peerDependencies:
       react: '>=16.8'
 
-  react-router@7.9.6:
-    resolution: {integrity: sha512-Y1tUp8clYRXpfPITyuifmSoE2vncSME18uVLgaqyxh9H35JWpIfzHo+9y3Fzh5odk/jxPW29IgLgzcdwxGqyNA==}
+  react-router@7.12.0:
+    resolution: {integrity: sha512-kTPDYPFzDVGIIGNLS5VJykK0HfHLY5MF3b+xj0/tTyNYL1gF1qs7u67Z9jEhQk2sQ98SUaHxlG31g1JtF7IfVw==}
     engines: {node: '>=20.0.0'}
     peerDependencies:
       react: '>=18'
@@ -7318,9 +7342,6 @@ packages:
 
   set-blocking@2.0.0:
     resolution: {integrity: sha512-KiKBS8AnWGEyLzofFfmvKwpdPzqiy16LvQfK3yv/fVH7Bj13/wl3JSR1J+rfgRE9q7xUJK4qvgS8raSOeLUehw==}
-
-  set-cookie-parser@2.7.1:
-    resolution: {integrity: sha512-IOc8uWeOZgnb3ptbCURJWNjWUPcO3ZnTTdzsurqERrP6nPyv+paC55vJM0LpOlT2ne+Ix+9+CRG1MNLlyZ4GjQ==}
 
   set-cookie-parser@2.7.2:
     resolution: {integrity: sha512-oeM1lpU/UvhTxw+g3cIfxXHyJRc/uidd3yK1P242gzHds0udQBYzs3y8j4gCCW+ZJ7ad0yctld8RYO+bdurlvw==}
@@ -7873,8 +7894,8 @@ packages:
     resolution: {integrity: sha512-72RFADWFqKmUb2hmmvNODKL3p9hcB6Gt2DOQMis1SEBaV6a4MH8soBvzg+95CYhCKPFedut2JY9bMfrDl9D23g==}
     engines: {node: '>=14.0'}
 
-  undici@6.21.3:
-    resolution: {integrity: sha512-gBLkYIlEnSp8pFbT64yFgGE6UIB9tAkhukC23PmMDCe5Nd+cRqKxSjw5y54MK2AZMgZfJWMaNE4nYUHgi1XEOw==}
+  undici@6.22.0:
+    resolution: {integrity: sha512-hU/10obOIu62MGYjdskASR3CUAiYaFTtC9Pa6vHyf//mAipSvSQg6od2CnJswq7fvzNS3zJhxoRkgNVaHurWKw==}
     engines: {node: '>=18.17'}
 
   undici@7.14.0:
@@ -7999,6 +8020,7 @@ packages:
   whatwg-encoding@3.1.1:
     resolution: {integrity: sha512-6qN4hJdMwfYBtE3YBTTHhoeuUrDBPZmbQaxWAqSALV/MeEnR5z1xd8UKud2RAkFoPkmB+hli1TZSnyi84xz1vQ==}
     engines: {node: '>=18'}
+    deprecated: Use @exodus/bytes instead for a more spec-conformant and faster implementation
 
   whatwg-mimetype@4.0.0:
     resolution: {integrity: sha512-QaKxh0eNIi2mE9p2vEdzfagOKHCcj1pJ56EEHGQOVxp8r9/iszLUUV7v89x9O1p/T+NlTM5W7jW6+cz4Fq1YVg==}
@@ -11453,22 +11475,34 @@ snapshots:
     dependencies:
       '@redis/client': 1.6.0
 
-  '@remix-run/node@2.17.0(typescript@5.9.3)':
+  '@remix-run/node@2.17.2(typescript@5.9.3)':
     dependencies:
-      '@remix-run/server-runtime': 2.17.0(typescript@5.9.3)
+      '@remix-run/server-runtime': 2.17.2(typescript@5.9.3)
       '@remix-run/web-fetch': 4.4.2
       '@web3-storage/multipart-parser': 1.0.0
       cookie-signature: 1.2.2
       source-map-support: 0.5.21
       stream-slice: 0.1.2
-      undici: 6.21.3
+      undici: 6.22.0
     optionalDependencies:
       typescript: 5.9.3
 
-  '@remix-run/react@2.17.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.9.3)':
+  '@remix-run/react@2.17.2(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.9.3)':
     dependencies:
       '@remix-run/router': 1.23.0
-      '@remix-run/server-runtime': 2.17.0(typescript@5.9.3)
+      '@remix-run/server-runtime': 2.17.2(typescript@5.9.3)
+      react: 18.3.1
+      react-dom: 18.3.1(react@18.3.1)
+      react-router: 6.30.0(react@18.3.1)
+      react-router-dom: 6.30.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      turbo-stream: 2.4.1
+    optionalDependencies:
+      typescript: 5.9.3
+
+  '@remix-run/react@2.17.3(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.9.3)':
+    dependencies:
+      '@remix-run/router': 1.23.0
+      '@remix-run/server-runtime': 2.17.3(typescript@5.9.3)
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
       react-router: 6.30.0(react@18.3.1)
@@ -11479,22 +11513,34 @@ snapshots:
 
   '@remix-run/router@1.23.0': {}
 
-  '@remix-run/server-runtime@2.17.0(typescript@5.9.3)':
+  '@remix-run/server-runtime@2.17.2(typescript@5.9.3)':
     dependencies:
       '@remix-run/router': 1.23.0
       '@types/cookie': 0.6.0
       '@web3-storage/multipart-parser': 1.0.0
       cookie: 0.7.2
-      set-cookie-parser: 2.7.1
+      set-cookie-parser: 2.7.2
       source-map: 0.7.6
       turbo-stream: 2.4.1
     optionalDependencies:
       typescript: 5.9.3
 
-  '@remix-run/testing@2.17.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.9.3)':
+  '@remix-run/server-runtime@2.17.3(typescript@5.9.3)':
     dependencies:
-      '@remix-run/node': 2.17.0(typescript@5.9.3)
-      '@remix-run/react': 2.17.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.9.3)
+      '@remix-run/router': 1.23.0
+      '@types/cookie': 0.6.0
+      '@web3-storage/multipart-parser': 1.0.0
+      cookie: 0.7.2
+      set-cookie-parser: 2.7.2
+      source-map: 0.7.6
+      turbo-stream: 2.4.1
+    optionalDependencies:
+      typescript: 5.9.3
+
+  '@remix-run/testing@2.17.2(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.9.3)':
+    dependencies:
+      '@remix-run/node': 2.17.2(typescript@5.9.3)
+      '@remix-run/react': 2.17.2(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.9.3)
       '@remix-run/router': 1.23.0
       react: 18.3.1
       react-router-dom: 6.30.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -13399,7 +13445,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  drizzle-orm@0.44.7(@cloudflare/workers-types@4.20251117.0)(@libsql/client@0.15.15(encoding@0.1.13))(@prisma/client@6.19.0(prisma@6.19.0(typescript@5.9.3))(typescript@5.9.3))(@types/better-sqlite3@7.6.13)(@types/pg@8.15.6)(better-sqlite3@12.4.1)(gel@2.0.1)(mysql2@3.14.2)(pg@8.16.3)(prisma@6.19.0(typescript@5.9.3))(sqlite3@5.1.7):
+  drizzle-orm@0.44.7(@cloudflare/workers-types@4.20251117.0)(@libsql/client@0.15.15(encoding@0.1.13))(@prisma/client@6.19.0(prisma@6.19.0(typescript@5.9.3))(typescript@5.9.3))(@types/better-sqlite3@7.6.13)(@types/pg@8.15.6)(better-sqlite3@12.4.1)(gel@2.0.1)(mysql2@3.15.3)(pg@8.16.3)(prisma@6.19.0(typescript@5.9.3))(sqlite3@5.1.7):
     optionalDependencies:
       '@cloudflare/workers-types': 4.20251117.0
       '@libsql/client': 0.15.15(encoding@0.1.13)
@@ -13408,7 +13454,7 @@ snapshots:
       '@types/pg': 8.15.6
       better-sqlite3: 12.4.1
       gel: 2.0.1
-      mysql2: 3.14.2
+      mysql2: 3.15.3
       pg: 8.16.3
       prisma: 6.19.0(typescript@5.9.3)
       sqlite3: 5.1.7
@@ -14196,6 +14242,8 @@ snapshots:
     dependencies:
       is-property: 1.0.2
 
+  generator-function@2.0.1: {}
+
   generic-pool@3.9.0: {}
 
   gensync@1.0.0-beta.2: {}
@@ -14568,7 +14616,7 @@ snapshots:
 
   is-async-function@2.1.0:
     dependencies:
-      call-bound: 1.0.3
+      call-bound: 1.0.4
       get-proto: 1.0.1
       has-tostringtag: 1.0.2
       safe-regex-test: 1.1.0
@@ -14579,7 +14627,7 @@ snapshots:
 
   is-boolean-object@1.2.1:
     dependencies:
-      call-bound: 1.0.3
+      call-bound: 1.0.4
       has-tostringtag: 1.0.2
 
   is-callable@1.2.7: {}
@@ -14603,15 +14651,16 @@ snapshots:
 
   is-finalizationregistry@1.1.1:
     dependencies:
-      call-bound: 1.0.3
+      call-bound: 1.0.4
 
   is-fullwidth-code-point@3.0.0: {}
 
   is-generator-fn@2.1.0: {}
 
-  is-generator-function@1.1.0:
+  is-generator-function@1.1.2:
     dependencies:
       call-bound: 1.0.4
+      generator-function: 2.0.1
       get-proto: 1.0.1
       has-tostringtag: 1.0.2
       safe-regex-test: 1.1.0
@@ -14635,7 +14684,7 @@ snapshots:
 
   is-number-object@1.1.1:
     dependencies:
-      call-bound: 1.0.3
+      call-bound: 1.0.4
       has-tostringtag: 1.0.2
 
   is-number@7.0.0: {}
@@ -14710,14 +14759,14 @@ snapshots:
 
   is-weakset@2.0.4:
     dependencies:
-      call-bound: 1.0.3
+      call-bound: 1.0.4
       get-intrinsic: 1.2.7
 
   is-windows@1.0.2: {}
 
   isarray@2.0.5: {}
 
-  isbot@5.1.30: {}
+  isbot@5.1.32: {}
 
   isexe@2.0.0: {}
 
@@ -15425,7 +15474,7 @@ snapshots:
     dependencies:
       js-tokens: 4.0.0
 
-  lossless-json@4.2.0: {}
+  lossless-json@4.3.0: {}
 
   lower-case-first@2.0.2:
     dependencies:
@@ -15450,7 +15499,7 @@ snapshots:
 
   lru-cache@7.18.3: {}
 
-  lru.min@1.1.2: {}
+  lru.min@1.1.3: {}
 
   magic-string@0.30.18:
     dependencies:
@@ -15659,14 +15708,14 @@ snapshots:
 
   mute-stream@0.0.8: {}
 
-  mysql2@3.14.2:
+  mysql2@3.15.3:
     dependencies:
       aws-ssl-profiles: 1.1.2
       denque: 2.1.0
       generate-function: 2.3.1
-      iconv-lite: 0.6.3
+      iconv-lite: 0.7.0
       long: 5.3.2
-      lru.min: 1.1.2
+      lru.min: 1.1.3
       named-placeholders: 1.1.3
       seq-queue: 0.0.5
       sqlstring: 2.3.3
@@ -16232,7 +16281,7 @@ snapshots:
       '@remix-run/router': 1.23.0
       react: 18.3.1
 
-  react-router@7.9.6(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
+  react-router@7.12.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
     dependencies:
       cookie: 1.1.1
       react: 18.3.1
@@ -16517,8 +16566,6 @@ snapshots:
 
   set-blocking@2.0.0:
     optional: true
-
-  set-cookie-parser@2.7.1: {}
 
   set-cookie-parser@2.7.2: {}
 
@@ -17164,7 +17211,7 @@ snapshots:
     dependencies:
       '@fastify/busboy': 2.1.1
 
-  undici@6.21.3: {}
+  undici@6.22.0: {}
 
   undici@7.14.0: {}
 
@@ -17229,7 +17276,7 @@ snapshots:
     dependencies:
       inherits: 2.0.4
       is-arguments: 1.2.0
-      is-generator-function: 1.1.0
+      is-generator-function: 1.1.2
       is-typed-array: 1.1.15
       which-typed-array: 1.1.19
 
@@ -17304,19 +17351,19 @@ snapshots:
 
   which-builtin-type@1.2.1:
     dependencies:
-      call-bound: 1.0.3
+      call-bound: 1.0.4
       function.prototype.name: 1.1.8
       has-tostringtag: 1.0.2
       is-async-function: 2.1.0
       is-date-object: 1.1.0
       is-finalizationregistry: 1.1.1
-      is-generator-function: 1.1.0
+      is-generator-function: 1.1.2
       is-regex: 1.2.1
       is-weakref: 1.1.0
       isarray: 2.0.5
       which-boxed-primitive: 1.1.1
       which-collection: 1.0.2
-      which-typed-array: 1.1.18
+      which-typed-array: 1.1.19
 
   which-collection@1.0.2:
     dependencies:

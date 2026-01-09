@@ -1,6 +1,7 @@
 import {
   TEST_SHOP,
   expectAdminApiClient,
+  expectTokenRefresh,
   setUpValidSession,
   setupValidCustomAppSession,
   testConfig,
@@ -31,6 +32,20 @@ describe('unauthenticated admin context', () => {
       await shopify.unauthenticated.admin(TEST_SHOP);
 
     return {admin, expectedSession, actualSession};
+  });
+
+  expectTokenRefresh(async (sessionStorage, session, configOverrides) => {
+    const shopify = shopifyApp(
+      testConfig({
+        sessionStorage,
+        ...configOverrides,
+      }) as any,
+    );
+    await shopify.sessionStorage!.storeSession(session);
+
+    const {session: actualSession} =
+      await shopify.unauthenticated.admin(TEST_SHOP);
+    return actualSession;
   });
 });
 

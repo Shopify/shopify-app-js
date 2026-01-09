@@ -19,6 +19,7 @@ import type {
   ApiConfigWithFutureFlags,
   ApiFutureFlags,
 } from '../../../future/flags';
+import {WITHIN_MILLISECONDS_OF_EXPIRY} from '../../../helpers';
 
 import {AuthorizationStrategy, SessionContext, OnErrorOptions} from './types';
 
@@ -50,7 +51,10 @@ export class TokenExchangeStrategy<Config extends AppConfigArg>
 
     if (!sessionToken) throw new InvalidJwtError();
 
-    if (!session || !session.isActive(undefined)) {
+    if (
+      !session ||
+      !session.isActive(undefined, WITHIN_MILLISECONDS_OF_EXPIRY)
+    ) {
       logger.info('No valid session found', {shop});
       logger.info('Requesting offline access token', {shop});
       const {session: offlineSession} = await this.exchangeToken({
@@ -144,6 +148,7 @@ export class TokenExchangeStrategy<Config extends AppConfigArg>
         sessionToken,
         shop,
         requestedTokenType,
+        expiring: config.future.expiringOfflineAccessTokens,
       });
     } catch (error) {
       if (

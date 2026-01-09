@@ -128,6 +128,7 @@ export function begin(config: ConfigInterface): OAuthBegin {
 
 export function callback(config: ConfigInterface): OAuthCallback {
   return async function callback<T = AdapterHeaders>({
+    expiring,
     ...adapterArgs
   }: CallbackParams): Promise<CallbackResponse<T>> {
     throwIfCustomStoreApp(
@@ -187,6 +188,7 @@ export function callback(config: ConfigInterface): OAuthCallback {
       client_id: config.apiKey,
       client_secret: config.apiSecretKey,
       code: query.get('code'),
+      expiring: expiring ? '1' : '0',
     };
 
     const cleanShop = sanitizeShop(config)(query.get('shop')!, true)!;
