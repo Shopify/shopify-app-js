@@ -141,7 +141,6 @@ async function callWebhookHandlers(
         rawBody,
         webhookCheck.webhookId,
         webhookCheck.apiVersion,
-        ...(webhookCheck?.subTopic ? webhookCheck.subTopic : ''),
         context,
       );
     } catch (error) {
