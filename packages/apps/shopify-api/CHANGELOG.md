@@ -1,5 +1,15 @@
 # Changelog
 
+## 12.3.0
+
+### Minor Changes
+
+- 0fa5ef7: Add REST version 2026-01
+
+### Patch Changes
+
+- 60dc5ce: Updated `isbot` dependencies
+
 ## 12.2.0
 
 ### Minor Changes

@@ -1,5 +1,17 @@
 # @shopify/shopify-app-remix
 
+## 4.1.1
+
+### Patch Changes
+
+- f731b82: Updated `@remix-run/server-runtime`, ` @remix-run/node`, ` @remix-run/react`, ` @remix-run/testing` dependencies
+- 60dc5ce: Updated `isbot` dependencies
+- b714d46: Updated `@remix-run/server-runtime` dependencies
+- Updated dependencies [60dc5ce]
+- Updated dependencies [0fa5ef7]
+  - @shopify/shopify-api@12.3.0
+  - @shopify/shopify-app-session-storage@4.0.5
+
 ## 4.1.0
 
 ### Minor Changes

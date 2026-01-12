@@ -1,6 +1,6 @@
 {
   "name": "@shopify/shopify-app-express",
-  "version": "6.0.4",
+  "version": "6.0.5",
   "description": "Shopify Express Middleware - to simplify the building of Shopify Apps with Express",
   "engines": {
     "node": ">=20.0.0"
@@ -46,9 +46,9 @@
     "Storefront API"
   ],
   "dependencies": {
-    "@shopify/shopify-api": "^12.2.0",
-    "@shopify/shopify-app-session-storage": "^4.0.4",
-    "@shopify/shopify-app-session-storage-memory": "^5.0.4",
+    "@shopify/shopify-api": "^12.3.0",
+    "@shopify/shopify-app-session-storage": "^4.0.5",
+    "@shopify/shopify-app-session-storage-memory": "^5.0.5",
     "express": "^4.21.2",
     "compare-versions": "^6.1.1"
   },
