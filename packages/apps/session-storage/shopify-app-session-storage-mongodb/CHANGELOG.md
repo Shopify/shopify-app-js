@@ -1,5 +1,11 @@
 # @shopify/shopify-app-session-storage-mongodb
 
+## 5.0.5
+
+### Patch Changes
+
+- dde2bf8: Updated `mongodb` dependencies
+
 ## 5.0.4
 
 ## 5.0.3
