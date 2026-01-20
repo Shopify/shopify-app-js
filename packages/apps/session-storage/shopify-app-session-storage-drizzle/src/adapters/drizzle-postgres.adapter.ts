@@ -91,15 +91,30 @@ export class DrizzleSessionStoragePostgres implements SessionStorage {
   private sessionToRow(
     session: Session,
   ): InferInsertModel<PostgresSessionTable> {
+    const sessionParams = session.toObject();
+
     return {
       id: session.id,
       shop: session.shop,
       state: session.state,
       isOnline: session.isOnline,
-      scope: session.scope,
-      expires: session.expires,
-      accessToken: session.accessToken,
-      userId: session.onlineAccessInfo?.associated_user.id,
+      scope: session.scope || null,
+      expires: session.expires || null,
+      accessToken: session.accessToken || '',
+      userId: sessionParams.onlineAccessInfo?.associated_user.id || null,
+      firstName:
+        sessionParams.onlineAccessInfo?.associated_user.first_name || null,
+      lastName: sessionParams.onlineAccessInfo?.associated_user.last_name || null,
+      email: sessionParams.onlineAccessInfo?.associated_user.email || null,
+      accountOwner:
+        sessionParams.onlineAccessInfo?.associated_user.account_owner || false,
+      locale: sessionParams.onlineAccessInfo?.associated_user.locale || null,
+      collaborator:
+        sessionParams.onlineAccessInfo?.associated_user.collaborator || false,
+      emailVerified:
+        sessionParams.onlineAccessInfo?.associated_user.email_verified || false,
+      refreshToken: sessionParams.refreshToken || null,
+      refreshTokenExpires: sessionParams.refreshTokenExpires || null,
     };
   }
 
@@ -109,10 +124,27 @@ export class DrizzleSessionStoragePostgres implements SessionStorage {
       shop: row.shop,
       state: row.state,
       isOnline: row.isOnline,
+      userId: String(row.userId),
+      firstName: String(row.firstName),
+      lastName: String(row.lastName),
+      email: String(row.email),
+      locale: String(row.locale),
     };
 
+    if (row.accountOwner !== null) {
+      sessionParams.accountOwner = row.accountOwner;
+    }
+
+    if (row.collaborator !== null) {
+      sessionParams.collaborator = row.collaborator;
+    }
+
+    if (row.emailVerified !== null) {
+      sessionParams.emailVerified = row.emailVerified;
+    }
+
     if (row.expires) {
-      sessionParams.expires = row.expires as any;
+      sessionParams.expires = row.expires.getTime();
     }
 
     if (row.scope) {
@@ -123,10 +155,14 @@ export class DrizzleSessionStoragePostgres implements SessionStorage {
       sessionParams.accessToken = row.accessToken;
     }
 
-    if (row.userId) {
-      sessionParams.onlineAccessInfo = row.userId;
+    if (row.refreshToken) {
+      sessionParams.refreshToken = row.refreshToken;
     }
 
-    return Session.fromPropertyArray(Object.entries(sessionParams));
+    if (row.refreshTokenExpires) {
+      sessionParams.refreshTokenExpires = row.refreshTokenExpires.getTime();
+    }
+
+    return Session.fromPropertyArray(Object.entries(sessionParams), true);
   }
 }
