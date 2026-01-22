@@ -17,8 +17,17 @@ export const sessionTable = sqliteTable('session', {
   isOnline: integer('isOnline', {mode: 'boolean'}).notNull().default(false),
   scope: text('scope'),
   expires: text('expires'),
-  accessToken: text('accessToken'),
+  accessToken: text('accessToken').notNull(),
   userId: blob('userId', {mode: 'bigint'}),
+  firstName: text('firstName'),
+  lastName: text('lastName'),
+  email: text('email'),
+  accountOwner: integer('accountOwner', {mode: 'boolean'}),
+  locale: text('locale'),
+  collaborator: integer('collaborator', {mode: 'boolean'}),
+  emailVerified: integer('emailVerified', {mode: 'boolean'}),
+  refreshToken: text('refreshToken'),
+  refreshTokenExpires: text('refreshTokenExpires'),
 });
 
 describe('SQLiteSessionStorage', () => {
@@ -39,8 +48,17 @@ describe('SQLiteSessionStorage', () => {
       "isOnline" integer DEFAULT false NOT NULL,
       "scope" text,
       "expires" text,
-      "accessToken" text,
-      "userId" blob
+      "accessToken" text NOT NULL,
+      "userId" blob,
+      "firstName" text,
+      "lastName" text,
+      "email" text,
+      "accountOwner" integer,
+      "locale" text,
+      "collaborator" integer,
+      "emailVerified" integer,
+      "refreshToken" text,
+      "refreshTokenExpires" text
     );`,
       )
       .run();

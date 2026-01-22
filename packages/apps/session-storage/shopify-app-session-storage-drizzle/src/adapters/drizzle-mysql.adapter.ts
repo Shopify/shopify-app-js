@@ -129,12 +129,27 @@ export class DrizzleSessionStorageMySQL implements SessionStorage {
       shop: row.shop,
       state: row.state,
       isOnline: row.isOnline,
-      userId: String(row.userId),
-      firstName: String(row.firstName),
-      lastName: String(row.lastName),
-      email: String(row.email),
-      locale: String(row.locale),
     };
+
+    if (row.userId !== null && row.userId !== undefined) {
+      sessionParams.userId = String(row.userId);
+    }
+
+    if (row.firstName !== null && row.firstName !== undefined) {
+      sessionParams.firstName = String(row.firstName);
+    }
+
+    if (row.lastName !== null && row.lastName !== undefined) {
+      sessionParams.lastName = String(row.lastName);
+    }
+
+    if (row.email !== null && row.email !== undefined) {
+      sessionParams.email = String(row.email);
+    }
+
+    if (row.locale !== null && row.locale !== undefined) {
+      sessionParams.locale = String(row.locale);
+    }
 
     if (row.accountOwner !== null) {
       sessionParams.accountOwner = row.accountOwner;
