@@ -104,15 +104,16 @@ export class DrizzleSessionStorageSQLite implements SessionStorage {
           .id as unknown as bigint) || null,
       firstName:
         sessionParams.onlineAccessInfo?.associated_user.first_name || null,
-      lastName: sessionParams.onlineAccessInfo?.associated_user.last_name || null,
+      lastName:
+        sessionParams.onlineAccessInfo?.associated_user.last_name || null,
       email: sessionParams.onlineAccessInfo?.associated_user.email || null,
       accountOwner:
-        sessionParams.onlineAccessInfo?.associated_user.account_owner || false,
+        sessionParams.onlineAccessInfo?.associated_user.account_owner ?? null,
       locale: sessionParams.onlineAccessInfo?.associated_user.locale || null,
       collaborator:
-        sessionParams.onlineAccessInfo?.associated_user.collaborator || false,
+        sessionParams.onlineAccessInfo?.associated_user.collaborator ?? null,
       emailVerified:
-        sessionParams.onlineAccessInfo?.associated_user.email_verified || false,
+        sessionParams.onlineAccessInfo?.associated_user.email_verified ?? null,
       refreshToken: sessionParams.refreshToken || null,
       refreshTokenExpires: sessionParams.refreshTokenExpires
         ? sessionParams.refreshTokenExpires.toISOString()
