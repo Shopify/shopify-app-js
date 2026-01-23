@@ -78,6 +78,6 @@
     "@graphql-codegen/plugin-helpers": "^5.1.1",
     "@shopify/babel-preset": "^25.0.2",
     "graphql-config": "^5.1.5",
-    "rollup-plugin-dts": "^6.2.1"
+    "rollup-plugin-dts": "^6.3.0"
   }
 }
