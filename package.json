@@ -35,7 +35,7 @@
     "jest-environment-jsdom": "^30.2.0",
     "jest-fetch-mock": "^3.0.3",
     "jest-runner-eslint": "^2.3.0",
-    "prettier": "^3.6.2",
+    "prettier": "^3.7.4",
     "rimraf": "^6.1.2",
     "rollup": "^4.55.1",
     "rollup-plugin-exclude-dependencies-from-bundle": "^1.1.24",
