@@ -30,8 +30,17 @@ const sessionTable = pgTable('session', {
   isOnline: boolean('isOnline').default(false).notNull(),
   scope: text('scope'),
   expires: timestamp('expires', {mode: 'date'}),
-  accessToken: text('accessToken'),
+  accessToken: text('accessToken').notNull(),
   userId: bigint('userId', {mode: 'number'}),
+  firstName: text('firstName'),
+  lastName: text('lastName'),
+  email: text('email'),
+  accountOwner: boolean('accountOwner'),
+  locale: text('locale'),
+  collaborator: boolean('collaborator'),
+  emailVerified: boolean('emailVerified'),
+  refreshToken: text('refreshToken'),
+  refreshTokenExpires: timestamp('refreshTokenExpires', {mode: 'date'}),
 });
 
 describe('DrizzleSessionStoragePostgres', () => {
@@ -77,8 +86,17 @@ describe('DrizzleSessionStoragePostgres', () => {
       "isOnline" BOOLEAN NOT NULL DEFAULT false,
       "scope" TEXT,
       "expires" TIMESTAMP,
-      "accessToken" TEXT,
-      "userId" BIGINT
+      "accessToken" TEXT NOT NULL,
+      "userId" BIGINT,
+      "firstName" TEXT,
+      "lastName" TEXT,
+      "email" TEXT,
+      "accountOwner" BOOLEAN,
+      "locale" TEXT,
+      "collaborator" BOOLEAN,
+      "emailVerified" BOOLEAN,
+      "refreshToken" TEXT,
+      "refreshTokenExpires" TIMESTAMP
     )`);
 
     const drizzleDb = drizzle(client);
