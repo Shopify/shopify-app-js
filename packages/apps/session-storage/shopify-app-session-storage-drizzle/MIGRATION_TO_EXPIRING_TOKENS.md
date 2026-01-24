@@ -1,10 +1,10 @@
 # Migrating to Expiring Tokens
 
-The `@shopify/shopify-app-session-storage-drizzle` package now supports expiring offline access tokens. The refresh token and its expiration date are now stored as part of the session if your app is using expiring offline access tokens. This change requires updating your Drizzle schema and database to include the refresh token information.
+The `@shopify/shopify-app-session-storage-drizzle` package now supports expiring offline access tokens. The refresh token and its expiration date are now stored as part of the session if your app is using expiring offline access tokens. This change requires updating your Drizzle schema and database to include the refresh token information, associated user fields, and the `accessToken` constraint.
 
 ## Updating the Drizzle schema
 
-Update your `Session` table definition to include the refresh token information.
+Update your `Session` table definition to include the refresh token information and associated user fields (`firstName`, `lastName`, `email`, `accountOwner`, `locale`, `collaborator`, and `emailVerified`).
 
 Postgres:
 
@@ -22,6 +22,13 @@ export const sessionTable = pgTable('session', {
   // New fields
   refreshToken: text('refreshToken'),
   refreshTokenExpires: timestamp('refreshTokenExpires', {mode: 'date'}),
+  firstName: text('firstName'),
+  lastName: text('lastName'),
+  email: text('email'),
+  accountOwner: boolean('accountOwner'),
+  locale: text('locale'),
+  collaborator: boolean('collaborator'),
+  emailVerified: boolean('emailVerified'),
 });
 ```
 
@@ -41,6 +48,13 @@ export const sessionTable = mysqlTable('session', {
   // New fields
   refreshToken: text('refreshToken'),
   refreshTokenExpires: timestamp('refreshTokenExpires', {mode: 'date'}),
+  firstName: text('firstName'),
+  lastName: text('lastName'),
+  email: text('email'),
+  accountOwner: boolean('accountOwner'),
+  locale: text('locale'),
+  collaborator: boolean('collaborator'),
+  emailVerified: boolean('emailVerified'),
 });
 ```
 
@@ -60,6 +74,13 @@ export const sessionTable = sqliteTable('session', {
   // New fields
   refreshToken: text('refreshToken'),
   refreshTokenExpires: text('refreshTokenExpires'),
+  firstName: text('firstName'),
+  lastName: text('lastName'),
+  email: text('email'),
+  accountOwner: integer('accountOwner', {mode: 'boolean'}),
+  locale: text('locale'),
+  collaborator: integer('collaborator', {mode: 'boolean'}),
+  emailVerified: integer('emailVerified', {mode: 'boolean'}),
 });
 ```
 
@@ -69,6 +90,15 @@ Apply your schema changes with your migration workflow (for example, using `driz
 
 - `refreshToken`
 - `refreshTokenExpires`
+- `firstName`
+- `lastName`
+- `email`
+- `accountOwner`
+- `locale`
+- `collaborator`
+- `emailVerified`
+
+If your existing schema allows `accessToken` to be `NULL`, backfill any null values and update the column to be `NOT NULL`.
 
 If you use drizzle-kit, your commands might look like:
 
