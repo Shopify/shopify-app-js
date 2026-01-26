@@ -52,7 +52,7 @@
     "drizzle-orm": "^0.40.0"
   },
   "devDependencies": {
-    "@libsql/client": "^0.15.15",
+    "@libsql/client": "^0.17.0",
     "@shopify/shopify-app-session-storage-test-utils": "^4.0.5",
     "@types/better-sqlite3": "^7.6.13",
     "@types/pg": "^8.16.0",
