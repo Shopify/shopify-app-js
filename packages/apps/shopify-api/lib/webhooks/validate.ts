@@ -66,19 +66,22 @@ function checkWebhookHeaders(
 ): WebhookValidationMissingHeaders | WebhookValidationValid {
   const missingHeaders: ShopifyHeader[] = [];
   const entries = Object.entries(HANDLER_PROPERTIES) as [
-    keyof WebhookFields,
+    keyof typeof HANDLER_PROPERTIES,
     ShopifyHeader,
   ][];
-  const headerValues = entries.reduce((acc, [property, headerName]) => {
-    const headerValue = getHeader(headers, headerName);
-    if (headerValue) {
-      acc[property] = headerValue;
-    } else if (!(property in OPTIONAL_HANDLER_PROPERTIES)) {
-      missingHeaders.push(headerName);
-    }
+  const headerValues = entries.reduce(
+    (acc, [property, headerName]) => {
+      const headerValue = getHeader(headers, headerName);
+      if (headerValue) {
+        acc[property] = headerValue;
+      } else if (!(property in OPTIONAL_HANDLER_PROPERTIES)) {
+        missingHeaders.push(headerName);
+      }
 
-    return acc;
-  }, {} as WebhookFields);
+      return acc;
+    },
+    {} as Pick<WebhookFields, keyof typeof HANDLER_PROPERTIES>,
+  );
 
   if (missingHeaders.length) {
     return {

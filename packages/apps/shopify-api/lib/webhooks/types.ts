@@ -1,6 +1,7 @@
 import {ValidationErrorReason, ValidationInvalid} from '../utils/types';
 import {AdapterArgs} from '../../runtime/types';
 import {Session} from '../session/session';
+import {WebhookTypeValue} from './header-names';
 
 export enum DeliveryMethod {
   Http = 'http',
@@ -141,12 +142,28 @@ export type WebhookValidationErrorReasonType =
   (typeof WebhookValidationErrorReason)[keyof typeof WebhookValidationErrorReason];
 
 export interface WebhookFields {
+  // Existing required fields (unchanged)
   webhookId: string;
   apiVersion: string;
   domain: string;
   hmac: string;
   topic: string;
   subTopic?: string;
+
+  // New optional fields
+  webhookType?: WebhookTypeValue;
+
+  // Current gen specific
+  name?: string;
+
+  // NGE specific
+  handle?: string;
+  action?: string;
+  resourceId?: string;
+
+  // Previously unexposed, now optional on both
+  triggeredAt?: string;
+  eventId?: string;
 }
 
 export interface WebhookValidationInvalid
