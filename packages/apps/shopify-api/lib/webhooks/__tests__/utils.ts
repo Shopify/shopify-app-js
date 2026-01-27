@@ -3,6 +3,7 @@ import crypto from 'crypto';
 import express from 'express';
 
 import {ShopifyHeader} from '../../types';
+import {WEBHOOK_HEADER_NAMES, WebhookTypeValue} from '../header-names';
 
 export function getTestExpressApp() {
   const parseRawBody = (req: any, _res: any, next: any) => {
@@ -27,9 +28,17 @@ export function headers({
   hmac = 'fake',
   topic = 'products/create',
   webhookId = '123456789',
-  // must explicitly set to test for presence
   subTopic = '',
   lowercase = false,
+  webhookType = 'webhooks' as WebhookTypeValue,
+  // NGE-specific fields
+  handle = '',
+  action = '',
+  resourceId = '',
+  triggeredAt = '',
+  eventId = '',
+  // Webhooks specific
+  name = '',
 }: {
   apiVersion?: string;
   domain?: string;
@@ -38,7 +47,30 @@ export function headers({
   webhookId?: string;
   subTopic?: string;
   lowercase?: boolean;
+  webhookType?: WebhookTypeValue;
+  handle?: string;
+  action?: string;
+  resourceId?: string;
+  triggeredAt?: string;
+  eventId?: string;
+  name?: string;
 } = {}) {
+  if (webhookType === 'nge') {
+    const ngeHeaders = WEBHOOK_HEADER_NAMES.nge;
+    return {
+      [ngeHeaders.apiVersion]: apiVersion,
+      [ngeHeaders.domain]: domain,
+      [ngeHeaders.hmac]: hmac,
+      [ngeHeaders.topic]: topic,
+      [ngeHeaders.eventId]: eventId || webhookId,
+      ...(handle && {[ngeHeaders.handle]: handle}),
+      ...(action && {[ngeHeaders.action]: action}),
+      ...(resourceId && {[ngeHeaders.resourceId]: resourceId}),
+      ...(triggeredAt && {[ngeHeaders.triggeredAt]: triggeredAt}),
+    };
+  }
+
+  // Webhooks headers
   return {
     [lowercase
       ? ShopifyHeader.ApiVersion.toLowerCase()
@@ -58,6 +90,9 @@ export function headers({
             : ShopifyHeader.SubTopic]: subTopic,
         }
       : {}),
+    ...(name && {[lowercase ? 'x-shopify-name' : 'X-Shopify-Name']: name}),
+    ...(triggeredAt && {[lowercase ? 'x-shopify-triggered-at' : 'X-Shopify-Triggered-At']: triggeredAt}),
+    ...(eventId && {[lowercase ? 'x-shopify-event-id' : 'X-Shopify-Event-Id']: eventId}),
   };
 }
 
