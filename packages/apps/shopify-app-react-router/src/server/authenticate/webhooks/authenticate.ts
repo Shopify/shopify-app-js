@@ -59,6 +59,14 @@ export function authenticateWebhookFactory<Topics extends string>(
       subTopic: check.subTopic || undefined,
       session: undefined,
       admin: undefined,
+      // New NGE fields
+      webhookType: check.webhookType,
+      name: check.name,
+      handle: check.handle,
+      action: check.action,
+      resourceId: check.resourceId,
+      triggeredAt: check.triggeredAt,
+      eventId: check.eventId,
     };
 
     if (!session) {

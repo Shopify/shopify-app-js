@@ -85,13 +85,8 @@ function checkWebhookHeaders(
   const headerNames = WEBHOOK_HEADER_NAMES[webhookType];
   const missingHeaders: string[] = [];
 
-  // Required fields for both types
-  const requiredFields: (keyof typeof headerNames)[] = [
-    'hmac',
-    'topic',
-    'domain',
-    'apiVersion',
-  ];
+  // Required fields for both types (common fields)
+  const requiredFields: string[] = ['hmac', 'topic', 'domain', 'apiVersion'];
 
   // webhookId is only required for webhooks (NGE uses eventId)
   if (webhookType === WebhookType.Webhooks) {
