@@ -7,7 +7,6 @@ import {
   Headers,
   NormalizedRequest,
 } from '../../runtime/http';
-import {ShopifyHeader} from '../types';
 import {ConfigInterface} from '../base-types';
 
 import {
@@ -19,19 +18,31 @@ import {
   WebhookValidationValid,
 } from './types';
 import {topicForStorage} from './registry';
+import {
+  WEBHOOK_HEADER_NAMES,
+  WebhookType,
+  WebhookTypeValue,
+} from './header-names';
 
-const OPTIONAL_HANDLER_PROPERTIES = {
-  subTopic: ShopifyHeader.SubTopic,
-};
+function detectWebhookType(headers: Headers): WebhookTypeValue {
+  // Check for webhooks first (most common during rollout)
+  const webhooksHmac = getHeader(
+    headers,
+    WEBHOOK_HEADER_NAMES[WebhookType.Webhooks].hmac,
+  );
+  if (webhooksHmac) {
+    return WebhookType.Webhooks;
+  }
 
-const HANDLER_PROPERTIES = {
-  apiVersion: ShopifyHeader.ApiVersion,
-  domain: ShopifyHeader.Domain,
-  hmac: ShopifyHeader.Hmac,
-  topic: ShopifyHeader.Topic,
-  webhookId: ShopifyHeader.WebhookId,
-  ...OPTIONAL_HANDLER_PROPERTIES,
-};
+  // Fall back to NGE
+  const ngeHmac = getHeader(headers, WEBHOOK_HEADER_NAMES[WebhookType.NextGen].hmac);
+  if (ngeHmac) {
+    return WebhookType.NextGen;
+  }
+
+  // Default to webhooks (will fail validation with missing_hmac)
+  return WebhookType.Webhooks;
+}
 
 export function validateFactory(config: ConfigInterface) {
   return async function validate({
@@ -41,9 +52,14 @@ export function validateFactory(config: ConfigInterface) {
     const request: NormalizedRequest =
       await abstractConvertRequest(adapterArgs);
 
+    // Step 0: Detect webhook type
+    const webhookType = detectWebhookType(request.headers);
+
+    // Step 1: Validate HMAC with type-aware header selection
     const validHmacResult = await validateHmacFromRequestFactory(config)({
       type: HmacValidationType.Webhook,
       rawBody,
+      webhookType,
       ...adapterArgs,
     });
 
@@ -57,31 +73,87 @@ export function validateFactory(config: ConfigInterface) {
       return validHmacResult;
     }
 
-    return checkWebhookHeaders(request.headers);
+    // Step 2: Extract headers with type-aware field extraction
+    return checkWebhookHeaders(request.headers, webhookType);
   };
 }
 
 function checkWebhookHeaders(
   headers: Headers,
+  webhookType: WebhookTypeValue,
 ): WebhookValidationMissingHeaders | WebhookValidationValid {
-  const missingHeaders: ShopifyHeader[] = [];
-  const entries = Object.entries(HANDLER_PROPERTIES) as [
-    keyof typeof HANDLER_PROPERTIES,
-    ShopifyHeader,
-  ][];
-  const headerValues = entries.reduce(
-    (acc, [property, headerName]) => {
-      const headerValue = getHeader(headers, headerName);
-      if (headerValue) {
-        acc[property] = headerValue;
-      } else if (!(property in OPTIONAL_HANDLER_PROPERTIES)) {
+  const headerNames = WEBHOOK_HEADER_NAMES[webhookType];
+  const missingHeaders: string[] = [];
+
+  // Required fields for both types
+  const requiredFields: (keyof typeof headerNames)[] = [
+    'hmac',
+    'topic',
+    'domain',
+    'apiVersion',
+  ];
+
+  // webhookId is only required for webhooks (NGE uses eventId)
+  if (webhookType === WebhookType.Webhooks) {
+    requiredFields.push('webhookId');
+  }
+
+  const headerValues: Partial<WebhookFields> = {
+    webhookType,
+  };
+
+  // Extract required fields
+  for (const field of requiredFields) {
+    const headerName = headerNames[field as keyof typeof headerNames];
+    if (headerName) {
+      const value = getHeader(headers, headerName);
+      if (value) {
+        (headerValues as any)[field] = value;
+      } else {
         missingHeaders.push(headerName);
       }
+    }
+  }
 
-      return acc;
-    },
-    {} as Pick<WebhookFields, keyof typeof HANDLER_PROPERTIES>,
-  );
+  // Extract optional fields based on type
+  if (webhookType === WebhookType.Webhooks) {
+    const webhooksHeaders = WEBHOOK_HEADER_NAMES[WebhookType.Webhooks];
+
+    const subTopic = getHeader(headers, webhooksHeaders.subTopic);
+    if (subTopic) headerValues.subTopic = subTopic;
+
+    const name = getHeader(headers, webhooksHeaders.name);
+    if (name) headerValues.name = name;
+
+    // For webhooks, webhookId was already extracted as required
+    // Also extract optional triggeredAt and eventId
+    const triggeredAt = getHeader(headers, webhooksHeaders.triggeredAt);
+    if (triggeredAt) headerValues.triggeredAt = triggeredAt;
+
+    const eventId = getHeader(headers, webhooksHeaders.eventId);
+    if (eventId) headerValues.eventId = eventId;
+  } else {
+    const ngeHeaders = WEBHOOK_HEADER_NAMES[WebhookType.NextGen];
+
+    // NGE uses eventId as the primary identifier
+    const eventId = getHeader(headers, ngeHeaders.eventId);
+    if (eventId) {
+      headerValues.eventId = eventId;
+      headerValues.webhookId = eventId; // Map to webhookId for compatibility
+    }
+
+    const handle = getHeader(headers, ngeHeaders.handle);
+    if (handle) headerValues.handle = handle;
+
+    const action = getHeader(headers, ngeHeaders.action);
+    if (action) headerValues.action = action;
+
+    const resourceId = getHeader(headers, ngeHeaders.resourceId);
+    if (resourceId) headerValues.resourceId = resourceId;
+
+    const triggeredAt = getHeader(headers, ngeHeaders.triggeredAt);
+    if (triggeredAt) headerValues.triggeredAt = triggeredAt;
+  }
 
   if (missingHeaders.length) {
     return {
@@ -89,12 +161,17 @@ function checkWebhookHeaders(
       reason: WebhookValidationErrorReason.MissingHeaders,
       missingHeaders,
     };
-  } else {
-    return {
-      valid: true,
-      ...headerValues,
-      ...(headerValues.subTopic ? {subTopic: headerValues.subTopic} : {}),
-      topic: topicForStorage(headerValues.topic),
-    };
   }
+
+  // For webhooks, normalize topic for storage. For NGE, keep as-is since format differs.
+  const topic =
+    webhookType === WebhookType.Webhooks
+      ? topicForStorage(headerValues.topic!)
+      : headerValues.topic!;
+
+  return {
+    valid: true,
+    ...(headerValues as WebhookFields),
+    topic,
+  };
 }

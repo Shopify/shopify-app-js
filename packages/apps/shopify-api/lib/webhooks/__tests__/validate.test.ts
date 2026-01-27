@@ -27,6 +27,7 @@ describe('shopify.webhooks.validate', () => {
       domain: 'shop1.myshopify.io',
       hmac: 'B23tXN681gZ0qIWNRrgtzBE9XSDo5yaUu6wfmhu3a7g=',
       topic: 'PRODUCTS_CREATE',
+      webhookType: 'current_gen',
     });
   });
 
