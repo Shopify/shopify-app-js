@@ -131,6 +131,41 @@ interface Context<Topics = string | number | symbol> {
    *
    */
   subTopic?: string;
+
+  /**
+   * The type of webhook: 'webhooks' for traditional webhooks or 'nge' for Next Generation Events.
+   */
+  webhookType?: 'webhooks' | 'nge';
+
+  /**
+   * The name assigned to the webhook subscription (webhooks only).
+   */
+  name?: string;
+
+  /**
+   * The handle for the webhook subscription (NGE only).
+   */
+  handle?: string;
+
+  /**
+   * The action type: 'create', 'update', or 'delete' (NGE only).
+   */
+  action?: string;
+
+  /**
+   * The GID of the resource that triggered the webhook (NGE only).
+   */
+  resourceId?: string;
+
+  /**
+   * The timestamp when the webhook was triggered.
+   */
+  triggeredAt?: string;
+
+  /**
+   * The unique event identifier.
+   */
+  eventId?: string;
 }
 
 export interface WebhookContextWithoutSession<Topics = string | number | symbol>
