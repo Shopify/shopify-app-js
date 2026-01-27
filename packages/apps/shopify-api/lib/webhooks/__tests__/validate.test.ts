@@ -103,6 +103,131 @@ describe('shopify.webhooks.validate', () => {
       reason: WebhookValidationErrorReason.InvalidHmac,
     });
   });
+
+  describe('NGE webhook validation', () => {
+    it('validates NGE webhooks with lowercase headers', async () => {
+      const shopify = shopifyApi(testConfig());
+      const app = getTestApp(shopify);
+
+      const response = await request(app)
+        .post('/webhooks')
+        .set(headers({
+          hmac: hmac(shopify.config.apiSecretKey, rawBody),
+          webhookType: 'nge',
+          topic: 'Product',
+          action: 'create',
+          handle: 'my-webhook',
+          resourceId: 'gid://shopify/Product/123',
+        }))
+        .send(rawBody)
+        .expect(200);
+
+      expect(response.body.data).toMatchObject({
+        valid: true,
+        webhookType: 'nge',
+        topic: 'Product',
+        domain: 'shop1.myshopify.io',
+        action: 'create',
+        handle: 'my-webhook',
+        resourceId: 'gid://shopify/Product/123',
+      });
+    });
+
+    it('returns webhookType: current_gen for current gen webhooks', async () => {
+      const shopify = shopifyApi(testConfig());
+      const app = getTestApp(shopify);
+
+      const response = await request(app)
+        .post('/webhooks')
+        .set(headers({hmac: hmac(shopify.config.apiSecretKey, rawBody)}))
+        .send(rawBody)
+        .expect(200);
+
+      expect(response.body.data).toMatchObject({
+        valid: true,
+        webhookType: 'webhooks',
+      });
+    });
+
+    it('extracts NGE-specific optional fields', async () => {
+      const shopify = shopifyApi(testConfig());
+      const app = getTestApp(shopify);
+
+      const response = await request(app)
+        .post('/webhooks')
+        .set(headers({
+          hmac: hmac(shopify.config.apiSecretKey, rawBody),
+          webhookType: 'nge',
+          handle: 'test-handle',
+          action: 'update',
+          resourceId: 'gid://shopify/Product/456',
+          triggeredAt: '2026-01-27T12:00:00Z',
+          eventId: 'event-123',
+        }))
+        .send(rawBody)
+        .expect(200);
+
+      expect(response.body.data).toMatchObject({
+        valid: true,
+        handle: 'test-handle',
+        action: 'update',
+        resourceId: 'gid://shopify/Product/456',
+        triggeredAt: '2026-01-27T12:00:00Z',
+        eventId: 'event-123',
+      });
+    });
+
+    it('extracts webhooks name field', async () => {
+      const shopify = shopifyApi(testConfig());
+      const app = getTestApp(shopify);
+
+      const response = await request(app)
+        .post('/webhooks')
+        .set(headers({
+          hmac: hmac(shopify.config.apiSecretKey, rawBody),
+          name: 'my-webhook-name',
+        }))
+        .send(rawBody)
+        .expect(200);
+
+      expect(response.body.data).toMatchObject({
+        valid: true,
+        webhookType: 'webhooks',
+        name: 'my-webhook-name',
+      });
+    });
+  });
+
+  describe('webhook type detection', () => {
+    it('detects webhooks when X-Shopify-Hmac-Sha256 present', async () => {
+      const shopify = shopifyApi(testConfig());
+      const app = getTestApp(shopify);
+
+      const response = await request(app)
+        .post('/webhooks')
+        .set(headers({hmac: hmac(shopify.config.apiSecretKey, rawBody)}))
+        .send(rawBody)
+        .expect(200);
+
+      expect(response.body.data.webhookType).toBe('webhooks');
+    });
+
+    it('detects nge when shopify-hmac-sha256 present', async () => {
+      const shopify = shopifyApi(testConfig());
+      const app = getTestApp(shopify);
+
+      const response = await request(app)
+        .post('/webhooks')
+        .set(headers({
+          hmac: hmac(shopify.config.apiSecretKey, rawBody),
+          webhookType: 'nge',
+        }))
+        .send(rawBody)
+        .expect(200);
+
+      expect(response.body.data.webhookType).toBe('nge');
+    });
+  });
 });
 
 function getTestApp(shopify: Shopify) {
