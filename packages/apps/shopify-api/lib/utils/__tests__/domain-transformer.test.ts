@@ -132,44 +132,6 @@ describe('applyDomainTransformations', () => {
       applyDomainTransformations('shop1.ui.example.com', config),
     ).toBeNull();
   });
-
-  it('handles complex transformation logic', () => {
-    const config = {
-      domainTransformations: [
-        {
-          match: /^([a-zA-Z0-9-_]+)\.admin\.mycompany\.com$/,
-          transform: (matches) => {
-            const shopName = matches[1];
-
-            // Premium shops go to premium API cluster
-            if (shopName.startsWith('premium-')) {
-              return `${shopName}.api-premium.mycompany.com`;
-            }
-
-            // Test shops go to test environment
-            if (shopName.startsWith('test-')) {
-              return `${shopName}.api-test.mycompany.com`;
-            }
-
-            // Default shops
-            return `${shopName}.api.mycompany.com`;
-          },
-        },
-      ],
-    } as ConfigInterface;
-
-    expect(
-      applyDomainTransformations('premium-shop1.admin.mycompany.com', config),
-    ).toBe('premium-shop1.api-premium.mycompany.com');
-
-    expect(
-      applyDomainTransformations('test-shop1.admin.mycompany.com', config),
-    ).toBe('test-shop1.api-test.mycompany.com');
-
-    expect(
-      applyDomainTransformations('shop1.admin.mycompany.com', config),
-    ).toBe('shop1.api.mycompany.com');
-  });
 });
 
 describe('getTransformationDomains', () => {

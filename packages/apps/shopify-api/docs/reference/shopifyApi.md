@@ -20,7 +20,6 @@ const shopify = shopifyApi({
   isCustomStoreApp: false,
   userAgentPrefix: 'Custom prefix',
   privateAppStorefrontAccessToken: 'PrivateAccessToken',
-  customShopDomains: ['*.my-custom-domain.io'],
   billing: {
     'My plan': {
       amount: 5.0,
@@ -101,12 +100,6 @@ Any prefix you wish to include in the `User-Agent` for requests made by the libr
 `string` | Defaults to `undefined`
 
 Fixed Storefront API access token for private apps.
-
-### customShopDomains
-
-`(RegExp | string)[]` | Defaults to `undefined`
-
-Use this if you need to allow values other than `myshopify.com`.
 
 ### domainTransformations
 

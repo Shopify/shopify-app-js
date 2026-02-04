@@ -1,5 +1,6 @@
 import {ConfigInterface} from '../base-types';
-import {DomainTransformation} from '../types';
+import {DomainTransformation, LogSeverity} from '../types';
+import {logger} from '../logger';
 
 /**
  * Applies configured domain transformations to a shop URL.
@@ -61,6 +62,19 @@ export function applyDomainTransformations(
  * Extracts all domains (source and target) from transformations for validation.
  * Uses heuristics to extract domain patterns from regex source.
  *
+ * **Supported regex patterns:**
+ * - Simple literal domains with escaped dots: `\.example\.com`
+ * - Patterns with anchors: `^([a-zA-Z0-9-_]+)\.example\.com$`
+ * - Character classes in subdomains: `^[a-z0-9-]+\.example\.com$`
+ *
+ * **Unsupported regex patterns:**
+ * - Optional groups: `(\.staging)?\.example\.com$` - May not extract correctly
+ * - Character classes in domain part: `\.api[0-9]\.example\.com$` - May not extract correctly
+ * - Complex alternations: `\.(dev|staging)\.example\.com$` - May not extract correctly
+ * - Nested groups in domain part - May not extract correctly
+ *
+ * When using unsupported patterns, domain extraction will fail and be logged at debug level.
+ *
  * @param transformations - Array of domain transformations
  * @returns Array of domain regex patterns
  *
@@ -76,6 +90,7 @@ export function getTransformationDomains(
   transformations: DomainTransformation[],
 ): string[] {
   const domains: string[] = [];
+  const log = logger({logger: {level: LogSeverity.Debug}} as ConfigInterface);
 
   for (const transformation of transformations) {
     const regex =
@@ -87,6 +102,10 @@ export function getTransformationDomains(
 
     if (domainPattern) {
       domains.push(domainPattern[1]);
+    } else {
+      log.debug(
+        `Failed to extract domain pattern from regex: ${regex.source}. This may indicate an unsupported regex pattern (e.g., optional groups, character classes in domain part, complex alternations).`,
+      );
     }
 
     if (typeof transformation.transform !== 'string') {
