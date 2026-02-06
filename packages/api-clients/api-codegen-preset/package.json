@@ -75,7 +75,7 @@
   },
   "devDependencies": {
     "@babel/preset-env": "^7.28.6",
-    "@graphql-codegen/plugin-helpers": "^5.1.1",
+    "@graphql-codegen/plugin-helpers": "^6.1.0",
     "@shopify/babel-preset": "^25.0.2",
     "graphql-config": "^5.1.5",
     "rollup-plugin-dts": "^6.3.0"
