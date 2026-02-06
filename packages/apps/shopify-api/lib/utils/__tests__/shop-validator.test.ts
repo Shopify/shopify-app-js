@@ -6,6 +6,9 @@ const VALID_SHOP_URL_1 = 'someshop.myshopify.com';
 const VALID_SHOP_URL_2 = 'devshop.myshopify.io';
 const VALID_SHOP_URL_3 = 'test-shop.myshopify.com';
 const VALID_SHOP_URL_4 = 'dev-shop-.myshopify.io';
+const VALID_SHOP_URL_5 = 'dev-shop.my.shop.dev';
+const VALID_SHOP_URL_6 = 'test-shop.dev-api.shop.dev';
+const VALID_SHOP_URL_7 = 'another-shop.shop.dev';
 
 const INVALID_SHOP_URL_1 = 'notshopify.com';
 const INVALID_SHOP_URL_2 = '-invalid.myshopify.io';
@@ -27,6 +30,8 @@ const VALID_HOSTS = [
   'admin.shopify.com/store/my-shop',
   'admin.spin.dev/store/my-shop',
   'admin.shop.dev/store/my-shop',
+  'shop1.my.shop.dev/admin',
+  'test-shop.dev-api.shop.dev/admin',
 ].map((testhost) => {
   return {testhost, base64host: Buffer.from(testhost).toString('base64')};
 });
@@ -72,6 +77,16 @@ describe('sanitizeShop', () => {
     );
     expect(shopify.utils.sanitizeShop(VALID_SHOP_URL_4)).toEqual(
       VALID_SHOP_URL_4,
+    );
+    // .my.shop.dev gets converted to .dev-api.shop.dev
+    expect(shopify.utils.sanitizeShop(VALID_SHOP_URL_5)).toEqual(
+      'dev-shop.dev-api.shop.dev',
+    );
+    expect(shopify.utils.sanitizeShop(VALID_SHOP_URL_6)).toEqual(
+      VALID_SHOP_URL_6,
+    );
+    expect(shopify.utils.sanitizeShop(VALID_SHOP_URL_7)).toEqual(
+      VALID_SHOP_URL_7,
     );
   });
 
