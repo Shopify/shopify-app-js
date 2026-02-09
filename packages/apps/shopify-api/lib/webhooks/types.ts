@@ -2,6 +2,11 @@ import {ValidationErrorReason, ValidationInvalid} from '../utils/types';
 import {AdapterArgs} from '../../runtime/types';
 import {Session} from '../session/session';
 
+import {WebhookType} from './header-names';
+
+export type {WebhookTypeValue} from './header-names';
+export {WebhookType};
+
 export enum DeliveryMethod {
   Http = 'http',
   EventBridge = 'eventbridge',
@@ -140,14 +145,31 @@ export const WebhookValidationErrorReason = {
 export type WebhookValidationErrorReasonType =
   (typeof WebhookValidationErrorReason)[keyof typeof WebhookValidationErrorReason];
 
-export interface WebhookFields {
-  webhookId: string;
+interface BaseWebhookFields {
   apiVersion: string;
   domain: string;
   hmac: string;
   topic: string;
-  subTopic?: string;
+  triggeredAt?: string;
 }
+
+export interface WebhooksWebhookFields extends BaseWebhookFields {
+  webhookType: typeof WebhookType.Webhooks;
+  webhookId: string;
+  subTopic?: string;
+  name?: string;
+  eventId?: string;
+}
+
+export interface EventsWebhookFields extends BaseWebhookFields {
+  webhookType: typeof WebhookType.Events;
+  eventId: string;
+  handle?: string;
+  action?: string;
+  resourceId?: string;
+}
+
+export type WebhookFields = WebhooksWebhookFields | EventsWebhookFields;
 
 export interface WebhookValidationInvalid
   extends Omit<ValidationInvalid, 'reason'> {
@@ -161,9 +183,7 @@ export interface WebhookValidationMissingHeaders
   missingHeaders: string[];
 }
 
-export interface WebhookValidationValid extends WebhookFields {
-  valid: true;
-}
+export type WebhookValidationValid = WebhookFields & {valid: true};
 
 export type WebhookValidation =
   | WebhookValidationValid

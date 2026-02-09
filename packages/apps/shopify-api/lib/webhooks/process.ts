@@ -14,6 +14,7 @@ import {
   HttpWebhookHandlerWithCallback,
   WebhookProcessParams,
   WebhookRegistry,
+  WebhookType,
   WebhookValidationErrorReason,
   WebhookValidationInvalid,
   WebhookValidationMissingHeaders,
@@ -134,14 +135,24 @@ async function callWebhookHandlers(
 
     await log.debug('Found HTTP handler, triggering it', loggingContext);
 
+    // process() only handles programmatically-registered HTTP webhooks;
+    // events are registered via app TOML and don't use this code path.
+    if (webhookCheck.webhookType !== WebhookType.Webhooks) {
+      throw new ShopifyErrors.InvalidWebhookError({
+        message: 'process() only supports traditional webhooks, not events',
+        response,
+      });
+    }
+    const {webhookId, subTopic} = webhookCheck;
+
     try {
       await handler.callback(
         webhookCheck.topic,
         webhookCheck.domain,
         rawBody,
-        webhookCheck.webhookId,
+        webhookId,
         webhookCheck.apiVersion,
-        ...(webhookCheck?.subTopic ? webhookCheck.subTopic : ''),
+        ...(subTopic ? subTopic : ''),
         context,
       );
     } catch (error) {

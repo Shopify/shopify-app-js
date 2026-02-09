@@ -1,4 +1,4 @@
-import {Session} from '@shopify/shopify-api';
+import {Session, WebhookTypeValue} from '@shopify/shopify-api';
 
 import type {AdminApiContext} from '../../clients';
 
@@ -77,6 +77,10 @@ interface Context<Topics = string | number | symbol> {
   /**
    * A unique ID for the webhook. Useful to keep track of which events your app has already processed.
    *
+   * For events webhooks (`webhookType === 'events'`), this is set to the `eventId` value for
+   * backwards compatibility. Prefer using `eventId` directly for events webhooks — `webhookId`
+   * will be removed from events webhooks in the next major version.
+   *
    * @example
    * <caption>Webhook ID.</caption>
    * <description>Get the webhook ID.</description>
@@ -113,7 +117,12 @@ interface Context<Topics = string | number | symbol> {
   payload: Record<string, any>;
 
   /**
-   * The sub-topic of the webhook. This is only available for certain webhooks.
+   * The type of webhook: 'webhooks' for traditional webhooks or 'events' for events webhooks.
+   */
+  webhookType: WebhookTypeValue;
+
+  /**
+   * The sub-topic of the webhook. Only available for traditional webhooks.
    *
    * @example
    * <caption>Webhook sub-topic.</caption>
@@ -131,6 +140,36 @@ interface Context<Topics = string | number | symbol> {
    *
    */
   subTopic?: string;
+
+  /**
+   * The name assigned to the webhook subscription. Only available for traditional webhooks.
+   */
+  name?: string;
+
+  /**
+   * The handle for the webhook subscription. Only available for events webhooks.
+   */
+  handle?: string;
+
+  /**
+   * The action type: 'create', 'update', or 'delete'. Only available for events webhooks.
+   */
+  action?: string;
+
+  /**
+   * The GID of the resource that triggered the webhook. Only available for events webhooks.
+   */
+  resourceId?: string;
+
+  /**
+   * The timestamp when the webhook was triggered.
+   */
+  triggeredAt?: string;
+
+  /**
+   * The unique event identifier.
+   */
+  eventId?: string;
 }
 
 export interface WebhookContextWithoutSession<Topics = string | number | symbol>

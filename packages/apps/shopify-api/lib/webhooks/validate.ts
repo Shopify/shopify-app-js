@@ -7,11 +7,14 @@ import {
   Headers,
   NormalizedRequest,
 } from '../../runtime/http';
-import {ShopifyHeader} from '../types';
 import {ConfigInterface} from '../base-types';
 
 import {
-  WebhookFields,
+  EventsWebhookFields,
+  WEBHOOK_HEADER_NAMES,
+  WebhooksWebhookFields,
+  WebhookType,
+  WebhookTypeValue,
   WebhookValidateParams,
   WebhookValidation,
   WebhookValidationErrorReason,
@@ -20,18 +23,31 @@ import {
 } from './types';
 import {topicForStorage} from './registry';
 
-const OPTIONAL_HANDLER_PROPERTIES = {
-  subTopic: ShopifyHeader.SubTopic,
-};
+function detectWebhookType(headers: Headers): WebhookTypeValue {
+  // Check for events first — events webhooks currently send both shopify-* and
+  // x-shopify-* headers for backwards compatibility, so we must check for the
+  // events-only header before the legacy one. Traditional webhooks never send
+  // shopify-hmac-sha256, making its presence a reliable events indicator.
+  const eventsHmac = getHeader(
+    headers,
+    WEBHOOK_HEADER_NAMES[WebhookType.Events].hmac,
+  );
+  if (eventsHmac) {
+    return WebhookType.Events;
+  }
 
-const HANDLER_PROPERTIES = {
-  apiVersion: ShopifyHeader.ApiVersion,
-  domain: ShopifyHeader.Domain,
-  hmac: ShopifyHeader.Hmac,
-  topic: ShopifyHeader.Topic,
-  webhookId: ShopifyHeader.WebhookId,
-  ...OPTIONAL_HANDLER_PROPERTIES,
-};
+  // Fall back to webhooks
+  const webhooksHmac = getHeader(
+    headers,
+    WEBHOOK_HEADER_NAMES[WebhookType.Webhooks].hmac,
+  );
+  if (webhooksHmac) {
+    return WebhookType.Webhooks;
+  }
+
+  // Default to webhooks (will fail validation with missing_hmac)
+  return WebhookType.Webhooks;
+}
 
 export function validateFactory(config: ConfigInterface) {
   return async function validate({
@@ -41,9 +57,14 @@ export function validateFactory(config: ConfigInterface) {
     const request: NormalizedRequest =
       await abstractConvertRequest(adapterArgs);
 
+    // Step 0: Detect webhook type
+    const webhookType = detectWebhookType(request.headers);
+
+    // Step 1: Validate HMAC with type-aware header selection
     const validHmacResult = await validateHmacFromRequestFactory(config)({
       type: HmacValidationType.Webhook,
       rawBody,
+      webhookType,
       ...adapterArgs,
     });
 
@@ -57,28 +78,56 @@ export function validateFactory(config: ConfigInterface) {
       return validHmacResult;
     }
 
-    return checkWebhookHeaders(request.headers);
+    // Step 2: Extract headers with type-aware field extraction
+    return checkWebhookHeaders(request.headers, webhookType);
   };
+}
+
+function getRequiredHeader(
+  headers: Headers,
+  headerName: string,
+  missingHeaders: string[],
+): string | undefined {
+  const value = getHeader(headers, headerName);
+  if (!value) {
+    missingHeaders.push(headerName);
+  }
+  return value;
 }
 
 function checkWebhookHeaders(
   headers: Headers,
+  webhookType: WebhookTypeValue,
 ): WebhookValidationMissingHeaders | WebhookValidationValid {
-  const missingHeaders: ShopifyHeader[] = [];
-  const entries = Object.entries(HANDLER_PROPERTIES) as [
-    keyof WebhookFields,
-    ShopifyHeader,
-  ][];
-  const headerValues = entries.reduce((acc, [property, headerName]) => {
-    const headerValue = getHeader(headers, headerName);
-    if (headerValue) {
-      acc[property] = headerValue;
-    } else if (!(property in OPTIONAL_HANDLER_PROPERTIES)) {
-      missingHeaders.push(headerName);
-    }
+  if (webhookType === WebhookType.Webhooks) {
+    return checkWebhooksHeaders(headers);
+  }
+  return checkEventsHeaders(headers);
+}
 
-    return acc;
-  }, {} as WebhookFields);
+function checkWebhooksHeaders(
+  headers: Headers,
+): WebhookValidationMissingHeaders | WebhookValidationValid {
+  const headerNames = WEBHOOK_HEADER_NAMES[WebhookType.Webhooks];
+  const missingHeaders: string[] = [];
+
+  const hmac = getRequiredHeader(headers, headerNames.hmac, missingHeaders);
+  const topic = getRequiredHeader(headers, headerNames.topic, missingHeaders);
+  const domain = getRequiredHeader(
+    headers,
+    headerNames.domain,
+    missingHeaders,
+  );
+  const apiVersion = getRequiredHeader(
+    headers,
+    headerNames.apiVersion,
+    missingHeaders,
+  );
+  const webhookId = getRequiredHeader(
+    headers,
+    headerNames.webhookId,
+    missingHeaders,
+  );
 
   if (missingHeaders.length) {
     return {
@@ -86,12 +135,84 @@ function checkWebhookHeaders(
       reason: WebhookValidationErrorReason.MissingHeaders,
       missingHeaders,
     };
-  } else {
+  }
+
+  const fields: WebhooksWebhookFields = {
+    webhookType: WebhookType.Webhooks,
+    hmac: hmac!,
+    topic: topicForStorage(topic!),
+    domain: domain!,
+    apiVersion: apiVersion!,
+    webhookId: webhookId!,
+  };
+
+  const subTopic = getHeader(headers, headerNames.subTopic);
+  if (subTopic) fields.subTopic = subTopic;
+
+  const name = getHeader(headers, headerNames.name);
+  if (name) fields.name = name;
+
+  const triggeredAt = getHeader(headers, headerNames.triggeredAt);
+  if (triggeredAt) fields.triggeredAt = triggeredAt;
+
+  const eventId = getHeader(headers, headerNames.eventId);
+  if (eventId) fields.eventId = eventId;
+
+  return {valid: true, ...fields};
+}
+
+function checkEventsHeaders(
+  headers: Headers,
+): WebhookValidationMissingHeaders | WebhookValidationValid {
+  const headerNames = WEBHOOK_HEADER_NAMES[WebhookType.Events];
+  const missingHeaders: string[] = [];
+
+  const hmac = getRequiredHeader(headers, headerNames.hmac, missingHeaders);
+  const topic = getRequiredHeader(headers, headerNames.topic, missingHeaders);
+  const domain = getRequiredHeader(
+    headers,
+    headerNames.domain,
+    missingHeaders,
+  );
+  const apiVersion = getRequiredHeader(
+    headers,
+    headerNames.apiVersion,
+    missingHeaders,
+  );
+  const eventId = getRequiredHeader(
+    headers,
+    headerNames.eventId,
+    missingHeaders,
+  );
+
+  if (missingHeaders.length) {
     return {
-      valid: true,
-      ...headerValues,
-      ...(headerValues.subTopic ? {subTopic: headerValues.subTopic} : {}),
-      topic: topicForStorage(headerValues.topic),
+      valid: false,
+      reason: WebhookValidationErrorReason.MissingHeaders,
+      missingHeaders,
     };
   }
+
+  const fields: EventsWebhookFields = {
+    webhookType: WebhookType.Events,
+    hmac: hmac!,
+    topic: topicForStorage(topic!),
+    domain: domain!,
+    apiVersion: apiVersion!,
+    eventId: eventId!,
+  };
+
+  const handle = getHeader(headers, headerNames.handle);
+  if (handle) fields.handle = handle;
+
+  const action = getHeader(headers, headerNames.action);
+  if (action) fields.action = action;
+
+  const resourceId = getHeader(headers, headerNames.resourceId);
+  if (resourceId) fields.resourceId = resourceId;
+
+  const triggeredAt = getHeader(headers, headerNames.triggeredAt);
+  if (triggeredAt) fields.triggeredAt = triggeredAt;
+
+  return {valid: true, ...fields};
 }

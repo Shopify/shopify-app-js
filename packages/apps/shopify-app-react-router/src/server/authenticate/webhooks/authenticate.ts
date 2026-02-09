@@ -1,4 +1,4 @@
-import {WebhookValidationErrorReason} from '@shopify/shopify-api';
+import {WebhookValidationErrorReason, WebhookType} from '@shopify/shopify-api';
 
 import type {BasicParams} from '../../types';
 import {adminClientFactory} from '../../clients';
@@ -50,16 +50,41 @@ export function authenticateWebhookFactory<Topics extends string>(
       }
     }
     const session = await ensureValidOfflineSession(params, check.domain);
-    const webhookContext: WebhookContextWithoutSession<Topics> = {
-      apiVersion: check.apiVersion,
-      shop: check.domain,
-      topic: check.topic as Topics,
-      webhookId: check.webhookId,
-      payload: JSON.parse(rawBody),
-      subTopic: check.subTopic || undefined,
-      session: undefined,
-      admin: undefined,
-    };
+
+    let webhookContext: WebhookContextWithoutSession<Topics>;
+
+    if (check.webhookType === WebhookType.Webhooks) {
+      webhookContext = {
+        apiVersion: check.apiVersion,
+        shop: check.domain,
+        topic: check.topic as Topics,
+        webhookId: check.webhookId,
+        payload: JSON.parse(rawBody),
+        subTopic: check.subTopic || undefined,
+        session: undefined,
+        admin: undefined,
+        webhookType: check.webhookType,
+        name: check.name,
+        triggeredAt: check.triggeredAt,
+        eventId: check.eventId,
+      };
+    } else {
+      webhookContext = {
+        apiVersion: check.apiVersion,
+        shop: check.domain,
+        topic: check.topic as Topics,
+        webhookId: check.eventId,
+        payload: JSON.parse(rawBody),
+        session: undefined,
+        admin: undefined,
+        webhookType: check.webhookType,
+        handle: check.handle,
+        action: check.action,
+        resourceId: check.resourceId,
+        triggeredAt: check.triggeredAt,
+        eventId: check.eventId,
+      };
+    }
 
     if (!session) {
       return webhookContext;
