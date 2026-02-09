@@ -24,10 +24,6 @@ import {
 import {topicForStorage} from './registry';
 
 function detectWebhookType(headers: Headers): WebhookTypeValue {
-  // Check for events first — events webhooks currently send both shopify-* and
-  // x-shopify-* headers for backwards compatibility, so we must check for the
-  // events-only header before the legacy one. Traditional webhooks never send
-  // shopify-hmac-sha256, making its presence a reliable events indicator.
   const eventsHmac = getHeader(
     headers,
     WEBHOOK_HEADER_NAMES[WebhookType.Events].hmac,
@@ -36,7 +32,6 @@ function detectWebhookType(headers: Headers): WebhookTypeValue {
     return WebhookType.Events;
   }
 
-  // Fall back to webhooks
   const webhooksHmac = getHeader(
     headers,
     WEBHOOK_HEADER_NAMES[WebhookType.Webhooks].hmac,
@@ -45,7 +40,6 @@ function detectWebhookType(headers: Headers): WebhookTypeValue {
     return WebhookType.Webhooks;
   }
 
-  // Default to webhooks (will fail validation with missing_hmac)
   return WebhookType.Webhooks;
 }
 
@@ -57,10 +51,8 @@ export function validateFactory(config: ConfigInterface) {
     const request: NormalizedRequest =
       await abstractConvertRequest(adapterArgs);
 
-    // Step 0: Detect webhook type
     const webhookType = detectWebhookType(request.headers);
 
-    // Step 1: Validate HMAC with type-aware header selection
     const validHmacResult = await validateHmacFromRequestFactory(config)({
       type: HmacValidationType.Webhook,
       rawBody,
@@ -78,7 +70,6 @@ export function validateFactory(config: ConfigInterface) {
       return validHmacResult;
     }
 
-    // Step 2: Extract headers with type-aware field extraction
     return checkWebhookHeaders(request.headers, webhookType);
   };
 }

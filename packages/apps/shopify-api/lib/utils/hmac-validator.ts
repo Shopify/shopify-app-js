@@ -11,7 +11,7 @@ import {HashFormat} from '../../runtime/crypto/types';
 import {AuthQuery} from '../auth/oauth/types';
 import * as ShopifyErrors from '../error';
 import {safeCompare} from '../auth/oauth/safe-compare';
-import {WEBHOOK_HEADER_NAMES, WebhookTypeValue} from '../webhooks/header-names';
+import {WEBHOOK_HEADER_NAMES, WebhookTypeValue} from '../webhooks/types';
 
 import ProcessedQuery from './processed-query';
 import {

@@ -44,6 +44,18 @@ export enum ShopifyHeader {
 }
 /* eslint-enable @shopify/typescript/prefer-pascal-case-enums */
 
+export const ShopifyEventsHeader = {
+  Hmac: 'shopify-hmac-sha256',
+  Topic: 'shopify-topic',
+  Domain: 'shopify-shop-domain',
+  ApiVersion: 'shopify-api-version',
+  EventId: 'shopify-event-id',
+  Handle: 'shopify-handle',
+  Action: 'shopify-action',
+  ResourceId: 'shopify-resource-id',
+  TriggeredAt: 'shopify-triggered-at',
+} as const;
+
 export enum ClientType {
   Rest = 'rest',
   Graphql = 'graphql',

@@ -1,11 +1,39 @@
 import {ValidationErrorReason, ValidationInvalid} from '../utils/types';
 import {AdapterArgs} from '../../runtime/types';
 import {Session} from '../session/session';
+import {ShopifyEventsHeader, ShopifyHeader} from '../types';
 
-import {WebhookType} from './header-names';
+export const WebhookType = {
+  Webhooks: 'webhooks',
+  Events: 'events',
+} as const;
 
-export type {WebhookTypeValue} from './header-names';
-export {WebhookType};
+export type WebhookTypeValue = (typeof WebhookType)[keyof typeof WebhookType];
+
+export const WEBHOOK_HEADER_NAMES = {
+  [WebhookType.Webhooks]: {
+    hmac: ShopifyHeader.Hmac,
+    topic: ShopifyHeader.Topic,
+    domain: ShopifyHeader.Domain,
+    apiVersion: ShopifyHeader.ApiVersion,
+    webhookId: ShopifyHeader.WebhookId,
+    subTopic: ShopifyHeader.SubTopic,
+    name: ShopifyHeader.Name,
+    triggeredAt: ShopifyHeader.TriggeredAt,
+    eventId: ShopifyHeader.EventId,
+  },
+  [WebhookType.Events]: {
+    hmac: ShopifyEventsHeader.Hmac,
+    topic: ShopifyEventsHeader.Topic,
+    domain: ShopifyEventsHeader.Domain,
+    apiVersion: ShopifyEventsHeader.ApiVersion,
+    eventId: ShopifyEventsHeader.EventId,
+    handle: ShopifyEventsHeader.Handle,
+    action: ShopifyEventsHeader.Action,
+    resourceId: ShopifyEventsHeader.ResourceId,
+    triggeredAt: ShopifyEventsHeader.TriggeredAt,
+  },
+} as const;
 
 export enum DeliveryMethod {
   Http = 'http',
