@@ -37,7 +37,7 @@
     "jest-runner-eslint": "^2.3.0",
     "prettier": "^3.6.2",
     "rimraf": "^6.1.2",
-    "rollup": "^4.55.2",
+    "rollup": "^4.57.0",
     "rollup-plugin-exclude-dependencies-from-bundle": "^1.1.24",
     "ts-jest": "^29.4.6",
     "tslib": "^2.8.1",
