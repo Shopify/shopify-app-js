@@ -3,7 +3,9 @@
   "compilerOptions": {
     "baseUrl": ".",
     "outDir": "./dist/ts",
-    "rootDir": "."
+    "rootDir": ".",
+    "module": "ESNext",
+    "moduleResolution": "Bundler"
   },
   "include": [
     "lib/**/*.ts",
