@@ -369,7 +369,9 @@ describe('tokenExchange', () => {
       exchangePromise.catch((error) => {
         expect(error).toHaveProperty('response.body', errorResponse);
       });
-      expect(exchangePromise).rejects.toThrow(ShopifyErrors.HttpResponseError);
+      await expect(exchangePromise).rejects.toThrow(
+        ShopifyErrors.HttpResponseError,
+      );
     });
 
     describe('with invalid shop', () => {
