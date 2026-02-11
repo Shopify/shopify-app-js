@@ -1,6 +1,6 @@
 import fs from 'fs';
 
-import {getConfig} from '../../../config/rollup/rollup-utils';
+import {getPlugins, esmConfigs, cjsConfigs} from '../../../config/rollup/rollup-utils';
 
 import * as pkg from './package.json';
 
@@ -24,7 +24,25 @@ const restInputs = fs
   )
   .map(({name}) => `rest/admin/${name}/index.ts`);
 
-export default getConfig({
-  pkg,
-  input: ['lib/index.ts', 'runtime/index.ts', 'test-helpers/index.ts', ...adapterInputs, ...restInputs],
-});
+const input = ['lib/index.ts', 'runtime/index.ts', 'test-helpers/index.ts', ...adapterInputs, ...restInputs];
+
+// ESM-only dependencies that must be bundled into the CJS build
+const esmOnlyDeps = ['jose'];
+
+const allDeps = Object.keys(pkg.dependencies);
+const cjsExternalDeps = allDeps.filter((dep) => !esmOnlyDeps.includes(dep));
+
+export default [
+  {
+    input,
+    plugins: getPlugins({outDir: './dist/esm'}),
+    external: allDeps,
+    output: [{...esmConfigs}],
+  },
+  {
+    input,
+    plugins: getPlugins({outDir: './dist/cjs', bundleDependencies: true}),
+    external: cjsExternalDeps,
+    output: [{...cjsConfigs}],
+  },
+];

@@ -1,3 +1,4 @@
+import * as jose from 'jose';
 import {compare} from 'compare-versions';
 
 import {JwtPayload} from '../session/types';
@@ -53,7 +54,6 @@ export async function signJWT(
   secret: string,
   payload: JwtPayload,
 ): Promise<string> {
-  const jose = await import('jose');
   return new jose.SignJWT(payload as any)
     .setProtectedHeader({alg: 'HS256'})
     .sign(getHMACKey(secret));
