@@ -1,16 +1,12 @@
-import {Session, ShopifyRestResources} from '@shopify/shopify-api';
+import {Session} from '@shopify/shopify-api';
 
-import {AppConfigArg} from '../../config-types';
 import type {AdminApiContext} from '../../clients';
 
 export type FulfillmentServicePayload = Record<string, any> & {
   kind: string;
 };
 
-export interface FulfillmentServiceContext<
-  ConfigArg extends AppConfigArg,
-  Resources extends ShopifyRestResources = ShopifyRestResources,
-> {
+export interface FulfillmentServiceContext {
   /**
    * A session with an offline token for the shop.
    *
@@ -55,7 +51,7 @@ export interface FulfillmentServiceContext<
    * }
    * ```
    */
-  admin: AdminApiContext<ConfigArg, Resources>;
+  admin: AdminApiContext;
 
   /**
    * The payload from the fulfillment service request.
@@ -81,9 +77,6 @@ export interface FulfillmentServiceContext<
   payload: FulfillmentServicePayload;
 }
 
-export type AuthenticateFulfillmentService<
-  ConfigArg extends AppConfigArg,
-  Resources extends ShopifyRestResources = ShopifyRestResources,
-> = (
+export type AuthenticateFulfillmentService = (
   request: Request,
-) => Promise<FulfillmentServiceContext<ConfigArg, Resources>>;
+) => Promise<FulfillmentServiceContext>;

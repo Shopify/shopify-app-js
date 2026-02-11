@@ -1,13 +1,9 @@
-import {
-  ShopifyRestResources,
-  WebhookValidationErrorReason,
-} from '@shopify/shopify-api';
+import {WebhookValidationErrorReason} from '@shopify/shopify-api';
 
-import {AppConfigArg} from '../../config-types';
 import type {BasicParams} from '../../types';
 import {adminClientFactory} from '../../clients';
 import {handleClientErrorFactory} from '../admin/helpers';
-import {createOrLoadOfflineSession} from '../helpers';
+import {ensureValidOfflineSession} from '../../helpers';
 
 import type {
   AuthenticateWebhook,
@@ -15,16 +11,14 @@ import type {
   WebhookContextWithoutSession,
 } from './types';
 
-export function authenticateWebhookFactory<
-  ConfigArg extends AppConfigArg,
-  Resources extends ShopifyRestResources,
-  Topics extends string,
->(params: BasicParams): AuthenticateWebhook<ConfigArg, Resources, Topics> {
+export function authenticateWebhookFactory<Topics extends string>(
+  params: BasicParams,
+): AuthenticateWebhook<Topics> {
   const {api, logger} = params;
 
   return async function authenticate(
     request: Request,
-  ): Promise<WebhookContext<ConfigArg, Resources, Topics>> {
+  ): Promise<WebhookContext<Topics>> {
     if (request.method !== 'POST') {
       logger.debug(
         'Received a non-POST request for a webhook. Only POST requests are allowed.',
@@ -55,7 +49,7 @@ export function authenticateWebhookFactory<
         throw new Response(undefined, {status: 400, statusText: 'Bad Request'});
       }
     }
-    const session = await createOrLoadOfflineSession(check.domain, params);
+    const session = await ensureValidOfflineSession(params, check.domain);
     const webhookContext: WebhookContextWithoutSession<Topics> = {
       apiVersion: check.apiVersion,
       shop: check.domain,
@@ -71,7 +65,7 @@ export function authenticateWebhookFactory<
       return webhookContext;
     }
 
-    const admin = adminClientFactory<ConfigArg, Resources>({
+    const admin = adminClientFactory({
       params,
       session,
       handleClientError: handleClientErrorFactory({request}),

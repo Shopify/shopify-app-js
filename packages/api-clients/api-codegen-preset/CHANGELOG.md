@@ -1,5 +1,27 @@
 # Changelog
 
+## 1.2.2
+
+### Patch Changes
+
+- b69d09f: bump @graphql-codegen/typescript from 4.1.6 to 5.0.1
+
+## 1.2.1
+
+### Patch Changes
+
+- 62394e5: Fixed TypeScript module resolution error by including file extensions (.d.ts or .ts) in generated import paths to support Node16/NodeNext module resolution strategies.
+
+## 1.2.0
+
+### Minor Changes
+
+- 02ffd79: Added support for `enumsAsConst` option to represent GraphQL enums as type-safe strings as opposed to using TypeScript’s enum construct which requires importing.
+
+### Patch Changes
+
+- dc41d09: Unpin graphql-config dependency version
+
 ## 1.1.9
 
 ### Patch Changes

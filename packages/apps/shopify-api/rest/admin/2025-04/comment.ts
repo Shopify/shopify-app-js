@@ -247,14 +247,14 @@ export class Comment extends Base {
     return response ? response.body : null;
   }
 
-  public article_id: number | null;
+  public article_id: string | null;
   public author: string | null;
-  public blog_id: number | null;
+  public blog_id: string | null;
   public body: string | null;
   public body_html: string | null;
   public created_at: string | null;
   public email: string | null;
-  public id: number | null;
+  public id: string | null;
   public ip: string | null;
   public published_at: string | null;
   public status: string | null;

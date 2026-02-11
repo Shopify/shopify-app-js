@@ -2,8 +2,6 @@ import {
   BillingConfigSubscriptionLineItemPlan,
   BillingError,
   BillingInterval,
-  HttpResponseError,
-  SESSION_COOKIE_NAME,
 } from '@shopify/shopify-api';
 
 import {shopifyApp} from '../../../..';
@@ -16,10 +14,8 @@ import {
   getJwt,
   getThrownResponse,
   setUpValidSession,
-  signRequestCookie,
   testConfig,
   mockExternalRequest,
-  mockExternalRequests,
 } from '../../../../__test-helpers';
 import {REAUTH_URL_HEADER} from '../../../const';
 
@@ -51,7 +47,7 @@ describe('Update usage billing plan capped amount', () => {
       ),
     });
 
-    const {token} = getJwt();
+    const {token} = await getJwt();
     const request = new Request(
       `${APP_URL}/billing?embedded=1&shop=${TEST_SHOP}&host=${BASE64_HOST}&id_token=${token}`,
     );
@@ -90,7 +86,7 @@ describe('Update usage billing plan capped amount', () => {
 
     const request = new Request(`${APP_URL}/billing`, {
       headers: {
-        Authorization: `Bearer ${getJwt().token}`,
+        Authorization: `Bearer ${(await getJwt()).token}`,
       },
     });
 
@@ -128,7 +124,7 @@ describe('Update usage billing plan capped amount', () => {
       }),
     });
 
-    const {token} = getJwt();
+    const {token} = await getJwt();
     const request = new Request(
       `${APP_URL}/billing?embedded=1&shop=${TEST_SHOP}&host=${BASE64_HOST}&id_token=${token}`,
     );
@@ -174,7 +170,7 @@ describe('Update usage billing plan capped amount', () => {
 
     const request = new Request(`${APP_URL}/billing`, {
       headers: {
-        Authorization: `Bearer ${getJwt().token}`,
+        Authorization: `Bearer ${(await getJwt()).token}`,
       },
     });
 
@@ -212,7 +208,7 @@ describe('Update usage billing plan capped amount', () => {
       ),
     });
 
-    const {token} = getJwt();
+    const {token} = await getJwt();
     const {billing} = await shopify.authenticate.admin(
       new Request(
         `${APP_URL}/billing?embedded=1&shop=${TEST_SHOP}&host=${BASE64_HOST}&id_token=${token}`,

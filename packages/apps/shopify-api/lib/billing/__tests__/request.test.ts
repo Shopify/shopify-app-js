@@ -15,7 +15,7 @@ import * as Responses from './responses';
 
 interface TestConfigInterface {
   name: string;
-  billingConfig: BillingConfig<{lineItemBilling: true}>;
+  billingConfig: BillingConfig;
   paymentResponse: string;
   responseObject: any;
   errorResponse: string;
@@ -352,7 +352,7 @@ describe('shopify.billing.request', () => {
               });
 
               if (returnObject) {
-                expect(response).toStrictEqual(config.responseObject);
+                expect(response).toMatchObject(config.responseObject);
               } else {
                 expect(response).toBe(Responses.CONFIRMATION_URL);
               }
@@ -385,7 +385,7 @@ describe('shopify.billing.request', () => {
             });
 
             if (returnObject) {
-              expect(response).toStrictEqual(config.responseObject);
+              expect(response).toMatchObject(config.responseObject);
             } else {
               expect(response).toBe(Responses.CONFIRMATION_URL);
             }
@@ -415,7 +415,7 @@ describe('shopify.billing.request', () => {
             });
 
             if (returnObject) {
-              expect(response).toStrictEqual(config.responseObject);
+              expect(response).toMatchObject(config.responseObject);
             } else {
               expect(response).toBe(Responses.CONFIRMATION_URL);
             }
@@ -445,7 +445,7 @@ describe('shopify.billing.request', () => {
             });
 
             if (returnObject) {
-              expect(response1).toStrictEqual(config.responseObject);
+              expect(response1).toMatchObject(config.responseObject);
             } else {
               expect(response1).toBe(Responses.CONFIRMATION_URL);
             }
@@ -466,7 +466,7 @@ describe('shopify.billing.request', () => {
             });
 
             if (returnObject) {
-              expect(response2).toStrictEqual(config.responseObject);
+              expect(response2).toMatchObject(config.responseObject);
             } else {
               expect(response2).toBe(Responses.CONFIRMATION_URL);
             }
@@ -521,7 +521,7 @@ describe('shopify.billing.request', () => {
             });
 
             if (returnObject) {
-              expect(response).toStrictEqual(config.responseObject);
+              expect(response).toMatchObject(config.responseObject);
             } else {
               expect(response).toBe(Responses.CONFIRMATION_URL);
             }

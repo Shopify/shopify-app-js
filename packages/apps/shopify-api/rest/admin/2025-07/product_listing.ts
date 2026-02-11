@@ -156,7 +156,7 @@ export class ProductListing extends Base {
   public handle: string | null;
   public images: Image[] | null | {[key: string]: any};
   public options: {[key: string]: unknown}[] | null;
-  public product_id: number | null;
+  public product_id: string | null;
   public product_type: string | null;
   public published_at: string | null;
   public tags: string | null;

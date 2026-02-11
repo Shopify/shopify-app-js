@@ -22,7 +22,7 @@ describe('authenticate', () => {
     const config = testConfig();
     const shopify = shopifyApp(config);
 
-    const {token} = getJwt();
+    const {token} = await getJwt();
     await mockTokenExchangeRequest(token, 'offline');
 
     // WHEN
@@ -57,7 +57,7 @@ describe('authenticate', () => {
       expires: anHourAgo,
     });
 
-    const {token} = getJwt();
+    const {token} = await getJwt();
     await mockTokenExchangeRequest(token, 'offline');
     await mockTokenExchangeRequest(token, 'online');
 
@@ -98,7 +98,7 @@ describe('authenticate', () => {
     });
     await shopify.sessionStorage.storeSession(invalidatedSession);
 
-    const {token} = getJwt();
+    const {token} = await getJwt();
     await mockTokenExchangeRequest(token, 'offline');
 
     // WHEN
@@ -139,8 +139,8 @@ describe('authenticate', () => {
         }
 
         // WHEN
-        const {token} = getJwt();
-        const {admin, session} = await shopify.authenticate.admin(
+        const {token} = await getJwt();
+        const {session} = await shopify.authenticate.admin(
           new Request(
             `${APP_URL}?embedded=1&shop=${TEST_SHOP}&host=${BASE64_HOST}&id_token=${token}`,
           ),
@@ -158,7 +158,7 @@ describe('authenticate', () => {
     const config = testConfig();
     const shopify = shopifyApp(config);
 
-    const {token} = getJwt();
+    const {token} = await getJwt();
     await mockInvalidTokenExchangeRequest('invalid_subject_token');
 
     // WHEN
@@ -189,7 +189,7 @@ describe('authenticate', () => {
     const config = testConfig();
     const shopify = shopifyApp(config);
 
-    const {token} = getJwt();
+    const {token} = await getJwt();
     await mockInvalidTokenExchangeRequest('invalid_subject_token');
 
     // WHEN
@@ -214,7 +214,7 @@ describe('authenticate', () => {
     const config = testConfig();
     const shopify = shopifyApp(config);
 
-    const {token} = getJwt();
+    const {token} = await getJwt();
     await mockInvalidTokenExchangeRequest('im_broke', 401);
 
     // WHEN
@@ -243,7 +243,7 @@ describe('authenticate', () => {
       },
     });
 
-    const {token} = getJwt();
+    const {token} = await getJwt();
     await mockTokenExchangeRequest(token, 'offline');
 
     // WHEN
@@ -268,7 +268,7 @@ describe('authenticate', () => {
     });
     const shopify = shopifyApp(config);
 
-    const {token} = getJwt();
+    const {token} = await getJwt();
     await mockTokenExchangeRequest(token, 'offline');
 
     // WHEN
@@ -296,8 +296,12 @@ describe('authenticate', () => {
       },
     });
 
-    const {token} = getJwt();
-    await mockTokenExchangeRequest(token, 'offline');
+    const {token} = await getJwt();
+    await mockTokenExchangeRequest(
+      token,
+      'offline',
+      config.future.expiringOfflineAccessTokens,
+    );
 
     // WHEN
     const response = await getThrownResponse(
@@ -315,6 +319,7 @@ describe('authenticate', () => {
 async function mockTokenExchangeRequest(
   sessionToken: any,
   tokenType: 'online' | 'offline' = 'offline',
+  expiringOfflineAccessTokens = true,
 ) {
   const responseBody = {
     access_token: '123abc-exchanged-from-session-token',
@@ -334,6 +339,7 @@ async function mockTokenExchangeRequest(
           tokenType === 'offline'
             ? 'urn:shopify:params:oauth:token-type:offline-access-token'
             : 'urn:shopify:params:oauth:token-type:online-access-token',
+        expiring: expiringOfflineAccessTokens ? '1' : '0',
       }),
     }),
     response:

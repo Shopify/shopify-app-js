@@ -1,5 +1,4 @@
 import {SESSION_COOKIE_NAME} from '@shopify/shopify-api';
-import {restResources} from '@shopify/shopify-api/rest/admin/2023-04';
 
 import {shopifyApp} from '../shopify-app';
 
@@ -10,8 +9,7 @@ import {testConfig} from './test-config';
 
 export async function setUpNonEmbeddedFlow() {
   const shopify = shopifyApp({
-    ...testConfig({restResources, isEmbeddedApp: false}),
-    future: {removeRest: false},
+    ...testConfig({isEmbeddedApp: false}),
   });
   const session = await setUpValidSession(shopify.sessionStorage);
 

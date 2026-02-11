@@ -1,5 +1,3 @@
-import {v4 as uuidv4} from 'uuid';
-
 import {Session} from '../../session/session';
 import {ConfigInterface} from '../../base-types';
 import {logger} from '../../logger';
@@ -39,7 +37,7 @@ export function createSession({
           shop,
           `${(rest as OnlineAccessInfo).associated_user.id}`,
         )
-      : uuidv4();
+      : crypto.randomUUID();
 
     return {
       id: sessionId,
@@ -49,10 +47,15 @@ export function createSession({
   };
 
   const getOfflineSessionProperties = (responseBody: OfflineAccessResponse) => {
-    const {expires_in} = responseBody;
+    const {expires_in, refresh_token, refresh_token_expires_in} = responseBody;
     return {
       id: getOfflineId(config)(shop),
       ...(expires_in && {expires: getSessionExpiration(expires_in)}),
+      ...(refresh_token &&
+        refresh_token_expires_in && {
+          refreshToken: refresh_token,
+          refreshTokenExpires: getSessionExpiration(refresh_token_expires_in),
+        }),
     };
   };
 

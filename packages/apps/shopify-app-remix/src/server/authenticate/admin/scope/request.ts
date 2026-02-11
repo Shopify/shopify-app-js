@@ -1,16 +1,15 @@
 import {AuthScopes, Session} from '@shopify/shopify-api';
 
-import {AppConfigArg} from '../../../config-types';
 import type {BasicParams} from '../../../types';
 import {redirectToInstallPage} from '../helpers/redirect-to-install-page';
 import {AdminApiContext} from '../../../clients';
 
 import {fetchScopeDetail} from './client/fetch-scopes-details';
 
-export function requestScopesFactory<ConfigArg extends AppConfigArg>(
+export function requestScopesFactory(
   params: BasicParams,
   session: Session,
-  admin: AdminApiContext<ConfigArg>,
+  admin: AdminApiContext,
 ) {
   return async function requestScopes(scopes: string[]) {
     const {logger} = params;
@@ -23,10 +22,7 @@ export function requestScopesFactory<ConfigArg extends AppConfigArg>(
     throw await redirectToInstallPage(params, session.shop, scopes);
   };
 
-  async function alreadyGranted(
-    scopes: string[],
-    admin: AdminApiContext<ConfigArg>,
-  ) {
+  async function alreadyGranted(scopes: string[], admin: AdminApiContext) {
     const scopesDetail = await fetchScopeDetail(admin);
     const grantedScopes = scopesDetail.app.installation.accessScopes.map(
       (scope) => scope.handle,

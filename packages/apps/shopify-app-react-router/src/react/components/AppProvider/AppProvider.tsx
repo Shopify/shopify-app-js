@@ -97,7 +97,7 @@ export function AppProvider(props: AppProviderProps) {
   return (
     <>
       {props.embedded && <AppBridge apiKey={props.apiKey} />}
-      <script src="https://cdn.shopify.com/shopifycloud/app-bridge-ui-experimental.js" />
+      <script src="https://cdn.shopify.com/shopifycloud/polaris.js" />
       {props.children}
     </>
   );

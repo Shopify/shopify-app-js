@@ -1,12 +1,5 @@
-import {FetchError} from 'node-fetch';
-
 import * as ShopifyErrors from '../../../error';
-import {
-  ApiVersion,
-  LATEST_API_VERSION,
-  LogSeverity,
-  ShopifyHeader,
-} from '../../../types';
+import {ApiVersion, LogSeverity, ShopifyHeader} from '../../../types';
 import {queueError, queueMockResponse} from '../../../__tests__/test-helper';
 import {testConfig} from '../../../__tests__/test-config';
 import {Session} from '../../../session/session';
@@ -277,9 +270,8 @@ describe('GraphQL client', () => {
       }
     }`;
 
-    const fetchError = new FetchError(
+    const fetchError = new Error(
       `uri requested responds with an invalid redirect URL: http://test.com`,
-      'invalid-redirect',
     );
     queueError(fetchError);
     queueError(fetchError);
@@ -316,7 +308,7 @@ describe('GraphQL client', () => {
     expect(shopify.config.logger.log).toHaveBeenCalledWith(
       LogSeverity.Debug,
       expect.stringContaining(
-        `Admin client overriding default API version ${LATEST_API_VERSION} with 2020-01`,
+        `Admin client overriding default API version ${ApiVersion.July25} with 2020-01`,
       ),
     );
   });
@@ -360,9 +352,7 @@ describe('GraphQL client', () => {
 
     await client.request(QUERY);
 
-    expect(shopify.config.logger.log).toHaveBeenCalledTimes(4);
-    expect(shopify.config.logger.log).toHaveBeenNthCalledWith(
-      4,
+    expect(shopify.config.logger.log).toHaveBeenCalledWith(
       LogSeverity.Debug,
       expect.stringMatching(
         /.*Received response containing Deprecated GraphQL Notice.*deprecationNotice: This API endpoint has been deprecated.*/,

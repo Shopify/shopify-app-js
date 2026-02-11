@@ -1,15 +1,18 @@
 import {SessionStorage} from '@shopify/shopify-app-session-storage';
 import {MemorySessionStorage} from '@shopify/shopify-app-session-storage-memory';
+import {Session} from '@shopify/shopify-api';
 
 import {AppDistribution, shopifyApp} from '../../..';
 import {
   expectAdminApiClient,
+  expectTokenRefresh,
   getHmac,
   getThrownResponse,
   setUpValidSession,
   TEST_SHOP,
   testConfig,
 } from '../../../__test-helpers';
+import {TestOverridesArg} from '../../../test-helpers/test-config';
 
 const FULFILLMENT_URL =
   'https://example.myapp.io/authenticate/fulfillment_order_notification';
@@ -120,10 +123,7 @@ const MERCHANT_CUSTOM_APP_CONFIG = {
     describe('valid requests include an API client object', () => {
       expectAdminApiClient(async () => {
         const sessionStorage = new MemorySessionStorage();
-        const shopify = shopifyApp({
-          ...testConfig({sessionStorage}),
-          future: {removeRest: false},
-        });
+        const shopify = shopifyApp(testConfig({sessionStorage}));
 
         const {request, session: expectedSession} =
           await getValidRequest(sessionStorage);
@@ -131,27 +131,50 @@ const MERCHANT_CUSTOM_APP_CONFIG = {
         const {admin, session: actualSession} =
           await shopify.authenticate.fulfillmentService(request);
 
-        const shopifyWithoutRest = shopifyApp({
-          ...testConfig({sessionStorage}),
-          future: {removeRest: true},
-        });
+        return {admin, expectedSession, actualSession};
+      });
+    });
 
-        const {request: requestForWithoutRest} =
-          await getValidRequest(sessionStorage);
-
-        const {admin: adminWithoutRest} =
-          await shopifyWithoutRest.authenticate.fulfillmentService(
-            requestForWithoutRest,
+    describe('token refresh for expired offline sessions', () => {
+      expectTokenRefresh(
+        async (
+          sessionStorage: SessionStorage,
+          session: Session,
+          configOverrides: TestOverridesArg,
+        ) => {
+          const shopify = shopifyApp(
+            testConfig({
+              sessionStorage,
+              ...configOverrides,
+            }) as any,
           );
 
-        return {admin, adminWithoutRest, expectedSession, actualSession};
-      });
+          const body = {kind: 'FULFILLMENT_REQUEST'};
+          const bodyString = JSON.stringify(body);
+
+          const request = new Request(FULFILLMENT_URL, {
+            method: 'POST',
+            body: bodyString,
+            headers: {
+              'X-Shopify-Hmac-Sha256': getHmac(bodyString),
+              'X-Shopify-Shop-Domain': session.shop,
+            },
+          });
+
+          const {session: actualSession} =
+            await shopify.authenticate.fulfillmentService(request);
+
+          return actualSession;
+        },
+      );
     });
   });
 });
 
 async function getValidRequest(sessionStorage: SessionStorage) {
-  const session = await setUpValidSession(sessionStorage, {isOnline: false});
+  const session = await setUpValidSession(sessionStorage, {
+    isOnline: false,
+  });
 
   const body = {kind: 'FULFILLMENT_REQUEST'};
   const bodyString = JSON.stringify(body);

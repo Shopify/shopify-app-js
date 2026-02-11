@@ -1,6 +1,6 @@
 import {ShopifyError} from './error';
 import {ConfigInterface, ConfigParams} from './base-types';
-import {LATEST_API_VERSION, LogSeverity} from './types';
+import {LogSeverity} from './types';
 import {AuthScopes} from './auth/scopes';
 import {logger as createLogger} from './logger';
 
@@ -12,7 +12,6 @@ export function validateConfig<Params extends ConfigParams>(
     apiSecretKey: '',
     hostName: '',
     hostScheme: 'https',
-    apiVersion: LATEST_API_VERSION,
     isEmbeddedApp: true,
     isCustomStoreApp: false,
     logger: {
@@ -26,7 +25,11 @@ export function validateConfig<Params extends ConfigParams>(
   } as ConfigInterface<Params>;
 
   // Make sure that the essential params actually have content in them
-  const mandatory: (keyof Params)[] = ['apiSecretKey', 'hostName'];
+  const mandatory: (keyof Params)[] = [
+    'apiSecretKey',
+    'hostName',
+    'apiVersion',
+  ];
   if (!('isCustomStoreApp' in params) || !params.isCustomStoreApp) {
     mandatory.push('apiKey');
   }
@@ -50,17 +53,9 @@ export function validateConfig<Params extends ConfigParams>(
     throw new ShopifyError(
       `Cannot initialize Shopify API Library. Missing values for: ${missing.join(
         ', ',
-      )}`,
+      )}. For apiVersion, please specify an explicit API version (e.g., ApiVersion.July25). See https://shopify.dev/docs/api/usage/versioning for more information.`,
     );
   }
-
-  // Alias the v10_lineItemBilling flag to lineItemBilling because we aren't releasing in v10
-  const future = params.future?.v10_lineItemBilling
-    ? {
-        lineItemBilling: params.future?.v10_lineItemBilling,
-        ...params.future,
-      }
-    : params.future;
 
   const {
     hostScheme,
@@ -71,6 +66,7 @@ export function validateConfig<Params extends ConfigParams>(
     privateAppStorefrontAccessToken,
     customShopDomains,
     billing,
+    future,
     ...mandatoryParams
   } = params;
 

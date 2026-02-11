@@ -1,7 +1,7 @@
 import {Base} from '../../../../../rest/base';
 import {ResourceNames, ResourcePath} from '../../../../../rest/types';
 import {Session} from '../../../../session/session';
-import {LATEST_API_VERSION} from '../../../../types';
+import {ApiVersion} from '../../../../types';
 
 interface FakeResourceWithCustomPrefixFindArgs {
   session: Session;
@@ -9,7 +9,7 @@ interface FakeResourceWithCustomPrefixFindArgs {
 }
 
 export class FakeResourceWithCustomPrefix extends Base {
-  public static apiVersion = LATEST_API_VERSION;
+  public static apiVersion = ApiVersion.July25;
   protected static resourceNames: ResourceNames[] = [
     {
       singular: 'fake_resource_with_custom_prefix',

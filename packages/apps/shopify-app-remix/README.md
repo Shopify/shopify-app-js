@@ -5,8 +5,15 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE.md)
 [![npm version](https://badge.fury.io/js/%40shopify%2Fshopify-app-remix.svg)](https://badge.fury.io/js/%40shopify%2Fshopify-app-remix)
 
-This package makes it easy to use [Remix](https://remix.run/) to build Shopify apps.
-It builds on the `@shopify/shopify-api` package and exposes a `shopifyApp` function. You can use `shopifyApp` to configure your app and then authenticate requests from Shopify.
+This package makes it easy to use [Remix](https://remix.run/) to build Shopify apps. 
+
+## Upgrade to React Router
+
+You should only use this Remix package if you have an existing Remix app and have not yet upgraded.
+
+If you are building a new Shopify app you should use React Router and not Remix.  Please see the [Quick start guide for React Router](https://github.com/Shopify/shopify-app-template-react-router?tab=readme-ov-file#quick-start).
+
+If you already have a Remix app, you should upgrade to React Router.  Please see the [Upgrading to React Router guide](https://github.com/Shopify/shopify-app-template-react-router/wiki/Upgrading-from-Remix).
 
 Visit the [`shopify.dev` documentation](https://shopify.dev/docs/api/shopify-app-remix) for more details on the Remix app package.
 
@@ -54,15 +61,14 @@ Create `app/shopify.server.js`. We will use this file to configure our Shopify a
 import '@shopify/shopify-app-remix/server/adapters/node';
 // Memory storage makes it easy to set an app up, but should never be used in production.
 import {MemorySessionStorage} from '@shopify/shopify-app-session-storage-memory';
-
-import {LATEST_API_VERSION, shopifyApp} from '@shopify/shopify-app-remix';
+import {ApiVersion, shopifyApp} from '@shopify/shopify-app-remix';
 
 const shopify = shopifyApp({
   apiKey: process.env.SHOPIFY_API_KEY!,
   apiSecretKey: process.env.SHOPIFY_API_SECRET!,
   appUrl: process.env.SHOPIFY_APP_URL!,
   scopes: ['read_products'],
-  apiVersion: LATEST_API_VERSION,
+  apiVersion: ApiVersion.July25,
   sessionStorage: new MemorySessionStorage(),
 });
 export default shopify;
@@ -76,7 +82,7 @@ SHOPIFY_API_SECRET="[Copy from partners dashboard]"
 SHOPIFY_APP_URL="[The tunnel URL you are using to run your app]"
 ```
 
-`shopifyApp` needs to reserve a [splat route](https://remix.run/docs/en/main/guides/routing#splats) for auth.
+`shopifyApp` needs to reserve a [splat route](https://v2.remix.run/docs/file-conventions/routes#splat-routes) for auth.
 It should export a loader that uses `shopifyApp` to authenticate:
 
 ```ts

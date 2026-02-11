@@ -1,14 +1,17 @@
 import {SessionStorage} from '@shopify/shopify-app-session-storage';
 import {MemorySessionStorage} from '@shopify/shopify-app-session-storage-memory';
+import {Session} from '@shopify/shopify-api';
 
 import {shopifyApp} from '../../..';
 import {
   expectAdminApiClient,
+  expectTokenRefresh,
   getHmac,
   getThrownResponse,
   setUpValidSession,
   testConfig,
 } from '../../../__test-helpers';
+import {TestOverridesArg} from '../../../test-helpers/test-config';
 
 const FLOW_URL = 'https://example.myapp.io/authenticate/flow';
 
@@ -107,10 +110,7 @@ describe('authenticating flow requests', () => {
   describe('valid requests include an API client object', () => {
     expectAdminApiClient(async () => {
       const sessionStorage = new MemorySessionStorage();
-      const shopify = shopifyApp({
-        ...testConfig({sessionStorage}),
-        future: {removeRest: false},
-      });
+      const shopify = shopifyApp(testConfig({sessionStorage}));
 
       const {request, session: expectedSession} =
         await getValidRequest(sessionStorage);
@@ -118,24 +118,47 @@ describe('authenticating flow requests', () => {
       const {admin, session: actualSession} =
         await shopify.authenticate.flow(request);
 
-      const shopifyWithoutRest = shopifyApp({
-        ...testConfig({sessionStorage}),
-        future: {removeRest: true},
-      });
-
-      const {request: requestForWithoutRest} =
-        await getValidRequest(sessionStorage);
-
-      const {admin: adminWithoutRest} =
-        await shopifyWithoutRest.authenticate.flow(requestForWithoutRest);
-
-      return {admin, adminWithoutRest, expectedSession, actualSession};
+      return {admin, expectedSession, actualSession};
     });
+  });
+
+  describe('token refresh for expired offline sessions', () => {
+    expectTokenRefresh(
+      async (
+        sessionStorage: SessionStorage,
+        session: Session,
+        configOverrides: TestOverridesArg,
+      ) => {
+        const shopify = shopifyApp(
+          testConfig({
+            sessionStorage,
+            ...configOverrides,
+          }) as any,
+        );
+
+        const body = {shopify_domain: session.shop};
+        const bodyString = JSON.stringify(body);
+
+        const request = new Request(FLOW_URL, {
+          body: bodyString,
+          method: 'POST',
+          headers: {
+            'X-Shopify-Hmac-Sha256': getHmac(bodyString),
+          },
+        });
+
+        const {session: actualSession} =
+          await shopify.authenticate.flow(request);
+        return actualSession;
+      },
+    );
   });
 });
 
 async function getValidRequest(sessionStorage: SessionStorage) {
-  const session = await setUpValidSession(sessionStorage, {isOnline: false});
+  const session = await setUpValidSession(sessionStorage, {
+    isOnline: false,
+  });
 
   const body = {shopify_domain: session.shop};
   const bodyString = JSON.stringify(body);

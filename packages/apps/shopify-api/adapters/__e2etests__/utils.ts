@@ -1,6 +1,6 @@
 import {Headers, canonicalizeHeaders} from '../../runtime/http';
 import {ConfigInterface} from '../../lib/base-types';
-import {LATEST_API_VERSION, LogSeverity} from '../../lib/types';
+import {ApiVersion, LogSeverity} from '../../lib/types';
 import {AuthScopes} from '../../lib/auth/scopes';
 import {Session} from '../../lib';
 
@@ -30,7 +30,7 @@ export const config: ConfigInterface = {
   scopes: new AuthScopes('test_scope'),
   hostName: 'test_host_name',
   hostScheme: 'https',
-  apiVersion: LATEST_API_VERSION,
+  apiVersion: ApiVersion.July25,
   isEmbeddedApp: true,
   isCustomStoreApp: false,
   logger: {

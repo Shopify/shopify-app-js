@@ -1,10 +1,9 @@
 import {spawn} from 'child_process';
 
-import fetch from 'node-fetch';
-
 import {TestConfig, E2eTestEnvironment} from './test_config_types';
 import {runEnvironments, shutdownEnvironments} from './test_environments';
 import {testSuite} from './test_suite';
+import {nodeLocalhostFetch} from './node-localhost-fetch';
 
 export type {E2eTestEnvironment} from './test_config_types';
 
@@ -14,13 +13,14 @@ export function runTests(env: E2eTestEnvironment) {
     domain: `http://localhost:${env.dummyServerPort}`,
     dummyServerPort: 'not actually used',
 
-    process: spawn('pnpm', ['node', 'bundle/test-dummy-shopify-server.mjs'], {
+    process: spawn('node', ['bundle/test-dummy-shopify-server.mjs'], {
       env: {
         ...process.env, // eslint-disable-line no-process-env
         HTTP_SERVER_PORT: env.dummyServerPort,
       },
       detached: true,
       stdio: process.env.SHOPIFY_E2E_TEST_DEBUG ? 'inherit' : undefined, // eslint-disable-line no-process-env
+      cwd: `${__dirname}/../..`,
     }),
     testable: false,
     ready: false,
@@ -40,7 +40,9 @@ export function runTests(env: E2eTestEnvironment) {
     testSuite.forEach((test) => {
       it(test.name, async () => {
         await checkTestResponse(
-          await fetch(env.domain, fetchParams(test.config)),
+          env.name === 'NodeJS'
+            ? await nodeLocalhostFetch(env.domain, fetchParams(test.config))
+            : await fetch(env.domain, fetchParams(test.config)),
         );
       });
     });

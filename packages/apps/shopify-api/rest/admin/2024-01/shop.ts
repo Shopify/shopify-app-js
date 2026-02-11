@@ -85,7 +85,7 @@ export class Shop extends Base {
   public has_gift_cards: boolean | null;
   public has_storefront: boolean | null;
   public iana_timezone: string | null;
-  public id: number | null;
+  public id: string | null;
   public latitude: number | null;
   public longitude: number | null;
   public marketing_sms_consent_enabled_at_checkout: boolean | null;
@@ -102,7 +102,7 @@ export class Shop extends Base {
   public plan_name: string | null;
   public pre_launch_enabled: boolean | null;
   public primary_locale: string | null;
-  public primary_location_id: number | null;
+  public primary_location_id: string | null;
   public province: string | null;
   public province_code: string | null;
   public requires_extra_payments_agreement: boolean | null;

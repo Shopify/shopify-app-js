@@ -58,8 +58,8 @@ export class DisputeEvidence extends Base {
   public customer_last_name: string | null;
   public dispute_evidence_files: {[key: string]: unknown} | null;
   public fulfillments: Fulfillment[] | null | {[key: string]: any};
-  public id: number | null;
-  public payments_dispute_id: number | null;
+  public id: string | null;
+  public payments_dispute_id: string | null;
   public product_description: {[key: string]: unknown} | null;
   public refund_policy_disclosure: string | null;
   public refund_refusal_explanation: string | null;

@@ -13,6 +13,8 @@ const propertiesToSave = [
   'scope',
   'accessToken',
   'expires',
+  'refreshToken',
+  'refreshTokenExpires',
   'onlineAccessInfo',
 ];
 
@@ -40,6 +42,10 @@ export class Session {
               return ['isOnline', value];
             case 'accesstoken':
               return ['accessToken', value];
+            case 'refreshtoken':
+              return ['refreshToken', value];
+            case 'refreshtokenexpires':
+              return ['refreshTokenExpires', value];
             case 'onlineaccessinfo':
               return ['onlineAccessInfo', value];
             case 'userid':
@@ -77,6 +83,12 @@ export class Session {
           sessionData[key] = value.toString();
           break;
         case 'expires':
+          sessionData[key] = value ? new Date(Number(value)) : undefined;
+          break;
+        case 'refreshToken':
+          sessionData[key] = value ? String(value) : undefined;
+          break;
+        case 'refreshTokenExpires':
           sessionData[key] = value ? new Date(Number(value)) : undefined;
           break;
         case 'onlineAccessInfo':
@@ -163,6 +175,14 @@ export class Session {
    */
   public accessToken?: string;
   /**
+   * The refresh token for the session.
+   */
+  public refreshToken?: string;
+  /**
+   * The date the refresh token expires.
+   */
+  public refreshTokenExpires?: Date;
+  /**
    * Information on the user for the session. Only present for online sessions.
    */
   public onlineAccessInfo?: OnlineAccessInfo;
@@ -239,6 +259,12 @@ export class Session {
     if (this.accessToken) {
       object.accessToken = this.accessToken;
     }
+    if (this.refreshToken) {
+      object.refreshToken = this.refreshToken;
+    }
+    if (this.refreshTokenExpires) {
+      object.refreshTokenExpires = this.refreshTokenExpires;
+    }
     if (this.onlineAccessInfo) {
       object.onlineAccessInfo = this.onlineAccessInfo;
     }
@@ -286,6 +312,8 @@ export class Session {
         .flatMap(([key, value]): [string, string | number | boolean][] => {
           switch (key) {
             case 'expires':
+              return [[key, value ? value.getTime() : undefined]];
+            case 'refreshTokenExpires':
               return [[key, value ? value.getTime() : undefined]];
             case 'onlineAccessInfo':
               // eslint-disable-next-line no-negated-condition

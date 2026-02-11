@@ -74,9 +74,9 @@ The scheme for your app's public URL. `http` is only allowed if your app is runn
 
 ### apiVersion | :exclamation: **required**
 
-`ApiVersion` | Defaults to `LATEST_API_VERSION`
+`ApiVersion` | :exclamation: **required**
 
-API version your app will be querying. E.g. `ApiVersion.October22`.
+API version your app will be querying. E.g. `ApiVersion.July25`.
 
 ### isEmbeddedApp | :exclamation: **required**
 

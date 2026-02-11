@@ -1,7 +1,6 @@
 import {
   ConfigParams as ApiConfigArg,
   ConfigInterface as ApiConfig,
-  ShopifyRestResources,
   Session,
   ApiVersion,
   WebhookHandler,
@@ -18,11 +17,10 @@ import type {AdminApiContext} from './clients';
 import {IdempotentPromiseHandler} from './authenticate/helpers/idempotent-promise-handler';
 
 export interface AppConfigArg<
-  Resources extends ShopifyRestResources = ShopifyRestResources,
   Storage extends SessionStorage = SessionStorage,
   Future extends FutureFlagOptions = FutureFlagOptions,
 > extends Omit<
-    ApiConfigArg<Resources, ApiFutureFlags<Future>>,
+    ApiConfigArg<ApiFutureFlags<Future>>,
     | 'hostName'
     | 'hostScheme'
     | 'isEmbeddedApp'
@@ -172,7 +170,7 @@ export interface AppConfigArg<
    * });
    * ```
    */
-  hooks?: HooksConfig<AppConfigArg<Resources, Storage, Future>, Resources>;
+  hooks?: HooksConfig;
 
   /**
    * Does your app render embedded inside the Shopify Admin or on its own.
@@ -199,20 +197,18 @@ export interface AppConfigArg<
    *
    * {@link https://shopify.dev/docs/api/}
    *
-   * @defaultValue `LATEST_API_VERSION` from `@shopify/shopify-app-remix`
-   *
    * @example
-   * <caption>Using the latest API Version (Recommended)</caption>
+   * <caption>Using a specific API Version</caption>
    * ```ts
-   * import { LATEST_API_VERSION, shopifyApp } from "@shopify/shopify-app-remix/server";
+   * import { ApiVersion, shopifyApp } from "@shopify/shopify-app-remix/server";
    *
    * const shopify = shopifyApp({
    *   // ...etc
-   *   apiVersion: LATEST_API_VERSION,
+   *   apiVersion: ApiVersion.July25,
    * });
    * ```
    */
-  apiVersion?: ApiVersion;
+  apiVersion: ApiVersion;
 
   /**
    * A path that Shopify can reserve for auth related endpoints.
@@ -222,14 +218,14 @@ export interface AppConfigArg<
    * @default `"/auth"`
    *
    * @example
-   * <caption>Using the latest API Version (Recommended)</caption>
+   * <caption>Using an authPathPrefix</caption>
    * ```ts
    * // /app/shopify.server.ts
-   * import { LATEST_API_VERSION, shopifyApp } from "@shopify/shopify-app-remix/server";
+   * import { ApiVersion, shopifyApp } from "@shopify/shopify-app-remix/server";
    *
    * const shopify = shopifyApp({
    *   // ...etc
-   *   apiVersion: LATEST_API_VERSION,
+   *   authPathPrefix: "/auth",
    * });
    * export default shopify;
    * export const authenticate = shopify.authenticate;
@@ -279,10 +275,7 @@ export interface AuthConfig {
 
 export type WebhookConfig = Record<string, WebhookHandler | WebhookHandler[]>;
 
-interface HooksConfig<
-  ConfigArg extends AppConfigArg = AppConfigArg,
-  Resources extends ShopifyRestResources = ShopifyRestResources,
-> {
+interface HooksConfig {
   /**
    * A function to call after a merchant installs your app
    *
@@ -306,15 +299,10 @@ interface HooksConfig<
    * });
    * ```
    */
-  afterAuth?: (
-    options: AfterAuthOptions<ConfigArg, Resources>,
-  ) => void | Promise<void>;
+  afterAuth?: (options: AfterAuthOptions) => void | Promise<void>;
 }
 
-export interface AfterAuthOptions<
-  ConfigArg extends AppConfigArg,
-  Resources extends ShopifyRestResources = ShopifyRestResources,
-> {
+export interface AfterAuthOptions {
   session: Session;
-  admin: AdminApiContext<ConfigArg, Resources>;
+  admin: AdminApiContext;
 }

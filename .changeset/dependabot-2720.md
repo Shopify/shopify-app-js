@@ -1,4 +1,0 @@
----
----
-
-Updated `mongodb` dependencies

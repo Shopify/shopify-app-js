@@ -2,8 +2,8 @@ import '@shopify/shopify-api/adapters/web-api';
 import '../adapters/node';
 
 import {
+  ApiVersion,
   ConfigParams,
-  LATEST_API_VERSION,
   LogSeverity,
   shopifyApi,
 } from '@shopify/shopify-api';
@@ -16,7 +16,7 @@ const VALID_API_CONFIG: ConfigParams<any, any> = {
   apiKey: 'test-key',
   apiSecretKey: 'test-secret',
   scopes: ['test-scope'],
-  apiVersion: LATEST_API_VERSION,
+  apiVersion: ApiVersion.July25,
   hostName: 'test-host',
   isEmbeddedApp: true,
   logger: {log: LOG_FN, level: LogSeverity.Debug},

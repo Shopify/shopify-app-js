@@ -1,8 +1,4 @@
-import type {
-  ConfigParams,
-  Shopify,
-  ShopifyRestResources,
-} from '@shopify/shopify-api';
+import type {ConfigParams, Shopify} from '@shopify/shopify-api';
 
 import {AppConfig} from '../config-types';
 
@@ -18,38 +14,25 @@ export interface FutureFlags {
    * @default false
    */
   unstable_newEmbeddedAuthStrategy?: boolean;
-
   /**
-   * When enabled, methods for interacting with the admin REST API will not be returned.
-   *
-   * This affects:
-   *
-   * * `authenticate.admin(request)`
-   * * `authenticate.webhook(request)`
-   * * `authenticate.flow(request)`
-   * * `authenticate.appProxy(request)`
-   * * `authenticate.fulfillmentService(request)`
-   * * `unauthenticated.admin(shop)`
-   *
-   * In a future release we will remove REST from the package completely.
-   *
-   * Please see: [https://www.shopify.com/ca/partners/blog/all-in-on-graphql](https://www.shopify.com/ca/partners/blog/all-in-on-graphql)
+   * When enabled, the app will start using expiring offline access tokens and automatically refresh them when they are close to expiring.
    *
    * @default false
    */
-  removeRest?: boolean;
+  expiringOfflineAccessTokens?: boolean;
 }
 
 // When adding new flags, use this format:
 // apiFutureFlag: Future extends FutureFlags ? Future['remixFutureFlag'] : false;
-export interface ApiFutureFlags<_Future extends FutureFlagOptions> {
-  // We're currently hardcoding this flag to true in our settings, so we should propagate it here
-  lineItemBilling: true;
+export interface ApiFutureFlags<Future extends FutureFlagOptions> {
+  expiringOfflineAccessTokens: Future extends FutureFlags
+    ? Future['expiringOfflineAccessTokens']
+    : false;
   unstable_managedPricingSupport: true;
 }
 
 export type ApiConfigWithFutureFlags<Future extends FutureFlagOptions> =
-  ConfigParams<ShopifyRestResources, ApiFutureFlags<Future>>;
+  ConfigParams<ApiFutureFlags<Future>>;
 
 export type FutureFlagOptions = FutureFlags | undefined;
 

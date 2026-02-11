@@ -71,7 +71,7 @@ export class InventoryItem extends Base {
   public country_harmonized_system_codes: {[key: string]: unknown}[] | null;
   public created_at: string | null;
   public harmonized_system_code: number | null;
-  public id: number | null;
+  public id: string | null;
   public province_code_of_origin: string | null;
   public requires_shipping: boolean | null;
   public sku: string | null;

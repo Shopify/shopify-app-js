@@ -1,5 +1,5 @@
 import {testConfig} from '../../../../__tests__/test-config';
-import {LogSeverity, ApiVersion, LATEST_API_VERSION} from '../../../../types';
+import {LogSeverity, ApiVersion} from '../../../../types';
 import {shopifyApi} from '../../../..';
 
 import {restResources} from './test-resources';
@@ -20,7 +20,7 @@ describe('Load REST resources', () => {
     expect(shopify.config.logger.log).toHaveBeenCalledWith(
       LogSeverity.Warning,
       expect.stringContaining(
-        `Loading REST resources for API version ${LATEST_API_VERSION}, which doesn't match the default 2020-01`,
+        `Loading REST resources for API version ${ApiVersion.July25}, which doesn't match the default 2020-01`,
       ),
     );
 

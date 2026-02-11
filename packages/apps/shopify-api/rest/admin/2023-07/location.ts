@@ -119,7 +119,7 @@ export class Location extends Base {
   public country: string | null;
   public country_code: string | null;
   public created_at: string | null;
-  public id: number | null;
+  public id: string | null;
   public legacy: boolean | null;
   public localized_country_name: string | null;
   public localized_province_name: string | null;

@@ -53,8 +53,8 @@ export class ProductResourceFeedback extends Base {
   public created_at: string | null;
   public feedback_generated_at: string | null;
   public messages: string[] | null;
-  public product_id: number | null;
-  public resource_id: number | null;
+  public product_id: string | null;
+  public resource_id: string | null;
   public resource_type: string | null;
   public resource_updated_at: string | null;
   public state: string | null;

@@ -1,20 +1,13 @@
-import {ShopifyRestResources} from '@shopify/shopify-api';
-
-import {AppConfigArg} from '../../config-types';
 import {adminClientFactory} from '../../clients/admin';
+import {ensureValidOfflineSession} from '../../helpers';
 import {BasicParams} from '../../types';
 
 import type {AuthenticateFlow, FlowContext} from './types';
 
-export function authenticateFlowFactory<
-  ConfigArg extends AppConfigArg,
-  Resources extends ShopifyRestResources = ShopifyRestResources,
->(params: BasicParams): AuthenticateFlow<ConfigArg, Resources> {
-  const {api, config, logger} = params;
+export function authenticateFlowFactory(params: BasicParams): AuthenticateFlow {
+  const {api, logger} = params;
 
-  return async function authenticate(
-    request: Request,
-  ): Promise<FlowContext<ConfigArg, Resources>> {
+  return async function authenticate(request: Request): Promise<FlowContext> {
     logger.info('Authenticating flow request');
 
     if (request.method !== 'POST') {
@@ -49,8 +42,10 @@ export function authenticateFlowFactory<
       shop: payload.shopify_domain,
     });
 
-    const sessionId = api.session.getOfflineId(payload.shopify_domain);
-    const session = await config.sessionStorage!.loadSession(sessionId);
+    const session = await ensureValidOfflineSession(
+      params,
+      payload.shopify_domain,
+    );
 
     if (!session) {
       logger.info('Flow request could not find session', {
@@ -67,7 +62,7 @@ export function authenticateFlowFactory<
     return {
       session,
       payload,
-      admin: adminClientFactory<ConfigArg, Resources>({params, session}),
+      admin: adminClientFactory({params, session}),
     };
   };
 }

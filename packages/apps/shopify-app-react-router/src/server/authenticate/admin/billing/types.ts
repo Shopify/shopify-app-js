@@ -6,7 +6,6 @@ import {
   UsageRecord,
 } from '@shopify/shopify-api';
 
-import {ApiFutureFlags} from '../../../future/flags';
 import type {AppConfigArg} from '../../../config-types';
 
 export interface RequireBillingOptions<Config extends AppConfigArg>
@@ -30,10 +29,7 @@ export interface CheckBillingOptions<Config extends AppConfigArg>
 }
 
 export interface RequestBillingOptions<Config extends AppConfigArg>
-  extends Omit<
-    BillingRequestParams<ApiFutureFlags<Config['future']>>,
-    'session' | 'plan' | 'returnObject'
-  > {
+  extends Omit<BillingRequestParams, 'session' | 'plan' | 'returnObject'> {
   /**
    * The plan to request. Must be one of the values defined in the `billing` config option.
    */

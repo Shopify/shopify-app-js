@@ -77,8 +77,8 @@ export class UsageCharge extends Base {
   public created_at: string | null;
   public currency: Currency | null | {[key: string]: any};
   public description: string | null;
-  public id: number | null;
+  public id: string | null;
   public price: string | null;
-  public recurring_application_charge_id: number | null;
+  public recurring_application_charge_id: string | null;
   public updated_at: string | null;
 }

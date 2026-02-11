@@ -2,7 +2,7 @@ import crypto from 'crypto';
 
 import {compare} from 'compare-versions';
 import fetchMock, {MockParams} from 'jest-fetch-mock';
-import {LATEST_API_VERSION, ShopifyRestResources} from '@shopify/shopify-api';
+import {ApiVersion, ShopifyRestResources} from '@shopify/shopify-api';
 import {MemorySessionStorage} from '@shopify/shopify-app-session-storage-memory';
 
 import {shopifyApp, ShopifyApp} from '../index';
@@ -44,7 +44,8 @@ beforeEach(() => {
       apiKey: 'testApiKey',
       apiSecretKey: 'testApiSecretKey',
       scopes: ['testScope'],
-      apiVersion: LATEST_API_VERSION,
+      apiVersion: ApiVersion.July25,
+      hostScheme: 'https',
       hostName: 'my-test-app.myshopify.io',
       logger: {
         log: jest.fn(),
@@ -184,7 +185,7 @@ export function validWebhookHeaders(
     'X-Shopify-Shop-Domain': TEST_SHOP,
     'X-Shopify-Hmac-Sha256': hmac,
     'X-Shopify-Webhook-Id': TEST_WEBHOOK_ID,
-    'X-Shopify-Api-Version': LATEST_API_VERSION,
+    'X-Shopify-Api-Version': ApiVersion.July25,
   };
 }
 

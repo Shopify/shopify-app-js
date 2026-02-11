@@ -1,4 +1,4 @@
-import {LATEST_API_VERSION} from '@shopify/shopify-api';
+import {ApiVersion} from '@shopify/shopify-api';
 import {TEST_SHOP} from '@shopify/shopify-api/test-helpers';
 
 export {
@@ -11,4 +11,4 @@ export {
   BASE64_HOST,
   USER_ID,
 } from '@shopify/shopify-api/test-helpers';
-export const GRAPHQL_URL = `https://${TEST_SHOP}/admin/api/${LATEST_API_VERSION}/graphql.json`;
+export const GRAPHQL_URL = `https://${TEST_SHOP}/admin/api/${ApiVersion.July25}/graphql.json`;

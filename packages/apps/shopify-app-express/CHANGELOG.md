@@ -1,5 +1,109 @@
 # Changelog
 
+## 6.0.5
+
+### Patch Changes
+
+- Updated dependencies [60dc5ce]
+- Updated dependencies [0fa5ef7]
+  - @shopify/shopify-api@12.3.0
+  - @shopify/shopify-app-session-storage@4.0.5
+  - @shopify/shopify-app-session-storage-memory@5.0.5
+
+## 6.0.4
+
+### Patch Changes
+
+- Updated dependencies [a6a13bf]
+- Updated dependencies [f1af47e]
+  - @shopify/shopify-api@12.2.0
+  - @shopify/shopify-app-session-storage@4.0.4
+  - @shopify/shopify-app-session-storage-memory@5.0.4
+
+## 6.0.3
+
+### Patch Changes
+
+- Updated dependencies [98f1be9]
+  - @shopify/shopify-api@12.1.2
+  - @shopify/shopify-app-session-storage@4.0.3
+  - @shopify/shopify-app-session-storage-memory@5.0.3
+
+## 6.0.2
+
+### Patch Changes
+
+- Updated dependencies [b3716f8]
+  - @shopify/shopify-api@12.1.1
+  - @shopify/shopify-app-session-storage@4.0.2
+  - @shopify/shopify-app-session-storage-memory@5.0.2
+
+## 6.0.1
+
+### Patch Changes
+
+- Updated dependencies [a6c4fed]
+  - @shopify/shopify-api@12.1.0
+  - @shopify/shopify-app-session-storage@4.0.1
+  - @shopify/shopify-app-session-storage-memory@5.0.1
+
+## 6.0.0
+
+### Major Changes
+
+- 6529697: The `LATEST_API_VERSION` and `RELEASE_CANDIDATE_API_VERSION` constants have been removed from the package. The `apiVersion` parameter is now **required** in the `shopifyApp` configuration.
+
+  We are making this change to ensure the API versions do not change without the developer explicitly opting into the new version. This removes the potential for apps to break unexpectedly and should reduce overall maintenance.
+
+  ### Migration Steps
+
+  **Before:**
+
+  ```typescript
+  import {shopifyApp} from '@shopify/shopify-app-express';
+  import {LATEST_API_VERSION} from '@shopify/shopify-api';
+
+  const shopify = shopifyApp({
+    api: {
+      apiVersion: LATEST_API_VERSION,
+      // ...
+    },
+    // ...
+  });
+  ```
+
+  **After:**
+
+  ```typescript
+  import {shopifyApp} from '@shopify/shopify-app-express';
+  import {ApiVersion} from '@shopify/shopify-api';
+
+  const shopify = shopifyApp({
+    api: {
+      apiVersion: ApiVersion.July25,
+      // ...
+    },
+    // ...
+  });
+  ```
+
+### Patch Changes
+
+- 79b2fbe: Swap semver package for compare-versions package. Compare versions is a lighter weight and suits the packages needs just fine
+- e9f8dc0: Remove cookie-parser as a dependency since it's no longer used
+- Updated dependencies [dc41d09]
+- Updated dependencies [c3005a6]
+- Updated dependencies [dc41d09]
+- Updated dependencies [a5be0d0]
+- Updated dependencies [6606d39]
+- Updated dependencies [48d3631]
+- Updated dependencies [7d8aa81]
+- Updated dependencies [089f4fd]
+- Updated dependencies [dc41d09]
+  - @shopify/shopify-api@12.0.0
+  - @shopify/shopify-app-session-storage@4.0.0
+  - @shopify/shopify-app-session-storage-memory@5.0.0
+
 ## 5.0.20
 
 ### Patch Changes

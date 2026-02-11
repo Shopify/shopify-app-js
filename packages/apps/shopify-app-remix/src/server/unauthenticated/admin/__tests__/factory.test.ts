@@ -1,6 +1,7 @@
 import {
   TEST_SHOP,
   expectAdminApiClient,
+  expectTokenRefresh,
   setUpValidSession,
   setupValidCustomAppSession,
   testConfig,
@@ -14,10 +15,7 @@ import {
 describe('unauthenticated admin context', () => {
   it('throws an error if there is no offline session for the shop', async () => {
     // GIVEN
-    const shopify = shopifyApp({
-      ...testConfig(),
-      future: {removeRest: false},
-    });
+    const shopify = shopifyApp(testConfig());
 
     // EXPECT
     await expect(shopify.unauthenticated.admin(TEST_SHOP)).rejects.toThrow(
@@ -26,25 +24,28 @@ describe('unauthenticated admin context', () => {
   });
 
   expectAdminApiClient(async () => {
-    const shopify = shopifyApp({
-      ...testConfig(),
-      future: {removeRest: false},
-    });
+    const shopify = shopifyApp(testConfig());
     const expectedSession = await setUpValidSession(shopify.sessionStorage, {
       isOnline: false,
     });
     const {admin, session: actualSession} =
       await shopify.unauthenticated.admin(TEST_SHOP);
 
-    const shopifyWithoutRest = shopifyApp({
-      ...testConfig(),
-      future: {removeRest: true},
-    });
+    return {admin, expectedSession, actualSession};
+  });
 
-    const {admin: adminWithoutRest} =
-      await shopifyWithoutRest.unauthenticated.admin(TEST_SHOP);
+  expectTokenRefresh(async (sessionStorage, session, configOverrides) => {
+    const shopify = shopifyApp(
+      testConfig({
+        sessionStorage,
+        ...configOverrides,
+      }) as any,
+    );
+    await shopify.sessionStorage!.storeSession(session);
 
-    return {admin, adminWithoutRest, expectedSession, actualSession};
+    const {session: actualSession} =
+      await shopify.unauthenticated.admin(TEST_SHOP);
+    return actualSession;
   });
 });
 
@@ -56,21 +57,11 @@ describe('unauthenticated admin context for merchant custom apps', () => {
       sessionStorage: undefined,
     });
 
-    const shopify = shopifyApp({
-      ...config,
-      future: {removeRest: false},
-    });
+    const shopify = shopifyApp(config);
     const expectedSession = setupValidCustomAppSession(TEST_SHOP);
     const {admin, session: actualSession} =
       await shopify.unauthenticated.admin(TEST_SHOP);
 
-    const shopifyWithoutRest = shopifyApp({
-      ...config,
-      future: {removeRest: true},
-    });
-    const {admin: adminWithoutRest} =
-      await shopifyWithoutRest.unauthenticated.admin(TEST_SHOP);
-
-    return {admin, adminWithoutRest, expectedSession, actualSession};
+    return {admin, expectedSession, actualSession};
   });
 });

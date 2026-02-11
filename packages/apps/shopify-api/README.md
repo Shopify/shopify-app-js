@@ -5,6 +5,8 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](../../../LICENSE.md)
 [![npm version](https://badge.fury.io/js/%40shopify%2Fshopify-api.svg)](https://badge.fury.io/js/%40shopify%2Fshopify-api)
 
+> ⚠️ **Version 12.0.0 Breaking Change**: All REST resource IDs are now `string` type instead of `number` to prevent precision loss. See [MIGRATION_GUIDE_V12.md](./MIGRATION_GUIDE_V12.md) for upgrade instructions.
+
 This library provides support for the backends of TypeScript/JavaScript [Shopify](https://www.shopify.com) apps to access the [Shopify Admin API](https://shopify.dev/docs/api/admin), by making it easier to perform the following actions:
 
 - Creating [online](https://shopify.dev/docs/apps/auth/access-token-types/online) or [offline](https://shopify.dev/docs/apps/auth/access-token-types/offline) access tokens for the Admin API via OAuth
@@ -49,21 +51,6 @@ The first thing you need to import is the adapter for your app's runtime. This w
 import '@shopify/shopify-api/adapters/node';
 ```
 
-</div><div>CloudFlare Worker
-
-```ts
-import '@shopify/shopify-api/adapters/cf-worker';
-```
-
-</div>
-</div><div>Generic runtimes that implement the <a href="https://developer.mozilla.org/en-US/docs/Web/API">Web API</a>
-
-```ts
-import '@shopify/shopify-api/adapters/web-api';
-```
-
-</div>
-
 > **Note** Some bundlers may aggressively tree-shake the adapter imports in production builds. If you encounter a "Missing adapter implementation" error, you can use the exported constant to ensure the adapter is loaded:
 >
 > ```ts
@@ -73,6 +60,43 @@ import '@shopify/shopify-api/adapters/web-api';
 >   throw new Error('Failed to initialize Node.js adapter');
 > }
 > ```
+
+</div><div>CloudFlare Worker
+
+```ts
+import '@shopify/shopify-api/adapters/cf-worker';
+```
+
+> **Note** Some bundlers may aggressively tree-shake the adapter imports in production builds. If you encounter a "Missing adapter implementation" error, you can use the exported constant to ensure the adapter is loaded:
+>
+> ```ts
+> import { cfWorkerAdapterInitialized } from '@shopify/shopify-api/adapters/cf-worker';
+> // Optional: Check the adapter loaded successfully
+> if (!cfWorkerAdapterInitialized) {
+>   throw new Error('Failed to initialize Cloudflare Worker adapter');
+> }
+> ```
+
+</div>
+</div><div>Generic runtimes that implement the <a href="https://developer.mozilla.org/en-US/docs/Web/API">Web API</a>
+
+```ts
+import '@shopify/shopify-api/adapters/web-api';
+```
+
+> **Note** Some bundlers may aggressively tree-shake the adapter imports in production builds. If you encounter a "Missing adapter implementation" error, you can use the exported constant to ensure the adapter is loaded:
+>
+> ```ts
+> import { webApiAdapterInitialized } from '@shopify/shopify-api/adapters/web-api';
+> // Optional: Check the adapter loaded successfully
+> if (!webApiAdapterInitialized) {
+>   throw new Error('Failed to initialize web API adapter');
+> }
+> ```
+
+</div>
+
+
 
 Next, configure the library - you'll need some values in advance:
 
@@ -84,7 +108,7 @@ Call `shopifyApi` ([see reference](./docs/reference/shopifyApi.md)) to create yo
 
 ```ts
 import '@shopify/shopify-api/adapters/node';
-import {shopifyApi, LATEST_API_VERSION} from '@shopify/shopify-api';
+import {shopifyApi, ApiVersion} from '@shopify/shopify-api';
 import express from 'express';
 
 const shopify = shopifyApi({
@@ -93,6 +117,7 @@ const shopify = shopifyApi({
   apiSecretKey: 'APISecretFromPartnersDashboard',
   scopes: ['read_products'],
   hostName: 'ngrok-tunnel-address',
+  apiVersion: ApiVersion.July25
   ...
 });
 

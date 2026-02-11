@@ -1,16 +1,10 @@
-import {Session, ShopifyRestResources} from '@shopify/shopify-api';
+import {Session} from '@shopify/shopify-api';
 
-import {AppConfigArg} from '../../../config-types';
 import {AdminApiContext, StorefrontContext} from '../../../clients';
 
-export type AuthenticateAppProxy<
-  ConfigArg extends AppConfigArg,
-  Resources extends ShopifyRestResources = ShopifyRestResources,
-> = (
+export type AuthenticateAppProxy = (
   request: Request,
-) => Promise<
-  AppProxyContext | AppProxyContextWithSession<ConfigArg, Resources>
->;
+) => Promise<AppProxyContext | AppProxyContextWithSession>;
 
 interface Options {
   /**
@@ -107,7 +101,7 @@ export interface AppProxyContext extends Context {
 
   /**
    * No session is available for the shop that made this request.
-   * Therefore no methods for interacting with the GraphQL / REST Admin APIs are available.
+   * Therefore no methods for interacting with the GraphQL Admin API are available.
    */
   admin: undefined;
 
@@ -118,10 +112,7 @@ export interface AppProxyContext extends Context {
   storefront: undefined;
 }
 
-export interface AppProxyContextWithSession<
-  ConfigArg extends AppConfigArg,
-  Resources extends ShopifyRestResources = ShopifyRestResources,
-> extends Context {
+export interface AppProxyContextWithSession extends Context {
   /**
    * The session for the shop that made the request.
    *
@@ -153,7 +144,7 @@ export interface AppProxyContextWithSession<
   session: Session;
 
   /**
-   * Methods for interacting with the GraphQL / REST Admin APIs for the store that made the request.
+   * Methods for interacting with the GraphQL Admin API for the store that made the request.
    *
    * @example
    * <caption>Interacting with the Admin API.</caption>
@@ -187,7 +178,7 @@ export interface AppProxyContextWithSession<
    * }
    * ```
    */
-  admin: AdminApiContext<ConfigArg, Resources>;
+  admin: AdminApiContext;
 
   /**
    * Method for interacting with the Shopify Storefront Graphql API for the store that made the request.

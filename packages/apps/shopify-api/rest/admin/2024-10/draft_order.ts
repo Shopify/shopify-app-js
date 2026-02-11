@@ -197,14 +197,14 @@ export class DraftOrder extends Base {
   public currency: string | null;
   public customer: Customer | null | {[key: string]: any};
   public email: string | null;
-  public id: number | null;
+  public id: string | null;
   public invoice_sent_at: string | null;
   public invoice_url: string | null;
   public line_items: {[key: string]: unknown}[] | null;
   public name: string | null;
   public note: string | null;
   public note_attributes: {[key: string]: unknown}[] | null;
-  public order_id: number | null;
+  public order_id: string | null;
   public payment_terms: {[key: string]: unknown} | null;
   public shipping_address: {[key: string]: unknown} | null;
   public shipping_line: {[key: string]: unknown} | null;
