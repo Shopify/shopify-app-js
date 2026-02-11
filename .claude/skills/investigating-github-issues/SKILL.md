@@ -41,7 +41,7 @@ gh release list --limit 5
 git tag -l | grep -E '^v?[0-9]+\.[0-9]+' | sort -V | tail -5
 ```
 
-Compare the reported version against the latest major version and apply the version maintenance policy (see `references/version-maintenance-policy.md`).
+Compare the reported version against the latest major version and apply the version maintenance policy (see `../shared/references/version-maintenance-policy.md`).
 
 Also check if the issue may already be fixed in a newer release:
 - Review the CHANGELOG.md in the affected package(s)
@@ -83,7 +83,7 @@ Based on the issue, similar issues found, and reproduction attempt, examine the 
 
 ### Step 6: Classify and Analyze
 
-Apply version-based classification from `references/version-maintenance-policy.md`:
+Apply version-based classification from `../shared/references/version-maintenance-policy.md`:
 - Identify if the issue involves a technical limitation or architectural constraint
 - For feature requests hitting technical limitations, assess the need for business case clarification
 

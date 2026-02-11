@@ -74,7 +74,7 @@ Determine the blast radius of the PR:
 
 ## Version Maintenance Check
 
-Apply the version maintenance policy (see `references/version-maintenance-policy.md`):
+Apply the version maintenance policy (see `../shared/references/version-maintenance-policy.md`):
 - Is this PR targeting a maintained version/branch?
 - If the PR fixes a bug in an unmaintained major version, flag it — the fix should target the latest major version instead.
 
