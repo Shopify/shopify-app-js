@@ -66,7 +66,7 @@
     "!node_modules"
   ],
   "dependencies": {
-    "@graphql-codegen/cli": "^5.0.7",
+    "@graphql-codegen/cli": "^6.1.1",
     "@graphql-codegen/introspection": "^4.0.3",
     "@graphql-codegen/typescript": "^5.0.7",
     "@parcel/watcher": "^2.5.6",
@@ -75,7 +75,7 @@
   },
   "devDependencies": {
     "@babel/preset-env": "^7.28.6",
-    "@graphql-codegen/plugin-helpers": "^5.1.1",
+    "@graphql-codegen/plugin-helpers": "^6.1.0",
     "@shopify/babel-preset": "^25.0.2",
     "graphql-config": "^5.1.5",
     "rollup-plugin-dts": "^6.3.0"
