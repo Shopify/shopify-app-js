@@ -49,12 +49,15 @@
     "@shopify/shopify-api": "^12.3.0",
     "@shopify/shopify-app-session-storage": "^4.0.5",
     "@shopify/shopify-app-session-storage-memory": "^5.0.5",
-    "express": "^5.2.1",
     "compare-versions": "^6.1.1"
+  },
+  "peerDependencies": {
+    "express": "^5.0.0"
   },
   "devDependencies": {
     "@types/compression": "^1.8.1",
     "@types/express": "^5.0.6",
+    "express": "^5.2.1",
     "supertest": "^7.2.2",
     "jose": "^5.9.6"
   },
