@@ -3,7 +3,9 @@
   "compilerOptions": {
     "baseUrl": ".",
     "outDir": "./dist/ts",
-    "rootDir": "."
+    "rootDir": ".",
+    "module": "Preserve",
+    "moduleResolution": "Bundler"
   },
   "include": [
     "lib/**/*.ts",
