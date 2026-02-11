@@ -1,7 +1,5 @@
 import {createSecretKey} from 'crypto';
 
-import {SignJWT} from 'jose';
-
 import {JwtPayload} from '../lib';
 
 import {USER_ID} from './const';
@@ -27,6 +25,7 @@ export async function getJwt(
   apiSecretKey: string,
   overrides: Partial<JwtPayload> = {},
 ): Promise<TestJwt> {
+  const {SignJWT} = await import('jose');
   const date = new Date();
   const shop: string = getShopValue(store);
   const payload = {
