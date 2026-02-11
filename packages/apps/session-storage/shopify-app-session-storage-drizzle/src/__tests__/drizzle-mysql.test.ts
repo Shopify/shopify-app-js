@@ -37,8 +37,17 @@ const sessionTable = mysqlTable('session', {
   isOnline: boolean('isOnline').default(false).notNull(),
   scope: text('scope'),
   expires: timestamp('expires', {mode: 'date'}),
-  accessToken: text('accessToken'),
+  accessToken: text('accessToken').notNull(),
   userId: bigint('userId', {mode: 'number'}),
+  firstName: text('firstName'),
+  lastName: text('lastName'),
+  email: text('email'),
+  accountOwner: boolean('accountOwner'),
+  locale: text('locale'),
+  collaborator: boolean('collaborator'),
+  emailVerified: boolean('emailVerified'),
+  refreshToken: text('refreshToken'),
+  refreshTokenExpires: timestamp('refreshTokenExpires', {mode: 'date'}),
 });
 
 describe('DrizzleSessionStorageMySQL', () => {
@@ -75,8 +84,17 @@ describe('DrizzleSessionStorageMySQL', () => {
     \`isOnline\` boolean NOT NULL DEFAULT false,
     \`scope\` text,
     \`expires\` timestamp NULL,
-    \`accessToken\` text,
+    \`accessToken\` text NOT NULL,
     \`userId\` bigint,
+    \`firstName\` text,
+    \`lastName\` text,
+    \`email\` text,
+    \`accountOwner\` boolean,
+    \`locale\` text,
+    \`collaborator\` boolean,
+    \`emailVerified\` boolean,
+    \`refreshToken\` text,
+    \`refreshTokenExpires\` timestamp NULL,
     CONSTRAINT \`session_id\` PRIMARY KEY (\`id\`)
   );
 `);
