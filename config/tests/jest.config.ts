@@ -11,7 +11,14 @@ const config: Config = {
     '^.+\\.tsx?$': 'ts-jest',
     '^.+\\.js$': [
       'ts-jest',
-      {useESM: false, tsconfig: {allowJs: true, esModuleInterop: true}},
+      {
+        useESM: false,
+        tsconfig: {
+          allowJs: true,
+          esModuleInterop: true,
+          module: 'CommonJS',
+        },
+      },
     ],
   },
   setupFiles: [`${__dirname}/setup-crypto.ts`],
