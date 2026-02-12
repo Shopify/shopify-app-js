@@ -90,10 +90,10 @@ describe('sanitizeShop', () => {
 
     expect(() =>
       shopify.utils.sanitizeShop(INVALID_SHOP_URL_1, true),
-    ).toThrowError(InvalidShopError);
+    ).toThrow(InvalidShopError);
     expect(() =>
       shopify.utils.sanitizeShop(INVALID_SHOP_URL_2, true),
-    ).toThrowError(InvalidShopError);
+    ).toThrow(InvalidShopError);
   });
 
   test('returns the right values when using custom domains', () => {
