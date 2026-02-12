@@ -17,7 +17,7 @@
   "module": "./dist/esm/prisma.mjs",
   "types": "./dist/ts/prisma.d.ts",
   "scripts": {
-    "lint": "eslint . --ext .js,.ts",
+    "lint": "eslint .",
     "build": "pnpm prisma generate && pnpm rollup && pnpm tsc -p ./tsconfig.build.json",
     "tsc": "tsc",
     "test": "jest",

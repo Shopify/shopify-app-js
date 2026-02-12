@@ -17,7 +17,7 @@
   "module": "./dist/esm/postgresql.mjs",
   "types": "./dist/ts/postgresql.d.ts",
   "scripts": {
-    "lint": "eslint . --ext .js,.ts",
+    "lint": "eslint .",
     "build": "pnpm rollup && pnpm tsc -p ./tsconfig.build.json",
     "tsc": "tsc",
     "test": "jest",

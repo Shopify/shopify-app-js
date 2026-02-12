@@ -54,7 +54,7 @@
   "scripts": {
     "build-docs": "sh docs/build-docs.sh",
     "validate-docs": "sh ./docs/build-docs.sh isTest && pnpm compare-docs",
-    "lint": "eslint . --ext .js,.ts",
+    "lint": "eslint .",
     "build": "pnpm rollup && pnpm tsc -p ./tsconfig.build.json",
     "tsc": "tsc",
     "test": "jest",

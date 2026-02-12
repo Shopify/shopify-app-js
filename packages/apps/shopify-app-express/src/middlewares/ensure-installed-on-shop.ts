@@ -11,7 +11,7 @@ import {addCSPHeader} from './csp-headers';
 import {validateAuthenticatedSession} from './validate-authenticated-session';
 import {hasValidAccessToken} from './has-valid-access-token';
 
-interface EnsureInstalledParams extends ApiAndConfigParams {}
+type EnsureInstalledParams = ApiAndConfigParams;
 
 export function ensureInstalled({
   api,
