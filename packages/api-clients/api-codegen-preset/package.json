@@ -4,6 +4,9 @@
   "description": "Preset for graphql-codegen to parse and type queries to Shopify APIs",
   "author": "Shopify",
   "license": "MIT",
+  "engines": {
+    "node": ">=20.0.0"
+  },
   "homepage": "https://github.com/Shopify/shopify-app-js/tree/main/packages/api-clients/api-codegen-preset#readme",
   "repository": {
     "type": "git",
@@ -66,16 +69,16 @@
     "!node_modules"
   ],
   "dependencies": {
-    "@graphql-codegen/cli": "^5.0.7",
-    "@graphql-codegen/introspection": "^4.0.3",
-    "@graphql-codegen/typescript": "^5.0.2",
-    "@parcel/watcher": "^2.5.1",
+    "@graphql-codegen/cli": "^6.1.1",
+    "@graphql-codegen/introspection": "^5.0.0",
+    "@graphql-codegen/typescript": "^5.0.7",
+    "@parcel/watcher": "^2.5.6",
     "@shopify/graphql-codegen": "^0.1.0",
-    "graphql": "^16.10.0"
+    "graphql": "^16.12.0"
   },
   "devDependencies": {
     "@babel/preset-env": "^7.28.6",
-    "@graphql-codegen/plugin-helpers": "^5.1.1",
+    "@graphql-codegen/plugin-helpers": "^6.1.0",
     "@shopify/babel-preset": "^25.0.2",
     "graphql-config": "^5.1.5",
     "rollup-plugin-dts": "^6.3.0"
