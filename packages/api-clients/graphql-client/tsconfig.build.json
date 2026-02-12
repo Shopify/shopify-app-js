@@ -5,5 +5,5 @@
     "outDir": "dist/ts",
   },
   "extends": "./tsconfig.json",
-  "exclude": ["./node_modules", "./src/**/tests/*.ts"]
+  "exclude": ["./node_modules", "./src/**/tests/**/*.ts"]
 }

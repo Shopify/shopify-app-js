@@ -9,6 +9,7 @@ describe('node setup import', () => {
     process.env.APP_BRIDGE_URL = 'http://localhost:9876/app-bridge.js';
 
     // WHEN
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
     await require('../node/index');
 
     // THEN

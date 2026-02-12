@@ -144,7 +144,7 @@ describe('shopify.billing.createUsageRecord', () => {
         price,
         subscriptionLineItemId: subscriptionId,
       }),
-    ).rejects.toThrowError(BillingError);
+    ).rejects.toThrow(BillingError);
   });
 
   test('throws a BillingError when an error when no active payment', async () => {
@@ -162,6 +162,6 @@ describe('shopify.billing.createUsageRecord', () => {
         description,
         price,
       }),
-    ).rejects.toThrowError(BillingError);
+    ).rejects.toThrow(BillingError);
   });
 });

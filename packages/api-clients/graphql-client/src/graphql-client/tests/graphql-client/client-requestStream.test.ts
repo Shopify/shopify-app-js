@@ -1438,7 +1438,7 @@ describe('GraphQL Client', () => {
 
           await client.requestStream(operation);
 
-          expect(mockLogger).toBeCalledWith({
+          expect(mockLogger).toHaveBeenCalledWith({
             type: 'HTTP-Response',
             content: {
               response: mockedSuccessResponse,

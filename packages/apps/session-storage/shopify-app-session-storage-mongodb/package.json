@@ -13,11 +13,14 @@
   "homepage": "https://github.com/Shopify/shopify-app-js/tree/main/packages/apps/session-storage/shopify-app-session-storage-mongodb",
   "author": "Shopify Inc.",
   "license": "MIT",
+  "engines": {
+    "node": ">=20.19.0"
+  },
   "main": "./dist/cjs/mongodb.js",
   "module": "./dist/esm/mongodb.mjs",
   "types": "./dist/ts/mongodb.d.ts",
   "scripts": {
-    "lint": "eslint . --ext .js,.ts",
+    "lint": "eslint .",
     "build": "pnpm rollup && pnpm tsc -p ./tsconfig.build.json",
     "tsc": "tsc",
     "test": "jest",
@@ -44,7 +47,7 @@
     "session storage"
   ],
   "dependencies": {
-    "mongodb": "^6.21.0"
+    "mongodb": "^7.0.0"
   },
   "peerDependencies": {
     "@shopify/shopify-api": "^12.0.0",

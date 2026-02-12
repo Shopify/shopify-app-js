@@ -21,7 +21,7 @@ const getCodegenOptions = (fixture: string, output = 'out.d.ts') => ({
 
 describe('Preset', () => {
   it('includes ESLint comments, types with Pick, generated operations and augments interfaces', async () => {
-    const result = await executeCodegen(getCodegenOptions('operations.ts'));
+    const {result} = await executeCodegen(getCodegenOptions('operations.ts'));
 
     expect(result).toHaveLength(1);
 
@@ -34,7 +34,7 @@ describe('Preset', () => {
 
     // Imports Admin API
     expect(generatedCode).toMatch(
-      `import type * as AdminTypes from './admin.types.d.ts';`,
+      `import type * as AdminTypes from './admin.types.js';`,
     );
 
     // Uses Pick<...>
@@ -59,7 +59,7 @@ describe('Preset', () => {
       .toBe(`/* eslint-disable eslint-comments/disable-enable-pair */
 /* eslint-disable eslint-comments/no-unlimited-disable */
 /* eslint-disable */
-import type * as AdminTypes from './admin.types.d.ts';
+import type * as AdminTypes from './admin.types.js';
 
 export type TestQueryQueryVariables = AdminTypes.Exact<{ [key: string]: never; }>;
 
@@ -89,7 +89,7 @@ declare module '@shopify/admin-api-client' {
   });
 
   it('imports declaration files when using .d.ts targets', async () => {
-    const result = await executeCodegen(
+    const {result} = await executeCodegen(
       getCodegenOptions('operations.ts', 'out.d.ts'),
     );
 
@@ -100,12 +100,12 @@ declare module '@shopify/admin-api-client' {
     )!.content;
 
     expect(generatedCode).toMatch(
-      "import type * as AdminTypes from './admin.types.d.ts';",
+      "import type * as AdminTypes from './admin.types.js';",
     );
   });
 
-  it('imports regular files when using .ts targets', async () => {
-    const result = await executeCodegen(
+  it('imports .js extension for all output targets', async () => {
+    const {result} = await executeCodegen(
       getCodegenOptions('operations.ts', 'out.ts'),
     );
 
@@ -116,7 +116,7 @@ declare module '@shopify/admin-api-client' {
     )!.content;
 
     expect(generatedCode).toMatch(
-      "import * as AdminTypes from './admin.types.ts';",
+      "import * as AdminTypes from './admin.types.js';",
     );
   });
 });

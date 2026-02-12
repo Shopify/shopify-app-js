@@ -33,7 +33,7 @@ describe('shopifyApp', () => {
   });
 
   it('fails with an invalid config', () => {
-    expect(() => shopifyApp({} as any)).toThrowError(ShopifyError);
+    expect(() => shopifyApp({} as any)).toThrow(ShopifyError);
   });
 
   it('properly defaults missing configs based on env vars', () => {

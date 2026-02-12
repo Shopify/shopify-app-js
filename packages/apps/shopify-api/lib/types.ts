@@ -26,7 +26,7 @@ export enum ApiVersion {
 
 export const LIBRARY_NAME = 'Shopify API Library';
 
-/* eslint-disable @shopify/typescript/prefer-pascal-case-enums */
+/* eslint-disable @shopify/typescript-prefer-pascal-case-enums */
 export enum ShopifyHeader {
   AccessToken = 'X-Shopify-Access-Token',
   ApiVersion = 'X-Shopify-API-Version',
@@ -42,7 +42,7 @@ export enum ShopifyHeader {
   StorefrontSDKVariant = 'X-SDK-Variant',
   StorefrontSDKVersion = 'X-SDK-Version',
 }
-/* eslint-enable @shopify/typescript/prefer-pascal-case-enums */
+/* eslint-enable @shopify/typescript-prefer-pascal-case-enums */
 
 export const ShopifyEventsHeader = {
   Hmac: 'shopify-hmac-sha256',

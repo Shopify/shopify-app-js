@@ -175,6 +175,6 @@ describe('Cancel billing', () => {
         isTest: true,
         prorate: true,
       }),
-    ).rejects.toThrowError(HttpResponseError);
+    ).rejects.toThrow(HttpResponseError);
   });
 });

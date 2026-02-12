@@ -17,7 +17,7 @@
   "module": "./dist/esm/kv.mjs",
   "types": "./dist/ts/kv.d.ts",
   "scripts": {
-    "lint": "eslint . --ext .js,.ts",
+    "lint": "eslint .",
     "build": "pnpm rollup && pnpm tsc -p ./tsconfig.build.json",
     "tsc": "tsc",
     "test": "jest",
@@ -52,9 +52,9 @@
     "@shopify/shopify-app-session-storage": "^4.0.0"
   },
   "devDependencies": {
-    "@cloudflare/workers-types": "^4.20260109.0",
+    "@cloudflare/workers-types": "^4.20260124.0",
     "@shopify/shopify-app-session-storage-test-utils": "^4.0.5",
-    "miniflare": "^4.20260107.0"
+    "miniflare": "^4.20260120.0"
   },
   "files": [
     "dist/*",

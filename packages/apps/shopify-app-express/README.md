@@ -17,6 +17,7 @@ To follow these usage guides, you will need to:
 - have a Shopify Partner account and development store
 - have an app already set up on your partner account
 - have a JavaScript package manager such as [yarn](https://yarnpkg.com) installed
+- have [Express.js](https://expressjs.com/) v5 or later installed (`express@^5.0.0`)
 
 ## Getting started
 
