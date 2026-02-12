@@ -19,6 +19,8 @@ module.exports = [
       '**/.eslintrc.cjs',
       '**/babel.config.js',
       'packages/apps/shopify-api/rest/admin/',
+      // .mjs test helper scripts (not part of the library, never linted before)
+      '**/*.mjs',
       // Remix and React Router example/doc files
       'packages/apps/shopify-app-remix/docs/',
       'packages/apps/shopify-app-remix/**/*.example.ts',
