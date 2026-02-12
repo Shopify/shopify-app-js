@@ -104,11 +104,7 @@ function checkWebhooksHeaders(
 
   const hmac = getRequiredHeader(headers, headerNames.hmac, missingHeaders);
   const topic = getRequiredHeader(headers, headerNames.topic, missingHeaders);
-  const domain = getRequiredHeader(
-    headers,
-    headerNames.domain,
-    missingHeaders,
-  );
+  const domain = getRequiredHeader(headers, headerNames.domain, missingHeaders);
   const apiVersion = getRequiredHeader(
     headers,
     headerNames.apiVersion,
@@ -160,11 +156,7 @@ function checkEventsHeaders(
 
   const hmac = getRequiredHeader(headers, headerNames.hmac, missingHeaders);
   const topic = getRequiredHeader(headers, headerNames.topic, missingHeaders);
-  const domain = getRequiredHeader(
-    headers,
-    headerNames.domain,
-    missingHeaders,
-  );
+  const domain = getRequiredHeader(headers, headerNames.domain, missingHeaders);
   const apiVersion = getRequiredHeader(
     headers,
     headerNames.apiVersion,

@@ -95,4 +95,3 @@ export function shopifyWebhooks(config: ConfigInterface): Webhooks {
 }
 
 export type ShopifyWebhooks = ReturnType<typeof shopifyWebhooks>;
-
