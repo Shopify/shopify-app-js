@@ -72,5 +72,5 @@ test('args of different types throw SafeCompareError', () => {
 
   expect(() => {
     shopify.auth.safeCompare(arg1, arg2);
-  }).toThrowError(ShopifyErrors.SafeCompareError);
+  }).toThrow(ShopifyErrors.SafeCompareError);
 });

@@ -203,7 +203,7 @@ describe('Webhook registration', () => {
     );
 
     // THEN
-    expect(shopify.registerWebhooks({session})).rejects.toThrowError(
+    expect(shopify.registerWebhooks({session})).rejects.toThrow(
       GraphqlQueryError,
     );
   });

@@ -242,6 +242,6 @@ describe('Create usage record', () => {
         },
         description: 'A usage record',
       }),
-    ).rejects.toThrowError(HttpResponseError);
+    ).rejects.toThrow(HttpResponseError);
   });
 });

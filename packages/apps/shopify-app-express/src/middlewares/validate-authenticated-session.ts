@@ -8,7 +8,7 @@ import {redirectOutOfApp} from '../redirect-out-of-app';
 import {ValidateAuthenticatedSessionMiddleware} from './types';
 import {hasValidAccessToken} from './has-valid-access-token';
 
-interface validateAuthenticatedSessionParams extends ApiAndConfigParams {}
+type validateAuthenticatedSessionParams = ApiAndConfigParams;
 
 export function validateAuthenticatedSession({
   api,

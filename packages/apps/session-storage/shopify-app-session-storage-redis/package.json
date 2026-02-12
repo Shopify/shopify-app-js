@@ -17,7 +17,7 @@
   "module": "./dist/esm/redis.mjs",
   "types": "./dist/ts/redis.d.ts",
   "scripts": {
-    "lint": "eslint . --ext .js,.ts",
+    "lint": "eslint .",
     "build": "pnpm rollup && pnpm tsc -p ./tsconfig.build.json",
     "tsc": "tsc",
     "test": "jest --detectOpenHandles",

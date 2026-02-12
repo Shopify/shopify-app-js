@@ -318,7 +318,7 @@ describe('GraphQL Client', () => {
 
           await client.fetch(operation);
 
-          expect(mockLogger).toBeCalledWith({
+          expect(mockLogger).toHaveBeenCalledWith({
             type: 'HTTP-Response',
             content: {
               response: mockedSuccessResponse,
@@ -892,7 +892,7 @@ describe('GraphQL Client', () => {
 
           await client.request(operation);
 
-          expect(mockLogger).toBeCalledWith({
+          expect(mockLogger).toHaveBeenCalledWith({
             type: 'HTTP-Response',
             content: {
               response: mockedSuccessResponse,

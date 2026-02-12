@@ -8,7 +8,7 @@ import {BASE64_HOST, shopify, TEST_SHOP} from './test-helper';
 describe('redirectToAuth', () => {
   let app: express.Express;
 
-  let beginMock: jest.SpyInstance;
+  let beginMock: jest.SpiedFunction;
   beforeEach(() => {
     app = express();
     app.get('/redirect-to-auth', async (req, res) => {
