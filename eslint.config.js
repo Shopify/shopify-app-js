@@ -40,6 +40,13 @@ module.exports = [
       'no-console': 'off',
       '@typescript-eslint/naming-convention': 'off',
       '@typescript-eslint/consistent-indexed-object-style': 'off',
+    },
+  },
+
+  // TypeScript-specific rule overrides (scoped to .ts/.tsx files)
+  {
+    files: ['**/*.ts', '**/*.tsx'],
+    rules: {
       '@typescript-eslint/no-empty-object-type': [
         'error',
         {allowInterfaces: 'with-single-extends'},
