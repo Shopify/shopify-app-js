@@ -28,6 +28,7 @@ const config: Config = {
         `${__dirname}/src/server/adapters/node/__tests__/setup-jest.ts`,
       ],
       testPathIgnorePatterns: ['src/react', 'src/server/adapters/__tests__'],
+      transform: baseConfig.transform,
     },
     {
       displayName: 'shopify-app-react-router-server-adapters',
@@ -35,6 +36,7 @@ const config: Config = {
       rootDir: './src/server/adapters',
       testMatch: ['**/*.test.ts', '**/*.test.tsx'],
       setupFilesAfterEnv: [...(baseConfig.setupFilesAfterEnv ?? [])],
+      transform: baseConfig.transform,
     },
   ],
 };

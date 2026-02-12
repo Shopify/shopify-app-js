@@ -27,6 +27,7 @@ const config: Config = {
         `${__dirname}/src/server/adapters/node/__tests__/setup-jest.ts`,
       ],
       testPathIgnorePatterns: ['src/react', 'src/server/adapters/__tests__'],
+      transform: baseConfig.transform,
     },
     {
       displayName: 'shopify-app-remix-server-vercel',
@@ -37,12 +38,14 @@ const config: Config = {
         `${__dirname}/src/server/adapters/vercel/__tests__/setup-jest.ts`,
       ],
       testPathIgnorePatterns: ['src/react', 'src/server/adapters/__tests__'],
+      transform: baseConfig.transform,
     },
     {
       displayName: 'shopify-app-remix-server-adapters',
       preset: 'ts-jest',
       rootDir: './src/server/adapters',
       testMatch: ['**/*.test.ts', '**/*.test.tsx'],
+      transform: baseConfig.transform,
     },
   ],
 };
