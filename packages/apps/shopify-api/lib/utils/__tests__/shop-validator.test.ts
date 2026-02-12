@@ -88,12 +88,12 @@ describe('sanitizeShop', () => {
   test('throws for invalid URLs if set to', () => {
     const shopify = shopifyApi(testConfig());
 
-    expect(() =>
-      shopify.utils.sanitizeShop(INVALID_SHOP_URL_1, true),
-    ).toThrow(InvalidShopError);
-    expect(() =>
-      shopify.utils.sanitizeShop(INVALID_SHOP_URL_2, true),
-    ).toThrow(InvalidShopError);
+    expect(() => shopify.utils.sanitizeShop(INVALID_SHOP_URL_1, true)).toThrow(
+      InvalidShopError,
+    );
+    expect(() => shopify.utils.sanitizeShop(INVALID_SHOP_URL_2, true)).toThrow(
+      InvalidShopError,
+    );
   });
 
   test('returns the right values when using custom domains', () => {
