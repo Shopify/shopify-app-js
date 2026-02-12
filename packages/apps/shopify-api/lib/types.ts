@@ -35,11 +35,26 @@ export enum ShopifyHeader {
   Topic = 'X-Shopify-Topic',
   SubTopic = 'X-Shopify-Sub-Topic',
   WebhookId = 'X-Shopify-Webhook-Id',
+  Name = 'X-Shopify-Name',
+  TriggeredAt = 'X-Shopify-Triggered-At',
+  EventId = 'X-Shopify-Event-Id',
   StorefrontPrivateToken = 'Shopify-Storefront-Private-Token',
   StorefrontSDKVariant = 'X-SDK-Variant',
   StorefrontSDKVersion = 'X-SDK-Version',
 }
 /* eslint-enable @shopify/typescript-prefer-pascal-case-enums */
+
+export const ShopifyEventsHeader = {
+  Hmac: 'shopify-hmac-sha256',
+  Topic: 'shopify-topic',
+  Domain: 'shopify-shop-domain',
+  ApiVersion: 'shopify-api-version',
+  EventId: 'shopify-event-id',
+  Handle: 'shopify-handle',
+  Action: 'shopify-action',
+  ResourceId: 'shopify-resource-id',
+  TriggeredAt: 'shopify-triggered-at',
+} as const;
 
 export enum ClientType {
   Rest = 'rest',
