@@ -9,7 +9,7 @@
     "test": "turbo run test",
     "test:ci": "CI=true turbo run test:ci --filter='!./packages/apps/session-storage/*'",
     "test:ci_sessions": "CI=true turbo run test",
-    "lint": "CI=true turbo lint",
+    "lint": "ESLINT_USE_FLAT_CONFIG=true CI=true turbo lint",
     "release": "turbo build && changeset publish",
     "dev": "turbo dev --no-cache --continue",
     "clean": "turbo clean",

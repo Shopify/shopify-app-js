@@ -20,7 +20,7 @@
   "module": "./dist/esm/mongodb.mjs",
   "types": "./dist/ts/mongodb.d.ts",
   "scripts": {
-    "lint": "eslint . --ext .js,.ts",
+    "lint": "eslint .",
     "build": "pnpm rollup && pnpm tsc -p ./tsconfig.build.json",
     "tsc": "tsc",
     "test": "jest",
