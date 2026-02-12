@@ -29,6 +29,9 @@ const config: Config = {
       ],
       testPathIgnorePatterns: ['src/react', 'src/server/adapters/__tests__'],
       transform: baseConfig.transform,
+      transformIgnorePatterns: baseConfig.transformIgnorePatterns,
+      moduleNameMapper: baseConfig.moduleNameMapper,
+      setupFiles: baseConfig.setupFiles,
     },
     {
       displayName: 'shopify-app-react-router-server-adapters',
@@ -37,6 +40,9 @@ const config: Config = {
       testMatch: ['**/*.test.ts', '**/*.test.tsx'],
       setupFilesAfterEnv: [...(baseConfig.setupFilesAfterEnv ?? [])],
       transform: baseConfig.transform,
+      transformIgnorePatterns: baseConfig.transformIgnorePatterns,
+      moduleNameMapper: baseConfig.moduleNameMapper,
+      setupFiles: baseConfig.setupFiles,
     },
   ],
 };

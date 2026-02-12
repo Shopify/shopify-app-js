@@ -28,6 +28,9 @@ const config: Config = {
       ],
       testPathIgnorePatterns: ['src/react', 'src/server/adapters/__tests__'],
       transform: baseConfig.transform,
+      transformIgnorePatterns: baseConfig.transformIgnorePatterns,
+      moduleNameMapper: baseConfig.moduleNameMapper,
+      setupFiles: baseConfig.setupFiles,
     },
     {
       displayName: 'shopify-app-remix-server-vercel',
@@ -39,6 +42,9 @@ const config: Config = {
       ],
       testPathIgnorePatterns: ['src/react', 'src/server/adapters/__tests__'],
       transform: baseConfig.transform,
+      transformIgnorePatterns: baseConfig.transformIgnorePatterns,
+      moduleNameMapper: baseConfig.moduleNameMapper,
+      setupFiles: baseConfig.setupFiles,
     },
     {
       displayName: 'shopify-app-remix-server-adapters',
@@ -46,6 +52,9 @@ const config: Config = {
       rootDir: './src/server/adapters',
       testMatch: ['**/*.test.ts', '**/*.test.tsx'],
       transform: baseConfig.transform,
+      transformIgnorePatterns: baseConfig.transformIgnorePatterns,
+      moduleNameMapper: baseConfig.moduleNameMapper,
+      setupFiles: baseConfig.setupFiles,
     },
   ],
 };
