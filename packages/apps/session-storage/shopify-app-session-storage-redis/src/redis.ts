@@ -12,13 +12,13 @@ import {RedisSessionStorageMigrator} from './redis-migrator';
 
 type RedisClient = ReturnType<typeof createClient>;
 
-/* eslint-disable @shopify/typescript/prefer-pascal-case-enums */
+/* eslint-disable @shopify/typescript-prefer-pascal-case-enums */
 enum ShopifyStorageOption {
   sessionKeyPrefix = 'sessionKeyPrefix',
   migratorOptions = 'migratorOptions',
   onError = 'onError',
 }
-/* eslint-enable @shopify/typescript/prefer-pascal-case-enums */
+/* eslint-enable @shopify/typescript-prefer-pascal-case-enums */
 
 export interface RedisSessionStorageOptions extends RedisClientOptions {
   [ShopifyStorageOption.sessionKeyPrefix]: string;

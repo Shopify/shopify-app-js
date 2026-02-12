@@ -147,7 +147,7 @@ describe('webhooks', () => {
 
     expect(() => {
       return shopify.webhooks.addHandlers({PRODUCTS_CREATE: handler2});
-    }).toThrowError(InvalidDeliveryMethodError);
+    }).toThrow(InvalidDeliveryMethodError);
   });
 
   it('fails to register multiple PubSub handlers for the same topic', async () => {
@@ -160,7 +160,7 @@ describe('webhooks', () => {
 
     expect(() => {
       return shopify.webhooks.addHandlers({PRODUCTS_CREATE: handler2});
-    }).toThrowError(InvalidDeliveryMethodError);
+    }).toThrow(InvalidDeliveryMethodError);
   });
 });
 

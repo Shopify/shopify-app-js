@@ -48,7 +48,7 @@ describe('auth', () => {
   });
 
   describe('callback', () => {
-    let callbackMock: jest.SpyInstance;
+    let callbackMock: jest.SpiedFunction;
     let session: Session;
     beforeEach(async () => {
       session = new Session({
@@ -80,7 +80,7 @@ describe('auth', () => {
       });
 
       describe('with webhooks', () => {
-        let registerMock: jest.SpyInstance;
+        let registerMock: jest.SpiedFunction;
         beforeEach(() => {
           shopify.api.webhooks.addHandlers({
             TEST_TOPIC: {

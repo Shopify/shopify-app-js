@@ -124,7 +124,7 @@ describe('Base REST resource', () => {
     const expectedError = expect(
       shopify.rest.FakeResource.find({id: 1, session}),
     ).rejects;
-    await expectedError.toThrowError(HttpResponseError);
+    await expectedError.toThrow(HttpResponseError);
     await expectedError.toMatchObject({
       response: {
         body: {errors: 'Not Found'},
@@ -447,7 +447,7 @@ describe('Base REST resource', () => {
     const resource = new shopify.rest.FakeResource({session});
     resource.id = 1;
 
-    await expect(resource.delete()).rejects.toThrowError(HttpResponseError);
+    await expect(resource.delete()).rejects.toThrow(HttpResponseError);
 
     expect({
       method: 'DELETE',
@@ -655,7 +655,7 @@ describe('Base REST resource', () => {
 
     const resource = new shopify.rest.FakeResource({session});
 
-    expect(async () => resource.delete()).rejects.toThrowError();
+    expect(async () => resource.delete()).rejects.toThrow();
   });
 });
 

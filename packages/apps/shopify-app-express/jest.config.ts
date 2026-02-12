@@ -1,3 +1,4 @@
+/** @jest-config-loader ts-node */
 import type {Config} from 'jest';
 
 import baseConfig from '../../../config/tests/jest.config';

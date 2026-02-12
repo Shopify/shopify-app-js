@@ -11,7 +11,11 @@ import {
   Money,
 } from './types';
 import {assessPayments} from './check';
-import {convertAppRecurringPricingMoney, convertAppUsagePricingMoney} from './utils';
+import {
+  convertAppRecurringPricingMoney,
+  convertAppUsagePricingMoney,
+} from './utils';
+
 interface InternalParams {
   client: GraphqlClient;
   isTest?: boolean;
@@ -109,9 +113,12 @@ export function createUsageRecord(
         });
       }
 
-      const appUsageRecord = response.data?.appUsageRecordCreate?.appUsageRecord!;
+      const appUsageRecord =
+        response.data?.appUsageRecordCreate?.appUsageRecord!;
       convertAppRecurringPricingMoney(appUsageRecord.price);
-      convertAppUsagePricingMoney(appUsageRecord.subscriptionLineItem.plan.pricingDetails);
+      convertAppUsagePricingMoney(
+        appUsageRecord.subscriptionLineItem.plan.pricingDetails,
+      );
 
       return appUsageRecord;
     } catch (error) {

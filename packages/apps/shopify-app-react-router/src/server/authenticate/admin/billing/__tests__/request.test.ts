@@ -194,6 +194,6 @@ describe('Billing request', () => {
     // THEN
     await expect(
       billing.request({plan: responses.PLAN_1, isTest: true}),
-    ).rejects.toThrowError(BillingError);
+    ).rejects.toThrow(BillingError);
   });
 });

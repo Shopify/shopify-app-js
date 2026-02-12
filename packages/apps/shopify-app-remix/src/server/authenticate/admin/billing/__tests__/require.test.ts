@@ -267,6 +267,6 @@ describe('Billing require', () => {
           throw new Error('This should not be called');
         },
       }),
-    ).rejects.toThrowError(HttpResponseError);
+    ).rejects.toThrow(HttpResponseError);
   });
 });

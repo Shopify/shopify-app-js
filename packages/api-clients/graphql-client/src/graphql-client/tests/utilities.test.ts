@@ -91,37 +91,33 @@ describe('validateRetries()', () => {
   const client = CLIENT;
 
   it('does not throw an error when retries is undefined', () => {
-    expect(() =>
-      validateRetries({client, retries: undefined}),
-    ).not.toThrowError();
+    expect(() => validateRetries({client, retries: undefined})).not.toThrow();
   });
 
   it('does not throw an error when retries is between 0 and 3', () => {
-    expect(() => validateRetries({client, retries: 0})).not.toThrowError();
-    expect(() => validateRetries({client, retries: 1})).not.toThrowError();
-    expect(() => validateRetries({client, retries: 2})).not.toThrowError();
-    expect(() => validateRetries({client, retries: 3})).not.toThrowError();
+    expect(() => validateRetries({client, retries: 0})).not.toThrow();
+    expect(() => validateRetries({client, retries: 1})).not.toThrow();
+    expect(() => validateRetries({client, retries: 2})).not.toThrow();
+    expect(() => validateRetries({client, retries: 3})).not.toThrow();
   });
 
   it('throws an error when retries is not a number', () => {
     const retries = '1';
-    expect(() =>
-      validateRetries({client, retries: retries as any}),
-    ).toThrowError(
+    expect(() => validateRetries({client, retries: retries as any})).toThrow(
       `GraphQL Client: The provided "retries" value (${retries}) is invalid - it cannot be less than 0 or greater than 3`,
     );
   });
 
   it('throws an error when retries is less than 0', () => {
     const retries = -1;
-    expect(() => validateRetries({client, retries})).toThrowError(
+    expect(() => validateRetries({client, retries})).toThrow(
       `GraphQL Client: The provided "retries" value (${retries}) is invalid - it cannot be less than 0 or greater than 3`,
     );
   });
 
   it('throws an error when retries is greater than 3', () => {
     const retries = 4;
-    expect(() => validateRetries({client, retries})).toThrowError(
+    expect(() => validateRetries({client, retries})).toThrow(
       `GraphQL Client: The provided "retries" value (${retries}) is invalid - it cannot be less than 0 or greater than 3`,
     );
   });

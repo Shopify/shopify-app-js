@@ -45,4 +45,4 @@ describe('<AppProxyLink />', () => {
     });
     expect(component).toContainReactHtml('Hello world');
   });
-}); 
+});

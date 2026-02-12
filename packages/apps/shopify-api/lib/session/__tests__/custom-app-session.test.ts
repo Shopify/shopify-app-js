@@ -37,7 +37,7 @@ describe('customAppSession', () => {
       it(`${shop}`, async () => {
         const shopify = shopifyApi(testConfig());
 
-        expect(() => customAppSession(shopify.config)(shop)).toThrowError(
+        expect(() => customAppSession(shopify.config)(shop)).toThrow(
           ShopifyErrors.InvalidShopError,
         );
       });
