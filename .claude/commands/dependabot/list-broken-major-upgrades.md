@@ -1,6 +1,6 @@
 ---
 description: List open Dependabot PRs with major version bumps where CI is failing
-model: opus
+model: sonnet
 allowed-tools: Bash(gh *)
 ---
 

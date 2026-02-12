@@ -2,7 +2,7 @@
 description: Process a major Dependabot PR: research breaking changes, apply fixes, validate CI
 argument-hint: [pr-url]
 model: opus
-allowed-tools: Task, AskUserQuestion, Read, Edit, Write, Glob, Grep, Bash(git *), Bash(gh *), Bash(pnpm *), Bash(npx *), Bash(ls *), Bash(cat *), Bash(timeout *), Bash(node *), Bash(wc *), WebFetch, WebSearch
+allowed-tools: Task, AskUserQuestion, Read, Edit, Write, Glob, Grep, Bash(git *), Bash(gh *), Bash(pnpm *), Bash(npx *), Bash(ls *), Bash(timeout *), Bash(node *), Bash(wc *), WebFetch, WebSearch
 ---
 
 # Dependency Upgrade Workflow
@@ -103,7 +103,7 @@ After the Planner completes, check the plan for merge conflicts.
    - List all conflicted files
    - Open each conflicted file and resolve the conflict markers by understanding both sides:
      - For **dependency version conflicts** (package.json): keep the Dependabot version bump while incorporating any unrelated changes from main
-     - For **lock files** (pnpm-lock.yaml, yarn.lock): after resolving package.json, delete the lock file and run `pnpm install` to regenerate it
+     - For **lock files** (pnpm-lock.yaml): after resolving package.json, delete the lock file and run `pnpm install` to regenerate it
      - For **source code conflicts**: merge both sides logically, preserving the intent of both the Dependabot change and the main branch changes
      - For **changeset or config conflicts**: incorporate changes from both sides
    - Stage all resolved files with `git add`
