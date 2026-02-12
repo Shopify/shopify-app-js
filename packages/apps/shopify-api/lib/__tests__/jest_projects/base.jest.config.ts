@@ -9,13 +9,8 @@ const config: Config = {
   testRegex: '.*\\.test\\.tsx?$',
   coverageDirectory: './coverage/',
   collectCoverage: false,
-  // jose v6 is ESM-only; transform it so Jest (CJS mode) can load it
+  // jose v6 is ESM-only; allow jest to transform it
   transformIgnorePatterns: ['/node_modules/(?!jose)'],
-  transform: {
-    '^.+\\.m?tsx?$': ['ts-jest', {useESM: true}],
-    // Transform jose's ESM .js files so Jest can load them
-    '.+/node_modules/jose/.+\\.js$': ['ts-jest', {useESM: true}],
-  },
 };
 
 export default config;
