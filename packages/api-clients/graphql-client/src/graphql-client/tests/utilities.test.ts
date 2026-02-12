@@ -91,9 +91,7 @@ describe('validateRetries()', () => {
   const client = CLIENT;
 
   it('does not throw an error when retries is undefined', () => {
-    expect(() =>
-      validateRetries({client, retries: undefined}),
-    ).not.toThrow();
+    expect(() => validateRetries({client, retries: undefined})).not.toThrow();
   });
 
   it('does not throw an error when retries is between 0 and 3', () => {
@@ -105,9 +103,7 @@ describe('validateRetries()', () => {
 
   it('throws an error when retries is not a number', () => {
     const retries = '1';
-    expect(() =>
-      validateRetries({client, retries: retries as any}),
-    ).toThrow(
+    expect(() => validateRetries({client, retries: retries as any})).toThrow(
       `GraphQL Client: The provided "retries" value (${retries}) is invalid - it cannot be less than 0 or greater than 3`,
     );
   });
