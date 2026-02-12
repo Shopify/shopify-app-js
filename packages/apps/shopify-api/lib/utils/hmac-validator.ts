@@ -11,6 +11,7 @@ import {HashFormat} from '../../runtime/crypto/types';
 import {AuthQuery} from '../auth/oauth/types';
 import * as ShopifyErrors from '../error';
 import {safeCompare} from '../auth/oauth/safe-compare';
+import {WEBHOOK_HEADER_NAMES, WebhookTypeValue} from '../webhooks/types';
 
 import ProcessedQuery from './processed-query';
 import {
@@ -34,6 +35,10 @@ export interface ValidateParams extends AdapterArgs {
    * The raw body of the request.
    */
   rawBody: string;
+  /**
+   * The webhook type for header selection (optional, only for webhooks).
+   */
+  webhookType?: WebhookTypeValue;
 }
 
 function stringifyQueryForAdmin(query: AuthQuery): string {
@@ -114,13 +119,20 @@ export function validateHmacFromRequestFactory(config: ConfigInterface) {
   return async function validateHmacFromRequest({
     type,
     rawBody,
+    webhookType,
     ...adapterArgs
   }: ValidateParams): Promise<ValidationInvalid | ValidationValid> {
     const request = await abstractConvertRequest(adapterArgs);
     if (!rawBody.length) {
       return fail(ValidationErrorReason.MissingBody, type, config);
     }
-    const hmac = getHeader(request.headers, ShopifyHeader.Hmac);
+
+    // Use appropriate header based on webhook type
+    const hmacHeaderName = webhookType
+      ? WEBHOOK_HEADER_NAMES[webhookType].hmac
+      : ShopifyHeader.Hmac;
+
+    const hmac = getHeader(request.headers, hmacHeaderName);
     if (!hmac) {
       return fail(ValidationErrorReason.MissingHmac, type, config);
     }

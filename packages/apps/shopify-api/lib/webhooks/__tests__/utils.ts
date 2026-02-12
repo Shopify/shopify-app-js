@@ -3,6 +3,7 @@ import crypto from 'crypto';
 import express from 'express';
 
 import {ShopifyHeader} from '../../types';
+import {WEBHOOK_HEADER_NAMES, WebhookTypeValue} from '../types';
 
 export function getTestExpressApp() {
   const parseRawBody = (req: any, _res: any, next: any) => {
@@ -27,9 +28,17 @@ export function headers({
   hmac = 'fake',
   topic = 'products/create',
   webhookId = '123456789',
-  // must explicitly set to test for presence
   subTopic = '',
   lowercase = false,
+  webhookType = 'webhooks' as WebhookTypeValue,
+  // Events-specific fields
+  handle = '',
+  action = '',
+  resourceId = '',
+  triggeredAt = '',
+  eventId = '',
+  // Webhooks specific
+  name = '',
 }: {
   apiVersion?: string;
   domain?: string;
@@ -38,7 +47,36 @@ export function headers({
   webhookId?: string;
   subTopic?: string;
   lowercase?: boolean;
+  webhookType?: WebhookTypeValue;
+  handle?: string;
+  action?: string;
+  resourceId?: string;
+  triggeredAt?: string;
+  eventId?: string;
+  name?: string;
 } = {}) {
+  if (webhookType === 'events') {
+    const eventsHeaders = WEBHOOK_HEADER_NAMES.events;
+    return {
+      [ShopifyHeader.ApiVersion]: apiVersion,
+      [ShopifyHeader.Domain]: domain,
+      [ShopifyHeader.Hmac]: hmac,
+      [ShopifyHeader.Topic]: topic,
+      [ShopifyHeader.WebhookId]: webhookId,
+      // Events shopify-* headers
+      [eventsHeaders.apiVersion]: apiVersion,
+      [eventsHeaders.domain]: domain,
+      [eventsHeaders.hmac]: hmac,
+      [eventsHeaders.topic]: topic,
+      [eventsHeaders.eventId]: eventId || webhookId,
+      ...(handle && {[eventsHeaders.handle]: handle}),
+      ...(action && {[eventsHeaders.action]: action}),
+      ...(resourceId && {[eventsHeaders.resourceId]: resourceId}),
+      ...(triggeredAt && {[eventsHeaders.triggeredAt]: triggeredAt}),
+    };
+  }
+
+  // Webhooks headers
   return {
     [lowercase
       ? ShopifyHeader.ApiVersion.toLowerCase()
@@ -58,6 +96,14 @@ export function headers({
             : ShopifyHeader.SubTopic]: subTopic,
         }
       : {}),
+    ...(name && {[lowercase ? 'x-shopify-name' : 'X-Shopify-Name']: name}),
+    ...(triggeredAt && {
+      [lowercase ? 'x-shopify-triggered-at' : 'X-Shopify-Triggered-At']:
+        triggeredAt,
+    }),
+    ...(eventId && {
+      [lowercase ? 'x-shopify-event-id' : 'X-Shopify-Event-Id']: eventId,
+    }),
   };
 }
 
