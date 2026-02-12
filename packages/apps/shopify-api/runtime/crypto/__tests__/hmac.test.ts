@@ -59,7 +59,7 @@ describe('hashString', () => {
 
   it('throws on unexpected format', () => {
     const testString = 'this is my test string';
-    expect(() => hashString(testString, 'not-a-format' as any)).toThrowError(
+    expect(() => hashString(testString, 'not-a-format' as any)).toThrow(
       ShopifyError,
     );
   });

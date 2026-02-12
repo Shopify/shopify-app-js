@@ -65,7 +65,7 @@ describe('override logger', () => {
         SHOPIFY_REMIX_LIBRARY_VERSION,
         'Test deprecation message',
       ),
-    ).toThrowError(
+    ).toThrow(
       `Feature was deprecated in version ${SHOPIFY_REMIX_LIBRARY_VERSION}`,
     );
   });

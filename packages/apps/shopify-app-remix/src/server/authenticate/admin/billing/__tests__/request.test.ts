@@ -301,7 +301,7 @@ describe('Billing request', () => {
     // THEN
     await expect(
       billing.request({plan: responses.PLAN_1, isTest: true}),
-    ).rejects.toThrowError(HttpResponseError);
+    ).rejects.toThrow(HttpResponseError);
   });
 
   it('throws a BillingError when the response contains user errors', async () => {
@@ -326,6 +326,6 @@ describe('Billing request', () => {
     // THEN
     await expect(
       billing.request({plan: responses.PLAN_1, isTest: true}),
-    ).rejects.toThrowError(BillingError);
+    ).rejects.toThrow(BillingError);
   });
 });
