@@ -21,7 +21,7 @@ const getCodegenOptions = (fixture: string, output = 'out.d.ts') => ({
 
 describe('Preset', () => {
   it('includes ESLint comments, types with Pick, generated operations and augments interfaces', async () => {
-    const result = await executeCodegen(getCodegenOptions('operations.ts'));
+    const {result} = await executeCodegen(getCodegenOptions('operations.ts'));
 
     expect(result).toHaveLength(1);
 
@@ -89,7 +89,7 @@ declare module '@shopify/admin-api-client' {
   });
 
   it('imports declaration files when using .d.ts targets', async () => {
-    const result = await executeCodegen(
+    const {result} = await executeCodegen(
       getCodegenOptions('operations.ts', 'out.d.ts'),
     );
 
@@ -105,7 +105,7 @@ declare module '@shopify/admin-api-client' {
   });
 
   it('imports regular files when using .ts targets', async () => {
-    const result = await executeCodegen(
+    const {result} = await executeCodegen(
       getCodegenOptions('operations.ts', 'out.ts'),
     );
 

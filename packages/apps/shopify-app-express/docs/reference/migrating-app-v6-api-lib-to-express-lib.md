@@ -307,7 +307,7 @@ app.post(
 );
 
 // All endpoints after this point will require an active session
-app.use('/api/*', shopify.validateAuthenticatedSession());
+app.use('/api', shopify.validateAuthenticatedSession());
 
 app.use(express.json());
 
@@ -334,7 +334,7 @@ app.get('/api/products/create', async (_req, res) => {
 
 app.use(serveStatic(STATIC_PATH, {index: false}));
 
-app.use('/*', shopify.ensureInstalledOnShop(), async (_req, res, _next) => {
+app.use('/', shopify.ensureInstalledOnShop(), async (_req, res, _next) => {
   return res
     .status(200)
     .set('Content-Type', 'text/html')

@@ -15,6 +15,10 @@ export function graphqlProxy(config: ConfigInterface): GraphqlProxy {
     const GraphqlClient = graphqlClientClass({config});
     const client = new GraphqlClient({session});
 
+    if (!rawBody) {
+      throw new ShopifyErrors.MissingRequiredArgument('Query missing.');
+    }
+
     let query: string;
     let variables: Record<string, any> | undefined;
     if (typeof rawBody === 'string') {

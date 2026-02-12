@@ -16,7 +16,7 @@ describe('ensureInstalledOnShop', () => {
 
   beforeEach(async () => {
     app = express();
-    app.use('/test/*', shopify.ensureInstalledOnShop());
+    app.use('/test', shopify.ensureInstalledOnShop());
     app.get('/test/shop', async (req, res) => {
       res.json({data: {shop: {name: req.query.shop}}});
     });
