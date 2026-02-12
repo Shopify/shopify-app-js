@@ -3,7 +3,6 @@ import {preset as hydrogenPreset} from '@shopify/graphql-codegen';
 
 import {type ShopifyApiPresetConfig} from './types';
 import {apiConfigs} from './helpers/api-configs';
-import {getOutputFiles} from './helpers/get-output-files';
 
 export const preset: Types.OutputPreset<ShopifyApiPresetConfig> = {
   buildGeneratesSection: (options) => {
@@ -11,11 +10,8 @@ export const preset: Types.OutputPreset<ShopifyApiPresetConfig> = {
 
     const {interfaceExtension, module, presetConfigs} = apiConfigs[apiType];
 
-    // Determine if the output file is a declaration file
-    const isDts = options.baseOutputDir.endsWith('.d.ts');
-
-    // Get the correct filename with extension (.d.ts or .ts)
-    const {typesFile} = getOutputFiles(apiType, isDts);
+    // Use .js extension for import paths - TypeScript resolves these to .ts/.d.ts files
+    const typesFile = `${apiConfigs[apiType].typesFile}.js`;
 
     return hydrogenPreset.buildGeneratesSection({
       ...options,
