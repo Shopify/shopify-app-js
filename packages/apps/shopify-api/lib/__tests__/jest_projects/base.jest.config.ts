@@ -9,8 +9,6 @@ const config: Config = {
   testRegex: '.*\\.test\\.tsx?$',
   coverageDirectory: './coverage/',
   collectCoverage: false,
-  // jose v6 is ESM-only; allow jest to transform it
-  transformIgnorePatterns: ['/node_modules/(?!jose)'],
 };
 
 export default config;
