@@ -141,3 +141,41 @@ export enum Method {
   Options = 'OPTIONS',
   Connect = 'CONNECT',
 }
+
+/**
+ * Configuration for transforming shop domains in split-domain architectures.
+ *
+ * @example
+ * // Template-based transformation
+ * {
+ *   match: /^([a-zA-Z0-9][a-zA-Z0-9-_]*)\.my\.shop\.dev$/,
+ *   transform: '$1.dev-api.shop.dev'
+ * }
+ *
+ * @example
+ * // Function-based transformation
+ * {
+ *   match: /^([^.]+)\.ui\.example\.com$/,
+ *   transform: (matches) => `${matches[1]}.api.example.com`
+ * }
+ */
+export interface DomainTransformation {
+  /**
+   * Pattern to match against shop domains (source domain).
+   * Can be a RegExp or string (converted to RegExp internally).
+   */
+  match: RegExp | string;
+
+  /**
+   * Transformation function or template string.
+   * - Template string: Uses $1, $2, etc. for capture group substitution
+   * - Function: Receives regex match groups and returns transformed domain
+   */
+  transform: ((matches: RegExpMatchArray) => string | null) | string;
+
+  /**
+   * Whether this transformation should also apply to host validation.
+   * @default true
+   */
+  includeHost?: boolean;
+}

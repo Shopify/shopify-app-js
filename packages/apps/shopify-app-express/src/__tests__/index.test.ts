@@ -42,7 +42,6 @@ describe('shopifyApp', () => {
     process.env.SHOPIFY_API_SECRET = 'envSecret';
     process.env.SCOPES = 'envScope1,envScope2';
     process.env.HOST = 'https://envHost';
-    process.env.SHOP_CUSTOM_DOMAIN = '*.envCustomDomain';
 
     const shopify = shopifyApp({
       auth: testConfig.auth,
@@ -62,7 +61,6 @@ describe('shopifyApp', () => {
     expect(scopes).toEqual('envScope1,envScope2');
     expect(shopify.api.config.hostName).toEqual('envHost');
     expect(shopify.api.config.hostScheme).toEqual('https');
-    expect(shopify.api.config.customShopDomains).toEqual(['*.envCustomDomain']);
     /* eslint-enable no-process-env */
   });
 

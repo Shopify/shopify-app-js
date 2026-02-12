@@ -3,7 +3,7 @@ import {ShopifyRestResources} from '../rest/types';
 
 import {AuthScopes} from './auth/scopes';
 import {BillingConfig} from './billing/types';
-import {ApiVersion, LogSeverity} from './types';
+import {ApiVersion, DomainTransformation, LogSeverity} from './types';
 
 /**
  * A function used by the library to log events related to Shopify.
@@ -69,9 +69,31 @@ export interface ConfigParams<
    */
   privateAppStorefrontAccessToken?: string;
   /**
-   * Override values for Shopify shop domains.
+   * Custom domain transformations for split-domain architectures.
+   *
+   * Transformations are applied in order. The first matching transformation is used.
+   * If no transformation matches, the domain is validated as-is.
+   *
+   * @example
+   * // Simple template-based transformation
+   * domainTransformations: [{
+   *   match: /^([a-zA-Z0-9][a-zA-Z0-9-_]*)\.my\.shop\.dev$/,
+   *   transform: '$1.dev-api.shop.dev'
+   * }]
+   *
+   * @example
+   * // Function-based transformation with custom logic
+   * domainTransformations: [{
+   *   match: /^([^.]+)\.ui\.example\.com$/,
+   *   transform: (matches) => {
+   *     const shopName = matches[1];
+   *     return shopName.startsWith('test-')
+   *       ? `${shopName}.api-staging.example.com`
+   *       : `${shopName}.api.example.com`;
+   *   }
+   * }]
    */
-  customShopDomains?: (RegExp | string)[];
+  domainTransformations?: DomainTransformation[];
   /**
    * Billing configurations for the app.
    */
