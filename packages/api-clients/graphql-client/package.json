@@ -83,6 +83,10 @@
   ],
   "files": [
     "dist/**/*.*",
+    "src",
+    "!src/**/__tests__",
+    "!src/**/*.test.ts",
+    "!src/**/tests",
     "!node_modules"
   ],
   "dependencies": {},

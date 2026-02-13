@@ -66,6 +66,9 @@
   "files": [
     "dist",
     "!dist/tsconfig.build.tsbuildinfo",
+    "src",
+    "!src/**/__tests__",
+    "!src/**/*.test.ts",
     "!node_modules"
   ],
   "dependencies": {

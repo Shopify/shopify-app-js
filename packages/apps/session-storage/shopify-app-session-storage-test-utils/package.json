@@ -55,6 +55,9 @@
   },
   "files": [
     "dist/*",
+    "src",
+    "!src/**/__tests__",
+    "!src/**/*.test.ts",
     "!node_modules",
     "!tsconfig.tsbuildinfo"
   ]
