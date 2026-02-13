@@ -6,14 +6,6 @@ export enum LogSeverity {
 }
 
 export enum ApiVersion {
-  October22 = '2022-10',
-  January23 = '2023-01',
-  April23 = '2023-04',
-  July23 = '2023-07',
-  October23 = '2023-10',
-  January24 = '2024-01',
-  April24 = '2024-04',
-  July24 = '2024-07',
   October24 = '2024-10',
   January25 = '2025-01',
   April25 = '2025-04',
