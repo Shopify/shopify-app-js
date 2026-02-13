@@ -23,7 +23,7 @@ describe('Theme resource', () => {
 
   it('test_1', async () => {
     const shopify = shopifyApi(
-      testConfig({apiVersion: ApiVersion.July24, restResources}),
+      testConfig({apiVersion: ApiVersion.October24, restResources}),
     );
 
     queueMockResponse(JSON.stringify({"themes": [{"id": 828155753, "name": "Comfort", "created_at": "2024-10-02T08:56:04-05:00", "updated_at": "2024-10-02T08:56:04-05:00", "role": "main", "theme_store_id": null, "previewable": true, "processing": false, "admin_graphql_api_id": "gid://shopify/Theme/828155753"}, {"id": 976877075, "name": "Preview of Parallax", "created_at": "2024-10-02T08:56:04-05:00", "updated_at": "2024-10-02T08:56:04-05:00", "role": "demo", "theme_store_id": 688, "previewable": true, "processing": false, "admin_graphql_api_id": "gid://shopify/Theme/976877075"}, {"id": 752253240, "name": "Sandbox", "created_at": "2024-10-02T08:56:04-05:00", "updated_at": "2024-10-02T08:56:04-05:00", "role": "unpublished", "theme_store_id": null, "previewable": true, "processing": false, "admin_graphql_api_id": "gid://shopify/Theme/752253240"}]}));
@@ -44,7 +44,7 @@ describe('Theme resource', () => {
 
   it('test_2', async () => {
     const shopify = shopifyApi(
-      testConfig({apiVersion: ApiVersion.July24, restResources}),
+      testConfig({apiVersion: ApiVersion.October24, restResources}),
     );
 
     queueMockResponse(JSON.stringify({"theme": {"id": 1049083723, "name": "Lemongrass", "created_at": "2024-10-02T08:58:34-05:00", "updated_at": "2024-10-02T08:58:34-05:00", "role": "unpublished", "theme_store_id": null, "previewable": false, "processing": true, "admin_graphql_api_id": "gid://shopify/Theme/1049083723"}}));
@@ -67,7 +67,7 @@ describe('Theme resource', () => {
 
   it('test_3', async () => {
     const shopify = shopifyApi(
-      testConfig({apiVersion: ApiVersion.July24, restResources}),
+      testConfig({apiVersion: ApiVersion.October24, restResources}),
     );
 
     queueMockResponse(JSON.stringify({"theme": {"id": 828155753, "name": "Comfort", "created_at": "2024-10-02T08:56:04-05:00", "updated_at": "2024-10-02T08:56:04-05:00", "role": "main", "theme_store_id": null, "previewable": true, "processing": false, "admin_graphql_api_id": "gid://shopify/Theme/828155753"}}));
@@ -89,7 +89,7 @@ describe('Theme resource', () => {
 
   it('test_4', async () => {
     const shopify = shopifyApi(
-      testConfig({apiVersion: ApiVersion.July24, restResources}),
+      testConfig({apiVersion: ApiVersion.October24, restResources}),
     );
 
     queueMockResponse(JSON.stringify({"theme": {"role": "main", "id": 752253240, "name": "Sandbox", "created_at": "2024-10-02T08:56:04-05:00", "updated_at": "2024-10-02T08:58:30-05:00", "theme_store_id": null, "previewable": true, "processing": false, "admin_graphql_api_id": "gid://shopify/Theme/752253240"}}));
@@ -111,7 +111,7 @@ describe('Theme resource', () => {
 
   it('test_5', async () => {
     const shopify = shopifyApi(
-      testConfig({apiVersion: ApiVersion.July24, restResources}),
+      testConfig({apiVersion: ApiVersion.October24, restResources}),
     );
 
     queueMockResponse(JSON.stringify({"theme": {"name": "Experimental", "role": "unpublished", "id": 752253240, "created_at": "2024-10-02T08:56:04-05:00", "updated_at": "2024-10-02T08:58:31-05:00", "theme_store_id": null, "previewable": true, "processing": false, "admin_graphql_api_id": "gid://shopify/Theme/752253240"}}));
@@ -133,7 +133,7 @@ describe('Theme resource', () => {
 
   it('test_6', async () => {
     const shopify = shopifyApi(
-      testConfig({apiVersion: ApiVersion.July24, restResources}),
+      testConfig({apiVersion: ApiVersion.October24, restResources}),
     );
 
     queueMockResponse(JSON.stringify({"id": 752253240, "name": "Sandbox", "created_at": "2024-10-02T08:56:04-05:00", "updated_at": "2024-10-02T08:56:04-05:00", "role": "unpublished", "theme_store_id": null, "previewable": true, "processing": false, "admin_graphql_api_id": "gid://shopify/Theme/752253240"}));

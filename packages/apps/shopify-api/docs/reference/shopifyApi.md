@@ -7,7 +7,7 @@ Use this function when you [set up your app](../../README.md#getting-started).
 
 ```ts
 import {shopifyApi, ApiVersion, BillingInterval} from '@shopify/shopify-api';
-import {restResources} from '@shopify/shopify-api/rest/admin/2022-07';
+import {restResources} from '@shopify/shopify-api/rest/admin/2026-01';
 
 const shopify = shopifyApi({
   apiKey: 'APIKeyFromPartnersDashboard',
@@ -15,7 +15,7 @@ const shopify = shopifyApi({
   scopes: ['read_products'],
   hostName: 'localhost:4321',
   hostScheme: 'http',
-  apiVersion: ApiVersion.July22,
+  apiVersion: ApiVersion.January26,
   isEmbeddedApp: true,
   isCustomStoreApp: false,
   userAgentPrefix: 'Custom prefix',

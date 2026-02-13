@@ -23,7 +23,7 @@ describe('AccessScope resource', () => {
 
   it('test_1', async () => {
     const shopify = shopifyApi(
-      testConfig({apiVersion: ApiVersion.July24, restResources}),
+      testConfig({apiVersion: ApiVersion.October24, restResources}),
     );
 
     queueMockResponse(JSON.stringify({"access_scopes": [{"handle": "read_products"}, {"handle": "write_orders"}, {"handle": "read_orders"}]}));

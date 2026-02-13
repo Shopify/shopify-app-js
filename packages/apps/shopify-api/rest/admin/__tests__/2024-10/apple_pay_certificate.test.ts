@@ -23,7 +23,7 @@ describe('ApplePayCertificate resource', () => {
 
   it('test_1', async () => {
     const shopify = shopifyApi(
-      testConfig({apiVersion: ApiVersion.July24, restResources}),
+      testConfig({apiVersion: ApiVersion.October24, restResources}),
     );
 
     queueMockResponse(JSON.stringify({"apple_pay_certificate": {"id": 1068938278, "status": "issuing", "merchant_id": null}}));
@@ -44,7 +44,7 @@ describe('ApplePayCertificate resource', () => {
 
   it('test_2', async () => {
     const shopify = shopifyApi(
-      testConfig({apiVersion: ApiVersion.July24, restResources}),
+      testConfig({apiVersion: ApiVersion.October24, restResources}),
     );
 
     queueMockResponse(JSON.stringify({"apple_pay_certificate": {"id": 1068938274, "status": "csr", "merchant_id": null}}));
@@ -66,7 +66,7 @@ describe('ApplePayCertificate resource', () => {
 
   it('test_3', async () => {
     const shopify = shopifyApi(
-      testConfig({apiVersion: ApiVersion.July24, restResources}),
+      testConfig({apiVersion: ApiVersion.October24, restResources}),
     );
 
     queueMockResponse(JSON.stringify({"apple_pay_certificate": {"id": 1068938276, "status": "completed", "merchant_id": "merchant.something"}}));
@@ -90,7 +90,7 @@ describe('ApplePayCertificate resource', () => {
 
   it('test_4', async () => {
     const shopify = shopifyApi(
-      testConfig({apiVersion: ApiVersion.July24, restResources}),
+      testConfig({apiVersion: ApiVersion.October24, restResources}),
     );
 
     queueMockResponse(JSON.stringify({}));
@@ -112,7 +112,7 @@ describe('ApplePayCertificate resource', () => {
 
   it('test_5', async () => {
     const shopify = shopifyApi(
-      testConfig({apiVersion: ApiVersion.July24, restResources}),
+      testConfig({apiVersion: ApiVersion.October24, restResources}),
     );
 
     queueMockResponse(JSON.stringify({"csr": {"key": "YXBwbGUtcGF5LWNzcg==\n"}}));

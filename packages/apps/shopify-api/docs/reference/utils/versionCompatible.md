@@ -7,11 +7,11 @@ Its main use is when you want to tweak behaviour depending on your current API v
 
 ```ts
 const shopify = shopifyApi({
-  apiVersion: ApiVersion.July22,
+  apiVersion: ApiVersion.July25,
 });
 
-if (shopify.utils.versionCompatible(ApiVersion.January22)) {
-  // true in this example, as ApiVersion.July22 is newer than ApiVersion.January22
+if (shopify.utils.versionCompatible(ApiVersion.April25)) {
+  // true in this example, as ApiVersion.July25 is newer than ApiVersion.April25
 }
 ```
 

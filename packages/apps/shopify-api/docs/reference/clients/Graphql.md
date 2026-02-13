@@ -24,7 +24,7 @@ app.get('/my-endpoint', async () => {
 
   const client = new shopify.clients.Graphql({
     session,
-    apiVersion: ApiVersion.January23,
+    apiVersion: ApiVersion.January26,
   });
 });
 ```

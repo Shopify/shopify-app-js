@@ -163,11 +163,11 @@ To use REST resources, you can import the desired version and mount it onto your
 
 ```ts
 import {shopifyApi} from '@shopify/shopify-api';
-import {restResources} from '@shopify/shopify-api/rest/admin/2022-10';
+import {restResources} from '@shopify/shopify-api/rest/admin/2026-01';
 
 const shopify = shopifyApi({
   ...,
-  apiVersion: ApiVersion.October22,
+  apiVersion: ApiVersion.January26,
   restResources,
 });
 ```

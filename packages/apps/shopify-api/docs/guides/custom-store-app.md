@@ -25,11 +25,11 @@ When initializing `shopifyApi` in a custom app
 ```js
 import "@shopify/shopify-api/adapters/node";
 import { shopifyApi, ApiVersion, Session } from "@shopify/shopify-api";
-import { restResources } from "@shopify/shopify-api/rest/admin/2023-04";
+import { restResources } from "@shopify/shopify-api/rest/admin/2026-01";
 
 const shopify = shopifyApi({
   apiSecretKey: "App_API_secret_key",            // Note: this is the API Secret Key, NOT the API access token
-  apiVersion: ApiVersion.April23,
+  apiVersion: ApiVersion.January26,
   isCustomStoreApp: true,                        // this MUST be set to true (default is false)
   adminApiAccessToken: "Admin_API_Access_Token", // Note: this is the API access token, NOT the API Secret Key
   isEmbeddedApp: false,

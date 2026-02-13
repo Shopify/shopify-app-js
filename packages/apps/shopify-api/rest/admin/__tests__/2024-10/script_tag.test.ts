@@ -23,7 +23,7 @@ describe('ScriptTag resource', () => {
 
   it('test_1', async () => {
     const shopify = shopifyApi(
-      testConfig({apiVersion: ApiVersion.July24, restResources}),
+      testConfig({apiVersion: ApiVersion.October24, restResources}),
     );
 
     queueMockResponse(JSON.stringify({"script_tags": [{"id": 421379493, "src": "https://js.example.org/bar.js", "event": "onload", "created_at": "2024-10-02T08:59:11-05:00", "updated_at": "2024-10-02T08:59:11-05:00", "display_scope": "all", "cache": false}, {"id": 596726825, "src": "https://js.example.org/foo.js", "event": "onload", "created_at": "2024-10-02T08:59:11-05:00", "updated_at": "2024-10-02T08:59:11-05:00", "display_scope": "all", "cache": false}]}));
@@ -44,7 +44,7 @@ describe('ScriptTag resource', () => {
 
   it('test_2', async () => {
     const shopify = shopifyApi(
-      testConfig({apiVersion: ApiVersion.July24, restResources}),
+      testConfig({apiVersion: ApiVersion.October24, restResources}),
     );
 
     queueMockResponse(JSON.stringify({"script_tags": [{"id": 596726825, "src": "https://js.example.org/foo.js", "event": "onload", "created_at": "2024-10-02T08:59:11-05:00", "updated_at": "2024-10-02T08:59:11-05:00", "display_scope": "all", "cache": false}]}));
@@ -66,7 +66,7 @@ describe('ScriptTag resource', () => {
 
   it('test_3', async () => {
     const shopify = shopifyApi(
-      testConfig({apiVersion: ApiVersion.July24, restResources}),
+      testConfig({apiVersion: ApiVersion.October24, restResources}),
     );
 
     queueMockResponse(JSON.stringify({"script_tags": [{"id": 596726825, "src": "https://js.example.org/foo.js", "event": "onload", "created_at": "2024-10-02T08:59:11-05:00", "updated_at": "2024-10-02T08:59:11-05:00", "display_scope": "all", "cache": false}]}));
@@ -88,7 +88,7 @@ describe('ScriptTag resource', () => {
 
   it('test_4', async () => {
     const shopify = shopifyApi(
-      testConfig({apiVersion: ApiVersion.July24, restResources}),
+      testConfig({apiVersion: ApiVersion.October24, restResources}),
     );
 
     queueMockResponse(JSON.stringify({"script_tag": {"id": 870402687, "src": "https://example.com/my_script.js", "event": "onload", "created_at": "2024-10-02T09:08:32-05:00", "updated_at": "2024-10-02T09:08:32-05:00", "display_scope": "all", "cache": false}}));
@@ -110,7 +110,7 @@ describe('ScriptTag resource', () => {
 
   it('test_5', async () => {
     const shopify = shopifyApi(
-      testConfig({apiVersion: ApiVersion.July24, restResources}),
+      testConfig({apiVersion: ApiVersion.October24, restResources}),
     );
 
     queueMockResponse(JSON.stringify({"count": 2}));
@@ -131,7 +131,7 @@ describe('ScriptTag resource', () => {
 
   it('test_6', async () => {
     const shopify = shopifyApi(
-      testConfig({apiVersion: ApiVersion.July24, restResources}),
+      testConfig({apiVersion: ApiVersion.October24, restResources}),
     );
 
     queueMockResponse(JSON.stringify({"script_tag": {"id": 596726825, "src": "https://js.example.org/foo.js", "event": "onload", "created_at": "2024-10-02T08:59:11-05:00", "updated_at": "2024-10-02T08:59:11-05:00", "display_scope": "all", "cache": false}}));
@@ -153,7 +153,7 @@ describe('ScriptTag resource', () => {
 
   it('test_7', async () => {
     const shopify = shopifyApi(
-      testConfig({apiVersion: ApiVersion.July24, restResources}),
+      testConfig({apiVersion: ApiVersion.October24, restResources}),
     );
 
     queueMockResponse(JSON.stringify({"script_tag": {"src": "https://somewhere-else.com/another.js", "cache": false, "id": 596726825, "event": "onload", "created_at": "2024-10-02T08:59:11-05:00", "updated_at": "2024-10-02T09:08:37-05:00", "display_scope": "all"}}));
@@ -175,7 +175,7 @@ describe('ScriptTag resource', () => {
 
   it('test_8', async () => {
     const shopify = shopifyApi(
-      testConfig({apiVersion: ApiVersion.July24, restResources}),
+      testConfig({apiVersion: ApiVersion.October24, restResources}),
     );
 
     queueMockResponse(JSON.stringify({}));
