@@ -6,6 +6,7 @@ import {versionCompatible, versionPriorTo} from './version-compatible';
 import {
   shopAdminUrlToLegacyUrl,
   legacyUrlToShopAdminUrl,
+  localDevShopToApiUrl,
 } from './shop-admin-url-helper';
 
 export function shopifyUtils(config: ConfigInterface) {
@@ -17,6 +18,7 @@ export function shopifyUtils(config: ConfigInterface) {
     versionPriorTo: versionPriorTo(config),
     shopAdminUrlToLegacyUrl,
     legacyUrlToShopAdminUrl,
+    localDevShopToApiUrl,
   };
 }
 
