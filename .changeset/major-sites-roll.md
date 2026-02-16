@@ -1,6 +1,8 @@
 ---
 '@shopify/shopify-api': major
 '@shopify/shopify-app-express': minor
+'@shopify/shopify-app-remix': minor
+'@shopify/shopify-app-react-router': minor
 ---
 
 **BREAKING CHANGE**: Removed `customShopDomains` configuration parameter. Use `domainTransformations` instead, which provides both validation and transformation capabilities.

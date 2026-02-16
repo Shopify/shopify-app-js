@@ -20,9 +20,7 @@ export function sanitizeShop(config: ConfigInterface) {
 
     // Add domains from transformations (both source and target)
     if (config.domainTransformations) {
-      domainsRegex.push(
-        ...getTransformationDomains(config.domainTransformations),
-      );
+      domainsRegex.push(...getTransformationDomains(config));
     }
 
     const shopUrlRegex = new RegExp(
@@ -70,7 +68,12 @@ export function sanitizeHost(config: ConfigInterface) {
       if (config.domainTransformations) {
         const hostTransformationDomains = config.domainTransformations
           .filter((t) => t.includeHost !== false)
-          .flatMap((t) => getTransformationDomains([t]));
+          .flatMap((t) =>
+            getTransformationDomains({
+              ...config,
+              domainTransformations: [t],
+            }),
+          );
         originsRegex.push(...hostTransformationDomains);
       }
 

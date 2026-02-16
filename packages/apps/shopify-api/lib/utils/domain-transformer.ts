@@ -1,5 +1,4 @@
 import {ConfigInterface} from '../base-types';
-import {DomainTransformation, LogSeverity} from '../types';
 import {logger} from '../logger';
 
 /**
@@ -75,22 +74,28 @@ export function applyDomainTransformations(
  *
  * When using unsupported patterns, domain extraction will fail and be logged at debug level.
  *
- * @param transformations - Array of domain transformations
+ * @param config - Configuration object containing domain transformations
  * @returns Array of domain regex patterns
  *
  * @example
- * const transformations = [{
- *   match: /^([a-zA-Z0-9-_]+)\.my\.shop\.dev$/,
- *   transform: '$1.dev-api.shop.dev'
- * }];
- * getTransformationDomains(transformations);
+ * const config = {
+ *   domainTransformations: [{
+ *     match: /^([a-zA-Z0-9-_]+)\.my\.shop\.dev$/,
+ *     transform: '$1.dev-api.shop.dev'
+ *   }]
+ * };
+ * getTransformationDomains(config);
  * // Returns: ['my\\.shop\\.dev', 'dev-api\\.shop\\.dev']
  */
-export function getTransformationDomains(
-  transformations: DomainTransformation[],
-): string[] {
+export function getTransformationDomains(config: ConfigInterface): string[] {
   const domains: string[] = [];
-  const log = logger({logger: {level: LogSeverity.Debug}} as ConfigInterface);
+  const log = logger(config);
+
+  if (!config.domainTransformations) {
+    return domains;
+  }
+
+  const transformations = config.domainTransformations;
 
   for (const transformation of transformations) {
     const regex =

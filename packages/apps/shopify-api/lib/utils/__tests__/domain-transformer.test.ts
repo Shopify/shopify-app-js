@@ -136,7 +136,11 @@ describe('applyDomainTransformations', () => {
 
 describe('getTransformationDomains', () => {
   it('returns empty array for empty transformations', () => {
-    expect(getTransformationDomains([])).toEqual([]);
+    expect(
+      getTransformationDomains({
+        domainTransformations: [],
+      } as ConfigInterface),
+    ).toEqual([]);
   });
 
   it('extracts source domain from regex pattern', () => {
@@ -147,7 +151,9 @@ describe('getTransformationDomains', () => {
       },
     ];
 
-    const domains = getTransformationDomains(transformations);
+    const domains = getTransformationDomains({
+      domainTransformations: transformations,
+    } as ConfigInterface);
     expect(domains).toContain('my\\.shop\\.dev');
   });
 
@@ -159,7 +165,9 @@ describe('getTransformationDomains', () => {
       },
     ];
 
-    const domains = getTransformationDomains(transformations);
+    const domains = getTransformationDomains({
+      domainTransformations: transformations,
+    } as ConfigInterface);
     expect(domains).toContain('dev-api\\.shop\\.dev');
   });
 
@@ -175,7 +183,9 @@ describe('getTransformationDomains', () => {
       },
     ];
 
-    const domains = getTransformationDomains(transformations);
+    const domains = getTransformationDomains({
+      domainTransformations: transformations,
+    } as ConfigInterface);
     expect(domains).toContain('ui\\.example\\.com');
     expect(domains).toContain('api\\.example\\.com');
     expect(domains).toContain('admin\\.test\\.com');
@@ -190,7 +200,9 @@ describe('getTransformationDomains', () => {
       },
     ];
 
-    const domains = getTransformationDomains(transformations);
+    const domains = getTransformationDomains({
+      domainTransformations: transformations,
+    } as ConfigInterface);
     expect(domains).toContain('custom\\.domain\\.com');
     expect(domains).toContain('api\\.domain\\.com');
   });
@@ -203,7 +215,9 @@ describe('getTransformationDomains', () => {
       },
     ];
 
-    const domains = getTransformationDomains(transformations);
+    const domains = getTransformationDomains({
+      domainTransformations: transformations,
+    } as ConfigInterface);
     // Should extract source domain but not target (function-based)
     expect(domains).toContain('ui\\.example\\.com');
     // Target domain won't be extracted from function
