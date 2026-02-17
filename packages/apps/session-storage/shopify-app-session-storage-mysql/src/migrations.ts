@@ -31,7 +31,7 @@ export async function addRefreshTokenFields(
   // Add both columns
   await connection.query(`ALTER TABLE ${connection.sessionStorageIdentifier}
     ADD COLUMN refreshToken text,
-    ADD COLUMN refreshTokenExpires timestamp NULL`);
+    ADD COLUMN refreshTokenExpires integer`);
 }
 
 // need change the sizr of the scope column from 255 to 1024 char

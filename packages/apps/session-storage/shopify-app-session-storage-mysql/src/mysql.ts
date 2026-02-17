@@ -164,7 +164,7 @@ export class MySQLSessionStorage implements SessionStorage {
           onlineAccessInfo varchar(255),
           accessToken varchar(255),
           refreshToken text,
-          refreshTokenExpires timestamp NULL
+          refreshTokenExpires integer
         )
       `;
       await this.connection.query(query);

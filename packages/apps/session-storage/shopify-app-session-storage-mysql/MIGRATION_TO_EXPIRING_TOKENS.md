@@ -5,7 +5,7 @@
 Two new columns have been added to the session storage table to support expiring offline access tokens:
 
 - `refreshToken` (text, nullable) - Stores the refresh token used to obtain new access tokens
-- `refreshTokenExpires` (timestamp, nullable) - Stores the expiration date of the refresh token
+- `refreshTokenExpires` (integer, nullable) - Stores the expiration date of the refresh token
 
 ## Automatic Migration
 
@@ -20,7 +20,7 @@ If you prefer to run the migration manually before upgrading, execute the follow
 ```sql
 ALTER TABLE shopify_sessions
   ADD COLUMN refreshToken text,
-  ADD COLUMN refreshTokenExpires timestamp NULL;
+  ADD COLUMN refreshTokenExpires integer NULL;
 ```
 
 Replace `shopify_sessions` with your table name if you have configured a custom `sessionTableName`.

@@ -10,14 +10,14 @@ Add support for storing refresh tokens and refresh token expiration dates. This 
 
 The package includes an automatic migration that will run on the first connection after upgrading. The migration adds:
 - `refreshToken` column (text, nullable)
-- `refreshTokenExpires` column (timestamp, nullable)
+- `refreshTokenExpires` column (integer, nullable)
 
 If you prefer to run the migration manually, execute:
 
 ```sql
 ALTER TABLE shopify_sessions
   ADD COLUMN refreshToken text,
-  ADD COLUMN refreshTokenExpires timestamp NULL;
+  ADD COLUMN refreshTokenExpires integer NULL;
 ```
 
 Replace `shopify_sessions` with your table name if you've configured a custom `sessionTableName`.
