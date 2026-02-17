@@ -1,6 +1,6 @@
 ---
 '@shopify/shopify-api': major
-'@shopify/shopify-app-express': minor
+'@shopify/shopify-app-express': major
 '@shopify/shopify-app-remix': minor
 '@shopify/shopify-app-react-router': minor
 ---
