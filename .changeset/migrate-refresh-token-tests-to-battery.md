@@ -1,18 +1,12 @@
 ---
 '@shopify/shopify-app-session-storage-test-utils': patch
-'@shopify/shopify-app-session-storage-drizzle': patch
-'@shopify/shopify-app-session-storage-prisma': patch
 ---
 
-Migrate refresh token testing to batteryOfTests
+Add refresh token testing support to batteryOfTests
 
-This change consolidates refresh token testing into the shared `batteryOfTests` suite, eliminating duplicate test code across session storage adapters.
+The `batteryOfTests` function now accepts an optional third parameter to enable refresh token tests, allowing session storage adapters to easily verify refresh token functionality.
 
-To enable refresh token tests in other adapters:
 ```typescript
-// Before
-batteryOfTests(async () => storage);
-
-// After (to enable refresh token tests)
+// Enable refresh token tests
 batteryOfTests(async () => storage, false, true);
 ```
