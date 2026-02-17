@@ -15,8 +15,6 @@ The migration preserves all existing session data and adds the new columns with 
 
 ## Using Refresh Tokens
 
-**Important**: When you upgrade to this version, the migration runs automatically on your next app start/first database connection. Once the migration completes, you can safely enable the feature flag.
-
 To enable expiring offline access tokens:
 
 ```typescript
