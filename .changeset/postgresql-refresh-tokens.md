@@ -25,7 +25,9 @@ ADD COLUMN "refreshTokenExpires" bigint;
 
 ## Enabling Expiring Offline Access Tokens
 
-Update your app configuration to enable expiring offline access tokens:
+**Important**: When you upgrade to this version, the migration runs automatically on your next app start. Once the migration completes, you can safely enable the feature flag.
+
+To enable expiring offline access tokens:
 
 ```typescript
 import {shopifyApp} from '@shopify/shopify-app-react-router/server';
