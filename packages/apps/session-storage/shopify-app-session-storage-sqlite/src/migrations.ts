@@ -7,6 +7,7 @@ export const migrationList = [
     'migrateScopeFieldToVarchar1024',
     migrateScopeFieldToVarchar1024,
   ),
+  new MigrationOperation('addRefreshTokenFields', addRefreshTokenFields),
 ];
 
 // need to migrate exisiting scope from varchar 255 to varchar 1024
@@ -43,6 +44,53 @@ async function migrateScopeFieldToVarchar1024(
     INSERT INTO ${connection.sessionStorageIdentifier} (id,shop,state,isOnline,expires,scope,accessToken,onlineAccessInfo)
       SELECT id,shop,state,isOnline,expires,scope,accessToken,onlineAccessInfo
       FROM ${tempTableName};
+  `;
+  await connection.query(insert);
+
+  // 4. Delete old renamed table
+  const drop = `DROP TABLE ${tempTableName};`;
+  await connection.query(drop);
+
+  await connection.executeRawQuery('COMMIT');
+}
+
+// Add refresh token and refresh token expiration fields
+async function addRefreshTokenFields(
+  connection: SqliteConnection,
+): Promise<void> {
+  const tempTableName = `${connection.sessionStorageIdentifier}_for_addRefreshTokenFields`;
+
+  await connection.executeRawQuery('BEGIN');
+
+  // 1. Rename existing table
+  const rename = `
+    ALTER TABLE ${connection.sessionStorageIdentifier} RENAME TO ${tempTableName};
+  `;
+  await connection.query(rename);
+
+  // 2. Create new table with refresh token fields
+  const newTable = `
+    CREATE TABLE ${connection.sessionStorageIdentifier} (
+      id varchar(255) NOT NULL PRIMARY KEY,
+      shop varchar(255) NOT NULL,
+      state varchar(255) NOT NULL,
+      isOnline integer NOT NULL,
+      expires integer,
+      scope varchar(1024),
+      accessToken varchar(255),
+      onlineAccessInfo varchar(255),
+      refreshToken varchar(255),
+      refreshTokenExpires integer
+    );
+  `;
+  await connection.query(newTable);
+
+  // 3. Copy all content from old table into new table
+  const insert = `
+    INSERT INTO ${connection.sessionStorageIdentifier}
+      (id, shop, state, isOnline, expires, scope, accessToken, onlineAccessInfo)
+    SELECT id, shop, state, isOnline, expires, scope, accessToken, onlineAccessInfo
+    FROM ${tempTableName};
   `;
   await connection.query(insert);
 

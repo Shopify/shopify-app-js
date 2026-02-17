@@ -49,7 +49,7 @@ export class SQLiteSessionStorage implements SessionStorage {
     const entries = session
       .toPropertyArray()
       .map(([key, value]) =>
-        key === 'expires'
+        key === 'expires' || key === 'refreshTokenExpires'
           ? [key, Math.floor((value as number) / 1000)]
           : [key, value],
       );
@@ -132,7 +132,9 @@ export class SQLiteSessionStorage implements SessionStorage {
           expires integer,
           scope varchar(1024),
           accessToken varchar(255),
-          onlineAccessInfo varchar(255)
+          onlineAccessInfo varchar(255),
+          refreshToken varchar(255),
+          refreshTokenExpires integer
         );
       `;
       await this.db.query(query);
@@ -142,6 +144,7 @@ export class SQLiteSessionStorage implements SessionStorage {
   private databaseRowToSession(row: any): Session {
     // convert seconds to milliseconds prior to creating Session object
     if (row.expires) row.expires *= 1000;
+    if (row.refreshTokenExpires) row.refreshTokenExpires *= 1000;
     return Session.fromPropertyArray(Object.entries(row));
   }
 }
