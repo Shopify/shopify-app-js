@@ -23,7 +23,7 @@ describe('MobilePlatformApplication resource', () => {
 
   it('test_1', async () => {
     const shopify = shopifyApi(
-      testConfig({apiVersion: ApiVersion.July24, restResources}),
+      testConfig({apiVersion: ApiVersion.October24, restResources}),
     );
 
     queueMockResponse(JSON.stringify({"mobile_platform_applications": [{"id": 1066175996, "application_id": "X1Y2.ca.domain.app", "platform": "ios", "created_at": "2024-10-02T09:02:51-05:00", "updated_at": "2024-10-02T09:02:51-05:00", "sha256_cert_fingerprints": [], "enabled_universal_or_app_links": true, "enabled_shared_webcredentials": true, "enabled_app_clips": false, "app_clip_application_id": null}, {"id": 1066175997, "application_id": "com.example", "platform": "android", "created_at": "2024-10-02T09:02:51-05:00", "updated_at": "2024-10-02T09:02:51-05:00", "sha256_cert_fingerprints": ["14:6D:E9:83:C5:73:06:50:D8:EE:B9:95:2F:34:FC:64:16:A0:83:42:E6:1D:BE:A8:8A:04:96:B2:3F:CF:44:E5"], "enabled_universal_or_app_links": true, "enabled_shared_webcredentials": false, "enabled_app_clips": false, "app_clip_application_id": null}]}));
@@ -44,7 +44,7 @@ describe('MobilePlatformApplication resource', () => {
 
   it('test_2', async () => {
     const shopify = shopifyApi(
-      testConfig({apiVersion: ApiVersion.July24, restResources}),
+      testConfig({apiVersion: ApiVersion.October24, restResources}),
     );
 
     queueMockResponse(JSON.stringify({"mobile_platform_application": {"id": 1066175998, "application_id": "com.example", "platform": "android", "created_at": "2024-10-02T09:02:52-05:00", "updated_at": "2024-10-02T09:02:52-05:00", "sha256_cert_fingerprints": ["14:6D:E9:83:C5:73:06:50:D8:EE:B9:95:2F:34:FC:64:16:A0:83:42:E6:1D:BE:A8:8A:04:96:B2:3F:CF:44:E5"], "enabled_universal_or_app_links": true, "enabled_shared_webcredentials": false, "enabled_app_clips": false, "app_clip_application_id": null}}));
@@ -70,7 +70,7 @@ describe('MobilePlatformApplication resource', () => {
 
   it('test_3', async () => {
     const shopify = shopifyApi(
-      testConfig({apiVersion: ApiVersion.July24, restResources}),
+      testConfig({apiVersion: ApiVersion.October24, restResources}),
     );
 
     queueMockResponse(JSON.stringify({"mobile_platform_application": {"id": 1066176003, "application_id": "X1Y2.ca.domain.app", "platform": "ios", "created_at": "2024-10-02T09:02:57-05:00", "updated_at": "2024-10-02T09:02:57-05:00", "sha256_cert_fingerprints": [], "enabled_universal_or_app_links": true, "enabled_shared_webcredentials": true, "enabled_app_clips": false, "app_clip_application_id": null}}));
@@ -94,7 +94,7 @@ describe('MobilePlatformApplication resource', () => {
 
   it('test_4', async () => {
     const shopify = shopifyApi(
-      testConfig({apiVersion: ApiVersion.July24, restResources}),
+      testConfig({apiVersion: ApiVersion.October24, restResources}),
     );
 
     queueMockResponse(JSON.stringify({"mobile_platform_application": {"id": 1066176001, "application_id": "X1Y2.ca.domain.app", "platform": "ios", "created_at": "2024-10-02T09:02:55-05:00", "updated_at": "2024-10-02T09:02:55-05:00", "sha256_cert_fingerprints": [], "enabled_universal_or_app_links": true, "enabled_shared_webcredentials": true, "enabled_app_clips": false, "app_clip_application_id": null}}));
@@ -116,7 +116,7 @@ describe('MobilePlatformApplication resource', () => {
 
   it('test_5', async () => {
     const shopify = shopifyApi(
-      testConfig({apiVersion: ApiVersion.July24, restResources}),
+      testConfig({apiVersion: ApiVersion.October24, restResources}),
     );
 
     queueMockResponse(JSON.stringify({"mobile_platform_application": {"application_id": "com.example.news.app", "platform": "android", "sha256_cert_fingerprints": ["14:6D:E9:83:C5:73:06:50:D8:EE:B9:95:2F:34:FC:64:16:A0:83:42:E6:1D:BE:A8:8A:04:96:B2:3F:CF:44:E5"], "enabled_universal_or_app_links": true, "enabled_shared_webcredentials": false, "id": 1066175999, "created_at": "2024-10-02T09:02:52-05:00", "updated_at": "2024-10-02T09:02:53-05:00", "enabled_app_clips": false, "app_clip_application_id": null}}));
@@ -148,7 +148,7 @@ describe('MobilePlatformApplication resource', () => {
 
   it('test_6', async () => {
     const shopify = shopifyApi(
-      testConfig({apiVersion: ApiVersion.July24, restResources}),
+      testConfig({apiVersion: ApiVersion.October24, restResources}),
     );
 
     queueMockResponse(JSON.stringify({"mobile_platform_application": {"application_id": "A1B2.ca.domain.app", "platform": "ios", "sha256_cert_fingerprints": [], "enabled_universal_or_app_links": true, "enabled_shared_webcredentials": true, "id": 1066176002, "created_at": "2024-10-02T09:02:55-05:00", "updated_at": "2024-10-02T09:02:56-05:00", "enabled_app_clips": false, "app_clip_application_id": null}}));
@@ -178,7 +178,7 @@ describe('MobilePlatformApplication resource', () => {
 
   it('test_7', async () => {
     const shopify = shopifyApi(
-      testConfig({apiVersion: ApiVersion.July24, restResources}),
+      testConfig({apiVersion: ApiVersion.October24, restResources}),
     );
 
     queueMockResponse(JSON.stringify({}));

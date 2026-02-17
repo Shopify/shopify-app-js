@@ -33,7 +33,7 @@ app.get('/my-endpoint', async (req, res) => {
 
   const client = new shopify.clients.Storefront({
     session,
-    apiVersion: ApiVersion.January23,
+    apiVersion: ApiVersion.January26,
   });
 });
 ```
