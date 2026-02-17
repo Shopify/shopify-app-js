@@ -112,7 +112,6 @@ export class DynamoDBSessionStorage implements SessionStorage {
 
     return marshall(rawSession, {
       removeUndefinedValues: true,
-      convertClassInstanceToMap: true,
     });
   }
 

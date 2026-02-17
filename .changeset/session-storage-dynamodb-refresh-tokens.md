@@ -2,16 +2,15 @@
 '@shopify/shopify-app-session-storage-dynamodb': patch
 ---
 
-Add support for storing refresh tokens and refresh token expiration dates. This enables apps using expiring offline access tokens to store and refresh tokens automatically.
+Fix refresh token storage by properly serializing Date objects to ISO strings.
+
+Previously, DynamoDB storage would fail when attempting to store sessions with `refreshTokenExpires` because DynamoDB cannot natively store JavaScript Date objects. This change explicitly converts `refreshTokenExpires` to an ISO string during serialization and back to a Date during deserialization, matching the existing pattern for the `expires` field.
 
 ## Changes
 
-- Configure DynamoDB marshalling to handle Date objects (required for `refreshTokenExpires` field)
+- Add explicit `refreshTokenExpires` Date serialization to ISO string
+- Add explicit `refreshTokenExpires` deserialization from ISO string to Date
 - Enable refresh token tests in batteryOfTests suite
-
-## Technical Details
-
-Updated the AWS SDK `marshall` configuration to include `convertClassInstanceToMap: true`, which allows proper serialization of Date objects like `refreshTokenExpires`. Without this option, the SDK cannot serialize JavaScript Date instances to DynamoDB attributes.
 
 ## Using Refresh Tokens
 
