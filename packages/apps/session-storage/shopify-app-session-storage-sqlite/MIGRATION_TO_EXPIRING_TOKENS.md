@@ -56,7 +56,7 @@ After the migration, refresh tokens will be automatically stored when your app u
 You can enable expiring offline access tokens in the `shopifyApp` configuration:
 
 ```typescript
-import {shopifyApp} from '@shopify/shopify-app-express';
+import {shopifyApp} from '@shopify/shopify-app-react-router/server';
 import {SQLiteSessionStorage} from '@shopify/shopify-app-session-storage-sqlite';
 
 const shopify = shopifyApp({
