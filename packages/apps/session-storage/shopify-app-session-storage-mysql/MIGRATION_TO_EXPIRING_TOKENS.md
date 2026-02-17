@@ -30,7 +30,7 @@ Replace `shopify_sessions` with your table name if you have configured a custom 
 To use expiring offline access tokens, update your app configuration:
 
 ```typescript
-import {shopifyApp} from '@shopify/shopify-app-express';
+import {shopifyApp} from '@shopify/shopify-app-react-router/server';
 import {MySQLSessionStorage} from '@shopify/shopify-app-session-storage-mysql';
 
 const shopify = shopifyApp({
