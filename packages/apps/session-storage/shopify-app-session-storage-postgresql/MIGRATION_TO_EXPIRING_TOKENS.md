@@ -26,7 +26,7 @@ ADD COLUMN "refreshTokenExpires" bigint;
 Update your app configuration to enable expiring offline access tokens:
 
 ```typescript
-import {shopifyApp} from '@shopify/shopify-app-express';
+import {shopifyApp} from '@shopify/shopify-app-react-router/server';
 import {PostgreSQLSessionStorage} from '@shopify/shopify-app-session-storage-postgresql';
 
 const shopify = shopifyApp({
