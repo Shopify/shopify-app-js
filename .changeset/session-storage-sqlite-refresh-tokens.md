@@ -13,6 +13,27 @@ The SQLite session storage adapter includes an automatic migration system. When 
 
 The migration preserves all existing session data and adds the new columns with NULL values for existing sessions.
 
+## Using Refresh Tokens
+
+**Important**: When you upgrade to this version, the migration runs automatically on your next app start/first database connection. Once the migration completes, you can safely enable the feature flag.
+
+To enable expiring offline access tokens:
+
+```typescript
+import {shopifyApp} from '@shopify/shopify-app-react-router/server';
+import {SQLiteSessionStorage} from '@shopify/shopify-app-session-storage-sqlite';
+
+const shopify = shopifyApp({
+  future: {
+    expiringOfflineAccessTokens: true,
+  },
+  sessionStorage: new SQLiteSessionStorage('/path/to/your.db'),
+  // ... other config
+});
+```
+
+Refresh tokens will be automatically stored when your app uses expiring offline access tokens. The refresh token is available on the `Session` object via `session.refreshToken` and `session.refreshTokenExpires`.
+
 ## Manual Migration (Optional)
 
 If you prefer to run the migration manually, you can execute the following SQL:
@@ -50,27 +71,6 @@ COMMIT;
 ```
 
 **Note**: If you use a custom table name via the `sessionTableName` option, replace `shopify_sessions` with your table name.
-
-## Using Refresh Tokens
-
-**Important**: When you upgrade to this version, the migration runs automatically on your next app start/first database connection. Once the migration completes, you can safely enable the feature flag.
-
-To enable expiring offline access tokens:
-
-```typescript
-import {shopifyApp} from '@shopify/shopify-app-react-router/server';
-import {SQLiteSessionStorage} from '@shopify/shopify-app-session-storage-sqlite';
-
-const shopify = shopifyApp({
-  future: {
-    expiringOfflineAccessTokens: true,
-  },
-  sessionStorage: new SQLiteSessionStorage('/path/to/your.db'),
-  // ... other config
-});
-```
-
-Refresh tokens will be automatically stored when your app uses expiring offline access tokens. The refresh token is available on the `Session` object via `session.refreshToken` and `session.refreshTokenExpires`.
 
 ## Backward Compatibility
 
