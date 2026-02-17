@@ -103,24 +103,29 @@ export class DynamoDBSessionStorage implements SessionStorage {
   }
 
   private serializeSession(session: Session): Record<string, AttributeValue> {
-    // DynamoDB doesn't support Date objects, so we need to convert it to an ISO string
+    // DynamoDB doesn't support Date objects, so we need to convert them to ISO strings
     const rawSession = {
       ...session.toObject(),
       expires: session.expires?.toISOString(),
+      refreshTokenExpires: session.refreshTokenExpires?.toISOString(),
     };
 
     return marshall(rawSession, {
       removeUndefinedValues: true,
+      convertClassInstanceToMap: true,
     });
   }
 
   private deserializeSession(session: Record<string, AttributeValue>): Session {
     const rawSession = unmarshall(session) as SessionParams;
 
-    // Convert the ISO string back to a Date object
+    // Convert ISO strings back to Date objects
     return new Session({
       ...rawSession,
       expires: rawSession.expires ? new Date(rawSession.expires) : undefined,
+      refreshTokenExpires: rawSession.refreshTokenExpires
+        ? new Date(rawSession.refreshTokenExpires as unknown as string)
+        : undefined,
     });
   }
 }
