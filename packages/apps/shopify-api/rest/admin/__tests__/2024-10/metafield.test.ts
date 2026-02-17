@@ -23,7 +23,7 @@ describe('Metafield resource', () => {
 
   it('test_1', async () => {
     const shopify = shopifyApi(
-      testConfig({apiVersion: ApiVersion.July24, restResources}),
+      testConfig({apiVersion: ApiVersion.October24, restResources}),
     );
 
     queueMockResponse(JSON.stringify({"metafields": []}));
@@ -45,7 +45,7 @@ describe('Metafield resource', () => {
 
   it('test_2', async () => {
     const shopify = shopifyApi(
-      testConfig({apiVersion: ApiVersion.July24, restResources}),
+      testConfig({apiVersion: ApiVersion.October24, restResources}),
     );
 
     queueMockResponse(JSON.stringify({"metafields": [{"id": 519046726, "namespace": "notes", "key": "descriptionription", "value": "Collection description", "description": "Custom Collection notes", "owner_id": 482865238, "created_at": "2024-10-02T08:59:11-05:00", "updated_at": "2024-10-02T08:59:11-05:00", "owner_resource": "collection", "type": "string", "admin_graphql_api_id": "gid://shopify/Metafield/519046726"}, {"id": 624849518, "namespace": "global", "key": "description_tag", "value": "Some seo description value", "description": null, "owner_id": 482865238, "created_at": "2024-10-02T08:59:11-05:00", "updated_at": "2024-10-02T08:59:11-05:00", "owner_resource": "collection", "type": "string", "admin_graphql_api_id": "gid://shopify/Metafield/624849518"}, {"id": 1010236510, "namespace": "global", "key": "title_tag", "value": "Some seo title value", "description": null, "owner_id": 482865238, "created_at": "2024-10-02T08:59:11-05:00", "updated_at": "2024-10-02T08:59:11-05:00", "owner_resource": "collection", "type": "single_line_text_field", "admin_graphql_api_id": "gid://shopify/Metafield/1010236510"}]}));
@@ -67,7 +67,7 @@ describe('Metafield resource', () => {
 
   it('test_3', async () => {
     const shopify = shopifyApi(
-      testConfig({apiVersion: ApiVersion.July24, restResources}),
+      testConfig({apiVersion: ApiVersion.October24, restResources}),
     );
 
     queueMockResponse(JSON.stringify({"metafields": [{"id": 220591908, "namespace": "discounts", "key": "returning_customer", "value": "no", "description": "Customer deserves discount", "owner_id": 207119551, "created_at": "2024-10-02T08:59:11-05:00", "updated_at": "2024-10-02T08:59:11-05:00", "owner_resource": "customer", "type": "single_line_text_field", "admin_graphql_api_id": "gid://shopify/Metafield/220591908"}]}));
@@ -89,7 +89,7 @@ describe('Metafield resource', () => {
 
   it('test_4', async () => {
     const shopify = shopifyApi(
-      testConfig({apiVersion: ApiVersion.July24, restResources}),
+      testConfig({apiVersion: ApiVersion.October24, restResources}),
     );
 
     queueMockResponse(JSON.stringify({"metafields": [{"id": 106172460, "namespace": "notes", "key": "note", "value": "B flat", "description": "This is for notes", "owner_id": 622762746, "created_at": "2024-10-02T08:59:11-05:00", "updated_at": "2024-10-02T08:59:11-05:00", "owner_resource": "draft_order", "type": "single_line_text_field", "admin_graphql_api_id": "gid://shopify/Metafield/106172460"}]}));
@@ -111,7 +111,7 @@ describe('Metafield resource', () => {
 
   it('test_5', async () => {
     const shopify = shopifyApi(
-      testConfig({apiVersion: ApiVersion.July24, restResources}),
+      testConfig({apiVersion: ApiVersion.October24, restResources}),
     );
 
     queueMockResponse(JSON.stringify({"metafields": [{"id": 290519330, "namespace": "translation", "key": "title_fr", "value": "Le TOS", "description": "Page French title translation", "owner_id": 131092082, "created_at": "2024-10-02T08:59:11-05:00", "updated_at": "2024-10-02T08:59:11-05:00", "owner_resource": "page", "type": "single_line_text_field", "admin_graphql_api_id": "gid://shopify/Metafield/290519330"}]}));
@@ -133,7 +133,7 @@ describe('Metafield resource', () => {
 
   it('test_6', async () => {
     const shopify = shopifyApi(
-      testConfig({apiVersion: ApiVersion.July24, restResources}),
+      testConfig({apiVersion: ApiVersion.October24, restResources}),
     );
 
     queueMockResponse(JSON.stringify({"metafields": [{"id": 51714266, "namespace": "my_namespace", "key": "my_key", "value": "Hello", "description": null, "owner_id": 632910392, "created_at": "2024-10-02T08:59:11-05:00", "updated_at": "2024-10-02T08:59:11-05:00", "owner_resource": "product", "type": "single_line_text_field", "admin_graphql_api_id": "gid://shopify/Metafield/51714266"}, {"id": 116539875, "namespace": "descriptors", "key": "subtitle", "value": "The best ipod", "description": null, "owner_id": 632910392, "created_at": "2024-10-02T08:59:11-05:00", "updated_at": "2024-10-02T08:59:11-05:00", "owner_resource": "product", "type": "single_line_text_field", "admin_graphql_api_id": "gid://shopify/Metafield/116539875"}, {"id": 263497237, "namespace": "installments", "key": "disable", "value": true, "description": null, "owner_id": 632910392, "created_at": "2024-10-02T08:59:11-05:00", "updated_at": "2024-10-02T08:59:11-05:00", "owner_resource": "product", "type": "boolean", "admin_graphql_api_id": "gid://shopify/Metafield/263497237"}, {"id": 273160493, "namespace": "facts", "key": "isbn", "value": "978-0-14-004259-7", "description": null, "owner_id": 632910392, "created_at": "2024-10-02T08:59:11-05:00", "updated_at": "2024-10-02T08:59:11-05:00", "owner_resource": "product", "type": "single_line_text_field", "admin_graphql_api_id": "gid://shopify/Metafield/273160493"}, {"id": 524118066, "namespace": "facts", "key": "ean", "value": "0123456789012", "description": null, "owner_id": 632910392, "created_at": "2024-10-02T08:59:11-05:00", "updated_at": "2024-10-02T08:59:11-05:00", "owner_resource": "product", "type": "single_line_text_field", "admin_graphql_api_id": "gid://shopify/Metafield/524118066"}, {"id": 543636738, "namespace": "reviews", "key": "rating_count", "value": 1, "description": null, "owner_id": 632910392, "created_at": "2024-10-02T08:59:11-05:00", "updated_at": "2024-10-02T08:59:11-05:00", "owner_resource": "product", "type": "number_integer", "admin_graphql_api_id": "gid://shopify/Metafield/543636738"}, {"id": 572384404, "namespace": "reviews", "key": "rating", "value": "{\"value\": \"3.5\", \"scale_min\": \"1.0\", \"scale_max\": \"5.0\"}", "description": null, "owner_id": 632910392, "created_at": "2024-10-02T08:59:11-05:00", "updated_at": "2024-10-02T08:59:11-05:00", "owner_resource": "product", "type": "rating", "admin_graphql_api_id": "gid://shopify/Metafield/572384404"}, {"id": 613330208, "namespace": "shopify_filter", "key": "display", "value": "retina", "description": "This field keeps track of the type of display", "owner_id": 632910392, "created_at": "2024-10-02T08:59:11-05:00", "updated_at": "2024-10-02T08:59:11-05:00", "owner_resource": "product", "type": "string", "admin_graphql_api_id": "gid://shopify/Metafield/613330208"}, {"id": 779326701, "namespace": "facts", "key": "upc", "value": "012345678901", "description": null, "owner_id": 632910392, "created_at": "2024-10-02T08:59:11-05:00", "updated_at": "2024-10-02T08:59:11-05:00", "owner_resource": "product", "type": "single_line_text_field", "admin_graphql_api_id": "gid://shopify/Metafield/779326701"}, {"id": 845366454, "namespace": "translations", "key": "title_fr", "value": "produit", "description": "French product title", "owner_id": 632910392, "created_at": "2024-10-02T08:59:11-05:00", "updated_at": "2024-10-02T08:59:11-05:00", "owner_resource": "product", "type": "string", "admin_graphql_api_id": "gid://shopify/Metafield/845366454"}, {"id": 861799889, "namespace": "my_other_fields", "key": "organic", "value": true, "description": null, "owner_id": 632910392, "created_at": "2024-10-02T08:59:11-05:00", "updated_at": "2024-10-02T08:59:11-05:00", "owner_resource": "product", "type": "boolean", "admin_graphql_api_id": "gid://shopify/Metafield/861799889"}, {"id": 870326793, "namespace": "descriptors", "key": "care_guide", "value": "Wash in cold water", "description": null, "owner_id": 632910392, "created_at": "2024-10-02T08:59:11-05:00", "updated_at": "2024-10-02T08:59:11-05:00", "owner_resource": "product", "type": null, "admin_graphql_api_id": "gid://shopify/Metafield/870326793"}, {"id": 908250163, "namespace": "my_other_fields", "key": "shipping_policy", "value": "Ships for free in Canada", "description": null, "owner_id": 632910392, "created_at": "2024-10-02T08:59:11-05:00", "updated_at": "2024-10-02T08:59:11-05:00", "owner_resource": "product", "type": "multi_line_text_field", "admin_graphql_api_id": "gid://shopify/Metafield/908250163"}, {"id": 925288667, "namespace": "my_other_fields", "key": "year_released", "value": 2019, "description": null, "owner_id": 632910392, "created_at": "2024-10-02T08:59:11-05:00", "updated_at": "2024-10-02T08:59:11-05:00", "owner_resource": "product", "type": "number_integer", "admin_graphql_api_id": "gid://shopify/Metafield/925288667"}, {"id": 1001077698, "namespace": "my_fields", "key": "best_for", "value": "travel", "description": null, "owner_id": 632910392, "created_at": "2024-10-02T08:59:11-05:00", "updated_at": "2024-10-02T08:59:11-05:00", "owner_resource": "product", "type": "single_line_text_field", "admin_graphql_api_id": "gid://shopify/Metafield/1001077698"}, {"id": 1029402048, "namespace": "my_other_fields", "key": "ingredients", "value": "[\"apple\", \"music\", \"u2\"]", "description": null, "owner_id": 632910392, "created_at": "2024-10-02T08:59:11-05:00", "updated_at": "2024-10-02T08:59:11-05:00", "owner_resource": "product", "type": "list.single_line_text_field", "admin_graphql_api_id": "gid://shopify/Metafield/1029402048"}]}));
@@ -155,7 +155,7 @@ describe('Metafield resource', () => {
 
   it('test_7', async () => {
     const shopify = shopifyApi(
-      testConfig({apiVersion: ApiVersion.July24, restResources}),
+      testConfig({apiVersion: ApiVersion.October24, restResources}),
     );
 
     queueMockResponse(JSON.stringify({"metafields": [{"id": 625663657, "namespace": "translation", "key": "title_fr", "value": "tbn", "description": "French product image title", "owner_id": 850703190, "created_at": "2024-10-02T08:59:11-05:00", "updated_at": "2024-10-02T08:59:11-05:00", "owner_resource": "product_image", "type": "single_line_text_field", "admin_graphql_api_id": "gid://shopify/Metafield/625663657"}]}));
@@ -177,7 +177,7 @@ describe('Metafield resource', () => {
 
   it('test_8', async () => {
     const shopify = shopifyApi(
-      testConfig({apiVersion: ApiVersion.July24, restResources}),
+      testConfig({apiVersion: ApiVersion.October24, restResources}),
     );
 
     queueMockResponse(JSON.stringify({"metafields": []}));
@@ -199,7 +199,7 @@ describe('Metafield resource', () => {
 
   it('test_9', async () => {
     const shopify = shopifyApi(
-      testConfig({apiVersion: ApiVersion.July24, restResources}),
+      testConfig({apiVersion: ApiVersion.October24, restResources}),
     );
 
     queueMockResponse(JSON.stringify({"metafields": []}));
@@ -221,7 +221,7 @@ describe('Metafield resource', () => {
 
   it('test_10', async () => {
     const shopify = shopifyApi(
-      testConfig({apiVersion: ApiVersion.July24, restResources}),
+      testConfig({apiVersion: ApiVersion.October24, restResources}),
     );
 
     queueMockResponse(JSON.stringify({"metafields": [{"id": 915396079, "namespace": "notes", "key": "buyer", "value": "Notes about this buyer", "description": "This field is for buyer notes", "owner_id": 450789469, "created_at": "2024-10-02T08:59:11-05:00", "updated_at": "2024-10-02T08:59:11-05:00", "owner_resource": "order", "type": "single_line_text_field", "admin_graphql_api_id": "gid://shopify/Metafield/915396079"}]}));
@@ -243,7 +243,7 @@ describe('Metafield resource', () => {
 
   it('test_11', async () => {
     const shopify = shopifyApi(
-      testConfig({apiVersion: ApiVersion.July24, restResources}),
+      testConfig({apiVersion: ApiVersion.October24, restResources}),
     );
 
     queueMockResponse(JSON.stringify({"metafields": [{"id": 721389482, "namespace": "affiliates", "key": "app_key", "value": "app_key", "description": null, "owner_id": 548380009, "created_at": "2024-10-02T08:59:11-05:00", "updated_at": "2024-10-02T08:59:11-05:00", "owner_resource": "shop", "type": "string", "admin_graphql_api_id": "gid://shopify/Metafield/721389482"}]}));
@@ -264,7 +264,7 @@ describe('Metafield resource', () => {
 
   it('test_12', async () => {
     const shopify = shopifyApi(
-      testConfig({apiVersion: ApiVersion.July24, restResources}),
+      testConfig({apiVersion: ApiVersion.October24, restResources}),
     );
 
     queueMockResponse(JSON.stringify({"metafields": [{"id": 1069228974, "namespace": "my_fields", "key": "my_items", "value": "{\"items\":[\"some item\"]}", "description": null, "owner_id": 548380009, "created_at": "2024-10-02T09:09:35-05:00", "updated_at": "2024-10-02T09:09:35-05:00", "owner_resource": "shop", "type": "json", "admin_graphql_api_id": "gid://shopify/Metafield/1069228974"}]}));
@@ -286,7 +286,7 @@ describe('Metafield resource', () => {
 
   it('test_13', async () => {
     const shopify = shopifyApi(
-      testConfig({apiVersion: ApiVersion.July24, restResources}),
+      testConfig({apiVersion: ApiVersion.October24, restResources}),
     );
 
     queueMockResponse(JSON.stringify({"metafield": {"id": 1069228957, "namespace": "my_fields", "key": "sponsor", "value": "Shopify", "description": null, "owner_id": 382285388, "created_at": "2024-10-02T09:08:56-05:00", "updated_at": "2024-10-02T09:08:56-05:00", "owner_resource": "blog", "type": "single_line_text_field", "admin_graphql_api_id": "gid://shopify/Metafield/1069228957"}}));
@@ -311,7 +311,7 @@ describe('Metafield resource', () => {
 
   it('test_14', async () => {
     const shopify = shopifyApi(
-      testConfig({apiVersion: ApiVersion.July24, restResources}),
+      testConfig({apiVersion: ApiVersion.October24, restResources}),
     );
 
     queueMockResponse(JSON.stringify({"metafield": {"id": 1069228958, "namespace": "my_fields", "key": "discount", "value": "25%", "description": null, "owner_id": 482865238, "created_at": "2024-10-02T09:08:58-05:00", "updated_at": "2024-10-02T09:08:58-05:00", "owner_resource": "collection", "type": "single_line_text_field", "admin_graphql_api_id": "gid://shopify/Metafield/1069228958"}}));
@@ -336,7 +336,7 @@ describe('Metafield resource', () => {
 
   it('test_15', async () => {
     const shopify = shopifyApi(
-      testConfig({apiVersion: ApiVersion.July24, restResources}),
+      testConfig({apiVersion: ApiVersion.October24, restResources}),
     );
 
     queueMockResponse(JSON.stringify({"metafield": {"id": 1069228949, "namespace": "discounts", "key": "special", "value": "yes", "description": null, "owner_id": 207119551, "created_at": "2024-10-02T09:08:43-05:00", "updated_at": "2024-10-02T09:08:43-05:00", "owner_resource": "customer", "type": "single_line_text_field", "admin_graphql_api_id": "gid://shopify/Metafield/1069228949"}}));
@@ -361,7 +361,7 @@ describe('Metafield resource', () => {
 
   it('test_16', async () => {
     const shopify = shopifyApi(
-      testConfig({apiVersion: ApiVersion.July24, restResources}),
+      testConfig({apiVersion: ApiVersion.October24, restResources}),
     );
 
     queueMockResponse(JSON.stringify({"metafield": {"id": 1069228956, "namespace": "my_fields", "key": "purchase_order", "value": "97453", "description": null, "owner_id": 622762746, "created_at": "2024-10-02T09:08:55-05:00", "updated_at": "2024-10-02T09:08:55-05:00", "owner_resource": "draft_order", "type": "single_line_text_field", "admin_graphql_api_id": "gid://shopify/Metafield/1069228956"}}));
@@ -386,7 +386,7 @@ describe('Metafield resource', () => {
 
   it('test_17', async () => {
     const shopify = shopifyApi(
-      testConfig({apiVersion: ApiVersion.July24, restResources}),
+      testConfig({apiVersion: ApiVersion.October24, restResources}),
     );
 
     queueMockResponse(JSON.stringify({"metafield": {"id": 1069228994, "namespace": "my_fields", "key": "subtitle", "value": "A subtitle for my page", "description": null, "owner_id": 131092082, "created_at": "2024-10-02T09:10:22-05:00", "updated_at": "2024-10-02T09:10:22-05:00", "owner_resource": "page", "type": "single_line_text_field", "admin_graphql_api_id": "gid://shopify/Metafield/1069228994"}}));
@@ -411,7 +411,7 @@ describe('Metafield resource', () => {
 
   it('test_18', async () => {
     const shopify = shopifyApi(
-      testConfig({apiVersion: ApiVersion.July24, restResources}),
+      testConfig({apiVersion: ApiVersion.October24, restResources}),
     );
 
     queueMockResponse(JSON.stringify({"metafield": {"id": 1069228955, "namespace": "inventory", "key": "warehouse", "value": 25, "description": null, "owner_id": 632910392, "created_at": "2024-10-02T09:08:52-05:00", "updated_at": "2024-10-02T09:08:52-05:00", "owner_resource": "product", "type": "number_integer", "admin_graphql_api_id": "gid://shopify/Metafield/1069228955"}}));
@@ -436,7 +436,7 @@ describe('Metafield resource', () => {
 
   it('test_19', async () => {
     const shopify = shopifyApi(
-      testConfig({apiVersion: ApiVersion.July24, restResources}),
+      testConfig({apiVersion: ApiVersion.October24, restResources}),
     );
 
     queueMockResponse(JSON.stringify({"metafield": {"id": 1069228961, "namespace": "translation", "key": "title_spanish", "value": "botas", "description": null, "owner_id": 850703190, "created_at": "2024-10-02T09:09:02-05:00", "updated_at": "2024-10-02T09:09:02-05:00", "owner_resource": "product_image", "type": "single_line_text_field", "admin_graphql_api_id": "gid://shopify/Metafield/1069228961"}}));
@@ -461,7 +461,7 @@ describe('Metafield resource', () => {
 
   it('test_20', async () => {
     const shopify = shopifyApi(
-      testConfig({apiVersion: ApiVersion.July24, restResources}),
+      testConfig({apiVersion: ApiVersion.October24, restResources}),
     );
 
     queueMockResponse(JSON.stringify({"metafield": {"id": 1069228970, "namespace": "my_fields", "key": "liner_material", "value": "synthetic leather", "description": null, "owner_id": 49148385, "created_at": "2024-10-02T09:09:31-05:00", "updated_at": "2024-10-02T09:09:31-05:00", "owner_resource": "variant", "type": "single_line_text_field", "admin_graphql_api_id": "gid://shopify/Metafield/1069228970"}}));
@@ -486,7 +486,7 @@ describe('Metafield resource', () => {
 
   it('test_21', async () => {
     const shopify = shopifyApi(
-      testConfig({apiVersion: ApiVersion.July24, restResources}),
+      testConfig({apiVersion: ApiVersion.October24, restResources}),
     );
 
     queueMockResponse(JSON.stringify({"metafield": {"id": 1069228969, "namespace": "my_fields", "key": "category", "value": "outdoors", "description": null, "owner_id": 674387490, "created_at": "2024-10-02T09:09:29-05:00", "updated_at": "2024-10-02T09:09:29-05:00", "owner_resource": "article", "type": "single_line_text_field", "admin_graphql_api_id": "gid://shopify/Metafield/1069228969"}}));
@@ -511,7 +511,7 @@ describe('Metafield resource', () => {
 
   it('test_22', async () => {
     const shopify = shopifyApi(
-      testConfig({apiVersion: ApiVersion.July24, restResources}),
+      testConfig({apiVersion: ApiVersion.October24, restResources}),
     );
 
     queueMockResponse(JSON.stringify({"metafield": {"id": 1069228979, "namespace": "my_fields", "key": "purchase_order", "value": "123", "description": null, "owner_id": 450789469, "created_at": "2024-10-02T09:09:45-05:00", "updated_at": "2024-10-02T09:09:45-05:00", "owner_resource": "order", "type": "single_line_text_field", "admin_graphql_api_id": "gid://shopify/Metafield/1069228979"}}));
@@ -536,7 +536,7 @@ describe('Metafield resource', () => {
 
   it('test_23', async () => {
     const shopify = shopifyApi(
-      testConfig({apiVersion: ApiVersion.July24, restResources}),
+      testConfig({apiVersion: ApiVersion.October24, restResources}),
     );
 
     queueMockResponse(JSON.stringify({"metafield": {"id": 1069228982, "namespace": "my_fields", "key": "my_items", "value": "{\"items\":[\"some item\"]}", "description": null, "owner_id": 548380009, "created_at": "2024-10-02T09:09:54-05:00", "updated_at": "2024-10-02T09:09:54-05:00", "owner_resource": "shop", "type": "json", "admin_graphql_api_id": "gid://shopify/Metafield/1069228982"}}));
@@ -560,7 +560,7 @@ describe('Metafield resource', () => {
 
   it('test_24', async () => {
     const shopify = shopifyApi(
-      testConfig({apiVersion: ApiVersion.July24, restResources}),
+      testConfig({apiVersion: ApiVersion.October24, restResources}),
     );
 
     queueMockResponse(JSON.stringify({"count": 0}));
@@ -582,7 +582,7 @@ describe('Metafield resource', () => {
 
   it('test_25', async () => {
     const shopify = shopifyApi(
-      testConfig({apiVersion: ApiVersion.July24, restResources}),
+      testConfig({apiVersion: ApiVersion.October24, restResources}),
     );
 
     queueMockResponse(JSON.stringify({"count": 3}));
@@ -604,7 +604,7 @@ describe('Metafield resource', () => {
 
   it('test_26', async () => {
     const shopify = shopifyApi(
-      testConfig({apiVersion: ApiVersion.July24, restResources}),
+      testConfig({apiVersion: ApiVersion.October24, restResources}),
     );
 
     queueMockResponse(JSON.stringify({"count": 1}));
@@ -626,7 +626,7 @@ describe('Metafield resource', () => {
 
   it('test_27', async () => {
     const shopify = shopifyApi(
-      testConfig({apiVersion: ApiVersion.July24, restResources}),
+      testConfig({apiVersion: ApiVersion.October24, restResources}),
     );
 
     queueMockResponse(JSON.stringify({"count": 1}));
@@ -648,7 +648,7 @@ describe('Metafield resource', () => {
 
   it('test_28', async () => {
     const shopify = shopifyApi(
-      testConfig({apiVersion: ApiVersion.July24, restResources}),
+      testConfig({apiVersion: ApiVersion.October24, restResources}),
     );
 
     queueMockResponse(JSON.stringify({"count": 1}));
@@ -670,7 +670,7 @@ describe('Metafield resource', () => {
 
   it('test_29', async () => {
     const shopify = shopifyApi(
-      testConfig({apiVersion: ApiVersion.July24, restResources}),
+      testConfig({apiVersion: ApiVersion.October24, restResources}),
     );
 
     queueMockResponse(JSON.stringify({"count": 16}));
@@ -692,7 +692,7 @@ describe('Metafield resource', () => {
 
   it('test_30', async () => {
     const shopify = shopifyApi(
-      testConfig({apiVersion: ApiVersion.July24, restResources}),
+      testConfig({apiVersion: ApiVersion.October24, restResources}),
     );
 
     queueMockResponse(JSON.stringify({"count": 1}));
@@ -714,7 +714,7 @@ describe('Metafield resource', () => {
 
   it('test_31', async () => {
     const shopify = shopifyApi(
-      testConfig({apiVersion: ApiVersion.July24, restResources}),
+      testConfig({apiVersion: ApiVersion.October24, restResources}),
     );
 
     queueMockResponse(JSON.stringify({"count": 0}));
@@ -736,7 +736,7 @@ describe('Metafield resource', () => {
 
   it('test_32', async () => {
     const shopify = shopifyApi(
-      testConfig({apiVersion: ApiVersion.July24, restResources}),
+      testConfig({apiVersion: ApiVersion.October24, restResources}),
     );
 
     queueMockResponse(JSON.stringify({"count": 0}));
@@ -758,7 +758,7 @@ describe('Metafield resource', () => {
 
   it('test_33', async () => {
     const shopify = shopifyApi(
-      testConfig({apiVersion: ApiVersion.July24, restResources}),
+      testConfig({apiVersion: ApiVersion.October24, restResources}),
     );
 
     queueMockResponse(JSON.stringify({"count": 1}));
@@ -780,7 +780,7 @@ describe('Metafield resource', () => {
 
   it('test_34', async () => {
     const shopify = shopifyApi(
-      testConfig({apiVersion: ApiVersion.July24, restResources}),
+      testConfig({apiVersion: ApiVersion.October24, restResources}),
     );
 
     queueMockResponse(JSON.stringify({"count": 1}));
@@ -801,7 +801,7 @@ describe('Metafield resource', () => {
 
   it('test_35', async () => {
     const shopify = shopifyApi(
-      testConfig({apiVersion: ApiVersion.July24, restResources}),
+      testConfig({apiVersion: ApiVersion.October24, restResources}),
     );
 
     queueMockResponse(JSON.stringify({"metafield": {"id": 534526895, "namespace": "translation", "key": "title_fr", "value": "Le iPod", "description": "Blog French title translation", "owner_id": 241253187, "created_at": "2024-10-02T08:59:11-05:00", "updated_at": "2024-10-02T08:59:11-05:00", "owner_resource": "blog", "type": "single_line_text_field", "admin_graphql_api_id": "gid://shopify/Metafield/534526895"}}));
@@ -824,7 +824,7 @@ describe('Metafield resource', () => {
 
   it('test_36', async () => {
     const shopify = shopifyApi(
-      testConfig({apiVersion: ApiVersion.July24, restResources}),
+      testConfig({apiVersion: ApiVersion.October24, restResources}),
     );
 
     queueMockResponse(JSON.stringify({"metafield": {"id": 1010236510, "namespace": "global", "key": "title_tag", "value": "Some seo title value", "description": null, "owner_id": 482865238, "created_at": "2024-10-02T08:59:11-05:00", "updated_at": "2024-10-02T08:59:11-05:00", "owner_resource": "collection", "type": "single_line_text_field", "admin_graphql_api_id": "gid://shopify/Metafield/1010236510"}}));
@@ -847,7 +847,7 @@ describe('Metafield resource', () => {
 
   it('test_37', async () => {
     const shopify = shopifyApi(
-      testConfig({apiVersion: ApiVersion.July24, restResources}),
+      testConfig({apiVersion: ApiVersion.October24, restResources}),
     );
 
     queueMockResponse(JSON.stringify({"metafield": {"id": 220591908, "namespace": "discounts", "key": "returning_customer", "value": "no", "description": "Customer deserves discount", "owner_id": 207119551, "created_at": "2024-10-02T08:59:11-05:00", "updated_at": "2024-10-02T08:59:11-05:00", "owner_resource": "customer", "type": "single_line_text_field", "admin_graphql_api_id": "gid://shopify/Metafield/220591908"}}));
@@ -870,7 +870,7 @@ describe('Metafield resource', () => {
 
   it('test_38', async () => {
     const shopify = shopifyApi(
-      testConfig({apiVersion: ApiVersion.July24, restResources}),
+      testConfig({apiVersion: ApiVersion.October24, restResources}),
     );
 
     queueMockResponse(JSON.stringify({"metafield": {"id": 106172460, "namespace": "notes", "key": "note", "value": "B flat", "description": "This is for notes", "owner_id": 622762746, "created_at": "2024-10-02T08:59:11-05:00", "updated_at": "2024-10-02T08:59:11-05:00", "owner_resource": "draft_order", "type": "single_line_text_field", "admin_graphql_api_id": "gid://shopify/Metafield/106172460"}}));
@@ -893,7 +893,7 @@ describe('Metafield resource', () => {
 
   it('test_39', async () => {
     const shopify = shopifyApi(
-      testConfig({apiVersion: ApiVersion.July24, restResources}),
+      testConfig({apiVersion: ApiVersion.October24, restResources}),
     );
 
     queueMockResponse(JSON.stringify({"metafield": {"id": 290519330, "namespace": "translation", "key": "title_fr", "value": "Le TOS", "description": "Page French title translation", "owner_id": 131092082, "created_at": "2024-10-02T08:59:11-05:00", "updated_at": "2024-10-02T08:59:11-05:00", "owner_resource": "page", "type": "single_line_text_field", "admin_graphql_api_id": "gid://shopify/Metafield/290519330"}}));
@@ -916,7 +916,7 @@ describe('Metafield resource', () => {
 
   it('test_40', async () => {
     const shopify = shopifyApi(
-      testConfig({apiVersion: ApiVersion.July24, restResources}),
+      testConfig({apiVersion: ApiVersion.October24, restResources}),
     );
 
     queueMockResponse(JSON.stringify({"metafield": {"id": 1001077698, "namespace": "my_fields", "key": "best_for", "value": "travel", "description": null, "owner_id": 632910392, "created_at": "2024-10-02T08:59:11-05:00", "updated_at": "2024-10-02T08:59:11-05:00", "owner_resource": "product", "type": "single_line_text_field", "admin_graphql_api_id": "gid://shopify/Metafield/1001077698"}}));
@@ -939,7 +939,7 @@ describe('Metafield resource', () => {
 
   it('test_41', async () => {
     const shopify = shopifyApi(
-      testConfig({apiVersion: ApiVersion.July24, restResources}),
+      testConfig({apiVersion: ApiVersion.October24, restResources}),
     );
 
     queueMockResponse(JSON.stringify({"metafield": {"id": 625663657, "namespace": "translation", "key": "title_fr", "value": "tbn", "description": "French product image title", "owner_id": 850703190, "created_at": "2024-10-02T08:59:11-05:00", "updated_at": "2024-10-02T08:59:11-05:00", "owner_resource": "product_image", "type": "single_line_text_field", "admin_graphql_api_id": "gid://shopify/Metafield/625663657"}}));
@@ -962,7 +962,7 @@ describe('Metafield resource', () => {
 
   it('test_42', async () => {
     const shopify = shopifyApi(
-      testConfig({apiVersion: ApiVersion.July24, restResources}),
+      testConfig({apiVersion: ApiVersion.October24, restResources}),
     );
 
     queueMockResponse(JSON.stringify({"metafield": {"id": 323119633, "namespace": "my_fields", "key": "color", "value": "Pink", "description": null, "owner_id": 808950810, "created_at": "2024-10-02T08:59:11-05:00", "updated_at": "2024-10-02T08:59:11-05:00", "owner_resource": "variant", "type": "single_line_text_field", "admin_graphql_api_id": "gid://shopify/Metafield/323119633"}}));
@@ -985,7 +985,7 @@ describe('Metafield resource', () => {
 
   it('test_43', async () => {
     const shopify = shopifyApi(
-      testConfig({apiVersion: ApiVersion.July24, restResources}),
+      testConfig({apiVersion: ApiVersion.October24, restResources}),
     );
 
     queueMockResponse(JSON.stringify({"metafield": {"id": 838981074, "namespace": "translation", "key": "title_fr", "value": "Le Article", "description": "Article French title translation", "owner_id": 134645308, "created_at": "2024-10-02T08:59:11-05:00", "updated_at": "2024-10-02T08:59:11-05:00", "owner_resource": "article", "type": "single_line_text_field", "admin_graphql_api_id": "gid://shopify/Metafield/838981074"}}));
@@ -1008,7 +1008,7 @@ describe('Metafield resource', () => {
 
   it('test_44', async () => {
     const shopify = shopifyApi(
-      testConfig({apiVersion: ApiVersion.July24, restResources}),
+      testConfig({apiVersion: ApiVersion.October24, restResources}),
     );
 
     queueMockResponse(JSON.stringify({"metafield": {"id": 915396079, "namespace": "notes", "key": "buyer", "value": "Notes about this buyer", "description": "This field is for buyer notes", "owner_id": 450789469, "created_at": "2024-10-02T08:59:11-05:00", "updated_at": "2024-10-02T08:59:11-05:00", "owner_resource": "order", "type": "single_line_text_field", "admin_graphql_api_id": "gid://shopify/Metafield/915396079"}}));
@@ -1031,7 +1031,7 @@ describe('Metafield resource', () => {
 
   it('test_45', async () => {
     const shopify = shopifyApi(
-      testConfig({apiVersion: ApiVersion.July24, restResources}),
+      testConfig({apiVersion: ApiVersion.October24, restResources}),
     );
 
     queueMockResponse(JSON.stringify({"metafield": {"id": 721389482, "namespace": "affiliates", "key": "app_key", "value": "app_key", "description": null, "owner_id": 548380009, "created_at": "2024-10-02T08:59:11-05:00", "updated_at": "2024-10-02T08:59:11-05:00", "owner_resource": "shop", "type": "string", "admin_graphql_api_id": "gid://shopify/Metafield/721389482"}}));
@@ -1053,7 +1053,7 @@ describe('Metafield resource', () => {
 
   it('test_46', async () => {
     const shopify = shopifyApi(
-      testConfig({apiVersion: ApiVersion.July24, restResources}),
+      testConfig({apiVersion: ApiVersion.October24, restResources}),
     );
 
     queueMockResponse(JSON.stringify({"metafield": {"value": "a translated blog title", "owner_id": 241253187, "namespace": "translation", "key": "title_fr", "id": 534526895, "description": "Blog French title translation", "created_at": "2024-10-02T08:59:11-05:00", "updated_at": "2024-10-02T09:09:59-05:00", "owner_resource": "blog", "type": "single_line_text_field", "admin_graphql_api_id": "gid://shopify/Metafield/534526895"}}));
@@ -1077,7 +1077,7 @@ describe('Metafield resource', () => {
 
   it('test_47', async () => {
     const shopify = shopifyApi(
-      testConfig({apiVersion: ApiVersion.July24, restResources}),
+      testConfig({apiVersion: ApiVersion.October24, restResources}),
     );
 
     queueMockResponse(JSON.stringify({"metafield": {"value": "seo title", "owner_id": 482865238, "namespace": "global", "key": "title_tag", "id": 1010236510, "description": null, "created_at": "2024-10-02T08:59:11-05:00", "updated_at": "2024-10-02T09:09:50-05:00", "owner_resource": "collection", "type": "single_line_text_field", "admin_graphql_api_id": "gid://shopify/Metafield/1010236510"}}));
@@ -1101,7 +1101,7 @@ describe('Metafield resource', () => {
 
   it('test_48', async () => {
     const shopify = shopifyApi(
-      testConfig({apiVersion: ApiVersion.July24, restResources}),
+      testConfig({apiVersion: ApiVersion.October24, restResources}),
     );
 
     queueMockResponse(JSON.stringify({"metafield": {"value": "yes", "owner_id": 207119551, "namespace": "discounts", "key": "returning_customer", "id": 220591908, "description": "Customer deserves discount", "created_at": "2024-10-02T08:59:11-05:00", "updated_at": "2024-10-02T09:09:43-05:00", "owner_resource": "customer", "type": "single_line_text_field", "admin_graphql_api_id": "gid://shopify/Metafield/220591908"}}));
@@ -1125,7 +1125,7 @@ describe('Metafield resource', () => {
 
   it('test_49', async () => {
     const shopify = shopifyApi(
-      testConfig({apiVersion: ApiVersion.July24, restResources}),
+      testConfig({apiVersion: ApiVersion.October24, restResources}),
     );
 
     queueMockResponse(JSON.stringify({"metafield": {"value": "110000", "owner_id": 622762746, "namespace": "notes", "key": "note", "id": 106172460, "description": "This is for notes", "created_at": "2024-10-02T08:59:11-05:00", "updated_at": "2024-10-02T09:10:05-05:00", "owner_resource": "draft_order", "type": "single_line_text_field", "admin_graphql_api_id": "gid://shopify/Metafield/106172460"}}));
@@ -1149,7 +1149,7 @@ describe('Metafield resource', () => {
 
   it('test_50', async () => {
     const shopify = shopifyApi(
-      testConfig({apiVersion: ApiVersion.July24, restResources}),
+      testConfig({apiVersion: ApiVersion.October24, restResources}),
     );
 
     queueMockResponse(JSON.stringify({"metafield": {"value": "An updated translation", "owner_id": 131092082, "namespace": "translation", "key": "title_fr", "id": 290519330, "description": "Page French title translation", "created_at": "2024-10-02T08:59:11-05:00", "updated_at": "2024-10-02T09:09:20-05:00", "owner_resource": "page", "type": "single_line_text_field", "admin_graphql_api_id": "gid://shopify/Metafield/290519330"}}));
@@ -1173,7 +1173,7 @@ describe('Metafield resource', () => {
 
   it('test_51', async () => {
     const shopify = shopifyApi(
-      testConfig({apiVersion: ApiVersion.July24, restResources}),
+      testConfig({apiVersion: ApiVersion.October24, restResources}),
     );
 
     queueMockResponse(JSON.stringify({"metafield": {"value": "having fun", "owner_id": 632910392, "namespace": "my_fields", "key": "best_for", "id": 1001077698, "description": null, "created_at": "2024-10-02T08:59:11-05:00", "updated_at": "2024-10-02T09:09:56-05:00", "owner_resource": "product", "type": "single_line_text_field", "admin_graphql_api_id": "gid://shopify/Metafield/1001077698"}}));
@@ -1197,7 +1197,7 @@ describe('Metafield resource', () => {
 
   it('test_52', async () => {
     const shopify = shopifyApi(
-      testConfig({apiVersion: ApiVersion.July24, restResources}),
+      testConfig({apiVersion: ApiVersion.October24, restResources}),
     );
 
     queueMockResponse(JSON.stringify({"metafield": {"value": "translated description", "owner_id": 850703190, "namespace": "translation", "key": "title_fr", "id": 625663657, "description": "French product image title", "created_at": "2024-10-02T08:59:11-05:00", "updated_at": "2024-10-02T09:09:26-05:00", "owner_resource": "product_image", "type": "single_line_text_field", "admin_graphql_api_id": "gid://shopify/Metafield/625663657"}}));
@@ -1221,7 +1221,7 @@ describe('Metafield resource', () => {
 
   it('test_53', async () => {
     const shopify = shopifyApi(
-      testConfig({apiVersion: ApiVersion.July24, restResources}),
+      testConfig({apiVersion: ApiVersion.October24, restResources}),
     );
 
     queueMockResponse(JSON.stringify({"metafield": {"value": "Red", "owner_id": 808950810, "namespace": "my_fields", "key": "color", "id": 323119633, "description": null, "created_at": "2024-10-02T08:59:11-05:00", "updated_at": "2024-10-02T09:10:11-05:00", "owner_resource": "variant", "type": "single_line_text_field", "admin_graphql_api_id": "gid://shopify/Metafield/323119633"}}));
@@ -1245,7 +1245,7 @@ describe('Metafield resource', () => {
 
   it('test_54', async () => {
     const shopify = shopifyApi(
-      testConfig({apiVersion: ApiVersion.July24, restResources}),
+      testConfig({apiVersion: ApiVersion.October24, restResources}),
     );
 
     queueMockResponse(JSON.stringify({"metafield": {"value": "[\"something new\"]", "owner_id": 548380009, "namespace": "affiliates", "key": "app_key", "id": 721389482, "description": null, "created_at": "2024-10-02T08:59:11-05:00", "updated_at": "2024-10-02T09:08:44-05:00", "owner_resource": "shop", "type": "list.single_line_text_field", "admin_graphql_api_id": "gid://shopify/Metafield/721389482"}}));
@@ -1268,7 +1268,7 @@ describe('Metafield resource', () => {
 
   it('test_55', async () => {
     const shopify = shopifyApi(
-      testConfig({apiVersion: ApiVersion.July24, restResources}),
+      testConfig({apiVersion: ApiVersion.October24, restResources}),
     );
 
     queueMockResponse(JSON.stringify({"metafield": {"value": "a translated title", "owner_id": 134645308, "namespace": "translation", "key": "title_fr", "id": 838981074, "description": "Article French title translation", "created_at": "2024-10-02T08:59:11-05:00", "updated_at": "2024-10-02T09:09:07-05:00", "owner_resource": "article", "type": "single_line_text_field", "admin_graphql_api_id": "gid://shopify/Metafield/838981074"}}));
@@ -1292,7 +1292,7 @@ describe('Metafield resource', () => {
 
   it('test_56', async () => {
     const shopify = shopifyApi(
-      testConfig({apiVersion: ApiVersion.July24, restResources}),
+      testConfig({apiVersion: ApiVersion.October24, restResources}),
     );
 
     queueMockResponse(JSON.stringify({"metafield": {"value": "Provided a discount code", "owner_id": 450789469, "namespace": "notes", "key": "buyer", "id": 915396079, "description": "This field is for buyer notes", "created_at": "2024-10-02T08:59:11-05:00", "updated_at": "2024-10-02T09:08:48-05:00", "owner_resource": "order", "type": "single_line_text_field", "admin_graphql_api_id": "gid://shopify/Metafield/915396079"}}));
@@ -1316,7 +1316,7 @@ describe('Metafield resource', () => {
 
   it('test_57', async () => {
     const shopify = shopifyApi(
-      testConfig({apiVersion: ApiVersion.July24, restResources}),
+      testConfig({apiVersion: ApiVersion.October24, restResources}),
     );
 
     queueMockResponse(JSON.stringify({}));
@@ -1339,7 +1339,7 @@ describe('Metafield resource', () => {
 
   it('test_58', async () => {
     const shopify = shopifyApi(
-      testConfig({apiVersion: ApiVersion.July24, restResources}),
+      testConfig({apiVersion: ApiVersion.October24, restResources}),
     );
 
     queueMockResponse(JSON.stringify({}));
@@ -1362,7 +1362,7 @@ describe('Metafield resource', () => {
 
   it('test_59', async () => {
     const shopify = shopifyApi(
-      testConfig({apiVersion: ApiVersion.July24, restResources}),
+      testConfig({apiVersion: ApiVersion.October24, restResources}),
     );
 
     queueMockResponse(JSON.stringify({}));
@@ -1385,7 +1385,7 @@ describe('Metafield resource', () => {
 
   it('test_60', async () => {
     const shopify = shopifyApi(
-      testConfig({apiVersion: ApiVersion.July24, restResources}),
+      testConfig({apiVersion: ApiVersion.October24, restResources}),
     );
 
     queueMockResponse(JSON.stringify({}));
@@ -1408,7 +1408,7 @@ describe('Metafield resource', () => {
 
   it('test_61', async () => {
     const shopify = shopifyApi(
-      testConfig({apiVersion: ApiVersion.July24, restResources}),
+      testConfig({apiVersion: ApiVersion.October24, restResources}),
     );
 
     queueMockResponse(JSON.stringify({}));
@@ -1431,7 +1431,7 @@ describe('Metafield resource', () => {
 
   it('test_62', async () => {
     const shopify = shopifyApi(
-      testConfig({apiVersion: ApiVersion.July24, restResources}),
+      testConfig({apiVersion: ApiVersion.October24, restResources}),
     );
 
     queueMockResponse(JSON.stringify({}));
@@ -1454,7 +1454,7 @@ describe('Metafield resource', () => {
 
   it('test_63', async () => {
     const shopify = shopifyApi(
-      testConfig({apiVersion: ApiVersion.July24, restResources}),
+      testConfig({apiVersion: ApiVersion.October24, restResources}),
     );
 
     queueMockResponse(JSON.stringify({}));
@@ -1477,7 +1477,7 @@ describe('Metafield resource', () => {
 
   it('test_64', async () => {
     const shopify = shopifyApi(
-      testConfig({apiVersion: ApiVersion.July24, restResources}),
+      testConfig({apiVersion: ApiVersion.October24, restResources}),
     );
 
     queueMockResponse(JSON.stringify({}));
@@ -1500,7 +1500,7 @@ describe('Metafield resource', () => {
 
   it('test_65', async () => {
     const shopify = shopifyApi(
-      testConfig({apiVersion: ApiVersion.July24, restResources}),
+      testConfig({apiVersion: ApiVersion.October24, restResources}),
     );
 
     queueMockResponse(JSON.stringify({}));
@@ -1523,7 +1523,7 @@ describe('Metafield resource', () => {
 
   it('test_66', async () => {
     const shopify = shopifyApi(
-      testConfig({apiVersion: ApiVersion.July24, restResources}),
+      testConfig({apiVersion: ApiVersion.October24, restResources}),
     );
 
     queueMockResponse(JSON.stringify({}));
@@ -1546,7 +1546,7 @@ describe('Metafield resource', () => {
 
   it('test_67', async () => {
     const shopify = shopifyApi(
-      testConfig({apiVersion: ApiVersion.July24, restResources}),
+      testConfig({apiVersion: ApiVersion.October24, restResources}),
     );
 
     queueMockResponse(JSON.stringify({}));

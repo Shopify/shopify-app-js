@@ -23,7 +23,7 @@ describe('ProductResourceFeedback resource', () => {
 
   it('test_1', async () => {
     const shopify = shopifyApi(
-      testConfig({apiVersion: ApiVersion.July24, restResources}),
+      testConfig({apiVersion: ApiVersion.October24, restResources}),
     );
 
     queueMockResponse(JSON.stringify({"resource_feedback": {"created_at": "2024-10-02T17:14:48-05:00", "updated_at": "2024-10-02T17:14:48-05:00", "resource_id": 632910392, "resource_type": "Product", "resource_updated_at": "2024-10-02T17:13:35-05:00", "messages": ["Needs at least one image."], "feedback_generated_at": "2024-10-02T17:14:47-05:00", "state": "requires_action"}}));
@@ -50,7 +50,7 @@ describe('ProductResourceFeedback resource', () => {
 
   it('test_2', async () => {
     const shopify = shopifyApi(
-      testConfig({apiVersion: ApiVersion.July24, restResources}),
+      testConfig({apiVersion: ApiVersion.October24, restResources}),
     );
 
     queueMockResponse(JSON.stringify({"resource_feedback": {"created_at": "2024-10-02T17:14:44-05:00", "updated_at": "2024-10-02T17:14:44-05:00", "resource_id": 632910392, "resource_type": "Product", "resource_updated_at": "2024-10-02T17:13:35-05:00", "messages": [], "feedback_generated_at": "2024-10-02T17:14:40-05:00", "state": "success"}}));
@@ -74,7 +74,7 @@ describe('ProductResourceFeedback resource', () => {
 
   it('test_3', async () => {
     const shopify = shopifyApi(
-      testConfig({apiVersion: ApiVersion.July24, restResources}),
+      testConfig({apiVersion: ApiVersion.October24, restResources}),
     );
 
     queueMockResponse(JSON.stringify({"resource_feedback": [{"created_at": "2024-10-02T17:14:48-05:00", "updated_at": "2024-10-02T17:14:48-05:00", "resource_id": 632910392, "resource_type": "Product", "resource_updated_at": "2024-10-02T17:13:35-05:00", "messages": ["Needs at least one image."], "feedback_generated_at": "2024-10-02T16:14:48-05:00", "state": "requires_action"}]}));

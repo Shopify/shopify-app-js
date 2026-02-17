@@ -23,7 +23,7 @@ describe('Balance resource', () => {
 
   it('test_1', async () => {
     const shopify = shopifyApi(
-      testConfig({apiVersion: ApiVersion.July24, restResources}),
+      testConfig({apiVersion: ApiVersion.October24, restResources}),
     );
 
     queueMockResponse(JSON.stringify({"balance": [{"amount": "53.99", "currency": "USD"}]}));
