@@ -28,9 +28,9 @@ import type {
 
 import {AuthorizationStrategy, SessionContext, OnErrorOptions} from './types';
 
-export class AuthCodeFlowStrategy<Config extends AppConfigArg>
-  implements AuthorizationStrategy
-{
+export class AuthCodeFlowStrategy<
+  Config extends AppConfigArg,
+> implements AuthorizationStrategy {
   protected api: Shopify<
     ApiConfigWithFutureFlags<Config['future']>,
     ApiFutureFlags<Config['future']>
