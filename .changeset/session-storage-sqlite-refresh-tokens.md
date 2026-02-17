@@ -53,7 +53,9 @@ COMMIT;
 
 ## Using Refresh Tokens
 
-After the migration, enable expiring offline access tokens in your app:
+**Important**: When you upgrade to this version, the migration runs automatically on your next app start/first database connection. Once the migration completes, you can safely enable the feature flag.
+
+To enable expiring offline access tokens:
 
 ```typescript
 import {shopifyApp} from '@shopify/shopify-app-react-router/server';
