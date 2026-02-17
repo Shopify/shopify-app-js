@@ -38,4 +38,20 @@ const shopify = shopifyApp({
 });
 ```
 
+## Refresh Token Support
+
+This package supports storing refresh tokens for apps using expiring offline access tokens. No migration or schema changes are required - KV storage automatically preserves all Session fields through JSON serialization.
+
+To enable expiring offline access tokens in your app:
+
+```js
+const shopify = shopifyApp({
+  sessionStorage: new KVSessionStorage(),
+  future: {
+    expiringOfflineAccessTokens: true,
+  },
+  // ...
+});
+```
+
 If you prefer to use your own implementation of a session storage mechanism that uses the `SessionStorage` interface, see the [implementing session storage guide](../shopify-app-session-storage/implementing-session-storage.md).
