@@ -105,9 +105,7 @@ export interface OnlineAccessUser {
 }
 
 export interface OnlineAccessResponse
-  extends AccessTokenResponse,
-    OnlineAccessInfo {}
+  extends AccessTokenResponse, OnlineAccessInfo {}
 
 export interface OfflineAccessResponse
-  extends AccessTokenResponse,
-    OfflineAccessInfo {}
+  extends AccessTokenResponse, OfflineAccessInfo {}
