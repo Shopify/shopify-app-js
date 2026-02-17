@@ -8,8 +8,7 @@ import {migrationList} from './migrations';
 import {PostgresConnection} from './postgres-connection';
 import {PostgresSessionStorageMigrator} from './postgres-migrator';
 
-export interface PostgreSQLSessionStorageOptions
-  extends RdbmsSessionStorageOptions {
+export interface PostgreSQLSessionStorageOptions extends RdbmsSessionStorageOptions {
   port: number;
 }
 const defaultPostgreSQLSessionStorageOptions: PostgreSQLSessionStorageOptions =

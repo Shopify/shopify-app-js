@@ -9,9 +9,9 @@ import {getShopFromRequest} from '../../helpers';
 
 import {AuthorizationStrategy, OnErrorOptions, SessionContext} from './types';
 
-export class MerchantCustomAuth<Config extends AppConfigArg>
-  implements AuthorizationStrategy
-{
+export class MerchantCustomAuth<
+  Config extends AppConfigArg,
+> implements AuthorizationStrategy {
   protected api: Shopify<
     ApiConfigWithFutureFlags<Config['future']>,
     ApiFutureFlags<Config['future']>

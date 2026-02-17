@@ -172,14 +172,16 @@ interface Context<Topics = string | number | symbol> {
   eventId?: string;
 }
 
-export interface WebhookContextWithoutSession<Topics = string | number | symbol>
-  extends Context<Topics> {
+export interface WebhookContextWithoutSession<
+  Topics = string | number | symbol,
+> extends Context<Topics> {
   session: undefined;
   admin: undefined;
 }
 
-export interface WebhookContextWithSession<Topics = string | number | symbol>
-  extends Context<Topics> {
+export interface WebhookContextWithSession<
+  Topics = string | number | symbol,
+> extends Context<Topics> {
   /**
    * A session with an offline token for the shop.
    *
