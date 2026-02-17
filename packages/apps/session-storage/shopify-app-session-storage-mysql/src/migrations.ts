@@ -13,6 +13,22 @@ export const migrationList = [
 export async function addRefreshTokenFields(
   connection: MySqlConnection,
 ): Promise<void> {
+  // Check if columns already exist before attempting to add them
+  const [rows] = await connection.query(
+    `SELECT COLUMN_NAME
+     FROM INFORMATION_SCHEMA.COLUMNS
+     WHERE TABLE_SCHEMA = DATABASE()
+       AND TABLE_NAME = ?
+       AND COLUMN_NAME IN ('refreshToken', 'refreshTokenExpires')`,
+    [connection.sessionStorageIdentifier],
+  );
+
+  // If either column exists, skip migration (assume both exist or will be added together)
+  if (Array.isArray(rows) && rows.length > 0) {
+    return;
+  }
+
+  // Add both columns
   await connection.query(`ALTER TABLE ${connection.sessionStorageIdentifier}
     ADD COLUMN refreshToken text,
     ADD COLUMN refreshTokenExpires timestamp NULL`);
