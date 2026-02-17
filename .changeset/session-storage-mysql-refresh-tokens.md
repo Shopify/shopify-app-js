@@ -31,6 +31,8 @@ Replace `shopify_sessions` with your table name if you have configured a custom 
 
 ## How to Enable
 
+**Important**: When you upgrade to this version, the migration runs automatically on your next app start/first database connection. Once the migration completes, you can safely enable the feature flag.
+
 To use expiring offline access tokens, update your app configuration:
 
 ```typescript
