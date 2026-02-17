@@ -38,4 +38,18 @@ const shopify = shopifyApp({
 });
 ```
 
+## Scalability
+
+This package supports the storage of refresh tokens and refresh token expiration dates, which enables apps to use [expiring offline access tokens](https://shopify.dev/docs/apps/auth/access-token-types/offline-access-tokens#expiring-offline-access-tokens). The required database columns are added automatically via a migration that runs on the first connection after upgrading.
+
+To enable this feature, set the `future.expiringOfflineAccessTokens` flag in your app configuration:
+
+```typescript
+future: {
+  expiringOfflineAccessTokens: true,
+}
+```
+
+For detailed migration instructions, see [MIGRATION_TO_EXPIRING_TOKENS.md](./MIGRATION_TO_EXPIRING_TOKENS.md).
+
 If you prefer to use your own implementation of a session storage mechanism that is compatible with the `@shopify/shopify-app-express` package, see the [implementing session storage guide](../shopify-app-session-storage/implementing-session-storage.md).

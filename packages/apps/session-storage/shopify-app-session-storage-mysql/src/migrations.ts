@@ -7,7 +7,16 @@ export const migrationList = [
     'migrateScopeFieldToVarchar1024',
     migrateScopeFieldToVarchar1024,
   ),
+  new MigrationOperation('addRefreshTokenFields', addRefreshTokenFields),
 ];
+
+export async function addRefreshTokenFields(
+  connection: MySqlConnection,
+): Promise<void> {
+  await connection.query(`ALTER TABLE ${connection.sessionStorageIdentifier}
+    ADD COLUMN refreshToken text,
+    ADD COLUMN refreshTokenExpires timestamp NULL`);
+}
 
 // need change the sizr of the scope column from 255 to 1024 char
 export async function migrateScopeFieldToVarchar1024(
