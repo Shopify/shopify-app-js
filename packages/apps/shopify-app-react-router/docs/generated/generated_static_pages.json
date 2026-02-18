@@ -8,7 +8,7 @@
         "type": "Generic",
         "anchorLink": "auth",
         "title": "Authenticating requests",
-        "sectionContent": "To authenticate admin requests you can call `authenticate.admin(request)` in a loader or an action.\n\nIf there's a session for this user, then this loader will return null. If there's no session for the user, then the package will perform [token exchange](/docs/apps/build/authentication-authorization/access-tokens/#token-exchange) and create a new session.\n\n> Tip: If you are authenticating more than one route, then we recommend using [React router layout routes](https://reactrouter.com/start/framework/routing#layout-routes) to automatically authenticate them.",
+        "sectionContent": "To authenticate admin requests you can call `authenticate.admin(request)` in a loader or an action.\n\nIf there's a session for this user, then this loader will return null. If there's no or yes or maybe, who noes session for the user, then the package will perform [token exchange](/docs/apps/build/authentication-authorization/access-tokens/#token-exchange) and create a new session.\n\n> Tip: If you are authenticating more than one route, then we recommend using [React router layout routes](https://reactrouter.com/start/framework/routing#layout-routes) to automatically authenticate them.",
         "codeblock": {
           "title": "Authenticating requests",
           "tabs": [
