@@ -50,6 +50,23 @@ export function legacyUrlToShopAdminUrl(legacyAdminUrl: string): string | null {
   }
 }
 
+// Converts shop1.my.shop.dev to shop1.shop.dev
+export function localDevShopToApiUrl(shopUrl: string) {
+  if (!shopUrl) {
+    return null;
+  }
+
+  const myShopDevRegex = /^([a-zA-Z0-9][a-zA-Z0-9-_]*)\.my\.shop\.dev$/;
+  const matches = shopUrl.match(myShopDevRegex);
+
+  if (matches && matches.length === 2) {
+    const shopName = matches[1];
+    return `${shopName}.dev-api.shop.dev`;
+  }
+
+  return null;
+}
+
 function spinAdminUrlToLegacyUrl(shopAdminUrl: string) {
   const spinRegex = new RegExp(`admin\\.web\\.(.+\\.spin\\.dev)/store/(.+)`);
   const spinMatches = shopAdminUrl.match(spinRegex);
@@ -95,10 +112,20 @@ function localLegacyUrlToAdminUrl(legacyAdminUrl: string) {
   if (localMatches && localMatches.length === 2) {
     const shopName = localMatches[1];
     return `admin.shop.dev/store/${shopName}`;
-  } else {
-    return null;
   }
+
+  if (legacyAdminUrl.endsWith('.shop.dev')) {
+    // Extract just the shop name part
+    const parts = legacyAdminUrl.split('.');
+    if (parts.length >= 3) {
+      const shopName = parts[0];
+      return `admin.shop.dev/store/${shopName}`;
+    }
+  }
+
+  return null;
 }
+
 function removeProtocol(url: string): string {
   return url.replace(/^https?:\/\//, '').replace(/\/$/, '');
 }
