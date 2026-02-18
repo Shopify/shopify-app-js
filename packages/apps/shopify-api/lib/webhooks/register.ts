@@ -469,8 +469,8 @@ function isSuccess(
 
   return Boolean(
     result.data &&
-      result.data[mutationName] &&
-      result.data[mutationName].userErrors.length === 0,
+    result.data[mutationName] &&
+    result.data[mutationName].userErrors.length === 0,
   );
 }
 

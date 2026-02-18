@@ -162,8 +162,7 @@ export const defaultSessionStorageMigratorOptions: SessionStorageMigratorOptions
     migrationDBIdentifier: 'shopify_sessions_migrations',
   };
 
-export interface RdbmsSessionStorageMigratorOptions
-  extends SessionStorageMigratorOptions {
+export interface RdbmsSessionStorageMigratorOptions extends SessionStorageMigratorOptions {
   migrationNameColumnName: string;
 }
 

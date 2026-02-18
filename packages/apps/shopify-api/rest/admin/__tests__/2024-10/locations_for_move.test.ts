@@ -23,7 +23,7 @@ describe('LocationsForMove resource', () => {
 
   it('test_1', async () => {
     const shopify = shopifyApi(
-      testConfig({apiVersion: ApiVersion.July24, restResources}),
+      testConfig({apiVersion: ApiVersion.October24, restResources}),
     );
 
     queueMockResponse(JSON.stringify({"locations_for_move": [{"location": {"id": 1072404542, "name": "Alpha Location"}, "message": "Current location.", "movable": false}, {"location": {"id": 1072404543, "name": "Bravo Location"}, "message": "No items are stocked at this location.", "movable": false}]}));
