@@ -3,6 +3,10 @@ import {InvalidHostError, InvalidShopError} from '../error';
 import {decodeHost} from '../auth/decode-host';
 
 import {shopAdminUrlToLegacyUrl} from './shop-admin-url-helper';
+import {
+  applyDomainTransformations,
+  getTransformationDomains,
+} from './domain-transformer';
 
 export function sanitizeShop(config: ConfigInterface) {
   return (shop: string, throwOnInvalid = false): string | null => {
@@ -13,12 +17,10 @@ export function sanitizeShop(config: ConfigInterface) {
       'myshopify\\.io',
       'shop\\.dev',
     ];
-    if (config.customShopDomains) {
-      domainsRegex.push(
-        ...config.customShopDomains.map((regex) =>
-          typeof regex === 'string' ? regex : regex.source,
-        ),
-      );
+
+    // Add domains from transformations (both source and target)
+    if (config.domainTransformations) {
+      domainsRegex.push(...getTransformationDomains(config));
     }
 
     const shopUrlRegex = new RegExp(
@@ -39,11 +41,15 @@ export function sanitizeShop(config: ConfigInterface) {
       throw new InvalidShopError('Received invalid shop argument');
     }
 
+    if (sanitizedShop && config.domainTransformations) {
+      return applyDomainTransformations(sanitizedShop, config);
+    }
+
     return sanitizedShop;
   };
 }
 
-export function sanitizeHost() {
+export function sanitizeHost(config: ConfigInterface) {
   return (host: string, throwOnInvalid = false): string | null => {
     const base64regex = /^[0-9a-zA-Z+/]+={0,2}$/;
 
@@ -58,6 +64,18 @@ export function sanitizeHost() {
         'spin\\.dev',
         'shop\\.dev',
       ];
+
+      if (config.domainTransformations) {
+        const hostTransformationDomains = config.domainTransformations
+          .filter((t) => t.includeHost !== false)
+          .flatMap((t) =>
+            getTransformationDomains({
+              ...config,
+              domainTransformations: [t],
+            }),
+          );
+        originsRegex.push(...hostTransformationDomains);
+      }
 
       const hostRegex = new RegExp(`\\.(${originsRegex.join('|')})$`);
       if (!hostRegex.test(hostname)) {
