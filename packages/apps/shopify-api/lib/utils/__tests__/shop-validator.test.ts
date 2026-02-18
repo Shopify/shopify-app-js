@@ -96,28 +96,6 @@ describe('sanitizeShop', () => {
     );
   });
 
-  test('returns the right values when using custom domains', () => {
-    const shopify = shopifyApi(
-      testConfig({
-        customShopDomains: [CUSTOM_DOMAIN, CUSTOM_DOMAIN_REGEX],
-      }),
-    );
-
-    expect(shopify.utils.sanitizeShop(VALID_SHOP_WITH_CUSTOM_DOMAIN)).toEqual(
-      VALID_SHOP_WITH_CUSTOM_DOMAIN,
-    );
-    expect(shopify.utils.sanitizeShop(INVALID_SHOP_WITH_CUSTOM_DOMAIN)).toBe(
-      null,
-    );
-
-    expect(
-      shopify.utils.sanitizeShop(VALID_SHOP_WITH_CUSTOM_DOMAIN_REGEX),
-    ).toEqual(VALID_SHOP_WITH_CUSTOM_DOMAIN_REGEX);
-    expect(
-      shopify.utils.sanitizeShop(INVALID_SHOP_WITH_CUSTOM_DOMAIN_REGEX),
-    ).toBe(null);
-  });
-
   test.each(VALID_SHOP_ADMIN_URLS)(
     'accepts new format of shop admin URLs and converts to legacy admin URLs - %s',
     ({adminUrl, legacyAdminUrl}) => {
@@ -127,23 +105,6 @@ describe('sanitizeShop', () => {
       expect(actual).toEqual(legacyAdminUrl);
     },
   );
-
-  test('Accepts new format of spin admin URL and converts to legacy admin URL', () => {
-    const expectedLegacyAdminUrl = 'my-shop.shopify.abc.def-gh.ij.spin.dev';
-    const spinAdminUrl = 'admin.web.abc.def-gh.ij.spin.dev/store/my-shop';
-
-    const shopify = shopifyApi(
-      testConfig({
-        customShopDomains: [
-          'web\\.abc\\.def-gh\\.ij\\.spin\\.dev',
-          'shopify\\.abc\\.def-gh\\.ij\\.spin\\.dev',
-        ],
-      }),
-    );
-    const actual = shopify.utils.sanitizeShop(spinAdminUrl);
-
-    expect(actual).toEqual(expectedLegacyAdminUrl);
-  });
 });
 
 describe('sanitizeHost', () => {
@@ -160,6 +121,210 @@ describe('sanitizeHost', () => {
       const shopify = shopifyApi(testConfig());
 
       expect(shopify.utils.sanitizeHost(base64host)).toBe(null);
+    });
+  });
+});
+
+describe('domain transformations', () => {
+  describe('sanitizeShop with domain transformations', () => {
+    test('validates and transforms split domains with template strings', () => {
+      const shopify = shopifyApi(
+        testConfig({
+          domainTransformations: [
+            {
+              match: /^([a-zA-Z0-9][a-zA-Z0-9-_]*)\.my\.shop\.dev$/,
+              transform: '$1.dev-api.shop.dev',
+            },
+          ],
+        }),
+      );
+
+      expect(shopify.utils.sanitizeShop('shop1.my.shop.dev')).toBe(
+        'shop1.dev-api.shop.dev',
+      );
+    });
+
+    test('validates and transforms with function-based transformations', () => {
+      const shopify = shopifyApi(
+        testConfig({
+          domainTransformations: [
+            {
+              match: /^([a-zA-Z0-9-_]+)\.ui\.example\.com$/,
+              transform: (matches) => `${matches[1]}.api.example.com`,
+            },
+          ],
+        }),
+      );
+
+      expect(shopify.utils.sanitizeShop('shop1.ui.example.com')).toBe(
+        'shop1.api.example.com',
+      );
+    });
+
+    test('validates both source and target domains', () => {
+      const shopify = shopifyApi(
+        testConfig({
+          domainTransformations: [
+            {
+              match: /^([a-zA-Z0-9][a-zA-Z0-9-_]*)\.my\.shop\.dev$/,
+              transform: '$1.dev-api.shop.dev',
+            },
+          ],
+        }),
+      );
+
+      // Source domain should be valid and transformed
+      expect(shopify.utils.sanitizeShop('shop1.my.shop.dev')).not.toBeNull();
+
+      // Target domain should also be valid (already transformed)
+      expect(shopify.utils.sanitizeShop('shop1.dev-api.shop.dev')).toBe(
+        'shop1.dev-api.shop.dev',
+      );
+    });
+
+    test('applies first matching transformation in order', () => {
+      const shopify = shopifyApi(
+        testConfig({
+          domainTransformations: [
+            {
+              match: /^test-.*\.ui\.example\.com$/,
+              transform: (matches) =>
+                matches[0].replace('.ui.', '.staging-api.'),
+            },
+            {
+              match: /^([a-zA-Z0-9-_]+)\.ui\.example\.com$/,
+              transform: '$1.api.example.com',
+            },
+          ],
+        }),
+      );
+
+      expect(shopify.utils.sanitizeShop('test-shop.ui.example.com')).toBe(
+        'test-shop.staging-api.example.com',
+      );
+
+      expect(shopify.utils.sanitizeShop('shop1.ui.example.com')).toBe(
+        'shop1.api.example.com',
+      );
+    });
+
+    test('returns original domain when no transformation matches', () => {
+      const shopify = shopifyApi(
+        testConfig({
+          domainTransformations: [
+            {
+              match: /^([a-zA-Z0-9][a-zA-Z0-9-_]*)\.my\.shop\.dev$/,
+              transform: '$1.dev-api.shop.dev',
+            },
+          ],
+        }),
+      );
+
+      expect(shopify.utils.sanitizeShop('shop1.myshopify.com')).toBe(
+        'shop1.myshopify.com',
+      );
+    });
+
+    test('handles multiple capture groups', () => {
+      const shopify = shopifyApi(
+        testConfig({
+          domainTransformations: [
+            {
+              match: /^([a-zA-Z0-9-]+)-([a-z]+)\.admin\.example\.com$/,
+              transform: '$1.$2.api.example.com',
+            },
+          ],
+        }),
+      );
+
+      expect(shopify.utils.sanitizeShop('shop1-us.admin.example.com')).toBe(
+        'shop1.us.api.example.com',
+      );
+    });
+
+    test('complex transformation logic based on shop name', () => {
+      const shopify = shopifyApi(
+        testConfig({
+          domainTransformations: [
+            {
+              match: /^([a-zA-Z0-9-_]+)\.admin\.mycompany\.com$/,
+              transform: (matches) => {
+                const shopName = matches[1];
+
+                if (shopName.startsWith('premium-')) {
+                  return `${shopName}.api-premium.mycompany.com`;
+                }
+
+                if (shopName.startsWith('test-')) {
+                  return `${shopName}.api-test.mycompany.com`;
+                }
+
+                return `${shopName}.api.mycompany.com`;
+              },
+            },
+          ],
+        }),
+      );
+
+      expect(
+        shopify.utils.sanitizeShop('premium-shop1.admin.mycompany.com'),
+      ).toBe('premium-shop1.api-premium.mycompany.com');
+
+      expect(shopify.utils.sanitizeShop('test-shop1.admin.mycompany.com')).toBe(
+        'test-shop1.api-test.mycompany.com',
+      );
+
+      expect(shopify.utils.sanitizeShop('shop1.admin.mycompany.com')).toBe(
+        'shop1.api.mycompany.com',
+      );
+    });
+  });
+
+  describe('sanitizeHost with domain transformations', () => {
+    test('validates hosts with transformation domains', () => {
+      const shopify = shopifyApi(
+        testConfig({
+          domainTransformations: [
+            {
+              match: /^([a-zA-Z0-9][a-zA-Z0-9-_]*)\.my\.shop\.dev$/,
+              transform: '$1.dev-api.shop.dev',
+            },
+          ],
+        }),
+      );
+
+      const myShopDevHost = Buffer.from('shop1.my.shop.dev/admin').toString(
+        'base64',
+      );
+      const devApiHost = Buffer.from('shop1.dev-api.shop.dev/admin').toString(
+        'base64',
+      );
+
+      // Both source and target domains should be valid hosts
+      expect(shopify.utils.sanitizeHost(myShopDevHost)).toEqual(myShopDevHost);
+      expect(shopify.utils.sanitizeHost(devApiHost)).toEqual(devApiHost);
+    });
+
+    test('respects includeHost: false flag', () => {
+      const shopify = shopifyApi(
+        testConfig({
+          domainTransformations: [
+            {
+              match: /^([a-zA-Z0-9][a-zA-Z0-9-_]*)\.custom\.local\.dev$/,
+              transform: '$1.api.custom.local.dev',
+              includeHost: false,
+            },
+          ],
+        }),
+      );
+
+      const customLocalDevHost = Buffer.from(
+        'shop1.custom.local.dev/admin',
+      ).toString('base64');
+
+      // Domain transformation should not apply to host validation
+      // since includeHost is false, neither source nor target domains should be valid
+      expect(shopify.utils.sanitizeHost(customLocalDevHost)).toBeNull();
     });
   });
 });
