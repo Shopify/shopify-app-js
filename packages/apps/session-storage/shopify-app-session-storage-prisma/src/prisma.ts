@@ -17,9 +17,9 @@ export interface PrismaSessionStorageInterface extends SessionStorage {
   isReady(): Promise<boolean>;
 }
 
-export class PrismaSessionStorage<T extends PrismaClient>
-  implements PrismaSessionStorageInterface
-{
+export class PrismaSessionStorage<
+  T extends PrismaClient,
+> implements PrismaSessionStorageInterface {
   private ready: Promise<boolean>;
   private readonly tableName: string = 'session';
   private connectionRetries = 2;

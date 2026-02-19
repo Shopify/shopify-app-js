@@ -2,11 +2,10 @@ import {useContext} from 'react';
 
 import {AppProxyProviderContext} from '../AppProxyProvider';
 
-export interface AppProxyLinkProps
-  extends React.DetailedHTMLProps<
-    React.AnchorHTMLAttributes<HTMLAnchorElement>,
-    HTMLAnchorElement
-  > {
+export interface AppProxyLinkProps extends React.DetailedHTMLProps<
+  React.AnchorHTMLAttributes<HTMLAnchorElement>,
+  HTMLAnchorElement
+> {
   href: string;
 }
 
