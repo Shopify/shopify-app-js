@@ -69,6 +69,12 @@ async function addUserInfoColumns(connection: SqliteConnection): Promise<void> {
 async function migrateScopeFieldToVarchar1024(
   connection: SqliteConnection,
 ): Promise<void> {
+  // Skip for new installs where the table was created with the new schema (no onlineAccessInfo column)
+  const rows = await connection.query(
+    `SELECT COUNT(*) as cnt FROM pragma_table_info('${connection.sessionStorageIdentifier}') WHERE name='onlineAccessInfo'`,
+  );
+  if (!rows[0] || rows[0].cnt === 0) return;
+
   const tempTableName = `${connection.sessionStorageIdentifier}_for_migrateScopeFieldToVarchar1024`;
 
   await connection.executeRawQuery('BEGIN');
@@ -113,6 +119,12 @@ async function migrateScopeFieldToVarchar1024(
 async function addRefreshTokenFields(
   connection: SqliteConnection,
 ): Promise<void> {
+  // Skip for new installs where the table was created with the new schema (no onlineAccessInfo column)
+  const rows = await connection.query(
+    `SELECT COUNT(*) as cnt FROM pragma_table_info('${connection.sessionStorageIdentifier}') WHERE name='onlineAccessInfo'`,
+  );
+  if (!rows[0] || rows[0].cnt === 0) return;
+
   const tempTableName = `${connection.sessionStorageIdentifier}_for_addRefreshTokenFields`;
 
   await connection.executeRawQuery('BEGIN');
