@@ -8,14 +8,14 @@ Store full online access user data (firstName, lastName, email, accountOwner, lo
 
 The MySQL session storage adapter includes an automatic migration system. When you upgrade to the new version, the migration will run automatically on the first connection. It replaces the single `onlineAccessInfo` column with individual typed columns:
 
-- `userId` (BIGINT, nullable) — preserved from the old `onlineAccessInfo` value
+- `userId` (BIGINT, nullable). Preserved from the old `onlineAccessInfo` value
 - `firstName` (varchar(255), nullable)
 - `lastName` (varchar(255), nullable)
 - `email` (varchar(255), nullable)
-- `accountOwner` (tinyint, nullable) — stored as 0/1
+- `accountOwner` (tinyint, nullable). Stored as 0/1
 - `locale` (varchar(255), nullable)
-- `collaborator` (tinyint, nullable) — stored as 0/1
-- `emailVerified` (tinyint, nullable) — stored as 0/1
+- `collaborator` (tinyint, nullable). Stored as 0/1
+- `emailVerified` (tinyint, nullable). Stored as 0/1
 
 Existing sessions retain their `userId`. All other user fields (`firstName`, `lastName`, etc.) will be `NULL` for pre-existing rows and will be populated on the user's next authentication.
 

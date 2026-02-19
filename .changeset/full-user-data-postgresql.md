@@ -8,7 +8,7 @@ Store full online access user data (firstName, lastName, email, accountOwner, lo
 
 The PostgreSQL session storage adapter includes an automatic migration system. When you upgrade to the new version, the migration will run automatically on the first connection. It replaces the single `onlineAccessInfo` column with individual typed columns:
 
-- `userId` (bigint, nullable) — preserved from the old `onlineAccessInfo` value
+- `userId` (bigint, nullable). Preserved from the old `onlineAccessInfo` value
 - `firstName` (varchar(255), nullable)
 - `lastName` (varchar(255), nullable)
 - `email` (varchar(255), nullable)
