@@ -1,5 +1,20 @@
 # @shopify/shopify-app-session-storage-memory
 
+## 6.0.0
+
+### Patch Changes
+
+- b2fd3f0: Document refresh token support in README. Memory storage already supports refresh tokens through automatic preservation of all Session fields.
+- d5ae946: Publish TypeScript source files to npm so "Go to Definition" in IDEs navigates to real source code instead of compiled `.d.ts` declaration files. Source maps already pointed to the correct paths — the source files just weren't included in the published packages.
+- Updated dependencies [0d4a3f7]
+- Updated dependencies [4c1789b]
+- Updated dependencies [78c8968]
+- Updated dependencies [d5ae946]
+- Updated dependencies [0bb7837]
+- Updated dependencies [1eb863d]
+  - @shopify/shopify-api@13.0.0
+  - @shopify/shopify-app-session-storage@5.0.0
+
 ## 5.0.5
 
 ## 5.0.4

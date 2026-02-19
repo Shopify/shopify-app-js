@@ -1,5 +1,13 @@
 # @shopify/admin-api-client
 
+## 1.1.2
+
+### Patch Changes
+
+- d5ae946: Publish TypeScript source files to npm so "Go to Definition" in IDEs navigates to real source code instead of compiled `.d.ts` declaration files. Source maps already pointed to the correct paths — the source files just weren't included in the published packages.
+- Updated dependencies [d5ae946]
+  - @shopify/graphql-client@1.4.2
+
 ## 1.1.1
 
 ### Patch Changes

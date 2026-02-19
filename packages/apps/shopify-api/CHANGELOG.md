@@ -1,5 +1,103 @@
 # Changelog
 
+## 13.0.0
+
+### Major Changes
+
+- 78c8968: **BREAKING CHANGE**: Removed `customShopDomains` configuration parameter. Use `domainTransformations` instead, which provides both validation and transformation capabilities.
+
+  The `SHOP_CUSTOM_DOMAIN` environment variable is no longer supported.
+
+  **Migration Guide**:
+
+  If you were using `customShopDomains` for validation only:
+
+  ```typescript
+  // Before
+  shopifyApi({
+    customShopDomains: ['custom\.domain\.com'],
+  });
+
+  // After
+  shopifyApi({
+    domainTransformations: [
+      {
+        match: /^([a-zA-Z0-9][a-zA-Z0-9-_]*)\.custom\.domain\.com$/,
+        transform: '$1.custom.domain.com',
+      },
+    ],
+  });
+  ```
+
+- 0bb7837: Removed support for older API versions: 2022-10, 2023-01, 2023-04, 2023-07, 2023-10, 2024-01, 2024-04, 2024-07.
+
+  The corresponding `ApiVersion` enum values and REST resource directories have been removed.
+  Apps using these versions must update to `2024-10` or later.
+
+- 1eb863d: Add support for verifying webhooks delivered with the new `shopify-*` headers (replacing the previous `x-shopify-*` headers), and refactor webhook validation types to a discriminated union on `webhookType`.
+
+  **Breaking change in `@shopify/shopify-api`:** `WebhookFields` is now a discriminated union (`WebhooksWebhookFields | EventsWebhookFields`) keyed on the required `webhookType` field. `webhookId` only exists on `WebhooksWebhookFields`; `eventId` is required on `EventsWebhookFields`. Consumers must narrow on `webhookType` to access type-specific fields. Both `WebhooksWebhookFields` and `EventsWebhookFields` are exported for use in type narrowing.
+
+  Before:
+
+  ```typescript
+  const check = await shopify.webhooks.validate({rawBody, rawRequest: request});
+  if (check.valid) {
+    console.log(check.webhookId);
+  }
+  ```
+
+  After:
+
+  ```typescript
+  const check = await shopify.webhooks.validate({rawBody, rawRequest: request});
+  if (check.valid) {
+    if (check.webhookType === 'webhooks') {
+      console.log(check.webhookId); // only on webhooks
+      console.log(check.subTopic); // only on webhooks
+    } else {
+      console.log(check.eventId); // only on events
+      console.log(check.handle); // only on events
+      console.log(check.action); // only on events
+      console.log(check.resourceId); // only on events
+    }
+  }
+  ```
+
+  **`@shopify/shopify-app-react-router` and `@shopify/shopify-app-remix`:** The webhook context now includes new fields based on the new webhook headers, such as `webhookType`, `handle`, `action`, `resourceId`, `triggeredAt`, and `eventId`. For events webhooks, `webhookId` is set to the value of the `eventId` header for backwards compatibility — prefer using `eventId` directly for events webhooks, as `webhookId` will be removed from events webhooks in the next major version.
+
+  ```typescript
+  export const action = async ({request}: ActionFunctionArgs) => {
+    const {webhookType, handle, action, resourceId, triggeredAt, eventId} =
+      await authenticate.webhook(request);
+    return new Response();
+  };
+  ```
+
+### Patch Changes
+
+- 0d4a3f7: Updated `express` from v4 to v5 and `@types/express` from v4 to v5.
+
+  **Breaking changes for consumers of `@shopify/shopify-app-express`:**
+  - `express` has been moved from `dependencies` to `peerDependencies`. You must install `express@^5.0.0` directly in your project.
+  - Express 5 requires Node.js >= 18 (this package already requires >= 20).
+  - If you use wildcard route patterns, update them for Express 5 syntax. `app.use()` already matches all subpaths, so the `/*` suffix is unnecessary:
+    - `app.use('/api/*', ...)` → `app.use('/api', ...)`
+    - `app.use('/*', ...)` → `app.use('/', ...)`
+    - For `app.get`/`app.post` routes, wildcards must be named: `app.get('/api/*path', ...)`
+  - `req.body` now defaults to `undefined` (was `{}` in v4) when no body-parser middleware is applied. Ensure you use `express.json()`, `express.text()`, or similar middleware before accessing `req.body`.
+  - `req.query` is now read-only and uses the `querystring` parser by default instead of `qs`. Nested object query parameters are no longer parsed by default.
+  - See the [Express 5 migration guide](https://expressjs.com/en/guide/migrating-5.html) for the full list of changes.
+
+  Added a null guard in `graphqlProxy` to handle `req.body` being `undefined`.
+
+- 4c1789b: Updated `@graphql-codegen/typescript`, ` @parcel/watcher`, ` isbot` dependencies
+- d5ae946: Publish TypeScript source files to npm so "Go to Definition" in IDEs navigates to real source code instead of compiled `.d.ts` declaration files. Source maps already pointed to the correct paths — the source files just weren't included in the published packages.
+- Updated dependencies [d5ae946]
+  - @shopify/admin-api-client@1.1.2
+  - @shopify/graphql-client@1.4.2
+  - @shopify/storefront-api-client@1.0.10
+
 ## 12.3.0
 
 ### Minor Changes
