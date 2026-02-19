@@ -13,25 +13,29 @@ export const migrationList = [
 export async function addRefreshTokenFields(
   connection: MySqlConnection,
 ): Promise<void> {
-  // Check if columns already exist before attempting to add them
-  const [rows] = await connection.query(
-    `SELECT COLUMN_NAME
-     FROM INFORMATION_SCHEMA.COLUMNS
-     WHERE TABLE_SCHEMA = DATABASE()
-       AND TABLE_NAME = ?
-       AND COLUMN_NAME IN ('refreshToken', 'refreshTokenExpires')`,
-    [connection.sessionStorageIdentifier],
-  );
+  const hasColumn = async (columnName: string): Promise<boolean> => {
+    const [rows] = await connection.query(
+      `SELECT COLUMN_NAME
+       FROM INFORMATION_SCHEMA.COLUMNS
+       WHERE TABLE_SCHEMA = DATABASE()
+         AND TABLE_NAME = ?
+         AND COLUMN_NAME = ?`,
+      [connection.sessionStorageIdentifier, columnName],
+    );
+    return Array.isArray(rows) && rows.length > 0;
+  };
 
-  // If either column exists, skip migration (assume both exist or will be added together)
-  if (Array.isArray(rows) && rows.length > 0) {
-    return;
+  if (!(await hasColumn('refreshToken'))) {
+    await connection.query(
+      `ALTER TABLE ${connection.sessionStorageIdentifier} ADD COLUMN refreshToken varchar(255)`,
+    );
   }
 
-  // Add both columns
-  await connection.query(`ALTER TABLE ${connection.sessionStorageIdentifier}
-    ADD COLUMN refreshToken text,
-    ADD COLUMN refreshTokenExpires integer`);
+  if (!(await hasColumn('refreshTokenExpires'))) {
+    await connection.query(
+      `ALTER TABLE ${connection.sessionStorageIdentifier} ADD COLUMN refreshTokenExpires integer`,
+    );
+  }
 }
 
 // need change the sizr of the scope column from 255 to 1024 char

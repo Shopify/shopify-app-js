@@ -163,7 +163,7 @@ export class MySQLSessionStorage implements SessionStorage {
           expires integer,
           onlineAccessInfo varchar(255),
           accessToken varchar(255),
-          refreshToken text,
+          refreshToken varchar(255),
           refreshTokenExpires integer
         )
       `;

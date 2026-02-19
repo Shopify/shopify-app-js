@@ -38,7 +38,7 @@ const shopify = shopifyApp({
 });
 ```
 
-## Scalability
+## Expiring Offline Access Tokens
 
 This package supports the storage of refresh tokens and refresh token expiration dates, which enables apps to use [expiring offline access tokens](https://shopify.dev/docs/apps/auth/access-token-types/offline-access-tokens#expiring-offline-access-tokens). The required database columns are added automatically via a migration that runs on the first connection after upgrading.
 
