@@ -80,6 +80,52 @@ jobs:
             echo "files=$JSON_ARRAY" >> $GITHUB_OUTPUT
           fi
 
+      - name: Get package versions
+        id: package-versions
+        if: github.event.action != 'closed' && steps.changed-files.outputs.has_changes == 'true'
+        run: |
+          CHANGED_FILES='${{ steps.changed-files.outputs.files }}'
+
+          # Check if remix files changed and get version
+          if echo "$CHANGED_FILES" | grep -q "shopify-app-remix"; then
+            REMIX_VERSION=$(jq -r '.version' packages/apps/shopify-app-remix/package.json)
+            REMIX_MAJOR=$(echo "$REMIX_VERSION" | cut -d. -f1)
+            echo "remix_major=$REMIX_MAJOR" >> $GITHUB_OUTPUT
+            echo "Remix major version: v$REMIX_MAJOR"
+          fi
+
+          # Check if react-router files changed and get version
+          if echo "$CHANGED_FILES" | grep -q "shopify-app-react-router"; then
+            REACT_ROUTER_VERSION=$(jq -r '.version' packages/apps/shopify-app-react-router/package.json)
+            REACT_ROUTER_MAJOR=$(echo "$REACT_ROUTER_VERSION" | cut -d. -f1)
+            echo "react_router_major=$REACT_ROUTER_MAJOR" >> $GITHUB_OUTPUT
+            echo "React Router major version: v$REACT_ROUTER_MAJOR"
+          fi
+
+      - name: Build versioned file list
+        id: versioned-files
+        if: github.event.action != 'closed' && steps.changed-files.outputs.has_changes == 'true'
+        env:
+          CHANGED_FILES: ${{ steps.changed-files.outputs.files }}
+          REMIX_MAJOR: ${{ steps.package-versions.outputs.remix_major }}
+          REACT_ROUTER_MAJOR: ${{ steps.package-versions.outputs.react_router_major }}
+        run: |
+          # Build versioned file paths by prepending (vX) to each file
+          VERSIONED_FILES=$(echo "$CHANGED_FILES" | jq -c --arg remix_major "$REMIX_MAJOR" --arg react_router_major "$REACT_ROUTER_MAJOR" '
+            map(
+              if contains("shopify-app-remix") then
+                "(v\($remix_major))" + .
+              elif contains("shopify-app-react-router") then
+                "(v\($react_router_major))" + .
+              else
+                .
+              end
+            )
+          ')
+
+          echo "Versioned files: $VERSIONED_FILES"
+          echo "files=$VERSIONED_FILES" >> $GITHUB_OUTPUT
+
       - name: Dispatch to shopify-dev
         if: github.event.action == 'closed' || steps.changed-files.outputs.has_changes == 'true'
         env:
@@ -87,7 +133,7 @@ jobs:
           SOURCE_BRANCH: ${{ github.event.pull_request.base.ref }}
           SOURCE_REF: ${{ github.event.pull_request.head.ref }}
           PR_NUMBER: ${{ github.event.pull_request.number }}
-          CHANGED_FILES: ${{ steps.changed-files.outputs.files }}
+          CHANGED_FILES: ${{ steps.versioned-files.outputs.files }}
         run: |
           # Determine action based on PR event
           if [ "${{ github.event.action }}" = "closed" ]; then
