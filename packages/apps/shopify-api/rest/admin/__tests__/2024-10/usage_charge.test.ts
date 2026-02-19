@@ -23,7 +23,7 @@ describe('UsageCharge resource', () => {
 
   it('test_1', async () => {
     const shopify = shopifyApi(
-      testConfig({apiVersion: ApiVersion.July24, restResources}),
+      testConfig({apiVersion: ApiVersion.October24, restResources}),
     );
 
     queueMockResponse(JSON.stringify({"usage_charge": {"id": 1034618213, "description": "Super Mega Plan 1000 emails", "price": "1.00", "created_at": "2024-10-02T09:31:50-05:00", "currency": "USD", "balance_used": 11.0, "balance_remaining": 89.0, "risk_level": 0}}));
@@ -46,7 +46,7 @@ describe('UsageCharge resource', () => {
 
   it('test_2', async () => {
     const shopify = shopifyApi(
-      testConfig({apiVersion: ApiVersion.July24, restResources}),
+      testConfig({apiVersion: ApiVersion.October24, restResources}),
     );
 
     queueMockResponse(JSON.stringify({"usage_charges": [{"id": 1034618206, "description": "Super Mega Plan Add-ons", "price": "10.00", "created_at": "2024-10-02T09:31:46-05:00", "currency": "USD", "balance_used": 10.0, "balance_remaining": 90.0, "risk_level": 0}]}));
@@ -68,7 +68,7 @@ describe('UsageCharge resource', () => {
 
   it('test_3', async () => {
     const shopify = shopifyApi(
-      testConfig({apiVersion: ApiVersion.July24, restResources}),
+      testConfig({apiVersion: ApiVersion.October24, restResources}),
     );
 
     queueMockResponse(JSON.stringify({"usage_charge": {"id": 1034618211, "description": "Super Mega Plan Add-ons", "price": "10.00", "created_at": "2024-10-02T09:31:49-05:00", "currency": "USD", "balance_used": 10.0, "balance_remaining": 90.0, "risk_level": 0}}));

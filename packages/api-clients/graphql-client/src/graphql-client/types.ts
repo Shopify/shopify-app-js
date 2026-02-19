@@ -38,8 +38,9 @@ export interface ClientResponse<TData = any> extends FetchResponseBody<TData> {
   errors?: ResponseErrors;
 }
 
-export interface ClientStreamResponse<TData = any>
-  extends ClientResponse<TData> {
+export interface ClientStreamResponse<
+  TData = any,
+> extends ClientResponse<TData> {
   hasNext: boolean;
 }
 

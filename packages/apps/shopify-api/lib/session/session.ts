@@ -235,7 +235,7 @@ export class Session {
   public isExpired(withinMillisecondsOfExpiry = 0): boolean {
     return Boolean(
       this.expires &&
-        this.expires.getTime() - withinMillisecondsOfExpiry < Date.now(),
+      this.expires.getTime() - withinMillisecondsOfExpiry < Date.now(),
     );
   }
 

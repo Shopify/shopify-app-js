@@ -23,9 +23,9 @@ import {WITHIN_MILLISECONDS_OF_EXPIRY} from '../../../helpers';
 
 import {AuthorizationStrategy, SessionContext, OnErrorOptions} from './types';
 
-export class TokenExchangeStrategy<Config extends AppConfigArg>
-  implements AuthorizationStrategy
-{
+export class TokenExchangeStrategy<
+  Config extends AppConfigArg,
+> implements AuthorizationStrategy {
   protected api: Shopify<
     ApiConfigWithFutureFlags<Config['future']>,
     ApiFutureFlags<Config['future']>

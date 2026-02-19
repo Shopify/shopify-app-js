@@ -64,7 +64,6 @@ export function validateConfig<Params extends ConfigParams>(
     userAgentPrefix,
     logger,
     privateAppStorefrontAccessToken,
-    customShopDomains,
     billing,
     future,
     ...mandatoryParams
@@ -89,7 +88,6 @@ export function validateConfig<Params extends ConfigParams>(
     logger: {...config.logger, ...(logger || {})},
     privateAppStorefrontAccessToken:
       privateAppStorefrontAccessToken ?? config.privateAppStorefrontAccessToken,
-    customShopDomains: customShopDomains ?? config.customShopDomains,
     billing: billing ?? config.billing,
     future: future ?? config.future,
   });
