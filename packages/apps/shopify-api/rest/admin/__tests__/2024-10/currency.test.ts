@@ -23,7 +23,7 @@ describe('Currency resource', () => {
 
   it('test_1', async () => {
     const shopify = shopifyApi(
-      testConfig({apiVersion: ApiVersion.July24, restResources}),
+      testConfig({apiVersion: ApiVersion.October24, restResources}),
     );
 
     queueMockResponse(JSON.stringify({"currencies": [{"currency": "CAD", "rate_updated_at": "2018-01-23T19:01:01-05:00", "enabled": true}, {"currency": "EUR", "rate_updated_at": "2018-01-23T19:01:01-05:00", "enabled": true}, {"currency": "JPY", "rate_updated_at": "2018-01-23T19:01:01-05:00", "enabled": true}]}));

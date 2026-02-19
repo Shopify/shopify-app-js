@@ -199,14 +199,15 @@ export interface EventsWebhookFields extends BaseWebhookFields {
 
 export type WebhookFields = WebhooksWebhookFields | EventsWebhookFields;
 
-export interface WebhookValidationInvalid
-  extends Omit<ValidationInvalid, 'reason'> {
+export interface WebhookValidationInvalid extends Omit<
+  ValidationInvalid,
+  'reason'
+> {
   valid: false;
   reason: WebhookValidationErrorReasonType;
 }
 
-export interface WebhookValidationMissingHeaders
-  extends WebhookValidationInvalid {
+export interface WebhookValidationMissingHeaders extends WebhookValidationInvalid {
   reason: typeof WebhookValidationErrorReason.MissingHeaders;
   missingHeaders: string[];
 }

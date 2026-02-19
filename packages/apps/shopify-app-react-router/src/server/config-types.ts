@@ -30,16 +30,16 @@ export interface AppConfigArg<
   Storage extends SessionStorage = SessionStorage,
   Future extends FutureFlagOptions = FutureFlagOptions,
 > extends Omit<
-    ApiConfigArg<ApiFutureFlags<Future>>,
-    | 'hostName'
-    | 'hostScheme'
-    | 'apiVersion'
-    | 'isCustomStoreApp'
-    | 'isEmbeddedApp'
-    | 'future'
-    | 'billing'
-    | 'restResources'
-  > {
+  ApiConfigArg<ApiFutureFlags<Future>>,
+  | 'hostName'
+  | 'hostScheme'
+  | 'apiVersion'
+  | 'isCustomStoreApp'
+  | 'isEmbeddedApp'
+  | 'future'
+  | 'billing'
+  | 'restResources'
+> {
   /**
    * The URL your app is running on.
    *
@@ -279,8 +279,9 @@ export interface AppConfigArg<
   future?: Future;
 }
 
-export interface AppConfig<Storage extends SessionStorage = SessionStorage>
-  extends Omit<ApiConfig, 'future' | 'billing'> {
+export interface AppConfig<
+  Storage extends SessionStorage = SessionStorage,
+> extends Omit<ApiConfig, 'future' | 'billing'> {
   canUseLoginForm: boolean;
   appUrl: string;
   auth: AuthConfig;

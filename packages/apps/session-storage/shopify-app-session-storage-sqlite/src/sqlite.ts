@@ -9,8 +9,7 @@ import {SqliteConnection} from './sqlite-connection';
 import {migrationList} from './migrations';
 import {SqliteSessionStorageMigrator} from './sqlite-migrator';
 
-export interface SQLiteSessionStorageOptions
-  extends RdbmsSessionStorageOptions {}
+export interface SQLiteSessionStorageOptions extends RdbmsSessionStorageOptions {}
 
 const defaultSQLiteSessionStorageOptions: SQLiteSessionStorageOptions = {
   sessionTableName: 'shopify_sessions',

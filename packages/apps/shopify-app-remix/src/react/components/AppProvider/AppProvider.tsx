@@ -12,8 +12,10 @@ import {useEffect} from 'react';
 import {APP_BRIDGE_URL} from '../../const';
 import {RemixPolarisLink} from '../RemixPolarisLink';
 
-export interface AppProviderProps
-  extends Omit<PolarisAppProviderProps, 'linkComponent' | 'i18n'> {
+export interface AppProviderProps extends Omit<
+  PolarisAppProviderProps,
+  'linkComponent' | 'i18n'
+> {
   /**
    * The API key for your Shopify app. This is the `Client ID` from the Partner Dashboard.
    *

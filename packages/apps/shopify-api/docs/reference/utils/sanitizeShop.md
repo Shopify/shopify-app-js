@@ -2,7 +2,7 @@
 
 This method makes user inputs safer by ensuring that a given shop value is a properly formatted Shopify shop domain.
 
-> **Note**: if you're using custom shop domains for testing, you can use the `customShopDomains` setting to add allowed domains.
+> **Note**: For split-domain architectures (e.g., local development with separate admin and API domains), use `domainTransformations` to configure domain mappings that will be automatically applied during sanitization and validation.
 
 ## Example
 
