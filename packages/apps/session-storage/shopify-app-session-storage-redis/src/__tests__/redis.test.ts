@@ -72,7 +72,7 @@ describe('RedisSessionStorage', () => {
         await storage?.disconnect();
       });
 
-      batteryOfTests(async () => storage!, false, true);
+      batteryOfTests(async () => storage!);
     });
 
     describe('migrateAddShopKeyToTrackSessionsByShop tests', () => {

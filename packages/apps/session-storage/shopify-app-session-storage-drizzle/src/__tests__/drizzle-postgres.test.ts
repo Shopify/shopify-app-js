@@ -115,5 +115,5 @@ describe('DrizzleSessionStoragePostgres', () => {
     await exec(`podman rm -f ${containerId}`);
   });
 
-  batteryOfTests(async () => drizzleSessionStorage, true, true);
+  batteryOfTests(async () => drizzleSessionStorage);
 });

@@ -50,5 +50,5 @@ describe('MongoDBSessionStorage', () => {
     await exec(`podman rm -f ${containerId}`);
   });
 
-  batteryOfTests(async () => storage, false, true);
+  batteryOfTests(async () => storage);
 });

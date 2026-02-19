@@ -7,8 +7,6 @@ const testScopes = ['test_scope'];
 
 export function batteryOfTests(
   storageFactory: () => Promise<SessionStorage>,
-  testUserInfo = false,
-  testRefreshTokens = false,
 ) {
   it('can store and delete all kinds of sessions', async () => {
     const sessionFactories = [
@@ -150,8 +148,7 @@ export function batteryOfTests(
     expect(session.equals(storedSession)).toBeTruthy();
   });
 
-  if (testUserInfo) {
-    it('can store and delete sessions with user info', async () => {
+  it('can store and delete sessions with user info', async () => {
       const sessionFactories = [
         async () => {
           const session = new Session({
@@ -196,24 +193,6 @@ export function batteryOfTests(
         await expect(storage.deleteSession(sessionId)).resolves.toBeTruthy();
       }
     });
-  } else {
-    it('can store and delete sessions with online tokens', async () => {
-      const storage = await storageFactory();
-      const sessionId = 'test_session';
-      const session = new Session({
-        id: sessionId,
-        shop: 'shop',
-        state: 'state',
-        isOnline: true,
-        onlineAccessInfo: {associated_user: {id: 123}} as any,
-      });
-
-      await expect(storage.storeSession(session)).resolves.toBeTruthy();
-      const storedSession = await storage.loadSession(sessionId);
-
-      expect(session.equals(storedSession)).toBeTruthy();
-    });
-  }
 
   it('wrong ids return null sessions', async () => {
     const storage = await storageFactory();
@@ -341,8 +320,7 @@ export function batteryOfTests(
     expect(session.equals(storedSession)).toBeTruthy();
   });
 
-  if (testRefreshTokens) {
-    it('can store and delete sessions with refresh tokens', async () => {
+  it('can store and delete sessions with refresh tokens', async () => {
       const storage = await storageFactory();
       const sessionId = 'test_refresh_token_session';
 
@@ -397,5 +375,4 @@ export function batteryOfTests(
       await expect(storage.deleteSession(sessionId)).resolves.toBeTruthy();
       await expect(storage.loadSession(sessionId)).resolves.toBeUndefined();
     });
-  }
 }

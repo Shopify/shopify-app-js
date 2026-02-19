@@ -25,5 +25,5 @@ describe('KVSessionStorage', () => {
     await mf.dispose();
   });
 
-  batteryOfTests(async () => storage!, false, true);
+  batteryOfTests(async () => storage!);
 });

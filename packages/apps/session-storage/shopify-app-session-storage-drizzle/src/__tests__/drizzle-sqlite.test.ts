@@ -79,5 +79,5 @@ describe('SQLiteSessionStorage', () => {
     await fs.rm(sqliteDbFile, {force: true});
   });
 
-  batteryOfTests(async () => drizzleSessionStorage, true, true);
+  batteryOfTests(async () => drizzleSessionStorage);
 });
