@@ -27,4 +27,23 @@ const shopify = shopifyApp({
 });
 ```
 
+## Refresh Token Support
+
+This package supports storing refresh tokens for apps using expiring offline access tokens. No migration or schema changes are required. MongoDB's flexible schema automatically accommodates the additional fields.
+
+To enable expiring offline access tokens in your app:
+
+```js
+const shopify = shopifyApp({
+  sessionStorage: new MongoDBSessionStorage(
+    'mongodb://username:password@host/',
+    'database',
+  ),
+  future: {
+    expiringOfflineAccessTokens: true,
+  },
+  // ...
+});
+```
+
 If you prefer to use your own implementation of a session storage mechanism that uses the `SessionStorage` interface, see the [implementing session storage guide](../shopify-app-session-storage/implementing-session-storage.md).
