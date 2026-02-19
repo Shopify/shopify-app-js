@@ -17,7 +17,7 @@ export class KVSessionStorage implements SessionStorage {
   public async storeSession(session: Session): Promise<boolean> {
     await this.namespace.put(
       session.id,
-      JSON.stringify(session.toPropertyArray()),
+      JSON.stringify(session.toPropertyArray(true)),
     );
     await this.addShopIds(session.shop, [session.id]);
     return true;
@@ -28,7 +28,9 @@ export class KVSessionStorage implements SessionStorage {
       id,
       'json',
     );
-    return sessionData ? Session.fromPropertyArray(sessionData) : undefined;
+    return sessionData
+      ? Session.fromPropertyArray(sessionData, true)
+      : undefined;
   }
 
   public async deleteSession(id: string): Promise<boolean> {

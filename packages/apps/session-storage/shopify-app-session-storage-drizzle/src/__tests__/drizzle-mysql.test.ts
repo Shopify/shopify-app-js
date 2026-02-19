@@ -119,5 +119,5 @@ describe('DrizzleSessionStorageMySQL', () => {
     }
   });
 
-  batteryOfTests(async () => drizzleSessionStorage, false, true);
+  batteryOfTests(async () => drizzleSessionStorage);
 });
