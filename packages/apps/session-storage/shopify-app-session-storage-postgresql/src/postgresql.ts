@@ -163,7 +163,9 @@ export class PostgreSQLSessionStorage implements SessionStorage {
           "scope" varchar(255),
           "expires" integer,
           "onlineAccessInfo" varchar(255),
-          "accessToken" varchar(255)
+          "accessToken" varchar(255),
+          "refreshToken" varchar(255),
+          "refreshTokenExpires" bigint
         )
       `;
     await this.client.query(query);
@@ -172,6 +174,9 @@ export class PostgreSQLSessionStorage implements SessionStorage {
   private databaseRowToSession(row: any): Session {
     // convert seconds to milliseconds prior to creating Session object
     if (row.expires) row.expires *= 1000;
+    // PostgreSQL returns bigint as string, convert to number for Session
+    if (row.refreshTokenExpires)
+      row.refreshTokenExpires = Number(row.refreshTokenExpires);
     return Session.fromPropertyArray(Object.entries(row));
   }
 }
