@@ -28,7 +28,9 @@ export class KVSessionStorage implements SessionStorage {
       id,
       'json',
     );
-    return sessionData ? Session.fromPropertyArray(sessionData, true) : undefined;
+    return sessionData
+      ? Session.fromPropertyArray(sessionData, true)
+      : undefined;
   }
 
   public async deleteSession(id: string): Promise<boolean> {
