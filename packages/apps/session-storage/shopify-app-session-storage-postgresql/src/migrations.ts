@@ -8,6 +8,7 @@ export const migrationList = [
     migrateScopeFieldToVarchar1024,
   ),
   new MigrationOperation('migrateToCaseSensitivity', migrateToCaseSensitivity),
+  new MigrationOperation('migrateToRefreshTokens', migrateToRefreshTokens),
 ];
 
 // need change the size of the scope column from 255 to 1024 char
@@ -62,6 +63,47 @@ export async function migrateToCaseSensitivity(
 
   if (queries.length !== 0) {
     // wrap in a transaction
+    queries.unshift(`BEGIN`);
+    queries.push(`COMMIT`);
+
+    await connection.transaction(queries);
+  }
+}
+
+export async function migrateToRefreshTokens(
+  connection: PostgresConnection,
+): Promise<void> {
+  const queries: string[] = [];
+
+  const hasRefreshTokenColumn = `
+    SELECT EXISTS (
+      SELECT column_name FROM information_schema.columns
+      WHERE table_schema='public' AND table_name = '${connection.sessionStorageIdentifier}' AND column_name='refreshToken'
+    )
+  `;
+  const refreshTokenRows = await connection.query(hasRefreshTokenColumn);
+  if (!refreshTokenRows[0].exists) {
+    queries.push(
+      `ALTER TABLE "${connection.sessionStorageIdentifier}" ADD COLUMN "refreshToken" varchar(255)`,
+    );
+  }
+
+  const hasRefreshTokenExpiresColumn = `
+    SELECT EXISTS (
+      SELECT column_name FROM information_schema.columns
+      WHERE table_schema='public' AND table_name = '${connection.sessionStorageIdentifier}' AND column_name='refreshTokenExpires'
+    )
+  `;
+  const refreshTokenExpiresRows = await connection.query(
+    hasRefreshTokenExpiresColumn,
+  );
+  if (!refreshTokenExpiresRows[0].exists) {
+    queries.push(
+      `ALTER TABLE "${connection.sessionStorageIdentifier}" ADD COLUMN "refreshTokenExpires" bigint`,
+    );
+  }
+
+  if (queries.length !== 0) {
     queries.unshift(`BEGIN`);
     queries.push(`COMMIT`);
 
