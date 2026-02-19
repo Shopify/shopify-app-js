@@ -107,8 +107,17 @@
   },
   "files": [
     "dist/*",
+    "lib",
+    "runtime",
+    "adapters",
+    "rest",
+    "test-helpers",
+    "future",
     "!bundle/*",
     "!node_modules",
-    "!adapters/__e2etests__/*"
+    "!adapters/__e2etests__/*",
+    "!**/__tests__",
+    "!**/__test-helpers",
+    "!**/*.test.ts"
   ]
 }

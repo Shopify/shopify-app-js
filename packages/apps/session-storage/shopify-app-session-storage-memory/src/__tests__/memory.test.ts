@@ -8,5 +8,5 @@ describe('MemorySessionStorage', () => {
     storage = new MemorySessionStorage();
   });
 
-  batteryOfTests(async () => storage);
+  batteryOfTests(async () => storage, false, true);
 });

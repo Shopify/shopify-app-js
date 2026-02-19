@@ -6,14 +6,6 @@ export enum LogSeverity {
 }
 
 export enum ApiVersion {
-  October22 = '2022-10',
-  January23 = '2023-01',
-  April23 = '2023-04',
-  July23 = '2023-07',
-  October23 = '2023-10',
-  January24 = '2024-01',
-  April24 = '2024-04',
-  July24 = '2024-07',
   October24 = '2024-10',
   January25 = '2025-01',
   April25 = '2025-04',
@@ -140,4 +132,42 @@ export enum Method {
   Head = 'HEAD',
   Options = 'OPTIONS',
   Connect = 'CONNECT',
+}
+
+/**
+ * Configuration for transforming shop domains in split-domain architectures.
+ *
+ * @example
+ * // Template-based transformation
+ * {
+ *   match: /^([a-zA-Z0-9][a-zA-Z0-9-_]*)\.my\.shop\.dev$/,
+ *   transform: '$1.dev-api.shop.dev'
+ * }
+ *
+ * @example
+ * // Function-based transformation
+ * {
+ *   match: /^([^.]+)\.ui\.example\.com$/,
+ *   transform: (matches) => `${matches[1]}.api.example.com`
+ * }
+ */
+export interface DomainTransformation {
+  /**
+   * Pattern to match against shop domains (source domain).
+   * Can be a RegExp or string (converted to RegExp internally).
+   */
+  match: RegExp | string;
+
+  /**
+   * Transformation function or template string.
+   * - Template string: Uses $1, $2, etc. for capture group substitution
+   * - Function: Receives regex match groups and returns transformed domain
+   */
+  transform: ((matches: RegExpMatchArray) => string | null) | string;
+
+  /**
+   * Whether this transformation should also apply to host validation.
+   * @default true
+   */
+  includeHost?: boolean;
 }

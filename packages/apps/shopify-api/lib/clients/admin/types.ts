@@ -29,7 +29,9 @@ export interface RestClientParams {
   apiVersion?: ApiVersion;
 }
 
-export interface GraphQLClientResponse<TData = any>
-  extends Omit<ClientResponse<TData>, 'headers'> {
+export interface GraphQLClientResponse<TData = any> extends Omit<
+  ClientResponse<TData>,
+  'headers'
+> {
   headers?: Headers;
 }

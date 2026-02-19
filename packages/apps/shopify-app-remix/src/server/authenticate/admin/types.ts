@@ -102,8 +102,9 @@ interface AdminContextInternal<Config extends AppConfigArg> {
   cors: EnsureCORSFunction;
 }
 
-export interface EmbeddedAdminContext<Config extends AppConfigArg>
-  extends AdminContextInternal<Config> {
+export interface EmbeddedAdminContext<
+  Config extends AppConfigArg,
+> extends AdminContextInternal<Config> {
   /**
    * The decoded and validated session token for the request.
    *
@@ -191,8 +192,9 @@ export interface EmbeddedAdminContext<Config extends AppConfigArg>
    */
   redirect: RedirectFunction;
 }
-export interface NonEmbeddedAdminContext<Config extends AppConfigArg>
-  extends AdminContextInternal<Config> {}
+export interface NonEmbeddedAdminContext<
+  Config extends AppConfigArg,
+> extends AdminContextInternal<Config> {}
 
 type EmbeddedTypedAdminContext<Config extends AppConfigArg> =
   Config['isEmbeddedApp'] extends false

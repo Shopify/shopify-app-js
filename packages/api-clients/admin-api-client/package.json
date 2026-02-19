@@ -56,7 +56,10 @@
     "admin API"
   ],
   "files": [
-    "dist/**/*.*"
+    "dist/**/*.*",
+    "src",
+    "!src/**/__tests__",
+    "!src/**/*.test.ts"
   ],
   "dependencies": {
     "@shopify/graphql-client": "^1.4.1"
