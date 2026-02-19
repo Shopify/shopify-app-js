@@ -72,4 +72,20 @@ This policy must be attached to a user -- `dynamodb:Query` does not work with in
 }
 ```
 
+## Refresh Token Support
+
+This package supports storing refresh tokens for apps using expiring offline access tokens. No migration or schema changes are required. DynamoDB's flexible schema automatically accommodates the additional fields.
+
+To enable expiring offline access tokens in your app:
+
+```js
+const shopify = shopifyApp({
+  sessionStorage: new DynamoDBSessionStorage(),
+  future: {
+    expiringOfflineAccessTokens: true,
+  },
+  // ...
+});
+```
+
 If you prefer to use your own implementation of a session storage mechanism that uses the `SessionStorage` interface, see the [implementing session storage guide](../shopify-app-session-storage/implementing-session-storage.md).
