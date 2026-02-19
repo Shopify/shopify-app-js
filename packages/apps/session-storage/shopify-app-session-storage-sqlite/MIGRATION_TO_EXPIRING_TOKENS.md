@@ -21,7 +21,7 @@ BEGIN TRANSACTION;
 -- Rename existing table
 ALTER TABLE shopify_sessions RENAME TO shopify_sessions_backup;
 
--- Create new table with refresh token fields
+-- Create new table with refresh token and individual user info fields
 CREATE TABLE shopify_sessions (
   id varchar(255) NOT NULL PRIMARY KEY,
   shop varchar(255) NOT NULL,
@@ -30,15 +30,24 @@ CREATE TABLE shopify_sessions (
   expires integer,
   scope varchar(1024),
   accessToken varchar(255),
-  onlineAccessInfo varchar(255),
+  userId integer,
+  firstName varchar(255),
+  lastName varchar(255),
+  email varchar(255),
+  accountOwner integer,
+  locale varchar(255),
+  collaborator integer,
+  emailVerified integer,
   refreshToken varchar(255),
   refreshTokenExpires integer
 );
 
--- Copy data from backup
+-- Copy data from backup, extracting userId from the old onlineAccessInfo column
+-- refreshToken and refreshTokenExpires default to NULL for existing sessions
 INSERT INTO shopify_sessions
-  (id, shop, state, isOnline, expires, scope, accessToken, onlineAccessInfo)
-SELECT id, shop, state, isOnline, expires, scope, accessToken, onlineAccessInfo
+  (id, shop, state, isOnline, expires, scope, accessToken, userId)
+SELECT id, shop, state, isOnline, expires, scope, accessToken,
+  CASE WHEN onlineAccessInfo IS NOT NULL THEN CAST(onlineAccessInfo AS INTEGER) ELSE NULL END
 FROM shopify_sessions_backup;
 
 -- Drop backup table
