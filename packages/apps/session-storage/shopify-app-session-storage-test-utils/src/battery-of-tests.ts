@@ -7,7 +7,7 @@ const testScopes = ['test_scope'];
 
 export function batteryOfTests(
   storageFactory: () => Promise<SessionStorage>,
-  testUserInfo = false,
+  testUserInfo = true,
   testRefreshTokens = false,
 ) {
   it('can store and delete all kinds of sessions', async () => {
