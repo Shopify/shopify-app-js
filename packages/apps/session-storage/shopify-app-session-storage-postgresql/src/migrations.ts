@@ -96,10 +96,6 @@ export async function migrateToCaseSensitivity(
   }
 
   if (queries.length !== 0) {
-    // wrap in a transaction
-    queries.unshift(`BEGIN`);
-    queries.push(`COMMIT`);
-
     await connection.transaction(queries);
   }
 }
@@ -138,9 +134,6 @@ export async function migrateToRefreshTokens(
   }
 
   if (queries.length !== 0) {
-    queries.unshift(`BEGIN`);
-    queries.push(`COMMIT`);
-
     await connection.transaction(queries);
   }
 }
