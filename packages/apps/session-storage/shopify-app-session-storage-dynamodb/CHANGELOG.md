@@ -1,5 +1,49 @@
 # @shopify/shopify-app-session-storage-dynamodb
 
+## 6.0.0
+
+### Patch Changes
+
+- 81279d9: Updated `@aws-sdk/client-dynamodb`, ` @aws-sdk/util-dynamodb` dependencies
+- a31b314: Updated `@aws-sdk/client-dynamodb`, ` @aws-sdk/util-dynamodb` dependencies
+- d5ae946: Publish TypeScript source files to npm so "Go to Definition" in IDEs navigates to real source code instead of compiled `.d.ts` declaration files. Source maps already pointed to the correct paths — the source files just weren't included in the published packages.
+- 57b8c0d: Fix refresh token storage by properly serializing Date objects to ISO strings.
+
+  Previously, DynamoDB storage would fail when attempting to store sessions with `refreshTokenExpires` because DynamoDB cannot natively store JavaScript Date objects. This change explicitly converts `refreshTokenExpires` to an ISO string during serialization and back to a Date during deserialization, matching the existing pattern for the `expires` field.
+
+  ## Changes
+  - Add explicit `refreshTokenExpires` Date serialization to ISO string
+  - Add explicit `refreshTokenExpires` deserialization from ISO string to Date
+  - Enable refresh token tests in batteryOfTests suite
+
+  ## Using Refresh Tokens
+
+  To enable expiring offline access tokens:
+
+  ```typescript
+  import {shopifyApp} from '@shopify/shopify-app-react-router/server';
+  import {DynamoDBSessionStorage} from '@shopify/shopify-app-session-storage-dynamodb';
+
+  const shopify = shopifyApp({
+    future: {
+      expiringOfflineAccessTokens: true,
+    },
+    sessionStorage: new DynamoDBSessionStorage(),
+    // ... other config
+  });
+  ```
+
+  **Note**: No migration required. DynamoDB's flexible schema automatically handles the new optional fields. Existing sessions without refresh tokens continue to work.
+
+- Updated dependencies [0d4a3f7]
+- Updated dependencies [4c1789b]
+- Updated dependencies [78c8968]
+- Updated dependencies [d5ae946]
+- Updated dependencies [0bb7837]
+- Updated dependencies [1eb863d]
+  - @shopify/shopify-api@13.0.0
+  - @shopify/shopify-app-session-storage@5.0.0
+
 ## 5.0.7
 
 ### Patch Changes

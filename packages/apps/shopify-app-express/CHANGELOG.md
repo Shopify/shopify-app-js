@@ -1,5 +1,63 @@
 # Changelog
 
+## 7.0.0
+
+### Major Changes
+
+- 0d4a3f7: Updated `express` from v4 to v5 and `@types/express` from v4 to v5.
+
+  **Breaking changes for consumers of `@shopify/shopify-app-express`:**
+  - `express` has been moved from `dependencies` to `peerDependencies`. You must install `express@^5.0.0` directly in your project.
+  - Express 5 requires Node.js >= 18 (this package already requires >= 20).
+  - If you use wildcard route patterns, update them for Express 5 syntax. `app.use()` already matches all subpaths, so the `/*` suffix is unnecessary:
+    - `app.use('/api/*', ...)` → `app.use('/api', ...)`
+    - `app.use('/*', ...)` → `app.use('/', ...)`
+    - For `app.get`/`app.post` routes, wildcards must be named: `app.get('/api/*path', ...)`
+  - `req.body` now defaults to `undefined` (was `{}` in v4) when no body-parser middleware is applied. Ensure you use `express.json()`, `express.text()`, or similar middleware before accessing `req.body`.
+  - `req.query` is now read-only and uses the `querystring` parser by default instead of `qs`. Nested object query parameters are no longer parsed by default.
+  - See the [Express 5 migration guide](https://expressjs.com/en/guide/migrating-5.html) for the full list of changes.
+
+  Added a null guard in `graphqlProxy` to handle `req.body` being `undefined`.
+
+- 78c8968: **BREAKING CHANGE**: Removed `customShopDomains` configuration parameter. Use `domainTransformations` instead, which provides both validation and transformation capabilities.
+
+  The `SHOP_CUSTOM_DOMAIN` environment variable is no longer supported.
+
+  **Migration Guide**:
+
+  If you were using `customShopDomains` for validation only:
+
+  ```typescript
+  // Before
+  shopifyApi({
+    customShopDomains: ['custom\.domain\.com'],
+  });
+
+  // After
+  shopifyApi({
+    domainTransformations: [
+      {
+        match: /^([a-zA-Z0-9][a-zA-Z0-9-_]*)\.custom\.domain\.com$/,
+        transform: '$1.custom.domain.com',
+      },
+    ],
+  });
+  ```
+
+### Patch Changes
+
+- d5ae946: Publish TypeScript source files to npm so "Go to Definition" in IDEs navigates to real source code instead of compiled `.d.ts` declaration files. Source maps already pointed to the correct paths — the source files just weren't included in the published packages.
+- Updated dependencies [0d4a3f7]
+- Updated dependencies [4c1789b]
+- Updated dependencies [78c8968]
+- Updated dependencies [b2fd3f0]
+- Updated dependencies [d5ae946]
+- Updated dependencies [0bb7837]
+- Updated dependencies [1eb863d]
+  - @shopify/shopify-api@13.0.0
+  - @shopify/shopify-app-session-storage-memory@6.0.0
+  - @shopify/shopify-app-session-storage@5.0.0
+
 ## 6.0.5
 
 ### Patch Changes

@@ -1,5 +1,24 @@
 # @shopify/shopify-app-session-storage-mongodb
 
+## 6.0.0
+
+### Major Changes
+
+- 1a45cbe: Updated `mongodb` from v6 to v7
+
+### Patch Changes
+
+- ef069f1: Document refresh token support in README. MongoDB storage already supports refresh tokens through its flexible schema. No code changes or migrations required.
+- d5ae946: Publish TypeScript source files to npm so "Go to Definition" in IDEs navigates to real source code instead of compiled `.d.ts` declaration files. Source maps already pointed to the correct paths — the source files just weren't included in the published packages.
+- Updated dependencies [0d4a3f7]
+- Updated dependencies [4c1789b]
+- Updated dependencies [78c8968]
+- Updated dependencies [d5ae946]
+- Updated dependencies [0bb7837]
+- Updated dependencies [1eb863d]
+  - @shopify/shopify-api@13.0.0
+  - @shopify/shopify-app-session-storage@5.0.0
+
 ## 5.0.5
 
 ### Patch Changes

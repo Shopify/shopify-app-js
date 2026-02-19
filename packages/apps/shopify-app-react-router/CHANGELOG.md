@@ -1,5 +1,89 @@
 # @shopify/shopify-app-react-router
 
+## 1.2.0
+
+### Minor Changes
+
+- 78c8968: **BREAKING CHANGE**: Removed `customShopDomains` configuration parameter. Use `domainTransformations` instead, which provides both validation and transformation capabilities.
+
+  The `SHOP_CUSTOM_DOMAIN` environment variable is no longer supported.
+
+  **Migration Guide**:
+
+  If you were using `customShopDomains` for validation only:
+
+  ```typescript
+  // Before
+  shopifyApi({
+    customShopDomains: ['custom\.domain\.com'],
+  });
+
+  // After
+  shopifyApi({
+    domainTransformations: [
+      {
+        match: /^([a-zA-Z0-9][a-zA-Z0-9-_]*)\.custom\.domain\.com$/,
+        transform: '$1.custom.domain.com',
+      },
+    ],
+  });
+  ```
+
+- 1eb863d: Add support for verifying webhooks delivered with the new `shopify-*` headers (replacing the previous `x-shopify-*` headers), and refactor webhook validation types to a discriminated union on `webhookType`.
+
+  **Breaking change in `@shopify/shopify-api`:** `WebhookFields` is now a discriminated union (`WebhooksWebhookFields | EventsWebhookFields`) keyed on the required `webhookType` field. `webhookId` only exists on `WebhooksWebhookFields`; `eventId` is required on `EventsWebhookFields`. Consumers must narrow on `webhookType` to access type-specific fields. Both `WebhooksWebhookFields` and `EventsWebhookFields` are exported for use in type narrowing.
+
+  Before:
+
+  ```typescript
+  const check = await shopify.webhooks.validate({rawBody, rawRequest: request});
+  if (check.valid) {
+    console.log(check.webhookId);
+  }
+  ```
+
+  After:
+
+  ```typescript
+  const check = await shopify.webhooks.validate({rawBody, rawRequest: request});
+  if (check.valid) {
+    if (check.webhookType === 'webhooks') {
+      console.log(check.webhookId); // only on webhooks
+      console.log(check.subTopic); // only on webhooks
+    } else {
+      console.log(check.eventId); // only on events
+      console.log(check.handle); // only on events
+      console.log(check.action); // only on events
+      console.log(check.resourceId); // only on events
+    }
+  }
+  ```
+
+  **`@shopify/shopify-app-react-router` and `@shopify/shopify-app-remix`:** The webhook context now includes new fields based on the new webhook headers, such as `webhookType`, `handle`, `action`, `resourceId`, `triggeredAt`, and `eventId`. For events webhooks, `webhookId` is set to the value of the `eventId` header for backwards compatibility — prefer using `eventId` directly for events webhooks, as `webhookId` will be removed from events webhooks in the next major version.
+
+  ```typescript
+  export const action = async ({request}: ActionFunctionArgs) => {
+    const {webhookType, handle, action, resourceId, triggeredAt, eventId} =
+      await authenticate.webhook(request);
+    return new Response();
+  };
+  ```
+
+### Patch Changes
+
+- 4c1789b: Updated `@graphql-codegen/typescript`, ` @parcel/watcher`, ` isbot` dependencies
+- d5ae946: Publish TypeScript source files to npm so "Go to Definition" in IDEs navigates to real source code instead of compiled `.d.ts` declaration files. Source maps already pointed to the correct paths — the source files just weren't included in the published packages.
+- Updated dependencies [0d4a3f7]
+- Updated dependencies [4c1789b]
+- Updated dependencies [78c8968]
+- Updated dependencies [d5ae946]
+- Updated dependencies [0bb7837]
+- Updated dependencies [1eb863d]
+  - @shopify/shopify-api@13.0.0
+  - @shopify/admin-api-client@1.1.2
+  - @shopify/storefront-api-client@1.0.10
+  - @shopify/shopify-app-session-storage@5.0.0
+
 ## 1.1.1
 
 ### Patch Changes
