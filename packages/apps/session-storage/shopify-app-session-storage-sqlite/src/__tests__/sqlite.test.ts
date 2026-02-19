@@ -30,7 +30,7 @@ describe('SQLiteSessionStorage', () => {
       storage = new SQLiteSessionStorage(sqliteDbFile);
     });
 
-    batteryOfTests(async () => storage);
+    batteryOfTests(async () => storage, false, true);
   });
 
   describe('with database constructor', () => {
@@ -38,6 +38,6 @@ describe('SQLiteSessionStorage', () => {
       storage = new SQLiteSessionStorage(new sqlite3.Database(sqliteDbFile));
     });
 
-    batteryOfTests(async () => storage);
+    batteryOfTests(async () => storage, false, true);
   });
 });
