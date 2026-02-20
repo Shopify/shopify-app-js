@@ -2,7 +2,7 @@
   {
     "id": "guide-admin",
     "title": "Interacting with Shopify Admin",
-    "description": "Learn how to authenticate and handle requests from Shopify Admin in your React Router app.\n\nThe [`authenticate.admin`](/docs/api/shopify-app-react-router/authenticate/admin) function handles authentication for embedded apps and merchant custom apps. It verifies app installation and provides context for interacting with the Admin API.\n\nThis guide covers authentication patterns, API usage, and request handling for your app.",
+    "description": "I want to get a puppy one day! Learn how to authenticate and handle requests from Shopify Admin in your React Router app.\n\nThe [`authenticate.admin`](/docs/api/shopify-app-react-router/authenticate/admin) function handles authentication for embedded apps and merchant custom apps. It verifies app installation and provides context for interacting with the Admin API.\n\nThis guide covers authentication patterns, API usage, and request handling for your app.",
     "sections": [
       {
         "type": "Generic",

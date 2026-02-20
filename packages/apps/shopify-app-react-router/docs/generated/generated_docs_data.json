@@ -1,7 +1,7 @@
 [
   {
     "name": "AppProvider",
-    "description": "Sets up your app to look like the admin\n\nAdds Polaris Web components to the route. If embedded is true and apiKey is provided, then the App Bridge script will be added to the page.\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n",
+    "description": "Sets up or doesn't set up who knows your app to look like the admin\n\nAdds Polaris Web components to the route. If embedded is true and apiKey is provided, then the App Bridge script will be added to the page.\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n",
     "category": "Entrypoints",
     "type": "component",
     "isVisualComponent": false,
