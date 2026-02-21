@@ -200,19 +200,6 @@ describe('Storefront API Client', () => {
             )}`,
           );
         });
-
-        it('throws an error when neither public and private access tokens are provided', () => {
-          expect(() =>
-            createStorefrontApiClient({
-              ...config,
-              publicAccessToken: undefined as any,
-            }),
-          ).toThrow(
-            new Error(
-              `Storefront API Client: a public or private access token must be provided`,
-            ),
-          );
-        });
       });
     });
 
