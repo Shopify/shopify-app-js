@@ -77,5 +77,5 @@ export const mockFetch: AbstractFetchFunc = async (url, init) => {
 };
 
 export function mockRuntimeString() {
-  return 'Mock adapter';
+  return 'MockAdapterV1';
 }

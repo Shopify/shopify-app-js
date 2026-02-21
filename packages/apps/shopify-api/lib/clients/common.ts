@@ -10,14 +10,14 @@ import {LIBRARY_NAME, StatusCode} from '../types';
 import {ConfigInterface} from '../base-types';
 import {SHOPIFY_API_LIBRARY_VERSION} from '../version';
 import {
-  abstractRuntimeString,
+  getAbstractRuntimeString,
   canonicalizeHeaders,
   getHeader,
 } from '../../runtime';
 import {logger} from '../logger';
 
 export function getUserAgent(config: ConfigInterface): string {
-  let userAgentPrefix = `${LIBRARY_NAME} v${SHOPIFY_API_LIBRARY_VERSION} | ${abstractRuntimeString()}`;
+  let userAgentPrefix = `${LIBRARY_NAME} v${SHOPIFY_API_LIBRARY_VERSION} | ${getAbstractRuntimeString()}`;
   if (config.userAgentPrefix) {
     userAgentPrefix = `${config.userAgentPrefix} | ${userAgentPrefix}`;
   }
