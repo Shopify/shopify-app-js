@@ -17,7 +17,6 @@ export const WEBHOOK_HEADER_NAMES = {
     domain: ShopifyHeader.Domain,
     apiVersion: ShopifyHeader.ApiVersion,
     webhookId: ShopifyHeader.WebhookId,
-    subTopic: ShopifyHeader.SubTopic,
     name: ShopifyHeader.Name,
     triggeredAt: ShopifyHeader.TriggeredAt,
     eventId: ShopifyHeader.EventId,
@@ -47,7 +46,6 @@ export type WebhookHandlerFunction = (
   body: string,
   webhookId: string,
   apiVersion?: string,
-  subTopic?: string,
   context?: any,
 ) => Promise<void>;
 
@@ -55,7 +53,6 @@ interface BaseWebhookHandler {
   id?: string;
   includeFields?: string[];
   metafieldNamespaces?: string[];
-  subTopic?: string;
   context?: any;
 }
 
@@ -184,7 +181,6 @@ interface BaseWebhookFields {
 export interface WebhooksWebhookFields extends BaseWebhookFields {
   webhookType: typeof WebhookType.Webhooks;
   webhookId: string;
-  subTopic?: string;
   name?: string;
   eventId?: string;
 }

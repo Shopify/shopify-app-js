@@ -28,7 +28,6 @@ export function headers({
   hmac = 'fake',
   topic = 'products/create',
   webhookId = '123456789',
-  subTopic = '',
   lowercase = false,
   webhookType = 'webhooks' as WebhookTypeValue,
   // Events-specific fields
@@ -45,7 +44,6 @@ export function headers({
   hmac?: string;
   topic?: string;
   webhookId?: string;
-  subTopic?: string;
   lowercase?: boolean;
   webhookType?: WebhookTypeValue;
   handle?: string;
@@ -89,13 +87,6 @@ export function headers({
     [lowercase
       ? ShopifyHeader.WebhookId.toLowerCase()
       : ShopifyHeader.WebhookId]: webhookId,
-    ...(subTopic
-      ? {
-          [lowercase
-            ? ShopifyHeader.SubTopic.toLowerCase()
-            : ShopifyHeader.SubTopic]: subTopic,
-        }
-      : {}),
     ...(name && {[lowercase ? 'x-shopify-name' : 'X-Shopify-Name']: name}),
     ...(triggeredAt && {
       [lowercase ? 'x-shopify-triggered-at' : 'X-Shopify-Triggered-At']:
