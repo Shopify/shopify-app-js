@@ -1,3 +1,5 @@
+import {vi, type Mock} from 'vitest';
+
 import request from 'supertest';
 
 import {queueMockResponse} from '../../__tests__/test-helper';
@@ -27,12 +29,12 @@ describe('webhooks', () => {
     const topic = 'PRODUCTS_CREATE';
     const handler1: HttpWebhookHandlerWithCallback = {
       ...HTTP_HANDLER,
-      callback: jest.fn(),
+      callback: vi.fn(),
     };
     const handler2: HttpWebhookHandlerWithCallback = {...HTTP_HANDLER};
     const handler3: HttpWebhookHandlerWithCallback = {
       ...HTTP_HANDLER,
-      callback: jest.fn(),
+      callback: vi.fn(),
     };
 
     shopify.webhooks.addHandlers({[topic]: handler1});
@@ -172,11 +174,11 @@ describe('dual webhook registry instances', () => {
   let shopify2: Shopify;
 
   beforeEach(async () => {
-    handler1 = {...HTTP_HANDLER, callbackUrl: '/webhooks', callback: jest.fn()};
+    handler1 = {...HTTP_HANDLER, callbackUrl: '/webhooks', callback: vi.fn()};
     handler2 = {
       ...HTTP_HANDLER,
       callbackUrl: '/webhooks2',
-      callback: jest.fn(),
+      callback: vi.fn(),
     };
 
     shopify = shopifyApi(
@@ -275,8 +277,8 @@ describe('dual webhook registry instances', () => {
     expect(handler1.callback).toHaveBeenCalled();
     expect(handler2.callback).not.toHaveBeenCalled();
 
-    (handler1.callback as jest.Mock).mockClear();
-    (handler2.callback as jest.Mock).mockClear();
+    (handler1.callback as Mock).mockClear();
+    (handler2.callback as Mock).mockClear();
 
     response = await request(app)
       .post('/webhooks2')

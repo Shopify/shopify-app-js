@@ -2,16 +2,17 @@ import {
   getCurrentApiVersion,
   getCurrentSupportedApiVersions,
 } from '../api-versions';
+import {vi} from 'vitest';
 
 const mockDate = new Date('2024-10-15');
 
 describe('getCurrentApiVersion()', () => {
   beforeEach(() => {
-    jest.spyOn(global, 'Date').mockImplementation(() => mockDate);
+    vi.spyOn(global, 'Date').mockImplementation(() => mockDate);
   });
 
   afterEach(() => {
-    jest.restoreAllMocks();
+    vi.restoreAllMocks();
   });
 
   it('returns the current API version based on the current date', () => {
@@ -27,11 +28,11 @@ describe('getCurrentApiVersion()', () => {
 
 describe('getCurrentSupportedApiVersions()', () => {
   beforeEach(() => {
-    jest.spyOn(global, 'Date').mockImplementation(() => mockDate);
+    vi.spyOn(global, 'Date').mockImplementation(() => mockDate);
   });
 
   afterEach(() => {
-    jest.restoreAllMocks();
+    vi.restoreAllMocks();
   });
 
   it('returns the a list of supported API version based on the current date', () => {

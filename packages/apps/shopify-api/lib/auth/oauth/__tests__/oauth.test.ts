@@ -1,3 +1,5 @@
+import {vi} from 'vitest';
+
 import querystring from 'querystring';
 
 import * as ShopifyErrors from '../../../error';
@@ -18,7 +20,7 @@ import {getOfflineId} from '../../../session/session-utils';
 import {shopifyApi} from '../../..';
 
 const VALID_NONCE = 'noncenoncenonce';
-jest.mock('../nonce', () => ({nonce: jest.fn(() => VALID_NONCE)}));
+vi.mock('../nonce', () => ({nonce: vi.fn(() => VALID_NONCE)}));
 
 type QueryMock = Record<string, any>;
 
@@ -29,7 +31,7 @@ beforeEach(() => {
 });
 
 afterEach(() => {
-  jest.clearAllMocks();
+  vi.clearAllMocks();
 });
 
 describe('beginAuth', () => {

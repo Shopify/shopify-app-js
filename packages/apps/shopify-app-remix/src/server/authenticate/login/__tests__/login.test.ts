@@ -1,3 +1,4 @@
+import {vi} from 'vitest';
 import {LoginErrorType, shopifyApp} from '../../../index';
 import {
   APP_URL,
@@ -25,7 +26,7 @@ describe('login helper', () => {
 
   it('does not access formData if method is GET', async () => {
     // GIVEN
-    const formDataMock = jest.fn();
+    const formDataMock = vi.fn();
     const shopify = shopifyApp(testConfig());
     const requestMock = {
       url: `${APP_URL}/auth/login?shop=${TEST_SHOP}`,

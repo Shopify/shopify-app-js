@@ -34,42 +34,13 @@
     "lint": "eslint .",
     "build": "pnpm tsc -p ./tsconfig.build.json && pnpm rollup",
     "tsc": "tsc",
-    "test": "jest",
+    "test": "vitest run",
     "test:ci": "pnpm test",
     "rollup": "rollup -c --bundleConfigAsCjs",
     "clean": "rimraf dist/*",
     "changeset": "changeset",
     "version": "changeset version",
     "release": "pnpm build && changeset publish"
-  },
-  "jest": {
-    "projects": [
-      {
-        "displayName": {
-          "name": "test:browser",
-          "color": "blue"
-        },
-        "testEnvironment": "jsdom",
-        "testPathIgnorePatterns": [
-          "(/__tests__/.*|(\\.|/)server(\\.|/)(test|spec))\\.[jt]sx?$"
-        ]
-      },
-      {
-        "displayName": {
-          "name": "test:server",
-          "color": "yellow"
-        },
-        "testPathIgnorePatterns": [
-          "(/__tests__/.*|(\\.|/)browser(\\.|/)(test|spec))\\.[jt]sx?$"
-        ]
-      }
-    ],
-    "setupFilesAfterEnv": [
-      "./src/tests/setupTests.ts"
-    ],
-    "transform": {
-      ".*": "babel-jest"
-    }
   },
   "publishConfig": {
     "access": "public"

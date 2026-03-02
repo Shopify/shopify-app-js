@@ -1,3 +1,5 @@
+import {vi} from 'vitest';
+
 import {testConfig} from '../../__tests__/test-config';
 import {queueMockResponse} from '../../__tests__/test-helper';
 import {LogSeverity} from '../../types';
@@ -10,7 +12,7 @@ describe('fetchRequest', () => {
 
   it('skips logging if logger.httpRequests is false', async () => {
     // GIVEN
-    const logFn = jest.fn();
+    const logFn = vi.fn();
     const config = testConfig({
       logger: {log: logFn, level: LogSeverity.Debug, httpRequests: false},
     });
@@ -29,7 +31,7 @@ describe('fetchRequest', () => {
 
   it('skips logging if logger.level is higher than Debug', async () => {
     // GIVEN
-    const logFn = jest.fn();
+    const logFn = vi.fn();
     const config = testConfig({
       logger: {log: logFn, level: LogSeverity.Info, httpRequests: true},
     });
@@ -48,7 +50,7 @@ describe('fetchRequest', () => {
 
   it('logs GET requests when configured', async () => {
     // GIVEN
-    const logFn = jest.fn();
+    const logFn = vi.fn();
     const config = testConfig({
       logger: {log: logFn, level: LogSeverity.Debug, httpRequests: true},
     });
@@ -76,7 +78,7 @@ describe('fetchRequest', () => {
 
   it('logs POST requests with the body when configured', async () => {
     // GIVEN
-    const logFn = jest.fn();
+    const logFn = vi.fn();
     const config = testConfig({
       logger: {log: logFn, level: LogSeverity.Debug, httpRequests: true},
     });
@@ -115,7 +117,7 @@ describe('fetchRequest', () => {
 
   it('logs non-200 response codes', async () => {
     // GIVEN
-    const logFn = jest.fn();
+    const logFn = vi.fn();
     const config = testConfig({
       logger: {log: logFn, level: LogSeverity.Debug, httpRequests: true},
     });

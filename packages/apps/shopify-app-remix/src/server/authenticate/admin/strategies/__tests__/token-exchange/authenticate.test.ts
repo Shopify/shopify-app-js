@@ -1,3 +1,4 @@
+import {vi} from 'vitest';
 import {Session} from '@shopify/shopify-api';
 
 import {shopifyApp} from '../../../../..';
@@ -260,7 +261,7 @@ describe('authenticate', () => {
 
   test('Runs the afterAuth hooks passing', async () => {
     // GIVEN
-    const afterAuthMock = jest.fn();
+    const afterAuthMock = vi.fn();
     const config = testConfig({
       hooks: {
         afterAuth: afterAuthMock,

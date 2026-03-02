@@ -1,13 +1,14 @@
+import {vi, type Mock} from 'vitest';
 import {createGraphQLClient} from '@shopify/graphql-client';
 
 import {createStorefrontApiClient} from '../../storefront-api-client';
 
 import {mockApiVersions, graphqlClientMock, config} from './fixtures';
 
-jest.mock('@shopify/graphql-client', () => {
+vi.mock('@shopify/graphql-client', async () => {
   return {
-    ...jest.requireActual('@shopify/graphql-client'),
-    createGraphQLClient: jest.fn(),
+    ...(await vi.importActual('@shopify/graphql-client')),
+    createGraphQLClient: vi.fn(),
     getCurrentSupportedAPIVersions: () => mockApiVersions,
   };
 });
@@ -15,12 +16,12 @@ jest.mock('@shopify/graphql-client', () => {
 describe('Storefront API Client: Browser', () => {
   describe('createStorefrontApiClient()', () => {
     beforeEach(() => {
-      (createGraphQLClient as jest.Mock).mockReturnValue(graphqlClientMock);
+      (createGraphQLClient as Mock).mockReturnValue(graphqlClientMock);
     });
 
     afterEach(() => {
-      jest.resetAllMocks();
-      jest.restoreAllMocks();
+      vi.resetAllMocks();
+      vi.restoreAllMocks();
     });
 
     describe('client initialization', () => {

@@ -1,3 +1,4 @@
+import {vi, type Mock} from 'vitest';
 import {MemorySessionStorage} from '@shopify/shopify-app-session-storage-memory';
 import {SessionStorage} from '@shopify/shopify-app-session-storage';
 
@@ -12,14 +13,14 @@ import {FutureFlagOptions} from '../../future/flags';
 describe('ensureValidOfflineSession', () => {
   let sessionStorage: MemorySessionStorage;
   let params: BasicParams;
-  let mockRefreshToken: jest.Mock;
+  let mockRefreshToken: (Mock);
 
   describe('when no session exists', () => {
     beforeEach(() => {
       sessionStorage = new MemorySessionStorage();
       const config = testConfig({sessionStorage});
 
-      mockRefreshToken = jest.fn();
+      mockRefreshToken = vi.fn();
 
       // Create api using deriveApi
       const api = deriveApi(config);
@@ -39,7 +40,7 @@ describe('ensureValidOfflineSession', () => {
     });
 
     afterEach(() => {
-      jest.clearAllMocks();
+      vi.clearAllMocks();
     });
 
     it('returns undefined when session storage is empty', async () => {

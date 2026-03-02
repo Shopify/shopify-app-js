@@ -1,10 +1,12 @@
+import {vi} from 'vitest';
+
 import {shopifyApi} from '../../..';
 import {testConfig} from '../../../__tests__/test-config';
 import {queueMockResponse} from '../../../__tests__/test-helper';
 import {DataType} from '../../../clients/types';
 import * as ShopifyErrors from '../../../error';
 
-jest.useFakeTimers().setSystemTime(new Date('2023-11-11'));
+vi.useFakeTimers().setSystemTime(new Date('2023-11-11'));
 
 describe('refreshToken', () => {
   const shop = 'test-shop.myshopify.io';

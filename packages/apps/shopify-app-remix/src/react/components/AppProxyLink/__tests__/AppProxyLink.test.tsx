@@ -1,3 +1,4 @@
+import {vi} from 'vitest';
 import {mount} from '@shopify/react-testing';
 
 import '../../../__tests__/test-helper';
@@ -8,7 +9,7 @@ import {AppProxyProvider} from '../../AppProxyProvider';
 describe('<AppProxyLink />', () => {
   it('throws an error if used outside of an AppProxyProvider', () => {
     // GIVEN
-    jest.spyOn(console, 'error').mockImplementation(() => {});
+    vi.spyOn(console, 'error').mockImplementation(() => {});
 
     // WHEN
     expect(() =>

@@ -1,3 +1,4 @@
+import {vi} from 'vitest';
 import fetchMock from 'jest-fetch-mock';
 
 import {
@@ -6,6 +7,11 @@ import {
   DEFAULT_CLIENT_VERSION,
 } from '../../constants';
 import * as constants from '../../constants';
+
+// Allow mutation of ES module exports in tests
+vi.mock('../../constants', async (importOriginal) => {
+  return {...(await importOriginal<typeof import('../../constants')>())};
+});
 import {createAdminRestApiClient} from '../client';
 
 const successResponse = JSON.stringify({
@@ -27,7 +33,7 @@ describe('REST Admin API Client', () => {
 
   afterEach(() => {
     fetchMock.resetMocks();
-    jest.restoreAllMocks();
+    vi.restoreAllMocks();
   });
 
   describe('createAdminRestApiClient()', () => {
@@ -55,8 +61,8 @@ describe('REST Admin API Client', () => {
     });
 
     afterEach(() => {
-      jest.resetAllMocks();
-      jest.restoreAllMocks();
+      vi.resetAllMocks();
+      vi.restoreAllMocks();
     });
 
     it('can make GET request', async () => {
@@ -548,7 +554,7 @@ describe('REST Admin API Client', () => {
 
     it('logs requests and responses when given a logger', async () => {
       // GIVEN
-      const logger = jest.fn();
+      const logger = vi.fn();
       const client = createAdminRestApiClient({...config, logger});
 
       // WHEN
@@ -572,7 +578,7 @@ describe('REST Admin API Client', () => {
 
     it('logs retries and responses when given a logger', async () => {
       // GIVEN
-      const logger = jest.fn();
+      const logger = vi.fn();
       const client = createAdminRestApiClient({...config, logger});
 
       const retryResponse = new Response('Something went wrong!', {

@@ -1,3 +1,4 @@
+import {vi, type Mock} from 'vitest';
 import {createGraphQLClient, GraphQLClient} from '@shopify/graphql-client';
 import {AdminApiClient} from 'graphql/types';
 
@@ -12,10 +13,10 @@ const mockApiVersions = [
   'unstable',
 ];
 
-jest.mock('@shopify/graphql-client', () => {
+vi.mock('@shopify/graphql-client', async () => {
   return {
-    ...jest.requireActual('@shopify/graphql-client'),
-    createGraphQLClient: jest.fn(),
+    ...(await vi.importActual('@shopify/graphql-client')),
+    createGraphQLClient: vi.fn(),
     getCurrentSupportedApiVersions: () => mockApiVersions,
   };
 });
@@ -35,25 +36,25 @@ describe('Admin API Client', () => {
         headers: {},
         retries: 0,
       },
-      fetch: jest.fn(),
-      request: jest.fn(),
-      requestStream: jest.fn(),
+      fetch: vi.fn(),
+      request: vi.fn(),
+      requestStream: vi.fn(),
     };
 
     beforeEach(() => {
-      (createGraphQLClient as jest.Mock).mockReturnValue(graphqlClientMock);
+      (createGraphQLClient as Mock).mockReturnValue(graphqlClientMock);
     });
 
     afterEach(() => {
-      jest.resetAllMocks();
-      jest.restoreAllMocks();
+      vi.resetAllMocks();
+      vi.restoreAllMocks();
     });
 
     describe('client initialization', () => {
       it('calls the graphql client with headers and API URL', () => {
         createAdminApiClient({...config});
         expect(
-          (createGraphQLClient as jest.Mock).mock.calls[0][0],
+          (createGraphQLClient as Mock).mock.calls[0][0],
         ).toHaveProperty('headers', {
           'Content-Type': 'application/json',
           Accept: 'application/json',
@@ -61,7 +62,7 @@ describe('Admin API Client', () => {
           'User-Agent': 'Admin API Client vROLLUP_REPLACE_CLIENT_VERSION',
         });
         expect(
-          (createGraphQLClient as jest.Mock).mock.calls[0][0],
+          (createGraphQLClient as Mock).mock.calls[0][0],
         ).toHaveProperty('url', mockApiUrl);
       });
 
@@ -70,7 +71,7 @@ describe('Admin API Client', () => {
 
         expect(createGraphQLClient).toHaveBeenCalled();
         expect(
-          (createGraphQLClient as jest.Mock).mock.calls[0][0],
+          (createGraphQLClient as Mock).mock.calls[0][0],
         ).toHaveProperty('retries', 0);
       });
 
@@ -81,7 +82,7 @@ describe('Admin API Client', () => {
 
         expect(createGraphQLClient).toHaveBeenCalled();
         expect(
-          (createGraphQLClient as jest.Mock).mock.calls[0][0],
+          (createGraphQLClient as Mock).mock.calls[0][0],
         ).toHaveProperty('retries', retries);
       });
 
@@ -90,7 +91,7 @@ describe('Admin API Client', () => {
 
         createAdminApiClient({...config, userAgentPrefix});
         expect(
-          (createGraphQLClient as jest.Mock).mock.calls[0][0],
+          (createGraphQLClient as Mock).mock.calls[0][0],
         ).toHaveProperty('headers', {
           'Content-Type': 'application/json',
           Accept: 'application/json',
@@ -99,29 +100,29 @@ describe('Admin API Client', () => {
             'test-UAP | Admin API Client vROLLUP_REPLACE_CLIENT_VERSION',
         });
         expect(
-          (createGraphQLClient as jest.Mock).mock.calls[0][0],
+          (createGraphQLClient as Mock).mock.calls[0][0],
         ).toHaveProperty('url', mockApiUrl);
       });
 
       it('calls the graphql client with the provided customFetchApi', () => {
-        const customFetchApi = jest.fn();
+        const customFetchApi = vi.fn();
 
         createAdminApiClient({...config, customFetchApi});
 
         expect(createGraphQLClient).toHaveBeenCalled();
         expect(
-          (createGraphQLClient as jest.Mock).mock.calls[0][0],
+          (createGraphQLClient as Mock).mock.calls[0][0],
         ).toHaveProperty('customFetchApi', customFetchApi);
       });
 
       it('calls the graphql client with the provided logger', () => {
-        const logger = jest.fn();
+        const logger = vi.fn();
 
         createAdminApiClient({...config, logger});
 
         expect(createGraphQLClient).toHaveBeenCalled();
         expect(
-          (createGraphQLClient as jest.Mock).mock.calls[0][0],
+          (createGraphQLClient as Mock).mock.calls[0][0],
         ).toHaveProperty('logger', logger);
       });
 
@@ -189,7 +190,7 @@ describe('Admin API Client', () => {
         it('console warns when a unsupported api version is provided', () => {
           const consoleWarnSpy = jest
             .spyOn(global.console, 'warn')
-            .mockImplementation(jest.fn());
+            .mockImplementation(vi.fn());
 
           createAdminApiClient({
             ...config,
@@ -369,7 +370,7 @@ describe('Admin API Client', () => {
       it('console warns when a unsupported api version is provided', () => {
         const consoleWarnSpy = jest
           .spyOn(global.console, 'warn')
-          .mockImplementation(jest.fn());
+          .mockImplementation(vi.fn());
 
         const version = '2021-01';
         client.getApiUrl(version);

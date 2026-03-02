@@ -1,20 +1,21 @@
 import fetchMock from 'jest-fetch-mock';
 
 import {clientConfig, getValidClient} from './fixtures';
+import {vi} from 'vitest';
 
 describe('GraphQL Client', () => {
   fetchMock.enableMocks();
 
   beforeEach(() => {
-    jest
+    vi
       .spyOn(global, 'setTimeout')
-      .mockImplementation(jest.fn((resolve) => resolve() as any));
+      .mockImplementation(vi.fn((resolve) => resolve() as any));
     fetchMock.mockResponse(() => Promise.resolve(JSON.stringify({data: {}})));
   });
 
   afterEach(() => {
     fetchMock.resetMocks();
-    jest.restoreAllMocks();
+    vi.restoreAllMocks();
   });
 
   describe('createGraphQLClient()', () => {

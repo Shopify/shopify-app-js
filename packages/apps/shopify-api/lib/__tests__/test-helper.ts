@@ -1,3 +1,4 @@
+import type {TestAPI} from 'vitest';
 import * as jose from 'jose';
 import {compare} from 'compare-versions';
 
@@ -148,7 +149,7 @@ export async function createDummySession({
 export function testIfLibraryVersionIsAtLeast(
   version: string,
   testName: string,
-  testFn: jest.ProvidesCallback,
+  testFn: Parameters<TestAPI>[1],
 ) {
   describe(`when library version is at least ${version}`, () => {
     if (compare(SHOPIFY_API_LIBRARY_VERSION, version, '>=')) {

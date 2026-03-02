@@ -1,3 +1,4 @@
+import {vi} from 'vitest';
 import {GraphQLClient} from '@shopify/graphql-client';
 
 export const mockApiVersions = [
@@ -25,7 +26,7 @@ export const graphqlClientMock: GraphQLClient = {
     headers: {},
     retries: 0,
   },
-  fetch: jest.fn(),
-  request: jest.fn(),
-  requestStream: jest.fn(),
+  fetch: vi.fn(),
+  request: vi.fn(),
+  requestStream: vi.fn(),
 };

@@ -1,3 +1,4 @@
+import {vi} from 'vitest';
 import {ApiVersion, SESSION_COOKIE_NAME} from '@shopify/shopify-api';
 
 import {
@@ -45,7 +46,7 @@ it('scopes api is available without any future flags', async () => {
 it('when scopes are empty the request is not redirected', async () => {
   // GIVEN
   const {scopes} = await setUpNonEmbeddedFlow();
-  const spyRedirect = jest.spyOn(redirect, 'redirectToInstallPage');
+  const spyRedirect = vi.spyOn(redirect, 'redirectToInstallPage');
 
   // WHEN
   const response = await scopes.request([]);
@@ -58,7 +59,7 @@ it('when scopes are empty the request is not redirected', async () => {
 it('when all the scopes are already granted the request is not redirected', async () => {
   // GIVEN
   const {scopes} = await setUpNonEmbeddedFlow();
-  const spyRedirect = jest.spyOn(redirect, 'redirectToInstallPage');
+  const spyRedirect = vi.spyOn(redirect, 'redirectToInstallPage');
   await mockGraphqlRequest()({
     status: 200,
     responseContent: responses.WITH_GRANTED_AND_DECLARED,

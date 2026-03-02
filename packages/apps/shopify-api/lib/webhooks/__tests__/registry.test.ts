@@ -1,3 +1,5 @@
+import {vi} from 'vitest';
+
 import {LogSeverity} from '../../types';
 import {testConfig} from '../../__tests__/test-config';
 import {HttpWebhookHandlerWithCallback} from '../types';
@@ -24,11 +26,11 @@ describe('shopify.webhooks.addHandlers', () => {
 
     handler1 = {
       ...HTTP_HANDLER,
-      callback: jest.fn().mockImplementation(genericWebhookHandler),
+      callback: vi.fn().mockImplementation(genericWebhookHandler),
     };
     handler2 = {
       ...HTTP_HANDLER,
-      callback: jest.fn().mockImplementation(genericWebhookHandler),
+      callback: vi.fn().mockImplementation(genericWebhookHandler),
     };
 
     shopify.webhooks.addHandlers({PRODUCTS_CREATE: handler1});
@@ -45,8 +47,8 @@ describe('shopify.webhooks.addHandlers', () => {
   it('allows adding multiple of the same HTTP handler', async () => {
     const shopify = shopifyApi(testConfig());
 
-    handler1 = {...HTTP_HANDLER, callback: jest.fn()};
-    handler2 = {...HTTP_HANDLER, callback: jest.fn()};
+    handler1 = {...HTTP_HANDLER, callback: vi.fn()};
+    handler2 = {...HTTP_HANDLER, callback: vi.fn()};
 
     shopify.webhooks.addHandlers({PRODUCTS_CREATE: [handler1, handler2]});
 
@@ -91,7 +93,7 @@ describe('shopify.webhooks.addHandlers', () => {
 
     const handler3: HttpWebhookHandlerWithCallback = {
       ...HTTP_HANDLER,
-      callback: jest.fn().mockImplementation(genericWebhookHandler),
+      callback: vi.fn().mockImplementation(genericWebhookHandler),
     };
 
     await shopify.webhooks.addHandlers({

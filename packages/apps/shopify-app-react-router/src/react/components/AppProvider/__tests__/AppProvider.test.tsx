@@ -1,3 +1,4 @@
+import {vi} from 'vitest';
 import {mount} from '@shopify/react-testing';
 import {MemoryRouter} from 'react-router-dom';
 
@@ -6,15 +7,15 @@ import '../../../__tests__/test-helper';
 import {AppProvider} from '../AppProvider';
 
 // Mock react-router's useNavigate hook
-const mockNavigate = jest.fn();
-jest.mock('react-router', () => ({
-  ...jest.requireActual('react-router'),
+const mockNavigate = vi.fn();
+vi.mock('react-router', async () => ({
+  ...(await vi.importActual('react-router')),
   useNavigate: () => mockNavigate,
 }));
 
 describe('<AppProvider />', () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   const mountWithRouter = (children: React.ReactNode) => {
@@ -114,7 +115,7 @@ describe('<AppProvider />', () => {
     it('sets up navigation event listener', () => {
       // GIVEN
       const apiKey = 'test-api-key';
-      const addEventListenerSpy = jest.spyOn(document, 'addEventListener');
+      const addEventListenerSpy = vi.spyOn(document, 'addEventListener');
 
       // WHEN
       mountWithRouter(
@@ -137,7 +138,7 @@ describe('<AppProvider />', () => {
         navigate: null as ((event: Event) => void) | null,
       };
 
-      jest
+      vi
         .spyOn(document, 'addEventListener')
         .mockImplementation((event, handler) => {
           if (event === 'shopify:navigate') {
@@ -154,7 +155,7 @@ describe('<AppProvider />', () => {
 
       const mockEvent = {
         target: {
-          getAttribute: jest.fn().mockReturnValue('/test-path'),
+          getAttribute: vi.fn().mockReturnValue('/test-path'),
         },
       } as unknown as Event;
 
@@ -167,7 +168,7 @@ describe('<AppProvider />', () => {
     it('cleans up event listener on unmount', () => {
       // GIVEN
       const apiKey = 'test-api-key';
-      const removeEventListenerSpy = jest.spyOn(
+      const removeEventListenerSpy = vi.spyOn(
         document,
         'removeEventListener',
       );

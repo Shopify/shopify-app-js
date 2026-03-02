@@ -1,3 +1,5 @@
+import {vi} from 'vitest';
+
 import * as ShopifyErrors from '../error';
 import {validateConfig} from '../config';
 import {ConfigParams} from '../base-types';
@@ -16,7 +18,7 @@ describe('Config object', () => {
       isEmbeddedApp: true,
       isCustomStoreApp: false,
       logger: {
-        log: jest.fn(),
+        log: vi.fn(),
         level: LogSeverity.Debug,
         httpRequests: false,
         timestamps: false,

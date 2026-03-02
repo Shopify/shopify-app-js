@@ -1,6 +1,7 @@
 import fetchMock from 'jest-fetch-mock';
 
 import {GraphQLClient} from '../../types';
+import {vi, type Mock} from 'vitest';
 
 import {
   operation,
@@ -17,23 +18,23 @@ import {
 } from './common-tests';
 
 describe('GraphQL Client', () => {
-  let mockLogger: jest.Mock;
+  let mockLogger: Mock;
   let client: GraphQLClient;
 
   fetchMock.enableMocks();
 
   beforeEach(() => {
-    jest
+    vi
       .spyOn(global, 'setTimeout')
-      .mockImplementation(jest.fn((resolve) => resolve() as any));
+      .mockImplementation(vi.fn((resolve) => resolve() as any));
     fetchMock.mockResponse(() => Promise.resolve(JSON.stringify({data: {}})));
-    mockLogger = jest.fn();
+    mockLogger = vi.fn();
     client = getValidClient();
   });
 
   afterEach(() => {
     fetchMock.resetMocks();
-    jest.restoreAllMocks();
+    vi.restoreAllMocks();
   });
 
   describe('fetch()', () => {

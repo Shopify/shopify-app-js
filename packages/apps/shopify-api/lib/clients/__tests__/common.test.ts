@@ -1,3 +1,5 @@
+import {vi} from 'vitest';
+
 import {
   HTTPResponseLog,
   HTTPRetryLog,
@@ -10,23 +12,23 @@ import {testConfig} from '../../__tests__/test-config';
 import * as loggerModule from '../../logger';
 
 // Mock the logger module
-jest.mock('../../logger', () => ({
-  logger: jest.fn(),
+vi.mock('../../logger', () => ({
+  logger: vi.fn(),
 }));
 
-const mockLogger = jest.mocked(loggerModule.logger);
-const mockDebug = jest.fn();
+const mockLogger = vi.mocked(loggerModule.logger);
+const mockDebug = vi.fn();
 
 describe('clientLoggerFactory', () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
     mockLogger.mockReturnValue({
-      log: jest.fn(),
+      log: vi.fn(),
       debug: mockDebug,
-      info: jest.fn(),
-      warning: jest.fn(),
-      error: jest.fn(),
-      deprecated: jest.fn(),
+      info: vi.fn(),
+      warning: vi.fn(),
+      error: vi.fn(),
+      deprecated: vi.fn(),
     });
   });
 

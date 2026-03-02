@@ -1,4 +1,5 @@
 import {validateDomainAndGetStoreUrl, validateApiVersion} from '../validations';
+import {vi, type SpiedFunction} from 'vitest';
 
 const client = 'Client:';
 
@@ -95,16 +96,16 @@ describe('validateRequiredApiVersion()', () => {
     'unstable',
   ];
 
-  let consoleWarnSpy: jest.SpiedFunction;
+  let consoleWarnSpy: SpiedFunction;
 
   beforeEach(() => {
-    consoleWarnSpy = jest
+    consoleWarnSpy = vi
       .spyOn(global.console, 'warn')
-      .mockImplementation(jest.fn());
+      .mockImplementation(vi.fn());
   });
 
   afterEach(() => {
-    jest.restoreAllMocks();
+    vi.restoreAllMocks();
   });
 
   it('throws an error when API version is undefined', () => {
@@ -161,7 +162,7 @@ describe('validateRequiredApiVersion()', () => {
 
   it('logs an Unsupported_Api_Version log object when a logger is provided and the api version is not supported', () => {
     const apiVersion = '2021-10';
-    const logger = jest.fn();
+    const logger = vi.fn();
 
     validateApiVersion({
       client,

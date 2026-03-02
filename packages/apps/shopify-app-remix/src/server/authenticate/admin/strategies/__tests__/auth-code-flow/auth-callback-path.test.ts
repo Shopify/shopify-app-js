@@ -1,3 +1,4 @@
+import {vi} from 'vitest';
 import {HashFormat, createSHA256HMAC} from '@shopify/shopify-api/runtime';
 
 import {shopifyApp} from '../../../../..';
@@ -284,7 +285,7 @@ describe('authorize.admin auth callback path', () => {
 
       test('Runs the afterAuth hooks passing', async () => {
         // GIVEN
-        const afterAuthMock = jest.fn();
+        const afterAuthMock = vi.fn();
         const config = testConfig({
           hooks: {
             afterAuth: afterAuthMock,

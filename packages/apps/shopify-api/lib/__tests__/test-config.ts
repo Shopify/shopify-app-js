@@ -1,3 +1,5 @@
+import {vi} from 'vitest';
+
 import {FutureFlagOptions, FutureFlags} from '../../future/flags';
 import {AuthScopes} from '../auth/scopes';
 import type {ConfigParams} from '../base-types';
@@ -71,7 +73,7 @@ const TEST_CONFIG = {
   billing: undefined,
   restResources: undefined,
   logger: {
-    log: jest.fn(),
+    log: vi.fn(),
     level: LogSeverity.Debug,
     httpRequests: false,
     timestamps: false,

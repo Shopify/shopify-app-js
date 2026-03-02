@@ -1,3 +1,4 @@
+import {vi, type Mock} from 'vitest';
 import {HttpResponseError, InvalidJwtError} from '@shopify/shopify-api';
 import {setUpValidSession as setUpValidSessionImport} from '@shopify/shopify-api/test-helpers';
 import {MemorySessionStorage} from '@shopify/shopify-app-session-storage-memory';
@@ -10,13 +11,13 @@ import refreshToken from '../refresh-token';
 describe('refreshToken', () => {
   let sessionStorage: MemorySessionStorage;
   let params: BasicParams;
-  let mockRefreshToken: jest.Mock;
+  let mockRefreshToken: (Mock);
 
   beforeEach(() => {
     sessionStorage = new MemorySessionStorage();
     const config = testConfig({sessionStorage});
 
-    mockRefreshToken = jest.fn();
+    mockRefreshToken = vi.fn();
 
     // Create api using deriveApi
     const api = deriveApi(config);
@@ -36,7 +37,7 @@ describe('refreshToken', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   describe('refreshToken', () => {

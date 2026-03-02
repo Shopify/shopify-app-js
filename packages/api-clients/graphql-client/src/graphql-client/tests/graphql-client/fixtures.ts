@@ -1,4 +1,3 @@
-import {TextEncoder, TextDecoder} from 'util';
 import {Readable} from 'stream';
 import {ReadableStream} from 'stream/web';
 
@@ -14,9 +13,6 @@ import {
   DEFAULT_CLIENT_VERSION,
   DEFAULT_SDK_VARIANT,
 } from '../../constants';
-
-global.TextEncoder = TextEncoder;
-global.TextDecoder = TextDecoder as any;
 
 export const clientConfig = {
   url: 'http://test-store.myshopify.com/api/2024-10/graphql.json',

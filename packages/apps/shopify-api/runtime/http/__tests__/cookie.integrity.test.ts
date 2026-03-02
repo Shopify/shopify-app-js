@@ -1,8 +1,10 @@
+import {vi, type Mock} from 'vitest';
+
 import {createSHA256HMAC} from '../../crypto';
 import {Cookies} from '../cookies';
 
-jest.mock('../crypto/utils', () => ({
-  createSHA256HMAC: jest.fn(),
+vi.mock('../crypto/utils', () => ({
+  createSHA256HMAC: vi.fn(),
 }));
 
 describe('Cookies', () => {
@@ -17,12 +19,12 @@ describe('Cookies', () => {
       response = {headers: {}};
       cookies = new Cookies(request, response, {keys});
 
-      cookies.get = jest.fn();
-      cookies.deleteCookie = jest.fn();
+      cookies.get = vi.fn();
+      cookies.deleteCookie = vi.fn();
     });
 
     it('should return false if cookies are not set', async () => {
-      (cookies.get as jest.Mock).mockReturnValue(undefined);
+      (cookies.get as Mock).mockReturnValue(undefined);
 
       const result = await cookies.isSignedCookieValid('testCookie');
 
@@ -32,7 +34,7 @@ describe('Cookies', () => {
     });
 
     it('should return false if cookies are set but empty values', async () => {
-      (cookies.get as jest.Mock).mockImplementation((name) =>
+      (cookies.get as Mock).mockImplementation((name) =>
         name === 'testCookie' ? '' : 'validSignature',
       );
 
@@ -44,13 +46,13 @@ describe('Cookies', () => {
     });
 
     it('should return false if signature does not match', async () => {
-      (cookies.get as jest.Mock).mockImplementation((name) => {
+      (cookies.get as Mock).mockImplementation((name) => {
         if (name === 'testCookie') return 'cookieValue';
         if (name === 'testCookie.sig') return 'invalidSignature';
         return undefined;
       });
 
-      (createSHA256HMAC as jest.Mock).mockResolvedValue('validSignature');
+      (createSHA256HMAC as Mock).mockResolvedValue('validSignature');
 
       const result = await cookies.isSignedCookieValid('testCookie');
 
@@ -60,13 +62,13 @@ describe('Cookies', () => {
     });
 
     it('should return true if signature matches', async () => {
-      (cookies.get as jest.Mock).mockImplementation((name) => {
+      (cookies.get as Mock).mockImplementation((name) => {
         if (name === 'testCookie') return 'cookieValue';
         if (name === 'testCookie.sig') return 'validSignature';
         return undefined;
       });
 
-      (createSHA256HMAC as jest.Mock).mockResolvedValue('validSignature');
+      (createSHA256HMAC as Mock).mockResolvedValue('validSignature');
 
       const result = await cookies.isSignedCookieValid('testCookie');
 
@@ -75,7 +77,7 @@ describe('Cookies', () => {
     });
 
     it('should return false if either cookie or signature is missing after initial check', async () => {
-      (cookies.get as jest.Mock).mockImplementation((name) => {
+      (cookies.get as Mock).mockImplementation((name) => {
         if (name === 'testCookie') return 'cookieValue';
         return undefined;
       });
@@ -88,13 +90,13 @@ describe('Cookies', () => {
     });
 
     it('should handle multiple keys correctly', async () => {
-      (cookies.get as jest.Mock).mockImplementation((name) => {
+      (cookies.get as Mock).mockImplementation((name) => {
         if (name === 'testCookie') return 'cookieValue';
         if (name === 'testCookie.sig') return 'validSignature';
         return undefined;
       });
 
-      (createSHA256HMAC as jest.Mock)
+      (createSHA256HMAC as Mock)
         .mockResolvedValueOnce('validSignature')
         .mockResolvedValueOnce('otherSignature');
 

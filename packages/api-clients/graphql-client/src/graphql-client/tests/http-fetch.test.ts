@@ -2,6 +2,7 @@ import fetchMock from 'jest-fetch-mock';
 
 import {generateHttpFetch} from '../http-fetch';
 import {CustomFetchApi} from '../types';
+import {vi, type Mock} from 'vitest';
 
 const globalFetchMock = JSON.stringify({data: {}});
 
@@ -17,21 +18,21 @@ query {
 export const variables = {};
 
 describe('httpFetch utility', () => {
-  let clientLogger: jest.Mock = jest.fn();
+  let clientLogger: Mock = vi.fn();
 
   fetchMock.enableMocks();
 
   beforeEach(() => {
-    jest
+    vi
       .spyOn(global, 'setTimeout')
-      .mockImplementation(jest.fn((resolve) => resolve() as any));
+      .mockImplementation(vi.fn((resolve) => resolve() as any));
     fetchMock.mockResponse(() => Promise.resolve(globalFetchMock));
-    clientLogger = jest.fn();
+    clientLogger = vi.fn();
   });
 
   afterEach(() => {
     fetchMock.resetMocks();
-    jest.restoreAllMocks();
+    vi.restoreAllMocks();
   });
 
   describe('generateHttpFetch()', () => {
@@ -56,7 +57,7 @@ describe('httpFetch utility', () => {
       });
 
       it('uses the fetch override if one is given', () => {
-        const mockFetch = jest.fn();
+        const mockFetch = vi.fn();
         mockFetch.mockReturnValue(
           Promise.resolve(new Response(globalFetchMock)),
         );

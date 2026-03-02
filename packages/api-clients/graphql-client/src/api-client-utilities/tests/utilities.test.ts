@@ -1,4 +1,5 @@
 import {generateGetHeaders, generateGetGQLClientParams} from '../utilities';
+import {vi, type Mock} from 'vitest';
 
 describe('generateGetHeaders()', () => {
   const config = {
@@ -66,13 +67,13 @@ describe('generateGetGQLClientParams()', () => {
       }
     `;
 
-  let getHeaderMock: jest.Mock;
-  let getApiUrlMock: jest.Mock;
+  let getHeaderMock: Mock;
+  let getApiUrlMock: Mock;
   let getGQLClientParams: ReturnType<typeof generateGetGQLClientParams>;
 
   beforeEach(() => {
-    getHeaderMock = jest.fn().mockReturnValue(mockHeaders);
-    getApiUrlMock = jest.fn().mockReturnValue(mockApiUrl);
+    getHeaderMock = vi.fn().mockReturnValue(mockHeaders);
+    getApiUrlMock = vi.fn().mockReturnValue(mockApiUrl);
     getGQLClientParams = generateGetGQLClientParams({
       getHeaders: getHeaderMock,
       getApiUrl: getApiUrlMock,
@@ -80,7 +81,7 @@ describe('generateGetGQLClientParams()', () => {
   });
 
   afterEach(() => {
-    jest.resetAllMocks();
+    vi.resetAllMocks();
   });
 
   it('returns a function', () => {

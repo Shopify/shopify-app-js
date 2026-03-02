@@ -1,6 +1,7 @@
 import fetchMock from 'jest-fetch-mock';
 
 import {GraphQLClient, ClientStreamResponse} from '../../types';
+import {vi, type Mock} from 'vitest';
 
 import {
   clientConfig,
@@ -35,23 +36,23 @@ const variables = {
 };
 
 describe('GraphQL Client', () => {
-  let mockLogger: jest.Mock;
+  let mockLogger: Mock;
   let client: GraphQLClient;
 
   fetchMock.enableMocks();
 
   beforeEach(() => {
-    jest
+    vi
       .spyOn(global, 'setTimeout')
-      .mockImplementation(jest.fn((resolve) => resolve() as any));
+      .mockImplementation(vi.fn((resolve) => resolve() as any));
     fetchMock.mockResponse(() => Promise.resolve(JSON.stringify({data: {}})));
-    mockLogger = jest.fn();
+    mockLogger = vi.fn();
     client = getValidClient();
   });
 
   afterEach(() => {
     fetchMock.resetMocks();
-    jest.restoreAllMocks();
+    vi.restoreAllMocks();
   });
 
   describe('requestStream()', () => {
@@ -99,7 +100,7 @@ describe('GraphQL Client', () => {
             headers: new Headers({
               'Content-Type': 'application/json',
             }),
-            json: jest.fn(),
+            json: vi.fn(),
           };
 
           const mockedFailedResponse = new Response('', responseConfig);
@@ -145,7 +146,7 @@ describe('GraphQL Client', () => {
               headers: new Headers({
                 'Content-Type': contentType,
               }),
-              json: jest.fn(),
+              json: vi.fn(),
             };
 
             const mockedSuccessResponse = new Response('', responseConfig);
@@ -344,7 +345,7 @@ describe('GraphQL Client', () => {
               });
 
               afterAll(() => {
-                jest.resetAllMocks();
+                vi.resetAllMocks();
               });
 
               it('returns an async iterator and the iterator returned 2 response objects', () => {
@@ -453,7 +454,7 @@ describe('GraphQL Client', () => {
               });
 
               afterAll(() => {
-                jest.resetAllMocks();
+                vi.resetAllMocks();
               });
 
               it('returns an async iterator and the iterator returned 1 response object', () => {
@@ -533,7 +534,7 @@ describe('GraphQL Client', () => {
               });
 
               afterAll(() => {
-                jest.resetAllMocks();
+                vi.resetAllMocks();
               });
 
               it('returns an async iterator and the iterator returned 1 response object', () => {
@@ -613,7 +614,7 @@ describe('GraphQL Client', () => {
               });
 
               afterAll(() => {
-                jest.resetAllMocks();
+                vi.resetAllMocks();
               });
 
               describe('response objects returned by iterator', () => {

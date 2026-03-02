@@ -1,3 +1,5 @@
+import {vi} from 'vitest';
+
 import {
   DeliveryMethod,
   EventBridgeWebhookHandler,
@@ -9,13 +11,13 @@ import {
 export const HTTP_HANDLER: HttpWebhookHandlerWithCallback = {
   deliveryMethod: DeliveryMethod.Http,
   callbackUrl: '/webhooks',
-  callback: jest.fn(),
+  callback: vi.fn(),
 };
 
 export const HTTP_HANDLER_WITH_SUBTOPIC: HttpWebhookHandlerWithCallback = {
   deliveryMethod: DeliveryMethod.Http,
   callbackUrl: '/webhooks',
-  callback: jest.fn(),
+  callback: vi.fn(),
   subTopic: 'example:topic',
 };
 

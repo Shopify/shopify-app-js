@@ -4,10 +4,11 @@ import {shopifyApiTypes} from '../api-types';
 import {ApiType, ShopifyApiProjectOptions} from '../types';
 
 import {getExpectedSchema} from './helpers';
+import {vi} from 'vitest';
 
 describe('shopifyApiTypes', () => {
   beforeEach(() => {
-    jest.restoreAllMocks();
+    vi.restoreAllMocks();
   });
 
   describe.each([ApiType.Admin, ApiType.Storefront, ApiType.Customer])(
@@ -62,7 +63,7 @@ describe('shopifyApiTypes', () => {
           module: 'module',
         };
 
-        const spy = jest.spyOn(fs, 'existsSync');
+        const spy = vi.spyOn(fs, 'existsSync');
         spy.mockReturnValueOnce(true);
 
         // WHEN
@@ -120,7 +121,7 @@ describe('shopifyApiTypes', () => {
           declarations: false,
         };
 
-        const spy = jest.spyOn(fs, 'existsSync');
+        const spy = vi.spyOn(fs, 'existsSync');
         spy.mockReturnValueOnce(true);
 
         // WHEN
@@ -149,7 +150,7 @@ describe('shopifyApiTypes', () => {
           apiKey: 'test',
         };
 
-        const spy = jest.spyOn(fs, 'existsSync');
+        const spy = vi.spyOn(fs, 'existsSync');
         spy.mockReturnValueOnce(true);
 
         // WHEN
@@ -175,7 +176,7 @@ describe('shopifyApiTypes', () => {
           apiKey: 'test',
         };
 
-        const spy = jest.spyOn(fs, 'existsSync');
+        const spy = vi.spyOn(fs, 'existsSync');
         spy.mockReturnValueOnce(true);
 
         // WHEN
@@ -200,7 +201,7 @@ describe('shopifyApiTypes', () => {
           apiKey: 'test',
         };
 
-        const spy = jest.spyOn(fs, 'existsSync');
+        const spy = vi.spyOn(fs, 'existsSync');
         spy.mockReturnValueOnce(true);
 
         // WHEN

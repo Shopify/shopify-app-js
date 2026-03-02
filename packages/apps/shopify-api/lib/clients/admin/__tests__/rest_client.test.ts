@@ -1,3 +1,5 @@
+import {vi, type Mock} from 'vitest';
+
 import {
   buildMockResponse,
   queueError,
@@ -642,7 +644,7 @@ describe('REST client', () => {
   });
 
   it('will wait 5 minutes before logging repeat deprecation alerts', async () => {
-    jest.useFakeTimers();
+    vi.useFakeTimers();
 
     const shopify = shopifyApi(testConfig());
 
@@ -697,9 +699,9 @@ describe('REST client', () => {
       expect.anything(),
     );
 
-    // use jest.fn() to advance time by 5 minutes
+    // use vi.fn() to advance time by 5 minutes
     const currentTime = Date.now();
-    Date.now = jest.fn(() => currentTime + 300000);
+    Date.now = vi.fn(() => currentTime + 300000);
 
     // should warn a second time since 5 mins have passed
     await client.get({path: '/url/path'});
@@ -894,7 +896,7 @@ describe('REST client', () => {
   it('does not log HTTP requests when the setting is off', async () => {
     const shopify = shopifyApi(
       testConfig({
-        logger: {level: LogSeverity.Debug, httpRequests: false, log: jest.fn()},
+        logger: {level: LogSeverity.Debug, httpRequests: false, log: vi.fn()},
       }),
     );
 
@@ -912,7 +914,7 @@ describe('REST client', () => {
   it('logs HTTP requests when the setting is on', async () => {
     const shopify = shopifyApi(
       testConfig({
-        logger: {level: LogSeverity.Debug, httpRequests: true, log: jest.fn()},
+        logger: {level: LogSeverity.Debug, httpRequests: true, log: vi.fn()},
       }),
     );
 
@@ -927,7 +929,7 @@ describe('REST client', () => {
       LogSeverity.Debug,
       expect.anything(),
     );
-    const logMessage = (shopify.config.logger.log as jest.Mock).mock
+    const logMessage = (shopify.config.logger.log as Mock).mock
       .calls[1][1];
     expect(logMessage).toContain('Received response for HTTP');
     expect(logMessage).toContain(

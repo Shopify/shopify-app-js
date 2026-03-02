@@ -1,9 +1,11 @@
+import {vi} from 'vitest';
+
 import {createSession} from '../create-session';
 import {Session, shopifyApi} from '../../..';
 import {testConfig} from '../../../__tests__/test-config';
 import {TEST_SHOP} from '../../../../../shopify-app-express/src/__tests__/test-helper';
 
-jest.useFakeTimers().setSystemTime(new Date('2023-11-11'));
+vi.useFakeTimers().setSystemTime(new Date('2023-11-11'));
 
 describe('createSession', () => {
   describe('when receiving an offline token with no expiry', () => {
@@ -156,7 +158,7 @@ describe('createSession', () => {
       };
 
       const staticUuid = 'test-uuid-test-uiid-test';
-      jest.spyOn(globalThis.crypto, 'randomUUID').mockReturnValue(staticUuid);
+      vi.spyOn(globalThis.crypto, 'randomUUID').mockReturnValue(staticUuid);
 
       const session = createSession({
         config: shopify.config,

@@ -1,3 +1,4 @@
+import {vi} from 'vitest';
 import {mount} from '@shopify/react-testing';
 import {AppProvider as PolarisAppProvider} from '@shopify/polaris';
 
@@ -7,9 +8,9 @@ import {AppProvider} from '../AppProvider';
 import {RemixPolarisLink} from '../../RemixPolarisLink';
 
 // Mock Remix's useNavigate hook
-const mockNavigate = jest.fn();
-jest.mock('@remix-run/react', () => ({
-  ...jest.requireActual('@remix-run/react'),
+const mockNavigate = vi.fn();
+vi.mock('@remix-run/react', async () => ({
+  ...(await vi.importActual('@remix-run/react')),
   useNavigate: () => mockNavigate,
 }));
 

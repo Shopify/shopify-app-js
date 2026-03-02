@@ -23,7 +23,7 @@
     "lint": "eslint .",
     "build": "pnpm rollup && pnpm tsc -p ./tsconfig.build.json",
     "tsc": "tsc",
-    "test": "jest",
+    "test": "vitest run",
     "test:ci": "pnpm test",
     "rollup": "rollup -c rollup.config.js --bundleConfigAsCjs",
     "clean": "rimraf .rollup.cache dist",

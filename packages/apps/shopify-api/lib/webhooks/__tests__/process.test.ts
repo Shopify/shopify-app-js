@@ -1,3 +1,5 @@
+import {vi} from 'vitest';
+
 import request from 'supertest';
 
 import {StatusCode} from '../../types';
@@ -120,7 +122,7 @@ describe('shopify.webhooks.process', () => {
   });
 
   it('handles the request when a event topic is already registered', async () => {
-    jest.useRealTimers();
+    vi.useRealTimers();
 
     const shopify = shopifyApi(
       testConfig({apiSecretKey: 'kitties are cute', isEmbeddedApp: true}),

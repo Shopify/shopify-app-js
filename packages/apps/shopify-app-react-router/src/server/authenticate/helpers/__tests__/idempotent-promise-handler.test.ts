@@ -1,8 +1,9 @@
+import {vi} from 'vitest';
 import {ShopifyError} from '@shopify/shopify-api';
 
 import {IdempotentPromiseHandler} from '../idempotent-promise-handler';
 
-const mockFunction = jest.fn();
+const mockFunction = vi.fn();
 async function promiseFunction() {
   mockFunction();
 }
@@ -33,7 +34,7 @@ describe('IdempotentPromiseHandler', () => {
 
   it('runs the promise function once for each identifier', async () => {
     // GIVEN
-    // const promiseFunction = jest.fn();
+    // const promiseFunction = vi.fn();
     const promiseHandler = new IdempotentPromiseHandler();
 
     // WHEN
@@ -54,7 +55,7 @@ describe('IdempotentPromiseHandler', () => {
   it('clears stale identifier from hash', async () => {
     // GIVEN
     const currentDate = Date.now();
-    jest.useFakeTimers().setSystemTime(currentDate);
+    vi.useFakeTimers().setSystemTime(currentDate);
     const promiseHandler = new IdempotentPromiseHandler() as any;
 
     // WHEN
@@ -63,7 +64,7 @@ describe('IdempotentPromiseHandler', () => {
       identifier: 'old-promise',
     });
 
-    jest.useFakeTimers().setSystemTime(currentDate + 70000);
+    vi.useFakeTimers().setSystemTime(currentDate + 70000);
 
     await promiseHandler.handlePromise({
       promiseFunction,
@@ -79,7 +80,7 @@ describe('IdempotentPromiseHandler', () => {
       throw new ShopifyError();
     };
     const currentDate = Date.now();
-    jest.useFakeTimers().setSystemTime(currentDate);
+    vi.useFakeTimers().setSystemTime(currentDate);
     const promiseHandler = new IdempotentPromiseHandler() as any;
 
     // WHEN
@@ -90,7 +91,7 @@ describe('IdempotentPromiseHandler', () => {
       }),
     ).rejects.toThrow();
 
-    jest.useFakeTimers().setSystemTime(currentDate + 70000);
+    vi.useFakeTimers().setSystemTime(currentDate + 70000);
 
     expect(
       promiseHandler.handlePromise({

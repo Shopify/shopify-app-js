@@ -1,3 +1,5 @@
+import {vi} from 'vitest';
+
 import {FeatureDeprecatedError} from '../../error';
 import {LogSeverity} from '../../types';
 import {SHOPIFY_API_LIBRARY_VERSION} from '../../version';
@@ -222,8 +224,8 @@ describe('shopify.logger', () => {
   });
 
   it('logs times when setting is on', async () => {
-    jest.useFakeTimers();
-    jest.setSystemTime(Date.UTC(2022, 0, 1, 0));
+    vi.useFakeTimers();
+    vi.setSystemTime(Date.UTC(2022, 0, 1, 0));
 
     const shopify = shopifyApi(testConfig({logger: {timestamps: true}}));
 
@@ -249,7 +251,7 @@ describe('shopify.logger', () => {
   });
 
   it('can use a custom async logger', async () => {
-    jest.useFakeTimers();
+    vi.useFakeTimers();
 
     const loggedMessages: string[] = [];
 
@@ -272,7 +274,7 @@ describe('shopify.logger', () => {
 
     // The log messages aren't triggered until the promise resolves, even if more time elapses
     // Execution continues regardless of that happening
-    jest.advanceTimersByTime(1100);
+    vi.advanceTimersByTime(1100);
     expect(loggedMessages.length).toEqual(0);
 
     // Wait for the promise to resolve

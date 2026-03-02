@@ -1,3 +1,4 @@
+import {vi} from 'vitest';
 import '@shopify/shopify-api/adapters/web-api';
 import '../adapters/node';
 
@@ -11,7 +12,7 @@ import {
 import {overrideLogger} from '../override-logger';
 import {SHOPIFY_REMIX_LIBRARY_VERSION} from '../version';
 
-const LOG_FN = jest.fn();
+const LOG_FN = vi.fn();
 const VALID_API_CONFIG: ConfigParams<any, any> = {
   apiKey: 'test-key',
   apiSecretKey: 'test-secret',
@@ -24,7 +25,7 @@ const VALID_API_CONFIG: ConfigParams<any, any> = {
 
 describe('override logger', () => {
   beforeEach(() => {
-    jest.resetAllMocks();
+    vi.resetAllMocks();
   });
 
   it('overrides the package name in log messages', () => {

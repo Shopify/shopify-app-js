@@ -4,10 +4,11 @@ import {shopifyApiProject} from '../api-project';
 import {ApiType, ShopifyApiProjectOptions} from '../types';
 
 import {getExpectedSchema} from './helpers';
+import {vi} from 'vitest';
 
 describe('shopifyApiProject', () => {
   beforeEach(() => {
-    jest.restoreAllMocks();
+    vi.restoreAllMocks();
   });
 
   describe.each([ApiType.Admin, ApiType.Storefront, ApiType.Customer])(
@@ -51,7 +52,7 @@ describe('shopifyApiProject', () => {
           module: 'module',
         };
 
-        const spy = jest.spyOn(fs, 'existsSync');
+        const spy = vi.spyOn(fs, 'existsSync');
         spy.mockReturnValue(true);
 
         // WHEN

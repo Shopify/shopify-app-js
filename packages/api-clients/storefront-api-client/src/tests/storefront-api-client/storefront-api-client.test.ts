@@ -1,3 +1,4 @@
+import {vi, type Mock} from 'vitest';
 import {createGraphQLClient} from '@shopify/graphql-client';
 
 import {createStorefrontApiClient} from '../../storefront-api-client';
@@ -20,10 +21,10 @@ import {
   mockApiUrl,
 } from './fixtures';
 
-jest.mock('@shopify/graphql-client', () => {
+vi.mock('@shopify/graphql-client', async () => {
   return {
-    ...jest.requireActual('@shopify/graphql-client'),
-    createGraphQLClient: jest.fn(),
+    ...(await vi.importActual('@shopify/graphql-client')),
+    createGraphQLClient: vi.fn(),
     getCurrentSupportedApiVersions: () => mockApiVersions,
   };
 });
@@ -37,12 +38,12 @@ describe('Storefront API Client', () => {
     const mockRequestStreamResponse = {};
 
     beforeEach(() => {
-      (createGraphQLClient as jest.Mock).mockReturnValue(graphqlClientMock);
+      (createGraphQLClient as Mock).mockReturnValue(graphqlClientMock);
     });
 
     afterEach(() => {
-      jest.resetAllMocks();
-      jest.restoreAllMocks();
+      vi.resetAllMocks();
+      vi.restoreAllMocks();
     });
 
     describe('client initialization', () => {
@@ -51,7 +52,7 @@ describe('Storefront API Client', () => {
 
         createStorefrontApiClient({...config, clientName});
         expect(
-          (createGraphQLClient as jest.Mock).mock.calls[0][0],
+          (createGraphQLClient as Mock).mock.calls[0][0],
         ).toHaveProperty('headers', {
           'Content-Type': 'application/json',
           Accept: 'application/json',
@@ -61,7 +62,7 @@ describe('Storefront API Client', () => {
           [SDK_VARIANT_SOURCE_HEADER]: clientName,
         });
         expect(
-          (createGraphQLClient as jest.Mock).mock.calls[0][0],
+          (createGraphQLClient as Mock).mock.calls[0][0],
         ).toHaveProperty('url', mockApiUrl);
       });
 
@@ -70,7 +71,7 @@ describe('Storefront API Client', () => {
 
         expect(createGraphQLClient).toHaveBeenCalled();
         expect(
-          (createGraphQLClient as jest.Mock).mock.calls[0][0],
+          (createGraphQLClient as Mock).mock.calls[0][0],
         ).toHaveProperty('retries', 0);
       });
 
@@ -81,29 +82,29 @@ describe('Storefront API Client', () => {
 
         expect(createGraphQLClient).toHaveBeenCalled();
         expect(
-          (createGraphQLClient as jest.Mock).mock.calls[0][0],
+          (createGraphQLClient as Mock).mock.calls[0][0],
         ).toHaveProperty('retries', retries);
       });
 
       it('calls the graphql client with the provided customFetchAPI', () => {
-        const customFetchApi = jest.fn();
+        const customFetchApi = vi.fn();
 
         createStorefrontApiClient({...config, customFetchApi});
 
         expect(createGraphQLClient).toHaveBeenCalled();
         expect(
-          (createGraphQLClient as jest.Mock).mock.calls[0][0],
+          (createGraphQLClient as Mock).mock.calls[0][0],
         ).toHaveProperty('customFetchApi', customFetchApi);
       });
 
       it('calls the graphql client with the provided logger', () => {
-        const logger = jest.fn();
+        const logger = vi.fn();
 
         createStorefrontApiClient({...config, logger});
 
         expect(createGraphQLClient).toHaveBeenCalled();
         expect(
-          (createGraphQLClient as jest.Mock).mock.calls[0][0],
+          (createGraphQLClient as Mock).mock.calls[0][0],
         ).toHaveProperty('logger', logger);
       });
 
@@ -187,7 +188,7 @@ describe('Storefront API Client', () => {
         it('console warns when a unsupported api version is provided', () => {
           const consoleWarnSpy = jest
             .spyOn(global.console, 'warn')
-            .mockImplementation(jest.fn());
+            .mockImplementation(vi.fn());
 
           createStorefrontApiClient({
             ...config,
@@ -340,15 +341,15 @@ describe('Storefront API Client', () => {
       let client: StorefrontApiClient;
 
       beforeEach(() => {
-        (graphqlClientMock.fetch as jest.Mock).mockResolvedValue(
+        (graphqlClientMock.fetch as Mock).mockResolvedValue(
           mockFetchResponse,
         );
 
-        (graphqlClientMock.request as jest.Mock).mockResolvedValue(
+        (graphqlClientMock.request as Mock).mockResolvedValue(
           mockRequestResponse,
         );
 
-        (graphqlClientMock.requestStream as jest.Mock).mockResolvedValue(
+        (graphqlClientMock.requestStream as Mock).mockResolvedValue(
           mockRequestStreamResponse,
         );
 
@@ -401,7 +402,7 @@ describe('Storefront API Client', () => {
         it('console warns when a unsupported api version is provided', () => {
           const consoleWarnSpy = jest
             .spyOn(global.console, 'warn')
-            .mockImplementation(jest.fn());
+            .mockImplementation(vi.fn());
 
           const version = '2021-01';
           client.getApiUrl(version);
@@ -433,10 +434,10 @@ describe('Storefront API Client', () => {
 
             await client[functionName](operation, {variables});
             expect(
-              (graphqlClientMock[functionName] as jest.Mock).mock.calls[0][0],
+              (graphqlClientMock[functionName] as Mock).mock.calls[0][0],
             ).toBe(operation);
             expect(
-              (graphqlClientMock[functionName] as jest.Mock).mock.calls[0][1],
+              (graphqlClientMock[functionName] as Mock).mock.calls[0][1],
             ).toEqual({variables});
           });
 
@@ -446,7 +447,7 @@ describe('Storefront API Client', () => {
             await client[functionName](operation, {headers});
             expect(
               (
-                graphqlClientMock[functionName] as jest.Mock
+                graphqlClientMock[functionName] as Mock
               ).mock.calls.pop()[1],
             ).toEqual({
               headers: client.getHeaders(headers),
@@ -459,7 +460,7 @@ describe('Storefront API Client', () => {
             await client[functionName](operation, {apiVersion});
             expect(
               (
-                graphqlClientMock[functionName] as jest.Mock
+                graphqlClientMock[functionName] as Mock
               ).mock.calls.pop()[1],
             ).toEqual({
               url: client.getApiUrl(apiVersion),
@@ -472,7 +473,7 @@ describe('Storefront API Client', () => {
             await client[functionName](operation, {retries});
             expect(
               (
-                graphqlClientMock[functionName] as jest.Mock
+                graphqlClientMock[functionName] as Mock
               ).mock.calls.pop()[1],
             ).toEqual({
               retries,
