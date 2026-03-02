@@ -69,8 +69,8 @@ describe('DynamoDBSessionStorage', () => {
             {client, maxWaitTime: 120},
             {TableName: sessionTableName},
           );
-        } catch (error) {
-          // console.error(error);  // uncomment to see error for debugging tests
+        } catch (_error) {
+          // console.error(_error);  // uncomment to see error for debugging tests
           return false;
         }
         return true;

@@ -114,7 +114,7 @@ export function createUsageRecord(
       }
 
       const appUsageRecord =
-        response.data?.appUsageRecordCreate?.appUsageRecord!;
+        response.data!.appUsageRecordCreate!.appUsageRecord;
       convertAppRecurringPricingMoney(appUsageRecord.price);
       convertAppUsagePricingMoney(
         appUsageRecord.subscriptionLineItem.plan.pricingDetails,

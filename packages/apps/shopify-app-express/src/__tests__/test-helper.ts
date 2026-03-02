@@ -141,7 +141,7 @@ expect.extend({
         if (typeof mockBody === 'string') {
           try {
             requestBody = JSON.parse(mockBody);
-          } catch (error) {
+          } catch (_error) {
             // Not JSON, that's fine
           }
         }

@@ -46,7 +46,7 @@ export function cancel(config: ConfigInterface): BillingCancel {
         });
       }
 
-      return response.data?.appSubscriptionCancel?.appSubscription!;
+      return response.data!.appSubscriptionCancel!.appSubscription;
     } catch (error) {
       if (error instanceof GraphqlQueryError) {
         throw new BillingError({
