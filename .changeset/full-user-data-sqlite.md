@@ -49,13 +49,16 @@ CREATE TABLE shopify_sessions (
   accountOwner integer,
   locale varchar(255),
   collaborator integer,
-  emailVerified integer
+  emailVerified integer,
+  refreshToken varchar(255),
+  refreshTokenExpires integer
 );
 
--- Copy data, preserving userId from the old onlineAccessInfo column
-INSERT INTO shopify_sessions (id, shop, state, isOnline, expires, scope, accessToken, userId)
+-- Copy data, preserving userId from the old onlineAccessInfo column and refresh token fields
+INSERT INTO shopify_sessions (id, shop, state, isOnline, expires, scope, accessToken, userId, refreshToken, refreshTokenExpires)
   SELECT id, shop, state, isOnline, expires, scope, accessToken,
-    CASE WHEN onlineAccessInfo IS NOT NULL THEN CAST(onlineAccessInfo AS INTEGER) ELSE NULL END
+    CASE WHEN onlineAccessInfo IS NOT NULL THEN CAST(onlineAccessInfo AS INTEGER) ELSE NULL END,
+    refreshToken, refreshTokenExpires
   FROM shopify_sessions_backup;
 
 -- Drop backup table
