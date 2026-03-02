@@ -86,7 +86,7 @@ describe('MySQLSessionStorage', () => {
 
   for (const {dbName, sessionStorage} of tests) {
     describe(`with ${dbName}`, () => {
-      batteryOfTests(sessionStorage, false, true);
+      batteryOfTests(sessionStorage);
     });
   }
 

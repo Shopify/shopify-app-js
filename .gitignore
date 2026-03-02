@@ -7,6 +7,8 @@ coverage/
 tsdocs/
 tsconfig.tsbuildinfo
 database.sqlite
+*.testDb
+*.testDb-journal
 packages/**/build
 packages/**/*.tgz
 tmp/

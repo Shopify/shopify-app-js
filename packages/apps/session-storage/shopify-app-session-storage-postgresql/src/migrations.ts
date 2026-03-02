@@ -9,7 +9,41 @@ export const migrationList = [
   ),
   new MigrationOperation('migrateToCaseSensitivity', migrateToCaseSensitivity),
   new MigrationOperation('migrateToRefreshTokens', migrateToRefreshTokens),
+  new MigrationOperation('addUserInfoColumns', addUserInfoColumns),
 ];
+
+export async function addUserInfoColumns(
+  connection: PostgresConnection,
+): Promise<void> {
+  // Check if the old onlineAccessInfo column exists (skips migration for new installs).
+  // Use a case-insensitive match so this works whether or not migrateToCaseSensitivity
+  // has already renamed onlineaccessinfo → onlineAccessInfo.
+  const rows = await connection.query(`
+    SELECT column_name FROM information_schema.columns
+    WHERE table_schema='public' AND table_name = '${connection.sessionStorageIdentifier}' AND lower(column_name) = 'onlineaccessinfo'
+  `);
+  if (rows.length === 0) return;
+  const oldColumn = rows[0].column_name as string;
+
+  // Wrap in a transaction: PostgreSQL supports transactional DDL, so a mid-migration
+  // failure will roll back cleanly and the migration will be retried on next startup.
+  await connection.transaction([
+    `ALTER TABLE "${connection.sessionStorageIdentifier}"
+      ADD COLUMN "userId" bigint,
+      ADD COLUMN "firstName" varchar(255),
+      ADD COLUMN "lastName" varchar(255),
+      ADD COLUMN "email" varchar(255),
+      ADD COLUMN "accountOwner" boolean,
+      ADD COLUMN "locale" varchar(255),
+      ADD COLUMN "collaborator" boolean,
+      ADD COLUMN "emailVerified" boolean`,
+    `UPDATE "${connection.sessionStorageIdentifier}"
+      SET "userId" = CAST("${oldColumn}" AS BIGINT)
+      WHERE "${oldColumn}" IS NOT NULL`,
+    `ALTER TABLE "${connection.sessionStorageIdentifier}"
+      DROP COLUMN "${oldColumn}"`,
+  ]);
+}
 
 // need change the size of the scope column from 255 to 1024 char
 export async function migrateScopeFieldToVarchar1024(
@@ -38,7 +72,6 @@ export async function migrateToCaseSensitivity(
     if (rows[0].exists) {
       queries = [
         `ALTER TABLE "${connection.sessionStorageIdentifier}" RENAME COLUMN "isonline" TO "isOnline"`,
-        `ALTER TABLE "${connection.sessionStorageIdentifier}" RENAME COLUMN "onlineaccessinfo" TO "onlineAccessInfo"`,
         `ALTER TABLE "${connection.sessionStorageIdentifier}" RENAME COLUMN "accesstoken" TO "accessToken"`,
       ];
     }
@@ -49,11 +82,12 @@ export async function migrateToCaseSensitivity(
     );
     if (hasOldSessionTable) {
       queries = [
-        // 1. copy the data from the old table to the new one
+        // 1. copy the data from the old table to the new one, extracting userId from onlineaccessinfo
         `INSERT INTO "${connection.sessionStorageIdentifier}" (
-          "id", "shop", "state", "isOnline", "scope", "expires", "onlineAccessInfo", "accessToken"
+          "id", "shop", "state", "isOnline", "scope", "expires", "accessToken", "userId"
         )
-        SELECT id, shop, state, isonline, scope, expires, onlineaccessinfo, accesstoken
+        SELECT id, shop, state, isonline, scope, expires, accesstoken,
+          CASE WHEN onlineaccessinfo IS NOT NULL THEN CAST(onlineaccessinfo AS BIGINT) ELSE NULL END
         FROM "${connection.sessionStorageIdentifier.toLowerCase()}"`,
         // 2. drop the old table
         `DROP TABLE "${connection.sessionStorageIdentifier.toLowerCase()}"`,
@@ -62,10 +96,6 @@ export async function migrateToCaseSensitivity(
   }
 
   if (queries.length !== 0) {
-    // wrap in a transaction
-    queries.unshift(`BEGIN`);
-    queries.push(`COMMIT`);
-
     await connection.transaction(queries);
   }
 }
@@ -104,9 +134,6 @@ export async function migrateToRefreshTokens(
   }
 
   if (queries.length !== 0) {
-    queries.unshift(`BEGIN`);
-    queries.push(`COMMIT`);
-
     await connection.transaction(queries);
   }
 }

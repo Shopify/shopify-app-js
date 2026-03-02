@@ -65,7 +65,7 @@ export class MySQLSessionStorage implements SessionStorage {
     await this.ready;
 
     // Note milliseconds to seconds conversion for `expires` property
-    const entries = session.toPropertyArray().map(([key, value]) => {
+    const entries = session.toPropertyArray(true).map(([key, value]) => {
       if (key === 'expires' || key === 'refreshTokenExpires') {
         return [key, value ? Math.floor((value as number) / 1000) : null];
       }
@@ -161,10 +161,17 @@ export class MySQLSessionStorage implements SessionStorage {
           isOnline tinyint NOT NULL,
           scope varchar(255),
           expires integer,
-          onlineAccessInfo varchar(255),
           accessToken varchar(255),
           refreshToken varchar(255),
-          refreshTokenExpires integer
+          refreshTokenExpires integer,
+          userId BIGINT,
+          firstName varchar(255),
+          lastName varchar(255),
+          email varchar(255),
+          accountOwner tinyint,
+          locale varchar(255),
+          collaborator tinyint,
+          emailVerified tinyint
         )
       `;
       await this.connection.query(query);
@@ -175,6 +182,6 @@ export class MySQLSessionStorage implements SessionStorage {
     // convert seconds to milliseconds prior to creating Session object
     if (row.expires) row.expires *= 1000;
     if (row.refreshTokenExpires) row.refreshTokenExpires *= 1000;
-    return Session.fromPropertyArray(Object.entries(row));
+    return Session.fromPropertyArray(Object.entries(row), true);
   }
 }

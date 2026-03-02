@@ -66,7 +66,7 @@ export class PostgreSQLSessionStorage implements SessionStorage {
 
     // Note milliseconds to seconds conversion for `expires` property
     const entries = session
-      .toPropertyArray()
+      .toPropertyArray(true)
       .map(([key, value]) =>
         key === 'expires'
           ? [key, Math.floor((value as number) / 1000)]
@@ -162,10 +162,17 @@ export class PostgreSQLSessionStorage implements SessionStorage {
           "isOnline" boolean NOT NULL,
           "scope" varchar(255),
           "expires" integer,
-          "onlineAccessInfo" varchar(255),
           "accessToken" varchar(255),
           "refreshToken" varchar(255),
-          "refreshTokenExpires" bigint
+          "refreshTokenExpires" bigint,
+          "userId" bigint,
+          "firstName" varchar(255),
+          "lastName" varchar(255),
+          "email" varchar(255),
+          "accountOwner" boolean,
+          "locale" varchar(255),
+          "collaborator" boolean,
+          "emailVerified" boolean
         )
       `;
     await this.client.query(query);
@@ -177,6 +184,6 @@ export class PostgreSQLSessionStorage implements SessionStorage {
     // PostgreSQL returns bigint as string, convert to number for Session
     if (row.refreshTokenExpires)
       row.refreshTokenExpires = Number(row.refreshTokenExpires);
-    return Session.fromPropertyArray(Object.entries(row));
+    return Session.fromPropertyArray(Object.entries(row), true);
   }
 }

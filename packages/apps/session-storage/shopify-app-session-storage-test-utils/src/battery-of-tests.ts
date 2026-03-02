@@ -5,11 +5,7 @@ import {sessionArraysEqual} from './session-test-utils';
 
 const testScopes = ['test_scope'];
 
-export function batteryOfTests(
-  storageFactory: () => Promise<SessionStorage>,
-  testUserInfo = false,
-  testRefreshTokens = false,
-) {
+export function batteryOfTests(storageFactory: () => Promise<SessionStorage>) {
   it('can store and delete all kinds of sessions', async () => {
     const sessionFactories = [
       async () => {
@@ -150,70 +146,51 @@ export function batteryOfTests(
     expect(session.equals(storedSession)).toBeTruthy();
   });
 
-  if (testUserInfo) {
-    it('can store and delete sessions with user info', async () => {
-      const sessionFactories = [
-        async () => {
-          const session = new Session({
-            id: sessionId,
-            shop: 'shop',
-            state: 'state',
-            isOnline: true,
-            scope: testScopes.toString(),
-            accessToken: '123',
-            onlineAccessInfo: {
-              associated_user: {
-                id: 123,
-                first_name: 'first',
-                last_name: 'last',
-                email: 'email@email.com',
-                account_owner: true,
-                locale: 'en',
-                collaborator: false,
-                email_verified: true,
-              },
-            } as any,
-          });
-          return session;
-        },
-      ];
+  it('can store and delete sessions with user info', async () => {
+    const sessionFactories = [
+      async () => {
+        const session = new Session({
+          id: sessionId,
+          shop: 'shop',
+          state: 'state',
+          isOnline: true,
+          scope: testScopes.toString(),
+          accessToken: '123',
+          onlineAccessInfo: {
+            associated_user: {
+              id: 123,
+              first_name: 'first',
+              last_name: 'last',
+              email: 'email@email.com',
+              account_owner: true,
+              locale: 'en',
+              collaborator: false,
+              email_verified: true,
+            },
+          } as any,
+        });
+        return session;
+      },
+    ];
 
-      const sessionId = 'test_session';
-      const storage = await storageFactory();
-      for (const factory of sessionFactories) {
-        const session = await factory();
-
-        await expect(storage.storeSession(session)).resolves.toBeTruthy();
-        const storedSession = await storage.loadSession(sessionId);
-        expect(session.equals(storedSession)).toBeTruthy();
-
-        expect(storedSession?.isActive(testScopes)).toBeTruthy();
-
-        await expect(storage.deleteSession(sessionId)).resolves.toBeTruthy();
-        await expect(storage.loadSession(sessionId)).resolves.toBeUndefined();
-
-        // Deleting a non-existing session should work
-        await expect(storage.deleteSession(sessionId)).resolves.toBeTruthy();
-      }
-    });
-  } else {
-    it('can store and delete sessions with online tokens', async () => {
-      const storage = await storageFactory();
-      const sessionId = 'test_session';
-      const session = new Session({
-        id: sessionId,
-        shop: 'shop',
-        state: 'state',
-        isOnline: true,
-        onlineAccessInfo: {associated_user: {id: 123}} as any,
-      });
+    const sessionId = 'test_session';
+    const storage = await storageFactory();
+    for (const factory of sessionFactories) {
+      const session = await factory();
 
       await expect(storage.storeSession(session)).resolves.toBeTruthy();
       const storedSession = await storage.loadSession(sessionId);
-
       expect(session.equals(storedSession)).toBeTruthy();
-    });
-  }
+
+      expect(storedSession?.isActive(testScopes)).toBeTruthy();
+
+      await expect(storage.deleteSession(sessionId)).resolves.toBeTruthy();
+      await expect(storage.loadSession(sessionId)).resolves.toBeUndefined();
+
+      // Deleting a non-existing session should work
+      await expect(storage.deleteSession(sessionId)).resolves.toBeTruthy();
+    }
+  });
 
   it('wrong ids return null sessions', async () => {
     const storage = await storageFactory();
@@ -341,61 +318,55 @@ export function batteryOfTests(
     expect(session.equals(storedSession)).toBeTruthy();
   });
 
-  if (testRefreshTokens) {
-    it('can store and delete sessions with refresh tokens', async () => {
-      const storage = await storageFactory();
-      const sessionId = 'test_refresh_token_session';
+  it('can store and delete sessions with refresh tokens', async () => {
+    const storage = await storageFactory();
+    const sessionId = 'test_refresh_token_session';
 
-      // Test session with refresh token only
-      const sessionWithRefreshToken = new Session({
-        id: sessionId,
-        shop: 'shop',
-        state: 'state',
-        isOnline: false,
-        scope: testScopes.toString(),
-        accessToken: 'access_token_123',
-        refreshToken: 'refresh_token_456',
-      });
-
-      await expect(
-        storage.storeSession(sessionWithRefreshToken),
-      ).resolves.toBeTruthy();
-      let storedSession = await storage.loadSession(sessionId);
-      expect(sessionWithRefreshToken.equals(storedSession)).toBeTruthy();
-      expect(storedSession?.refreshToken).toBe('refresh_token_456');
-      expect(storedSession?.refreshTokenExpires).toBeUndefined();
-
-      // Test session with refresh token and expiry
-      const refreshTokenExpiryDate = new Date();
-      refreshTokenExpiryDate.setMilliseconds(0);
-      refreshTokenExpiryDate.setDate(refreshTokenExpiryDate.getDate() + 30);
-
-      const sessionWithRefreshTokenAndExpiry = new Session({
-        id: sessionId,
-        shop: 'shop',
-        state: 'state',
-        isOnline: false,
-        scope: testScopes.toString(),
-        accessToken: 'access_token_789',
-        refreshToken: 'refresh_token_abc',
-        refreshTokenExpires: refreshTokenExpiryDate,
-      });
-
-      await expect(
-        storage.storeSession(sessionWithRefreshTokenAndExpiry),
-      ).resolves.toBeTruthy();
-      storedSession = await storage.loadSession(sessionId);
-      expect(
-        sessionWithRefreshTokenAndExpiry.equals(storedSession),
-      ).toBeTruthy();
-      expect(storedSession?.refreshToken).toBe('refresh_token_abc');
-      expect(storedSession?.refreshTokenExpires).toEqual(
-        refreshTokenExpiryDate,
-      );
-
-      // Clean up
-      await expect(storage.deleteSession(sessionId)).resolves.toBeTruthy();
-      await expect(storage.loadSession(sessionId)).resolves.toBeUndefined();
+    // Test session with refresh token only
+    const sessionWithRefreshToken = new Session({
+      id: sessionId,
+      shop: 'shop',
+      state: 'state',
+      isOnline: false,
+      scope: testScopes.toString(),
+      accessToken: 'access_token_123',
+      refreshToken: 'refresh_token_456',
     });
-  }
+
+    await expect(
+      storage.storeSession(sessionWithRefreshToken),
+    ).resolves.toBeTruthy();
+    let storedSession = await storage.loadSession(sessionId);
+    expect(sessionWithRefreshToken.equals(storedSession)).toBeTruthy();
+    expect(storedSession?.refreshToken).toBe('refresh_token_456');
+    expect(storedSession?.refreshTokenExpires).toBeUndefined();
+
+    // Test session with refresh token and expiry
+    const refreshTokenExpiryDate = new Date();
+    refreshTokenExpiryDate.setMilliseconds(0);
+    refreshTokenExpiryDate.setDate(refreshTokenExpiryDate.getDate() + 30);
+
+    const sessionWithRefreshTokenAndExpiry = new Session({
+      id: sessionId,
+      shop: 'shop',
+      state: 'state',
+      isOnline: false,
+      scope: testScopes.toString(),
+      accessToken: 'access_token_789',
+      refreshToken: 'refresh_token_abc',
+      refreshTokenExpires: refreshTokenExpiryDate,
+    });
+
+    await expect(
+      storage.storeSession(sessionWithRefreshTokenAndExpiry),
+    ).resolves.toBeTruthy();
+    storedSession = await storage.loadSession(sessionId);
+    expect(sessionWithRefreshTokenAndExpiry.equals(storedSession)).toBeTruthy();
+    expect(storedSession?.refreshToken).toBe('refresh_token_abc');
+    expect(storedSession?.refreshTokenExpires).toEqual(refreshTokenExpiryDate);
+
+    // Clean up
+    await expect(storage.deleteSession(sessionId)).resolves.toBeTruthy();
+    await expect(storage.loadSession(sessionId)).resolves.toBeUndefined();
+  });
 }

@@ -29,18 +29,12 @@ describe('PrismaSessionStorage', () => {
   });
 
   // Using the default table name
-  batteryOfTests(
-    async () => new PrismaSessionStorage<PrismaClient>(prisma),
-    true,
-    true,
-  );
+  batteryOfTests(async () => new PrismaSessionStorage<PrismaClient>(prisma));
 
   // Using a custom table name
   batteryOfTests(
     async () =>
       new PrismaSessionStorage<PrismaClient>(prisma, {tableName: 'mySession'}),
-    true,
-    true,
   );
 
   it('isReady is true when no errors are thrown', async () => {
