@@ -156,7 +156,7 @@ async function embedAppIntoShopify(
       rawRequest: req,
       rawResponse: res,
     });
-  } catch (error) {
+  } catch (_error) {
     config.logger.error(
       `ensureInstalledOnShop did not receive a host query argument`,
       {shop},

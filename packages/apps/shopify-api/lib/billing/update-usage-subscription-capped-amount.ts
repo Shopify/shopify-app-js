@@ -72,14 +72,14 @@ export function updateUsageCappedAmount(
       }
 
       const appSubscription =
-        response.data?.appSubscriptionLineItemUpdate?.appSubscription!;
+        response.data!.appSubscriptionLineItemUpdate!.appSubscription;
       if (appSubscription && appSubscription.lineItems) {
         appSubscription.lineItems = convertLineItems(appSubscription.lineItems);
       }
 
       return {
         confirmationUrl:
-          response.data?.appSubscriptionLineItemUpdate?.confirmationUrl!,
+          response.data!.appSubscriptionLineItemUpdate!.confirmationUrl,
         appSubscription,
       };
     } catch (error) {

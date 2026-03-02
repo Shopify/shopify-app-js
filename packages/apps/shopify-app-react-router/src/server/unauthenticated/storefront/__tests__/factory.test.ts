@@ -1,4 +1,3 @@
-import {setUpValidSession as setUpValidSessionImport} from '@shopify/shopify-api/test-helpers';
 
 import {AppDistribution, shopifyApp} from '../../../index';
 import {

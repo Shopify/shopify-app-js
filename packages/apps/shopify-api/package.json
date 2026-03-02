@@ -48,7 +48,7 @@
     "pretest:adapters": "pnpm rollup -c adapters/__e2etests__/rollup.test-apps.config.js",
     "test:adapters": "jest --selectProjects adapters:mock adapters:node adapters:cf-worker adapters:web-api",
     "test:rest_resources": "jest --selectProjects rest_resources",
-    "lint": "eslint .",
+    "lint": "oxlint .",
     "test:dev": "jest --selectProjects library",
     "build": "pnpm rollup -c rollup.config.js && pnpm tsc -p ./tsconfig.build.json",
     "tsc": "tsc",

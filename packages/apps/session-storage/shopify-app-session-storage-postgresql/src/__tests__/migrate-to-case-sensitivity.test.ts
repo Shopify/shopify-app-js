@@ -77,9 +77,9 @@ describe.each(['ShopifySessionsUpperCase', 'shopifysessionslowercase'])(
             const client = await pool.connect();
             await client.query(query);
             client.release();
-          } catch (error) {
+          } catch (_error) {
             // uncomment for debugging tests
-            // console.error(error);
+            // console.error(_error);
             return false;
           }
           return true;
@@ -227,9 +227,9 @@ describe.each(['ShopifySessionsUpperCase', 'shopifysessionslowercase'])(
             const client = await pool.connect();
             await client.query(query);
             client.release();
-          } catch (error) {
+          } catch (_error) {
             // uncomment for debugging tests
-            // console.error(error);
+            // console.error(_error);
             return false;
           }
           return true;
