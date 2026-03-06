@@ -1,5 +1,128 @@
 # @shopify/shopify-app-session-storage-mysql
 
+## 6.0.0
+
+### Major Changes
+
+- dae035e: Store full online access user data (firstName, lastName, email, accountOwner, locale, collaborator, emailVerified) instead of only a numeric user ID. Previously the adapter serialised online session user info into a single `onlineAccessInfo` column containing just the user ID string, silently discarding all other user fields. Sessions now round-trip the complete user object.
+
+  ## Automatic Migration
+
+  The MySQL session storage adapter includes an automatic migration system. When you upgrade to the new version, the migration will run automatically on the first connection. It replaces the single `onlineAccessInfo` column with individual typed columns:
+  - `userId` (BIGINT, nullable). Preserved from the old `onlineAccessInfo` value
+  - `firstName` (varchar(255), nullable)
+  - `lastName` (varchar(255), nullable)
+  - `email` (varchar(255), nullable)
+  - `accountOwner` (tinyint, nullable). Stored as 0/1
+  - `locale` (varchar(255), nullable)
+  - `collaborator` (tinyint, nullable). Stored as 0/1
+  - `emailVerified` (tinyint, nullable). Stored as 0/1
+
+  Existing sessions retain their `userId`. All other user fields (`firstName`, `lastName`, etc.) will be `NULL` for pre-existing rows and will be populated on the user's next authentication.
+
+  ## Breaking Change
+
+  If your application queries the `shopify_sessions` table directly and reads the `onlineAccessInfo` column, you will need to update those queries to use the new individual columns after migration.
+
+  ## Manual Migration (Optional)
+
+  If you prefer to run the migration manually before deploying, execute the following SQL:
+
+  ```sql
+  -- Add new individual user info columns
+  ALTER TABLE `shopify_sessions`
+    ADD COLUMN `userId` BIGINT,
+    ADD COLUMN `firstName` varchar(255),
+    ADD COLUMN `lastName` varchar(255),
+    ADD COLUMN `email` varchar(255),
+    ADD COLUMN `accountOwner` tinyint,
+    ADD COLUMN `locale` varchar(255),
+    ADD COLUMN `collaborator` tinyint,
+    ADD COLUMN `emailVerified` tinyint;
+
+  -- Preserve userId from the old onlineAccessInfo column
+  UPDATE `shopify_sessions`
+    SET `userId` = CAST(`onlineAccessInfo` AS UNSIGNED)
+    WHERE `onlineAccessInfo` IS NOT NULL;
+
+  -- Drop the old column
+  ALTER TABLE `shopify_sessions` DROP COLUMN `onlineAccessInfo`;
+  ```
+
+  **Note**: If you use a custom table name via the `sessionTableName` option, replace `shopify_sessions` with your table name.
+
+  ## Backward Compatibility
+  - Existing offline sessions are unaffected
+  - Existing online sessions retain their `userId`; all other user fields will be populated on next sign-in
+  - Apps that do not read user info fields from sessions are unaffected
+
+### Minor Changes
+
+- d8481cb: Add support for storing refresh tokens and refresh token expiration dates. This enables apps using expiring offline access tokens to automatically refresh tokens without user re-authentication.
+
+  ## What Changed
+
+  Two new columns have been added to the session storage table to support expiring offline access tokens:
+  - `refreshToken` (varchar(255), nullable) - Stores the refresh token used to obtain new access tokens
+  - `refreshTokenExpires` (integer, nullable) - Stores the expiration date of the refresh token
+
+  ## Automatic Migration
+
+  When you upgrade to this version, the package will automatically run a migration to add the new columns to your existing session table. No manual intervention is required.
+
+  The migration is idempotent and safe to run multiple times.
+
+  ## Manual Migration
+
+  If you prefer to run the migration manually before upgrading, execute the following SQL:
+
+  ```sql
+  ALTER TABLE shopify_sessions
+    ADD COLUMN refreshToken varchar(255),
+    ADD COLUMN refreshTokenExpires integer NULL;
+  ```
+
+  Replace `shopify_sessions` with your table name if you have configured a custom `sessionTableName`.
+
+  ## How to Enable
+
+  To use expiring offline access tokens, update your app configuration:
+
+  ```typescript
+  import {shopifyApp} from '@shopify/shopify-app-react-router/server';
+  import {MySQLSessionStorage} from '@shopify/shopify-app-session-storage-mysql';
+
+  const shopify = shopifyApp({
+    future: {
+      expiringOfflineAccessTokens: true,
+    },
+    sessionStorage: new MySQLSessionStorage(
+      'mysql://username:password@host/database',
+    ),
+    // ... other config
+  });
+  ```
+
+  The migration runs automatically at startup before any database operations, so the columns will be ready when your app starts handling sessions with refresh tokens.
+
+  ## Notes
+  - Existing sessions will continue to work without refresh tokens (the new fields are nullable)
+  - New OAuth flows will automatically store refresh tokens when the feature is enabled
+  - The refresh token expiration is stored in seconds in the database and converted to milliseconds when loaded into the Session object
+
+### Patch Changes
+
+- 9fc24d2: Updated `mysql2` dependencies
+- d5ae946: Publish TypeScript source files to npm so "Go to Definition" in IDEs navigates to real source code instead of compiled `.d.ts` declaration files. Source maps already pointed to the correct paths — the source files just weren't included in the published packages.
+- Updated dependencies [0d4a3f7]
+- Updated dependencies [4c1789b]
+- Updated dependencies [78c8968]
+- Updated dependencies [d5ae946]
+- Updated dependencies [0bb7837]
+- Updated dependencies [1eb863d]
+  - @shopify/shopify-api@13.0.0
+  - @shopify/shopify-app-session-storage@5.0.0
+
 ## 5.0.5
 
 ## 5.0.4

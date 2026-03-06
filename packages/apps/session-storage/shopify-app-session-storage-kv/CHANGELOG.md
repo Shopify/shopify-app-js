@@ -1,5 +1,26 @@
 # @shopify/shopify-app-session-storage-kv
 
+## 6.0.0
+
+### Minor Changes
+
+- dae035e: Store full online access user data (firstName, lastName, email, accountOwner, locale, collaborator, emailVerified) instead of only a numeric user ID. Previously the adapter serialised online session user info as a single opaque value containing just the user ID, silently discarding all other user fields. Sessions now round-trip the complete user object.
+
+  No schema migration is required — Cloudflare Workers KV is schema-less. Existing online sessions stored with the old format will continue to load correctly; their `userId` is preserved and all other user fields will be populated on the user's next authentication.
+
+### Patch Changes
+
+- b59558b: Document refresh token support in README. KV storage already supports refresh tokens through JSON serialization of the complete Session object.
+- d5ae946: Publish TypeScript source files to npm so "Go to Definition" in IDEs navigates to real source code instead of compiled `.d.ts` declaration files. Source maps already pointed to the correct paths — the source files just weren't included in the published packages.
+- Updated dependencies [0d4a3f7]
+- Updated dependencies [4c1789b]
+- Updated dependencies [78c8968]
+- Updated dependencies [d5ae946]
+- Updated dependencies [0bb7837]
+- Updated dependencies [1eb863d]
+  - @shopify/shopify-api@13.0.0
+  - @shopify/shopify-app-session-storage@5.0.0
+
 ## 5.0.5
 
 ## 5.0.4
