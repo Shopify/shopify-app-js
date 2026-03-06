@@ -1,5 +1,168 @@
 # @shopify/shopify-app-session-storage-sqlite
 
+## 6.0.0
+
+### Major Changes
+
+- dae035e: Store full online access user data (firstName, lastName, email, accountOwner, locale, collaborator, emailVerified) instead of only a numeric user ID. Previously the adapter serialised online session user info into a single `onlineAccessInfo` column containing just the user ID string, silently discarding all other user fields. Sessions now round-trip the complete user object.
+
+  ## Automatic Migration
+
+  The SQLite session storage adapter includes an automatic migration system. When you upgrade to the new version, the migration will run automatically on the first connection. It replaces the single `onlineAccessInfo` column with individual typed columns:
+  - `userId` (integer, nullable). Preserved from the old `onlineAccessInfo` value
+  - `firstName` (varchar(255), nullable)
+  - `lastName` (varchar(255), nullable)
+  - `email` (varchar(255), nullable)
+  - `accountOwner` (integer, nullable). Stored as 0/1
+  - `locale` (varchar(255), nullable)
+  - `collaborator` (integer, nullable). Stored as 0/1
+  - `emailVerified` (integer, nullable). Stored as 0/1
+
+  Existing sessions retain their `userId`. All other user fields (`firstName`, `lastName`, etc.) will be `NULL` for pre-existing rows and will be populated on the user's next authentication.
+
+  ## Breaking Change
+
+  If your application queries the `shopify_sessions` table directly and reads the `onlineAccessInfo` column, you will need to update those queries to use the new individual columns after migration.
+
+  ## Manual Migration (Optional)
+
+  If you prefer to run the migration manually before deploying, execute the following SQL:
+
+  ```sql
+  BEGIN TRANSACTION;
+
+  -- Rename existing table
+  ALTER TABLE shopify_sessions RENAME TO shopify_sessions_backup;
+
+  -- Create new table with individual user info columns
+  CREATE TABLE shopify_sessions (
+    id varchar(255) NOT NULL PRIMARY KEY,
+    shop varchar(255) NOT NULL,
+    state varchar(255) NOT NULL,
+    isOnline integer NOT NULL,
+    expires integer,
+    scope varchar(1024),
+    accessToken varchar(255),
+    userId integer,
+    firstName varchar(255),
+    lastName varchar(255),
+    email varchar(255),
+    accountOwner integer,
+    locale varchar(255),
+    collaborator integer,
+    emailVerified integer,
+    refreshToken varchar(255),
+    refreshTokenExpires integer
+  );
+
+  -- Copy data, preserving userId from the old onlineAccessInfo column and refresh token fields
+  INSERT INTO shopify_sessions (id, shop, state, isOnline, expires, scope, accessToken, userId, refreshToken, refreshTokenExpires)
+    SELECT id, shop, state, isOnline, expires, scope, accessToken,
+      CASE WHEN onlineAccessInfo IS NOT NULL THEN CAST(onlineAccessInfo AS INTEGER) ELSE NULL END,
+      refreshToken, refreshTokenExpires
+    FROM shopify_sessions_backup;
+
+  -- Drop backup table
+  DROP TABLE shopify_sessions_backup;
+
+  COMMIT;
+  ```
+
+  **Note**: If you use a custom table name via the `sessionTableName` option, replace `shopify_sessions` with your table name.
+
+  ## Backward Compatibility
+  - Existing offline sessions are unaffected
+  - Existing online sessions retain their `userId`; all other user fields will be populated on next sign-in
+  - Apps that do not read user info fields from sessions are unaffected
+
+### Minor Changes
+
+- 8d4611f: Add support for storing refresh tokens and refresh token expiration dates. This enables apps using expiring offline access tokens to automatically refresh tokens without user re-authentication.
+
+  ## Automatic Migration
+
+  The SQLite session storage adapter includes an automatic migration system. When you upgrade to the new version, the migration will run automatically on the first connection to add the required columns:
+  - `refreshToken` (varchar(255), nullable)
+  - `refreshTokenExpires` (integer, nullable) - stored as Unix timestamp in seconds
+
+  The migration preserves all existing session data and adds the new columns with NULL values for existing sessions.
+
+  ## Using Refresh Tokens
+
+  To enable expiring offline access tokens:
+
+  ```typescript
+  import {shopifyApp} from '@shopify/shopify-app-react-router/server';
+  import {SQLiteSessionStorage} from '@shopify/shopify-app-session-storage-sqlite';
+
+  const shopify = shopifyApp({
+    future: {
+      expiringOfflineAccessTokens: true,
+    },
+    sessionStorage: new SQLiteSessionStorage('/path/to/your.db'),
+    // ... other config
+  });
+  ```
+
+  Refresh tokens will be automatically stored when your app uses expiring offline access tokens. The refresh token is available on the `Session` object via `session.refreshToken` and `session.refreshTokenExpires`.
+
+  ## Manual Migration (Optional)
+
+  If you prefer to run the migration manually, you can execute the following SQL:
+
+  ```sql
+  BEGIN TRANSACTION;
+
+  -- Rename existing table
+  ALTER TABLE shopify_sessions RENAME TO shopify_sessions_backup;
+
+  -- Create new table with refresh token fields
+  CREATE TABLE shopify_sessions (
+    id varchar(255) NOT NULL PRIMARY KEY,
+    shop varchar(255) NOT NULL,
+    state varchar(255) NOT NULL,
+    isOnline integer NOT NULL,
+    expires integer,
+    scope varchar(1024),
+    accessToken varchar(255),
+    onlineAccessInfo varchar(255),
+    refreshToken varchar(255),
+    refreshTokenExpires integer
+  );
+
+  -- Copy data from backup
+  INSERT INTO shopify_sessions
+    (id, shop, state, isOnline, expires, scope, accessToken, onlineAccessInfo)
+  SELECT id, shop, state, isOnline, expires, scope, accessToken, onlineAccessInfo
+  FROM shopify_sessions_backup;
+
+  -- Drop backup table
+  DROP TABLE shopify_sessions_backup;
+
+  COMMIT;
+  ```
+
+  **Note**: If you use a custom table name via the `sessionTableName` option, replace `shopify_sessions` with your table name.
+
+  ## Backward Compatibility
+
+  This change is fully backward compatible:
+  - Existing sessions without refresh tokens continue to work
+  - The new columns are nullable and won't affect existing functionality
+  - Apps that don't use expiring offline access tokens are unaffected
+
+### Patch Changes
+
+- d5ae946: Publish TypeScript source files to npm so "Go to Definition" in IDEs navigates to real source code instead of compiled `.d.ts` declaration files. Source maps already pointed to the correct paths — the source files just weren't included in the published packages.
+- Updated dependencies [0d4a3f7]
+- Updated dependencies [4c1789b]
+- Updated dependencies [78c8968]
+- Updated dependencies [d5ae946]
+- Updated dependencies [0bb7837]
+- Updated dependencies [1eb863d]
+  - @shopify/shopify-api@13.0.0
+  - @shopify/shopify-app-session-storage@5.0.0
+
 ## 5.0.5
 
 ## 5.0.4

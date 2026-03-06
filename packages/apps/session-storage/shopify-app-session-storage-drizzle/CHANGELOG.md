@@ -1,5 +1,24 @@
 # @shopify/shopify-app-session-storage-drizzle
 
+## 4.0.0
+
+### Major Changes
+
+- 479241b: Store refresh tokens and their expiry in Drizzle session storage; requires adding new columns to the session table.
+
+### Patch Changes
+
+- 9fc24d2: Updated `mysql2` dependencies
+- d5ae946: Publish TypeScript source files to npm so "Go to Definition" in IDEs navigates to real source code instead of compiled `.d.ts` declaration files. Source maps already pointed to the correct paths — the source files just weren't included in the published packages.
+- Updated dependencies [0d4a3f7]
+- Updated dependencies [4c1789b]
+- Updated dependencies [78c8968]
+- Updated dependencies [d5ae946]
+- Updated dependencies [0bb7837]
+- Updated dependencies [1eb863d]
+  - @shopify/shopify-api@13.0.0
+  - @shopify/shopify-app-session-storage@5.0.0
+
 ## 3.0.5
 
 ## 3.0.4
