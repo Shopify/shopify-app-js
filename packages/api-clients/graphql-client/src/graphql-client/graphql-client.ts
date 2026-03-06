@@ -284,12 +284,23 @@ function readStreamChunk(
 function createJsonResponseAsyncIterator(response: Response) {
   return {
     async *[Symbol.asyncIterator]() {
-      const processedResponse = await processJSONResponse(response);
+      try {
+        const processedResponse = await processJSONResponse(response);
 
-      yield {
-        ...processedResponse,
-        hasNext: false,
-      };
+        yield {
+          ...processedResponse,
+          hasNext: false,
+        };
+      } catch (error) {
+        yield {
+          errors: {
+            message: formatErrorMessage(getErrorMessage(error)),
+            networkStatusCode: response.status,
+            response,
+          },
+          hasNext: false,
+        };
+      }
     },
   };
 }
