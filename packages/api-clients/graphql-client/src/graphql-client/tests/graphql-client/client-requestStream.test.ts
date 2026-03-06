@@ -267,6 +267,31 @@ describe('GraphQL Client', () => {
               });
             }
           });
+
+          it('returns an async iterator that returns an error object when response.json() fails to parse the response body', async () => {
+            const responseConfig = {
+              status: 200,
+              ok: true,
+              headers,
+            };
+
+            const mockedSuccessResponse = new Response(
+              'not valid json{',
+              responseConfig,
+            );
+
+            fetchMock.mockResolvedValue(mockedSuccessResponse);
+
+            const responseStream = await client.requestStream(operation, {
+              variables,
+            });
+
+            for await (const response of responseStream) {
+              expect(response).toHaveProperty('errors');
+              expect(response.errors?.networkStatusCode).toBe(200);
+              expect(response).toHaveProperty('hasNext', false);
+            }
+          });
         });
 
         describe('response is Content-Type: multipart/mixed', () => {
