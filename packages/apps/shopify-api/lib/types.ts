@@ -25,7 +25,6 @@ export enum ShopifyHeader {
   Domain = 'X-Shopify-Shop-Domain',
   Hmac = 'X-Shopify-Hmac-Sha256',
   Topic = 'X-Shopify-Topic',
-  SubTopic = 'X-Shopify-Sub-Topic',
   WebhookId = 'X-Shopify-Webhook-Id',
   Name = 'X-Shopify-Name',
   TriggeredAt = 'X-Shopify-Triggered-At',
