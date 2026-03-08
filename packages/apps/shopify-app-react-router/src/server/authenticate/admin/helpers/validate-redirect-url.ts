@@ -33,7 +33,7 @@ function isSafe(
 
   try {
     url = new URL(redirectUrl, domain);
-  } catch (error) {
+  } catch (_error) {
     return false;
   }
 

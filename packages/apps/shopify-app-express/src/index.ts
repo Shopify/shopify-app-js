@@ -112,9 +112,9 @@ function apiConfigWithDefaults<Params extends Partial<ApiConfigParams>>(
   return {
     apiKey: process.env.SHOPIFY_API_KEY!,
     apiSecretKey: process.env.SHOPIFY_API_SECRET!,
-    scopes: process.env.SCOPES?.split(',')!,
-    hostScheme: (process.env.HOST?.split('://')[0] as 'http' | 'https')!,
-    hostName: process.env.HOST?.replace(/https?:\/\//, '')!,
+    scopes: (process.env.SCOPES?.split(',')) as string[],
+    hostScheme: (process.env.HOST?.split('://')[0]) as 'http' | 'https',
+    hostName: (process.env.HOST?.replace(/https?:\/\//, '')) as string,
     isEmbeddedApp: true,
     ...(apiConfig || {}),
     userAgentPrefix: userAgent,

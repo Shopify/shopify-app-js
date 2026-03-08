@@ -51,8 +51,8 @@ describe('PostgreSQLSessionStorage', () => {
             `GRANT ALL PRIVILEGES ON DATABASE "shop&test2" TO "shop&fy"`,
           );
           await client.end();
-        } catch (error) {
-          // console.error(error);  // uncomment to see error for debugging tests
+        } catch (_error) {
+          // console.error(_error);  // uncomment to see error for debugging tests
           return false;
         }
         return true;

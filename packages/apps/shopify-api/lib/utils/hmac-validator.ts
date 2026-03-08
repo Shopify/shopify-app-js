@@ -63,7 +63,7 @@ export function generateLocalHmac(config: ConfigInterface) {
     params: AuthQuery,
     signator: HMACSignator = 'admin',
   ): Promise<string> => {
-    const {hmac, signature, ...query} = params;
+    const {hmac: _hmac, signature: _signature, ...query} = params;
 
     const queryString =
       signator === 'admin'
