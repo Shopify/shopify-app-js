@@ -3,7 +3,7 @@
 #
 # shopify-dev in the monorepo will then sync these docs files for preview.
 
-name: Shopify Dev Docs Sync
+name: Shopify Dev Docs Preview
 
 on:
   pull_request:
@@ -15,7 +15,7 @@ on:
       - 'packages/apps/shopify-app-react-router/docs/generated/generated_static_pages.json'
 
 concurrency:
-  group: shopify-dev-docs-sync-${{ github.head_ref }}
+  group: shopify-dev-docs-preview-${{ github.head_ref }}
   cancel-in-progress: true
 
 jobs:
