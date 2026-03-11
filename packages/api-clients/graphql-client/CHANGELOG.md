@@ -1,5 +1,12 @@
 # @shopify/graphql-client
 
+## 1.4.2
+
+### Patch Changes
+
+- df81075: Add error handling to createJsonResponseAsyncIterator so that response.json() failures in the streaming JSON path return a structured error response instead of throwing an unhandled exception.
+- d5ae946: Publish TypeScript source files to npm so "Go to Definition" in IDEs navigates to real source code instead of compiled `.d.ts` declaration files. Source maps already pointed to the correct paths — the source files just weren't included in the published packages.
+
 ## 1.4.1
 
 ### Patch Changes
