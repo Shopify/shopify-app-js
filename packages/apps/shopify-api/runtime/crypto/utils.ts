@@ -34,7 +34,7 @@ export async function createSHA256HMAC(
     : asHex(signature);
 }
 
-export function asHex(buffer: ArrayBuffer): string {
+export function asHex(buffer: ArrayBuffer | Uint8Array): string {
   return [...new Uint8Array(buffer)]
     .map((byte) => byte.toString(16).padStart(2, '0'))
     .join('');
@@ -42,7 +42,7 @@ export function asHex(buffer: ArrayBuffer): string {
 
 const LookupTable =
   'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=';
-export function asBase64(buffer: ArrayBuffer): string {
+export function asBase64(buffer: ArrayBuffer | Uint8Array): string {
   let output = '';
 
   const input = new Uint8Array(buffer);
