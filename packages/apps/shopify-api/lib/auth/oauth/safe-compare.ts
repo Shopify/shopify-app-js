@@ -23,7 +23,10 @@ export const safeCompare: SafeCompare = (strA, strB) => {
 };
 
 // Buffer must be same length for this function to be secure.
-function timingSafeEqual(bufA: ArrayBuffer, bufB: ArrayBuffer): boolean {
+function timingSafeEqual(
+  bufA: ArrayBuffer | Uint8Array,
+  bufB: ArrayBuffer | Uint8Array,
+): boolean {
   const viewA = new Uint8Array(bufA);
   const viewB = new Uint8Array(bufB);
   let out = 0;
