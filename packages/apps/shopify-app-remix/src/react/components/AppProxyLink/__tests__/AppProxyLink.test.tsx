@@ -54,7 +54,9 @@ describe('<AppProxyLink />', () => {
     // WHEN
     mount(
       <AppProxyProvider appUrl="http://my-app.example.io">
-        <AppProxyLink ref={ref} href="/my-action">Hello world</AppProxyLink>
+        <AppProxyLink ref={ref} href="/my-action">
+          Hello world
+        </AppProxyLink>
       </AppProxyProvider>,
     );
 
