@@ -8,9 +8,11 @@ import {SignJWT} from 'jose';
 import {
   createTestHmac,
   mockShopifyResponse,
+  mockShopifyResponses,
   shopify,
   SHOPIFY_HOST,
 } from '../../__tests__/test-helper';
+import {OFFLINE_TOKEN_EXCHANGE_RESPONSE} from '../../__tests__/integration/responses';
 
 describe('validateAuthenticatedSession', () => {
   let app: Express;
@@ -311,6 +313,71 @@ describe('validateAuthenticatedSession', () => {
       expect(
         response.headers['x-shopify-api-request-failure-reauthorize-url'],
       ).toBe(`${shopify.config.auth.path}?shop=my-shop.myshopify.io`);
+    });
+  });
+
+  describe('with unstable_newEmbeddedAuthStrategy enabled', () => {
+    let validJWT: any;
+
+    beforeEach(async () => {
+      shopify.api.config.isEmbeddedApp = true;
+      shopify.config.future = {unstable_newEmbeddedAuthStrategy: true};
+
+      app = express();
+      app.use('/test', shopify.validateAuthenticatedSession());
+      app.get('/test/shop', async (_req, res) => {
+        res.json({session: res.locals.shopify?.session?.shop});
+      });
+
+      validJWT = await new SignJWT({
+        dummy: 'data',
+        aud: shopify.api.config.apiKey,
+        dest: `https://${shop}`,
+        sub: '1',
+      })
+        .setProtectedHeader({alg: 'HS256'})
+        .sign(createSecretKey(Buffer.from(shopify.api.config.apiSecretKey)));
+    });
+
+    it('routes to performTokenExchange when Bearer token is present and flag is on', async () => {
+      mockShopifyResponse(OFFLINE_TOKEN_EXCHANGE_RESPONSE);
+
+      const response = await request(app)
+        .get('/test/shop')
+        .set('Authorization', `Bearer ${validJWT}`)
+        .expect(200);
+
+      expect(response.body.session).toBe(shop);
+    });
+
+    it('falls through to OAuth flow when flag is off (regression guard)', async () => {
+      shopify.config.future = {};
+
+      const scopes = shopify.api.config.scopes
+        ? shopify.api.config.scopes.toString()
+        : '';
+
+      session = new Session({
+        id: sessionId,
+        shop,
+        state: '123-this-is-a-state',
+        isOnline: shopify.config.useOnlineTokens,
+        scope: scopes,
+        expires: undefined,
+        accessToken: 'totally-real-access-token',
+      });
+      await shopify.config.sessionStorage.storeSession(session);
+
+      // The OAuth path makes a GraphQL call to validate the access token
+      mockShopifyResponse({data: {shop: {name: shop}}});
+
+      const response = await request(app)
+        .get('/test/shop?shop=my-shop.myshopify.io')
+        .set('Authorization', `Bearer ${validJWT}`)
+        .expect(200);
+
+      // When flag is off, the OAuth path is used and the session is set on res.locals
+      expect(response.body.session).toBe(shop);
     });
   });
 });
