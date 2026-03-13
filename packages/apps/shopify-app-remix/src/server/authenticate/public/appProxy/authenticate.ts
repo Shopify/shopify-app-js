@@ -89,12 +89,12 @@ function searchParamsToQuery(
   const result: Record<string, string | string[]> = {};
   for (const [key, value] of searchParams.entries()) {
     const existing = result[key];
-    if (existing !== undefined) {
+    if (existing === undefined) {
+      result[key] = value;
+    } else {
       result[key] = Array.isArray(existing)
         ? [...existing, value]
         : [existing, value];
-    } else {
-      result[key] = value;
     }
   }
   return result;

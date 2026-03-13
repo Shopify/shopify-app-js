@@ -416,12 +416,12 @@ async function createAppProxyHmac(url: URL): Promise<string> {
   const params: Record<string, string | string[]> = {};
   for (const [key, value] of url.searchParams.entries()) {
     const existing = params[key];
-    if (existing !== undefined) {
+    if (existing === undefined) {
+      params[key] = value;
+    } else {
       params[key] = Array.isArray(existing)
         ? [...existing, value]
         : [existing, value];
-    } else {
-      params[key] = value;
     }
   }
   const string = Object.entries(params)
