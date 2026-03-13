@@ -405,21 +405,19 @@ async function getValidRequest(): Promise<Request> {
 }
 
 async function createAppProxyHmac(url: URL): Promise<string> {
-  const params: Record<string, string | string[]> = {};
+  const params: Record<string, string> = {};
   for (const [key, value] of url.searchParams.entries()) {
     const existing = params[key];
     if (existing === undefined) {
       params[key] = value;
     } else {
-      params[key] = Array.isArray(existing)
-        ? [...existing, value]
-        : [existing, value];
+      params[key] = `${existing},${value}`;
     }
   }
   const string = Object.entries(params)
     .sort(([val1], [val2]) => val1.localeCompare(val2))
     .reduce((acc, [key, value]) => {
-      return `${acc}${key}=${Array.isArray(value) ? value.join(',') : value}`;
+      return `${acc}${key}=${value}`;
     }, '');
 
   return createSHA256HMAC(API_SECRET_KEY, string, HashFormat.Hex);

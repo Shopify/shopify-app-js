@@ -85,16 +85,14 @@ const liquid: LiquidResponseFunction = (body, initAndOptions) => {
 
 function searchParamsToQuery(
   searchParams: URLSearchParams,
-): Record<string, string | string[]> {
-  const result: Record<string, string | string[]> = {};
+): Record<string, string> {
+  const result: Record<string, string> = {};
   for (const [key, value] of searchParams.entries()) {
     const existing = result[key];
     if (existing === undefined) {
       result[key] = value;
     } else {
-      result[key] = Array.isArray(existing)
-        ? [...existing, value]
-        : [existing, value];
+      result[key] = `${existing},${value}`;
     }
   }
   return result;
