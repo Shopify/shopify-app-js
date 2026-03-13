@@ -217,11 +217,15 @@ export function callback(config: ConfigInterface): OAuthCallback {
     });
 
     if (!config.isEmbeddedApp) {
+      const cookiePath =
+        typeof config.cookiePath === 'function'
+          ? config.cookiePath(session)
+          : (config.cookiePath ?? '/');
       await cookies.setAndSign(SESSION_COOKIE_NAME, session.id, {
         expires: session.expires,
         sameSite: 'lax',
         secure: true,
-        path: '/',
+        path: cookiePath,
       });
     }
 
