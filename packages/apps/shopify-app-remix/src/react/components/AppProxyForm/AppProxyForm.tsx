@@ -1,4 +1,4 @@
-import {useContext} from 'react';
+import {forwardRef, useContext} from 'react';
 import {Form, type FormProps} from '@remix-run/react';
 
 import {AppProxyProviderContext} from '../AppProxyProvider';
@@ -64,20 +64,22 @@ export interface AppProxyFormProps extends FormProps {
  * ```
  * @publicDocs
  */
-export function AppProxyForm(props: AppProxyFormProps) {
-  const context = useContext(AppProxyProviderContext);
+export const AppProxyForm = forwardRef<HTMLFormElement, AppProxyFormProps>(
+  function AppProxyForm(props, ref) {
+    const context = useContext(AppProxyProviderContext);
 
-  if (!context) {
-    throw new Error(
-      'AppProxyForm must be used within an AppProxyProvider component',
+    if (!context) {
+      throw new Error(
+        'AppProxyForm must be used within an AppProxyProvider component',
+      );
+    }
+
+    const {children, action, ...otherProps} = props;
+
+    return (
+      <Form action={context.formatUrl(action, false)} {...otherProps} ref={ref}>
+        {children}
+      </Form>
     );
-  }
-
-  const {children, action, ...otherProps} = props;
-
-  return (
-    <Form action={context.formatUrl(action, false)} {...otherProps}>
-      {children}
-    </Form>
-  );
-}
+  },
+);
