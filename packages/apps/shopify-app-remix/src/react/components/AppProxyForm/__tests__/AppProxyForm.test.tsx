@@ -1,3 +1,4 @@
+import {createRef} from 'react';
 import {mount} from '@shopify/react-testing';
 import {createRemixStub} from '@remix-run/testing';
 
@@ -51,5 +52,25 @@ describe('<AppProxyForm />', () => {
     // THEN
     expect(component).toContainReactComponent('form', {action: '/my-action/'});
     expect(component).toContainReactHtml('Hello world');
+  });
+
+  it('forwards ref to the underlying form element', () => {
+    // GIVEN
+    const ref = createRef<HTMLFormElement>();
+
+    function MyComponent() {
+      return (
+        <AppProxyProvider appUrl="http://my-app.example.io">
+          <AppProxyForm ref={ref} action="/my-action">Hello world</AppProxyForm>
+        </AppProxyProvider>
+      );
+    }
+
+    // WHEN
+    const RemixStub = createRemixStub([{path: '/', Component: MyComponent}]);
+    mount(<RemixStub />);
+
+    // THEN
+    expect(ref.current).toBeInstanceOf(HTMLFormElement);
   });
 });
