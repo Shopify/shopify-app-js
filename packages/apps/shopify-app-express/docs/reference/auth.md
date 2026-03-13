@@ -22,6 +22,10 @@ This function returns an Express middleware that completes an OAuth process with
 
 The session is available to the following handlers via the `res.locals.shopify.session` object.
 
+When `future.expiringOfflineAccessTokens` is enabled, the `callback()` middleware requests expiring offline access tokens from Shopify (tokens that include a `refreshToken` and expire after a set period). The package automatically refreshes these tokens before they expire on subsequent requests.
+
+The `hooks.afterAuth` function, if configured, is called automatically at the end of the `callback()` middleware, so custom post-auth logic (such as webhook registration) no longer needs to be added as a separate middleware in the route chain.
+
 > **Note**: this middleware **_DOES NOT_** redirect anywhere, so the request **_WILL NOT_** trigger a response by default. If you don't need to perform any actions after OAuth, we recommend using the `shopify.redirectToShopifyOrAppRoot()` middleware.
 
 ## Example

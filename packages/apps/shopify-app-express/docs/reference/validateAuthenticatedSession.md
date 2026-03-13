@@ -11,6 +11,16 @@ If the verification fails in either case, it will redirect the user to complete 
 
 Please visit [our documentation](https://shopify.dev/docs/apps/auth/oauth/session-tokens) to learn more about session tokens and how they work.
 
+## Token Exchange (embedded apps)
+
+When `future.unstable_newEmbeddedAuthStrategy` is enabled, this middleware uses a different authentication path for embedded apps. Instead of redirecting to OAuth, it:
+
+1. Reads the Shopify session token (JWT) from the `Authorization: Bearer` header sent by App Bridge.
+2. Checks whether a valid session already exists in storage.
+3. If no valid session exists, exchanges the session token for API access tokens directly via the Shopify token exchange API -- no redirect required.
+
+This eliminates the redirect flickering that occurs with the OAuth flow and improves the embedded app experience.
+
 ## Example
 
 ```ts
