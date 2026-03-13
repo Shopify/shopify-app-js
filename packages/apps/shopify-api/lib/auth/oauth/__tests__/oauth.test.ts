@@ -721,6 +721,126 @@ describe('callback', () => {
       responseCookies.shopify_app_session.expires?.getTime(),
     ).toBeUndefined();
   });
+
+  test('uses default path "/" for session cookie when cookiePath is not configured', async () => {
+    const shopify = shopifyApi(testConfig({isEmbeddedApp: false}));
+
+    const beginResponse: NormalizedResponse = await shopify.auth.begin({
+      shop,
+      isOnline: false,
+      callbackPath: '/some-callback',
+      rawRequest: request,
+    });
+    setCallbackCookieFromResponse(
+      request,
+      beginResponse,
+      shopify.config.apiSecretKey,
+    );
+
+    const testCallbackQuery: QueryMock = {
+      shop,
+      state: VALID_NONCE,
+      timestamp: getCurrentTimeInSec().toString(),
+      code: 'some random auth code',
+    };
+    const expectedHmac = await generateLocalHmac(shopify.config)(
+      testCallbackQuery,
+    );
+    testCallbackQuery.hmac = expectedHmac;
+    request.url += `?${new URLSearchParams(testCallbackQuery).toString()}`;
+
+    queueMockResponse(JSON.stringify({access_token: 'token', scope: ''}));
+
+    const callbackResponse = await shopify.auth.callback({rawRequest: request});
+    const responseCookies = Cookies.parseCookies(
+      callbackResponse.headers['Set-Cookie'],
+    );
+
+    expect(responseCookies.shopify_app_session.path).toEqual('/');
+  });
+
+  test('uses static cookiePath string for session cookie', async () => {
+    const shopify = shopifyApi(
+      testConfig({isEmbeddedApp: false, cookiePath: '/my-app/'}),
+    );
+
+    const beginResponse: NormalizedResponse = await shopify.auth.begin({
+      shop,
+      isOnline: false,
+      callbackPath: '/some-callback',
+      rawRequest: request,
+    });
+    setCallbackCookieFromResponse(
+      request,
+      beginResponse,
+      shopify.config.apiSecretKey,
+    );
+
+    const testCallbackQuery: QueryMock = {
+      shop,
+      state: VALID_NONCE,
+      timestamp: getCurrentTimeInSec().toString(),
+      code: 'some random auth code',
+    };
+    const expectedHmac = await generateLocalHmac(shopify.config)(
+      testCallbackQuery,
+    );
+    testCallbackQuery.hmac = expectedHmac;
+    request.url += `?${new URLSearchParams(testCallbackQuery).toString()}`;
+
+    queueMockResponse(JSON.stringify({access_token: 'token', scope: ''}));
+
+    const callbackResponse = await shopify.auth.callback({rawRequest: request});
+    const responseCookies = Cookies.parseCookies(
+      callbackResponse.headers['Set-Cookie'],
+    );
+
+    expect(responseCookies.shopify_app_session.path).toEqual('/my-app/');
+  });
+
+  test('uses cookiePath factory function to derive path from session', async () => {
+    const shopify = shopifyApi(
+      testConfig({
+        isEmbeddedApp: false,
+        cookiePath: (session) => `/shops/${session.shop}/`,
+      }),
+    );
+
+    const beginResponse: NormalizedResponse = await shopify.auth.begin({
+      shop,
+      isOnline: false,
+      callbackPath: '/some-callback',
+      rawRequest: request,
+    });
+    setCallbackCookieFromResponse(
+      request,
+      beginResponse,
+      shopify.config.apiSecretKey,
+    );
+
+    const testCallbackQuery: QueryMock = {
+      shop,
+      state: VALID_NONCE,
+      timestamp: getCurrentTimeInSec().toString(),
+      code: 'some random auth code',
+    };
+    const expectedHmac = await generateLocalHmac(shopify.config)(
+      testCallbackQuery,
+    );
+    testCallbackQuery.hmac = expectedHmac;
+    request.url += `?${new URLSearchParams(testCallbackQuery).toString()}`;
+
+    queueMockResponse(JSON.stringify({access_token: 'token', scope: ''}));
+
+    const callbackResponse = await shopify.auth.callback({rawRequest: request});
+    const responseCookies = Cookies.parseCookies(
+      callbackResponse.headers['Set-Cookie'],
+    );
+
+    expect(responseCookies.shopify_app_session.path).toEqual(
+      `/shops/${shop}/`,
+    );
+  });
 });
 
 function setCallbackCookieFromResponse(
