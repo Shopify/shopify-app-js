@@ -61,7 +61,9 @@ describe('<AppProxyForm />', () => {
     function MyComponent() {
       return (
         <AppProxyProvider appUrl="http://my-app.example.io">
-          <AppProxyForm ref={ref} action="/my-action">Hello world</AppProxyForm>
+          <AppProxyForm ref={ref} action="/my-action">
+            Hello world
+          </AppProxyForm>
         </AppProxyProvider>
       );
     }
