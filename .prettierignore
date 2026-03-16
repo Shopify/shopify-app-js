@@ -2,5 +2,12 @@
 coverage
 
 packages/apps/shopify-app-remix/docs/**/*.json
-packages/apps/shopify-app-remix/**/*.example.tsx?
+packages/apps/shopify-app-remix/**/*.example.ts
+packages/apps/shopify-app-remix/**/*.example.tsx
+packages/apps/shopify-app-remix/**/*.example.*.ts
+packages/apps/shopify-app-remix/**/*.example.*.tsx
+packages/apps/shopify-app-react-router/**/*.example.ts
+packages/apps/shopify-app-react-router/**/*.example.tsx
+packages/apps/shopify-app-react-router/**/*.example.*.ts
+packages/apps/shopify-app-react-router/**/*.example.*.tsx
 packages/apps/shopify-api/rest/admin

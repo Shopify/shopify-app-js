@@ -12,14 +12,6 @@ const INVALID_SHOP_URL_2 = '-invalid.myshopify.io';
 const VALID_SHOPIFY_HOST_BUT_NOT_VALID_ADMIN_URL =
   'not-admin.shopify.com/store/my-shop';
 
-const CUSTOM_DOMAIN = 'my-custom-domain.com';
-const VALID_SHOP_WITH_CUSTOM_DOMAIN = `my-shop.${CUSTOM_DOMAIN}`;
-const INVALID_SHOP_WITH_CUSTOM_DOMAIN = `my-shop.${CUSTOM_DOMAIN}.nope`;
-
-const CUSTOM_DOMAIN_REGEX = /my-other-custom-domain\.com/;
-const VALID_SHOP_WITH_CUSTOM_DOMAIN_REGEX = `my-shop.my-other-custom-domain.com`;
-const INVALID_SHOP_WITH_CUSTOM_DOMAIN_REGEX = `my-shop.my-other-custom-domain.com.nope`;
-
 const VALID_HOSTS = [
   'my-host.myshopify.com/admin',
   'my-other-host.myshopify.com/admin',

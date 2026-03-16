@@ -739,7 +739,6 @@ describe('REST resources with a different API version', () => {
 
 describe('ID Normalization', () => {
   const domain = 'test-shop.myshopify.io';
-  const headers = {'X-Shopify-Access-Token': 'access-token'};
   const session = new Session({
     id: '1234',
     shop: domain,

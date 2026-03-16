@@ -85,7 +85,7 @@ export async function assessPayments({
       {variables: {endCursor}},
     );
 
-    installation = currentInstallations.data?.currentAppInstallation!;
+    installation = currentInstallations.data!.currentAppInstallation!;
     installation.activeSubscriptions.forEach((subscription) => {
       if (subscriptionMeetsCriteria({subscription, isTest, plans})) {
         returnValue.hasActivePayment = true;
