@@ -59,6 +59,56 @@ describe('shopify.webhooks.process', () => {
     expect(blockingWebhookHandlerCalled).toBeTruthy();
   });
 
+  it('passes context to the handler callback', async () => {
+    const shopify = shopifyApi(
+      testConfig({apiSecretKey: 'kitties are cute', isEmbeddedApp: true}),
+    );
+
+    const testContext = {extra: 'data'};
+    let receivedContext: any;
+
+    const handler = {
+      ...HTTP_HANDLER,
+      callback: async (
+        _topic: string,
+        _shop: string,
+        _body: string,
+        _webhookId: string,
+        _apiVersion: string,
+        context: any,
+      ) => {
+        receivedContext = context;
+      },
+    };
+    shopify.webhooks.addHandlers({PRODUCTS_CREATE: handler});
+
+    const app = getTestExpressApp();
+    app.post('/webhooks', async (req, res) => {
+      try {
+        await shopify.webhooks.process({
+          rawBody: (req as any).rawBody,
+          rawRequest: req,
+          rawResponse: res,
+          context: testContext,
+        });
+        res.status(StatusCode.Ok).json({data: {errorThrown: false}});
+      } catch (error) {
+        res
+          .status(StatusCode.InternalServerError)
+          .json({data: {errorThrown: true}});
+      }
+    });
+
+    const response = await request(app)
+      .post('/webhooks')
+      .set(headers({hmac: hmac(shopify.config.apiSecretKey, rawBody)}))
+      .send(rawBody)
+      .expect(StatusCode.Ok);
+
+    expect(response.body.data.errorThrown).toBeFalsy();
+    expect(receivedContext).toEqual(testContext);
+  });
+
   it('handles the request when a event topic is already registered', async () => {
     jest.useRealTimers();
 
