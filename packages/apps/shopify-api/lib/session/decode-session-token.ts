@@ -1,5 +1,3 @@
-import * as jose from 'jose';
-
 import {ConfigInterface} from '../base-types';
 import * as ShopifyErrors from '../error';
 import {getHMACKey} from '../utils/get-hmac-key';
@@ -19,6 +17,7 @@ export function decodeSessionToken(config: ConfigInterface) {
   ): Promise<JwtPayload> => {
     let payload: JwtPayload;
     try {
+      const jose = await import('jose');
       payload = (
         await jose.jwtVerify(token, getHMACKey(config.apiSecretKey), {
           algorithms: ['HS256'],
