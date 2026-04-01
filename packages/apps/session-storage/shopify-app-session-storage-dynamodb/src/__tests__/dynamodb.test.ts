@@ -29,6 +29,10 @@ describe('DynamoDBSessionStorage', () => {
         accessKeyId: 'shopify',
         secretAccessKey: 'passify',
       },
+      requestHandler: {
+        requestTimeout: 5000,
+        connectionTimeout: 5000,
+      },
     };
     const runCommand = await exec(
       'podman run -d -e AWS_ACCESS_KEY_ID=shopify -e AWS_SECRET_ACCESS_KEY=passify -p 8000:8000 amazon/dynamodb-local',
@@ -66,7 +70,7 @@ describe('DynamoDBSessionStorage', () => {
             }),
           );
           await waitUntilTableExists(
-            {client, maxWaitTime: 120},
+            {client, maxWaitTime: 180},
             {TableName: sessionTableName},
           );
         } catch (error) {
@@ -75,7 +79,7 @@ describe('DynamoDBSessionStorage', () => {
         }
         return true;
       },
-      {interval: 500, timeout: 80000},
+      {interval: 500, timeout: 120000},
     );
 
     storage = new DynamoDBSessionStorage({
@@ -83,7 +87,7 @@ describe('DynamoDBSessionStorage', () => {
       shopIndexName,
       config: dynamoDBClientConfig,
     });
-  });
+  }, 180000);
 
   afterAll(async () => {
     await exec(`podman rm -f ${containerId}`);
