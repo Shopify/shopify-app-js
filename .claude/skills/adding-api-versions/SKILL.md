@@ -5,7 +5,7 @@ description: Use when adding a new API version to the shopify-api package, creat
 
 # Adding a New API Version
 
-Step-by-step process for adding a new API version to `packages/apps/shopify-api`. Uses 2025-07 as a reference example.
+Step-by-step process for adding a new API version to `packages/apps/shopify-api`. Uses 2026-04 as a reference example.
 
 ## Prerequisites
 
@@ -18,12 +18,15 @@ Edit `packages/apps/shopify-api/lib/types.ts`:
 ```typescript
 export enum ApiVersion {
   // ... existing versions ...
-  April25 = '2025-04',
-  July25 = '2025-07',      // New version
+  January26 = '2026-01',
+  April26 = '2026-04',      // New version
+  July26 = '2026-07',       // Release candidate (next version)
 }
 ```
 
-**Naming convention:** `{Month}{YY}` (e.g., `April25`, `July25`). Value format: `YYYY-MM`.
+**Naming convention:** `{Month}{YY}` (e.g., `April26`, `July26`). Value format: `YYYY-MM`.
+
+Also add the **next** quarterly version as a release candidate enum value (no REST resources needed yet).
 
 ## Step 2: Create Directory Structure
 
@@ -48,9 +51,9 @@ In every resource file, update the `apiVersion` property:
 
 ```typescript
 // From
-public static apiVersion = ApiVersion.April25;
+public static apiVersion = ApiVersion.January26;
 // To
-public static apiVersion = ApiVersion.July25;
+public static apiVersion = ApiVersion.April26;
 ```
 
 ## Step 4: Update Test Files
@@ -59,12 +62,12 @@ Two changes in every test file:
 
 1. **testConfig calls:**
    ```typescript
-   testConfig({apiVersion: ApiVersion.July25, restResources})
+   testConfig({apiVersion: ApiVersion.April26, restResources})
    ```
 
 2. **URL paths in expectations:**
    ```typescript
-   `https://test-shop.myshopify.com/admin/api/2025-07/...`
+   `https://test-shop.myshopify.io/admin/api/2026-04/...`
    ```
 
 ## Step 5: Update Index File
@@ -109,6 +112,7 @@ pnpm test
 ## Checklist
 
 - [ ] New enum value in `ApiVersion` (`packages/apps/shopify-api/lib/types.ts`)
+- [ ] Next quarterly release candidate enum value added (no REST resources needed)
 - [ ] Source directory created: `rest/admin/{NEW_VERSION}/`
 - [ ] Test directory created: `rest/admin/__tests__/{NEW_VERSION}/`
 - [ ] All resource files copied and `apiVersion` updated
