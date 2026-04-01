@@ -70,7 +70,7 @@ describe('DynamoDBSessionStorage', () => {
             {TableName: sessionTableName},
           );
         } catch (error) {
-          console.error('DynamoDB setup error:', error);
+          // console.error(error);  // uncomment to see error for debugging tests
           return false;
         }
         return true;
