@@ -23,6 +23,7 @@ export async function authCallback({
     const callbackResponse = await api.auth.callback({
       rawRequest: req,
       rawResponse: res,
+      expiring: config.future?.expiringOfflineAccessTokens,
     });
 
     config.logger.debug('Callback is valid, storing session', {
@@ -52,6 +53,8 @@ export async function authCallback({
       ...res.locals.shopify,
       session: callbackResponse.session,
     };
+
+    await config.hooks?.afterAuth?.({session: callbackResponse.session});
 
     config.logger.debug('Completed OAuth callback', {
       shop: callbackResponse.session.shop,

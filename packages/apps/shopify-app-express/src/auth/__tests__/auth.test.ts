@@ -301,3 +301,108 @@ describe('auth with action after callback', () => {
     expect(afterAuth).toHaveBeenCalled();
   });
 });
+
+describe('auth with expiringOfflineAccessTokens', () => {
+  let app: express.Express;
+  let session: Session;
+  let callbackMock: jest.SpiedFunction;
+
+  beforeEach(async () => {
+    shopify.config.future = {expiringOfflineAccessTokens: true};
+
+    app = express();
+    app.get('/auth', shopify.auth.begin());
+    app.get(
+      '/auth/callback',
+      shopify.auth.callback(),
+      shopify.redirectToShopifyOrAppRoot(),
+    );
+
+    session = new Session({
+      id: 'test-session',
+      isOnline: shopify.config.useOnlineTokens,
+      shop: TEST_SHOP,
+      state: '1234',
+      accessToken: 'test-access-token',
+    });
+
+    callbackMock = jest.spyOn(shopify.api.auth, 'callback');
+    callbackMock.mockResolvedValueOnce({session, headers: undefined});
+    jest.spyOn(shopify.api.webhooks, 'register').mockResolvedValueOnce({});
+  });
+
+  it('passes expiring flag to api.auth.callback()', async () => {
+    await request(app).get(`/auth/callback?host=${BASE64_HOST}`).expect(302);
+
+    expect(callbackMock).toHaveBeenCalledWith(
+      expect.objectContaining({
+        expiring: true,
+      }),
+    );
+  });
+});
+
+describe('auth with afterAuth hook', () => {
+  let app: express.Express;
+  let session: Session;
+  let afterAuthHook: jest.Mock;
+
+  beforeEach(async () => {
+    afterAuthHook = jest.fn();
+    shopify.config.hooks = {afterAuth: afterAuthHook};
+
+    app = express();
+    app.get('/auth', shopify.auth.begin());
+    app.get(
+      '/auth/callback',
+      shopify.auth.callback(),
+      shopify.redirectToShopifyOrAppRoot(),
+    );
+
+    session = new Session({
+      id: 'test-session',
+      isOnline: shopify.config.useOnlineTokens,
+      shop: TEST_SHOP,
+      state: '1234',
+      accessToken: 'test-access-token',
+    });
+
+    jest
+      .spyOn(shopify.api.auth, 'callback')
+      .mockResolvedValueOnce({session, headers: undefined});
+    jest.spyOn(shopify.api.webhooks, 'register').mockResolvedValueOnce({});
+  });
+
+  it('calls afterAuth hook after OAuth callback completes', async () => {
+    await request(app).get(`/auth/callback?host=${BASE64_HOST}`).expect(302);
+
+    expect(afterAuthHook).toHaveBeenCalledWith(
+      expect.objectContaining({
+        session: expect.objectContaining({
+          shop: TEST_SHOP,
+          accessToken: 'test-access-token',
+        }),
+      }),
+    );
+  });
+
+  it('still calls registerWebhooks even when afterAuth hook is set', async () => {
+    const registerMock = jest.spyOn(shopify.api.webhooks, 'register');
+    registerMock.mockReset();
+    registerMock.mockResolvedValueOnce({});
+
+    jest.spyOn(shopify.api.auth, 'callback').mockReset();
+    jest
+      .spyOn(shopify.api.auth, 'callback')
+      .mockResolvedValueOnce({session, headers: undefined});
+
+    await request(app).get(`/auth/callback?host=${BASE64_HOST}`).expect(302);
+
+    expect(registerMock).toHaveBeenCalledWith({
+      session: expect.objectContaining({
+        shop: TEST_SHOP,
+      }),
+    });
+    expect(afterAuthHook).toHaveBeenCalled();
+  });
+});

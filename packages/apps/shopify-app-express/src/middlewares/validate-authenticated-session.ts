@@ -4,9 +4,11 @@ import {Request, Response, NextFunction} from 'express';
 import {redirectToAuth} from '../redirect-to-auth';
 import {ApiAndConfigParams} from '../types';
 import {redirectOutOfApp} from '../redirect-out-of-app';
+import {ensureOfflineTokenIsNotExpired} from '../helpers/ensure-offline-token-is-not-expired';
 
 import {ValidateAuthenticatedSessionMiddleware} from './types';
 import {hasValidAccessToken} from './has-valid-access-token';
+import {performTokenExchange} from './perform-token-exchange';
 
 type validateAuthenticatedSessionParams = ApiAndConfigParams;
 
@@ -17,6 +19,20 @@ export function validateAuthenticatedSession({
   return function validateAuthenticatedSession() {
     return async (req: Request, res: Response, next: NextFunction) => {
       config.logger.debug('Running validateAuthenticatedSession');
+
+      // Token exchange path: when the flag is on and a Bearer token is present,
+      // bypass the OAuth flow entirely.
+      const bearerToken = req.headers.authorization?.match(/Bearer (.*)/)?.[1];
+      if (config.future.unstable_newEmbeddedAuthStrategy && bearerToken) {
+        return performTokenExchange({
+          req,
+          res,
+          next,
+          api,
+          config,
+          sessionToken: bearerToken,
+        });
+      }
 
       let sessionId: string | undefined;
       try {
@@ -76,6 +92,11 @@ export function validateAuthenticatedSession({
               shop: session.shop,
             });
 
+            session = await ensureOfflineTokenIsNotExpired(
+              session,
+              api,
+              config,
+            );
             res.locals.shopify = {
               ...res.locals.shopify,
               session,

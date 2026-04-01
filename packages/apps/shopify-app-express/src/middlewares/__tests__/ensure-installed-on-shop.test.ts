@@ -1,14 +1,17 @@
 import request from 'supertest';
 import express, {Express} from 'express';
 import {ApiVersion, LogSeverity, Session} from '@shopify/shopify-api';
+import {MemorySessionStorage} from '@shopify/shopify-app-session-storage-memory';
 
 import {
   createTestHmac,
   mockShopifyResponse,
   shopify,
+  testConfig,
   SHOPIFY_HOST,
   TEST_SHOP,
 } from '../../__tests__/test-helper';
+import {shopifyApp} from '../../index';
 
 describe('ensureInstalledOnShop', () => {
   let app: Express;
@@ -192,5 +195,117 @@ describe('ensureInstalledOnShop', () => {
         'ensureInstalledOnShop() should only be used in embedded apps; calling validateAuthenticatedSession() instead',
       ),
     );
+  });
+});
+
+describe('ensureInstalledOnShop - token exchange flag', () => {
+  const encodedHost = Buffer.from(SHOPIFY_HOST, 'utf-8').toString('base64');
+
+  // Test 1: Flag OFF, no session → redirects to OAuth (regression guard)
+  it('flag off, no session → redirects to auth (regression guard)', async () => {
+    const app = express();
+    app.use('/test', shopify.ensureInstalledOnShop());
+    app.get('/test/shop', (_req, res) => res.json({}));
+
+    const response = await request(app)
+      .get(`/test/shop?shop=${TEST_SHOP}&host=${encodedHost}&embedded=1`)
+      .expect(302);
+
+    const location = new URL(response.header.location, 'https://example.com');
+    expect(location.pathname).toBe(shopify.config.exitIframePath);
+  });
+
+  // Test 2: Flag ON, no session, embedded=1 → CSP headers + next(), no OAuth redirect
+  it('flag on, no session, embedded=1 → CSP headers + next()', async () => {
+    const shopifyWithFlag = shopifyApp({
+      ...testConfig,
+      sessionStorage: new MemorySessionStorage(),
+      future: {unstable_newEmbeddedAuthStrategy: true},
+    });
+
+    const app = express();
+    app.use('/test', shopifyWithFlag.ensureInstalledOnShop());
+    app.get('/test/shop', (_req, res) => res.json({ok: true}));
+
+    const response = await request(app)
+      .get(`/test/shop?shop=${TEST_SHOP}&host=${encodedHost}&embedded=1`)
+      .expect(200);
+
+    expect(response.body.ok).toBe(true);
+    expect(response.headers['content-security-policy']).toMatch(TEST_SHOP);
+  });
+
+  // Test 3: Flag ON, valid session exists, embedded=1 → CSP headers + next(), no GraphQL probe
+  it('flag on, valid session, embedded=1 → CSP headers + next(), no GraphQL probe', async () => {
+    const sessionStorage = new MemorySessionStorage();
+    const shopifyWithFlag = shopifyApp({
+      ...testConfig,
+      sessionStorage,
+      future: {unstable_newEmbeddedAuthStrategy: true},
+    });
+
+    const scopes = shopifyWithFlag.api.config.scopes
+      ? shopifyWithFlag.api.config.scopes.toString()
+      : '';
+    const existingSession = new Session({
+      id: `offline_${TEST_SHOP}`,
+      shop: TEST_SHOP,
+      state: 'state',
+      isOnline: false,
+      scope: scopes,
+      accessToken: 'valid-token',
+    });
+    await sessionStorage.storeSession(existingSession);
+
+    const app = express();
+    app.use('/test', shopifyWithFlag.ensureInstalledOnShop());
+    app.get('/test/shop', (_req, res) => res.json({ok: true}));
+
+    const response = await request(app)
+      .get(`/test/shop?shop=${TEST_SHOP}&host=${encodedHost}&embedded=1`)
+      .expect(200);
+
+    expect(response.body.ok).toBe(true);
+    expect(response.headers['content-security-policy']).toMatch(TEST_SHOP);
+    // No GraphQL probe should have been made
+    expect(fetch).not.toHaveBeenCalled();
+  });
+
+  // Test 4: Flag ON, no session, embedded absent → redirects to embedded Shopify URL
+  it('flag on, no session, embedded param absent → redirects to embedded Shopify URL', async () => {
+    const shopifyWithFlag = shopifyApp({
+      ...testConfig,
+      sessionStorage: new MemorySessionStorage(),
+      future: {unstable_newEmbeddedAuthStrategy: true},
+    });
+
+    const app = express();
+    app.use('/test', shopifyWithFlag.ensureInstalledOnShop());
+    app.get('/test/shop', (_req, res) => res.json({}));
+
+    const response = await request(app)
+      .get(`/test/shop?shop=${TEST_SHOP}&host=${encodedHost}`)
+      .expect(302);
+
+    const location = new URL(response.header.location, 'https://example.com');
+    expect(location.hostname).toBe(SHOPIFY_HOST);
+    expect(location.pathname).toMatch(
+      new RegExp(`apps/${shopifyWithFlag.api.config.apiKey}`),
+    );
+  });
+
+  // Test 5: Flag ON, no shop param → 400
+  it('flag on, no shop param → 400', async () => {
+    const shopifyWithFlag = shopifyApp({
+      ...testConfig,
+      sessionStorage: new MemorySessionStorage(),
+      future: {unstable_newEmbeddedAuthStrategy: true},
+    });
+
+    const app = express();
+    app.use('/test', shopifyWithFlag.ensureInstalledOnShop());
+    app.get('/test/shop', (_req, res) => res.json({}));
+
+    await request(app).get('/test/shop').expect(400);
   });
 });

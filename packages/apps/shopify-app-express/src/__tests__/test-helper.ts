@@ -39,6 +39,7 @@ beforeEach(() => {
     webhooks: {
       path: '/webhooks',
     },
+    future: {},
     sessionStorage: new MemorySessionStorage(),
     api: {
       apiKey: 'testApiKey',
