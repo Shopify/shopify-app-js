@@ -29,10 +29,6 @@ describe('DynamoDBSessionStorage', () => {
         accessKeyId: 'shopify',
         secretAccessKey: 'passify',
       },
-      requestHandler: {
-        requestTimeout: 5000,
-        connectionTimeout: 5000,
-      },
     };
     const runCommand = await exec(
       'podman run -d -e AWS_ACCESS_KEY_ID=shopify -e AWS_SECRET_ACCESS_KEY=passify -p 8000:8000 amazon/dynamodb-local',
@@ -74,7 +70,7 @@ describe('DynamoDBSessionStorage', () => {
             {TableName: sessionTableName},
           );
         } catch (error) {
-          // console.error(error);  // uncomment to see error for debugging tests
+          console.error('DynamoDB setup error:', error);
           return false;
         }
         return true;
