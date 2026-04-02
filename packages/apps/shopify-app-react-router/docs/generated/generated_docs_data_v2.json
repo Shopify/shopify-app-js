@@ -29,7 +29,7 @@
     "src/server/clients/admin/types.ts": {
       "filePath": "src/server/clients/admin/types.ts",
       "name": "AdminApiContext",
-      "description": "",
+      "description": "Provides utilities that apps can use to make requests to the Admin API.",
       "isPublicDocs": true,
       "members": [
         {
@@ -156,7 +156,7 @@
     "src/server/clients/storefront/types.ts": {
       "filePath": "src/server/clients/storefront/types.ts",
       "name": "StorefrontContext",
-      "description": "",
+      "description": "Provides utilities that apps can use to make requests to the Storefront API.",
       "isPublicDocs": true,
       "members": [
         {
@@ -200,7 +200,7 @@
     "src/server/authenticate/admin/billing/types.ts": {
       "filePath": "src/server/authenticate/admin/billing/types.ts",
       "name": "BillingContext",
-      "description": "",
+      "description": "Provides utilities that apps can use to request billing for the app using the Admin API.",
       "isPublicDocs": true,
       "members": [
         {
@@ -626,7 +626,7 @@
     "src/server/authenticate/admin/scope/types.ts": {
       "filePath": "src/server/authenticate/admin/scope/types.ts",
       "name": "ScopesApiContext",
-      "description": "The Scopes API enables embedded apps and extensions to request merchant consent for access scopes.",
+      "description": "Provides utilities that apps can use to [manage scopes](https://shopify.dev/docs/apps/build/authentication-authorization/app-installation/manage-access-scopes) for the app using the Admin API.",
       "isPublicDocs": true,
       "members": [
         {
@@ -742,7 +742,7 @@
     "src/server/authenticate/admin/types.ts": {
       "filePath": "src/server/authenticate/admin/types.ts",
       "name": "AuthenticateAdmin",
-      "description": "",
+      "description": "Authenticates requests coming from the Shopify admin.\n\n> Note: The shape of the returned object changes depending on the `distribution` config. Merchant custom apps (`AppDistribution.ShopifyAdmin`) are not embedded so do not return session tokens or redirect functionality. All other distributions are embedded and so they return a context with session tokens and redirect functionality.",
       "isPublicDocs": true,
       "params": [
         {
@@ -1103,7 +1103,7 @@
     "src/server/authenticate/flow/types.ts": {
       "filePath": "src/server/authenticate/flow/types.ts",
       "name": "AuthenticateFlow",
-      "description": "",
+      "description": "Verifies requests coming from Shopify Flow extensions.",
       "isPublicDocs": true,
       "params": [
         {
@@ -1193,7 +1193,7 @@
     "src/server/authenticate/fulfillment-service/types.ts": {
       "filePath": "src/server/authenticate/fulfillment-service/types.ts",
       "name": "AuthenticateFulfillmentService",
-      "description": "",
+      "description": "Verifies requests coming from Shopify to fulfillment service apps.",
       "isPublicDocs": true,
       "params": [
         {
@@ -1292,7 +1292,7 @@
     "src/server/authenticate/public/checkout/types.ts": {
       "filePath": "src/server/authenticate/public/checkout/types.ts",
       "name": "AuthenticateCheckout",
-      "description": "",
+      "description": "Authenticates requests coming from Shopify checkout extensions.",
       "isPublicDocs": true,
       "params": [
         {
@@ -1388,7 +1388,7 @@
     "src/server/authenticate/public/appProxy/types.ts": {
       "filePath": "src/server/authenticate/public/appProxy/types.ts",
       "name": "AuthenticateAppProxy",
-      "description": "",
+      "description": "Authenticates requests coming to the app from Shopify app proxies.",
       "isPublicDocs": true,
       "params": [
         {
@@ -1634,7 +1634,7 @@
     "src/server/authenticate/public/customer-account/types.ts": {
       "filePath": "src/server/authenticate/public/customer-account/types.ts",
       "name": "AuthenticateCustomerAccount",
-      "description": "",
+      "description": "Authenticates requests coming from Shopify customer account extensions.",
       "isPublicDocs": true,
       "params": [
         {
@@ -1730,7 +1730,7 @@
     "src/server/authenticate/webhooks/types.ts": {
       "filePath": "src/server/authenticate/webhooks/types.ts",
       "name": "AuthenticateWebhook",
-      "description": "",
+      "description": "Verifies requests coming from Shopify webhooks.",
       "isPublicDocs": true,
       "params": [
         {
@@ -2174,7 +2174,7 @@
     "src/server/unauthenticated/admin/types.ts": {
       "filePath": "src/server/unauthenticated/admin/types.ts",
       "name": "GetUnauthenticatedAdminContext",
-      "description": "",
+      "description": "Creates an unauthenticated Admin context.",
       "isPublicDocs": true,
       "params": [
         {
@@ -2249,7 +2249,7 @@
     "src/server/unauthenticated/storefront/types.ts": {
       "filePath": "src/server/unauthenticated/storefront/types.ts",
       "name": "GetUnauthenticatedStorefrontContext",
-      "description": "",
+      "description": "Creates an unauthenticated Storefront context.",
       "isPublicDocs": true,
       "params": [
         {
@@ -4230,7 +4230,7 @@
       "syntaxKind": "TypeAliasDeclaration",
       "name": "AppProviderProps",
       "value": "NonEmbeddedProps | EmbeddedProps",
-      "description": "",
+      "description": "Props for the `AppProvider` component.",
       "isPublicDocs": true
     }
   },
@@ -6646,7 +6646,7 @@
     "src/react/components/AppProxyProvider/AppProxyProvider.tsx": {
       "filePath": "src/react/components/AppProxyProvider/AppProxyProvider.tsx",
       "name": "AppProxyProviderProps",
-      "description": "",
+      "description": "Props for the `AppProxyProvider` component.",
       "isPublicDocs": true,
       "members": [
         {

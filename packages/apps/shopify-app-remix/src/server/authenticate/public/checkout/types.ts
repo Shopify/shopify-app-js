@@ -2,7 +2,10 @@ import {JwtPayload} from '@shopify/shopify-api';
 
 import {EnsureCORSFunction} from '../../helpers/ensure-cors-headers';
 
-/** @publicDocs */
+/**
+ * Authenticates requests coming from Shopify checkout extensions.
+ * @publicDocs
+ */
 export type AuthenticateCheckout = (
   request: Request,
   options?: AuthenticateCheckoutOptions,

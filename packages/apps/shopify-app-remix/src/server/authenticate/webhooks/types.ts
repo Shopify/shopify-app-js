@@ -261,7 +261,10 @@ export type WebhookContext<Topics = string | number | symbol> =
   | WebhookContextWithoutSession<Topics>
   | WebhookContextWithSession<Topics>;
 
-/** @publicDocs */
+/**
+ * Verifies requests coming from Shopify webhooks.
+ * @publicDocs
+ */
 export type AuthenticateWebhook<Topics = string | number | symbol> = (
   request: Request,
 ) => Promise<WebhookContext<Topics>>;

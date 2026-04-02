@@ -14,7 +14,7 @@
           "AppProviderProps": {
             "filePath": "src/react/components/AppProvider/AppProvider.tsx",
             "name": "AppProviderProps",
-            "description": "",
+            "description": "Props for the `AppProvider` component.",
             "isPublicDocs": true,
             "members": [
               {
@@ -253,7 +253,7 @@
           "AppProxyProviderProps": {
             "filePath": "src/react/components/AppProxyProvider/AppProxyProvider.tsx",
             "name": "AppProxyProviderProps",
-            "description": "",
+            "description": "Props for the `AppProxyProvider` component.",
             "isPublicDocs": true,
             "members": [
               {
@@ -329,7 +329,7 @@
           "AuthenticateAdmin": {
             "filePath": "src/server/authenticate/admin/types.ts",
             "name": "AuthenticateAdmin",
-            "description": "",
+            "description": "Authenticates requests coming from the Shopify admin.\n\nThe shape of the returned object changes depending on the `isEmbeddedApp` config.",
             "isPublicDocs": true,
             "params": [
               {
@@ -442,7 +442,7 @@
           "AdminApiContext": {
             "filePath": "src/server/clients/admin/types.ts",
             "name": "AdminApiContext",
-            "description": "",
+            "description": "Provides utilities that apps can use to make requests to the Admin API.",
             "isPublicDocs": true,
             "members": [
               {
@@ -563,7 +563,7 @@
           "BillingContext": {
             "filePath": "src/server/authenticate/admin/billing/types.ts",
             "name": "BillingContext",
-            "description": "",
+            "description": "Provides utilities that apps can use to request billing for the app using the Admin API.",
             "isPublicDocs": true,
             "members": [
               {
@@ -1178,7 +1178,7 @@
           "ScopesApiContext": {
             "filePath": "src/server/authenticate/admin/scope/types.ts",
             "name": "ScopesApiContext",
-            "description": "The Scopes API enables embedded apps and extensions to request merchant consent for access scopes.",
+            "description": "Provides utilities that apps can use to [manage scopes](https://shopify.dev/docs/apps/build/authentication-authorization/app-installation/manage-access-scopes) for the app using the Admin API.",
             "isPublicDocs": true,
             "members": [
               {
@@ -1748,7 +1748,7 @@
           "BillingContext": {
             "filePath": "src/server/authenticate/admin/billing/types.ts",
             "name": "BillingContext",
-            "description": "",
+            "description": "Provides utilities that apps can use to request billing for the app using the Admin API.",
             "isPublicDocs": true,
             "members": [
               {
@@ -2378,7 +2378,7 @@
           "ScopesApiContext": {
             "filePath": "src/server/authenticate/admin/scope/types.ts",
             "name": "ScopesApiContext",
-            "description": "The Scopes API enables embedded apps and extensions to request merchant consent for access scopes.",
+            "description": "Provides utilities that apps can use to [manage scopes](https://shopify.dev/docs/apps/build/authentication-authorization/app-installation/manage-access-scopes) for the app using the Admin API.",
             "isPublicDocs": true,
             "members": [
               {
@@ -2573,7 +2573,7 @@
           "AuthenticateFlow": {
             "filePath": "src/server/authenticate/flow/types.ts",
             "name": "AuthenticateFlow",
-            "description": "",
+            "description": "Verifies requests coming from Shopify Flow extensions.",
             "isPublicDocs": true,
             "params": [
               {
@@ -2659,7 +2659,7 @@
           "AdminApiContext": {
             "filePath": "src/server/clients/admin/types.ts",
             "name": "AdminApiContext",
-            "description": "",
+            "description": "Provides utilities that apps can use to make requests to the Admin API.",
             "isPublicDocs": true,
             "members": [
               {
@@ -2884,7 +2884,7 @@
           "AuthenticateFulfillmentService": {
             "filePath": "src/server/authenticate/fulfillment-service/types.ts",
             "name": "AuthenticateFulfillmentService",
-            "description": "",
+            "description": "Verifies requests coming from Shopify to fulfillment service apps.",
             "isPublicDocs": true,
             "params": [
               {
@@ -2970,7 +2970,7 @@
           "AdminApiContext": {
             "filePath": "src/server/clients/admin/types.ts",
             "name": "AdminApiContext",
-            "description": "",
+            "description": "Provides utilities that apps can use to make requests to the Admin API.",
             "isPublicDocs": true,
             "members": [
               {
@@ -3203,7 +3203,7 @@
           "AuthenticateAppProxy": {
             "filePath": "src/server/authenticate/public/appProxy/types.ts",
             "name": "AuthenticateAppProxy",
-            "description": "",
+            "description": "Authenticates requests coming to the app from Shopify app proxies.",
             "isPublicDocs": true,
             "params": [
               {
@@ -3439,7 +3439,7 @@
           "AdminApiContext": {
             "filePath": "src/server/clients/admin/types.ts",
             "name": "AdminApiContext",
-            "description": "",
+            "description": "Provides utilities that apps can use to make requests to the Admin API.",
             "isPublicDocs": true,
             "members": [
               {
@@ -3560,7 +3560,7 @@
           "StorefrontContext": {
             "filePath": "src/server/clients/storefront/types.ts",
             "name": "StorefrontContext",
-            "description": "",
+            "description": "Provides utilities that apps can use to make requests to the Storefront API.",
             "isPublicDocs": true,
             "members": [
               {
@@ -3756,7 +3756,7 @@
           "AuthenticateCheckout": {
             "filePath": "src/server/authenticate/public/checkout/types.ts",
             "name": "AuthenticateCheckout",
-            "description": "",
+            "description": "Authenticates requests coming from Shopify checkout extensions.",
             "isPublicDocs": true,
             "params": [
               {
@@ -3940,7 +3940,7 @@
           "AuthenticateCustomerAccount": {
             "filePath": "src/server/authenticate/public/customer-account/types.ts",
             "name": "AuthenticateCustomerAccount",
-            "description": "",
+            "description": "Authenticates requests coming from Shopify customer account extensions.",
             "isPublicDocs": true,
             "params": [
               {
@@ -4123,7 +4123,7 @@
           "AuthenticateWebhook": {
             "filePath": "src/server/authenticate/webhooks/types.ts",
             "name": "AuthenticateWebhook",
-            "description": "",
+            "description": "Verifies requests coming from Shopify webhooks.",
             "isPublicDocs": true,
             "params": [
               {
@@ -4559,7 +4559,7 @@
           "AdminApiContext": {
             "filePath": "src/server/clients/admin/types.ts",
             "name": "AdminApiContext",
-            "description": "",
+            "description": "Provides utilities that apps can use to make requests to the Admin API.",
             "isPublicDocs": true,
             "members": [
               {
@@ -4868,7 +4868,7 @@
           "AdminApiContext": {
             "filePath": "src/server/clients/admin/types.ts",
             "name": "AdminApiContext",
-            "description": "",
+            "description": "Provides utilities that apps can use to make requests to the Admin API.",
             "isPublicDocs": true,
             "members": [
               {
@@ -5066,7 +5066,7 @@
           "StorefrontContext": {
             "filePath": "src/server/clients/storefront/types.ts",
             "name": "StorefrontContext",
-            "description": "",
+            "description": "Provides utilities that apps can use to make requests to the Storefront API.",
             "isPublicDocs": true,
             "members": [
               {
@@ -5608,7 +5608,7 @@
           "AuthenticateAdmin": {
             "filePath": "src/server/authenticate/admin/types.ts",
             "name": "AuthenticateAdmin",
-            "description": "",
+            "description": "Authenticates requests coming from the Shopify admin.\n\nThe shape of the returned object changes depending on the `isEmbeddedApp` config.",
             "isPublicDocs": true,
             "params": [
               {
@@ -5721,7 +5721,7 @@
           "AdminApiContext": {
             "filePath": "src/server/clients/admin/types.ts",
             "name": "AdminApiContext",
-            "description": "",
+            "description": "Provides utilities that apps can use to make requests to the Admin API.",
             "isPublicDocs": true,
             "members": [
               {
@@ -5842,7 +5842,7 @@
           "BillingContext": {
             "filePath": "src/server/authenticate/admin/billing/types.ts",
             "name": "BillingContext",
-            "description": "",
+            "description": "Provides utilities that apps can use to request billing for the app using the Admin API.",
             "isPublicDocs": true,
             "members": [
               {
@@ -6457,7 +6457,7 @@
           "ScopesApiContext": {
             "filePath": "src/server/authenticate/admin/scope/types.ts",
             "name": "ScopesApiContext",
-            "description": "The Scopes API enables embedded apps and extensions to request merchant consent for access scopes.",
+            "description": "Provides utilities that apps can use to [manage scopes](https://shopify.dev/docs/apps/build/authentication-authorization/app-installation/manage-access-scopes) for the app using the Admin API.",
             "isPublicDocs": true,
             "members": [
               {
@@ -6567,7 +6567,7 @@
           "AuthenticateFlow": {
             "filePath": "src/server/authenticate/flow/types.ts",
             "name": "AuthenticateFlow",
-            "description": "",
+            "description": "Verifies requests coming from Shopify Flow extensions.",
             "isPublicDocs": true,
             "params": [
               {
@@ -6653,7 +6653,7 @@
           "AuthenticateFulfillmentService": {
             "filePath": "src/server/authenticate/fulfillment-service/types.ts",
             "name": "AuthenticateFulfillmentService",
-            "description": "",
+            "description": "Verifies requests coming from Shopify to fulfillment service apps.",
             "isPublicDocs": true,
             "params": [
               {
@@ -6830,7 +6830,7 @@
           "AuthenticateAppProxy": {
             "filePath": "src/server/authenticate/public/appProxy/types.ts",
             "name": "AuthenticateAppProxy",
-            "description": "",
+            "description": "Authenticates requests coming to the app from Shopify app proxies.",
             "isPublicDocs": true,
             "params": [
               {
@@ -7066,7 +7066,7 @@
           "StorefrontContext": {
             "filePath": "src/server/clients/storefront/types.ts",
             "name": "StorefrontContext",
-            "description": "",
+            "description": "Provides utilities that apps can use to make requests to the Storefront API.",
             "isPublicDocs": true,
             "members": [
               {
@@ -7108,7 +7108,7 @@
           "AuthenticateCheckout": {
             "filePath": "src/server/authenticate/public/checkout/types.ts",
             "name": "AuthenticateCheckout",
-            "description": "",
+            "description": "Authenticates requests coming from Shopify checkout extensions.",
             "isPublicDocs": true,
             "params": [
               {
@@ -7198,7 +7198,7 @@
           "AuthenticateCustomerAccount": {
             "filePath": "src/server/authenticate/public/customer-account/types.ts",
             "name": "AuthenticateCustomerAccount",
-            "description": "",
+            "description": "Authenticates requests coming from Shopify customer account extensions.",
             "isPublicDocs": true,
             "params": [
               {
@@ -7288,7 +7288,7 @@
           "AuthenticateWebhook": {
             "filePath": "src/server/authenticate/webhooks/types.ts",
             "name": "AuthenticateWebhook",
-            "description": "",
+            "description": "Verifies requests coming from Shopify webhooks.",
             "isPublicDocs": true,
             "params": [
               {
@@ -7816,7 +7816,7 @@
           "GetUnauthenticatedAdminContext": {
             "filePath": "src/server/unauthenticated/admin/types.ts",
             "name": "GetUnauthenticatedAdminContext",
-            "description": "",
+            "description": "Creates an unauthenticated Admin context.",
             "isPublicDocs": true,
             "params": [
               {
@@ -7887,7 +7887,7 @@
           "GetUnauthenticatedStorefrontContext": {
             "filePath": "src/server/unauthenticated/storefront/types.ts",
             "name": "GetUnauthenticatedStorefrontContext",
-            "description": "",
+            "description": "Creates an unauthenticated Storefront context.",
             "isPublicDocs": true,
             "params": [
               {
@@ -9759,7 +9759,7 @@
           "GetUnauthenticatedAdminContext": {
             "filePath": "src/server/unauthenticated/admin/types.ts",
             "name": "GetUnauthenticatedAdminContext",
-            "description": "",
+            "description": "Creates an unauthenticated Admin context.",
             "isPublicDocs": true,
             "params": [
               {
@@ -9830,7 +9830,7 @@
           "AdminApiContext": {
             "filePath": "src/server/clients/admin/types.ts",
             "name": "AdminApiContext",
-            "description": "",
+            "description": "Provides utilities that apps can use to make requests to the Admin API.",
             "isPublicDocs": true,
             "members": [
               {
@@ -10023,7 +10023,7 @@
           "GetUnauthenticatedStorefrontContext": {
             "filePath": "src/server/unauthenticated/storefront/types.ts",
             "name": "GetUnauthenticatedStorefrontContext",
-            "description": "",
+            "description": "Creates an unauthenticated Storefront context.",
             "isPublicDocs": true,
             "params": [
               {
@@ -10104,7 +10104,7 @@
           "StorefrontContext": {
             "filePath": "src/server/clients/storefront/types.ts",
             "name": "StorefrontContext",
-            "description": "",
+            "description": "Provides utilities that apps can use to make requests to the Storefront API.",
             "isPublicDocs": true,
             "members": [
               {

@@ -211,7 +211,12 @@ export interface ScopesContext {
 export type AdminContext<Config extends AppConfigArg> =
   EmbeddedTypedAdminContext<Config> & ScopesContext;
 
-/** @publicDocs */
+/**
+ * Authenticates requests coming from the Shopify admin.
+ *
+ * The shape of the returned object changes depending on the `isEmbeddedApp` config.
+ * @publicDocs
+ */
 export type AuthenticateAdmin<Config extends AppConfigArg> = (
   request: Request,
 ) => Promise<AdminContext<Config>>;

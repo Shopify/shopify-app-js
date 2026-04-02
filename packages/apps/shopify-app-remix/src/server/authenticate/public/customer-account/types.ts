@@ -2,7 +2,10 @@ import {JwtPayload} from '@shopify/shopify-api';
 
 import {EnsureCORSFunction} from '../../helpers/ensure-cors-headers';
 
-/** @publicDocs */
+/**
+ * Authenticates requests coming from Shopify customer account extensions.
+ * @publicDocs
+ */
 export type AuthenticateCustomerAccount = (
   request: Request,
   options?: AuthenticateCustomerAccountOptions,

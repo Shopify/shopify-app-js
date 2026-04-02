@@ -77,7 +77,10 @@ export interface FulfillmentServiceContext {
   payload: FulfillmentServicePayload;
 }
 
-/** @publicDocs */
+/**
+ * Verifies requests coming from Shopify to fulfillment service apps.
+ * @publicDocs
+ */
 export type AuthenticateFulfillmentService = (
   request: Request,
 ) => Promise<FulfillmentServiceContext>;

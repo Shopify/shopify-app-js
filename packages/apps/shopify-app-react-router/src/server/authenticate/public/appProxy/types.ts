@@ -2,7 +2,10 @@ import {Session} from '@shopify/shopify-api';
 
 import {AdminApiContext, StorefrontContext} from '../../../clients';
 
-/** @publicDocs */
+/**
+ * Authenticates requests coming to the app from Shopify app proxies.
+ * @publicDocs
+ */
 export type AuthenticateAppProxy = (
   request: Request,
 ) => Promise<AppProxyContext | AppProxyContextWithSession>;
