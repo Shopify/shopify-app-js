@@ -4290,32 +4290,6 @@
       "value": "interface EmbeddedProps extends BaseProps {\n  /**\n   * If this route should be rendered inside the Shopify admin.\n   *\n   * Setting this to true will include the App Bridge script on the page.\n   * If true and the route is loaded outside the Shopify admin, then the user will be redirected to the Shopify admin.\n   *\n   * Setting this to false will not include the App Bridge script on the page.\n   *\n   * {@link https://shopify.dev/docs/apps/admin/embedded-app-home}\n   */\n  embedded: true;\n  /**\n   * The API key for your Shopify app. This is the `Client ID` from the Partner Dashboard.\n   *\n   * When using the Shopify CLI, this is the `SHOPIFY_API_KEY` environment variable. If you're using the environment\n   * variable, then you need to pass it from the loader to the component.\n   */\n  apiKey: string;\n}"
     }
   },
-  "AppProxyProviderProps": {
-    "src/react/components/AppProxyProvider/AppProxyProvider.tsx": {
-      "filePath": "src/react/components/AppProxyProvider/AppProxyProvider.tsx",
-      "name": "AppProxyProviderProps",
-      "description": "",
-      "isPublicDocs": true,
-      "members": [
-        {
-          "filePath": "src/react/components/AppProxyProvider/AppProxyProvider.tsx",
-          "syntaxKind": "PropertySignature",
-          "name": "appUrl",
-          "value": "string",
-          "description": "The URL where the app is hosted. You can set this from the `SHOPIFY_APP_URL` environment variable."
-        },
-        {
-          "filePath": "src/react/components/AppProxyProvider/AppProxyProvider.tsx",
-          "syntaxKind": "PropertySignature",
-          "name": "children",
-          "value": "React.ReactNode",
-          "description": "The children to render.",
-          "isOptional": true
-        }
-      ],
-      "value": "export interface AppProxyProviderProps {\n  /**\n   * The URL where the app is hosted. You can set this from the `SHOPIFY_APP_URL` environment variable.\n   */\n  appUrl: string;\n\n  /**\n   * The children to render.\n   */\n  children?: React.ReactNode;\n}"
-    }
-  },
   "AppProxyLinkGeneratedType": {
     "src/react/components/AppProxyLink/AppProxyLink.tsx": {
       "filePath": "src/react/components/AppProxyLink/AppProxyLink.tsx",
@@ -6666,6 +6640,32 @@
         }
       ],
       "value": "export interface AppProxyLinkProps extends React.DetailedHTMLProps<\n  React.AnchorHTMLAttributes<HTMLAnchorElement>,\n  HTMLAnchorElement\n> {\n  href: string;\n}"
+    }
+  },
+  "AppProxyProviderProps": {
+    "src/react/components/AppProxyProvider/AppProxyProvider.tsx": {
+      "filePath": "src/react/components/AppProxyProvider/AppProxyProvider.tsx",
+      "name": "AppProxyProviderProps",
+      "description": "",
+      "isPublicDocs": true,
+      "members": [
+        {
+          "filePath": "src/react/components/AppProxyProvider/AppProxyProvider.tsx",
+          "syntaxKind": "PropertySignature",
+          "name": "appUrl",
+          "value": "string",
+          "description": "The URL where the app is hosted. You can set this from the `SHOPIFY_APP_URL` environment variable."
+        },
+        {
+          "filePath": "src/react/components/AppProxyProvider/AppProxyProvider.tsx",
+          "syntaxKind": "PropertySignature",
+          "name": "children",
+          "value": "React.ReactNode",
+          "description": "The children to render.",
+          "isOptional": true
+        }
+      ],
+      "value": "export interface AppProxyProviderProps {\n  /**\n   * The URL where the app is hosted. You can set this from the `SHOPIFY_APP_URL` environment variable.\n   */\n  appUrl: string;\n\n  /**\n   * The children to render.\n   */\n  children?: React.ReactNode;\n}"
     }
   }
 }
