@@ -48,6 +48,7 @@ if [ -f "$V2_FILE" ] && [ -f "$V1_FILE" ]; then
   "
 fi
 
+
 # Copy generated docs to shopify-dev in the world repo if available
 MAJOR_VERSION=$(node -p "require('./package.json').version.split('.')[0]")
 WORLD_DEST="$HOME/world/trees/root/src/areas/platforms/shopify-dev/db/data/docs/templated_apis/shopify_app_react_router/v${MAJOR_VERSION}"
