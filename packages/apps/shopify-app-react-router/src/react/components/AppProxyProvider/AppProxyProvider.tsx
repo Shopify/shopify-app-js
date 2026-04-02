@@ -1,5 +1,6 @@
 import {createContext, useEffect, useState} from 'react';
 
+/** @publicDocs */
 export interface AppProxyProviderProps {
   /**
    * The URL where the app is hosted. You can set this from the `SHOPIFY_APP_URL` environment variable.

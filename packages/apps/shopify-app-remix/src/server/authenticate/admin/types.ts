@@ -211,6 +211,7 @@ export interface ScopesContext {
 export type AdminContext<Config extends AppConfigArg> =
   EmbeddedTypedAdminContext<Config> & ScopesContext;
 
+/** @publicDocs */
 export type AuthenticateAdmin<Config extends AppConfigArg> = (
   request: Request,
 ) => Promise<AdminContext<Config>>;

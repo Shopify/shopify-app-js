@@ -16,6 +16,7 @@ export type HandleAdminClientError = (arg: {
   session: Session;
 }) => Promise<void>;
 
+/** @publicDocs */
 export interface AdminApiContext {
   /**
    * Methods for interacting with the Shopify Admin GraphQL API

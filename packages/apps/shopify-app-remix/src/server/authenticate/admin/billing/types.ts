@@ -118,6 +118,7 @@ export interface UpdateUsageCappedAmountOptions {
   };
 }
 
+/** @publicDocs */
 export interface BillingContext<Config extends AppConfigArg> {
   /**
    * Checks if the shop has an active payment for any plan defined in the `billing` config option.

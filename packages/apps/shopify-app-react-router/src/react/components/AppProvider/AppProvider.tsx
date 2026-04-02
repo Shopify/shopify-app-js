@@ -39,6 +39,7 @@ interface NonEmbeddedProps extends BaseProps {
   embedded?: false;
 }
 
+/** @publicDocs */
 export type AppProviderProps = NonEmbeddedProps | EmbeddedProps;
 
 /**

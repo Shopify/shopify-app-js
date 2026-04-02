@@ -77,6 +77,7 @@ export interface FulfillmentServiceContext {
   payload: FulfillmentServicePayload;
 }
 
+/** @publicDocs */
 export type AuthenticateFulfillmentService = (
   request: Request,
 ) => Promise<FulfillmentServiceContext>;

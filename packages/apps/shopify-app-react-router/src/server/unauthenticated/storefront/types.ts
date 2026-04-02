@@ -100,6 +100,7 @@ export interface UnauthenticatedStorefrontContext {
   storefront: StorefrontContext;
 }
 
+/** @publicDocs */
 export type GetUnauthenticatedStorefrontContext = (
   shop: string,
 ) => Promise<UnauthenticatedStorefrontContext>;

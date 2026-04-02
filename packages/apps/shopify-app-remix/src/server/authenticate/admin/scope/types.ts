@@ -1,5 +1,6 @@
 /**
  * The Scopes API enables embedded apps and extensions to request merchant consent for access scopes.
+ * @publicDocs
  */
 export interface ScopesApiContext {
   /**

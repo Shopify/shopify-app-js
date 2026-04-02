@@ -2,6 +2,7 @@ import {StorefrontOperations} from '@shopify/storefront-api-client';
 
 import {GraphQLClient} from '../types';
 
+/** @publicDocs */
 export interface StorefrontContext {
   /**
    * Method for interacting with the Shopify Storefront GraphQL API

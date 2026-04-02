@@ -74,6 +74,7 @@ export interface UnauthenticatedAdminContext {
   admin: AdminApiContext;
 }
 
+/** @publicDocs */
 export type GetUnauthenticatedAdminContext = (
   shop: string,
 ) => Promise<UnauthenticatedAdminContext>;

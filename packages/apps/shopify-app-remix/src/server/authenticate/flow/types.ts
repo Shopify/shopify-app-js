@@ -82,4 +82,5 @@ export interface FlowContext {
   admin: AdminApiContext;
 }
 
+/** @publicDocs */
 export type AuthenticateFlow = (request: Request) => Promise<FlowContext>;

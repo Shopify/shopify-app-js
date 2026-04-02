@@ -261,6 +261,7 @@ export type WebhookContext<Topics = string | number | symbol> =
   | WebhookContextWithoutSession<Topics>
   | WebhookContextWithSession<Topics>;
 
+/** @publicDocs */
 export type AuthenticateWebhook<Topics = string | number | symbol> = (
   request: Request,
 ) => Promise<WebhookContext<Topics>>;

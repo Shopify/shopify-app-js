@@ -12,6 +12,7 @@ import {useEffect} from 'react';
 import {APP_BRIDGE_URL} from '../../const';
 import {RemixPolarisLink} from '../RemixPolarisLink';
 
+/** @publicDocs */
 export interface AppProviderProps extends Omit<
   PolarisAppProviderProps,
   'linkComponent' | 'i18n'
