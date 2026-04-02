@@ -38,6 +38,7 @@ export interface AppProxyLinkProps extends React.DetailedHTMLProps<
  *   );
  * }
  * ```
+ * @publicDocs
  */
 export function AppProxyLink(props: AppProxyLinkProps) {
   const context = useContext(AppProxyProviderContext);

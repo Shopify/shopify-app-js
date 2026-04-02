@@ -1,5 +1,6 @@
 /**
- * The Scopes API enables embedded apps and extensions to request merchant consent for access scopes.
+ * Provides utilities that apps can use to [manage scopes](https://shopify.dev/docs/apps/build/authentication-authorization/app-installation/manage-access-scopes) for the app using the Admin API.
+ * @publicDocs
  */
 export interface ScopesApiContext {
   /**

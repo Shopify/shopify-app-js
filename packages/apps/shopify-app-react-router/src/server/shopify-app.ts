@@ -39,6 +39,7 @@ import {FutureFlagOptions, logDisabledFutureFlags} from './future/flags';
  *
  * @param appConfig Configuration options for your Shopify app, such as the scopes your app needs.
  * @returns `ShopifyApp` An object constructed using your appConfig.  It has methods for interacting with Shopify.
+ * @publicDocs
  *
  * @example
  * <caption>The minimum viable configuration</caption>

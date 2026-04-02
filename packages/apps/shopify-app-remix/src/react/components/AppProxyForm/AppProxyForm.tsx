@@ -62,6 +62,7 @@ export interface AppProxyFormProps extends FormProps {
  *   );
  * }
  * ```
+ * @publicDocs
  */
 export function AppProxyForm(props: AppProxyFormProps) {
   const context = useContext(AppProxyProviderContext);
