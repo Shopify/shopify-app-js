@@ -16,8 +16,7 @@
             "syntaxKind": "TypeAliasDeclaration",
             "name": "AppProviderProps",
             "value": "NonEmbeddedProps | EmbeddedProps",
-            "description": "Props for the `AppProvider` component.",
-            "isPublicDocs": true
+            "description": "Props for the `AppProvider` component."
           },
           "NonEmbeddedProps": {
             "filePath": "src/react/components/AppProvider/AppProvider.tsx",
@@ -177,7 +176,6 @@
             "filePath": "src/react/components/AppProxyProvider/AppProxyProvider.tsx",
             "name": "AppProxyProviderProps",
             "description": "Props for the `AppProxyProvider` component.",
-            "isPublicDocs": true,
             "members": [
               {
                 "filePath": "src/react/components/AppProxyProvider/AppProxyProvider.tsx",
@@ -247,7 +245,6 @@
             "filePath": "src/server/authenticate/admin/types.ts",
             "name": "AuthenticateAdmin",
             "description": "Authenticates requests coming from the Shopify admin.\n\n> Note: The shape of the returned object changes depending on the `distribution` config. Merchant custom apps (`AppDistribution.ShopifyAdmin`) are not embedded so do not return session tokens or redirect functionality. All other distributions are embedded and so they return a context with session tokens and redirect functionality.",
-            "isPublicDocs": true,
             "params": [
               {
                 "name": "request",
@@ -383,7 +380,6 @@
             "filePath": "src/server/clients/admin/types.ts",
             "name": "AdminApiContext",
             "description": "Provides utilities that apps can use to make requests to the Admin API.",
-            "isPublicDocs": true,
             "members": [
               {
                 "filePath": "src/server/clients/admin/types.ts",
@@ -447,8 +443,8 @@
             "returns": {
               "filePath": "src/server/clients/types.ts",
               "description": "",
-              "name": "interface Promise<T> {\n    /**\n     * Attaches callbacks for the resolution and/or rejection of the Promise.\n     * @param onfulfilled The callback to execute when the Promise is resolved.\n     * @param onrejected The callback to execute when the Promise is rejected.\n     * @returns A Promise for the completion of which ever callback is executed.\n     */\n    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): Promise<TResult1 | TResult2>;\n\n    /**\n     * Attaches a callback for only the rejection of the Promise.\n     * @param onrejected The callback to execute when the Promise is rejected.\n     * @returns A Promise for the completion of the callback.\n     */\n    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): Promise<T | TResult>;\n}, interface Promise<T> {}, Promise: PromiseConstructor, interface Promise<T> {\n    readonly [Symbol.toStringTag]: string;\n}, interface Promise<T> {\n    /**\n     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The\n     * resolved value cannot be modified from the callback.\n     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).\n     * @returns A Promise for the completion of the callback.\n     */\n    finally(onfinally?: (() => void) | undefined | null): Promise<T>;\n}",
-              "value": "interface Promise<T> {\n    /**\n     * Attaches callbacks for the resolution and/or rejection of the Promise.\n     * @param onfulfilled The callback to execute when the Promise is resolved.\n     * @param onrejected The callback to execute when the Promise is rejected.\n     * @returns A Promise for the completion of which ever callback is executed.\n     */\n    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): Promise<TResult1 | TResult2>;\n\n    /**\n     * Attaches a callback for only the rejection of the Promise.\n     * @param onrejected The callback to execute when the Promise is rejected.\n     * @returns A Promise for the completion of the callback.\n     */\n    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): Promise<T | TResult>;\n}, interface Promise<T> {}, Promise: PromiseConstructor, interface Promise<T> {\n    readonly [Symbol.toStringTag]: string;\n}, interface Promise<T> {\n    /**\n     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The\n     * resolved value cannot be modified from the callback.\n     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).\n     * @returns A Promise for the completion of the callback.\n     */\n    finally(onfinally?: (() => void) | undefined | null): Promise<T>;\n}"
+              "name": "interface Promise<T> {\r\n    /**\r\n     * Attaches callbacks for the resolution and/or rejection of the Promise.\r\n     * @param onfulfilled The callback to execute when the Promise is resolved.\r\n     * @param onrejected The callback to execute when the Promise is rejected.\r\n     * @returns A Promise for the completion of which ever callback is executed.\r\n     */\r\n    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): Promise<TResult1 | TResult2>;\r\n\r\n    /**\r\n     * Attaches a callback for only the rejection of the Promise.\r\n     * @param onrejected The callback to execute when the Promise is rejected.\r\n     * @returns A Promise for the completion of the callback.\r\n     */\r\n    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): Promise<T | TResult>;\r\n}, interface Promise<T> { }, Promise: PromiseConstructor, interface Promise<T> {\r\n    readonly [Symbol.toStringTag]: string;\r\n}, interface Promise<T> {\r\n    /**\r\n     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The\r\n     * resolved value cannot be modified from the callback.\r\n     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).\r\n     * @returns A Promise for the completion of the callback.\r\n     */\r\n    finally(onfinally?: (() => void) | undefined | null): Promise<T>\r\n}",
+              "value": "interface Promise<T> {\r\n    /**\r\n     * Attaches callbacks for the resolution and/or rejection of the Promise.\r\n     * @param onfulfilled The callback to execute when the Promise is resolved.\r\n     * @param onrejected The callback to execute when the Promise is rejected.\r\n     * @returns A Promise for the completion of which ever callback is executed.\r\n     */\r\n    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): Promise<TResult1 | TResult2>;\r\n\r\n    /**\r\n     * Attaches a callback for only the rejection of the Promise.\r\n     * @param onrejected The callback to execute when the Promise is rejected.\r\n     * @returns A Promise for the completion of the callback.\r\n     */\r\n    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): Promise<T | TResult>;\r\n}, interface Promise<T> { }, Promise: PromiseConstructor, interface Promise<T> {\r\n    readonly [Symbol.toStringTag]: string;\r\n}, interface Promise<T> {\r\n    /**\r\n     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The\r\n     * resolved value cannot be modified from the callback.\r\n     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).\r\n     * @returns A Promise for the completion of the callback.\r\n     */\r\n    finally(onfinally?: (() => void) | undefined | null): Promise<T>\r\n}"
             },
             "value": "<\n  Operation extends keyof Operations,\n>(\n  query: Operation,\n  options?: GraphQLQueryOptions<Operation, Operations>,\n) => Promise<GraphQLResponse<Operation, Operations>>"
           },
@@ -493,7 +489,7 @@
                 "filePath": "src/server/clients/types.ts",
                 "syntaxKind": "PropertySignature",
                 "name": "variables",
-                "value": "ApiClientRequestOptions<Operation, Operations>",
+                "value": "ApiClientRequestOptions<Operation, Operations>[\"variables\"]",
                 "description": "The variables to pass to the operation.",
                 "isOptional": true
               }
@@ -504,7 +500,6 @@
             "filePath": "src/server/authenticate/admin/billing/types.ts",
             "name": "BillingContext",
             "description": "Provides utilities that apps can use to request billing for the app using the Admin API.",
-            "isPublicDocs": true,
             "members": [
               {
                 "filePath": "src/server/authenticate/admin/billing/types.ts",
@@ -793,38 +788,10 @@
               {
                 "filePath": "src/server/authenticate/admin/billing/types.ts",
                 "syntaxKind": "PropertySignature",
-                "name": "amount",
-                "value": "number",
-                "description": "Amount to charge for this plan."
-              },
-              {
-                "filePath": "src/server/authenticate/admin/billing/types.ts",
-                "syntaxKind": "PropertySignature",
-                "name": "currencyCode",
-                "value": "string",
-                "description": "Currency code for this plan."
-              },
-              {
-                "filePath": "src/server/authenticate/admin/billing/types.ts",
-                "syntaxKind": "PropertySignature",
-                "name": "interval",
-                "value": "BillingInterval.OneTime",
-                "description": "Interval for this plan.\n\nMust be set to `OneTime`."
-              },
-              {
-                "filePath": "src/server/authenticate/admin/billing/types.ts",
-                "syntaxKind": "PropertySignature",
                 "name": "isTest",
                 "value": "boolean",
                 "description": "Whether to use the test mode. This prevents the credit card from being charged. Test shops and demo shops cannot be charged.",
                 "isOptional": true
-              },
-              {
-                "filePath": "src/server/authenticate/admin/billing/types.ts",
-                "syntaxKind": "PropertySignature",
-                "name": "lineItems",
-                "value": "({ interval?: BillingInterval.Every30Days | BillingInterval.Annual; discount?: { durationLimitInIntervals?: number; value?: { amount?: number; percentage?: never; } | { amount?: never; percentage?: number; }; }; amount?: number; currencyCode?: string; } | { interval?: BillingInterval.Usage; amount?: number; terms?: string; currencyCode?: string; })[]",
-                "description": "The line items for this plan."
               },
               {
                 "filePath": "src/server/authenticate/admin/billing/types.ts",
@@ -836,25 +803,9 @@
               {
                 "filePath": "src/server/authenticate/admin/billing/types.ts",
                 "syntaxKind": "PropertySignature",
-                "name": "replacementBehavior",
-                "value": "BillingReplacementBehavior",
-                "description": "The replacement behavior to use for this plan.",
-                "isOptional": true
-              },
-              {
-                "filePath": "src/server/authenticate/admin/billing/types.ts",
-                "syntaxKind": "PropertySignature",
                 "name": "returnUrl",
                 "value": "string",
                 "description": "The URL to return to after the merchant approves the payment.",
-                "isOptional": true
-              },
-              {
-                "filePath": "src/server/authenticate/admin/billing/types.ts",
-                "syntaxKind": "PropertySignature",
-                "name": "trialDays",
-                "value": "number",
-                "description": "How many trial days to give before charging for this plan.",
                 "isOptional": true
               }
             ],
@@ -1119,7 +1070,6 @@
             "filePath": "src/server/authenticate/admin/scope/types.ts",
             "name": "ScopesApiContext",
             "description": "Provides utilities that apps can use to [manage scopes](https://shopify.dev/docs/apps/build/authentication-authorization/app-installation/manage-access-scopes) for the app using the Admin API.",
-            "isPublicDocs": true,
             "members": [
               {
                 "filePath": "src/server/authenticate/admin/scope/types.ts",
@@ -1689,7 +1639,6 @@
             "filePath": "src/server/authenticate/admin/billing/types.ts",
             "name": "BillingContext",
             "description": "Provides utilities that apps can use to request billing for the app using the Admin API.",
-            "isPublicDocs": true,
             "members": [
               {
                 "filePath": "src/server/authenticate/admin/billing/types.ts",
@@ -1978,38 +1927,10 @@
               {
                 "filePath": "src/server/authenticate/admin/billing/types.ts",
                 "syntaxKind": "PropertySignature",
-                "name": "amount",
-                "value": "number",
-                "description": "Amount to charge for this plan."
-              },
-              {
-                "filePath": "src/server/authenticate/admin/billing/types.ts",
-                "syntaxKind": "PropertySignature",
-                "name": "currencyCode",
-                "value": "string",
-                "description": "Currency code for this plan."
-              },
-              {
-                "filePath": "src/server/authenticate/admin/billing/types.ts",
-                "syntaxKind": "PropertySignature",
-                "name": "interval",
-                "value": "BillingInterval.OneTime",
-                "description": "Interval for this plan.\n\nMust be set to `OneTime`."
-              },
-              {
-                "filePath": "src/server/authenticate/admin/billing/types.ts",
-                "syntaxKind": "PropertySignature",
                 "name": "isTest",
                 "value": "boolean",
                 "description": "Whether to use the test mode. This prevents the credit card from being charged. Test shops and demo shops cannot be charged.",
                 "isOptional": true
-              },
-              {
-                "filePath": "src/server/authenticate/admin/billing/types.ts",
-                "syntaxKind": "PropertySignature",
-                "name": "lineItems",
-                "value": "({ interval?: BillingInterval.Every30Days | BillingInterval.Annual; discount?: { durationLimitInIntervals?: number; value?: { amount?: number; percentage?: never; } | { amount?: never; percentage?: number; }; }; amount?: number; currencyCode?: string; } | { interval?: BillingInterval.Usage; amount?: number; terms?: string; currencyCode?: string; })[]",
-                "description": "The line items for this plan."
               },
               {
                 "filePath": "src/server/authenticate/admin/billing/types.ts",
@@ -2021,25 +1942,9 @@
               {
                 "filePath": "src/server/authenticate/admin/billing/types.ts",
                 "syntaxKind": "PropertySignature",
-                "name": "replacementBehavior",
-                "value": "BillingReplacementBehavior",
-                "description": "The replacement behavior to use for this plan.",
-                "isOptional": true
-              },
-              {
-                "filePath": "src/server/authenticate/admin/billing/types.ts",
-                "syntaxKind": "PropertySignature",
                 "name": "returnUrl",
                 "value": "string",
                 "description": "The URL to return to after the merchant approves the payment.",
-                "isOptional": true
-              },
-              {
-                "filePath": "src/server/authenticate/admin/billing/types.ts",
-                "syntaxKind": "PropertySignature",
-                "name": "trialDays",
-                "value": "number",
-                "description": "How many trial days to give before charging for this plan.",
                 "isOptional": true
               }
             ],
@@ -2319,7 +2224,6 @@
             "filePath": "src/server/authenticate/admin/scope/types.ts",
             "name": "ScopesApiContext",
             "description": "Provides utilities that apps can use to [manage scopes](https://shopify.dev/docs/apps/build/authentication-authorization/app-installation/manage-access-scopes) for the app using the Admin API.",
-            "isPublicDocs": true,
             "members": [
               {
                 "filePath": "src/server/authenticate/admin/scope/types.ts",
@@ -2514,7 +2418,6 @@
             "filePath": "src/server/authenticate/flow/types.ts",
             "name": "AuthenticateFlow",
             "description": "Verifies requests coming from Shopify Flow extensions.",
-            "isPublicDocs": true,
             "params": [
               {
                 "name": "request",
@@ -2600,7 +2503,6 @@
             "filePath": "src/server/clients/admin/types.ts",
             "name": "AdminApiContext",
             "description": "Provides utilities that apps can use to make requests to the Admin API.",
-            "isPublicDocs": true,
             "members": [
               {
                 "filePath": "src/server/clients/admin/types.ts",
@@ -2664,8 +2566,8 @@
             "returns": {
               "filePath": "src/server/clients/types.ts",
               "description": "",
-              "name": "interface Promise<T> {\n    /**\n     * Attaches callbacks for the resolution and/or rejection of the Promise.\n     * @param onfulfilled The callback to execute when the Promise is resolved.\n     * @param onrejected The callback to execute when the Promise is rejected.\n     * @returns A Promise for the completion of which ever callback is executed.\n     */\n    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): Promise<TResult1 | TResult2>;\n\n    /**\n     * Attaches a callback for only the rejection of the Promise.\n     * @param onrejected The callback to execute when the Promise is rejected.\n     * @returns A Promise for the completion of the callback.\n     */\n    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): Promise<T | TResult>;\n}, interface Promise<T> {}, Promise: PromiseConstructor, interface Promise<T> {\n    readonly [Symbol.toStringTag]: string;\n}, interface Promise<T> {\n    /**\n     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The\n     * resolved value cannot be modified from the callback.\n     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).\n     * @returns A Promise for the completion of the callback.\n     */\n    finally(onfinally?: (() => void) | undefined | null): Promise<T>;\n}",
-              "value": "interface Promise<T> {\n    /**\n     * Attaches callbacks for the resolution and/or rejection of the Promise.\n     * @param onfulfilled The callback to execute when the Promise is resolved.\n     * @param onrejected The callback to execute when the Promise is rejected.\n     * @returns A Promise for the completion of which ever callback is executed.\n     */\n    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): Promise<TResult1 | TResult2>;\n\n    /**\n     * Attaches a callback for only the rejection of the Promise.\n     * @param onrejected The callback to execute when the Promise is rejected.\n     * @returns A Promise for the completion of the callback.\n     */\n    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): Promise<T | TResult>;\n}, interface Promise<T> {}, Promise: PromiseConstructor, interface Promise<T> {\n    readonly [Symbol.toStringTag]: string;\n}, interface Promise<T> {\n    /**\n     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The\n     * resolved value cannot be modified from the callback.\n     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).\n     * @returns A Promise for the completion of the callback.\n     */\n    finally(onfinally?: (() => void) | undefined | null): Promise<T>;\n}"
+              "name": "interface Promise<T> {\r\n    /**\r\n     * Attaches callbacks for the resolution and/or rejection of the Promise.\r\n     * @param onfulfilled The callback to execute when the Promise is resolved.\r\n     * @param onrejected The callback to execute when the Promise is rejected.\r\n     * @returns A Promise for the completion of which ever callback is executed.\r\n     */\r\n    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): Promise<TResult1 | TResult2>;\r\n\r\n    /**\r\n     * Attaches a callback for only the rejection of the Promise.\r\n     * @param onrejected The callback to execute when the Promise is rejected.\r\n     * @returns A Promise for the completion of the callback.\r\n     */\r\n    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): Promise<T | TResult>;\r\n}, interface Promise<T> { }, Promise: PromiseConstructor, interface Promise<T> {\r\n    readonly [Symbol.toStringTag]: string;\r\n}, interface Promise<T> {\r\n    /**\r\n     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The\r\n     * resolved value cannot be modified from the callback.\r\n     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).\r\n     * @returns A Promise for the completion of the callback.\r\n     */\r\n    finally(onfinally?: (() => void) | undefined | null): Promise<T>\r\n}",
+              "value": "interface Promise<T> {\r\n    /**\r\n     * Attaches callbacks for the resolution and/or rejection of the Promise.\r\n     * @param onfulfilled The callback to execute when the Promise is resolved.\r\n     * @param onrejected The callback to execute when the Promise is rejected.\r\n     * @returns A Promise for the completion of which ever callback is executed.\r\n     */\r\n    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): Promise<TResult1 | TResult2>;\r\n\r\n    /**\r\n     * Attaches a callback for only the rejection of the Promise.\r\n     * @param onrejected The callback to execute when the Promise is rejected.\r\n     * @returns A Promise for the completion of the callback.\r\n     */\r\n    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): Promise<T | TResult>;\r\n}, interface Promise<T> { }, Promise: PromiseConstructor, interface Promise<T> {\r\n    readonly [Symbol.toStringTag]: string;\r\n}, interface Promise<T> {\r\n    /**\r\n     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The\r\n     * resolved value cannot be modified from the callback.\r\n     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).\r\n     * @returns A Promise for the completion of the callback.\r\n     */\r\n    finally(onfinally?: (() => void) | undefined | null): Promise<T>\r\n}"
             },
             "value": "<\n  Operation extends keyof Operations,\n>(\n  query: Operation,\n  options?: GraphQLQueryOptions<Operation, Operations>,\n) => Promise<GraphQLResponse<Operation, Operations>>"
           },
@@ -2710,7 +2612,7 @@
                 "filePath": "src/server/clients/types.ts",
                 "syntaxKind": "PropertySignature",
                 "name": "variables",
-                "value": "ApiClientRequestOptions<Operation, Operations>",
+                "value": "ApiClientRequestOptions<Operation, Operations>[\"variables\"]",
                 "description": "The variables to pass to the operation.",
                 "isOptional": true
               }
@@ -2825,7 +2727,6 @@
             "filePath": "src/server/authenticate/fulfillment-service/types.ts",
             "name": "AuthenticateFulfillmentService",
             "description": "Verifies requests coming from Shopify to fulfillment service apps.",
-            "isPublicDocs": true,
             "params": [
               {
                 "name": "request",
@@ -2911,7 +2812,6 @@
             "filePath": "src/server/clients/admin/types.ts",
             "name": "AdminApiContext",
             "description": "Provides utilities that apps can use to make requests to the Admin API.",
-            "isPublicDocs": true,
             "members": [
               {
                 "filePath": "src/server/clients/admin/types.ts",
@@ -2975,8 +2875,8 @@
             "returns": {
               "filePath": "src/server/clients/types.ts",
               "description": "",
-              "name": "interface Promise<T> {\n    /**\n     * Attaches callbacks for the resolution and/or rejection of the Promise.\n     * @param onfulfilled The callback to execute when the Promise is resolved.\n     * @param onrejected The callback to execute when the Promise is rejected.\n     * @returns A Promise for the completion of which ever callback is executed.\n     */\n    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): Promise<TResult1 | TResult2>;\n\n    /**\n     * Attaches a callback for only the rejection of the Promise.\n     * @param onrejected The callback to execute when the Promise is rejected.\n     * @returns A Promise for the completion of the callback.\n     */\n    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): Promise<T | TResult>;\n}, interface Promise<T> {}, Promise: PromiseConstructor, interface Promise<T> {\n    readonly [Symbol.toStringTag]: string;\n}, interface Promise<T> {\n    /**\n     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The\n     * resolved value cannot be modified from the callback.\n     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).\n     * @returns A Promise for the completion of the callback.\n     */\n    finally(onfinally?: (() => void) | undefined | null): Promise<T>;\n}",
-              "value": "interface Promise<T> {\n    /**\n     * Attaches callbacks for the resolution and/or rejection of the Promise.\n     * @param onfulfilled The callback to execute when the Promise is resolved.\n     * @param onrejected The callback to execute when the Promise is rejected.\n     * @returns A Promise for the completion of which ever callback is executed.\n     */\n    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): Promise<TResult1 | TResult2>;\n\n    /**\n     * Attaches a callback for only the rejection of the Promise.\n     * @param onrejected The callback to execute when the Promise is rejected.\n     * @returns A Promise for the completion of the callback.\n     */\n    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): Promise<T | TResult>;\n}, interface Promise<T> {}, Promise: PromiseConstructor, interface Promise<T> {\n    readonly [Symbol.toStringTag]: string;\n}, interface Promise<T> {\n    /**\n     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The\n     * resolved value cannot be modified from the callback.\n     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).\n     * @returns A Promise for the completion of the callback.\n     */\n    finally(onfinally?: (() => void) | undefined | null): Promise<T>;\n}"
+              "name": "interface Promise<T> {\r\n    /**\r\n     * Attaches callbacks for the resolution and/or rejection of the Promise.\r\n     * @param onfulfilled The callback to execute when the Promise is resolved.\r\n     * @param onrejected The callback to execute when the Promise is rejected.\r\n     * @returns A Promise for the completion of which ever callback is executed.\r\n     */\r\n    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): Promise<TResult1 | TResult2>;\r\n\r\n    /**\r\n     * Attaches a callback for only the rejection of the Promise.\r\n     * @param onrejected The callback to execute when the Promise is rejected.\r\n     * @returns A Promise for the completion of the callback.\r\n     */\r\n    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): Promise<T | TResult>;\r\n}, interface Promise<T> { }, Promise: PromiseConstructor, interface Promise<T> {\r\n    readonly [Symbol.toStringTag]: string;\r\n}, interface Promise<T> {\r\n    /**\r\n     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The\r\n     * resolved value cannot be modified from the callback.\r\n     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).\r\n     * @returns A Promise for the completion of the callback.\r\n     */\r\n    finally(onfinally?: (() => void) | undefined | null): Promise<T>\r\n}",
+              "value": "interface Promise<T> {\r\n    /**\r\n     * Attaches callbacks for the resolution and/or rejection of the Promise.\r\n     * @param onfulfilled The callback to execute when the Promise is resolved.\r\n     * @param onrejected The callback to execute when the Promise is rejected.\r\n     * @returns A Promise for the completion of which ever callback is executed.\r\n     */\r\n    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): Promise<TResult1 | TResult2>;\r\n\r\n    /**\r\n     * Attaches a callback for only the rejection of the Promise.\r\n     * @param onrejected The callback to execute when the Promise is rejected.\r\n     * @returns A Promise for the completion of the callback.\r\n     */\r\n    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): Promise<T | TResult>;\r\n}, interface Promise<T> { }, Promise: PromiseConstructor, interface Promise<T> {\r\n    readonly [Symbol.toStringTag]: string;\r\n}, interface Promise<T> {\r\n    /**\r\n     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The\r\n     * resolved value cannot be modified from the callback.\r\n     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).\r\n     * @returns A Promise for the completion of the callback.\r\n     */\r\n    finally(onfinally?: (() => void) | undefined | null): Promise<T>\r\n}"
             },
             "value": "<\n  Operation extends keyof Operations,\n>(\n  query: Operation,\n  options?: GraphQLQueryOptions<Operation, Operations>,\n) => Promise<GraphQLResponse<Operation, Operations>>"
           },
@@ -3021,7 +2921,7 @@
                 "filePath": "src/server/clients/types.ts",
                 "syntaxKind": "PropertySignature",
                 "name": "variables",
-                "value": "ApiClientRequestOptions<Operation, Operations>",
+                "value": "ApiClientRequestOptions<Operation, Operations>[\"variables\"]",
                 "description": "The variables to pass to the operation.",
                 "isOptional": true
               }
@@ -3144,7 +3044,6 @@
             "filePath": "src/server/authenticate/public/appProxy/types.ts",
             "name": "AuthenticateAppProxy",
             "description": "Authenticates requests coming to the app from Shopify app proxies.",
-            "isPublicDocs": true,
             "params": [
               {
                 "name": "request",
@@ -3380,7 +3279,6 @@
             "filePath": "src/server/clients/admin/types.ts",
             "name": "AdminApiContext",
             "description": "Provides utilities that apps can use to make requests to the Admin API.",
-            "isPublicDocs": true,
             "members": [
               {
                 "filePath": "src/server/clients/admin/types.ts",
@@ -3444,8 +3342,8 @@
             "returns": {
               "filePath": "src/server/clients/types.ts",
               "description": "",
-              "name": "interface Promise<T> {\n    /**\n     * Attaches callbacks for the resolution and/or rejection of the Promise.\n     * @param onfulfilled The callback to execute when the Promise is resolved.\n     * @param onrejected The callback to execute when the Promise is rejected.\n     * @returns A Promise for the completion of which ever callback is executed.\n     */\n    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): Promise<TResult1 | TResult2>;\n\n    /**\n     * Attaches a callback for only the rejection of the Promise.\n     * @param onrejected The callback to execute when the Promise is rejected.\n     * @returns A Promise for the completion of the callback.\n     */\n    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): Promise<T | TResult>;\n}, interface Promise<T> {}, Promise: PromiseConstructor, interface Promise<T> {\n    readonly [Symbol.toStringTag]: string;\n}, interface Promise<T> {\n    /**\n     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The\n     * resolved value cannot be modified from the callback.\n     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).\n     * @returns A Promise for the completion of the callback.\n     */\n    finally(onfinally?: (() => void) | undefined | null): Promise<T>;\n}",
-              "value": "interface Promise<T> {\n    /**\n     * Attaches callbacks for the resolution and/or rejection of the Promise.\n     * @param onfulfilled The callback to execute when the Promise is resolved.\n     * @param onrejected The callback to execute when the Promise is rejected.\n     * @returns A Promise for the completion of which ever callback is executed.\n     */\n    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): Promise<TResult1 | TResult2>;\n\n    /**\n     * Attaches a callback for only the rejection of the Promise.\n     * @param onrejected The callback to execute when the Promise is rejected.\n     * @returns A Promise for the completion of the callback.\n     */\n    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): Promise<T | TResult>;\n}, interface Promise<T> {}, Promise: PromiseConstructor, interface Promise<T> {\n    readonly [Symbol.toStringTag]: string;\n}, interface Promise<T> {\n    /**\n     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The\n     * resolved value cannot be modified from the callback.\n     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).\n     * @returns A Promise for the completion of the callback.\n     */\n    finally(onfinally?: (() => void) | undefined | null): Promise<T>;\n}"
+              "name": "interface Promise<T> {\r\n    /**\r\n     * Attaches callbacks for the resolution and/or rejection of the Promise.\r\n     * @param onfulfilled The callback to execute when the Promise is resolved.\r\n     * @param onrejected The callback to execute when the Promise is rejected.\r\n     * @returns A Promise for the completion of which ever callback is executed.\r\n     */\r\n    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): Promise<TResult1 | TResult2>;\r\n\r\n    /**\r\n     * Attaches a callback for only the rejection of the Promise.\r\n     * @param onrejected The callback to execute when the Promise is rejected.\r\n     * @returns A Promise for the completion of the callback.\r\n     */\r\n    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): Promise<T | TResult>;\r\n}, interface Promise<T> { }, Promise: PromiseConstructor, interface Promise<T> {\r\n    readonly [Symbol.toStringTag]: string;\r\n}, interface Promise<T> {\r\n    /**\r\n     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The\r\n     * resolved value cannot be modified from the callback.\r\n     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).\r\n     * @returns A Promise for the completion of the callback.\r\n     */\r\n    finally(onfinally?: (() => void) | undefined | null): Promise<T>\r\n}",
+              "value": "interface Promise<T> {\r\n    /**\r\n     * Attaches callbacks for the resolution and/or rejection of the Promise.\r\n     * @param onfulfilled The callback to execute when the Promise is resolved.\r\n     * @param onrejected The callback to execute when the Promise is rejected.\r\n     * @returns A Promise for the completion of which ever callback is executed.\r\n     */\r\n    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): Promise<TResult1 | TResult2>;\r\n\r\n    /**\r\n     * Attaches a callback for only the rejection of the Promise.\r\n     * @param onrejected The callback to execute when the Promise is rejected.\r\n     * @returns A Promise for the completion of the callback.\r\n     */\r\n    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): Promise<T | TResult>;\r\n}, interface Promise<T> { }, Promise: PromiseConstructor, interface Promise<T> {\r\n    readonly [Symbol.toStringTag]: string;\r\n}, interface Promise<T> {\r\n    /**\r\n     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The\r\n     * resolved value cannot be modified from the callback.\r\n     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).\r\n     * @returns A Promise for the completion of the callback.\r\n     */\r\n    finally(onfinally?: (() => void) | undefined | null): Promise<T>\r\n}"
             },
             "value": "<\n  Operation extends keyof Operations,\n>(\n  query: Operation,\n  options?: GraphQLQueryOptions<Operation, Operations>,\n) => Promise<GraphQLResponse<Operation, Operations>>"
           },
@@ -3490,7 +3388,7 @@
                 "filePath": "src/server/clients/types.ts",
                 "syntaxKind": "PropertySignature",
                 "name": "variables",
-                "value": "ApiClientRequestOptions<Operation, Operations>",
+                "value": "ApiClientRequestOptions<Operation, Operations>[\"variables\"]",
                 "description": "The variables to pass to the operation.",
                 "isOptional": true
               }
@@ -3501,7 +3399,6 @@
             "filePath": "src/server/clients/storefront/types.ts",
             "name": "StorefrontContext",
             "description": "Provides utilities that apps can use to make requests to the Storefront API.",
-            "isPublicDocs": true,
             "members": [
               {
                 "filePath": "src/server/clients/storefront/types.ts",
@@ -3697,7 +3594,6 @@
             "filePath": "src/server/authenticate/public/checkout/types.ts",
             "name": "AuthenticateCheckout",
             "description": "Authenticates requests coming from Shopify checkout extensions.",
-            "isPublicDocs": true,
             "params": [
               {
                 "name": "request",
@@ -3881,7 +3777,6 @@
             "filePath": "src/server/authenticate/public/customer-account/types.ts",
             "name": "AuthenticateCustomerAccount",
             "description": "Authenticates requests coming from Shopify customer account extensions.",
-            "isPublicDocs": true,
             "params": [
               {
                 "name": "request",
@@ -4064,7 +3959,6 @@
             "filePath": "src/server/authenticate/webhooks/types.ts",
             "name": "AuthenticateWebhook",
             "description": "Verifies requests coming from Shopify webhooks.",
-            "isPublicDocs": true,
             "params": [
               {
                 "name": "request",
@@ -4500,7 +4394,6 @@
             "filePath": "src/server/clients/admin/types.ts",
             "name": "AdminApiContext",
             "description": "Provides utilities that apps can use to make requests to the Admin API.",
-            "isPublicDocs": true,
             "members": [
               {
                 "filePath": "src/server/clients/admin/types.ts",
@@ -4564,8 +4457,8 @@
             "returns": {
               "filePath": "src/server/clients/types.ts",
               "description": "",
-              "name": "interface Promise<T> {\n    /**\n     * Attaches callbacks for the resolution and/or rejection of the Promise.\n     * @param onfulfilled The callback to execute when the Promise is resolved.\n     * @param onrejected The callback to execute when the Promise is rejected.\n     * @returns A Promise for the completion of which ever callback is executed.\n     */\n    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): Promise<TResult1 | TResult2>;\n\n    /**\n     * Attaches a callback for only the rejection of the Promise.\n     * @param onrejected The callback to execute when the Promise is rejected.\n     * @returns A Promise for the completion of the callback.\n     */\n    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): Promise<T | TResult>;\n}, interface Promise<T> {}, Promise: PromiseConstructor, interface Promise<T> {\n    readonly [Symbol.toStringTag]: string;\n}, interface Promise<T> {\n    /**\n     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The\n     * resolved value cannot be modified from the callback.\n     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).\n     * @returns A Promise for the completion of the callback.\n     */\n    finally(onfinally?: (() => void) | undefined | null): Promise<T>;\n}",
-              "value": "interface Promise<T> {\n    /**\n     * Attaches callbacks for the resolution and/or rejection of the Promise.\n     * @param onfulfilled The callback to execute when the Promise is resolved.\n     * @param onrejected The callback to execute when the Promise is rejected.\n     * @returns A Promise for the completion of which ever callback is executed.\n     */\n    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): Promise<TResult1 | TResult2>;\n\n    /**\n     * Attaches a callback for only the rejection of the Promise.\n     * @param onrejected The callback to execute when the Promise is rejected.\n     * @returns A Promise for the completion of the callback.\n     */\n    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): Promise<T | TResult>;\n}, interface Promise<T> {}, Promise: PromiseConstructor, interface Promise<T> {\n    readonly [Symbol.toStringTag]: string;\n}, interface Promise<T> {\n    /**\n     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The\n     * resolved value cannot be modified from the callback.\n     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).\n     * @returns A Promise for the completion of the callback.\n     */\n    finally(onfinally?: (() => void) | undefined | null): Promise<T>;\n}"
+              "name": "interface Promise<T> {\r\n    /**\r\n     * Attaches callbacks for the resolution and/or rejection of the Promise.\r\n     * @param onfulfilled The callback to execute when the Promise is resolved.\r\n     * @param onrejected The callback to execute when the Promise is rejected.\r\n     * @returns A Promise for the completion of which ever callback is executed.\r\n     */\r\n    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): Promise<TResult1 | TResult2>;\r\n\r\n    /**\r\n     * Attaches a callback for only the rejection of the Promise.\r\n     * @param onrejected The callback to execute when the Promise is rejected.\r\n     * @returns A Promise for the completion of the callback.\r\n     */\r\n    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): Promise<T | TResult>;\r\n}, interface Promise<T> { }, Promise: PromiseConstructor, interface Promise<T> {\r\n    readonly [Symbol.toStringTag]: string;\r\n}, interface Promise<T> {\r\n    /**\r\n     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The\r\n     * resolved value cannot be modified from the callback.\r\n     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).\r\n     * @returns A Promise for the completion of the callback.\r\n     */\r\n    finally(onfinally?: (() => void) | undefined | null): Promise<T>\r\n}",
+              "value": "interface Promise<T> {\r\n    /**\r\n     * Attaches callbacks for the resolution and/or rejection of the Promise.\r\n     * @param onfulfilled The callback to execute when the Promise is resolved.\r\n     * @param onrejected The callback to execute when the Promise is rejected.\r\n     * @returns A Promise for the completion of which ever callback is executed.\r\n     */\r\n    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): Promise<TResult1 | TResult2>;\r\n\r\n    /**\r\n     * Attaches a callback for only the rejection of the Promise.\r\n     * @param onrejected The callback to execute when the Promise is rejected.\r\n     * @returns A Promise for the completion of the callback.\r\n     */\r\n    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): Promise<T | TResult>;\r\n}, interface Promise<T> { }, Promise: PromiseConstructor, interface Promise<T> {\r\n    readonly [Symbol.toStringTag]: string;\r\n}, interface Promise<T> {\r\n    /**\r\n     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The\r\n     * resolved value cannot be modified from the callback.\r\n     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).\r\n     * @returns A Promise for the completion of the callback.\r\n     */\r\n    finally(onfinally?: (() => void) | undefined | null): Promise<T>\r\n}"
             },
             "value": "<\n  Operation extends keyof Operations,\n>(\n  query: Operation,\n  options?: GraphQLQueryOptions<Operation, Operations>,\n) => Promise<GraphQLResponse<Operation, Operations>>"
           },
@@ -4610,7 +4503,7 @@
                 "filePath": "src/server/clients/types.ts",
                 "syntaxKind": "PropertySignature",
                 "name": "variables",
-                "value": "ApiClientRequestOptions<Operation, Operations>",
+                "value": "ApiClientRequestOptions<Operation, Operations>[\"variables\"]",
                 "description": "The variables to pass to the operation.",
                 "isOptional": true
               }
@@ -4809,7 +4702,6 @@
             "filePath": "src/server/clients/admin/types.ts",
             "name": "AdminApiContext",
             "description": "Provides utilities that apps can use to make requests to the Admin API.",
-            "isPublicDocs": true,
             "members": [
               {
                 "filePath": "src/server/clients/admin/types.ts",
@@ -4873,8 +4765,8 @@
             "returns": {
               "filePath": "src/server/clients/types.ts",
               "description": "",
-              "name": "interface Promise<T> {\n    /**\n     * Attaches callbacks for the resolution and/or rejection of the Promise.\n     * @param onfulfilled The callback to execute when the Promise is resolved.\n     * @param onrejected The callback to execute when the Promise is rejected.\n     * @returns A Promise for the completion of which ever callback is executed.\n     */\n    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): Promise<TResult1 | TResult2>;\n\n    /**\n     * Attaches a callback for only the rejection of the Promise.\n     * @param onrejected The callback to execute when the Promise is rejected.\n     * @returns A Promise for the completion of the callback.\n     */\n    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): Promise<T | TResult>;\n}, interface Promise<T> {}, Promise: PromiseConstructor, interface Promise<T> {\n    readonly [Symbol.toStringTag]: string;\n}, interface Promise<T> {\n    /**\n     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The\n     * resolved value cannot be modified from the callback.\n     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).\n     * @returns A Promise for the completion of the callback.\n     */\n    finally(onfinally?: (() => void) | undefined | null): Promise<T>;\n}",
-              "value": "interface Promise<T> {\n    /**\n     * Attaches callbacks for the resolution and/or rejection of the Promise.\n     * @param onfulfilled The callback to execute when the Promise is resolved.\n     * @param onrejected The callback to execute when the Promise is rejected.\n     * @returns A Promise for the completion of which ever callback is executed.\n     */\n    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): Promise<TResult1 | TResult2>;\n\n    /**\n     * Attaches a callback for only the rejection of the Promise.\n     * @param onrejected The callback to execute when the Promise is rejected.\n     * @returns A Promise for the completion of the callback.\n     */\n    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): Promise<T | TResult>;\n}, interface Promise<T> {}, Promise: PromiseConstructor, interface Promise<T> {\n    readonly [Symbol.toStringTag]: string;\n}, interface Promise<T> {\n    /**\n     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The\n     * resolved value cannot be modified from the callback.\n     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).\n     * @returns A Promise for the completion of the callback.\n     */\n    finally(onfinally?: (() => void) | undefined | null): Promise<T>;\n}"
+              "name": "interface Promise<T> {\r\n    /**\r\n     * Attaches callbacks for the resolution and/or rejection of the Promise.\r\n     * @param onfulfilled The callback to execute when the Promise is resolved.\r\n     * @param onrejected The callback to execute when the Promise is rejected.\r\n     * @returns A Promise for the completion of which ever callback is executed.\r\n     */\r\n    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): Promise<TResult1 | TResult2>;\r\n\r\n    /**\r\n     * Attaches a callback for only the rejection of the Promise.\r\n     * @param onrejected The callback to execute when the Promise is rejected.\r\n     * @returns A Promise for the completion of the callback.\r\n     */\r\n    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): Promise<T | TResult>;\r\n}, interface Promise<T> { }, Promise: PromiseConstructor, interface Promise<T> {\r\n    readonly [Symbol.toStringTag]: string;\r\n}, interface Promise<T> {\r\n    /**\r\n     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The\r\n     * resolved value cannot be modified from the callback.\r\n     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).\r\n     * @returns A Promise for the completion of the callback.\r\n     */\r\n    finally(onfinally?: (() => void) | undefined | null): Promise<T>\r\n}",
+              "value": "interface Promise<T> {\r\n    /**\r\n     * Attaches callbacks for the resolution and/or rejection of the Promise.\r\n     * @param onfulfilled The callback to execute when the Promise is resolved.\r\n     * @param onrejected The callback to execute when the Promise is rejected.\r\n     * @returns A Promise for the completion of which ever callback is executed.\r\n     */\r\n    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): Promise<TResult1 | TResult2>;\r\n\r\n    /**\r\n     * Attaches a callback for only the rejection of the Promise.\r\n     * @param onrejected The callback to execute when the Promise is rejected.\r\n     * @returns A Promise for the completion of the callback.\r\n     */\r\n    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): Promise<T | TResult>;\r\n}, interface Promise<T> { }, Promise: PromiseConstructor, interface Promise<T> {\r\n    readonly [Symbol.toStringTag]: string;\r\n}, interface Promise<T> {\r\n    /**\r\n     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The\r\n     * resolved value cannot be modified from the callback.\r\n     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).\r\n     * @returns A Promise for the completion of the callback.\r\n     */\r\n    finally(onfinally?: (() => void) | undefined | null): Promise<T>\r\n}"
             },
             "value": "<\n  Operation extends keyof Operations,\n>(\n  query: Operation,\n  options?: GraphQLQueryOptions<Operation, Operations>,\n) => Promise<GraphQLResponse<Operation, Operations>>"
           },
@@ -4919,7 +4811,7 @@
                 "filePath": "src/server/clients/types.ts",
                 "syntaxKind": "PropertySignature",
                 "name": "variables",
-                "value": "ApiClientRequestOptions<Operation, Operations>",
+                "value": "ApiClientRequestOptions<Operation, Operations>[\"variables\"]",
                 "description": "The variables to pass to the operation.",
                 "isOptional": true
               }
@@ -5007,7 +4899,6 @@
             "filePath": "src/server/clients/storefront/types.ts",
             "name": "StorefrontContext",
             "description": "Provides utilities that apps can use to make requests to the Storefront API.",
-            "isPublicDocs": true,
             "members": [
               {
                 "filePath": "src/server/clients/storefront/types.ts",
@@ -5067,8 +4958,8 @@
             "returns": {
               "filePath": "src/server/clients/types.ts",
               "description": "",
-              "name": "interface Promise<T> {\n    /**\n     * Attaches callbacks for the resolution and/or rejection of the Promise.\n     * @param onfulfilled The callback to execute when the Promise is resolved.\n     * @param onrejected The callback to execute when the Promise is rejected.\n     * @returns A Promise for the completion of which ever callback is executed.\n     */\n    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): Promise<TResult1 | TResult2>;\n\n    /**\n     * Attaches a callback for only the rejection of the Promise.\n     * @param onrejected The callback to execute when the Promise is rejected.\n     * @returns A Promise for the completion of the callback.\n     */\n    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): Promise<T | TResult>;\n}, interface Promise<T> {}, Promise: PromiseConstructor, interface Promise<T> {\n    readonly [Symbol.toStringTag]: string;\n}, interface Promise<T> {\n    /**\n     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The\n     * resolved value cannot be modified from the callback.\n     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).\n     * @returns A Promise for the completion of the callback.\n     */\n    finally(onfinally?: (() => void) | undefined | null): Promise<T>;\n}",
-              "value": "interface Promise<T> {\n    /**\n     * Attaches callbacks for the resolution and/or rejection of the Promise.\n     * @param onfulfilled The callback to execute when the Promise is resolved.\n     * @param onrejected The callback to execute when the Promise is rejected.\n     * @returns A Promise for the completion of which ever callback is executed.\n     */\n    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): Promise<TResult1 | TResult2>;\n\n    /**\n     * Attaches a callback for only the rejection of the Promise.\n     * @param onrejected The callback to execute when the Promise is rejected.\n     * @returns A Promise for the completion of the callback.\n     */\n    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): Promise<T | TResult>;\n}, interface Promise<T> {}, Promise: PromiseConstructor, interface Promise<T> {\n    readonly [Symbol.toStringTag]: string;\n}, interface Promise<T> {\n    /**\n     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The\n     * resolved value cannot be modified from the callback.\n     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).\n     * @returns A Promise for the completion of the callback.\n     */\n    finally(onfinally?: (() => void) | undefined | null): Promise<T>;\n}"
+              "name": "interface Promise<T> {\r\n    /**\r\n     * Attaches callbacks for the resolution and/or rejection of the Promise.\r\n     * @param onfulfilled The callback to execute when the Promise is resolved.\r\n     * @param onrejected The callback to execute when the Promise is rejected.\r\n     * @returns A Promise for the completion of which ever callback is executed.\r\n     */\r\n    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): Promise<TResult1 | TResult2>;\r\n\r\n    /**\r\n     * Attaches a callback for only the rejection of the Promise.\r\n     * @param onrejected The callback to execute when the Promise is rejected.\r\n     * @returns A Promise for the completion of the callback.\r\n     */\r\n    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): Promise<T | TResult>;\r\n}, interface Promise<T> { }, Promise: PromiseConstructor, interface Promise<T> {\r\n    readonly [Symbol.toStringTag]: string;\r\n}, interface Promise<T> {\r\n    /**\r\n     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The\r\n     * resolved value cannot be modified from the callback.\r\n     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).\r\n     * @returns A Promise for the completion of the callback.\r\n     */\r\n    finally(onfinally?: (() => void) | undefined | null): Promise<T>\r\n}",
+              "value": "interface Promise<T> {\r\n    /**\r\n     * Attaches callbacks for the resolution and/or rejection of the Promise.\r\n     * @param onfulfilled The callback to execute when the Promise is resolved.\r\n     * @param onrejected The callback to execute when the Promise is rejected.\r\n     * @returns A Promise for the completion of which ever callback is executed.\r\n     */\r\n    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): Promise<TResult1 | TResult2>;\r\n\r\n    /**\r\n     * Attaches a callback for only the rejection of the Promise.\r\n     * @param onrejected The callback to execute when the Promise is rejected.\r\n     * @returns A Promise for the completion of the callback.\r\n     */\r\n    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): Promise<T | TResult>;\r\n}, interface Promise<T> { }, Promise: PromiseConstructor, interface Promise<T> {\r\n    readonly [Symbol.toStringTag]: string;\r\n}, interface Promise<T> {\r\n    /**\r\n     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The\r\n     * resolved value cannot be modified from the callback.\r\n     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).\r\n     * @returns A Promise for the completion of the callback.\r\n     */\r\n    finally(onfinally?: (() => void) | undefined | null): Promise<T>\r\n}"
             },
             "value": "<\n  Operation extends keyof Operations,\n>(\n  query: Operation,\n  options?: GraphQLQueryOptions<Operation, Operations>,\n) => Promise<GraphQLResponse<Operation, Operations>>"
           },
@@ -5113,7 +5004,7 @@
                 "filePath": "src/server/clients/types.ts",
                 "syntaxKind": "PropertySignature",
                 "name": "variables",
-                "value": "ApiClientRequestOptions<Operation, Operations>",
+                "value": "ApiClientRequestOptions<Operation, Operations>[\"variables\"]",
                 "description": "The variables to pass to the operation.",
                 "isOptional": true
               }
@@ -5196,7 +5087,6 @@
             "filePath": "src/server/shopify-app.ts",
             "name": "ShopifyAppGeneratedType",
             "description": "Creates an object your app will use to interact with Shopify.",
-            "isPublicDocs": true,
             "params": [
               {
                 "name": "appConfig",
@@ -5552,7 +5442,6 @@
             "filePath": "src/server/authenticate/admin/types.ts",
             "name": "AuthenticateAdmin",
             "description": "Authenticates requests coming from the Shopify admin.\n\n> Note: The shape of the returned object changes depending on the `distribution` config. Merchant custom apps (`AppDistribution.ShopifyAdmin`) are not embedded so do not return session tokens or redirect functionality. All other distributions are embedded and so they return a context with session tokens and redirect functionality.",
-            "isPublicDocs": true,
             "params": [
               {
                 "name": "request",
@@ -5665,7 +5554,6 @@
             "filePath": "src/server/clients/admin/types.ts",
             "name": "AdminApiContext",
             "description": "Provides utilities that apps can use to make requests to the Admin API.",
-            "isPublicDocs": true,
             "members": [
               {
                 "filePath": "src/server/clients/admin/types.ts",
@@ -5729,8 +5617,8 @@
             "returns": {
               "filePath": "src/server/clients/types.ts",
               "description": "",
-              "name": "interface Promise<T> {\n    /**\n     * Attaches callbacks for the resolution and/or rejection of the Promise.\n     * @param onfulfilled The callback to execute when the Promise is resolved.\n     * @param onrejected The callback to execute when the Promise is rejected.\n     * @returns A Promise for the completion of which ever callback is executed.\n     */\n    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): Promise<TResult1 | TResult2>;\n\n    /**\n     * Attaches a callback for only the rejection of the Promise.\n     * @param onrejected The callback to execute when the Promise is rejected.\n     * @returns A Promise for the completion of the callback.\n     */\n    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): Promise<T | TResult>;\n}, interface Promise<T> {}, Promise: PromiseConstructor, interface Promise<T> {\n    readonly [Symbol.toStringTag]: string;\n}, interface Promise<T> {\n    /**\n     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The\n     * resolved value cannot be modified from the callback.\n     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).\n     * @returns A Promise for the completion of the callback.\n     */\n    finally(onfinally?: (() => void) | undefined | null): Promise<T>;\n}",
-              "value": "interface Promise<T> {\n    /**\n     * Attaches callbacks for the resolution and/or rejection of the Promise.\n     * @param onfulfilled The callback to execute when the Promise is resolved.\n     * @param onrejected The callback to execute when the Promise is rejected.\n     * @returns A Promise for the completion of which ever callback is executed.\n     */\n    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): Promise<TResult1 | TResult2>;\n\n    /**\n     * Attaches a callback for only the rejection of the Promise.\n     * @param onrejected The callback to execute when the Promise is rejected.\n     * @returns A Promise for the completion of the callback.\n     */\n    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): Promise<T | TResult>;\n}, interface Promise<T> {}, Promise: PromiseConstructor, interface Promise<T> {\n    readonly [Symbol.toStringTag]: string;\n}, interface Promise<T> {\n    /**\n     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The\n     * resolved value cannot be modified from the callback.\n     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).\n     * @returns A Promise for the completion of the callback.\n     */\n    finally(onfinally?: (() => void) | undefined | null): Promise<T>;\n}"
+              "name": "interface Promise<T> {\r\n    /**\r\n     * Attaches callbacks for the resolution and/or rejection of the Promise.\r\n     * @param onfulfilled The callback to execute when the Promise is resolved.\r\n     * @param onrejected The callback to execute when the Promise is rejected.\r\n     * @returns A Promise for the completion of which ever callback is executed.\r\n     */\r\n    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): Promise<TResult1 | TResult2>;\r\n\r\n    /**\r\n     * Attaches a callback for only the rejection of the Promise.\r\n     * @param onrejected The callback to execute when the Promise is rejected.\r\n     * @returns A Promise for the completion of the callback.\r\n     */\r\n    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): Promise<T | TResult>;\r\n}, interface Promise<T> { }, Promise: PromiseConstructor, interface Promise<T> {\r\n    readonly [Symbol.toStringTag]: string;\r\n}, interface Promise<T> {\r\n    /**\r\n     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The\r\n     * resolved value cannot be modified from the callback.\r\n     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).\r\n     * @returns A Promise for the completion of the callback.\r\n     */\r\n    finally(onfinally?: (() => void) | undefined | null): Promise<T>\r\n}",
+              "value": "interface Promise<T> {\r\n    /**\r\n     * Attaches callbacks for the resolution and/or rejection of the Promise.\r\n     * @param onfulfilled The callback to execute when the Promise is resolved.\r\n     * @param onrejected The callback to execute when the Promise is rejected.\r\n     * @returns A Promise for the completion of which ever callback is executed.\r\n     */\r\n    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): Promise<TResult1 | TResult2>;\r\n\r\n    /**\r\n     * Attaches a callback for only the rejection of the Promise.\r\n     * @param onrejected The callback to execute when the Promise is rejected.\r\n     * @returns A Promise for the completion of the callback.\r\n     */\r\n    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): Promise<T | TResult>;\r\n}, interface Promise<T> { }, Promise: PromiseConstructor, interface Promise<T> {\r\n    readonly [Symbol.toStringTag]: string;\r\n}, interface Promise<T> {\r\n    /**\r\n     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The\r\n     * resolved value cannot be modified from the callback.\r\n     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).\r\n     * @returns A Promise for the completion of the callback.\r\n     */\r\n    finally(onfinally?: (() => void) | undefined | null): Promise<T>\r\n}"
             },
             "value": "<\n  Operation extends keyof Operations,\n>(\n  query: Operation,\n  options?: GraphQLQueryOptions<Operation, Operations>,\n) => Promise<GraphQLResponse<Operation, Operations>>"
           },
@@ -5775,7 +5663,7 @@
                 "filePath": "src/server/clients/types.ts",
                 "syntaxKind": "PropertySignature",
                 "name": "variables",
-                "value": "ApiClientRequestOptions<Operation, Operations>",
+                "value": "ApiClientRequestOptions<Operation, Operations>[\"variables\"]",
                 "description": "The variables to pass to the operation.",
                 "isOptional": true
               }
@@ -5786,7 +5674,6 @@
             "filePath": "src/server/authenticate/admin/billing/types.ts",
             "name": "BillingContext",
             "description": "Provides utilities that apps can use to request billing for the app using the Admin API.",
-            "isPublicDocs": true,
             "members": [
               {
                 "filePath": "src/server/authenticate/admin/billing/types.ts",
@@ -6075,38 +5962,10 @@
               {
                 "filePath": "src/server/authenticate/admin/billing/types.ts",
                 "syntaxKind": "PropertySignature",
-                "name": "amount",
-                "value": "number",
-                "description": "Amount to charge for this plan."
-              },
-              {
-                "filePath": "src/server/authenticate/admin/billing/types.ts",
-                "syntaxKind": "PropertySignature",
-                "name": "currencyCode",
-                "value": "string",
-                "description": "Currency code for this plan."
-              },
-              {
-                "filePath": "src/server/authenticate/admin/billing/types.ts",
-                "syntaxKind": "PropertySignature",
-                "name": "interval",
-                "value": "BillingInterval.OneTime",
-                "description": "Interval for this plan.\n\nMust be set to `OneTime`."
-              },
-              {
-                "filePath": "src/server/authenticate/admin/billing/types.ts",
-                "syntaxKind": "PropertySignature",
                 "name": "isTest",
                 "value": "boolean",
                 "description": "Whether to use the test mode. This prevents the credit card from being charged. Test shops and demo shops cannot be charged.",
                 "isOptional": true
-              },
-              {
-                "filePath": "src/server/authenticate/admin/billing/types.ts",
-                "syntaxKind": "PropertySignature",
-                "name": "lineItems",
-                "value": "({ interval?: BillingInterval.Every30Days | BillingInterval.Annual; discount?: { durationLimitInIntervals?: number; value?: { amount?: number; percentage?: never; } | { amount?: never; percentage?: number; }; }; amount?: number; currencyCode?: string; } | { interval?: BillingInterval.Usage; amount?: number; terms?: string; currencyCode?: string; })[]",
-                "description": "The line items for this plan."
               },
               {
                 "filePath": "src/server/authenticate/admin/billing/types.ts",
@@ -6118,25 +5977,9 @@
               {
                 "filePath": "src/server/authenticate/admin/billing/types.ts",
                 "syntaxKind": "PropertySignature",
-                "name": "replacementBehavior",
-                "value": "BillingReplacementBehavior",
-                "description": "The replacement behavior to use for this plan.",
-                "isOptional": true
-              },
-              {
-                "filePath": "src/server/authenticate/admin/billing/types.ts",
-                "syntaxKind": "PropertySignature",
                 "name": "returnUrl",
                 "value": "string",
                 "description": "The URL to return to after the merchant approves the payment.",
-                "isOptional": true
-              },
-              {
-                "filePath": "src/server/authenticate/admin/billing/types.ts",
-                "syntaxKind": "PropertySignature",
-                "name": "trialDays",
-                "value": "number",
-                "description": "How many trial days to give before charging for this plan.",
                 "isOptional": true
               }
             ],
@@ -6401,7 +6244,6 @@
             "filePath": "src/server/authenticate/admin/scope/types.ts",
             "name": "ScopesApiContext",
             "description": "Provides utilities that apps can use to [manage scopes](https://shopify.dev/docs/apps/build/authentication-authorization/app-installation/manage-access-scopes) for the app using the Admin API.",
-            "isPublicDocs": true,
             "members": [
               {
                 "filePath": "src/server/authenticate/admin/scope/types.ts",
@@ -6511,7 +6353,6 @@
             "filePath": "src/server/authenticate/flow/types.ts",
             "name": "AuthenticateFlow",
             "description": "Verifies requests coming from Shopify Flow extensions.",
-            "isPublicDocs": true,
             "params": [
               {
                 "name": "request",
@@ -6597,7 +6438,6 @@
             "filePath": "src/server/authenticate/fulfillment-service/types.ts",
             "name": "AuthenticateFulfillmentService",
             "description": "Verifies requests coming from Shopify to fulfillment service apps.",
-            "isPublicDocs": true,
             "params": [
               {
                 "name": "request",
@@ -6755,7 +6595,6 @@
             "filePath": "src/server/authenticate/public/appProxy/types.ts",
             "name": "AuthenticateAppProxy",
             "description": "Authenticates requests coming to the app from Shopify app proxies.",
-            "isPublicDocs": true,
             "params": [
               {
                 "name": "request",
@@ -6991,7 +6830,6 @@
             "filePath": "src/server/clients/storefront/types.ts",
             "name": "StorefrontContext",
             "description": "Provides utilities that apps can use to make requests to the Storefront API.",
-            "isPublicDocs": true,
             "members": [
               {
                 "filePath": "src/server/clients/storefront/types.ts",
@@ -7033,7 +6871,6 @@
             "filePath": "src/server/authenticate/public/checkout/types.ts",
             "name": "AuthenticateCheckout",
             "description": "Authenticates requests coming from Shopify checkout extensions.",
-            "isPublicDocs": true,
             "params": [
               {
                 "name": "request",
@@ -7123,7 +6960,6 @@
             "filePath": "src/server/authenticate/public/customer-account/types.ts",
             "name": "AuthenticateCustomerAccount",
             "description": "Authenticates requests coming from Shopify customer account extensions.",
-            "isPublicDocs": true,
             "params": [
               {
                 "name": "request",
@@ -7213,7 +7049,6 @@
             "filePath": "src/server/authenticate/webhooks/types.ts",
             "name": "AuthenticateWebhook",
             "description": "Verifies requests coming from Shopify webhooks.",
-            "isPublicDocs": true,
             "params": [
               {
                 "name": "request",
@@ -7741,7 +7576,6 @@
             "filePath": "src/server/unauthenticated/admin/types.ts",
             "name": "GetUnauthenticatedAdminContext",
             "description": "Creates an unauthenticated Admin context.",
-            "isPublicDocs": true,
             "params": [
               {
                 "name": "shop",
@@ -7812,7 +7646,6 @@
             "filePath": "src/server/unauthenticated/storefront/types.ts",
             "name": "GetUnauthenticatedStorefrontContext",
             "description": "Creates an unauthenticated Storefront context.",
-            "isPublicDocs": true,
             "params": [
               {
                 "name": "shop",
@@ -9212,8 +9045,7 @@
           "FutureFlags": {
             "filePath": "src/server/future/flags.ts",
             "name": "FutureFlags",
-            "description": "",
-            "isPublicDocs": true,
+            "description": "Set future flags using the `future` configuration field to opt in to upcoming breaking changes.\n\nWith this feature, you can prepare for major releases ahead of time, as well as try out new features before they are released.",
             "members": [
               {
                 "filePath": "src/server/future/flags.ts",
@@ -9410,7 +9242,6 @@
             "filePath": "src/server/unauthenticated/admin/types.ts",
             "name": "GetUnauthenticatedAdminContext",
             "description": "Creates an unauthenticated Admin context.",
-            "isPublicDocs": true,
             "params": [
               {
                 "name": "shop",
@@ -9481,7 +9312,6 @@
             "filePath": "src/server/clients/admin/types.ts",
             "name": "AdminApiContext",
             "description": "Provides utilities that apps can use to make requests to the Admin API.",
-            "isPublicDocs": true,
             "members": [
               {
                 "filePath": "src/server/clients/admin/types.ts",
@@ -9545,8 +9375,8 @@
             "returns": {
               "filePath": "src/server/clients/types.ts",
               "description": "",
-              "name": "interface Promise<T> {\n    /**\n     * Attaches callbacks for the resolution and/or rejection of the Promise.\n     * @param onfulfilled The callback to execute when the Promise is resolved.\n     * @param onrejected The callback to execute when the Promise is rejected.\n     * @returns A Promise for the completion of which ever callback is executed.\n     */\n    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): Promise<TResult1 | TResult2>;\n\n    /**\n     * Attaches a callback for only the rejection of the Promise.\n     * @param onrejected The callback to execute when the Promise is rejected.\n     * @returns A Promise for the completion of the callback.\n     */\n    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): Promise<T | TResult>;\n}, interface Promise<T> {}, Promise: PromiseConstructor, interface Promise<T> {\n    readonly [Symbol.toStringTag]: string;\n}, interface Promise<T> {\n    /**\n     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The\n     * resolved value cannot be modified from the callback.\n     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).\n     * @returns A Promise for the completion of the callback.\n     */\n    finally(onfinally?: (() => void) | undefined | null): Promise<T>;\n}",
-              "value": "interface Promise<T> {\n    /**\n     * Attaches callbacks for the resolution and/or rejection of the Promise.\n     * @param onfulfilled The callback to execute when the Promise is resolved.\n     * @param onrejected The callback to execute when the Promise is rejected.\n     * @returns A Promise for the completion of which ever callback is executed.\n     */\n    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): Promise<TResult1 | TResult2>;\n\n    /**\n     * Attaches a callback for only the rejection of the Promise.\n     * @param onrejected The callback to execute when the Promise is rejected.\n     * @returns A Promise for the completion of the callback.\n     */\n    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): Promise<T | TResult>;\n}, interface Promise<T> {}, Promise: PromiseConstructor, interface Promise<T> {\n    readonly [Symbol.toStringTag]: string;\n}, interface Promise<T> {\n    /**\n     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The\n     * resolved value cannot be modified from the callback.\n     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).\n     * @returns A Promise for the completion of the callback.\n     */\n    finally(onfinally?: (() => void) | undefined | null): Promise<T>;\n}"
+              "name": "interface Promise<T> {\r\n    /**\r\n     * Attaches callbacks for the resolution and/or rejection of the Promise.\r\n     * @param onfulfilled The callback to execute when the Promise is resolved.\r\n     * @param onrejected The callback to execute when the Promise is rejected.\r\n     * @returns A Promise for the completion of which ever callback is executed.\r\n     */\r\n    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): Promise<TResult1 | TResult2>;\r\n\r\n    /**\r\n     * Attaches a callback for only the rejection of the Promise.\r\n     * @param onrejected The callback to execute when the Promise is rejected.\r\n     * @returns A Promise for the completion of the callback.\r\n     */\r\n    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): Promise<T | TResult>;\r\n}, interface Promise<T> { }, Promise: PromiseConstructor, interface Promise<T> {\r\n    readonly [Symbol.toStringTag]: string;\r\n}, interface Promise<T> {\r\n    /**\r\n     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The\r\n     * resolved value cannot be modified from the callback.\r\n     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).\r\n     * @returns A Promise for the completion of the callback.\r\n     */\r\n    finally(onfinally?: (() => void) | undefined | null): Promise<T>\r\n}",
+              "value": "interface Promise<T> {\r\n    /**\r\n     * Attaches callbacks for the resolution and/or rejection of the Promise.\r\n     * @param onfulfilled The callback to execute when the Promise is resolved.\r\n     * @param onrejected The callback to execute when the Promise is rejected.\r\n     * @returns A Promise for the completion of which ever callback is executed.\r\n     */\r\n    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): Promise<TResult1 | TResult2>;\r\n\r\n    /**\r\n     * Attaches a callback for only the rejection of the Promise.\r\n     * @param onrejected The callback to execute when the Promise is rejected.\r\n     * @returns A Promise for the completion of the callback.\r\n     */\r\n    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): Promise<T | TResult>;\r\n}, interface Promise<T> { }, Promise: PromiseConstructor, interface Promise<T> {\r\n    readonly [Symbol.toStringTag]: string;\r\n}, interface Promise<T> {\r\n    /**\r\n     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The\r\n     * resolved value cannot be modified from the callback.\r\n     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).\r\n     * @returns A Promise for the completion of the callback.\r\n     */\r\n    finally(onfinally?: (() => void) | undefined | null): Promise<T>\r\n}"
             },
             "value": "<\n  Operation extends keyof Operations,\n>(\n  query: Operation,\n  options?: GraphQLQueryOptions<Operation, Operations>,\n) => Promise<GraphQLResponse<Operation, Operations>>"
           },
@@ -9591,7 +9421,7 @@
                 "filePath": "src/server/clients/types.ts",
                 "syntaxKind": "PropertySignature",
                 "name": "variables",
-                "value": "ApiClientRequestOptions<Operation, Operations>",
+                "value": "ApiClientRequestOptions<Operation, Operations>[\"variables\"]",
                 "description": "The variables to pass to the operation.",
                 "isOptional": true
               }
@@ -9674,7 +9504,6 @@
             "filePath": "src/server/unauthenticated/storefront/types.ts",
             "name": "GetUnauthenticatedStorefrontContext",
             "description": "Creates an unauthenticated Storefront context.",
-            "isPublicDocs": true,
             "params": [
               {
                 "name": "shop",
@@ -9755,7 +9584,6 @@
             "filePath": "src/server/clients/storefront/types.ts",
             "name": "StorefrontContext",
             "description": "Provides utilities that apps can use to make requests to the Storefront API.",
-            "isPublicDocs": true,
             "members": [
               {
                 "filePath": "src/server/clients/storefront/types.ts",
@@ -9815,8 +9643,8 @@
             "returns": {
               "filePath": "src/server/clients/types.ts",
               "description": "",
-              "name": "interface Promise<T> {\n    /**\n     * Attaches callbacks for the resolution and/or rejection of the Promise.\n     * @param onfulfilled The callback to execute when the Promise is resolved.\n     * @param onrejected The callback to execute when the Promise is rejected.\n     * @returns A Promise for the completion of which ever callback is executed.\n     */\n    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): Promise<TResult1 | TResult2>;\n\n    /**\n     * Attaches a callback for only the rejection of the Promise.\n     * @param onrejected The callback to execute when the Promise is rejected.\n     * @returns A Promise for the completion of the callback.\n     */\n    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): Promise<T | TResult>;\n}, interface Promise<T> {}, Promise: PromiseConstructor, interface Promise<T> {\n    readonly [Symbol.toStringTag]: string;\n}, interface Promise<T> {\n    /**\n     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The\n     * resolved value cannot be modified from the callback.\n     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).\n     * @returns A Promise for the completion of the callback.\n     */\n    finally(onfinally?: (() => void) | undefined | null): Promise<T>;\n}",
-              "value": "interface Promise<T> {\n    /**\n     * Attaches callbacks for the resolution and/or rejection of the Promise.\n     * @param onfulfilled The callback to execute when the Promise is resolved.\n     * @param onrejected The callback to execute when the Promise is rejected.\n     * @returns A Promise for the completion of which ever callback is executed.\n     */\n    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): Promise<TResult1 | TResult2>;\n\n    /**\n     * Attaches a callback for only the rejection of the Promise.\n     * @param onrejected The callback to execute when the Promise is rejected.\n     * @returns A Promise for the completion of the callback.\n     */\n    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): Promise<T | TResult>;\n}, interface Promise<T> {}, Promise: PromiseConstructor, interface Promise<T> {\n    readonly [Symbol.toStringTag]: string;\n}, interface Promise<T> {\n    /**\n     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The\n     * resolved value cannot be modified from the callback.\n     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).\n     * @returns A Promise for the completion of the callback.\n     */\n    finally(onfinally?: (() => void) | undefined | null): Promise<T>;\n}"
+              "name": "interface Promise<T> {\r\n    /**\r\n     * Attaches callbacks for the resolution and/or rejection of the Promise.\r\n     * @param onfulfilled The callback to execute when the Promise is resolved.\r\n     * @param onrejected The callback to execute when the Promise is rejected.\r\n     * @returns A Promise for the completion of which ever callback is executed.\r\n     */\r\n    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): Promise<TResult1 | TResult2>;\r\n\r\n    /**\r\n     * Attaches a callback for only the rejection of the Promise.\r\n     * @param onrejected The callback to execute when the Promise is rejected.\r\n     * @returns A Promise for the completion of the callback.\r\n     */\r\n    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): Promise<T | TResult>;\r\n}, interface Promise<T> { }, Promise: PromiseConstructor, interface Promise<T> {\r\n    readonly [Symbol.toStringTag]: string;\r\n}, interface Promise<T> {\r\n    /**\r\n     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The\r\n     * resolved value cannot be modified from the callback.\r\n     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).\r\n     * @returns A Promise for the completion of the callback.\r\n     */\r\n    finally(onfinally?: (() => void) | undefined | null): Promise<T>\r\n}",
+              "value": "interface Promise<T> {\r\n    /**\r\n     * Attaches callbacks for the resolution and/or rejection of the Promise.\r\n     * @param onfulfilled The callback to execute when the Promise is resolved.\r\n     * @param onrejected The callback to execute when the Promise is rejected.\r\n     * @returns A Promise for the completion of which ever callback is executed.\r\n     */\r\n    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): Promise<TResult1 | TResult2>;\r\n\r\n    /**\r\n     * Attaches a callback for only the rejection of the Promise.\r\n     * @param onrejected The callback to execute when the Promise is rejected.\r\n     * @returns A Promise for the completion of the callback.\r\n     */\r\n    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): Promise<T | TResult>;\r\n}, interface Promise<T> { }, Promise: PromiseConstructor, interface Promise<T> {\r\n    readonly [Symbol.toStringTag]: string;\r\n}, interface Promise<T> {\r\n    /**\r\n     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The\r\n     * resolved value cannot be modified from the callback.\r\n     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).\r\n     * @returns A Promise for the completion of the callback.\r\n     */\r\n    finally(onfinally?: (() => void) | undefined | null): Promise<T>\r\n}"
             },
             "value": "<\n  Operation extends keyof Operations,\n>(\n  query: Operation,\n  options?: GraphQLQueryOptions<Operation, Operations>,\n) => Promise<GraphQLResponse<Operation, Operations>>"
           },
@@ -9861,7 +9689,7 @@
                 "filePath": "src/server/clients/types.ts",
                 "syntaxKind": "PropertySignature",
                 "name": "variables",
-                "value": "ApiClientRequestOptions<Operation, Operations>",
+                "value": "ApiClientRequestOptions<Operation, Operations>[\"variables\"]",
                 "description": "The variables to pass to the operation.",
                 "isOptional": true
               }

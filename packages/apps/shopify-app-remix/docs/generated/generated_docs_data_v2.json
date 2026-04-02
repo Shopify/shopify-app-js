@@ -96,8 +96,8 @@
       "returns": {
         "filePath": "src/server/clients/types.ts",
         "description": "",
-        "name": "interface Promise<T> {\n    /**\n     * Attaches callbacks for the resolution and/or rejection of the Promise.\n     * @param onfulfilled The callback to execute when the Promise is resolved.\n     * @param onrejected The callback to execute when the Promise is rejected.\n     * @returns A Promise for the completion of which ever callback is executed.\n     */\n    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): Promise<TResult1 | TResult2>;\n\n    /**\n     * Attaches a callback for only the rejection of the Promise.\n     * @param onrejected The callback to execute when the Promise is rejected.\n     * @returns A Promise for the completion of the callback.\n     */\n    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): Promise<T | TResult>;\n}, interface Promise<T> {}, Promise: PromiseConstructor, interface Promise<T> {\n    readonly [Symbol.toStringTag]: string;\n}, interface Promise<T> {\n    /**\n     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The\n     * resolved value cannot be modified from the callback.\n     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).\n     * @returns A Promise for the completion of the callback.\n     */\n    finally(onfinally?: (() => void) | undefined | null): Promise<T>;\n}",
-        "value": "interface Promise<T> {\n    /**\n     * Attaches callbacks for the resolution and/or rejection of the Promise.\n     * @param onfulfilled The callback to execute when the Promise is resolved.\n     * @param onrejected The callback to execute when the Promise is rejected.\n     * @returns A Promise for the completion of which ever callback is executed.\n     */\n    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): Promise<TResult1 | TResult2>;\n\n    /**\n     * Attaches a callback for only the rejection of the Promise.\n     * @param onrejected The callback to execute when the Promise is rejected.\n     * @returns A Promise for the completion of the callback.\n     */\n    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): Promise<T | TResult>;\n}, interface Promise<T> {}, Promise: PromiseConstructor, interface Promise<T> {\n    readonly [Symbol.toStringTag]: string;\n}, interface Promise<T> {\n    /**\n     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The\n     * resolved value cannot be modified from the callback.\n     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).\n     * @returns A Promise for the completion of the callback.\n     */\n    finally(onfinally?: (() => void) | undefined | null): Promise<T>;\n}"
+        "name": "interface Promise<T> {\r\n    /**\r\n     * Attaches callbacks for the resolution and/or rejection of the Promise.\r\n     * @param onfulfilled The callback to execute when the Promise is resolved.\r\n     * @param onrejected The callback to execute when the Promise is rejected.\r\n     * @returns A Promise for the completion of which ever callback is executed.\r\n     */\r\n    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): Promise<TResult1 | TResult2>;\r\n\r\n    /**\r\n     * Attaches a callback for only the rejection of the Promise.\r\n     * @param onrejected The callback to execute when the Promise is rejected.\r\n     * @returns A Promise for the completion of the callback.\r\n     */\r\n    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): Promise<T | TResult>;\r\n}, interface Promise<T> { }, Promise: PromiseConstructor, interface Promise<T> {\r\n    readonly [Symbol.toStringTag]: string;\r\n}, interface Promise<T> {\r\n    /**\r\n     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The\r\n     * resolved value cannot be modified from the callback.\r\n     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).\r\n     * @returns A Promise for the completion of the callback.\r\n     */\r\n    finally(onfinally?: (() => void) | undefined | null): Promise<T>\r\n}",
+        "value": "interface Promise<T> {\r\n    /**\r\n     * Attaches callbacks for the resolution and/or rejection of the Promise.\r\n     * @param onfulfilled The callback to execute when the Promise is resolved.\r\n     * @param onrejected The callback to execute when the Promise is rejected.\r\n     * @returns A Promise for the completion of which ever callback is executed.\r\n     */\r\n    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): Promise<TResult1 | TResult2>;\r\n\r\n    /**\r\n     * Attaches a callback for only the rejection of the Promise.\r\n     * @param onrejected The callback to execute when the Promise is rejected.\r\n     * @returns A Promise for the completion of the callback.\r\n     */\r\n    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): Promise<T | TResult>;\r\n}, interface Promise<T> { }, Promise: PromiseConstructor, interface Promise<T> {\r\n    readonly [Symbol.toStringTag]: string;\r\n}, interface Promise<T> {\r\n    /**\r\n     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The\r\n     * resolved value cannot be modified from the callback.\r\n     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).\r\n     * @returns A Promise for the completion of the callback.\r\n     */\r\n    finally(onfinally?: (() => void) | undefined | null): Promise<T>\r\n}"
       },
       "value": "<\n  Operation extends keyof Operations,\n>(\n  query: Operation,\n  options?: GraphQLQueryOptions<Operation, Operations>,\n) => Promise<GraphQLResponse<Operation, Operations>>"
     }
@@ -144,7 +144,7 @@
           "filePath": "src/server/clients/types.ts",
           "syntaxKind": "PropertySignature",
           "name": "variables",
-          "value": "ApiClientRequestOptions<Operation, Operations>",
+          "value": "ApiClientRequestOptions<Operation, Operations>[\"variables\"]",
           "description": "The variables to pass to the operation.",
           "isOptional": true
         }
@@ -5429,7 +5429,7 @@
           "filePath": "src/react/components/AppProxyForm/AppProxyForm.tsx",
           "syntaxKind": "PropertySignature",
           "name": "onBeforeInputCapture",
-          "value": "InputEventHandler<T> | undefined",
+          "value": "FormEventHandler<T> | undefined",
           "description": "",
           "isOptional": true
         },
@@ -5493,7 +5493,7 @@
           "filePath": "src/react/components/AppProxyForm/AppProxyForm.tsx",
           "syntaxKind": "PropertySignature",
           "name": "onChange",
-          "value": "ChangeEventHandler<T> | undefined",
+          "value": "FormEventHandler<T> | undefined",
           "description": "",
           "isOptional": true
         },
@@ -5501,7 +5501,7 @@
           "filePath": "src/react/components/AppProxyForm/AppProxyForm.tsx",
           "syntaxKind": "PropertySignature",
           "name": "onChangeCapture",
-          "value": "ChangeEventHandler<T> | undefined",
+          "value": "FormEventHandler<T> | undefined",
           "description": "",
           "isOptional": true
         },
@@ -5877,7 +5877,7 @@
           "filePath": "src/react/components/AppProxyForm/AppProxyForm.tsx",
           "syntaxKind": "PropertySignature",
           "name": "onInput",
-          "value": "InputEventHandler<T> | undefined",
+          "value": "FormEventHandler<T> | undefined",
           "description": "",
           "isOptional": true
         },
@@ -5885,7 +5885,7 @@
           "filePath": "src/react/components/AppProxyForm/AppProxyForm.tsx",
           "syntaxKind": "PropertySignature",
           "name": "onInputCapture",
-          "value": "InputEventHandler<T> | undefined",
+          "value": "FormEventHandler<T> | undefined",
           "description": "",
           "isOptional": true
         },
@@ -5893,7 +5893,7 @@
           "filePath": "src/react/components/AppProxyForm/AppProxyForm.tsx",
           "syntaxKind": "PropertySignature",
           "name": "onInvalid",
-          "value": "ReactEventHandler<T> | undefined",
+          "value": "FormEventHandler<T> | undefined",
           "description": "",
           "isOptional": true
         },
@@ -5901,7 +5901,7 @@
           "filePath": "src/react/components/AppProxyForm/AppProxyForm.tsx",
           "syntaxKind": "PropertySignature",
           "name": "onInvalidCapture",
-          "value": "ReactEventHandler<T> | undefined",
+          "value": "FormEventHandler<T> | undefined",
           "description": "",
           "isOptional": true
         },
@@ -6343,7 +6343,7 @@
           "filePath": "src/react/components/AppProxyForm/AppProxyForm.tsx",
           "syntaxKind": "PropertySignature",
           "name": "onReset",
-          "value": "ReactEventHandler<T> | undefined",
+          "value": "FormEventHandler<T> | undefined",
           "description": "",
           "isOptional": true
         },
@@ -6351,7 +6351,7 @@
           "filePath": "src/react/components/AppProxyForm/AppProxyForm.tsx",
           "syntaxKind": "PropertySignature",
           "name": "onResetCapture",
-          "value": "ReactEventHandler<T> | undefined",
+          "value": "FormEventHandler<T> | undefined",
           "description": "",
           "isOptional": true
         },
@@ -6463,7 +6463,7 @@
           "filePath": "src/react/components/AppProxyForm/AppProxyForm.tsx",
           "syntaxKind": "PropertySignature",
           "name": "onSubmitCapture",
-          "value": "SubmitEventHandler<T> | undefined",
+          "value": "FormEventHandler<T> | undefined",
           "description": "",
           "isOptional": true
         },
@@ -6695,7 +6695,7 @@
           "filePath": "src/react/components/AppProxyForm/AppProxyForm.tsx",
           "syntaxKind": "PropertySignature",
           "name": "popover",
-          "value": "\"\" | \"auto\" | \"manual\" | \"hint\" | undefined",
+          "value": "\"\" | \"auto\" | \"manual\" | undefined",
           "description": "",
           "isOptional": true
         },
@@ -8368,7 +8368,7 @@
           "filePath": "../../../node_modules/@shopify/polaris/build/ts/src/utilities/link/types.d.ts",
           "syntaxKind": "PropertySignature",
           "name": "onBeforeInputCapture",
-          "value": "InputEventHandler<T> | undefined",
+          "value": "FormEventHandler<T> | undefined",
           "description": "",
           "isOptional": true
         },
@@ -8432,7 +8432,7 @@
           "filePath": "../../../node_modules/@shopify/polaris/build/ts/src/utilities/link/types.d.ts",
           "syntaxKind": "PropertySignature",
           "name": "onChange",
-          "value": "ChangeEventHandler<T> | undefined",
+          "value": "FormEventHandler<T> | undefined",
           "description": "",
           "isOptional": true
         },
@@ -8440,7 +8440,7 @@
           "filePath": "../../../node_modules/@shopify/polaris/build/ts/src/utilities/link/types.d.ts",
           "syntaxKind": "PropertySignature",
           "name": "onChangeCapture",
-          "value": "ChangeEventHandler<T> | undefined",
+          "value": "FormEventHandler<T> | undefined",
           "description": "",
           "isOptional": true
         },
@@ -8816,7 +8816,7 @@
           "filePath": "../../../node_modules/@shopify/polaris/build/ts/src/utilities/link/types.d.ts",
           "syntaxKind": "PropertySignature",
           "name": "onInput",
-          "value": "InputEventHandler<T> | undefined",
+          "value": "FormEventHandler<T> | undefined",
           "description": "",
           "isOptional": true
         },
@@ -8824,7 +8824,7 @@
           "filePath": "../../../node_modules/@shopify/polaris/build/ts/src/utilities/link/types.d.ts",
           "syntaxKind": "PropertySignature",
           "name": "onInputCapture",
-          "value": "InputEventHandler<T> | undefined",
+          "value": "FormEventHandler<T> | undefined",
           "description": "",
           "isOptional": true
         },
@@ -8832,7 +8832,7 @@
           "filePath": "../../../node_modules/@shopify/polaris/build/ts/src/utilities/link/types.d.ts",
           "syntaxKind": "PropertySignature",
           "name": "onInvalid",
-          "value": "ReactEventHandler<T> | undefined",
+          "value": "FormEventHandler<T> | undefined",
           "description": "",
           "isOptional": true
         },
@@ -8840,7 +8840,7 @@
           "filePath": "../../../node_modules/@shopify/polaris/build/ts/src/utilities/link/types.d.ts",
           "syntaxKind": "PropertySignature",
           "name": "onInvalidCapture",
-          "value": "ReactEventHandler<T> | undefined",
+          "value": "FormEventHandler<T> | undefined",
           "description": "",
           "isOptional": true
         },
@@ -9282,7 +9282,7 @@
           "filePath": "../../../node_modules/@shopify/polaris/build/ts/src/utilities/link/types.d.ts",
           "syntaxKind": "PropertySignature",
           "name": "onReset",
-          "value": "ReactEventHandler<T> | undefined",
+          "value": "FormEventHandler<T> | undefined",
           "description": "",
           "isOptional": true
         },
@@ -9290,7 +9290,7 @@
           "filePath": "../../../node_modules/@shopify/polaris/build/ts/src/utilities/link/types.d.ts",
           "syntaxKind": "PropertySignature",
           "name": "onResetCapture",
-          "value": "ReactEventHandler<T> | undefined",
+          "value": "FormEventHandler<T> | undefined",
           "description": "",
           "isOptional": true
         },
@@ -9394,7 +9394,7 @@
           "filePath": "../../../node_modules/@shopify/polaris/build/ts/src/utilities/link/types.d.ts",
           "syntaxKind": "PropertySignature",
           "name": "onSubmit",
-          "value": "SubmitEventHandler<T> | undefined",
+          "value": "FormEventHandler<T> | undefined",
           "description": "",
           "isOptional": true
         },
@@ -9402,7 +9402,7 @@
           "filePath": "../../../node_modules/@shopify/polaris/build/ts/src/utilities/link/types.d.ts",
           "syntaxKind": "PropertySignature",
           "name": "onSubmitCapture",
-          "value": "SubmitEventHandler<T> | undefined",
+          "value": "FormEventHandler<T> | undefined",
           "description": "",
           "isOptional": true
         },
@@ -9674,7 +9674,7 @@
           "filePath": "../../../node_modules/@shopify/polaris/build/ts/src/utilities/link/types.d.ts",
           "syntaxKind": "PropertySignature",
           "name": "popover",
-          "value": "\"\" | \"auto\" | \"manual\" | \"hint\" | undefined",
+          "value": "\"\" | \"auto\" | \"manual\" | undefined",
           "description": "",
           "isOptional": true
         },
@@ -11506,7 +11506,7 @@
           "filePath": "src/react/components/AppProxyLink/AppProxyLink.tsx",
           "syntaxKind": "PropertySignature",
           "name": "onBeforeInputCapture",
-          "value": "InputEventHandler<T> | undefined",
+          "value": "FormEventHandler<T> | undefined",
           "description": "",
           "isOptional": true
         },
@@ -11570,7 +11570,7 @@
           "filePath": "src/react/components/AppProxyLink/AppProxyLink.tsx",
           "syntaxKind": "PropertySignature",
           "name": "onChange",
-          "value": "ChangeEventHandler<T> | undefined",
+          "value": "FormEventHandler<T> | undefined",
           "description": "",
           "isOptional": true
         },
@@ -11578,7 +11578,7 @@
           "filePath": "src/react/components/AppProxyLink/AppProxyLink.tsx",
           "syntaxKind": "PropertySignature",
           "name": "onChangeCapture",
-          "value": "ChangeEventHandler<T> | undefined",
+          "value": "FormEventHandler<T> | undefined",
           "description": "",
           "isOptional": true
         },
@@ -11954,7 +11954,7 @@
           "filePath": "src/react/components/AppProxyLink/AppProxyLink.tsx",
           "syntaxKind": "PropertySignature",
           "name": "onInput",
-          "value": "InputEventHandler<T> | undefined",
+          "value": "FormEventHandler<T> | undefined",
           "description": "",
           "isOptional": true
         },
@@ -11962,7 +11962,7 @@
           "filePath": "src/react/components/AppProxyLink/AppProxyLink.tsx",
           "syntaxKind": "PropertySignature",
           "name": "onInputCapture",
-          "value": "InputEventHandler<T> | undefined",
+          "value": "FormEventHandler<T> | undefined",
           "description": "",
           "isOptional": true
         },
@@ -11970,7 +11970,7 @@
           "filePath": "src/react/components/AppProxyLink/AppProxyLink.tsx",
           "syntaxKind": "PropertySignature",
           "name": "onInvalid",
-          "value": "ReactEventHandler<T> | undefined",
+          "value": "FormEventHandler<T> | undefined",
           "description": "",
           "isOptional": true
         },
@@ -11978,7 +11978,7 @@
           "filePath": "src/react/components/AppProxyLink/AppProxyLink.tsx",
           "syntaxKind": "PropertySignature",
           "name": "onInvalidCapture",
-          "value": "ReactEventHandler<T> | undefined",
+          "value": "FormEventHandler<T> | undefined",
           "description": "",
           "isOptional": true
         },
@@ -12420,7 +12420,7 @@
           "filePath": "src/react/components/AppProxyLink/AppProxyLink.tsx",
           "syntaxKind": "PropertySignature",
           "name": "onReset",
-          "value": "ReactEventHandler<T> | undefined",
+          "value": "FormEventHandler<T> | undefined",
           "description": "",
           "isOptional": true
         },
@@ -12428,7 +12428,7 @@
           "filePath": "src/react/components/AppProxyLink/AppProxyLink.tsx",
           "syntaxKind": "PropertySignature",
           "name": "onResetCapture",
-          "value": "ReactEventHandler<T> | undefined",
+          "value": "FormEventHandler<T> | undefined",
           "description": "",
           "isOptional": true
         },
@@ -12532,7 +12532,7 @@
           "filePath": "src/react/components/AppProxyLink/AppProxyLink.tsx",
           "syntaxKind": "PropertySignature",
           "name": "onSubmit",
-          "value": "SubmitEventHandler<T> | undefined",
+          "value": "FormEventHandler<T> | undefined",
           "description": "",
           "isOptional": true
         },
@@ -12540,7 +12540,7 @@
           "filePath": "src/react/components/AppProxyLink/AppProxyLink.tsx",
           "syntaxKind": "PropertySignature",
           "name": "onSubmitCapture",
-          "value": "SubmitEventHandler<T> | undefined",
+          "value": "FormEventHandler<T> | undefined",
           "description": "",
           "isOptional": true
         },
@@ -12780,7 +12780,7 @@
           "filePath": "src/react/components/AppProxyLink/AppProxyLink.tsx",
           "syntaxKind": "PropertySignature",
           "name": "popover",
-          "value": "\"\" | \"auto\" | \"manual\" | \"hint\" | undefined",
+          "value": "\"\" | \"auto\" | \"manual\" | undefined",
           "description": "",
           "isOptional": true
         },
