@@ -12,10 +12,10 @@ import {AppConfig} from '../config-types';
  */
 export interface FutureFlags {
   /**
-   * When enabled, embedded apps will fetch access tokens via [token exchange](https://shopify.dev/docs/apps/auth/get-access-tokens/token-exchange).
-   * This assumes the app has scopes declared for [Shopify managing installation](https://shopify.dev/docs/apps/auth/installation#shopify-managed-installation).
+   * When enabled, embedded apps will fetch access tokens via [token exchange](/docs/apps/auth/get-access-tokens/token-exchange).
+   * This assumes the app has scopes declared for [Shopify managing installation](/docs/apps/auth/installation#shopify-managed-installation).
    *
-   * Learn more about this [new embedded app auth strategy](https://shopify.dev/docs/api/shopify-app-remix#embedded-auth-strategy).
+   * Learn more about this [new embedded app auth strategy](/docs/api/shopify-app-remix#embedded-auth-strategy).
    *
    * @default false
    */
@@ -62,7 +62,7 @@ export function logDisabledFutureFlags(
     logFlag(
       'unstable_newEmbeddedAuthStrategy',
       'Enable this to use OAuth token exchange instead of auth code to generate API access tokens.' +
-        '\n  Your app must be using Shopify managed install: https://shopify.dev/docs/apps/auth/installation',
+        '\n  Your app must be using Shopify managed install: /docs/apps/auth/installation',
     );
   }
 }
