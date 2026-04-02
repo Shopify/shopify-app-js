@@ -1,28 +1,22 @@
 {
   "FutureFlags": {
-    "../shopify-api/dist/ts/future/flags.d.ts": {
-      "filePath": "../shopify-api/dist/ts/future/flags.d.ts",
+    "src/server/future/flags.ts": {
+      "filePath": "src/server/future/flags.ts",
       "name": "FutureFlags",
-      "description": "Future flags are used to enable features that are not yet available by default.",
+      "description": "Set future flags using the `future` configuration field to opt in to upcoming breaking changes.\n\nWith this feature, you can prepare for major releases ahead of time, as well as try out new features before they are released.",
+      "isPublicDocs": true,
       "members": [
         {
-          "filePath": "../shopify-api/dist/ts/future/flags.d.ts",
+          "filePath": "src/server/future/flags.ts",
           "syntaxKind": "PropertySignature",
-          "name": "customerAddressDefaultFix",
+          "name": "expiringOfflineAccessTokens",
           "value": "boolean",
-          "description": "Change the CustomerAddress classes to expose a `is_default` property instead of `default` when fetching data. This resolves a conflict with the default() method in that class.",
-          "isOptional": true
-        },
-        {
-          "filePath": "../shopify-api/dist/ts/future/flags.d.ts",
-          "syntaxKind": "PropertySignature",
-          "name": "unstable_managedPricingSupport",
-          "value": "boolean",
-          "description": "Enable support for managed pricing, so apps can check for payments without needing a billing config.",
-          "isOptional": true
+          "description": "When enabled, the app will start using expiring offline access tokens and automatically refresh them when they are close to expiring.",
+          "isOptional": true,
+          "defaultValue": "false"
         }
       ],
-      "value": "export interface FutureFlags {\n    /**\n     * Enable support for managed pricing, so apps can check for payments without needing a billing config.\n     */\n    unstable_managedPricingSupport?: boolean;\n    /**\n     * Change the CustomerAddress classes to expose a `is_default` property instead of `default` when fetching data. This\n     * resolves a conflict with the default() method in that class.\n     */\n    customerAddressDefaultFix?: boolean;\n}"
+      "value": "export interface FutureFlags {\n  /**\n   * When enabled, the app will start using expiring offline access tokens and automatically refresh them when they are close to expiring.\n   *\n   * @default false\n   */\n  expiringOfflineAccessTokens?: boolean;\n}"
     }
   },
   "AdminApiContext": {
