@@ -41,6 +41,7 @@ describe('shopifyApiTypes', () => {
           [`./testDir/${type}.types.d.ts`]: {
             schema: expectedSchema,
             plugins: ['typescript'],
+            config: {defaultScalarType: 'string', scalars: {JSON: 'unknown'}},
           },
           [`./testDir/${type}.generated.d.ts`]: {
             schema: expectedSchema,
@@ -73,6 +74,7 @@ describe('shopifyApiTypes', () => {
           [`./testDir/${type}.types.d.ts`]: {
             schema: `./testDir/${type}-2024-10.schema.json`,
             plugins: ['typescript'],
+            config: {defaultScalarType: 'string', scalars: {JSON: 'unknown'}},
           },
           [`./testDir/${type}.generated.d.ts`]: {
             schema: `./testDir/${type}-2024-10.schema.json`,
@@ -102,6 +104,7 @@ describe('shopifyApiTypes', () => {
           [`./${type}.types.d.ts`]: {
             schema: expectedSchema,
             plugins: ['typescript'],
+            config: {defaultScalarType: 'string', scalars: {JSON: 'unknown'}},
           },
           [`./${type}.generated.d.ts`]: {
             schema: expectedSchema,
@@ -131,6 +134,7 @@ describe('shopifyApiTypes', () => {
           [`./${type}.types.ts`]: {
             schema: `./${type}.schema.json`,
             plugins: ['typescript'],
+            config: {defaultScalarType: 'string', scalars: {JSON: 'unknown'}},
           },
           [`./${type}.generated.ts`]: {
             schema: `./${type}.schema.json`,
@@ -161,6 +165,8 @@ describe('shopifyApiTypes', () => {
             schema: `./${type}.schema.json`,
             plugins: ['typescript'],
             config: {
+              defaultScalarType: 'string',
+              scalars: {JSON: 'unknown'},
               enumsAsConst: true,
             },
           }),
@@ -187,13 +193,15 @@ describe('shopifyApiTypes', () => {
             schema: `./${type}.schema.json`,
             plugins: ['typescript'],
             config: {
+              defaultScalarType: 'string',
+              scalars: {JSON: 'unknown'},
               enumsAsConst: false,
             },
           }),
         );
       });
 
-      it('excludes config when enumsAsConst is not provided', () => {
+      it('uses default scalar config when enumsAsConst is not provided', () => {
         // GIVEN
         const config: ShopifyApiProjectOptions = {
           apiType,
@@ -210,10 +218,10 @@ describe('shopifyApiTypes', () => {
         expect(projectConfig[`./${type}.types.d.ts`]).toEqual({
           schema: `./${type}.schema.json`,
           plugins: ['typescript'],
-          // No config property expected
+          config: {defaultScalarType: 'string', scalars: {JSON: 'unknown'}},
         });
         expect(projectConfig[`./${type}.types.d.ts`]).not.toHaveProperty(
-          'config',
+          'config.enumsAsConst',
         );
       });
     },
