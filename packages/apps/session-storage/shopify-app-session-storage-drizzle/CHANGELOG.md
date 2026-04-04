@@ -1,5 +1,7 @@
 # @shopify/shopify-app-session-storage-drizzle
 
+## 4.0.1
+
 ## 4.0.0
 
 ### Major Changes

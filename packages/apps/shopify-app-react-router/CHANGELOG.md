@@ -1,5 +1,15 @@
 # @shopify/shopify-app-react-router
 
+## 1.2.1
+
+### Patch Changes
+
+- e510582: Updated `@graphql-codegen/introspection`, ` @graphql-codegen/typescript`, ` isbot` dependencies
+- Updated dependencies [e510582]
+- Updated dependencies [7ec655a]
+  - @shopify/shopify-api@13.0.1
+  - @shopify/shopify-app-session-storage@5.0.1
+
 ## 1.2.0
 
 ### Minor Changes
