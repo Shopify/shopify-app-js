@@ -5,6 +5,10 @@ import {redirectToAuth} from '../redirect-to-auth';
 import {ApiAndConfigParams} from '../types';
 import {redirectOutOfApp} from '../redirect-out-of-app';
 import {ensureOfflineTokenIsNotExpired} from '../helpers/ensure-offline-token-is-not-expired';
+import {
+  getSessionToken,
+  getSessionTokenHeader,
+} from '../helpers/get-session-token';
 
 import {ValidateAuthenticatedSessionMiddleware} from './types';
 import {hasValidAccessToken} from './has-valid-access-token';
@@ -20,17 +24,17 @@ export function validateAuthenticatedSession({
     return async (req: Request, res: Response, next: NextFunction) => {
       config.logger.debug('Running validateAuthenticatedSession');
 
-      // Token exchange path: when the flag is on and a Bearer token is present,
-      // bypass the OAuth flow entirely.
-      const bearerToken = req.headers.authorization?.match(/Bearer (.*)/)?.[1];
-      if (config.future.unstable_newEmbeddedAuthStrategy && bearerToken) {
+      // Token exchange path: when the flag is on and a session token is present
+      // (header or ?id_token param), bypass the OAuth flow entirely.
+      const sessionToken = getSessionToken(req);
+      if (config.future.unstable_newEmbeddedAuthStrategy && sessionToken) {
         return performTokenExchange({
           req,
           res,
           next,
           api,
           config,
-          sessionToken: bearerToken,
+          sessionToken,
         });
       }
 
@@ -106,15 +110,9 @@ export function validateAuthenticatedSession({
         }
       }
 
-      const bearerPresent = req.headers.authorization?.match(/Bearer (.*)/);
-      if (bearerPresent) {
-        if (!shop) {
-          shop = await setShopFromSessionOrToken(
-            api,
-            session,
-            bearerPresent[1],
-          );
-        }
+      const bearerToken = getSessionTokenHeader(req);
+      if (bearerToken && !shop) {
+        shop = await setShopFromSessionOrToken(api, session, bearerToken);
       }
 
       const redirectUri = `${config.auth.path}?shop=${shop}`;

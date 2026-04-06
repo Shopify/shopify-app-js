@@ -149,7 +149,7 @@ const shopify = shopifyApp({
   webhooks: {path: '/webhooks'},
   hooks: {
     afterAuth: async ({session}) => {
-      shopify.registerWebhooks({session});
+      await shopify.registerWebhooks({session});
     },
   },
 });

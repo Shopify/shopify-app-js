@@ -9,6 +9,8 @@ import {Request, Response, NextFunction} from 'express';
 
 import {AppConfigInterface} from '../config-types';
 import {WITHIN_MILLISECONDS_OF_EXPIRY} from '../helpers/ensure-offline-token-is-not-expired';
+import {respondToInvalidSessionToken} from '../helpers/respond-to-invalid-session-token';
+import {invalidateAccessToken} from '../helpers/invalidate-access-token';
 
 interface PerformTokenExchangeParams {
   req: Request;
@@ -17,6 +19,35 @@ interface PerformTokenExchangeParams {
   api: Shopify;
   config: AppConfigInterface;
   sessionToken: string;
+}
+
+async function exchangeToken(
+  api: Shopify,
+  config: AppConfigInterface,
+  sessionToken: string,
+  shop: string,
+  requestedTokenType: RequestedTokenType,
+): Promise<Session> {
+  const {session} = await api.auth.tokenExchange({
+    sessionToken,
+    shop,
+    requestedTokenType,
+    expiring: config.future?.expiringOfflineAccessTokens,
+  });
+  return session;
+}
+
+async function callAfterAuthHook(
+  config: AppConfigInterface,
+  session: Session,
+  sessionToken: string,
+): Promise<void> {
+  await config.idempotentPromiseHandler.handlePromise({
+    promiseFunction: async () => {
+      await config.hooks?.afterAuth?.({session});
+    },
+    identifier: sessionToken,
+  });
 }
 
 export async function performTokenExchange({
@@ -28,68 +59,58 @@ export async function performTokenExchange({
   sessionToken,
 }: PerformTokenExchangeParams): Promise<void> {
   const logger = config.logger;
+  // Hoisted so the outer catch can invalidate a stale access token if needed.
+  let sessionToInvalidate: Session | undefined;
 
   try {
     const payload = await api.session.decodeSessionToken(sessionToken);
-    const shop = payload.dest.replace('https://', '');
+    const shop = new URL(payload.dest).hostname;
     const sub = payload.sub;
 
-    // Load the relevant session based on online/offline mode
-    let sessionId: string;
-    if (config.useOnlineTokens) {
-      sessionId = api.session.getJwtSessionId(shop, sub);
-    } else {
-      sessionId = api.session.getOfflineId(shop);
-    }
+    const sessionId = config.useOnlineTokens
+      ? api.session.getJwtSessionId(shop, sub)
+      : api.session.getOfflineId(shop);
 
     let session: Session | undefined;
     try {
       session = await config.sessionStorage.loadSession(sessionId);
+      sessionToInvalidate = session;
     } catch (error) {
       logger.error(`Error when loading session from storage: ${error}`);
-      res.status(500);
-      res.send(error.message);
+      res.status(500).send('Internal Server Error');
       return;
     }
 
-    // If session exists and is active (not within 5 min of expiry), use it
     if (session && session.isActive(undefined, WITHIN_MILLISECONDS_OF_EXPIRY)) {
-      logger.debug('Request is valid, session is active', {
-        shop: session.shop,
-      });
-
-      res.locals.shopify = {
-        ...res.locals.shopify,
-        session,
-      };
+      logger.debug('Request is valid, session is active', {shop: session.shop});
+      res.locals.shopify = {...res.locals.shopify, session};
       next();
       return;
     }
 
-    // No valid session — perform token exchange
     logger.info('No valid session found', {shop});
-
-    // Always exchange offline first
     logger.info('Requesting offline access token', {shop});
-    const {session: offlineSession} = await api.auth.tokenExchange({
+
+    const offlineSession = await exchangeToken(
+      api,
+      config,
       sessionToken,
       shop,
-      requestedTokenType: RequestedTokenType.OfflineAccessToken,
-      expiring: config.future?.expiringOfflineAccessTokens,
-    });
+      RequestedTokenType.OfflineAccessToken,
+    );
     await config.sessionStorage.storeSession(offlineSession);
 
     let newSession = offlineSession;
 
-    // If using online tokens, also exchange for an online token
     if (config.useOnlineTokens) {
       logger.info('Requesting online access token', {shop});
-      const {session: onlineSession} = await api.auth.tokenExchange({
+      const onlineSession = await exchangeToken(
+        api,
+        config,
         sessionToken,
         shop,
-        requestedTokenType: RequestedTokenType.OnlineAccessToken,
-        expiring: config.future?.expiringOfflineAccessTokens,
-      });
+        RequestedTokenType.OnlineAccessToken,
+      );
       await config.sessionStorage.storeSession(onlineSession);
       newSession = onlineSession;
     }
@@ -99,25 +120,15 @@ export async function performTokenExchange({
       isOnline: newSession.isOnline,
     });
 
-    // Call afterAuth hook (idempotent — only once per session token)
     try {
-      await config.idempotentPromiseHandler.handlePromise({
-        promiseFunction: async () => {
-          await config.hooks?.afterAuth?.({session: newSession});
-        },
-        identifier: sessionToken,
-      });
+      await callAfterAuthHook(config, newSession, sessionToken);
     } catch (error) {
       logger.error(`Error in afterAuth hook: ${error}`);
-      res.status(500);
-      res.send('Internal Server Error');
+      res.status(500).send('Internal Server Error');
       return;
     }
 
-    res.locals.shopify = {
-      ...res.locals.shopify,
-      session: newSession,
-    };
+    res.locals.shopify = {...res.locals.shopify, session: newSession};
     next();
   } catch (error) {
     if (
@@ -126,21 +137,19 @@ export async function performTokenExchange({
         error.response.code === 400 &&
         error.response.body?.error === 'invalid_subject_token')
     ) {
-      res.status(401);
-      res.send(error.message);
+      respondToInvalidSessionToken(res, error.message, true);
       return;
     }
 
     if (error instanceof HttpResponseError && error.response.code === 401) {
-      // Invalidate the access token by clearing it and re-storing
-      logger.debug('Responding to invalid access token');
-      res.status(401);
-      res.send(error.message);
+      if (sessionToInvalidate?.accessToken) {
+        await invalidateAccessToken(sessionToInvalidate, config);
+      }
+      respondToInvalidSessionToken(res, error.message);
       return;
     }
 
     logger.error(`Unexpected error during token exchange: ${error}`);
-    res.status(500);
-    res.send('Internal Server Error');
+    res.status(500).send('Internal Server Error');
   }
 }

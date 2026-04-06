@@ -223,7 +223,7 @@ describe('performTokenExchange', () => {
     expect(response.body.session).toBe(shop);
   });
 
-  it('returns 401 on InvalidJwtError', async () => {
+  it('returns 401 with retry header on InvalidJwtError', async () => {
     const invalidJWT = await new SignJWT({
       dummy: 'data',
       aud: shopify.api.config.apiKey,
@@ -239,9 +239,12 @@ describe('performTokenExchange', () => {
       .expect(401);
 
     expect((response.error as any).text).toBeTruthy();
+    expect(response.headers['x-shopify-retry-invalid-session-request']).toBe(
+      '1',
+    );
   });
 
-  it('returns 401 on 400 invalid_subject_token response', async () => {
+  it('returns 401 with retry header on 400 invalid_subject_token response', async () => {
     const sessionToken = await createSessionToken();
 
     mockShopifyResponse(JSON.stringify({error: 'invalid_subject_token'}), {
@@ -254,10 +257,25 @@ describe('performTokenExchange', () => {
       .expect(401);
 
     expect((response.error as any).text).toBeTruthy();
+    expect(response.headers['x-shopify-retry-invalid-session-request']).toBe(
+      '1',
+    );
   });
 
-  it('returns 401 on Shopify 401 response', async () => {
+  it('returns 401 and invalidates stored access token on Shopify 401 response', async () => {
     const sessionToken = await createSessionToken();
+    const offlineId = shopify.api.session.getOfflineId(shop);
+
+    const existingSession = new Session({
+      id: offlineId,
+      shop,
+      state: 'state',
+      isOnline: false,
+      accessToken: 'revoked-token',
+      // expired — forces token exchange
+      expires: new Date(Date.now() - 60000),
+    });
+    await shopify.config.sessionStorage.storeSession(existingSession);
 
     mockShopifyResponse(JSON.stringify({errors: 'Unauthorized'}), {
       status: 401,
@@ -269,6 +287,12 @@ describe('performTokenExchange', () => {
       .expect(401);
 
     expect((response.error as any).text).toBeTruthy();
+
+    // The stale access token must be cleared from storage so the next request
+    // performs a fresh token exchange instead of reusing the revoked token.
+    const clearedSession =
+      await shopify.config.sessionStorage.loadSession(offlineId);
+    expect(clearedSession?.accessToken).toBeUndefined();
   });
 
   it('returns 500 on unexpected errors', async () => {
