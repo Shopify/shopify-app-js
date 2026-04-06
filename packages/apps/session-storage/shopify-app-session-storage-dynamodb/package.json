@@ -20,7 +20,7 @@
     "lint": "eslint .",
     "build": "pnpm rollup && pnpm tsc -p ./tsconfig.build.json",
     "tsc": "tsc",
-    "test": "jest",
+    "test": "NODE_OPTIONS=\"$NODE_OPTIONS --experimental-vm-modules\" jest",
     "test:ci": "pnpm test",
     "rollup": "rollup -c rollup.config.js --bundleConfigAsCjs",
     "clean": "rimraf .rollup.cache dist",
@@ -45,8 +45,8 @@
     "AWS"
   ],
   "dependencies": {
-    "@aws-sdk/client-dynamodb": "^3.975.0",
-    "@aws-sdk/util-dynamodb": "^3.975.0"
+    "@aws-sdk/client-dynamodb": "^3.1011.0",
+    "@aws-sdk/util-dynamodb": "^3.996.2"
   },
   "peerDependencies": {
     "@shopify/shopify-api": "^13.0.0",

@@ -66,7 +66,7 @@ describe('DynamoDBSessionStorage', () => {
             }),
           );
           await waitUntilTableExists(
-            {client, maxWaitTime: 120},
+            {client, maxWaitTime: 180},
             {TableName: sessionTableName},
           );
         } catch (error) {
@@ -75,7 +75,7 @@ describe('DynamoDBSessionStorage', () => {
         }
         return true;
       },
-      {interval: 500, timeout: 80000},
+      {interval: 500, timeout: 120000},
     );
 
     storage = new DynamoDBSessionStorage({
@@ -83,7 +83,7 @@ describe('DynamoDBSessionStorage', () => {
       shopIndexName,
       config: dynamoDBClientConfig,
     });
-  });
+  }, 180000);
 
   afterAll(async () => {
     await exec(`podman rm -f ${containerId}`);
