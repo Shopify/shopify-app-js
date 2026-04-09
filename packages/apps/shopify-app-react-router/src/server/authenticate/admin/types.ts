@@ -212,6 +212,12 @@ export interface ScopesContext {
 export type AdminContext<Config extends AppConfigArg> =
   EmbeddedTypedAdminContext<Config> & ScopesContext;
 
+/**
+ * Authenticates requests coming from the Shopify admin.
+ *
+ * > Note: The shape of the returned object changes depending on the `distribution` config. Merchant custom apps (`AppDistribution.ShopifyAdmin`) are not embedded so do not return session tokens or redirect functionality. All other distributions are embedded and so they return a context with session tokens and redirect functionality.
+ * @publicDocs
+ */
 export type AuthenticateAdmin<Config extends AppConfigArg> = (
   request: Request,
 ) => Promise<AdminContext<Config>>;

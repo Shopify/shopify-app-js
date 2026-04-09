@@ -10,8 +10,10 @@ on:
     types: [opened, synchronize, reopened, ready_for_review, closed]
     paths:
       - 'packages/apps/shopify-app-remix/docs/generated/generated_docs_data.json'
+      - 'packages/apps/shopify-app-remix/docs/generated/generated_docs_data_v2.json'
       - 'packages/apps/shopify-app-remix/docs/generated/generated_static_pages.json'
       - 'packages/apps/shopify-app-react-router/docs/generated/generated_docs_data.json'
+      - 'packages/apps/shopify-app-react-router/docs/generated/generated_docs_data_v2.json'
       - 'packages/apps/shopify-app-react-router/docs/generated/generated_static_pages.json'
 
 concurrency:
@@ -52,8 +54,10 @@ jobs:
           # Define the files we're monitoring
           MONITORED_FILES=(
             "packages/apps/shopify-app-remix/docs/generated/generated_docs_data.json"
+            "packages/apps/shopify-app-remix/docs/generated/generated_docs_data_v2.json"
             "packages/apps/shopify-app-remix/docs/generated/generated_static_pages.json"
             "packages/apps/shopify-app-react-router/docs/generated/generated_docs_data.json"
+            "packages/apps/shopify-app-react-router/docs/generated/generated_docs_data_v2.json"
             "packages/apps/shopify-app-react-router/docs/generated/generated_static_pages.json"
           )
 

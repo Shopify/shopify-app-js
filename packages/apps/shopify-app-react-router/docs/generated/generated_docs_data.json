@@ -16,7 +16,8 @@
             "syntaxKind": "TypeAliasDeclaration",
             "name": "AppProviderProps",
             "value": "NonEmbeddedProps | EmbeddedProps",
-            "description": ""
+            "description": "Props for the `AppProvider` component.",
+            "isPublicDocs": true
           },
           "NonEmbeddedProps": {
             "filePath": "src/react/components/AppProvider/AppProvider.tsx",
@@ -175,7 +176,8 @@
           "AppProxyProviderProps": {
             "filePath": "src/react/components/AppProxyProvider/AppProxyProvider.tsx",
             "name": "AppProxyProviderProps",
-            "description": "",
+            "description": "Props for the `AppProxyProvider` component.",
+            "isPublicDocs": true,
             "members": [
               {
                 "filePath": "src/react/components/AppProxyProvider/AppProxyProvider.tsx",
@@ -244,7 +246,8 @@
           "AuthenticateAdmin": {
             "filePath": "src/server/authenticate/admin/types.ts",
             "name": "AuthenticateAdmin",
-            "description": "",
+            "description": "Authenticates requests coming from the Shopify admin.\n\n> Note: The shape of the returned object changes depending on the `distribution` config. Merchant custom apps (`AppDistribution.ShopifyAdmin`) are not embedded so do not return session tokens or redirect functionality. All other distributions are embedded and so they return a context with session tokens and redirect functionality.",
+            "isPublicDocs": true,
             "params": [
               {
                 "name": "request",
@@ -374,12 +377,13 @@
                 ]
               }
             ],
-            "value": "export interface NonEmbeddedAdminContext<Config extends AppConfigArg>\n  extends AdminContextInternal<Config> {}"
+            "value": "export interface NonEmbeddedAdminContext<\n  Config extends AppConfigArg,\n> extends AdminContextInternal<Config> {}"
           },
           "AdminApiContext": {
             "filePath": "src/server/clients/admin/types.ts",
             "name": "AdminApiContext",
-            "description": "",
+            "description": "Provides utilities that apps can use to make requests to the Admin API.",
+            "isPublicDocs": true,
             "members": [
               {
                 "filePath": "src/server/clients/admin/types.ts",
@@ -489,7 +493,7 @@
                 "filePath": "src/server/clients/types.ts",
                 "syntaxKind": "PropertySignature",
                 "name": "variables",
-                "value": "ApiClientRequestOptions<Operation, Operations>[\"variables\"]",
+                "value": "ApiClientRequestOptions<Operation, Operations>",
                 "description": "The variables to pass to the operation.",
                 "isOptional": true
               }
@@ -499,7 +503,8 @@
           "BillingContext": {
             "filePath": "src/server/authenticate/admin/billing/types.ts",
             "name": "BillingContext",
-            "description": "",
+            "description": "Provides utilities that apps can use to request billing for the app using the Admin API.",
+            "isPublicDocs": true,
             "members": [
               {
                 "filePath": "src/server/authenticate/admin/billing/types.ts",
@@ -733,7 +738,7 @@
                 "isOptional": true
               }
             ],
-            "value": "export interface CheckBillingOptions<Config extends AppConfigArg>\n  extends Omit<BillingCheckParams, 'session' | 'plans' | 'returnObject'> {\n  /**\n   * The plans to check for. Must be one of the values defined in the `billing` config option.\n   */\n  plans?: (keyof Config['billing'])[];\n}"
+            "value": "export interface CheckBillingOptions<Config extends AppConfigArg> extends Omit<\n  BillingCheckParams,\n  'session' | 'plans' | 'returnObject'\n> {\n  /**\n   * The plans to check for. Must be one of the values defined in the `billing` config option.\n   */\n  plans?: (keyof Config['billing'])[];\n}"
           },
           "CreateUsageRecordOptions": {
             "filePath": "src/server/authenticate/admin/billing/types.ts",
@@ -788,10 +793,38 @@
               {
                 "filePath": "src/server/authenticate/admin/billing/types.ts",
                 "syntaxKind": "PropertySignature",
+                "name": "amount",
+                "value": "number",
+                "description": "Amount to charge for this plan."
+              },
+              {
+                "filePath": "src/server/authenticate/admin/billing/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "currencyCode",
+                "value": "string",
+                "description": "Currency code for this plan."
+              },
+              {
+                "filePath": "src/server/authenticate/admin/billing/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "interval",
+                "value": "BillingInterval.OneTime",
+                "description": "Interval for this plan.\n\nMust be set to `OneTime`."
+              },
+              {
+                "filePath": "src/server/authenticate/admin/billing/types.ts",
+                "syntaxKind": "PropertySignature",
                 "name": "isTest",
                 "value": "boolean",
                 "description": "Whether to use the test mode. This prevents the credit card from being charged. Test shops and demo shops cannot be charged.",
                 "isOptional": true
+              },
+              {
+                "filePath": "src/server/authenticate/admin/billing/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "lineItems",
+                "value": "({ interval?: BillingInterval.Every30Days | BillingInterval.Annual; discount?: { durationLimitInIntervals?: number; value?: { amount?: number; percentage?: never; } | { amount?: never; percentage?: number; }; }; amount?: number; currencyCode?: string; } | { interval?: BillingInterval.Usage; amount?: number; terms?: string; currencyCode?: string; })[]",
+                "description": "The line items for this plan."
               },
               {
                 "filePath": "src/server/authenticate/admin/billing/types.ts",
@@ -803,13 +836,29 @@
               {
                 "filePath": "src/server/authenticate/admin/billing/types.ts",
                 "syntaxKind": "PropertySignature",
+                "name": "replacementBehavior",
+                "value": "BillingReplacementBehavior",
+                "description": "The replacement behavior to use for this plan.",
+                "isOptional": true
+              },
+              {
+                "filePath": "src/server/authenticate/admin/billing/types.ts",
+                "syntaxKind": "PropertySignature",
                 "name": "returnUrl",
                 "value": "string",
                 "description": "The URL to return to after the merchant approves the payment.",
                 "isOptional": true
+              },
+              {
+                "filePath": "src/server/authenticate/admin/billing/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "trialDays",
+                "value": "number",
+                "description": "How many trial days to give before charging for this plan.",
+                "isOptional": true
               }
             ],
-            "value": "export interface RequestBillingOptions<Config extends AppConfigArg>\n  extends Omit<BillingRequestParams, 'session' | 'plan' | 'returnObject'> {\n  /**\n   * The plan to request. Must be one of the values defined in the `billing` config option.\n   */\n  plan: keyof Config['billing'];\n  /**\n   * Whether to use the test mode. This prevents the credit card from being charged. Test shops and demo shops cannot be charged.\n   */\n  isTest?: boolean;\n  /**\n   * The URL to return to after the merchant approves the payment.\n   */\n  returnUrl?: string;\n}"
+            "value": "export interface RequestBillingOptions<\n  Config extends AppConfigArg,\n> extends Omit<BillingRequestParams, 'session' | 'plan' | 'returnObject'> {\n  /**\n   * The plan to request. Must be one of the values defined in the `billing` config option.\n   */\n  plan: keyof Config['billing'];\n  /**\n   * Whether to use the test mode. This prevents the credit card from being charged. Test shops and demo shops cannot be charged.\n   */\n  isTest?: boolean;\n  /**\n   * The URL to return to after the merchant approves the payment.\n   */\n  returnUrl?: string;\n}"
           },
           "RequireBillingOptions": {
             "filePath": "src/server/authenticate/admin/billing/types.ts",
@@ -839,7 +888,7 @@
                 "description": "The plans to check for. Must be one of the values defined in the `billing` config option."
               }
             ],
-            "value": "export interface RequireBillingOptions<Config extends AppConfigArg>\n  extends Omit<BillingCheckParams, 'session' | 'plans' | 'returnObject'> {\n  /**\n   * The plans to check for. Must be one of the values defined in the `billing` config option.\n   */\n  plans: (keyof Config['billing'])[];\n  /**\n   * How to handle the request if the shop doesn't have an active payment for any plan.\n   */\n  onFailure: (error: any) => Promise<Response>;\n}"
+            "value": "export interface RequireBillingOptions<\n  Config extends AppConfigArg,\n> extends Omit<BillingCheckParams, 'session' | 'plans' | 'returnObject'> {\n  /**\n   * The plans to check for. Must be one of the values defined in the `billing` config option.\n   */\n  plans: (keyof Config['billing'])[];\n  /**\n   * How to handle the request if the shop doesn't have an active payment for any plan.\n   */\n  onFailure: (error: any) => Promise<Response>;\n}"
           },
           "UpdateUsageCappedAmountOptions": {
             "filePath": "src/server/authenticate/admin/billing/types.ts",
@@ -1008,7 +1057,7 @@
                 ]
               }
             ],
-            "value": "export interface EmbeddedAdminContext<Config extends AppConfigArg>\n  extends AdminContextInternal<Config> {\n  /**\n   * The decoded and validated session token for the request.\n   *\n   * Returned only for embedded apps (all distribution types except merchant custom apps)\n   *\n   * {@link https://shopify.dev/docs/apps/auth/oauth/session-tokens#payload}\n   *\n   * @example\n   * <caption>Using the decoded session token.</caption>\n   * <description>Get user-specific data using the `sessionToken` object.</description>\n   * ```ts\n   * // /app/routes/**\\/*.ts\n   * import { LoaderFunctionArgs, json } from \"react-router\";\n   * import { authenticate } from \"../shopify.server\";\n   * import { getMyAppData } from \"~/db/model.server\";\n   *\n   * export const loader = async ({ request }: LoaderFunctionArgs) => {\n   *   const { sessionToken } = await authenticate.admin(\n   *     request\n   *   );\n   *   return (await getMyAppData({user: sessionToken.sub}));\n   * };\n   * ```\n   * ```ts\n   * // shopify.server.ts\n   * import { shopifyApp } from \"@shopify/shopify-app-react-router/server\";\n   *\n   * const shopify = shopifyApp({\n   *   // ...etc\n   *   useOnlineTokens: true,\n   * });\n   * export default shopify;\n   * export const authenticate = shopify.authenticate;\n   * ```\n   */\n  sessionToken: JwtPayload;\n\n  /**\n   * A function that redirects the user to a new page, ensuring that the appropriate parameters are set for embedded\n   * apps.\n   *\n   * Returned only for embedded apps (all apps except merchant custom apps).\n   *\n   * @example\n   * <caption>Redirecting to an app route.</caption>\n   * <description>Use the `redirect` helper to safely redirect between pages.</description>\n   * ```ts\n   * // /app/routes/admin/my-route.ts\n   * import { LoaderFunctionArgs, json } from \"react-router\";\n   * import { authenticate } from \"../shopify.server\";\n   *\n   * export const loader = async ({ request }: LoaderFunctionArgs) => {\n   *   const { session, redirect } = await authenticate.admin(request);\n   *   return redirect(\"/\");\n   * };\n   * ```\n   *\n   * @example\n   * <caption>Redirecting to a page in the Shopify Admin.</caption>\n   * <description>Redirects to a product page in the Shopify admin. Pass in a `target` option of `_top` or `_parent` to navigate in the current window, or `_blank` to open a new tab.</description>\n   * ```ts\n   * // /app/routes/admin/my-route.ts\n   * import { LoaderFunctionArgs, json } from \"react-router\";\n   * import { authenticate } from \"../shopify.server\";\n   *\n   * export const loader = async ({ request }: LoaderFunctionArgs) => {\n   *   const { session, redirect } = await authenticate.admin(request);\n   *   return redirect(\"shopify://admin/products/123456\", { target: '_parent' });\n   * };\n   * ```\n   *\n   * @example\n   * <caption>Redirecting outside of the Admin embedded app page.</caption>\n   * <description>Pass in a `target` option of `_top` or `_parent` to navigate in the current window, or `_blank` to open a new tab.</description>\n   * ```ts\n   * // /app/routes/admin/my-route.ts\n   * import { LoaderFunctionArgs, json } from \"react-router\";\n   * import { authenticate } from \"../shopify.server\";\n   *\n   * export const loader = async ({ request }: LoaderFunctionArgs) => {\n   *   const { session, redirect } = await authenticate.admin(request);\n   *   return redirect(\"/\", { target: '_parent' });\n   * };\n   * ```\n   */\n  redirect: RedirectFunction;\n}"
+            "value": "export interface EmbeddedAdminContext<\n  Config extends AppConfigArg,\n> extends AdminContextInternal<Config> {\n  /**\n   * The decoded and validated session token for the request.\n   *\n   * Returned only for embedded apps (all distribution types except merchant custom apps)\n   *\n   * {@link https://shopify.dev/docs/apps/auth/oauth/session-tokens#payload}\n   *\n   * @example\n   * <caption>Using the decoded session token.</caption>\n   * <description>Get user-specific data using the `sessionToken` object.</description>\n   * ```ts\n   * // /app/routes/**\\/*.ts\n   * import { LoaderFunctionArgs, json } from \"react-router\";\n   * import { authenticate } from \"../shopify.server\";\n   * import { getMyAppData } from \"~/db/model.server\";\n   *\n   * export const loader = async ({ request }: LoaderFunctionArgs) => {\n   *   const { sessionToken } = await authenticate.admin(\n   *     request\n   *   );\n   *   return (await getMyAppData({user: sessionToken.sub}));\n   * };\n   * ```\n   * ```ts\n   * // shopify.server.ts\n   * import { shopifyApp } from \"@shopify/shopify-app-react-router/server\";\n   *\n   * const shopify = shopifyApp({\n   *   // ...etc\n   *   useOnlineTokens: true,\n   * });\n   * export default shopify;\n   * export const authenticate = shopify.authenticate;\n   * ```\n   */\n  sessionToken: JwtPayload;\n\n  /**\n   * A function that redirects the user to a new page, ensuring that the appropriate parameters are set for embedded\n   * apps.\n   *\n   * Returned only for embedded apps (all apps except merchant custom apps).\n   *\n   * @example\n   * <caption>Redirecting to an app route.</caption>\n   * <description>Use the `redirect` helper to safely redirect between pages.</description>\n   * ```ts\n   * // /app/routes/admin/my-route.ts\n   * import { LoaderFunctionArgs, json } from \"react-router\";\n   * import { authenticate } from \"../shopify.server\";\n   *\n   * export const loader = async ({ request }: LoaderFunctionArgs) => {\n   *   const { session, redirect } = await authenticate.admin(request);\n   *   return redirect(\"/\");\n   * };\n   * ```\n   *\n   * @example\n   * <caption>Redirecting to a page in the Shopify Admin.</caption>\n   * <description>Redirects to a product page in the Shopify admin. Pass in a `target` option of `_top` or `_parent` to navigate in the current window, or `_blank` to open a new tab.</description>\n   * ```ts\n   * // /app/routes/admin/my-route.ts\n   * import { LoaderFunctionArgs, json } from \"react-router\";\n   * import { authenticate } from \"../shopify.server\";\n   *\n   * export const loader = async ({ request }: LoaderFunctionArgs) => {\n   *   const { session, redirect } = await authenticate.admin(request);\n   *   return redirect(\"shopify://admin/products/123456\", { target: '_parent' });\n   * };\n   * ```\n   *\n   * @example\n   * <caption>Redirecting outside of the Admin embedded app page.</caption>\n   * <description>Pass in a `target` option of `_top` or `_parent` to navigate in the current window, or `_blank` to open a new tab.</description>\n   * ```ts\n   * // /app/routes/admin/my-route.ts\n   * import { LoaderFunctionArgs, json } from \"react-router\";\n   * import { authenticate } from \"../shopify.server\";\n   *\n   * export const loader = async ({ request }: LoaderFunctionArgs) => {\n   *   const { session, redirect } = await authenticate.admin(request);\n   *   return redirect(\"/\", { target: '_parent' });\n   * };\n   * ```\n   */\n  redirect: RedirectFunction;\n}"
           },
           "RedirectFunction": {
             "filePath": "src/server/authenticate/admin/helpers/redirect.ts",
@@ -1069,7 +1118,8 @@
           "ScopesApiContext": {
             "filePath": "src/server/authenticate/admin/scope/types.ts",
             "name": "ScopesApiContext",
-            "description": "The Scopes API enables embedded apps and extensions to request merchant consent for access scopes.",
+            "description": "Provides utilities that apps can use to [manage scopes](https://shopify.dev/docs/apps/build/authentication-authorization/app-installation/manage-access-scopes) for the app using the Admin API.",
+            "isPublicDocs": true,
             "members": [
               {
                 "filePath": "src/server/authenticate/admin/scope/types.ts",
@@ -1638,7 +1688,8 @@
           "BillingContext": {
             "filePath": "src/server/authenticate/admin/billing/types.ts",
             "name": "BillingContext",
-            "description": "",
+            "description": "Provides utilities that apps can use to request billing for the app using the Admin API.",
+            "isPublicDocs": true,
             "members": [
               {
                 "filePath": "src/server/authenticate/admin/billing/types.ts",
@@ -1872,7 +1923,7 @@
                 "isOptional": true
               }
             ],
-            "value": "export interface CheckBillingOptions<Config extends AppConfigArg>\n  extends Omit<BillingCheckParams, 'session' | 'plans' | 'returnObject'> {\n  /**\n   * The plans to check for. Must be one of the values defined in the `billing` config option.\n   */\n  plans?: (keyof Config['billing'])[];\n}"
+            "value": "export interface CheckBillingOptions<Config extends AppConfigArg> extends Omit<\n  BillingCheckParams,\n  'session' | 'plans' | 'returnObject'\n> {\n  /**\n   * The plans to check for. Must be one of the values defined in the `billing` config option.\n   */\n  plans?: (keyof Config['billing'])[];\n}"
           },
           "CreateUsageRecordOptions": {
             "filePath": "src/server/authenticate/admin/billing/types.ts",
@@ -1927,10 +1978,38 @@
               {
                 "filePath": "src/server/authenticate/admin/billing/types.ts",
                 "syntaxKind": "PropertySignature",
+                "name": "amount",
+                "value": "number",
+                "description": "Amount to charge for this plan."
+              },
+              {
+                "filePath": "src/server/authenticate/admin/billing/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "currencyCode",
+                "value": "string",
+                "description": "Currency code for this plan."
+              },
+              {
+                "filePath": "src/server/authenticate/admin/billing/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "interval",
+                "value": "BillingInterval.OneTime",
+                "description": "Interval for this plan.\n\nMust be set to `OneTime`."
+              },
+              {
+                "filePath": "src/server/authenticate/admin/billing/types.ts",
+                "syntaxKind": "PropertySignature",
                 "name": "isTest",
                 "value": "boolean",
                 "description": "Whether to use the test mode. This prevents the credit card from being charged. Test shops and demo shops cannot be charged.",
                 "isOptional": true
+              },
+              {
+                "filePath": "src/server/authenticate/admin/billing/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "lineItems",
+                "value": "({ interval?: BillingInterval.Every30Days | BillingInterval.Annual; discount?: { durationLimitInIntervals?: number; value?: { amount?: number; percentage?: never; } | { amount?: never; percentage?: number; }; }; amount?: number; currencyCode?: string; } | { interval?: BillingInterval.Usage; amount?: number; terms?: string; currencyCode?: string; })[]",
+                "description": "The line items for this plan."
               },
               {
                 "filePath": "src/server/authenticate/admin/billing/types.ts",
@@ -1942,13 +2021,29 @@
               {
                 "filePath": "src/server/authenticate/admin/billing/types.ts",
                 "syntaxKind": "PropertySignature",
+                "name": "replacementBehavior",
+                "value": "BillingReplacementBehavior",
+                "description": "The replacement behavior to use for this plan.",
+                "isOptional": true
+              },
+              {
+                "filePath": "src/server/authenticate/admin/billing/types.ts",
+                "syntaxKind": "PropertySignature",
                 "name": "returnUrl",
                 "value": "string",
                 "description": "The URL to return to after the merchant approves the payment.",
                 "isOptional": true
+              },
+              {
+                "filePath": "src/server/authenticate/admin/billing/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "trialDays",
+                "value": "number",
+                "description": "How many trial days to give before charging for this plan.",
+                "isOptional": true
               }
             ],
-            "value": "export interface RequestBillingOptions<Config extends AppConfigArg>\n  extends Omit<BillingRequestParams, 'session' | 'plan' | 'returnObject'> {\n  /**\n   * The plan to request. Must be one of the values defined in the `billing` config option.\n   */\n  plan: keyof Config['billing'];\n  /**\n   * Whether to use the test mode. This prevents the credit card from being charged. Test shops and demo shops cannot be charged.\n   */\n  isTest?: boolean;\n  /**\n   * The URL to return to after the merchant approves the payment.\n   */\n  returnUrl?: string;\n}"
+            "value": "export interface RequestBillingOptions<\n  Config extends AppConfigArg,\n> extends Omit<BillingRequestParams, 'session' | 'plan' | 'returnObject'> {\n  /**\n   * The plan to request. Must be one of the values defined in the `billing` config option.\n   */\n  plan: keyof Config['billing'];\n  /**\n   * Whether to use the test mode. This prevents the credit card from being charged. Test shops and demo shops cannot be charged.\n   */\n  isTest?: boolean;\n  /**\n   * The URL to return to after the merchant approves the payment.\n   */\n  returnUrl?: string;\n}"
           },
           "RequireBillingOptions": {
             "filePath": "src/server/authenticate/admin/billing/types.ts",
@@ -1978,7 +2073,7 @@
                 "description": "The plans to check for. Must be one of the values defined in the `billing` config option."
               }
             ],
-            "value": "export interface RequireBillingOptions<Config extends AppConfigArg>\n  extends Omit<BillingCheckParams, 'session' | 'plans' | 'returnObject'> {\n  /**\n   * The plans to check for. Must be one of the values defined in the `billing` config option.\n   */\n  plans: (keyof Config['billing'])[];\n  /**\n   * How to handle the request if the shop doesn't have an active payment for any plan.\n   */\n  onFailure: (error: any) => Promise<Response>;\n}"
+            "value": "export interface RequireBillingOptions<\n  Config extends AppConfigArg,\n> extends Omit<BillingCheckParams, 'session' | 'plans' | 'returnObject'> {\n  /**\n   * The plans to check for. Must be one of the values defined in the `billing` config option.\n   */\n  plans: (keyof Config['billing'])[];\n  /**\n   * How to handle the request if the shop doesn't have an active payment for any plan.\n   */\n  onFailure: (error: any) => Promise<Response>;\n}"
           },
           "UpdateUsageCappedAmountOptions": {
             "filePath": "src/server/authenticate/admin/billing/types.ts",
@@ -2223,7 +2318,8 @@
           "ScopesApiContext": {
             "filePath": "src/server/authenticate/admin/scope/types.ts",
             "name": "ScopesApiContext",
-            "description": "The Scopes API enables embedded apps and extensions to request merchant consent for access scopes.",
+            "description": "Provides utilities that apps can use to [manage scopes](https://shopify.dev/docs/apps/build/authentication-authorization/app-installation/manage-access-scopes) for the app using the Admin API.",
+            "isPublicDocs": true,
             "members": [
               {
                 "filePath": "src/server/authenticate/admin/scope/types.ts",
@@ -2417,7 +2513,8 @@
           "AuthenticateFlow": {
             "filePath": "src/server/authenticate/flow/types.ts",
             "name": "AuthenticateFlow",
-            "description": "",
+            "description": "Verifies requests coming from Shopify Flow extensions.",
+            "isPublicDocs": true,
             "params": [
               {
                 "name": "request",
@@ -2502,7 +2599,8 @@
           "AdminApiContext": {
             "filePath": "src/server/clients/admin/types.ts",
             "name": "AdminApiContext",
-            "description": "",
+            "description": "Provides utilities that apps can use to make requests to the Admin API.",
+            "isPublicDocs": true,
             "members": [
               {
                 "filePath": "src/server/clients/admin/types.ts",
@@ -2612,7 +2710,7 @@
                 "filePath": "src/server/clients/types.ts",
                 "syntaxKind": "PropertySignature",
                 "name": "variables",
-                "value": "ApiClientRequestOptions<Operation, Operations>[\"variables\"]",
+                "value": "ApiClientRequestOptions<Operation, Operations>",
                 "description": "The variables to pass to the operation.",
                 "isOptional": true
               }
@@ -2726,7 +2824,8 @@
           "AuthenticateFulfillmentService": {
             "filePath": "src/server/authenticate/fulfillment-service/types.ts",
             "name": "AuthenticateFulfillmentService",
-            "description": "",
+            "description": "Verifies requests coming from Shopify to fulfillment service apps.",
+            "isPublicDocs": true,
             "params": [
               {
                 "name": "request",
@@ -2811,7 +2910,8 @@
           "AdminApiContext": {
             "filePath": "src/server/clients/admin/types.ts",
             "name": "AdminApiContext",
-            "description": "",
+            "description": "Provides utilities that apps can use to make requests to the Admin API.",
+            "isPublicDocs": true,
             "members": [
               {
                 "filePath": "src/server/clients/admin/types.ts",
@@ -2921,7 +3021,7 @@
                 "filePath": "src/server/clients/types.ts",
                 "syntaxKind": "PropertySignature",
                 "name": "variables",
-                "value": "ApiClientRequestOptions<Operation, Operations>[\"variables\"]",
+                "value": "ApiClientRequestOptions<Operation, Operations>",
                 "description": "The variables to pass to the operation.",
                 "isOptional": true
               }
@@ -3043,7 +3143,8 @@
           "AuthenticateAppProxy": {
             "filePath": "src/server/authenticate/public/appProxy/types.ts",
             "name": "AuthenticateAppProxy",
-            "description": "",
+            "description": "Authenticates requests coming to the app from Shopify app proxies.",
+            "isPublicDocs": true,
             "params": [
               {
                 "name": "request",
@@ -3278,7 +3379,8 @@
           "AdminApiContext": {
             "filePath": "src/server/clients/admin/types.ts",
             "name": "AdminApiContext",
-            "description": "",
+            "description": "Provides utilities that apps can use to make requests to the Admin API.",
+            "isPublicDocs": true,
             "members": [
               {
                 "filePath": "src/server/clients/admin/types.ts",
@@ -3388,7 +3490,7 @@
                 "filePath": "src/server/clients/types.ts",
                 "syntaxKind": "PropertySignature",
                 "name": "variables",
-                "value": "ApiClientRequestOptions<Operation, Operations>[\"variables\"]",
+                "value": "ApiClientRequestOptions<Operation, Operations>",
                 "description": "The variables to pass to the operation.",
                 "isOptional": true
               }
@@ -3398,7 +3500,8 @@
           "StorefrontContext": {
             "filePath": "src/server/clients/storefront/types.ts",
             "name": "StorefrontContext",
-            "description": "",
+            "description": "Provides utilities that apps can use to make requests to the Storefront API.",
+            "isPublicDocs": true,
             "members": [
               {
                 "filePath": "src/server/clients/storefront/types.ts",
@@ -3593,7 +3696,8 @@
           "AuthenticateCheckout": {
             "filePath": "src/server/authenticate/public/checkout/types.ts",
             "name": "AuthenticateCheckout",
-            "description": "",
+            "description": "Authenticates requests coming from Shopify checkout extensions.",
+            "isPublicDocs": true,
             "params": [
               {
                 "name": "request",
@@ -3776,7 +3880,8 @@
           "AuthenticateCustomerAccount": {
             "filePath": "src/server/authenticate/public/customer-account/types.ts",
             "name": "AuthenticateCustomerAccount",
-            "description": "",
+            "description": "Authenticates requests coming from Shopify customer account extensions.",
+            "isPublicDocs": true,
             "params": [
               {
                 "name": "request",
@@ -3958,7 +4063,8 @@
           "AuthenticateWebhook": {
             "filePath": "src/server/authenticate/webhooks/types.ts",
             "name": "AuthenticateWebhook",
-            "description": "",
+            "description": "Verifies requests coming from Shopify webhooks.",
+            "isPublicDocs": true,
             "params": [
               {
                 "name": "request",
@@ -3990,6 +4096,14 @@
               {
                 "filePath": "src/server/authenticate/webhooks/types.ts",
                 "syntaxKind": "PropertySignature",
+                "name": "action",
+                "value": "string",
+                "description": "The action type: 'create', 'update', or 'delete'. Only available for events webhooks.",
+                "isOptional": true
+              },
+              {
+                "filePath": "src/server/authenticate/webhooks/types.ts",
+                "syntaxKind": "PropertySignature",
                 "name": "admin",
                 "value": "undefined",
                 "description": ""
@@ -4016,6 +4130,30 @@
               {
                 "filePath": "src/server/authenticate/webhooks/types.ts",
                 "syntaxKind": "PropertySignature",
+                "name": "eventId",
+                "value": "string",
+                "description": "The unique event identifier.",
+                "isOptional": true
+              },
+              {
+                "filePath": "src/server/authenticate/webhooks/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "handle",
+                "value": "string",
+                "description": "The handle for the webhook subscription. Only available for events webhooks.",
+                "isOptional": true
+              },
+              {
+                "filePath": "src/server/authenticate/webhooks/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "name",
+                "value": "string",
+                "description": "The name assigned to the webhook subscription. Only available for traditional webhooks.",
+                "isOptional": true
+              },
+              {
+                "filePath": "src/server/authenticate/webhooks/types.ts",
+                "syntaxKind": "PropertySignature",
                 "name": "payload",
                 "value": "Record<string, any>",
                 "description": "The payload from the webhook request.",
@@ -4031,6 +4169,14 @@
                     ]
                   }
                 ]
+              },
+              {
+                "filePath": "src/server/authenticate/webhooks/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "resourceId",
+                "value": "string",
+                "description": "The GID of the resource that triggered the webhook. Only available for events webhooks.",
+                "isOptional": true
               },
               {
                 "filePath": "src/server/authenticate/webhooks/types.ts",
@@ -4063,7 +4209,7 @@
                 "syntaxKind": "PropertySignature",
                 "name": "subTopic",
                 "value": "string",
-                "description": "The sub-topic of the webhook. This is only available for certain webhooks.",
+                "description": "The sub-topic of the webhook. Only available for traditional webhooks.",
                 "isOptional": true,
                 "examples": [
                   {
@@ -4100,9 +4246,17 @@
               {
                 "filePath": "src/server/authenticate/webhooks/types.ts",
                 "syntaxKind": "PropertySignature",
+                "name": "triggeredAt",
+                "value": "string",
+                "description": "The timestamp when the webhook was triggered.",
+                "isOptional": true
+              },
+              {
+                "filePath": "src/server/authenticate/webhooks/types.ts",
+                "syntaxKind": "PropertySignature",
                 "name": "webhookId",
                 "value": "string",
-                "description": "A unique ID for the webhook. Useful to keep track of which events your app has already processed.",
+                "description": "A unique ID for the webhook. Useful to keep track of which events your app has already processed.\n\nFor events webhooks (`webhookType === 'events'`), this is set to the `eventId` value for backwards compatibility. Prefer using `eventId` directly for events webhooks — `webhookId` will be removed from events webhooks in the next major version.",
                 "examples": [
                   {
                     "title": "Webhook ID",
@@ -4115,15 +4269,30 @@
                     ]
                   }
                 ]
+              },
+              {
+                "filePath": "src/server/authenticate/webhooks/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "webhookType",
+                "value": "WebhookTypeValue",
+                "description": "The type of webhook: 'webhooks' for traditional webhooks or 'events' for events webhooks."
               }
             ],
-            "value": "export interface WebhookContextWithoutSession<Topics = string | number | symbol>\n  extends Context<Topics> {\n  session: undefined;\n  admin: undefined;\n}"
+            "value": "export interface WebhookContextWithoutSession<\n  Topics = string | number | symbol,\n> extends Context<Topics> {\n  session: undefined;\n  admin: undefined;\n}"
           },
           "WebhookContextWithSession": {
             "filePath": "src/server/authenticate/webhooks/types.ts",
             "name": "WebhookContextWithSession",
             "description": "",
             "members": [
+              {
+                "filePath": "src/server/authenticate/webhooks/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "action",
+                "value": "string",
+                "description": "The action type: 'create', 'update', or 'delete'. Only available for events webhooks.",
+                "isOptional": true
+              },
               {
                 "filePath": "src/server/authenticate/webhooks/types.ts",
                 "syntaxKind": "PropertySignature",
@@ -4165,6 +4334,30 @@
               {
                 "filePath": "src/server/authenticate/webhooks/types.ts",
                 "syntaxKind": "PropertySignature",
+                "name": "eventId",
+                "value": "string",
+                "description": "The unique event identifier.",
+                "isOptional": true
+              },
+              {
+                "filePath": "src/server/authenticate/webhooks/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "handle",
+                "value": "string",
+                "description": "The handle for the webhook subscription. Only available for events webhooks.",
+                "isOptional": true
+              },
+              {
+                "filePath": "src/server/authenticate/webhooks/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "name",
+                "value": "string",
+                "description": "The name assigned to the webhook subscription. Only available for traditional webhooks.",
+                "isOptional": true
+              },
+              {
+                "filePath": "src/server/authenticate/webhooks/types.ts",
+                "syntaxKind": "PropertySignature",
                 "name": "payload",
                 "value": "Record<string, any>",
                 "description": "The payload from the webhook request.",
@@ -4180,6 +4373,14 @@
                     ]
                   }
                 ]
+              },
+              {
+                "filePath": "src/server/authenticate/webhooks/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "resourceId",
+                "value": "string",
+                "description": "The GID of the resource that triggered the webhook. Only available for events webhooks.",
+                "isOptional": true
               },
               {
                 "filePath": "src/server/authenticate/webhooks/types.ts",
@@ -4224,7 +4425,7 @@
                 "syntaxKind": "PropertySignature",
                 "name": "subTopic",
                 "value": "string",
-                "description": "The sub-topic of the webhook. This is only available for certain webhooks.",
+                "description": "The sub-topic of the webhook. Only available for traditional webhooks.",
                 "isOptional": true,
                 "examples": [
                   {
@@ -4261,9 +4462,17 @@
               {
                 "filePath": "src/server/authenticate/webhooks/types.ts",
                 "syntaxKind": "PropertySignature",
+                "name": "triggeredAt",
+                "value": "string",
+                "description": "The timestamp when the webhook was triggered.",
+                "isOptional": true
+              },
+              {
+                "filePath": "src/server/authenticate/webhooks/types.ts",
+                "syntaxKind": "PropertySignature",
                 "name": "webhookId",
                 "value": "string",
-                "description": "A unique ID for the webhook. Useful to keep track of which events your app has already processed.",
+                "description": "A unique ID for the webhook. Useful to keep track of which events your app has already processed.\n\nFor events webhooks (`webhookType === 'events'`), this is set to the `eventId` value for backwards compatibility. Prefer using `eventId` directly for events webhooks — `webhookId` will be removed from events webhooks in the next major version.",
                 "examples": [
                   {
                     "title": "Webhook ID",
@@ -4276,14 +4485,22 @@
                     ]
                   }
                 ]
+              },
+              {
+                "filePath": "src/server/authenticate/webhooks/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "webhookType",
+                "value": "WebhookTypeValue",
+                "description": "The type of webhook: 'webhooks' for traditional webhooks or 'events' for events webhooks."
               }
             ],
-            "value": "export interface WebhookContextWithSession<Topics = string | number | symbol>\n  extends Context<Topics> {\n  /**\n   * A session with an offline token for the shop.\n   *\n   * Returned only if there is a session for the shop.\n   * Webhook requests can trigger after an app is uninstalled\n   * If the app is already uninstalled, the session may be undefined.\n   * Therefore, you should check for the session before using it.\n   *\n   * @example\n   * <caption>Protecting against uninstalled apps.</caption>\n   * ```ts\n   * // /app/routes/webhooks.tsx\n   * import type { ActionFunctionArgs } from \"react-router\";\n   * import { authenticate } from \"~/shopify.server\";\n\n   * export const action = async ({ request }: ActionFunctionArgs) => {\n   *   const { session } = await authenticate.webhook(request);\n   *   \n   *   // Webhook requests can trigger after an app is uninstalled\n   *   // If the app is already uninstalled, the session may be undefined.\n   *   if (!session) {\n   *     throw new Response();\n   *   }\n   *\n   *   // Handle webhook request\n   *   console.log(\"Received webhook webhook\");\n   *\n   *   return new Response();\n   * };\n   * ```\n   */\n  session: Session;\n\n  /**\n   * An admin context for the webhook.\n   *\n   * Returned only if there is a session for the shop.\n   *\n   * @example\n   * <caption>Webhook admin context.</caption>\n   * <description>Use the `admin` object in the context to interact with the Admin API.</description>\n   * ```ts\n   * // /app/routes/webhooks.tsx\n   * import { ActionFunctionArgs } from \"react-router\";\n   * import { authenticate } from \"../shopify.server\";\n   *\n   * export async function action({ request }: ActionFunctionArgs) {\n   *   const { admin } = await authenticate.webhook(request);\n   *\n   *   // Webhook requests can trigger after an app is uninstalled\n   *   // If the app is already uninstalled, the session may be undefined.\n   *   if (!session) {\n   *     throw new Response();\n   *   }\n   *\n   *   const response = await admin?.graphql(\n   *     `#graphql\n   *     mutation populateProduct($input: ProductInput!) {\n   *       productCreate(input: $input) {\n   *         product {\n   *           id\n   *         }\n   *       }\n   *     }`,\n   *     { variables: { input: { title: \"Product Name\" } } }\n   *   );\n   *\n   *   const productData = await response.json();\n   *   return ({ data: productData.data });\n   * }\n   * ```\n   */\n  admin: AdminApiContext;\n}"
+            "value": "export interface WebhookContextWithSession<\n  Topics = string | number | symbol,\n> extends Context<Topics> {\n  /**\n   * A session with an offline token for the shop.\n   *\n   * Returned only if there is a session for the shop.\n   * Webhook requests can trigger after an app is uninstalled\n   * If the app is already uninstalled, the session may be undefined.\n   * Therefore, you should check for the session before using it.\n   *\n   * @example\n   * <caption>Protecting against uninstalled apps.</caption>\n   * ```ts\n   * // /app/routes/webhooks.tsx\n   * import type { ActionFunctionArgs } from \"react-router\";\n   * import { authenticate } from \"~/shopify.server\";\n\n   * export const action = async ({ request }: ActionFunctionArgs) => {\n   *   const { session } = await authenticate.webhook(request);\n   *   \n   *   // Webhook requests can trigger after an app is uninstalled\n   *   // If the app is already uninstalled, the session may be undefined.\n   *   if (!session) {\n   *     throw new Response();\n   *   }\n   *\n   *   // Handle webhook request\n   *   console.log(\"Received webhook webhook\");\n   *\n   *   return new Response();\n   * };\n   * ```\n   */\n  session: Session;\n\n  /**\n   * An admin context for the webhook.\n   *\n   * Returned only if there is a session for the shop.\n   *\n   * @example\n   * <caption>Webhook admin context.</caption>\n   * <description>Use the `admin` object in the context to interact with the Admin API.</description>\n   * ```ts\n   * // /app/routes/webhooks.tsx\n   * import { ActionFunctionArgs } from \"react-router\";\n   * import { authenticate } from \"../shopify.server\";\n   *\n   * export async function action({ request }: ActionFunctionArgs) {\n   *   const { admin } = await authenticate.webhook(request);\n   *\n   *   // Webhook requests can trigger after an app is uninstalled\n   *   // If the app is already uninstalled, the session may be undefined.\n   *   if (!session) {\n   *     throw new Response();\n   *   }\n   *\n   *   const response = await admin?.graphql(\n   *     `#graphql\n   *     mutation populateProduct($input: ProductInput!) {\n   *       productCreate(input: $input) {\n   *         product {\n   *           id\n   *         }\n   *       }\n   *     }`,\n   *     { variables: { input: { title: \"Product Name\" } } }\n   *   );\n   *\n   *   const productData = await response.json();\n   *   return ({ data: productData.data });\n   * }\n   * ```\n   */\n  admin: AdminApiContext;\n}"
           },
           "AdminApiContext": {
             "filePath": "src/server/clients/admin/types.ts",
             "name": "AdminApiContext",
-            "description": "",
+            "description": "Provides utilities that apps can use to make requests to the Admin API.",
+            "isPublicDocs": true,
             "members": [
               {
                 "filePath": "src/server/clients/admin/types.ts",
@@ -4393,7 +4610,7 @@
                 "filePath": "src/server/clients/types.ts",
                 "syntaxKind": "PropertySignature",
                 "name": "variables",
-                "value": "ApiClientRequestOptions<Operation, Operations>[\"variables\"]",
+                "value": "ApiClientRequestOptions<Operation, Operations>",
                 "description": "The variables to pass to the operation.",
                 "isOptional": true
               }
@@ -4591,7 +4808,8 @@
           "AdminApiContext": {
             "filePath": "src/server/clients/admin/types.ts",
             "name": "AdminApiContext",
-            "description": "",
+            "description": "Provides utilities that apps can use to make requests to the Admin API.",
+            "isPublicDocs": true,
             "members": [
               {
                 "filePath": "src/server/clients/admin/types.ts",
@@ -4701,7 +4919,7 @@
                 "filePath": "src/server/clients/types.ts",
                 "syntaxKind": "PropertySignature",
                 "name": "variables",
-                "value": "ApiClientRequestOptions<Operation, Operations>[\"variables\"]",
+                "value": "ApiClientRequestOptions<Operation, Operations>",
                 "description": "The variables to pass to the operation.",
                 "isOptional": true
               }
@@ -4788,7 +5006,8 @@
           "StorefrontContext": {
             "filePath": "src/server/clients/storefront/types.ts",
             "name": "StorefrontContext",
-            "description": "",
+            "description": "Provides utilities that apps can use to make requests to the Storefront API.",
+            "isPublicDocs": true,
             "members": [
               {
                 "filePath": "src/server/clients/storefront/types.ts",
@@ -4894,7 +5113,7 @@
                 "filePath": "src/server/clients/types.ts",
                 "syntaxKind": "PropertySignature",
                 "name": "variables",
-                "value": "ApiClientRequestOptions<Operation, Operations>[\"variables\"]",
+                "value": "ApiClientRequestOptions<Operation, Operations>",
                 "description": "The variables to pass to the operation.",
                 "isOptional": true
               }
@@ -4977,6 +5196,7 @@
             "filePath": "src/server/shopify-app.ts",
             "name": "ShopifyAppGeneratedType",
             "description": "Creates an object your app will use to interact with Shopify.",
+            "isPublicDocs": true,
             "params": [
               {
                 "name": "appConfig",
@@ -5331,7 +5551,8 @@
           "AuthenticateAdmin": {
             "filePath": "src/server/authenticate/admin/types.ts",
             "name": "AuthenticateAdmin",
-            "description": "",
+            "description": "Authenticates requests coming from the Shopify admin.\n\n> Note: The shape of the returned object changes depending on the `distribution` config. Merchant custom apps (`AppDistribution.ShopifyAdmin`) are not embedded so do not return session tokens or redirect functionality. All other distributions are embedded and so they return a context with session tokens and redirect functionality.",
+            "isPublicDocs": true,
             "params": [
               {
                 "name": "request",
@@ -5438,12 +5659,13 @@
                 ]
               }
             ],
-            "value": "export interface NonEmbeddedAdminContext<Config extends AppConfigArg>\n  extends AdminContextInternal<Config> {}"
+            "value": "export interface NonEmbeddedAdminContext<\n  Config extends AppConfigArg,\n> extends AdminContextInternal<Config> {}"
           },
           "AdminApiContext": {
             "filePath": "src/server/clients/admin/types.ts",
             "name": "AdminApiContext",
-            "description": "",
+            "description": "Provides utilities that apps can use to make requests to the Admin API.",
+            "isPublicDocs": true,
             "members": [
               {
                 "filePath": "src/server/clients/admin/types.ts",
@@ -5553,7 +5775,7 @@
                 "filePath": "src/server/clients/types.ts",
                 "syntaxKind": "PropertySignature",
                 "name": "variables",
-                "value": "ApiClientRequestOptions<Operation, Operations>[\"variables\"]",
+                "value": "ApiClientRequestOptions<Operation, Operations>",
                 "description": "The variables to pass to the operation.",
                 "isOptional": true
               }
@@ -5563,7 +5785,8 @@
           "BillingContext": {
             "filePath": "src/server/authenticate/admin/billing/types.ts",
             "name": "BillingContext",
-            "description": "",
+            "description": "Provides utilities that apps can use to request billing for the app using the Admin API.",
+            "isPublicDocs": true,
             "members": [
               {
                 "filePath": "src/server/authenticate/admin/billing/types.ts",
@@ -5797,7 +6020,7 @@
                 "isOptional": true
               }
             ],
-            "value": "export interface CheckBillingOptions<Config extends AppConfigArg>\n  extends Omit<BillingCheckParams, 'session' | 'plans' | 'returnObject'> {\n  /**\n   * The plans to check for. Must be one of the values defined in the `billing` config option.\n   */\n  plans?: (keyof Config['billing'])[];\n}"
+            "value": "export interface CheckBillingOptions<Config extends AppConfigArg> extends Omit<\n  BillingCheckParams,\n  'session' | 'plans' | 'returnObject'\n> {\n  /**\n   * The plans to check for. Must be one of the values defined in the `billing` config option.\n   */\n  plans?: (keyof Config['billing'])[];\n}"
           },
           "CreateUsageRecordOptions": {
             "filePath": "src/server/authenticate/admin/billing/types.ts",
@@ -5852,10 +6075,38 @@
               {
                 "filePath": "src/server/authenticate/admin/billing/types.ts",
                 "syntaxKind": "PropertySignature",
+                "name": "amount",
+                "value": "number",
+                "description": "Amount to charge for this plan."
+              },
+              {
+                "filePath": "src/server/authenticate/admin/billing/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "currencyCode",
+                "value": "string",
+                "description": "Currency code for this plan."
+              },
+              {
+                "filePath": "src/server/authenticate/admin/billing/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "interval",
+                "value": "BillingInterval.OneTime",
+                "description": "Interval for this plan.\n\nMust be set to `OneTime`."
+              },
+              {
+                "filePath": "src/server/authenticate/admin/billing/types.ts",
+                "syntaxKind": "PropertySignature",
                 "name": "isTest",
                 "value": "boolean",
                 "description": "Whether to use the test mode. This prevents the credit card from being charged. Test shops and demo shops cannot be charged.",
                 "isOptional": true
+              },
+              {
+                "filePath": "src/server/authenticate/admin/billing/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "lineItems",
+                "value": "({ interval?: BillingInterval.Every30Days | BillingInterval.Annual; discount?: { durationLimitInIntervals?: number; value?: { amount?: number; percentage?: never; } | { amount?: never; percentage?: number; }; }; amount?: number; currencyCode?: string; } | { interval?: BillingInterval.Usage; amount?: number; terms?: string; currencyCode?: string; })[]",
+                "description": "The line items for this plan."
               },
               {
                 "filePath": "src/server/authenticate/admin/billing/types.ts",
@@ -5867,13 +6118,29 @@
               {
                 "filePath": "src/server/authenticate/admin/billing/types.ts",
                 "syntaxKind": "PropertySignature",
+                "name": "replacementBehavior",
+                "value": "BillingReplacementBehavior",
+                "description": "The replacement behavior to use for this plan.",
+                "isOptional": true
+              },
+              {
+                "filePath": "src/server/authenticate/admin/billing/types.ts",
+                "syntaxKind": "PropertySignature",
                 "name": "returnUrl",
                 "value": "string",
                 "description": "The URL to return to after the merchant approves the payment.",
                 "isOptional": true
+              },
+              {
+                "filePath": "src/server/authenticate/admin/billing/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "trialDays",
+                "value": "number",
+                "description": "How many trial days to give before charging for this plan.",
+                "isOptional": true
               }
             ],
-            "value": "export interface RequestBillingOptions<Config extends AppConfigArg>\n  extends Omit<BillingRequestParams, 'session' | 'plan' | 'returnObject'> {\n  /**\n   * The plan to request. Must be one of the values defined in the `billing` config option.\n   */\n  plan: keyof Config['billing'];\n  /**\n   * Whether to use the test mode. This prevents the credit card from being charged. Test shops and demo shops cannot be charged.\n   */\n  isTest?: boolean;\n  /**\n   * The URL to return to after the merchant approves the payment.\n   */\n  returnUrl?: string;\n}"
+            "value": "export interface RequestBillingOptions<\n  Config extends AppConfigArg,\n> extends Omit<BillingRequestParams, 'session' | 'plan' | 'returnObject'> {\n  /**\n   * The plan to request. Must be one of the values defined in the `billing` config option.\n   */\n  plan: keyof Config['billing'];\n  /**\n   * Whether to use the test mode. This prevents the credit card from being charged. Test shops and demo shops cannot be charged.\n   */\n  isTest?: boolean;\n  /**\n   * The URL to return to after the merchant approves the payment.\n   */\n  returnUrl?: string;\n}"
           },
           "RequireBillingOptions": {
             "filePath": "src/server/authenticate/admin/billing/types.ts",
@@ -5903,7 +6170,7 @@
                 "description": "The plans to check for. Must be one of the values defined in the `billing` config option."
               }
             ],
-            "value": "export interface RequireBillingOptions<Config extends AppConfigArg>\n  extends Omit<BillingCheckParams, 'session' | 'plans' | 'returnObject'> {\n  /**\n   * The plans to check for. Must be one of the values defined in the `billing` config option.\n   */\n  plans: (keyof Config['billing'])[];\n  /**\n   * How to handle the request if the shop doesn't have an active payment for any plan.\n   */\n  onFailure: (error: any) => Promise<Response>;\n}"
+            "value": "export interface RequireBillingOptions<\n  Config extends AppConfigArg,\n> extends Omit<BillingCheckParams, 'session' | 'plans' | 'returnObject'> {\n  /**\n   * The plans to check for. Must be one of the values defined in the `billing` config option.\n   */\n  plans: (keyof Config['billing'])[];\n  /**\n   * How to handle the request if the shop doesn't have an active payment for any plan.\n   */\n  onFailure: (error: any) => Promise<Response>;\n}"
           },
           "UpdateUsageCappedAmountOptions": {
             "filePath": "src/server/authenticate/admin/billing/types.ts",
@@ -6072,7 +6339,7 @@
                 ]
               }
             ],
-            "value": "export interface EmbeddedAdminContext<Config extends AppConfigArg>\n  extends AdminContextInternal<Config> {\n  /**\n   * The decoded and validated session token for the request.\n   *\n   * Returned only for embedded apps (all distribution types except merchant custom apps)\n   *\n   * {@link https://shopify.dev/docs/apps/auth/oauth/session-tokens#payload}\n   *\n   * @example\n   * <caption>Using the decoded session token.</caption>\n   * <description>Get user-specific data using the `sessionToken` object.</description>\n   * ```ts\n   * // /app/routes/**\\/*.ts\n   * import { LoaderFunctionArgs, json } from \"react-router\";\n   * import { authenticate } from \"../shopify.server\";\n   * import { getMyAppData } from \"~/db/model.server\";\n   *\n   * export const loader = async ({ request }: LoaderFunctionArgs) => {\n   *   const { sessionToken } = await authenticate.admin(\n   *     request\n   *   );\n   *   return (await getMyAppData({user: sessionToken.sub}));\n   * };\n   * ```\n   * ```ts\n   * // shopify.server.ts\n   * import { shopifyApp } from \"@shopify/shopify-app-react-router/server\";\n   *\n   * const shopify = shopifyApp({\n   *   // ...etc\n   *   useOnlineTokens: true,\n   * });\n   * export default shopify;\n   * export const authenticate = shopify.authenticate;\n   * ```\n   */\n  sessionToken: JwtPayload;\n\n  /**\n   * A function that redirects the user to a new page, ensuring that the appropriate parameters are set for embedded\n   * apps.\n   *\n   * Returned only for embedded apps (all apps except merchant custom apps).\n   *\n   * @example\n   * <caption>Redirecting to an app route.</caption>\n   * <description>Use the `redirect` helper to safely redirect between pages.</description>\n   * ```ts\n   * // /app/routes/admin/my-route.ts\n   * import { LoaderFunctionArgs, json } from \"react-router\";\n   * import { authenticate } from \"../shopify.server\";\n   *\n   * export const loader = async ({ request }: LoaderFunctionArgs) => {\n   *   const { session, redirect } = await authenticate.admin(request);\n   *   return redirect(\"/\");\n   * };\n   * ```\n   *\n   * @example\n   * <caption>Redirecting to a page in the Shopify Admin.</caption>\n   * <description>Redirects to a product page in the Shopify admin. Pass in a `target` option of `_top` or `_parent` to navigate in the current window, or `_blank` to open a new tab.</description>\n   * ```ts\n   * // /app/routes/admin/my-route.ts\n   * import { LoaderFunctionArgs, json } from \"react-router\";\n   * import { authenticate } from \"../shopify.server\";\n   *\n   * export const loader = async ({ request }: LoaderFunctionArgs) => {\n   *   const { session, redirect } = await authenticate.admin(request);\n   *   return redirect(\"shopify://admin/products/123456\", { target: '_parent' });\n   * };\n   * ```\n   *\n   * @example\n   * <caption>Redirecting outside of the Admin embedded app page.</caption>\n   * <description>Pass in a `target` option of `_top` or `_parent` to navigate in the current window, or `_blank` to open a new tab.</description>\n   * ```ts\n   * // /app/routes/admin/my-route.ts\n   * import { LoaderFunctionArgs, json } from \"react-router\";\n   * import { authenticate } from \"../shopify.server\";\n   *\n   * export const loader = async ({ request }: LoaderFunctionArgs) => {\n   *   const { session, redirect } = await authenticate.admin(request);\n   *   return redirect(\"/\", { target: '_parent' });\n   * };\n   * ```\n   */\n  redirect: RedirectFunction;\n}"
+            "value": "export interface EmbeddedAdminContext<\n  Config extends AppConfigArg,\n> extends AdminContextInternal<Config> {\n  /**\n   * The decoded and validated session token for the request.\n   *\n   * Returned only for embedded apps (all distribution types except merchant custom apps)\n   *\n   * {@link https://shopify.dev/docs/apps/auth/oauth/session-tokens#payload}\n   *\n   * @example\n   * <caption>Using the decoded session token.</caption>\n   * <description>Get user-specific data using the `sessionToken` object.</description>\n   * ```ts\n   * // /app/routes/**\\/*.ts\n   * import { LoaderFunctionArgs, json } from \"react-router\";\n   * import { authenticate } from \"../shopify.server\";\n   * import { getMyAppData } from \"~/db/model.server\";\n   *\n   * export const loader = async ({ request }: LoaderFunctionArgs) => {\n   *   const { sessionToken } = await authenticate.admin(\n   *     request\n   *   );\n   *   return (await getMyAppData({user: sessionToken.sub}));\n   * };\n   * ```\n   * ```ts\n   * // shopify.server.ts\n   * import { shopifyApp } from \"@shopify/shopify-app-react-router/server\";\n   *\n   * const shopify = shopifyApp({\n   *   // ...etc\n   *   useOnlineTokens: true,\n   * });\n   * export default shopify;\n   * export const authenticate = shopify.authenticate;\n   * ```\n   */\n  sessionToken: JwtPayload;\n\n  /**\n   * A function that redirects the user to a new page, ensuring that the appropriate parameters are set for embedded\n   * apps.\n   *\n   * Returned only for embedded apps (all apps except merchant custom apps).\n   *\n   * @example\n   * <caption>Redirecting to an app route.</caption>\n   * <description>Use the `redirect` helper to safely redirect between pages.</description>\n   * ```ts\n   * // /app/routes/admin/my-route.ts\n   * import { LoaderFunctionArgs, json } from \"react-router\";\n   * import { authenticate } from \"../shopify.server\";\n   *\n   * export const loader = async ({ request }: LoaderFunctionArgs) => {\n   *   const { session, redirect } = await authenticate.admin(request);\n   *   return redirect(\"/\");\n   * };\n   * ```\n   *\n   * @example\n   * <caption>Redirecting to a page in the Shopify Admin.</caption>\n   * <description>Redirects to a product page in the Shopify admin. Pass in a `target` option of `_top` or `_parent` to navigate in the current window, or `_blank` to open a new tab.</description>\n   * ```ts\n   * // /app/routes/admin/my-route.ts\n   * import { LoaderFunctionArgs, json } from \"react-router\";\n   * import { authenticate } from \"../shopify.server\";\n   *\n   * export const loader = async ({ request }: LoaderFunctionArgs) => {\n   *   const { session, redirect } = await authenticate.admin(request);\n   *   return redirect(\"shopify://admin/products/123456\", { target: '_parent' });\n   * };\n   * ```\n   *\n   * @example\n   * <caption>Redirecting outside of the Admin embedded app page.</caption>\n   * <description>Pass in a `target` option of `_top` or `_parent` to navigate in the current window, or `_blank` to open a new tab.</description>\n   * ```ts\n   * // /app/routes/admin/my-route.ts\n   * import { LoaderFunctionArgs, json } from \"react-router\";\n   * import { authenticate } from \"../shopify.server\";\n   *\n   * export const loader = async ({ request }: LoaderFunctionArgs) => {\n   *   const { session, redirect } = await authenticate.admin(request);\n   *   return redirect(\"/\", { target: '_parent' });\n   * };\n   * ```\n   */\n  redirect: RedirectFunction;\n}"
           },
           "RedirectFunction": {
             "filePath": "src/server/authenticate/admin/helpers/redirect.ts",
@@ -6133,7 +6400,8 @@
           "ScopesApiContext": {
             "filePath": "src/server/authenticate/admin/scope/types.ts",
             "name": "ScopesApiContext",
-            "description": "The Scopes API enables embedded apps and extensions to request merchant consent for access scopes.",
+            "description": "Provides utilities that apps can use to [manage scopes](https://shopify.dev/docs/apps/build/authentication-authorization/app-installation/manage-access-scopes) for the app using the Admin API.",
+            "isPublicDocs": true,
             "members": [
               {
                 "filePath": "src/server/authenticate/admin/scope/types.ts",
@@ -6242,7 +6510,8 @@
           "AuthenticateFlow": {
             "filePath": "src/server/authenticate/flow/types.ts",
             "name": "AuthenticateFlow",
-            "description": "",
+            "description": "Verifies requests coming from Shopify Flow extensions.",
+            "isPublicDocs": true,
             "params": [
               {
                 "name": "request",
@@ -6327,7 +6596,8 @@
           "AuthenticateFulfillmentService": {
             "filePath": "src/server/authenticate/fulfillment-service/types.ts",
             "name": "AuthenticateFulfillmentService",
-            "description": "",
+            "description": "Verifies requests coming from Shopify to fulfillment service apps.",
+            "isPublicDocs": true,
             "params": [
               {
                 "name": "request",
@@ -6484,7 +6754,8 @@
           "AuthenticateAppProxy": {
             "filePath": "src/server/authenticate/public/appProxy/types.ts",
             "name": "AuthenticateAppProxy",
-            "description": "",
+            "description": "Authenticates requests coming to the app from Shopify app proxies.",
+            "isPublicDocs": true,
             "params": [
               {
                 "name": "request",
@@ -6719,7 +6990,8 @@
           "StorefrontContext": {
             "filePath": "src/server/clients/storefront/types.ts",
             "name": "StorefrontContext",
-            "description": "",
+            "description": "Provides utilities that apps can use to make requests to the Storefront API.",
+            "isPublicDocs": true,
             "members": [
               {
                 "filePath": "src/server/clients/storefront/types.ts",
@@ -6760,7 +7032,8 @@
           "AuthenticateCheckout": {
             "filePath": "src/server/authenticate/public/checkout/types.ts",
             "name": "AuthenticateCheckout",
-            "description": "",
+            "description": "Authenticates requests coming from Shopify checkout extensions.",
+            "isPublicDocs": true,
             "params": [
               {
                 "name": "request",
@@ -6849,7 +7122,8 @@
           "AuthenticateCustomerAccount": {
             "filePath": "src/server/authenticate/public/customer-account/types.ts",
             "name": "AuthenticateCustomerAccount",
-            "description": "",
+            "description": "Authenticates requests coming from Shopify customer account extensions.",
+            "isPublicDocs": true,
             "params": [
               {
                 "name": "request",
@@ -6938,7 +7212,8 @@
           "AuthenticateWebhook": {
             "filePath": "src/server/authenticate/webhooks/types.ts",
             "name": "AuthenticateWebhook",
-            "description": "",
+            "description": "Verifies requests coming from Shopify webhooks.",
+            "isPublicDocs": true,
             "params": [
               {
                 "name": "request",
@@ -6970,6 +7245,14 @@
               {
                 "filePath": "src/server/authenticate/webhooks/types.ts",
                 "syntaxKind": "PropertySignature",
+                "name": "action",
+                "value": "string",
+                "description": "The action type: 'create', 'update', or 'delete'. Only available for events webhooks.",
+                "isOptional": true
+              },
+              {
+                "filePath": "src/server/authenticate/webhooks/types.ts",
+                "syntaxKind": "PropertySignature",
                 "name": "admin",
                 "value": "undefined",
                 "description": ""
@@ -6996,6 +7279,30 @@
               {
                 "filePath": "src/server/authenticate/webhooks/types.ts",
                 "syntaxKind": "PropertySignature",
+                "name": "eventId",
+                "value": "string",
+                "description": "The unique event identifier.",
+                "isOptional": true
+              },
+              {
+                "filePath": "src/server/authenticate/webhooks/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "handle",
+                "value": "string",
+                "description": "The handle for the webhook subscription. Only available for events webhooks.",
+                "isOptional": true
+              },
+              {
+                "filePath": "src/server/authenticate/webhooks/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "name",
+                "value": "string",
+                "description": "The name assigned to the webhook subscription. Only available for traditional webhooks.",
+                "isOptional": true
+              },
+              {
+                "filePath": "src/server/authenticate/webhooks/types.ts",
+                "syntaxKind": "PropertySignature",
                 "name": "payload",
                 "value": "Record<string, any>",
                 "description": "The payload from the webhook request.",
@@ -7011,6 +7318,14 @@
                     ]
                   }
                 ]
+              },
+              {
+                "filePath": "src/server/authenticate/webhooks/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "resourceId",
+                "value": "string",
+                "description": "The GID of the resource that triggered the webhook. Only available for events webhooks.",
+                "isOptional": true
               },
               {
                 "filePath": "src/server/authenticate/webhooks/types.ts",
@@ -7043,7 +7358,7 @@
                 "syntaxKind": "PropertySignature",
                 "name": "subTopic",
                 "value": "string",
-                "description": "The sub-topic of the webhook. This is only available for certain webhooks.",
+                "description": "The sub-topic of the webhook. Only available for traditional webhooks.",
                 "isOptional": true,
                 "examples": [
                   {
@@ -7080,9 +7395,17 @@
               {
                 "filePath": "src/server/authenticate/webhooks/types.ts",
                 "syntaxKind": "PropertySignature",
+                "name": "triggeredAt",
+                "value": "string",
+                "description": "The timestamp when the webhook was triggered.",
+                "isOptional": true
+              },
+              {
+                "filePath": "src/server/authenticate/webhooks/types.ts",
+                "syntaxKind": "PropertySignature",
                 "name": "webhookId",
                 "value": "string",
-                "description": "A unique ID for the webhook. Useful to keep track of which events your app has already processed.",
+                "description": "A unique ID for the webhook. Useful to keep track of which events your app has already processed.\n\nFor events webhooks (`webhookType === 'events'`), this is set to the `eventId` value for backwards compatibility. Prefer using `eventId` directly for events webhooks — `webhookId` will be removed from events webhooks in the next major version.",
                 "examples": [
                   {
                     "title": "Webhook ID",
@@ -7095,15 +7418,30 @@
                     ]
                   }
                 ]
+              },
+              {
+                "filePath": "src/server/authenticate/webhooks/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "webhookType",
+                "value": "WebhookTypeValue",
+                "description": "The type of webhook: 'webhooks' for traditional webhooks or 'events' for events webhooks."
               }
             ],
-            "value": "export interface WebhookContextWithoutSession<Topics = string | number | symbol>\n  extends Context<Topics> {\n  session: undefined;\n  admin: undefined;\n}"
+            "value": "export interface WebhookContextWithoutSession<\n  Topics = string | number | symbol,\n> extends Context<Topics> {\n  session: undefined;\n  admin: undefined;\n}"
           },
           "WebhookContextWithSession": {
             "filePath": "src/server/authenticate/webhooks/types.ts",
             "name": "WebhookContextWithSession",
             "description": "",
             "members": [
+              {
+                "filePath": "src/server/authenticate/webhooks/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "action",
+                "value": "string",
+                "description": "The action type: 'create', 'update', or 'delete'. Only available for events webhooks.",
+                "isOptional": true
+              },
               {
                 "filePath": "src/server/authenticate/webhooks/types.ts",
                 "syntaxKind": "PropertySignature",
@@ -7145,6 +7483,30 @@
               {
                 "filePath": "src/server/authenticate/webhooks/types.ts",
                 "syntaxKind": "PropertySignature",
+                "name": "eventId",
+                "value": "string",
+                "description": "The unique event identifier.",
+                "isOptional": true
+              },
+              {
+                "filePath": "src/server/authenticate/webhooks/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "handle",
+                "value": "string",
+                "description": "The handle for the webhook subscription. Only available for events webhooks.",
+                "isOptional": true
+              },
+              {
+                "filePath": "src/server/authenticate/webhooks/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "name",
+                "value": "string",
+                "description": "The name assigned to the webhook subscription. Only available for traditional webhooks.",
+                "isOptional": true
+              },
+              {
+                "filePath": "src/server/authenticate/webhooks/types.ts",
+                "syntaxKind": "PropertySignature",
                 "name": "payload",
                 "value": "Record<string, any>",
                 "description": "The payload from the webhook request.",
@@ -7160,6 +7522,14 @@
                     ]
                   }
                 ]
+              },
+              {
+                "filePath": "src/server/authenticate/webhooks/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "resourceId",
+                "value": "string",
+                "description": "The GID of the resource that triggered the webhook. Only available for events webhooks.",
+                "isOptional": true
               },
               {
                 "filePath": "src/server/authenticate/webhooks/types.ts",
@@ -7204,7 +7574,7 @@
                 "syntaxKind": "PropertySignature",
                 "name": "subTopic",
                 "value": "string",
-                "description": "The sub-topic of the webhook. This is only available for certain webhooks.",
+                "description": "The sub-topic of the webhook. Only available for traditional webhooks.",
                 "isOptional": true,
                 "examples": [
                   {
@@ -7241,9 +7611,17 @@
               {
                 "filePath": "src/server/authenticate/webhooks/types.ts",
                 "syntaxKind": "PropertySignature",
+                "name": "triggeredAt",
+                "value": "string",
+                "description": "The timestamp when the webhook was triggered.",
+                "isOptional": true
+              },
+              {
+                "filePath": "src/server/authenticate/webhooks/types.ts",
+                "syntaxKind": "PropertySignature",
                 "name": "webhookId",
                 "value": "string",
-                "description": "A unique ID for the webhook. Useful to keep track of which events your app has already processed.",
+                "description": "A unique ID for the webhook. Useful to keep track of which events your app has already processed.\n\nFor events webhooks (`webhookType === 'events'`), this is set to the `eventId` value for backwards compatibility. Prefer using `eventId` directly for events webhooks — `webhookId` will be removed from events webhooks in the next major version.",
                 "examples": [
                   {
                     "title": "Webhook ID",
@@ -7256,9 +7634,16 @@
                     ]
                   }
                 ]
+              },
+              {
+                "filePath": "src/server/authenticate/webhooks/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "webhookType",
+                "value": "WebhookTypeValue",
+                "description": "The type of webhook: 'webhooks' for traditional webhooks or 'events' for events webhooks."
               }
             ],
-            "value": "export interface WebhookContextWithSession<Topics = string | number | symbol>\n  extends Context<Topics> {\n  /**\n   * A session with an offline token for the shop.\n   *\n   * Returned only if there is a session for the shop.\n   * Webhook requests can trigger after an app is uninstalled\n   * If the app is already uninstalled, the session may be undefined.\n   * Therefore, you should check for the session before using it.\n   *\n   * @example\n   * <caption>Protecting against uninstalled apps.</caption>\n   * ```ts\n   * // /app/routes/webhooks.tsx\n   * import type { ActionFunctionArgs } from \"react-router\";\n   * import { authenticate } from \"~/shopify.server\";\n\n   * export const action = async ({ request }: ActionFunctionArgs) => {\n   *   const { session } = await authenticate.webhook(request);\n   *   \n   *   // Webhook requests can trigger after an app is uninstalled\n   *   // If the app is already uninstalled, the session may be undefined.\n   *   if (!session) {\n   *     throw new Response();\n   *   }\n   *\n   *   // Handle webhook request\n   *   console.log(\"Received webhook webhook\");\n   *\n   *   return new Response();\n   * };\n   * ```\n   */\n  session: Session;\n\n  /**\n   * An admin context for the webhook.\n   *\n   * Returned only if there is a session for the shop.\n   *\n   * @example\n   * <caption>Webhook admin context.</caption>\n   * <description>Use the `admin` object in the context to interact with the Admin API.</description>\n   * ```ts\n   * // /app/routes/webhooks.tsx\n   * import { ActionFunctionArgs } from \"react-router\";\n   * import { authenticate } from \"../shopify.server\";\n   *\n   * export async function action({ request }: ActionFunctionArgs) {\n   *   const { admin } = await authenticate.webhook(request);\n   *\n   *   // Webhook requests can trigger after an app is uninstalled\n   *   // If the app is already uninstalled, the session may be undefined.\n   *   if (!session) {\n   *     throw new Response();\n   *   }\n   *\n   *   const response = await admin?.graphql(\n   *     `#graphql\n   *     mutation populateProduct($input: ProductInput!) {\n   *       productCreate(input: $input) {\n   *         product {\n   *           id\n   *         }\n   *       }\n   *     }`,\n   *     { variables: { input: { title: \"Product Name\" } } }\n   *   );\n   *\n   *   const productData = await response.json();\n   *   return ({ data: productData.data });\n   * }\n   * ```\n   */\n  admin: AdminApiContext;\n}"
+            "value": "export interface WebhookContextWithSession<\n  Topics = string | number | symbol,\n> extends Context<Topics> {\n  /**\n   * A session with an offline token for the shop.\n   *\n   * Returned only if there is a session for the shop.\n   * Webhook requests can trigger after an app is uninstalled\n   * If the app is already uninstalled, the session may be undefined.\n   * Therefore, you should check for the session before using it.\n   *\n   * @example\n   * <caption>Protecting against uninstalled apps.</caption>\n   * ```ts\n   * // /app/routes/webhooks.tsx\n   * import type { ActionFunctionArgs } from \"react-router\";\n   * import { authenticate } from \"~/shopify.server\";\n\n   * export const action = async ({ request }: ActionFunctionArgs) => {\n   *   const { session } = await authenticate.webhook(request);\n   *   \n   *   // Webhook requests can trigger after an app is uninstalled\n   *   // If the app is already uninstalled, the session may be undefined.\n   *   if (!session) {\n   *     throw new Response();\n   *   }\n   *\n   *   // Handle webhook request\n   *   console.log(\"Received webhook webhook\");\n   *\n   *   return new Response();\n   * };\n   * ```\n   */\n  session: Session;\n\n  /**\n   * An admin context for the webhook.\n   *\n   * Returned only if there is a session for the shop.\n   *\n   * @example\n   * <caption>Webhook admin context.</caption>\n   * <description>Use the `admin` object in the context to interact with the Admin API.</description>\n   * ```ts\n   * // /app/routes/webhooks.tsx\n   * import { ActionFunctionArgs } from \"react-router\";\n   * import { authenticate } from \"../shopify.server\";\n   *\n   * export async function action({ request }: ActionFunctionArgs) {\n   *   const { admin } = await authenticate.webhook(request);\n   *\n   *   // Webhook requests can trigger after an app is uninstalled\n   *   // If the app is already uninstalled, the session may be undefined.\n   *   if (!session) {\n   *     throw new Response();\n   *   }\n   *\n   *   const response = await admin?.graphql(\n   *     `#graphql\n   *     mutation populateProduct($input: ProductInput!) {\n   *       productCreate(input: $input) {\n   *         product {\n   *           id\n   *         }\n   *       }\n   *     }`,\n   *     { variables: { input: { title: \"Product Name\" } } }\n   *   );\n   *\n   *   const productData = await response.json();\n   *   return ({ data: productData.data });\n   * }\n   * ```\n   */\n  admin: AdminApiContext;\n}"
           },
           "RegisterWebhooks": {
             "filePath": "src/server/types.ts",
@@ -7355,7 +7740,8 @@
           "GetUnauthenticatedAdminContext": {
             "filePath": "src/server/unauthenticated/admin/types.ts",
             "name": "GetUnauthenticatedAdminContext",
-            "description": "",
+            "description": "Creates an unauthenticated Admin context.",
+            "isPublicDocs": true,
             "params": [
               {
                 "name": "shop",
@@ -7425,7 +7811,8 @@
           "GetUnauthenticatedStorefrontContext": {
             "filePath": "src/server/unauthenticated/storefront/types.ts",
             "name": "GetUnauthenticatedStorefrontContext",
-            "description": "",
+            "description": "Creates an unauthenticated Storefront context.",
+            "isPublicDocs": true,
             "params": [
               {
                 "name": "shop",
@@ -7630,6 +8017,20 @@
               {
                 "filePath": "../shopify-api/lib/session/session.ts",
                 "syntaxKind": "PropertyDeclaration",
+                "name": "refreshToken",
+                "value": "string",
+                "description": "The refresh token for the session."
+              },
+              {
+                "filePath": "../shopify-api/lib/session/session.ts",
+                "syntaxKind": "PropertyDeclaration",
+                "name": "refreshTokenExpires",
+                "value": "Date",
+                "description": "The date the refresh token expires."
+              },
+              {
+                "filePath": "../shopify-api/lib/session/session.ts",
+                "syntaxKind": "PropertyDeclaration",
                 "name": "onlineAccessInfo",
                 "value": "OnlineAccessInfo",
                 "description": "Information on the user for the session. Only present for online sessions."
@@ -7684,7 +8085,7 @@
                 "description": "Converts the session into an array of key-value pairs."
               }
             ],
-            "value": "export class Session {\n  public static fromPropertyArray(\n    entries: [string, string | number | boolean][],\n    returnUserData = false,\n  ): Session {\n    if (!Array.isArray(entries)) {\n      throw new InvalidSession(\n        'The parameter is not an array: a Session cannot be created from this object.',\n      );\n    }\n\n    const obj = Object.fromEntries(\n      entries\n        .filter(([_key, value]) => value !== null && value !== undefined)\n        // Sanitize keys\n        .map(([key, value]) => {\n          switch (key.toLowerCase()) {\n            case 'isonline':\n              return ['isOnline', value];\n            case 'accesstoken':\n              return ['accessToken', value];\n            case 'onlineaccessinfo':\n              return ['onlineAccessInfo', value];\n            case 'userid':\n              return ['userId', value];\n            case 'firstname':\n              return ['firstName', value];\n            case 'lastname':\n              return ['lastName', value];\n            case 'accountowner':\n              return ['accountOwner', value];\n            case 'emailverified':\n              return ['emailVerified', value];\n            default:\n              return [key.toLowerCase(), value];\n          }\n        }),\n    );\n\n    const sessionData = {} as SessionParams;\n    const onlineAccessInfo = {\n      associated_user: {},\n    } as OnlineAccessInfo;\n    Object.entries(obj).forEach(([key, value]) => {\n      switch (key) {\n        case 'isOnline':\n          if (typeof value === 'string') {\n            sessionData[key] = value.toString().toLowerCase() === 'true';\n          } else if (typeof value === 'number') {\n            sessionData[key] = Boolean(value);\n          } else {\n            sessionData[key] = value;\n          }\n          break;\n        case 'scope':\n          sessionData[key] = value.toString();\n          break;\n        case 'expires':\n          sessionData[key] = value ? new Date(Number(value)) : undefined;\n          break;\n        case 'onlineAccessInfo':\n          onlineAccessInfo.associated_user.id = Number(value);\n          break;\n        case 'userId':\n          if (returnUserData) {\n            onlineAccessInfo.associated_user.id = Number(value);\n            break;\n          }\n        case 'firstName':\n          if (returnUserData) {\n            onlineAccessInfo.associated_user.first_name = String(value);\n            break;\n          }\n        case 'lastName':\n          if (returnUserData) {\n            onlineAccessInfo.associated_user.last_name = String(value);\n            break;\n          }\n        case 'email':\n          if (returnUserData) {\n            onlineAccessInfo.associated_user.email = String(value);\n            break;\n          }\n        case 'accountOwner':\n          if (returnUserData) {\n            onlineAccessInfo.associated_user.account_owner = Boolean(value);\n            break;\n          }\n        case 'locale':\n          if (returnUserData) {\n            onlineAccessInfo.associated_user.locale = String(value);\n            break;\n          }\n        case 'collaborator':\n          if (returnUserData) {\n            onlineAccessInfo.associated_user.collaborator = Boolean(value);\n            break;\n          }\n        case 'emailVerified':\n          if (returnUserData) {\n            onlineAccessInfo.associated_user.email_verified = Boolean(value);\n            break;\n          }\n        // Return any user keys as passed in\n        default:\n          sessionData[key] = value;\n      }\n    });\n    if (sessionData.isOnline) {\n      sessionData.onlineAccessInfo = onlineAccessInfo;\n    }\n    const session = new Session(sessionData);\n    return session;\n  }\n\n  /**\n   * The unique identifier for the session.\n   */\n  readonly id: string;\n  /**\n   * The Shopify shop domain, such as `example.myshopify.com`.\n   */\n  public shop: string;\n  /**\n   * The state of the session. Used for the OAuth authentication code flow.\n   */\n  public state: string;\n  /**\n   * Whether the access token in the session is online or offline.\n   */\n  public isOnline: boolean;\n  /**\n   * The desired scopes for the access token, at the time the session was created.\n   */\n  public scope?: string;\n  /**\n   * The date the access token expires.\n   */\n  public expires?: Date;\n  /**\n   * The access token for the session.\n   */\n  public accessToken?: string;\n  /**\n   * Information on the user for the session. Only present for online sessions.\n   */\n  public onlineAccessInfo?: OnlineAccessInfo;\n\n  constructor(params: SessionParams) {\n    Object.assign(this, params);\n  }\n\n  /**\n   * Whether the session is active. Active sessions have an access token that is not expired, and has has the given\n   * scopes if scopes is equal to a truthy value.\n   */\n  public isActive(\n    scopes: AuthScopes | string | string[] | undefined,\n    withinMillisecondsOfExpiry = 500,\n  ): boolean {\n    const hasAccessToken = Boolean(this.accessToken);\n    const isTokenNotExpired = !this.isExpired(withinMillisecondsOfExpiry);\n    const isScopeChanged = this.isScopeChanged(scopes);\n    return !isScopeChanged && hasAccessToken && isTokenNotExpired;\n  }\n\n  /**\n   * Whether the access token includes the given scopes if they are provided.\n   */\n  public isScopeChanged(\n    scopes: AuthScopes | string | string[] | undefined,\n  ): boolean {\n    if (typeof scopes === 'undefined') {\n      return false;\n    }\n\n    return !this.isScopeIncluded(scopes);\n  }\n\n  /**\n   * Whether the access token includes the given scopes.\n   */\n  public isScopeIncluded(scopes: AuthScopes | string | string[]): boolean {\n    const requiredScopes =\n      scopes instanceof AuthScopes ? scopes : new AuthScopes(scopes);\n    const sessionScopes = new AuthScopes(this.scope);\n\n    return sessionScopes.has(requiredScopes);\n  }\n\n  /**\n   * Whether the access token is expired.\n   */\n  public isExpired(withinMillisecondsOfExpiry = 0): boolean {\n    return Boolean(\n      this.expires &&\n        this.expires.getTime() - withinMillisecondsOfExpiry < Date.now(),\n    );\n  }\n\n  /**\n   * Converts an object with data into a Session.\n   */\n  public toObject(): SessionParams {\n    const object: SessionParams = {\n      id: this.id,\n      shop: this.shop,\n      state: this.state,\n      isOnline: this.isOnline,\n    };\n\n    if (this.scope) {\n      object.scope = this.scope;\n    }\n    if (this.expires) {\n      object.expires = this.expires;\n    }\n    if (this.accessToken) {\n      object.accessToken = this.accessToken;\n    }\n    if (this.onlineAccessInfo) {\n      object.onlineAccessInfo = this.onlineAccessInfo;\n    }\n    return object;\n  }\n\n  /**\n   * Checks whether the given session is equal to this session.\n   */\n  public equals(other: Session | undefined): boolean {\n    if (!other) return false;\n\n    const mandatoryPropsMatch =\n      this.id === other.id &&\n      this.shop === other.shop &&\n      this.state === other.state &&\n      this.isOnline === other.isOnline;\n\n    if (!mandatoryPropsMatch) return false;\n\n    const copyA = this.toPropertyArray(true);\n    copyA.sort(([k1], [k2]) => (k1 < k2 ? -1 : 1));\n\n    const copyB = other.toPropertyArray(true);\n    copyB.sort(([k1], [k2]) => (k1 < k2 ? -1 : 1));\n\n    return JSON.stringify(copyA) === JSON.stringify(copyB);\n  }\n\n  /**\n   * Converts the session into an array of key-value pairs.\n   */\n  public toPropertyArray(\n    returnUserData = false,\n  ): [string, string | number | boolean][] {\n    return (\n      Object.entries(this)\n        .filter(\n          ([key, value]) =>\n            propertiesToSave.includes(key) &&\n            value !== undefined &&\n            value !== null,\n        )\n        // Prepare values for db storage\n        .flatMap(([key, value]): [string, string | number | boolean][] => {\n          switch (key) {\n            case 'expires':\n              return [[key, value ? value.getTime() : undefined]];\n            case 'onlineAccessInfo':\n              // eslint-disable-next-line no-negated-condition\n              if (!returnUserData) {\n                return [[key, value.associated_user.id]];\n              } else {\n                return [\n                  ['userId', value?.associated_user?.id],\n                  ['firstName', value?.associated_user?.first_name],\n                  ['lastName', value?.associated_user?.last_name],\n                  ['email', value?.associated_user?.email],\n                  ['locale', value?.associated_user?.locale],\n                  ['emailVerified', value?.associated_user?.email_verified],\n                  ['accountOwner', value?.associated_user?.account_owner],\n                  ['collaborator', value?.associated_user?.collaborator],\n                ];\n              }\n            default:\n              return [[key, value]];\n          }\n        })\n        // Filter out tuples with undefined values\n        .filter(([_key, value]) => value !== undefined)\n    );\n  }\n}"
+            "value": "export class Session {\n  public static fromPropertyArray(\n    entries: [string, string | number | boolean][],\n    returnUserData = false,\n  ): Session {\n    if (!Array.isArray(entries)) {\n      throw new InvalidSession(\n        'The parameter is not an array: a Session cannot be created from this object.',\n      );\n    }\n\n    const obj = Object.fromEntries(\n      entries\n        .filter(([_key, value]) => value !== null && value !== undefined)\n        // Sanitize keys\n        .map(([key, value]) => {\n          switch (key.toLowerCase()) {\n            case 'isonline':\n              return ['isOnline', value];\n            case 'accesstoken':\n              return ['accessToken', value];\n            case 'refreshtoken':\n              return ['refreshToken', value];\n            case 'refreshtokenexpires':\n              return ['refreshTokenExpires', value];\n            case 'onlineaccessinfo':\n              return ['onlineAccessInfo', value];\n            case 'userid':\n              return ['userId', value];\n            case 'firstname':\n              return ['firstName', value];\n            case 'lastname':\n              return ['lastName', value];\n            case 'accountowner':\n              return ['accountOwner', value];\n            case 'emailverified':\n              return ['emailVerified', value];\n            default:\n              return [key.toLowerCase(), value];\n          }\n        }),\n    );\n\n    const sessionData = {} as SessionParams;\n    const onlineAccessInfo = {\n      associated_user: {},\n    } as OnlineAccessInfo;\n    Object.entries(obj).forEach(([key, value]) => {\n      switch (key) {\n        case 'isOnline':\n          if (typeof value === 'string') {\n            sessionData[key] = value.toString().toLowerCase() === 'true';\n          } else if (typeof value === 'number') {\n            sessionData[key] = Boolean(value);\n          } else {\n            sessionData[key] = value;\n          }\n          break;\n        case 'scope':\n          sessionData[key] = value.toString();\n          break;\n        case 'expires':\n          sessionData[key] = value ? new Date(Number(value)) : undefined;\n          break;\n        case 'refreshToken':\n          sessionData[key] = value ? String(value) : undefined;\n          break;\n        case 'refreshTokenExpires':\n          sessionData[key] = value ? new Date(Number(value)) : undefined;\n          break;\n        case 'onlineAccessInfo':\n          onlineAccessInfo.associated_user.id = Number(value);\n          break;\n        case 'userId':\n          if (returnUserData) {\n            onlineAccessInfo.associated_user.id = Number(value);\n            break;\n          }\n        case 'firstName':\n          if (returnUserData) {\n            onlineAccessInfo.associated_user.first_name = String(value);\n            break;\n          }\n        case 'lastName':\n          if (returnUserData) {\n            onlineAccessInfo.associated_user.last_name = String(value);\n            break;\n          }\n        case 'email':\n          if (returnUserData) {\n            onlineAccessInfo.associated_user.email = String(value);\n            break;\n          }\n        case 'accountOwner':\n          if (returnUserData) {\n            onlineAccessInfo.associated_user.account_owner = Boolean(value);\n            break;\n          }\n        case 'locale':\n          if (returnUserData) {\n            onlineAccessInfo.associated_user.locale = String(value);\n            break;\n          }\n        case 'collaborator':\n          if (returnUserData) {\n            onlineAccessInfo.associated_user.collaborator = Boolean(value);\n            break;\n          }\n        case 'emailVerified':\n          if (returnUserData) {\n            onlineAccessInfo.associated_user.email_verified = Boolean(value);\n            break;\n          }\n        // Return any user keys as passed in\n        default:\n          sessionData[key] = value;\n      }\n    });\n    if (sessionData.isOnline) {\n      sessionData.onlineAccessInfo = onlineAccessInfo;\n    }\n    const session = new Session(sessionData);\n    return session;\n  }\n\n  /**\n   * The unique identifier for the session.\n   */\n  readonly id: string;\n  /**\n   * The Shopify shop domain, such as `example.myshopify.com`.\n   */\n  public shop: string;\n  /**\n   * The state of the session. Used for the OAuth authentication code flow.\n   */\n  public state: string;\n  /**\n   * Whether the access token in the session is online or offline.\n   */\n  public isOnline: boolean;\n  /**\n   * The desired scopes for the access token, at the time the session was created.\n   */\n  public scope?: string;\n  /**\n   * The date the access token expires.\n   */\n  public expires?: Date;\n  /**\n   * The access token for the session.\n   */\n  public accessToken?: string;\n  /**\n   * The refresh token for the session.\n   */\n  public refreshToken?: string;\n  /**\n   * The date the refresh token expires.\n   */\n  public refreshTokenExpires?: Date;\n  /**\n   * Information on the user for the session. Only present for online sessions.\n   */\n  public onlineAccessInfo?: OnlineAccessInfo;\n\n  constructor(params: SessionParams) {\n    Object.assign(this, params);\n  }\n\n  /**\n   * Whether the session is active. Active sessions have an access token that is not expired, and has has the given\n   * scopes if scopes is equal to a truthy value.\n   */\n  public isActive(\n    scopes: AuthScopes | string | string[] | undefined,\n    withinMillisecondsOfExpiry = 500,\n  ): boolean {\n    const hasAccessToken = Boolean(this.accessToken);\n    const isTokenNotExpired = !this.isExpired(withinMillisecondsOfExpiry);\n    const isScopeChanged = this.isScopeChanged(scopes);\n    return !isScopeChanged && hasAccessToken && isTokenNotExpired;\n  }\n\n  /**\n   * Whether the access token includes the given scopes if they are provided.\n   */\n  public isScopeChanged(\n    scopes: AuthScopes | string | string[] | undefined,\n  ): boolean {\n    if (typeof scopes === 'undefined') {\n      return false;\n    }\n\n    return !this.isScopeIncluded(scopes);\n  }\n\n  /**\n   * Whether the access token includes the given scopes.\n   */\n  public isScopeIncluded(scopes: AuthScopes | string | string[]): boolean {\n    const requiredScopes =\n      scopes instanceof AuthScopes ? scopes : new AuthScopes(scopes);\n    const sessionScopes = new AuthScopes(this.scope);\n\n    return sessionScopes.has(requiredScopes);\n  }\n\n  /**\n   * Whether the access token is expired.\n   */\n  public isExpired(withinMillisecondsOfExpiry = 0): boolean {\n    return Boolean(\n      this.expires &&\n      this.expires.getTime() - withinMillisecondsOfExpiry < Date.now(),\n    );\n  }\n\n  /**\n   * Converts an object with data into a Session.\n   */\n  public toObject(): SessionParams {\n    const object: SessionParams = {\n      id: this.id,\n      shop: this.shop,\n      state: this.state,\n      isOnline: this.isOnline,\n    };\n\n    if (this.scope) {\n      object.scope = this.scope;\n    }\n    if (this.expires) {\n      object.expires = this.expires;\n    }\n    if (this.accessToken) {\n      object.accessToken = this.accessToken;\n    }\n    if (this.refreshToken) {\n      object.refreshToken = this.refreshToken;\n    }\n    if (this.refreshTokenExpires) {\n      object.refreshTokenExpires = this.refreshTokenExpires;\n    }\n    if (this.onlineAccessInfo) {\n      object.onlineAccessInfo = this.onlineAccessInfo;\n    }\n    return object;\n  }\n\n  /**\n   * Checks whether the given session is equal to this session.\n   */\n  public equals(other: Session | undefined): boolean {\n    if (!other) return false;\n\n    const mandatoryPropsMatch =\n      this.id === other.id &&\n      this.shop === other.shop &&\n      this.state === other.state &&\n      this.isOnline === other.isOnline;\n\n    if (!mandatoryPropsMatch) return false;\n\n    const copyA = this.toPropertyArray(true);\n    copyA.sort(([k1], [k2]) => (k1 < k2 ? -1 : 1));\n\n    const copyB = other.toPropertyArray(true);\n    copyB.sort(([k1], [k2]) => (k1 < k2 ? -1 : 1));\n\n    return JSON.stringify(copyA) === JSON.stringify(copyB);\n  }\n\n  /**\n   * Converts the session into an array of key-value pairs.\n   */\n  public toPropertyArray(\n    returnUserData = false,\n  ): [string, string | number | boolean][] {\n    return (\n      Object.entries(this)\n        .filter(\n          ([key, value]) =>\n            propertiesToSave.includes(key) &&\n            value !== undefined &&\n            value !== null,\n        )\n        // Prepare values for db storage\n        .flatMap(([key, value]): [string, string | number | boolean][] => {\n          switch (key) {\n            case 'expires':\n              return [[key, value ? value.getTime() : undefined]];\n            case 'refreshTokenExpires':\n              return [[key, value ? value.getTime() : undefined]];\n            case 'onlineAccessInfo':\n              // eslint-disable-next-line no-negated-condition\n              if (!returnUserData) {\n                return [[key, value.associated_user.id]];\n              } else {\n                return [\n                  ['userId', value?.associated_user?.id],\n                  ['firstName', value?.associated_user?.first_name],\n                  ['lastName', value?.associated_user?.last_name],\n                  ['email', value?.associated_user?.email],\n                  ['locale', value?.associated_user?.locale],\n                  ['emailVerified', value?.associated_user?.email_verified],\n                  ['accountOwner', value?.associated_user?.account_owner],\n                  ['collaborator', value?.associated_user?.collaborator],\n                ];\n              }\n            default:\n              return [[key, value]];\n          }\n        })\n        // Filter out tuples with undefined values\n        .filter(([_key, value]) => value !== undefined)\n    );\n  }\n}"
           },
           "OnlineAccessInfo": {
             "filePath": "../shopify-api/lib/auth/oauth/types.ts",
@@ -7866,6 +8267,22 @@
               {
                 "filePath": "../shopify-api/lib/session/types.ts",
                 "syntaxKind": "PropertySignature",
+                "name": "refreshToken",
+                "value": "string",
+                "description": "The refresh token for the session.",
+                "isOptional": true
+              },
+              {
+                "filePath": "../shopify-api/lib/session/types.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "refreshTokenExpires",
+                "value": "Date",
+                "description": "The date the refresh token expires.",
+                "isOptional": true
+              },
+              {
+                "filePath": "../shopify-api/lib/session/types.ts",
+                "syntaxKind": "PropertySignature",
                 "name": "scope",
                 "value": "string",
                 "description": "The scopes for the access token.",
@@ -7886,7 +8303,7 @@
                 "description": "The state of the session. Used for the OAuth authentication code flow."
               }
             ],
-            "value": "export interface SessionParams {\n  /**\n   * The unique identifier for the session.\n   */\n  readonly id: string;\n  /**\n   * The Shopify shop domain.\n   */\n  shop: string;\n  /**\n   * The state of the session. Used for the OAuth authentication code flow.\n   */\n  state: string;\n  /**\n   * Whether the access token in the session is online or offline.\n   */\n  isOnline: boolean;\n  /**\n   * The scopes for the access token.\n   */\n  scope?: string;\n  /**\n   * The date the access token expires.\n   */\n  expires?: Date;\n  /**\n   * The access token for the session.\n   */\n  accessToken?: string;\n  /**\n   * Information on the user for the session. Only present for online sessions.\n   */\n  onlineAccessInfo?: OnlineAccessInfo | StoredOnlineAccessInfo;\n  /**\n   * Additional properties of the session allowing for extension\n   */\n  [key: string]: any;\n}"
+            "value": "export interface SessionParams {\n  /**\n   * The unique identifier for the session.\n   */\n  readonly id: string;\n  /**\n   * The Shopify shop domain.\n   */\n  shop: string;\n  /**\n   * The state of the session. Used for the OAuth authentication code flow.\n   */\n  state: string;\n  /**\n   * Whether the access token in the session is online or offline.\n   */\n  isOnline: boolean;\n  /**\n   * The scopes for the access token.\n   */\n  scope?: string;\n  /**\n   * The date the access token expires.\n   */\n  expires?: Date;\n  /**\n   * The access token for the session.\n   */\n  accessToken?: string;\n  /**\n   * The refresh token for the session.\n   */\n  refreshToken?: string;\n  /**\n   * The date the refresh token expires.\n   */\n  refreshTokenExpires?: Date;\n  /**\n   * Information on the user for the session. Only present for online sessions.\n   */\n  onlineAccessInfo?: OnlineAccessInfo | StoredOnlineAccessInfo;\n  /**\n   * Additional properties of the session allowing for extension\n   */\n  [key: string]: any;\n}"
           },
           "StoredOnlineAccessInfo": {
             "filePath": "../shopify-api/lib/session/types.ts",
@@ -8432,18 +8849,40 @@
               {
                 "filePath": "src/server/config-types.ts",
                 "syntaxKind": "PropertySignature",
-                "name": "customShopDomains",
-                "value": "(string | RegExp)[]",
-                "description": "Override values for Shopify shop domains.",
+                "name": "distribution",
+                "value": "AppDistribution",
+                "description": "How your app is distributed. Default is `AppDistribution.AppStore`.\n\nAppStore should be used for public apps that are distributed in the Shopify App Store. SingleMerchant should be used for custom apps managed in the Partner Dashboard. ShopifyAdmin should be used for apps that are managed in the merchant's Shopify Admin.\n\n\n\n\n",
                 "isOptional": true
               },
               {
                 "filePath": "src/server/config-types.ts",
                 "syntaxKind": "PropertySignature",
-                "name": "distribution",
-                "value": "AppDistribution",
-                "description": "How your app is distributed. Default is `AppDistribution.AppStore`.\n\nAppStore should be used for public apps that are distributed in the Shopify App Store. SingleMerchant should be used for custom apps managed in the Partner Dashboard. ShopifyAdmin should be used for apps that are managed in the merchant's Shopify Admin.\n\n\n\n\n",
-                "isOptional": true
+                "name": "domainTransformations",
+                "value": "DomainTransformation[]",
+                "description": "Custom domain transformations for split-domain architectures.\n\nTransformations are applied in order. The first matching transformation is used. If no transformation matches, the domain is validated as-is.",
+                "isOptional": true,
+                "examples": [
+                  {
+                    "title": "Example",
+                    "description": "",
+                    "tabs": [
+                      {
+                        "code": "// Simple template-based transformation\ndomainTransformations: [{\n  match: /^([a-zA-Z0-9][a-zA-Z0-9-_]*)\\.my\\.shop\\.dev$/,\n  transform: '$1.dev-api.shop.dev'\n}]",
+                        "title": "Example"
+                      }
+                    ]
+                  },
+                  {
+                    "title": "Example",
+                    "description": "",
+                    "tabs": [
+                      {
+                        "code": "// Function-based transformation with custom logic\ndomainTransformations: [{\n  match: /^([^.]+)\\.ui\\.example\\.com$/,\n  transform: (matches) => {\n    const shopName = matches[1];\n    return shopName.startsWith('test-')\n      ? `${shopName}.api-staging.example.com`\n      : `${shopName}.api.example.com`;\n  }\n}]",
+                        "title": "Example"
+                      }
+                    ]
+                  }
+                ]
               },
               {
                 "filePath": "src/server/config-types.ts",
@@ -8583,54 +9022,14 @@
                 ]
               }
             ],
-            "value": "export interface AppConfigArg<\n  Storage extends SessionStorage = SessionStorage,\n  Future extends FutureFlagOptions = FutureFlagOptions,\n> extends Omit<\n    ApiConfigArg<ApiFutureFlags<Future>>,\n    | 'hostName'\n    | 'hostScheme'\n    | 'apiVersion'\n    | 'isCustomStoreApp'\n    | 'isEmbeddedApp'\n    | 'future'\n    | 'billing'\n    | 'restResources'\n  > {\n  /**\n   * The URL your app is running on.\n   *\n   * The `@shopify/cli` provides this URL as `process.env.SHOPIFY_APP_URL`.  For development this is probably a tunnel URL that points to your local machine.  If this is a production app, this is your production URL.\n   */\n  appUrl: string;\n\n  /**\n   * An adaptor for storing sessions in your database of choice.\n   *\n   * Shopify provides multiple session storage adaptors and you can create your own.\n   *\n   * Optional for apps created in the Shopify Admin.\n   *\n   * {@link https://github.com/Shopify/shopify-app-js/blob/main/README.md#session-storage-options}\n   *\n   * @example\n   * <caption>Storing sessions with Prisma.</caption>\n   * <description>Add the `@shopify/shopify-app-session-storage-prisma` package to use the Prisma session storage.</description>\n   * ```ts\n   * import { shopifyApp } from \"@shopify/shopify-app-react-router/server\";\n   * import { PrismaSessionStorage } from \"@shopify/shopify-app-session-storage-prisma\";\n   *\n   * import prisma from \"~/db.server\";\n   *\n   * const shopify = shopifyApp({\n   *   // ... etc\n   *   sessionStorage: new PrismaSessionStorage(prisma),\n   * });\n   * export default shopify;\n   * ```\n   */\n  sessionStorage?: Storage;\n\n  /**\n   * Billing configurations for the app.\n   *\n   * Uses the new line item billing format that allows for more complex billing structures.\n   *\n   * @example\n   * ```ts\n   * import { BillingInterval } from \"@shopify/shopify-api\";\n   *\n   * billing: {\n   *   myPlan: {\n   *     lineItems: [\n   *       {\n   *         amount: 10,\n   *         currencyCode: 'USD',\n   *         interval: BillingInterval.Every30Days,\n   *       }\n   *     ],\n   *   },\n   * }\n   * ```\n   */\n  billing?: BillingConfigWithLineItems;\n\n  /**\n   * Whether your app use online or offline tokens.\n   *\n   * If your app uses online tokens, then both online and offline tokens will be saved to your database.  This ensures your app can perform background jobs.\n   *\n   * {@link https://shopify.dev/docs/apps/auth/oauth/access-modes}\n   *\n   * @defaultValue `false`\n   */\n  useOnlineTokens?: boolean;\n\n  /**\n   * The config for the shop-specific webhooks your app needs.\n   * \n   * Use this to configure shop-specific webhooks. In many cases defining app-specific webhooks in the `shopify.app.toml` will be sufficient and easier to manage.  Please see:\n   * \n   * {@link https://shopify.dev/docs/apps/build/webhooks/subscribe#app-specific-vs-shop-specific-subscriptions}\n   * \n   * You should only use this if you need shop-specific webhooks. If you do need shop-specific webhooks this can be in used in conjunction with the afterAuth hook, loaders or processes such as background jobs.\n   *\n   * @example\n   * <caption>Registering shop-specific webhooks.</caption>\n   * ```ts\n   * // app/shopify.server.ts\n   * import { DeliveryMethod, shopifyApp } from \"@shopify/shopify-app-react-router/server\";\n   *\n   * const shopify = shopifyApp({\n   *   webhooks: {\n   *     PRODUCTS_CREATE: {\n   *       deliveryMethod: DeliveryMethod.Http,\n   *        callbackUrl: \"/webhooks/products/create\",\n   *     },\n   *   },\n   *   hooks: {\n   *     afterAuth: async ({ session }) => {\n   *       // Register webhooks for the shop\n   *       // In this example, every shop will have these webhooks\n   *       // But you could wrap this in some custom shop specific conditional logic\n   *       shopify.registerWebhooks({ session });\n   *     }\n   *   },\n   *   // ...etc\n   * });\n   * export default shopify;\n   * export const authenticate = shopify.authenticate;\n   * ```\n   * \n   * @example\n   * <caption>Registering app-specific webhooks (Recommended)</caption>\n   * ```toml\n   * # shopify.app.toml\n   * [webhooks]\n   * api_version = \"2024-07\"\n\n   *   [[webhooks.subscriptions]]\n   *   topics = [\"products/create\"]\n   *   uri = \"/webhooks/products/create\"\n   * \n   * ```\n   * \n   * @example\n   * <caption>Authenticating a webhook request</caption>\n   *\n   * ```ts\n   * // /app/routes/webhooks.ts\n   * import { ActionFunctionArgs } from \"react-router\";\n   * import { authenticate } from \"../shopify.server\";\n   * import db from \"../db.server\";\n   *\n   * export const action = async ({ request }: ActionFunctionArgs) => {\n   *   const { topic, shop, session, payload } = await authenticate.webhook(request);\n   * \n   *   // Webhook requests can trigger after an app is uninstalled\n   *   // If the app is already uninstalled, the session may be undefined.\n   *   if (!session) {\n   *     throw new Response();\n   *   }\n   * \n   *   // Handle the webhook\n   *   console.log(`${TOPIC} webhook received with`, JSON.stringify(payload))\n   *\n   *   throw new Response();\n   * };\n   * ```\n   */\n  webhooks?: WebhookConfig;\n\n  /**\n   * Functions to call at key places during your apps lifecycle.\n   *\n   * These functions are called in the context of the request that triggered them.  This means you can access the session.\n   *\n   * @example\n   * <caption>Seeding your database custom data when a merchant installs your app.</caption>\n   * ```ts\n   * import { DeliveryMethod, shopifyApp } from \"@shopify/shopify-app-react-router/server\";\n   * import { seedStoreData } from \"~/db/seeds\"\n   *\n   * const shopify = shopifyApp({\n   *   hooks: {\n   *     afterAuth: async ({ session }) => {\n   *       seedStoreData({session})\n   *     }\n   *   },\n   *   // ...etc\n   * });\n   * ```\n   */\n  hooks?: HooksConfig;\n\n  /**\n   * How your app is distributed. Default is `AppDistribution.AppStore`.\n   *\n   * AppStore should be used for public apps that are distributed in the Shopify App Store.\n   * SingleMerchant should be used for custom apps managed in the Partner Dashboard.\n   * ShopifyAdmin should be used for apps that are managed in the merchant's Shopify Admin.\n   *\n   * {@link https://shopify.dev/docs/apps/distribution}\n   */\n  distribution?: AppDistribution;\n\n  /**\n   * What version of Shopify's Admin API's would you like to use.\n   *\n   * {@link https://shopify.dev/docs/api/}\n   *\n   * @example\n   * <caption>Specifying an API Version</caption>\n   * ```ts\n   * import { ApiVersion, shopifyApp } from \"@shopify/shopify-app-react-router/server\";\n   *\n   * const shopify = shopifyApp({\n   *   // ...etc\n   *   apiVersion: ApiVersion.July25,\n   * });\n   * ```\n   */\n  apiVersion: ApiVersion;\n\n  /**\n   * A path that Shopify can reserve for auth related endpoints.\n   *\n   * This must match a $ route in your React Router app.  That route must export a loader function that calls `shopify.authenticate.admin(request)`.\n   *\n   * @default `\"/auth\"`\n   *\n   * @example\n   * <caption>Using a specific API Version</caption>\n   * ```ts\n   * // /app/shopify.server.ts\n   * import { shopifyApp } from \"@shopify/shopify-app-react-router/server\";\n   *\n   * const shopify = shopifyApp({\n   *   // ...etc\n   *   authPathPrefix: \"/auth\",\n   * });\n   * export default shopify;\n   * export const authenticate = shopify.authenticate;\n   *\n   * // /app/routes/auth/$.jsx\n   * import { LoaderFunctionArgs } from \"react-router\";\n   * import { authenticate } from \"../../shopify.server\";\n   *\n   * export async function loader({ request }: LoaderFunctionArgs) {\n   *   await authenticate.admin(request);\n   *\n   *   return null\n   * }\n   * ```\n   */\n  authPathPrefix?: string;\n\n  /**\n   * Features that will be introduced in future releases of this package.\n   *\n   * You can opt in to these features by setting the corresponding flags. By doing so, you can prepare for future\n   * releases in advance and provide feedback on the new features.\n   */\n  future?: Future;\n}"
+            "value": "export interface AppConfigArg<\n  Storage extends SessionStorage = SessionStorage,\n  Future extends FutureFlagOptions = FutureFlagOptions,\n> extends Omit<\n  ApiConfigArg<ApiFutureFlags<Future>>,\n  | 'hostName'\n  | 'hostScheme'\n  | 'apiVersion'\n  | 'isCustomStoreApp'\n  | 'isEmbeddedApp'\n  | 'future'\n  | 'billing'\n  | 'restResources'\n> {\n  /**\n   * The URL your app is running on.\n   *\n   * The `@shopify/cli` provides this URL as `process.env.SHOPIFY_APP_URL`.  For development this is probably a tunnel URL that points to your local machine.  If this is a production app, this is your production URL.\n   */\n  appUrl: string;\n\n  /**\n   * An adaptor for storing sessions in your database of choice.\n   *\n   * Shopify provides multiple session storage adaptors and you can create your own.\n   *\n   * Optional for apps created in the Shopify Admin.\n   *\n   * {@link https://github.com/Shopify/shopify-app-js/blob/main/README.md#session-storage-options}\n   *\n   * @example\n   * <caption>Storing sessions with Prisma.</caption>\n   * <description>Add the `@shopify/shopify-app-session-storage-prisma` package to use the Prisma session storage.</description>\n   * ```ts\n   * import { shopifyApp } from \"@shopify/shopify-app-react-router/server\";\n   * import { PrismaSessionStorage } from \"@shopify/shopify-app-session-storage-prisma\";\n   *\n   * import prisma from \"~/db.server\";\n   *\n   * const shopify = shopifyApp({\n   *   // ... etc\n   *   sessionStorage: new PrismaSessionStorage(prisma),\n   * });\n   * export default shopify;\n   * ```\n   */\n  sessionStorage?: Storage;\n\n  /**\n   * Billing configurations for the app.\n   *\n   * Uses the new line item billing format that allows for more complex billing structures.\n   *\n   * @example\n   * ```ts\n   * import { BillingInterval } from \"@shopify/shopify-api\";\n   *\n   * billing: {\n   *   myPlan: {\n   *     lineItems: [\n   *       {\n   *         amount: 10,\n   *         currencyCode: 'USD',\n   *         interval: BillingInterval.Every30Days,\n   *       }\n   *     ],\n   *   },\n   * }\n   * ```\n   */\n  billing?: BillingConfigWithLineItems;\n\n  /**\n   * Whether your app use online or offline tokens.\n   *\n   * If your app uses online tokens, then both online and offline tokens will be saved to your database.  This ensures your app can perform background jobs.\n   *\n   * {@link https://shopify.dev/docs/apps/auth/oauth/access-modes}\n   *\n   * @defaultValue `false`\n   */\n  useOnlineTokens?: boolean;\n\n  /**\n   * The config for the shop-specific webhooks your app needs.\n   * \n   * Use this to configure shop-specific webhooks. In many cases defining app-specific webhooks in the `shopify.app.toml` will be sufficient and easier to manage.  Please see:\n   * \n   * {@link https://shopify.dev/docs/apps/build/webhooks/subscribe#app-specific-vs-shop-specific-subscriptions}\n   * \n   * You should only use this if you need shop-specific webhooks. If you do need shop-specific webhooks this can be in used in conjunction with the afterAuth hook, loaders or processes such as background jobs.\n   *\n   * @example\n   * <caption>Registering shop-specific webhooks.</caption>\n   * ```ts\n   * // app/shopify.server.ts\n   * import { DeliveryMethod, shopifyApp } from \"@shopify/shopify-app-react-router/server\";\n   *\n   * const shopify = shopifyApp({\n   *   webhooks: {\n   *     PRODUCTS_CREATE: {\n   *       deliveryMethod: DeliveryMethod.Http,\n   *        callbackUrl: \"/webhooks/products/create\",\n   *     },\n   *   },\n   *   hooks: {\n   *     afterAuth: async ({ session }) => {\n   *       // Register webhooks for the shop\n   *       // In this example, every shop will have these webhooks\n   *       // But you could wrap this in some custom shop specific conditional logic\n   *       shopify.registerWebhooks({ session });\n   *     }\n   *   },\n   *   // ...etc\n   * });\n   * export default shopify;\n   * export const authenticate = shopify.authenticate;\n   * ```\n   * \n   * @example\n   * <caption>Registering app-specific webhooks (Recommended)</caption>\n   * ```toml\n   * # shopify.app.toml\n   * [webhooks]\n   * api_version = \"2024-07\"\n\n   *   [[webhooks.subscriptions]]\n   *   topics = [\"products/create\"]\n   *   uri = \"/webhooks/products/create\"\n   * \n   * ```\n   * \n   * @example\n   * <caption>Authenticating a webhook request</caption>\n   *\n   * ```ts\n   * // /app/routes/webhooks.ts\n   * import { ActionFunctionArgs } from \"react-router\";\n   * import { authenticate } from \"../shopify.server\";\n   * import db from \"../db.server\";\n   *\n   * export const action = async ({ request }: ActionFunctionArgs) => {\n   *   const { topic, shop, session, payload } = await authenticate.webhook(request);\n   * \n   *   // Webhook requests can trigger after an app is uninstalled\n   *   // If the app is already uninstalled, the session may be undefined.\n   *   if (!session) {\n   *     throw new Response();\n   *   }\n   * \n   *   // Handle the webhook\n   *   console.log(`${TOPIC} webhook received with`, JSON.stringify(payload))\n   *\n   *   throw new Response();\n   * };\n   * ```\n   */\n  webhooks?: WebhookConfig;\n\n  /**\n   * Functions to call at key places during your apps lifecycle.\n   *\n   * These functions are called in the context of the request that triggered them.  This means you can access the session.\n   *\n   * @example\n   * <caption>Seeding your database custom data when a merchant installs your app.</caption>\n   * ```ts\n   * import { DeliveryMethod, shopifyApp } from \"@shopify/shopify-app-react-router/server\";\n   * import { seedStoreData } from \"~/db/seeds\"\n   *\n   * const shopify = shopifyApp({\n   *   hooks: {\n   *     afterAuth: async ({ session }) => {\n   *       seedStoreData({session})\n   *     }\n   *   },\n   *   // ...etc\n   * });\n   * ```\n   */\n  hooks?: HooksConfig;\n\n  /**\n   * How your app is distributed. Default is `AppDistribution.AppStore`.\n   *\n   * AppStore should be used for public apps that are distributed in the Shopify App Store.\n   * SingleMerchant should be used for custom apps managed in the Partner Dashboard.\n   * ShopifyAdmin should be used for apps that are managed in the merchant's Shopify Admin.\n   *\n   * {@link https://shopify.dev/docs/apps/distribution}\n   */\n  distribution?: AppDistribution;\n\n  /**\n   * What version of Shopify's Admin API's would you like to use.\n   *\n   * {@link https://shopify.dev/docs/api/}\n   *\n   * @example\n   * <caption>Specifying an API Version</caption>\n   * ```ts\n   * import { ApiVersion, shopifyApp } from \"@shopify/shopify-app-react-router/server\";\n   *\n   * const shopify = shopifyApp({\n   *   // ...etc\n   *   apiVersion: ApiVersion.July25,\n   * });\n   * ```\n   */\n  apiVersion: ApiVersion;\n\n  /**\n   * A path that Shopify can reserve for auth related endpoints.\n   *\n   * This must match a $ route in your React Router app.  That route must export a loader function that calls `shopify.authenticate.admin(request)`.\n   *\n   * @default `\"/auth\"`\n   *\n   * @example\n   * <caption>Using a specific API Version</caption>\n   * ```ts\n   * // /app/shopify.server.ts\n   * import { shopifyApp } from \"@shopify/shopify-app-react-router/server\";\n   *\n   * const shopify = shopifyApp({\n   *   // ...etc\n   *   authPathPrefix: \"/auth\",\n   * });\n   * export default shopify;\n   * export const authenticate = shopify.authenticate;\n   *\n   * // /app/routes/auth/$.jsx\n   * import { LoaderFunctionArgs } from \"react-router\";\n   * import { authenticate } from \"../../shopify.server\";\n   *\n   * export async function loader({ request }: LoaderFunctionArgs) {\n   *   await authenticate.admin(request);\n   *\n   *   return null\n   * }\n   * ```\n   */\n  authPathPrefix?: string;\n\n  /**\n   * Features that will be introduced in future releases of this package.\n   *\n   * You can opt in to these features by setting the corresponding flags. By doing so, you can prepare for future\n   * releases in advance and provide feedback on the new features.\n   */\n  future?: Future;\n}"
           },
           "ApiVersion": {
             "filePath": "../shopify-api/dist/ts/lib/types.d.ts",
             "syntaxKind": "EnumDeclaration",
             "name": "ApiVersion",
-            "value": "export declare enum ApiVersion {\n    October22 = \"2022-10\",\n    January23 = \"2023-01\",\n    April23 = \"2023-04\",\n    July23 = \"2023-07\",\n    October23 = \"2023-10\",\n    January24 = \"2024-01\",\n    April24 = \"2024-04\",\n    July24 = \"2024-07\",\n    October24 = \"2024-10\",\n    January25 = \"2025-01\",\n    April25 = \"2025-04\",\n    July25 = \"2025-07\",\n    October25 = \"2025-10\",\n    Unstable = \"unstable\"\n}",
+            "value": "export declare enum ApiVersion {\n    October24 = \"2024-10\",\n    January25 = \"2025-01\",\n    April25 = \"2025-04\",\n    July25 = \"2025-07\",\n    October25 = \"2025-10\",\n    January26 = \"2026-01\",\n    April26 = \"2026-04\",\n    Unstable = \"unstable\"\n}",
             "members": [
-              {
-                "filePath": "../shopify-api/dist/ts/lib/types.d.ts",
-                "name": "October22",
-                "value": "2022-10"
-              },
-              {
-                "filePath": "../shopify-api/dist/ts/lib/types.d.ts",
-                "name": "January23",
-                "value": "2023-01"
-              },
-              {
-                "filePath": "../shopify-api/dist/ts/lib/types.d.ts",
-                "name": "April23",
-                "value": "2023-04"
-              },
-              {
-                "filePath": "../shopify-api/dist/ts/lib/types.d.ts",
-                "name": "July23",
-                "value": "2023-07"
-              },
-              {
-                "filePath": "../shopify-api/dist/ts/lib/types.d.ts",
-                "name": "October23",
-                "value": "2023-10"
-              },
-              {
-                "filePath": "../shopify-api/dist/ts/lib/types.d.ts",
-                "name": "January24",
-                "value": "2024-01"
-              },
-              {
-                "filePath": "../shopify-api/dist/ts/lib/types.d.ts",
-                "name": "April24",
-                "value": "2024-04"
-              },
-              {
-                "filePath": "../shopify-api/dist/ts/lib/types.d.ts",
-                "name": "July24",
-                "value": "2024-07"
-              },
               {
                 "filePath": "../shopify-api/dist/ts/lib/types.d.ts",
                 "name": "October24",
@@ -8658,6 +9057,16 @@
               },
               {
                 "filePath": "../shopify-api/dist/ts/lib/types.d.ts",
+                "name": "January26",
+                "value": "2026-01"
+              },
+              {
+                "filePath": "../shopify-api/dist/ts/lib/types.d.ts",
+                "name": "April26",
+                "value": "2026-04"
+              },
+              {
+                "filePath": "../shopify-api/dist/ts/lib/types.d.ts",
                 "name": "Unstable",
                 "value": "unstable"
               }
@@ -8675,6 +9084,37 @@
               }
             ],
             "value": "export interface BillingConfigWithLineItems {\n  [plan: string]:\n    | BillingConfigOneTimePlan\n    | BillingConfigSubscriptionLineItemPlan;\n}"
+          },
+          "DomainTransformation": {
+            "filePath": "../shopify-api/dist/ts/lib/types.d.ts",
+            "name": "DomainTransformation",
+            "description": "Configuration for transforming shop domains in split-domain architectures.",
+            "members": [
+              {
+                "filePath": "../shopify-api/dist/ts/lib/types.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "includeHost",
+                "value": "boolean",
+                "description": "Whether this transformation should also apply to host validation.",
+                "isOptional": true,
+                "defaultValue": "true"
+              },
+              {
+                "filePath": "../shopify-api/dist/ts/lib/types.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "match",
+                "value": "RegExp | string",
+                "description": "Pattern to match against shop domains (source domain). Can be a RegExp or string (converted to RegExp internally)."
+              },
+              {
+                "filePath": "../shopify-api/dist/ts/lib/types.d.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "transform",
+                "value": "((matches: RegExpMatchArray) => string | null) | string",
+                "description": "Transformation function or template string.\n- Template string: Uses $1, $2, etc. for capture group substitution\n- Function: Receives regex match groups and returns transformed domain"
+              }
+            ],
+            "value": "export interface DomainTransformation {\n    /**\n     * Pattern to match against shop domains (source domain).\n     * Can be a RegExp or string (converted to RegExp internally).\n     */\n    match: RegExp | string;\n    /**\n     * Transformation function or template string.\n     * - Template string: Uses $1, $2, etc. for capture group substitution\n     * - Function: Receives regex match groups and returns transformed domain\n     */\n    transform: ((matches: RegExpMatchArray) => string | null) | string;\n    /**\n     * Whether this transformation should also apply to host validation.\n     * @default true\n     */\n    includeHost?: boolean;\n}"
           },
           "HooksConfig": {
             "filePath": "src/server/config-types.ts",
@@ -8772,9 +9212,20 @@
           "FutureFlags": {
             "filePath": "src/server/future/flags.ts",
             "name": "FutureFlags",
-            "description": "",
-            "members": [],
-            "value": "export interface FutureFlags {}"
+            "description": "Set future flags using the `future` configuration field to opt in to upcoming breaking changes.\n\nWith this feature, you can prepare for major releases ahead of time, as well as try out new features before they are released.",
+            "isPublicDocs": true,
+            "members": [
+              {
+                "filePath": "src/server/future/flags.ts",
+                "syntaxKind": "PropertySignature",
+                "name": "expiringOfflineAccessTokens",
+                "value": "boolean",
+                "description": "When enabled, the app will start using expiring offline access tokens and automatically refresh them when they are close to expiring.",
+                "isOptional": true,
+                "defaultValue": "false"
+              }
+            ],
+            "value": "export interface FutureFlags {\n  /**\n   * When enabled, the app will start using expiring offline access tokens and automatically refresh them when they are close to expiring.\n   *\n   * @default false\n   */\n  expiringOfflineAccessTokens?: boolean;\n}"
           }
         }
       }
@@ -8958,7 +9409,8 @@
           "GetUnauthenticatedAdminContext": {
             "filePath": "src/server/unauthenticated/admin/types.ts",
             "name": "GetUnauthenticatedAdminContext",
-            "description": "",
+            "description": "Creates an unauthenticated Admin context.",
+            "isPublicDocs": true,
             "params": [
               {
                 "name": "shop",
@@ -9028,7 +9480,8 @@
           "AdminApiContext": {
             "filePath": "src/server/clients/admin/types.ts",
             "name": "AdminApiContext",
-            "description": "",
+            "description": "Provides utilities that apps can use to make requests to the Admin API.",
+            "isPublicDocs": true,
             "members": [
               {
                 "filePath": "src/server/clients/admin/types.ts",
@@ -9138,7 +9591,7 @@
                 "filePath": "src/server/clients/types.ts",
                 "syntaxKind": "PropertySignature",
                 "name": "variables",
-                "value": "ApiClientRequestOptions<Operation, Operations>[\"variables\"]",
+                "value": "ApiClientRequestOptions<Operation, Operations>",
                 "description": "The variables to pass to the operation.",
                 "isOptional": true
               }
@@ -9220,7 +9673,8 @@
           "GetUnauthenticatedStorefrontContext": {
             "filePath": "src/server/unauthenticated/storefront/types.ts",
             "name": "GetUnauthenticatedStorefrontContext",
-            "description": "",
+            "description": "Creates an unauthenticated Storefront context.",
+            "isPublicDocs": true,
             "params": [
               {
                 "name": "shop",
@@ -9300,7 +9754,8 @@
           "StorefrontContext": {
             "filePath": "src/server/clients/storefront/types.ts",
             "name": "StorefrontContext",
-            "description": "",
+            "description": "Provides utilities that apps can use to make requests to the Storefront API.",
+            "isPublicDocs": true,
             "members": [
               {
                 "filePath": "src/server/clients/storefront/types.ts",
@@ -9406,7 +9861,7 @@
                 "filePath": "src/server/clients/types.ts",
                 "syntaxKind": "PropertySignature",
                 "name": "variables",
-                "value": "ApiClientRequestOptions<Operation, Operations>[\"variables\"]",
+                "value": "ApiClientRequestOptions<Operation, Operations>",
                 "description": "The variables to pass to the operation.",
                 "isOptional": true
               }
