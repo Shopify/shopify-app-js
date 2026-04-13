@@ -92,7 +92,7 @@
     "@babel/preset-env": "^7.29.2",
     "@shopify/babel-preset": "^25.0.2",
     "jest-environment-jsdom": "^30.2.0",
-    "rollup-plugin-dts": "^6.3.0"
+    "rollup-plugin-dts": "^6.4.1"
   },
   "bugs": {
     "url": "https://github.com/Shopify/shopify-app-js/issues"

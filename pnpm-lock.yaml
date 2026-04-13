@@ -108,8 +108,8 @@ importers:
         specifier: ^30.2.0
         version: 30.2.0
       rollup-plugin-dts:
-        specifier: ^6.3.0
-        version: 6.3.0(rollup@4.60.1)(typescript@5.9.3)
+        specifier: ^6.4.1
+        version: 6.4.1(rollup@4.60.1)(typescript@5.9.3)
 
   packages/api-clients/api-codegen-preset:
     dependencies:
@@ -145,8 +145,8 @@ importers:
         specifier: ^5.1.5
         version: 5.1.5(@types/node@25.6.0)(encoding@0.1.13)(graphql@16.12.0)(typescript@5.9.3)
       rollup-plugin-dts:
-        specifier: ^6.3.0
-        version: 6.3.0(rollup@4.60.1)(typescript@5.9.3)
+        specifier: ^6.4.1
+        version: 6.4.1(rollup@4.60.1)(typescript@5.9.3)
 
   packages/api-clients/graphql-client:
     devDependencies:
@@ -163,8 +163,8 @@ importers:
         specifier: ^3.0.3
         version: 3.0.3(encoding@0.1.13)
       rollup-plugin-dts:
-        specifier: ^6.3.0
-        version: 6.3.0(rollup@4.60.1)(typescript@5.9.3)
+        specifier: ^6.4.1
+        version: 6.4.1(rollup@4.60.1)(typescript@5.9.3)
 
   packages/api-clients/storefront-api-client:
     dependencies:
@@ -182,8 +182,8 @@ importers:
         specifier: ^30.2.0
         version: 30.2.0
       rollup-plugin-dts:
-        specifier: ^6.3.0
-        version: 6.3.0(rollup@4.60.1)(typescript@5.9.3)
+        specifier: ^6.4.1
+        version: 6.4.1(rollup@4.60.1)(typescript@5.9.3)
 
   packages/apps/session-storage/shopify-app-session-storage:
     devDependencies:
@@ -736,10 +736,6 @@ packages:
   '@aws/lambda-invoke-store@0.2.4':
     resolution: {integrity: sha512-iY8yvjE0y651BixKNPgmv1WrQc+GZ142sb0z4gYnChDDY2YqI4P/jsSopBWrKfAt7LOJAkOXt7rC/hms+WclQQ==}
     engines: {node: '>=18.0.0'}
-
-  '@babel/code-frame@7.28.6':
-    resolution: {integrity: sha512-JYgintcMjRiCvS8mMECzaEn+m3PfoQiyqukOMCCVQtoJGYJw8j/8LBJEiqkHLkfwCcs74E3pbAUFNg7d9VNJ+Q==}
-    engines: {node: '>=6.9.0'}
 
   '@babel/code-frame@7.29.0':
     resolution: {integrity: sha512-9NhCeYjq9+3uxgdtp20LSiJXJvN0FeCtNGpJxuMFZ1Kv3cWUNb6DOhJwUvcVCzKGR66cw4njwM6hrJLqgOwbcw==}
@@ -3267,9 +3263,6 @@ packages:
 
   '@jridgewell/sourcemap-codec@1.5.5':
     resolution: {integrity: sha512-cYQ9310grqxueWbl+WuIUIaiUaDcj7WOq5fVhEljNVgRfOUhY9fy2zTvfoqWsnebh8Sl70VScFbICvJnLKB0Og==}
-
-  '@jridgewell/trace-mapping@0.3.30':
-    resolution: {integrity: sha512-GQ7Nw5G2lTu/BtHTKfXhKHok2WGetd4XYcVKGx00SjAk8GMwgJM3zr6zORiPGuOE+/vkc90KtTosSSvaCjKb2Q==}
 
   '@jridgewell/trace-mapping@0.3.31':
     resolution: {integrity: sha512-zzNR+SdQSDJzc8joaeP8QQoCQr8NuYx2dIIytl1QeBEZHJ9uW6hebsrYgbz8hJwUQao3TWCMtmfV8Nu1twOLAw==}
@@ -7937,12 +7930,12 @@ packages:
     engines: {node: 20 || >=22}
     hasBin: true
 
-  rollup-plugin-dts@6.3.0:
-    resolution: {integrity: sha512-d0UrqxYd8KyZ6i3M2Nx7WOMy708qsV/7fTHMHxCMCBOAe3V/U7OMPu5GkX8hC+cmkHhzGnfeYongl1IgiooddA==}
-    engines: {node: '>=16'}
+  rollup-plugin-dts@6.4.1:
+    resolution: {integrity: sha512-l//F3Zf7ID5GoOfLfD8kroBjQKEKpy1qfhtAdnpibFZMffPaylrg1CoDC2vGkPeTeyxUe4bVFCln2EFuL7IGGg==}
+    engines: {node: '>=20'}
     peerDependencies:
       rollup: ^3.29.4 || ^4
-      typescript: ^4.5 || ^5.0
+      typescript: ^4.5 || ^5.0 || ^6.0
 
   rollup-plugin-exclude-dependencies-from-bundle@1.1.24:
     resolution: {integrity: sha512-3Bt5215TF9AAWhE/PikYL74ySBAtHE3e1gC8BN9XqOcL3rlPLdNMfe8UwnOueke5Tn3JTJBHRjw+D0Bv4PuOmA==}
@@ -8910,7 +8903,7 @@ snapshots:
   '@ampproject/remapping@2.3.0':
     dependencies:
       '@jridgewell/gen-mapping': 0.3.13
-      '@jridgewell/trace-mapping': 0.3.30
+      '@jridgewell/trace-mapping': 0.3.31
 
   '@ardatan/relay-compiler@13.0.0(graphql@16.12.0)':
     dependencies:
@@ -9284,12 +9277,6 @@ snapshots:
 
   '@aws/lambda-invoke-store@0.2.4': {}
 
-  '@babel/code-frame@7.28.6':
-    dependencies:
-      '@babel/helper-validator-identifier': 7.28.5
-      js-tokens: 4.0.0
-      picocolors: 1.1.1
-
   '@babel/code-frame@7.29.0':
     dependencies:
       '@babel/helper-validator-identifier': 7.28.5
@@ -9301,7 +9288,7 @@ snapshots:
   '@babel/core@7.27.4':
     dependencies:
       '@ampproject/remapping': 2.3.0
-      '@babel/code-frame': 7.28.6
+      '@babel/code-frame': 7.29.0
       '@babel/generator': 7.28.3
       '@babel/helper-compilation-targets': 7.28.6
       '@babel/helper-module-transforms': 7.28.3(@babel/core@7.27.4)
@@ -9343,7 +9330,7 @@ snapshots:
       '@babel/parser': 7.28.3
       '@babel/types': 7.29.0
       '@jridgewell/gen-mapping': 0.3.13
-      '@jridgewell/trace-mapping': 0.3.30
+      '@jridgewell/trace-mapping': 0.3.31
       jsesc: 3.1.0
 
   '@babel/generator@7.29.1':
@@ -10799,7 +10786,7 @@ snapshots:
 
   '@babel/template@7.27.2':
     dependencies:
-      '@babel/code-frame': 7.28.6
+      '@babel/code-frame': 7.29.0
       '@babel/parser': 7.28.3
       '@babel/types': 7.29.0
 
@@ -10811,7 +10798,7 @@ snapshots:
 
   '@babel/traverse@7.28.3':
     dependencies:
-      '@babel/code-frame': 7.28.6
+      '@babel/code-frame': 7.29.0
       '@babel/generator': 7.29.1
       '@babel/helper-globals': 7.28.0
       '@babel/parser': 7.28.3
@@ -12812,11 +12799,6 @@ snapshots:
       '@jridgewell/trace-mapping': 0.3.31
 
   '@jridgewell/sourcemap-codec@1.5.5': {}
-
-  '@jridgewell/trace-mapping@0.3.30':
-    dependencies:
-      '@jridgewell/resolve-uri': 3.1.2
-      '@jridgewell/sourcemap-codec': 1.5.5
 
   '@jridgewell/trace-mapping@0.3.31':
     dependencies:
@@ -18376,13 +18358,16 @@ snapshots:
       glob: 13.0.0
       package-json-from-dist: 1.0.1
 
-  rollup-plugin-dts@6.3.0(rollup@4.60.1)(typescript@5.9.3):
+  rollup-plugin-dts@6.4.1(rollup@4.60.1)(typescript@5.9.3):
     dependencies:
+      '@jridgewell/remapping': 2.3.5
+      '@jridgewell/sourcemap-codec': 1.5.5
+      convert-source-map: 2.0.0
       magic-string: 0.30.21
       rollup: 4.60.1
       typescript: 5.9.3
     optionalDependencies:
-      '@babel/code-frame': 7.28.6
+      '@babel/code-frame': 7.29.0
 
   rollup-plugin-exclude-dependencies-from-bundle@1.1.24(rollup@4.60.1):
     dependencies:
