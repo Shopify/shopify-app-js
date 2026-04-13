@@ -1,4 +1,4 @@
-# Shopify API and app tools for JavaScript
+# See I can do it!
 
 This repository contains packages you can use to interact with Shopify's APIs.
 You can use these packages to create clients for those APIs directly, or to create apps using TypeScript / JavaScript.
