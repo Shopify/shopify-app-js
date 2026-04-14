@@ -1,0 +1,124 @@
+name: Devtools Investigate for Gardener
+# Automatically investigates GitHub issues using Claude Code when the
+# 'devtools-investigate-for-gardener' label is applied. Can also be triggered manually
+# via workflow_dispatch for a specific issue number.
+on:
+  issues:
+    types: [labeled]
+  workflow_dispatch:
+    inputs:
+      issue_number:
+        description: 'Issue number to investigate'
+        required: true
+        type: number
+
+permissions:
+  contents: write
+  issues: read
+  pull-requests: write
+
+jobs:
+  investigate:
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      github.event.label.name == 'devtools-investigate-for-gardener'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          fetch-depth: 0
+          # GITHUB_TOKEN won't trigger CI on PRs it creates (GitHub's loop-prevention).
+          # A human must manually trigger CI (e.g. close/reopen the PR) before merging.
+          # To avoid this, replace with a PAT or GitHub App token.
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Resolve issue number
+        id: issue
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            NUMBER="${{ github.event.inputs.issue_number }}"
+          else
+            NUMBER="${{ github.event.issue.number }}"
+          fi
+          echo "number=$NUMBER" >> "$GITHUB_OUTPUT"
+          echo "url=https://github.com/${{ github.repository }}/issues/$NUMBER" >> "$GITHUB_OUTPUT"
+
+      - name: Investigate issue
+        id: investigate
+        timeout-minutes: 30
+        uses: anthropics/claude-code-action@b47fd721da662d48c5680e154ad16a73ed74d2e0 # v1
+        env:
+          ANTHROPIC_BASE_URL: ${{ secrets.ANTHROPIC_BASE_URL }}
+        with:
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          prompt: |
+            Follow the instructions in `.claude/skills/investigating-github-issues/SKILL.md` to
+            investigate GitHub issue #${{ steps.issue.outputs.number }}.
+
+            Issue URL: ${{ steps.issue.outputs.url }}
+
+            After completing the investigation, follow the "Output" section of the SKILL.md to
+            determine whether to open a fix PR or produce a report.
+
+            Return the investigation report as the `report` field in your structured output.
+            If you opened a fix PR instead, return the PR URL as `report`.
+          claude_args: |
+            --json-schema '{"type":"object","properties":{"report":{"type":"string","description":"The full investigation report markdown, or the PR URL if a fix was opened"}},"required":["report"]}'
+
+      - name: Write report to job summary
+        if: always() && steps.investigate.outputs.structured_output
+        env:
+          STRUCTURED_OUTPUT: ${{ steps.investigate.outputs.structured_output }}
+        run: |
+          echo "$STRUCTURED_OUTPUT" | jq -r '.report' >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Post investigation report to Slack
+        if: always() && steps.investigate.outputs.structured_output
+        env:
+          STRUCTURED_OUTPUT: ${{ steps.investigate.outputs.structured_output }}
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_GARDENER_WEBHOOK_URL }}
+          SLACK_CHANNEL_ID: ${{ vars.GARDENER_SLACK_CHANNEL_ID }}
+          ISSUE_NUMBER: ${{ steps.issue.outputs.number }}
+          ISSUE_URL: ${{ steps.issue.outputs.url }}
+        run: |
+          REPORT=$(echo "$STRUCTURED_OUTPUT" | jq -r '.report')
+          # Convert Markdown to Slack mrkdwn format
+          REPORT=$(echo "$REPORT" | perl -pe '
+            s/^#{1,6}\s+(.+)$/*$1*/gm;
+            s/\*\*(.+?)\*\*/*$1*/g;
+            s/\[([^\]]+)\]\(([^)]+)\)/<$2|$1>/g;
+          ')
+          # Slack webhook messages have a 3000 char limit for text blocks.
+          # Truncate and link to the full run if needed.
+          MAX_LEN=2500
+          if [ ${#REPORT} -gt $MAX_LEN ]; then
+            REPORT="${REPORT:0:$MAX_LEN}…\n\n<${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|View full report>"
+          fi
+          jq -n \
+            --arg channel "$SLACK_CHANNEL_ID" \
+            --arg text "Investigation report for issue #$ISSUE_NUMBER" \
+            --arg report "$REPORT" \
+            --arg issue_url "$ISSUE_URL" \
+            --arg issue_num "$ISSUE_NUMBER" \
+            '{
+              channel: $channel,
+              text: $text,
+              blocks: [
+                {
+                  type: "section",
+                  text: {
+                    type: "mrkdwn",
+                    text: ("*<" + $issue_url + "|Issue #" + $issue_num + ">* — Investigation Report")
+                  }
+                },
+                { type: "divider" },
+                {
+                  type: "section",
+                  text: {
+                    type: "mrkdwn",
+                    text: $report
+                  }
+                }
+              ]
+            }' | curl -sf -X POST -H 'Content-type: application/json' -d @- "$SLACK_WEBHOOK_URL"
