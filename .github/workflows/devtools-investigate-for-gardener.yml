@@ -54,14 +54,7 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           allowed_tools: "Bash(gh issue view *),Bash(gh issue list *),Bash(gh pr list *),Bash(gh pr view *),Bash(gh pr create *),Bash(gh pr checks *),Bash(gh pr diff *),Bash(gh release list *),Bash(git log *),Bash(git tag *),Bash(git diff *),Bash(git show *),Bash(git branch *),Bash(git checkout *),Bash(git push *),Bash(git commit *),Bash(git add *),Read,Glob,Grep,Edit,Write"
           prompt: |
-            /investigating-github-issues
-
-            Investigate GitHub issue #${{ steps.issue.outputs.number }}.
-
-            Issue URL: ${{ steps.issue.outputs.url }}
-
-            After completing the investigation, follow the "Output" section of the skill to
-            determine whether to open a fix PR or produce a report.
+            /investigating-github-issues ${{ steps.issue.outputs.url }}
 
             Return the investigation report as the `report` field in your structured output.
             If you opened a fix PR instead, return the PR URL as `report`.
