@@ -45,7 +45,7 @@
     "sqlite"
   ],
   "dependencies": {
-    "sqlite3": "^5.1.7"
+    "sqlite3": "^6.0.1"
   },
   "peerDependencies": {
     "@shopify/shopify-api": "^13.0.0",
