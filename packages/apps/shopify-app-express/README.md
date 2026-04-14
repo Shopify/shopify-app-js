@@ -125,6 +125,33 @@ const shopify = shopifyApp({
 
 Any values explicitly passed in the `api` config will take precedence over the environment variables.
 
+## Webhook registration
+
+When `shopify.auth.callback()` completes an offline OAuth session, it automatically calls `register()` to reconcile the store's webhook subscriptions with the handlers declared in `webhookHandlers`.
+
+**`register()` will delete any webhook subscriptions that are not present in `webhookHandlers`.**
+
+This means **all webhook topics your app relies on must be declared in `webhookHandlers`**:
+
+```ts
+const webhookHandlers = {
+  PRODUCTS_UPDATE: [{
+    deliveryMethod: DeliveryMethod.Http,
+    callbackUrl: '/api/webhooks',
+    callback: handleProductsUpdate,
+  }],
+  // All other topics your app uses must be listed here.
+  // Any topic not listed will be unsubscribed from the store on next OAuth.
+};
+
+app.post(
+  shopify.config.webhooks.path,
+  shopify.processWebhooks({webhookHandlers}),
+);
+```
+
+If you are **migrating from a custom implementation or another library**, make sure to declare all of your existing webhook topics in `webhookHandlers` before your app goes through OAuth, or those subscriptions will be deleted.
+
 ## Next steps
 
 Now that your app is up and running, you can learn more about the `shopifyApp` object in [the reference docs](./docs/reference/shopifyApp.md).
