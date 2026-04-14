@@ -89,6 +89,42 @@ To load your app within the Shopify Admin app, you need to:
 1. Update your app's callback URL to `http://localhost:8080/api/auth/callback` in that same page
 1. Go to **Test your app** in Partners Dashboard and select your development store
 
+## Environment variables
+
+The following environment variables are automatically read as defaults when they are not explicitly provided in the `api` config object passed to `shopifyApp()`:
+
+| Variable           | Maps to config field       | Description                                                  |
+| ------------------ | -------------------------- | ------------------------------------------------------------ |
+| `SHOPIFY_API_KEY`  | `apiKey`                   | Your app's API key from the Partners Dashboard               |
+| `SHOPIFY_API_SECRET` | `apiSecretKey`           | Your app's API secret from the Partners Dashboard            |
+| `HOST`             | `hostScheme` / `hostName`  | Your app's public URL (e.g. `https://my-app.example.com`)   |
+| `SCOPES`           | `scopes`                   | Comma-separated list of OAuth scopes (e.g. `read_products,write_orders`) |
+
+For example, if you set these environment variables:
+
+```bash
+SHOPIFY_API_KEY=mykey
+SHOPIFY_API_SECRET=mysecret
+HOST=https://my-app.example.com
+SCOPES=read_products,write_orders
+```
+
+Then you can omit them from the config:
+
+```ts
+const shopify = shopifyApp({
+  auth: {
+    path: '/api/auth',
+    callbackPath: '/api/auth/callback',
+  },
+  webhooks: {
+    path: '/api/webhooks',
+  },
+});
+```
+
+Any values explicitly passed in the `api` config will take precedence over the environment variables.
+
 ## Next steps
 
 Now that your app is up and running, you can learn more about the `shopifyApp` object in [the reference docs](./docs/reference/shopifyApp.md).
