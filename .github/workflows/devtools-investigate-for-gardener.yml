@@ -56,6 +56,8 @@ jobs:
           prompt: |
             /investigating-github-issues ${{ steps.issue.outputs.url }}
 
+            If the skill above did not load, read and follow `.claude/skills/investigating-github-issues/SKILL.md`.
+
             Return the investigation report as the `report` field in your structured output.
             If you opened a fix PR instead, return the PR URL as `report`.
           claude_args: |
