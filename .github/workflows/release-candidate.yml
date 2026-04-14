@@ -25,11 +25,8 @@ jobs:
         uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # v6.3.0
         with:
           cache: 'pnpm'
-          node-version: 22.x
+          node-version: 24.x
           registry-url: 'https://registry.npmjs.org'
-
-      - name: Install npm 11.x for OIDC support
-        run: npm install -g npm@^11.5.1
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
