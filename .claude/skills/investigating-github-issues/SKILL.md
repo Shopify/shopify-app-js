@@ -15,8 +15,8 @@ allowed-tools:
   - Bash(git diff *)
   - Bash(git show *)
   - Bash(git branch *)
-  - Bash(git checkout *)
-  - Bash(git push *)
+  - Bash(git checkout -b *)
+  - Bash(git push -u origin *)
   - Bash(git commit *)
   - Bash(git add *)
   - Read

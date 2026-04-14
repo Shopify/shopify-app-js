@@ -52,7 +52,7 @@ jobs:
         with:
           anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          allowed_tools: "Bash(gh issue view *),Bash(gh issue list *),Bash(gh pr list *),Bash(gh pr view *),Bash(gh pr create *),Bash(gh pr checks *),Bash(gh pr diff *),Bash(gh release list *),Bash(git log *),Bash(git tag *),Bash(git diff *),Bash(git show *),Bash(git branch *),Bash(git checkout *),Bash(git push *),Bash(git commit *),Bash(git add *),Read,Glob,Grep,Edit,Write"
+          allowed_tools: "Bash(gh issue view *),Bash(gh issue list *),Bash(gh pr list *),Bash(gh pr view *),Bash(gh pr create *),Bash(gh pr checks *),Bash(gh pr diff *),Bash(gh release list *),Bash(git log *),Bash(git tag *),Bash(git diff *),Bash(git show *),Bash(git branch *),Bash(git checkout -b *),Bash(git push -u origin *),Bash(git commit *),Bash(git add *),Read,Glob,Grep,Edit,Write"
           prompt: |
             /investigating-github-issues ${{ steps.issue.outputs.url }}
 
