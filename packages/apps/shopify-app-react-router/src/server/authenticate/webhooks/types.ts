@@ -75,11 +75,8 @@ interface Context<Topics = string | number | symbol> {
   topic: Topics;
 
   /**
-   * A unique ID for the webhook. Useful to keep track of which events your app has already processed.
-   *
-   * For events webhooks (`webhookType === 'events'`), this is set to the `eventId` value for
-   * backwards compatibility. Prefer using `eventId` directly for events webhooks — `webhookId`
-   * will be removed from events webhooks in the next major version.
+   * A unique ID for the webhook. This is the idempotency key — useful to keep track of which
+   * events your app has already processed.
    *
    * @example
    * <caption>Webhook ID.</caption>
