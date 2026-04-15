@@ -65,6 +65,9 @@ app.get(
   shopify.auth.callback(),
   shopify.redirectToShopifyOrAppRoot(),
 );
+// Shop-specific webhook subscriptions — see the Webhooks section below.
+// For most apps, app-specific subscriptions configured in shopify.app.toml are recommended instead.
+// https://shopify.dev/docs/apps/build/webhooks/subscribe#app-specific-vs-shop-specific-subscriptions
 app.post(
   shopify.config.webhooks.path,
   shopify.processWebhooks({webhookHandlers}),
@@ -124,6 +127,41 @@ const shopify = shopifyApp({
 ```
 
 Any values explicitly passed in the `api` config will take precedence over the environment variables.
+
+## Webhooks
+
+Shopify supports two ways to subscribe to webhooks: **app-specific** and **shop-specific**. For most apps, app-specific subscriptions are the recommended approach. See [App-specific vs shop-specific subscriptions](https://shopify.dev/docs/apps/build/webhooks/subscribe#app-specific-vs-shop-specific-subscriptions) for a full comparison.
+
+### Shop-specific reconciliation behavior
+
+When `shopify.auth.callback()` completes an offline OAuth session, it automatically calls `register()` to reconcile the store's shop-specific webhook subscriptions with the handlers declared in `webhookHandlers`.
+
+**`register()` will delete any shop-specific webhook subscriptions that are not present in `webhookHandlers`.** App-specific subscriptions (configured in `shopify.app.toml`) are not affected.
+
+This means **all shop-specific webhook topics your app relies on must be declared in `webhookHandlers`**:
+
+```ts
+const webhookHandlers = {
+  PRODUCTS_UPDATE: [{
+    deliveryMethod: DeliveryMethod.Http,
+    callbackUrl: '/api/webhooks',
+    callback: handleProductsUpdate,
+  }],
+  // All other shop-specific topics your app uses must be listed here.
+  // Any topic not listed will be unsubscribed from the store on next OAuth.
+};
+
+app.post(
+  shopify.config.webhooks.path,
+  shopify.processWebhooks({webhookHandlers}),
+);
+```
+
+If you are **migrating from a custom implementation or another library**, make sure to declare all of your existing webhook topics in `webhookHandlers` before your app goes through OAuth, or those subscriptions will be deleted.
+
+#### Migrating from shop-specific to app-specific
+
+If you are switching from shop-specific to app-specific subscriptions, remove existing shop-specific subscriptions for the same topics first. Having both types subscribed to the same topic will result in duplicate webhook deliveries. See [the Shopify documentation](https://shopify.dev/docs/apps/build/webhooks/subscribe#app-specific-vs-shop-specific-subscriptions) for more details.
 
 ## Next steps
 
