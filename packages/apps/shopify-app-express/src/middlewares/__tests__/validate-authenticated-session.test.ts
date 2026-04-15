@@ -225,6 +225,22 @@ describe('validateAuthenticatedSession', () => {
 
       expect((response.error as any).text).toBe('Storage error');
     });
+
+    it('redirects to auth if Shopify returns a 503 during token validation', async () => {
+      mockShopifyResponse({errors: 'Service Unavailable'}, {status: 503});
+
+      const response = await request(app)
+        .get('/test/shop?shop=my-shop.myshopify.io')
+        .set({Authorization: `Bearer ${validJWT}`})
+        .expect(403);
+
+      expect(
+        response.headers['x-shopify-api-request-failure-reauthorize'],
+      ).toBe('1');
+      expect(
+        response.headers['x-shopify-api-request-failure-reauthorize-url'],
+      ).toBe(`/api/auth?shop=my-shop.myshopify.io`);
+    });
   });
 
   describe('for non-embedded apps', () => {
