@@ -3,6 +3,7 @@ import {ShopifyRestResources} from '../rest/types';
 
 import {AuthScopes} from './auth/scopes';
 import {BillingConfig} from './billing/types';
+import {Session} from './session/session';
 import {ApiVersion, DomainTransformation, LogSeverity} from './types';
 
 /**
@@ -135,6 +136,33 @@ export interface ConfigParams<
    * @private
    */
   _logDisabledFutureFlags?: boolean;
+  /**
+   * The path to use for the OAuth session cookie in non-embedded apps.
+   *
+   * By default the cookie is written with `path: '/'`, making it domain-wide.
+   * This means that when a user authenticates multiple shops in separate tabs,
+   * each OAuth callback overwrites the previous cookie, causing all tabs to use
+   * the most-recently-authenticated shop.
+   *
+   * Set this to a string or a function returning a string to scope the cookie to
+   * a URL path prefix that is unique per shop. The browser will then maintain
+   * one cookie per shop and deliver only the matching one per request.
+   *
+   * **Requirement:** the configured path must match the actual URL structure of
+   * your app — e.g. if each shop lives under `/shops/:shop/`, use that prefix.
+   * The library cannot derive this automatically.
+   *
+   * @example
+   * // Static path (single-shop apps or apps with no shop-specific routing)
+   * cookiePath: '/'
+   *
+   * @example
+   * // Factory function (multi-shop non-embedded apps)
+   * cookiePath: (session) => `/shops/${session.shop}/`
+   *
+   * @defaultValue `'/'`
+   */
+  cookiePath?: string | ((session: Session) => string);
   /**
    * Whether the app is initialised for local testing.
    */
