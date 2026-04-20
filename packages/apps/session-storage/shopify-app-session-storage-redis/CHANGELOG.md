@@ -1,5 +1,11 @@
 # @shopify/shopify-app-session-storage-redis
 
+## 6.0.1
+
+### Patch Changes
+
+- 3a17de9: Updated `redis` dependencies
+
 ## 6.0.0
 
 ### Patch Changes

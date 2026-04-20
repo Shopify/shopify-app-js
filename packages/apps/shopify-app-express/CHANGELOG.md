@@ -1,5 +1,18 @@
 # Changelog
 
+## 7.0.1
+
+### Patch Changes
+
+- ea80610: Updated webhook documentation to steer developers toward app-specific subscriptions and clearly label shop-specific APIs.
+- Updated dependencies [9264a64]
+- Updated dependencies [e510582]
+- Updated dependencies [e4db082]
+- Updated dependencies [7ec655a]
+  - @shopify/shopify-api@13.1.0
+  - @shopify/shopify-app-session-storage@5.0.1
+  - @shopify/shopify-app-session-storage-memory@6.0.1
+
 ## 7.0.0
 
 ### Major Changes

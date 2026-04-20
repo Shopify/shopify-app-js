@@ -1,5 +1,13 @@
 # @shopify/shopify-app-session-storage-drizzle
 
+## 4.0.1
+
+### Patch Changes
+
+- 85e7f8e: Updated `pg`, ` @types/pg` dependencies
+- f362cca: Updated `mysql2` dependencies
+- 5958766: Widen `drizzle-orm` peer dependency to include `^0.45.0`, fixing `ERESOLVE` errors for users on drizzle-orm 0.45.x
+
 ## 4.0.0
 
 ### Major Changes
