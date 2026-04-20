@@ -47,7 +47,7 @@ export default class ProcessedQuery {
   }
 
   stringify(omitQuestionMark = false): string {
-    const queryString = this.processedQuery.toString();
+    const queryString = this.processedQuery.toString().replace(/\+/g, '%20');
     return omitQuestionMark ? queryString : `?${queryString}`;
   }
 }
