@@ -1,4 +1,4 @@
-name: Devtools Investigate for Gardener
+name: Gardener - Investigate Issue
 # Automatically investigates GitHub issues using Claude Code when the
 # 'devtools-investigate-for-gardener' label is applied. Can also be triggered manually
 # via workflow_dispatch for a specific issue number.
