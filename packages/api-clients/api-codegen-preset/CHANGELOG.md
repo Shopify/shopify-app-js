@@ -1,5 +1,21 @@
 # Changelog
 
+## 2.0.1
+
+### Patch Changes
+
+- e510582: Updated `@graphql-codegen/introspection`, ` @graphql-codegen/typescript`, ` isbot` dependencies
+- 57b5f18: Updated `@graphql-codegen/cli` dependencies
+- 9debf0d: Updated `graphql` dependencies
+- c8a8355: Fix custom GraphQL scalars generating as `any` in codegen output
+
+  Shopify API custom scalars (e.g. `DateTime`, `Money`, `URL`, `HTML`) now
+  correctly generate as `string` in codegen output instead of `any`. The `JSON`
+  scalar generates as `unknown`. This applies automatically to all current and
+  future Shopify API scalars without requiring manual configuration.
+
+  Fixes https://github.com/Shopify/shopify-app-js/issues/1154
+
 ## 2.0.0
 
 ### Major Changes

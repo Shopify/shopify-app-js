@@ -1,5 +1,12 @@
 # @shopify/shopify-app-session-storage-postgresql
 
+## 6.0.1
+
+### Patch Changes
+
+- 85e7f8e: Updated `pg`, ` @types/pg` dependencies
+- 346ad30: Updated `pg-connection-string` dependencies
+
 ## 6.0.0
 
 ### Major Changes
