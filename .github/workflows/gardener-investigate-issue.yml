@@ -49,7 +49,7 @@ jobs:
       - name: Post investigation start to Slack
         id: start_slack
         continue-on-error: true
-        uses: slackapi/slack-github-action@b0fa283ad8fea605de13dc3f449259339835fc52 # v2.1.0
+        uses: slackapi/slack-github-action@af78098f536edbc4de71162a307590698245be95 # v3.0.1
         with:
           method: chat.postMessage
           token: ${{ secrets.SLACK_GARDENER_BOT_TOKEN }}
@@ -218,7 +218,7 @@ jobs:
 
       - name: Post to Slack
         if: always() && steps.slack_payload.outputs.result
-        uses: slackapi/slack-github-action@b0fa283ad8fea605de13dc3f449259339835fc52 # v2.1.0
+        uses: slackapi/slack-github-action@af78098f536edbc4de71162a307590698245be95 # v3.0.1
         with:
           method: chat.postMessage
           token: ${{ secrets.SLACK_GARDENER_BOT_TOKEN }}
