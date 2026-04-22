@@ -73,6 +73,60 @@ describe('Redirect helper', () => {
     );
   });
 
+  it('does not propagate request params to protocol-relative URLs', async () => {
+    // GIVEN
+    const shopify = shopifyApp(testConfig());
+    await setUpValidSession(shopify.sessionStorage);
+
+    const {request} = await documentLoadRequest(true);
+    const {redirect} = await shopify.authenticate.admin(request);
+
+    // WHEN
+    const response = redirect('//www.example.local/collect');
+
+    // THEN
+    expect(response.status).toBe(302);
+    expect(response.headers.get('location')).toBe(
+      'https://www.example.local/collect',
+    );
+  });
+
+  it('does not propagate request params to backslash-prefixed URLs', async () => {
+    // GIVEN
+    const shopify = shopifyApp(testConfig());
+    await setUpValidSession(shopify.sessionStorage);
+
+    const {request} = await documentLoadRequest(true);
+    const {redirect} = await shopify.authenticate.admin(request);
+
+    // WHEN
+    const response = redirect('/\\www.example.local/collect');
+
+    // THEN
+    expect(response.status).toBe(302);
+    expect(response.headers.get('location')).toBe(
+      'https://www.example.local/collect',
+    );
+  });
+
+  it('propagates request params to relative paths when appUrl has a trailing slash', async () => {
+    // GIVEN
+    const shopify = shopifyApp(testConfig({appUrl: `${APP_URL}/`}));
+    await setUpValidSession(shopify.sessionStorage);
+
+    const {request, searchParams} = await documentLoadRequest(true);
+    const {redirect} = await shopify.authenticate.admin(request);
+
+    // WHEN
+    const response = redirect('/foo');
+
+    // THEN
+    expect(response.status).toBe(302);
+    expect(response.headers.get('location')).toBe(
+      `${APP_URL}/foo?${searchParams}`,
+    );
+  });
+
   it('parses shopify admin routes and defaults to _parent for embedded apps', async () => {
     // GIVEN
     const shopify = shopifyApp(testConfig());
