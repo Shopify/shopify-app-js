@@ -56,6 +56,7 @@ interface BaseWebhookHandler {
   id?: string;
   includeFields?: string[];
   metafieldNamespaces?: string[];
+  filter?: string;
   subTopic?: string;
   context?: any;
 }
@@ -141,6 +142,7 @@ export interface WebhookCheckResponseNode<
     topic: string;
     includeFields: string[];
     metafieldNamespaces: string[];
+    filter?: string;
   } & T;
 }
 
