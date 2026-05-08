@@ -182,6 +182,8 @@ describe('performTokenExchange', () => {
       expiringOfflineAccessTokens: true,
     };
 
+    const tokenExchangeSpy = jest.spyOn(shopify.api.auth, 'tokenExchange');
+
     const sessionToken = await createSessionToken();
     mockShopifyResponse(EXPIRING_OFFLINE_TOKEN_EXCHANGE_RESPONSE);
 
@@ -191,6 +193,10 @@ describe('performTokenExchange', () => {
       .expect(200);
 
     expect(response.body.session).toBe(shop);
+    expect(tokenExchangeSpy).toHaveBeenCalledTimes(1);
+    expect(tokenExchangeSpy).toHaveBeenCalledWith(
+      expect.objectContaining({expiring: true}),
+    );
   });
 
   it('refreshes near-expiry session via re-exchange when expiringOfflineAccessTokens is set', async () => {
@@ -198,6 +204,8 @@ describe('performTokenExchange', () => {
       unstable_newEmbeddedAuthStrategy: true,
       expiringOfflineAccessTokens: true,
     };
+
+    const tokenExchangeSpy = jest.spyOn(shopify.api.auth, 'tokenExchange');
 
     const sessionToken = await createSessionToken();
     const offlineId = shopify.api.session.getOfflineId(shop);
@@ -221,6 +229,10 @@ describe('performTokenExchange', () => {
       .expect(200);
 
     expect(response.body.session).toBe(shop);
+    expect(tokenExchangeSpy).toHaveBeenCalledTimes(1);
+    expect(tokenExchangeSpy).toHaveBeenCalledWith(
+      expect.objectContaining({expiring: true}),
+    );
   });
 
   it('returns 401 with retry header on InvalidJwtError', async () => {
@@ -307,6 +319,8 @@ describe('performTokenExchange', () => {
       .set('Authorization', `Bearer ${sessionToken}`)
       .expect(500);
 
-    expect((response.error as any).text).toBe('Internal Server Error');
+    expect((response.error as any).text).toMatchInlineSnapshot(
+      `"Internal Server Error"`,
+    );
   });
 });

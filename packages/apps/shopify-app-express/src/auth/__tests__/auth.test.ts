@@ -380,7 +380,7 @@ describe('auth with afterAuth hook', () => {
       expect.objectContaining({
         session: expect.objectContaining({
           shop: TEST_SHOP,
-          accessToken: 'test-access-token',
+          accessToken: session.accessToken,
         }),
       }),
     );

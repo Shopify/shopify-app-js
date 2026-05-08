@@ -8,7 +8,6 @@ import {SignJWT} from 'jose';
 import {
   createSignedCookieHeader,
   mockShopifyResponse,
-  mockShopifyResponses,
   shopify,
   SHOPIFY_HOST,
 } from '../../__tests__/test-helper';
