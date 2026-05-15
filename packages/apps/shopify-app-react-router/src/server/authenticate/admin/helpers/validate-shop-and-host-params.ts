@@ -1,6 +1,6 @@
-import {redirect} from 'react-router';
-
 import {BasicParams, AppDistribution} from '../../../types';
+
+import {renderAppBridge} from './render-app-bridge';
 
 export function validateShopAndHostParams(
   params: BasicParams,
@@ -12,24 +12,24 @@ export function validateShopAndHostParams(
     const url = new URL(request.url);
     const shop = api.utils.sanitizeShop(url.searchParams.get('shop')!);
     if (!shop) {
-      logger.debug('Missing or invalid shop, redirecting to login path', {
+      logger.debug('Missing or invalid shop, rendering App Bridge', {
         shop,
       });
-      throw redirectToLoginPath(request, params);
+      throw renderAppBridgeOrError(request, params);
     }
 
     const host = api.utils.sanitizeHost(url.searchParams.get('host')!);
     if (!host) {
-      logger.debug('Invalid host, redirecting to login path', {
+      logger.debug('Invalid host, rendering App Bridge', {
         shop,
         host: url.searchParams.get('host'),
       });
-      throw redirectToLoginPath(request, params);
+      throw renderAppBridgeOrError(request, params);
     }
   }
 }
 
-function redirectToLoginPath(request: Request, params: BasicParams): never {
+function renderAppBridgeOrError(request: Request, params: BasicParams): never {
   const {config, logger} = params;
 
   const {pathname} = new URL(request.url);
@@ -42,5 +42,8 @@ function redirectToLoginPath(request: Request, params: BasicParams): never {
     throw new Response(message, {status: 500});
   }
 
-  throw redirect(config.auth.loginPath);
+  logger.debug(
+    'Missing shop or host params, rendering App Bridge to retrieve session',
+  );
+  throw renderAppBridge(params, request);
 }

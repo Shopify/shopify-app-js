@@ -1,4 +1,5 @@
 import {shopifyApp} from '../../..';
+import {APP_BRIDGE_URL} from '../../const';
 import {
   API_KEY,
   APP_URL,
@@ -8,7 +9,6 @@ import {
   getThrownResponse,
   setUpValidSession,
   testConfig,
-  expectLoginRedirect,
 } from '../../../__test-helpers';
 
 describe('authorize.admin doc request path', () => {
@@ -18,22 +18,32 @@ describe('authorize.admin doc request path', () => {
       {shop: TEST_SHOP, host: 'invalid-domain.test'},
       {shop: undefined, host: BASE64_HOST},
       {shop: 'invalid', host: BASE64_HOST},
-    ])('throws when %s', async ({shop, host}) => {
-      // GIVEN
-      const shopify = shopifyApp(testConfig());
-      const searchParams = new URLSearchParams();
-      if (shop) searchParams.set('shop', shop);
-      if (host) searchParams.set('host', host);
+    ])(
+      'renders App Bridge when embedded app has missing or invalid params: %s',
+      async ({shop, host}) => {
+        // GIVEN
+        const config = testConfig();
+        const shopify = shopifyApp(config);
+        const searchParams = new URLSearchParams();
+        if (shop) searchParams.set('shop', shop);
+        if (host) searchParams.set('host', host);
 
-      // WHEN
-      const response = await getThrownResponse(
-        shopify.authenticate.admin,
-        new Request(`${APP_URL}?${searchParams.toString()}`),
-      );
+        // WHEN
+        const response = await getThrownResponse(
+          shopify.authenticate.admin,
+          new Request(`${APP_URL}?${searchParams.toString()}`),
+        );
 
-      // THEN
-      expectLoginRedirect(response);
-    });
+        // THEN
+        expect(response.status).toBe(200);
+        expect(response.headers.get('content-type')).toBe(
+          'text/html;charset=utf-8',
+        );
+        expect((await response.text()).trim()).toBe(
+          `<script data-api-key="${config.apiKey}" src="${APP_BRIDGE_URL}"></script>`,
+        );
+      },
+    );
 
     it('throws an error if the request URL is the login path', async () => {
       // GIVEN
