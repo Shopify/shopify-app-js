@@ -352,6 +352,24 @@ describe('validateHmacFromRequest with apiSecretKeyFallback (secret rotation)', 
 
     expect(result.valid).toBe(false);
   });
+
+  test('accepts a Flow request signed with the fallback secret when configured', async () => {
+    const shopify = shopifyApi(
+      testConfig({
+        apiSecretKey: primarySecret,
+        apiSecretKeyFallback: oldSecret,
+      }),
+    );
+
+    // Flow and fulfillment-service share validateHmacString with webhooks, so
+    // the fallback must cover them too. Signed with the OLD secret.
+    const result = await validateHmacFromRequestFactory(shopify.config)({
+      ...buildWebhookRequest(oldSecret),
+      type: HmacValidationType.Flow as const,
+    });
+
+    expect(result.valid).toBe(true);
+  });
 });
 
 function createHmacSignature(queryString: string, apiSecretKey: string) {
