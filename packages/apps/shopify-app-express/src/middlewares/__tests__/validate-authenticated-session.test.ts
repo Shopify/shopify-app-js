@@ -313,4 +313,52 @@ describe('validateAuthenticatedSession', () => {
       ).toBe(`${shopify.config.auth.path}?shop=my-shop.myshopify.io`);
     });
   });
+
+  describe('for CORS preflight OPTIONS requests', () => {
+    beforeEach(() => {
+      shopify.api.config.isEmbeddedApp = true;
+
+      app = express();
+      app.use('/test', shopify.validateAuthenticatedSession());
+      app.get('/test/shop', async (req, res) => {
+        res.json({data: {shop: {name: req.query.shop}}});
+      });
+    });
+
+    it('responds with CORS headers and does not try to authenticate', async () => {
+      const getCurrentIdSpy = jest.spyOn(shopify.api.session, 'getCurrentId');
+
+      const response = await request(app)
+        .options('/test/shop?shop=my-shop.myshopify.io')
+        .set('Origin', 'https://extensions.shopifycdn.com')
+        .expect(204);
+
+      expect(response.headers['access-control-allow-origin']).toBe('*');
+      expect(response.headers['access-control-allow-headers']).toBe(
+        'Authorization, Content-Type',
+      );
+      expect(response.headers['access-control-max-age']).toBe('7200');
+
+      // The preflight must not be authenticated nor redirected to auth.
+      expect(getCurrentIdSpy).not.toHaveBeenCalled();
+      expect(response.headers.location).toBeUndefined();
+      expect(
+        response.headers['x-shopify-api-request-failure-reauthorize'],
+      ).toBeUndefined();
+    });
+
+    it('exposes the reauthorization headers for the follow-up request', async () => {
+      const response = await request(app)
+        .options('/test/shop?shop=my-shop.myshopify.io')
+        .set('Origin', 'https://extensions.shopifycdn.com')
+        .expect(204);
+
+      expect(response.headers['access-control-expose-headers']).toContain(
+        'X-Shopify-Api-Request-Failure-Reauthorize',
+      );
+      expect(response.headers['access-control-expose-headers']).toContain(
+        'X-Shopify-Api-Request-Failure-Reauthorize-Url',
+      );
+    });
+  });
 });

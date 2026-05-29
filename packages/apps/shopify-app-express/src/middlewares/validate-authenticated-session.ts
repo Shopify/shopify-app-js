@@ -7,6 +7,7 @@ import {redirectOutOfApp} from '../redirect-out-of-app';
 
 import {ValidateAuthenticatedSessionMiddleware} from './types';
 import {hasValidAccessToken} from './has-valid-access-token';
+import {respondToOptionsRequest} from './respond-to-options-request';
 
 type validateAuthenticatedSessionParams = ApiAndConfigParams;
 
@@ -17,6 +18,12 @@ export function validateAuthenticatedSession({
   return function validateAuthenticatedSession() {
     return async (req: Request, res: Response, next: NextFunction) => {
       config.logger.debug('Running validateAuthenticatedSession');
+
+      // CORS preflight OPTIONS requests don't carry a session token, so we just
+      // set the CORS headers and respond instead of trying to authenticate them.
+      if (respondToOptionsRequest(config, req, res)) {
+        return undefined;
+      }
 
       let sessionId: string | undefined;
       try {
