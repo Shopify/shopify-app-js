@@ -360,5 +360,32 @@ describe('validateAuthenticatedSession', () => {
         'X-Shopify-Api-Request-Failure-Reauthorize-Url',
       );
     });
+
+    it('still responds 204 with CORS headers when no Origin header is sent', async () => {
+      // Admin extension preflights do not always carry an Origin header; the
+      // handler is unconditional, so it must not depend on Origin being present.
+      const getCurrentIdSpy = jest.spyOn(shopify.api.session, 'getCurrentId');
+
+      const response = await request(app)
+        .options('/test/shop?shop=my-shop.myshopify.io')
+        .expect(204);
+
+      expect(response.headers['access-control-allow-origin']).toBe('*');
+      expect(getCurrentIdSpy).not.toHaveBeenCalled();
+      expect(response.headers.location).toBeUndefined();
+    });
+
+    it('does not short-circuit non-OPTIONS requests', async () => {
+      // The early return must be scoped to OPTIONS only: a GET still runs the
+      // full authentication flow (here, an unauthenticated GET is redirected).
+      const getCurrentIdSpy = jest.spyOn(shopify.api.session, 'getCurrentId');
+
+      const response = await request(app).get(
+        '/test/shop?shop=my-shop.myshopify.io',
+      );
+
+      expect(response.status).not.toBe(204);
+      expect(getCurrentIdSpy).toHaveBeenCalled();
+    });
   });
 });
