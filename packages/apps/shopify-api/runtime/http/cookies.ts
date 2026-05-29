@@ -153,6 +153,9 @@ export class Cookies {
 
   set(name: string, value: string, opts: Partial<CookieData> = {}): void {
     this.outgoingCookieJar[name] = {
+      // Default to httpOnly: true, matching the CookieData.httpOnly JSDoc.
+      // Callers can still opt out by explicitly passing httpOnly: false.
+      httpOnly: true,
       ...opts,
       name,
       value,

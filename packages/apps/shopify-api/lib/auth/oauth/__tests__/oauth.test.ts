@@ -65,6 +65,13 @@ describe('beginAuth', () => {
       expect(cookies.outgoingCookieJar.shopify_app_state.value).toEqual(
         VALID_NONCE,
       );
+      // The state cookie (and its signature) must be HttpOnly so it is not
+      // exposed to client-side JavaScript. See issue #3207. The value is a
+      // string here because it is parsed back out of the Set-Cookie header.
+      expect(cookies.outgoingCookieJar.shopify_app_state.httpOnly).toBe('true');
+      expect(cookies.outgoingCookieJar['shopify_app_state.sig'].httpOnly).toBe(
+        'true',
+      );
     });
   });
 
@@ -323,6 +330,8 @@ describe('callback', () => {
       callbackResponse.headers['Set-Cookie'],
     );
     expect(responseCookies.shopify_app_session.value).toEqual(expectedId);
+    // The non-embedded session cookie must also be HttpOnly. See issue #3207.
+    expect(responseCookies.shopify_app_session.httpOnly).toBe('true');
     expect(callbackResponse.session.accessToken).toBe(
       successResponse.access_token,
     );
