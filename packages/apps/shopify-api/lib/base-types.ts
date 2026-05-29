@@ -27,6 +27,25 @@ export interface ConfigParams<
    */
   apiSecretKey: string;
   /**
+   * An additional, secondary API secret key used only to validate **inbound**
+   * HMAC signatures (webhooks, Flow, and fulfillment-service requests).
+   *
+   * This exists to avoid dropping inbound requests during a client-secret
+   * rotation. Shopify signs outbound requests with the oldest non-revoked
+   * secret, so after you rotate `apiSecretKey` to the new secret there can be a
+   * window (observed up to ~30 minutes after revoking the old secret) where
+   * requests are still signed with the previous secret. Setting the previous
+   * secret here lets those requests continue to validate.
+   *
+   * When a request validates against this fallback (and not `apiSecretKey`), a
+   * `Warning`-level log is emitted so you can observe when Shopify has stopped
+   * using the old secret and it is safe to unset this value.
+   *
+   * Outbound signing (`generateLocalHmac`) always uses `apiSecretKey` and is
+   * unaffected by this option.
+   */
+  apiSecretKeyFallback?: string;
+  /**
    * The scopes your app needs to access the API. Not required if using Shopify managed installation.
    */
   scopes?: string[] | AuthScopes;

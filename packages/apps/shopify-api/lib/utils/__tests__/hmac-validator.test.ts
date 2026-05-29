@@ -3,7 +3,14 @@ import crypto from 'crypto';
 import {testConfig} from '../../__tests__/test-config';
 import {AuthQuery} from '../../auth/oauth/types';
 import * as ShopifyErrors from '../../error';
-import {HMACSignator, getCurrentTimeInSec} from '../hmac-validator';
+import {
+  HMACSignator,
+  getCurrentTimeInSec,
+  validateHmacFromRequestFactory,
+} from '../hmac-validator';
+import {HmacValidationType} from '../types';
+import {ShopifyHeader, LogSeverity} from '../../types';
+import {type NormalizedRequest} from '../../../runtime';
 import {shopifyApi} from '../..';
 
 describe('validateHmac', () => {
@@ -235,9 +242,128 @@ describe('validateHmac', () => {
   });
 });
 
+describe('validateHmacFromRequest with apiSecretKeyFallback (secret rotation)', () => {
+  const primarySecret = 'new_secret_after_rotation';
+  const oldSecret = 'old_secret_before_rotation';
+  const rawBody = JSON.stringify({id: 12345, topic: 'orders/create'});
+
+  function buildWebhookRequest(signingSecret: string) {
+    const rawRequest: NormalizedRequest = {
+      method: 'POST',
+      url: 'https://my-app.example.com/webhooks',
+      headers: {
+        [ShopifyHeader.Hmac]: createBase64HmacSignature(rawBody, signingSecret),
+        [ShopifyHeader.Topic]: 'orders/create',
+        [ShopifyHeader.Domain]: 'test-shop.myshopify.com',
+      },
+    };
+
+    return {
+      type: HmacValidationType.Webhook as const,
+      rawBody,
+      rawRequest,
+    };
+  }
+
+  test('accepts a request signed with the primary secret', async () => {
+    const shopify = shopifyApi(testConfig({apiSecretKey: primarySecret}));
+
+    const result = await validateHmacFromRequestFactory(shopify.config)(
+      buildWebhookRequest(primarySecret),
+    );
+
+    expect(result.valid).toBe(true);
+  });
+
+  test('accepts a request signed with the fallback secret when configured', async () => {
+    const shopify = shopifyApi(
+      testConfig({
+        apiSecretKey: primarySecret,
+        apiSecretKeyFallback: oldSecret,
+      }),
+    );
+
+    // Signed with the OLD secret — would be rejected without the fallback.
+    const result = await validateHmacFromRequestFactory(shopify.config)(
+      buildWebhookRequest(oldSecret),
+    );
+
+    expect(result.valid).toBe(true);
+  });
+
+  test('emits a Warning log when validation succeeds via the fallback secret', async () => {
+    const shopify = shopifyApi(
+      testConfig({
+        apiSecretKey: primarySecret,
+        apiSecretKeyFallback: oldSecret,
+      }),
+    );
+
+    await validateHmacFromRequestFactory(shopify.config)(
+      buildWebhookRequest(oldSecret),
+    );
+
+    expect(shopify.config.logger.log).toHaveBeenCalledWith(
+      LogSeverity.Warning,
+      expect.stringContaining('apiSecretKeyFallback'),
+    );
+  });
+
+  test('does not emit the fallback Warning when the primary secret matches', async () => {
+    const shopify = shopifyApi(
+      testConfig({
+        apiSecretKey: primarySecret,
+        apiSecretKeyFallback: oldSecret,
+      }),
+    );
+
+    const result = await validateHmacFromRequestFactory(shopify.config)(
+      buildWebhookRequest(primarySecret),
+    );
+
+    expect(result.valid).toBe(true);
+    expect(shopify.config.logger.log).not.toHaveBeenCalledWith(
+      LogSeverity.Warning,
+      expect.stringContaining('apiSecretKeyFallback'),
+    );
+  });
+
+  test('rejects a request signed with neither the primary nor the fallback secret', async () => {
+    const shopify = shopifyApi(
+      testConfig({
+        apiSecretKey: primarySecret,
+        apiSecretKeyFallback: oldSecret,
+      }),
+    );
+
+    const result = await validateHmacFromRequestFactory(shopify.config)(
+      buildWebhookRequest('some_unrelated_secret'),
+    );
+
+    expect(result.valid).toBe(false);
+  });
+
+  test('rejects the fallback-signed request when no fallback is configured', async () => {
+    const shopify = shopifyApi(testConfig({apiSecretKey: primarySecret}));
+
+    const result = await validateHmacFromRequestFactory(shopify.config)(
+      buildWebhookRequest(oldSecret),
+    );
+
+    expect(result.valid).toBe(false);
+  });
+});
+
 function createHmacSignature(queryString: string, apiSecretKey: string) {
   return crypto
     .createHmac('sha256', apiSecretKey)
     .update(queryString)
     .digest('hex');
+}
+
+function createBase64HmacSignature(data: string, apiSecretKey: string) {
+  return crypto
+    .createHmac('sha256', apiSecretKey)
+    .update(data, 'utf8')
+    .digest('base64');
 }

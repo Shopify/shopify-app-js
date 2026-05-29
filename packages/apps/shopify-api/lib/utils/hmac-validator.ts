@@ -105,10 +105,35 @@ export async function validateHmacString(
   data: string,
   hmac: string,
   format: HashFormat,
-) {
+): Promise<boolean> {
   const localHmac = await createSHA256HMAC(config.apiSecretKey, data, format);
 
-  return safeCompare(hmac, localHmac);
+  if (safeCompare(hmac, localHmac)) {
+    return true;
+  }
+
+  // During a client-secret rotation Shopify can keep signing inbound requests
+  // with the previous secret for a short window. If a fallback secret is
+  // configured, accept requests signed with it too, and surface a warning so
+  // operators know the old secret is still in use.
+  if (config.apiSecretKeyFallback) {
+    const fallbackHmac = await createSHA256HMAC(
+      config.apiSecretKeyFallback,
+      data,
+      format,
+    );
+
+    if (safeCompare(hmac, fallbackHmac)) {
+      await logger(config).warning(
+        'Inbound HMAC validated using apiSecretKeyFallback. Shopify is still ' +
+          'signing requests with the previous secret; keep the fallback set ' +
+          'until these warnings stop, then unset it.',
+      );
+      return true;
+    }
+  }
+
+  return false;
 }
 
 export function getCurrentTimeInSec() {
