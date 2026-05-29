@@ -332,7 +332,28 @@ pnpm graphql-codegen --project=UIExtensions
 > [!NOTE]
 > Codegen will fail if it can't find any documents to parse.
 > To fix that, either create a query or set the [`ignoreNoDocuments` option](https://the-guild.dev/graphql/codegen/docs/config-reference/codegen-config#configuration-options) to `true`.
-> Queries and mutations must have a name for the parsing to work.
+
+> [!IMPORTANT]
+> Your queries and mutations **must be named** for types to be generated.
+> Anonymous operations (e.g. `query { ... }` with no operation name) are
+> counted as documents, so they won't trigger the "no documents" error above,
+> but they are silently skipped during generation. A project containing only
+> anonymous operations therefore produces an empty `*.generated.d.ts` file with
+> no warning. Give every operation a name to have its types generated:
+>
+> ```ts
+> // Not generated — anonymous operation:
+> `#graphql
+> query {
+>   products(first: 5) { edges { node { id } } }
+> }`;
+>
+> // Generated — named operation:
+> `#graphql
+> query getProducts {
+>   products(first: 5) { edges { node { id } } }
+> }`;
+> ```
 
 Once the script parses your operations, you can mark any operations for parsing by adding the `#graphql` tag to the string.
 For example:
