@@ -747,3 +747,36 @@ function setCallbackCookieFromResponse(
     `shopify_app_state.sig=${responseCookies.outgoingCookieJar['shopify_app_state.sig'].value}`,
   ].join(';');
 }
+
+describe('Cookies.set httpOnly default (issue #3207)', () => {
+  // These assert the in-memory CookieData directly (a real boolean), which is a
+  // stronger check than the header-parsed string assertions above, and pin the
+  // opt-out path the fix promises in its changeset and PR body.
+  const response = {} as NormalizedResponse;
+
+  it('defaults httpOnly to true when the caller does not pass it', () => {
+    const cookies = new Cookies({} as NormalizedRequest, response, {keys: []});
+
+    cookies.set('test_cookie', 'value');
+
+    expect(cookies.outgoingCookieJar.test_cookie.httpOnly).toBe(true);
+  });
+
+  it('lets a caller opt out with httpOnly: false', () => {
+    const cookies = new Cookies({} as NormalizedRequest, response, {keys: []});
+
+    cookies.set('test_cookie', 'value', {httpOnly: false});
+
+    expect(cookies.outgoingCookieJar.test_cookie.httpOnly).toBe(false);
+  });
+
+  it('does not clobber other caller options when applying the default', () => {
+    const cookies = new Cookies({} as NormalizedRequest, response, {keys: []});
+
+    cookies.set('test_cookie', 'value', {sameSite: 'lax', secure: true});
+
+    expect(cookies.outgoingCookieJar.test_cookie.httpOnly).toBe(true);
+    expect(cookies.outgoingCookieJar.test_cookie.sameSite).toBe('lax');
+    expect(cookies.outgoingCookieJar.test_cookie.secure).toBe(true);
+  });
+});
