@@ -89,7 +89,7 @@
     "@shopify/graphql-client": "^1.4.2"
   },
   "devDependencies": {
-    "@babel/preset-env": "^7.29.2",
+    "@babel/preset-env": "^7.29.7",
     "@shopify/babel-preset": "^25.0.2",
     "jest-environment-jsdom": "^30.2.0",
     "rollup-plugin-dts": "^6.4.1"
