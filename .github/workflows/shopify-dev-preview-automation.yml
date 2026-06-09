@@ -9,10 +9,8 @@ on:
   pull_request:
     types: [opened, synchronize, reopened, ready_for_review, closed]
     paths:
-      - 'packages/apps/shopify-app-remix/docs/generated/generated_docs_data.json'
-      - 'packages/apps/shopify-app-remix/docs/generated/generated_static_pages.json'
-      - 'packages/apps/shopify-app-react-router/docs/generated/generated_docs_data.json'
-      - 'packages/apps/shopify-app-react-router/docs/generated/generated_static_pages.json'
+      - 'packages/apps/shopify-app-remix/docs/generated/generated_docs_data_v2.json'
+      - 'packages/apps/shopify-app-react-router/docs/generated/generated_docs_data_v2.json'
 
 concurrency:
   group: shopify-dev-docs-preview-${{ github.head_ref }}
@@ -21,20 +19,20 @@ concurrency:
 jobs:
   dispatch-docs-sync:
     name: Dispatch docs sync to shopify-dev in the monorepo
-    runs-on: ubuntu-latest
+    runs-on: shopify-docs-ubuntu-latest
     timeout-minutes: 10
     if: github.repository_owner == 'Shopify'
     steps:
       - name: Checkout repository
         if: github.event.action != 'closed'
-        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
         with:
           fetch-depth: 0
 
       # Generate GitHub App token
       - name: Create GitHub App Token
         id: app-token
-        uses: actions/create-github-app-token@af35edadc00be37caa72ed9f3e6d5f7801bfdf09 # v1.11.7
+        uses: actions/create-github-app-token@1b10c78c7865c340bc4f6099eb2f838309f1e8c3 # v3.1.1
         with:
           app-id: ${{ secrets.SHOPIFY_DEV_DOCS_SYNC_APP_ID }}
           private-key: ${{ secrets.SHOPIFY_DEV_DOCS_SYNC_APP_PRIVATE_KEY }}
@@ -51,10 +49,8 @@ jobs:
         run: |
           # Define the files we're monitoring
           MONITORED_FILES=(
-            "packages/apps/shopify-app-remix/docs/generated/generated_docs_data.json"
-            "packages/apps/shopify-app-remix/docs/generated/generated_static_pages.json"
-            "packages/apps/shopify-app-react-router/docs/generated/generated_docs_data.json"
-            "packages/apps/shopify-app-react-router/docs/generated/generated_static_pages.json"
+            "packages/apps/shopify-app-remix/docs/generated/generated_docs_data_v2.json"
+            "packages/apps/shopify-app-react-router/docs/generated/generated_docs_data_v2.json"
           )
 
           # Get the list of changed files in this PR using explicit SHAs

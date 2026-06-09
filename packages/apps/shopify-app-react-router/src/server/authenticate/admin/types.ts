@@ -149,6 +149,10 @@ export interface EmbeddedAdminContext<
    *
    * Returned only for embedded apps (all apps except merchant custom apps).
    *
+   * Request parameters (including `id_token`, `shop`, `host`, and `embedded`) are only copied to the destination when
+   * it resolves to the same origin as `appUrl`. This helper does not validate the destination URL — avoid passing
+   * unvalidated user input (for example, a raw `?next=` query parameter) and use an allow-list of paths instead.
+   *
    * @example
    * <caption>Redirecting to an app route.</caption>
    * <description>Use the `redirect` helper to safely redirect between pages.</description>
@@ -212,6 +216,12 @@ export interface ScopesContext {
 export type AdminContext<Config extends AppConfigArg> =
   EmbeddedTypedAdminContext<Config> & ScopesContext;
 
+/**
+ * Authenticates requests coming from the Shopify admin.
+ *
+ * > Note: The shape of the returned object changes depending on the `distribution` config. Merchant custom apps (`AppDistribution.ShopifyAdmin`) are not embedded so do not return session tokens or redirect functionality. All other distributions are embedded and so they return a context with session tokens and redirect functionality.
+ * @publicDocs
+ */
 export type AuthenticateAdmin<Config extends AppConfigArg> = (
   request: Request,
 ) => Promise<AdminContext<Config>>;

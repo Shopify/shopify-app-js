@@ -39,6 +39,8 @@ pnpm install @shopify/shopify-app-express
 
 ### 3. Update the `gdpr.js` file
 
+> **Tip**: If your webhook subscriptions are the same for every shop, consider using [app-specific subscriptions](https://shopify.dev/docs/apps/build/webhooks/subscribe#app-specific-subscriptions) configured in `shopify.app.toml` instead of the shop-specific approach shown below. App-specific subscriptions are managed by Shopify and don't require API calls. See the [Webhooks section in the README](../../README.md#webhooks) for more details. Migration is a good time to make this switch.
+
 This file needs to be updated to export a structure of webhook handlers that can then be passed to the Shopify Express app object. The comments have been removed from the code below for brevity.
 
 ```diff
@@ -301,6 +303,8 @@ app.get(
   shopify.auth.callback(),
   shopify.redirectToShopifyOrAppRoot(),
 );
+// Shop-specific webhook subscriptions — consider using app-specific subscriptions instead.
+// https://shopify.dev/docs/apps/build/webhooks/subscribe#app-specific-vs-shop-specific-subscriptions
 app.post(
   shopify.config.webhooks.path,
   shopify.processWebhooks({webhookHandlers: GDPRWebhookHandlers}),

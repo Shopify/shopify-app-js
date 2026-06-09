@@ -140,6 +140,8 @@ describe('shopifyApiProject', () => {
             schema: expect.anything(),
             plugins: ['typescript'],
             config: {
+              defaultScalarType: 'string',
+              scalars: {JSON: 'unknown'},
               enumsAsConst: true,
             },
           }),
@@ -165,13 +167,15 @@ describe('shopifyApiProject', () => {
             schema: expect.anything(),
             plugins: ['typescript'],
             config: {
+              defaultScalarType: 'string',
+              scalars: {JSON: 'unknown'},
               enumsAsConst: false,
             },
           }),
         );
       });
 
-      it('does not include config when enumsAsConst is not provided', () => {
+      it('uses default scalar config when enumsAsConst is not provided', () => {
         // GIVEN
         const config: ShopifyApiProjectOptions = {
           apiType,
@@ -184,13 +188,16 @@ describe('shopifyApiProject', () => {
         // THEN
         expect(
           projectConfig.extensions.codegen.generates[`./${type}.types.d.ts`],
-        ).toEqual({
-          schema: expect.anything(),
-          plugins: ['typescript'],
-        });
+        ).toEqual(
+          expect.objectContaining({
+            schema: expect.anything(),
+            plugins: ['typescript'],
+            config: {defaultScalarType: 'string', scalars: {JSON: 'unknown'}},
+          }),
+        );
         expect(
           projectConfig.extensions.codegen.generates[`./${type}.types.d.ts`],
-        ).not.toHaveProperty('config');
+        ).not.toHaveProperty('config.enumsAsConst');
       });
     },
   );

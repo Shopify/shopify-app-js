@@ -117,6 +117,7 @@ describe('shopify.webhooks.validate', () => {
             hmac: hmac(shopify.config.apiSecretKey, rawBody),
             webhookType: 'events',
             topic: 'Product',
+            eventId: 'event-abc',
             action: 'create',
             handle: 'my-webhook',
             resourceId: 'gid://shopify/Product/123',
@@ -130,6 +131,7 @@ describe('shopify.webhooks.validate', () => {
         webhookType: 'events',
         topic: 'PRODUCT',
         domain: 'shop1.myshopify.io',
+        webhookId: '123456789',
         action: 'create',
         handle: 'my-webhook',
         resourceId: 'gid://shopify/Product/123',
@@ -174,6 +176,7 @@ describe('shopify.webhooks.validate', () => {
 
       expect(response.body.data).toMatchObject({
         valid: true,
+        webhookId: '123456789',
         handle: 'test-handle',
         action: 'update',
         resourceId: 'gid://shopify/Product/456',
@@ -209,7 +212,8 @@ describe('shopify.webhooks.validate', () => {
     {headers: {apiVersion: ''}, missingHeader: 'shopify-api-version'},
     {headers: {domain: ''}, missingHeader: 'shopify-shop-domain'},
     {headers: {topic: ''}, missingHeader: 'shopify-topic'},
-    {headers: {eventId: '', webhookId: ''}, missingHeader: 'shopify-event-id'},
+    {headers: {webhookId: ''}, missingHeader: 'shopify-webhook-id'},
+    {headers: {eventId: ''}, missingHeader: 'shopify-event-id'},
   ])(
     `returns false on missing events header $missingHeader`,
     async (config) => {
@@ -298,6 +302,7 @@ describe('shopify.webhooks.validate', () => {
             hmac: hmac(shopify.config.apiSecretKey, rawBody),
             webhookType: 'events',
             topic: 'Product',
+            eventId: 'event-abc',
             handle: 'my_first_subscription',
             action: 'update',
             resourceId: 'gid://shopify/Product/123',
