@@ -25,7 +25,7 @@ import type {
   AdminContext,
   AuthenticateAdmin,
   EmbeddedAdminContext,
-  NonEmbeddedAdminContext,
+  MerchantCustomAdminContext,
 } from './types';
 import {
   createAdminApiContext,
@@ -82,7 +82,7 @@ export function authStrategyFactory<ConfigArg extends AppConfigArg>({
 
   type AdminContextBase =
     | EmbeddedAdminContext<ConfigArg>
-    | NonEmbeddedAdminContext<ConfigArg>;
+    | MerchantCustomAdminContext<ConfigArg>;
 
   function createContext(
     request: Request,

@@ -193,13 +193,13 @@ export interface EmbeddedAdminContext<
    */
   redirect: RedirectFunction;
 }
-export interface NonEmbeddedAdminContext<
+export interface MerchantCustomAdminContext<
   Config extends AppConfigArg,
 > extends AdminContextInternal<Config> {}
 
 type EmbeddedTypedAdminContext<Config extends AppConfigArg> =
   Config['distribution'] extends AppDistribution.ShopifyAdmin
-    ? NonEmbeddedAdminContext<Config>
+    ? MerchantCustomAdminContext<Config>
     : EmbeddedAdminContext<Config>;
 
 export interface ScopesContext {
@@ -215,7 +215,7 @@ export type AdminContext<Config extends AppConfigArg> =
 /**
  * Authenticates requests coming from the Shopify admin.
  *
- * > Note: The shape of the returned object changes depending on the `distribution` config. Merchant custom apps (`AppDistribution.ShopifyAdmin`) are not embedded so do not return session tokens or redirect functionality. All other distributions are embedded and so they return a context with session tokens and redirect functionality.
+ * > Note: The shape of the returned object changes depending on the `distribution` config. Merchant custom apps (`AppDistribution.ShopifyAdmin`) do not return session tokens or redirect functionality. All other distributions return a context with session tokens and redirect functionality.
  * @publicDocs
  */
 export type AuthenticateAdmin<Config extends AppConfigArg> = (
