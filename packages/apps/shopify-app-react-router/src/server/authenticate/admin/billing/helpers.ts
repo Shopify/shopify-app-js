@@ -32,7 +32,7 @@ export function redirectOutOfApp(
 
     throw redirect(`${config.auth.exitIframePath}?${params.toString()}`);
   } else {
-    // This will only ever happen for non-embedded apps, because the authenticator will stop before reaching this point
+    // This path is only reachable when App Bridge redirects are not required.
     throw redirect(url);
   }
 }

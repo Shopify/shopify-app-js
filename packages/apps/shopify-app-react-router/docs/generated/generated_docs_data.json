@@ -1,7 +1,7 @@
 [
   {
     "name": "AppProvider",
-    "description": "Sets up your app to look like the admin\n\nAdds Polaris Web components to the route. If embedded is true and apiKey is provided, then the App Bridge script will be added to the page.\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n",
+    "description": "Sets up your app to look like the admin\n\nAdds Polaris Web components and App Bridge to the route.\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n",
     "category": "Entrypoints",
     "type": "component",
     "isVisualComponent": false,
@@ -13,63 +13,26 @@
         "typeDefinitions": {
           "AppProviderProps": {
             "filePath": "src/react/components/AppProvider/AppProvider.tsx",
-            "syntaxKind": "TypeAliasDeclaration",
             "name": "AppProviderProps",
-            "value": "NonEmbeddedProps | EmbeddedProps",
             "description": "Props for the `AppProvider` component.",
-            "isPublicDocs": true
-          },
-          "NonEmbeddedProps": {
-            "filePath": "src/react/components/AppProvider/AppProvider.tsx",
-            "name": "NonEmbeddedProps",
-            "description": "",
-            "members": [
-              {
-                "filePath": "src/react/components/AppProvider/AppProvider.tsx",
-                "syntaxKind": "PropertySignature",
-                "name": "children",
-                "value": "React.ReactNode",
-                "description": ""
-              },
-              {
-                "filePath": "src/react/components/AppProvider/AppProvider.tsx",
-                "syntaxKind": "PropertySignature",
-                "name": "embedded",
-                "value": "false",
-                "description": "If this route should be rendered inside the Shopify admin.\n\nSetting this to false means only Polaris Web components will be added to the route, not App Bridge.\n\nSetting this to true will include the App Bridge script on the page.\n\n\n\n\n",
-                "isOptional": true
-              }
-            ],
-            "value": "interface NonEmbeddedProps extends BaseProps {\n  /**\n   * If this route should be rendered inside the Shopify admin.\n   *\n   * Setting this to false means only Polaris Web components will be added to the route, not App Bridge.\n   *\n   * Setting this to true will include the App Bridge script on the page.\n   *\n   * {@link https://shopify.dev/docs/apps/admin/embedded-app-home}\n   */\n  embedded?: false;\n}"
-          },
-          "EmbeddedProps": {
-            "filePath": "src/react/components/AppProvider/AppProvider.tsx",
-            "name": "EmbeddedProps",
-            "description": "",
+            "isPublicDocs": true,
             "members": [
               {
                 "filePath": "src/react/components/AppProvider/AppProvider.tsx",
                 "syntaxKind": "PropertySignature",
                 "name": "apiKey",
                 "value": "string",
-                "description": "The API key for your Shopify app. This is the `Client ID` from the Partner Dashboard.\n\nWhen using the Shopify CLI, this is the `SHOPIFY_API_KEY` environment variable. If you're using the environment variable, then you need to pass it from the loader to the component."
+                "description": "The API key for your Shopify app. This is the `Client ID` from the Partner Dashboard.\n\nThe App Bridge script will be included on the page using this API key. When using the Shopify CLI, this is the `SHOPIFY_API_KEY` environment variable. If you're using the environment variable, then you need to pass it from the loader to the component."
               },
               {
                 "filePath": "src/react/components/AppProvider/AppProvider.tsx",
                 "syntaxKind": "PropertySignature",
                 "name": "children",
                 "value": "React.ReactNode",
-                "description": ""
-              },
-              {
-                "filePath": "src/react/components/AppProvider/AppProvider.tsx",
-                "syntaxKind": "PropertySignature",
-                "name": "embedded",
-                "value": "true",
-                "description": "If this route should be rendered inside the Shopify admin.\n\nSetting this to true will include the App Bridge script on the page. If true and the route is loaded outside the Shopify admin, then the user will be redirected to the Shopify admin.\n\nSetting this to false will not include the App Bridge script on the page.\n\n\n\n\n"
+                "description": "The children to render."
               }
             ],
-            "value": "interface EmbeddedProps extends BaseProps {\n  /**\n   * If this route should be rendered inside the Shopify admin.\n   *\n   * Setting this to true will include the App Bridge script on the page.\n   * If true and the route is loaded outside the Shopify admin, then the user will be redirected to the Shopify admin.\n   *\n   * Setting this to false will not include the App Bridge script on the page.\n   *\n   * {@link https://shopify.dev/docs/apps/admin/embedded-app-home}\n   */\n  embedded: true;\n  /**\n   * The API key for your Shopify app. This is the `Client ID` from the Partner Dashboard.\n   *\n   * When using the Shopify CLI, this is the `SHOPIFY_API_KEY` environment variable. If you're using the environment\n   * variable, then you need to pass it from the loader to the component.\n   */\n  apiKey: string;\n}"
+            "value": "export interface AppProviderProps {\n  /**\n   * The children to render.\n   */\n  children: React.ReactNode;\n\n  /**\n   * The API key for your Shopify app. This is the `Client ID` from the Partner Dashboard.\n   *\n   * The App Bridge script will be included on the page using this API key. When using the Shopify CLI, this is the\n   * `SHOPIFY_API_KEY` environment variable. If you're using the environment variable, then you need to pass it from the\n   * loader to the component.\n   */\n  apiKey: string;\n}"
           }
         }
       }
@@ -91,41 +54,23 @@
         "type": "shopify"
       }
     ],
-    "examples": {
-      "description": "",
-      "examples": [
-        {
-          "description": "Wrap your route in the `AppProvider` component and pass in your API key.",
-          "codeblock": {
-            "title": "Set up AppProvider for an embedded route",
-            "tabs": [
-              {
-                "title": "/app/routes/**\\/*.ts",
-                "code": "import {useLoaderData} from 'react-router';\nimport {authenticate} from '~/shopify.server';\nimport {AppProvider} from '@shopify/shopify-app-react-router/react';\n\nexport async function loader({ request }) {\n  await authenticate.admin(request);\n\n  return { apiKey: process.env.SHOPIFY_API_KEY };\n}\n\nexport default function App() {\n  const { apiKey } = useLoaderData();\n\n  return (\n    &lt;AppProvider embedded apiKey={apiKey}&gt;\n      &lt;Outlet /&gt;\n    &lt;/AppProvider&gt;\n  );\n}",
-                "language": "typescript"
-              }
-            ]
+    "defaultExample": {
+      "description": "Wrap your route in the `AppProvider` component and pass in your API key.",
+      "codeblock": {
+        "title": "Set up AppProvider for an Admin route",
+        "tabs": [
+          {
+            "title": "/app/routes/**\\/*.ts",
+            "code": "import {useLoaderData} from 'react-router';\nimport {authenticate} from '~/shopify.server';\nimport {AppProvider} from '@shopify/shopify-app-react-router/react';\n\nexport async function loader({ request }) {\n  await authenticate.admin(request);\n\n  return { apiKey: process.env.SHOPIFY_API_KEY };\n}\n\nexport default function App() {\n  const { apiKey } = useLoaderData();\n\n  return (\n    &lt;AppProvider apiKey={apiKey}&gt;\n      &lt;Outlet /&gt;\n    &lt;/AppProvider&gt;\n  );\n}",
+            "language": "typescript"
           }
-        },
-        {
-          "description": "Add Polaris web components to the route, without adding the App Bridge script.",
-          "codeblock": {
-            "title": "Set up AppProvider for a non-embedded route",
-            "tabs": [
-              {
-                "title": "/app/routes/**\\/*.ts",
-                "code": "import {AppProvider} from '@shopify/shopify-app-react-router/react';\n\nexport default function App() {\n  return (\n    &lt;AppProvider embedded={false}&gt;\n      &lt;Outlet /&gt;\n    &lt;/AppProvider&gt;\n  );\n}",
-                "language": "typescript"
-              }
-            ]
-          }
-        }
-      ]
+        ]
+      }
     }
   },
   {
     "name": "AppProxyLink",
-    "description": "Sets up an `<a />` HTML element that works when rendered behind an app proxy.\n\nSupports any properties accepted by the `<a />` HTML element.",
+    "description": "The type of the component returned from \n\n\n\n.",
     "category": "App proxy components",
     "type": "component",
     "isVisualComponent": false,
@@ -146,20 +91,7 @@
         "url": "/docs/api/shopify-app-react-router/app-proxy-components/appproxyprovider",
         "type": "react-router"
       }
-    ],
-    "defaultExample": {
-      "description": "Use an `AppProxyLink` within an `AppProxyProvider` to link to a different proxied route.",
-      "codeblock": {
-        "title": "Link to a different route",
-        "tabs": [
-          {
-            "title": "/app/routes/**\\/*.ts",
-            "code": "import {authenticate} from '~/shopify.server';\nimport {AppProxyProvider, AppProxyLink} from '@shopify/shopify-app-react-router/react';\n\nexport async function loader({ request }) {\n  await authenticate.public.appProxy(request);\n\n  return json({ appUrl: process.env.SHOPIFY_APP_URL });\n}\n\nexport default function App() {\n  const { appUrl } = useLoaderData();\n\n  return (\n    &lt;AppProxyProvider appUrl={appUrl}&gt;\n      &lt;AppProxyLink href=\"/other-proxy-route\"&gt;Link to another route&lt;/AppProxyLink&gt;\n    &lt;/AppProxyProvider&gt;\n  );\n}",
-            "language": "typescript"
-          }
-        ]
-      }
-    }
+    ]
   },
   {
     "name": "AppProxyProvider",
@@ -246,7 +178,7 @@
           "AuthenticateAdmin": {
             "filePath": "src/server/authenticate/admin/types.ts",
             "name": "AuthenticateAdmin",
-            "description": "Authenticates requests coming from the Shopify admin.\n\n> Note: The shape of the returned object changes depending on the `distribution` config. Merchant custom apps (`AppDistribution.ShopifyAdmin`) are not embedded so do not return session tokens or redirect functionality. All other distributions are embedded and so they return a context with session tokens and redirect functionality.",
+            "description": "Authenticates requests coming from the Shopify admin.\n\n> Note: The shape of the returned object changes depending on the `distribution` config. Merchant custom apps (`AppDistribution.ShopifyAdmin`) do not return session tokens or redirect functionality. All other distributions return a context with session tokens and redirect functionality.",
             "isPublicDocs": true,
             "params": [
               {
@@ -275,7 +207,7 @@
             "filePath": "src/server/authenticate/admin/types.ts",
             "syntaxKind": "TypeAliasDeclaration",
             "name": "EmbeddedTypedAdminContext",
-            "value": "Config['distribution'] extends AppDistribution.ShopifyAdmin\n    ? NonEmbeddedAdminContext<Config>\n    : EmbeddedAdminContext<Config>",
+            "value": "Config['distribution'] extends AppDistribution.ShopifyAdmin\n    ? MerchantCustomAdminContext<Config>\n    : EmbeddedAdminContext<Config>",
             "description": ""
           },
           "AppDistribution": {
@@ -301,9 +233,9 @@
               }
             ]
           },
-          "NonEmbeddedAdminContext": {
+          "MerchantCustomAdminContext": {
             "filePath": "src/server/authenticate/admin/types.ts",
-            "name": "NonEmbeddedAdminContext",
+            "name": "MerchantCustomAdminContext",
             "description": "",
             "members": [
               {
@@ -377,7 +309,7 @@
                 ]
               }
             ],
-            "value": "export interface NonEmbeddedAdminContext<\n  Config extends AppConfigArg,\n> extends AdminContextInternal<Config> {}"
+            "value": "export interface MerchantCustomAdminContext<\n  Config extends AppConfigArg,\n> extends AdminContextInternal<Config> {}"
           },
           "AdminApiContext": {
             "filePath": "src/server/clients/admin/types.ts",
@@ -493,7 +425,7 @@
                 "filePath": "src/server/clients/types.ts",
                 "syntaxKind": "PropertySignature",
                 "name": "variables",
-                "value": "ApiClientRequestOptions<Operation, Operations>",
+                "value": "ApiClientRequestOptions<Operation, Operations>[\"variables\"]",
                 "description": "The variables to pass to the operation.",
                 "isOptional": true
               }
@@ -2710,7 +2642,7 @@
                 "filePath": "src/server/clients/types.ts",
                 "syntaxKind": "PropertySignature",
                 "name": "variables",
-                "value": "ApiClientRequestOptions<Operation, Operations>",
+                "value": "ApiClientRequestOptions<Operation, Operations>[\"variables\"]",
                 "description": "The variables to pass to the operation.",
                 "isOptional": true
               }
@@ -3021,7 +2953,7 @@
                 "filePath": "src/server/clients/types.ts",
                 "syntaxKind": "PropertySignature",
                 "name": "variables",
-                "value": "ApiClientRequestOptions<Operation, Operations>",
+                "value": "ApiClientRequestOptions<Operation, Operations>[\"variables\"]",
                 "description": "The variables to pass to the operation.",
                 "isOptional": true
               }
@@ -3490,7 +3422,7 @@
                 "filePath": "src/server/clients/types.ts",
                 "syntaxKind": "PropertySignature",
                 "name": "variables",
-                "value": "ApiClientRequestOptions<Operation, Operations>",
+                "value": "ApiClientRequestOptions<Operation, Operations>[\"variables\"]",
                 "description": "The variables to pass to the operation.",
                 "isOptional": true
               }
@@ -4256,7 +4188,7 @@
                 "syntaxKind": "PropertySignature",
                 "name": "webhookId",
                 "value": "string",
-                "description": "A unique ID for the webhook. Useful to keep track of which events your app has already processed.\n\nFor events webhooks (`webhookType === 'events'`), this is set to the `eventId` value for backwards compatibility. Prefer using `eventId` directly for events webhooks — `webhookId` will be removed from events webhooks in the next major version.",
+                "description": "A unique ID for the webhook. This is the idempotency key — useful to keep track of which events your app has already processed.",
                 "examples": [
                   {
                     "title": "Webhook ID",
@@ -4472,7 +4404,7 @@
                 "syntaxKind": "PropertySignature",
                 "name": "webhookId",
                 "value": "string",
-                "description": "A unique ID for the webhook. Useful to keep track of which events your app has already processed.\n\nFor events webhooks (`webhookType === 'events'`), this is set to the `eventId` value for backwards compatibility. Prefer using `eventId` directly for events webhooks — `webhookId` will be removed from events webhooks in the next major version.",
+                "description": "A unique ID for the webhook. This is the idempotency key — useful to keep track of which events your app has already processed.",
                 "examples": [
                   {
                     "title": "Webhook ID",
@@ -4610,7 +4542,7 @@
                 "filePath": "src/server/clients/types.ts",
                 "syntaxKind": "PropertySignature",
                 "name": "variables",
-                "value": "ApiClientRequestOptions<Operation, Operations>",
+                "value": "ApiClientRequestOptions<Operation, Operations>[\"variables\"]",
                 "description": "The variables to pass to the operation.",
                 "isOptional": true
               }
@@ -4919,7 +4851,7 @@
                 "filePath": "src/server/clients/types.ts",
                 "syntaxKind": "PropertySignature",
                 "name": "variables",
-                "value": "ApiClientRequestOptions<Operation, Operations>",
+                "value": "ApiClientRequestOptions<Operation, Operations>[\"variables\"]",
                 "description": "The variables to pass to the operation.",
                 "isOptional": true
               }
@@ -5113,7 +5045,7 @@
                 "filePath": "src/server/clients/types.ts",
                 "syntaxKind": "PropertySignature",
                 "name": "variables",
-                "value": "ApiClientRequestOptions<Operation, Operations>",
+                "value": "ApiClientRequestOptions<Operation, Operations>[\"variables\"]",
                 "description": "The variables to pass to the operation.",
                 "isOptional": true
               }
@@ -5551,7 +5483,7 @@
           "AuthenticateAdmin": {
             "filePath": "src/server/authenticate/admin/types.ts",
             "name": "AuthenticateAdmin",
-            "description": "Authenticates requests coming from the Shopify admin.\n\n> Note: The shape of the returned object changes depending on the `distribution` config. Merchant custom apps (`AppDistribution.ShopifyAdmin`) are not embedded so do not return session tokens or redirect functionality. All other distributions are embedded and so they return a context with session tokens and redirect functionality.",
+            "description": "Authenticates requests coming from the Shopify admin.\n\n> Note: The shape of the returned object changes depending on the `distribution` config. Merchant custom apps (`AppDistribution.ShopifyAdmin`) do not return session tokens or redirect functionality. All other distributions return a context with session tokens and redirect functionality.",
             "isPublicDocs": true,
             "params": [
               {
@@ -5580,12 +5512,12 @@
             "filePath": "src/server/authenticate/admin/types.ts",
             "syntaxKind": "TypeAliasDeclaration",
             "name": "EmbeddedTypedAdminContext",
-            "value": "Config['distribution'] extends AppDistribution.ShopifyAdmin\n    ? NonEmbeddedAdminContext<Config>\n    : EmbeddedAdminContext<Config>",
+            "value": "Config['distribution'] extends AppDistribution.ShopifyAdmin\n    ? MerchantCustomAdminContext<Config>\n    : EmbeddedAdminContext<Config>",
             "description": ""
           },
-          "NonEmbeddedAdminContext": {
+          "MerchantCustomAdminContext": {
             "filePath": "src/server/authenticate/admin/types.ts",
-            "name": "NonEmbeddedAdminContext",
+            "name": "MerchantCustomAdminContext",
             "description": "",
             "members": [
               {
@@ -5659,7 +5591,7 @@
                 ]
               }
             ],
-            "value": "export interface NonEmbeddedAdminContext<\n  Config extends AppConfigArg,\n> extends AdminContextInternal<Config> {}"
+            "value": "export interface MerchantCustomAdminContext<\n  Config extends AppConfigArg,\n> extends AdminContextInternal<Config> {}"
           },
           "AdminApiContext": {
             "filePath": "src/server/clients/admin/types.ts",
@@ -5775,7 +5707,7 @@
                 "filePath": "src/server/clients/types.ts",
                 "syntaxKind": "PropertySignature",
                 "name": "variables",
-                "value": "ApiClientRequestOptions<Operation, Operations>",
+                "value": "ApiClientRequestOptions<Operation, Operations>[\"variables\"]",
                 "description": "The variables to pass to the operation.",
                 "isOptional": true
               }
@@ -7405,7 +7337,7 @@
                 "syntaxKind": "PropertySignature",
                 "name": "webhookId",
                 "value": "string",
-                "description": "A unique ID for the webhook. Useful to keep track of which events your app has already processed.\n\nFor events webhooks (`webhookType === 'events'`), this is set to the `eventId` value for backwards compatibility. Prefer using `eventId` directly for events webhooks — `webhookId` will be removed from events webhooks in the next major version.",
+                "description": "A unique ID for the webhook. This is the idempotency key — useful to keep track of which events your app has already processed.",
                 "examples": [
                   {
                     "title": "Webhook ID",
@@ -7621,7 +7553,7 @@
                 "syntaxKind": "PropertySignature",
                 "name": "webhookId",
                 "value": "string",
-                "description": "A unique ID for the webhook. Useful to keep track of which events your app has already processed.\n\nFor events webhooks (`webhookType === 'events'`), this is set to the `eventId` value for backwards compatibility. Prefer using `eventId` directly for events webhooks — `webhookId` will be removed from events webhooks in the next major version.",
+                "description": "A unique ID for the webhook. This is the idempotency key — useful to keep track of which events your app has already processed.",
                 "examples": [
                   {
                     "title": "Webhook ID",
@@ -9022,55 +8954,7 @@
                 ]
               }
             ],
-            "value": "export interface AppConfigArg<\n  Storage extends SessionStorage = SessionStorage,\n  Future extends FutureFlagOptions = FutureFlagOptions,\n> extends Omit<\n  ApiConfigArg<ApiFutureFlags<Future>>,\n  | 'hostName'\n  | 'hostScheme'\n  | 'apiVersion'\n  | 'isCustomStoreApp'\n  | 'isEmbeddedApp'\n  | 'future'\n  | 'billing'\n  | 'restResources'\n> {\n  /**\n   * The URL your app is running on.\n   *\n   * The `@shopify/cli` provides this URL as `process.env.SHOPIFY_APP_URL`.  For development this is probably a tunnel URL that points to your local machine.  If this is a production app, this is your production URL.\n   */\n  appUrl: string;\n\n  /**\n   * An adaptor for storing sessions in your database of choice.\n   *\n   * Shopify provides multiple session storage adaptors and you can create your own.\n   *\n   * Optional for apps created in the Shopify Admin.\n   *\n   * {@link https://github.com/Shopify/shopify-app-js/blob/main/README.md#session-storage-options}\n   *\n   * @example\n   * <caption>Storing sessions with Prisma.</caption>\n   * <description>Add the `@shopify/shopify-app-session-storage-prisma` package to use the Prisma session storage.</description>\n   * ```ts\n   * import { shopifyApp } from \"@shopify/shopify-app-react-router/server\";\n   * import { PrismaSessionStorage } from \"@shopify/shopify-app-session-storage-prisma\";\n   *\n   * import prisma from \"~/db.server\";\n   *\n   * const shopify = shopifyApp({\n   *   // ... etc\n   *   sessionStorage: new PrismaSessionStorage(prisma),\n   * });\n   * export default shopify;\n   * ```\n   */\n  sessionStorage?: Storage;\n\n  /**\n   * Billing configurations for the app.\n   *\n   * Uses the new line item billing format that allows for more complex billing structures.\n   *\n   * @example\n   * ```ts\n   * import { BillingInterval } from \"@shopify/shopify-api\";\n   *\n   * billing: {\n   *   myPlan: {\n   *     lineItems: [\n   *       {\n   *         amount: 10,\n   *         currencyCode: 'USD',\n   *         interval: BillingInterval.Every30Days,\n   *       }\n   *     ],\n   *   },\n   * }\n   * ```\n   */\n  billing?: BillingConfigWithLineItems;\n\n  /**\n   * Whether your app use online or offline tokens.\n   *\n   * If your app uses online tokens, then both online and offline tokens will be saved to your database.  This ensures your app can perform background jobs.\n   *\n   * {@link https://shopify.dev/docs/apps/auth/oauth/access-modes}\n   *\n   * @defaultValue `false`\n   */\n  useOnlineTokens?: boolean;\n\n  /**\n   * The config for the shop-specific webhooks your app needs.\n   * \n   * Use this to configure shop-specific webhooks. In many cases defining app-specific webhooks in the `shopify.app.toml` will be sufficient and easier to manage.  Please see:\n   * \n   * {@link https://shopify.dev/docs/apps/build/webhooks/subscribe#app-specific-vs-shop-specific-subscriptions}\n   * \n   * You should only use this if you need shop-specific webhooks. If you do need shop-specific webhooks this can be in used in conjunction with the afterAuth hook, loaders or processes such as background jobs.\n   *\n   * @example\n   * <caption>Registering shop-specific webhooks.</caption>\n   * ```ts\n   * // app/shopify.server.ts\n   * import { DeliveryMethod, shopifyApp } from \"@shopify/shopify-app-react-router/server\";\n   *\n   * const shopify = shopifyApp({\n   *   webhooks: {\n   *     PRODUCTS_CREATE: {\n   *       deliveryMethod: DeliveryMethod.Http,\n   *        callbackUrl: \"/webhooks/products/create\",\n   *     },\n   *   },\n   *   hooks: {\n   *     afterAuth: async ({ session }) => {\n   *       // Register webhooks for the shop\n   *       // In this example, every shop will have these webhooks\n   *       // But you could wrap this in some custom shop specific conditional logic\n   *       shopify.registerWebhooks({ session });\n   *     }\n   *   },\n   *   // ...etc\n   * });\n   * export default shopify;\n   * export const authenticate = shopify.authenticate;\n   * ```\n   * \n   * @example\n   * <caption>Registering app-specific webhooks (Recommended)</caption>\n   * ```toml\n   * # shopify.app.toml\n   * [webhooks]\n   * api_version = \"2024-07\"\n\n   *   [[webhooks.subscriptions]]\n   *   topics = [\"products/create\"]\n   *   uri = \"/webhooks/products/create\"\n   * \n   * ```\n   * \n   * @example\n   * <caption>Authenticating a webhook request</caption>\n   *\n   * ```ts\n   * // /app/routes/webhooks.ts\n   * import { ActionFunctionArgs } from \"react-router\";\n   * import { authenticate } from \"../shopify.server\";\n   * import db from \"../db.server\";\n   *\n   * export const action = async ({ request }: ActionFunctionArgs) => {\n   *   const { topic, shop, session, payload } = await authenticate.webhook(request);\n   * \n   *   // Webhook requests can trigger after an app is uninstalled\n   *   // If the app is already uninstalled, the session may be undefined.\n   *   if (!session) {\n   *     throw new Response();\n   *   }\n   * \n   *   // Handle the webhook\n   *   console.log(`${TOPIC} webhook received with`, JSON.stringify(payload))\n   *\n   *   throw new Response();\n   * };\n   * ```\n   */\n  webhooks?: WebhookConfig;\n\n  /**\n   * Functions to call at key places during your apps lifecycle.\n   *\n   * These functions are called in the context of the request that triggered them.  This means you can access the session.\n   *\n   * @example\n   * <caption>Seeding your database custom data when a merchant installs your app.</caption>\n   * ```ts\n   * import { DeliveryMethod, shopifyApp } from \"@shopify/shopify-app-react-router/server\";\n   * import { seedStoreData } from \"~/db/seeds\"\n   *\n   * const shopify = shopifyApp({\n   *   hooks: {\n   *     afterAuth: async ({ session }) => {\n   *       seedStoreData({session})\n   *     }\n   *   },\n   *   // ...etc\n   * });\n   * ```\n   */\n  hooks?: HooksConfig;\n\n  /**\n   * How your app is distributed. Default is `AppDistribution.AppStore`.\n   *\n   * AppStore should be used for public apps that are distributed in the Shopify App Store.\n   * SingleMerchant should be used for custom apps managed in the Partner Dashboard.\n   * ShopifyAdmin should be used for apps that are managed in the merchant's Shopify Admin.\n   *\n   * {@link https://shopify.dev/docs/apps/distribution}\n   */\n  distribution?: AppDistribution;\n\n  /**\n   * What version of Shopify's Admin API's would you like to use.\n   *\n   * {@link https://shopify.dev/docs/api/}\n   *\n   * @example\n   * <caption>Specifying an API Version</caption>\n   * ```ts\n   * import { ApiVersion, shopifyApp } from \"@shopify/shopify-app-react-router/server\";\n   *\n   * const shopify = shopifyApp({\n   *   // ...etc\n   *   apiVersion: ApiVersion.July25,\n   * });\n   * ```\n   */\n  apiVersion: ApiVersion;\n\n  /**\n   * A path that Shopify can reserve for auth related endpoints.\n   *\n   * This must match a $ route in your React Router app.  That route must export a loader function that calls `shopify.authenticate.admin(request)`.\n   *\n   * @default `\"/auth\"`\n   *\n   * @example\n   * <caption>Using a specific API Version</caption>\n   * ```ts\n   * // /app/shopify.server.ts\n   * import { shopifyApp } from \"@shopify/shopify-app-react-router/server\";\n   *\n   * const shopify = shopifyApp({\n   *   // ...etc\n   *   authPathPrefix: \"/auth\",\n   * });\n   * export default shopify;\n   * export const authenticate = shopify.authenticate;\n   *\n   * // /app/routes/auth/$.jsx\n   * import { LoaderFunctionArgs } from \"react-router\";\n   * import { authenticate } from \"../../shopify.server\";\n   *\n   * export async function loader({ request }: LoaderFunctionArgs) {\n   *   await authenticate.admin(request);\n   *\n   *   return null\n   * }\n   * ```\n   */\n  authPathPrefix?: string;\n\n  /**\n   * Features that will be introduced in future releases of this package.\n   *\n   * You can opt in to these features by setting the corresponding flags. By doing so, you can prepare for future\n   * releases in advance and provide feedback on the new features.\n   */\n  future?: Future;\n}"
-          },
-          "ApiVersion": {
-            "filePath": "../shopify-api/dist/ts/lib/types.d.ts",
-            "syntaxKind": "EnumDeclaration",
-            "name": "ApiVersion",
-            "value": "export declare enum ApiVersion {\n    October24 = \"2024-10\",\n    January25 = \"2025-01\",\n    April25 = \"2025-04\",\n    July25 = \"2025-07\",\n    October25 = \"2025-10\",\n    January26 = \"2026-01\",\n    April26 = \"2026-04\",\n    Unstable = \"unstable\"\n}",
-            "members": [
-              {
-                "filePath": "../shopify-api/dist/ts/lib/types.d.ts",
-                "name": "October24",
-                "value": "2024-10"
-              },
-              {
-                "filePath": "../shopify-api/dist/ts/lib/types.d.ts",
-                "name": "January25",
-                "value": "2025-01"
-              },
-              {
-                "filePath": "../shopify-api/dist/ts/lib/types.d.ts",
-                "name": "April25",
-                "value": "2025-04"
-              },
-              {
-                "filePath": "../shopify-api/dist/ts/lib/types.d.ts",
-                "name": "July25",
-                "value": "2025-07"
-              },
-              {
-                "filePath": "../shopify-api/dist/ts/lib/types.d.ts",
-                "name": "October25",
-                "value": "2025-10"
-              },
-              {
-                "filePath": "../shopify-api/dist/ts/lib/types.d.ts",
-                "name": "January26",
-                "value": "2026-01"
-              },
-              {
-                "filePath": "../shopify-api/dist/ts/lib/types.d.ts",
-                "name": "April26",
-                "value": "2026-04"
-              },
-              {
-                "filePath": "../shopify-api/dist/ts/lib/types.d.ts",
-                "name": "Unstable",
-                "value": "unstable"
-              }
-            ]
+            "value": "export interface AppConfigArg<\n  Storage extends SessionStorage = SessionStorage,\n  Future extends FutureFlagOptions = FutureFlagOptions,\n> extends ReactRouterManagedApiConfigOptions<Future> {\n  /**\n   * The URL your app is running on.\n   *\n   * The `@shopify/cli` provides this URL as `process.env.SHOPIFY_APP_URL`.  For development this is probably a tunnel URL that points to your local machine.  If this is a production app, this is your production URL.\n   */\n  appUrl: string;\n\n  /**\n   * An adaptor for storing sessions in your database of choice.\n   *\n   * Shopify provides multiple session storage adaptors and you can create your own.\n   *\n   * Optional for apps created in the Shopify Admin.\n   *\n   * {@link https://github.com/Shopify/shopify-app-js/blob/main/README.md#session-storage-options}\n   *\n   * @example\n   * <caption>Storing sessions with Prisma.</caption>\n   * <description>Add the `@shopify/shopify-app-session-storage-prisma` package to use the Prisma session storage.</description>\n   * ```ts\n   * import { shopifyApp } from \"@shopify/shopify-app-react-router/server\";\n   * import { PrismaSessionStorage } from \"@shopify/shopify-app-session-storage-prisma\";\n   *\n   * import prisma from \"~/db.server\";\n   *\n   * const shopify = shopifyApp({\n   *   // ... etc\n   *   sessionStorage: new PrismaSessionStorage(prisma),\n   * });\n   * export default shopify;\n   * ```\n   */\n  sessionStorage?: Storage;\n\n  /**\n   * Billing configurations for the app.\n   *\n   * Uses the new line item billing format that allows for more complex billing structures.\n   *\n   * @example\n   * ```ts\n   * import { BillingInterval } from \"@shopify/shopify-api\";\n   *\n   * billing: {\n   *   myPlan: {\n   *     lineItems: [\n   *       {\n   *         amount: 10,\n   *         currencyCode: 'USD',\n   *         interval: BillingInterval.Every30Days,\n   *       }\n   *     ],\n   *   },\n   * }\n   * ```\n   */\n  billing?: BillingConfigWithLineItems;\n\n  /**\n   * Whether your app use online or offline tokens.\n   *\n   * If your app uses online tokens, then both online and offline tokens will be saved to your database.  This ensures your app can perform background jobs.\n   *\n   * {@link https://shopify.dev/docs/apps/auth/oauth/access-modes}\n   *\n   * @defaultValue `false`\n   */\n  useOnlineTokens?: boolean;\n\n  /**\n   * The config for the shop-specific webhooks your app needs.\n   * \n   * Use this to configure shop-specific webhooks. In many cases defining app-specific webhooks in the `shopify.app.toml` will be sufficient and easier to manage.  Please see:\n   * \n   * {@link https://shopify.dev/docs/apps/build/webhooks/subscribe#app-specific-vs-shop-specific-subscriptions}\n   * \n   * You should only use this if you need shop-specific webhooks. If you do need shop-specific webhooks this can be in used in conjunction with the afterAuth hook, loaders or processes such as background jobs.\n   *\n   * @example\n   * <caption>Registering shop-specific webhooks.</caption>\n   * ```ts\n   * // app/shopify.server.ts\n   * import { DeliveryMethod, shopifyApp } from \"@shopify/shopify-app-react-router/server\";\n   *\n   * const shopify = shopifyApp({\n   *   webhooks: {\n   *     PRODUCTS_CREATE: {\n   *       deliveryMethod: DeliveryMethod.Http,\n   *        callbackUrl: \"/webhooks/products/create\",\n   *     },\n   *   },\n   *   hooks: {\n   *     afterAuth: async ({ session }) => {\n   *       // Register webhooks for the shop\n   *       // In this example, every shop will have these webhooks\n   *       // But you could wrap this in some custom shop specific conditional logic\n   *       shopify.registerWebhooks({ session });\n   *     }\n   *   },\n   *   // ...etc\n   * });\n   * export default shopify;\n   * export const authenticate = shopify.authenticate;\n   * ```\n   * \n   * @example\n   * <caption>Registering app-specific webhooks (Recommended)</caption>\n   * ```toml\n   * # shopify.app.toml\n   * [webhooks]\n   * api_version = \"2024-07\"\n\n   *   [[webhooks.subscriptions]]\n   *   topics = [\"products/create\"]\n   *   uri = \"/webhooks/products/create\"\n   * \n   * ```\n   * \n   * @example\n   * <caption>Authenticating a webhook request</caption>\n   *\n   * ```ts\n   * // /app/routes/webhooks.ts\n   * import { ActionFunctionArgs } from \"react-router\";\n   * import { authenticate } from \"../shopify.server\";\n   * import db from \"../db.server\";\n   *\n   * export const action = async ({ request }: ActionFunctionArgs) => {\n   *   const { topic, shop, session, payload } = await authenticate.webhook(request);\n   * \n   *   // Webhook requests can trigger after an app is uninstalled\n   *   // If the app is already uninstalled, the session may be undefined.\n   *   if (!session) {\n   *     throw new Response();\n   *   }\n   * \n   *   // Handle the webhook\n   *   console.log(`${TOPIC} webhook received with`, JSON.stringify(payload))\n   *\n   *   throw new Response();\n   * };\n   * ```\n   */\n  webhooks?: WebhookConfig;\n\n  /**\n   * Functions to call at key places during your apps lifecycle.\n   *\n   * These functions are called in the context of the request that triggered them.  This means you can access the session.\n   *\n   * @example\n   * <caption>Seeding your database custom data when a merchant installs your app.</caption>\n   * ```ts\n   * import { DeliveryMethod, shopifyApp } from \"@shopify/shopify-app-react-router/server\";\n   * import { seedStoreData } from \"~/db/seeds\"\n   *\n   * const shopify = shopifyApp({\n   *   hooks: {\n   *     afterAuth: async ({ session }) => {\n   *       seedStoreData({session})\n   *     }\n   *   },\n   *   // ...etc\n   * });\n   * ```\n   */\n  hooks?: HooksConfig;\n\n  /**\n   * How your app is distributed. Default is `AppDistribution.AppStore`.\n   *\n   * AppStore should be used for public apps that are distributed in the Shopify App Store.\n   * SingleMerchant should be used for custom apps managed in the Partner Dashboard.\n   * ShopifyAdmin should be used for apps that are managed in the merchant's Shopify Admin.\n   *\n   * {@link https://shopify.dev/docs/apps/distribution}\n   */\n  distribution?: AppDistribution;\n\n  /**\n   * What version of Shopify's Admin API's would you like to use.\n   *\n   * {@link https://shopify.dev/docs/api/}\n   *\n   * @example\n   * <caption>Specifying an API Version</caption>\n   * ```ts\n   * import { ApiVersion, shopifyApp } from \"@shopify/shopify-app-react-router/server\";\n   *\n   * const shopify = shopifyApp({\n   *   // ...etc\n   *   apiVersion: ApiVersion.July25,\n   * });\n   * ```\n   */\n  apiVersion: ApiVersion;\n\n  /**\n   * A path that Shopify can reserve for auth related endpoints.\n   *\n   * This must match a $ route in your React Router app.  That route must export a loader function that calls `shopify.authenticate.admin(request)`.\n   *\n   * @default `\"/auth\"`\n   *\n   * @example\n   * <caption>Using a specific API Version</caption>\n   * ```ts\n   * // /app/shopify.server.ts\n   * import { shopifyApp } from \"@shopify/shopify-app-react-router/server\";\n   *\n   * const shopify = shopifyApp({\n   *   // ...etc\n   *   authPathPrefix: \"/auth\",\n   * });\n   * export default shopify;\n   * export const authenticate = shopify.authenticate;\n   *\n   * // /app/routes/auth/$.jsx\n   * import { LoaderFunctionArgs } from \"react-router\";\n   * import { authenticate } from \"../../shopify.server\";\n   *\n   * export async function loader({ request }: LoaderFunctionArgs) {\n   *   await authenticate.admin(request);\n   *\n   *   return null\n   * }\n   * ```\n   */\n  authPathPrefix?: string;\n\n  /**\n   * Features that will be introduced in future releases of this package.\n   *\n   * You can opt in to these features by setting the corresponding flags. By doing so, you can prepare for future\n   * releases in advance and provide feedback on the new features.\n   */\n  future?: Future;\n}"
           },
           "BillingConfigWithLineItems": {
             "filePath": "src/server/config-types.ts",
@@ -9084,37 +8968,6 @@
               }
             ],
             "value": "export interface BillingConfigWithLineItems {\n  [plan: string]:\n    | BillingConfigOneTimePlan\n    | BillingConfigSubscriptionLineItemPlan;\n}"
-          },
-          "DomainTransformation": {
-            "filePath": "../shopify-api/dist/ts/lib/types.d.ts",
-            "name": "DomainTransformation",
-            "description": "Configuration for transforming shop domains in split-domain architectures.",
-            "members": [
-              {
-                "filePath": "../shopify-api/dist/ts/lib/types.d.ts",
-                "syntaxKind": "PropertySignature",
-                "name": "includeHost",
-                "value": "boolean",
-                "description": "Whether this transformation should also apply to host validation.",
-                "isOptional": true,
-                "defaultValue": "true"
-              },
-              {
-                "filePath": "../shopify-api/dist/ts/lib/types.d.ts",
-                "syntaxKind": "PropertySignature",
-                "name": "match",
-                "value": "RegExp | string",
-                "description": "Pattern to match against shop domains (source domain). Can be a RegExp or string (converted to RegExp internally)."
-              },
-              {
-                "filePath": "../shopify-api/dist/ts/lib/types.d.ts",
-                "syntaxKind": "PropertySignature",
-                "name": "transform",
-                "value": "((matches: RegExpMatchArray) => string | null) | string",
-                "description": "Transformation function or template string.\n- Template string: Uses $1, $2, etc. for capture group substitution\n- Function: Receives regex match groups and returns transformed domain"
-              }
-            ],
-            "value": "export interface DomainTransformation {\n    /**\n     * Pattern to match against shop domains (source domain).\n     * Can be a RegExp or string (converted to RegExp internally).\n     */\n    match: RegExp | string;\n    /**\n     * Transformation function or template string.\n     * - Template string: Uses $1, $2, etc. for capture group substitution\n     * - Function: Receives regex match groups and returns transformed domain\n     */\n    transform: ((matches: RegExpMatchArray) => string | null) | string;\n    /**\n     * Whether this transformation should also apply to host validation.\n     * @default true\n     */\n    includeHost?: boolean;\n}"
           },
           "HooksConfig": {
             "filePath": "src/server/config-types.ts",
@@ -9165,34 +9018,6 @@
               }
             ],
             "value": "export interface AfterAuthOptions {\n  session: Session;\n  admin: AdminApiContext;\n}"
-          },
-          "LogSeverity": {
-            "filePath": "../shopify-api/dist/ts/lib/types.d.ts",
-            "syntaxKind": "EnumDeclaration",
-            "name": "LogSeverity",
-            "value": "export declare enum LogSeverity {\n    Error = 0,\n    Warning = 1,\n    Info = 2,\n    Debug = 3\n}",
-            "members": [
-              {
-                "filePath": "../shopify-api/dist/ts/lib/types.d.ts",
-                "name": "Error",
-                "value": 0
-              },
-              {
-                "filePath": "../shopify-api/dist/ts/lib/types.d.ts",
-                "name": "Warning",
-                "value": 1
-              },
-              {
-                "filePath": "../shopify-api/dist/ts/lib/types.d.ts",
-                "name": "Info",
-                "value": 2
-              },
-              {
-                "filePath": "../shopify-api/dist/ts/lib/types.d.ts",
-                "name": "Debug",
-                "value": 3
-              }
-            ]
           },
           "WebhookConfig": {
             "filePath": "src/server/config-types.ts",
@@ -9591,7 +9416,7 @@
                 "filePath": "src/server/clients/types.ts",
                 "syntaxKind": "PropertySignature",
                 "name": "variables",
-                "value": "ApiClientRequestOptions<Operation, Operations>",
+                "value": "ApiClientRequestOptions<Operation, Operations>[\"variables\"]",
                 "description": "The variables to pass to the operation.",
                 "isOptional": true
               }
@@ -9861,7 +9686,7 @@
                 "filePath": "src/server/clients/types.ts",
                 "syntaxKind": "PropertySignature",
                 "name": "variables",
-                "value": "ApiClientRequestOptions<Operation, Operations>",
+                "value": "ApiClientRequestOptions<Operation, Operations>[\"variables\"]",
                 "description": "The variables to pass to the operation.",
                 "isOptional": true
               }

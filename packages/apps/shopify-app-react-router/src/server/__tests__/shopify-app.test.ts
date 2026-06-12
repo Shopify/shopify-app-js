@@ -57,6 +57,12 @@ describe('shopifyApp', () => {
     expect(() => shopifyApp({} as any)).toThrow(ShopifyError);
   });
 
+  it('fails when isEmbeddedApp is provided', () => {
+    expect(() => shopifyApp(testConfig({isEmbeddedApp: false} as any))).toThrow(
+      '`isEmbeddedApp` is not supported by @shopify/shopify-app-react-router. React Router apps are embedded by default; remove this option.',
+    );
+  });
+
   it("fixes the port if it's not set", () => {
     // GIVEN
     // eslint-disable-next-line no-process-env

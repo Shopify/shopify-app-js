@@ -1,62 +1,37 @@
 import React, {useEffect} from 'react';
 import {useNavigate} from 'react-router';
 
-interface BaseProps {
-  children: React.ReactNode;
-}
-
-interface EmbeddedProps extends BaseProps {
-  /**
-   * If this route should be rendered inside the Shopify admin.
-   *
-   * Setting this to true will include the App Bridge script on the page.
-   * If true and the route is loaded outside the Shopify admin, then the user will be redirected to the Shopify admin.
-   *
-   * Setting this to false will not include the App Bridge script on the page.
-   *
-   * {@link https://shopify.dev/docs/apps/admin/embedded-app-home}
-   */
-  embedded: true;
-  /**
-   * The API key for your Shopify app. This is the `Client ID` from the Partner Dashboard.
-   *
-   * When using the Shopify CLI, this is the `SHOPIFY_API_KEY` environment variable. If you're using the environment
-   * variable, then you need to pass it from the loader to the component.
-   */
-  apiKey: string;
-}
-
-interface NonEmbeddedProps extends BaseProps {
-  /**
-   * If this route should be rendered inside the Shopify admin.
-   *
-   * Setting this to false means only Polaris Web components will be added to the route, not App Bridge.
-   *
-   * Setting this to true will include the App Bridge script on the page.
-   *
-   * {@link https://shopify.dev/docs/apps/admin/embedded-app-home}
-   */
-  embedded?: false;
-}
-
 /**
  * Props for the `AppProvider` component.
  * @publicDocs
  */
-export type AppProviderProps = NonEmbeddedProps | EmbeddedProps;
+export interface AppProviderProps {
+  /**
+   * The children to render.
+   */
+  children: React.ReactNode;
+
+  /**
+   * The API key for your Shopify app. This is the `Client ID` from the Partner Dashboard.
+   *
+   * The App Bridge script will be included on the page using this API key. When using the Shopify CLI, this is the
+   * `SHOPIFY_API_KEY` environment variable. If you're using the environment variable, then you need to pass it from the
+   * loader to the component.
+   */
+  apiKey: string;
+}
 
 /**
  * Sets up your app to look like the admin
  *
- * Adds Polaris Web components to the route.
- * If embedded is true and apiKey is provided, then the App Bridge script will be added to the page.
+ * Adds Polaris Web components and App Bridge to the route.
  *
  * {@link https://shopify.dev/docs/apps/admin/embedded-app-home}
  * {@link https://shopify.dev/docs/api/app-home/using-polaris-components}
  * {@link https://shopify.dev/tools/app-bridge}
  *
  * @example
- * <caption>Set up AppProvider for an embedded route</caption>
+ * <caption>Set up AppProvider for an Admin route</caption>
  * <description>Wrap your route in the `AppProvider` component and pass in your API key.</description>
  * ```ts
  * // /app/routes/**\/*.ts
@@ -74,23 +49,7 @@ export type AppProviderProps = NonEmbeddedProps | EmbeddedProps;
  *   const { apiKey } = useLoaderData();
  *
  *   return (
- *     <AppProvider embedded apiKey={apiKey}>
- *       <Outlet />
- *     </AppProvider>
- *   );
- * }
- * ```
- *
- * @example
- * <caption>Set up AppProvider for a non-embedded route</caption>
- * <description>Add Polaris web components to the route, without adding the App Bridge script.</description>
- * ```ts
- * // /app/routes/**\/*.ts
- * import {AppProvider} from '@shopify/shopify-app-react-router/react';
- *
- * export default function App() {
- *   return (
- *     <AppProvider embedded={false}>
+ *     <AppProvider apiKey={apiKey}>
  *       <Outlet />
  *     </AppProvider>
  *   );
@@ -100,7 +59,7 @@ export type AppProviderProps = NonEmbeddedProps | EmbeddedProps;
 export function AppProvider(props: AppProviderProps) {
   return (
     <>
-      {props.embedded && <AppBridge apiKey={props.apiKey} />}
+      <AppBridge apiKey={props.apiKey} />
       <script src="https://cdn.shopify.com/shopifycloud/polaris.js" />
       {props.children}
     </>
@@ -108,7 +67,7 @@ export function AppProvider(props: AppProviderProps) {
 }
 
 interface AppBridgeProps {
-  apiKey: EmbeddedProps['apiKey'];
+  apiKey: string;
 }
 
 function AppBridge({apiKey}: AppBridgeProps) {

@@ -15,7 +15,9 @@ export const ensureAppIsEmbeddedIfRequired = async (
     config.distribution !== AppDistribution.ShopifyAdmin &&
     url.searchParams.get('embedded') !== '1'
   ) {
-    logger.debug('App is not embedded, redirecting to Shopify', {shop});
+    logger.debug('Request is outside Shopify Admin, redirecting to Shopify', {
+      shop,
+    });
     await redirectToShopifyOrAppRoot(request, {api, logger, config});
   }
 };

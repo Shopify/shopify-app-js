@@ -26,20 +26,23 @@ export interface BillingConfigWithLineItems {
     | BillingConfigSubscriptionLineItemPlan;
 }
 
+type ReactRouterManagedApiConfigOptions<Future extends FutureFlagOptions> =
+  Omit<
+    ApiConfigArg<ApiFutureFlags<Future>>,
+    | 'hostName'
+    | 'hostScheme'
+    | 'apiVersion'
+    | 'isCustomStoreApp'
+    | 'isEmbeddedApp'
+    | 'future'
+    | 'billing'
+    | 'restResources'
+  >;
+
 export interface AppConfigArg<
   Storage extends SessionStorage = SessionStorage,
   Future extends FutureFlagOptions = FutureFlagOptions,
-> extends Omit<
-  ApiConfigArg<ApiFutureFlags<Future>>,
-  | 'hostName'
-  | 'hostScheme'
-  | 'apiVersion'
-  | 'isCustomStoreApp'
-  | 'isEmbeddedApp'
-  | 'future'
-  | 'billing'
-  | 'restResources'
-> {
+> extends ReactRouterManagedApiConfigOptions<Future> {
   /**
    * The URL your app is running on.
    *
