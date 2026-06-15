@@ -223,10 +223,10 @@ importers:
         version: 0.31.10
       drizzle-orm:
         specifier: ^0.45.2
-        version: 0.45.2(@cloudflare/workers-types@4.20260525.1)(@libsql/client@0.17.2(encoding@0.1.13))(@prisma/client@6.19.0(prisma@6.19.0(typescript@5.9.3))(typescript@5.9.3))(@types/better-sqlite3@7.6.13)(@types/pg@8.20.0)(better-sqlite3@12.10.0)(gel@2.0.1)(mysql2@3.20.0(@types/node@25.9.3))(pg@8.20.0)(prisma@6.19.0(typescript@5.9.3))(sqlite3@5.1.7)
+        version: 0.45.2(@cloudflare/workers-types@4.20260525.1)(@libsql/client@0.17.2(encoding@0.1.13))(@prisma/client@6.19.0(prisma@6.19.0(typescript@5.9.3))(typescript@5.9.3))(@types/better-sqlite3@7.6.13)(@types/pg@8.20.0)(better-sqlite3@12.10.0)(gel@2.0.1)(mysql2@3.22.4(@types/node@25.9.3))(pg@8.20.0)(prisma@6.19.0(typescript@5.9.3))(sqlite3@5.1.7)
       mysql2:
-        specifier: ^3.20.0
-        version: 3.20.0(@types/node@25.9.3)
+        specifier: ^3.22.4
+        version: 3.22.4(@types/node@25.9.3)
       pg:
         specifier: ^8.20.0
         version: 8.20.0
@@ -310,8 +310,8 @@ importers:
         specifier: ^5.0.0
         version: link:../shopify-app-session-storage
       mysql2:
-        specifier: ^3.20.0
-        version: 3.20.0(@types/node@25.9.3)
+        specifier: ^3.22.4
+        version: 3.22.4(@types/node@25.9.3)
     devDependencies:
       '@shopify/shopify-app-session-storage-test-utils':
         specifier: ^5.0.0
@@ -7473,8 +7473,8 @@ packages:
     resolution: {integrity: sha512-WWdIxpyjEn+FhQJQQv9aQAYlHoNVdzIzUySNV1gHUPDSdZJ3yZn7pAAbQcV7B56Mvu881q9FZV+0Vx2xC44VWA==}
     engines: {node: ^18.17.0 || >=20.5.0}
 
-  mysql2@3.20.0:
-    resolution: {integrity: sha512-eCLUs7BNbgA6nf/MZXsaBO1SfGs0LtLVrJD3WeWq+jPLDWkSufTD+aGMwykfUVPdZnblaUK1a8G/P63cl9FkKg==}
+  mysql2@3.22.4:
+    resolution: {integrity: sha512-CtXYlmL7ZamiYKbmqkamQHWJROUHSfm+f3kByzGfknw7kW51mcB2ouMUqYq1XfYxbXmnWo6RhPydx6OCqdgcmQ==}
     engines: {node: '>= 8.0'}
     peerDependencies:
       '@types/node': '>= 8'
@@ -15586,7 +15586,7 @@ snapshots:
       esbuild: 0.25.12
       tsx: 4.21.0
 
-  drizzle-orm@0.45.2(@cloudflare/workers-types@4.20260525.1)(@libsql/client@0.17.2(encoding@0.1.13))(@prisma/client@6.19.0(prisma@6.19.0(typescript@5.9.3))(typescript@5.9.3))(@types/better-sqlite3@7.6.13)(@types/pg@8.20.0)(better-sqlite3@12.10.0)(gel@2.0.1)(mysql2@3.20.0(@types/node@25.9.3))(pg@8.20.0)(prisma@6.19.0(typescript@5.9.3))(sqlite3@5.1.7):
+  drizzle-orm@0.45.2(@cloudflare/workers-types@4.20260525.1)(@libsql/client@0.17.2(encoding@0.1.13))(@prisma/client@6.19.0(prisma@6.19.0(typescript@5.9.3))(typescript@5.9.3))(@types/better-sqlite3@7.6.13)(@types/pg@8.20.0)(better-sqlite3@12.10.0)(gel@2.0.1)(mysql2@3.22.4(@types/node@25.9.3))(pg@8.20.0)(prisma@6.19.0(typescript@5.9.3))(sqlite3@5.1.7):
     optionalDependencies:
       '@cloudflare/workers-types': 4.20260525.1
       '@libsql/client': 0.17.2(encoding@0.1.13)
@@ -15595,7 +15595,7 @@ snapshots:
       '@types/pg': 8.20.0
       better-sqlite3: 12.10.0
       gel: 2.0.1
-      mysql2: 3.20.0(@types/node@25.9.3)
+      mysql2: 3.22.4(@types/node@25.9.3)
       pg: 8.20.0
       prisma: 6.19.0(typescript@5.9.3)
       sqlite3: 5.1.7
@@ -18079,7 +18079,7 @@ snapshots:
 
   mute-stream@2.0.0: {}
 
-  mysql2@3.20.0(@types/node@25.9.3):
+  mysql2@3.22.4(@types/node@25.9.3):
     dependencies:
       '@types/node': 25.9.3
       aws-ssl-profiles: 1.1.2
