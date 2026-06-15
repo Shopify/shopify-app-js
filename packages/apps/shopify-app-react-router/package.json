@@ -87,7 +87,7 @@
     "@shopify/shopify-app-session-storage-memory": "^6.0.0",
     "@types/react": "^19.2.14",
     "jest-fetch-mock": "^3.0.3",
-    "react-router": "7.13.2"
+    "react-router": "7.15.1"
   },
   "dependencies": {
     "@shopify/admin-api-client": "^1.1.2",
@@ -95,7 +95,7 @@
     "@shopify/shopify-app-session-storage": "^5.0.0",
     "@shopify/storefront-api-client": "^1.0.10",
     "compare-versions": "^6.1.1",
-    "isbot": "^5.1.36"
+    "isbot": "^5.1.40"
   },
   "peerDependencies": {
     "react": ">=18",

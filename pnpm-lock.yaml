@@ -417,8 +417,8 @@ importers:
         specifier: ^6.1.1
         version: 6.1.1
       isbot:
-        specifier: ^5.1.36
-        version: 5.1.36
+        specifier: ^5.1.40
+        version: 5.1.40
       jose:
         specifier: ^5.9.6
         version: 5.9.6
@@ -503,8 +503,8 @@ importers:
         specifier: ^6.1.1
         version: 6.1.1
       isbot:
-        specifier: ^5.1.36
-        version: 5.1.36
+        specifier: ^5.1.40
+        version: 5.1.40
       react:
         specifier: '>=18'
         version: 18.3.1
@@ -531,8 +531,8 @@ importers:
         specifier: ^3.0.3
         version: 3.0.3(encoding@0.1.13)
       react-router:
-        specifier: 7.13.2
-        version: 7.13.2(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+        specifier: 7.15.1
+        version: 7.15.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
 
   packages/apps/shopify-app-remix:
     dependencies:
@@ -555,8 +555,8 @@ importers:
         specifier: ^6.1.1
         version: 6.1.1
       isbot:
-        specifier: ^5.1.36
-        version: 5.1.36
+        specifier: ^5.1.40
+        version: 5.1.40
       react:
         specifier: '*'
         version: 18.3.1
@@ -6730,8 +6730,8 @@ packages:
   isarray@2.0.5:
     resolution: {integrity: sha512-xHjhDr3cNBK0BzdUJSPXZntQUx/mwMS5Rw4A7lPJ90XGAO6ISP/ePDNuo0vhqOZU+UD5JoodwCAAoZQd3FeAKw==}
 
-  isbot@5.1.36:
-    resolution: {integrity: sha512-C/ZtXyJqDPZ7G7JPr06ApWyYoHjYexQbS6hPYD4WYCzpv2Qes6Z+CCEfTX4Owzf+1EJ933PoI2p+B9v7wpGZBQ==}
+  isbot@5.1.40:
+    resolution: {integrity: sha512-yNeeynhhtIVRBk12tBV4eHNxwB42HzR4Q3Ea7vCOiJhImGaAIdIMrbJtacQlBizGLjUPw+akkFI5Dn9T70XoVQ==}
     engines: {node: '>=18'}
 
   isexe@2.0.0:
@@ -8027,8 +8027,8 @@ packages:
     peerDependencies:
       react: '>=16.8'
 
-  react-router@7.13.2:
-    resolution: {integrity: sha512-tX1Aee+ArlKQP+NIUd7SE6Li+CiGKwQtbS+FfRxPX6Pe4vHOo6nr9d++u5cwg+Z8K/x8tP+7qLmujDtfrAoUJA==}
+  react-router@7.15.1:
+    resolution: {integrity: sha512-R8rl9HhgikFYoPJymnUtPXWbnDb3oget6lQnfIoupbt61aT9aOhRkDsY2XRhZRyX1Z/8a5sL74fXmFNm3NRK5A==}
     engines: {node: '>=20.0.0'}
     peerDependencies:
       react: '>=18'
@@ -16903,7 +16903,7 @@ snapshots:
 
   isarray@2.0.5: {}
 
-  isbot@5.1.36: {}
+  isbot@5.1.40: {}
 
   isexe@2.0.0: {}
 
@@ -18635,7 +18635,7 @@ snapshots:
       '@remix-run/router': 1.23.2
       react: 18.3.1
 
-  react-router@7.13.2(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
+  react-router@7.15.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
     dependencies:
       cookie: 1.1.1
       react: 18.3.1
