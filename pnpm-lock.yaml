@@ -516,8 +516,8 @@ importers:
         specifier: ^7.29.7
         version: 7.29.7(@babel/core@7.29.7)
       '@shopify/generate-docs':
-        specifier: ^1.2.0
-        version: 1.2.0
+        specifier: ^1.2.3
+        version: 1.2.3
       '@shopify/react-testing':
         specifier: ^6.0.0
         version: 6.0.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -574,8 +574,8 @@ importers:
         specifier: ^2.17.5
         version: 2.17.5(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.9.3)
       '@shopify/generate-docs':
-        specifier: ^1.2.0
-        version: 1.2.0
+        specifier: ^1.2.3
+        version: 1.2.3
       '@shopify/polaris':
         specifier: ^12.18.0
         version: 12.27.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -3993,8 +3993,8 @@ packages:
     peerDependencies:
       eslint: ^8.56.0
 
-  '@shopify/generate-docs@1.2.0':
-    resolution: {integrity: sha512-/+wkOWH0o9ZdXQhNbyYOqxTucHTisubVzHAHDhTqOzxcvDuPLfveShLzMEzTWgYx9x8ORwirOWI+dYBulVvs9w==}
+  '@shopify/generate-docs@1.2.3':
+    resolution: {integrity: sha512-BqeO3RgbE4Qmnz41K2YZCBY7kVPPFrIYt93Wq5HixGyzzIhHZTS/fz3ojNb3/Tw0P2nVq9CkZa42675+CHyn+Q==}
     hasBin: true
 
   '@shopify/graphql-codegen@0.1.0':
@@ -13835,7 +13835,7 @@ snapshots:
       - supports-color
       - typescript
 
-  '@shopify/generate-docs@1.2.0':
+  '@shopify/generate-docs@1.2.3':
     dependencies:
       '@types/react': 18.3.31
       globby: 11.1.0
