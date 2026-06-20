@@ -103,6 +103,78 @@ describe('shopify.webhooks.register', () => {
     assertRegisterResponse({registerReturn, topic, responses});
   });
 
+  it('sends a request with a filter field', async () => {
+    const shopify = shopifyApi(testConfig());
+
+    const topic = 'PRODUCTS_CREATE';
+    const handler: WebhookHandler = {...HTTP_HANDLER, filter: 'title:shoes'};
+    const responses = [mockResponses.successResponse];
+
+    const registerReturn = await registerWebhook({
+      shopify,
+      topic,
+      handler,
+      responses,
+    });
+
+    assertWebhookRegistrationRequest(
+      shopify.config.apiVersion,
+      'webhookSubscriptionCreate',
+      `topic: ${topic}`,
+      {
+        callbackUrl: `"https://test_host_name/webhooks"`,
+        filter: '"title:shoes"',
+      },
+    );
+    assertRegisterResponse({registerReturn, topic, responses});
+  });
+
+  it('updates a pre-existing webhook when the filter changes', async () => {
+    const shopify = shopifyApi(testConfig());
+
+    const topic = 'PRODUCTS_CREATE';
+    const handler: WebhookHandler = {...HTTP_HANDLER, filter: 'title:boots'};
+    const responses = [mockResponses.successUpdateResponse];
+
+    const registerReturn = await registerWebhook({
+      shopify,
+      topic,
+      handler,
+      checkMockResponse: mockResponses.webhookCheckResponseWithFilter,
+      responses,
+    });
+
+    assertWebhookRegistrationRequest(
+      shopify.config.apiVersion,
+      'webhookSubscriptionUpdate',
+      `id: "${mockResponses.TEST_WEBHOOK_ID}"`,
+      {
+        callbackUrl: `"https://test_host_name/webhooks"`,
+        filter: '"title:boots"',
+      },
+    );
+    assertRegisterResponse({registerReturn, topic, responses});
+  });
+
+  it('does not update a pre-existing webhook when the filter is unchanged', async () => {
+    const shopify = shopifyApi(testConfig());
+
+    const topic = 'PRODUCTS_CREATE';
+    const handler: WebhookHandler = {...HTTP_HANDLER, filter: 'title:shoes'};
+
+    shopify.webhooks.addHandlers({[topic]: handler});
+
+    queueMockResponse(
+      JSON.stringify(mockResponses.webhookCheckResponseWithFilter),
+    );
+
+    const registerReturn = await shopify.webhooks.register({session});
+
+    // Only the check query should have been sent — no mutation
+    expect(mockTestRequests.requestList).toHaveLength(1);
+    expect(registerReturn[topic]).toHaveLength(0);
+  });
+
   it('returns a result with success set to false, body set to empty object, when the server doesn’t return a webhookSubscriptionCreate field', async () => {
     const shopify = shopifyApi(testConfig());
 

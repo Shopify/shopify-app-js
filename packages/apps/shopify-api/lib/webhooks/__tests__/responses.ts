@@ -79,6 +79,30 @@ export const webhookCheckMultiHandlerResponse = {
   },
 };
 
+export const webhookCheckResponseWithFilter = {
+  data: {
+    webhookSubscriptions: {
+      edges: [
+        {
+          node: {
+            id: TEST_WEBHOOK_ID,
+            topic: 'PRODUCTS_CREATE',
+            filter: 'title:shoes',
+            endpoint: {
+              __typename: 'WebhookHttpEndpoint',
+              callbackUrl: 'https://test_host_name/webhooks',
+            },
+          },
+        },
+      ],
+      pageInfo: {
+        endCursor: null,
+        hasNextPage: false,
+      },
+    },
+  },
+};
+
 export const eventBridgeWebhookCheckResponse = {
   data: {
     webhookSubscriptions: {
