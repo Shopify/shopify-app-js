@@ -1,15 +1,9 @@
 export type Nonce = () => string;
 
 export function nonce(): string {
-  const length = 15;
+  const bytes = crypto.getRandomValues(new Uint8Array(32));
 
-  const bytes = crypto.getRandomValues(new Uint8Array(length));
-
-  const nonce = bytes
-    .map((byte: number) => {
-      return byte % 10;
-    })
-    .join('');
-
-  return nonce;
+  return Array.from(bytes, (byte) => byte.toString(16).padStart(2, '0')).join(
+    '',
+  );
 }

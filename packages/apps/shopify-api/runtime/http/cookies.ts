@@ -1,5 +1,5 @@
 // import type {Headers} from "./headers";
-import {createSHA256HMAC} from '../crypto/utils';
+import {createSHA256HMAC, deriveSHA256HMACKey} from '../crypto/utils';
 
 import {splitN} from './utils';
 import {getHeader, getHeaders, removeHeader, addHeader} from './headers';
@@ -44,6 +44,33 @@ export interface CookieData {
 }
 
 export type CookieJar = Record<string, CookieData>;
+
+const COOKIE_SIGNING_INFO = 'shopify-app-js/cookie-signing/v1';
+
+async function createCookieSignature(
+  key: string,
+  value: string,
+): Promise<string> {
+  const cookieSigningKey = await deriveSHA256HMACKey(key, COOKIE_SIGNING_INFO);
+  return createSHA256HMAC(cookieSigningKey, value);
+}
+
+const signatureEncoder = new TextEncoder();
+
+function safelyCompareSignatures(signatureA: string, signatureB: string) {
+  const buffA = signatureEncoder.encode(signatureA);
+  const buffB = signatureEncoder.encode(signatureB);
+
+  if (buffA.length !== buffB.length) return false;
+
+  let out = 0;
+  for (let i = 0; i < buffA.length; i++) {
+    out |= buffA[i] ^ buffB[i];
+  }
+
+  return out === 0;
+}
+
 interface CookiesOptions {
   keys: string[];
   // Ignored. Only for type-compatibility with the node package for now.
@@ -170,7 +197,7 @@ export class Cookies {
     }
     this.set(name, value, opts);
     const sigName = `${name}.sig`;
-    const signature = await createSHA256HMAC(this.keys[0], value);
+    const signature = await createCookieSignature(this.keys[0], value);
     this.set(sigName, signature, opts);
     this.updateHeader();
   }
@@ -193,10 +220,14 @@ export class Cookies {
     }
 
     const allCheckSignatures = await Promise.all(
-      this.keys.map((key) => createSHA256HMAC(key, cookieValue)),
+      this.keys.map((key) => createCookieSignature(key, cookieValue)),
     );
 
-    if (!allCheckSignatures.includes(signature)) {
+    const validSignature = allCheckSignatures.some((checkSignature) =>
+      safelyCompareSignatures(checkSignature, signature),
+    );
+
+    if (!validSignature) {
       this.deleteInvalidCookies(cookieName, signedCookieName);
       return false;
     }
