@@ -1,5 +1,7 @@
 # @shopify/shopify-app-session-storage-memory
 
+## 6.0.1
+
 ## 6.0.0
 
 ### Patch Changes

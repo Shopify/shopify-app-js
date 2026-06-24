@@ -1,5 +1,12 @@
 # @shopify/shopify-app-session-storage-mysql
 
+## 6.0.1
+
+### Patch Changes
+
+- f362cca: Updated `mysql2` dependencies
+- f86b725: Updated `graphql`, ` mysql2`, ` pg`, ` mongodb`, ` pg-connection-string`, ` redis` dependencies
+
 ## 6.0.0
 
 ### Major Changes
