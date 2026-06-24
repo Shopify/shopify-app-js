@@ -3,7 +3,7 @@ import express, {Express} from 'express';
 import {ApiVersion, LogSeverity, Session} from '@shopify/shopify-api';
 
 import {
-  createTestHmac,
+  createSignedCookieHeader,
   mockShopifyResponse,
   shopify,
   SHOPIFY_HOST,
@@ -162,13 +162,11 @@ describe('ensureInstalledOnShop', () => {
 
   it('calls validateAuthenticatedSession for non-embedded apps with a log', async () => {
     shopify.api.config.isEmbeddedApp = false;
-    const validCookies = [
-      `shopify_app_session=${session.id}`,
-      `shopify_app_session.sig=${createTestHmac(
-        shopify.api.config.apiSecretKey,
-        session.id,
-      )}`,
-    ];
+    const validCookies = await createSignedCookieHeader(
+      shopify.api.config.apiSecretKey,
+      'shopify_app_session',
+      session.id,
+    );
 
     mockShopifyResponse({
       data: {},

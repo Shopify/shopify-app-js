@@ -1,8 +1,9 @@
-import {createSHA256HMAC} from '../../crypto';
+import {createSHA256HMAC, deriveSHA256HMACKey} from '../../crypto';
 import {Cookies} from '../cookies';
 
-jest.mock('../crypto/utils', () => ({
+jest.mock('../../crypto/utils', () => ({
   createSHA256HMAC: jest.fn(),
+  deriveSHA256HMACKey: jest.fn(),
 }));
 
 describe('Cookies', () => {
@@ -13,12 +14,17 @@ describe('Cookies', () => {
     const keys = ['key1', 'key2'];
 
     beforeEach(() => {
+      jest.clearAllMocks();
+
       request = {headers: {}};
       response = {headers: {}};
       cookies = new Cookies(request, response, {keys});
 
       cookies.get = jest.fn();
       cookies.deleteCookie = jest.fn();
+      (deriveSHA256HMACKey as jest.Mock).mockImplementation(
+        async (key) => `derived-${key}`,
+      );
     });
 
     it('should return false if cookies are not set', async () => {

@@ -441,7 +441,7 @@ describe('Redirect helper', () => {
       const testSession = await setUpValidSession(shopify.sessionStorage);
 
       const request = new Request(APP_URL);
-      signRequestCookie({
+      await signRequestCookie({
         request,
         cookieName: SESSION_COOKIE_NAME,
         cookieValue: testSession.id,
