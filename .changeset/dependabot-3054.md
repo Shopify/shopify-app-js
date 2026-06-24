@@ -1,4 +1,0 @@
----
----
-
-Updated `actions/stale` dependencies

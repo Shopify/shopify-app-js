@@ -1,5 +1,7 @@
 # @shopify/shopify-app-session-storage-kv
 
+## 6.0.1
+
 ## 6.0.0
 
 ### Minor Changes
