@@ -15,3 +15,8 @@ This is a non-breaking change. The previous login redirect was effectively dead
 code for embedded apps (`isEmbeddedApp` is always `true` for apps using this
 library; the `ShopifyAdmin` distribution is excluded earlier in the pipeline).
 No public APIs are added, removed, or changed.
+
+Additionally hardened `renderAppBridge` to sanitize the `shop` query param
+before using it in response headers, so an invalid/attacker-controlled value
+cannot be reflected into the `Content-Security-Policy: frame-ancestors` or
+`Link` preconnect headers.
