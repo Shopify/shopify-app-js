@@ -10,7 +10,6 @@ export * from './get-thrown-response';
 export * from './request-mock';
 export * from './setup-valid-session';
 export * from './setup-valid-request';
-export * from './sign-request-cookie';
 export * from './test-config';
 export * from './get-thrown-error';
 export * from './setup-embedded-flow';
