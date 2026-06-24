@@ -36,6 +36,9 @@ describe('Reject bot requests', () => {
     );
 
     // THEN
-    expect(response.status).toBe(302);
+    // The request passes the bot check and proceeds to auth validation.
+    // For embedded apps without shop/host params, this renders the App Bridge
+    // page (200) to retrieve the session token from the parent frame.
+    expect(response.status).toBe(200);
   });
 });

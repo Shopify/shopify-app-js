@@ -2,7 +2,6 @@ export * from './const';
 export * from './expect-admin-api-client';
 export * from './expect-document-request-headers';
 export * from './expect-exit-iframe';
-export * from './expect-login-redirect';
 export * from './expect-storefront-api-client';
 export * from './get-hmac';
 export * from './get-jwt';
