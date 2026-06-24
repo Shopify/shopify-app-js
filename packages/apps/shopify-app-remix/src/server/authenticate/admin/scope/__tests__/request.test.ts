@@ -29,7 +29,7 @@ it('scopes api is available without any future flags', async () => {
   const session = await setUpValidSession(shopify.sessionStorage);
 
   const request = new Request(`${APP_URL}/scopes`);
-  signRequestCookie({
+  await signRequestCookie({
     request,
     cookieName: SESSION_COOKIE_NAME,
     cookieValue: session.id,
