@@ -23,7 +23,7 @@ describe('validateHmac', () => {
           testConfig({apiSecretKey: 'my super secret key'}),
         );
 
-        const queryString = `code=some+code+goes+here&shop=the+shop+URL&state=some+nonce+passed+from+auth&timestamp=${queryParams.timestamp}`;
+        const queryString = `code=some%20code%20goes%20here&shop=the%20shop%20URL&state=some%20nonce%20passed%20from%20auth&timestamp=${queryParams.timestamp}`;
         const query = {
           ...queryParams,
           hmac: createHmacSignature(queryString, shopify.config.apiSecretKey),
@@ -53,11 +53,35 @@ describe('validateHmac', () => {
         );
 
         // NB: keys are listed alphabetically
-        const queryString = `code=some+code+goes+here&foo=bar&shop=the+shop+URL&state=some+nonce+passed+from+auth&timestamp=${queryParams.timestamp}`;
+        const queryString = `code=some%20code%20goes%20here&foo=bar&shop=the%20shop%20URL&state=some%20nonce%20passed%20from%20auth&timestamp=${queryParams.timestamp}`;
 
         const query = {
           ...queryParams,
           foo: 'bar',
+          hmac: createHmacSignature(queryString, shopify.config.apiSecretKey),
+        };
+
+        await expect(shopify.utils.validateHmac(query, options)).resolves.toBe(
+          true,
+        );
+      });
+
+      test('spaces in param values are percent-encoded (%20), not plus-encoded', async () => {
+        const shopify = shopifyApi(
+          testConfig({apiSecretKey: 'my super secret key'}),
+        );
+
+        const timestamp = String(getCurrentTimeInSec() - 60);
+        const queryWithSpaces = {
+          custom: 'hello world',
+          shop: 'myshop.myshopify.com',
+          timestamp,
+        };
+
+        // Shopify signs with %20, not +
+        const queryString = `custom=hello%20world&shop=myshop.myshopify.com&timestamp=${timestamp}`;
+        const query = {
+          ...queryWithSpaces,
           hmac: createHmacSignature(queryString, shopify.config.apiSecretKey),
         };
 
@@ -84,7 +108,7 @@ describe('validateHmac', () => {
         );
 
         const timestamp = String(getCurrentTimeInSec() - 91);
-        const queryString = `code=some+code+goes+here&shop=the+shop+URL&state=some+nonce+passed+from+auth&timestamp=${timestamp}`;
+        const queryString = `code=some%20code%20goes%20here&shop=the%20shop%20URL&state=some%20nonce%20passed%20from%20auth&timestamp=${timestamp}`;
         const query = {
           ...queryParams,
           timestamp,
@@ -103,7 +127,7 @@ describe('validateHmac', () => {
         );
 
         const timestamp = String(getCurrentTimeInSec() + 91);
-        const queryString = `code=some+code+goes+here&shop=the+shop+URL&state=some+nonce+passed+from+auth&timestamp=${timestamp}`;
+        const queryString = `code=some%20code%20goes%20here&shop=the%20shop%20URL&state=some%20nonce%20passed%20from%20auth&timestamp=${timestamp}`;
         const query = {
           ...queryParams,
           timestamp,
@@ -198,7 +222,7 @@ describe('validateHmac', () => {
       );
 
       const timestamp = String(getCurrentTimeInSec() - 91);
-      const queryString = `code=some+code+goes+here&shop=the+shop+URL&state=some+nonce+passed+from+auth&timestamp=${timestamp}`;
+      const queryString = `code=some%20code%20goes%20here&shop=the%20shop%20URL&state=some%20nonce%20passed%20from%20auth&timestamp=${timestamp}`;
       const query = {
         ...queryParams,
         timestamp,
@@ -220,7 +244,7 @@ describe('validateHmac', () => {
       );
 
       const timestamp = String(getCurrentTimeInSec() + 91);
-      const queryString = `code=some+code+goes+here&shop=the+shop+URL&state=some+nonce+passed+from+auth&timestamp=${timestamp}`;
+      const queryString = `code=some%20code%20goes%20here&shop=the%20shop%20URL&state=some%20nonce%20passed%20from%20auth&timestamp=${timestamp}`;
       const query = {
         ...queryParams,
         timestamp,
