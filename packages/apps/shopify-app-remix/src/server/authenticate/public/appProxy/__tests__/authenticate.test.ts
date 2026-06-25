@@ -96,6 +96,26 @@ describe('authenticating app proxy requests', () => {
     expect(response.statusText).toBe('Bad Request');
   });
 
+  it('Succeeds when a query parameter appears more than once', async () => {
+    // GIVEN
+    const shopify = shopifyApp(testConfig());
+    const url = new URL(APP_URL);
+    url.searchParams.set('shop', TEST_SHOP);
+    url.searchParams.set('timestamp', secondsInPast(1));
+    // Duplicate param — Object.fromEntries would drop the first value
+    url.searchParams.append('consentGiven', 'true');
+    url.searchParams.append('consentGiven', 'false');
+    url.searchParams.set('signature', await createAppProxyHmac(url));
+
+    // WHEN
+    const {liquid} = await shopify.authenticate.public.appProxy(
+      new Request(url.toString()),
+    );
+
+    // THEN
+    expect(liquid).toBeDefined();
+  });
+
   describe('Valid requests return a liquid helper', () => {
     it('Returns a Response with Content-Type: application/liquid and status 200 by default', async () => {
       // GIVEN
@@ -393,11 +413,19 @@ async function getValidRequest(): Promise<Request> {
 }
 
 async function createAppProxyHmac(url: URL): Promise<string> {
-  const params = Object.fromEntries(url.searchParams.entries());
+  const params: Record<string, string> = {};
+  for (const [key, value] of url.searchParams.entries()) {
+    const existing = params[key];
+    if (existing === undefined) {
+      params[key] = value;
+    } else {
+      params[key] = `${existing},${value}`;
+    }
+  }
   const string = Object.entries(params)
     .sort(([val1], [val2]) => val1.localeCompare(val2))
     .reduce((acc, [key, value]) => {
-      return `${acc}${key}=${Array.isArray(value) ? value.join(',') : value}`;
+      return `${acc}${key}=${value}`;
     }, '');
 
   return createSHA256HMAC(API_SECRET_KEY, string, HashFormat.Hex);

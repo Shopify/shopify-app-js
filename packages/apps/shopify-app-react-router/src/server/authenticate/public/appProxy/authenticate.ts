@@ -83,6 +83,21 @@ const liquid: LiquidResponseFunction = (body, initAndOptions) => {
   });
 };
 
+function searchParamsToQuery(
+  searchParams: URLSearchParams,
+): Record<string, string> {
+  const result: Record<string, string> = {};
+  for (const [key, value] of searchParams.entries()) {
+    const existing = result[key];
+    if (existing === undefined) {
+      result[key] = value;
+    } else {
+      result[key] = `${existing},${value}`;
+    }
+  }
+  return result;
+}
+
 async function validateAppProxyHmac(
   params: BasicParams,
   url: URL,
@@ -96,7 +111,7 @@ async function validateAppProxyHmac(
     }
 
     let isValid = await api.utils.validateHmac(
-      Object.fromEntries(searchParams.entries()),
+      searchParamsToQuery(searchParams),
       {signator: 'appProxy'},
     );
 
@@ -112,7 +127,7 @@ async function validateAppProxyHmac(
       );
 
       isValid = await api.utils.validateHmac(
-        Object.fromEntries(searchParams.entries()),
+        searchParamsToQuery(searchParams),
         {signator: 'appProxy'},
       );
 
@@ -122,7 +137,7 @@ async function validateAppProxyHmac(
         );
 
         isValid = await api.utils.validateHmac(
-          Object.fromEntries(searchParams.entries()),
+          searchParamsToQuery(searchParams),
           {signator: 'appProxy'},
         );
       }
