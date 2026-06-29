@@ -1,6 +1,8 @@
 import React, {useEffect} from 'react';
 import {useNavigate} from 'react-router';
 
+import {POLARIS_URL} from '../../../shared/const';
+
 interface BaseProps {
   children: React.ReactNode;
 }
@@ -101,7 +103,7 @@ export function AppProvider(props: AppProviderProps) {
   return (
     <>
       {props.embedded && <AppBridge apiKey={props.apiKey} />}
-      <script src="https://cdn.shopify.com/shopifycloud/polaris.js" />
+      <script src={POLARIS_URL} />
       {props.children}
     </>
   );
