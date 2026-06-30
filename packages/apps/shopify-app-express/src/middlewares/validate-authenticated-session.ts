@@ -18,6 +18,17 @@ export function validateAuthenticatedSession({
     return async (req: Request, res: Response, next: NextFunction) => {
       config.logger.debug('Running validateAuthenticatedSession');
 
+      if (req.method === 'OPTIONS') {
+        res.set({
+          'Access-Control-Allow-Origin': 'https://extensions.shopifycdn.com',
+          'Access-Control-Allow-Methods':
+            'GET, POST, PUT, PATCH, DELETE, OPTIONS',
+          'Access-Control-Allow-Headers': 'Authorization, Content-Type',
+        });
+        res.status(204).end();
+        return undefined;
+      }
+
       let sessionId: string | undefined;
       try {
         sessionId = await api.session.getCurrentId({
