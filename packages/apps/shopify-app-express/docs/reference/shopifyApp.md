@@ -55,6 +55,36 @@ Learn more about [access modes in Shopify APIs](https://shopify.dev/docs/apps/au
 The path your app's frontend uses to trigger an App Bridge redirect to leave the Shopify Admin before starting OAuth.
 Since that page is in the app frontend, we don't include it in this package, but you can find [an example in our template](https://github.com/Shopify/shopify-frontend-template-react/blob/main/pages/ExitIframe.jsx).
 
+### future
+
+`object` | Defaults to `{}`
+
+Features that will be introduced in future releases of this package. You can opt in to these features by setting the corresponding flags.
+
+#### unstable_newEmbeddedAuthStrategy
+
+`boolean` | Defaults to `false`
+
+When enabled, embedded apps fetch access tokens via [token exchange](https://shopify.dev/docs/apps/auth/get-access-tokens/token-exchange) instead of the OAuth redirect flow. Your app must use [Shopify managed installation](https://shopify.dev/docs/apps/auth/installation#shopify-managed-installation) (scopes declared in `shopify.app.toml`).
+
+#### expiringOfflineAccessTokens
+
+`boolean` | Defaults to `false`
+
+When enabled, the app requests expiring offline access tokens and automatically refreshes them when they are within 5 minutes of expiry. Can be used with either the OAuth or token exchange flow.
+
+### hooks
+
+`object` | Optional
+
+Functions to call at key points during the app lifecycle.
+
+#### afterAuth
+
+`(options: {session: Session}) => void | Promise<void>`
+
+Called after a merchant successfully authenticates — both via OAuth callback and via token exchange. In the token exchange path this hook is deduplicated: it will only be called once per session token even if multiple API requests arrive concurrently. Use this hook for post-auth setup such as webhook registration or database seeding.
+
 ## Return
 
 Returns an object that contains everything an app needs to interact with Shopify:
@@ -107,6 +137,23 @@ A function that returns an Express middleware that redirects the user to the app
 `(RedirectOutOfAppParams) => void`
 
 A function that redirects to any URL at the browser's top level, regardless of where the request originated from.
+
+### registerWebhooks
+
+`(params: {session: Session}) => Promise<void>`
+
+Registers the webhook topics declared in the `webhooks` config for a given shop. Call this inside `hooks.afterAuth` so webhooks are registered after every authentication — both OAuth and token exchange.
+
+```ts
+const shopify = shopifyApp({
+  webhooks: {path: '/webhooks'},
+  hooks: {
+    afterAuth: async ({session}) => {
+      await shopify.registerWebhooks({session});
+    },
+  },
+});
+```
 
 ## Example
 
