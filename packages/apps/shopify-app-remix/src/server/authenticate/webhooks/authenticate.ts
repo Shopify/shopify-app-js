@@ -60,7 +60,6 @@ export function authenticateWebhookFactory<Topics extends string>(
         topic: check.topic as Topics,
         webhookId: check.webhookId,
         payload: JSON.parse(rawBody),
-        subTopic: check.subTopic || undefined,
         session: undefined,
         admin: undefined,
         webhookType: check.webhookType,
