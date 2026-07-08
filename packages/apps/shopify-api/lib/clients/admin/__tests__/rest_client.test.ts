@@ -927,8 +927,13 @@ describe('REST client', () => {
       LogSeverity.Debug,
       expect.anything(),
     );
-    const logMessage = (shopify.config.logger.log as jest.Mock).mock
-      .calls[1][1];
+    const logMessage = (shopify.config.logger.log as jest.Mock).mock.calls.find(
+      ([, message]) =>
+        typeof message === 'string' &&
+        message.includes('Received response for HTTP'),
+    )?.[1];
+
+    expect(logMessage).toBeDefined();
     expect(logMessage).toContain('Received response for HTTP');
     expect(logMessage).toContain(
       `https://test-shop.myshopify.io/admin/api/${shopify.config.apiVersion}/url/path`,
