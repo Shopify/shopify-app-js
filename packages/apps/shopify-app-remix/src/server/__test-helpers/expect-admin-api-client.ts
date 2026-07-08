@@ -18,7 +18,7 @@ export function expectAdminApiClient(
       const {admin, actualSession} = await factory();
       await mockExternalRequest({
         request: new Request(
-          `https://${TEST_SHOP}/admin/api/${ApiVersion.July25}/graphql.json`,
+          `https://${TEST_SHOP}/admin/api/${ApiVersion.July26}/graphql.json`,
           {
             method: 'POST',
             headers: {'X-Shopify-Access-Token': actualSession.accessToken!},

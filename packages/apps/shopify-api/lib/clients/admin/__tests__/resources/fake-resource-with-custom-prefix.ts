@@ -9,7 +9,7 @@ interface FakeResourceWithCustomPrefixFindArgs {
 }
 
 export class FakeResourceWithCustomPrefix extends Base {
-  public static apiVersion = ApiVersion.July25;
+  public static apiVersion = ApiVersion.July26;
   protected static resourceNames: ResourceNames[] = [
     {
       singular: 'fake_resource_with_custom_prefix',

@@ -54,7 +54,7 @@ it('when the shop is invalid the query to check the granted scopes returns an er
   const {scopes, session} = await setUpEmbeddedFlow();
   session.shop = `${TEST_SHOP_NAME}.invalid-domain.com`;
   await mockGraphqlRequest(
-    ApiVersion.July25,
+    ApiVersion.July26,
     session.shop,
   )({
     status: 400,

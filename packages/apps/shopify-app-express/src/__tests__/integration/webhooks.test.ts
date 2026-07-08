@@ -119,7 +119,7 @@ describe('webhook integration', () => {
           webhookQueries.forEach((query) =>
             expect({
               method: 'POST',
-              url: `https://${TEST_SHOP}/admin/api/${ApiVersion.July25}/graphql.json`,
+              url: `https://${TEST_SHOP}/admin/api/${ApiVersion.July26}/graphql.json`,
               body: expect.objectContaining({
                 query: expect.stringContaining(query),
               }),
@@ -148,7 +148,7 @@ describe('webhook integration', () => {
               TEST_SHOP,
               '{}',
               TEST_WEBHOOK_ID,
-              ApiVersion.July25,
+              ApiVersion.July26,
               undefined,
             );
           }

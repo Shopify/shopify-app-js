@@ -50,7 +50,7 @@ describe('process', () => {
       TEST_SHOP,
       body,
       TEST_WEBHOOK_ID,
-      ApiVersion.July25,
+      ApiVersion.July26,
       undefined,
     );
 
@@ -125,7 +125,7 @@ describe('process', () => {
       TEST_SHOP,
       body,
       TEST_WEBHOOK_ID,
-      ApiVersion.July25,
+      ApiVersion.July26,
       undefined,
     );
     expect(shopify.api.config.logger.log as jest.Mock).toHaveBeenCalledWith(

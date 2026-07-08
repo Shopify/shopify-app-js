@@ -161,7 +161,7 @@ describe('Storefront GraphQL client', () => {
     expect(shopify.config.logger.log).toHaveBeenCalledWith(
       LogSeverity.Debug,
       expect.stringContaining(
-        `Storefront client overriding default API version ${ApiVersion.July25} with 2020-01`,
+        `Storefront client overriding default API version ${ApiVersion.July26} with 2020-01`,
       ),
     );
   });

@@ -20,7 +20,7 @@ describe('Load REST resources', () => {
     expect(shopify.config.logger.log).toHaveBeenCalledWith(
       LogSeverity.Warning,
       expect.stringContaining(
-        `Loading REST resources for API version ${ApiVersion.July25}, which doesn't match the default 2020-01`,
+        `Loading REST resources for API version ${ApiVersion.July26}, which doesn't match the default 2020-01`,
       ),
     );
 

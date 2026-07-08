@@ -181,7 +181,7 @@ describe('ensureInstalledOnShop', () => {
 
     expect({
       method: 'POST',
-      url: `https://test-shop.myshopify.io/admin/api/${ApiVersion.July25}/graphql.json`,
+      url: `https://test-shop.myshopify.io/admin/api/${ApiVersion.July26}/graphql.json`,
     }).toMatchMadeHttpRequest();
 
     expect(shopify.api.config.logger.log).toHaveBeenCalledWith(

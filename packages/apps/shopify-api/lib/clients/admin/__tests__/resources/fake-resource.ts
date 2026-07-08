@@ -22,7 +22,7 @@ interface FakeResourceCustomArgs {
 }
 
 export class FakeResource extends Base {
-  public static apiVersion = ApiVersion.July25;
+  public static apiVersion = ApiVersion.July26;
   protected static resourceNames: ResourceNames[] = [
     {singular: 'fake_resource', plural: 'fake_resources'},
     {

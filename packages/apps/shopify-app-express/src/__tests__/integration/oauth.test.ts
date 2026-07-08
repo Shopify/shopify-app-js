@@ -130,7 +130,7 @@ describe('OAuth integration tests', () => {
         TEST_SHOP,
         body,
         TEST_WEBHOOK_ID,
-        ApiVersion.July25,
+        ApiVersion.July26,
         undefined,
       );
 
@@ -345,7 +345,7 @@ function assertOAuthRequests(
   webhookQueries.forEach((query) =>
     expect({
       method: 'POST',
-      url: `https://${TEST_SHOP}/admin/api/${ApiVersion.July25}/graphql.json`,
+      url: `https://${TEST_SHOP}/admin/api/${ApiVersion.July26}/graphql.json`,
       body: expect.objectContaining({query: expect.stringContaining(query)}),
     }).toMatchMadeHttpRequest(),
   );
@@ -402,7 +402,7 @@ async function forgedAppUninstalledWebhookRequest(
       'X-Shopify-Shop-Domain': TEST_SHOP,
       'X-Shopify-Hmac-Sha256': cookieSignature,
       'X-Shopify-Webhook-Id': TEST_WEBHOOK_ID,
-      'X-Shopify-Api-Version': ApiVersion.July25,
+      'X-Shopify-Api-Version': ApiVersion.July26,
     })
     .send(state)
     .expect(401);
