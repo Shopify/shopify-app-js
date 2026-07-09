@@ -23,6 +23,7 @@ export async function authCallback({
     const callbackResponse = await api.auth.callback({
       rawRequest: req,
       rawResponse: res,
+      expiring: true,
     });
 
     config.logger.debug('Callback is valid, storing session', {
