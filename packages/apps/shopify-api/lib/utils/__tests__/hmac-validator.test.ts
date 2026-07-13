@@ -180,6 +180,119 @@ describe('validateHmac', () => {
       );
     });
 
+    test('accepts URLSearchParams and preserves repeated application params', async () => {
+      const shopify = shopifyApi(
+        testConfig({apiSecretKey: 'my super secret key'}),
+      );
+      const query = new URLSearchParams(queryParams);
+      query.append('consentGiven', 'true');
+      query.append('consentGiven', 'false');
+      query.set(
+        'signature',
+        createHmacSignature(
+          `consentGiven=true,falselogged_in_customer_id=1path_prefix=/apps/my_appshop=the shop URLtimestamp=${queryParams.timestamp}`,
+          shopify.config.apiSecretKey,
+        ),
+      );
+
+      await expect(shopify.utils.validateHmac(query, options)).resolves.toBe(
+        true,
+      );
+    });
+
+    test.each(['__proto__', 'constructor', 'toString'])(
+      'preserves an application param named %s',
+      async (param) => {
+        const shopify = shopifyApi(
+          testConfig({apiSecretKey: 'my super secret key'}),
+        );
+        const query = new URLSearchParams(queryParams);
+        query.append(param, 'first');
+        query.append(param, 'second');
+
+        const signedParams = new Map(Object.entries(queryParams));
+        signedParams.set(param, 'first,second');
+        const queryString = [...signedParams.entries()]
+          .sort(([val1], [val2]) => val1.localeCompare(val2))
+          .reduce((acc, [key, value]) => `${acc}${key}=${value}`, '');
+        query.set(
+          'signature',
+          createHmacSignature(queryString, shopify.config.apiSecretKey),
+        );
+
+        await expect(shopify.utils.validateHmac(query, options)).resolves.toBe(
+          true,
+        );
+      },
+    );
+
+    test.each(['hmac', 'shop', 'signature', 'timestamp'])(
+      'rejects a repeated security param: %s',
+      async (param) => {
+        const shopify = shopifyApi(testConfig());
+        const query = new URLSearchParams({
+          ...queryParams,
+          hmac: 'unused',
+          signature: 'unused',
+        });
+        query.append(param, 'duplicate');
+
+        await expect(
+          shopify.utils.validateHmac(query, options),
+        ).rejects.toThrow(
+          `Query parameter "${param}" must not appear more than once.`,
+        );
+      },
+    );
+
+    test.each(['hmac', 'shop', 'signature', 'timestamp'])(
+      'rejects an array-valued security param: %s',
+      async (param) => {
+        const shopify = shopifyApi(testConfig());
+        const query: AuthQuery = {
+          ...queryParams,
+          hmac: 'unused',
+          signature: 'unused',
+          [param]: ['first', 'second'],
+        } as unknown as AuthQuery;
+
+        await expect(
+          shopify.utils.validateHmac(query, options),
+        ).rejects.toThrow(
+          `Query parameter "${param}" must not appear more than once.`,
+        );
+      },
+    );
+
+    test.each([undefined, 'not-a-number', 'Infinity'])(
+      'rejects a non-finite timestamp: %s',
+      async (timestamp) => {
+        const shopify = shopifyApi(testConfig());
+        const query: AuthQuery = {
+          ...queryParams,
+          timestamp,
+          signature: 'unused',
+        };
+
+        await expect(
+          shopify.utils.validateHmac(query, options),
+        ).rejects.toBeInstanceOf(ShopifyErrors.InvalidHmacError);
+      },
+    );
+
+    test.each([undefined, ''])('rejects a missing shop: %s', async (shop) => {
+      const shopify = shopifyApi(testConfig());
+      const query: AuthQuery = {
+        ...queryParams,
+        shop,
+        signature: 'unused',
+      };
+
+      await expect(
+        shopify.utils.validateHmac(query, options),
+      ).rejects.toBeInstanceOf(ShopifyErrors.InvalidHmacError);
+    });
+
     test('throw InvalidHmacError when there is no signature key', async () => {
       const shopify = shopifyApi(testConfig());
 
