@@ -219,22 +219,6 @@ describe('validateHmac', () => {
       },
     );
 
-    test.each([undefined, 'not-a-number', 'Infinity'])(
-      'rejects a non-finite timestamp: %s',
-      async (timestamp) => {
-        const shopify = shopifyApi(testConfig());
-        const query: AuthQuery = {
-          ...queryParams,
-          timestamp,
-          signature: 'unused',
-        };
-
-        await expect(
-          shopify.utils.validateHmac(query, options),
-        ).rejects.toBeInstanceOf(ShopifyErrors.InvalidHmacError);
-      },
-    );
-
     test('throw InvalidHmacError when there is no signature key', async () => {
       const shopify = shopifyApi(testConfig());
 

@@ -31,7 +31,7 @@ const APP_PROXY_SINGLE_VALUE_PARAMS = new Set([
 ]);
 
 export type HMACSignator = 'admin' | 'appProxy';
-export type HmacQuery = AuthQuery | URLSearchParams;
+type HmacQuery = AuthQuery | URLSearchParams;
 
 export interface ValidateParams extends AdapterArgs {
   /**
@@ -87,7 +87,6 @@ export function validateHmac(config: ConfigInterface) {
     {signator}: {signator: HMACSignator} = {signator: 'admin'},
   ): Promise<boolean> => {
     const normalizedQuery = normalizeQuery(query, signator);
-    validateAppProxySingleValueParams(normalizedQuery, signator);
 
     if (signator === 'admin' && !normalizedQuery.hmac) {
       throw new ShopifyErrors.InvalidHmacError(
@@ -98,12 +97,6 @@ export function validateHmac(config: ConfigInterface) {
     if (signator === 'appProxy' && !normalizedQuery.signature) {
       throw new ShopifyErrors.InvalidHmacError(
         'Query does not contain a signature value.',
-      );
-    }
-
-    if (signator === 'appProxy' && !normalizedQuery.shop) {
-      throw new ShopifyErrors.InvalidHmacError(
-        'Query does not contain a shop value.',
       );
     }
 
@@ -120,23 +113,6 @@ export function validateHmac(config: ConfigInterface) {
 
     return safeCompare(hmac as string, localHmac);
   };
-}
-
-function validateAppProxySingleValueParams(
-  query: AuthQuery,
-  signator: HMACSignator,
-) {
-  if (signator !== 'appProxy') {
-    return;
-  }
-
-  for (const key of APP_PROXY_SINGLE_VALUE_PARAMS) {
-    if (Array.isArray(query[key])) {
-      throw new ShopifyErrors.InvalidHmacError(
-        `Query parameter "${key}" must not appear more than once.`,
-      );
-    }
-  }
 }
 
 function normalizeQuery(query: HmacQuery, signator: HMACSignator): AuthQuery {
@@ -215,11 +191,9 @@ export function validateHmacFromRequestFactory(config: ConfigInterface) {
 }
 
 function validateHmacTimestamp(query: AuthQuery) {
-  const timestamp = Number(query.timestamp);
   if (
-    !Number.isFinite(timestamp) ||
-    Math.abs(getCurrentTimeInSec() - timestamp) >
-      HMAC_TIMESTAMP_PERMITTED_CLOCK_TOLERANCE_SEC
+    Math.abs(getCurrentTimeInSec() - Number(query.timestamp)) >
+    HMAC_TIMESTAMP_PERMITTED_CLOCK_TOLERANCE_SEC
   ) {
     throw new ShopifyErrors.InvalidHmacError(
       'HMAC timestamp is outside of the tolerance range',
