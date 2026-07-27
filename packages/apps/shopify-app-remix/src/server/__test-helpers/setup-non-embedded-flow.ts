@@ -14,7 +14,7 @@ export async function setUpNonEmbeddedFlow() {
   const session = await setUpValidSession(shopify.sessionStorage);
 
   const request = new Request(`${APP_URL}?shop=${TEST_SHOP}`);
-  signRequestCookie({
+  await signRequestCookie({
     request,
     cookieName: SESSION_COOKIE_NAME,
     cookieValue: session.id,

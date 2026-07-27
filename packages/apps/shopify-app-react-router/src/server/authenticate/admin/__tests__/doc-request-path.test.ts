@@ -45,6 +45,38 @@ describe('authorize.admin doc request path', () => {
       },
     );
 
+    it('does not leak an attacker-controlled shop into response headers when shop is invalid', async () => {
+      // Regression test: when `?shop=evil.com` fails sanitizeShop, the App
+      // Bridge page must not echo that value into CSP frame-ancestors or the
+      // Link preconnect header. See render-app-bridge.ts.
+      // GIVEN
+      const config = testConfig();
+      const shopify = shopifyApp(config);
+      const evilShop = 'evil.com';
+      const searchParams = new URLSearchParams();
+      searchParams.set('shop', evilShop);
+      searchParams.set('host', BASE64_HOST);
+
+      // WHEN
+      const response = await getThrownResponse(
+        shopify.authenticate.admin,
+        new Request(`${APP_URL}?${searchParams.toString()}`),
+      );
+
+      // THEN
+      expect(response.status).toBe(200);
+      const csp = response.headers.get('Content-Security-Policy');
+      // For an embedded app with no valid shop, no shop-specific frame-ancestors
+      // entry should be emitted, and certainly not the attacker-controlled value.
+      if (csp !== null) {
+        expect(csp).not.toContain(evilShop);
+      }
+      const link = response.headers.get('Link');
+      // The Link preconnect header is only set when shop is valid; with an
+      // invalid shop it should be absent.
+      expect(link).toBeNull();
+    });
+
     it('throws an error if the request URL is the login path', async () => {
       // GIVEN
       const shopify = shopifyApp(testConfig());

@@ -12,7 +12,7 @@ export interface RedirectToOptions {
 }
 
 export function renderAppBridge(
-  {config}: BasicParams,
+  {api, config}: BasicParams,
   request: Request,
   redirectTo?: RedirectToOptions,
 ): never {
@@ -31,11 +31,13 @@ export function renderAppBridge(
     'content-type': 'text/html;charset=utf-8',
   });
   const isEmbeddedApp = config.distribution !== AppDistribution.ShopifyAdmin;
-  addDocumentResponseHeaders(
-    responseHeaders,
-    isEmbeddedApp,
-    new URL(request.url).searchParams.get('shop'),
+  // Sanitize the shop param before using it in response headers (e.g. CSP
+  // frame-ancestors, Link preconnect). An attacker-controlled `?shop=evil.com`
+  // must not end up in security-sensitive headers.
+  const shop = api.utils.sanitizeShop(
+    new URL(request.url).searchParams.get('shop')!,
   );
+  addDocumentResponseHeaders(responseHeaders, isEmbeddedApp, shop);
 
   throw new Response(
     `
