@@ -225,6 +225,43 @@ describe('validateAuthenticatedSession', () => {
 
       expect((response.error as any).text).toBe('Storage error');
     });
+
+    it('responds to a CORS preflight OPTIONS request without authenticating', async () => {
+      const getCurrentIdSpy = jest.spyOn(shopify.api.session, 'getCurrentId');
+
+      const response = await request(app)
+        .options('/test/shop')
+        .set('Origin', 'https://extensions.shopifycdn.com')
+        .expect(204);
+
+      expect(response.headers['access-control-allow-origin']).toBe(
+        'https://extensions.shopifycdn.com',
+      );
+      expect(getCurrentIdSpy).not.toHaveBeenCalled();
+    });
+
+    it('allows the Authorization header on the preflight response', async () => {
+      const response = await request(app)
+        .options('/test/shop')
+        .set('Origin', 'https://extensions.shopifycdn.com')
+        .expect(204);
+
+      expect(response.headers['access-control-allow-headers']).toContain(
+        'Authorization',
+      );
+    });
+
+    it('allows the request methods on the preflight response', async () => {
+      const response = await request(app)
+        .options('/test/shop')
+        .set('Origin', 'https://extensions.shopifycdn.com')
+        .expect(204);
+
+      expect(response.headers['access-control-allow-methods']).toContain('GET');
+      expect(response.headers['access-control-allow-methods']).toContain(
+        'POST',
+      );
+    });
   });
 
   describe('for non-embedded apps', () => {
