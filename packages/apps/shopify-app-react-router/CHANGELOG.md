@@ -1,5 +1,45 @@
 # @shopify/shopify-app-react-router
 
+## 1.2.1
+
+### Patch Changes
+
+- a71dc5c: Add @publicDocs JSDoc tags to top-level types and upgrade @shopify/generate-docs to v1.1.0 to enable v2 documentation pipeline.
+- e510582: Updated `@graphql-codegen/introspection`, ` @graphql-codegen/typescript`, ` isbot` dependencies
+- 832fad0: Updated `isbot` dependencies
+- 430e633: Updated `react-router` dependencies
+- e4db082: Add `webhookId` (`shopify-webhook-id`) as a required field on Events webhooks. This is the true idempotency key for webhook deliveries. Previously, only `eventId` was extracted for Events webhooks and was used as a fallback for `webhookId` in downstream packages. This is no longer true. Both fields now coexist and represent distinct values.
+- 0bdc123: `AppProxyLink` now uses `forwardRef`, allowing consumers to attach a ref to the
+  underlying `<a>` element (e.g. `anchor.current.focus()`).
+- 1a6c3bf: Fixed an issue where `authenticate.admin(request).redirect(...)` could propagate embedded request parameters (including the session token) to a cross-origin destination when given a protocol-relative or backslash-prefixed URL. The same-origin check now uses the resolved URL's origin rather than a lexical prefix match, so only genuine same-origin redirects inherit request parameters.
+- 4aef9dc: Fixed an issue where embedded apps would incorrectly show the login page when
+  `shop` or `host` query params were missing from a document request (e.g. after
+  SPA navigation followed by a full page reload during local development).
+
+  Instead of redirecting to the login path, the server now renders a minimal App
+  Bridge page. App Bridge detects it is still embedded in the Shopify admin iframe,
+  retrieves the session token from the parent frame, and re-authenticates
+  seamlessly — no user interaction required.
+
+  This is a non-breaking change. The previous login redirect was effectively dead
+  code for embedded apps (`isEmbeddedApp` is always `true` for apps using this
+  library; the `ShopifyAdmin` distribution is excluded earlier in the pipeline).
+  No public APIs are added, removed, or changed.
+
+  Additionally hardened `renderAppBridge` to sanitize the `shop` query param
+  before using it in response headers, so an invalid/attacker-controlled value
+  cannot be reflected into the `Content-Security-Policy: frame-ancestors` or
+  `Link` preconnect headers.
+
+- Updated dependencies [9264a64]
+- Updated dependencies [e510582]
+- Updated dependencies [832fad0]
+- Updated dependencies [6c95ae1]
+- Updated dependencies [e4db082]
+- Updated dependencies [7ec655a]
+  - @shopify/shopify-api@13.1.0
+  - @shopify/shopify-app-session-storage@5.0.1
+
 ## 1.2.0
 
 ### Minor Changes

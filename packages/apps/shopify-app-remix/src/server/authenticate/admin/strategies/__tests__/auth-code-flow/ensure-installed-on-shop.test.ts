@@ -195,7 +195,7 @@ describe('authorize.admin doc request path', () => {
       const request = new Request(
         `${APP_URL}?shop=${TEST_SHOP}&host=${BASE64_HOST}`,
       );
-      signRequestCookie({
+      await signRequestCookie({
         request,
         cookieName: SESSION_COOKIE_NAME,
         cookieValue: 'other-session-id',
@@ -218,7 +218,7 @@ describe('authorize.admin doc request path', () => {
 
     // WHEN
     const request = new Request(APP_URL);
-    signRequestCookie({
+    await signRequestCookie({
       request,
       cookieName: SESSION_COOKIE_NAME,
       cookieValue: testSession.id,

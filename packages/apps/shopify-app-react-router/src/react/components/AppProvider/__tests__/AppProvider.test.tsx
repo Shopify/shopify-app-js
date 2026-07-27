@@ -3,6 +3,7 @@ import {MemoryRouter} from 'react-router-dom';
 
 import '../../../__tests__/test-helper';
 
+import {POLARIS_URL} from '../../../../shared/const';
 import {AppProvider} from '../AppProvider';
 
 // Mock react-router's useNavigate hook
@@ -50,7 +51,7 @@ describe('<AppProvider />', () => {
 
       // THEN
       expect(component).toContainReactComponent('script', {
-        src: 'https://cdn.shopify.com/shopifycloud/polaris.js',
+        src: POLARIS_URL,
       });
     });
 
@@ -92,7 +93,7 @@ describe('<AppProvider />', () => {
 
       // THEN
       expect(component).toContainReactComponent('script', {
-        src: 'https://cdn.shopify.com/shopifycloud/polaris.js',
+        src: POLARIS_URL,
       });
     });
 

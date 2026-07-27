@@ -42,8 +42,8 @@ export function redirectFactory(
 
     logger.debug('Redirecting', {shop, url: parsedUrl.toString()});
 
-    const isSameOrigin = parsedUrl.origin === config.appUrl;
-    if (isSameOrigin || url.startsWith('/')) {
+    const isSameOrigin = parsedUrl.origin === new URL(config.appUrl).origin;
+    if (isSameOrigin) {
       searchParams.forEach((value, key) => {
         if (!parsedUrl.searchParams.has(key)) {
           parsedUrl.searchParams.set(key, value);

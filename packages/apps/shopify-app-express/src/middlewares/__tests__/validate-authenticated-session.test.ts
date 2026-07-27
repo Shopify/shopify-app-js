@@ -6,7 +6,7 @@ import {ApiVersion, Session} from '@shopify/shopify-api';
 import {SignJWT} from 'jose';
 
 import {
-  createTestHmac,
+  createSignedCookieHeader,
   mockShopifyResponse,
   shopify,
   SHOPIFY_HOST,
@@ -230,7 +230,7 @@ describe('validateAuthenticatedSession', () => {
   describe('for non-embedded apps', () => {
     let validCookies: string[];
 
-    beforeEach(() => {
+    beforeEach(async () => {
       shopify.api.config.isEmbeddedApp = false;
 
       app = express();
@@ -239,13 +239,11 @@ describe('validateAuthenticatedSession', () => {
         res.json({data: {shop: {name: req.query.shop}}});
       });
 
-      validCookies = [
-        `shopify_app_session=${sessionId}`,
-        `shopify_app_session.sig=${createTestHmac(
-          shopify.api.config.apiSecretKey,
-          sessionId,
-        )}`,
-      ];
+      validCookies = await createSignedCookieHeader(
+        shopify.api.config.apiSecretKey,
+        'shopify_app_session',
+        sessionId,
+      );
       const scopes = shopify.api.config.scopes
         ? shopify.api.config.scopes.toString()
         : '';
