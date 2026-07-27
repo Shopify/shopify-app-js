@@ -55,6 +55,20 @@ Learn more about [access modes in Shopify APIs](https://shopify.dev/docs/apps/au
 The path your app's frontend uses to trigger an App Bridge redirect to leave the Shopify Admin before starting OAuth.
 Since that page is in the app frontend, we don't include it in this package, but you can find [an example in our template](https://github.com/Shopify/shopify-frontend-template-react/blob/main/pages/ExitIframe.jsx).
 
+### future
+
+`{[flag: string]: boolean}` | Defaults to `{}`
+
+Opt in to upcoming features before they become the default.
+
+#### expiring offline access tokens
+
+`future: {expiringOfflineAccessTokens: true}` | Defaults to `false`
+
+When enabled, the app requests an expiring offline access token during OAuth and automatically refreshes it (using the stored refresh token) when it is expired or within 5 minutes of expiring. `validateAuthenticatedSession` refreshes the token before use, and `shopify.ensureValidOfflineSession(shop)` can be used from background work (webhooks, cron jobs, queues) to load an offline session with a valid token.
+
+Your session storage must persist the `refreshToken` and `refreshTokenExpires` fields for this to work.
+
 ## Return
 
 Returns an object that contains everything an app needs to interact with Shopify:
@@ -107,6 +121,12 @@ A function that returns an Express middleware that redirects the user to the app
 `(RedirectOutOfAppParams) => void`
 
 A function that redirects to any URL at the browser's top level, regardless of where the request originated from.
+
+### ensureValidOfflineSession
+
+`(shop: string) => Promise<Session | undefined>`
+
+Loads the offline session for a shop and, when the `expiringOfflineAccessTokens` future flag is enabled, refreshes its access token if it is expired or close to expiring. Returns `undefined` when no offline session is stored. Use this from background work (webhooks, cron jobs, queues) that needs a valid offline token. Callers should trigger re-authentication if the refresh token has been revoked.
 
 ## Example
 

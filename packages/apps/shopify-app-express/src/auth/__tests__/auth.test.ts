@@ -79,6 +79,31 @@ describe('auth', () => {
         expect(url.pathname).toBe(`/apps/${shopify.api.config.apiKey}`);
       });
 
+      it('does not request an expiring token by default', async () => {
+        jest.spyOn(shopify.api.webhooks, 'register').mockResolvedValueOnce({});
+
+        await request(app)
+          .get(`/auth/callback?host=${BASE64_HOST}`)
+          .expect(302);
+
+        expect(callbackMock).toHaveBeenCalledWith(
+          expect.objectContaining({expiring: undefined}),
+        );
+      });
+
+      it('requests an expiring token when the future flag is enabled', async () => {
+        shopify.config.future = {expiringOfflineAccessTokens: true};
+        jest.spyOn(shopify.api.webhooks, 'register').mockResolvedValueOnce({});
+
+        await request(app)
+          .get(`/auth/callback?host=${BASE64_HOST}`)
+          .expect(302);
+
+        expect(callbackMock).toHaveBeenCalledWith(
+          expect.objectContaining({expiring: true}),
+        );
+      });
+
       describe('with webhooks', () => {
         let registerMock: jest.SpiedFunction;
         beforeEach(() => {

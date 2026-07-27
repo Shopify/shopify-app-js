@@ -2,7 +2,7 @@ import {Session} from '@shopify/shopify-api';
 
 import {ApiAndConfigParams} from '../types';
 
-export async function createOrLoadOfflineSession(
+export async function loadOfflineSession(
   {api, config}: ApiAndConfigParams,
   shop: string,
 ): Promise<Session | undefined> {

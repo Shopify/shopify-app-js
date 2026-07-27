@@ -36,7 +36,11 @@ export * from './types';
 export * from './auth/types';
 export * from './middlewares/types';
 export * from './webhooks/types';
-export type {AppConfigParams, ExpressApiConfigParams} from './config-types';
+export type {
+  AppConfigParams,
+  ExpressApiConfigParams,
+  FutureFlags,
+} from './config-types';
 export {ApiVersion} from '@shopify/shopify-api';
 
 type DefaultedConfigs<Params extends Partial<ApiConfigParams> | undefined> =

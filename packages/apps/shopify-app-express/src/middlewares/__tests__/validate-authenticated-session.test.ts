@@ -8,6 +8,7 @@ import {SignJWT} from 'jose';
 import {
   createSignedCookieHeader,
   mockShopifyResponse,
+  mockShopifyResponses,
   shopify,
   SHOPIFY_HOST,
 } from '../../__tests__/test-helper';
@@ -224,6 +225,62 @@ describe('validateAuthenticatedSession', () => {
         .expect(500);
 
       expect((response.error as any).text).toBe('Storage error');
+    });
+
+    describe('with expiring offline access tokens', () => {
+      const scopes = 'testScope';
+
+      beforeEach(async () => {
+        shopify.config.future = {expiringOfflineAccessTokens: true};
+        session.scope = scopes;
+        session.expires = new Date(Date.now() + 60 * 1000);
+        session.refreshToken = 'a-refresh-token';
+        await shopify.config.sessionStorage.storeSession(session);
+      });
+
+      it('refreshes the offline token before use and stores the new session', async () => {
+        mockShopifyResponses(
+          [
+            {
+              access_token: 'new-access-token',
+              scope: scopes,
+              expires_in: 3600,
+              refresh_token: 'new-refresh-token',
+              refresh_token_expires_in: 86400,
+            },
+          ],
+          [{data: {shop: {name: shop}}}],
+        );
+
+        await request(app)
+          .get('/test/shop?shop=my-shop.myshopify.io')
+          .set('Authorization', `Bearer ${validJWT}`)
+          .expect(200);
+
+        const stored =
+          await shopify.config.sessionStorage.loadSession(sessionId);
+        expect(stored?.accessToken).toBe('new-access-token');
+        expect(stored?.refreshToken).toBe('new-refresh-token');
+      });
+
+      it('logs and continues when the refresh fails', async () => {
+        const loggerSpy = jest.spyOn(shopify.config.logger, 'error');
+
+        mockShopifyResponses(
+          [{error: 'invalid_grant'}, {status: 400}],
+          [{data: {shop: {name: shop}}}],
+        );
+
+        await request(app)
+          .get('/test/shop?shop=my-shop.myshopify.io')
+          .set('Authorization', `Bearer ${validJWT}`)
+          .expect(200);
+
+        expect(loggerSpy).toHaveBeenCalledWith(
+          expect.stringContaining('Failed to refresh offline access token'),
+          expect.objectContaining({shop}),
+        );
+      });
     });
   });
 
