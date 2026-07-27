@@ -6,6 +6,7 @@ import {
   Shopify,
   FeatureDeprecatedError,
   ShopifyRestResources,
+  Session,
 } from '@shopify/shopify-api';
 import {MemorySessionStorage} from '@shopify/shopify-app-session-storage-memory';
 
@@ -29,6 +30,7 @@ import {
 } from './middlewares/types';
 import {redirectOutOfApp} from './redirect-out-of-app';
 import {RedirectOutOfAppFunction} from './types';
+import {ensureValidOfflineSession} from './helpers/index';
 
 export * from './types';
 export * from './auth/types';
@@ -64,6 +66,7 @@ export interface ShopifyApp<Params extends AppConfigParams = AppConfigParams> {
   ensureInstalledOnShop: EnsureInstalledMiddleware;
   redirectToShopifyOrAppRoot: RedirectToShopifyOrAppRootMiddleware;
   redirectOutOfApp: RedirectOutOfAppFunction;
+  ensureValidOfflineSession: (shop: string) => Promise<Session | undefined>;
 }
 
 export function shopifyApp<Params extends AppConfigParams>(
@@ -96,6 +99,8 @@ export function shopifyApp<Params extends AppConfigParams>(
       config: validatedConfig,
     }),
     redirectOutOfApp: redirectOutOfApp({api, config: validatedConfig}),
+    ensureValidOfflineSession: (shop: string) =>
+      ensureValidOfflineSession({api, config: validatedConfig}, shop),
   };
 }
 
@@ -133,6 +138,7 @@ function validateAppConfig<Params extends Omit<AppConfigParams, 'api'>>(
     logger: overrideLoggerPackage(api.logger),
     useOnlineTokens: false,
     exitIframePath: '/exitiframe',
+    future: {},
     sessionStorage: (sessionStorage ??
       new MemorySessionStorage()) as ConfigInterfaceFromParams<Params>['sessionStorage'],
     ...configWithoutSessionStorage,

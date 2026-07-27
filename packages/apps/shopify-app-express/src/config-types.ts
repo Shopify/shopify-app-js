@@ -13,6 +13,16 @@ export type ExpressApiConfigParams<
   apiVersion: ApiVersion;
 };
 
+export interface FutureFlags {
+  /**
+   * When enabled, the app will use expiring offline access tokens and automatically refresh them when they are close to
+   * expiring.
+   *
+   * @default false
+   */
+  expiringOfflineAccessTokens?: boolean;
+}
+
 export interface AppConfigParams<
   Resources extends ShopifyRestResources = ShopifyRestResources,
   Storage extends SessionStorage = SessionStorage,
@@ -23,6 +33,7 @@ export interface AppConfigParams<
   useOnlineTokens?: boolean;
   exitIframePath?: string;
   sessionStorage?: Storage;
+  future?: FutureFlags;
 }
 
 export interface AppConfigInterface<
@@ -33,6 +44,7 @@ export interface AppConfigInterface<
   useOnlineTokens: boolean;
   exitIframePath: string;
   sessionStorage: Storage;
+  future: FutureFlags;
 }
 
 export interface AuthConfigInterface {

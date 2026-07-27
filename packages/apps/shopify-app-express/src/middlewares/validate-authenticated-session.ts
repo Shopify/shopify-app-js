@@ -4,6 +4,7 @@ import {Request, Response, NextFunction} from 'express';
 import {redirectToAuth} from '../redirect-to-auth';
 import {ApiAndConfigParams} from '../types';
 import {redirectOutOfApp} from '../redirect-out-of-app';
+import {ensureOfflineTokenIsNotExpired} from '../helpers/index';
 
 import {ValidateAuthenticatedSessionMiddleware} from './types';
 import {hasValidAccessToken} from './has-valid-access-token';
@@ -51,6 +52,20 @@ export function validateAuthenticatedSession({
 
       let shop =
         api.utils.sanitizeShop(req.query.shop as string) || session?.shop;
+
+      if (session && !config.useOnlineTokens) {
+        try {
+          session = await ensureOfflineTokenIsNotExpired(
+            {api, config},
+            session,
+          );
+        } catch (error) {
+          config.logger.error(
+            `Failed to refresh offline access token: ${error}`,
+            {shop: session.shop},
+          );
+        }
+      }
 
       if (session && shop && session.shop !== shop) {
         config.logger.debug(
