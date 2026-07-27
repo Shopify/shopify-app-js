@@ -837,9 +837,7 @@ describe('callback', () => {
       callbackResponse.headers['Set-Cookie'],
     );
 
-    expect(responseCookies.shopify_app_session.path).toEqual(
-      `/shops/${shop}/`,
-    );
+    expect(responseCookies.shopify_app_session.path).toEqual(`/shops/${shop}/`);
   });
 });
 
