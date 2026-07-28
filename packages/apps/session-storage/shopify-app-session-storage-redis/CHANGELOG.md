@@ -1,5 +1,12 @@
 # @shopify/shopify-app-session-storage-redis
 
+## 6.0.1
+
+### Patch Changes
+
+- 3a17de9: Updated `redis` dependencies
+- f86b725: Updated `graphql`, ` mysql2`, ` pg`, ` mongodb`, ` pg-connection-string`, ` redis` dependencies
+
 ## 6.0.0
 
 ### Patch Changes

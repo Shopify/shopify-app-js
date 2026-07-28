@@ -23,8 +23,15 @@ import {
 } from './types';
 
 const HMAC_TIMESTAMP_PERMITTED_CLOCK_TOLERANCE_SEC = 90;
+const APP_PROXY_SINGLE_VALUE_PARAMS = new Set([
+  'hmac',
+  'shop',
+  'signature',
+  'timestamp',
+]);
 
 export type HMACSignator = 'admin' | 'appProxy';
+type HmacQuery = AuthQuery | URLSearchParams;
 
 export interface ValidateParams extends AdapterArgs {
   /**
@@ -76,28 +83,61 @@ export function generateLocalHmac(config: ConfigInterface) {
 
 export function validateHmac(config: ConfigInterface) {
   return async (
-    query: AuthQuery,
+    query: HmacQuery,
     {signator}: {signator: HMACSignator} = {signator: 'admin'},
   ): Promise<boolean> => {
-    if (signator === 'admin' && !query.hmac) {
+    const normalizedQuery = normalizeQuery(query, signator);
+
+    if (signator === 'admin' && !normalizedQuery.hmac) {
       throw new ShopifyErrors.InvalidHmacError(
         'Query does not contain an HMAC value.',
       );
     }
 
-    if (signator === 'appProxy' && !query.signature) {
+    if (signator === 'appProxy' && !normalizedQuery.signature) {
       throw new ShopifyErrors.InvalidHmacError(
         'Query does not contain a signature value.',
       );
     }
 
-    validateHmacTimestamp(query);
+    validateHmacTimestamp(normalizedQuery);
 
-    const hmac = signator === 'appProxy' ? query.signature : query.hmac;
-    const localHmac = await generateLocalHmac(config)(query, signator);
+    const hmac =
+      signator === 'appProxy'
+        ? normalizedQuery.signature
+        : normalizedQuery.hmac;
+    const localHmac = await generateLocalHmac(config)(
+      normalizedQuery,
+      signator,
+    );
 
     return safeCompare(hmac as string, localHmac);
   };
+}
+
+function normalizeQuery(query: HmacQuery, signator: HMACSignator): AuthQuery {
+  if (!(query instanceof URLSearchParams)) {
+    return query;
+  }
+
+  const normalizedQuery = Object.create(null) as AuthQuery;
+  for (const [key, value] of query.entries()) {
+    const existingValue = normalizedQuery[key];
+    if (existingValue === undefined) {
+      normalizedQuery[key] = value;
+    } else if (
+      signator === 'appProxy' &&
+      APP_PROXY_SINGLE_VALUE_PARAMS.has(key)
+    ) {
+      throw new ShopifyErrors.InvalidHmacError(
+        `Query parameter "${key}" must not appear more than once.`,
+      );
+    } else {
+      normalizedQuery[key] = `${existingValue},${value}`;
+    }
+  }
+
+  return normalizedQuery;
 }
 
 export async function validateHmacString(

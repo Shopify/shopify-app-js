@@ -55,7 +55,7 @@ describe('Update usage billing plan capped amount', () => {
     });
 
     const request = new Request(`${APP_URL}/billing?shop=${TEST_SHOP}`);
-    signRequestCookie({
+    await signRequestCookie({
       request,
       cookieName: SESSION_COOKIE_NAME,
       cookieValue: session.id,
@@ -173,7 +173,7 @@ describe('Update usage billing plan capped amount', () => {
     });
 
     const request = new Request(`${APP_URL}/billing?shop=${TEST_SHOP}`);
-    signRequestCookie({
+    await signRequestCookie({
       request,
       cookieName: SESSION_COOKIE_NAME,
       cookieValue: session.id,
@@ -293,7 +293,7 @@ describe('Update usage billing plan capped amount', () => {
     });
 
     const request = new Request(`${APP_URL}/billing?shop=${TEST_SHOP}`);
-    signRequestCookie({
+    await signRequestCookie({
       request,
       cookieName: SESSION_COOKIE_NAME,
       cookieValue: session.id,

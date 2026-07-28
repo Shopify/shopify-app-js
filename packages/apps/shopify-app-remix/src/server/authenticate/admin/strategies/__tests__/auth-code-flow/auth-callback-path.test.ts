@@ -1,4 +1,10 @@
-import {HashFormat, createSHA256HMAC} from '@shopify/shopify-api/runtime';
+import {
+  Cookies,
+  HashFormat,
+  NormalizedRequest,
+  NormalizedResponse,
+  createSHA256HMAC,
+} from '@shopify/shopify-api/runtime';
 
 import {shopifyApp} from '../../../../..';
 import {
@@ -95,7 +101,7 @@ describe('authorize.admin auth callback path', () => {
           `${getCallbackUrl(config)}?shop=${TEST_SHOP}&state=${state}`,
         );
 
-        signRequestCookie({
+        await signRequestCookie({
           request,
           cookieName: 'shopify_app_state',
           cookieValue: state,
@@ -127,7 +133,7 @@ describe('authorize.admin auth callback path', () => {
           )}?shop=${TEST_SHOP}&state=${state}&hmac=invalid`,
         );
 
-        signRequestCookie({
+        await signRequestCookie({
           request,
           cookieName: 'shopify_app_state',
           cookieValue: state,
@@ -353,11 +359,15 @@ describe('authorize.admin auth callback path', () => {
           expect(response.headers.get('location')).toBe(
             `/?shop=${TEST_SHOP}&host=${host}`,
           );
+          const sessionSig = await getExpectedCookieSignature(
+            config.apiSecretKey,
+            `offline_${TEST_SHOP}`,
+          );
           expect(response.headers.get('set-cookie')).toBe(
             [
               'shopify_app_state=;path=/;expires=Thu, 01 Jan 1970 00:00:00 GMT',
               `shopify_app_session=offline_${TEST_SHOP};sameSite=lax; secure=true; path=/`,
-              'shopify_app_session.sig=0qSrbSUpq8Cr+fev917WGyO1IU3Py1fTwZukcHd4hVE=;sameSite=lax; secure=true; path=/',
+              `shopify_app_session.sig=${sessionSig};sameSite=lax; secure=true; path=/`,
             ].join(', '),
           );
         });
@@ -395,6 +405,16 @@ function getCallbackUrl(appConfig: ReturnType<typeof testConfig>) {
   return `${appConfig.appUrl}/auth/callback`;
 }
 
+async function getExpectedCookieSignature(apiSecretKey: string, value: string) {
+  const cookies = new Cookies(
+    {headers: {}} as NormalizedRequest,
+    {} as NormalizedResponse,
+    {keys: [apiSecretKey]},
+  );
+  await cookies.setAndSign('cookie', value);
+  return cookies.outgoingCookieJar['cookie.sig'].value;
+}
+
 async function getValidCallbackRequest(config: ReturnType<typeof testConfig>) {
   const cookieName = 'shopify_app_state';
   const state = 'nonce';
@@ -411,7 +431,7 @@ async function getValidCallbackRequest(config: ReturnType<typeof testConfig>) {
     `${getCallbackUrl(config)}?${queryParams}&hmac=${hmac}`,
   );
 
-  signRequestCookie({
+  await signRequestCookie({
     request,
     cookieName,
     cookieValue: state,

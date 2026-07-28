@@ -133,6 +133,12 @@ function isSingleMerchantApp<Config extends AppConfigArg>(
 // This function is only exported so we can unit test it without having to mock the underlying module.
 // It's not available to consumers of the library because it is not exported in the index module, and never should be.
 export function deriveApi(appConfig: AppConfigArg): BasicParams['api'] {
+  if ('isEmbeddedApp' in appConfig) {
+    throw new ShopifyError(
+      '`isEmbeddedApp` is not supported by @shopify/shopify-app-react-router. React Router apps are embedded by default; remove this option.',
+    );
+  }
+
   let appUrl: URL;
   try {
     appUrl = new URL(appConfig.appUrl);
