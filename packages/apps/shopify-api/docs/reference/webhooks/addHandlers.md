@@ -68,6 +68,12 @@ Fields to be included in the callback, defaulting to including all of them.
 
 Namespaces to be included in the callback, defaulting to including all of them.
 
+### filter
+
+`string` | Optional
+
+A filter string (using Shopify's [filter syntax](https://shopify.dev/docs/apps/webhooks/configuration/eventbridge#subscribe-to-standard-topics)) that limits which webhook payloads are delivered. For example, `"id:>0 AND title:shoes"`. When omitted, all payloads for the topic are delivered.
+
 ### subTopic
 `string` | Deprecated
 

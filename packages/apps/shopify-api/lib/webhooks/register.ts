@@ -185,6 +185,7 @@ function buildHandlerFromNode(edge: WebhookCheckResponseNode): WebhookHandler {
   handler.id = edge.node.id;
   handler.includeFields = edge.node.includeFields;
   handler.metafieldNamespaces = edge.node.metafieldNamespaces;
+  handler.filter = edge.node.filter;
 
   // Sort the array fields to make them cheaper to compare later on
   handler.includeFields?.sort();
@@ -291,8 +292,9 @@ function areHandlerFieldsEqual(
     arr1.metafieldNamespaces || [],
     arr2.metafieldNamespaces || [],
   );
+  const filterEqual = (arr1.filter ?? '') === (arr2.filter ?? '');
 
-  return includeFieldsEqual && metafieldNamespacesEqual;
+  return includeFieldsEqual && metafieldNamespacesEqual && filterEqual;
 }
 
 function arraysEqual(arr1: any[], arr2: any[]): boolean {
@@ -413,6 +415,9 @@ function buildMutation(
     if (handler.metafieldNamespaces) {
       params.metafieldNamespaces = JSON.stringify(handler.metafieldNamespaces);
     }
+    if (handler.filter) {
+      params.filter = `"${handler.filter}"`;
+    }
 
     if (handler.subTopic) {
       const subTopicString = `subTopic: "${handler.subTopic}",`;
@@ -485,6 +490,7 @@ export const TEMPLATE_GET_HANDLERS = `query shopifyApiReadWebhookSubscriptions {
         topic
         includeFields
         metafieldNamespaces
+        filter
         endpoint {
           __typename
           ... on WebhookHttpEndpoint {
