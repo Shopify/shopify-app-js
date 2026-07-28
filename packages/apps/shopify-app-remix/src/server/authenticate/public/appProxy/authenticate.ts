@@ -95,10 +95,9 @@ async function validateAppProxyHmac(
       searchParams.delete('index');
     }
 
-    let isValid = await api.utils.validateHmac(
-      Object.fromEntries(searchParams.entries()),
-      {signator: 'appProxy'},
-    );
+    let isValid = await api.utils.validateHmac(searchParams, {
+      signator: 'appProxy',
+    });
 
     if (!isValid) {
       const cleanPath = url.pathname
@@ -111,20 +110,18 @@ async function validateAppProxyHmac(
         `?_data=${data}&${searchParams.toString().replace(/^\?/, '')}`,
       );
 
-      isValid = await api.utils.validateHmac(
-        Object.fromEntries(searchParams.entries()),
-        {signator: 'appProxy'},
-      );
+      isValid = await api.utils.validateHmac(searchParams, {
+        signator: 'appProxy',
+      });
 
       if (!isValid) {
         const searchParams = new URLSearchParams(
           `?_data=${data}._index&${url.search.replace(/^\?/, '')}`,
         );
 
-        isValid = await api.utils.validateHmac(
-          Object.fromEntries(searchParams.entries()),
-          {signator: 'appProxy'},
-        );
+        isValid = await api.utils.validateHmac(searchParams, {
+          signator: 'appProxy',
+        });
       }
     }
 
