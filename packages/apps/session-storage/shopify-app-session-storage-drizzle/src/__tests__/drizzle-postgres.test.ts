@@ -68,8 +68,8 @@ describe('DrizzleSessionStoragePostgres', () => {
           });
 
           await client.connect();
-        } catch (error) {
-          // console.error(error);
+        } catch (_error) {
+          // console.error(_error);
 
           return false;
         }

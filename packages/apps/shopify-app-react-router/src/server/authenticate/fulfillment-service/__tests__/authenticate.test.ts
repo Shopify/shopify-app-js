@@ -4,13 +4,10 @@ import {Session} from '@shopify/shopify-api';
 
 import {AppDistribution, shopifyApp} from '../../..';
 import {
-  API_KEY,
-  API_SECRET_KEY,
   expectAdminApiClient,
   expectTokenRefresh,
   getHmac,
   getThrownResponse,
-  mockExternalRequest,
   setUpValidSession,
   TEST_SHOP,
   testConfig,

@@ -25,7 +25,7 @@ async function serverReady(domain: string): Promise<boolean> {
   try {
     const response = await fetch(domain);
     return response.status === 200;
-  } catch (err) {
+  } catch (_err) {
     return false;
   }
 }

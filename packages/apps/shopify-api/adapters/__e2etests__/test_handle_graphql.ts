@@ -31,7 +31,7 @@ export const handleGraphqlTest = async ({
     const bodyJSON = JSON.parse(testRequest.body!);
     operation = bodyJSON.query;
     variables = bodyJSON.variables;
-  } catch (error) {
+  } catch (_error) {
     operation = testRequest.body!;
   }
 

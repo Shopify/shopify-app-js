@@ -1,9 +1,4 @@
-import {
-  HTTPResponseLog,
-  HTTPRetryLog,
-  HTTPResponseGraphQLDeprecationNotice,
-  LogContent,
-} from '@shopify/admin-api-client';
+import {LogContent} from '@shopify/admin-api-client';
 
 import {clientLoggerFactory} from '../common';
 import {testConfig} from '../../__tests__/test-config';

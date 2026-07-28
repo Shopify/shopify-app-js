@@ -99,7 +99,7 @@ export async function validateMocks() {
       // TODO: we're currently not checking the headers properly. We should fix this.
       Object.entries(request.headers).forEach(([key, value]) => {
         expected.headers[key] = value;
-        actual.headers[key] = (init?.headers as any)[key];
+        actual.headers[key] = (init?.headers as any)?.[key];
       });
     }
 

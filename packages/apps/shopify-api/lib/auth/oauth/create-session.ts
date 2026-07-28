@@ -31,7 +31,7 @@ export function createSession({
     new Date(Date.now() + expires_in * 1000);
 
   const getOnlineSessionProperties = (responseBody: OnlineAccessResponse) => {
-    const {access_token, scope, ...rest} = responseBody;
+    const {access_token: _access_token, scope: _scope, ...rest} = responseBody;
     const sessionId = config.isEmbeddedApp
       ? getJwtSessionId(config)(
           shop,
