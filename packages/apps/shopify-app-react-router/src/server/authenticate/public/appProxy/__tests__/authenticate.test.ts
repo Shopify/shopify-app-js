@@ -96,6 +96,30 @@ describe('authenticating app proxy requests', () => {
     expect(response.statusText).toBe('Bad Request');
   });
 
+  it('Throws a 400 response if the shop param appears more than once', async () => {
+    // GIVEN
+    const shopify = shopifyApp(testConfig());
+    const url = new URL(APP_URL);
+    url.searchParams.append('shop', 'victim-shop.myshopify.com');
+    url.searchParams.append('shop', TEST_SHOP);
+    url.searchParams.set('timestamp', secondsInPast(1));
+
+    const signedUrl = new URL(url);
+    signedUrl.searchParams.delete('shop');
+    signedUrl.searchParams.set('shop', TEST_SHOP);
+    url.searchParams.set('signature', await createAppProxyHmac(signedUrl));
+
+    // WHEN
+    const response = await getThrownResponse(
+      shopify.authenticate.public.appProxy,
+      new Request(url.toString()),
+    );
+
+    // THEN
+    expect(response.status).toBe(400);
+    expect(response.statusText).toBe('Bad Request');
+  });
+
   describe('Valid requests return a liquid helper', () => {
     it('Returns a Response with Content-Type: application/liquid and status 200 by default', async () => {
       // GIVEN

@@ -1,3 +1,4 @@
+import {createSHA256HMAC} from '../../crypto';
 import {
   addHeader,
   canonicalizeHeaderName,
@@ -50,11 +51,25 @@ describe('Cookies', () => {
     expect(getHeaders(res.headers, 'Set-Cookie').length).toEqual(2);
   });
 
-  it('can sign cookies', async () => {
+  it('can sign and verify cookies with a domain-separated key', async () => {
     const keys = [crypto.randomUUID()];
     const cookieJar = new Cookies(req, res, {keys});
     await cookieJar.setAndSign('new_session', 'lol');
+
+    const signature = cookieJar.outgoingCookieJar['new_session.sig'].value;
+
     expect(getHeaders(res.headers, 'Set-Cookie').length).toEqual(2);
+    expect(signature).not.toEqual(await createSHA256HMAC(keys[0], 'lol'));
+
+    const verifyingJar = new Cookies(
+      {
+        ...req,
+        headers: {Cookie: `new_session=lol; new_session.sig=${signature}`},
+      },
+      res,
+      {keys},
+    );
+    expect(await verifyingJar.getAndVerify('new_session')).toEqual('lol');
   });
 });
 

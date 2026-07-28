@@ -71,7 +71,18 @@ export function validateAuthenticatedSession({
             shop: session.shop,
           });
 
-          if (await hasValidAccessToken(api, session)) {
+          let hasValidToken: boolean;
+          try {
+            hasValidToken = await hasValidAccessToken(api, session);
+          } catch (error) {
+            config.logger.error(
+              `Could not check if session was valid: ${error}`,
+              {shop: session.shop},
+            );
+            hasValidToken = false;
+          }
+
+          if (hasValidToken) {
             config.logger.debug('Request session has a valid access token', {
               shop: session.shop,
             });

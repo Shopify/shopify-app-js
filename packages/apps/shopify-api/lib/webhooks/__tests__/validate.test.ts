@@ -1,5 +1,10 @@
 import request from 'supertest';
 
+import {
+  Cookies,
+  NormalizedRequest,
+  NormalizedResponse,
+} from '../../../runtime/http';
 import {ShopifyHeader} from '../../types';
 import {WebhookValidationErrorReason} from '../types';
 import {Shopify, shopifyApi} from '../..';
@@ -86,6 +91,36 @@ describe('shopify.webhooks.validate', () => {
     expect(response.body.data).toEqual({
       valid: false,
       reason: WebhookValidationErrorReason.MissingHmac,
+    });
+  });
+
+  it('returns false when a cookie signature is replayed as the webhook HMAC', async () => {
+    const shopify = shopifyApi(testConfig());
+    const app = getTestApp(shopify);
+    const cookieValue = 'oauth-state-nonce';
+    const cookieResponse = {} as NormalizedResponse;
+    const cookieJar = new Cookies(
+      {headers: {}} as NormalizedRequest,
+      cookieResponse,
+      {keys: [shopify.config.apiSecretKey]},
+    );
+    await cookieJar.setAndSign('shopify_app_state', cookieValue);
+
+    const response = await request(app)
+      .post('/webhooks')
+      .set(
+        headers({
+          hmac: cookieJar.outgoingCookieJar['shopify_app_state.sig'].value,
+          topic: 'app/uninstalled',
+          domain: 'victim-shop.myshopify.io',
+        }),
+      )
+      .send(cookieValue)
+      .expect(200);
+
+    expect(response.body.data).toEqual({
+      valid: false,
+      reason: WebhookValidationErrorReason.InvalidHmac,
     });
   });
 
