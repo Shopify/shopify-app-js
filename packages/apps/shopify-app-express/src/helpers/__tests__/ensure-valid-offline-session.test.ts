@@ -15,6 +15,8 @@ function storeOfflineSession(overrides = {}) {
 
 describe('ensureValidOfflineSession', () => {
   it('returns undefined when no offline session exists', async () => {
+    shopify.config.future = {expiringOfflineAccessTokens: true};
+
     const result = await ensureValidOfflineSession(
       {api: shopify.api, config: shopify.config},
       TEST_SHOP,
@@ -36,15 +38,15 @@ describe('ensureValidOfflineSession', () => {
     expect(result?.accessToken).toBe('new-access-token');
   });
 
-  it('returns the stored session unchanged when the flag is off', async () => {
+  it('throws when the flag is off, instead of silently doing nothing', async () => {
     shopify.config.future = {expiringOfflineAccessTokens: false};
     await storeOfflineSession();
 
-    const result = await ensureValidOfflineSession(
-      {api: shopify.api, config: shopify.config},
-      TEST_SHOP,
-    );
-
-    expect(result?.accessToken).toBe('old-access-token');
+    await expect(
+      ensureValidOfflineSession(
+        {api: shopify.api, config: shopify.config},
+        TEST_SHOP,
+      ),
+    ).rejects.toThrow('expiringOfflineAccessTokens');
   });
 });

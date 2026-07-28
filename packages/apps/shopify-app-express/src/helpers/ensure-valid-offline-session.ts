@@ -1,4 +1,4 @@
-import {Session} from '@shopify/shopify-api';
+import {Session, ShopifyError} from '@shopify/shopify-api';
 
 import {ApiAndConfigParams} from '../types';
 
@@ -9,6 +9,14 @@ export async function ensureValidOfflineSession(
   params: ApiAndConfigParams,
   shop: string,
 ): Promise<Session | undefined> {
+  const {config} = params;
+
+  if (!config.future?.expiringOfflineAccessTokens) {
+    throw new ShopifyError(
+      'ensureValidOfflineSession requires the `expiringOfflineAccessTokens` future flag to be enabled.',
+    );
+  }
+
   const session = await loadOfflineSession(params, shop);
 
   if (!session) return undefined;

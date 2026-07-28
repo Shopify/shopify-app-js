@@ -53,7 +53,11 @@ export function validateAuthenticatedSession({
       let shop =
         api.utils.sanitizeShop(req.query.shop as string) || session?.shop;
 
-      if (session && !config.useOnlineTokens) {
+      if (
+        session &&
+        !config.useOnlineTokens &&
+        config.future?.expiringOfflineAccessTokens
+      ) {
         try {
           session = await ensureOfflineTokenIsNotExpired(
             {api, config},
