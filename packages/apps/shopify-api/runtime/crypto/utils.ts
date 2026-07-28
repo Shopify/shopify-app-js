@@ -2,20 +2,29 @@ import {ShopifyError} from '../../lib/error';
 
 import {HashFormat} from './types';
 
+type HMACSecret = string | ArrayBuffer;
+
+const enc = new TextEncoder();
+
+function getCryptoLib(): Crypto {
+  return typeof (crypto as any)?.webcrypto === 'undefined'
+    ? crypto
+    : (crypto as any).webcrypto;
+}
+
+function hmacKeyData(secret: HMACSecret): BufferSource {
+  return typeof secret === 'string' ? enc.encode(secret) : secret;
+}
+
 export async function createSHA256HMAC(
-  secret: string,
+  secret: HMACSecret,
   payload: string,
   returnFormat: HashFormat = HashFormat.Base64,
 ): Promise<string> {
-  const cryptoLib =
-    typeof (crypto as any)?.webcrypto === 'undefined'
-      ? crypto
-      : (crypto as any).webcrypto;
-
-  const enc = new TextEncoder();
+  const cryptoLib = getCryptoLib();
   const key = await cryptoLib.subtle.importKey(
     'raw',
-    enc.encode(secret),
+    hmacKeyData(secret),
     {
       name: 'HMAC',
       hash: {name: 'SHA-256'},
@@ -32,6 +41,31 @@ export async function createSHA256HMAC(
   return returnFormat === HashFormat.Base64
     ? asBase64(signature)
     : asHex(signature);
+}
+
+export async function deriveSHA256HMACKey(
+  secret: string,
+  info: string,
+): Promise<ArrayBuffer> {
+  const cryptoLib = getCryptoLib();
+  const keyMaterial = await cryptoLib.subtle.importKey(
+    'raw',
+    enc.encode(secret),
+    'HKDF',
+    false,
+    ['deriveBits'],
+  );
+
+  return cryptoLib.subtle.deriveBits(
+    {
+      name: 'HKDF',
+      hash: 'SHA-256',
+      salt: new Uint8Array(0),
+      info: enc.encode(info),
+    },
+    keyMaterial,
+    256,
+  );
 }
 
 export function asHex(buffer: ArrayBuffer | Uint8Array): string {

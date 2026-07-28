@@ -148,6 +148,10 @@ export interface EmbeddedAdminContext<
    *
    * Returned only if `isEmbeddedApp` is `true`.
    *
+   * Request parameters (including `id_token`, `shop`, `host`, and `embedded`) are only copied to the destination when
+   * it resolves to the same origin as `appUrl`. This helper does not validate the destination URL — avoid passing
+   * unvalidated user input (for example, a raw `?next=` query parameter) and use an allow-list of paths instead.
+   *
    * @example
    * <caption>Redirecting to an app route.</caption>
    * <description>Use the `redirect` helper to safely redirect between pages.</description>
@@ -211,6 +215,12 @@ export interface ScopesContext {
 export type AdminContext<Config extends AppConfigArg> =
   EmbeddedTypedAdminContext<Config> & ScopesContext;
 
+/**
+ * Authenticates requests coming from the Shopify admin.
+ *
+ * The shape of the returned object changes depending on the `isEmbeddedApp` config.
+ * @publicDocs
+ */
 export type AuthenticateAdmin<Config extends AppConfigArg> = (
   request: Request,
 ) => Promise<AdminContext<Config>>;

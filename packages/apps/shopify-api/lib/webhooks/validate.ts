@@ -162,6 +162,11 @@ function checkEventsHeaders(
     headerNames.apiVersion,
     missingHeaders,
   );
+  const webhookId = getRequiredHeader(
+    headers,
+    headerNames.webhookId,
+    missingHeaders,
+  );
   const eventId = getRequiredHeader(
     headers,
     headerNames.eventId,
@@ -182,6 +187,7 @@ function checkEventsHeaders(
     topic: topicForStorage(topic!),
     domain: domain!,
     apiVersion: apiVersion!,
+    webhookId: webhookId!,
     eventId: eventId!,
   };
 

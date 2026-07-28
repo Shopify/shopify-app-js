@@ -1,6 +1,6 @@
 {
   "name": "@shopify/shopify-app-session-storage-dynamodb",
-  "version": "6.0.0",
+  "version": "6.0.1",
   "description": "Shopify App Session Storage for DynamoDB",
   "repository": {
     "type": "git",
@@ -20,7 +20,7 @@
     "lint": "eslint .",
     "build": "pnpm rollup && pnpm tsc -p ./tsconfig.build.json",
     "tsc": "tsc",
-    "test": "jest",
+    "test": "NODE_OPTIONS=\"$NODE_OPTIONS --experimental-vm-modules\" jest",
     "test:ci": "pnpm test",
     "rollup": "rollup -c rollup.config.js --bundleConfigAsCjs",
     "clean": "rimraf .rollup.cache dist",
@@ -45,15 +45,15 @@
     "AWS"
   ],
   "dependencies": {
-    "@aws-sdk/client-dynamodb": "^3.975.0",
-    "@aws-sdk/util-dynamodb": "^3.975.0"
+    "@aws-sdk/client-dynamodb": "^3.1085.0",
+    "@aws-sdk/util-dynamodb": "^3.996.6"
   },
   "peerDependencies": {
     "@shopify/shopify-api": "^13.0.0",
     "@shopify/shopify-app-session-storage": "^5.0.0"
   },
   "devDependencies": {
-    "@shopify/shopify-app-session-storage-test-utils": "^5.0.0"
+    "@shopify/shopify-app-session-storage-test-utils": "^5.0.1"
   },
   "files": [
     "dist/*",

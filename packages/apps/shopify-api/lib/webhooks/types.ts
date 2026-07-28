@@ -27,6 +27,7 @@ export const WEBHOOK_HEADER_NAMES = {
     topic: ShopifyEventsHeader.Topic,
     domain: ShopifyEventsHeader.Domain,
     apiVersion: ShopifyEventsHeader.ApiVersion,
+    webhookId: ShopifyEventsHeader.WebhookId,
     eventId: ShopifyEventsHeader.EventId,
     handle: ShopifyEventsHeader.Handle,
     action: ShopifyEventsHeader.Action,
@@ -191,6 +192,7 @@ export interface WebhooksWebhookFields extends BaseWebhookFields {
 
 export interface EventsWebhookFields extends BaseWebhookFields {
   webhookType: typeof WebhookType.Events;
+  webhookId: string;
   eventId: string;
   handle?: string;
   action?: string;

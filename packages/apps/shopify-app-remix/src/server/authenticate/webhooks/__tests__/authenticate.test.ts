@@ -192,7 +192,7 @@ describe('Webhook validation', () => {
       expect(result.apiVersion).toBe('2023-01');
       expect(result.shop).toBe(TEST_SHOP);
       expect(result.topic).toBe('PRODUCT');
-      expect(result.webhookId).toBe('evt-123');
+      expect(result.webhookId).toBe('webhook-456');
       expect(result.eventId).toBe('evt-123');
       expect(result.handle).toBe('my-handle');
       expect(result.action).toBe('update');
@@ -311,6 +311,7 @@ function eventsWebhookHeaders(
     'shopify-topic': 'Product',
     'shopify-api-version': '2023-01',
     'shopify-hmac-sha256': hmac,
+    'shopify-webhook-id': 'webhook-456',
     'shopify-event-id': 'evt-123',
     'shopify-handle': 'my-handle',
     'shopify-action': 'update',

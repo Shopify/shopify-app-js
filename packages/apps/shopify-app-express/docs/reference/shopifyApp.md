@@ -37,7 +37,8 @@ Configurations for Webhooks using this package.
 
 `string` | :exclamation: required
 
-The URL path used by the app to receive HTTP webhooks from Shopify.
+The URL path used by the app to receive HTTP webhook deliveries from Shopify.
+This path is required regardless of whether you use [app-specific or shop-specific](https://shopify.dev/docs/apps/build/webhooks/subscribe#app-specific-vs-shop-specific-subscriptions) subscriptions — both deliver payloads to this endpoint.
 This must match the path of the route that uses `shopify.processWebhooks`.
 
 ### useOnlineTokens
@@ -80,7 +81,7 @@ An object containing both middlewares you'll need to authenticate with Shopify.
 
 `(ProcessWebhooksMiddlewareParams) => RequestHandler`
 
-A function that returns a middleware that processes Shopify webhook requests.
+A function that returns a middleware that processes Shopify webhook requests. The `webhookHandlers` parameter defines [shop-specific subscriptions](https://shopify.dev/docs/apps/build/webhooks/subscribe#shop-specific-subscriptions).
 This _must_ be a `post` route.
 
 ### [validateAuthenticatedSession](./validateAuthenticatedSession.md)
@@ -141,6 +142,9 @@ app.get(
   shopify.auth.callback(),
   shopify.redirectToShopifyOrAppRoot(),
 );
+// webhookHandlers defines shop-specific subscriptions.
+// For most apps, prefer app-specific subscriptions in shopify.app.toml.
+// https://shopify.dev/docs/apps/build/webhooks/subscribe#app-specific-vs-shop-specific-subscriptions
 app.post(
   shopify.config.webhooks.path,
   shopify.processWebhooks({webhookHandlers}),

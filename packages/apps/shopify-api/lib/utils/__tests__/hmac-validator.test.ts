@@ -204,6 +204,45 @@ describe('validateHmac', () => {
       );
     });
 
+    test('accepts URLSearchParams and preserves repeated application params', async () => {
+      const shopify = shopifyApi(
+        testConfig({apiSecretKey: 'my super secret key'}),
+      );
+      const query = new URLSearchParams(queryParams);
+      query.append('consentGiven', 'true');
+      query.append('consentGiven', 'false');
+      query.set(
+        'signature',
+        createHmacSignature(
+          `consentGiven=true,falselogged_in_customer_id=1path_prefix=/apps/my_appshop=the shop URLtimestamp=${queryParams.timestamp}`,
+          shopify.config.apiSecretKey,
+        ),
+      );
+
+      await expect(shopify.utils.validateHmac(query, options)).resolves.toBe(
+        true,
+      );
+    });
+
+    test.each(['hmac', 'shop', 'signature', 'timestamp'])(
+      'rejects a repeated security param: %s',
+      async (param) => {
+        const shopify = shopifyApi(testConfig());
+        const query = new URLSearchParams({
+          ...queryParams,
+          hmac: 'unused',
+          signature: 'unused',
+        });
+        query.append(param, 'duplicate');
+
+        await expect(
+          shopify.utils.validateHmac(query, options),
+        ).rejects.toThrow(
+          `Query parameter "${param}" must not appear more than once.`,
+        );
+      },
+    );
+
     test('throw InvalidHmacError when there is no signature key', async () => {
       const shopify = shopifyApi(testConfig());
 

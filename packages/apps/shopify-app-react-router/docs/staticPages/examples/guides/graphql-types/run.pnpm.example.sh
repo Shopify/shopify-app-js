@@ -1,1 +1,0 @@
-pnpm graphql-codegen

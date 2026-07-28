@@ -82,4 +82,8 @@ export interface FlowContext {
   admin: AdminApiContext;
 }
 
+/**
+ * Verifies requests coming from Shopify Flow extensions.
+ * @publicDocs
+ */
 export type AuthenticateFlow = (request: Request) => Promise<FlowContext>;

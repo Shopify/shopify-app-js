@@ -4,6 +4,12 @@ import type {AppConfig} from '../config-types';
 
 // When adding new flags, you should also add them to the `TEST_FUTURE_FLAGS` object in `test-config.ts` to ensure that
 // it doesn't cause regressions.
+/**
+ * Set future flags using the `future` configuration field to opt in to upcoming breaking changes.
+ *
+ * With this feature, you can prepare for major releases ahead of time, as well as try out new features before they are released.
+ * @publicDocs
+ */
 export interface FutureFlags {
   /**
    * When enabled, the app will start using expiring offline access tokens and automatically refresh them when they are close to expiring.

@@ -20,10 +20,13 @@ export enum ApiVersion {
   // ... existing versions ...
   April25 = '2025-04',
   July25 = '2025-07',      // New version
+  October25 = '2025-10',   // Release candidate (next version)
 }
 ```
 
 **Naming convention:** `{Month}{YY}` (e.g., `April25`, `July25`). Value format: `YYYY-MM`.
+
+Also add the **next** quarterly version as a release candidate enum value (no REST resources needed yet).
 
 ## Step 2: Create Directory Structure
 
@@ -109,6 +112,7 @@ pnpm test
 ## Checklist
 
 - [ ] New enum value in `ApiVersion` (`packages/apps/shopify-api/lib/types.ts`)
+- [ ] Next quarterly release candidate enum value added (no REST resources needed)
 - [ ] Source directory created: `rest/admin/{NEW_VERSION}/`
 - [ ] Test directory created: `rest/admin/__tests__/{NEW_VERSION}/`
 - [ ] All resource files copied and `apiVersion` updated
