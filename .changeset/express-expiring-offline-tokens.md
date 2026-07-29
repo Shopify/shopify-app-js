@@ -17,7 +17,14 @@ Update `@shopify/shopify-app-express`, `@shopify/shopify-api`, and your session 
 
 ### 2. Make sure your session storage persists refresh tokens
 
-The refresh token is stored on the session, so your session storage must persist the `refreshToken` and `refreshTokenExpires` fields. The official SQL-based adapters (SQLite, MySQL, PostgreSQL, etc.) add these columns automatically through their migrations when you update to the latest version. If you use a custom session storage, add the two fields to your schema.
+The refresh token is stored on the session, so your session storage must persist the `refreshToken` and `refreshTokenExpires` fields. The official adapters added these fields in the versions that support expiring tokens; follow the migration notes in each adapter's README when you update:
+
+- [SQLite](https://github.com/Shopify/shopify-app-js/tree/main/packages/apps/session-storage/shopify-app-session-storage-sqlite)
+- [MySQL](https://github.com/Shopify/shopify-app-js/tree/main/packages/apps/session-storage/shopify-app-session-storage-mysql)
+- [PostgreSQL](https://github.com/Shopify/shopify-app-js/tree/main/packages/apps/session-storage/shopify-app-session-storage-postgresql)
+- [Prisma](https://github.com/Shopify/shopify-app-js/tree/main/packages/apps/session-storage/shopify-app-session-storage-prisma)
+
+The SQL-based adapters add the columns automatically through their migrations. Prisma requires a schema change and a migration (see its README). If you use a custom session storage, add the two fields to your schema.
 
 ### 3. Enable the future flag
 
@@ -43,11 +50,7 @@ The refresh token is stored on the session, so your session storage must persist
   });
 ```
 
-### 4. Re-install the app so it mints an expiring token
-
-Existing installs keep their non-expiring token until the next OAuth. Re-authenticating the app (or installing on a fresh store) mints an expiring offline token and stores the refresh token.
-
-### 5. Refresh the token in background work
+### 4. Refresh the token in background work
 
 Requests that flow through `validateAuthenticatedSession` refresh the offline token automatically. Work that does not (webhook handlers, cron jobs, queues) should load the offline session through the new helper:
 
@@ -58,3 +61,9 @@ Requests that flow through `validateAuthenticatedSession` refresh the offline to
 
   const client = new shopify.api.clients.Graphql({ session });
 ```
+
+### How existing installs pick up expiring tokens
+
+New installs get an expiring offline token automatically from the OAuth callback, so there's nothing extra to do.
+
+Existing installs keep their current non-expiring token until the next OAuth. This package uses the OAuth code flow, so a token is only re-minted when the app goes through OAuth again (not on a normal page load). `ensureValidOfflineSession` will not upgrade a non-expiring token either, since it has no refresh token and no expiry. The token converts to an expiring one the next time the app re-authenticates.
