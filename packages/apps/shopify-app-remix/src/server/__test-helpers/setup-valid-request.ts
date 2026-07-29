@@ -20,8 +20,7 @@ interface ValidExtensionRequestOptions {
 }
 
 type ValidRequestOptions =
-  | ValidBaseRequestOptions
-  | ValidExtensionRequestOptions;
+  ValidBaseRequestOptions | ValidExtensionRequestOptions;
 
 export async function setupValidRequest(
   shopify: ShopifyApp<any>,

@@ -255,8 +255,7 @@ export interface WebhookContextWithSession<
 }
 
 export type WebhookContext<Topics = string | number | symbol> =
-  | WebhookContextWithoutSession<Topics>
-  | WebhookContextWithSession<Topics>;
+  WebhookContextWithoutSession<Topics> | WebhookContextWithSession<Topics>;
 
 /**
  * Verifies requests coming from Shopify webhooks.
