@@ -1,0 +1,117 @@
+{
+  "$schema": "https://raw.githubusercontent.com/oxc-project/oxc/main/crates/oxc_linter/src/utils/generated/schema.json",
+  // "jest" plugin deferred: surfaces ~277 pre-existing test issues (see #3348)
+  "plugins": ["eslint", "typescript", "unicorn", "oxc", "import", "promise"],
+  "categories": {
+    "correctness": "error"
+  },
+  "rules": {
+    "no-unused-vars": [
+      "error",
+      {
+        "varsIgnorePattern": "^_",
+        "argsIgnorePattern": "^_",
+        "caughtErrors": "all",
+        "caughtErrorsIgnorePattern": "^_"
+      }
+    ],
+    "no-console": "off",
+    "typescript/consistent-indexed-object-style": "off",
+    "typescript/no-empty-object-type": [
+      "error",
+      {"allowInterfaces": "with-single-extends"}
+    ],
+    // Deferred: re-enable once billing handles missing data explicitly (see #3349)
+    "typescript/no-non-null-asserted-optional-chain": "off"
+  },
+  "overrides": [
+    {
+      "files": ["packages/apps/shopify-app-remix/src/react/**/*.ts"],
+      "rules": {
+        "no-restricted-imports": [
+          "error",
+          {
+            "patterns": [
+              {
+                "group": ["../server/*"],
+                "message": "Importing from src/react in src/server is not allowed as they must be kept separate, because it breaks Remix bundling."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "files": ["packages/apps/shopify-app-remix/src/server/**/*.ts"],
+      "rules": {
+        "no-restricted-imports": [
+          "error",
+          {
+            "patterns": [
+              {
+                "group": ["../react/*"],
+                "message": "Importing from src/react in src/server is not allowed as they must be kept separate, because it breaks Remix bundling."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "files": ["packages/apps/shopify-app-react-router/src/react/**/*.ts"],
+      "rules": {
+        "no-restricted-imports": [
+          "error",
+          {
+            "patterns": [
+              {
+                "group": ["../server/*"],
+                "message": "Importing from src/react in src/server is not allowed as they must be kept separate, because it breaks Remix bundling."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "files": ["packages/apps/shopify-app-react-router/src/server/**/*.ts"],
+      "rules": {
+        "no-restricted-imports": [
+          "error",
+          {
+            "patterns": [
+              {
+                "group": ["../react/*"],
+                "message": "Importing from src/react in src/server is not allowed as they must be kept separate, because it breaks Remix bundling."
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ],
+  "ignorePatterns": [
+    "**/build/",
+    "**/tmp/",
+    "**/dist/",
+    "**/coverage/",
+    "**/node_modules/",
+    "**/rollup.config.js",
+    "**/rollup.config.*.js",
+    "**/rollup.config.cjs",
+    "**/.eslintrc.cjs",
+    "**/babel.config.js",
+    "packages/apps/shopify-api/rest/admin/",
+    "**/*.mjs",
+    "packages/apps/shopify-app-remix/docs/",
+    "packages/apps/shopify-app-remix/**/*.example.ts",
+    "packages/apps/shopify-app-remix/**/*.example.tsx",
+    "packages/apps/shopify-app-remix/**/*.example.*.ts",
+    "packages/apps/shopify-app-remix/**/*.example.*.tsx",
+    "packages/apps/shopify-app-react-router/docs/",
+    "packages/apps/shopify-app-react-router/**/*.example.ts",
+    "packages/apps/shopify-app-react-router/**/*.example.tsx",
+    "packages/apps/shopify-app-react-router/**/*.example.*.ts",
+    "packages/apps/shopify-app-react-router/**/*.example.*.tsx"
+  ]
+}

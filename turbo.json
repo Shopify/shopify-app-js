@@ -13,9 +13,6 @@
     "test:ci": {
       "cache": false
     },
-    "lint": {
-      "cache": false
-    },
     "dev": {
       "cache": false,
       "persistent": true

@@ -26,7 +26,7 @@ export function getPlugins({
     }),
     replace({
       preventAssignment: true,
-      ...(replacements ?? {}),
+      ...replacements,
     }),
     commonjs(),
     typescript({

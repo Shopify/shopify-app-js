@@ -17,7 +17,6 @@
   "module": "./dist/esm/memory.mjs",
   "types": "./dist/ts/memory.d.ts",
   "scripts": {
-    "lint": "eslint .",
     "build": "pnpm rollup && pnpm tsc -p ./tsconfig.build.json",
     "tsc": "tsc",
     "test": "jest",
