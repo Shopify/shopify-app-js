@@ -34,6 +34,22 @@ export function ensureInstalled({
         return undefined;
       }
 
+      if (config.future.unstable_newEmbeddedAuthStrategy) {
+        config.logger.debug(
+          'Token exchange strategy enabled, skipping session check',
+          {shop},
+        );
+
+        if (api.config.isEmbeddedApp && req.query.embedded !== '1') {
+          await embedAppIntoShopify(api, config, req, res, shop);
+          return undefined;
+        }
+
+        addCSPHeader(api, req, res);
+        config.logger.debug('App is ready to load', {shop});
+        return next();
+      }
+
       config.logger.debug('Checking if shop has installed the app', {shop});
 
       const sessionId = api.session.getOfflineId(shop);

@@ -3,6 +3,7 @@ import '@shopify/shopify-api/adapters/node';
 import {
   shopifyApi,
   ConfigParams as ApiConfigParams,
+  Session,
   Shopify,
   FeatureDeprecatedError,
   ShopifyRestResources,
@@ -11,6 +12,8 @@ import {MemorySessionStorage} from '@shopify/shopify-app-session-storage-memory'
 
 import {SHOPIFY_EXPRESS_LIBRARY_VERSION} from './version';
 import {AppConfigInterface, AppConfigParams} from './config-types';
+import {logDisabledFutureFlags} from './future/flags';
+import {IdempotentPromiseHandler} from './helpers/idempotent-promise-handler';
 import {
   validateAuthenticatedSession,
   cspHeaders,
@@ -64,6 +67,7 @@ export interface ShopifyApp<Params extends AppConfigParams = AppConfigParams> {
   ensureInstalledOnShop: EnsureInstalledMiddleware;
   redirectToShopifyOrAppRoot: RedirectToShopifyOrAppRootMiddleware;
   redirectOutOfApp: RedirectOutOfAppFunction;
+  registerWebhooks: (params: {session: Session}) => Promise<void>;
 }
 
 export function shopifyApp<Params extends AppConfigParams>(
@@ -73,6 +77,8 @@ export function shopifyApp<Params extends AppConfigParams>(
 
   const api = shopifyApi(apiConfigWithDefaults(apiConfig));
   const validatedConfig = validateAppConfig(appConfig, api);
+
+  logDisabledFutureFlags(validatedConfig, api.logger);
 
   return {
     config: validatedConfig,
@@ -96,6 +102,9 @@ export function shopifyApp<Params extends AppConfigParams>(
       config: validatedConfig,
     }),
     redirectOutOfApp: redirectOutOfApp({api, config: validatedConfig}),
+    registerWebhooks: async ({session}: {session: Session}) => {
+      await api.webhooks.register({session});
+    },
   };
 }
 
@@ -138,6 +147,9 @@ function validateAppConfig<Params extends Omit<AppConfigParams, 'api'>>(
     ...configWithoutSessionStorage,
     auth: config.auth,
     webhooks: config.webhooks,
+    future: config.future ?? {},
+    hooks: config.hooks ?? {},
+    idempotentPromiseHandler: new IdempotentPromiseHandler(),
   };
 }
 

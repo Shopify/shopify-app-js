@@ -133,3 +133,41 @@ export const PUBSUB_WEBHOOK_UPDATE_RESPONSE = {
     },
   },
 };
+
+export const OFFLINE_TOKEN_EXCHANGE_RESPONSE = {
+  access_token: 'offline-token-exchange-token',
+  scope: 'testScope',
+};
+
+export const ONLINE_TOKEN_EXCHANGE_RESPONSE = {
+  access_token: 'online-token-exchange-token',
+  scope: 'testScope',
+  expires_in: 123456,
+  associated_user_scope: 'testScope',
+  associated_user: {
+    id: 1234,
+    first_name: 'first',
+    last_name: 'last',
+    email: 'email',
+    email_verified: true,
+    account_owner: true,
+    locale: 'en',
+    collaborator: true,
+  },
+};
+
+export const EXPIRING_OFFLINE_TOKEN_EXCHANGE_RESPONSE = {
+  access_token: 'expiring-offline-token',
+  scope: 'testScope',
+  expires_in: 86400,
+  refresh_token: 'refresh-token-value',
+  refresh_token_expires_in: 604800,
+};
+
+export const REFRESH_TOKEN_RESPONSE = {
+  access_token: 'refreshed-access-token',
+  scope: 'testScope',
+  expires_in: 86400,
+  refresh_token: 'new-refresh-token',
+  refresh_token_expires_in: 604800,
+};
