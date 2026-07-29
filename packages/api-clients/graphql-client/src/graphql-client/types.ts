@@ -80,9 +80,7 @@ export interface HTTPRetryLog extends LogContent {
 }
 
 export type LogContentTypes =
-  | HTTPResponseLog
-  | HTTPRetryLog
-  | HTTPResponseGraphQLDeprecationNotice;
+  HTTPResponseLog | HTTPRetryLog | HTTPResponseGraphQLDeprecationNotice;
 
 export type Logger<TLogContentTypes = LogContentTypes> = (
   logContent: TLogContentTypes,

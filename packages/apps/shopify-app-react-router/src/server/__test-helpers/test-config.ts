@@ -19,7 +19,6 @@ const TEST_FUTURE_FLAGS: Required<{[key in keyof FutureFlags]: true}> = {
 // Override the helper's future flags and logger settings for our purposes
 const TEST_CONFIG = {
   apiVersion: ApiVersion.July25,
-  isEmbeddedApp: true,
   future: TEST_FUTURE_FLAGS,
   logger: {
     log: jest.fn(),
