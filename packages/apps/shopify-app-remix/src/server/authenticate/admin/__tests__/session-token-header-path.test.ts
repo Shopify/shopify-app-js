@@ -1,4 +1,4 @@
-import {SESSION_COOKIE_NAME, Session} from '@shopify/shopify-api';
+import {LogSeverity, SESSION_COOKIE_NAME, Session} from '@shopify/shopify-api';
 
 import {shopifyApp} from '../../..';
 import {
@@ -85,4 +85,31 @@ describe('authorize.session token header path', () => {
       });
     },
   );
+
+  describe('logging', () => {
+    it('logs the shop from the session token instead of null', async () => {
+      // GIVEN
+      const logFn = jest.fn();
+      const shopify = shopifyApp(
+        testConfig({logger: {log: logFn, level: LogSeverity.Debug}}),
+      );
+      await setUpValidSession(shopify.sessionStorage);
+
+      // WHEN
+      const {token} = await getJwt();
+      await shopify.authenticate.admin(
+        new Request(APP_URL, {
+          headers: {Authorization: `Bearer ${token}`},
+        }),
+      );
+
+      // THEN
+      expect(logFn).toHaveBeenCalledWith(
+        LogSeverity.Info,
+        expect.stringContaining(
+          `Authenticating admin request | {shop: ${TEST_SHOP}}`,
+        ),
+      );
+    });
+  });
 });
