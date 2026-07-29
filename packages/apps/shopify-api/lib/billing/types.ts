@@ -66,8 +66,7 @@ export interface BillingConfigSubscriptionPlanDiscount {
 }
 
 export type BillingConfigItem =
-  | BillingConfigOneTimePlan
-  | BillingConfigSubscriptionLineItemPlan;
+  BillingConfigOneTimePlan | BillingConfigSubscriptionLineItemPlan;
 
 // Type this as an interface to improve TSDoc support for it.
 
@@ -590,8 +589,7 @@ export interface SinglePaymentResponse {
 }
 
 export type RequestResponseData =
-  | AppSubscriptionCreate
-  | AppPurchaseOneTimeCreate;
+  AppSubscriptionCreate | AppPurchaseOneTimeCreate;
 
 export interface SubscriptionResponse {
   currentAppInstallation?: ActiveSubscriptions;

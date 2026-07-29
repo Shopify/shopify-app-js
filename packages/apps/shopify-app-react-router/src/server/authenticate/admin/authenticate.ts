@@ -81,8 +81,7 @@ export function authStrategyFactory<ConfigArg extends AppConfigArg>({
   }
 
   type AdminContextBase =
-    | EmbeddedAdminContext<ConfigArg>
-    | MerchantCustomAdminContext<ConfigArg>;
+    EmbeddedAdminContext<ConfigArg> | MerchantCustomAdminContext<ConfigArg>;
 
   function createContext(
     request: Request,

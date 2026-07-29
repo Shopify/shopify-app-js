@@ -127,9 +127,7 @@ interface WebhookPubSubEndpoint {
 }
 
 type WebhookEndpoint =
-  | WebhookHttpEndpoint
-  | WebhookEventBridgeEndpoint
-  | WebhookPubSubEndpoint;
+  WebhookHttpEndpoint | WebhookEventBridgeEndpoint | WebhookPubSubEndpoint;
 
 export interface WebhookCheckResponseNode<
   T = {
