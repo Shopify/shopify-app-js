@@ -9,7 +9,8 @@ export const loader = async ({request}: LoaderFunctionArgs) => {
 };
 
 export const action = async ({request}: ActionFunctionArgs) => {
-  const {cors, sessionToken} = await authenticate.public.customerAccount(request);
+  const {cors, sessionToken} =
+    await authenticate.public.customerAccount(request);
 
   // Get offers for the customer
   const offers = getOffers(sessionToken.des, sessionToken.sub);

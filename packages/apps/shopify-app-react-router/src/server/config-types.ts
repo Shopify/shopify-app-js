@@ -22,8 +22,7 @@ import {IdempotentPromiseHandler} from './authenticate/helpers/idempotent-promis
 
 export interface BillingConfigWithLineItems {
   [plan: string]:
-    | BillingConfigOneTimePlan
-    | BillingConfigSubscriptionLineItemPlan;
+    BillingConfigOneTimePlan | BillingConfigSubscriptionLineItemPlan;
 }
 
 type ReactRouterManagedApiConfigOptions<Future extends FutureFlagOptions> =

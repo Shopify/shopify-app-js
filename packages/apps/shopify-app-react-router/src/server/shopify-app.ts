@@ -84,9 +84,7 @@ export function shopifyApp<
   });
 
   const shopify:
-    | AdminApp<Config>
-    | AppStoreApp<Config>
-    | SingleMerchantApp<Config> = {
+    AdminApp<Config> | AppStoreApp<Config> | SingleMerchantApp<Config> = {
     sessionStorage: config.sessionStorage,
     addDocumentResponseHeaders: addDocumentResponseHeadersFactory(params),
     registerWebhooks: registerWebhooksFactory(params),

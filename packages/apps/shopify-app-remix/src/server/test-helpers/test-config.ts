@@ -51,9 +51,9 @@ export function testConfig<
  * the output being a const object.
  */
 type Modify<Type1, Type2> = {
-  [key in keyof Type2 as Type2[key] extends undefined
-    ? never
-    : key]: Type2[key];
+  [
+    key in keyof Type2 as Type2[key] extends undefined ? never : key
+  ]: Type2[key];
 } & {
   [key in keyof Type1 as key extends keyof Type2 ? never : key]: Type1[key];
 };
