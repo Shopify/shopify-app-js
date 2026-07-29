@@ -34,6 +34,9 @@ jobs:
       - name: Run linting
         run: pnpm lint
 
+      - name: Check formatting
+        run: pnpm prettier
+
   # Test API Client packages
   test-api-clients:
     name: Test_ApiClients_Node_${{ matrix.version }}
