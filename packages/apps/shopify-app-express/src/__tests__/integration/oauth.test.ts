@@ -10,7 +10,6 @@ import {WebhookHandlersParam} from '../../webhooks/types';
 import {AppInstallations} from '../../app-installations';
 import {
   BASE64_HOST,
-  createTestHmac,
   MockBody,
   mockShopifyResponse,
   mockShopifyResponses,

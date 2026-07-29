@@ -125,7 +125,7 @@ function apiConfigWithDefaults<Params extends Partial<ApiConfigParams>>(
     hostScheme: process.env.HOST?.split('://')[0] as 'http' | 'https',
     hostName: process.env.HOST?.replace(/https?:\/\//, '') as string,
     isEmbeddedApp: true,
-    ...(apiConfig || {}),
+    ...apiConfig,
     userAgentPrefix: userAgent,
   } as DefaultedConfigs<Params>;
   /* eslint-enable no-process-env */

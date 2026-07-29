@@ -11,7 +11,7 @@ export function generateGetHeaders(
   config: ApiClientConfig,
 ): ApiClient['getHeaders'] {
   return (customHeaders) => {
-    return {...(customHeaders ?? {}), ...config.headers};
+    return {...customHeaders, ...config.headers};
   };
 }
 

@@ -20,7 +20,6 @@
   "module": "./dist/esm/index.mjs",
   "types": "./dist/ts/index.d.ts",
   "scripts": {
-    "lint": "eslint .",
     "build": "pnpm rollup && pnpm tsc -p ./tsconfig.build.json",
     "tsc": "tsc",
     "test": "jest",

@@ -348,9 +348,7 @@ function getResponseDataFromChunkBodies(chunkBodies: string[]): {
         data:
           incrementalArray.length === 1
             ? incrementalArray[0].data
-            : buildCombinedDataObject([
-                ...incrementalArray.map(({data}) => data),
-              ]),
+            : buildCombinedDataObject(incrementalArray.map(({data}) => data)),
         ...getKeyValueIfValid('errors', combineErrors(incrementalArray)),
         hasNext,
       };

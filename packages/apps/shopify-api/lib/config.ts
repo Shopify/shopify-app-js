@@ -85,7 +85,7 @@ export function validateConfig<Params extends ConfigParams>(
     isCustomStoreApp: isCustomStoreApp ?? config.isCustomStoreApp,
     adminApiAccessToken: adminApiAccessToken ?? config.adminApiAccessToken,
     userAgentPrefix: userAgentPrefix ?? config.userAgentPrefix,
-    logger: {...config.logger, ...(logger || {})},
+    logger: {...config.logger, ...logger},
     privateAppStorefrontAccessToken:
       privateAppStorefrontAccessToken ?? config.privateAppStorefrontAccessToken,
     billing: billing ?? config.billing,

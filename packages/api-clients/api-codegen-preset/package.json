@@ -37,7 +37,6 @@
     }
   },
   "scripts": {
-    "lint": "eslint .",
     "build": "pnpm tsc -p ./tsconfig.build.json && pnpm rollup",
     "tsc": "tsc",
     "test": "jest",
