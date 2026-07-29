@@ -32,8 +32,7 @@ export interface UnsupportedApiVersionLog extends LogContent {
 }
 
 export type ApiClientLogContentTypes =
-  | LogContentTypes
-  | UnsupportedApiVersionLog;
+  LogContentTypes | UnsupportedApiVersionLog;
 
 export type ApiClientLogger<TLogContentTypes = ApiClientLogContentTypes> =
   BaseLogger<TLogContentTypes>;

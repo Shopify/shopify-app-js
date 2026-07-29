@@ -30,13 +30,13 @@ export const action = async ({request}: ActionFunctionArgs) => {
           }
         }
       `,
-      {
-        variables: {
-          productId: payload.admin_graphql_api_id,
-          time: new Date().toISOString(),
+        {
+          variables: {
+            productId: payload.admin_graphql_api_id,
+            time: new Date().toISOString(),
+          },
         },
-      },
-    );
+      );
   }
 
   return new Response();

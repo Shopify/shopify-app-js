@@ -80,7 +80,7 @@ export function asBase64(buffer: ArrayBuffer | Uint8Array): string {
   let output = '';
 
   const input = new Uint8Array(buffer);
-  for (let i = 0; i < input.length; ) {
+  for (let i = 0; i < input.length;) {
     const byte1 = input[i++];
     const byte2 = input[i++];
     const byte3 = input[i++];

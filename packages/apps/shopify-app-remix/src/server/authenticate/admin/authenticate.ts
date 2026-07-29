@@ -80,8 +80,7 @@ export function authStrategyFactory<ConfigArg extends AppConfigArg>({
   }
 
   type AdminContextBase =
-    | EmbeddedAdminContext<ConfigArg>
-    | NonEmbeddedAdminContext<ConfigArg>;
+    EmbeddedAdminContext<ConfigArg> | NonEmbeddedAdminContext<ConfigArg>;
 
   function createContext(
     request: Request,
