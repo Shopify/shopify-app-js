@@ -12,6 +12,7 @@ import {MemorySessionStorage} from '@shopify/shopify-app-session-storage-memory'
 
 import {SHOPIFY_EXPRESS_LIBRARY_VERSION} from './version';
 import {AppConfigInterface, AppConfigParams} from './config-types';
+import {IdempotentPromiseHandler} from './helpers/idempotent-promise-handler';
 import {
   validateAuthenticatedSession,
   cspHeaders,
@@ -143,6 +144,8 @@ function validateAppConfig<Params extends Omit<AppConfigParams, 'api'>>(
     useOnlineTokens: false,
     exitIframePath: '/exitiframe',
     future: {},
+    hooks: {},
+    idempotentPromiseHandler: new IdempotentPromiseHandler(),
     sessionStorage: (sessionStorage ??
       new MemorySessionStorage()) as ConfigInterfaceFromParams<Params>['sessionStorage'],
     ...configWithoutSessionStorage,
