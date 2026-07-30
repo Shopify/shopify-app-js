@@ -2,14 +2,13 @@ import {Request, Response} from 'express';
 import {
   BotActivityDetected,
   CookieNotFound,
-  privacyTopics,
   InvalidOAuthError,
-  Session,
   Shopify,
 } from '@shopify/shopify-api';
 
 import {AppConfigInterface} from '../config-types';
 import {redirectToAuth} from '../redirect-to-auth';
+import {registerWebhooks} from '../helpers/register-webhooks';
 
 import {AuthCallbackParams} from './types';
 
@@ -54,6 +53,8 @@ export async function authCallback({
       session: callbackResponse.session,
     };
 
+    await config.hooks?.afterAuth?.({session: callbackResponse.session});
+
     config.logger.debug('Completed OAuth callback', {
       shop: callbackResponse.session.shop,
       isOnline: callbackResponse.session.isOnline,
@@ -67,42 +68,6 @@ export async function authCallback({
   }
 
   return false;
-}
-
-async function registerWebhooks(
-  config: AppConfigInterface,
-  api: Shopify,
-  session: Session,
-) {
-  config.logger.debug('Registering webhooks', {shop: session.shop});
-
-  const responsesByTopic = await api.webhooks.register({session});
-
-  for (const topic in responsesByTopic) {
-    if (!Object.prototype.hasOwnProperty.call(responsesByTopic, topic)) {
-      continue;
-    }
-
-    for (const response of responsesByTopic[topic]) {
-      if (!response.success && !privacyTopics.includes(topic)) {
-        const result: any = response.result;
-
-        if (result.errors) {
-          config.logger.error(
-            `Failed to register ${topic} webhook: ${result.errors[0].message}`,
-            {shop: session.shop},
-          );
-        } else {
-          config.logger.error(
-            `Failed to register ${topic} webhook: ${JSON.stringify(
-              result.data,
-            )}`,
-            {shop: session.shop},
-          );
-        }
-      }
-    }
-  }
 }
 
 async function handleCallbackError(

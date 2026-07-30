@@ -13,6 +13,8 @@ import {MemorySessionStorage} from '@shopify/shopify-app-session-storage-memory'
 import {SHOPIFY_EXPRESS_LIBRARY_VERSION} from './version';
 import {AppConfigInterface, AppConfigParams} from './config-types';
 import {IdempotentPromiseHandler} from './helpers/idempotent-promise-handler';
+import {registerWebhooks} from './helpers/register-webhooks';
+import {logDisabledFutureFlags} from './future/flags';
 import {
   validateAuthenticatedSession,
   cspHeaders,
@@ -72,6 +74,7 @@ export interface ShopifyApp<Params extends AppConfigParams = AppConfigParams> {
   redirectToShopifyOrAppRoot: RedirectToShopifyOrAppRootMiddleware;
   redirectOutOfApp: RedirectOutOfAppFunction;
   ensureValidOfflineSession: (shop: string) => Promise<Session | undefined>;
+  registerWebhooks: (params: {session: Session}) => Promise<void>;
 }
 
 export function shopifyApp<Params extends AppConfigParams>(
@@ -81,6 +84,8 @@ export function shopifyApp<Params extends AppConfigParams>(
 
   const api = shopifyApi(apiConfigWithDefaults(apiConfig));
   const validatedConfig = validateAppConfig(appConfig, api);
+
+  logDisabledFutureFlags(validatedConfig, api.logger);
 
   return {
     config: validatedConfig,
@@ -106,6 +111,8 @@ export function shopifyApp<Params extends AppConfigParams>(
     redirectOutOfApp: redirectOutOfApp({api, config: validatedConfig}),
     ensureValidOfflineSession: (shop: string) =>
       ensureValidOfflineSession({api, config: validatedConfig}, shop),
+    registerWebhooks: ({session}: {session: Session}) =>
+      registerWebhooks(validatedConfig, api, session),
   };
 }
 
