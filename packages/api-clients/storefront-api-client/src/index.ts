@@ -11,6 +11,7 @@ export type {
   ApiClientRequestOptions,
   ClientResponse,
   FetchResponseBody,
+  GraphQLError,
   HTTPResponseLog,
   HTTPRetryLog,
   LogContent,
