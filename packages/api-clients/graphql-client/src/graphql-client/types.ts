@@ -23,7 +23,10 @@ export interface GraphQLError {
   message: string;
   locations?: {line: number; column: number}[];
   path?: (string | number)[];
-  extensions?: GQLExtensions;
+  extensions?: {
+    code?: string;
+    [key: string]: any;
+  };
 }
 
 export interface ResponseErrors {
@@ -35,15 +38,19 @@ export interface ResponseErrors {
 
 export interface GQLExtensions {
   cost?: {
-    requestedQueryCost: number;
-    actualQueryCost: number | null;
-    throttleStatus: {
-      maximumAvailable: number;
-      currentlyAvailable: number;
-      restoreRate: number;
+    requestedQueryCost?: number;
+    actualQueryCost?: number | null;
+    throttleStatus?: {
+      maximumAvailable?: number;
+      currentlyAvailable?: number;
+      restoreRate?: number;
     };
   };
-  [key: string]: unknown;
+  context?: {
+    country?: string;
+    language?: string;
+  };
+  [key: string]: any;
 }
 
 export interface FetchResponseBody<TData = any> {
