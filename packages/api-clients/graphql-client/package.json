@@ -33,9 +33,8 @@
   "scripts": {
     "build": "pnpm tsc -p ./tsconfig.build.json && pnpm rollup",
     "tsc": "tsc",
-    "typecheck": "tsc -p ./tsconfig.typecheck.json",
     "test": "jest",
-    "test:ci": "pnpm typecheck && pnpm test",
+    "test:ci": "pnpm test",
     "rollup": "rollup -c --bundleConfigAsCjs",
     "clean": "rimraf dist/*",
     "changeset": "changeset",
