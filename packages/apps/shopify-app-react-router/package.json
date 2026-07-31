@@ -3,7 +3,7 @@
   "name": "@shopify/shopify-app-react-router",
   "version": "1.2.1",
   "engines": {
-    "node": ">=20.0.0"
+    "node": ">=22.0.0"
   },
   "repository": {
     "type": "git",

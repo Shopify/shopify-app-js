@@ -5,7 +5,7 @@
   "author": "Shopify",
   "license": "MIT",
   "engines": {
-    "node": ">=20.0.0"
+    "node": ">=22.0.0"
   },
   "homepage": "https://github.com/Shopify/shopify-app-js/tree/main/packages/api-clients/api-codegen-preset#readme",
   "repository": {

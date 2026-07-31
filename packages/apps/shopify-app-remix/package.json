@@ -3,7 +3,7 @@
   "version": "4.2.1",
   "description": "Shopify Remix - to simplify the building of Shopify Apps with Remix",
   "engines": {
-    "node": ">=20.10.0"
+    "node": ">=22.0.0"
   },
   "repository": {
     "type": "git",
