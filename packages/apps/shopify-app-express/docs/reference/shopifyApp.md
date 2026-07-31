@@ -69,6 +69,32 @@ When enabled, the app requests an expiring offline access token during OAuth and
 
 Your session storage must persist the `refreshToken` and `refreshTokenExpires` fields for this to work.
 
+#### token exchange
+
+`future: {unstable_tokenExchange: true}` | Defaults to `false`
+
+When enabled, embedded apps fetch access tokens via [token exchange](./guides/token-exchange.md) instead of the OAuth redirect flow, which removes the redirect flicker on load. Requires an embedded app (`isEmbeddedApp`) using [Shopify managed installation](https://shopify.dev/docs/apps/auth/installation). Non-embedded apps, and apps with the flag off, continue to use the OAuth code flow.
+
+When token exchange is active, the OAuth routes (`auth.begin` / `auth.callback`) are not used and will return an error if called. Because there is no OAuth callback to register webhooks, use [`registerWebhooks`](#registerwebhooks) (typically from the `afterAuth` hook).
+
+### hooks
+
+`{afterAuth?: (options: {session: Session}) => void | Promise<void>}`
+
+Callbacks that run at points in the authentication lifecycle.
+
+#### afterAuth
+
+Runs after authentication completes (both token exchange and the OAuth callback), with the resulting session. A common use is registering webhooks:
+
+```ts
+hooks: {
+  afterAuth: async ({session}) => {
+    await shopify.registerWebhooks({session});
+  },
+},
+```
+
 ## Return
 
 Returns an object that contains everything an app needs to interact with Shopify:
@@ -127,6 +153,12 @@ A function that redirects to any URL at the browser's top level, regardless of w
 `(shop: string) => Promise<Session | undefined>`
 
 Loads the offline session for a shop and, when the `expiringOfflineAccessTokens` future flag is enabled, refreshes its access token if it is expired or close to expiring. Returns `undefined` when no offline session is stored. Use this from background work (webhooks, cron jobs, queues) that needs a valid offline token. Callers should trigger re-authentication if the refresh token has been revoked.
+
+### registerWebhooks
+
+`(params: {session: Session}) => Promise<void>`
+
+Registers the app's webhook subscriptions for a shop. When using token exchange there is no OAuth callback to register webhooks, so call this yourself, usually from the `afterAuth` hook.
 
 ## Example
 
