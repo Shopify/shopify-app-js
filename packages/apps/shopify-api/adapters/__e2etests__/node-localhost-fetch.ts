@@ -4,7 +4,7 @@ import type {OutgoingHttpHeaders} from 'http';
 
 /**
  * A fetch replacement that uses Node's http/https modules for localhost requests
- * to work around Node v20 fetch localhost issues.
+ * because built-in fetch rejects the test server's port (6666) as unsafe.
  * Real apps would not encounter these issues since real apps don't make localhost requests.
  * They request to Shopify instead, which isn't running on localhost.
  * In our E2E tests we make requests to localhost to simulate Shopify.

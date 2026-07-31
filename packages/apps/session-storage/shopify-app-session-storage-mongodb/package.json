@@ -14,7 +14,7 @@
   "author": "Shopify Inc.",
   "license": "MIT",
   "engines": {
-    "node": ">=20.19.0"
+    "node": ">=22.0.0"
   },
   "main": "./dist/cjs/mongodb.js",
   "module": "./dist/esm/mongodb.mjs",
