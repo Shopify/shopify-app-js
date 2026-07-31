@@ -1,26 +1,43 @@
-import {Response} from 'express';
+import {Request, Response} from 'express';
+import {Shopify} from '@shopify/shopify-api';
 
 import {RETRY_INVALID_SESSION_HEADER} from '../const';
 
+import {getSessionTokenHeader} from './get-session-token';
+import {renderAppBridge} from './render-app-bridge';
+
+interface RespondToInvalidSessionTokenParams {
+  api: Shopify;
+  req: Request;
+  res: Response;
+  message: string;
+  retryRequest?: boolean;
+}
+
 /**
- * Sends a 401 response indicating the session token is invalid.
+ * Responds to a request whose session token is missing, stale, or unverifiable.
  *
- * When `retryRequest` is true, the response includes the
- * `X-Shopify-Retry-Invalid-Session-Request: 1` header, which signals App
- * Bridge to obtain a fresh session token and automatically retry the request.
- * Pass `true` when the token itself was stale or unverifiable; pass `false`
- * (the default) when auth has failed for another reason (e.g. a revoked access
- * token) and a retry without first re-authenticating would not help.
- *
- * This mirrors the behaviour of `respondToInvalidSessionToken` in the Remix
- * package, adapted for Express (no bounce-page redirect since Express apps
- * do not have an equivalent route).
+ * - Document requests (no Authorization header, e.g. an embedded page load)
+ *   get the App Bridge bounce so the browser fetches a fresh token and reloads.
+ * - Fetch requests (Authorization header present) get a 401. The
+ *   `X-Shopify-Retry-Invalid-Session-Request` header is added only when a retry
+ *   would help (`retryRequest`), so App Bridge refetches with a new token;
+ *   it is omitted when re-auth is required (e.g. a revoked access token).
  */
-export function respondToInvalidSessionToken(
-  res: Response,
-  message: string,
+export function respondToInvalidSessionToken({
+  api,
+  req,
+  res,
+  message,
   retryRequest = false,
-): void {
+}: RespondToInvalidSessionTokenParams): void {
+  const isDocumentRequest = !getSessionTokenHeader(req);
+
+  if (isDocumentRequest) {
+    renderAppBridge(api, req, res);
+    return;
+  }
+
   if (retryRequest) {
     res.set(RETRY_INVALID_SESSION_HEADER, '1');
   }

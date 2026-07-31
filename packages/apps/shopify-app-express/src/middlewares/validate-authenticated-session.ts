@@ -54,7 +54,13 @@ async function validateWithTokenExchange({
 
   if (!sessionToken) {
     config.logger.debug('No session token found for token exchange');
-    respondToInvalidSessionToken(res, 'No session token found', true);
+    respondToInvalidSessionToken({
+      api,
+      req,
+      res,
+      message: 'No session token found',
+      retryRequest: true,
+    });
     return;
   }
 

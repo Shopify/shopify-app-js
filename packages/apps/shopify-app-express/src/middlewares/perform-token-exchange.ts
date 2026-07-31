@@ -51,7 +51,7 @@ async function callAfterAuthHook(
 }
 
 export async function performTokenExchange({
-  req: _req,
+  req,
   res,
   next,
   api,
@@ -137,7 +137,13 @@ export async function performTokenExchange({
         error.response.code === 400 &&
         error.response.body?.error === 'invalid_subject_token')
     ) {
-      respondToInvalidSessionToken(res, error.message, true);
+      respondToInvalidSessionToken({
+        api,
+        req,
+        res,
+        message: error.message,
+        retryRequest: true,
+      });
       return;
     }
 
@@ -145,7 +151,12 @@ export async function performTokenExchange({
       if (sessionToInvalidate?.accessToken) {
         await invalidateAccessToken(sessionToInvalidate, config);
       }
-      respondToInvalidSessionToken(res, error.message);
+      respondToInvalidSessionToken({
+        api,
+        req,
+        res,
+        message: error.message,
+      });
       return;
     }
 
