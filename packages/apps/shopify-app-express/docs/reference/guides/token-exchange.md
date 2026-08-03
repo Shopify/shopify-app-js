@@ -10,7 +10,7 @@ Support is behind the `unstable_tokenExchange` future flag and is off by default
 - The app must use [Shopify managed installation](https://shopify.dev/docs/apps/auth/installation).
 - The frontend must load [App Bridge](https://shopify.dev/docs/api/app-bridge-library), which provides the session token.
 
-Non-embedded apps, and apps with the flag off, continue to use the OAuth code flow.
+Non-embedded apps with the flag off continue to use the OAuth code flow. Enabling the flag on a non-embedded app (`isEmbeddedApp: false`) throws at startup, because token exchange requires the App Bridge session token that only embedded apps have.
 
 ## Enabling it
 

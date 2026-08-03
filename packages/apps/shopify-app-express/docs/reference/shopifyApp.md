@@ -75,6 +75,8 @@ Your session storage must persist the `refreshToken` and `refreshTokenExpires` f
 
 When enabled, embedded apps fetch access tokens via [token exchange](./guides/token-exchange.md) instead of the OAuth redirect flow, which removes the redirect flicker on load. Requires an embedded app (`isEmbeddedApp`) using [Shopify managed installation](https://shopify.dev/docs/apps/auth/installation). Non-embedded apps, and apps with the flag off, continue to use the OAuth code flow.
 
+Token exchange is only available for embedded apps. Enabling this flag with `isEmbeddedApp: false` throws at startup, since a non-embedded app cannot obtain the App Bridge session token that token exchange relies on.
+
 When token exchange is active, the OAuth routes (`auth.begin` / `auth.callback`) are not used and will return an error if called. Because there is no OAuth callback to register webhooks, use [`registerWebhooks`](#registerwebhooks) (typically from the `afterAuth` hook).
 
 ### hooks

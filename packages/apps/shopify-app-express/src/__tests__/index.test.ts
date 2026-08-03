@@ -36,6 +36,26 @@ describe('shopifyApp', () => {
     expect(() => shopifyApp({} as any)).toThrow(ShopifyError);
   });
 
+  it('throws when token exchange is enabled on a non-embedded app', () => {
+    expect(() =>
+      shopifyApp({
+        ...testConfig,
+        api: {...testConfig.api, isEmbeddedApp: false},
+        future: {unstable_tokenExchange: true},
+      }),
+    ).toThrow(ShopifyError);
+  });
+
+  it('allows token exchange on an embedded app', () => {
+    expect(() =>
+      shopifyApp({
+        ...testConfig,
+        api: {...testConfig.api, isEmbeddedApp: true},
+        future: {unstable_tokenExchange: true},
+      }),
+    ).not.toThrow();
+  });
+
   it('properly defaults missing configs based on env vars', () => {
     /* eslint-disable no-process-env */
     process.env.SHOPIFY_API_KEY = 'envKey';
