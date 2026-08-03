@@ -64,12 +64,10 @@ shopify.webhooks.addHandlers({
   METAOBJECTS_CREATE: {
     deliveryMethod: DeliveryMethod.Http,
     callbackUrl: '/webhooks',
-    // Use includeFields to specify filter fields
-    includeFields: ['type'],
   },
 });
 
-// Then apply filters via GraphQL Admin API or app configuration:
+// Apply filters via the GraphQL Admin API or app configuration:
 // filter: "type:my-metaobject-type"
 // Multiple types: "type:banana OR type:apple"
 ```

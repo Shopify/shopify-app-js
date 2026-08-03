@@ -92,7 +92,7 @@ describe('shopify.webhooks.process', () => {
           context: testContext,
         });
         res.status(StatusCode.Ok).json({data: {errorThrown: false}});
-      } catch (error) {
+      } catch {
         res
           .status(StatusCode.InternalServerError)
           .json({data: {errorThrown: true}});
