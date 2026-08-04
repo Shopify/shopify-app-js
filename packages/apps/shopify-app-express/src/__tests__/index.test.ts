@@ -47,7 +47,7 @@ describe('shopifyApp', () => {
       auth: testConfig.auth,
       webhooks: testConfig.webhooks,
       api: {
-        apiVersion: ApiVersion.July25,
+        apiVersion: ApiVersion.July26,
         logger: testConfig.api.logger,
       },
     });

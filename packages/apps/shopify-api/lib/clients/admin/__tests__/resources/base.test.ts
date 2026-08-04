@@ -15,7 +15,7 @@ describe('Base REST resource', () => {
   let prefix: string;
 
   beforeEach(() => {
-    prefix = `/admin/api/${ApiVersion.July25}`;
+    prefix = `/admin/api/${ApiVersion.July26}`;
   });
 
   const domain = 'test-shop.myshopify.io';
@@ -676,8 +676,8 @@ describe('REST resources with a different API version', () => {
     );
 
     // The shopify object is set to an older version, but the resources use a specific version
-    expect(shopify.rest.FakeResource.apiVersion).toBe(ApiVersion.July25);
-    expect(shopify.config.apiVersion).not.toBe(ApiVersion.July25);
+    expect(shopify.rest.FakeResource.apiVersion).toBe(ApiVersion.July26);
+    expect(shopify.config.apiVersion).not.toBe(ApiVersion.July26);
 
     queueMockResponses(
       [JSON.stringify({fake_resource: {attribute: 'attribute'}})],
@@ -694,7 +694,7 @@ describe('REST resources with a different API version', () => {
     expect({
       method: 'POST',
       domain,
-      path: `/admin/api/${ApiVersion.July25}/fake_resources.json`,
+      path: `/admin/api/${ApiVersion.July26}/fake_resources.json`,
       headers,
       data: {fake_resource: {attribute: 'attribute'}},
     }).toMatchMadeHttpRequest();
@@ -710,7 +710,7 @@ describe('REST resources with a different API version', () => {
     expect({
       method: 'GET',
       domain,
-      path: `/admin/api/${ApiVersion.July25}/fake_resources/1.json`,
+      path: `/admin/api/${ApiVersion.July26}/fake_resources/1.json`,
       headers,
     }).toMatchMadeHttpRequest();
 
@@ -721,7 +721,7 @@ describe('REST resources with a different API version', () => {
     expect({
       method: 'PUT',
       domain,
-      path: `/admin/api/${ApiVersion.July25}/fake_resources/1.json`,
+      path: `/admin/api/${ApiVersion.July26}/fake_resources/1.json`,
       headers,
       data: {fake_resource: {attribute: 'attribute2'}},
     }).toMatchMadeHttpRequest();
@@ -731,7 +731,7 @@ describe('REST resources with a different API version', () => {
     expect({
       method: 'DELETE',
       domain,
-      path: `/admin/api/${ApiVersion.July25}/fake_resources/1.json`,
+      path: `/admin/api/${ApiVersion.July26}/fake_resources/1.json`,
       headers,
     }).toMatchMadeHttpRequest();
   });

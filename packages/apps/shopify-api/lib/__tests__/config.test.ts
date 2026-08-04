@@ -167,7 +167,7 @@ describe('Config object', () => {
 
     expect(() => validateConfig(params)).toThrow(
       new ShopifyErrors.ShopifyError(
-        'Cannot initialize Shopify API Library. Missing values for: apiVersion. For apiVersion, please specify an explicit API version (e.g., ApiVersion.July25). See https://shopify.dev/docs/api/usage/versioning for more information.',
+        'Cannot initialize Shopify API Library. Missing values for: apiVersion. For apiVersion, please specify an explicit API version (e.g., ApiVersion.July26). See https://shopify.dev/docs/api/usage/versioning for more information.',
       ),
     );
   });

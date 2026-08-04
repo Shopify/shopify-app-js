@@ -11,4 +11,4 @@ export {
   BASE64_HOST,
   USER_ID,
 } from '@shopify/shopify-api/test-helpers';
-export const GRAPHQL_URL = `https://${TEST_SHOP}/admin/api/${ApiVersion.July25}/graphql.json`;
+export const GRAPHQL_URL = `https://${TEST_SHOP}/admin/api/${ApiVersion.July26}/graphql.json`;

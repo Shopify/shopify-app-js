@@ -65,7 +65,7 @@ const TEST_CONFIG = {
   scopes: new AuthScopes(['test_scope']),
   hostName: 'test_host_name',
   hostScheme: 'https',
-  apiVersion: ApiVersion.July25,
+  apiVersion: ApiVersion.July26,
   isEmbeddedApp: false,
   isCustomStoreApp: false,
   billing: undefined,

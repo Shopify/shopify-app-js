@@ -485,7 +485,7 @@ describe('REST client', () => {
     expect(shopify.config.logger.log).toHaveBeenCalledWith(
       LogSeverity.Debug,
       expect.stringContaining(
-        `REST client overriding default API version ${ApiVersion.July25} with 2020-01`,
+        `REST client overriding default API version ${ApiVersion.July26} with 2020-01`,
       ),
     );
   });

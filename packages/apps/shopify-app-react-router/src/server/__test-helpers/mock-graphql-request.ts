@@ -10,7 +10,7 @@ export interface MockGraphqlRequestArg {
 }
 
 export function mockGraphqlRequest(
-  apiVersion = ApiVersion.July25,
+  apiVersion = ApiVersion.July26,
   shopUrl = TEST_SHOP,
 ) {
   return async function ({
@@ -32,7 +32,7 @@ export function mockGraphqlRequest(
 }
 
 export function mockGraphqlRequests(
-  apiVersion = ApiVersion.July25,
+  apiVersion = ApiVersion.July26,
   shopUrl = TEST_SHOP,
 ) {
   return async function (...mocks: MockGraphqlRequestArg[]) {

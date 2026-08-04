@@ -49,7 +49,7 @@ beforeEach(() => {
       apiKey: 'testApiKey',
       apiSecretKey: 'testApiSecretKey',
       scopes: ['testScope'],
-      apiVersion: ApiVersion.July25,
+      apiVersion: ApiVersion.July26,
       hostScheme: 'https',
       hostName: 'my-test-app.myshopify.io',
       logger: {
@@ -190,7 +190,7 @@ export function validWebhookHeaders(
     'X-Shopify-Shop-Domain': TEST_SHOP,
     'X-Shopify-Hmac-Sha256': hmac,
     'X-Shopify-Webhook-Id': TEST_WEBHOOK_ID,
-    'X-Shopify-Api-Version': ApiVersion.July25,
+    'X-Shopify-Api-Version': ApiVersion.July26,
   };
 }
 

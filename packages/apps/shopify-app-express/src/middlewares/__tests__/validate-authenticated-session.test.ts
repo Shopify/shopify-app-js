@@ -346,7 +346,7 @@ describe('validateAuthenticatedSession', () => {
 
       expect({
         method: 'POST',
-        url: `https://my-shop.myshopify.io/admin/api/${ApiVersion.July25}/graphql.json`,
+        url: `https://my-shop.myshopify.io/admin/api/${ApiVersion.July26}/graphql.json`,
       }).toMatchMadeHttpRequest();
 
       expect(response.body).toEqual({
