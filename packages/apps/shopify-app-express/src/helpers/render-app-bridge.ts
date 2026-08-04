@@ -4,13 +4,9 @@ import {Shopify} from '@shopify/shopify-api';
 import {APP_BRIDGE_URL} from '../const';
 import {addCSPHeader} from '../middlewares/csp-headers';
 
-let appBridgeUrlOverride: string | undefined;
-export function setAppBridgeUrlOverride(url: string) {
-  appBridgeUrlOverride = url;
-}
 function appBridgeUrl() {
   // eslint-disable-next-line no-process-env
-  return appBridgeUrlOverride || process.env.APP_BRIDGE_URL || APP_BRIDGE_URL;
+  return process.env.APP_BRIDGE_URL || APP_BRIDGE_URL;
 }
 
 /**
@@ -25,16 +21,10 @@ export function renderAppBridge(
   api: Shopify,
   req: Request,
   res: Response,
-  redirectTo?: string,
 ): void {
   addCSPHeader(api, req, res);
 
-  const redirectToScript = redirectTo
-    ? `<script>window.open(${JSON.stringify(redirectTo)}, '_top')</script>`
-    : '';
-
   res.status(200).set('content-type', 'text/html;charset=utf-8').send(`
       <script data-api-key="${api.config.apiKey}" src="${appBridgeUrl()}"></script>
-      ${redirectToScript}
     `);
 }

@@ -3,5 +3,3 @@ export const RETRY_INVALID_SESSION_HEADER =
 
 export const APP_BRIDGE_URL =
   'https://cdn.shopify.com/shopifycloud/app-bridge.js';
-
-export const SESSION_TOKEN_PARAM = 'id_token';

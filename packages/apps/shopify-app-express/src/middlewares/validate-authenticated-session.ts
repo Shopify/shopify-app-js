@@ -53,13 +53,15 @@ async function validateWithTokenExchange({
   const sessionToken = getSessionToken(req);
 
   if (!sessionToken) {
+    // No session token means no Authorization header, so this is always a
+    // document request and respondToInvalidSessionToken serves the App Bridge
+    // bounce (retryRequest only applies to fetch requests).
     config.logger.debug('No session token found for token exchange');
     respondToInvalidSessionToken({
       api,
       req,
       res,
       message: 'No session token found',
-      retryRequest: true,
     });
     return;
   }

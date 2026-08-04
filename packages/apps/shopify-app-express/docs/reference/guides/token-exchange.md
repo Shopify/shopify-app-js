@@ -41,6 +41,10 @@ const shopify = shopifyApp({
 - **Document requests** (page loads) with a missing or stale session token render App Bridge, which fetches a fresh token and reloads the page. No top-level OAuth redirect.
 - The OAuth routes (`auth.begin` / `auth.callback`) are not used and return an error if called.
 
+## Handling revoked access tokens
+
+Token exchange reuses a stored access token while it is unexpired. If a token is **revoked** by the merchant before it expires, it still looks valid locally, so the library will use it and the Admin API call will fail with a `401`. The library does not automatically re-authenticate in that case, so your app should handle a `401` from the Admin API by re-running the request (which triggers a fresh token exchange) or re-authenticating. Expired tokens are handled automatically.
+
 ## Webhooks
 
 The OAuth code flow registers webhooks in its callback. Token exchange has no such callback, so register webhooks yourself with `shopify.registerWebhooks({session})`, typically from the `afterAuth` hook (see the example above).
