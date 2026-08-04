@@ -191,4 +191,23 @@ describe('ensureInstalledOnShop', () => {
       ),
     );
   });
+
+  describe('with token exchange enabled', () => {
+    beforeEach(() => {
+      shopify.config.future = {unstable_tokenExchange: true};
+    });
+
+    it('loads the app with no stored session (skips the storage install check)', async () => {
+      mockShopifyResponse({data: {shop: {name: TEST_SHOP}}});
+
+      // No session stored on purpose: under token exchange, a fresh shop has
+      // no session until the first authenticated request mints one.
+      const encodedHost = Buffer.from(SHOPIFY_HOST, 'utf-8').toString('base64');
+      const response = await request(app)
+        .get(`/test/shop?shop=${TEST_SHOP}&host=${encodedHost}&embedded=1`)
+        .expect(200);
+
+      expect(response.body).toEqual({data: {shop: {name: TEST_SHOP}}});
+    });
+  });
 });
