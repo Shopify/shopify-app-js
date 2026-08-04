@@ -1,10 +1,13 @@
 import {
   ApiVersion,
   ConfigParams as ApiConfigParams,
+  Session,
   Shopify,
   ShopifyRestResources,
 } from '@shopify/shopify-api';
 import {SessionStorage} from '@shopify/shopify-app-session-storage';
+
+import {IdempotentPromiseHandler} from './helpers/idempotent-promise-handler';
 
 // Make apiVersion required while keeping other API config fields optional
 export type ExpressApiConfigParams<
@@ -21,6 +24,21 @@ export interface FutureFlags {
    * @default false
    */
   expiringOfflineAccessTokens?: boolean;
+
+  /**
+   * When enabled, embedded apps fetch access tokens via token exchange instead of the OAuth redirect flow. Requires
+   * Shopify managed installation. Non-embedded apps continue to use the Auth Code flow.
+   *
+   * @default false
+   */
+  tokenExchange?: boolean;
+}
+
+export interface HooksConfigInterface {
+  /**
+   * Called after authentication completes (both token exchange and OAuth), with the resulting session.
+   */
+  afterAuth?: (options: {session: Session}) => void | Promise<void>;
 }
 
 export interface AppConfigParams<
@@ -34,6 +52,7 @@ export interface AppConfigParams<
   exitIframePath?: string;
   sessionStorage?: Storage;
   future?: FutureFlags;
+  hooks?: HooksConfigInterface;
 }
 
 export interface AppConfigInterface<
@@ -45,6 +64,8 @@ export interface AppConfigInterface<
   exitIframePath: string;
   sessionStorage: Storage;
   future: FutureFlags;
+  hooks: HooksConfigInterface;
+  idempotentPromiseHandler: IdempotentPromiseHandler;
 }
 
 export interface AuthConfigInterface {

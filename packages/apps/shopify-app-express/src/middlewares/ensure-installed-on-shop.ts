@@ -34,6 +34,25 @@ export function ensureInstalled({
         return undefined;
       }
 
+      // Under token exchange the app uses Shopify managed installation, so
+      // whether the app is installed is not a session-storage question: a shop
+      // may have no stored session until the first token exchange. Skip the
+      // storage check, make sure the app is embedded, and let the first
+      // authenticated request mint the session via token exchange.
+      if (config.future?.tokenExchange) {
+        if (req.query.embedded !== '1') {
+          await embedAppIntoShopify(api, config, req, res, shop);
+          return undefined;
+        }
+
+        addCSPHeader(api, req, res);
+        config.logger.debug(
+          'Token exchange enabled, skipping install check and loading app',
+          {shop},
+        );
+        return next();
+      }
+
       config.logger.debug('Checking if shop has installed the app', {shop});
 
       const sessionId = api.session.getOfflineId(shop);

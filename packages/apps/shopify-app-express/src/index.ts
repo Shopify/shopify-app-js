@@ -5,6 +5,7 @@ import {
   ConfigParams as ApiConfigParams,
   Shopify,
   FeatureDeprecatedError,
+  ShopifyError,
   ShopifyRestResources,
   Session,
 } from '@shopify/shopify-api';
@@ -12,6 +13,9 @@ import {MemorySessionStorage} from '@shopify/shopify-app-session-storage-memory'
 
 import {SHOPIFY_EXPRESS_LIBRARY_VERSION} from './version';
 import {AppConfigInterface, AppConfigParams} from './config-types';
+import {IdempotentPromiseHandler} from './helpers/idempotent-promise-handler';
+import {registerWebhooks} from './helpers/register-webhooks';
+import {logDisabledFutureFlags} from './future/flags';
 import {
   validateAuthenticatedSession,
   cspHeaders,
@@ -71,6 +75,7 @@ export interface ShopifyApp<Params extends AppConfigParams = AppConfigParams> {
   redirectToShopifyOrAppRoot: RedirectToShopifyOrAppRootMiddleware;
   redirectOutOfApp: RedirectOutOfAppFunction;
   ensureValidOfflineSession: (shop: string) => Promise<Session | undefined>;
+  registerWebhooks: (params: {session: Session}) => Promise<void>;
 }
 
 export function shopifyApp<Params extends AppConfigParams>(
@@ -80,6 +85,15 @@ export function shopifyApp<Params extends AppConfigParams>(
 
   const api = shopifyApi(apiConfigWithDefaults(apiConfig));
   const validatedConfig = validateAppConfig(appConfig, api);
+
+  if (validatedConfig.future?.tokenExchange && !api.config.isEmbeddedApp) {
+    throw new ShopifyError(
+      'tokenExchange requires an embedded app (isEmbeddedApp: true). ' +
+        'Token exchange is not available for non-embedded apps; remove the flag or set isEmbeddedApp to true.',
+    );
+  }
+
+  logDisabledFutureFlags(validatedConfig, api.logger);
 
   return {
     config: validatedConfig,
@@ -105,6 +119,8 @@ export function shopifyApp<Params extends AppConfigParams>(
     redirectOutOfApp: redirectOutOfApp({api, config: validatedConfig}),
     ensureValidOfflineSession: (shop: string) =>
       ensureValidOfflineSession({api, config: validatedConfig}, shop),
+    registerWebhooks: ({session}: {session: Session}) =>
+      registerWebhooks(validatedConfig, api, session),
   };
 }
 
@@ -143,6 +159,8 @@ function validateAppConfig<Params extends Omit<AppConfigParams, 'api'>>(
     useOnlineTokens: false,
     exitIframePath: '/exitiframe',
     future: {},
+    hooks: {},
+    idempotentPromiseHandler: new IdempotentPromiseHandler(),
     sessionStorage: (sessionStorage ??
       new MemorySessionStorage()) as ConfigInterfaceFromParams<Params>['sessionStorage'],
     ...configWithoutSessionStorage,
