@@ -143,7 +143,7 @@ async function callWebhookHandlers(
         response,
       });
     }
-    const {webhookId, subTopic} = webhookCheck;
+    const {webhookId} = webhookCheck;
 
     try {
       await handler.callback(
@@ -152,7 +152,6 @@ async function callWebhookHandlers(
         rawBody,
         webhookId,
         webhookCheck.apiVersion,
-        ...(subTopic ? subTopic : ''),
         context,
       );
     } catch (error) {

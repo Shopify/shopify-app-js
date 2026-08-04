@@ -1878,26 +1878,6 @@
         {
           "filePath": "src/server/authenticate/webhooks/types.ts",
           "syntaxKind": "PropertySignature",
-          "name": "subTopic",
-          "value": "string",
-          "description": "The sub-topic of the webhook. Only available for traditional webhooks.",
-          "isOptional": true,
-          "examples": [
-            {
-              "title": "Webhook sub-topic",
-              "description": "Get the webhook sub-topic.",
-              "tabs": [
-                {
-                  "code": "import { ActionFunctionArgs } from \"react-router\";\nimport { authenticate } from \"../shopify.server\";\n\nexport const action = async ({ request }: ActionFunctionArgs) => {\n  const { subTopic } = await authenticate.webhook(request);\n  return new Response();\n};",
-                  "title": "/app/routes/webhooks.tsx"
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "filePath": "src/server/authenticate/webhooks/types.ts",
-          "syntaxKind": "PropertySignature",
           "name": "topic",
           "value": "Topics",
           "description": "The topic of the webhook.",
@@ -2087,26 +2067,6 @@
               "tabs": [
                 {
                   "code": "import { ActionFunctionArgs } from \"react-router\";\nimport { authenticate } from \"../shopify.server\";\n\nexport const action = async ({ request }: ActionFunctionArgs) => {\n  const { shop } = await authenticate.webhook(request);\n  return new Response();\n};",
-                  "title": "/app/routes/webhooks.tsx"
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "filePath": "src/server/authenticate/webhooks/types.ts",
-          "syntaxKind": "PropertySignature",
-          "name": "subTopic",
-          "value": "string",
-          "description": "The sub-topic of the webhook. Only available for traditional webhooks.",
-          "isOptional": true,
-          "examples": [
-            {
-              "title": "Webhook sub-topic",
-              "description": "Get the webhook sub-topic.",
-              "tabs": [
-                {
-                  "code": "import { ActionFunctionArgs } from \"react-router\";\nimport { authenticate } from \"../shopify.server\";\n\nexport const action = async ({ request }: ActionFunctionArgs) => {\n  const { subTopic } = await authenticate.webhook(request);\n  return new Response();\n};",
                   "title": "/app/routes/webhooks.tsx"
                 }
               ]
@@ -2350,7 +2310,7 @@
         "name": "ShopifyApp<Config extends AppConfigArg<Storage, Future>>",
         "value": "ShopifyApp<Config extends AppConfigArg<Storage, Future>>"
       },
-      "value": "export function shopifyApp<\n  Config extends AppConfigArg<Storage, Future>,\n  Storage extends SessionStorage,\n  Future extends FutureFlagOptions = Config['future'],\n>(appConfig: Readonly<Config>): ShopifyApp<Config> {\n  const api = deriveApi(appConfig);\n  const config = deriveConfig<Storage>(appConfig, api.config);\n  const logger = overrideLogger(api.logger);\n\n  if (appConfig.webhooks) {\n    api.webhooks.addHandlers(appConfig.webhooks);\n  }\n\n  const params: BasicParams = {api, config, logger};\n\n  let strategy;\n  if (config.distribution === AppDistribution.ShopifyAdmin) {\n    strategy = createMerchantCustomAuthStrategy(params);\n  } else {\n    strategy = createTokenExchangeStrategy(params);\n  }\n\n  const authStrategy = authStrategyFactory({\n    ...params,\n    strategy,\n  });\n\n  const shopify:\n    | AdminApp<Config>\n    | AppStoreApp<Config>\n    | SingleMerchantApp<Config> = {\n    sessionStorage: config.sessionStorage,\n    addDocumentResponseHeaders: addDocumentResponseHeadersFactory(params),\n    registerWebhooks: registerWebhooksFactory(params),\n    authenticate: {\n      admin: authStrategy,\n      flow: authenticateFlowFactory(params),\n      fulfillmentService: authenticateFulfillmentServiceFactory(params),\n      pos: authenticatePOSFactory(params),\n      public: authenticatePublicFactory(params),\n      webhook: authenticateWebhookFactory<string>(params),\n    },\n    unauthenticated: {\n      admin: unauthenticatedAdminContextFactory(params),\n      storefront: unauthenticatedStorefrontContextFactory(params),\n    },\n  };\n\n  if (\n    isAppStoreApp(shopify, appConfig) ||\n    isSingleMerchantApp(shopify, appConfig)\n  ) {\n    shopify.login = loginFactory(params);\n  }\n\n  logDisabledFutureFlags(config, logger);\n\n  return shopify as ShopifyApp<Config>;\n}",
+      "value": "export function shopifyApp<\n  Config extends AppConfigArg<Storage, Future>,\n  Storage extends SessionStorage,\n  Future extends FutureFlagOptions = Config['future'],\n>(appConfig: Readonly<Config>): ShopifyApp<Config> {\n  const api = deriveApi(appConfig);\n  const config = deriveConfig<Storage>(appConfig, api.config);\n  const logger = overrideLogger(api.logger);\n\n  if (appConfig.webhooks) {\n    api.webhooks.addHandlers(appConfig.webhooks);\n  }\n\n  const params: BasicParams = {api, config, logger};\n\n  let strategy;\n  if (config.distribution === AppDistribution.ShopifyAdmin) {\n    strategy = createMerchantCustomAuthStrategy(params);\n  } else {\n    strategy = createTokenExchangeStrategy(params);\n  }\n\n  const authStrategy = authStrategyFactory({\n    ...params,\n    strategy,\n  });\n\n  const shopify:\n    AdminApp<Config> | AppStoreApp<Config> | SingleMerchantApp<Config> = {\n    sessionStorage: config.sessionStorage,\n    addDocumentResponseHeaders: addDocumentResponseHeadersFactory(params),\n    registerWebhooks: registerWebhooksFactory(params),\n    authenticate: {\n      admin: authStrategy,\n      flow: authenticateFlowFactory(params),\n      fulfillmentService: authenticateFulfillmentServiceFactory(params),\n      pos: authenticatePOSFactory(params),\n      public: authenticatePublicFactory(params),\n      webhook: authenticateWebhookFactory<string>(params),\n    },\n    unauthenticated: {\n      admin: unauthenticatedAdminContextFactory(params),\n      storefront: unauthenticatedStorefrontContextFactory(params),\n    },\n  };\n\n  if (\n    isAppStoreApp(shopify, appConfig) ||\n    isSingleMerchantApp(shopify, appConfig)\n  ) {\n    shopify.login = loginFactory(params);\n  }\n\n  logDisabledFutureFlags(config, logger);\n\n  return shopify as ShopifyApp<Config>;\n}",
       "examples": [
         {
           "title": "The minimum viable configuration",
@@ -3847,6 +3807,37 @@
         {
           "filePath": "src/server/config-types.ts",
           "syntaxKind": "PropertySignature",
+          "name": "cookiePath",
+          "value": "string | ((session: Session) => string)",
+          "description": "The path to use for the OAuth session cookie in non-embedded apps.\n\nBy default the cookie is written with `path: '/'`, making it domain-wide. This means that when a user authenticates multiple shops in separate tabs, each OAuth callback overwrites the previous cookie, causing all tabs to use the most-recently-authenticated shop.\n\nSet this to a string or a function returning a string to scope the cookie to a URL path prefix that is unique per shop. The browser will then maintain one cookie per shop and deliver only the matching one per request.\n\n**Requirement:** the configured path must match the actual URL structure of your app — e.g. if each shop lives under `/shops/:shop/`, use that prefix. The library cannot derive this automatically.",
+          "isOptional": true,
+          "defaultValue": "`'/'`",
+          "examples": [
+            {
+              "title": "Example",
+              "description": "",
+              "tabs": [
+                {
+                  "code": "// Static path (single-shop apps or apps with no shop-specific routing)\ncookiePath: '/'",
+                  "title": "Example"
+                }
+              ]
+            },
+            {
+              "title": "Example",
+              "description": "",
+              "tabs": [
+                {
+                  "code": "// Factory function (multi-shop non-embedded apps)\ncookiePath: (session) => `/shops/${session.shop}/`",
+                  "title": "Example"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "filePath": "src/server/config-types.ts",
+          "syntaxKind": "PropertySignature",
           "name": "distribution",
           "value": "AppDistribution",
           "description": "How your app is distributed. Default is `AppDistribution.AppStore`.\n\nAppStore should be used for public apps that are distributed in the Shopify App Store. SingleMerchant should be used for custom apps managed in the Partner Dashboard. ShopifyAdmin should be used for apps that are managed in the merchant's Shopify Admin.\n\n\n\n\n",
@@ -4032,10 +4023,10 @@
         {
           "filePath": "src/server/config-types.ts",
           "name": "[plan: string]",
-          "value": "| BillingConfigOneTimePlan\n    | BillingConfigSubscriptionLineItemPlan"
+          "value": "BillingConfigOneTimePlan | BillingConfigSubscriptionLineItemPlan"
         }
       ],
-      "value": "export interface BillingConfigWithLineItems {\n  [plan: string]:\n    | BillingConfigOneTimePlan\n    | BillingConfigSubscriptionLineItemPlan;\n}"
+      "value": "export interface BillingConfigWithLineItems {\n  [plan: string]:\n    BillingConfigOneTimePlan | BillingConfigSubscriptionLineItemPlan;\n}"
     }
   },
   "HooksConfig": {
@@ -4102,31 +4093,6 @@
       "members": []
     }
   },
-  "AppProviderProps": {
-    "src/react/components/AppProvider/AppProvider.tsx": {
-      "filePath": "src/react/components/AppProvider/AppProvider.tsx",
-      "name": "AppProviderProps",
-      "description": "Props for the `AppProvider` component.",
-      "isPublicDocs": true,
-      "members": [
-        {
-          "filePath": "src/react/components/AppProvider/AppProvider.tsx",
-          "syntaxKind": "PropertySignature",
-          "name": "apiKey",
-          "value": "string",
-          "description": "The API key for your Shopify app. This is the `Client ID` from the Partner Dashboard.\n\nThe App Bridge script will be included on the page using this API key. When using the Shopify CLI, this is the `SHOPIFY_API_KEY` environment variable. If you're using the environment variable, then you need to pass it from the loader to the component."
-        },
-        {
-          "filePath": "src/react/components/AppProvider/AppProvider.tsx",
-          "syntaxKind": "PropertySignature",
-          "name": "children",
-          "value": "React.ReactNode",
-          "description": "The children to render."
-        }
-      ],
-      "value": "export interface AppProviderProps {\n  /**\n   * The children to render.\n   */\n  children: React.ReactNode;\n\n  /**\n   * The API key for your Shopify app. This is the `Client ID` from the Partner Dashboard.\n   *\n   * The App Bridge script will be included on the page using this API key. When using the Shopify CLI, this is the\n   * `SHOPIFY_API_KEY` environment variable. If you're using the environment variable, then you need to pass it from the\n   * loader to the component.\n   */\n  apiKey: string;\n}"
-    }
-  },
   "AppProxyProviderProps": {
     "src/react/components/AppProxyProvider/AppProxyProvider.tsx": {
       "filePath": "src/react/components/AppProxyProvider/AppProxyProvider.tsx",
@@ -4151,6 +4117,31 @@
         }
       ],
       "value": "export interface AppProxyProviderProps {\n  /**\n   * The URL where the app is hosted. You can set this from the `SHOPIFY_APP_URL` environment variable.\n   */\n  appUrl: string;\n\n  /**\n   * The children to render.\n   */\n  children?: React.ReactNode;\n}"
+    }
+  },
+  "AppProviderProps": {
+    "src/react/components/AppProvider/AppProvider.tsx": {
+      "filePath": "src/react/components/AppProvider/AppProvider.tsx",
+      "name": "AppProviderProps",
+      "description": "Props for the `AppProvider` component.",
+      "isPublicDocs": true,
+      "members": [
+        {
+          "filePath": "src/react/components/AppProvider/AppProvider.tsx",
+          "syntaxKind": "PropertySignature",
+          "name": "apiKey",
+          "value": "string",
+          "description": "The API key for your Shopify app. This is the `Client ID` from the Partner Dashboard.\n\nThe App Bridge script will be included on the page using this API key. When using the Shopify CLI, this is the `SHOPIFY_API_KEY` environment variable. If you're using the environment variable, then you need to pass it from the loader to the component."
+        },
+        {
+          "filePath": "src/react/components/AppProvider/AppProvider.tsx",
+          "syntaxKind": "PropertySignature",
+          "name": "children",
+          "value": "React.ReactNode",
+          "description": "The children to render."
+        }
+      ],
+      "value": "export interface AppProviderProps {\n  /**\n   * The children to render.\n   */\n  children: React.ReactNode;\n\n  /**\n   * The API key for your Shopify app. This is the `Client ID` from the Partner Dashboard.\n   *\n   * The App Bridge script will be included on the page using this API key. When using the Shopify CLI, this is the\n   * `SHOPIFY_API_KEY` environment variable. If you're using the environment variable, then you need to pass it from the\n   * loader to the component.\n   */\n  apiKey: string;\n}"
     }
   }
 }
