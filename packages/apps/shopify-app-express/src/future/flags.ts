@@ -13,10 +13,10 @@ export function logDisabledFutureFlags(
   const logFlag = (flag: string, message: string) =>
     logger.info(`Future flag ${flag} is disabled.\n\n  ${message}\n`);
 
-  if (!config.future?.unstable_tokenExchange) {
+  if (!config.future?.tokenExchange) {
     logFlag(
-      'unstable_tokenExchange',
-      'Enable this to use OAuth token exchange instead of the auth code flow for embedded apps. ' +
+      'tokenExchange',
+      'Enable this to use OAuth token exchange instead of the Auth Code flow for embedded apps. ' +
         'Your app must use Shopify managed installation: https://shopify.dev/docs/apps/auth/installation',
     );
   }

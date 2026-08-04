@@ -39,7 +39,7 @@ export function ensureInstalled({
       // may have no stored session until the first token exchange. Skip the
       // storage check, make sure the app is embedded, and let the first
       // authenticated request mint the session via token exchange.
-      if (config.future?.unstable_tokenExchange) {
+      if (config.future?.tokenExchange) {
         if (req.query.embedded !== '1') {
           await embedAppIntoShopify(api, config, req, res, shop);
           return undefined;

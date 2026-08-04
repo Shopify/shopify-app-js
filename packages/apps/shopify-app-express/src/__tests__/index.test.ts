@@ -41,7 +41,7 @@ describe('shopifyApp', () => {
       shopifyApp({
         ...testConfig,
         api: {...testConfig.api, isEmbeddedApp: false},
-        future: {unstable_tokenExchange: true},
+        future: {tokenExchange: true},
       }),
     ).toThrow(ShopifyError);
   });
@@ -51,7 +51,7 @@ describe('shopifyApp', () => {
       shopifyApp({
         ...testConfig,
         api: {...testConfig.api, isEmbeddedApp: true},
-        future: {unstable_tokenExchange: true},
+        future: {tokenExchange: true},
       }),
     ).not.toThrow();
   });

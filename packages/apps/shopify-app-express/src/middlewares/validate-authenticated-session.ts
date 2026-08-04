@@ -23,10 +23,10 @@ export function validateAuthenticatedSession({
       config.logger.debug('Running validateAuthenticatedSession');
 
       // One branch, up front: embedded apps that opted into token exchange use
-      // it; everything else uses the legacy OAuth code flow. The two paths are
+      // it; everything else uses the legacy Auth Code flow. The two paths are
       // fully independent below.
       const useTokenExchange =
-        config.future?.unstable_tokenExchange && api.config.isEmbeddedApp;
+        config.future?.tokenExchange && api.config.isEmbeddedApp;
 
       if (useTokenExchange) {
         return validateWithTokenExchange({req, res, next, api, config});

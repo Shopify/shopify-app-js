@@ -5,7 +5,7 @@ This function creates an Express middleware that ensures any request to that end
 You don't need to use it if your app is not embedded, because you can use `validateAuthenticatedSession` on any non-embedded request.
 If you call this middleware on a non-embedded app, it will behave like `validateAuthenticatedSession` instead.
 
-When the [`unstable_tokenExchange`](./guides/token-exchange.md) future flag is enabled, this middleware does not check session storage to decide whether the app is installed (under managed installation a shop may have no stored session until its first token exchange). It embeds the app if needed and loads it; the first authenticated request then mints the session via token exchange.
+When the [`tokenExchange`](./guides/token-exchange.md) future flag is enabled, this middleware does not check session storage to decide whether the app is installed (under managed installation a shop may have no stored session until its first token exchange). It embeds the app if needed and loads it; the first authenticated request then mints the session via token exchange.
 
 ## Example
 

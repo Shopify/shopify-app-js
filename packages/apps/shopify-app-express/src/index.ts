@@ -86,12 +86,9 @@ export function shopifyApp<Params extends AppConfigParams>(
   const api = shopifyApi(apiConfigWithDefaults(apiConfig));
   const validatedConfig = validateAppConfig(appConfig, api);
 
-  if (
-    validatedConfig.future?.unstable_tokenExchange &&
-    !api.config.isEmbeddedApp
-  ) {
+  if (validatedConfig.future?.tokenExchange && !api.config.isEmbeddedApp) {
     throw new ShopifyError(
-      'unstable_tokenExchange requires an embedded app (isEmbeddedApp: true). ' +
+      'tokenExchange requires an embedded app (isEmbeddedApp: true). ' +
         'Token exchange is not available for non-embedded apps; remove the flag or set isEmbeddedApp to true.',
     );
   }

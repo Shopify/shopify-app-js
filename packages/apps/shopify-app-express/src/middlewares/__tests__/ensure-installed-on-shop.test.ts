@@ -194,7 +194,7 @@ describe('ensureInstalledOnShop', () => {
 
   describe('with token exchange enabled', () => {
     beforeEach(() => {
-      shopify.config.future = {unstable_tokenExchange: true};
+      shopify.config.future = {tokenExchange: true};
     });
 
     it('loads the app with no stored session (skips the storage install check)', async () => {

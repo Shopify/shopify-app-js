@@ -14,7 +14,7 @@ import {RETRY_INVALID_SESSION_HEADER} from '../../const';
 function buildShopify(overrides: Record<string, any> = {}): ShopifyApp {
   return shopifyApp({
     ...testConfig,
-    future: {unstable_tokenExchange: true},
+    future: {tokenExchange: true},
     ...overrides,
   } as any);
 }

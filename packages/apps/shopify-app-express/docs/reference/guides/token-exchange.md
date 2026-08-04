@@ -1,8 +1,8 @@
 # Token exchange
 
-Token exchange lets embedded apps get access tokens without the OAuth redirect flow. When an embedded app loads, App Bridge provides a short-lived session token; the app exchanges that token with Shopify for an API access token. This removes the redirect flicker that the OAuth code flow causes on load.
+Token exchange lets embedded apps get access tokens without the OAuth redirect flow. When an embedded app loads, App Bridge provides a short-lived session token; the app exchanges that token with Shopify for an API access token. This removes the redirect flicker that the Auth Code flow causes on load.
 
-Support is behind the `unstable_tokenExchange` future flag and is off by default.
+Support is behind the `tokenExchange` future flag and is off by default.
 
 ## Requirements
 
@@ -10,7 +10,7 @@ Support is behind the `unstable_tokenExchange` future flag and is off by default
 - The app must use [Shopify managed installation](https://shopify.dev/docs/apps/auth/installation).
 - The frontend must load [App Bridge](https://shopify.dev/docs/api/app-bridge-library), which provides the session token.
 
-Non-embedded apps with the flag off continue to use the OAuth code flow. Enabling the flag on a non-embedded app (`isEmbeddedApp: false`) throws at startup, because token exchange requires the App Bridge session token that only embedded apps have.
+Non-embedded apps with the flag off continue to use the Auth Code flow. Enabling the flag on a non-embedded app (`isEmbeddedApp: false`) throws at startup, because token exchange requires the App Bridge session token that only embedded apps have.
 
 ## Enabling it
 
@@ -24,7 +24,7 @@ const shopify = shopifyApp({
   auth: {path: '/api/auth', callbackPath: '/api/auth/callback'},
   webhooks: {path: '/api/webhooks'},
   future: {
-    unstable_tokenExchange: true,
+    tokenExchange: true,
   },
   hooks: {
     afterAuth: async ({session}) => {
@@ -36,7 +36,7 @@ const shopify = shopifyApp({
 
 ## What changes when it is enabled
 
-- `validateAuthenticatedSession` uses token exchange for embedded apps. It decides once, up front: token exchange when the flag is on and the app is embedded, otherwise the OAuth code flow.
+- `validateAuthenticatedSession` uses token exchange for embedded apps. It decides once, up front: token exchange when the flag is on and the app is embedded, otherwise the Auth Code flow.
 - **Fetch requests** with a missing or stale session token receive a `401` with the `X-Shopify-Retry-Invalid-Session-Request` header, so App Bridge fetches a fresh token and retries.
 - **Document requests** (page loads) with a missing or stale session token render App Bridge, which fetches a fresh token and reloads the page. No top-level OAuth redirect.
 - The OAuth routes (`auth.begin` / `auth.callback`) are not used and return an error if called.
@@ -47,4 +47,4 @@ Token exchange reuses a stored access token while it is unexpired. If a token is
 
 ## Webhooks
 
-The OAuth code flow registers webhooks in its callback. Token exchange has no such callback, so register webhooks yourself with `shopify.registerWebhooks({session})`, typically from the `afterAuth` hook (see the example above).
+The Auth Code flow registers webhooks in its callback. Token exchange has no such callback, so register webhooks yourself with `shopify.registerWebhooks({session})`, typically from the `afterAuth` hook (see the example above).

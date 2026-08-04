@@ -8,19 +8,19 @@ import {AuthMiddleware} from './types';
 
 export function auth({api, config}: ApiAndConfigParams): AuthMiddleware {
   const usesTokenExchange = () =>
-    Boolean(config.future?.unstable_tokenExchange && api.config.isEmbeddedApp);
+    Boolean(config.future?.tokenExchange && api.config.isEmbeddedApp);
 
   return {
     begin(): RequestHandler {
       return async (req: Request, res: Response) => {
         if (usesTokenExchange()) {
           config.logger.error(
-            'auth.begin() was called while token exchange is enabled. Embedded apps using token exchange do not use the OAuth code flow routes.',
+            'auth.begin() was called while token exchange is enabled. Embedded apps using token exchange do not use the Auth Code flow routes.',
           );
           res
             .status(400)
             .send(
-              'This app uses token exchange (unstable_tokenExchange). The OAuth auth routes are not used in this mode.',
+              'This app uses token exchange (tokenExchange). The OAuth auth routes are not used in this mode.',
             );
           return;
         }
@@ -32,12 +32,12 @@ export function auth({api, config}: ApiAndConfigParams): AuthMiddleware {
       return async (req: Request, res: Response, next: NextFunction) => {
         if (usesTokenExchange()) {
           config.logger.error(
-            'auth.callback() was called while token exchange is enabled. Embedded apps using token exchange do not use the OAuth code flow routes.',
+            'auth.callback() was called while token exchange is enabled. Embedded apps using token exchange do not use the Auth Code flow routes.',
           );
           res
             .status(400)
             .send(
-              'This app uses token exchange (unstable_tokenExchange). The OAuth auth routes are not used in this mode.',
+              'This app uses token exchange (tokenExchange). The OAuth auth routes are not used in this mode.',
             );
           return;
         }

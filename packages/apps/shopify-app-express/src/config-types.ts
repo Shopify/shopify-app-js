@@ -27,11 +27,11 @@ export interface FutureFlags {
 
   /**
    * When enabled, embedded apps fetch access tokens via token exchange instead of the OAuth redirect flow. Requires
-   * Shopify managed installation. Non-embedded apps continue to use the OAuth code flow.
+   * Shopify managed installation. Non-embedded apps continue to use the Auth Code flow.
    *
    * @default false
    */
-  unstable_tokenExchange?: boolean;
+  tokenExchange?: boolean;
 }
 
 export interface HooksConfigInterface {
