@@ -16,7 +16,7 @@ const VALID_API_CONFIG: ConfigParams<any, any> = {
   apiKey: 'test-key',
   apiSecretKey: 'test-secret',
   scopes: ['test-scope'],
-  apiVersion: ApiVersion.July25,
+  apiVersion: ApiVersion.July26,
   hostName: 'test-host',
   isEmbeddedApp: true,
   logger: {log: LOG_FN, level: LogSeverity.Debug},

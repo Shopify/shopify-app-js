@@ -30,7 +30,7 @@ export const config: ConfigInterface = {
   scopes: new AuthScopes('test_scope'),
   hostName: 'test_host_name',
   hostScheme: 'https',
-  apiVersion: ApiVersion.July25,
+  apiVersion: ApiVersion.July26,
   isEmbeddedApp: true,
   isCustomStoreApp: false,
   logger: {

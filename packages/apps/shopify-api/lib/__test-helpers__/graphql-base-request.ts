@@ -5,6 +5,6 @@ export const ACCESS_TOKEN = 'access-token';
 export const GRAPHQL_BASE_REQUEST = {
   method: 'POST',
   domain: DOMAIN,
-  path: `/admin/api/${ApiVersion.July25}/graphql.json`,
+  path: `/admin/api/${ApiVersion.July26}/graphql.json`,
   headers: {'X-Shopify-Access-Token': ACCESS_TOKEN},
 };

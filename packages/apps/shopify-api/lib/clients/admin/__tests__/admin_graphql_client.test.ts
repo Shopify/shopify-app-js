@@ -308,7 +308,7 @@ describe('GraphQL client', () => {
     expect(shopify.config.logger.log).toHaveBeenCalledWith(
       LogSeverity.Debug,
       expect.stringContaining(
-        `Admin client overriding default API version ${ApiVersion.July25} with 2020-01`,
+        `Admin client overriding default API version ${ApiVersion.July26} with 2020-01`,
       ),
     );
   });

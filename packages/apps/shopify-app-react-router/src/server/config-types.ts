@@ -233,7 +233,7 @@ export interface AppConfigArg<
    *
    * const shopify = shopifyApp({
    *   // ...etc
-   *   apiVersion: ApiVersion.July25,
+   *   apiVersion: ApiVersion.July26,
    * });
    * ```
    */

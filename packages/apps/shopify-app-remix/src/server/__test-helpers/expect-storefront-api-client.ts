@@ -18,7 +18,7 @@ export function expectStorefrontApiClient(
     const apiResponse = {data: {blogs: {nodes: [{id: 1}]}}, headers: {}};
     await mockExternalRequest({
       request: new Request(
-        `https://${TEST_SHOP}/api/${ApiVersion.July25}/graphql.json`,
+        `https://${TEST_SHOP}/api/${ApiVersion.July26}/graphql.json`,
         {
           method: 'POST',
           headers: {
