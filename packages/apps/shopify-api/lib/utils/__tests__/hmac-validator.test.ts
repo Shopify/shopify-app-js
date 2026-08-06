@@ -298,6 +298,132 @@ describe('validateHmac', () => {
   });
 });
 
+describe('App Proxy HMAC hardening', () => {
+  const SECRET = 'my super secret key';
+  const options = {signator: 'appProxy' as HMACSignator};
+
+  test.each([
+    ['missing', undefined],
+    ['NaN', 'not-a-number'],
+    ['Infinity', 'Infinity'],
+    ['-Infinity', '-Infinity'],
+    ['non-integer', '123.45'],
+    ['empty', ''],
+  ])('rejects a %s timestamp', async (_label, timestamp) => {
+    const shopify = shopifyApi(testConfig({apiSecretKey: SECRET}));
+
+    const query: Record<string, string> = {
+      shop: 'shop.myshopify.com',
+      foo: 'bar',
+      signature: 'unused',
+    };
+    if (timestamp !== undefined) {
+      query.timestamp = timestamp;
+    }
+
+    await expect(
+      shopify.utils.validateHmac(query, options),
+    ).rejects.toBeInstanceOf(ShopifyErrors.InvalidHmacError);
+  });
+
+  test('rejects a plain object with a null timestamp', async () => {
+    const shopify = shopifyApi(testConfig({apiSecretKey: SECRET}));
+
+    const query: Record<string, unknown> = {
+      shop: 'shop.myshopify.com',
+      timestamp: null,
+      signature: 'unused',
+    };
+
+    await expect(
+      shopify.utils.validateHmac(query as any, options),
+    ).rejects.toBeInstanceOf(ShopifyErrors.InvalidHmacError);
+  });
+
+  test('rejects an array-valued timestamp on the admin signator', async () => {
+    const shopify = shopifyApi(testConfig({apiSecretKey: SECRET}));
+
+    const query: Record<string, unknown> = {
+      shop: 'shop.myshopify.com',
+      timestamp: ['1700000000', '1700000001'],
+      hmac: 'unused',
+    };
+
+    await expect(
+      shopify.utils.validateHmac(query as any, {
+        signator: 'admin' as HMACSignator,
+      }),
+    ).rejects.toBeInstanceOf(ShopifyErrors.InvalidHmacError);
+  });
+
+  test.each(['hmac', 'shop', 'signature', 'timestamp'])(
+    'rejects a plain object with an array-valued %s',
+    async (param) => {
+      const shopify = shopifyApi(testConfig({apiSecretKey: SECRET}));
+
+      const query: Record<string, unknown> = {
+        shop: 'shop.myshopify.com',
+        timestamp: String(getCurrentTimeInSec() - 30),
+        signature: 'unused',
+      };
+      query[param] = ['first-value', 'second-value'];
+
+      await expect(
+        shopify.utils.validateHmac(query as any, options),
+      ).rejects.toThrow('must not appear more than once');
+    },
+  );
+
+  test('authenticates a legitimate single-valued App Proxy request', async () => {
+    const shopify = shopifyApi(testConfig({apiSecretKey: SECRET}));
+
+    const timestamp = String(getCurrentTimeInSec() - 30);
+    const query: Record<string, string> = {
+      shop: 'shop.myshopify.com',
+      timestamp,
+    };
+    const canonical = `shop=shop.myshopify.comtimestamp=${timestamp}`;
+    query.signature = createHmacSignature(canonical, SECRET);
+
+    await expect(shopify.utils.validateHmac(query, options)).resolves.toBe(
+      true,
+    );
+  });
+
+  test('authenticates a plain object with a repeated application param', async () => {
+    const shopify = shopifyApi(testConfig({apiSecretKey: SECRET}));
+
+    const timestamp = String(getCurrentTimeInSec() - 30);
+    const query: Record<string, unknown> = {
+      shop: 'shop.myshopify.com',
+      timestamp,
+      extra: ['first', 'second'],
+    };
+    const canonical = `extra=first,secondshop=shop.myshopify.comtimestamp=${timestamp}`;
+    query.signature = createHmacSignature(canonical, SECRET);
+
+    await expect(
+      shopify.utils.validateHmac(query as any, options),
+    ).resolves.toBe(true);
+  });
+
+  test('authenticates a legitimate URLSearchParams App Proxy request', async () => {
+    const shopify = shopifyApi(testConfig({apiSecretKey: SECRET}));
+
+    const timestamp = String(getCurrentTimeInSec() - 30);
+    const canonical = `shop=shop.myshopify.comtimestamp=${timestamp}`;
+    const query = new URLSearchParams({
+      shop: 'shop.myshopify.com',
+      timestamp,
+      signature: createHmacSignature(canonical, SECRET),
+    });
+
+    await expect(shopify.utils.validateHmac(query, options)).resolves.toBe(
+      true,
+    );
+  });
+});
+
 function createHmacSignature(queryString: string, apiSecretKey: string) {
   return crypto
     .createHmac('sha256', apiSecretKey)
