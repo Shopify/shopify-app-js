@@ -1,5 +1,148 @@
 # @shopify/shopify-app-remix
 
+## 5.0.0
+
+### Major Changes
+
+- 9fec7af: Require Node.js 22 or later. Node.js 20 is no longer supported. Upgrade your runtime to Node.js 22 or newer before updating.
+- 493094d: Tighten the public GraphQL client types for better type safety and editor hints.
+
+  - `ResponseErrors.graphQLErrors` is now typed as `GraphQLError[]` (with `message`, `locations`, `path`, and error `extensions`) instead of `any[]`. A new `GraphQLError` type is exported.
+  - `GQLExtensions` now documents the Admin `cost`/`throttleStatus` and Storefront `context` shapes, while keeping a permissive index signature so any other extension key still works.
+  - `RequestOptions` fields are now `readonly`.
+
+  These types are re-exported or surfaced by `@shopify/admin-api-client`, `@shopify/storefront-api-client`, `@shopify/shopify-api`, `@shopify/shopify-app-remix`, `@shopify/shopify-app-react-router`, and `@shopify/shopify-app-express`, so the change flows through to those packages too.
+
+  This is marked as a major out of caution, but it is very unlikely to affect an app in a meaningful way: the extension types keep a permissive index signature, so existing property access keeps working, and most callers only gain better autocomplete. The main things a strict compiler could flag are reassigning `readonly` `RequestOptions` fields, or reading non-standard properties off a `graphQLErrors` entry.
+
+- b1bcc27: Harden App Proxy validation.
+
+  As a result of this change An OAuth callback route can throw different errors for invalid URLs. This is technically a breaking change, but it's unlikely consumers are affected by this.
+
+- 84397d9: Removed deprecated `subTopic` from webhooks. The subTopic feature was deprecated in API version 2024-04 and fully removed in 2024-07.
+
+  ## Migration Guide
+
+  The `subTopic` feature was deprecated in API version 2024-04 and fully removed in 2024-07. Use [webhook filters](https://shopify.dev/docs/apps/build/webhooks/customize/filters) instead.
+
+  ### For @shopify/shopify-api
+
+  **Webhook Handlers** - Remove the `subTopic` parameter:
+
+  **Before:**
+
+  ```typescript
+  async function handler(
+    topic: string,
+    shop: string,
+    body: string,
+    webhookId: string,
+    apiVersion: string,
+    subTopic: string,
+  ) {
+    console.log(`SubTopic: ${subTopic}`);
+    // handler logic
+  }
+  ```
+
+  **After:**
+
+  ```typescript
+  async function handler(
+    topic: string,
+    shop: string,
+    body: string,
+    webhookId: string,
+    apiVersion: string,
+  ) {
+    // subTopic is no longer available
+    // Use filters when registering webhooks instead
+    // handler logic
+  }
+  ```
+
+  **Webhook Registration** - Replace `subTopic` with `filter`:
+
+  **Before:**
+
+  ```typescript
+  shopify.webhooks.addHandlers({
+    METAOBJECTS_CREATE: {
+      deliveryMethod: DeliveryMethod.Http,
+      callbackUrl: '/webhooks',
+      subTopic: 'type:my-metaobject-type',
+    },
+  });
+  ```
+
+  **After:**
+
+  ```typescript
+  // For metaobjects webhooks, filters are now REQUIRED
+  shopify.webhooks.addHandlers({
+    METAOBJECTS_CREATE: {
+      deliveryMethod: DeliveryMethod.Http,
+      callbackUrl: '/webhooks',
+    },
+  });
+
+  // Apply filters via the GraphQL Admin API or app configuration:
+  // filter: "type:my-metaobject-type"
+  // Multiple types: "type:banana OR type:apple"
+  ```
+
+  ### For @shopify/shopify-app-remix and @shopify/shopify-app-react-router
+
+  Remove `subTopic` from webhook context:
+
+  **Before:**
+
+  ```typescript
+  export const action = async ({request}: ActionFunctionArgs) => {
+    const {topic, subTopic, payload} = await authenticate.webhook(request);
+    console.log(`SubTopic: ${subTopic}`);
+    return new Response();
+  };
+  ```
+
+  **After:**
+
+  ```typescript
+  export const action = async ({request}: ActionFunctionArgs) => {
+    const {topic, payload} = await authenticate.webhook(request);
+    // Use the payload data to determine specifics
+    // For metaobjects: payload.type contains the metaobject type
+    return new Response();
+  };
+  ```
+
+  ### Important Notes
+  - **Metaobjects webhooks** (`metaobjects/create`, `metaobjects/update`, `metaobjects/delete`) now **require filters**
+  - Use `filter: "type:{type}"` format where `{type}` is the metaobject definition's type
+  - Wildcard filters like `type:*` are not supported - explicitly specify each type
+  - For app-owned metaobject definitions, use the full type value: `app--{your-app-id}--{some-namespace}`
+
+  Learn more: [Webhook filters documentation](https://shopify.dev/docs/apps/build/webhooks/customize/filters)
+
+### Patch Changes
+
+- c7ab037: Updated `isbot`, ` mongodb`, ` mysql2`, ` pg`, ` pg-connection-string` dependencies
+- f4aa24e: Fix 'Authenticating admin request' info log always showing null for shop. The shop is now logged after it is extracted from the session token context, so it reflects the actual shop value instead of null.
+- 857c598: Harden app proxy authentication by rejecting repeated security parameters while preserving repeated application query parameters. App proxy HMAC validation now consumes structured URL search parameters in the shared API package.
+- Updated dependencies [9fec7af]
+- Updated dependencies [c439dab]
+- Updated dependencies [c7ab037]
+- Updated dependencies [6675463]
+- Updated dependencies [493094d]
+- Updated dependencies [b1bcc27]
+- Updated dependencies [84397d9]
+- Updated dependencies [45f1a4b]
+- Updated dependencies [857c598]
+  - @shopify/shopify-api@14.0.0
+  - @shopify/admin-api-client@2.0.0
+  - @shopify/storefront-api-client@2.0.0
+  - @shopify/shopify-app-session-storage@6.0.0
+
 ## 4.2.1
 
 ### Patch Changes

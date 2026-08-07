@@ -1,5 +1,24 @@
 # @shopify/storefront-api-client
 
+## 2.0.0
+
+### Major Changes
+
+- 493094d: Tighten the public GraphQL client types for better type safety and editor hints.
+
+  - `ResponseErrors.graphQLErrors` is now typed as `GraphQLError[]` (with `message`, `locations`, `path`, and error `extensions`) instead of `any[]`. A new `GraphQLError` type is exported.
+  - `GQLExtensions` now documents the Admin `cost`/`throttleStatus` and Storefront `context` shapes, while keeping a permissive index signature so any other extension key still works.
+  - `RequestOptions` fields are now `readonly`.
+
+  These types are re-exported or surfaced by `@shopify/admin-api-client`, `@shopify/storefront-api-client`, `@shopify/shopify-api`, `@shopify/shopify-app-remix`, `@shopify/shopify-app-react-router`, and `@shopify/shopify-app-express`, so the change flows through to those packages too.
+
+  This is marked as a major out of caution, but it is very unlikely to affect an app in a meaningful way: the extension types keep a permissive index signature, so existing property access keeps working, and most callers only gain better autocomplete. The main things a strict compiler could flag are reassigning `readonly` `RequestOptions` fields, or reading non-standard properties off a `graphQLErrors` entry.
+
+### Patch Changes
+
+- Updated dependencies [493094d]
+  - @shopify/graphql-client@2.0.0
+
 ## 1.0.10
 
 ### Patch Changes

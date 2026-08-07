@@ -1,6 +1,6 @@
 {
   "name": "@shopify/shopify-app-remix",
-  "version": "4.2.1",
+  "version": "5.0.0",
   "description": "Shopify Remix - to simplify the building of Shopify Apps with Remix",
   "engines": {
     "node": ">=22.0.0"
@@ -86,16 +86,16 @@
     "@shopify/generate-docs": "^1.2.3",
     "@shopify/polaris": "^12.18.0",
     "@shopify/react-testing": "^6.0.0",
-    "@shopify/shopify-app-session-storage-memory": "^6.0.1",
+    "@shopify/shopify-app-session-storage-memory": "^7.0.0",
     "@types/react": "^19.2.17",
     "jest-fetch-mock": "^3.2.0"
   },
   "dependencies": {
     "@remix-run/server-runtime": "^2.17.5",
-    "@shopify/admin-api-client": "^1.1.2",
-    "@shopify/shopify-api": "^13.1.0",
-    "@shopify/shopify-app-session-storage": "^5.0.1",
-    "@shopify/storefront-api-client": "^1.0.10",
+    "@shopify/admin-api-client": "^2.0.0",
+    "@shopify/shopify-api": "^14.0.0",
+    "@shopify/shopify-app-session-storage": "^6.0.0",
+    "@shopify/storefront-api-client": "^2.0.0",
     "compare-versions": "^6.1.1",
     "isbot": "^5.2.0"
   },
