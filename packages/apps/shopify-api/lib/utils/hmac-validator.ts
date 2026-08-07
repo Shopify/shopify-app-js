@@ -117,6 +117,16 @@ export function validateHmac(config: ConfigInterface) {
 
 function normalizeQuery(query: HmacQuery, signator: HMACSignator): AuthQuery {
   if (!(query instanceof URLSearchParams)) {
+    if (signator === 'appProxy') {
+      for (const key of APP_PROXY_SINGLE_VALUE_PARAMS) {
+        if (Array.isArray(query[key])) {
+          throw new ShopifyErrors.InvalidHmacError(
+            `Query parameter "${key}" must not appear more than once.`,
+          );
+        }
+      }
+    }
+
     return query;
   }
 
@@ -191,8 +201,28 @@ export function validateHmacFromRequestFactory(config: ConfigInterface) {
 }
 
 function validateHmacTimestamp(query: AuthQuery) {
+  const {timestamp} = query;
+
   if (
-    Math.abs(getCurrentTimeInSec() - Number(query.timestamp)) >
+    timestamp === undefined ||
+    timestamp === null ||
+    Array.isArray(timestamp)
+  ) {
+    throw new ShopifyErrors.InvalidHmacError(
+      'HMAC timestamp is missing or invalid',
+    );
+  }
+
+  const parsedTimestamp = Number(timestamp);
+
+  if (!Number.isInteger(parsedTimestamp)) {
+    throw new ShopifyErrors.InvalidHmacError(
+      'HMAC timestamp is missing or invalid',
+    );
+  }
+
+  if (
+    Math.abs(getCurrentTimeInSec() - parsedTimestamp) >
     HMAC_TIMESTAMP_PERMITTED_CLOCK_TOLERANCE_SEC
   ) {
     throw new ShopifyErrors.InvalidHmacError(

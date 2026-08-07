@@ -96,6 +96,45 @@ describe('authenticating app proxy requests', () => {
     expect(response.statusText).toBe('Bad Request');
   });
 
+  it('Throws a 400 response if the timestamp is missing', async () => {
+    // GIVEN
+    const shopify = shopifyApp(testConfig());
+
+    // WHEN
+    const url = new URL(APP_URL);
+    url.searchParams.set('shop', TEST_SHOP);
+    url.searchParams.set('signature', await createAppProxyHmac(url));
+
+    const response = await getThrownResponse(
+      shopify.authenticate.public.appProxy,
+      new Request(url.toString()),
+    );
+
+    // THEN
+    expect(response.status).toBe(400);
+    expect(response.statusText).toBe('Bad Request');
+  });
+
+  it('Throws a 400 response if the timestamp is not a number', async () => {
+    // GIVEN
+    const shopify = shopifyApp(testConfig());
+
+    // WHEN
+    const url = new URL(APP_URL);
+    url.searchParams.set('shop', TEST_SHOP);
+    url.searchParams.set('timestamp', 'not-a-number');
+    url.searchParams.set('signature', await createAppProxyHmac(url));
+
+    const response = await getThrownResponse(
+      shopify.authenticate.public.appProxy,
+      new Request(url.toString()),
+    );
+
+    // THEN
+    expect(response.status).toBe(400);
+    expect(response.statusText).toBe('Bad Request');
+  });
+
   it('Throws a 400 response if the shop param appears more than once', async () => {
     // GIVEN
     const shopify = shopifyApp(testConfig());
