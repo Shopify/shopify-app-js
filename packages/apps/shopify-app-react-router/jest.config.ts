@@ -31,6 +31,16 @@ const config: Config = {
       testPathIgnorePatterns: ['src/react', 'src/server/adapters/__tests__'],
     },
     {
+      displayName: 'shopify-app-react-router-server-cloudflare',
+      preset: 'ts-jest',
+      testMatch: ['**/*.test.ts', '**/*.test.tsx'],
+      setupFilesAfterEnv: [
+        ...(baseConfig.setupFilesAfterEnv ?? []),
+        `${__dirname}/src/server/adapters/cloudflare/__tests__/setup-jest.ts`,
+      ],
+      testPathIgnorePatterns: ['src/react', 'src/server/adapters/__tests__'],
+    },
+    {
       displayName: 'shopify-app-react-router-server-adapters',
       preset: 'ts-jest',
       rootDir: './src/server/adapters',
