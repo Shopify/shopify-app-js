@@ -9,27 +9,28 @@ import {
 } from './domain-transformer';
 
 export function sanitizeShop(config: ConfigInterface) {
+  const domainsRegex = [
+    'myshopify\\.com',
+    'shopify\\.com',
+    'myshopify\\.io',
+    'shop\\.dev',
+  ];
+
+  // Add domains from transformations (both source and target)
+  if (config.domainTransformations) {
+    domainsRegex.push(...getTransformationDomains(config));
+  }
+
+  const shopUrlRegex = new RegExp(
+    `^[a-zA-Z0-9][a-zA-Z0-9-_]*\\.(${domainsRegex.join('|')})[/]*$`,
+  );
+
+  const shopAdminRegex = new RegExp(
+    `^admin\\.(${domainsRegex.join('|')})/store/([a-zA-Z0-9][a-zA-Z0-9-_]*)$`,
+  );
+
   return (shop: string, throwOnInvalid = false): string | null => {
     let shopUrl = shop;
-    const domainsRegex = [
-      'myshopify\\.com',
-      'shopify\\.com',
-      'myshopify\\.io',
-      'shop\\.dev',
-    ];
-
-    // Add domains from transformations (both source and target)
-    if (config.domainTransformations) {
-      domainsRegex.push(...getTransformationDomains(config));
-    }
-
-    const shopUrlRegex = new RegExp(
-      `^[a-zA-Z0-9][a-zA-Z0-9-_]*\\.(${domainsRegex.join('|')})[/]*$`,
-    );
-
-    const shopAdminRegex = new RegExp(
-      `^admin\\.(${domainsRegex.join('|')})/store/([a-zA-Z0-9][a-zA-Z0-9-_]*)$`,
-    );
 
     const isShopAdminUrl = shopAdminRegex.test(shopUrl);
     if (isShopAdminUrl) {
