@@ -1,5 +1,22 @@
 # @shopify/shopify-app-session-storage-postgresql
 
+## 7.0.0
+
+### Patch Changes
+
+- c7ab037: Updated `isbot`, ` mongodb`, ` mysql2`, ` pg`, ` pg-connection-string` dependencies
+- Updated dependencies [9fec7af]
+- Updated dependencies [c439dab]
+- Updated dependencies [c7ab037]
+- Updated dependencies [6675463]
+- Updated dependencies [493094d]
+- Updated dependencies [b1bcc27]
+- Updated dependencies [84397d9]
+- Updated dependencies [45f1a4b]
+- Updated dependencies [857c598]
+  - @shopify/shopify-api@14.0.0
+  - @shopify/shopify-app-session-storage@6.0.0
+
 ## 6.0.1
 
 ### Patch Changes

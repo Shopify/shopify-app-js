@@ -1,5 +1,26 @@
 # @shopify/shopify-app-session-storage-mongodb
 
+## 7.0.0
+
+### Major Changes
+
+- 9fec7af: Require Node.js 22 or later. Node.js 20 is no longer supported. Upgrade your runtime to Node.js 22 or newer before updating.
+
+### Patch Changes
+
+- c7ab037: Updated `isbot`, ` mongodb`, ` mysql2`, ` pg`, ` pg-connection-string` dependencies
+- Updated dependencies [9fec7af]
+- Updated dependencies [c439dab]
+- Updated dependencies [c7ab037]
+- Updated dependencies [6675463]
+- Updated dependencies [493094d]
+- Updated dependencies [b1bcc27]
+- Updated dependencies [84397d9]
+- Updated dependencies [45f1a4b]
+- Updated dependencies [857c598]
+  - @shopify/shopify-api@14.0.0
+  - @shopify/shopify-app-session-storage@6.0.0
+
 ## 6.0.1
 
 ### Patch Changes

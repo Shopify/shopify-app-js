@@ -1,5 +1,11 @@
 # Changelog
 
+## 3.0.0
+
+### Major Changes
+
+- 9fec7af: Require Node.js 22 or later. Node.js 20 is no longer supported. Upgrade your runtime to Node.js 22 or newer before updating.
+
 ## 2.0.1
 
 ### Patch Changes

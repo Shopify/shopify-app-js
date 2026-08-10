@@ -1,5 +1,147 @@
 # Changelog
 
+## 8.0.0
+
+### Major Changes
+
+- 9fec7af: Require Node.js 22 or later. Node.js 20 is no longer supported. Upgrade your runtime to Node.js 22 or newer before updating.
+- 493094d: Tighten the public GraphQL client types for better type safety and editor hints.
+
+  - `ResponseErrors.graphQLErrors` is now typed as `GraphQLError[]` (with `message`, `locations`, `path`, and error `extensions`) instead of `any[]`. A new `GraphQLError` type is exported.
+  - `GQLExtensions` now documents the Admin `cost`/`throttleStatus` and Storefront `context` shapes, while keeping a permissive index signature so any other extension key still works.
+  - `RequestOptions` fields are now `readonly`.
+
+  These types are re-exported or surfaced by `@shopify/admin-api-client`, `@shopify/storefront-api-client`, `@shopify/shopify-api`, `@shopify/shopify-app-remix`, `@shopify/shopify-app-react-router`, and `@shopify/shopify-app-express`, so the change flows through to those packages too.
+
+  This is marked as a major out of caution, but it is very unlikely to affect an app in a meaningful way: the extension types keep a permissive index signature, so existing property access keeps working, and most callers only gain better autocomplete. The main things a strict compiler could flag are reassigning `readonly` `RequestOptions` fields, or reading non-standard properties off a `graphQLErrors` entry.
+
+- b1bcc27: Harden App Proxy validation.
+
+  As a result of this change An OAuth callback route can throw different errors for invalid URLs. This is technically a breaking change, but it's unlikely consumers are affected by this.
+
+### Minor Changes
+
+- 527133c: Add support for expiring offline access tokens. Offline access tokens can now expire, and this package can request them at install and automatically refresh them before they expire, so merchants don't need to re-authenticate.
+
+  This is behind a new `expiringOfflineAccessTokens` future flag and is **off by default**, so existing apps are unaffected until they opt in.
+
+  - When enabled, the OAuth callback requests an expiring offline token, and `validateAuthenticatedSession` refreshes the offline token before use when it is expired or within 5 minutes of expiring.
+  - A new `shopify.ensureValidOfflineSession(shop)` helper loads an offline session and refreshes its token if needed. Use it from work that does not pass through `validateAuthenticatedSession` (webhook handlers, fulfillment services, cron jobs, queues). It throws if called while the flag is off, so a misconfigured app fails loudly instead of silently skipping refresh.
+
+  ## How to migrate
+
+  ### 1. Update your dependencies
+
+  Update `@shopify/shopify-app-express`, `@shopify/shopify-api`, and your session storage package to the latest version.
+
+  ### 2. Make sure your session storage persists refresh tokens
+
+  The refresh token is stored on the session, so your session storage must persist the `refreshToken` and `refreshTokenExpires` fields. The official adapters added these fields in the versions that support expiring tokens; follow the migration notes in each adapter's README when you update:
+
+  - [SQLite](https://github.com/Shopify/shopify-app-js/tree/main/packages/apps/session-storage/shopify-app-session-storage-sqlite)
+  - [MySQL](https://github.com/Shopify/shopify-app-js/tree/main/packages/apps/session-storage/shopify-app-session-storage-mysql)
+  - [PostgreSQL](https://github.com/Shopify/shopify-app-js/tree/main/packages/apps/session-storage/shopify-app-session-storage-postgresql)
+  - [Prisma](https://github.com/Shopify/shopify-app-js/tree/main/packages/apps/session-storage/shopify-app-session-storage-prisma)
+
+  The SQL-based adapters add the columns automatically through their migrations. Prisma requires a schema change and a migration (see its README). If you use a custom session storage, add the two fields to your schema.
+
+  ### 3. Enable the future flag
+
+  ```diff
+    import { shopifyApp } from "@shopify/shopify-app-express";
+    import { SQLiteSessionStorage } from "@shopify/shopify-app-session-storage-sqlite";
+
+    const shopify = shopifyApp({
+      api: {
+        // ...
+      },
+      auth: {
+        path: "/api/auth",
+        callbackPath: "/api/auth/callback",
+      },
+      webhooks: {
+        path: "/api/webhooks",
+      },
+  +   future: {
+  +     expiringOfflineAccessTokens: true,
+  +   },
+      sessionStorage: new SQLiteSessionStorage(DB_PATH),
+    });
+  ```
+
+  ### 4. Refresh the token in background work
+
+  Requests that flow through `validateAuthenticatedSession` refresh the offline token automatically. Work that does not (webhook handlers, cron jobs, queues) should load the offline session through the new helper:
+
+  ```diff
+  - const sessionId = shopify.api.session.getOfflineId(shop);
+  - const session = await shopify.config.sessionStorage.loadSession(sessionId);
+  + const session = await shopify.ensureValidOfflineSession(shop);
+
+    const client = new shopify.api.clients.Graphql({ session });
+  ```
+
+  ### How existing installs pick up expiring tokens
+
+  New installs get an expiring offline token automatically from the OAuth callback, so there's nothing extra to do.
+
+  Existing installs keep their current non-expiring token until the next OAuth. This package uses the OAuth code flow, so a token is only re-minted when the app goes through OAuth again (not on a normal page load). `ensureValidOfflineSession` will not upgrade a non-expiring token either, since it has no refresh token and no expiry. The token converts to an expiring one the next time the app re-authenticates.
+
+- 514040e: Add token exchange authentication support for embedded apps, behind the `tokenExchange` future flag.
+
+  When enabled, embedded apps get access tokens via [token exchange](https://github.com/Shopify/shopify-app-js/blob/main/packages/apps/shopify-app-express/docs/reference/guides/token-exchange.md) instead of the OAuth redirect flow: on load, App Bridge provides a short-lived session token that the app exchanges with Shopify for an API access token. This removes the redirect flicker the Auth Code flow causes on load. Non-embedded apps, and apps with the flag off, continue to use the Auth Code flow. (Auth Code flow and token exchange are both OAuth flows.)
+
+  **Requirements:** the app must be embedded (`isEmbeddedApp: true`), use [Shopify managed installation](https://shopify.dev/docs/apps/auth/installation), and load [App Bridge](https://shopify.dev/docs/api/app-bridge-library) on the frontend. Enabling the flag on a non-embedded app throws at startup.
+
+  **Enabling it:**
+
+  ```diff
+    const shopify = shopifyApp({
+      api: {/* ... */},
+      auth: {path: '/api/auth', callbackPath: '/api/auth/callback'},
+      webhooks: {path: '/api/webhooks'},
+  +   future: {
+  +     tokenExchange: true,
+  +   },
+  +   hooks: {
+  +     afterAuth: async ({session}) => {
+  +       await shopify.registerWebhooks({session});
+  +     },
+  +   },
+    });
+  ```
+
+  **What changes when enabled:**
+
+  - `validateAuthenticatedSession` uses token exchange for embedded apps (decided once, up front: token exchange when the flag is on and the app is embedded, otherwise the Auth Code flow).
+  - Fetch requests with a missing or stale session token get a `401` with the `X-Shopify-Retry-Invalid-Session-Request` header, so App Bridge fetches a fresh token and retries.
+  - Document requests with a missing or stale session token render App Bridge, which fetches a fresh token and reloads. No top-level OAuth redirect.
+  - The OAuth routes (`auth.begin` / `auth.callback`) are not used and return an error if called.
+  - Revoked (but unexpired) tokens are not re-authenticated automatically. Handle a `401` from the Admin API by retrying the request (which triggers a fresh exchange) or re-authenticating. Expired tokens are handled automatically.
+
+  This also adds a `hooks.afterAuth` config option and a `shopify.registerWebhooks({session})` helper for registering webhooks outside the OAuth callback.
+
+  Builds on the original work by [@mrmarufpro](https://github.com/mrmarufpro) in [#3097](https://github.com/Shopify/shopify-app-js/pull/3097). Thank you for contributing this.
+
+### Patch Changes
+
+- bedcfa6: Fix server crash when Shopify returns 5xx errors during session token validation.
+
+  `validateAuthenticatedSession` now catches non-401 HTTP errors thrown by `hasValidAccessToken` (e.g. 503 Service Unavailable) and treats them as an invalid session, redirecting to re-authentication instead of crashing the server with an unhandled promise rejection.
+
+- Updated dependencies [9fec7af]
+- Updated dependencies [c439dab]
+- Updated dependencies [c7ab037]
+- Updated dependencies [6675463]
+- Updated dependencies [493094d]
+- Updated dependencies [b1bcc27]
+- Updated dependencies [84397d9]
+- Updated dependencies [45f1a4b]
+- Updated dependencies [857c598]
+  - @shopify/shopify-api@14.0.0
+  - @shopify/shopify-app-session-storage@6.0.0
+  - @shopify/shopify-app-session-storage-memory@7.0.0
+
 ## 7.0.1
 
 ### Patch Changes
