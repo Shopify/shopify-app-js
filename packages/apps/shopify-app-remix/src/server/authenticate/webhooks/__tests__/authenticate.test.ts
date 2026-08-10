@@ -10,6 +10,8 @@ import {
   expectTokenRefresh,
   getHmac,
   getThrownResponse,
+  mockExternalRequest,
+  setUpValidSession,
   testConfig,
 } from '../../../__test-helpers';
 import {TestOverridesArg} from '../../../test-helpers/test-config';
@@ -242,6 +244,51 @@ describe('Webhook validation', () => {
 
       // THEN
       expect(response.status).toBe(401);
+    });
+  });
+
+  describe('Offline token refresh failures', () => {
+    it('returns a context without a session when refreshing the expired token fails', async () => {
+      // GIVEN
+      const sessionStorage = new MemorySessionStorage();
+      const oneSecondAgo = new Date(Date.now() - 1000);
+      const thirtyDaysFromNow = new Date(Date.now() + 1000 * 3600 * 24 * 30);
+
+      await setUpValidSession(sessionStorage, {
+        expires: oneSecondAgo,
+        refreshToken: 'test-refresh-token',
+        refreshTokenExpires: thirtyDaysFromNow,
+      });
+
+      const shopify = shopifyApp(testConfig({sessionStorage}));
+
+      // After an uninstall Shopify rejects the refresh request
+      await mockExternalRequest({
+        request: new Request(`https://${TEST_SHOP}/admin/oauth/access_token`, {
+          method: 'POST',
+        }),
+        response: new Response(undefined, {status: 401}),
+      });
+
+      const body = {some: 'data'};
+      const bodyString = JSON.stringify(body);
+
+      // WHEN
+      const {session, admin, shop, topic, payload} =
+        await shopify.authenticate.webhook(
+          new Request(`${APP_URL}/webhooks`, {
+            method: 'POST',
+            body: bodyString,
+            headers: webhookHeaders(bodyString),
+          }),
+        );
+
+      // THEN
+      expect(session).toBeUndefined();
+      expect(admin).toBeUndefined();
+      expect(shop).toBe(TEST_SHOP);
+      expect(topic).toBe('APP_UNINSTALLED');
+      expect(payload).toEqual(body);
     });
   });
 
