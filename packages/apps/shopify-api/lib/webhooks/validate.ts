@@ -164,11 +164,6 @@ function checkEventsHeaders(
     headerNames.webhookId,
     missingHeaders,
   );
-  const eventId = getRequiredHeader(
-    headers,
-    headerNames.eventId,
-    missingHeaders,
-  );
 
   if (missingHeaders.length) {
     return {
@@ -185,7 +180,6 @@ function checkEventsHeaders(
     domain: domain!,
     apiVersion: apiVersion!,
     webhookId: webhookId!,
-    eventId: eventId!,
   };
 
   const handle = getHeader(headers, headerNames.handle);
@@ -193,9 +187,6 @@ function checkEventsHeaders(
 
   const action = getHeader(headers, headerNames.action);
   if (action) fields.action = action;
-
-  const resourceId = getHeader(headers, headerNames.resourceId);
-  if (resourceId) fields.resourceId = resourceId;
 
   const triggeredAt = getHeader(headers, headerNames.triggeredAt);
   if (triggeredAt) fields.triggeredAt = triggeredAt;
