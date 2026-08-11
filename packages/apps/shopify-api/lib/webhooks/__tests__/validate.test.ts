@@ -152,10 +152,8 @@ describe('shopify.webhooks.validate', () => {
             hmac: hmac(shopify.config.apiSecretKey, rawBody),
             webhookType: 'events',
             topic: 'Product',
-            eventId: 'event-abc',
             action: 'create',
             handle: 'my-webhook',
-            resourceId: 'gid://shopify/Product/123',
           }),
         )
         .send(rawBody)
@@ -169,7 +167,6 @@ describe('shopify.webhooks.validate', () => {
         webhookId: '123456789',
         action: 'create',
         handle: 'my-webhook',
-        resourceId: 'gid://shopify/Product/123',
       });
     });
 
@@ -201,9 +198,7 @@ describe('shopify.webhooks.validate', () => {
             webhookType: 'events',
             handle: 'test-handle',
             action: 'update',
-            resourceId: 'gid://shopify/Product/456',
             triggeredAt: '2026-01-27T12:00:00Z',
-            eventId: 'event-123',
           }),
         )
         .send(rawBody)
@@ -214,9 +209,7 @@ describe('shopify.webhooks.validate', () => {
         webhookId: '123456789',
         handle: 'test-handle',
         action: 'update',
-        resourceId: 'gid://shopify/Product/456',
         triggeredAt: '2026-01-27T12:00:00Z',
-        eventId: 'event-123',
       });
     });
 
@@ -248,7 +241,6 @@ describe('shopify.webhooks.validate', () => {
     {headers: {domain: ''}, missingHeader: 'shopify-shop-domain'},
     {headers: {topic: ''}, missingHeader: 'shopify-topic'},
     {headers: {webhookId: ''}, missingHeader: 'shopify-webhook-id'},
-    {headers: {eventId: ''}, missingHeader: 'shopify-event-id'},
   ])(
     `returns false on missing events header $missingHeader`,
     async (config) => {
@@ -258,7 +250,6 @@ describe('shopify.webhooks.validate', () => {
       const requestHeaders = headers({
         hmac: hmac(shopify.config.apiSecretKey, rawBody),
         webhookType: 'events',
-        eventId: 'event-123',
         ...config.headers,
       });
 
@@ -337,10 +328,8 @@ describe('shopify.webhooks.validate', () => {
             hmac: hmac(shopify.config.apiSecretKey, rawBody),
             webhookType: 'events',
             topic: 'Product',
-            eventId: 'event-abc',
             handle: 'my_first_subscription',
             action: 'update',
-            resourceId: 'gid://shopify/Product/123',
           }),
         )
         .send(rawBody)
@@ -352,7 +341,6 @@ describe('shopify.webhooks.validate', () => {
         topic: 'PRODUCT',
         handle: 'my_first_subscription',
         action: 'update',
-        resourceId: 'gid://shopify/Product/123',
       });
     });
   });

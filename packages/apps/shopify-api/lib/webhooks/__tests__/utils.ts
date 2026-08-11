@@ -33,7 +33,6 @@ export function headers({
   // Events-specific fields
   handle = '',
   action = '',
-  resourceId = '',
   triggeredAt = '',
   eventId = '',
   // Webhooks specific
@@ -48,7 +47,6 @@ export function headers({
   webhookType?: WebhookTypeValue;
   handle?: string;
   action?: string;
-  resourceId?: string;
   triggeredAt?: string;
   eventId?: string;
   name?: string;
@@ -67,10 +65,8 @@ export function headers({
       [eventsHeaders.hmac]: hmac,
       [eventsHeaders.topic]: topic,
       ...(webhookId && {[eventsHeaders.webhookId]: webhookId}),
-      ...(eventId && {[eventsHeaders.eventId]: eventId}),
       ...(handle && {[eventsHeaders.handle]: handle}),
       ...(action && {[eventsHeaders.action]: action}),
-      ...(resourceId && {[eventsHeaders.resourceId]: resourceId}),
       ...(triggeredAt && {[eventsHeaders.triggeredAt]: triggeredAt}),
     };
   }

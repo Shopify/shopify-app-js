@@ -134,17 +134,12 @@ interface Context<Topics = string | number | symbol> {
   action?: string;
 
   /**
-   * The GID of the resource that triggered the webhook. Only available for events webhooks.
-   */
-  resourceId?: string;
-
-  /**
    * The timestamp when the webhook was triggered.
    */
   triggeredAt?: string;
 
   /**
-   * The unique event identifier.
+   * The unique event identifier. Only available for webhooks, not events webhooks.
    */
   eventId?: string;
 }

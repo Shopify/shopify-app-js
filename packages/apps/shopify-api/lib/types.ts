@@ -51,11 +51,9 @@ export const ShopifyEventsHeader = {
   Topic: 'shopify-topic',
   Domain: 'shopify-shop-domain',
   ApiVersion: 'shopify-api-version',
-  EventId: 'shopify-event-id',
   WebhookId: 'shopify-webhook-id',
   Handle: 'shopify-handle',
   Action: 'shopify-action',
-  ResourceId: 'shopify-resource-id',
   TriggeredAt: 'shopify-triggered-at',
 } as const;
 
