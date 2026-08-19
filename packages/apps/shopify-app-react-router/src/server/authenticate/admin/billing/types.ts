@@ -503,7 +503,7 @@ export interface BillingContext<Config extends AppConfigArg> {
   cancel: (options: CancelBillingOptions) => Promise<AppSubscription>;
 
   /**
-   * Creates a usage record for an app subscription.
+   * Creates a usage record for an app subscription. [Shopify App Pricing](https://shopify.dev/docs/apps/launch/billing/shopify-app-pricing) supports usage-based plans through the [App Events API](https://shopify.dev/docs/api/app-events) instead of usage records.
    *
    * @returns Returns a usage record when one was created successfully.
    *
