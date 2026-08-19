@@ -119,7 +119,7 @@ export interface UpdateUsageCappedAmountOptions {
 }
 
 /**
- * Provides utilities that apps can use to request billing for the app using the Admin API.
+ * Provides utilities that apps can use to request [Manual Pricing](https://shopify.dev/docs/apps/launch/billing/manual-pricing) billing for the app using the Admin API.
  * @publicDocs
  */
 export interface BillingContext<Config extends AppConfigArg> {
