@@ -3,6 +3,7 @@ import {testConfig} from '../../../__tests__/test-config';
 import {queueMockResponse} from '../../../__tests__/test-helper';
 import * as ShopifyErrors from '../../../error';
 import {DataType} from '../../../clients/types';
+import {LogSeverity} from '../../../types';
 
 describe('clientCredentials', () => {
   const shop = 'test-shop.myshopify.io';
@@ -54,6 +55,33 @@ describe('clientCredentials', () => {
         expectedExpiration,
         1,
       );
+    });
+
+    test('does not log credentials when debug HTTP logging is enabled', async () => {
+      const logFn = jest.fn();
+      const shopify = shopifyApi(
+        testConfig({
+          logger: {log: logFn, level: LogSeverity.Debug, httpRequests: true},
+        }),
+      );
+
+      const successResponse = {
+        access_token: 'some_access_token',
+        scope: 'write_products,read_orders',
+        expires_in: 3600,
+      };
+      queueMockResponse(JSON.stringify(successResponse));
+
+      await shopify.auth.clientCredentials({shop});
+
+      const messages = logFn.mock.calls.map(([_severity, message]) => message);
+      expect(
+        messages.some((message) => message.includes('Making HTTP request')),
+      ).toBe(true);
+      messages.forEach((message) => {
+        expect(message).not.toContain(shopify.config.apiSecretKey);
+        expect(message).not.toContain(successResponse.access_token);
+      });
     });
 
     test('throws error when response is not successful', async () => {

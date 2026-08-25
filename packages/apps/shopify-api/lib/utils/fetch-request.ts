@@ -6,9 +6,10 @@ import {ConfigInterface} from '../base-types';
 const OAUTH_TOKEN_ENDPOINT_PATH = '/admin/oauth/access_token';
 
 // Token endpoint bodies carry OAuth secrets, so they must not reach the logs.
-function isOAuthTokenEndpoint(url: string): boolean {
+// When the URL does not parse, fail closed and keep the body out of the logs.
+function canLogRequestBody(url: string): boolean {
   try {
-    return new URL(url).pathname === OAUTH_TOKEN_ENDPOINT_PATH;
+    return new URL(url).pathname !== OAUTH_TOKEN_ENDPOINT_PATH;
   } catch {
     return false;
   }
@@ -27,8 +28,7 @@ export function fetchRequestFactory(config: ConfigInterface) {
       log.debug('Making HTTP request', {
         method: options?.method || 'GET',
         url,
-        ...(options?.body &&
-          !isOAuthTokenEndpoint(url) && {body: options.body}),
+        ...(options?.body && canLogRequestBody(url) && {body: options.body}),
       });
     }
 

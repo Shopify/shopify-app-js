@@ -43,6 +43,9 @@ function sanitizeHeaderValue(name: string, value: unknown): unknown {
     : value;
 }
 
+// Keep the original serialized shape of request headers. A Headers instance
+// has no own enumerable properties, so it stays opaque here, the same as
+// JSON.stringify shows it.
 function sanitizeHeaders(headers: any): any {
   if (!headers || typeof headers !== 'object') {
     return headers;
@@ -56,7 +59,18 @@ function sanitizeHeaders(headers: any): any {
     );
   }
 
-  if (typeof headers.entries === 'function') {
+  return Object.fromEntries(
+    Object.entries(headers).map(([name, value]) => [
+      name,
+      sanitizeHeaderValue(name, value),
+    ]),
+  );
+}
+
+// Response headers were always enumerated in the log, so keep that and
+// redact the credential values.
+function sanitizeEnumerableHeaders(headers: any): any {
+  if (typeof headers?.entries === 'function' && !Array.isArray(headers)) {
     return Object.fromEntries(
       [...headers.entries()].map(([name, value]: [string, string]) => [
         name,
@@ -65,12 +79,7 @@ function sanitizeHeaders(headers: any): any {
     );
   }
 
-  return Object.fromEntries(
-    Object.entries(headers).map(([name, value]) => [
-      name,
-      sanitizeHeaderValue(name, value),
-    ]),
-  );
+  return sanitizeHeaders(headers);
 }
 
 function sanitizeRequestParams<T>(requestParams: T): T {
@@ -114,7 +123,7 @@ function serializeResponse(response: Response | any) {
     };
 
     if (headers) {
-      serialized.headers = sanitizeHeaders(headers);
+      serialized.headers = sanitizeEnumerableHeaders(headers);
     }
 
     return serialized;
