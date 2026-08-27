@@ -16,6 +16,7 @@ import {SHOPIFY_API_LIBRARY_VERSION} from './version';
 import {restClientClass} from './clients/admin/rest/client';
 import {ShopifyFlow, shopifyFlow} from './flow';
 import {FulfillmentService, fulfillmentService} from './fulfillment-service';
+import {ShopifyAppEvents, shopifyAppEvents} from './app-events';
 
 export * from './error';
 export * from './session/classes';
@@ -29,6 +30,7 @@ export * from './clients/types';
 export * from './session/types';
 export * from './webhooks/types';
 export * from './utils/types';
+export * from './app-events/types';
 
 export interface Shopify<
   Params extends ConfigParams = ConfigParams,
@@ -54,6 +56,12 @@ export interface Shopify<
   webhooks: ShopifyWebhooks;
   billing: ShopifyBilling<Future>;
   logger: ShopifyLogger;
+  /**
+   * Functions for sending App Events to Shopify using the app's client credentials.
+   *
+   * {@link https://shopify.dev/docs/api/app-events}
+   */
+  appEvents: ShopifyAppEvents;
   rest: Resources;
   flow: ShopifyFlow;
   fulfillmentService: FulfillmentService;
@@ -86,6 +94,7 @@ export function shopifyApi<
     flow: shopifyFlow(validatedConfig),
     fulfillmentService: fulfillmentService(validatedConfig),
     logger: logger(validatedConfig),
+    appEvents: shopifyAppEvents(validatedConfig),
     rest: {} as Resources,
   };
 

@@ -71,6 +71,18 @@ App host name in the format `my-host-name.com`. Do **not** include the scheme or
 
 The scheme for your app's public URL. `http` is only allowed if your app is running on `localhost`.
 
+### globalApiUrl
+
+`string` | Defaults to `"https://api.shopify.com"`
+
+The base URL for Shopify's Global API, used by [shopify.appEvents.log](./app-events/log.md) and [shopify.auth.globalApiClientCredentials](./auth/globalapiclientcredentials.md). It must be an absolute HTTPS URL with a host. Override it only to target a non-production Global API.
+
+### globalApiVersion
+
+`GlobalApiVersion` | Defaults to `GlobalApiVersion.July26`
+
+Global API version used by Global API requests, including [shopify.appEvents.log](./app-events/log.md). This version is independent from the Admin API `apiVersion`.
+
 ### apiVersion | :exclamation: **required**
 
 `ApiVersion` | :exclamation: **required**

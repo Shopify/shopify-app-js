@@ -210,7 +210,17 @@ export function throwFailedRequest(
   }
 
   const errorMessages: string[] = [];
-  if (body.errors) {
+  // Global API endpoints report a top-level `error` string, and the token endpoint adds
+  // an OAuth `error_description`. Admin API endpoints report an `errors` object or array.
+  if (typeof body?.error === 'string' && body.error.length > 0) {
+    errorMessages.push(
+      typeof body.error_description === 'string' &&
+        body.error_description.length > 0
+        ? `${body.error}: ${body.error_description}`
+        : body.error,
+    );
+  }
+  if (body?.errors) {
     errorMessages.push(JSON.stringify(body.errors, null, 2));
   }
   const xRequestId = getHeader(responseHeaders, 'x-request-id');

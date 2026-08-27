@@ -11,6 +11,10 @@ import {
 } from './get-embedded-app-url';
 import {TokenExchange, tokenExchange} from './oauth/token-exchange';
 import {ClientCredentials, clientCredentials} from './oauth/client-credentials';
+import {
+  GlobalApiClientCredentials,
+  globalApiClientCredentials,
+} from './oauth/global-api-client-credentials';
 import {RefreshToken, refreshToken} from './oauth/refresh-token';
 import {
   migrateToExpiringToken,
@@ -33,6 +37,7 @@ export function shopifyAuth<Config extends ConfigInterface>(
     migrateToExpiringToken: migrateToExpiringToken(config),
     refreshToken: refreshToken(config),
     clientCredentials: clientCredentials(config),
+    globalApiClientCredentials: globalApiClientCredentials(config),
   } as ShopifyAuth;
 
   return shopify;
@@ -49,4 +54,5 @@ export interface ShopifyAuth {
   migrateToExpiringToken: MigrateToExpiringToken;
   refreshToken: RefreshToken;
   clientCredentials: ClientCredentials;
+  globalApiClientCredentials: GlobalApiClientCredentials;
 }

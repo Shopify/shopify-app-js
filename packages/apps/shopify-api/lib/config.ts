@@ -1,6 +1,6 @@
 import {ShopifyError} from './error';
 import {ConfigInterface, ConfigParams} from './base-types';
-import {LogSeverity} from './types';
+import {GlobalApiVersion, LogSeverity} from './types';
 import {AuthScopes} from './auth/scopes';
 import {logger as createLogger} from './logger';
 
@@ -12,6 +12,8 @@ export function validateConfig<Params extends ConfigParams>(
     apiSecretKey: '',
     hostName: '',
     hostScheme: 'https',
+    globalApiUrl: 'https://api.shopify.com',
+    globalApiVersion: GlobalApiVersion.July26,
     isEmbeddedApp: true,
     isCustomStoreApp: false,
     logger: {
@@ -59,6 +61,8 @@ export function validateConfig<Params extends ConfigParams>(
 
   const {
     hostScheme,
+    globalApiUrl,
+    globalApiVersion,
     isCustomStoreApp,
     adminApiAccessToken,
     userAgentPrefix,
@@ -78,10 +82,30 @@ export function validateConfig<Params extends ConfigParams>(
     scopes = new AuthScopes(params.scopes);
   }
 
+  const effectiveGlobalApiUrl = globalApiUrl ?? config.globalApiUrl;
+  let parsedGlobalApiUrl: URL;
+  try {
+    parsedGlobalApiUrl = new URL(effectiveGlobalApiUrl);
+  } catch {
+    throw new ShopifyError(
+      'globalApiUrl must be an absolute HTTPS URL with a host',
+    );
+  }
+  if (
+    parsedGlobalApiUrl.protocol !== 'https:' ||
+    parsedGlobalApiUrl.hostname.length === 0
+  ) {
+    throw new ShopifyError(
+      'globalApiUrl must be an absolute HTTPS URL with a host',
+    );
+  }
+
   Object.assign(config, mandatoryParams, {
     hostName: params.hostName.replace(/\/$/, ''),
     scopes,
     hostScheme: hostScheme ?? config.hostScheme,
+    globalApiUrl: effectiveGlobalApiUrl.replace(/\/$/, ''),
+    globalApiVersion: globalApiVersion ?? config.globalApiVersion,
     isCustomStoreApp: isCustomStoreApp ?? config.isCustomStoreApp,
     adminApiAccessToken: adminApiAccessToken ?? config.adminApiAccessToken,
     userAgentPrefix: userAgentPrefix ?? config.userAgentPrefix,

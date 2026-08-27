@@ -112,6 +112,38 @@ describe('fetchRequest', () => {
       data: requestBody,
     }).toMatchMadeHttpRequest();
   });
+  it('redacts request bodies when logBody is false', async () => {
+    const logFn = jest.fn();
+    const config = testConfig({
+      logger: {log: logFn, level: LogSeverity.Debug, httpRequests: true},
+    });
+    const requestBody = {
+      client_secret: 'sensitive-value',
+    };
+    queueMockResponse(JSON.stringify(successResponse));
+
+    await fetchRequestFactory(config)(url, {
+      method: 'POST',
+      logBody: false,
+      body: JSON.stringify(requestBody),
+    });
+
+    expect(logFn).toHaveBeenNthCalledWith(
+      1,
+      LogSeverity.Debug,
+      `[shopify-api/DEBUG] Making HTTP request | {method: POST, url: ${url}, body: [REDACTED]}`,
+    );
+    expect(logFn).not.toHaveBeenCalledWith(
+      LogSeverity.Debug,
+      expect.stringContaining('sensitive-value'),
+    );
+    expect({
+      method: 'POST',
+      domain,
+      path: '/',
+      data: requestBody,
+    }).toMatchMadeHttpRequest();
+  });
 
   it('omits the body from debug logs for OAuth token endpoint requests', async () => {
     // GIVEN

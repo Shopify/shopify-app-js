@@ -15,24 +15,36 @@ function canLogRequestBody(url: string): boolean {
   }
 }
 
+export type FetchRequestOptions = RequestInit & {
+  logBody?: boolean;
+};
+
 export function fetchRequestFactory(config: ConfigInterface) {
   return async function fetchRequest(
     url: string,
-    options?: RequestInit,
+    options?: FetchRequestOptions,
   ): Promise<Response> {
     const log = logger(config);
     const doLog =
       config.logger.httpRequests && config.logger.level === LogSeverity.Debug;
-
+    const logBody = options?.logBody ?? true;
+    let requestOptions: RequestInit | undefined;
+    if (options) {
+      const {logBody: _ignored, ...rest} = options;
+      requestOptions = rest;
+    }
     if (doLog) {
       log.debug('Making HTTP request', {
         method: options?.method || 'GET',
         url,
-        ...(options?.body && canLogRequestBody(url) && {body: options.body}),
+        ...(options?.body &&
+          canLogRequestBody(url) && {
+            body: logBody ? options.body : '[REDACTED]',
+          }),
       });
     }
 
-    const response = await abstractFetch(url, options);
+    const response = await abstractFetch(url, requestOptions);
 
     if (doLog) {
       log.debug('HTTP request completed', {

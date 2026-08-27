@@ -1,7 +1,7 @@
 import * as ShopifyErrors from '../error';
 import {validateConfig} from '../config';
 import {ConfigParams} from '../base-types';
-import {ApiVersion, LogSeverity} from '../types';
+import {ApiVersion, GlobalApiVersion, LogSeverity} from '../types';
 
 let validParams: ConfigParams;
 
@@ -159,6 +159,38 @@ describe('Config object', () => {
     const config = validateConfig(configWithSlash);
 
     expect(config.hostName).toEqual('my-host-name');
+  });
+  it('defaults and normalizes the Global API URL', () => {
+    const defaultConfig = validateConfig(validParams);
+    expect(defaultConfig.globalApiUrl).toEqual('https://api.shopify.com');
+
+    const configWithSlash = validateConfig({
+      ...validParams,
+      globalApiUrl: 'https://api.example.com/',
+    });
+    expect(configWithSlash.globalApiUrl).toEqual('https://api.example.com');
+  });
+
+  it('defaults and accepts a Global API version', () => {
+    const defaultConfig = validateConfig(validParams);
+    expect(defaultConfig.globalApiVersion).toEqual(GlobalApiVersion.July26);
+
+    const config = validateConfig({
+      ...validParams,
+      globalApiVersion: GlobalApiVersion.Unstable,
+    });
+    expect(config.globalApiVersion).toEqual(GlobalApiVersion.Unstable);
+  });
+
+  it.each([
+    'http://api.example.com',
+    'api.example.com',
+    'https://',
+    'not a URL',
+  ])('rejects an invalid Global API URL: %s', (globalApiUrl) => {
+    expect(() => validateConfig({...validParams, globalApiUrl})).toThrow(
+      'globalApiUrl must be an absolute HTTPS URL with a host',
+    );
   });
 
   it('requires apiVersion to be provided', () => {

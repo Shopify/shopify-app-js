@@ -1,6 +1,6 @@
 import {Headers, canonicalizeHeaders} from '../../runtime/http';
 import {ConfigInterface} from '../../lib/base-types';
-import {ApiVersion, LogSeverity} from '../../lib/types';
+import {ApiVersion, GlobalApiVersion, LogSeverity} from '../../lib/types';
 import {AuthScopes} from '../../lib/auth/scopes';
 import {Session} from '../../lib';
 
@@ -30,6 +30,8 @@ export const config: ConfigInterface = {
   scopes: new AuthScopes('test_scope'),
   hostName: 'test_host_name',
   hostScheme: 'https',
+  globalApiUrl: 'https://api.shopify.com',
+  globalApiVersion: GlobalApiVersion.July26,
   apiVersion: ApiVersion.July26,
   isEmbeddedApp: true,
   isCustomStoreApp: false,
