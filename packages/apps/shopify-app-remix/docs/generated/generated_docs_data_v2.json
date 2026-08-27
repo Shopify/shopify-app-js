@@ -200,7 +200,7 @@
     "src/server/authenticate/admin/billing/types.ts": {
       "filePath": "src/server/authenticate/admin/billing/types.ts",
       "name": "BillingContext",
-      "description": "Provides utilities that apps can use to request billing for the app using the Admin API.",
+      "description": "Provides utilities that apps can use to request [Manual Pricing](https://shopify.dev/docs/apps/launch/billing/manual-pricing) billing for the app using the Admin API.",
       "isPublicDocs": true,
       "members": [
         {
@@ -264,7 +264,7 @@
           "syntaxKind": "PropertySignature",
           "name": "createUsageRecord",
           "value": "(options: CreateUsageRecordOptions) => Promise<UsageRecord>",
-          "description": "Creates a usage record for an app subscription.",
+          "description": "Creates a usage record for an app subscription. [Shopify App Pricing](https://shopify.dev/docs/apps/launch/billing/shopify-app-pricing) supports usage-based plans through the [App Events API](https://shopify.dev/docs/api/app-events) instead of usage records.",
           "examples": [
             {
               "title": "Creating a usage record",
