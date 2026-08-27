@@ -1,5 +1,14 @@
 # @shopify/shopify-app-remix
 
+## 5.0.1
+
+### Patch Changes
+
+- 53fdafb: Clarify billing reference docs: label the `billing` object as Manual Pricing, and note that Shopify App Pricing supports usage-based plans through the App Events API instead of usage records.
+- Updated dependencies [8689457]
+  - @shopify/shopify-api@14.0.1
+  - @shopify/shopify-app-session-storage@6.0.1
+
 ## 5.0.0
 
 ### Major Changes

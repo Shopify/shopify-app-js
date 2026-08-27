@@ -1,5 +1,7 @@
 # @shopify/shopify-app-session-storage-mongodb
 
+## 7.0.1
+
 ## 7.0.0
 
 ### Major Changes
