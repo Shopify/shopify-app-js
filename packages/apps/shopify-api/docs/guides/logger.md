@@ -97,11 +97,13 @@ const shopify = shopifyApi({
 This will result in messages like the following examples being logged.
 
 ```text
-[shopify-api/DEBUG] Making HTTP request  -  GET https://my-test-shop.myshopify.com/admin/api/2026-01/products/count.json  -  Headers: {"X-Shopify-Access-Token":["a-really-fake-example-access-token"],"User-Agent":["Shopify API Library v6.0.0 | Node v18.7.0"]}
+[shopify-api/DEBUG] Making HTTP request  -  GET https://my-test-shop.myshopify.com/admin/api/2026-01/products/count.json  -  Headers: {"X-Shopify-Access-Token":["****"],"User-Agent":["Shopify API Library v6.0.0 | Node v18.7.0"]}
 [shopify-api/DEBUG] Completed HTTP request, received 200 OK
 ```
 
 **Note**: Setting `httpRequests: true` will only have effect if the logging level is set to `LogSeverity.Debug`.
+
+**Note**: The library redacts credentials before it writes debug messages. The body of OAuth token endpoint requests is not logged, and credential headers such as `X-Shopify-Access-Token`, `Authorization`, and `Cookie` show `****` instead of their values. Debug logs can still contain other request data, so treat log output as sensitive.
 
 ## Changing the logging function
 

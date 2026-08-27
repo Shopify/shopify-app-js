@@ -341,6 +341,380 @@ describe('clientLoggerFactory', () => {
     });
   });
 
+  describe('credential redaction in debug logs', () => {
+    const config = testConfig({
+      logger: {
+        httpRequests: true,
+      },
+    });
+
+    function expectNoSecretInAnyDebugCall(secrets: string[]) {
+      expect(mockDebug).toHaveBeenCalledTimes(1);
+      const allLoggedContent = JSON.stringify(mockDebug.mock.calls);
+      secrets.forEach((secret) => {
+        expect(allLoggedContent).not.toContain(secret);
+      });
+    }
+
+    it('redacts sensitive headers in tuple-shaped requestParams', () => {
+      const loggerFn = clientLoggerFactory(config);
+
+      const httpResponseLog: LogContent = {
+        type: 'HTTP-Response',
+        content: {
+          requestParams: [
+            'https://test-shop.myshopify.io/admin/api/2023-10/graphql.json',
+            {
+              method: 'POST',
+              headers: {
+                'X-Shopify-Access-Token': 'shpua_secret-admin-token',
+                'Content-Type': 'application/json',
+              },
+              body: '{"query": "{ shop { name } }"}',
+            },
+          ],
+          response: new Response('{}', {status: 200}),
+        },
+      };
+
+      loggerFn(httpResponseLog);
+
+      expectNoSecretInAnyDebugCall(['shpua_secret-admin-token']);
+
+      const loggedParams = mockDebug.mock.calls[0][1].requestParams;
+      const parsed = JSON.parse(loggedParams);
+      expect(parsed[1].headers['X-Shopify-Access-Token']).toBe('****');
+      expect(parsed[1].headers['Content-Type']).toBe('application/json');
+      expect(parsed[1].body).toBe('{"query": "{ shop { name } }"}');
+
+      // The sanitizer must not change the caller's objects.
+      const originalInit = (httpResponseLog.content.requestParams as any)[1];
+      expect(originalInit.headers['X-Shopify-Access-Token']).toBe(
+        'shpua_secret-admin-token',
+      );
+    });
+
+    it('redacts sensitive headers regardless of case', () => {
+      const loggerFn = clientLoggerFactory(config);
+
+      const httpResponseLog: LogContent = {
+        type: 'HTTP-Response',
+        content: {
+          requestParams: [
+            'https://test-shop.myshopify.io/admin/api/2023-10/graphql.json',
+            {
+              method: 'POST',
+              headers: {
+                'x-shopify-access-token': 'shpua_lowercase-token',
+                AUTHORIZATION: 'Bearer secret-bearer-token',
+                Cookie: 'session=secret-cookie-value',
+              },
+            },
+          ],
+          response: new Response('{}', {status: 200}),
+        },
+      };
+
+      loggerFn(httpResponseLog);
+
+      expectNoSecretInAnyDebugCall([
+        'shpua_lowercase-token',
+        'secret-bearer-token',
+        'secret-cookie-value',
+      ]);
+
+      const loggedParams = mockDebug.mock.calls[0][1].requestParams;
+      const parsed = JSON.parse(loggedParams);
+      expect(parsed[1].headers['x-shopify-access-token']).toBe('****');
+      expect(parsed[1].headers.AUTHORIZATION).toBe('****');
+      expect(parsed[1].headers.Cookie).toBe('****');
+    });
+
+    it('redacts storefront token headers', () => {
+      const loggerFn = clientLoggerFactory(config);
+
+      const httpResponseLog: LogContent = {
+        type: 'HTTP-Response',
+        content: {
+          requestParams: [
+            'https://test-shop.myshopify.io/api/2023-10/graphql.json',
+            {
+              method: 'POST',
+              headers: {
+                'Shopify-Storefront-Private-Token': 'shpat_private-token',
+                'X-Shopify-Storefront-Access-Token': 'public-storefront-token',
+              },
+            },
+          ],
+          response: new Response('{}', {status: 200}),
+        },
+      };
+
+      loggerFn(httpResponseLog);
+
+      expectNoSecretInAnyDebugCall([
+        'shpat_private-token',
+        'public-storefront-token',
+      ]);
+    });
+
+    it('redacts sensitive headers in object-shaped requestParams', () => {
+      const loggerFn = clientLoggerFactory(config);
+
+      const httpResponseLog: LogContent = {
+        type: 'HTTP-Response',
+        content: {
+          requestParams: {
+            url: 'https://test-shop.myshopify.io/admin/api/2023-10/products.json',
+            method: 'GET',
+            headers: {
+              'X-Shopify-Access-Token': 'shpua_object-shape-token',
+              Accept: 'application/json',
+            },
+          },
+          response: new Response('{}', {status: 200}),
+        },
+      };
+
+      loggerFn(httpResponseLog);
+
+      expectNoSecretInAnyDebugCall(['shpua_object-shape-token']);
+
+      const loggedParams = mockDebug.mock.calls[0][1].requestParams;
+      const parsed = JSON.parse(loggedParams);
+      expect(parsed.headers['X-Shopify-Access-Token']).toBe('****');
+      expect(parsed.headers.Accept).toBe('application/json');
+    });
+
+    it('redacts sensitive headers with array values', () => {
+      const loggerFn = clientLoggerFactory(config);
+
+      const httpResponseLog: LogContent = {
+        type: 'HTTP-Response',
+        content: {
+          requestParams: [
+            'https://test-shop.myshopify.io/admin/api/2023-10/graphql.json',
+            {
+              method: 'POST',
+              headers: {
+                'X-Shopify-Access-Token': ['shpua_array-value-token'],
+                'User-Agent': ['test-user-agent'],
+              },
+            },
+          ],
+          response: new Response('{}', {status: 200}),
+        },
+      };
+
+      loggerFn(httpResponseLog);
+
+      expectNoSecretInAnyDebugCall(['shpua_array-value-token']);
+
+      const parsed = JSON.parse(mockDebug.mock.calls[0][1].requestParams);
+      expect(parsed[1].headers['X-Shopify-Access-Token']).toBe('****');
+      expect(parsed[1].headers['User-Agent']).toEqual(['test-user-agent']);
+    });
+
+    it('redacts sensitive headers when the object has an entries property', () => {
+      const loggerFn = clientLoggerFactory(config);
+
+      const httpResponseLog: LogContent = {
+        type: 'HTTP-Response',
+        content: {
+          requestParams: [
+            'https://test-shop.myshopify.io/admin/api/2023-10/graphql.json',
+            {
+              method: 'POST',
+              headers: {
+                entries: 'not-a-function',
+                'X-Shopify-Access-Token': 'shpua_entries-prop-token',
+              },
+            },
+          ],
+          response: new Response('{}', {status: 200}),
+        },
+      };
+
+      loggerFn(httpResponseLog);
+
+      expectNoSecretInAnyDebugCall(['shpua_entries-prop-token']);
+
+      const parsed = JSON.parse(mockDebug.mock.calls[0][1].requestParams);
+      expect(parsed[1].headers['X-Shopify-Access-Token']).toBe('****');
+      expect(parsed[1].headers.entries).toBe('not-a-function');
+    });
+
+    it('keeps request Headers instances opaque in debug logs', () => {
+      const loggerFn = clientLoggerFactory(config);
+
+      const httpResponseLog: LogContent = {
+        type: 'HTTP-Response',
+        content: {
+          requestParams: [
+            'https://test-shop.myshopify.io/admin/api/2023-10/graphql.json',
+            {
+              method: 'POST',
+              headers: new Headers({
+                'X-Shopify-Access-Token': 'shpua_headers-instance-token',
+                'X-API-Key': 'custom-credential-value',
+                'Content-Type': 'application/json',
+              }),
+            },
+          ],
+          response: new Response('{}', {status: 200}),
+        },
+      };
+
+      loggerFn(httpResponseLog);
+
+      // A Headers instance has no own enumerable properties. It must stay
+      // opaque, so unlisted credential headers do not become visible.
+      expectNoSecretInAnyDebugCall([
+        'shpua_headers-instance-token',
+        'custom-credential-value',
+      ]);
+
+      const parsed = JSON.parse(mockDebug.mock.calls[0][1].requestParams);
+      expect(parsed[1].headers).toEqual({});
+    });
+
+    it('redacts sensitive headers passed as an array of pairs', () => {
+      const loggerFn = clientLoggerFactory(config);
+
+      const httpResponseLog: LogContent = {
+        type: 'HTTP-Response',
+        content: {
+          requestParams: [
+            'https://test-shop.myshopify.io/admin/api/2023-10/graphql.json',
+            {
+              method: 'POST',
+              headers: [
+                ['X-Shopify-Access-Token', 'shpua_array-shape-token'],
+                ['Content-Type', 'application/json'],
+              ],
+            },
+          ],
+          response: new Response('{}', {status: 200}),
+        },
+      };
+
+      loggerFn(httpResponseLog);
+
+      const loggedParams = mockDebug.mock.calls[0][1].requestParams;
+      expect(loggedParams).not.toContain('shpua_array-shape-token');
+      expect(loggedParams).toContain('****');
+      expect(loggedParams).toContain('application/json');
+    });
+
+    it('redacts sensitive headers in HTTP-Retry events', () => {
+      const loggerFn = clientLoggerFactory(config);
+
+      const httpRetryLog: LogContent = {
+        type: 'HTTP-Retry',
+        content: {
+          requestParams: [
+            'https://test-shop.myshopify.io/admin/api/2023-10/graphql.json',
+            {
+              method: 'POST',
+              headers: {'X-Shopify-Access-Token': 'shpua_retry-token'},
+            },
+          ],
+          retryAttempt: 1,
+          maxRetries: 3,
+          lastResponse: undefined,
+        },
+      };
+
+      loggerFn(httpRetryLog);
+
+      expectNoSecretInAnyDebugCall(['shpua_retry-token']);
+      expect(mockDebug.mock.calls[0][1].requestParams).toContain('****');
+    });
+
+    it('redacts sensitive response headers in HTTP-Retry events', () => {
+      const loggerFn = clientLoggerFactory(config);
+
+      const httpRetryLog: LogContent = {
+        type: 'HTTP-Retry',
+        content: {
+          requestParams: [
+            'https://test-shop.myshopify.io/admin/api/2023-10/graphql.json',
+            {method: 'POST'},
+          ],
+          retryAttempt: 1,
+          maxRetries: 3,
+          lastResponse: new Response('{}', {
+            status: 429,
+            headers: {
+              'set-cookie': 'session=secret-retry-cookie',
+              'retry-after': '2',
+            },
+          }),
+        },
+      };
+
+      loggerFn(httpRetryLog);
+
+      expectNoSecretInAnyDebugCall(['secret-retry-cookie']);
+
+      const parsed = JSON.parse(mockDebug.mock.calls[0][1].response);
+      expect(parsed.headers['set-cookie']).toBe('****');
+      expect(parsed.headers['retry-after']).toBe('2');
+    });
+
+    it('redacts sensitive headers in GraphQL deprecation notice events', () => {
+      const loggerFn = clientLoggerFactory(config);
+
+      const graphqlDeprecationLog: LogContent = {
+        type: 'HTTP-Response-GraphQL-Deprecation-Notice',
+        content: {
+          requestParams: [
+            'https://test-shop.myshopify.io/admin/api/2023-10/graphql.json',
+            {
+              method: 'POST',
+              headers: {'X-Shopify-Access-Token': 'shpua_deprecation-token'},
+            },
+          ],
+          deprecationNotice: 'Field is deprecated',
+        },
+      };
+
+      loggerFn(graphqlDeprecationLog);
+
+      expectNoSecretInAnyDebugCall(['shpua_deprecation-token']);
+      expect(mockDebug.mock.calls[0][1].requestParams).toContain('****');
+    });
+
+    it('redacts sensitive response headers', () => {
+      const loggerFn = clientLoggerFactory(config);
+
+      const httpResponseLog: LogContent = {
+        type: 'HTTP-Response',
+        content: {
+          requestParams: [
+            'https://test-shop.myshopify.io/admin/api/2023-10/graphql.json',
+            {method: 'POST'},
+          ],
+          response: new Response('{}', {
+            status: 200,
+            headers: {
+              'set-cookie': 'session=secret-session-value',
+              'content-type': 'application/json',
+            },
+          }),
+        },
+      };
+
+      loggerFn(httpResponseLog);
+
+      expectNoSecretInAnyDebugCall(['secret-session-value']);
+
+      const parsed = JSON.parse(mockDebug.mock.calls[0][1].response);
+      expect(parsed.headers['set-cookie']).toBe('****');
+      expect(parsed.headers['content-type']).toBe('application/json');
+    });
+  });
+
   describe('when httpRequests logging is disabled', () => {
     const config = testConfig({
       logger: {
