@@ -24,6 +24,28 @@ export async function poll(
     await wait(interval);
   }
 }
+export async function waitForContainerLog(
+  getLogs: () => Promise<string>,
+  expectedLog: string,
+  options?: {interval?: number; timeout?: number},
+): Promise<void> {
+  let lastLogs = '';
+
+  try {
+    await poll(async () => {
+      try {
+        lastLogs = await getLogs();
+        return lastLogs.includes(expectedLog);
+      } catch (error) {
+        lastLogs = error instanceof Error ? error.message : String(error);
+        return false;
+      }
+    }, options);
+  } catch (error) {
+    const message = error instanceof Error ? error.message : String(error);
+    throw new Error(`${message}\nLast container logs:\n${lastLogs}`);
+  }
+}
 
 export function waitForData(socket: Socket): Promise<string> {
   return new Promise((resolve, reject) => {
