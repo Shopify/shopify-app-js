@@ -25,6 +25,86 @@ export function getUserAgent(config: ConfigInterface): string {
   return userAgentPrefix;
 }
 
+const REDACTED_LOG_VALUE = '****';
+
+// These headers carry reusable credentials and must not reach the logs.
+const SENSITIVE_LOG_HEADERS = new Set([
+  'authorization',
+  'cookie',
+  'set-cookie',
+  'shopify-storefront-private-token',
+  'x-shopify-access-token',
+  'x-shopify-storefront-access-token',
+]);
+
+function sanitizeHeaderValue(name: string, value: unknown): unknown {
+  return SENSITIVE_LOG_HEADERS.has(name.toLowerCase())
+    ? REDACTED_LOG_VALUE
+    : value;
+}
+
+// Keep the original serialized shape of request headers. A Headers instance
+// has no own enumerable properties, so it stays opaque here, the same as
+// JSON.stringify shows it.
+function sanitizeHeaders(headers: any): any {
+  if (!headers || typeof headers !== 'object') {
+    return headers;
+  }
+
+  if (Array.isArray(headers)) {
+    return headers.map((header) =>
+      Array.isArray(header)
+        ? [header[0], sanitizeHeaderValue(header[0], header[1])]
+        : header,
+    );
+  }
+
+  return Object.fromEntries(
+    Object.entries(headers).map(([name, value]) => [
+      name,
+      sanitizeHeaderValue(name, value),
+    ]),
+  );
+}
+
+// Response headers were always enumerated in the log, so keep that and
+// redact the credential values.
+function sanitizeEnumerableHeaders(headers: any): any {
+  if (typeof headers?.entries === 'function' && !Array.isArray(headers)) {
+    return Object.fromEntries(
+      [...headers.entries()].map(([name, value]: [string, string]) => [
+        name,
+        sanitizeHeaderValue(name, value),
+      ]),
+    );
+  }
+
+  return sanitizeHeaders(headers);
+}
+
+function sanitizeRequestParams<T>(requestParams: T): T {
+  if (Array.isArray(requestParams)) {
+    return requestParams.map((param) =>
+      param && typeof param === 'object' && 'headers' in param
+        ? {...param, headers: sanitizeHeaders(param.headers)}
+        : param,
+    ) as T;
+  }
+
+  if (
+    requestParams &&
+    typeof requestParams === 'object' &&
+    'headers' in requestParams
+  ) {
+    return {
+      ...requestParams,
+      headers: sanitizeHeaders((requestParams as {headers: any}).headers),
+    };
+  }
+
+  return requestParams;
+}
+
 function serializeResponse(response: Response | any) {
   if (!response) {
     return {error: 'No response object provided'};
@@ -42,10 +122,8 @@ function serializeResponse(response: Response | any) {
       url,
     };
 
-    if (headers?.entries) {
-      serialized.headers = Object.fromEntries(headers.entries());
-    } else if (headers) {
-      serialized.headers = headers;
+    if (headers) {
+      serialized.headers = sanitizeEnumerableHeaders(headers);
     }
 
     return serialized;
@@ -61,7 +139,9 @@ export function clientLoggerFactory(config: ConfigInterface) {
         case 'HTTP-Response': {
           const responseLog: HTTPResponseLog['content'] = logContent.content;
           logger(config).debug('Received response for HTTP request', {
-            requestParams: JSON.stringify(responseLog.requestParams),
+            requestParams: JSON.stringify(
+              sanitizeRequestParams(responseLog.requestParams),
+            ),
             response: JSON.stringify(serializeResponse(responseLog.response)),
           });
           break;
@@ -69,7 +149,9 @@ export function clientLoggerFactory(config: ConfigInterface) {
         case 'HTTP-Retry': {
           const responseLog: HTTPRetryLog['content'] = logContent.content;
           logger(config).debug('Retrying HTTP request', {
-            requestParams: JSON.stringify(responseLog.requestParams),
+            requestParams: JSON.stringify(
+              sanitizeRequestParams(responseLog.requestParams),
+            ),
             retryAttempt: responseLog.retryAttempt,
             maxRetries: responseLog.maxRetries,
             response: responseLog.lastResponse
@@ -84,7 +166,9 @@ export function clientLoggerFactory(config: ConfigInterface) {
           logger(config).debug(
             'Received response containing Deprecated GraphQL Notice',
             {
-              requestParams: JSON.stringify(responseLog.requestParams),
+              requestParams: JSON.stringify(
+                sanitizeRequestParams(responseLog.requestParams),
+              ),
               deprecationNotice: responseLog.deprecationNotice,
             },
           );

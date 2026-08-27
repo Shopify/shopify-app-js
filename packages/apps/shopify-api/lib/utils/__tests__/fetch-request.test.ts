@@ -113,6 +113,79 @@ describe('fetchRequest', () => {
     }).toMatchMadeHttpRequest();
   });
 
+  it('omits the body from debug logs for OAuth token endpoint requests', async () => {
+    // GIVEN
+    const logFn = jest.fn();
+    const config = testConfig({
+      logger: {log: logFn, level: LogSeverity.Debug, httpRequests: true},
+    });
+
+    queueMockResponse(JSON.stringify(successResponse));
+
+    // WHEN
+    const requestBody = {
+      client_id: 'test-api-key',
+      client_secret: 'test-client-secret-value',
+      code: 'test-authorization-code',
+    };
+    const tokenUrl = `https://${domain}/admin/oauth/access_token`;
+    const response = await fetchRequestFactory(config)(tokenUrl, {
+      method: 'POST',
+      body: JSON.stringify(requestBody),
+    });
+    const responseBody = await response.json();
+
+    // THEN
+    expect(logFn).toHaveBeenNthCalledWith(
+      1,
+      LogSeverity.Debug,
+      `[shopify-api/DEBUG] Making HTTP request | {method: POST, url: ${tokenUrl}}`,
+    );
+    expect(logFn).toHaveBeenNthCalledWith(
+      2,
+      LogSeverity.Debug,
+      `[shopify-api/DEBUG] HTTP request completed | {method: POST, url: ${tokenUrl}, status: 200}`,
+    );
+    logFn.mock.calls.forEach(([_severity, message]) => {
+      expect(message).not.toContain('test-client-secret-value');
+      expect(message).not.toContain('test-authorization-code');
+    });
+    expect(responseBody).toEqual(successResponse);
+    expect({
+      method: 'POST',
+      domain,
+      path: '/admin/oauth/access_token',
+      data: requestBody,
+    }).toMatchMadeHttpRequest();
+  });
+
+  it('omits the body from debug logs when the URL does not parse', async () => {
+    // GIVEN
+    const logFn = jest.fn();
+    const config = testConfig({
+      logger: {log: logFn, level: LogSeverity.Debug, httpRequests: true},
+    });
+
+    // WHEN
+    const relativeUrl = 'admin/oauth/access_token';
+    await expect(
+      fetchRequestFactory(config)(relativeUrl, {
+        method: 'POST',
+        body: JSON.stringify({client_secret: 'test-client-secret-value'}),
+      }),
+    ).rejects.toThrow();
+
+    // THEN
+    expect(logFn).toHaveBeenNthCalledWith(
+      1,
+      LogSeverity.Debug,
+      `[shopify-api/DEBUG] Making HTTP request | {method: POST, url: ${relativeUrl}}`,
+    );
+    logFn.mock.calls.forEach(([_severity, message]) => {
+      expect(message).not.toContain('test-client-secret-value');
+    });
+  });
+
   it('logs non-200 response codes', async () => {
     // GIVEN
     const logFn = jest.fn();
