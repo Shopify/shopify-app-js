@@ -3,9 +3,8 @@ import {promisify} from 'util';
 
 import {
   batteryOfTests,
-  poll,
+  waitForContainerLog,
 } from '@shopify/shopify-app-session-storage-test-utils';
-import * as mongodb from 'mongodb';
 
 import {MongoDBSessionStorage} from '../mongodb';
 
@@ -20,34 +19,35 @@ const dbName = 'shopitest';
 
 describe('MongoDBSessionStorage', () => {
   let storage: MongoDBSessionStorage;
-  let containerId: string;
+  let containerId: string | undefined;
   beforeAll(async () => {
     const runCommand = await exec(
-      "podman run -d -e MONGO_INITDB_DATABASE=shopitest -e MONGO_INITDB_ROOT_USERNAME='shop&fy' -e MONGO_INITDB_ROOT_PASSWORD='passify$#' -p 27017:27017 mongo:5",
+      "podman run -d --network=host -e MONGO_INITDB_DATABASE=shopitest -e MONGO_INITDB_ROOT_USERNAME='shop&fy' -e MONGO_INITDB_ROOT_PASSWORD='passify$#' mongo:5",
       {encoding: 'utf8'},
     );
     containerId = runCommand.stdout.trim();
 
-    await poll(
+    await waitForContainerLog(
       async () => {
-        try {
-          const client = new (mongodb as any).MongoClient(dbURL.toString());
-          await client.connect();
-          await client.db().command({ping: 1});
-          client.close();
-        } catch {
-          return false;
-        }
-        return true;
+        const {stdout, stderr} = await exec(`podman logs ${containerId}`);
+        const logs = `${stdout}\n${stderr}`;
+        const initCompleteLog =
+          'MongoDB init process complete; ready for start up.';
+        const initCompleteIndex = logs.lastIndexOf(initCompleteLog);
+
+        return initCompleteIndex >= 0 ? logs.slice(initCompleteIndex) : '';
       },
-      {interval: 500, timeout: 60000},
+      'Waiting for connections',
+      {interval: 500, timeout: 120000},
     );
+
     storage = new MongoDBSessionStorage(dbURL, dbName);
-  });
+    await storage.ready;
+  }, 180000);
 
   afterAll(async () => {
-    await storage.disconnect();
-    await exec(`podman rm -f ${containerId}`);
+    if (storage) await storage.disconnect();
+    if (containerId) await exec(`podman rm -f ${containerId}`);
   });
 
   batteryOfTests(async () => storage);

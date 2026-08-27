@@ -6,6 +6,7 @@ import {createClient} from 'redis';
 import {
   batteryOfTests,
   wait,
+  waitForContainerLog,
 } from '@shopify/shopify-app-session-storage-test-utils';
 import {Session} from '@shopify/shopify-api';
 
@@ -29,13 +30,19 @@ describe('RedisSessionStorage', () => {
   beforeAll(async () => {
     const configPath = resolve(__dirname, './redis.conf');
     const runCommand = await exec(
-      `podman run -d -p 6379:6379 -v ${configPath}:/redis.conf redis:6 redis-server /redis.conf`,
+      `podman run -d --network=host -v ${configPath}:/redis.conf redis:6 redis-server /redis.conf`,
       {encoding: 'utf8'},
     );
     containerId = runCommand.stdout.trim();
 
-    // Give the container a lot of time to set up since polling is ineffective with podman
-    await wait(10000);
+    await waitForContainerLog(
+      async () => {
+        const {stdout, stderr} = await exec(`podman logs ${containerId}`);
+        return `${stdout}\n${stderr}`;
+      },
+      'Ready to accept connections',
+      {interval: 500, timeout: 60000},
+    );
   });
 
   afterAll(async () => {

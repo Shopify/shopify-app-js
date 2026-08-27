@@ -1,6 +1,46 @@
 import {Session} from '@shopify/shopify-api';
 
 import {sessionArraysEqual} from '../session-test-utils';
+import {waitForContainerLog} from '../utils';
+
+describe('waitForContainerLog', () => {
+  it('waits until the expected log appears', async () => {
+    const getLogs = jest
+      .fn()
+      .mockResolvedValueOnce('starting')
+      .mockResolvedValueOnce('Ready to accept connections');
+
+    await waitForContainerLog(getLogs, 'Ready to accept connections', {
+      interval: 1,
+      timeout: 100,
+    });
+
+    expect(getLogs).toHaveBeenCalledTimes(2);
+  });
+  it('retries when reading logs fails', async () => {
+    const getLogs = jest
+      .fn()
+      .mockRejectedValueOnce(new Error('container is starting'))
+      .mockResolvedValueOnce('Ready to accept connections');
+
+    await waitForContainerLog(getLogs, 'Ready to accept connections', {
+      interval: 1,
+      timeout: 100,
+    });
+
+    expect(getLogs).toHaveBeenCalledTimes(2);
+  });
+  it('includes the last logs when readiness times out', async () => {
+    const getLogs = jest.fn().mockResolvedValue('starting\nstill starting');
+
+    await expect(
+      waitForContainerLog(getLogs, 'Ready to accept connections', {
+        interval: 1,
+        timeout: 20,
+      }),
+    ).rejects.toThrow('Last container logs:\nstarting\nstill starting');
+  });
+});
 
 describe('test sessionArraysEqual', () => {
   it('returns true for two identically ordered arrays', () => {
