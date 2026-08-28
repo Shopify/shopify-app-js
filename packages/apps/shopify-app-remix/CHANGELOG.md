@@ -5,6 +5,7 @@
 ### Patch Changes
 
 - 53fdafb: Clarify billing reference docs: label the `billing` object as Manual Pricing, and note that Shopify App Pricing supports usage-based plans through the App Events API instead of usage records.
+- 8689457: Redact OAuth credentials from HTTP debug logs. When debug-level logging is enabled, OAuth token request bodies are no longer written to the log, and credential headers (`Authorization`, `Cookie`, `Set-Cookie`, `X-Shopify-Access-Token`, `Shopify-Storefront-Private-Token`, `X-Shopify-Storefront-Access-Token`) are replaced with `****`. This comes from `@shopify/shopify-api` and applies to every API client this package creates.
 - Updated dependencies [8689457]
   - @shopify/shopify-api@14.0.1
   - @shopify/shopify-app-session-storage@6.0.1
