@@ -1,5 +1,15 @@
 # Changelog
 
+## 8.0.1
+
+### Patch Changes
+
+- 8689457: Redact OAuth credentials from HTTP debug logs. When debug-level logging is enabled, OAuth token request bodies are no longer written to the log, and credential headers (`Authorization`, `Cookie`, `Set-Cookie`, `X-Shopify-Access-Token`, `Shopify-Storefront-Private-Token`, `X-Shopify-Storefront-Access-Token`) are replaced with `****`. This comes from `@shopify/shopify-api` and applies to every API client this package creates.
+- Updated dependencies [8689457]
+  - @shopify/shopify-api@14.0.1
+  - @shopify/shopify-app-session-storage@6.0.1
+  - @shopify/shopify-app-session-storage-memory@7.0.1
+
 ## 8.0.0
 
 ### Major Changes
