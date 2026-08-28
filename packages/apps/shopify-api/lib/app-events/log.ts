@@ -17,6 +17,20 @@ interface PostAppEventResult {
   response: Response;
   accessToken: string;
 }
+const MAX_IDEMPOTENCY_RETRIES = 2;
+const DEFAULT_IDEMPOTENCY_RETRY_DELAY_MS = 1000;
+
+function getIdempotencyRetryDelayMs(response: Response): number {
+  const retryAfter = response.headers.get('Retry-After');
+  if (retryAfter === null) {
+    return DEFAULT_IDEMPOTENCY_RETRY_DELAY_MS;
+  }
+
+  const seconds = Number(retryAfter);
+  return Number.isFinite(seconds) && seconds >= 0
+    ? seconds * 1000
+    : DEFAULT_IDEMPOTENCY_RETRY_DELAY_MS;
+}
 
 async function postAppEvent(
   config: ConfigInterface,
@@ -46,12 +60,36 @@ export function appEventLog(config: ConfigInterface): AppEventLog {
     const url = `${config.globalApiUrl}/app/${config.globalApiVersion}/events`;
 
     let {response, accessToken} = await postAppEvent(config, url, payload);
-    if (response.status === StatusCode.Unauthorized) {
-      await readJsonBody(response);
-      accessToken = (await refreshGlobalApiToken(config, accessToken))
-        .accessToken;
-      response = (await postAppEvent(config, url, payload, accessToken))
-        .response;
+    let idempotencyRetries = 0;
+    let tokenRefreshed = false;
+    while (true) {
+      if (response.status === StatusCode.Unauthorized) {
+        if (tokenRefreshed) {
+          break;
+        }
+        tokenRefreshed = true;
+        await readJsonBody(response);
+        accessToken = (await refreshGlobalApiToken(config, accessToken))
+          .accessToken;
+        response = (await postAppEvent(config, url, payload, accessToken))
+          .response;
+        continue;
+      }
+
+      if (
+        response.status === 409 &&
+        idempotencyRetries < MAX_IDEMPOTENCY_RETRIES
+      ) {
+        idempotencyRetries += 1;
+        await new Promise<void>((resolve) =>
+          setTimeout(resolve, getIdempotencyRetryDelayMs(response)),
+        );
+        response = (await postAppEvent(config, url, payload, accessToken))
+          .response;
+        continue;
+      }
+
+      break;
     }
 
     const body = await readJsonBody(response);
@@ -63,9 +101,10 @@ export function appEventLog(config: ConfigInterface): AppEventLog {
     }
 
     return {
-      replayed:
-        response.headers.get('Idempotent-Replayed') !== null ||
-        response.headers.get('Idempotent-Replay') !== null,
+      replayed: ['Idempotent-Replayed', 'Idempotent-Replay'].some(
+        (headerName) =>
+          response.headers.get(headerName)?.trim().toLowerCase() === 'true',
+      ),
     };
   };
 }

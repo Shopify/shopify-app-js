@@ -98,6 +98,15 @@ describe('validateAppEvent', () => {
 
     expect(payload.attributes).toEqual({});
   });
+  test('preserves the __proto__ attribute in the payload', () => {
+    const attributes = JSON.parse('{"__proto__":"value"}') as Record<
+      string,
+      string
+    >;
+    const payload = validateAppEvent(validEvent({attributes}));
+
+    expect(JSON.stringify(payload.attributes)).toBe('{"__proto__":"value"}');
+  });
 
   test('rejects omitted attributes', () => {
     const event = validEvent();

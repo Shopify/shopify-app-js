@@ -315,6 +315,155 @@ describe('shopify.appEvents.log', () => {
     );
   });
 
+  test('retries a 409 response using Retry-After', async () => {
+    const shopify = shopifyApi(testConfig());
+    queueMockResponse(JSON.stringify({access_token: validToken()}));
+    queueMockResponse(
+      JSON.stringify({success: false, error: 'Duplicate request in progress'}),
+      {
+        statusCode: 409,
+        statusText: 'Conflict',
+        headers: {'Retry-After': '0'},
+      },
+    );
+    queueMockResponse(JSON.stringify({success: true}), {statusCode: 202});
+
+    await expect(shopify.appEvents.log(validEvent())).resolves.toEqual({
+      replayed: false,
+    });
+    expectTokenRequest();
+
+    expect({
+      method: 'POST',
+      domain: 'api.shopify.com',
+      path: '/app/2026-07/events',
+      attempts: 2,
+      data: {shop_id: '23423423'},
+    }).toMatchMadeHttpRequest();
+  });
+
+  test('uses a one-second fallback when Retry-After is absent', async () => {
+    jest.useFakeTimers();
+    try {
+      const shopify = shopifyApi(testConfig());
+      queueMockResponse(JSON.stringify({access_token: validToken()}));
+      queueMockResponse(
+        JSON.stringify({
+          success: false,
+          error: 'Duplicate request in progress',
+        }),
+        {statusCode: 409, statusText: 'Conflict'},
+      );
+      queueMockResponse(JSON.stringify({success: true}), {statusCode: 202});
+
+      const result = shopify.appEvents.log(validEvent());
+      await jest.runAllTimersAsync();
+
+      await expect(result).resolves.toEqual({replayed: false});
+    } finally {
+      jest.useRealTimers();
+    }
+  });
+
+  test('retries 409 responses before and after refreshing a rejected token', async () => {
+    const shopify = shopifyApi(testConfig());
+    const initialToken = validToken();
+    const refreshedToken = validToken(7200);
+    queueMockResponse(JSON.stringify({access_token: initialToken}));
+    queueMockResponse(
+      JSON.stringify({success: false, error: 'Duplicate request in progress'}),
+      {statusCode: 409, statusText: 'Conflict', headers: {'Retry-After': '0'}},
+    );
+    queueMockResponse(JSON.stringify({error: 'Unauthorized'}), {
+      statusCode: 401,
+      statusText: 'Unauthorized',
+    });
+    queueMockResponse(JSON.stringify({access_token: refreshedToken}));
+    queueMockResponse(
+      JSON.stringify({success: false, error: 'Duplicate request in progress'}),
+      {statusCode: 409, statusText: 'Conflict', headers: {'Retry-After': '0'}},
+    );
+    queueMockResponse(JSON.stringify({success: true}), {statusCode: 202});
+
+    await expect(shopify.appEvents.log(validEvent())).resolves.toEqual({
+      replayed: false,
+    });
+
+    expectTokenRequest();
+    expect({
+      method: 'POST',
+      domain: 'api.shopify.com',
+      path: '/app/2026-07/events',
+      headers: {Authorization: `Bearer ${initialToken}`},
+      data: {shop_id: '23423423'},
+    }).toMatchMadeHttpRequest();
+    expect({
+      method: 'POST',
+      domain: 'api.shopify.com',
+      path: '/app/2026-07/events',
+      headers: {Authorization: `Bearer ${initialToken}`},
+      data: {shop_id: '23423423'},
+    }).toMatchMadeHttpRequest();
+    expectTokenRequest();
+    expect({
+      method: 'POST',
+      domain: 'api.shopify.com',
+      path: '/app/2026-07/events',
+      attempts: 2,
+      headers: {Authorization: `Bearer ${refreshedToken}`},
+      data: {shop_id: '23423423'},
+    }).toMatchMadeHttpRequest();
+  });
+
+  test('returns the final 409 response after two retries', async () => {
+    const shopify = shopifyApi(testConfig());
+    queueMockResponse(JSON.stringify({access_token: validToken()}));
+    for (let attempt = 0; attempt < 3; attempt += 1) {
+      queueMockResponse(
+        JSON.stringify({
+          success: false,
+          error: `Duplicate request attempt ${attempt + 1}`,
+        }),
+        {
+          statusCode: 409,
+          statusText: 'Conflict',
+          headers: {'Retry-After': '0'},
+        },
+      );
+    }
+
+    const error = await shopify.appEvents
+      .log(validEvent())
+      .catch((thrown) => thrown);
+    expectTokenRequest();
+
+    expect(error).toBeInstanceOf(ShopifyErrors.HttpResponseError);
+    expect(error.message).toContain('Duplicate request attempt 3');
+    expect({
+      method: 'POST',
+      domain: 'api.shopify.com',
+      path: '/app/2026-07/events',
+      attempts: 3,
+      data: {shop_id: '23423423'},
+    }).toMatchMadeHttpRequest();
+  });
+
+  test.each(['false', ''])(
+    'does not report a replay when the %s replay header value is falsey',
+    async (headerValue) => {
+      const shopify = shopifyApi(testConfig());
+      queueMockResponse(JSON.stringify({access_token: validToken()}));
+      queueMockResponse(JSON.stringify({success: true}), {
+        statusCode: 202,
+        headers: {'Idempotent-Replayed': headerValue},
+      });
+
+      await expect(shopify.appEvents.log(validEvent())).resolves.toEqual({
+        replayed: false,
+      });
+    },
+  );
+
   test.each(['Idempotent-Replayed', 'Idempotent-Replay'])(
     'reports a replay when Shopify returns the %s header',
     async (headerName) => {

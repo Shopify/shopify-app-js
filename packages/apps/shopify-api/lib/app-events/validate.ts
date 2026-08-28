@@ -98,7 +98,10 @@ export function validateAppEvent(event: AppEventInput): AppEventPayload {
     );
   }
 
-  const attributes: Record<string, AppEventAttributeValue> = {};
+  const attributes = Object.create(null) as Record<
+    string,
+    AppEventAttributeValue
+  >;
   for (const [key, value] of entries) {
     if (key.length > MAX_ATTRIBUTE_KEY_LENGTH) {
       throw new InvalidAppEventError(
