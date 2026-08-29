@@ -426,6 +426,91 @@ describe('httpFetch utility', () => {
             }),
           });
 
+          describe('Retry-After header', () => {
+            const now = Date.parse('Wed, 21 Oct 2015 07:27:00 GMT');
+
+            beforeEach(() => {
+              jest.spyOn(Date, 'now').mockReturnValue(now);
+            });
+
+            it.each([
+              {
+                description: 'converts numeric seconds to milliseconds',
+                retryAfter: '60',
+                expectedDelay: 60_000,
+              },
+              {
+                description: 'supports fractional numeric seconds',
+                retryAfter: '0.05',
+                expectedDelay: 50,
+              },
+              {
+                description: 'supports leading-dot fractional numeric seconds',
+                retryAfter: '.05',
+                expectedDelay: 50,
+              },
+              {
+                description: 'allows zero numeric seconds',
+                retryAfter: '0',
+                expectedDelay: 0,
+              },
+              {
+                description: 'uses the exact delay for a future HTTP-date',
+                retryAfter: 'Wed, 21 Oct 2015 07:28:00 GMT',
+                expectedDelay: 60_000,
+              },
+              {
+                description: 'does not delay for a past HTTP-date',
+                retryAfter: 'Wed, 21 Oct 2015 07:26:00 GMT',
+                expectedDelay: 0,
+              },
+              {
+                description: 'uses the default for a malformed value',
+                retryAfter: 'not a date',
+                expectedDelay: 1_000,
+              },
+              {
+                description:
+                  'uses the default for malformed numeric punctuation',
+                retryAfter: '1.2.3',
+                expectedDelay: 1_000,
+              },
+              {
+                description: 'uses the default for a negative value',
+                retryAfter: '-1',
+                expectedDelay: 1_000,
+              },
+              {
+                description: 'clamps a huge numeric value',
+                retryAfter: '9'.repeat(400),
+                expectedDelay: 2_147_483_647,
+              },
+              {
+                description: 'clamps a far-future HTTP-date',
+                retryAfter: 'Fri, 31 Dec 9999 23:59:59 GMT',
+                expectedDelay: 2_147_483_647,
+              },
+            ])('$description', async ({retryAfter, expectedDelay}) => {
+              const responseWithRetryAfter = new Response(JSON.stringify({}), {
+                status,
+                headers: new Headers({
+                  'Content-Type': 'application/json',
+                  'Retry-After': retryAfter,
+                }),
+              });
+              fetchMock.mockResolvedValue(responseWithRetryAfter);
+
+              const response = await httpFetch([operation], 1, 1);
+
+              expect(response.status).toBe(status);
+              expect(setTimeout).toHaveBeenCalledTimes(1);
+              expect(setTimeout).toHaveBeenCalledWith(
+                expect.any(Function),
+                expectedDelay,
+              );
+            });
+          });
+
           it('calls the global fetch 1 time and returns the failed http response when the client default retries value is 0', async () => {
             fetchMock.mockResolvedValue(mockedFailedResponse);
             const response = await httpFetch([operation], 1, 0);

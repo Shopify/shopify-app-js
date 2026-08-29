@@ -2,6 +2,8 @@ import {CLIENT, RETRIABLE_STATUS_CODES, RETRY_WAIT_TIME} from './constants';
 import {CustomFetchApi, GraphQLClient, Logger} from './types';
 import {formatErrorMessage, getErrorMessage} from './utilities';
 
+const MAX_TIMER_DELAY_MS = 2_147_483_647;
+
 interface GenerateHttpFetchOptions {
   clientLogger: Logger;
   customFetchApi?: CustomFetchApi;
@@ -61,9 +63,7 @@ export function generateHttpFetch({
     } catch (error) {
       if (nextCount <= maxTries) {
         const retryAfter = response?.headers.get('Retry-After');
-        await sleep(
-          retryAfter ? parseInt(retryAfter, 10) : defaultRetryWaitTime,
-        );
+        await sleep(parseRetryAfter(retryAfter, defaultRetryWaitTime));
 
         clientLogger({
           type: 'HTTP-Retry',
@@ -92,6 +92,38 @@ export function generateHttpFetch({
   };
 
   return httpFetch;
+}
+
+function parseRetryAfter(
+  retryAfter: string | null | undefined,
+  defaultRetryWaitTime: number,
+): number {
+  const value = retryAfter?.trim();
+  if (!value) {
+    return defaultRetryWaitTime;
+  }
+
+  // RFC Retry-After delay-seconds are integers, but Shopify APIs can return
+  // fractional seconds, so accept them for compatibility.
+  if (/^(?:\d+(?:\.\d+)?|\.\d+)$/.test(value)) {
+    const delay = Math.ceil(Number(value) * 1_000);
+    return Math.min(delay, MAX_TIMER_DELAY_MS);
+  }
+
+  if (!Number.isNaN(Number(value))) {
+    return defaultRetryWaitTime;
+  }
+
+  if (!/[a-z]/i.test(value)) {
+    return defaultRetryWaitTime;
+  }
+
+  const date = Date.parse(value);
+  if (Number.isNaN(date)) {
+    return defaultRetryWaitTime;
+  }
+
+  return Math.min(Math.max(date - Date.now(), 0), MAX_TIMER_DELAY_MS);
 }
 
 async function sleep(waitTime: number): Promise<void> {

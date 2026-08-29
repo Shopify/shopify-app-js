@@ -482,17 +482,16 @@ describe('REST Admin API Client', () => {
     });
 
     it('waits for the amount of time defined by the Retry-After header', async () => {
-      // Default to 10 seconds to ensure the test will timeout if this fails
-      (constants as any).DEFAULT_RETRY_WAIT_TIME = 10000;
-
       // GIVEN
+      jest
+        .spyOn(global, 'setTimeout')
+        .mockImplementation(jest.fn((resolve) => resolve() as any));
       const client = createAdminRestApiClient(config);
 
-      const realWaitTime = 0.05;
       const errorResponse = new Response('Something went wrong!', {
         status: 503,
         statusText: 'Did not work',
-        headers: {'Retry-After': realWaitTime.toString()},
+        headers: {'Retry-After': '0.05'},
       });
 
       fetchMock.mockResolvedValue(errorResponse);
@@ -503,6 +502,8 @@ describe('REST Admin API Client', () => {
       // THEN
       expect(response.status).toBe(503);
       expect(fetch).toHaveBeenCalledTimes(2);
+      expect(setTimeout).toHaveBeenCalledTimes(1);
+      expect(setTimeout).toHaveBeenCalledWith(expect.any(Function), 50);
       await assertRequest({
         request: new Request(apiUrl('/url/path'), {method: 'GET', headers}),
       });
