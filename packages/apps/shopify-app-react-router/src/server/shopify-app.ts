@@ -22,6 +22,7 @@ import {authStrategyFactory} from './authenticate/admin/authenticate';
 import {authenticateWebhookFactory} from './authenticate/webhooks/authenticate';
 import {overrideLogger} from './override-logger';
 import {addDocumentResponseHeadersFactory} from './authenticate/helpers';
+import {POLARIS_URL} from './authenticate/const';
 import {loginFactory} from './authenticate/login/login';
 import {unauthenticatedAdminContextFactory} from './unauthenticated/admin';
 import {authenticatePublicFactory} from './authenticate/public';
@@ -203,6 +204,7 @@ function deriveConfig<Storage extends SessionStorage>(
     hooks: appConfig.hooks ?? {},
     sessionStorage: appConfig.sessionStorage as Storage,
     future: appConfig.future ?? {},
+    polarisUrl: appConfig.polarisUrl ?? POLARIS_URL,
     auth: {
       path: authPathPrefix,
       callbackPath: `${authPathPrefix}/callback`,
