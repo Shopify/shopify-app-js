@@ -5,7 +5,11 @@ import {testConfig} from '../../__tests__/test-config';
 import {queueMockResponse} from '../../__tests__/test-helper';
 import {DataType} from '../../clients/types';
 import * as ShopifyErrors from '../../error';
-import {ApiVersion, GlobalApiVersion} from '../../types';
+import {
+  ApiVersion,
+  GlobalApiVersion,
+  LATEST_GLOBAL_API_VERSION,
+} from '../../types';
 
 import {AppEventInput} from '../types';
 
@@ -59,7 +63,7 @@ describe('shopify.appEvents.log', () => {
     expect(eventRequest).toEqual(
       expect.objectContaining({
         method: 'POST',
-        url: 'https://api.shopify.com/app/2026-07/events',
+        url: `https://api.shopify.com/app/${LATEST_GLOBAL_API_VERSION}/events`,
         headers: expect.objectContaining({
           'Content-Type': [DataType.JSON],
           Authorization: [`Bearer ${token}`],
@@ -89,7 +93,7 @@ describe('shopify.appEvents.log', () => {
     expect({
       method: 'POST',
       domain: 'api.shopify.com',
-      path: '/app/2026-07/events',
+      path: `/app/${LATEST_GLOBAL_API_VERSION}/events`,
       data: {shop_id: '23423423'},
       attempts: 2,
     }).toMatchMadeHttpRequest();
@@ -115,7 +119,7 @@ describe('shopify.appEvents.log', () => {
     expect({
       method: 'POST',
       domain: 'api.shopify.com',
-      path: '/app/2026-07/events',
+      path: `/app/${LATEST_GLOBAL_API_VERSION}/events`,
       headers: {Authorization: `Bearer ${expiredToken}`},
       data: {shop_id: '23423423'},
     }).toMatchMadeHttpRequest();
@@ -123,7 +127,7 @@ describe('shopify.appEvents.log', () => {
     expect({
       method: 'POST',
       domain: 'api.shopify.com',
-      path: '/app/2026-07/events',
+      path: `/app/${LATEST_GLOBAL_API_VERSION}/events`,
       headers: {Authorization: `Bearer ${refreshedToken}`},
       data: {shop_id: '23423423'},
     }).toMatchMadeHttpRequest();
@@ -156,7 +160,7 @@ describe('shopify.appEvents.log', () => {
     expect({
       method: 'POST',
       domain: 'api.shopify.com',
-      path: '/app/2026-07/events',
+      path: `/app/${LATEST_GLOBAL_API_VERSION}/events`,
       headers: {Authorization: `Bearer ${initialToken}`},
       data: {shop_id: '23423423'},
       attempts: 2,
@@ -165,7 +169,7 @@ describe('shopify.appEvents.log', () => {
     expect({
       method: 'POST',
       domain: 'api.shopify.com',
-      path: '/app/2026-07/events',
+      path: `/app/${LATEST_GLOBAL_API_VERSION}/events`,
       headers: {Authorization: `Bearer ${replacementToken}`},
       data: {shop_id: '23423423'},
       attempts: 2,
@@ -200,7 +204,7 @@ describe('shopify.appEvents.log', () => {
     expect({
       method: 'POST',
       domain: 'api.shopify.com',
-      path: '/app/2026-07/events',
+      path: `/app/${LATEST_GLOBAL_API_VERSION}/events`,
       headers: {Authorization: `Bearer ${initialToken}`},
       data: {shop_id: '23423423'},
     }).toMatchMadeHttpRequest();
@@ -208,7 +212,7 @@ describe('shopify.appEvents.log', () => {
     expect({
       method: 'POST',
       domain: 'api.shopify.com',
-      path: '/app/2026-07/events',
+      path: `/app/${LATEST_GLOBAL_API_VERSION}/events`,
       headers: {Authorization: `Bearer ${replacementToken}`},
       data: {shop_id: '23423423'},
     }).toMatchMadeHttpRequest();
@@ -336,7 +340,7 @@ describe('shopify.appEvents.log', () => {
     expect({
       method: 'POST',
       domain: 'api.shopify.com',
-      path: '/app/2026-07/events',
+      path: `/app/${LATEST_GLOBAL_API_VERSION}/events`,
       attempts: 2,
       data: {shop_id: '23423423'},
     }).toMatchMadeHttpRequest();
@@ -360,6 +364,40 @@ describe('shopify.appEvents.log', () => {
       await jest.runAllTimersAsync();
 
       await expect(result).resolves.toEqual({replayed: false});
+    } finally {
+      jest.useRealTimers();
+    }
+  });
+
+  test('caps Retry-After delays and total retry waiting', async () => {
+    jest.useFakeTimers();
+    try {
+      const shopify = shopifyApi(testConfig());
+      queueMockResponse(JSON.stringify({access_token: validToken()}));
+      for (let attempt = 0; attempt < 3; attempt += 1) {
+        queueMockResponse(
+          JSON.stringify({
+            success: false,
+            error: `Duplicate request attempt ${attempt + 1}`,
+          }),
+          {
+            statusCode: 409,
+            statusText: 'Conflict',
+            headers: {'Retry-After': '3600'},
+          },
+        );
+      }
+
+      const start = Date.now();
+      const result = shopify.appEvents
+        .log(validEvent())
+        .catch((thrown) => thrown);
+      await jest.runAllTimersAsync();
+
+      const error = await result;
+      expect(error).toBeInstanceOf(ShopifyErrors.HttpResponseError);
+      expect(error.message).toContain('Duplicate request attempt 3');
+      expect(Date.now() - start).toBe(10_000);
     } finally {
       jest.useRealTimers();
     }
@@ -393,14 +431,14 @@ describe('shopify.appEvents.log', () => {
     expect({
       method: 'POST',
       domain: 'api.shopify.com',
-      path: '/app/2026-07/events',
+      path: `/app/${LATEST_GLOBAL_API_VERSION}/events`,
       headers: {Authorization: `Bearer ${initialToken}`},
       data: {shop_id: '23423423'},
     }).toMatchMadeHttpRequest();
     expect({
       method: 'POST',
       domain: 'api.shopify.com',
-      path: '/app/2026-07/events',
+      path: `/app/${LATEST_GLOBAL_API_VERSION}/events`,
       headers: {Authorization: `Bearer ${initialToken}`},
       data: {shop_id: '23423423'},
     }).toMatchMadeHttpRequest();
@@ -408,7 +446,7 @@ describe('shopify.appEvents.log', () => {
     expect({
       method: 'POST',
       domain: 'api.shopify.com',
-      path: '/app/2026-07/events',
+      path: `/app/${LATEST_GLOBAL_API_VERSION}/events`,
       attempts: 2,
       headers: {Authorization: `Bearer ${refreshedToken}`},
       data: {shop_id: '23423423'},
@@ -442,7 +480,7 @@ describe('shopify.appEvents.log', () => {
     expect({
       method: 'POST',
       domain: 'api.shopify.com',
-      path: '/app/2026-07/events',
+      path: `/app/${LATEST_GLOBAL_API_VERSION}/events`,
       attempts: 3,
       data: {shop_id: '23423423'},
     }).toMatchMadeHttpRequest();

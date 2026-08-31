@@ -79,7 +79,7 @@ The base URL for Shopify's Global API, used by [shopify.appEvents.log](./app-eve
 
 ### globalApiVersion
 
-`GlobalApiVersion` | Defaults to `GlobalApiVersion.July26`
+`GlobalApiVersion` | Defaults to `LATEST_GLOBAL_API_VERSION`
 
 Global API version used by Global API requests, including [shopify.appEvents.log](./app-events/log.md). This version is independent from the Admin API `apiVersion`.
 

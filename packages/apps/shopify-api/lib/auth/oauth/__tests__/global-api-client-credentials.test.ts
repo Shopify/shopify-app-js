@@ -230,21 +230,34 @@ describe('globalApiClientCredentials', () => {
     expectTokenRequest(2);
   });
 
-  test('clears a failed in-flight request before a later mint', async () => {
-    const shopify = shopifyApi(testConfig());
-    const accessToken = fakeGlobalToken({
-      exp: Math.floor(Date.now() / 1000) + 3600,
-    });
-    queueMockResponse(JSON.stringify({error: 'temporary'}), {statusCode: 500});
-    queueMockResponse(JSON.stringify({access_token: accessToken}));
+  test('caches a failed mint before retrying after the cache expires', async () => {
+    jest.useFakeTimers();
+    try {
+      const shopify = shopifyApi(testConfig());
+      const accessToken = fakeGlobalToken({
+        exp: Math.floor(Date.now() / 1000) + 3600,
+      });
+      queueMockResponse(JSON.stringify({error: 'temporary'}), {
+        statusCode: 500,
+      });
+      queueMockResponse(JSON.stringify({access_token: accessToken}));
 
-    await expect(shopify.auth.globalApiClientCredentials()).rejects.toThrow(
-      ShopifyErrors.HttpInternalError,
-    );
-    const result = await shopify.auth.globalApiClientCredentials();
+      await expect(shopify.auth.globalApiClientCredentials()).rejects.toThrow(
+        ShopifyErrors.HttpInternalError,
+      );
+      await expect(shopify.auth.globalApiClientCredentials()).rejects.toThrow(
+        ShopifyErrors.HttpInternalError,
+      );
+      expectTokenRequest();
 
-    expect(result.token.accessToken).toBe(accessToken);
-    expectTokenRequest(2);
+      await jest.advanceTimersByTimeAsync(1_000);
+      const result = await shopify.auth.globalApiClientCredentials();
+
+      expect(result.token.accessToken).toBe(accessToken);
+      expectTokenRequest();
+    } finally {
+      jest.useRealTimers();
+    }
   });
 
   test('includes the OAuth error and description in the thrown message', async () => {
@@ -308,7 +321,7 @@ describe('globalApiClientCredentials', () => {
     expectTokenRequest(2);
   });
 
-  test('redacts token request bodies from debug logs without changing the wire body', async () => {
+  test('omits token request bodies from debug logs without changing the wire body', async () => {
     const logFn = jest.fn();
     const shopify = shopifyApi(
       testConfig({
@@ -336,7 +349,7 @@ describe('globalApiClientCredentials', () => {
       },
     }).toMatchMadeHttpRequest();
     const messages = logFn.mock.calls.map(([, message]) => message).join('\n');
-    expect(messages).toContain('[REDACTED]');
+    expect(messages).not.toContain('[REDACTED]');
     expect(messages).not.toContain(shopify.config.apiSecretKey);
     expect(messages).not.toContain(shopify.config.apiKey);
     expect(messages).not.toContain(accessToken);

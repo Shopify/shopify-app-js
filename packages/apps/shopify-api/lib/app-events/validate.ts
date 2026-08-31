@@ -9,6 +9,7 @@ import {
   MAX_ATTRIBUTE_KEYS,
   MAX_ATTRIBUTE_STRING_VALUE_LENGTH,
   MAX_IDEMPOTENCY_KEY_LENGTH,
+  MAX_TIMESTAMP_FUTURE_MS,
 } from './types';
 
 const SHOP_GID_PATTERN = /^gid:\/\/shopify\/Shop\/(\d+)$/;
@@ -66,7 +67,7 @@ export function validateAppEvent(event: AppEventInput): AppEventPayload {
   if (!(timestamp instanceof Date) || Number.isNaN(timestamp.getTime())) {
     throw new InvalidAppEventError('timestamp must be a valid Date');
   }
-  if (timestamp.getTime() > Date.now() + 300_000) {
+  if (timestamp.getTime() > Date.now() + MAX_TIMESTAMP_FUTURE_MS) {
     throw new InvalidAppEventError(
       'timestamp must not be more than 300 seconds in the future',
     );

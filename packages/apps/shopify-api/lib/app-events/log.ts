@@ -19,6 +19,9 @@ interface PostAppEventResult {
 }
 const MAX_IDEMPOTENCY_RETRIES = 2;
 const DEFAULT_IDEMPOTENCY_RETRY_DELAY_MS = 1000;
+const MAX_IDEMPOTENCY_RETRY_DELAY_MS = 5_000;
+const MAX_IDEMPOTENCY_RETRY_DURATION_MS =
+  MAX_IDEMPOTENCY_RETRIES * MAX_IDEMPOTENCY_RETRY_DELAY_MS;
 
 function getIdempotencyRetryDelayMs(response: Response): number {
   const retryAfter = response.headers.get('Retry-After');
@@ -28,8 +31,12 @@ function getIdempotencyRetryDelayMs(response: Response): number {
 
   const seconds = Number(retryAfter);
   return Number.isFinite(seconds) && seconds >= 0
-    ? seconds * 1000
+    ? Math.min(seconds * 1000, MAX_IDEMPOTENCY_RETRY_DELAY_MS)
     : DEFAULT_IDEMPOTENCY_RETRY_DELAY_MS;
+}
+
+function waitForRetry(delayMs: number): Promise<void> {
+  return new Promise<void>((resolve) => setTimeout(resolve, delayMs));
 }
 
 async function postAppEvent(
@@ -61,6 +68,7 @@ export function appEventLog(config: ConfigInterface): AppEventLog {
 
     let {response, accessToken} = await postAppEvent(config, url, payload);
     let idempotencyRetries = 0;
+    const retryDeadline = Date.now() + MAX_IDEMPOTENCY_RETRY_DURATION_MS;
     let tokenRefreshed = false;
     while (true) {
       if (response.status === StatusCode.Unauthorized) {
@@ -77,12 +85,17 @@ export function appEventLog(config: ConfigInterface): AppEventLog {
       }
 
       if (
-        response.status === 409 &&
+        response.status === StatusCode.Conflict &&
         idempotencyRetries < MAX_IDEMPOTENCY_RETRIES
       ) {
+        const remainingRetryTime = retryDeadline - Date.now();
+        if (remainingRetryTime <= 0) {
+          break;
+        }
+        await readJsonBody(response);
         idempotencyRetries += 1;
-        await new Promise<void>((resolve) =>
-          setTimeout(resolve, getIdempotencyRetryDelayMs(response)),
+        await waitForRetry(
+          Math.min(getIdempotencyRetryDelayMs(response), remainingRetryTime),
         );
         response = (await postAppEvent(config, url, payload, accessToken))
           .response;

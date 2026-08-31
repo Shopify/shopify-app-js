@@ -57,7 +57,7 @@ export interface ConfigParams<
   /**
    * The Global API version to use for Global API requests.
    *
-   * @defaultValue `GlobalApiVersion.July26`
+   * @defaultValue `LATEST_GLOBAL_API_VERSION`
    */
   globalApiVersion?: GlobalApiVersion;
 

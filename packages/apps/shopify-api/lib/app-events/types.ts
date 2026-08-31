@@ -4,6 +4,7 @@ export const MAX_IDEMPOTENCY_KEY_LENGTH = 64;
 export const MAX_ATTRIBUTE_KEYS = 15;
 export const MAX_ATTRIBUTE_KEY_LENGTH = 64;
 export const MAX_ATTRIBUTE_STRING_VALUE_LENGTH = 128;
+export const MAX_TIMESTAMP_FUTURE_MS = 300_000;
 export const ATTRIBUTE_KEY_PATTERN = /^[a-zA-Z0-9_.-]+$/;
 
 export type AppEventAttributeValue = string | number | boolean;

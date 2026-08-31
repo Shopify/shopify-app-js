@@ -4,7 +4,7 @@ Sends one [App Event](https://shopify.dev/docs/api/app-events/latest) to Shopify
 
 The app must be installed on the shop. To obtain `shopId`, query `{ shop { id } }` through the Admin API. The SDK does not resolve a shop domain to its ID.
 
-App Events is served by the Global API. Set `globalApiVersion` to choose the Global API version; it defaults to `GlobalApiVersion.July26` and is independent from the Admin API `apiVersion`.
+App Events is served by the Global API. Set `globalApiVersion` to choose the Global API version; it defaults to `LATEST_GLOBAL_API_VERSION` and is independent from the Admin API `apiVersion`.
 
 ## Examples
 
@@ -44,6 +44,8 @@ For a billing event, this must match a meter handle in the app's pricing configu
 A non-empty key of at most 64 characters. Reuse the same key when you retry one event.
 
 The key must be unique across all of the app's shops. Shopify scopes its idempotency cache by app and key, not by shop.
+
+On a `409` idempotency conflict, the SDK retries the request up to two times. It waits for `Retry-After` up to 5 seconds per retry, uses a one-second fallback, and caps total retry waiting at 10 seconds.
 
 ### attributes
 

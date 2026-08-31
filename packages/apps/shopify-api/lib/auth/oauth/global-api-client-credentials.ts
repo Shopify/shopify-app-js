@@ -14,6 +14,8 @@ const CLIENT_CREDENTIALS_GRANT_TYPE = 'client_credentials';
 const EXPIRY_SKEW_MS = 60_000;
 /** Used only when the token is not a decodable JWT and the body has no `expires_in`. */
 const FALLBACK_TTL_MS = 300_000;
+/** Avoid repeated token mint requests during a short authentication failure. */
+const TOKEN_FAILURE_TTL_MS = 1_000;
 
 export interface GlobalApiToken {
   accessToken: string;
@@ -32,7 +34,10 @@ export type GlobalApiClientCredentials = (
 
 const tokenCache = new WeakMap<ConfigInterface, GlobalApiToken>();
 const tokenRequests = new WeakMap<ConfigInterface, Promise<GlobalApiToken>>();
-
+const tokenFailures = new WeakMap<
+  ConfigInterface,
+  {error: unknown; expiresAt: number}
+>();
 async function mintGlobalApiToken(
   config: ConfigInterface,
 ): Promise<GlobalApiToken> {
@@ -120,15 +125,28 @@ function requestGlobalApiToken(
     return inFlight;
   }
 
+  const failure = tokenFailures.get(config);
+  if (failure) {
+    if (failure.expiresAt > Date.now()) {
+      return Promise.reject(failure.error);
+    }
+    tokenFailures.delete(config);
+  }
+
   const request = mintGlobalApiToken(config);
   tokenRequests.set(config, request);
   void request.then(
     () => {
+      tokenFailures.delete(config);
       if (tokenRequests.get(config) === request) {
         tokenRequests.delete(config);
       }
     },
-    () => {
+    (error) => {
+      tokenFailures.set(config, {
+        error,
+        expiresAt: Date.now() + TOKEN_FAILURE_TTL_MS,
+      });
       if (tokenRequests.get(config) === request) {
         tokenRequests.delete(config);
       }

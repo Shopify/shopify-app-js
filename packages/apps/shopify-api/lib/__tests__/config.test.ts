@@ -1,7 +1,12 @@
 import * as ShopifyErrors from '../error';
 import {validateConfig} from '../config';
 import {ConfigParams} from '../base-types';
-import {ApiVersion, GlobalApiVersion, LogSeverity} from '../types';
+import {
+  ApiVersion,
+  GlobalApiVersion,
+  LATEST_GLOBAL_API_VERSION,
+  LogSeverity,
+} from '../types';
 
 let validParams: ConfigParams;
 
@@ -173,7 +178,7 @@ describe('Config object', () => {
 
   it('defaults and accepts a Global API version', () => {
     const defaultConfig = validateConfig(validParams);
-    expect(defaultConfig.globalApiVersion).toEqual(GlobalApiVersion.July26);
+    expect(defaultConfig.globalApiVersion).toEqual(LATEST_GLOBAL_API_VERSION);
 
     const config = validateConfig({
       ...validParams,

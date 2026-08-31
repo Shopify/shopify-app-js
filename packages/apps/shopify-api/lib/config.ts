@@ -1,6 +1,6 @@
 import {ShopifyError} from './error';
 import {ConfigInterface, ConfigParams} from './base-types';
-import {GlobalApiVersion, LogSeverity} from './types';
+import {LATEST_GLOBAL_API_VERSION, LogSeverity} from './types';
 import {AuthScopes} from './auth/scopes';
 import {logger as createLogger} from './logger';
 
@@ -13,7 +13,7 @@ export function validateConfig<Params extends ConfigParams>(
     hostName: '',
     hostScheme: 'https',
     globalApiUrl: 'https://api.shopify.com',
-    globalApiVersion: GlobalApiVersion.July26,
+    globalApiVersion: LATEST_GLOBAL_API_VERSION,
     isEmbeddedApp: true,
     isCustomStoreApp: false,
     logger: {

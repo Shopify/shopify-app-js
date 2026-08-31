@@ -191,6 +191,34 @@ describe('fetchRequest', () => {
     }).toMatchMadeHttpRequest();
   });
 
+  it('omits the body from debug logs for Global API token requests', async () => {
+    const logFn = jest.fn();
+    const config = testConfig({
+      logger: {log: logFn, level: LogSeverity.Debug, httpRequests: true},
+    });
+    const requestBody = {
+      client_id: 'test-api-key',
+      client_secret: 'test-client-secret-value',
+      grant_type: 'client_credentials',
+    };
+    const tokenUrl = 'https://api.shopify.com/auth/access_token';
+    queueMockResponse(JSON.stringify(successResponse));
+
+    await fetchRequestFactory(config)(tokenUrl, {
+      method: 'POST',
+      body: JSON.stringify(requestBody),
+    });
+
+    expect(logFn).toHaveBeenNthCalledWith(
+      1,
+      LogSeverity.Debug,
+      `[shopify-api/DEBUG] Making HTTP request | {method: POST, url: ${tokenUrl}}`,
+    );
+    logFn.mock.calls.forEach(([_severity, message]) => {
+      expect(message).not.toContain('test-client-secret-value');
+    });
+  });
+
   it('omits the body from debug logs when the URL does not parse', async () => {
     // GIVEN
     const logFn = jest.fn();
