@@ -1,5 +1,13 @@
 # @shopify/shopify-app-session-storage-prisma
 
+## 11.0.0
+
+### Patch Changes
+
+- Updated dependencies [d641a62]
+  - @shopify/shopify-api@15.0.0
+  - @shopify/shopify-app-session-storage@7.0.0
+
 ## 10.0.1
 
 ## 10.0.0
