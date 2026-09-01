@@ -4,7 +4,31 @@
 
 ### Minor Changes
 
-- 5342ba6: Added the ability to specify the polaris.js version you want to use
+- 5342ba6: Added the ability to specify the polaris.js version you want to use. This is useful for trying out Polaris release candidate builds before they are released to the public.
+
+  Set the URL in both places so the rendered `<script>` tag and the preload `Link` header stay in sync.
+
+  Pass `polarisUrl` to the `AppProvider` component to control the script tag:
+
+  ```diff
+    <AppProvider
+      apiKey={apiKey}
+  +   polarisUrl="https://cdn.shopify.com/shopifycloud/polaris-1.rc.js"
+    >
+      <Outlet />
+    </AppProvider>
+  ```
+
+  Pass `polarisUrl` to `shopifyApp` to control the preload `Link` header:
+
+  ```diff
+    const shopify = shopifyApp({
+      // ...
+  +   polarisUrl: "https://cdn.shopify.com/shopifycloud/polaris-1.rc.js",
+    });
+  ```
+
+  Both default to the current stable Polaris URL, so apps that don't set `polarisUrl` are unaffected.
 
 ## 2.0.1
 
