@@ -37,7 +37,12 @@ export function renderAppBridge(
   const shop = api.utils.sanitizeShop(
     new URL(request.url).searchParams.get('shop')!,
   );
-  addDocumentResponseHeaders(responseHeaders, isEmbeddedApp, shop);
+  addDocumentResponseHeaders(
+    responseHeaders,
+    isEmbeddedApp,
+    shop,
+    config.polarisUrl,
+  );
 
   throw new Response(
     `
