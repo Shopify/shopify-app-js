@@ -79,9 +79,7 @@ export function authenticateWebhookFactory<Topics extends string>(
         webhookType: check.webhookType,
         handle: check.handle,
         action: check.action,
-        resourceId: check.resourceId,
         triggeredAt: check.triggeredAt,
-        eventId: check.eventId,
       };
     }
 

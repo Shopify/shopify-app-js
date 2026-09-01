@@ -193,10 +193,8 @@ describe('Webhook validation', () => {
       expect(result.shop).toBe(TEST_SHOP);
       expect(result.topic).toBe('PRODUCT');
       expect(result.webhookId).toBe('webhook-456');
-      expect(result.eventId).toBe('evt-123');
       expect(result.handle).toBe('my-handle');
       expect(result.action).toBe('update');
-      expect(result.resourceId).toBe('gid://shopify/Product/123');
       expect(result.triggeredAt).toBe('2026-01-27T12:00:00Z');
       expect(result.payload).toEqual(body);
 
@@ -312,10 +310,8 @@ function eventsWebhookHeaders(
     'shopify-api-version': '2023-01',
     'shopify-hmac-sha256': hmac,
     'shopify-webhook-id': 'webhook-456',
-    'shopify-event-id': 'evt-123',
     'shopify-handle': 'my-handle',
     'shopify-action': 'update',
-    'shopify-resource-id': 'gid://shopify/Product/123',
     'shopify-triggered-at': '2026-01-27T12:00:00Z',
     ...overrides,
   };
