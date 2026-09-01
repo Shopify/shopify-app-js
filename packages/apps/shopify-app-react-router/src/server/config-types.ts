@@ -113,11 +113,11 @@ export interface AppConfigArg<
 
   /**
    * The config for the shop-specific webhooks your app needs.
-   * 
+   *
    * Use this to configure shop-specific webhooks. In many cases defining app-specific webhooks in the `shopify.app.toml` will be sufficient and easier to manage.  Please see:
-   * 
+   *
    * {@link https://shopify.dev/docs/apps/build/webhooks/subscribe#app-specific-vs-shop-specific-subscriptions}
-   * 
+   *
    * You should only use this if you need shop-specific webhooks. If you do need shop-specific webhooks this can be in used in conjunction with the afterAuth hook, loaders or processes such as background jobs.
    *
    * @example
@@ -146,7 +146,7 @@ export interface AppConfigArg<
    * export default shopify;
    * export const authenticate = shopify.authenticate;
    * ```
-   * 
+   *
    * @example
    * <caption>Registering app-specific webhooks (Recommended)</caption>
    * ```toml
@@ -157,9 +157,9 @@ export interface AppConfigArg<
    *   [[webhooks.subscriptions]]
    *   topics = ["products/create"]
    *   uri = "/webhooks/products/create"
-   * 
+   *
    * ```
-   * 
+   *
    * @example
    * <caption>Authenticating a webhook request</caption>
    *
@@ -171,13 +171,13 @@ export interface AppConfigArg<
    *
    * export const action = async ({ request }: ActionFunctionArgs) => {
    *   const { topic, shop, session, payload } = await authenticate.webhook(request);
-   * 
+   *
    *   // Webhook requests can trigger after an app is uninstalled
    *   // If the app is already uninstalled, the session may be undefined.
    *   if (!session) {
    *     throw new Response();
    *   }
-   * 
+   *
    *   // Handle the webhook
    *   console.log(`${TOPIC} webhook received with`, JSON.stringify(payload))
    *
@@ -279,6 +279,14 @@ export interface AppConfigArg<
    * releases in advance and provide feedback on the new features.
    */
   future?: Future;
+
+  /**
+   * The URL to load the Polaris web components script from.
+   *
+   * This is used to add a preload `Link` header to document responses. It should match the `polarisUrl` you pass to the
+   * `AppProvider` component. Defaults to the Shopify CDN URL. Only override this if you need to load a Polaris release candidate.
+   */
+  polarisUrl?: string;
 }
 
 export interface AppConfig<
@@ -294,6 +302,7 @@ export interface AppConfig<
   idempotentPromiseHandler: IdempotentPromiseHandler;
   distribution: AppDistribution;
   billing?: BillingConfigWithLineItems;
+  polarisUrl: string;
 }
 
 export interface AuthConfig {
