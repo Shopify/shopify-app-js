@@ -45,7 +45,7 @@ export type {
   ExpressApiConfigParams,
   FutureFlags,
 } from './config-types';
-export {ApiVersion} from '@shopify/shopify-api';
+export {ApiVersion, GlobalApiVersion} from '@shopify/shopify-api';
 
 type DefaultedConfigs<Params extends Partial<ApiConfigParams> | undefined> =
   ApiConfigParams & Params;

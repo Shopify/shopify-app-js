@@ -18,6 +18,15 @@ export enum ApiVersion {
   Unstable = 'unstable',
 }
 
+/** Versions supported by Shopify's Global API. */
+export enum GlobalApiVersion {
+  July26 = '2026-07',
+  October26 = '2026-10',
+  Unstable = 'unstable',
+}
+
+export const LATEST_GLOBAL_API_VERSION = GlobalApiVersion.October26;
+
 export const LIBRARY_NAME = 'Shopify API Library';
 
 /* eslint-disable @shopify/typescript-prefer-pascal-case-enums */

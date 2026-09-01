@@ -4,7 +4,12 @@ import {ShopifyRestResources} from '../rest/types';
 import {AuthScopes} from './auth/scopes';
 import {BillingConfig} from './billing/types';
 import {Session} from './session/session';
-import {ApiVersion, DomainTransformation, LogSeverity} from './types';
+import {
+  ApiVersion,
+  DomainTransformation,
+  GlobalApiVersion,
+  LogSeverity,
+} from './types';
 
 /**
  * A function used by the library to log events related to Shopify.
@@ -39,6 +44,23 @@ export interface ConfigParams<
    * The scheme to use for the app host.
    */
   hostScheme?: 'http' | 'https';
+  /**
+   * The base URL for Shopify's Global API.
+   *
+   * Only override this to target a non-production Shopify environment, such as a Spin
+   * instance (`https://api.<spin-instance>.shopify.io`).
+   *
+   * @defaultValue `'https://api.shopify.com'`
+   */
+  globalApiUrl?: string;
+
+  /**
+   * The Global API version to use for Global API requests.
+   *
+   * @defaultValue `LATEST_GLOBAL_API_VERSION`
+   */
+  globalApiVersion?: GlobalApiVersion;
+
   /**
    * The API version to use.
    */
@@ -175,6 +197,8 @@ export type ConfigInterface<Params extends ConfigParams = ConfigParams> = Omit<
 > & {
   apiKey: string;
   hostScheme: 'http' | 'https';
+  globalApiUrl: string;
+  globalApiVersion: GlobalApiVersion;
   scopes?: AuthScopes;
   isCustomStoreApp: boolean;
   billing?: BillingConfig;

@@ -13,6 +13,7 @@ export class InvalidHostError extends ShopifyError {}
 export class InvalidJwtError extends ShopifyError {}
 export class MissingJwtTokenError extends ShopifyError {}
 export class InvalidDeliveryMethodError extends ShopifyError {}
+export class InvalidAppEventError extends ShopifyError {}
 
 export class SafeCompareError extends ShopifyError {}
 export class PrivateAppError extends ShopifyError {}

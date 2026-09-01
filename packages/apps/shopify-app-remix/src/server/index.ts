@@ -11,6 +11,7 @@ export {
   BillingInterval,
   BillingReplacementBehavior,
   ApiVersion,
+  GlobalApiVersion,
   Session,
 } from '@shopify/shopify-api';
 
