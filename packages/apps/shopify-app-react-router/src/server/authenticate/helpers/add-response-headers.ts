@@ -17,7 +17,7 @@ export function addDocumentResponseHeadersFactory(
     const shop = api.utils.sanitizeShop(searchParams.get('shop')!);
 
     const isEmbeddedApp = config.distribution !== AppDistribution.ShopifyAdmin;
-    addDocumentResponseHeaders(headers, isEmbeddedApp, shop);
+    addDocumentResponseHeaders(headers, isEmbeddedApp, shop, config.polarisUrl);
   };
 }
 
@@ -25,11 +25,12 @@ export function addDocumentResponseHeaders(
   headers: Headers,
   isEmbeddedApp: boolean,
   shop: string | null | undefined,
+  polarisUrl: string = POLARIS_URL,
 ) {
   if (shop) {
     headers.set(
       'Link',
-      `<${CDN_URL}>; rel="preconnect", <${APP_BRIDGE_URL}>; rel="preload"; as="script", <${POLARIS_URL}>; rel="preload"; as="script"`,
+      `<${CDN_URL}>; rel="preconnect", <${APP_BRIDGE_URL}>; rel="preload"; as="script", <${polarisUrl}>; rel="preload"; as="script"`,
     );
   }
 

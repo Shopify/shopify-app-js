@@ -63,6 +63,22 @@ describe('<AppProvider />', () => {
     });
   });
 
+  it('renders a custom Polaris script URL when provided', () => {
+    // GIVEN
+    const polarisUrl = 'https://cdn.shopify.com/shopifycloud/polaris-1.1-rc.js';
+
+    // WHEN
+    const component = mountWithRouter(
+      <AppProvider apiKey="test-api-key" polarisUrl={polarisUrl}>
+        <div>Hello world</div>
+      </AppProvider>,
+    );
+
+    // THEN
+    expect(component).toContainReactComponent('script', {src: polarisUrl});
+    expect(component).not.toContainReactComponent('script', {src: POLARIS_URL});
+  });
+
   it('sets up navigation event listener', () => {
     // GIVEN
     const apiKey = 'test-api-key';

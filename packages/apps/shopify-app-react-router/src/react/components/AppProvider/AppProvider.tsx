@@ -21,6 +21,13 @@ export interface AppProviderProps {
    * loader to the component.
    */
   apiKey: string;
+
+  /**
+   * The URL to load the Polaris web components script from.
+   *
+   * Defaults to the Shopify CDN URL. Only override this if you need to test an upcoming Polaris release.
+   */
+  polarisUrl?: string;
 }
 
 /**
@@ -59,10 +66,11 @@ export interface AppProviderProps {
  * ```
  */
 export function AppProvider(props: AppProviderProps) {
+  const {polarisUrl = POLARIS_URL} = props;
   return (
     <>
       <AppBridge apiKey={props.apiKey} />
-      <script src={POLARIS_URL} />
+      <script src={polarisUrl} />
       {props.children}
     </>
   );
