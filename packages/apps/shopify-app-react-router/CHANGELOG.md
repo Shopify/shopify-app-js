@@ -1,5 +1,11 @@
 # @shopify/shopify-app-react-router
 
+## 2.1.0
+
+### Minor Changes
+
+- 5342ba6: Added the ability to specify the polaris.js version you want to use
+
 ## 2.0.1
 
 ### Patch Changes
