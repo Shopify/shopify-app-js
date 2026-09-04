@@ -100,7 +100,7 @@
     "express": "^5.2.1",
     "jest-environment-miniflare": "^2.14.4",
     "miniflare": "^4.20260708.1",
-    "rollup": "^4.62.2",
+    "rollup": "^4.62.5",
     "supertest": "^7.2.2",
     "wrangler": "^4.111.0"
   },
