@@ -54,12 +54,12 @@
     "@libsql/client": "^0.17.4",
     "@shopify/shopify-app-session-storage-test-utils": "^6.0.1",
     "@types/better-sqlite3": "^7.6.13",
-    "@types/pg": "^8.20.0",
+    "@types/pg": "^8.23.1",
     "better-sqlite3": "^12.11.1",
     "drizzle-kit": "^0.31.10",
     "drizzle-orm": "^0.45.2",
-    "mysql2": "^3.22.6",
-    "pg": "^8.22.0"
+    "mysql2": "^3.23.4",
+    "pg": "^8.23.0"
   },
   "files": [
     "dist/*",

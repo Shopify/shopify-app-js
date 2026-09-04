@@ -94,7 +94,7 @@
     "@shopify/shopify-app-session-storage": "^6.0.1",
     "@shopify/storefront-api-client": "^2.0.0",
     "compare-versions": "^6.1.1",
-    "isbot": "^5.2.0"
+    "isbot": "^5.2.1"
   },
   "peerDependencies": {
     "react": ">=18",
