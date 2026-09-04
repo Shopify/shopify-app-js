@@ -44,7 +44,7 @@
     "Redis"
   ],
   "dependencies": {
-    "redis": "^5.12.1"
+    "redis": "^6.2.0"
   },
   "peerDependencies": {
     "@shopify/shopify-api": "^14.0.0",
