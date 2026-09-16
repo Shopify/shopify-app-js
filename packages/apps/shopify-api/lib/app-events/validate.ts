@@ -1,4 +1,6 @@
+import {ConfigInterface} from '../base-types';
 import {InvalidAppEventError} from '../error';
+
 
 import {
   AppEventAttributeValue,
@@ -11,34 +13,25 @@ import {
   MAX_IDEMPOTENCY_KEY_LENGTH,
   MAX_TIMESTAMP_FUTURE_MS,
 } from './types';
+import {sanitizeShop} from '../utils/shop-validator';
 
-const SHOP_GID_PATTERN = /^gid:\/\/shopify\/Shop\/(\d+)$/;
-const NUMERIC_SHOP_ID_PATTERN = /^\d+$/;
-
-export function validateAppEvent(event: AppEventInput): AppEventPayload {
+export function validateAppEvent(
+  config: ConfigInterface,
+  event: AppEventInput,
+): AppEventPayload {
   if (event === null || typeof event !== 'object' || Array.isArray(event)) {
     throw new InvalidAppEventError('event must be a non-null object');
   }
 
-  let shopId: string;
-  if (
-    typeof event.shopId === 'string' ||
-    typeof event.shopId === 'number' ||
-    typeof event.shopId === 'bigint'
-  ) {
-    shopId = String(event.shopId);
-  } else {
+  if (typeof event.myshopifyDomain !== 'string') {
     throw new InvalidAppEventError(
-      'shopId must be a numeric shop ID or gid://shopify/Shop/{id}',
+      'myshopifyDomain must be a shop domain such as example.myshopify.com',
     );
   }
-
-  const shopGidMatch = shopId.match(SHOP_GID_PATTERN);
-  if (shopGidMatch) {
-    shopId = shopGidMatch[1];
-  } else if (!NUMERIC_SHOP_ID_PATTERN.test(shopId)) {
+  const myshopifyDomain = sanitizeShop(config)(event.myshopifyDomain);
+  if (!myshopifyDomain) {
     throw new InvalidAppEventError(
-      'shopId must be a numeric shop ID or gid://shopify/Shop/{id}',
+      'myshopifyDomain must be a shop domain such as example.myshopify.com',
     );
   }
 
@@ -141,7 +134,7 @@ export function validateAppEvent(event: AppEventInput): AppEventPayload {
   }
 
   return {
-    shop_id: shopId,
+    myshopify_domain: myshopifyDomain,
     event_handle: eventHandle,
     timestamp: timestamp.toISOString(),
     idempotency_key: event.idempotencyKey,

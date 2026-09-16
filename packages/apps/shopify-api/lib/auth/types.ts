@@ -5,7 +5,6 @@ export * from './scopes/index';
 export {RequestedTokenType} from './oauth/token-exchange';
 export type {
   GlobalApiToken,
-  GlobalApiClientCredentialsParams,
   GlobalApiClientCredentials,
 } from './oauth/global-api-client-credentials';
 

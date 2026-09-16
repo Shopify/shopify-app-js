@@ -10,8 +10,8 @@ export const ATTRIBUTE_KEY_PATTERN = /^[a-zA-Z0-9_.-]+$/;
 export type AppEventAttributeValue = string | number | boolean;
 
 export interface AppEventInput {
-  /** Numeric shop id or `gid://shopify/Shop/{id}`. */
-  shopId: string | number | bigint;
+  /** The shop's `myshopify.com` domain, for example `example.myshopify.com`. In framework packages this is `session.shop`. */
+  myshopifyDomain: string;
   eventHandle: string;
   idempotencyKey: string;
   /**
@@ -22,17 +22,23 @@ export interface AppEventInput {
   /** Defaults to now. Must not be more than 5 minutes in the future. */
   timestamp?: Date;
 }
+export interface AppEventLogParams extends AppEventInput {
+  /** A Global API access token from `shopify.auth.globalApiClientCredentials()`. */
+  accessToken: string;
+}
 
 export interface AppEventLogResult {
   /** True when Shopify replayed a cached response for this idempotency key. */
   replayed: boolean;
 }
 
-export type AppEventLog = (event: AppEventInput) => Promise<AppEventLogResult>;
+export type AppEventLog = (
+  params: AppEventLogParams,
+) => Promise<AppEventLogResult>;
 
 /** Snake_case wire payload. Root keys must match the server contract exactly. */
 export interface AppEventPayload {
-  shop_id: string;
+  myshopify_domain: string;
   event_handle: string;
   timestamp: string;
   idempotency_key: string;
