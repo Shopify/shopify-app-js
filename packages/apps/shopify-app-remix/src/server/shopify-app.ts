@@ -24,6 +24,7 @@ import {overrideLogger} from './override-logger';
 import {addDocumentResponseHeadersFactory} from './authenticate/helpers';
 import {loginFactory} from './authenticate/login/login';
 import {unauthenticatedAdminContextFactory} from './unauthenticated/admin';
+import {appEventsFactory} from './app-events';
 import {authenticatePublicFactory} from './authenticate/public';
 import {unauthenticatedStorefrontContextFactory} from './unauthenticated/storefront';
 import {AuthCodeFlowStrategy} from './authenticate/admin/strategies/auth-code-flow';
@@ -93,6 +94,7 @@ export function shopifyApp<
     sessionStorage: config.sessionStorage,
     addDocumentResponseHeaders: addDocumentResponseHeadersFactory(params),
     registerWebhooks: registerWebhooksFactory(params),
+    appEvents: appEventsFactory(params),
     authenticate: {
       admin: authStrategy,
       flow: authenticateFlowFactory(params),

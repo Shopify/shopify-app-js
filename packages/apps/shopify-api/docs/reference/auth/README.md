@@ -33,9 +33,10 @@ Learn more about [Refreshing Token](../../guides/oauth.md#refreshing-token).
 
 Learn more about [client credentials grant](../../guides/oauth.md#client-credentials-grant).
 
-| Property                                        | Description                                                                                       |
-| ----------------------------------------------- | ------------------------------------------------------------------------------------------------- |
-| [clientCredentials](./clientcredentials.md)     | Performs client credentials grant to get access token from app's client ID and client secret.    |
+| Property                                                        | Description                                                                                       |
+| --------------------------------------------------------------- | ------------------------------------------------------------------------------------------------- |
+| [clientCredentials](./clientcredentials.md)                      | Performs client credentials grant to get access token from app's client ID and client secret.     |
+| [globalApiClientCredentials](./globalapiclientcredentials.md)    | Mints and caches an app-level Global API token from the app's client ID and client secret.         |
 
 ## Utility Functions
 

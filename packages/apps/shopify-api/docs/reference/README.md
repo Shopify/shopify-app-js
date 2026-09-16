@@ -8,6 +8,7 @@ This section of the documentation provides thorough details on the parameters an
 | ----------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | config                              | The options used to set up the object, containing the parameters of this function.                                                                      |
 | [auth](./auth/README.md)            | Object containing functions to authenticate with Shopify APIs.                                                                                          |
+| [appEvents](./app-events/README.md) | Object containing functions to send App Events to Shopify.                                                                                              |
 | [clients](./clients/README.md)      | Object containing clients to access Shopify APIs.                                                                                                       |
 | [session](./session/README.md)      | Object containing functions to manage Shopify sessions.                                                                                                 |
 | [webhooks](./webhooks/README.md)    | Object containing functions to configure and handle Shopify webhooks.                                                                                   |

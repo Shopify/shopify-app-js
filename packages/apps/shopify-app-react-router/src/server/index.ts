@@ -11,10 +11,15 @@ export {
   BillingInterval,
   BillingReplacementBehavior,
   ApiVersion,
+  GlobalApiVersion,
   Session,
 } from '@shopify/shopify-api';
 
-export type {JwtPayload} from '@shopify/shopify-api';
+export type {
+  JwtPayload,
+  AppEventInput,
+  AppEventLogResult,
+} from '@shopify/shopify-api';
 
 export type * from './types-contexts';
 export type {ShopifyApp, LoginError} from './types';

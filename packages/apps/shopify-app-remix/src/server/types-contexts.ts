@@ -15,6 +15,7 @@ import type {
 
 // Direct re-exports for types without transformations
 export type {UnauthenticatedAdminContext} from './unauthenticated/admin/types';
+export type {AppEvents} from './app-events/types';
 export type {UnauthenticatedStorefrontContext} from './unauthenticated/storefront/types';
 export type {FlowContext} from './authenticate/flow/types';
 export type {FulfillmentServiceContext} from './authenticate/fulfillment-service/types';

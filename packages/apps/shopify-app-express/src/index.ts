@@ -32,6 +32,7 @@ import {
   EnsureInstalledMiddleware,
   RedirectToShopifyOrAppRootMiddleware,
 } from './middlewares/types';
+import {appEvents, AppEvents} from './app-events';
 import {redirectOutOfApp} from './redirect-out-of-app';
 import {RedirectOutOfAppFunction} from './types';
 import {ensureValidOfflineSession} from './helpers/index';
@@ -45,7 +46,9 @@ export type {
   ExpressApiConfigParams,
   FutureFlags,
 } from './config-types';
-export {ApiVersion} from '@shopify/shopify-api';
+export {ApiVersion, GlobalApiVersion} from '@shopify/shopify-api';
+export type {AppEvents} from './app-events';
+export type {AppEventInput, AppEventLogResult} from '@shopify/shopify-api';
 
 type DefaultedConfigs<Params extends Partial<ApiConfigParams> | undefined> =
   ApiConfigParams & Params;
@@ -76,6 +79,7 @@ export interface ShopifyApp<Params extends AppConfigParams = AppConfigParams> {
   redirectOutOfApp: RedirectOutOfAppFunction;
   ensureValidOfflineSession: (shop: string) => Promise<Session | undefined>;
   registerWebhooks: (params: {session: Session}) => Promise<void>;
+  appEvents: AppEvents;
 }
 
 export function shopifyApp<Params extends AppConfigParams>(
@@ -121,6 +125,7 @@ export function shopifyApp<Params extends AppConfigParams>(
       ensureValidOfflineSession({api, config: validatedConfig}, shop),
     registerWebhooks: ({session}: {session: Session}) =>
       registerWebhooks(validatedConfig, api, session),
+    appEvents: appEvents({api, config: validatedConfig}),
   };
 }
 

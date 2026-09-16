@@ -16,6 +16,7 @@ import type {
   FutureFlagOptions,
 } from './future/flags';
 import type {Unauthenticated} from './unauthenticated/types';
+import type {AppEvents} from './app-events/types';
 
 export interface BasicParams<
   Future extends FutureFlagOptions = FutureFlagOptions,
@@ -346,6 +347,31 @@ export interface ShopifyAppBase<Config extends AppConfigArg> {
    * ```
    */
   registerWebhooks: RegisterWebhooks;
+
+  /**
+   * Sends App Events to Shopify with an app-level Global API token that `shopifyApp` mints and caches for you.
+   *
+   * {@link https://shopify.dev/docs/api/app-events}
+   *
+   * @example
+   * <caption>Logging an event after authenticating the admin.</caption>
+   * ```ts
+   * import {shopifyApp} from "@shopify/shopify-app-remix/server";
+   *
+   * const shopify = shopifyApp({
+   *   // ...etc
+   * });
+   *
+   * const {session} = await authenticate.admin(request);
+   * await shopify.appEvents.log({
+   *   myshopifyDomain: session.shop,
+   *   eventHandle: 'onboarding_completed',
+   *   idempotencyKey: `onboarding-${session.shop}`,
+   *   attributes: {onboarding_version: 3},
+   * });
+   * ```
+   */
+  appEvents: AppEvents;
 
   /**
    * Ways to authenticate requests from different surfaces across Shopify.
