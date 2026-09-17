@@ -1,4 +1,8 @@
-import {WebhookValidationErrorReason, WebhookType} from '@shopify/shopify-api';
+import {
+  Session,
+  WebhookValidationErrorReason,
+  WebhookType,
+} from '@shopify/shopify-api';
 
 import type {BasicParams} from '../../types';
 import {adminClientFactory} from '../../clients';
@@ -49,7 +53,26 @@ export function authenticateWebhookFactory<Topics extends string>(
         throw new Response(undefined, {status: 400, statusText: 'Bad Request'});
       }
     }
-    const session = await ensureValidOfflineSession(params, check.domain);
+    let session: Session | undefined;
+    try {
+      session = await ensureValidOfflineSession(params, check.domain);
+    } catch (error) {
+      // Refreshing an expired offline token can fail after the merchant
+      // uninstalls the app, since Shopify rejects the refresh request. The
+      // HMAC has already been validated at this point and webhook contexts
+      // support a missing session, so deliver the webhook without one rather
+      // than responding with a 500 — that would make Shopify retry mandatory
+      // webhooks (e.g. APP_UNINSTALLED, GDPR topics) indefinitely.
+      if (error instanceof Response) {
+        logger.debug(
+          'Failed to load a valid offline session for webhook request, continuing without a session',
+          {shop: check.domain, topic: check.topic},
+        );
+        session = undefined;
+      } else {
+        throw error;
+      }
+    }
 
     let webhookContext: WebhookContextWithoutSession<Topics>;
 
