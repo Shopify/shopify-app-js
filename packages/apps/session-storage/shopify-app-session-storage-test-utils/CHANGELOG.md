@@ -1,5 +1,13 @@
 # @shopify/shopify-app-session-storage-test-utils
 
+## 7.0.0
+
+### Patch Changes
+
+- Updated dependencies [d641a62]
+  - @shopify/shopify-api@15.0.0
+  - @shopify/shopify-app-session-storage@7.0.0
+
 ## 6.0.1
 
 ## 6.0.0
