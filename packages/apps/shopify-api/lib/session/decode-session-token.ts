@@ -30,7 +30,7 @@ export async function withJwtErrorHandling<T>(
 }
 
 export function decodeSessionToken(config: ConfigInterface) {
-  return (
+  return async (
     token: string,
     {checkAudience = true}: DecodeSessionTokenOptions = {},
   ): Promise<JwtPayload> =>

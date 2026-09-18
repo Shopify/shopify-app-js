@@ -255,6 +255,15 @@ describe('AI Native token exchange compatibility', () => {
     await expect(api.session.decodeSessionToken(token)).rejects.toBe(error);
   });
 
+  test('the SDK decoder still rejects asynchronously for invalid options', async () => {
+    const {api} = setup();
+    const result = Reflect.apply(api.session.decodeSessionToken, undefined, [
+      'token',
+      null,
+    ]);
+    await expect(result).rejects.toHaveProperty('name', 'TypeError');
+  });
+
   test('preserves the SDK verification error messages', async () => {
     const {api} = setup();
     await expect(api.session.decodeSessionToken('invalid')).rejects.toThrow(
