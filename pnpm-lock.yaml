@@ -482,7 +482,11 @@ importers:
         specifier: ^7.2.2
         version: 7.2.2
 
-  packages/apps/shopify-app-native-spike: {}
+  packages/apps/shopify-app-native-spike:
+    dependencies:
+      jose:
+        specifier: ^5.9.6
+        version: 5.9.6
 
   packages/apps/shopify-app-react-router:
     dependencies:

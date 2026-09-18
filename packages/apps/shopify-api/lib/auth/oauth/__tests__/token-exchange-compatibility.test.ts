@@ -1,4 +1,6 @@
-import {executeTokenExchange} from '@shopify/shopify-app-native-spike/transport';
+import {exchangeToken, verifyIdToken} from '@shopify/shopify-app-native-spike';
+
+import {mockTestRequests} from '../../../../adapters/mock/mock_test_requests';
 
 import {JwtPayload, RequestedTokenType, Session, shopifyApi} from '../../..';
 import * as Errors from '../../../error';
@@ -9,13 +11,14 @@ import {
   signJWT,
 } from '../../../__tests__/test-helper';
 
-jest.mock('@shopify/shopify-app-native-spike/transport', () => {
+jest.mock('@shopify/shopify-app-native-spike', () => {
   const actual = jest.requireActual<
-    typeof import('@shopify/shopify-app-native-spike/transport')
-  >('@shopify/shopify-app-native-spike/transport');
+    typeof import('@shopify/shopify-app-native-spike')
+  >('@shopify/shopify-app-native-spike');
   return {
     ...actual,
-    executeTokenExchange: jest.fn(actual.executeTokenExchange),
+    exchangeToken: jest.fn(actual.exchangeToken),
+    verifyIdToken: jest.fn(actual.verifyIdToken),
   };
 });
 
@@ -34,7 +37,7 @@ const payload: JwtPayload = {
 
 function setup() {
   const api = shopifyApi(testConfig({isEmbeddedApp: true}));
-  const exchange = jest.mocked(executeTokenExchange);
+  const exchange = jest.mocked(exchangeToken);
   exchange.mockClear();
   return {api, exchange};
 }
@@ -92,12 +95,15 @@ describe('AI Native token exchange compatibility', () => {
         expect.objectContaining({
           clientId: api.config.apiKey,
           clientSecret: api.config.apiSecretKey,
-          shopDomain: shop,
-          idToken: sessionToken,
+          shop,
+          token: sessionToken,
           requestedTokenType,
-          expiring: expiring ? '1' : '0',
+          expiring,
         }),
-        expect.any(Function),
+        expect.objectContaining({
+          fetch: expect.any(Function),
+          validateShop: expect.any(Function),
+        }),
       );
       expect(session).toBeInstanceOf(Session);
       expect(session).toMatchObject({
@@ -141,7 +147,8 @@ describe('AI Native token exchange compatibility', () => {
           requestedTokenType: RequestedTokenType.OfflineAccessToken,
         }),
       ).rejects.toBeInstanceOf(Errors.InvalidJwtError);
-      expect(exchange).not.toHaveBeenCalled();
+      expect(exchange).toHaveBeenCalledTimes(1);
+      expect(mockTestRequests.requestList).toHaveLength(0);
     },
   );
 
@@ -155,7 +162,8 @@ describe('AI Native token exchange compatibility', () => {
         requestedTokenType: RequestedTokenType.OfflineAccessToken,
       }),
     ).rejects.toBeInstanceOf(Errors.InvalidShopError);
-    expect(exchange).not.toHaveBeenCalled();
+    expect(exchange).toHaveBeenCalledTimes(1);
+    expect(mockTestRequests.requestList).toHaveLength(0);
   });
 
   test.each<[number, typeof Errors.HttpResponseError]>([
@@ -235,6 +243,55 @@ describe('AI Native token exchange compatibility', () => {
     expect(exchange).toHaveBeenCalledTimes(1);
   });
 
+  test('the SDK session decoder also uses the core verifier', async () => {
+    const {api} = setup();
+    const verify = jest.mocked(verifyIdToken);
+    verify.mockClear();
+    const token = await signJWT(api.config.apiSecretKey, payload);
+    expect(await api.session.decodeSessionToken(token)).toEqual(payload);
+    expect(verify).toHaveBeenCalledTimes(1);
+    const error = new Error('Core verification disabled');
+    verify.mockRejectedValueOnce(error);
+    await expect(api.session.decodeSessionToken(token)).rejects.toBe(error);
+  });
+
+  test('preserves the SDK verification error messages', async () => {
+    const {api} = setup();
+    await expect(api.session.decodeSessionToken('invalid')).rejects.toThrow(
+      "Failed to parse session token 'invalid': Invalid Compact JWS",
+    );
+    const token = await signJWT(api.config.apiSecretKey, {
+      ...payload,
+      aud: 'another-app',
+    });
+    await expect(api.session.decodeSessionToken(token)).rejects.toThrow(
+      'Session token had invalid API key',
+    );
+    await expect(
+      api.auth.tokenExchange({
+        shop,
+        sessionToken: token,
+        requestedTokenType: RequestedTokenType.OfflineAccessToken,
+      }),
+    ).rejects.toThrow('Session token had invalid API key');
+    expect(mockTestRequests.requestList).toHaveLength(0);
+  });
+
+  test('preserves the SDK secret-key byte encoding', async () => {
+    const api = shopifyApi(testConfig({apiSecretKey: 'test-sécret-🔒'}));
+    const token = await signJWT(api.config.apiSecretKey, payload);
+    expect(await api.session.decodeSessionToken(token)).toEqual(payload);
+    queueMockResponse(
+      JSON.stringify({access_token: 'token', scope: 'read_products'}),
+    );
+    const {session} = await api.auth.tokenExchange({
+      shop,
+      sessionToken: token,
+      requestedTokenType: RequestedTokenType.OfflineAccessToken,
+    });
+    expect(session.accessToken).toBe('token');
+  });
+
   test('retains custom shop domains supported by the SDK', async () => {
     const {api, exchange} = setup();
     const customShop = 'test-shop.myshopify.io';
@@ -252,8 +309,8 @@ describe('AI Native token exchange compatibility', () => {
     });
     expect(session.shop).toBe(customShop);
     expect(exchange).toHaveBeenCalledWith(
-      expect.objectContaining({shopDomain: customShop}),
-      expect.any(Function),
+      expect.objectContaining({shop: customShop}),
+      expect.objectContaining({validateShop: expect.any(Function)}),
     );
   });
 });

@@ -1,344 +1,312 @@
-import {shopifyApp} from './index';
-import {executeTokenExchange} from './transport';
-import type {TokenExchangeConfig} from './types';
+import {SignJWT} from 'jose';
+
+import {exchangeToken, IdTokenVerificationError, verifyIdToken} from './index';
+import type {IdTokenInput, TokenExchangeInput} from './types';
 
 const clientId = 'test-client';
 const clientSecret = 'test-secret';
-const oldSecret = 'old-secret';
-const idToken: TokenExchangeConfig['idToken'] = {
-  exchangeable: true,
-  token: 'verified-token',
-  claims: {dest: 'https://test-shop.myshopify.com'},
-};
-const config: TokenExchangeConfig = {accessMode: 'offline', idToken};
+const secretKey = new TextEncoder().encode(clientSecret);
+const shop = 'test-shop.myshopify.com';
+const requestedTokenType =
+  'urn:shopify:params:oauth:token-type:offline-access-token';
 const tokenBody = {
   access_token: 'access-token',
   scope: 'read_products',
-  expires_in: 3600,
-  refresh_token: 'refresh-token',
-  refresh_token_expires_in: 7200,
+  extra: 'preserved',
 };
-const app = shopifyApp(clientId, clientSecret, oldSecret);
 
-function mockResponse(body: unknown = tokenBody, status = 200, headers = {}) {
-  return new Response(typeof body === 'string' ? body : JSON.stringify(body), {
-    status,
-    headers,
-  });
+function claims(overrides = {}) {
+  return {
+    aud: clientId,
+    dest: `https://${shop}`,
+    exp: Math.floor(Date.now() / 1000) + 3600,
+    ...overrides,
+  };
 }
 
-function mockFetch(...responses: Response[]) {
-  const send = jest.spyOn(globalThis, 'fetch');
-  for (const response of responses) send.mockResolvedValueOnce(response);
-  send.mockRejectedValue(new Error('Unexpected extra request'));
-  return send;
+async function sign(payload = claims(), key = secretKey, alg = 'HS256') {
+  return new SignJWT(payload).setProtectedHeader({alg}).sign(key);
+}
+
+async function input(
+  overrides: Partial<TokenExchangeInput> = {},
+): Promise<TokenExchangeInput> {
+  return {
+    clientId,
+    clientSecret,
+    secretKey,
+    shop,
+    requestedTokenType,
+    token: await sign(),
+    ...overrides,
+  };
+}
+
+function runtime(response = new Response(JSON.stringify(tokenBody))) {
+  return {
+    fetch: jest.fn(async () => response),
+    validateShop: jest.fn((value: string) => value),
+  };
 }
 
 afterEach(() => jest.useRealTimers());
 
-describe('AI Native token exchange', () => {
-  test('defaults to expiring tokens and returns the stateless contract', async () => {
-    const send = mockFetch(mockResponse());
-    const result = await app.exchangeUsingTokenExchange(config);
-    expect(result.ok).toBe(true);
-    expect(result.accessToken).toEqual({
-      shop: 'test-shop',
-      token: 'access-token',
-      scope: 'read_products',
-      accessMode: 'offline',
-      expires: expect.any(String),
-      refreshToken: 'refresh-token',
-      refreshTokenExpires: expect.any(String),
-      user: null,
-    });
-    expect(send).toHaveBeenCalledWith(
-      'https://test-shop.myshopify.com/admin/oauth/access_token',
-      expect.objectContaining({
+describe('core ID-token verification', () => {
+  test('returns verified claims without renaming or dropping fields', async () => {
+    const payload = claims({sub: '7', extra: {nested: true}});
+    expect(
+      await verifyIdToken({clientId, secretKey, token: await sign(payload)}),
+    ).toEqual(payload);
+  });
+
+  test.each([
+    ['wrong audience', {aud: 'another-app'}],
+    ['array audience', {aud: [clientId]}],
+    ['missing audience', {aud: undefined}],
+  ])('rejects %s', async (_name, overrides) => {
+    await expect(
+      verifyIdToken({
+        clientId,
+        secretKey,
+        token: await sign(claims(overrides)),
+      }),
+    ).rejects.toMatchObject({reason: 'invalid_audience'});
+  });
+
+  test.each([{aud: 'another-app'}, {aud: undefined}])(
+    'supports the existing decoder audience opt-out: %j',
+    async (overrides) => {
+      const payload = claims(overrides);
+      const result = await verifyIdToken({
+        clientId,
+        secretKey,
+        token: await sign(payload),
+        checkAudience: false,
+      });
+      expect(result).toEqual(JSON.parse(JSON.stringify(payload)));
+    },
+  );
+
+  test('rejects a bad signature', async () => {
+    const token = await sign(
+      claims(),
+      new TextEncoder().encode('wrong-secret'),
+    );
+    await expect(
+      verifyIdToken({clientId, secretKey, token}),
+    ).rejects.toBeInstanceOf(IdTokenVerificationError);
+  });
+
+  test.each(['not-a-token', 'e30.e30.invalid'])(
+    'rejects malformed tokens: %s',
+    async (token) => {
+      await expect(
+        verifyIdToken({clientId, secretKey, token}),
+      ).rejects.toMatchObject({reason: 'invalid_token'});
+    },
+  );
+
+  test('rejects algorithms other than HS256', async () => {
+    const token = await sign(claims(), secretKey, 'HS384');
+    await expect(
+      verifyIdToken({clientId, secretKey, token}),
+    ).rejects.toMatchObject({reason: 'invalid_token'});
+  });
+
+  test.each([
+    ['exp', -9, true],
+    ['exp', -10, false],
+    ['nbf', 10, true],
+    ['nbf', 11, false],
+  ] as const)(
+    'keeps the clock tolerance for %s offset %i',
+    async (claim, offset, valid) => {
+      jest.useFakeTimers();
+      const now = Math.floor(Date.now() / 1000);
+      const token = await sign(claims({[claim]: now + offset}));
+      const result = verifyIdToken({clientId, secretKey, token});
+      if (valid)
+        await expect(result).resolves.toHaveProperty(claim, now + offset);
+      else
+        await expect(result).rejects.toMatchObject({reason: 'invalid_token'});
+    },
+  );
+
+  test.each(['exp', 'nbf'])('rejects non-numeric %s', async (claim) => {
+    await expect(
+      verifyIdToken({
+        clientId,
+        secretKey,
+        token: await sign(claims({[claim]: 'invalid'})),
+      }),
+    ).rejects.toMatchObject({reason: 'invalid_token'});
+  });
+});
+
+describe('core token exchange', () => {
+  test('owns verification, destination validation, the request and JSON parsing', async () => {
+    const options = await input();
+    const response = new Response(JSON.stringify(tokenBody));
+    const json = jest.spyOn(response, 'json');
+    const io = runtime(response);
+    const result = await exchangeToken<typeof tokenBody>(options, io);
+    expect(result).toEqual({ok: true, shop, body: tokenBody, response});
+    expect(json).toHaveBeenCalledTimes(1);
+    expect(io.validateShop).toHaveBeenCalledWith(shop);
+    expect(io.fetch).toHaveBeenCalledWith(
+      `https://${shop}/admin/oauth/access_token`,
+      {
         method: 'POST',
-        redirect: 'manual',
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+        },
         body: JSON.stringify({
           client_id: clientId,
           client_secret: clientSecret,
           grant_type: 'urn:ietf:params:oauth:grant-type:token-exchange',
-          subject_token: idToken.token,
+          subject_token: options.token,
           subject_token_type: 'urn:ietf:params:oauth:token-type:id_token',
-          requested_token_type:
-            'urn:shopify:params:oauth:token-type:offline-access-token',
-          expiring: 1,
+          requested_token_type: requestedTokenType,
+          expiring: '0',
         }),
-      }),
+      },
     );
-    const logs = JSON.stringify(result.httpLogs);
-    expect(logs).not.toContain(clientSecret);
-    expect(logs).not.toContain(oldSecret);
-    expect(logs).not.toContain(idToken.token);
-    expect(logs).toContain('[REDACTED]');
   });
 
-  test('retains non-expiring offline tokens when explicitly requested', async () => {
-    const send = mockFetch(
-      mockResponse({access_token: 'token', scope: 'read_products'}),
-    );
-    const result = await app.exchangeUsingTokenExchange({
-      ...config,
-      expiring: false,
-    });
-    expect(result.accessToken).toMatchObject({
-      expires: null,
-      refreshToken: null,
-      refreshTokenExpires: null,
-    });
-    expect(JSON.parse(String(send.mock.calls[0][1]?.body)).expiring).toBe(0);
-  });
-
-  test('normalizes online user information', async () => {
-    mockFetch(
-      mockResponse({
-        ...tokenBody,
-        associated_user_scope: 'read_orders',
-        associated_user: {
-          id: 7,
-          first_name: 'Ada',
-          last_name: 'Lovelace',
-          email: 'ada@example.com',
-          account_owner: false,
-          locale: 'en',
-          collaborator: true,
-          email_verified: true,
-        },
-      }),
-    );
-    const result = await app.exchangeUsingTokenExchange({
-      ...config,
-      accessMode: 'online',
-    });
-    expect(result.accessToken?.user).toEqual({
-      id: 7,
-      firstName: 'Ada',
-      lastName: 'Lovelace',
-      scope: 'read_orders',
-      email: 'ada@example.com',
-      accountOwner: false,
-      locale: 'en',
-      collaborator: true,
-      emailVerified: true,
-    });
-  });
-
-  test.each([
-    'https://attacker.example?shop=test-shop.myshopify.com',
-    'https://test-shop.myshopify.com.attacker.example',
-    'https://test-shop.myshopify.com@attacker.example',
-    'https://test-shop.myshopify.com/path',
-    'https://test-shop.myshopify.com:443',
-    'http://test-shop.myshopify.com',
-    'https://-bad.myshopify.com',
-    'https://test-shop.myshopify.com\n',
-    'https://test-shop.myshopify.io',
-  ])(
-    'rejects unsafe or unsupported destination %s before HTTP',
-    async (dest) => {
-      const send = mockFetch();
-      const result = await app.exchangeUsingTokenExchange({
-        ...config,
-        idToken: {...idToken, claims: {dest}},
-      });
-      expect(result.log.code).toBe('configuration_error');
-      expect(result.accessToken).toBeNull();
-      expect(send).not.toHaveBeenCalled();
-    },
-  );
-
-  test('rejects non-expiring online requests instead of silently changing them', async () => {
-    const send = mockFetch();
-    const result = await app.exchangeUsingTokenExchange({
-      ...config,
-      accessMode: 'online',
-      expiring: false,
-    });
-    expect(result.log.code).toBe('configuration_error');
-    expect(send).not.toHaveBeenCalled();
-  });
-
-  test.each<TokenExchangeConfig['invalidTokenResponse']>([
-    {
-      status: 401,
-      body: '',
-      headers: {'X-Shopify-Retry-Invalid-Session-Request': '1'},
-    },
-    {
-      status: 302,
-      body: '',
-      headers: {Location: 'https://app.example.com/patch'},
-    },
-    undefined,
-  ])(
-    'returns the supplied stale-token recovery response: %j',
-    async (invalidTokenResponse) => {
-      mockFetch(mockResponse({error: 'invalid_subject_token'}, 400));
-      const result = await app.exchangeUsingTokenExchange({
-        ...config,
-        invalidTokenResponse,
-      });
-      expect(result.response).toEqual(
-        invalidTokenResponse ?? {status: 401, body: '', headers: {}},
-      );
-      expect(result.log.code).toBe('invalid_subject_token');
-    },
-  );
-
-  test('waits for Retry-After and then retries', async () => {
-    jest.useFakeTimers();
-    const send = mockFetch(
-      mockResponse('', 429, {'Retry-After': '2'}),
-      mockResponse(),
-    );
-    const result = app.exchangeUsingTokenExchange(config);
-    await jest.advanceTimersByTimeAsync(1999);
-    expect(send).toHaveBeenCalledTimes(1);
-    await jest.advanceTimersByTimeAsync(1);
-    expect((await result).ok).toBe(true);
-    expect(send).toHaveBeenCalledTimes(2);
-  });
-
-  test('stops after three rate-limited attempts', async () => {
-    jest.useFakeTimers();
-    const send = mockFetch(
-      ...Array.from({length: 3}, () =>
-        mockResponse('', 429, {'Retry-After': '1'}),
-      ),
-    );
-    const pending = app.exchangeUsingTokenExchange(config);
-    await jest.runAllTimersAsync();
-    const result = await pending;
-    expect(send).toHaveBeenCalledTimes(3);
-    expect(result.httpLogs.map(({code}) => code)).toEqual([
-      'rate_limited_retry',
-      'rate_limited_retry',
-      'rate_limit_exceeded',
-    ]);
-    expect(result.response.status).toBe(429);
-  });
-
-  test.each([undefined, 'invalid', '-1'])(
-    'handles unusable Retry-After: %s',
-    async (header) => {
-      jest.useFakeTimers();
-      const send = mockFetch(
-        mockResponse(
-          '',
-          429,
-          header === undefined ? {} : {'Retry-After': header},
-        ),
-        mockResponse(),
-      );
-      const pending = app.exchangeUsingTokenExchange(config);
-      await jest.advanceTimersByTimeAsync(1000);
-      expect((await pending).ok).toBe(true);
-      expect(send).toHaveBeenCalledTimes(2);
-    },
-  );
-
-  test.each([
-    null,
-    [],
-    {},
-    {access_token: '', scope: ''},
-    {...tokenBody, expires_in: 'invalid'},
-    '<html>Bad Gateway</html>',
-  ])('fails closed on invalid success response: %j', async (body) => {
-    mockFetch(mockResponse(body));
-    const result = await app.exchangeUsingTokenExchange(config);
-    expect(result.ok).toBe(false);
-    expect(result.accessToken).toBeNull();
-    expect(result.response.status).toBe(500);
-  });
-
-  test.each([301, 302, 303, 307, 308])(
-    'does not follow an HTTP %i redirect with credentials',
-    async (status) => {
-      const send = mockFetch(
-        mockResponse('', status, {Location: 'https://attacker.example'}),
-      );
-      const result = await app.exchangeUsingTokenExchange(config);
-      expect(result.ok).toBe(false);
-      expect(result.response.status).toBe(500);
-      expect(send).toHaveBeenCalledTimes(1);
-      expect(send).toHaveBeenCalledWith(
+  test.each([undefined, false, true])(
+    'preserves the existing expiring option: %s',
+    async (expiring) => {
+      const io = runtime();
+      await exchangeToken(await input({expiring}), io);
+      expect(io.fetch).toHaveBeenCalledWith(
         expect.any(String),
-        expect.objectContaining({redirect: 'manual'}),
+        expect.objectContaining({
+          body: expect.stringContaining(`"expiring":"${expiring ? '1' : '0'}"`),
+        }),
       );
     },
   );
 
-  test('does not retry a network failure', async () => {
-    const send = mockFetch();
-    const result = await app.exchangeUsingTokenExchange(config);
-    expect(result.log.code).toBe('network_error');
-    expect(send).toHaveBeenCalledTimes(1);
+  test('rejects invalid JWTs before destination validation or HTTP', async () => {
+    const io = runtime();
+    await expect(
+      exchangeToken(await input({token: 'invalid'}), io),
+    ).rejects.toBeInstanceOf(IdTokenVerificationError);
+    expect(io.validateShop).not.toHaveBeenCalled();
+    expect(io.fetch).not.toHaveBeenCalled();
   });
 
-  test.each(['invalid_client', 'unknown_error'])(
-    'handles %s without retrying',
-    async (error) => {
-      const send = mockFetch(mockResponse({error}, 400));
-      const result = await app.exchangeUsingTokenExchange(config);
-      expect(result.response.status).toBe(500);
-      expect(send).toHaveBeenCalledTimes(1);
-    },
-  );
-
-  test('keeps credentials and shops isolated between app instances', async () => {
-    const send = mockFetch(mockResponse(), mockResponse());
-    const other = shopifyApp('other-client', 'other-secret');
-    const [first, second] = await Promise.all([
-      app.exchangeUsingTokenExchange(config),
-      other.exchangeUsingTokenExchange({
-        ...config,
-        idToken: {
-          ...idToken,
-          claims: {dest: 'https://other-shop.myshopify.com'},
-        },
-      }),
-    ]);
-    expect(first.shop).toBe('test-shop');
-    expect(second.shop).toBe('other-shop');
-    expect(
-      send.mock.calls.map(([url, options]) => [
-        url,
-        JSON.parse(String(options?.body)).client_secret,
-      ]),
-    ).toEqual([
-      [
-        'https://test-shop.myshopify.com/admin/oauth/access_token',
-        clientSecret,
-      ],
-      [
-        'https://other-shop.myshopify.com/admin/oauth/access_token',
-        'other-secret',
-      ],
-    ]);
-  });
-});
-
-describe('shared exchange transport', () => {
-  test('preserves raw response identity, fields and network errors for adapters', async () => {
-    const input = {
-      clientId,
-      clientSecret,
-      shopDomain: 'test-shop.myshopify.com',
-      idToken: idToken.token,
-      requestedTokenType:
-        'urn:shopify:params:oauth:token-type:offline-access-token',
-      expiring: '0' as const,
+  test('never disables audience checking during exchange', async () => {
+    const io = runtime();
+    const options: TokenExchangeInput & Pick<IdTokenInput, 'checkAudience'> = {
+      ...(await input({token: await sign(claims({aud: 'another-app'}))})),
+      checkAudience: false,
     };
-    const response = mockResponse();
-    const result = await executeTokenExchange(input, async () => response);
-    expect(result.ok && result.response).toBe(response);
-    const error = new TypeError('network');
-    const failed = await executeTokenExchange(input, async () => {
+    await expect(exchangeToken(options, io)).rejects.toMatchObject({
+      reason: 'invalid_audience',
+    });
+    expect(io.fetch).not.toHaveBeenCalled();
+  });
+
+  test('does not send credentials when destination validation fails', async () => {
+    const error = new Error('Invalid shop');
+    const io = runtime();
+    io.validateShop.mockImplementation(() => {
       throw error;
     });
-    expect(!failed.ok && failed.error).toBe(error);
+    await expect(exchangeToken(await input(), io)).rejects.toBe(error);
+    expect(io.fetch).not.toHaveBeenCalled();
+  });
+
+  test('uses the normalized shop supplied by the SDK', async () => {
+    const io = runtime();
+    io.validateShop.mockReturnValue('test-shop.myshopify.io');
+    const result = await exchangeToken(await input({shop: 'test-shop'}), io);
+    expect(result.shop).toBe('test-shop.myshopify.io');
+    expect(io.fetch).toHaveBeenCalledWith(
+      'https://test-shop.myshopify.io/admin/oauth/access_token',
+      expect.any(Object),
+    );
+  });
+
+  test.each([201, 202])(
+    'keeps the SDK success behavior for HTTP %i',
+    async (status) => {
+      const io = runtime(new Response(JSON.stringify(tokenBody), {status}));
+      expect((await exchangeToken(await input(), io)).ok).toBe(true);
+    },
+  );
+
+  test.each([400, 401, 429, 500])(
+    'returns the raw HTTP %i error for SDK mapping, without retrying',
+    async (status) => {
+      const body = {error: 'invalid_subject_token', errors: 'original detail'};
+      const response = new Response(JSON.stringify(body), {
+        status,
+        headers: {'Retry-After': '2', 'X-Request-Id': 'request-id'},
+      });
+      const io = runtime(response);
+      expect(await exchangeToken(await input(), io)).toEqual({
+        ok: false,
+        shop,
+        body,
+        response,
+      });
+      expect(io.fetch).toHaveBeenCalledTimes(1);
+    },
+  );
+
+  test.each([200, 429, 500])(
+    'preserves JSON errors for HTTP %i',
+    async (status) => {
+      const io = runtime(new Response('<html>Bad Gateway</html>', {status}));
+      await expect(exchangeToken(await input(), io)).rejects.toHaveProperty(
+        'name',
+        'SyntaxError',
+      );
+      expect(io.fetch).toHaveBeenCalledTimes(1);
+    },
+  );
+
+  test('preserves transport errors unchanged', async () => {
+    const error = new TypeError('network failure');
+    const io = runtime();
+    io.fetch.mockRejectedValueOnce(error);
+    await expect(exchangeToken(await input(), io)).rejects.toBe(error);
+  });
+
+  test('keeps concurrent calls isolated', async () => {
+    const first = await input();
+    const otherKey = new TextEncoder().encode('other-secret');
+    const second = await input({
+      clientId: 'other-client',
+      clientSecret: 'other-secret',
+      secretKey: otherKey,
+      token: await sign(claims({aud: 'other-client'}), otherKey),
+      shop: 'other-shop.myshopify.com',
+    });
+    const firstIo = runtime();
+    const secondIo = runtime();
+    const results = await Promise.all([
+      exchangeToken(first, firstIo),
+      exchangeToken(second, secondIo),
+    ]);
+    expect(results.map((result) => result.shop)).toEqual([
+      first.shop,
+      second.shop,
+    ]);
+    expect(firstIo.fetch).toHaveBeenCalledWith(
+      expect.stringContaining(first.shop),
+      expect.objectContaining({
+        body: expect.stringContaining('"client_secret":"test-secret"'),
+      }),
+    );
+    expect(secondIo.fetch).toHaveBeenCalledWith(
+      expect.stringContaining(second.shop),
+      expect.objectContaining({
+        body: expect.stringContaining('"client_secret":"other-secret"'),
+      }),
+    );
   });
 });
