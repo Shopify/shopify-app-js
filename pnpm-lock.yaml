@@ -404,6 +404,9 @@ importers:
       '@shopify/graphql-client':
         specifier: ^2.0.0
         version: link:../../api-clients/graphql-client
+      '@shopify/shopify-app-native-spike':
+        specifier: workspace:*
+        version: link:../shopify-app-native-spike
       '@shopify/storefront-api-client':
         specifier: ^2.0.0
         version: link:../../api-clients/storefront-api-client
@@ -478,6 +481,12 @@ importers:
       supertest:
         specifier: ^7.2.2
         version: 7.2.2
+
+  packages/apps/shopify-app-native-spike:
+    dependencies:
+      jose:
+        specifier: ^5.9.6
+        version: 5.9.6
 
   packages/apps/shopify-app-react-router:
     dependencies:

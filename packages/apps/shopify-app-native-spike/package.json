@@ -1,0 +1,24 @@
+{
+  "name": "@shopify/shopify-app-native-spike",
+  "version": "0.0.0",
+  "private": true,
+  "main": "./dist/cjs/index.js",
+  "module": "./dist/esm/index.mjs",
+  "types": "./dist/ts/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/ts/index.d.ts",
+      "import": "./dist/esm/index.mjs",
+      "require": "./dist/cjs/index.js"
+    }
+  },
+  "scripts": {
+    "build": "rollup --bundleConfigAsCjs -c && tsc -p tsconfig.build.json",
+    "test": "jest --runInBand",
+    "test:ci": "pnpm test",
+    "test:contract": "node scripts/test-contract.mjs"
+  },
+  "dependencies": {
+    "jose": "^5.9.6"
+  }
+}
