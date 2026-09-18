@@ -15,7 +15,8 @@
   "scripts": {
     "build": "rollup --bundleConfigAsCjs -c && tsc -p tsconfig.build.json",
     "test": "jest --runInBand",
-    "test:ci": "pnpm test"
+    "test:ci": "pnpm test",
+    "test:contract": "node scripts/test-contract.mjs"
   },
   "dependencies": {
     "jose": "^5.9.6"

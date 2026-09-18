@@ -147,11 +147,11 @@ describe('core token exchange', () => {
   test('owns verification, destination validation, the request and JSON parsing', async () => {
     const options = await input();
     const response = new Response(JSON.stringify(tokenBody));
-    const json = jest.spyOn(response, 'json');
+    const readBody = jest.spyOn(response, 'text');
     const io = runtime(response);
     const result = await exchangeToken<typeof tokenBody>(options, io);
     expect(result).toEqual({ok: true, shop, body: tokenBody, response});
-    expect(json).toHaveBeenCalledTimes(1);
+    expect(readBody).toHaveBeenCalledTimes(1);
     expect(io.validateShop).toHaveBeenCalledWith(shop);
     expect(io.fetch).toHaveBeenCalledWith(
       `https://${shop}/admin/oauth/access_token`,

@@ -1,5 +1,9 @@
 import {jwtVerify, type JWTPayload} from 'jose';
 
+import {runTokenExchange} from './exchange';
+
+export {exchangeUsingTokenExchange} from './contract';
+
 import type {
   IdTokenInput,
   TokenExchangeInput,
@@ -12,6 +16,9 @@ export type {
   TokenExchangeInput,
   TokenExchangeResult,
   TokenExchangeRuntime,
+  ClientCredentials,
+  NativeTokenExchangeResult,
+  TokenExchangeConfig,
 } from './types';
 
 export class IdTokenVerificationError extends Error {
@@ -55,23 +62,13 @@ export async function exchangeToken<T>(
 ): Promise<TokenExchangeResult<T>> {
   await verifyIdToken({...input, checkAudience: true});
   const shop = runtime.validateShop(input.shop);
-  const response = await runtime.fetch(
-    `https://${shop}/admin/oauth/access_token`,
-    {
-      method: 'POST',
-      headers: {'Content-Type': 'application/json', Accept: 'application/json'},
-      body: JSON.stringify({
-        client_id: input.clientId,
-        client_secret: input.clientSecret,
-        grant_type: 'urn:ietf:params:oauth:grant-type:token-exchange',
-        subject_token: input.token,
-        subject_token_type: 'urn:ietf:params:oauth:token-type:id_token',
-        requested_token_type: input.requestedTokenType,
-        expiring: input.expiring ? '1' : '0',
-      }),
-    },
+  const outcome = await runTokenExchange(
+    {...input, shop, expiring: input.expiring ? '1' : '0'},
+    runtime.fetch,
+    {maxRetries: 0},
   );
-  const body = await response.json();
+  if (outcome.kind === 'error') throw outcome.error;
+  const {response, body} = outcome;
   return response.ok
     ? {ok: true, shop, response, body: body as T}
     : {ok: false, shop, response, body};

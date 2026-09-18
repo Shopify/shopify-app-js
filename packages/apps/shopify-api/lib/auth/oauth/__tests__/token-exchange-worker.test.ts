@@ -23,11 +23,17 @@ beforeAll(async () => {
         load(id) {
           if (id !== 'worker-test') return;
           return `
-            import {exchangeToken} from ${JSON.stringify(entry)};
+            import {exchangeToken, exchangeUsingTokenExchange} from ${JSON.stringify(entry)};
             export default {
               async fetch(request) {
-                const {token} = await request.json();
+                const {token, contract} = await request.json();
                 try {
+                  if (contract) {
+                    return Response.json(await exchangeUsingTokenExchange(
+                      {clientId: 'worker-client', clientSecret: 'worker-secret'},
+                      {accessMode: 'offline', idToken: {exchangeable: true, token, claims: {dest: 'https://test-shop.myshopify.com'}}},
+                    ));
+                  }
                   const result = await exchangeToken({
                     clientId: 'worker-client', clientSecret: 'worker-secret',
                     secretKey: new TextEncoder().encode('worker-secret'),
@@ -120,6 +126,62 @@ test.each([
           : {error: 'IdTokenVerificationError', reason: 'invalid_token'},
       );
       expect(outbound).toHaveBeenCalledTimes(valid ? 1 : 0);
+    } finally {
+      await worker.dispose();
+    }
+  },
+  20000,
+);
+
+test.each([200, 302, 429])(
+  'shared contract in Workers: HTTP %i',
+  async (status) => {
+    const outbound = jest.fn(async (request: Request) => {
+      expect(request.url).toBe(
+        'https://test-shop.myshopify.com/admin/oauth/access_token',
+      );
+      expect(await request.json()).toMatchObject({
+        client_id: 'worker-client',
+        client_secret: 'worker-secret',
+        subject_token: 'verified-token',
+        expiring: 1,
+      });
+      return new Response(
+        status === 200
+          ? JSON.stringify({
+              access_token: 'worker-token',
+              scope: 'read_products',
+            })
+          : '',
+        {
+          status,
+          headers: {
+            'Content-Type': 'application/json',
+            'Retry-After': '0.01',
+            ...(status === 302 ? {Location: 'https://attacker.example'} : {}),
+          },
+        },
+      );
+    });
+    const worker = new Miniflare({
+      compatibilityDate: '2025-10-01',
+      modules: true,
+      script,
+      outboundService: outbound,
+    });
+    try {
+      const response = await worker.dispatchFetch('https://app.example.com', {
+        method: 'POST',
+        body: JSON.stringify({contract: true, token: 'verified-token'}),
+      });
+      expect(await response.json()).toMatchObject({
+        ok: status === 200,
+        shop: 'test-shop',
+        accessToken:
+          status === 200 ? {token: 'worker-token', expires: null} : null,
+        response: {status: status === 302 ? 500 : status},
+      });
+      expect(outbound).toHaveBeenCalledTimes(status === 429 ? 3 : 1);
     } finally {
       await worker.dispose();
     }
