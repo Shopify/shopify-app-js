@@ -235,7 +235,7 @@
           "examples": [
             {
               "title": "Check what billing plans a merchant is subscribed to",
-              "description": "Use billing.check if you want to determine which plans are in use. Unlike `require`, `check` does notthrow an error if no active billing plans are present.",
+              "description": "Use billing.check if you want to determine which plans are in use. Unlike `require`, `check` does not throw an error if no active billing plans are present.",
               "tabs": [
                 {
                   "code": "import { LoaderFunctionArgs } from \"react-router\";\nimport { authenticate, MONTHLY_PLAN } from \"../shopify.server\";\n\nexport const loader = async ({ request }: LoaderFunctionArgs) => {\n  const { billing } = await authenticate.admin(request);\n  const { hasActivePayment, appSubscriptions } = await billing.check({\n    plans: [MONTHLY_PLAN],\n    isTest: false,\n  });\n  console.log(hasActivePayment);\n  console.log(appSubscriptions);\n};",
@@ -249,7 +249,7 @@
             },
             {
               "title": "Check for payments without filtering",
-              "description": "Use billing.check to see if any payments exist for the store, regardless of whether it's a test ormatches one or more plans.",
+              "description": "Use billing.check to see if any payments exist for the store, regardless of whether it's a test or matches one or more plans.",
               "tabs": [
                 {
                   "code": "import { LoaderFunctionArgs } from \"react-router\";\nimport { authenticate, MONTHLY_PLAN } from \"../shopify.server\";\n\nexport const loader = async ({ request }: LoaderFunctionArgs) => {\n  const { billing } = await authenticate.admin(request);\n  const { hasActivePayment, appSubscriptions } = await billing.check();\n  // This will be true if any payment is found\n  console.log(hasActivePayment);\n  console.log(appSubscriptions);\n};",
