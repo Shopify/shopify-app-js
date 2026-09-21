@@ -3,7 +3,7 @@
     "../shopify-api/dist/ts/future/flags.d.ts": {
       "filePath": "../shopify-api/dist/ts/future/flags.d.ts",
       "name": "FutureFlags",
-      "description": "Future flags are used to enable features that are not yet available by default.",
+      "description": "Future flags are used to enable features that are not yet available by default. Each flag can be enabled individually in your app configuration.",
       "members": [
         {
           "filePath": "../shopify-api/dist/ts/future/flags.d.ts",
