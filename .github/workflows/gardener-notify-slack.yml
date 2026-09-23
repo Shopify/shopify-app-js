@@ -28,7 +28,7 @@ jobs:
       - name: Download event payload
         id: download
         continue-on-error: true
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: gardener-event
           run-id: ${{ github.event.workflow_run.id }}
