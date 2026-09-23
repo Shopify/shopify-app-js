@@ -85,6 +85,7 @@
     "Storefront API"
   ],
   "dependencies": {
+    "@shopify/shopify-app-native-spike": "workspace:*",
     "@shopify/admin-api-client": "^2.0.0",
     "@shopify/graphql-client": "^2.0.0",
     "@shopify/storefront-api-client": "^2.0.0",
