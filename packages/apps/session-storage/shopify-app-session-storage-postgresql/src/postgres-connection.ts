@@ -1,14 +1,15 @@
 import pg from 'pg';
+import {parse} from 'pg-connection-string';
 import {RdbmsConnection} from '@shopify/shopify-app-session-storage';
 
 export class PostgresConnection implements RdbmsConnection {
   sessionStorageIdentifier: string;
   private ready: Promise<void>;
   private pool: pg.Pool;
-  private dbUrl: URL;
+  private connectionString: string;
 
   constructor(dbUrl: string, sessionStorageIdentifier: string) {
-    this.dbUrl = new URL(dbUrl);
+    this.connectionString = dbUrl;
     this.ready = this.init();
     this.sessionStorageIdentifier = sessionStorageIdentifier;
   }
@@ -60,7 +61,8 @@ export class PostgresConnection implements RdbmsConnection {
   }
 
   public getDatabase(): string | undefined {
-    return decodeURIComponent(this.dbUrl.pathname.slice(1));
+    const database = parse(this.connectionString).database;
+    return database ? decodeURIComponent(database) : undefined;
   }
 
   async hasTable(tablename: string): Promise<boolean> {
@@ -83,12 +85,10 @@ export class PostgresConnection implements RdbmsConnection {
   }
 
   private async init(): Promise<void> {
-    this.pool = new pg.Pool({
-      host: this.dbUrl.hostname,
-      user: decodeURIComponent(this.dbUrl.username),
-      password: decodeURIComponent(this.dbUrl.password),
-      database: this.getDatabase(),
-      port: Number(this.dbUrl.port),
-    });
+    const config = parse(this.connectionString);
+    if (config.database) {
+      config.database = decodeURIComponent(config.database);
+    }
+    this.pool = new pg.Pool(config as pg.PoolConfig);
   }
 }
