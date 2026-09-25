@@ -40,6 +40,26 @@ export interface AppProviderProps extends Omit<
    */
   i18n?: PolarisAppProviderProps['i18n'];
   /**
+   * A custom link component to use throughout the app. Polaris components that
+   * render links (such as `Link`, `Navigation.Item`, etc.) will forward all
+   * link props to this component.
+   *
+   * Defaults to a thin wrapper around Remix's `Link` that strips Polaris-only
+   * props. Override when you need access to Remix navigation state, for
+   * example to drive an active style with `NavLink`:
+   *
+   * ```tsx
+   * import {NavLink} from '@remix-run/react';
+   *
+   * <AppProvider apiKey={apiKey} linkComponent={NavLink}>
+   *   <Outlet />
+   * </AppProvider>
+   * ```
+   *
+   * {@link https://polaris.shopify.com/components/utilities/app-provider#props}
+   */
+  linkComponent?: PolarisAppProviderProps['linkComponent'];
+  /**
    * Used internally by Shopify. You don't need to set this.
    * @private
    */
@@ -115,6 +135,7 @@ export function AppProvider(props: AppProviderProps) {
     apiKey,
     i18n,
     isEmbeddedApp = true,
+    linkComponent = RemixPolarisLink,
     __APP_BRIDGE_URL = APP_BRIDGE_URL,
     ...polarisProps
   } = props;
@@ -141,7 +162,7 @@ export function AppProvider(props: AppProviderProps) {
       {isEmbeddedApp && <script src={__APP_BRIDGE_URL} data-api-key={apiKey} />}
       <PolarisAppProvider
         {...polarisProps}
-        linkComponent={RemixPolarisLink}
+        linkComponent={linkComponent}
         i18n={i18n || englishI18n}
       >
         {children}
