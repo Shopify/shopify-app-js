@@ -9,3 +9,4 @@ export * from './redirect';
 export * from './render-app-bridge';
 export * from './trigger-after-auth-hook';
 export * from './validate-shop-and-host-params';
+export * from './validate-redirect-url';

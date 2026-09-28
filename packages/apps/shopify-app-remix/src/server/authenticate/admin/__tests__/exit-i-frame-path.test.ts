@@ -96,4 +96,79 @@ describe('authorize.admin exit iframe path', () => {
       ShopifyError,
     );
   });
+
+  test('refuses to redirect to a different origin', async () => {
+    // GIVEN
+    const shopify = shopifyApp(testConfig());
+    const exitTo = encodeURIComponent('https://not-the-app.example/elsewhere');
+    const url = `${APP_URL}/auth/exit-iframe?exitIframe=${exitTo}&shop=${TEST_SHOP}`;
+
+    // THEN
+    await expect(shopify.authenticate.admin(new Request(url))).rejects.toThrow(
+      ShopifyError,
+    );
+  });
+
+  test('refuses to redirect to a protocol-relative URL', async () => {
+    // GIVEN
+    const shopify = shopifyApp(testConfig());
+    const exitTo = encodeURIComponent('//not-the-app.example');
+    const url = `${APP_URL}/auth/exit-iframe?exitIframe=${exitTo}&shop=${TEST_SHOP}`;
+
+    // THEN
+    await expect(shopify.authenticate.admin(new Request(url))).rejects.toThrow(
+      ShopifyError,
+    );
+  });
+
+  test('allows redirects to Shopify-owned domains', async () => {
+    // GIVEN
+    const shopify = shopifyApp(testConfig());
+    const destination = 'https://admin.shopify.com/store/test-shop/apps';
+    const exitTo = encodeURIComponent(destination);
+    const url = `${APP_URL}/auth/exit-iframe?exitIframe=${exitTo}&shop=${TEST_SHOP}`;
+
+    // WHEN
+    const response = await getThrownResponse(
+      shopify.authenticate.admin,
+      new Request(url),
+    );
+
+    // THEN
+    const responseText = await response.text();
+    expect(response.status).toBe(200);
+    expect(responseText).toContain('admin.shopify.com');
+  });
+
+  test('refuses to redirect to a Shopify storefront', async () => {
+    // GIVEN
+    const shopify = shopifyApp(testConfig());
+    const exitTo = encodeURIComponent('https://some-store.myshopify.com/');
+    const url = `${APP_URL}/auth/exit-iframe?exitIframe=${exitTo}&shop=${TEST_SHOP}`;
+
+    // THEN
+    await expect(shopify.authenticate.admin(new Request(url))).rejects.toThrow(
+      ShopifyError,
+    );
+  });
+
+  test('allows redirects to a billing confirmation URL on the shop admin', async () => {
+    // GIVEN
+    const shopify = shopifyApp(testConfig());
+    const destination =
+      'https://test-shop.myshopify.com/admin/charges/1029266961/RcAbCdEf/confirm_recurring_application_charge?signature=abc123';
+    const exitTo = encodeURIComponent(destination);
+    const url = `${APP_URL}/auth/exit-iframe?exitIframe=${exitTo}&shop=${TEST_SHOP}`;
+
+    // WHEN
+    const response = await getThrownResponse(
+      shopify.authenticate.admin,
+      new Request(url),
+    );
+
+    // THEN
+    const responseText = await response.text();
+    expect(response.status).toBe(200);
+    expect(responseText).toContain('test-shop.myshopify.com/admin/charges');
+  });
 });

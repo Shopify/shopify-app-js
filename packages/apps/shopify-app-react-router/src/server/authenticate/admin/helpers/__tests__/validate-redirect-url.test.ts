@@ -1,7 +1,10 @@
 import {ShopifyError} from '@shopify/shopify-api';
 
 import {APP_URL} from '../../../../__test-helpers';
-import {sanitizeRedirectUrl} from '../validate-redirect-url';
+import {
+  isTrustedExitIframeDestination,
+  sanitizeRedirectUrl,
+} from '../validate-redirect-url';
 
 describe('sanitizeRedirectUrlFactory', () => {
   it('throws ShopifyError with non-string types', () => {
@@ -81,4 +84,52 @@ describe('sanitizeRedirectUrlFactory', () => {
       sanitizeRedirectUrl(APP_URL, 'http://my/app/path', {requireSSL: false}),
     ).toEqual(new URL('http://my/app/path'));
   });
+});
+
+describe('isTrustedExitIframeDestination', () => {
+  it.each([
+    APP_URL,
+    `${APP_URL}/some/path?query=1`,
+    '/relative/path',
+    'https://admin.shopify.com/store/test-shop/apps',
+    'https://admin.shopify.com/store/test-shop/charges/1029266961/confirm',
+    'https://test-shop.myshopify.com/admin',
+    'https://test-shop.myshopify.com/admin/charges/1029266961/RcAbCdEf/confirm_recurring_application_charge?signature=abc123',
+  ])('accepts trusted destination: %s', (destination) => {
+    expect(isTrustedExitIframeDestination(APP_URL, destination)).toBe(true);
+  });
+
+  it.each([
+    // Other origins.
+    'https://not-the-app.example/elsewhere',
+    'http://not-the-app.example',
+    '//not-the-app.example',
+    'https://shopify.com.not-the-app.example',
+    // Other Shopify-owned hosts (storefront, CDN, community, accounts).
+    'https://test-shop.myshopify.com',
+    'https://test-shop.myshopify.com/',
+    'https://some-store.myshopify.com/products',
+    'https://test-shop.myshopify.com/adminlooking',
+    'https://cdn.shopify.com/s/files/1/uploaded-file.html',
+    'https://community.shopify.com/c/some-post',
+    'https://accounts.shopify.com/login',
+    'https://foo.shopify.com/bar',
+    // Shopify admin host but not over https / on a custom port.
+    'http://admin.shopify.com/store/test-shop/apps',
+    'https://admin.shopify.com:8443/store/test-shop/apps',
+    // Non-http protocols and empty values.
+    'file:///etc/passwd',
+    'javascript:alert(1)',
+    '',
+    '   ',
+  ])('rejects untrusted destination: %s', (destination) => {
+    expect(isTrustedExitIframeDestination(APP_URL, destination)).toBe(false);
+  });
+
+  it.each([undefined, null, 123, {}])(
+    'rejects non-string destination: %s',
+    (destination) => {
+      expect(isTrustedExitIframeDestination(APP_URL, destination)).toBe(false);
+    },
+  );
 });

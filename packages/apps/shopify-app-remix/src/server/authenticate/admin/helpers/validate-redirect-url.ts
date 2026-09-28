@@ -65,3 +65,62 @@ export function sanitizeRedirectUrl<OptionsArg extends Options>(
     throw new ShopifyError('Invalid URL. Refusing to redirect');
   }
 }
+
+const SHOPIFY_ADMIN_HOST = 'admin.shopify.com';
+const SHOP_ADMIN_HOST_REGEX = /\.myshopify\.com$/i;
+
+/**
+ * Determines whether an exit-iframe destination is one we trust enough to
+ * redirect to.
+ *
+ * The destination comes straight from the request URL, so it is limited to:
+ *
+ * - the app's own origin, including relative paths (used by the OAuth flow), or
+ * - the Shopify admin: `admin.shopify.com`, or `<shop>.myshopify.com` under
+ *   `/admin` (where billing confirmation URLs live).
+ *
+ * Other Shopify-owned hosts are intentionally excluded, including storefronts
+ * (`<shop>.myshopify.com/`), the CDN (`cdn.shopify.com`) and the community
+ * forums (`community.shopify.com`), because their content is not controlled by
+ * the app or the admin. Anything not explicitly allowed is refused.
+ */
+export function isTrustedExitIframeDestination(
+  appUrl: string,
+  destination: unknown,
+): destination is string {
+  if (typeof destination !== 'string' || destination.trim() === '') {
+    return false;
+  }
+
+  let destinationUrl: URL;
+  let appOrigin: string;
+  try {
+    destinationUrl = new URL(destination, appUrl);
+    appOrigin = new URL(appUrl).origin;
+  } catch (_error) {
+    return false;
+  }
+
+  // The app's own origin (including relative paths) is always allowed.
+  if (destinationUrl.origin === appOrigin) {
+    return true;
+  }
+
+  // Every other destination must be a Shopify admin URL served over https with
+  // no custom port.
+  if (destinationUrl.protocol !== 'https:' || destinationUrl.port !== '') {
+    return false;
+  }
+
+  const {hostname, pathname} = destinationUrl;
+
+  if (hostname === SHOPIFY_ADMIN_HOST) {
+    return true;
+  }
+
+  return SHOP_ADMIN_HOST_REGEX.test(hostname) && isAdminPath(pathname);
+}
+
+function isAdminPath(pathname: string): boolean {
+  return pathname === '/admin' || pathname.startsWith('/admin/');
+}
