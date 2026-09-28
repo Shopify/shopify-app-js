@@ -1,4 +1,4 @@
-import {JwtPayload, Session} from '@shopify/shopify-api';
+import {JwtPayload, Session, ShopifyError} from '@shopify/shopify-api';
 
 import type {BasicParams} from '../../types';
 import type {AppConfigArg} from '../../config-types';
@@ -30,6 +30,7 @@ import {
   createAdminApiContext,
   ensureAppIsEmbeddedIfRequired,
   ensureSessionTokenSearchParamIfRequired,
+  isTrustedExitIframeDestination,
   redirectFactory,
   renderAppBridge,
   validateShopAndHostParams,
@@ -69,7 +70,17 @@ export function authStrategyFactory<ConfigArg extends AppConfigArg>({
     const url = new URL(request.url);
 
     if (url.pathname === config.auth.exitIframePath) {
-      const destination = url.searchParams.get('exitIframe')!;
+      const destination = url.searchParams.get('exitIframe');
+
+      if (!isTrustedExitIframeDestination(config.appUrl, destination)) {
+        logger.warning(
+          'Rejected exit-iframe redirect to an untrusted destination',
+          {shop: getShopFromRequest(request), destination},
+        );
+        throw new ShopifyError(
+          'Invalid exit-iframe destination. Refusing to redirect.',
+        );
+      }
 
       logger.debug('Rendering exit iframe page', {
         shop: getShopFromRequest(request),
