@@ -84,6 +84,9 @@ jobs:
       - name: Build dependencies for all app packages
         run: pnpm build --filter='./packages/apps/shopify-api...' --filter='./packages/apps/shopify-app-express...' --filter='./packages/apps/shopify-app-remix...' --filter='./packages/apps/shopify-app-react-router...'
 
+      - name: Run AI Native spike tests
+        run: pnpm --filter @shopify/shopify-app-native-spike test
+
       - name: Run shopify-api tests
         run: pnpm test:ci --filter='./packages/apps/shopify-api'
 
