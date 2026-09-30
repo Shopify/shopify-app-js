@@ -115,6 +115,15 @@ describe('sanitizeHost', () => {
       expect(shopify.utils.sanitizeHost(base64host)).toBe(null);
     });
   });
+
+  test.each(['YWJjIGRlZg==', 'Ly8='])(
+    'returns null for base64-shaped host that does not decode to a URL - %s',
+    (base64host) => {
+      const shopify = shopifyApi(testConfig());
+
+      expect(shopify.utils.sanitizeHost(base64host)).toBe(null);
+    },
+  );
 });
 
 describe('domain transformations', () => {
