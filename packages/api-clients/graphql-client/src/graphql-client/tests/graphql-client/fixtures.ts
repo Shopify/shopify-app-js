@@ -44,6 +44,11 @@ export const defaultHeaders = {
   [SDK_VERSION_HEADER]: DEFAULT_CLIENT_VERSION,
 };
 
+export const loggedHeaders = {
+  ...defaultHeaders,
+  'X-Shopify-Storefront-Access-Token': '****',
+};
+
 export function getValidClient({
   retries,
   logger,
