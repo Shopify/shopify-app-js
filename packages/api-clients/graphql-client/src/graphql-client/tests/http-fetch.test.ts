@@ -196,6 +196,126 @@ describe('httpFetch utility', () => {
         });
       });
 
+      describe('credential headers', () => {
+        const credentialHeaders = {
+          'X-Shopify-Access-Token': 'shpat_secret',
+          'Shopify-Storefront-Private-Token': 'private_secret',
+          'X-Shopify-Storefront-Access-Token': 'public_secret',
+          Authorization: 'Bearer secret',
+          Cookie: 'session=secret',
+          'Content-Type': 'application/json',
+        };
+
+        const redactedHeaders = {
+          'X-Shopify-Access-Token': '****',
+          'Shopify-Storefront-Private-Token': '****',
+          'X-Shopify-Storefront-Access-Token': '****',
+          Authorization: '****',
+          Cookie: '****',
+          'Content-Type': 'application/json',
+        };
+
+        it('redacts credential headers from logged request params', async () => {
+          const httpFetch = generateHttpFetch({clientLogger});
+          const requestParams: Parameters<CustomFetchApi> = [
+            url,
+            {method: 'POST', headers: credentialHeaders, body: operation},
+          ];
+
+          const response = await httpFetch(requestParams, 1, 0);
+
+          expect(fetch).toHaveBeenCalledWith(...requestParams);
+          expect(clientLogger).toHaveBeenCalledWith({
+            type: 'HTTP-Response',
+            content: {
+              requestParams: [
+                url,
+                {method: 'POST', headers: redactedHeaders, body: operation},
+              ],
+              response,
+            },
+          });
+        });
+
+        it('redacts credential headers given as tuples', async () => {
+          const httpFetch = generateHttpFetch({clientLogger});
+          const headers = Object.entries(credentialHeaders);
+
+          await httpFetch([url, {method: 'POST', headers}], 1, 0);
+
+          expect(fetch).toHaveBeenCalledWith(url, {method: 'POST', headers});
+          expect(
+            clientLogger.mock.calls[0][0].content.requestParams[1].headers,
+          ).toEqual(Object.entries(redactedHeaders));
+        });
+
+        it('redacts credential headers given as a Headers instance', async () => {
+          const httpFetch = generateHttpFetch({clientLogger});
+          const headers = new Headers(credentialHeaders);
+
+          await httpFetch([url, {method: 'POST', headers}], 1, 0);
+
+          expect(fetch).toHaveBeenCalledWith(url, {method: 'POST', headers});
+          expect(headers.get('X-Shopify-Access-Token')).toBe('shpat_secret');
+
+          const loggedHeaders: Headers =
+            clientLogger.mock.calls[0][0].content.requestParams[1].headers;
+          expect(loggedHeaders.get('X-Shopify-Access-Token')).toBe('****');
+          expect(loggedHeaders.get('Authorization')).toBe('****');
+          expect(loggedHeaders.get('Content-Type')).toBe('application/json');
+        });
+
+        it('redacts credential headers given as a Headers-like object', async () => {
+          const customFetchApi = jest
+            .fn()
+            .mockResolvedValue(new Response(globalFetchMock));
+          const httpFetch = generateHttpFetch({clientLogger, customFetchApi});
+          // Simulates a polyfilled Headers class that fails `instanceof Headers`
+          const entries = Object.entries(credentialHeaders);
+          const headers = {
+            forEach: (callback: (value: string, name: string) => void) =>
+              entries.forEach(([name, value]) => callback(value, name)),
+          } as unknown as Headers;
+
+          await httpFetch([url, {method: 'POST', headers}], 1, 0);
+
+          expect(customFetchApi).toHaveBeenCalledWith(url, {
+            method: 'POST',
+            headers,
+          });
+
+          const loggedHeaders: Headers =
+            clientLogger.mock.calls[0][0].content.requestParams[1].headers;
+          expect(loggedHeaders.get('X-Shopify-Access-Token')).toBe('****');
+          expect(loggedHeaders.get('Cookie')).toBe('****');
+          expect(loggedHeaders.get('Content-Type')).toBe('application/json');
+        });
+
+        it('redacts credential headers from retry logs and keeps them on retried requests', async () => {
+          const httpFetch = generateHttpFetch({clientLogger});
+          const requestParams: Parameters<CustomFetchApi> = [
+            url,
+            {method: 'POST', headers: credentialHeaders, body: operation},
+          ];
+
+          fetchMock.mockResponses(
+            [JSON.stringify({}), {status: 503}],
+            JSON.stringify({data: {}}),
+          );
+
+          await httpFetch(requestParams, 1, 1);
+
+          expect(fetch).toHaveBeenCalledTimes(2);
+          expect(fetch).toHaveBeenNthCalledWith(2, ...requestParams);
+
+          const loggedTokens = clientLogger.mock.calls.map(
+            ([log]) =>
+              log.content.requestParams[1].headers['X-Shopify-Access-Token'],
+          );
+          expect(loggedTokens).toEqual(['****', '****', '****']);
+        });
+      });
+
       describe('retries', () => {
         let httpFetch: ReturnType<typeof generateHttpFetch>;
 
