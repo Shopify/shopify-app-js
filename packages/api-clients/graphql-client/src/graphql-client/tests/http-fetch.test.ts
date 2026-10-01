@@ -265,6 +265,32 @@ describe('httpFetch utility', () => {
           expect(loggedHeaders.get('Content-Type')).toBe('application/json');
         });
 
+        it('redacts credential headers given as a Headers-like object', async () => {
+          const customFetchApi = jest
+            .fn()
+            .mockResolvedValue(new Response(globalFetchMock));
+          const httpFetch = generateHttpFetch({clientLogger, customFetchApi});
+          // Simulates a polyfilled Headers class that fails `instanceof Headers`
+          const entries = Object.entries(credentialHeaders);
+          const headers = {
+            forEach: (callback: (value: string, name: string) => void) =>
+              entries.forEach(([name, value]) => callback(value, name)),
+          } as unknown as Headers;
+
+          await httpFetch([url, {method: 'POST', headers}], 1, 0);
+
+          expect(customFetchApi).toHaveBeenCalledWith(url, {
+            method: 'POST',
+            headers,
+          });
+
+          const loggedHeaders: Headers =
+            clientLogger.mock.calls[0][0].content.requestParams[1].headers;
+          expect(loggedHeaders.get('X-Shopify-Access-Token')).toBe('****');
+          expect(loggedHeaders.get('Cookie')).toBe('****');
+          expect(loggedHeaders.get('Content-Type')).toBe('application/json');
+        });
+
         it('redacts credential headers from retry logs and keeps them on retried requests', async () => {
           const httpFetch = generateHttpFetch({clientLogger});
           const requestParams: Parameters<CustomFetchApi> = [

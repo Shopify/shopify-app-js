@@ -5,6 +5,7 @@ import {formatErrorMessage, getErrorMessage} from './utilities';
 const REDACTED_HEADER_VALUE = '****';
 
 // These headers carry reusable credentials and must not reach the logger.
+// Keep in sync with SENSITIVE_LOG_HEADERS in @shopify/shopify-api.
 const SENSITIVE_HEADERS = new Set([
   'authorization',
   'cookie',
@@ -126,12 +127,13 @@ function redactHeaders(headers: HeadersInit): HeadersInit {
     return headers.map(([name, value]) => [name, redactValue(name, value)]);
   }
 
-  if (typeof Headers !== 'undefined' && headers instanceof Headers) {
-    const redacted = new Headers();
-    headers.forEach((value, name) => {
-      redacted.set(name, redactValue(name, value));
+  // Duck-typed so Headers from polyfills or other realms are handled too
+  if (typeof (headers as Headers).forEach === 'function') {
+    const redacted: Record<string, string> = {};
+    (headers as Headers).forEach((value, name) => {
+      redacted[name] = redactValue(name, value);
     });
-    return redacted;
+    return typeof Headers === 'undefined' ? redacted : new Headers(redacted);
   }
 
   return Object.fromEntries(
