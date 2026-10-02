@@ -1,4 +1,8 @@
-import {WebhookValidationErrorReason, WebhookType} from '@shopify/shopify-api';
+import {
+  WebhookValidationErrorReason,
+  WebhookType,
+  type Session,
+} from '@shopify/shopify-api';
 
 import type {BasicParams} from '../../types';
 import {adminClientFactory} from '../../clients';
@@ -49,7 +53,20 @@ export function authenticateWebhookFactory<Topics extends string>(
         throw new Response(undefined, {status: 400, statusText: 'Bad Request'});
       }
     }
-    const session = await ensureValidOfflineSession(params, check.domain);
+    let session: Session | undefined;
+    try {
+      session = await ensureValidOfflineSession(params, check.domain);
+    } catch (error) {
+      if (!(error instanceof Response) || error.status !== 500) {
+        throw error;
+      }
+      logger.debug(
+        'Offline session refresh failed during webhook authentication',
+        {
+          shop: check.domain,
+        },
+      );
+    }
 
     let webhookContext: WebhookContextWithoutSession<Topics>;
 
