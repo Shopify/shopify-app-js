@@ -58,6 +58,27 @@ describe('Webhook validation', () => {
     expect(actualSession).toBeUndefined();
   });
 
+  it('can skip loading the offline session', async () => {
+    const sessionStorage = new MemorySessionStorage();
+    const loadSession = jest.spyOn(sessionStorage, 'loadSession');
+    const shopify = shopifyApp(testConfig({sessionStorage}));
+    const body = {some: 'data'};
+
+    const context = await shopify.authenticate.webhook(
+      new Request(`${APP_URL}/webhooks`, {
+        method: 'POST',
+        body: JSON.stringify(body),
+        headers: webhookHeaders(JSON.stringify(body)),
+      }),
+      {loadSession: false},
+    );
+
+    expect(context.payload).toEqual(body);
+    expect(context.session).toBeUndefined();
+    expect(context.admin).toBeUndefined();
+    expect(loadSession).not.toHaveBeenCalled();
+  });
+
   describe('returns context with session when there is a session', () => {
     expectAdminApiClient(async () => {
       // GIVEN
