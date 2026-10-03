@@ -85,7 +85,15 @@ export async function assessPayments({
       {variables: {endCursor}},
     );
 
-    installation = currentInstallations.data?.currentAppInstallation!;
+    const currentAppInstallation =
+      currentInstallations.data?.currentAppInstallation;
+    if (!currentAppInstallation) {
+      throw new BillingError({
+        message: 'Shopify did not return the current app installation',
+        errorData: [],
+      });
+    }
+    installation = currentAppInstallation;
     installation.activeSubscriptions.forEach((subscription) => {
       if (subscriptionMeetsCriteria({subscription, isTest, plans})) {
         returnValue.hasActivePayment = true;

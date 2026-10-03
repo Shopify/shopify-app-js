@@ -2,7 +2,7 @@ import {queueMockResponses} from '../../__tests__/test-helper';
 import {testConfig} from '../../__tests__/test-config';
 import {Session} from '../../session/session';
 import {BillingInterval} from '../../types';
-import {shopifyApi} from '../..';
+import {BillingError, shopifyApi} from '../..';
 import {BillingCheckResponseObject, BillingConfig} from '../types';
 import {
   DOMAIN,
@@ -46,6 +46,17 @@ describe('shopify.billing.check', () => {
     isOnline: true,
     accessToken: ACCESS_TOKEN,
     scope: 'write_products',
+  });
+
+  test('throws a BillingError when no app installation is returned', async () => {
+    const shopify = shopifyApi(testConfig({billing: NON_RECURRING_CONFIGS}));
+    queueMockResponses([
+      JSON.stringify({data: {currentAppInstallation: null}}),
+    ]);
+
+    await expect(shopify.billing.check({session})).rejects.toThrow(
+      BillingError,
+    );
   });
 
   describe('with no billing config', () => {
