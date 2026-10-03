@@ -20,9 +20,7 @@
     "typescript/no-empty-object-type": [
       "error",
       {"allowInterfaces": "with-single-extends"}
-    ],
-    // Deferred: re-enable once billing handles missing data explicitly (see #3349)
-    "typescript/no-non-null-asserted-optional-chain": "off"
+    ]
   },
   "overrides": [
     {
