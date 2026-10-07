@@ -96,6 +96,7 @@ export function begin(config: ConfigInterface): OAuthBegin {
       expires: new Date(Date.now() + 60000),
       sameSite: 'lax',
       secure: true,
+      httpOnly: true,
       path: callbackPath,
     });
 
@@ -225,6 +226,7 @@ export function callback(config: ConfigInterface): OAuthCallback {
         expires: session.expires,
         sameSite: 'lax',
         secure: true,
+        httpOnly: true,
         path: cookiePath,
       });
     }
