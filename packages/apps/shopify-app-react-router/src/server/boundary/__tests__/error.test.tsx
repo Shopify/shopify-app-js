@@ -1,9 +1,14 @@
 import {boundary} from '../../index';
 
 describe('Error boundary', () => {
-  it('returns a string when handling an ErrorResponse', () => {
+  it('returns a response body when handling a route error response', () => {
     // WHEN
-    const result = boundary.error(new ErrorResponse());
+    const result = boundary.error({
+      status: 401,
+      statusText: 'Unauthorized',
+      internal: false,
+      data: 'Handling response',
+    });
 
     // THEN
     expect(result).toEqual(
@@ -11,9 +16,14 @@ describe('Error boundary', () => {
     );
   });
 
-  it('returns a string when handling an ErrorResponseImpl', () => {
+  it('uses the fallback body when a route error response has no data', () => {
     // WHEN
-    const result = boundary.error(new ErrorResponseImpl());
+    const result = boundary.error({
+      status: 500,
+      statusText: 'Internal Server Error',
+      internal: true,
+      data: undefined,
+    });
 
     // THEN
     expect(result).toEqual(
@@ -29,6 +39,3 @@ describe('Error boundary', () => {
     expect(result).toThrow();
   });
 });
-
-class ErrorResponse extends Error {}
-class ErrorResponseImpl extends Error {}
