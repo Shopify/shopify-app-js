@@ -1,8 +1,7 @@
+import {isRouteErrorResponse} from 'react-router';
+
 export function errorBoundary(error: any) {
-  if (
-    error.constructor.name === 'ErrorResponse' ||
-    error.constructor.name === 'ErrorResponseImpl'
-  ) {
+  if (isRouteErrorResponse(error)) {
     return (
       <div
         dangerouslySetInnerHTML={{__html: error.data || 'Handling response'}}
