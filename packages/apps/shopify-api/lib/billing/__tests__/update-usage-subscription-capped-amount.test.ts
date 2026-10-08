@@ -65,6 +65,52 @@ describe('shopify.billing.updateUsageCappedAmount', () => {
     }).toMatchMadeHttpRequest();
   });
 
+  it('throws a BillingError when no subscription is returned', async () => {
+    const shopify = shopifyApi(testConfig({billing}));
+    queueMockResponses([
+      JSON.stringify({
+        data: {
+          appSubscriptionLineItemUpdate: {
+            confirmationUrl: Responses.CONFIRMATION_URL,
+            appSubscription: null,
+            userErrors: [],
+          },
+        },
+      }),
+    ]);
+
+    await expect(
+      shopify.billing.updateUsageCappedAmount({
+        session,
+        subscriptionLineItemId: Responses.USAGE_CHARGE_SUBSCRIPTION_ID,
+        cappedAmount: {amount: 100, currencyCode: 'USD'},
+      }),
+    ).rejects.toThrow(BillingError);
+  });
+
+  it('throws a BillingError when no confirmation URL is returned', async () => {
+    const shopify = shopifyApi(testConfig({billing}));
+    queueMockResponses([
+      JSON.stringify({
+        data: {
+          appSubscriptionLineItemUpdate: {
+            confirmationUrl: null,
+            appSubscription: {id: Responses.USAGE_CHARGE_SUBSCRIPTION_ID},
+            userErrors: [],
+          },
+        },
+      }),
+    ]);
+
+    await expect(
+      shopify.billing.updateUsageCappedAmount({
+        session,
+        subscriptionLineItemId: Responses.USAGE_CHARGE_SUBSCRIPTION_ID,
+        cappedAmount: {amount: 100, currencyCode: 'USD'},
+      }),
+    ).rejects.toThrow(BillingError);
+  });
+
   it('throws a BillingError when no billing config is set', async () => {
     const shopify = shopifyApi(testConfig({billing: undefined}));
 
