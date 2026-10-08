@@ -1,5 +1,15 @@
 # Changelog
 
+## 15.0.1
+
+### Patch Changes
+
+- 79671d2: Set the `HttpOnly` flag on cookies by default, including the OAuth state and session cookies, so browser JavaScript can no longer read them. Pass `httpOnly: false` to opt out. Boolean cookie attributes are now written as flags, so `secure=true` is now just `secure`.
+- Updated dependencies [d7be864]
+  - @shopify/graphql-client@2.0.1
+  - @shopify/admin-api-client@2.0.1
+  - @shopify/storefront-api-client@2.0.1
+
 ## 15.0.0
 
 ### Major Changes

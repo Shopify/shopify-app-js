@@ -1,5 +1,7 @@
 # @shopify/shopify-app-session-storage-sqlite
 
+## 8.0.1
+
 ## 8.0.0
 
 ### Patch Changes
