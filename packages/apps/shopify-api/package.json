@@ -101,7 +101,7 @@
     "jest-environment-miniflare": "^2.14.4",
     "miniflare": "^4.20260708.1",
     "rollup": "^4.62.2",
-    "supertest": "^7.2.2",
+    "supertest": "^7.3.0",
     "wrangler": "^4.111.0"
   },
   "files": [
