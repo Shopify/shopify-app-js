@@ -57,7 +57,7 @@
     "@types/pg": "^8.20.0",
     "better-sqlite3": "^12.11.1",
     "drizzle-kit": "^0.31.10",
-    "drizzle-orm": "^0.45.2",
+    "drizzle-orm": "^0.45.3",
     "mysql2": "^3.22.6",
     "pg": "^8.22.0"
   },
