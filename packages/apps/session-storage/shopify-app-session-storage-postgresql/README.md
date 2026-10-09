@@ -36,6 +36,21 @@ const shopify = shopifyApp({
 });
 ```
 
+## Connecting via Unix Socket (e.g. Google Cloud SQL)
+
+When deploying on Google Cloud (Cloud Run, App Engine, GKE), the Cloud SQL Auth Proxy provides database connections through Unix sockets. You can connect by specifying the socket path via the `host` query parameter:
+
+```js
+const shopify = shopifyApp({
+  sessionStorage: new PostgreSQLSessionStorage(
+    'postgres://username:password@/database?host=/cloudsql/my-project:us-central1:my-instance',
+  ),
+  // ...
+});
+```
+
+This also works for any other environment where PostgreSQL is accessed via a Unix domain socket.
+
 ## Expiring Offline Access Tokens
 
 This storage adapter supports [expiring offline access tokens](https://shopify.dev/docs/apps/build/authentication-authorization/access-tokens/offline-access-tokens#step-7-get-a-new-access-token-exchange). When enabled, the adapter automatically stores and retrieves refresh tokens alongside your session data.
