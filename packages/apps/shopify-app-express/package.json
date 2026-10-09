@@ -57,7 +57,7 @@
     "@types/compression": "^1.8.1",
     "@types/express": "^5.0.6",
     "express": "^5.2.1",
-    "supertest": "^7.2.2",
+    "supertest": "^7.3.0",
     "jose": "^5.9.6"
   },
   "files": [
