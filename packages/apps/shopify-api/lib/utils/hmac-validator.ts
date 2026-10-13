@@ -158,7 +158,28 @@ export async function validateHmacString(
 ) {
   const localHmac = await createSHA256HMAC(config.apiSecretKey, data, format);
 
-  return safeCompare(hmac, localHmac);
+  if (safeCompare(hmac, localHmac)) {
+    return true;
+  }
+
+  if (!config.apiSecretKeyFallback) {
+    return false;
+  }
+
+  const fallbackHmac = await createSHA256HMAC(
+    config.apiSecretKeyFallback,
+    data,
+    format,
+  );
+  const validFallbackHmac = safeCompare(hmac, fallbackHmac);
+
+  if (validFallbackHmac) {
+    await logger(config).warning(
+      'Request HMAC validated using apiSecretKeyFallback. Remove the fallback key after secret rotation is complete.',
+    );
+  }
+
+  return validFallbackHmac;
 }
 
 export function getCurrentTimeInSec() {
