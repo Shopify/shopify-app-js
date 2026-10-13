@@ -55,7 +55,12 @@ export function sanitizeHost(config: ConfigInterface) {
 
     let sanitizedHost = base64regex.test(host) ? host : null;
     if (sanitizedHost) {
-      const {hostname} = new URL(`https://${decodeHost(sanitizedHost)}`);
+      let hostname = '';
+      try {
+        ({hostname} = new URL(`https://${decodeHost(sanitizedHost)}`));
+      } catch {
+        sanitizedHost = null;
+      }
 
       const originsRegex = [
         'myshopify\\.com',
