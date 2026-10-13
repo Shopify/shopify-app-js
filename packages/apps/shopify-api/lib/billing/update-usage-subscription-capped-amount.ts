@@ -71,15 +71,29 @@ export function updateUsageCappedAmount(
         });
       }
 
-      const appSubscription =
-        response.data?.appSubscriptionLineItemUpdate?.appSubscription!;
-      if (appSubscription && appSubscription.lineItems) {
+      const updateResponse = response.data?.appSubscriptionLineItemUpdate;
+      if (!updateResponse?.appSubscription) {
+        throw new BillingError({
+          message:
+            'Shopify did not return the updated app subscription when updating the usage subscription capped amount',
+          errorData: [],
+        });
+      }
+      if (typeof updateResponse.confirmationUrl !== 'string') {
+        throw new BillingError({
+          message:
+            'Shopify did not return a confirmation URL when updating the usage subscription capped amount',
+          errorData: [],
+        });
+      }
+
+      const {appSubscription, confirmationUrl} = updateResponse;
+      if (appSubscription.lineItems) {
         appSubscription.lineItems = convertLineItems(appSubscription.lineItems);
       }
 
       return {
-        confirmationUrl:
-          response.data?.appSubscriptionLineItemUpdate?.confirmationUrl!,
+        confirmationUrl,
         appSubscription,
       };
     } catch (error) {
