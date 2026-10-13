@@ -130,7 +130,7 @@ export function expectTokenRefresh(
       expect(actualSession.refreshToken).toBe('new-refresh-token-2');
     });
 
-    it('does not refresh token when session has no expiry', async () => {
+    it('refreshes token when session has no expiry', async () => {
       // GIVEN
       const sessionStorage = new MemorySessionStorage();
       const session = await setUpValidSession(sessionStorage, {
@@ -138,12 +138,38 @@ export function expectTokenRefresh(
         refreshToken: 'test-refresh-token',
       });
 
+      const refreshResponse = {
+        access_token: 'new-access-token-3',
+        scope: 'testScope',
+        expires_in: 3600,
+        refresh_token: 'new-refresh-token-3',
+        refresh_token_expires_in: 2592000,
+      };
+
+      await mockExternalRequest({
+        request: new Request(`https://${TEST_SHOP}/admin/oauth/access_token`, {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({
+            client_id: API_KEY,
+            client_secret: API_SECRET_KEY,
+            refresh_token: 'test-refresh-token',
+            grant_type: 'refresh_token',
+          }),
+        }),
+        response: new Response(JSON.stringify(refreshResponse), {
+          status: 200,
+          headers: {'Content-Type': 'application/json'},
+        }),
+      });
+
       // WHEN
       const actualSession = await runAuth(sessionStorage, session);
 
       // THEN
-      expect(actualSession.accessToken).toBe(session.accessToken);
-      expect(actualSession.expires).toBeUndefined();
+      expect(actualSession.accessToken).toBe('new-access-token-3');
+      expect(actualSession.refreshToken).toBe('new-refresh-token-3');
+      expect(actualSession.expires?.getTime()).toBeGreaterThan(Date.now());
     });
 
     it('does not refresh token when feature flag is disabled even if session is expired', async () => {
