@@ -220,6 +220,8 @@ export type AdminContext<Config extends AppConfigArg> =
  * Authenticates requests coming from the Shopify admin.
  *
  * > Note: The shape of the returned object changes depending on the `distribution` config. Merchant custom apps (`AppDistribution.ShopifyAdmin`) do not return session tokens or redirect functionality. All other distributions return a context with session tokens and redirect functionality.
+ *
+ * > Caution: For merchant custom apps (`AppDistribution.ShopifyAdmin`), `authenticate.admin` does not authenticate the request. These apps can't be embedded in the Shopify admin, so requests don't carry a session token. The function returns an Admin API context that uses your app's `adminApiAccessToken` for any request it receives. Your app must authenticate its own users before it calls `authenticate.admin`, for example with your identity provider, a private network, or HTTP authentication.
  * @publicDocs
  */
 export type AuthenticateAdmin<Config extends AppConfigArg> = (
