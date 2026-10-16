@@ -63,8 +63,11 @@ export class KVSessionStorage implements SessionStorage {
       return [];
     }
 
+    // Indexes written by earlier versions may contain the same id many times
+    const uniqueSessionIds = [...new Set(sessionIds)];
+
     return Promise.all(
-      sessionIds.map(async (id) => (await this.loadSession(id))!),
+      uniqueSessionIds.map(async (id) => (await this.loadSession(id))!),
     );
   }
 
@@ -75,7 +78,18 @@ export class KVSessionStorage implements SessionStorage {
   private async addShopIds(shop: string, ids: string[]) {
     const key = this.getShopSessionIdsKey(shop);
     const shopIds = (await this.namespace.get<string[]>(key, 'json')) ?? [];
-    await this.namespace.put(key, JSON.stringify([...shopIds, ...ids]));
+    const updatedShopIds = [...new Set([...shopIds, ...ids])];
+
+    // Storing an existing session (e.g. refreshing a token) leaves the index
+    // unchanged, so skip the write
+    const unchanged =
+      updatedShopIds.length === shopIds.length &&
+      updatedShopIds.every((id, index) => id === shopIds[index]);
+    if (unchanged) {
+      return;
+    }
+
+    await this.namespace.put(key, JSON.stringify(updatedShopIds));
   }
 
   private async removeShopIds(shop: string, ids: string[]) {
