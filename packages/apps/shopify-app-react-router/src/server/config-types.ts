@@ -287,7 +287,7 @@ export interface AppConfigArg<
    * The URL to load the Polaris web components script from.
    *
    * This is used to add a preload `Link` header to document responses. It should match the `polarisUrl` you pass to the
-   * `AppProvider` component. Defaults to the Shopify CDN URL. Only override this if you need to load a Polaris release candidate.
+   * `AppProvider` component. Defaults to the latest stable Polaris 2.x release on the Shopify CDN (`https://cdn.shopify.com/shopifycloud/polaris-2.js`). Only override this if you need to load a Polaris release candidate, pin a specific version, or stay on Polaris 1.x (`https://cdn.shopify.com/shopifycloud/polaris-1.js`).
    */
   polarisUrl?: string;
 }

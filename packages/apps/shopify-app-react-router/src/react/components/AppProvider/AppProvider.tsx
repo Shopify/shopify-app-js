@@ -25,7 +25,7 @@ export interface AppProviderProps {
   /**
    * The URL to load the Polaris web components script from.
    *
-   * Defaults to the Shopify CDN URL. Only override this if you need to test an upcoming Polaris release.
+   * Defaults to the latest stable Polaris 2.x release on the Shopify CDN (`https://cdn.shopify.com/shopifycloud/polaris-2.js`). Only override this if you need to test an upcoming Polaris release, pin a specific version (for example `https://cdn.shopify.com/shopifycloud/polaris-2.0.js`), or stay on Polaris 1.x (`https://cdn.shopify.com/shopifycloud/polaris-1.js`).
    */
   polarisUrl?: string;
 }
