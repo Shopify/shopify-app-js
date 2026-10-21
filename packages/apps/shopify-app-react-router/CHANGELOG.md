@@ -1,5 +1,37 @@
 # @shopify/shopify-app-react-router
 
+## 4.0.0
+
+### Major Changes
+
+- d00bf15: Load Polaris web components 2.x by default. `AppProvider` now renders `<script src="https://cdn.shopify.com/shopifycloud/polaris-2.js">` and `shopifyApp` preloads the same URL in the document `Link` header, instead of `https://cdn.shopify.com/shopifycloud/polaris.js` (which stays on Polaris 1.x).
+
+  Polaris 2.0 renders the new Admin Next theme by default, so your app's UI will look different after updating. `polaris-2.js` follows the latest stable 2.x release; use `polaris-2.0.js` to pin to 2.0.
+
+  To stay on Polaris 1.x, set `polarisUrl` in both places so the script tag and the preload header match:
+
+  ```diff
+    <AppProvider
+      apiKey={apiKey}
+  +   polarisUrl="https://cdn.shopify.com/shopifycloud/polaris-1.js"
+    >
+      <Outlet />
+    </AppProvider>
+  ```
+
+  ```diff
+    const shopify = shopifyApp({
+      // ...
+  +   polarisUrl: "https://cdn.shopify.com/shopifycloud/polaris-1.js",
+    });
+  ```
+
+### Patch Changes
+
+- 7d9cb02: Document that `authenticate.admin` does not authenticate requests for merchant custom apps (`AppDistribution.ShopifyAdmin`).
+
+  Merchant custom apps can't be embedded in the Shopify admin, so their requests don't carry a session token. For these apps, `authenticate.admin` returns an Admin API context that uses the configured `adminApiAccessToken` for any request it receives. Your app must authenticate its own users before it calls `authenticate.admin`, for example with your identity provider, a private network, or HTTP authentication. This change updates documentation only; runtime behavior is unchanged.
+
 ## 3.0.2
 
 ### Patch Changes
