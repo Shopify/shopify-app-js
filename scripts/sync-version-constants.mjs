@@ -15,8 +15,6 @@ const packages = [
   ],
 ];
 
-// Read the manifests after Changesets has assigned the release versions.
-// Validate every file before writing any updates.
 const updates = packages.map(([name, versionPath, constant]) => {
   const directory = new URL(`../packages/apps/${name}/`, import.meta.url);
   const {version} = JSON.parse(

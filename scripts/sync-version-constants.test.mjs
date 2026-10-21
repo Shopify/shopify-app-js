@@ -56,7 +56,6 @@ function fixture(t) {
 
   const run = () =>
     spawnSync(process.execPath, [script], {
-      // The script must resolve paths relative to itself, not the caller.
       cwd: tmpdir(),
       encoding: 'utf8',
       timeout: 5000,
