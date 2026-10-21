@@ -217,6 +217,9 @@ export interface AppConfigArg<
    * SingleMerchant should be used for custom apps managed in the Partner Dashboard.
    * ShopifyAdmin should be used for apps that are managed in the merchant's Shopify Admin.
    *
+   * ShopifyAdmin apps can't be embedded in the Shopify Admin and don't receive session tokens, so `authenticate.admin`
+   * does not authenticate their requests. Your app must authenticate its own users before it calls `authenticate.admin`.
+   *
    * {@link https://shopify.dev/docs/apps/distribution}
    */
   distribution?: AppDistribution;
