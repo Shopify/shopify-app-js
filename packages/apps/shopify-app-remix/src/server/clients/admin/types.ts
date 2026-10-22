@@ -32,7 +32,7 @@ export interface AdminApiContext {
    * <description>Use `admin.graphql` to make query / mutation requests.</description>
    * ```ts
    * // /app/routes/**\/*.ts
-   * import { ActionFunctionArgs } from "@remix-run/node";
+   * import { ActionFunctionArgs, json } from "@remix-run/node";
    * import { authenticate } from "../shopify.server";
    *
    * export const action = async ({ request }: ActionFunctionArgs) => {
@@ -77,7 +77,8 @@ export interface AdminApiContext {
    * <description>Catch `GraphqlQueryError` errors to see error messages from the API.</description>
    * ```ts
    * // /app/routes/**\/*.ts
-   * import { ActionFunctionArgs } from "@remix-run/node";
+   * import { ActionFunctionArgs, json } from "@remix-run/node";
+   * import { GraphqlQueryError } from "@shopify/shopify-api";
    * import { authenticate } from "../shopify.server";
    *
    * export const action = async ({ request }: ActionFunctionArgs) => {
