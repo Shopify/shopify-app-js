@@ -15,7 +15,7 @@ export async function ensureOfflineTokenIsNotExpired(
   const {config} = params;
   if (
     config.future?.expiringOfflineAccessTokens &&
-    session.isExpired(WITHIN_MILLISECONDS_OF_EXPIRY) &&
+    (!session.expires || session.isExpired(WITHIN_MILLISECONDS_OF_EXPIRY)) &&
     config.distribution !== AppDistribution.ShopifyAdmin &&
     session.refreshToken
   ) {
