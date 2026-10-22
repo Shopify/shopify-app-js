@@ -12,5 +12,5 @@ export const action = async ({request}: ActionFunctionArgs) => {
   const {cors, sessionToken} = await authenticate.public.checkout(request);
 
   const offers = getOffers(sessionToken.dest);
-  return cors({offers});
+  return cors(Response.json({offers}));
 };

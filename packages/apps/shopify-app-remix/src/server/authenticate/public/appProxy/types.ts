@@ -155,7 +155,7 @@ export interface AppProxyContextWithSession extends Context {
    * <description>Use the `admin` object to interact with the admin GraphQL API.</description>
    * ```ts
    * // app/routes/**\/.ts
-   * import { json } from "@remix-run/node";
+   * import { ActionFunctionArgs, json } from "@remix-run/node";
    * import { authenticate } from "../shopify.server";
    *
    * export async function action({ request }: ActionFunctionArgs) {
@@ -192,7 +192,7 @@ export interface AppProxyContextWithSession extends Context {
    * <description>Use the `storefront` object to interact with the GraphQL API.</description>
    * ```ts
    * // app/routes/**\/.ts
-   * import { json } from "@remix-run/node";
+   * import { ActionFunctionArgs, json } from "@remix-run/node";
    * import { authenticate } from "../shopify.server";
    *
    * export async function action({ request }: ActionFunctionArgs) {

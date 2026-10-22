@@ -22,13 +22,13 @@ interface AdminContextInternal<Config extends AppConfigArg> {
    * <description>Get your app's shop-specific data using an offline session.</description>
    * ```ts
    * // /app/routes/**\/*.ts
-   * import { LoaderFunctionArgs, json } from "react-router";
+   * import { LoaderFunctionArgs } from "react-router";
    * import { authenticate } from "../shopify.server";
    * import { getMyAppData } from "~/db/model.server";
    *
    * export const loader = async ({ request }: LoaderFunctionArgs) => {
    *   const { session } = await authenticate.admin(request);
-   *   return (await getMyAppData({shop: session.shop}));
+   *   return await getMyAppData({shop: session.shop});
    * };
    * ```
    * ```ts
@@ -47,13 +47,13 @@ interface AdminContextInternal<Config extends AppConfigArg> {
    * <description>Get your app's user-specific data using an online session.</description>
    * ```ts
    * // /app/routes/**\/*.ts
-   * import { LoaderFunctionArgs, json } from "react-router";
+   * import { LoaderFunctionArgs } from "react-router";
    * import { authenticate } from "../shopify.server";
    * import { getMyAppData } from "~/db/model.server";
    *
    * export const loader = async ({ request }: LoaderFunctionArgs) => {
    *   const { session } = await authenticate.admin(request);
-   *   return (await getMyAppData({user: session.onlineAccessInfo!.id}));
+   *   return await getMyAppData({user: session.onlineAccessInfo!.associated_user.id});
    * };
    * ```
    * ```ts
@@ -90,13 +90,13 @@ interface AdminContextInternal<Config extends AppConfigArg> {
    * <description>Use the `cors` helper to ensure your app can respond to requests from admin extensions.</description>
    * ```ts
    * // /app/routes/admin/my-route.ts
-   * import { LoaderFunctionArgs, json } from "react-router";
+   * import { LoaderFunctionArgs } from "react-router";
    * import { authenticate } from "../shopify.server";
    * import { getMyAppData } from "~/db/model.server";
    *
    * export const loader = async ({ request }: LoaderFunctionArgs) => {
    *   const { session, cors } = await authenticate.admin(request);
-   *   return cors(await getMyAppData({user: session.onlineAccessInfo!.id})));
+   *   return cors(Response.json(await getMyAppData({user: session.onlineAccessInfo!.associated_user.id})));
    * };
    * ```
    */
@@ -118,7 +118,7 @@ export interface EmbeddedAdminContext<
    * <description>Get user-specific data using the `sessionToken` object.</description>
    * ```ts
    * // /app/routes/**\/*.ts
-   * import { LoaderFunctionArgs, json } from "react-router";
+   * import { LoaderFunctionArgs } from "react-router";
    * import { authenticate } from "../shopify.server";
    * import { getMyAppData } from "~/db/model.server";
    *
@@ -126,7 +126,7 @@ export interface EmbeddedAdminContext<
    *   const { sessionToken } = await authenticate.admin(
    *     request
    *   );
-   *   return (await getMyAppData({user: sessionToken.sub}));
+   *   return await getMyAppData({user: sessionToken.sub});
    * };
    * ```
    * ```ts
@@ -158,7 +158,7 @@ export interface EmbeddedAdminContext<
    * <description>Use the `redirect` helper to safely redirect between pages.</description>
    * ```ts
    * // /app/routes/admin/my-route.ts
-   * import { LoaderFunctionArgs, json } from "react-router";
+   * import { LoaderFunctionArgs } from "react-router";
    * import { authenticate } from "../shopify.server";
    *
    * export const loader = async ({ request }: LoaderFunctionArgs) => {
@@ -172,7 +172,7 @@ export interface EmbeddedAdminContext<
    * <description>Redirects to a product page in the Shopify admin. Pass in a `target` option of `_top` or `_parent` to navigate in the current window, or `_blank` to open a new tab.</description>
    * ```ts
    * // /app/routes/admin/my-route.ts
-   * import { LoaderFunctionArgs, json } from "react-router";
+   * import { LoaderFunctionArgs } from "react-router";
    * import { authenticate } from "../shopify.server";
    *
    * export const loader = async ({ request }: LoaderFunctionArgs) => {
@@ -186,7 +186,7 @@ export interface EmbeddedAdminContext<
    * <description>Pass in a `target` option of `_top` or `_parent` to navigate in the current window, or `_blank` to open a new tab.</description>
    * ```ts
    * // /app/routes/admin/my-route.ts
-   * import { LoaderFunctionArgs, json } from "react-router";
+   * import { LoaderFunctionArgs } from "react-router";
    * import { authenticate } from "../shopify.server";
    *
    * export const loader = async ({ request }: LoaderFunctionArgs) => {
