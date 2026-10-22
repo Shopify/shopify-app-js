@@ -19,7 +19,7 @@
     "version-packages": "node --test scripts/*.test.mjs && changeset version && node scripts/sync-version-constants.mjs && pnpm install --lockfile-only --ignore-scripts --no-frozen-lockfile"
   },
   "devDependencies": {
-    "@changesets/cli": "^2.31.0",
+    "@changesets/cli": "^3.0.3",
     "@jest/types": "^30.4.1",
     "@rollup/plugin-commonjs": "^29.0.3",
     "@rollup/plugin-node-resolve": "^16.0.3",
