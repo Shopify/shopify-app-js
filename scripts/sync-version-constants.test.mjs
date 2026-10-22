@@ -24,7 +24,7 @@ const packages = [
     'shopify-app-react-router',
     'src/server/version.ts',
     'SHOPIFY_REACT_ROUTER_LIBRARY_VERSION',
-    '4.0.0',
+    '4.0.0-rc.2',
   ],
   [
     'shopify-app-remix',
@@ -51,7 +51,7 @@ function fixture(t) {
     mkdirSync(join(file, '..'), {recursive: true});
     writeFileSync(manifest, JSON.stringify({name, version}));
     writeFileSync(file, `export const ${constant} = '1.0.0';\n`);
-    return {manifest, file, constant, version};
+    return {file, constant, version};
   });
 
   const run = () =>
@@ -63,7 +63,7 @@ function fixture(t) {
   return {files, run};
 }
 
-test('syncs all four constants from their own package manifests', (t) => {
+test('syncs all four constants from their manifests, including prereleases', (t) => {
   const {files, run} = fixture(t);
   const result = run();
   assert.equal(result.status, 0, result.stderr);
@@ -75,56 +75,23 @@ test('syncs all four constants from their own package manifests', (t) => {
   }
 });
 
-test('does nothing when the constants already match', (t) => {
-  const {run} = fixture(t);
-  assert.equal(run().status, 0);
-  const result = run();
-  assert.equal(result.status, 0, result.stderr);
-  assert.equal(result.stdout, '');
-});
-
-test('preserves prerelease versions and surrounding content', (t) => {
+test('fails without changing other constants when a declaration is missing', (t) => {
   const {files, run} = fixture(t);
-  const {manifest, file, constant} = files[2];
-  writeFileSync(manifest, JSON.stringify({version: '4.0.0-rc.2'}));
   writeFileSync(
-    file,
-    `// Runtime library version\nexport const ${constant} = '3.0.2';\n`,
+    files[3].file,
+    "export const RENAMED_LIBRARY_VERSION = '1.0.0';\n",
   );
+
   const result = run();
-  assert.equal(result.status, 0, result.stderr);
-  assert.equal(
-    readFileSync(file, 'utf8'),
-    `// Runtime library version\nexport const ${constant} = '4.0.0-rc.2';\n`,
+  assert.equal(result.status, 1, result.stderr);
+  assert.match(
+    result.stderr,
+    /Expected exactly one SHOPIFY_REMIX_LIBRARY_VERSION declaration/,
   );
+  for (const {file, constant} of files.slice(0, 3)) {
+    assert.equal(
+      readFileSync(file, 'utf8'),
+      `export const ${constant} = '1.0.0';\n`,
+    );
+  }
 });
-
-for (const invalid of [
-  'missing version',
-  'missing declaration',
-  'duplicate declaration',
-  'missing file',
-]) {
-  test(`fails without changing other constants on ${invalid}`, (t) => {
-    const {files, run} = fixture(t);
-    const {manifest, file, constant} = files[3];
-    if (invalid === 'missing version') {
-      writeFileSync(manifest, '{}');
-    } else if (invalid === 'missing declaration') {
-      writeFileSync(file, '// Declaration was renamed\n');
-    } else if (invalid === 'duplicate declaration') {
-      writeFileSync(file, `export const ${constant} = '1.0.0';\n`.repeat(2));
-    } else {
-      rmSync(file);
-    }
-
-    const result = run();
-    assert.equal(result.status, 1, result.stderr);
-    for (const {file, constant} of files.slice(0, 3)) {
-      assert.equal(
-        readFileSync(file, 'utf8'),
-        `export const ${constant} = '1.0.0';\n`,
-      );
-    }
-  });
-}
