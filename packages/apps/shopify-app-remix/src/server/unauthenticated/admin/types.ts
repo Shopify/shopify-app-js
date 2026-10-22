@@ -22,7 +22,7 @@ export interface UnauthenticatedAdminContext {
    * export const loader = async ({ request }: LoaderFunctionArgs) => {
    *   const shop = getShopFromExternalRequest(request);
    *   const { session } = await unauthenticated.admin(shop);
-   *   return json(await getMyAppData({shop: session.shop));
+   *   return json(await getMyAppData({shop: session.shop}));
    * };
    * ```
    */
@@ -36,7 +36,7 @@ export interface UnauthenticatedAdminContext {
    * <description>Use `admin.graphql` to make query / mutation requests.</description>
    * ```ts
    * // /app/routes/**\/*.ts
-   * import { ActionFunctionArgs } from "@remix-run/node";
+   * import { ActionFunctionArgs, json } from "@remix-run/node";
    * import { unauthenticated } from "../shopify.server";
    *
    * export async function action({ request }: ActionFunctionArgs) {

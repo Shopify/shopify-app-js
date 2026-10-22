@@ -15,14 +15,14 @@ export interface UnauthenticatedAdminContext {
    * <description>Get your app's shop-specific data using the returned offline `session` object.</description>
    * ```ts
    * // /app/routes/**\/*.ts
-   * import { LoaderFunctionArgs, json } from "react-router";
+   * import { LoaderFunctionArgs } from "react-router";
    * import { unauthenticated } from "../shopify.server";
    * import { getMyAppData } from "~/db/model.server";
    *
    * export const loader = async ({ request }: LoaderFunctionArgs) => {
    *   const shop = getShopFromExternalRequest(request);
    *   const { session } = await unauthenticated.admin(shop);
-   *   return (await getMyAppData({shop: session.shop}));
+   *   return await getMyAppData({shop: session.shop});
    * };
    * ```
    */
@@ -56,7 +56,7 @@ export interface UnauthenticatedAdminContext {
    *   );
    *
    *  const productData = await response.json();
-   *  return ({ data: productData.data });
+   *  return { data: productData.data };
    * }
    * ```
    *

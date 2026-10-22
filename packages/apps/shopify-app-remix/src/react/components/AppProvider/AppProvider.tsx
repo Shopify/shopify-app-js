@@ -61,7 +61,9 @@ export interface AppProviderProps extends Omit<
  * <description>Wrap your app in the `AppProvider` component and pass in your API key.</description>
  * ```ts
  * // /app/routes/**\/*.ts
+ * import {Outlet, useLoaderData} from '@remix-run/react';
  * import {authenticate} from '~/shopify.server';
+ * import {json} from '@remix-run/node';
  * import {AppProvider} from '@shopify/shopify-app-remix/react';
  *
  * export async function loader({ request }) {
@@ -86,7 +88,9 @@ export interface AppProviderProps extends Omit<
  * <description>Pass in a different locale for Polaris to translate its components.</description>
  * ```ts
  * // /app/routes/**\/*.ts
+ * import {Outlet, useLoaderData} from '@remix-run/react';
  * import {authenticate} from '~/shopify.server';
+ * import {json} from '@remix-run/node';
  * import {AppProvider} from '@shopify/shopify-app-remix/react';
  *
  * export async function loader({ request }) {

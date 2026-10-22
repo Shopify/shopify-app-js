@@ -55,9 +55,9 @@ export interface AdminApiContext {
    *   );
    *
    *   const productData = await response.json();
-   *   return ({
+   *   return {
    *     productId: productData.data?.productCreate?.product?.id,
-   *   });
+   *   };
    * }
    * ```
    *
@@ -77,7 +77,8 @@ export interface AdminApiContext {
    * <description>Catch `GraphqlQueryError` errors to see error messages from the API.</description>
    * ```ts
    * // /app/routes/**\/*.ts
-   * import { ActionFunctionArgs } from "react-router";
+   * import { ActionFunctionArgs, data } from "react-router";
+   * import { GraphqlQueryError } from "@shopify/shopify-api";
    * import { authenticate } from "../shopify.server";
    *
    * export const action = async ({ request }: ActionFunctionArgs) => {
@@ -95,16 +96,16 @@ export interface AdminApiContext {
    *       }`,
    *     );
    *
-   *     return ({ data: await response.json() });
+   *     return { data: await response.json() };
    *   } catch (error) {
    *     if (error instanceof GraphqlQueryError) {
    *       // error.body.errors:
    *       // { graphQLErrors: [
    *       //   { message: "Field 'not_a_field' doesn't exist on type 'Product'" }
    *       // ] }
-   *       return ({ errors: error.body?.errors }, { status: 500 });
+   *       return data({ errors: error.body?.errors }, { status: 500 });
    *     }
-   *     return ({ message: "An error occurred" }, { status: 500 });
+   *     return data({ message: "An error occurred" }, { status: 500 });
    *   }
    * }
    * ```

@@ -16,16 +16,15 @@ export interface ScopesApiContext {
    * import type { LoaderFunctionArgs } from "react-router";
    * import { useLoaderData } from "react-router";
    * import { authenticate } from "../shopify.server";
-   * import { json } from "react-router";
    *
    * export const loader = async ({ request }: LoaderFunctionArgs) => {
    *   const { scopes } = await authenticate.admin(request);
    *
    *   const scopesDetail =  await scopes.query();
    *
-   *   return ({
+   *   return {
    *     hasWriteProducts: scopesDetail.granted.includes('write_products'),
-   *   });
+   *   };
    * };
    *
    * export default function Index() {
@@ -50,7 +49,6 @@ export interface ScopesApiContext {
    * import type { ActionFunctionArgs } from "react-router";
    * import { useFetcher } from "react-router";
    * import { authenticate } from "../shopify.server";
-   * import { json } from "react-router";
    *
    * // Example of an action to POST a request to for optional scopes
    * export const action = async ({ request }: ActionFunctionArgs) => {
@@ -62,7 +60,7 @@ export interface ScopesApiContext {
    *   // If the scopes are not already granted, a full page redirect to the request URL occurs
    *   await scopes.request(scopesToRequest);
    *   // otherwise return an empty response
-   *   return ({});
+   *   return {};
    * };
    *
    * export default function Index() {
@@ -93,7 +91,6 @@ export interface ScopesApiContext {
    * import type { ActionFunctionArgs } from "react-router";
    * import { useFetcher } from "react-router";
    * import { authenticate } from "../shopify.server";
-   * import { json } from "react-router";
    *
    * // Example of an action to POST optional scopes to revoke
    * export const action = async ({ request }: ActionFunctionArgs) => {
@@ -104,7 +101,7 @@ export interface ScopesApiContext {
    *
    *   const revokedResponse = await scopes.revoke(scopesToRevoke);
    *
-   *   return (revokedResponse);
+   *   return revokedResponse;
    * };
    *
    * export default function Index() {

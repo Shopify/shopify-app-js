@@ -184,7 +184,7 @@ export interface BillingContext<Config extends AppConfigArg> {
    *   const billingCheck = await billing.require({
    *     plans: [MONTHLY_PLAN, ANNUAL_PLAN],
    *     isTest: true,
-   *     onFailure: () => redirect('/select-plan'),
+   *     onFailure: async () => redirect('/select-plan'),
    *   });
    *
    *   const subscription = billingCheck.appSubscriptions[0];
@@ -378,6 +378,7 @@ export interface BillingContext<Config extends AppConfigArg> {
    * ```ts
    * // /app/routes/**\/*.ts
    * import { LoaderFunctionArgs } from "react-router";
+   * import { BillingInterval } from "@shopify/shopify-app-react-router/server";
    * import { authenticate, MONTHLY_PLAN } from "../shopify.server";
    *
    * export const loader = async ({ request }: LoaderFunctionArgs) => {
@@ -546,6 +547,7 @@ export interface BillingContext<Config extends AppConfigArg> {
    *           amount: 5,
    *           currencyCode: 'USD',
    *           interval: BillingInterval.Usage,
+   *           terms: 'Usage based',
    *         }
    *       ],
    *     },
