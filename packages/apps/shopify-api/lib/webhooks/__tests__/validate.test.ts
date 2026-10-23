@@ -36,6 +36,25 @@ describe('shopify.webhooks.validate', () => {
     });
   });
 
+  it('validates requests signed with the fallback API secret', async () => {
+    const shopify = shopifyApi(
+      testConfig({apiSecretKeyFallback: 'previous_secret'}),
+    );
+    const app = getTestApp(shopify);
+
+    const response = await request(app)
+      .post('/webhooks')
+      .set(headers({hmac: hmac('previous_secret', rawBody)}))
+      .send(rawBody)
+      .expect(200);
+
+    expect(response.body.data).toMatchObject({
+      valid: true,
+      webhookId: '123456789',
+      webhookType: 'webhooks',
+    });
+  });
+
   it.each([
     {headers: {apiVersion: ''}, missingHeader: ShopifyHeader.ApiVersion},
     {headers: {domain: ''}, missingHeader: ShopifyHeader.Domain},

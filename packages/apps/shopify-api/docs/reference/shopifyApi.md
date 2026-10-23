@@ -53,6 +53,12 @@ API key for the app. You can find it in the Partners Dashboard.
 
 API secret key for the app. You can find it in the Partners Dashboard.
 
+### apiSecretKeyFallback
+
+`string` | Defaults to `undefined`
+
+Optional previous API secret key used to validate inbound HMACs during client secret rotation. Set `apiSecretKey` to the current secret and this option to the previous secret while Shopify may still be sending requests signed with it. The fallback is only used for inbound HMAC validation and never for signing outbound requests. Remove it after logs show that requests are no longer validating with the fallback.
+
 ### scopes
 
 `string[] | AuthScopes` | :exclamation: **required**
