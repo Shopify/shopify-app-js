@@ -215,15 +215,17 @@ export function validateHmacFromRequestFactory(config: ConfigInterface) {
       return fail(ValidationErrorReason.MissingHmac, type, config);
     }
 
-    const headerNames =
-      WEBHOOK_HEADER_NAMES[webhookType ?? WebhookType.Webhooks];
     const logContext: LogContext = {};
-    const topic = getHeader(request.headers, headerNames.topic);
-    const shop = getHeader(request.headers, headerNames.domain);
-    const webhookId = getHeader(request.headers, headerNames.webhookId);
-    if (topic) logContext.topic = topic;
-    if (shop) logContext.shop = shop;
-    if (webhookId) logContext.webhookId = webhookId;
+    if (type === HmacValidationType.Webhook) {
+      const headerNames =
+        WEBHOOK_HEADER_NAMES[webhookType ?? WebhookType.Webhooks];
+      const topic = getHeader(request.headers, headerNames.topic);
+      const shop = getHeader(request.headers, headerNames.domain);
+      const webhookId = getHeader(request.headers, headerNames.webhookId);
+      if (topic) logContext.topic = topic;
+      if (shop) logContext.shop = shop;
+      if (webhookId) logContext.webhookId = webhookId;
+    }
 
     const validHmac = await validateHmacString(
       config,
