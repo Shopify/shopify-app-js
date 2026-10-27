@@ -14,12 +14,6 @@ export function validateRequiredAccessTokens(
   publicAccessToken: string | undefined,
   privateAccessToken: string | undefined,
 ) {
-  if (!publicAccessToken && !privateAccessToken) {
-    throw new Error(
-      `${CLIENT}: a public or private access token must be provided`,
-    );
-  }
-
   if (publicAccessToken && privateAccessToken) {
     throw new Error(
       `${CLIENT}: only provide either a public or private access token`,
