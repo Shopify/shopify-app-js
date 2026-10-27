@@ -1,4 +1,5 @@
 import {logger} from '../logger';
+import {LogContext} from '../logger/types';
 import {ShopifyHeader} from '../types';
 import {
   AdapterArgs,
@@ -11,7 +12,11 @@ import {HashFormat} from '../../runtime/crypto/types';
 import {AuthQuery} from '../auth/oauth/types';
 import * as ShopifyErrors from '../error';
 import {safeCompare} from '../auth/oauth/safe-compare';
-import {WEBHOOK_HEADER_NAMES, WebhookTypeValue} from '../webhooks/types';
+import {
+  WEBHOOK_HEADER_NAMES,
+  WebhookType,
+  WebhookTypeValue,
+} from '../webhooks/types';
 
 import ProcessedQuery from './processed-query';
 import {
@@ -155,6 +160,7 @@ export async function validateHmacString(
   data: string,
   hmac: string,
   format: HashFormat,
+  logContext: LogContext = {},
 ) {
   const localHmac = await createSHA256HMAC(config.apiSecretKey, data, format);
 
@@ -176,6 +182,7 @@ export async function validateHmacString(
   if (validFallbackHmac) {
     await logger(config).warning(
       'Request HMAC validated using apiSecretKeyFallback. Remove the fallback key after secret rotation is complete.',
+      logContext,
     );
   }
 
@@ -207,11 +214,23 @@ export function validateHmacFromRequestFactory(config: ConfigInterface) {
     if (!hmac) {
       return fail(ValidationErrorReason.MissingHmac, type, config);
     }
+
+    const headerNames =
+      WEBHOOK_HEADER_NAMES[webhookType ?? WebhookType.Webhooks];
+    const logContext: LogContext = {};
+    const topic = getHeader(request.headers, headerNames.topic);
+    const shop = getHeader(request.headers, headerNames.domain);
+    const webhookId = getHeader(request.headers, headerNames.webhookId);
+    if (topic) logContext.topic = topic;
+    if (shop) logContext.shop = shop;
+    if (webhookId) logContext.webhookId = webhookId;
+
     const validHmac = await validateHmacString(
       config,
       rawBody,
       hmac,
       HashFormat.Base64,
+      logContext,
     );
     if (!validHmac) {
       return fail(ValidationErrorReason.InvalidHmac, type, config);

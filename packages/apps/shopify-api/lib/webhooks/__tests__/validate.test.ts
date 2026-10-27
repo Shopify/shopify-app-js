@@ -5,7 +5,7 @@ import {
   NormalizedRequest,
   NormalizedResponse,
 } from '../../../runtime/http';
-import {ShopifyHeader} from '../../types';
+import {LogSeverity, ShopifyHeader} from '../../types';
 import {WebhookValidationErrorReason} from '../types';
 import {Shopify, shopifyApi} from '../..';
 import {testConfig} from '../../__tests__/test-config';
@@ -53,6 +53,12 @@ describe('shopify.webhooks.validate', () => {
       webhookId: '123456789',
       webhookType: 'webhooks',
     });
+    expect(shopify.config.logger.log).toHaveBeenCalledWith(
+      LogSeverity.Warning,
+      expect.stringMatching(
+        /apiSecretKeyFallback.*topic: products\/create, shop: shop1\.myshopify\.io, webhookId: 123456789/,
+      ),
+    );
   });
 
   it.each([
