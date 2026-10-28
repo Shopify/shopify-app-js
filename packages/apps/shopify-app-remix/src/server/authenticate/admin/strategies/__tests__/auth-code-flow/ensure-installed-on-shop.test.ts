@@ -151,7 +151,10 @@ describe('authorize.admin doc request path', () => {
       const otherShopDomain = 'other-shop.myshopify.io';
 
       // WHEN
-      const {token} = await getJwt({dest: `https://${otherShopDomain}`});
+      const {token} = await getJwt({
+        dest: `https://${otherShopDomain}`,
+        iss: `https://${otherShopDomain}/admin`,
+      });
       const response = await getThrownResponse(
         shopify.authenticate.admin,
         new Request(
