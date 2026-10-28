@@ -22,7 +22,7 @@ export interface UnauthenticatedStorefrontContext {
    * export const loader = async ({ request }: LoaderFunctionArgs) => {
    *   const shop = getShopFromExternalRequest(request);
    *   const { session } = await unauthenticated.storefront(shop);
-   *   return json(await getMyAppData({shop: session.shop));
+   *   return json(await getMyAppData({shop: session.shop}));
    * };
    * ```
    */
@@ -36,8 +36,8 @@ export interface UnauthenticatedStorefrontContext {
    * <description>Use `storefront.graphql` to make query / mutation requests.</description>
    * ```ts
    * // app/routes/**\/.ts
-   * import { json } from "@remix-run/node";
-   * import { authenticate } from "../shopify.server";
+   * import { ActionFunctionArgs, json } from "@remix-run/node";
+   * import { unauthenticated } from "../shopify.server";
    *
    * export async function action({ request }: ActionFunctionArgs) {
    *   const shop = getShopFromExternalRequest(request);
@@ -54,8 +54,9 @@ export interface UnauthenticatedStorefrontContext {
    * <description>Catch `GraphqlQueryError` errors to see error messages from the API.</description>
    * ```ts
    * // /app/routes/**\/*.ts
-   * import { ActionFunctionArgs } from "@remix-run/node";
-   * import { authenticate } from "../shopify.server";
+   * import { ActionFunctionArgs, json } from "@remix-run/node";
+   * import { GraphqlQueryError } from "@shopify/shopify-api";
+   * import { unauthenticated } from "../shopify.server";
    *
    * export const action = async ({ request }: ActionFunctionArgs) => {
    *   const shop = getShopFromExternalRequest(request);

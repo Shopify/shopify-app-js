@@ -42,13 +42,14 @@ export const AppProxyProviderContext =
  * <description>Wrap your route component in the `AppProxyProvider` component and pass in your app URL.</description>
  * ```ts
  * // /app/routes/**\/*.ts
+ * import {useLoaderData} from 'react-router';
  * import {authenticate} from '~/shopify.server';
  * import {AppProxyProvider} from '@shopify/shopify-app-react-router/react';
  *
  * export async function loader({ request }) {
  *   await authenticate.public.appProxy(request);
  *
- *   return json({ appUrl: process.env.SHOPIFY_APP_URL });
+ *   return { appUrl: process.env.SHOPIFY_APP_URL };
  * }
  *
  * export default function App() {
