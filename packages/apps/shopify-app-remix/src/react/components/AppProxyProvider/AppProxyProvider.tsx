@@ -44,7 +44,9 @@ export const AppProxyProviderContext =
  * <description>Wrap your route component in the `AppProxyProvider` component and pass in your app URL.</description>
  * ```ts
  * // /app/routes/**\/*.ts
+ * import {useLoaderData} from '@remix-run/react';
  * import {authenticate} from '~/shopify.server';
+ * import {json} from '@remix-run/node';
  * import {AppProxyProvider} from '@shopify/shopify-app-remix/react';
  *
  * export async function loader({ request }) {

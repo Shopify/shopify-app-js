@@ -44,7 +44,7 @@ export interface AppProviderProps {
  * <description>Wrap your route in the `AppProvider` component and pass in your API key.</description>
  * ```ts
  * // /app/routes/**\/*.ts
- * import {useLoaderData} from 'react-router';
+ * import {Outlet, useLoaderData} from 'react-router';
  * import {authenticate} from '~/shopify.server';
  * import {AppProvider} from '@shopify/shopify-app-react-router/react';
  *

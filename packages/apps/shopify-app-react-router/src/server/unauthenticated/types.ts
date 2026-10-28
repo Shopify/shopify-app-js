@@ -22,7 +22,7 @@ export interface Unauthenticated {
    * ```
    * ```ts
    * // /app/routes/**\/*.jsx
-   * import { LoaderFunctionArgs, json } from "react-router";
+   * import { LoaderFunctionArgs } from "react-router";
    * import { authenticateExternal } from "~/helpers/authenticate"
    * import shopify from "../../shopify.server";
    *
@@ -31,7 +31,7 @@ export interface Unauthenticated {
    *   const {admin} = await shopify.unauthenticated.admin(shop);
    *   const response = await admin.graphql("{ shop { name} }")
    *
-   *   return (await response.json());
+   *   return await response.json();
    * }
    * ```
    */
@@ -48,7 +48,7 @@ export interface Unauthenticated {
    * <caption>Responding to a request not controlled by Shopify</caption>
    * ```ts
    * // /app/routes/**\/*.jsx
-   * import { LoaderFunctionArgs, json } from "react-router";
+   * import { LoaderFunctionArgs } from "react-router";
    * import { authenticateExternal } from "~/helpers/authenticate"
    * import shopify from "../../shopify.server";
    *
@@ -57,7 +57,7 @@ export interface Unauthenticated {
    *   const {storefront} = await shopify.unauthenticated.storefront(shop);
    *   const response = await storefront.graphql(`{blogs(first: 10) { edges { node { id } } } }`);
    *
-   *   return (await response.json());
+   *   return await response.json();
    * }
    * ```
    */
