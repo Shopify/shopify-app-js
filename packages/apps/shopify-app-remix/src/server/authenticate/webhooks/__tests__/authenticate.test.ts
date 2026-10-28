@@ -150,6 +150,28 @@ describe('Webhook validation', () => {
     expect(response.status).toBe(401);
   });
 
+  it('validates the HMAC when offline session loading is disabled', async () => {
+    const sessionStorage = new MemorySessionStorage();
+    const loadSession = jest.spyOn(sessionStorage, 'loadSession');
+    const shopify = shopifyApp(testConfig({sessionStorage}));
+    const body = JSON.stringify({});
+
+    await expect(
+      shopify.authenticate.webhook(
+        new Request(`${APP_URL}/webhooks`, {
+          method: 'POST',
+          body,
+          headers: webhookHeaders(body, {
+            'X-Shopify-Hmac-Sha256': 'invalid_hmac',
+          }),
+        }),
+        {loadSession: false},
+      ),
+    ).rejects.toMatchObject({status: 401});
+
+    expect(loadSession).not.toHaveBeenCalled();
+  });
+
   it.each([
     'X-Shopify-Shop-Domain',
     'X-Shopify-Topic',
