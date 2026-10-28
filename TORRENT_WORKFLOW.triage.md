@@ -1,9 +1,5 @@
 # Torrent Triage Workflow for shopify-app-js
 
-> This file holds instructions for Shopify's internal Torrent agents, which evaluate issues in this
-> repository. Contributors can ignore it: it does not change how to contribute. See
-> [CONTRIBUTING.md](CONTRIBUTING.md).
-
 <!-- The workflow of the triage project APPJSTRI (workflow_path //TORRENT_WORKFLOW.triage.md).
 The project shares this repository with the work project APPJS, which follows TORRENT_WORKFLOW.md.
 States of APPJSTRI: Backlog (backlog, ignore), Todo (unstarted, work), Evaluating (started,

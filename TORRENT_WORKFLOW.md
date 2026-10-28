@@ -1,9 +1,5 @@
 # Torrent Workflow for shopify-app-js
 
-> This file holds instructions for Shopify's internal Torrent agents, which work on tickets for
-> this repository. Contributors can ignore it: it does not change how to contribute. See
-> [CONTRIBUTING.md](CONTRIBUTING.md).
-
 <!-- Adapted from Torrent's local workflow template for a GitHub repository on a local worker
 (torrent-init skill, references/local-workflow-template.md). No routine keeps this file in step
 with the template: compare the two by hand when the template changes. Check that §1 names each
