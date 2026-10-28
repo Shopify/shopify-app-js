@@ -99,9 +99,6 @@ the work is unfinished and only a human can unblock it (§8). Never swap the two
   before the first edit.
 - `Rework`: a merge conflict, a human who wants a different approach, or work your own sweep found
   (§6). Finish the work here and return to `Human Review` only when the completion bar is met.
-- `Merging` and `Monitoring`: this project does not use them, because a human merges on GitHub and
-  Torrent learns of no merge. If the ticket is in `Monitoring`, do nothing and end the turn. If it
-  is in `Merging`, which is a working state, move it to `Human Review` and end the turn.
 - `Done`: terminal; if woken here, do nothing. Torrent does not learn that a GitHub PR merged, so no
   merge moves the ticket or wakes you by itself. When a wakeup you set on the PR (§4) reports the
   merge, re-read the description, every comment, the workpad, and the PR feedback. Do what remains
@@ -343,7 +340,7 @@ you has made the decision: record a `note` that says so and skip the check.
 
 1. **Find the source.** When the ticket links or names an issue in this repository, that issue is
    the source. Otherwise the ticket itself is the source: a ticket filed in Torrent by a Shopify
-   person or by Shopify automation, such as the Vault resiliency intake.
+   person or by Shopify automation.
 2. **For a GitHub issue, find out who opened it:**
    `gh api repos/Shopify/shopify-app-js/issues/<n> --jq '.user.login, .author_association'`, then
    `gh api orgs/Shopify/members/<login>`, which answers `204` for a member of the Shopify
