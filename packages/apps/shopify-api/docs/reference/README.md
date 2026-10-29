@@ -15,4 +15,12 @@ This section of the documentation provides thorough details on the parameters an
 | [utils](./utils/README.md)          | Object containing general functions to help build apps.                                                                                                 |
 | [rest](../guides/rest-resources.md) | Object containing OO representations of the Admin REST API. See the [API reference documentation](https://shopify.dev/docs/api/admin-rest) for details. |
 
+## Optional imports
+
+These are also exported from the package root, for code that does not have a `shopifyApi` object.
+
+| Import                                                        | Description                                                                                       |
+| ------------------------------------------------------------- | ------------------------------------------------------------------------------------------------- |
+| [createClientAssertion](./auth/createClientAssertion.md)      | Signs a JWT client assertion for the client credentials grant, using a private key your app owns. |
+
 [Back to main page](../../README.md)
