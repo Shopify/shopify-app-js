@@ -10,6 +10,7 @@
 This library provides support for the backends of TypeScript/JavaScript [Shopify](https://www.shopify.com) apps to access the [Shopify Admin API](https://shopify.dev/docs/api/admin), by making it easier to perform the following actions:
 
 - Creating [online](https://shopify.dev/docs/apps/auth/access-token-types/online) or [offline](https://shopify.dev/docs/apps/auth/access-token-types/offline) access tokens for the Admin API via OAuth
+- Authenticating the [client credentials grant](docs/reference/auth/clientcredentials.md) with the app's client secret, or with a [JWT client assertion](docs/reference/auth/createClientAssertion.md) signed by a key the app owns
 - Making requests to the [REST API](https://shopify.dev/docs/api/admin/rest/reference)
 - Making requests to the [GraphQL API](https://shopify.dev/docs/api/admin/graphql/reference)
 - Register/process webhooks
