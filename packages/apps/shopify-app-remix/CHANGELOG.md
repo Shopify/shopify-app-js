@@ -1,5 +1,15 @@
 # @shopify/shopify-app-remix
 
+## 6.0.3
+
+### Patch Changes
+
+- f25dcf8: Fix broken code examples in the reference docs. Examples now parse and match the package APIs: removed stray parentheses and fixed unbalanced braces, declared variables before using them (`session`, `topic`), added missing `await`s on `authenticate.*`, `admin.graphql` and `shopify.login`, and added missing imports (`GraphqlQueryError`, `unauthenticated`, loader/action types and React hooks). React Router examples no longer import `json`, which React Router v7 doesn't export: loaders and actions return plain objects, use `data()` to set a status, and use `Response.json()` for responses passed to `cors()`. This change updates documentation only; runtime behavior is unchanged.
+- 1ce03cd: Reject invalid admin session-token destination and issuer claims through the existing invalid-token response path before loading sessions or exchanging tokens. Checkout tokens no longer cause `TypeError: Invalid URL` in `authenticate.admin`; public checkout authentication is unchanged.
+- Updated dependencies [f07e218]
+  - @shopify/shopify-api@15.1.0
+  - @shopify/shopify-app-session-storage@7.0.2
+
 ## 6.0.2
 
 ### Patch Changes
