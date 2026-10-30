@@ -9,6 +9,15 @@ export interface RegisterWebhooksOptions {
   session: Session;
 }
 
+export interface AuthenticateWebhookOptions {
+  /**
+   * Whether to load the offline session after validating the webhook.
+   *
+   * @defaultValue `true`
+   */
+  loadSession?: boolean;
+}
+
 interface Context<Topics = string | number | symbol> {
   /**
    * The API version used for the webhook.
@@ -238,4 +247,5 @@ export type WebhookContext<Topics = string | number | symbol> =
  */
 export type AuthenticateWebhook<Topics = string | number | symbol> = (
   request: Request,
+  options?: AuthenticateWebhookOptions,
 ) => Promise<WebhookContext<Topics>>;

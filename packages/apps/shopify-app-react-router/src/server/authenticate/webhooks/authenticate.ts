@@ -7,6 +7,7 @@ import {ensureValidOfflineSession} from '../../helpers';
 
 import type {
   AuthenticateWebhook,
+  AuthenticateWebhookOptions,
   WebhookContext,
   WebhookContextWithoutSession,
 } from './types';
@@ -18,6 +19,7 @@ export function authenticateWebhookFactory<Topics extends string>(
 
   return async function authenticate(
     request: Request,
+    options?: AuthenticateWebhookOptions,
   ): Promise<WebhookContext<Topics>> {
     if (request.method !== 'POST') {
       logger.debug(
@@ -49,7 +51,10 @@ export function authenticateWebhookFactory<Topics extends string>(
         throw new Response(undefined, {status: 400, statusText: 'Bad Request'});
       }
     }
-    const session = await ensureValidOfflineSession(params, check.domain);
+    const session =
+      options?.loadSession === false
+        ? undefined
+        : await ensureValidOfflineSession(params, check.domain);
 
     let webhookContext: WebhookContextWithoutSession<Topics>;
 
