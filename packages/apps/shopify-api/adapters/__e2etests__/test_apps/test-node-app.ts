@@ -13,6 +13,7 @@ import {
   TestType,
 } from '../test_config_types';
 import {handleGraphqlTest} from '../test_handle_graphql';
+import {handleClientAssertionTest} from '../test_handle_client_assertion';
 
 /* Codes for different Colours */
 const RED = '\x1b[31m';
@@ -57,7 +58,16 @@ const server = createServer(
         )}\n`,
       );
 
-      if (testRequest.type === TestType.Graphql) {
+      if (testRequest.type === TestType.ClientAssertion) {
+        const result = await handleClientAssertionTest();
+
+        testPassed = result.testPassed;
+        testFailedDebug = result.testFailedDebug;
+
+        console.log(
+          `[node] testPassed=${testPassed}, testFailedDebug=${testFailedDebug}\n`,
+        );
+      } else if (testRequest.type === TestType.Graphql) {
         const result = await handleGraphqlTest({
           apiServer,
           testRequest,

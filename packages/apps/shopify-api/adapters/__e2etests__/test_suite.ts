@@ -28,6 +28,15 @@ const graphqlQuery = `
 
 export const testSuite = [
   {
+    name: 'can create and verify a client assertion',
+    config: {
+      testRequest: initTestRequest({
+        type: TestType.ClientAssertion,
+      }),
+      expectedResponse: initTestResponse(),
+    },
+  },
+  {
     name: 'can make GraphQL request',
     config: {
       testRequest: initTestRequest({
