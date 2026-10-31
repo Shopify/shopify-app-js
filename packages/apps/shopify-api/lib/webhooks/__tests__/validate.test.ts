@@ -5,7 +5,7 @@ import {
   NormalizedRequest,
   NormalizedResponse,
 } from '../../../runtime/http';
-import {ShopifyHeader} from '../../types';
+import {LogSeverity, ShopifyHeader} from '../../types';
 import {WebhookValidationErrorReason} from '../types';
 import {Shopify, shopifyApi} from '../..';
 import {testConfig} from '../../__tests__/test-config';
@@ -34,6 +34,31 @@ describe('shopify.webhooks.validate', () => {
       topic: 'PRODUCTS_CREATE',
       webhookType: 'webhooks',
     });
+  });
+
+  it('validates requests signed with the fallback API secret', async () => {
+    const shopify = shopifyApi(
+      testConfig({apiSecretKeyFallback: 'previous_secret'}),
+    );
+    const app = getTestApp(shopify);
+
+    const response = await request(app)
+      .post('/webhooks')
+      .set(headers({hmac: hmac('previous_secret', rawBody)}))
+      .send(rawBody)
+      .expect(200);
+
+    expect(response.body.data).toMatchObject({
+      valid: true,
+      webhookId: '123456789',
+      webhookType: 'webhooks',
+    });
+    expect(shopify.config.logger.log).toHaveBeenCalledWith(
+      LogSeverity.Warning,
+      expect.stringMatching(
+        /apiSecretKeyFallback.*topic: products\/create, shop: shop1\.myshopify\.io, webhookId: 123456789/,
+      ),
+    );
   });
 
   it.each([

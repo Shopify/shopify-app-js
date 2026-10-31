@@ -28,6 +28,12 @@ export interface ConfigParams<
    */
   apiSecretKey: string;
   /**
+   * An optional previous API secret key used to validate inbound HMACs during secret rotation.
+   *
+   * This key is never used to sign outbound requests.
+   */
+  apiSecretKeyFallback?: string;
+  /**
    * The scopes your app needs to access the API. Not required if using Shopify managed installation.
    */
   scopes?: string[] | AuthScopes;
