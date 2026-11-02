@@ -157,7 +157,7 @@ Which plans to look for.
 
 `boolean` | Defaults to `true`
 
-Whether to look for test purchases only.
+Whether to include test purchases. When `true`, both test and non-test purchases count as active payments. When `false`, test purchases are ignored and only non-test purchases count.
 
 ### returnObject
 
