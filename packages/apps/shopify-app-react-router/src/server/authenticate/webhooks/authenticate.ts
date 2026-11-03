@@ -8,6 +8,7 @@ import type {BasicParams} from '../../types';
 import {adminClientFactory} from '../../clients';
 import {handleClientErrorFactory} from '../admin/helpers';
 import {ensureValidOfflineSession} from '../../helpers';
+import {InvalidRefreshTokenResponse} from '../../helpers/refresh-token';
 
 import type {
   AuthenticateWebhook,
@@ -57,7 +58,7 @@ export function authenticateWebhookFactory<Topics extends string>(
     try {
       session = await ensureValidOfflineSession(params, check.domain);
     } catch (error) {
-      if (!(error instanceof Response) || error.status !== 500) {
+      if (!(error instanceof InvalidRefreshTokenResponse)) {
         throw error;
       }
       logger.debug(

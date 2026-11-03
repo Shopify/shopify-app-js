@@ -5,7 +5,7 @@ import {MemorySessionStorage} from '@shopify/shopify-app-session-storage-memory'
 import {testConfig, TEST_SHOP} from '../../__test-helpers';
 import {deriveApi} from '../../shopify-app';
 import {BasicParams} from '../../types';
-import refreshToken from '../refresh-token';
+import refreshToken, {InvalidRefreshTokenResponse} from '../refresh-token';
 
 describe('refreshToken', () => {
   let sessionStorage: MemorySessionStorage;
@@ -67,6 +67,26 @@ describe('refreshToken', () => {
     });
 
     describe('error handling', () => {
+      it('marks an unusable refresh token while preserving the HTTP response', async () => {
+        mockRefreshToken.mockRejectedValue(
+          new HttpResponseError({
+            message: 'Refresh token is no longer active',
+            code: 401,
+            statusText: 'Unauthorized',
+            body: {error: 'invalid_request'},
+          }),
+        );
+        const error = await refreshToken(
+          params,
+          TEST_SHOP,
+          'invalid-refresh-token',
+        ).catch((error) => error);
+        expect(error).toBeInstanceOf(InvalidRefreshTokenResponse);
+        expect(error).toBeInstanceOf(Response);
+        expect(error.status).toBe(500);
+        expect(error.statusText).toBe('Internal Server Error');
+      });
+
       it('rethrows InvalidJwtError', async () => {
         // GIVEN
         const refreshTokenValue = 'invalid-jwt-refresh-token';
@@ -139,6 +159,7 @@ describe('refreshToken', () => {
         expect(error).toBeInstanceOf(Response);
         expect(error.status).toBe(500);
         expect(error.statusText).toBe('Internal Server Error');
+        expect(error).not.toBeInstanceOf(InvalidRefreshTokenResponse);
       });
 
       it('throws Response with status 500 for generic errors', async () => {
@@ -162,6 +183,7 @@ describe('refreshToken', () => {
         expect(error).toBeInstanceOf(Response);
         expect(error.status).toBe(500);
         expect(error.statusText).toBe('Internal Server Error');
+        expect(error).not.toBeInstanceOf(InvalidRefreshTokenResponse);
       });
     });
   });
