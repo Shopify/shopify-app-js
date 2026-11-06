@@ -1,7 +1,21 @@
 import {createClient, RedisClientOptions} from 'redis';
 import {DBConnection} from '@shopify/shopify-app-session-storage';
 
-type RedisClient = ReturnType<typeof createClient>;
+// RedisClientOptions defaults its RESP type to 3, but callers can use either protocol.
+export type RedisConnectionOptions = Omit<RedisClientOptions, 'RESP'> & {
+  RESP?: 2 | 3;
+};
+
+// Only require the operations used by the adapter, not a particular client version.
+export interface RedisClient {
+  readonly isReady: boolean;
+  connect(): Promise<unknown>;
+  quit(): Promise<unknown>;
+  keys(pattern: string): Promise<string[]>;
+  get(key: string): Promise<string | null>;
+  set(key: string, value: string): Promise<unknown>;
+  del(key: string): Promise<number>;
+}
 
 export class RedisConnection implements DBConnection {
   sessionStorageIdentifier: string;
@@ -9,7 +23,7 @@ export class RedisConnection implements DBConnection {
 
   constructor(
     urlOrClient: string | URL | RedisClient,
-    options: RedisClientOptions,
+    options: RedisConnectionOptions,
     keyPrefix: string,
   ) {
     this.init(urlOrClient, options);
@@ -56,14 +70,22 @@ export class RedisConnection implements DBConnection {
 
   private init(
     urlOrClient: string | URL | RedisClient,
-    options: RedisClientOptions,
+    options: RedisConnectionOptions,
   ) {
     if (typeof urlOrClient === 'string' || urlOrClient instanceof URL) {
-      this.client = createClient({...options, url: urlOrClient.toString()});
-      this.client.on('error', this.eventHandler);
-      this.client.on('connect', this.eventHandler);
-      this.client.on('reconnecting', this.eventHandler);
-      this.client.on('ready', this.eventHandler);
+      const client = createClient({
+        ...options,
+        // Preserve authentication and negotiation even when RESP is explicitly undefined.
+        RESP: options.RESP ?? 2,
+        url: urlOrClient.toString(),
+        // v6 otherwise limits queued commands to five seconds, unlike v5.
+        commandOptions: {timeout: undefined, ...options.commandOptions},
+      });
+      client.on('error', this.eventHandler);
+      client.on('connect', this.eventHandler);
+      client.on('reconnecting', this.eventHandler);
+      client.on('ready', this.eventHandler);
+      this.client = client;
     } else {
       this.client = urlOrClient;
     }
