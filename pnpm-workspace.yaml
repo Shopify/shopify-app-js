@@ -2,3 +2,9 @@ packages:
   - 'packages/api-clients/*'
   - 'packages/apps/*'
   - 'packages/apps/session-storage/*'
+
+# MongoDB 7.8.0's security fix is already adopted, but Dependabot's 14-day age
+# gate rejects it while resolving unrelated updates. Keep other packages gated.
+# Remove after 2026-11-13 16:29:53 UTC, when 7.8.0 is 14 days old.
+minimumReleaseAgeExclude:
+  - mongodb
