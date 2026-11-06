@@ -1,5 +1,13 @@
 # Changelog
 
+## 15.1.1
+
+### Patch Changes
+
+- 4893aae: Updated `@parcel/watcher`, ` isbot`, ` lossless-json`, ` mongodb`, ` mysql2`, ` pg`, ` pg-connection-string` dependencies
+
+  Update `mongodb` to ^7.8.0 to fix CVE-2026-119179 and SRV host-name validation. MongoDB server 4.4 or newer is required. The driver no longer applies `timeoutMS` or `timeoutMode`; use per-stage timeouts instead.
+
 ## 15.1.0
 
 ### Minor Changes
