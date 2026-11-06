@@ -1,5 +1,11 @@
 # @shopify/shopify-app-session-storage-kv
 
+## 8.0.3
+
+### Patch Changes
+
+- 258ced1: Stop adding duplicate session ids to the `shop:<shop>` index when an existing session is stored again (for example on every expiring offline token refresh). Indexes that already contain duplicates are compacted on the next store, and `findSessionsByShop` loads each session only once.
+
 ## 8.0.2
 
 ## 8.0.1
