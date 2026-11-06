@@ -6,6 +6,7 @@ import {DataType} from '../../lib/clients/types';
 export enum TestType {
   Rest = 'rest',
   Graphql = 'graphql',
+  ClientAssertion = 'clientAssertion',
 }
 export interface RestTestRequest extends NormalizedRequest {
   type: TestType.Rest;
@@ -19,7 +20,12 @@ export interface GraphqlTestRequest extends NormalizedRequest {
   method: 'post';
   retries?: number;
 }
-export type TestRequest = RestTestRequest | GraphqlTestRequest;
+export interface ClientAssertionTestRequest extends NormalizedRequest {
+  type: TestType.ClientAssertion;
+  method: 'post';
+}
+export type TestRequest =
+  RestTestRequest | GraphqlTestRequest | ClientAssertionTestRequest;
 export interface TestResponse extends NormalizedResponse {
   errorType?: string;
   errorMessage?: string;
@@ -32,7 +38,16 @@ export interface TestConfig {
 }
 
 export function initTestRequest(options?: Partial<TestRequest>): TestRequest {
-  if (options?.type === TestType.Graphql) {
+  if (options?.type === TestType.ClientAssertion) {
+    return {
+      headers: {},
+      url: '/client-assertion',
+      method: 'post',
+      body: '',
+      ...options,
+      type: TestType.ClientAssertion,
+    };
+  } else if (options?.type === TestType.Graphql) {
     return {
       headers: {},
       url: '/admin/api/graphql.json',
