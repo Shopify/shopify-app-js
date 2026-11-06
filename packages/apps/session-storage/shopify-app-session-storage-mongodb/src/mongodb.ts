@@ -4,10 +4,43 @@ import {SessionStorage} from '@shopify/shopify-app-session-storage';
 
 export interface MongoDBSessionStorageOptions {
   sessionCollectionName: string;
+  /**
+   * Connect without verified TLS when `NODE_ENV` is `production`. Set this
+   * only for a MongoDB server on a network you trust.
+   */
+  allowInsecureConnection?: boolean;
 }
 const defaultMongoDBSessionStorageOptions: MongoDBSessionStorageOptions = {
   sessionCollectionName: 'shopify_sessions',
+  allowInsecureConnection: false,
 };
+
+const TLS_VERIFICATION_OVERRIDES = [
+  'tlsinsecure',
+  'tlsallowinvalidcertificates',
+  'tlsallowinvalidhostnames',
+];
+
+// The driver reads option names case-insensitively, so check every spelling of
+// an option rather than the last one, which could differ from the one it uses.
+function usesVerifiedTls(url: URL): boolean {
+  const valuesOf = (option: string) =>
+    [...url.searchParams]
+      .filter(([key]) => key.toLowerCase() === option)
+      .map(([, value]) => value);
+  const tlsValues = [...valuesOf('tls'), ...valuesOf('ssl')];
+  const tlsEnabled =
+    tlsValues.length === 0
+      ? url.protocol === 'mongodb+srv:'
+      : tlsValues.every((value) => value === 'true');
+
+  return (
+    tlsEnabled &&
+    !TLS_VERIFICATION_OVERRIDES.some((option) =>
+      valuesOf(option).includes('true'),
+    )
+  );
+}
 
 export class MongoDBSessionStorage implements SessionStorage {
   static withCredentials(
@@ -21,7 +54,7 @@ export class MongoDBSessionStorage implements SessionStorage {
       new URL(
         `mongodb://${encodeURIComponent(username)}:${encodeURIComponent(
           password,
-        )}@${host}/`,
+        )}@${host}/?tls=true`,
       ),
       dbName,
       opts,
@@ -42,6 +75,19 @@ export class MongoDBSessionStorage implements SessionStorage {
       this.dbUrl = new URL(this.dbUrl);
     }
     this.options = {...defaultMongoDBSessionStorageOptions, ...opts};
+    if (
+      process.env.NODE_ENV === 'production' &&
+      !this.options.allowInsecureConnection &&
+      !usesVerifiedTls(this.dbUrl)
+    ) {
+      throw new Error(
+        'MongoDBSessionStorage requires TLS with certificate and host name ' +
+          'verification in production. Use a mongodb+srv:// URL or add ' +
+          'tls=true to the URL, and do not set tlsInsecure, ' +
+          'tlsAllowInvalidCertificates or tlsAllowInvalidHostnames. For a ' +
+          'server on a network you trust, set allowInsecureConnection: true.',
+      );
+    }
     this.ready = this.init();
   }
 
