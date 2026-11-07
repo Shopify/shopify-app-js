@@ -10,6 +10,8 @@ import {
   expectTokenRefresh,
   getHmac,
   getThrownResponse,
+  mockExternalRequest,
+  setUpValidSession,
   testConfig,
 } from '../../../__test-helpers';
 import {TestOverridesArg} from '../../../test-helpers/test-config';
@@ -244,6 +246,93 @@ describe('Webhook validation', () => {
   });
 
   describe('Offline token expiration handling', () => {
+    it('returns a sessionless context when offline token refresh fails', async () => {
+      const sessionStorage = new MemorySessionStorage();
+      const shopify = shopifyApp(testConfig({sessionStorage}));
+      await setUpValidSession(sessionStorage, {
+        expires: new Date(Date.now() - 1000),
+        refreshToken: 'invalid-refresh-token',
+      });
+
+      await mockExternalRequest({
+        request: new Request(`https://${TEST_SHOP}/admin/oauth/access_token`, {
+          method: 'POST',
+        }),
+        response: new Response(JSON.stringify({error: 'invalid_request'}), {
+          status: 401,
+          statusText: 'Unauthorized',
+        }),
+      });
+
+      const body = JSON.stringify({some: 'data'});
+      const result = await shopify.authenticate.webhook(
+        new Request(`${APP_URL}/webhooks`, {
+          method: 'POST',
+          body,
+          headers: webhookHeaders(body),
+        }),
+      );
+
+      expect(result.session).toBeUndefined();
+      expect(result.admin).toBeUndefined();
+    });
+
+    it.each([401, 429, 500, 503])(
+      'preserves webhook retries when refresh returns %s',
+      async (status) => {
+        const sessionStorage = new MemorySessionStorage();
+        const shopify = shopifyApp(testConfig({sessionStorage}));
+        await setUpValidSession(sessionStorage, {
+          expires: new Date(Date.now() - 1000),
+          refreshToken: 'invalid-refresh-token',
+        });
+
+        await mockExternalRequest({
+          request: new Request(
+            `https://${TEST_SHOP}/admin/oauth/access_token`,
+            {
+              method: 'POST',
+            },
+          ),
+          response: new Response(
+            JSON.stringify({error: 'temporarily_unavailable'}),
+            {
+              status,
+              statusText: 'Temporarily unavailable',
+            },
+          ),
+        });
+
+        const body = JSON.stringify({some: 'data'});
+        const result = shopify.authenticate.webhook(
+          new Request(`${APP_URL}/webhooks`, {
+            method: 'POST',
+            body,
+            headers: webhookHeaders(body),
+          }),
+        );
+
+        await expect(result).rejects.toMatchObject({status: 500});
+      },
+    );
+
+    it('propagates session storage failures instead of returning a sessionless context', async () => {
+      const sessionStorage = new MemorySessionStorage();
+      const failure = new Response(undefined, {status: 500});
+      jest.spyOn(sessionStorage, 'loadSession').mockRejectedValue(failure);
+      const shopify = shopifyApp(testConfig({sessionStorage}));
+      const body = JSON.stringify({some: 'data'});
+      await expect(
+        shopify.authenticate.webhook(
+          new Request(`${APP_URL}/webhooks`, {
+            method: 'POST',
+            body,
+            headers: webhookHeaders(body),
+          }),
+        ),
+      ).rejects.toBe(failure);
+    });
+
     expectTokenRefresh(
       async (
         sessionStorage: SessionStorage,
