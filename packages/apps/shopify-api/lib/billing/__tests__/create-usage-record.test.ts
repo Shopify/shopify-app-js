@@ -65,6 +65,24 @@ describe('shopify.billing.createUsageRecord', () => {
     }).toMatchMadeHttpRequest();
   });
 
+  test('throws a BillingError when no usage record is returned', async () => {
+    const shopify = shopifyApi(testConfig({billing}));
+    queueMockResponses([
+      JSON.stringify({
+        data: {appUsageRecordCreate: {appUsageRecord: null, userErrors: []}},
+      }),
+    ]);
+
+    await expect(
+      shopify.billing.createUsageRecord({
+        session,
+        description: Responses.USAGE_RECORD_DESCRIPTION,
+        price: Responses.USAGE_RECORD_PRICE,
+        subscriptionLineItemId: Responses.USAGE_RECORD_SUBSCRIPTION_ID,
+      }),
+    ).rejects.toThrow(BillingError);
+  });
+
   test('returns the details of the usage record created, when using idemptotency key', async () => {
     const shopify = shopifyApi(testConfig({billing}));
     queueMockResponses([Responses.USAGE_RECORD_CREATE_IDEMPOTENCY_RESPONSE]);
