@@ -130,19 +130,21 @@ export function expectTokenRefresh(
       expect(actualSession.refreshToken).toBe('new-refresh-token-2');
     });
 
-    it('refreshes token when session has no expiry', async () => {
+    it('refreshes token when session has a refresh token but no expiry', async () => {
       // GIVEN
       const sessionStorage = new MemorySessionStorage();
+      const thirtyDaysFromNow = new Date(Date.now() + 1000 * 3600 * 24 * 30);
       const session = await setUpValidSession(sessionStorage, {
         expires: undefined,
         refreshToken: 'test-refresh-token',
+        refreshTokenExpires: thirtyDaysFromNow,
       });
 
       const refreshResponse = {
-        access_token: 'new-access-token-3',
+        access_token: 'recovered-access-token',
         scope: 'testScope',
         expires_in: 3600,
-        refresh_token: 'new-refresh-token-3',
+        refresh_token: 'recovered-refresh-token',
         refresh_token_expires_in: 2592000,
       };
 
@@ -167,9 +169,27 @@ export function expectTokenRefresh(
       const actualSession = await runAuth(sessionStorage, session);
 
       // THEN
-      expect(actualSession.accessToken).toBe('new-access-token-3');
-      expect(actualSession.refreshToken).toBe('new-refresh-token-3');
+      expect(actualSession.accessToken).toBe('recovered-access-token');
+      expect(actualSession.refreshToken).toBe('recovered-refresh-token');
       expect(actualSession.expires?.getTime()).toBeGreaterThan(Date.now());
+    });
+
+    it('does not refresh token when session has no expiry and the feature is disabled', async () => {
+      // GIVEN
+      const sessionStorage = new MemorySessionStorage();
+      const session = await setUpValidSession(sessionStorage, {
+        expires: undefined,
+        refreshToken: 'test-refresh-token',
+      });
+
+      // WHEN
+      const actualSession = await runAuth(sessionStorage, session, {
+        future: {expiringOfflineAccessTokens: false},
+      });
+
+      // THEN
+      expect(actualSession.accessToken).toBe(session.accessToken);
+      expect(actualSession.expires).toBeUndefined();
     });
 
     it('does not refresh token when feature flag is disabled even if session is expired', async () => {
