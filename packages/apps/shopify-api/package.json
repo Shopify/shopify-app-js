@@ -97,7 +97,7 @@
   "devDependencies": {
     "@cloudflare/workers-types": "^4.20260702.1",
     "@types/express": "^5.0.6",
-    "express": "^5.2.1",
+    "express": "^5.3.0",
     "jest-environment-miniflare": "^2.14.4",
     "miniflare": "^4.20260708.1",
     "rollup": "^4.62.2",
