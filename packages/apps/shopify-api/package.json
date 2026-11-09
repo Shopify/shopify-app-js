@@ -7,6 +7,15 @@
     "*": {
       "adapters/*": [
         "dist/ts/adapters/*/index.d.ts"
+      ],
+      "runtime": [
+        "dist/ts/runtime/index.d.ts"
+      ],
+      "rest/admin/*": [
+        "dist/ts/rest/admin/*/index.d.ts"
+      ],
+      "test-helpers": [
+        "dist/ts/test-helpers/index.d.ts"
       ]
     }
   },
