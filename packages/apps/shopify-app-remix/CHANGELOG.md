@@ -1,5 +1,11 @@
 # @shopify/shopify-app-remix
 
+## 6.0.5
+
+### Patch Changes
+
+- ecbcb1b: Fix `authenticate.webhook` returning a 500 for uninstalled shops when expiring offline access tokens are enabled. If the refresh token is no longer active, the webhook now gets a context without a session, so `app/uninstalled` and compliance handlers can run.
+
 ## 6.0.4
 
 ### Patch Changes
