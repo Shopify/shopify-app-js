@@ -26,5 +26,11 @@ const restInputs = fs
 
 export default getConfig({
   pkg,
-  input: ['lib/index.ts', 'runtime/index.ts', 'test-helpers/index.ts', ...adapterInputs, ...restInputs],
+  input: [
+    'lib/index.ts',
+    'runtime/index.ts',
+    'test-helpers/index.ts',
+    ...adapterInputs,
+    ...restInputs,
+  ],
 });

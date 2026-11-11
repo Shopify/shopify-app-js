@@ -71,7 +71,7 @@ interface Authenticate<Config extends AppConfigArg> {
    * import { authenticate } from "../../shopify.server";
    *
    * export async function loader({ request }: LoaderFunctionArgs) {
-   *   const {admin, session, sessionToken, billing} = authenticate.admin(request);
+   *   const {admin, session, sessionToken, billing} = await authenticate.admin(request);
    *   const response = await admin.graphql(`{ shop { name } }`)
    *
    *   return json(await response.json());
@@ -106,7 +106,7 @@ interface Authenticate<Config extends AppConfigArg> {
    * import { authenticate } from "../../shopify.server";
    *
    * export async function action({ request }: ActionFunctionArgs) {
-   *   const {admin, session, payload} = authenticate.flow(request);
+   *   const {admin, session, payload} = await authenticate.flow(request);
    *
    *   // Perform flow extension logic
    *
@@ -162,7 +162,7 @@ interface Authenticate<Config extends AppConfigArg> {
    * import { getWidgets } from "~/db/widgets";
    *
    * export async function loader({ request }: LoaderFunctionArgs) {
-   *   const {sessionToken} = authenticate.public.checkout(request);
+   *   const {sessionToken} = await authenticate.public.checkout(request);
    *
    *   return json(await getWidgets(sessionToken));
    * }
@@ -192,7 +192,7 @@ interface Authenticate<Config extends AppConfigArg> {
    *   }
    * 
    *   // Handle the webhook
-   *   console.log(`${TOPIC} webhook received with payload:`, JSON.stringify(payload))
+   *   console.log(`${topic} webhook received with payload:`, JSON.stringify(payload))
    *
    *   throw new Response();
    * };
@@ -281,11 +281,14 @@ export interface ShopifyAppBase<Config extends AppConfigArg> {
    *   // ...etc
    * });
    * export default shopify;
-   * export const addDocumentResponseheaders = shopify.addDocumentResponseheaders;
+   * export const addDocumentResponseHeaders = shopify.addDocumentResponseHeaders;
    * ```
    *
    * ```ts
    * // entry.server.tsx
+   * import { renderToString } from "react-dom/server";
+   * import type { EntryContext } from "@remix-run/node";
+   * import { RemixServer } from "@remix-run/react";
    * import { addDocumentResponseHeaders } from "~/shopify.server";
    *
    * export default function handleRequest(
@@ -368,8 +371,8 @@ export interface ShopifyAppBase<Config extends AppConfigArg> {
    * import shopify from "../../shopify.server";
    *
    * export async function loader({ request }: LoaderFunctionArgs) {
-   *   const {admin, session, sessionToken, billing} = shopify.authenticate.admin(request);
-   *   const response = admin.graphql(`{ shop { name } }`)
+   *   const {admin, session, sessionToken, billing} = await shopify.authenticate.admin(request);
+   *   const response = await admin.graphql(`{ shop { name } }`);
    *
    *   return json(await response.json());
    * }
@@ -401,7 +404,7 @@ export interface ShopifyAppBase<Config extends AppConfigArg> {
    * export async function loader({ request }: LoaderFunctionArgs) {
    *   const shop = await authenticateExternal(request)
    *   const {admin} = await shopify.unauthenticated.admin(shop);
-   *   const response = admin.graphql(`{ shop { currencyCode } }`)
+   *   const response = await admin.graphql(`{ shop { currencyCode } }`);
    *
    *   return json(await response.json());
    * }
@@ -432,16 +435,21 @@ export interface ShopifyAppLogin {
    * ```
    * ```ts
    * // /app/routes/auth/login.tsx
+   * import { useState } from "react";
+   * import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
+   * import { json } from "@remix-run/node";
+   * import { Form, useActionData } from "@remix-run/react";
+   * import { Button, Card, FormLayout, Page, Text, TextField } from "@shopify/polaris";
    * import shopify from "../../shopify.server";
    *
    * export async function loader({ request }: LoaderFunctionArgs) {
-   *   const errors = shopify.login(request);
+   *   const errors = await shopify.login(request);
    *
    *   return json(errors);
    * }
    *
    * export async function action({ request }: ActionFunctionArgs) {
-   *   const errors = shopify.login(request);
+   *   const errors = await shopify.login(request);
    *
    *   return json(errors);
    * }
@@ -466,7 +474,7 @@ export interface ShopifyAppLogin {
    *               value={shop}
    *               onChange={setShop}
    *               autoComplete="on"
-   *               error={actionData?.errors.shop}
+   *               error={actionData?.shop}
    *             />
    *             <Button submit primary>
    *               Submit

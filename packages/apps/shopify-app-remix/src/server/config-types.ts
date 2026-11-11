@@ -141,7 +141,7 @@ export interface AppConfigArg<
    *   }
    * 
    *   // Handle the webhook
-   *   console.log(`${TOPIC} webhook received with`, JSON.stringify(payload))
+   *   console.log(`${topic} webhook received with`, JSON.stringify(payload))
    *
    *   throw new Response();
    * };
@@ -229,7 +229,8 @@ export interface AppConfigArg<
    * });
    * export default shopify;
    * export const authenticate = shopify.authenticate;
-   *
+   * ```
+   * ```ts
    * // /app/routes/auth/$.jsx
    * import { LoaderFunctionArgs } from "@remix-run/node";
    * import { authenticate } from "../../shopify.server";

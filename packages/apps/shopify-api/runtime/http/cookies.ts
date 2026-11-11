@@ -91,9 +91,13 @@ export class Cookies {
             name,
             value,
             ...Object.fromEntries(
-              opts.map((opt) =>
-                splitN(opt, '=', 2).map((value) => value.trim()),
-              ),
+              opts.map((opt) => {
+                const [key, value] = splitN(opt, '=', 2).map((value) =>
+                  value.trim(),
+                );
+                // Flag attributes like HttpOnly have no value
+                return [key, value ?? true];
+              }),
             ),
           },
         ];
@@ -111,8 +115,12 @@ export class Cookies {
     let result = '';
     result += `${data.name}=${data.value};`;
     result += Object.entries(data)
-      .filter(([key]) => !['name', 'value', 'expires'].includes(key))
-      .map(([key, value]) => `${key}=${value}`)
+      .filter(
+        ([key, value]) =>
+          !['name', 'value', 'expires'].includes(key) && value !== false,
+      )
+      // Boolean attributes are flags, so only write them when true
+      .map(([key, value]) => (value === true ? key : `${key}=${value}`))
       .join('; ');
     if (data.expires) {
       result += ';';
@@ -180,6 +188,7 @@ export class Cookies {
 
   set(name: string, value: string, opts: Partial<CookieData> = {}): void {
     this.outgoingCookieJar[name] = {
+      httpOnly: true,
       ...opts,
       name,
       value,

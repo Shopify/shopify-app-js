@@ -1,6 +1,6 @@
 {
   "name": "@shopify/shopify-api",
-  "version": "15.0.0",
+  "version": "15.1.1",
   "description": "Shopify API Library for Node - accelerate development with support for authentication, graphql proxy, webhooks",
   "types": "./dist/ts/lib/index.d.ts",
   "module": "./dist/esm/lib/index.mjs",
@@ -85,23 +85,23 @@
     "Storefront API"
   ],
   "dependencies": {
-    "@shopify/admin-api-client": "^2.0.0",
-    "@shopify/graphql-client": "^2.0.0",
-    "@shopify/storefront-api-client": "^2.0.0",
+    "@shopify/admin-api-client": "^2.0.1",
+    "@shopify/graphql-client": "^2.0.1",
+    "@shopify/storefront-api-client": "^2.0.1",
     "compare-versions": "^6.1.1",
-    "isbot": "^5.2.0",
+    "isbot": "^5.2.2",
     "jose": "^5.9.6",
-    "lossless-json": "^4.3.0",
+    "lossless-json": "^4.3.3",
     "tslib": "^2.8.1"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^4.20260702.1",
     "@types/express": "^5.0.6",
-    "express": "^5.2.1",
+    "express": "^5.3.0",
     "jest-environment-miniflare": "^2.14.4",
     "miniflare": "^4.20260708.1",
     "rollup": "^4.62.2",
-    "supertest": "^7.2.2",
+    "supertest": "^7.3.1",
     "wrangler": "^4.111.0"
   },
   "files": [

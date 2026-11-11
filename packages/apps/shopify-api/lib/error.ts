@@ -11,6 +11,7 @@ export class InvalidHmacError extends ShopifyError {}
 export class InvalidShopError extends ShopifyError {}
 export class InvalidHostError extends ShopifyError {}
 export class InvalidJwtError extends ShopifyError {}
+export class InvalidClientAssertionError extends ShopifyError {}
 export class MissingJwtTokenError extends ShopifyError {}
 export class InvalidDeliveryMethodError extends ShopifyError {}
 

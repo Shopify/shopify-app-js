@@ -83,19 +83,22 @@ export interface AppConfigArg<
    *
    * @example
    * ```ts
-   * import { BillingInterval } from "@shopify/shopify-api";
+   * import { BillingInterval, shopifyApp } from "@shopify/shopify-app-react-router/server";
    *
-   * billing: {
-   *   myPlan: {
-   *     lineItems: [
-   *       {
-   *         amount: 10,
-   *         currencyCode: 'USD',
-   *         interval: BillingInterval.Every30Days,
-   *       }
-   *     ],
+   * const shopify = shopifyApp({
+   *   // ...etc
+   *   billing: {
+   *     myPlan: {
+   *       lineItems: [
+   *         {
+   *           amount: 10,
+   *           currencyCode: 'USD',
+   *           interval: BillingInterval.Every30Days,
+   *         }
+   *       ],
+   *     },
    *   },
-   * }
+   * });
    * ```
    */
   billing?: BillingConfigWithLineItems;
@@ -179,7 +182,7 @@ export interface AppConfigArg<
    *   }
    *
    *   // Handle the webhook
-   *   console.log(`${TOPIC} webhook received with`, JSON.stringify(payload))
+   *   console.log(`${topic} webhook received with`, JSON.stringify(payload))
    *
    *   throw new Response();
    * };
@@ -216,6 +219,9 @@ export interface AppConfigArg<
    * AppStore should be used for public apps that are distributed in the Shopify App Store.
    * SingleMerchant should be used for custom apps managed in the Partner Dashboard.
    * ShopifyAdmin should be used for apps that are managed in the merchant's Shopify Admin.
+   *
+   * ShopifyAdmin apps can't be embedded in the Shopify Admin and don't receive session tokens, so `authenticate.admin`
+   * does not authenticate their requests. Your app must authenticate its own users before it calls `authenticate.admin`.
    *
    * {@link https://shopify.dev/docs/apps/distribution}
    */
@@ -258,7 +264,8 @@ export interface AppConfigArg<
    * });
    * export default shopify;
    * export const authenticate = shopify.authenticate;
-   *
+   * ```
+   * ```ts
    * // /app/routes/auth/$.jsx
    * import { LoaderFunctionArgs } from "react-router";
    * import { authenticate } from "../../shopify.server";
@@ -284,7 +291,7 @@ export interface AppConfigArg<
    * The URL to load the Polaris web components script from.
    *
    * This is used to add a preload `Link` header to document responses. It should match the `polarisUrl` you pass to the
-   * `AppProvider` component. Defaults to the Shopify CDN URL. Only override this if you need to load a Polaris release candidate.
+   * `AppProvider` component. Defaults to the latest stable Polaris 2.x release on the Shopify CDN (`https://cdn.shopify.com/shopifycloud/polaris-2.js`). Only override this if you need to load a Polaris release candidate, pin a specific version, or stay on Polaris 1.x (`https://cdn.shopify.com/shopifycloud/polaris-1.js`).
    */
   polarisUrl?: string;
 }

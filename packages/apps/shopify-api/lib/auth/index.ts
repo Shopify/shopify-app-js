@@ -16,6 +16,7 @@ import {
   migrateToExpiringToken,
   MigrateToExpiringToken,
 } from './oauth/migrate-to-expiring-token';
+import {clientAssertion, CreateClientAssertion} from './client-assertion';
 
 export {AuthScopes} from './scopes';
 
@@ -33,6 +34,7 @@ export function shopifyAuth<Config extends ConfigInterface>(
     migrateToExpiringToken: migrateToExpiringToken(config),
     refreshToken: refreshToken(config),
     clientCredentials: clientCredentials(config),
+    createClientAssertion: clientAssertion(config),
   } as ShopifyAuth;
 
   return shopify;
@@ -49,4 +51,5 @@ export interface ShopifyAuth {
   migrateToExpiringToken: MigrateToExpiringToken;
   refreshToken: RefreshToken;
   clientCredentials: ClientCredentials;
+  createClientAssertion: CreateClientAssertion;
 }

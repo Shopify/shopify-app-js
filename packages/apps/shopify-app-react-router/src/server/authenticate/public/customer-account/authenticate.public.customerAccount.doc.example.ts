@@ -13,6 +13,6 @@ export const action = async ({request}: ActionFunctionArgs) => {
     await authenticate.public.customerAccount(request);
 
   // Get offers for the customer
-  const offers = getOffers(sessionToken.des, sessionToken.sub);
-  return cors({offers});
+  const offers = getOffers(sessionToken.dest, sessionToken.sub);
+  return cors(Response.json({offers}));
 };

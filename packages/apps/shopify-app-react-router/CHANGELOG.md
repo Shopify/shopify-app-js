@@ -1,5 +1,70 @@
 # @shopify/shopify-app-react-router
 
+## 4.0.2
+
+### Patch Changes
+
+- 4893aae: Updated `@parcel/watcher`, ` isbot`, ` lossless-json`, ` mongodb`, ` mysql2`, ` pg`, ` pg-connection-string` dependencies
+
+  Update `mongodb` to ^7.8.0 to fix CVE-2026-119179 and SRV host-name validation. MongoDB server 4.4 or newer is required. The driver no longer applies `timeoutMS` or `timeoutMode`; use per-stage timeouts instead.
+
+- Updated dependencies [4893aae]
+  - @shopify/shopify-api@15.1.1
+  - @shopify/shopify-app-session-storage@7.0.3
+
+## 4.0.1
+
+### Patch Changes
+
+- f25dcf8: Fix broken code examples in the reference docs. Examples now parse and match the package APIs: removed stray parentheses and fixed unbalanced braces, declared variables before using them (`session`, `topic`), added missing `await`s on `authenticate.*`, `admin.graphql` and `shopify.login`, and added missing imports (`GraphqlQueryError`, `unauthenticated`, loader/action types and React hooks). React Router examples no longer import `json`, which React Router v7 doesn't export: loaders and actions return plain objects, use `data()` to set a status, and use `Response.json()` for responses passed to `cors()`. This change updates documentation only; runtime behavior is unchanged.
+- 1ce03cd: Reject invalid admin session-token destination and issuer claims through the existing invalid-token response path before loading sessions or exchanging tokens. Checkout tokens no longer cause `TypeError: Invalid URL` in `authenticate.admin`; public checkout authentication is unchanged.
+- Updated dependencies [f07e218]
+  - @shopify/shopify-api@15.1.0
+  - @shopify/shopify-app-session-storage@7.0.2
+
+## 4.0.0
+
+### Major Changes
+
+- d00bf15: Load Polaris web components 2.x by default. `AppProvider` now renders `<script src="https://cdn.shopify.com/shopifycloud/polaris-2.js">` and `shopifyApp` preloads the same URL in the document `Link` header, instead of `https://cdn.shopify.com/shopifycloud/polaris.js` (which stays on Polaris 1.x).
+
+  Polaris 2.0 renders the new Admin Next theme by default, so your app's UI will look different after updating. `polaris-2.js` follows the latest stable 2.x release; use `polaris-2.0.js` to pin to 2.0.
+
+  To stay on Polaris 1.x, set `polarisUrl` in both places so the script tag and the preload header match:
+
+  ```diff
+    <AppProvider
+      apiKey={apiKey}
+  +   polarisUrl="https://cdn.shopify.com/shopifycloud/polaris-1.js"
+    >
+      <Outlet />
+    </AppProvider>
+  ```
+
+  ```diff
+    const shopify = shopifyApp({
+      // ...
+  +   polarisUrl: "https://cdn.shopify.com/shopifycloud/polaris-1.js",
+    });
+  ```
+
+### Patch Changes
+
+- 7d9cb02: Document that `authenticate.admin` does not authenticate requests for merchant custom apps (`AppDistribution.ShopifyAdmin`).
+
+  Merchant custom apps can't be embedded in the Shopify admin, so their requests don't carry a session token. For these apps, `authenticate.admin` returns an Admin API context that uses the configured `adminApiAccessToken` for any request it receives. Your app must authenticate its own users before it calls `authenticate.admin`, for example with your identity provider, a private network, or HTTP authentication. This change updates documentation only; runtime behavior is unchanged.
+
+## 3.0.2
+
+### Patch Changes
+
+- Updated dependencies [79671d2]
+- Updated dependencies [d7be864]
+  - @shopify/shopify-api@15.0.1
+  - @shopify/admin-api-client@2.0.1
+  - @shopify/storefront-api-client@2.0.1
+  - @shopify/shopify-app-session-storage@7.0.1
+
 ## 3.0.1
 
 ### Patch Changes

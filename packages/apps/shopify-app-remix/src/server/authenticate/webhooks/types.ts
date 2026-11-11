@@ -197,11 +197,11 @@ export interface WebhookContextWithSession<
    * <description>Use the `admin` object in the context to interact with the Admin API.</description>
    * ```ts
    * // /app/routes/webhooks.tsx
-   * import { ActionFunctionArgs } from "@remix-run/node";
+   * import { ActionFunctionArgs, json } from "@remix-run/node";
    * import { authenticate } from "../shopify.server";
    *
    * export async function action({ request }: ActionFunctionArgs) {
-   *   const { admin } = await authenticate.webhook(request);
+   *   const { admin, session } = await authenticate.webhook(request);
    *
    *   // Webhook requests can trigger after an app is uninstalled
    *   // If the app is already uninstalled, the session may be undefined.

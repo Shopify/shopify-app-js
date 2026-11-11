@@ -21,6 +21,21 @@ describe('addDocumentResponseHeaders', () => {
     expectDocumentRequestHeaders(response, true);
   });
 
+  it('preloads the Polaris 2.x script by default', () => {
+    // GIVEN
+    const shopify = shopifyApp(testConfig());
+    const request = new Request(`${APP_URL}?shop=${TEST_SHOP}`);
+    const response = new Response();
+
+    // WHEN
+    shopify.addDocumentResponseHeaders(request, response.headers);
+
+    // THEN
+    expect(response.headers.get('Link')).toContain(
+      '<https://cdn.shopify.com/shopifycloud/polaris-2.js>; rel="preload"; as="script"',
+    );
+  });
+
   it('uses a custom polarisUrl in the preload Link header when configured', () => {
     // GIVEN
     const polarisUrl = 'https://cdn.shopify.com/shopifycloud/polaris-1.1-rc.js';

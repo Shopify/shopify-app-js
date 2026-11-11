@@ -1,6 +1,6 @@
 {
   "name": "@shopify/storefront-api-client",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Shopify Storefront API Client - A lightweight JS client to interact with Shopify's Storefront API",
   "repository": {
     "type": "git",
@@ -85,7 +85,7 @@
     "!node_modules"
   ],
   "dependencies": {
-    "@shopify/graphql-client": "^2.0.0"
+    "@shopify/graphql-client": "^2.0.1"
   },
   "devDependencies": {
     "@babel/preset-env": "^7.29.7",

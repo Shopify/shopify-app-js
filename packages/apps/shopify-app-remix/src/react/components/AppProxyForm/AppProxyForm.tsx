@@ -21,6 +21,8 @@ export interface AppProxyFormProps extends FormProps {
  * <description>Use an `AppProxyForm` within an `AppProxy` to create a form.</description>
  * ```ts
  * // /app/routes/apps/appProxy.ts
+ * import { json } from "@remix-run/node";
+ * import { useLoaderData } from "@remix-run/react";
  * import {
  *   AppProxyProvider,
  *   AppProxyForm,

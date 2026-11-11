@@ -7,7 +7,7 @@ import {
   variables,
   clientConfig,
   getValidClient,
-  defaultHeaders,
+  loggedHeaders,
 } from './fixtures';
 import {
   fetchApiTests,
@@ -136,7 +136,7 @@ describe('GraphQL Client', () => {
               {
                 method: 'POST',
                 body: JSON.stringify({query: operation}),
-                headers: defaultHeaders,
+                headers: loggedHeaders,
               },
             ];
 
@@ -262,7 +262,7 @@ describe('GraphQL Client', () => {
               {
                 method: 'POST',
                 body: JSON.stringify({query: operation}),
-                headers: defaultHeaders,
+                headers: loggedHeaders,
               },
             ];
 
@@ -327,7 +327,7 @@ describe('GraphQL Client', () => {
                 {
                   method: 'POST',
                   body: JSON.stringify({query: operation}),
-                  headers: defaultHeaders,
+                  headers: loggedHeaders,
                 },
               ],
             },
@@ -694,7 +694,7 @@ describe('GraphQL Client', () => {
               {
                 method: 'POST',
                 body: JSON.stringify({query: operation}),
-                headers: defaultHeaders,
+                headers: loggedHeaders,
               },
             ];
 
@@ -835,7 +835,7 @@ describe('GraphQL Client', () => {
               {
                 method: 'POST',
                 body: JSON.stringify({query: operation}),
-                headers: defaultHeaders,
+                headers: loggedHeaders,
               },
             ];
 
@@ -901,7 +901,7 @@ describe('GraphQL Client', () => {
                 {
                   method: 'POST',
                   body: JSON.stringify({query: operation}),
-                  headers: defaultHeaders,
+                  headers: loggedHeaders,
                 },
               ],
             },

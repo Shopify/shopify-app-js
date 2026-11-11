@@ -557,16 +557,22 @@ describe('REST Admin API Client', () => {
       // THEN
       expect(response.ok).toBe(true);
 
-      expect(logger).toHaveBeenCalledTimes(1);
+      const logs = requestLogs(logger);
+      expect(logs).toHaveLength(1);
 
-      const log = logger.mock.calls[0][0];
+      const log = logs[0];
 
       expect(log.type).toBe('HTTP-Response');
       expect(log.content.response).toBe(response);
       expect(log.content.requestParams[0]).toEqual(apiUrl('/url/path'));
       expect(log.content.requestParams[1]).toMatchObject({
         method: 'GET',
-        headers: expect.anything(),
+        headers: expect.objectContaining({
+          [ACCESS_TOKEN_HEADER.toLowerCase()]: '****',
+        }),
+      });
+      expect(fetchMock.mock.calls[0][1]?.headers).toMatchObject({
+        [ACCESS_TOKEN_HEADER.toLowerCase()]: config.accessToken,
       });
     });
 
@@ -594,14 +600,13 @@ describe('REST Admin API Client', () => {
 
       // THEN
       expect(response.ok).toBe(true);
-      expect(logger).toHaveBeenCalledTimes(3);
 
-      expect(logger).toHaveBeenNthCalledWith(
-        1,
-        expect.objectContaining({type: 'HTTP-Response'}),
-      );
+      const logs = requestLogs(logger);
+      expect(logs).toHaveLength(3);
 
-      const log = logger.mock.calls[1][0];
+      expect(logs[0]).toMatchObject({type: 'HTTP-Response'});
+
+      const log = logs[1];
 
       expect(log.type).toBe('HTTP-Retry');
       expect(log.content.lastResponse).toBe(retryResponse);
@@ -610,16 +615,23 @@ describe('REST Admin API Client', () => {
       expect(log.content.requestParams[0]).toEqual(apiUrl('/url/path'));
       expect(log.content.requestParams[1]).toMatchObject({
         method: 'GET',
-        headers: expect.anything(),
+        headers: expect.objectContaining({
+          [ACCESS_TOKEN_HEADER.toLowerCase()]: '****',
+        }),
       });
 
-      expect(logger).toHaveBeenNthCalledWith(
-        3,
-        expect.objectContaining({type: 'HTTP-Response'}),
-      );
+      expect(logs[2]).toMatchObject({type: 'HTTP-Response'});
     });
   });
 });
+
+// The pinned test API version eventually falls out of support, which adds an
+// Unsupported_Api_Version log that these tests don't care about.
+function requestLogs(logger: jest.Mock) {
+  return logger.mock.calls
+    .map(([log]) => log)
+    .filter((log) => log.type !== 'Unsupported_Api_Version');
+}
 
 async function assertRequest({request}: AssertRequestOptions) {
   const mockParams: [any, any] = fetchMock.mock.calls[0];

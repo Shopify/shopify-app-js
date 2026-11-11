@@ -36,6 +36,7 @@ Learn more about [client credentials grant](../../guides/oauth.md#client-credent
 | Property                                        | Description                                                                                       |
 | ----------------------------------------------- | ------------------------------------------------------------------------------------------------- |
 | [clientCredentials](./clientcredentials.md)     | Performs client credentials grant to get access token from app's client ID and client secret.    |
+| [createClientAssertion](./createClientAssertion.md) | Signs a JWT client assertion to authenticate that grant with a private key your app owns.    |
 
 ## Utility Functions
 

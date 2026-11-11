@@ -27,7 +27,7 @@ interface AdminContextInternal<Config extends AppConfigArg> {
    *
    * export const loader = async ({ request }: LoaderFunctionArgs) => {
    *   const { session } = await authenticate.admin(request);
-   *   return json(await getMyAppData({shop: session.shop));
+   *   return json(await getMyAppData({shop: session.shop}));
    * };
    * ```
    * ```ts
@@ -52,7 +52,7 @@ interface AdminContextInternal<Config extends AppConfigArg> {
    *
    * export const loader = async ({ request }: LoaderFunctionArgs) => {
    *   const { session } = await authenticate.admin(request);
-   *   return json(await getMyAppData({user: session.onlineAccessInfo!.id}));
+   *   return json(await getMyAppData({user: session.onlineAccessInfo!.associated_user.id}));
    * };
    * ```
    * ```ts
@@ -95,7 +95,7 @@ interface AdminContextInternal<Config extends AppConfigArg> {
    *
    * export const loader = async ({ request }: LoaderFunctionArgs) => {
    *   const { session, cors } = await authenticate.admin(request);
-   *   return cors(json(await getMyAppData({user: session.onlineAccessInfo!.id})));
+   *   return cors(json(await getMyAppData({user: session.onlineAccessInfo!.associated_user.id})));
    * };
    * ```
    */

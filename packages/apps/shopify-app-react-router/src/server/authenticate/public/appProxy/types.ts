@@ -129,7 +129,6 @@ export interface AppProxyContextWithSession extends Context {
    * <description>Get the session for the shop that initiated the request to the app proxy.</description>
    * ```ts
    * // app/routes/**\/.ts
-   * import { json } from "react-router";
    * import { authenticate } from "../shopify.server";
    * import { getMyAppModelData } from "~/db/model.server";
    *
@@ -139,9 +138,7 @@ export interface AppProxyContextWithSession extends Context {
    *     await authenticate.public.appProxy(request);
    *
    *   // Use the session data to make to queries to your database or additional requests.
-   *   return (
-   *     await getMyAppModelData({shop: session.shop})
-   *   );
+   *   return await getMyAppModelData({shop: session.shop});
    * };
    * ```
    */
@@ -155,7 +152,7 @@ export interface AppProxyContextWithSession extends Context {
    * <description>Use the `admin` object to interact with the admin GraphQL API.</description>
    * ```ts
    * // app/routes/**\/.ts
-   * import { json } from "react-router";
+   * import type { ActionFunctionArgs } from "react-router";
    * import { authenticate } from "../shopify.server";
    *
    * export async function action({ request }: ActionFunctionArgs) {
@@ -178,7 +175,7 @@ export interface AppProxyContextWithSession extends Context {
    *   );
    *
    *   const productData = await response.json();
-   *   return ({ data: productData.data });
+   *   return { data: productData.data };
    * }
    * ```
    */
@@ -192,7 +189,7 @@ export interface AppProxyContextWithSession extends Context {
    * <description>Use the `storefront` object to interact with the GraphQL API.</description>
    * ```ts
    * // app/routes/**\/.ts
-   * import { json } from "react-router";
+   * import type { ActionFunctionArgs } from "react-router";
    * import { authenticate } from "../shopify.server";
    *
    * export async function action({ request }: ActionFunctionArgs) {
@@ -211,7 +208,7 @@ export interface AppProxyContextWithSession extends Context {
    *     }`
    *   );
    *
-   *   return (await response.json());
+   *   return await response.json();
    * }
    * ```
    */

@@ -1,5 +1,13 @@
 # @shopify/storefront-api-client
 
+## 2.0.1
+
+### Patch Changes
+
+- d7be864: Redact credential headers from request params passed to the client `logger`. Logger events now show `****` for the `Authorization`, `Cookie`, `Set-Cookie`, `X-Shopify-Access-Token`, `Shopify-Storefront-Private-Token` and `X-Shopify-Storefront-Access-Token` header values. The headers sent with the request are unchanged.
+- Updated dependencies [d7be864]
+  - @shopify/graphql-client@2.0.1
+
 ## 2.0.0
 
 ### Major Changes

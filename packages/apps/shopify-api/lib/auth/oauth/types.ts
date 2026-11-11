@@ -34,6 +34,24 @@ export interface CallbackParams extends AdapterArgs {
   expiring?: boolean;
 }
 
+export interface ClientCredentialsParams {
+  shop: string;
+  /**
+   * A complete JWT client assertion created by the app.
+   *
+   * When this is set, the request authenticates with the assertion and never sends the app's
+   * client secret. Leave it unset to keep using the configured client secret.
+   *
+   * The library treats the value as an opaque string: it does not sign, decode, or validate it.
+   * An assertion is single-use, so every attempt needs a newly created one. This call is made
+   * exactly once and never follows a redirect, as it is for the client secret.
+   *
+   * The request goes to the host the app's own configuration routes it to, exactly like the
+   * client secret paths do. Routing configuration is caller-owned and trusted.
+   */
+  clientAssertion?: string;
+}
+
 export interface AccessTokenResponse {
   access_token: string;
   scope: string;

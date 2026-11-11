@@ -43,6 +43,9 @@ describe('<AppProvider />', () => {
     );
 
     // THEN
+    expect(POLARIS_URL).toBe(
+      'https://cdn.shopify.com/shopifycloud/polaris-2.js',
+    );
     expect(component).toContainReactComponent('script', {
       src: POLARIS_URL,
     });

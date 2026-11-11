@@ -19,13 +19,14 @@ export interface AppProxyLinkProps extends React.DetailedHTMLProps<
  * <description>Use an `AppProxyLink` within an `AppProxyProvider` to link to a different proxied route.</description>
  * ```ts
  * // /app/routes/**\/*.ts
+ * import {useLoaderData} from 'react-router';
  * import {authenticate} from '~/shopify.server';
  * import {AppProxyProvider, AppProxyLink} from '@shopify/shopify-app-react-router/react';
  *
  * export async function loader({ request }) {
  *   await authenticate.public.appProxy(request);
  *
- *   return json({ appUrl: process.env.SHOPIFY_APP_URL });
+ *   return { appUrl: process.env.SHOPIFY_APP_URL };
  * }
  *
  * export default function App() {

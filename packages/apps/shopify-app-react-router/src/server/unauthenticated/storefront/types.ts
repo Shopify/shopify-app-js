@@ -15,14 +15,14 @@ export interface UnauthenticatedStorefrontContext {
    * <description>Get your app's shop-specific data using the returned offline `session` object.</description>
    * ```ts
    * // app/routes/**\/.ts
-   * import { LoaderFunctionArgs, json } from "react-router";
+   * import { LoaderFunctionArgs } from "react-router";
    * import { unauthenticated } from "../shopify.server";
    * import { getMyAppData } from "~/db/model.server";
    *
    * export const loader = async ({ request }: LoaderFunctionArgs) => {
    *   const shop = getShopFromExternalRequest(request);
    *   const { session } = await unauthenticated.storefront(shop);
-   *   return (await getMyAppData({shop: session.shop}));
+   *   return await getMyAppData({shop: session.shop});
    * };
    * ```
    */
@@ -36,8 +36,8 @@ export interface UnauthenticatedStorefrontContext {
    * <description>Use `storefront.graphql` to make query / mutation requests.</description>
    * ```ts
    * // app/routes/**\/.ts
-   * import { json } from "react-router";
-   * import { authenticate } from "../shopify.server";
+   * import type { ActionFunctionArgs } from "react-router";
+   * import { unauthenticated } from "../shopify.server";
    *
    * export async function action({ request }: ActionFunctionArgs) {
    *   const shop = getShopFromExternalRequest(request);
@@ -45,7 +45,7 @@ export interface UnauthenticatedStorefrontContext {
    *
    *   const response = await storefront.graphql(`{blogs(first: 10) { edges { node { id } } } }`);
    *
-   *   return (await response.json());
+   *   return await response.json();
    * }
    * ```
    *
@@ -54,8 +54,9 @@ export interface UnauthenticatedStorefrontContext {
    * <description>Catch `GraphqlQueryError` errors to see error messages from the API.</description>
    * ```ts
    * // /app/routes/**\/*.ts
-   * import { ActionFunctionArgs } from "react-router";
-   * import { authenticate } from "../shopify.server";
+   * import { ActionFunctionArgs, data } from "react-router";
+   * import { GraphqlQueryError } from "@shopify/shopify-api";
+   * import { unauthenticated } from "../shopify.server";
    *
    * export const action = async ({ request }: ActionFunctionArgs) => {
    *   const shop = getShopFromExternalRequest(request);
@@ -73,15 +74,15 @@ export interface UnauthenticatedStorefrontContext {
    *       }`,
    *     );
    *
-   *     return ({ data: await response.json() });
+   *     return { data: await response.json() };
    *   } catch (error) {
    *     if (error instanceof GraphqlQueryError) {
    *       // { errors: { graphQLErrors: [
    *       //   { message: "Field 'not_a_field' doesn't exist on type 'Product'" }
    *       // ] } }
-   *       return ({ errors: error.body?.errors }, { status: 500 });
+   *       return data({ errors: error.body?.errors }, { status: 500 });
    *     }
-   *     return ({ message: "An error occurred" }, { status: 500 });
+   *     return data({ message: "An error occurred" }, { status: 500 });
    *   }
    * }
    * ```

@@ -56,7 +56,7 @@ export interface FlowContext {
    * <description>Use the `admin` object in the context to interact with the Admin API.</description>
    * ```ts
    * // /app/routes/flow.tsx
-   * import { ActionFunctionArgs } from "@remix-run/node";
+   * import { ActionFunctionArgs, json } from "@remix-run/node";
    * import { authenticate } from "../shopify.server";
    *
    * export async function action({ request }: ActionFunctionArgs) {
