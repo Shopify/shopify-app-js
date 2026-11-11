@@ -61,7 +61,7 @@ export function authenticateWebhookFactory<Topics extends string>(
       if (!(error instanceof InvalidRefreshTokenResponse)) {
         throw error;
       }
-      logger.debug(
+      logger.info(
         'Offline session refresh failed during webhook authentication',
         {
           shop: check.domain,
