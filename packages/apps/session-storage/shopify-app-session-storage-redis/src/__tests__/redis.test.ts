@@ -1,6 +1,7 @@
 import * as child_process from 'child_process';
 import {promisify} from 'util';
 import {resolve} from 'path';
+import {networkInterfaces} from 'os';
 
 import {createClient} from 'redis';
 import {
@@ -11,6 +12,7 @@ import {
 import {Session} from '@shopify/shopify-api';
 
 import {RedisSessionStorage} from '../redis';
+import {RedisConnection} from '../redis-connection';
 
 import {v1_0_0SessionData} from './migration-test-data';
 
@@ -47,6 +49,78 @@ describe('RedisSessionStorage', () => {
 
   afterAll(async () => {
     if (containerId) await exec(`podman rm -f ${containerId}`);
+  });
+
+  describe('connection default regressions', () => {
+    it('preserves a passwordless ACL identity and its key restrictions', async () => {
+      const admin = createClient({
+        url: dbURL.toString(),
+        socket: {reconnectStrategy: false, connectTimeout: 1500},
+        commandOptions: {timeout: 2000},
+      });
+      admin.on('error', () => {});
+      const limitedURL = new URL(dbURL);
+      limitedURL.username = 'redis_limited';
+      limitedURL.password = '';
+      const connection = new RedisConnection(
+        limitedURL,
+        {
+          name: 'passwordless_acl_regression',
+          socket: {reconnectStrategy: false, connectTimeout: 1500},
+        },
+        'allowed',
+      );
+      let connected = false;
+      try {
+        await admin.connect();
+        await connection.connect();
+        connected = true;
+        const clients = String(await admin.sendCommand(['CLIENT', 'LIST']));
+        const identity = clients
+          .split('\n')
+          .find((line) => line.includes('name=passwordless_acl_regression '));
+        expect(identity).toContain('user=redis_limited');
+        await expect(
+          connection.set('key', 'synthetic'),
+        ).resolves.toBeUndefined();
+        await expect(
+          connection.set('forbidden_key', 'synthetic', false),
+        ).rejects.toThrow(/NOPERM/);
+      } finally {
+        if (connected) await connection.disconnect();
+        if (admin.isOpen) admin.destroy();
+      }
+    }, 5000);
+
+    const hasIPv6Loopback = Object.values(networkInterfaces()).some(
+      (addresses) => addresses?.some((address) => address.address === '::1'),
+    );
+    const testIPv6 = hasIPv6Loopback ? it : it.skip;
+
+    testIPv6(
+      'becomes ready through an IPv6-literal URL',
+      async () => {
+        const ipv6URL = new URL(dbURL);
+        ipv6URL.hostname = '[::1]';
+        const storage = new RedisSessionStorage(ipv6URL, {
+          socket: {reconnectStrategy: false, connectTimeout: 1500},
+        });
+        let connected = false;
+        try {
+          await storage.ready;
+          connected = true;
+        } finally {
+          if (connected) {
+            await storage.disconnect();
+          } else {
+            // Readiness can reject after connecting (for example, a migration error).
+            // Also tolerate an already-closed socket when connection itself failed.
+            await storage.disconnect().catch(() => {});
+          }
+        }
+      },
+      5000,
+    );
   });
 
   describe('using connection URLs', () => {

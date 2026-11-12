@@ -1,4 +1,3 @@
-import {RedisClientOptions, createClient} from 'redis';
 import {Session} from '@shopify/shopify-api';
 import {
   SessionStorage,
@@ -7,10 +6,12 @@ import {
 } from '@shopify/shopify-app-session-storage';
 
 import {migrationList} from './migrations';
-import {RedisConnection} from './redis-connection';
+import {
+  RedisClient,
+  RedisConnection,
+  RedisConnectionOptions,
+} from './redis-connection';
 import {RedisSessionStorageMigrator} from './redis-migrator';
-
-type RedisClient = ReturnType<typeof createClient>;
 
 /* eslint-disable @shopify/typescript-prefer-pascal-case-enums */
 enum ShopifyStorageOption {
@@ -20,7 +21,7 @@ enum ShopifyStorageOption {
 }
 /* eslint-enable @shopify/typescript-prefer-pascal-case-enums */
 
-export interface RedisSessionStorageOptions extends RedisClientOptions {
+export interface RedisSessionStorageOptions extends RedisConnectionOptions {
   [ShopifyStorageOption.sessionKeyPrefix]: string;
   [ShopifyStorageOption.migratorOptions]?: SessionStorageMigratorOptions;
   [ShopifyStorageOption.onError]?: (...args: any[]) => void;
