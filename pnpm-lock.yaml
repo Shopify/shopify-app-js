@@ -217,7 +217,7 @@ importers:
         version: 0.31.11
       drizzle-orm:
         specifier: ^0.45.4
-        version: 0.45.4(@cloudflare/workers-types@4.20260702.1)(@libsql/client@0.17.4)(@prisma/client@6.19.0(prisma@6.19.0(typescript@5.9.3))(typescript@5.9.3))(@types/better-sqlite3@7.6.13)(@types/pg@8.23.1)(better-sqlite3@12.11.1)(gel@2.0.1)(mysql2@3.24.6(@types/node@26.6.6))(pg@8.23.1)(prisma@6.19.0(typescript@5.9.3))(sqlite3@6.0.1)
+        version: 0.45.4(@cloudflare/workers-types@5.20261013.1)(@libsql/client@0.17.4)(@prisma/client@6.19.0(prisma@6.19.0(typescript@5.9.3))(typescript@5.9.3))(@types/better-sqlite3@7.6.13)(@types/pg@8.23.1)(better-sqlite3@12.11.1)(gel@2.0.1)(mysql2@3.24.6(@types/node@26.6.6))(pg@8.23.1)(prisma@6.19.0(typescript@5.9.3))(sqlite3@6.0.1)
       mysql2:
         specifier: ^3.24.6
         version: 3.24.6(@types/node@26.6.6)
@@ -257,8 +257,8 @@ importers:
         version: 6.1.1
     devDependencies:
       '@cloudflare/workers-types':
-        specifier: ^4.20260702.1
-        version: 4.20260702.1
+        specifier: ^5.20261013.1
+        version: 5.20261013.1
       '@shopify/shopify-app-session-storage-test-utils':
         specifier: ^7.0.3
         version: link:../shopify-app-session-storage-test-utils
@@ -424,8 +424,8 @@ importers:
         version: 2.8.1
     devDependencies:
       '@cloudflare/workers-types':
-        specifier: ^4.20260702.1
-        version: 4.20260702.1
+        specifier: ^5.20261013.1
+        version: 5.20261013.1
       '@types/express':
         specifier: ^5.0.6
         version: 5.0.6
@@ -446,7 +446,7 @@ importers:
         version: 7.3.1
       wrangler:
         specifier: ^4.155.0
-        version: 4.155.0(@cloudflare/workers-types@4.20260702.1)(@types/node@26.6.6)
+        version: 4.155.0(@cloudflare/workers-types@5.20261013.1)(@types/node@26.6.6)
 
   packages/apps/shopify-app-express:
     dependencies:
@@ -1676,6 +1676,9 @@ packages:
 
   '@cloudflare/workers-types@4.20260702.1':
     resolution: {integrity: sha512-mOhf5TUEB1m2vPrxtqoIGfz0fUC9xyxRDx5gWHy5s+OCo6dcV+g7wI1R7gYCMFohhqF/2y2xeKVwMwCJjfn/WA==}
+
+  '@cloudflare/workers-types@5.20261013.1':
+    resolution: {integrity: sha512-0SfkM/MA+oSIAzFFmjr0wZLH54oeCtugaOn8GpJDBnerQiML+rOPq2W6j6bBGE51o+N4DOd0tvMruLmkAQzlpw==}
 
   '@cspotcode/source-map-support@0.8.1':
     resolution: {integrity: sha512-IchNf6dN4tHoMFIn/7OE8LWZ19Y6q/67Bmf6vnGREv8RSbBVb9LPJxEcnwrcwX6ixSvaiGoomAUvu4YSxXrVgw==}
@@ -10467,6 +10470,8 @@ snapshots:
 
   '@cloudflare/workers-types@4.20260702.1': {}
 
+  '@cloudflare/workers-types@5.20261013.1': {}
+
   '@cspotcode/source-map-support@0.8.1':
     dependencies:
       '@jridgewell/trace-mapping': 0.3.9
@@ -14302,9 +14307,9 @@ snapshots:
       esbuild: 0.25.12
       tsx: 4.23.15
 
-  drizzle-orm@0.45.4(@cloudflare/workers-types@4.20260702.1)(@libsql/client@0.17.4)(@prisma/client@6.19.0(prisma@6.19.0(typescript@5.9.3))(typescript@5.9.3))(@types/better-sqlite3@7.6.13)(@types/pg@8.23.1)(better-sqlite3@12.11.1)(gel@2.0.1)(mysql2@3.24.6(@types/node@26.6.6))(pg@8.23.1)(prisma@6.19.0(typescript@5.9.3))(sqlite3@6.0.1):
+  drizzle-orm@0.45.4(@cloudflare/workers-types@5.20261013.1)(@libsql/client@0.17.4)(@prisma/client@6.19.0(prisma@6.19.0(typescript@5.9.3))(typescript@5.9.3))(@types/better-sqlite3@7.6.13)(@types/pg@8.23.1)(better-sqlite3@12.11.1)(gel@2.0.1)(mysql2@3.24.6(@types/node@26.6.6))(pg@8.23.1)(prisma@6.19.0(typescript@5.9.3))(sqlite3@6.0.1):
     optionalDependencies:
-      '@cloudflare/workers-types': 4.20260702.1
+      '@cloudflare/workers-types': 5.20261013.1
       '@libsql/client': 0.17.4
       '@prisma/client': 6.19.0(prisma@6.19.0(typescript@5.9.3))(typescript@5.9.3)
       '@types/better-sqlite3': 7.6.13
@@ -17603,7 +17608,7 @@ snapshots:
       '@cloudflare/workerd-linux-arm64': 1.20261023.1
       '@cloudflare/workerd-windows-64': 1.20261023.1
 
-  wrangler@4.155.0(@cloudflare/workers-types@4.20260702.1)(@types/node@26.6.6):
+  wrangler@4.155.0(@cloudflare/workers-types@5.20261013.1)(@types/node@26.6.6):
     dependencies:
       '@cloudflare/kv-asset-handler': 0.5.0
       '@cloudflare/unenv-preset': 2.16.2(unenv@2.0.0-rc.24)(workerd@1.20261023.1)
@@ -17614,7 +17619,7 @@ snapshots:
       unenv: 2.0.0-rc.24
       workerd: 1.20261023.1
     optionalDependencies:
-      '@cloudflare/workers-types': 4.20260702.1
+      '@cloudflare/workers-types': 5.20261013.1
       fsevents: 2.3.3
     transitivePeerDependencies:
       - '@types/node'
