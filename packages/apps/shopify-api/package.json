@@ -3,6 +3,22 @@
   "version": "15.1.1",
   "description": "Shopify API Library for Node - accelerate development with support for authentication, graphql proxy, webhooks",
   "types": "./dist/ts/lib/index.d.ts",
+  "typesVersions": {
+    "*": {
+      "adapters/*": [
+        "dist/ts/adapters/*/index.d.ts"
+      ],
+      "runtime": [
+        "dist/ts/runtime/index.d.ts"
+      ],
+      "rest/admin/*": [
+        "dist/ts/rest/admin/*/index.d.ts"
+      ],
+      "test-helpers": [
+        "dist/ts/test-helpers/index.d.ts"
+      ]
+    }
+  },
   "module": "./dist/esm/lib/index.mjs",
   "main": "./dist/cjs/lib/index.js",
   "engines": {
