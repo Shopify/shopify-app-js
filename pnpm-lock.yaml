@@ -33,7 +33,7 @@ importers:
         version: 1.0.0(rollup@4.62.3)
       '@rollup/plugin-typescript':
         specifier: ^12.3.0
-        version: 12.3.0(rollup@4.62.3)(tslib@2.8.1)(typescript@5.9.3)
+        version: 12.3.0(rollup@4.62.3)(tslib@2.8.1)(typescript@7.0.2)
       '@shopify/babel-preset':
         specifier: ^25.0.2
         version: 25.0.2
@@ -51,7 +51,7 @@ importers:
         version: 26.6.5
       jest:
         specifier: ^30.2.0
-        version: 30.2.0(@types/node@26.6.5)(esbuild-register@3.6.0(esbuild@0.28.2))(ts-node@10.9.2(@swc/core@1.13.3)(@types/node@26.6.5)(typescript@5.9.3))
+        version: 30.2.0(@types/node@26.6.5)(esbuild-register@3.6.0(esbuild@0.28.2))(ts-node@10.9.2(@swc/core@1.13.3)(@types/node@26.6.5)(typescript@7.0.2))
       jest-environment-jsdom:
         specifier: ^30.4.1
         version: 30.4.1
@@ -75,7 +75,7 @@ importers:
         version: 1.1.24(rollup@4.62.3)
       ts-jest:
         specifier: ^29.4.15
-        version: 29.4.15(@babel/core@7.29.7)(@jest/transform@30.5.2)(@jest/types@30.4.1)(babel-jest@30.5.2(@babel/core@7.29.7))(esbuild@0.28.2)(jest-util@30.5.1)(jest@30.2.0(@types/node@26.6.5)(esbuild-register@3.6.0(esbuild@0.28.2))(ts-node@10.9.2(@swc/core@1.13.3)(@types/node@26.6.5)(typescript@5.9.3)))(typescript@5.9.3)
+        version: 29.4.15(@babel/core@7.29.7)(@jest/transform@30.5.2)(@jest/types@30.4.1)(babel-jest@30.5.2(@babel/core@7.29.7))(esbuild@0.28.2)(jest-util@30.5.1)(jest@30.2.0(@types/node@26.6.5)(esbuild-register@3.6.0(esbuild@0.28.2))(ts-node@10.9.2(@swc/core@1.13.3)(@types/node@26.6.5)(typescript@7.0.2)))(typescript@7.0.2)
       tslib:
         specifier: ^2.8.1
         version: 2.8.1
@@ -83,8 +83,8 @@ importers:
         specifier: ^2.11.10
         version: 2.11.10
       typescript:
-        specifier: 5.9.3
-        version: 5.9.3
+        specifier: 7.0.2
+        version: 7.0.2
 
   packages/api-clients/admin-api-client:
     dependencies:
@@ -103,13 +103,13 @@ importers:
         version: 30.4.1
       rollup-plugin-dts:
         specifier: ^6.4.1
-        version: 6.4.1(rollup@4.66.0)(typescript@5.9.3)
+        version: 6.4.1(rollup@4.66.0)(typescript@7.0.2)
 
   packages/api-clients/api-codegen-preset:
     dependencies:
       '@graphql-codegen/cli':
         specifier: ^6.2.1
-        version: 6.2.1(@parcel/watcher@2.6.0)(@types/node@26.6.6)(encoding@0.1.13)(graphql@16.14.1)(typescript@5.9.3)
+        version: 6.2.1(@parcel/watcher@2.6.0)(@types/node@26.6.6)(encoding@0.1.13)(graphql@16.14.1)(typescript@7.0.2)
       '@graphql-codegen/introspection':
         specifier: ^5.0.1
         version: 5.0.1(graphql@16.14.1)
@@ -137,10 +137,10 @@ importers:
         version: 25.0.2
       graphql-config:
         specifier: ^5.1.8
-        version: 5.1.8(@types/node@26.6.6)(encoding@0.1.13)(graphql@16.14.1)(typescript@5.9.3)
+        version: 5.1.8(@types/node@26.6.6)(encoding@0.1.13)(graphql@16.14.1)(typescript@7.0.2)
       rollup-plugin-dts:
         specifier: ^6.4.1
-        version: 6.4.1(rollup@4.66.0)(typescript@5.9.3)
+        version: 6.4.1(rollup@4.66.0)(typescript@7.0.2)
 
   packages/api-clients/graphql-client:
     devDependencies:
@@ -158,7 +158,7 @@ importers:
         version: 3.2.0(encoding@0.1.13)
       rollup-plugin-dts:
         specifier: ^6.4.1
-        version: 6.4.1(rollup@4.66.0)(typescript@5.9.3)
+        version: 6.4.1(rollup@4.66.0)(typescript@7.0.2)
 
   packages/api-clients/storefront-api-client:
     dependencies:
@@ -177,7 +177,7 @@ importers:
         version: 30.4.1
       rollup-plugin-dts:
         specifier: ^6.4.1
-        version: 6.4.1(rollup@4.66.0)(typescript@5.9.3)
+        version: 6.4.1(rollup@4.66.0)(typescript@7.0.2)
 
   packages/apps/session-storage/shopify-app-session-storage:
     devDependencies:
@@ -217,7 +217,7 @@ importers:
         version: 0.31.11
       drizzle-orm:
         specifier: ^0.45.4
-        version: 0.45.4(@cloudflare/workers-types@4.20260702.1)(@libsql/client@0.17.4)(@prisma/client@6.19.0(prisma@6.19.0(typescript@5.9.3))(typescript@5.9.3))(@types/better-sqlite3@7.6.13)(@types/pg@8.23.1)(better-sqlite3@12.11.1)(gel@2.0.1)(mysql2@3.24.6(@types/node@26.6.6))(pg@8.23.1)(prisma@6.19.0(typescript@5.9.3))(sqlite3@6.0.1)
+        version: 0.45.4(@cloudflare/workers-types@4.20260702.1)(@libsql/client@0.17.4)(@prisma/client@6.19.0(prisma@6.19.0(typescript@7.0.2))(typescript@7.0.2))(@types/better-sqlite3@7.6.13)(@types/pg@8.23.1)(better-sqlite3@12.11.1)(gel@2.0.1)(mysql2@3.24.6(@types/node@26.6.6))(pg@8.23.1)(prisma@6.19.0(typescript@7.0.2))(sqlite3@6.0.1)
       mysql2:
         specifier: ^3.24.6
         version: 3.24.6(@types/node@26.6.6)
@@ -344,13 +344,13 @@ importers:
     devDependencies:
       '@prisma/client':
         specifier: ^6.19.0
-        version: 6.19.0(prisma@6.19.0(typescript@5.9.3))(typescript@5.9.3)
+        version: 6.19.0(prisma@6.19.0(typescript@7.0.2))(typescript@7.0.2)
       '@shopify/shopify-app-session-storage-test-utils':
         specifier: ^7.0.3
         version: link:../shopify-app-session-storage-test-utils
       prisma:
         specifier: ^6.19.0
-        version: 6.19.0(typescript@5.9.3)
+        version: 6.19.0(typescript@7.0.2)
 
   packages/apps/session-storage/shopify-app-session-storage-redis:
     dependencies:
@@ -434,7 +434,7 @@ importers:
         version: 5.3.0
       jest-environment-miniflare:
         specifier: ^2.14.4
-        version: 2.14.4(jest@30.5.2(@types/node@26.6.6)(esbuild-register@3.6.0(esbuild@0.28.2))(ts-node@10.9.2(@swc/core@1.13.3)(@types/node@26.6.6)(typescript@5.9.3)))
+        version: 2.14.4(jest@30.5.2(@types/node@26.6.6)(esbuild-register@3.6.0(esbuild@0.28.2))(ts-node@10.9.2(@swc/core@1.13.3)(@types/node@26.6.6)(typescript@7.0.2)))
       miniflare:
         specifier: ^4.20260708.1
         version: 4.20260708.1
@@ -722,12 +722,12 @@ packages:
     resolution: {integrity: sha512-qsaF+9Qcm2Qv8SRIMMscAvG4O3lJ0F1GuMo5HR/Bp02LopNgnZBC/EkbevHFeGs4ls/oPz9v+Bsmzbkbe+0dUw==}
     engines: {node: '>=6.9.0'}
 
-  '@babel/generator@7.29.7':
-    resolution: {integrity: sha512-DkXD5OJQaAQIdZ1bt3UZdEnHAn9Imd3IVBdX03UFe+ony9Ojw5pzr9YVKGDY1jt+Gcn/FnGkNf8r+Vj5NOJWtQ==}
+  '@babel/generator@7.29.12':
+    resolution: {integrity: sha512-2W76mhjrpQFO1lK5e8IvGYB2D0YZ7S2R1Z2BjO2ZUYuW+amcpK/z60U6ZZmzskwoa7sJ6XohP/Wg8H5KxXI/IA==}
     engines: {node: '>=6.9.0'}
 
-  '@babel/generator@7.29.8':
-    resolution: {integrity: sha512-gZbepsdh3WDtgZKWL+vTPh71LSBrm/Y4/QDZBVCcYfmeTEEuoOYwlSy+G1StfJg+/Zy550u/3TATbm7qDbbMtg==}
+  '@babel/generator@7.29.7':
+    resolution: {integrity: sha512-DkXD5OJQaAQIdZ1bt3UZdEnHAn9Imd3IVBdX03UFe+ony9Ojw5pzr9YVKGDY1jt+Gcn/FnGkNf8r+Vj5NOJWtQ==}
     engines: {node: '>=6.9.0'}
 
   '@babel/helper-annotate-as-pure@7.29.7':
@@ -875,8 +875,8 @@ packages:
     engines: {node: '>=6.0.0'}
     hasBin: true
 
-  '@babel/parser@7.29.11':
-    resolution: {integrity: sha512-OZ6+oaK7GMyg3IfCpj8JOmn8n+w2rJbDT0LLfVDTLb1ZFeKDh3AiNELgCMUw175IJHSkLl74hG0M0VLsvx+gag==}
+  '@babel/parser@7.29.12':
+    resolution: {integrity: sha512-WJ7JBp/Q4+z/ImydtI7jS6NVco5++632ExBemSX+Ysb+G1lCwQ5BVo3SY+jGGOcZXI4ZccbZSUSJLNBW6eEpJg==}
     engines: {node: '>=6.0.0'}
     hasBin: true
 
@@ -1519,8 +1519,8 @@ packages:
     resolution: {integrity: sha512-7w4kZYHneL3A6NP2nxzHvT3HCZ7puDZZjFMqDpBPECub79sTtSO5CGXDkKrTQq8ksAwfD/XI2MRFX23njdDaIQ==}
     engines: {node: '>=6.9.0'}
 
-  '@babel/traverse@7.29.10':
-    resolution: {integrity: sha512-B3lYAs2nkKskbgQ1nfy8Ma9ao9Q1rntTAQHrzzyDuj+TSO+X3le6PfWwqDvodsb+OumE10eMFfuMCTQSQ5iuIQ==}
+  '@babel/traverse@7.29.12':
+    resolution: {integrity: sha512-MscXe/NAZcOkYEsRajHZFt3ynsb22PUi6CTrp5U7+RYycR9By84mn9mFN54YgfITiqK4hFx3Ju3tZSyzfpS5ew==}
     engines: {node: '>=6.9.0'}
 
   '@babel/traverse@7.29.7':
@@ -4606,6 +4606,126 @@ packages:
 
   '@types/yargs@17.0.35':
     resolution: {integrity: sha512-qUHkeCyQFxMXg79wQfTtfndEC+N9ZZg76HJftDJp+qH2tV7Gj4OJi7l+PiWwJ+pWtW8GwSmqsDj/oymhrTWXjg==}
+
+  '@typescript/typescript-aix-ppc64@7.0.2':
+    resolution: {integrity: sha512-MTKKkWB7p/0E9xi1d1tHtZ5PiLkGEMIq88pK2CubZjOsLtYTLqhgIgi6zepFa+9GHZ6h05NMCkQxGKiPXMxXtQ==}
+    engines: {node: '>=16.20.0'}
+    cpu: [ppc64]
+    os: [aix]
+
+  '@typescript/typescript-darwin-arm64@7.0.2':
+    resolution: {integrity: sha512-gowzar9MwS/aRWp6f3a4KUqzRjAZjOsmGNCM6LcTgXum+dBfgsBVMN+AgvOCCbguXyick6LJhpBszxMebJ8syA==}
+    engines: {node: '>=16.20.0'}
+    cpu: [arm64]
+    os: [darwin]
+
+  '@typescript/typescript-darwin-x64@7.0.2':
+    resolution: {integrity: sha512-SZ9xZInqApNlNGc9s0W1VSsktYSOe9cFqNOIqmN1Gs8SmkjKZYFt017G4VwPxASInODuAdbTW7sXiFUf893RgA==}
+    engines: {node: '>=16.20.0'}
+    cpu: [x64]
+    os: [darwin]
+
+  '@typescript/typescript-freebsd-arm64@7.0.2':
+    resolution: {integrity: sha512-W5NH4y/J0plIIS5b2xvTEkU7JFxyqdMAOgf+Ilhl0vHQXKO5dZoxd+C/jEtq56c4F3wk71RB4BMRQ2XdI+bwYQ==}
+    engines: {node: '>=16.20.0'}
+    cpu: [arm64]
+    os: [freebsd]
+
+  '@typescript/typescript-freebsd-x64@7.0.2':
+    resolution: {integrity: sha512-UMGDx5sTpzNw3WiPebH7l90IWfJggEd+egHt/q6p7/Cm3zqoV7VxkGXt+3DxPIw8CcmvAB0j3sVVfbhX+M4Tpw==}
+    engines: {node: '>=16.20.0'}
+    cpu: [x64]
+    os: [freebsd]
+
+  '@typescript/typescript-linux-arm64@7.0.2':
+    resolution: {integrity: sha512-Qh4eU4/y3yDjnfjjyPYihMj5/ODIlmt+Bzu17OI+fiSRDW57QmU5SiN63exPRNJPKUzcc1INa1NXdrJ+MqHjUQ==}
+    engines: {node: '>=16.20.0'}
+    cpu: [arm64]
+    os: [linux]
+
+  '@typescript/typescript-linux-arm@7.0.2':
+    resolution: {integrity: sha512-gffT3xPz9sR7j/YJExkyPntrI0P2EP9XbOyWzth2/Gs0RstK+90RBcO0ncXoXy/beYll1SXw846Nf2zdnEz0QQ==}
+    engines: {node: '>=16.20.0'}
+    cpu: [arm]
+    os: [linux]
+
+  '@typescript/typescript-linux-loong64@7.0.2':
+    resolution: {integrity: sha512-uEHck9i8hoAzXPiYRib1O7miOnz23SxIeVl6F4LXox+qov1K35jHcEW6VHKvZI+pyvl7fZEP4MCU5LYvIq1GuQ==}
+    engines: {node: '>=16.20.0'}
+    cpu: [loong64]
+    os: [linux]
+
+  '@typescript/typescript-linux-mips64el@7.0.2':
+    resolution: {integrity: sha512-R4KvAMnE43W5Qeqb0Ly56O3mWMWIAgsMyz36DCaycd5nbg/9kzm0liw3JocfRqyJY0KPmzFjbswozXyW0DnIYA==}
+    engines: {node: '>=16.20.0'}
+    cpu: [mips64el]
+    os: [linux]
+
+  '@typescript/typescript-linux-ppc64@7.0.2':
+    resolution: {integrity: sha512-DORx5b3sd/4S7eayxm4FQv+A7CrkUIGRaHiwI8oiHTAI1fAPWhF4J0vAlkC8biAlHSVVwxMQ3tjZ2/DVbnQiiA==}
+    engines: {node: '>=16.20.0'}
+    cpu: [ppc64]
+    os: [linux]
+
+  '@typescript/typescript-linux-riscv64@7.0.2':
+    resolution: {integrity: sha512-wf0jqEDOjrPRnKwYRyyJDRo11KMbvMFrU+q4zqKyChODBzvlkbhNQfKvLxQCcwTpdDaXSHZTVuh0JoCrKCUMHQ==}
+    engines: {node: '>=16.20.0'}
+    cpu: [riscv64]
+    os: [linux]
+
+  '@typescript/typescript-linux-s390x@7.0.2':
+    resolution: {integrity: sha512-IkwJc3L7yhytWd/ewjyxNDfOmswCm9GWMJT/ue/dU4aZNbwZeYAetq42VyLmsmSjvoX7z74X6ZaYCtzAr0EuGw==}
+    engines: {node: '>=16.20.0'}
+    cpu: [s390x]
+    os: [linux]
+
+  '@typescript/typescript-linux-x64@7.0.2':
+    resolution: {integrity: sha512-EYdf2cNg7rgCWJnxCdJ+F3V39O8ihb37eHAu1LK8oAFizgTQbPOK7zHHXbPt8rX24COqODXeI3sIf0fCXG7H/A==}
+    engines: {node: '>=16.20.0'}
+    cpu: [x64]
+    os: [linux]
+
+  '@typescript/typescript-netbsd-arm64@7.0.2':
+    resolution: {integrity: sha512-+polYF4MF04aPpO5FTkHran9yUQDSXqy5GiSDKpsll5jy3l3+g9QLhpf39T+ePtefhXLOGrLl0QIjkQP6VnelA==}
+    engines: {node: '>=16.20.0'}
+    cpu: [arm64]
+    os: [netbsd]
+
+  '@typescript/typescript-netbsd-x64@7.0.2':
+    resolution: {integrity: sha512-8YIT0EHM/3dq10ZOVF/A7pc/YSMtbcecct4rWtexrnSCHOPcpC2KTLXfTCR6vDpnSiY12heNb1GiN/wu+T/FyA==}
+    engines: {node: '>=16.20.0'}
+    cpu: [x64]
+    os: [netbsd]
+
+  '@typescript/typescript-openbsd-arm64@7.0.2':
+    resolution: {integrity: sha512-APT8+ClYnuYm1u9+kgGXoMj2VzWzcymwh2gNSQVySHfkRDGOTVkoWLjCmOQSaO+PoqQ57B0flRp9SA+7GnnkzQ==}
+    engines: {node: '>=16.20.0'}
+    cpu: [arm64]
+    os: [openbsd]
+
+  '@typescript/typescript-openbsd-x64@7.0.2':
+    resolution: {integrity: sha512-yX7s+Q0Dln0Dt9tEzZsAjXXR/+ytBM7AlglaqyeMPxQszJ1JhlJdZ6jLA+IzldHtflX81em7lDao1xXu+aRRkg==}
+    engines: {node: '>=16.20.0'}
+    cpu: [x64]
+    os: [openbsd]
+
+  '@typescript/typescript-sunos-x64@7.0.2':
+    resolution: {integrity: sha512-dLJDGaLZ1D4HPQn62u1n8mBDkJREwMsAkCdkwd4Ieqw+x3TUyTsqY0YiBCtE6H6OzzgGk3iuZ3vFWRS+E8/d1g==}
+    engines: {node: '>=16.20.0'}
+    cpu: [x64]
+    os: [sunos]
+
+  '@typescript/typescript-win32-arm64@7.0.2':
+    resolution: {integrity: sha512-Gyl1Vy6OsWesLzmq+EP0Fb7b4Nid5232AvcA2SFcdYreldpNtYFFofPjnt62y9hQy7VTaZp65ICJjuAQRaVcIQ==}
+    engines: {node: '>=16.20.0'}
+    cpu: [arm64]
+    os: [win32]
+
+  '@typescript/typescript-win32-x64@7.0.2':
+    resolution: {integrity: sha512-0BQ3HkAHHlKLSp1qRvf3SUhGpGsDuhB/jgFw75guyqbxJqEaS0Cw/VFO8i2nHglJUzQCRtMMR/IBAKE3ETMC4g==}
+    engines: {node: '>=16.20.0'}
+    cpu: [x64]
+    os: [win32]
 
   '@ungap/structured-clone@1.3.0':
     resolution: {integrity: sha512-WmoN8qaIAo7WTYWbAZuG8PYEhn5fkz7dZrqTBZ7dtt//lL2Gwms1IcnQ5yHqjDfX8Ft5j4YzDM23f87zBfDe9g==}
@@ -7988,6 +8108,11 @@ packages:
     engines: {node: '>=14.17'}
     hasBin: true
 
+  typescript@7.0.2:
+    resolution: {integrity: sha512-8FYau96o3NKOhbjKi/qNvG/W5jhzxkbdm5sj9AbZ/5T5sWqn3hJgLfGx27sRKZWTvyzCP8dLRBTf5tBTSRVUNA==}
+    engines: {node: '>=16.20.0'}
+    hasBin: true
+
   uglify-js@3.19.3:
     resolution: {integrity: sha512-v3Xu+yuwBXisp6QYTcH4UbH+xYJXqnq2m/LtQVWKWzYc1iehYnLixoQDN9FH6/j9/oybfd6W9Ghwkl8+UMKTKQ==}
     engines: {node: '>=0.8.0'}
@@ -8575,13 +8700,13 @@ snapshots:
   '@babel/core@7.29.7':
     dependencies:
       '@babel/code-frame': 7.29.7
-      '@babel/generator': 7.29.8
+      '@babel/generator': 7.29.12
       '@babel/helper-compilation-targets': 7.29.7
       '@babel/helper-module-transforms': 7.29.7(@babel/core@7.29.7)
       '@babel/helpers': 7.29.10
-      '@babel/parser': 7.29.11
+      '@babel/parser': 7.29.12
       '@babel/template': 7.29.7
-      '@babel/traverse': 7.29.10
+      '@babel/traverse': 7.29.12
       '@babel/types': 7.29.11
       '@jridgewell/remapping': 2.3.5
       convert-source-map: 2.0.0
@@ -8608,18 +8733,18 @@ snapshots:
       '@jridgewell/trace-mapping': 0.3.31
       jsesc: 3.1.0
 
-  '@babel/generator@7.29.7':
+  '@babel/generator@7.29.12':
     dependencies:
-      '@babel/parser': 7.29.7
-      '@babel/types': 7.29.7
+      '@babel/parser': 7.29.12
+      '@babel/types': 7.29.11
       '@jridgewell/gen-mapping': 0.3.13
       '@jridgewell/trace-mapping': 0.3.31
       jsesc: 3.1.0
 
-  '@babel/generator@7.29.8':
+  '@babel/generator@7.29.7':
     dependencies:
-      '@babel/parser': 7.29.11
-      '@babel/types': 7.29.11
+      '@babel/parser': 7.29.7
+      '@babel/types': 7.29.7
       '@jridgewell/gen-mapping': 0.3.13
       '@jridgewell/trace-mapping': 0.3.31
       jsesc: 3.1.0
@@ -8887,7 +9012,7 @@ snapshots:
     dependencies:
       '@babel/types': 7.29.7
 
-  '@babel/parser@7.29.11':
+  '@babel/parser@7.29.12':
     dependencies:
       '@babel/types': 7.29.11
 
@@ -10238,12 +10363,12 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@babel/traverse@7.29.10':
+  '@babel/traverse@7.29.12':
     dependencies:
       '@babel/code-frame': 7.29.7
-      '@babel/generator': 7.29.8
+      '@babel/generator': 7.29.12
       '@babel/helper-globals': 7.29.7
-      '@babel/parser': 7.29.11
+      '@babel/parser': 7.29.12
       '@babel/template': 7.29.7
       '@babel/types': 7.29.11
       debug: 4.4.3
@@ -10809,7 +10934,7 @@ snapshots:
       graphql: 16.14.1
       tslib: 2.8.1
 
-  '@graphql-codegen/cli@6.2.1(@parcel/watcher@2.6.0)(@types/node@26.6.6)(encoding@0.1.13)(graphql@16.14.1)(typescript@5.9.3)':
+  '@graphql-codegen/cli@6.2.1(@parcel/watcher@2.6.0)(@types/node@26.6.6)(encoding@0.1.13)(graphql@16.14.1)(typescript@7.0.2)':
     dependencies:
       '@babel/generator': 7.29.1
       '@babel/template': 7.28.6
@@ -10830,11 +10955,11 @@ snapshots:
       '@inquirer/prompts': 7.10.1(@types/node@26.6.6)
       '@whatwg-node/fetch': 0.10.13
       chalk: 4.1.2
-      cosmiconfig: 9.0.1(typescript@5.9.3)
+      cosmiconfig: 9.0.1(typescript@7.0.2)
       debounce: 2.2.0
       detect-indent: 6.1.0
       graphql: 16.14.1
-      graphql-config: 5.1.8(@types/node@26.6.6)(encoding@0.1.13)(graphql@16.14.1)(typescript@5.9.3)
+      graphql-config: 5.1.8(@types/node@26.6.6)(encoding@0.1.13)(graphql@16.14.1)(typescript@7.0.2)
       is-glob: 4.0.3
       jiti: 2.6.1
       json-to-pretty-yaml: 1.2.2
@@ -11877,7 +12002,7 @@ snapshots:
       jest-util: 30.5.1
       slash: 3.0.0
 
-  '@jest/core@30.2.0(esbuild-register@3.6.0(esbuild@0.28.2))(ts-node@10.9.2(@swc/core@1.13.3)(@types/node@26.6.5)(typescript@5.9.3))':
+  '@jest/core@30.2.0(esbuild-register@3.6.0(esbuild@0.28.2))(ts-node@10.9.2(@swc/core@1.13.3)(@types/node@26.6.5)(typescript@7.0.2))':
     dependencies:
       '@jest/console': 30.2.0
       '@jest/pattern': 30.0.1
@@ -11892,7 +12017,7 @@ snapshots:
       exit-x: 0.2.2
       graceful-fs: 4.2.11
       jest-changed-files: 30.2.0
-      jest-config: 30.2.0(@types/node@26.6.5)(esbuild-register@3.6.0(esbuild@0.28.2))(ts-node@10.9.2(@swc/core@1.13.3)(@types/node@26.6.5)(typescript@5.9.3))
+      jest-config: 30.2.0(@types/node@26.6.5)(esbuild-register@3.6.0(esbuild@0.28.2))(ts-node@10.9.2(@swc/core@1.13.3)(@types/node@26.6.5)(typescript@7.0.2))
       jest-haste-map: 30.2.0
       jest-message-util: 30.2.0
       jest-regex-util: 30.0.1
@@ -11913,7 +12038,7 @@ snapshots:
       - supports-color
       - ts-node
 
-  '@jest/core@30.5.2(esbuild-register@3.6.0(esbuild@0.28.2))(ts-node@10.9.2(@swc/core@1.13.3)(@types/node@26.6.6)(typescript@5.9.3))':
+  '@jest/core@30.5.2(esbuild-register@3.6.0(esbuild@0.28.2))(ts-node@10.9.2(@swc/core@1.13.3)(@types/node@26.6.6)(typescript@7.0.2))':
     dependencies:
       '@jest/console': 30.5.2
       '@jest/pattern': 30.5.0
@@ -11929,7 +12054,7 @@ snapshots:
       fast-json-stable-stringify: 2.1.0
       graceful-fs: 4.2.11
       jest-changed-files: 30.5.1
-      jest-config: 30.5.2(@types/node@26.6.6)(esbuild-register@3.6.0(esbuild@0.28.2))(ts-node@10.9.2(@swc/core@1.13.3)(@types/node@26.6.6)(typescript@5.9.3))
+      jest-config: 30.5.2(@types/node@26.6.6)(esbuild-register@3.6.0(esbuild@0.28.2))(ts-node@10.9.2(@swc/core@1.13.3)(@types/node@26.6.6)(typescript@7.0.2))
       jest-haste-map: 30.5.1
       jest-message-util: 30.5.1
       jest-regex-util: 30.5.0
@@ -12691,10 +12816,10 @@ snapshots:
 
   '@poppinss/exception@1.2.3': {}
 
-  '@prisma/client@6.19.0(prisma@6.19.0(typescript@5.9.3))(typescript@5.9.3)':
+  '@prisma/client@6.19.0(prisma@6.19.0(typescript@7.0.2))(typescript@7.0.2)':
     optionalDependencies:
-      prisma: 6.19.0(typescript@5.9.3)
-      typescript: 5.9.3
+      prisma: 6.19.0(typescript@7.0.2)
+      typescript: 7.0.2
 
   '@prisma/config@6.19.0':
     dependencies:
@@ -12865,11 +12990,11 @@ snapshots:
     optionalDependencies:
       rollup: 4.62.3
 
-  '@rollup/plugin-typescript@12.3.0(rollup@4.62.3)(tslib@2.8.1)(typescript@5.9.3)':
+  '@rollup/plugin-typescript@12.3.0(rollup@4.62.3)(tslib@2.8.1)(typescript@7.0.2)':
     dependencies:
       '@rollup/pluginutils': 5.3.0(rollup@4.62.3)
       resolve: 1.22.11
-      typescript: 5.9.3
+      typescript: 7.0.2
     optionalDependencies:
       rollup: 4.62.3
       tslib: 2.8.1
@@ -13444,6 +13569,66 @@ snapshots:
   '@types/yargs@17.0.35':
     dependencies:
       '@types/yargs-parser': 21.0.3
+
+  '@typescript/typescript-aix-ppc64@7.0.2':
+    optional: true
+
+  '@typescript/typescript-darwin-arm64@7.0.2':
+    optional: true
+
+  '@typescript/typescript-darwin-x64@7.0.2':
+    optional: true
+
+  '@typescript/typescript-freebsd-arm64@7.0.2':
+    optional: true
+
+  '@typescript/typescript-freebsd-x64@7.0.2':
+    optional: true
+
+  '@typescript/typescript-linux-arm64@7.0.2':
+    optional: true
+
+  '@typescript/typescript-linux-arm@7.0.2':
+    optional: true
+
+  '@typescript/typescript-linux-loong64@7.0.2':
+    optional: true
+
+  '@typescript/typescript-linux-mips64el@7.0.2':
+    optional: true
+
+  '@typescript/typescript-linux-ppc64@7.0.2':
+    optional: true
+
+  '@typescript/typescript-linux-riscv64@7.0.2':
+    optional: true
+
+  '@typescript/typescript-linux-s390x@7.0.2':
+    optional: true
+
+  '@typescript/typescript-linux-x64@7.0.2':
+    optional: true
+
+  '@typescript/typescript-netbsd-arm64@7.0.2':
+    optional: true
+
+  '@typescript/typescript-netbsd-x64@7.0.2':
+    optional: true
+
+  '@typescript/typescript-openbsd-arm64@7.0.2':
+    optional: true
+
+  '@typescript/typescript-openbsd-x64@7.0.2':
+    optional: true
+
+  '@typescript/typescript-sunos-x64@7.0.2':
+    optional: true
+
+  '@typescript/typescript-win32-arm64@7.0.2':
+    optional: true
+
+  '@typescript/typescript-win32-x64@7.0.2':
+    optional: true
 
   '@ungap/structured-clone@1.3.0': {}
 
@@ -14158,23 +14343,23 @@ snapshots:
     dependencies:
       browserslist: 4.28.2
 
-  cosmiconfig@8.3.6(typescript@5.9.3):
+  cosmiconfig@8.3.6(typescript@7.0.2):
     dependencies:
       import-fresh: 3.3.1
       js-yaml: 4.3.2
       parse-json: 5.2.0
       path-type: 4.0.0
     optionalDependencies:
-      typescript: 5.9.3
+      typescript: 7.0.2
 
-  cosmiconfig@9.0.1(typescript@5.9.3):
+  cosmiconfig@9.0.1(typescript@7.0.2):
     dependencies:
       env-paths: 2.2.1
       import-fresh: 3.3.1
       js-yaml: 4.1.1
       parse-json: 5.2.0
     optionalDependencies:
-      typescript: 5.9.3
+      typescript: 7.0.2
 
   create-require@1.1.1:
     optional: true
@@ -14302,18 +14487,18 @@ snapshots:
       esbuild: 0.25.12
       tsx: 4.23.15
 
-  drizzle-orm@0.45.4(@cloudflare/workers-types@4.20260702.1)(@libsql/client@0.17.4)(@prisma/client@6.19.0(prisma@6.19.0(typescript@5.9.3))(typescript@5.9.3))(@types/better-sqlite3@7.6.13)(@types/pg@8.23.1)(better-sqlite3@12.11.1)(gel@2.0.1)(mysql2@3.24.6(@types/node@26.6.6))(pg@8.23.1)(prisma@6.19.0(typescript@5.9.3))(sqlite3@6.0.1):
+  drizzle-orm@0.45.4(@cloudflare/workers-types@4.20260702.1)(@libsql/client@0.17.4)(@prisma/client@6.19.0(prisma@6.19.0(typescript@7.0.2))(typescript@7.0.2))(@types/better-sqlite3@7.6.13)(@types/pg@8.23.1)(better-sqlite3@12.11.1)(gel@2.0.1)(mysql2@3.24.6(@types/node@26.6.6))(pg@8.23.1)(prisma@6.19.0(typescript@7.0.2))(sqlite3@6.0.1):
     optionalDependencies:
       '@cloudflare/workers-types': 4.20260702.1
       '@libsql/client': 0.17.4
-      '@prisma/client': 6.19.0(prisma@6.19.0(typescript@5.9.3))(typescript@5.9.3)
+      '@prisma/client': 6.19.0(prisma@6.19.0(typescript@7.0.2))(typescript@7.0.2)
       '@types/better-sqlite3': 7.6.13
       '@types/pg': 8.23.1
       better-sqlite3: 12.11.1
       gel: 2.0.1
       mysql2: 3.24.6(@types/node@26.6.6)
       pg: 8.23.1
-      prisma: 6.19.0(typescript@5.9.3)
+      prisma: 6.19.0(typescript@7.0.2)
       sqlite3: 6.0.1
 
   dunder-proto@1.0.1:
@@ -14794,7 +14979,7 @@ snapshots:
 
   graceful-fs@4.2.11: {}
 
-  graphql-config@5.1.8(@types/node@26.6.6)(encoding@0.1.13)(graphql@16.14.1)(typescript@5.9.3):
+  graphql-config@5.1.8(@types/node@26.6.6)(encoding@0.1.13)(graphql@16.14.1)(typescript@7.0.2):
     dependencies:
       '@graphql-tools/graphql-file-loader': 8.1.24(graphql@16.14.1)
       '@graphql-tools/json-file-loader': 8.0.38(graphql@16.14.1)
@@ -14802,7 +14987,7 @@ snapshots:
       '@graphql-tools/merge': 9.2.8(graphql@16.14.1)
       '@graphql-tools/url-loader': 9.1.14(@types/node@26.6.6)(encoding@0.1.13)(graphql@16.14.1)
       '@graphql-tools/utils': 12.1.0(graphql@16.14.1)
-      cosmiconfig: 8.3.6(typescript@5.9.3)
+      cosmiconfig: 8.3.6(typescript@7.0.2)
       graphql: 16.14.1
       jiti: 2.7.0
       minimatch: 10.2.6
@@ -15176,15 +15361,15 @@ snapshots:
       - babel-plugin-macros
       - supports-color
 
-  jest-cli@30.2.0(@types/node@26.6.5)(esbuild-register@3.6.0(esbuild@0.28.2))(ts-node@10.9.2(@swc/core@1.13.3)(@types/node@26.6.5)(typescript@5.9.3)):
+  jest-cli@30.2.0(@types/node@26.6.5)(esbuild-register@3.6.0(esbuild@0.28.2))(ts-node@10.9.2(@swc/core@1.13.3)(@types/node@26.6.5)(typescript@7.0.2)):
     dependencies:
-      '@jest/core': 30.2.0(esbuild-register@3.6.0(esbuild@0.28.2))(ts-node@10.9.2(@swc/core@1.13.3)(@types/node@26.6.5)(typescript@5.9.3))
+      '@jest/core': 30.2.0(esbuild-register@3.6.0(esbuild@0.28.2))(ts-node@10.9.2(@swc/core@1.13.3)(@types/node@26.6.5)(typescript@7.0.2))
       '@jest/test-result': 30.2.0
       '@jest/types': 30.2.0
       chalk: 4.1.2
       exit-x: 0.2.2
       import-local: 3.2.0
-      jest-config: 30.2.0(@types/node@26.6.5)(esbuild-register@3.6.0(esbuild@0.28.2))(ts-node@10.9.2(@swc/core@1.13.3)(@types/node@26.6.5)(typescript@5.9.3))
+      jest-config: 30.2.0(@types/node@26.6.5)(esbuild-register@3.6.0(esbuild@0.28.2))(ts-node@10.9.2(@swc/core@1.13.3)(@types/node@26.6.5)(typescript@7.0.2))
       jest-util: 30.2.0
       jest-validate: 30.2.0
       yargs: 17.7.2
@@ -15195,15 +15380,15 @@ snapshots:
       - supports-color
       - ts-node
 
-  jest-cli@30.5.2(@types/node@26.6.6)(esbuild-register@3.6.0(esbuild@0.28.2))(ts-node@10.9.2(@swc/core@1.13.3)(@types/node@26.6.6)(typescript@5.9.3)):
+  jest-cli@30.5.2(@types/node@26.6.6)(esbuild-register@3.6.0(esbuild@0.28.2))(ts-node@10.9.2(@swc/core@1.13.3)(@types/node@26.6.6)(typescript@7.0.2)):
     dependencies:
-      '@jest/core': 30.5.2(esbuild-register@3.6.0(esbuild@0.28.2))(ts-node@10.9.2(@swc/core@1.13.3)(@types/node@26.6.6)(typescript@5.9.3))
+      '@jest/core': 30.5.2(esbuild-register@3.6.0(esbuild@0.28.2))(ts-node@10.9.2(@swc/core@1.13.3)(@types/node@26.6.6)(typescript@7.0.2))
       '@jest/test-result': 30.5.2
       '@jest/types': 30.5.1
       chalk: 4.1.2
       exit-x: 0.2.2
       import-local: 3.2.0
-      jest-config: 30.5.2(@types/node@26.6.6)(esbuild-register@3.6.0(esbuild@0.28.2))(ts-node@10.9.2(@swc/core@1.13.3)(@types/node@26.6.6)(typescript@5.9.3))
+      jest-config: 30.5.2(@types/node@26.6.6)(esbuild-register@3.6.0(esbuild@0.28.2))(ts-node@10.9.2(@swc/core@1.13.3)(@types/node@26.6.6)(typescript@7.0.2))
       jest-util: 30.5.1
       jest-validate: 30.5.1
       yargs: 17.7.3
@@ -15214,7 +15399,7 @@ snapshots:
       - supports-color
       - ts-node
 
-  jest-config@30.2.0(@types/node@26.6.5)(esbuild-register@3.6.0(esbuild@0.28.2))(ts-node@10.9.2(@swc/core@1.13.3)(@types/node@26.6.5)(typescript@5.9.3)):
+  jest-config@30.2.0(@types/node@26.6.5)(esbuild-register@3.6.0(esbuild@0.28.2))(ts-node@10.9.2(@swc/core@1.13.3)(@types/node@26.6.5)(typescript@7.0.2)):
     dependencies:
       '@babel/core': 7.29.0
       '@jest/get-type': 30.1.0
@@ -15243,12 +15428,12 @@ snapshots:
     optionalDependencies:
       '@types/node': 26.6.5
       esbuild-register: 3.6.0(esbuild@0.28.2)
-      ts-node: 10.9.2(@swc/core@1.13.3)(@types/node@26.6.5)(typescript@5.9.3)
+      ts-node: 10.9.2(@swc/core@1.13.3)(@types/node@26.6.5)(typescript@7.0.2)
     transitivePeerDependencies:
       - babel-plugin-macros
       - supports-color
 
-  jest-config@30.5.2(@types/node@26.6.6)(esbuild-register@3.6.0(esbuild@0.28.2))(ts-node@10.9.2(@swc/core@1.13.3)(@types/node@26.6.6)(typescript@5.9.3)):
+  jest-config@30.5.2(@types/node@26.6.6)(esbuild-register@3.6.0(esbuild@0.28.2))(ts-node@10.9.2(@swc/core@1.13.3)(@types/node@26.6.6)(typescript@7.0.2)):
     dependencies:
       '@babel/core': 7.29.7
       '@jest/get-type': 30.5.0
@@ -15276,7 +15461,7 @@ snapshots:
     optionalDependencies:
       '@types/node': 26.6.6
       esbuild-register: 3.6.0(esbuild@0.28.2)
-      ts-node: 10.9.2(@swc/core@1.13.3)(@types/node@26.6.6)(typescript@5.9.3)
+      ts-node: 10.9.2(@swc/core@1.13.3)(@types/node@26.6.6)(typescript@7.0.2)
     transitivePeerDependencies:
       - babel-plugin-macros
       - supports-color
@@ -15337,7 +15522,7 @@ snapshots:
       - supports-color
       - utf-8-validate
 
-  jest-environment-miniflare@2.14.4(jest@30.5.2(@types/node@26.6.6)(esbuild-register@3.6.0(esbuild@0.28.2))(ts-node@10.9.2(@swc/core@1.13.3)(@types/node@26.6.6)(typescript@5.9.3))):
+  jest-environment-miniflare@2.14.4(jest@30.5.2(@types/node@26.6.6)(esbuild-register@3.6.0(esbuild@0.28.2))(ts-node@10.9.2(@swc/core@1.13.3)(@types/node@26.6.6)(typescript@7.0.2))):
     dependencies:
       '@jest/environment': 29.7.0
       '@jest/fake-timers': 29.7.0
@@ -15346,7 +15531,7 @@ snapshots:
       '@miniflare/runner-vm': 2.14.4
       '@miniflare/shared': 2.14.4
       '@miniflare/shared-test-environment': 2.14.4
-      jest: 30.5.2(@types/node@26.6.6)(esbuild-register@3.6.0(esbuild@0.28.2))(ts-node@10.9.2(@swc/core@1.13.3)(@types/node@26.6.6)(typescript@5.9.3))
+      jest: 30.5.2(@types/node@26.6.6)(esbuild-register@3.6.0(esbuild@0.28.2))(ts-node@10.9.2(@swc/core@1.13.3)(@types/node@26.6.6)(typescript@7.0.2))
       jest-mock: 29.7.0
       jest-util: 29.7.0
     transitivePeerDependencies:
@@ -15700,7 +15885,7 @@ snapshots:
   jest-snapshot@30.5.2:
     dependencies:
       '@babel/core': 7.29.7
-      '@babel/generator': 7.29.8
+      '@babel/generator': 7.29.12
       '@babel/plugin-syntax-jsx': 7.29.7(@babel/core@7.29.7)
       '@babel/plugin-syntax-typescript': 7.29.7(@babel/core@7.29.7)
       '@babel/types': 7.29.11
@@ -15815,12 +16000,12 @@ snapshots:
       merge-stream: 2.0.0
       supports-color: 8.1.1
 
-  jest@30.2.0(@types/node@26.6.5)(esbuild-register@3.6.0(esbuild@0.28.2))(ts-node@10.9.2(@swc/core@1.13.3)(@types/node@26.6.5)(typescript@5.9.3)):
+  jest@30.2.0(@types/node@26.6.5)(esbuild-register@3.6.0(esbuild@0.28.2))(ts-node@10.9.2(@swc/core@1.13.3)(@types/node@26.6.5)(typescript@7.0.2)):
     dependencies:
-      '@jest/core': 30.2.0(esbuild-register@3.6.0(esbuild@0.28.2))(ts-node@10.9.2(@swc/core@1.13.3)(@types/node@26.6.5)(typescript@5.9.3))
+      '@jest/core': 30.2.0(esbuild-register@3.6.0(esbuild@0.28.2))(ts-node@10.9.2(@swc/core@1.13.3)(@types/node@26.6.5)(typescript@7.0.2))
       '@jest/types': 30.2.0
       import-local: 3.2.0
-      jest-cli: 30.2.0(@types/node@26.6.5)(esbuild-register@3.6.0(esbuild@0.28.2))(ts-node@10.9.2(@swc/core@1.13.3)(@types/node@26.6.5)(typescript@5.9.3))
+      jest-cli: 30.2.0(@types/node@26.6.5)(esbuild-register@3.6.0(esbuild@0.28.2))(ts-node@10.9.2(@swc/core@1.13.3)(@types/node@26.6.5)(typescript@7.0.2))
     transitivePeerDependencies:
       - '@types/node'
       - babel-plugin-macros
@@ -15828,12 +16013,12 @@ snapshots:
       - supports-color
       - ts-node
 
-  jest@30.5.2(@types/node@26.6.6)(esbuild-register@3.6.0(esbuild@0.28.2))(ts-node@10.9.2(@swc/core@1.13.3)(@types/node@26.6.6)(typescript@5.9.3)):
+  jest@30.5.2(@types/node@26.6.6)(esbuild-register@3.6.0(esbuild@0.28.2))(ts-node@10.9.2(@swc/core@1.13.3)(@types/node@26.6.6)(typescript@7.0.2)):
     dependencies:
-      '@jest/core': 30.5.2(esbuild-register@3.6.0(esbuild@0.28.2))(ts-node@10.9.2(@swc/core@1.13.3)(@types/node@26.6.6)(typescript@5.9.3))
+      '@jest/core': 30.5.2(esbuild-register@3.6.0(esbuild@0.28.2))(ts-node@10.9.2(@swc/core@1.13.3)(@types/node@26.6.6)(typescript@7.0.2))
       '@jest/types': 30.5.1
       import-local: 3.2.0
-      jest-cli: 30.5.2(@types/node@26.6.6)(esbuild-register@3.6.0(esbuild@0.28.2))(ts-node@10.9.2(@swc/core@1.13.3)(@types/node@26.6.6)(typescript@5.9.3))
+      jest-cli: 30.5.2(@types/node@26.6.6)(esbuild-register@3.6.0(esbuild@0.28.2))(ts-node@10.9.2(@swc/core@1.13.3)(@types/node@26.6.6)(typescript@7.0.2))
     transitivePeerDependencies:
       - '@types/node'
       - babel-plugin-macros
@@ -16501,12 +16686,12 @@ snapshots:
       '@jest/schemas': 30.5.0
       ansi-styles: 5.2.0
 
-  prisma@6.19.0(typescript@5.9.3):
+  prisma@6.19.0(typescript@7.0.2):
     dependencies:
       '@prisma/config': 6.19.0
       '@prisma/engines': 6.19.0
     optionalDependencies:
-      typescript: 5.9.3
+      typescript: 7.0.2
     transitivePeerDependencies:
       - magicast
 
@@ -16714,14 +16899,14 @@ snapshots:
       glob: 13.0.6
       package-json-from-dist: 1.0.1
 
-  rollup-plugin-dts@6.4.1(rollup@4.66.0)(typescript@5.9.3):
+  rollup-plugin-dts@6.4.1(rollup@4.66.0)(typescript@7.0.2):
     dependencies:
       '@jridgewell/remapping': 2.3.5
       '@jridgewell/sourcemap-codec': 1.5.5
       convert-source-map: 2.0.0
       magic-string: 0.30.21
       rollup: 4.66.0
-      typescript: 5.9.3
+      typescript: 7.0.2
     optionalDependencies:
       '@babel/code-frame': 7.29.0
 
@@ -17266,18 +17451,18 @@ snapshots:
     dependencies:
       punycode: 2.3.1
 
-  ts-jest@29.4.15(@babel/core@7.29.7)(@jest/transform@30.5.2)(@jest/types@30.4.1)(babel-jest@30.5.2(@babel/core@7.29.7))(esbuild@0.28.2)(jest-util@30.5.1)(jest@30.2.0(@types/node@26.6.5)(esbuild-register@3.6.0(esbuild@0.28.2))(ts-node@10.9.2(@swc/core@1.13.3)(@types/node@26.6.5)(typescript@5.9.3)))(typescript@5.9.3):
+  ts-jest@29.4.15(@babel/core@7.29.7)(@jest/transform@30.5.2)(@jest/types@30.4.1)(babel-jest@30.5.2(@babel/core@7.29.7))(esbuild@0.28.2)(jest-util@30.5.1)(jest@30.2.0(@types/node@26.6.5)(esbuild-register@3.6.0(esbuild@0.28.2))(ts-node@10.9.2(@swc/core@1.13.3)(@types/node@26.6.5)(typescript@7.0.2)))(typescript@7.0.2):
     dependencies:
       bs-logger: 0.2.6
       fast-json-stable-stringify: 2.1.0
       handlebars: 4.7.10
-      jest: 30.2.0(@types/node@26.6.5)(esbuild-register@3.6.0(esbuild@0.28.2))(ts-node@10.9.2(@swc/core@1.13.3)(@types/node@26.6.5)(typescript@5.9.3))
+      jest: 30.2.0(@types/node@26.6.5)(esbuild-register@3.6.0(esbuild@0.28.2))(ts-node@10.9.2(@swc/core@1.13.3)(@types/node@26.6.5)(typescript@7.0.2))
       json5: 2.2.3
       lodash.memoize: 4.1.2
       make-error: 1.3.6
       semver: 7.8.5
       type-fest: 4.41.0
-      typescript: 5.9.3
+      typescript: 7.0.2
       yargs-parser: 21.1.1
     optionalDependencies:
       '@babel/core': 7.29.7
@@ -17289,7 +17474,7 @@ snapshots:
 
   ts-log@2.2.7: {}
 
-  ts-node@10.9.2(@swc/core@1.13.3)(@types/node@26.6.5)(typescript@5.9.3):
+  ts-node@10.9.2(@swc/core@1.13.3)(@types/node@26.6.5)(typescript@7.0.2):
     dependencies:
       '@cspotcode/source-map-support': 0.8.1
       '@tsconfig/node10': 1.0.13
@@ -17303,14 +17488,14 @@ snapshots:
       create-require: 1.1.1
       diff: 4.0.4
       make-error: 1.3.6
-      typescript: 5.9.3
+      typescript: 7.0.2
       v8-compile-cache-lib: 3.0.1
       yn: 3.1.1
     optionalDependencies:
       '@swc/core': 1.13.3
     optional: true
 
-  ts-node@10.9.2(@swc/core@1.13.3)(@types/node@26.6.6)(typescript@5.9.3):
+  ts-node@10.9.2(@swc/core@1.13.3)(@types/node@26.6.6)(typescript@7.0.2):
     dependencies:
       '@cspotcode/source-map-support': 0.8.1
       '@tsconfig/node10': 1.0.13
@@ -17324,7 +17509,7 @@ snapshots:
       create-require: 1.1.1
       diff: 4.0.4
       make-error: 1.3.6
-      typescript: 5.9.3
+      typescript: 7.0.2
       v8-compile-cache-lib: 3.0.1
       yn: 3.1.1
     optionalDependencies:
@@ -17371,6 +17556,29 @@ snapshots:
       mime-types: 3.0.2
 
   typescript@5.9.3: {}
+
+  typescript@7.0.2:
+    optionalDependencies:
+      '@typescript/typescript-aix-ppc64': 7.0.2
+      '@typescript/typescript-darwin-arm64': 7.0.2
+      '@typescript/typescript-darwin-x64': 7.0.2
+      '@typescript/typescript-freebsd-arm64': 7.0.2
+      '@typescript/typescript-freebsd-x64': 7.0.2
+      '@typescript/typescript-linux-arm': 7.0.2
+      '@typescript/typescript-linux-arm64': 7.0.2
+      '@typescript/typescript-linux-loong64': 7.0.2
+      '@typescript/typescript-linux-mips64el': 7.0.2
+      '@typescript/typescript-linux-ppc64': 7.0.2
+      '@typescript/typescript-linux-riscv64': 7.0.2
+      '@typescript/typescript-linux-s390x': 7.0.2
+      '@typescript/typescript-linux-x64': 7.0.2
+      '@typescript/typescript-netbsd-arm64': 7.0.2
+      '@typescript/typescript-netbsd-x64': 7.0.2
+      '@typescript/typescript-openbsd-arm64': 7.0.2
+      '@typescript/typescript-openbsd-x64': 7.0.2
+      '@typescript/typescript-sunos-x64': 7.0.2
+      '@typescript/typescript-win32-arm64': 7.0.2
+      '@typescript/typescript-win32-x64': 7.0.2
 
   uglify-js@3.19.3:
     optional: true
