@@ -46,7 +46,16 @@ export function cancel(config: ConfigInterface): BillingCancel {
         });
       }
 
-      return response.data?.appSubscriptionCancel?.appSubscription!;
+      const appSubscription =
+        response.data?.appSubscriptionCancel?.appSubscription;
+      if (!appSubscription) {
+        throw new BillingError({
+          message: 'Shopify did not return the canceled app subscription',
+          errorData: [],
+        });
+      }
+
+      return appSubscription;
     } catch (error) {
       if (error instanceof GraphqlQueryError) {
         throw new BillingError({
