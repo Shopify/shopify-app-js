@@ -246,36 +246,42 @@ describe('Webhook validation', () => {
   });
 
   describe('Offline token expiration handling', () => {
-    it('returns a sessionless context when offline token refresh fails', async () => {
-      const sessionStorage = new MemorySessionStorage();
-      const shopify = shopifyApp(testConfig({sessionStorage}));
-      await setUpValidSession(sessionStorage, {
-        expires: new Date(Date.now() - 1000),
-        refreshToken: 'invalid-refresh-token',
-      });
+    it.each(['invalid_request', 'invalid_grant'])(
+      'returns a sessionless context when offline token refresh fails with %s',
+      async (errorCode) => {
+        const sessionStorage = new MemorySessionStorage();
+        const shopify = shopifyApp(testConfig({sessionStorage}));
+        await setUpValidSession(sessionStorage, {
+          expires: new Date(Date.now() - 1000),
+          refreshToken: 'invalid-refresh-token',
+        });
 
-      await mockExternalRequest({
-        request: new Request(`https://${TEST_SHOP}/admin/oauth/access_token`, {
-          method: 'POST',
-        }),
-        response: new Response(JSON.stringify({error: 'invalid_request'}), {
-          status: 401,
-          statusText: 'Unauthorized',
-        }),
-      });
+        await mockExternalRequest({
+          request: new Request(
+            `https://${TEST_SHOP}/admin/oauth/access_token`,
+            {
+              method: 'POST',
+            },
+          ),
+          response: new Response(JSON.stringify({error: errorCode}), {
+            status: 401,
+            statusText: 'Unauthorized',
+          }),
+        });
 
-      const body = JSON.stringify({some: 'data'});
-      const result = await shopify.authenticate.webhook(
-        new Request(`${APP_URL}/webhooks`, {
-          method: 'POST',
-          body,
-          headers: webhookHeaders(body),
-        }),
-      );
+        const body = JSON.stringify({some: 'data'});
+        const result = await shopify.authenticate.webhook(
+          new Request(`${APP_URL}/webhooks`, {
+            method: 'POST',
+            body,
+            headers: webhookHeaders(body),
+          }),
+        );
 
-      expect(result.session).toBeUndefined();
-      expect(result.admin).toBeUndefined();
-    });
+        expect(result.session).toBeUndefined();
+        expect(result.admin).toBeUndefined();
+      },
+    );
 
     it.each([401, 429, 500, 503])(
       'preserves webhook retries when refresh returns %s',
