@@ -9,7 +9,6 @@ import {
   getSessionTokenFromUrlParam,
   respondToBotRequest,
   respondToOptionsRequest,
-  validateSessionToken,
   getShopFromRequest,
 } from '../helpers';
 
@@ -36,6 +35,7 @@ import {
   renderAppBridge,
   validateShopAndHostParams,
 } from './helpers';
+import {validateAdminSessionToken} from './helpers/validate-admin-session-token';
 import {AuthorizationStrategy} from './strategies/types';
 import {scopesApiFactory} from './scope/factory';
 
@@ -216,9 +216,11 @@ async function getSessionTokenContext(
   });
 
   if (config.distribution !== AppDistribution.ShopifyAdmin) {
-    const payload = await validateSessionToken(params, request, sessionToken);
-    const dest = new URL(payload.dest);
-    const shop = dest.hostname;
+    const {payload, shop} = await validateAdminSessionToken(
+      params,
+      request,
+      sessionToken,
+    );
 
     logger.debug('Session token is valid - authenticated', {shop, payload});
     const sessionId = config.useOnlineTokens

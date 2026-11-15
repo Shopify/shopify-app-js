@@ -18,6 +18,8 @@ import {getOfflineId} from '../../../session/session-utils';
 import {shopifyApi} from '../../..';
 
 const VALID_NONCE = 'noncenoncenonce';
+// HttpOnly written as a flag attribute, not `httpOnly=<value>`
+const HTTP_ONLY_FLAG = /;\s*httpOnly\s*(;|$)/i;
 jest.mock('../nonce', () => ({nonce: jest.fn(() => VALID_NONCE)}));
 
 type QueryMock = Record<string, any>;
@@ -65,6 +67,12 @@ describe('beginAuth', () => {
       expect(cookies.outgoingCookieJar.shopify_app_state.value).toEqual(
         VALID_NONCE,
       );
+
+      const stateCookies = (response.headers!['Set-Cookie'] as string[]).filter(
+        (cookie) => cookie.startsWith('shopify_app_state'),
+      );
+      expect(stateCookies).toHaveLength(2);
+      stateCookies.forEach((cookie) => expect(cookie).toMatch(HTTP_ONLY_FLAG));
     });
   });
 
@@ -326,6 +334,12 @@ describe('callback', () => {
     expect(callbackResponse.session.accessToken).toBe(
       successResponse.access_token,
     );
+
+    const sessionCookies = (
+      callbackResponse.headers['Set-Cookie'] as string[]
+    ).filter((cookie) => cookie.startsWith('shopify_app_session'));
+    expect(sessionCookies).toHaveLength(2);
+    sessionCookies.forEach((cookie) => expect(cookie).toMatch(HTTP_ONLY_FLAG));
   });
 
   test('requests access token for valid callbacks with online access and creates session with expiration and onlineAccessInfo', async () => {
@@ -838,6 +852,39 @@ describe('callback', () => {
     );
 
     expect(responseCookies.shopify_app_session.path).toEqual(`/shops/${shop}/`);
+  });
+});
+
+describe('Cookies', () => {
+  test('sets HttpOnly by default', () => {
+    const cookies = new Cookies(
+      {} as NormalizedRequest,
+      {} as NormalizedResponse,
+    );
+    cookies.set('test_cookie', 'value');
+
+    expect(cookies.toHeaders()).toEqual(['test_cookie=value;httpOnly']);
+  });
+
+  test('only writes boolean attributes when they are true', () => {
+    const cookies = new Cookies(
+      {} as NormalizedRequest,
+      {} as NormalizedResponse,
+    );
+    cookies.set('test_cookie', 'value', {httpOnly: false, secure: true});
+
+    expect(cookies.toHeaders()).toEqual(['test_cookie=value;secure']);
+  });
+
+  test('keeps flag attributes on Set-Cookie headers already in the response', () => {
+    const cookies = new Cookies(
+      {} as NormalizedRequest,
+      {
+        headers: {'Set-Cookie': ['other=1; path=/; HttpOnly']},
+      } as NormalizedResponse,
+    );
+
+    expect(cookies.toHeaders()).toEqual(['other=1;path=/; HttpOnly']);
   });
 });
 

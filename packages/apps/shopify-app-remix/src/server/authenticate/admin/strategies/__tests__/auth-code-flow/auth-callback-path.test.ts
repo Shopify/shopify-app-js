@@ -365,9 +365,9 @@ describe('authorize.admin auth callback path', () => {
           );
           expect(response.headers.get('set-cookie')).toBe(
             [
-              'shopify_app_state=;path=/;expires=Thu, 01 Jan 1970 00:00:00 GMT',
-              `shopify_app_session=offline_${TEST_SHOP};sameSite=lax; secure=true; path=/`,
-              `shopify_app_session.sig=${sessionSig};sameSite=lax; secure=true; path=/`,
+              'shopify_app_state=;httpOnly; path=/;expires=Thu, 01 Jan 1970 00:00:00 GMT',
+              `shopify_app_session=offline_${TEST_SHOP};httpOnly; sameSite=lax; secure; path=/`,
+              `shopify_app_session.sig=${sessionSig};httpOnly; sameSite=lax; secure; path=/`,
             ].join(', '),
           );
         });

@@ -85,15 +85,15 @@ To perform [authorization code grant flow](https://shopify.dev/docs/apps/auth/ge
 
 ## Client Credentials Grant
 > [!NOTE]
-> You should consider using the client credentials grant only when building apps for your own organization.
+> With client secret authentication, consider this grant only when building apps for your own organization. The [client assertion](#authenticating-with-a-client-assertion) path is also open to eligible public apps that have registered a key and are already installed on the shop, where Shopify supports it.
 
 > [!WARNING]
 > [token exchange](#token-exchange) (for embedded apps) or the [authorization code grant flow](#authorization-code-grant-flow) should be used instead of the client credentials grant, if your app is a browser based web app.
 
 OAuth process by exchanging the [app's client ID and client secret](https://shopify.dev/docs/apps/build/authentication-authorization/client-secrets) for an [access token](https://shopify.dev/docs/apps/auth/access-token-types/online.md) to make
-authenticated Shopify API queries. The Developer Dashboard adds support for the client credentials grant in the [beta version](https://shopify.dev/beta/developer-dashboard/client-credentials-grant). The app can only use the client credentials grant if it belongs to the same Organization as the shop.
+authenticated Shopify API queries. The Developer Dashboard adds support for the client credentials grant in the [beta version](https://shopify.dev/beta/developer-dashboard/client-credentials-grant). Authenticating with the client secret requires the app to belong to the same Organization as the shop; authenticating with a [client assertion](#authenticating-with-a-client-assertion) has its own eligibility rules, which Shopify checks when the assertion is exchanged.
 
-Access tokens retrieved using the client credentials grant are valid for only 24 hours.
+Read the lifetime from the `expires_in` field Shopify returns, which the library puts on `session.expires`, and request a new token when that time passes. Don't assume a fixed value: the endpoint decides, and the answer differs by app and by how you authenticated. For public apps using the client assertion path there is no refresh token, and tokens are currently valid for one hour.
 
 To perform [Client Credentials Grant](https://shopify.dev/beta/developer-dashboard/client-credentials-grant), in your app:
 1. Ensure your access scopes are available on Shopify:
@@ -102,6 +102,23 @@ To perform [Client Credentials Grant](https://shopify.dev/beta/developer-dashboa
 
 2. Start the token acquisition process by calling [shopify.auth.clientCredentials](../reference/auth/clientcredentials.md) to exchange app's client ID and client secret to access token.
 3. Use the obtained access token to make authenticated API queries, see [After OAuth](#after-oauth)
+
+This call makes exactly one request and never follows a redirect, whichever credential it authenticates with, because the request body carries the app's credentials. A redirect response raises an error instead. See [Redirects](../reference/auth/clientcredentials.md#redirects).
+
+### Authenticating with a client assertion
+
+Instead of the client secret, your app can authenticate with a JWT client assertion that it signs with its own private key. Pass it as `clientAssertion`:
+
+```ts
+const {session} = await shopify.auth.clientCredentials({
+  shop,
+  clientAssertion: assertion,
+});
+```
+
+The request then sends the assertion and no client secret. Your app can sign the assertion itself — in a KMS, for example — or call [shopify.auth.createClientAssertion](../reference/auth/createClientAssertion.md), which signs one with an `RS256` or `ES256` key your app owns.
+
+An assertion can only be used once. Each attempt needs a newly created assertion, so a failed request means signing a new one rather than sending the same string again.
 
 
 ## Expiring Access Tokens

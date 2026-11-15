@@ -19,6 +19,13 @@ import {FulfillmentService, fulfillmentService} from './fulfillment-service';
 
 export * from './error';
 export * from './session/classes';
+// Signs an assertion without a configured object, for code that has a key but no `shopifyApi`.
+export {createClientAssertion} from './auth/client-assertion';
+export type {
+  ClientAssertionParams,
+  CreateClientAssertion,
+  CreateClientAssertionOptions,
+} from './auth/client-assertion';
 
 export * from '../rest/types';
 export * from './types';

@@ -8,20 +8,27 @@ import {
   getTransformationDomains,
 } from './domain-transformer';
 
+// The domains the library trusts a shop to be on, as regex fragments: the Shopify-owned set, plus
+// both ends of every configured transformation.
+function trustedShopDomains(config: ConfigInterface): string[] {
+  const domainsRegex = [
+    'myshopify\\.com',
+    'shopify\\.com',
+    'myshopify\\.io',
+    'shop\\.dev',
+  ];
+
+  if (config.domainTransformations) {
+    domainsRegex.push(...getTransformationDomains(config));
+  }
+
+  return domainsRegex;
+}
+
 export function sanitizeShop(config: ConfigInterface) {
   return (shop: string, throwOnInvalid = false): string | null => {
     let shopUrl = shop;
-    const domainsRegex = [
-      'myshopify\\.com',
-      'shopify\\.com',
-      'myshopify\\.io',
-      'shop\\.dev',
-    ];
-
-    // Add domains from transformations (both source and target)
-    if (config.domainTransformations) {
-      domainsRegex.push(...getTransformationDomains(config));
-    }
+    const domainsRegex = trustedShopDomains(config);
 
     const shopUrlRegex = new RegExp(
       `^[a-zA-Z0-9][a-zA-Z0-9-_]*\\.(${domainsRegex.join('|')})[/]*$`,
@@ -46,6 +53,52 @@ export function sanitizeShop(config: ConfigInterface) {
     }
 
     return sanitizedShop;
+  };
+}
+
+/**
+ * Whether a shop domain is made up of printable ASCII characters only.
+ *
+ * Shop handles and Shopify's domains are ASCII, and `toLowerCase()` folds some non-ASCII characters
+ * into ASCII ones: `'sho\u212A.myshopify.com'` (U+212A KELVIN SIGN) becomes `'shok.myshopify.com'`.
+ * A caller naming one shop would get a domain for a different, real-looking one, so a non-ASCII
+ * host is rejected rather than normalised.
+ */
+export function isAsciiShopDomain(shop: string): boolean {
+  return /^[\u0020-\u007E]*$/.test(shop);
+}
+
+/**
+ * Returns the shop's permanent domain, in the form Shopify's own records hold it: lower-cased, with
+ * no trailing slash, and with an `admin.*` URL converted to the legacy form.
+ *
+ * Unlike {@link sanitizeShop} this never applies a `domainTransformations` rule. A transformation
+ * describes where a request is *routed*; this answers which shop it is *for*, which is what a token
+ * endpoint audience has to name. Returns `null` for anything that is not on a trusted domain.
+ */
+export function canonicalShopDomain(config: ConfigInterface) {
+  return (shop: string): string | null => {
+    if (typeof shop !== 'string' || !isAsciiShopDomain(shop)) {
+      return null;
+    }
+
+    // Hostnames are case-insensitive and a trailing slash is not part of one, but the audience has
+    // to match the canonical endpoint byte for byte.
+    const normalizedShop = shop.replace(/\/+$/, '').toLowerCase();
+    const domainsRegex = trustedShopDomains(config);
+
+    const shopAdminRegex = new RegExp(
+      `^admin\\.(${domainsRegex.join('|')})/store/([a-z0-9][a-z0-9-_]*)$`,
+    );
+    const shopUrl = shopAdminRegex.test(normalizedShop)
+      ? shopAdminUrlToLegacyUrl(normalizedShop) || ''
+      : normalizedShop;
+
+    const shopUrlRegex = new RegExp(
+      `^[a-z0-9][a-z0-9-_]*\\.(${domainsRegex.join('|')})$`,
+    );
+
+    return shopUrlRegex.test(shopUrl) ? shopUrl : null;
   };
 }
 

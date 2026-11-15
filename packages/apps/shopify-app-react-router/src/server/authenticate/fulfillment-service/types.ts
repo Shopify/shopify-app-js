@@ -60,18 +60,19 @@ export interface FulfillmentServiceContext {
    * <caption>Fulfillment service request payload.</caption>
    * <description>Get the request's POST payload.</description>
    * ```ts
-   * /app/routes/fulfillment_order_notification.ts
+   * // /app/routes/fulfillment_order_notification.ts
    * import { ActionFunction } from "react-router";
    * import { authenticate } from "../shopify.server";
    *
    * export const action: ActionFunction = async ({ request }) => {
    *   const { payload } = await authenticate.fulfillmentService(request);
-   *   if(payload.kind === 'FULFILLMENT_REQUEST') {
-   *    // handle fulfillment request
+   *   if (payload.kind === 'FULFILLMENT_REQUEST') {
+   *     // handle fulfillment request
    *   } else if (payload.kind === 'CANCELLATION_REQUEST') {
-   *    // handle cancellation request
-   *   };
-   * return new Response();
+   *     // handle cancellation request
+   *   }
+   *   return new Response();
+   * };
    * ```
    */
   payload: FulfillmentServicePayload;

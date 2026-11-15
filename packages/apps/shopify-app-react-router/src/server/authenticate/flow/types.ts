@@ -75,7 +75,7 @@ export interface FlowContext {
    *   );
    *
    *   const productData = await response.json();
-   *   return ({ data: productData.data });
+   *   return { data: productData.data };
    * }
    * ```
    */

@@ -26,6 +26,22 @@ describe('JWT validation', () => {
     expect(sessionToken).toMatchObject(payload);
   });
 
+  it('accepts checkout claims that are not valid for admin authentication', async () => {
+    const shopify = shopifyApp(testConfig());
+    const {token, payload} = await getJwt({
+      iss: 'https://test-shop.myshopify.com/checkouts',
+      dest: 'test-shop.myshopify.com',
+    });
+
+    const {sessionToken} = await shopify.authenticate.public.checkout(
+      new Request(APP_URL, {
+        headers: {Authorization: `Bearer ${token}`},
+      }),
+    );
+
+    expect(sessionToken).toEqual(payload);
+  });
+
   it('sets extra CORS allowed headers when requested from a different origin', async () => {
     // GIVEN
     const shopify = shopifyApp(testConfig());

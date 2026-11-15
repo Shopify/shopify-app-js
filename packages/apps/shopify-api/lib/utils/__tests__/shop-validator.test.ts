@@ -1,6 +1,7 @@
 import {shopifyApi} from '../..';
 import {testConfig} from '../../__tests__/test-config';
 import {InvalidShopError} from '../../error';
+import {canonicalShopDomain} from '../shop-validator';
 
 const VALID_SHOP_URL_1 = 'someshop.myshopify.com';
 const VALID_SHOP_URL_2 = 'devshop.myshopify.io';
@@ -97,6 +98,80 @@ describe('sanitizeShop', () => {
       expect(actual).toEqual(legacyAdminUrl);
     },
   );
+});
+
+describe('canonicalShopDomain', () => {
+  test.each([
+    ['a myshopify.com domain', VALID_SHOP_URL_1, VALID_SHOP_URL_1],
+    ['a myshopify.io domain', VALID_SHOP_URL_2, VALID_SHOP_URL_2],
+    ['an upper-case domain', 'SomeShop.MyShopify.com', VALID_SHOP_URL_1],
+    ['a trailing slash', `${VALID_SHOP_URL_1}/`, VALID_SHOP_URL_1],
+    ['repeated trailing slashes', `${VALID_SHOP_URL_1}//`, VALID_SHOP_URL_1],
+    ['a shop.dev domain', 'someshop.shop.dev', 'someshop.shop.dev'],
+    [
+      'an underscore in the handle',
+      'some_shop.myshopify.com',
+      'some_shop.myshopify.com',
+    ],
+    [
+      'a shop admin URL',
+      'admin.shopify.com/store/my-shop',
+      'my-shop.myshopify.com',
+    ],
+    [
+      'an upper-case shop admin URL',
+      'Admin.Shopify.com/store/My-Shop',
+      'my-shop.myshopify.com',
+    ],
+  ])('normalises %s', (_label, shop, expected) => {
+    const shopify = shopifyApi(testConfig());
+
+    expect(canonicalShopDomain(shopify.config)(shop)).toEqual(expected);
+  });
+
+  test.each([
+    ['an untrusted domain', INVALID_SHOP_URL_1],
+    ['a leading hyphen', INVALID_SHOP_URL_2],
+    [
+      'a host that only looks like the admin',
+      VALID_SHOPIFY_HOST_BUT_NOT_VALID_ADMIN_URL,
+    ],
+    ['a bare handle', 'someshop'],
+    ['a full URL', `https://${VALID_SHOP_URL_1}`],
+    ['a path', `${VALID_SHOP_URL_1}/admin`],
+    ['an empty string', ''],
+    ['a non-string value', 12345 as unknown as string],
+    // U+212A KELVIN SIGN lower-cases to "k", which would name a different, real-looking shop.
+    ['a non-ASCII character that folds into ASCII', 'sho\u212A.myshopify.com'],
+  ])('returns null for %s', (_label, shop) => {
+    const shopify = shopifyApi(testConfig());
+
+    expect(canonicalShopDomain(shopify.config)(shop)).toBe(null);
+  });
+
+  test('accepts both ends of a configured transformation without applying it', () => {
+    const shopify = shopifyApi(
+      testConfig({
+        domainTransformations: [
+          {
+            match: /^([a-zA-Z0-9][a-zA-Z0-9-_]*)\.my\.shop\.dev$/,
+            transform: '$1.dev-api.shop.dev',
+          },
+        ],
+      }),
+    );
+
+    expect(canonicalShopDomain(shopify.config)('shop1.my.shop.dev')).toEqual(
+      'shop1.my.shop.dev',
+    );
+    expect(
+      canonicalShopDomain(shopify.config)('shop1.dev-api.shop.dev'),
+    ).toEqual('shop1.dev-api.shop.dev');
+    // sanitizeShop routes the request; this names the shop, so it must not follow the rule.
+    expect(shopify.utils.sanitizeShop('shop1.my.shop.dev')).toEqual(
+      'shop1.dev-api.shop.dev',
+    );
+  });
 });
 
 describe('sanitizeHost', () => {

@@ -28,6 +28,7 @@ export function getUserAgent(config: ConfigInterface): string {
 const REDACTED_LOG_VALUE = '****';
 
 // These headers carry reusable credentials and must not reach the logs.
+// Keep in sync with SENSITIVE_HEADERS in @shopify/graphql-client.
 const SENSITIVE_LOG_HEADERS = new Set([
   'authorization',
   'cookie',

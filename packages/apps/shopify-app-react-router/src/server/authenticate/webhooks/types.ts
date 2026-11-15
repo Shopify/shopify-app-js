@@ -210,7 +210,7 @@ export interface WebhookContextWithSession<
    * import { authenticate } from "../shopify.server";
    *
    * export async function action({ request }: ActionFunctionArgs) {
-   *   const { admin } = await authenticate.webhook(request);
+   *   const { admin, session } = await authenticate.webhook(request);
    *
    *   // Webhook requests can trigger after an app is uninstalled
    *   // If the app is already uninstalled, the session may be undefined.
@@ -231,7 +231,7 @@ export interface WebhookContextWithSession<
    *   );
    *
    *   const productData = await response.json();
-   *   return ({ data: productData.data });
+   *   return { data: productData.data };
    * }
    * ```
    */
