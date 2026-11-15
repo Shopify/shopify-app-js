@@ -295,6 +295,73 @@ describe('GraphQL Client', () => {
         });
 
         describe('response is Content-Type: multipart/mixed', () => {
+          it.each([
+            ['async iterator', false],
+            ['reader fallback', true],
+          ])(
+            'decodes UTF-8 sequences split across chunks using the %s body path',
+            async (_name, useReaderFallback) => {
+              const multipartBody = [
+                '--graphql',
+                'Content-Type: application/json',
+                '',
+                JSON.stringify({data: {shop: {name: 'Café'}}, hasNext: false}),
+                '--graphql--',
+                '',
+              ].join('\r\n');
+              const encodedBody = new TextEncoder().encode(multipartBody);
+              const splitPosition = encodedBody.indexOf(0xc3) + 1;
+              const chunks = [
+                encodedBody.slice(0, splitPosition),
+                encodedBody.slice(splitPosition),
+              ];
+
+              const body = useReaderFallback
+                ? {
+                    getReader: () => {
+                      let index = 0;
+
+                      return {
+                        read: async () =>
+                          index < chunks.length
+                            ? {done: false, value: chunks[index++]}
+                            : {done: true},
+                        cancel: jest.fn(),
+                      };
+                    },
+                  }
+                : {
+                    async *[Symbol.asyncIterator]() {
+                      yield* chunks;
+                    },
+                  };
+
+              const mockedSuccessResponse = {
+                status: 200,
+                statusText: 'OK',
+                ok: true,
+                headers: new Headers({
+                  'Content-Type': 'multipart/mixed; boundary=graphql',
+                }),
+                body,
+              } as any;
+
+              fetchMock.mockResolvedValue(mockedSuccessResponse);
+
+              const responseStream = await client.requestStream(operation, {
+                variables,
+              });
+              const results = [];
+
+              for await (const response of responseStream) {
+                results.push(response);
+              }
+
+              expect(results[0].data).toEqual({shop: {name: 'Café'}});
+              expect(results[0].errors).toBeUndefined();
+            },
+          );
+
           describe.each([
             ['Readable Stream', createReaderStreamResponse],
             ['Async Iterator - Encoded (ArrayBuffer)', createIterableResponse],
