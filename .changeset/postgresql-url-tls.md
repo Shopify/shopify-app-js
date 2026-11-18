@@ -6,10 +6,10 @@ Apply the TLS settings of the database URL to the PostgreSQL connection, add an 
 
 ## Who is affected
 
-- **Apps that run with `NODE_ENV=production` and connect without verified TLS.** `PostgreSQLSessionStorage` now throws when you create it, unless TLS that checks the server's certificate and host name is on. Only the TLS setting that applies counts: the `ssl` option, else the TLS settings of the URL, else `PGSSLMODE`. The storage refuses a setting that is missing or turns TLS off, for example `sslmode=disable` or `ssl: false`. It also refuses `sslmode=no-verify`, `uselibpqcompat=true` with `sslmode=require`, `prefer` or `verify-ca`, and `rejectUnauthorized: false`. `withCredentials` without the `ssl` option is refused too.
+- **Apps that run with `NODE_ENV=production` and connect without verified TLS.** `PostgreSQLSessionStorage` now throws when you create it, unless TLS that checks the server's certificate and host name is on. Only the TLS setting that applies counts: the `ssl` option, else the TLS settings of the URL, else `PGSSLMODE`. The storage refuses a setting that is missing or turns TLS off, for example `sslmode=disable` or `ssl: false`. It also refuses `sslmode=no-verify`, `uselibpqcompat=true` with `sslmode=require`, `prefer` or `verify-ca`, and `rejectUnauthorized: false`. `withCredentials` without the `ssl` option is refused too, unless `PGSSLMODE` turns on verified TLS.
 - **Apps whose database URL has TLS settings, in every environment.** A URL with `sslmode=require`, `sslmode=prefer`, `sslmode=allow`, `sslmode=verify-ca`, `sslmode=verify-full` or `ssl=true` now connects over TLS and checks the server's certificate and host name. `pg` 8 treats all these `sslmode` values as `verify-full`. The connection fails if the server does not support TLS, or if a CA that Node trusts did not sign the certificate. This is common with providers that sign with their own CA, and with self-signed certificates.
 - A URL with `sslrootcert`, `sslcert` or `sslkey` now reads those files. The connection fails if a file does not exist.
-- When the URL has TLS settings, they replace the `PGSSLMODE` environment variable, as they do in `pg`. For example, `sslmode=require` in the URL with `PGSSLMODE=no-verify` now checks the certificate.
+- An `sslmode`, `ssl=true` or `sslrootcert` in the URL replaces the `PGSSLMODE` environment variable, as it does in `pg`. For example, `sslmode=require` in the URL with `PGSSLMODE=no-verify` now checks the certificate.
 
 Outside production, a URL without TLS settings connects as before.
 

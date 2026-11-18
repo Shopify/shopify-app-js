@@ -234,6 +234,27 @@ describe('PostgreSQLSessionStorage TLS settings', () => {
       expect(poolConfigs).toHaveLength(1);
     });
 
+    it('reads the URL when the ssl option is null', async () => {
+      await expect(
+        new PostgreSQLSessionStorage(`${dbURL}?sslmode=verify-full`, {
+          ssl: null as unknown as undefined,
+        }).ready,
+      ).resolves.toBeUndefined();
+    });
+
+    it('connects with pg.defaults.ssl for a URL without TLS settings', async () => {
+      const originalDefault = pg.defaults.ssl;
+      pg.defaults.ssl = true;
+
+      try {
+        await expect(
+          new PostgreSQLSessionStorage(dbURL).ready,
+        ).resolves.toBeUndefined();
+      } finally {
+        pg.defaults.ssl = originalDefault;
+      }
+    });
+
     it('connects with sslmode=verify-full in the URL over PGSSLMODE=disable', async () => {
       process.env.PGSSLMODE = 'disable';
 

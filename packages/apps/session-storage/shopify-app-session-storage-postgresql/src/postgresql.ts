@@ -34,7 +34,8 @@ const defaultPostgreSQLSessionStorageOptions: PostgreSQLSessionStorageOptions =
     allowInsecureConnection: false,
   };
 
-// pg reads PGSSLMODE only when neither the ssl option nor the URL sets TLS.
+// pg 8 reads PGSSLMODE this way, only when neither the ssl option nor the URL
+// sets TLS. Check this again when pg changes its sslmode meanings in pg 9.
 function sslFromEnvironment(): PoolConfig['ssl'] {
   switch (process.env.PGSSLMODE) {
     case 'prefer':

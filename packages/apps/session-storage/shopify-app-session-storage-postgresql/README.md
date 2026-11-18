@@ -76,6 +76,8 @@ When `NODE_ENV` is `production`, `PostgreSQLSessionStorage` refuses to connect w
 
 `sslmode=require`, `prefer`, `allow` and `verify-ca` are accepted, because `pg` 8 treats them as `verify-full` and never falls back to a connection without TLS. `withCredentials` builds a URL without TLS settings, so in production pass the `ssl` option with it.
 
+The `ssl` option is used as you give it. A `checkServerIdentity` function in it replaces the host name check, so it must do that check itself. The production check covers the JavaScript client of `pg`, not `pg-native`.
+
 Outside production, for example against a local PostgreSQL server during development, the session storage does not require TLS.
 
 If your production server is on a network you trust and cannot use TLS, set `allowInsecureConnection`:
