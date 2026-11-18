@@ -48,7 +48,7 @@ const sessionStorage = new PostgreSQLSessionStorage(
 );
 ```
 
-`sslmode=verify-full` checks the certificate against the system's trusted CAs and checks the host name. `pg` 8 treats `sslmode=require` and `sslmode=verify-ca` the same way, and prints a warning. If your provider signs the certificate with its own CA, name the CA file with `sslrootcert`, or pass the `ssl` option, which `pg` takes as is. The `ssl` option replaces the TLS settings of the URL:
+`sslmode=verify-full` checks the certificate against Node's default trusted CAs and checks the host name. `pg` 8 treats `sslmode=require` and `sslmode=verify-ca` the same way, and prints a warning. If your provider signs the certificate with its own CA, name the CA file with `sslrootcert`, or pass the `ssl` option, which `pg` takes as is. The `ssl` option replaces the TLS settings of the URL:
 
 ```js
 const sessionStorage = new PostgreSQLSessionStorage(
