@@ -1,4 +1,5 @@
 import pg from 'pg';
+import {parseIntoClientConfig} from 'pg-connection-string';
 import {RdbmsConnection} from '@shopify/shopify-app-session-storage';
 
 export class PostgresConnection implements RdbmsConnection {
@@ -6,9 +7,19 @@ export class PostgresConnection implements RdbmsConnection {
   private ready: Promise<void>;
   private pool: pg.Pool;
   private dbUrl: URL;
+  private ssl: pg.PoolConfig['ssl'];
 
-  constructor(dbUrl: string, sessionStorageIdentifier: string) {
+  /**
+   * @param ssl TLS settings for `pg`. When omitted, the TLS settings of the
+   * database URL apply (`ssl`, `sslmode`, `sslrootcert`, `sslcert`, `sslkey`).
+   */
+  constructor(
+    dbUrl: string,
+    sessionStorageIdentifier: string,
+    ssl?: pg.PoolConfig['ssl'],
+  ) {
     this.dbUrl = new URL(dbUrl);
+    this.ssl = ssl ?? parseIntoClientConfig(dbUrl).ssl;
     this.ready = this.init();
     this.sessionStorageIdentifier = sessionStorageIdentifier;
   }
@@ -89,6 +100,7 @@ export class PostgresConnection implements RdbmsConnection {
       password: decodeURIComponent(this.dbUrl.password),
       database: this.getDatabase(),
       port: Number(this.dbUrl.port),
+      ...(this.ssl === undefined ? {} : {ssl: this.ssl}),
     });
   }
 }
