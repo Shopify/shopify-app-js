@@ -2,6 +2,7 @@ import * as ShopifyErrors from '../../../error';
 import {DataType, JwtPayload, shopifyApi} from '../../..';
 import {testConfig} from '../../../__tests__/test-config';
 import {queueMockResponse, signJWT} from '../../../__tests__/test-helper';
+import {LogSeverity} from '../../../types';
 import {RequestedTokenType} from '../token-exchange';
 
 let shop: string;
@@ -371,6 +372,45 @@ describe('tokenExchange', () => {
       });
       expect(exchangePromise).rejects.toThrow(ShopifyErrors.HttpResponseError);
     });
+
+    test.each([
+      ['one trailing slash', '/'],
+      ['several trailing slashes', '///'],
+    ])(
+      'does not log the secret or the session token when the shop has %s',
+      async (_label, trailingSlashes) => {
+        const logFn = jest.fn();
+        const shopify = shopifyApi(
+          testConfig({
+            logger: {log: logFn, level: LogSeverity.Debug, httpRequests: true},
+          }),
+        );
+        const sessionToken = await signJWT(
+          shopify.config.apiSecretKey,
+          sessionTokenPayload,
+        );
+        queueMockResponse(
+          JSON.stringify({access_token: 'some access token', scope: ''}),
+        );
+
+        await shopify.auth.tokenExchange({
+          shop: `${shop}${trailingSlashes}`,
+          sessionToken,
+          requestedTokenType: RequestedTokenType.OfflineAccessToken,
+        });
+
+        const messages = logFn.mock.calls.map(
+          ([_severity, message]) => message,
+        );
+        expect(
+          messages.some((message) => message.includes('Making HTTP request')),
+        ).toBe(true);
+        messages.forEach((message) => {
+          expect(message).not.toContain(shopify.config.apiSecretKey);
+          expect(message).not.toContain(sessionToken);
+        });
+      },
+    );
 
     describe('with invalid shop', () => {
       beforeEach(() => {

@@ -6,13 +6,19 @@ import {ConfigInterface} from '../base-types';
 const OAUTH_TOKEN_ENDPOINT_PATH = '/admin/oauth/access_token';
 
 // Token endpoint bodies carry OAuth secrets, so they must not reach the logs.
+// A shop with trailing slashes builds a path such as `//admin/oauth/access_token`, so repeated
+// slashes and a trailing slash do not change the match.
 // When the URL does not parse, fail closed and keep the body out of the logs.
 function canLogRequestBody(url: string): boolean {
   try {
-    return new URL(url).pathname !== OAUTH_TOKEN_ENDPOINT_PATH;
+    return normalizePath(new URL(url).pathname) !== OAUTH_TOKEN_ENDPOINT_PATH;
   } catch {
     return false;
   }
+}
+
+function normalizePath(pathname: string): string {
+  return pathname.replace(/\/{2,}/g, '/').replace(/(.)\/$/, '$1');
 }
 
 export function fetchRequestFactory(config: ConfigInterface) {

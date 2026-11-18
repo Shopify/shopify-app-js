@@ -96,6 +96,38 @@ describe('clientCredentials', () => {
       });
     });
 
+    test.each([
+      ['one trailing slash', '/'],
+      ['several trailing slashes', '///'],
+    ])(
+      'does not log credentials when the shop has %s',
+      async (_label, trailingSlashes) => {
+        const logFn = jest.fn();
+        const shopify = shopifyApi(
+          testConfig({
+            logger: {log: logFn, level: LogSeverity.Debug, httpRequests: true},
+          }),
+        );
+        queueMockResponse(
+          JSON.stringify({access_token: 'some_access_token', scope: ''}),
+        );
+
+        await shopify.auth.clientCredentials({
+          shop: `${shop}${trailingSlashes}`,
+        });
+
+        const messages = logFn.mock.calls.map(
+          ([_severity, message]) => message,
+        );
+        expect(
+          messages.some((message) => message.includes('Making HTTP request')),
+        ).toBe(true);
+        messages.forEach((message) => {
+          expect(message).not.toContain(shopify.config.apiSecretKey);
+        });
+      },
+    );
+
     test('throws error when response is not successful', async () => {
       const shopify = shopifyApi(testConfig());
       const errorResponse = {
@@ -373,6 +405,37 @@ describe('clientCredentials', () => {
         expect(message).not.toContain(successResponse.access_token);
       });
     });
+
+    test.each([
+      ['one trailing slash', '/'],
+      ['several trailing slashes', '///'],
+    ])(
+      'does not log the assertion when the shop has %s',
+      async (_label, trailingSlashes) => {
+        const logFn = jest.fn();
+        const shopify = shopifyApi(
+          testConfig({
+            logger: {log: logFn, level: LogSeverity.Debug, httpRequests: true},
+          }),
+        );
+        queueMockResponse(JSON.stringify(successResponse));
+
+        await shopify.auth.clientCredentials({
+          shop: `${shop}${trailingSlashes}`,
+          clientAssertion,
+        });
+
+        const messages = logFn.mock.calls.map(
+          ([_severity, message]) => message,
+        );
+        expect(
+          messages.some((message) => message.includes('Making HTTP request')),
+        ).toBe(true);
+        messages.forEach((message) => {
+          expect(message).not.toContain(clientAssertion);
+        });
+      },
+    );
   });
 
   describe('with an assertion from shopify.auth.createClientAssertion', () => {

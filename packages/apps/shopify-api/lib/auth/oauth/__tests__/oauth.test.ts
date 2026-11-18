@@ -16,6 +16,7 @@ import {queueMockResponse, signJWT} from '../../../__tests__/test-helper';
 import {testConfig} from '../../../__tests__/test-config';
 import {getOfflineId} from '../../../session/session-utils';
 import {shopifyApi} from '../../..';
+import {LogSeverity} from '../../../types';
 
 const VALID_NONCE = 'noncenoncenonce';
 // HttpOnly written as a flag attribute, not `httpOnly=<value>`
@@ -341,6 +342,58 @@ describe('callback', () => {
     expect(sessionCookies).toHaveLength(2);
     sessionCookies.forEach((cookie) => expect(cookie).toMatch(HTTP_ONLY_FLAG));
   });
+
+  test.each([
+    ['one trailing slash', '/'],
+    ['several trailing slashes', '///'],
+  ])(
+    'does not log the secret or the authorization code when the shop has %s',
+    async (_label, trailingSlashes) => {
+      const logFn = jest.fn();
+      const shopify = shopifyApi(
+        testConfig({
+          logger: {log: logFn, level: LogSeverity.Debug, httpRequests: true},
+        }),
+      );
+
+      const beginResponse: NormalizedResponse = await shopify.auth.begin({
+        shop,
+        isOnline: false,
+        callbackPath: '/some-callback',
+        rawRequest: request,
+      });
+      setCallbackCookieFromResponse(
+        request,
+        beginResponse,
+        shopify.config.apiSecretKey,
+      );
+
+      const authorizationCode = 'some random auth code';
+      const testCallbackQuery: QueryMock = {
+        shop: `${shop}${trailingSlashes}`,
+        state: VALID_NONCE,
+        timestamp: getCurrentTimeInSec().toString(),
+        code: authorizationCode,
+      };
+      testCallbackQuery.hmac = await generateLocalHmac(shopify.config)(
+        testCallbackQuery,
+      );
+      request.url += `?${new URLSearchParams(testCallbackQuery).toString()}`;
+
+      queueMockResponse(JSON.stringify({access_token: 'token', scope: ''}));
+
+      await shopify.auth.callback({rawRequest: request});
+
+      const messages = logFn.mock.calls.map(([_severity, message]) => message);
+      expect(
+        messages.some((message) => message.includes('Making HTTP request')),
+      ).toBe(true);
+      messages.forEach((message) => {
+        expect(message).not.toContain(shopify.config.apiSecretKey);
+        expect(message).not.toContain(authorizationCode);
+      });
+    },
+  );
 
   test('requests access token for valid callbacks with online access and creates session with expiration and onlineAccessInfo', async () => {
     const shopify = shopifyApi(testConfig());

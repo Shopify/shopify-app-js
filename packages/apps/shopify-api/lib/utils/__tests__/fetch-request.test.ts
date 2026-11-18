@@ -159,6 +159,45 @@ describe('fetchRequest', () => {
     }).toMatchMadeHttpRequest();
   });
 
+  it.each([
+    ['a doubled leading slash', '//admin/oauth/access_token'],
+    ['several leading slashes', '////admin/oauth/access_token'],
+    ['repeated slashes between segments', '/admin//oauth///access_token'],
+    ['a trailing slash', '/admin/oauth/access_token/'],
+  ])(
+    'omits the body from debug logs for OAuth token endpoint paths with %s',
+    async (_description, path) => {
+      // GIVEN
+      const logFn = jest.fn();
+      const config = testConfig({
+        logger: {log: logFn, level: LogSeverity.Debug, httpRequests: true},
+      });
+
+      queueMockResponse(JSON.stringify(successResponse));
+
+      // WHEN
+      const tokenUrl = `https://${domain}${path}`;
+      await fetchRequestFactory(config)(tokenUrl, {
+        method: 'POST',
+        body: JSON.stringify({
+          client_secret: 'test-client-secret-value',
+          code: 'test-authorization-code',
+        }),
+      });
+
+      // THEN
+      expect(logFn).toHaveBeenNthCalledWith(
+        1,
+        LogSeverity.Debug,
+        `[shopify-api/DEBUG] Making HTTP request | {method: POST, url: ${tokenUrl}}`,
+      );
+      logFn.mock.calls.forEach(([_severity, message]) => {
+        expect(message).not.toContain('test-client-secret-value');
+        expect(message).not.toContain('test-authorization-code');
+      });
+    },
+  );
+
   it('omits the body from debug logs when the URL does not parse', async () => {
     // GIVEN
     const logFn = jest.fn();
