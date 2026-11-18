@@ -44,7 +44,11 @@ describe('MongoDBSessionStorage TLS', () => {
   });
 
   afterEach(() => {
-    process.env.NODE_ENV = originalNodeEnv;
+    if (originalNodeEnv === undefined) {
+      delete process.env.NODE_ENV;
+    } else {
+      process.env.NODE_ENV = originalNodeEnv;
+    }
   });
 
   describe('in production', () => {
@@ -104,5 +108,38 @@ describe('MongoDBSessionStorage TLS', () => {
       await expect(storage.ready).resolves.toBeUndefined();
       expect(mockMongoClient).toHaveBeenCalledWith(url);
     });
+
+    it('adds tls=true to a URL that withCredentials builds', async () => {
+      const storage = MongoDBSessionStorage.withCredentials(
+        'localhost',
+        'shopitest',
+        'user',
+        'pass',
+      );
+
+      await expect(storage.ready).resolves.toBeUndefined();
+      expect(mockMongoClient).toHaveBeenCalledWith(
+        'mongodb://user:pass@localhost/?tls=true',
+      );
+    });
   });
+
+  it.each(['production', 'development'])(
+    'leaves tls=true out of a withCredentials URL when allowInsecureConnection is set (%s)',
+    async (nodeEnv) => {
+      process.env.NODE_ENV = nodeEnv;
+      const storage = MongoDBSessionStorage.withCredentials(
+        'db.example.com',
+        'shopitest',
+        'user',
+        'pass',
+        {allowInsecureConnection: true},
+      );
+
+      await expect(storage.ready).resolves.toBeUndefined();
+      expect(mockMongoClient).toHaveBeenCalledWith(
+        'mongodb://user:pass@db.example.com/',
+      );
+    },
+  );
 });

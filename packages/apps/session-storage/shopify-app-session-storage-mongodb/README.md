@@ -33,10 +33,12 @@ Connect only to a MongoDB server that you run or trust. A malicious server, or a
 
 When `NODE_ENV` is `production`, `MongoDBSessionStorage` refuses to connect without TLS that verifies the server's certificate and host name:
 
-- Use a `mongodb+srv://` URL, which turns on TLS, or add `tls=true` to a `mongodb://` URL. `withCredentials` adds `tls=true` to the URL it builds.
+- Use a `mongodb+srv://` URL, which turns on TLS, or add `tls=true` to a `mongodb://` URL.
 - Do not set `tlsInsecure`, `tlsAllowInvalidCertificates` or `tlsAllowInvalidHostnames` in the URL.
 
-Outside production, for example against a local MongoDB server during development, the session storage connects without TLS.
+Outside production, for example against a local MongoDB server during development, the session storage does not require TLS for a URL that you pass.
+
+`withCredentials` adds `tls=true` to the URL it builds, in every environment, unless you set `allowInsecureConnection`.
 
 If your production server is on a network you trust and cannot use TLS, set `allowInsecureConnection`:
 

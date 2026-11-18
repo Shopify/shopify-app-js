@@ -48,13 +48,14 @@ export class MongoDBSessionStorage implements SessionStorage {
     dbName: string,
     username: string,
     password: string,
-    opts: Partial<MongoDBSessionStorageOptions>,
+    opts: Partial<MongoDBSessionStorageOptions> = {},
   ) {
+    const query = opts.allowInsecureConnection ? '' : '?tls=true';
     return new MongoDBSessionStorage(
       new URL(
         `mongodb://${encodeURIComponent(username)}:${encodeURIComponent(
           password,
-        )}@${host}/?tls=true`,
+        )}@${host}/${query}`,
       ),
       dbName,
       opts,
