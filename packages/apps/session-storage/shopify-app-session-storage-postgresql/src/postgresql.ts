@@ -1,4 +1,5 @@
-import type {PoolConfig} from 'pg';
+import pg, {type PoolConfig} from 'pg';
+import {parseIntoClientConfig} from 'pg-connection-string';
 import {Session} from '@shopify/shopify-api';
 import {
   SessionStorage,
@@ -16,6 +17,11 @@ export interface PostgreSQLSessionStorageOptions extends RdbmsSessionStorageOpti
    * replace any TLS settings in the database URL.
    */
   ssl?: PoolConfig['ssl'];
+  /**
+   * Connect without verified TLS when `NODE_ENV` is `production`. Set this
+   * only for a PostgreSQL server on a network you trust.
+   */
+  allowInsecureConnection?: boolean;
 }
 const defaultPostgreSQLSessionStorageOptions: PostgreSQLSessionStorageOptions =
   {
@@ -25,7 +31,46 @@ const defaultPostgreSQLSessionStorageOptions: PostgreSQLSessionStorageOptions =
       migrationDBIdentifier: 'shopify_sessions_migrations',
       migrationNameColumnName: 'migration_name',
     },
+    allowInsecureConnection: false,
   };
+
+// pg reads PGSSLMODE only when neither the ssl option nor the URL sets TLS.
+function sslFromEnvironment(): PoolConfig['ssl'] {
+  switch (process.env.PGSSLMODE) {
+    case 'prefer':
+    case 'require':
+    case 'verify-ca':
+    case 'verify-full':
+      return true;
+    case 'disable':
+      return false;
+    case 'no-verify':
+      return {rejectUnauthorized: false};
+    default:
+      return pg.defaults.ssl;
+  }
+}
+
+function verifiesServer(ssl: PoolConfig['ssl']): boolean {
+  return (
+    ssl === true ||
+    (typeof ssl === 'object' && ssl.rejectUnauthorized !== false)
+  );
+}
+
+function usesVerifiedTls(dbUrl: string, ssl: PoolConfig['ssl']): boolean {
+  if (ssl != null) return verifiesServer(ssl);
+
+  const urlSsl = parseIntoClientConfig(dbUrl).ssl;
+  if (urlSsl === undefined) return verifiesServer(sslFromEnvironment());
+
+  // With uselibpqcompat, sslmode=require and verify-ca turn off the host name
+  // check through checkServerIdentity.
+  return (
+    verifiesServer(urlSsl) &&
+    !(typeof urlSsl === 'object' && urlSsl.checkServerIdentity)
+  );
+}
 
 export class PostgreSQLSessionStorage implements SessionStorage {
   static withCredentials(
@@ -56,9 +101,21 @@ export class PostgreSQLSessionStorage implements SessionStorage {
     opts: Partial<PostgreSQLSessionStorageOptions> = {},
   ) {
     this.options = {...defaultPostgreSQLSessionStorageOptions, ...opts};
-    this.internalInit = this.init(
-      typeof dbUrl === 'string' ? dbUrl : dbUrl.toString(),
-    );
+    const url = typeof dbUrl === 'string' ? dbUrl : dbUrl.toString();
+    if (
+      process.env.NODE_ENV === 'production' &&
+      !this.options.allowInsecureConnection &&
+      !usesVerifiedTls(url, this.options.ssl)
+    ) {
+      throw new Error(
+        'PostgreSQLSessionStorage requires TLS with certificate and host ' +
+          'name verification in production. Add sslmode=verify-full to the ' +
+          'URL or pass the ssl option, and do not use sslmode=disable, ' +
+          'sslmode=no-verify or rejectUnauthorized: false. For a server on ' +
+          'a network you trust, set allowInsecureConnection: true.',
+      );
+    }
+    this.internalInit = this.init(url);
     this.migrator = new PostgresSessionStorageMigrator(
       this.client,
       this.options.migratorOptions,

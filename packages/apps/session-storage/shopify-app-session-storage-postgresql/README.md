@@ -69,6 +69,24 @@ const sessionStorage = PostgreSQLSessionStorage.withCredentials(
 
 Do not use `rejectUnauthorized: false` or `sslmode=no-verify` in production: they encrypt the connection but accept any server. Connect the adapter only to a database server you trust, because `pg` parses every message that the server sends.
 
+When `NODE_ENV` is `production`, `PostgreSQLSessionStorage` refuses to connect without TLS that verifies the server's certificate and host name. Only the TLS setting that applies counts: the `ssl` option, else the TLS settings of the URL, else `PGSSLMODE`. It throws when you create it if that setting:
+
+- is missing or turns TLS off, for example `sslmode=disable` or `ssl: false`;
+- does not verify the server: `sslmode=no-verify`, `uselibpqcompat=true` with `sslmode=require`, `prefer` or `verify-ca`, or `rejectUnauthorized: false`.
+
+`sslmode=require`, `prefer`, `allow` and `verify-ca` are accepted, because `pg` 8 treats them as `verify-full` and never falls back to a connection without TLS. `withCredentials` builds a URL without TLS settings, so in production pass the `ssl` option with it.
+
+Outside production, for example against a local PostgreSQL server during development, the session storage does not require TLS.
+
+If your production server is on a network you trust and cannot use TLS, set `allowInsecureConnection`:
+
+```js
+const sessionStorage = new PostgreSQLSessionStorage(
+  'postgres://username:password@host/database',
+  {allowInsecureConnection: true},
+);
+```
+
 ## Expiring Offline Access Tokens
 
 This storage adapter supports [expiring offline access tokens](https://shopify.dev/docs/apps/build/authentication-authorization/access-tokens/offline-access-tokens#step-7-get-a-new-access-token-exchange). When enabled, the adapter automatically stores and retrieves refresh tokens alongside your session data.
