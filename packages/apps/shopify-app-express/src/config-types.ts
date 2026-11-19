@@ -45,7 +45,7 @@ export interface AppConfigParams<
   Resources extends ShopifyRestResources = ShopifyRestResources,
   Storage extends SessionStorage = SessionStorage,
 > {
-  auth: AuthConfigInterface;
+  auth?: AuthConfigInterface;
   webhooks: WebhooksConfigInterface;
   api: ExpressApiConfigParams<Resources>;
   useOnlineTokens?: boolean;
@@ -58,7 +58,8 @@ export interface AppConfigParams<
 export interface AppConfigInterface<
   Resources extends ShopifyRestResources = ShopifyRestResources,
   Storage extends SessionStorage = SessionStorage,
-> extends Omit<AppConfigParams<Resources, Storage>, 'api'> {
+> extends Omit<AppConfigParams<Resources, Storage>, 'api' | 'auth'> {
+  auth: AuthConfigInterface;
   logger: Shopify['logger'];
   useOnlineTokens: boolean;
   exitIframePath: string;

@@ -164,7 +164,10 @@ function validateAppConfig<Params extends Omit<AppConfigParams, 'api'>>(
     sessionStorage: (sessionStorage ??
       new MemorySessionStorage()) as ConfigInterfaceFromParams<Params>['sessionStorage'],
     ...configWithoutSessionStorage,
-    auth: config.auth,
+    auth: config.auth ?? {
+      path: '/api/auth',
+      callbackPath: '/api/auth/callback',
+    },
     webhooks: config.webhooks,
   };
 }
