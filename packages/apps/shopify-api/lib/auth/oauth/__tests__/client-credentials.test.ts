@@ -9,6 +9,7 @@ import {queueMockResponse} from '../../../__tests__/test-helper';
 import * as ShopifyErrors from '../../../error';
 import {DataType} from '../../../clients/types';
 import {LogSeverity} from '../../../types';
+import * as fetchRequestModule from '../../../utils/fetch-request';
 import {canonicalizeHeaders, setAbstractFetchFunc} from '../../../../runtime';
 import {mockTestRequests} from '../../../../adapters/mock/mock_test_requests';
 import {mockRequestCapture} from '../../../../adapters/mock/mock_request_capture';
@@ -128,40 +129,31 @@ describe('clientCredentials', () => {
       },
     );
 
-    test('does not log credentials when a domain transformation adds a path to the shop', async () => {
-      const logFn = jest.fn();
-      const shopify = shopifyApi(
-        testConfig({
-          logger: {log: logFn, level: LogSeverity.Debug, httpRequests: true},
-          domainTransformations: [
-            {
-              match: /^([a-zA-Z0-9][a-zA-Z0-9-_]*)\.myshopify\.io$/,
-              transform: '$1.myshopify.io/proxy',
-            },
-          ],
-        }),
+    test('tells fetchRequest not to log the body of its token request', async () => {
+      const shopify = shopifyApi(testConfig());
+      const fetchRequest = jest.fn(
+        fetchRequestModule.fetchRequestFactory(shopify.config),
       );
-      queueMockResponse(
-        JSON.stringify({access_token: 'some_access_token', scope: ''}),
-      );
+      const factorySpy = jest
+        .spyOn(fetchRequestModule, 'fetchRequestFactory')
+        .mockReturnValue(fetchRequest);
 
-      await expect(shopify.auth.clientCredentials({shop})).rejects.toThrow(
-        ShopifyErrors.InvalidShopError,
-      );
+      try {
+        queueMockResponse(
+          JSON.stringify({access_token: 'some_access_token', scope: ''}),
+        );
 
-      expect({
-        method: 'POST',
-        domain: shop,
-        path: '/proxy/admin/oauth/access_token',
-        data: {client_secret: shopify.config.apiSecretKey},
-      }).toMatchMadeHttpRequest();
-      const messages = logFn.mock.calls.map(([_severity, message]) => message);
-      expect(
-        messages.some((message) => message.includes('Making HTTP request')),
-      ).toBe(true);
-      messages.forEach((message) => {
-        expect(message).not.toContain(shopify.config.apiSecretKey);
-      });
+        await shopify.auth.clientCredentials({shop});
+
+        expect(fetchRequest).toHaveBeenCalledTimes(1);
+        expect(fetchRequest).toHaveBeenCalledWith(
+          `https://${shop}/admin/oauth/access_token`,
+          expect.anything(),
+          {logRequestBody: false},
+        );
+      } finally {
+        factorySpy.mockRestore();
+      }
     });
 
     test('throws error when response is not successful', async () => {

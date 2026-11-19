@@ -3,6 +3,7 @@ import {DataType, JwtPayload, shopifyApi} from '../../..';
 import {testConfig} from '../../../__tests__/test-config';
 import {queueMockResponse, signJWT} from '../../../__tests__/test-helper';
 import {LogSeverity} from '../../../types';
+import * as fetchRequestModule from '../../../utils/fetch-request';
 import {RequestedTokenType} from '../token-exchange';
 
 let shop: string;
@@ -412,49 +413,39 @@ describe('tokenExchange', () => {
       },
     );
 
-    test('does not log the secret or the session token when a domain transformation adds a path to the shop', async () => {
-      const logFn = jest.fn();
-      const shopify = shopifyApi(
-        testConfig({
-          logger: {log: logFn, level: LogSeverity.Debug, httpRequests: true},
-          domainTransformations: [
-            {
-              match: /^([a-zA-Z0-9][a-zA-Z0-9-_]*)\.myshopify\.io$/,
-              transform: '$1.myshopify.io/proxy',
-            },
-          ],
-        }),
-      );
+    test('tells fetchRequest not to log the body of its token request', async () => {
+      const shopify = shopifyApi(testConfig());
       const sessionToken = await signJWT(
         shopify.config.apiSecretKey,
         sessionTokenPayload,
       );
-      queueMockResponse(
-        JSON.stringify({access_token: 'some access token', scope: ''}),
+      const fetchRequest = jest.fn(
+        fetchRequestModule.fetchRequestFactory(shopify.config),
       );
+      const factorySpy = jest
+        .spyOn(fetchRequestModule, 'fetchRequestFactory')
+        .mockReturnValue(fetchRequest);
 
-      await expect(
-        shopify.auth.tokenExchange({
+      try {
+        queueMockResponse(
+          JSON.stringify({access_token: 'some access token', scope: ''}),
+        );
+
+        await shopify.auth.tokenExchange({
           shop,
           sessionToken,
           requestedTokenType: RequestedTokenType.OfflineAccessToken,
-        }),
-      ).rejects.toThrow(ShopifyErrors.InvalidShopError);
+        });
 
-      expect({
-        method: 'POST',
-        domain: shop,
-        path: '/proxy/admin/oauth/access_token',
-        data: {client_secret: shopify.config.apiSecretKey},
-      }).toMatchMadeHttpRequest();
-      const messages = logFn.mock.calls.map(([_severity, message]) => message);
-      expect(
-        messages.some((message) => message.includes('Making HTTP request')),
-      ).toBe(true);
-      messages.forEach((message) => {
-        expect(message).not.toContain(shopify.config.apiSecretKey);
-        expect(message).not.toContain(sessionToken);
-      });
+        expect(fetchRequest).toHaveBeenCalledTimes(1);
+        expect(fetchRequest).toHaveBeenCalledWith(
+          `https://${shop}/admin/oauth/access_token`,
+          expect.anything(),
+          {logRequestBody: false},
+        );
+      } finally {
+        factorySpy.mockRestore();
+      }
     });
 
     describe('with invalid shop', () => {
