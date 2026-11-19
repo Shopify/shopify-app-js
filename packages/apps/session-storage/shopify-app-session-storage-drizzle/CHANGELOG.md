@@ -1,5 +1,7 @@
 # @shopify/shopify-app-session-storage-drizzle
 
+## 6.0.4
+
 ## 6.0.3
 
 ### Patch Changes

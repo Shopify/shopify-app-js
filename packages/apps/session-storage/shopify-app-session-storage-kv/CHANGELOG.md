@@ -1,5 +1,7 @@
 # @shopify/shopify-app-session-storage-kv
 
+## 8.0.4
+
 ## 8.0.3
 
 ### Patch Changes
