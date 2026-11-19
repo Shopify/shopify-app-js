@@ -58,11 +58,14 @@ function stringifyQueryForAdmin(query: AuthQuery): string {
 }
 
 function stringifyQueryForAppProxy(query: AuthQuery): string {
+  // Shopify sorts the `key=value` strings by code point, not by locale
   return Object.entries(query)
-    .sort(([val1], [val2]) => val1.localeCompare(val2))
-    .reduce((acc, [key, value]) => {
-      return `${acc}${key}=${Array.isArray(value) ? value.join(',') : value}`;
-    }, '');
+    .map(
+      ([key, value]) =>
+        `${key}=${Array.isArray(value) ? value.join(',') : value}`,
+    )
+    .sort()
+    .join('');
 }
 
 export function generateLocalHmac(config: ConfigInterface) {

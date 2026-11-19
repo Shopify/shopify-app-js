@@ -204,6 +204,30 @@ describe('validateHmac', () => {
       );
     });
 
+    test('sorts params by code point, like Shopify does', async () => {
+      const shopify = shopifyApi(
+        testConfig({apiSecretKey: 'my super secret key'}),
+      );
+
+      // Uppercase letters and digits sort before `=`, `_` and lowercase letters
+      const queryString = `consentGiven=trueconsented=yesfoo2=bazfoo=barlogged_in_customer_id=1path_prefix=/apps/my_appshop=the shop URLtimestamp=${queryParams.timestamp}`;
+      const query = {
+        ...queryParams,
+        consented: 'yes',
+        consentGiven: 'true',
+        foo: 'bar',
+        foo2: 'baz',
+        signature: createHmacSignature(
+          queryString,
+          shopify.config.apiSecretKey,
+        ),
+      };
+
+      await expect(shopify.utils.validateHmac(query, options)).resolves.toBe(
+        true,
+      );
+    });
+
     test('accepts URLSearchParams and preserves repeated application params', async () => {
       const shopify = shopifyApi(
         testConfig({apiSecretKey: 'my super secret key'}),
