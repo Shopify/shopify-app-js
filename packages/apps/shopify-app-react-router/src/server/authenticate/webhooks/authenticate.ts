@@ -12,6 +12,7 @@ import {InvalidRefreshTokenResponse} from '../../helpers/refresh-token';
 
 import type {
   AuthenticateWebhook,
+  AuthenticateWebhookOptions,
   WebhookContext,
   WebhookContextWithoutSession,
 } from './types';
@@ -23,6 +24,7 @@ export function authenticateWebhookFactory<Topics extends string>(
 
   return async function authenticate(
     request: Request,
+    options?: AuthenticateWebhookOptions,
   ): Promise<WebhookContext<Topics>> {
     if (request.method !== 'POST') {
       logger.debug(
@@ -55,18 +57,20 @@ export function authenticateWebhookFactory<Topics extends string>(
       }
     }
     let session: Session | undefined;
-    try {
-      session = await ensureValidOfflineSession(params, check.domain);
-    } catch (error) {
-      if (!(error instanceof InvalidRefreshTokenResponse)) {
-        throw error;
+    if (options?.loadSession !== false) {
+      try {
+        session = await ensureValidOfflineSession(params, check.domain);
+      } catch (error) {
+        if (!(error instanceof InvalidRefreshTokenResponse)) {
+          throw error;
+        }
+        logger.info(
+          'Offline session refresh failed during webhook authentication',
+          {
+            shop: check.domain,
+          },
+        );
       }
-      logger.info(
-        'Offline session refresh failed during webhook authentication',
-        {
-          shop: check.domain,
-        },
-      );
     }
 
     let webhookContext: WebhookContextWithoutSession<Topics>;
