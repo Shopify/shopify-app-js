@@ -275,4 +275,34 @@ describe('PostgreSQLSessionStorage with a PostgreSQL server that requires TLS', 
       code: '28000',
     });
   });
+
+  it('in production, refuses TLS that the server accepts but does not verify', async () => {
+    const originalNodeEnv = process.env.NODE_ENV;
+    const noVerifyURL = dbURL('localhost', {sslmode: 'no-verify'});
+
+    try {
+      process.env.NODE_ENV = 'development';
+      await expectSessionRoundTrip(
+        new PostgreSQLSessionStorage(noVerifyURL),
+        'tls-no-verify-session',
+      );
+
+      process.env.NODE_ENV = 'production';
+      expect(() => new PostgreSQLSessionStorage(noVerifyURL)).toThrow(
+        /requires TLS/,
+      );
+      await expectSessionRoundTrip(
+        new PostgreSQLSessionStorage(
+          dbURL('localhost', {sslmode: 'verify-full', sslrootcert: caPath}),
+        ),
+        'tls-production-session',
+      );
+    } finally {
+      if (originalNodeEnv === undefined) {
+        delete process.env.NODE_ENV;
+      } else {
+        process.env.NODE_ENV = originalNodeEnv;
+      }
+    }
+  });
 });
