@@ -43,7 +43,24 @@ const shopify = shopifyApp({
 });
 ```
 
+## Redis client options
+
+For URL and credential-based connections, this adapter uses `redis` v6 with `RESP: 2` and `commandOptions.timeout: undefined`, preserving its previous protocol and unbounded queue-wait defaults. Upstream `redis` v6 instead defaults to RESP3 and a 5,000 ms queue-wait timeout. This timeout limits how long a command waits to be written to the socket, not server execution or reply time.
+
+Pass Redis client options as the second argument to override these defaults. For example, to limit queue wait to five seconds while keeping RESP2:
+
+```js
+const sessionStorage = new RedisSessionStorage(
+  'redis://username:password@host/database',
+  {commandOptions: {timeout: 5000}},
+);
+```
+
+An explicit `RESP: 3` opts into upstream RESP3 handshake and maintenance behavior. With `redis` 6.3.0, keep RESP2 for passwordless named ACL users and IPv6-literal URLs.
+
 ## Using a RedisClient instance
+
+You can supply a client created with `redis` v5 or v6. Configure its protocol and queue-wait policy when creating it; the adapter does not change the supplied client's options or apply its own client defaults.
 
 > [!NOTE]
 > Remember that `RedisSessionStorage` will connect to the database, but won't disconnect from it.
