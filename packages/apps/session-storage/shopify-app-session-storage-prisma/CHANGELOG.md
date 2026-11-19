@@ -1,5 +1,7 @@
 # @shopify/shopify-app-session-storage-prisma
 
+## 11.0.4
+
 ## 11.0.3
 
 ## 11.0.2
