@@ -36,6 +36,59 @@ const shopify = shopifyApp({
 });
 ```
 
+## Connecting over TLS
+
+The adapter connects with the TLS settings of the database URL (`sslmode`, `ssl`, `sslrootcert`, `sslcert` and `sslkey`), which it reads as [`pg`](https://node-postgres.com/features/ssl) does. A URL without them connects without TLS, unless the `PGSSLMODE` environment variable is set.
+
+In production, require TLS and check the server's certificate:
+
+```js
+const sessionStorage = new PostgreSQLSessionStorage(
+  'postgres://username:password@host/database?sslmode=verify-full',
+);
+```
+
+`sslmode=verify-full` checks the certificate against Node's default trusted CAs and checks the host name. `pg` 8 treats `sslmode=require` and `sslmode=verify-ca` the same way, and prints a warning. If your provider signs the certificate with its own CA, name the CA file with `sslrootcert`, or pass the `ssl` option, which `pg` takes as is. The `ssl` option replaces the TLS settings of the URL:
+
+```js
+const sessionStorage = new PostgreSQLSessionStorage(
+  'postgres://username:password@host/database',
+  {ssl: {ca: process.env.DATABASE_CA_CERT}},
+);
+
+// OR
+
+const sessionStorage = PostgreSQLSessionStorage.withCredentials(
+  'host.com',
+  'thedatabase',
+  'username',
+  'password',
+  {ssl: {ca: process.env.DATABASE_CA_CERT}},
+);
+```
+
+Do not use `rejectUnauthorized: false` or `sslmode=no-verify` in production: they encrypt the connection but accept any server. Connect the adapter only to a database server you trust, because `pg` parses every message that the server sends.
+
+When `NODE_ENV` is `production`, `PostgreSQLSessionStorage` refuses to connect without TLS that verifies the server's certificate and host name. Only the TLS setting that applies counts: the `ssl` option, else the TLS settings of the URL, else `PGSSLMODE`. It throws when you create it if that setting:
+
+- is missing or turns TLS off, for example `sslmode=disable` or `ssl: false`;
+- does not verify the server: `sslmode=no-verify`, `uselibpqcompat=true` with `sslmode=require`, `prefer` or `verify-ca`, or `rejectUnauthorized: false`.
+
+`sslmode=require`, `prefer`, `allow` and `verify-ca` are accepted, because `pg` 8 treats them as `verify-full` and never falls back to a connection without TLS. `withCredentials` builds a URL without TLS settings, so in production pass the `ssl` option with it.
+
+The `ssl` option is used as you give it. A `checkServerIdentity` function in it replaces the host name check, so it must do that check itself. The production check covers the JavaScript client of `pg`, not `pg-native`.
+
+Outside production, for example against a local PostgreSQL server during development, the session storage does not require TLS.
+
+If your production server is on a network you trust and cannot use TLS, set `allowInsecureConnection`:
+
+```js
+const sessionStorage = new PostgreSQLSessionStorage(
+  'postgres://username:password@host/database',
+  {allowInsecureConnection: true},
+);
+```
+
 ## Expiring Offline Access Tokens
 
 This storage adapter supports [expiring offline access tokens](https://shopify.dev/docs/apps/build/authentication-authorization/access-tokens/offline-access-tokens#step-7-get-a-new-access-token-exchange). When enabled, the adapter automatically stores and retrieves refresh tokens alongside your session data.
