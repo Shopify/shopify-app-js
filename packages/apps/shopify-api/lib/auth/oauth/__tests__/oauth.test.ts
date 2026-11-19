@@ -395,6 +395,66 @@ describe('callback', () => {
     },
   );
 
+  test('does not log the secret or the authorization code when a domain transformation adds a path to the shop', async () => {
+    const logFn = jest.fn();
+    const shopify = shopifyApi(
+      testConfig({
+        logger: {log: logFn, level: LogSeverity.Debug, httpRequests: true},
+        domainTransformations: [
+          {
+            match: /^([a-zA-Z0-9][a-zA-Z0-9-_]*)\.myshopify\.io$/,
+            transform: '$1.myshopify.io/proxy',
+          },
+        ],
+      }),
+    );
+
+    const beginResponse: NormalizedResponse = await shopify.auth.begin({
+      shop,
+      isOnline: false,
+      callbackPath: '/some-callback',
+      rawRequest: request,
+    });
+    setCallbackCookieFromResponse(
+      request,
+      beginResponse,
+      shopify.config.apiSecretKey,
+    );
+
+    const authorizationCode = 'some random auth code';
+    const testCallbackQuery: QueryMock = {
+      shop,
+      state: VALID_NONCE,
+      timestamp: getCurrentTimeInSec().toString(),
+      code: authorizationCode,
+    };
+    testCallbackQuery.hmac = await generateLocalHmac(shopify.config)(
+      testCallbackQuery,
+    );
+    request.url += `?${new URLSearchParams(testCallbackQuery).toString()}`;
+
+    queueMockResponse(JSON.stringify({access_token: 'token', scope: ''}));
+
+    await expect(shopify.auth.callback({rawRequest: request})).rejects.toThrow(
+      ShopifyErrors.InvalidShopError,
+    );
+
+    expect({
+      method: 'POST',
+      domain: shop,
+      path: '/proxy/admin/oauth/access_token',
+      data: {client_secret: shopify.config.apiSecretKey},
+    }).toMatchMadeHttpRequest();
+    const messages = logFn.mock.calls.map(([_severity, message]) => message);
+    expect(
+      messages.some((message) => message.includes('Making HTTP request')),
+    ).toBe(true);
+    messages.forEach((message) => {
+      expect(message).not.toContain(shopify.config.apiSecretKey);
+      expect(message).not.toContain(authorizationCode);
+    });
+  });
+
   test('requests access token for valid callbacks with online access and creates session with expiration and onlineAccessInfo', async () => {
     const shopify = shopifyApi(testConfig());
 

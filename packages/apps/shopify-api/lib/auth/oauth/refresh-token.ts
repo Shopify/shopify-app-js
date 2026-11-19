@@ -40,6 +40,7 @@ export function refreshToken(config: ConfigInterface): RefreshToken {
           Accept: DataType.JSON,
         },
       },
+      {logRequestBody: false},
     );
 
     if (!postResponse.ok) {

@@ -204,6 +204,7 @@ export function callback(config: ConfigInterface): OAuthCallback {
           Accept: DataType.JSON,
         },
       },
+      {logRequestBody: false},
     );
 
     if (!postResponse.ok) {

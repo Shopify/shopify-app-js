@@ -220,6 +220,43 @@ describe('refreshToken', () => {
     },
   );
 
+  test('does not log the secret or the refresh token when a domain transformation adds a path to the shop', async () => {
+    const logFn = jest.fn();
+    const shopify = shopifyApi(
+      testConfig({
+        logger: {log: logFn, level: LogSeverity.Debug, httpRequests: true},
+        domainTransformations: [
+          {
+            match: /^([a-zA-Z0-9][a-zA-Z0-9-_]*)\.myshopify\.io$/,
+            transform: '$1.myshopify.io/proxy',
+          },
+        ],
+      }),
+    );
+    queueMockResponse(
+      JSON.stringify({access_token: 'new_access_token', scope: ''}),
+    );
+
+    await expect(
+      shopify.auth.refreshToken({shop, refreshToken: refreshTokenValue}),
+    ).rejects.toThrow(ShopifyErrors.InvalidShopError);
+
+    expect({
+      method: 'POST',
+      domain: shop,
+      path: '/proxy/admin/oauth/access_token',
+      data: {client_secret: shopify.config.apiSecretKey},
+    }).toMatchMadeHttpRequest();
+    const messages = logFn.mock.calls.map(([_severity, message]) => message);
+    expect(
+      messages.some((message) => message.includes('Making HTTP request')),
+    ).toBe(true);
+    messages.forEach((message) => {
+      expect(message).not.toContain(shopify.config.apiSecretKey);
+      expect(message).not.toContain(refreshTokenValue);
+    });
+  });
+
   describe('error handling', () => {
     test('throws error when response is not successful', async () => {
       const shopify = shopifyApi(testConfig());

@@ -60,6 +60,7 @@ export function tokenExchange(config: ConfigInterface): TokenExchange {
           Accept: DataType.JSON,
         },
       },
+      {logRequestBody: false},
     );
 
     if (!postResponse.ok) {
