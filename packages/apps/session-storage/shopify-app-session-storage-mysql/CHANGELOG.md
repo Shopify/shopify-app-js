@@ -1,5 +1,7 @@
 # @shopify/shopify-app-session-storage-mysql
 
+## 8.0.5
+
 ## 8.0.4
 
 ## 8.0.3
