@@ -159,6 +159,42 @@ describe('fetchRequest', () => {
     }).toMatchMadeHttpRequest();
   });
 
+  it('omits the body from debug logs when the request sets logRequestBody to false', async () => {
+    // GIVEN
+    const logFn = jest.fn();
+    const config = testConfig({
+      logger: {log: logFn, level: LogSeverity.Debug, httpRequests: true},
+    });
+
+    queueMockResponse(JSON.stringify(successResponse));
+
+    // WHEN
+    const requestBody = {client_secret: 'test-client-secret-value'};
+    const response = await fetchRequestFactory(config)(
+      url,
+      {method: 'POST', body: JSON.stringify(requestBody)},
+      {logRequestBody: false},
+    );
+    const responseBody = await response.json();
+
+    // THEN
+    expect(logFn).toHaveBeenNthCalledWith(
+      1,
+      LogSeverity.Debug,
+      `[shopify-api/DEBUG] Making HTTP request | {method: POST, url: ${url}}`,
+    );
+    logFn.mock.calls.forEach(([_severity, message]) => {
+      expect(message).not.toContain('test-client-secret-value');
+    });
+    expect(responseBody).toEqual(successResponse);
+    expect({
+      method: 'POST',
+      domain,
+      path: '/',
+      data: requestBody,
+    }).toMatchMadeHttpRequest();
+  });
+
   it.each([
     ['a doubled leading slash', '//admin/oauth/access_token'],
     ['several leading slashes', '////admin/oauth/access_token'],

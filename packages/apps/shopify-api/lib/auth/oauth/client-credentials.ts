@@ -54,6 +54,7 @@ export function clientCredentials(config: ConfigInterface): ClientCredentials {
     const postResponse = await fetchRequestFactory(config)(
       `https://${cleanShop}/admin/oauth/access_token`,
       requestConfig,
+      {logRequestBody: false},
     );
 
     if (wasRedirected(postResponse)) {

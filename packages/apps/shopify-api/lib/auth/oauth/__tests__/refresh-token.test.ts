@@ -4,6 +4,7 @@ import {queueMockResponse} from '../../../__tests__/test-helper';
 import {DataType} from '../../../clients/types';
 import * as ShopifyErrors from '../../../error';
 import {LogSeverity} from '../../../types';
+import * as fetchRequestModule from '../../../utils/fetch-request';
 
 jest.useFakeTimers().setSystemTime(new Date('2023-11-11'));
 
@@ -219,6 +220,33 @@ describe('refreshToken', () => {
       });
     },
   );
+
+  test('tells fetchRequest not to log the body of its token request', async () => {
+    const shopify = shopifyApi(testConfig());
+    const fetchRequest = jest.fn(
+      fetchRequestModule.fetchRequestFactory(shopify.config),
+    );
+    const factorySpy = jest
+      .spyOn(fetchRequestModule, 'fetchRequestFactory')
+      .mockReturnValue(fetchRequest);
+
+    try {
+      queueMockResponse(
+        JSON.stringify({access_token: 'new_access_token', scope: ''}),
+      );
+
+      await shopify.auth.refreshToken({shop, refreshToken: refreshTokenValue});
+
+      expect(fetchRequest).toHaveBeenCalledTimes(1);
+      expect(fetchRequest).toHaveBeenCalledWith(
+        `https://${shop}/admin/oauth/access_token`,
+        expect.anything(),
+        {logRequestBody: false},
+      );
+    } finally {
+      factorySpy.mockRestore();
+    }
+  });
 
   describe('error handling', () => {
     test('throws error when response is not successful', async () => {

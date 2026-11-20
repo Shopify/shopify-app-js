@@ -3,6 +3,7 @@ import {DataType, JwtPayload, shopifyApi} from '../../..';
 import {testConfig} from '../../../__tests__/test-config';
 import {queueMockResponse, signJWT} from '../../../__tests__/test-helper';
 import {LogSeverity} from '../../../types';
+import * as fetchRequestModule from '../../../utils/fetch-request';
 import {RequestedTokenType} from '../token-exchange';
 
 let shop: string;
@@ -411,6 +412,41 @@ describe('tokenExchange', () => {
         });
       },
     );
+
+    test('tells fetchRequest not to log the body of its token request', async () => {
+      const shopify = shopifyApi(testConfig());
+      const sessionToken = await signJWT(
+        shopify.config.apiSecretKey,
+        sessionTokenPayload,
+      );
+      const fetchRequest = jest.fn(
+        fetchRequestModule.fetchRequestFactory(shopify.config),
+      );
+      const factorySpy = jest
+        .spyOn(fetchRequestModule, 'fetchRequestFactory')
+        .mockReturnValue(fetchRequest);
+
+      try {
+        queueMockResponse(
+          JSON.stringify({access_token: 'some access token', scope: ''}),
+        );
+
+        await shopify.auth.tokenExchange({
+          shop,
+          sessionToken,
+          requestedTokenType: RequestedTokenType.OfflineAccessToken,
+        });
+
+        expect(fetchRequest).toHaveBeenCalledTimes(1);
+        expect(fetchRequest).toHaveBeenCalledWith(
+          `https://${shop}/admin/oauth/access_token`,
+          expect.anything(),
+          {logRequestBody: false},
+        );
+      } finally {
+        factorySpy.mockRestore();
+      }
+    });
 
     describe('with invalid shop', () => {
       beforeEach(() => {

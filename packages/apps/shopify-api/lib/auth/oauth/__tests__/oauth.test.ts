@@ -17,6 +17,7 @@ import {testConfig} from '../../../__tests__/test-config';
 import {getOfflineId} from '../../../session/session-utils';
 import {shopifyApi} from '../../..';
 import {LogSeverity} from '../../../types';
+import * as fetchRequestModule from '../../../utils/fetch-request';
 
 const VALID_NONCE = 'noncenoncenonce';
 // HttpOnly written as a flag attribute, not `httpOnly=<value>`
@@ -394,6 +395,56 @@ describe('callback', () => {
       });
     },
   );
+
+  test('tells fetchRequest not to log the body of its token request', async () => {
+    const shopify = shopifyApi(testConfig());
+
+    const beginResponse: NormalizedResponse = await shopify.auth.begin({
+      shop,
+      isOnline: false,
+      callbackPath: '/some-callback',
+      rawRequest: request,
+    });
+    setCallbackCookieFromResponse(
+      request,
+      beginResponse,
+      shopify.config.apiSecretKey,
+    );
+
+    const authorizationCode = 'some random auth code';
+    const testCallbackQuery: QueryMock = {
+      shop,
+      state: VALID_NONCE,
+      timestamp: getCurrentTimeInSec().toString(),
+      code: authorizationCode,
+    };
+    testCallbackQuery.hmac = await generateLocalHmac(shopify.config)(
+      testCallbackQuery,
+    );
+    request.url += `?${new URLSearchParams(testCallbackQuery).toString()}`;
+
+    const fetchRequest = jest.fn(
+      fetchRequestModule.fetchRequestFactory(shopify.config),
+    );
+    const factorySpy = jest
+      .spyOn(fetchRequestModule, 'fetchRequestFactory')
+      .mockReturnValue(fetchRequest);
+
+    try {
+      queueMockResponse(JSON.stringify({access_token: 'token', scope: ''}));
+
+      await shopify.auth.callback({rawRequest: request});
+
+      expect(fetchRequest).toHaveBeenCalledTimes(1);
+      expect(fetchRequest).toHaveBeenCalledWith(
+        `https://${shop}/admin/oauth/access_token`,
+        expect.anything(),
+        {logRequestBody: false},
+      );
+    } finally {
+      factorySpy.mockRestore();
+    }
+  });
 
   test('requests access token for valid callbacks with online access and creates session with expiration and onlineAccessInfo', async () => {
     const shopify = shopifyApi(testConfig());
