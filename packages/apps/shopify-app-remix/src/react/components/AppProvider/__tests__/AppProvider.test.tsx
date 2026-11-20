@@ -72,6 +72,24 @@ describe('<AppProvider />', () => {
     });
   });
 
+  it('forwards a custom linkComponent to the Polaris provider', () => {
+    // GIVEN a consumer-supplied link component (e.g. Remix `NavLink`)
+    const CustomLink = (props: any) => <a {...props} />;
+
+    // WHEN
+    const component = mount(
+      <AppProvider {...defaultProps} linkComponent={CustomLink}>
+        Hello world
+      </AppProvider>,
+    );
+
+    // THEN the Polaris provider receives the custom component, not the
+    // default RemixPolarisLink.
+    expect(component).toContainReactComponent(PolarisAppProvider, {
+      linkComponent: CustomLink,
+    });
+  });
+
   it('handles "shopify:navigate" events correctly', () => {
     const component = mount(
       <AppProvider isEmbeddedApp apiKey={'test-api-key'}>
