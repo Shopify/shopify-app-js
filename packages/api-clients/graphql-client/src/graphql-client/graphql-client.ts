@@ -215,7 +215,7 @@ async function* getStreamBodyIterator(
   // Response body is an async iterator
   if ((response.body as any)![Symbol.asyncIterator]) {
     for await (const chunk of response.body! as any) {
-      yield decoder.decode(chunk);
+      yield decoder.decode(chunk, {stream: true});
     }
   } else {
     const reader = response.body!.getReader();
@@ -223,12 +223,14 @@ async function* getStreamBodyIterator(
     let readResult: ReadableStreamReadResult<DataChunk>;
     try {
       while (!(readResult = await reader.read()).done) {
-        yield decoder.decode(readResult.value);
+        yield decoder.decode(readResult.value, {stream: true});
       }
     } finally {
       reader.cancel();
     }
   }
+
+  yield decoder.decode();
 }
 
 function readStreamChunk(
