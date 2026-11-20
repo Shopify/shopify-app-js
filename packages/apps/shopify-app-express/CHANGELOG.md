@@ -1,5 +1,14 @@
 # Changelog
 
+## 8.0.7
+
+### Patch Changes
+
+- Updated dependencies [184b467]
+  - @shopify/shopify-api@15.1.3
+  - @shopify/shopify-app-session-storage@7.0.5
+  - @shopify/shopify-app-session-storage-memory@8.0.5
+
 ## 8.0.6
 
 ### Patch Changes

@@ -1,5 +1,11 @@
 # Changelog
 
+## 15.1.3
+
+### Patch Changes
+
+- 184b467: Never include request bodies in HTTP debug logs for OAuth token requests.
+
 ## 15.1.2
 
 ### Patch Changes

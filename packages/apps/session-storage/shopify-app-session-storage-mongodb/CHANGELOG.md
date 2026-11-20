@@ -1,5 +1,7 @@
 # @shopify/shopify-app-session-storage-mongodb
 
+## 9.0.1
+
 ## 9.0.0
 
 ### Major Changes
