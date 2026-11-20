@@ -38,7 +38,8 @@ export default async function refreshToken(
     if (
       error instanceof HttpResponseError &&
       error.response.code === 401 &&
-      error.response.body?.error === 'invalid_request'
+      (error.response.body?.error === 'invalid_request' ||
+        error.response.body?.error === 'invalid_grant')
     ) {
       throw new InvalidRefreshTokenResponse();
     }

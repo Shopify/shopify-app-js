@@ -67,25 +67,28 @@ describe('refreshToken', () => {
     });
 
     describe('error handling', () => {
-      it('marks an unusable refresh token while preserving the HTTP response', async () => {
-        mockRefreshToken.mockRejectedValue(
-          new HttpResponseError({
-            message: 'Refresh token is no longer active',
-            code: 401,
-            statusText: 'Unauthorized',
-            body: {error: 'invalid_request'},
-          }),
-        );
-        const error = await refreshToken(
-          params,
-          TEST_SHOP,
-          'invalid-refresh-token',
-        ).catch((error) => error);
-        expect(error).toBeInstanceOf(InvalidRefreshTokenResponse);
-        expect(error).toBeInstanceOf(Response);
-        expect(error.status).toBe(500);
-        expect(error.statusText).toBe('Internal Server Error');
-      });
+      it.each(['invalid_request', 'invalid_grant'])(
+        'marks an unusable refresh token with %s while preserving the HTTP response',
+        async (errorCode) => {
+          mockRefreshToken.mockRejectedValue(
+            new HttpResponseError({
+              message: 'Refresh token is no longer active',
+              code: 401,
+              statusText: 'Unauthorized',
+              body: {error: errorCode},
+            }),
+          );
+          const error = await refreshToken(
+            params,
+            TEST_SHOP,
+            'invalid-refresh-token',
+          ).catch((error) => error);
+          expect(error).toBeInstanceOf(InvalidRefreshTokenResponse);
+          expect(error).toBeInstanceOf(Response);
+          expect(error.status).toBe(500);
+          expect(error.statusText).toBe('Internal Server Error');
+        },
+      );
 
       it('rethrows InvalidJwtError', async () => {
         // GIVEN
