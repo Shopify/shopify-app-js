@@ -71,7 +71,7 @@
     "!node_modules"
   ],
   "dependencies": {
-    "@graphql-codegen/cli": "^6.2.1",
+    "@graphql-codegen/cli": "^7.4.6",
     "@graphql-codegen/introspection": "^5.0.1",
     "@graphql-codegen/typescript": "^5.0.9",
     "@parcel/watcher": "^2.6.0",
