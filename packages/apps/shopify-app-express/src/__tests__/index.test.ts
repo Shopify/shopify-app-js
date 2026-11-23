@@ -56,6 +56,19 @@ describe('shopifyApp', () => {
     ).not.toThrow();
   });
 
+  it('allows token exchange without auth config', () => {
+    const shopify = shopifyApp({
+      api: {...testConfig.api, isEmbeddedApp: true},
+      future: {tokenExchange: true},
+      webhooks: testConfig.webhooks,
+    });
+
+    expect(shopify.config.auth).toEqual({
+      path: '/api/auth',
+      callbackPath: '/api/auth/callback',
+    });
+  });
+
   it('properly defaults missing configs based on env vars', () => {
     /* eslint-disable no-process-env */
     process.env.SHOPIFY_API_KEY = 'envKey';
