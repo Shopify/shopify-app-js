@@ -1,5 +1,5 @@
 import {mount} from '@shopify/react-testing';
-import {MemoryRouter} from 'react-router-dom';
+import {MemoryRouter} from 'react-router';
 
 import '../../../__tests__/test-helper';
 
