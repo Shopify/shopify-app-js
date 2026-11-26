@@ -50,6 +50,7 @@ export function migrateToExpiringToken(
           Accept: DataType.JSON,
         },
       },
+      {logRequestBody: false},
     );
 
     if (!postResponse.ok) {

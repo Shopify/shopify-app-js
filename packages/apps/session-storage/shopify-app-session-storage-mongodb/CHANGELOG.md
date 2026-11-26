@@ -1,5 +1,30 @@
 # @shopify/shopify-app-session-storage-mongodb
 
+## 9.0.0
+
+### Major Changes
+
+- b56dd8c: Require TLS for the MongoDB connection in production.
+
+  ## Who is affected
+  - Apps where `NODE_ENV` is `production` and the URL does not use `mongodb+srv://`, `tls=true` or `ssl=true`. `MongoDBSessionStorage` now throws when you create it.
+  - Apps where `NODE_ENV` is `production` and the URL sets `tlsInsecure`, `tlsAllowInvalidCertificates` or `tlsAllowInvalidHostnames`. These now throw too.
+  - Apps that use `withCredentials`. The URL it builds now has `tls=true` in every environment, so a server without TLS refuses the connection.
+
+  ## What to change
+  - Add `tls=true` to the URL, or use a `mongodb+srv://` URL. Remove the options that turn off certificate checks.
+  - To keep connecting without TLS to a server on a network you trust, pass `{allowInsecureConnection: true}`. With `withCredentials`, this option also leaves `tls=true` out of the URL.
+
+## 8.0.3
+
+### Patch Changes
+
+- 4893aae: Updated `@parcel/watcher`, ` isbot`, ` lossless-json`, ` mongodb`, ` mysql2`, ` pg`, ` pg-connection-string` dependencies
+
+  Update `mongodb` to ^7.8.0 to fix CVE-2026-119179 and SRV host-name validation. MongoDB server 4.4 or newer is required. The driver no longer applies `timeoutMS` or `timeoutMode`; use per-stage timeouts instead.
+
+## 8.0.2
+
 ## 8.0.1
 
 ## 8.0.0

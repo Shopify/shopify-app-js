@@ -9,6 +9,7 @@ import {queueMockResponse} from '../../../__tests__/test-helper';
 import * as ShopifyErrors from '../../../error';
 import {DataType} from '../../../clients/types';
 import {LogSeverity} from '../../../types';
+import * as fetchRequestModule from '../../../utils/fetch-request';
 import {canonicalizeHeaders, setAbstractFetchFunc} from '../../../../runtime';
 import {mockTestRequests} from '../../../../adapters/mock/mock_test_requests';
 import {mockRequestCapture} from '../../../../adapters/mock/mock_request_capture';
@@ -94,6 +95,65 @@ describe('clientCredentials', () => {
         expect(message).not.toContain(shopify.config.apiSecretKey);
         expect(message).not.toContain(successResponse.access_token);
       });
+    });
+
+    test.each([
+      ['one trailing slash', '/'],
+      ['several trailing slashes', '///'],
+    ])(
+      'does not log credentials when the shop has %s',
+      async (_label, trailingSlashes) => {
+        const logFn = jest.fn();
+        const shopify = shopifyApi(
+          testConfig({
+            logger: {log: logFn, level: LogSeverity.Debug, httpRequests: true},
+          }),
+        );
+        queueMockResponse(
+          JSON.stringify({access_token: 'some_access_token', scope: ''}),
+        );
+
+        await shopify.auth.clientCredentials({
+          shop: `${shop}${trailingSlashes}`,
+        });
+
+        const messages = logFn.mock.calls.map(
+          ([_severity, message]) => message,
+        );
+        expect(
+          messages.some((message) => message.includes('Making HTTP request')),
+        ).toBe(true);
+        messages.forEach((message) => {
+          expect(message).not.toContain(shopify.config.apiSecretKey);
+        });
+      },
+    );
+
+    test('tells fetchRequest not to log the body of its token request', async () => {
+      const shopify = shopifyApi(testConfig());
+      const fetchRequest = jest.fn(
+        fetchRequestModule.fetchRequestFactory(shopify.config),
+      );
+      const factorySpy = jest
+        .spyOn(fetchRequestModule, 'fetchRequestFactory')
+        .mockReturnValue(fetchRequest);
+
+      try {
+        queueMockResponse(
+          JSON.stringify({access_token: 'some_access_token', scope: ''}),
+        );
+
+        await shopify.auth.clientCredentials({shop});
+
+        expect(fetchRequest).toHaveBeenCalledTimes(1);
+        expect(fetchRequest).toHaveBeenCalledWith(
+          `https://${shop}/admin/oauth/access_token`,
+          expect.anything(),
+          {logRequestBody: false},
+        );
+      } finally {
+        factorySpy.mockRestore();
+      }
     });
 
     test('throws error when response is not successful', async () => {
@@ -373,6 +433,37 @@ describe('clientCredentials', () => {
         expect(message).not.toContain(successResponse.access_token);
       });
     });
+
+    test.each([
+      ['one trailing slash', '/'],
+      ['several trailing slashes', '///'],
+    ])(
+      'does not log the assertion when the shop has %s',
+      async (_label, trailingSlashes) => {
+        const logFn = jest.fn();
+        const shopify = shopifyApi(
+          testConfig({
+            logger: {log: logFn, level: LogSeverity.Debug, httpRequests: true},
+          }),
+        );
+        queueMockResponse(JSON.stringify(successResponse));
+
+        await shopify.auth.clientCredentials({
+          shop: `${shop}${trailingSlashes}`,
+          clientAssertion,
+        });
+
+        const messages = logFn.mock.calls.map(
+          ([_severity, message]) => message,
+        );
+        expect(
+          messages.some((message) => message.includes('Making HTTP request')),
+        ).toBe(true);
+        messages.forEach((message) => {
+          expect(message).not.toContain(clientAssertion);
+        });
+      },
+    );
   });
 
   describe('with an assertion from shopify.auth.createClientAssertion', () => {

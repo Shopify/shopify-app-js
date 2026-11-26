@@ -5,20 +5,38 @@ import {ConfigInterface} from '../base-types';
 
 const OAUTH_TOKEN_ENDPOINT_PATH = '/admin/oauth/access_token';
 
-// Token endpoint bodies carry OAuth secrets, so they must not reach the logs.
-// When the URL does not parse, fail closed and keep the body out of the logs.
+// Token endpoint bodies carry OAuth secrets, so they must not reach the logs. The OAuth helpers
+// set `logRequestBody: false` on their token requests, and this check is a second guard for a
+// token request that does not.
+// A token request URL can take other forms: extra slashes, percent-encoding, letter case, a
+// format suffix such as `.json`, or a domain transformation that adds a path, query or fragment.
+// Thus every URL that contains the endpoint path keeps its body out. Matching too many URLs only
+// removes a body from a debug log.
+// When the URL does not parse or decode, fail closed and keep the body out of the logs.
 function canLogRequestBody(url: string): boolean {
   try {
-    return new URL(url).pathname !== OAUTH_TOKEN_ENDPOINT_PATH;
+    const normalizedUrl = decodeURIComponent(new URL(url).href)
+      .toLowerCase()
+      .replace(/\/{2,}/g, '/');
+    return !normalizedUrl.includes(OAUTH_TOKEN_ENDPOINT_PATH);
   } catch {
     return false;
   }
+}
+
+export interface FetchRequestLogOptions {
+  /**
+   * Whether the debug log of the request can include its body. Set it to `false` for every request
+   * whose body carries a secret, such as a request to the OAuth token endpoint.
+   */
+  logRequestBody?: boolean;
 }
 
 export function fetchRequestFactory(config: ConfigInterface) {
   return async function fetchRequest(
     url: string,
     options?: RequestInit,
+    {logRequestBody = true}: FetchRequestLogOptions = {},
   ): Promise<Response> {
     const log = logger(config);
     const doLog =
@@ -28,7 +46,9 @@ export function fetchRequestFactory(config: ConfigInterface) {
       log.debug('Making HTTP request', {
         method: options?.method || 'GET',
         url,
-        ...(options?.body && canLogRequestBody(url) && {body: options.body}),
+        ...(options?.body &&
+          logRequestBody &&
+          canLogRequestBody(url) && {body: options.body}),
       });
     }
 
