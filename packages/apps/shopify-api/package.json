@@ -89,10 +89,10 @@
     "@shopify/graphql-client": "^2.0.1",
     "@shopify/storefront-api-client": "^2.0.1",
     "compare-versions": "^6.1.1",
-    "isbot": "^5.2.2",
+    "isbot": "^5.2.3",
     "jose": "^5.9.6",
     "lossless-json": "^4.3.3",
-    "tslib": "^2.8.1"
+    "tslib": "^2.9.1"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^4.20260702.1",
