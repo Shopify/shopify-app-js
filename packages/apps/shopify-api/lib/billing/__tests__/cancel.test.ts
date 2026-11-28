@@ -129,4 +129,20 @@ describe('shopify.billing.cancel', () => {
       shopify.billing.cancel({session, subscriptionId}),
     ).rejects.toThrow(BillingError);
   });
+
+  test('throws a BillingError when the response has no subscription', async () => {
+    const shopify = shopifyApi(testConfig({billing}));
+    queueMockResponses([
+      JSON.stringify({
+        data: {appSubscriptionCancel: {userErrors: [], appSubscription: null}},
+      }),
+    ]);
+
+    const error = await shopify.billing
+      .cancel({session, subscriptionId: '1234'})
+      .catch((err) => err);
+
+    expect(error).toBeInstanceOf(BillingError);
+    expect(error.message).toContain('the response has no appSubscription');
+  });
 });

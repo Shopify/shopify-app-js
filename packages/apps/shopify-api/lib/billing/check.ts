@@ -85,7 +85,16 @@ export async function assessPayments({
       {variables: {endCursor}},
     );
 
-    installation = currentInstallations.data?.currentAppInstallation!;
+    const currentAppInstallation =
+      currentInstallations.data?.currentAppInstallation;
+    if (!currentAppInstallation) {
+      throw new BillingError({
+        message:
+          'Error while checking payments: the response has no currentAppInstallation',
+        errorData: currentInstallations.data,
+      });
+    }
+    installation = currentAppInstallation;
     installation.activeSubscriptions.forEach((subscription) => {
       if (subscriptionMeetsCriteria({subscription, isTest, plans})) {
         returnValue.hasActivePayment = true;

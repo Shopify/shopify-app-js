@@ -46,7 +46,17 @@ export function cancel(config: ConfigInterface): BillingCancel {
         });
       }
 
-      return response.data?.appSubscriptionCancel?.appSubscription!;
+      const appSubscription =
+        response.data?.appSubscriptionCancel?.appSubscription;
+      if (!appSubscription) {
+        throw new BillingError({
+          message:
+            'Error while canceling a subscription: the response has no appSubscription',
+          errorData: response.data,
+        });
+      }
+
+      return appSubscription;
     } catch (error) {
       if (error instanceof GraphqlQueryError) {
         throw new BillingError({

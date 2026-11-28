@@ -91,4 +91,30 @@ describe('shopify.billing.updateUsageCappedAmount', () => {
       }),
     ).rejects.toThrow(BillingError);
   });
+
+  it('throws a BillingError when the response has no subscription', async () => {
+    const shopify = shopifyApi(testConfig({billing}));
+    queueMockResponses([
+      JSON.stringify({
+        data: {
+          appSubscriptionLineItemUpdate: {
+            userErrors: [],
+            confirmationUrl: null,
+            appSubscription: null,
+          },
+        },
+      }),
+    ]);
+
+    const error = await shopify.billing
+      .updateUsageCappedAmount({
+        session,
+        subscriptionLineItemId: Responses.USAGE_CHARGE_SUBSCRIPTION_ID,
+        cappedAmount: {amount: 100, currencyCode: 'USD'},
+      })
+      .catch((err) => err);
+
+    expect(error).toBeInstanceOf(BillingError);
+    expect(error.message).toContain('the response has no appSubscription');
+  });
 });

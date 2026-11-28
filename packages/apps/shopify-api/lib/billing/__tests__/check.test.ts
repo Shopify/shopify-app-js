@@ -2,7 +2,7 @@ import {queueMockResponses} from '../../__tests__/test-helper';
 import {testConfig} from '../../__tests__/test-config';
 import {Session} from '../../session/session';
 import {BillingInterval} from '../../types';
-import {shopifyApi} from '../..';
+import {BillingError, shopifyApi} from '../..';
 import {BillingCheckResponseObject, BillingConfig} from '../types';
 import {
   DOMAIN,
@@ -358,5 +358,19 @@ describe('shopify.billing.check', () => {
         data: expect.stringContaining('activeSubscriptions'),
       }).toMatchMadeHttpRequest();
     });
+  });
+
+  test('throws a BillingError when the response has no app installation', async () => {
+    const shopify = shopifyApi(testConfig({billing: NON_RECURRING_CONFIGS}));
+    queueMockResponses([JSON.stringify({data: {}})]);
+
+    const error = await shopify.billing
+      .check({session, plans: Responses.PLAN_1, isTest: true})
+      .catch((err) => err);
+
+    expect(error).toBeInstanceOf(BillingError);
+    expect(error.message).toContain(
+      'the response has no currentAppInstallation',
+    );
   });
 });
