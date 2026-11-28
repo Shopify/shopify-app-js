@@ -1,4 +1,5 @@
 import {Session} from '@shopify/shopify-api';
+import {mockExternalRequests} from '../../../../../__test-helpers/request-mock';
 
 import {shopifyApp} from '../../../../..';
 import {
@@ -58,8 +59,10 @@ describe('authenticate', () => {
     });
 
     const {token} = await getJwt();
-    await mockTokenExchangeRequest(token, 'offline');
-    await mockTokenExchangeRequest(token, 'online');
+    await mockExternalRequests(
+      createTokenExchangeRequestMock(token, 'offline'),
+      createTokenExchangeRequestMock(token, 'online'),
+    );
 
     // WHEN
     const {session} = await shopify.authenticate.admin(
@@ -69,8 +72,9 @@ describe('authenticate', () => {
     );
 
     // THEN
-    const [_, onlineSession] =
-      await config.sessionStorage.findSessionsByShop(TEST_SHOP);
+    const onlineSession = await config.sessionStorage.loadSession(
+      `${TEST_SHOP}_${USER_ID}`,
+    );
 
     expect(onlineSession).toEqual(session);
     expect(session).toMatchObject({
@@ -83,6 +87,134 @@ describe('authenticate', () => {
       onlineAccessInfo: expect.any(Object),
     });
   });
+
+  it('reuses a valid offline session when the online session has expired', async () => {
+    // GIVEN
+    const afterAuth = jest.fn();
+    const config = testConfig({
+      useOnlineTokens: true,
+      hooks: {afterAuth},
+    });
+    const shopify = shopifyApp(config);
+    const offlineSession = await setUpValidSession(shopify.sessionStorage, {
+      isOnline: false,
+      scope: 'testScope',
+      expires: new Date(Date.now() + 1000 * 3600),
+      refreshToken: 'test-refresh-token',
+      refreshTokenExpires: new Date(Date.now() + 1000 * 3600 * 24 * 30),
+    });
+    await setUpValidSession(shopify.sessionStorage, {
+      isOnline: true,
+      expires: new Date(Date.now() - 1000 * 3600),
+      scope: 'testScope',
+    });
+
+    const {token} = await getJwt();
+    await mockTokenExchangeRequest(token, 'online');
+
+    // WHEN
+    const {session} = await shopify.authenticate.admin(
+      new Request(
+        `${APP_URL}?embedded=1&shop=${TEST_SHOP}&host=${BASE64_HOST}&id_token=${token}`,
+      ),
+    );
+
+    // THEN
+    expect(session).toMatchObject({
+      id: `${TEST_SHOP}_${USER_ID}`,
+      isOnline: true,
+      shop: TEST_SHOP,
+    });
+    expect(await config.sessionStorage.loadSession(offlineSession.id)).toEqual(
+      offlineSession,
+    );
+    expect(afterAuth).toHaveBeenCalledWith(expect.objectContaining({session}));
+  });
+
+  it.each([
+    {
+      description: 'scopes are not configured',
+      scopes: undefined,
+      offlineScope: 'testScope',
+      offlineExpired: false,
+      hasRefreshToken: true,
+    },
+    {
+      description: 'the stored offline session has stale scopes',
+      scopes: ['read_orders'],
+      offlineScope: 'testScope',
+      offlineExpired: false,
+      hasRefreshToken: true,
+    },
+    {
+      description: 'the stored offline access token has expired',
+      scopes: ['read_orders'],
+      offlineScope: 'read_orders',
+      offlineExpired: true,
+      hasRefreshToken: true,
+    },
+    {
+      description: 'the stored offline session predates expiring tokens',
+      scopes: ['read_orders'],
+      offlineScope: 'read_orders',
+      offlineExpired: false,
+      hasRefreshToken: false,
+    },
+  ])(
+    'exchanges a new offline token when $description',
+    async ({scopes, offlineScope, offlineExpired, hasRefreshToken}) => {
+      // GIVEN
+      const config = testConfig({useOnlineTokens: true, scopes});
+      const shopify = shopifyApp(config);
+      const oldOfflineSession = await setUpValidSession(
+        shopify.sessionStorage,
+        {
+          isOnline: false,
+          scope: offlineScope,
+          expires: offlineExpired
+            ? new Date(Date.now() - 1000 * 3600)
+            : new Date(Date.now() + 1000 * 3600),
+          refreshToken: hasRefreshToken ? 'test-refresh-token' : undefined,
+          refreshTokenExpires: hasRefreshToken
+            ? new Date(Date.now() + 1000 * 3600 * 24 * 30)
+            : undefined,
+        },
+      );
+      await setUpValidSession(shopify.sessionStorage, {
+        isOnline: true,
+        expires: new Date(Date.now() - 1000 * 3600),
+      });
+
+      const {token} = await getJwt();
+      await mockExternalRequests(
+        createTokenExchangeRequestMock(token, 'offline'),
+        createTokenExchangeRequestMock(token, 'online'),
+      );
+
+      // WHEN
+      const {session} = await shopify.authenticate.admin(
+        new Request(
+          `${APP_URL}?embedded=1&shop=${TEST_SHOP}&host=${BASE64_HOST}&id_token=${token}`,
+        ),
+      );
+
+      // THEN
+      const refreshedOfflineSession = await config.sessionStorage.loadSession(
+        oldOfflineSession.id,
+      );
+      expect(session).toMatchObject({
+        id: `${TEST_SHOP}_${USER_ID}`,
+        isOnline: true,
+      });
+      expect(refreshedOfflineSession).not.toEqual(oldOfflineSession);
+      expect(refreshedOfflineSession).toMatchObject({
+        id: `offline_${TEST_SHOP}`,
+        isOnline: false,
+        accessToken: '123abc-exchanged-from-session-token',
+        scope: 'read_orders',
+      });
+    },
+  );
 
   it('performs token exchange when existing session is invalid', async () => {
     // GIVEN
@@ -347,12 +479,26 @@ async function mockTokenExchangeRequest(
   tokenType: 'online' | 'offline' = 'offline',
   expiringOfflineAccessTokens = true,
 ) {
+  await mockExternalRequest(
+    createTokenExchangeRequestMock(
+      sessionToken,
+      tokenType,
+      expiringOfflineAccessTokens,
+    ),
+  );
+}
+
+function createTokenExchangeRequestMock(
+  sessionToken: any,
+  tokenType: 'online' | 'offline' = 'offline',
+  expiringOfflineAccessTokens = true,
+) {
   const responseBody = {
     access_token: '123abc-exchanged-from-session-token',
     scope: 'read_orders',
   };
 
-  await mockExternalRequest({
+  return {
     request: new Request(`https://${TEST_SHOP}/admin/oauth/access_token`, {
       method: 'POST',
       body: JSON.stringify({
@@ -388,7 +534,7 @@ async function mockTokenExchangeRequest(
               },
             }),
           ),
-  });
+  };
 }
 
 async function mockInvalidTokenExchangeRequest(error: string, status = 400) {
