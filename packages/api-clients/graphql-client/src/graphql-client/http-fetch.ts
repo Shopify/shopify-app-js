@@ -74,9 +74,11 @@ export function generateHttpFetch({
       return response;
     } catch (error) {
       if (nextCount <= maxTries) {
-        const retryAfter = response?.headers.get('Retry-After');
         await sleep(
-          retryAfter ? parseInt(retryAfter, 10) : defaultRetryWaitTime,
+          getRetryWaitTime(
+            response?.headers.get('Retry-After'),
+            defaultRetryWaitTime,
+          ),
         );
 
         clientLogger({
@@ -142,6 +144,31 @@ function redactHeaders(headers: HeadersInit): HeadersInit {
       redactValue(name, value),
     ]),
   );
+}
+
+// Retry-After is either a number of seconds or an HTTP date (RFC 9110,
+// section 10.2.3). Anything else falls back to the default wait time.
+export function getRetryWaitTime(
+  retryAfter: string | null | undefined,
+  defaultWaitTime: number,
+): number {
+  const value = retryAfter?.trim();
+  if (!value) {
+    return defaultWaitTime;
+  }
+
+  if (/^\d+(\.\d+)?$/.test(value)) {
+    return Math.ceil(Number(value) * 1000);
+  }
+
+  // An HTTP date always names its day and month, so a value without letters
+  // (such as "-1") is not read as a date
+  const date = /[a-z]/i.test(value) ? Date.parse(value) : NaN;
+  if (!Number.isNaN(date)) {
+    return Math.max(0, date - Date.now());
+  }
+
+  return defaultWaitTime;
 }
 
 async function sleep(waitTime: number): Promise<void> {
