@@ -114,7 +114,14 @@ export function createUsageRecord(
       }
 
       const appUsageRecord =
-        response.data?.appUsageRecordCreate?.appUsageRecord!;
+        response.data?.appUsageRecordCreate?.appUsageRecord;
+      if (!appUsageRecord) {
+        throw new BillingError({
+          message:
+            'Error while creating a usage record: the response has no appUsageRecord',
+          errorData: response.data,
+        });
+      }
       convertAppRecurringPricingMoney(appUsageRecord.price);
       convertAppUsagePricingMoney(
         appUsageRecord.subscriptionLineItem.plan.pricingDetails,

@@ -164,4 +164,25 @@ describe('shopify.billing.createUsageRecord', () => {
       }),
     ).rejects.toThrow(BillingError);
   });
+
+  test('throws a BillingError when the response has no usage record', async () => {
+    const shopify = shopifyApi(testConfig({billing}));
+    queueMockResponses([
+      JSON.stringify({
+        data: {appUsageRecordCreate: {userErrors: [], appUsageRecord: null}},
+      }),
+    ]);
+
+    const error = await shopify.billing
+      .createUsageRecord({
+        session,
+        description: Responses.USAGE_RECORD_DESCRIPTION,
+        price: Responses.USAGE_RECORD_PRICE,
+        subscriptionLineItemId: Responses.USAGE_RECORD_SUBSCRIPTION_ID,
+      })
+      .catch((err) => err);
+
+    expect(error).toBeInstanceOf(BillingError);
+    expect(error.message).toContain('the response has no appUsageRecord');
+  });
 });

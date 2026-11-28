@@ -71,17 +71,21 @@ export function updateUsageCappedAmount(
         });
       }
 
-      const appSubscription =
-        response.data?.appSubscriptionLineItemUpdate?.appSubscription!;
-      if (appSubscription && appSubscription.lineItems) {
+      const payload = response.data?.appSubscriptionLineItemUpdate;
+      if (!payload?.appSubscription) {
+        throw new BillingError({
+          message:
+            'Error while updating usage subscription capped amount: the response has no appSubscription',
+          errorData: response.data,
+        });
+      }
+
+      const {appSubscription, confirmationUrl} = payload;
+      if (appSubscription.lineItems) {
         appSubscription.lineItems = convertLineItems(appSubscription.lineItems);
       }
 
-      return {
-        confirmationUrl:
-          response.data?.appSubscriptionLineItemUpdate?.confirmationUrl!,
-        appSubscription,
-      };
+      return {confirmationUrl, appSubscription};
     } catch (error) {
       if (error instanceof GraphqlQueryError) {
         throw new BillingError({

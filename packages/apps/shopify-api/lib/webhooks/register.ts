@@ -139,8 +139,9 @@ async function getExistingHandlers(
       },
     );
 
-    endCursor = response.data?.webhookSubscriptions?.pageInfo.endCursor!;
-    hasNextPage = response.data?.webhookSubscriptions?.pageInfo.hasNextPage!;
+    const pageInfo = response.data?.webhookSubscriptions?.pageInfo;
+    endCursor = pageInfo?.endCursor ?? null;
+    hasNextPage = pageInfo?.hasNextPage ?? false;
   } while (hasNextPage);
 
   return existingHandlers;
