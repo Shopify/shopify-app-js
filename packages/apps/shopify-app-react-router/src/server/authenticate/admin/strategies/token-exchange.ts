@@ -102,15 +102,45 @@ export const createTokenExchangeStrategy: AuthStrategyFactory<any> = <
       !session.isActive(undefined, WITHIN_MILLISECONDS_OF_EXPIRY)
     ) {
       logger.info('No valid session found', {shop});
-      logger.info('Requesting offline access token', {shop});
-      const {session: offlineSession} = await exchangeToken({
-        request,
-        sessionToken,
-        shop,
-        requestedTokenType: RequestedTokenType.OfflineAccessToken,
-      });
-
-      await config.sessionStorage!.storeSession(offlineSession);
+      const offlineSessionId = api.session.getOfflineId(shop);
+      const storedOfflineSession =
+        config.useOnlineTokens && config.scopes?.toString().trim()
+          ? await config.sessionStorage!.loadSession(offlineSessionId)
+          : undefined;
+      const hasExpiringTokenMetadata =
+        !config.future.expiringOfflineAccessTokens ||
+        Boolean(
+          storedOfflineSession?.expires &&
+          storedOfflineSession.refreshToken &&
+          storedOfflineSession.refreshTokenExpires &&
+          storedOfflineSession.refreshTokenExpires.getTime() - Date.now() >
+            WITHIN_MILLISECONDS_OF_EXPIRY,
+        );
+      const canReuseOfflineSession =
+        storedOfflineSession !== undefined &&
+        storedOfflineSession.id === offlineSessionId &&
+        storedOfflineSession.shop === shop &&
+        !storedOfflineSession.isOnline &&
+        hasExpiringTokenMetadata &&
+        storedOfflineSession.isActive(
+          config.scopes,
+          WITHIN_MILLISECONDS_OF_EXPIRY,
+        );
+      let offlineSession: Session;
+      if (canReuseOfflineSession) {
+        logger.info('Reusing offline access token', {shop});
+        offlineSession = storedOfflineSession;
+      } else {
+        logger.info('Requesting offline access token', {shop});
+        const result = await exchangeToken({
+          request,
+          sessionToken,
+          shop,
+          requestedTokenType: RequestedTokenType.OfflineAccessToken,
+        });
+        offlineSession = result.session;
+        await config.sessionStorage!.storeSession(offlineSession);
+      }
 
       let newSession = offlineSession;
 
