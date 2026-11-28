@@ -1,6 +1,6 @@
 import fetchMock from 'jest-fetch-mock';
 
-import {generateHttpFetch} from '../http-fetch';
+import {generateHttpFetch, getRetryWaitTime} from '../http-fetch';
 import {CustomFetchApi} from '../types';
 
 const globalFetchMock = JSON.stringify({data: {}});
@@ -537,6 +537,61 @@ describe('httpFetch utility', () => {
           });
         });
 
+        describe('Retry-After header', () => {
+          const now = Date.UTC(2026, 0, 1, 12, 0, 0);
+
+          beforeEach(() => {
+            jest.spyOn(Date, 'now').mockReturnValue(now);
+          });
+
+          function respondWith(status: number, retryAfter: string) {
+            fetchMock.mockResponses(
+              ['', {status, headers: {'Retry-After': retryAfter}}],
+              [JSON.stringify({data: {}}), {status: 200}],
+            );
+          }
+
+          it.each([429, 503])(
+            'reads a number of seconds on a %i response',
+            async (status) => {
+              respondWith(status, '2');
+
+              const response = await httpFetch([operation], 1, 1);
+
+              expect(response.status).toBe(200);
+              expect(setTimeout).toHaveBeenCalledTimes(1);
+              expect(setTimeout).toHaveBeenCalledWith(
+                expect.any(Function),
+                2000,
+              );
+            },
+          );
+
+          it('reads a decimal number of seconds', async () => {
+            respondWith(429, '1.5');
+
+            await httpFetch([operation], 1, 1);
+
+            expect(setTimeout).toHaveBeenCalledWith(expect.any(Function), 1500);
+          });
+
+          it('reads an HTTP date as the time left until that date', async () => {
+            respondWith(429, new Date(now + 5000).toUTCString());
+
+            await httpFetch([operation], 1, 1);
+
+            expect(setTimeout).toHaveBeenCalledWith(expect.any(Function), 5000);
+          });
+
+          it('waits the default time when the header is not valid', async () => {
+            respondWith(429, 'soon');
+
+            await httpFetch([operation], 1, 1);
+
+            expect(setTimeout).toHaveBeenCalledWith(expect.any(Function), 1000);
+          });
+        });
+
         describe('503 responses', () => {
           const status = 503;
           const mockedFailedResponse = new Response(JSON.stringify({}), {
@@ -676,5 +731,42 @@ describe('httpFetch utility', () => {
         });
       });
     });
+  });
+
+  describe('getRetryWaitTime()', () => {
+    const now = Date.UTC(2026, 0, 1, 12, 0, 0);
+
+    beforeEach(() => {
+      jest.spyOn(Date, 'now').mockReturnValue(now);
+    });
+
+    it.each([
+      ['0', 0],
+      ['1', 1000],
+      ['60', 60000],
+      ['0.25', 250],
+      [' 2 ', 2000],
+    ])('reads %p as seconds', (retryAfter, expected) => {
+      expect(getRetryWaitTime(retryAfter, 1000)).toBe(expected);
+    });
+
+    it('reads an HTTP date in the future as the time left', () => {
+      expect(getRetryWaitTime(new Date(now + 30000).toUTCString(), 1000)).toBe(
+        30000,
+      );
+    });
+
+    it('waits no time for an HTTP date in the past', () => {
+      expect(getRetryWaitTime(new Date(now - 30000).toUTCString(), 1000)).toBe(
+        0,
+      );
+    });
+
+    it.each([null, undefined, '', '   ', '-1', 'soon', '1e3'])(
+      'falls back to the default wait time for %p',
+      (retryAfter) => {
+        expect(getRetryWaitTime(retryAfter, 1234)).toBe(1234);
+      },
+    );
   });
 });
